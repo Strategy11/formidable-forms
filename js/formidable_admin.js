@@ -2744,7 +2744,7 @@ function frmAdminBuildJS() {
 
 	function insertFieldCode( element, variable ) {
 		var variable,
-			rich = true,
+			rich = false,
 			element_id = element;
 		if ( typeof(element) === 'object' ) {
 			if ( element.hasClass( 'frm_noallow' ) ) {
@@ -2851,8 +2851,13 @@ function frmAdminBuildJS() {
 		}
 		c = id;
 
-		if ( id === 'frm_classes' ) {
+		if ( id.indexOf( 'frm_classes_' ) === 0 ) {
 			jQuery( '#frm-layout-classes .frm_code_list' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
+			return;
+		}
+
+		if ( id.indexOf( 'frm_default_value_' ) === 0 ) {
+			jQuery( '#frm-dynamic-values .frm_code_list' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 			return;
 		}
 
@@ -2870,12 +2875,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( id === 'frm_classes' ) {
-			jQuery( '#frm-layout-classes .frm_code_list' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
-			return;
-		}
-
-		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values' ).removeClass().addClass( 'tabs-panel ' + c );
+		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab' ).removeClass().addClass( 'tabs-panel ' + c );
 		var a = [
 			'content', 'wpbody-content', 'dyncontent', 'success_url',
 			'success_msg', 'edit_msg', 'frm_dyncontent', 'frm_not_email_message',
@@ -2893,16 +2893,12 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_code_list li:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 			jQuery( '.frm_code_list .show_' + id ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 		} else {
-			jQuery( '.frm_code_list li' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( '.frm_code_list:not(.frm-full-hover) li' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		}
 
 		//Automatically select a tab
 		if ( id === 'dyn_default_value' ) {
-			//clickedID = 'frm_dynamic_values';
-		} else if ( jQuery( '.frm_form_builder' ).length ) {
-			if ( f === 'focusin' || jQuery( document.getElementById( 'frm-dynamic-values' ) ).is( ':visible' ) ) {
-				clickedID = 'frm_insert_fields';
-			}
+			clickedID = 'frm_dynamic_values';
 		}
 
 		if ( typeof clickedID !== 'undefined' ) {
@@ -3820,6 +3816,12 @@ function frmAdminBuildJS() {
 				this.select();
 			} );
 
+			var autoSearch = jQuery( '.frm-auto-search' );
+			autoSearch.keyup( searchContent );
+			if ( autoSearch.val() !== '' ) {
+				autoSearch.keyup();
+			}
+
 			jQuery( document.getElementById( 'frm_deauthorize_link' ) ).click( deauthorize );
 			jQuery( '.frm_authorize_link' ).click( authorize );
 
@@ -4151,12 +4153,6 @@ function frmAdminBuildJS() {
 
 		templateInit: function() {
 			initTemplateModal();
-
-			var autoSearch = jQuery( '.frm-auto-search' );
-			autoSearch.keyup( searchContent );
-			if ( autoSearch.val() !== '' ) {
-				autoSearch.keyup();
-			}
 		},
 
 		viewInit: function() {
@@ -4351,7 +4347,6 @@ function frmAdminBuildJS() {
 			jQuery( 'select[name="format"]' ).change( checkExportTypes ).change();
 			jQuery( 'input[name="frm_export_forms[]"]' ).click( preventMultipleExport );
 			initiateMultiselect();
-			frmAdminBuild.templateInit(); // Include autosearch.
 		},
 
 		updateOpts: function( field_id, opts, modal ) {

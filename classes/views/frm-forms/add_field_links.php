@@ -130,7 +130,15 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				<?php
 				FrmFieldsHelper::inline_modal(
 					array(
-						'title'    => __( 'Add layout classes', 'formidable' ),
+						'title'    => __( 'Smart Default Values', 'formidable' ),
+						'callback' => array( 'FrmFieldsHelper', 'smart_values' ),
+						'id'       => 'frm-smart-values-box',
+					)
+				);
+
+				FrmFieldsHelper::inline_modal(
+					array(
+						'title'    => __( 'Add Layout Classes', 'formidable' ),
 						'callback' => array( 'FrmFieldsHelper', 'layout_classes' ),
 						'id'       => 'frm-layout-classes-box',
 					)

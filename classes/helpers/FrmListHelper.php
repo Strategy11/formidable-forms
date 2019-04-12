@@ -275,7 +275,7 @@ class FrmListHelper {
 			$this->hidden_search_inputs( $search_params );
 		}
 
-		FrmAppHelper::show_search_box( $text, $input_id );
+		FrmAppHelper::show_search_box( compact( 'text', 'input_id' ) );
 	}
 
 	private function hidden_search_inputs( $param_name ) {

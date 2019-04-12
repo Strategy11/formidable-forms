@@ -156,6 +156,18 @@ do_action( 'frm_before_field_options', $field );
 			</p>
 		<?php } ?>
 
+		<?php if ( $display['default'] ) { ?>
+			<p class="frm-has-modal">
+				<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
+					<?php esc_html_e( 'Default Value', 'formidable' ); ?>
+				</label>
+				<span class="frm-with-right-icon">
+					<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-smart-values-box"></i>
+					<input type="text" name="default_value_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['default_value'] ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" />
+				</span>
+			</p>
+		<?php } ?>
+
 		<?php if ( $display['css'] ) { ?>
 			<p class="frm-has-modal">
 				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
@@ -163,7 +175,7 @@ do_action( 'frm_before_field_options', $field );
 				</label>
 				<span class="frm-with-right-icon">
 					<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-layout-classes-box"></i>
-					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_classes" />
+					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" />
 				</span>
 			</p>
 		<?php } ?>

@@ -94,7 +94,15 @@
 					<?php esc_html_e( 'Select a Form', 'formidable' ); ?>
 				</label>
 			</p>
-			<?php FrmAppHelper::show_search_box( '', 'template', __( 'Search Forms', 'formidable' ) ); ?>
+			<?php
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'template',
+					'placeholder' => __( 'Search Forms', 'formidable' ),
+					'tosearch'    => 'frm-row',
+				)
+			);
+			?>
 			<div class="frm-scroll-box">
 				<table class="widefat striped frm-border frm_no_top_margin">
 					<thead>
@@ -109,7 +117,7 @@
 					</thead>
 					<tbody>
 						<?php foreach ( $forms as $form ) { ?>
-							<tr class="frm-card">
+							<tr class="frm-row">
 								<td>
 									<input type="checkbox" name="frm_export_forms[]" value="<?php echo esc_attr( $form->id ); ?>" id="export_form_<?php echo esc_attr( $form->id ); ?>" />
 								</td>

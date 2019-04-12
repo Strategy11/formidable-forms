@@ -20,7 +20,14 @@
 			?>
 		</p>
 
-		<?php FrmAppHelper::show_search_box( '', 'template', __( 'Search Templates', 'formidable' ) ); ?>
+		<?php
+		FrmAppHelper::show_search_box(
+			array(
+				'input_id'    => 'template',
+				'placeholder' => __( 'Search Templates', 'formidable' )
+			)
+		);
+		?>
 		<div class="clear"></div>
 
 		<div class="frm-addons">

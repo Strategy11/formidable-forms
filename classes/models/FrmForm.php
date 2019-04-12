@@ -245,11 +245,10 @@ class FrmForm {
 			}
 
 			$field->field_options = apply_filters( 'frm_update_field_options', $field->field_options, $field, $values );
-			$default_value        = maybe_serialize( $values['item_meta'][ $field_id ] );
 
 			$new_field = array(
 				'field_options' => $field->field_options,
-				'default_value' => $default_value,
+				'default_value' => maybe_serialize( $values[ 'default_value_' . $field_id ] ),
 			);
 
 			self::prepare_field_update_values( $field, $values, $new_field );

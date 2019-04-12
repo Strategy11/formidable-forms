@@ -468,6 +468,20 @@ class FrmFieldsHelper {
 	/**
 	 * @since 4.0
 	 */
+	public static function smart_values() {
+		$continue = apply_filters( 'frm_smart_values_box', true );
+		if ( $continue === true ) {
+			$upgrade_link = array(
+				'medium'  => 'builder',
+				'content' => 'smart-tags',
+			);
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/smart-values.php' );
+		}
+	}
+
+	/**
+	 * @since 4.0
+	 */
 	public static function input_mask() {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/input-mask-info.php' );
 	}

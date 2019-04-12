@@ -256,7 +256,7 @@ DEFAULT_HTML;
 			'label_position' => true,
 			'invalid'        => false,
 			'size'           => false,
-			'clear_on_focus' => false, // Shows the placeholder option
+			'clear_on_focus' => false, // Shows the placeholder option.
 			'default_blank'  => true,
 			'css'            => true,
 			'conf_field'     => false,
@@ -265,6 +265,7 @@ DEFAULT_HTML;
 			'captcha_size'   => false,
 			'format'         => false,
 			'show_image'     => false,
+			'default'        => true,
 		);
 	}
 
@@ -283,6 +284,7 @@ DEFAULT_HTML;
 			'required'       => false,
 			'description'    => false,
 			'label_position' => false,
+			'default'        => false,
 		);
 	}
 

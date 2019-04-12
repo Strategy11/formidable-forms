@@ -696,29 +696,38 @@ class FrmAppHelper {
 	/**
 	 * @since 3.06
 	 */
-	public static function show_search_box( $text, $input_id, $placeholder = '' ) {
-		$tosearch = '';
-		$class    = 'frm-search-input';
-		if ( $input_id === 'template' ) {
-			$tosearch = 'frm-card';
-			$class    .= ' frm-auto-search';
+	public static function show_search_box( $atts ) {
+		$defaults = array(
+			'placeholder' => '',
+			'tosearch'    => '',
+			'text'        => __( 'Search', 'formidable' ),
+			'input_id'    => '',
+		);
+		$atts = array_merge( $defaults, $atts );
+
+		if ( $atts['input_id'] === 'template' && empty( $atts['tosearch'] ) ) {
+			$atts['tosearch'] = 'frm-card';
 		}
-		$input_id = $input_id . '-search-input';
-		if ( empty( $text ) ) {
-			$text = __( 'Search', 'formidable' );
+
+		$class = 'frm-search-input';
+		if ( ! empty( $atts['tosearch'] ) ) {
+			$class .= ' frm-auto-search';
 		}
+
+		$input_id = $atts['input_id'] . '-search-input';
+
 		?>
 		<p class="search-box frm-search">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
-				<?php echo wp_kses( $text, array() ); ?>:
+				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
 			<span class="dashicons dashicons-search"></span>
 			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
-				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>"
-				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $tosearch ); ?>"/>
+				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
+				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $atts['tosearch'] ); ?>"/>
 			<?php
-			if ( empty( $tosearch ) ) {
-				submit_button( $text, 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
+			if ( empty( $atts['tosearch'] ) ) {
+				submit_button( $atts['text'], 'button-secondary', '', false, array( 'id' => 'search-submit' ) );
 			}
 			?>
 		</p>

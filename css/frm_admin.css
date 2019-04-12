@@ -569,12 +569,6 @@ ul.frm_form_nav > li {
 	padding: 0;
 }
 
-.frm-right-panel .frm_field_list #frm-options-panel,
-.frm-right-panel .frm_field_list #frm-dynamic-values {
-	display: none;
-	max-height: none;
-}
-
 .frm-nav-tabs,
 #frm-bulk-modal h2 {
 	margin: 10px 0 20px;
@@ -1123,11 +1117,16 @@ form .frm_primary_label input {
 	margin-bottom: 20px;
 }
 
+.frm_description,
 .with_frm_style form div.description,
 .frm_error,
 .with_frm_style form div.description textarea {
 	padding: 0;
 	font-size: 11px;
+}
+
+.with_frm_style .description {
+	color: inherit;
 }
 
 #frm_form_editor_container .divider_section_only .frm_primary_label {
@@ -1150,7 +1149,9 @@ form .form-field.frm_field_loading {
 	display: none;
 }
 
-.with_frm_style form div.description, .frm_error {
+.frm_description,
+.with_frm_style form div.description,
+.frm_error {
 	margin: 0;
 }
 
@@ -4625,10 +4626,12 @@ ul.frm-category-tabs {
 	position: relative;
 }
 
+.frm-inline-modal .frm-search,
 #frm_adv_info .frm-search {
 	float: none;
 	width: 100%;
 	clear: both;
+	margin-bottom: 10px;
 }
 
 .frm-button-group a {
@@ -4710,6 +4713,7 @@ i.frm-show-inline-modal {
 	width: 100%;
 	border-right-width: 1px;
 	border-radius: var(--border-radius);
+	float: none;
 }
 
 .frm-search #search-submit {
@@ -4941,6 +4945,7 @@ ul .frm_col_two {
 	font-size: 14px;
 }
 
+.frm_code_list.frm-full-hover a:hover span,
 .frm_code_list.frm-full-hover a:hover {
 	background: var(--sidebar-color);
 	color: var(--primary-color);
