@@ -10,6 +10,6 @@
 		</li>
 	</ul>
 	<div class="inside">
-		<?php call_user_func( $args['callback'] ); ?>
+		<?php call_user_func( $args['callback'], $args['args'] ); ?>
 	</div>
 </div>

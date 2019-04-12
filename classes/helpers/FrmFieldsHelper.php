@@ -462,6 +462,9 @@ class FrmFieldsHelper {
 	 * @since 4.0
 	 */
 	public static function inline_modal( $args ) {
+		if ( ! isset( $args['args'] ) ) {
+			$args['args'] = array();
+		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/inline-modal.php' );
 	}
 

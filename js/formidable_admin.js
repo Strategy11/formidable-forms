@@ -202,7 +202,7 @@ function frmAdminBuildJS() {
 			b = this;
 		}
 
-		popCalcFields( b );
+		popCalcFields( b, false );
 
 		var cont = jQuery( b ).closest( '.frm_form_action_settings' );
 		if ( cont.length && typeof target !== 'undefined' && ( target.parentElement.className.indexOf( 'frm_email_icons' ) > -1 || target.parentElement.className.indexOf( 'frm_toggle' ) > -1 ) ) {
@@ -826,31 +826,70 @@ function frmAdminBuildJS() {
 		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
 	}
 
-	function popCalcFields( v ) {
-		/*jshint validthis:true */
-		var p;
-		if ( !v.type ) {
-			if ( !jQuery( v ).closest( 'div.widget' ).children( '.widget-inside' ).is( ':hidden' ) ) {
-				return;
-			}
-			p = jQuery( v ).closest( '.frm-single-settings' );
-		} else {
-			p = jQuery( this ).closest( '.frm-single-settings' );
-		}
+	function popCalcFields( v, force ) {
+		var box, exclude, fields, i, list,
+			p = jQuery( v ).closest( '.frm-single-settings' ),
+			calc = p.find( '.frm-calc-field' );
 
-		if ( !p.find( '.use_calc' ).length || !p.find( '.use_calc' ).is( ':checked' ) ) {
+		if ( ! force && ( ! calc.length || calc.val() === '' || calc.is( ':hidden' ) ) ) {
 			return;
 		}
 
 		var form_id = jQuery( 'input[name="id"]' ).val();
-		var field_id = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_populate_calc_dropdown', field_id: field_id, form_id: form_id, nonce: frmGlobal.nonce},
-			success: function( msg ) {
-				p.find( '.frm_shortcode_select' ).replaceWith( msg );
+		var fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
+
+		if ( force ) {
+			box = v;
+		} else {
+			box = document.getElementById( 'frm-calc-box-' + fieldId );
+		}
+
+		exclude = JSON.parse( box.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+		fields = getFieldList();
+		list = document.getElementById( 'frm-calc-list-' + fieldId );
+		list.innerHTML = '';
+
+		for ( i = 0; i < fields.length; i++ ) {
+			if ( exclude.includes( fields[ i ].fieldType ) ) {
+				continue;
 			}
-		} );
+			var span = document.createElement( 'span' );
+			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
+
+			var a = document.createElement( 'a' );
+			a.setAttribute( 'href', '#' );
+			a.setAttribute( 'data-code', fields[i].fieldId );
+			a.classList.add( 'frm_insert_code' );
+			a.appendChild( span );
+			a.appendChild( document.createTextNode( fields[i].fieldName ) );
+
+			var li = document.createElement( 'li' );
+			li.classList.add( 'frm-field-list-' + fieldId );
+			li.classList.add( 'frm-field-list-' + fields[i].fieldType );
+			li.appendChild( a );
+			list.appendChild( li );
+		}
+	}
+
+	function getFieldList() {
+		var i, fields = [],
+			allFields = jQuery( '#frm_builder_page .frm-single-settings.frm-fields' );
+
+		for ( i = 0; i < allFields.length; i++ ) {
+			var fieldId = allFields[ i ].getAttribute( 'data-fid' );
+			if ( typeof fieldId !== 'undefined' && fieldId ) {
+				fields.push( {
+					'fieldId': fieldId,
+					'fieldName': document.getElementById( 'frm_name_' + fieldId ).value,
+					'fieldType': document.getElementById( 'field_options_type_' + fieldId ).value,
+					'fieldKey': document.getElementById( 'field_options_field_key_' + fieldId ).value
+				} );
+			}
+
+			if ( i === allFields.length - 1 ) {
+				return fields;
+			}
+		}
 	}
 
 	function toggleInvalidMsg() {
@@ -1816,6 +1855,9 @@ function frmAdminBuildJS() {
 		} else {
 			this.nextElementSibling.focus();
 			container.after( box );
+			if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
+				popCalcFields( box, true );
+			}
 			container.addClass( 'frm-open' );
 			box.classList.remove( 'frm_hidden' );
 		}
@@ -2758,7 +2800,17 @@ function frmAdminBuildJS() {
 		}
 
 		if ( typeof element_id === 'undefined' ) {
-			element_id = document.activeElement.id;
+			var active = document.activeElement;
+			if ( active.type === 'search' ) {
+				// If the search field has focus, find the correct field.
+				element_id = active.id.replace( '-search-input', '' );
+				if ( element_id.match( /\d/gi ) === null ) {
+					active = jQuery( '.frm-single-settings:visible .' + element_id );
+					element_id = active.attr( 'id' );
+				}
+			} else {
+				element_id = active.id;
+			}
 		}
 
 		if ( element_id ) {
@@ -3892,7 +3944,6 @@ function frmAdminBuildJS() {
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.fa-clone', duplicateField );
-			$builderForm.on( 'click', '.use_calc', popCalcFields );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );

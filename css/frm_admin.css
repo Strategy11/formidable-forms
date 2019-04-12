@@ -139,6 +139,11 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	border-radius: var(--small-radius);
 }
 
+.frm-short-list {
+	overflow: auto;
+	max-height: 200px;
+}
+
 .frm-white-body table.frm-border td {
 	font-size: 14px;
 }
@@ -1091,6 +1096,7 @@ a.frm_hidden,
 
 .frm-fields td > label,
 .frm-fields p > label,
+#new_fields .frm_primary_label,
 #frm_form_editor_container .frm_primary_label {
 	color: var(--dark-grey);
 	margin: 0 0 3px;
@@ -2921,6 +2927,44 @@ select.frm_cancelnew, input.frm_enternew {
 	background-color: #fff;
 }
 
+.frm_toggle_long {
+	border: 2px solid var(--primary-color);
+	border-radius: var(--border-radius);
+	width: 80%;
+	height: 28px;
+}
+
+.frm_toggle_long .frm_toggle_slider {
+	background-color: var(--primary-color);
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long .frm_toggle_on {
+	width: 50%;
+	text-align: center;
+	font-size: 13px;
+	line-height: 28px;
+}
+
+.frm_toggle_long .frm_toggle_on {
+	color: var(--primary-color);
+	display: inline;
+	left: 0;
+}
+
+.frm_toggle_long .frm_toggle_off {
+	right: 0;
+	font-weight: bold;
+}
+
+.frm_toggle_long .frm_toggle_slider:before {
+	width: 50%;
+	left: 0;
+	top: 0;
+	border-radius: var(--border-radius) 0 0 var(--border-radius);
+	height: 100%;
+}
+
 input:checked + .frm_toggle_slider {
 	background-color: var(--primary-hover);
 }
@@ -2929,12 +2973,32 @@ input:checked + .frm_toggle_slider:before {
 	transform: translateX(25px);
 }
 
+.frm_toggle_long input:checked + .frm_toggle_slider {
+	background-color: var(--primary-color);
+}
+
+.frm_toggle_long input:checked + .frm_toggle_slider:before {
+	transform: translateX(101%);
+	border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
 input:checked + .frm_toggle_slider + .frm_toggle_on {
 	display: inline;
 }
 
 input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
 	display: none;
+}
+
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: inline;
+	color: var(--primary-color);
+	font-weight: normal;
+}
+
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on {
+	color: #fff;
+	font-weight: bold;
 }
 
 input:focus + .frm_toggle_slider {
