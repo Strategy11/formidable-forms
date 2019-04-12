@@ -248,7 +248,7 @@ class FrmForm {
 
 			$new_field = array(
 				'field_options' => $field->field_options,
-				'default_value' => maybe_serialize( $values[ 'default_value_' . $field_id ] ),
+				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? maybe_serialize( $values[ 'default_value_' . $field_id ] ) : '',
 			);
 
 			self::prepare_field_update_values( $field, $values, $new_field );
