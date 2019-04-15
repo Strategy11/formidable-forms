@@ -124,6 +124,14 @@ function frmAdminBuildJS() {
 			jQuery( show ).removeClass( toggleClass );
 		}
 
+		var current = this.parentNode.querySelectorAll( 'a.current' );
+		if ( current !== null ) {
+			for ( var i = 0; i < current.length; i++ ) {
+				current[ i ].classList.remove( 'current' );
+			}
+			this.classList.add( 'current' );
+		}
+
 		return false;
 	}
 
@@ -1000,7 +1008,9 @@ function frmAdminBuildJS() {
 			} else if ( val === 'below' ) {
 				$thisField.removeClass( 'frm_conf_inline' ).addClass( 'frm_conf_below' );
 			}
+			jQuery( '.frm-conf-box-' + field_id ).removeClass( 'frm_hidden' );
 		} else {
+			jQuery( '.frm-conf-box-' + field_id ).addClass( 'frm_hidden' );
 			setTimeout( function() {
 				$thisField.removeClass( 'frm_conf_inline frm_conf_below' );
 			}, 200 );
@@ -1360,21 +1370,6 @@ function frmAdminBuildJS() {
 			}
 		} );
 		return false;
-	}
-
-	function hideOrShowAutopopulateValue() {
-		/*jshint validthis:true */
-		var fieldId = this.id.replace( 'autopopulate_value_', '' );
-		var sections = document.querySelectorAll( '.frm_autopopulate_value_section_' + fieldId );
-
-		var l = sections.length;
-		for ( var i = 0; i < l; i++ ) {
-			if ( this.checked ) {
-				sections[i].className = sections[i].className.replace( 'frm_hidden', '' );
-			} else {
-				sections[i].className = sections[i].className + ' frm_hidden';
-			}
-		}
 	}
 
 	function updateGetValueFieldSelection() {
@@ -1869,18 +1864,23 @@ function frmAdminBuildJS() {
 		var box = document.getElementById( this.getAttribute( 'data-open' ) ),
 			container = jQuery( this ).closest( 'p' ),
 			pos = this.getBoundingClientRect(),
-			parentPos = box.parentElement.getBoundingClientRect();
+			parentPos = box.parentNode.getBoundingClientRect();
 
 		e.preventDefault();
 		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
 			box.classList.add( 'frm_hidden' );
 		} else {
-			this.nextElementSibling.focus();
-			container.after( box );
-			if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
-				popCalcFields( box, true );
+			var input = this.nextElementSibling;
+			if ( input !== null ) {
+				input.focus();
+				container.after( box );
+
+				if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
+					popCalcFields( box, true );
+				}
 			}
+
 			container.addClass( 'frm-open' );
 			box.classList.remove( 'frm_hidden' );
 		}
@@ -3959,7 +3959,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
 			$builderForm.on( 'click', '.frm_remove_tag', removeThisTag );
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
-			$builderForm.on( 'change', '.autopopulate_value', hideOrShowAutopopulateValue );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );

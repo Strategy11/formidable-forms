@@ -25,7 +25,7 @@
 		<?php $field_obj->show_on_form_builder(); ?>
 		<div class="clear"></div>
 	</div>
-	<?php if ( $display['description'] ) { ?>
+	<?php if ( $display['description'] || ! empty( $field['description'] ) ) { ?>
 		<div class="description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
 		</div>
@@ -44,6 +44,7 @@
 </div>
 	<?php if ( $display['clear_on_focus'] ) { ?>
 		<div class="alignleft">
+			TODO: placeholder for confirmation
 			<?php FrmFieldsHelper::clear_on_focus_html( $field, $display, '_conf' ); ?>
 		</div>
 	<?php } ?>

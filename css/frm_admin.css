@@ -1029,6 +1029,8 @@ input.frm_insert_in_template {
 	display: inline;
 }
 
+.frm-lookup-modal .dismiss,
+.frm-right-panel .inside a.frm_hidden,
 ul.frm_form_nav > li.frm_hidden,
 a.frm_hidden,
 .button.frm_hidden,
@@ -4768,6 +4770,11 @@ i.frm-show-inline-modal {
 
 .frm-open i.frm-show-inline-modal {
 	opacity: .5;
+}
+
+.frm-lookup-box-label + .frm-inline-modal,
+.frm-open + .frm-inline-modal {
+	top: -10px;
 }
 
 .frm-with-left-icon input {

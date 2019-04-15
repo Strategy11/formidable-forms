@@ -27,16 +27,11 @@
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		<?php } ?>
 
-		<?php if ( $display['description'] ) { ?>
-			<p>
-				<label for="frm_description_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php esc_html_e( 'Field Description', 'formidable' ); ?>
-				</label>
-				<textarea name="field_options[description_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_long_input"><?php
-				echo FrmAppHelper::esc_textarea( $field['description'] ); // WPCS: XSS ok.
-				?></textarea>
-			</p>
-		<?php } ?>
+		<?php
+		if ( $display['description'] ) {
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php' );
+		}
+		?>
 
 		<p>
 			<?php if ( $display['required'] ) { ?>
@@ -158,11 +153,12 @@ do_action( 'frm_before_field_options', $field );
 
 		<?php if ( $display['default'] ) { ?>
 			<div class="frm-has-modal">
+				<?php if ( count( $default_value_types ) > 1 ) { ?>
 				<span class="frm-default-switcher">
 					<?php foreach ( $default_value_types as $def_name => $link ) { ?>
-					<a href="#" title="<?php echo esc_attr( $link['title'] ); ?>" class="<?php echo esc_attr( $link['class'] ); ?>" data-toggleclass="frm_hidden frm_open"
+					<a href="#" title="<?php echo esc_attr( $link['title'] ); ?>" class="<?php echo esc_attr( $link['class'] ); ?>" data-toggleclass="frm_hidden frm-open"
 						<?php foreach ( $link['data'] as $data_key => $data_value ) { ?>
-							data-<?php echo esc_attr( $data_key ); ?>="<?php echo esc_attr( $data_value . ( $data_key === 'frmshow' ? $field['id'] : '' ) ); ?>"
+							data-<?php echo esc_attr( $data_key ); ?>="<?php echo esc_attr( $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' ) ); ?>"
 						<?php } ?>
 						<?php if ( isset( $link['data']['frmshow'] ) ) { ?>
 							data-frmhide=".frm-inline-modal,.default-value-section-<?php echo esc_attr( $field['id'] ); ?>"
@@ -172,6 +168,7 @@ do_action( 'frm_before_field_options', $field );
 					</a>
 					<?php } ?>
 				</span>
+				<?php } ?>
 
 				<p class="frm-has-modal default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>" id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 					<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
@@ -306,12 +303,12 @@ do_action( 'frm_before_field_options', $field );
 		<?php } else { ?>
 			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
 		<?php } ?>
-	</div>
 
-	<table class="form-table frm_no_top_margin">
-		<?php $field_obj->show_options( $field, $display, $values ); ?>
-		<?php do_action( 'frm_field_options_form', $field, $display, $values ); ?>
-	</table>
+		<table class="form-table frm_no_top_margin">
+			<?php $field_obj->show_options( $field, $display, $values ); ?>
+			<?php do_action( 'frm_field_options_form', $field, $display, $values ); ?>
+		</table>
+	</div>
 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 		<?php

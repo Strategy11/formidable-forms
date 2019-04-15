@@ -327,7 +327,7 @@ class FrmFieldsController {
 		$display_type = self::displayed_field_type( $field );
 
 		if ( $display['default'] ) {
-			$default_value_types = self::default_value_types( $field );
+			$default_value_types = self::default_value_types( $field, compact( 'display' ) );
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
@@ -355,7 +355,7 @@ class FrmFieldsController {
 	 * @since 4.0
 	 * @return array
 	 */
-	private static function default_value_types( $field ) {
+	private static function default_value_types( $field, $atts ) {
 		$types = array(
 			'default_value' => array(
 				'class' => '',
@@ -374,9 +374,18 @@ class FrmFieldsController {
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
 				),
 			),
+			'get_values_field' => array(
+				'class' => 'frm_show_upgrade frm_noallow',
+				'title' => __( 'Default Value (Lookup)', 'formidable' ),
+				'icon'  => 'fas fa-search',
+				'data'  => array(
+					'medium'  => 'lookup',
+					'upgrade' => __( 'Lookup fields', 'formidable' ),
+				),
+			),
 		);
 
-		$types = apply_filters( 'frm_default_value_types', $types );
+		$types = apply_filters( 'frm_default_value_types', $types, $atts );
 
 		// Set active class.
 		$settings = array_keys( $types );
@@ -388,7 +397,7 @@ class FrmFieldsController {
 			}
 		}
 
-		$types[ $active ]['class']  .= 'current';
+		$types[ $active ]['class']  .= ' current';
 		$types[ $active ]['current'] = true;
 
 		return $types;
