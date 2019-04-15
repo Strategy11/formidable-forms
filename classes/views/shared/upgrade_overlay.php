@@ -1,7 +1,9 @@
 <div id="frm_upgrade_modal" class="frm_hidden settings-lite-cta">
 	<div class="metabox-holder">
 		<div class="postbox">
-			<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>"><i class="dashicons dashicons-no-alt" aria-label="Dismiss" aria-hidden="true"></i></a>
+			<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
+				<i class="fas fa-times" aria-label="Dismiss" aria-hidden="true"></i>
+			</a>
 			<div class="inside">
 
 				<i class="dashicons dashicons-lock"></i>

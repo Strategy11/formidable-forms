@@ -464,13 +464,14 @@ ul.frm_form_nav > li {
 	background: #fff;
 }
 
+#frm_upgrade_modal .dismiss i,
 .frm-inline-modal i,
 #frm-bulk-modal i,
 .frm_has_shortcodes i {
 	position: absolute;
 	top: 44px;
 	right: 5px;
-	z-index: 1;
+	z-index: 100;
 	margin-top: -9px;
 	color: var(--primary-color);
 	border-radius: 50%;
@@ -480,6 +481,11 @@ ul.frm_form_nav > li {
 	height: 15px;
 	width: 15px;
 	text-align: center;
+}
+
+#frm_upgrade_modal .dismiss i {
+	top: 7px;
+	right: 7px;
 }
 
 #frm-bulk-modal i {
@@ -493,15 +499,16 @@ ul.frm_form_nav > li {
 	font-size: 11px;
 	height: 11px;
 	width: 11px;
-	background: var(--sidebar-color);
 }
 
+#frm_upgrade_modal .dismiss i:hover,
 .frm-inline-modal i:hover,
 #frm-bulk-modal i:hover,
 .frm_has_shortcodes i:hover {
-	background: var(--light-blue);
+	background: var(--sidebar-color);
 }
 
+#frm_upgrade_modal .dismiss .fa-times,
 .frm-inline-modal .fa-times,
 #frm-bulk-modal .fa-times,
 .frm_has_shortcodes .fa-times {
@@ -5272,13 +5279,6 @@ h2 .frm-sub-label {
 
 #frm_upgrade_modal {
 	text-align: center;
-}
-
-#frm_upgrade_modal .dismiss {
-	padding: 5px;
-	color: #c4c4c4;
-	z-index: 100;
-	position: relative;
 }
 
 #frm_upgrade_modal .dashicons-lock {
