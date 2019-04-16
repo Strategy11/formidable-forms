@@ -363,7 +363,7 @@ class FrmFieldsController {
 				'title' => __( 'Default Value (Text)', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
-				)
+				),
 			),
 			'calc' => array(
 				'class' => 'frm_show_upgrade frm_noallow',

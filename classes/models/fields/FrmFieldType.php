@@ -343,6 +343,16 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * This is called right after the default value settings.
+	 *
+	 * @since 4.0
+	 * @param array $args - Includes 'field', 'display'.
+	 */
+	public function show_after_default( $args ) {
+		return;
+	}
+
+	/**
 	 *
 	 * @since 4.0
 	 * @param array $args - Includes 'field', 'display', and 'values'

@@ -183,6 +183,8 @@ do_action( 'frm_before_field_options', $field );
 			</div>
 		<?php } ?>
 
+		<?php $field_obj->show_after_default( compact( 'field', 'display' ) ); ?>
+
 		<?php if ( $display['css'] ) { ?>
 			<p class="frm-has-modal">
 				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
