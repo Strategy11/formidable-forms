@@ -51,6 +51,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 	}
 
 	if ( is_array( $field_type ) && isset( $field_type['types'] ) ) {
+		_deprecated_argument( 'Field with sub types', '4.0' );
 		$field_label = $field_type['name'];
 
 		?>

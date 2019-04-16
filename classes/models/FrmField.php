@@ -822,10 +822,8 @@ class FrmField {
 	 * @return boolean
 	 */
 	public static function is_multiple_select( $field ) {
-		$field_type = self::get_field_type( $field );
-		$data_type  = self::get_option( $field, 'data_type' );
-
-		$is_multiple = self::is_option_true( $field, 'multiple' ) && ( ( $field_type == 'select' || ( $field_type == 'data' && $data_type == 'select' ) ) );
+		$field_type  = self::get_field_type( $field );
+		$is_multiple = self::is_option_true( $field, 'multiple' ) && self::is_field_type( $field, 'select' ) && $field_type !== 'hidden';
 
 		return apply_filters( 'frm_is_multiple_select', $is_multiple, $field );
 	}
