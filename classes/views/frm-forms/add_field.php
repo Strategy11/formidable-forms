@@ -36,18 +36,12 @@
 	<div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_conf_container">
 		<label class="frm_primary_label">&nbsp;</label>
 		<div class="frm_form_fields">
-			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
+			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ); ?>]" placeholder="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
 		</div>
 		<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="description"><?php
 			echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // WPCS: XSS ok.
 		?></div>
 </div>
-	<?php if ( $display['clear_on_focus'] ) { ?>
-		<div class="alignleft">
-			TODO: placeholder for confirmation
-			<?php FrmFieldsHelper::clear_on_focus_html( $field, $display, '_conf' ); ?>
-		</div>
-	<?php } ?>
 </div>
 <div class="clear"></div>
 	<?php
