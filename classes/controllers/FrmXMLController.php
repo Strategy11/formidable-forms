@@ -160,13 +160,14 @@ class FrmXMLController {
 			return;
 		}
 
-		if ( ! isset( $_FILES ) || ! isset( $_FILES['frm_import_file'] ) || empty( $_FILES['frm_import_file']['name'] ) || (int) $_FILES['frm_import_file']['size'] < 1 ) {
+		$has_file = isset( $_FILES ) && isset( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
+		if ( ! $has_file ) {
 			$errors[] = __( 'Oops, you didn\'t select a file.', 'formidable' );
 			self::form( $errors );
 			return;
 		}
 
-		$file = $_FILES['frm_import_file']['tmp_name'];
+		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? $_FILES['frm_import_file']['tmp_name'] : '';
 
 		if ( ! is_uploaded_file( $file ) ) {
 			unset( $file );
@@ -421,7 +422,7 @@ class FrmXMLController {
 		set_time_limit( 0 ); //Remove time limit to execute this function
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
-			ini_set( 'memory_limit', '256M' );
+			wp_raise_memory_limit();
 		}
 
 		global $wpdb;

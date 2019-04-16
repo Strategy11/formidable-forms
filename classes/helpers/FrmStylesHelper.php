@@ -223,7 +223,7 @@ class FrmStylesHelper {
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
-			if ( isset( $_POST['frm_style_setting'] ) ) {
+			if ( isset( $_POST['frm_style_setting'] ) && isset( $_POST['frm_style_setting']['post_content'] ) ) {
 				$settings = $_POST['frm_style_setting']['post_content'];
 			} else {
 				$settings = $_GET;
