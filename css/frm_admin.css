@@ -2253,6 +2253,15 @@ input[type="checkbox"] {
 	margin: 7px 0;
 }
 
+#new_fields div.frm_grid_container > .frm_primary_label {
+	margin-top: 7px;
+}
+
+#new_fields .frm_primary_label + p,
+#new_fields .frm_primary_label + .frm6 + .frm6 {
+	margin-top: 0;
+}
+
 .frm_catlevel_2, .frm_catlevel_3, .frm_catlevel_4, .frm_catlevel_5 {
 	margin-left: 18px;
 }

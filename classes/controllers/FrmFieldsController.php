@@ -570,8 +570,7 @@ class FrmFieldsController {
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
 		if ( $field['placeholder'] != '' ) {
 			if ( is_array( $field['placeholder'] ) ) {
-				$field['placeholder']    = json_encode( $field['placeholder'] );
-				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
+				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( json_encode( $field['placeholder'] ) ) . '"';
 			} else {
 				self::add_frmval_to_input( $field, $add_html );
 			}
