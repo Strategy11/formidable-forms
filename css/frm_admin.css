@@ -76,6 +76,17 @@ a.frm_confirming,
 .frm-white-body #screen-meta-links .screen-meta-toggle {
 	position: absolute;
 	right: 90px;
+	box-shadow: none;
+	border-bottom-left-radius: var(--small-radius);
+	border-bottom-right-radius: var(--small-radius);
+}
+
+.frm-white-body #screen-meta-links .show-settings {
+	box-shadow: none;
+}
+
+.frm-white-body #screen-meta-links .show-settings:after {
+	color: var(--grey);
 }
 
 .frm-white-body .columns-2 {
