@@ -25,7 +25,7 @@
 		<?php $field_obj->show_on_form_builder(); ?>
 		<div class="clear"></div>
 	</div>
-	<?php if ( $display['description'] || ! empty( $field['description'] ) ) { ?>
+	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ) ) ) { ?>
 		<div class="description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
 		</div>
