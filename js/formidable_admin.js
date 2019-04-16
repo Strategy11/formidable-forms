@@ -1241,6 +1241,13 @@ function frmAdminBuildJS() {
 		$element.tooltip( 'show' );
 	}
 
+	/**
+	 * If a field is clicked in the builder, prevent inputs from changing.
+	 */
+	function stopFieldFocus( e ) {
+		e.preventDefault();
+	}
+
 	function deleteFieldOption() {
 		/*jshint validthis:true */
 		var parentLi = this.parentNode;
@@ -3988,6 +3995,8 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
+			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
+			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption ); //TODO
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
