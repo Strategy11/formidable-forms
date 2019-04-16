@@ -9,12 +9,15 @@
 		</div>
 		<?php
 	}
-
+	?>
+	<div id="frm-publishing">
+	<?php
 	if ( isset( $atts['publish'] ) ) {
 		call_user_func( $atts['publish'][0], $atts['publish'][1] );
 	}
-
 	?>
+	</div>
+
 	<a href="?page=formidable" class="frm-header-logo">
 	<?php
 	FrmAppHelper::show_logo(

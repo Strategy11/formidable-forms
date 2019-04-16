@@ -1,4 +1,4 @@
-<div id="frm-publishing" class="<?php echo esc_attr( 'draft' === $values['status'] ? 'frm-is-draft' : '' ); ?>">
+<div class="<?php echo esc_attr( 'draft' === $values['status'] ? 'frm-is-draft' : '' ); ?>">
 
 			<?php if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) { ?>
 				<button class="frm_submit_form frm_submit_settings_btn button-primary frm-button-primary frm_button_submit" type="button" id="frm_submit_side_top" >

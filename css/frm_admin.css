@@ -232,6 +232,7 @@ td.column-title .frm_actions_dropdown {
 ul.frm_form_nav {
 	margin: 0 auto;
 	padding-top: 19px;
+	display: inline-block;
 }
 
 .nav-tab-wrapper.frm_form_nav {
@@ -310,6 +311,10 @@ ul.frm_form_nav > li {
 .post-type-frm_display #frm_top_bar h1,
 .frm_page_container #frm_top_bar h1 {
 	margin: 15px 15px 10px;
+	width: 225px;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 #frm_top_bar h1,
@@ -332,6 +337,7 @@ ul.frm_form_nav > li {
 #frm-publishing {
 	float: right;
 	margin-top: 15px;
+	width: 225px;
 }
 
 #frm-preview-action,
