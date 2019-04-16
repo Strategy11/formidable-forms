@@ -1178,70 +1178,6 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Toggle a default value icon
-	 *
-	 * @since 2.02.13
-	 *
-	 * @param {Object} event
-	 * @param {string} event.data.iconType
-	 */
-	function toggleDefaultValueIcon( event ) {
-		/*jshint validthis:true */
-		var type = event.data.iconType;
-		var messages = getTooltipMessages( type );
-		if ( !( 'active' in messages ) ) {
-			return;
-		}
-
-		var switch_to = '0';
-		var tooltipMessage = messages.active;
-		if ( this.className.indexOf( 'frm_inactive_icon' ) !== -1 ) {
-			switch_to = '1';
-			tooltipMessage = messages.inactive;
-		}
-
-		var $icon = jQuery( this );
-
-		$icon.toggleClass( 'frm_inactive_icon' );
-
-		changeBootstrapTooltipText( $icon, tooltipMessage );
-
-		var field_id = $icon.closest( '.frm-single-settings' ).data( 'fid' );
-		jQuery( 'input[name="field_options[' + type + '_' + field_id + ']"]' ).val( switch_to );
-	}
-
-	/**
-	 * Get the tooltip messages for a specific icon
-	 *
-	 * @since 2.02.13
-	 * @param {string} type
-	 * @returns {Object}
-	 */
-	function getTooltipMessages( type ) {
-		var messages = {};
-
-		if ( type === 'default_blank' ) {
-			messages.active = frm_admin_js.valid_default;
-			messages.inactive = frm_admin_js.no_valid_default;
-		}
-
-		return messages;
-	}
-
-	/**
-	 * Change the text on a Bootstrap tooltip
-	 *
-	 * @since 2.02.13
-	 * @param {Object} $element
-	 * @param {string} newText
-	 */
-	function changeBootstrapTooltipText( $element, newText ) {
-		$element.attr( 'title', newText );
-		$element.tooltip( 'fixTitle' );
-		$element.tooltip( 'show' );
-	}
-
-	/**
 	 * If a field is clicked in the builder, prevent inputs from changing.
 	 */
 	function stopFieldFocus( e ) {
@@ -1595,18 +1531,6 @@ function frmAdminBuildJS() {
 			getTaxOrFieldSelection( val, id );
 		}
 
-	}
-
-	function triggerDefaults() {
-		/*jshint validthis:true */
-		var n = this.name;
-		if ( typeof n === 'undefined' ) {
-			return false;
-		}
-		n = n.replace( '[other]', '' );
-		var end = n.indexOf( ']' );
-		n = n.substring( 10, end );
-		showDefaults( n, jQuery( this ).val() );
 	}
 
 	function resetDropdownOpts( id ) {
@@ -2167,61 +2091,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function triggerDefaults() {
-		var n = this.name;
-		if ( typeof n === 'undefined' ) {
-			return false;
-		}
-
-		var fieldContainer = jQuery( this ).closest( '.frm_field_box' );
-
-		maybeShowDefaultValIcons( fieldContainer );
-	}
-
-	/**
-	 * Show or hide the default value icons of a field
-	 *
-	 * @since 2.04.02
-	 *
-	 * @param {boolean} showDefaultValIcons
-	 * @param {object} $innerField
-	 */
-	function showOrHideDefaultValIcons( showDefaultValIcons, $innerField ) {
-		var $defaultValueIcons = $innerField.find( '.frm_default_val_icons' );
-
-		if ( showDefaultValIcons ) {
-			$defaultValueIcons.css( 'visibility', 'visible' ).fadeIn( 'slow' );
-		} else {
-			$defaultValueIcons.css( 'visibility', 'visible' ).fadeOut( 'slow' );
-		}
-	}
-
-	/**
-	 * Determine if a field has default content and display the default value icons if it does
-	 *
-	 * @since 2.04.02
-	 *
-	 * @param {number} fieldId
-	 */
-	function maybeShowDefaultValIcons( $fieldInner ) {
-		var showDefaultValIcons = false;
-		var isComboOrConfirmationField = $fieldInner.find( '.frm_multi_fields_container, .frm_inner_conf_container' ).length > 0;
-		var inputList = $fieldInner.find( 'input[name^="item_meta"], input[id^="conf_field"], select[name^="item_meta"], textarea[name^="item_meta"]' );
-
-		jQuery( inputList ).each( function( index ) {
-
-			if ( jQuery( this ).val() ) {
-				showDefaultValIcons = true;
-				return false;
-			} else if ( !isComboOrConfirmationField ) {
-				return false;
-			}
-
-		} );
-
-		showOrHideDefaultValIcons( showDefaultValIcons, $fieldInner );
-	}
-
 	function getNewActionId() {
 		var len = 0;
 		if ( jQuery( '.frm_form_action_settings:last' ).length ) {
@@ -2247,12 +2116,6 @@ function frmAdminBuildJS() {
 		}
 
 		selected = jQuery( 'li.ui-state-default.selected' );
-
-		if ( obj.className.indexOf( 'edit_field_type_divider' ) !== -1 ) {
-			$thisobj.find( '.frm_default_val_icons' ).hide().css( 'visibility', 'hidden' );
-		} else {
-			maybeShowDefaultValIcons( $thisobj );
-		}
 
 		selected.removeClass( 'selected' );
 		$thisobj.addClass( 'selected' );
@@ -3977,8 +3840,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
-			$builderForm.on( 'click', '.frm_reload_icon', {iconType: 'clear_on_focus'}, toggleDefaultValueIcon );
-			$builderForm.on( 'click', '.frm_error_icon', {iconType: 'default_blank'}, toggleDefaultValueIcon );
 
 			$builderForm.on( 'change', '.frm_repeat_format', toggleRepeatButtons );
 			$builderForm.on( 'change', '.frm_repeat_limit', checkRepeatLimit );
@@ -4005,8 +3866,6 @@ function frmAdminBuildJS() {
 			jQuery( builderArea ).on( 'click', '#frm-show-fields > li.ui-state-default', clickVis );
 			$newFields.on( 'click', '.start_divider li.ui-state-default', clickSectionVis );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
-			jQuery( '.frm_form_builder' ).on( 'keyup', 'input[name^="item_meta"], textarea[name^="item_meta"]', triggerDefaults );
-			jQuery( '.frm_form_builder' ).on( 'change', 'select[name^="item_meta"]', triggerDefaults );
 			$builderForm.on( 'change', 'select.conf_field', addConf );
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );

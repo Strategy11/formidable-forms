@@ -24,12 +24,6 @@ if ( isset( $field['post_field'] ) && 'post_category' === $field['post_field'] &
 	</select>
 <?php } ?>
 
-<?php if ( $display['default_blank'] ) { ?>
-	<span id="frm_clear_on_focus_<?php echo esc_attr( $field['id'] ); ?>" class="frm_clear_on_focus frm-show-click">
-		<?php FrmFieldsHelper::show_default_blank_js( $field['default_blank'] ); ?>
-	</span>
-	<input type="hidden" name="field_options[default_blank_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['default_blank'] ); ?>" />
-<?php } ?>
 <div class="clear"></div>
 <div class="frm-show-click frm_small_top_margin">
 	<?php if ( ! isset( $field['post_field'] ) || 'post_category' !== $field['post_field'] ) { ?>

@@ -129,7 +129,6 @@
 }
 
 if ( $display['clear_on_focus'] ) {
-	FrmFieldsHelper::clear_on_focus_html( $field, $display );
 	do_action( 'frm_extra_field_display_options', $field );
 }
 

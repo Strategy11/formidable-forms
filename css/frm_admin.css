@@ -3838,10 +3838,6 @@ a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
 	width: 30%;
 }
 
-.frm_clear_on_focus {
-	vertical-align: middle;
-}
-
 .frm_action_icon {
 	margin: 5px 0 0 5px;
 }

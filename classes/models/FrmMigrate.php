@@ -206,7 +206,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 95 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 95, 97 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -272,31 +272,63 @@ class FrmMigrate {
 	}
 
 	/**
+	 * Move default_blank to placeholder.
+	 *
+	 * @since 4.0
+	 */
+	private function migrate_to_97() {
+		$this->migrate_to_placeholder( 'default_blank' );
+	}
+
+	/**
 	 * Move clear_on_focus to placeholder.
 	 *
 	 * @since 4.0
 	 */
 	private function migrate_to_95() {
+		$this->migrate_to_placeholder( 'clear_on_focus' );
+	}
+
+	/**
+	 * Move clear_on_focus or default_blank to placeholder.
+	 *
+	 * @since 4.0
+	 */
+	private function migrate_to_placeholder( $type = 'clear_on_focus' ) {
 		$query = array(
-			'field_options like'     => ':"clear_on_focus";s:1:"1";',
+			'field_options like' => '"' . $type . '";s:1:"1";',
 		);
 
-		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options' );
+		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options, options' );
 
 		foreach ( $fields as $field ) {
 			$field_options = maybe_unserialize( $field->field_options );
-			if ( empty( $field_options['clear_on_focus'] ) || empty( $field->default_value ) ) {
+			if ( empty( $field_options[ $type ] ) || empty( $field->default_value ) ) {
 				continue;
 			}
 
-			$field_options['placeholder']    = $field->default_value;
-			$field_options['clear_on_focus'] = 0;
+			$field_options['placeholder'] = $field->default_value;
+			unset( $field_options['default_blank'] );
+			unset( $field_options['clear_on_focus'] );
+
+			// If a dropdown placeholder was used, remove the option so it won't be included twice.
+			$options = maybe_unserialize( $field->options );
+			if ( $type === 'default_blank' ) {
+				foreach ( $options as $opt_key => $opt ) {
+					$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+					if ( $opt == $field->default_value ) {
+						unset( $options[ $opt_key ] );
+						break;
+					}
+				}
+			}
 
 			FrmField::update(
 				$field->id,
 				array(
 					'field_options' => $field_options,
 					'default_value' => '',
+					'options'       => $options,
 				)
 			);
 

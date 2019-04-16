@@ -33,12 +33,6 @@ class FrmFieldRadio extends FrmFieldType {
 		return $this->include_front_form_file();
 	}
 
-	protected function field_settings_for_type() {
-		return array(
-			'default_blank' => false,
-		);
-	}
-
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );
 

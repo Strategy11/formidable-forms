@@ -18,6 +18,16 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 		<?php
 	}
 
+	$placeholder = FrmField::get_option( $field, 'placeholder' );
+	$skipped = false;
+	if ( ! empty( $placeholder ) ) {
+		?>
+		<option value="">
+			<?php echo esc_html( $placeholder ); ?>
+		</option>
+		<?php
+	}
+
 	$other_opt = false;
 	$other_checked = false;
 	foreach ( $field['options'] as $opt_key => $opt ) {
@@ -29,6 +39,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 			if ( FrmFieldsHelper::is_other_opt( $opt_key ) && $selected ) {
 				$other_checked = true;
 			}
+		}
+
+		if ( ! empty( $placeholder ) && $opt == '' && ! $skipped ) {
+			$skipped = true;
+			continue;
 		}
 		?>
 		<option value="<?php echo esc_attr( $field_val ); ?>" <?php echo $selected ? ' selected="selected"' : ''; ?> class="<?php echo esc_attr( FrmFieldsHelper::is_other_opt( $opt_key ) ? 'frm_other_trigger' : '' ); ?>">

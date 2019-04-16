@@ -107,8 +107,9 @@ class FrmEntryValidate {
 	}
 
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
-		$is_default = ( FrmField::is_option_true_in_object( $field, 'default_blank' ) && $value == $field->default_value );
-		$is_label   = false;
+		$placeholder = FrmField::get_option( $field, 'placeholder' );
+		$is_default  = ( ! empty( $placeholder ) && $value == $placeholder );
+		$is_label    = false;
 
 		if ( ! $is_default ) {
 			$position = FrmField::get_option( $field, 'label' );

@@ -23,6 +23,7 @@ class FrmFieldSelect extends FrmFieldType {
 
 	protected function field_settings_for_type() {
 		return array(
+			'clear_on_focus' => true,
 			'size' => true,
 		);
 	}

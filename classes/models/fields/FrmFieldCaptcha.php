@@ -31,7 +31,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return array(
 			'required'      => false,
 			'invalid'       => true,
-			'default_blank' => false,
 			'captcha_size'  => true,
 		);
 	}

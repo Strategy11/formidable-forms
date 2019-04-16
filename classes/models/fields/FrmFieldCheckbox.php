@@ -33,12 +33,6 @@ class FrmFieldCheckbox extends FrmFieldType {
 		return $this->include_front_form_file();
 	}
 
-	protected function field_settings_for_type() {
-		return array(
-			'default_blank' => false,
-		);
-	}
-
 	protected function new_field_settings() {
 		return array(
 			'options' => serialize(

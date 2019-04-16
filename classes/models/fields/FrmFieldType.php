@@ -257,7 +257,6 @@ DEFAULT_HTML;
 			'invalid'        => false,
 			'size'           => false,
 			'clear_on_focus' => false, // Shows the placeholder option.
-			'default_blank'  => true,
 			'css'            => true,
 			'conf_field'     => false,
 			'max'            => true,
@@ -280,7 +279,6 @@ DEFAULT_HTML;
 
 	private function no_input_settings() {
 		return array(
-			'default_blank'  => false,
 			'required'       => false,
 			'description'    => false,
 			'label_position' => false,
@@ -437,7 +435,6 @@ DEFAULT_HTML;
 			'invalid'            => '',
 			'separate_value'     => 0,
 			'clear_on_focus'     => 0,
-			'default_blank'      => 0,
 			'classes'            => '',
 			'custom_html'        => '',
 			'minnum'             => 1,
