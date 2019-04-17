@@ -92,7 +92,7 @@ class FrmSettings {
 			'fade_form' => false,
 			'old_css'   => true,
 
-			're_multi'  => 0,
+			're_multi'  => 1,
 
             'success_msg' => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
             'blank_msg' => __( 'This field cannot be blank.', 'formidable' ),
