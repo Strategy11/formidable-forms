@@ -63,7 +63,7 @@ class FrmUsage {
 
 		$snap = array(
 			'uuid'           => $this->uuid(),
-			'admin_email'    => get_option( 'admin_email' ),
+			'admin_email'    => '', // Let's keep it anonymous.
 			'wp_version'     => $wp_version,
 			'php_version'    => phpversion(),
 			'mysql_version'  => $wpdb->db_version(),
