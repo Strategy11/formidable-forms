@@ -1,7 +1,7 @@
 === Contact Forms, Surveys & Quiz Forms Plugin by Formidable Forms Builder for WordPress ===
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: forms, contact form, form builder, survey, form maker, form, form creator
-Requires at least: 4.5
+Requires at least: 4.6
 Tested up to: 5.1.1
 Requires PHP: 5.3
 Stable tag: 3.06.05

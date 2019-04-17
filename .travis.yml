@@ -21,21 +21,15 @@ matrix:
       env: WP_VERSION=4.7
     - php: 5.6
       env: WP_VERSION=4.6
-    - php: 5.5
-      env: WP_VERSION=4.5 SCRIPT_DEBUG=1
-    - php: 5.4
-      env: WP_VERSION=4.5
     - php: nightly
       env: WP_VERSION=master
   allow_failures:
     - php: nightly
 
 install:
-- if [[ $TRAVIS_PHP_VERSION == "5.2.17" || $TRAVIS_PHP_VERSION == "5.3" ]]; then phpenv local 5.6.13; fi
 - travis_retry composer selfupdate 1.0.0 --no-interaction
 - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then travis_retry composer require --dev phpunit/phpunit ^5.7; fi
 - travis_retry composer install --no-interaction
-- if [[ $TRAVIS_PHP_VERSION == "5.2.17" || $TRAVIS_PHP_VERSION == "5.3" ]]; then phpenv local --unset; fi
 
 before_script:
 - phpunit --version
