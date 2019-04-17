@@ -1305,11 +1305,9 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( newRow ) {
-				jQuery( document.getElementById( 'frm_add_watch_lookup_link_' + id ) ).fadeOut( 'slow', function() {
-					var watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
-					watchRowBlock.append( newRow );
-					watchRowBlock.fadeIn( 'slow' );
-				} );
+				var watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
+				watchRowBlock.append( newRow );
+				watchRowBlock.fadeIn( 'slow' );
 			}
 		} );
 		return false;

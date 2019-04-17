@@ -27,12 +27,6 @@
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		<?php } ?>
 
-		<?php
-		if ( $display['description'] ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php' );
-		}
-		?>
-
 		<p>
 			<?php if ( $display['required'] ) { ?>
 				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label">
@@ -114,7 +108,7 @@
 		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $field['field_key'] ); ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
 		</ul>
-		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
+		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
 			<span class="frm_icon_font frm_add_tag"></span>
 			<?php esc_html_e( 'Add Option', 'formidable' ); ?>
 		</a>
@@ -141,6 +135,12 @@ do_action( 'frm_before_field_options', $field );
 		<i class="fas fa-chevron-down"></i>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
+		<?php
+		if ( $display['description'] ) {
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php' );
+		}
+		?>
+
 		<?php if ( $display['clear_on_focus'] ) { ?>
 			<p>
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
@@ -198,15 +198,9 @@ do_action( 'frm_before_field_options', $field );
 
 		<?php
 		// Field Size
-		if ( $display['size'] && $field['type'] !== 'select' && $field['type'] !== 'data' ) {
-			if ( in_array( $field['type'], array( 'time' ) ) ) {
-				if ( ! isset( $values['custom_style'] ) || $values['custom_style'] ) {
-					include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php' );
-				}
-			} else {
-				$display_max = $display['max'];
-				include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
-			}
+		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ) ) ) {
+			$display_max = $display['max'];
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php' );
 		}
 		?>
 
@@ -278,7 +272,7 @@ do_action( 'frm_before_field_options', $field );
 			</p>
 		<?php } ?>
 
-		<p class="frm6 frm_form_field frm_first">
+		<p class="frm6 frm_form_field">
 			<label for="field_options_field_key_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'The field key can be used as an alternative to the field ID in many cases.', 'formidable' ); ?>">
 				<?php esc_html_e( 'Field Key', 'formidable' ); ?>
 			</label>

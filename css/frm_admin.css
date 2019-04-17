@@ -687,6 +687,7 @@ ul.frm_form_nav > li {
 .frm-single-settings > h3:first-of-type {
 	border-bottom: 2px solid var(--sidebar-hover);
 	border-top: none;
+	padding-top: 0;
 }
 
 .frm-right-panel h3 i {
@@ -1144,6 +1145,7 @@ a.frm_hidden,
 }
 
 .frm-fields td > label,
+.frm-fields td > div > label,
 .frm-fields p > label,
 #new_fields .frm_primary_label,
 #frm_form_editor_container .frm_primary_label {
@@ -1157,6 +1159,10 @@ a.frm_hidden,
 
 .frm-fields td > label {
 	display: initial;
+}
+
+.frm-fields td input + label {
+	display: inline;
 }
 
 #frm_form_editor_container .edit_field_type_end_divider .frm_primary_label,
@@ -1609,13 +1615,11 @@ h2.frm-h2 + .howto {
 	padding: 0 5px 10px;
 }
 
-.frm_add_opt,
-.frm-add-other a {
+.frm-small-add {
 	font-size: 14px;
 }
 
-.frm_add_opt span:before,
-.frm-add-other a span:before {
+.frm-small-add span:before {
 	color: var(--primary-color);
 	font-size: 12px;
 	height: 12px;
@@ -2580,7 +2584,10 @@ table.frm_name_value textarea {
 	border: solid 1px #ddd;
 }
 
-.form-table .form-field input, .form-table .form-field .quicktags-toolbar input,
+#new_fields .form-table input[type=text],
+#new_fields .form-table select,
+.form-table .form-field input,
+.form-table .form-field .quicktags-toolbar input,
 .form-field input, .form-field .quicktags-toolbar input {
 	width: auto;
 }
@@ -2786,12 +2793,14 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	clear: both;
 }
 
+#new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
 	width: 86%;
 }
 
 .frm_single_option a {
 	padding-left: 7px;
+	vertical-align: bottom;
 }
 
 .frm_single_option:hover .frm_single_visible_hover {
@@ -3675,6 +3684,10 @@ table td, .form-table tr td {
 
 .frm_logic_field_opts {
 	max-width: 35%;
+}
+
+.frm_logic_rows .frm-collapse-me {
+	line-height: 30px;
 }
 
 .frm_logic_row {
