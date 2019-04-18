@@ -39,7 +39,7 @@
 		// Used when no form is currently selected.
 		?>
 
-	<div class="frm_top_left <?php echo esc_attr( isset( $atts['nav'] ) ? 'alignleft' : '' ); ?>">
+	<div class="frm_top_left">
 		<h1>
 			<?php echo esc_html( $atts['label'] ); ?>
 			<?php FrmAppHelper::add_new_item_link( $atts ); ?>

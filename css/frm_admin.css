@@ -192,10 +192,6 @@ td.column-title .frm_actions_dropdown {
 	padding: 0 15px;
 }
 
-.post-type-frm_display.post-new-php #frm_top_bar {
-	padding: 0;
-}
-
 .post-type-frm_display #frm_top_bar h1,
 .frm_wrap #frm_top_bar h1 {
 	font-size: 23px;
@@ -223,9 +219,7 @@ td.column-title .frm_actions_dropdown {
 
 .frm_top_left {
 	text-align: left;
-}
-
-.frm_top_left.alignleft {
+	float: left;
 	white-space: nowrap;
 	max-width: 250px;
 }
@@ -243,7 +237,7 @@ td.column-title .frm_actions_dropdown {
 ul.frm_form_nav {
 	margin: 0 auto;
 	padding-top: 19px;
-	display: inline-block;
+	display: block;
 }
 
 .nav-tab-wrapper.frm_form_nav {
@@ -255,6 +249,9 @@ ul.frm_form_nav > li {
 	display: inline-block;
 }
 
+.post-type-frm_display #advanced-sortables h2.hndle,
+.post-type-frm_display #side-sortables h2.hndle,
+.post-type-frm_display #normal-sortables h2.hndle,
 .post-type-frm_display .frm_form_nav .nav-tab-active,
 .frm_form_nav > li > a {
 	font-size: 1.3em;
@@ -349,6 +346,7 @@ ul.frm_form_nav > li {
 	float: right;
 	margin-top: 15px;
 	width: 225px;
+	min-height: 10px;
 }
 
 #frm-preview-action,
@@ -547,7 +545,7 @@ ul.frm_form_nav > li {
 	max-height: 350px;
 	min-height: 250px;
 	overflow-y: scroll;
-	z-index: 2;
+	z-index: 100;
 }
 
 #form_global_settings .columns-2 .frm-right-panel,
@@ -634,6 +632,13 @@ ul.frm_form_nav > li {
 	margin: 5px 0 10px;
 }
 
+#frm_adv_info .frm-nav-tabs.frm-compact-nav {
+	margin-left: -11px;
+	margin-right: -11px;
+	padding-right: 0;
+	padding-left: 20px;
+}
+
 #frm-bulk-modal h2,
 .frm-nav-tabs li {
 	display: inline-block;
@@ -649,6 +654,10 @@ ul.frm_form_nav > li {
 	border-bottom: 2px solid transparent;
 }
 
+.frm-nav-tabs.frm-compact-nav a {
+	margin: 0 5px;
+}
+
 .frm-nav-tabs a {
 	display: block;
 }
@@ -660,7 +669,7 @@ ul.frm_form_nav > li {
 #frm-bulk-modal h2,
 .frm-nav-tabs a:hover,
 .frm-nav-tabs .frm-tabs a {
-	color: var(--primary-color);
+	color: var(--primary-color) !important;
 	border-color: var(--primary-color);
 }
 
@@ -2928,8 +2937,11 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 
 #frm_adv_info .tabs-panel {
 	min-height: 0 !important;
-	overflow: hidden;
+	overflow-x: hidden;
 	padding: 0 20px;
+	border: none;
+	padding: 0;
+	background: transparent;
 }
 
 #form_settings_page .frm_posttax_row select {
@@ -3260,6 +3272,7 @@ h2.frm-h2,
 
 #frm-conditionals, #frm-adv-info-tab {
 	display: none;
+	max-height: 355px;
 }
 
 #frm-insert-fields-box ul.subsubsub,
@@ -3273,26 +3286,17 @@ h2.frm-h2,
 	margin: 5px 0 0;
 }
 
-#frm_field_search {
-	width: 100%;
-}
-
-#frm-insert-fields-box ul.frm_code_list.frm_full_width,
-#frm-conditionals ul.frm_code_list.frm_full_width {
+#frm-insert-fields-box ul.frm_code_list.frm-full-hover {
 	clear: both;
-	max-height: 150px;
+	max-height: 284px;
 	overflow: auto;
-}
-
-#frm-adv-info-tab {
-	max-height: 355px;
 }
 
 #frm-insert-fields-box ul.frm_code_list li.clear.frm_block {
 	height: 10px;
 }
 
-#frm_adv_info .frm_noallow {
+.frm_page_container #frm_adv_info .frm_noallow {
 	display: none;
 }
 
@@ -4935,7 +4939,21 @@ select[name="m"] {
 /* View page */
 #frm_dyncontent .hndle,
 #frm_dyncontent .handlediv {
-	display: none;
+	display: none !important;
+}
+
+.post-type-frm_display .meta-box-sortables .frm_form_nav > li > a,
+.post-type-frm_display .frm_form_nav .nav-tab-active {
+	padding: 0 2px 5px;
+	line-height: 1.4;
+}
+
+.post-type-frm_display #advanced-sortables h2.hndle,
+.post-type-frm_display #side-sortables h2.hndle,
+.post-type-frm_display #normal-sortables h2.hndle {
+	border-bottom: 1px solid var(--grey-border);
+	margin: 10px 0 0;
+	padding: 0 25px 8px;
 }
 
 .post-type-frm_display.edit-php #wpbody-content > .wrap {
@@ -4947,8 +4965,11 @@ select[name="m"] {
 	border-color: var(--grey-border);
 }
 
+.post-type-frm_display #postbox-container-1 .postbox,
 .post-type-frm_display #postbox-container-2 .postbox {
 	border-radius: var(--small-radius);
+	border-color: var(--grey-border);
+	box-shadow: none;
 }
 
 .post-type-frm_display .wrap h1.wp-heading-inline,
@@ -5082,6 +5103,15 @@ ul .frm_col_two {
 	color: var(--grey);
 	float: right;
 	font-size: 14px;
+	max-width: 83px;
+	text-align: right;
+}
+
+.frm_code_list.frm-full-hover a,
+.frm_code_list.frm-full-hover a span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .frm_code_list.frm-full-hover a:hover span,
@@ -5168,6 +5198,7 @@ ul .frm_col_two {
 	clear: both;
 }
 
+.frm_code_list.frm-full-hover a.frm_hidden,
 .frm_code_list .frmkeys {
 	display: none;
 }

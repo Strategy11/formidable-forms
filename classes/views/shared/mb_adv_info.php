@@ -1,5 +1,5 @@
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ); ?>">
-	<ul id="frm-nav-tabs" class="frm-nav-tabs">
+	<ul id="frm-nav-tabs" class="frm-nav-tabs <?php echo esc_attr( $settings_tab ? '' : 'frm-compact-nav' ); ?>">
 		<li class="frm-tabs">
 			<a href="#frm-insert-fields-box" id="frm_insert_fields_tab">
 				<?php esc_html_e( 'Fields', 'formidable' ); ?>
@@ -35,15 +35,17 @@
 			<li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li>
 		</ul>
 
-		<div class="search-box frm-search" id="frm_customize_search">
-			<label class="screen-reader-text" for="entry-search-input">
-				<?php esc_html_e( 'Search', 'formidable' ); ?>
-			</label>
-			<span class="dashicons dashicons-search"></span>
-			<input type="search" id="frm_field_search" class="frm-search-input" name="frm_field_search" placeholder="<?php esc_html_e( 'Search', 'formidable' ); ?>">
-		</div>
+		<?php
+		FrmAppHelper::show_search_box(
+			array(
+				'input_id'    => 'field',
+				'placeholder' => __( 'Search', 'formidable' ),
+				'tosearch'    => 'frm-customize-list',
+			)
+		);
+		?>
 
-		<ul class="frm_code_list frm_customize_field_list">
+		<ul class="frm_code_list frm_customize_field_list frm-full-hover">
 		<?php
 		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $f ) {
@@ -61,6 +63,7 @@
 						'key'  => $f->field_key,
 						'name' => $f->name,
 						'type' => $f->type,
+						'class' => 'frm-customize-list',
 					)
 				);
 
@@ -121,6 +124,15 @@
 	<?php } ?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
+		<?php
+		FrmAppHelper::show_search_box(
+			array(
+				'input_id'    => 'advanced',
+				'placeholder' => __( 'Search', 'formidable' ),
+				'tosearch'    => 'frm-advanced-list',
+			)
+		);
+		?>
 		<ul class="frm_code_list frm-full-hover">
 		<?php
 		foreach ( $entry_shortcodes as $skey => $sname ) {
@@ -129,8 +141,9 @@
 				continue;
 			}
 
-			$classes = ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? 'show_before_content show_after_content' : '';
-			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? 'hide_frm_not_email_subject' : '';
+			$classes = 'frm-advanced-list';
+			$classes .= ( in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ) ) ) ? ' show_before_content show_after_content' : '';
+			$classes .= ( strpos( $skey, 'default-' ) === 0 ) ? ' hide_frm_not_email_subject' : '';
 
 			FrmFormsHelper::insert_code_html(
 				array(
@@ -151,9 +164,12 @@
 				continue;
 			}
 
+			if ( isset( $helper['heading'] ) && ! empty( $helper['heading'] ) ) {
+				?>
+				<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
+				<?php
+				}
 			?>
-
-			<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
 			<ul class="frm_code_list frm-full-hover">
 			<?php
 			foreach ( $helper['codes'] as $code => $code_label ) {
@@ -175,6 +191,7 @@
 						'code'  => $include_x . $code,
 						'label' => $code_label['label'],
 						'title' => isset( $code_label['title'] ) ? $code_label['title'] : '',
+						'class' => 'frm-advanced-list',
 					)
 				);
 

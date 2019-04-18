@@ -81,7 +81,7 @@ class FrmStylesHelper {
 			do_action( 'frm_style_switcher_heading', $atts );
 		} else {
 			?>
-			<div class="frm_top_left alignleft">
+			<div class="frm_top_left">
 				<h1>
 					<?php echo esc_html( $atts['style']->post_title ); ?>
 				</h1>

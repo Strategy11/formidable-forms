@@ -1047,7 +1047,6 @@ class FrmFormsController {
 			}
 
 			$advanced_helpers['user_id'] = array(
-				'heading' => __( 'Insert user information', 'formidable' ),
 				'codes'   => $user_helpers,
 			);
 		}
