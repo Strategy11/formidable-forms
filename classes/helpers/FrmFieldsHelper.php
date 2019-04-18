@@ -415,7 +415,7 @@ class FrmFieldsHelper {
 
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
-			$checked = ( isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) ) ) ? ' checked="checked"' : '';
+			$checked = ( isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) ) );
 
 			// If this is an "Other" option, get the HTML for it.
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -440,7 +440,7 @@ class FrmFieldsHelper {
 		$opt_key    = '000';
 		$field_val  = '';
 		$opt        = '';
-		$checked    = '';
+		$checked    = false;
 		$field_name = 'default_value_' . $field['id'];
 		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
