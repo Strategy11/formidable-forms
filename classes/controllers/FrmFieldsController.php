@@ -568,15 +568,15 @@ class FrmFieldsController {
 	}
 
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
-		if ( $field['placeholder'] != '' ) {
-			if ( is_array( $field['placeholder'] ) ) {
-				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( json_encode( $field['placeholder'] ) ) . '"';
+		if ( $field['default_value'] != '' ) {
+			if ( is_array( $field['default_value'] ) ) {
+				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( json_encode( $field['default_value'] ) ) . '"';
 			} else {
 				self::add_frmval_to_input( $field, $add_html );
 			}
 		}
 
-		$field['placeholder'] = self::prepare_default_value( $field );
+		$field['placeholder'] = self::prepare_placeholder( $field );
 		if ( $field['placeholder'] == '' || is_array( $field['placeholder'] ) ) {
 			// don't include a json placeholder
 			return;
@@ -597,7 +597,7 @@ class FrmFieldsController {
 		}
 	}
 
-	private static function prepare_default_value( $field ) {
+	private static function prepare_placeholder( $field ) {
 		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
 		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ) );
 
