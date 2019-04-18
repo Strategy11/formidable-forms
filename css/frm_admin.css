@@ -3249,14 +3249,6 @@ h2.frm-h2,
 	margin-top: 0;
 }
 
-.frm_form_settings .advanced_settings .form-table .frm_short_tr td {
-	padding: 0 10px 10px;
-}
-
-.frm_form_settings .advanced_settings .form-table td.td_select_padding {
-	padding: 8px 10px 0;
-}
-
 .frm_form_settings td.frm_175_width {
 	width: 175px;
 }
@@ -4549,6 +4541,7 @@ table td.frm_left_label {
 	text-align: right;
 }
 
+.frm-fields .frm_left_label + select,
 .frm-fields .frm_left_label + input[type=text],
 .frm_with_left_label {
 	width: 66%;

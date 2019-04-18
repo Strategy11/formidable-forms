@@ -4011,7 +4011,7 @@ function frmAdminBuildJS() {
 				}
 			} );
 
-			jQuery( '.hide_editable, .hide_save_draft' ).hide();
+			jQuery( '.hide_save_draft' ).hide();
 
 			var $saveDraft = jQuery( document.getElementById( 'save_draft' ) );
 			$saveDraft.change( function() {
@@ -4025,9 +4025,6 @@ function frmAdminBuildJS() {
 
 			//If Allow editing is checked/unchecked
 			var $editable = document.getElementById( 'editable' );
-			if ( $editable !== null && $editable.checked ) {
-				jQuery( '.hide_editable' ).show();
-			}
 			jQuery( $editable ).change( function() {
 				if ( this.checked ) {
 					jQuery( '.hide_editable' ).fadeIn( 'slow' );

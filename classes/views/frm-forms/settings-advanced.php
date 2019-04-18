@@ -65,7 +65,7 @@
 <!--On Submit Section-->
 <table class="form-table">
 	<tr>
-		<td class="frm_175_width">
+		<td class="frm_left_label">
 			<select name="options[success_action]" id="success_action">
 				<option value="message" <?php selected( $values['success_action'], 'message' ); ?>>
 					<?php esc_html_e( 'Show Message', 'formidable' ); ?>
