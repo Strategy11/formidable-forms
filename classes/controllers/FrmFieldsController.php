@@ -253,16 +253,17 @@ class FrmFieldsController {
 		$opts  = explode( "\n", rtrim( $opts, "\n" ) );
 		$opts  = array_map( 'trim', $opts );
 
+		$separate = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
+		$field['separate_value'] = ( $separate === 'true' );
+
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
 				if ( strpos( $opt, '|' ) !== false ) {
 					$vals = explode( '|', $opt );
-					if ( $vals[0] != $vals[1] ) {
-						$opts[ $opt_key ] = array(
-							'label' => trim( $vals[0] ),
-							'value' => trim( $vals[1] ),
-						);
-					}
+					$opts[ $opt_key ] = array(
+						'label' => trim( $vals[0] ),
+						'value' => trim( $vals[1] ),
+					);
 					unset( $vals );
 				}
 				unset( $opt_key, $opt );

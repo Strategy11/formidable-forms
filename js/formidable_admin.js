@@ -1051,28 +1051,25 @@ function frmAdminBuildJS() {
 
 		jQuery( builderForm ).on( 'click', '.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
-			var i, key, content = '',
+			var i, key, label, content = '',
 				fieldId = this.parentNode.parentNode.getAttribute( 'data-fid' ),
-				separate = document.getElementById( 'separate_value_' + fieldId ),
+				separate = document.getElementById( 'separate_value_' + fieldId ).checked,
 				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
 				opts = optList.getElementsByTagName( 'li' );
-
-			if ( separate === null ) {
-				separate = 0;
-			} else {
-				separate = separate.value;
-			}
 
 			document.getElementById( 'bulk-field-id' ).value = fieldId;
 
 			for ( i = 0; i < opts.length; i++ ) {
 				key = opts[i].getAttribute( 'data-optkey' );
 				if ( key !== '000' ) {
-					content += document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][label]' )[0].value;
-					if ( separate ) {
-						content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][value]' )[0].value;
+					label = document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][label]' )[0];
+					if ( typeof label !== 'undefined' ) {
+						content += label.value;
+						if ( separate ) {
+							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][value]' )[0].value;
+						}
+						content += "\r\n";
 					}
-					content += "\r\n";
 				}
 
 				if ( i >= opts.length - 1 ) {
@@ -4289,6 +4286,7 @@ function frmAdminBuildJS() {
 		},
 
 		updateOpts: function( field_id, opts, modal ) {
+			var separate = document.getElementById( 'separate_value_' + field_id ).checked;
 			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' );
 			empty( $fieldOpts );
 			jQuery.ajax( {
@@ -4298,6 +4296,7 @@ function frmAdminBuildJS() {
 					action: 'frm_import_options',
 					field_id: field_id,
 					opts: opts,
+					separate: separate,
 					nonce: frmGlobal.nonce
 				},
 				success: function( html ) {
