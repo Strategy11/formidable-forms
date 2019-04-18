@@ -687,7 +687,7 @@ ul.frm_form_nav > li {
 .frm-single-settings > h3:first-of-type {
 	border-bottom: 2px solid var(--sidebar-hover);
 	border-top: none;
-	padding-top: 0;
+	padding-top: 0 !important;
 }
 
 .frm-right-panel h3 i {
@@ -2795,7 +2795,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
-	width: 86%;
+	width: 79%;
 }
 
 .frm_single_option a {

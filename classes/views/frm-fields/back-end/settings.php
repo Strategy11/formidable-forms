@@ -175,7 +175,16 @@ do_action( 'frm_before_field_options', $field );
 					</label>
 					<span class="frm-with-right-icon">
 						<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-smart-values-box"></i>
-						<input type="text" name="default_value_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['default_value'] ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
+						<?php
+						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
+							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
+							$default_value = isset( $field['dyn_default_value'] ) ? $field['dyn_default_value'] : '';
+						} else {
+							$default_name  = 'default_value_' . $field['id'];
+							$default_value = $field['default_value'];
+						}
+						?>
+						<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
 					</span>
 				</p>
 				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>

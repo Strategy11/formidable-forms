@@ -404,17 +404,18 @@ class FrmFieldsHelper {
 			return;
 		}
 
-		$field_name = isset( $field['html_name'] ) ? $field['html_name'] : $field['name'];
+		$base_name = 'default_value_' . $field['id'];
 		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+
+		$default_type = self::get_default_value_type( $field );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
 			$opt       = self::get_label_from_array( $opt, $opt_key, $field );
 
-			// Get string for Other text field, if needed
-			$other_val = self::get_other_val( compact( 'opt_key', 'field' ) );
+			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
-			$checked = ( $other_val || isset( $field['value'] ) && ( ( ! is_array( $field['value'] ) && $field['value'] == $field_val ) || ( is_array( $field['value'] ) && in_array( $field_val, $field['value'] ) ) ) ) ? ' checked="checked"' : '';
+			$checked = ( isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) ) ) ? ' checked="checked"' : '';
 
 			// If this is an "Other" option, get the HTML for it.
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -425,7 +426,7 @@ class FrmFieldsHelper {
 				require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
 			}
 
-			unset( $checked, $other_val );
+			unset( $checked );
 		}
 	}
 
@@ -440,10 +441,27 @@ class FrmFieldsHelper {
 		$field_val  = '';
 		$opt        = '';
 		$checked    = '';
-		$field_name = isset( $field['html_name'] ) ? $field['html_name'] : $field['name'];
+		$field_name = 'default_value_' . $field['id'];
 		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
+		$default_type = self::get_default_value_type( $field );
+		$field_name  .= ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
+
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 *
+	 * @param array $field
+	 * @return string radio or checkbox
+	 */
+	private static function get_default_value_type( $field ) {
+		$default_type = $field['type'];
+		if ( $field['type'] === 'select' ) {
+			$default_type = FrmField::is_multiple_select( $field ) ? 'checkbox' : 'radio';
+		}
+		return $default_type;
 	}
 
 	public static function get_value_from_array( $opt, $opt_key, $field ) {
