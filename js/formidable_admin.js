@@ -2247,6 +2247,16 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function toggleSubmitLogic() {
+		/*jshint validthis:true */
+		if ( this.checked ) {
+			addSubmitLogic();
+		} else {
+			jQuery( '.frm_logic_row_submit' ).remove();
+			document.getElementById( 'frm_submit_logic_rows' ).style.display = 'none';
+		}
+	}
+
 	/**
 	 * Adds submit button Conditional Logic row and reveals submit button Conditional Logic
 	 *
@@ -2273,11 +2283,9 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				jQuery( document.getElementById( 'logic_link_submit' ) ).fadeOut( 'slow', function() {
-					var $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
-					$logicRow.append( html );
-					$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
-				} );
+				var $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
+				$logicRow.append( html );
+				$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
 			}
 		} );
 		return false;
@@ -2304,6 +2312,15 @@ function frmAdminBuildJS() {
 			//has email
 			//TODO: add < > if they aren't there
 		}*/
+	}
+
+	function maybeShowFormMessages() {
+		var header = document.getElementById( 'frm_messages_header' );
+		if ( showFormMessages() ) {
+			header.style.display = 'block';
+		} else {
+			header.style.display = 'none';
+		}
 	}
 
 	function showFormMessages() {
@@ -3790,8 +3807,10 @@ function frmAdminBuildJS() {
 			// tabs
 			jQuery( '#frm-nav-tabs a' ).click( clickNewTab );
 			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a' ).click( function() {
-				clickTab( this );
-				return false;
+				if ( ! this.classList.contains( 'frm_noallow' ) ) {
+					clickTab( this );
+					return false;
+				}
 			} );
 			jQuery( '.starttab a' ).trigger( 'click' );
 
@@ -3952,11 +3971,14 @@ function frmAdminBuildJS() {
 			} );
 
 			jQuery( '.frm_submit_settings_btn' ).click( submitSettings );
-			jQuery( '.frm_form_settings' ).on( 'click', '.frm_add_form_logic', addFormLogicRow );
-			jQuery( '.frm_form_settings' ).on( 'blur', '.frm_email_blur', formatEmailSetting );
 
-			jQuery( '.frm_form_settings' ).on( 'click', '.frm_add_submit_logic', addSubmitLogic );
-			jQuery( '.frm_form_settings' ).on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
+			var formSettings = jQuery( '.frm_form_settings' );
+			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
+			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
+
+			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
+			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
+			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).change( function() {
@@ -3970,11 +3992,7 @@ function frmAdminBuildJS() {
 
 			//Show/hide Messages header
 			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).change( function() {
-				if ( showFormMessages() ) {
-					jQuery( document.getElementById( 'frm_messages_header' ) ).fadeIn( 'slow' );
-				} else {
-					jQuery( document.getElementById( 'frm_messages_header' ) ).fadeOut( 'slow' );
-				}
+				maybeShowFormMessages();
 			} );
 			jQuery( "select[name='options[success_action]'], select[name='options[edit_action]']" ).change( showSuccessOpt );
 
@@ -4028,9 +4046,7 @@ function frmAdminBuildJS() {
 			jQuery( $editable ).change( function() {
 				if ( this.checked ) {
 					jQuery( '.hide_editable' ).fadeIn( 'slow' );
-					if ( jQuery( document.getElementById( 'edit_action' ) ).val() === 'message' ) {
-						jQuery( '.edit_action_message_box' ).fadeIn( 'slow' );//Show On Update message box
-					}
+					jQuery( '#edit_action' ).change();
 				} else {
 					jQuery( '.hide_editable' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box

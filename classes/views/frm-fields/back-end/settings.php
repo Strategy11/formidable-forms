@@ -56,14 +56,7 @@
 			do_action( 'frm_field_options_form_top', $field, $display, $values );
 			?>
 		</p>
-		<?php if ( $display['required'] ) { ?>
-			<div class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
-				<span class="howto">
-					<?php esc_html_e( 'Indicate required field with', 'formidable' ); ?>
-				</span>
-				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
-			</div>
-		<?php } ?>
+
 		<?php
 		if ( $display['range'] ) {
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php' );
@@ -258,6 +251,15 @@ do_action( 'frm_before_field_options', $field );
 		?>
 
 		<?php do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) ); ?>
+
+		<?php if ( $display['required'] ) { ?>
+			<p class="frm6 frm_form_field frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
+				<label>
+					<?php esc_html_e( 'Required Field Indicator', 'formidable' ); ?>
+				</label>
+				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
+			</p>
+		<?php } ?>
 
 		<?php if ( $display['label_position'] ) { ?>
 			<p class="frm6 frm_form_field">

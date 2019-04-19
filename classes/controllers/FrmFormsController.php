@@ -909,32 +909,44 @@ class FrmFormsController {
 	 */
 	private static function get_settings_tabs( $values ) {
 		$sections = array(
-			array(
+			'advanced'    => array(
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
-				'anchor'   => 'advanced',
-				'class'    => __CLASS__,
-				'function' => 'advanced_settings',
+				'function' => array( __CLASS__, 'advanced_settings' ),
 				'icon'     => 'fas fa-cog',
 			),
-			array(
+			'email'       => array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
-				'anchor'   => 'email',
-				'class'    => 'FrmFormActionsController',
-				'function' => 'email_settings',
+				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
 				'icon'     => 'fas fa-random',
 			),
-			array(
+			'permissions' => array(
+				'name'     => __( 'Form Permissions', 'formidable' ),
+				'icon'     => 'fas fa-unlock-alt',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'     => array(
+					'medium'  => 'permissions',
+					'upgrade' => __( 'Form Permissions', 'formidable' ),
+				),
+			),
+			'scheduling' => array(
+				'name'     => __( 'Form Scheduling', 'formidable' ),
+				'icon'     => 'far fa-calendar-alt',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'     => array(
+					'medium'  => 'scheduling',
+					'upgrade' => __( 'Form scheduling settings', 'formidable' ),
+				),
+			),
+			'buttons'     => array(
 				'name'     => __( 'Styling & Buttons', 'formidable' ),
-				'anchor'   => 'buttons',
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
 				'icon'     => 'fas fa-palette',
 			),
-			array(
+			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
-				'anchor'   => 'html',
 				'class'    => __CLASS__,
 				'function' => 'html_settings',
 				'icon'     => 'dashicons dashicons-editor-code',
@@ -944,9 +956,13 @@ class FrmFormsController {
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
 		foreach ( $sections as $key => $section ) {
-			if ( ! isset( $section['name'] ) ) {
-				$sections[ $key ]['name'] = ucfirst( $key );
-			}
+			$defaults = array(
+				'html_class' => '',
+				'name'       => ucfirst( $key ),
+				'icon'       => 'dashicons dashicons-admin-generic',
+			);
+
+			$sections[ $key ] = array_merge( $defaults, $section );
 
 			if ( ! isset( $section['anchor'] ) ) {
 				$sections[ $key ]['anchor'] = $key;
@@ -955,10 +971,6 @@ class FrmFormsController {
 
 			if ( ! isset( $section['title'] ) ) {
 				$sections[ $key ]['title'] = $sections[ $key ]['name'];
-			}
-
-			if ( ! isset( $section['icon'] ) ) {
-				$sections[ $key ]['icon'] = 'dashicons dashicons-admin-generic';
 			}
 
 			if ( ! isset( $section['id'] ) ) {

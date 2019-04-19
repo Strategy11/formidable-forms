@@ -2,47 +2,48 @@
 	<?php esc_html_e( 'Modify the basic form settings here.', 'formidable' ); ?>
 </p>
 
-<div class="frm_grid_container frm-collapse-me">
-	<p>
+<div class="frm_grid_container">
+	<p class="frm6 frm_form_field">
 		<label for="frm_form_name">
 			<?php esc_html_e( 'Form Title', 'formidable' ); ?>
 		</label>
 		<input type="text" id="frm_form_name" name="name" value="<?php echo esc_attr( $values['name'] ); ?>" />
 	</p>
 
-	<p>
-		<label for="frm_form_description">
-			<?php esc_html_e( 'Form Description', 'formidable' ); ?>
-		</label>
-		<textarea id="frm_form_description" name="description" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // WPCS: XSS ok. ?></textarea>
-	</p>
-
-	<p>
+	<p class="frm6 frm_form_field">
 		<label for="frm_form_key">
 			<?php esc_html_e( 'Form Key', 'formidable' ); ?>
 		</label>
 		<input type="text" id="frm_form_key" name="form_key" value="<?php echo esc_attr( $values['form_key'] ); ?>" />
 	</p>
-</div>
+
+	<p>
+		<label for="frm_form_description">
+			<?php esc_html_e( 'Form Description', 'formidable' ); ?>
+		</label>
+		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // WPCS: XSS ok. ?></textarea>
+	</p>
+
 
 <?php if ( ! $values['is_template'] ) { ?>
-	<h3 id="frm_shortcode" class="<?php echo esc_attr( $first_h3 ); ?>">
-		<?php esc_html_e( 'Form Shortcodes', 'formidable' ); ?>
-	</h3>
-	<a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php esc_html_e( 'Show', 'formidable' ); ?></a>
-	<div id="frm_shortcodediv" class="hide-if-js">
-		<p class="howto"><?php esc_html_e( 'Insert on a page, post, or text widget', 'formidable' ); ?>:</p>
-		<p><input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?>]" />
-			<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?> title=true description=true]" />
-		</p>
+	<p class="frm6 frm_form_field">
+		<label>
+			<?php esc_html_e( 'Embed Shortcode', 'formidable' ); ?>
+		</label>
+		<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?>]" />
+	</p>
+	<p class="frm6 frm_form_field">
+		<label>&nbsp;</label>
+		<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?> title=true description=true]" />
+	</p>
 
-		<p class="howto"><?php esc_html_e( 'Insert in a template', 'formidable' ); ?>:</p>
-		<p>
+	<a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php esc_html_e( 'Insert with PHP', 'formidable' ); ?></a>
+	<p id="frm_shortcodediv" class="hide-if-js">
+		<label>
+			<?php esc_html_e( 'Embed in Template', 'formidable' ); ?>
+		</label>
 			<input type="text" readonly="readonly" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode( array( 'id' => <?php echo absint( $values['id'] ); ?>, 'title' => false, 'description' => false ) ); ?&gt;" />
-		</p>
-
-		<p><a href="#edit_frm_shortcode" class="cancel-frm_shortcode hide-if-no-js"><?php esc_html_e( 'Hide', 'formidable' ); ?></a></p>
-	</div>
+	</p>
 	<?php $first_h3 = ''; ?>
 
 	<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
@@ -63,9 +64,8 @@
 </h3>
 
 <!--On Submit Section-->
-<table class="form-table">
-	<tr>
-		<td class="frm_left_label">
+
+<p class="frm4 frm_form_field">
 			<select name="options[success_action]" id="success_action">
 				<option value="message" <?php selected( $values['success_action'], 'message' ); ?>>
 					<?php esc_html_e( 'Show Message', 'formidable' ); ?>
@@ -77,8 +77,8 @@
 					<?php esc_html_e( 'Show Page Content', 'formidable' ); ?>
 				</option>
 			</select>
-		</td>
-		<td>
+</p>
+<p class="frm8 frm_form_field">
 			<span class="success_action_redirect_box success_action_box<?php echo ( $values['success_action'] == 'redirect' ) ? '' : ' frm_hidden'; ?>">
 				<input type="text" name="options[success_url]" id="success_url" value="<?php echo esc_attr( isset( $values['success_url'] ) ? $values['success_url'] : '' ); ?>" placeholder="http://example.com" />
 			</span>
@@ -87,17 +87,16 @@
 				<label><?php esc_html_e( 'Use Content from Page', 'formidable' ); ?></label>
 				<?php FrmAppHelper::wp_pages_dropdown( 'options[success_page_id]', $values['success_page_id'] ); ?>
 			</span>
+</p>
 
-		</td>
-	</tr>
-	<tr class="frm_show_form_opt success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] == 'message' ? '' : ' frm_hidden' ); ?>">
-		<td colspan="2">
+<p class="frm_show_form_opt success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] == 'message' ? '' : ' frm_hidden' ); ?>">
 			<label for="show_form">
 				<input type="checkbox" name="options[show_form]" id="show_form" value="1" <?php checked( $values['show_form'], 1 ); ?> />
 				<?php esc_html_e( 'Show the form with the confirmation message', 'formidable' ); ?>
 			</label>
-		</td>
-	</tr>
+</p>
+
+<table class="form-table">
 	<tr>
 		<td colspan="2">
 			<label for="no_save">
@@ -176,3 +175,5 @@
 	<?php do_action( 'frm_additional_form_options', $values ); ?>
 </table>
 <?php } ?>
+
+</div>
