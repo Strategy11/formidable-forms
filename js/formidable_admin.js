@@ -2071,6 +2071,7 @@ function frmAdminBuildJS() {
 				//check if icon should be active
 				checkActiveAction( type );
 				initiateMultiselect();
+				showInputIcon( '#frm_form_action_' + actionId );
 			}
 		} );
 	}
@@ -2372,7 +2373,7 @@ function frmAdminBuildJS() {
 			jQuery( 'select.frm_dyncontent_opt' ).val( '' );
 		} else {
 			jQuery( '.frm_post_content_opt' ).hide().val( '' );
-			jQuery( 'select.frm_dyncontent_opt' ).show();
+			jQuery( 'select.frm_dyncontent_opt, .frm_form_field.frm_dyncontent_opt' ).show();
 		}
 	}
 
@@ -2469,7 +2470,7 @@ function frmAdminBuildJS() {
 				jQuery( '.frm_add_post' + type + '_row.button' ).hide();
 
 				if ( type === 'meta' ) {
-					document.getElementById( 'postcustomstuff' ).style.display = 'block';
+					jQuery( '.frm_name_value' ).show();
 					jQuery( '.frm_toggle_cf_opts' ).not( ':last' ).hide();
 				}
 			}
@@ -3740,7 +3741,7 @@ function frmAdminBuildJS() {
 			jQuery( '.wp-admin' ).click( function( e ) {
 				var t = jQuery( e.target );
 				var $openDrop = jQuery( '.dropdown.open' );
-				if ( $openDrop.length && e.target.className.indexOf( 'dropdown' ) === -1 && !t.closest( '.dropdown' ).length ) {
+				if ( $openDrop.length && ! t.hasClass( 'dropdown' ) && !t.closest( '.dropdown' ).length ) {
 					$openDrop.removeClass( 'open' );
 				}
 			} );

@@ -2,7 +2,7 @@
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
 <div class="frm_grid_container frm_no_p_margin">
-	<p class="frm_half">
+	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
 			<?php esc_html_e( 'Action Name', 'formidable' ); ?>
 		</label>
@@ -26,7 +26,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	}
 } else {
 	?>
-	<p class="frm_half">
+	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 			<?php esc_html_e( 'Trigger this action when', 'formidable' ); ?>
 		</label>

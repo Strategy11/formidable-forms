@@ -484,7 +484,7 @@ ul.frm_form_nav > li {
 #frm-bulk-modal i,
 .frm_has_shortcodes i {
 	position: absolute;
-	top: 44px;
+	top: 40px;
 	right: 5px;
 	z-index: 100;
 	margin-top: -9px;
@@ -496,6 +496,10 @@ ul.frm_form_nav > li {
 	height: 15px;
 	width: 15px;
 	text-align: center;
+}
+
+div.frm_has_shortcodes i {
+	top: 30px;
 }
 
 #frm_upgrade_modal .dismiss i {
@@ -2519,8 +2523,6 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 .frm_posttax_opt_list {
-	border: 1px solid #DFDFDF;
-	padding: 10px;
 	overflow: auto;
 	max-height: 200px;
 	background-color: #fff;
@@ -2531,7 +2533,9 @@ label input[type="checkbox"], label input[type="radio"] {
 }
 
 .frm_border_bottom {
-	border-bottom: 1px solid #DFDFDF;
+	border-bottom: 1px solid var(--grey-border);
+	margin-bottom: 10px;
+	padding-bottom: 10px;
 }
 
 .frm_posttax_opt_list .frm_border_bottom span.howto {
@@ -2542,35 +2546,9 @@ label input[type="checkbox"], label input[type="radio"] {
 	margin-right: 1px;
 }
 
-table.frm_name_value {
-	background-color: #f9f9f9;
-	border: 1px solid #ddd;
-	border-spacing: 0;
-	margin: 0;
-	width: 100%;
-}
-
-table.frm_name_value thead th {
-	background-color: #f1f1f1;
-	padding: 5px 8px 8px;
-}
-
-table.frm_name_value tr {
-	vertical-align: top;
-}
-
-table.frm_name_value td.left,
-table.frm_name_value th.left {
-	width: 38%;
-}
-
-table.frm_name_value input,
-table.frm_name_value select,
-table.frm_name_value textarea {
-	margin: 8px;
-	width: 96%;
-	height: auto;
-	line-height: normal;
+.frm_logic_row,
+.frm_add_remove div.frm_form_field {
+	padding-bottom: 5px;
 }
 
 .frm_field_opts_list {
@@ -2944,14 +2922,11 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 	background: transparent;
 }
 
-#form_settings_page .frm_posttax_row select {
-	max-width: 35%;
-}
-
 select.frm_cancelnew, input.frm_enternew {
 	width: 175px;
 }
 
+.frm_posttax_opt_list,
 .frm_submit_logic_rows {
 	border: 1px solid var(--grey-border);
 	padding: 25px;
@@ -3636,7 +3611,7 @@ table td, .form-table tr td {
 #form_settings_page th,
 #form_settings_page td,
 .frm_settings_form td,
-#frm_notification_settings .frm_form_action_settings p {
+#frm_notification_settings .frm_form_action_settings td p {
 	padding: 7px 0;
 }
 
@@ -3676,7 +3651,9 @@ table td, .form-table tr td {
 .frm_reply_to_container,
 .frm_bcc_cc_container {
 	float: right;
-	margin: -20px 0 0;
+	margin: -9px 0 0;
+	z-index: 1;
+	position: relative;
 }
 
 .frm_action_id {
@@ -3689,13 +3666,10 @@ table td, .form-table tr td {
 	max-width: 35%;
 }
 
+.frm-inline-select,
 #frm_submit_logic_row,
 .frm_logic_rows .frm-collapse-me {
 	line-height: 30px;
-}
-
-.frm_logic_row {
-	padding-bottom: 8px;
 }
 
 .frm_logic_row:first-of-type {
@@ -3715,17 +3689,19 @@ table td, .form-table tr td {
 	max-width: 118px;
 }
 
-.frm_form_action_settings .frm_logic_row,
-.frm_form_action_settings .frm_posttax_row,
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
 }
 
-.frm_form_action_settings .frm_logic_row select,
-.frm_form_action_settings .frm_logic_row input,
 .advanced_settings .frm_logic_row select,
 .advanced_settings .frm_logic_row input {
 	max-width: 30%;
+}
+
+.frm_form_action_settings .frm_logic_row p {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0;
 }
 
 .frm_form_settings input[type="text"] {
@@ -3779,6 +3755,7 @@ a.frm_add_logic_link {
 	margin: 10px auto;
 	padding: 10px;
 	width: 80%;
+	max-width: 290px;
 	font-size: 19px;
 	border: 1px solid var(--primary-color);
 	border-radius: var(--border-radius);
