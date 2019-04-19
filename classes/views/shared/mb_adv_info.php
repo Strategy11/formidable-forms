@@ -168,7 +168,7 @@
 				?>
 				<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
 				<?php
-				}
+			}
 			?>
 			<ul class="frm_code_list frm-full-hover">
 			<?php
