@@ -881,6 +881,7 @@ h2 .frm-button-primary {
 .wp-core-ui.frm-white-body .button-secondary,
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
+.wp-core-ui.frm-white-body .button,
 .frm-white-body button {
 	text-shadow: none;
 	box-shadow: none;
@@ -3629,16 +3630,30 @@ table td, .form-table tr td {
 	width: 80px;
 }
 
-#frm_notification_settings label.frm_left_label {
-	width: 160px;
-}
-
 #frm_notification_settings table tr td:first-child {
 	padding-left: 0;
 }
 
 #frm_notification_settings table tr td:last-child {
 	padding-right: 0;
+}
+
+
+#frm_notification_settings .frm_left_label {
+	/* For add-ons that haven't been updated for 4.0 */
+	float: none;
+	width: auto !important;
+}
+
+.frm-fields .frm_autoresponder_rows select {
+	width: auto;
+}
+
+#frm_notification_settings .frm_with_left_label,
+#frm_notification_settings .frm_left_label + textarea,
+#frm_notification_settings .frm_left_label + select,
+#frm_notification_settings .frm_left_label + input[type=text] {
+	width: 100%;
 }
 
 #frm_notification_settings .frm_email_buttons {
@@ -4542,7 +4557,6 @@ table td.frm_left_label {
 .frm_with_left_label {
 	width: 66%;
 }
-
 
 td.frm_left_label + td {
 	width: 66%;

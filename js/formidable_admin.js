@@ -272,11 +272,13 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		if ( cont.length && cont.find( '.form-table' ).length < 1 ) {
+		var inside = cont.children( '.widget-inside' );
+
+		if ( cont.length && inside.find( 'p, div, table' ).length < 1 ) {
 			var action_id = cont.find( 'input[name$="[ID]"]' ).val();
 			var action_type = cont.find( 'input[name$="[post_excerpt]"]' ).val();
 			if ( action_type ) {
-				cont.children( '.widget-inside' ).html( '<span class="spinner frm_spinner"></span>' );
+				inside.html( '<span class="spinner frm_spinner"></span>' );
 				cont.find( '.spinner' ).fadeIn( 'slow' );
 				jQuery.ajax( {
 					type: 'POST',
@@ -288,7 +290,7 @@ function frmAdminBuildJS() {
 						nonce: frmGlobal.nonce
 					},
 					success: function( html ) {
-						cont.children( '.widget-inside' ).html( html );
+						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr('id') );
 					}
@@ -2451,6 +2453,8 @@ function frmAdminBuildJS() {
 				if ( type === 'meta' ) {
 					jQuery( '.frm_name_value' ).show();
 					jQuery( '.frm_toggle_cf_opts' ).not( ':last' ).hide();
+				} else if ( type === 'tax' ) {
+					jQuery( '.frm_posttax_labels' ).show();
 				}
 			}
 		} );
