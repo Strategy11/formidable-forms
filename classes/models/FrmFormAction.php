@@ -110,7 +110,7 @@ class FrmFormAction {
 		}
 
 		if ( $upgrade_class ) {
-			$action_options['classes'] .= 'frm_show_upgrade';
+			$action_options['classes'] .= ' frm_show_upgrade';
 		}
 
 		$this->action_options  = wp_parse_args( $action_options, $default_options );

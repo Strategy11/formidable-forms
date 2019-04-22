@@ -121,19 +121,16 @@ class FrmFormActionsController {
 	 */
 	public static function form_action_groups() {
 		$groups = array(
-			'email'     => array(
-				'name'  => __( 'Email Notification', 'formidable' ),
-				'icon'  => 'fas fa-envelope',
-			),
-			'wppost'    => array(
-				'name'  => __( 'Create Post', 'formidable' ),
-				'icon'  => 'fab fa-wordpress frm-inverse',
-				'color' => 'rgb(0,160,210)',
-			),
-			'register'  => array(
-				'name'  => __( 'Register User', 'formidable' ),
-				'icon'  => 'fas fa-user',
-				'color' => 'rgb(226,42,110)',
+			'misc'        => array(
+				'name'    => '',
+				'icon'    => 'fas fa-random',
+				'color'   => 'rgb(141,53,245)',
+				'actions' => array(
+					'email',
+					'wppost',
+					'register',
+					'twilio',
+				),
 			),
 			'payment'   => array(
 				'name'    => __( 'eCommerce', 'formidable' ),
@@ -167,18 +164,6 @@ class FrmFormActionsController {
 					'highrise',
 				),
 			),
-			'misc'        => array(
-				'name'    => __( 'Miscellaneous', 'formidable' ),
-				'icon'    => 'fas fa-random',
-				'color'   => 'rgb(141,53,245)',
-				'actions' => array(
-					'twilio',
-				),
-			),
-			'all'         => array(
-				'name'  => __( 'All Form Actions', 'formidable' ),
-				'icon'  => 'fas fa-plus',
-			),
 		);
 
 		return apply_filters( 'frm_action_groups', $groups );
@@ -200,11 +185,6 @@ class FrmFormActionsController {
 		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action frm_bstooltip';
 
 		$group_class = ' frm-group-' . $action_control->action_options['group'];
-		if ( ! empty( $group ) ) {
-			$group_class = 'frm-group-action';
-			$classes    .= ' frm-group-action';
-		}
-		//$classes .= $action_control->action_options['classes'];
 
 		/* translators: %s: Name of form action */
 		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );

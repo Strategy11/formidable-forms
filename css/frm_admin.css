@@ -484,7 +484,7 @@ ul.frm_form_nav > li {
 #frm-bulk-modal i,
 .frm_has_shortcodes i {
 	position: absolute;
-	top: 40px;
+	top: 38px;
 	right: 5px;
 	z-index: 100;
 	margin-top: -9px;
@@ -3342,9 +3342,19 @@ h2.frm-h2,
 
 #frm_email_addon_menu {
 	border: 1px solid var(--grey-border);
-	padding: 30px 30px 10px;
+	padding: 15px;
 	border-radius: 4px;
 	margin: 40px 0 15px;
+}
+
+#frm_email_addon_menu .frm-search {
+	float: right;
+	margin: 0;
+}
+
+#frm_email_addon_menu h3.frm-no-border {
+	clear: none;
+	padding-top: 7px;
 }
 
 .frm_email_settings .widget .widget-top,
@@ -3402,13 +3412,8 @@ h2.frm-h2,
 }
 
 #frm_email_addon_menu h3 {
-	text-align: center;
-	margin: 0 0 55px;
-	border: none;
-	text-transform: none;
-	color: var(--medium-grey);
-	font-size: 24px;
-	font-weight: 300;
+	margin: 0 0 15px;
+	clear: both;
 }
 
 .frm_form_action_icon {
@@ -3417,29 +3422,32 @@ h2.frm-h2,
 
 .frm_actions_list {
 	margin: 0;
+	display: inline;
 }
 
 .frm_actions_list li {
-	display: none;
 	float: left;
-	width: 18%;
-	margin: 0 1% 55px;
+	width: 15.6%;
+	margin: 10px .5% 15px;
 	height: 100px;
 	text-align: center;
 }
 
-#frm_email_addon_menu .frm-group-action {
-	display: inline-block;
-}
-
-#frm-show-groups {
-	font-size: 16px;
-	float: right;
+.frm-limited-actions .frm-group-heading,
+.frm-limited-actions #frm-hide-groups,
+.frm-all-actions #frm-show-groups,
+.frm-limited-actions .frm-not-installed:not(.frm-search-result) {
 	display: none;
 }
 
 label.frm_action_events {
 	padding-left: 15px;
+}
+
+#frm-hide-groups,
+#frm-show-groups {
+	font-size: 16px;
+	float: right;
 }
 
 .frm_actions_list a:active, .frm_actions_list a:focus {
@@ -3452,15 +3460,15 @@ label.frm_action_events {
 }
 
 .frm_actions_list span {
-	/* 55px total with 30px content */
-	background-color: rgba(40, 47, 54, .05);
-	padding: 12px;
+	/* 50px total with 30px content */
+	background-color: var(--sidebar-color);
+	padding: 10px;
 	text-align: center;
 	border-radius: 50%;
 	display: block;
 	width: 30px;
 	height: 30px;
-	margin: 0 auto 25px;
+	margin: 0 auto 15px;
 }
 
 .frm_email_settings .widget-title h4 {
@@ -3489,7 +3497,7 @@ label.frm_action_events {
 }
 
 .frm_actions_list i {
-	background: var(--primary-hover);
+	background-color: var(--primary-hover);
 	height: 22px;
 	width: 22px;
 	vertical-align: top;
@@ -3515,7 +3523,7 @@ label.frm_action_events {
 }
 
 .frm_actions_list .frm-inverse {
-	background: transparent;
+	background-color: transparent;
 	padding: 0;
 	height: 30px;
 	width: 30px;
@@ -3548,12 +3556,8 @@ label.frm_action_events {
 	color: var(--grey);
 }
 
-.frm_email_icons, .frm_actions_list {
-	padding: 10px 0 5px 15px;
-}
-
 .frm_email_icons {
-	padding-left: 6px;
+	padding: 10px 0 5px 6px;
 	font-size: 20px;
 }
 
@@ -3646,6 +3650,7 @@ table td, .form-table tr td {
 	line-height: 1em;
 	height: auto;
 	font-size: 12px;
+	box-shadow: none;
 }
 
 .frm_reply_to_container,
@@ -3654,6 +3659,11 @@ table td, .form-table tr td {
 	margin: -9px 0 0;
 	z-index: 1;
 	position: relative;
+}
+
+.frm_email_row .frm_cancel1_icon:before {
+	line-height: 1;
+	vertical-align: bottom;
 }
 
 .frm_action_id {
@@ -4775,7 +4785,7 @@ ul.frm-category-tabs {
 .frm-with-right-icon i {
 	right: 0;
 	left: auto;
-	top: -3px;
+	top: -2px;
 	padding: 0 10px 0 5px;
 }
 
@@ -5310,6 +5320,7 @@ li.frm_noallow.button.frm_show_upgrade {
 .frm-dialog .frm-sub-label,
 .frm-sub-label {
 	color: var(--grey);
+	text-transform: none;
 }
 
 h2 .frm-sub-label {

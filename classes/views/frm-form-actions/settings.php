@@ -4,57 +4,55 @@
 
 <?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
 				
-<div id="frm_email_addon_menu">
-	<h3><?php esc_html_e( 'Select the type of form action you would like to add', 'formidable' ); ?></h3>
-	<ul class="frm_actions_list frm-show-groups">
-		<?php
-		$displayed_actions = array();
-		foreach ( $groups as $group_name => $group ) {
-			$is_single = ( ! isset( $group['actions'] ) || count( $group['actions'] ) === 1 );
-			if ( isset( $action_controls[ $group_name ] ) && $is_single ) {
-				$displayed_actions[] = $group_name;
-				FrmFormActionsController::show_action_icon_link( $action_controls[ $group_name ], $group );
-			} else {
-				?>
-				<li class="frm-group-action" data-group="<?php echo esc_attr( $group_name ); ?>">
-					<a href="javascript:void(0)">
-						<span>
-							<i class="<?php echo esc_attr( $group['icon'] ); ?>"
-							<?php if ( isset( $group['color'] ) ) { ?>
-							style="--primary-hover:<?php echo esc_attr( $group['color'] ); ?>"
-							<?php } ?>></i>
-						</span>
-						<?php echo esc_html( $group['name'] ); ?>
-					</a>
-				</li>
-				<?php
-			}
+<div id="frm_email_addon_menu" class="frm-limited-actions">
+	<?php
+	FrmAppHelper::show_search_box(
+		array(
+			'input_id'    => 'actions',
+			'placeholder' => __( 'Search Form Actions', 'formidable' ),
+			'tosearch'    => 'frm-action',
+		)
+	);
+	?>
+	<h3 class="frm-no-border">
+		<?php esc_html_e( 'Form Actions', 'formidable' ); ?>
+		<span class="frm-sub-label">
+			<?php esc_html_e( '(click an action to add it to your form)', 'formidable' ); ?>
+		</span>
+	</h3>
+	<?php
+	$displayed_actions = array();
+	foreach ( $groups as $group_name => $group ) {
+		if ( ! empty( $group['name'] ) ) { ?>
+			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
+			<?php
 		}
 
-		foreach ( $action_controls as $action_control ) {
-			if ( in_array( $action_control->id_base, $displayed_actions ) ) {
-				continue;
-			}
-
-			$displayed_actions[] = $action_control->id_base;
-			FrmFormActionsController::show_action_icon_link( $action_control );
-			unset( $actions_icon, $classes );
+		if ( ! isset( $group['actions'] ) ) {
+			$group['actions'] = array();
 		}
+		?>
+		<ul class="frm_actions_list">
+			<?php
+			foreach ( $action_controls as $action_control ) {
+				if ( in_array( $action_control->id_base, $displayed_actions ) || ! in_array( $action_control->id_base, $group['actions'] ) ) {
+					continue;
+				}
 
-		foreach ( $groups as $group_name => $group ) {
-			if ( ! isset( $group['actions'] ) ) {
-				continue;
+				$displayed_actions[] = $action_control->id_base;
+				FrmFormActionsController::show_action_icon_link( $action_control );
+				unset( $actions_icon, $classes );
 			}
 
 			foreach ( $group['actions'] as $action ) {
 				if ( ! in_array( $action, $displayed_actions ) ) {
 					?>
-					<li class="frm-group-<?php echo esc_attr( $group_name ); ?>">
+					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span>
 								<i class="dashicons dashicons-plus"
 								<?php if ( isset( $group['color'] ) ) { ?>
-								style="--primary-hover:<?php echo esc_attr( $group['color'] ); ?>"
+									style="--primary-hover:<?php echo esc_attr( $group['color'] ); ?>"
 								<?php } ?>></i>
 							</span>
 							<?php echo esc_html( $action ); ?>
@@ -63,12 +61,17 @@
 					<?php
 				}
 			}
-		}
-		?>
-	</ul>
+			?>
+		</ul>
+		<?php
+	}
+	?>
 	<div class="clear"></div>
 	<a href="#" id="frm-show-groups">
-		<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+		<?php esc_html_e( 'Show all form actions', 'formidable' ); ?>
+	</a>
+	<a href="#" id="frm-hide-groups">
+		<?php esc_html_e( 'Hide extra form actions', 'formidable' ); ?>
 	</a>
 	<div class="clear"></div>
 </div>

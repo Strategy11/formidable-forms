@@ -9,10 +9,11 @@ class FrmEmailAction extends FrmFormAction {
 			'event'     => array( 'create' ),
 			'limit'     => 99,
 			'priority'  => 10,
+			'color'     => 'rgb(49, 119, 199)',
 		);
 		$action_ops = apply_filters( 'frm_email_control_settings', $action_ops );
 
-		parent::__construct( 'email', __( 'Email Notification', 'formidable' ), $action_ops );
+		parent::__construct( 'email', __( 'Send Email', 'formidable' ), $action_ops );
 	}
 
 	public function form( $form_action, $args = array() ) {

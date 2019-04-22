@@ -2078,43 +2078,22 @@ function frmAdminBuildJS() {
 
 	function toggleActionGroups() {
 		/*jshint validthis:true */
-		var i,
-			group = this.getAttribute('data-group'),
-			groupClass = 'frm-group-' + group,
-			actions = document.getElementsByClassName( 'frm_actions_list' )[0].children;
+		var actions = document.getElementById( 'frm_email_addon_menu' ).classList,
+			search = document.getElementById( 'actions-search-input' );
 
-		for ( i = 0; i < actions.length; i++ ) {
-			if ( group === 'all' ) {
-				if ( actions[i].getAttribute( 'data-group' ) === null ) {
-					actions[i].style.display = 'inline-block';
-				} else {
-					actions[i].style.display = 'none';
-				}
-			} else {
-				showItemsWithClass( actions, groupClass );
-			}
+		if ( actions.contains( 'frm-all-actions' ) ) {
+			actions.remove( 'frm-all-actions' );
+			actions.add( 'frm-limited-actions' );
+		} else {
+			actions.add( 'frm-all-actions' );
+			actions.remove( 'frm-limited-actions' );
 		}
-		document.getElementById('frm-show-groups').style.display = 'block';
-	}
 
-	function cancelActionGroup() {
-		/*jshint validthis:true */
-		var actions = document.getElementsByClassName( 'frm_actions_list' )[0].children;
-
-		showItemsWithClass( actions, 'frm-group-action' );
-		this.style.display = 'none';
-	}
-
-	function showItemsWithClass( items, className ) {
-		var i;
-
-		for ( i = 0; i < items.length; i++ ) {
-			if ( items[i].classList.contains( className ) ) {
-				items[i].style.display = 'inline-block';
-			} else {
-				items[i].style.display = 'none';
-			}
-		}
+		// Reset search.
+		search.value = '';
+		var evt = document.createEvent( 'HTMLEvents' );
+		evt.initEvent( 'input', false, true );
+		search.dispatchEvent(evt);
 	}
 
 	function getNewActionId() {
@@ -3628,13 +3607,25 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var i,
 			searchText = this.value.toLowerCase(),
-			items = document.getElementsByClassName( this.getAttribute( 'data-tosearch' ) );
+			toSearch = this.getAttribute( 'data-tosearch' ),
+			items = document.getElementsByClassName( toSearch );
+
+		if ( toSearch === 'frm-action' && searchText !== '' ) {
+			var addons = document.getElementById( 'frm_email_addon_menu' ).classList;
+			addons.remove( 'frm-all-actions' );
+			addons.add( 'frm-limited-actions' );
+		}
 
 		for ( i = 0; i < items.length; i++ ) {
-			if ( items[i].innerHTML.toLowerCase().indexOf( searchText ) >= 0 ) {
+			if ( searchText === '' ) {
 				items[i].classList.remove( 'frm_hidden' );
+				items[i].classList.remove( 'frm-search-result' );
+			} else if ( items[i].innerHTML.toLowerCase().indexOf( searchText ) >= 0 ) {
+				items[i].classList.remove( 'frm_hidden' );
+				items[i].classList.add( 'frm-search-result' );
 			} else {
 				items[i].classList.add( 'frm_hidden' );
+				items[i].classList.remove( 'frm-search-result' );
 			}
 		}
 	}
@@ -3831,7 +3822,7 @@ function frmAdminBuildJS() {
 			} );
 
 			var autoSearch = jQuery( '.frm-auto-search' );
-			autoSearch.keyup( searchContent );
+			autoSearch.on( 'input search', searchContent );
 			if ( autoSearch.val() !== '' ) {
 				autoSearch.keyup();
 			}
@@ -3962,13 +3953,18 @@ function frmAdminBuildJS() {
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( 'select[data-toggleclass], input[data-toggleclass]' ).change( toggleFormOpts );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
-			jQuery( 'li[data-group]').click( toggleActionGroups );
-			jQuery( '#frm-show-groups' ).click( cancelActionGroup );
+			jQuery( '#frm-show-groups, #frm-hide-groups').click( toggleActionGroups );
 			initiateMultiselect();
 
 			//set actions icons to inactive
 			jQuery( 'ul.frm_actions_list li' ).each( function() {
 				checkActiveAction( jQuery( this ).children( 'a' ).data( 'actiontype' ) );
+
+				// If the icon is a background image, don't add BG color.
+				var icon = jQuery( this ).find( 'i' );
+				if ( icon.css('background-image') !== 'none' ) {
+					icon.addClass( 'frm-inverse' );
+				}
 			} );
 
 			jQuery( '.frm_submit_settings_btn' ).click( submitSettings );

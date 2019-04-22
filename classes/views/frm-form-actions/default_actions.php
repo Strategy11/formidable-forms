@@ -3,7 +3,8 @@
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'frm_show_upgrade';
+		$action_ops['classes'] = 'fab fa-wordpress frm-inverse frm_show_upgrade';
+		$action_ops['color']   = 'rgb(0,160,210)';
 
 		parent::__construct( 'wppost', __( 'Create Post', 'formidable' ), $action_ops );
 	}
@@ -13,8 +14,9 @@ class FrmDefPostAction extends FrmFormAction {
 class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'frm_show_upgrade';
+		$action_ops['classes'] = 'fas fa-user frm_show_upgrade';
 		$action_ops['plugin']  = 'registration';
+		$action_ops['color']   = 'rgb(226,42,110)';
 		parent::__construct( 'register', __( 'Register User', 'formidable' ), $action_ops );
 	}
 }
@@ -23,7 +25,7 @@ class FrmDefRegAction extends FrmFormAction {
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'fab fa-paypal frm_show_upgrade';
+		$action_ops['classes'] = 'fab fa-paypal frm-inverse frm_show_upgrade';
 		$action_ops['color'] = 'rgb(0,112,185)';
 
 		parent::__construct( 'paypal', 'PayPal', $action_ops );
@@ -78,7 +80,7 @@ class FrmDefActiveCampaignAction extends FrmFormAction {
 class FrmDefSalesforceAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'frm_show_upgrade';
+		$action_ops['classes'] = 'fab fa-salesforce frm_show_upgrade';
 		parent::__construct( 'salesforce', 'Salesforce', $action_ops );
 	}
 }
@@ -102,8 +104,9 @@ class FrmDefGetResponseAction extends FrmFormAction {
 class FrmDefHubspotAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'frm_show_upgrade';
-		parent::__construct( 'hubspot', 'Hubpost', $action_ops );
+		$action_ops['classes'] = 'fab fa-hubspot frm-inverse frm_show_upgrade';
+		$action_ops['color']   = '#ff7a59';
+		parent::__construct( 'hubspot', 'Hubspot', $action_ops );
 	}
 }
 
