@@ -3395,6 +3395,14 @@ h2.frm-h2,
 	border-color: var(--grey-border);
 }
 
+.frm_form_action_settings > .widget-inside {
+	display: none;
+}
+
+.frm_form_action_settings.open > .widget-inside {
+	display: block;
+}
+
 .frm_form_action_settings .widget-inside {
 	min-height: 25px;
 	padding: 15px;

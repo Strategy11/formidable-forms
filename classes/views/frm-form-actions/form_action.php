@@ -31,7 +31,7 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
 			</h4>
 		</div>
 	</div>
-	<div class="widget-inside frm_hidden">
+	<div class="widget-inside">
 		<?php
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			// only load settings if they are just added or are open

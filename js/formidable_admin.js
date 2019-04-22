@@ -2063,12 +2063,20 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				jQuery( '#frm_notification_settings .widget-inside' ).css( 'display', 'none' );//Close any open actions first
+				// Close any open actions first.
+				jQuery( '.frm_form_action_settings.open' ).removeClass( 'open' );
+
 				jQuery( '#frm_notification_settings' ).append( html );
 				jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
-				jQuery( '#frm_form_action_' + actionId + ' .widget-inside' ).css( 'display', 'block' );
-				jQuery( '#frm_form_action_' + actionId ).addClass( 'open' );
-				jQuery( '#action_post_title_' + actionId ).focus();
+
+				var newAction = document.getElementById( 'frm_form_action_' + actionId );
+
+				newAction.classList.add( 'open' );
+				document.getElementById( 'post-body-content' ).scroll( {
+					top: newAction.offsetTop + 10,
+					left: 0,
+					behavior: 'smooth'
+				} );
 
 				//check if icon should be active
 				checkActiveAction( type );
