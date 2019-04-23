@@ -801,7 +801,6 @@ class FrmFormsController {
 		}
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
-		$plans   = array( 'free', 'Personal', 'Business', 'Elite' );
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
 	}

@@ -107,19 +107,7 @@
 							$preview_link = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html';
 						}
 
-						if ( isset( $template['categories'] ) && ( ! isset( $template['url'] ) || empty( $template['url'] ) ) ) {
-							foreach ( $template['categories'] as $k => $category ) {
-								if ( in_array( $category, $plans ) ) {
-									printf(
-										/* translators: %s: Plan name */
-										esc_html__( 'License plan required: %s', 'formidable' ),
-										'<a href="' . esc_url( $pricing ) . '" target="_blank" rel="noopener">' . esc_html( $category ) . '</a>'
-									);
-									unset( $template['categories'][ $k ] );
-									break;
-								}
-							}
-						}
+						FrmFormsHelper::show_plan_required( $template, $pricing . '&utm_content=' . $template['key'] );
 						?>
 						<?php if ( ! empty( $template['categories'] ) ) { ?>
 							<div class="frm_hidden">

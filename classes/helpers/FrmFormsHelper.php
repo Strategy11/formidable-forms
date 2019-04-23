@@ -1133,4 +1133,34 @@ BEFORE_HTML;
 
 		return $name;
 	}
+
+	/**
+	 * If a template or add-on cannot be installed, show a message
+	 * about which plan is required.
+	 *
+	 * @since 4.0
+	 */
+	public static function show_plan_required( &$item, $link ) {
+		if ( ! isset( $item['categories'] ) || ( isset( $item['url'] ) && ! empty( $item['url'] ) ) ) {
+			return;
+		}
+
+		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
+
+		foreach ( $item['categories'] as $k => $category ) {
+			if ( ! in_array( $category, $plans ) ) {
+				continue;
+			}
+			?>
+			<p>
+				<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
+				<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
+					<?php echo esc_html( $category ); ?>
+				</a>
+			</p>
+			<?php
+			unset( $item['categories'][ $k ] );
+			break;
+		}
+	}
 }

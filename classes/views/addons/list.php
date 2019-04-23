@@ -16,12 +16,15 @@
 					<h2>
 						<?php echo esc_html( $addon['title'] ); ?>
 					</h2>
-					<p><?php echo esc_html( $addon['excerpt'] ); ?></p>
-					<?php if ( isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'] ) { ?>
-						<a href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
-							<?php esc_html_e( 'View Docs', 'formidable' ); ?>
-						</a>
-					<?php } ?>
+					<p>
+						<?php echo esc_html( $addon['excerpt'] ); ?>
+						<?php if ( isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'] ) { ?>
+							<br/><a href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
+								<?php esc_html_e( 'View Docs', 'formidable' ); ?>
+							</a>
+						<?php } ?>
+					</p>
+					<?php FrmFormsHelper::show_plan_required( $addon, $pricing . '&utm_content=' . $addon['slug'] ); ?>
 				</div>
 				<div class="plugin-card-bottom">
 					<span class="addon-status">
