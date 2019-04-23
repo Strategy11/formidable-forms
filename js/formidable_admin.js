@@ -1926,9 +1926,15 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', '[data-upgrade]', function( event ) {
 			event.preventDefault();
-			jQuery('.frm_feature_label').html( this.dataset.upgrade );
+			jQuery('.frm_feature_label').html( this.getAttribute( 'data-upgrade' ) );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
+
+			var requires = this.getAttribute( 'data-requires' );
+			if ( requires === undefined ) {
+				requires = 'Pro';
+			}
+			jQuery( '.license-level' ).html( requires );
 
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
@@ -1937,8 +1943,8 @@ function frmAdminBuildJS() {
 
 			// set the utm medium
 			var button = $info.find('.button-primary:not(#frm-oneclick-button)');
-			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + this.dataset.medium );
-			var content = this.dataset.content;
+			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
+			var content = this.getAttribute( 'data-content' );
 			if ( content === undefined ) {
 				content = '';
 			}

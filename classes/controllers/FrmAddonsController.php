@@ -16,12 +16,15 @@ class FrmAddonsController {
 
 	public static function list_addons() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		$license_type     = '';
 
 		$addons = self::get_api_addons();
 		$errors = array();
+
 		if ( isset( $addons['error'] ) ) {
 			$api    = new FrmFormApi();
 			$errors = $api->get_error_from_response( $addons );
+			$license_type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : '';
 			unset( $addons['error'] );
 		}
 		self::prepare_addons( $addons );
@@ -327,6 +330,10 @@ class FrmAddonsController {
 				$link = array(
 					'url'   => $addon['url'],
 					'class' => 'frm-install-addon',
+				);
+			} elseif ( isset( $addon['categories'] ) && ! empty( $addon['categories'] ) ) {
+				$link = array(
+					'categories' => $addon['categories'],
 				);
 			}
 

@@ -1141,26 +1141,38 @@ BEFORE_HTML;
 	 * @since 4.0
 	 */
 	public static function show_plan_required( &$item, $link ) {
-		if ( ! isset( $item['categories'] ) || ( isset( $item['url'] ) && ! empty( $item['url'] ) ) ) {
+		$requires = self::get_plan_required( $item );
+		if ( empty( $requires ) ) {
 			return;
+		}
+
+		?>
+		<p>
+			<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
+			<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
+				<?php echo esc_html( $requires ); ?>
+			</a>
+		</p>
+		<?php
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function get_plan_required( &$item ) {
+		if ( ! isset( $item['categories'] ) || ( isset( $item['url'] ) && ! empty( $item['url'] ) ) ) {
+			return false;
 		}
 
 		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
 
 		foreach ( $item['categories'] as $k => $category ) {
-			if ( ! in_array( $category, $plans ) ) {
-				continue;
+			if ( in_array( $category, $plans ) ) {
+				unset( $item['categories'][ $k ] );
+				return $category;
 			}
-			?>
-			<p>
-				<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
-				<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
-					<?php echo esc_html( $category ); ?>
-				</a>
-			</p>
-			<?php
-			unset( $item['categories'][ $k ] );
-			break;
 		}
+
+		return false;
 	}
 }

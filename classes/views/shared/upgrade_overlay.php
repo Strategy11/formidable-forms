@@ -41,7 +41,13 @@
 					</p>
 					<?php if ( $is_pro ) { ?>
 						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link">
-								<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
+							<?php
+							printf(
+								/* translators: %s: Plan name */
+								esc_html__( 'Upgrade to %s', 'formidable' ),
+								'<span class="license-level">Pro</span>'
+							);
+							?>
 						</a>
 					<?php } else { ?>
 						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer" id="frm-upgrade-modal-link">

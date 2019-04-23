@@ -44,6 +44,10 @@
 						<a class="frm-install-addon button button-primary frm-button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
 							<?php esc_html_e( 'Install', 'formidable' ); ?>
 						</a>
+					<?php } elseif ( $license_type === strtolower( FrmFormsHelper::get_plan_required( $addon ) ) ) { ?>
+						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+							<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
+						</a>
 					<?php } else { ?>
 						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $pricing . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 							<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>

@@ -85,6 +85,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		$run_filter      = true;
 		$single_no_allow = ' ';
 		$install_data    = '';
+		$requires        = '';
 		if ( strpos( $field_type['icon'], ' frm_show_upgrade' ) ) {
 			$single_no_allow   .= 'frm_show_upgrade';
 			$field_type['icon'] = str_replace( ' frm_show_upgrade', '', $field_type['icon'] );
@@ -94,10 +95,11 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 				if ( isset( $upgrading['url'] ) ) {
 					$install_data = json_encode( $upgrading );
 				}
+				$requires = FrmFormsHelper::get_plan_required( $upgrading );
 			}
 		}
 		?>
-					<li class="frmbutton <?php echo esc_attr( $no_allow_class . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>">
+					<li class="frmbutton <?php echo esc_attr( $no_allow_class . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
 		<?php
 		if ( $run_filter ) {
 			echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $field_label, $id, $field_key ), array( 'a', 'i', 'span' ) ); // WPCS: XSS ok.
