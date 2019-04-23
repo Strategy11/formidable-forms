@@ -580,7 +580,7 @@ class FrmEntriesHelper {
 			$actions['frm_delete'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'far fa-trash-alt',
+				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array(
 					'frmverify' => __( 'Really delete?', 'formidable' ),
 				),
@@ -607,7 +607,7 @@ class FrmEntriesHelper {
 				'medium'  => 'resend-email',
 				'content' => 'entry',
 			),
-			'icon'  => 'far fa-envelope',
+			'icon'  => 'frm_icon_font frm_email_icon',
 		);
 
 		$actions['frm_edit'] = array(
@@ -619,7 +619,7 @@ class FrmEntriesHelper {
 				'medium'  => 'edit-entries',
 				'content' => 'entry',
 			),
-			'icon'  => 'far fa-edit',
+			'icon'  => 'frm_icon_font frm_pencil_icon',
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );

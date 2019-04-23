@@ -5,6 +5,6 @@
 
 <?php if ( isset( $delete_link ) ) { ?>
 	<a href="<?php echo esc_url( $delete_link ); ?>" id="frm_delete_style" class="submitdelete deletion" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ); ?>">
-		<i class="far fa-trash-alt"></i>
+		<i class="frm_icon_font frm_delete_icon"></i>
 	</a>
 <?php } ?>

@@ -23,7 +23,8 @@
 	<?php
 	$displayed_actions = array();
 	foreach ( $groups as $group_name => $group ) {
-		if ( ! empty( $group['name'] ) ) { ?>
+		if ( ! empty( $group['name'] ) ) {
+			?>
 			<h3 class="frm-group-heading"><?php echo esc_html( $group['name'] ); ?></h3>
 			<?php
 		}
@@ -50,7 +51,7 @@
 					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span>
-								<i class="dashicons dashicons-plus"
+								<i class="frm_icon_font frm_plus_icon"
 								<?php if ( isset( $group['color'] ) ) { ?>
 									style="--primary-hover:<?php echo esc_attr( $group['color'] ); ?>"
 								<?php } ?>></i>

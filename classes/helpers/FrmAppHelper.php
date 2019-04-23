@@ -721,7 +721,7 @@ class FrmAppHelper {
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-			<span class="dashicons dashicons-search"></span>
+			<span class="frm_font_icon frm_search_icon"></span>
 			<input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s"
 				value="<?php _admin_search_query(); ?>" placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"
 				class="<?php echo esc_attr( $class ); ?>" data-tosearch="<?php echo esc_attr( $atts['tosearch'] ); ?>"
@@ -1811,7 +1811,6 @@ class FrmAppHelper {
 	 */
 	public static function load_font_style() {
 		wp_enqueue_style( 'frm_fonts', self::plugin_url() . '/css/frm_fonts.css', array(), self::plugin_version() );
-		wp_enqueue_style( 'font-awesome-5', 'https://use.fontawesome.com/releases/v5.8.1/css/all.css', array(), '5.8.1' );
 	}
 
 	/**

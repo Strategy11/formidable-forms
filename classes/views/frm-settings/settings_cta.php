@@ -3,7 +3,7 @@
 		<div class="postbox">
 			<div class="inside">
 
-				<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>"><i class="dashicons dashicons-dismiss" aria-label="Dismiss" aria-hidden="true"></i></a>
+				<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>"><i class="frm_icon_font frm_close_icon" aria-label="Dismiss" aria-hidden="true"></i></a>
 				<h2><?php esc_html_e( 'Get Formidable Forms Pro and Unlock all the Powerful Features', 'formidable' ); ?></h2>
 				<div class="cta-inside">
 					<p><?php esc_html_e( 'Thanks for being a loyal Formidable Forms user. Upgrade to Formidable Forms Pro to unlock all the awesome features and learn how others are defying the limits by taking on big projects without big resources.', 'formidable' ); ?></p>

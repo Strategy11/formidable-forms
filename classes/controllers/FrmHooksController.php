@@ -155,7 +155,6 @@ class FrmHooksController {
 		// Fields Controller.
 		add_action( 'wp_ajax_frm_load_field', 'FrmFieldsController::load_field' );
 		add_action( 'wp_ajax_frm_insert_field', 'FrmFieldsController::create' );
-		add_action( 'wp_ajax_frm_update_ajax_option', 'FrmFieldsController::update_ajax_option' );
 		add_action( 'wp_ajax_frm_duplicate_field', 'FrmFieldsController::duplicate' );
 		add_action( 'wp_ajax_frm_delete_field', 'FrmFieldsController::destroy' );
 		add_action( 'wp_ajax_frm_import_options', 'FrmFieldsController::import_options' );

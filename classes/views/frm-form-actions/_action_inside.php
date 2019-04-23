@@ -93,7 +93,7 @@ if ( $use_logging ) {
 		?>
 		<p>
 			<a href="javascript:void(0)" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
-				<i class="dashicons dashicons-info"></i>
+				<i class="frm_icon_font frm_tooltip_solid_icon"></i>
 				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
 			</a>
 		</p>

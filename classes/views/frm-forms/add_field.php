@@ -9,12 +9,12 @@
 	<div class="frm-field-action-icons frm-show-hover">
 
 		<?php if ( $field['type'] === 'divider' ) { ?>
-			<a href="#" class="frm-collapse-section frm-hover-icon fas fa-chevron-down" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
+			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
 		<?php } ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>"> </a>
-		<a href="#" class="frm_bstooltip frm-hover-icon far fa-trash-alt frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
-		<a href="#" class="frm_bstooltip frm-hover-icon far fa-clone" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
+		<a href="#" class="frm_bstooltip frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
+		<a href="#" class="frm_bstooltip frm-hover-icon frm_icon_font frm_clone_icon" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
 	</div>
 
 	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
@@ -53,7 +53,7 @@ if ( 'divider' === $field['type'] ) {
 	?>
 </div>
 <div class="frm_no_section_fields">
-	<i class="frm-large-plus fas fa-plus-circle"></i>
+	<i class="frm-large-plus frm_icon_font frm_plus2_icon"></i>
 	<p class="howto"><?php esc_html_e( 'Your section has no fields. Drag fields here to add them to this section.', 'formidable' ); ?></p>
 </div>
 <ul class="start_divider frm_sorting">

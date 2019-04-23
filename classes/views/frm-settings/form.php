@@ -11,18 +11,10 @@
 
 	<div class="columns-2">
 		<div class="frm-right-panel">
-			<ul class="frm-category-tabs frm-form-setting-tabs">
-				<?php $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' ); ?>
-				<?php foreach ( $sections as $sec_name => $section ) { ?>
-					<li <?php echo ( $a == $sec_name . '_settings' ) ? 'class="tabs active starttab"' : ''; ?>>
-						<a href="#<?php echo esc_attr( $sec_name ); ?>_settings"
-								data-frmajax="<?php echo esc_attr( isset( $section['ajax'] ) ? $section['ajax'] : '' ); ?>">
-							<span class="<?php echo esc_attr( $section['icon'] ); ?>" aria-hidden="true"></span>
-							<?php echo esc_html( isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ); ?>
-						</a>
-					</li>
-				<?php } ?>
-			</ul>
+			<?php
+			$current = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php' );
+			?>
 		</div>
 
 		<div id="post-body-content" class="frm-fields">
@@ -30,28 +22,28 @@
 			<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
 							<form name="frm_settings_form" method="post" class="frm_settings_form"
-									action="?page=formidable-settings<?php echo esc_html( $a ? '&amp;t=' . $a : '' ); ?>">
+									action="?page=formidable-settings<?php echo esc_html( $current ? '&amp;t=' . $current : '' ); ?>">
 								<input type="hidden" name="frm_action" value="process-form"/>
 								<input type="hidden" name="action" value="process-form"/>
 								<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
 								<?php
-								foreach ( $sections as $sec_name => $section ) {
-									if ( $a === $sec_name . '_settings' ) {
+								foreach ( $sections as $section ) {
+									if ( $current === $section['anchor'] ) {
 										?>
-										<style type="text/css">.<?php echo esc_attr( $sec_name ); ?>_settings {
+										<style type="text/css">.<?php echo esc_attr( $section['anchor'] ); ?> {
 											display: block;
 										}</style>
 									<?php } ?>
-									<div id="<?php echo esc_attr( $sec_name ); ?>_settings"
-											class="<?php echo esc_attr( $sec_name ); ?>_settings tabs-panel <?php echo esc_attr( $a === $sec_name . '_settings' ? 'frm_block' : 'frm_hidden' ); ?>">
+									<div id="<?php echo esc_attr( $section['anchor'] ); ?>"
+											class="<?php echo esc_attr( $section['anchor'] ); ?> tabs-panel <?php echo esc_attr( $current === $section['anchor'] ? 'frm_block' : 'frm_hidden' ); ?>">
 										<?php if ( isset( $section['ajax'] ) ) { ?>
-											<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $sec_name ); ?>_settings_ajax">
+											<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $section['anchor'] ); ?>_ajax">
 												<span class="spinner"></span>
 											</div>
 										<?php } else { ?>
 											<h2 class="frm-h2">
-												<?php echo esc_html( isset( $section['name'] ) ? $section['name'] : ucfirst( $sec_name ) ); ?>
+												<?php echo esc_html( $section['name'] ); ?>
 											</h2>
 											<?php
 											if ( isset( $section['class'] ) ) {
@@ -60,7 +52,7 @@
 												call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
 											}
 										}
-										do_action( 'frm_' . $sec_name . '_settings_form', $frm_settings );
+										do_action( 'frm_' . $section['anchor'] . '_form', $frm_settings );
 										?>
 									</div>
 								<?php } ?>

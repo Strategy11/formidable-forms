@@ -33,8 +33,8 @@
 			</ul>
 			<div class="clear"></div>
 			<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
-			<h3 class="frm-advanced-fields">
-				<?php esc_html_e( 'Advanced Fields', 'formidable' ); ?>
+			<h3 class="frm-with-line">
+				<span><?php esc_html_e( 'Advanced Fields', 'formidable' ); ?></span>
 			</h3>
 			<ul class="field_type_list">
 <?php

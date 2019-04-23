@@ -3,7 +3,7 @@
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'fab fa-wordpress frm-inverse frm_show_upgrade';
+		$action_ops['classes'] = 'frm_wordpress_icon frm_icon_font frm-inverse frm_show_upgrade';
 		$action_ops['color']   = 'rgb(0,160,210)';
 
 		parent::__construct( 'wppost', __( 'Create Post', 'formidable' ), $action_ops );
@@ -14,7 +14,7 @@ class FrmDefPostAction extends FrmFormAction {
 class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'fas fa-user frm_show_upgrade';
+		$action_ops['classes'] = 'frm_register_icon frm_icon_font frm_show_upgrade';
 		$action_ops['plugin']  = 'registration';
 		$action_ops['color']   = 'rgb(226,42,110)';
 		parent::__construct( 'register', __( 'Register User', 'formidable' ), $action_ops );
@@ -25,7 +25,7 @@ class FrmDefRegAction extends FrmFormAction {
 class FrmDefPayPalAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'fab fa-paypal frm-inverse frm_show_upgrade';
+		$action_ops['classes'] = 'frm_paypal_icon frm_icon_font frm-inverse frm_show_upgrade';
 		$action_ops['color'] = 'rgb(0,112,185)';
 
 		parent::__construct( 'paypal', 'PayPal', $action_ops );
@@ -44,7 +44,7 @@ class FrmDefAweberAction extends FrmFormAction {
 class FrmDefMlcmpAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'fab fa-mailchimp frm_show_upgrade frm-inverse';
+		$action_ops['classes'] = 'frm_icon_font frm_mailchimp_icon frm_show_upgrade frm-inverse';
 		$action_ops['color']   = 'var(--dark-grey)';
 
 		parent::__construct( 'mailchimp', 'MailChimp', $action_ops );
@@ -55,7 +55,7 @@ class FrmDefMlcmpAction extends FrmFormAction {
 class FrmDefTwilioAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'fas fa-mobile-alt frm_show_upgrade';
+		$action_ops['classes'] = 'frm_icon_font frm_sms_icon frm_show_upgrade';
 		parent::__construct( 'twilio', __( 'Twilio SMS', 'formidable' ), $action_ops );
 	}
 }
@@ -112,8 +112,8 @@ class FrmDefHubspotAction extends FrmFormAction {
 
 class FrmDefHighriseAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops = FrmFormAction::default_action_opts();
-		$action_ops['classes'] = 'frm_show_upgrade';
+		$action_ops = FrmFormAction::default_action_opts( 'frm_highrise_icon frm-inverse frm_show_upgrade' );
+		$action_ops['color'] = 'var(--primary-color)';
 		parent::__construct( 'highrise', 'Highrise', $action_ops );
 	}
 }

@@ -76,7 +76,7 @@
 			esc_html( $all_field_types[ $display['type'] ]['name'] )
 		);
 		?>
-		<i class="fas fa-chevron-down"></i>
+		<i class="frm_icon_font frm_arrowdown6_icon"></i>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 	<?php
@@ -125,7 +125,7 @@ do_action( 'frm_before_field_options', $field );
 
 	<h3 class="frm-collapsed">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
-		<i class="fas fa-chevron-down"></i>
+		<i class="frm_icon_font frm_arrowdown6_icon"></i>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 		<?php
@@ -167,7 +167,7 @@ do_action( 'frm_before_field_options', $field );
 						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
 					</label>
 					<span class="frm-with-right-icon">
-						<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-smart-values-box"></i>
+						<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-smart-values-box"></i>
 						<?php
 						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
@@ -192,7 +192,7 @@ do_action( 'frm_before_field_options', $field );
 					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
 				</label>
 				<span class="frm-with-right-icon">
-					<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-layout-classes-box"></i>
+					<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-layout-classes-box"></i>
 					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" />
 				</span>
 			</p>
@@ -324,7 +324,7 @@ do_action( 'frm_before_field_options', $field );
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
-				<i class="fas fa-chevron-down"></i>
+				<i class="frm_icon_font frm_arrowdown6_icon"></i>
 			</h3>
 
 			<div class="frm_validation_box frm-collapse-me">

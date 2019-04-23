@@ -1190,10 +1190,6 @@ function frmAdminBuildJS() {
 		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		toggle( jQuery( '.field_' + field_id + '_option_key' ) );
 		jQuery( '.field_' + field_id + '_option' ).toggleClass( 'frm_with_key' );
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_update_ajax_option', field: field_id, separate_value: '1', nonce: frmGlobal.nonce}
-		} );
 	}
 
 	function toggleMultiselect() {
@@ -1932,7 +1928,7 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 			jQuery('.frm_feature_label').html( this.dataset.upgrade );
 			jQuery( '#frm_upgrade_modal h2' ).show();
-			jQuery( '#frm_upgrade_modal .dashicons-lock' ).removeClass( 'dashicons-unlock' );
+			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
 
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
@@ -1986,7 +1982,7 @@ function frmAdminBuildJS() {
 		if ( typeof parentClass === 'undefined' ) {
 			parentClass = '';
 		}
-		jQuery( parentClass + ' .frm_has_shortcodes input,' + parentClass + ' .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box fas fa-ellipsis-h"></i>' );
+		jQuery( parentClass + ' .frm_has_shortcodes input,' + parentClass + ' .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box frm_icon_font frm_more_horiz_solid_icon"></i>' );
 	}
 
 	function showSuccessOpt() {
@@ -2810,15 +2806,15 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 		e.stopPropagation();
 
-		if ( classes.indexOf( 'fa-times' ) !== -1 ) {
+		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			box.style.display = 'none';
-			this.className = classes.replace( 'fa-times', 'fa-ellipsis-h' );
+			this.className = classes.replace( 'frm_close_icon', 'fa-ellipsis-h' );
 		} else {
 			this.nextSibling.focus();
 			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
 			box.style.display = 'block';
-			this.className = classes.replace( 'fa-ellipsis-h', 'fa-times' );
+			this.className = classes.replace( 'fa-ellipsis-h', 'frm_close_icon' );
 		}
 	}
 
@@ -3449,7 +3445,7 @@ function frmAdminBuildJS() {
 		jQuery( '#frm-oneclick' ).hide();
 		jQuery( '#frm-addon-status' ).text( response ).show();
 		jQuery( '#frm_upgrade_modal h2' ).hide();
-		jQuery( '#frm_upgrade_modal .dashicons-lock' ).addClass( 'dashicons-unlock' );
+		jQuery( '#frm_upgrade_modal .frm_lock_icon' ).addClass( 'frm_lock_open_icon' );
 
 		// Proceed with CSS changes
 		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active');
@@ -4105,9 +4101,9 @@ function frmAdminBuildJS() {
 						return;
 					}
 					sidebar.style.display = 'none';
-					var closeIcons = document.querySelectorAll( '.frm-show-box.fa-times' );
+					var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
 					for ( var i = 0; i < closeIcons.length; i++ ) {
-						closeIcons[i].classList.remove('fa-times');
+						closeIcons[i].classList.remove('frm_close_icon');
 						closeIcons[i].classList.add('fa-ellipsis-h');
 					}
 				}

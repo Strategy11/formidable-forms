@@ -1,9 +1,5 @@
-<h3 class="frm_left_label">
-	<?php esc_html_e( 'License Key', 'formidable' ); ?>
-</h3>
-<div class="frm_with_left_label">
-	<p>You're using Formidable Forms Lite - no license needed. Enjoy! 🙂</p>
-	<p>
+<p>You're using Formidable Forms Lite - no license needed. Enjoy! 🙂</p>
+<p>
 		<?php
 		printf(
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
@@ -12,9 +8,10 @@
 			'</a>'
 		);
 		?>
-	</p>
-	<p>
-		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'settings-license', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank"><?php esc_html_e( 'Already purchased?', 'formidable' ); ?></a>
-	</p>
-</div>
+</p>
+<p>
+<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'settings-license', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank">
+	<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
+</a>
+</p>
 <div class="clear"></div>

@@ -913,17 +913,17 @@ class FrmFormsController {
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
 				'function' => array( __CLASS__, 'advanced_settings' ),
-				'icon'     => 'fas fa-cog',
+				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'email'       => array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
-				'icon'     => 'fas fa-random',
+				'icon'     => 'frm_icon_font frm_shuffle_icon',
 			),
 			'permissions' => array(
 				'name'     => __( 'Form Permissions', 'formidable' ),
-				'icon'     => 'fas fa-unlock-alt',
+				'icon'     => 'frm_icon_font frm_lock_icon',
 				'html_class' => 'frm_show_upgrade frm_noallow',
 				'data'     => array(
 					'medium'  => 'permissions',
@@ -932,7 +932,7 @@ class FrmFormsController {
 			),
 			'scheduling' => array(
 				'name'     => __( 'Form Scheduling', 'formidable' ),
-				'icon'     => 'far fa-calendar-alt',
+				'icon'     => 'frm_icon_font frm_calendar_icon',
 				'html_class' => 'frm_show_upgrade frm_noallow',
 				'data'     => array(
 					'medium'  => 'scheduling',
@@ -943,13 +943,13 @@ class FrmFormsController {
 				'name'     => __( 'Styling & Buttons', 'formidable' ),
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
-				'icon'     => 'fas fa-palette',
+				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
 				'function' => 'html_settings',
-				'icon'     => 'dashicons dashicons-editor-code',
+				'icon'     => 'frm_icon_font frm_embed2_icon',
 			),
 		);
 
@@ -959,23 +959,25 @@ class FrmFormsController {
 			$defaults = array(
 				'html_class' => '',
 				'name'       => ucfirst( $key ),
-				'icon'       => 'dashicons dashicons-admin-generic',
+				'icon'       => 'frm_icon_font frm_settings_icon',
 			);
 
-			$sections[ $key ] = array_merge( $defaults, $section );
+			$section = array_merge( $defaults, $section );
 
 			if ( ! isset( $section['anchor'] ) ) {
-				$sections[ $key ]['anchor'] = $key;
+				$section['anchor'] = $key;
 			}
-			$sections[ $key ]['anchor'] .= '_settings';
+			$section['anchor'] .= '_settings';
 
 			if ( ! isset( $section['title'] ) ) {
-				$sections[ $key ]['title'] = $sections[ $key ]['name'];
+				$section['title'] = $section['name'];
 			}
 
 			if ( ! isset( $section['id'] ) ) {
-				$sections[ $key ]['id'] = $sections[ $key ]['anchor'];
+				$section['id'] = $section['anchor'];
 			}
+
+			$sections[ $key ] = $section;
 		}
 
 		return $sections;

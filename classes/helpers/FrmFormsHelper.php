@@ -108,7 +108,7 @@ class FrmFormsHelper {
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
 				<h1>
 					<?php echo esc_html( $name ); ?>
-					<b class="fas fa-caret-down"></b>
+					<b class="frm_icon_font frm_arrowdown4_icon"></b>
 				</h1>
 			</a>
 			<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
@@ -918,13 +918,13 @@ BEFORE_HTML;
 				$actions['frm_duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Create Form from Template', 'formidable' ),
-					'icon'  => 'fas fa-clone',
+					'icon'  => 'frm_icon_font frm_clone_icon',
 				);
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Duplicate Form', 'formidable' ),
-					'icon'  => 'fas fa-clone',
+					'icon'  => 'frm_icon_font frm_clone_icon',
 				);
 			}
 
@@ -1023,7 +1023,7 @@ BEFORE_HTML;
 				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
-				'icon'  => 'far fa-trash-alt',
+				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array( 'frmverify' => __( 'Are you sure?', 'formidable' ) ),
 			),
 			'delete'  => array(
@@ -1031,7 +1031,7 @@ BEFORE_HTML;
 				'short'   => __( 'Delete', 'formidable' ),
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
-				'icon'    => 'far fa-trash-alt',
+				'icon'    => 'frm_icon_font frm_delete_icon',
 				'data'    => array( 'frmverify' => __( 'Delete form & entries?', 'formidable' ) ),
 			),
 		);

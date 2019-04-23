@@ -92,7 +92,7 @@ function frmAdminPopupJS(){
         jQuery('.frm_switch_sc').removeClass( 'active' );
         jQuery(this).addClass( 'active' );
         toggleMenu();
-        jQuery('#frm_popup_content .media-frame-title h1').html(jQuery(this).children('.howto').text() +' <span class="spinner" style="float:left;"></span><span class="dashicons dashicons-arrow-down"></span>');
+        jQuery('#frm_popup_content .media-frame-title h1').html(jQuery(this).children('.howto').text() +' <span class="spinner" style="float:left;"></span>');
         var val = this.id.replace('sc-link-', '');
         populateOpts(val);
         return false;

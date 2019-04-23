@@ -123,7 +123,7 @@ class FrmFormActionsController {
 		$groups = array(
 			'misc'        => array(
 				'name'    => '',
-				'icon'    => 'fas fa-random',
+				'icon'    => 'frm_icon_font frm_shuffle_icon',
 				'color'   => 'rgb(141,53,245)',
 				'actions' => array(
 					'email',
@@ -134,7 +134,7 @@ class FrmFormActionsController {
 			),
 			'payment'   => array(
 				'name'    => __( 'eCommerce', 'formidable' ),
-				'icon'    => 'fas fa-credit-card',
+				'icon'    => 'frm_icon_font frm_credit_card_alt_icon',
 				'color'   => 'rgb(63,172,37)',
 				'actions' => array(
 					'paypal',
@@ -143,7 +143,7 @@ class FrmFormActionsController {
 			),
 			'marketing' => array(
 				'name'    => __( 'Email Marketing', 'formidable' ),
-				'icon'    => 'fas fa-mail-bulk',
+				'icon'    => 'frm_icon_font frm_mail_bulk_icon',
 				'color'   => 'rgb(37,167,172)',
 				'actions' => array(
 					'mailchimp',
@@ -156,7 +156,7 @@ class FrmFormActionsController {
 			),
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
-				'icon'    => 'fas fa-address-card',
+				'icon'    => 'frm_icon_font frm_address_card_icon',
 				'color'   => 'rgb(222,137,25)',
 				'actions' => array(
 					'salesforce',

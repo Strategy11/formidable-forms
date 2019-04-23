@@ -3,7 +3,7 @@
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
 	<span class="frm-with-right-icon">
-		<i class="frm-show-inline-modal fas fa-ellipsis-h" data-open="frm-input-mask-box"></i>
+		<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-input-mask-box"></i>
 		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" />
 	</span>
 </p>

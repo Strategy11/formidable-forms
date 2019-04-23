@@ -2,11 +2,11 @@
 	<div class="metabox-holder">
 		<div class="postbox">
 			<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
-				<i class="fas fa-times" aria-label="Dismiss" aria-hidden="true"></i>
+				<i class="frm_icon_font frm_close_icon" aria-label="Dismiss" aria-hidden="true"></i>
 			</a>
 			<div class="inside">
 
-				<i class="dashicons dashicons-lock"></i>
+				<i class="frm_icon_font frm_lock_icon"></i>
 				<h2>
 					<?php
 					printf(

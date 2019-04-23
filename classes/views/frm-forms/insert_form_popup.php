@@ -27,7 +27,7 @@
 						<div class="media-frame-title">
 							<h1><?php esc_html_e( 'Insert a Form', 'formidable' ); ?>
 								<span class="spinner"></span>
-								<span class="fas fa-caret-down"></span>
+								<span class="frm_icon_font frm_arrowdown4_icon"></span>
 							</h1>
 						</div>
 

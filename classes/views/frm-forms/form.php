@@ -18,7 +18,7 @@
 				/* translators: %s: The page number */
 				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' );
 				?>
-				<i class="fas fa-chevron-down"></i>
+				<i class="frm_icon_font frm_arrowdown6_icon"></i>
 			</div>
 		</div>
 	</div>

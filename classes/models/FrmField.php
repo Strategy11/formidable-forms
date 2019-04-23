@@ -12,55 +12,55 @@ class FrmField {
 		$fields = array(
 			'text'     => array(
 				'name' => __( 'Text', 'formidable' ),
-				'icon' => 'fas fa-font',
+				'icon' => 'frm_icon_font frm_text2_icon',
 			),
 			'textarea' => array(
 				'name' => __( 'Paragraph', 'formidable' ),
-				'icon' => 'fas fa-paragraph',
+				'icon' => 'frm_icon_font frm_paragraph_icon',
 			),
 			'checkbox' => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
-				'icon' => 'far fa-check-square',
+				'icon' => 'frm_icon_font frm_check_square_icon',
 			),
 			'radio'    => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),
-				'icon' => 'far fa-dot-circle',
+				'icon' => 'frm_icon_font frm_radio_checked_icon',
 			),
 			'select'   => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'far fa-caret-square-down',
+				'icon' => 'frm_icon_font frm_caret_square_down_icon',
 			),
 			'email'    => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'far fa-envelope',
+				'icon' => 'frm_icon_font frm_email_icon',
 			),
 			'url'      => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'fas fa-link',
+				'icon' => 'frm_icon_font frm_link_icon',
 			),
 			'number'   => array(
 				'name' => __( 'Number', 'formidable' ),
-				'icon' => 'fas fa-hashtag',
+				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
 			'phone'    => array(
 				'name' => __( 'Phone', 'formidable' ),
-				'icon' => 'fas fa-phone',
+				'icon' => 'frm_icon_font frm_phone_icon',
 			),
 			'html'     => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'fas fa-code',
+				'icon' => 'frm_icon_font frm_embed2_icon',
 			),
 			'hidden'   => array(
 				'name' => __( 'Hidden Field', 'formidable' ),
-				'icon' => 'far fa-eye-slash',
+				'icon' => 'frm_icon_font frm_eye_slash_icon',
 			),
 			'user_id'  => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'far fa-user',
+				'icon' => 'frm_icon_font frm_person_outline_icon',
 			),
 			'captcha'  => array(
 				'name' => __( 'reCAPTCHA', 'formidable' ),
-				'icon' => 'fas fa-shield-alt',
+				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
 		);
 
@@ -71,47 +71,47 @@ class FrmField {
 		$fields = array(
 			'file'           => array(
 				'name' => __( 'File Upload', 'formidable' ),
-				'icon' => 'fas fa-upload',
+				'icon' => 'frm_icon_font frm_upload_icon',
 			),
 			'rte'            => array(
 				'name' => __( 'Rich Text', 'formidable' ),
-				'icon' => 'fas fa-align-right',
+				'icon' => 'frm_icon_font frm_align_right_icon',
 			),
 			'date'           => array(
 				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'far fa-calendar-alt',
+				'icon' => 'frm_icon_font frm_calendar_icon',
 			),
 			'time'           => array(
 				'name' => __( 'Time', 'formidable' ),
-				'icon' => 'far fa-clock',
+				'icon' => 'frm_icon_font frm_clock_icon',
 			),
 			'scale'          => array(
 				'name' => __( 'Scale', 'formidable' ),
-				'icon' => 'fas fa-ellipsis-h',
+				'icon' => 'frm_icon_font frm_linear_scale_icon',
 			),
 			'star'           => array(
 				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'far fa-star',
+				'icon' => 'frm_icon_font frm_star_icon',
 			),
 			'range'          => array(
 				'name' => __( 'Slider', 'formidable' ),
-				'icon' => 'fas fa-sliders-h',
+				'icon' => 'frm_icon_font frm_code_commit_icon',
 			),
 			'toggle'         => array(
 				'name' => __( 'Toggle', 'formidable' ),
-				'icon' => 'fas fa-toggle-on',
+				'icon' => 'frm_icon_font frm_toggle_on_icon',
 			),
 			'data'           => array(
 				'name' => __( 'Dynamic', 'formidable' ),
-				'icon' => 'fas fa-sitemap',
+				'icon' => 'frm_icon_font frm_sitemap_icon',
 			),
 			'lookup'         => array(
 				'name' => __( 'Lookup', 'formidable' ),
-				'icon' => 'fas fa-search',
+				'icon' => 'frm_icon_font frm_search_icon',
 			),
 			'divider|repeat' => array(
 				'name' => __( 'Repeater', 'formidable' ),
-				'icon' => 'fas fa-redo',
+				'icon' => 'frm_icon_font frm_repeater_icon',
 			),
 			'end_divider'    => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -119,36 +119,36 @@ class FrmField {
 			),
 			'divider'        => array(
 				'name' => __( 'Section', 'formidable' ),
-				'icon' => 'fas fa-heading',
+				'icon' => 'frm_icon_font frm_header_icon',
 			),
 			'break'          => array(
 				'name' => __( 'Page Break', 'formidable' ),
-				'icon' => 'fas fa-columns',
+				'icon' => 'frm_icon_font frm_page_break_icon',
 			),
 			'form'           => array(
 				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'far fa-file-alt',
+				'icon' => 'frm_icon_font frm_file_text_icon',
 			),
 			'password'       => array(
 				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'fas fa-unlock-alt',
+				'icon' => 'frm_icon_font frm_lock_open_icon',
 			),
 			'tag'            => array(
 				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'fas fa-tags',
+				'icon' => 'frm_icon_font frm_price_tags_icon',
 			),
 			'credit_card'    => array(
 				'name'  => __( 'Credit Card', 'formidable' ),
-				'icon'  => 'far fa-credit-card frm_show_upgrade',
+				'icon'  => 'frm_icon_font frm_credit_card_alt_icon frm_show_upgrade',
 				'addon' => 'stripe',
 			),
 			'address'        => array(
 				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'fas fa-map-marker-alt',
+				'icon' => 'frm_icon_font frm_location_icon',
 			),
 			'signature' => array(
 				'name'  => __( 'Signature', 'formidable' ),
-				'icon'  => 'fas fa-pencil-alt frm_show_upgrade',
+				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
 				'addon' => 'signature',
 			),
 			'quiz_score' => array(

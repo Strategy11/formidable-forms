@@ -98,34 +98,6 @@ class FrmFieldsController {
 		return $field;
 	}
 
-	public static function update_ajax_option() {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
-		if ( ! $field_id ) {
-			wp_die();
-		}
-
-		$field = FrmField::getOne( $field_id );
-
-		if ( isset( $_POST['separate_value'] ) ) {
-			$new_val = FrmField::is_option_true( $field, 'separate_value' ) ? 0 : 1;
-
-			$field->field_options['separate_value'] = $new_val;
-			unset( $new_val );
-		}
-
-		FrmField::update(
-			$field_id,
-			array(
-				'field_options' => $field->field_options,
-				'form_id'       => $field->form_id,
-			)
-		);
-		wp_die();
-	}
-
 	public static function duplicate() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -360,7 +332,7 @@ class FrmFieldsController {
 		$types = array(
 			'default_value' => array(
 				'class' => '',
-				'icon'  => 'fas fa-font',
+				'icon'  => 'frm_icon_font frm_text2_icon',
 				'title' => __( 'Default Value (Text)', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
@@ -369,7 +341,7 @@ class FrmFieldsController {
 			'calc' => array(
 				'class' => 'frm_show_upgrade frm_noallow',
 				'title' => __( 'Default Value (Calculation)', 'formidable' ),
-				'icon'  => 'fas fa-calculator',
+				'icon'  => 'frm_icon_font frm_calculator_icon',
 				'data'  => array(
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
@@ -378,7 +350,7 @@ class FrmFieldsController {
 			'get_values_field' => array(
 				'class' => 'frm_show_upgrade frm_noallow',
 				'title' => __( 'Default Value (Lookup)', 'formidable' ),
-				'icon'  => 'fas fa-search',
+				'icon'  => 'frm_icon_font frm_search_icon',
 				'data'  => array(
 					'medium'  => 'lookup',
 					'upgrade' => __( 'Lookup fields', 'formidable' ),
@@ -754,6 +726,38 @@ class FrmFieldsController {
 		}
 
 		return $opt;
+	}
+
+	/**
+	 * @deprecated 4.0
+	 */
+	public static function update_ajax_option() {
+		_deprecated_function( __METHOD__, '4.0' );
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$field_id = FrmAppHelper::get_post_param( 'field', 0, 'absint' );
+		if ( ! $field_id ) {
+			wp_die();
+		}
+
+		$field = FrmField::getOne( $field_id );
+
+		if ( isset( $_POST['separate_value'] ) ) {
+			$new_val = FrmField::is_option_true( $field, 'separate_value' ) ? 0 : 1;
+
+			$field->field_options['separate_value'] = $new_val;
+			unset( $new_val );
+		}
+
+		FrmField::update(
+			$field_id,
+			array(
+				'field_options' => $field->field_options,
+				'form_id'       => $field->form_id,
+			)
+		);
+		wp_die();
 	}
 
 	/**

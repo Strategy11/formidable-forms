@@ -4,7 +4,7 @@
 		?>
 		<div class="frm-full-close">
 			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
-				<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+				<span class="frm_icon_font frm_close_icon" aria-hidden="true"></span>
 			</a>
 		</div>
 		<?php

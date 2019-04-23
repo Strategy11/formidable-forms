@@ -4,7 +4,7 @@ class FrmEmailAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'   => 'fas fa-envelope',
+			'classes'   => 'frm_icon_font frm_email_solid_icon',
 			'active'    => true,
 			'event'     => array( 'create' ),
 			'limit'     => 99,

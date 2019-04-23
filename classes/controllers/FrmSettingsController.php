@@ -33,25 +33,34 @@ class FrmSettingsController {
 				'class'    => __CLASS__,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
-				'icon'     => 'fas fa-cog',
+				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'messages' => array(
 				'class'    => __CLASS__,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
-				'icon'     => 'fas fa-stamp',
+				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
 			'permissions' => array(
 				'class'    => __CLASS__,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
-				'icon'     => 'fas fa-unlock-alt',
+				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
 			'recaptcha' => array(
 				'class'    => __CLASS__,
 				'function' => 'recaptcha_settings',
 				'name'     => __( 'reCaptcha', 'formidable' ),
-				'icon'     => 'fas fa-shield-alt',
+				'icon'     => 'frm_icon_font frm_shield_check_icon',
+			),
+			'white_label' => array(
+				'name'       => __( 'White Labeling', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_ghost_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => array(
+					'medium'  => 'white-label',
+					'upgrade' => __( 'White labeling options', 'formidable' ),
+				),
 			),
 		);
 
@@ -78,9 +87,21 @@ class FrmSettingsController {
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
 		foreach ( $sections as $key => $section ) {
-			if ( ! isset( $section['icon'] ) ) {
-				$sections[ $key ]['icon'] = 'fas fa-cog';
+			$defaults = array(
+				'html_class' => '',
+				'name'       => ucfirst( $key ),
+				'icon'       => 'frm_icon_font frm_settings_icon',
+				'anchor'     => $key . '_settings',
+				'data'       => array(),
+			);
+
+			$section = array_merge( $defaults, $section );
+
+			if ( isset( $section['ajax'] ) && ! isset( $section['data']['frmajax'] ) ) {
+				$section['data']['frmajax'] = $section['ajax'];
 			}
+
+			$sections[ $key ] = $section;
 		}
 
 		return $sections;
