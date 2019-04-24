@@ -948,7 +948,7 @@ class FrmFormsController {
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
 				'function' => 'html_settings',
-				'icon'     => 'frm_icon_font frm_embed2_icon',
+				'icon'     => 'frm_icon_font frm_code_icon',
 			),
 		);
 

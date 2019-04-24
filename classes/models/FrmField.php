@@ -48,7 +48,7 @@ class FrmField {
 			),
 			'html'     => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_embed2_icon',
+				'icon' => 'frm_icon_font frm_code_icon',
 			),
 			'hidden'   => array(
 				'name' => __( 'Hidden Field', 'formidable' ),
@@ -56,7 +56,7 @@ class FrmField {
 			),
 			'user_id'  => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_person_outline_icon',
+				'icon' => 'frm_icon_font frm_user_icon',
 			),
 			'captcha'  => array(
 				'name' => __( 'reCAPTCHA', 'formidable' ),
@@ -139,7 +139,7 @@ class FrmField {
 			),
 			'credit_card'    => array(
 				'name'  => __( 'Credit Card', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_credit_card_alt_icon frm_show_upgrade',
+				'icon'  => 'frm_icon_font frm_credit_card_icon frm_show_upgrade',
 				'addon' => 'stripe',
 			),
 			'address'        => array(
@@ -153,7 +153,7 @@ class FrmField {
 			),
 			'quiz_score' => array(
 				'name'  => __( 'Quiz Score', 'formidable' ),
-				'icon'  => 'fas fa-percent frm_show_upgrade',
+				'icon'  => 'frm_icon_font frm_percent_icon frm_show_upgrade',
 				'addon' => 'quizzes',
 			),
 		);

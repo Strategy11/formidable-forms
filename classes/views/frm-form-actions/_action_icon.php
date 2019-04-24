@@ -9,7 +9,10 @@
 		}
 		?>
 		>
-		<span><i class="<?php echo esc_attr( $action_control->action_options['classes'] ); ?>" style="--primary-hover:<?php echo esc_attr( $action_control->action_options['color'] ); ?>"></i></span>
+		<span><i class="<?php echo esc_attr( $action_control->action_options['classes'] ); ?>"
+			<?php if ( $action_control->action_options['color'] !== 'var(--primary-hover)' ) { ?> 				style="--primary-hover:<?php echo esc_attr( $action_control->action_options['color'] ); ?>"
+			<?php } ?>
+			></i></span>
 		<?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?>
 	</a>
 </li>

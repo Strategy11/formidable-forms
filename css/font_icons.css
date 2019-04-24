@@ -1,3 +1,4 @@
+.frmfont,
 .frm_icon_font,
 .frm_dashicon_font{
 	text-decoration:none;
@@ -16,18 +17,25 @@
 	font-size: 18px;
 }
 
+i.frmfont,
 i.frm_icon_font{
 	font-style:normal;
 	font-variant: normal;
 	speak: none;
 }
 
+.frmfont:before,
+select.frmfont,
 .frm_icon_font:before,
 select.frm_icon_font{
 	font-family: 's11-fp' !important;
 	text-align:center;
 }
 
+.frmfont,
+a.frmfont,
+.frmfont:hover,
+a.frmfont:hover
 .frm_icon_font,
 a.frm_icon_font,
 .frm_icon_font:hover,
@@ -36,12 +44,14 @@ a.frm_icon_font:hover{
 	box-shadow:none;
 }
 
+.frmfont:focus,
 .frm_icon_font:focus,
 .frm_dashicon_font:focus{
 	box-shadow:none;
 	-webkit-box-shadow:none;
 }
 
+.frmfont:active,
 .frm_icon_font:active{
 	outline:none;
 }
@@ -60,7 +70,7 @@ a.frm_icon_font:hover{
 	content: "\e610" !important;
 }
 .frm_delete_solid_icon:before {
-	content: "\e922";
+	content: "\e900";
 }
 .frm_move_icon:before {
 	content: "\e61a";
@@ -100,6 +110,9 @@ a.frm_icon_font:hover{
 }
 .frm_check1_icon:before {
 	content: "\e606";
+}
+.frm_checkmark_icon:before {
+	content: "\e90a";
 }
 .frm_plus_icon:before {
 	content: "\e62f";
@@ -206,6 +219,9 @@ a.frm_icon_font:hover{
 .frm_arrow_right_icon:before {
 	content: "\e913";
 }
+.frm_filter_icon:before {
+	content: "\e90c";
+}
 .frm_download_icon:before {
 	content: "\e615";
 }
@@ -221,9 +237,6 @@ a.frm_icon_font:hover{
 .frm_hard_drive_icon:before {
 	content: "\e916";
 }
-.frm_menu_icon:before {
-	content: "\e618";
-}
 .frm_pencil_solid_icon:before {
 	content: "\e901";
 }
@@ -233,11 +246,8 @@ a.frm_icon_font:hover{
 .frm_signature_icon:before {
 	content: "\e919";
 }
-.frm_person_outline_icon:before {
-	content: "\e7ff";
-}
 .frm_user_icon:before {
-	content: "\f007";
+	content: "\e7ff";
 }
 .frm_register_icon:before {
 	content: "\e637";
@@ -257,17 +267,20 @@ a.frm_icon_font:hover{
 .frm_checkbox_unchecked_icon:before {
 	content: "\e91e";
 }
-.frm_check_square_icon:before {
-	content: "\f14a";
-}
-.frm_dropdown_icon:before {
-  content: "\e909";
+.frm_checkbox_icon:before {
+	content: "\e922";
 }
 .frm_checkbox_solid_icon:before {
 	content: "\e91f";
 }
+.frm_dropdown_icon:before {
+	content: "\e909";
+}
 .frm_caret_square_down_icon:before {
 	content: "\f150";
+}
+.frm_check_square_icon:before {
+	content: "\f14a";
 }
 .frm_radio_unchecked_icon:before {
 	content: "\e971";
@@ -320,8 +333,8 @@ a.frm_icon_font:hover{
 .frm_calendar_icon:before {
 	content: "\f073";
 }
-.frm_embed2_icon:before {
-	content: "\ea80";
+.frm_code_icon:before {
+	content: "\e90d";
 }
 .frm_tag_icon:before {
 	content: "\e98b";
@@ -338,8 +351,14 @@ a.frm_icon_font:hover{
 .frm_sitemap_icon:before {
 	content: "\f0e8";
 }
-.frm_file_text_icon:before {
+.frm_file_icon:before {
+	content: "\f15b";
+}
+.frm_file_text_solid_icon:before {
 	content: "\f15c";
+}
+.frm_file_text_icon:before {
+	content: "\e923";
 }
 .frm-option-icon:before, /* Reverse Compatibility */
 .frm_option_icon:before {
@@ -372,6 +391,9 @@ a.frm_icon_font:hover{
 .frm_keyalt_icon:before {
 	content: "\e987";
 }
+.frm_keyboard_icon:before {
+	content: "\e924";
+}
 .frm_eye_icon:before {
 	content: "\f06e";
 }
@@ -393,6 +415,12 @@ a.frm_icon_font:hover{
 .frm_view_day_icon:before {
 	content: "\e8ed";
 }
+.frm_attach_file_icon:before {
+	content: "\e226";
+}
+.frm_printer_icon:before {
+	content: "\e926";
+}
 .frm_header_icon:before {
 	content: "\f1dc";
 }
@@ -407,6 +435,9 @@ a.frm_icon_font:hover{
 }
 .frm_hashtag_icon:before {
 	content: "\e292";
+}
+.frm_save_icon:before {
+	content: "\e927";
 }
 .frm_sliders_icon:before {
 	content: "\f1de";
@@ -432,9 +463,6 @@ a.frm_icon_font:hover{
 .frm_stats_bars_icon:before {
 	content: "\e99c";
 }
-.frm_file_icon:before {
-	content: "\f15b";
-}
 .frm_sms_icon:before {
 	content: "\e61c";
 }
@@ -450,14 +478,38 @@ a.frm_icon_font:hover{
 .frm_authorize_icon:before {
 	content: "\e903";
 }
+.frm_icon_font.frm_activecampaign_icon {
+	background-image: none;
+}
+.frm_activecampaign_icon:before {
+	content: "\e930";
+}
 .frm_aweber_icon:before {
 	content: "\e627";
+}
+.frm_constant_contact_icon:before {
+	content: "\e931";
+}
+.frm_getresponse_icon:before {
+	content: "\e932";
+}
+.frm_hubspot_icon:before {
+	content: "\e933";
+}
+.frm_icon_font.frm_mailpoet_icon:before {
+	content: "\e934";
 }
 .frm_paypal_icon:before {
 	content: "\e61f";
 }
 .frm_twilio_icon:before {
 	content: "\e620";
+}
+.frm_salesforce_icon:before {
+	content: "\e935";
+}
+.frm_salesforcealt_icon:before {
+	content: "\e937";
 }
 .frm_stripe_icon:before {
 	content: "\e902";
@@ -467,6 +519,9 @@ a.frm_icon_font:hover{
 }
 .frm_wordpress_icon:before {
 	content: "\f19a";
+}
+.frm_credit_card_icon:before {
+	content: "\e938";
 }
 .frm_credit-card-alt_icon:before, /* Reverse Compatibility */
 .frm_credit_card_alt_icon:before {
@@ -580,6 +635,9 @@ a.frm_icon_font:hover{
 .frm_dollar_sign_icon:before {
 	content: "\e91c";
 }
+.frm_percent_icon:before {
+	content: "\e939";
+}
 .frm_notification_solid_icon:before {
 	content: "\e964";
 }
@@ -631,12 +689,15 @@ a.frm_icon_font:hover{
 .frm_work_icon:before {
 	content: "\e99e";
 }
+.frm_white_label_icon:before {
+	content: "\e91d";
+}
 .frm_zoom_out_icon:before {
 	content: "\e99f";
 }
 .frm_maximize_icon:before {
-	content: "\e91d";
+	content: "\e920";
 }
 .frm_minimize_icon:before {
-	content: "\e920";
+	content: "\e93a";
 }

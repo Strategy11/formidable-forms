@@ -572,7 +572,7 @@ class FrmEntriesHelper {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),
-				'icon'  => 'far fa-save',
+				'icon'  => 'frm_icon_font frm_save_icon',
 			);
 		}
 
@@ -594,7 +594,7 @@ class FrmEntriesHelper {
 				'data'  => array(
 					'frmprint' => '1',
 				),
-				'icon'  => 'fas fa-print',
+				'icon'  => 'frm_icon_font frm_printer_icon',
 			);
 		}
 

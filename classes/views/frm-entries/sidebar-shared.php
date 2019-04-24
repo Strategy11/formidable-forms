@@ -68,7 +68,7 @@
 	<div class="inside">
 		<?php if ( $entry->user_id ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_person_outline_icon" aria-hidden="true"></i>
+				<i class="frm_icon_font frm_user_icon" aria-hidden="true"></i>
 				<?php
 				printf(
 					/* translators: %1$s: User display name. */
@@ -81,7 +81,7 @@
 
 		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_person_outline_icon" aria-hidden="true"></i>
+				<i class="frm_icon_font frm_user_icon" aria-hidden="true"></i>
 				<?php
 				printf(
 					/* translators: %1$s: User display name. */
@@ -123,7 +123,7 @@
 			}
 			?>
 			<div class="misc-pub-section">
-				<i class="fas fa-paperclip" aria-hidden="true"></i>
+				<i class="frm_icon_font frm_attach_file_icon" aria-hidden="true"></i>
 				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
 				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
 			</div>
