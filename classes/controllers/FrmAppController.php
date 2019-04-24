@@ -38,7 +38,7 @@ class FrmAppController {
 		if ( self::is_white_page() ) {
 			$classes .= ' frm-white-body ';
 		}
-		if ( self::is_full_screen() ) {
+		if ( FrmAppHelper::is_full_screen() ) {
 			$classes .= ' frm-full-screen';
 		}
 
@@ -68,19 +68,6 @@ class FrmAppController {
 		}
 
 		return $is_white_page;
-	}
-
-	/**
-	 * Hide the WordPress menus on some pages.
-	 *
-	 * @since 4.0
-	 */
-	private static function is_full_screen() {
-		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		$full_builder = FrmAppHelper::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' );
-		$full_entries = FrmAppHelper::is_admin_page( 'formidable-entries' ) && FrmAppHelper::simple_get( 'frm-full', 'absint' );
-
-		return $full_builder || $full_entries;
 	}
 
 	public static function load_wp_admin_style() {

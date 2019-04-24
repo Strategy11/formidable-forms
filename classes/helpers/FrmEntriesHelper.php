@@ -541,7 +541,7 @@ class FrmEntriesHelper {
 		foreach ( $links as $link ) {
 			?>
 		<div class="misc-pub-section">
-			<a href="<?php echo esc_url( $link['url'] ); ?>"
+			<a href="<?php echo esc_url( FrmAppHelper::maybe_full_screen_link( $link['url'] ) ); ?>"
 				<?php
 				if ( isset( $link['data'] ) ) {
 					foreach ( $link['data'] as $data => $value ) {

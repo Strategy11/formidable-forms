@@ -14,7 +14,7 @@ class FrmDefRegAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_register_icon frm_show_upgrade' );
 		$action_ops['plugin']  = 'registration';
-		$action_ops['color']   = 'rgb(226,42,110)';
+		$action_ops['color']   = 'var(--pink)';
 		parent::__construct( 'register', __( 'Register User', 'formidable' ), $action_ops );
 	}
 }
@@ -33,7 +33,7 @@ class FrmDefPayPalAction extends FrmFormAction {
 class FrmDefAweberAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_aweber_icon frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-hover)';
+		$action_ops['color'] = 'var(--green)';
 		parent::__construct( 'aweber', 'AWeber', $action_ops );
 	}
 }
@@ -60,6 +60,7 @@ class FrmDefTwilioAction extends FrmFormAction {
 class FrmDefHrsAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit_card_alt_icon frm_show_upgrade' );
+		$action_ops['color'] = 'var(--green)';
 		$action_ops['plugin'] = 'stripe';
 		parent::__construct( 'payment', __( 'eCommerce', 'formidable' ), $action_ops );
 	}
@@ -84,7 +85,7 @@ class FrmDefSalesforceAction extends FrmFormAction {
 class FrmDefConstContactAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_constant_contact_icon frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-hover)';
+		$action_ops['color'] = 'rgb(0,160,210)';
 		parent::__construct( 'constantcontact', 'Constant Contact', $action_ops );
 	}
 }
@@ -99,16 +100,16 @@ class FrmDefGetResponseAction extends FrmFormAction {
 
 class FrmDefHubspotAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops = FrmFormAction::default_action_opts( 'frm_hubspot_icon frm-inverse frm_show_upgrade' );
-		$action_ops['color'] = '#ff7a59';
+		$action_ops = FrmFormAction::default_action_opts( 'frm_hubspot_icon frm_show_upgrade' );
+		$action_ops['color'] = 'var(--orange)';
 		parent::__construct( 'hubspot', 'Hubspot', $action_ops );
 	}
 }
 
 class FrmDefHighriseAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops = FrmFormAction::default_action_opts( 'frm_highrise_icon frm-inverse frm_show_upgrade' );
-		$action_ops['color'] = 'var(--primary-color)';
+		$action_ops = FrmFormAction::default_action_opts( 'frm_building_icon frm_show_upgrade' );
+		$action_ops['color'] = 'var(--purple)';
 		parent::__construct( 'highrise', 'Highrise', $action_ops );
 	}
 }
@@ -116,7 +117,7 @@ class FrmDefHighriseAction extends FrmFormAction {
 class FrmDefMailpoetAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_mailpoet_icon frm_show_upgrade' );
-		$action_ops['color'] = '#ff7a59';
+		$action_ops['color'] = 'var(--orange)';
 		parent::__construct( 'mailpoet', 'MailPoet', $action_ops );
 	}
 }
@@ -124,6 +125,7 @@ class FrmDefMailpoetAction extends FrmFormAction {
 class FrmDefApiAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_feed_icon frm_show_upgrade' );
+		$action_ops['color'] = 'var(--purple)';
 		parent::__construct( 'api', __( 'Send API data', 'formidable' ), $action_ops );
 	}
 }

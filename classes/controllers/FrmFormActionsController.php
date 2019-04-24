@@ -79,6 +79,8 @@ class FrmFormActionsController {
 		$action_controls = self::get_form_actions();
 		self::maybe_add_action_to_group( $action_controls, $groups );
 
+		$allowed = self::active_actions( $action_controls );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php' );
 	}
 
@@ -124,7 +126,6 @@ class FrmFormActionsController {
 			'misc'        => array(
 				'name'    => '',
 				'icon'    => 'frm_icon_font frm_shuffle_icon',
-				'color'   => 'rgb(141,53,245)',
 				'actions' => array(
 					'email',
 					'wppost',
@@ -135,7 +136,6 @@ class FrmFormActionsController {
 			'payment'   => array(
 				'name'    => __( 'eCommerce', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_credit_card_alt_icon',
-				'color'   => 'rgb(63,172,37)',
 				'actions' => array(
 					'paypal',
 					'payment',
@@ -144,7 +144,6 @@ class FrmFormActionsController {
 			'marketing' => array(
 				'name'    => __( 'Email Marketing', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_mail_bulk_icon',
-				'color'   => 'rgb(37,167,172)',
 				'actions' => array(
 					'mailchimp',
 					'activecampaign',
@@ -157,7 +156,6 @@ class FrmFormActionsController {
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_address_card_icon',
-				'color'   => 'rgb(222,137,25)',
 				'actions' => array(
 					'salesforce',
 					'hubspot',
@@ -170,17 +168,30 @@ class FrmFormActionsController {
 	}
 
 	/**
+	 * Get the number of currently active form actions.
+	 *
+	 * @since 4.0
+	 *
+	 * @return array
+	 */
+	private static function active_actions( $action_controls ) {
+		$allowed = array();
+		foreach ( $action_controls as $action_control ) {
+			if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
+				$allowed[] = $action_control->id_base;
+			}
+		}
+		return $allowed;
+	}
+
+	/**
 	 * For each add-on, add an li, class, and javascript function. If active, add an additional class.
 	 *
 	 * @since 4.0
 	 * @param object $action_control
-	 * @param array  $group If this if being loaded on the group listing
+	 * @param array  $allowed
 	 */
-	public static function show_action_icon_link( $action_control, $group = array() ) {
-		if ( isset( $group['color'] ) ) {
-			$action_control->action_options['color'] = $group['color'];
-		}
-
+	public static function show_action_icon_link( $action_control, $allowed ) {
 		$data    = array();
 		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action frm_bstooltip';
 
@@ -189,10 +200,18 @@ class FrmFormActionsController {
 		/* translators: %s: Name of form action */
 		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
 
+		$default_shown    = array( 'wppost', 'register', 'paypal', 'payment', 'mailchimp' );
+		$default_shown    = array_values( array_diff( $default_shown, $allowed ) );
+		$default_position = array_search( $action_control->id_base, $default_shown );
+		$allowed_count    = count( $allowed );
+
 		if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
 			$classes .= ' frm_active_action';
 		} else {
 			$classes .= ' frm_inactive_action';
+			if ( $default_position !== false && ( $allowed_count + $default_position ) < 6 ) {
+				$group_class .= ' frm-default-show';
+			}
 
 			$data['data-upgrade'] = $upgrade_label;
 			$data['data-medium']  = 'settings-' . $action_control->id_base;

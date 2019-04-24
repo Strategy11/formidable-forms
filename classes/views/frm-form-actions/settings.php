@@ -41,7 +41,7 @@
 				}
 
 				$displayed_actions[] = $action_control->id_base;
-				FrmFormActionsController::show_action_icon_link( $action_control );
+				FrmFormActionsController::show_action_icon_link( $action_control, $allowed );
 				unset( $actions_icon, $classes );
 			}
 
@@ -76,11 +76,5 @@
 	</a>
 	<div class="clear"></div>
 </div>
-<div class="frm_no_actions">
-	<div class="inner_actions">
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt=""/>
-		<div class="clear"></div>
-		<?php esc_html_e( 'Click an action to add it to this form', 'formidable' ); ?>
-	</div>
-</div>
+
 <?php FrmFormActionsController::list_actions( $form, $values ); ?>

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAppHelper {
 	public static $db_version = 97; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
-	public static $font_version = 3;
+	public static $font_version = 4;
 
 	/**
 	 * @since 2.0
@@ -676,6 +676,10 @@ class FrmAppHelper {
 	 */
 	public static function get_admin_header( $atts ) {
 		$has_nav = ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ( ! isset( $atts['is_template'] ) || ! $atts['is_template'] ) );
+		if ( ! isset( $atts['close'] ) || empty( $atts['close'] ) ) {
+			$atts['close'] = '?page=formidable';
+		}
+
 		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );
 	}
 
@@ -817,11 +821,37 @@ class FrmAppHelper {
 		$post = get_post( $post_id );
 		if ( $post ) {
 			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
+			$post_url = self::maybe_full_screen_link( $post_url );
 
 			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
 		}
 
 		return '';
+	}
+
+	/**
+	 * Hide the WordPress menus on some pages.
+	 *
+	 * @since 4.0
+	 */
+	public static function is_full_screen() {
+		$action       = self::simple_get( 'frm_action', 'sanitize_title' );
+		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' );
+		$styler       = self::is_admin_page( 'formidable-styles' );
+		$full_entries = self::simple_get( 'frm-full', 'absint' );
+
+		return $full_builder || $full_entries || $styler;
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function maybe_full_screen_link( $link ) {
+		$is_full = self::simple_get( 'frm-full', 'absint' );
+		if ( $is_full ) {
+			$link .= '&frm-full=1';
+		}
+		return $link;
 	}
 
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {

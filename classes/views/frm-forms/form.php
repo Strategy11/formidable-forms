@@ -11,6 +11,11 @@
 		<div class="clear"></div>
 	</div>
 
+	<?php
+	// Add form messages.
+	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+	?>
+
 	<div id="frm-fake-page" class="frm_hidden">
 		<div class="frm-page-break">
 			<div class="frm-collapse-page button frm-button-secondary">

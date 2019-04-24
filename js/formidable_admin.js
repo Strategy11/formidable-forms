@@ -2814,13 +2814,13 @@ function frmAdminBuildJS() {
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			box.style.display = 'none';
-			this.className = classes.replace( 'frm_close_icon', 'fa-ellipsis-h' );
+			this.className = classes.replace( 'frm_close_icon', 'frm_more_horiz_solid_icon' );
 		} else {
 			this.nextSibling.focus();
 			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
 			box.style.display = 'block';
-			this.className = classes.replace( 'fa-ellipsis-h', 'frm_close_icon' );
+			this.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
 		}
 	}
 
@@ -3634,7 +3634,7 @@ function frmAdminBuildJS() {
 			if ( searchText === '' ) {
 				items[i].classList.remove( 'frm_hidden' );
 				items[i].classList.remove( 'frm-search-result' );
-			} else if ( items[i].innerHTML.toLowerCase().indexOf( searchText ) >= 0 ) {
+			} else if ( items[i].innerText.toLowerCase().indexOf( searchText ) >= 0 ) {
 				items[i].classList.remove( 'frm_hidden' );
 				items[i].classList.add( 'frm-search-result' );
 			} else {
@@ -3828,10 +3828,7 @@ function frmAdminBuildJS() {
 				return false;
 			} );
 
-			jQuery( '.frm_select_box' ).click( function() {
-				this.select();
-			} );
-			jQuery( '.frm_select_box' ).focus( function() {
+			jQuery( '.frm_select_box' ).on( 'click focus', function() {
 				this.select();
 			} );
 
@@ -3909,7 +3906,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
-			$newFields.on( 'click', '.fa-clone', duplicateField );
+			$newFields.on( 'click', '.frm_clone_icon', duplicateField );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
@@ -4110,7 +4107,7 @@ function frmAdminBuildJS() {
 					var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
 					for ( var i = 0; i < closeIcons.length; i++ ) {
 						closeIcons[i].classList.remove('frm_close_icon');
-						closeIcons[i].classList.add('fa-ellipsis-h');
+						closeIcons[i].classList.add('frm_more_horiz_solid_icon');
 					}
 				}
 			} );

@@ -1,15 +1,11 @@
 <div id="frm_top_bar">
-	<?php
-	if ( isset( $atts['close'] ) && ! empty( $atts['close'] ) ) {
-		?>
+	<?php if ( FrmAppHelper::is_full_screen() ) { ?>
 		<div class="frm-full-close">
 			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
 				<span class="frm_icon_font frm_close_icon" aria-hidden="true"></span>
 			</a>
 		</div>
-		<?php
-	}
-	?>
+	<?php } ?>
 	<div id="frm-publishing">
 	<?php
 	if ( isset( $atts['publish'] ) ) {

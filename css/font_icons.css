@@ -12,8 +12,6 @@
 	-moz-transition: all .1s ease-in-out;
 	-webkit-transition: all .1s ease-in-out;
 	transition: all .1s ease-in-out;
-	width: 18px;
-	height: 18px;
 	font-size: 18px;
 }
 
@@ -105,14 +103,14 @@ a.frm_icon_font:hover{
 .frm_forbid_icon:before {
 	content: "\e636";
 }
+.frm_checkmark_icon:before {
+	content: "\e90a";
+}
 .frm_check_icon:before {
 	content: "\e605";
 }
 .frm_check1_icon:before {
 	content: "\e606";
-}
-.frm_checkmark_icon:before {
-	content: "\e90a";
 }
 .frm_plus_icon:before {
 	content: "\e62f";
@@ -406,9 +404,6 @@ a.frm_icon_font:hover{
 .frm_eye_slash_solid_icon:before {
 	content: "\e949";
 }
-.frm_page_break_solid_icon:before {
-	content: "\e968";
-}
 .frm_page_break_icon:before {
 	content: "\e8e9";
 }
@@ -513,6 +508,9 @@ a.frm_icon_font:hover{
 }
 .frm_stripe_icon:before {
 	content: "\e902";
+}
+.frm_stripealt_icon:before {
+	content: "\e93d";
 }
 .frm_woocommerce_icon:before {
 	content: "\e90e";
@@ -700,4 +698,7 @@ a.frm_icon_font:hover{
 }
 .frm_minimize_icon:before {
 	content: "\e93a";
+}
+.frm_building_icon:before {
+	content: "\e93f";
 }

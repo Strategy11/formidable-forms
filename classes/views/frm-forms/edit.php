@@ -7,7 +7,6 @@
 			'label'       => __( 'Build Form', 'formidable' ),
 			'form'        => $form,
 			'hide_title'  => true,
-			'close'       => '?page=formidable',
 			'publish'     => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
 		)
 	);
@@ -18,11 +17,6 @@
 	<div id="post-body-content">
 
 	<div class="frm_form_builder with_frm_style">
-
-		<?php
-		// Add form messages.
-		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
-		?>
 
 		<p class="frm_hidden frm-no-margin">
 			<button class="frm_submit_<?php echo ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_'; ?>ajax button-primary">

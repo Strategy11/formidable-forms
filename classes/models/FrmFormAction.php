@@ -97,8 +97,10 @@ class FrmFormAction {
 		$group                   = $this->get_group( $action_options );
 		$action_options['group'] = $group['id'];
 
-		if ( isset( $group['color'] ) && ! isset( $action_options['color'] ) ) {
-			$action_options['color'] = $group['color'];
+		if ( ! isset( $action_options['color'] ) ) {
+			$colors = array( 'green', 'orange', 'purple' );
+			shuffle( $colors );
+			$action_options['color'] = 'var(--' . reset( $colors ) . ')';
 		}
 
 		$upgrade_class = $action_options['classes'] === 'frm_show_upgrade';

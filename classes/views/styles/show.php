@@ -12,23 +12,6 @@
 	?>
 
 	<div class="columns-2">
-	<div id="post-body-content">
-		<?php do_action( 'frm_style_switcher', $style, $styles ); ?>
-
-		<div class="frm-inner-content">
-
-			<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-
-			<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
-			<input type="hidden" name="frm_action" value="save" />
-			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
-			<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
-			<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
-
-			<?php include( dirname( __FILE__ ) . '/_sample_form.php' ); ?>
-
-		</div>
-	</div>
 	<div class="frm-right-panel styling_settings">
 		<input name="prev_menu_order" type="hidden" value="<?php echo esc_attr( $style->menu_order ); ?>" />
 		<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
@@ -58,6 +41,23 @@
 			</p>
 		</div>
 		<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
+	</div>
+	<div id="post-body-content">
+		<?php do_action( 'frm_style_switcher', $style, $styles ); ?>
+
+		<div class="frm-inner-content">
+
+			<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+
+			<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
+			<input type="hidden" name="frm_action" value="save" />
+			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
+			<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
+			<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
+
+			<?php include( dirname( __FILE__ ) . '/_sample_form.php' ); ?>
+
+		</div>
 	</div>
 </div>
 </div>
