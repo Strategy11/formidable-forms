@@ -1780,20 +1780,10 @@ h1 .fa-caret-down {
 
 .frm-dropdown-menu > li > a,
 .frm-dropdown-menu .frm_dropdown_li {
-	display: block;
-	padding: 3px 20px;
 	clear: both;
 	font-weight: normal;
-	line-height: 1.428571429;
-	color: #333333;
 	white-space: nowrap;
 	text-decoration: none;
-}
-
-.frm-dropdown-menu > li > a:hover, .frm-dropdown-menu > li > a:focus {
-	text-decoration: none;
-	color: #262626;
-	background-color: #f5f5f5;
 }
 
 .frm-dropdown-menu > .active > a, .frm-dropdown-menu > .active > a:hover, .frm-dropdown-menu > .active > a:focus {
@@ -5063,6 +5053,8 @@ ul .frm_col_two {
 	margin: 0;
 }
 
+.frm-dropdown-menu > li > a,
+.frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
 	display: block;
 	color: var(--dark-grey);
@@ -5085,10 +5077,20 @@ ul .frm_col_two {
 	text-overflow: ellipsis;
 }
 
+.frm-dropdown-menu > li > a:hover,
 .frm_code_list.frm-full-hover a:hover span,
 .frm_code_list.frm-full-hover a:hover {
 	background: var(--sidebar-color);
 	color: var(--primary-color);
+}
+
+.frm-dropdown-menu.frm_code_list > li > a {
+	padding: 3px 15px;
+	width: 300px;
+}
+
+.frm-dropdown-menu.frm_code_list .frm-with-search {
+	padding: 3px 10px;
 }
 
 .frm_grid_container {

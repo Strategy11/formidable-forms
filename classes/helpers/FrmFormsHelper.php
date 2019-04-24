@@ -111,7 +111,20 @@ class FrmFormsHelper {
 					<b class="frm_icon_font frm_arrowdown4_icon"></b>
 				</h1>
 			</a>
-			<ul class="frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-navbarDrop">
+			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
+				<?php if ( count( $forms > 8 ) ) { ?>
+				<li class="frm-with-search">
+					<?php
+					FrmAppHelper::show_search_box(
+						array(
+							'input_id'    => 'dropform',
+							'placeholder' => __( 'Search Forms', 'formidable' ),
+							'tosearch'    => 'frm-dropdown-form',
+						)
+					);
+					?>
+				</li>
+				<?php } ?>
 				<?php
 				foreach ( $forms as $form ) {
 					if ( isset( $args['id'] ) ) {
@@ -122,9 +135,9 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 40 );
+					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name;
 					?>
-					<li>
+					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1"><?php echo esc_html( $form_name ); ?></a>
 					</li>
 					<?php
