@@ -591,11 +591,7 @@ div.frm_has_shortcodes i {
 	padding: 10px 0 10px 25px;
 }
 
-.frm_settings_form > .tabs-panel {
-	padding: 0 25px 10px;
-}
-
-.frm_settings_form > .tabs-panel + .submit {
+.frm_settings_form {
 	padding: 0 25px 35px;
 }
 
@@ -1933,6 +1929,9 @@ a.frm_option_icon:hover::before {
 	padding-top: 3px;
 }
 
+.frm-right-panel .accordion-section-content {
+	background: transparent;
+}
 
 .frm-right-panel .accordion-section-content  > .inside {
 	padding: 0;
@@ -1944,9 +1943,14 @@ a.frm_option_icon:hover::before {
 	color: var(--dark-grey);
 }
 
+.frm-right-panel .control-section.open h3 {
+	border-bottom: none;
+}
+
 .js .frm-right-panel .control-section.open .accordion-section-title,
+.js .frm-right-panel .control-section .accordion-section-title:focus,
 .js .frm-right-panel .control-section .accordion-section-title:hover {
-	background: var(--sidebar-color);
+	background: transparent;
 	color: var(--dark-grey);
 }
 
@@ -1990,10 +1994,14 @@ a.frm_option_icon:hover::before {
 	top: 50%;
 }
 
+.frm-right-panel .accordion-section {
+	border: none;
+}
+
 .frm-right-panel .accordion-section-title:before,
 .frm-right-panel .accordion-section-title:after {
 	content: "\e913" !important;
-	font: normal 12px/2 "s11-fp" !important;
+	font: normal 12px/1 "s11-fp" !important;
 	font-variant: normal;
 	text-rendering: auto;
 }
@@ -2070,12 +2078,12 @@ a.frm_option_icon:hover::before {
 }
 
 .progress-bars-style .accordion-section-title:before{
-	content: "\e260" !important;
+	content: "\e939" !important;
 }
 
 .frm-right-panel h3.accordion-section-title {
-	border-top: none;
-	border-color: var(--grey-border);
+	padding: 15px 20px;
+	background: var(--sidebar-color);
 }
 
 .accordion-container .frm-dropdown-menu {
@@ -2787,6 +2795,7 @@ li.sortable-placeholder {
 	height: 0;
 	border: none;
 	box-shadow: 0 0 1px 2px var(--primary-color);
+	margin: 0;
 }
 
 .no-drop-placeholder,
@@ -5563,8 +5572,23 @@ iframe#dyncontent_ifr {
 }
 
 #frm_styling_form .wp-picker-container .wp-color-result.button {
-	max-width: 100%;
+	width: 100%;
 	overflow: hidden;
+	margin: 0;
+	height: 32px;
+	padding: 0 0 0 30px;
+	border-radius: var(--small-radius);
+	border-color: var(--grey-border);
+}
+
+#frm_styling_form .wp-color-result-text {
+	line-height: 28px;
+	font-size: 15px;
+	background: #fff;
+}
+
+.wp-picker-container {
+	position: relative;
 }
 
 .wp-picker-holder {

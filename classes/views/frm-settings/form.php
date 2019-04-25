@@ -19,10 +19,9 @@
 
 		<div id="post-body-content" class="frm-fields">
 
-			<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-
 							<form name="frm_settings_form" method="post" class="frm_settings_form"
 									action="?page=formidable-settings<?php echo esc_html( $current ? '&amp;t=' . $current : '' ); ?>">
+								<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 								<input type="hidden" name="frm_action" value="process-form"/>
 								<input type="hidden" name="action" value="process-form"/>
 								<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
