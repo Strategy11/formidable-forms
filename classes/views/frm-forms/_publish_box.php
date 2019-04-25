@@ -1,10 +1,10 @@
-			<?php
-			if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
-				$class = 'frm_submit_settings_btn';
-			} else {
-				$class = 'frm_submit_' . ( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ) . 'ajax';
-			}
-			?>
+<?php
+if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
+	$class = 'frm_submit_settings_btn';
+} else {
+	$class = 'frm_submit_' . ( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ) . 'ajax';
+}
+?>
 			<button class="frm_submit_form button-primary frm-button-primary frm_button_submit <?php echo esc_attr( $class ); ?>" type="button" id="frm_submit_side_top" >
 				<?php esc_html_e( 'Update', 'formidable' ); ?>
 			</button>
@@ -33,4 +33,4 @@
 				<?php } ?>
 			</div>
 
-	<div class="clear"></div>
+<div class="clear"></div>
