@@ -127,6 +127,173 @@ class test_FrmMigrate extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmMigrate::migrate_to_97
+	 */
+	public function test_migrate_to_97() {
+		update_option( 'frm_db_version', 96 );
+
+		$form_id  = $this->factory->form->create();
+		$settings = array(
+			array(
+				'start' => array(
+					'field_options' => array(
+						'clear_on_focus' => '1',
+					),
+					'default_value'  => 'Default 1',
+				),
+				'expected' => array(
+					'placeholder'    => 'Default 1',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start' => array(
+					'field_options' => array(
+						'clear_on_focus' => '0',
+					),
+					'default_value'  => 'Default 2',
+				),
+				'expected' => array(
+					'placeholder'    => '',
+					'default_value'  => 'Default 2',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'clear_on_focus' => '1',
+					),
+					'default_value'  => '',
+				),
+				'expected' => array(
+					'placeholder'    => '',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'default_blank' => '1',
+					),
+					'default_value'  => '',
+				),
+				'expected' => array(
+					'placeholder'    => '',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'default_blank' => '1',
+					),
+					'default_value'  => 'Default 3',
+				),
+				'expected' => array(
+					'placeholder'    => 'Default 3',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'default_blank' => '1',
+					),
+					'default_value'  => 'Default 3.1',
+					'type'           => 'select',
+					'options'        => array(
+						'Default 3.1',
+						'Option 1',
+						'Option 2',
+					),
+				),
+				'expected' => array(
+					'placeholder'    => 'Default 3.1',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'default_blank' => '1',
+					),
+					'default_value'  => 'Default 3.1',
+					'type'           => 'select',
+					'options'        => array(
+						array( 'value' => 'Default 3.1' ),
+						array( 'value' => 'Option 1' ),
+						array( 'value' => 'Option 2' ),
+					),
+				),
+				'expected' => array(
+					'placeholder'    => 'Default 3.1',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'default_blank'  => '1',
+						'clear_on_click' => '1',
+					),
+					'default_value'  => 'Default 4',
+				),
+				'expected' => array(
+					'placeholder'    => 'Default 4',
+					'default_value'  => '',
+				),
+			),
+			array(
+				'start'    => array(
+					'field_options' => array(
+						'default_blank'  => '1',
+						'clear_on_click' => '1',
+					),
+					'default_value'  => '',
+				),
+				'expected' => array(
+					'placeholder'    => '',
+					'default_value'  => '',
+				),
+			),
+		);
+
+		$field_ids = array();
+		foreach ( $settings as $key => $setting ) {
+			$new_field = $setting['start'];
+			$new_field['form_id'] = $form_id;
+			if ( ! isset( $new_field['type'] ) ) {
+				$new_field['type'] = 'text';
+			}
+
+			$field_id = $this->factory->field->create( $new_field );
+			$field    = $this->factory->field->get_object_by_id( $field_id );
+			$this->assertNotEmpty( $field );
+
+			if ( isset( $new_field['default_value'] ) ) {
+				$this->assertEquals( $new_field['default_value'], $field->default_value );
+			}
+
+			$field_ids[ $key ] = $field_id;
+		}
+
+		$frmdb = new FrmMigrate();
+		$this->run_private_method( array( $frmdb, 'migrate_to_97' ), array() );
+
+		foreach ( $settings as $key => $setting ) {
+			$field = $this->factory->field->get_object_by_id( $field_ids[ $key ] );
+			$this->assertNotEmpty( $field );
+
+			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key  );
+			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key );
+
+			if ( isset( $setting['start']['options'] ) ) {
+				$this->assertNotContains( $setting['start']['default_value'], $field->options );
+			}
+		}
+	}
+
+	/**
 	 * @covers FrmMigrate::collation
 	 */
 	public function test_collation() {

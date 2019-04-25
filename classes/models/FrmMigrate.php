@@ -206,7 +206,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 95, 97 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -272,21 +272,13 @@ class FrmMigrate {
 	}
 
 	/**
-	 * Move default_blank to placeholder.
+	 * Move default_blank and clear_on_focus to placeholder.
 	 *
 	 * @since 4.0
 	 */
 	private function migrate_to_97() {
-		$this->migrate_to_placeholder( 'default_blank' );
-	}
-
-	/**
-	 * Move clear_on_focus to placeholder.
-	 *
-	 * @since 4.0
-	 */
-	private function migrate_to_95() {
 		$this->migrate_to_placeholder( 'clear_on_focus' );
+		$this->migrate_to_placeholder( 'default_blank' );
 	}
 
 	/**
@@ -299,7 +291,7 @@ class FrmMigrate {
 			'field_options like' => '"' . $type . '";s:1:"1";',
 		);
 
-		$fields = FrmDb::get_results( $this->fields, $query, 'id, field_options, options' );
+		$fields = FrmDb::get_results( $this->fields, $query, 'id, default_value, field_options, options' );
 
 		foreach ( $fields as $field ) {
 			$field_options = maybe_unserialize( $field->field_options );
@@ -315,7 +307,10 @@ class FrmMigrate {
 			$options = maybe_unserialize( $field->options );
 			if ( $type === 'default_blank' ) {
 				foreach ( $options as $opt_key => $opt ) {
-					$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+					if ( is_array( $opt ) ) {
+						$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+					}
+
 					if ( $opt == $field->default_value ) {
 						unset( $options[ $opt_key ] );
 						break;
