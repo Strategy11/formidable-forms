@@ -130,8 +130,6 @@ class test_FrmMigrate extends FrmUnitTest {
 	 * @covers FrmMigrate::migrate_to_97
 	 */
 	public function test_migrate_to_97() {
-		update_option( 'frm_db_version', 96 );
-
 		$form_id  = $this->factory->form->create();
 		$settings = array(
 			array(
