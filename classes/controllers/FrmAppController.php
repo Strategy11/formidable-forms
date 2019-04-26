@@ -457,6 +457,7 @@ class FrmAppController {
 			}
 
 			if ( $post_type == 'frm_display' ) {
+				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_script( 'jquery-ui-draggable' );
 				wp_enqueue_script( 'formidable_admin' );
 				wp_enqueue_style( 'formidable-admin' );

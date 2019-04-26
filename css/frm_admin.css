@@ -285,6 +285,10 @@ ul.frm_form_nav > li {
 	letter-spacing: 1px;
 }
 
+.post-type-frm_display.js .postbox .handlediv .toggle-indicator:before {
+	margin-top: 10px;
+}
+
 .frm-nav-tabs a:focus,
 .frm-nav-tabs a:active,
 .frm_form_nav a:active,
@@ -589,6 +593,15 @@ div.frm_has_shortcodes i {
 
 .post-type-frm_display #poststuff {
 	padding: 10px 0 10px 25px;
+}
+
+#postbox-container-2 .postbox .inside {
+	padding: 15px 25px;
+}
+
+#postbox-container-2 #frm_advanced .inside h3 {
+	margin: 15px -25px;
+	font-weight: 600;
 }
 
 .frm_settings_form {
@@ -901,8 +914,8 @@ h2 .frm-button-primary {
 .wp-core-ui.frm-white-body .button-secondary,
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
-.wp-core-ui.frm-white-body .button,
-.frm-white-body button {
+.wp-core-ui.frm-white-body .button:not(.button-small),
+.frm-white-body button:not(.wp-switch-editor) {
 	text-shadow: none;
 	box-shadow: none;
 	border-radius: 20px;
@@ -919,6 +932,11 @@ h2 .frm-button-primary {
 	color: var(--dark-grey);
 }
 
+.post-type-frm_display.wp-core-ui .button:not(.button-small):not(.button-primary) {
+	background: transparent;
+}
+
+.post-type-frm_display.wp-core-ui .button-primary,
 .frm-button-primary,
 .wp-core-ui .button-primary.frm-button-primary,
 .frm_single_entry_page .button-primary {
@@ -1201,6 +1219,7 @@ a.frm_hidden,
 .frm-fields td > label,
 .frm-fields td > div > label,
 .frm-fields p > label,
+.post-type-frm_display .frm_form_field > label,
 #new_fields .frm_primary_label,
 #frm_form_editor_container .frm_primary_label {
 	color: var(--dark-grey);
@@ -2340,6 +2359,7 @@ input[type="checkbox"] {
 	right: -28%;
 }
 
+.post-type-frm_display .frm_grid_container > div.frm_form_field,
 .accordion-section-content .frm_grid_container > div.frm_form_field,
 .accordion-section-content .frm_grid_container > p,
 #new_fields .frm_grid_container > p {
@@ -2652,6 +2672,7 @@ label input[type="checkbox"], label input[type="radio"] {
 	text-align: center;
 	font-weight: bold;
 	width: 100%;
+	background-color: transparent !important;
 }
 
 .wp-list-table input.frm_select_box {
@@ -4982,6 +5003,7 @@ select[name="m"] {
 	box-shadow: none;
 }
 
+.post-type-frm_display #edit-slug-box,
 .post-type-frm_display .wrap h1.wp-heading-inline,
 .post-type-frm_display .wrap > .page-title-action {
 	display: none;
