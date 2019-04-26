@@ -4,7 +4,7 @@
 	</a>
 <?php } ?>
 
-<input type="submit" id="save_menu_header" class="button button-primary frm-button-primary menu-save" value="<?php esc_attr_e( 'Save Style', 'formidable' ); ?>"  />
+<input type="submit" id="save_menu_header" class="button button-primary frm-button-primary menu-save" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>"  />
 <a href="#" class="button button-secondary frm-button-secondary frm_reset_style" data-frmverify="<?php esc_attr_e( 'Really? ', 'formidable' ); ?>">
 	<?php esc_attr_e( 'Reset', 'formidable' ); ?>
 </a>

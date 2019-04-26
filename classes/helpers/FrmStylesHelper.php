@@ -67,7 +67,7 @@ class FrmStylesHelper {
 	 */
 	public static function save_button() {
 		?>
-		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Save Changes', 'formidable' ); ?>" />
+		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
 	}
 

@@ -76,7 +76,7 @@
 			</tbody>
 		</table>
 		<p>
-			<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Save Changes', 'formidable' ); ?>" />
+			<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		</p>
 		<?php wp_nonce_field( 'frm_manage_style_nonce', 'frm_manage_style' ); ?>
 

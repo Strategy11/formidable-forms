@@ -15,7 +15,7 @@
 	--primary-color: rgb(65, 153, 253);
 	--primary-hover: rgb(49, 119, 199);
 	--green: rgb(63, 172, 37);
-	--orange: #ff7a59;
+	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--border-radius: 35px;
@@ -31,7 +31,7 @@ a.frm_confirming:hover,
 a.frm_confirming:focus,
 a.frm_confirming,
 .frm_confirming {
-	color: #f37656 !important;
+	color: var(--orange) !important;
 }
 
 #frm_top_bar + .wrap,
@@ -845,8 +845,8 @@ div.frm_has_shortcodes i {
 .frm_reverse_button,
 .post-type-frm_display .wrap .add-new-h2 {
 	font-size: 12px;
-	border: 1px solid #f37656;
-	color: #f37656;
+	border: 1px solid var(--orange);
+	color: var(--orange);
 	line-height: 1.4;
 	font-weight: 600;
 	padding: 1px 4px;
@@ -879,8 +879,8 @@ h2 .frm-button-primary {
 .post-type-frm_display .wrap .add-new-h2:active,
 .post-type-frm_display .wrap .add-new-h2:focus {
 	color: #fff;
-	background: #f37656;
-	border: 1px solid #f37656;
+	background: var(--orange);
+	border: 1px solid var(--orange);
 }
 
 .frm_reverse_button {
@@ -946,7 +946,7 @@ h2 .frm-button-primary {
 .frm_orange_button,
 .wrap .frm_pricing a.button-primary {
 	border-color: #da791d !important;
-	background: #f37656;
+	background: var(--orange);
 	color: #fff;
 }
 
@@ -1003,9 +1003,9 @@ h2 .frm-button-primary {
 
 .frm_orange_button:hover,
 .frm_orange_button:focus {
-	border-color: #f37656 !important;
+	border-color: var(--orange) !important;
 	background: transparent;
-	color: #f37656;
+	color: var(--orange);
 	opacity: 1;
 }
 
@@ -1178,6 +1178,7 @@ a.frm_hidden,
 	clear: both;
 }
 
+.post-type-frm_display h2,
 .frm_page_container h2 {
 	margin: 10px 0;
 	color: var(--medium-grey);
@@ -1395,7 +1396,7 @@ div.frm_updated_message {
 	-o-transform: rotate(45deg);
 	transform: rotate(45deg);
 	border: 25px solid transparent;
-	border-bottom: 25px solid #f37656;
+	border-bottom: 25px solid var(--orange);
 	position: absolute;
 	top: 4px;
 	right: -38px;
@@ -1420,7 +1421,7 @@ div.frm_updated_message {
 	padding: 10px 15px;
 	display: block;
 	text-align: center;
-	background: #f37656;
+	background: var(--orange);
 	color: #fff;
 	font-size: 19px;
 	line-height: 2.1em;
@@ -1458,7 +1459,7 @@ div.frm_updated_message {
 
 .upgrade_to_pro a,
 .upgrade_to_pro .frm_check_icon {
-	color: #f37656;
+	color: var(--orange);
 }
 
 .widefat.frm_pricing thead th,
@@ -1467,7 +1468,7 @@ div.frm_updated_message {
 }
 
 .widefat th.frm_table_break {
-	background-color: #f37656;
+	background-color: var(--orange);
 	color: #fff;
 	text-align: center;
 }
@@ -1551,7 +1552,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-addon-active .addon-status-label {
-	color: #f37656;
+	color: var(--orange);
 	opacity: 1;
 }
 
@@ -1691,7 +1692,7 @@ h2.frm-h2 + .howto {
 .frm_pro_tip a,
 .frm_pro_tip span,
 .frm_pro_tip .frm_check1_icon {
-	color: #f37656;
+	color: var(--orange);
 }
 
 .frm_pro_tip .frm_check1_icon {
@@ -1701,7 +1702,7 @@ h2.frm-h2 + .howto {
 .frm_pro_tip {
 	font-size: 12px;
 	color: #666;
-	border: 1px solid #f37656;
+	border: 1px solid var(--orange);
 	display: block;
 	padding: 5px;
 	background: #FBF0EC;
@@ -1735,12 +1736,11 @@ h1 .fa-caret-down {
 	width: 0;
 	height: 0;
 	margin-left: 2px;
+	vertical-align: middle;
 	border-top: 4px solid #AAA;
 	border-right: 4px solid transparent;
 	border-left: 4px solid transparent;
 	border-bottom: 0 dotted;
-	float: right;
-	margin-top: 9px;
 }
 
 .frm-btn-group .caret {
@@ -4759,6 +4759,10 @@ ul.frm-category-tabs {
 	clear: right;
 }
 
+#form_entries_page .search-box {
+	margin-top: 15px;
+}
+
 .frm-search {
 	width: 32%;
 	float: right;
@@ -5072,7 +5076,7 @@ ul .frm_col_two {
 }
 
 .cta-inside a {
-	color: #f37656
+	color: var(--orange)
 }
 
 .field_type_list > li {
