@@ -39,6 +39,7 @@
 					<?php esc_html_e( 'Make this the default style', 'formidable' ); ?></span>
 				</label>
 			</p>
+			<?php do_action( 'frm_style_settings_top', $style ); ?>
 		</div>
 		<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
 	</div>

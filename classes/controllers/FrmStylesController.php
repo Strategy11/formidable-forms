@@ -425,7 +425,9 @@ class FrmStylesController {
 		 */
 		$file_name = apply_filters( 'frm_style_settings_' . $sec['args'], $file_name );
 
+		echo '<div class="frm_grid_container">';
 		include( $file_name );
+		echo '</div>';
 	}
 
 	public static function load_css() {
