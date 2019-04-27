@@ -2526,6 +2526,20 @@ img.frm_help {
 	box-shadow: none;
 }
 
+.frm-wait {
+	margin: 20px;
+	width: 20px;
+	height: 20px;
+	position: relative;
+}
+
+#frm-show-fields .frm-wait:only-child {
+	position: absolute;
+	left: 50px;
+	top: 30px;
+}
+
+.frm-wait:before,
 .frm_loading_button:before,
 .frm_loading_form.frm_button_submit:before {
 	content: '';
@@ -2550,6 +2564,11 @@ img.frm_help {
 	-moz-animation: spin 2s linear infinite;
 	-o-animation: spin 2s linear infinite;
 	animation: spin 2s linear infinite;
+}
+
+.frm-wait:before {
+	border-bottom-color: var(--primary-hover);
+	border-right-color: var(--primary-hover);
 }
 
 .frm_loading_button.frm-button-secondary:before {
@@ -2866,10 +2885,29 @@ li.sortable-placeholder {
 	box-shadow: 20px -3px 0px 1px var(--primary-color);
 }
 
+.frm_sorting > .frmbutton + .sortable-placeholder, /* hide for first field */
 .no-drop-placeholder,
 .frm-show-click,
 li.ui-state-default.edit_field_type_divider .frm-show-click {
 	display: none;
+}
+
+.frm_form_field.ui-sortable-helper {
+	height: 30px !important;
+	background-color: #fff !important;
+	overflow: hidden !important;
+	box-sizing: border-box;
+}
+
+.frm_form_field.ui-sortable-helper .frm-field-action-icons,
+.frm_form_field.ui-sortable-helper .frm_form_fields,
+.frm_form_field.ui-sortable-helper .description {
+	display: none;
+}
+
+.frm_form_field.ui-sortable-helper .frm_primary_label,
+.frm_form_field.ui-sortable-helper .frm_inner_field_container {
+	margin: 0 !important;
 }
 
 .frm-single-settings .frm-show-click {
@@ -4160,7 +4198,7 @@ span.howto {
 	padding: 5px;
 	margin: 10px 0;
 	box-shadow: none;
-	display: block !important;
+	display: block;
 	text-align: inherit !important;
 	overflow: visible;
 	position: relative;
@@ -4515,10 +4553,15 @@ tr.frm_options_heading td {
 .frm_no_section_fields {
 	text-align: center;
 	position: absolute;
+	top: 0;
 	color: var(--medium-grey);
 	font-size: 16px;
 	box-sizing: border-box;
 	border: 2px dashed var(--primary-color);
+}
+
+.drop-me + .frm_no_fields {
+	border-style: solid;
 }
 
 .frm_no_section_fields {
@@ -4724,7 +4767,7 @@ ul.frm-category-tabs {
 }
 
 .frm_sorting li.ui-state-default {
-	transition: .7s box-shadow ease-in-out;
+	transition: .7s box-shadow ease-in-out, .7s height linear;
 }
 
 .frm_sorting li.ui-state-default.frm-newly-added {
@@ -5325,6 +5368,7 @@ ul .frm_col_two {
 	font-size: 15px;
 }
 
+#frm-show-fields .frmbutton.ui-sortable-helper i,
 .frmbutton.ui-sortable-helper span,
 .frmbutton.ui-draggable-dragging i {
 	color: #fff !important;
@@ -5336,6 +5380,15 @@ ul .frm_col_two {
 
 .frmbutton.ui-draggable-dragging .frm-dropdown-menu {
 	display: none;
+}
+
+.frmbutton.ui-sortable-helper {
+	transition: opacity .2s;
+	opacity: 1;
+}
+
+.frmbutton.ui-sortable-helper:not(.ui-draggable-dragging) {
+	opacity: 0;
 }
 
 /* End dragging */

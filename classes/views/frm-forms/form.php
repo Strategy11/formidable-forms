@@ -1,16 +1,5 @@
 <div id="frm_form_editor_container">
 
-	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">
-
-		<div class="frm_drag_inst">
-			<?php esc_html_e( 'Add Fields Here', 'formidable' ); ?>
-		</div>
-		<p>
-			<?php esc_html_e( 'Click or drag a field from the sidebar to add it to your form', 'formidable' ); ?>
-		</p>
-		<div class="clear"></div>
-	</div>
-
 	<?php
 	// Add form messages.
 	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
@@ -40,5 +29,16 @@
 		}
 		?>
 	</ul>
+
+	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">
+
+		<div class="frm_drag_inst">
+			<?php esc_html_e( 'Add Fields Here', 'formidable' ); ?>
+		</div>
+		<p>
+			<?php esc_html_e( 'Click or drag a field from the sidebar to add it to your form', 'formidable' ); ?>
+		</p>
+		<div class="clear"></div>
+	</div>
 </div>
 <?php FrmFieldsHelper::bulk_options_overlay(); ?>

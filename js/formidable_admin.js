@@ -7,6 +7,7 @@ function frmAdminBuildJS() {
 	var builderForm = document.getElementById( 'new_fields' );
 	var thisForm = document.getElementById( 'form_id' );
 	var cancelSort = false;
+	var copyHelper = false;
 
 	var this_form_id = 0;
 	if ( thisForm !== null ) {
@@ -374,13 +375,18 @@ function frmAdminBuildJS() {
 			items: '> li.frm_field_box',
 			placeholder: 'sortable-placeholder',
 			axis: 'y',
-			opacity: 0.65,
 			cancel: '.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_sortable_field_opts,.frm_noallow',
 			accepts: 'field_type_list',
 			revert: true,
 			forcePlaceholderSize: false,
 			tolerance: 'pointer',
 			handle: '.frm-move',
+			over : function(){
+				this.classList.add( 'drop-me' );
+			},
+			out : function(){
+				this.classList.remove( 'drop-me' );
+			},
 			receive: function( event, ui ) {
 				// Receive event occurs when an item in one sortable list is dragged into another sortable list
 
@@ -424,8 +430,13 @@ function frmAdminBuildJS() {
 					toggleCollapsePage( jQuery( ui.item[0] ) );
 				}
 			},
+			helper: function( e, li ) {
+				copyHelper = li.clone().insertAfter( li );
+				return li.clone();
+			},
 			stop: function( event, ui ) {
 				var moving = jQuery( this );
+				copyHelper && copyHelper.remove();
 				if ( cancelSort ) {
 					moving.sortable( 'cancel' );
 				}
@@ -562,7 +573,7 @@ function frmAdminBuildJS() {
 		var sectionId = getSectionIdForFieldPlacement( section );
 
 		var loadingID = fieldType.replace( '|', '-' );
-		currentItem.replaceWith( '<span class="frm_visible_spinner spinner frmbutton_loadingnow" id="' + loadingID + '" ></span>' );
+		currentItem.replaceWith( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
 
 		jQuery.ajax( {
 			type: 'POST', url: ajaxurl,
@@ -729,14 +740,23 @@ function frmAdminBuildJS() {
 
 		if ( addFocus ) {
 			var field = document.getElementById( match[1] ),
-				container = document.getElementById( 'post-body-content' );
+				bounding = field.getBoundingClientRect(),
+				container = document.getElementById( 'post-body-content' ),
+				inView = ( bounding.top >= 0 &&
+					bounding.left >= 0 &&
+					bounding.right <= ( window.innerWidth || document.documentElement.clientWidth ) &&
+					bounding.bottom <= ( window.innerHeight || document.documentElement.clientHeight )
+				);
 
 			addClass( field, 'frm-newly-added' );
-			container.scroll( {
-				top: container.scrollHeight,
-				left: 0,
-				behavior: 'smooth'
-			} );
+
+			if ( ! inView ) {
+				container.scroll( {
+					top: container.scrollHeight,
+					left: 0,
+					behavior: 'smooth'
+				} );
+			}
 
 			setTimeout( function() {
 				field.style.boxShadow = 'none';
