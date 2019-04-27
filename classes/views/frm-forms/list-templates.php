@@ -107,11 +107,15 @@
 							$preview_link = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html';
 						}
 
+						$plan_required = FrmFormsHelper::get_plan_required( $template );
 						FrmFormsHelper::show_plan_required( $template, $pricing . '&utm_content=' . $template['key'] );
 						?>
 						<?php if ( ! empty( $template['categories'] ) ) { ?>
 							<div class="frm_hidden">
-								Category:<?php echo esc_html( implode( $template['categories'], ', Category:' ) ); ?>
+								<?php
+								esc_html_e( 'Category:', 'formidable' );
+								echo esc_html( implode( $template['categories'], ', ' . __( 'Category:', 'formidable' ) ) );
+								?>
 							</div>
 						<?php } ?>
 					</div>
@@ -134,6 +138,10 @@
 							<?php } ?>
 								<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 							</a>
+						<?php } elseif ( ! empty( $license_type ) && $license_type === strtolower( $plan_required ) ) { ?>
+								<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $template['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Renew Now', 'formidable' ); ?>">
+									<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
+								</a>
 						<?php } else { ?>
 							<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 								<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
@@ -145,7 +153,8 @@
 			<?php } ?>
 		</div>
 		<?php if ( $expired ) { ?>
-			<p>
+			<br/>
+			<p class="frm_error_style">
 				<?php echo FrmAppHelper::kses( $error, 'a' ); // WPCS: XSS ok. ?>
 			</p>
 		<?php } ?>

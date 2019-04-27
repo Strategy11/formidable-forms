@@ -24,7 +24,10 @@
 							</a>
 						<?php } ?>
 					</p>
-					<?php FrmFormsHelper::show_plan_required( $addon, $pricing . '&utm_content=' . $addon['slug'] ); ?>
+					<?php
+					$plan_required = FrmFormsHelper::get_plan_required( $addon );
+					FrmFormsHelper::show_plan_required( $addon, $pricing . '&utm_content=' . $addon['slug'] );
+					?>
 				</div>
 				<div class="plugin-card-bottom">
 					<span class="addon-status">
@@ -44,7 +47,7 @@
 						<a class="frm-install-addon button button-primary frm-button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
 							<?php esc_html_e( 'Install', 'formidable' ); ?>
 						</a>
-					<?php } elseif ( $license_type === strtolower( FrmFormsHelper::get_plan_required( $addon ) ) ) { ?>
+					<?php } elseif ( ! empty( $license_type ) && $license_type === strtolower( $plan_required ) ) { ?>
 						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 							<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 						</a>

@@ -21,7 +21,7 @@
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
 				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
 			</label>
-			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
+			<input type="text" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_label_<?php echo esc_attr( $field['id'] ); ?>" />
 		</p>
 		<?php } else { ?>
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
@@ -139,7 +139,7 @@ do_action( 'frm_before_field_options', $field );
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
 				</label>
-				<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" />
+				<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder" />
 			</p>
 		<?php } ?>
 

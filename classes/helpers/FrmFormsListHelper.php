@@ -96,12 +96,24 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	public function no_items() {
-		esc_html_e( 'No Forms Found.', 'formidable' );
-		?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ); ?>">
-			<?php esc_html_e( 'Add New', 'formidable' ); ?>
-		</a>
-		<?php
+		echo '<p>';
+		if ( $this->status === 'trash' ) {
+			esc_html_e( 'No forms found in the trash.' );
+			?>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
+				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
+			</a>
+			<?php
+		} else {
+
+			esc_html_e( 'No Forms Found.', 'formidable' );
+			?>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ); ?>">
+				<?php esc_html_e( 'Add New', 'formidable' ); ?>
+			</a>
+			<?php
+		}
+		echo '</p>';
 	}
 
 	public function get_bulk_actions() {
@@ -163,7 +175,7 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class = '';
 			}
 
-			if ( $counts->{$status} || 'published' == $status ) {
+			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable&form_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts->{$status} ) ) . '</a>';
 			}

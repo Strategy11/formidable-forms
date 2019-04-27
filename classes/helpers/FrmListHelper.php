@@ -318,7 +318,7 @@ class FrmListHelper {
 		 */
 		$views = apply_filters( 'views_' . $this->screen->id, $views );
 
-		if ( empty( $views ) || count( $views ) < 2 ) {
+		if ( empty( $views ) ) {
 			return;
 		}
 

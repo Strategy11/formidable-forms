@@ -741,6 +741,8 @@ function frmAdminBuildJS() {
 			}, 1000 );
 			toggleOneSectionHolder( jQuery( section ) );
 		}
+
+		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
 		initiateMultiselect();
 	}
 
@@ -952,6 +954,19 @@ function frmAdminBuildJS() {
 			if ( i === allFields.length - 1 ) {
 				return fields;
 			}
+		}
+	}
+
+	function liveChanges() {
+		/*jshint validthis:true */
+		var newValue = this.value,
+			changes = document.getElementById( this.getAttribute( 'data-changeme' ) ),
+			att = this.getAttribute( 'data-changeatt' );
+
+		if ( att !== undefined ) {
+			changes.setAttribute( att, newValue );
+		} else {
+			changes.innerHTML = newValue;
 		}
 	}
 
@@ -3909,6 +3924,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_clone_icon', duplicateField );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
+			$builderForm.on( 'change', '[data-changeme]', liveChanges );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 

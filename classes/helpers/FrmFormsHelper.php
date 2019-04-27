@@ -248,7 +248,7 @@ class FrmFormsHelper {
 			'logged_in'      => '',
 			'editable'       => '',
 			'is_template'    => 0,
-			'status'         => 'draft',
+			'status'         => 'published',
 			'parent_form_id' => 0,
 		);
 		foreach ( $defaults as $var => $default ) {
@@ -1094,13 +1094,8 @@ BEFORE_HTML;
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->old_css ) {
 			$classes = array(
-				'frm_fifth'       => '1/5',
-				'frm_four_fifths' => '4/5',
-
-				'frm_two_fifths'   => '2/5',
-				'frm_three_fifths' => '3/5',
-
 				'frm_sixth' => '1/6',
+				'frm10'     => '5/6',
 
 				'frm_full' => '100%',
 			);

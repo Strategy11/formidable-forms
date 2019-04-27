@@ -15,7 +15,7 @@ class FrmForm {
 			'form_key'       => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
 			'name'           => $values['name'],
 			'description'    => $values['description'],
-			'status'         => isset( $values['status'] ) ? $values['status'] : 'draft',
+			'status'         => isset( $values['status'] ) ? $values['status'] : 'published',
 			'logged_in'      => isset( $values['logged_in'] ) ? $values['logged_in'] : 0,
 			'is_template'    => isset( $values['is_template'] ) ? (int) $values['is_template'] : 0,
 			'parent_form_id' => isset( $values['parent_form_id'] ) ? absint( $values['parent_form_id'] ) : 0,
@@ -63,7 +63,7 @@ class FrmForm {
 			'form_key'    => FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_forms', 'form_key' ),
 			'name'        => $values->name,
 			'description' => $values->description,
-			'status'      => $template ? 'published' : 'draft',
+			'status'      => $values->status ? $values->status : 'published',
 			'logged_in'   => $values->logged_in ? $values->logged_in : 0,
 			'editable'    => $values->editable ? $values->editable : 0,
 			'created_at'  => current_time( 'mysql', 1 ),
@@ -595,7 +595,7 @@ class FrmForm {
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
-			if ( isset( $where['is_template'] ) && $where['is_template'] && ! isset( $where['status'] ) ) {
+			if ( isset( $where['is_template'] ) && $where['is_template'] && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
 				// don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
 			}

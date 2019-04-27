@@ -838,7 +838,7 @@ class FrmAppHelper {
 	 */
 	public static function is_full_screen() {
 		$action       = self::simple_get( 'frm_action', 'sanitize_title' );
-		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' );
+		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 		$styler       = self::is_admin_page( 'formidable-styles' );
 		$full_entries = self::simple_get( 'frm-full', 'absint' );
 

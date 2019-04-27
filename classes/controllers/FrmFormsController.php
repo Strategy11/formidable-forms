@@ -793,16 +793,43 @@ class FrmFormsController {
 
 		$error   = '';
 		$expired = false;
+		$license_type = '';
 		if ( isset( $templates['error'] ) ) {
 			$error   = $templates['error']['message'];
 			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
 			$expired = ( $templates['error']['code'] === 'expired' );
+
+			$license_type = isset( $templates['error']['type'] ) ? $templates['error']['type'] : '';
 			unset( $templates['error'] );
 		}
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 
+		self::put_allowed_templates_first( $templates );
+
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	private static function put_allowed_templates_first( &$templates ) {
+		$allowed = array();
+
+		// Include contact form first.
+		$contact_us = 20872734;
+		$allowed[ $contact_us ] = $templates[ $contact_us ];
+		unset( $templates[ $contact_us ] );
+
+		foreach ( $templates as $k => $template ) {
+			if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
+				$allowed[ $k ] = $template;
+				unset( $templates[ $k ] );
+			}
+		}
+
+		$allowed += $templates;
+		$templates = $allowed;
 	}
 
 	private static function add_user_templates( &$templates ) {
@@ -866,8 +893,6 @@ class FrmFormsController {
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
-		} elseif ( $create_link ) {
-			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/new.php' );
 		} else {
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php' );
 		}

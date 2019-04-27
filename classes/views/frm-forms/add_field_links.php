@@ -121,7 +121,11 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 
 		<div id="frm-options-panel" class="tabs-panel frm_hidden">
 			<div class="frm-single-settings">
-				<?php esc_html_e( 'Select a field to see the options', 'formidable' ); ?>
+				<div class="frm-embed-field-placeholder">
+					<div class="frm-embed-message">
+						<?php esc_html_e( 'Select a field to see the options', 'formidable' ); ?>
+					</div>
+				</div>
 			</div>
 			<form method="post" id="new_fields">
 				<input type="hidden" name="frm_action" value="update" />

@@ -924,6 +924,7 @@ h2 .frm-button-primary {
 	transition: all .2s ease;
 	padding: 0 15px;
 	height: 28px;
+	outline: none;
 }
 
 .wp-core-ui.frm-white-body .button.action {
@@ -952,6 +953,10 @@ h2 .frm-button-primary {
 .frm-button-primary:hover {
 	background: var(--primary-hover) !important;
 	border-color: var(--primary-hover) !important;
+}
+
+.wp-core-ui .button-primary.frm-button-primary:active {
+	vertical-align: inherit;
 }
 
 .wp-core-ui .button-secondary.frm-button-secondary,
@@ -2284,6 +2289,11 @@ a.frm_option_icon:hover::before {
 	width: 50%;
 	top: 23px;
 	left: 25%
+}
+
+.frm-single-settings .frm-embed-message {
+	width: 100%;
+	position: static;
 }
 
 #new_fields input[type=text],
@@ -4141,7 +4151,7 @@ span.howto {
 	box-shadow: none;
 	display: block !important;
 	text-align: inherit !important;
-	overflow: hidden;
+	overflow: visible;
 	position: relative;
 }
 
@@ -5473,10 +5483,10 @@ iframe#dyncontent_ifr {
 .tooltip-inner {
 	max-width: 200px;
 	padding: 3px 8px;
-	color: #FFF;
+	color: #fff;
 	text-align: center;
 	text-decoration: none;
-	background-color: #777;
+	background-color: var(--dark-grey);
 	border-radius: 4px;
 }
 
@@ -5493,21 +5503,21 @@ iframe#dyncontent_ifr {
 	left: 50%;
 	margin-left: -5px;
 	border-width: 5px 5px 0;
-	border-top-color: #808080;
+	border-top-color: var(--dark-grey);
 }
 
 .tooltip.top-left .tooltip-arrow {
 	bottom: 0;
 	left: 5px;
 	border-width: 5px 5px 0;
-	border-top-color: #808080;
+	border-top-color: var(--dark-grey);
 }
 
 .tooltip.top-right .tooltip-arrow {
 	bottom: 0;
 	right: 5px;
 	border-width: 5px 5px 0;
-	border-top-color: #808080;
+	border-top-color: var(--dark-grey);
 }
 
 .tooltip.right .tooltip-arrow {
@@ -5515,7 +5525,7 @@ iframe#dyncontent_ifr {
 	left: 0;
 	margin-top: -5px;
 	border-width: 5px 5px 5px 0;
-	border-right-color: #808080;
+	border-right-color: var(--dark-grey);
 }
 
 .tooltip.left .tooltip-arrow {
@@ -5523,7 +5533,7 @@ iframe#dyncontent_ifr {
 	right: 0;
 	margin-top: -5px;
 	border-width: 5px 0 5px 5px;
-	border-left-color: #808080;
+	border-left-color: var(--dark-grey);
 }
 
 .tooltip.bottom .tooltip-arrow {
