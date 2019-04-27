@@ -98,7 +98,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	public function no_items() {
 		echo '<p>';
 		if ( $this->status === 'trash' ) {
-			esc_html_e( 'No forms found in the trash.' );
+			esc_html_e( 'No forms found in the trash.', 'formidable' );
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
