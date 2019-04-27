@@ -325,6 +325,10 @@ function frmAdminBuildJS() {
 		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		document.getElementById( t.replace( '#', '' ), ).style.display = 'block';
+
+		if ( this.id === 'frm_insert_fields_tab' ) {
+			clearSettingsBox();
+		}
 		return false;
 	}
 
@@ -764,8 +768,18 @@ function frmAdminBuildJS() {
 			toggleOneSectionHolder( jQuery( section ) );
 		}
 
-		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
+		deselectFields();
 		initiateMultiselect();
+	}
+
+	function clearSettingsBox() {
+		jQuery( '#new_fields .frm-single-settings' ).hide();
+		jQuery( '#frm-options-panel > .frm-single-settings' ).show();
+		deselectFields();
+	}
+
+	function deselectFields() {
+		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
 	}
 
 	function scrollToField( field ) {
@@ -2167,8 +2181,7 @@ function frmAdminBuildJS() {
 	}
 
 	function clickAction( obj ) {
-		var selected,
-			$thisobj = jQuery( obj );
+		var $thisobj = jQuery( obj );
 
 		if ( obj.className.indexOf( 'selected' ) !== -1 ) {
 			return;
@@ -2177,9 +2190,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		selected = jQuery( 'li.ui-state-default.selected' );
-
-		selected.removeClass( 'selected' );
+		deselectFields();
 		$thisobj.addClass( 'selected' );
 
 		showFieldOptions( obj );
@@ -2194,13 +2205,13 @@ function frmAdminBuildJS() {
 			allFieldSettings = document.getElementsByClassName( 'frm-single-settings' );
 
 		for ( i = 0; i < allFieldSettings.length; i++ ) {
-			allFieldSettings[i].style.display = 'none';
+			allFieldSettings[i].classList.add( 'frm_hidden' );
 		}
 
 		singleField = document.getElementById( 'frm-single-settings-' + fieldId );
 		moveFieldSettings( singleField );
 
-		singleField.style.display = 'block';
+		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
 	}
 
