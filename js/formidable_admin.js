@@ -1301,7 +1301,15 @@ function frmAdminBuildJS() {
 			type: 'POST', url: ajaxurl,
 			data: {action: 'frm_delete_field', field_id: field_id, nonce: frmGlobal.nonce},
 			success: function( msg ) {
-				var $thisField = jQuery( document.getElementById( 'frm_field_id_' + field_id ) );
+				var $thisField = jQuery( document.getElementById( 'frm_field_id_' + field_id ) ),
+					settings = jQuery( '#frm-single-settings-' + field_id );
+
+				// Remove settings from sidebar.
+				if ( settings.is( ':visible' ) ) {
+					document.getElementById( 'frm_insert_fields_tab' ).click();
+				}
+				settings.remove();
+
 				$thisField.fadeOut( 'slow', function() {
 					var $section = $thisField.closest( '.start_divider' );
 					$thisField.remove();
