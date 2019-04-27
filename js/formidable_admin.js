@@ -374,7 +374,6 @@ function frmAdminBuildJS() {
 			items: '> li.frm_field_box',
 			placeholder: 'sortable-placeholder',
 			axis: 'y',
-			cursor: 'move',
 			opacity: 0.65,
 			cancel: '.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_sortable_field_opts,.frm_noallow',
 			accepts: 'field_type_list',
@@ -462,13 +461,16 @@ function frmAdminBuildJS() {
 		var opts = {
 			items: '.frm_sortable_field_opts li',
 			axis: 'y',
-			cursor: 'move',
 			opacity: 0.65,
-			revert: true,
 			forcePlaceholderSize: false,
-			tolerance: 'pointer',
 			handle: '.frm-drag',
-			helper: 'clone'
+			helper: function( e, li ) {
+				copyHelper = li.clone().insertAfter( li );
+				return li.clone();
+			},
+			stop: function() {
+				copyHelper && copyHelper.remove();
+			}
 		};
 
 		jQuery( sort ).sortable( opts );
@@ -3881,7 +3883,6 @@ function frmAdminBuildJS() {
 
 			jQuery( '.field_type_list > li:not(.frm_noallow)' ).draggable( {
 				connectToSortable: '#frm-show-fields',
-				cursor: 'move',
 				helper: 'clone',
 				revert: 'invalid',
 				delay: 10,
@@ -4086,7 +4087,7 @@ function frmAdminBuildJS() {
 			} );
 
 			showInputIcon();
-			jQuery( document ).on( 'click', '.frm-show-box', showShortcodes );
+			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
 
 			jQuery( document ).on( 'focusin click', 'form input, form textarea', function( e ) {
 				e.stopPropagation();

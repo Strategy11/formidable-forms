@@ -2852,12 +2852,18 @@ label input[type="checkbox"], label input[type="radio"] {
 	height: 34px;
 }
 
+.frm_single_option.ui-sortable-placeholder,
 li.sortable-placeholder {
-	width: 100% !important;
-	height: 0;
+	width: 98% !important;
+	height: 0 !important;
 	border: none;
-	box-shadow: 0 0 1px 2px var(--primary-color);
+	box-shadow: 9px -5px 0 1px var(--primary-color);
 	margin: 0;
+	visibility: visible !important;
+}
+
+.frm_single_option.ui-sortable-placeholder {
+	box-shadow: 20px -3px 0px 1px var(--primary-color);
 }
 
 .no-drop-placeholder,
@@ -2902,6 +2908,11 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	font-size: 18px;
 	color: var(--grey);
 	width: 18px;
+}
+
+.frm-drag,
+.frm_single_option.ui-sortable-helper {
+	cursor: move;
 }
 
 .frm_sortable_field_opts + a,
@@ -5285,6 +5296,11 @@ ul .frm_col_two {
 }
 
 /* Icon while dragging */
+.frmbutton.ui-draggable-dragging,
+.frmbutton.ui-draggable-dragging a {
+	cursor: move;
+}
+
 .frmbutton.ui-sortable-helper a,
 .frmbutton.ui-draggable-dragging a:hover,
 .frmbutton.ui-draggable-dragging a {
