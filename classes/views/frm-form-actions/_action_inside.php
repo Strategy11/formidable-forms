@@ -101,7 +101,7 @@ if ( $use_logging ) {
 	}
 }
 ?>
-<span class="alignright frm_action_id <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
+<span class="alignright frm_action_id frm-sub-label <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
 	<?php
 	/* translators: %1$s: The ID of the form action. */
 	printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) );

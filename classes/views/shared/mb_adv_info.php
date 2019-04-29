@@ -27,6 +27,7 @@
 	</ul>
 
 	<div id="frm-insert-fields-box" class="tabs-panel">
+		<div class="inside">
 		<ul class="subsubsub">
 			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
@@ -77,6 +78,7 @@
 		}
 		?>
 		</ul>
+		</div>
 	</div>
 
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>

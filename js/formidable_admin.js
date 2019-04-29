@@ -2049,7 +2049,19 @@ function frmAdminBuildJS() {
 		if ( typeof parentClass === 'undefined' ) {
 			parentClass = '';
 		}
+		maybeAddFieldSelection();
 		jQuery( parentClass + ' .frm_has_shortcodes input,' + parentClass + ' .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box frm_icon_font frm_more_horiz_solid_icon"></i>' );
+	}
+
+	/**
+	 * For reverse compatibility. Check for fields that were
+	 * using the old sidebar.
+	 */
+	function maybeAddFieldSelection() {
+		var i, missingClass = jQuery( ':not(.frm_has_shortcodes) .frm_not_email_message, :not(.frm_has_shortcodes) .frm_not_email_to, :not(.frm_has_shortcodes) .frm_not_email_subject' );
+		for ( i = 0; i < missingClass.length; i ++ ) {
+			missingClass[i].parentNode.classList.add( 'frm_has_shortcodes' );
+		}
 	}
 
 	function showSuccessOpt() {
@@ -2863,6 +2875,7 @@ function frmAdminBuildJS() {
 	function showShortcodes( e ) {
 		/*jshint validthis:true */
 		var pos = this.getBoundingClientRect(),
+			input = this.nextSibling,
 			box = document.getElementById( 'frm_adv_info' ),
 			classes = this.className,
 			parentPos = box.parentElement.getBoundingClientRect();
@@ -2874,9 +2887,15 @@ function frmAdminBuildJS() {
 			box.style.display = 'none';
 			this.className = classes.replace( 'frm_close_icon', 'frm_more_horiz_solid_icon' );
 		} else {
-			this.nextSibling.focus();
+			input.focus();
 			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
+
+			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
+			if ( input.classList.contains( 'frm_not_email_to' ) ) {
+				jQuery( '.frm_code_list li:not(.show_frm_not_email_to) a' ).addClass( 'frm_noallow' );
+			}
+
 			box.style.display = 'block';
 			this.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
 		}

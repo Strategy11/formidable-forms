@@ -512,7 +512,7 @@ ul.frm_form_nav > li {
 #frm-bulk-modal i,
 .frm_has_shortcodes i {
 	position: absolute;
-	top: 38px;
+	top: 37px;
 	right: 5px;
 	z-index: 100;
 	margin-top: -9px;
@@ -528,6 +528,10 @@ ul.frm_form_nav > li {
 
 div.frm_has_shortcodes i {
 	top: 30px;
+}
+
+td.frm_has_shortcodes i {
+	top: 25px;
 }
 
 #frm_upgrade_modal .dismiss i {
@@ -637,6 +641,9 @@ div.frm_has_shortcodes i {
 
 .frm_wrap #frm_adv_info .inside {
 	margin: 0;
+}
+
+.frm_wrap #frm_adv_info > .inside {
 	padding: 0;
 }
 
@@ -3799,8 +3806,6 @@ table td, .form-table tr td {
 }
 
 .frm_action_id {
-	font-size: 11px;
-	opacity: 0.8;
 	padding-top: 10px;
 }
 
@@ -3972,6 +3977,7 @@ a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
 
 .form-field input[type=text].frm_other_input {
 	width: 30%;
+	margin-left: 10px;
 }
 
 .frm_action_icon {
@@ -5505,10 +5511,6 @@ iframe#dyncontent_ifr {
 	min-height: 150px;
 }
 
-#frm-insert-fields-box ul.frm_code_list, #frm-conditionals ul.frm_code_list {
-	padding-right: 0.9em;
-}
-
 /*!
  * Bootstrap v3.0.2
  */
@@ -5803,6 +5805,10 @@ iframe#dyncontent_ifr {
 .frm_wrap textarea[readonly],
 .frm_wrap input::placeholder {
 	color: var(--grey);
+}
+
+#postcustomstuff table input {
+	width: 98% !important;
 }
 
 .wp-admin .frm_wrap select {
