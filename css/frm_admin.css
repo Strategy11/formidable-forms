@@ -2892,6 +2892,7 @@ li.sortable-placeholder {
 	box-shadow: 20px -3px 0px 1px var(--primary-color);
 }
 
+.frm_sorting > li.edit_field_type_end_divider:first-child,
 .frm_sorting > .frmbutton + .sortable-placeholder, /* hide for first field */
 .no-drop-placeholder,
 .frm-show-click,
