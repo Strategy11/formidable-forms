@@ -996,12 +996,20 @@ function frmAdminBuildJS() {
 
 	function liveChanges() {
 		/*jshint validthis:true */
-		var newValue = this.value,
+		var option,
+			newValue = this.value,
 			changes = document.getElementById( this.getAttribute( 'data-changeme' ) ),
 			att = this.getAttribute( 'data-changeatt' );
 
 		if ( att !== null ) {
-			changes.setAttribute( att, newValue );
+			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
+				option = changes.options[0];
+				if ( option.value === '' ) {
+					option.innerHTML = newValue;
+				}
+			} else {
+				changes.setAttribute( att, newValue );
+			}
 		} else {
 			changes.innerHTML = newValue;
 		}
