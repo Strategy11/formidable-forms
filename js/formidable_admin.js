@@ -734,7 +734,9 @@ function frmAdminBuildJS() {
 
 	function afterAddField( msg, addFocus ) {
 		var regex = /id="(\S+)"/,
-			match = regex.exec( msg );
+			match = regex.exec( msg ),
+			field = document.getElementById( match[1] );
+
 		section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting';
 		setupSortable( section );
 
@@ -742,17 +744,19 @@ function frmAdminBuildJS() {
 			renumberPageBreaks();
 		}
 
+		addClass( field, 'frm-newly-added' );
+		setTimeout( function() {
+			field.classList.remove( 'frm-newly-added' );
+		}, 1000 );
+
 		if ( addFocus ) {
-			var field = document.getElementById( match[1] ),
-				bounding = field.getBoundingClientRect(),
+			var bounding = field.getBoundingClientRect(),
 				container = document.getElementById( 'post-body-content' ),
 				inView = ( bounding.top >= 0 &&
 					bounding.left >= 0 &&
 					bounding.right <= ( window.innerWidth || document.documentElement.clientWidth ) &&
 					bounding.bottom <= ( window.innerHeight || document.documentElement.clientHeight )
 				);
-
-			addClass( field, 'frm-newly-added' );
 
 			if ( ! inView ) {
 				container.scroll( {
@@ -762,9 +766,6 @@ function frmAdminBuildJS() {
 				} );
 			}
 
-			setTimeout( function() {
-				field.style.boxShadow = 'none';
-			}, 1000 );
 			toggleOneSectionHolder( jQuery( section ) );
 		}
 
@@ -1535,7 +1536,8 @@ function frmAdminBuildJS() {
 
 	function clickVis( e ) {
 		/*jshint validthis:true */
-		if ( e.target.classList.contains( 'frm-collapse-page' ) ) {
+		var currentClass = e.target.classList;
+		if ( currentClass.contains( 'frm-collapse-page' ) || currentClass.contains( 'frm-sub-label' ) ) {
 			return;
 		}
 
