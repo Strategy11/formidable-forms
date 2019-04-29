@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-04-26T20:48:35+02:00\n"
+"POT-Creation-Date: 2019-04-29T20:18:36+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -237,7 +237,7 @@ msgid "Dropdown"
 msgstr ""
 
 #: classes/models/FrmField.php:34
-#: classes/controllers/FrmFormsController.php:1117
+#: classes/controllers/FrmFormsController.php:1142
 msgid "Email"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgid "Hidden Field"
 msgstr ""
 
 #: classes/models/FrmField.php:58
-#: classes/controllers/FrmFormsController.php:1112
+#: classes/controllers/FrmFormsController.php:1137
 msgid "User ID"
 msgstr ""
 
@@ -411,21 +411,21 @@ msgstr ""
 msgid "The reCAPTCHA was not entered correctly"
 msgstr ""
 
-#: classes/models/fields/FrmFieldType.php:402
+#: classes/models/fields/FrmFieldType.php:404
 #: classes/helpers/FrmFieldsHelper.php:285
 msgid "This field is invalid"
 msgstr ""
 
 #. translators: %s: The field name.
 #. translators: %s: Field name
-#: classes/models/fields/FrmFieldType.php:405
+#: classes/models/fields/FrmFieldType.php:407
 #: classes/helpers/FrmFieldsHelper.php:167
 #: classes/helpers/FrmFieldsHelper.php:287
 #: classes/helpers/FrmXMLHelper.php:1022
 msgid "%s is invalid"
 msgstr ""
 
-#: classes/models/fields/FrmFieldType.php:412
+#: classes/models/fields/FrmFieldType.php:414
 msgid "Untitled"
 msgstr ""
 
@@ -576,7 +576,7 @@ msgstr ""
 #: classes/controllers/FrmAppController.php:121
 #: classes/views/frm-forms/settings.php:8
 #: classes/views/frm-settings/form.php:7
-#: classes/helpers/FrmFormsListHelper.php:284
+#: classes/helpers/FrmFormsListHelper.php:296
 msgid "Settings"
 msgstr ""
 
@@ -681,68 +681,68 @@ msgstr ""
 msgid "Plugin Licenses"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:191
-#: classes/controllers/FrmSettingsController.php:194
+#: classes/controllers/FrmSettingsController.php:192
+#: classes/controllers/FrmSettingsController.php:195
 msgid "Settings Saved"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:228
+#: classes/controllers/FrmSettingsController.php:229
 msgid "Extra form features like file uploads, pagination, etc"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:229
+#: classes/controllers/FrmSettingsController.php:230
 msgid "Repeaters & cascading fields for advanced forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:230
+#: classes/controllers/FrmSettingsController.php:231
 msgid "Flexibly view, search, edit, and delete entries anywhere"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:231
+#: classes/controllers/FrmSettingsController.php:232
 msgid "Display entries with virtually limitless Formidable views"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:232
+#: classes/controllers/FrmSettingsController.php:233
 msgid "Create surveys & polls"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:233
+#: classes/controllers/FrmSettingsController.php:234
 msgid "WordPress user registration and login forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:234
+#: classes/controllers/FrmSettingsController.php:235
 msgid "Create Stripe, PayPal or Authorize.net payment forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:235
+#: classes/controllers/FrmSettingsController.php:236
 msgid "Powerful conditional logic for smart forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:236
+#: classes/controllers/FrmSettingsController.php:237
 msgid "Integrations with 1000+ marketing & payment services"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:237
+#: classes/controllers/FrmSettingsController.php:238
 msgid "Collect digital signatures"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:238
+#: classes/controllers/FrmSettingsController.php:239
 msgid "Accept user-submitted content with Post submissions"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:239
+#: classes/controllers/FrmSettingsController.php:240
 msgid "Email routing"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:240
+#: classes/controllers/FrmSettingsController.php:241
 msgid "Create calculator forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:241
+#: classes/controllers/FrmSettingsController.php:242
 msgid "Save draft entries and return later"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:242
+#: classes/controllers/FrmSettingsController.php:243
 msgid "Analyze form data with graphs & stats"
 msgstr ""
 
@@ -763,7 +763,7 @@ msgstr ""
 
 #: classes/controllers/FrmStylesController.php:38
 #: classes/views/frm-entries/sidebar-shared.php:35
-#: classes/helpers/FrmFormsListHelper.php:283
+#: classes/helpers/FrmFormsListHelper.php:295
 msgid "Edit"
 msgstr ""
 
@@ -785,7 +785,7 @@ msgid "Your form styles have been saved."
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:386
-#: classes/controllers/FrmFormsController.php:912
+#: classes/controllers/FrmFormsController.php:937
 msgid "General"
 msgstr ""
 
@@ -845,7 +845,7 @@ msgid "Settings Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:161
-#: classes/controllers/FrmFormsController.php:860
+#: classes/controllers/FrmFormsController.php:887
 msgid "Form was successfully updated."
 msgstr ""
 
@@ -945,162 +945,162 @@ msgstr ""
 msgid "Shortcodes"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:834
+#: classes/controllers/FrmFormsController.php:861
 msgid "You are trying to edit a form that does not exist."
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:839
+#: classes/controllers/FrmFormsController.php:866
 msgid "You are trying to edit a child form. Please edit from %1$shere%2$s"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:862
+#: classes/controllers/FrmFormsController.php:889
 msgid "Template was successfully updated."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:913
+#: classes/controllers/FrmFormsController.php:938
 msgid "General Form Settings"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:918
+#: classes/controllers/FrmFormsController.php:943
 msgid "Actions & Notifications"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:924
-#: classes/controllers/FrmFormsController.php:929
+#: classes/controllers/FrmFormsController.php:949
+#: classes/controllers/FrmFormsController.php:954
 msgid "Form Permissions"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:933
+#: classes/controllers/FrmFormsController.php:958
 msgid "Form Scheduling"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:938
+#: classes/controllers/FrmFormsController.php:963
 msgid "Form scheduling settings"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:942
+#: classes/controllers/FrmFormsController.php:967
 msgid "Styling & Buttons"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:948
+#: classes/controllers/FrmFormsController.php:973
 msgid "Customize HTML"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1049
+#: classes/controllers/FrmFormsController.php:1074
 msgid "Customize field values with the following parameters."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1086
+#: classes/controllers/FrmFormsController.php:1111
 msgid "Separator"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1087
+#: classes/controllers/FrmFormsController.php:1112
 msgid "Use a different separator for checkbox fields"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1090
+#: classes/controllers/FrmFormsController.php:1115
 msgid "Date Format"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1093
+#: classes/controllers/FrmFormsController.php:1118
 #: classes/views/frm-fields/back-end/settings.php:22
 msgid "Field Label"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1096
+#: classes/controllers/FrmFormsController.php:1121
 msgid "No Auto P"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1097
+#: classes/controllers/FrmFormsController.php:1122
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1113
+#: classes/controllers/FrmFormsController.php:1138
 msgid "First Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1114
+#: classes/controllers/FrmFormsController.php:1139
 msgid "Last Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1115
+#: classes/controllers/FrmFormsController.php:1140
 msgid "Display Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1116
+#: classes/controllers/FrmFormsController.php:1141
 msgid "User Login"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1118
+#: classes/controllers/FrmFormsController.php:1143
 msgid "Avatar"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1119
+#: classes/controllers/FrmFormsController.php:1144
 msgid "Author Link"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1132
+#: classes/controllers/FrmFormsController.php:1157
 #: classes/views/frm-entries/sidebar-shared.php:46
 msgid "Entry ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1133
+#: classes/controllers/FrmFormsController.php:1158
 #: classes/controllers/FrmEntriesController.php:69
 #: classes/views/frm-entries/sidebar-shared.php:52
 #: classes/views/frm-entries/form.php:52
 msgid "Entry Key"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1134
+#: classes/controllers/FrmFormsController.php:1159
 msgid "Post ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1135
+#: classes/controllers/FrmFormsController.php:1160
 msgid "User IP"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1136
+#: classes/controllers/FrmFormsController.php:1161
 msgid "Entry created"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1137
+#: classes/controllers/FrmFormsController.php:1162
 msgid "Entry updated"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1139
+#: classes/controllers/FrmFormsController.php:1164
 msgid "Site URL"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1140
+#: classes/controllers/FrmFormsController.php:1165
 msgid "Site Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1148
+#: classes/controllers/FrmFormsController.php:1173
 msgid "Default Msg"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1149
+#: classes/controllers/FrmFormsController.php:1174
 msgid "Default HTML"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1150
+#: classes/controllers/FrmFormsController.php:1175
 msgid "Default Plain"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1239
+#: classes/controllers/FrmFormsController.php:1264
 msgid "No forms were specified"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1345
+#: classes/controllers/FrmFormsController.php:1370
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1414
+#: classes/controllers/FrmFormsController.php:1439
 #: classes/views/frm-forms/list-templates.php:63
 #: classes/views/xml/import_form.php:126
 #: classes/views/styles/manage.php:49
-#: classes/helpers/FrmFormsListHelper.php:297
+#: classes/helpers/FrmFormsListHelper.php:309
 #: classes/helpers/FrmFormsHelper.php:57
 #: classes/helpers/FrmFormsHelper.php:103
 #: classes/helpers/FrmFormsHelper.php:138
@@ -1108,17 +1108,17 @@ msgstr ""
 msgid "(no title)"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1465
-#: classes/controllers/FrmFormsController.php:1479
+#: classes/controllers/FrmFormsController.php:1490
+#: classes/controllers/FrmFormsController.php:1504
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1714
+#: classes/controllers/FrmFormsController.php:1739
 msgid "Please wait while you are redirected."
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:1750
+#: classes/controllers/FrmFormsController.php:1775
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
@@ -1213,7 +1213,7 @@ msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:9
 #: classes/views/frm-forms/edit.php:23
-#: classes/views/frm-forms/add_field_links.php:164
+#: classes/views/frm-forms/add_field_links.php:168
 #: classes/views/styles/header-buttons.php:7
 #: classes/views/styles/manage.php:79
 #: classes/helpers/FrmStylesHelper.php:70
@@ -1222,8 +1222,8 @@ msgid "Update"
 msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:16
-#: classes/views/frm-forms/list-templates.php:120
-#: classes/helpers/FrmFormsListHelper.php:288
+#: classes/views/frm-forms/list-templates.php:124
+#: classes/helpers/FrmFormsListHelper.php:300
 msgid "Preview"
 msgstr ""
 
@@ -1281,8 +1281,8 @@ msgid "Templates"
 msgstr ""
 
 #: classes/views/frm-forms/list.php:21
-#: classes/views/shared/mb_adv_info.php:42
-#: classes/views/shared/mb_adv_info.php:131
+#: classes/views/shared/mb_adv_info.php:43
+#: classes/views/shared/mb_adv_info.php:133
 #: classes/views/frm-entries/list.php:37
 #: classes/helpers/FrmAppHelper.php:709
 msgid "Search"
@@ -1344,32 +1344,43 @@ msgid "Start from scratch and build exactly what you want. This option will not 
 msgstr ""
 
 #: classes/views/frm-forms/list-templates.php:83
-#: classes/views/frm-forms/list-templates.php:131
-#: classes/views/frm-forms/list-templates.php:133
 #: classes/views/frm-forms/list-templates.php:135
+#: classes/views/frm-forms/list-templates.php:137
+#: classes/views/frm-forms/list-templates.php:139
 msgid "Create Form"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:124
+#: classes/views/frm-forms/list-templates.php:116
+#: classes/views/frm-forms/list-templates.php:117
+msgid "Category:"
+msgstr ""
+
+#: classes/views/frm-forms/list-templates.php:128
 #: classes/helpers/FrmEntriesListHelper.php:264
 #: classes/helpers/FrmFormsHelper.php:1040
 #: classes/helpers/FrmAppHelper.php:1886
 msgid "Are you sure?"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:125
+#: classes/views/frm-forms/list-templates.php:129
 #: classes/views/frm-form-actions/form_action.php:19
 #: classes/helpers/FrmEntriesListHelper.php:264
-#: classes/helpers/FrmFormsListHelper.php:121
+#: classes/helpers/FrmFormsListHelper.php:133
 #: classes/helpers/FrmFormsHelper.php:1044
 msgid "Delete"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:138
-#: classes/views/frm-forms/list-templates.php:139
-#: classes/views/addons/list.php:48
+#: classes/views/frm-forms/list-templates.php:142
+#: classes/views/frm-forms/list-templates.php:143
 #: classes/views/addons/list.php:52
-#: classes/views/addons/list.php:53
+msgid "Renew Now"
+msgstr ""
+
+#: classes/views/frm-forms/list-templates.php:146
+#: classes/views/frm-forms/list-templates.php:147
+#: classes/views/addons/list.php:51
+#: classes/views/addons/list.php:55
+#: classes/views/addons/list.php:56
 msgid "Upgrade Now"
 msgstr ""
 
@@ -1444,7 +1455,7 @@ msgstr ""
 msgid "Duplicate Field"
 msgstr ""
 
-#: classes/views/frm-forms/add_field.php:57
+#: classes/views/frm-forms/add_field.php:68
 msgid "Your section has no fields. Drag fields here to add them to this section."
 msgstr ""
 
@@ -1563,17 +1574,17 @@ msgstr ""
 msgid "Build Form"
 msgstr ""
 
-#: classes/views/frm-forms/form.php:6
+#. translators: %s: The page number
+#: classes/views/frm-forms/form.php:13
+msgid "Page %s"
+msgstr ""
+
+#: classes/views/frm-forms/form.php:36
 msgid "Add Fields Here"
 msgstr ""
 
-#: classes/views/frm-forms/form.php:9
+#: classes/views/frm-forms/form.php:39
 msgid "Click or drag a field from the sidebar to add it to your form"
-msgstr ""
-
-#. translators: %s: The page number
-#: classes/views/frm-forms/form.php:24
-msgid "Page %s"
 msgstr ""
 
 #: classes/views/frm-forms/settings-buttons.php:2
@@ -1619,19 +1630,19 @@ msgstr ""
 msgid "%s fields"
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:124
+#: classes/views/frm-forms/add_field_links.php:126
 msgid "Select a field to see the options"
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:136
+#: classes/views/frm-forms/add_field_links.php:140
 msgid "Smart Default Values"
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:144
+#: classes/views/frm-forms/add_field_links.php:148
 msgid "Add Layout Classes"
 msgstr ""
 
-#: classes/views/frm-forms/add_field_links.php:152
+#: classes/views/frm-forms/add_field_links.php:156
 msgid "Input Mask Format"
 msgstr ""
 
@@ -1768,7 +1779,7 @@ msgid "Deactivate"
 msgstr ""
 
 #: classes/views/addons/settings.php:28
-#: classes/views/addons/list.php:41
+#: classes/views/addons/list.php:44
 msgid "Activate"
 msgstr ""
 
@@ -1786,19 +1797,15 @@ msgid "View Docs"
 msgstr ""
 
 #. translators: %s: Status name
-#: classes/views/addons/list.php:34
+#: classes/views/addons/list.php:37
 msgid "Status: %s"
 msgstr ""
 
-#: classes/views/addons/list.php:44
-#: classes/views/addons/list.php:45
+#: classes/views/addons/list.php:47
+#: classes/views/addons/list.php:48
 #: classes/views/shared/upgrade_overlay.php:27
 #: classes/helpers/FrmAppHelper.php:1908
 msgid "Install"
-msgstr ""
-
-#: classes/views/addons/list.php:49
-msgid "Renew Now"
 msgstr ""
 
 #: classes/views/shared/admin-header.php:4
@@ -1903,25 +1910,25 @@ msgstr ""
 msgid "HTML Tags"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:31
-#: classes/views/shared/mb_adv_info.php:85
+#: classes/views/shared/mb_adv_info.php:32
+#: classes/views/shared/mb_adv_info.php:87
 msgid "IDs"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:32
-#: classes/views/shared/mb_adv_info.php:86
+#: classes/views/shared/mb_adv_info.php:33
+#: classes/views/shared/mb_adv_info.php:88
 msgid "Keys"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:35
+#: classes/views/shared/mb_adv_info.php:36
 msgid "Fields from your form"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:97
+#: classes/views/shared/mb_adv_info.php:99
 msgid "Conditional text here"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:108
+#: classes/views/shared/mb_adv_info.php:110
 msgid "Click a button below to insert sample logic into your view"
 msgstr ""
 
@@ -3170,54 +3177,62 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:99
+#: classes/helpers/FrmFormsListHelper.php:101
+msgid "No forms found in the trash."
+msgstr ""
+
+#: classes/helpers/FrmFormsListHelper.php:104
+msgid "See all forms."
+msgstr ""
+
+#: classes/helpers/FrmFormsListHelper.php:109
 msgid "No Forms Found."
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:102
+#: classes/helpers/FrmFormsListHelper.php:112
 #: classes/helpers/FrmAppHelper.php:694
 msgid "Add New"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:112
+#: classes/helpers/FrmFormsListHelper.php:124
 #: classes/helpers/FrmFormsHelper.php:1032
 msgid "Restore"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:116
+#: classes/helpers/FrmFormsListHelper.php:128
 #: classes/helpers/FrmFormsHelper.php:1043
 msgid "Delete Permanently"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:119
+#: classes/helpers/FrmFormsListHelper.php:131
 msgid "Move to Trash"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:135
+#: classes/helpers/FrmFormsListHelper.php:147
 msgid "Empty Trash"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:144
+#: classes/helpers/FrmFormsListHelper.php:156
 msgid "My Forms"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:145
+#: classes/helpers/FrmFormsListHelper.php:157
 msgid "Drafts"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:146
+#: classes/helpers/FrmFormsListHelper.php:158
 #: classes/helpers/FrmFormsHelper.php:1037
-#: classes/helpers/FrmFormsHelper.php:1137
+#: classes/helpers/FrmFormsHelper.php:1132
 msgid "Trash"
 msgstr ""
 
 #. translators: %1$s: Status, %2$s: Number of items
-#: classes/helpers/FrmFormsListHelper.php:168
+#: classes/helpers/FrmFormsListHelper.php:180
 msgid "%1$s <span class=\"count\">(%2$s)</span>"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:324
-#: classes/helpers/FrmFormsHelper.php:1136
+#: classes/helpers/FrmFormsListHelper.php:336
+#: classes/helpers/FrmFormsHelper.php:1131
 #: classes/helpers/FrmCSVExportHelper.php:152
 msgid "Draft"
 msgstr ""
@@ -4487,11 +4502,11 @@ msgstr ""
 msgid "Automatically capitalize the first letter in each word."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1138
+#: classes/helpers/FrmFormsHelper.php:1133
 msgid "Published"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1164
+#: classes/helpers/FrmFormsHelper.php:1159
 msgid "License plan required:"
 msgstr ""
 
