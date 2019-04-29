@@ -19,6 +19,13 @@
 
 	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok. ?>
+		<span class="frm_required">
+			<?php
+			if ( FrmField::is_required( $field ) ) {
+				echo esc_html( $field['required_indicator'] );
+			}
+			?>
+		</span>
 	</label>
 
 	<div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">

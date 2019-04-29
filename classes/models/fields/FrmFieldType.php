@@ -224,7 +224,9 @@ DEFAULT_HTML;
 	}
 
 	protected function builder_text_field( $name = '' ) {
-		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" placeholder="' . esc_attr( FrmField::get_option( $this->field, 'placeholder' ) ) . '" class="dyn_default_value" />';
+		$read_only = FrmField::get_option( $this->field, 'read_only' );
+
+		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" placeholder="' . esc_attr( FrmField::get_option( $this->field, 'placeholder' ) ) . '" ' . ( $read_only ? ' readonly="readonly" disabled="disabled"' : '' ) . ' />';
 	}
 
 	protected function html_name( $name = '' ) {

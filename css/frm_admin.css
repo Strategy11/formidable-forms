@@ -5795,6 +5795,12 @@ iframe#dyncontent_ifr {
 	padding: 10px 12px;
 }
 
+.frm_wrap input[disabled],
+.frm_wrap select[disabled],
+.frm_wrap textarea[disabled],
+.frm_wrap input[readonly],
+.frm_wrap select[readonly],
+.frm_wrap textarea[readonly],
 .frm_wrap input::placeholder {
 	color: var(--grey);
 }
