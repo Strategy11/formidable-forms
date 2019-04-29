@@ -4559,7 +4559,6 @@ tr.frm_options_heading td {
 .frm_no_section_fields {
 	text-align: center;
 	position: absolute;
-	top: 0;
 	color: var(--medium-grey);
 	font-size: 16px;
 	box-sizing: border-box;
@@ -4584,6 +4583,7 @@ tr.frm_options_heading td {
 	min-height: 300px;
 	margin: 20px 5%;
 	width: 90%;
+	top: 0;
 }
 
 .frm-large-plus {
