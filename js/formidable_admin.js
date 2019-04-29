@@ -1192,12 +1192,20 @@ function frmAdminBuildJS() {
 			newOption = jQuery( '#frm_field_' + field_id + '_opts .frm_option_template' ).prop('outerHTML'),
 			opt_type = jQuery( this ).data( 'opttype' ),
 			optKey = 0,
+			lastKey = 0,
 			oldKey = '000',
 			lastOpt = jQuery( '#frm_field_' + field_id + '_opts li:last' );
 
 		if ( lastOpt.length ) {
 			optKey = lastOpt.data( 'optkey');
-			optKey = parseInt( optKey ) + 1;
+			lastKey = parseInt( optKey );
+			if ( isNaN( lastKey ) ) {
+				lastKey = jQuery( '#frm_field_' + field_id + '_opts li' ).length;
+				if ( document.getElementById( 'frm_delete_field_' + field_id + '-' + ( lastKey + 1 ) + '_container' ) !== null ) {
+					lastKey = lastKey + 2;
+				}
+			}
+			optKey = lastKey + 1;
 		}
 
 		//Update hidden field
@@ -1217,7 +1225,7 @@ function frmAdminBuildJS() {
 			};
 			jQuery.post( ajaxurl, data, function( msg ) {
 				jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( msg );
-				resetDropdownOpts( field_id );
+				resetDisplayedOpts( field_id );
 			} );
 		} else {
 			newOption = newOption.replace( new RegExp( 'optkey="' + oldKey + '"', 'g' ), 'optkey="' + optKey + '"' );
@@ -1226,7 +1234,7 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( newOption );
-			//resetDropdownOpts( field_id );
+			//resetDisplayedOpts( field_id );
 		}
 	}
 
@@ -1642,7 +1650,7 @@ function frmAdminBuildJS() {
 
 	}
 
-	function resetDropdownOpts( id ) {
+	function resetDisplayedOpts( id ) {
 		// TODO: 4.0
 		var field = document.getElementById( 'frm_dropdown_' + id );
 		if ( field !== null ) {
