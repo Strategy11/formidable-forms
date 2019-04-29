@@ -1282,6 +1282,25 @@ function frmAdminBuildJS() {
 		} );
 	}
 
+	function maybeUncheckRadio( e ) {
+		/*jshint validthis:true */
+		var $self = jQuery( this );
+		if ( $self.is( ':checked' ) ) {
+			var uncheck = function() {
+				setTimeout( function(){ $self.removeAttr( 'checked' ); },0 );
+			};
+			var unbind = function() {
+				$self.unbind( 'mouseup', up );
+			};
+			var up = function() {
+				uncheck();
+				unbind();
+			};
+			$self.bind( 'mouseup', up );
+			$self.one( 'mouseout', unbind );
+		}
+	}
+
 	function clickDeleteField() {
 		/*jshint validthis:true */
 		var confirm_msg = frm_admin_js.conf_delete,
@@ -4014,7 +4033,8 @@ function frmAdminBuildJS() {
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
-			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption ); //TODO
+			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption );
+			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
