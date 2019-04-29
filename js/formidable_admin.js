@@ -774,8 +774,8 @@ function frmAdminBuildJS() {
 	}
 
 	function clearSettingsBox() {
-		jQuery( '#new_fields .frm-single-settings' ).hide();
-		jQuery( '#frm-options-panel > .frm-single-settings' ).show();
+		jQuery( '#new_fields .frm-single-settings' ).addClass( 'frm_hidden' );
+		jQuery( '#frm-options-panel > .frm-single-settings' ).removeClass( 'frm_hidden' );
 		deselectFields();
 	}
 
@@ -1000,7 +1000,7 @@ function frmAdminBuildJS() {
 			changes = document.getElementById( this.getAttribute( 'data-changeme' ) ),
 			att = this.getAttribute( 'data-changeatt' );
 
-		if ( att !== undefined ) {
+		if ( att !== null ) {
 			changes.setAttribute( att, newValue );
 		} else {
 			changes.innerHTML = newValue;
@@ -1343,9 +1343,10 @@ function frmAdminBuildJS() {
 
 	function addFieldLogicRow() {
 		/*jshint validthis:true */
-		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		var form_id = this_form_id;
-		var meta_name = 0;
+		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+			form_id = this_form_id,
+			meta_name = 0;
+
 		if ( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row' ).length > 0 ) {
 			meta_name = 1 + parseInt( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ) );
 		}
@@ -1355,6 +1356,7 @@ function frmAdminBuildJS() {
 				action: 'frm_add_logic_row',
 				form_id: form_id,
 				field_id: id,
+				fields: getFieldList(),
 				meta_name: meta_name,
 				nonce: frmGlobal.nonce
 			},
@@ -3985,7 +3987,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_clone_icon', duplicateField );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
-			$builderForm.on( 'change', '[data-changeme]', liveChanges );
+			$builderForm.on( 'keyup', '[data-changeme]', liveChanges );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 
