@@ -2081,10 +2081,7 @@ a.frm_option_icon:hover::before {
 	margin: 0 10px;
 }
 
-.form-title-style .accordion-section-title:before {
-	content: "\e94c" !important;
-}
-
+.form-title-style .accordion-section-title:before,
 .section-fields-style .accordion-section-title:before {
 	content: "\f1dc" !important;
 }
@@ -2144,6 +2141,11 @@ a.frm_option_icon:hover::before {
 .frm-right-panel h3.accordion-section-title {
 	padding: 15px 20px;
 	background: var(--sidebar-color);
+	line-height: 1;
+}
+
+.control-section .accordion-section-title:after, .customize-pane-child .accordion-section-title:after {
+	top: 19px;
 }
 
 .accordion-container .frm-dropdown-menu {
@@ -4294,6 +4296,10 @@ ul.start_divider {
 	opacity: 0;
 }
 
+.frm-section-collapsed .divider_section_only .frm-collapsed-label {
+	display: inline;
+}
+
 .frm-page-collapsed .frm_clone_icon,
 .frm-page-collapsed .frm_delete_field,
 .frm-section-collapsed .frm_clone_icon,
@@ -4321,6 +4327,7 @@ ul.start_divider {
 	margin: 0;
 }
 
+.frm-collapsed-label,
 .divider_section_only > .frm_inner_field_container .frm_form_fields {
 	display: none;
 }

@@ -30,6 +30,9 @@
 			}
 			?>
 		</span>
+		<span class="frm-sub-label frm-collapsed-label">
+			<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
+		</span>
 	</label>
 
 	<div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">

@@ -943,7 +943,7 @@ class FrmFormsController {
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
-				'icon'     => 'frm_icon_font frm_shuffle_icon',
+				'icon'     => 'frm_icon_font frm_mail_bulk_icon',
 			),
 			'permissions' => array(
 				'name'     => __( 'Form Permissions', 'formidable' ),
