@@ -4684,10 +4684,6 @@ ul.frm-category-tabs {
 	color: var(--primary-color);
 }
 
-#frm_styling_form #post-body-content {
-	padding-top: 0;
-}
-
 .frm_wrap .manage-menus {
 	margin-top: 0;
 	border: none;

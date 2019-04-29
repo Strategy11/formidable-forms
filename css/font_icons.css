@@ -470,79 +470,6 @@ a.frm_icon_font:hover{
 .frm_feed_icon:before {
 	content: "\e624";
 }
-.frm_authorize_icon:before {
-	content: "\e903";
-}
-.frm_icon_font.frm_activecampaign_icon {
-	background-image: none;
-}
-.frm_activecampaign_icon:before {
-	content: "\e930";
-}
-.frm_aweber_icon:before {
-	content: "\e627";
-}
-.frm_constant_contact_icon:before {
-	content: "\e931";
-}
-.frm_getresponse_icon:before {
-	content: "\e932";
-}
-.frm_hubspot_icon:before {
-	content: "\e933";
-}
-.frm_icon_font.frm_mailpoet_icon:before {
-	content: "\e934";
-}
-.frm_paypal_icon:before {
-	content: "\e61f";
-}
-.frm_twilio_icon:before {
-	content: "\e620";
-}
-.frm_salesforce_icon:before {
-	content: "\e935";
-}
-.frm_salesforcealt_icon:before {
-	content: "\e937";
-}
-.frm_stripe_icon:before {
-	content: "\e902";
-}
-.frm_stripealt_icon:before {
-	content: "\e93d";
-}
-.frm_woocommerce_icon:before {
-	content: "\e90e";
-}
-.frm_wordpress_icon:before {
-	content: "\f19a";
-}
-.frm_credit_card_icon:before {
-	content: "\e938";
-}
-.frm_credit-card-alt_icon:before, /* Reverse Compatibility */
-.frm_credit_card_alt_icon:before {
-	content: "\f283";
-}
-.frm_cc_amex_icon:before {
-	content: "\f1f3";
-}
-.frm_cc_discover_icon:before {
-	content: "\f1f2";
-}
-.frm_cc_mastercard_icon:before {
-	content: "\f1f1";
-}
-.frm_cc_visa_icon:before {
-	content: "\f1f0";
-}
-.frm_cc_paypal_icon:before {
-	content: "\f1f4";
-}
-.frm_cc_stripe_icon:before {
-	content: "\f1f5";
-}
 .frm_align_right_icon:before {
 	content: "\e90f";
 }
@@ -699,6 +626,94 @@ a.frm_icon_font:hover{
 .frm_minimize_icon:before {
 	content: "\e93a";
 }
+.frm_authorize_icon:before {
+	content: "\e903";
+}
+.frm_icon_font.frm_activecampaign_icon {
+	background-image: none;
+}
+.frm_activecampaign_icon:before {
+	content: "\e930";
+}
+.frm_aweber_icon:before {
+	content: "\e627";
+}
+.frm_campaignmonitor_icon:before {
+	content: "\e946";
+}
+.frm_constant_contact_icon:before {
+	content: "\e931";
+}
+.frm_getresponse_icon:before {
+	content: "\e932";
+}
+.frm_googlesheets_icon:before {
+	content: "\e944";
+}
 .frm_building_icon:before {
 	content: "\e93f";
+}
+.frm_hubspot_icon:before {
+	content: "\e933";
+}
+.frm_icontact_icon:before {
+	content: "\e940";
+}
+.frm_icon_font.frm_mailpoet_icon:before {
+	content: "\e934";
+}
+.frm_paypal_icon:before {
+	content: "\e61f";
+}
+.frm_sendinblue_icon:before {
+	content: "\e943";
+}
+.frm_sendy_icon:before {
+	content: "\e941";
+}
+.frm_salesforce_icon:before {
+	content: "\e935";
+}
+.frm_salesforcealt_icon:before {
+	content: "\e937";
+}
+.frm_stripe_icon:before {
+	content: "\e902";
+}
+.frm_stripealt_icon:before {
+	content: "\e93d";
+}
+.frm_twilio_icon:before {
+	content: "\e620";
+}
+.frm_woocommerce_icon:before {
+	content: "\e90e";
+}
+.frm_wordpress_icon:before {
+	content: "\f19a";
+}
+.frm_credit_card_icon:before {
+	content: "\e938";
+}
+.frm_credit-card-alt_icon:before, /* Reverse Compatibility */
+.frm_credit_card_alt_icon:before {
+	content: "\f283";
+}
+.frm_cc_amex_icon:before {
+	content: "\f1f3";
+}
+.frm_cc_discover_icon:before {
+	content: "\f1f2";
+}
+.frm_cc_mastercard_icon:before {
+	content: "\f1f1";
+}
+.frm_cc_visa_icon:before {
+	content: "\f1f0";
+}
+.frm_cc_paypal_icon:before {
+	content: "\f1f4";
+}
+.frm_cc_stripe_icon:before {
+	content: "\f1f5";
 }
