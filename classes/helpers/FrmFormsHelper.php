@@ -112,7 +112,7 @@ class FrmFormsHelper {
 				</h1>
 			</a>
 			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
-				<?php if ( count( $forms > 8 ) ) { ?>
+				<?php if ( count( $forms ) > 8 ) { ?>
 				<li class="frm-with-search">
 					<?php
 					FrmAppHelper::show_search_box(

@@ -2242,7 +2242,7 @@ function frmAdminBuildJS() {
 	function showFieldOptions( obj ) {
 		var i, singleField,
 			fieldId = obj.getAttribute( 'data-fid' ),
-			allFieldSettings = document.getElementsByClassName( 'frm-single-settings' );
+			allFieldSettings = document.querySelectorAll( '.frm-single-settings:not(.frm_hidden)' );
 
 		for ( i = 0; i < allFieldSettings.length; i++ ) {
 			allFieldSettings[i].classList.add( 'frm_hidden' );
