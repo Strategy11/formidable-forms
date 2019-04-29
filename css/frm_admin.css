@@ -1204,6 +1204,11 @@ a.frm_hidden,
 	padding: 0;
 }
 
+.frm-new-entry {
+	max-width: 900px;
+	margin: 40px auto;
+}
+
 .frm_inner_field_container > .frm_form_fields {
 	clear: both;
 }

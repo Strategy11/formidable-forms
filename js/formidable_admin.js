@@ -419,12 +419,6 @@ function frmAdminBuildJS() {
 					cancelSort = true;
 				}
 			},
-			update: function() {
-				if ( cancelSort ) {
-					return;
-				}
-				updateFieldOrder();
-			},
 			start: function( event, ui ) {
 				if ( ui.item[0].offsetHeight > 120 ) {
 					jQuery( sort ).sortable( 'refreshPositions' );
@@ -443,6 +437,8 @@ function frmAdminBuildJS() {
 				copyHelper && copyHelper.remove();
 				if ( cancelSort ) {
 					moving.sortable( 'cancel' );
+				} else {
+					updateFieldOrder();
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
 			},
@@ -1797,21 +1793,22 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldOrder() {
-		var array = [];
 		renumberPageBreaks();
 		jQuery( '#frm-show-fields' ).each( function( i ) {
-			jQuery( 'li.frm_field_box', this ).each( function( e ) {
-				var fieldId = this.getAttribute( 'data-fid' ),
+			var fields = jQuery( 'li.frm_field_box', this );
+			for ( var i = 0; i < fields.length; i ++ ) {
+				var fieldId = fields[ i ].getAttribute( 'data-fid' ),
 					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
-					currentOrder = field.val();
+					currentOrder = field.val(),
+					newOrder = ( i + 1 );
 
-				if ( currentOrder != e + 1 ) {
-					field.val( e + 1 );
+				if ( currentOrder != newOrder ) {
+					field.val( newOrder );
 					singleField = document.getElementById( 'frm-single-settings-' + fieldId );
 
 					moveFieldSettings( singleField );
 				}
-			} );
+			}
 		} );
 	}
 
