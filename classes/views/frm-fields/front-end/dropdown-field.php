@@ -20,10 +20,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 
 	$placeholder = FrmField::get_option( $field, 'placeholder' );
 	$skipped = false;
-	if ( ! empty( $placeholder ) ) {
+	if ( $placeholder !== '' ) {
 		?>
 		<option value="">
-			<?php echo esc_html( $placeholder ); ?>
+			<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
 		</option>
 		<?php
 	}
