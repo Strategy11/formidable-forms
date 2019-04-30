@@ -2521,6 +2521,7 @@ img.frm_help {
 	float: none;
 }
 
+.frm_form_action_settings .frm_spinner.frm-wait,
 .frm_form_action_settings .frm_spinner.spinner {
 	visibility: visible;
 	float: none;
@@ -2532,6 +2533,7 @@ img.frm_help {
 	text-align: center;
 }
 
+.frm_ajax_settings_tab .frm-wait,
 .frm_ajax_settings_tab .spinner {
 	visibility: visible;
 	float: none;
@@ -3795,6 +3797,7 @@ table td, .form-table tr td {
 	/* For add-ons that haven't been updated for 4.0 */
 	float: none;
 	width: auto !important;
+	line-height: 1;
 }
 
 .frm-fields .frm_autoresponder_rows select {

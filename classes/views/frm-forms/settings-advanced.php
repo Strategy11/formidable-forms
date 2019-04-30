@@ -158,7 +158,7 @@
 	<?php esc_html_e( 'Messages', 'formidable' ); ?>
 	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set up your confirmation messages.', 'formidable' ); ?>" ></span>
 </h3>
-<table class="form-table">
+<table class="form-table frm-fields">
 	<tr class="success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] === 'message' ? '' : ' frm_hidden' ); ?>">
 		<td class="frm_has_shortcodes">
 			<label for="success_msg"><?php esc_html_e( 'On Submit', 'formidable' ); ?></label>

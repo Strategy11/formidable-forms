@@ -85,20 +85,35 @@
 			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 		</ul>
-		<ul class="frm_code_list">
+		<?php
+		FrmAppHelper::show_search_box(
+			array(
+				'input_id'    => 'field',
+				'placeholder' => __( 'Search', 'formidable' ),
+				'tosearch'    => 'frm-conditional-list',
+			)
+		);
+		?>
+		<ul class="frm_code_list frm-full-hover">
 			<?php
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $f ) {
 					if ( FrmField::is_no_save_field( $f->type ) || ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
 						continue;
 					}
-					?>
-				<li>
-					<a href="javascript:void(0)" class="frmids alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->id ); ?>]<?php esc_attr_e( 'Conditional text here', 'formidable' ); ?>[/if <?php echo esc_attr( $f->id ); ?>">[if <?php echo (int) $f->id; ?>]</a>
-					<a href="javascript:void(0)" class="frmkeys alignright frm_insert_code" data-code="if <?php echo esc_attr( $f->field_key ); ?>]something[/if <?php echo esc_attr( $f->field_key ); ?>">[if <?php echo FrmAppHelper::truncate( $f->field_key, 10 ); // WPCS: XSS ok. ?>]</a>
-					<a href="javascript:void(0)" class="frm_insert_code" data-code="<?php echo esc_attr( $f->id ); ?>"><?php echo FrmAppHelper::truncate( $f->name, 60 ); // WPCS: XSS ok. ?></a>
-				</li>
-					<?php
+
+					FrmFormsHelper::insert_opt_html(
+						array(
+							'id'        => 'if ' . $f->id . ']' . __( 'Conditional text here', 'formidable' ) . '[/if ' . $f->id,
+							'id_label'  => 'if ' . $f->id,
+							'key'       => 'if ' . $f->field_key . ']' . __( 'Conditional text here', 'formidable' ) . '[/if ' . $f->field_key,
+							'key_label' => 'if ' . $f->field_key,
+							'name'      => $f->name,
+							'type'      => $f->type,
+							'class'     => 'frm-conditional-list',
+						)
+					);
+
 					unset( $f );
 				}
 			}

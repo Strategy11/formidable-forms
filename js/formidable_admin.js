@@ -279,7 +279,7 @@ function frmAdminBuildJS() {
 			var action_id = cont.find( 'input[name$="[ID]"]' ).val();
 			var action_type = cont.find( 'input[name$="[post_excerpt]"]' ).val();
 			if ( action_type ) {
-				inside.html( '<span class="spinner frm_spinner"></span>' );
+				inside.html( '<span class="frm-wait frm_spinner"></span>' );
 				cont.find( '.spinner' ).fadeIn( 'slow' );
 				jQuery.ajax( {
 					type: 'POST',
@@ -341,7 +341,7 @@ function frmAdminBuildJS() {
 
 		var c = t.replace( '#', '.' );
 		var pro = jQuery( '.frm-category-tabs li' ).length > 2;
-		link.closest( 'li' ).addClass( 'tabs active' ).siblings( 'li' ).removeClass( 'tabs active starttab' );
+		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
 		} else {
@@ -359,6 +359,8 @@ function frmAdminBuildJS() {
 		}
 		jQuery( t ).show();
 		jQuery( c ).show();
+
+		hideShortcodes();
 
 		if ( auto !== 'auto' ) {
 			// Hide success message on tab change.
@@ -2831,9 +2833,12 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			element_id = element.closest( 'div' ).attr( 'class' );
-			if ( typeof element_id !== 'undefined' ) {
-				element_id = element_id.split( ' ' )[1];
+			element_id = jQuery( element ).closest( '[data-fills]' ).data( 'fills' );
+			if ( typeof element_id === 'undefined' ) {
+				element_id = element.closest( 'div' ).attr( 'class' );
+				if ( typeof element_id !== 'undefined' ) {
+					element_id = element_id.split( ' ' )[1];
+				}
 			}
 		}
 
@@ -2923,8 +2928,7 @@ function frmAdminBuildJS() {
 		e.stopPropagation();
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
-			box.style.display = 'none';
-			this.className = classes.replace( 'frm_close_icon', 'frm_more_horiz_solid_icon' );
+			hideShortcodes( box );
 		} else {
 			input.focus();
 			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
@@ -2935,8 +2939,25 @@ function frmAdminBuildJS() {
 				jQuery( '.frm_code_list li:not(.show_frm_not_email_to) a' ).addClass( 'frm_noallow' );
 			}
 
+			box.setAttribute( 'data-fills', input.id );
 			box.style.display = 'block';
 			this.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
+		}
+	}
+
+	function hideShortcodes( box ) {
+		if ( typeof box === 'undefined' ) {
+			box = document.getElementById( 'frm_adv_info' );
+			if ( typeof box === 'undefined' ) {
+				return;
+			}
+		}
+		box.style.display = 'none';
+
+		var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
+		for ( var i = 0; i < closeIcons.length; i++ ) {
+			closeIcons[i].classList.remove( 'frm_close_icon' );
+			closeIcons[i].classList.add( 'frm_more_horiz_solid_icon' );
 		}
 	}
 
@@ -2983,11 +3004,15 @@ function frmAdminBuildJS() {
 		}
 		c = id;
 
+		if ( id.indexOf( '-search-input' ) !== -1 ) {
+			return;
+		}
+
 		if ( id !== '' ) {
 			var $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
 				var d = $ele.attr( 'class' ).split( ' ' )[0];
-				if ( d === 'frm_long_input' || typeof d === 'undefined' ) {
+				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
 					d = '';
 				} else {
 					id = jQuery.trim( d );
@@ -2997,7 +3022,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values').removeClass().addClass( 'tabs-panel ' + c );
+		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values' ).attr( 'data-fills', jQuery.trim( c ) );
 		var a = [
 			'content', 'wpbody-content', 'dyncontent', 'success_url',
 			'success_msg', 'edit_msg', 'frm_dyncontent', 'frm_not_email_message',
@@ -3927,7 +3952,7 @@ function frmAdminBuildJS() {
 			}
 
 			// tabs
-			jQuery( '#frm-nav-tabs a' ).click( clickNewTab );
+			jQuery( document ).on( 'click', '#frm-nav-tabs a', clickNewTab );
 			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a' ).click( function() {
 				if ( ! this.classList.contains( 'frm_noallow' ) ) {
 					clickTab( this );
@@ -3948,8 +3973,8 @@ function frmAdminBuildJS() {
 				this.select();
 			} );
 
+			jQuery( document ).on( 'input search', '.frm-auto-search', searchContent );
 			var autoSearch = jQuery( '.frm-auto-search' );
-			autoSearch.on( 'input search', searchContent );
 			if ( autoSearch.val() !== '' ) {
 				autoSearch.keyup();
 			}
@@ -4105,6 +4130,24 @@ function frmAdminBuildJS() {
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
+
+			// Close shortcode modal on click.
+			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
+				if ( e.target.classList.contains( 'frm-show-box' ) ) {
+					return;
+				}
+				var sidebar = document.getElementById( 'frm_adv_info' )
+					isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+
+				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
+					if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
+						// Don't run when in the sidebar.
+						return;
+					}
+					hideShortcodes( sidebar );
+				}
+			} );
+
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).change( function() {
 				if ( this.checked ) {
@@ -4191,7 +4234,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'focusin click', 'form input, form textarea', function( e ) {
 				e.stopPropagation();
-				if ( jQuery( this ).is( ':not(:submit, input[type=button])' ) ) {
+				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
 					if ( document.getElementById( 'form_settings_page' ) !== null ) {
 						/* form settings page */
 						var htmlTab = jQuery( '#frm_html_tab' );
@@ -4208,23 +4251,6 @@ function frmAdminBuildJS() {
 					} else if ( document.body.classList.contains( 'post-type-frm_display' ) ) {
 						// Run on view page.
 						toggleAllowedShortcodes( this.id, e.type );
-					}
-				}
-			} );
-
-			// Close shortcode modal on click.
-			jQuery( document ).on( 'focusout', 'form input, form textarea', function( e ) {
-				var sidebar = document.getElementById( 'frm_adv_info' );
-				if ( sidebar !== null ) {
-					if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
-						// Don't run when in the sidebar.
-						return;
-					}
-					sidebar.style.display = 'none';
-					var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
-					for ( var i = 0; i < closeIcons.length; i++ ) {
-						closeIcons[i].classList.remove('frm_close_icon');
-						closeIcons[i].classList.add('frm_more_horiz_solid_icon');
 					}
 				}
 			} );

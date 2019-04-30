@@ -511,7 +511,7 @@ BEFORE_HTML;
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
 				data-code="<?php echo esc_attr( $args['id'] ); ?>">
-				<span>[<?php echo esc_attr( $args['id'] ); ?>]</span>
+				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
 				<?php if ( isset( $field['icon'] ) ) { ?>
 					<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
 				<?php } ?>
@@ -519,7 +519,7 @@ BEFORE_HTML;
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden"
 				data-code="<?php echo esc_attr( $args['key'] ); ?>">
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
 				<?php if ( isset( $field['icon'] ) ) { ?>
 					<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
 				<?php } ?>
