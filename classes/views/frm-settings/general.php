@@ -74,3 +74,10 @@
 	title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ); ?>"></span>
 </p>
 <?php } ?>
+
+<p class="alignright frm_uninstall">
+	<a href="javascript:void(0)" id="frm_uninstall_now">
+		<?php esc_html_e( 'Uninstall Formidable', 'formidable' ); ?>
+	</a>
+	<span class="frm-wait frm_spinner"></span>
+</p>

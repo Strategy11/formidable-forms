@@ -485,7 +485,7 @@ class FrmFormsController {
 		}
 
 		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
+		$message = sprintf( _n( '%1$s Form Permanently Deleted', '%1$s Forms Permanently Deleted', $count, 'formidable' ), $count );
 
 		self::display_forms_list( $params, $message );
 	}

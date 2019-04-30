@@ -1,14 +1,14 @@
 <p class="frm6 frm_form_field">
-	<label>
+	<label class="frm_help" title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used.', 'formidable' ); ?>">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'important_style' ) ); ?>" id="frm_important_style" value="1" <?php checked( $style->post_content['important_style'], 1 ); ?> />
-		<?php esc_html_e( 'Override theme styling', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used.', 'formidable' ); ?>" ></span>
+		<?php esc_html_e( 'Override theme styling', 'formidable' ); ?>
 	</label>
 </p>
 
 <p class="frm6 frm_form_field">
-	<label>
+	<label class="frm_help" title="<?php esc_attr_e( 'This will center your form on the page where it is published if the form width is less than the available width on the page.', 'formidable' ); ?>">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'center_form' ) ); ?>" id="frm_center_form" value="1" <?php checked( $style->post_content['center_form'], 1 ); ?> />
-		<?php esc_html_e( 'Center form on page', 'formidable' ); ?> <span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This will center your form on the page where it is published if the form width is less than the available width on the page.', 'formidable' ); ?>" ></span>
+		<?php esc_html_e( 'Center form on page', 'formidable' ); ?>
 	</label>
 </p>
 

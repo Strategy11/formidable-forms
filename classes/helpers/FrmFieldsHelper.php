@@ -437,6 +437,12 @@ class FrmFieldsHelper {
 	 * @param array $field
 	 */
 	private static function hidden_field_option( $field ) {
+		// Don't duplicate during an ajax add option.
+		$ajax_action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
+		if ( $ajax_action === 'frm_add_field_option' ) {
+			return;
+		}
+
 		$opt_key    = '000';
 		$field_val  = '';
 		$opt        = '';

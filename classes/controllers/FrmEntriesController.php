@@ -442,7 +442,7 @@ class FrmEntriesController {
 
 		$message = '';
 		if ( FrmEntry::destroy( $params['id'] ) ) {
-			$message = __( 'Entry was Successfully Destroyed', 'formidable' );
+			$message = __( 'Entry was Successfully Deleted', 'formidable' );
 		}
 
 		self::display_list( $message );
@@ -474,10 +474,10 @@ class FrmEntriesController {
 			$results = self::delete_form_entries( $form_id );
 			if ( $results ) {
 				FrmEntry::clear_cache();
-				$message = __( 'Entries were Successfully Destroyed', 'formidable' );
+				$message = __( 'Entries Successfully Deleted', 'formidable' );
 			}
 		} else {
-			$errors = __( 'No entries were specified', 'formidable' );
+			$errors = __( 'No Entries Selected', 'formidable' );
 		}
 
 		self::display_list( $message, $errors );

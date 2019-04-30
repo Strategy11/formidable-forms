@@ -38,7 +38,7 @@
 											class="<?php echo esc_attr( $section['anchor'] ); ?> tabs-panel <?php echo esc_attr( $current === $section['anchor'] ? 'frm_block' : 'frm_hidden' ); ?>">
 										<?php if ( isset( $section['ajax'] ) ) { ?>
 											<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $section['anchor'] ); ?>_ajax">
-												<span class="spinner"></span>
+												<span class="frm-wait"></span>
 											</div>
 										<?php } else { ?>
 											<h2 class="frm-h2">
@@ -59,12 +59,6 @@
 								<div class="submit">
 									<input class="button-primary frm-button-primary" type="submit"
 										value="<?php esc_attr_e( 'Update Options', 'formidable' ); ?>"/>
-									<p class="alignright frm_uninstall">
-										<a href="javascript:void(0)" id="frm_uninstall_now">
-											<?php esc_html_e( 'Uninstall Formidable', 'formidable' ); ?>
-										</a>
-										<span class="spinner frm_spinner"></span>
-									</p>
 								</div>
 
 							</form>

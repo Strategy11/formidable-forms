@@ -332,7 +332,7 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function clickTab( link ) {
+	function clickTab( link, auto ) {
 		link = jQuery( link );
 		var t = link.attr( 'href' );
 		if ( typeof t === 'undefined' ) {
@@ -359,6 +359,11 @@ function frmAdminBuildJS() {
 		}
 		jQuery( t ).show();
 		jQuery( c ).show();
+
+		if ( auto !== 'auto' ) {
+			// Hide success message on tab change.
+			jQuery( '.frm_updated_message' ).hide();
+		}
 
 		if ( jQuery( link ).closest( '#frm_adv_info' ).length ) {
 			return;
@@ -3108,7 +3113,7 @@ function frmAdminBuildJS() {
 
 	function uninstallNow() {
 		if ( confirm( frm_admin_js.confirm_uninstall ) ) {
-			jQuery( '.frm_uninstall .spinner' ).show();
+			jQuery( '.frm_uninstall .frm-wait' ).show();
 			jQuery.ajax( {
 				type: 'POST', url: ajaxurl, data: "action=frm_uninstall&nonce=" + frmGlobal.nonce,
 				success: function( msg ) {
@@ -3929,7 +3934,7 @@ function frmAdminBuildJS() {
 					return false;
 				}
 			} );
-			jQuery( '.starttab a' ).trigger( 'click' );
+			clickTab( jQuery( '.starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
 			jQuery( '#frm-fid-search-menu a' ).click( function() {

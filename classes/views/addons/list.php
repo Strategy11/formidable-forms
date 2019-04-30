@@ -1,6 +1,12 @@
 <div class="frm_wrap" id="frm-addons-page">
-<div class="wrap">
-	<h1><?php esc_html_e( 'Formidable Add-Ons', 'formidable' ); ?></h1>
+	<?php
+	FrmAppHelper::get_admin_header(
+		array(
+			'label' => __( 'Formidable Add-Ons', 'formidable' ),
+		)
+	);
+	?>
+	<div class="wrap">
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
