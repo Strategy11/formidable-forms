@@ -35,7 +35,7 @@ class FrmStylesHelper {
 			<li>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
 					class="<?php echo ( 'manage' == $active ) ? 'current_page' : ''; ?>">
-					<?php esc_html_e( 'Manage Form Styles', 'formidable' ); ?>
+					<?php esc_html_e( 'Manage Styles', 'formidable' ); ?>
 				</a>
 			</li>
 			<li>

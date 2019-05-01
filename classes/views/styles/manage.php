@@ -4,7 +4,7 @@
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Manage Form Styles', 'formidable' ),
+			'label'       => __( 'Manage Styles', 'formidable' ),
 			'hide_title'  => true,
 			'publish'     => array( 'FrmStylesHelper::save_button', array() ),
 			'nav'         => FrmStylesHelper::get_style_menu( 'manage' ),

@@ -252,6 +252,8 @@ td.column-title .frm_actions_dropdown {
 	float: left;
 	white-space: nowrap;
 	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .frm-header-logo {
@@ -276,7 +278,7 @@ ul.frm_form_nav {
 }
 
 ul.frm_form_nav > li {
-	margin: 0 40px 0 0;
+	margin: 0 4% 0 0;
 	display: inline-block;
 }
 
@@ -352,7 +354,7 @@ ul.frm_form_nav > li {
 .post-php.post-type-frm_display #frm_top_bar h1,
 .frm_page_container #frm_top_bar h1 {
 	margin: 15px 15px 10px;
-	width: 225px;
+	width: 175px;
 	text-align: left;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -5863,10 +5865,17 @@ iframe#dyncontent_ifr {
 }
 
 /* RTL */
-.rtl .frm_wrap .columns-2 .frm-right-panel,
-.rtl .frm_wrap .columns-2 {
-	margin-left: 0;
-	margin-right: 0;
+.rtl h3 {
+	font-weight: inherit !important;
+}
+
+.rtl.js .accordion-section-title:after {
+	left: 10px;
+	right: auto;
+}
+
+.rtl #frm_top_bar #frm_bs_dropdown {
+	padding-left: 15px;
 }
 
 .rtl .frm_wrap .columns-2 .frm-right-panel,
@@ -5912,6 +5921,31 @@ iframe#dyncontent_ifr {
 	margin-right: 0;
 }
 
+.rtl .frm-page-break .frm-collapse-page.button {
+	margin-left: 0;
+	margin-right: 46%;
+}
+
+.rtl .frm-field-action-icons a {
+	float: left;
+	margin-right: 15px;
+	margin-left: 0;
+}
+
+.rtl #frm_upgrade_modal .dismiss i,
+.rtl .frm-inline-modal i,
+.rtl #frm-bulk-modal i,
+.rtl .frm_has_shortcodes i {
+	right: auto;
+	left: 5px;
+}
+
+.rtl .frm_code_list.frm-full-hover a span,
+.rtl .frm_reply_to_container,
+.rtl .frm_bcc_cc_container {
+	float: left;
+}
+
 /* ---------------------------------------------------------------
 Clearfix
 --------------------------------------------------------------- */
@@ -5952,10 +5986,6 @@ Responsive Design
 ---------------------------------------------------------------- */
 
 @media only screen and (max-width: 1200px) {
-	.frm_drag_inst {
-		font-size: 30px;
-	}
-
 	li.ui-state-default.selected .frm-show-click.frm_import_options {
 		background: none;
 		border: none;
@@ -5974,13 +6004,13 @@ Responsive Design
 	.frm-add-new-form .frm-addons {
 		grid-template-columns: 1fr 1fr 1fr;
 	}
+
+	ul.frm_form_nav > li {
+		margin-right: 1%;
+	}
 }
 
 @media only screen and (max-width: 1050px) {
-	.frm_drag_inst {
-		font-size: 20px;
-	}
-
 	.post-type-frm_display #frm_adv_info {
 		top: auto !important;
 		position: static;
@@ -6041,11 +6071,6 @@ Responsive Design
 	#frm_form_editor_container,
 	.frm-entry-container {
 		margin: 0 20px;
-	}
-
-	.frm_drag_inst {
-		font-size: 40px;
-		text-align: center;
 	}
 
 	.frm_wrap #publishing-action {
@@ -6118,6 +6143,10 @@ Responsive Design
 
 	.frm-full-close span {
 		padding: 0;
+	}
+
+	.frm-full-screen #screen-meta-links {
+		display: none;
 	}
 
 	.frm_wrap .misc-pub-section {
@@ -6314,6 +6343,19 @@ Responsive Design
 		left: auto;
 	}
 
+	.frm-right-panel h3.accordion-section-title {
+		padding-right: 10px;
+		padding-left: 10px;
+		font-size: 20px;
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.frm-right-panel .accordion-section-title:before {
+		margin-left: 0;
+		margin-right: 3px;
+	}
+
 	.rtl #frm_builder_page .frm_actions_dropdown > .frm-dropdown-menu {
 		right: auto;
 		left: 0;
@@ -6321,11 +6363,6 @@ Responsive Design
 }
 
 @media only screen and (max-width: 475px) {
-	.frm_drag_inst {
-		font-size: 16px;
-		margin-bottom: 40px;
-	}
-
 	#frm_bs_dropdown {
 		float: none;
 	}
