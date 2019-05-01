@@ -353,7 +353,21 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 *
+	 * @since 4.0
+	 */
+	public function default_value_to_string( &$default_value ) {
+		if ( ! is_array( $default_value) ) {
+			return;
+		}
+
+		if ( empty( array_filter( $default_value ) ) ) {
+			$default_value = '';
+		} else {
+			$default_value = implode( $default_value, ',' );
+		}
+	}
+
+	/**
 	 * @since 4.0
 	 * @param array $args - Includes 'field', 'display', and 'values'
 	 */

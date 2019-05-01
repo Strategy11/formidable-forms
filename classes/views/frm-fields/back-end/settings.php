@@ -176,13 +176,7 @@ do_action( 'frm_before_field_options', $field );
 							$default_name  = 'default_value_' . $field['id'];
 							$default_value = $field['default_value'];
 						}
-						if ( is_array( $default_value ) ) {
-							if ( empty( array_filter( $default_value ) ) ) {
-								$default_value = '';
-							} else {
-								$default_value = implode( $default_value, ',' );
-							}
-						}
+						$field_obj->default_value_to_string( $default_value );
 						?>
 						<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
 					</span>

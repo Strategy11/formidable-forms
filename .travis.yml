@@ -8,9 +8,6 @@ matrix:
       env: WP_VERSION=master WP_MULTISITE=1 SNIFF=1
     - php: 5.6
       env: WP_VERSION=master WP_MULTISITE=1
-    - php: 5.3
-      env: WP_VERSION=4.9 WP_MULTISITE=1
-      dist: precise
     - php: 7.0
       env: WP_VERSION=4.9 SCRIPT_DEBUG=1
     - php: 7.0

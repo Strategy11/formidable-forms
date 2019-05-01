@@ -2937,6 +2937,8 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
 			if ( input.classList.contains( 'frm_not_email_to' ) ) {
 				jQuery( '.frm_code_list li:not(.show_frm_not_email_to) a' ).addClass( 'frm_noallow' );
+			} else if ( input.classList.contains( 'frm_not_email_subject' ) ) {
+				jQuery( '.frm_code_list li.hide_frm_not_email_subject a' ).addClass( 'frm_noallow' );
 			}
 
 			box.setAttribute( 'data-fills', input.id );
@@ -2952,6 +2954,12 @@ function frmAdminBuildJS() {
 				return;
 			}
 		}
+
+		if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
+			// Don't run when in the sidebar.
+			return;
+		}
+
 		box.style.display = 'none';
 
 		var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
@@ -3785,6 +3793,10 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function stopPropagation( e ) {
+		e.stopPropagation();
+	}
+
 	/* Helpers */
 
 	function postAjax( data, success ) {
@@ -3974,6 +3986,7 @@ function frmAdminBuildJS() {
 			} );
 
 			jQuery( document ).on( 'input search', '.frm-auto-search', searchContent );
+			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
 				autoSearch.keyup();
@@ -4140,10 +4153,6 @@ function frmAdminBuildJS() {
 					isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
 
 				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
-					if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
-						// Don't run when in the sidebar.
-						return;
-					}
 					hideShortcodes( sidebar );
 				}
 			} );

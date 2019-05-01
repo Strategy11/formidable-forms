@@ -168,6 +168,7 @@
 		}
 		?>
 		</ul>
+		<ul class="frm_code_list frm-full-hover">
 		<?php
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
@@ -177,12 +178,12 @@
 
 			if ( isset( $helper['heading'] ) && ! empty( $helper['heading'] ) ) {
 				?>
+				</ul>
 				<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
+				<ul class="frm_code_list frm-full-hover">
 				<?php
 			}
-			?>
-			<ul class="frm_code_list frm-full-hover">
-			<?php
+
 			foreach ( $helper['codes'] as $code => $code_label ) {
 				if ( isset( $uid ) ) {
 					$code = str_replace( '|user_id|', $uid, $code );
@@ -208,11 +209,9 @@
 
 				unset( $code );
 			}
-			?>
-			</ul>
-			<?php
 		}
 		?>
+		</ul>
 	</div>
 
 	<?php
