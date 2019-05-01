@@ -723,7 +723,7 @@ class FrmAppHelper {
 		$input_id = $atts['input_id'] . '-search-input';
 
 		?>
-		<p class="search-box frm-search">
+		<p class="frm-search">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>

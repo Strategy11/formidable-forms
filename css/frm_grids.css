@@ -341,12 +341,6 @@
    100% {opacity: 1;}
 }
 
-@media only screen and (max-width: 700px) {
-	.frm_form_fields .frm_fields_container{
-		grid-gap: 0 2%;
-	}
-}
-
 @media only screen and (max-width: 600px) {
 	.frm_section_heading > .frm_form_field,
 	.frm_fields_container > .frm_submit,
