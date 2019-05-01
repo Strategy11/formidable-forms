@@ -3442,6 +3442,10 @@ h2.frm-h2,
 	width: 95%;
 }
 
+.frm_select_with_label {
+	margin: 7px 0 0;
+}
+
 /* Customization Panel */
 #frm-insert-fields-box, #frm-conditionals {
 	max-height: none;
@@ -6013,7 +6017,7 @@ Responsive Design
 	}
 
 	ul.frm_form_nav > li {
-		margin-right: 1%;
+		margin-right: 2.5%;
 	}
 }
 
@@ -6035,6 +6039,10 @@ Responsive Design
 	.frm-add-new-form .frm-addons {
 		grid-gap: 30px 3%;
 	}
+
+	ul.frm_form_nav > li {
+		margin-right: 1.5%;
+	}
 }
 
 @media only screen and (max-width: 960px) {
@@ -6049,6 +6057,27 @@ Responsive Design
 	p.howto {
 		display: inline-block;
 	}
+
+	ul.frm_form_nav {
+		clear: left;
+		padding-top: 0;
+	}
+
+	ul.frm_form_nav > li {
+		margin-right: 3.5%;
+	}
+
+	.frm-full-screen #frm_top_bar {
+		padding: 0 10px !important;
+	}
+
+	.frm-full-close {
+		padding: 15px 0 0 10px;
+	}
+
+	.frm-full-close span {
+		padding: 0;
+	}
 }
 
 @media only screen and (max-width: 850px) {
@@ -6058,11 +6087,6 @@ Responsive Design
 
 	.frm_col_one {
 		clear: none;
-	}
-
-	ul.frm_form_nav {
-		clear: left;
-		padding-top: 0;
 	}
 
 	.post-type-frm_display #frm_top_bar h1,
@@ -6138,18 +6162,6 @@ Responsive Design
 
 	html.wp-toolbar .frm-full-screen {
 		margin-top: 0;
-	}
-
-	.frm-full-screen #frm_top_bar {
-		padding: 0 10px !important;
-	}
-
-	.frm-full-close {
-		padding: 15px 0 0 10px;
-	}
-
-	.frm-full-close span {
-		padding: 0;
 	}
 
 	.frm-full-screen #screen-meta-links {
