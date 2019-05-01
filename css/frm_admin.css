@@ -7,6 +7,7 @@
 	--dark-grey: #616871;
 	--medium-grey:#7f7f7f;
 	--light-grey: rgb( 235, 235, 235 );
+	--lightest-grey: rgb(250, 250, 250);
 	--primary-color: #3177c7;
 	--primary-border:#4199fd;
 	--primary-hover:#2963a4;
@@ -2442,6 +2443,34 @@ span.howto{display:inline;}
 
 /* Reports Page */
 #form_reports_page img.frm_no_reports{max-width:100%;}
+
+.frm_wrap .google-visualization-table-tr-odd,
+.frm_wrap .google-visualization-table-tr-odd.google-visualization-table-tr-over {
+	background: var(--lightest-grey);
+}
+
+.frm_wrap .google-visualization-table-tr-over,
+.frm_wrap .google-visualization-table .gradient,
+.frm_wrap .google-visualization-table-tr-head {
+	background: #fff;
+}
+
+.frm_wrap .google-visualization-table-table th,
+.frm_wrap .google-visualization-table-table td {
+	border-right-width: 0;
+	padding: 2px;
+}
+
+.frm_wrap .google-visualization-table-tr-head,
+.frm_wrap .google-visualization-table-tr-head th {
+	font-size: 16px;
+	font-weight: 400 !important;
+	text-align: left;
+}
+
+.frm_wrap .google-visualization-table-td-number {
+	text-align: center;
+}
 
 /* Views Page */
 #form_views_page img.frm_no_views{max-width:100%;}
