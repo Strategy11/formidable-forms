@@ -27,14 +27,6 @@
 	</ul>
 
 	<div id="frm-insert-fields-box" class="tabs-panel">
-		<ul class="subsubsub">
-			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
-			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
-		</ul>
-		<ul class="alignleft">
-			<li><?php esc_html_e( 'Fields from your form', 'formidable' ); ?>:</li>
-		</ul>
-
 		<?php
 		FrmAppHelper::show_search_box(
 			array(
@@ -45,6 +37,10 @@
 		);
 		?>
 
+		<ul class="subsubsub">
+			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
+		</ul>
 		<ul class="frm_code_list frm_customize_field_list frm-full-hover">
 		<?php
 		if ( ! empty( $fields ) ) {
@@ -81,10 +77,6 @@
 
 	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
 	<div id="frm-conditionals" class="tabs-panel">
-		<ul class="subsubsub">
-			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
-			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
-		</ul>
 		<?php
 		FrmAppHelper::show_search_box(
 			array(
@@ -94,6 +86,10 @@
 			)
 		);
 		?>
+		<ul class="subsubsub">
+			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
+		</ul>
 		<ul class="frm_code_list frm-full-hover">
 			<?php
 			if ( ! empty( $fields ) ) {

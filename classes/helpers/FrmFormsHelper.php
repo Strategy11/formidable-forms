@@ -503,6 +503,12 @@ BEFORE_HTML;
 		$fields = FrmField::all_field_selection();
 		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
 
+		self::prepare_field_type( $field );
+
+		if ( ! isset( $field['icon'] ) ) {
+			$field['icon'] = 'frmfont frm_pencil_icon';
+		}
+
 		$possible_email_field = FrmFieldFactory::field_has_property( $args['type'], 'holds_email_values' );
 		if ( $possible_email_field ) {
 			$class .= ' show_frm_not_email_to';
@@ -512,9 +518,7 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
 				data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
-				<?php if ( isset( $field['icon'] ) ) { ?>
-					<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
-				<?php } ?>
+				<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
 				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden"
@@ -556,6 +560,21 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Some field types in add-ons may have been added with only
+	 * a field type and name.
+	 *
+	 * @since 4.0
+	 */
+	public static function prepare_field_type( &$field ) {
+		if ( ! is_array( $field ) ) {
+			$field = array(
+				'name' => $field,
+				'icon' => 'frm_icon_font frm_pencil_icon',
+			);
+		}
 	}
 
 	/**

@@ -295,6 +295,9 @@ class FrmFieldsController {
 				'name' => ucfirst( $field['type'] ),
 				'icon' => 'frm_icon_font frm_pencil_icon',
 			);
+		} elseif ( ! is_array( $all_field_types[ $field['type'] ] ) ) {
+			// Fallback for fields added in a more basic way.
+			FrmFormsHelper::prepare_field_type( $all_field_types[ $field['type'] ] );
 		}
 
 		$display_type = self::displayed_field_type( $field );
@@ -303,6 +306,9 @@ class FrmFieldsController {
 			$default_value_types = self::default_value_types( $field, compact( 'display' ) );
 		}
 
+		if ( $display['clear_on_focus'] && is_array( $field['placeholder'] ) ) {
+			$field['placeholder'] = implode( $field['placeholder'], ', ' );
+		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
 	}
 
