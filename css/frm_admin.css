@@ -5154,6 +5154,10 @@ select.texture {
 	width: 280px;
 }
 
+.post-type-frm_display #frm_adv_info ul.frm_code_list.frm-full-hover {
+	max-height: 305px;
+}
+
 .frm_col_one {
 	margin-right: 4%;
 	clear: both;

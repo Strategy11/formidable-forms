@@ -2217,9 +2217,7 @@ function frmAdminBuildJS() {
 
 		// Reset search.
 		search.value = '';
-		var evt = document.createEvent( 'HTMLEvents' );
-		evt.initEvent( 'input', false, true );
-		search.dispatchEvent(evt);
+		triggerEvent( search, 'input' );
 	}
 
 	function getNewActionId() {
@@ -2916,6 +2914,36 @@ function frmAdminBuildJS() {
 		content_box.keyup(); //trigger change
 	}
 
+	function resetLogicBuilder() {
+		/*jshint validthis:true */
+		var id = document.getElementById( 'frm-id-condition' ),
+			key = document.getElementById( 'frm-key-condition' );
+
+		if ( this.checked ) {
+			id.classList.remove( 'frm_hidden' );
+			key.classList.add( 'frm_hidden' );
+			triggerEvent( key, 'change' );
+		} else {
+			id.classList.add( 'frm_hidden' );
+			key.classList.remove( 'frm_hidden' );
+			triggerEvent( id, 'change' );
+		}
+	}
+
+	function setLogicExample() {
+		var field, code,
+			idKey = document.getElementById( 'frm-id-key-condition' ).checked ? 'frm-id-condition' : 'frm-key-condition',
+			is = document.getElementById( 'frm-is-condition' ).value,
+			text = document.getElementById( 'frm-text-condition' ).value,
+			result = document.getElementById( 'frm-insert-condition' );
+
+		idKey = document.getElementById( idKey );
+		field = idKey.options[idKey.selectedIndex].value;
+		code = 'if ' + field + ' ' + is + '="' + text + '"][/if ' + field;
+		result.setAttribute( 'data-code', code );
+		result.innerHTML = '[' + code + ']';
+	}
+
 	function showShortcodes( e ) {
 		/*jshint validthis:true */
 		var pos = this.getBoundingClientRect(),
@@ -2950,7 +2978,7 @@ function frmAdminBuildJS() {
 	function hideShortcodes( box ) {
 		if ( typeof box === 'undefined' ) {
 			box = document.getElementById( 'frm_adv_info' );
-			if ( typeof box === 'undefined' ) {
+			if ( box === null ) {
 				return;
 			}
 		}
@@ -3799,6 +3827,12 @@ function frmAdminBuildJS() {
 
 	/* Helpers */
 
+	function triggerEvent( element, event ) {
+		var evt = document.createEvent( 'HTMLEvents' );
+		evt.initEvent( event, false, true );
+		element.dispatchEvent( evt );
+	}
+
 	function postAjax( data, success ) {
 		var xmlHttp = new XMLHttpRequest();
 		var params = typeof data == 'string' ? data : Object.keys( data ).map(
@@ -4237,6 +4271,9 @@ function frmAdminBuildJS() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
 				jQuery( this ).val( '' );
 			} );
+
+			jQuery( '#frm-id-key-condition' ).on( 'click change', resetLogicBuilder );
+			jQuery( '.frm-build-logic' ).on( 'change', setLogicExample );
 
 			showInputIcon();
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );

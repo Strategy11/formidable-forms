@@ -75,62 +75,80 @@
 		</ul>
 	</div>
 
-	<?php if ( ! empty( $cond_shortcodes ) ) { ?>
+	<?php if ( ! empty( $cond_shortcodes ) && ! empty( $fields ) ) { ?>
 	<div id="frm-conditionals" class="tabs-panel">
-		<?php
-		FrmAppHelper::show_search_box(
-			array(
-				'input_id'    => 'field',
-				'placeholder' => __( 'Search', 'formidable' ),
-				'tosearch'    => 'frm-conditional-list',
-			)
-		);
-		?>
-		<ul class="subsubsub">
-			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
-			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
-		</ul>
-		<ul class="frm_code_list frm-full-hover">
-			<?php
-			if ( ! empty( $fields ) ) {
-				foreach ( $fields as $f ) {
-					if ( FrmField::is_no_save_field( $f->type ) || ( $f->type == 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] == 'data' || $f->field_options['data_type'] == '' ) ) ) {
-						continue;
+		<div class="frmcenter">
+			<label class="frm_toggle frm_toggle_long">
+				<input type="checkbox" value="id" checked="checked" id="frm-id-key-condition" />
+				<span class="frm_toggle_slider"></span>
+				<span class="frm_toggle_on">
+					<?php esc_html_e( 'ID', 'formidable' ); ?>
+				</span>
+				<span class="frm_toggle_off">
+					<?php esc_html_e( 'Key', 'formidable' ); ?>
+				</span>
+			</label>
+		</div>
+
+		<div class="frm_grid_container frm-fields">
+			<div class="frm1 frm_form_field" style="line-height:27px;">
+				<label for="frm-id-condition">
+					<?php esc_html_e( 'IF', 'formidable' ); ?>
+				</label>
+				</div>
+
+			<div class="frm11 frm_form_field">
+				<select id="frm-id-condition" class="frm-build-logic">
+					<?php foreach ( $fields as $f ) { ?>
+						<?php
+						if ( ! isset( $field_field ) ) {
+							$field_field = $f->id;
+						}
+						?>
+						<option value="<?php echo esc_attr( $f->id ); ?>">
+							<?php echo esc_html( $f->name ); ?>
+						</option>
+					<? } ?>
+				</select>
+				<select id="frm-key-condition" class="frm_hidden frm-build-logic">
+					<?php foreach ( $fields as $f ) { ?>
+						<option value="<?php echo esc_attr( $f->field_key ); ?>">
+							<?php echo esc_html( $f->name ); ?>
+						</option>
+					<? } ?>
+				</select>
+			</div>
+
+			<div class="frm1 frm_form_field"></div>
+			<div class="frm11 frm_form_field">
+				<select id="frm-is-condition" class="frm-build-logic">
+					<?php foreach ( $cond_shortcodes as $skey => $sname ) { ?>
+						<option value="<?php echo esc_attr( $skey ); ?>">
+							<?php echo esc_html( $sname ); ?>
+						</option>
+						<?php
+						unset( $skey, $sname );
 					}
+					?>
+				</select>
+			</div>
 
-					FrmFormsHelper::insert_opt_html(
-						array(
-							'id'        => 'if ' . $f->id . ']' . __( 'Conditional text here', 'formidable' ) . '[/if ' . $f->id,
-							'id_label'  => 'if ' . $f->id,
-							'key'       => 'if ' . $f->field_key . ']' . __( 'Conditional text here', 'formidable' ) . '[/if ' . $f->field_key,
-							'key_label' => 'if ' . $f->field_key,
-							'name'      => $f->name,
-							'type'      => $f->type,
-							'class'     => 'frm-conditional-list',
-						)
-					);
-
-					unset( $f );
-				}
-			}
-			?>
-		</ul>
-
-		<p class="howto"><?php esc_html_e( 'Click a button below to insert sample logic into your view', 'formidable' ); ?></p>
-		<ul class="frm_code_list">
-			<?php
-			$col = 'one';
-			foreach ( $cond_shortcodes as $skey => $sname ) {
-				?>
-			<li class="frm_col_<?php echo esc_attr( $col ); ?>">
-				<a href="javascript:void(0)" class="frmbutton button frm_insert_code" data-code="if x <?php echo esc_attr( $skey ); ?>][/if x"><?php echo esc_html( $sname ); ?></a>
-			</li>
-				<?php
-				$col = ( $col == 'one' ) ? 'two' : 'one';
-				unset( $skey, $sname );
-			}
-			?>
-		</ul>
+			<div class="frm1 frm_form_field"></div>
+			<div class="frm11 frm_form_field">
+				<input id="frm-text-condition" type="text" value="" placeholder="<?php esc_attr_e( 'A blank value', 'formidable' ); ?>" class="frm-build-logic" />
+			</div>
+			<h3 class="frm-with-line" style="margin-top:1em;">
+				<span><?php esc_html_e( 'Click to Insert', 'formidable' ); ?></span>
+			</h3>
+			<ul class="frm_code_list frm-full-hover frmcenter">
+				<li>
+					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals=''][/if x">
+						[if <?php echo esc_html( $field_field ); ?> equals=""][/if <?php echo esc_html( $field_field ); ?>]
+					</a>
+				</li>
+			</ul>
+			<br/>
+		</div>
 	</div>
 	<?php } ?>
 
@@ -166,10 +184,6 @@
 
 			unset( $skey, $sname, $classes );
 		}
-		?>
-		</ul>
-		<ul class="frm_code_list frm-full-hover">
-		<?php
 
 		foreach ( $advanced_helpers as $helper_type => $helper ) {
 			if ( 'user_id' === $helper_type && ! isset( $uid ) ) {
@@ -178,9 +192,9 @@
 
 			if ( isset( $helper['heading'] ) && ! empty( $helper['heading'] ) ) {
 				?>
-				</ul>
-				<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
-				<ul class="frm_code_list frm-full-hover">
+				<li style="padding:0 25px;">
+					<p class="howto"><?php echo esc_html( $helper['heading'] ); ?></p>
+				</li>
 				<?php
 			}
 
