@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.0a6\n"
+"Project-Id-Version: Formidable Forms 4.0b1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-05-01T21:14:35+02:00\n"
+"POT-Creation-Date: 2019-05-02T23:24:32+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -942,6 +942,7 @@ msgstr ""
 
 #: classes/controllers/FrmFormsController.php:723
 #: classes/controllers/FrmFormsController.php:727
+#: classes/views/shared/mb_adv_info.php:88
 #: classes/helpers/FrmCSVExportHelper.php:155
 msgid "Key"
 msgstr ""
@@ -1287,8 +1288,7 @@ msgstr ""
 
 #: classes/views/frm-forms/list.php:21
 #: classes/views/shared/mb_adv_info.php:34
-#: classes/views/shared/mb_adv_info.php:84
-#: classes/views/shared/mb_adv_info.php:142
+#: classes/views/shared/mb_adv_info.php:160
 #: classes/views/frm-entries/list.php:37
 #: classes/helpers/FrmAppHelper.php:709
 msgid "Search"
@@ -1921,22 +1921,29 @@ msgid "HTML Tags"
 msgstr ""
 
 #: classes/views/shared/mb_adv_info.php:41
-#: classes/views/shared/mb_adv_info.php:90
 msgid "IDs"
 msgstr ""
 
 #: classes/views/shared/mb_adv_info.php:42
-#: classes/views/shared/mb_adv_info.php:91
 msgid "Keys"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:103
-#: classes/views/shared/mb_adv_info.php:105
-msgid "Conditional text here"
+#: classes/views/shared/mb_adv_info.php:85
+#: classes/helpers/FrmCSVExportHelper.php:154
+#: classes/helpers/FrmAppHelper.php:1862
+msgid "ID"
 msgstr ""
 
-#: classes/views/shared/mb_adv_info.php:119
-msgid "Click a button below to insert sample logic into your view"
+#: classes/views/shared/mb_adv_info.php:96
+msgid "IF"
+msgstr ""
+
+#: classes/views/shared/mb_adv_info.php:138
+msgid "A blank value"
+msgstr ""
+
+#: classes/views/shared/mb_adv_info.php:141
+msgid "Click to Insert"
 msgstr ""
 
 #: classes/views/xml/import_form.php:12
@@ -4547,11 +4554,6 @@ msgstr ""
 
 #: classes/helpers/FrmCSVExportHelper.php:153
 msgid "IP"
-msgstr ""
-
-#: classes/helpers/FrmCSVExportHelper.php:154
-#: classes/helpers/FrmAppHelper.php:1862
-msgid "ID"
 msgstr ""
 
 #: classes/helpers/FrmCSVExportHelper.php:157
