@@ -76,8 +76,8 @@
 	</div>
 
 	<?php
-	$hide_logic = ( empty( $cond_shortcodes ) || empty( $fields ) );
-	if ( ! $hide_logic ) {
+	$show_logic = ( ! empty( $cond_shortcodes ) && ! empty( $fields ) );
+	if ( $show_logic ) {
 		?>
 	<div id="frm-conditionals" class="tabs-panel">
 		<div class="frmcenter">
