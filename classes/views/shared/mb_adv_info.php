@@ -75,7 +75,9 @@
 		</ul>
 	</div>
 
-	<?php if ( ! empty( $cond_shortcodes ) && ! empty( $fields ) ) { ?>
+	<?php
+	if ( ! empty( $cond_shortcodes ) && ! empty( $fields ) ) {
+		?>
 	<div id="frm-conditionals" class="tabs-panel">
 		<div class="frmcenter">
 			<label class="frm_toggle frm_toggle_long">
@@ -99,8 +101,8 @@
 
 			<div class="frm11 frm_form_field">
 				<select id="frm-id-condition" class="frm-build-logic">
-					<?php foreach ( $fields as $f ) { ?>
-						<?php
+					<?php
+					foreach ( $fields as $f ) {
 						if ( ! isset( $field_field ) ) {
 							$field_field = $f->id;
 						}
@@ -111,18 +113,24 @@
 					<? } ?>
 				</select>
 				<select id="frm-key-condition" class="frm_hidden frm-build-logic">
-					<?php foreach ( $fields as $f ) { ?>
+					<?php
+					foreach ( $fields as $f ) {
+						?>
 						<option value="<?php echo esc_attr( $f->field_key ); ?>">
 							<?php echo esc_html( $f->name ); ?>
 						</option>
-					<? } ?>
+						<?
+					}
+					?>
 				</select>
 			</div>
 
 			<div class="frm1 frm_form_field"></div>
 			<div class="frm11 frm_form_field">
 				<select id="frm-is-condition" class="frm-build-logic">
-					<?php foreach ( $cond_shortcodes as $skey => $sname ) { ?>
+					<?php
+					foreach ( $cond_shortcodes as $skey => $sname ) {
+						?>
 						<option value="<?php echo esc_attr( $skey ); ?>">
 							<?php echo esc_html( $sname ); ?>
 						</option>
@@ -150,7 +158,9 @@
 			<br/>
 		</div>
 	</div>
-	<?php } ?>
+		<?php
+	}
+	?>
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
 		<?php
