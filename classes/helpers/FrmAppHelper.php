@@ -221,7 +221,7 @@ class FrmAppHelper {
 	public static function is_view_builder_page() {
 		global $pagenow;
 
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
 		return ( $pagenow === 'post.php' || ( $pagenow === 'post-new.php' && $post_type === 'frm_display' ) );
 	}
 
