@@ -93,12 +93,11 @@ class FrmAppController {
 	}
 
 	private static function get_current_page() {
-		global $pagenow;
-
 		$page         = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type    = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 		$current_page = isset( $_GET['page'] ) ? $page : $post_type;
-		if ( $pagenow == 'post.php' || $pagenow == 'post-new.php' ) {
+
+		if ( FrmAppHelper::is_view_builder_page() ) {
 			$current_page = 'frm_display';
 		}
 
@@ -443,7 +442,7 @@ class FrmAppController {
 
 			do_action( 'frm_enqueue_builder_scripts' );
 			self::include_upgrade_overlay();
-		} elseif ( $pagenow == 'post.php' || ( $pagenow == 'post-new.php' && $post_type == 'frm_display' ) ) {
+		} elseif ( FrmAppHelper::is_view_builder_page() ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
 				$post_type = sanitize_title( wp_unslash( $_REQUEST['post_type'] ) );
 			} elseif ( isset( $_REQUEST['post'] ) && absint( $_REQUEST['post'] ) ) {

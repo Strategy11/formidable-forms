@@ -153,15 +153,17 @@ function frmAdminBuildJS() {
 			fields.style.top = '';
 			return;
 		}
-		var posEle = jQuery( document.getElementById( 'frm_position_ele' ) );
-		if(posEle.length>0){
-			var eleOffset = posEle.offset();
+
+		var posEle = document.getElementById( 'frm_position_ele' );
+		if ( posEle !== null ) {
+			var eleOffset = jQuery( posEle ).offset();
 			offset = eleOffset.top;
 		}
 
-		var desiredOffset = offset + 2 - currentOffset;
-		if ( desiredOffset < 35 ) {
-			desiredOffset = 35;
+		var desiredOffset = offset - currentOffset;
+		var menuHeight = document.getElementById( 'wpadminbar' ).offsetHeight;
+		if ( desiredOffset < menuHeight ) {
+			desiredOffset = menuHeight;
 		}
 		fields.style.top = desiredOffset + 'px';
 	}
@@ -4323,18 +4325,10 @@ function frmAdminBuildJS() {
 			$advInfo.before( '<div id="frm_position_ele"></div>' );
 			setupMenuOffset();
 
-			// add form nav
-			var $navCont = document.getElementById( 'frm_nav_container' );
-			if ( $navCont !== null ) {
-				var $titleDiv = document.getElementsByClassName( 'wp-header-end' )[0];
-				if ( $titleDiv === null || typeof $titleDiv === 'undefined' ) {
-					$titleDiv = document.getElementById( 'titlediv' );
-				} else {
-					$titleDiv = $titleDiv.parentNode;
-				}
-				$titleDiv.insertBefore( $navCont, $titleDiv.firstChild );
-				$navCont.style.display = 'block';
-			}
+			// Show loading indicator.
+			jQuery( '#publish' ).mousedown( function() {
+				this.classList.add( 'frm_loading_button' );
+			});
 
 			// move content tabs
 			jQuery( '#frm_dyncontent .handlediv' ).before( jQuery( '#frm_dyncontent .nav-menus-php' ) );

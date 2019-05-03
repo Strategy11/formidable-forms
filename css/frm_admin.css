@@ -46,8 +46,8 @@ a.frm_confirming,
 	margin: 0;
 }
 
-.post-new-php .wrap {
-	margin-left: 0;
+.post-type-frm_display .wrap {
+	margin: 0;
 }
 
 .columns-2 .frm-right-panel + #post-body-content {
@@ -85,6 +85,8 @@ a.frm_confirming,
 	float: none;
 }
 
+.new-php.post-type-frm_display #wpfooter,
+.post-php.post-type-frm_display #wpfooter,
 .frm-full-screen #wpfooter {
 	display: none;
 }
@@ -212,7 +214,7 @@ td.column-title .frm_actions_dropdown {
 	text-align: center;
 }
 
-.post-type-frm_display.post-php #frm_top_bar,
+.post-type-frm_display:not(.edit-php) #frm_top_bar,
 .frm-full-screen.post-type-frm_display #frm_top_bar,
 .frm_page_container #frm_top_bar {
 	border-bottom: 1px solid var(--grey-border);
@@ -224,7 +226,7 @@ td.column-title .frm_actions_dropdown {
 	padding: 0 15px !important;
 }
 
-.post-type-frm_display #frm_top_bar h1,
+.edit-php.post-type-frm_display #frm_top_bar h1,
 .frm_wrap #frm_top_bar h1 {
 	font-size: 24px;
 	font-weight: 400;
@@ -261,13 +263,14 @@ td.column-title .frm_actions_dropdown {
 	text-overflow: ellipsis;
 }
 
-.frm-header-logo {
+.frm-header-logo,
+.edit-php.post-type-frm_display .frm-header-logo {
 	float: left;
 	margin: 0 15px 0 0;
 }
 
 .frm-full-screen.post-type-frm_display .frm-header-logo,
-.post-php.post-type-frm_display .frm-header-logo,
+.post-type-frm_display .frm-header-logo,
 .frm_page_container .frm-header-logo {
 	margin: 13px 0 0;
 }
@@ -356,9 +359,10 @@ ul.frm_form_nav > li {
 }
 
 .frm-full-screen.post-type-frm_display #frm_top_bar h1,
-.post-php.post-type-frm_display #frm_top_bar h1,
+.post-type-frm_display #frm_top_bar h1,
 .frm_page_container #frm_top_bar h1 {
 	margin: 15px 15px 10px;
+	padding: 0;
 	width: 175px;
 	text-align: left;
 	text-overflow: ellipsis;
@@ -389,6 +393,8 @@ ul.frm_form_nav > li {
 	min-height: 10px;
 }
 
+#frm-publishing #publishing-action,
+#frm-publishing #preview-action,
 #frm-preview-action,
 #frm-publishing > input[type=submit],
 #frm-publishing > .button,
@@ -611,7 +617,7 @@ td.frm_has_shortcodes i {
 }
 
 .post-type-frm_display #poststuff {
-	padding: 10px 0 10px 25px;
+	padding: 0 0 10px 25px;
 }
 
 #postbox-container-2 .postbox .inside {
@@ -5069,6 +5075,20 @@ select[name="m"] {
 }
 
 /* View page */
+
+.post-type-frm_display #poststuff #post-body.columns-2 {
+	margin-right: var(--medium-sidebar);
+}
+
+.post-type-frm_display #post-body.columns-2 #postbox-container-1 {
+	margin-right: calc( var(--medium-sidebar) * -1 );
+	width: calc( var(--medium-sidebar) - 20px );
+}
+
+.post-type-frm_display #poststuff #post-body.columns-2 #side-sortables {
+	width: 100%;
+}
+
 #frm_dyncontent .hndle,
 #frm_dyncontent .handlediv {
 	display: none !important;
@@ -5084,8 +5104,13 @@ select[name="m"] {
 .post-type-frm_display #side-sortables h2.hndle,
 .post-type-frm_display #normal-sortables h2.hndle {
 	border-bottom: 1px solid var(--grey-border);
-	margin: 10px 0 0;
+	margin: 10px 0 0 !important;
 	padding: 0 25px 8px;
+}
+
+.post-type-frm_display #side-sortables h2.hndle {
+	margin-top: 0 !important;
+	padding-top: 10px;
 }
 
 .post-type-frm_display.edit-php #wpbody-content > .wrap {
@@ -5104,6 +5129,14 @@ select[name="m"] {
 	box-shadow: none;
 }
 
+.post-type-frm_display #side-sortables .postbox {
+	border-radius: 0;
+	border-top-width: 0;
+	margin-bottom: 0;
+}
+
+.post-type-frm_display #submitdiv #publishing-action,
+.post-type-frm_display #submitdiv #minor-publishing-actions,
 .post-type-frm_display #edit-slug-box,
 .post-type-frm_display .wrap h1.wp-heading-inline,
 .post-type-frm_display .wrap > .page-title-action {
@@ -5148,14 +5181,20 @@ select.texture {
 	background-color: transparent;
 }
 
+.post-type-frm_display #major-publishing-actions {
+	border-color: var(--grey-border);
+	background: var(--lightest-grey);
+}
+
 .post-type-frm_display #frm_adv_info {
 	position: fixed;
 	z-index: 9999;
-	width: 280px;
+	width: calc( var(--medium-sidebar) - 20px );
+	height: 100vh;
 }
 
 .post-type-frm_display #frm_adv_info ul.frm_code_list.frm-full-hover {
-	max-height: 305px;
+	max-height: none;
 }
 
 .frm_col_one {
@@ -6146,6 +6185,16 @@ Responsive Design
 	.frm_wrap #frm_adv_info ul.category-tabs li.tabs {
 		border-bottom: 2px solid #5b9dd9;
 		padding-bottom: 8px;
+	}
+
+	.post-type-frm_display #poststuff {
+		padding: 10px 25px;
+	}
+
+	.post-type-frm_display #side-sortables .postbox {
+		margin-bottom: 20px;
+		border-radius: var(--small-radius);
+		border-top-width: 1px;
 	}
 }
 

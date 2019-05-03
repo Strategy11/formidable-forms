@@ -300,6 +300,7 @@ class FrmStylesController {
 				)
 			);
 		} else {
+			_deprecated_function( 'Codemirror v4.7', 'WordPress 4.9', 'Update WordPress' );
 			$id         = 'frm_custom_css_box';
 			$settings   = array();
 			$codemirror = '4.7';

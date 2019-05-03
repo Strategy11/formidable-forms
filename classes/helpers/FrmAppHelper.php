@@ -213,6 +213,19 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * If the current page is for editing or creating a view.
+	 * Returns false for the views listing page.
+	 *
+	 * @since 4.0
+	 */
+	public static function is_view_builder_page() {
+		global $pagenow;
+
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
+		return ( $pagenow === 'post.php' || ( $pagenow === 'post-new.php' && $post_type === 'frm_display' ) );
+	}
+
+	/**
 	 * Check for the form preview page
 	 *
 	 * @since 2.0
@@ -842,7 +855,7 @@ class FrmAppHelper {
 		$styler       = self::is_admin_page( 'formidable-styles' );
 		$full_entries = self::simple_get( 'frm-full', 'absint' );
 
-		return $full_builder || $full_entries || $styler;
+		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
 	}
 
 	/**
