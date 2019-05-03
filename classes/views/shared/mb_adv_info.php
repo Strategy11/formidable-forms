@@ -102,11 +102,11 @@
 
 			<div class="frm11 frm_form_field">
 				<select id="frm-id-condition" class="frm-build-logic">
+					<option value="x">
+						<?php esc_html_e( 'Select a Field', 'formidable' ); ?>
+					</option>
 					<?php
 					foreach ( $fields as $f ) {
-						if ( ! isset( $field_field ) ) {
-							$field_field = $f->id;
-						}
 						?>
 						<option value="<?php echo esc_attr( $f->id ); ?>">
 							<?php echo esc_html( $f->name ); ?>
@@ -116,6 +116,9 @@
 					?>
 				</select>
 				<select id="frm-key-condition" class="frm_hidden frm-build-logic">
+					<option value="x">
+						<?php esc_html_e( 'Select a Field', 'formidable' ); ?>
+					</option>
 					<?php
 					foreach ( $fields as $f ) {
 						?>
@@ -154,7 +157,7 @@
 			<ul class="frm_code_list frm-full-hover frmcenter">
 				<li>
 					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals=''][/if x">
-						[if <?php echo esc_html( $field_field ); ?> equals=""][/if <?php echo esc_html( $field_field ); ?>]
+						[if x equals=""][/if x]
 					</a>
 				</li>
 			</ul>

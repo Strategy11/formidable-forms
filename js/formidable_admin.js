@@ -4272,8 +4272,8 @@ function frmAdminBuildJS() {
 				jQuery( this ).val( '' );
 			} );
 
-			jQuery( '#frm-id-key-condition' ).on( 'click change', resetLogicBuilder );
-			jQuery( '.frm-build-logic' ).on( 'change', setLogicExample );
+			jQuery( document ).on( 'click change', '#frm-id-key-condition', resetLogicBuilder );
+			jQuery( document ).on( 'change', '.frm-build-logic', setLogicExample );
 
 			showInputIcon();
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
