@@ -76,7 +76,7 @@
 	</div>
 
 	<?php
-	$show_logic = ( ! empty( $cond_shortcodes ) && ! empty( $fields ) );
+	$show_logic = ! empty( $cond_shortcodes ) && ! empty( $fields );
 	if ( $show_logic ) {
 		?>
 	<div id="frm-conditionals" class="tabs-panel">
@@ -111,14 +111,20 @@
 						<option value="<?php echo esc_attr( $f->id ); ?>">
 							<?php echo esc_html( $f->name ); ?>
 						</option>
-					<?php } ?>
+						<?php
+					}
+					?>
 				</select>
 				<select id="frm-key-condition" class="frm_hidden frm-build-logic">
-					<?php foreach ( $fields as $f ) { ?>
+					<?php
+					foreach ( $fields as $f ) {
+						?>
 						<option value="<?php echo esc_attr( $f->field_key ); ?>">
 							<?php echo esc_html( $f->name ); ?>
 						</option>
-					<? } ?>
+						<?php
+					}
+					?>
 				</select>
 			</div>
 
