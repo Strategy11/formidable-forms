@@ -1,4 +1,4 @@
-<div id="frm_form_editor_container">
+<div id="frm_form_editor_container" class="<?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm-has-fields' : ''; ?>">
 
 	<?php
 	// Add form messages.
@@ -29,8 +29,13 @@
 		}
 		?>
 	</ul>
+	<p id="frm-form-button">
+		<button class="frm_button_submit" disabled="disabled">
+			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+		</button>
+	</p>
 
-	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">
+	<div class="frm_no_fields">
 
 		<div class="frm_drag_inst">
 			<?php esc_html_e( 'Add Fields Here', 'formidable' ); ?>

@@ -8,7 +8,7 @@
 	);
 	?>
 	<div class="wrap">
-		<h2 class="frm-h2"><?php esc_html_e( 'Form templates', 'formidable' ); ?></h2>
+		<h2 class="frm-h2"><?php esc_html_e( 'Select a Template', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php
 			printf(
@@ -31,6 +31,18 @@
 		<div class="clear"></div>
 
 		<div class="frm-addons">
+			<div class="frm-card frm-no-thumb">
+				<div class="plugin-card-top">
+					<h3><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
+					<p><?php esc_html_e( 'Start from scratch and build exactly what you want. This option will not pre-load any fields.', 'formidable' ); ?></p>
+				</div>
+				<div class="plugin-card-bottom">
+					<a class="button button-primary frm-button-primary frm-new-form-button" href="#">
+						<?php esc_html_e( 'Create Form', 'formidable' ); ?>
+					</a>
+				</div>
+			</div>
+
 			<div class="frm-card frm-no-thumb">
 				<div class="plugin-card-top">
 					<h3><?php esc_html_e( 'Create a Custom Template', 'formidable' ); ?></h3>
@@ -70,18 +82,6 @@
 							?>
 						</ul>
 					</div>
-				</div>
-			</div>
-
-			<div class="frm-card frm-no-thumb">
-				<div class="plugin-card-top">
-					<h3><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Start from scratch and build exactly what you want. This option will not pre-load any fields.', 'formidable' ); ?></p>
-				</div>
-				<div class="plugin-card-bottom">
-					<a class="button button-primary frm-button-primary frm-new-form-button" href="#">
-						<?php esc_html_e( 'Create Form', 'formidable' ); ?>
-					</a>
 				</div>
 			</div>
 

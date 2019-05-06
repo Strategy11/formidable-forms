@@ -8,7 +8,7 @@
 			array(
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
-				'close'       => $form ? '?page=formidable-entries&form=' . $form->id : '',
+				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
 			)
 		);
 		?>
@@ -25,6 +25,7 @@
 					);
 					?>
 				</h2>
+				<div class="clear"></div>
 			<?php } ?>
 
 			<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>

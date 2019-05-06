@@ -59,7 +59,7 @@
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'email_subject', '', $form->name ); ?>>
 		<?php esc_html_e( 'Subject', 'formidable' ); ?>
 	</label>
-	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_subject' ) ); ?>" class="frm_not_email_subject large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_subject', 'open', $form->name ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>" size="55" value="<?php echo esc_attr( $form_action->post_content['email_subject'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_subject' ) ); ?>" class="frm_not_email_subject large-text <?php FrmAppHelper::maybe_add_tooltip( 'email_subject', 'open', $form->name ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_subject'] ); ?>" />
 </p>
 
 <p class="frm_has_shortcodes">

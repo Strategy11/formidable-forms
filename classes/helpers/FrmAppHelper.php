@@ -692,7 +692,7 @@ class FrmAppHelper {
 	public static function get_admin_header( $atts ) {
 		$has_nav = ( isset( $atts['form'] ) && ! empty( $atts['form'] ) && ( ! isset( $atts['is_template'] ) || ! $atts['is_template'] ) );
 		if ( ! isset( $atts['close'] ) || empty( $atts['close'] ) ) {
-			$atts['close'] = '?page=formidable';
+			$atts['close'] = admin_url( 'admin.php?page=formidable' );
 		}
 
 		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );

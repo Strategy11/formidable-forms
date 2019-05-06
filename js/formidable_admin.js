@@ -594,7 +594,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( msg ) {
-				jQuery( '.frm_no_fields' ).hide();
+				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
 
 				var regex = /id="(\S+)"/;
@@ -701,7 +701,7 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( msg ) {
-				jQuery( '.frm_no_fields' ).hide();
+				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				$newFields.append( msg );
 				afterAddField( msg, true );
 			}
@@ -1036,17 +1036,21 @@ function frmAdminBuildJS() {
 
 	function markRequired() {
 		/*jshint validthis:true */
-		var thisid = this.id.replace( 'frm_', '' );
-		var field_id = thisid.replace( 'req_field_', '' );
-		var checked = this.checked;
+		var thisid = this.id.replace( 'frm_', '' ),
+			fieldId = thisid.replace( 'req_field_', '' ),
+			checked = this.checked,
+			label = jQuery( '#field_label_' + fieldId + ' .frm_required' );
 
-		toggleValidationBox( checked, '.frm_required_details' + field_id );
+		toggleValidationBox( checked, '.frm_required_details' + fieldId );
 
 		if ( checked ) {
-			var $reqBox = jQuery( 'input[name="field_options[required_indicator_' + field_id + ']"]' );
+			var $reqBox = jQuery( 'input[name="field_options[required_indicator_' + fieldId + ']"]' );
 			if ( $reqBox.val() === '' ) {
 				$reqBox.val( '*' );
 			}
+			label.removeClass( 'frm_hidden' );
+		} else {
+			label.addClass( 'frm_hidden' );
 		}
 	}
 
@@ -1372,7 +1376,7 @@ function frmAdminBuildJS() {
 						renumberPageBreaks();
 					}
 					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
-						jQuery( '.frm_no_fields' ).show();
+						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
 					} else if ( $section.length ) {
 						toggleOneSectionHolder( $section );
 					}
@@ -2093,7 +2097,7 @@ function frmAdminBuildJS() {
 			parentClass = '';
 		}
 		maybeAddFieldSelection();
-		jQuery( parentClass + ' .frm_has_shortcodes input,' + parentClass + ' .frm_has_shortcodes textarea' ).before( '<i class="frm-show-box frm_icon_font frm_more_horiz_solid_icon"></i>' );
+		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<i class="frm-show-box frm_icon_font frm_more_horiz_solid_icon"></i>' );
 	}
 
 	/**
@@ -2961,7 +2965,7 @@ function frmAdminBuildJS() {
 			hideShortcodes( box );
 		} else {
 			input.focus();
-			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
+			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );

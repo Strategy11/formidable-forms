@@ -68,8 +68,7 @@ class FrmFormsController {
 	 * @since 3.06
 	 */
 	public static function add_new() {
-		self::init_modal();
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add-new.php' );
+		self::list_templates( $vars );
 	}
 
 	/**
@@ -805,31 +804,7 @@ class FrmFormsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 
-		self::put_allowed_templates_first( $templates );
-
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
-	}
-
-	/**
-	 * @since 4.0
-	 */
-	private static function put_allowed_templates_first( &$templates ) {
-		$allowed = array();
-
-		// Include contact form first.
-		$contact_us = 20872734;
-		$allowed[ $contact_us ] = $templates[ $contact_us ];
-		unset( $templates[ $contact_us ] );
-
-		foreach ( $templates as $k => $template ) {
-			if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
-				$allowed[ $k ] = $template;
-				unset( $templates[ $k ] );
-			}
-		}
-
-		$allowed += $templates;
-		$templates = $allowed;
 	}
 
 	private static function add_user_templates( &$templates ) {
@@ -1332,9 +1307,10 @@ class FrmFormsController {
 		switch ( $action ) {
 			case 'new':
 				return self::new_form( $vars );
-			case 'create':
 			case 'add_new':
 			case 'list_templates':
+				return self::list_templates( $vars );
+			case 'create':
 			case 'edit':
 			case 'update':
 			case 'duplicate':

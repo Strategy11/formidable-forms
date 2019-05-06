@@ -14,7 +14,7 @@
 	?>
 	</div>
 
-	<a href="?page=formidable" class="frm-header-logo">
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 	<?php
 	FrmAppHelper::show_logo(
 		array(
