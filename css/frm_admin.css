@@ -25,7 +25,7 @@
 	--big-sidebar: 390px;
 }
 
-a, .widget .widget-top, .postbox h3, .stuffbox h3 {
+a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	cursor: pointer;
 	text-decoration: none;
 }
@@ -768,6 +768,7 @@ p.frm_has_shortcodes {
 	color: var(--dark-grey);
 	float: right;
 	width: 16px;
+	cursor: pointer;
 }
 
 /* right sidebar */
@@ -5951,6 +5952,25 @@ iframe#dyncontent_ifr {
 
 .global-font .field-group input[type="text"] {
 	width: auto;
+}
+
+/* Chrome Scrollbars for Windows */
+.windows::-webkit-scrollbar,
+.windows ::-webkit-scrollbar {
+	width: 7px;
+	background: transparent;
+}
+
+.windows::-webkit-scrollbar-thumb,
+.windows ::-webkit-scrollbar-thumb {
+	background: var(--grey-border);
+	-webkit-border-radius: var(--border-radius);
+	-webkit-box-shadow: none;
+}
+
+.windows::-webkit-scrollbar-corner,
+.windows ::-webkit-scrollbar-corner {
+	background: transparent;
 }
 
 /* RTL */

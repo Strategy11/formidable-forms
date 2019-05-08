@@ -37,12 +37,30 @@ class FrmAppController {
 	public static function add_admin_class( $classes ) {
 		if ( self::is_white_page() ) {
 			$classes .= ' frm-white-body ';
+			$classes .= self::get_os();
 		}
+
 		if ( FrmAppHelper::is_full_screen() ) {
 			$classes .= ' frm-full-screen';
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	private static function get_os() {
+		$agent = strtolower( FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
+		$os    = '';
+		if ( strpos( $agent, 'mac' ) !== false ) {
+			$os = ' osx';
+		} elseif ( strpos( $agent, 'linux' ) !== false ) {
+			$os = ' linux';
+		} elseif ( strpos( $agent, 'windows' ) !== false ) {
+			$os = ' windows';
+		}
+		return $os;
 	}
 
 	/**
