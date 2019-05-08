@@ -24,7 +24,8 @@
 					</h2>
 					<p>
 						<?php echo esc_html( $addon['excerpt'] ); ?>
-						<?php if ( isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'] ) { ?>
+						<?php $show_docs = isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed']; ?>
+						<?php if ( $show_docs ) { ?>
 							<br/><a href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
 								<?php esc_html_e( 'View Docs', 'formidable' ); ?>
 							</a>
@@ -32,7 +33,9 @@
 					</p>
 					<?php
 					$plan_required = FrmFormsHelper::get_plan_required( $addon );
-					FrmFormsHelper::show_plan_required( $addon, $pricing . '&utm_content=' . $addon['slug'] );
+					if ( ! $show_docs ) {
+						FrmFormsHelper::show_plan_required( $plan_required, $pricing . '&utm_content=' . $addon['slug'] );
+					}
 					?>
 				</div>
 				<div class="plugin-card-bottom">

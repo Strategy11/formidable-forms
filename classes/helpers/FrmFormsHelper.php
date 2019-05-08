@@ -1167,8 +1167,7 @@ BEFORE_HTML;
 	 *
 	 * @since 4.0
 	 */
-	public static function show_plan_required( &$item, $link ) {
-		$requires = self::get_plan_required( $item );
+	public static function show_plan_required( $requires, $link ) {
 		if ( empty( $requires ) ) {
 			return;
 		}

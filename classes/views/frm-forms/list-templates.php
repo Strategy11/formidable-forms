@@ -108,7 +108,7 @@
 						}
 
 						$plan_required = FrmFormsHelper::get_plan_required( $template );
-						FrmFormsHelper::show_plan_required( $template, $pricing . '&utm_content=' . $template['key'] );
+						FrmFormsHelper::show_plan_required( $plan_required, $pricing . '&utm_content=' . $template['key'] );
 						?>
 						<?php if ( ! empty( $template['categories'] ) ) { ?>
 							<div class="frm_hidden">

@@ -151,7 +151,7 @@
 			<div class="frm11 frm_form_field">
 				<input id="frm-text-condition" type="text" value="" placeholder="<?php esc_attr_e( 'A blank value', 'formidable' ); ?>" class="frm-build-logic" />
 			</div>
-			<h3 class="frm-with-line" style="margin-top:1em;">
+			<h3 class="frm-with-line">
 				<span><?php esc_html_e( 'Click to Insert', 'formidable' ); ?></span>
 			</h3>
 			<ul class="frm_code_list frm-full-hover frmcenter">

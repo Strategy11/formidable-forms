@@ -2970,7 +2970,7 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
 			if ( input.classList.contains( 'frm_not_email_to' ) ) {
-				jQuery( '.frm_code_list li:not(.show_frm_not_email_to) a' ).addClass( 'frm_noallow' );
+				jQuery( '#frm-insert-fields-box .frm_code_list li:not(.show_frm_not_email_to) a' ).addClass( 'frm_noallow' );
 			} else if ( input.classList.contains( 'frm_not_email_subject' ) ) {
 				jQuery( '.frm_code_list li.hide_frm_not_email_subject a' ).addClass( 'frm_noallow' );
 			}

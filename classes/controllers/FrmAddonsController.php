@@ -10,7 +10,14 @@ class FrmAddonsController {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), __( 'Add-Ons', 'formidable' ), 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ), __( 'Upgrade to Pro', 'formidable' ), 'frm_view_forms', 'formidable-pro-upgrade', 'FrmAddonsController::upgrade_to_pro' );
+			add_submenu_page(
+				'formidable',
+				'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ),
+				'<span style="color:#f15a24">' . __( 'Upgrade to Pro', 'formidable' ) .'</span>',
+				'frm_view_forms',
+				'formidable-pro-upgrade',
+				'FrmAddonsController::upgrade_to_pro'
+			);
 		}
 	}
 
