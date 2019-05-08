@@ -636,12 +636,13 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		$object.removeClass('frm_loading_form');
+		var loadingForm = jQuery( '.frm_loading_form' );
+		loadingForm.removeClass('frm_loading_form');
 
-		$object.trigger( 'frmEndFormLoading' );
+		loadingForm.trigger( 'frmEndFormLoading' );
 
 		if ( enable === 'enable' ) {
-			enableSubmitButton( $object );
+			enableSubmitButton( loadingForm );
 		}
 	}
 
