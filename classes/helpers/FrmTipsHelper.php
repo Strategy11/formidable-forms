@@ -11,7 +11,7 @@ class FrmTipsHelper {
 		$tip  = self::get_random_tip( $tips );
 
 		if ( 'p' === $html ) {
-			echo '<p>';
+			echo '<p class="frmcenter frm_no_top_margin">';
 		}
 
 		if ( ! isset( $tip['page'] ) ) {
@@ -24,12 +24,20 @@ class FrmTipsHelper {
 		$link = FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] ) );
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
-			<span>
-				<i class="frm_icon_font frm_check1_icon"></i> <?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
+			<i class="frm_icon_font frm_star_full_icon"></i>
+			<span class="pro-tip">
+				<?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
 			</span>
-			<?php echo esc_html( $tip['tip'] ); ?>
+
 			<?php if ( isset( $tip['call'] ) ) { ?>
-				<span><?php echo esc_html( $tip['call'] ); ?></span>
+				<?php echo esc_html( $tip['tip'] ); ?>
+				<span class="frm-tip-cta">
+					<?php echo esc_html( $tip['call'] ); ?>
+				</span>
+			<?php } else { ?>
+				<span class="frm-tip-cta">
+					<?php echo esc_html( $tip['tip'] ); ?>
+				</span>
 			<?php } ?>
 		</a>
 		<?php
@@ -232,7 +240,7 @@ class FrmTipsHelper {
 					'content' => 'style',
 					'anchor'  => 'feature-wordpress-visual-form-styler',
 				),
-				'tip'  => __( 'Make your sidebar or footer form stand out.', 'formidable' ),
+				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
 		);

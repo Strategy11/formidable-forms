@@ -13,7 +13,7 @@ class FrmAddonsController {
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ),
-				'<span style="color:#f15a24">' . __( 'Upgrade to Pro', 'formidable' ) .'</span>',
+				'<span style="color:#f15a24">' . __( 'Upgrade to Pro', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'

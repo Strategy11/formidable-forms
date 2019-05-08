@@ -128,6 +128,7 @@
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
 	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ); ?>" ></span>
 </h3>
+<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 <table class="form-table">
 	<tr>
 		<td>
@@ -148,7 +149,6 @@
 		</td>
 	</tr>
 </table>
-<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 
 <!--Permissions Section-->
 <?php do_action( 'frm_add_form_perm_options', $values ); ?>

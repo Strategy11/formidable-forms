@@ -37,7 +37,7 @@
 				<?php do_action( 'frm_entry_inside_h2', $form ); ?>
 				<?php $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' ); ?>
 
-				<?php FrmTipsHelper::pro_tip( 'get_entries_tip' ); ?>
+				<?php FrmTipsHelper::pro_tip( 'get_entries_tip', 'p' ); ?>
 
 				<?php $wp_list_table->display(); ?>
 			</form>

@@ -1713,41 +1713,52 @@ h2.frm-h2 + .howto {
 	height: 50px;
 }
 
-.frm_pro_tip a,
-.frm_pro_tip span,
-.frm_pro_tip .frm_check1_icon {
-	color: var(--orange);
-}
-
-.frm_pro_tip .frm_check1_icon {
-	vertical-align: middle;
-}
-
-.frm_pro_tip {
-	font-size: 12px;
-	color: #666;
-	border: 1px solid var(--orange);
-	display: block;
-	padding: 5px;
-	background: #FBF0EC;
-	border-radius: var(--small-radius);
+a.frm_pro_tip,
+a.frm_pro_tip:hover {
+	font-size: 14px;
+	border: 1px solid var(--blue-border);
+	display: inline-block;
+	color: var(--dark-grey);
+	background: var(--light-blue);
+	border-radius: var(--border-radius);
 	text-align: center;
+	padding: 5px 15px;
+	margin: 0 auto;
+	line-height: 1.4;
 }
 
 .frm_field_list .frm_pro_tip {
-	margin: 10px;
+	margin: 10px 15px;
+	padding-left: 40px;
+	position: relative;
+}
+
+a.frm_pro_tip i {
+	color: var(--primary-hover);
+	margin-right: 5px;
+}
+
+.frm_field_list a.frm_pro_tip i {
+	position: absolute;
+	left: 15px;
+	top: calc(50% - 11px);
+}
+
+.pro-tip {
+	font-weight: 500;
+	color: var(--darkest-grey);
+}
+
+.frm-tip-cta {
+	color: var(--primary-hover);
 }
 
 .nav-tab-wrapper .frm_pro_tip {
 	float: right;
 }
 
-.frm_pro_tip:hover {
-	color: #666;
-}
-
-.frm_pro_tip:hover span {
-	color: #F0430E;
+.frm_pro_tip:hover .frm-tip-cta {
+	color: var(--primary-color);
 }
 
 /*Switch form dropdown*/

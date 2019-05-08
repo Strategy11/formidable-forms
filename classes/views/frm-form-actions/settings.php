@@ -1,8 +1,6 @@
 <p class="howto">
 	<?php esc_html_e( 'Add form actions to your form to perform tasks when an entry is created, updated, imported, and more.', 'formidable' ); ?>
 </p>
-
-<?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
 				
 <div id="frm_email_addon_menu" class="frm-limited-actions">
 	<?php
@@ -78,3 +76,4 @@
 </div>
 
 <?php FrmFormActionsController::list_actions( $form, $values ); ?>
+<?php FrmTipsHelper::pro_tip( 'get_form_action_tip', 'p' ); ?>
