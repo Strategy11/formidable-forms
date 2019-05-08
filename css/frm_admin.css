@@ -1002,6 +1002,7 @@ h2 .frm-button-primary {
 	color: #fff;
 }
 
+.wp-core-ui.frm-white-body .frm-button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .frm_wrap .preview > .button:hover {
@@ -2984,7 +2985,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 .frm-small-gutter,
 .frm_sortable_field_opts + a,
 .frm_single_option .frm_option_key {
-	margin-left: 22px;
+	margin-left: 22px !important;
 }
 
 .frm_option_key input[type=text] {
@@ -3859,7 +3860,7 @@ table td, .form-table tr td {
 }
 
 .frm-single-settings .frm_logic_row > select {
-	max-width: 33.5%;
+	max-width: 32.5%;
 }
 
 .frm-single-settings .frm_logic_row select:nth-child(2) {
@@ -4425,10 +4426,8 @@ li.selected .divider_section_only:before {
 .frm_add_form_row,
 .frm-white-body .frm-preview-buttons button {
 	border-radius: var(--small-radius);
-	border-color: var(--blue-border);
-	border-width: var(--border-width);
+	border: 1px solid var(--blue-border);
 	color: var(--primary-color);
-	font-weight: var(--font-weight);
 }
 
 .frm_remove_form_row i:before,
@@ -4527,10 +4526,12 @@ li.selected .divider_section_only:before {
 	margin-left: 46%;
 	margin-top: -15px;
 	background-color: #fff;
+	border-color: var(--primary-hover) !important;
+	color: var(--primary-hover);
 }
 
 #frm-fake-page .frm-collapse-page.button {
-	border-color: var(--grey);
+	border-color: var(--grey) !important;
 	color: var(--grey);
 }
 
@@ -4556,6 +4557,17 @@ li.selected .divider_section_only:before {
 	width: 16px;
 	text-align: center;
 	margin-left: 2px;
+	color: var(--primary-hover);
+}
+
+#frm-fake-page .frm_arrowdown6_icon {
+	color: var(--grey);
+}
+
+#frm-fake-page .frm-collapse-page:hover,
+#frm-fake-page .frm-collapse-page:hover .frm_arrowdown6_icon,
+.frm-collapse-page:hover .frm_arrowdown6_icon {
+	color: #fff;
 }
 
 .frm-collapsed i:before,
@@ -4897,10 +4909,13 @@ ul.frm-category-tabs {
 	margin: 0 7px !important;
 }
 
+.frm_has_textarea .frm-with-right-icon {
+	display: block;
+}
+
 .frm-with-left-icon,
 .frm-with-right-icon {
 	position: relative;
-	display: block;
 }
 
 .frm-with-left-icon i,
@@ -6309,6 +6324,11 @@ Responsive Design
 
 	a.frm_add_logic_link i {
 		display: none;
+	}
+
+	#new_fields .frm_single_option select,
+	#new_fields .frm_single_option input[type=text] {
+		width: calc(100% - 85px);
 	}
 
 	.frm_single_entry_page .frm_form_fields input[type=text],

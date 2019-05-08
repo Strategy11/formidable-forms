@@ -160,7 +160,7 @@
 </h3>
 <table class="form-table frm-fields">
 	<tr class="success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] === 'message' ? '' : ' frm_hidden' ); ?>">
-		<td class="frm_has_shortcodes">
+		<td class="frm_has_shortcodes frm_has_textarea">
 			<label for="success_msg"><?php esc_html_e( 'On Submit', 'formidable' ); ?></label>
 			<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // WPCS: XSS ok. ?></textarea>
 		</td>
