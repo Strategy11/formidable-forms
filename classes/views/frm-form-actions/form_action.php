@@ -16,7 +16,7 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
 			<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
 				<a href="javascript:void(0)" class="frm_icon_font frm_clone_solid_icon frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>"> </a>
 			<?php } ?>
-			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_icon_font frm_delete_icon frm_remove_form_action" data-frmverify="<?php echo esc_attr( 'Really?', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>"> </a>
+			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_icon_font frm_delete_icon frm_remove_form_action" data-frmverify="<?php echo esc_attr( 'Delete this form action?', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>"> </a>
 
 			<label class="frm_toggle">
 				<input type="checkbox" value="publish" name="<?php echo esc_attr( $action_control->get_field_name( 'post_status', '' ) ); ?>" <?php checked( $form_action->post_status, 'publish' ); ?> />

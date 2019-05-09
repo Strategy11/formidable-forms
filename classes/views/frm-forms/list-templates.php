@@ -91,7 +91,7 @@
 					continue;
 				}
 				?>
-				<div class="frm-card frm-no-thumb">
+				<div class="frm-card frm-no-thumb" id="frm-template-<?php echo esc_attr( ( isset( $template['installed'] ) && $template['installed'] ? 'custom-' : '' ) . $template['id'] ); ?>">
 					<div class="plugin-card-top">
 						<?php if ( strtotime( $template['released'] ) > strtotime( '-10 days' ) ) { ?>
 							<div class="frm_ribbon">
@@ -125,7 +125,7 @@
 						</a>
 						<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
 							|
-							<a href="#" class="frm-trash-template frm-trash" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ); ?>">
+							<a href="#" class="frm-trash-template frm-trash" data-frmdelete="trash-template" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-trashtemplate="1" data-frmverify="<?php esc_attr_e( 'Are you sure you want to delete this form template?', 'formidable' ); ?>">
 								<?php esc_html_e( 'Delete', 'formidable' ); ?>
 							</a>
 						<?php } ?>

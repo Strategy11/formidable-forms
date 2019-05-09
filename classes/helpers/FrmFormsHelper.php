@@ -1056,7 +1056,7 @@ BEFORE_HTML;
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
-				'data'  => array( 'frmverify' => __( 'Are you sure?', 'formidable' ) ),
+				'data'  => array( 'frmverify' => __( 'Do you want to move this form to the trash?', 'formidable' ) ),
 			),
 			'delete'  => array(
 				'label'   => __( 'Delete Permanently', 'formidable' ),
@@ -1064,7 +1064,7 @@ BEFORE_HTML;
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_delete_icon',
-				'data'    => array( 'frmverify' => __( 'Delete form & entries?', 'formidable' ) ),
+				'data'    => array( 'frmverify' => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ) ),
 			),
 		);
 	}

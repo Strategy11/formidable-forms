@@ -4,9 +4,12 @@
 <table class="form-table">
 	<tr>
 		<td class="frm_left_label">
-			<label for="custom_style"><?php esc_html_e( 'Style Template', 'formidable' ); ?></label>
+			<label for="custom_style">
+				<?php esc_html_e( 'Style Template', 'formidable' ); ?>
+			</label>
 		</td>
-		<td><select name="options[custom_style]" id="custom_style">
+		<td>
+			<select name="options[custom_style]" id="custom_style">
 			<option value="1" <?php selected( $values['custom_style'], 1 ); ?>>
 				<?php esc_html_e( 'Always use default', 'formidable' ); ?>
 			</option>
@@ -22,7 +25,8 @@
 				?>>
 				<?php esc_html_e( 'Do not use Formidable styling', 'formidable' ); ?>
 			</option>
-		</select></td>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td><label><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?></label></td>

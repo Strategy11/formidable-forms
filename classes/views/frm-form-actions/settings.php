@@ -44,8 +44,10 @@
 			}
 
 			foreach ( $group['actions'] as $action ) {
-				if ( ! in_array( $action, $displayed_actions ) ) {
-					?>
+				if ( in_array( $action, $displayed_actions ) ) {
+					continue;
+				}
+				?>
 					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span>
@@ -57,8 +59,7 @@
 							<?php echo esc_html( $action ); ?>
 						</a>
 					</li>
-					<?php
-				}
+				<?php
 			}
 			?>
 		</ul>

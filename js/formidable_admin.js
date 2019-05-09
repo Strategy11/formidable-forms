@@ -43,45 +43,47 @@ function frmAdminBuildJS() {
 
 	function confirmClick( e ) {
 		/*jshint validthis:true */
-		if ( this.classList.contains( 'frm_confirming' ) ) {
-			return true;
-		} else {
-			e.stopPropagation();
-			e.preventDefault();
-			confirmLinkClick( this );
-		}
+		e.stopPropagation();
+		e.preventDefault();
+		confirmLinkClick( this );
 	}
 
 	function confirmLinkClick( link ) {
 		var message = link.getAttribute( 'data-frmverify' );
 
-		if ( message === null || link.classList.contains( 'frm_confirming' ) ) {
+		if ( message === null || link.id === 'frm-confirmed-click' ) {
 			return true;
 		} else {
-			link.classList.add( 'frm_confirming' );
-
-			var $link = jQuery( link );
-			var $label = $link.find( '.frm_link_label' );
-			if ( $label.length < 1 ) {
-				$label = $link;
-				link.setAttribute( 'data-label', link.innerHTML );
-			}
-
-			var oldLabel = $label.html();
-
-			$label.html( message );
-
-			setTimeout( function() {
-				link.classList.remove( 'frm_confirming' );
-				$label.html( oldLabel );
-			}, 5000 );
-			return false;
+			return confirmModal( link );
 		}
 	}
 
-	function reverseConfirm( link ) {
-		link.classList.remove( 'frm_confirming' );
-		link.innerHTML = link.getAttribute( 'data-label' );
+	function confirmModal( link ) {
+		var i, dataAtts,
+			$info = initModal( '#frm_confirm_modal', '400px' ),
+			continueButton = document.getElementById( 'frm-confirmed-click' );
+
+		if ( $info === false ) {
+			return false;
+		}
+
+		jQuery('.frm-confirm-msg').html( link.getAttribute( 'data-frmverify' ) );
+
+		removeAtts = continueButton.dataset;
+		for ( i in dataAtts ) {
+			continueButton.removeAttribute( 'data-' + i );
+		}
+
+		dataAtts = link.dataset;
+		for ( i in dataAtts ) {
+			if ( i !== 'frmverify' ) {
+				continueButton.setAttribute( 'data-' + i, dataAtts[ i ] );
+			}
+		}
+
+		$info.dialog('open');
+		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
+		return false;
 	}
 
 	function toggleItem( e ) {
@@ -175,7 +177,12 @@ function frmAdminBuildJS() {
 			container: 'body'
 		};
 
-		var wrapClass = jQuery( '.wrap, .frm_wrap' );
+		var wrapClass = jQuery( '.wrap, .frm_wrap' ),
+			confirmModal = document.getElementById( 'frm_confirm_modal' );
+
+		jQuery( confirmModal ).on( 'click', '[data-deletefield]', deleteFieldConfirmed );
+		jQuery( confirmModal ).on( 'click', '[data-removeid]', removeThisTag );
+		jQuery( confirmModal ).on( 'click', '[data-trashtemplate]', trashTemplate );
 
 		wrapClass.on( 'click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag );
 		wrapClass.on( 'click', 'a[data-frmverify]', confirmClick );
@@ -1326,7 +1333,9 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var confirm_msg = frm_admin_js.conf_delete,
 			maybeDivider = this.parentNode.parentNode.parentNode,
-			li = maybeDivider.parentNode;
+			li = maybeDivider.parentNode,
+			field = jQuery( this ).closest( 'li' ),
+			fieldId = field.data( 'fid' );
 
 		if ( li.classList.contains( 'frm-section-collapsed' ) || li.classList.contains( 'frm-page-collapsed' ) ) {
 			return false;
@@ -1336,28 +1345,39 @@ function frmAdminBuildJS() {
 		if ( maybeDivider.className === 'divider_section_only' ) {
 			confirm_msg += '\n\n' + frm_admin_js.conf_delete_sec;
 		}
-		if ( confirm( confirm_msg ) !== true ) {
-			return false;
-		}
-		var field_id = jQuery( this ).closest( 'li' ).data( 'fid' );
-		deleteField( field_id );
 
-		if ( jQuery( this ).closest( 'li' ).hasClass( 'edit_field_type_divider' ) ) {
-			jQuery( this ).closest( 'li' ).find( 'li.frm_field_box' ).each( function() {
+		this.setAttribute( 'data-frmverify', confirm_msg );
+		this.setAttribute( 'data-deletefield', fieldId );
+
+		confirmLinkClick( this );
+		return false;
+	}
+
+	function deleteFieldConfirmed() {
+		/*jshint validthis:true */
+		deleteFields( this.getAttribute( 'data-deletefield' ) );
+	}
+
+	function deleteFields( fieldId ) {
+		var field = jQuery( 'frm_field_id_' + fieldId );
+
+		deleteField( fieldId );
+
+		if ( field.hasClass( 'edit_field_type_divider' ) ) {
+			field.find( 'li.frm_field_box' ).each( function() {
 				//TODO: maybe delete only end section
 				//if(n.hasClass('edit_field_type_end_divider')){
-				deleteField( jQuery( this ).data( 'fid' ) );
+				deleteField( this.getAttribute( 'data-fid' ) );
 				//}
 			} );
-
 		}
 		toggleSectionHolder();
-		return false;
 	}
 
 	function deleteField( field_id ) {
 		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {action: 'frm_delete_field', field_id: field_id, nonce: frmGlobal.nonce},
 			success: function( msg ) {
 				var $thisField = jQuery( document.getElementById( 'frm_field_id_' + field_id ) ),
@@ -3664,8 +3684,6 @@ function frmAdminBuildJS() {
 	}
 
 	function initTemplateModal() {
-		jQuery( '.frm_wrap' ).on( 'click', '.frm-trash-template.frm_confirming', trashTemplate );
-
 		var $preview = initModal( '#frm_preview_template_modal', '700px' );
 		if ( $preview !== false ) {
 			jQuery( '.frm-preview-template' ).click( function( event ) {
@@ -3783,8 +3801,7 @@ function frmAdminBuildJS() {
 
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
-		var id = this.getAttribute( 'data-id' ),
-			link = this;
+		var id = this.getAttribute( 'data-id' );
 		e.preventDefault();
 
 		data = {
@@ -3793,7 +3810,7 @@ function frmAdminBuildJS() {
 			nonce: frmGlobal.nonce
 		};
 		postAjax( data, function() {
-			var card = link.closest( '.frm-card' );
+			var card = document.getElementById( 'frm-template-custom-' + id );
 			fadeOut( card, function() {
 				card.parentNode.removeChild( card );
 			} );
@@ -4091,7 +4108,6 @@ function frmAdminBuildJS() {
 			var $builderForm = jQuery( builderForm );
 			var builderArea = document.getElementById( 'frm_form_editor_container' );
 			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
-			$builderForm.on( 'click', '.frm_remove_tag', removeThisTag );
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
@@ -4425,15 +4441,11 @@ function frmAdminBuildJS() {
 				jQuery( this ).closest( 'li' ).addClass( 'active' );
 			} );
 
-			jQuery( '.frm_reset_style' ).click( function( e ) {
-				var button = this;
-				if ( ! button.classList.contains( 'frm_confirming' ) ) {
-					return;
-				}
+			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
+				var button = document.getElementById( 'frm_reset_style' );
 
 				button.classList.add( 'frm_loading_button' );
 				e.stopPropagation();
-				reverseConfirm( button );
 
 				jQuery.ajax( {
 					type: 'POST', url: ajaxurl,

@@ -30,13 +30,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	text-decoration: none;
 }
 
-a.frm_confirming:hover,
-a.frm_confirming:focus,
-a.frm_confirming,
-.frm_confirming {
-	color: var(--orange) !important;
-}
-
 .wrap.frm-with-margin,
 #frm_top_bar + .wrap,
 .frm_wrap > .wrap {
@@ -559,6 +552,7 @@ p.frm_has_shortcodes {
 	text-align: center;
 }
 
+#frm_confirm_modal .dismiss i,
 #frm_upgrade_modal .dismiss i {
 	top: 7px;
 	right: 7px;
@@ -2531,7 +2525,6 @@ img.frm_help {
 	margin-top: 20px;
 }
 
-.frm_confirming.frm_loading_button,
 .wp-core-ui .frm_loading_button.button-primary.frm-button-primary,
 .frm_loading_button,
 .frm_loading_form.frm_button_submit {
@@ -3978,10 +3971,6 @@ a.frm_add_logic_link.frm_hidden {
 
 a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
 	color: #82b4cb;
-}
-
-.frm_confirming.frm_icon_font:before {
-	content: '' !important;
 }
 
 .misc-pub-revisions.frm_icon_font,

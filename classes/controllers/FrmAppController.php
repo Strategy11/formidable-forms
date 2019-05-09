@@ -308,6 +308,8 @@ class FrmAppController {
 			'content' => 'upgrade',
 		);
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/confirm-overlay.php' );
 	}
 
 	/**
