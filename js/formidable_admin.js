@@ -1157,7 +1157,7 @@ function frmAdminBuildJS() {
 
 		jQuery( '.frm-insert-preset' ).click( insertBulkPreset );
 
-		jQuery( builderForm ).on( 'click', '.frm-bulk-edit-link', function( event ) {
+		jQuery( builderForm ).on( 'click', 'a.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
 			var i, key, label, content = '',
 				fieldId = this.parentNode.parentNode.getAttribute( 'data-fid' ),
@@ -1254,7 +1254,7 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( newOption );
-			//resetDisplayedOpts( field_id );
+			//TODO: resetDisplayedOpts( field_id );
 		}
 	}
 
@@ -1683,39 +1683,148 @@ function frmAdminBuildJS() {
 
 	}
 
-	function resetDisplayedOpts( id ) {
-		// TODO: 4.0
-		var field = document.getElementById( 'frm_dropdown_' + id );
-		if ( field !== null ) {
-			fillDropdownOpts( field, id );
+	function resetOptOnChange() {
+		/*jshint validthis:true */
+		var allOpts = jQuery( this ).closest( '.frm_sortable_field_opts' ),
+			fieldId = allOpts.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_opts', '' ),
+			fieldKey = allOpts.data( 'key' ),
+			thisOpt = jQuery( this ).closest( '.frm_single_option' );
+
+		resetSingleOpt( fieldId, fieldKey, thisOpt );
+	}
+
+	function resetSingleOpt( fieldId, fieldKey, thisOpt ) {
+		var label, saved, baseName, text, defaultVal, previewInput,
+			optKey = thisOpt.data( 'optkey' ),
+			separateValues = document.getElementById( 'separate_value_' + fieldId ).checked,
+			single = jQuery( 'label[for="field_' + fieldKey + '-' + optKey + '"]' );
+
+		if ( single.length < 1 ) {
+			resetDisplayedOpts( fieldId );
+			return;
+		}
+
+		baseName = 'field_options[options_' + fieldId + '][' + optKey + ']';
+		label = jQuery( 'input[name="' + baseName + '[label]"]' );
+		previewInput = single.children( 'input' );
+
+		if ( label.length < 1 ) {
+			// Check for other label.
+			label = jQuery( 'input[name="' + baseName + '"]' );
+			saved = label.val();
+		} else if ( separateValues ) {
+			saved = jQuery( 'input[name="' + baseName + '[value]"]' ).val();
+		} else {
+			saved = label.val();
+		}
+
+		if ( label.length ) {
+			// Set the displayed value.
+			text = single[0].childNodes;
+			text[ text.length - 1 ].nodeValue = ' ' + label.val();
+
+			// Set saved value.
+			previewInput.val( saved );
+
+			// Set the default value.
+			defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
+			previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
 		}
 	}
 
-	function fillDropdownOpts( field, sourceID, includeBlank ) {
+	function resetDisplayedOpts( fieldId ) {
+		var opt, opts, type, placeholder,
+			input = jQuery( '[name^="item_meta[' + fieldId + ']"]' );
+
+		if ( input.length < 1 ) {
+			return;
+		}
+
+		if ( input.is( 'select' ) ) {
+			placeholder = document.getElementById( 'frm_placeholder_' + fieldId ).value;
+			if ( placeholder === '' ) {
+				fillDropdownOpts( input[0], fieldId );
+			} else {
+				fillDropdownOpts( input[0], fieldId, placeholder );
+			}
+		} else {
+			opts = getMultipleOpts( fieldId );
+			type = input.attr( 'type' );
+
+			for ( var i = 0; i < opts.length; i++ ) {
+				var opt = radioCheckboxOpt( type, opts[ i ], fieldId );
+				jQuery( input ).append( opt );
+			}
+		}
+	}
+
+	function getMultipleOpts( fieldId ) {
+		var i, saved, labelName, label, key, opts = [],
+			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + '"][name$="[label]"]' ),
+			separateValues = document.getElementById( 'separate_value_' + fieldId ).checked;
+
+		for ( i = 0; i < optVals.length; i++ ) {
+			if ( optVals[ i ].name.indexOf( '000' ) !== -1 ) {
+				continue;
+			}
+			saved = optVals[ i ].value;
+			label = saved;
+			key = optVals[ i ].name.replace( 'field_options[options_' + fieldId + '][', '' ).replace( '][label]', '' );
+
+			if ( separateValues ) {
+				labelName = optVals[ i ].name.replace( '[label]', '[value]' );
+				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
+			}
+
+			opts.push( {
+				saved: saved,
+				label: label,
+				key: key
+			} );
+
+			if ( i === optVals.length - 1 ) {
+				return opts;
+			}
+		}
+	}
+
+	function radioCheckboxOpt( type, opt, fieldId ) {
+		return '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label><input type="' + type +
+			'" value="' + opt.saved + '">' + opt.label + '</label></div>';
+	}
+
+	function fillDropdownOpts( field, sourceID, placeholder ) {
 		if ( field !== null ) {
 			removeDropdownOpts( field );
-			var opts = jQuery( 'input[name^="field_options[options_' + sourceID + '"][name$="[value]"]' );
-			var l = opts.length;
-			jQuery.each( opts, function() {
-				var labelName = this.name.replace( '[value]', '[label]' );
-				var value = this.value;
-				if ( includeBlank === 'blank' && value !== '' ) {
+			var opts = getMultipleOpts( sourceID );
+
+			for ( var i = 0; i < opts.length; i++ ) {
+				var label = opts[ i ].label;
+
+				if ( placeholder !== null && label !== '' ) {
 					var blankOpt = document.createElement( 'option' );
 					blankOpt.value = '';
+					blankOpt.innerHTML = placeholder;
 					field.appendChild( blankOpt );
-					includeBlank = false;
+				} else if ( placeholder !== null ) {
+					label = placeholder;
 				}
+				placeholder = null;
 
 				var opt = document.createElement( 'option' );
-				opt.value = value;
-				opt.innerHTML = jQuery( 'input[name="' + labelName + '"]' ).val();
+				opt.value = opts[ i ].saved;
+				opt.innerHTML = label;
 				field.appendChild( opt );
-			} );
+			}
 		}
 	}
 
 	function removeDropdownOpts( field ) {
 		var i;
+		if ( typeof field.options === 'undefined' ) {
+			return;
+		}
+
 		for ( i = field.options.length - 1; i >= 0; i-- ) {
 			field.remove( i );
 		}
@@ -1822,7 +1931,7 @@ function frmAdminBuildJS() {
 
 				if ( showSelect ) {
 					var fillField = document.getElementById( input.id );
-					fillDropdownOpts( fillField, val, 'blank' );
+					fillDropdownOpts( fillField, val, '' );
 				}
 			} else {
 				var thisType = this.getAttribute( 'data-type' );
@@ -4118,7 +4227,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_clone_icon', duplicateField );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
-			$builderForm.on( 'keyup', '[data-changeme]', liveChanges );
+			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 
@@ -4143,6 +4252,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
+			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
 			jQuery( builderArea ).on( 'click', '#frm-show-fields > li.ui-state-default', clickVis );
@@ -4300,28 +4410,35 @@ function frmAdminBuildJS() {
 			showInputIcon();
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
 
-			jQuery( document ).on( 'focusin click', 'form input, form textarea', function( e ) {
+			var settingsPage = document.getElementById( 'form_settings_page' ),
+				viewPage = document.body.classList.contains( 'post-type-frm_display' ),
+				htmlTab = document.getElementById( 'frm_html_tags_tab' ),
+				insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
+
+			if ( settingsPage !== null || viewPage ) {
+			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
 				e.stopPropagation();
 				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
-					if ( document.getElementById( 'form_settings_page' ) !== null ) {
+					if ( settingsPage !== null ) {
 						/* form settings page */
 						var htmlTab = jQuery( '#frm_html_tab' );
 						if ( jQuery( this ).closest( '#html_settings' ).length > 0 ) {
 							htmlTab.show();
 							htmlTab.siblings().hide();
-							document.getElementById( 'frm_html_tags_tab' ).click();
+							htmlTab.click();
 						} else {
 							showElement( jQuery( '.frm-category-tabs li' ) );
-							document.getElementById( 'frm_insert_fields_tab' ).click();
+							insertFieldsTab.click();
 							htmlTab.hide();
 							htmlTab.siblings().show();
 						}
-					} else if ( document.body.classList.contains( 'post-type-frm_display' ) ) {
+					} else if ( viewPage ) {
 						// Run on view page.
 						toggleAllowedShortcodes( this.id, e.type );
 					}
 				}
 			} );
+			}
 
 			jQuery( '.frm_wrap, #postbox-container-1' ).on( 'mousedown', '#frm_adv_info a, .frm_field_list a', function( e ) {
 				e.preventDefault();
@@ -4542,15 +4659,8 @@ function frmAdminBuildJS() {
 					nonce: frmGlobal.nonce
 				},
 				success: function( html ) {
-					jQuery( '#frm_field_' + field_id + '_opts' ).html( html );
-					if ( jQuery( 'select[name="item_meta[' + field_id + ']"]' ).length > 0 ) {
-						var o = opts.replace( /\s\s*$/, '' ).split( "\n" );
-						var sel = '';
-						for ( var i = 0; i < o.length; i++ ) {
-							sel += '<option value="' + o[i] + '">' + o[i] + '</option>';
-						}
-						jQuery( 'select[name="item_meta[' + field_id + ']"]' ).html( sel );
-					}
+					document.getElementById( 'frm_field_' + field_id + '_opts' ).innerHTML = html;
+					resetDisplayedOpts( field_id );
 
 					if ( typeof modal !== 'undefined' ) {
 						modal.dialog( 'close' );

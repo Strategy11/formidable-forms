@@ -25,7 +25,9 @@
 					);
 					?>
 				</h2>
+				<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 				<div class="clear"></div>
+				<?php } ?>
 			<?php } ?>
 
 			<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>

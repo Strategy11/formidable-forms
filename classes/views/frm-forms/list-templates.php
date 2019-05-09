@@ -125,7 +125,7 @@
 						</a>
 						<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
 							|
-							<a href="#" class="frm-trash-template frm-trash" data-frmdelete="trash-template" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-trashtemplate="1" data-frmverify="<?php esc_attr_e( 'Are you sure you want to delete this form template?', 'formidable' ); ?>">
+							<a href="#" class="frm-trash-template frm-trash" data-frmdelete="trash-template" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-trashtemplate="1" data-frmverify="<?php esc_attr_e( 'Delete this form template?', 'formidable' ); ?>">
 								<?php esc_html_e( 'Delete', 'formidable' ); ?>
 							</a>
 						<?php } ?>

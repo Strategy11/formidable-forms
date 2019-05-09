@@ -1023,6 +1023,7 @@ h2 .frm-button-primary {
 	font-size: inherit;
 }
 
+.wp-core-ui.frm-white-body .frm-button-secondary:hover i,
 .frm_wrap .preview > .button:hover i {
 	color: #fff;
 }
@@ -2965,9 +2966,14 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 }
 
 .frm_single_option .frm-drag {
-	font-size: 18px;
+	font-size: 23px;
+	width: 22px;
+	margin-left: -4px;
 	color: var(--grey);
-	width: 18px;
+}
+
+.frm_single_option .frm-drag:before {
+	vertical-align: middle;
 }
 
 .frm-drag,
@@ -3969,10 +3975,6 @@ a.frm_add_logic_link.frm_hidden {
 	color: var(--grey);
 }
 
-a.frm_icon_font:hover, a.frm_icon_font:active, a.frm_icon_font:focus {
-	color: #82b4cb;
-}
-
 .misc-pub-revisions.frm_icon_font,
 .misc-pub-revisions.frm_icon_font:hover {
 	color: inherit;
@@ -4411,6 +4413,7 @@ li.selected .divider_section_only:before {
 	display: none;
 }
 
+#frm-form-button button,
 .frm_remove_form_row,
 .frm_add_form_row,
 .frm-white-body .frm-preview-buttons button {
@@ -4637,6 +4640,7 @@ tr.frm_options_heading td {
 
 #frm-form-button {
 	display: none;
+	margin: 25px 7px;
 }
 
 .frm-has-fields #frm-form-button {
@@ -4876,7 +4880,7 @@ ul.frm-category-tabs {
 	clear: right;
 }
 
-#form_entries_page .frm-search {
+#form_entries_page form .frm-search {
 	margin-top: 15px;
 }
 
@@ -4907,6 +4911,8 @@ ul.frm-category-tabs {
 	position: relative;
 }
 
+i.frm-show-box,
+i.frm-show-inline-modal,
 .frm-with-left-icon i,
 .frm-with-right-icon i,
 .frm-search span {
@@ -4920,9 +4926,10 @@ ul.frm-category-tabs {
 }
 
 .frm-with-right-icon i {
-	right: 2px;
+	right: 0;
+	top: -3px;
 	left: auto;
-	padding: 6px 5px;
+	padding: 0 10px 0 5px;
 }
 
 i.frm-show-box,
@@ -4931,6 +4938,9 @@ i.frm-show-inline-modal {
 	pointer-events: initial;
 	z-index: 1;
 	opacity: 1;
+	right: 2px;
+	top: auto;
+	padding: 7px 10px;
 }
 
 .frm-open i.frm-show-inline-modal {
@@ -5880,7 +5890,7 @@ iframe#dyncontent_ifr {
 	outline: 0;
 	box-shadow: none;
 	border-radius: var(--small-radius);
-	padding: 6px 12px;
+	padding: 6px 9px;
 	border-color: var(--grey-border);
 	color: var(--dark-grey);
 	font-size: 15px;
@@ -5896,6 +5906,10 @@ iframe#dyncontent_ifr {
 .frm_wrap .frm_form_builder input[type="tel"],
 .frm_wrap .frm_form_builder input[type="text"] {
 	padding: 10px 12px;
+}
+
+.frm_wrap .frm_form_builder input[type="text"].frm_other_input {
+	padding: 6px 9px;
 }
 
 .frm_wrap input[disabled],
