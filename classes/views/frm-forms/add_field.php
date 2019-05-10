@@ -31,7 +31,7 @@
 		</span>
 	</label>
 
-	<div class="frm_form_fields" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
+	<div class="frm_form_fields frm_opt_container" data-ftype="<?php echo esc_attr( $display['type'] ); ?>">
 		<?php $field_obj->show_on_form_builder(); ?>
 		<div class="clear"></div>
 	</div>

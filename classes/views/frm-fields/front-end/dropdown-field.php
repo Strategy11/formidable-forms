@@ -19,6 +19,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 	}
 
 	$placeholder = FrmField::get_option( $field, 'placeholder' );
+	if ( empty( $placeholder ) ) {
+		$placeholder = FrmFieldsController::get_default_value_from_name( $field );
+	}
+
 	$skipped = false;
 	if ( $placeholder !== '' ) {
 		?>

@@ -385,7 +385,7 @@ class FrmFieldsHelper {
 	 * @since 2.05
 	 */
 	public static function is_placeholder_field_type( $type ) {
-		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden', 'file' ) );
+		return ! in_array( $type, array( 'radio', 'checkbox', 'hidden', 'file' ) );
 	}
 
 	public static function get_checkbox_id( $field, $opt_key, $type = 'checkbox' ) {
@@ -444,8 +444,8 @@ class FrmFieldsHelper {
 		}
 
 		$opt_key    = '000';
-		$field_val  = '';
-		$opt        = '';
+		$field_val  = __( 'New Option', 'formidable' );
+		$opt        = __( 'New Option', 'formidable' );
 		$checked    = false;
 		$field_name = 'default_value_' . $field['id'];
 		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );

@@ -1323,6 +1323,10 @@ function frmAdminBuildJS() {
 		} );
 	}
 
+	/**
+	 * If a radio button is set as default, allow a click to
+	 * deselect it.
+	 */
 	function maybeUncheckRadio( e ) {
 		/*jshint validthis:true */
 		var $self = jQuery( this );
@@ -1339,6 +1343,16 @@ function frmAdminBuildJS() {
 			};
 			$self.bind( 'mouseup', up );
 			$self.one( 'mouseout', unbind );
+		}
+	}
+
+	/**
+	 * If the field option has the default text, clear it out on click.
+	 */
+	function maybeClearOptText() {
+		/*jshint validthis:true */
+		if ( this.value === frm_admin_js.new_option ) {
+			this.value = '';
 		}
 	}
 
@@ -2092,10 +2106,9 @@ function frmAdminBuildJS() {
 	 */
 	function changeFieldSetting() {
 		/*jshint validthis:true */
-		var $setting = jQuery( this ),
-			fieldId = $setting.closest( '.frm-single-settings' ).data( 'fid' );
-
+		var fieldId;
 		if ( this.classList.contains( 'frm_classes' ) ) {
+			fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 			changeFieldClass( fieldId, this );
 		}
 	}
@@ -3071,8 +3084,9 @@ function frmAdminBuildJS() {
 			send_to_editor( variable );
 			return;
 		}
+
 		var content_box = jQuery( document.getElementById( element_id ) );
-		if ( !content_box ) {
+		if ( ! content_box.length ) {
 			return false;
 		}
 
@@ -3113,7 +3127,7 @@ function frmAdminBuildJS() {
 		} else {
 			content_box.val( variable + content_box.val() );
 		}
-		content_box.keyup(); //trigger change
+		content_box.change(); //trigger change
 	}
 
 	function resetLogicBuilder() {
@@ -4260,7 +4274,7 @@ function frmAdminBuildJS() {
 			} );
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
-			jQuery( builderForm ).on( 'change', 'input, select, textarea', changeFieldSetting );
+			jQuery( builderForm ).on( 'change', 'input.frm_classes', changeFieldSetting );
 			jQuery( '.frm_submit_ajax' ).click( submitBuild );
 			jQuery( '.frm_submit_no_ajax' ).click( submitNoAjax );
 
@@ -4318,6 +4332,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
+			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
