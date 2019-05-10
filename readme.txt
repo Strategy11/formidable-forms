@@ -2,9 +2,9 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
-Tested up to: 5.1.1
-Requires PHP: 5.3
-Stable tag: 3.06.05
+Tested up to: 5.2
+Requires PHP: 5.6
+Stable tag: 3.06.06
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,19 +374,15 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 3.06.06 =
+* Remove complete Spanish translations
+* Increase PHP requirements to 5.6
+* Increase minimum WP version to 4.6
+
 = 3.06.05 =
 * When getting IP addresses, use the end use IP rather than the proxy IP with services like Cloudflare.
 * On new installations, allow multiple reCaptchas on a page by default.
 * Remove admin email address from user tracking in order to keep it 100% anonymous.
 * Fix: When a license is saved, properly clear the local caches in order to get access to new add-ons and form templates after renewing or upgrading.
-
-= 3.06.04 =
-* New: Added an option to opt into usage tracking. This will allow us to simplify settings in a future release and better cater to the majority of use cases.
-* Fix: Replace old field ids in the field description and HTML field after duplication or import.
-
-= 3.06.03 =
-* Fix: The required indicator for a field was blank after importing a form.
-* Fix: Only include the id of the error message once in aria-describedby for linking the error message for screen readers.
-* Fix: Prevent a couple PHP warning messages with certain settings.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

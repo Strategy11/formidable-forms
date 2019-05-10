@@ -1,4 +1,9 @@
 == Changelog ==
+= 3.06.06 =
+* Remove complete Spanish translations
+* Increase PHP requirements to 5.6
+* Increase minimum WP version to 4.6
+
 = 3.06.05 =
 * When getting IP addresses, use the end use IP rather than the proxy IP with services like Cloudflare.
 * On new installations, allow multiple reCaptchas on a page by default.
