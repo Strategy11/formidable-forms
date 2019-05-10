@@ -2954,7 +2954,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
-	width: calc(100% - 75px);
+	width: calc(100% - 73px);
 }
 
 .frm_single_option a {
@@ -2968,7 +2968,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 .frm_single_option .frm-drag {
 	font-size: 23px;
 	width: 22px;
-	margin-left: -4px;
+	margin-left: -6px;
 	color: var(--grey);
 }
 
@@ -2981,8 +2981,6 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	cursor: move;
 }
 
-.frm-small-gutter,
-.frm_sortable_field_opts + a,
 .frm_single_option .frm_option_key {
 	margin-left: 22px !important;
 }
@@ -6331,7 +6329,7 @@ Responsive Design
 
 	#new_fields .frm_single_option select,
 	#new_fields .frm_single_option input[type=text] {
-		width: calc(100% - 85px);
+		width: calc(100% - 83px);
 	}
 
 	.frm_single_entry_page .frm_form_fields input[type=text],

@@ -388,13 +388,13 @@ class FrmFieldsHelper {
 		return ! in_array( $type, array( 'select', 'radio', 'checkbox', 'hidden', 'file' ) );
 	}
 
-	public static function get_checkbox_id( $field, $opt_key ) {
+	public static function get_checkbox_id( $field, $opt_key, $type = 'checkbox' ) {
 		$id = $field['id'];
-		if ( isset( $field['in_section'] ) && $field['in_section'] ) {
+		if ( isset( $field['in_section'] ) && $field['in_section'] && ! FrmAppHelper::is_page( 'formidable' ) ) {
 			$id .= '-' . $field['in_section'];
 		}
 
-		return 'frm_checkbox_' . $id . '-' . $opt_key;
+		return 'frm_' . $type . '_' . $id . '-' . $opt_key;
 	}
 
 	public static function show_single_option( $field ) {
