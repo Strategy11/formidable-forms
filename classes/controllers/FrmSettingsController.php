@@ -87,6 +87,13 @@ class FrmSettingsController {
 		}
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
+		$sections['misc'] = array(
+			'name'     => __( 'Miscellaneous', 'formidable' ),
+			'icon'     => 'frm_icon_font frm_shuffle_icon',
+			'class'    => __CLASS__,
+			'function' => 'misc_settings',
+		);
+
 		foreach ( $sections as $key => $section ) {
 			$defaults = array(
 				'html_class' => '',
@@ -167,6 +174,15 @@ class FrmSettingsController {
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function misc_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
 	}
 
 	public static function process_form( $stop_load = false ) {

@@ -83,6 +83,8 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	float: none;
 }
 
+.new-php.post-type-frm_display #screen-meta-links,
+.post-php.post-type-frm_display #screen-meta-links,
 .new-php.post-type-frm_display #wpfooter,
 .post-php.post-type-frm_display #wpfooter,
 .frm-full-screen #wpfooter {
@@ -410,6 +412,7 @@ ul.frm_form_nav > li {
 .frm_wrap .postbox {
 	border-color: var(--grey-border);
 	border-radius: 6px;
+	box-shadow: none;
 }
 
 .frm_wrap .postbox h3.hndle {
@@ -998,6 +1001,11 @@ h2 .frm-button-primary {
 .frm-button-secondary {
 	color: var(--primary-color);
 	background-color: transparent;
+}
+
+#wp-content-media-buttons button,
+#wp-content-media-buttons a.button {
+	border-color: var(--grey-border);
 }
 
 .frm_orange_button {
@@ -3107,7 +3115,7 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 #form_settings_page .tabs-panel,
 .frm_settings_form .tabs-panel {
 	max-height: initial !important;
-	min-height: 260px !important;
+	min-height: 50px !important;
 }
 
 #frm_adv_info .tabs-panel {
@@ -5120,23 +5128,6 @@ select[name="m"] {
 	text-decoration: line-through;
 }
 
-.frm_uninstall {
-	padding-right: 0.75em;
-	padding-top: 11px;
-}
-
-.frm_uninstall a {
-	color: #D54E21;
-}
-
-.frm_uninstall a:hover {
-	color: #21759B;
-}
-
-.frm_uninstall a.button {
-	margin-top: 1px;
-}
-
 /* View page */
 
 .post-type-frm_display #poststuff #post-body.columns-2 {
@@ -5280,7 +5271,9 @@ select.texture {
 }
 
 .post-type-frm_display #frm_adv_info ul.frm_code_list.frm-full-hover {
-	max-height: none;
+	max-height: calc( 100vh - 180px );
+	max-height: -moz-available;
+	max-height: -webkit-fill-available;
 }
 
 .frm_col_one {
@@ -6333,12 +6326,8 @@ Responsive Design
 		width: auto !important;
 	}
 
-	html.wp-toolbar {
-		padding: 0 !important;
-	}
-
 	html.wp-toolbar .frm-full-screen {
-		margin-top: 0;
+		margin-top: -46px; /* TODO: remove admin bar */
 	}
 
 	.frm-full-screen #screen-meta-links {

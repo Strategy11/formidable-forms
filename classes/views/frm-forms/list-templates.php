@@ -2,13 +2,12 @@
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Add new form', 'formidable' ),
-			'cancel_link' => '?page=formidable&frm_action=add_new',
+			'label'       => __( 'Add New Form', 'formidable' ),
+			'cancel_link' => '?page=formidable',
 		)
 	);
 	?>
 	<div class="wrap">
-		<h2 class="frm-h2"><?php esc_html_e( 'Select a Template', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php
 			printf(

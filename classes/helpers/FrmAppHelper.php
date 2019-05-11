@@ -1883,7 +1883,6 @@ class FrmAppHelper {
 		if ( $location == 'admin' ) {
 			$frm_settings         = self::get_settings();
 			$admin_script_strings = array(
-				'confirm_uninstall' => __( 'Are you sure you want to do this? Clicking OK will delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ),
 				'desc'              => __( '(Click to add description)', 'formidable' ),
 				'blank'             => __( '(Blank)', 'formidable' ),
 				'no_label'          => __( '(no label)', 'formidable' ),
@@ -1904,6 +1903,7 @@ class FrmAppHelper {
 				'default_conf'      => __( 'The entered values do not match', 'formidable' ),
 				'enter_email'       => __( 'Enter Email', 'formidable' ),
 				'confirm_email'     => __( 'Confirm Email', 'formidable' ),
+				'conditional_text'  => __( 'Conditional content here', 'formidable' ),
 				'new_option'        => __( 'New Option', 'formidable' ),
 				'css_invalid_size'  => __( 'In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
 				'enter_password'    => __( 'Enter Password', 'formidable' ),

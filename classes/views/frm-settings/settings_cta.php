@@ -1,6 +1,5 @@
-<div class="settings-lite-cta">
-	<div class="metabox-holder">
-		<div class="postbox">
+<div class="settings-lite-cta" id="frm-dismissable-cta">
+		<div class="postbox" style="border:none;">
 			<div class="inside">
 
 				<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>"><i class="frm_icon_font frm_close_icon" aria-label="Dismiss" aria-hidden="true"></i></a>
@@ -29,5 +28,4 @@
 				</div>
 			</div>
 		</div>
-	</div>
 </div>

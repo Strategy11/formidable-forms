@@ -36,7 +36,7 @@
 <?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
 
 
-<h3><?php esc_html_e( 'Miscellaneous', 'formidable' ); ?></h3>
+<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
 <?php do_action( 'frm_settings_form', $frm_settings ); ?>
 
 <div class="clear"></div>
@@ -52,32 +52,4 @@
 		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDRP compliance.', 'formidable' ); ?>
 	</label>
 
-</p>
-
-<p>
-	<label for="frm_tracking">
-		<input type="checkbox" name="frm_tracking" id="frm_tracking" value="1" <?php checked( $frm_settings->tracking, 1 ); ?> />
-		<?php esc_html_e( 'Allow Formidable Forms to track plugin usage. Opt-in to tracking to help us ensure compatibility and simplify our settings.', 'formidable' ); ?>
-	</label>
-</p>
-
-<!-- Deprecated settings can only be switched away from the default -->
-<input type="hidden" id="frm_use_html" name="frm_use_html" value="1" />
-
-<?php if ( empty( $frm_settings->use_html ) ) { ?>
-<p>
-	<label for="frm_use_html">
-		<input type="checkbox" id="frm_use_html" name="frm_use_html" value="1" <?php checked( $frm_settings->use_html, 1 ); ?> />
-		<?php esc_html_e( 'Use HTML5 in forms', 'formidable' ); ?>
-	</label>
-	<span class="frm_help frm_icon_font frm_tooltip_icon"
-	title="<?php esc_attr_e( 'We recommend using HTML 5 for your forms. It adds some nifty options like placeholders, patterns, and autocomplete.', 'formidable' ); ?>"></span>
-</p>
-<?php } ?>
-
-<p class="alignright frm_uninstall">
-	<a href="javascript:void(0)" id="frm_uninstall_now">
-		<?php esc_html_e( 'Uninstall Formidable', 'formidable' ); ?>
-	</a>
-	<span class="frm-wait frm_spinner"></span>
 </p>

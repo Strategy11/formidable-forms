@@ -3033,7 +3033,7 @@ function frmAdminBuildJS() {
 	function insertCode( e ) {
 		/*jshint validthis:true */
 		e.preventDefault();
-		insertFieldCode( jQuery( this ), jQuery( this ).data( 'code' ) );
+		insertFieldCode( jQuery( this ), this.getAttribute( 'data-code' ) );
 		return false;
 	}
 
@@ -3155,9 +3155,9 @@ function frmAdminBuildJS() {
 
 		idKey = document.getElementById( idKey );
 		field = idKey.options[idKey.selectedIndex].value;
-		code = 'if ' + field + ' ' + is + '="' + text + '"][/if ' + field;
-		result.setAttribute( 'data-code', code );
-		result.innerHTML = '[' + code + ']';
+		code = 'if ' + field + ' ' + is + '="' + text + '"]';
+		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field );
+		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
 	function showShortcodes( e ) {
@@ -3389,10 +3389,13 @@ function frmAdminBuildJS() {
 	}
 
 	function uninstallNow() {
-		if ( confirm( frm_admin_js.confirm_uninstall ) ) {
-			jQuery( '.frm_uninstall .frm-wait' ).show();
+		/*jshint validthis:true */
+		if ( confirmLinkClick( this ) === true ) {
+			jQuery( '.frm_uninstall .frm-wait' ).css( 'visibility', 'visible' );
 			jQuery.ajax( {
-				type: 'POST', url: ajaxurl, data: "action=frm_uninstall&nonce=" + frmGlobal.nonce,
+				type: 'POST',
+				url: ajaxurl,
+				data: 'action=frm_uninstall&nonce=' + frmGlobal.nonce,
 				success: function( msg ) {
 					jQuery( '.frm_uninstall' ).fadeOut( 'slow' );
 					window.location = msg;
@@ -4487,7 +4490,7 @@ function frmAdminBuildJS() {
 			} );
 
 			jQuery( document ).on( 'click change', '#frm-id-key-condition', resetLogicBuilder );
-			jQuery( document ).on( 'change', '.frm-build-logic', setLogicExample );
+			jQuery( document ).on( 'keyup change', '.frm-build-logic', setLogicExample );
 
 			showInputIcon();
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
@@ -4699,15 +4702,15 @@ function frmAdminBuildJS() {
 		},
 
 		globalSettingsInit: function() {
-			var $globalForm = jQuery( document.getElementById( 'form_global_settings' ) );
-			jQuery( document.getElementById( 'frm_uninstall_now' ) ).click( uninstallNow );
+			jQuery( document).on( 'click', '[data-frmuninstall]', uninstallNow );
+
 			initiateMultiselect();
 
 			// activate addon licenses
 			var licenseTab = document.getElementById( 'licenses_settings' );
 			jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
 
-			jQuery( '.settings-lite-cta .dismiss' ).click( function( event ) {
+			jQuery( '#frm-dismissable-cta .dismiss' ).click( function( event ) {
 				event.preventDefault();
 				jQuery.post( ajaxurl, {
 					action: 'frm_lite_settings_upgrade'

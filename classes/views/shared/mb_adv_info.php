@@ -156,7 +156,7 @@
 			</h3>
 			<ul class="frm_code_list frm-full-hover frmcenter">
 				<li>
-					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals=''][/if x">
+					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php echo esc_attr( 'Conditional content here', 'formidable' ); ?>[/if x">
 						[if x equals=""][/if x]
 					</a>
 				</li>
