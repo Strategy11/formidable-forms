@@ -817,15 +817,35 @@ class FrmAppHelper {
 		return get_posts( $query );
 	}
 
-	public static function wp_pages_dropdown( $field_name, $page_id, $truncate = false ) {
+	/**
+	 * @param array   $args
+	 * @param string  $page_id Deprecated.
+	 * @param boolean $truncate Deprecated.
+	 */
+	public static function wp_pages_dropdown( $args = array(), $page_id, $truncate = false ) {
+		if ( ! is_array( $args ) ) {
+			$args = array(
+				'field_name' => $args,
+			);
+		}
+
+		$defaults = array(
+			'truncate'    => $truncate,
+			'placeholder' => ' ',
+			'field_name'  => '',
+			'page_id'     => '',
+		);
+		$args = array_merge( $defaults, $args );
+
 		$pages    = self::get_pages();
-		$selected = self::get_post_param( $field_name, $page_id, 'absint' );
+		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+
 		?>
-		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>" class="frm-pages-dropdown">
-			<option value=""> </option>
+		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
+			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $truncate ) : $page->post_title ); ?>
+					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
 				</option>
 			<?php } ?>
 		</select>

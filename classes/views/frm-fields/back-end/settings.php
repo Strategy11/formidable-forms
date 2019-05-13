@@ -196,7 +196,7 @@ do_action( 'frm_before_field_options', $field );
 				</label>
 				<span class="frm-with-right-icon">
 					<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-layout-classes-box"></i>
-					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" />
+					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" />
 				</span>
 			</p>
 		<?php } ?>

@@ -578,16 +578,22 @@ DEFAULT_HTML;
 
 		$class = '';
 		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
-			if ( 'inline' === $align ) {
-				$class .= ' horizontal_radio';
-			} elseif ( 'block' === $align ) {
-				$class .= ' vertical_radio';
-			} else {
-				$class .= ' ' . $align;
-			}
+			self::prepare_align_class( $align );
+			$class .= ' ' . $align;
 		}
 
 		return $class;
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function prepare_align_class( &$align ) {
+		if ( 'inline' === $align ) {
+			$align = 'horizontal_radio';
+		} elseif ( 'block' === $align ) {
+			$align = 'vertical_radio';
+		}
 	}
 
 	public function get_label_class() {

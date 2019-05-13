@@ -142,6 +142,12 @@ class FrmSettings {
 	public function fill_with_defaults( $params = array() ) {
 		$settings = $this->default_options();
 
+		// Use grids and fade in as default for new installs.
+		if ( isset( $params[ 'frm_tracking' ] ) ) {
+			$settings['old_css']   = false;
+			$settings['fade_form'] = true;
+		}
+
 		foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $setting ] ) ) {
 				$this->{$setting} = $params[ 'frm_' . $setting ];
