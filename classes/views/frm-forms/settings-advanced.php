@@ -91,7 +91,8 @@
 						'page_id'     => $values['success_page_id'],
 						'placeholder' => __( 'Select a Page', 'formidable' ),
 					)
-				); ?>
+				);
+				?>
 			</span>
 </p>
 

@@ -1,4 +1,4 @@
-<p class="frm6 frm_form_field">
+<p class="frm6 frm_first frm_form_field">
 	<label class="frm_help" title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used.', 'formidable' ); ?>">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'important_style' ) ); ?>" id="frm_important_style" value="1" <?php checked( $style->post_content['important_style'], 1 ); ?> />
 		<?php esc_html_e( 'Override theme styling', 'formidable' ); ?>
@@ -12,7 +12,7 @@
 	</label>
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Alignment', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'form_align' ) ); ?>" id="frm_form_align">
 		<option value="left" <?php selected( $style->post_content['form_align'], 'left' ); ?>>
@@ -37,7 +37,7 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" />
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Border', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset' ) ); ?>" id="frm_fieldset" value="<?php echo esc_attr( $style->post_content['fieldset'] ); ?>" size="4" />
 </p>
@@ -57,7 +57,7 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  class="frm_full_width" />
 </p>
 
-<p class="frm6 frm_form_field">
+<p class="frm6 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Direction', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'direction' ) ); ?>" id="frm_direction">
 		<option value="ltr" <?php selected( $style->post_content['direction'], 'ltr' ); ?>>

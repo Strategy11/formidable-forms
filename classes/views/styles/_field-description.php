@@ -1,4 +1,4 @@
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'description_color' ) ); ?>" id="frm_description_color" class="hex" value="<?php echo esc_attr( $style->post_content['description_color'] ); ?>" />
 </p>
@@ -22,7 +22,7 @@
 	</select>
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Size', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'description_font_size' ) ); ?>" id="frm_description_font_size" value="<?php echo esc_attr( $style->post_content['description_font_size'] ); ?>"  size="3" />
 </p>

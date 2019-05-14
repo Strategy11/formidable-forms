@@ -1,4 +1,4 @@
-<p class="frm6 frm_form_field">
+<p class="frm6 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Radio', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'radio_align' ) ); ?>" id="frm_radio_align">
 		<option value="block" <?php selected( $style->post_content['radio_align'], 'block' ); ?>>
@@ -22,7 +22,7 @@
 	</select>
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'check_label_color' ) ); ?>" id="frm_check_label_color" class="hex" value="<?php echo esc_attr( $style->post_content['check_label_color'] ); ?>" />
 </p>

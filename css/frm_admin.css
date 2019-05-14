@@ -64,6 +64,8 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow: hidden;
 }
 
+.frm-full-screen.frm-admin-page-reports,
+.frm-full-screen.forms_page_formidable-entries,
 .frm-full-screen.post-type-frm_display {
 	overflow: auto;
 }
@@ -448,6 +450,12 @@ ul.frm_form_nav > li {
 	flex-direction: column;
 	overflow: hidden;
 	padding-top: 0;
+}
+
+.frm-admin-page-reports .frm_page_container,
+.frm_list_entry_page .frm_page_container {
+	height: auto;
+	display: block;
 }
 
 .frm_wrap #frm_top_bar,
@@ -966,6 +974,10 @@ h2 .frm-button-primary {
 	line-height: 26px;
 }
 
+.wp-core-ui.frm-white-body .button.first-page,
+.wp-core-ui.frm-white-body .button.prev-page,
+.wp-core-ui.frm-white-body .button.next-page,
+.wp-core-ui.frm-white-body .button.last-page,
 .wp-core-ui.frm-white-body .button.action {
 	background-color: var(--lightest-grey);
 	border-color: var(--grey-border);
@@ -1238,6 +1250,7 @@ a.frm_hidden,
 
 #form_reports_page .frm-inner-content,
 .frm-new-entry {
+	width: calc(100% - 40px);
 	max-width: 900px;
 	margin: 20px auto;
 	padding: 20px;
@@ -1670,11 +1683,18 @@ h2.frm-h2 + .howto {
 
 #wpbody-content > .updated,
 #wpbody-content > .notice,
-#wpbody-content > .error,
+#wpbody-content > .error:not(.frm_previous_install),
 #frm-templates-page .updated,
 #frm-templates-page .notice,
 #frm-templates-page .error {
 	display: none;
+}
+
+.frm-white-body .updated,
+.frm-white-body .notice,
+.frm-white-body .error {
+	margin: 0;
+	padding: 10px 20px;
 }
 
 /* Bulk Options */
@@ -2407,9 +2427,13 @@ input[type="checkbox"] {
 }
 
 .frm_grid_container > div.frm_form_field,
-.accordion-section-content .frm_grid_container > p,
 #new_fields .frm_grid_container > p {
 	margin: 7px 0;
+}
+
+.accordion-section-content .frm_grid_container > p {
+	margin-top: 7px;
+	margin-bottom: 7px;
 }
 
 #new_fields div.frm_grid_container > .frm_primary_label {
@@ -5831,6 +5855,10 @@ iframe#dyncontent_ifr {
 	right: 5px;
 	border-width: 0 5px 5px;
 	border-bottom-color: #6D6D6D;
+}
+
+.frm_clear {
+	clear: both;
 }
 
 .frm_clearfix:after {

@@ -38,6 +38,11 @@ class FrmAppController {
 		if ( self::is_white_page() ) {
 			$classes .= ' frm-white-body ';
 			$classes .= self::get_os();
+
+			$page = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+			if ( ! empty( $page ) ) {
+				$classes .= ' frm-admin-page-' . $page;
+			}
 		}
 
 		if ( FrmAppHelper::is_full_screen() ) {

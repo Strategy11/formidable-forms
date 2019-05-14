@@ -95,6 +95,7 @@ class FrmSettingsController {
 		);
 
 		foreach ( $sections as $key => $section ) {
+			$original = $section;
 			$defaults = array(
 				'html_class' => '',
 				'name'       => ucfirst( $key ),
@@ -107,6 +108,11 @@ class FrmSettingsController {
 
 			if ( isset( $section['ajax'] ) && ! isset( $section['data']['frmajax'] ) ) {
 				$section['data']['frmajax'] = $section['ajax'];
+			}
+
+			// For reverse compatibility.
+			if ( ! isset( $section['function'] ) && ( ! is_array( $original ) || ! isset( $original['name' ] ) ) ) {
+				$section['function'] = $original;
 			}
 
 			$sections[ $key ] = $section;

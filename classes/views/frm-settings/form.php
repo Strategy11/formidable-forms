@@ -47,8 +47,8 @@
 											<?php
 											if ( isset( $section['class'] ) ) {
 												call_user_func( array( $section['class'], $section['function'] ) );
-											} else {
-												call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+											} elseif ( isset( $section['function'] ) )  {
+												call_user_func( $section['function'] );
 											}
 										}
 										do_action( 'frm_' . $section['anchor'] . '_form', $frm_settings );

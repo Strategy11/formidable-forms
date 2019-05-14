@@ -1,4 +1,4 @@
-			<p class="frm4 frm_form_field">
+			<p class="frm4 frm_first frm_form_field">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color' ) ); ?>" id="frm_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color'] ); ?>" />
 			</p>
@@ -32,7 +32,7 @@
 				</select>
 			</p>
 
-			<p class="frm_no_bottom_margin">
+			<p class="frm_clear frm_no_bottom_margin">
 				<label>
 					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'remove_box_shadow' ) ); ?>" id="frm_remove_box_shadow" value="1" <?php checked( $style->post_content['remove_box_shadow'], 1 ); ?> />
 					<?php esc_html_e( 'Remove box shadow', 'formidable' ); ?>
@@ -40,7 +40,7 @@
 			</p>
 
 			<h4><span><?php esc_html_e( 'Active Style', 'formidable' ); ?></span></h4>
-			<p class="frm4 frm_form_field">
+			<p class="frm4 frm_first frm_form_field">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_active' ) ); ?>" id="frm_bg_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_active'] ); ?>" />
 			</p>
@@ -49,7 +49,7 @@
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'border_color_active' ) ); ?>" id="frm_border_color_active" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_active'] ); ?>" />
 			</p>
 
-			<p class="frm_no_bottom_margin">
+			<p class="frm_clear frm_no_bottom_margin">
 				<label>
 					<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'remove_box_shadow_active' ) ); ?>" id="frm_remove_box_shadow_active" value="1" <?php checked( $style->post_content['remove_box_shadow_active'], 1 ); ?> />
 					<?php esc_html_e( 'Remove box shadow', 'formidable' ); ?>
@@ -57,7 +57,7 @@
 			</p>
 
 			<h4><span><?php esc_html_e( 'Error Style', 'formidable' ); ?></span></h4>
-			<p class="frm4 frm_form_field">
+			<p class="frm4 frm_first frm_form_field">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_error' ) ); ?>" id="frm_bg_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_error'] ); ?>" />
 			</p>
@@ -69,7 +69,7 @@
 				<label><?php esc_html_e( 'Border', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'border_color_error' ) ); ?>" id="frm_border_color_error" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_error'] ); ?>" />
 			</p>
-			<p class="frm4 frm_form_field">
+			<p class="frm4 frm_first frm_form_field">
 				<label><?php esc_html_e( 'Thickness', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'border_width_error' ) ); ?>" id="frm_border_width_error" value="<?php echo esc_attr( $style->post_content['border_width_error'] ); ?>" size="4" />
 			</p>
@@ -91,8 +91,10 @@
 				</select>
 			</p>
 
-			<h4><span><?php esc_html_e( 'Read Only Style', 'formidable' ); ?></span></h4>
-			<p class="frm4 frm_form_field">
+			<h4 class="frm_clear">
+				<span><?php esc_html_e( 'Read Only Style', 'formidable' ); ?></span>
+			</h4>
+			<p class="frm4 frm_first frm_form_field">
 				<label class="background"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'bg_color_disabled' ) ); ?>" id="frm_bg_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['bg_color_disabled'] ); ?>" />
 			</p>
@@ -100,7 +102,6 @@
 				<label><?php esc_html_e( 'Text', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'text_color_disabled' ) ); ?>" id="frm_text_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['text_color_disabled'] ); ?>" />
 			</p>
-
 			<p class="frm4 frm_end frm_form_field">
 				<label><?php esc_html_e( 'Border', 'formidable' ); ?></label>
 				<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'border_color_disabled' ) ); ?>" id="frm_border_color_disabled" class="hex" value="<?php echo esc_attr( $style->post_content['border_color_disabled'] ); ?>" />

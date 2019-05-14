@@ -6,7 +6,7 @@
 	</label>
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_font_size"><?php esc_html_e( 'Size', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_font_size' ) ); ?>" id="frm_submit_font_size" value="<?php echo esc_attr( $style->post_content['submit_font_size'] ); ?>"  size="3" />
 </p>
@@ -21,7 +21,7 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_height' ) ); ?>" id="frm_submit_height" value="<?php echo esc_attr( $style->post_content['submit_height'] ); ?>"  size="5" />
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_weight"><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_weight' ) ); ?>" id="frm_submit_weight">
 		<?php foreach ( FrmStyle::get_bold_options() as $value => $name ) { ?>
@@ -60,12 +60,12 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_shadow_color' ) ); ?>" id="frm_submit_shadow_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_shadow_color'] ); ?>" />
 </p>
 
-<p>
+<p class="frm_clear">
 	<label for="frm_submit_bg_img"><?php esc_html_e( 'BG Image', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_bg_img' ) ); ?>" id="frm_submit_bg_img" value="<?php echo esc_attr( $style->post_content['submit_bg_img'] ); ?>"  />
 </p>
 
-<p class="frm4 frm_form_field">
+<p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_margin"><?php esc_html_e( 'Margin', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_margin' ) ); ?>" id="frm_submit_margin" value="<?php echo esc_attr( $style->post_content['submit_margin'] ); ?>" size="6" />
 </p>
@@ -75,8 +75,10 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_padding' ) ); ?>" id="frm_submit_padding" value="<?php echo esc_attr( $style->post_content['submit_padding'] ); ?>" size="6" />
 </p>
 
-<h4><span><?php esc_html_e( 'On Hover', 'formidable' ); ?></span></h4>
-<p class="frm4 frm_form_field">
+<h4 class="frm_clear">
+	<span><?php esc_html_e( 'On Hover', 'formidable' ); ?></span>
+</h4>
+<p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_hover_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_bg_color' ) ); ?>" id="frm_submit_hover_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_bg_color'] ); ?>" />
 </p>
@@ -91,8 +93,10 @@
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_hover_border_color' ) ); ?>" id="frm_submit_hover_border_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_hover_border_color'] ); ?>" />
 </p>
 
-<h4><span><?php esc_html_e( 'On Click', 'formidable' ); ?></span></h4>
-<p class="frm4 frm_form_field">
+<h4 class="frm_clear">
+	<span><?php esc_html_e( 'On Click', 'formidable' ); ?></span>
+</h4>
+<p class="frm4 frm_first frm_form_field">
 	<label for="frm_submit_active_bg_color"><?php esc_html_e( 'BG color', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_active_bg_color' ) ); ?>" id="frm_submit_active_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['submit_active_bg_color'] ); ?>" />
 </p>
