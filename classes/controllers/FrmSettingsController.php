@@ -111,7 +111,7 @@ class FrmSettingsController {
 			}
 
 			// For reverse compatibility.
-			if ( ! isset( $section['function'] ) && ( ! is_array( $original ) || ! isset( $original['name' ] ) ) ) {
+			if ( ! isset( $section['function'] ) && ( ! is_array( $original ) || ! isset( $original['name'] ) ) ) {
 				$section['function'] = $original;
 			}
 

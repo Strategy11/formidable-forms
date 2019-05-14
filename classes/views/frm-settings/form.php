@@ -47,7 +47,7 @@
 											<?php
 											if ( isset( $section['class'] ) ) {
 												call_user_func( array( $section['class'], $section['function'] ) );
-											} elseif ( isset( $section['function'] ) )  {
+											} elseif ( isset( $section['function'] ) ) {
 												call_user_func( $section['function'] );
 											}
 										}
