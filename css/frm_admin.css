@@ -2990,10 +2990,6 @@ li.sortable-placeholder {
 }
 
 .frm-is-collapsed + .sortable-placeholder {
-	box-shadow: 2px -7px 0 1px var(--primary-color);
-}
-
-.edit_field_type_break.frm-page-collapsed ~ .frm-is-collapsed + .sortable-placeholder {
 	box-shadow: 2px 15px 0 1px var(--primary-color);
 }
 
@@ -4345,6 +4341,8 @@ span.howto {
 
 #frm-show-fields {
 	min-height: 350px;
+	padding: 10px 0 35px;
+	margin: 0;
 }
 
 .frm-has-fields #frm-show-fields {
@@ -4663,6 +4661,10 @@ li.selected .divider_section_only:before {
 	color: var(--grey);
 }
 
+#frm-fake-page.frm-page-collapsed {
+	margin-bottom: 0;
+}
+
 .frm-page-collapsed {
 	position: relative;
 	overflow: visible !important;
@@ -4776,7 +4778,7 @@ tr.frm_options_heading td {
 
 #frm-form-button {
 	display: none;
-	margin: 25px 7px;
+	margin: 0 7px 25px;
 }
 
 .frm-has-fields #frm-form-button {
