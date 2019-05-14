@@ -2320,7 +2320,7 @@ a.frm_option_icon:hover::before {
 	position: absolute;
 	background: #fff;
 	border: 1px solid var(--grey-border);
-	color: var(--primary-color);
+	color: var(--dark-grey);
 	padding: 37px 0;
 	font-size: 18px;
 	width: 50%;

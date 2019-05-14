@@ -2144,7 +2144,7 @@ function frmAdminBuildJS() {
 		replaceWith += ' ';
 
 		// Allow for the column number dropdown.
-		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' );
+		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' ).replace( ' frm_alignright ', ' ' );
 
 		classes = field.className.split( ' frmstart ' )[1].split( ' frmend ' )[0];
 		if ( classes.trim() === '' ) {
