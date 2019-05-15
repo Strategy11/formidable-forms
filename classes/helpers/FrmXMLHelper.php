@@ -369,6 +369,7 @@ class FrmXMLHelper {
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
 			self::maybe_update_get_values_form_setting( $imported, $f );
+			self::migrate_placeholders( $f );
 
 			if ( ! empty( $this_form ) ) {
 				// check for field to edit by field id
@@ -485,6 +486,64 @@ class FrmXMLHelper {
 				$f['field_options']['get_values_form'] = $imported['forms'][ $old_form ];
 			}
 		}
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	private static function migrate_placeholders( &$f ) {
+		$update_values = self::migrate_field_placeholder( $f, 'clear_on_focus' );
+		$more_values   = self::migrate_field_placeholder( $f, 'default_blank' );
+		$update_values = array_merge( $update_values, $more_values );
+
+		foreach ( $update_values as $k => $v ) {
+			$f[ $k ] = $v;
+		}
+	}
+
+	/**
+	 * Move clear_on_focus or default_blank to placeholder.
+	 *
+	 * @since 4.0
+	 * @return array
+	 */
+	public static function migrate_field_placeholder( $field, $type ) {
+		$field = (array) $field;
+		$field_options = $field['field_options'];
+		if ( empty( $field_options[ $type ] ) || empty( $field['default_value'] ) ) {
+			return array();
+		}
+
+		$field_options['placeholder'] = is_array( $field['default_value'] ) ? reset( $field['default_value'] ) : $field['default_value'];
+		unset( $field_options['default_blank'], $field_options['clear_on_focus'] );
+
+		$changes = array(
+			'field_options' => $field_options,
+			'default_value' => '',
+		);
+
+		// If a dropdown placeholder was used, remove the option so it won't be included twice.
+		$options = $field['options'];
+		if ( $type === 'default_blank' && is_array( $options ) ) {
+			$default_value = $field['default_value'];
+			if ( is_array( $default_value ) ) {
+				$default_value = reset( $default_value );
+			}
+
+			foreach ( $options as $opt_key => $opt ) {
+				if ( is_array( $opt ) ) {
+					$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+				}
+
+				if ( $opt == $default_value ) {
+					unset( $options[ $opt_key ] );
+					break;
+				}
+			}
+			$changes['options'] = $options;
+		}
+
+		return $changes;
 	}
 
 	/**

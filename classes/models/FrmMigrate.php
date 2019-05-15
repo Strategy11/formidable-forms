@@ -294,39 +294,14 @@ class FrmMigrate {
 		$fields = FrmDb::get_results( $this->fields, $query, 'id, default_value, field_options, options' );
 
 		foreach ( $fields as $field ) {
-			$field_options = maybe_unserialize( $field->field_options );
-			if ( empty( $field_options[ $type ] ) || empty( $field->default_value ) ) {
+			$field->field_options = maybe_unserialize( $field->field_options );
+			$field->options = maybe_unserialize( $field->options );
+			$update_values = FrmXMLHelper::migrate_field_placeholder( $field, $type );
+			if ( empty( $update_values ) ) {
 				continue;
 			}
 
-			$field_options['placeholder'] = $field->default_value;
-			unset( $field_options['default_blank'] );
-			unset( $field_options['clear_on_focus'] );
-
-			// If a dropdown placeholder was used, remove the option so it won't be included twice.
-			$options = maybe_unserialize( $field->options );
-			if ( $type === 'default_blank' ) {
-				foreach ( $options as $opt_key => $opt ) {
-					if ( is_array( $opt ) ) {
-						$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
-					}
-
-					if ( $opt == $field->default_value ) {
-						unset( $options[ $opt_key ] );
-						break;
-					}
-				}
-			}
-
-			FrmField::update(
-				$field->id,
-				array(
-					'field_options' => $field_options,
-					'default_value' => '',
-					'options'       => $options,
-				)
-			);
-
+			FrmField::update( $field->id, $update_values );
 			unset( $field );
 		}
 	}
