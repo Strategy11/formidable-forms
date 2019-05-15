@@ -489,6 +489,16 @@ class FrmXMLHelper {
 	}
 
 	/**
+	 * If field settings have been migrated, update the values during import.
+	 *
+	 * @since 4.0
+	 */
+	private static function run_field_migrations( &$f ) {
+		self::migrate_placeholders( $f );
+		$f = apply_filters( 'frm_import_xml_field', $f );
+	}
+
+	/**
 	 * @since 4.0
 	 */
 	private static function migrate_placeholders( &$f ) {
@@ -503,6 +513,7 @@ class FrmXMLHelper {
 
 	/**
 	 * Move clear_on_focus or default_blank to placeholder.
+	 * Also called during database migration in FrmMigrate.
 	 *
 	 * @since 4.0
 	 * @return array
