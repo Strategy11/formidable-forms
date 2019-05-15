@@ -1605,6 +1605,7 @@ h2.frm-h2 + .howto {
 
 .frm-fade {
 	opacity: 0;
+	transition: all 1s;
 }
 
 /* Add-on tiles */

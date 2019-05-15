@@ -3990,15 +3990,22 @@ function frmAdminBuildJS() {
 	}
 
 	function frmApiPreview( cont, link ) {
+		cont.innerHTML = '<div class="frm-wait"></div>';
 		jQuery.ajax( {
 			dataType: 'json',
 			url: link,
 			success: function( json ) {
 				var form = json.renderedHtml;
 				form = form.replace( /<script\b[^<]*(js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
-				form = form.replace( /<link\b[^>]*(formidableforms17.css)[^>]*>/gi, '' );
+				form = form.replace( /<link\b[^>]*(jquery-ui.min.css)[^>]*>/gi, '' );
+				form = form.replace( ' frm_logic_form ', ' ' );
 				form = form.replace( '<form ', '<form onsubmit="event.preventDefault();" ' );
-				cont.innerHTML = form;
+				cont.innerHTML = '<div class="frm-wait" id="frm-remove-me"></div><div class="frm-fade" id="frm-show-me">' +
+				form + '</div>';
+				setTimeout( function(){
+					document.getElementById( 'frm-remove-me' ).style.display = 'none';
+					document.getElementById( 'frm-show-me' ).style.opacity = '1';
+				}, 300 );
 			}
 		} );
 	}
