@@ -62,8 +62,6 @@ class FrmReviews {
 	 * Maybe show review request
 	 *
 	 * @since 3.04.03
-	 *
-	 * @param int $asked
 	 */
 	private function review() {
 

@@ -742,7 +742,7 @@ class FrmAddonsController {
 		}
 
 		if ( $show_form ) {
-			$form = ob_get_clean();
+			//$form = ob_get_clean();
 			//TODO: test this: echo json_encode( array( 'form' => $form ) );
 			echo json_encode( array( 'form' => __( 'Sorry, you\'re site requires FTP authentication. Please install plugins manaully.', 'formidable' ) ) );
 			wp_die();

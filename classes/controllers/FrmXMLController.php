@@ -383,6 +383,8 @@ class FrmXMLController {
 		if ( $has_one_form ) {
 			// one form is being exported
 			$selected_form_id = reset( $args['ids'] );
+			$filename         = 'form-' . $selected_form_id . '.xml';
+
 			foreach ( $records['forms'] as $form_id ) {
 				$filename = 'form-' . $form_id . '.xml';
 				if ( $selected_form_id === $form_id ) {

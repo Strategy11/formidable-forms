@@ -68,7 +68,7 @@ class FrmFormsController {
 	 * @since 3.06
 	 */
 	public static function add_new() {
-		self::list_templates( $vars );
+		self::list_templates();
 	}
 
 	/**
@@ -1309,7 +1309,7 @@ class FrmFormsController {
 				return self::new_form( $vars );
 			case 'add_new':
 			case 'list_templates':
-				return self::list_templates( $vars );
+				return self::list_templates();
 			case 'create':
 			case 'edit':
 			case 'update':
@@ -1512,9 +1512,6 @@ class FrmFormsController {
 	}
 
 	private static function is_viewable_draft_form( $form ) {
-		global $post;
-		$frm_settings = FrmAppHelper::get_settings();
-
 		return $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
 	}
 

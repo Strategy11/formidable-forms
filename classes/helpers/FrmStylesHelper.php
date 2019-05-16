@@ -423,7 +423,7 @@ class FrmStylesHelper {
 	 * @codeCoverageIgnore
 	 */
 	public static function get_sigle_label_postitions() {
-		return FrmDeprecated::get_single_label_positions();
+		return FrmDeprecated::get_sigle_label_postitions();
 	}
 
 	/**

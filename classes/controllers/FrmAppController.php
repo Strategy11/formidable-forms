@@ -407,7 +407,6 @@ class FrmAppController {
 			self::network_upgrade_site();
 		}
 
-		$action = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
 		if ( ! FrmAppHelper::doing_ajax() ) {
 			// don't continue during ajax calls
 			self::admin_js();

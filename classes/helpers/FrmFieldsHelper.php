@@ -390,7 +390,7 @@ class FrmFieldsHelper {
 
 	public static function get_checkbox_id( $field, $opt_key, $type = 'checkbox' ) {
 		$id = $field['id'];
-		if ( isset( $field['in_section'] ) && $field['in_section'] && ! FrmAppHelper::is_page( 'formidable' ) ) {
+		if ( isset( $field['in_section'] ) && $field['in_section'] && ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$id .= '-' . $field['in_section'];
 		}
 

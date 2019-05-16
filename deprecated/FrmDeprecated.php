@@ -27,13 +27,12 @@ class FrmDeprecated {
 		$action = empty( $values ) ? FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' ) : $values[ $action ];
 
 		if ( $action === 'create' ) {
-			self::create( $values );
+			FrmFormsController::update( $values );
 			return;
 		}
 
 		$values = FrmFormsHelper::setup_new_vars( $values );
 		$id   = FrmForm::create( $values );
-		$form = FrmForm::getOne( $id );
 		$values['id'] = $id;
 
 		FrmFormsController::edit( $values );
@@ -182,7 +181,7 @@ class FrmDeprecated {
 	 */
 	public static function reset_cached_addons( $license = '' ) {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::reset_cached' );
-		$api = new FrmFormApi( $this->license );
+		$api = new FrmFormApi( $license );
 		$api->reset_cached();
 	}
 
@@ -193,7 +192,7 @@ class FrmDeprecated {
 	 */
 	public static function get_cache_key( $license ) {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_cache_key' );
-		$api = new FrmFormApi( $this->license );
+		$api = new FrmFormApi( $license );
 		return $api->get_cache_key();
 	}
 

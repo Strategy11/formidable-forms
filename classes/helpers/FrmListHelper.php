@@ -1072,7 +1072,7 @@ class FrmListHelper {
 	 * @param object $item The current item
 	 */
 	protected function single_row_columns( $item ) {
-		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
+		list( $columns, $hidden,, $primary ) = $this->get_column_info();
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$classes = "$column_name column-$column_name";
