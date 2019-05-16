@@ -503,9 +503,11 @@ class FrmXMLHelper {
 	 */
 	private static function migrate_placeholders( &$f ) {
 		$update_values = self::migrate_field_placeholder( $f, 'clear_on_focus' );
-		$more_values   = self::migrate_field_placeholder( $f, 'default_blank' );
-		$update_values = array_merge( $update_values, $more_values );
+		foreach ( $update_values as $k => $v ) {
+			$f[ $k ] = $v;
+		}
 
+		$update_values = self::migrate_field_placeholder( $f, 'default_blank' );
 		foreach ( $update_values as $k => $v ) {
 			$f[ $k ] = $v;
 		}
