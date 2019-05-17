@@ -103,10 +103,12 @@
 		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $field['field_key'] ); ?>">
 			<?php FrmFieldsHelper::show_single_option( $field ); ?>
 		</ul>
-		<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
-			<span class="frm_icon_font frm_add_tag"></span>
-			<?php esc_html_e( 'Add Option', 'formidable' ); ?>
-		</a>
+		<div class="frm6 frm_form_field">
+			<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
+				<span class="frm_icon_font frm_add_tag"></span>
+				<?php esc_html_e( 'Add Option', 'formidable' ); ?>
+			</a>
+		</div>
 
 		<?php
 	}

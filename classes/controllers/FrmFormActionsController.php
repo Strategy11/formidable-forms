@@ -193,7 +193,7 @@ class FrmFormActionsController {
 	 */
 	public static function show_action_icon_link( $action_control, $allowed ) {
 		$data    = array();
-		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action frm_bstooltip';
+		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action';
 
 		$group_class = ' frm-group-' . $action_control->action_options['group'];
 

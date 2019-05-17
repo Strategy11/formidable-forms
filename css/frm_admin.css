@@ -2246,7 +2246,6 @@ a.frm_option_icon:hover::before {
 	height: 100%;
 	cursor: pointer;
 	font-weight: 400;
-	padding: 3px 20px;
 }
 
 .accordion-container .multiselect-container > li > a > label {
@@ -4083,6 +4082,10 @@ a.frm_add_logic_link.frm_hidden {
 
 .frm_logic_row .frm_remove_tag {
 	padding-left: 7px;
+}
+
+.frm_logic_row .frm1 > .frm_remove_tag {
+	padding: 0;
 }
 
 .frm_tooltip_icon:before {
@@ -6031,6 +6034,10 @@ iframe#dyncontent_ifr {
 	background: #fff;
 }
 
+.frm_wrap input[type="number"] {
+	height: auto;
+}
+
 .frm_wrap select {
 	padding: 2px;
 }
@@ -6252,12 +6259,6 @@ Responsive Design
 		border: none;
 	}
 
-	.frm-fields p > .frm_inline_label,
-	.frm_inline_label {
-		display: block;
-		margin: 5px 0;
-	}
-
 	.frm-addons {
 		grid-template-columns: 1fr 1fr;
 	}
@@ -6323,6 +6324,12 @@ Responsive Design
 
 	.frm_col_one {
 		clear: none;
+	}
+
+	.frm-fields p > .frm_inline_label,
+	.frm_inline_label {
+		display: block;
+		margin: 5px 0;
 	}
 
 	.post-type-frm_display #frm_top_bar h1,

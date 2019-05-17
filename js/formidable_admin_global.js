@@ -26,9 +26,9 @@ function frm_install_now(){
 }
 
 function frmInstallPro( e ){
-	var plugin = jQuery(this).data('prourl');
+	var plugin = this.getAttribute('data-prourl');
 	if ( plugin === '' ) {
-		return false;
+		return true;
 	}
 
 	e.preventDefault();
