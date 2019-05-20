@@ -65,7 +65,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 }
 
 .frm-full-screen.frm-admin-page-reports,
-.frm-full-screen.forms_page_formidable-entries,
+.frm-full-screen.frm-admin-page-list,
 .frm-full-screen.post-type-frm_display {
 	overflow: auto;
 }
