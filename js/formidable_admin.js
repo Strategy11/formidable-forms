@@ -1668,7 +1668,11 @@ function frmAdminBuildJS() {
 		if ( setting !== null ) {
 			if ( fieldType.tagName === 'SELECT' ) {
 				fieldTypeName = fieldType.options[ fieldType.selectedIndex ].text.toLowerCase();
+			} else {
+				fieldTypeName = fieldTypeName.replace( '_', ' ' );
 			}
+
+			fieldTypeName = normalizeFieldName( fieldTypeName );
 
 			setTimeout( function() {
 				if ( setting.value.toLowerCase() === fieldTypeName ) {
@@ -1678,6 +1682,19 @@ function frmAdminBuildJS() {
 				}
 			}, 50 );
 		}
+	}
+
+	function normalizeFieldName( fieldTypeName ) {
+		if ( fieldTypeName === 'divider' ) {
+			fieldTypeName = 'section';
+		} else if ( fieldTypeName === 'range' ) {
+			fieldTypeName = 'slider';
+		} else if ( fieldTypeName === 'data' ) {
+			fieldTypeName = 'dynamic';
+		} else if ( fieldTypeName === 'form' ) {
+			fieldTypeName = 'embed form';
+		}
+		return fieldTypeName;
 	}
 
 	function clickVis( e ) {
