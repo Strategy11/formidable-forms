@@ -2173,6 +2173,7 @@ function frmAdminBuildJS() {
 			if ( input !== null ) {
 				input.focus();
 				container.after( box );
+				box.setAttribute( 'data-fills', input.id );
 
 				if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
 					popCalcFields( box, true );

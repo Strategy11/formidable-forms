@@ -2426,7 +2426,7 @@ input[type="checkbox"] {
 	right: -28%;
 }
 
-.frm_grid_container > div.frm_form_field,
+.frm_grid_container > .frm_form_field,
 #new_fields .frm_grid_container > p {
 	margin: 7px 0;
 }
