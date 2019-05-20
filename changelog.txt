@@ -1,4 +1,19 @@
 == Changelog ==
+= 4.0 =
+* We've added a new, full screen builder for a faster and more enjoyable form building experience.
+* Moved all settings into the sidebar instead of expanding/collapsing under each field.
+* Faster way of adding new radio/select/checkbox options with drag and drop reordering.
+* Added a separate placeholder option to make it easier to use, and to allow for both a placeholder and a default value. Existing placeholders will be automatically moved to the new setting.
+* Added placeholder setting for dropdown fields, and allow the field label to be used as a placeholder.
+* Long forms are easier to edit and save since only the fields settings that have been viewed will be saved.
+* Replaced the form builder sidebar panel with in-field modals that include the possible values to insert.
+* Added a way to more easily see and find all possible add-ons in the form actions.
+* Add link to imported form in the import success message.
+* Removed a few unused settings including the option to disable HTML5.
+* New hooks: frm_after_field_choices, frm_field_options, frm_after_field_options, frm_[type]_primary_field_options, Added hooks for each tab in the global settings: frm_[section name]_settings_form, frm_default_value_setting
+* Added better confirmation messages before deleting fields, forms, form actions, and entries.
+* Change default settings to fade in forms and use css grids for new installs.
+
 = 3.06.06 =
 * Remove complete Spanish translations
 * Increase PHP requirements to 5.6
