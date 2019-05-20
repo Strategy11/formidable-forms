@@ -1032,6 +1032,10 @@ function frmAdminBuildJS() {
 			changes = document.getElementById( this.getAttribute( 'data-changeme' ) ),
 			att = this.getAttribute( 'data-changeatt' );
 
+		if ( changes === null ) {
+			return;
+		}
+
 		if ( att !== null ) {
 			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
 				option = changes.options[0];
@@ -1045,6 +1049,10 @@ function frmAdminBuildJS() {
 				changeFieldClass( changes, this );
 			} else {
 				changes.setAttribute( att, newValue );
+			}
+		} else if ( changes.id.indexOf( 'setup-message' ) === 0 ) {
+			if ( newValue !== '' ) {
+				changes.innerHTML = '<input type="text" value="" disabled />';
 			}
 		} else {
 			changes.innerHTML = newValue;
@@ -1649,6 +1657,27 @@ function frmAdminBuildJS() {
 	function maybeCollapseSettings() {
 		/*jshint validthis:true */
 		this.classList.toggle( 'frm-collapsed' );
+	}
+
+	function clickLabel( e ) {
+		var setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0],
+			fieldId = this.id.replace( 'field_label_', '' ),
+			fieldType = document.getElementById( 'field_options_type_' + fieldId ),
+			fieldTypeName = fieldType.value;
+
+		if ( setting !== null ) {
+			if ( fieldType.tagName === 'SELECT' ) {
+				fieldTypeName = fieldType.options[ fieldType.selectedIndex ].text.toLowerCase();
+			}
+
+			setTimeout( function() {
+				if ( setting.value.toLowerCase() === fieldTypeName ) {
+					setting.select();
+				} else {
+					setting.focus();
+				}
+			}, 50 );
+		}
 	}
 
 	function clickVis( e ) {
@@ -4390,6 +4419,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
+			jQuery( builderArea ).on( 'click', '#frm-show-fields .frm_primary_label', clickLabel );
 			jQuery( builderArea ).on( 'click', '#frm-show-fields > li.ui-state-default', clickVis );
 			$newFields.on( 'click', '.start_divider li.ui-state-default', clickSectionVis );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
