@@ -885,7 +885,7 @@ class FrmAppHelper {
 	 */
 	public static function maybe_full_screen_link( $link ) {
 		$is_full = self::simple_get( 'frm-full', 'absint' );
-		if ( $is_full ) {
+		if ( $is_full && ! empty( $link ) && $link !== '#' ) {
 			$link .= '&frm-full=1';
 		}
 		return $link;

@@ -542,6 +542,9 @@ class FrmEntriesHelper {
 				if ( isset( $link['class'] ) ) {
 					echo 'class="' . esc_attr( $link['class'] ) . '" ';
 				}
+				if ( isset( $link['id'] ) ) {
+					echo 'id="' . esc_attr( $link['id'] ) . '" ';
+				}
 				?>
 				>
 				<i class="<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></i>
