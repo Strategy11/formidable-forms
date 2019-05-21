@@ -279,8 +279,8 @@ class FrmUsage {
 
 		$field_query = array(
 			'or'             => 1,
-			'form_id'        => $form_id,
-			'parent_form_id' => $form_id,
+			'fi.form_id'     => $form_id,
+			'fi.parent_form_id' => $form_id,
 		);
 
 		return FrmDb::get_count( $join, $field_query );
