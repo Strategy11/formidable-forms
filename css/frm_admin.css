@@ -6678,12 +6678,19 @@ Responsive Design
 		display: block;
 	}
 
+	#post-body-content + .frm-right-panel,
 	.frm_wrap .columns-2 .frm-right-panel,
 	.frm-right-panel {
 		border: none;
 		width: auto;
 		display: block;
 		padding: 20px;
+	}
+
+	.frm_page_container .columns-2,
+	.frm_wrap .frm_page_container {
+		height: auto;
+		display: block;
 	}
 
 	.misc-pub-section > span {

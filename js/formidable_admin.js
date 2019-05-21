@@ -4290,6 +4290,11 @@ function frmAdminBuildJS() {
 			} else {
 				// New form selection page
 				initNewFormModal();
+
+				jQuery( '[data-frmprint]' ).click( function() {
+					window.print();
+					return false;
+				} );
 			}
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
