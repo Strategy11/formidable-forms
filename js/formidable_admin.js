@@ -213,13 +213,13 @@ function frmAdminBuildJS() {
 		if ( continueRemove === false ) {
 			return;
 		} else {
-			id = deleteButton.data( 'removeid' );
-			show = deleteButton.data( 'showlast' );
-			removeMore = deleteButton.data( 'removemore' );
+			id = deleteButton.attr( 'data-removeid' );
+			show = deleteButton.attr( 'data-showlast' );
+			removeMore = deleteButton.attr( 'data-removemore' );
 			if ( typeof show === 'undefined' ) {
 				show = '';
 			}
-			hide = deleteButton.data( 'hidelast' );
+			hide = deleteButton.attr( 'data-hidelast' );
 			if ( typeof hide === 'undefined' ) {
 				hide = '';
 			}
