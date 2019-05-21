@@ -3124,7 +3124,7 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			element_id = jQuery( element ).closest( '[data-fills]' ).data( 'fills' );
+			element_id = jQuery( element ).closest( '[data-fills]' ).attr( 'data-fills' );
 			if ( typeof element_id === 'undefined' ) {
 				element_id = element.closest( 'div' ).attr( 'class' );
 				if ( typeof element_id !== 'undefined' ) {
