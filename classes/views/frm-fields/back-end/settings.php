@@ -10,7 +10,7 @@
 		printf(
 			/* translators: %s: Field type */
 			esc_html__( '%s Field', 'formidable' ),
-			esc_html( $all_field_types[ $field['type'] ]['name'] )
+			esc_html( $type_name )
 		);
 		?>
 	</h3>

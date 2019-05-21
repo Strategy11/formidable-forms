@@ -305,6 +305,11 @@ class FrmFieldsController {
 			FrmFormsHelper::prepare_field_type( $all_field_types[ $field['type'] ] );
 		}
 
+		$type_name = $all_field_types[ $field['type'] ]['name'];
+		if ( $field['type'] === 'divider' && FrmField::is_option_true( $field, 'repeat' ) ) {
+			$type_name = $all_field_types['divider|repeat']['name'];
+		}
+
 		$display_type = self::displayed_field_type( $field );
 
 		if ( $display['default'] ) {
