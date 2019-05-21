@@ -2217,6 +2217,10 @@ function frmAdminBuildJS() {
 		} else {
 			var input = this.nextElementSibling;
 			if ( input !== null ) {
+				if ( input.tagName !== 'INPUT' ) {
+					// Workaround for 1Password.
+					input = input.nextSibling;
+				}
 				input.focus();
 				container.after( box );
 				box.setAttribute( 'data-fills', input.id );
@@ -3248,7 +3252,6 @@ function frmAdminBuildJS() {
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			hideShortcodes( box );
 		} else {
-			input.focus();
 			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
 
@@ -3259,7 +3262,13 @@ function frmAdminBuildJS() {
 				jQuery( '.frm_code_list li.hide_frm_not_email_subject a' ).addClass( 'frm_noallow' );
 			}
 
+			if ( input.tagName !== 'INPUT' ) {
+				// Workaround for 1Password.
+				input = input.nextSibling;
+			}
+			input.focus();
 			box.setAttribute( 'data-fills', input.id );
+
 			box.style.display = 'block';
 			this.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
 		}
