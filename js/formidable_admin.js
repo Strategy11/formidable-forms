@@ -540,8 +540,9 @@ function frmAdminBuildJS() {
 		if ( typeof section[0] !== 'undefined' ) {
 			var sDivide = section.children( '.start_divider' );
 			sDivide.children( '.edit_field_type_end_divider' ).appendTo( sDivide );
-			if ( typeof section.data( 'formid' ) !== 'undefined' ) {
-				form_id = section.find( 'input[name^="field_options[form_select_"]' ).val();
+			if ( typeof section.attr( 'data-formid' ) !== 'undefined' ) {
+				var fieldId = section.attr( 'data-fid' );
+				form_id = jQuery( 'input[name="field_options[form_select_' + fieldId + ']"]' ).val();
 			}
 		}
 
@@ -623,22 +624,9 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
-
-				var regex = /id="(\S+)"/;
-				var match = regex.exec( msg );
-				var $thisField = jQuery( document.getElementById( match[1] ) );
-
 				updateFieldOrder();
-				initiateMultiselect();
 
-				var $thisSection = $thisField.find( 'ul.frm_sorting' );
-				if ( $thisSection.length ) {
-					$thisSection.sortable( opts );
-					$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
-				} else {
-					var $parentSection = $thisField.closest( 'ul.frm_sorting' );
-					toggleOneSectionHolder( $parentSection );
-				}
+				afterAddField( msg, false );
 			}
 		} );
 	}
@@ -651,7 +639,7 @@ function frmAdminBuildJS() {
 
 		// new field
 		if ( ui.item.hasClass( 'frmbutton' ) ) {
-			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) ) {
+			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) || ui.item.hasClass( 'frm_tdivider-repeat' ) ) {
 				return false;
 			}
 			return true;
@@ -766,10 +754,20 @@ function frmAdminBuildJS() {
 	function afterAddField( msg, addFocus ) {
 		var regex = /id="(\S+)"/,
 			match = regex.exec( msg ),
-			field = document.getElementById( match[1] );
+			field = document.getElementById( match[1] ),
+			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
+			$thisSection = jQuery( section ),
+			toggled = false;
 
-		section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting';
 		setupSortable( section );
+
+		if ( $thisSection.length ) {
+			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
+		} else {
+			var $parentSection = jQuery( field ).closest( 'ul.frm_sorting' );
+			toggleOneSectionHolder( $parentSection );
+			toggled = true;
+		}
 
 		if ( msg.indexOf( 'frm-collapse-page' ) !== -1 ) {
 			renumberPageBreaks();
@@ -797,7 +795,9 @@ function frmAdminBuildJS() {
 				} );
 			}
 
-			toggleOneSectionHolder( jQuery( section ) );
+			if ( toggled === false ) {
+				toggleOneSectionHolder( $thisSection );
+			}
 		}
 
 		deselectFields();
@@ -2143,10 +2143,11 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		var sectionFields = $section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' );
 		if ( $section.children( 'li' ).length < 2 ) {
-			$section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
+			sectionFields.addClass( 'frm_block' );
 		} else {
-			$section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).removeClass( 'frm_block' );
+			sectionFields.removeClass( 'frm_block' );
 		}
 	}
 

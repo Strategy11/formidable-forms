@@ -2426,7 +2426,8 @@ input[type="checkbox"] {
 	right: -28%;
 }
 
-.frm_grid_container > .frm_form_field,
+.frm_grid_container > p.frm_form_field,
+.frm_grid_container > div.frm_form_field,
 #new_fields .frm_grid_container > p {
 	margin: 7px 0;
 }
@@ -4950,7 +4951,7 @@ ul.frm-category-tabs {
 }
 
 .frm_sorting li.ui-state-default.frm-newly-added {
-	box-shadow: 0 0 3px 1px var(--blue-border);
+	box-shadow: inset 0 0 2px 1px var(--blue-border);
 }
 
 .frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover {
