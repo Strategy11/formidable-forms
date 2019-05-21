@@ -1742,7 +1742,7 @@ function frmAdminBuildJS() {
 	function checkRepeatLimit() {
 		/*jshint validthis:true */
 		var val = this.value;
-		if ( val < 2 || val > 200 ) {
+		if ( val !== '' && ( val < 2 || val > 200 ) ) {
 			alert( frm_admin_js.repeat_limit_min );
 			this.value = '';
 		}
