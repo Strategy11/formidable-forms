@@ -1975,6 +1975,11 @@ class FrmAppHelper {
 	 * @since 4.0.01
 	 */
 	public static function min_pro_version_notice( $min_version ) {
+		if ( ! self::is_formidable_admin() ) {
+			// Don't show admin-wide.
+			return;
+		}
+
 		$is_pro = self::pro_is_installed() && class_exists( 'FrmProDb' );
 		if ( ! $is_pro || self::meets_min_pro_version( $min_version ) ) {
 			return;
