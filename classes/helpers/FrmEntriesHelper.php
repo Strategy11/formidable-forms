@@ -65,9 +65,15 @@ class FrmEntriesHelper {
 		//If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array
 		$return_array = FrmField::is_field_with_multiple_values( $field );
 
-		// Do any shortcodes in default value and allow customization of default value
+		/**
+		 * Do any shortcodes in default value and allow customization of default value.
+		 * Calls FrmProFieldsHelper::get_default_value
+		 */
 		$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true, $return_array );
-		// Calls FrmProFieldsHelper::get_default_value
+
+		if ( isset( $field->field_options['placeholder'] ) ) {
+			$field->field_options['placeholder'] = apply_filters( 'frm_filter_default_value', $field->field_options['placeholder'], $field, true, $return_array );
+		}
 	}
 
 	/**
