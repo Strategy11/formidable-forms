@@ -379,6 +379,7 @@ To get access to more features, integrations, and support, <a href="https://form
 * Use collapsed admin menu in full screen mode.
 * Show a form title in the top bar on hover if truncated.
 * Show a message if 4.0 Lite is installed without the matching Pro version.
+* Fix: The link to print an entry wasn't responding.
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.
