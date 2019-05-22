@@ -2216,12 +2216,8 @@ function frmAdminBuildJS() {
 			container.removeClass( 'frm-open' );
 			box.classList.add( 'frm_hidden' );
 		} else {
-			var input = this.nextElementSibling;
+			var input = getInputForIcon( this );
 			if ( input !== null ) {
-				if ( input.tagName !== 'INPUT' ) {
-					// Workaround for 1Password.
-					input = input.nextSibling;
-				}
 				input.focus();
 				container.after( box );
 				box.setAttribute( 'data-fills', input.id );
@@ -3241,14 +3237,18 @@ function frmAdminBuildJS() {
 
 	function showShortcodes( e ) {
 		/*jshint validthis:true */
-		var pos = this.getBoundingClientRect(),
-			input = this.nextSibling,
-			box = document.getElementById( 'frm_adv_info' ),
-			classes = this.className,
-			parentPos = box.parentElement.getBoundingClientRect();
-
 		e.preventDefault();
 		e.stopPropagation();
+
+		showShortcodeBox( this );
+	}
+
+	function showShortcodeBox( moreIcon, shouldFocus ) {
+		var pos = moreIcon.getBoundingClientRect(),
+			input = getInputForIcon( moreIcon ),
+			box = document.getElementById( 'frm_adv_info' ),
+			classes = moreIcon.className,
+			parentPos = box.parentElement.getBoundingClientRect();
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			hideShortcodes( box );
@@ -3263,16 +3263,23 @@ function frmAdminBuildJS() {
 				jQuery( '.frm_code_list li.hide_frm_not_email_subject a' ).addClass( 'frm_noallow' );
 			}
 
-			if ( input.tagName !== 'INPUT' ) {
-				// Workaround for 1Password.
-				input = input.nextSibling;
-			}
-			input.focus();
 			box.setAttribute( 'data-fills', input.id );
-
 			box.style.display = 'block';
-			this.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
+			moreIcon.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
+
+			if ( shouldFocus !== 'nofocus' ) {
+				input.focus();
+			}
 		}
+	}
+
+	function getInputForIcon( moreIcon ) {
+		var input = moreIcon.nextElementSibling;
+		if ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
+			// Workaround for 1Password.
+			input = input.nextElementSibling;
+		}
+		return input;
 	}
 
 	function hideShortcodes( box ) {
@@ -4515,6 +4522,10 @@ function frmAdminBuildJS() {
 				var sidebar = document.getElementById( 'frm_adv_info' )
 					isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
 
+				if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
+					return;
+				}
+
 				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
@@ -4615,6 +4626,14 @@ function frmAdminBuildJS() {
 			if ( settingsPage !== null || viewPage ) {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
 				e.stopPropagation();
+				if ( this.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
+					var moreIcon = this.previousElementSibling;
+					if ( moreIcon.tagName !== 'I' ) {
+						moreIcon = moreIcon.previousElementSibling;
+					}
+					showShortcodeBox( moreIcon, 'nofocus' );
+				}
+
 				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
 					if ( settingsPage !== null ) {
 						/* form settings page */
