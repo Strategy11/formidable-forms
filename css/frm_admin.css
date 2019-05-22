@@ -124,6 +124,10 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	border: none;
 }
 
+html.wp-toolbar .frm-full-screen {
+	margin-top: -32px;
+}
+
 body.formidable_page_formidable-pro-upgrade,
 body.post-type-frm_display.edit-php,
 body.frm-white-body {
@@ -6417,6 +6421,10 @@ Responsive Design
 	#form_settings_page .advanced_settings .form-table td, .form-table th {
 		display: table-cell;
 		width: auto !important;
+	}
+
+	html.wp-toolbar .frm-full-screen {
+		margin-top: -46px;
 	}
 
 	.frm-full-screen #screen-meta-links {
