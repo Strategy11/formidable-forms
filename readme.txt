@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.0
+Stable tag: 4.0.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,6 +374,12 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.0.01 =
+* Clean up, size down, and reposition the request for reviews.
+* Use collapsed admin menu in full screen mode.
+* Show a form title in the top bar on hover if truncated.
+* Show a message if 4.0 Lite is installed without the matching Pro version.
+
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.
 * Moved all settings into the sidebar instead of expanding/collapsing under each field.
@@ -388,10 +394,5 @@ To get access to more features, integrations, and support, <a href="https://form
 * New hooks: frm_after_field_choices, frm_field_options, frm_after_field_options, frm_[type]_primary_field_options, Added hooks for each tab in the global settings: frm_[section name]_settings_form, frm_default_value_setting
 * Added better confirmation messages before deleting fields, forms, form actions, and entries.
 * Change default settings to fade in forms and use css grids for new installs.
-
-= 3.06.06 =
-* Remove complete Spanish translations
-* Increase PHP requirements to 5.6
-* Increase minimum WP version to 4.6
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

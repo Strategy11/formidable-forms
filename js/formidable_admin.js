@@ -163,10 +163,14 @@ function frmAdminBuildJS() {
 		}
 
 		var desiredOffset = offset - currentOffset;
-		var menuHeight = document.getElementById( 'wpadminbar' ).offsetHeight;
-		if ( desiredOffset < menuHeight ) {
-			desiredOffset = menuHeight;
+		var menu = document.getElementById( 'wpadminbar' );
+		if ( menu !== null ) {
+			var menuHeight = menu.offsetHeight;
+			if ( desiredOffset < menuHeight ) {
+				desiredOffset = menuHeight;
+			}
 		}
+
 		fields.style.top = desiredOffset + 'px';
 	}
 

@@ -74,12 +74,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	display: none;
 }
 
-.frm-full-screen #adminmenuback,
-.frm-full-screen #adminmenuwrap {
-	height: 100vh;
-	overflow: auto;
-}
-
 .frm-full-screen #wpbody-content,
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
@@ -219,6 +213,7 @@ td.column-title .frm_actions_dropdown {
 #frm_top_bar {
 	display: block;
 	width: 100%;
+	max-height: 100px;
 	padding: 25px 40px 25px;
 	margin: 0;
 	box-sizing: border-box;
@@ -239,7 +234,7 @@ td.column-title .frm_actions_dropdown {
 
 .edit-php.post-type-frm_display #frm_top_bar h1,
 .frm_wrap #frm_top_bar h1 {
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: 400;
 	padding: 0;
 	margin: 0;
@@ -5293,9 +5288,9 @@ select[name="m"] {
 	color: var( --grey);
 }
 
-.post-type-frm_display #submitdiv #publishing-action,
-.post-type-frm_display #submitdiv #minor-publishing-actions,
-.post-type-frm_display #edit-slug-box,
+.post-type-frm_display #frm_top_bar + #poststuff #submitdiv #publishing-action, /* Hide only if top bar is present */
+.post-type-frm_display #frm_top_bar + #poststuff #submitdiv #minor-publishing-actions,
+.post-type-frm_display #frm_top_bar + #poststuff #edit-slug-box,
 .post-type-frm_display .wrap h1.wp-heading-inline,
 .post-type-frm_display .wrap > .page-title-action {
 	display: none;
@@ -6317,7 +6312,7 @@ Responsive Design
 	}
 
 	.frm-full-close {
-		padding: 15px 0 0 10px;
+		padding: 15px 0 10px 10px;
 	}
 
 	.frm-full-close span {
@@ -6353,10 +6348,6 @@ Responsive Design
 	#frm_form_editor_container,
 	.frm-entry-container {
 		margin: 0 20px;
-	}
-
-	.frm_wrap #publishing-action {
-		line-height: inherit;
 	}
 
 	.frmbutton.ui-sortable-helper i,
@@ -6425,6 +6416,11 @@ Responsive Design
 
 	html.wp-toolbar .frm-full-screen {
 		margin-top: -46px;
+	}
+
+	.frm-white-body #publishing-action,
+	.frm_wrap #publishing-action {
+		line-height: normal;
 	}
 
 	.frm-full-screen #screen-meta-links {
@@ -6546,6 +6542,10 @@ Responsive Design
 @media only screen and (max-width: 600px) {
 	.frm_wrap {
 		--small-sidebar: 45px;
+	}
+
+	html.wp-toolbar .frm-full-screen {
+		margin-top: 0;
 	}
 
 	.frm-full-screen #wpbody {
