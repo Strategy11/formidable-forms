@@ -4445,7 +4445,6 @@ ul.start_divider {
 	padding: 8px 13px 0 8px;
 	min-height: 115px;
 	transition: all 0.4s linear;
-	overflow: hidden;
 }
 
 .frm-section-collapsed .frm_no_section_fields,
