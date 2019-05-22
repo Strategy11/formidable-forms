@@ -334,6 +334,7 @@ class FrmFieldsController {
 			'checkbox' => FrmField::is_field_type( $field, 'checkbox' ),
 			'select'   => FrmField::is_field_type( $field, 'select' ),
 			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
+			'data'     => FrmField::is_field_type( $field, 'data' ),
 		);
 		return array_filter( $display_type );
 	}
