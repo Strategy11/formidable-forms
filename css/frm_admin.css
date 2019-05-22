@@ -70,16 +70,19 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow: auto;
 }
 
-.frm-full-screen .wp-header-end,
-.frm-full-screen #adminmenumain,
-.frm-full-screen #wpadminbar {
+.frm-full-screen .wp-header-end {
 	display: none;
+}
+
+.frm-full-screen #adminmenuback,
+.frm-full-screen #adminmenuwrap {
+	height: 100vh;
+	overflow: auto;
 }
 
 .frm-full-screen #wpbody-content,
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
-	margin-left: 0 !important;
 	margin-right: 0;
 	padding-bottom: 0;
 	float: none;
@@ -119,10 +122,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 
 .frm-full-screen .columns-2 {
 	border: none;
-}
-
-html.wp-toolbar .frm-full-screen {
-	margin-top: -32px; /* TODO: remove admin bar */
 }
 
 body.formidable_page_formidable-pro-upgrade,
@@ -6418,10 +6417,6 @@ Responsive Design
 	#form_settings_page .advanced_settings .form-table td, .form-table th {
 		display: table-cell;
 		width: auto !important;
-	}
-
-	html.wp-toolbar .frm-full-screen {
-		margin-top: -46px; /* TODO: remove admin bar */
 	}
 
 	.frm-full-screen #screen-meta-links {

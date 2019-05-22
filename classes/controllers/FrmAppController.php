@@ -46,7 +46,7 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_full_screen() ) {
-			$classes .= ' frm-full-screen';
+			$classes .= ' frm-full-screen folded';
 		}
 
 		return $classes;
@@ -393,6 +393,17 @@ class FrmAppController {
 		}
 
 		return $needs_upgrade;
+	}
+
+	/**
+	 * Remove the admin toolbar on full screen pages.
+	 *
+	 * @since 4.0.01
+	 */
+	public static function no_admin_bar() {
+		if ( FrmAppHelper::is_full_screen() ) {
+			add_filter( 'wp_admin_bar_class', 'Nope' );
+		}
 	}
 
 	/**
