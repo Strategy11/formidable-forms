@@ -769,8 +769,10 @@ function frmAdminBuildJS() {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 		} else {
 			var $parentSection = jQuery( field ).closest( 'ul.frm_sorting' );
-			toggleOneSectionHolder( $parentSection );
-			toggled = true;
+			if ( $parentSection.length ) {
+				toggleOneSectionHolder( $parentSection );
+				toggled = true;
+			}
 		}
 
 		if ( msg.indexOf( 'frm-collapse-page' ) !== -1 ) {
