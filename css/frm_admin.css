@@ -1110,11 +1110,16 @@ input.frm_insert_in_template {
 .frm-review-notice.notice {
 	border: 1px solid #ddd;
 	text-align: center;
+	position: fixed !important;
+	z-index: 999;
+	bottom: 0;
+	right: 0;
+	width: 400px;
 }
 
 .frm-review-notice.notice form,
 .frm-review-notice.notice p {
-	font-size: 15px;
+	font-size: 14px;
 	max-width: 600px;
 	margin-left: auto;
 	margin-right: auto;
@@ -1124,12 +1129,8 @@ input.frm_insert_in_template {
 	margin: 5px;
 }
 
-.frm-review-notice > div {
-	padding-bottom: 20px;
-}
-
-.frm-review-notice .frm_reverse_button,
-.frm-review-notice .frm_orange_button {
+.frm-review-notice .frm-button-primary,
+.frm-review-notice .frm-button-secondary {
 	min-width: 100px;
 	display: inline-block;
 	text-align: center;
@@ -1137,7 +1138,7 @@ input.frm_insert_in_template {
 }
 
 .frm-review-notice p > span {
-	font-size: 14px;
+	font-size: 13px;
 	opacity: 0.75;
 }
 
@@ -1683,8 +1684,11 @@ h2.frm-h2 + .howto {
 }
 
 #wpbody-content > .updated,
-#wpbody-content > .notice,
+#wpbody-content > .notice:not(.frm-review-notice),
 #wpbody-content > .error:not(.frm_previous_install),
+.frm-white-body .updated,
+.frm-white-body .notice:not(.frm-review-notice),
+.frm-white-body .error:not(.frm_previous_install),
 #frm-templates-page .updated,
 #frm-templates-page .notice,
 #frm-templates-page .error {
