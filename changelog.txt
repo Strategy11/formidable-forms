@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.0.01 =
+* Clean up, size down, and reposition the request for reviews.
+* Use collapsed admin menu in full screen mode.
+* Show a form title in the top bar on hover if truncated.
+* Show a message if 4.0 Lite is installed without the matching Pro version.
+
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.
 * Moved all settings into the sidebar instead of expanding/collapsing under each field.
