@@ -403,8 +403,17 @@ class FrmAppController {
 	 */
 	public static function no_admin_bar() {
 		if ( FrmAppHelper::is_full_screen() ) {
-			add_filter( 'wp_admin_bar_class', 'Nope' );
+			add_filter( 'wp_admin_bar_class', 'FrmAppController::fake_admin_bar_class' );
 		}
+	}
+
+	/*
+	 * A class that doesn't exist will hide the admin bar.
+	 *
+	 * @since 4.0.01
+	 */
+	public static function fake_admin_bar_class() {
+		return 'Nope';
 	}
 
 	/**
