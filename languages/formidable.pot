@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.0\n"
+"Project-Id-Version: Formidable Forms 4.0.01b\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-05-20T19:25:26+02:00\n"
+"POT-Creation-Date: 2019-05-22T18:39:49+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -1135,23 +1135,23 @@ msgstr ""
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:347
+#: classes/controllers/FrmFieldsController.php:352
 msgid "Default Value (Text)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:354
+#: classes/controllers/FrmFieldsController.php:359
 msgid "Default Value (Calculation)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:358
+#: classes/controllers/FrmFieldsController.php:363
 msgid "Calculator forms"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:363
+#: classes/controllers/FrmFieldsController.php:368
 msgid "Default Value (Lookup)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:367
+#: classes/controllers/FrmFieldsController.php:372
 msgid "Lookup fields"
 msgstr ""
 
@@ -2833,7 +2833,7 @@ msgid "Updated: %1$s"
 msgstr ""
 
 #: classes/views/frm-entries/show.php:7
-#: classes/helpers/FrmEntriesHelper.php:565
+#: classes/helpers/FrmEntriesHelper.php:568
 msgid "View Entry"
 msgstr ""
 
@@ -4352,28 +4352,28 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:573
+#: classes/helpers/FrmEntriesHelper.php:576
 msgid "Delete Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:576
+#: classes/helpers/FrmEntriesHelper.php:579
 msgid "Delete this form entry?"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:584
+#: classes/helpers/FrmEntriesHelper.php:587
 msgid "Print Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:594
 #: classes/helpers/FrmEntriesHelper.php:597
+#: classes/helpers/FrmEntriesHelper.php:600
 msgid "Resend Emails"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:606
+#: classes/helpers/FrmEntriesHelper.php:609
 msgid "Edit Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:609
+#: classes/helpers/FrmEntriesHelper.php:612
 msgid "Entry edits"
 msgstr ""
 
