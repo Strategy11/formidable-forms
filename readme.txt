@@ -375,11 +375,15 @@ To get access to more features, integrations, and support, <a href="https://form
 
 == Changelog ==
 = 4.0.01 =
+* Automatically open the field options box on the form settings page.
 * Clean up, size down, and reposition the request for reviews.
 * Use collapsed admin menu in full screen mode.
 * Show a form title in the top bar on hover if truncated.
 * Show a message if 4.0 Lite is installed without the matching Pro version.
 * Fix: The link to print an entry wasn't responding.
+* Fix: The full screen entries page was only scrolling if the manu label was 'Forms'
+* Fix: Sometimes the field classes and inline shortcodes were appearing on the wrong setting.
+* Fix: 1Password was conflicting with some fields with the inline popup.
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.
