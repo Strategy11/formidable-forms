@@ -451,8 +451,11 @@ class FrmAddon {
 		}
 	}
 
+	/**
+	 * Use a new cache after the license is changed, or Formidable is updated.
+	 */
 	private function transient_key() {
-		return 'frm_' . md5( sanitize_key( $this->license . '_' . $this->plugin_slug ) );
+		return 'frm_' . md5( sanitize_key( $this->license . '_' . $this->plugin_slug . '_' . FrmAppHelper::plugin_version() ) );
 	}
 
 	public static function activate() {

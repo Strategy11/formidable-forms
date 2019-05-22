@@ -1969,6 +1969,42 @@ class FrmAppHelper {
 			'</div></td></tr>';
 	}
 
+	/**
+	 * If Pro is far outdated, show a message.
+	 *
+	 * @since 4.0.01
+	 */
+	public static function min_pro_version_notice( $min_version ) {
+		$is_pro = self::pro_is_installed() && class_exists( 'FrmProDb' );
+		if ( ! $is_pro || self::meets_min_pro_version( $min_version ) ) {
+			return;
+		}
+
+		$pro_version = FrmProDb::$plug_version;
+		$expired = FrmAddonsController::is_license_expired();
+		?>
+		<div class="error frm_previous_install">
+			<?php
+			esc_html_e( 'You are running a version of Formidable Forms that has not been tested with your version of Formidable Forms Pro.', 'formidable' );
+			if ( empty( $expired ) ) {
+				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
+			} else {
+				echo '<br/>Please <a href="https://formidableforms.com/account/licenses/?utm_source=WordPress&utm_medium=addons&utm_campaign=api">renew now</a> to get the latest version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous version</a> to revert.';
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * If Pro is installed, check the version number.
+	 *
+	 * @since 4.0.01
+	 */
+	public static function meets_min_pro_version( $min_version ) {
+		return ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, $min_version, '>=' );
+	}
+
 	public static function locales( $type = 'date' ) {
 		$locales = array(
 			'en'     => __( 'English', 'formidable' ),

@@ -201,6 +201,7 @@ class FrmAppController {
 	public static function pro_get_started_headline() {
 		self::maybe_show_upgrade_bar();
 		self::review_request();
+		FrmAppHelper::min_pro_version_notice( '4.0' );
 
 		// Don't display this error as we're upgrading the thing, or if the user shouldn't see the message
 		if ( 'upgrade-plugin' == FrmAppHelper::simple_get( 'action', 'sanitize_title' ) || ! current_user_can( 'update_plugins' ) ) {

@@ -377,6 +377,11 @@ class FrmFieldsController {
 
 		$types = apply_filters( 'frm_default_value_types', $types, $atts );
 
+		if ( FrmAppHelper::pro_is_installed() && ! FrmAppHelper::meets_min_pro_version( '4.0' ) ) {
+			// Prevent settings from showing in 2 spots.
+			unset( $types['calc'], $types['get_values_field'] );
+		}
+
 		// Set active class.
 		$settings = array_keys( $types );
 		$active   = 'default_value';
@@ -673,7 +678,7 @@ class FrmFieldsController {
 			return;
 		}
 
-		$include_html = ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, '3.06', '>' );
+		$include_html = FrmAppHelper::meets_min_pro_version( '3.06.01' );
 		if ( $include_html ) {
 			$add_html['aria-required'] = 'aria-required="true"';
 		}

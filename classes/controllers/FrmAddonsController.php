@@ -187,6 +187,26 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * @since 4.0.01
+	 */
+	public static function is_license_expired() {
+		$installed_addons = apply_filters( 'frm_installed_addons', array() );
+		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
+			return false;
+		}
+		$installed_addons = array(
+			'formidable_pro' => $installed_addons['formidable_pro'],
+		);
+
+		$version_info = self::fill_update_addon_info( $installed_addons );
+		if ( ! isset( $version_info['error'] ) ) {
+			return false;
+		}
+
+		return $version_info['error'];
+	}
+
+	/**
 	 * @since 3.04.03
 	 */
 	public static function check_update( $transient ) {
