@@ -106,7 +106,7 @@ class FrmFormsHelper {
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
-				<h1 title="<?php echo ( $truncated_name === $name ) ? '' : esc_attr( $name ); ?>">
+				<h1 title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>">
 					<?php echo esc_html( $truncated_name ); ?>
 					<b class="frm_icon_font frm_arrowdown4_icon"></b>
 				</h1>
