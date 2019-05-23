@@ -2540,6 +2540,7 @@ input[type="checkbox"] {
 	clear: both;
 }
 
+.frm_form_settings #op-popup, /* 1Password */
 .frm_form_settings com-1password-op-button,
 .frm_conf_below .frm_conf_field_container .frm_primary_label,
 .frm_conf_inline .frm_inner_field_container .frm-show-click a,
