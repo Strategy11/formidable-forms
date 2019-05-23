@@ -153,6 +153,13 @@ class FrmFormApi {
 			return false; // Cache is expired
 		}
 
+		$version     = FrmAppHelper::plugin_version();
+		$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
+		if ( ! $for_current ) {
+			// Force a new check.
+			return false;
+		}
+
 		return json_decode( $cache['value'], true );
 	}
 
@@ -163,6 +170,7 @@ class FrmFormApi {
 		$data = array(
 			'timeout' => strtotime( $this->cache_timeout, current_time( 'timestamp' ) ),
 			'value'   => json_encode( $addons ),
+			'version' => FrmAppHelper::plugin_version(),
 		);
 
 		update_option( $this->cache_key, $data, 'no' );
