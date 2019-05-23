@@ -53,5 +53,5 @@
 		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // WPCS: XSS ok.
 	}
 	?>
-	<div class="clear"></div>
+	<div style="clear:right;"></div>
 </div>

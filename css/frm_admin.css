@@ -82,10 +82,8 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	float: none;
 }
 
-.new-php.post-type-frm_display #screen-meta-links,
+.post-new-php.post-type-frm_display #screen-meta-links,
 .post-php.post-type-frm_display #screen-meta-links,
-.new-php.post-type-frm_display #wpfooter,
-.post-php.post-type-frm_display #wpfooter,
 .frm-full-screen #wpfooter {
 	display: none;
 }
