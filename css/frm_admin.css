@@ -5082,6 +5082,7 @@ i.frm-show-box,
 i.frm-show-inline-modal {
 	color: var(--primary-color);
 	pointer-events: initial;
+	cursor: pointer;
 	z-index: 1;
 	opacity: 1;
 	right: 2px;

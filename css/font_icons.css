@@ -373,8 +373,13 @@ a.frm_icon_font:hover{
 .frm_more_vert_icon:before {
 	content: "\e5d4";
 }
+.frm_more_horiz_solid_icon {
+	font-size: 28px !important;
+	font-weight: bold;
+	line-height: 18px;
+}
 .frm_more_horiz_solid_icon:before {
-	content: "\f141";
+	content: "\00B7\00B7\00B7";
 }
 .frm_more_vert_solid_icon:before {
 	content: "\f142";
