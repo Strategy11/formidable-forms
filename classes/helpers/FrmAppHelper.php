@@ -1990,11 +1990,11 @@ class FrmAppHelper {
 		?>
 		<div class="error frm_previous_install">
 			<?php
-			esc_html_e( 'You are running a version of Formidable Forms that has not been tested with your version of Formidable Forms Pro.', 'formidable' );
+			esc_html_e( 'You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro.', 'formidable' );
 			if ( empty( $expired ) ) {
 				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
 			} else {
-				echo '<br/>Please <a href="https://formidableforms.com/account/licenses/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous version</a> to revert.';
+				echo '<br/>Please <a href="https://formidableforms.com/account/licenses/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest Pro version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous Lite version</a> to revert.';
 			}
 			?>
 		</div>
