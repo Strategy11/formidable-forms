@@ -182,10 +182,10 @@ do_action( 'frm_before_field_options', $field );
 						}
 						$field_obj->default_value_to_string( $default_value );
 
-						if ( $display['type'] === 'textarea' ||  $display['type'] === 'rte' ) {
+						if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
 							?>
 							<textarea name="<?php echo esc_attr( $default_name ); ?>" class="default-value-field" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" rows="5"><?php
-								echo FrmAppHelper::esc_textarea( $default_value );
+								echo FrmAppHelper::esc_textarea( $default_value ); // WPCS: XSS ok.
 							?></textarea>
 							<?php
 						} else {
