@@ -181,8 +181,19 @@ do_action( 'frm_before_field_options', $field );
 							$default_value = $field['default_value'];
 						}
 						$field_obj->default_value_to_string( $default_value );
+
+						if ( $display['type'] === 'textarea' ||  $display['type'] === 'rte' ) {
+							?>
+							<textarea name="<?php echo esc_attr( $default_name ); ?>" class="default-value-field" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" rows="5"><?php
+								echo FrmAppHelper::esc_textarea( $default_value );
+							?></textarea>
+							<?php
+						} else {
+							?>
+							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
+							<?php
+						}
 						?>
-						<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" />
 					</span>
 				</p>
 				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
