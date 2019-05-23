@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-05-23T01:43:05+02:00\n"
+"POT-Creation-Date: 2019-05-23T07:48:01+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -2463,6 +2463,13 @@ msgstr ""
 msgid "Default Value"
 msgstr ""
 
+#: classes/views/frm-fields/back-end/settings.php:174
+#: classes/views/frm-fields/back-end/settings.php:200
+#: classes/views/frm-fields/back-end/value-format.php:6
+#: classes/views/frm-fields/back-end/html-content.php:6
+msgid "Toggle Options"
+msgstr ""
+
 #: classes/views/frm-fields/back-end/settings.php:196
 msgid "Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row."
 msgstr ""
@@ -4834,7 +4841,7 @@ msgid "You are running an outdated version of Formidable. This plugin may not wo
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:1993
-msgid "You are running a version of Formidable Forms that has not been tested with your version of Formidable Forms Pro."
+msgid "You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro."
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2015
