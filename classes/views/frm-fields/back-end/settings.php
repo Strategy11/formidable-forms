@@ -171,7 +171,7 @@ do_action( 'frm_before_field_options', $field );
 						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
 					</label>
 					<span class="frm-with-right-icon">
-						<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-smart-values-box"></i>
+						<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-smart-values-box" title="<?php esc_attr_e( 'Toggle Options', 'formidable' ); ?>"></i>
 						<?php
 						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
@@ -197,7 +197,7 @@ do_action( 'frm_before_field_options', $field );
 					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
 				</label>
 				<span class="frm-with-right-icon">
-					<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-layout-classes-box"></i>
+					<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-layout-classes-box" title="<?php esc_attr_e( 'Toggle Options', 'formidable' ); ?>"></i>
 					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" />
 				</span>
 			</p>
