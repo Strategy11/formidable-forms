@@ -9,9 +9,9 @@
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: auto;
 	line-height: 1;
-	-moz-transition: all .1s ease-in-out;
-	-webkit-transition: all .1s ease-in-out;
-	transition: all .1s ease-in-out;
+	-moz-transition: color .1s ease-in-out, opacity .1s ease-in-out;
+	-webkit-transition: color .1s ease-in-out, opacity .1s ease-in-out;
+	transition: color .1s ease-in-out, opacity .1s ease-in-out;
 	font-size: 18px;
 }
 

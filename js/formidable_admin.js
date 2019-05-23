@@ -3279,6 +3279,9 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Get the input box for the selected ... icon.
+	 */
 	function getInputForIcon( moreIcon ) {
 		var input = moreIcon.nextElementSibling;
 		if ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
@@ -3286,6 +3289,17 @@ function frmAdminBuildJS() {
 			input = input.nextElementSibling;
 		}
 		return input;
+	}
+
+	/**
+	 * Get the ... icon for the selected input box.
+	 */
+	function getIconForInput( input ) {
+		var moreIcon = input.previousElementSibling;
+		if ( moreIcon !== null && moreIcon.tagName !== 'I' ) {
+			moreIcon = moreIcon.previousElementSibling;
+		}
+		return moreIcon;
 	}
 
 	function hideShortcodes( box ) {
@@ -4522,6 +4536,7 @@ function frmAdminBuildJS() {
 
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
+				e.stopPropagation();
 				if ( e.target.classList.contains( 'frm-show-box' ) ) {
 					return;
 				}
@@ -4633,11 +4648,11 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
 				e.stopPropagation();
 				if ( this.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
-					var moreIcon = this.previousElementSibling;
-					if ( moreIcon.tagName !== 'I' ) {
-						moreIcon = moreIcon.previousElementSibling;
+					hideShortcodes();
+					var moreIcon = getIconForInput( this );
+					if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
+						showShortcodeBox( moreIcon, 'nofocus' );
 					}
-					showShortcodeBox( moreIcon, 'nofocus' );
 				}
 
 				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
