@@ -59,7 +59,7 @@ class FrmFieldsHelper {
 
 		self::prepare_edit_front_field( $field_array, $field );
 
-		$field_array = array_merge( $field->field_options, $field_array );
+		$field_array = array_merge( (array) $field->field_options, $field_array );
 	}
 
 	/**
