@@ -1994,7 +1994,7 @@ class FrmAppHelper {
 			if ( empty( $expired ) ) {
 				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
 			} else {
-				echo '<br/>Please <a href="https://formidableforms.com/account/licenses/?utm_source=WordPress&utm_medium=addons&utm_campaign=api">renew now</a> to get the latest version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous version</a> to revert.';
+				echo '<br/>Please <a href="https://formidableforms.com/account/licenses/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous version</a> to revert.';
 			}
 			?>
 		</div>

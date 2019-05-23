@@ -1,6 +1,5 @@
 .frmfont,
 .frm_icon_font,
-.dashicons-frm_white_label_icon,
 .frm_dashicon_font{
 	text-decoration:none;
 	text-shadow: none;
@@ -26,7 +25,6 @@ i.frm_icon_font{
 .frmfont:before,
 select.frmfont,
 .frm_icon_font:before,
-.dashicons-frm_white_label_icon:before,
 select.frm_icon_font{
 	font-family: 's11-fp' !important;
 	text-align:center;
@@ -621,7 +619,6 @@ a.frm_icon_font:hover{
 .frm_work_icon:before {
 	content: "\e99e";
 }
-.dashicons-frm_white_label_icon:before,
 .frm_white_label_icon:before {
 	content: "\e91d";
 }
