@@ -2431,12 +2431,9 @@ input[type="checkbox"] {
 .frm_grid_container > p.frm_form_field,
 .frm_grid_container > div.frm_form_field,
 #new_fields .frm_grid_container > p {
-	margin: 7px 0;
-}
-
-.accordion-section-content .frm_grid_container > p {
 	margin-top: 7px;
 	margin-bottom: 7px;
+	margin-right: 0;
 }
 
 #new_fields div.frm_grid_container > .frm_primary_label {
