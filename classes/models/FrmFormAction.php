@@ -309,6 +309,8 @@ class FrmFormAction {
 					$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey, $cv );
 				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
+				} elseif ( $ck == $subkey ) {
+					$action[ $ck ] = FrmFieldsHelper::switch_field_ids( $action[ $ck ] );
 				}
 			}
 		}
