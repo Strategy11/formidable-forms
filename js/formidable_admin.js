@@ -1665,13 +1665,14 @@ function frmAdminBuildJS() {
 		this.classList.toggle( 'frm-collapsed' );
 	}
 
-	function clickLabel( e ) {
+	function clickLabel() {
+		/*jshint validthis:true */
 		var setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0],
 			fieldId = this.id.replace( 'field_label_', '' ),
 			fieldType = document.getElementById( 'field_options_type_' + fieldId ),
 			fieldTypeName = fieldType.value;
 
-		if ( setting !== null ) {
+		if ( typeof setting !== 'undefined' ) {
 			if ( fieldType.tagName === 'SELECT' ) {
 				fieldTypeName = fieldType.options[ fieldType.selectedIndex ].text.toLowerCase();
 			} else {
@@ -1687,6 +1688,24 @@ function frmAdminBuildJS() {
 					setting.focus();
 				}
 			}, 50 );
+		}
+	}
+
+	function clickDescription() {
+		/*jshint validthis:true */
+		var setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0];
+		if ( typeof setting !== 'undefined' ) {
+			setTimeout( function() {
+				setting.focus();
+				autoExpandSettings( setting );
+			}, 50 );
+		}
+	}
+
+	function autoExpandSettings( setting ) {
+		var inSection = setting.closest( '.frm-collapse-me' );
+		if ( inSection !== null ) {
+			inSection.previousElementSibling.classList.remove( 'frm-collapsed' );
 		}
 	}
 
@@ -1861,9 +1880,12 @@ function frmAdminBuildJS() {
 		if ( input.is( 'select' ) ) {
 			placeholder = document.getElementById( 'frm_placeholder_' + fieldId );
 			if ( placeholder !== null && placeholder.value === '' ) {
-				fillDropdownOpts( input[0], fieldId );
+				fillDropdownOpts( input[0], { sourceID: fieldId } );
 			} else {
-				fillDropdownOpts( input[0], fieldId, placeholder.value );
+				fillDropdownOpts( input[0], {
+					sourceID: fieldId,
+					placeholder: placeholder.value
+				} );
 			}
 		} else {
 			opts = getMultipleOpts( fieldId );
@@ -1895,29 +1917,34 @@ function frmAdminBuildJS() {
 		container.append( single );
 	}
 
-	function fillDropdownOpts( field, sourceID, placeholder ) {
-		if ( field !== null ) {
-			removeDropdownOpts( field );
-			var opts = getMultipleOpts( sourceID ),
-				hasPlaceholder = ( typeof placeholder !== 'undefined' );
+	function fillDropdownOpts( field, atts ) {
+		if ( field === null ) {
+			return;
+		}
+		var sourceID = atts.sourceID,
+			placeholder = atts.placeholder,
+			showOther = atts.other;
 
-			for ( var i = 0; i < opts.length; i++ ) {
-				var label = opts[ i ].label,
-					isOther = opts[ i ].key.indexOf( 'other' ) !== -1;
+		removeDropdownOpts( field );
+		var opts = getMultipleOpts( sourceID ),
+		hasPlaceholder = ( typeof placeholder !== 'undefined' );
 
-				if ( hasPlaceholder && label !== '' ) {
-					addBlankSelectOption( field, placeholder );
-				} else if ( hasPlaceholder ) {
-					label = placeholder;
-				}
-				hasPlaceholder = false;
+		for ( var i = 0; i < opts.length; i++ ) {
+			var label = opts[ i ].label,
+			isOther = opts[ i ].key.indexOf( 'other' ) !== -1;
 
-				if ( ! isOther ) {
-					var opt = document.createElement( 'option' );
-					opt.value = opts[ i ].saved;
-					opt.innerHTML = label;
-					field.appendChild( opt );
-				}
+			if ( hasPlaceholder && label !== '' ) {
+				addBlankSelectOption( field, placeholder );
+			} else if ( hasPlaceholder ) {
+				label = placeholder;
+			}
+			hasPlaceholder = false;
+
+			if ( ! isOther || showOther ) {
+				var opt = document.createElement( 'option' );
+				opt.value = opts[ i ].saved;
+				opt.innerHTML = label;
+				field.appendChild( opt );
 			}
 		}
 	}
@@ -2088,7 +2115,11 @@ function frmAdminBuildJS() {
 
 				if ( showSelect ) {
 					var fillField = document.getElementById( input.id );
-					fillDropdownOpts( fillField, val, '' );
+					fillDropdownOpts( fillField, {
+						sourceID: val,
+						placeholder: '',
+						other: true
+					} );
 				}
 			} else {
 				var thisType = this.getAttribute( 'data-type' );
@@ -4477,7 +4508,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
-			$builderForm.on( 'click', '.frm_single_option .frm_delete_icon', deleteFieldOption );
+			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
@@ -4485,6 +4516,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 
 			jQuery( builderArea ).on( 'click', '#frm-show-fields .frm_primary_label', clickLabel );
+			jQuery( builderArea ).on( 'click', '.frm_description', clickDescription );
 			jQuery( builderArea ).on( 'click', '#frm-show-fields > li.ui-state-default', clickVis );
 			$newFields.on( 'click', '.start_divider li.ui-state-default', clickSectionVis );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
