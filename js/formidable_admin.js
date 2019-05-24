@@ -2386,7 +2386,7 @@ function frmAdminBuildJS() {
 		if ( typeof parentClass === 'undefined' ) {
 			parentClass = '';
 		}
-		maybeAddFieldSelection();
+		maybeAddFieldSelection( parentClass );
 		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<i class="frm-show-box frm_icon_font frm_more_horiz_solid_icon"></i>' );
 	}
 
@@ -2394,8 +2394,8 @@ function frmAdminBuildJS() {
 	 * For reverse compatibility. Check for fields that were
 	 * using the old sidebar.
 	 */
-	function maybeAddFieldSelection() {
-		var i, missingClass = jQuery( ':not(.frm_has_shortcodes) .frm_not_email_message, :not(.frm_has_shortcodes) .frm_not_email_to, :not(.frm_has_shortcodes) .frm_not_email_subject' );
+	function maybeAddFieldSelection( parentClass ) {
+		var i, missingClass = jQuery( parentClass + ' :not(.frm_has_shortcodes) .frm_not_email_message, ' + parentClass + ' :not(.frm_has_shortcodes) .frm_not_email_to, ' + parentClass + ' :not(.frm_has_shortcodes) .frm_not_email_subject' );
 		for ( i = 0; i < missingClass.length; i ++ ) {
 			missingClass[i].parentNode.classList.add( 'frm_has_shortcodes' );
 		}
@@ -3260,7 +3260,7 @@ function frmAdminBuildJS() {
 			hideShortcodes( box );
 		} else {
 			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
-			box.style.left = ( pos.left - parentPos.left - 273 ) + 'px';
+			box.style.left = ( pos.left - parentPos.left - 257 ) + 'px';
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
 			if ( input.classList.contains( 'frm_not_email_to' ) ) {
@@ -4637,6 +4637,10 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'keyup change', '.frm-build-logic', setLogicExample );
 
 			showInputIcon();
+			jQuery( document ).on( 'frmElementAdded', function( event, parentEle ) {
+				/* This is here for add-ons to trigger */
+				showInputIcon( parentEle );
+			});
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
 
 			var settingsPage = document.getElementById( 'form_settings_page' ),
@@ -4656,6 +4660,11 @@ function frmAdminBuildJS() {
 				}
 
 				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
+					if ( jQuery( e.target ).closest( '#frm_adv_info' ).length ) {
+						// Don't trigger for fields inside of the modal.
+						return;
+					}
+
 					if ( settingsPage !== null ) {
 						/* form settings page */
 						var htmlTab = jQuery( '#frm_html_tab' );
