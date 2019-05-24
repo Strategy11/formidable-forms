@@ -2245,6 +2245,12 @@ function frmAdminBuildJS() {
 		jQuery('.frm-open [data-open="' + this.parentNode.id + '"]').closest( '.frm-open' ).removeClass( 'frm-open' );
 	}
 
+	function changeInputtedValue() {
+		/*jshint validthis:true */
+		var action = this.getAttribute( 'data-frmchange' );
+		this.value = this.value[ action ]();
+	}
+
 	function submitBuild() {
 		/*jshint validthis:true */
 		var $thisEle = jQuery( this );
@@ -4489,6 +4495,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm-show-inline-modal', showInlineModal );
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
+			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
 			initBulkOptionsOverlay();
 		},

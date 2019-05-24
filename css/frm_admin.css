@@ -634,11 +634,8 @@ p.frm_has_shortcodes {
 	font-weight: 600;
 }
 
-.frm_settings_form {
-	padding: 0 25px 35px;
-}
-
 #form_settings_page .frm-inner-content {
+	padding-top: 0;
 	padding-bottom: 150px;
 	position: relative;
 }
@@ -1442,6 +1439,10 @@ div.frm_updated_message {
 
 #post-body-content > .frm_updated_message {
 	margin: 5px 65px;
+}
+
+#form_global_settings .frm_updated_message {
+	margin: 5px 25px;
 }
 
 .frm_error_style {
@@ -3171,6 +3172,10 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 .frm-right-panel .inside a:hover i,
 .frm-form-setting-tabs a:hover span {
 	color: var(--dark-grey);
+}
+
+.frm_settings_form .tabs-panel {
+	padding: 0 25px;
 }
 
 #form_settings_page .tabs-panel,
@@ -5103,7 +5108,7 @@ i.frm-show-inline-modal {
 .frm_wrap .frm-with-right-icon textarea,
 .frm_wrap .frm-with-right-icon input,
 .frm_wrap .frm-with-right-icon input[type=text] {
-	padding-right: 27px;
+	padding-right: 35px;
 }
 
 #frm-show-fields .frm-with-left-icon i {

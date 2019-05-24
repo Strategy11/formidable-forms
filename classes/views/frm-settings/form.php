@@ -1,26 +1,24 @@
 <div id="form_global_settings" class="frm_wrap">
-	<div class="frm_page_container">
+	<form name="frm_settings_form" method="post" class="frm_settings_form"
+		action="?page=formidable-settings<?php echo esc_html( $current ? '&amp;t=' . $current : '' ); ?>">
+		<div class="frm_page_container">
 
-	<?php
-	FrmAppHelper::get_admin_header(
-		array(
-			'label' => __( 'Settings', 'formidable' ),
-		)
-	);
-	?>
-
-	<div class="columns-2">
-		<div class="frm-right-panel">
 			<?php
-			$current = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php' );
+			FrmAppHelper::get_admin_header(
+			array(
+				'label'   => __( 'Settings', 'formidable' ),
+				'publish' => array( 'FrmSettingsController::save_button', array() ),
+				)
+			);
 			?>
-		</div>
 
-		<div id="post-body-content" class="frm-fields">
+			<div class="columns-2">
+				<div class="frm-right-panel">
+					<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/tabs.php' ); ?>
+				</div>
 
-							<form name="frm_settings_form" method="post" class="frm_settings_form"
-									action="?page=formidable-settings<?php echo esc_html( $current ? '&amp;t=' . $current : '' ); ?>">
+				<div id="post-body-content" class="frm-fields">
+
 								<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 								<input type="hidden" name="frm_action" value="process-form"/>
 								<input type="hidden" name="action" value="process-form"/>
@@ -55,17 +53,9 @@
 										?>
 									</div>
 								<?php } ?>
-
-								<div class="submit">
-									<input class="button-primary frm-button-primary" type="submit"
-										value="<?php esc_attr_e( 'Update Options', 'formidable' ); ?>"/>
-								</div>
-
-							</form>
+				</div>
 			</div>
 		</div>
-
-	</div>
-
+	</form>
 	<?php do_action( 'frm_after_settings' ); ?>
 </div>

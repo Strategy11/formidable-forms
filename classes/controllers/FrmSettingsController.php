@@ -23,6 +23,7 @@ class FrmSettingsController {
 		$target_path = $uploads['basedir'] . '/formidable/css';
 
 		$sections = self::get_settings_tabs();
+		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
 	}
@@ -224,6 +225,16 @@ class FrmSettingsController {
 		}
 
 		self::display_form( $errors, $message );
+	}
+
+	/**
+	 * Include the Update button on the global settings page.
+	 *
+	 * @since 4.0.02
+	 */
+	public static function save_button() {
+		echo '<input class="button-primary frm-button-primary" type="submit"
+			value="' . esc_attr__( 'Update', 'formidable' ) . '"/>';
 	}
 
 	public static function route( $stop_load = false ) {
