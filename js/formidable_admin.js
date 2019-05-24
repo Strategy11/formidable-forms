@@ -1012,7 +1012,7 @@ function frmAdminBuildJS() {
 
 	function getFieldList() {
 		var i, fields = [],
-			allFields = jQuery( '#frm_builder_page .frm-single-settings.frm-fields' );
+			allFields = document.querySelectorAll( 'li.frm_field_box' );
 
 		for ( i = 0; i < allFields.length; i++ ) {
 			var fieldId = allFields[ i ].getAttribute( 'data-fid' );
