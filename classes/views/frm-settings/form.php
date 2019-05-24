@@ -5,9 +5,9 @@
 
 			<?php
 			FrmAppHelper::get_admin_header(
-			array(
-				'label'   => __( 'Settings', 'formidable' ),
-				'publish' => array( 'FrmSettingsController::save_button', array() ),
+				array(
+					'label'   => __( 'Settings', 'formidable' ),
+					'publish' => array( 'FrmSettingsController::save_button', array() ),
 				)
 			);
 			?>
