@@ -360,7 +360,8 @@ DEFAULT_HTML;
 			return;
 		}
 
-		if ( empty( array_filter( $default_value ) ) ) {
+		$is_empty = array_filter( $default_value );
+		if ( empty( $is_empty ) ) {
 			$default_value = '';
 		} else {
 			$default_value = implode( $default_value, ',' );
