@@ -42,6 +42,9 @@
 							'include_extras' => 'page, section',
 							'inline_style'   => 0,
 							'class'          => 'frm-alt-table',
+							'show_filename'  => true,
+							'show_image'     => true,
+							'add_link'       => true,
 						)
 					);
 					?>
