@@ -12,11 +12,15 @@
 	);
 	?>
 </p>
-<?php } elseif ( $form ) { ?>
+<?php } elseif ( $form || $has_form ) { ?>
 <div class="frm_no_entries_header">
 	<?php
-	/* translators: %s: The form name */
-	printf( esc_html__( 'No Entries for form: %s', 'formidable' ), esc_html( $form->name ) );
+	if ( $form ) {
+		/* translators: %s: The form name */
+		printf( esc_html__( 'No Entries for form: %s', 'formidable' ), esc_html( $form->name ) );
+	} else {
+		esc_html_e( 'No Entries found.', 'formidable' );
+	}
 	?>
 </div>
 <p class="frm_no_entries_text">

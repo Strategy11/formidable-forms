@@ -98,6 +98,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $form_id ) {
 			$form = FrmForm::getOne( $form_id );
 		}
+		$has_form = ! empty( $form );
+
+		if ( ! $has_form ) {
+			$has_form = FrmForm::getAll( array(), '', 1 );
+			$has_form = ! empty( $has_form );
+		}
+
 		$colspan = $this->get_column_count();
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php' );
