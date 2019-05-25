@@ -25,19 +25,18 @@
 		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
 		<exclude name="WordPress.Security.NonceVerification.Missing" />
 		<exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized" />
-		<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
 
 		<!-- These give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
-		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
-		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
-		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.PHP.YodaConditions"/>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
