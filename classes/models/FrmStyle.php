@@ -50,7 +50,7 @@ class FrmStyle {
 		$action_ids = array();
 
 		foreach ( $all_instances as $number => $new_instance ) {
-			$new_instance = stripslashes_deep( (array) $new_instance );
+			$new_instance = wp_unslash( (array) $new_instance );
 			$this->id     = $new_instance['ID'];
 			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
 				$all_instances[ $number ] = $new_instance;

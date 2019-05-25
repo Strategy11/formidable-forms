@@ -570,7 +570,7 @@ class FrmForm {
 					$cache->options = maybe_unserialize( $cache->options );
 				}
 
-				return stripslashes_deep( $cache );
+				return wp_unslash( $cache );
 			}
 		}
 
@@ -587,7 +587,7 @@ class FrmForm {
 			$results->options = maybe_unserialize( $results->options );
 		}
 
-		return stripslashes_deep( $results );
+		return wp_unslash( $results );
 	}
 
 	/**
@@ -621,7 +621,7 @@ class FrmForm {
 			$results = reset( $results );
 		}
 
-		return stripslashes_deep( $results );
+		return wp_unslash( $results );
 	}
 
 	/**

@@ -185,7 +185,7 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 
 .frm-short-list {
 	overflow: auto;
-	max-height: 200px;
+	max-height: 190px;
 }
 
 .frm-white-body table.frm-border td {
@@ -1182,6 +1182,7 @@ a.frm_hidden,
 	margin-top: 0 !important;
 }
 
+.postbox .inside > p.frm_no_bottom_margin:last-child,
 .frm_no_bottom_margin {
 	margin-bottom: 0 !important;
 }

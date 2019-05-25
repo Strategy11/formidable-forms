@@ -431,7 +431,7 @@ class FrmField {
 		self::prepare_options( $results );
 		self::filter_field( $filter, $results );
 
-		return stripslashes_deep( $results );
+		return wp_unslash( $results );
 	}
 
 	/**
@@ -504,7 +504,7 @@ class FrmField {
 				unset( $result );
 			}
 
-			return stripslashes_deep( $fields );
+			return wp_unslash( $fields );
 		}
 
 		self::$use_cache = false;
@@ -613,7 +613,7 @@ class FrmField {
 			// make sure old cache doesn't get saved as a transient
 			$results = wp_cache_get( $cache_key, 'frm_field' );
 			if ( false !== $results ) {
-				return stripslashes_deep( $results );
+				return wp_unslash( $results );
 			}
 		}
 
@@ -662,7 +662,7 @@ class FrmField {
 
 		FrmDb::set_cache( $cache_key, $results, 'frm_field' );
 
-		return stripslashes_deep( $results );
+		return wp_unslash( $results );
 	}
 
 	/**

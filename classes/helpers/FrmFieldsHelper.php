@@ -184,7 +184,7 @@ class FrmFieldsHelper {
 			$value = maybe_unserialize( $_POST['field_options'][ $setting ] );
 			if ( strpos( $setting, 'html' ) !== false ) {
 				// strip slashes from HTML but not regex
-				$value = stripslashes_deep( $value );
+				$value = wp_unslash( $value );
 			}
 		}
 	}

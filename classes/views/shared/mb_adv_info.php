@@ -28,13 +28,15 @@
 
 	<div id="frm-insert-fields-box" class="tabs-panel">
 		<?php
-		FrmAppHelper::show_search_box(
-			array(
-				'input_id'    => 'field',
-				'placeholder' => __( 'Search', 'formidable' ),
-				'tosearch'    => 'frm-customize-list',
-			)
-		);
+		if ( count( $fields ) > 8 ) {
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'field',
+					'placeholder' => __( 'Search', 'formidable' ),
+					'tosearch'    => 'frm-customize-list',
+				)
+			);
+		}
 		?>
 
 		<ul class="subsubsub">

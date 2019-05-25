@@ -310,18 +310,18 @@ class FrmEntry {
 		if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
 
-			return stripslashes_deep( $entry );
+			return wp_unslash( $entry );
 		}
 
 		$entry = FrmDb::check_cache( $id, 'frm_entry' );
 		if ( $entry !== false ) {
-			return stripslashes_deep( $entry );
+			return wp_unslash( $entry );
 		}
 
 		$entry = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 		$entry = self::get_meta( $entry );
 
-		return stripslashes_deep( $entry );
+		return wp_unslash( $entry );
 	}
 
 	public static function get_meta( $entry ) {
@@ -423,7 +423,7 @@ class FrmEntry {
 		}
 
 		if ( ! $meta || ! $entries ) {
-			return stripslashes_deep( $entries );
+			return wp_unslash( $entries );
 		}
 		unset( $meta );
 
@@ -443,7 +443,7 @@ class FrmEntry {
 		unset( $meta_where );
 
 		if ( ! $metas ) {
-			return stripslashes_deep( $entries );
+			return wp_unslash( $entries );
 		}
 
 		foreach ( $metas as $m_key => $meta_val ) {
@@ -467,7 +467,7 @@ class FrmEntry {
 			}
 		}
 
-		return stripslashes_deep( $entries );
+		return wp_unslash( $entries );
 	}
 
 	// Pagination Methods

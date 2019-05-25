@@ -273,7 +273,7 @@ class FrmFormsHelper {
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
 		if ( empty( $post_values ) ) {
-			$post_values = stripslashes_deep( $_POST );
+			$post_values = wp_unslash( $_POST );
 		}
 
 		$values['form_key']    = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;

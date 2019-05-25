@@ -214,7 +214,7 @@ class FrmEntryMeta {
 		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
 			$result = $cached->metas[ $field_id ];
 
-			return stripslashes_deep( $result );
+			return wp_unslash( $result );
 		}
 
 		$get_table = $wpdb->prefix . 'frm_item_metas';
@@ -228,7 +228,7 @@ class FrmEntryMeta {
 
 		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
 		$result = maybe_unserialize( $result );
-		$result = stripslashes_deep( $result );
+		$result = wp_unslash( $result );
 
 		return $result;
 	}
@@ -258,7 +258,7 @@ class FrmEntryMeta {
 			unset( $k, $v );
 		}
 
-		return stripslashes_deep( $values );
+		return wp_unslash( $values );
 	}
 
 	/**
@@ -310,7 +310,7 @@ class FrmEntryMeta {
 		}
 
 		foreach ( $results as $k => $result ) {
-			$results[ $k ]->meta_value = stripslashes_deep( maybe_unserialize( $result->meta_value ) );
+			$results[ $k ]->meta_value = wp_unslash( maybe_unserialize( $result->meta_value ) );
 			unset( $k, $result );
 		}
 
