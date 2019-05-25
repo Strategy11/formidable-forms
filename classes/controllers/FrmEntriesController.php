@@ -552,7 +552,7 @@ class FrmEntriesController {
 		}
 
 		if ( $errors == '' && ! $ajax ) {
-			$errors = FrmEntryValidate::validate( $_POST );
+			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) );
 		}
 
 		/**
