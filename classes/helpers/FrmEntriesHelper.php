@@ -308,11 +308,11 @@ class FrmEntriesHelper {
 		$field_id = is_object( $field ) ? $field->id : $field;
 
 		if ( empty( $args['parent_field_id'] ) ) {
-			$value = isset( $_POST['item_meta'][ $field_id ] ) ? $_POST['item_meta'][ $field_id ] : '';
+			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : '';
 		} else {
-			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] : '';
+			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
 		}
-		$value = wp_unslash( $value );
+
 		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
 	}
 

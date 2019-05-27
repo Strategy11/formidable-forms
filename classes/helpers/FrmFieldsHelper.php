@@ -180,12 +180,16 @@ class FrmFieldsHelper {
 	 * @param mixed $value
 	 */
 	private static function get_posted_field_setting( $setting, &$value ) {
-		if ( isset( $_POST['field_options'][ $setting ] ) ) {
-			$value = maybe_unserialize( $_POST['field_options'][ $setting ] );
-			if ( strpos( $setting, 'html' ) !== false ) {
-				// strip slashes from HTML but not regex
-				$value = wp_unslash( $value );
-			}
+		if ( ! isset( $_POST['field_options'][ $setting ] ) ) {
+			return;
+		}
+
+		if ( strpos( $setting, 'html' ) !== false ) {
+			// Strip slashes from HTML but not regex.
+			$value = maybe_unserialize( wp_unslash( $_POST['field_options'][ $setting ] ) );
+		} else {
+			// TODO: Remove stripslashes on output, and use on input only.
+			$value = maybe_unserialize( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
 		}
 	}
 
@@ -1048,9 +1052,9 @@ class FrmFieldsHelper {
 		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
 		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
-				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) : '';
+				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ) : '';
 			} else {
-				$other_val = sanitize_text_field( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] );
+				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) );
 			}
 
 			return $other_val;
@@ -1059,9 +1063,9 @@ class FrmFieldsHelper {
 			// For normal fields
 
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
-				$other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) : '';
+				$other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( wp_unslash( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ) : '';
 			} else {
-				$other_val = sanitize_text_field( $_POST['item_meta']['other'][ $field['id'] ] );
+				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta']['other'][ $field['id'] ] ) );
 			}
 
 			return $other_val;
