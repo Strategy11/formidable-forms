@@ -6526,6 +6526,31 @@ Responsive Design
 	.frm-addons {
 		grid-template-columns: 1fr;
 	}
+
+	.frm_single_entry_page.frm_wrap .frm_page_container {
+		height: auto;
+		display: block;
+	}
+
+	.frm_single_entry_page.frm_wrap .columns-2 {
+		display: block;
+		border-bottom: none;
+	}
+
+	.frm_single_entry_page .wrap.frm-with-margin {
+		margin: 10px 20px;
+	}
+
+	.frm_single_entry_page #post-body-content + .frm-right-panel {
+		width: auto;
+		margin: 0 20px;
+		border: 1px solid var(--sidebar-hover);
+		border-radius: 6px;
+	}
+
+	#wp-content-media-buttons a.frm_insert_form {
+		padding: 0 15px;
+	}
 }
 
 @media only screen and (max-width: 700px) {

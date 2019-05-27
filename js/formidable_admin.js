@@ -1329,6 +1329,18 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Allow typing on form switcher click without an extra click to search.
+	 */
+	function focusSearchBox() {
+		var searchBox = document.getElementById( 'dropform-search-input' );
+		if ( searchBox !== null ) {
+			setTimeout( function() {
+				searchBox.focus();
+			}, 100 );
+		}
+	}
+
+	/**
 	 * If a field is clicked in the builder, prevent inputs from changing.
 	 */
 	function stopFieldFocus( e ) {
@@ -2241,21 +2253,30 @@ function frmAdminBuildJS() {
 		field.className = field.className.replace( replace, replaceWith );
 	}
 
-	function showInlineModal( e ) {
+	function maybeShowInlineModal( e ) {
 		/*jshint validthis:true */
-		var box = document.getElementById( this.getAttribute( 'data-open' ) ),
-			container = jQuery( this ).closest( 'p' ),
-			pos = this.getBoundingClientRect(),
-			parentPos = box.parentNode.getBoundingClientRect();
-
 		e.preventDefault();
+		showInlineModal( this );
+	}
+
+	function showInlineModal( icon, input ) {
+		var box = document.getElementById( icon.getAttribute( 'data-open' ) ),
+			container = jQuery( icon ).closest( 'p' ),
+			pos = icon.getBoundingClientRect(),
+			parentPos = box.parentNode.getBoundingClientRect(),
+			inputTrigger = ( typeof input !== 'undefined' );
+
 		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
 			box.classList.add( 'frm_hidden' );
 		} else {
-			var input = getInputForIcon( this );
+			if ( ! inputTrigger ) {
+				input = getInputForIcon( icon );
+			}
 			if ( input !== null ) {
-				input.focus();
+				if ( ! inputTrigger ) {
+					input.focus();
+				}
 				container.after( box );
 				box.setAttribute( 'data-fills', input.id );
 
@@ -3276,6 +3297,23 @@ function frmAdminBuildJS() {
 		code = 'if ' + field + ' ' + is + '="' + text + '"]';
 		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field );
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
+	}
+
+	function showBuilderModal( e ) {
+		/*jshint validthis:true */
+		var moreIcon = getIconForInput( this );
+		showInlineModal( moreIcon, this );
+	}
+
+	function maybeShowModal( input ) {
+		var moreIcon;
+		if ( input.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
+			hideShortcodes();
+			moreIcon = getIconForInput( input );
+			if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
+				showShortcodeBox( moreIcon, 'nofocus' );
+			}
+		}
 	}
 
 	function showShortcodes( e ) {
@@ -4324,6 +4362,7 @@ function frmAdminBuildJS() {
 					$openDrop.removeClass( 'open' );
 				}
 			} );
+			jQuery( '#frm_bs_dropdown:not(.open) a' ).click( focusSearchBox );
 
 			if ( typeof this_form_id === 'undefined' ) {
 				this_form_id = jQuery( document.getElementById( 'form_id' ) ).val();
@@ -4514,6 +4553,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
+			$builderForm.on( 'focusin', '.frm_classes', showBuilderModal );
 
 			jQuery( builderArea ).on( 'click', '#frm-show-fields .frm_primary_label', clickLabel );
 			jQuery( builderArea ).on( 'click', '.frm_description', clickDescription );
@@ -4524,7 +4564,7 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
-			$builderForm.on( 'click', '.frm-show-inline-modal', showInlineModal );
+			$builderForm.on( 'click', '.frm-show-inline-modal', maybeShowInlineModal );
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
@@ -4690,13 +4730,7 @@ function frmAdminBuildJS() {
 			if ( settingsPage !== null || viewPage ) {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
 				e.stopPropagation();
-				if ( this.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
-					hideShortcodes();
-					var moreIcon = getIconForInput( this );
-					if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
-						showShortcodeBox( moreIcon, 'nofocus' );
-					}
-				}
+				maybeShowModal( this );
 
 				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
 					if ( jQuery( e.target ).closest( '#frm_adv_info' ).length ) {

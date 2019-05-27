@@ -620,7 +620,7 @@ a.frm_icon_font:hover{
 	content: "\e99e";
 }
 .frm_white_label_icon:before {
-	content: "\e91d";
+	content: "\e91d" !important;
 }
 .frm_zoom_out_icon:before {
 	content: "\e99f";
