@@ -4522,7 +4522,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
-			$newFields.on( 'click', '.frm_clone_icon', duplicateField );
+			$newFields.on( 'click', '.frm_clone_field', duplicateField );
 			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );

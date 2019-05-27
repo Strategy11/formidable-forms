@@ -191,6 +191,37 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * Try to show the SVG if possible. Otherwise, use the font icon.
+	 *
+	 * @since 4.0.02
+	 */
+	public static function icon_by_class( $class, $echo = true ) {
+		$icon = str_replace( array( 'frm_icon_font ', 'frmfont ' ), '', $class );
+		if ( $icon === $class || strpos( $icon, ' ' ) !== false ) {
+			$icon = '<i class="' . esc_attr( $class ) . ' frm_animate_bg"></i>';
+		} else {
+			$icon = '<svg class="frmsvg">
+				<use xlink:href="#' . esc_attr( $icon ) . '" />
+			</svg>';
+		}
+
+		if ( $echo ) {
+			echo FrmAppHelper::kses( $icon, array( 'i', 'use', 'svg' ) ); // WPCS: XSS ok.
+		} else {
+			return $icon;
+		}
+	}
+
+	/**
+	 * Include svg images.
+	 *
+	 * @since 4.0.02
+	 */
+	public static function include_svg() {
+		include_once( FrmAppHelper::plugin_path() . '/images/icons.svg' );
+	}
+
+	/**
 	 * Get the invalid form error message
 	 *
 	 * @since 2.02.07

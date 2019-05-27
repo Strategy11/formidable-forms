@@ -12,9 +12,15 @@
 			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
 		<?php } ?>
 
-		<a href="#" class="frm_bstooltip frm-move frm-hover-icon frm_icon_font frm_move_icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>"> </a>
-		<a href="#" class="frm_bstooltip frm-hover-icon frm_icon_font frm_delete_icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>"> </a>
-		<a href="#" class="frm_bstooltip frm-hover-icon frm_icon_font frm_clone_icon" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>"> </a>
+		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
+			<?php FrmFormsHelper::icon_by_class( 'frm_icon_font frm_move_icon' ); ?>
+		</a>
+		<a href="#" class="frm_bstooltip frm-hover-icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>">
+			<?php FrmFormsHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
+		</a>
+		<a href="#" class="frm_bstooltip frm-hover-icon frm_clone_field" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>">
+			<?php FrmFormsHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?>
+		</a>
 
 		<div class="frm-sub-label alignright">
 			(ID <?php echo esc_html( $field['id'] ); ?>)

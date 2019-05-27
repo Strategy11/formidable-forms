@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAppHelper {
 	public static $db_version = 97; //version of the database we are moving to
 	public static $pro_db_version = 37; //deprecated
-	public static $font_version = 4;
+	public static $font_version = 7;
 
 	/**
 	 * @since 2.0
@@ -649,11 +649,22 @@ class FrmAppHelper {
 			),
 			'strike'     => array(),
 			'strong'     => array(),
+			'symbol'     => array(
+				'class'   => true,
+				'id'      => true,
+				'viewbox' => true,
+			),
 			'svg'        => array(
+				'class'   => true,
+				'id'      => true,
 				'xmlns'   => true,
 				'viewbox' => true,
 				'width'   => true,
 				'height'  => true,
+			),
+			'use'        => array(
+				'href'   => true,
+				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
 		);

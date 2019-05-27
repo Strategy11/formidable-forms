@@ -869,6 +869,7 @@ class FrmFormsController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
 		} else {
+			FrmFormsHelper::include_svg();
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php' );
 		}
 	}
