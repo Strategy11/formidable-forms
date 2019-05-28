@@ -49,7 +49,7 @@
 <p>
 	<label for="frm_no_ips">
 		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> />
-		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDRP compliance.', 'formidable' ); ?>
+		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDPR compliance.', 'formidable' ); ?>
 	</label>
 
 </p>
