@@ -351,11 +351,12 @@ ul.frm_form_nav > li {
 	display: block;
 }
 
-.frm-full-close span {
+.frm-full-close .frmsvg {
 	font-size: 20px;
 	width: 20px;
 	height: 20px;
 	padding: 5px;
+	color: var(--grey);
 }
 
 .frm-full-screen.post-type-frm_display #frm_top_bar h1,
@@ -510,15 +511,20 @@ ul.frm_form_nav > li {
 
 .frm-default-switcher a {
 	padding: 0 2px;
-	font-size: 15px;
+}
+
+.frm-default-switcher a .frmsvg {
+	vertical-align: initial;
 }
 
 .frm-default-switcher a,
+.frm-default-switcher a .frmsvg,
 .frm-default-switcher a i {
 	color: var(--grey);
 }
 
 .frm-default-switcher a.current,
+.frm-default-switcher a.current .frmsvg,
 .frm-default-switcher a.current i {
 	color: var( --primary-color);
 }
@@ -534,6 +540,10 @@ p.frm_has_shortcodes {
 	background: #fff;
 }
 
+#frm_upgrade_modal .dismiss .frmsvg,
+.frm-inline-modal .frmsvg,
+#frm-bulk-modal .frmsvg,
+.frm_has_shortcodes > .frmsvg,
 #frm_upgrade_modal .dismiss i,
 .frm-inline-modal i,
 #frm-bulk-modal i,
@@ -549,6 +559,10 @@ p.frm_has_shortcodes {
 	font-weight: bold;
 }
 
+#frm_upgrade_modal .dismiss .frmsvg,
+.frm-inline-modal .frmsvg,
+#frm-bulk-modal .frmsvg,
+.frm_has_shortcodes .frmsvg,
 #frm_upgrade_modal .dismiss i,
 .frm-inline-modal i,
 #frm-bulk-modal i,
@@ -561,17 +575,21 @@ p.frm_has_shortcodes {
 	text-align: center;
 }
 
+#frm_confirm_modal .dismiss .frmsvg,
+#frm_upgrade_modal .dismiss .frmsvg,
 #frm_confirm_modal .dismiss i,
 #frm_upgrade_modal .dismiss i {
 	top: 7px;
 	right: 7px;
 }
 
+#frm-bulk-modal .frmsvg,
 #frm-bulk-modal i {
 	top: 15px;
 	right: 7px;
 }
 
+.frm-inline-modal .frmsvg,
 .frm-inline-modal i {
 	top: 18px;
 	right: 7px;
@@ -580,12 +598,18 @@ p.frm_has_shortcodes {
 	width: 11px;
 }
 
+#frm_upgrade_modal .dismiss:hover .frmsvg,
+.frm-inline-modal .dismiss:hover .frmsvg,
+#frm-bulk-modal .dismiss:hover .frmsvg,
 #frm_upgrade_modal .dismiss i:hover,
 .frm-inline-modal i:hover,
 #frm-bulk-modal i:hover {
 	background: var(--sidebar-color);
 }
 
+#frm_upgrade_modal .dismiss .frmsvg,
+.frm-inline-modal .dismiss .frmsvg,
+#frm-bulk-modal .dismiss .frmsvg,
 #frm_upgrade_modal .dismiss .frm_close_icon,
 .frm-inline-modal .frm_close_icon,
 #frm-bulk-modal .frm_close_icon {
@@ -1040,6 +1064,16 @@ h2 .frm-button-primary {
 
 .frm_wrap .preview i {
 	font-size: inherit;
+}
+
+.frmsvg.frm_svg15 {
+	width: 15px;
+	height: 15px;
+}
+
+.frmsvg.frm_svg13 {
+	width: 13px;
+	height: 13px;
 }
 
 .wp-core-ui.frm-white-body .frm-button-secondary:hover i,
@@ -1544,12 +1578,13 @@ div.frm_updated_message {
 }
 
 .upgrade_to_pro a,
-.upgrade_to_pro .frm_checkmark_icon {
+.upgrade_to_pro .frm-checked {
 	color: var(--orange);
 }
 
-.upgrade_to_pro table i {
-	font-size: 20px;
+.upgrade_to_pro table .frmsvg {
+	height: 20px;
+	width: 20px;
 }
 
 .widefat.frm_pricing thead th,
@@ -1775,11 +1810,13 @@ a.frm_pro_tip:hover {
 	position: relative;
 }
 
+a.frm_pro_tip .frmsvg,
 a.frm_pro_tip i {
 	color: var(--primary-hover);
 	margin-right: 5px;
 }
 
+.frm_field_list a.frm_pro_tip .frmsvg,
 .frm_field_list a.frm_pro_tip i {
 	position: absolute;
 	left: 15px;
@@ -3055,6 +3092,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 .frm_single_option .frm-drag {
 	font-size: 23px;
 	width: 22px;
+	height: 22px;
 	margin-left: -6px;
 	color: var(--grey);
 }
@@ -3162,7 +3200,9 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 }
 
 .frm-right-panel .inside i,
-.frm-form-setting-tabs a span {
+.frm-right-panel .inside .frmsvg,
+.frm-form-setting-tabs a i,
+.frm-form-setting-tabs a .frmsvg {
 	margin: 0 5px;
 	display: inline-block;
 	width: 20px;
@@ -3171,6 +3211,8 @@ li.ui-state-default.selected .frm-show-click.frm_import_options select {
 }
 
 .frm-right-panel .inside a:hover i,
+.frm-right-panel .inside a:hover .frmsvg,
+.frm-form-setting-tabs a:hover .frmsvg,
 .frm-form-setting-tabs a:hover span {
 	color: var(--dark-grey);
 }
@@ -3388,7 +3430,10 @@ label.frm-example-icon {
 
 #frm_styling_form #frm_delete_style {
 	padding-right: 10px;
-	line-height: 30px;
+}
+
+#frm_styling_form #frm_delete_style .frmsvg {
+	vertical-align: -webkit-baseline-middle;
 }
 
 .frm_pro_form .frm_form_field.frm_lite_style,
@@ -3775,6 +3820,7 @@ label.frm_action_events {
 .frm_email_settings .widget-title .frm_form_action_icon .frmsvg {
 	height: 15px;
 	width: 15px;
+	vertical-align: text-top;
 }
 
 .frm_actions_list i:before {
@@ -4820,9 +4866,10 @@ tr.frm_options_heading td {
 	display: block;
 }
 
-.frm-large-plus {
+.frm-large-plus.frmsvg {
 	color: var(--primary-hover);
-	font-size: 45px;
+	height: 45px;
+	width: 45px;
 }
 
 .frm_drag_inst {
@@ -4905,6 +4952,8 @@ ul.frm-category-tabs {
 	box-shadow: none;
 }
 
+.frm-category-tabs > li.active .frmsvg,
+.frm-category-tabs > li.active i,
 .frm-category-tabs > li.active span,
 .frm-category-tabs > li.active a {
 	color: var(--primary-color);
@@ -5089,6 +5138,10 @@ i.frm-show-box,
 i.frm-show-inline-modal,
 .frm-with-left-icon i,
 .frm-with-right-icon i,
+.frmsvg.frm-show-box,
+.frmsvg.frm-show-inline-modal,
+.frm-with-left-icon .frmsvg,
+.frm-with-right-icon .frmsvg,
 .frm-search span {
 	position: absolute;
 	padding: 7px 10px;
@@ -5099,6 +5152,7 @@ i.frm-show-inline-modal,
 	font-size: 18px;
 }
 
+.frm-with-right-icon .frmsvg,
 .frm-with-right-icon i {
 	right: 0;
 	top: -3px;
@@ -5106,6 +5160,8 @@ i.frm-show-inline-modal,
 	padding: 0 10px 0 5px;
 }
 
+.frmsvg.frm-show-box,
+.frmsvg.frm-show-inline-modal,
 i.frm-show-box,
 i.frm-show-inline-modal {
 	color: var(--primary-color);
@@ -5118,6 +5174,7 @@ i.frm-show-inline-modal {
 	padding: 7px 10px;
 }
 
+.frm-open .frmsvg.frm-show-inline-modal,
 .frm-open i.frm-show-inline-modal {
 	opacity: .5;
 }
@@ -5142,6 +5199,7 @@ i.frm-show-inline-modal {
 	padding-right: 35px;
 }
 
+#frm-show-fields .frm-with-left-icon .frmsvg,
 #frm-show-fields .frm-with-left-icon i {
 	padding-top: 10px;
 }
@@ -5424,8 +5482,8 @@ ul .frm_col_two {
 	font-size: 17px !important;
 }
 
-.settings-lite-cta .dashicons-yes {
-	color: #468847;
+.frm-green-icons .frmsvg {
+	color: var(--green);
 }
 
 .settings-lite-cta .postbox .inside {
@@ -5585,8 +5643,9 @@ ul .frm_col_two {
 
 .frmsvg {
 	fill: currentColor;
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
+	vertical-align: middle;
 }
 
 .frm_code_list a .frmsvg,
@@ -5609,6 +5668,7 @@ ul .frm_col_two {
 .frm_code_list a .frmsvg,
 .frm_code_list a i {
 	margin: 0 5px 0 0;
+	padding: 0;
 	width: 15px;
 	font-size: 15px;
 }
@@ -5765,7 +5825,8 @@ h2 .frm-sub-label {
 #frm_upgrade_modal .frm_lock_icon {
 	display: block;
 	margin: 0 auto;
-	font-size: 35px;
+	height: 35px;
+	width: 35px;
 	color: #c4c4c4;
 	padding-bottom: 20px;
 }
@@ -6356,7 +6417,7 @@ Responsive Design
 		padding: 15px 0 10px 10px;
 	}
 
-	.frm-full-close span {
+	.frm-full-close .frmsvg {
 		padding: 0;
 	}
 }
@@ -6478,7 +6539,8 @@ Responsive Design
 		padding: 10px 5px 10px 40px;
 	}
 
-	.frm-form-setting-tabs a span {
+	.frm-form-setting-tabs a .frmsvg,
+	.frm-form-setting-tabs a i {
 		position: absolute;
 		left: 13px;
 		top: calc(50% - 10px);
@@ -6612,7 +6674,8 @@ Responsive Design
 		padding: 0 15px;
 	}
 
-	.frm-form-setting-tabs a span {
+	.frm-form-setting-tabs a .frmsvg,
+	.frm-form-setting-tabs a i {
 		visibility: visible;
 		position: initial;
 		font-size: 18px;

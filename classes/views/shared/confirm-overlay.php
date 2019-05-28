@@ -2,7 +2,7 @@
 	<div class="metabox-holder">
 		<div class="postbox">
 			<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
-				<i class="frm_icon_font frm_close_icon" aria-label="Dismiss" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
 			<div class="inside">
 				<div class="cta-inside frmcenter">

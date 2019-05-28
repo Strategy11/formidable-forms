@@ -108,7 +108,7 @@ class FrmFormsHelper {
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
 				<h1 title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>">
 					<?php echo esc_html( $truncated_name ); ?>
-					<b class="frm_icon_font frm_arrowdown4_icon"></b>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
 			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
@@ -518,14 +518,14 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
 				data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
-				<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
 				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden"
 				data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
 				<?php if ( isset( $field['icon'] ) ) { ?>
-					<i class="<?php echo esc_attr( $field['icon'] ); ?>" aria-hidden="true"></i>
+					<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
 				<?php } ?>
 				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
 			</a>

@@ -76,7 +76,7 @@ abstract class FrmFormMigrator {
 					<div id="frm-importer-process" class="frm_hidden">
 
 						<p class="process-count">
-							<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+							<span class="frm-wait" aria-hidden="true"></span>
 							Importing <span class="form-current">1</span> of <span class="form-total">0</span> forms
 							from <?php echo esc_html( $this->name ); ?>.
 						</p>

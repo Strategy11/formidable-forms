@@ -240,6 +240,8 @@ class FrmSettingsController {
 	public static function route( $stop_load = false ) {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+		FrmAppHelper::include_svg();
+
 		if ( $action == 'process-form' ) {
 			self::process_form( $stop_load );
 		} elseif ( $stop_load != 'stop_load' ) {

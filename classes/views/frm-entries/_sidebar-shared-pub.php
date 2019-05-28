@@ -4,7 +4,7 @@ if ( ! isset( $entry ) ) {
 } ?>
 
 <div class="misc-pub-section">
-	<i class="frm_icon_font frm_calendar_icon"></i>
+	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 	$date_format = __( 'M j, Y @ G:i', 'formidable' );
@@ -19,7 +19,7 @@ if ( ! isset( $entry ) ) {
 
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section">
-	<i class="frm_icon_font frm_calendar_icon"></i>
+	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 	printf(

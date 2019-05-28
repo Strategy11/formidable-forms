@@ -27,7 +27,7 @@
 
 		<?php if ( $entry->post_id ) { ?>
 			<div class="misc-pub-section frm_no_print">
-				<i aria-hidden="true" class="frm_icon_font frm_calendar_icon"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Post', 'formidable' ); ?>:
 				<b><?php echo esc_html( get_the_title( $entry->post_id ) ); ?></b>
 				<span>
@@ -42,20 +42,20 @@
 		<?php } ?>
 
 		<div class="misc-pub-section">
-			<i class="frm_icon_font frm_fingerprint_icon" aria-hidden="true"></i>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_fingerprint_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Entry ID', 'formidable' ); ?>:
 			<b><?php echo absint( $entry->id ); ?></b>
 		</div>
 
 		<div class="misc-pub-section">
-			<i class="frm_icon_font frm_keyalt_icon" aria-hidden="true"></i>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_keyalt_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Entry Key', 'formidable' ); ?>:
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
 
 		<?php if ( $entry->parent_item_id ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_sitemap_icon" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_sitemap_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Parent Entry ID', 'formidable' ); ?>:
 				<b><?php echo esc_html( $entry->parent_item_id ); ?></b>
 			</div>
@@ -68,8 +68,9 @@
 	<div class="inside">
 		<?php if ( $entry->user_id ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_user_icon" aria-hidden="true"></i>
 				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) );
+
 				printf(
 					/* translators: %1$s: User display name. */
 					esc_html__( 'Created by: %1$s', 'formidable' ),
@@ -81,8 +82,9 @@
 
 		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_user_icon" aria-hidden="true"></i>
 				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) );
+
 				printf(
 					/* translators: %1$s: User display name. */
 					esc_html__( 'Updated by: %1$s', 'formidable' ),
@@ -94,7 +96,7 @@
 
 		<?php if ( ! empty( $entry->ip ) ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_location_icon" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_location_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'IP Address:', 'formidable' ); ?>
 				<b><?php echo esc_html( $entry->ip ); ?></b>
 			</div>
@@ -102,7 +104,7 @@
 
 		<?php if ( isset( $browser ) ) { ?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_browser_icon" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_browser_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
 				<b><?php echo wp_kses_post( $browser ); ?></b>
 			</div>
@@ -110,7 +112,7 @@
 
 		<?php if ( isset( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
-				<i class="frm_icon_font frm_history_icon" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
 				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
 			</div>
@@ -123,7 +125,7 @@
 			}
 			?>
 			<div class="misc-pub-section">
-				<i class="frm_icon_font frm_attach_file_icon" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_attach_file_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php echo esc_html( ucfirst( str_replace( '-', ' ', $k ) ) ); ?>:
 				<b><?php echo wp_kses_post( implode( ', ', (array) $d ) ); ?></b>
 			</div>

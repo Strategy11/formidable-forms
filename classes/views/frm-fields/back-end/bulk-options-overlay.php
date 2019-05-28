@@ -1,6 +1,6 @@
 <div id="frm-bulk-modal" class="frm_hidden settings-lite-cta">
 	<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
-		<i class="frm_icon_font frm_close_icon" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>" aria-hidden="true"></i>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => __( 'Close', 'formidable' ) ) ); ?>
 	</a>
 	<h2>
 		<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>

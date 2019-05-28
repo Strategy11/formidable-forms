@@ -346,7 +346,7 @@ function frmAdminBuildJS() {
 
 		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
-		document.getElementById( t.replace( '#', '' ), ).style.display = 'block';
+		document.getElementById( t.replace( '#', '' ) ).style.display = 'block';
 
 		if ( this.id === 'frm_insert_fields_tab' ) {
 			clearSettingsBox();
@@ -2385,6 +2385,7 @@ function frmAdminBuildJS() {
 			jQuery('.frm_feature_label').html( this.getAttribute( 'data-upgrade' ) );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
+			jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_icon' );
 
 			var requires = this.getAttribute( 'data-requires' );
 			if ( requires === undefined ) {
@@ -2445,7 +2446,7 @@ function frmAdminBuildJS() {
 			parentClass = '';
 		}
 		maybeAddFieldSelection( parentClass );
-		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<i class="frm-show-box frm_icon_font frm_more_horiz_solid_icon"></i>' );
+		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
 	}
 
 	/**
@@ -3310,7 +3311,12 @@ function frmAdminBuildJS() {
 		if ( input.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
 			hideShortcodes();
 			moreIcon = getIconForInput( input );
-			if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
+			if ( moreIcon.tagName === 'use' ) {
+				moreIcon = moreIcon.firstElementChild;
+				if ( moreIcon.getAttribute( 'xlink:href' ).indexOf( 'frm_close_icon' ) === -1 ) {
+					showShortcodeBox( moreIcon, 'nofocus' );
+				}
+			} else if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
 				showShortcodeBox( moreIcon, 'nofocus' );
 			}
 		}
@@ -3331,6 +3337,13 @@ function frmAdminBuildJS() {
 			classes = moreIcon.className,
 			parentPos = box.parentElement.getBoundingClientRect();
 
+		if ( moreIcon.tagName === 'svg' ) {
+			moreIcon = moreIcon.firstElementChild;
+		}
+		if ( moreIcon.tagName === 'use' ) {
+			classes = moreIcon.getAttribute( 'xlink:href' );
+		}
+
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			hideShortcodes( box );
 		} else {
@@ -3346,7 +3359,12 @@ function frmAdminBuildJS() {
 
 			box.setAttribute( 'data-fills', input.id );
 			box.style.display = 'block';
-			moreIcon.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
+
+			if ( moreIcon.tagName === 'use' ) {
+				moreIcon.setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_close_icon' );
+			} else {
+				moreIcon.className = classes.replace( 'frm_more_horiz_solid_icon', 'frm_close_icon' );
+			}
 
 			if ( shouldFocus !== 'nofocus' ) {
 				input.focus();
@@ -3371,13 +3389,14 @@ function frmAdminBuildJS() {
 	 */
 	function getIconForInput( input ) {
 		var moreIcon = input.previousElementSibling;
-		if ( moreIcon !== null && moreIcon.tagName !== 'I' ) {
+		if ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
 			moreIcon = moreIcon.previousElementSibling;
 		}
 		return moreIcon;
 	}
 
 	function hideShortcodes( box ) {
+		var i, u;
 		if ( typeof box === 'undefined' ) {
 			box = document.getElementById( 'frm_adv_info' );
 			if ( box === null ) {
@@ -3393,9 +3412,16 @@ function frmAdminBuildJS() {
 		box.style.display = 'none';
 
 		var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
-		for ( var i = 0; i < closeIcons.length; i++ ) {
+		for ( i = 0; i < closeIcons.length; i++ ) {
 			closeIcons[i].classList.remove( 'frm_close_icon' );
 			closeIcons[i].classList.add( 'frm_more_horiz_solid_icon' );
+		}
+
+		var closeSvg = document.querySelectorAll( 'use' );
+		for ( u = 0; u < closeSvg.length; u++ ) {
+			if ( closeSvg[u].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
+				closeSvg[u].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
+			}
 		}
 	}
 
@@ -4050,6 +4076,7 @@ function frmAdminBuildJS() {
 		jQuery( '#frm-addon-status' ).text( response ).show();
 		jQuery( '#frm_upgrade_modal h2' ).hide();
 		jQuery( '#frm_upgrade_modal .frm_lock_icon' ).addClass( 'frm_lock_open_icon' );
+		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
 
 		// Proceed with CSS changes
 		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active');

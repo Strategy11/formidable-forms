@@ -24,7 +24,7 @@ class FrmTipsHelper {
 		$link = FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] ) );
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
-			<i class="frm_icon_font frm_star_full_icon"></i>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_star_full_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<span class="pro-tip">
 				<?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
 			</span>

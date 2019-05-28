@@ -3,7 +3,15 @@
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
 	<span class="frm-with-right-icon">
-		<i class="frm-show-inline-modal frm_icon_font frm_more_horiz_solid_icon" data-open="frm-input-mask-box" title="<?php esc_attr_e( 'Toggle Options', 'formidable' ); ?>"></i>
+		<?php
+		FrmAppHelper::icon_by_class(
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			array(
+				'data-open' => 'frm-input-mask-box',
+				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+			)
+	 	);
+		?>
 		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" />
 	</span>
 </p>

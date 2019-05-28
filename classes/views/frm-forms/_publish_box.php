@@ -14,7 +14,7 @@ if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) 
 					<div class="preview dropdown">
 						<a href="#" id="frm-previewDrop" class="frm-dropdown-toggle button frm-button-secondary" data-toggle="dropdown">
 							<?php esc_html_e( 'Preview', 'formidable' ); ?>
-							<i class="frmfont frm_arrowdown4_icon"></i>
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 						</a>
 
 						<ul class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">

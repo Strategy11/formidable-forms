@@ -1,6 +1,6 @@
 <?php if ( isset( $delete_link ) ) { ?>
 	<a href="<?php echo esc_url( $delete_link ); ?>" id="frm_delete_style" class="submitdelete deletion alignright" data-frmverify="<?php esc_attr_e( 'Permanently delete this style?', 'formidable' ); ?>">
-		<i class="frm_icon_font frm_delete_icon"></i>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</a>
 <?php } ?>
 

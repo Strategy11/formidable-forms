@@ -228,8 +228,8 @@ class FrmStylesHelper {
 
 		<div class="btn-group hide-if-no-js" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
-				<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ); ?>"></i>
-				<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>
 				<b class="caret"></b>
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
@@ -239,8 +239,8 @@ class FrmStylesHelper {
 							<label>
 								<input type="radio" value="<?php echo esc_attr( $key ); ?>"/>
 								<span>
-									<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $key, '+', $type ) ); ?>"></i>
-									<i class="frm_icon_font <?php echo esc_attr( self::icon_key_to_class( $key, '-', $type ) ); ?>"></i>
+									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) ); ?>
+									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '-', $type ) ); ?>
 								</span>
 							</label>
 						</a>

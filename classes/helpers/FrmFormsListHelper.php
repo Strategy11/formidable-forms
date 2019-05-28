@@ -256,7 +256,13 @@ class FrmFormsListHelper extends FrmListHelper {
 					break;
 				case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
-						$val = '<i class="frm_icon_font frm_forbid_icon frm_bstooltip" title="' . esc_attr( 'Saving entries is disabled for this form', 'formidable' ) . '"></i>';
+						$val = FrmAppHelper::icon_by_class(
+							'frmfont frm_forbid_icon frm_bstooltip',
+							array(
+								'title' => __( 'Saving entries is disabled for this form', 'formidable' ),
+								'echo'  => false,
+							)
+						);
 					} else {
 						$text = FrmEntry::getRecordCount( $item->id );
 						$val  = current_user_can( 'frm_view_entries' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-entries&form=' . $item->id ) ) . '">' . $text . '</a>' : $text;

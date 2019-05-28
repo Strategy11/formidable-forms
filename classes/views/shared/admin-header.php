@@ -2,7 +2,7 @@
 	<?php if ( FrmAppHelper::is_full_screen() ) { ?>
 		<div class="frm-full-close">
 			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
-				<span class="frm_icon_font frm_close_icon" aria-hidden="true"></span>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
 		</div>
 	<?php } ?>

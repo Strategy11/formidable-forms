@@ -29,6 +29,7 @@ class FrmEntriesController {
 	/* Display in Back End */
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
+		FrmAppHelper::include_svg();
 
 		switch ( $action ) {
 			case 'show':

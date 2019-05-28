@@ -12,7 +12,7 @@
 				}
 				?>
 				>
-				<span class="<?php echo esc_attr( $section['icon'] ); ?>" aria-hidden="true"></span>
+				<?php FrmAppHelper::icon_by_class( $section['icon'], array( 'aria-hidden' => 'true' ) ); ?>
 				<?php echo esc_html( $section['name'] ); ?>
 			</a>
 		</li>

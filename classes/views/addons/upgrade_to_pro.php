@@ -82,8 +82,12 @@
 							}
 							?>
 						</th>
-						<td><i class="frm_icon_font <?php echo esc_attr( $feature['lite'] ? 'frm_checkmark_icon' : 'frm_close_icon' ); ?>"></i></td>
-						<td><i class="frm_icon_font frm_checkmark_icon"></i></td>
+						<td class="<?php echo esc_attr( $feature['lite'] ? 'frm-checked' : '' ); ?>">
+							<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $feature['lite'] ? 'frm_checkmark_icon' : 'frm_close_icon' ) ); ?>
+						</td>
+						<td class="<?php echo esc_attr( 'frm-checked' ); ?>">
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
+						</td>
 					</tr>
 				<?php } ?>
 			<?php } ?>

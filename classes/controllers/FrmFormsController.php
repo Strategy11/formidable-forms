@@ -869,7 +869,6 @@ class FrmFormsController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
 		} else {
-			FrmAppHelper::include_svg();
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php' );
 		}
 	}
@@ -887,7 +886,6 @@ class FrmFormsController {
 
 		$sections = self::get_settings_tabs( $values );
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
-		FrmAppHelper::include_svg();
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
 	}
@@ -1280,6 +1278,8 @@ class FrmFormsController {
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
+		FrmAppHelper::include_svg();
+
 		if ( isset( $_POST['frm_compact_fields'] ) ) {
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
 

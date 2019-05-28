@@ -22,6 +22,7 @@ class FrmAddonsController {
 	}
 
 	public static function list_addons() {
+		FrmAppHelper::include_svg();
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 		$license_type     = '';
 
@@ -484,6 +485,7 @@ class FrmAddonsController {
 	}
 
 	public static function upgrade_to_pro() {
+		FrmAppHelper::include_svg();
 		$pro_pricing = self::prepare_pro_info();
 
 		$link_parts = array(

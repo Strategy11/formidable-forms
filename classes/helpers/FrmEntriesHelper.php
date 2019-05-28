@@ -553,7 +553,7 @@ class FrmEntriesHelper {
 				}
 				?>
 				>
-				<i class="<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></i>
+				<?php FrmAppHelper::icon_by_class( $link['icon'], array( 'aria-hidden' => 'true' ) ); ?>
 				<span class="frm_link_label"><?php echo esc_html( $link['label'] ); ?></span>
 			</a>
 		</div>
