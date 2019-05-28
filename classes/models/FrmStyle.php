@@ -50,7 +50,7 @@ class FrmStyle {
 		$action_ids = array();
 
 		foreach ( $all_instances as $number => $new_instance ) {
-			$new_instance = wp_unslash( (array) $new_instance );
+			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
 			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
 				$all_instances[ $number ] = $new_instance;
@@ -66,7 +66,8 @@ class FrmStyle {
 			}
 
 			$new_instance['post_title']   = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : '';
-			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? wp_unslash( $_POST['frm_style_setting']['post_content'] ) : '';
+			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $_POST['frm_style_setting']['post_content'] : '';
+			FrmAppHelper::sanitize_value( 'wp_kses_post', $new_instance['post_content'] );
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
 			$new_instance['menu_order']   = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0;
