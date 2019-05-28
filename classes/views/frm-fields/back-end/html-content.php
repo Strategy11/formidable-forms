@@ -10,7 +10,7 @@
 				'data-open' => 'frm-smart-values-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 			)
-	 	);
+		);
 		?>
 		<textarea name="field_options[description_<?php echo absint( $field['id'] ); ?>]" id="frm_description_<?php echo esc_attr( $field['id'] ); ?>" rows="8"><?php
 		echo FrmAppHelper::esc_textarea( $field['description'] ); // WPCS: XSS ok.

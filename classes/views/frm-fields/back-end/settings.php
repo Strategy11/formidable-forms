@@ -79,7 +79,7 @@
 							'data-open' => 'frm-layout-classes-box',
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 						)
-				 	);
+					);
 					?>
 					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" />
 				</span>
@@ -198,7 +198,7 @@ do_action( 'frm_before_field_options', $field );
 								'data-open' => 'frm-smart-values-box',
 								'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 							)
-					 	);
+						);
 
 						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';

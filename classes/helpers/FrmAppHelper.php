@@ -754,7 +754,7 @@ class FrmAppHelper {
 	 * @since 4.0.02
 	 */
 	public static function include_svg() {
-		include_once( FrmAppHelper::plugin_path() . '/images/icons.svg' );
+		include_once( self::plugin_path() . '/images/icons.svg' );
 	}
 
 	/**

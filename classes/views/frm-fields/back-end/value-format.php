@@ -10,7 +10,7 @@
 				'data-open' => 'frm-input-mask-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 			)
-	 	);
+		);
 		?>
 		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" />
 	</span>

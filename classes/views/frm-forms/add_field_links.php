@@ -104,7 +104,7 @@ foreach ( FrmField::pro_field_selection() as $field_key => $field_type ) {
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $id, $field_key );
 		}
-		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg'  ) ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // WPCS: XSS ok.
 		?>
 					</li>
 		<?php
