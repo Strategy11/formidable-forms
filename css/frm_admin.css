@@ -340,7 +340,7 @@ ul.frm_form_nav > li {
 .frm-full-close {
 	display: none;
 	float: right;
-	padding: 15px 0 12px 12px;
+	padding: 15px 0 14px 12px;
 	border-left: 1px solid var(--grey-border);
 	height: 100%;
 	box-sizing: border-box;
@@ -1053,22 +1053,19 @@ h2 .frm-button-primary {
 }
 
 .frm-with-plus {
-	position: relative;
-	padding-left: 24px !important;
+	padding-left: 10px !important;
 }
 
-.frm-with-plus:before {
-	content: "\e62f";
-	font-family: "s11-fp";
-	position: absolute;
-	left: 8px;
-	font-size: 15px;
+.frm-button-primary .frmsvg {
+	color: #fff;
 }
 
 .frm_wrap .preview i {
 	font-size: inherit;
 }
 
+.wp-core-ui.frm-white-body .frm-button-secondary:hover .frmsvg,
+.frm_wrap .preview > .button:hover .frmsvg,
 .wp-core-ui.frm-white-body .frm-button-secondary:hover i,
 .frm_wrap .preview > .button:hover i {
 	color: #fff;
