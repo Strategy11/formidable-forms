@@ -3417,7 +3417,7 @@ function frmAdminBuildJS() {
 			closeIcons[i].classList.add( 'frm_more_horiz_solid_icon' );
 		}
 
-		var closeSvg = document.querySelectorAll( 'use' );
+		var closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
 		for ( u = 0; u < closeSvg.length; u++ ) {
 			if ( closeSvg[u].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
 				closeSvg[u].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
