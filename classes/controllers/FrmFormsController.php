@@ -869,7 +869,7 @@ class FrmFormsController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();
 		} else {
-			FrmFormsHelper::include_svg();
+			FrmAppHelper::include_svg();
 			require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/edit.php' );
 		}
 	}
@@ -887,6 +887,7 @@ class FrmFormsController {
 
 		$sections = self::get_settings_tabs( $values );
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
+		FrmAppHelper::include_svg();
 
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings.php' );
 	}
@@ -1434,12 +1435,7 @@ class FrmFormsController {
 		global $frm_vars;
 		if ( isset( $frm_vars['skip_shortcode'] ) && $frm_vars['skip_shortcode'] ) {
 			$sc = '[formidable';
-			if ( ! empty( $atts ) ) {
-				foreach ( $atts as $k => $v ) {
-					$sc .= ' ' . $k . '="' . esc_attr( $v ) . '"';
-				}
-			}
-
+			$sc .= FrmAppHelper::array_to_html_params( $atts );
 			return $sc . ']';
 		}
 

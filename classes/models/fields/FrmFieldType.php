@@ -815,12 +815,9 @@ DEFAULT_HTML;
 		$field       = isset( $values['field'] ) ? $values['field'] : $this->field;
 		$input_html  = $this->get_field_input_html_hook( $field );
 		$select_atts = $this->get_select_atributes( $values );
-		$select      = '';
-		foreach ( $select_atts as $name => $value ) {
-			$select .= $name . '="' . esc_attr( $value ) . '" ';
-		}
+		$select      = FrmAppHelper::array_to_html_params( $select_atts ) . ' ';
 
-		return '<select ' . $select . $input_html . '>';
+		return '<select' . $select . $input_html . '>';
 	}
 
 	/**

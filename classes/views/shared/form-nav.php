@@ -11,9 +11,7 @@ foreach ( $nav_items as $nav_item ) {
 				<?php FrmAppHelper::select_current_page( $nav_item['page'], $current_page, $nav_item['current'] ); ?>
 				<?php
 				if ( isset( $nav_item['atts'] ) ) {
-					foreach ( $nav_item['atts'] as $att => $value ) {
-						echo esc_attr( $att ) . '="' . esc_attr( $value ) . '" ';
-					}
+					echo FrmAppHelper::array_to_html_params( $nav_item['atts'] ); // WPCS: XSS ok.
 				}
 				?>>
 				<?php echo esc_html( $nav_item['label'] ); ?>

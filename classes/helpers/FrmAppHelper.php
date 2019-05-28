@@ -611,6 +611,7 @@ class FrmAppHelper {
 				'class' => true,
 				'id'    => true,
 				'icon'  => true,
+				'style' => true,
 			),
 			'img'        => array(
 				'alt'    => true,
@@ -661,6 +662,7 @@ class FrmAppHelper {
 				'viewbox' => true,
 				'width'   => true,
 				'height'  => true,
+				'style'   => true,
 			),
 			'use'        => array(
 				'href'   => true,
@@ -708,6 +710,68 @@ class FrmAppHelper {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Try to show the SVG if possible. Otherwise, use the font icon.
+	 *
+	 * @since 4.0.02
+	 * @param string $class
+	 * @param array  $atts
+	 */
+	public static function icon_by_class( $class, $atts = array() ) {
+		$echo = ! isset( $atts['echo'] ) || $atts['echo'];
+		if ( isset( $atts['echo'] ) ) {
+			unset( $atts['echo'] );
+		}
+
+		$html_atts = self::array_to_html_params( $atts );
+
+		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+		if ( $icon === $class ) {
+			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
+		} else {
+			$class = strpos( $icon, ' ' ) === false ? '' : ' ' . $icon;
+			if ( strpos( $icon, ' ' ) ) {
+				$icon = explode( ' ', $icon );
+				$icon = reset( $icon );
+			}
+			$icon  = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
+				<use xlink:href="#' . esc_attr( $icon ) . '" />
+			</svg>';
+		}
+
+		if ( $echo ) {
+			echo $icon; // WPCS: XSS ok.
+		} else {
+			return $icon;
+		}
+	}
+
+	/**
+	 * Include svg images.
+	 *
+	 * @since 4.0.02
+	 */
+	public static function include_svg() {
+		include_once( FrmAppHelper::plugin_path() . '/images/icons.svg' );
+	}
+
+	/**
+	 * Convert an associative array to HTML values.
+	 *
+	 * @since 4.0.02
+	 * @param array $atts
+	 * @return string
+	 */
+	public static function array_to_html_params( $atts ) {
+		$html = '';
+		if ( ! empty( $atts ) ) {
+			foreach ( $atts as $key => $value ) {
+				$html .= ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+			}
+		}
+		return $html;
 	}
 
 	/**

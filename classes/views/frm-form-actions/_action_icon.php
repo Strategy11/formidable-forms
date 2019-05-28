@@ -3,20 +3,16 @@
 		data-limit="<?php echo esc_attr( $action_control->action_options['limit'] ); ?>"
 		data-actiontype="<?php echo esc_attr( $action_control->id_base ); ?>"
 		<?php
-		foreach ( $data as $name => $value ) {
-			echo esc_attr( $name ) . '="' . esc_attr( $value ) . '" ';
-		}
+		echo FrmAppHelper::array_to_html_params( $data ); // WPCS: XSS ok.
 		?>
 		>
-		<span><i class="<?php echo esc_attr( $action_control->action_options['classes'] ); ?>"
-			<?php
-			if ( $action_control->action_options['color'] !== 'var(--primary-hover)' ) {
-				?>
-				style="--primary-hover:<?php echo esc_attr( $action_control->action_options['color'] ); ?>"
-				<?php
-			}
-			?>
-			></i></span>
+		<span class="frm-outer-circle">
+			<span class="frm-inner-circle<?php echo esc_attr( strpos( $action_control->action_options['classes'], 'frm-inverse' ) === false ? '' : ' frm-inverse' ); ?>" <?php
+				echo FrmAppHelper::array_to_html_params( $icon_atts ); // WPCS: XSS ok.
+			?>>
+				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>
+			</span>
+		</span>
 		<?php echo esc_html( str_replace( 'Add to ', '', $action_control->name ) ); ?>
 	</a>
 </li>

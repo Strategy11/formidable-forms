@@ -3717,7 +3717,7 @@ label.frm_action_events {
 	word-break: break-word;
 }
 
-.frm_actions_list span {
+.frm_actions_list span.frm-outer-circle {
 	/* 50px total with 30px content */
 	background-color: var(--sidebar-color);
 	padding: 10px;
@@ -3737,29 +3737,42 @@ label.frm_action_events {
 	color: var(--grey);
 }
 
-.frm_actions_list a i,
-.frm_email_settings .widget-title .frm_form_action_icon {
+.frm_actions_list a .frmsvg,
+.frm_actions_list a i {
 	height: 18px;
 	width: 18px;
-	font-size: 15px;
-	padding: 4px;
-	background-color: var(--grey-border);
+	font-size: 18px;
+	padding: 2px;
 	color: var(--lightest-grey);
+}
+
+.frm_actions_list span.frm-inner-circle,
+.frm_email_settings .widget-title .frm_form_action_icon {
+	background-color: var(--grey-border);
 	border-radius: 50%;
 	display: inline-block;
 	text-align: center;
-	text-decoration: none;
 }
 
-.frm_actions_list a i {
+.frm_actions_list span.frm-inner-circle {
 	background-color: var(--primary-hover);
 	height: 22px;
 	width: 22px;
-	font-size: 18px;
+	padding: 4px;
 }
 
+.frm_email_settings .widget-title .frm_form_action_icon {
+	height: 15px;
+	width: 15px;
+	padding: 5px;
+	color: var(--lightest-grey);
+	vertical-align: middle;
+}
+
+.frm_actions_list .frmsvg,
 .frm_actions_list i:before,
-.frm_email_settings .widget-title .frm_form_action_icon:before {
+.frm_email_settings .widget-title .frm_form_action_icon i,
+.frm_email_settings .widget-title .frm_form_action_icon .frmsvg {
 	height: 15px;
 	width: 15px;
 }
@@ -3772,7 +3785,7 @@ label.frm_action_events {
 	background-color: var(--grey);
 }
 
-.frm_actions_list .frm-inverse {
+.frm_actions_list span.frm-inner-circle.frm-inverse {
 	background-color: transparent;
 	color: var(--primary-hover);
 	padding: 0;
@@ -3780,7 +3793,16 @@ label.frm_action_events {
 	width: 100%;
 }
 
-.frm_actions_list .frm-inverse:before {
+.frm_actions_list span.frm-inverse i,
+.frm_actions_list span.frm-inverse .frmsvg {
+	color: var(--primary-hover);
+	height: 30px;
+	width: 30px;
+	font-size: 30px;
+	padding: 0;
+}
+
+.frm_actions_list i.frm-inverse:before {
 	height: 30px;
 	width: 100%;
 	font-size: 30px;
@@ -3789,19 +3811,21 @@ label.frm_action_events {
 .frm_email_settings .widget-title .frm_form_action_icon.frm-inverse {
 	background: transparent;
 	padding: 0;
-	height: 22px;
-	width: 22px;
+	height: 24px;
+	width: 24px;
 }
 
-.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse:before {
+.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse .frmsvg,
+.frm_email_settings .widget-title .frm_form_action_icon.frm-inverse i:before {
 	color: var(--grey-border);
-	height: 22px;
-	width: 22px;
-	font-size: 22px;
+	height: 24px;
+	width: 24px;
+	font-size: 24px;
 	line-height: 1em;
 }
 
-.frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse:before {
+.frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse .frmsvg,
+.frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse i:before {
 	color: var(--grey);
 }
 
@@ -4130,6 +4154,12 @@ a.frm_action_icon:hover {
 	color: var(--primary-hover) !important;
 	font-size: 17px;
 	width: 17px;
+}
+
+.frm-field-action-icons a .frmsvg {
+	font-size: 17px;
+	width: 17px;
+	height: 17px;
 }
 
 .edit_field_type_end_divider .frm-field-action-icons {
@@ -5553,6 +5583,15 @@ ul .frm_col_two {
 	display: none;
 }
 
+.frmsvg {
+	fill: currentColor;
+	width: 20px;
+	height: 20px;
+}
+
+.frm_code_list a .frmsvg,
+.frmbutton.ui-sortable-helper .frmsvg,
+.field_type_list li.frmbutton .frmsvg,
 .frm_code_list a i,
 .frmbutton.ui-sortable-helper i,
 .field_type_list li.frmbutton i {
@@ -5560,12 +5599,14 @@ ul .frm_col_two {
 	color: var(--grey);
 	display: inline-block;
 	vertical-align: middle;
-	width: 38px;
+	width: 20px;
 	height: 20px;
+	padding-right: 15px;
 	text-align: left;
 	font-size: 18px;
 }
 
+.frm_code_list a .frmsvg,
 .frm_code_list a i {
 	margin: 0 5px 0 0;
 	width: 15px;
@@ -5576,6 +5617,7 @@ ul .frm_col_two {
 	font-size: inherit;
 }
 
+#frm-insert-fields li a:hover .frmsvg,
 #frm-insert-fields li a:hover i {
 	color: var(--dark-grey);
 }

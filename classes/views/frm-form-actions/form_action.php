@@ -26,7 +26,10 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
 			</label>
 		</span>
 		<div class="widget-title">
-			<h4><span class="frm_form_action_icon <?php echo esc_attr( $action_control->action_options['classes'] ); ?>"></span>
+			<h4>
+				<span class="frm_form_action_icon frm-outer-circle <?php echo esc_attr( strpos( $action_control->action_options['classes'], 'frm-inverse' ) === false ? '' : ' frm-inverse' ); ?>">
+					<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
+				</span>
 				<?php echo esc_html( $form_action->post_title ); ?>
 			</h4>
 		</div>
