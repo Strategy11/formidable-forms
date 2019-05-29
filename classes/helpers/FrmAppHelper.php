@@ -2069,6 +2069,8 @@ class FrmAppHelper {
 			return;
 		}
 
+		self::php_version_notice();
+
 		$is_pro = self::pro_is_installed() && class_exists( 'FrmProDb' );
 		if ( ! $is_pro || self::meets_min_pro_version( $min_version ) ) {
 			return;
@@ -2097,6 +2099,32 @@ class FrmAppHelper {
 	 */
 	public static function meets_min_pro_version( $min_version ) {
 		return ! class_exists( 'FrmProDb' ) || version_compare( FrmProDb::$plug_version, $min_version, '>=' );
+	}
+
+	/**
+	 * Show a message if the browser or PHP version is below the recommendations.
+	 *
+	 * @since 4.0.02
+	 */
+	private static function php_version_notice() {
+		$message = array();
+		if ( version_compare( phpversion(), '5.6', '<' ) ) {
+			$message[] = __( 'The version of PHP on your server is too low. If this is not corrected, you may see issues with Formidable Forms. Please contact your web host and ask to be updated to PHP 7.0+.', 'formidable' );
+		}
+
+		$browser = self::get_server_value( 'HTTP_USER_AGENT' );
+		$is_ie   = strpos( $browser, 'MSIE' ) !== false;
+		if ( $is_ie ) {
+			$message[] = __( 'You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome).', 'formidable' );
+		}
+
+		foreach ( $message as $m ) {
+			?>
+			<div class="error frm_previous_install">
+				<?php echo esc_html( $m ); ?>
+			</div>
+			<?php
+		}
 	}
 
 	public static function locales( $type = 'date' ) {
