@@ -30,8 +30,6 @@
 				<?php } ?>
 			<?php } ?>
 
-			<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-
 			<form id="posts-filter" method="get">
 				<input type="hidden" name="page" value="formidable-entries" />
 				<input type="hidden" name="form" value="<?php echo esc_attr( $form ? $form->id : '' ); ?>" />
@@ -41,6 +39,8 @@
 
 				<?php FrmTipsHelper::pro_tip( 'get_entries_tip', 'p' ); ?>
 
+				<div class="clear"></div>
+				<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 				<?php $wp_list_table->display(); ?>
 			</form>
 		</div>
