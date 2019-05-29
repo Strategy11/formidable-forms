@@ -1189,6 +1189,10 @@ input.frm_insert_in_template {
 	display: inline;
 }
 
+.frm_inline_block {
+	display: inline-block !important;
+}
+
 .frm-lookup-modal .dismiss,
 .frm-right-panel .inside a.frm_hidden,
 ul.frm_form_nav > li.frm_hidden,

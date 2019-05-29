@@ -97,16 +97,16 @@
 </p>
 
 <p class="frm_show_form_opt success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] == 'message' ? '' : ' frm_hidden' ); ?>">
-			<label for="show_form">
-				<input type="checkbox" name="options[show_form]" id="show_form" value="1" <?php checked( $values['show_form'], 1 ); ?> />
-				<?php esc_html_e( 'Show the form with the confirmation message', 'formidable' ); ?>
-			</label>
+	<label for="show_form" class="frm_inline_block">
+		<input type="checkbox" name="options[show_form]" id="show_form" value="1" <?php checked( $values['show_form'], 1 ); ?> />
+		<?php esc_html_e( 'Show the form with the confirmation message', 'formidable' ); ?>
+	</label>
 </p>
 
 <table class="form-table">
 	<tr>
 		<td colspan="2">
-			<label for="no_save">
+			<label for="no_save" class="frm_inline_block">
 				<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
 				<?php esc_html_e( 'Do not store entries submitted from this form', 'formidable' ); ?>
 			</label>
@@ -139,7 +139,7 @@
 <table class="form-table">
 	<tr>
 		<td>
-			<label for="ajax_load">
+			<label for="ajax_load" class="frm_inline_block">
 				<input type="checkbox" name="options[ajax_load]" id="ajax_load" value="1"<?php echo ( $values['ajax_load'] ) ? ' checked="checked"' : ''; ?> /> <?php esc_html_e( 'Load and save form builder page with AJAX', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Recommended for long forms.', 'formidable' ); ?>"></span>
 			</label>
@@ -148,7 +148,7 @@
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>
 	<tr>
 		<td>
-			<label for="js_validate">
+			<label for="js_validate" class="frm_inline_block">
 				<input type="checkbox" name="options[js_validate]" id="js_validate" value="1" <?php checked( $values['js_validate'], 1 ); ?> />
 				<?php esc_html_e( 'Validate this form with javascript', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ); ?>"></span>
