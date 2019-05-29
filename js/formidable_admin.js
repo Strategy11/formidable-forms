@@ -1427,7 +1427,7 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFields( fieldId ) {
-		var field = jQuery( 'frm_field_id_' + fieldId );
+		var field = jQuery( '#frm_field_id_' + fieldId );
 
 		deleteField( fieldId );
 

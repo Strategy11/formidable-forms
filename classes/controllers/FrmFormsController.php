@@ -865,6 +865,7 @@ class FrmFormsController {
 		}
 
 		$all_templates = FrmForm::getAll( array( 'is_template' => 1 ), 'name' );
+		$has_fields    = isset( $values['fields'] ) && ! empty( $values['fields'] );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			wp_die();

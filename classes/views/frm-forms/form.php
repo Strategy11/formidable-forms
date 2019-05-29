@@ -1,8 +1,10 @@
-<div id="frm_form_editor_container" class="<?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm-has-fields' : ''; ?>">
+<div id="frm_form_editor_container" class="<?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
 
 	<?php
-	// Add form messages.
-	require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+	if ( $has_fields ) {
+		// Add form messages.
+		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+	}
 	?>
 
 	<div id="frm-fake-page" class="frm_hidden">
