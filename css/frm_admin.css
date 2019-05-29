@@ -4206,12 +4206,12 @@ a.frm_action_icon:hover {
 .frm-field-action-icons a {
 	margin-left: 15px;
 	float: right;
-	color: var(--primary-hover) !important;
 	font-size: 17px;
 	width: 17px;
 }
 
 .frm-field-action-icons a .frmsvg {
+	color: var(--primary-hover) !important;
 	font-size: 17px;
 	width: 17px;
 	height: 17px;
@@ -4542,6 +4542,10 @@ ul.start_divider {
 .frm-section-collapsed ul.start_divider {
 	height: 0;
 	min-height: 0 !important;
+}
+
+.frm-section-collapsed ul.start_divider {
+	overflow: hidden;
 }
 
 .frm-section-collapsed .frm_no_section_fields {
