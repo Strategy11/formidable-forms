@@ -1791,7 +1791,7 @@ h2.frm-h2 + .howto {
 
 a.frm_pro_tip {
 	font-size: 14px;
-	border: 1px solid var(--blue-border);
+	border: 1px solid var(--orange);
 	display: inline-block;
 	color: var(--dark-grey);
 	background: var(--light-blue);
@@ -1814,12 +1814,11 @@ a.frm_pro_tip:hover {
 
 a.frm_pro_tip .frmsvg,
 a.frm_pro_tip i {
-	color: var(--primary-hover);
+	color: var(--orange);
 	margin-right: 5px;
 }
 
-.frm_field_list a.frm_pro_tip .frmsvg,
-.frm_field_list a.frm_pro_tip i {
+.frm_field_list a.frm_pro_tip .frmsvg {
 	position: absolute;
 	left: 15px;
 	top: calc(50% - 11px);
@@ -1831,7 +1830,7 @@ a.frm_pro_tip i {
 }
 
 .frm-tip-cta {
-	color: var(--primary-hover);
+	color: var(--orange);
 }
 
 .nav-tab-wrapper .frm_pro_tip {
@@ -3892,6 +3891,10 @@ label.frm_action_events {
 	vertical-align: middle;
 }
 
+.frm_email_icons a .frmsvg {
+	color: var(--grey);
+}
+
 .frm_email_icons a:hover,
 .widget-top:hover .frm_email_icons a {
 	opacity: 1;
@@ -3901,6 +3904,7 @@ label.frm_action_events {
 	color: var(--grey);
 }
 
+.frm_actions_list .frm_inactive_action .frm-inner-circle,
 .frm_actions_list .frm_inactive_action i {
 	opacity: .4;
 }
