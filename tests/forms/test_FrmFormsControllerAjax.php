@@ -25,6 +25,8 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 		try {
 			$this->_handleAjax( 'frm_save_form' );
+		} catch ( WPAjaxDieContinueException $e ) {
+			unset( $e );
 		} catch ( WPAjaxDieStopException $e ) {
 			unset( $e );
 			// Expected to return form successfully updated message
