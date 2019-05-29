@@ -152,20 +152,6 @@ do_action( 'frm_before_field_options', $field );
 		<i class="frm_icon_font frm_arrowdown6_icon"></i>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
-		<?php
-		if ( $display['description'] ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php' );
-		}
-		?>
-
-		<?php if ( $display['clear_on_focus'] ) { ?>
-			<p>
-				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
-				</label>
-				<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder" />
-			</p>
-		<?php } ?>
 
 		<?php if ( $display['default'] ) { ?>
 			<div class="frm-has-modal">
@@ -229,7 +215,20 @@ do_action( 'frm_before_field_options', $field );
 
 		<?php $field_obj->show_after_default( compact( 'field', 'display' ) ); ?>
 
+		<?php if ( $display['clear_on_focus'] ) { ?>
+			<p>
+				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
+					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
+				</label>
+				<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder" />
+			</p>
+		<?php } ?>
+
 		<?php
+		if ( $display['description'] ) {
+			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php' );
+		}
+
 		// Field Size
 		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ) ) ) {
 			$display_max = $display['max'];
