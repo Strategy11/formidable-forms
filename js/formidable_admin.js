@@ -3313,7 +3313,7 @@ function frmAdminBuildJS() {
 			moreIcon = getIconForInput( input );
 			if ( moreIcon.tagName === 'use' ) {
 				moreIcon = moreIcon.firstElementChild;
-				if ( moreIcon.getAttribute( 'xlink:href' ).indexOf( 'frm_close_icon' ) === -1 ) {
+				if ( moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ).indexOf( 'frm_close_icon' ) === -1 ) {
 					showShortcodeBox( moreIcon, 'nofocus' );
 				}
 			} else if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
@@ -3341,7 +3341,7 @@ function frmAdminBuildJS() {
 			moreIcon = moreIcon.firstElementChild;
 		}
 		if ( moreIcon.tagName === 'use' ) {
-			classes = moreIcon.getAttribute( 'xlink:href' );
+			classes = moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
 		}
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
@@ -3396,7 +3396,7 @@ function frmAdminBuildJS() {
 	}
 
 	function hideShortcodes( box ) {
-		var i, u;
+		var i, u, closeIcons, closeSvg;
 		if ( typeof box === 'undefined' ) {
 			box = document.getElementById( 'frm_adv_info' );
 			if ( box === null ) {
@@ -3411,13 +3411,13 @@ function frmAdminBuildJS() {
 
 		box.style.display = 'none';
 
-		var closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
+		closeIcons = document.querySelectorAll( '.frm-show-box.frm_close_icon' );
 		for ( i = 0; i < closeIcons.length; i++ ) {
 			closeIcons[i].classList.remove( 'frm_close_icon' );
 			closeIcons[i].classList.add( 'frm_more_horiz_solid_icon' );
 		}
 
-		var closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
+		closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
 		for ( u = 0; u < closeSvg.length; u++ ) {
 			if ( closeSvg[u].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
 				closeSvg[u].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );

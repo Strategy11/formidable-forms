@@ -5671,6 +5671,10 @@ ul .frm_col_two {
 	vertical-align: text-bottom;
 }
 
+.frmsvg svg {
+	pointer-events: none;
+}
+
 .frmsvg.frm_svg20 {
 	width: 20px;
 	height: 20px;
