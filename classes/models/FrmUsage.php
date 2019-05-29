@@ -280,7 +280,7 @@ class FrmUsage {
 		$field_query = array(
 			'or'             => 1,
 			'fi.form_id'     => $form_id,
-			'fi.parent_form_id' => $form_id,
+			'parent_form_id' => $form_id,
 		);
 
 		return FrmDb::get_count( $join, $field_query );
@@ -313,7 +313,11 @@ class FrmUsage {
 			'order_by' => 'id DESC',
 		);
 
-		return FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type', $args );
+		$fields = FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type, field_options', $args );
+		foreach ( $fields as $k => $field ) {
+			$fields[ $k ]->field_options = json_encode( maybe_unserialize( $field->field_options ) );
+		}
+		return $fields;
 	}
 
 	/**
