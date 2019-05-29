@@ -72,7 +72,7 @@ class FrmEntriesHelper {
 		$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true, $return_array );
 
 		if ( isset( $field->field_options['placeholder'] ) ) {
-			$field->field_options['placeholder'] = apply_filters( 'frm_get_default_value', $field->field_options['placeholder'], $field, false, $return_array );
+			$field->field_options['placeholder'] = apply_filters( 'frm_get_default_value', $field->field_options['placeholder'], $field, false, false );
 		}
 	}
 
