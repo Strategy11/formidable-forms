@@ -66,7 +66,9 @@ class FrmStyle {
 			}
 
 			$new_instance['post_title']   = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : '';
-			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $_POST['frm_style_setting']['post_content'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.
+
+			// Don't wp_unslash yet since it removes backslashes.
+			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $_POST['frm_style_setting']['post_content'] : ''; // WPCS: sanitization ok.
 			FrmAppHelper::sanitize_value( 'wp_kses_post', $new_instance['post_content'] );
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
