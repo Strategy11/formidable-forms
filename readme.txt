@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.0.01
+Stable tag: 4.0.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,6 +374,26 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.0.02 =
+* Include the WordPress admin bar in full screen mode.
+* Replace field icons in builder with svg sprite to prevent browser caching issues.
+* Update the field ids in more of the form action settings when a form is duplicated.
+* Live update for default values.
+* Click on a field description on the form builder page to be taken directly to the setting.
+* Allow apostrophes in an email address.
+* Save a few clicks. Move the layout classes out of the advanced section and auto open the fields class list on click. Also select the search box when the form switcher is selected.
+* Fix: The WordPress menu was collapsed when editing a post. Oops!
+* Fix: Trim whitespace from radio/checkbox/dropdown options when they are changed.
+* Fix: Automatically hide and show the field box more accurately when clicking in and out of settings that use it.
+* Fix: Include field selection box on the redirect url setting.
+* Fix: Adjust the show entry page for small screens.
+* Fix: After an entry was deleted from the entry listing page, the page no longer scrolled.
+* Fix: Backslashes were removed in the Custom CSS on save.
+* Fix: In some cases, the default value was showing as a placeholder.
+* Fix: Fix a PHP 5.4 error. If you are running a version less than 5.6, you'll see a reminder message to get up to date.
+* Code: Added a trigger for use after an ajax call. The frmElementAdded trigger allows add-ons to add the field box menu to newly added settings.
+* Show a message if Internet Explorer is being used. This browser is no longer supported in the form builder.
+
 = 4.0.01 =
 * Automatically open the field options box on the form settings page.
 * Clean up, size down, and reposition the request for reviews.
