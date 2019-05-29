@@ -5227,7 +5227,7 @@ i.frm-show-inline-modal {
 
 .frm-search input.frm-search-input {
 	border-radius: var(--border-radius);
-	padding-left: 33px;
+	padding-left: 33px !important;
 }
 
 .frm-search input[name="s"] {
