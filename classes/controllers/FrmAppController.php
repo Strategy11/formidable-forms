@@ -40,8 +40,13 @@ class FrmAppController {
 			$classes .= self::get_os();
 
 			$page = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
-			if ( empty( $page ) ) {
-				$page = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+			if ( empty( $page ) || $page === 'formidable' ) {
+				$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+				if ( in_array( $action, array( 'settings', 'edit', 'list' ) ) ) {
+					$page .= $action;
+				} else {
+					$page = $action;
+				}
 			}
 			if ( ! empty( $page ) ) {
 				$classes .= ' frm-admin-page-' . $page;

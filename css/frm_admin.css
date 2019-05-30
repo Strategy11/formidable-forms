@@ -1302,6 +1302,12 @@ a.frm_hidden,
 	margin: 25px 50px 50px;
 }
 
+.form-field p {
+	/* for conflicts */
+	background: none;
+	border: none;
+}
+
 .form-field label.frm_primary_label {
 	display: block;
 	float: none;
@@ -1714,6 +1720,7 @@ h2.frm-h2 + .howto {
 	margin-bottom: 0;
 }
 
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
 #wpbody-content > .updated,
 #wpbody-content > .notice:not(.frm-review-notice),
 #wpbody-content > .error:not(.frm_previous_install),
@@ -1724,6 +1731,10 @@ h2.frm-h2 + .howto {
 #frm-templates-page .notice,
 #frm-templates-page .error {
 	display: none;
+}
+
+.frm-admin-page-formidableedit #frm_builder_page {
+	display: block !important;
 }
 
 .frm-white-body .updated,
@@ -3046,6 +3057,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-click {
 
 .frm_form_field.ui-sortable-helper .frm-field-action-icons,
 .frm_form_field.ui-sortable-helper .frm_form_fields,
+.frm_form_field.ui-sortable-helper .frm_description,
 .frm_form_field.ui-sortable-helper .description {
 	display: none;
 }
