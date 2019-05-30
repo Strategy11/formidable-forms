@@ -42,7 +42,7 @@
 		<div class="clear"></div>
 	</div>
 	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ) ) ) { ?>
-		<div class="description frm_description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
+		<div class="frm_description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
 		</div>
 	<?php } ?>
@@ -54,7 +54,7 @@
 		<div class="frm_form_fields">
 			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ); ?>]" placeholder="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
 		</div>
-		<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="description frm_description"><?php
+		<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
 			echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // WPCS: XSS ok.
 		?></div>
 </div>
