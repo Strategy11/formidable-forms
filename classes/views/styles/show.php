@@ -1,88 +1,68 @@
-<div class="nav-menus-php">
-<div class="wrap">
-    <?php FrmStylesHelper::style_menu(); ?>
-
-	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-
-	<?php do_action( 'frm_style_switcher', $style, $styles ) ?>
-
+<div class="frm_wrap">
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
-		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ) ?>" />
-		<input type="hidden" name="frm_action" value="save" />
-		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ) ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
-		<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
-		<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
-	<div id="nav-menus-frame">
-		<div id="menu-settings-column" class="metabox-holder">
-		<div class="clear"></div>
+	<div class="frm_page_container frm-fields">
+	<?php
+	FrmAppHelper::get_admin_header(
+		array(
+			'publish'     => array( 'FrmStylesHelper::styler_save_button', compact( 'style' ) ),
+			'nav'         => FrmStylesHelper::get_style_menu(),
+			'switcher'    => array( 'FrmStylesHelper::styler_switcher', compact( 'style', 'styles' ) ),
+		)
+	);
+	?>
 
-		<div class="styling_settings">
-			<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ) ?>" />
-			<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
+	<div class="columns-2">
+	<div class="frm-right-panel styling_settings">
+		<input name="prev_menu_order" type="hidden" value="<?php echo esc_attr( $style->menu_order ); ?>" />
+		<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
+		<div class="frm-inner-content">
+			<p>
+				<label for="menu-name">
+					<?php esc_html_e( 'Style Name', 'formidable' ); ?>
+					<?php if ( $style->ID ) { ?>
+						<span class="howto alignright">
+							<span>.frm_style_<?php echo esc_attr( $style->post_name ); ?></span>
+						</span>
+					<?php } ?>
+				</label>
+				<input id="menu-name" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="text" class="frm_full" title="<?php esc_attr_e( 'Enter style name here', 'formidable' ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
+			</p>
+
+			<p>
+				<label class="default-style-box" for="menu_order">
+					<?php if ( $style->menu_order ) { ?>
+						<input name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="hidden" value="1" />
+						<input id="menu_order" disabled="disabled" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ); ?> />
+					<?php } else { ?>
+						<input id="menu_order" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ); ?> />
+					<?php } ?>
+					<?php esc_html_e( 'Make this the default style', 'formidable' ); ?></span>
+				</label>
+			</p>
+			<?php do_action( 'frm_style_settings_top', $style ); ?>
 		</div>
+		<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
+	</div>
+	<div id="post-body-content">
+		<?php do_action( 'frm_style_switcher', $style, $styles ); ?>
 
-	</div><!-- /#menu-settings-column -->
+		<div class="frm-inner-content">
 
+			<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
-	<div id="menu-management-liquid">
-		<div id="menu-management">
-				<div class="menu-edit blank-slate">
-					<div id="nav-menu-header">
-						<div class="major-publishing-actions">
-							<label class="menu-name-label howto open-label" for="menu-name">
-								<span><?php esc_html_e( 'Style Name', 'formidable' ) ?></span>
-								<input id="menu-name" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="text" class="menu-name regular-text menu-item-textbox" title="<?php esc_attr_e( 'Enter style name here', 'formidable' ) ?>" value="<?php echo esc_attr( $style->post_title ) ?>" />
-							</label>
+			<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
+			<input type="hidden" name="frm_action" value="save" />
+			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
+			<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
+			<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
 
-							<input name="prev_menu_order" type="hidden" value="<?php echo esc_attr( $style->menu_order ) ?>" />
-							<label class="menu-name-label howto open-label default-style-box" for="menu_order">
-							<span>
-							<?php if ( $style->menu_order ) { ?>
-								<input name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="hidden" value="1" />
-								<input id="menu_order" disabled="disabled" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ) ?> />
-							<?php } else { ?>
-								<input id="menu_order" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ) ?> />
-							<?php } ?>
-							<?php esc_html_e( 'Make default style', 'formidable' ) ?></span>
-							</label>
+			<?php include( dirname( __FILE__ ) . '/_sample_form.php' ); ?>
 
-							<div class="publishing-action">
-								<input type="submit" id="save_menu_header" class="button button-primary menu-save" value="<?php esc_attr_e( 'Save Style', 'formidable' ); ?>"  />
-							</div><!-- END .publishing-action -->
-						</div><!-- END .major-publishing-actions -->
-					</div><!-- END .nav-menu-header -->
-					<div id="post-body">
-						<div id="post-body-content">
-
-							<?php include( dirname( __FILE__ ) . '/_sample_form.php' ); ?>
-
-						</div><!-- /#post-body-content -->
-					</div><!-- /#post-body -->
-					<div id="nav-menu-footer" class="submitbox">
-						<div class="major-publishing-actions">
-						    <?php if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) { ?>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID ) ); ?>" id="frm_delete_style" class="submitdelete deletion" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ) ?>">
-								<?php esc_html_e( 'Delete Style', 'formidable' ) ?>
-							</a>
-						    <?php } ?>
-						    <?php
-						    if ( $style->ID ) {
-								echo '<span class="howto"><span>.frm_style_' . esc_attr( $style->post_name ) . '</span></span>';
-							}
-							?>
-                            <div class="publishing-action">
-                                <input type="button" value="<?php esc_attr_e( 'Reset to Default', 'formidable' ) ?>" class="button-secondary frm_reset_style" />
-								<input type="submit" id="save_menu_header" class="button button-primary menu-save" value="<?php esc_attr_e( 'Save Style', 'formidable' ); ?>"  />
-							</div><!-- END .publishing-action -->
-							<div class="clear"></div>
-						</div><!-- END .major-publishing-actions -->
-					</div><!-- /#nav-menu-footer -->
-				</div><!-- /.menu-edit -->
-		</div><!-- /#menu-management -->
-	</div><!-- /#menu-management-liquid -->
-	</div><!-- /#nav-menus-frame -->
-	</form>
+		</div>
+	</div>
 </div>
+</div>
+</form>
 </div>
 
 <div id="this_css"></div>

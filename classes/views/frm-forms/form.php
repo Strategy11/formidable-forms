@@ -1,50 +1,51 @@
-<?php wp_nonce_field( 'frm_save_form_nonce', 'frm_save_form' ); ?>
-<input type="hidden" name="status" value="<?php echo esc_attr( $values['status'] ); ?>" />
-<input type="hidden" name="new_status" value="" />
+<div id="frm_form_editor_container" class="<?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
 
-<div id="frm_form_editor_container">
+	<?php
+	if ( $has_fields ) {
+		// Add form messages.
+		require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+	}
+	?>
 
-<div class="postbox">
-	<div id="titlediv" class="inside">
-		<input type="text" name="name" value="<?php echo esc_attr( $form->name ); ?>" id="title" placeholder="<?php esc_attr_e( 'Enter title here', 'formidable' ); ?>" />
+	<div id="frm-fake-page" class="frm_hidden">
+		<div class="frm-page-break">
+			<div class="frm-collapse-page button frm-button-secondary">
+				<?php
+				/* translators: %s: The page number */
+				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' );
+				?>
+				<i class="frm_icon_font frm_arrowdown6_icon"></i>
+			</div>
+		</div>
 	</div>
 
-	<div class="frm_no_fields <?php echo ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) ? 'frm_hidden' : ''; ?>">
-	    <div class="alignleft sketch1">
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow1.png' ); ?>" alt="" />
-	    </div>
-	    <div class="alignleft sketch1_text">
-			<?php esc_html_e( '1. Name your form', 'formidable' ) ?>
-	    </div>
+	<ul id="frm-show-fields" class="frm_sorting inside">
+		<?php
+		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
+			$values['count'] = 0;
+			foreach ( $values['fields'] as $field ) {
+				$values['count']++;
+				FrmFieldsController::load_single_field( $field, $values );
+				unset( $field );
+			}
+		}
+		?>
+	</ul>
+	<p id="frm-form-button">
+		<button class="frm_button_submit" disabled="disabled">
+			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+		</button>
+	</p>
 
-	    <div class="alignright sketch2">
-			<?php esc_html_e( '2. Click or drag a field to add it to your form', 'formidable' ); ?>
-	        <div class="clear"></div>
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow2.png' ); ?>" alt="" />
-	    </div>
-	    <div class="clear"></div>
+	<div class="frm_no_fields">
 
-		<div class="frm_drag_inst"><?php esc_html_e( 'Add Fields Here', 'formidable' ) ?></div>
-
-    	<div class="alignleft sketch3">
-			<div class="alignright"><?php esc_html_e( '3. Save your form', 'formidable' ) ?></div>
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sketch_arrow3.png' ); ?>" alt="" />
-	    </div>
-    	<div class="clear"></div>
-    </div>
-<ul id="new_fields" class="frm_sorting inside">
-<?php
-if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
-	$values['count'] = 0;
-	foreach ( $values['fields'] as $field ) {
-		$values['count']++;
-		FrmFieldsController::load_single_field( $field, $values );
-		unset( $field );
-	}
-}
-?>
-</ul>
-<input type="hidden" name="frm_end" value="1" />
+		<div class="frm_drag_inst">
+			<?php esc_html_e( 'Add Fields Here', 'formidable' ); ?>
+		</div>
+		<p>
+			<?php esc_html_e( 'Click or drag a field from the sidebar to add it to your form', 'formidable' ); ?>
+		</p>
+		<div class="clear"></div>
+	</div>
 </div>
-
-</div>
+<?php FrmFieldsHelper::bulk_options_overlay(); ?>

@@ -1,6 +1,6 @@
-<div class="wrap upgrade_to_pro">
+<div class="frm_wrap wrap upgrade_to_pro frm-fields">
 	<h1 class="frm_pro_heading">
-		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ) ?>/images/logo.png" alt="Upgrade to Pro" />
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />
 		<span class="alignright">Take on bigger projects, earn more clients and grow your business.<br/>
 			<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" target="_blank">Upgrade to Pro</a>.</span>
 		<span class="clear"></span>
@@ -18,9 +18,9 @@
 				<th></th>
 			<?php foreach ( $pro_pricing as $price_info ) { ?>
 				<th>
-					<h3><?php echo esc_attr( ucfirst( $price_info['name'] ) ) ?></h3>
-					<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" class="button-primary" target="_blank">
-						<?php esc_html_e( 'Get Started', 'formidable' ) ?>
+					<h3><?php echo esc_attr( ucfirst( $price_info['name'] ) ); ?></h3>
+					<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" class="button-primary frm-button-primary" target="_blank">
+						<?php esc_html_e( 'Get Started', 'formidable' ); ?>
 					</a>
 				</th>
 			<?php } ?>
@@ -82,8 +82,12 @@
 							}
 							?>
 						</th>
-						<td><i class="frm_icon_font <?php echo esc_attr( $feature['lite'] ? 'frm_check_icon' : 'frm_cancel1_icon' ); ?>"></i></td>
-						<td><i class="frm_icon_font frm_check_icon"></i></td>
+						<td class="<?php echo esc_attr( $feature['lite'] ? 'frm-checked' : '' ); ?>">
+							<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $feature['lite'] ? 'frm_checkmark_icon' : 'frm_close_icon' ) ); ?>
+						</td>
+						<td class="<?php echo esc_attr( 'frm-checked' ); ?>">
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
+						</td>
 					</tr>
 				<?php } ?>
 			<?php } ?>

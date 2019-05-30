@@ -131,7 +131,7 @@ class test_FrmAppController extends FrmUnitTest {
 			),
 			array(
 				'version'  => '5.01.10',
-				'db'       => 90,
+				'db'       => 900,
 				'expected' => false,
 			),
 			array(

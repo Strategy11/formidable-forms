@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 3.06.06
+Stable tag: 4.0.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,15 +374,50 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
-= 3.06.06 =
-* Remove complete Spanish translations
-* Increase PHP requirements to 5.6
-* Increase minimum WP version to 4.6
+= 4.0.02 =
+* Include the WordPress admin bar in full screen mode.
+* Replace field icons in builder with svg sprite to prevent browser caching issues.
+* Update the field ids in more of the form action settings when a form is duplicated.
+* Live update for default values.
+* Click on a field description on the form builder page to be taken directly to the setting.
+* Allow apostrophes in an email address.
+* Save a few clicks. Move the layout classes out of the advanced section and auto open the fields class list on click. Also select the search box when the form switcher is selected.
+* Fix: The WordPress menu was collapsed when editing a post. Oops!
+* Fix: Trim whitespace from radio/checkbox/dropdown options when they are changed.
+* Fix: Automatically hide and show the field box more accurately when clicking in and out of settings that use it.
+* Fix: Include field selection box on the redirect url setting.
+* Fix: Adjust the show entry page for small screens.
+* Fix: After an entry was deleted from the entry listing page, the page no longer scrolled.
+* Fix: Backslashes were removed in the Custom CSS on save.
+* Fix: In some cases, the default value was showing as a placeholder.
+* Fix: Fix a PHP 5.4 error. If you are running a version less than 5.6, you'll see a reminder message to get up to date.
+* Code: Added a trigger for use after an ajax call. The frmElementAdded trigger allows add-ons to add the field box menu to newly added settings.
+* Show a message if Internet Explorer is being used. This browser is no longer supported in the form builder.
 
-= 3.06.05 =
-* When getting IP addresses, use the end use IP rather than the proxy IP with services like Cloudflare.
-* On new installations, allow multiple reCaptchas on a page by default.
-* Remove admin email address from user tracking in order to keep it 100% anonymous.
-* Fix: When a license is saved, properly clear the local caches in order to get access to new add-ons and form templates after renewing or upgrading.
+= 4.0.01 =
+* Automatically open the field options box on the form settings page.
+* Clean up, size down, and reposition the request for reviews.
+* Use collapsed admin menu in full screen mode.
+* Show a form title in the top bar on hover if truncated.
+* Show a message if 4.0 Lite is installed without the matching Pro version.
+* Fix: The link to print an entry wasn't responding.
+* Fix: The full screen entries page was only scrolling if the manu label was 'Forms'
+* Fix: Sometimes the field classes and inline shortcodes were appearing on the wrong setting.
+* Fix: 1Password was conflicting with some fields with the inline popup.
+
+= 4.0 =
+* We've added a new, full screen builder for a faster and more enjoyable form building experience.
+* Moved all settings into the sidebar instead of expanding/collapsing under each field.
+* Faster way of adding new radio/select/checkbox options with drag and drop reordering.
+* Added a separate placeholder option to make it easier to use, and to allow for both a placeholder and a default value. Existing placeholders will be automatically moved to the new setting.
+* Added placeholder setting for dropdown fields, and allow the field label to be used as a placeholder.
+* Long forms are easier to edit and save since only the fields settings that have been viewed will be saved.
+* Replaced the form builder sidebar panel with in-field modals that include the possible values to insert.
+* Added a way to more easily see and find all possible add-ons in the form actions.
+* Add link to imported form in the import success message.
+* Removed a few unused settings including the option to disable HTML5.
+* New hooks: frm_after_field_choices, frm_field_options, frm_after_field_options, frm_[type]_primary_field_options, Added hooks for each tab in the global settings: frm_[section name]_settings_form, frm_default_value_setting
+* Added better confirmation messages before deleting fields, forms, form actions, and entries.
+* Change default settings to fade in forms and use css grids for new installs.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

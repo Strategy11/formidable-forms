@@ -85,7 +85,7 @@ class FrmEmail {
 		$to = $this->prepare_email_setting( $this->settings['email_to'], $user_id_args );
 		$to = $this->explode_emails( $to );
 
-		$where = array(
+		$where  = array(
 			'it.field_id !' => 0,
 			'it.item_id'    => $this->entry->id,
 		);
@@ -298,7 +298,7 @@ class FrmEmail {
 
 		// Add the user info if it isn't already included
 		if ( $this->include_user_info && $prev_mail_body === $mail_body ) {
-			$data = maybe_unserialize( $this->entry->description );
+			$data      = maybe_unserialize( $this->entry->description );
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";
@@ -449,7 +449,7 @@ class FrmEmail {
 	 * @return array
 	 */
 	private function package_header() {
-		$header   = array();
+		$header = array();
 
 		if ( ! empty( $this->cc ) ) {
 			$header[] = 'CC: ' . implode( ',', $this->cc );
@@ -522,6 +522,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $emails
+	 *
 	 * @return array|string $emails
 	 */
 	private function explode_emails( $emails ) {
@@ -637,6 +638,7 @@ class FrmEmail {
 			$parts = explode( '<', $email );
 			$email = trim( $parts[1], '>' );
 		}
+
 		return $email;
 	}
 
@@ -671,6 +673,7 @@ class FrmEmail {
 		if ( '' !== $name ) {
 			$email = $name . ' <' . $email . '>';
 		}
+
 		return $email;
 	}
 

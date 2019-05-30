@@ -15,7 +15,21 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 		<select <?php do_action( 'frm_field_input_html', $field ); ?>>
 	<?php } else { ?>
 		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id ); ?>" <?php do_action( 'frm_field_input_html', $field ); ?>>
-	<?php
+		<?php
+	}
+
+	$placeholder = FrmField::get_option( $field, 'placeholder' );
+	if ( empty( $placeholder ) ) {
+		$placeholder = FrmFieldsController::get_default_value_from_name( $field );
+	}
+
+	$skipped = false;
+	if ( $placeholder !== '' ) {
+		?>
+		<option value="">
+			<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
+		</option>
+		<?php
 	}
 
 	$other_opt = false;
@@ -29,6 +43,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 			if ( FrmFieldsHelper::is_other_opt( $opt_key ) && $selected ) {
 				$other_checked = true;
 			}
+		}
+
+		if ( ! empty( $placeholder ) && $opt == '' && ! $skipped ) {
+			$skipped = true;
+			continue;
 		}
 		?>
 		<option value="<?php echo esc_attr( $field_val ); ?>" <?php echo $selected ? ' selected="selected"' : ''; ?> class="<?php echo esc_attr( FrmFieldsHelper::is_other_opt( $opt_key ) ? 'frm_other_trigger' : '' ); ?>">

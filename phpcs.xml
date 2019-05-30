@@ -14,39 +14,30 @@
 	<rule ref="WordPress">
 
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
-		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
-		<exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
-		<exclude name="WordPress.WhiteSpace.ScopeIndent.Incorrect" />
-		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
-		<exclude name="Squiz.PHP.EmbeddedPhp.NoSemicolon" />
-		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 		<exclude name="WordPress.WP.GlobalVariablesOverride" />
-		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Functions.DontExtract.extract_extract" />
 		<exclude name="WordPress.PHP.DontExtract.extract_extract" />
-		<exclude name="WordPress.CSRF.NonceVerification.NoNonceVerification" />
-		<exclude name="WordPress.Security.NonceVerification.NoNonceVerification" />
 		<exclude name="WordPress.Security.NonceVerification.Missing" />
-		<exclude name="WordPress.Security.ValidatedSanitizedInput" />
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized" />
 
-		<!-- We should probably turn the below rules on, but these give issues with the current code base. -->
+		<!-- These give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
-		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
-		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
-		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
-		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
+		<exclude name="WordPress.PHP.YodaConditions"/>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>

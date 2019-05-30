@@ -1,18 +1,14 @@
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
-<table class="form-table">
-    <tr>
-        <th>
-			<label <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php esc_html_e( 'Label', 'formidable' ); ?></label>
-        </th>
-		<td>
-			<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
-        </td>
-    </tr>
-</table>
+<div class="frm_grid_container frm_no_p_margin">
+	<p class="frm6 frm_form_field">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>>
+			<?php esc_html_e( 'Action Name', 'formidable' ); ?>
+		</label>
+		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text <?php FrmAppHelper::maybe_add_tooltip( 'action_title', 'open' ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
+	</p>
 <?php
-$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 if ( ! isset( $action_control->action_options['event'] ) ) {
 	$events = 'create';
@@ -24,27 +20,34 @@ if ( ! is_array( $action_control->action_options['event'] ) ) {
 
 if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
 	foreach ( $action_control->action_options['event'] as $e ) {
-	?>
-	<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
-<?php
+		?>
+		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
+		<?php
 	}
 } else {
-?>
-	<h3><?php esc_html_e( 'Action Triggers', 'formidable' ); ?></h3>
-	<p>
-		<label class="frm_left_label"><?php esc_html_e( 'Trigger this action after', 'formidable' ) ?></label>
+	?>
+	<p class="frm6 frm_form_field">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
+			<?php esc_html_e( 'Trigger this action when', 'formidable' ); ?>
+		</label>
 		<select name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" multiple="multiple" class="frm_multiselect" id="<?php echo esc_attr( $action_control->get_field_id( 'event' ) ); ?>">
 	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) {
-	?>
-		<option value="<?php echo esc_attr( $event ) ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
+		?>
+		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>
-<?php
+	<?php
 }
+
+?>
+</div>
+<?php
+
+$action_control->form( $form_action, compact( 'form', 'action_key', 'values' ) );
 
 $pass_args = array(
 	'form'       => $form,
@@ -90,7 +93,7 @@ if ( $use_logging ) {
 		?>
 		<p>
 			<a href="javascript:void(0)" class="frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Form action logs', 'formidable' ); ?>" data-medium="action-logs" data-oneclick="<?php echo esc_attr( json_encode( $upgrading ) ); ?>">
-				<i class="dashicons dashicons-info"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_solid_icon frm_svg15', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Install logging to get more information on API requests.', 'formidable' ); ?>
 			</a>
 		</p>
@@ -98,7 +101,10 @@ if ( $use_logging ) {
 	}
 }
 ?>
-<span class="alignright frm_action_id <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
-	<?php printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) ); ?>
+<span class="alignright frm_action_id frm-sub-label <?php echo esc_attr( empty( $form_action->ID ) ? 'frm_hidden' : '' ); ?>">
+	<?php
+	/* translators: %1$s: The ID of the form action. */
+	printf( esc_html__( 'Action ID: %1$s', 'formidable' ), esc_attr( $form_action->ID ) );
+	?>
 </span>
 <div style="clear:both;"></div>

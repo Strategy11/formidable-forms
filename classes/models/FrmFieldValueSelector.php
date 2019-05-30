@@ -36,7 +36,6 @@ class FrmFieldValueSelector {
 	 */
 	protected $options = array();
 
-
 	/**
 	 * @var string
 	 *
@@ -137,7 +136,7 @@ class FrmFieldValueSelector {
 	 * @since 2.03.05
 	 */
 	protected function set_options() {
-		$field_obj = FrmFieldFactory::get_field_object( $this->db_row );
+		$field_obj     = FrmFieldFactory::get_field_object( $this->db_row );
 		$this->options = $field_obj->get_options( array() );
 	}
 

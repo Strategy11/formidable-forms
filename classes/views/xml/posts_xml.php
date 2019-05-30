@@ -1,4 +1,9 @@
 <?php
+/**
+ * Generate the XML for export for posts and form actions.
+ *
+ * @phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
+ */
 
 if ( ! $item_ids ) {
 	return;
@@ -15,10 +20,10 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 	foreach ( $posts as $post ) {
 		setup_postdata( $post );
 		$is_sticky = is_sticky( $post->ID ) ? 1 : 0;
-?>
+		?>
 	<view>
 		<title><?php echo esc_html( apply_filters( 'the_title_rss', $post->post_title ) ); ?></title>
-		<link><?php the_permalink_rss() ?></link>
+		<link><?php the_permalink_rss(); ?></link>
 		<post_author><?php echo FrmXMLHelper::cdata( get_the_author_meta( 'login' ) ); // WPCS: XSS ok. ?></post_author>
 		<description></description>
 		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); // WPCS: XSS ok. ?></content>
@@ -45,7 +50,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 			if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) ) {
 				continue;
 			}
-		?>
+			?>
 		<postmeta>
 			<meta_key><?php echo esc_html( $meta->meta_key ); ?></meta_key>
 			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); // WPCS: XSS ok. ?></meta_value>
@@ -59,7 +64,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 			foreach ( (array) $terms as $term ) {
 				?>
-		<category domain="<?php echo esc_attr( $term->taxonomy ) ?>" nicename="<?php echo esc_attr( $term->slug ) ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // WPCS: XSS ok. ?></category>
+		<category domain="<?php echo esc_attr( $term->taxonomy ); ?>" nicename="<?php echo esc_attr( $term->slug ); ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // WPCS: XSS ok. ?></category>
 <?php
 			}
 		}
@@ -86,7 +91,7 @@ foreach ( (array) $terms as $term ) {
 	$frm_inc_tax[] = $term->term_id;
 	$label = ( 'category' === $term->taxonomy || 'tag' === $term->taxonomy ) ? $term->taxonomy : 'term';
 	?>
-	<term><term_id><?php echo esc_html( $term->term_id ) ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
+	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // WPCS: XSS ok.
 	}

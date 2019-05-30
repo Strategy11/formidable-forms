@@ -1,27 +1,40 @@
-<div class="nav-menus-php">
-<div class="wrap">
-    <?php FrmStylesHelper::style_menu( 'manage' ); ?>
+<div class="frm_wrap">
+	<form method="post">
+	<div class="frm_page_container">
+	<?php
+	FrmAppHelper::get_admin_header(
+		array(
+			'label'       => __( 'Manage Styles', 'formidable' ),
+			'hide_title'  => true,
+			'publish'     => array( 'FrmStylesHelper::save_button', array() ),
+			'nav'         => FrmStylesHelper::get_style_menu( 'manage' ),
+		)
+	);
+	?>
+
+	<div class="columns-2">
+	<div id="post-body-content">
+
+		<div class="frm-inner-content">
 
 	<p><?php printf( esc_html__( 'Easily change which template your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>' ); ?></p>
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
-	<div id="menu-locations-wrap">
-	<form method="post">
 		<input type="hidden" name="frm_action" value="manage_styles"/>
-		<table class="widefat fixed" id="menu-locations-table">
+		<table class="widefat fixed striped">
 			<thead>
 			<tr>
-				<th scope="col" class="manage-column column-locations">
-					<?php esc_html_e( 'Form Title', 'formidable' ) ?>
+				<th scope="col" class="column-locations">
+					<?php esc_html_e( 'Form Title', 'formidable' ); ?>
 				</th>
-				<th scope="col" class="manage-column column-menus">
-					<?php esc_html_e( 'Assigned Style Templates', 'formidable' ) ?>
+				<th scope="col">
+					<?php esc_html_e( 'Assigned Style Templates', 'formidable' ); ?>
 				</th>
 			</tr>
 			</thead>
 
-			<tbody class="menu-locations">
+			<tbody>
 				<?php
 				if ( $forms ) {
 					foreach ( $forms as $form ) {
@@ -31,39 +44,44 @@
 							$this_style = $default_style->ID;
 						}
 						?>
-				<tr id="menu-locations-row">
+				<tr>
 					<td class="menu-location-title">
 						<strong><?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?></strong>
 					</td>
-					<td class="menu-location-menus">
-					    <input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ) ?>]" value="<?php echo esc_attr( $this_style ) ?>" />
-						<select name="style[<?php echo esc_attr( $form->id ) ?>]">
+					<td>
+						<input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
+						<select name="style[<?php echo esc_attr( $form->id ); ?>]">
 							<?php foreach ( $styles as $s ) { ?>
-								<option value="<?php echo esc_attr( $s->ID ) ?>" <?php selected( $s->ID, $this_style ) ?>>
-									<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ) ?>
+								<option value="<?php echo esc_attr( $s->ID ); ?>" <?php selected( $s->ID, $this_style ); ?>>
+									<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>
 								</option>
 							<?php } ?>
-							<option value="" <?php selected( 0, $this_style ) ?>>
-								<?php esc_html_e( 'Styling disabled', 'formidable' ) ?>
+							<option value="" <?php selected( 0, $this_style ); ?>>
+								<?php esc_html_e( 'Styling disabled', 'formidable' ); ?>
 							</option>
 						</select>
 
-					</td><!-- .menu-location-menus -->
-				</tr><!-- #menu-locations-row -->
-				<?php
+					</td>
+				</tr>
+						<?php
 					}
 				} else {
-				?>
+					?>
 				<tr>
-				    <td><?php esc_html_e( 'No Forms Found', 'formidable' ) ?></td>
+					<td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
 				</tr>
-				<?php
+					<?php
 				}
 				?>
 			</tbody>
 		</table>
-		<p class="button-controls"><input type="submit" name="nav-menu-locations" id="nav-menu-locations" class="button button-primary left" value="<?php esc_attr_e( 'Save Changes', 'formidable' ) ?>" /></p>
+		<p>
+			<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
+		</p>
 		<?php wp_nonce_field( 'frm_manage_style_nonce', 'frm_manage_style' ); ?>
-	</form>
-</div><!-- #menu-locations-wrap -->
-</div><!-- /.wrap-->
+
+</div>
+</div>
+</div>
+</form>
+</div>

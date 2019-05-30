@@ -30,13 +30,7 @@ class FrmFieldCheckbox extends FrmFieldType {
 	}
 
 	protected function include_form_builder_file() {
-		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-multiple.php';
-	}
-
-	protected function field_settings_for_type() {
-		return array(
-			'default_blank' => false,
-		);
+		return $this->include_front_form_file();
 	}
 
 	protected function new_field_settings() {
@@ -52,6 +46,7 @@ class FrmFieldCheckbox extends FrmFieldType {
 
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );
+
 		return array(
 			'align' => FrmStylesController::get_style_val( 'check_align', ( empty( $form_id ) ? 'default' : $form_id ) ),
 		);

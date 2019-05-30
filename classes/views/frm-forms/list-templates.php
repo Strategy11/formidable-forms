@@ -2,28 +2,46 @@
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Add new form', 'formidable' ),
-			'cancel_link' => '?page=formidable&frm_action=add_new',
+			'label'       => __( 'Add New Form', 'formidable' ),
+			'cancel_link' => '?page=formidable',
 		)
 	);
 	?>
 	<div class="wrap">
-		<h2 class="frm-h2"><?php esc_html_e( 'Form templates', 'formidable' ); ?></h2>
 		<p class="howto">
 			<?php
-			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			printf(
+				/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 				esc_html__( 'Save time by starting from one of our pre-made templates. They are expertly designed and configured to work right out of the box. If you don\'t find a template you like, you can always start with a %1$sblank form%2$s.', 'formidable' ),
-				'<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ) . '">',
+				'<a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ) . '">',
 				'</a>'
 			);
 			?>
 		</p>
 
-		<?php FrmAppHelper::show_search_box( '', 'template', __( 'Search Templates', 'formidable' ) ); ?>
+		<?php
+		FrmAppHelper::show_search_box(
+			array(
+				'input_id'    => 'template',
+				'placeholder' => __( 'Search Templates', 'formidable' ),
+			)
+		);
+		?>
 		<div class="clear"></div>
 
 		<div class="frm-addons">
+			<div class="frm-card frm-no-thumb">
+				<div class="plugin-card-top">
+					<h3><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
+					<p><?php esc_html_e( 'Start from scratch and build exactly what you want. This option will not pre-load any fields.', 'formidable' ); ?></p>
+				</div>
+				<div class="plugin-card-bottom">
+					<a class="button button-primary frm-button-primary frm-new-form-button" href="#">
+						<?php esc_html_e( 'Create Form', 'formidable' ); ?>
+					</a>
+				</div>
+			</div>
+
 			<div class="frm-card frm-no-thumb">
 				<div class="plugin-card-top">
 					<h3><?php esc_html_e( 'Create a Custom Template', 'formidable' ); ?></h3>
@@ -66,25 +84,13 @@
 				</div>
 			</div>
 
-			<div class="frm-card frm-no-thumb">
-				<div class="plugin-card-top">
-					<h3><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Start from scratch and build exactly what you want. This option will not pre-load any fields.', 'formidable' ); ?></p>
-				</div>
-				<div class="plugin-card-bottom">
-					<a class="button button-primary frm-button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=new' ) ); ?>">
-						<?php esc_html_e( 'Create Form', 'formidable' ); ?>
-					</a>
-				</div>
-			</div>
-
 			<?php
 			foreach ( $templates as $k => $template ) {
 				if ( ! is_numeric( $k ) ) {
 					continue;
 				}
 				?>
-				<div class="frm-card frm-no-thumb">
+				<div class="frm-card frm-no-thumb" id="frm-template-<?php echo esc_attr( ( isset( $template['installed'] ) && $template['installed'] ? 'custom-' : '' ) . $template['id'] ); ?>">
 					<div class="plugin-card-top">
 						<?php if ( strtotime( $template['released'] ) > strtotime( '-10 days' ) ) { ?>
 							<div class="frm_ribbon">
@@ -100,22 +106,15 @@
 							$preview_link = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html';
 						}
 
-						if ( isset( $template['categories'] ) && ( ! isset( $template['url'] ) || empty( $template['url'] ) ) ) {
-							foreach ( $template['categories'] as $k => $category ) {
-								if ( in_array( $category, $plans ) ) {
-									printf(
-										esc_html__( 'License plan required: %s', 'formidable' ),
-										'<a href="' . esc_url( $pricing ) . '" target="_blank" rel="noopener">' . esc_html( $category ) . '</a>'
-									);
-									unset( $template['categories'][ $k ] );
-									break;
-								}
-							}
-						}
+						$plan_required = FrmFormsHelper::get_plan_required( $template );
+						FrmFormsHelper::show_plan_required( $plan_required, $pricing . '&utm_content=' . $template['key'] );
 						?>
 						<?php if ( ! empty( $template['categories'] ) ) { ?>
 							<div class="frm_hidden">
-								Category:<?php echo esc_html( implode( $template['categories'], ', Category:' ) ); ?>
+								<?php
+								esc_html_e( 'Category:', 'formidable' );
+								echo esc_html( implode( $template['categories'], ', ' . __( 'Category:', 'formidable' ) ) );
+								?>
 							</div>
 						<?php } ?>
 					</div>
@@ -125,7 +124,7 @@
 						</a>
 						<?php if ( isset( $template['installed'] ) && $template['installed'] ) { ?>
 							|
-							<a href="#" class="frm-trash-template frm-trash" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-frmverify="<?php esc_attr_e( 'Are you sure?', 'formidable' ); ?>">
+							<a href="#" class="frm-trash-template frm-trash" data-frmdelete="trash-template" data-id="<?php echo esc_attr( $template['id'] ); ?>" data-trashtemplate="1" data-frmverify="<?php esc_attr_e( 'Delete this form template?', 'formidable' ); ?>">
 								<?php esc_html_e( 'Delete', 'formidable' ); ?>
 							</a>
 						<?php } ?>
@@ -138,8 +137,12 @@
 							<?php } ?>
 								<?php esc_html_e( 'Create Form', 'formidable' ); ?>
 							</a>
+						<?php } elseif ( ! empty( $license_type ) && $license_type === strtolower( $plan_required ) ) { ?>
+								<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $template['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Renew Now', 'formidable' ); ?>">
+									<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
+								</a>
 						<?php } else { ?>
-							<a class="install-now button button-primary frm-button-primary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+							<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $pricing ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 								<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 							</a>
 						<?php } ?>
@@ -149,7 +152,8 @@
 			<?php } ?>
 		</div>
 		<?php if ( $expired ) { ?>
-			<p>
+			<br/>
+			<p class="frm_error_style">
 				<?php echo FrmAppHelper::kses( $error, 'a' ); // WPCS: XSS ok. ?>
 			</p>
 		<?php } ?>

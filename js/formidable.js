@@ -636,12 +636,13 @@ function frmFrontFormJS(){
 			return;
 		}
 
-		$object.removeClass('frm_loading_form');
+		var loadingForm = jQuery( '.frm_loading_form' );
+		loadingForm.removeClass('frm_loading_form');
 
-		$object.trigger( 'frmEndFormLoading' );
+		loadingForm.trigger( 'frmEndFormLoading' );
 
 		if ( enable === 'enable' ) {
-			enableSubmitButton( $object );
+			enableSubmitButton( loadingForm );
 		}
 	}
 
@@ -699,15 +700,26 @@ function frmFrontFormJS(){
 
 	function resendEmail(){
 		/*jshint validthis:true */
-		var $link = jQuery(this);
-		var entry_id = $link.data('eid');
-		var form_id = $link.data('fid');
-		$link.append('<span class="spinner" style="display:inline"></span>');
+		var $link = jQuery(this),
+			entry_id = this.getAttribute( 'data-eid' ),
+			form_id = this.getAttribute( 'data-fid' ),
+			label = $link.find( '.frm_link_label' );
+		if ( label.length < 1 ) {
+			label = $link;
+		}
+		label.append('<span class="frm-wait"></span>');
+
 		jQuery.ajax({
-			type:'POST',url:frm_js.ajax_url,
-			data:{action:'frm_entries_send_email', entry_id:entry_id, form_id:form_id, nonce:frm_js.nonce},
+			type:'POST',
+			url:frm_js.ajax_url,
+			data:{
+				action:'frm_entries_send_email',
+				entry_id:entry_id,
+				form_id:form_id,
+				nonce:frm_js.nonce
+			},
 			success:function(msg){
-				$link.replaceWith(msg);
+				label.html(msg);
 			}
 		});
 		return false;

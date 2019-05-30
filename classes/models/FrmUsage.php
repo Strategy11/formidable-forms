@@ -17,6 +17,7 @@ class FrmUsage {
 		}
 
 		$ep   = 'aHR0cHM6Ly9mcm0tdXNlci10cmFja2luZy5oZXJva3VhcHAuY29tL3NuYXBzaG90';
+		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
 		$body = json_encode( $this->snapshot() );
 
 		// Setup variable for wp_remote_request.
@@ -75,7 +76,7 @@ class FrmUsage {
 			'entry_count'    => FrmEntry::getRecordCount(),
 			'timestamp'      => gmdate( 'c' ),
 
-			'theme_name'     => $theme_data->Name, // phpcs:ignore WordPress.NamingConventions
+			'theme_name'     => is_object( $theme_data ) ? $theme_data->Name : '', // phpcs:ignore WordPress.NamingConventions
 			'plugins'        => $this->plugins(),
 			'settings'       => array(
 				$this->settings(),
@@ -278,7 +279,7 @@ class FrmUsage {
 
 		$field_query = array(
 			'or'             => 1,
-			'form_id'        => $form_id,
+			'fi.form_id'     => $form_id,
 			'parent_form_id' => $form_id,
 		);
 
@@ -312,7 +313,11 @@ class FrmUsage {
 			'order_by' => 'id DESC',
 		);
 
-		return FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type', $args );
+		$fields = FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type, field_options', $args );
+		foreach ( $fields as $k => $field ) {
+			$fields[ $k ]->field_options = json_encode( maybe_unserialize( $field->field_options ) );
+		}
+		return $fields;
 	}
 
 	/**

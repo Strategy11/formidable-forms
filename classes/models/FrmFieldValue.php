@@ -45,7 +45,7 @@ class FrmFieldValue {
 		}
 
 		$this->entry_id = $entry->id;
-		$this->field = $field;
+		$this->field    = $field;
 		$this->init_saved_value( $entry );
 	}
 
@@ -59,7 +59,7 @@ class FrmFieldValue {
 	protected function init_saved_value( $entry ) {
 		if ( $this->field->type === 'html' ) {
 			$this->saved_value = $this->field->description;
-		} else if ( isset( $entry->metas[ $this->field->id ] ) ) {
+		} elseif ( isset( $entry->metas[ $this->field->id ] ) ) {
 			$this->saved_value = $entry->metas[ $this->field->id ];
 		} else {
 			$this->saved_value = '';
@@ -160,6 +160,7 @@ class FrmFieldValue {
 	protected function generate_displayed_value_for_field_type( $atts ) {
 		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $this->field );
+
 			$this->displayed_value = $field_obj->get_display_value( $this->displayed_value, $atts );
 		}
 	}
@@ -177,7 +178,7 @@ class FrmFieldValue {
 		// TODO: maybe change from 'source' to 'run_filters' = 'email'
 		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
-			$meta                  = array(
+			$meta = array(
 				'item_id'    => $entry->id,
 				'field_id'   => $this->field->id,
 				'meta_value' => $this->saved_value,

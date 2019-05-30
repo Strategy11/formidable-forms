@@ -13,7 +13,7 @@ class FrmXMLController {
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader = libxml_disable_entity_loader( true );
+		$loader  = libxml_disable_entity_loader( true );
 
 		$files = apply_filters( 'frm_default_templates_files', array() );
 
@@ -27,7 +27,6 @@ class FrmXMLController {
 		libxml_use_internal_errors( $set_err );
 		libxml_disable_entity_loader( $loader );
 	}
-
 
 	/**
 	 * Use the template link to install the XML template
@@ -58,10 +57,10 @@ class FrmXMLController {
 		if ( isset( $imported['form_status'] ) && ! empty( $imported['form_status'] ) ) {
 			// Get the last form id in case there are child forms.
 			end( $imported['form_status'] );
-			$form_id = key( $imported['form_status'] );
+			$form_id  = key( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form_id ) ),
+				'redirect' => FrmForm::get_edit_link( $form_id ),
 				'success'  => 1,
 			);
 		} else {
@@ -80,6 +79,7 @@ class FrmXMLController {
 	 * since we redirect to the last form.
 	 *
 	 * @since 3.06
+	 *
 	 * @param object $xml The values included in the XML.
 	 */
 	private static function set_new_form_name( &$xml ) {
@@ -103,7 +103,7 @@ class FrmXMLController {
 			}
 
 			// Use a unique key to prevent editing existing form.
-			$name = sanitize_title( $form->name );
+			$name           = sanitize_title( $form->name );
 			$form->form_key = FrmAppHelper::get_unique_key( $name, 'frm_forms', 'form_key' );
 		}
 	}
@@ -111,6 +111,8 @@ class FrmXMLController {
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+		FrmAppHelper::include_svg();
+
 		if ( 'import_xml' === $action ) {
 			return self::import_xml();
 		} elseif ( 'export_xml' === $action ) {
@@ -150,13 +152,14 @@ class FrmXMLController {
 	}
 
 	public static function import_xml() {
-		$errors = array();
+		$errors  = array();
 		$message = '';
 
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'import-xml', 'import-xml-nonce' );
 		if ( false !== $permission_error ) {
 			$errors[] = $permission_error;
 			self::form( $errors );
+
 			return;
 		}
 
@@ -164,15 +167,17 @@ class FrmXMLController {
 		if ( ! $has_file ) {
 			$errors[] = __( 'Oops, you didn\'t select a file.', 'formidable' );
 			self::form( $errors );
+
 			return;
 		}
 
-		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? $_FILES['frm_import_file']['tmp_name'] : '';
+		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? wp_unslash( $_FILES['frm_import_file']['tmp_name'] ) : '';
 
 		if ( ! is_uploaded_file( $file ) ) {
 			unset( $file );
 			$errors[] = __( 'The file does not exist, please try again.', 'formidable' );
 			self::form( $errors );
+
 			return;
 		}
 
@@ -187,10 +192,11 @@ class FrmXMLController {
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
-		$file_type = strtolower( pathinfo( $_FILES['frm_import_file']['name'], PATHINFO_EXTENSION ) );
+		$file_type = strtolower( pathinfo( wp_unslash( $_FILES['frm_import_file']['name'], PATHINFO_EXTENSION ) ) );
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {
 			// allow other file types to be imported
 			do_action( 'frm_before_import_' . $file_type );
+
 			return;
 		}
 		unset( $file_type );
@@ -198,11 +204,12 @@ class FrmXMLController {
 		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
 			$errors[] = __( 'XML import is not enabled on your server with the libxml_disable_entity_loader function.', 'formidable' );
 			self::form( $errors );
+
 			return;
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader = libxml_disable_entity_loader( true );
+		$loader  = libxml_disable_entity_loader( true );
 
 		$result = FrmXMLHelper::import_xml( $file );
 		FrmXMLHelper::parse_message( $result, $message, $errors );
@@ -221,8 +228,8 @@ class FrmXMLController {
 			wp_die( esc_html( $error ) );
 		}
 
-		$ids = FrmAppHelper::get_post_param( 'frm_export_forms', array() );
-		$type = FrmAppHelper::get_post_param( 'type', array() );
+		$ids    = FrmAppHelper::get_post_param( 'frm_export_forms', array() );
+		$type   = FrmAppHelper::get_post_param( 'type', array() );
 		$format = FrmAppHelper::get_post_param( 'format', 'xml', 'sanitize_title' );
 
 		if ( ! headers_sent() && ! $type ) {
@@ -247,17 +254,17 @@ class FrmXMLController {
 		self::prepare_types_array( $type );
 
 		$tables = array(
-			'items'     => $wpdb->prefix . 'frm_items',
-			'forms'     => $wpdb->prefix . 'frm_forms',
-			'posts'     => $wpdb->posts,
-			'styles'    => $wpdb->posts,
-			'actions'   => $wpdb->posts,
+			'items'   => $wpdb->prefix . 'frm_items',
+			'forms'   => $wpdb->prefix . 'frm_forms',
+			'posts'   => $wpdb->posts,
+			'styles'  => $wpdb->posts,
+			'actions' => $wpdb->posts,
 		);
 
 		$defaults = array(
 			'ids' => false,
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args     = wp_parse_args( $args, $defaults );
 
 		// Make sure ids are numeric.
 		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
@@ -268,10 +275,10 @@ class FrmXMLController {
 
 		foreach ( $type as $tb_type ) {
 			$where = array();
-			$join = '';
+			$join  = '';
 			$table = $tables[ $tb_type ];
 
-			$select = $table . '.id';
+			$select     = $table . '.id';
 			$query_vars = array();
 
 			switch ( $tb_type ) {
@@ -279,8 +286,8 @@ class FrmXMLController {
 					//add forms
 					if ( $args['ids'] ) {
 						$where[] = array(
-							'or'           => 1,
-							$table . '.id' => $args['ids'],
+							'or'                       => 1,
+							$table . '.id'             => $args['ids'],
 							$table . '.parent_form_id' => $args['ids'],
 						);
 					} else {
@@ -288,27 +295,27 @@ class FrmXMLController {
 					}
 					break;
 				case 'actions':
-					$select = $table . '.ID';
+					$select             = $table . '.ID';
 					$where['post_type'] = FrmFormActionsController::$action_post_type;
 					if ( ! empty( $args['ids'] ) ) {
 						$where['menu_order'] = $args['ids'];
 					}
 					break;
 				case 'items':
-					//$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
+					// $join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
 					if ( $args['ids'] ) {
 						$where[ $table . '.form_id' ] = $args['ids'];
 					}
 					break;
 				case 'styles':
-					// Loop through all exported forms and get their selected style IDs
-					$frm_style = new FrmStyle();
+					// Loop through all exported forms and get their selected style IDs.
+					$frm_style     = new FrmStyle();
 					$default_style = $frm_style->get_default_style();
-					$form_ids = $args['ids'];
-					$style_ids = array();
+					$form_ids      = $args['ids'];
+					$style_ids     = array();
 					foreach ( $form_ids as $form_id ) {
 						$form_data = FrmForm::getOne( $form_id );
-						// For forms that have not been updated while running 2.0, check if custom_style is set
+						// For forms that have not been updated while running 2.0, check if custom_style is set.
 						if ( isset( $form_data->options['custom_style'] ) ) {
 							if ( 1 === absint( $form_data->options['custom_style'] ) ) {
 								$style_ids[] = $default_style->ID;
@@ -318,17 +325,17 @@ class FrmXMLController {
 						}
 						unset( $form_id, $form_data );
 					}
-					$select = $table . '.ID';
+					$select             = $table . '.ID';
 					$where['post_type'] = 'frm_styles';
 
-					// Only export selected styles
+					// Only export selected styles.
 					if ( ! empty( $style_ids ) ) {
 						$where['ID'] = $style_ids;
 					}
 					break;
 				default:
-					$select = $table . '.ID';
-					$join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
+					$select               = $table . '.ID';
+					$join                 = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
 					$where['pm.meta_key'] = 'frm_form_id';
 
 					if ( empty( $args['ids'] ) ) {
@@ -378,10 +385,12 @@ class FrmXMLController {
 		if ( $has_one_form ) {
 			// one form is being exported
 			$selected_form_id = reset( $args['ids'] );
+			$filename         = 'form-' . $selected_form_id . '.xml';
+
 			foreach ( $records['forms'] as $form_id ) {
 				$filename = 'form-' . $form_id . '.xml';
 				if ( $selected_form_id === $form_id ) {
-					$form = FrmForm::getOne( $form_id );
+					$form     = FrmForm::getOne( $form_id );
 					$filename = sanitize_title( $form->name ) . '-form.xml';
 					break;
 				}
@@ -394,6 +403,7 @@ class FrmXMLController {
 			}
 			$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
 		}
+
 		return $filename;
 	}
 
@@ -415,8 +425,8 @@ class FrmXMLController {
 
 		if ( ! $form_id ) {
 			$form_id = FrmAppHelper::get_param( 'form', '', 'get', 'sanitize_text_field' );
-			$search = FrmAppHelper::get_param( ( isset( $_REQUEST['s'] ) ? 's' : 'search' ), '', 'get', 'sanitize_text_field' );
-			$fid = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
+			$search  = FrmAppHelper::get_param( ( isset( $_REQUEST['s'] ) ? 's' : 'search' ), '', 'get', 'sanitize_text_field' );
+			$fid     = FrmAppHelper::get_param( 'fid', '', 'get', 'sanitize_text_field' );
 		}
 
 		set_time_limit( 0 ); //Remove time limit to execute this function
@@ -427,7 +437,7 @@ class FrmXMLController {
 
 		global $wpdb;
 
-		$form = FrmForm::getOne( $form_id );
+		$form    = FrmForm::getOne( $form_id );
 		$form_id = $form->id;
 
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
@@ -466,16 +476,17 @@ class FrmXMLController {
 	}
 
 	/**
-	* Get the fields that should be included in the CSV export
-	*
-	* @since 2.0.19
-	*
-	* @param int $form_id
-	* @param object $form
-	* @return array $csv_fields
-	*/
+	 * Get the fields that should be included in the CSV export
+	 *
+	 * @since 2.0.19
+	 *
+	 * @param int $form_id
+	 * @param object $form
+	 *
+	 * @return array $csv_fields
+	 */
 	private static function get_fields_for_csv_export( $form_id, $form ) {
-		$csv_fields = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
+		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
 		$no_export_fields = FrmField::no_save_fields();
 		foreach ( $csv_fields as $k => $f ) {
 			if ( in_array( $f->type, $no_export_fields ) ) {

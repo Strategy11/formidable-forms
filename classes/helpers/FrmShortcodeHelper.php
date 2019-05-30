@@ -9,6 +9,7 @@ class FrmShortcodeHelper {
 	 * Get the shortcode attributes in key/value pairs from a string
 	 *
 	 * @since 2.02.12
+	 *
 	 * @param string $text
 	 *
 	 * @return array
@@ -30,6 +31,7 @@ class FrmShortcodeHelper {
 	 * Get the name of the shortcode from the regEx
 	 *
 	 * @since 3.0
+	 *
 	 * @param array $shortcodes
 	 * @param int $short_key The position in the shortcodes array
 	 * @param array $args
@@ -53,16 +55,16 @@ class FrmShortcodeHelper {
 		if ( $args['conditional_check'] ) {
 			if ( $args['conditional'] ) {
 				$prefix = 'if ';
-			} else if ( $args['foreach'] ) {
+			} elseif ( $args['foreach'] ) {
 				$prefix = 'foreach ';
 			}
 		}
 
 		$with_tags = $args['conditional_check'] ? 3 : 2;
 		if ( ! empty( $shortcodes[ $with_tags ][ $short_key ] ) ) {
-			$tag = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
-			$tag = str_replace( ']', '', $tag );
-			$tag = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
+			$tag  = str_replace( '[' . $prefix, '', $shortcodes[0][ $short_key ] );
+			$tag  = str_replace( ']', '', $tag );
+			$tag  = str_replace( chr( 194 ) . chr( 160 ), ' ', $tag );
 			$tags = preg_split( '/\s+/', $tag, 2 );
 			if ( is_array( $tags ) ) {
 				$tag = $tags[0];

@@ -8,10 +8,10 @@ class FrmTipsHelper {
 		}
 
 		$tips = self::$callback();
-		$tip = self::get_random_tip( $tips );
+		$tip  = self::get_random_tip( $tips );
 
 		if ( 'p' === $html ) {
-			echo '<p>';
+			echo '<p class="frmcenter frm_no_top_margin">';
 		}
 
 		if ( ! isset( $tip['page'] ) ) {
@@ -24,12 +24,20 @@ class FrmTipsHelper {
 		$link = FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] ) );
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
-			<span>
-				<i class="frm_icon_font frm_check1_icon"></i>  <?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_star_full_icon', array( 'aria-hidden' => 'true' ) ); ?>
+			<span class="pro-tip">
+				<?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
 			</span>
-			<?php echo esc_html( $tip['tip'] ) ?>
+
 			<?php if ( isset( $tip['call'] ) ) { ?>
-				<span><?php echo esc_html( $tip['call'] ) ?></span>
+				<?php echo esc_html( $tip['tip'] ); ?>
+				<span class="frm-tip-cta">
+					<?php echo esc_html( $tip['call'] ); ?>
+				</span>
+			<?php } else { ?>
+				<span class="frm-tip-cta">
+					<?php echo esc_html( $tip['tip'] ); ?>
+				</span>
 			<?php } ?>
 		</a>
 		<?php
@@ -126,6 +134,7 @@ class FrmTipsHelper {
 				'call' => __( 'Add form scheduling.', 'formidable' ),
 			),
 		);
+
 		return $tips;
 	}
 
@@ -231,10 +240,11 @@ class FrmTipsHelper {
 					'content' => 'style',
 					'anchor'  => 'feature-wordpress-visual-form-styler',
 				),
-				'tip'  => __( 'Make your sidebar or footer form stand out.', 'formidable' ),
+				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
 		);
+
 		return $tips;
 	}
 
@@ -266,6 +276,7 @@ class FrmTipsHelper {
 			),
 		);
 		$tips = array_merge( $tips, self::get_import_tip() );
+
 		return $tips;
 	}
 
@@ -280,11 +291,12 @@ class FrmTipsHelper {
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 		);
+
 		return $tips;
 	}
 
 	public static function get_banner_tip() {
-		$tips = array(
+		$tips       = array(
 			array(
 				'link' => array(
 					'medium'  => 'banner',
@@ -310,14 +322,16 @@ class FrmTipsHelper {
 				'call' => __( 'Collect instant payments, and send leads to MailChimp.', 'formidable' ),
 			),
 		);
-		$random = rand( 0, count( $tips ) - 1 );
-		$tip = $tips[ $random ];
+		$random     = rand( 0, count( $tips ) - 1 );
+		$tip        = $tips[ $random ];
 		$tip['num'] = $random;
+
 		return $tip;
 	}
 
 	public static function get_random_tip( $tips ) {
 		$random = rand( 0, count( $tips ) - 1 );
+
 		return $tips[ $random ];
 	}
 }

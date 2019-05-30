@@ -26,9 +26,9 @@ function frm_install_now(){
 }
 
 function frmInstallPro( e ){
-	var plugin = jQuery(this).data('prourl');
+	var plugin = this.getAttribute('data-prourl');
 	if ( plugin === '' ) {
-		return false;
+		return true;
 	}
 
 	e.preventDefault();
@@ -78,16 +78,6 @@ function frmSelectSubnav(){
     jQuery('#toplevel_page_formidable a.wp-has-submenu').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu wp-menu-open');
 }
 
-function frmPrePop(opts){
-    jQuery(document.getElementById('frm_bulk_options')).val(opts.join("\n"));
-    return false;
-}
-
-function frmUpdateBulkOpts(fieldID) {
-    window.top.frmAdminBuild.updateOpts(fieldID,document.getElementById('frm_bulk_options').value);
-    window.top.tb_remove();
-}
-
 function frmCreatePostEntry(id,post_id){
     jQuery('#frm_create_entry p').replaceWith('<img src="'+ frmGlobal.url +'/images/wpspin_light.gif" alt="'+ frmGlobal.loading +'" />');
     jQuery.ajax({
@@ -102,7 +92,7 @@ function frmAdminPopupJS(){
         jQuery('.frm_switch_sc').removeClass( 'active' );
         jQuery(this).addClass( 'active' );
         toggleMenu();
-        jQuery('#frm_popup_content .media-frame-title h1').html(jQuery(this).children('.howto').text() +' <span class="spinner" style="float:left;"></span><span class="dashicons dashicons-arrow-down"></span>');
+        jQuery('#frm_popup_content .media-frame-title h1').html(jQuery(this).children('.howto').text() +' <span class="spinner" style="float:left;"></span>');
         var val = this.id.replace('sc-link-', '');
         populateOpts(val);
         return false;

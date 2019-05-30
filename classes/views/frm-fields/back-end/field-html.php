@@ -1,6 +1,6 @@
-<div class="frm_html_field_placeholder">
-<div class="howto button-secondary frm_html_field">
-	<?php esc_html_e( 'This is a placeholder for your custom HTML.', 'formidable' ) ?><br/>
-	<?php esc_html_e( 'You can edit this content in the field settings.', 'formidable' ) ?>
-</div>
+<div class="frm-embed-field-placeholder">
+	<div class="frm-embed-message">
+		<?php esc_html_e( 'Custom HTML:', 'formidable' ); ?>
+		<?php echo esc_html( FrmAppHelper::truncate( htmlentities( $field['description'] ), 60 ) ); ?>
+	</div>
 </div>

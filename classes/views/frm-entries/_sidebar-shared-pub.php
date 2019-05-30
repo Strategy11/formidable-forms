@@ -1,27 +1,34 @@
 <?php
 if ( ! isset( $entry ) ) {
-    $entry = $record;
+	$entry = $record;
 } ?>
 
-<div class="misc-pub-section curtime misc-pub-curtime">
-    <span id="timestamp">
-    <?php
-    $date_format = __( 'M j, Y @ G:i', 'formidable' );
-	printf( esc_html__( 'Published on: %1$s', 'formidable' ), '<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ) . '</b>' );
+<div class="misc-pub-section">
+	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<span id="timestamp">
+	<?php
+	$date_format = __( 'M j, Y @ G:i', 'formidable' );
+	printf(
+		/* translators: %1$s: The date */
+		esc_html__( 'Submitted: %1$s', 'formidable' ),
+		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->created_at ) ) . '</b>'
+	);
 	?>
-    </span>
+	</span>
 </div>
-<?php if ( FrmAppHelper::get_param( 'frm_action' ) == 'show' ) { ?>
-<div class="misc-pub-section frm_no_print">
-	<span class="dashicons dashicons-format-aside wp-media-buttons-icon"></span>
-	<a href="#" onclick="window.print();return false;"><?php esc_html_e( 'Print', 'formidable' ) ?></a>
-</div>
-<?php } ?>
+
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
-<div class="misc-pub-section curtime misc-pub-curtime">
-    <span id="timestamp">
-	<?php printf( esc_html__( 'Updated on: %1$s', 'formidable' ), '<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->updated_at ) ) . '</b>' ); ?>
-    </span>
+<div class="misc-pub-section">
+	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<span id="timestamp">
+	<?php
+	printf(
+		/* translators: %1$s: The date */
+		esc_html__( 'Updated: %1$s', 'formidable' ),
+		'<b>' . esc_html( FrmAppHelper::get_localized_date( $date_format, $entry->updated_at ) ) . '</b>'
+	);
+	?>
+	</span>
 </div>
 <?php } ?>
 

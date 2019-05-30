@@ -1,3 +1,4 @@
-<p class="howto frm_clear">
-	<?php esc_html_e( 'Note: This field will not show in the form, but will link the user id to it as long as the user is logged in at the time of form submission.', 'formidable' ) ?>
-</p>
+<span class="frm-with-left-icon">
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<input type="text" value="<?php esc_attr_e( 'User ID fields will not show in your form.', 'formidable' ); ?>" disabled />
+</span>

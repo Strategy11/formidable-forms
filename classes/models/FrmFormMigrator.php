@@ -49,7 +49,8 @@ abstract class FrmFormMigrator {
 						Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>. <br/>
 						Select the forms to import.
 					</p>
-					<form id="frm_form_importer" method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+					<form id="frm_form_importer" method="post"
+						action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
@@ -57,13 +58,14 @@ abstract class FrmFormMigrator {
 							<?php foreach ( $this->get_forms() as $form_id => $name ) { ?>
 								<p>
 									<label>
-										<input type="checkbox" name="form_id[]" value="<?php echo esc_attr( $form_id ); ?>" checked="checked" />
+										<input type="checkbox" name="form_id[]"
+											value="<?php echo esc_attr( $form_id ); ?>" checked="checked" />
 										<?php
 										echo esc_html( $name );
 										$new_form_id = $this->is_imported( $form_id );
 										?>
 										<?php if ( $new_form_id ) { ?>
-											(<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $new_form_id ) ); ?>">previously imported</a>)
+											(<a href="<?php echo esc_url( FrmForm::get_edit_link( $new_form_id ) ); ?>">previously imported</a>)
 										<?php } ?>
 									</label>
 								</p>
@@ -74,12 +76,14 @@ abstract class FrmFormMigrator {
 					<div id="frm-importer-process" class="frm_hidden">
 
 						<p class="process-count">
-							<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-							Importing <span class="form-current">1</span> of <span class="form-total">0</span> forms from <?php echo esc_html( $this->name ); ?>.
+							<span class="frm-wait" aria-hidden="true"></span>
+							Importing <span class="form-current">1</span> of <span class="form-total">0</span> forms
+							from <?php echo esc_html( $this->name ); ?>.
 						</p>
 
 						<p class="process-completed" class="frm_hidden">
-							The import process has finished! We have successfully imported <span class="forms-completed"></span> forms. You can review the results below.
+							The import process has finished! We have successfully imported
+							<span class="forms-completed"></span> forms. You can review the results below.
 						</p>
 
 						<div class="status"></div>
@@ -124,9 +128,9 @@ abstract class FrmFormMigrator {
 	 */
 	protected function import_form( $source_id ) {
 
-		$source_form        = $this->get_form( $source_id );
-		$source_form_name   = $this->get_form_name( $source_form );
-		$source_fields      = $this->get_form_fields( $source_id );
+		$source_form      = $this->get_form( $source_id );
+		$source_form_name = $this->get_form_name( $source_form );
+		$source_fields    = $this->get_form_fields( $source_id );
 
 		// If form does not contain fields, bail.
 		if ( empty( $source_fields ) ) {
@@ -181,15 +185,15 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_field             = FrmFieldsHelper::setup_new_vars( $this->convert_field_type( $type ) );
-			$new_field['name']     = $label;
+			$new_field                = FrmFieldsHelper::setup_new_vars( $this->convert_field_type( $type ) );
+			$new_field['name']        = $label;
 			$new_field['field_order'] = $field_order;
-			$new_field['original'] = $type;
+			$new_field['original']    = $type;
 
 			$this->prepare_field( $field, $new_field );
 			$form['fields'][] = $new_field;
 
-			$field_order++;
+			$field_order ++;
 		}
 	}
 
@@ -231,7 +235,7 @@ abstract class FrmFormMigrator {
 		}
 
 		foreach ( $form['fields'] as $key => $new_field ) {
-			$new_field['form_id'] = $form_id;
+			$new_field['form_id']         = $form_id;
 			$form['fields'][ $key ]['id'] = FrmField::create( $new_field );
 		}
 
@@ -255,10 +259,10 @@ abstract class FrmFormMigrator {
 
 		// Build and send final AJAX response!
 		return array(
-			'name'          => $form['name'],
-			'id'            => $form_id,
-			'link'          => esc_url_raw( admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id ) ),
-			'upgrade_omit'  => $this->response['upgrade_omit'],
+			'name'         => $form['name'],
+			'id'           => $form_id,
+			'link'         => esc_url_raw( FrmForm::get_edit_link( $form_id ) ),
+			'upgrade_omit' => $this->response['upgrade_omit'],
 		);
 	}
 
@@ -292,11 +296,12 @@ abstract class FrmFormMigrator {
 	 * @return int the ID of the created form or 0
 	 */
 	private function is_imported( $source_id ) {
-		$imported = $this->get_tracked_import();
+		$imported    = $this->get_tracked_import();
 		$new_form_id = 0;
 		if ( isset( $imported[ $this->slug ] ) && in_array( $source_id, $imported[ $this->slug ] ) ) {
 			$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
 		}
+
 		return $new_form_id;
 	}
 
@@ -311,6 +316,7 @@ abstract class FrmFormMigrator {
 
 	private function is_unsupported_field( $type ) {
 		$fields = $this->unsupported_field_types();
+
 		return in_array( $type, $fields, true );
 	}
 
@@ -325,6 +331,7 @@ abstract class FrmFormMigrator {
 
 	private function should_skip_field( $type ) {
 		$skip_pro_fields = $this->skip_pro_fields();
+
 		return ( ! FrmAppHelper::pro_is_installed() && in_array( $type, $skip_pro_fields, true ) );
 	}
 
@@ -332,7 +339,7 @@ abstract class FrmFormMigrator {
 	 * Replace 3rd-party form provider tags/shortcodes with our own Tags.
 	 *
 	 * @param string $string String to process the smart tag in.
-	 * @param array  $fields List of fields for the form.
+	 * @param array $fields List of fields for the form.
 	 *
 	 * @return string
 	 */
@@ -355,6 +362,7 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @param object|array $source_form
+	 *
 	 * @return string
 	 */
 	protected function get_form_name( $source_form ) {
@@ -363,6 +371,7 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @param object|array|int $source_form
+	 *
 	 * @return array
 	 */
 	protected function get_form_fields( $source_form ) {
@@ -371,6 +380,7 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @param object|array $field
+	 *
 	 * @return string
 	 */
 	protected function get_field_type( $field ) {
@@ -383,7 +393,7 @@ abstract class FrmFormMigrator {
 	 * @return string
 	 */
 	protected function get_field_label( $field ) {
-		$type = $this->get_field_type( $field );
+		$type  = $this->get_field_type( $field );
 		$label = sprintf(
 			/* translators: %1$s - field type */
 			esc_html__( '%1$s Field', 'formidable' ),

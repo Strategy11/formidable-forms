@@ -14,8 +14,8 @@ $wp_list_table->views();
 ?>
 
 <form id="posts-filter" method="get">
-    <input type="hidden" name="page" value="<?php echo esc_attr( FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) ?>" />
-    <input type="hidden" name="frm_action" value="list" />
+	<input type="hidden" name="page" value="<?php echo esc_attr( FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ); ?>" />
+	<input type="hidden" name="frm_action" value="list" />
 <?php
 
 $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' );

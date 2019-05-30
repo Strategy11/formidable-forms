@@ -193,7 +193,7 @@ class FrmEntryValues {
 			$entry_description = (array) maybe_unserialize( $this->entry->description );
 		} else {
 			$entry_description = array(
-				'browser' => '',
+				'browser'  => '',
 				'referrer' => '',
 			);
 		}
@@ -205,7 +205,7 @@ class FrmEntryValues {
 
 		$browser = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
-			'value'   => FrmEntriesHelper::get_browser( $entry_description['browser'] ),
+			'value' => FrmEntriesHelper::get_browser( $entry_description['browser'] ),
 		);
 
 		$referrer = array(
@@ -214,8 +214,8 @@ class FrmEntryValues {
 		);
 
 		$this->user_info = array(
-			'ip' => $ip,
-			'browser' => $browser,
+			'ip'       => $ip,
+			'browser'  => $browser,
 			'referrer' => $referrer,
 		);
 	}
@@ -243,7 +243,7 @@ class FrmEntryValues {
 	protected function is_field_included( $field ) {
 		if ( ! empty( $this->include_fields ) ) {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
-		} else if ( ! empty( $this->exclude_fields ) ) {
+		} elseif ( ! empty( $this->exclude_fields ) ) {
 			$is_included = ! $this->is_field_in_array( $field, $this->exclude_fields );
 		} else {
 			$is_included = true;

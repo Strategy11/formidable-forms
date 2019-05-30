@@ -2,7 +2,7 @@
 
 class FrmFormApi {
 
-	protected $license   = '';
+	protected $license = '';
 	protected $cache_key = '';
 	protected $cache_timeout = '+6 hours';
 
@@ -67,7 +67,7 @@ class FrmFormApi {
 
 		$response = wp_remote_get( $url );
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-		    $addons = $response['body'];
+			$addons = $response['body'];
 			if ( ! empty( $addons ) ) {
 				$addons = json_decode( $addons, true );
 
@@ -104,7 +104,9 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @param object $license_plugin The FrmAddon object
+	 *
 	 * @return array
 	 */
 	public function get_addon_for_license( $license_plugin, $addons = array() ) {
@@ -112,7 +114,7 @@ class FrmFormApi {
 			$addons = $this->get_api_info();
 		}
 		$download_id = $license_plugin->download_id;
-		$plugin = array();
+		$plugin      = array();
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license_plugin->plugin_name ) == strtolower( $addon['title'] ) ) {
@@ -133,6 +135,7 @@ class FrmFormApi {
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {
 			$updater = FrmProAppHelper::get_updater();
 			$this->set_license( $updater->license );
+
 			return $updater;
 		}
 
@@ -150,6 +153,13 @@ class FrmFormApi {
 			return false; // Cache is expired
 		}
 
+		$version     = FrmAppHelper::plugin_version();
+		$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
+		if ( ! $for_current ) {
+			// Force a new check.
+			return false;
+		}
+
 		return json_decode( $cache['value'], true );
 	}
 
@@ -160,6 +170,7 @@ class FrmFormApi {
 		$data = array(
 			'timeout' => strtotime( $this->cache_timeout, current_time( 'timestamp' ) ),
 			'value'   => json_encode( $addons ),
+			'version' => FrmAppHelper::plugin_version(),
 		);
 
 		update_option( $this->cache_key, $data, 'no' );
@@ -181,6 +192,7 @@ class FrmFormApi {
 		if ( ! empty( $this->license ) ) {
 			$errors = $this->get_error_from_response();
 		}
+
 		return $errors;
 	}
 
@@ -197,6 +209,7 @@ class FrmFormApi {
 			$errors[] = $addons['error']['message'];
 			do_action( 'frm_license_error', $addons['error'] );
 		}
+
 		return $errors;
 	}
 }

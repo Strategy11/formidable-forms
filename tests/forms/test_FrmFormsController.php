@@ -77,7 +77,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		foreach ( $fields as $field ) {
 			$_POST['frm_fields_submitted'][] = $field->id;
-			$_POST['item_meta'][ $field->id ] = 'default';
+			$_POST[ 'default_value_' . $field->id ] = 'default';
 
 			$field_options = array(
 				'description_' . $field->id => '',
@@ -121,7 +121,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		// Compare to posted values
 		foreach ( $fields as $field ) {
 			// Check default value
-			$posted_val = $_POST['item_meta'][ $field->id ];
+			$posted_val = $_POST[ 'default_value_' . $field->id ];
 			$actual_val = $field->default_value;
 			$this->assertEquals( $posted_val, $actual_val, 'The default value was not updated correctly for field ' . $field->field_key . '.' );
 		}

@@ -33,7 +33,6 @@ fi
 # Generate the plugin zip file.
 status "Creating archive..."
 zip -r $zipname $destination \
-	-x "*/jquery.editinplace.js" \
 	-x "*/.*" \
 	-x "*/.git/*" \
 	-x "*/bin/*" \

@@ -16,16 +16,16 @@ class FrmSimpleBlocksController {
 			true
 		);
 
-		$icon = str_replace( 'dashicons-', '', apply_filters( 'frm_icon', 'svg' ) );
+		$icon       = str_replace( 'dashicons-', '', apply_filters( 'frm_icon', 'svg' ) );
 		$block_name = FrmAppHelper::get_menu_name();
 		if ( $block_name === 'Formidable' ) {
 			$block_name = 'Formidable Forms';
 		}
 
 		$script_vars = array(
-			'forms'        => self::get_forms_options(),
-			'icon'         => $icon,
-			'name'         => $block_name,
+			'forms' => self::get_forms_options(),
+			'icon'  => $icon,
+			'name'  => $block_name,
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
@@ -134,6 +134,7 @@ class FrmSimpleBlocksController {
 		unset( $params['formId'] );
 
 		$form = FrmFormsController::get_form_shortcode( $params );
+
 		return str_replace( ' frm_logic_form ', ' ', $form ); // prevent the form from hiding
 	}
 }

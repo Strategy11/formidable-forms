@@ -10,7 +10,7 @@ class FrmFieldFormHtml {
 	private $html_id;
 
 	/**
-	 *   @var FrmFieldType
+	 * @var FrmFieldType
 	 */
 	private $field_obj;
 
@@ -83,8 +83,8 @@ class FrmFieldFormHtml {
 	 */
 	private function set_pass_args( $atts ) {
 		$this->pass_args = $atts;
-		$exclude = array( 'field_obj', 'html' );
 
+		$exclude = array( 'field_obj', 'html' );
 		foreach ( $exclude as $ex ) {
 			if ( isset( $atts[ $ex ] ) ) {
 				unset( $this->pass_args[ $ex ] );
@@ -167,7 +167,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
-		$is_html = 'html' === $this->field_obj->get_field_column( 'type' );
+		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
 		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
@@ -250,7 +250,7 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_required_class() {
 		$required_class = FrmField::is_required( $this->field_obj->get_field() ) ? ' frm_required_field' : '';
-		$this->html = str_replace( '[required_class]', $required_class, $this->html );
+		$this->html     = str_replace( '[required_class]', $required_class, $this->html );
 	}
 
 	/**
@@ -317,7 +317,7 @@ class FrmFieldFormHtml {
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-			$tag = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
+			$tag            = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
 
 			$replace_with = '';
 
@@ -338,6 +338,7 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
+
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 
@@ -348,7 +349,7 @@ class FrmFieldFormHtml {
 	 */
 	private function prepare_input_shortcode_atts( $shortcode_atts ) {
 		if ( isset( $shortcode_atts['opt'] ) ) {
-			$shortcode_atts['opt']--;
+			$shortcode_atts['opt'] --;
 		}
 
 		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
@@ -375,7 +376,7 @@ class FrmFieldFormHtml {
 	 */
 	private function add_class_to_label() {
 		$label_class = $this->field_obj->get_label_class();
-		$this->html = str_replace( '[label_position]', $label_class, $this->html );
+		$this->html  = str_replace( '[label_position]', $label_class, $this->html );
 		if ( $this->field_obj->get_field_column( 'label' ) == 'inside' && $this->field_obj->get_field_column( 'value' ) != '' ) {
 			$this->html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $this->html );
 		}
@@ -387,7 +388,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_entry_key() {
-		$entry_key = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
+		$entry_key  = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
 		$this->html = str_replace( '[entry_key]', $entry_key, $this->html );
 	}
 
@@ -405,7 +406,6 @@ class FrmFieldFormHtml {
 		}
 		$this->html = str_replace( '[error_class]', $classes, $this->html );
 	}
-
 
 	/**
 	 * Get the classes for a field div

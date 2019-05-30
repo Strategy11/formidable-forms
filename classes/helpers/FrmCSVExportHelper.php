@@ -2,22 +2,23 @@
 
 class FrmCSVExportHelper {
 
-	protected static $separator        = ', ';
+	protected static $separator = ', ';
 	protected static $column_separator = ',';
-	protected static $line_break       = 'return';
-	protected static $charset          = 'UTF-8';
-	protected static $to_encoding      = 'UTF-8';
-	protected static $wp_date_format   = 'Y-m-d H:i:s';
-	protected static $comment_count    = 0;
-	protected static $form_id          = 0;
-	protected static $headings         = array();
-	protected static $fields           = array();
+	protected static $line_break = 'return';
+	protected static $charset = 'UTF-8';
+	protected static $to_encoding = 'UTF-8';
+	protected static $wp_date_format = 'Y-m-d H:i:s';
+	protected static $comment_count = 0;
+	protected static $form_id = 0;
+	protected static $headings = array();
+	protected static $fields = array();
 	protected static $entry;
 	protected static $has_parent_id;
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
 		$formats = apply_filters( 'frm_csv_format_options', $formats );
+
 		return $formats;
 	}
 
@@ -25,7 +26,7 @@ class FrmCSVExportHelper {
 		global $frm_vars;
 		$frm_vars['prevent_caching'] = true;
 
-		self::$fields = $atts['form_cols'];
+		self::$fields  = $atts['form_cols'];
 		self::$form_id = $atts['form']->id;
 		self::set_class_paramters();
 		self::set_has_parent_id( $atts['form'] );
@@ -36,11 +37,11 @@ class FrmCSVExportHelper {
 		self::print_file_headers( $filename );
 		unset( $filename );
 
-		$comment_count = FrmDb::get_count(
+		$comment_count       = FrmDb::get_count(
 			'frm_item_metas',
 			array(
-				'item_id'  => $atts['entry_ids'],
-				'field_id' => 0,
+				'item_id'         => $atts['entry_ids'],
+				'field_id'        => 0,
 				'meta_value like' => '{',
 			),
 			array(
@@ -60,13 +61,14 @@ class FrmCSVExportHelper {
 	}
 
 	private static function set_class_paramters() {
-		self::$separator = apply_filters( 'frm_csv_sep', self::$separator );
-		self::$line_break = apply_filters( 'frm_csv_line_break', self::$line_break );
+		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator );
+		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break );
 		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format );
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( $_POST['csv_col_sep'] ) : self::$column_separator;
+		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator;
+
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep );
 	}
 
@@ -93,15 +95,15 @@ class FrmCSVExportHelper {
 	}
 
 	public static function get_csv_format() {
-		$csv_format = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
-		$csv_format = apply_filters( 'frm_csv_format', $csv_format );
+		$csv_format        = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
+		$csv_format        = apply_filters( 'frm_csv_format', $csv_format );
 		self::$to_encoding = $csv_format;
 	}
 
 	private static function prepare_csv_headings() {
 		$headings = array();
 		self::csv_headings( $headings );
-		$headings = apply_filters(
+		$headings       = apply_filters(
 			'frm_csv_columns',
 			$headings,
 			self::$form_id,
@@ -117,25 +119,27 @@ class FrmCSVExportHelper {
 	private static function csv_headings( &$headings ) {
 		foreach ( self::$fields as $col ) {
 			$field_headings = array();
-			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, array( 'user_id', 'file', 'data', 'date' ), true ) ) {
+			$separate_values = array( 'user_id', 'file', 'data', 'date' );
+			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, $separate_values, true ) ) {
 				$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 			}
 
 			$field_headings[ $col->id ] = strip_tags( $col->name );
-			$field_headings = apply_filters(
+			$field_headings             = apply_filters(
 				'frm_csv_field_columns',
 				$field_headings,
 				array(
 					'field' => $col,
 				)
 			);
+
 			$headings += $field_headings;
 		}
 
 		if ( self::$comment_count ) {
-			for ( $i = 0; $i < self::$comment_count; $i++ ) {
-				$headings[ 'comment' . $i ] = __( 'Comment', 'formidable' );
-				$headings[ 'comment_user_id' . $i ] = __( 'Comment User', 'formidable' );
+			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
+				$headings[ 'comment' . $i ]            = __( 'Comment', 'formidable' );
+				$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
 				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
 			}
 			unset( $i );
@@ -143,12 +147,12 @@ class FrmCSVExportHelper {
 
 		$headings['created_at'] = __( 'Timestamp', 'formidable' );
 		$headings['updated_at'] = __( 'Last Updated', 'formidable' );
-		$headings['user_id'] = __( 'Created By', 'formidable' );
+		$headings['user_id']    = __( 'Created By', 'formidable' );
 		$headings['updated_by'] = __( 'Updated By', 'formidable' );
-		$headings['is_draft'] = __( 'Draft', 'formidable' );
-		$headings['ip'] = __( 'IP', 'formidable' );
-		$headings['id'] = __( 'ID', 'formidable' );
-		$headings['item_key'] = __( 'Key', 'formidable' );
+		$headings['is_draft']   = __( 'Draft', 'formidable' );
+		$headings['ip']         = __( 'IP', 'formidable' );
+		$headings['id']         = __( 'ID', 'formidable' );
+		$headings['item_key']   = __( 'Key', 'formidable' );
 		if ( self::has_parent_id() ) {
 			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
 		}
@@ -160,9 +164,9 @@ class FrmCSVExportHelper {
 
 	private static function prepare_next_csv_rows( $next_set ) {
 		// order by parent_item_id so children will be first
-		$where = array(
-			'or' => 1,
-			'id' => $next_set,
+		$where   = array(
+			'or'             => 1,
+			'id'             => $next_set,
 			'parent_item_id' => $next_set,
 		);
 		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
@@ -248,14 +252,15 @@ class FrmCSVExportHelper {
 					$field_value,
 					$col,
 					array(
-						'type'      => $col->type,
-						'post_id'   => self::$entry->post_id,
-						'show_icon' => false,
-						'entry_id'  => self::$entry->id,
-						'sep'       => self::$separator,
+						'type'              => $col->type,
+						'post_id'           => self::$entry->post_id,
+						'show_icon'         => false,
+						'entry_id'          => self::$entry->id,
+						'sep'               => self::$separator,
 						'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
 					)
 				);
+
 				$row[ $col->id . '_label' ] = $sep_value;
 				unset( $sep_value );
 			}
@@ -283,12 +288,12 @@ class FrmCSVExportHelper {
 	private static function add_entry_data_to_csv( &$row ) {
 		$row['created_at'] = FrmAppHelper::get_formatted_time( self::$entry->created_at, self::$wp_date_format, ' ' );
 		$row['updated_at'] = FrmAppHelper::get_formatted_time( self::$entry->updated_at, self::$wp_date_format, ' ' );
-		$row['user_id'] = self::$entry->user_id;
+		$row['user_id']    = self::$entry->user_id;
 		$row['updated_by'] = self::$entry->updated_by;
-		$row['is_draft'] = self::$entry->is_draft ? '1' : '0';
-		$row['ip'] = self::$entry->ip;
-		$row['id'] = self::$entry->id;
-		$row['item_key'] = self::$entry->item_key;
+		$row['is_draft']   = self::$entry->is_draft ? '1' : '0';
+		$row['ip']         = self::$entry->ip;
+		$row['id']         = self::$entry->id;
+		$row['item_key']   = self::$entry->item_key;
 		if ( self::has_parent_id() ) {
 			$row['parent_id'] = self::$entry->parent_item_id;
 		}
@@ -344,7 +349,7 @@ class FrmCSVExportHelper {
 		}
 
 		return self::escape_csv( $line );
-    }
+	}
 
 	/**
 	 * Escape a " in a csv with another "
@@ -357,6 +362,7 @@ class FrmCSVExportHelper {
 			$value = "'" . $value;
 		}
 		$value = str_replace( '"', '""', $value );
+
 		return $value;
 	}
 }

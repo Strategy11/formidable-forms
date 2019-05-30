@@ -18,11 +18,12 @@ class FrmFieldSelect extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	protected function include_form_builder_file() {
-		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/dropdown-field.php';
+		return $this->include_front_form_file();
 	}
 
 	protected function field_settings_for_type() {
 		return array(
+			'clear_on_focus' => true,
 			'size' => true,
 		);
 	}
@@ -38,6 +39,14 @@ class FrmFieldSelect extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @since 4.0
+	 * @param array $args - Includes 'field', 'display', and 'values'
+	 */
+	public function show_extra_field_choices( $args ) {
+		$this->auto_width_setting( $args );
+	}
+
 	protected function include_front_form_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/dropdown-field.php';
 	}
@@ -50,6 +59,7 @@ class FrmFieldSelect extends FrmFieldType {
 		if ( FrmField::is_option_true( $this->field, 'multiple' ) ) {
 			$value = $this->get_multi_opts_for_import( $value );
 		}
+
 		return $value;
 	}
 }

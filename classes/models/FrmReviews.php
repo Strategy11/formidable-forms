@@ -53,8 +53,8 @@ class FrmReviews {
 			update_user_meta( $user_id, $this->option_name, $default );
 		}
 
-		$review = array_merge( $default, (array) $review );
-		$review['asked'] = (int) $review['asked'];
+		$review              = array_merge( $default, (array) $review );
+		$review['asked']     = (int) $review['asked'];
 		$this->review_status = $review;
 	}
 
@@ -62,13 +62,12 @@ class FrmReviews {
 	 * Maybe show review request
 	 *
 	 * @since 3.04.03
-	 * @param int $asked
 	 */
 	private function review() {
 
 		// show the review request 3 times, depending on the number of entries
 		$show_intervals = array( 50, 200, 500 );
-		$asked = $this->review_status['asked'];
+		$asked          = $this->review_status['asked'];
 
 		if ( ! isset( $show_intervals[ $asked ] ) ) {
 			return;
@@ -83,6 +82,7 @@ class FrmReviews {
 			// check the entry count again in a week
 			$this->review_status['time'] = time();
 			update_user_meta( $user->ID, $this->option_name, $this->review_status );
+
 			return;
 		}
 
@@ -122,7 +122,7 @@ class FrmReviews {
 			wp_die();
 		}
 
-		$dismissed = FrmAppHelper::get_post_param( 'link', 'no', 'sanitize_text_field' );
+		$dismissed           = FrmAppHelper::get_post_param( 'link', 'no', 'sanitize_text_field' );
 		$review['time']      = time();
 		$review['dismissed'] = $dismissed === 'done' ? true : 'later';
 		$review['asked']     = isset( $review['asked'] ) ? $review['asked'] + 1 : 1;

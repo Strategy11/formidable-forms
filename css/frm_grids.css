@@ -49,6 +49,7 @@
 	grid-column: span 12 / span 12;
 }
 
+.frm_inline,
 .frm_form_field.frm_left_inline,
 .frm_form_field.frm_first_inline,
 .frm_form_field.frm_inline,
@@ -59,6 +60,8 @@
 	grid-column: span 2 / span 2;
 }
 
+.frm6,
+.frm_half,
 .frm_form_field.frm_three_fifths, /* 5ths deprecated */
 .frm_form_field.frm6,
 .frm_submit.frm6,
@@ -71,6 +74,8 @@
     grid-column:span 6 / span 6;
 }
 
+.frm4,
+.frm_third,
 .frm_form_field.frm_two_fifths, /* 5ths deprecated */
 .frm_form_field.frm4,
 .frm_submit.frm4,
@@ -83,6 +88,8 @@
     grid-column:span 4 / span 4;
 }
 
+.frm8,
+.frm_two_thirds,
 .frm_form_field.frm8,
 .frm_submit.frm8,
 .frm_form_field.frm_left_two_thirds,
@@ -93,6 +100,8 @@
     grid-column: span 8/span 8;
 }
 
+.frm3,
+.frm_fourth,
 .frm_form_field.frm3,
 .frm_submit.frm3,
 .frm_form_field.frm_left_fourth,
@@ -104,6 +113,8 @@
     grid-column: span 3/span 3;
 }
 
+.frm9,
+.frm_three_fourths,
 .frm_form_field.frm_four_fifths, /* 5ths deprecated */
 .frm_form_field.frm9,
 .frm_submit.frm9,
@@ -121,6 +132,8 @@
     grid-column: span 2/span 2;
 }
 
+.frm2,
+.frm_sixth,
 .frm_form_field.frm2,
 .frm_submit.frm2,
 .frm_form_field.frm_sixth,
@@ -130,11 +143,13 @@
     grid-column: span 2/span 2;
 }
 
+.frm10,
 .frm_form_field.frm10,
 .frm_submit.frm10{
 	grid-column: span 10/span 10;
 }
 
+.frm1,
 .frm_form_field.frm1,
 .frm_submit.frm1,
 /* 7ths and 8ths are deprecated */
@@ -149,16 +164,19 @@
     grid-column: span 1/span 1;
 }
 
+.frm5,
 .frm_form_field.frm5,
 .frm_submit.frm5{
 	grid-column: span 5/span 5;
 }
 
+.frm7,
 .frm_form_field.frm7,
 .frm_submit.frm7{
 	grid-column: span 7/span 7;
 }
 
+.frm11,
 .frm_form_field.frm11,
 .frm_submit.frm11{
 	grid-column: span 11/span 11;
@@ -172,12 +190,14 @@
 .frm_full textarea{
     width:100% !important;
 	grid-column: span 12/span 12;
+	box-sizing: border-box;
 }
 
 .frm_full .wp-editor-wrap input{
     width:auto !important;
 }
 
+.frm_first,
 .frm_form_field.frm_left_half,
 .frm_form_field.frm_left_third,
 .frm_form_field.frm_left_two_thirds,
@@ -197,6 +217,7 @@
 	grid-column-start:1;
 }
 
+.frm_last,
 .frm_form_field.frm_last,
 .frm_form_field.frm_alignright{
 	grid-column-end:-1;
@@ -318,12 +339,6 @@
 @keyframes fadeIn {
    0% {opacity: 0;}
    100% {opacity: 1;}
-}
-
-@media only screen and (max-width: 700px) {
-	.frm_form_fields .frm_fields_container{
-		grid-gap: 0 2%;
-	}
 }
 
 @media only screen and (max-width: 600px) {
