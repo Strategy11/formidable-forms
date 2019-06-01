@@ -860,12 +860,18 @@ function frmFrontFormJS(){
 		},
 
 		renderRecaptcha: function( captcha ) {
-			var size = captcha.getAttribute('data-size');
-			var params = {
-				'sitekey': captcha.getAttribute('data-sitekey'),
-				'size': size,
-				'theme': captcha.getAttribute('data-theme')
-			};
+			var size = captcha.getAttribute('data-size'),
+				rendered = captcha.getAttribute('data-rid') !== null,
+				params = {
+					'sitekey': captcha.getAttribute('data-sitekey'),
+					'size': size,
+					'theme': captcha.getAttribute('data-theme')
+				};
+
+			if ( rendered ) {
+				return;
+			}
+
 			if ( size === 'invisible' ) {
 				var formID = jQuery(captcha).closest('form').find('input[name="form_id"]').val();
 				jQuery(captcha).closest('.frm_form_field').hide();
