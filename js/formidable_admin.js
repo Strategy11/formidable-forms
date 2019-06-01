@@ -1019,15 +1019,27 @@ function frmAdminBuildJS() {
 			if ( typeof fieldId !== 'undefined' && fieldId ) {
 				fields.push( {
 					'fieldId': fieldId,
-					'fieldName': document.getElementById( 'frm_name_' + fieldId ).value,
-					'fieldType': document.getElementById( 'field_options_type_' + fieldId ).value,
-					'fieldKey': document.getElementById( 'field_options_field_key_' + fieldId ).value
+					'fieldName': getPossibleValue( 'frm_name_' + fieldId ),
+					'fieldType': getPossibleValue( 'field_options_type_' + fieldId ),
+					'fieldKey': getPossibleValue( 'field_options_field_key_' + fieldId )
 				} );
 			}
 
 			if ( i === allFields.length - 1 ) {
 				return fields;
 			}
+		}
+	}
+
+	/**
+	 * If the element doesn't exist, use a blank value.
+	 */
+	function getPossibleValue( id ) {
+		field = document.getElementById( id );
+		if ( field !== null ) {
+			return field.value;
+		} else {
+			return '';
 		}
 	}
 
@@ -1488,9 +1500,9 @@ function frmAdminBuildJS() {
 				action: 'frm_add_logic_row',
 				form_id: form_id,
 				field_id: id,
-				fields: getFieldList(),
+				nonce: frmGlobal.nonce,
 				meta_name: meta_name,
-				nonce: frmGlobal.nonce
+				fields: getFieldList()
 			},
 			success: function( html ) {
 				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'slow', function() {

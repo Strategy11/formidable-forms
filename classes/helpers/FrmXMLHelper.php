@@ -1349,7 +1349,7 @@ class FrmXMLHelper {
 			if ( $switch ) {
 
 				// Switch field IDs in email conditional logic
-				self::switch_email_contition_field_ids( $new_notification['post_content'] );
+				self::switch_email_condition_field_ids( $new_notification['post_content'] );
 
 				// Switch all other field IDs in email
 				$new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
@@ -1527,7 +1527,7 @@ class FrmXMLHelper {
 	 *
 	 * @param $post_content array, pass by reference
 	 */
-	private static function switch_email_contition_field_ids( &$post_content ) {
+	private static function switch_email_condition_field_ids( &$post_content ) {
 		// Switch field IDs in conditional logic
 		if ( isset( $post_content['conditions'] ) && is_array( $post_content['conditions'] ) ) {
 			foreach ( $post_content['conditions'] as $email_key => $val ) {
