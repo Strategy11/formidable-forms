@@ -4662,8 +4662,8 @@ li.selected .divider_section_only:before {
 }
 
 #frm-form-button button,
-.frm_remove_form_row,
-.frm_add_form_row,
+.frm_remove_form_row.frm_button,
+.frm_add_form_row.frm_button,
 .frm-white-body .frm-preview-buttons button {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--blue-border);
