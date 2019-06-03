@@ -220,7 +220,19 @@ do_action( 'frm_before_field_options', $field );
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
 				</label>
-				<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder" />
+				<?php
+				if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
+					?>
+					<textarea name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" rows="3" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder"><?php
+						echo FrmAppHelper::esc_textarea( $field['placeholder'] ); // WPCS: XSS ok.
+					?></textarea>
+					<?php
+				} else {
+					?>
+					<input type="text" name="field_options[placeholder_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['placeholder'] ); ?>" id="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="placeholder" />
+					<?php
+				}
+				?>
 			</p>
 		<?php } ?>
 
