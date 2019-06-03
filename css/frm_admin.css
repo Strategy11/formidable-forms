@@ -449,10 +449,15 @@ ul.frm_form_nav > li {
 	padding-top: 0;
 }
 
+.frm-new-entry .frm_page_container,
 .frm-admin-page-reports .frm_page_container,
 .frm_list_entry_page .frm_page_container {
 	height: auto;
 	display: block;
+}
+
+.frm-new-entry .columns-2 {
+	border: none;
 }
 
 .frm_wrap #frm_top_bar,
@@ -809,6 +814,12 @@ p.frm_has_shortcodes {
 	width: var(--medium-sidebar);
 	min-width: var(--medium-sidebar);
 	border-left: 1px solid var(--sidebar-hover);
+}
+
+.frm-new-entry #post-body-content + .frm-right-panel,
+.frm-new-entry .frm-right-panel {
+	background: none;
+	border: none;
 }
 
 #post-body-content + .frm-right-panel h3 {
