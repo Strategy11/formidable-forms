@@ -5689,6 +5689,7 @@ ul .frm_col_two {
 	vertical-align: text-bottom;
 }
 
+input[disabled],
 .frmsvg svg {
 	pointer-events: none;
 }
