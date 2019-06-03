@@ -691,11 +691,18 @@ class FrmEntriesController {
 	}
 
 	public static function entry_sidebar( $entry = false ) {
-		$data        = maybe_unserialize( $entry->description );
+		$data = array();
+		$id   = 0;
+
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
-		if ( isset( $data['browser'] ) ) {
-			$browser = FrmEntriesHelper::get_browser( $data['browser'] );
+
+		if ( $entry ) {
+			$id   = $entry->id;
+			$data = maybe_unserialize( $entry->description );
+			if ( isset( $data['browser'] ) ) {
+				$browser = FrmEntriesHelper::get_browser( $data['browser'] );
+			}
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
