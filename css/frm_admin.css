@@ -1268,16 +1268,11 @@ a.frm_hidden,
 	padding: 0;
 }
 
-#form_reports_page .frm-inner-content,
-.frm-new-entry {
+#form_reports_page .frm-inner-content {
 	width: calc(100% - 40px);
 	max-width: 900px;
 	margin: 20px auto;
 	padding: 20px;
-}
-
-.frm-new-entry {
-	padding-top: 0;
 }
 
 .frm_inner_field_container > .frm_form_fields {
@@ -6611,10 +6606,6 @@ Responsive Design
 	.frmbutton.ui-sortable-helper a {
 		line-height: 26px;
 		max-height: 28px;
-	}
-
-	.frm-new-entry {
-		margin: 0;
 	}
 
 	a.frm_add_logic_link {
