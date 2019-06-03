@@ -3146,17 +3146,6 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	opacity: 100;
 }
 
-li.ui-state-default.selected .frm-show-click.frm_import_options {
-	vertical-align: middle;
-	padding: 10px 5px 12px;
-	background: #fbfbfb;
-	border: solid 1px #ebebeb;
-}
-
-li.ui-state-default.selected .frm-show-click.frm_import_options select {
-	max-width: 22%;
-}
-
 .frm_sorting span.ui-icon {
 	width: 16px;
 }
@@ -4442,12 +4431,6 @@ span.howto {
 	display: none;
 }
 
-.frm_sorting li.ui-state-default.selected > .widget,
-.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .widget {
-	display: block;
-	margin-top: 15px;
-}
-
 #frm-show-fields {
 	min-height: 350px;
 	padding: 10px 0 35px;
@@ -4504,10 +4487,6 @@ span.howto {
 .repeat_section .show_repeat_sec {
 	display: inline-block;
 	margin: 5px 0 0;
-}
-
-.repeat_section .selected .show_repeat_sec {
-	margin-bottom: 10px;
 }
 
 .repeat_section tr.show_repeat_sec {
@@ -4649,12 +4628,6 @@ li.selected .divider_section_only:before {
 .frm_sorting li.edit_field_type_end_divider,
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover {
 	margin: 0 0 15px;
-}
-
-.frm_sorting li.ui-state-default.edit_field_type_end_divider.selected,
-.frm_sorting li.ui-state-default.edit_field_type_end_divider.selected:hover {
-	margin: 20px 0;
-	position: static;
 }
 
 .frm-first-page .frm_prev_page {
@@ -6425,11 +6398,6 @@ Responsive Design
 ---------------------------------------------------------------- */
 
 @media only screen and (max-width: 1200px) {
-	li.ui-state-default.selected .frm-show-click.frm_import_options {
-		background: none;
-		border: none;
-	}
-
 	.frm-addons {
 		grid-template-columns: 1fr 1fr;
 	}
