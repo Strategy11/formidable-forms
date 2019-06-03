@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.0.03 =
+* Reduce builder layout and styling conflicts with themes that don't like to keep their messages and css to themselves. This hides messages and junk from other plugins on Formidable pages. It also removes the .description class from the builder page.
+* Use a textarea for the placeholder setting in paragraph fields.
+* Fix: CSV import was returning an error message.
+
 = 4.0.02 =
 * Include the WordPress admin bar in full screen mode.
 * Replace field icons in builder with svg sprite to prevent browser caching issues.
