@@ -1002,6 +1002,7 @@ h2 .frm-button-primary {
 	line-height: 26px;
 }
 
+.wp-core-ui.frm-white-body #post-query-submit.button,
 .wp-core-ui.frm-white-body .button.first-page,
 .wp-core-ui.frm-white-body .button.prev-page,
 .wp-core-ui.frm-white-body .button.next-page,
@@ -5274,7 +5275,7 @@ i.frm-show-inline-modal {
 	opacity: 1;
 }
 
-.post-type-frm_display #post-query-submit,
+.post-type-frm_display select[name="m"] + #post-query-submit,
 select[name="m"] {
 	display: none;
 }
