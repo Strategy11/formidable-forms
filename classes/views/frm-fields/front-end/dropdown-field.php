@@ -34,6 +34,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 
 	$other_opt = false;
 	$other_checked = false;
+	if ( empty( $field['options'] ) ) {
+		$field['options'] = array();
+	}
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );

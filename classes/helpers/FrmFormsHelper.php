@@ -138,7 +138,19 @@ class FrmFormsHelper {
 					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name;
 					?>
 					<li class="frm-dropdown-form">
-						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1"><?php echo esc_html( $form_name ); ?></a>
+						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1">
+							<span class="frm-sub-label">
+							<?php
+							printf(
+								/* translators: %d: Form ID */
+								esc_html__( '(ID %d)', 'formidable' ),
+								esc_attr( $form->id )
+							);
+							?>
+							</span>
+							<?php echo esc_html( $form_name ); ?>
+							<span class="frm_hidden"><?php echo esc_html( $form->form_key ); ?></span>
+						</a>
 					</li>
 					<?php
 					unset( $form );
