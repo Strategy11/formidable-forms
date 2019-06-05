@@ -74,6 +74,9 @@ class FrmFormsHelper {
 		}
 	}
 
+	/**
+	 * @param string|object $selected - The label for the placeholder, or the form object.
+	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
@@ -97,6 +100,12 @@ class FrmFormsHelper {
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );
+		}
+
+		$form_id = 0;
+		if ( is_object( $selected ) ) {
+			$form_id  = $selected->id;
+			$selected = $selected->name;
 		}
 
 		$name = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
@@ -127,6 +136,11 @@ class FrmFormsHelper {
 				<?php } ?>
 				<?php
 				foreach ( $forms as $form ) {
+					if ( $form->id === $form_id ) {
+						// Don't include the selected form in the switcher since it does nothing.
+						continue;
+					}
+
 					if ( isset( $args['id'] ) ) {
 						$args['id'] = $form->id;
 					}

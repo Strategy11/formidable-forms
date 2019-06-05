@@ -1,4 +1,4 @@
-<?php FrmFormsHelper::form_switcher( $form->name ); ?>
+<?php FrmFormsHelper::form_switcher( $form ); ?>
 
 <ul class="frm_form_nav">
 <?php
