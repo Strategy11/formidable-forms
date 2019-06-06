@@ -41,4 +41,11 @@ class FrmFieldEmail extends FrmFieldType {
 
 		return $errors;
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_email', $value );
+	}
 }

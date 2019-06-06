@@ -64,4 +64,11 @@ class FrmFieldTextarea extends FrmFieldType {
 			FrmAppHelper::esc_textarea( $this->field['value'] ) .
 			'</textarea>';
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_textarea_field', $value );
+	}
 }

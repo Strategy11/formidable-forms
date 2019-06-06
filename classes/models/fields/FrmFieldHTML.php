@@ -53,4 +53,15 @@ class FrmFieldHTML extends FrmFieldType {
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-html.php';
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+
+		// do wp_specialchars_decode to get back '&' that wp_kses_post might have turned to '&amp;'
+		// this MUST be done, else we'll be back to the '& entity' problem.
+		$value = wp_specialchars_decode( $value );
+	}
 }
