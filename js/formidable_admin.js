@@ -3496,10 +3496,10 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 			jQuery( '.frm_code_list a.hide_' + id ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		} else if ( jQuery.inArray( id, b ) >= 0 ) {
-			jQuery( '.frm_code_list a:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 			jQuery( '.frm_code_list a.show_' + id ).removeClass('frm_noallow').addClass( 'frm_allow' );
 		} else {
-			jQuery( '.frm_code_list a' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
+			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		}
 
 		// Automatically select a tab.
@@ -4819,7 +4819,7 @@ function frmAdminBuildJS() {
 			jQuery( '#side-sortables' ).on( 'click', '.frm_doing_ajax.categorydiv .category-tabs a', clickTabsAfterAjax );
 
 			initToggleShortcodes();
-			jQuery( '.frm_code_list a' ).addClass( 'frm_noallow' );
+			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a' ).addClass( 'frm_noallow' );
 
 			jQuery( 'input[name="show_count"]' ).change( showCount );
 

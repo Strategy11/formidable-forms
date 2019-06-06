@@ -110,13 +110,15 @@ class FrmFormsHelper {
 
 		$name = ( $selected === false ) ? __( 'Switch Form', 'formidable' ) : $selected;
 		$name = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
-		$truncated_name = FrmAppHelper::truncate( $name, 20 );
+		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
-				<h1 title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>">
-					<?php echo esc_html( $truncated_name ); ?>
+				<h1>
+					<span class="frm_bstooltip" title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>" data-placement="right">
+						<?php echo esc_html( $name ); ?>
+					</span>
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>

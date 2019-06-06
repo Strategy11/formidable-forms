@@ -54,7 +54,7 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_full_screen() ) {
-			$classes .= ' frm-full-screen folded';
+			$classes .= apply_filters( 'frm_admin_full_screen_class', ' frm-full-screen folded' );
 		}
 
 		return $classes;
