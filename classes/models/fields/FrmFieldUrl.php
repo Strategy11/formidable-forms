@@ -86,4 +86,11 @@ class FrmFieldUrl extends FrmFieldType {
 
 		return $value;
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'esc_url_raw', $value );
+	}
 }

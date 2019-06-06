@@ -32,4 +32,11 @@ class FrmFieldPhone extends FrmFieldType {
 
 		return $frm_settings->use_html ? 'tel' : 'text';
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
+	}
 }

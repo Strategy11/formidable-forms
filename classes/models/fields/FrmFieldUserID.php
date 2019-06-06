@@ -111,4 +111,11 @@ class FrmFieldUserID extends FrmFieldType {
 	protected function prepare_import_value( $value, $atts ) {
 		return FrmAppHelper::get_user_id_param( trim( $value ) );
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'intval', $value );
+	}
 }
