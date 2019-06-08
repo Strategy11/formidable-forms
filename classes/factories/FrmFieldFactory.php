@@ -67,7 +67,7 @@ class FrmFieldFactory {
 		if ( empty( $class ) ) {
 			$field = new FrmFieldDefault( $field, $field_type );
 		} else {
-			$field = new $class( $field );
+			$field = new $class( $field, $field_type );
 		}
 
 		return $field;
