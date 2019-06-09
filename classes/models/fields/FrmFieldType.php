@@ -1060,6 +1060,6 @@ DEFAULT_HTML;
 
 		// do wp_specialchars_decode to get back '&' that wp_kses_post might have turned to '&amp;'
 		// this MUST be done, else we'll be back to the '& entity' problem.
-		$value = wp_specialchars_decode( $value );
+		FrmAppHelper::sanitize_value( 'wp_specialchars_decode', $value );
 	}
 }
