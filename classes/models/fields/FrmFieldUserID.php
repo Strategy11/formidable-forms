@@ -113,7 +113,7 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @since 4.0
+	 * @since 4.0.04
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'intval', $value );
