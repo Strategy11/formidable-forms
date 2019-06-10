@@ -28,4 +28,44 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertContains( ' max="999"', $form );
 		$this->assertContains( ' step="any"', $form );
 	}
+
+	/**
+	 * @covers FrmFieldType::sanitize_value
+	 */
+	function test_sanitize_value() {
+		$frm_field_type = new FrmFieldDefault();
+
+		$values = array(
+			array(
+				'value'    => '<script></script>test',
+				'expected' => 'test',
+			),
+			array(
+				'value'    => '1 > 2',
+				'expected' => '1 > 2',
+			),
+			array(
+				'value'    => '<div class="here"></div>',
+				'expected' => '<div class="here"></div>',
+			),
+			array(
+				'value'    => 'Dolce & Gabbana',
+				'expected' => 'Dolce & Gabbana',
+			),
+			array(
+				'value'    => array(
+					'<script></script>test',
+					'another test',
+				),
+				'expected' => array(
+					'test',
+					'another test',
+				),
+			),
+		);
+		foreach ( $values as $value ) {
+			$frm_field_type->sanitize_value( $value['value'] );
+			$this->assertEquals( $value['expected'], $value['value'] );
+		}
+	}
 }

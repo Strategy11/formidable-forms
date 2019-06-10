@@ -199,4 +199,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		return wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $arg_array );
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
+	}
 }

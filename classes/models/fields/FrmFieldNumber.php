@@ -95,4 +95,11 @@ class FrmFieldNumber extends FrmFieldType {
 
 		return $value;
 	}
+
+	/**
+	 * @since 4.0
+	 */
+	public function sanitize_value( &$value ) {
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
+	}
 }

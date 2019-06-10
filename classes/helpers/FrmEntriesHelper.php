@@ -313,7 +313,13 @@ class FrmEntriesHelper {
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
 		}
 
-		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+		if ( is_array( $field ) ) {
+			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
+		} else {
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+		}
+
+		$field_obj->sanitize_value( $value );
 	}
 
 	/**
