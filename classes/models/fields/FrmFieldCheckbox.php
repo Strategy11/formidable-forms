@@ -63,11 +63,4 @@ class FrmFieldCheckbox extends FrmFieldType {
 	protected function prepare_import_value( $value, $atts ) {
 		return $this->get_multi_opts_for_import( $value );
 	}
-
-	/**
-	 * @since 4.0
-	 */
-	public function sanitize_value( &$value ) {
-		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
-	}
 }
