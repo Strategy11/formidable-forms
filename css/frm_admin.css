@@ -1834,12 +1834,18 @@ a.frm_pro_tip {
 
 a.frm_pro_tip:hover {
 	color: var(--dark-grey);
+	border-color: var(--primary-color);
+}
+
+a.frm_pro_tip:hover .frmsvg {
+	fill: var(--primary-color);
 }
 
 .frm_field_list .frm_pro_tip {
 	margin: 10px 15px;
 	padding-left: 40px;
 	position: relative;
+	background: #fff;
 }
 
 a.frm_pro_tip .frmsvg,
@@ -5470,8 +5476,6 @@ select.texture {
 
 .post-type-frm_display #frm_adv_info ul.frm_code_list.frm-full-hover {
 	max-height: calc( 100vh - 180px );
-	max-height: -moz-available;
-	max-height: -webkit-fill-available;
 }
 
 .frm_col_one {
