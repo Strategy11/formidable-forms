@@ -5664,6 +5664,10 @@ ul .frm_col_two {
 	cursor: pointer;
 }
 
+#frm-insert-fields li a span {
+	vertical-align: middle;
+}
+
 #frm-insert-fields li:nth-child(2n) a {
 	border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
