@@ -39,7 +39,7 @@
 							'entry'          => $entry,
 							'fields'         => $fields,
 							'include_blank'  => true,
-							'include_extras' => 'page, section',
+							'include_extras' => 'page, section, password',
 							'inline_style'   => 0,
 							'class'          => 'frm-alt-table',
 							'show_filename'  => true,
