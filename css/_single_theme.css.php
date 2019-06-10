@@ -117,7 +117,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	margin-bottom:0<?php echo esc_html( $important ); ?>;
 }
 .<?php echo esc_html( $style_class ); ?> .form-field.frm_section_heading{
-	margin-bottom:0<?php echo esc_html( $important ); ?>;
+	margin-bottom:15px<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> p.description,
