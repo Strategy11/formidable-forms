@@ -1056,24 +1056,6 @@ DEFAULT_HTML;
 	 * @since 4.0.04
 	 */
 	public function sanitize_value( &$value ) {
-		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-
-		// do wp_specialchars_decode to get back '&' that wp_kses_post might have turned to '&amp;'
-		// this MUST be done, else we'll be back to the '& entity' problem.
-		$this->decode_specialchars( $value );
-	}
-
-	/**
-	 * @since 4.0.04
-	 */
-	public function decode_specialchars( &$value ) {
-		if ( is_array( $value ) ) {
-			$temp_values = $value;
-			foreach ( $temp_values as $k => $v ) {
-				$this->decode_specialchars( $value[ $k ] );
-			}
-		} else {
-			$value = wp_specialchars_decode( $value, ENT_COMPAT );
-		}
+		FrmAppHelper::sanitize_with_html( $value );
 	}
 }

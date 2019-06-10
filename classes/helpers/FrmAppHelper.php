@@ -523,6 +523,31 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 4.0.04
+	 */
+	public static function sanitize_with_html( &$value ) {
+		self::sanitize_value( 'wp_kses_post', $value );
+		self::decode_specialchars( $value );
+	}
+
+	/**
+	 * Do wp_specialchars_decode to get back '&' that wp_kses_post might have turned to '&amp;'
+	 * this MUST be done, else we'll be back to the '& entity' problem.
+	 *
+	 * @since 4.0.04
+	 */
+	private function decode_specialchars( &$value ) {
+		if ( is_array( $value ) ) {
+			$temp_values = $value;
+			foreach ( $temp_values as $k => $v ) {
+				self::decode_specialchars( $value[ $k ] );
+			}
+		} else {
+			$value = wp_specialchars_decode( $value, ENT_COMPAT );
+		}
+	}
+
+	/**
 	 * Sanitize the value, and allow some HTML
 	 *
 	 * @since 2.0
