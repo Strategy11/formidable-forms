@@ -4754,7 +4754,7 @@ function frmAdminBuildJS() {
 				e.stopPropagation();
 				maybeShowModal( this );
 
-				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input)' ) ) {
+				if ( jQuery( this ).is( ':not(:submit, input[type=button], .frm-search-input, input[type=checkbox])' ) ) {
 					if ( jQuery( e.target ).closest( '#frm_adv_info' ).length ) {
 						// Don't trigger for fields inside of the modal.
 						return;
