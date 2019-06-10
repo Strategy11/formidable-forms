@@ -6266,6 +6266,10 @@ iframe#dyncontent_ifr {
 	outline: 0;
 }
 
+.frm-fields select.frm-width-auto {
+	width: auto;
+}
+
 .frm-fields button.btn {
 	line-height: normal;
 	height: auto;
