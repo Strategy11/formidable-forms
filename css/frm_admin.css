@@ -5467,11 +5467,19 @@ select.texture {
 }
 
 .post-type-frm_display #frm_adv_info {
-	position: fixed;
-	z-index: 9999;
 	width: calc( var(--big-sidebar) - 40px );
 	height: calc( 100vh - 32px );
 	overflow: hidden;
+}
+
+.post-type-frm_display #frm_adv_info:not(.frm_fixed) {
+	top: 0 !important;
+}
+
+.post-type-frm_display #frm_adv_info.frm_fixed {
+	position: fixed;
+	z-index: 9999;
+	top: 32px;
 }
 
 .post-type-frm_display #frm_adv_info ul.frm_code_list.frm-full-hover {

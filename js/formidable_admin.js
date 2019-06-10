@@ -144,7 +144,6 @@ function frmAdminBuildJS() {
 	}
 
 	function setMenuOffset() {
-		var offset = 455;
 		var fields = document.getElementById( 'frm_adv_info' );
 		if ( fields === null ) {
 			return;
@@ -152,26 +151,37 @@ function frmAdminBuildJS() {
 
 		var currentOffset = document.documentElement.scrollTop || document.body.scrollTop; // body for Safari
 		if ( currentOffset === 0 ) {
-			fields.style.top = '';
+			fields.classList.remove( 'frm_fixed' );
 			return;
 		}
 
 		var posEle = document.getElementById( 'frm_position_ele' );
-		if ( posEle !== null ) {
-			var eleOffset = jQuery( posEle ).offset();
-			offset = eleOffset.top;
+		if ( posEle === null ) {
+			return;
 		}
 
+		var eleOffset = jQuery( posEle ).offset();
+		var offset = eleOffset.top;
 		var desiredOffset = offset - currentOffset;
+		var menuHeight = 0;
+
 		var menu = document.getElementById( 'wpadminbar' );
 		if ( menu !== null ) {
-			var menuHeight = menu.offsetHeight;
-			if ( desiredOffset < menuHeight ) {
-				desiredOffset = menuHeight;
-			}
+			menuHeight = menu.offsetHeight;
 		}
 
-		fields.style.top = desiredOffset + 'px';
+		if ( desiredOffset < menuHeight ) {
+			desiredOffset = menuHeight;
+		}
+
+		if ( desiredOffset > menuHeight ) {
+			fields.classList.remove( 'frm_fixed' );
+		} else {
+			fields.classList.add( 'frm_fixed' );
+			if ( desiredOffset !== 32 ) {
+				fields.style.top = desiredOffset + 'px';
+			}
+		}
 	}
 
 	function loadTooltips() {
@@ -1757,6 +1767,14 @@ function frmAdminBuildJS() {
 			e.stopPropagation();
 		}
 		clickAction( this );
+	}
+
+	/**
+	 * Open Advanced settings on double click.
+	 */
+	function openAdvanced() {
+		var fieldId = this.getAttribute( 'data-fid' );
+		autoExpandSettings( document.getElementById( 'field_options_field_key_' + fieldId ) );
 	}
 
 	function toggleRepeatButtons() {
@@ -4581,6 +4599,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_primary_label', clickLabel );
 			$newFields.on( 'click', '.frm_description', clickDescription );
 			$newFields.on( 'click', 'li.ui-state-default', clickVis );
+			$newFields.on( 'dblclick', 'li.ui-state-default', openAdvanced );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
 			$builderForm.on( 'change', 'select.conf_field', addConf );
 
