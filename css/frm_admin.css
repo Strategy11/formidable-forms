@@ -6266,7 +6266,10 @@ iframe#dyncontent_ifr {
 	outline: 0;
 }
 
-.frm-fields select.frm-width-auto {
+.frm-fields input[type="text"].frm-width-auto,
+.frm-fields select.frm-width-auto,
+.field-group input[type="text"].frm-width-auto,
+.field-group select.frm-width-auto {
 	width: auto;
 }
 
