@@ -300,6 +300,19 @@ class FrmEntriesHelper {
 		if ( empty( $args['parent_field_id'] ) ) {
 			$_POST['item_meta'][ $field->id ] = $value;
 		} else {
+			// init arrays if necessary, else we get fatal error
+			if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && 
+				 is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) {
+
+				if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ||
+					 ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) {
+					$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array();
+				}
+			} else {
+				// All of the section was probably removed.
+				$_POST['item_meta'][ $args['parent_field_id'] ] = array();
+				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array();
+			}
 			$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value;
 		}
 	}
