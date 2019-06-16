@@ -6131,17 +6131,17 @@ iframe#dyncontent_ifr {
 #frm_styling_form .wp-picker-container .wp-color-result.button {
 	width: 100%;
 	overflow: hidden;
-	margin: 0;
-	height: 32px;
-	padding: 0 0 0 30px;
+	margin: 0 !important;
+	height: 32px !important;
+	padding: 0 0 0 30px !important;
 	border-radius: var(--small-radius);
 	border-color: var(--grey-border);
 }
 
 #frm_styling_form .wp-color-result-text {
-	line-height: 28px;
+	line-height: 28px !important;
 	font-size: 15px;
-	background: #fff;
+	background: #fff !important;
 }
 
 .wp-picker-open + .wp-picker-input-wrap {
