@@ -2233,25 +2233,6 @@ class FrmAppHelper {
 		return $locales;
 	}
 
-	/*
-	 * Check if array has at least one numeric key.
-	 */
-	public static function has_numeric_key( $arr ) {
-		if ( ! is_array( $arr ) || empty( $arr ) ) {
-			return false;
-		}
-
-		$has_numeric_key = false;
-		foreach ( $arr as $k => $v ) {
-			if ( is_int( $k ) ) {
-				$has_numeric_key = true;
-				break;
-			}
-		}
-
-		return $has_numeric_key;
-	}
-
 	/**
 	 * @deprecated 4.0
 	 */
