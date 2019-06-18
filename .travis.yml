@@ -48,6 +48,7 @@ before_script:
       ;;
   esac
 - ./vendor/bin/phpunit --version
+- mysql --version
 - export PHPCS_DIR=/tmp/phpcs
 - export SNIFFS_DIR=/tmp/sniffs
 # Install CodeSniffer for WordPress Coding Standards checks.
@@ -69,7 +70,7 @@ before_script:
 - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
 - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
 - sed -i "s/yourpasswordhere//" wp-tests-config.php
-- mysql -e "CREATE DATABASE wordpress_tests;" -uroot
+- mysql -u root -e "CREATE DATABASE wordpress_tests;"
 - cd "/tmp/wordpress/src/wp-content/plugins/formidable"
 - phpenv rehash
 # Install JSCS: JavaScript Code Style checker.
