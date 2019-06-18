@@ -305,7 +305,7 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * init arrays if necessary, else we get fatal error.
+	 * Init arrays if necessary, else we get fatal error.
 	 *
 	 * @since 4.0.05
 	 */
