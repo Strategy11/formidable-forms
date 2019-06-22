@@ -1739,7 +1739,7 @@ h2.frm-h2 + .howto {
 	margin-bottom: 0;
 }
 
-.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
+.frm-full-screen #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
 #wpbody-content > .updated,
 #wpbody-content > .notice:not(.frm-review-notice),
 #wpbody-content > .error:not(.frm_previous_install),
