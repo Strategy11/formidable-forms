@@ -80,7 +80,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					'description LIKE' => $term,
 					'created_at LIKE'  => $term,
 					'form_key LIKE'    => $term,
-					'id LIKE'          => $term,
+					'id'               => $term,
 				);
 				unset( $term );
 			}
