@@ -1893,10 +1893,33 @@ class FrmFormsController {
 	public static function maybe_load_css( $form, $this_load, $global_load ) {
 		$load_css = FrmForm::is_form_loaded( $form, $this_load, $global_load );
 
-		if ( $load_css ) {
-			global $frm_vars;
-			self::footer_js( 'header' );
-			$frm_vars['css_loaded'] = true;
+		if ( ! $load_css ) {
+			return;
+		}
+
+		global $frm_vars;
+		self::footer_js( 'header' );
+		$frm_vars['css_loaded'] = true;
+
+		self::load_late_css();
+	}
+
+	/**
+	 * If css is loaded only on applicable pages, include it before the form loads
+	 * to prevent a flash of unstyled form.
+	 *
+	 * @since 4.0.05
+	 */
+	private static function load_late_css() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$late_css = $frm_settings->load_style === 'dynamic';
+		if ( ! $late_css ) {
+			return;
+		}
+
+		global $wp_styles;
+		if ( is_array( $wp_styles->queue ) && in_array( 'formidable', $wp_styles->queue ) ) {
+			wp_print_styles( 'formidable' );
 		}
 	}
 

@@ -337,8 +337,10 @@ class FrmEntriesHelper {
 
 		if ( is_array( $field ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
-		} else {
+		} elseif ( is_object( $field ) || is_numeric( $field ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field );
+		} else {
+			return;
 		}
 
 		$field_obj->sanitize_value( $value );
