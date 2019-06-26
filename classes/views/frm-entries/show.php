@@ -44,6 +44,7 @@
 							'class'          => 'frm-alt-table',
 							'show_filename'  => true,
 							'show_image'     => true,
+							'size'           => 'thumbnail',
 							'add_link'       => true,
 						)
 					);
