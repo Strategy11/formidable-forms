@@ -1561,41 +1561,6 @@ div.frm_updated_message {
 	font-size: 17px;
 }
 
-​
-.update-nag.frm-update-to-pro {
-	border: none;
-	border-bottom: 1px solid #d55a1e;
-	padding: 10px 15px;
-	display: block;
-	text-align: center;
-	background: var(--orange);
-	color: #fff;
-	font-size: 19px;
-	line-height: 2.1em;
-	margin: 0;
-}
-
-.update-nag.frm-update-to-pro span {
-	font-weight: 100;
-}
-
-.update-nag.frm-update-to-pro a {
-	color: #fff;
-	font-size: 18px;
-	height: auto;
-	margin: 0 15px;
-	background-color: #d55a1e;
-	box-shadow: 0 1px 0 #BB3E01;
-	border-color: transparent;
-	padding: 7px 15px;
-}
-
-.update-nag.frm-update-to-pro a:hover {
-	background-color: #d55a1e;
-	color: #fff;
-	border: 1px solid #BB3E01;
-}
-
 .frm_pro_heading span {
 	margin-top: 10px;
 }
@@ -1739,8 +1704,10 @@ h2.frm-h2 + .howto {
 	margin-bottom: 0;
 }
 
-.frm-full-screen #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
 #wpbody-content > .updated,
+#wpbody-content > #update-nag,
+#wpbody-content > .update-nag,
 #wpbody-content > .notice:not(.frm-review-notice),
 #wpbody-content > .error:not(.frm_previous_install),
 .frm-white-body .updated,

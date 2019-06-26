@@ -67,6 +67,7 @@
 <div class="frm_submit">
 <input type="submit" disabled="disabled" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
 </div>
+<div class="clear"></div>
 
 <div class="frm_message">
 	<strong><?php esc_html_e( 'SAMPLE:', 'formidable' ); ?></strong>
