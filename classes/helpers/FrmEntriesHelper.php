@@ -307,7 +307,7 @@ class FrmEntriesHelper {
 	/**
 	 * Init arrays if necessary, else we get fatal error.
 	 *
-	 * @since 4.0.05
+	 * @since 4.01
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
 		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) &&

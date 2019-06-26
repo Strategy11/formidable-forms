@@ -1908,7 +1908,7 @@ class FrmFormsController {
 	 * If css is loaded only on applicable pages, include it before the form loads
 	 * to prevent a flash of unstyled form.
 	 *
-	 * @since 4.0.05
+	 * @since 4.01
 	 */
 	private static function load_late_css() {
 		$frm_settings = FrmAppHelper::get_settings();
