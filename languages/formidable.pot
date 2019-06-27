@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.0.04\n"
+"Project-Id-Version: Formidable Forms 4.01\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-06-11T01:32:19+02:00\n"
+"POT-Creation-Date: 2019-06-27T18:03:45+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -578,7 +578,7 @@ msgstr ""
 #: classes/controllers/FrmAppController.php:151
 #: classes/views/frm-forms/settings.php:8
 #: classes/views/frm-settings/form.php:9
-#: classes/helpers/FrmFormsListHelper.php:302
+#: classes/helpers/FrmFormsListHelper.php:304
 msgid "Settings"
 msgstr ""
 
@@ -606,7 +606,7 @@ msgid "Build a Form"
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Start link HTML, %4$s: End link HTML
-#: classes/controllers/FrmAppController.php:247
+#: classes/controllers/FrmAppController.php:246
 msgid "This site has been previously authorized to run Formidable Forms. %1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue running the free version and remove this message."
 msgstr ""
 
@@ -781,7 +781,7 @@ msgstr ""
 
 #: classes/controllers/FrmStylesController.php:38
 #: classes/views/frm-entries/sidebar-shared.php:35
-#: classes/helpers/FrmFormsListHelper.php:301
+#: classes/helpers/FrmFormsListHelper.php:303
 msgid "Edit"
 msgstr ""
 
@@ -793,21 +793,21 @@ msgstr ""
 msgid "Edit Style"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:224
-#: classes/controllers/FrmStylesController.php:328
+#: classes/controllers/FrmStylesController.php:225
+#: classes/controllers/FrmStylesController.php:329
 msgid "Your styling settings have been saved."
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:285
+#: classes/controllers/FrmStylesController.php:286
 msgid "Your form styles have been saved."
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:388
+#: classes/controllers/FrmStylesController.php:389
 #: classes/controllers/FrmFormsController.php:913
 msgid "General"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:389
+#: classes/controllers/FrmStylesController.php:390
 #: classes/controllers/FrmFormsController.php:724
 #: classes/views/frm-forms/settings-advanced.php:8
 #: classes/views/xml/import_form.php:111
@@ -816,7 +816,7 @@ msgstr ""
 msgid "Form Title"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:390
+#: classes/controllers/FrmStylesController.php:391
 #: classes/views/frm-forms/new-form-overlay.php:16
 #: classes/views/frm-forms/new-form-overlay.php:17
 #: classes/views/frm-forms/settings-advanced.php:22
@@ -824,33 +824,33 @@ msgstr ""
 msgid "Form Description"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:391
+#: classes/controllers/FrmStylesController.php:392
 msgid "Field Labels"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:392
+#: classes/controllers/FrmStylesController.php:393
 #: classes/views/frm-fields/back-end/field-description.php:3
 #: classes/helpers/FrmFormsHelper.php:457
 msgid "Field Description"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:393
+#: classes/controllers/FrmStylesController.php:394
 msgid "Field Colors"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:394
+#: classes/controllers/FrmStylesController.php:395
 msgid "Field Settings"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:395
+#: classes/controllers/FrmStylesController.php:396
 msgid "Check Box & Radio Fields"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:396
+#: classes/controllers/FrmStylesController.php:397
 msgid "Buttons"
 msgstr ""
 
-#: classes/controllers/FrmStylesController.php:397
+#: classes/controllers/FrmStylesController.php:398
 msgid "Form Messages"
 msgstr ""
 
@@ -1124,7 +1124,7 @@ msgstr ""
 #: classes/views/frm-forms/list-templates.php:74
 #: classes/views/xml/import_form.php:126
 #: classes/views/styles/manage.php:49
-#: classes/helpers/FrmFormsListHelper.php:315
+#: classes/helpers/FrmFormsListHelper.php:317
 #: classes/helpers/FrmFormsHelper.php:57
 #: classes/helpers/FrmFormsHelper.php:112
 #: classes/helpers/FrmFormsHelper.php:154
@@ -1237,7 +1237,7 @@ msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:16
 #: classes/views/frm-forms/list-templates.php:123
-#: classes/helpers/FrmFormsListHelper.php:306
+#: classes/helpers/FrmFormsListHelper.php:308
 msgid "Preview"
 msgstr ""
 
@@ -1372,7 +1372,7 @@ msgstr ""
 #: classes/views/frm-forms/list-templates.php:128
 #: classes/views/frm-form-actions/form_action.php:21
 #: classes/helpers/FrmEntriesListHelper.php:271
-#: classes/helpers/FrmFormsListHelper.php:133
+#: classes/helpers/FrmFormsListHelper.php:135
 #: classes/helpers/FrmFormsHelper.php:1091
 msgid "Delete"
 msgstr ""
@@ -2190,8 +2190,8 @@ msgstr ""
 msgid "Check Boxes"
 msgstr ""
 
-#: classes/views/styles/_sample_form.php:72
-#: classes/views/styles/_sample_form.php:77
+#: classes/views/styles/_sample_form.php:73
+#: classes/views/styles/_sample_form.php:78
 msgid "SAMPLE:"
 msgstr ""
 
@@ -2840,7 +2840,7 @@ msgid "Updated: %1$s"
 msgstr ""
 
 #: classes/views/frm-entries/show.php:7
-#: classes/helpers/FrmEntriesHelper.php:580
+#: classes/helpers/FrmEntriesHelper.php:604
 msgid "View Entry"
 msgstr ""
 
@@ -3191,65 +3191,65 @@ msgstr ""
 msgid "Permanently delete this entry?"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:101
+#: classes/helpers/FrmFormsListHelper.php:103
 msgid "No forms found in the trash."
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:104
+#: classes/helpers/FrmFormsListHelper.php:106
 msgid "See all forms."
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:109
+#: classes/helpers/FrmFormsListHelper.php:111
 msgid "No Forms Found."
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:112
+#: classes/helpers/FrmFormsListHelper.php:114
 #: classes/helpers/FrmAppHelper.php:821
 msgid "Add New"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:124
+#: classes/helpers/FrmFormsListHelper.php:126
 #: classes/helpers/FrmFormsHelper.php:1079
 msgid "Restore"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:128
+#: classes/helpers/FrmFormsListHelper.php:130
 #: classes/helpers/FrmFormsHelper.php:1090
 msgid "Delete Permanently"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:131
+#: classes/helpers/FrmFormsListHelper.php:133
 msgid "Move to Trash"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:147
+#: classes/helpers/FrmFormsListHelper.php:149
 msgid "Empty Trash"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:156
+#: classes/helpers/FrmFormsListHelper.php:158
 msgid "My Forms"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:157
+#: classes/helpers/FrmFormsListHelper.php:159
 msgid "Drafts"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:158
+#: classes/helpers/FrmFormsListHelper.php:160
 #: classes/helpers/FrmFormsHelper.php:1084
 #: classes/helpers/FrmFormsHelper.php:1179
 msgid "Trash"
 msgstr ""
 
 #. translators: %1$s: Status, %2$s: Number of items
-#: classes/helpers/FrmFormsListHelper.php:180
+#: classes/helpers/FrmFormsListHelper.php:182
 msgid "%1$s <span class=\"count\">(%2$s)</span>"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:262
+#: classes/helpers/FrmFormsListHelper.php:264
 msgid "Saving entries is disabled for this form"
 msgstr ""
 
-#: classes/helpers/FrmFormsListHelper.php:342
+#: classes/helpers/FrmFormsListHelper.php:344
 #: classes/helpers/FrmFormsHelper.php:1178
 #: classes/helpers/FrmCSVExportHelper.php:152
 msgid "Draft"
@@ -4412,33 +4412,33 @@ msgstr ""
 msgid "Select All"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:470
-#: classes/helpers/FrmEntriesHelper.php:471
+#: classes/helpers/FrmEntriesHelper.php:494
+#: classes/helpers/FrmEntriesHelper.php:495
 msgid "Unknown"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:588
+#: classes/helpers/FrmEntriesHelper.php:612
 msgid "Delete Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:591
+#: classes/helpers/FrmEntriesHelper.php:615
 msgid "Delete this form entry?"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:599
+#: classes/helpers/FrmEntriesHelper.php:623
 msgid "Print Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:609
-#: classes/helpers/FrmEntriesHelper.php:612
+#: classes/helpers/FrmEntriesHelper.php:633
+#: classes/helpers/FrmEntriesHelper.php:636
 msgid "Resend Emails"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:621
+#: classes/helpers/FrmEntriesHelper.php:645
 msgid "Edit Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:624
+#: classes/helpers/FrmEntriesHelper.php:648
 msgid "Entry edits"
 msgstr ""
 
