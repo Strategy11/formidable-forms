@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.01 =
+* New: Prevent a flash of unstyled form when form styling is set to load only on applicable pages.
+* New: Search by field id or key on the form listing page.
+* Hide more notices from other plugins when on a Formidable page.
+* Fix: The colorpicker box in the form styler was off screen on some sites.
+
 = 4.0.04 =
 * New: Added several missing countries to the default options in the bulk countries list.
 * New: Include form ids in the form switcher dropdown. Searching here will also search the form key.

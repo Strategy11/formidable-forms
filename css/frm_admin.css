@@ -79,6 +79,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
 	padding-bottom: 0;
+	overflow: hidden;
 }
 
 .post-new-php.post-type-frm_display #screen-meta-links,
@@ -460,6 +461,7 @@ ul.frm_form_nav > li {
 	padding-top: 0;
 }
 
+.frm-full-screen.frm-admin-page-entries .frm_page_container,
 .frm-new-entry .frm_page_container,
 .frm-admin-page-reports .frm_page_container,
 .frm_list_entry_page .frm_page_container {
@@ -474,10 +476,6 @@ ul.frm_form_nav > li {
 .frm_wrap #frm_top_bar,
 .frm_wrap .columns-2 {
 	flex: 0 0 auto;
-}
-
-.frm_wrap .columns-2 {
-	overflow: scroll;
 }
 
 .frm_wrap #post-body-content {
@@ -5518,6 +5516,10 @@ ul .frm_col_two {
 
 .frm_code_list.frm-full-hover {
 	margin: 0 -20px;
+}
+
+#frm-navbarDrop + .frm_code_list.frm-full-hover {
+	margin: 4px 0 0;
 }
 
 .frm_code_list.frm-full-hover li {
