@@ -1001,7 +1001,7 @@ h2 .frm-button-primary {
 .frm-white-body button:not(.wp-switch-editor) {
 	text-shadow: none;
 	box-shadow: none;
-	border-radius: 20px;
+	border-radius: 30px;
 	border-color: var(--primary-color);
 	font-size: 1em;
 	transition: all .2s ease;
@@ -1028,6 +1028,12 @@ h2 .frm-button-primary {
 .frm_single_entry_page .button-primary {
 	background-color: var(--primary-color) !important;
 	color: #fff !important;
+}
+
+.frm-button-primary.frm_large{
+	font-size: 22px !important;
+	height: auto !important;
+	padding: 16px 32px !important;
 }
 
 .frm-button-primary i:before {
@@ -1583,8 +1589,7 @@ div.frm_updated_message {
 }
 
 .widefat th.frm_table_break {
-	background-color: var(--orange);
-	color: #fff;
+	background-color: #f3f4f5;
 	text-align: center;
 }
 
