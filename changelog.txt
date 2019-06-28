@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.01.01 =
+* Use svgs for admin menu and admin bar so icon font doesn't need to be loaded admin-wide.
+* Optimize a few SVGs.
+* Fix: Load the css a bit earlier on the page when it isn't set to load in the header. This solves issues with styling ajax multi-page forms.
+* Fix: Changing settings in the styler was causing font icon not found warnings in the console.
+
 = 4.01 =
 * New: Prevent a flash of unstyled form when form styling is set to load only on applicable pages.
 * New: Search by field id or key on the form listing page.
