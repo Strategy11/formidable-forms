@@ -1802,7 +1802,7 @@ class FrmFormsController {
 		$submit       = isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : $frm_settings->submit_value;
 
 		global $frm_vars;
-		FrmFormsController::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
+		self::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
 	}
