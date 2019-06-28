@@ -891,13 +891,6 @@ select.frm_loading_lookup{
 }
 
 /* Fonts */
-@font-face {
-	font-family:'s11-fp';
-	src:local('☺'), url('../fonts/s11-fp.woff?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>') format('woff'), url('../fonts/s11-fp.ttf?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>') format('truetype'), url('../fonts/s11-fp.svg?v=<?php echo esc_attr( FrmAppHelper::$font_version ); ?>') format('svg');
-	font-weight:normal;
-	font-style:normal;
-}
-
 <?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
 
