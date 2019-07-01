@@ -1801,6 +1801,9 @@ class FrmFormsController {
 		$frm_settings = FrmAppHelper::get_settings();
 		$submit       = isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : $frm_settings->submit_value;
 
+		global $frm_vars;
+		self::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
 	}
 
@@ -1893,10 +1896,33 @@ class FrmFormsController {
 	public static function maybe_load_css( $form, $this_load, $global_load ) {
 		$load_css = FrmForm::is_form_loaded( $form, $this_load, $global_load );
 
-		if ( $load_css ) {
-			global $frm_vars;
-			self::footer_js( 'header' );
-			$frm_vars['css_loaded'] = true;
+		if ( ! $load_css ) {
+			return;
+		}
+
+		global $frm_vars;
+		self::footer_js( 'header' );
+		$frm_vars['css_loaded'] = true;
+
+		self::load_late_css();
+	}
+
+	/**
+	 * If css is loaded only on applicable pages, include it before the form loads
+	 * to prevent a flash of unstyled form.
+	 *
+	 * @since 4.01
+	 */
+	private static function load_late_css() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$late_css = $frm_settings->load_style === 'dynamic';
+		if ( ! $late_css ) {
+			return;
+		}
+
+		global $wp_styles;
+		if ( is_array( $wp_styles->queue ) && in_array( 'formidable', $wp_styles->queue ) ) {
+			wp_print_styles( 'formidable' );
 		}
 	}
 

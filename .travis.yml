@@ -1,3 +1,4 @@
+dist: trusty
 language: php
 
 sudo: false
@@ -6,16 +7,12 @@ matrix:
   include:
     - php: 7.1
       env: WP_VERSION=master WP_MULTISITE=1 SNIFF=1
-    - php: 5.6
+    - php: 7.2
       env: WP_VERSION=master WP_MULTISITE=1
     - php: 7.0
-      env: WP_VERSION=4.9 SCRIPT_DEBUG=1
+      env: WP_VERSION=master SCRIPT_DEBUG=1
     - php: 7.0
       env: WP_VERSION=4.9 COVERAGE=1 PHPUNIT=0
-    - php: 5.6
-      env: WP_VERSION=4.8
-    - php: 5.6
-      env: WP_VERSION=4.7
     - php: 5.6
       env: WP_VERSION=4.6
     - php: nightly
@@ -23,13 +20,36 @@ matrix:
   allow_failures:
     - php: nightly
 
-install:
-- travis_retry composer selfupdate 1.0.0 --no-interaction
-- if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then travis_retry composer require --dev phpunit/phpunit ^5.7; fi
-- travis_retry composer install --no-interaction
-
 before_script:
-- phpunit --version
+- |
+  # Remove Xdebug for a huge performance increase:
+  if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+    phpenv config-rm xdebug.ini
+  else
+    echo "xdebug.ini does not exist"
+  fi
+- |
+  # Install the specified version of PHPUnit depending on the PHP version:
+  case "$TRAVIS_PHP_VERSION" in
+    7.3|7.2|nightly)
+      echo "Using PHPUnit 7.x"
+      travis_retry composer require "phpunit/phpunit:^7"
+      ;;
+    7.1|7.0)
+      echo "Using PHPUnit 6.x"
+      travis_retry composer require "phpunit/phpunit:^6"
+      ;;
+    5.6)
+      echo "Using PHPUnit 4.x"
+      travis_retry composer require "phpunit/phpunit:^4"
+      ;;
+    *)
+      echo "No PHPUnit version handling for PHP version $TRAVIS_PHP_VERSION"
+      exit 1
+      ;;
+  esac
+- ./vendor/bin/phpunit --version
+- mysql --version
 - export PHPCS_DIR=/tmp/phpcs
 - export SNIFFS_DIR=/tmp/sniffs
 # Install CodeSniffer for WordPress Coding Standards checks.
@@ -51,7 +71,7 @@ before_script:
 - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
 - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
 - sed -i "s/yourpasswordhere//" wp-tests-config.php
-- mysql -e "CREATE DATABASE wordpress_tests;" -uroot
+- mysql -u root -e "CREATE DATABASE wordpress_tests;"
 - cd "/tmp/wordpress/src/wp-content/plugins/formidable"
 - phpenv rehash
 # Install JSCS: JavaScript Code Style checker.
@@ -82,10 +102,13 @@ script:
 # --standard: Use WordPress as the standard.
 # --extensions: Only sniff PHP files.
 - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/bin/phpcs -p -s -v -n . --standard=./phpcs.xml --extensions=php; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=ajax -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=entries -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --group=styles -c phpunit.xml; fi
-- if [[ "$PHPUNIT" != "0" ]]; then phpunit --exclude-group=ajax,entries,styles -c phpunit.xml; fi
+- |
+  if [ "$PHPUNIT" != "0" ]; then
+    ./vendor/bin/phpunit --group=ajax -c phpunit.xml
+    ./vendor/bin/phpunit --group=entries -c phpunit.xml
+    ./vendor/bin/phpunit --group=styles -c phpunit.xml
+    ./vendor/bin/phpunit --exclude-group=ajax,entries,styles -c phpunit.xml
+  fi
 - if [[ "$COVERAGE" == "1" ]]; then vendor/bin/phpunit --coverage-clover=coverage.xml; fi
 
 after_script:

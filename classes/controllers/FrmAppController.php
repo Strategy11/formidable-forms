@@ -207,7 +207,6 @@ class FrmAppController {
 	}
 
 	public static function pro_get_started_headline() {
-		self::maybe_show_upgrade_bar();
 		self::review_request();
 		FrmAppHelper::min_pro_version_notice( '4.0' );
 
@@ -256,27 +255,6 @@ class FrmAppController {
 			<div id="frm_install_message" class="hidden frm_hidden"></div>
 		</div>
 		<?php
-	}
-
-	private static function maybe_show_upgrade_bar() {
-		if ( ! FrmAppHelper::is_formidable_admin() || FrmAppHelper::pro_is_installed() ) {
-			return;
-		}
-
-		$affiliate = FrmAppHelper::get_affiliate();
-		if ( ! empty( $affiliate ) ) {
-			$tip  = FrmTipsHelper::get_banner_tip();
-			$link = FrmAppHelper::admin_upgrade_link( 'banner' );
-			?>
-			<div class="update-nag frm-update-to-pro">
-				<?php echo FrmAppHelper::kses( $tip['tip'] ); // WPCS: XSS ok. ?>
-				<span><?php echo FrmAppHelper::kses( $tip['call'] ); // WPCS: XSS ok. ?></span>
-				<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( $link ) ); ?>" class="button">
-					Upgrade to Pro
-				</a>
-			</div>
-			<?php
-		}
 	}
 
 	/**

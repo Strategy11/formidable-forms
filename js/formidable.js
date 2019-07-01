@@ -27,11 +27,19 @@ function frmFrontFormJS(){
 			fieldName = field.name;
 		}
 
+		if ( typeof fieldName === 'undefined' ) {
+			fieldName = '';
+		}
+
 		if ( fieldName === '' ) {
 			if ( field instanceof jQuery ) {
 				fieldName = field.data('name');
 			} else {
 				fieldName = field.getAttribute('data-name');
+			}
+
+			if ( typeof fieldName === 'undefined' ) {
+				fieldName = '';
 			}
 
 			if ( fieldName !== '' && fieldName ) {

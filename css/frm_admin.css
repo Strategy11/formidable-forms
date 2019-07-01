@@ -79,6 +79,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
 	padding-bottom: 0;
+	overflow: hidden;
 }
 
 .post-new-php.post-type-frm_display #screen-meta-links,
@@ -460,6 +461,7 @@ ul.frm_form_nav > li {
 	padding-top: 0;
 }
 
+.frm-full-screen.frm-admin-page-entries .frm_page_container,
 .frm-new-entry .frm_page_container,
 .frm-admin-page-reports .frm_page_container,
 .frm_list_entry_page .frm_page_container {
@@ -474,10 +476,6 @@ ul.frm_form_nav > li {
 .frm_wrap #frm_top_bar,
 .frm_wrap .columns-2 {
 	flex: 0 0 auto;
-}
-
-.frm_wrap .columns-2 {
-	overflow: scroll;
 }
 
 .frm_wrap #post-body-content {
@@ -1003,7 +1001,7 @@ h2 .frm-button-primary {
 .frm-white-body button:not(.wp-switch-editor) {
 	text-shadow: none;
 	box-shadow: none;
-	border-radius: 20px;
+	border-radius: 30px;
 	border-color: var(--primary-color);
 	font-size: 1em;
 	transition: all .2s ease;
@@ -1030,6 +1028,12 @@ h2 .frm-button-primary {
 .frm_single_entry_page .button-primary {
 	background-color: var(--primary-color) !important;
 	color: #fff !important;
+}
+
+.frm-button-primary.frm_large{
+	font-size: 22px !important;
+	height: auto !important;
+	padding: 16px 32px !important;
 }
 
 .frm-button-primary i:before {
@@ -1561,41 +1565,6 @@ div.frm_updated_message {
 	font-size: 17px;
 }
 
-​
-.update-nag.frm-update-to-pro {
-	border: none;
-	border-bottom: 1px solid #d55a1e;
-	padding: 10px 15px;
-	display: block;
-	text-align: center;
-	background: var(--orange);
-	color: #fff;
-	font-size: 19px;
-	line-height: 2.1em;
-	margin: 0;
-}
-
-.update-nag.frm-update-to-pro span {
-	font-weight: 100;
-}
-
-.update-nag.frm-update-to-pro a {
-	color: #fff;
-	font-size: 18px;
-	height: auto;
-	margin: 0 15px;
-	background-color: #d55a1e;
-	box-shadow: 0 1px 0 #BB3E01;
-	border-color: transparent;
-	padding: 7px 15px;
-}
-
-.update-nag.frm-update-to-pro a:hover {
-	background-color: #d55a1e;
-	color: #fff;
-	border: 1px solid #BB3E01;
-}
-
 .frm_pro_heading span {
 	margin-top: 10px;
 }
@@ -1620,8 +1589,7 @@ div.frm_updated_message {
 }
 
 .widefat th.frm_table_break {
-	background-color: var(--orange);
-	color: #fff;
+	background-color: #f3f4f5;
 	text-align: center;
 }
 
@@ -1741,6 +1709,8 @@ h2.frm-h2 + .howto {
 
 .frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
 #wpbody-content > .updated,
+#wpbody-content > #update-nag,
+#wpbody-content > .update-nag,
 #wpbody-content > .notice:not(.frm-review-notice),
 #wpbody-content > .error:not(.frm_previous_install),
 .frm-white-body .updated,
@@ -5551,6 +5521,10 @@ ul .frm_col_two {
 
 .frm_code_list.frm-full-hover {
 	margin: 0 -20px;
+}
+
+#frm-navbarDrop + .frm_code_list.frm-full-hover {
+	margin: 4px 0 0;
 }
 
 .frm_code_list.frm-full-hover li {

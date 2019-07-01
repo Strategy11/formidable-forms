@@ -81,41 +81,42 @@ class FrmStylesController {
 		$register_css = ( $register == 'register' );
 		$should_load  = $force || ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() );
 
-		if ( $should_load ) {
-
-			$frm_settings = FrmAppHelper::get_settings();
-			if ( $frm_settings->load_style == 'none' ) {
-				return;
-			}
-
-			$css = apply_filters( 'get_frm_stylesheet', self::custom_stylesheet() );
-
-			if ( ! empty( $css ) ) {
-				$css = (array) $css;
-
-				$version = FrmAppHelper::plugin_version();
-
-				foreach ( $css as $css_key => $file ) {
-					if ( $register_css ) {
-						$this_version = self::get_css_version( $css_key, $version );
-						wp_register_style( $css_key, $file, array(), $this_version );
-					}
-
-					$load_on_all = ! FrmAppHelper::is_admin() && 'all' == $frm_settings->load_style;
-					if ( $load_on_all || $register != 'register' ) {
-						wp_enqueue_style( $css_key );
-					}
-					unset( $css_key, $file );
-				}
-
-				if ( $frm_settings->load_style == 'all' ) {
-					$frm_vars['css_loaded'] = true;
-				}
-			}
-			unset( $css );
-
-			add_filter( 'style_loader_tag', 'FrmStylesController::add_tags_to_css', 10, 2 );
+		if ( ! $should_load ) {
+			return;
 		}
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->load_style == 'none' ) {
+			return;
+		}
+
+		$css = apply_filters( 'get_frm_stylesheet', self::custom_stylesheet() );
+
+		if ( ! empty( $css ) ) {
+			$css = (array) $css;
+
+			$version = FrmAppHelper::plugin_version();
+
+			foreach ( $css as $css_key => $file ) {
+				if ( $register_css ) {
+					$this_version = self::get_css_version( $css_key, $version );
+					wp_register_style( $css_key, $file, array(), $this_version );
+				}
+
+				$load_on_all = ! FrmAppHelper::is_admin() && 'all' == $frm_settings->load_style;
+				if ( $load_on_all || $register != 'register' ) {
+					wp_enqueue_style( $css_key );
+				}
+				unset( $css_key, $file );
+			}
+
+			if ( $frm_settings->load_style == 'all' ) {
+				$frm_vars['css_loaded'] = true;
+			}
+		}
+		unset( $css );
+
+		add_filter( 'style_loader_tag', 'FrmStylesController::add_tags_to_css', 10, 2 );
 	}
 
 	public static function custom_stylesheet() {

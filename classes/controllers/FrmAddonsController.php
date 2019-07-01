@@ -486,7 +486,6 @@ class FrmAddonsController {
 
 	public static function upgrade_to_pro() {
 		FrmAppHelper::include_svg();
-		$pro_pricing = self::prepare_pro_info();
 
 		$link_parts = array(
 			'medium'  => 'upgrade',
@@ -691,35 +690,6 @@ class FrmAddonsController {
 		);
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php' );
-	}
-
-	private static function prepare_pro_info() {
-		return array(
-			'personal'      => array(
-				'id'       => 2,
-				'download' => 19367654,
-				'price'    => '49.00',
-				'name'     => 'Personal',
-			),
-			'professional'  => array(
-				'id'       => 0,
-				'download' => 19367001,
-				'price'    => '99.00',
-				'name'     => 'Creator',
-			),
-			'smallbusiness' => array(
-				'id'       => 0,
-				'download' => 19366995,
-				'price'    => '199.00',
-				'name'     => 'Business',
-			),
-			'enterprise'    => array(
-				'id'       => 0,
-				'download' => 19366992,
-				'price'    => '399.00',
-				'name'     => 'Elite',
-			),
-		);
 	}
 
 	/**

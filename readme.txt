@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.0.04
+Stable tag: 4.01.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,16 +374,17 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
-= 4.0.04 =
-* New: Added several missing countries to the default options in the bulk countries list.
-* New: Include form ids in the form switcher dropdown. Searching here will also search the form key.
-* New: Double click on a field in the form builder to auto-expend the advanced options section.
-* New: Show more of the form title in the builder and include a tooltip when it's cut off.
-* Give the builder sidebar a bit more space.
-* Improve the way &, <, and > are sanitized and saved in the database. Strip them out in the fields that should not have them.
-* Fix: Some custom created field types were showing as text fields when created.
-* Fix: The form actions trigger options box was closing automatically when a box was checked.
-* Added frm_admin_full_screen_class hook for preventing collapsed admin menu. This is not supported, and is not the best experience with using the Formidable form builder.
+= 4.01.01 =
+* Use svgs for admin menu and admin bar so icon font doesn't need to be loaded admin-wide.
+* Optimize a few SVGs.
+* Fix: Load the css a bit earlier on the page when it isn't set to load in the header. This solves issues with styling ajax multi-page forms.
+* Fix: Changing settings in the styler was causing font icon not found warnings in the console.
+
+= 4.01 =
+* New: Prevent a flash of unstyled form when form styling is set to load only on applicable pages.
+* New: Search by field id or key on the form listing page.
+* Hide more notices from other plugins when on a Formidable page.
+* Fix: The colorpicker box in the form styler was off screen on some sites.
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.

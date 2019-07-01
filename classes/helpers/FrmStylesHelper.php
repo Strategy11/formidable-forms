@@ -217,16 +217,7 @@ class FrmStylesHelper {
 
 		$name = ( 'arrow' == $type ) ? 'collapse_icon' : 'repeat_icon';
 		?>
-		<select name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>"
-			id="frm_<?php echo esc_attr( $name ); ?>" class="frm_icon_font frm_multiselect hide-if-js">
-			<?php foreach ( $icons as $key => $icon ) { ?>
-				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $style->post_content[ $name ], $key ); ?>>
-					<?php echo '&#xe' . esc_html( $icon['+'] ) . '; &#xe' . esc_html( $icon['-'] ) . ';'; ?>
-				</option>
-			<?php } ?>
-		</select>
-
-		<div class="btn-group hide-if-no-js" id="frm_<?php echo esc_attr( $name ); ?>_select">
+		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '+', $type ) ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>
@@ -237,7 +228,7 @@ class FrmStylesHelper {
 					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ); ?>"/>
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?>/>
 								<span>
 									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) ); ?>
 									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '-', $type ) ); ?>
@@ -245,9 +236,9 @@ class FrmStylesHelper {
 							</label>
 						</a>
 					</li>
-					<?php } ?>
-				</ul>
-			</div>
+				<?php } ?>
+			</ul>
+		</div>
 		<?php
 	}
 

@@ -516,7 +516,7 @@ class FrmField {
 		self::maybe_include_repeating_fields( $inc_sub, $where );
 		$results         = self::getAll( $where, 'field_order', $limit );
 		self::$use_cache = true;
-		self::include_sub_fields( $results, $inc_sub, $type );
+		self::include_sub_fields( $results, $inc_sub, $type, $form_id );
 
 		return $results;
 	}
@@ -553,7 +553,7 @@ class FrmField {
 
 		self::$use_cache = true;
 
-		self::include_sub_fields( $results, $inc_embed, 'all' );
+		self::include_sub_fields( $results, $inc_embed, 'all', $form_id );
 
 		if ( empty( $limit ) ) {
 			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
@@ -580,12 +580,18 @@ class FrmField {
 		}
 	}
 
-	public static function include_sub_fields( &$results, $inc_embed, $type = 'all' ) {
-		if ( 'include' != $inc_embed || empty( $results ) ) {
+	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
+		$no_sub_forms = empty( $results ) && $type === 'all';
+		if ( 'include' != $inc_embed || $no_sub_forms ) {
 			return;
 		}
 
-		$form_fields  = $results;
+		$form_fields = $results;
+		$should_get_subforms = ( $type !== 'all' && $type !== 'form' && ! empty( $form_id ) );
+		if ( $should_get_subforms ) {
+			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
+		}
+
 		$index_offset = 1;
 		foreach ( $form_fields as $k => $field ) {
 			if ( 'form' != $field->type || ! isset( $field->field_options['form_select'] ) ) {
@@ -595,7 +601,7 @@ class FrmField {
 			if ( $type == 'all' ) {
 				$sub_fields = self::get_all_for_form( $field->field_options['form_select'] );
 			} else {
-				$sub_fields = self::get_all_types_in_form( $field->form_id, $type );
+				$sub_fields = self::get_all_types_in_form( $field->field_options['form_select'], $type );
 			}
 
 			if ( ! empty( $sub_fields ) ) {
