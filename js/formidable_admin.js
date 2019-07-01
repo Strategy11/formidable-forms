@@ -3269,19 +3269,62 @@ function frmAdminBuildJS() {
 
 	function insertContent( content_box, variable ) {
 		if ( document.selection ) {
-			content_box[0].focus();
-			document.selection.createRange().text = variable;
-		} else if ( content_box[0].selectionStart ) {
+			// ie8
+			if ( 'Text' === document.selection.type && content_box[0] === document.selection.createRange().parentElement() ) {
+				var textRange = document.selection.createRange();
+				var selectionStartEnd = getIE8SelectionStartEnd( textRange );
+				variable = maybeFormatInsertedContent( content_box, variable, selectionStartEnd[0], selectionStartEnd[1] );
+				textRange.text = variable;
+			} else {
+				var input = content_box[0];
+				input.focus();
+				variable = maybeFormatInsertedContent( content_box, variable, input.value.length, input.value.length );
+				input.value = input.value + variable; // simply append
+			}
+		} else {
 			obj = content_box[0];
 			var e = obj.selectionEnd;
+
+			variable = maybeFormatInsertedContent( content_box, variable, content_box[0].selectionStart, content_box[0].selectionEnd );
+
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
 			var s = e + variable.length;
 			obj.focus();
 			obj.setSelectionRange( s, s );
-		} else {
-			content_box.val( variable + content_box.val() );
 		}
+
 		content_box.change(); //trigger change
+	}
+
+	function getIE8SelectionStartEnd( textRange ) {
+		var input          = textRange.parentElement(),
+			selectionStart = input.value.indexOf( textRange.text ),
+			selectionEnd   = selectionStart + textRange.text.length;
+
+		return [ selectionStart, selectionEnd ];
+	}
+
+	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
+		var name = input.attr( 'name' );
+		if ( false === /\[FRM_TAGS\]$/.test( name ) ) {
+			return textToInsert;
+		}
+
+		var value = input.val();
+
+		if ( ! jQuery.trim( value ).length ) {
+			return textToInsert;
+		}
+
+		if ( jQuery.trim( value.substr( 0, selectionStart ) ).length && false === /,\s*$/.test( value.substr( 0, selectionStart ) ) ) {
+			textToInsert = ',' + textToInsert;
+		}
+
+		if ( jQuery.trim( value.substr( selectionEnd, value.length ) ).length && false === /^\s*,/.test( value.substr( selectionEnd, value.length ) ) ) {
+			textToInsert += ',';
+		}
+
+		return textToInsert;
 	}
 
 	function resetLogicBuilder() {
