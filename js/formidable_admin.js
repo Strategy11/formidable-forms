@@ -3268,60 +3268,40 @@ function frmAdminBuildJS() {
 	}
 
 	function insertContent( content_box, variable ) {
-		if ( document.selection ) {
-			// ie8
-			if ( 'Text' === document.selection.type && content_box[0] === document.selection.createRange().parentElement() ) {
-				var textRange = document.selection.createRange();
-				var selectionStartEnd = getIE8SelectionStartEnd( textRange );
-				variable = maybeFormatInsertedContent( content_box, variable, selectionStartEnd[0], selectionStartEnd[1] );
-				textRange.text = variable;
-			} else {
-				var input = content_box[0];
-				input.focus();
-				variable = maybeFormatInsertedContent( content_box, variable, input.value.length, input.value.length );
-				input.value = input.value + variable; // simply append
-			}
-		} else {
-			obj = content_box[0];
-			var e = obj.selectionEnd;
+		obj = content_box[0];
+		var e = obj.selectionEnd;
 
-			variable = maybeFormatInsertedContent( content_box, variable, content_box[0].selectionStart, content_box[0].selectionEnd );
+		variable = maybeFormatInsertedContent( content_box, variable, obj.selectionStart, e );
 
-			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
-			var s = e + variable.length;
-			obj.focus();
-			obj.setSelectionRange( s, s );
-		}
+		obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+		var s = e + variable.length;
+		obj.focus();
+		obj.setSelectionRange( s, s );
 
 		content_box.change(); //trigger change
 	}
 
-	function getIE8SelectionStartEnd( textRange ) {
-		var input          = textRange.parentElement(),
-			selectionStart = input.value.indexOf( textRange.text ),
-			selectionEnd   = selectionStart + textRange.text.length;
-
-		return [ selectionStart, selectionEnd ];
-	}
-
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
-		var name = input.attr( 'name' );
-		if ( false === /\[FRM_TAGS\]$/.test( name ) ) {
+		var separator = input.data( 'sep' );
+		if ( undefined === separator ) {
 			return textToInsert;
 		}
 
 		var value = input.val();
 
-		if ( ! jQuery.trim( value ).length ) {
+		if ( ! value.trim().length ) {
 			return textToInsert;
 		}
 
-		if ( jQuery.trim( value.substr( 0, selectionStart ) ).length && false === /,\s*$/.test( value.substr( 0, selectionStart ) ) ) {
-			textToInsert = ',' + textToInsert;
+		var startPattern = new RegExp( separator + "\\s*$" );
+		var endPattern = new RegExp( "^\\s*" + separator );
+
+		if ( value.substr( 0, selectionStart ).trim().length && false === startPattern.test( value.substr( 0, selectionStart ) ) ) {
+			textToInsert = separator + textToInsert;
 		}
 
-		if ( jQuery.trim( value.substr( selectionEnd, value.length ) ).length && false === /^\s*,/.test( value.substr( selectionEnd, value.length ) ) ) {
-			textToInsert += ',';
+		if ( value.substr( selectionEnd, value.length ).trim().length && false === endPattern.test( value.substr( selectionEnd, value.length ) ) ) {
+			textToInsert += separator;
 		}
 
 		return textToInsert;
@@ -5182,4 +5162,11 @@ function frmImportCsv( formID ) {
 			}
 		}
 	} );
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
+if ( ! String.prototype.trim ) {
+  String.prototype.trim = function () {
+    return this.replace( /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '' );
+  };
 }
