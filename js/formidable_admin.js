@@ -3268,16 +3268,20 @@ function frmAdminBuildJS() {
 	}
 
 	function insertContent( content_box, variable ) {
-		obj = content_box[0];
-		var e = obj.selectionEnd;
+		if ( document.selection ) {
+			content_box[0].focus();
+			document.selection.createRange().text = variable;
+		} else {
+			obj = content_box[0];
+			var e = obj.selectionEnd;
 
-		variable = maybeFormatInsertedContent( content_box, variable, obj.selectionStart, e );
+			variable = maybeFormatInsertedContent( content_box, variable, obj.selectionStart, e );
 
-		obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
-		var s = e + variable.length;
-		obj.focus();
-		obj.setSelectionRange( s, s );
-
+			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+			var s = e + variable.length;
+			obj.focus();
+			obj.setSelectionRange( s, s );
+		}
 		content_box.change(); //trigger change
 	}
 
