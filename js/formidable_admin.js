@@ -1799,6 +1799,15 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function checkCheckboxSelectionsLimit() {
+		/*jshint validthis:true */
+		var val = this.value;
+		if ( val !== '' && ( val < 2 || val > 200 ) ) {
+			alert( frm_admin_js.checkbox_limit );
+			this.value = '';
+		}
+	}
+
 	function updateRepeatText( obj, addRemove ) {
 		var $thisField = jQuery( obj ).closest( '.frm_field_box' );
 		$thisField.find( '.frm_' + addRemove + '_form_row .frm_repeat_label' ).text( obj.value );
@@ -4572,6 +4581,7 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_repeat_format', toggleRepeatButtons );
 			$builderForm.on( 'change', '.frm_repeat_limit', checkRepeatLimit );
+			$builderForm.on( 'change', '.frm_js_checkbox_limit', checkCheckboxSelectionsLimit );
 			$builderForm.on( 'input', 'input[name^="field_options[add_label_"]', function() {
 				updateRepeatText( this, 'add' );
 			} );
