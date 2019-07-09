@@ -3271,17 +3271,44 @@ function frmAdminBuildJS() {
 		if ( document.selection ) {
 			content_box[0].focus();
 			document.selection.createRange().text = variable;
-		} else if ( content_box[0].selectionStart ) {
+		} else {
 			obj = content_box[0];
 			var e = obj.selectionEnd;
+
+			variable = maybeFormatInsertedContent( content_box, variable, obj.selectionStart, e );
+
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
 			var s = e + variable.length;
 			obj.focus();
 			obj.setSelectionRange( s, s );
-		} else {
-			content_box.val( variable + content_box.val() );
 		}
 		content_box.change(); //trigger change
+	}
+
+	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
+		var separator = input.data( 'sep' );
+		if ( undefined === separator ) {
+			return textToInsert;
+		}
+
+		var value = input.val();
+
+		if ( ! value.trim().length ) {
+			return textToInsert;
+		}
+
+		var startPattern = new RegExp( separator + "\\s*$" );
+		var endPattern = new RegExp( "^\\s*" + separator );
+
+		if ( value.substr( 0, selectionStart ).trim().length && false === startPattern.test( value.substr( 0, selectionStart ) ) ) {
+			textToInsert = separator + textToInsert;
+		}
+
+		if ( value.substr( selectionEnd, value.length ).trim().length && false === endPattern.test( value.substr( selectionEnd, value.length ) ) ) {
+			textToInsert += separator;
+		}
+
+		return textToInsert;
 	}
 
 	function resetLogicBuilder() {
@@ -5139,4 +5166,11 @@ function frmImportCsv( formID ) {
 			}
 		}
 	} );
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
+if ( ! String.prototype.trim ) {
+  String.prototype.trim = function () {
+    return this.replace( /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '' );
+  };
 }
