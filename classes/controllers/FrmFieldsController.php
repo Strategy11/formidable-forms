@@ -190,6 +190,9 @@ class FrmFieldsController {
 
 		// Exclude alignright for now since we aren't using widths.
 		$classes    = str_replace( ' frm_alignright ', ' ', $classes );
+		if ( trim( $classes ) === 'frm_alignright' ) {
+			$classes = '';
+		}
 
 		$li_classes .= ' frm_form_field frmstart ' . $classes . ' frmend';
 		if ( ! empty( $field ) ) {
