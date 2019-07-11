@@ -206,7 +206,7 @@ DEFAULT_HTML;
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
 		$html_id    = $this->html_id();
-		$read_only  = $field['read_only'];
+		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
 
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
