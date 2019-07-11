@@ -178,13 +178,15 @@ do_action( 'frm_before_field_options', $field );
 					</label>
 					<span class="frm-with-right-icon">
 						<?php
+						$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 						FrmAppHelper::icon_by_class(
 							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
 							array(
-								'data-open' => ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
+								'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 								'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 							)
 						);
+						unset( $special_default );
 
 						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
