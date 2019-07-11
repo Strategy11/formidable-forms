@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.01.01\n"
+"Project-Id-Version: Formidable Forms 4.01.02\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-06-28T16:44:28+02:00\n"
+"POT-Creation-Date: 2019-07-12T00:36:45+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -1146,23 +1146,23 @@ msgstr ""
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:353
+#: classes/controllers/FrmFieldsController.php:356
 msgid "Default Value (Text)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:360
+#: classes/controllers/FrmFieldsController.php:363
 msgid "Default Value (Calculation)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:364
+#: classes/controllers/FrmFieldsController.php:367
 msgid "Calculator forms"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:369
+#: classes/controllers/FrmFieldsController.php:372
 msgid "Default Value (Lookup)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:373
+#: classes/controllers/FrmFieldsController.php:376
 msgid "Lookup fields"
 msgstr ""
 
@@ -2424,7 +2424,7 @@ msgid "%s Field"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/settings.php:34
-#: classes/views/frm-fields/back-end/settings.php:376
+#: classes/views/frm-fields/back-end/settings.php:378
 msgid "Required"
 msgstr ""
 
@@ -2433,7 +2433,7 @@ msgid "Unique: Do not allow the same response multiple times. For example, if on
 msgstr ""
 
 #: classes/views/frm-fields/back-end/settings.php:42
-#: classes/views/frm-fields/back-end/settings.php:396
+#: classes/views/frm-fields/back-end/settings.php:398
 msgid "Unique"
 msgstr ""
 
@@ -2454,7 +2454,7 @@ msgid "CSS Layout Classes"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/settings.php:80
-#: classes/views/frm-fields/back-end/settings.php:185
+#: classes/views/frm-fields/back-end/settings.php:186
 #: classes/views/frm-fields/back-end/value-format.php:11
 #: classes/views/frm-fields/back-end/html-content.php:11
 msgid "Toggle Options"
@@ -2475,78 +2475,78 @@ msgstr ""
 msgid "Default Value"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:221
+#: classes/views/frm-fields/back-end/settings.php:223
 msgid "Placeholder Text"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:255
+#: classes/views/frm-fields/back-end/settings.php:257
 msgid "If this URL points to an image, show to image on the entries listing page."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:262
+#: classes/views/frm-fields/back-end/settings.php:264
 msgid "Set the size of the captcha field. The compact option is best if your form is in a small area."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:263
+#: classes/views/frm-fields/back-end/settings.php:265
 msgid "ReCaptcha Type"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:267
+#: classes/views/frm-fields/back-end/settings.php:269
 msgid "Normal"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:270
+#: classes/views/frm-fields/back-end/settings.php:272
 msgid "Compact"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:276
+#: classes/views/frm-fields/back-end/settings.php:278
 msgid "reCAPTCHA Color"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:280
+#: classes/views/frm-fields/back-end/settings.php:282
 msgid "Light"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:283
+#: classes/views/frm-fields/back-end/settings.php:285
 msgid "Dark"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:300
+#: classes/views/frm-fields/back-end/settings.php:302
 msgid "Required Field Indicator"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:308
+#: classes/views/frm-fields/back-end/settings.php:310
 #: classes/helpers/FrmFormsHelper.php:461
 msgid "Label Position"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:311
+#: classes/views/frm-fields/back-end/settings.php:313
 #: classes/helpers/FrmAppHelper.php:2026
 msgid "Default"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:329
+#: classes/views/frm-fields/back-end/settings.php:331
 msgid "The field key can be used as an alternative to the field ID in many cases."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:330
+#: classes/views/frm-fields/back-end/settings.php:332
 #: classes/helpers/FrmFormsHelper.php:449
 msgid "Field Key"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:338
+#: classes/views/frm-fields/back-end/settings.php:340
 msgid "Field Type"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:368
+#: classes/views/frm-fields/back-end/settings.php:370
 msgid "Validation Messages"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:385
+#: classes/views/frm-fields/back-end/settings.php:387
 msgid "Invalid Format"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:407
+#: classes/views/frm-fields/back-end/settings.php:409
 msgid "Confirmation"
 msgstr ""
 
