@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.01.02 =
+* Fix: Prevent the frm_alignright class from affecting the layout on the form builder page
+* Tweak: When inserting smart default values, use a comma between values by default for checkbox fields
+* Code: Set the field classes in a more generalizable way so other areas can set a separator and exclude shortcode brackets (use data-sep=" " and data-shortcode="0" in add-ons)
+
 = 4.01.01 =
 * Use svgs for admin menu and admin bar so icon font doesn't need to be loaded admin-wide.
 * Optimize a few SVGs.

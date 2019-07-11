@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.01.01
+Stable tag: 4.01.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -374,6 +374,11 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.01.02 =
+* Fix: Prevent the frm_alignright class from affecting the layout on the form builder page
+* Tweak: When inserting smart default values, use a comma between values by default for checkbox fields
+* Code: Set the field classes in a more generalizable way so other areas can set a separator and exclude shortcode brackets (use data-sep=" " and data-shortcode="0" in add-ons)
+
 = 4.01.01 =
 * Use svgs for admin menu and admin bar so icon font doesn't need to be loaded admin-wide.
 * Optimize a few SVGs.
