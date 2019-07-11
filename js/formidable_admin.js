@@ -3227,7 +3227,8 @@ function frmAdminBuildJS() {
 			rich = jQuery( '#wp-' + element_id + '-wrap.wp-editor-wrap' ).length > 0;
 		}
 
-		if ( typeof element.attr('data-shortcode') === 'undefined' ) {
+		var content_box = jQuery( document.getElementById( element_id ) );
+		if ( typeof element.attr('data-shortcode') === 'undefined' && ( ! content_box.length || typeof content_box.attr('data-shortcode') === 'undefined' ) ) {
 			variable = '[' + variable + ']';
 		}
 
@@ -3237,7 +3238,6 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		var content_box = jQuery( document.getElementById( element_id ) );
 		if ( ! content_box.length ) {
 			return false;
 		}
