@@ -81,7 +81,7 @@
 						)
 					);
 					?>
-					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" />
+					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" data-sep=" " />
 				</span>
 			</p>
 		<?php } ?>
@@ -181,7 +181,7 @@ do_action( 'frm_before_field_options', $field );
 						FrmAppHelper::icon_by_class(
 							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
 							array(
-								'data-open' => 'frm-smart-values-box',
+								'data-open' => ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 								'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 							)
 						);
@@ -203,7 +203,7 @@ do_action( 'frm_before_field_options', $field );
 							<?php
 						} else {
 							?>
-							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" />
+							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" data-sep="<?php echo esc_attr( $display_type ? ',' : '' ); ?>" />
 							<?php
 						}
 						?>

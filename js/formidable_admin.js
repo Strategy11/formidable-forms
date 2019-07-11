@@ -3227,9 +3227,7 @@ function frmAdminBuildJS() {
 			rich = jQuery( '#wp-' + element_id + '-wrap.wp-editor-wrap' ).length > 0;
 		}
 
-		if ( element_id.substring( 0, 11 ) === 'frm_classes' ) {
-			variable = variable + ' ';
-		} else {
+		if ( typeof element.attr('data-shortcode') === 'undefined' ) {
 			variable = '[' + variable + ']';
 		}
 
