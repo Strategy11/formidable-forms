@@ -171,6 +171,7 @@ class FrmXMLController {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		$file = isset( $_FILES['frm_import_file']['tmp_name'] ) ? $_FILES['frm_import_file']['tmp_name'] : '';
 
 		if ( ! is_uploaded_file( $file ) ) {
@@ -192,6 +193,7 @@ class FrmXMLController {
 		);
 		$export_format = apply_filters( 'frm_export_formats', $export_format );
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		$file_type = strtolower( pathinfo( $_FILES['frm_import_file']['name'], PATHINFO_EXTENSION ) );
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {
 			// allow other file types to be imported
