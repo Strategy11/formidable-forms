@@ -376,6 +376,7 @@ To get access to more features, integrations, and support, <a href="https://form
 == Changelog ==
 = 4.01.02 =
 * Fix: Prevent the frm_alignright class from affecting the layout on the form builder page
+* Fix: Importing in Windows was failing and not finding the file
 * Tweak: When inserting smart default values, use a comma between values by default for checkbox fields
 * Code: Set the field classes in a more generalizable way so other areas can set a separator and exclude shortcode brackets (use data-sep=" " and data-shortcode="0" in add-ons)
 
