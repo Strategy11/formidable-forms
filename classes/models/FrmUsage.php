@@ -309,7 +309,7 @@ class FrmUsage {
 	 */
 	private function fields() {
 		$args   = array(
-			'limit'    => 100,
+			'limit'    => 50,
 			'order_by' => 'id DESC',
 		);
 
