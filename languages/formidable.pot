@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-07-12T00:36:45+02:00\n"
+"POT-Creation-Date: 2019-07-12T15:53:54+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -634,19 +634,19 @@ msgstr ""
 msgid "Oops, you didn't select a file."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:178
+#: classes/controllers/FrmXMLController.php:179
 msgid "The file does not exist, please try again."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:205
+#: classes/controllers/FrmXMLController.php:207
 msgid "XML import is not enabled on your server with the libxml_disable_entity_loader function."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:413
+#: classes/controllers/FrmXMLController.php:415
 msgid "Please select a form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:470
+#: classes/controllers/FrmXMLController.php:472
 msgid "There are no entries for that form."
 msgstr ""
 
