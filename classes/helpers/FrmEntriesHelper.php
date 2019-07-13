@@ -361,6 +361,13 @@ class FrmEntriesHelper {
 			return;
 		}
 
+		// Trim excess values if selection limit is exceeded for checkbox. Necessary to do here
+		// as the value set here will be used later in this class's set_posted_value() method.
+		if ( FrmField::is_checkbox( $field ) ) {
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+			$field_obj->maybe_trim_excess_values( $value );
+		}
+
 		// Get other value for fields in repeating section.
 		self::set_other_repeating_vals( $field, $value, $args );
 
