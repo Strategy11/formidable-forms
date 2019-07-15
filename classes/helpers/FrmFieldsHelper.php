@@ -1132,7 +1132,7 @@ class FrmFieldsHelper {
 		self::set_other_name( $args, $other_args );
 		self::set_other_value( $args, $other_args );
 
-		if ( $other_args['value'] ) {
+		if ( '' !== $other_args['value'] ) {
 			$checked = 'checked="checked" ';
 		}
 
