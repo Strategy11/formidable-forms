@@ -327,20 +327,23 @@ class FrmEntriesHelper {
 	}
 
 	public static function get_posted_value( $field, &$value, $args ) {
-		$field_id = is_object( $field ) ? $field->id : $field;
+		if ( is_array( $field ) ) {
+			$field_id  = $field['id'];
+			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
+		} else if ( is_object( $field ) ) {
+			$field_id  = $field->id;
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+		} else if ( is_numeric( $field ) ) {
+			$field_id  = $field;
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+		} else {
+			return;
+		}
 
 		if ( empty( $args['parent_field_id'] ) ) {
 			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : '';
 		} else {
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
-		}
-
-		if ( is_array( $field ) ) {
-			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
-		} elseif ( is_object( $field ) || is_numeric( $field ) ) {
-			$field_obj = FrmFieldFactory::get_field_object( $field );
-		} else {
-			return;
 		}
 
 		$field_obj->sanitize_value( $value );
@@ -359,6 +362,13 @@ class FrmEntriesHelper {
 		$args['other'] = false;
 		if ( ! $value || empty( $value ) || ! FrmAppHelper::pro_is_installed() ) {
 			return;
+		}
+
+		// Trim excess values if selection limit is exceeded for checkbox. Necessary to do here
+		// as the value set here will be used later in this class's set_posted_value() method.
+		if ( FrmField::is_checkbox( $field ) ) {
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+			$field_obj->maybe_trim_excess_values( $value );
 		}
 
 		// Get other value for fields in repeating section.
