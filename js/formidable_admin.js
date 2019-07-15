@@ -1802,7 +1802,7 @@ function frmAdminBuildJS() {
 	function checkCheckboxSelectionsLimit() {
 		/*jshint validthis:true */
 		var val = this.value;
-		if ( val !== '' && ( val < 2 || val > 200 ) ) {
+		if ( val !== '' && ( val < 1 || val > 200 ) ) {
 			alert( frm_admin_js.checkbox_limit );
 			this.value = '';
 		}
