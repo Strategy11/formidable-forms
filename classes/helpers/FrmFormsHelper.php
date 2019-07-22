@@ -1189,6 +1189,88 @@ BEFORE_HTML;
 		return $name;
 	}
 
+	public static function template_icon( $categories ) {
+		$ignore     = array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
+		$categories = array_diff( $categories, $ignore );
+
+		$icons = array(
+			'WooCommerce'       => array( 'woocommerce', 'var(--purple)' ),
+			'Post'              => array( 'wordpress', 'rgb(0,160,210)' ),
+			'User Registration' => array( 'register', 'var(--pink)' ),
+			'PayPal'            => array( 'paypal' ),
+			'Stripe'            => array( 'credit_card', 'var(--green)' ),
+			'Twilio'            => array( 'sms', 'rgb(0,160,210)' ),
+			'Calculator'        => array( 'calculator', 'var(--orange)' ),
+			'Contact Form'      => array( 'address_card' ),
+			'Survey'            => array( 'align_right', 'var(--pink)' ),
+			'Application Form'  => array( 'align_right', 'rgb(0,160,210)' ),
+			''                  => array( 'align_right' ),
+		);
+
+		if ( empty( $categories ) ) {
+			$icon = $icons[''];
+		} elseif ( count( $categories ) === 1 ) {
+			$category = reset( $categories );
+			$icon     = $icons[ $category ];
+		} else {
+			foreach ( $icons as $cat => $icon ) {
+				if ( ! in_array( $cat, $categories ) ) {
+					unset( $icons[ $cat ] );
+				}
+			}
+			$icon = reset( $icons );
+		}
+
+
+		echo '<span class="frm-inner-circle" ' . ( isset( $icon[1] ) ? 'style="background-color:' . esc_attr( $icon[1] ) : '' ) . '">';
+		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon[0] . '_icon' );
+		echo '<span class="frm_hidden">';
+		FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
+		echo '</span>';
+		echo '</span>';
+	}
+
+	/**
+	 * @since 4.02
+	 */
+	public static function get_template_install_link( $template, $args ) {
+		if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
+			$link = array(
+				'url'   => $template['url'],
+				'label' => 'Create Form',
+				'class' => 'frm-install-template',
+				'href'  => 'rel',
+				'atts'  => '',
+			);
+		} elseif ( ! empty( $args['license_type'] ) && $args['license_type'] === strtolower( $args['plan_required'] ) ) {
+			$link = array(
+				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $template['slug'],
+				'label' => 'Renew',
+				'class' => 'install-now',
+				'atts'  => 'target="_blank" rel="noopener"',
+				'href'  => 'href',
+			);
+		} else {
+			$link = array(
+				'url'   => $args['pricing'],
+				'label' => 'Upgrade',
+				'class' => 'install-now',
+				'atts'  => 'target="_blank" rel="noopener"',
+				'href'  => 'href',
+			);
+		}
+
+		return $link;
+	}
+
+	/**
+	 * @since 4.02
+	 */
+	public static function template_install_html( $link, $class = '' ) {
+		$link['class'] .= ' ' . $class;
+		echo '<a ' . esc_attr( $link['href'] ) . '="' . esc_url( $link['url'] ) . '" class="' . esc_attr( $link['class'] ) . ' " aria-label="' . esc_attr( $link['label'] ) . '" ' . esc_html( $link['atts'] ) . '>';
+	}
+
 	/**
 	 * If a template or add-on cannot be installed, show a message
 	 * about which plan is required.
@@ -1201,7 +1283,7 @@ BEFORE_HTML;
 		}
 
 		?>
-		<p>
+		<p class="frm_plan_required">
 			<?php esc_html_e( 'License plan required:', 'formidable' ); ?>
 			<a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener">
 				<?php echo esc_html( $requires ); ?>

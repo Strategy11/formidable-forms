@@ -336,7 +336,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		var inside = jQuery( b ).closest( 'div.widget' ).children( '.widget-inside' );
+		inside = jQuery( b ).closest( 'div.widget' ).children( '.widget-inside' );
 		if ( inside.is( ':hidden' ) ) {
 			inside.slideDown( 'fast' );
 		} else {
@@ -882,7 +882,7 @@ function frmAdminBuildJS() {
 			if ( closing.hasOwnProperty( formula_array[i] ) ) {
 				top = stack.pop();
 				if ( top !== closing[formula_array[i]] ) {
-					unmatchedClosing.push( formula_array[i] )
+					unmatchedClosing.push( formula_array[i] );
 				}
 			}
 		}
@@ -1321,7 +1321,7 @@ function frmAdminBuildJS() {
 	function toggleMultSel() {
 		/*jshint validthis:true */
 		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		toggleMultiSelect( field_id, this.value )
+		toggleMultiSelect( field_id, this.value );
 	}
 
 	function toggleMultiSelect( fieldId, value ) {
@@ -1856,7 +1856,7 @@ function frmAdminBuildJS() {
 		return {
 			fieldId: fieldId,
 			fieldKey: fieldKey
-		}
+		};
 	}
 
 	function resetSingleOpt( fieldId, fieldKey, thisOpt ) {
@@ -1942,8 +1942,8 @@ function frmAdminBuildJS() {
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id
-			+ '"><input type="' + type +
+		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + opt.saved + '" id="' + id + '"> ' + opt.label + '</label>' +
 			( isOther ? other : '' ) +
@@ -4182,7 +4182,7 @@ function frmAdminBuildJS() {
 
 		jQuery( '.frm-install-template' ).click( function( event ) {
 			event.preventDefault();
-			var oldName = jQuery( this ).closest( '.frm-card' ).find( 'h3' ).html(),
+			var oldName = jQuery( this.parentElement ).find( 'h3' ).html(),
 				nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
 
@@ -4505,7 +4505,7 @@ function frmAdminBuildJS() {
 
 			// tabs
 			jQuery( document ).on( 'click', '#frm-nav-tabs a', clickNewTab );
-			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a' ).click( function() {
+			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a, #frm-templates-page .frm-nav-tabs a' ).click( function() {
 				if ( ! this.classList.contains( 'frm_noallow' ) ) {
 					clickTab( this );
 					return false;

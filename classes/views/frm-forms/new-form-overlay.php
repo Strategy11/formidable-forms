@@ -20,7 +20,7 @@
 							<br/>
 							<textarea name="template_desc" id="frm_template_desc" class="frm_long_input"></textarea>
 						</p>
-						<input type="hidden" name="link" id="frm_link" />
+						<input type="hidden" name="link" id="frm_link" value="" />
 						<input type="hidden" name="type" id="frm_action_type" value="frm_install_<?php echo esc_attr( $type ); ?>" />
 
 						<button type="submit" class="button-primary frm-button-primary">

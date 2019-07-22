@@ -788,7 +788,9 @@ class FrmFormsController {
 
 		$api       = new FrmFormTemplateApi();
 		$templates = $api->get_api_info();
-		self::add_user_templates( $templates );
+
+		$custom_templates = array();
+		self::add_user_templates( $custom_templates );
 
 		$error   = '';
 		$expired = false;
