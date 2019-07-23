@@ -113,9 +113,9 @@ abstract class FrmFieldType {
 
 		if ( is_array( $this->field ) ) {
 			$this->field_id = $this->field['id'];
-		} else if ( is_object( $this->field ) ) {
+		} else if ( is_object( $this->field ) && is_numeric( $this->field->id ) ) {
 			$this->field_id = $this->field->id;
-		} else {
+		} elseif ( is_numeric( $this->field ) ) {
 			$this->field_id = $this->field;
 		}
 	}
