@@ -207,7 +207,8 @@
 											'knowledgebase/create-a-form/'
 										)
 										);
-											?>" target="_blank" rel="noopener">
+									?>"
+									target="_blank" rel="noopener">
 									<?php esc_html_e( 'Learn how to create custom form templates.', 'formidable' ); ?>
 								</a>
 							</p>
