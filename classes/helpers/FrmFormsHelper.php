@@ -1221,7 +1221,6 @@ BEFORE_HTML;
 			$icon = reset( $icons );
 		}
 
-
 		echo '<span class="frm-inner-circle" ' . ( isset( $icon[1] ) ? 'style="background-color:' . esc_attr( $icon[1] ) : '' ) . '">';
 		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon[0] . '_icon' );
 		echo '<span class="frm_hidden">';
