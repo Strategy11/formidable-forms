@@ -900,6 +900,13 @@ DEFAULT_HTML;
 		return array();
 	}
 
+	/**
+	 * @since 4.02
+	 */
+	public function maybe_trim_excess_values( &$value ) {
+		// Override in a child class.
+	}
+
 	public function is_not_unique( $value, $entry_id ) {
 		$exists = false;
 		if ( FrmAppHelper::pro_is_installed() ) {

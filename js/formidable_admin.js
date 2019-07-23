@@ -4193,7 +4193,7 @@ function frmAdminBuildJS() {
 
 		jQuery( '.frm-install-template' ).click( function( event ) {
 			event.preventDefault();
-			var oldName = jQuery( this.parentElement ).find( 'h3' ).html(),
+			var oldName = jQuery( this ).closest( 'li, td' ).find( 'h3' ).html(),
 				nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
 
