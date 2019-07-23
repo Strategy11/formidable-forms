@@ -27,7 +27,7 @@
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		<?php } ?>
 
-		<p>
+		<p class="frm-hide-empty">
 			<?php if ( $display['required'] ) { ?>
 				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label">
 					<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />

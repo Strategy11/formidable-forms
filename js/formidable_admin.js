@@ -2243,6 +2243,17 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	/**
+	 * Get rid of empty container that inserts extra space.
+	 */
+	function hideEmptyEle() {
+		jQuery( '.frm-hide-empty' ).each( function() {
+		    if ( jQuery( this ).text().trim().length == 0 ) {
+		        jQuery( this ).remove();
+		    }
+		});
+	}
+
 	/* Change the classes in the builder */
 	function changeFieldClass( field, setting ) {
 		var classes, replace, alignField,
@@ -4646,6 +4657,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
 			initBulkOptionsOverlay();
+			hideEmptyEle();
 		},
 
 		settingsInit: function() {
