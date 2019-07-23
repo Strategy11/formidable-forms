@@ -197,14 +197,16 @@
 							<h3><?php esc_html_e( 'You do not have any custom templates yet.', 'formidable' ); ?></h3>
 							<p style="display:block">
 								<a href="<?php
-									echo esc_url( FrmAppHelper::admin_upgrade_link(
-										array(
-											'anchor'  => 'kb-how-to-create-a-template-from-a-form',
-											'medium'  => 'form-templates',
-											'content' => 'create-template',
-										),
-										'knowledgebase/create-a-form/'
-									) );
+									echo esc_url(
+										FrmAppHelper::admin_upgrade_link(
+											array(
+												'anchor'  => 'kb-how-to-create-a-template-from-a-form',
+												'medium'  => 'form-templates',
+												'content' => 'create-template',
+											),
+											'knowledgebase/create-a-form/'
+										)
+									); // phpcs:ignore Generic.WhiteSpace.ScopeIndent
 									?>"
 									target="_blank" rel="noopener">
 									<?php esc_html_e( 'Learn how to create custom form templates.', 'formidable' ); ?>
