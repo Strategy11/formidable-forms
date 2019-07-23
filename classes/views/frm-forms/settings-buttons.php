@@ -9,6 +9,12 @@
 			</label>
 		</td>
 		<td>
+			<?php if ( $no_global_style ) { ?>
+				<p class="howto">
+					<?php esc_html_e( 'The form styling has been disabled in the Global settings.', 'formidable' ); ?>
+				</p>
+				<input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
+			<?php } else { ?>
 			<select name="options[custom_style]" id="custom_style">
 			<option value="1" <?php selected( $values['custom_style'], 1 ); ?>>
 				<?php esc_html_e( 'Always use default', 'formidable' ); ?>
@@ -26,6 +32,7 @@
 				<?php esc_html_e( 'Do not use Formidable styling', 'formidable' ); ?>
 			</option>
 			</select>
+			<?php } ?>
 		</td>
 	</tr>
 	<tr>

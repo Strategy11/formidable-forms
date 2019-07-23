@@ -1010,6 +1010,9 @@ class FrmFormsController {
 	public static function buttons_settings( $values ) {
 		$styles = apply_filters( 'frm_get_style_opts', array() );
 
+		$frm_settings    = FrmAppHelper::get_settings();
+		$no_global_style = $frm_settings->load_style === 'none';
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-buttons.php' );
 	}
 
