@@ -1233,10 +1233,16 @@ BEFORE_HTML;
 	 * @since 4.02
 	 */
 	public static function get_template_install_link( $template, $args ) {
+		$defaults = array(
+			'class' => 'install-now',
+			'href'  => 'href',
+			'atts'  => true,
+		);
+
 		if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
 			$link = array(
 				'url'   => $template['url'],
-				'label' => 'Create Form',
+				'label' => __( 'Create Form', 'formidable' ),
 				'class' => 'frm-install-template',
 				'href'  => 'rel',
 				'atts'  => '',
@@ -1244,22 +1250,16 @@ BEFORE_HTML;
 		} elseif ( ! empty( $args['license_type'] ) && $args['license_type'] === strtolower( $args['plan_required'] ) ) {
 			$link = array(
 				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $template['slug'],
-				'label' => 'Renew',
-				'class' => 'install-now',
-				'atts'  => 'target="_blank" rel="noopener"',
-				'href'  => 'href',
+				'label' => __( 'Renew', 'formidable' ),
 			);
 		} else {
 			$link = array(
 				'url'   => $args['pricing'],
-				'label' => 'Upgrade',
-				'class' => 'install-now',
-				'atts'  => 'target="_blank" rel="noopener"',
-				'href'  => 'href',
+				'label' => __( 'Upgrade', 'formidable' ),
 			);
 		}
 
-		return $link;
+		return array_merge( $defaults, $link );
 	}
 
 	/**
@@ -1267,7 +1267,7 @@ BEFORE_HTML;
 	 */
 	public static function template_install_html( $link, $class = '' ) {
 		$link['class'] .= ' ' . $class;
-		echo '<a ' . esc_attr( $link['href'] ) . '="' . esc_url( $link['url'] ) . '" class="' . esc_attr( $link['class'] ) . ' " aria-label="' . esc_attr( $link['label'] ) . '" ' . esc_html( $link['atts'] ) . '>';
+		echo '<a ' . esc_attr( $link['href'] ) . '="' . esc_url( $link['url'] ) . '" class="' . esc_attr( $link['class'] ) . ' " aria-label="' . esc_attr( $link['label'] ) . '"' . ( $link['atts'] ? ' target="_blank" rel="noopener"' : '' ) . '>';
 	}
 
 	/**
