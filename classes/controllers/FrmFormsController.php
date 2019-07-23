@@ -305,6 +305,7 @@ class FrmFormsController {
 		add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
 		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
 		add_filter( 'is_active_sidebar', '__return_false' );
+		FrmStylesController::enqueue_css( 'enqueue', true );
 		get_template_part( 'page' );
 	}
 
