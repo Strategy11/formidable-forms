@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.02 =
+* New: Adjust the process and layout of starting a new form.
+* New: Separate custom templates from downloadable templates.
+* New: Add frm_modify_posted_field_value hook or adjusting a posted value.
+* UX: Don't show the style template option if the Formidable styling is turned off.
+* Fix: Always include form styling when previewing forms in the theme.
+
 = 4.01.02 =
 * Fix: Prevent the frm_alignright class from affecting the layout on the form builder page
 * Fix: Importing in Windows was failing and not finding the file
@@ -60,7 +67,7 @@
 * Show a form title in the top bar on hover if truncated.
 * Show a message if 4.0 Lite is installed without the matching Pro version.
 * Fix: The link to print an entry wasn't responding.
-* Fix: The full screen entries page was only scrolling if the manu label was 'Forms'
+* Fix: The full screen entries page was only scrolling if the menu label was 'Forms'
 * Fix: Sometimes the field classes and inline shortcodes were appearing on the wrong setting.
 * Fix: 1Password was conflicting with some fields with the inline popup.
 
