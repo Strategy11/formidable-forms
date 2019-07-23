@@ -103,8 +103,8 @@
 
 						echo '<p class="frm_plan_required">';
 						if ( ! empty( $plan_required ) ) {
-							/* translators: %s: Link with label */
 							printf(
+								/* translators: %s: Link with label */
 								esc_html__( 'This template requires an active %s license or above.', 'formidable' ),
 								'<a href="' . esc_url( $pricing . '&utm_content=' . $template['key'] ) . '" target="_blank" rel="noopener">' .
 								esc_html( $plan_required ) .
@@ -197,17 +197,17 @@
 							<h3><?php esc_html_e( 'You do not have any custom templates yet.', 'formidable' ); ?></h3>
 							<p style="display:block">
 								<a href="<?php
-								echo esc_url(
-									FrmAppHelper::admin_upgrade_link(
-										array(
-											'anchor'  => 'kb-how-to-create-a-template-from-a-form',
-											'medium'  => 'form-templates',
-											'content' => 'create-template',
-										),
-										'knowledgebase/create-a-form/'
-									)
-								);
-								?>" target="_blank" rel="noopener">
+									echo esc_url(
+										FrmAppHelper::admin_upgrade_link(
+											array(
+												'anchor'  => 'kb-how-to-create-a-template-from-a-form',
+												'medium'  => 'form-templates',
+												'content' => 'create-template',
+											),
+											'knowledgebase/create-a-form/'
+										)
+										);
+											?>" target="_blank" rel="noopener">
 									<?php esc_html_e( 'Learn how to create custom form templates.', 'formidable' ); ?>
 								</a>
 							</p>
