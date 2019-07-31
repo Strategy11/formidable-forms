@@ -618,6 +618,14 @@ function frmAdminBuildJS() {
 	 */
 	function insertNewFieldByDragging( selectedItem, fieldButton, opts ) {
 		var fieldType = fieldButton.attr( 'id' );
+		var addBtn = fieldButton.children( '.frm_add_field' );
+
+		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
+		if ( 'summary' === fieldType ) {
+			addBtn[0].setAttribute( 'disabled', 'disabled' );
+			fieldButton.draggable( 'disable' );
+		}
+
 		var currentItem = jQuery( selectedItem ).data().uiSortable.currentItem;
 		var section = getSectionForFieldPlacement( currentItem );
 		var formId = getFormIdForFieldPlacement( section );
@@ -637,15 +645,83 @@ function frmAdminBuildJS() {
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
-				updateFieldOrder();
 
-				afterAddField( msg, false );
+				// preserve the original string cos of afterAddField which uses the string
+				var originalMsg = msg;
+
+				msg = jQuery( msg );
+				if ( 'summary' === fieldType ) {
+					// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
+					var breakFieldBefore = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' );
+					if ( ! breakFieldBefore.length ) {
+						// hide it pending when we get a page break before it - just for a good UX
+						msg.hide();
+					}
+				}
+
+				/*
+				 * 'undefined' === typeof breakFieldBefore => it's not summary field that's just been dragged in
+				 * breakFieldBefore.length                 => it's summary field but it has break(s) before it already
+				 * else, then we still need to add a break field, so don't bother updating field order just yet.
+				 */
+				if ( 'undefined' === typeof breakFieldBefore || breakFieldBefore.length ) {
+					jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
+				} else {
+					// please continue to show the loading spinner to let user know that we aren't done yet - just for good UX
+					// the spinner will be replaced in maybeAddBreakFieldAfterSummaryDrag below
+					jQuery( '.frmbutton_loadingnow#' + loadingID ).after( msg );
+				}
+
+				if ( 'undefined' === typeof breakFieldBefore || breakFieldBefore.length ) {
+					updateFieldOrder();
+				}
+
+				afterAddField( originalMsg, false );
+
+				if ( 'undefined' !== typeof breakFieldBefore && ! breakFieldBefore.length ) {
+					maybeAddBreakFieldAfterSummaryDrag( loadingID );
+				}
+			},
+			error: function ( jqXHR, textStatus, errorThrown ) {
+				alert( errorThrown + '. Please try again.' );
+				if ( 'summary' === fieldType ) {
+					addBtn[0].removeAttribute( 'disabled' );
+					fieldButton.draggable( 'enable' );
+				}
 			}
 		} );
 	}
 
-	// don't allow page break, embed form, captcha, or section inside section field
+	function maybeAddBreakFieldAfterSummaryDrag( loadingID ) {
+		jQuery.ajax( {
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_insert_field',
+				form_id: this_form_id,
+				field_type: 'break',
+				section_id: 0,
+				nonce: frmGlobal.nonce
+			},
+			success: function( msg ) {
+				jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
+				// since we can only have 1, we can find it easily in order to show it
+				$newFields.children( 'li[data-type="summary"]' ).show();
+
+				updateFieldOrder();
+				afterAddField( msg, false );
+			},
+			error: function ( jqXHR, textStatus, errorThrown ) {
+				alert( errorThrown + '. Please try again.' );
+				jQuery( '.frmbutton_loadingnow#' + loadingID ).remove();
+				// delete the earlier-added summary
+				$newFields.children( 'li[data-type="summary"]' ).find( '.frm_delete_field:first' ).click();
+				reenableAddSummaryBtn();
+			}
+		} );
+	}
+
+	// don't allow page break, embed form, captcha, summary, or section inside section field
 	function allowDrop( ui ) {
 		if ( !ui.placeholder.parent().hasClass( 'start_divider' ) ) {
 			return true;
@@ -653,7 +729,7 @@ function frmAdminBuildJS() {
 
 		// new field
 		if ( ui.item.hasClass( 'frmbutton' ) ) {
-			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) || ui.item.hasClass( 'frm_tdivider-repeat' ) ) {
+			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) || ui.item.hasClass( 'frm_tdivider-repeat' ) || ui.item.hasClass( 'frm_tsummary' ) ) {
 				return false;
 			}
 			return true;
@@ -713,11 +789,31 @@ function frmAdminBuildJS() {
 	}
 
 	function addFieldClick() {
+		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
+		if ( this.hasAttribute( 'disabled' ) ) {
+			return false;
+		}
+
 		/*jshint validthis:true */
 		var $thisObj = jQuery( this );
-		var field_type = $thisObj.closest( 'li' ).attr( 'id' );
+		var $button = $thisObj.closest( 'li' );
+		var field_type = $button.attr( 'id' );
+
+		if ( 'summary' === field_type ) {
+			// We'll optimistically disable $button now. We'll re-enable if AJAX fails
+			this.setAttribute( 'disabled', 'disabled' );
+			$button.draggable( 'disable' );
+
+			var breakFields = $newFields.children( 'li[data-type="break"]' );
+			if ( ! breakFields.length ) {
+				maybeAddBreakField();
+				// return & wait for the break field to be added 1st; return false to preventDefault & stopPropagation.
+				return false;
+			}
+		}
+
 		var form_id = this_form_id;
-		var $button = $thisObj.closest( '.frmbutton' );
+
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
@@ -732,9 +828,71 @@ function frmAdminBuildJS() {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				$newFields.append( msg );
 				afterAddField( msg, true );
+			},
+			error: function ( jqXHR, textStatus, errorThrown ) {
+				alert( errorThrown + '. Please try again.' );
+				if ( 'summary' === field_type ) {
+					$thisObj[0].removeAttribute( 'disabled' );
+					$button.draggable( 'enable' );
+				}
 			}
 		} );
 		return false;
+	}
+
+	function maybeAddBreakField() {
+		jQuery.ajax( {
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_insert_field',
+				form_id: this_form_id,
+				field_type: 'break',
+				section_id: 0,
+				nonce: frmGlobal.nonce
+			},
+			success: function( msg ) {
+				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+				$newFields.append( msg );
+				afterAddField( msg, true );
+
+				// now add summary
+				var addFieldLink = jQuery( document.getElementById( 'summary' ) ).children( '.frm_add_field' )[0];
+				// re-enable in order to click
+				addFieldLink.removeAttribute( 'disabled' );
+				addFieldLink.click();
+				// re-disable
+				addFieldLink.setAttribute( 'disabled', 'disabled' );
+			},
+			error: function ( jqXHR, textStatus, errorThrown ) {
+				alert( errorThrown + '. Please try again.' );
+				reenableAddSummaryBtn();
+			}
+		} );
+	}
+
+	function reenableAddSummaryBtn() {
+		var frmBtn = jQuery( 'li#summary' );
+		var addFieldLink = frmBtn.children( '.frm_add_field' );
+		frmBtn.draggable( 'enable' );
+		addFieldLink[0].removeAttribute( 'disabled' );
+	}
+
+	function maybeDisableAddSummaryBtn() {
+		if ( formHasSummaryField() ) {
+			disableAddSummaryBtn();
+		}
+	}
+
+	function disableAddSummaryBtn() {
+		var frmBtn = jQuery( 'li#summary' );
+		var addFieldLink = frmBtn.children( '.frm_add_field' );
+		frmBtn.draggable( 'disable' );
+		addFieldLink[0].setAttribute( 'disabled', 'disabled' );
+	}
+
+	function formHasSummaryField() {
+		return $newFields.children( 'li[data-type="summary"]' ).length > 0;
 	}
 
 	function duplicateField() {
@@ -1484,6 +1642,9 @@ function frmAdminBuildJS() {
 					$thisField.remove();
 					if ( $thisField.data( 'type' ) === 'break' ) {
 						renumberPageBreaks();
+					}
+					if ( $thisField.data( 'type' ) === 'summary' ) {
+						reenableAddSummaryBtn();
 					}
 					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
 						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
@@ -3249,7 +3410,11 @@ function frmAdminBuildJS() {
 
 		var content_box = jQuery( document.getElementById( element_id ) );
 		if ( typeof element.attr('data-shortcode') === 'undefined' && ( ! content_box.length || typeof content_box.attr('data-shortcode') === 'undefined' ) ) {
-			variable = '[' + variable + ']';
+			// this helps to exclude those that don't want shortcode-like inserted content e.g. frm-pro's summary field
+			var doShortcode = element.parents( 'ul.frm_code_list' ).attr( 'data-shortcode' );
+			if ( doShortcode === 'undefined' || doShortcode !== 'no' ) {
+				variable = '[' + variable + ']';
+			}
 		}
 
 		if ( rich ) {
@@ -4658,6 +4823,7 @@ function frmAdminBuildJS() {
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
+			maybeDisableAddSummaryBtn();
 		},
 
 		settingsInit: function() {

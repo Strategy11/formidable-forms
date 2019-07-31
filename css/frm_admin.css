@@ -2520,6 +2520,21 @@ a.frm_option_icon:hover::before {
 	height: 145px;
 }
 
+.frm-summary-field-placeholder {
+	position: relative;
+	box-sizing: border-box;
+	padding: 15px;
+	border: 2px dashed var(--grey-border);
+	font-size: 16px;
+	color: var(--medium-grey);
+	text-align: center;
+}
+
+.frm-summary-field-placeholder p.howto {
+	color: var(--grey);
+	font-size: 15px;
+}
+
 .frm-fake-field {
 	display: block;
 	height: 25px;
@@ -5768,6 +5783,12 @@ ul .frm_col_two {
 	float: left;
 }
 
+.field_type_list::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
 .field_type_list li:nth-child(2n) {
 	float: right;
 	clear: none;
@@ -5802,8 +5823,16 @@ ul .frm_col_two {
 	border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
-#frm-insert-fields li a:hover {
+#frm-insert-fields li a:not([disabled]):hover {
 	background: var(--sidebar-hover);
+}
+
+#frm-insert-fields li a[disabled] {
+    pointer-events: none;
+}
+
+#frm-insert-fields li.ui-draggable-disabled {
+	opacity: 0.5;
 }
 
 .frm_code_list {
@@ -5876,8 +5905,8 @@ input[disabled],
 	font-size: inherit;
 }
 
-#frm-insert-fields li a:hover .frmsvg,
-#frm-insert-fields li a:hover i {
+#frm-insert-fields li a:not([disabled]):hover .frmsvg,
+#frm-insert-fields li a:not([disabled]):hover i {
 	color: var(--dark-grey);
 }
 
