@@ -230,8 +230,8 @@ class FrmXMLController {
 			wp_die( esc_html( $error ) );
 		}
 
-		$ids    = FrmAppHelper::get_post_param( 'frm_export_forms', array() );
-		$type   = FrmAppHelper::get_post_param( 'type', array() );
+		$ids    = FrmAppHelper::get_post_param( 'frm_export_forms', array(), 'sanitize_text_field' );
+		$type   = FrmAppHelper::get_post_param( 'type', array(), 'sanitize_text_field' );
 		$format = FrmAppHelper::get_post_param( 'format', 'xml', 'sanitize_title' );
 
 		if ( ! headers_sent() && ! $type ) {

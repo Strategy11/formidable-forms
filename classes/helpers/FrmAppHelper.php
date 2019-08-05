@@ -410,13 +410,14 @@ class FrmAppHelper {
 		return $value;
 	}
 
-	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
+	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
 				'type'     => 'post',
 				'param'    => $param,
 				'default'  => $default,
 				'sanitize' => $sanitize,
+				'serialized' => $serialized,
 			)
 		);
 	}
@@ -456,6 +457,7 @@ class FrmAppHelper {
 			'default'  => '',
 			'type'     => 'get',
 			'sanitize' => 'sanitize_text_field',
+			'serialized' => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
@@ -466,7 +468,10 @@ class FrmAppHelper {
 			}
 		} elseif ( $args['type'] == 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) {
-				$value = maybe_unserialize( wp_unslash( $_POST[ $args['param'] ] ) );
+				$value = wp_unslash( $_POST[ $args['param'] ] );
+				if ( $args['serialized'] === true && is_serialized_string( $value ) && is_serialized( $value ) ) {
+					$value = maybe_unserialize( $value );
+				}
 			}
 		} else {
 			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
