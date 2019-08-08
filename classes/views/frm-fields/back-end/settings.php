@@ -87,57 +87,9 @@
 		<?php } ?>
 	</div>
 
-<?php if ( ! empty( $display_type ) ) { ?>
-	<h3>
-		<?php
-		printf(
-			/* translators: %s: Field type */
-			esc_html__( '%s Options', 'formidable' ),
-			esc_html( $all_field_types[ $display['type'] ]['name'] )
-		);
-		?>
-		<i class="frm_icon_font frm_arrowdown6_icon"></i>
-	</h3>
-	<div class="frm_grid_container frm-collapse-me">
-	<?php
-	if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) {
-		?>
-		<div class="frm-inline-message" id="frm_has_hidden_options_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmFieldsHelper::get_term_link( $field['taxonomy'] ); // WPCS: XSS ok. ?>
-		</div>
-		<?php
-	} elseif ( in_array( $field['type'], array( 'select', 'radio', 'checkbox' ) ) ) {
-		$has_options = ! empty( $field['options'] );
-		$short_name  = FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $field['name'] ) ), 20 );
+<?php
 
-		/* translators: %s: Field name */
-		$option_title = sprintf( __( '%s Options', 'formidable' ), $short_name );
-
-		?>
-		<span class="frm-bulk-edit-link">
-			<a href="#" title="<?php echo esc_attr( $option_title ); ?>" class="frm-bulk-edit-link">
-				<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
-			</a>
-		</span>
-		<?php do_action( 'frm_add_multiple_opts_labels', $field ); ?>
-		<ul id="frm_field_<?php echo esc_attr( $field['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $field['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $field['field_key'] ); ?>">
-			<?php FrmFieldsHelper::show_single_option( $field ); ?>
-		</ul>
-		<div class="frm6 frm_form_field">
-			<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
-				<span class="frm_icon_font frm_add_tag"></span>
-				<?php esc_html_e( 'Add Option', 'formidable' ); ?>
-			</a>
-		</div>
-
-		<?php
-	}
-
-	$field_obj->show_extra_field_choices( compact( 'field', 'display', 'values' ) );
-	?>
-	</div>
-	<?php
-}
+$field_obj->show_field_choices( compact( 'field', 'display', 'values' ) );
 
 if ( $display['clear_on_focus'] ) {
 	do_action( 'frm_extra_field_display_options', $field );
@@ -205,7 +157,7 @@ do_action( 'frm_before_field_options', $field );
 							<?php
 						} else {
 							?>
-							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" data-sep="<?php echo esc_attr( $display_type ? ',' : '' ); ?>" />
+							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" data-sep="<?php echo esc_attr( $field_obj->displayed_field_type( $field ) ? ',' : '' ); ?>" />
 							<?php
 						}
 						?>
