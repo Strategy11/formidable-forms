@@ -722,6 +722,10 @@ p.frm_has_shortcodes {
 	font-size: 15px;
 }
 
+.howto a {
+	font-size: inherit !important;
+}
+
 .frm-inline-modal .inside a.frm_icon_font {
 	font-size: 18px;
 }
@@ -2520,19 +2524,17 @@ a.frm_option_icon:hover::before {
 	height: 145px;
 }
 
-.frm-summary-field-placeholder {
-	position: relative;
-	box-sizing: border-box;
-	padding: 15px;
-	border: 2px dashed var(--grey-border);
+.frm-summary-message {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background: #fff;
+	width: 50%;
+	padding: 15px 0;
+	border: 1px solid var(--grey-border);
+	color: var(--primary-color);
 	font-size: 16px;
-	color: var(--medium-grey);
-	text-align: center;
-}
-
-.frm-summary-field-placeholder p.howto {
-	color: var(--grey);
-	font-size: 15px;
+	transform: translate(-50%, -50%);
 }
 
 .frm-fake-field {
@@ -4723,6 +4725,10 @@ ul.start_divider {
 	cursor: not-allowed;
 }
 
+.edit_field_type_summary .frm_clone_field {
+	display: none !important;
+}
+
 .frm_no_section_fields:not(.frm_block) + ul.start_divider {
 	padding: 0;
 	min-height: 132px;
@@ -5823,12 +5829,12 @@ ul .frm_col_two {
 	border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
-#frm-insert-fields li a:not([disabled]):hover {
+#frm-insert-fields li a:not(.disabled):hover {
 	background: var(--sidebar-hover);
 }
 
-#frm-insert-fields li a[disabled] {
-    pointer-events: none;
+#frm-insert-fields li a.disabled:hover {
+	cursor: not-allowed;
 }
 
 #frm-insert-fields li.ui-draggable-disabled {
@@ -5905,8 +5911,8 @@ input[disabled],
 	font-size: inherit;
 }
 
-#frm-insert-fields li a:not([disabled]):hover .frmsvg,
-#frm-insert-fields li a:not([disabled]):hover i {
+#frm-insert-fields li a:not(.disabled):hover .frmsvg,
+#frm-insert-fields li a:not(.disabled):hover i {
 	color: var(--dark-grey);
 }
 

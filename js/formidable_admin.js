@@ -622,7 +622,7 @@ function frmAdminBuildJS() {
 
 		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
 		if ( 'summary' === fieldType ) {
-			addBtn[0].setAttribute( 'disabled', 'disabled' );
+			addBtn.addClass( 'disabled' );
 			fieldButton.draggable( 'disable' );
 		}
 
@@ -634,6 +634,12 @@ function frmAdminBuildJS() {
 		var loadingID = fieldType.replace( '|', '-' );
 		currentItem.replaceWith( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
 
+		var has_break = 0;
+		if ( 'summary' === fieldType ) {
+			// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
+			has_break = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' ).length > 0 ? 1 : 0;
+		}
+
 		jQuery.ajax( {
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -641,82 +647,22 @@ function frmAdminBuildJS() {
 				form_id: formId,
 				field_type: fieldType,
 				section_id: sectionId,
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				has_break: has_break
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-
-				// preserve the original string cos of afterAddField which uses the string
-				var originalMsg = msg;
-
-				msg = jQuery( msg );
-				if ( 'summary' === fieldType ) {
-					// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
-					var breakFieldBefore = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' );
-					if ( ! breakFieldBefore.length ) {
-						// hide it pending when we get a page break before it - just for a good UX
-						msg.hide();
-					}
-				}
-
-				/*
-				 * 'undefined' === typeof breakFieldBefore => it's not summary field that's just been dragged in
-				 * breakFieldBefore.length                 => it's summary field but it has break(s) before it already
-				 * else, then we still need to add a break field, so don't bother updating field order just yet.
-				 */
-				if ( 'undefined' === typeof breakFieldBefore || breakFieldBefore.length ) {
-					jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
-				} else {
-					// please continue to show the loading spinner to let user know that we aren't done yet - just for good UX
-					// the spinner will be replaced in maybeAddBreakFieldAfterSummaryDrag below
-					jQuery( '.frmbutton_loadingnow#' + loadingID ).after( msg );
-				}
-
-				if ( 'undefined' === typeof breakFieldBefore || breakFieldBefore.length ) {
-					updateFieldOrder();
-				}
-
-				afterAddField( originalMsg, false );
-
-				if ( 'undefined' !== typeof breakFieldBefore && ! breakFieldBefore.length ) {
-					maybeAddBreakFieldAfterSummaryDrag( loadingID );
-				}
-			},
-			error: function ( jqXHR, textStatus, errorThrown ) {
-				alert( errorThrown + '. Please try again.' );
-				if ( 'summary' === fieldType ) {
-					addBtn[0].removeAttribute( 'disabled' );
-					fieldButton.draggable( 'enable' );
-				}
-			}
-		} );
-	}
-
-	function maybeAddBreakFieldAfterSummaryDrag( loadingID ) {
-		jQuery.ajax( {
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: this_form_id,
-				field_type: 'break',
-				section_id: 0,
-				nonce: frmGlobal.nonce
-			},
-			success: function( msg ) {
 				jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
-				// since we can only have 1, we can find it easily in order to show it
-				$newFields.children( 'li[data-type="summary"]' ).show();
-
 				updateFieldOrder();
+
 				afterAddField( msg, false );
 			},
 			error: function ( jqXHR, textStatus, errorThrown ) {
 				alert( errorThrown + '. Please try again.' );
-				jQuery( '.frmbutton_loadingnow#' + loadingID ).remove();
-				// delete the earlier-added summary
-				$newFields.children( 'li[data-type="summary"]' ).find( '.frm_delete_field:first' ).click();
-				reenableAddSummaryBtn();
+				if ( 'summary' === fieldType ) {
+					addBtn.removeClass( 'disabled' );
+					fieldButton.draggable( 'enable' );
+				}
 			}
 		} );
 	}
@@ -729,7 +675,7 @@ function frmAdminBuildJS() {
 
 		// new field
 		if ( ui.item.hasClass( 'frmbutton' ) ) {
-			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) || ui.item.hasClass( 'frm_tdivider-repeat' ) || ui.item.hasClass( 'frm_tsummary' ) ) {
+			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) || ui.item.hasClass( 'frm_tdivider-repeat' ) ) {
 				return false;
 			}
 			return true;
@@ -789,27 +735,23 @@ function frmAdminBuildJS() {
 	}
 
 	function addFieldClick() {
+		/*jshint validthis:true */
+		var $thisObj = jQuery( this );
 		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
-		if ( this.hasAttribute( 'disabled' ) ) {
+		if ( $thisObj.hasClass( 'disabled' ) ) {
 			return false;
 		}
 
-		/*jshint validthis:true */
-		var $thisObj = jQuery( this );
 		var $button = $thisObj.closest( 'li' );
 		var field_type = $button.attr( 'id' );
 
+		var has_break = 0;
 		if ( 'summary' === field_type ) {
 			// We'll optimistically disable $button now. We'll re-enable if AJAX fails
-			this.setAttribute( 'disabled', 'disabled' );
+			$thisObj.addClass( 'disabled' );
 			$button.draggable( 'disable' );
 
-			var breakFields = $newFields.children( 'li[data-type="break"]' );
-			if ( ! breakFields.length ) {
-				maybeAddBreakField();
-				// return & wait for the break field to be added 1st; return false to preventDefault & stopPropagation.
-				return false;
-			}
+			has_break = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
 		var form_id = this_form_id;
@@ -822,7 +764,8 @@ function frmAdminBuildJS() {
 				form_id: form_id,
 				field_type: field_type,
 				section_id: 0,
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				has_break: has_break
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -832,7 +775,7 @@ function frmAdminBuildJS() {
 			error: function ( jqXHR, textStatus, errorThrown ) {
 				alert( errorThrown + '. Please try again.' );
 				if ( 'summary' === field_type ) {
-					$thisObj[0].removeAttribute( 'disabled' );
+					$thisObj.removeClass( 'disabled' );
 					$button.draggable( 'enable' );
 				}
 			}
@@ -840,42 +783,11 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function maybeAddBreakField() {
-		jQuery.ajax( {
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: this_form_id,
-				field_type: 'break',
-				section_id: 0,
-				nonce: frmGlobal.nonce
-			},
-			success: function( msg ) {
-				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				$newFields.append( msg );
-				afterAddField( msg, true );
-
-				// now add summary
-				var addFieldLink = jQuery( document.getElementById( 'summary' ) ).children( '.frm_add_field' )[0];
-				// re-enable in order to click
-				addFieldLink.removeAttribute( 'disabled' );
-				addFieldLink.click();
-				// re-disable
-				addFieldLink.setAttribute( 'disabled', 'disabled' );
-			},
-			error: function ( jqXHR, textStatus, errorThrown ) {
-				alert( errorThrown + '. Please try again.' );
-				reenableAddSummaryBtn();
-			}
-		} );
-	}
-
 	function reenableAddSummaryBtn() {
 		var frmBtn = jQuery( 'li#summary' );
 		var addFieldLink = frmBtn.children( '.frm_add_field' );
 		frmBtn.draggable( 'enable' );
-		addFieldLink[0].removeAttribute( 'disabled' );
+		addFieldLink.removeClass( 'disabled' );
 	}
 
 	function maybeDisableAddSummaryBtn() {
@@ -888,7 +800,7 @@ function frmAdminBuildJS() {
 		var frmBtn = jQuery( 'li#summary' );
 		var addFieldLink = frmBtn.children( '.frm_add_field' );
 		frmBtn.draggable( 'disable' );
-		addFieldLink[0].setAttribute( 'disabled', 'disabled' );
+		addFieldLink.addClass( 'disabled' );
 	}
 
 	function formHasSummaryField() {
@@ -1133,6 +1045,44 @@ function frmAdminBuildJS() {
 		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
 	}
 
+	function isSummaryCalcBox( box ) {
+		var list = jQuery( box ).find( '.frm_code_list' );
+		return 1 === list.length && list.hasClass( 'frm_js_summary_list' );
+	}
+
+	function extractExcludedOptions( exclude ) {
+		var opts = new Array();
+		for ( var i = 0; i < exclude.length; i++ ) {
+			if ( exclude[ i ].startsWith( '[' ) ) {
+				opts.push( exclude[ i ] );
+				// remove it
+				exclude.splice( i, 1 );
+				// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
+				i--;
+			}
+		}
+
+		return opts;
+	}
+
+	function hasExcludedOption( field, excludedOpts ) {
+		var hasOption = false;
+		for ( var i = 0; i < excludedOpts.length; i++ ) {
+			var inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
+			// 2nd condition checks that there's at least one non-empty value
+			if ( inputs.length && jQuery( inputs[0] ).val() ) {
+				hasOption = true;
+				break;
+			}
+		}
+		return hasOption;
+	}
+
+	function getFieldOptionInputName( opt, fieldId ) {
+		var at = opt.indexOf( ']' );
+		return 'field_options' + opt.substring( 0, at ) + '_' + fieldId + opt.substring( at );
+	}
+
 	function popCalcFields( v, force ) {
 		var box, exclude, fields, i, list,
 			p = jQuery( v ).closest( '.frm-single-settings' ),
@@ -1141,6 +1091,8 @@ function frmAdminBuildJS() {
 		if ( ! force && ( ! calc.length || calc.val() === '' || calc.is( ':hidden' ) ) ) {
 			return;
 		}
+
+		var isSummary = isSummaryCalcBox( v );
 
 		var form_id = jQuery( 'input[name="id"]' ).val();
 		var fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
@@ -1151,15 +1103,19 @@ function frmAdminBuildJS() {
 			box = document.getElementById( 'frm-calc-box-' + fieldId );
 		}
 
-		exclude = JSON.parse( box.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+		exclude = getExcludeArray( box, isSummary );
+		var excludedOpts = extractExcludedOptions( exclude );
+
 		fields = getFieldList();
 		list = document.getElementById( 'frm-calc-list-' + fieldId );
 		list.innerHTML = '';
 
-		for ( i = 0; i < fields.length; i++ ) {
-			if ( exclude.includes( fields[ i ].fieldType ) ) {
+		for ( var i = 0; i < fields.length; i++ ) {
+			if ( exclude.includes( fields[ i ].fieldType )
+				 || ( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
+
 			var span = document.createElement( 'span' );
 			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
 
@@ -1176,6 +1132,45 @@ function frmAdminBuildJS() {
 			li.appendChild( a );
 			list.appendChild( li );
 		}
+	}
+
+	function getExcludeArray( calcBox, isSummary ) {
+		var exclude = JSON.parse( calcBox.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+
+		if ( isSummary ) {
+			// includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
+			// when they have been chosen to be included, then they can now be manually excluded in the calc box.
+			var includedExtras = getIncludedExtras();
+			if ( includedExtras.length ) {
+				for ( var i = 0; i < exclude.length; i++ ) {
+					if ( includedExtras.includes( exclude[ i ] ) ) {
+						// remove it
+						exclude.splice( i, 1 );
+						// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
+						i--;
+					}
+				}
+			}
+		}
+
+		return exclude;
+	}
+
+	function getIncludedExtras() {
+		var checked = new Array();
+		var checkboxes = document.getElementsByClassName( 'frm_include_extras_field' );
+
+		for ( var i = 0; i < checkboxes.length; i++ ) {
+			if ( checkboxes[i].checked ) {
+				checked.push( checkboxes[i].value );
+			}
+		}
+
+		return checked;
+	}
+
+	function rePopCalcFieldsForSummary() {
+		popCalcFields( jQuery( '.frm-inline-modal.postbox:has(.frm_js_summary_list)' )[0], true );
 	}
 
 	function getFieldList() {
@@ -4821,6 +4816,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
+			jQuery( document ).on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
+
 			initBulkOptionsOverlay();
 			hideEmptyEle();
 			maybeDisableAddSummaryBtn();
@@ -5359,4 +5356,13 @@ if ( ! String.prototype.trim ) {
   String.prototype.trim = function () {
     return this.replace( /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '' );
   };
+}
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
+if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        value: function(search, pos) {
+            pos = !pos || pos < 0 ? 0 : +pos;
+            return this.substring(pos, pos + search.length) === search;
+        }
+    });
 }
