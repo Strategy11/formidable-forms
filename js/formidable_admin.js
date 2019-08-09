@@ -804,7 +804,8 @@ function frmAdminBuildJS() {
 	}
 
 	function formHasSummaryField() {
-		return $newFields.children( 'li[data-type="summary"]' ).length > 0;
+		// .edit_field_type_summary is a better selector here in order to also cover fields loaded by AJAX
+		return $newFields.children( 'li.edit_field_type_summary' ).length > 0;
 	}
 
 	function duplicateField() {
