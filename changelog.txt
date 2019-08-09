@@ -1,4 +1,8 @@
 == Changelog ==
+= 4.02.01 =
+* Security: Fix vulnerability with unserializing.
+* Code: Refactor field settings to make it easier to add a section for field options/choices.
+
 = 4.02 =
 * New: Adjust the process and layout of starting a new form.
 * New: Separate custom templates from downloadable templates.
