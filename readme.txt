@@ -19,17 +19,17 @@ Before we take a deep-dive into the features of the powerful Formidable form bui
 On top of that, we have optimized Formidable contact forms for speed and maximum server performance. Whether you use Formidable to build a contact form on your own site or an advanced form for your client, you can confidently say that it's one of the FASTEST WordPress form builders on the market.
 
 > <strong>Formidable Forms Pro</strong><br />
-> This form builder plugin is the lite version of the Formidable Forms Pro plugin that comes with all the contact form and advanced form features you will ever need. Our premium features include repeater fields, email subscription forms, multi-page contact forms, file upload forms, smart forms with conditional logic, payment integrations, form templates, form relationships, cascading dropdown fields, front-end form editing, powerful Formidable Views to display data in web applications, and far more than just contact forms. <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion" rel="friend" title="Formidable Forms">Click here to purchase the most advanced premium WordPress form builder plugin now!</a>
+> This form builder plugin is the lite version of the Formidable Forms Pro plugin that comes with all the form features you will ever need. Our premium features include repeater fields, email subscription forms, multi-page forms, file upload forms, smart forms with conditional logic, payment integrations, form templates, form relationships, cascading dropdown fields, front-end form editing, powerful Formidable Views to display data in web applications, and far more than just contact forms. <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion" rel="friend" title="Formidable Forms">Click here to purchase the most advanced premium WordPress form builder plugin now!</a>
 
 You can start with our pre-built contact form template or create totally custom forms from scratch all with an easy-to-use drag & drop form builder interface. 
 
 https://www.youtube.com/watch?v=d2IPmicn2x8&rel=0
 
-Let's take a look at all the powerful form builder features that you get with Formidable Forms for making amazing contact forms, lead forms, subscription forms, request a quote forms, donation forms, payment order forms, surveys, polls and more.
+Let's take a look at all the powerful form builder features that you get with Formidable Forms for making amazing lead forms, subscription forms, request a quote forms, donation forms, payment order forms, surveys, polls and more.
 
 = Drag & Drop Contact Form Maker and Advanced Form Builder =
 
-The Formidable drag & drop form builder allows you to quickly create unlimited contact forms, surveys, quizzes, registration forms, and just about any other type of form that you want.
+The Formidable drag & drop form builder allows you to quickly create unlimited surveys, quizzes, registration forms, and just about any other type of form that you want.
 
 Our form builder plugin comes with all the powerful form fields that you need to create a solution-focused form, fast!
 
@@ -54,7 +54,7 @@ Once a user submits a contact form, their response is automatically stored in yo
 
 Formidable Forms is a **100% GDPR-friendly** form generator. You can turn off IP tracking or stop saving contact form submissions entirely. Alternatively, you can add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
-Need to import your contact form leads to another service like MailChimp? No problem. **Export contact form leads to a CSV**, open it in Excel, and import anywhere.
+Need to import your leads to another service like MailChimp? No problem. **Export contact form leads to a CSV**, open it in Excel, and import anywhere.
 
 You can also configure unlimited form email notifications and autoresponders triggered by contact form submissions. 
 
@@ -198,7 +198,7 @@ Since Formidable Forms is not your average WordPress contact form plugin, this f
 * <a href="https://formidableforms.com/features/confirm-email-address-password-wordpress-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Confirmation fields</a>. Double check email addresses or passwords and prevent typos from cannibalizing your contact form leads.
 * <a href="https://formidableforms.com/features/conditional-logic-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Conditional logic for smart forms</a>. Show or hide form fields based on user selections or user roles. Make complex forms simple and increase form conversion rates.
 * <a href="https://formidableforms.com/features/email-autoresponders-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Send email notifications & autoresponders</a>. Automatically let clients know you received their contact form message. Then create customized email notifications for multiple recipients and get info from a contact form or email form to those who need it.
-* Email routing: Conditionally send multiple autoresponder emails and notifications based on values in contact forms, email forms, payment forms, and registration forms.
+* Email routing: Conditionally send multiple autoresponder emails and notifications based on values in email forms, payment forms, and registration forms.
 * <a href="https://formidableforms.com/features/wordpress-calculated-fields-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields for a mortgage calculator, auto loan calculator, or many other calculator forms. Even a contact form could benefit from calculations for easy quotes and price estimates.
 * <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual form style creator</a>. Our form creator for contact forms, email forms, calculators, and other online forms not only allows you to build forms, but also create branded forms that match your site. Change colors, borders, padding and much more without any code.
 * <a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Flexible form layout design</a>. Build mobile responsive contact forms and advanced form layouts with multiple fields in a row by using our CSS layout classes.
@@ -240,7 +240,7 @@ In addition to all the form builder features listed above, power up registration
 * <a href="https://formidableforms.com/features/aweber-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">AWeber Forms</a>. Subscribe users to an AWeber mailing list when a newsletter signup form is submitted.
 * <a href="https://formidableforms.com/features/mailpoet-newsletters-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailPoet Newsletter forms</a>. Fill your email marketing lists from newsletter signup forms. Then send WordPress newsletters from your own site using MailPoet.
 * <a href="https://formidableforms.com/features/highrise-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Highrise Forms</a>. Add leads to your Highrise CRM account any time a WordPress registration form, or payment form is submitted.
-* <a href="https://formidableforms.com/features/form-entries-to-salesforce/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Salesforce Forms</a>. Create leads, contacts, and any other Salesforce objects directly from your contact page and advanced forms.
+* <a href="https://formidableforms.com/features/form-entries-to-salesforce/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Salesforce Forms</a>. Create leads and any other Salesforce objects directly from your contact page and advanced forms.
 * <a href="https://formidableforms.com/features/entries-to-activecampaign/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">ActiveCampaign Forms</a>. Let your contact form pull double duty as a payment form, post creation form, user registration form, and an ActiveCampaign integration.
 * <a href="https://formidableforms.com/features/form-entries-to-hubspot/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">HubSpot Forms</a>. Route lead form data from your WordPress forms to HubSpot CRM.
 * <a href="https://formidableforms.com/features/twilio-sms-form-notifications/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Twilio for SMS Forms</a>. Collect votes and poll responses via SMS text or send SMS notifications when form entries are submitted. Get notified instantly when an important payment form is completed, and let your form leads know you received their message.
@@ -268,7 +268,7 @@ Formidable Forms is part of the <a href="https://www.wpbeginner.com/">WPBeginner
 4. Activate the plugin through the 'Plugins' menu
 5. Go to the Formidable Forms menu
 6. Click the 'Add New' button to go to the form generator page and create a new email form, registration form, or advanced form
-7. Insert your newly created quiz, survey form, or registration form on a Contact Us page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add a contact form in a contact page template
+7. Insert your newly created quiz, survey form, or registration form on a Contact Us page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add a contact form in a page template
 
 == Screenshots ==
 1. Build professional WP contact forms without any code.
@@ -296,7 +296,7 @@ When you do not receive emails, try the following steps:
    3. Check your SPAM box.
    4. Try a different email address in your settings in the form builder.
    5. Install WP Mail SMPT or another similar emailing plugin and configure the SMTP settings.
-   6. If none of these steps fix the email problem and no other WP emails are going out, please contact your web host.
+   6. If none of these steps fix the email problem and no other WP emails are going out, please get in touch with your web host.
 
 <a href="https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Read more about WordPress emails not sending</a> in our blog.
 
