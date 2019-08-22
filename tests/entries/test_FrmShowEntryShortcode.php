@@ -808,8 +808,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$second = $field_value;
 		}
 
-		$html .= '<td' . $this->td_style . '>' . $first . '</td>';
-		$html .= '<td' . $this->td_style . '>' . $second . '</td>';
+		$html .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
+		$html .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
 
 		$html .= '</tr>' . "\r\n";
 
