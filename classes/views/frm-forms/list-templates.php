@@ -85,6 +85,7 @@
 					continue;
 				}
 
+				$plan_required = FrmFormsHelper::get_plan_required( $template );
 				$link = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) );
 				?>
 				<tr class="frm-template-row <?php echo esc_attr( $link['class'] === 'install-now' ? $link['class'] : '' ); ?>" id="frm-template-<?php echo esc_attr( $template['id'] ); ?>">
@@ -98,8 +99,6 @@
 						<h3><?php echo esc_html( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ); ?></h3>
 						<p><?php echo esc_html( $template['description'] ); ?></p>
 						<?php
-
-						$plan_required = FrmFormsHelper::get_plan_required( $template );
 
 						echo '<p class="frm_plan_required">';
 						if ( ! empty( $plan_required ) ) {
