@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.02.02 =
+* Security: Correctly escape values on the View Entry page.
+* Include a message on the Entries page about how to prevent spam.
+* Show the reCaptcha badge for invisible recaptcha since it's required by their terms.
+* Fix: Show the correct labels on template buttons (Upgrade vs Renew)
+
 = 4.02.01 =
 * Security: Fix vulnerability with unserializing.
 * Code: Refactor field settings to make it easier to add a section for field options/choices.

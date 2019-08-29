@@ -1255,7 +1255,7 @@ BEFORE_HTML;
 		} else {
 			$link = array(
 				'url'   => $args['pricing'],
-				'label' => __( 'Upgrade', 'formidable' ) . $args['license_type'] .' '. $args['plan_required'],
+				'label' => __( 'Upgrade', 'formidable' ),
 			);
 		}
 
@@ -1272,15 +1272,22 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	private static function plan_is_allowed( $args ) {
+		if ( empty( $args['license_type'] ) ) {
+			return false;
+		}
+
+		$included = $args['license_type'] === strtolower( $args['plan_required'] );
+
 		$plans = array( 'free', 'personal', 'business', 'elite' );
-		$included = ! empty( $args['license_type'] ) && $args['license_type'] === strtolower( $args['plan_required'] );
-		if ( ! empty( $args['license_type'] ) && in_array( strtolower( $args['plan_required'] ), $plans ) ) {
-			foreach ( $plans as $plan ) {
-				if ( $included || $plan === $args['license_type'] ) {
-					break;
-				}
-				$included = $plan === strtolower( $args['plan_required'] );
+		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans ) ) {
+			return $included;
+		}
+
+		foreach ( $plans as $plan ) {
+			if ( $included || $plan === $args['license_type'] ) {
+				break;
 			}
+			$included = $plan === strtolower( $args['plan_required'] );
 		}
 
 		return $included;

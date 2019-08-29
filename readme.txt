@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.02.01
+Stable tag: 4.02.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,6 +356,12 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.02.02 =
+* Security: Correctly escape values on the View Entry page.
+* Include a message on the Entries page about how to prevent spam.
+* Show the reCaptcha badge for invisible recaptcha since it's required by their terms.
+* Fix: Show the correct labels on template buttons (Upgrade vs Renew)
+
 = 4.02.01 =
 * Security: Fix vulnerability with unserializing.
 * Code: Refactor field settings to make it easier to add a section for field options/choices.
@@ -366,18 +372,6 @@ To get access to more features, integrations, and support, <a href="https://form
 * New: Add frm_modify_posted_field_value hook or adjusting a posted value.
 * UX: Don't show the style template option if the Formidable styling is turned off.
 * Fix: Always include form styling when previewing forms in the theme.
-
-= 4.01.02 =
-* Fix: Prevent the frm_alignright class from affecting the layout on the form builder page
-* Fix: Importing in Windows was failing and not finding the file
-* Tweak: When inserting smart default values, use a comma between values by default for checkbox fields
-* Code: Set the field classes in a more generalizable way so other areas can set a separator and exclude shortcode brackets (use data-sep=" " and data-shortcode="0" in add-ons)
-
-= 4.01.01 =
-* Use svgs for admin menu and admin bar so icon font doesn't need to be loaded admin-wide.
-* Optimize a few SVGs.
-* Fix: Load the css a bit earlier on the page when it isn't set to load in the header. This solves issues with styling ajax multi-page forms.
-* Fix: Changing settings in the styler was causing font icon not found warnings in the console.
 
 = 4.01 =
 * New: Prevent a flash of unstyled form when form styling is set to load only on applicable pages.
