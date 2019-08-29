@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.02.01\n"
+"Project-Id-Version: Formidable Forms 4.02.02\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-08-09T18:30:21+02:00\n"
+"POT-Creation-Date: 2019-08-29T18:34:37+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -1128,7 +1128,7 @@ msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:1429
-#: classes/views/frm-forms/list-templates.php:173
+#: classes/views/frm-forms/list-templates.php:172
 #: classes/views/xml/import_form.php:126
 #: classes/views/styles/manage.php:49
 #: classes/helpers/FrmFormsListHelper.php:317
@@ -1243,8 +1243,8 @@ msgid "Show options"
 msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:16
-#: classes/views/frm-forms/list-templates.php:135
-#: classes/views/frm-forms/list-templates.php:239
+#: classes/views/frm-forms/list-templates.php:134
+#: classes/views/frm-forms/list-templates.php:238
 #: classes/helpers/FrmFormsListHelper.php:308
 msgid "Preview"
 msgstr ""
@@ -1333,54 +1333,54 @@ msgid "Premium Templates"
 msgstr ""
 
 #: classes/views/frm-forms/list-templates.php:73
-#: classes/views/frm-forms/list-templates.php:185
+#: classes/views/frm-forms/list-templates.php:184
 msgid "My Templates"
 msgstr ""
 
 #. translators: %s: Link with label
-#: classes/views/frm-forms/list-templates.php:108
+#: classes/views/frm-forms/list-templates.php:107
 msgid "This template requires an active %s license or above."
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:123
+#: classes/views/frm-forms/list-templates.php:122
 msgid "Category:"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:154
+#: classes/views/frm-forms/list-templates.php:153
 msgid "Create a template from an existing form"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:157
+#: classes/views/frm-forms/list-templates.php:156
 msgid "Select form for new template"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:165
+#: classes/views/frm-forms/list-templates.php:164
 #: classes/views/frm-entries/no_entries.php:37
 msgid "You have not created any forms yet."
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:197
+#: classes/views/frm-forms/list-templates.php:196
 msgid "You do not have any custom templates yet."
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:212
+#: classes/views/frm-forms/list-templates.php:211
 msgid "Learn how to create custom form templates."
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:230
+#: classes/views/frm-forms/list-templates.php:229
 msgid "Delete this form template?"
 msgstr ""
 
-#: classes/views/frm-forms/list-templates.php:231
+#: classes/views/frm-forms/list-templates.php:230
 #: classes/views/frm-form-actions/form_action.php:21
-#: classes/helpers/FrmEntriesListHelper.php:271
+#: classes/helpers/FrmEntriesListHelper.php:286
 #: classes/helpers/FrmFormsListHelper.php:135
 #: classes/helpers/FrmFormsHelper.php:1091
 msgid "Delete"
 msgstr ""
 
+#: classes/views/frm-forms/list-templates.php:233
 #: classes/views/frm-forms/list-templates.php:234
-#: classes/views/frm-forms/list-templates.php:235
 #: classes/helpers/FrmFormsHelper.php:1245
 msgid "Create Form"
 msgstr ""
@@ -2878,7 +2878,7 @@ msgid "Post"
 msgstr ""
 
 #: classes/views/frm-entries/sidebar-shared.php:38
-#: classes/helpers/FrmEntriesListHelper.php:266
+#: classes/helpers/FrmEntriesListHelper.php:281
 msgid "View"
 msgstr ""
 
@@ -3173,23 +3173,31 @@ msgstr ""
 msgid "No Entries Found"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:125
+#: classes/helpers/FrmEntriesListHelper.php:122
+msgid "Getting spam form submissions?"
+msgstr ""
+
+#: classes/helpers/FrmEntriesListHelper.php:124
+msgid "Learn how to prevent them."
+msgstr ""
+
+#: classes/helpers/FrmEntriesListHelper.php:140
 msgid "View all forms"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:126
+#: classes/helpers/FrmEntriesListHelper.php:141
 msgid "Filter"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:236
+#: classes/helpers/FrmEntriesListHelper.php:251
 msgid "No"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:236
+#: classes/helpers/FrmEntriesListHelper.php:251
 msgid "Yes"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:271
+#: classes/helpers/FrmEntriesListHelper.php:286
 msgid "Permanently delete this entry?"
 msgstr ""
 
@@ -4592,7 +4600,7 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1286
+#: classes/helpers/FrmFormsHelper.php:1317
 msgid "License plan required:"
 msgstr ""
 
