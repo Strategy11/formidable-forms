@@ -298,6 +298,8 @@ class FrmStylesHelper {
 		if ( self::previewing_style() ) {
 
 			if ( isset( $_POST['frm_style_setting'] ) ) {
+				// Sanitizing is done later.
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$posted = json_decode( wp_unslash( $_POST['frm_style_setting'] ), true );
 				FrmAppHelper::format_form_data( $posted );
 

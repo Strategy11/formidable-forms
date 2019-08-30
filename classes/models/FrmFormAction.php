@@ -334,6 +334,8 @@ class FrmFormAction {
 		}
 
 		if ( isset( $_POST[ $this->option_name ] ) && is_array( $_POST[ $this->option_name ] ) ) {
+			// Sanitizing removes scripts and <email> type of values.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
 			return;
