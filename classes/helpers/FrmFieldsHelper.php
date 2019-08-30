@@ -124,7 +124,7 @@ class FrmFieldsHelper {
 	 * @param array $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
-		$check_post = FrmAppHelper::is_admin() && $_POST && isset( $_POST['field_options'] );
+		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] );
 
 		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
@@ -186,10 +186,12 @@ class FrmFieldsHelper {
 
 		if ( strpos( $setting, 'html' ) !== false ) {
 			// Strip slashes from HTML but not regex.
-			$value = maybe_unserialize( wp_unslash( $_POST['field_options'][ $setting ] ) );
-		} else {
+			$value = wp_unslash( $_POST['field_options'][ $setting ] );
+		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
-			$value = maybe_unserialize( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
+			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
+		} else {
+			$value = wp_kses_post( wp_unslash( $_POST['field_options'][ $setting ] ) );
 		}
 	}
 
