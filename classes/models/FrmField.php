@@ -203,7 +203,11 @@ class FrmField {
 
 		foreach ( $new_values as $k => $v ) {
 			if ( is_array( $v ) ) {
-				$new_values[ $k ] = serialize( $v );
+				if ( $k === 'default_value' ) {
+					$new_values[ $k ] = FrmAppHelper::maybe_json_encode( $v );
+				} else {
+					$new_values[ $k ] = serialize( $v );
+				}
 			}
 			unset( $k, $v );
 		}
@@ -313,10 +317,13 @@ class FrmField {
 		}
 
 		// serialize array values
-		foreach ( array( 'default_value', 'field_options', 'options' ) as $opt ) {
+		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
+		}
+		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
+			$values['default_value'] = FrmAppHelper::maybe_json_encode( $values['default_value'] );
 		}
 
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
@@ -614,7 +621,7 @@ class FrmField {
 	}
 
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
-		$cache_key = maybe_serialize( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
+		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
 		if ( self::$use_cache ) {
 			// make sure old cache doesn't get saved as a transient
 			$results = wp_cache_get( $cache_key, 'frm_field' );
@@ -680,9 +687,10 @@ class FrmField {
 				FrmDb::set_cache( $result->id, $result, 'frm_field' );
 				FrmDb::set_cache( $result->field_key, $result, 'frm_field' );
 
-				$results[ $r_key ]->field_options = maybe_unserialize( $result->field_options );
-				$results[ $r_key ]->options       = maybe_unserialize( $result->options );
-				$results[ $r_key ]->default_value = maybe_unserialize( $result->default_value );
+				self::prepare_options( $result );
+				$results[ $r_key ]->field_options = $result->field_options;
+				$results[ $r_key ]->options       = $result->options;
+				$results[ $r_key ]->default_value = $result->default_value;
 
 				unset( $r_key, $result );
 			}
@@ -700,10 +708,9 @@ class FrmField {
 	 * @since 2.0
 	 */
 	private static function prepare_options( &$results ) {
-		$results->field_options = maybe_unserialize( $results->field_options );
-
-		$results->options       = maybe_unserialize( $results->options );
-		$results->default_value = maybe_unserialize( $results->default_value );
+		FrmAppHelper::unserialize_or_decode( $results->field_options );
+		FrmAppHelper::unserialize_or_decode( $results->options );
+		FrmAppHelper::unserialize_or_decode( $results->default_value );
 	}
 
 	/**

@@ -41,7 +41,7 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$form->options = maybe_unserialize( $form->options );
+		FrmAppHelper::unserialize_or_decode( $form->options );
 		if ( is_array( $form->options ) ) {
 			$values = array_merge( $values, $form->options );
 		}
@@ -272,7 +272,8 @@ class FrmEntriesHelper {
 			return $value;
 		}
 
-		$unfiltered_value = maybe_unserialize( $value );
+		$unfiltered_value = $value;
+		FrmAppHelper::unserialize_or_decode( $unfiltered_value );
 
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );

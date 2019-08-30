@@ -470,7 +470,7 @@ class FrmAppHelper {
 			if ( isset( $_POST[ $args['param'] ] ) ) {
 				$value = wp_unslash( $_POST[ $args['param'] ] );
 				if ( $args['serialized'] === true && is_serialized_string( $value ) && is_serialized( $value ) ) {
-					$value = maybe_unserialize( $value );
+					self::unserialize_or_decode( $value );
 				}
 			}
 		} else {
@@ -1475,7 +1475,12 @@ class FrmAppHelper {
 		}
 
 		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
-		$new_value  = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
+		if ( isset( $post_values['item_meta'][ $field->id ] ) ) {
+			$new_value = $post_values['item_meta'][ $field->id ];
+			self::unserialize_or_decode( $new_value );
+		} else {
+			$new_value = $meta_value;
+		}
 
 		$field_array                   = self::start_field_array( $field );
 		$field_array['value']          = $new_value;
@@ -1539,7 +1544,12 @@ class FrmAppHelper {
 		}
 
 		foreach ( $form->options as $opt => $value ) {
-			$values[ $opt ] = isset( $post_values[ $opt ] ) ? maybe_unserialize( $post_values[ $opt ] ) : $value;
+			if ( isset( $post_values[ $opt ] ) ) {
+				$values[ $opt ] = $post_values[ $opt ];
+				self::unserialize_or_decode( $values[ $opt ] );
+			} else {
+				$values[ $opt ] = $value;
+			}
 		}
 
 		self::fill_form_defaults( $post_values, $values );
@@ -1926,6 +1936,24 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Check for either json or serilized data. This is temporary while transitioning
+	 * all data to json.
+	 *
+	 * @since 4.02.03
+	 */
+	public static function unserialize_or_decode( &$value ) {
+		if ( is_array( $value ) ) {
+			return;
+		}
+
+		if ( is_serialized( $value ) ) {
+			$value = maybe_unserialize( $value );
+		} else {
+			$value = self::maybe_json_decode( $value );
+		}
+	}
+
 	public static function maybe_json_decode( $string ) {
 		if ( is_array( $string ) ) {
 			return $string;
@@ -1943,6 +1971,40 @@ class FrmAppHelper {
 		}
 
 		return $string;
+	}
+
+	/**
+	 * Reformat the json serialized array in name => value array.
+	 *
+	 * @since 4.02.03
+	 */
+	public static function format_form_data( &$form ) {
+		$formatted = array();
+
+		foreach ( $form as $input ) {
+			$key = $input['name'];
+			if ( isset( $formatted[ $key ] ) ) {
+				if ( is_array( $formatted[ $key ] ) ) {
+					$formatted[ $key ][] = $input['value'];
+				} else {
+					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
+				}
+			} else {
+				$formatted[ $key ] = $input['value'];
+			}
+		}
+
+		parse_str( http_build_query( $formatted ), $form );
+	}
+
+ 	/**
+	 * @since 4.02.03
+	 */
+	public static function maybe_json_encode( $value ) {
+		if ( is_array( $value ) ) {
+			$value = wp_json_encode( $value );
+		}
+		return $value;
 	}
 
 	/**

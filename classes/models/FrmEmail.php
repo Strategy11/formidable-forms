@@ -298,7 +298,8 @@ class FrmEmail {
 
 		// Add the user info if it isn't already included
 		if ( $this->include_user_info && $prev_mail_body === $mail_body ) {
-			$data      = maybe_unserialize( $this->entry->description );
+			$data      = $this->entry->description;
+			FrmAppHelper::unserialize_or_decode( $data );
 			$mail_body .= "\r\n\r\n" . __( 'User Information', 'formidable' ) . "\r\n";
 			$this->maybe_add_ip( $mail_body );
 			$mail_body .= __( 'User-Agent (Browser/OS)', 'formidable' ) . ': ' . FrmEntriesHelper::get_browser( $data['browser'] ) . "\r\n";

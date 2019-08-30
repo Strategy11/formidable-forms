@@ -72,7 +72,8 @@ class FrmForm {
 
 		if ( $blog_id ) {
 			$new_values['status']    = 'published';
-			$new_options             = maybe_unserialize( $values->options );
+			$new_options             = $values->options;
+			FrmAppHelper::unserialize_or_decode( $new_options );
 			$new_options['email_to'] = get_option( 'admin_email' );
 			$new_options['copy']     = false;
 			$new_values['options']   = $new_options;
@@ -103,7 +104,8 @@ class FrmForm {
 	}
 
 	public static function after_duplicate( $form_id, $values ) {
-		$new_opts          = maybe_unserialize( $values['options'] );
+		$new_opts          = $values['options'];
+		FrmAppHelper::unserialize_or_decode( $new_opts );
 		$values['options'] = $new_opts;
 
 		if ( isset( $new_opts['success_msg'] ) ) {
@@ -248,7 +250,7 @@ class FrmForm {
 
 			$new_field = array(
 				'field_options' => $field->field_options,
-				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? maybe_serialize( $values[ 'default_value_' . $field_id ] ) : '',
+				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
 			);
 
 			self::prepare_field_update_values( $field, $values, $new_field );
@@ -478,7 +480,7 @@ class FrmForm {
 
 		$count = 0;
 		foreach ( $trash_forms as $form ) {
-			$form->options = maybe_unserialize( $form->options );
+			FrmAppHelper::unserialize_or_decode( $form->options );
 			if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
 				self::destroy( $form->id );
 				$count ++;
@@ -567,7 +569,7 @@ class FrmForm {
 			$cache      = wp_cache_get( $id, 'frm_form' );
 			if ( $cache ) {
 				if ( isset( $cache->options ) ) {
-					$cache->options = maybe_unserialize( $cache->options );
+					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
 
 				return wp_unslash( $cache );
@@ -584,7 +586,7 @@ class FrmForm {
 
 		if ( isset( $results->options ) ) {
 			FrmDb::set_cache( $results->id, $results, 'frm_form' );
-			$results->options = maybe_unserialize( $results->options );
+			FrmAppHelper::unserialize_or_decode( $results->options );
 		}
 
 		return wp_unslash( $results );
@@ -612,7 +614,7 @@ class FrmForm {
 		if ( $results ) {
 			foreach ( $results as $result ) {
 				FrmDb::set_cache( $result->id, $result, 'frm_form' );
-				$result->options = maybe_unserialize( $result->options );
+				FrmAppHelper::unserialize_or_decode( $result->options );
 			}
 		}
 

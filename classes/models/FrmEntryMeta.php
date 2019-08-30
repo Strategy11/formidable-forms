@@ -227,7 +227,7 @@ class FrmEntryMeta {
 		}
 
 		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
-		$result = maybe_unserialize( $result );
+		FrmAppHelper::unserialize_or_decode( $result );
 		$result = wp_unslash( $result );
 
 		return $result;
@@ -246,7 +246,7 @@ class FrmEntryMeta {
 		self::meta_field_query( $field_id, $order, $limit, $args, $query );
 		$query = implode( ' ', $query );
 
-		$cache_key = 'entry_metas_for_field_' . $field_id . $order . $limit . maybe_serialize( $args );
+		$cache_key = 'entry_metas_for_field_' . $field_id . $order . $limit . FrmAppHelper::maybe_json_encode( $args );
 		$values    = FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_col' );
 
 		if ( ! $args['stripslashes'] ) {
@@ -254,7 +254,8 @@ class FrmEntryMeta {
 		}
 
 		foreach ( $values as $k => $v ) {
-			$values[ $k ] = maybe_unserialize( $v );
+			FrmAppHelper::unserialize_or_decode( $v );
+			$values[ $k ] = $v;
 			unset( $k, $v );
 		}
 
@@ -302,7 +303,7 @@ class FrmEntryMeta {
 			FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id' .
 			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
-		$cache_key = 'all_' . maybe_serialize( $where ) . $order_by . $limit;
+		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
 		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) );
 
 		if ( ! $results || ! $stripslashes ) {
@@ -310,7 +311,8 @@ class FrmEntryMeta {
 		}
 
 		foreach ( $results as $k => $result ) {
-			$results[ $k ]->meta_value = wp_unslash( maybe_unserialize( $result->meta_value ) );
+			FrmAppHelper::unserialize_or_decode( $result->meta_value );
+			$results[ $k ]->meta_value = wp_unslash( $result->meta_value );
 			unset( $k, $result );
 		}
 
@@ -329,7 +331,7 @@ class FrmEntryMeta {
 		self::get_ids_query( $where, $order_by, $limit, $unique, $args, $query );
 		$query = implode( ' ', $query );
 
-		$cache_key = 'ids_' . maybe_serialize( $where ) . $order_by . 'l' . $limit . 'u' . $unique . maybe_serialize( $args );
+		$cache_key = 'ids_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'u' . $unique . json_encode( $args );
 
 		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_var' : 'get_col' ) );
 	}
@@ -401,7 +403,7 @@ class FrmEntryMeta {
 	}
 
 	public static function search_entry_metas( $search, $field_id = '', $operator ) {
-		$cache_key = 'search_' . maybe_serialize( $search ) . $field_id . $operator;
+		$cache_key = 'search_' . FrmAppHelper::maybe_json_encode( $search ) . $field_id . $operator;
 		$results   = wp_cache_get( $cache_key, 'frm_entry' );
 		if ( false !== $results ) {
 			return $results;

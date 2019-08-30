@@ -344,7 +344,8 @@ class FrmEntry {
 		$include_key = apply_filters( 'frm_include_meta_keys', false, array( 'form_id' => $entry->form_id ) );
 		foreach ( $metas as $meta_val ) {
 			if ( $meta_val->item_id == $entry->id ) {
-				$entry->metas[ $meta_val->field_id ] = maybe_unserialize( $meta_val->meta_value );
+				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
+				FrmAppHelper::unserialize_or_decode( $entry->metas[ $meta_val->field_id ] );
 				if ( $include_key ) {
 					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
 				}
@@ -356,7 +357,8 @@ class FrmEntry {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 
-			$entry->metas[ $meta_val->field_id ][] = maybe_unserialize( $meta_val->meta_value );
+			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+			$entry->metas[ $meta_val->field_id ][] = $meta_val->meta_value;
 
 			unset( $meta_val );
 		}
@@ -394,7 +396,7 @@ class FrmEntry {
 
 		$limit = FrmDb::esc_limit( $limit );
 
-		$cache_key = maybe_serialize( $where ) . $order_by . $limit . $inc_form;
+		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
 		if ( false === $entries ) {
@@ -455,8 +457,8 @@ class FrmEntry {
 				$entries[ $meta_val->item_id ]->metas = array();
 			}
 
-			$entries[ $meta_val->item_id ]->metas[ $meta_val->field_id ] = maybe_unserialize( $meta_val->meta_value );
-
+			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+			$entries[ $meta_val->item_id ]->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 			unset( $m_key, $meta_val );
 		}
 
@@ -486,7 +488,7 @@ class FrmEntry {
 		if ( is_array( $where ) ) {
 			$count = FrmDb::get_count( $table_join, $where );
 		} else {
-			$cache_key = 'count_' . maybe_serialize( $where );
+			$cache_key = 'count_' . FrmAppHelper::maybe_json_encode( $where );
 			$query     = 'SELECT COUNT(*) FROM ' . $table_join . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 			$count     = FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_var' );
 		}

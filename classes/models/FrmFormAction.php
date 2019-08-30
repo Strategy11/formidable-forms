@@ -449,7 +449,7 @@ class FrmFormAction {
 
 		$args                = self::action_args( $form_id, $limit );
 		$args['post_status'] = $atts['post_status'];
-		$actions             = FrmDb::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
+		$actions             = FrmDb::check_cache( FrmAppHelper::maybe_json_encode( $args ), 'frm_actions', $args, 'get_posts' );
 
 		if ( ! $actions ) {
 			return array();
@@ -539,7 +539,7 @@ class FrmFormAction {
 		$query['post_status'] = $atts['post_status'];
 		$query['suppress_filters'] = false;
 
-		$actions = FrmDb::check_cache( serialize( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
+		$actions = FrmDb::check_cache( FrmAppHelper::maybe_json_encode( $query ) . '_type_' . $type, 'frm_actions', $query, 'get_posts' );
 		unset( $query );
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
@@ -670,7 +670,7 @@ class FrmFormAction {
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
 		$action        = $this->prepare_new( $form->id );
-		$form->options = maybe_unserialize( $form->options );
+		FrmAppHelper::unserialize_or_decode( $form->options );
 
 		// fill with existing options
 		foreach ( $action->post_content as $name => $val ) {

@@ -234,7 +234,7 @@ DEFAULT_HTML;
 
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
-		$field['default_value'] = maybe_unserialize( $field['default_value'] );
+		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
 
 		$display = $this->display_field_settings();
 		include( $this->include_form_builder_file() );
@@ -599,7 +599,8 @@ DEFAULT_HTML;
 			$values = (array) $this->field;
 		}
 
-		return maybe_unserialize( $values['options'] );
+		FrmAppHelper::unserialize_or_decode( $values['options'] );
+		return $values['options'];
 	}
 
 	/**
@@ -1122,7 +1123,8 @@ DEFAULT_HTML;
 			return $value;
 		}
 
-		$checked = is_array( $value ) ? $value : maybe_unserialize( $value );
+		$checked = $value;
+		FrmAppHelper::unserialize_or_decode( $checked );
 
 		if ( ! is_array( $checked ) ) {
 			$checked = explode( ',', $checked );

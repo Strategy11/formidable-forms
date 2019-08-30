@@ -260,7 +260,7 @@ class FrmFieldsHelper {
 		$values['field_key']     = FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_fields', 'field_key' );
 		$values['form_id']       = $form_id;
 		$values['options']       = maybe_serialize( $field->options );
-		$values['default_value'] = maybe_serialize( $field->default_value );
+		$values['default_value'] = FrmAppHelper::maybe_json_encode( $field->default_value );
 
 		foreach ( array( 'name', 'description', 'type', 'field_order', 'field_options', 'required' ) as $col ) {
 			$values[ $col ] = $field->{$col};
@@ -764,7 +764,8 @@ class FrmFieldsHelper {
 		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag == 'user_agent' ) {
-			$description  = maybe_unserialize( $atts['entry']->description );
+			$description  = $atts['entry']->description;
+			FrmAppHelper::unserialize_or_decode( $description );
 			$replace_with = FrmEntriesHelper::get_browser( $description['browser'] );
 		} elseif ( $clean_tag == 'created_at' || $clean_tag == 'updated_at' ) {
 			$atts['tag']  = $clean_tag;
