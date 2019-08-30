@@ -4919,10 +4919,15 @@ function frmAdminBuildJS() {
 
 			// update styling on change
 			jQuery( '#frm_styling_form .styling_settings' ).change( function() {
-				var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serialize();
+				var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
+				locStr = JSON.stringify( locStr );
 				jQuery.ajax( {
 					type: 'POST', url: ajaxurl,
-					data: 'action=frm_change_styling&nonce=' + frmGlobal.nonce + '&' + locStr,
+					data: {
+						action: 'frm_change_styling',
+						nonce: frmGlobal.nonce,
+						frm_style_setting: locStr,
+					},
 					success: function( css ) {
 						document.getElementById( 'this_css' ).innerHTML = css;
 					}
