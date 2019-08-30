@@ -190,9 +190,7 @@ class FrmEntryValues {
 	 */
 	protected function init_user_info() {
 		if ( isset( $this->entry->description ) ) {
-			$entry_description = $this->entry->description;
-			FrmAppHelper::unserialize_or_decode( $entry_description );
-			$entry_description = (array) $entry_description;
+			$entry_description = (array) $this->entry->description;
 		} else {
 			$entry_description = array(
 				'browser'  => '',

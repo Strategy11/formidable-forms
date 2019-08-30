@@ -1242,7 +1242,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function use_wpautop( $content ) {
-		if ( apply_filters( 'frm_use_wpautop', true ) ) {
+		if ( apply_filters( 'frm_use_wpautop', true ) && ! is_array( $content ) ) {
 			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 

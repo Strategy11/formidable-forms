@@ -309,19 +309,43 @@ class FrmEntry {
 
 		if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
-
-			return wp_unslash( $entry );
+			self::prepare_entry( $entry );
+			return $entry;
 		}
 
 		$entry = FrmDb::check_cache( $id, 'frm_entry' );
 		if ( $entry !== false ) {
-			return wp_unslash( $entry );
+			self::prepare_entry( $entry );
+			return $entry;
 		}
 
 		$entry = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 		$entry = self::get_meta( $entry );
+		self::prepare_entry( $entry );
 
-		return wp_unslash( $entry );
+		return $entry;
+	}
+
+	/**
+	 * @since 4.02.03
+	 *
+	 * @param object $entry
+	 */
+	private static function prepare_entry( &$entry ) {
+		FrmAppHelper::unserialize_or_decode( $entry->description );
+		wp_unslash( $entry );
+	}
+
+	/**
+	 * @since 4.02.03
+	 *
+	 * @param array $entries
+	 */
+	private static function prepare_entries( &$entries ) {
+		foreach ( $entries as $k => $entry ) {
+			self::prepare_entry( $entry );
+			$entries[ $k ] = $entry;
+		}
 	}
 
 	public static function get_meta( $entry ) {
@@ -425,7 +449,8 @@ class FrmEntry {
 		}
 
 		if ( ! $meta || ! $entries ) {
-			return wp_unslash( $entries );
+			self::prepare_entries( $entries );
+			return $entries;
 		}
 		unset( $meta );
 
@@ -445,7 +470,8 @@ class FrmEntry {
 		unset( $meta_where );
 
 		if ( ! $metas ) {
-			return wp_unslash( $entries );
+			self::prepare_entries( $entries );
+			return $entries;
 		}
 
 		foreach ( $metas as $m_key => $meta_val ) {
@@ -469,7 +495,8 @@ class FrmEntry {
 			}
 		}
 
-		return wp_unslash( $entries );
+		self::prepare_entries( $entries );
+		return $entries;
 	}
 
 	// Pagination Methods
@@ -697,9 +724,9 @@ class FrmEntry {
 	 */
 	private static function get_entry_description( $values ) {
 		if ( isset( $values['description'] ) && ! empty( $values['description'] ) ) {
-			$description = maybe_serialize( $values['description'] );
+			$description = FrmAppHelper::maybe_json_encode( $values['description'] );
 		} else {
-			$description = serialize(
+			$description = json_encode(
 				array(
 					'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
 					'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),

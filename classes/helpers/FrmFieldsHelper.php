@@ -765,7 +765,6 @@ class FrmFieldsHelper {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag == 'user_agent' ) {
 			$description  = $atts['entry']->description;
-			FrmAppHelper::unserialize_or_decode( $description );
 			$replace_with = FrmEntriesHelper::get_browser( $description['browser'] );
 		} elseif ( $clean_tag == 'created_at' || $clean_tag == 'updated_at' ) {
 			$atts['tag']  = $clean_tag;

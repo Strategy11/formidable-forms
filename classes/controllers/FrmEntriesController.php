@@ -422,7 +422,6 @@ class FrmEntriesController {
 		}
 
 		$data = $entry->description;
-		FrmAppHelper::unserialize_or_decode( $data );
 		if ( ! is_array( $data ) || ! isset( $data['referrer'] ) ) {
 			$data = array( 'referrer' => $data );
 		}
@@ -701,7 +700,6 @@ class FrmEntriesController {
 		if ( $entry ) {
 			$id   = $entry->id;
 			$data = $entry->description;
-			FrmAppHelper::unserialize_or_decode( $data );
 			if ( isset( $data['browser'] ) ) {
 				$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 			}
