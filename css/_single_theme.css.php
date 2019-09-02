@@ -400,7 +400,8 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ); ?> input[type=submit],
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
-.frm_form_submit_style{
+.frm_form_submit_style,
+.summary-page-wrapper .edit-page-btn {
 	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
 	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
 	font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
