@@ -233,7 +233,9 @@ class FrmEntry {
 			return $result;
 		}
 
-		do_action( 'frm_before_destroy_entry', $id, $entry );
+		if ( isset( $entry->form_id ) && is_numeric( $entry->form_id ) ) {
+			do_action( 'frm_before_destroy_entry', $id, $entry );
+		}
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE item_id=%d', $id ) );
 		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $id ) );
