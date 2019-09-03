@@ -308,7 +308,7 @@ class FrmStylesHelper {
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
 					$settings = $posted['post_content'];
-					$style_name = sanitize_title( $_POST['style_name'] );
+					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' ) );
 				}
 			} else {
 				$settings = $_GET;
