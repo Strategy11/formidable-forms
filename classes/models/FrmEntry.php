@@ -372,8 +372,8 @@ class FrmEntry {
 		$include_key = apply_filters( 'frm_include_meta_keys', false, array( 'form_id' => $entry->form_id ) );
 		foreach ( $metas as $meta_val ) {
 			if ( $meta_val->item_id == $entry->id ) {
+				FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
-				FrmAppHelper::unserialize_or_decode( $entry->metas[ $meta_val->field_id ] );
 				if ( $include_key ) {
 					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
 				}

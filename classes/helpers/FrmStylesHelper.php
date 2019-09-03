@@ -304,10 +304,12 @@ class FrmStylesHelper {
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
+					$settings = $posted['frm_style_setting']['post_content'];
+					$style_name = sanitize_title( $posted['style_name'] );
+				} else {
+					$settings = $posted['post_content'];
+					$style_name = sanitize_title( $_POST['style_name'] );
 				}
-
-				$settings = $posted['frm_style_setting']['post_content'];
-				$style_name = sanitize_title( $posted['style_name'] );
 			} else {
 				$settings = $_GET;
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
