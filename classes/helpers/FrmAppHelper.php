@@ -1967,12 +1967,9 @@ class FrmAppHelper {
 		$new_string = json_decode( $string, true );
 		if ( function_exists( 'json_last_error' ) ) {
 			// php 5.3+
-			if ( json_last_error() == JSON_ERROR_NONE ) {
+			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) ) {
 				$string = $new_string;
 			}
-		} elseif ( isset( $new_string ) ) {
-			// php < 5.3 fallback
-			$string = $new_string;
 		}
 
 		return $string;
