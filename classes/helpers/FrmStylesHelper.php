@@ -300,7 +300,10 @@ class FrmStylesHelper {
 			if ( isset( $_POST['frm_style_setting'] ) ) {
 				// Sanitizing is done later.
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$posted = json_decode( wp_unslash( $_POST['frm_style_setting'] ), true );
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
+				if ( ! is_array( $posted ) ) {
+					$posted = json_decode( $posted, true );
+				}
 				FrmAppHelper::format_form_data( $posted );
 
 				$settings = $posted['frm_style_setting']['post_content'];
