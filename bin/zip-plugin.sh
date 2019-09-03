@@ -44,11 +44,13 @@ zip -r $zipname $destination \
 	-x "*/formidable-js.pot" \
 	-x "*/node_modules/*" \
 	-x "*/npm-debug.log" \
+	-x "*/results.log" \
 	-x "*/package.json" \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
 	-x "*/readme.md" \
+	-x "*/README.md" \
 	-x "*/tests/*" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"

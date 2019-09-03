@@ -233,9 +233,7 @@ class FrmEntry {
 			return $result;
 		}
 
-		if ( isset( $entry->form_id ) && is_numeric( $entry->form_id ) ) {
-			do_action( 'frm_before_destroy_entry', $id, $entry );
-		}
+		do_action( 'frm_before_destroy_entry', $id, $entry );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE item_id=%d', $id ) );
 		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $id ) );
@@ -334,8 +332,12 @@ class FrmEntry {
 	 * @param object $entry
 	 */
 	private static function prepare_entry( &$entry ) {
+		if ( empty( $entry ) ) {
+			return;
+		}
+
 		FrmAppHelper::unserialize_or_decode( $entry->description );
-		wp_unslash( $entry );
+		$entry = wp_unslash( $entry ); // TODO: Remove slashes on input only, not output.
 	}
 
 	/**
