@@ -1984,6 +1984,9 @@ class FrmAppHelper {
 		$formatted = array();
 
 		foreach ( $form as $input ) {
+			if ( ! isset( $input['name'] ) ) {
+				continue;
+			}
 			$key = $input['name'];
 			if ( isset( $formatted[ $key ] ) ) {
 				if ( is_array( $formatted[ $key ] ) ) {

@@ -303,8 +303,8 @@ class FrmStylesHelper {
 				$posted = wp_unslash( $_POST['frm_style_setting'] );
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
+					FrmAppHelper::format_form_data( $posted );
 				}
-				FrmAppHelper::format_form_data( $posted );
 
 				$settings = $posted['frm_style_setting']['post_content'];
 				$style_name = sanitize_title( $posted['style_name'] );
