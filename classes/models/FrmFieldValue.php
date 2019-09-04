@@ -104,7 +104,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_label() {
-		return $this->field->name;
+		return is_object( $this->field ) ? $this->field->name : '';
 	}
 
 	/**
@@ -113,7 +113,7 @@ class FrmFieldValue {
 	 * @since 2.05
 	 */
 	public function get_field_id() {
-		return $this->field->id;
+		return is_object( $this->field ) ? $this->field->id : '';
 	}
 
 	/**
@@ -122,7 +122,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_key() {
-		return $this->field->field_key;
+		return is_object( $this->field ) ? $this->field->field_key : '';
 	}
 
 	/**
@@ -131,7 +131,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_type() {
-		return $this->field->type;
+		return is_object( $this->field ) ? $this->field->type : '';
 	}
 
 	/**
@@ -182,10 +182,7 @@ class FrmFieldValue {
 	 */
 	protected function filter_displayed_value( $atts ) {
 		if ( ! is_object( $this->entry ) ) {
-			$this->entry = FrmEntry::getOne( $this->entry_id, true );
-			if ( ! is_object( $this->entry ) ) {
-				return;
-			}
+			return;
 		}
 
 		// TODO: maybe change from 'source' to 'run_filters' = 'email'
