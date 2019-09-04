@@ -124,7 +124,7 @@ class FrmFieldsHelper {
 	 * @param array $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
-		$check_post = FrmAppHelper::is_admin() && $_POST && isset( $_POST['field_options'] );
+		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] );
 
 		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
@@ -185,11 +185,14 @@ class FrmFieldsHelper {
 		}
 
 		if ( strpos( $setting, 'html' ) !== false ) {
-			// Strip slashes from HTML but not regex.
-			$value = maybe_unserialize( wp_unslash( $_POST['field_options'][ $setting ] ) );
-		} else {
+			// Strip slashes from HTML but not regex or script tags.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$value = wp_unslash( $_POST['field_options'][ $setting ] );
+		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
-			$value = maybe_unserialize( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
+			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
+		} else {
+			$value = wp_kses_post( wp_unslash( $_POST['field_options'][ $setting ] ) );
 		}
 	}
 
@@ -258,7 +261,7 @@ class FrmFieldsHelper {
 		$values['field_key']     = FrmAppHelper::get_unique_key( $new_key, $wpdb->prefix . 'frm_fields', 'field_key' );
 		$values['form_id']       = $form_id;
 		$values['options']       = maybe_serialize( $field->options );
-		$values['default_value'] = maybe_serialize( $field->default_value );
+		$values['default_value'] = FrmAppHelper::maybe_json_encode( $field->default_value );
 
 		foreach ( array( 'name', 'description', 'type', 'field_order', 'field_options', 'required' ) as $col ) {
 			$values[ $col ] = $field->{$col};
@@ -762,7 +765,7 @@ class FrmFieldsHelper {
 		} elseif ( in_array( $atts['tag'], $dynamic_default ) ) {
 			$replace_with = self::dynamic_default_values( $atts['tag'], $atts );
 		} elseif ( $clean_tag == 'user_agent' ) {
-			$description  = maybe_unserialize( $atts['entry']->description );
+			$description  = $atts['entry']->description;
 			$replace_with = FrmEntriesHelper::get_browser( $description['browser'] );
 		} elseif ( $clean_tag == 'created_at' || $clean_tag == 'updated_at' ) {
 			$atts['tag']  = $clean_tag;

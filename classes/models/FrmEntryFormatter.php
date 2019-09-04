@@ -507,9 +507,9 @@ class FrmEntryFormatter {
 		$display_value = $this->prepare_display_value_for_plain_text_content( $display_value );
 
 		if ( 'rtl' == $this->direction ) {
-			$content .= $display_value . ' :' . $label . "\r\n";
+			$content .= wp_kses_post( $display_value . ' :' . $label ) . "\r\n";
 		} else {
-			$content .= $label . ': ' . $display_value . "\r\n";
+			$content .= wp_kses_post( $label . ': ' . $display_value ) . "\r\n";
 		}
 	}
 

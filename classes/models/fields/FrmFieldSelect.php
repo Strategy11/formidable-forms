@@ -40,6 +40,18 @@ class FrmFieldSelect extends FrmFieldType {
 	}
 
 	/**
+	 * Get the type of field being displayed.
+	 *
+	 * @since 4.02.01
+	 * @return array
+	 */
+	public function displayed_field_type( $field ) {
+		return array(
+			$this->type => true,
+		);
+	}
+
+	/**
 	 * @since 4.0
 	 * @param array $args - Includes 'field', 'display', and 'values'
 	 */

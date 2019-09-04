@@ -176,7 +176,7 @@ class FrmStyle {
 			'order'       => 'ASC',
 		);
 
-		FrmDb::delete_cache_and_transient( serialize( $default_post_atts ), 'frm_styles' );
+		FrmDb::delete_cache_and_transient( json_encode( $default_post_atts ), 'frm_styles' );
 		FrmDb::cache_delete_group( 'frm_styles' );
 		FrmDb::delete_cache_and_transient( 'frmpro_css' );
 	}
@@ -223,7 +223,7 @@ class FrmStyle {
 			'order'       => $order,
 		);
 
-		$temp_styles = FrmDb::check_cache( serialize( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
+		$temp_styles = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
 		if ( empty( $temp_styles ) ) {
 			global $wpdb;

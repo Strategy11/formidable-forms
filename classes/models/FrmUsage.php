@@ -297,7 +297,7 @@ class FrmUsage {
 			'fields'     => 'ids',
 		);
 
-		$actions = FrmDb::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
+		$actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
 		return count( $actions );
 	}
 
@@ -315,7 +315,8 @@ class FrmUsage {
 
 		$fields = FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type, field_options', $args );
 		foreach ( $fields as $k => $field ) {
-			$fields[ $k ]->field_options = json_encode( maybe_unserialize( $field->field_options ) );
+			FrmAppHelper::unserialize_or_decode( $field->field_options );
+			$fields[ $k ]->field_options = json_encode( $field->field_options );
 		}
 		return $fields;
 	}
@@ -332,7 +333,7 @@ class FrmUsage {
 
 		$actions = array();
 
-		$saved_actions = FrmDb::check_cache( serialize( $args ), 'frm_actions', $args, 'get_posts' );
+		$saved_actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
 		foreach ( $saved_actions as $action ) {
 			$actions[] = array(
 				'form_id'  => $action->menu_order,

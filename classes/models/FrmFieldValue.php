@@ -218,7 +218,7 @@ class FrmFieldValue {
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {
 
-			$this->saved_value = maybe_unserialize( $this->saved_value );
+			FrmAppHelper::unserialize_or_decode( $this->saved_value );
 
 			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {
 				$this->saved_value = '';

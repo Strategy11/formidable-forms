@@ -1247,7 +1247,7 @@ BEFORE_HTML;
 				'href'  => 'rel',
 				'atts'  => '',
 			);
-		} elseif ( ! empty( $args['license_type'] ) && $args['license_type'] === strtolower( $args['plan_required'] ) ) {
+		} elseif ( self::plan_is_allowed( $args ) ) {
 			$link = array(
 				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $template['slug'],
 				'label' => __( 'Renew', 'formidable' ),
@@ -1260,6 +1260,37 @@ BEFORE_HTML;
 		}
 
 		return array_merge( $defaults, $link );
+	}
+
+	/**
+	 * Is the template included with the license type?
+	 *
+	 * @since 4.02.02
+	 *
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
+	private static function plan_is_allowed( $args ) {
+		if ( empty( $args['license_type'] ) ) {
+			return false;
+		}
+
+		$included = $args['license_type'] === strtolower( $args['plan_required'] );
+
+		$plans = array( 'free', 'personal', 'business', 'elite' );
+		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans ) ) {
+			return $included;
+		}
+
+		foreach ( $plans as $plan ) {
+			if ( $included || $plan === $args['license_type'] ) {
+				break;
+			}
+			$included = $plan === strtolower( $args['plan_required'] );
+		}
+
+		return $included;
 	}
 
 	/**

@@ -294,8 +294,8 @@ class FrmMigrate {
 		$fields = FrmDb::get_results( $this->fields, $query, 'id, default_value, field_options, options' );
 
 		foreach ( $fields as $field ) {
-			$field->field_options = maybe_unserialize( $field->field_options );
-			$field->options = maybe_unserialize( $field->options );
+			FrmAppHelper::unserialize_or_decode( $field->field_options );
+			FrmAppHelper::unserialize_or_decode( $field->options );
 			$update_values = FrmXMLHelper::migrate_field_placeholder( $field, $type );
 			if ( empty( $update_values ) ) {
 				continue;
@@ -328,7 +328,7 @@ class FrmMigrate {
 		$fields = $this->get_fields_with_size();
 
 		foreach ( (array) $fields as $f ) {
-			$f->field_options = maybe_unserialize( $f->field_options );
+			FrmAppHelper::unserialize_or_decode( $f->field_options );
 			$size             = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
 
@@ -386,7 +386,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$widgets = maybe_unserialize( $widgets );
+		FrmAppHelper::unserialize_or_decode( $widgets );
 		foreach ( $widgets as $k => $widget ) {
 			if ( ! is_array( $widget ) || ! isset( $widget['size'] ) ) {
 				continue;
@@ -463,7 +463,7 @@ class FrmMigrate {
 		$fields = $this->get_fields_with_size();
 
 		foreach ( $fields as $f ) {
-			$f->field_options = maybe_unserialize( $f->field_options );
+			FrmAppHelper::unserialize_or_decode( $f->field_options );
 			if ( empty( $f->field_options['size'] ) || ! is_numeric( $f->field_options['size'] ) ) {
 				continue;
 			}
@@ -486,7 +486,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$widgets = maybe_unserialize( $widgets );
+		FrmAppHelper::unserialize_or_decode( $widgets );
 		foreach ( $widgets as $k => $widget ) {
 			if ( ! is_array( $widget ) || ! isset( $widget['size'] ) ) {
 				continue;
@@ -545,7 +545,8 @@ class FrmMigrate {
 			}
 
 			// Format form options
-			$form_options = maybe_unserialize( $form->options );
+			$form_options = $form->options;
+			FrmAppHelper::unserialize_or_decode( $form_options );
 
 			// Migrate settings to actions
 			FrmXMLHelper::migrate_form_settings_to_actions( $form_options, $form->id );
@@ -571,7 +572,7 @@ DEFAULT_HTML;
 		$new_default_html = FrmFormsHelper::get_default_html( 'submit' );
 		$draft_link       = FrmFormsHelper::get_draft_link();
 		foreach ( $forms as $form ) {
-			$form->options = maybe_unserialize( $form->options );
+			FrmAppHelper::unserialize_or_decode( $form->options );
 			if ( ! isset( $form->options['submit_html'] ) || empty( $form->options['submit_html'] ) ) {
 				continue;
 			}

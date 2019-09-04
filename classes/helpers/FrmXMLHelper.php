@@ -1024,7 +1024,7 @@ class FrmXMLHelper {
 	 * @return string
 	 */
 	public static function prepare_form_options_for_export( $options ) {
-		$options = maybe_unserialize( $options );
+		FrmAppHelper::unserialize_or_decode( $options );
 		// Change custom_style to the post_name instead of ID (1 may be a string)
 		$not_default = isset( $options['custom_style'] ) && 1 != $options['custom_style'];
 		if ( $not_default ) {
@@ -1083,7 +1083,8 @@ class FrmXMLHelper {
 			$defaults['blank'] = $global_defaults['blank_msg'];
 		}
 
-		$options = maybe_unserialize( $field->field_options );
+		$options = $field->field_options;
+		FrmAppHelper::unserialize_or_decode( $options );
 		self::remove_defaults( $defaults, $options );
 		self::remove_default_html( 'custom_html', $defaults, $options );
 
@@ -1154,7 +1155,7 @@ class FrmXMLHelper {
 	}
 
 	public static function cdata( $str ) {
-		$str = maybe_unserialize( $str );
+		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
 		} elseif ( seems_utf8( $str ) == false ) {

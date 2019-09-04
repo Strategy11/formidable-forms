@@ -234,7 +234,7 @@ DEFAULT_HTML;
 
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
-		$field['default_value'] = maybe_unserialize( $field['default_value'] );
+		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
 
 		$display = $this->display_field_settings();
 		include( $this->include_form_builder_file() );
@@ -354,6 +354,70 @@ DEFAULT_HTML;
 	 */
 	public function show_primary_options( $args ) {
 		do_action( 'frm_' . $args['field']['type'] . '_primary_field_options', $args );
+	}
+
+	/**
+	 * Add and remove choices in a radio, checkbox, dropdown.
+	 *
+	 * @since 4.02.01
+	 *
+	 * @param array $args - Includes field, display, and values.
+	 */
+	public function show_field_choices( $args ) {
+		if ( ! $this->has_field_choices( $args['field'] ) ) {
+			return;
+		}
+
+		$this->field_choices_heading( $args );
+		echo '<div class="frm_grid_container frm-collapse-me">';
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
+		$this->show_extra_field_choices( $args );
+		echo '</div>';
+	}
+
+	/**
+	 * Should the section for adding choices show for this field?
+	 *
+	 * @since 4.02.01
+	 */
+	protected function has_field_choices( $field ) {
+		return ! empty( $this->displayed_field_type( $field ) );
+	}
+
+	/**
+	 * Get the type of field being displayed for lookups and dynamic fields.
+	 *
+	 * @since 4.02.01
+	 * @return array
+	 */
+	public function displayed_field_type( $field ) {
+		$display_type = array(
+			'radio'    => FrmField::is_field_type( $field, 'radio' ),
+			'checkbox' => FrmField::is_field_type( $field, 'checkbox' ),
+			'select'   => FrmField::is_field_type( $field, 'select' ),
+			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
+			'data'     => FrmField::is_field_type( $field, 'data' ),
+		);
+		return array_filter( $display_type );
+	}
+
+	/**
+	 * @since 4.02.01
+	 */
+	protected function field_choices_heading( $args ) {
+		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
+		?>
+		<h3>
+			<?php
+			printf(
+				/* translators: %s: Field type */
+				esc_html__( '%s Options', 'formidable' ),
+				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
+			);
+			?>
+			<i class="frm_icon_font frm_arrowdown6_icon"></i>
+		</h3>
+		<?php
 	}
 
 	/**
@@ -535,7 +599,8 @@ DEFAULT_HTML;
 			$values = (array) $this->field;
 		}
 
-		return maybe_unserialize( $values['options'] );
+		FrmAppHelper::unserialize_or_decode( $values['options'] );
+		return $values['options'];
 	}
 
 	/**
@@ -1058,7 +1123,8 @@ DEFAULT_HTML;
 			return $value;
 		}
 
-		$checked = is_array( $value ) ? $value : maybe_unserialize( $value );
+		$checked = $value;
+		FrmAppHelper::unserialize_or_decode( $checked );
 
 		if ( ! is_array( $checked ) ) {
 			$checked = explode( ',', $checked );

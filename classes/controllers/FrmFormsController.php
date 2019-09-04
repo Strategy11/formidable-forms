@@ -1290,6 +1290,8 @@ class FrmFormsController {
 		if ( isset( $_POST['frm_compact_fields'] ) ) {
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
 
+			// Javascript needs to be allowed in some field settings.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', wp_unslash( $_POST['frm_compact_fields'] ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
 			if ( empty( $json_vars ) ) {

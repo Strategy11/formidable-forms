@@ -234,7 +234,7 @@ class FrmCSVExportHelper {
 		foreach ( self::$fields as $col ) {
 			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
 
-			$field_value = maybe_unserialize( $field_value );
+			FrmAppHelper::unserialize_or_decode( $field_value );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
 			$field_value = apply_filters(
