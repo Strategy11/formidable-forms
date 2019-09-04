@@ -543,7 +543,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.04
 	 */
-	private static function decode_specialchars( &$value ) {
+	public static function decode_specialchars( &$value ) {
 		if ( is_array( $value ) ) {
 			$temp_values = $value;
 			foreach ( $temp_values as $k => $v ) {
