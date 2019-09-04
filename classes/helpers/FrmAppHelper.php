@@ -1955,15 +1955,15 @@ class FrmAppHelper {
 		if ( is_serialized( $value ) ) {
 			$value = maybe_unserialize( $value );
 		} else {
-			$value = self::maybe_json_decode( $value );
+			$value = self::maybe_json_decode( $value, false );
 		}
 	}
 
 	/**
 	 * Decode a JSON string.
-	 * Do not switch shortcodes like [24] to array.
+	 * Do not switch shortcodes like [24] to array unless intentional ie XML values.
 	 */
-	public static function maybe_json_decode( $string ) {
+	public static function maybe_json_decode( $string, $single_to_array = true ) {
 		if ( is_array( $string ) ) {
 			return $string;
 		}
@@ -1971,7 +1971,10 @@ class FrmAppHelper {
 		$new_string = json_decode( $string, true );
 		if ( function_exists( 'json_last_error' ) ) {
 			// php 5.3+
-			$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+			$single_value = false;
+			if ( ! $single_to_array ) {
+				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+			}
 			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
 				$string = $new_string;
 			}
