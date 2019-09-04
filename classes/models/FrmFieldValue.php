@@ -181,6 +181,10 @@ class FrmFieldValue {
 	 * @param array $atts
 	 */
 	protected function filter_displayed_value( $atts ) {
+		if ( ! is_object( $this->entry ) ) {
+			$this->entry = FrmEntry::getOne( $this->entry_id, true );
+		}
+
 		// TODO: maybe change from 'source' to 'run_filters' = 'email'
 		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
