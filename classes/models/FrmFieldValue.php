@@ -13,6 +13,13 @@ class FrmFieldValue {
 	protected $field = null;
 
 	/**
+	 * @since 4.03
+	 *
+	 * @var object
+	 */
+	protected $entry;
+
+	/**
 	 * @since 2.04
 	 *
 	 * @var int
@@ -44,6 +51,7 @@ class FrmFieldValue {
 			return;
 		}
 
+		$this->entry    = $entry;
 		$this->entry_id = $entry->id;
 		$this->field    = $field;
 		$this->init_saved_value( $entry );
@@ -173,13 +181,11 @@ class FrmFieldValue {
 	 * @param array $atts
 	 */
 	protected function filter_displayed_value( $atts ) {
-		$entry = FrmEntry::getOne( $this->entry_id, true );
-
 		// TODO: maybe change from 'source' to 'run_filters' = 'email'
 		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
 			// Deprecated frm_email_value hook
 			$meta = array(
-				'item_id'    => $entry->id,
+				'item_id'    => $this->entry->id,
 				'field_id'   => $this->field->id,
 				'meta_value' => $this->saved_value,
 				'field_type' => $this->field->type,
@@ -191,7 +197,7 @@ class FrmFieldValue {
 					'frm_email_value',
 					$this->displayed_value,
 					(object) $meta,
-					$entry,
+					$this->entry,
 					array(
 						'field' => $this->field,
 					)
@@ -205,7 +211,7 @@ class FrmFieldValue {
 			$this->displayed_value,
 			array(
 				'field' => $this->field,
-				'entry' => $entry,
+				'entry' => $this->entry,
 			)
 		);
 	}
@@ -217,8 +223,9 @@ class FrmFieldValue {
 	 */
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {
-
-			FrmAppHelper::unserialize_or_decode( $this->saved_value );
+			if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
+				FrmAppHelper::unserialize_or_decode( $this->saved_value );
+			}
 
 			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {
 				$this->saved_value = '';

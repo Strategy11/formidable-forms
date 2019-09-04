@@ -159,7 +159,7 @@ class FrmEntryFormatter {
 	protected function prepare_entry_attributes( $atts ) {
 		$entry_atts = array();
 
-		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields' );
+		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields', 'entry' );
 		foreach ( $conditionally_add as $index ) {
 			if ( isset( $atts[ $index ] ) ) {
 				$entry_atts[ $index ] = $atts[ $index ];
