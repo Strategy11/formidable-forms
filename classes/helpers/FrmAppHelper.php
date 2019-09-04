@@ -1959,6 +1959,10 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Decode a JSON string.
+	 * Do not switch shortcodes like [24] to array.
+	 */
 	public static function maybe_json_decode( $string ) {
 		if ( is_array( $string ) ) {
 			return $string;
@@ -1967,7 +1971,8 @@ class FrmAppHelper {
 		$new_string = json_decode( $string, true );
 		if ( function_exists( 'json_last_error' ) ) {
 			// php 5.3+
-			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) ) {
+			$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
 				$string = $new_string;
 			}
 		}
