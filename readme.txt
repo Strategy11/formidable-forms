@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.02.02
+Stable tag: 4.02.03
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,42 +356,15 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.02.03 =
+* Security: Don't unserialize values posted in field options in admin area.
+* Start switching any data saved with serializing to json, including cache keys and default values.
+* Save styling settings with json instead of serialized array.
+
 = 4.02.02 =
 * Security: Correctly escape values on the View Entry page.
 * Include a message on the Entries page about how to prevent spam.
 * Show the reCaptcha badge for invisible recaptcha since it's required by their terms.
 * Fix: Show the correct labels on template buttons (Upgrade vs Renew)
-
-= 4.02.01 =
-* Security: Fix vulnerability with unserializing.
-* Code: Refactor field settings to make it easier to add a section for field options/choices.
-
-= 4.02 =
-* New: Adjust the process and layout of starting a new form.
-* New: Separate custom templates from downloadable templates.
-* New: Add frm_modify_posted_field_value hook or adjusting a posted value.
-* UX: Don't show the style template option if the Formidable styling is turned off.
-* Fix: Always include form styling when previewing forms in the theme.
-
-= 4.01 =
-* New: Prevent a flash of unstyled form when form styling is set to load only on applicable pages.
-* New: Search by field id or key on the form listing page.
-* Hide more notices from other plugins when on a Formidable page.
-* Fix: The colorpicker box in the form styler was off screen on some sites.
-
-= 4.0 =
-* We've added a new, full screen builder for a faster and more enjoyable form building experience.
-* Moved all settings into the sidebar instead of expanding/collapsing under each field.
-* Faster way of adding new radio/select/checkbox options with drag and drop reordering.
-* Added a separate placeholder option to make it easier to use, and to allow for both a placeholder and a default value. Existing placeholders will be automatically moved to the new setting.
-* Added placeholder setting for dropdown fields, and allow the field label to be used as a placeholder.
-* Long forms are easier to edit and save since only the fields settings that have been viewed will be saved.
-* Replaced the form builder sidebar panel with in-field modals that include the possible values to insert.
-* Added a way to more easily see and find all possible add-ons in the form actions.
-* Add link to imported form in the import success message.
-* Removed a few unused settings including the option to disable HTML5.
-* New hooks: frm_after_field_choices, frm_field_options, frm_after_field_options, frm_[type]_primary_field_options, Added hooks for each tab in the global settings: frm_[section name]_settings_form, frm_default_value_setting
-* Added better confirmation messages before deleting fields, forms, form actions, and entries.
-* Change default settings to fade in forms and use css grids for new installs.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
