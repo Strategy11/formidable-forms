@@ -202,7 +202,7 @@ Since Formidable Forms is not your average WordPress contact form plugin, this f
 * <a href="https://formidableforms.com/features/wordpress-calculated-fields-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields for a mortgage calculator, auto loan calculator, or many other calculator forms. Even a contact form could benefit from calculations for easy quotes and price estimates.
 * <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual form style creator</a>. Our form creator for email forms, calculators, and other online forms not only allows you to build forms, but also create branded forms that match your site. Change colors, borders, padding and much more without any code.
 * <a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Flexible form layout design</a>. Build mobile responsive contact forms and advanced form layouts with multiple fields in a row by using our CSS layout classes.
-* <a href="https://formidableforms.com/features/wordpress-mobile-friendly-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mobile-friendly, responsive forms</a>. All of our forms are sized automatically for every screen size. Ensure that everyone can see and submit your online forms from any device.
+* <a href="https://formidableforms.com/features/wordpress-mobile-friendly-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mobile-friendly, responsive forms</a>. All of our forms are sized automatically for every screen size. Ensure that everyone can see and submit your surveys, calculator forms, and online forms from any device.
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and even custom post types from your front-end online forms. Send user-generated content quickly from a post creation form to a page.
 * <a href="https://formidableforms.com/features/form-entry-management-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Simple entry management</a>. Flexibly and powerfully display, edit, and delete form entries from anywhere on your site, and specify who has permission to do so. Your logged-in users can fully manage their personal journal entries, weight tracking, guest blog posts, RSVP status, and whatever else you need, far and above just contact forms.
 * <a href="https://formidableforms.com/features/front-end-editing-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WordPress front-end editing</a>. Allow users to edit their form entries and posts from the front-end of your site. Create an online journaling platform, member directory, classified ads, community recipes, and more.
@@ -366,5 +366,20 @@ To get access to more features, integrations, and support, <a href="https://form
 * Include a message on the Entries page about how to prevent spam.
 * Show the reCaptcha badge for invisible recaptcha since it's required by their terms.
 * Fix: Show the correct labels on template buttons (Upgrade vs Renew)
+
+= 4.0 =
+* We've added a new, full screen builder for a faster and more enjoyable form building experience.
+* Moved all settings into the sidebar instead of expanding/collapsing under each field.
+* Faster way of adding new radio/select/checkbox options with drag and drop reordering.
+* Added a separate placeholder option to make it easier to use, and to allow for both a placeholder and a default value. Existing placeholders will be automatically moved to the new setting.
+* Added placeholder setting for dropdown fields, and allow the field label to be used as a placeholder.
+* Long forms are easier to edit and save since only the fields settings that have been viewed will be saved.
+* Replaced the form builder sidebar panel with in-field modals that include the possible values to insert.
+* Added a way to more easily see and find all possible add-ons in the form actions.
+* Add link to imported form in the import success message.
+* Removed a few unused settings including the option to disable HTML5.
+* New hooks: frm_after_field_choices, frm_field_options, frm_after_field_options, frm_[type]_primary_field_options, Added hooks for each tab in the global settings: frm_[section name]_settings_form, frm_default_value_setting
+* Added better confirmation messages before deleting fields, forms, form actions, and entries.
+* Change default settings to fade in forms and use css grids for new installs.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
