@@ -2075,6 +2075,13 @@ class FrmAppHelper {
 	 * @param string $location
 	 */
 	public static function localize_script( $location ) {
+		global $frm_vars;
+
+		if ( isset( $frm_vars['jsloc'] ) ) {
+			return;
+		}
+		$frm_vars['jsloc'] = true;
+
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
