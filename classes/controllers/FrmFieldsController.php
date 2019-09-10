@@ -55,9 +55,7 @@ class FrmFieldsController {
 		$field_type = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id    = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		if ( 'summary' === $field_type ) {
-			self::maybeAddBreakFieldBeforeSummary( $form_id );
-		}
+		do_action( 'frm_before_create_field', $field_type, $form_id );
 
 		$field = self::include_new_field( $field_type, $form_id );
 
@@ -65,13 +63,6 @@ class FrmFieldsController {
 		do_action( 'frm_after_field_created', $field, $form_id );
 
 		wp_die();
-	}
-
-	public static function maybeAddBreakFieldBeforeSummary( $form_id ) {
-		$has_break = FrmAppHelper::get_post_param( 'has_break', '', 'sanitize_text_field' );
-		if ( ! $has_break ) {
-			$break_field = self::include_new_field( 'break', $form_id );
-		}
 	}
 
 	/**

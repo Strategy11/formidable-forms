@@ -622,8 +622,7 @@ function frmAdminBuildJS() {
 
 		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
 		if ( 'summary' === fieldType ) {
-			addBtn.addClass( 'disabled' );
-			fieldButton.draggable( 'disable' );
+			disableSummaryBtnBeforeAJAX( addBtn, fieldButton );
 		}
 
 		var currentItem = jQuery( selectedItem ).data().uiSortable.currentItem;
@@ -634,10 +633,10 @@ function frmAdminBuildJS() {
 		var loadingID = fieldType.replace( '|', '-' );
 		currentItem.replaceWith( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
 
-		var has_break = 0;
+		var hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
-			has_break = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' ).length > 0 ? 1 : 0;
+			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' ).length > 0 ? 1 : 0;
 		}
 
 		jQuery.ajax( {
@@ -648,7 +647,7 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: sectionId,
 				nonce: frmGlobal.nonce,
-				has_break: has_break
+				has_break: hasBreak
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -658,11 +657,7 @@ function frmAdminBuildJS() {
 				afterAddField( msg, false );
 			},
 			error: function ( jqXHR, textStatus, errorThrown ) {
-				alert( errorThrown + '. Please try again.' );
-				if ( 'summary' === fieldType ) {
-					addBtn.removeClass( 'disabled' );
-					fieldButton.draggable( 'enable' );
-				}
+				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
 			}
 		} );
 	}
@@ -742,16 +737,15 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		var $button = $thisObj.closest( 'li' );
-		var field_type = $button.attr( 'id' );
+		var $button = $thisObj.closest( '.frmbutton' );
+		var fieldType = $button.attr( 'id' );
 
-		var has_break = 0;
-		if ( 'summary' === field_type ) {
+		var hasBreak = 0;
+		if ( 'summary' === fieldType ) {
 			// We'll optimistically disable $button now. We'll re-enable if AJAX fails
-			$thisObj.addClass( 'disabled' );
-			$button.draggable( 'disable' );
+			disableSummaryBtnBeforeAJAX( $thisObj, $button );
 
-			has_break = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
+			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
 		var form_id = this_form_id;
@@ -762,10 +756,10 @@ function frmAdminBuildJS() {
 			data: {
 				action: 'frm_insert_field',
 				form_id: form_id,
-				field_type: field_type,
+				field_type: fieldType,
 				section_id: 0,
 				nonce: frmGlobal.nonce,
-				has_break: has_break
+				has_break: hasBreak
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -773,14 +767,15 @@ function frmAdminBuildJS() {
 				afterAddField( msg, true );
 			},
 			error: function ( jqXHR, textStatus, errorThrown ) {
-				alert( errorThrown + '. Please try again.' );
-				if ( 'summary' === field_type ) {
-					$thisObj.removeClass( 'disabled' );
-					$button.draggable( 'enable' );
-				}
+				maybeReenableSummaryBtnAfterAJAX( fieldType, $thisObj, $button, errorThrown );
 			}
 		} );
 		return false;
+	}
+
+	function disableSummaryBtnBeforeAJAX( addBtn, fieldButton ) {
+		addBtn.addClass( 'disabled' );
+		fieldButton.draggable( 'disable' );
 	}
 
 	function reenableAddSummaryBtn() {
@@ -801,6 +796,14 @@ function frmAdminBuildJS() {
 		var addFieldLink = frmBtn.children( '.frm_add_field' );
 		frmBtn.draggable( 'disable' );
 		addFieldLink.addClass( 'disabled' );
+	}
+
+	function maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown ) {
+		alert( errorThrown + '. Please try again.' );
+		if ( 'summary' === fieldType ) {
+			addBtn.removeClass( 'disabled' );
+			fieldButton.draggable( 'enable' );
+		}
 	}
 
 	function formHasSummaryField() {

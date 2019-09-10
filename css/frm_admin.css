@@ -722,7 +722,7 @@ p.frm_has_shortcodes {
 	font-size: 15px;
 }
 
-.howto a {
+.frm-summary-learn-more {
 	font-size: inherit !important;
 }
 
@@ -2524,19 +2524,6 @@ a.frm_option_icon:hover::before {
 	height: 145px;
 }
 
-.frm-summary-message {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	background: #fff;
-	width: 50%;
-	padding: 15px 0;
-	border: 1px solid var(--grey-border);
-	color: var(--primary-color);
-	font-size: 16px;
-	transform: translate(-50%, -50%);
-}
-
 .frm-fake-field {
 	display: block;
 	height: 25px;
@@ -2556,6 +2543,15 @@ a.frm_option_icon:hover::before {
 	width: 50%;
 	top: 23px;
 	left: 25%
+}
+
+.frm-summary-message {
+	top: 50%;
+	left: 50%;
+	padding: 15px 0;
+	color: var(--primary-color);
+	font-size: 16px;
+	transform: translate(-50%, -50%);
 }
 
 .frm-single-settings .frm-embed-message {
