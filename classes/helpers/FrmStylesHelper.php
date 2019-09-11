@@ -296,14 +296,27 @@ class FrmStylesHelper {
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
-			if ( isset( $_POST['frm_style_setting'] ) && isset( $_POST['frm_style_setting']['post_content'] ) ) {
-				$settings = wp_unslash( $_POST['frm_style_setting']['post_content'] );
+
+			if ( isset( $_POST['frm_style_setting'] ) ) {
+				// Sanitizing is done later.
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
+				if ( ! is_array( $posted ) ) {
+					$posted = json_decode( $posted, true );
+					FrmAppHelper::format_form_data( $posted );
+					$settings = $posted['frm_style_setting']['post_content'];
+					$style_name = sanitize_title( $posted['style_name'] );
+				} else {
+					$settings = $posted['post_content'];
+					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
+				}
 			} else {
 				$settings = $_GET;
+				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
+
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
-			$style_name              = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			$settings['style_class'] = '';
 			if ( ! empty( $style_name ) ) {
 				$settings['style_class'] = $style_name . '.';

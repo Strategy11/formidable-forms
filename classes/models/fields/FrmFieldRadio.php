@@ -33,6 +33,18 @@ class FrmFieldRadio extends FrmFieldType {
 		return $this->include_front_form_file();
 	}
 
+	/**
+	 * Get the type of field being displayed.
+	 *
+	 * @since 4.02.01
+	 * @return array
+	 */
+	public function displayed_field_type( $field ) {
+		return array(
+			$this->type => true,
+		);
+	}
+
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );
 

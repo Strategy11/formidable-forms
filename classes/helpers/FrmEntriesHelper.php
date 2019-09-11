@@ -41,7 +41,7 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$form->options = maybe_unserialize( $form->options );
+		FrmAppHelper::unserialize_or_decode( $form->options );
 		if ( is_array( $form->options ) ) {
 			$values = array_merge( $values, $form->options );
 		}
@@ -272,7 +272,8 @@ class FrmEntriesHelper {
 			return $value;
 		}
 
-		$unfiltered_value = maybe_unserialize( $value );
+		$unfiltered_value = $value;
+		FrmAppHelper::unserialize_or_decode( $unfiltered_value );
 
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
@@ -341,8 +342,11 @@ class FrmEntriesHelper {
 		}
 
 		if ( empty( $args['parent_field_id'] ) ) {
+			// Sanitizing is done next.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : '';
 		} else {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
 		}
 
@@ -380,7 +384,11 @@ class FrmEntriesHelper {
 			// Save original value.
 			$args['temp_value'] = $value;
 			$args['other']      = true;
-			$other_vals         = wp_unslash( $_POST['item_meta']['other'][ $field->id ] );
+
+			// Sanitizing is done next.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] );
+			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now
 			self::set_other_validation_val( $value, $other_vals, $field, $args );
@@ -407,7 +415,9 @@ class FrmEntriesHelper {
 			$args['temp_value'] = $value;
 			$args['other']      = true;
 
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] );
+			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now.
 			self::set_other_validation_val( $value, $other_vals, $field, $args );

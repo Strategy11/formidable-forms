@@ -6,6 +6,8 @@ class FrmFieldsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
+		// Javascript may be included in some field settings.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
 		if ( empty( $fields ) ) {
 			wp_die();
@@ -315,8 +317,6 @@ class FrmFieldsController {
 			$type_name = $all_field_types['divider|repeat']['name'];
 		}
 
-		$display_type = self::displayed_field_type( $field );
-
 		if ( $display['default'] ) {
 			$default_value_types = self::default_value_types( $field, compact( 'display' ) );
 		}
@@ -325,23 +325,6 @@ class FrmFieldsController {
 			$field['placeholder'] = implode( $field['placeholder'], ', ' );
 		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
-	}
-
-	/**
-	 * Get the type of field being displayed for lookups and dynamic fields.
-	 *
-	 * @since 4.0
-	 * @return array
-	 */
-	private static function displayed_field_type( $field ) {
-		$display_type = array(
-			'radio'    => FrmField::is_field_type( $field, 'radio' ),
-			'checkbox' => FrmField::is_field_type( $field, 'checkbox' ),
-			'select'   => FrmField::is_field_type( $field, 'select' ),
-			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
-			'data'     => FrmField::is_field_type( $field, 'data' ),
-		);
-		return array_filter( $display_type );
 	}
 
 	/**

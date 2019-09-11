@@ -114,6 +114,21 @@ class FrmEntriesListHelper extends FrmListHelper {
 		// Searching is a pro feature
 	}
 
+	protected function display_tablenav( $which ) {
+		$is_footer = ( $which !== 'top' );
+		if ( $is_footer && ! empty( $this->items ) ) {
+			?>
+			<p>
+				<?php esc_html_e( 'Getting spam form submissions?', 'formidable' ); ?>
+				<a href="https://formidableforms.com/knowledgebase/add-spam-protection/" target="_blank">
+					<?php esc_html_e( 'Learn how to prevent them.', 'formidable' ); ?>
+				</a>
+			</p>
+			<?php
+		}
+		parent::display_tablenav( $which );
+	}
+
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
 		if ( $which == 'top' && empty( $form_id ) ) {

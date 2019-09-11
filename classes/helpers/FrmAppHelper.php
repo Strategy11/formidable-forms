@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.02';
+	public static $plug_version = '4.02.02';
 
 	/**
 	 * @since 1.07.02
@@ -380,8 +380,10 @@ class FrmAppHelper {
 		}
 
 		if ( $src == 'get' ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default );
 			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = htmlspecialchars_decode( wp_unslash( $_GET[ $param ] ) );
 			}
 			self::sanitize_value( $sanitize, $value );
@@ -410,13 +412,14 @@ class FrmAppHelper {
 		return $value;
 	}
 
-	public static function get_post_param( $param, $default = '', $sanitize = '' ) {
+	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
 		return self::get_simple_request(
 			array(
 				'type'     => 'post',
 				'param'    => $param,
 				'default'  => $default,
 				'sanitize' => $sanitize,
+				'serialized' => $serialized,
 			)
 		);
 	}
@@ -456,20 +459,27 @@ class FrmAppHelper {
 			'default'  => '',
 			'type'     => 'get',
 			'sanitize' => 'sanitize_text_field',
+			'serialized' => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
 
 		$value = $args['default'];
 		if ( $args['type'] == 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = wp_unslash( $_GET[ $args['param'] ] );
 			}
 		} elseif ( $args['type'] == 'post' ) {
 			if ( isset( $_POST[ $args['param'] ] ) ) {
-				$value = maybe_unserialize( wp_unslash( $_POST[ $args['param'] ] ) );
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				$value = wp_unslash( $_POST[ $args['param'] ] );
+				if ( $args['serialized'] === true && is_serialized_string( $value ) && is_serialized( $value ) ) {
+					self::unserialize_or_decode( $value );
+				}
 			}
 		} else {
 			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = wp_unslash( $_REQUEST[ $args['param'] ] );
 			}
 		}
@@ -1237,7 +1247,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function use_wpautop( $content ) {
-		if ( apply_filters( 'frm_use_wpautop', true ) ) {
+		if ( apply_filters( 'frm_use_wpautop', true ) && ! is_array( $content ) ) {
 			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 
@@ -1470,7 +1480,12 @@ class FrmAppHelper {
 		}
 
 		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
-		$new_value  = isset( $post_values['item_meta'][ $field->id ] ) ? maybe_unserialize( $post_values['item_meta'][ $field->id ] ) : $meta_value;
+		if ( isset( $post_values['item_meta'][ $field->id ] ) ) {
+			$new_value = $post_values['item_meta'][ $field->id ];
+			self::unserialize_or_decode( $new_value );
+		} else {
+			$new_value = $meta_value;
+		}
 
 		$field_array                   = self::start_field_array( $field );
 		$field_array['value']          = $new_value;
@@ -1534,7 +1549,12 @@ class FrmAppHelper {
 		}
 
 		foreach ( $form->options as $opt => $value ) {
-			$values[ $opt ] = isset( $post_values[ $opt ] ) ? maybe_unserialize( $post_values[ $opt ] ) : $value;
+			if ( isset( $post_values[ $opt ] ) ) {
+				$values[ $opt ] = $post_values[ $opt ];
+				self::unserialize_or_decode( $values[ $opt ] );
+			} else {
+				$values[ $opt ] = $value;
+			}
 		}
 
 		self::fill_form_defaults( $post_values, $values );
@@ -1921,6 +1941,24 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Check for either json or serilized data. This is temporary while transitioning
+	 * all data to json.
+	 *
+	 * @since 4.02.03
+	 */
+	public static function unserialize_or_decode( &$value ) {
+		if ( is_array( $value ) ) {
+			return;
+		}
+
+		if ( is_serialized( $value ) ) {
+			$value = maybe_unserialize( $value );
+		} else {
+			$value = self::maybe_json_decode( $value );
+		}
+	}
+
 	public static function maybe_json_decode( $string ) {
 		if ( is_array( $string ) ) {
 			return $string;
@@ -1929,15 +1967,49 @@ class FrmAppHelper {
 		$new_string = json_decode( $string, true );
 		if ( function_exists( 'json_last_error' ) ) {
 			// php 5.3+
-			if ( json_last_error() == JSON_ERROR_NONE ) {
+			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) ) {
 				$string = $new_string;
 			}
-		} elseif ( isset( $new_string ) ) {
-			// php < 5.3 fallback
-			$string = $new_string;
 		}
 
 		return $string;
+	}
+
+	/**
+	 * Reformat the json serialized array in name => value array.
+	 *
+	 * @since 4.02.03
+	 */
+	public static function format_form_data( &$form ) {
+		$formatted = array();
+
+		foreach ( $form as $input ) {
+			if ( ! isset( $input['name'] ) ) {
+				continue;
+			}
+			$key = $input['name'];
+			if ( isset( $formatted[ $key ] ) ) {
+				if ( is_array( $formatted[ $key ] ) ) {
+					$formatted[ $key ][] = $input['value'];
+				} else {
+					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
+				}
+			} else {
+				$formatted[ $key ] = $input['value'];
+			}
+		}
+
+		parse_str( http_build_query( $formatted ), $form );
+	}
+
+	/**
+	 * @since 4.02.03
+	 */
+	public static function maybe_json_encode( $value ) {
+		if ( is_array( $value ) ) {
+			$value = wp_json_encode( $value );
+		}
+		return $value;
 	}
 
 	/**

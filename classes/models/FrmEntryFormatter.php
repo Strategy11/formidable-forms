@@ -159,7 +159,7 @@ class FrmEntryFormatter {
 	protected function prepare_entry_attributes( $atts ) {
 		$entry_atts = array();
 
-		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields' );
+		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields', 'entry' );
 		foreach ( $conditionally_add as $index ) {
 			if ( isset( $atts[ $index ] ) ) {
 				$entry_atts[ $index ] = $atts[ $index ];
@@ -507,9 +507,9 @@ class FrmEntryFormatter {
 		$display_value = $this->prepare_display_value_for_plain_text_content( $display_value );
 
 		if ( 'rtl' == $this->direction ) {
-			$content .= $display_value . ' :' . $label . "\r\n";
+			$content .= wp_kses_post( $display_value . ' :' . $label ) . "\r\n";
 		} else {
-			$content .= $label . ': ' . $display_value . "\r\n";
+			$content .= wp_kses_post( $label . ': ' . $display_value ) . "\r\n";
 		}
 	}
 

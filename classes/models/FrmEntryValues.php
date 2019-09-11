@@ -49,7 +49,11 @@ class FrmEntryValues {
 	 * @param array $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
-		$this->init_entry( $entry_id );
+		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
+			$this->entry = $atts['entry'];
+		} else {
+			$this->init_entry( $entry_id );
+		}
 
 		if ( $this->entry === null || $this->entry === false ) {
 			return;
@@ -190,7 +194,7 @@ class FrmEntryValues {
 	 */
 	protected function init_user_info() {
 		if ( isset( $this->entry->description ) ) {
-			$entry_description = (array) maybe_unserialize( $this->entry->description );
+			$entry_description = (array) $this->entry->description;
 		} else {
 			$entry_description = array(
 				'browser'  => '',

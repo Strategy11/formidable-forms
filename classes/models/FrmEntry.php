@@ -309,19 +309,47 @@ class FrmEntry {
 
 		if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
-
-			return wp_unslash( $entry );
+			self::prepare_entry( $entry );
+			return $entry;
 		}
 
 		$entry = FrmDb::check_cache( $id, 'frm_entry' );
 		if ( $entry !== false ) {
-			return wp_unslash( $entry );
+			self::prepare_entry( $entry );
+			return $entry;
 		}
 
 		$entry = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
 		$entry = self::get_meta( $entry );
+		self::prepare_entry( $entry );
 
-		return wp_unslash( $entry );
+		return $entry;
+	}
+
+	/**
+	 * @since 4.02.03
+	 *
+	 * @param object $entry
+	 */
+	private static function prepare_entry( &$entry ) {
+		if ( empty( $entry ) ) {
+			return;
+		}
+
+		FrmAppHelper::unserialize_or_decode( $entry->description );
+		$entry = wp_unslash( $entry ); // TODO: Remove slashes on input only, not output.
+	}
+
+	/**
+	 * @since 4.02.03
+	 *
+	 * @param array $entries
+	 */
+	private static function prepare_entries( &$entries ) {
+		foreach ( $entries as $k => $entry ) {
+			self::prepare_entry( $entry );
+			$entries[ $k ] = $entry;
+		}
 	}
 
 	public static function get_meta( $entry ) {
@@ -344,7 +372,8 @@ class FrmEntry {
 		$include_key = apply_filters( 'frm_include_meta_keys', false, array( 'form_id' => $entry->form_id ) );
 		foreach ( $metas as $meta_val ) {
 			if ( $meta_val->item_id == $entry->id ) {
-				$entry->metas[ $meta_val->field_id ] = maybe_unserialize( $meta_val->meta_value );
+				FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 				if ( $include_key ) {
 					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
 				}
@@ -356,7 +385,8 @@ class FrmEntry {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 
-			$entry->metas[ $meta_val->field_id ][] = maybe_unserialize( $meta_val->meta_value );
+			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+			$entry->metas[ $meta_val->field_id ][] = $meta_val->meta_value;
 
 			unset( $meta_val );
 		}
@@ -394,7 +424,7 @@ class FrmEntry {
 
 		$limit = FrmDb::esc_limit( $limit );
 
-		$cache_key = maybe_serialize( $where ) . $order_by . $limit . $inc_form;
+		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
 		if ( false === $entries ) {
@@ -423,7 +453,8 @@ class FrmEntry {
 		}
 
 		if ( ! $meta || ! $entries ) {
-			return wp_unslash( $entries );
+			self::prepare_entries( $entries );
+			return $entries;
 		}
 		unset( $meta );
 
@@ -443,7 +474,8 @@ class FrmEntry {
 		unset( $meta_where );
 
 		if ( ! $metas ) {
-			return wp_unslash( $entries );
+			self::prepare_entries( $entries );
+			return $entries;
 		}
 
 		foreach ( $metas as $m_key => $meta_val ) {
@@ -455,8 +487,8 @@ class FrmEntry {
 				$entries[ $meta_val->item_id ]->metas = array();
 			}
 
-			$entries[ $meta_val->item_id ]->metas[ $meta_val->field_id ] = maybe_unserialize( $meta_val->meta_value );
-
+			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+			$entries[ $meta_val->item_id ]->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 			unset( $m_key, $meta_val );
 		}
 
@@ -467,7 +499,8 @@ class FrmEntry {
 			}
 		}
 
-		return wp_unslash( $entries );
+		self::prepare_entries( $entries );
+		return $entries;
 	}
 
 	// Pagination Methods
@@ -486,7 +519,7 @@ class FrmEntry {
 		if ( is_array( $where ) ) {
 			$count = FrmDb::get_count( $table_join, $where );
 		} else {
-			$cache_key = 'count_' . maybe_serialize( $where );
+			$cache_key = 'count_' . FrmAppHelper::maybe_json_encode( $where );
 			$query     = 'SELECT COUNT(*) FROM ' . $table_join . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 			$count     = FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_var' );
 		}
@@ -695,9 +728,9 @@ class FrmEntry {
 	 */
 	private static function get_entry_description( $values ) {
 		if ( isset( $values['description'] ) && ! empty( $values['description'] ) ) {
-			$description = maybe_serialize( $values['description'] );
+			$description = FrmAppHelper::maybe_json_encode( $values['description'] );
 		} else {
-			$description = serialize(
+			$description = json_encode(
 				array(
 					'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
 					'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),

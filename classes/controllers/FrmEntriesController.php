@@ -421,7 +421,7 @@ class FrmEntriesController {
 			return;
 		}
 
-		$data = maybe_unserialize( $entry->description );
+		$data = $entry->description;
 		if ( ! is_array( $data ) || ! isset( $data['referrer'] ) ) {
 			$data = array( 'referrer' => $data );
 		}
@@ -619,7 +619,7 @@ class FrmEntriesController {
 			return;
 		}
 
-		$form->options = maybe_unserialize( $form->options );
+		FrmAppHelper::unserialize_or_decode( $form->options );
 		if ( isset( $form->options['no_save'] ) && $form->options['no_save'] ) {
 			self::unlink_post( $entry_id );
 			FrmEntry::destroy( $entry_id );
@@ -699,7 +699,7 @@ class FrmEntriesController {
 
 		if ( $entry ) {
 			$id   = $entry->id;
-			$data = maybe_unserialize( $entry->description );
+			$data = $entry->description;
 			if ( isset( $data['browser'] ) ) {
 				$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 			}

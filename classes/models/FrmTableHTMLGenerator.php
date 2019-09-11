@@ -276,8 +276,8 @@ class FrmTableHTMLGenerator {
 			$second = $value;
 		}
 
-		$row .= '<td' . $this->td_style . '>' . $first . '</td>';
-		$row .= '<td' . $this->td_style . '>' . $second . '</td>';
+		$row .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
+		$row .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
 
 		$row .= '</tr>' . "\r\n";
 
