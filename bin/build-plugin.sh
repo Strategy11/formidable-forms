@@ -24,7 +24,7 @@ status "Time to release"
 # Update any submodules
 git submodule foreach git pull origin master
 if ! git diff --submodule=diff --exit-code > /dev/null; then
-	git submodule foreach git commit -am 'Update submodule'
+	git commit -am 'Update submodule'
 fi
 
 # Make sure there are no changes in the working tree. Release builds should be
