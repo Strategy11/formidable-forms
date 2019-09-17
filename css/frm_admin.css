@@ -1573,8 +1573,18 @@ div.frm_updated_message {
 	text-align: right;
 }
 
-.upgrade_to_pro a,
-.upgrade_to_pro .frm-checked {
+.frm-yes {
+	color: var(--green);
+	font-size: 21px;
+	font-weight: 500;
+}
+
+.frm-nope {
+	color: #d2e0f2;
+	font-size: 21px;
+}
+
+.upgrade_to_pro a {
 	color: var(--orange);
 }
 
@@ -1583,14 +1593,23 @@ div.frm_updated_message {
 	width: 20px;
 }
 
-.widefat.frm_pricing thead th,
-.widefat.frm_pricing td {
+.upgrade_to_pro table.widefat {
+	background-color: #fff;
+	border-collapse: collapse;
+}
+
+.upgrade_to_pro table th,
+.upgrade_to_pro table td {
+	padding: 10px 15px;
+	border: 1px solid #d2e0f2;
+}
+
+.upgrade_to_pro table th.frmcenter {
 	text-align: center;
 }
 
 .widefat th.frm_table_break {
-	background-color: #f3f4f5;
-	text-align: center;
+	background-color: #f6f7fb;
 }
 
 h2.frm-h2 + .howto {

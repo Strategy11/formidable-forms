@@ -15,19 +15,19 @@
 
 	<p class="frmcenter">
 		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" class="button-primary frm-button-primary frm_large" target="_blank">
-			<?php esc_html_e( 'Get Started', 'formidable' ); ?>
+			<?php esc_html_e( 'Get Started Now', 'formidable' ); ?>
 		</a>
 	</p>
 	<br/>
 
 	<?php do_action( 'frm_upgrade_page' ); ?>
 
-	<table class="wp-list-table widefat fixed striped">
+	<table class="widefat">
 		<thead>
 			<tr>
-				<th style="width:60%"></th>
-				<th><h3>Lite</h3></th>
-				<th><h3>Pro</h3></th>
+				<th style="width:60%;border:none"></th>
+				<th class="frmcenter"><h3>Lite</h3></th>
+				<th class="frmcenter"><h3>Pro</h3></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -49,11 +49,19 @@
 							}
 							?>
 						</th>
-						<td class="<?php echo esc_attr( $feature['lite'] ? 'frm-checked' : '' ); ?>">
-							<?php FrmAppHelper::icon_by_class( 'frmfont ' . ( $feature['lite'] ? 'frm_checkmark_icon' : 'frm_close_icon' ) ); ?>
+						<td class="<?php echo esc_attr( $feature['lite'] ? 'frm-checked' : '' ); ?> frmcenter">
+							<?php if ( $feature['lite'] ) { ?>
+							<span class="frm-yes">
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
+							</span>
+							<?php } else { ?>
+							<span class="frm-nope">&#10008;</span>
+							<?php } ?>
 						</td>
-						<td class="<?php echo esc_attr( 'frm-checked' ); ?>">
-							<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
+						<td class="<?php echo esc_attr( 'frm-checked' ); ?> frmcenter">
+							<span class="frm-yes">
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon' ); ?>
+							</span>
 						</td>
 					</tr>
 				<?php } ?>
@@ -64,7 +72,7 @@
 	<br/>
 	<p class="frmcenter">
 		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" class="button-primary frm-button-primary frm_large" target="_blank">
-			<?php esc_html_e( 'Get Started', 'formidable' ); ?>
+			<?php esc_html_e( 'Get Started Now', 'formidable' ); ?>
 		</a>
 	</p>
 </div>
