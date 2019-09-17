@@ -1055,7 +1055,7 @@ function frmAdminBuildJS() {
 	}
 
 	function extractExcludedOptions( exclude ) {
-		var opts = new Array();
+		var opts = [];
 		for ( var i = 0; i < exclude.length; i++ ) {
 			if ( exclude[ i ].startsWith( '[' ) ) {
 				opts.push( exclude[ i ] );
@@ -1114,9 +1114,9 @@ function frmAdminBuildJS() {
 		list = document.getElementById( 'frm-calc-list-' + fieldId );
 		list.innerHTML = '';
 
-		for ( var i = 0; i < fields.length; i++ ) {
-			if ( exclude.includes( fields[ i ].fieldType )
-				 || ( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
+		for ( i = 0; i < fields.length; i++ ) {
+			if ( exclude.includes( fields[ i ].fieldType ) ||
+				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
 
@@ -1161,7 +1161,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getIncludedExtras() {
-		var checked = new Array();
+		var checked = [];
 		var checkboxes = document.getElementsByClassName( 'frm_include_extras_field' );
 
 		for ( var i = 0; i < checkboxes.length; i++ ) {
@@ -3372,8 +3372,7 @@ function frmAdminBuildJS() {
 	}
 
 	function insertFieldCode( element, variable ) {
-		var variable,
-			rich = false,
+		var rich = false,
 			element_id = element;
 		if ( typeof element === 'object' ) {
 			if ( element.hasClass( 'frm_noallow' ) ) {
@@ -4525,7 +4524,7 @@ function frmAdminBuildJS() {
 				}
 				success( response );
 			}
-		}
+		};
 		xmlHttp.setRequestHeader( 'X-Requested-With', 'XMLHttpRequest' );
 		xmlHttp.setRequestHeader( 'Content-type', 'application/x-www-form-urlencoded' );
 		xmlHttp.send( params );
@@ -4874,7 +4873,7 @@ function frmAdminBuildJS() {
 				if ( e.target.classList.contains( 'frm-show-box' ) ) {
 					return;
 				}
-				var sidebar = document.getElementById( 'frm_adv_info' )
+				var sidebar = document.getElementById( 'frm_adv_info' ),
 					isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
 
 				if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
