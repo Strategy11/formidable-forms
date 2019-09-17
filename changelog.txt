@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.02.03 =
+* Security: Don't unserialize values posted in field options in admin area.
+* Start switching any data saved with serializing to json, including cache keys and default values.
+* Save styling settings with json instead of serialized array.
+
 = 4.02.02 =
 * Security: Correctly escape values on the View Entry page.
 * Include a message on the Entries page about how to prevent spam.

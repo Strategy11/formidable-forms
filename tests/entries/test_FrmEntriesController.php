@@ -6,38 +6,6 @@
 class test_FrmEntriesController extends FrmUnitTest {
 
 	/**
-	 * @covers FrmEntriesController::delete_form_entries
-	 */
-	public function test_delete_form_entries() {
-		$form = $this->create_form();
-		$field = $this->factory->field->create_and_get( array(
-			'type' => 'text',
-			'form_id' => $form->id,
-		) );
-
-		$entry_data = $this->factory->field->generate_entry_array( $form );
-		$this->factory->entry->create_many( 10, $entry_data );
-
-		global $wpdb;
-		$meta_query = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) WHERE form_id=%d", $form->id );
-		$item_query = $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form->id );
-
-		$item_metas = $wpdb->get_var( $meta_query );
-		$this->assertTrue( $item_metas >= 10, 'There are ' . $item_metas . ' entry metas in form ' . $form->id );
-
-		$entries = $wpdb->get_var( $item_query );
-		$this->assertTrue( $entries >= 10, 'There are ' . $entries . ' entries in form ' . $form->id );
-
-		$this->run_private_method( array( 'FrmEntriesController', 'delete_form_entries' ), array( $form->id ) );
-
-		$item_metas = $wpdb->get_var( $meta_query );
-		$this->assertEquals( $item_metas, 0, 'There are still entry metas in form ' . $form->id );
-
-		$entries = $wpdb->get_var( $item_query );
-		$this->assertEquals( $entries, 0, 'There are still entries in form ' . $form->id );
-	}
-
-	/**
 	 * @covers FrmEntriesController::delete_entry_after_save
 	 * @covers FrmEntriesController::_delete_entry
 	 * @covers FrmEntriesController::unlink_post
