@@ -106,6 +106,10 @@ class FrmAppHelper {
 			$query_args['utm_content'] = $content;
 		}
 
+		if ( is_array( $args ) && isset( $args['param'] ) ) {
+			$query_args['f'] = $args['param'];
+		}
+
 		return add_query_arg( $query_args, $page ) . $anchor;
 	}
 
