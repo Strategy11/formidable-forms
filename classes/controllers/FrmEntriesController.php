@@ -34,7 +34,6 @@ class FrmEntriesController {
 		switch ( $action ) {
 			case 'show':
 			case 'destroy':
-			case 'destroy_all':
 				return self::$action();
 
 			default:
@@ -449,83 +448,14 @@ class FrmEntriesController {
 		self::display_list( $message );
 	}
 
+	/**
+	 * @deprecated 4.02.04 - Moved to Pro since it was unused in Lite.
+	 */
 	public static function destroy_all() {
-		if ( ! current_user_can( 'frm_delete_entries' ) ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			wp_die( esc_html( $frm_settings->admin_permission ) );
+		_deprecated_function( __METHOD__, '4.02.04', 'FrmProEntriesController::destroy_all' );
+		if ( is_callable( 'FrmProEntriesController::destroy_all' ) ) {
+			FrmProEntriesController::destroy_all();
 		}
-
-		$params  = FrmForm::get_admin_params();
-		$message = '';
-		$errors  = array();
-		$form_id = (int) $params['form'];
-
-		if ( $form_id ) {
-			$entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
-			$action    = FrmFormAction::get_action_for_form( $form_id, 'wppost', 1 );
-
-			if ( $action ) {
-				// This action takes a while, so only trigger it if there are posts to delete.
-				foreach ( $entry_ids as $entry_id ) {
-					do_action( 'frm_before_destroy_entry', $entry_id );
-					unset( $entry_id );
-				}
-			}
-
-			$results = self::delete_form_entries( $form_id );
-			if ( $results ) {
-				FrmEntry::clear_cache();
-				$message = __( 'Entries Successfully Deleted', 'formidable' );
-			}
-		} else {
-			$errors = __( 'No Entries Selected', 'formidable' );
-		}
-
-		self::display_list( $message, $errors );
-	}
-
-	/**
-	 * @since 3.01
-	 *
-	 * @param int $form_id
-	 */
-	private static function delete_form_entries( $form_id ) {
-		global $wpdb;
-
-		$form_ids = self::get_child_form_ids( $form_id );
-
-		$meta_query  = $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) WHERE form_id=%d", $form_id );
-		$entry_query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id );
-
-		if ( ! empty( $form_ids ) ) {
-			$form_query  = ' OR form_id in (' . $form_ids . ')';
-			$meta_query  .= $form_query;
-			$entry_query .= $form_query;
-		}
-
-		$wpdb->query( $meta_query ); // WPCS: unprepared SQL ok.
-
-		return $wpdb->query( $entry_query ); // WPCS: unprepared SQL ok.
-	}
-
-	/**
-	 * @since 3.01
-	 *
-	 * @param int $form_id
-	 * @param bool|string $implode
-	 */
-	private static function get_child_form_ids( $form_id, $implode = ',' ) {
-		$form_ids       = array();
-		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
-		if ( $child_form_ids ) {
-			$form_ids = $child_form_ids;
-		}
-		$form_ids = array_filter( $form_ids, 'is_numeric' );
-		if ( $implode ) {
-			$form_ids = implode( $implode, $form_ids );
-		}
-
-		return $form_ids;
 	}
 
 	public static function process_entry( $errors = '', $ajax = false ) {

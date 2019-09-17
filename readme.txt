@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.02.02
+Stable tag: 4.02.03
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -202,7 +202,7 @@ Since Formidable Forms is not your average WordPress contact form plugin, this f
 * <a href="https://formidableforms.com/features/wordpress-calculated-fields-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields for a mortgage calculator, auto loan calculator, or many other calculator forms. Even a contact form could benefit from calculations for easy quotes and price estimates.
 * <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual form style creator</a>. Our form creator for email forms, calculators, and other online forms not only allows you to build forms, but also create branded forms that match your site. Change colors, borders, padding and much more without any code.
 * <a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Flexible form layout design</a>. Build mobile responsive contact forms and advanced form layouts with multiple fields in a row by using our CSS layout classes.
-* <a href="https://formidableforms.com/features/wordpress-mobile-friendly-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mobile-friendly, responsive forms</a>. All of our forms are sized automatically for every screen size. Ensure that everyone can see and submit your online forms from any device.
+* <a href="https://formidableforms.com/features/wordpress-mobile-friendly-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mobile-friendly, responsive forms</a>. All of our forms are sized automatically for every screen size. Ensure that everyone can see and submit your surveys, calculator forms, and online forms from any device.
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and even custom post types from your front-end online forms. Send user-generated content quickly from a post creation form to a page.
 * <a href="https://formidableforms.com/features/form-entry-management-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Simple entry management</a>. Flexibly and powerfully display, edit, and delete form entries from anywhere on your site, and specify who has permission to do so. Your logged-in users can fully manage their personal journal entries, weight tracking, guest blog posts, RSVP status, and whatever else you need, far and above just contact forms.
 * <a href="https://formidableforms.com/features/front-end-editing-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WordPress front-end editing</a>. Allow users to edit their form entries and posts from the front-end of your site. Create an online journaling platform, member directory, classified ads, community recipes, and more.
@@ -356,28 +356,16 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.02.03 =
+* Security: Don't unserialize values posted in field options in admin area.
+* Start switching any data saved with serializing to json, including cache keys and default values.
+* Save styling settings with json instead of serialized array.
+
 = 4.02.02 =
 * Security: Correctly escape values on the View Entry page.
 * Include a message on the Entries page about how to prevent spam.
 * Show the reCaptcha badge for invisible recaptcha since it's required by their terms.
 * Fix: Show the correct labels on template buttons (Upgrade vs Renew)
-
-= 4.02.01 =
-* Security: Fix vulnerability with unserializing.
-* Code: Refactor field settings to make it easier to add a section for field options/choices.
-
-= 4.02 =
-* New: Adjust the process and layout of starting a new form.
-* New: Separate custom templates from downloadable templates.
-* New: Add frm_modify_posted_field_value hook or adjusting a posted value.
-* UX: Don't show the style template option if the Formidable styling is turned off.
-* Fix: Always include form styling when previewing forms in the theme.
-
-= 4.01 =
-* New: Prevent a flash of unstyled form when form styling is set to load only on applicable pages.
-* New: Search by field id or key on the form listing page.
-* Hide more notices from other plugins when on a Formidable page.
-* Fix: The colorpicker box in the form styler was off screen on some sites.
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.

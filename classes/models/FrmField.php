@@ -327,7 +327,7 @@ class FrmField {
 			}
 		}
 		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
-			$values['default_value'] = FrmAppHelper::maybe_json_encode( $values['default_value'] );
+			$values['default_value'] = json_encode( $values['default_value'] );
 		}
 
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );

@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.02.02';
+	public static $plug_version = '4.02.03';
 
 	/**
 	 * @since 1.07.02
@@ -543,7 +543,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.04
 	 */
-	private static function decode_specialchars( &$value ) {
+	public static function decode_specialchars( &$value ) {
 		if ( is_array( $value ) ) {
 			$temp_values = $value;
 			foreach ( $temp_values as $k => $v ) {
@@ -1955,11 +1955,15 @@ class FrmAppHelper {
 		if ( is_serialized( $value ) ) {
 			$value = maybe_unserialize( $value );
 		} else {
-			$value = self::maybe_json_decode( $value );
+			$value = self::maybe_json_decode( $value, false );
 		}
 	}
 
-	public static function maybe_json_decode( $string ) {
+	/**
+	 * Decode a JSON string.
+	 * Do not switch shortcodes like [24] to array unless intentional ie XML values.
+	 */
+	public static function maybe_json_decode( $string, $single_to_array = true ) {
 		if ( is_array( $string ) ) {
 			return $string;
 		}
@@ -1967,7 +1971,11 @@ class FrmAppHelper {
 		$new_string = json_decode( $string, true );
 		if ( function_exists( 'json_last_error' ) ) {
 			// php 5.3+
-			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) ) {
+			$single_value = false;
+			if ( ! $single_to_array ) {
+				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+			}
+			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
 				$string = $new_string;
 			}
 		}
@@ -2067,6 +2075,13 @@ class FrmAppHelper {
 	 * @param string $location
 	 */
 	public static function localize_script( $location ) {
+		global $frm_vars;
+
+		if ( isset( $frm_vars['jsloc'] ) ) {
+			return;
+		}
+		$frm_vars['jsloc'] = true;
+
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
