@@ -618,10 +618,10 @@ function frmAdminBuildJS() {
 	 */
 	function insertNewFieldByDragging( selectedItem, fieldButton, opts ) {
 		var fieldType = fieldButton.attr( 'id' );
-		var addBtn = fieldButton.children( '.frm_add_field' );
 
 		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
 		if ( 'summary' === fieldType ) {
+			var addBtn = fieldButton.children( '.frm_add_field' );
 			disableSummaryBtnBeforeAJAX( addBtn, fieldButton );
 		}
 
