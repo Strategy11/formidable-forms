@@ -647,7 +647,7 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: sectionId,
 				nonce: frmGlobal.nonce,
-				has_break: hasBreak
+				has_break: hasBreak,
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -656,15 +656,15 @@ function frmAdminBuildJS() {
 
 				afterAddField( msg, false );
 			},
-			error: function ( jqXHR, textStatus, errorThrown ) {
+			error: function( jqXHR, textStatus, errorThrown ) {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
-			}
+			},
 		} );
 	}
 
 	// don't allow page break, embed form, captcha, summary, or section inside section field
 	function allowDrop( ui ) {
-		if ( !ui.placeholder.parent().hasClass( 'start_divider' ) ) {
+		if ( ! ui.placeholder.parent().hasClass( 'start_divider' ) ) {
 			return true;
 		}
 
@@ -677,8 +677,8 @@ function frmAdminBuildJS() {
 		}
 
 		// moving an existing field
-		return !(ui.item.hasClass( 'edit_field_type_break' ) || ui.item.hasClass( 'edit_field_type_form' ) ||
-			ui.item.hasClass( 'edit_field_type_divider' ));
+		return ! ( ui.item.hasClass( 'edit_field_type_break' ) || ui.item.hasClass( 'edit_field_type_form' ) ||
+			ui.item.hasClass( 'edit_field_type_divider' ) );
 	}
 
 	function loadFields( field_id ) {
@@ -725,7 +725,7 @@ function frmAdminBuildJS() {
 
 				initiateMultiselect();
 				renumberPageBreaks();
-			}
+			},
 		} );
 	}
 
@@ -759,16 +759,16 @@ function frmAdminBuildJS() {
 				field_type: fieldType,
 				section_id: 0,
 				nonce: frmGlobal.nonce,
-				has_break: hasBreak
+				has_break: hasBreak,
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				$newFields.append( msg );
 				afterAddField( msg, true );
 			},
-			error: function ( jqXHR, textStatus, errorThrown ) {
+			error: function( jqXHR, textStatus, errorThrown ) {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, $thisObj, $button, errorThrown );
-			}
+			},
 		} );
 		return false;
 	}
@@ -828,13 +828,13 @@ function frmAdminBuildJS() {
 				field_id: field_id,
 				form_id: this_form_id,
 				children: children,
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
 			},
 			success: function( msg ) {
 				thisField.after( msg );
 				updateFieldOrder();
 				afterAddField( msg, false );
-			}
+			},
 		} );
 		return false;
 	}
@@ -881,7 +881,7 @@ function frmAdminBuildJS() {
 				container.scroll( {
 					top: container.scrollHeight,
 					left: 0,
-					behavior: 'smooth'
+					behavior: 'smooth',
 				} );
 			}
 
@@ -912,7 +912,7 @@ function frmAdminBuildJS() {
 
 		if ( typeof animate === 'undefined' ) {
 			jQuery( container ).scrollTop(newPos);
-		}else{
+		} else {
 			// TODO: smooth scroll
 			jQuery( container ).animate({scrollTop: newPos}, 500);
 		}
