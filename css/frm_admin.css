@@ -1699,7 +1699,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-addon-active .addon-status-label {
-	color: var(--orange);
+	color: var(--green);
 	opacity: 1;
 }
 
