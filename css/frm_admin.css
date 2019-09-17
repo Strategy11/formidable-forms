@@ -2549,7 +2549,6 @@ a.frm_option_icon:hover::before {
 	top: 50%;
 	left: 50%;
 	padding: 15px 0;
-	color: var(--primary-color);
 	font-size: 16px;
 	transform: translate(-50%, -50%);
 }
@@ -5783,12 +5782,6 @@ ul .frm_col_two {
 	padding: 0;
 	clear: both;
 	float: left;
-}
-
-.field_type_list::after {
-	content: '';
-	display: table;
-	clear: both;
 }
 
 .field_type_list li:nth-child(2n) {
