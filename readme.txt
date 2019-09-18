@@ -360,6 +360,7 @@ To get access to more features, integrations, and support, <a href="https://form
 * Add a bit more in-plugin education and guidance for using Styles.
 * Add styling for Stripe credit card fields.
 * Fix: Prevent the localized javascript info from being duplicated in the page source.
+* Fix: Use the current date for the auto-created contact form.
 * Remove a bit of unused code.
 
 = 4.02.03 =
