@@ -1261,7 +1261,7 @@ BEFORE_HTML;
 			);
 		} elseif ( self::plan_is_allowed( $args ) ) {
 			$link = array(
-				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $template['slug'],
+				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $template['slug'],
 				'label' => __( 'Renew', 'formidable' ),
 			);
 		} else {
