@@ -112,6 +112,18 @@ class FrmFormsHelper {
 		$name = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
+		if ( count( $forms ) < 2 ) {
+			?>
+			<div id="frm_bs_dropdown">
+				<h1>
+					<span class="frm_bstooltip" title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>" data-placement="right">
+						<?php echo esc_html( $name ); ?>
+					</span>
+				</h1>
+			</div>
+			<?php
+			return;
+		}
 		?>
 		<div id="frm_bs_dropdown" class="dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
 			<a href="#" id="frm-navbarDrop" class="frm-dropdown-toggle" data-toggle="dropdown">
