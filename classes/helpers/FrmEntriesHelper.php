@@ -338,9 +338,20 @@ class FrmEntriesHelper {
 			$field_id  = $field;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 		} else {
+			$value = self::get_posted_meta( $field, $args );
+			FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
 			return;
 		}
 
+		$value = self::get_posted_meta( $field_id, $args );
+
+		$field_obj->sanitize_value( $value );
+	}
+
+	/**
+	 * @since 4.02.04
+	 */
+	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -349,8 +360,7 @@ class FrmEntriesHelper {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
 		}
-
-		$field_obj->sanitize_value( $value );
+		return $value;
 	}
 
 	/**
