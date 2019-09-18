@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2
 Requires PHP: 5.6
-Stable tag: 4.02.03
+Stable tag: 4.02.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,16 +356,16 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.02.04 =
+* Add a bit more in-plugin education and guidance for using Styles.
+* Add styling for Stripe credit card fields.
+* Fix: Prevent the localized javascript info from being duplicated in the page source.
+* Remove a bit of unused code.
+
 = 4.02.03 =
 * Security: Don't unserialize values posted in field options in admin area.
 * Start switching any data saved with serializing to json, including cache keys and default values.
 * Save styling settings with json instead of serialized array.
-
-= 4.02.02 =
-* Security: Correctly escape values on the View Entry page.
-* Include a message on the Entries page about how to prevent spam.
-* Show the reCaptcha badge for invisible recaptcha since it's required by their terms.
-* Fix: Show the correct labels on template buttons (Upgrade vs Renew)
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.
