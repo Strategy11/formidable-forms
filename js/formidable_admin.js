@@ -4438,19 +4438,21 @@ function frmAdminBuildJS() {
 
 	function maybeChangeEmbedFormMsg() {
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		var fieldItem = $newFields.children( '#frm_field_id_' + fieldId );
-		if ( ! fieldItem.length ) {
+		var fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
+		if ( null === fieldItem || 'form' !== fieldItem.dataset['type'] ) {
 			return;
 		}
 
+		fieldItem = jQuery( fieldItem );
+
 		if ( this.options[ this.selectedIndex ].value ) {
-			fieldItem.find( '.frm-not-set' ).hide();
+			fieldItem.find( '.frm-not-set' )[0].classList.add( 'frm_hidden' );
 			var embedMsg = fieldItem.find( '.frm-embed-message' );
 			embedMsg.html( embedMsg.data( 'embedmsg' ) + this.options[ this.selectedIndex ].text );
-			fieldItem.find( '.frm-embed-field-placeholder' ).show();
+			fieldItem.find( '.frm-embed-field-placeholder' )[0].classList.remove( 'frm_hidden' );
 		} else {
-			fieldItem.find( '.frm-not-set' ).show();
-			fieldItem.find( '.frm-embed-field-placeholder' ).hide();
+			fieldItem.find( '.frm-not-set' )[0].classList.remove( 'frm_hidden' );
+			fieldItem.find( '.frm-embed-field-placeholder' )[0].classList.add( 'frm_hidden' );
 		}
 	}
 
