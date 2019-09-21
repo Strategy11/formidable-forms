@@ -3582,6 +3582,7 @@ label.frm-example-icon {
 	margin-top: 0;
 }
 
+.frm_authorized_box .frm-show-unauthorized,
 .frm_unauthorized_box .frm-show-authorized {
 	display: none;
 }

@@ -7,13 +7,17 @@ class FrmAddonsController {
 			return;
 		}
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), __( 'Add-Ons', 'formidable' ), 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+		$label = __( 'Add-Ons', 'formidable' );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$label = '<span style="color:#fe5a1d">' . $label . '</span>';
+		}
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ),
-				'<span style="color:#f15a24">' . __( 'Upgrade to Pro', 'formidable' ) . '</span>',
+				'<span style="color:#fe5a1d">' . __( 'Upgrade to Pro', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'
@@ -689,6 +693,35 @@ class FrmAddonsController {
 		);
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php' );
+	}
+
+	/**
+	 * Install Pro after connection with Formidable.
+	 *
+	 * @since 4.02.05
+	 */
+	public static function connect_pro() {
+		FrmAppHelper::permission_check( 'install_plugins' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$url = FrmAppHelper::get_post_param( 'plugin', '', 'sanitize_text_field' );
+		if ( FrmAppHelper::pro_is_installed() || empty( $url ) ) {
+			wp_die();
+		}
+
+		$response = array();
+
+		// It's already installed and active.
+		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		if ( is_wp_error( $active ) ) {
+			// The plugin was installed, but not active. Download it now.
+			self::ajax_install_addon();
+		} else {
+			$response['active'] = true;
+		}
+
+		echo json_encode( $response );
+		wp_die();
 	}
 
 	/**

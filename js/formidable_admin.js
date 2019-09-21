@@ -2185,10 +2185,11 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldOrder() {
+		var i;
 		renumberPageBreaks();
 		jQuery( '#frm-show-fields' ).each( function( i ) {
 			var fields = jQuery( 'li.frm_field_box', this );
-			for ( var i = 0; i < fields.length; i ++ ) {
+			for ( i = 0; i < fields.length; i ++ ) {
 				var fieldId = fields[ i ].getAttribute( 'data-fid' ),
 					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
 					currentOrder = field.val(),
@@ -3692,83 +3693,11 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function authorize() {
-		/*jshint validthis:true */
-		var button = jQuery( this );
-		var pluginSlug = button.data( 'plugin' );
-		var input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
-		var license = input.value;
-		var wpmu = document.getElementById( 'proplug-wpmu' );
-		if ( wpmu === null ) {
-			wpmu = 0;
-		} else if ( wpmu.checked ) {
-			wpmu = 1;
-		} else {
-			wpmu = 0;
-		}
-
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl, dataType: 'json',
-			data: {
-				action: 'frm_addon_activate',
-				license: license,
-				plugin: pluginSlug,
-				wpmu: wpmu,
-				nonce: frmGlobal.nonce
-			},
-			success: function( msg ) {
-				var messageBox = jQuery( '.frm_pro_license_msg' );
-				if ( msg.success === true ) {
-					document.getElementById( 'pro_cred_form' ).classList.remove( 'frm_unauthorized_box' );
-					messageBox.removeClass( 'frm_error_style' ).addClass( 'frm_message frm_updated_message' );
-					input.value = '•••••••••••••••••••';
-				} else {
-					messageBox.addClass( 'frm_error_style' ).removeClass( 'frm_message frm_updated_message' );
-				}
-
-				messageBox.removeClass( 'frm_hidden' );
-				messageBox.html( msg.message );
-				if ( msg.message !== '' ) {
-					setTimeout( function() {
-						messageBox.html( '' );
-						messageBox.addClass( 'frm_hidden' ).removeClass( 'frm_error_style frm_message frm_updated_message' );
-					}, 10000 );
-				}
-			}
-		} );
-	}
-
-	function deauthorize() {
-		/*jshint validthis:true */
-		if ( !confirm( frmGlobal.deauthorize ) ) {
-			return false;
-		}
-		var $link = jQuery( this );
-		var pluginSlug = $link.data( 'plugin' );
-		var input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
-		var license = input.value;
-		jQuery.ajax( {
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_addon_deactivate',
-				license: license,
-				plugin: pluginSlug,
-				nonce: frmGlobal.nonce
-			},
-			success: function( msg ) {
-				document.getElementById( 'pro_cred_form' ).classList.add( 'frm_unauthorized_box' );
-				input.value = '';
-			}
-		} );
-		return false;
-	}
-
 	function saveAddonLicense() {
 		/*jshint validthis:true */
 		var button = jQuery( this );
 		var buttonName = this.name;
-		var pluginSlug = button.data( 'plugin' );
+		var pluginSlug = this.getAttribute( 'data-plugin' );
 		var action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
 		var license = document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value;
 		jQuery.ajax( {
@@ -4543,8 +4472,8 @@ function frmAdminBuildJS() {
 				autoSearch.keyup();
 			}
 
-			jQuery( document.getElementById( 'frm_deauthorize_link' ) ).click( deauthorize );
-			jQuery( '.frm_authorize_link' ).click( authorize );
+			// Initialize Formidable Connection.
+			FrmFormsConnect.init();
 
 			jQuery( document ).on( 'click', '.frm-install-addon', installAddon );
 			jQuery( document ).on( 'click', '.frm-activate-addon', activateAddon );
@@ -5103,6 +5032,226 @@ var frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
 } );
+
+
+var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
+
+	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
+
+	/**
+	 * Public functions and properties.
+	 *
+	 * @since 4.02.05
+	 *
+	 * @type {Object}
+	 */
+	var app = {
+
+		/**
+		 * Start the engine.
+		 *
+		 * @since 4.02.05
+		 */
+		init: function() {
+			$( document ).ready( app.connectBtnClick );
+		},
+
+		/**
+		 * Register connect button event.
+		 *
+		 * @since 4.02.05
+		 */
+		connectBtnClick: function() {
+			$( document.getElementById( 'frm_deauthorize_link' ) ).click( app.deauthorize );
+			$( '.frm_authorize_link' ).click( app.authorize );
+
+			$( '#frm-settings-connect-btn' ).on( 'click', function(e) {
+				e.preventDefault();
+				app.gotoUpgradeUrl();
+			} );
+
+			window.addEventListener('message', function(msg) {
+				if ( msg.origin.replace(/\/$/, '') !== frmGlobal.app_url.replace(/\/$/, '') ) {
+					return;
+				}
+
+				if ( ! msg.data || 'object' !== typeof msg.data ) {
+					console.error('Messages from "' + frmGlobal.app_url + '" must contain an api key string.');
+					return;
+				}
+
+				app.updateForm(msg.data);
+			});
+		},
+
+		/**
+		 * Go to upgrade url.
+		 *
+		 * @since 4.02.05
+		 */
+		gotoUpgradeUrl: function() {
+			var w = window.open(frmGlobal.app_url + '/api-connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0');
+			w.focus();
+		},
+
+		updateForm: function(response) {
+
+			// Start spinner.
+			var btn = document.getElementById('frm-settings-connect-btn');
+			btn.classList.add('frm_loading_button');
+
+			if ( response.url !== '' ) {
+				$.ajax( {
+					type: 'POST',
+					url: ajaxurl,
+					dataType: 'json',
+					data: {
+						action: 'frm_connect',
+						plugin: response.url,
+						nonce: frmGlobal.nonce
+					},
+					success: function( msg ) {
+						app.activateKey( response, btn );
+					}
+				});
+			} else if ( response.key !== '' ) {
+				app.activateKey( response, btn );
+			}
+		},
+
+		activateKey: function( response, btn ) {
+			if ( response.key === '' ) {
+				btn.classList.remove('frm_loading_button');
+			} else {
+				$.ajax( {
+					type: 'POST',
+					url: ajaxurl,
+					dataType: 'json',
+					data: {
+						action: 'frm_addon_activate',
+						license: response.key,
+						plugin: 'formidable_pro',
+						wpmu: 0,
+						nonce: frmGlobal.nonce
+					},
+					success: function( msg ) {
+						btn.classList.remove('frm_loading_button');
+
+						if ( msg.success === true ) {
+							document.getElementById( 'frm_license_top' ).classList.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
+						}
+
+						app.showMessage( msg );
+					}
+				});
+			}
+		},
+
+		/* Manual license authorization */
+		authorize: function() {
+			/*jshint validthis:true */
+			var button = this;
+			var pluginSlug = this.getAttribute('data-plugin');
+			var input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
+			var license = input.value;
+			var wpmu = document.getElementById( 'proplug-wpmu' );
+			this.classList.add( 'frm_loading_button' );
+			if ( wpmu === null ) {
+				wpmu = 0;
+			} else if ( wpmu.checked ) {
+				wpmu = 1;
+			} else {
+				wpmu = 0;
+			}
+
+			$.ajax( {
+				type: 'POST', url: ajaxurl, dataType: 'json',
+				data: {
+					action: 'frm_addon_activate',
+					license: license,
+					plugin: pluginSlug,
+					wpmu: wpmu,
+					nonce: frmGlobal.nonce
+				},
+				success: function( msg ) {
+					app.afterAuthorize( msg, input );
+					button.classList.remove( 'frm_loading_button' );
+				}
+			} );
+		},
+
+		afterAuthorize: function( msg, input ) {
+			if ( msg.success === true ) {
+				input.value = '•••••••••••••••••••';
+			}
+
+			app.showMessage( msg );
+		},
+
+		showMessage: function( msg ) {
+			var messageBox = document.getElementById('frm-using-lite');
+			if ( messageBox === null ) {
+				messageBox = document.getElementsByClassName( 'frm_pro_license_msg' )[0];
+			}
+
+			if ( msg.success === true ) {
+				var d = document.getElementById( 'frm_license_top' );
+				d.className = d.className.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
+				messageBox.classList.remove( 'frm_error_style' );
+				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
+			} else {
+				messageBox.classList.add( 'frm_error_style' );
+				messageBox.classList.remove( 'frm_message', 'frm_updated_message' );
+			}
+
+			messageBox.classList.remove( 'frm_hidden' );
+			messageBox.innerHTML = msg.message;
+			if ( msg.message !== '' ) {
+				setTimeout( function() {
+					messageBox.innerHTML = '';
+					messageBox.classList.add( 'frm_hidden' );
+					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
+				}, 10000 );
+			}
+		},
+
+		deauthorize: function() {
+			/*jshint validthis:true */
+			if ( !confirm( frmGlobal.deauthorize ) ) {
+				return false;
+			}
+			var pluginSlug = this.getAttribute('data-plugin'),
+				input = document.getElementById( 'edd_' + pluginSlug + '_license_key' ),
+				license = input.value,
+				link = this;
+
+			this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;"></span>';
+
+			$.ajax( {
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'frm_addon_deactivate',
+					license: license,
+					plugin: pluginSlug,
+					nonce: frmGlobal.nonce
+				},
+				success: function( msg ) {
+					var l = document.getElementById( 'frm_license_top' )
+					l.className = l.className.replace( 'frm_authorized_box', 'frm_unauthorized_box' );
+					input.value = '';
+					document.getElementById('frm-connect-btns').classList.remove('frm_hidden');
+					link.innerHTML = '';
+				}
+			} );
+			return false;
+		}
+	};
+
+	// Provide access to public functions/properties.
+	return app;
+
+}( document, window, jQuery ) );
 
 function frm_remove_tag( html_tag ) {
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );

@@ -1,3 +1,15 @@
+<div id="frm_license_top" class="frm_unauthorized_box">
+<p id="frm-connect-btns" class="frm-show-unauthorized">
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings' ) ); ?>" target="_blank" class="button-primary frm-button-primary" id="frm-settings-connect-btn">
+		<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
+	</a>
+	or
+	<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ) ); ?>" target="_blank" class="button-secondary frm-secondary-button">
+		<?php esc_html_e( 'Get Formidable Now', 'formidable' ); ?>
+	</a>
+</p>
+
+<div id="frm-using-lite" class="frm-show-unauthorized">
 <p>You're using Formidable Forms Lite - no license needed. Enjoy! 🙂</p>
 <p>
 		<?php
@@ -9,9 +21,5 @@
 		);
 		?>
 </p>
-<p>
-<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( 'settings-license', 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank">
-	<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
-</a>
-</p>
-<div class="clear"></div>
+</div>
+</div>
