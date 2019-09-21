@@ -4365,6 +4365,26 @@ function frmAdminBuildJS() {
 		w.off( 'beforeunload.edit-post' );
 	}
 
+	function maybeChangeEmbedFormMsg() {
+		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		var fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
+		if ( null === fieldItem || 'form' !== fieldItem.dataset['type'] ) {
+			return;
+		}
+
+		fieldItem = jQuery( fieldItem );
+
+		if ( this.options[ this.selectedIndex ].value ) {
+			fieldItem.find( '.frm-not-set' )[0].classList.add( 'frm_hidden' );
+			var embedMsg = fieldItem.find( '.frm-embed-message' );
+			embedMsg.html( embedMsg.data( 'embedmsg' ) + this.options[ this.selectedIndex ].text );
+			fieldItem.find( '.frm-embed-field-placeholder' )[0].classList.remove( 'frm_hidden' );
+		} else {
+			fieldItem.find( '.frm-not-set' )[0].classList.remove( 'frm_hidden' );
+			fieldItem.find( '.frm-embed-field-placeholder' )[0].classList.add( 'frm_hidden' );
+		}
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -4584,6 +4604,8 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
+
+			jQuery( document ).on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
