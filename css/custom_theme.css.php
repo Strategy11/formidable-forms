@@ -211,6 +211,7 @@ legend.frm_hidden{
 	margin-bottom:8px !important;
 }
 
+.with_frm_style .frm-edit-page-btn,
 .with_frm_style .frm_submit input[type=submit],
 .with_frm_style .frm_submit input[type=button],
 .with_frm_style .frm_submit button{

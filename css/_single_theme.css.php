@@ -451,6 +451,7 @@ if ( ! empty( $important ) ) {
 }
 
 	<?php if ( empty( $submit_bg_img ) ) { ?>
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:hover{
@@ -463,6 +464,7 @@ if ( ! empty( $important ) ) {
 	margin-bottom:<?php echo esc_html( $submit_margin ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:focus,
