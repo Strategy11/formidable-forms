@@ -801,7 +801,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$html = '<tr' . $this->tr_style . '>';
 
 		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
+		$field_value = '<td' . $this->td_style . '>' . wp_kses_post( $field_value ) . '</td>';
 
 		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
 			$html .= $field_value;
