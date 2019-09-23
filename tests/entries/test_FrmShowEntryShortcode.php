@@ -800,16 +800,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
 		$html = '<tr' . $this->tr_style . '>';
 
-		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
-			$first = $field_value;
-			$second = $label;
-		} else {
-			$first = $label;
-			$second = $field_value;
-		}
+		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
+		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
 
-		$html .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
-		$html .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
+		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
+			$html .= $field_value;
+			$html .= $label;
+		} else {
+			$html .= $label;
+			$html .= $field_value;
+		}
 
 		$html .= '</tr>' . "\r\n";
 
