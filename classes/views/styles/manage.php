@@ -17,7 +17,12 @@
 
 		<div class="frm-inner-content">
 
-	<p><?php printf( esc_html__( 'Easily change which template your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>' ); ?></p>
+	<h2 class="frm-h2">
+		<?php esc_html_e( 'Manage Styles', 'formidable' ); ?>
+	</h2>
+	<p class="howto">
+		<?php printf( esc_html__( 'Easily change which style your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>' ); ?>
+	</p>
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 

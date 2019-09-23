@@ -1,3 +1,9 @@
+<h2 class="frm-h2">
+	<?php esc_html_e( 'Style a Sample Form', 'formidable' ); ?>
+</h2>
+<p class="howto">
+	<?php esc_html_e( 'Use the options in the sidebar to customize the style of your forms. Any changes made here will affect any forms that are using this style.', 'formidable' ); ?>
+</p>
 <div class="frm_forms with_frm_style frm_style_<?php echo esc_attr( $style->post_name ); ?> <?php echo esc_attr( FrmAppHelper::pro_is_installed() ? 'frm_pro_form' : 'frm_lite_form' ); ?>">
 <div class="frm-show-form">
 

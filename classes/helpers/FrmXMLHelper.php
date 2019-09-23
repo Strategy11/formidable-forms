@@ -214,6 +214,10 @@ class FrmXMLHelper {
 			'created_at'     => date( 'Y-m-d H:i:s', strtotime( (string) $item->created_at ) ),
 		);
 
+		if ( empty( $item->created_at ) ) {
+			$form['created_at'] = current_time( 'mysql', 1 );
+		}
+
 		$form['options'] = FrmAppHelper::maybe_json_decode( $form['options'] );
 
 		return $form;

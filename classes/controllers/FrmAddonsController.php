@@ -7,13 +7,17 @@ class FrmAddonsController {
 			return;
 		}
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), __( 'Add-Ons', 'formidable' ), 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
+		$label = __( 'Add-Ons', 'formidable' );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$label = '<span style="color:#fe5a1d">' . $label . '</span>';
+		}
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ),
-				'<span style="color:#f15a24">' . __( 'Upgrade to Pro', 'formidable' ) . '</span>',
+				'<span style="color:#fe5a1d">' . __( 'Upgrade to Pro', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'
@@ -498,7 +502,7 @@ class FrmAddonsController {
 					'label' => 'Display form data with virtually limitless views',
 					'link'  => array(
 						'content' => 'views',
-						'anchor'  => 'feature-display-form-data-views',
+						'param'   => 'views-display-form-data',
 					),
 					'lite'  => false,
 				),
@@ -506,7 +510,7 @@ class FrmAddonsController {
 					'label' => 'Generate graphs and stats based on your submitted data',
 					'link'  => array(
 						'content' => 'graphs',
-						'anchor'  => 'feature-create-a-graph-wordpress-forms',
+						'param'   => 'statistics-graphs-wordpress-forms',
 					),
 					'lite'  => false,
 				),
@@ -516,7 +520,7 @@ class FrmAddonsController {
 					'label' => 'Import entries from a CSV',
 					'link'  => array(
 						'content' => 'import-entries',
-						'anchor'  => 'feature-importing-exporting-wordpress-forms',
+						'param'   => 'importing-exporting-wordpress-forms',
 					),
 					'lite'  => false,
 				),
@@ -524,7 +528,7 @@ class FrmAddonsController {
 					'label' => 'Logged-in users can save drafts and return later',
 					'link'  => array(
 						'content' => 'save-drafts',
-						'anchor'  => 'feature-save-and-continue-partial-submissions',
+						'param'   => 'save-drafts-wordpress-form',
 					),
 					'lite'  => false,
 				),
@@ -532,7 +536,7 @@ class FrmAddonsController {
 					'label' => 'Flexibly and powerfully view, edit, and delete entries from anywhere on your site',
 					'link'  => array(
 						'content' => 'front-edit',
-						'anchor'  => 'feature-front-end-editing-wordpress',
+						'param'   => 'wordpress-front-end-editing',
 					),
 					'lite'  => false,
 				),
@@ -550,7 +554,7 @@ class FrmAddonsController {
 					'label' => 'Save a calculated value into a field',
 					'link'  => array(
 						'content' => 'calculations',
-						'anchor'  => 'feature-wordpress-calculated-fields-form',
+						'param'   => 'field-calculations-wordpress-form',
 					),
 					'lite'  => false,
 				),
@@ -558,7 +562,7 @@ class FrmAddonsController {
 					'label' => 'Allow multiple file uploads',
 					'link'  => array(
 						'content' => 'file-uploads',
-						'anchor'  => 'feature-wordpress-multiple-file-upload-form',
+						'param'   => 'wordpress-multi-file-upload-fields',
 					),
 					'lite'  => false,
 				),
@@ -566,7 +570,7 @@ class FrmAddonsController {
 					'label' => 'Repeat sections of fields',
 					'link'  => array(
 						'content' => 'repeaters',
-						'anchor'  => 'feature-dynamically-add-form-fields',
+						'param'   => 'repeatable-sections-forms',
 					),
 					'lite'  => false,
 				),
@@ -574,7 +578,7 @@ class FrmAddonsController {
 					'label' => 'Hide and show fields conditionally based on other fields or the user\'s role',
 					'link'  => array(
 						'content' => 'conditional-logic',
-						'anchor'  => 'feature-conditional-logic-wordpress-forms',
+						'param'   => 'conditional-logic-wordpress-forms',
 					),
 					'lite'  => false,
 				),
@@ -582,7 +586,7 @@ class FrmAddonsController {
 					'label' => 'Confirmation fields',
 					'link'  => array(
 						'content' => 'confirmation-fields',
-						'anchor'  => 'feature-confirm-email-address-password-wordpress-form',
+						'param'   => 'confirmation-fields-wordpress-forms',
 					),
 					'lite'  => false,
 				),
@@ -590,7 +594,7 @@ class FrmAddonsController {
 					'label' => 'Multi-paged forms',
 					'link'  => array(
 						'content' => 'page-breaks',
-						'anchor'  => 'feature-wordpress-multi-step-form',
+						'param'   => 'wordpress-multi-page-forms',
 					),
 					'lite'  => false,
 				),
@@ -606,7 +610,7 @@ class FrmAddonsController {
 					'label' => 'Drag & Drop Form building',
 					'link'  => array(
 						'content' => 'drag-drop',
-						'anchor'  => 'feature-drag-drop-form-builder',
+						'param'   => 'drag-drop-forms',
 					),
 					'lite'  => true,
 				),
@@ -614,7 +618,7 @@ class FrmAddonsController {
 					'label' => 'Create forms from Templates',
 					'link'  => array(
 						'content' => 'form-templates',
-						'anchor'  => 'feature-wordpress-form-templates',
+						'param'   => 'wordpress-form-templates',
 					),
 					'lite'  => true,
 				),
@@ -622,7 +626,7 @@ class FrmAddonsController {
 					'label' => 'Import and export forms with XML',
 					'link'  => array(
 						'content' => 'import',
-						'anchor'  => 'feature-importing-exporting-wordpress-forms',
+						'param'   => 'importing-exporting-wordpress-forms',
 					),
 					'lite'  => true,
 				),
@@ -636,7 +640,6 @@ class FrmAddonsController {
 					'label' => 'Conditionally send your email notifications based on values in your form',
 					'link'  => array(
 						'content' => 'conditional-emails',
-						'anchor'  => 'feature-conditional-logic-wordpress-forms',
 					),
 					'lite'  => false,
 				),
@@ -644,7 +647,7 @@ class FrmAddonsController {
 					'label' => 'Create and edit WordPress posts or custom posts from the front-end',
 					'link'  => array(
 						'content' => 'create-posts',
-						'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
+						'param'   => 'create-posts-pages-wordpress-forms',
 					),
 					'lite'  => false,
 				),
@@ -652,7 +655,7 @@ class FrmAddonsController {
 					'label' => 'Send multiple emails and autoresponders',
 					'link'  => array(
 						'content' => 'multiple-emails',
-						'anchor'  => 'feature-email-autoresponders-wordpress',
+						'param'   => 'virtually-unlimited-emails',
 					),
 					'lite'  => true,
 				),
@@ -662,7 +665,7 @@ class FrmAddonsController {
 					'label' => 'Create Multiple styles for different forms',
 					'link'  => array(
 						'content' => 'multiple-styles',
-						'anchor'  => 'feature-wordpress-visual-form-styler',
+						'param'   => 'wordpress-visual-form-styler',
 					),
 					'lite'  => false,
 				),
@@ -670,7 +673,7 @@ class FrmAddonsController {
 					'label' => 'Customizable layout with CSS classes',
 					'link'  => array(
 						'content' => 'form-layout',
-						'anchor'  => 'feature-wordpress-mobile-friendly-responsive-forms',
+						'param'   => 'wordpress-mobile-friendly-forms',
 					),
 					'lite'  => true,
 				),
@@ -678,7 +681,7 @@ class FrmAddonsController {
 					'label' => 'Customize the HTML for your forms',
 					'link'  => array(
 						'content' => 'custom-html',
-						'anchor'  => 'feature-customize-form-html-wordpress',
+						'param'   => 'customizable-html-wordpress-form',
 					),
 					'lite'  => true,
 				),
@@ -690,6 +693,35 @@ class FrmAddonsController {
 		);
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/upgrade_to_pro.php' );
+	}
+
+	/**
+	 * Install Pro after connection with Formidable.
+	 *
+	 * @since 4.02.05
+	 */
+	public static function connect_pro() {
+		FrmAppHelper::permission_check( 'install_plugins' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$url = FrmAppHelper::get_post_param( 'plugin', '', 'sanitize_text_field' );
+		if ( FrmAppHelper::pro_is_installed() || empty( $url ) ) {
+			wp_die();
+		}
+
+		$response = array();
+
+		// It's already installed and active.
+		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		if ( is_wp_error( $active ) ) {
+			// The plugin was installed, but not active. Download it now.
+			self::ajax_install_addon();
+		} else {
+			$response['active'] = true;
+		}
+
+		echo json_encode( $response );
+		wp_die();
 	}
 
 	/**

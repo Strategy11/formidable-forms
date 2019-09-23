@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.02.03';
+	public static $plug_version = '4.02.04';
 
 	/**
 	 * @since 1.07.02
@@ -104,6 +104,10 @@ class FrmAppHelper {
 
 		if ( isset( $content ) ) {
 			$query_args['utm_content'] = $content;
+		}
+
+		if ( is_array( $args ) && isset( $args['param'] ) ) {
+			$query_args['f'] = $args['param'];
 		}
 
 		return add_query_arg( $query_args, $page ) . $anchor;
@@ -2054,6 +2058,7 @@ class FrmAppHelper {
 			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
 			'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
 			'url'          => self::plugin_url(),
+			'app_url'      => 'https://formidableforms.com/',
 			'loading'      => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'        => wp_create_nonce( 'frm_ajax' ),
 		);
@@ -2075,13 +2080,6 @@ class FrmAppHelper {
 	 * @param string $location
 	 */
 	public static function localize_script( $location ) {
-		global $frm_vars;
-
-		if ( isset( $frm_vars['jsloc'] ) ) {
-			return;
-		}
-		$frm_vars['jsloc'] = true;
-
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
@@ -2195,7 +2193,7 @@ class FrmAppHelper {
 			if ( empty( $expired ) ) {
 				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
 			} else {
-				echo '<br/>Please <a href="https://formidableforms.com/account/licenses/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest Pro version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous Lite version</a> to revert.';
+				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest Pro version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous Lite version</a> to revert.';
 			}
 			?>
 		</div>

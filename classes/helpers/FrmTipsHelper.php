@@ -51,7 +51,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'conditional-logic',
-					'anchor'  => 'feature-conditional-logic-wordpress-forms',
+					'param'   => 'conditional-logic-wordpress-forms',
 				),
 				'tip'  => __( 'Use conditional logic to shorten your forms and increase conversions.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
@@ -59,7 +59,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'confirmation-fields',
-					'anchor'  => 'feature-confirm-email-address-password-wordpress-form',
+					'param'   => 'confirmation-fields-wordpress-forms',
 				),
 				'tip'  => __( 'Want to stop losing leads from email typos?', 'formidable' ),
 				'call' => __( 'Add email confirmation fields.', 'formidable' ),
@@ -67,7 +67,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'page-breaks',
-					'anchor'  => 'feature-wordpress-multi-step-form',
+					'param'   => 'wordpress-multi-page-forms',
 				),
 				'tip'  => __( 'Stop intimidating users with long forms.', 'formidable' ),
 				'call' => __( 'Use page breaks.', 'formidable' ),
@@ -75,7 +75,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'file-uploads',
-					'anchor'  => 'feature-wordpress-multiple-file-upload-form',
+					'param'   => 'wordpress-multi-file-upload-fields',
 				),
 				'tip'  => __( 'Cut down on back-and-forth with clients.', 'formidable' ),
 				'call' => __( 'Allow file uploads in your form.', 'formidable' ),
@@ -83,7 +83,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'calculations',
-					'anchor'  => 'feature-wordpress-calculated-fields-form',
+					'param'   => 'field-calculations-wordpress-form',
 				),
 				'tip'  => __( 'Need to calculate a total?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
@@ -91,7 +91,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'prefill-fields',
-					'anchor'  => 'feature-fill-out-forms-automatically',
+					'param'   => 'auto-fill-forms',
 				),
 				'tip'  => __( 'Save time.', 'formidable' ),
 				'call' => __( 'Prefill fields with user info.', 'formidable' ),
@@ -106,7 +106,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'front-edit-b',
-					'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
+					'param'   => 'wordpress-front-end-editing',
 				),
 				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
 				'call' => __( 'Add front-end editing.', 'formidable' ),
@@ -114,7 +114,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'save-drafts',
-					'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
+					'param'   => 'save-drafts-wordpress-form',
 				),
 				'tip'  => __( 'Have a long form that takes time to complete?', 'formidable' ),
 				'call' => __( 'Let logged-in users save a draft and return later.', 'formidable' ),
@@ -129,6 +129,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'form-scheduling',
+					'param'   => 'schedule-forms-wordpress',
 				),
 				'tip'  => __( 'Need to open and close your form on specific days?', 'formidable' ),
 				'call' => __( 'Add form scheduling.', 'formidable' ),
@@ -143,7 +144,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'email-routing',
-					'anchor'  => 'feature-email-autoresponders-wordpress',
+					'param'   => 'virtually-unlimited-emails',
 				),
 				'tip'  => __( 'Save time by sending the email to the right person automatically.', 'formidable' ),
 				'call' => __( 'Add email routing.', 'formidable' ),
@@ -151,7 +152,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'create-posts',
-					'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
+					'param'   => 'create-posts-pages-wordpress-forms',
 				),
 				'tip'  => __( 'Create blog posts or pages from the front-end.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
@@ -159,7 +160,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'user-submit',
-					'anchor'  => 'feature-user-submitted-posts-wordpress-forms',
+					'param'   => 'create-posts-pages-wordpress-forms',
 				),
 				'tip'  => __( 'Make front-end posting easy.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
@@ -171,14 +172,6 @@ class FrmTipsHelper {
 				),
 				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
 				'call' => __( 'Send leads straight to MailChimp.', 'formidable' ),
-			),
-			array(
-				'link' => array(
-					'content' => 'paypal',
-					'page'    => 'paypal-tip',
-				),
-				'tip'  => __( 'Save hours and increase revenue by collecting payments with every submission.', 'formidable' ),
-				'call' => __( 'Use PayPal with this form.', 'formidable' ),
 			),
 			array(
 				'link' => array(
@@ -238,7 +231,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'style',
-					'anchor'  => 'feature-wordpress-visual-form-styler',
+					'param'   => 'wordpress-visual-form-styler',
 				),
 				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
@@ -253,7 +246,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'entries',
-					'anchor'  => 'feature-form-entry-management-wordpress',
+					'param'   => 'form-entry-management-wordpress',
 				),
 				'tip'  => __( 'Want to edit form submissions?', 'formidable' ),
 				'call' => __( 'Add entry management.', 'formidable' ),
@@ -261,7 +254,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'entries-search',
-					'anchor'  => 'feature-form-entry-management-wordpress',
+					'param'   => 'form-entry-management-wordpress',
 				),
 				'tip'  => __( 'Want to search submitted entries?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
@@ -269,7 +262,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'views',
-					'anchor'  => 'feature-display-form-data-views',
+					'param'   => 'views-display-form-data',
 				),
 				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
 				'call' => __( 'Display form data with Views.', 'formidable' ),
@@ -285,7 +278,7 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'import',
-					'anchor'  => 'feature-importing-exporting-wordpress-forms',
+					'param'   => 'importing-exporting-wordpress-forms',
 				),
 				'tip'  => __( 'Want to import entries into your forms?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),

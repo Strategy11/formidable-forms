@@ -57,7 +57,7 @@
 							<?php esc_html_e( 'Install', 'formidable' ); ?>
 						</a>
 					<?php } elseif ( ! empty( $license_type ) && $license_type === strtolower( $plan_required ) ) { ?>
-						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'addons', 'account/licenses/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 							<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 						</a>
 					<?php } else { ?>

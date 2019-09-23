@@ -462,7 +462,8 @@ class FrmAddon {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		if ( ! isset( $_POST['license'] ) || empty( $_POST['license'] ) ) {
+		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
+		if ( empty( $license ) ) {
 			wp_die(
 				json_encode(
 					array(
@@ -473,7 +474,6 @@ class FrmAddon {
 			);
 		}
 
-		$license     = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
 		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$this_plugin = self::get_addon( $plugin_slug );
 		$response    = $this_plugin->activate_license( $license );

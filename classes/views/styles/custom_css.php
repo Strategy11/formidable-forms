@@ -17,8 +17,11 @@
 
 		<div class="frm-inner-content" id="template">
 
+	<h2 class="frm-h2">
+		<?php esc_html_e( 'Add Custom CSS', 'formidable' ); ?>
+	</h2>
 	<p class="howto">
-		<?php esc_html_e( 'You can add custom css here or in your theme style.css', 'formidable' ); ?>
+		<?php esc_html_e( 'You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded.', 'formidable' ); ?>
 	</p>
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
