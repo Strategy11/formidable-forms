@@ -271,13 +271,14 @@ class FrmTableHTMLGenerator {
 		if ( 'rtl' == $this->direction ) {
 			$first  = $value;
 			$second = $label;
+			$row .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
+			$row .= '<th' . $this->td_style . '>' . wp_kses_post( $second ) . '</th>';
 		} else {
 			$first  = $label;
 			$second = $value;
+			$row .= '<th' . $this->td_style . '>' . wp_kses_post( $first ) . '</th>';
+			$row .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
 		}
-
-		$row .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
-		$row .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
 
 		$row .= '</tr>' . "\r\n";
 
