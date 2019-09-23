@@ -99,12 +99,26 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * @since 4.03
+	 */
+	public function get_field_attr( $option ) {
+		return is_object( $this->field ) ? $this->field->{$option} : '';
+	}
+
+	/**
+	 * @since 4.03
+	 */
+	public function get_field() {
+		return $this->field;
+	}
+
+	/**
 	 * Get the field property's label
 	 *
 	 * @since 2.04
 	 */
 	public function get_field_label() {
-		return is_object( $this->field ) ? $this->field->name : '';
+		return $this->get_field_attr( 'name' );
 	}
 
 	/**
@@ -113,7 +127,7 @@ class FrmFieldValue {
 	 * @since 2.05
 	 */
 	public function get_field_id() {
-		return is_object( $this->field ) ? $this->field->id : '';
+		return $this->get_field_attr( 'id' );
 	}
 
 	/**
@@ -122,7 +136,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_key() {
-		return is_object( $this->field ) ? $this->field->field_key : '';
+		return $this->get_field_attr( 'field_key' );
 	}
 
 	/**
@@ -131,7 +145,7 @@ class FrmFieldValue {
 	 * @since 2.04
 	 */
 	public function get_field_type() {
-		return is_object( $this->field ) ? $this->field->type : '';
+		return $this->get_field_attr( 'type' );
 	}
 
 	/**
