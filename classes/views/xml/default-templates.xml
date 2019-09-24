@@ -84,7 +84,7 @@
 		<link></link>
 		<post_author><![CDATA[admin]]></post_author>
 		<description></description>
-		<content><![CDATA[{"email_to":"[admin_email]","cc":"","bcc":"","reply_to":"","from":"[sitename] <[admin_email]>","email_subject":"","email_message":"[default-message]","event":["create"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+		<content><![CDATA[{"email_to":"[admin_email]","cc":"","bcc":"","reply_to":"[3]","from":"[sitename] <[admin_email]>","email_subject":"","email_message":"[default-message]","event":["create"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
 		<excerpt><![CDATA[email]]></excerpt>
 		<post_id>1</post_id>
 		<post_date>2015-04-06 17:18:12</post_date>
