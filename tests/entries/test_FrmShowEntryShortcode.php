@@ -902,7 +902,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
 			$html = '<tr' . $this->tr_style . '><th' . $this->td_style . '>IP Address</th><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
 			$html .= '<tr' . $this->tr_style . '><th' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><th' . $this->td_style . '>Referrer</td><th' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><th' . $this->td_style . '>Referrer</th><td' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n";
 		} else {
 			$html = '';
 		}
