@@ -38,6 +38,7 @@ zip -r $zipname $destination \
 	-x "*/bin/*" \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
+	-x "*/formidableforms.css" \
 	-x "*/js/src/*" \
 	-x "*/js/frm.min.js" \
 	-x "*/dropzone.js" \
