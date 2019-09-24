@@ -1068,7 +1068,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function table_row_start_tags( $type, $field ) {
 		if ( $type === 'html' ) {
-			$html = '<tr style="[frm-alt-color]"><td' . $this->td_style . '>';
+			$html = '<tr style="[frm-alt-color]"><th' . $this->td_style . '>';
 		} else {
 			$html = '';
 		}
@@ -1078,7 +1078,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function cell_separator( $type ) {
 		if ( $type === 'html' ) {
-			$html = '</td><td' . $this->td_style . '>';
+			$html = '</th><td' . $this->td_style . '>';
 		} else {
 			$html = ': ';
 		}
@@ -1088,7 +1088,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function table_row_end_tags( $type ) {
 		if ( $type === 'html' ) {
-			$html = '</td></tr>';
+			$html = '</th></tr>';
 		} else {
 			$html = '';
 		}
