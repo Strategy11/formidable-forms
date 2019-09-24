@@ -1088,7 +1088,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function table_row_end_tags( $type ) {
 		if ( $type === 'html' ) {
-			$html = '</th></tr>';
+			$html = '</td></tr>';
 		} else {
 			$html = '';
 		}
