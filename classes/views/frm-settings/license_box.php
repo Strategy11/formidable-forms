@@ -23,3 +23,5 @@
 </p>
 </div>
 </div>
+
+<div class="frm_pro_license_msg frm_hidden"></div>
