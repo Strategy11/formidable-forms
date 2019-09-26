@@ -5060,6 +5060,12 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
+	var el = {
+		licenseBox: document.getElementById( 'frm_license_top' ),
+		messageBox: document.getElementsByClassName( 'frm_pro_license_msg' )[0],
+		btn: document.getElementById('frm-settings-connect-btn')
+	};
+
 	/**
 	 * Public functions and properties.
 	 *
@@ -5087,7 +5093,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			$( document.getElementById( 'frm_deauthorize_link' ) ).click( app.deauthorize );
 			$( '.frm_authorize_link' ).click( app.authorize );
 
-			$( '#frm-settings-connect-btn' ).on( 'click', function(e) {
+			$( el.btn ).on( 'click', function(e) {
 				e.preventDefault();
 				app.gotoUpgradeUrl();
 			} );
@@ -5119,10 +5125,20 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		updateForm: function(response) {
 
 			// Start spinner.
-			var btn = document.getElementById('frm-settings-connect-btn');
+			var btn = el.btn;
 			btn.classList.add('frm_loading_button');
 
 			if ( response.url !== '' ) {
+				app.showProgress({
+					success:true,
+					message:'Installing...'
+				});
+				var fallback = setTimeout( function() {
+					app.showProgress({
+						success:true,
+						message:'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
+					});
+				}, 10000 );
 				$.ajax( {
 					type: 'POST',
 					url: ajaxurl,
@@ -5132,19 +5148,33 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						plugin: response.url,
 						nonce: frmGlobal.nonce
 					},
-					success: function( msg ) {
-						app.activateKey( response, btn );
+					success: function() {
+						clearTimeout( fallback );
+						app.activateKey( response );
+					},
+					error: function(xhr, textStatus, e) {
+						clearTimeout( fallback );
+						btn.classList.remove('frm_loading_button');
+						app.showMessage({
+							success:false,
+							message: e
+						});
 					}
 				});
 			} else if ( response.key !== '' ) {
-				app.activateKey( response, btn );
+				app.activateKey( response );
 			}
 		},
 
-		activateKey: function( response, btn ) {
+		activateKey: function( response ) {
+			var btn = el.btn;
 			if ( response.key === '' ) {
 				btn.classList.remove('frm_loading_button');
 			} else {
+				app.showProgress({
+					success:true,
+					message:'Activating...'
+				});
 				$.ajax( {
 					type: 'POST',
 					url: ajaxurl,
@@ -5160,10 +5190,17 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						btn.classList.remove('frm_loading_button');
 
 						if ( msg.success === true ) {
-							document.getElementById( 'frm_license_top' ).classList.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
+							el.licenseBox.classList.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
 						}
 
 						app.showMessage( msg );
+					},
+					error: function(xhr, textStatus, e) {
+						btn.classList.remove('frm_loading_button');
+						app.showMessage({
+							success:false,
+							message: e
+						});
 					}
 				});
 			}
@@ -5210,14 +5247,24 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			app.showMessage( msg );
 		},
 
-		showMessage: function( msg ) {
-			var messageBox = document.getElementById('frm-using-lite');
-			if ( messageBox === null ) {
-				messageBox = document.getElementsByClassName( 'frm_pro_license_msg' )[0];
+		showProgress: function( msg ) {
+			var messageBox = el.messageBox;
+			if ( msg.success === true ) {
+				messageBox.classList.remove( 'frm_error_style' );
+				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
+			} else {
+				messageBox.classList.add( 'frm_error_style' );
+				messageBox.classList.remove( 'frm_message', 'frm_updated_message' );
 			}
+			messageBox.classList.remove( 'frm_hidden' );
+			messageBox.innerHTML = msg.message;
+		},
+
+		showMessage: function( msg ) {
+			var messageBox = el.messageBox;
 
 			if ( msg.success === true ) {
-				var d = document.getElementById( 'frm_license_top' );
+				var d = el.licenseBox;
 				d.className = d.className.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
 				messageBox.classList.remove( 'frm_error_style' );
 				messageBox.classList.add( 'frm_message', 'frm_updated_message' );
@@ -5259,10 +5306,8 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					var l = document.getElementById( 'frm_license_top' )
-					l.className = l.className.replace( 'frm_authorized_box', 'frm_unauthorized_box' );
+					el.licenseBox.className = el.licenseBox.className.replace( 'frm_authorized_box', 'frm_unauthorized_box' );
 					input.value = '';
-					document.getElementById('frm-connect-btns').classList.remove('frm_hidden');
 					link.innerHTML = '';
 				}
 			} );
