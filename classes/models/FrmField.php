@@ -156,6 +156,10 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_percent_icon frm_show_upgrade',
 				'addon' => 'quizzes',
 			),
+			'summary' => array(
+				'name'  => __( 'Summary', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_file_text_icon',
+			),
 		);
 
 		// Since the signature field may be in a different section, don't show it twice.
@@ -777,7 +781,7 @@ class FrmField {
 	}
 
 	public static function no_save_fields() {
-		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form' );
+		return array( 'divider', 'end_divider', 'captcha', 'break', 'html', 'form', 'summary' );
 	}
 
 	/**

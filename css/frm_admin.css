@@ -722,6 +722,10 @@ p.frm_has_shortcodes {
 	font-size: 15px;
 }
 
+.frm-summary-learn-more {
+	font-size: inherit !important;
+}
+
 .frm-inline-modal .inside a.frm_icon_font {
 	font-size: 18px;
 }
@@ -2558,6 +2562,14 @@ a.frm_option_icon:hover::before {
 	width: 50%;
 	top: 23px;
 	left: 25%
+}
+
+.frm-summary-message {
+	top: 50%;
+	left: 50%;
+	padding: 15px 0;
+	font-size: 16px;
+	transform: translate(-50%, -50%);
 }
 
 .frm-single-settings .frm-embed-message {
@@ -4728,6 +4740,10 @@ ul.start_divider {
 	cursor: not-allowed;
 }
 
+.edit_field_type_summary .frm_clone_field {
+	display: none !important;
+}
+
 .frm_no_section_fields:not(.frm_block) + ul.start_divider {
 	padding: 0;
 	min-height: 132px;
@@ -5822,8 +5838,16 @@ ul .frm_col_two {
 	border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
-#frm-insert-fields li a:hover {
+#frm-insert-fields li a:not(.disabled):hover {
 	background: var(--sidebar-hover);
+}
+
+#frm-insert-fields li a.disabled:hover {
+	cursor: not-allowed;
+}
+
+#frm-insert-fields li.ui-draggable-disabled {
+	opacity: 0.5;
 }
 
 .frm_code_list {
@@ -5896,8 +5920,8 @@ input[disabled],
 	font-size: inherit;
 }
 
-#frm-insert-fields li a:hover .frmsvg,
-#frm-insert-fields li a:hover i {
+#frm-insert-fields li a:not(.disabled):hover .frmsvg,
+#frm-insert-fields li a:not(.disabled):hover i {
 	color: var(--dark-grey);
 }
 

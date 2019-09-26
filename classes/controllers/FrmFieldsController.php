@@ -57,6 +57,8 @@ class FrmFieldsController {
 		$field_type = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
 		$form_id    = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
+		do_action( 'frm_before_create_field', $field_type, $form_id );
+
 		$field = self::include_new_field( $field_type, $form_id );
 
 		// this hook will allow for multiple fields to be added at once

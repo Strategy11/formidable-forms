@@ -268,16 +268,16 @@ class FrmTableHTMLGenerator {
 		}
 		$row .= '>';
 
-		if ( 'rtl' == $this->direction ) {
-			$first  = $value;
-			$second = $label;
-		} else {
-			$first  = $label;
-			$second = $value;
-		}
+		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
+		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
 
-		$row .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
-		$row .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
+		if ( 'rtl' == $this->direction ) {
+			$row .= $value;
+			$row .= $label;
+		} else {
+			$row .= $label;
+			$row .= $value;
+		}
 
 		$row .= '</tr>' . "\r\n";
 

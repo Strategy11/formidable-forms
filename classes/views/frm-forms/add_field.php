@@ -18,6 +18,7 @@
 		<a href="#" class="frm_bstooltip frm-hover-icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
 		</a>
+
 		<a href="#" class="frm_bstooltip frm-hover-icon frm_clone_field" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?>
 		</a>

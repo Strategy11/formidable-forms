@@ -800,16 +800,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
 		$html = '<tr' . $this->tr_style . '>';
 
-		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
-			$first = $field_value;
-			$second = $label;
-		} else {
-			$first = $label;
-			$second = $field_value;
-		}
+		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
+		$field_value = '<td' . $this->td_style . '>' . wp_kses_post( $field_value ) . '</td>';
 
-		$html .= '<td' . $this->td_style . '>' . wp_kses_post( $first ) . '</td>';
-		$html .= '<td' . $this->td_style . '>' . wp_kses_post( $second ) . '</td>';
+		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
+			$html .= $field_value;
+			$html .= $label;
+		} else {
+			$html .= $label;
+			$html .= $field_value;
+		}
 
 		$html .= '</tr>' . "\r\n";
 
@@ -900,9 +900,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function user_info_rows( $atts ) {
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
-			$html = '<tr' . $this->tr_style . '><td' . $this->td_style . '>IP Address</td><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>User-Agent (Browser/OS)</td><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
-			$html .= '<tr' . $this->tr_style . '><td' . $this->td_style . '>Referrer</td><td' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n";
+			$html = '<tr' . $this->tr_style . '><th' . $this->td_style . '>IP Address</th><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><th' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
+			$html .= '<tr' . $this->tr_style . '><th' . $this->td_style . '>Referrer</th><td' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n";
 		} else {
 			$html = '';
 		}
@@ -1068,7 +1068,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function table_row_start_tags( $type, $field ) {
 		if ( $type === 'html' ) {
-			$html = '<tr style="[frm-alt-color]"><td' . $this->td_style . '>';
+			$html = '<tr style="[frm-alt-color]"><th' . $this->td_style . '>';
 		} else {
 			$html = '';
 		}
@@ -1078,7 +1078,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function cell_separator( $type ) {
 		if ( $type === 'html' ) {
-			$html = '</td><td' . $this->td_style . '>';
+			$html = '</th><td' . $this->td_style . '>';
 		} else {
 			$html = ': ';
 		}

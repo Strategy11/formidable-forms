@@ -404,7 +404,8 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ); ?> input[type=submit],
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
-.frm_form_submit_style{
+.frm_form_submit_style,
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn {
 	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
 	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
 	font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
@@ -450,6 +451,7 @@ if ( ! empty( $important ) ) {
 }
 
 	<?php if ( empty( $submit_bg_img ) ) { ?>
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:hover{
@@ -462,6 +464,7 @@ if ( ! empty( $important ) ) {
 	margin-bottom:<?php echo esc_html( $submit_margin ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:focus,
