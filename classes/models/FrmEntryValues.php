@@ -49,7 +49,7 @@ class FrmEntryValues {
 	 * @param array $atts
 	 */
 	public function __construct( $entry_id, $atts = array() ) {
-		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
+		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) && ! empty( $atts['entry']->metas ) ) {
 			$this->entry = $atts['entry'];
 		} else {
 			$this->init_entry( $entry_id );
