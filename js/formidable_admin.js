@@ -5152,7 +5152,9 @@ function frmAdminBuildJS() {
 
 			// activate addon licenses
 			var licenseTab = document.getElementById( 'licenses_settings' );
-			jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
+			if ( licenseTab !== null ) {
+				jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
+			}
 
 			jQuery( '#frm-dismissable-cta .dismiss' ).click( function( event ) {
 				event.preventDefault();
