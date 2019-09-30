@@ -553,14 +553,30 @@ class FrmAddon {
 		);
 	}
 
+	/**
+	 * @since 4.03
+	 */
+	public static function reset_cache() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$this_plugin = self::set_license_from_post();
+		$this_plugin->delete_cache();
+
+		$response = array(
+			'success' => true,
+			'message' => __( 'Refresh downloads', 'formidable' ),
+		);
+
+		echo json_encode( $response );
+		wp_die();
+	}
+
 	public static function deactivate() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		$this_plugin          = self::get_addon( $plugin_slug );
-		$license              = $this_plugin->get_license();
-		$this_plugin->license = $license;
+		$this_plugin = self::set_license_from_post();
 
 		$response = array(
 			'success' => false,
@@ -583,6 +599,17 @@ class FrmAddon {
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 4.03
+	 */
+	private static function set_license_from_post() {
+		$plugin_slug          = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
+		$this_plugin          = self::get_addon( $plugin_slug );
+		$license              = $this_plugin->get_license();
+		$this_plugin->license = $license;
+		return $this_plugin;
 	}
 
 	public function send_mothership_request( $action ) {

@@ -5230,7 +5230,8 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 	var el = {
 		licenseBox: document.getElementById( 'frm_license_top' ),
 		messageBox: document.getElementsByClassName( 'frm_pro_license_msg' )[0],
-		btn: document.getElementById('frm-settings-connect-btn')
+		btn: document.getElementById('frm-settings-connect-btn'),
+		reset: document.getElementById( 'frm_reconnect_link' )
 	};
 
 	/**
@@ -5259,6 +5260,9 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		connectBtnClick: function() {
 			$( document.getElementById( 'frm_deauthorize_link' ) ).click( app.deauthorize );
 			$( '.frm_authorize_link' ).click( app.authorize );
+			if ( el.reset !== null ) {
+				$( el.reset ).click( app.reauthorize );
+			}
 
 			$( el.btn ).on( 'click', function(e) {
 				e.preventDefault();
@@ -5449,6 +5453,27 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
 				}, 10000 );
 			}
+		},
+
+		/* Clear the site license cache */
+		reauthorize: function() {
+			/*jshint validthis:true */
+			this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;float:none"></span>';
+
+			$.ajax( {
+				type: 'POST',
+				url: ajaxurl,
+				dataType: 'json',
+				data: {
+					action: 'frm_reset_cache',
+					plugin: 'formidable_pro',
+					nonce: frmGlobal.nonce
+				},
+				success: function( msg ) {
+					el.reset.innerHTML = msg.message;
+				}
+			} );
+			return false;
 		},
 
 		deauthorize: function() {
