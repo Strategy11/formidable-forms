@@ -722,10 +722,6 @@ p.frm_has_shortcodes {
 	font-size: 15px;
 }
 
-.frm-summary-learn-more {
-	font-size: inherit !important;
-}
-
 .frm-inline-modal .inside a.frm_icon_font {
 	font-size: 18px;
 }
@@ -2570,6 +2566,10 @@ a.frm_option_icon:hover::before {
 	padding: 15px 0;
 	font-size: 16px;
 	transform: translate(-50%, -50%);
+}
+
+.frm-summary-learn-more {
+	font-size: inherit !important;
 }
 
 .frm-single-settings .frm-embed-message {
