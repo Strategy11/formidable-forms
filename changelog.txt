@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.03 =
+* New: Add an easier way to upgrade to the Pro version.
+* New: When the default Contact form is created, use the email address in the form as the Reply to address.
+* Fix: On some sites, the Formidable js wasn't loading correctly and causing errors.
+* Fix: Don't include generated css with plugin. Some sites weren't updating it.
+* New: Added frm_before_create_field hook while a field is being created from the builder. This allows extra fields to be included at once.
+
 = 4.02.04 =
 * Add a bit more in-plugin education and guidance for using Styles.
 * Add styling for Stripe credit card fields.
