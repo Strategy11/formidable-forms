@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.03b\n"
+"Project-Id-Version: Formidable Forms 4.03\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-09-27T23:23:56+02:00\n"
+"POT-Creation-Date: 2019-09-30T19:03:35+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -140,29 +140,33 @@ msgstr ""
 msgid "Oops! That is the wrong license key for this plugin."
 msgstr ""
 
-#: classes/models/FrmAddon.php:574
+#: classes/models/FrmAddon.php:568
+msgid "Refresh downloads"
+msgstr ""
+
+#: classes/models/FrmAddon.php:590
 msgid "That license was removed successfully"
 msgstr ""
 
-#: classes/models/FrmAddon.php:576
+#: classes/models/FrmAddon.php:592
 msgid "There was an error deactivating your license."
 msgstr ""
 
-#: classes/models/FrmAddon.php:609
+#: classes/models/FrmAddon.php:636
 msgid "Your License Key was invalid"
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/models/FrmAddon.php:613
+#: classes/models/FrmAddon.php:640
 msgid "You had an error communicating with the Formidable API. %1$sClick here%2$s for more information."
 msgstr ""
 
-#: classes/models/FrmAddon.php:616
+#: classes/models/FrmAddon.php:643
 msgid "You had an HTTP error connecting to the Formidable API"
 msgstr ""
 
 #. translators: %1$s: Error code, %2$s: Error message
-#: classes/models/FrmAddon.php:627
+#: classes/models/FrmAddon.php:654
 msgid "There was a %1$s error: %2$s"
 msgstr ""
 
