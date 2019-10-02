@@ -12,27 +12,18 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 	/**
 	 * Public functions and properties.
 	 *
-	 * @since 4.02.05
+	 * @since 4.03
 	 *
 	 * @type {Object}
 	 */
 	var app = {
 
 		/**
-		 * Start the engine.
-		 *
-		 * @since 4.02.05
-		 */
-		init: function() {
-			$( document ).ready( app.connectBtnClick );
-		},
-
-		/**
 		 * Register connect button event.
 		 *
-		 * @since 4.02.05
+		 * @since 4.03
 		 */
-		connectBtnClick: function() {
+		init: function() {
 			$( document.getElementById( 'frm_deauthorize_link' ) ).click( app.deauthorize );
 			$( '.frm_authorize_link' ).click( app.authorize );
 			if ( el.reset !== null ) {
@@ -61,7 +52,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		/**
 		 * Go to upgrade url.
 		 *
-		 * @since 4.02.05
+		 * @since 4.03
 		 */
 		gotoUpgradeUrl: function() {
 			var w = window.open(frmGlobal.app_url + '/api-connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0');
@@ -246,6 +237,9 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				},
 				success: function( msg ) {
 					el.reset.innerHTML = msg.message;
+					if ( el.reset.getAttribute( 'data-refresh' ) === '1' ) {
+						window.location.reload();
+					}
 				}
 			} );
 			return false;

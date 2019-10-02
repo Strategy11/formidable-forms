@@ -85,6 +85,10 @@ class FrmFormApi {
 			}
 		}
 
+		if ( empty( $addons ) ) {
+			return array();
+		}
+
 		return $addons;
 	}
 

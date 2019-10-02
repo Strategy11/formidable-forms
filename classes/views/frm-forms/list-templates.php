@@ -143,7 +143,12 @@
 		<?php if ( $expired ) { ?>
 			<br/>
 			<p class="frm_error_style">
-				<?php echo FrmAppHelper::kses( $error, 'a' ); // WPCS: XSS ok. ?>
+				<?php echo FrmAppHelper::kses( str_replace( 'Please resave your license on the Formidable Global Settings page to refresh this message.', '', $error ), 'a' ); // WPCS: XSS ok. ?>
+
+				<br/>
+				<a href="#" id="frm_reconnect_link" class="frm-show-authorized" data-refresh="1">
+					<?php esc_html_e( 'Check now for a recent upgrade or renewal', 'formidable' ); ?>
+				</a>
 			</p>
 		<?php } ?>
 		</div>

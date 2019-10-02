@@ -565,7 +565,7 @@ class FrmAddon {
 
 		$response = array(
 			'success' => true,
-			'message' => __( 'Refresh downloads', 'formidable' ),
+			'message' => __( 'Cache cleared', 'formidable' ),
 		);
 
 		echo json_encode( $response );
