@@ -606,6 +606,7 @@ class FrmFormsController {
 	 */
 	public static function insert_form_button() {
 		if ( current_user_can( 'frm_view_forms' ) ) {
+			FrmAppHelper::load_admin_wide_js();
 			$menu_name = FrmAppHelper::get_menu_name();
 			$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
 			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
@@ -807,7 +808,26 @@ class FrmFormsController {
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 
+		$categories = self::get_template_categories( $templates );
+
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
+	}
+
+	/**
+	 * @since 4.03.01
+	 */
+	private static function get_template_categories( $templates ) {
+		$categories = array();
+		foreach ( $templates as $template ) {
+			if ( isset( $template['categories'] ) ) {
+				$categories = array_merge( $categories, $template['categories'] );
+			}
+		}
+		$exclude_cats = FrmFormsHelper::ignore_template_categories();
+		$categories = array_unique( $categories );
+		$categories = array_diff( $categories, $exclude_cats );
+		sort( $categories );
+		return $categories;
 	}
 
 	private static function add_user_templates( &$templates ) {

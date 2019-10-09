@@ -4683,9 +4683,16 @@ function frmAdminBuildJS() {
 	function searchContent() {
 		/*jshint validthis:true */
 		var i,
+			regEx = false,
 			searchText = this.value.toLowerCase(),
 			toSearch = this.getAttribute( 'data-tosearch' ),
 			items = document.getElementsByClassName( toSearch );
+
+		if ( this.tagName === 'SELECT' ) {
+			searchText = selectedOptions( this );
+			searchText = searchText.join('|').toLowerCase();
+			regEx = true;
+		}
 
 		if ( toSearch === 'frm-action' && searchText !== '' ) {
 			var addons = document.getElementById( 'frm_email_addon_menu' ).classList;
@@ -4694,10 +4701,11 @@ function frmAdminBuildJS() {
 		}
 
 		for ( i = 0; i < items.length; i++ ) {
+			var innerText = items[i].innerText.toLowerCase();
 			if ( searchText === '' ) {
 				items[i].classList.remove( 'frm_hidden' );
 				items[i].classList.remove( 'frm-search-result' );
-			} else if ( items[i].innerText.toLowerCase().indexOf( searchText ) >= 0 ) {
+			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 ) {
 				items[i].classList.remove( 'frm_hidden' );
 				items[i].classList.add( 'frm-search-result' );
 			} else {
@@ -4712,6 +4720,21 @@ function frmAdminBuildJS() {
 	}
 
 	/* Helpers */
+
+	function selectedOptions( select ) {
+		var opt,
+			result = [],
+			options = select && select.options;
+
+		for ( var i = 0, iLen = options.length; i < iLen; i++ ) {
+			opt = options[i];
+
+			if ( opt.selected ) {
+				result.push( opt.value );
+			}
+		}
+		return result;
+	}
 
 	function triggerEvent( element, event ) {
 		var evt = document.createEvent( 'HTMLEvents' );
@@ -4931,7 +4954,7 @@ function frmAdminBuildJS() {
 				this.select();
 			} );
 
-			jQuery( document ).on( 'input search', '.frm-auto-search', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
@@ -5262,6 +5285,7 @@ function frmAdminBuildJS() {
 
 		templateInit: function() {
 			initTemplateModal();
+			initiateMultiselect();
 		},
 
 		viewInit: function() {

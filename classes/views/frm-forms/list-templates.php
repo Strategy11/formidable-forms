@@ -61,6 +61,19 @@
 			)
 		);
 		?>
+		<p class="frm-search" style="clear:none;max-width:200px;margin-right:5px">
+			<label class="screen-reader-text" for="filter-template-search-input">
+				<?php esc_html_e( 'Filter', 'formidable' ); ?>
+			</label>
+			<span class="frmfont frm_filter_icon"></span>
+			<select name="frm_filter_templates" id="filter-template-search-input" multiple="multiple" class="frm_multiselect frm-search-input frm-auto-search" data-tosearch="frm-template-row" data-placeholder="<?php esc_attr_e( 'Filter Templates', 'formidable' ); ?>">
+				<?php foreach ( $categories as $cat ) { ?>
+					<option value="<?php echo esc_attr( $cat ); ?>">
+						<?php echo esc_html( $cat ); ?>
+					</option>
+				<?php } ?>
+			</select>
+		</p>
 
 		<ul class="frm-nav-tabs">
 			<li class="frm-tabs">
