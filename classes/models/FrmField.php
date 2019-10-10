@@ -160,6 +160,18 @@ class FrmField {
 				'name'  => __( 'Summary', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_file_text_icon',
 			),
+			'product' => array(
+				'name'  => __( 'Product', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_file_text_icon',
+			),
+			'quantity' => array(
+				'name'  => __( 'Quantity', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_file_text_icon',
+			),
+			'total' => array(
+				'name'  => __( 'Total', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_file_text_icon',
+			),
 		);
 
 		// Since the signature field may be in a different section, don't show it twice.

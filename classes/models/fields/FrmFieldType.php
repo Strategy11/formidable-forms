@@ -375,6 +375,55 @@ DEFAULT_HTML;
 		echo '</div>';
 	}
 
+	public function show_field_options( $args ) {
+		if ( ! $this->should_continue_to_field_options( $args ) ) {
+			return;
+		}
+
+		$has_options = ! empty( $args['field']['options'] );
+		$short_name  = FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $args['field']['name'] ) ), 20 );
+
+		/* translators: %s: Field name */
+		$option_title = sprintf( __( '%s Options', 'formidable' ), $short_name );
+
+		?>
+		<span class="frm-bulk-edit-link">
+			<a href="#" title="<?php echo esc_attr( $option_title ); ?>" class="frm-bulk-edit-link">
+				<?php echo esc_html( $this->get_bulk_edit_string() ); ?>
+			</a>
+		</span>
+
+		<?php do_action( 'frm_add_multiple_opts_labels', $args['field'] ); ?>
+
+		<ul id="frm_field_<?php echo esc_attr( $args['field']['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $args['field']['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $args['field']['field_key'] ); ?>">
+			<?php $this->show_single_option( $args ); ?>
+		</ul>
+
+		<div class="frm6 frm_form_field">
+			<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $args['field']['id'] ); ?>">
+				<span class="frm_icon_font frm_add_tag"></span>
+				<?php echo esc_html( $this->get_add_option_string() ); ?>
+			</a>
+		</div>
+	<?php
+	}
+
+	protected function should_continue_to_field_options( $args ) {
+		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ) );
+	}
+
+	protected function get_bulk_edit_string() {
+		return __( 'Bulk Edit Options', 'formidable' );
+	}
+
+	protected function get_add_option_string() {
+		return __( 'Add Option', 'formidable' );
+	}
+
+	protected function show_single_option( $args ) {
+		FrmFieldsHelper::show_single_option( $args['field'] );
+	}
+
 	/**
 	 * Should the section for adding choices show for this field?
 	 *

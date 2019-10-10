@@ -6093,6 +6093,11 @@ iframe#dyncontent_ifr {
 	min-height: 150px;
 }
 
+.frm_sortable_field_opts .frm_single_option .frm_product_price {
+	margin-left: 43px;
+	margin-top: 4px;
+}
+
 /*!
  * Bootstrap v3.0.2
  */

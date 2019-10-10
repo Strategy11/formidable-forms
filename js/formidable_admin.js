@@ -1380,7 +1380,8 @@ function frmAdminBuildJS() {
 				fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' ),
 				separate = usingSeparateValues( fieldId ),
 				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
-				opts = optList.getElementsByTagName( 'li' );
+				opts = optList.getElementsByTagName( 'li' ),
+				product = frmIsProductField( fieldId );
 
 			document.getElementById( 'bulk-field-id' ).value = fieldId;
 
@@ -1392,6 +1393,9 @@ function frmAdminBuildJS() {
 						content += label.value;
 						if ( separate ) {
 							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][value]' )[0].value;
+						}
+						if ( product ) {
+							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][price]' )[0].value;
 						}
 						content += "\r\n";
 					}
@@ -2087,29 +2091,30 @@ function frmAdminBuildJS() {
 			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
+			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
+				isProductField = frmIsProductField( fieldId );
 
 			for ( i = 0; i < opts.length; i++ ) {
-				addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey );
+				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProductField ) );
 			}
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProductField ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-			id = 'field_' + fieldKey + '-' + opt.key,
-			container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' );
+			id = 'field_' + fieldKey + '-' + opt.key;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
 		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"> ' + opt.label + '</label>' +
+			'" value="' + opt.saved + '" id="' + id + '"' + ( isProductField ? ' data-price="' + opt.price + '"' : '' ) + '> ' + opt.label + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
-		container.append( single );
+		return single;
 	}
 
 	function fillDropdownOpts( field, atts ) {
@@ -2118,7 +2123,8 @@ function frmAdminBuildJS() {
 		}
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
-			showOther = atts.other;
+			showOther = atts.other,
+			isProductField = frmIsProductField( sourceID );
 
 		removeDropdownOpts( field );
 		var opts = getMultipleOpts( sourceID ),
@@ -2139,6 +2145,11 @@ function frmAdminBuildJS() {
 				var opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
 				opt.innerHTML = label;
+
+				if ( isProductField ) {
+					opt.setAttribute( 'data-price', opts[ i ].price );
+				}
+
 				field.appendChild( opt );
 			}
 		}
@@ -2159,9 +2170,10 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, opts = [],
+		var i, saved, labelName, label, key, opts = [], optObj,
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
-			separateValues = usingSeparateValues( fieldId );
+			separateValues = usingSeparateValues( fieldId ),
+			isProductField = frmIsProductField( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
 			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 ) {
@@ -2176,11 +2188,18 @@ function frmAdminBuildJS() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 			}
 
-			opts.push( {
+			optObj = {
 				saved: saved,
 				label: label,
 				key: key
-			} );
+			};
+
+			if ( isProductField ) {
+				labelName = optVals[ i ].name.replace( '[label]', '[price]' );
+				optObj.price = jQuery( 'input[name="' + labelName + '"]' ).val();
+			}
+
+			opts.push( optObj );
 		}
 
 		return opts;
@@ -5176,14 +5195,15 @@ function frmAdminBuildJS() {
 		},
 
 		updateOpts: function( field_id, opts, modal ) {
-			var separate = usingSeparateValues( field_id );
-			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' );
+			var separate = usingSeparateValues( field_id ),
+			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' ),
+			action = frmIsProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
 			empty( $fieldOpts );
 			jQuery.ajax( {
 				type: 'POST',
 				url: ajaxurl,
 				data: {
-					action: 'frm_import_options',
+					action: action,
 					field_id: field_id,
 					opts: opts,
 					separate: separate,
@@ -5574,6 +5594,15 @@ function frmImportCsv( formID ) {
 			}
 		}
 	} );
+}
+
+function frmIsProductField( fieldId ) {
+	var field = document.getElementById( 'frm_field_id_' + fieldId );
+	if ( field === null ) {
+		return false;
+	} else {
+		return 'product' === field.getAttribute( 'data-type' );
+	}
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
