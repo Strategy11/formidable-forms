@@ -2,9 +2,9 @@
 Contributors: formidableforms, sswells, srwells, jamie.wahlin
 Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
-Tested up to: 5.2
+Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 4.03
+Stable tag: 4.03.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,19 +356,18 @@ Formidable Forms drag & drop form builder combined with our add-ons is the most 
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced contact forms, Formidable Views, graphs and stats, priority support, and Formidable Forms Add-ons!
 
 == Changelog ==
+= 4.03.01 =
+* Add an option to filter form templates by category.
+* Add the refresh downloads link on the add-ons and form templates pages.
+* Fix: If HTML entities are intentionally saved in a field, keep it that way rather than converting to the value.
+* Fix: Prevent a js error with some plugins when the WP editor is loaded on a custom page.
+
 = 4.03 =
 * New: Add an easier way to upgrade to the Pro version.
 * New: When the default Contact form is created, use the email address in the form as the Reply to address.
 * Fix: On some sites, the Formidable js wasn't loading correctly and causing errors.
 * Fix: Don't include generated css with plugin. Some sites weren't updating it.
 * New: Added frm_before_create_field hook while a field is being created from the builder. This allows extra fields to be included at once.
-
-= 4.02.04 =
-* Add a bit more in-plugin education and guidance for using Styles.
-* Add styling for Stripe credit card fields.
-* Fix: Prevent the localized javascript info from being duplicated in the page source.
-* Fix: Use the current date for the auto-created contact form.
-* Remove a bit of unused code.
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.

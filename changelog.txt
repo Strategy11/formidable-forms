@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.03.01 =
+* Add an option to filter form templates by category.
+* Add the refresh downloads link on the add-ons and form templates pages.
+* Fix: If HTML entities are intentionally saved in a field, keep it that way rather than converting to the value.
+* Fix: Prevent a js error with some plugins when the WP editor is loaded on a custom page.
+
 = 4.03 =
 * New: Add an easier way to upgrade to the Pro version.
 * New: When the default Contact form is created, use the email address in the form as the Reply to address.
