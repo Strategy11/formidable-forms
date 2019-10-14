@@ -774,13 +774,32 @@ DEFAULT_HTML;
 		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
-		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->field['value'] ) . '" ' . $input_html . '/>';
+		$value = $this->field['value'];
+		if ( strpos( '&lt;', $this->field['value'] ) ) {
+			// If the value includes intentional entities, don't lose them.
+			$value = htmlentities( $value );
+		}
+
+		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>';
 	}
 
 	protected function html5_input_type() {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		return $frm_settings->use_html ? $this->type : 'text';
+	}
+
+	/**
+	 * If the value includes intentional entities, don't lose them.
+	 *
+	 * @since 4.03.01
+	 */
+	protected function prepare_esc_value() {
+		$value = $this->field['value'];
+		if ( strpos( $value, '&lt;' ) !== false ) {
+			$value = htmlentities( $value );
+		}
+		return $value;
 	}
 
 	/**

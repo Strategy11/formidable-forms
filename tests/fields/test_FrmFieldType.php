@@ -57,6 +57,11 @@ class test_FrmFieldType extends FrmUnitTest {
 				'expected' => 'test > with \' < & characters "like “ and ‘ this',
 			),
 			array(
+				'type'     => 'text',
+				'value'    => '&lt;span&gt;2 < 1&lt;/span&gt;',
+				'expected' => '&lt;span>2 < 1&lt;/span>',
+			),
+			array(
 				'type'     => 'email',
 				'value'    => 'johndoe@yahoo.co.uk',
 				'expected' => 'johndoe@yahoo.co.uk',

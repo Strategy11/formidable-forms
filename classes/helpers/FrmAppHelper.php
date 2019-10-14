@@ -554,8 +554,52 @@ class FrmAppHelper {
 				self::decode_specialchars( $value[ $k ] );
 			}
 		} else {
-			$value = wp_specialchars_decode( $value, ENT_COMPAT );
+			self::decode_amp( $value );
 		}
+	}
+
+	/**
+	 * The wp_specialchars_decode function changes too much.
+	 * This will leave HTML as is, but still convert &.
+	 * Adapted from wp_specialchars_decode().
+	 *
+	 * @since 4.03.01
+	 *
+	 * @param string $string The string to prep.
+	 */
+	private static function decode_amp( &$string ) {
+		// Don't bother if there are no entities - saves a lot of processing
+		if ( empty( $string ) || strpos( $string, '&' ) === false ) {
+			return;
+		}
+
+		$translation = array(
+			'&quot;'  => '"',
+			'&#034;'  => '"',
+			'&#x22;'  => '"',
+			'&lt; '   => '< ', // The space preserves the HTML.
+			'&#060; ' => '< ', // The space preserves the HTML.
+			'&gt;'    => '>',
+			'&#062;'  => '>',
+			'&amp;'   => '&',
+			'&#038;'  => '&',
+			'&#x26;'  => '&',
+		);
+
+		$translation_preg = array(
+			'/&#0*34;/'   => '&#034;',
+			'/&#x0*22;/i' => '&#x22;',
+			'/&#0*60;/'   => '&#060;',
+			'/&#0*62;/'   => '&#062;',
+			'/&#0*38;/'   => '&#038;',
+			'/&#x0*26;/i' => '&#x26;',
+		);
+
+		// Remove zero padding on numeric entities
+		$string = preg_replace( array_keys( $translation_preg ), array_values( $translation_preg ), $string );
+
+		// Replace characters according to translation table
+		$string = strtr( $string, $translation );
 	}
 
 	/**
@@ -1240,7 +1284,7 @@ class FrmAppHelper {
 		if ( ! $is_rich_text ) {
 			$safe_text = htmlspecialchars( $safe_text, ENT_NOQUOTES );
 		}
-		$safe_text = str_replace( '&amp;', '&', $safe_text );
+		$safe_text = str_replace( '&amp; ', '& ', $safe_text );
 
 		return apply_filters( 'esc_textarea', $safe_text, $text );
 	}
