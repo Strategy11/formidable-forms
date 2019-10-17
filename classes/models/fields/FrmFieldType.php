@@ -818,12 +818,16 @@ DEFAULT_HTML;
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
-		$field_type = $this->html5_input_type();
+		$field_type = $this->get_field_type_for_front();
 		$input_html = $this->get_field_input_html_hook( $this->field );
 		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->field['value'] ) . '" ' . $input_html . '/>';
+	}
+
+	protected function get_field_type_for_front() {
+		return $this->html5_input_type();
 	}
 
 	protected function html5_input_type() {
