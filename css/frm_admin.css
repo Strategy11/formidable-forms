@@ -722,10 +722,6 @@ p.frm_has_shortcodes {
 	font-size: 15px;
 }
 
-.frm-summary-learn-more {
-	font-size: inherit !important;
-}
-
 .frm-inline-modal .inside a.frm_icon_font {
 	font-size: 18px;
 }
@@ -1002,7 +998,7 @@ h2 .frm-button-primary {
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 .wp-core-ui.frm-white-body .button:not(.button-small),
-.frm-white-body button:not(.wp-switch-editor) {
+.frm-white-body button:not(.wp-switch-editor):not(.dropdown-toggle) {
 	text-shadow: none;
 	box-shadow: none;
 	border-radius: 30px;
@@ -2183,7 +2179,6 @@ h1 .fa-caret-down {
 .btn {
 	border: 1px solid #ddd;
 	background: #fff;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
 	height: 28px;
 	line-height: 1.5;
 }
@@ -2570,6 +2565,10 @@ a.frm_option_icon:hover::before {
 	padding: 15px 0;
 	font-size: 16px;
 	transform: translate(-50%, -50%);
+}
+
+.frm-summary-learn-more {
+	font-size: inherit !important;
 }
 
 .frm-single-settings .frm-embed-message {
@@ -5336,7 +5335,7 @@ i.frm-show-inline-modal,
 .frm-with-left-icon .frmsvg,
 .frm-with-right-icon .frmsvg,
 .frm-search > .frmsvg,
-.frm-search span {
+.frm-search span:not(.multiselect-selected-text) {
 	position: absolute;
 	padding: 7px 10px;
 	pointer-events: none;
@@ -5410,6 +5409,7 @@ i.frm-show-inline-modal {
 	line-height: normal;
 }
 
+.frm-search .dropdown-toggle,
 .frm-search input.frm-search-input {
 	border-radius: var(--border-radius);
 	padding-left: 33px !important;
@@ -5423,11 +5423,26 @@ i.frm-show-inline-modal {
 	padding-left: 33px;
 }
 
+.frm-search .dropdown-toggle,
 .frm-search input.frm-auto-search {
 	width: 100%;
 	border-right-width: 1px;
 	border-radius: var(--border-radius) !important;
 	float: none;
+}
+
+.frm-search .dropdown-toggle {
+	max-width: 200px;
+	background: transparent;
+	padding: 7px;
+	min-height: 32px;
+	text-align: inherit;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.frm-search span.multiselect-selected-text {
+	white-space: nowrap;
 }
 
 .frm-search #search-submit {

@@ -1202,7 +1202,7 @@ BEFORE_HTML;
 	}
 
 	public static function template_icon( $categories ) {
-		$ignore     = array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
+		$ignore     = self::ignore_template_categories();
 		$categories = array_diff( $categories, $ignore );
 
 		$icons = array(
@@ -1239,6 +1239,13 @@ BEFORE_HTML;
 		FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 		echo '</span>';
 		echo '</span>';
+	}
+
+	/**
+	 * @since 4.03.01
+	 */
+	public static function ignore_template_categories() {
+		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
 	}
 
 	/**
