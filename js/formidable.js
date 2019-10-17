@@ -637,23 +637,15 @@ function frmFrontFormJS(){
 			$object.trigger( 'frmStartFormLoading' );
 		}
 	}
-
+	
 	function addLoadingClass( $object ) {
-		if ( goingToPrevPage( $object ) ) {
-			$object.addClass( 'frm_loading_prev' );
+		var loading_class = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
-			return;
-		}
-
-		$object.addClass( 'frm_loading_form' );
+		$object.addClass( loading_class );
 	}
 
-	function goingToPrevPage( $object ) {
-		if ( typeof frmProForm === undefined ) {
-			return false;
-		}
-
-		return frmProForm.goingToPreviousPage( $object );
+	function isGoingToPrevPage( $object ) {
+		return ( typeof frmProForm !== undefined && frmProForm.goingToPreviousPage( $object ) );
 	}
 
 	function removeSubmitLoading( $object, enable, processesRunning ) {
