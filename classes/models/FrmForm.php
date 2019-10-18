@@ -589,7 +589,7 @@ class FrmForm {
 			FrmAppHelper::unserialize_or_decode( $results->options );
 		}
 
-		return wp_unslash( $results );
+		return apply_filters( 'frm_form_object', wp_unslash( $results ) );
 	}
 
 	/**
