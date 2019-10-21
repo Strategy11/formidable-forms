@@ -716,7 +716,7 @@ DEFAULT_HTML;
 		$align       = FrmField::get_option( $this->field, 'align' );
 
 		$class = '';
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
+		if ( ! empty( $align ) && ( $is_radio || $is_checkbox || ( FrmAppHelper::pro_is_installed() && FrmProFieldsHelper::should_align_field( $this->field ) ) ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
