@@ -811,6 +811,22 @@ function frmAdminBuildJS() {
 		return $newFields.children( 'li.edit_field_type_summary' ).length > 0;
 	}
 
+	function maybeHideQuantityProductFieldOptions() {
+		if ( $newFields.children( 'li.edit_field_type_product' ).length > 1 ) {
+			hide = false;
+		} else {
+			hide = true;
+		}
+
+		jQuery( '.frmjs_prod_field_opt' ).each( function () {
+			if ( hide ) {
+				this.classList.add( 'frm_hidden' );
+			} else {
+				this.classList.remove( 'frm_hidden' );
+			}
+		} );
+	}
+
 	function duplicateField() {
 		/*jshint validthis:true */
 		var thisField = jQuery( this ).closest( 'li' );
@@ -848,6 +864,7 @@ function frmAdminBuildJS() {
 			toggled = false;
 
 		setupSortable( section );
+		maybeHideQuantityProductFieldOptions();
 
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
@@ -1049,13 +1066,17 @@ function frmAdminBuildJS() {
 		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
 	}
 
-	function isSummaryCalcBox( box ) {
+	function isCalcBoxType( box, listClass ) {
 		var list = jQuery( box ).find( '.frm_code_list' );
-		return 1 === list.length && list.hasClass( 'frm_js_summary_list' );
+		return 1 === list.length && list.hasClass( listClass );
 	}
 
 	function extractExcludedOptions( exclude ) {
 		var opts = [];
+		if ( ! Array.isArray( exclude ) ) {
+			return opts;
+		}
+
 		for ( var i = 0; i < exclude.length; i++ ) {
 			if ( exclude[ i ].startsWith( '[' ) ) {
 				opts.push( exclude[ i ] );
@@ -1096,7 +1117,8 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		var isSummary = isSummaryCalcBox( v );
+		var isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
+		var isProduct = isCalcBoxType( v, 'frmjs_products_list' );
 
 		var form_id = jQuery( 'input[name="id"]' ).val();
 		var fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
@@ -1115,7 +1137,11 @@ function frmAdminBuildJS() {
 		list.innerHTML = '';
 
 		for ( i = 0; i < fields.length; i++ ) {
-			if ( exclude.includes( fields[ i ].fieldType ) ||
+			if ( isProduct && 'product' !== fields[ i ].fieldType ) {
+				continue;
+			}
+
+			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
@@ -1648,6 +1674,9 @@ function frmAdminBuildJS() {
 					}
 					if ( $thisField.data( 'type' ) === 'summary' ) {
 						reenableAddSummaryBtn();
+					}
+					if ( $thisField.data( 'type' ) === 'product' ) {
+						maybeHideQuantityProductFieldOptions();
 					}
 					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
 						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
@@ -3469,6 +3498,12 @@ function frmAdminBuildJS() {
 	}
 
 	function insertContent( content_box, variable ) {
+		if ( content_box[0].hasAttribute( 'data-frmprodfield' ) ) {
+			content_box.val( variable );
+			content_box.change();
+			return;
+		}
+
 		if ( document.selection ) {
 			content_box[0].focus();
 			document.selection.createRange().text = variable;
@@ -4793,6 +4828,7 @@ function frmAdminBuildJS() {
 			initBulkOptionsOverlay();
 			hideEmptyEle();
 			maybeDisableAddSummaryBtn();
+			maybeHideQuantityProductFieldOptions();
 		},
 
 		settingsInit: function() {
