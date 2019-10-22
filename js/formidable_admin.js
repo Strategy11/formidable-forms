@@ -812,17 +812,23 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeHideQuantityProductFieldOptions() {
-		if ( $newFields.children( 'li.edit_field_type_product' ).length > 1 ) {
+		if ( $newFields.find( 'li.edit_field_type_product' ).length > 1 ) {
 			hide = false;
 		} else {
 			hide = true;
 		}
 
 		jQuery( '.frmjs_prod_field_opt' ).each( function () {
+			var parent = jQuery( this ).parent(),
+				heading = parent.prev(); // that h3
 			if ( hide ) {
 				this.classList.add( 'frm_hidden' );
+				heading[0].classList.add( 'frm_hidden' );
+				parent[0].classList.add( 'frm_hidden' );
 			} else {
 				this.classList.remove( 'frm_hidden' );
+				heading[0].classList.remove( 'frm_hidden' );
+				parent[0].classList.remove( 'frm_hidden' );
 			}
 		} );
 	}
