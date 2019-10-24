@@ -99,7 +99,10 @@ function frmAdminPopupJS(){
     }
 
     function populateOpts(val){
-        document.getElementById('frm_complete_shortcode').value = '['+ val +']';
+		var sc = document.getElementById('frm_complete_shortcode');
+		if ( sc !== null) {
+			sc.value = '['+ val +']';
+		}
         jQuery('.frm_shortcode_option').hide();
 
         var $settings = document.getElementById('sc-opts-'+ val);
