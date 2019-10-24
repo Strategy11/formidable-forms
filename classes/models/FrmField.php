@@ -162,15 +162,15 @@ class FrmField {
 			),
 			'product' => array(
 				'name'  => __( 'Product', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_file_text_icon',
+				'icon'  => 'frm_icon_font frm_price_tags_icon',
 			),
 			'quantity' => array(
 				'name'  => __( 'Quantity', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_file_text_icon',
+				'icon'  => 'frm_icon_font frm_hashtag_icon',
 			),
 			'total' => array(
 				'name'  => __( 'Total', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_file_text_icon',
+				'icon'  => 'frm_icon_font frm_signature_icon',
 			),
 		);
 

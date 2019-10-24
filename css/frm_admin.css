@@ -5078,6 +5078,37 @@ tr.frm_options_heading td {
 	font-size: 15px;
 }
 
+.frm-single-settings .frm_product_price_wrapper {
+	width: calc(100% - 73px);
+	display: inline-block;
+	margin-bottom: 8px;
+	vertical-align: middle;
+}
+
+.frm-single-settings .frm_product_price_wrapper::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+#new_fields .frm-single-settings .frm_product_price_wrapper input:first-child {
+	width: 60%;
+	float: left;
+}
+
+#new_fields .frm-single-settings .frm_product_price_wrapper input:last-child {
+	width: 37%;
+	float: right;
+}
+
+li.frm_single_option:not(:last-child)::after {
+	content: '';
+	display: block;
+	height: 1px;
+	margin: 15px 0 5px;
+	background: #dedede;
+}
+
 #frm-preview-block {
 	height: 400px;
 	overflow: scroll;
@@ -6091,11 +6122,6 @@ a.frm-link-secondary {
 
 iframe#dyncontent_ifr {
 	min-height: 150px;
-}
-
-.frm_sortable_field_opts .frm_single_option .frm_product_price {
-	margin-left: 43px;
-	margin-top: 4px;
 }
 
 /*!
