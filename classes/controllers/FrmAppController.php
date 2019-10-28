@@ -253,6 +253,8 @@ class FrmAppController {
 			'medium'  => 'builder',
 			'content' => 'upgrade',
 		);
+		$default_link = FrmAppHelper::admin_upgrade_link( $upgrade_link );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/confirm-overlay.php' );

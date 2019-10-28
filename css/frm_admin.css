@@ -5843,6 +5843,7 @@ ul .frm_col_two {
 	padding: 5px 20px;
 	box-sizing: border-box;
 	cursor: pointer;
+	opacity: .5;
 }
 
 #frm-insert-fields li a span {
@@ -6087,6 +6088,10 @@ h2 .frm-sub-label {
 	width: 35px;
 	color: #c4c4c4;
 	padding-bottom: 20px;
+}
+
+#frm-upgrade-message img {
+	max-width: 100%;
 }
 
 a.frm-link-secondary {

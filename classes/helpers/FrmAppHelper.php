@@ -110,7 +110,8 @@ class FrmAppHelper {
 			$query_args['f'] = $args['param'];
 		}
 
-		return add_query_arg( $query_args, $page ) . $anchor;
+		$link = add_query_arg( $query_args, $page ) . $anchor;
+		return self::make_affiliate_url( $link );
 	}
 
 	/**

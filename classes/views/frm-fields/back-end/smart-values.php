@@ -1,5 +1,5 @@
 <div class="cta-inside">
-	<p id="frm-upgrade-message">
+	<p>
 		<?php
 		/* translators: %s: Feature name */
 		$message = __( '%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?', 'formidable' );
@@ -7,7 +7,7 @@
 		?>
 	</p>
 	<p>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer" id="frm-upgrade-modal-link">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
 		</a>
 
