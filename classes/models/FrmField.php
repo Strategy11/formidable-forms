@@ -129,7 +129,7 @@ class FrmField {
 			'break'          => array(
 				'name' => __( 'Page Break', 'formidable' ),
 				'icon' => 'frm_icon_font frm_page_break_icon',
-				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?'
+				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?',
 			),
 			'form'           => array(
 				'name' => __( 'Embed Form', 'formidable' ),

@@ -38,7 +38,7 @@
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
 					<p id="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
-						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); ?>
+						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); // WPCS: XSS ok. ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
 						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link" data-default="<?php echo esc_url( $default_link ); ?>">
