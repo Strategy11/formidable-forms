@@ -171,9 +171,9 @@ class FrmField {
 				'name'    => __( 'Appointment', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
-				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/formidable">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
+				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
 					<img src="https://s3.amazonaws.com/fp.strategy11.com/images/appointments/appointments.png" alt="Scheduling" />',
-				'link'    => 'https://simplyscheduleappointments.com/formidable',
+				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 		);
 
