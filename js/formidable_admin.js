@@ -1101,7 +1101,7 @@ function frmAdminBuildJS() {
 			hide = true;
 		}
 
-		jQuery( '.frmjs_prod_field_opt' ).each( function () {
+		jQuery( '.frmjs_prod_field_opt_cont' ).each( function () {
 			var parent = jQuery( this ).parent(),
 				heading = parent.prev(); // that h3
 			if ( hide ) {
@@ -1407,7 +1407,6 @@ function frmAdminBuildJS() {
 		}
 
 		var isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
-		var isProduct = isCalcBoxType( v, 'frmjs_products_list' );
 
 		var form_id = jQuery( 'input[name="id"]' ).val();
 		var fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
@@ -1426,10 +1425,6 @@ function frmAdminBuildJS() {
 		list.innerHTML = '';
 
 		for ( i = 0; i < fields.length; i++ ) {
-			if ( isProduct && 'product' !== fields[ i ].fieldType ) {
-				continue;
-			}
-
 			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
@@ -1492,11 +1487,17 @@ function frmAdminBuildJS() {
 		popCalcFields( jQuery( '.frm-inline-modal.postbox:has(.frm_js_summary_list)' )[0], true );
 	}
 
-	function getFieldList() {
+	function getFieldList( fieldType ) {
 		var i, fields = [],
-			allFields = document.querySelectorAll( 'li.frm_field_box' );
+			allFields = document.querySelectorAll( 'li.frm_field_box' ),
+			checkType = 'undefined' !== typeof fieldType;
 
 		for ( i = 0; i < allFields.length; i++ ) {
+			// data-ftype is better (than data-type) cos of fields loaded by AJAX - which might not be ready yet
+			if ( checkType && allFields[ i ].getAttribute( 'data-ftype' ) !== fieldType ) {
+				continue;
+			}
+
 			var fieldId = allFields[ i ].getAttribute( 'data-fid' );
 			if ( typeof fieldId !== 'undefined' && fieldId ) {
 				fields.push( {
@@ -1506,11 +1507,32 @@ function frmAdminBuildJS() {
 					'fieldKey': getPossibleValue( 'field_options_field_key_' + fieldId )
 				} );
 			}
-
-			if ( i === allFields.length - 1 ) {
-				return fields;
-			}
 		}
+
+		return fields;
+	}
+
+	function popProductFields( field ) {
+		var options = [], fields, i, selected, current;
+
+		current = field.getAttribute( 'data-current' );
+
+		fields = getFieldList( 'product' );
+
+		options.push( '<option value="">-- Select Field --</option>' );
+
+		for ( i = 0; i < fields.length; i++ ) {
+			selected = current == fields[ i ].fieldId ? ' selected' : '';
+			options.push( '<option value="'+ fields[ i ].fieldId +'"' + selected + '>'+ fields[ i ].fieldName +'</option>' );
+		}
+
+		field.innerHTML = options.join( '' );
+	}
+
+	function popAllProductFields() {
+		jQuery( '.frmjs_prod_field_opt' ).each( function () {
+			popProductFields( this );
+		} );
 	}
 
 	/**
@@ -1966,6 +1988,8 @@ function frmAdminBuildJS() {
 					}
 					if ( $thisField.data( 'type' ) === 'product' ) {
 						maybeHideQuantityProductFieldOptions();
+						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
+						popAllProductFields();
 					}
 					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
 						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
@@ -3142,6 +3166,7 @@ function frmAdminBuildJS() {
 	function showFieldOptions( obj ) {
 		var i, singleField,
 			fieldId = obj.getAttribute( 'data-fid' ),
+			fieldType = obj.getAttribute( 'data-type' ),
 			allFieldSettings = document.querySelectorAll( '.frm-single-settings:not(.frm_hidden)' );
 
 		for ( i = 0; i < allFieldSettings.length; i++ ) {
@@ -3150,6 +3175,10 @@ function frmAdminBuildJS() {
 
 		singleField = document.getElementById( 'frm-single-settings-' + fieldId );
 		moveFieldSettings( singleField );
+
+		if ( fieldType && 'quantity' === fieldType ) {
+			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0] );
+		}
 
 		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
@@ -5136,6 +5165,8 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
+
+			popAllProductFields();
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
