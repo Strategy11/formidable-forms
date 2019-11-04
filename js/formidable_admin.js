@@ -1515,7 +1515,7 @@ function frmAdminBuildJS() {
 	function popProductFields( field ) {
 		var options = [], fields, i, selected, current;
 
-		current = field.getAttribute( 'data-current' );
+		current = field.getAttribute( 'data-frmcurrent' );
 
 		fields = getFieldList( 'product' );
 
@@ -5167,6 +5167,9 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			popAllProductFields();
+			jQuery( document ).on( 'change', '.frmjs_prod_field_opt', function () {
+				this.setAttribute( 'data-frmcurrent', this.options[ this.selectedIndex ].value );
+			} );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
