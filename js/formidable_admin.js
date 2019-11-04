@@ -1094,7 +1094,7 @@ function frmAdminBuildJS() {
 		return $newFields.children( 'li.edit_field_type_summary' ).length > 0;
 	}
 
-	function maybeHideQuantityProductFieldOptions() {
+	function maybeHideQuantityProductFieldOption() {
 		if ( $newFields.find( 'li.edit_field_type_product' ).length > 1 ) {
 			hide = false;
 		} else {
@@ -1102,16 +1102,10 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery( '.frmjs_prod_field_opt_cont' ).each( function () {
-			var parent = jQuery( this ).parent(),
-				heading = parent.prev(); // that h3
 			if ( hide ) {
 				this.classList.add( 'frm_hidden' );
-				heading[0].classList.add( 'frm_hidden' );
-				parent[0].classList.add( 'frm_hidden' );
 			} else {
 				this.classList.remove( 'frm_hidden' );
-				heading[0].classList.remove( 'frm_hidden' );
-				parent[0].classList.remove( 'frm_hidden' );
 			}
 		} );
 	}
@@ -1153,7 +1147,7 @@ function frmAdminBuildJS() {
 			toggled = false;
 
 		setupSortable( section );
-		maybeHideQuantityProductFieldOptions();
+		maybeHideQuantityProductFieldOption();
 
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
@@ -1987,7 +1981,7 @@ function frmAdminBuildJS() {
 						reenableAddSummaryBtn();
 					}
 					if ( $thisField.data( 'type' ) === 'product' ) {
-						maybeHideQuantityProductFieldOptions();
+						maybeHideQuantityProductFieldOption();
 						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
 						popAllProductFields();
 					}
@@ -5174,7 +5168,7 @@ function frmAdminBuildJS() {
 			initBulkOptionsOverlay();
 			hideEmptyEle();
 			maybeDisableAddSummaryBtn();
-			maybeHideQuantityProductFieldOptions();
+			maybeHideQuantityProductFieldOption();
 		},
 
 		settingsInit: function() {
