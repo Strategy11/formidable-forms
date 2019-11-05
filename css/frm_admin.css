@@ -14,6 +14,7 @@
 	--sidebar-hover: rgb(227, 232, 235);
 	--primary-color: rgb(65, 153, 253);
 	--primary-hover: rgb(49, 119, 199);
+	--tooltip-background-color: rgb(44,86,142);
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
@@ -4324,6 +4325,7 @@ a.frm_add_logic_link.frm_hidden {
 .frm_icon_font {
 	color: #A0A0A0;
 	color: var(--grey);
+	color: var(--primary-color);
 }
 
 .misc-pub-revisions.frm_icon_font,
@@ -6159,7 +6161,7 @@ iframe#dyncontent_ifr {
 	color: #fff;
 	text-align: center;
 	text-decoration: none;
-	background-color: var(--dark-grey);
+	background-color: var(--tooltip-background-color);
 	border-radius: 4px;
 }
 
@@ -6181,21 +6183,21 @@ iframe#dyncontent_ifr {
 	left: 50%;
 	margin-left: -5px;
 	border-width: 5px 5px 0;
-	border-top-color: var(--dark-grey);
+	border-top-color: var(--tooltip-background-color);
 }
 
 .tooltip.top-left .tooltip-arrow {
 	bottom: 0;
 	left: 5px;
 	border-width: 5px 5px 0;
-	border-top-color: var(--dark-grey);
+	border-top-color: var(--tooltip-background-color);
 }
 
 .tooltip.top-right .tooltip-arrow {
 	bottom: 0;
 	right: 5px;
 	border-width: 5px 5px 0;
-	border-top-color: var(--dark-grey);
+	border-top-color: var(--tooltip-background-color);
 }
 
 .tooltip.right .tooltip-arrow {
@@ -6203,7 +6205,7 @@ iframe#dyncontent_ifr {
 	left: 0;
 	margin-top: -5px;
 	border-width: 5px 5px 5px 0;
-	border-right-color: var(--dark-grey);
+	border-right-color: var(--tooltip-background-color);
 }
 
 .tooltip.left .tooltip-arrow {
@@ -6211,7 +6213,7 @@ iframe#dyncontent_ifr {
 	right: 0;
 	margin-top: -5px;
 	border-width: 5px 0 5px 5px;
-	border-left-color: var(--dark-grey);
+	border-left-color: var(--tooltip-background-color);
 }
 
 .tooltip.bottom .tooltip-arrow {
@@ -6220,6 +6222,7 @@ iframe#dyncontent_ifr {
 	margin-left: -5px;
 	border-width: 0 5px 5px;
 	border-bottom-color: #6D6D6D;
+	border-bottom-color: var(--tooltip-background-color);
 }
 
 .tooltip.bottom-left .tooltip-arrow {
@@ -6227,6 +6230,7 @@ iframe#dyncontent_ifr {
 	left: 5px;
 	border-width: 0 5px 5px;
 	border-bottom-color: #6D6D6D;
+	border-bottom-color: var(--tooltip-background-color);
 }
 
 .tooltip.bottom-right .tooltip-arrow {
@@ -6234,6 +6238,7 @@ iframe#dyncontent_ifr {
 	right: 5px;
 	border-width: 0 5px 5px;
 	border-bottom-color: #6D6D6D;
+	border-bottom-color: var(--tooltip-background-color);
 }
 
 .frm_clear {

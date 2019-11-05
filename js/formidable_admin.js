@@ -468,12 +468,6 @@ function frmAdminBuildJS() {
 	}
 
 	function loadTooltips() {
-		var tooltipOpts = {
-			template: '<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
-			placement: 'bottom',
-			container: 'body'
-		};
-
 		var wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' );
 
@@ -487,17 +481,12 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
-		wrapClass.on( 'mouseenter.frm', '.frm_help', function() {
-			jQuery( this ).off( 'mouseenter.frm' );
-			jQuery( '.frm_help' ).tooltip( tooltipOpts );
-			jQuery( this ).tooltip( 'show' );
-		} );
-		jQuery( '.frm_help' ).tooltip( tooltipOpts );
-		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip', function() {
+		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
 			jQuery( '.frm_bstooltip' ).tooltip();
 			jQuery( this ).tooltip( 'show' );
 		} );
+
 		jQuery( '.frm_bstooltip' ).tooltip();
 	}
 
