@@ -16,12 +16,17 @@
 
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 	<?php
-	FrmAppHelper::show_logo(
+	$icon = FrmAppHelper::svg_logo(
 		array(
 			'height' => 35,
 			'width'  => 35,
 		)
 	);
+	$new_icon = apply_filters( 'frm_icon', $icon, true );
+	if ( $new_icon !== $icon && strpos( $new_icon, '<svg' ) === 0 ) {
+		$icon = str_replace( 'viewBox=', 'width="35" height="35" style="color:#4d4d4d" viewBox=', $new_icon );
+	}
+	echo FrmAppHelper::kses( $icon, 'all' ); // WPCS: XSS ok.
 	?>
 	</a>
 
