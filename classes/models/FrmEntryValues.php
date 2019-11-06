@@ -267,7 +267,7 @@ class FrmEntryValues {
 	 * @return bool
 	 */
 	protected function is_field_in_array( $field, $array ) {
-		return in_array( $field->id, $array ) || in_array( $field->field_key, $array );
+		return in_array( $field->id, $array ) || in_array( (string) $field->field_key, $array, true );
 	}
 
 	/**
