@@ -15,24 +15,7 @@
 	</div>
 
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
-	<?php
-	$icon = FrmAppHelper::svg_logo(
-		array(
-			'height' => 35,
-			'width'  => 35,
-		)
-	);
-	$new_icon = apply_filters( 'frm_icon', $icon, true );
-	if ( $new_icon !== $icon ) {
-		if ( strpos( $new_icon, '<svg' ) === 0 ) {
-			$icon = str_replace( 'viewBox="0 0 20', 'width="30" height="35" style="color:#929699" viewBox="0 0 20', $new_icon );
-		} else {
-			// Show nothing if it isn't an SVG.
-			$icon = '<div style="height:39px"></div>';
-		}
-	}
-	echo FrmAppHelper::kses( $icon, 'all' ); // WPCS: XSS ok.
-	?>
+		<?php FrmAppHelper::show_header_logo(); ?>
 	</a>
 
 	<?php

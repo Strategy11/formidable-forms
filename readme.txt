@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 4.03.01
+Stable tag: 4.03.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,6 +356,11 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced forms, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 == Changelog ==
+= 4.03.02 =
+* Add 'frm_form_object' hook run when a form is fetched from the database.
+* Include more education about field types, including the new Appointments field.
+* Fix: Dropdown fields weren't saving HTML values correctly.
+
 = 4.03.01 =
 * Add an option to filter form templates by category.
 * Add the refresh downloads link on the add-ons and form templates pages.
