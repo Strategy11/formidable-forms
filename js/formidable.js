@@ -341,7 +341,7 @@ function frmFrontFormJS(){
 	}
 
 	function hasInvisibleRecaptcha( object ) {
-		if ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( object ) ) {
+		if ( isGoingToPrevPage( object ) ) {
 			return false;
 		}
 
@@ -645,7 +645,7 @@ function frmFrontFormJS(){
 	}
 
 	function isGoingToPrevPage( $object ) {
-		return ( typeof frmProForm !== undefined && frmProForm.goingToPreviousPage( $object ) );
+		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
 	}
 
 	function removeSubmitLoading( $object, enable, processesRunning ) {
