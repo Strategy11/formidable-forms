@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 4.03.02
+Stable tag: 4.03.03
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,23 +356,13 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced forms, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 == Changelog ==
+= 4.03.03 =
+* Fix: There was an error on form submit when Pro was not installed.
+
 = 4.03.02 =
 * Add 'frm_form_object' hook run when a form is fetched from the database.
 * Include more education about field types, including the new Appointments field.
 * Fix: Dropdown fields weren't saving HTML values correctly.
-
-= 4.03.01 =
-* Add an option to filter form templates by category.
-* Add the refresh downloads link on the add-ons and form templates pages.
-* Fix: If HTML entities are intentionally saved in a field, keep it that way rather than converting to the value.
-* Fix: Prevent a js error with some plugins when the WP editor is loaded on a custom page.
-
-= 4.03 =
-* New: Add an easier way to upgrade to the Pro version.
-* New: When the default form is created, use the email address in the form as the Reply to address.
-* Fix: On some sites, the Formidable js wasn't loading correctly and causing errors.
-* Fix: Don't include generated css with plugin. Some sites weren't updating it.
-* New: Added frm_before_create_field hook while a field is being created from the builder. This allows extra fields to be included at once.
 
 = 4.0 =
 * We've added a new, full screen builder for a faster and more enjoyable form building experience.

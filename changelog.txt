@@ -1,4 +1,7 @@
 == Changelog ==
+= 4.03.03 =
+* Fix: There was an error on form submit when Pro was not installed.
+
 = 4.03.02 =
 * Add 'frm_form_object' hook run when a form is fetched from the database.
 * Include more education about field types, including the new Appointments field.
