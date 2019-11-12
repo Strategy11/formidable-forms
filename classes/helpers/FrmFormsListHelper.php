@@ -247,8 +247,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 					break;
 				case 'created_at':
-					$date = date( $format, strtotime( $item->created_at ) );
-					$val  = '<abbr title="' . esc_attr( date( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
+					$date = gmdate( $format, strtotime( $item->created_at ) );
+					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
 					$val = '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable id=' . $item->id . ']' ) . '" /><br/>';

@@ -52,7 +52,7 @@ class FrmEntry {
 		}
 
 		$check_val                 = $new_values;
-		$check_val['created_at >'] = date( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
+		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
 
 		unset( $check_val['created_at'], $check_val['updated_at'] );
 		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );

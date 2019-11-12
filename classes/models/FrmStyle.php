@@ -131,7 +131,7 @@ class FrmStyle {
 	 */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
-		update_option( 'frm_last_style_update', date( 'njGi' ) );
+		update_option( 'frm_last_style_update', gmdate( 'njGi' ) );
 
 		if ( ! is_file( $filename ) ) {
 			return;

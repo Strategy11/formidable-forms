@@ -416,11 +416,11 @@ class FrmAddon {
 	private function has_been_cleared() {
 		$last_cleared = get_option( 'frm_last_cleared' );
 
-		return ( $last_cleared && $last_cleared > date( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) ) );
+		return ( $last_cleared && $last_cleared > gmdate( 'Y-m-d H:i:s', strtotime( '-5 minutes' ) ) );
 	}
 
 	private function cleared_plugins() {
-		update_option( 'frm_last_cleared', date( 'Y-m-d H:i:s' ) );
+		update_option( 'frm_last_cleared', gmdate( 'Y-m-d H:i:s' ) );
 	}
 
 	private function is_license_revoked() {
@@ -434,14 +434,14 @@ class FrmAddon {
 			$last_checked = get_option( $this->transient_key() );
 		}
 
-		$seven_days_ago = date( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
+		$seven_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
 
 		if ( ! $last_checked || $last_checked < $seven_days_ago ) {
 			// check weekly
 			if ( is_multisite() ) {
-				update_site_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) );
+				update_site_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
 			} else {
-				update_option( $this->transient_key(), date( 'Y-m-d H:i:s' ) );
+				update_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
 			}
 
 			$response = $this->get_license_status();

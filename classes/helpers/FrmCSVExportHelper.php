@@ -31,7 +31,7 @@ class FrmCSVExportHelper {
 		self::set_class_paramters();
 		self::set_has_parent_id( $atts['form'] );
 
-		$filename = apply_filters( 'frm_csv_filename', date( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
+		$filename = apply_filters( 'frm_csv_filename', gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
 		unset( $atts['form'], $atts['form_cols'] );
 
 		self::print_file_headers( $filename );
@@ -80,7 +80,7 @@ class FrmCSVExportHelper {
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename="' . esc_attr( $filename ) . '"' );
 		header( 'Content-Type: text/csv; charset=' . self::$charset, true );
-		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', mktime( date( 'H' ) + 2, date( 'i' ), date( 's' ), date( 'm' ), date( 'd' ), date( 'Y' ) ) ) . ' GMT' );
+		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', mktime( gmdate( 'H' ) + 2, gmdate( 'i' ), gmdate( 's' ), gmdate( 'm' ), gmdate( 'd' ), gmdate( 'Y' ) ) ) . ' GMT' );
 		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
 		header( 'Cache-Control: no-cache, must-revalidate' );
 		header( 'Pragma: no-cache' );

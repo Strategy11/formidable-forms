@@ -2,7 +2,7 @@
 
 <channel>
 	<title><?php bloginfo_rss( 'name' ); ?></title>
-	<pubDate><?php echo esc_html( date( 'D, d M Y H:i:s +0000' ) ); ?></pubDate>
+	<pubDate><?php echo esc_html( gmdate( 'D, d M Y H:i:s +0000' ) ); ?></pubDate>
 
 <?php
 foreach ( $type as $tb_type ) {
