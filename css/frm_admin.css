@@ -2675,6 +2675,10 @@ input[type="checkbox"] {
 	width: auto !important;
 }
 
+.frm_form_fields select.auto_width {
+	min-width: 60px;
+}
+
 .frm_form_fields input:focus, .frm_form_fields select:focus,
 .frm_form_fields textarea:focus, .frm_focus_field input {
 	background-color: #fff;
@@ -6393,6 +6397,7 @@ iframe#dyncontent_ifr {
 .frm_wrap input[type="text"],
 .frm_wrap input[type="number"],
 .frm_wrap select,
+.wp-admin .frm_wrap select,
 .field-group textarea,
 .field-group input[type="text"],
 .field-group select {
@@ -6404,7 +6409,7 @@ iframe#dyncontent_ifr {
 	color: var(--dark-grey);
 	font-size: 15px;
 	margin: 0;
-	background: #fff;
+	background-color: #fff;
 }
 
 .frm_wrap input[type="number"] {
@@ -6413,6 +6418,10 @@ iframe#dyncontent_ifr {
 
 .frm_wrap select {
 	padding: 2px;
+}
+
+.wp-admin .frm_wrap select {
+	max-width: 100%;
 }
 
 .frm_form_field.frm_scroll_box .frm_opt_container,
@@ -6462,6 +6471,15 @@ iframe#dyncontent_ifr {
 	line-height: 40px;
 	height: 40px;
 	width: 100%;
+}
+
+.branch-5-3 #postbox-container-2 select,
+.branch-5-3.wp-admin .frm_wrap select {
+	height: 44px;
+}
+
+.branch-5-3 .frm_wrap .frm_form_builder select {
+	height: 52px;
 }
 
 .frm-fields button.btn,
