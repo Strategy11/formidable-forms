@@ -6410,6 +6410,13 @@ iframe#dyncontent_ifr {
 	font-size: 15px;
 	margin: 0;
 	background-color: #fff;
+	line-height: 1;
+}
+
+#postbox-container-2 textarea,
+.frm_wrap textarea,
+.field-group textarea {
+	line-height: 2;
 }
 
 .frm_wrap input[type="number"] {
@@ -6460,6 +6467,7 @@ iframe#dyncontent_ifr {
 	padding-top: 0 !important;
 }
 
+.wp-admin .frm_wrap .form-table select,
 #postbox-container-2 select,
 .wp-admin .frm_wrap select {
 	line-height: 32px;
@@ -6474,12 +6482,10 @@ iframe#dyncontent_ifr {
 }
 
 .branch-5-3 #postbox-container-2 select,
-.branch-5-3.wp-admin .frm_wrap select {
-	height: 44px;
-}
-
+.branch-5-3.wp-admin .frm_wrap select,
 .branch-5-3 .frm_wrap .frm_form_builder select {
-	height: 52px;
+	height: auto;
+	padding: 0 24px 0 12px;
 }
 
 .frm-fields button.btn,
