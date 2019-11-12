@@ -48,7 +48,7 @@ $pro_fields = FrmField::pro_field_selection();
 $pricing_fields = array();
 foreach ( $pro_fields as $field_key => $field_type ) {
 
-	if ( in_array( $field_key, array( 'product', 'quantity', 'total' ) ) ) {
+	if ( isset( $field_type['section'] ) && 'pricing' === $field_type['section'] ) {
 		$pricing_fields[ $field_key ] = $field_type;
 		continue;
 	}
@@ -81,7 +81,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 				</li>
 		<?php
 	} else {
-		FrmFormsController::show_add_field_buttons( $field_key, $field_type, $id, $no_allow_class );
+		FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
 	}
 
 	unset( $field_key, $field_type, $field_label );
@@ -89,14 +89,14 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 ?>
 			</ul>
 			<div class="clear"></div>
-			<?php FrmTipsHelper::pro_tip( 'get_builder_tip' ); ?>
+
 			<h3 class="frm-with-line">
 				<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
 			</h3>
 			<ul class="field_type_list">
 				<?php
 					foreach ( $pricing_fields as $field_key => $field_type ) {
-						FrmFormsController::show_add_field_buttons( $field_key, $field_type, $id, $no_allow_class );
+						FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
 						unset( $field_key, $field_type );
 					}
 				?>

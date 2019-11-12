@@ -1008,6 +1008,7 @@ function frmAdminBuildJS() {
 
 				initiateMultiselect();
 				renumberPageBreaks();
+				maybeHideQuantityProductFieldOption();
 			},
 		} );
 	}
@@ -1095,19 +1096,21 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeHideQuantityProductFieldOption() {
+		var hide, opts = document.querySelectorAll( '.frmjs_prod_field_opt_cont' );
+
 		if ( $newFields.find( 'li.edit_field_type_product' ).length > 1 ) {
 			hide = false;
 		} else {
 			hide = true;
 		}
 
-		jQuery( '.frmjs_prod_field_opt_cont' ).each( function () {
+		for ( var i = 0; i < opts.length; i++ ) {
 			if ( hide ) {
-				this.classList.add( 'frm_hidden' );
+				opts[ i ].classList.add( 'frm_hidden' );
 			} else {
-				this.classList.remove( 'frm_hidden' );
+				opts[ i ].classList.remove( 'frm_hidden' );
 			}
-		} );
+		}
 	}
 
 	function duplicateField() {
@@ -1144,10 +1147,21 @@ function frmAdminBuildJS() {
 			field = document.getElementById( match[1] ),
 			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
 			$thisSection = jQuery( section ),
-			toggled = false;
+			toggled = false,
+			type = field.getAttribute( 'data-type' );
 
 		setupSortable( section );
-		maybeHideQuantityProductFieldOption();
+
+		if ( 'quantity' === type ) {
+			// try to automatically attach a product field
+			maybeSetProductField( field );
+		}
+
+		if ( 'product' === type || 'quantity' === type ) {
+			// quantity too needs to be a part of the if stmt especially cos of the very
+			// 1st quantity field (or even if it's just one quantity field in the form).
+			maybeHideQuantityProductFieldOption();
+		}
 
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
@@ -1513,7 +1527,7 @@ function frmAdminBuildJS() {
 
 		fields = getFieldList( 'product' );
 
-		options.push( '<option value="">-- Select Field --</option>' );
+		options.push( '<option value="">' + field.getAttribute( 'data-selectlabel' ) + '</option>' );
 
 		for ( i = 0; i < fields.length; i++ ) {
 			selected = current == fields[ i ].fieldId ? ' selected' : '';
@@ -1524,9 +1538,28 @@ function frmAdminBuildJS() {
 	}
 
 	function popAllProductFields() {
-		jQuery( '.frmjs_prod_field_opt' ).each( function () {
-			popProductFields( this );
-		} );
+		var opts = document.querySelectorAll( '.frmjs_prod_field_opt' );
+		for ( var i = 0; i < opts.length; i++ ) {
+			popProductFields( opts[ i ] );
+		}
+	}
+
+	function maybeSetProductField( field ) {
+		var productFields, quantityFields, fieldsList, productFieldOpt;
+
+		fieldsList = jQuery( field ).closest( 'ul.frm_sorting' );
+		productFields = fieldsList.children( '.edit_field_type_product' );
+		quantityFields = fieldsList.children( '.edit_field_type_quantity' );
+
+		if ( 1 === quantityFields.length && 1 === productFields.length ) {
+			productFieldOpt = document.getElementById( 'field_options[product_field_' + field.getAttribute( 'data-fid' ) + ']' );
+			if ( null === productFieldOpt ) {
+				return; // very unlikely though
+			}
+
+			productFieldOpt.setAttribute( 'data-frmcurrent', productFields[0].getAttribute( 'data-fid' ) );
+			popProductFields( productFieldOpt );
+		}
 	}
 
 	/**
@@ -1972,15 +2005,16 @@ function frmAdminBuildJS() {
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {
-					var $section = $thisField.closest( '.start_divider' );
+					var $section = $thisField.closest( '.start_divider' ),
+						type = $thisField.data( 'type' );
 					$thisField.remove();
-					if ( $thisField.data( 'type' ) === 'break' ) {
+					if ( type === 'break' ) {
 						renumberPageBreaks();
 					}
-					if ( $thisField.data( 'type' ) === 'summary' ) {
+					if ( type === 'summary' ) {
 						reenableAddSummaryBtn();
 					}
-					if ( $thisField.data( 'type' ) === 'product' ) {
+					if ( type === 'product' ) {
 						maybeHideQuantityProductFieldOption();
 						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
 						popAllProductFields();
@@ -3810,12 +3844,6 @@ function frmAdminBuildJS() {
 	}
 
 	function insertContent( content_box, variable ) {
-		if ( content_box[0].hasAttribute( 'data-frmprodfield' ) ) {
-			content_box.val( variable );
-			content_box.change();
-			return;
-		}
-
 		if ( document.selection ) {
 			content_box[0].focus();
 			document.selection.createRange().text = variable;
@@ -4937,6 +4965,23 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function toggleProductType() {
+		var $this, container, currentVal;
+		$this = jQuery( this );
+		container = $this.parents( '.frm_grid_container.frm-collapse-me' );
+		currentVal = this.options[ this.selectedIndex ].value;
+
+		if ( 'single' === currentVal ) {
+			container.removeClass( 'frm_prod_type_user_def' );
+			container.addClass( 'frm_prod_type_single' );
+		} else if ( 'user_def' === currentVal ) {
+			container.removeClass( 'frm_prod_type_single' );
+			container.addClass( 'frm_prod_type_user_def' );
+		} else {
+			container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
+		}
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -5164,6 +5209,8 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '.frmjs_prod_field_opt', function () {
 				this.setAttribute( 'data-frmcurrent', this.options[ this.selectedIndex ].value );
 			} );
+
+			jQuery( document ).on( 'change', '[name^="field_options[display_as"]', toggleProductType );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
@@ -5611,6 +5658,15 @@ function frmAdminBuildJS() {
 			location.href = url;
 		}
 	};
+
+	function frmIsProductField( fieldId ) {
+		var field = document.getElementById( 'frm_field_id_' + fieldId );
+		if ( field === null ) {
+			return false;
+		} else {
+			return 'product' === field.getAttribute( 'data-type' );
+		}
+	}
 }
 
 var frmAdminBuild = frmAdminBuildJS();
@@ -5706,15 +5762,6 @@ function frmImportCsv( formID ) {
 			}
 		}
 	} );
-}
-
-function frmIsProductField( fieldId ) {
-	var field = document.getElementById( 'frm_field_id_' + fieldId );
-	if ( field === null ) {
-		return false;
-	} else {
-		return 'product' === field.getAttribute( 'data-type' );
-	}
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill

@@ -369,12 +369,16 @@ DEFAULT_HTML;
 		}
 
 		$this->field_choices_heading( $args );
-		echo '<div class="frm_grid_container frm-collapse-me">';
+		$extra_classes = $this->extra_field_choices_class();
+		echo '<div class="frm_grid_container frm-collapse-me' . $extra_classes . '">';
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
 	}
 
+	/**
+	 * @since 4.04
+	 */
 	public function show_field_options( $args ) {
 		if ( ! $this->should_continue_to_field_options( $args ) ) {
 			return;
@@ -386,42 +390,39 @@ DEFAULT_HTML;
 		/* translators: %s: Field name */
 		$option_title = sprintf( __( '%s Options', 'formidable' ), $short_name );
 
-		?>
-		<span class="frm-bulk-edit-link">
-			<a href="#" title="<?php echo esc_attr( $option_title ); ?>" class="frm-bulk-edit-link">
-				<?php echo esc_html( $this->get_bulk_edit_string() ); ?>
-			</a>
-		</span>
-
-		<?php do_action( 'frm_add_multiple_opts_labels', $args['field'] ); ?>
-
-		<ul id="frm_field_<?php echo esc_attr( $args['field']['id'] ); ?>_opts" class="frm_sortable_field_opts frm_clear<?php echo ( count( $args['field']['options'] ) > 10 ) ? ' frm_field_opts_list' : ''; ?> frm_add_remove" data-key="<?php echo esc_attr( $args['field']['field_key'] ); ?>">
-			<?php $this->show_single_option( $args ); ?>
-		</ul>
-
-		<div class="frm6 frm_form_field">
-			<a href="javascript:void(0);" data-opttype="single" class="frm_cb_button frm-small-add frm_add_opt frm6 frm_form_field" id="frm_add_opt_<?php echo esc_attr( $args['field']['id'] ); ?>">
-				<span class="frm_icon_font frm_add_tag"></span>
-				<?php echo esc_html( $this->get_add_option_string() ); ?>
-			</a>
-		</div>
-	<?php
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
 	}
 
+	/**
+	 * @since 4.04
+	 */
 	protected function should_continue_to_field_options( $args ) {
 		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ) );
 	}
 
+	/**
+	 * @since 4.04
+	 */
 	protected function get_bulk_edit_string() {
 		return __( 'Bulk Edit Options', 'formidable' );
 	}
 
+	/**
+	 * @since 4.04
+	 */
 	protected function get_add_option_string() {
 		return __( 'Add Option', 'formidable' );
 	}
 
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function extra_field_choices_class() {
+		return '';
 	}
 
 	/**
@@ -716,12 +717,23 @@ DEFAULT_HTML;
 		$align       = FrmField::get_option( $this->field, 'align' );
 
 		$class = '';
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox || ( FrmAppHelper::pro_is_installed() && FrmProFieldsHelper::should_align_field( $this->field ) ) ) ) {
+		if ( ! empty( $align ) && ( $is_radio || $is_checkbox || $this->maybe_align_pro_field() ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
 
 		return $class;
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	private function maybe_align_pro_field() {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProFieldsHelper::should_align_field' ) ) {
+			return FrmProFieldsHelper::should_align_field( $this->field );
+		}
+
+		return false;
 	}
 
 	/**

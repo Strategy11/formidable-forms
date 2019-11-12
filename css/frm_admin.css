@@ -5080,7 +5080,6 @@ tr.frm_options_heading td {
 .frm-single-settings .frm_product_price_wrapper {
 	width: calc(100% - 73px);
 	display: inline-block;
-	margin-bottom: 8px;
 	vertical-align: middle;
 }
 
@@ -5105,7 +5104,32 @@ li.frm_single_option:not(:last-child)::after {
 	display: block;
 	height: 1px;
 	margin: 15px 0 5px;
-	background: #dedede;
+	background: var(--sidebar-hover);
+}
+
+.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_sortable_field_opts li:nth-child( n + 3 ) {
+	display: none;
+}
+
+.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_sortable_field_opts .frm_remove_tag {
+	display: none;
+}
+
+.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_form_field:not(.frm_product_type):not(.frm_sep_val_product) {
+	display: none;
+}
+
+.frm_grid_container.frm-collapse-me.frm_prod_type_user_def .frm_sortable_field_opts {
+	display: none;
+}
+
+.frm_grid_container.frm-collapse-me.frm_prod_type_user_def .frm-bulk-edit-link,
+.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm-bulk-edit-link {
+	display: none;
+}
+
+.frm_grid_container.frm-collapse-me.frm_prod_type_user_def .frm_form_field:not(.frm_product_type) {
+	display: none;
 }
 
 #frm-preview-block {

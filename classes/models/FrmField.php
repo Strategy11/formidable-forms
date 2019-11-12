@@ -161,16 +161,19 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_file_text_icon',
 			),
 			'product' => array(
-				'name'  => __( 'Product', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_price_tags_icon',
+				'name'    => __( 'Product', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_price_tags_icon',
+				'section' => 'pricing',
 			),
 			'quantity' => array(
-				'name'  => __( 'Quantity', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_hashtag_icon',
+				'name'    => __( 'Quantity', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_hashtag_icon',
+				'section' => 'pricing',
 			),
 			'total' => array(
-				'name'  => __( 'Total', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_signature_icon',
+				'name'    => __( 'Total', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_signature_icon',
+				'section' => 'pricing',
 			),
 		);
 
