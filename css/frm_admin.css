@@ -4213,20 +4213,20 @@ table td, .form-table tr td {
 }
 
 .frm-single-settings .frm_logic_row > select {
-	max-width: 32.5%;
+	max-width: 32.5% !important;
 }
 
 .frm-single-settings .frm_logic_row select:nth-child(2) {
-	max-width: 20%;
+	max-width: 20% !important;
 }
 
 .frm-single-settings .frm_logic_row span input,
 .frm-single-settings .frm_logic_row span select {
-	max-width: 36%;
+	max-width: 36% !important;
 }
 
 .frm-single-settings .frm_logic_row input {
-	max-width: 118px;
+	max-width: 118px !important;
 }
 
 .advanced_settings .frm_logic_row {
@@ -4235,7 +4235,7 @@ table td, .form-table tr td {
 
 .advanced_settings .frm_logic_row select,
 .advanced_settings .frm_logic_row input {
-	max-width: 30%;
+	max-width: 30% !important;
 }
 
 .frm_form_action_settings .frm_logic_row p {
