@@ -1545,20 +1545,24 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeSetProductField( field ) {
-		var productFields, quantityFields, fieldsList, productFieldOpt;
+		var productFields, quantityFields, fieldsList, productFieldOpt, fieldId;
 
 		fieldsList = jQuery( field ).closest( 'ul.frm_sorting' );
 		productFields = fieldsList.children( '.edit_field_type_product' );
 		quantityFields = fieldsList.children( '.edit_field_type_quantity' );
 
 		if ( 1 === quantityFields.length && 1 === productFields.length ) {
-			productFieldOpt = document.getElementById( 'field_options[product_field_' + field.getAttribute( 'data-fid' ) + ']' );
+			fieldId = field.getAttribute( 'data-fid' );
+			productFieldOpt = document.getElementById( 'field_options[product_field_' + fieldId + ']' );
 			if ( null === productFieldOpt ) {
 				return; // very unlikely though
 			}
 
 			productFieldOpt.setAttribute( 'data-frmcurrent', productFields[0].getAttribute( 'data-fid' ) );
 			popProductFields( productFieldOpt );
+			// in order to move its settings to that LHS panel where
+			// the update form resides, else it'll lose this setting
+			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
 		}
 	}
 
