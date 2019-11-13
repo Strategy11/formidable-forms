@@ -1024,10 +1024,18 @@ class FrmField {
 		$field_type = self::get_original_field_type( $field );
 		$data_type  = self::get_option( $field, 'data_type' );
 
-		return (
+		$is_field_type = (
 			$is_type === $field_type ||
 			( 'data' === $field_type && $is_type === $data_type ) ||
 			( 'lookup' === $field_type && $is_type === $data_type )
 		);
+
+		/**
+		 * When a field type is checked, allow individual fields
+		 * to set the type.
+		 *
+		 * @since 4.04
+		 */
+		return apply_filters( 'frm_is_field_type', $is_field_type, compact( 'field', 'is_type' ) );
 	}
 }
