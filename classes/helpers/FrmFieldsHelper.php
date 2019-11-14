@@ -1676,10 +1676,13 @@ class FrmFieldsHelper {
 	 * @since 4.04
 	 */
 	public static function show_add_field_buttons( $args ) {
-		extract( $args );
-		$field_label = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
-		$field_name  = FrmFormsHelper::get_field_link_name( $field_type );
-		$field_label .= ' <span>' . $field_name . '</span>';
+		$field_key      = $args['field_key'];
+		$field_type     = $args['field_type'];
+		$id             = $args['id'];
+		$no_allow_class = $args['no_allow_class'];
+		$field_label    = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
+		$field_name     = FrmFormsHelper::get_field_link_name( $field_type );
+		$field_label   .= ' <span>' . $field_name . '</span>';
 
 		/* translators: %s: Field name */
 		$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
