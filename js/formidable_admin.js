@@ -2238,6 +2238,10 @@ function frmAdminBuildJS() {
 	}
 
 	function clickLabel() {
+		if ( ! this.id ) {
+			return;
+		}
+
 		/*jshint validthis:true */
 		var setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0],
 			fieldId = this.id.replace( 'field_label_', '' ),
@@ -5240,7 +5244,7 @@ function frmAdminBuildJS() {
 				this.setAttribute( 'data-frmcurrent', this.options[ this.selectedIndex ].value );
 			} );
 
-			jQuery( document ).on( 'change', '[name^="field_options[display_as"]', toggleProductType );
+			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();

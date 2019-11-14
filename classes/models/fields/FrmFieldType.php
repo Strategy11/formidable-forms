@@ -717,23 +717,12 @@ DEFAULT_HTML;
 		$align       = FrmField::get_option( $this->field, 'align' );
 
 		$class = '';
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox || $this->maybe_align_pro_field() ) ) {
+		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
 
 		return $class;
-	}
-
-	/**
-	 * @since 4.04
-	 */
-	private function maybe_align_pro_field() {
-		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProFieldsHelper::should_align_field' ) ) {
-			return FrmProFieldsHelper::should_align_field( $this->field );
-		}
-
-		return false;
 	}
 
 	/**

@@ -1042,7 +1042,8 @@ class FrmField {
 		$is_field_type = (
 			$is_type === $field_type ||
 			( 'data' === $field_type && $is_type === $data_type ) ||
-			( 'lookup' === $field_type && $is_type === $data_type )
+			( 'lookup' === $field_type && $is_type === $data_type ) ||
+			( 'product' === $field_type && $is_type === $data_type )
 		);
 
 		/**
