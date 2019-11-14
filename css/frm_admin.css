@@ -6481,6 +6481,13 @@ iframe#dyncontent_ifr {
 	width: 100%;
 }
 
+/** TODO: After 5.5, remove the branch clases **/
+.branch-5-5 #postbox-container-2 select,
+.branch-5-5.wp-admin .frm_wrap select,
+.branch-5-5 .frm_wrap .frm_form_builder select,
+.branch-5-4 #postbox-container-2 select,
+.branch-5-4.wp-admin .frm_wrap select,
+.branch-5-4 .frm_wrap .frm_form_builder select,
 .branch-5-3 #postbox-container-2 select,
 .branch-5-3.wp-admin .frm_wrap select,
 .branch-5-3 .frm_wrap .frm_form_builder select {
