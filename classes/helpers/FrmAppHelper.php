@@ -2208,6 +2208,7 @@ class FrmAppHelper {
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),
 				'active'            => __( 'Active', 'formidable' ),
+				'select_a_field'    => __( 'Select a Field', 'formidable' ),
 			);
 			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 		}

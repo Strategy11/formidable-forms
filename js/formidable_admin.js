@@ -1527,7 +1527,7 @@ function frmAdminBuildJS() {
 
 		fields = getFieldList( 'product' );
 
-		options.push( '<option value="">' + field.getAttribute( 'data-selectlabel' ) + '</option>' );
+		options.push( '<option value="">' + frm_admin_js.select_a_field + '</option>' );
 
 		for ( i = 0; i < fields.length; i++ ) {
 			selected = current == fields[ i ].fieldId ? ' selected' : '';
