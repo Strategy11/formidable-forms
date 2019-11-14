@@ -27,20 +27,21 @@
 						<?php esc_html_e( 'Install', 'formidable' ); ?>
 					</a>
 
-					<p id="frm-upgrade-message">
-						<?php
-						if ( $is_pro ) {
-							/* translators: %s: Feature name */
-							$message = __( '%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features.', 'formidable' );
-						} else {
-							/* translators: %s: Feature name */
-							$message = __( '%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?', 'formidable' );
-						}
-						printf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
-						?>
+					<?php
+					if ( $is_pro ) {
+						/* translators: %s: Feature name */
+						$message = __( '%s are not available on your plan. Please upgrade or renew your license to unlock more awesome features.', 'formidable' );
+					} else {
+						/* translators: %s: Feature name */
+						$message = __( '%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?', 'formidable' );
+					}
+					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
+					?>
+					<p id="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
+						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); // WPCS: XSS ok. ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
-						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link">
+						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link" data-default="<?php echo esc_url( $default_link ); ?>">
 							<?php
 							printf(
 								/* translators: %s: Plan name */
@@ -50,12 +51,18 @@
 							?>
 						</a>
 					<?php } else { ?>
-						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer" id="frm-upgrade-modal-link">
-							<?php esc_html_e( 'Upgrade to Pro', 'formidable' ); ?>
+						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer" id="frm-upgrade-modal-link" data-default="<?php echo esc_url( $default_link ); ?>">
+							<?php
+							printf(
+								/* translators: %s: Plan name */
+								esc_html__( 'Upgrade to %s', 'formidable' ),
+								'<span class="license-level">Pro</span>'
+							);
+							?>
 						</a>
 
 						<p>
-							<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $upgrade_link, 'knowledgebase/install-formidable-forms/' ) ) ); ?>" target="_blank" class="frm-link-secondary">
+							<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link, 'knowledgebase/install-formidable-forms/' ) ); ?>" target="_blank" class="frm-link-secondary">
 								<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
 							</a>
 						</p>

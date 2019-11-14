@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.03.01';
+	public static $plug_version = '4.03.03';
 
 	/**
 	 * @since 1.07.02
@@ -110,7 +110,8 @@ class FrmAppHelper {
 			$query_args['f'] = $args['param'];
 		}
 
-		return add_query_arg( $query_args, $page ) . $anchor;
+		$link = add_query_arg( $query_args, $page ) . $anchor;
+		return self::make_affiliate_url( $link );
 	}
 
 	/**
@@ -162,6 +163,29 @@ class FrmAppHelper {
 	 */
 	public static function show_logo( $atts = array() ) {
 		echo self::kses( self::svg_logo( $atts ), 'all' ); // WPCS: XSS ok.
+	}
+
+	/**
+	 * @since 4.03.02
+	 */
+	public static function show_header_logo() {
+		$icon = self::svg_logo(
+			array(
+				'height' => 35,
+				'width'  => 35,
+			)
+		);
+
+		$new_icon = apply_filters( 'frm_icon', $icon, true );
+		if ( $new_icon !== $icon ) {
+			if ( strpos( $new_icon, '<svg' ) === 0 ) {
+				$icon = str_replace( 'viewBox="0 0 20', 'width="30" height="35" style="color:#929699" viewBox="0 0 20', $new_icon );
+			} else {
+				// Show nothing if it isn't an SVG.
+				$icon = '<div style="height:39px"></div>';
+			}
+		}
+		echo self::kses( $icon, 'all' ); // WPCS: XSS ok.
 	}
 
 	/**
@@ -1720,7 +1744,7 @@ class FrmAppHelper {
 
 		$formatted = self::get_localized_date( $date_format, $date );
 
-		$do_time = ( date( 'H:i:s', strtotime( $date ) ) != '00:00:00' );
+		$do_time = ( gmdate( 'H:i:s', strtotime( $date ) ) != '00:00:00' );
 		if ( $do_time ) {
 			$formatted .= self::add_time_to_date( $time_format, $date );
 		}

@@ -2970,19 +2970,20 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', '[data-upgrade]', function( event ) {
 			event.preventDefault();
-			jQuery('.frm_feature_label').html( this.getAttribute( 'data-upgrade' ) );
-			jQuery( '#frm_upgrade_modal h2' ).show();
 			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
 			jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_icon' );
 
 			var requires = this.getAttribute( 'data-requires' );
-			if ( requires === undefined ) {
+			if ( typeof requires === 'undefined' || requires === null || requires === '' ) {
 				requires = 'Pro';
 			}
 			jQuery( '.license-level' ).html( requires );
 
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
+
+			jQuery('.frm_feature_label').html( this.getAttribute( 'data-upgrade' ) );
+			jQuery( '#frm_upgrade_modal h2' ).show();
 
 			$info.dialog('open');
 
@@ -3003,13 +3004,17 @@ function frmAdminBuildJS() {
 	 * Allow addons to be installed from the upgrade modal.
 	 */
 	function addOneClickModal( link ) {
-		// If one click upgrade, hide other content
 		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
 			oneclick = link.getAttribute( 'data-oneclick' ),
+			customLink = link.getAttribute( 'data-link' ),
+			showLink = document.getElementById( 'frm-upgrade-modal-link' ),
+			upgradeMessage = document.getElementById( 'frm-upgrade-message' ),
+			newMessage = link.getAttribute('data-message'),
 			button = document.getElementById( 'frm-oneclick-button' ),
 			showIt = 'block',
 			hideIt = 'none';
 
+		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
 			showIt = 'none';
 			hideIt = 'block';
@@ -3020,11 +3025,23 @@ function frmAdminBuildJS() {
 			button.rel = oneclick.url;
 		}
 
+		// Use a custom message in the modal.
+		if ( newMessage === null || typeof newMessage === 'undefined' || newMessage === '' ) {
+			newMessage = upgradeMessage.getAttribute('data-default');
+		}
+		upgradeMessage.innerHTML = newMessage;
+
+		// Either set the link or use the default.
+		if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
+			customLink = showLink.getAttribute('data-default');
+		}
+		showLink.href = customLink;
+
 		document.getElementById( 'frm-addon-status' ).style.display = 'none';
 		oneclickMessage.style.display = hideIt;
 		button.style.display = hideIt == 'block' ? 'inline-block' : hideIt;
-		document.getElementById( 'frm-upgrade-message' ).style.display = showIt;
-		document.getElementById( 'frm-upgrade-modal-link' ).style.display = showIt == 'block' ? 'inline-block' : showIt;
+		upgradeMessage.style.display = showIt;
+		showLink.style.display = showIt == 'block' ? 'inline-block' : showIt;
 	}
 
 	/* Form settings */

@@ -245,12 +245,16 @@ class FrmEntryValues {
 	 * @return bool
 	 */
 	protected function is_field_included( $field ) {
+		$is_included = true;
 		if ( ! empty( $this->include_fields ) ) {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
-		} elseif ( ! empty( $this->exclude_fields ) ) {
-			$is_included = ! $this->is_field_in_array( $field, $this->exclude_fields );
-		} else {
-			$is_included = true;
+		}
+
+		if ( ! empty( $this->exclude_fields ) ) {
+			$is_excluded = $this->is_field_in_array( $field, $this->exclude_fields );
+			if ( $is_excluded ) {
+				$is_included = false;
+			}
 		}
 
 		return $is_included;
@@ -267,7 +271,7 @@ class FrmEntryValues {
 	 * @return bool
 	 */
 	protected function is_field_in_array( $field, $array ) {
-		return in_array( $field->id, $array ) || in_array( $field->field_key, $array );
+		return in_array( $field->id, $array ) || in_array( (string) $field->field_key, $array, true );
 	}
 
 	/**

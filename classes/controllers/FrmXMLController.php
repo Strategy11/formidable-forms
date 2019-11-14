@@ -404,7 +404,7 @@ class FrmXMLController {
 			if ( ! empty( $sitename ) ) {
 				$sitename .= '.';
 			}
-			$filename = $sitename . 'formidable.' . date( 'Y-m-d' ) . '.xml';
+			$filename = $sitename . 'formidable.' . gmdate( 'Y-m-d' ) . '.xml';
 		}
 
 		return $filename;

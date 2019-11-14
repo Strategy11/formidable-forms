@@ -1,4 +1,12 @@
 == Changelog ==
+= 4.03.03 =
+* Fix: There was an error on form submit when Pro was not installed.
+
+= 4.03.02 =
+* Add 'frm_form_object' hook run when a form is fetched from the database.
+* Include more education about field types, including the new Appointments field.
+* Fix: Dropdown fields weren't saving HTML values correctly.
+
 = 4.03.01 =
 * Add an option to filter form templates by category.
 * Add the refresh downloads link on the add-ons and form templates pages.

@@ -2675,6 +2675,10 @@ input[type="checkbox"] {
 	width: auto !important;
 }
 
+.frm_form_fields select.auto_width {
+	min-width: 60px;
+}
+
 .frm_form_fields input:focus, .frm_form_fields select:focus,
 .frm_form_fields textarea:focus, .frm_focus_field input {
 	background-color: #fff;
@@ -5903,6 +5907,7 @@ ul .frm_col_two {
 	padding: 5px 20px;
 	box-sizing: border-box;
 	cursor: pointer;
+	opacity: .5;
 }
 
 #frm-insert-fields li a span {
@@ -6147,6 +6152,10 @@ h2 .frm-sub-label {
 	width: 35px;
 	color: #c4c4c4;
 	padding-bottom: 20px;
+}
+
+#frm-upgrade-message img {
+	max-width: 100%;
 }
 
 a.frm-link-secondary {
@@ -6448,6 +6457,7 @@ iframe#dyncontent_ifr {
 .frm_wrap input[type="text"],
 .frm_wrap input[type="number"],
 .frm_wrap select,
+.wp-admin .frm_wrap select,
 .field-group textarea,
 .field-group input[type="text"],
 .field-group select {
@@ -6459,7 +6469,14 @@ iframe#dyncontent_ifr {
 	color: var(--dark-grey);
 	font-size: 15px;
 	margin: 0;
-	background: #fff;
+	background-color: #fff;
+	line-height: 1;
+}
+
+#postbox-container-2 textarea,
+.frm_wrap textarea,
+.field-group textarea {
+	line-height: 2;
 }
 
 .frm_wrap input[type="number"] {
@@ -6468,6 +6485,10 @@ iframe#dyncontent_ifr {
 
 .frm_wrap select {
 	padding: 2px;
+}
+
+.wp-admin .frm_wrap select {
+	max-width: 100%;
 }
 
 .frm_form_field.frm_scroll_box .frm_opt_container,
@@ -6506,6 +6527,7 @@ iframe#dyncontent_ifr {
 	padding-top: 0 !important;
 }
 
+.wp-admin .frm_wrap .form-table select,
 #postbox-container-2 select,
 .wp-admin .frm_wrap select {
 	line-height: 32px;
@@ -6517,6 +6539,13 @@ iframe#dyncontent_ifr {
 	line-height: 40px;
 	height: 40px;
 	width: 100%;
+}
+
+.branch-5-3 #postbox-container-2 select,
+.branch-5-3.wp-admin .frm_wrap select,
+.branch-5-3 .frm_wrap .frm_form_builder select {
+	height: auto;
+	padding: 0 24px 0 12px;
 }
 
 .frm-fields button.btn,

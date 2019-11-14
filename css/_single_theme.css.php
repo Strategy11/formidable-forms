@@ -476,6 +476,10 @@ if ( ! empty( $important ) ) {
 	color: <?php echo esc_html( $submit_active_color . $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:hover,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:active,
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:active,
@@ -484,6 +488,7 @@ if ( ! empty( $important ) ) {
 	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:before {
 	border-bottom-color: <?php echo esc_html( $submit_text_color . $important ); ?>;
 	border-right-color: <?php echo esc_html( $submit_text_color . $important ); ?>;

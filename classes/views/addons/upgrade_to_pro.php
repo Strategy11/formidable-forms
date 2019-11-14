@@ -2,7 +2,7 @@
 	<h1 class="frm_pro_heading">
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />
 		<span class="alignright">Take on bigger projects, earn more clients and grow your business.<br/>
-			<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" target="_blank">Upgrade to Pro</a>.</span>
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ); ?>" target="_blank">Upgrade to Pro</a>.</span>
 		<span class="clear"></span>
 	</h1>
 
@@ -14,7 +14,7 @@
 
 
 	<p class="frmcenter">
-		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" class="button-primary frm-button-primary frm_large" target="_blank">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ); ?>" class="button-primary frm-button-primary frm_large" target="_blank">
 			<?php esc_html_e( 'Get Started Now', 'formidable' ); ?>
 		</a>
 	</p>
@@ -71,7 +71,7 @@
 
 	<br/>
 	<p class="frmcenter">
-		<a href="<?php echo esc_url( FrmAppHelper::make_affiliate_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ) ); ?>" class="button-primary frm-button-primary frm_large" target="_blank">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $link_parts ) ); ?>" class="button-primary frm-button-primary frm_large" target="_blank">
 			<?php esc_html_e( 'Get Started Now', 'formidable' ); ?>
 		</a>
 	</p>

@@ -72,6 +72,7 @@ class FrmField {
 			'file'           => array(
 				'name' => __( 'File Upload', 'formidable' ),
 				'icon' => 'frm_icon_font frm_upload_icon',
+				'message' => 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.',
 			),
 			'rte'            => array(
 				'name' => __( 'Rich Text', 'formidable' ),
@@ -88,6 +89,7 @@ class FrmField {
 			'scale'          => array(
 				'name' => __( 'Scale', 'formidable' ),
 				'icon' => 'frm_icon_font frm_linear_scale_icon',
+				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/scale_field.png" alt="Scale Field" />',
 			),
 			'star'           => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -104,14 +106,17 @@ class FrmField {
 			'data'           => array(
 				'name' => __( 'Dynamic', 'formidable' ),
 				'icon' => 'frm_icon_font frm_sitemap_icon',
+				'message' => 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.',
 			),
 			'lookup'         => array(
 				'name' => __( 'Lookup', 'formidable' ),
 				'icon' => 'frm_icon_font frm_search_icon',
+				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/look-up_year-make-model.gif" alt="cascading lookup fields" />',
 			),
 			'divider|repeat' => array(
 				'name' => __( 'Repeater', 'formidable' ),
 				'icon' => 'frm_icon_font frm_repeater_icon',
+				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
 			),
 			'end_divider'    => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -124,6 +129,7 @@ class FrmField {
 			'break'          => array(
 				'name' => __( 'Page Break', 'formidable' ),
 				'icon' => 'frm_icon_font frm_page_break_icon',
+				'message' => 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?',
 			),
 			'form'           => array(
 				'name' => __( 'Embed Form', 'formidable' ),
@@ -146,6 +152,11 @@ class FrmField {
 				'name' => __( 'Address', 'formidable' ),
 				'icon' => 'frm_icon_font frm_location_icon',
 			),
+			'summary' => array(
+				'name'  => __( 'Summary', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_file_text_icon',
+				'message' => 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.',
+			),
 			'signature' => array(
 				'name'  => __( 'Signature', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
@@ -156,9 +167,13 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_percent_icon frm_show_upgrade',
 				'addon' => 'quizzes',
 			),
-			'summary' => array(
-				'name'  => __( 'Summary', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_file_text_icon',
+			'ssa-appointment' => array(
+				'name'    => __( 'Appointment', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
+				'require' => 'Simply Schedule Appointments',
+				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
+					<img src="https://s3.amazonaws.com/fp.strategy11.com/images/appointments/appointments.png" alt="Scheduling" />',
+				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product' => array(
 				'name'    => __( 'Product', 'formidable' ),

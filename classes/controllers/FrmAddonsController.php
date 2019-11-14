@@ -228,6 +228,9 @@ class FrmAddonsController {
 
 		$transient->last_checked = time();
 
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 		$wp_plugins = get_plugins();
 
 		foreach ( $version_info as $id => $plugin ) {

@@ -341,7 +341,7 @@ function frmFrontFormJS(){
 	}
 
 	function hasInvisibleRecaptcha( object ) {
-		if ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( object ) ) {
+		if ( isGoingToPrevPage( object ) ) {
 			return false;
 		}
 
@@ -632,11 +632,20 @@ function frmFrontFormJS(){
 	}
 
 	function showLoadingIndicator( $object ) {
-		if ( !$object.hasClass('frm_loading_form') ) {
-			$object.addClass('frm_loading_form');
-
+		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) {
+			addLoadingClass( $object );
 			$object.trigger( 'frmStartFormLoading' );
 		}
+	}
+	
+	function addLoadingClass( $object ) {
+		var loading_class = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
+
+		$object.addClass( loading_class );
+	}
+
+	function isGoingToPrevPage( $object ) {
+		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
 	}
 
 	function removeSubmitLoading( $object, enable, processesRunning ) {
@@ -646,6 +655,7 @@ function frmFrontFormJS(){
 
 		var loadingForm = jQuery( '.frm_loading_form' );
 		loadingForm.removeClass('frm_loading_form');
+		loadingForm.removeClass( 'frm_loading_prev' );
 
 		loadingForm.trigger( 'frmEndFormLoading' );
 
@@ -688,7 +698,7 @@ function frmFrontFormJS(){
 		/*jshint validthis:true */
 		toggleDefault(jQuery(this), 'replace');
 	}
-	
+
 	function toggleDefault($thisField, e){
 		// TODO: Fix this for a default value that is a number or array
 		var v = $thisField.data('frmval').replace(/(\n|\r\n)/g, '\r');
@@ -696,7 +706,7 @@ function frmFrontFormJS(){
 			return false;
 		}
 		var thisVal = $thisField.val().replace(/(\n|\r\n)/g, '\r');
-		
+
 		if ( 'replace' == e ) {
 			if ( thisVal === '' ) {
 				$thisField.addClass('frm_default').val(v);
@@ -843,7 +853,7 @@ function frmFrontFormJS(){
 					jQuery( this ).blur();
 				}
 			} );
-			
+
 			jQuery(document).on('focus', '.frm_toggle_default', clearDefault);
 			jQuery(document).on('blur', '.frm_toggle_default', replaceDefault);
 			jQuery('.frm_toggle_default').blur();
@@ -1146,7 +1156,7 @@ function frmFrontFormJS(){
 				frmProForm.removeUsedTimes();
 			}
 		},
-		
+
 		escapeHtml: function(text){
 			return text
 				.replace(/&/g, '&amp;')
@@ -1159,7 +1169,7 @@ function frmFrontFormJS(){
 		invisible: function(classes) {
 			jQuery(classes).css('visibility', 'hidden');
 		},
-		
+
 		visible: function(classes) {
 			jQuery(classes).css('visibility', 'visible');
 		}
@@ -1208,18 +1218,18 @@ function frmDeleteEntry(entry_id,prefix){
 				jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
 			else
 				jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
-			
+
 		}
 	});
 }
 
 function frmOnSubmit(e){
-	console.warn('DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm'); 
+	console.warn('DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm');
 	frmFrontForm.submitForm(e, this);
 }
 
 function frm_resend_email(entry_id,form_id){
-	console.warn('DEPRECATED: function frm_resend_email in v2.0'); 
+	console.warn('DEPRECATED: function frm_resend_email in v2.0');
 	var $link = jQuery(document.getElementById('frm_resend_email'));
 	$link.append('<span class="spinner" style="display:inline"></span>');
 	jQuery.ajax({
