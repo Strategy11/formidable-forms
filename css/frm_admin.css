@@ -740,6 +740,16 @@ p.frm_has_shortcodes {
 	border-bottom: 2px solid var(--sidebar-hover);
 }
 
+#frm-nav-tabs {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	background-color: var(--sidebar-color);
+	z-index: 1000;
+	margin-top: 0;
+	padding-top: 5px;
+}
+
 .frm-inline-modal .frm-nav-tabs,
 #frm_adv_info .frm-nav-tabs {
 	margin: 5px 0 10px;
