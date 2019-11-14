@@ -358,6 +358,8 @@ To get access to more features, integrations, and support, <a href="https://form
 == Changelog ==
 = 4.03.04 =
 * Better compatibility with WP 5.3.
+* Switch from using date to gmdate per WP codestyling recommendations.
+* Fix: Prevent undefined get_plugins error on some sites.
 
 = 4.03.03 =
 * Fix: There was an error on form submit when Pro was not installed.
