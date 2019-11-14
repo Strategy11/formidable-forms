@@ -5103,12 +5103,10 @@ tr.frm_options_heading td {
 	float: right;
 }
 
-li.frm_single_option:not(:last-child)::after {
-	content: '';
-	display: block;
-	height: 1px;
-	margin: 15px 0 5px;
-	background: var(--sidebar-hover);
+li.frm_single_option:not(:last-child) {
+	padding-bottom: 15px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid var(--sidebar-hover);
 }
 
 .frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_sortable_field_opts li:nth-child( n + 3 ) {

@@ -1749,7 +1749,7 @@ function frmAdminBuildJS() {
 				separate = usingSeparateValues( fieldId ),
 				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
 				opts = optList.getElementsByTagName( 'li' ),
-				product = frmIsProductField( fieldId );
+				product = isProductField( fieldId );
 
 			document.getElementById( 'bulk-field-id' ).value = fieldId;
 
@@ -2466,15 +2466,15 @@ function frmAdminBuildJS() {
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
-				isProductField = frmIsProductField( fieldId );
+				isProduct = isProductField( fieldId );
 
 			for ( i = 0; i < opts.length; i++ ) {
-				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProductField ) );
+				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct ) );
 			}
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProductField ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
 			id = 'field_' + fieldKey + '-' + opt.key;
@@ -2484,7 +2484,7 @@ function frmAdminBuildJS() {
 		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"' + ( isProductField ? ' data-price="' + opt.price + '"' : '' ) + '> ' + opt.label + '</label>' +
+			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + '> ' + opt.label + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
@@ -2498,7 +2498,7 @@ function frmAdminBuildJS() {
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
 			showOther = atts.other,
-			isProductField = frmIsProductField( sourceID );
+			isProduct = isProductField( sourceID );
 
 		removeDropdownOpts( field );
 		var opts = getMultipleOpts( sourceID ),
@@ -2520,7 +2520,7 @@ function frmAdminBuildJS() {
 				opt.value = opts[ i ].saved;
 				opt.innerHTML = label;
 
-				if ( isProductField ) {
+				if ( isProduct ) {
 					opt.setAttribute( 'data-price', opts[ i ].price );
 				}
 
@@ -2547,7 +2547,7 @@ function frmAdminBuildJS() {
 		var i, saved, labelName, label, key, opts = [], optObj,
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
 			separateValues = usingSeparateValues( fieldId ),
-			isProductField = frmIsProductField( fieldId );
+			isProduct = isProductField( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
 			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 ) {
@@ -2568,7 +2568,7 @@ function frmAdminBuildJS() {
 				key: key
 			};
 
-			if ( isProductField ) {
+			if ( isProduct ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[price]' );
 				optObj.price = jQuery( 'input[name="' + labelName + '"]' ).val();
 			}
@@ -5003,6 +5003,15 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function isProductField( fieldId ) {
+		var field = document.getElementById( 'frm_field_id_' + fieldId );
+		if ( field === null ) {
+			return false;
+		} else {
+			return 'product' === field.getAttribute( 'data-type' );
+		}
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -5642,7 +5651,7 @@ function frmAdminBuildJS() {
 		updateOpts: function( field_id, opts, modal ) {
 			var separate = usingSeparateValues( field_id ),
 			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' ),
-			action = frmIsProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
+			action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
 			empty( $fieldOpts );
 			jQuery.ajax( {
 				type: 'POST',
@@ -5679,15 +5688,6 @@ function frmAdminBuildJS() {
 			location.href = url;
 		}
 	};
-
-	function frmIsProductField( fieldId ) {
-		var field = document.getElementById( 'frm_field_id_' + fieldId );
-		if ( field === null ) {
-			return false;
-		} else {
-			return 'product' === field.getAttribute( 'data-type' );
-		}
-	}
 }
 
 var frmAdminBuild = frmAdminBuildJS();
