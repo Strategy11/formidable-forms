@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.03.03\n"
+"Project-Id-Version: Formidable Forms 4.03.04\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-11-07T15:22:20+01:00\n"
+"POT-Creation-Date: 2019-11-14T17:28:32+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -565,28 +565,28 @@ msgstr ""
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:476
+#: classes/controllers/FrmAddonsController.php:479
 msgid "Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:481
+#: classes/controllers/FrmAddonsController.php:484
 #: classes/helpers/FrmAppHelper.php:2210
 msgid "Active"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:486
+#: classes/controllers/FrmAddonsController.php:489
 msgid "Not Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:744
+#: classes/controllers/FrmAddonsController.php:747
 msgid "Your plugin has been installed. Please reload the page to see more options."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:771
+#: classes/controllers/FrmAddonsController.php:774
 msgid "Sorry, you're site requires FTP authentication. Please install plugins manaully."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:814
+#: classes/controllers/FrmAddonsController.php:817
 msgid "Your plugin has been activated. Please reload the page to see more options."
 msgstr ""
 

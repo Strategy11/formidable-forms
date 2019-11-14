@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.03.03';
+	public static $plug_version = '4.03.04';
 
 	/**
 	 * @since 1.07.02
