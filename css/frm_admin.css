@@ -14,7 +14,8 @@
 	--sidebar-hover: rgb(227, 232, 235);
 	--primary-color: rgb(65, 153, 253);
 	--primary-hover: rgb(49, 119, 199);
-	--tooltip-background-color: rgb(44,86,142);
+	--tooltip-background-color: var(--dark-grey);
+	--tooltip-font-size: 14px;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
@@ -6122,9 +6123,10 @@ iframe#dyncontent_ifr {
 .tooltip {
 	position: absolute;
 	z-index: 1030;
+	z-index: 9999999;
 	display: block;
 	visibility: visible;
-	font-size: 12px;
+	font-size: var(--tooltip-font-size);
 	line-height: 1.4;
 	opacity: 0;
 	filter: alpha(opacity=0);
@@ -6132,7 +6134,9 @@ iframe#dyncontent_ifr {
 
 .tooltip.in {
 	opacity: 0.95;
+	opacity: 1;
 	filter: alpha(opacity=95);
+	filter: alpha(opacity=100);
 }
 
 .tooltip.top {
@@ -6157,12 +6161,17 @@ iframe#dyncontent_ifr {
 
 .tooltip-inner {
 	max-width: 200px;
-	padding: 3px 8px;
+	padding: 8px 8px;
+	padding: 10px 10px;
 	color: #fff;
 	text-align: center;
+	text-align: left;
 	text-decoration: none;
 	background-color: var(--tooltip-background-color);
 	border-radius: 4px;
+	font-size: var(--tooltip-font-size);
+	z-index: 99999999;
+	text-transform: none;
 }
 
 .tooltip.right .tooltip-inner {

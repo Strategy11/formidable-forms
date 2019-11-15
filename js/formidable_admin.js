@@ -481,13 +481,14 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
-		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
+		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function () {
 			jQuery( this ).off( 'mouseenter.frm' );
-			jQuery( '.frm_bstooltip' ).tooltip();
+
+			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 			jQuery( this ).tooltip( 'show' );
 		} );
 
-		jQuery( '.frm_bstooltip' ).tooltip();
+		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 	}
 
 	function removeThisTag() {
