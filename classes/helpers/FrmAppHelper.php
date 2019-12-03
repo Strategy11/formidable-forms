@@ -1028,8 +1028,7 @@ class FrmAppHelper {
             ?>
             <input type="text"
                 placeholder="Search page..."
-                id="page-search"
-                data-valueholder_field="<?php echo esc_attr( $args['field_name'] ); ?>"
+                class="frm-page-search"
                 value="<?php echo esc_attr($title); ?>" />
             <input type="hidden"
                 name="<?php echo esc_attr( $args['field_name'] ); ?>"

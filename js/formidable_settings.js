@@ -1,17 +1,15 @@
 (function($) {
 
-    $("#page-search").autocomplete({
+    $(".frm-page-search").autocomplete({
         delay: 500,
         classes: {
             "ui-autocomplete": "highlight"
         },
-        minLength: 2,
+        minLength: 0,
         source: ajaxurl + '?action=' + fSettings.action + '&nonce=' + fSettings.nonce,
         select: function(event, ui) {
-            $valueholder = $('input[name="' + $("#page-search").data("valueholder_field") + '"]');
-
-            $("#page-search").val(ui.item.label);
-            $valueholder.val(ui.item.value);
+            $(this).val(ui.item.label);
+            $(this).next('input[type="hidden"]').val(ui.item.value);
 
             return false;
         }
