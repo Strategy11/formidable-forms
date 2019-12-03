@@ -1010,12 +1010,43 @@ class FrmAppHelper {
 		return get_posts( $query );
 	}
 
+    public static function maybe_autocomplete_pages_options( $args = array(), $page_id = '', $truncate = false ) {
+        $params = [ $args, $page_id, $truncate ];
+
+        $args = apply_filters( 'preformat_pages_selection_args', ...$params );
+
+        $pages_count = wp_count_posts( 'page' );
+
+        if ( $pages_count->publish > 100 ) {
+            $selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+            $title = '';
+
+            if( $selected ) {
+                $title = get_the_title($selected);
+            }
+
+            ?>
+            <input type="text"
+                placeholder="Search page..."
+                id="page-search"
+                data-valueholder_field="<?php echo esc_attr( $args['field_name'] ); ?>"
+                value="<?php echo esc_attr($title); ?>" />
+            <input type="hidden"
+                name="<?php echo esc_attr( $args['field_name'] ); ?>"
+                value="<?php echo esc_attr($selected); ?>"/>
+            <?php
+        } else {
+            self::wp_pages_dropdown( ...$params );
+        }
+    }
+
 	/**
 	 * @param array   $args
 	 * @param string  $page_id Deprecated.
 	 * @param boolean $truncate Deprecated.
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
+        /*
 		if ( ! is_array( $args ) ) {
 			$args = array(
 				'field_name' => $args,
@@ -1031,6 +1062,8 @@ class FrmAppHelper {
 			'page_id'     => '',
 		);
 		$args = array_merge( $defaults, $args );
+        */
+        $args = apply_filters('preformat_pages_selection_args', $args, $page_id, $truncate);
 
 		$pages    = self::get_pages();
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
