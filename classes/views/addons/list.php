@@ -10,10 +10,23 @@
 
 	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 
-	<?php esc_html_e( 'Missing add-ons?', 'formidable' ); ?>
-	<a href="#" id="frm_reconnect_link" class="frm-show-authorized" data-refresh="1">
-		<?php esc_html_e( 'Check now for a recent upgrade or renewal', 'formidable' ); ?>
-	</a>
+	<p class="alignleft">
+		<?php esc_html_e( 'Missing add-ons?', 'formidable' ); ?>
+		<a href="#" id="frm_reconnect_link" class="frm-show-authorized" data-refresh="1">
+			<?php esc_html_e( 'Check now for a recent upgrade or renewal', 'formidable' ); ?>
+		</a>
+	</p>
+
+	<?php
+	FrmAppHelper::show_search_box(
+		array(
+			'input_id'    => 'addon',
+			'placeholder' => __( 'Search Add-ons', 'formidable' ),
+			'tosearch'    => 'frm-card',
+		)
+	);
+	?>
+	<div class="clear"></div>
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $slug => $addon ) { ?>
