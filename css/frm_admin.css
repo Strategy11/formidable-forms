@@ -1575,6 +1575,21 @@ div.frm_updated_message {
 	font-size: 17px;
 }
 
+#frm-premium-templates .frm_ribbon {
+	border: 15px solid transparent;
+	border-bottom: 15px solid var(--orange);
+	top: -4px;
+	right: -21px;
+	width: 16px;
+	z-index: 1;
+}
+
+#frm-premium-templates .frm_ribbon span {
+	top: -2px;
+	left: 3px;
+	font-size: 15px;
+}
+
 .frm_pro_heading span {
 	margin-top: 10px;
 }
