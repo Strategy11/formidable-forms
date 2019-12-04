@@ -4626,6 +4626,25 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
+	function initPageSelectionAutocomplete() {
+		if(jQuery.fn.autocomplete && jQuery(".frm-page-search").length > 0) {
+			jQuery(".frm-page-search").autocomplete( {
+				delay: 500,
+				classes: {
+					"ui-autocomplete": "highlight"
+				},
+				minLength: 0,
+				source: ajaxurl + '?action=page_search&nonce=' + frmGlobal.nonce,
+				select: function(event, ui) {
+					jQuery(this).val(ui.item.label);
+					jQuery(this).next('input[type="hidden"]').val(ui.item.value);
+
+					return false;
+				}
+			} );
+		}
+	}
+
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
 		jQuery.ajax( {
@@ -4986,6 +5005,9 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
+
+			// Page Selection Autocomplete
+			initPageSelectionAutocomplete();
 		},
 
 		buildInit: function() {

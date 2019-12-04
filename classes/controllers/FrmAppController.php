@@ -379,7 +379,6 @@ class FrmAppController {
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), $version );
 		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.3.4' );
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
-        wp_register_script( 'formidable-settings-autocomplete', FrmAppHelper::plugin_url() . '/js/formidable_settings.js', array('jquery', 'jquery-ui-autocomplete'), $version, true );
 
 		// load multselect js
 		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
@@ -387,8 +386,6 @@ class FrmAppController {
 
 		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
-        $frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
@@ -409,14 +406,6 @@ class FrmAppController {
 					wp_enqueue_style( 'formidable-grids' );
 				}
 			}
-
-            if( "settings" === $frm_action ) {
-                wp_localize_script( 'formidable-settings-autocomplete', 'fSettings', array(
-                        'nonce' => wp_create_nonce( 'autoCompleteKey' ),
-                        'action' => 'page_search'
-                ) );
-                wp_enqueue_script( 'formidable-settings-autocomplete' );
-            }
 
 			do_action( 'frm_enqueue_builder_scripts' );
 			self::include_upgrade_overlay();
