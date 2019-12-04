@@ -4636,10 +4636,29 @@ function frmAdminBuildJS() {
 				minLength: 0,
 				source: ajaxurl + '?action=page_search&nonce=' + frmGlobal.nonce,
 				select: function(event, ui) {
-					jQuery(this).val(ui.item.label);
-					jQuery(this).next('input[type="hidden"]').val(ui.item.value);
+					var new_label = '';
+					var new_value = '';
+
+					if(ui.item.value) {
+						new_label = ui.item.label;
+						new_value = ui.item.value;
+					}
+
+					jQuery(this).val(new_label);
+					jQuery(this).next('input[type="hidden"]').val(new_value);
 
 					return false;
+				},
+				position: {
+					my: "left top",
+					at: "left bottom",
+					collision: "flip"
+				},
+				response: function(event, ui) {
+					if ( !ui.content.length ) {
+						var noResult = { value: "", label: "No results found" };
+						ui.content.push(noResult);
+					}
 				}
 			} );
 		}
