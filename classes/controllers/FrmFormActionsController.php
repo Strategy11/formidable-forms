@@ -548,69 +548,6 @@ class FrmFormActionsController {
 
 		return $where;
 	}
-
-    public static function page_search() {
-        global $wpdb;
-
-        $nonce = $_REQUEST['nonce'];
-        $term = sanitize_text_field($_REQUEST['term']);
-
-        if ( ! wp_verify_nonce( $nonce, 'autoCompleteKey' ) ) {
-            wp_send_json([
-                'status' => 'error',
-                'message' => 'Forbidden request'
-            ]);
-        }
-
-        $results = [];
-        $pages = $wpdb->get_results(
-            $wpdb->prepare( "
-                SELECT
-                    *
-                FROM {$wpdb->posts}
-                WHERE
-                    post_status = %s
-                AND
-                    post_type = %s
-                AND
-                    post_title LIKE %s
-            ", 'publish', 'page',  '%' . $wpdb->esc_like( $term ) . '%'
-            )
-        );
-
-        if ( count($pages) ) {
-            foreach ( $pages as $page ) {
-                $results[] = [
-                    'value' => $page->ID,
-                    'label' => $page->post_title
-                ];
-            }
-        }
-
-        wp_send_json($results);
-    }
-
-    public function preformat_selection_args( $args = array(), $page_id = '', $truncate = false ) {
-
-        if ( ! is_array( $args ) ) {
-			$args = array(
-				'field_name' => $args,
-				'page_id'    => $page_id,
-				'truncate'   => $truncate,
-			);
-		}
-
-		$defaults = array(
-			'truncate'    => false,
-			'placeholder' => ' ',
-			'field_name'  => '',
-			'page_id'     => '',
-		);
-
-		$args = array_merge( $defaults, $args );
-
-        return $args;
-    }
 }
 
 class Frm_Form_Action_Factory {

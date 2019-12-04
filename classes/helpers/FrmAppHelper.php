@@ -1010,69 +1010,124 @@ class FrmAppHelper {
 		return get_posts( $query );
 	}
 
-    public static function maybe_autocomplete_pages_options( $args = array(), $page_id = '', $truncate = false ) {
-        $params = [ $args, $page_id, $truncate ];
-
-        $args = apply_filters( 'preformat_pages_selection_args', ...$params );
-
-        $pages_count = wp_count_posts( 'page' );
-
-        if ( $pages_count->publish > 100 ) {
-            $selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-            $title = '';
-
-            if( $selected ) {
-                $title = get_the_title($selected);
-            }
-
-            ?>
-            <input type="text"
-                placeholder="Search page..."
-                class="frm-page-search"
-                value="<?php echo esc_attr($title); ?>" />
-            <input type="hidden"
-                name="<?php echo esc_attr( $args['field_name'] ); ?>"
-                value="<?php echo esc_attr($selected); ?>"/>
-            <?php
-        } else {
-            self::wp_pages_dropdown( ...$params );
-        }
-    }
-
 	/**
-	 * @param array   $args
-	 * @param string  $page_id Deprecated.
-	 * @param boolean $truncate Deprecated.
+	* Autocomplete page admin ajax endpoint
+	* @since 4.04
 	 */
-	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
-        /*
-		if ( ! is_array( $args ) ) {
-			$args = array(
-				'field_name' => $args,
-				'page_id'    => $page_id,
-				'truncate'   => $truncate,
+	public static function page_search() {
+		global $wpdb;
+
+		$nonce = isset($_REQUEST['nonce']) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
+		$term = isset($_REQUEST['term']) ? sanitize_text_field( wp_unslash( $_REQUEST['term'] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, 'frm_ajax' ) ) {
+			wp_send_json(
+				array(
+					'status' => 'error',
+					'message' => 'Forbidden request',
+				)
 			);
 		}
 
+		$results = array();
+		$pages = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT
+					*
+				FROM {$wpdb->posts}
+				WHERE
+					post_status = %s
+				AND
+					post_type = %s
+				AND
+					post_title LIKE %s
+				",
+				'publish',
+				'page',
+				'%' . $wpdb->esc_like( $term ) . '%'
+			)
+		);
+
+		if ( count($pages) ) {
+			foreach ( $pages as $page ) {
+				$results[] = array(
+					'value' => $page->ID,
+					'label' => $page->post_title,
+				);
+			}
+		}
+
+		wp_send_json( $results );
+	}
+
+	/**
+	* Filter to format args for page dropdown or autocomplete
+	* @since 4.04
+	 */
+	public static function frm_preformat_selection_args( $args = array() ) {
 		$defaults = array(
 			'truncate'    => false,
 			'placeholder' => ' ',
 			'field_name'  => '',
 			'page_id'     => '',
 		);
+
 		$args = array_merge( $defaults, $args );
-        */
-        $args = apply_filters('preformat_pages_selection_args', $args, $page_id, $truncate);
+
+		return $args;
+	}
+
+	/**
+	* Renders an autocomplete page selection or a regular dropdown depending on
+	* the total page count
+	* @since 4.04
+	 */
+	public static function maybe_autocomplete_pages_options( $args = array() ) {
+		$args = apply_filters( 'frm_preformat_pages_selection_args', $args );
+
+		$pages_count = wp_count_posts( 'page' );
+
+		if ( $pages_count->publish > 25 ) {
+			wp_enqueue_script( 'jquery-ui-autocomplete' );
+
+			$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+			$title = '';
+
+			if ( $selected ) {
+				$title = get_the_title( $selected );
+			}
+
+			?>
+			<input type="text"
+				placeholder="<?php echo __( 'Search page...', 'formidable' ); ?>"
+				class="frm-page-search"
+				value="<?php echo esc_attr( $title ); ?>" />
+			<input type="hidden"
+				name="<?php echo esc_attr( $args['field_name'] ); ?>"
+				value="<?php echo esc_attr( $selected ); ?>"/>
+			<?php
+		} else {
+			self::wp_pages_dropdown( $args );
+		}
+	}
+
+	/**
+	 * @param array   $args
+	 * @param string  $page_id Deprecated.
+	 * @param boolean $truncate Deprecated.
+	 */
+	public static function wp_pages_dropdown( $args ) {
+		$args = apply_filters( 'frm_preformat_pages_selection_args', $args );
 
 		$pages    = self::get_pages();
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
 
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
-			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
+			<option value=""><?php echo __( 'Select a Page', 'formidable' ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
 				</option>
 			<?php } ?>
 		</select>
