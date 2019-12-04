@@ -4991,10 +4991,9 @@ function frmAdminBuildJS() {
 	}
 
 	function toggleProductType() {
-		var $this, container, currentVal;
-		$this = jQuery( this );
-		container = $this.parents( '.frm_grid_container.frm-collapse-me' );
-		currentVal = this.options[ this.selectedIndex ].value;
+		var $this = jQuery( this ),
+			container = $this.closest( '.frm-single-settings' ).find( '.frmjs_product_choices' ),
+			currentVal = this.options[ this.selectedIndex ].value;
 
 		if ( 'single' === currentVal ) {
 			container.removeClass( 'frm_prod_type_user_def' );
