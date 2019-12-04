@@ -884,9 +884,9 @@
 <title>total</title>
 <path d="M21.9 0H1A1.1 1.1 0 000 1.2v11.5a1.1 1.1 0 001.1 1.1H22a1.1 1.1 0 001.1-1.1V1.2A1.1 1.1 0 0021.9 0zm-.6 9.8A2.3 2.3 0 0019 12H4a2.3 2.3 0 00-2.3-2.3V4A2.3 2.3 0 004 1.7h15A2.3 2.3 0 0021.3 4zM11.5 4a2.9 2.9 0 000 5.8 2.9 2.9 0 000-5.8z"/>
 </symbol>
-<symbol id="frm_quantity_icon" viewBox="0 0 18.6 18.6">
+<symbol id="frm_quantity_icon" viewBox="0 0 17 20">
 <title>quantity</title>
-<g data-name="Group 1462"><path d="M18.6 2v14.6a2 2 0 01-2 2H2a2 2 0 01-2-2V2a2 2 0 012-2h14.6a2 2 0 012 2zm-2 14.3v-14a.3.3 0 00-.3-.3h-14a.3.3 0 00-.3.2v14.1a.3.3 0 00.2.3h14.1a.3.3 0 00.3-.3z"/><path data-name="Line 382" fill="none" stroke="#000" stroke-width="2" d="M9.5 4.5v10"/><path data-name="Line 383" fill="none" stroke="#000" stroke-width="2" d="M4.5 9.5h10"/></g>
+<g><path d="M15.6 1.3H1.9C1 1.3 0 2 0 3.1v13.6c0 1 .9 2 2 2h13.6c1 0 1.9-1 1.9-2V3.2c0-1-.9-2-2-2zm0 15.5H1.9V3.2h13.7"></path><path fill="none" stroke="currentColor" stroke-width="2" d="M9.5 4.5v10M4.5 9.5h10" transform="translate(-.7,0.4)"/></g>
 </symbol>
 </defs>
 </svg>
