@@ -3750,10 +3750,18 @@ h2.frm-h2,
 .frm-admin-page-formidablesettings .ui-autocomplete {
     box-shadow: none;
     border: 1px solid #ccc;
+    background: var(--lightest-grey);
+    position: absolute;
 }
 
 .frm-admin-page-formidablesettings .ui-autocomplete li {
     padding: 10px;
+    background: none;
+}
+
+.frm-admin-page-formidablesettings .ui-autocomplete li:hover {
+    background: rgb(65, 153, 253);
+    color: #fff;
 }
 
 .frm_select_with_label {
