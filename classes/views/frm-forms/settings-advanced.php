@@ -86,13 +86,12 @@
 			<span class="success_action_page_box success_action_box<?php echo esc_attr( $values['success_action'] === 'page' ? '' : ' frm_hidden' ); ?>">
 
 				<?php
-                FrmAppHelper::maybe_autocomplete_pages_options(
-                    array(
+				FrmAppHelper::maybe_autocomplete_pages_options(
+					array(
 						'field_name'  => 'options[success_page_id]',
-						'page_id'     => isset( $values['success_page_id'] ) ? $values['success_page_id'] : '',
-						'placeholder' => __( 'Select a Page', 'formidable' ),
+						'page_id'     => isset( $values['success_page_id'] ) ? $values['success_page_id'] : ''
 					)
-                );
+				);
 				?>
 			</span>
 </p>
