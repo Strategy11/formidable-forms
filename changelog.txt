@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.03.05 =
+* New: Add a center alignment option for section headings.
+* Keep the add field & field options links fixed to prevent extra scrolling to add more fields.
+* Add live searching on the add-ons page.
+* Fix: When only one box was selected for the default value in a checkbox field, it wasn't being checked.
+* Fix: Recaptcha labels are included for accessibility.
+
 = 4.03.04 =
 * Better compatibility with WP 5.3.
 * Switch from using date to gmdate per WP codestyling recommendations.
