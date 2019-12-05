@@ -1221,12 +1221,10 @@ BEFORE_HTML;
 
 		$icon = $icons[''];
 
-		if ( empty( $categories ) ) {
-			$icon = $icons[''];
-		} elseif ( count( $categories ) === 1 ) {
+		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
 			$icon     = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
-		} else {
+		} elseif ( ! empty( $categories ) ) {
 			foreach ( $icons as $cat => $icon ) {
 				if ( ! in_array( $cat, $categories ) ) {
 					unset( $icons[ $cat ] );
