@@ -95,10 +95,10 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 			</h3>
 			<ul class="field_type_list">
 				<?php
-					foreach ( $pricing_fields as $field_key => $field_type ) {
-						FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
-						unset( $field_key, $field_type );
-					}
+				foreach ( $pricing_fields as $field_key => $field_type ) {
+					FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
+					unset( $field_key, $field_type );
+				}
 				?>
 			</ul>
 			<div class="clear"></div>
