@@ -5044,7 +5044,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
-			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
+			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
