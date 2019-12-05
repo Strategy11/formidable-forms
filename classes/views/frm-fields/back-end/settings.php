@@ -261,7 +261,7 @@ do_action( 'frm_before_field_options', $field );
 			<p class="frm6 frm_form_field">
 				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
 				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
-					<option value=""<?php selected( $field['label'], '' ); ?>>
+					<option value="" <?php selected( $field['label'], '' ); ?>>
 						<?php esc_html_e( 'Default', 'formidable' ); ?>
 					</option>
 					<?php
@@ -273,6 +273,11 @@ do_action( 'frm_before_field_options', $field );
 						?>
 						<option value="<?php echo esc_attr( $pos ); ?>"<?php selected( $field['label'], $pos ); ?>>
 							<?php echo esc_html( $pos_label ); ?>
+						</option>
+					<?php } ?>
+					<?php if ( $field['type'] === 'divider' ) { ?>
+						<option value="center" <?php selected( $field['label'], 'center' ); ?>>
+							<?php esc_html_e( 'Center', 'formidable' ); ?>
 						</option>
 					<?php } ?>
 				</select>

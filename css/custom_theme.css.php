@@ -98,6 +98,10 @@ legend.frm_hidden{
 	margin-left:10px;
 }
 
+.with_frm_style .frm_pos_center {
+	text-align: center;
+}
+
 .with_frm_style .frm_none_container .frm_primary_label,
 .with_frm_style .frm_pos_none,
 .frm_pos_none,
