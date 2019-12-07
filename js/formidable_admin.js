@@ -4992,17 +4992,22 @@ function frmAdminBuildJS() {
 
 	function toggleProductType() {
 		var $this = jQuery( this ),
-			container = $this.closest( '.frm-single-settings' ).find( '.frmjs_product_choices' ),
+			settings = $this.closest( '.frm-single-settings' ),
+			container = settings.find( '.frmjs_product_choices' ),
+			heading = settings.find( '.frm_prod_options_heading' ),
 			currentVal = this.options[ this.selectedIndex ].value;
 
 		if ( 'single' === currentVal ) {
 			container.removeClass( 'frm_prod_type_user_def' );
 			container.addClass( 'frm_prod_type_single' );
+			heading.removeClass( 'frm_prod_user_def' );
 		} else if ( 'user_def' === currentVal ) {
 			container.removeClass( 'frm_prod_type_single' );
 			container.addClass( 'frm_prod_type_user_def' );
+			heading.addClass( 'frm_prod_user_def' );
 		} else {
 			container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
+			heading.removeClass( 'frm_prod_user_def' );
 		}
 	}
 

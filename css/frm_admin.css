@@ -5134,6 +5134,10 @@ li.frm_single_option:not(:last-child) {
 	display: none;
 }
 
+.frm_prod_options_heading.frm_prod_user_def {
+	display: none;
+}
+
 #frm-preview-block {
 	height: 400px;
 	overflow: scroll;

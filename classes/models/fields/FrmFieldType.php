@@ -457,7 +457,7 @@ DEFAULT_HTML;
 	protected function field_choices_heading( $args ) {
 		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 		?>
-		<h3>
+		<h3<?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
 			printf(
 				/* translators: %s: Field type */
@@ -468,6 +468,13 @@ DEFAULT_HTML;
 			<i class="frm_icon_font frm_arrowdown6_icon"></i>
 		</h3>
 		<?php
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function field_choices_heading_attrs( $args ) {
+		return;
 	}
 
 	/**
