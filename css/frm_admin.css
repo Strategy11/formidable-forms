@@ -3747,21 +3747,23 @@ h2.frm-h2,
 	width: 95%;
 }
 
-.frm-admin-page-formidablesettings .ui-autocomplete {
-    box-shadow: none;
-    border: 1px solid #ccc;
-    background: var(--lightest-grey);
-    position: absolute;
+#form_settings_page .ui-autocomplete {
+	box-shadow: none;
+	border: 1px solid #ccc;
+	background: var(--lightest-grey);
+	position: absolute;
 }
 
-.frm-admin-page-formidablesettings .ui-autocomplete li {
-    padding: 10px;
-    background: none;
+#form_settings_page .ui-autocomplete li {
+	padding: 10px;
+	background: none;
+	color: var(--dark-grey);
 }
 
-.frm-admin-page-formidablesettings .ui-autocomplete li:hover {
-    background: rgb(65, 153, 253);
-    color: #fff;
+#form_settings_page .ui-autocomplete li:hover {
+	background: rgb(65, 153, 253);
+	border: none;
+	color: #fff;
 }
 
 .frm_select_with_label {
