@@ -130,7 +130,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_page_search', 'FrmAppHelper::page_search' );
 		add_filter( 'frm_preformat_pages_selection_args', 'FrmAppHelper::frm_preformat_selection_args', 10, 3 );
 
-
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
 		add_action( 'admin_init', 'FrmStylesController::admin_init' );
