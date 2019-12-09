@@ -4627,11 +4627,11 @@ function frmAdminBuildJS() {
 	}
 
 	function initPageSelectionAutocomplete() {
-		if(jQuery.fn.autocomplete && jQuery(".frm-page-search").length > 0) {
-			jQuery(".frm-page-search").autocomplete( {
-				delay: 500,
+		if(jQuery.fn.autocomplete && jQuery('.frm-page-search').length > 0) {
+			jQuery('.frm-page-search').autocomplete( {
+				delay: 200,
 				classes: {
-					"ui-autocomplete": "highlight"
+					'ui-autocomplete': 'highlight'
 				},
 				minLength: 0,
 				source: ajaxurl + '?action=page_search&nonce=' + frmGlobal.nonce,
@@ -4645,18 +4645,18 @@ function frmAdminBuildJS() {
 					}
 
 					jQuery(this).val(new_label);
-					jQuery(this).next('input[type="hidden"]').val(new_value);
+					jQuery(this).next("input[type='hidden']").val(new_value);
 
 					return false;
 				},
 				position: {
-					my: "left top",
-					at: "left bottom",
-					collision: "flip"
+					my: 'left top',
+					at: 'left bottom',
+					collision: 'flip'
 				},
 				response: function(event, ui) {
 					if ( !ui.content.length ) {
-						var noResult = { value: "", label: "No results found" };
+						var noResult = { value: '', label: frm_admin_js.no_items_found };
 						ui.content.push(noResult);
 					}
 				}
@@ -5024,9 +5024,6 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
-
-			// Page Selection Autocomplete
-			initPageSelectionAutocomplete();
 		},
 
 		buildInit: function() {
@@ -5271,6 +5268,9 @@ function frmAdminBuildJS() {
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			} );
+
+            // Page Selection Autocomplete
+			initPageSelectionAutocomplete();
 		},
 
 		panelInit: function() {
