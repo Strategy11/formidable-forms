@@ -1018,8 +1018,8 @@ class FrmAppHelper {
 	public static function page_search() {
 		global $wpdb;
 
-		$nonce = FrmAppHelper::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
-		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+		$nonce = self::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
+		$term = self::get_param( 'term', '', 'get', 'sanitize_text_field' );
 
 		if ( ! wp_verify_nonce( $nonce, 'frm_ajax' ) ) {
 			wp_send_json(
@@ -1082,6 +1082,7 @@ class FrmAppHelper {
 	/**
 	* Renders an autocomplete page selection or a regular dropdown depending on
 	* the total page count
+	*
 	* @since 4.04
 	 */
 	public static function maybe_autocomplete_pages_options( $args = array() ) {
@@ -2305,7 +2306,7 @@ class FrmAppHelper {
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),
 				'active'            => __( 'Active', 'formidable' ),
-				'no_items_found'    => __('No items found.', 'formidable'),
+				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
 			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 		}
