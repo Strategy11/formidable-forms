@@ -623,7 +623,7 @@ class FrmFieldsController {
 	public static function add_placeholder_to_select( $field ) {
 		$placeholder = FrmField::get_option( $field, 'placeholder' );
 		if ( empty( $placeholder ) ) {
-			$placeholder = FrmFieldsController::get_default_value_from_name( $field );
+			$placeholder = self::get_default_value_from_name( $field );
 		}
 
 		if ( $placeholder !== '' ) {
