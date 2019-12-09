@@ -1011,14 +1011,15 @@ class FrmAppHelper {
 	}
 
 	/**
-	* Autocomplete page admin ajax endpoint
-	* @since 4.04
+	 * Autocomplete page admin ajax endpoint
+	 *
+	 * @since 4.04
 	 */
 	public static function page_search() {
 		global $wpdb;
 
-		$nonce = isset($_REQUEST['nonce']) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
-		$term = isset($_REQUEST['term']) ? sanitize_text_field( wp_unslash( $_REQUEST['term'] ) ) : '';
+		$nonce = FrmAppHelper::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
+		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
 
 		if ( ! wp_verify_nonce( $nonce, 'frm_ajax' ) ) {
 			wp_send_json(
@@ -1048,7 +1049,7 @@ class FrmAppHelper {
 			)
 		);
 
-		if ( count($pages) ) {
+		if ( count( $pages ) ) {
 			foreach ( $pages as $page ) {
 				$results[] = array(
 					'value' => $page->ID,
@@ -1061,8 +1062,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	* Filter to format args for page dropdown or autocomplete
-	* @since 4.04
+	 * Filter to format args for page dropdown or autocomplete
+	 *
+	 * @since 4.04
 	 */
 	public static function frm_preformat_selection_args( $args = array() ) {
 		$defaults = array(
@@ -1099,7 +1101,7 @@ class FrmAppHelper {
 
 			?>
 			<input type="text"
-				placeholder="<?php echo __( 'Search page...', 'formidable' ); ?>"
+				placeholder="<?php esc_html_e( 'Search page...', 'formidable' ); ?>"
 				class="frm-page-search"
 				value="<?php echo esc_attr( $title ); ?>" />
 			<input type="hidden"
@@ -1116,7 +1118,15 @@ class FrmAppHelper {
 	 * @param string  $page_id Deprecated.
 	 * @param boolean $truncate Deprecated.
 	 */
-	public static function wp_pages_dropdown( $args ) {
+	public static function wp_pages_dropdown( $args, $page_id = '', $truncate = false ) {
+		if ( ! is_array( $args ) ) {
+			$args = array(
+				'field_name' => $args,
+				'page_id'    => $page_id,
+				'truncate'   => $truncate,
+			);
+		}
+
 		$args = apply_filters( 'frm_preformat_pages_selection_args', $args );
 
 		$pages    = self::get_pages();
@@ -1124,7 +1134,7 @@ class FrmAppHelper {
 
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
-			<option value=""><?php echo __( 'Select a Page', 'formidable' ); ?></option>
+			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
 					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
@@ -2295,6 +2305,7 @@ class FrmAppHelper {
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),
 				'active'            => __( 'Active', 'formidable' ),
+				'no_items_found'    => __('No items found.', 'formidable'),
 			);
 			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 		}
