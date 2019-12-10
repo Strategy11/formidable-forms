@@ -4646,7 +4646,7 @@ function frmAdminBuildJS() {
 					}
 				},
 				create: function( event, ui ) {
-					var $container = jQuery( this ).parents( '.frm_page_selection' );
+					var $container = jQuery( this ).parent();
 
 					if ( $container.length == 0 ) {
 						$container = 'body';
@@ -4667,7 +4667,12 @@ function frmAdminBuildJS() {
 	function autoCompleteSelectFromResults( event, ui ) {
 		event.preventDefault();
 
-		this.value = ui.item.label;
+		if ( ui.item.value === '' ) {
+			this.value = '';
+		} else {
+			this.value = ui.item.label;
+		}
+
 		this.nextElementSibling.value = ui.item.value;
 	}
 
