@@ -4626,6 +4626,56 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
+	function initPageSelectionAutocomplete() {
+		if ( jQuery.fn.autocomplete && jQuery( '.frm-page-search' ).length > 0 ) {
+			jQuery( '.frm-page-search' ).autocomplete( {
+				delay: 100,
+				minLength: 0,
+				source: ajaxurl + '?action=frm_page_search&nonce=' + frmGlobal.nonce,
+				select: autoCompleteSelectFromResults,
+				focus: autoCompleteSelectFromResults,
+				position: {
+					my: 'left top',
+					at: 'left bottom',
+					collision: 'flip'
+				},
+				response: function( event, ui ) {
+					if ( !ui.content.length ) {
+						var noResult = { value: '', label: frm_admin_js.no_items_found };
+						ui.content.push( noResult );
+					}
+				},
+				create: function( event, ui ) {
+					var $container = jQuery( this ).parent();
+
+					if ( $container.length == 0 ) {
+						$container = 'body';
+					}
+
+					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+				}
+			} )
+			.focus( function(){
+				// Show options on click to make it work more like a dropdown.
+				if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+					jQuery( this ).autocomplete( 'search', this.value );
+				}
+			} );
+		}
+	}
+
+	function autoCompleteSelectFromResults( event, ui ) {
+		event.preventDefault();
+
+		if ( ui.item.value === '' ) {
+			this.value = '';
+		} else {
+			this.value = ui.item.label;
+		}
+
+		this.nextElementSibling.value = ui.item.value;
+	}
+
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
 		jQuery.ajax( {
@@ -5230,6 +5280,9 @@ function frmAdminBuildJS() {
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			} );
+
+            // Page Selection Autocomplete
+			initPageSelectionAutocomplete();
 		},
 
 		panelInit: function() {

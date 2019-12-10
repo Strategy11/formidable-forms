@@ -1011,26 +1011,90 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Autocomplete page admin ajax endpoint
+	 *
+	 * @since 4.03.06
+	 */
+	public static function page_search() {
+		global $wpdb;
+
+		$nonce = self::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
+		$term = self::get_param( 'term', '', 'get', 'sanitize_text_field' );
+
+		if ( ! wp_verify_nonce( $nonce, 'frm_ajax' ) ) {
+			wp_send_json(
+				array(
+					'status'  => 'error',
+					'message' => esc_html__( 'You do not have permission to do that', 'formidable' ),
+				)
+			);
+		}
+
+		$results = array();
+		$pages = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT ID, post_title FROM {$wpdb->posts}
+				WHERE post_status = %s AND post_type = %s AND post_title LIKE %s
+				LIMIT 25",
+				'publish',
+				'page',
+				'%' . $wpdb->esc_like( $term ) . '%'
+			)
+		);
+
+		if ( count( $pages ) ) {
+			foreach ( $pages as $page ) {
+				$results[] = array(
+					'value' => $page->ID,
+					'label' => $page->post_title,
+				);
+			}
+		}
+
+		wp_send_json( $results );
+	}
+
+	/**
+	 * Renders an autocomplete page selection or a regular dropdown depending on
+	 * the total page count
+	 *
+	 * @since 4.03.06
+	 */
+	public static function maybe_autocomplete_pages_options( $args ) {
+		$args = self::preformat_selection_args( $args );
+
+		$pages_count = wp_count_posts( 'page' );
+
+		if ( $pages_count->publish <= 50 ) {
+			self::wp_pages_dropdown( $args );
+			return;
+		}
+
+		wp_enqueue_script( 'jquery-ui-autocomplete' );
+
+		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+		$title = '';
+
+		if ( $selected ) {
+			$title = get_the_title( $selected );
+		}
+
+		?>
+		<input type="text" class="frm-page-search"
+			placeholder="<?php esc_html_e( 'Select a Page...', 'formidable' ); ?>"
+			value="<?php echo esc_attr( $title ); ?>" />
+		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
+			value="<?php echo esc_attr( $selected ); ?>" />
+		<?php
+	}
+
+	/**
 	 * @param array   $args
 	 * @param string  $page_id Deprecated.
 	 * @param boolean $truncate Deprecated.
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
-		if ( ! is_array( $args ) ) {
-			$args = array(
-				'field_name' => $args,
-				'page_id'    => $page_id,
-				'truncate'   => $truncate,
-			);
-		}
-
-		$defaults = array(
-			'truncate'    => false,
-			'placeholder' => ' ',
-			'field_name'  => '',
-			'page_id'     => '',
-		);
-		$args = array_merge( $defaults, $args );
+		self::prep_page_dropdown_params( $page_id, $truncate, $args );
 
 		$pages    = self::get_pages();
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
@@ -1040,11 +1104,45 @@ class FrmAppHelper {
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
 				</option>
 			<?php } ?>
 		</select>
 		<?php
+	}
+
+	/**
+	 * Fill in missing parameters passed to wp_pages_dropdown().
+	 * This is for reverse compatibility with switching 3 params to 1.
+	 *
+	 * @since 4.03.06
+	 */
+	private static function prep_page_dropdown_params( $page_id, $truncate, &$args ) {
+		if ( ! is_array( $args ) ) {
+			$args = array(
+				'field_name' => $args,
+				'page_id'    => $page_id,
+				'truncate'   => $truncate,
+			);
+		}
+
+		$args = self::preformat_selection_args( $args );
+	}
+
+	/**
+	 * Filter to format args for page dropdown or autocomplete
+	 *
+	 * @since 4.03.06
+	 */
+	private static function preformat_selection_args( $args ) {
+		$defaults = array(
+			'truncate'    => false,
+			'placeholder' => ' ',
+			'field_name'  => '',
+			'page_id'     => '',
+		);
+
+		return array_merge( $defaults, $args );
 	}
 
 	public static function post_edit_link( $post_id ) {
@@ -2208,6 +2306,7 @@ class FrmAppHelper {
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),
 				'active'            => __( 'Active', 'formidable' ),
+				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
 			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 		}
