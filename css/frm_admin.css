@@ -3747,22 +3747,29 @@ h2.frm-h2,
 	width: 95%;
 }
 
-#form_settings_page .ui-autocomplete {
+.frm_wrap .ui-autocomplete {
 	box-shadow: none;
-	border: 1px solid #ccc;
+	border: 1px solid var(--grey-border);
+	border-radius: var(--small-radius);
 	background: var(--lightest-grey);
 	position: absolute;
+	padding: 3px 0;
 	font-size: 15px;
 }
 
-#form_settings_page .ui-autocomplete li {
-	padding: 10px;
+.frm_wrap .ui-widget {
+	font-family: inherit;
+}
+
+.frm_wrap .ui-autocomplete li {
+	padding: 2px 10px;
 	background: none;
 	color: var(--dark-grey);
 	border: none;
+	font-weight: normal;
 }
 
-#form_settings_page .ui-autocomplete li.ui-state-focus {
+.frm_wrap .ui-autocomplete li.ui-state-focus {
 	background: rgb(65, 153, 253);
 	color: #fff;
 }

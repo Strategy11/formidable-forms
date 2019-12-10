@@ -1015,7 +1015,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.04
 	 */
-	public static function wp_ajax_frm_page_search() {
+	public static function page_search() {
 		global $wpdb;
 
 		$nonce = self::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
@@ -1024,8 +1024,8 @@ class FrmAppHelper {
 		if ( ! wp_verify_nonce( $nonce, 'frm_ajax' ) ) {
 			wp_send_json(
 				array(
-					'status' => 'error',
-					'message' => esc_html__( 'Forbidden request', 'formidable' ),
+					'status'  => 'error',
+					'message' => esc_html__( 'You do not have permission to do that', 'formidable' ),
 				)
 			);
 		}
@@ -1033,16 +1033,9 @@ class FrmAppHelper {
 		$results = array();
 		$pages = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT
-					ID, post_title
-				FROM {$wpdb->posts}
-				WHERE
-					post_status = %s
-				AND
-					post_type = %s
-				AND
-					post_title LIKE %s
-				",
+				"SELECT ID, post_title FROM {$wpdb->posts}
+				WHERE post_status = %s AND post_type = %s AND post_title LIKE %s
+				LIMIT 25",
 				'publish',
 				'page',
 				'%' . $wpdb->esc_like( $term ) . '%'
@@ -1062,56 +1055,37 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Filter to format args for page dropdown or autocomplete
-	 *
-	 * @since 4.04
-	 */
-	public static function preformat_selection_args( $args = array() ) {
-		$defaults = array(
-			'truncate'    => false,
-			'placeholder' => ' ',
-			'field_name'  => '',
-			'page_id'     => '',
-		);
-
-		$args = array_merge( $defaults, $args );
-
-		return $args;
-	}
-
-	/**
 	* Renders an autocomplete page selection or a regular dropdown depending on
 	* the total page count
 	*
 	* @since 4.04
 	 */
-	public static function maybe_autocomplete_pages_options( $args = array() ) {
-		$args = apply_filters( 'frm_preformat_pages_selection_args', $args );
+	public static function maybe_autocomplete_pages_options( $args ) {
+		$args = self::preformat_selection_args( $args );
 
 		$pages_count = wp_count_posts( 'page' );
 
-		if ( $pages_count->publish > 25 ) {
-			wp_enqueue_script( 'jquery-ui-autocomplete' );
-
-			$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-			$title = '';
-
-			if ( $selected ) {
-				$title = get_the_title( $selected );
-			}
-
-			?>
-			<input type="text"
-				placeholder="<?php esc_html_e( 'Select a Page...', 'formidable' ); ?>"
-				class="frm-page-search"
-				value="<?php echo esc_attr( $title ); ?>" />
-			<input type="hidden"
-				name="<?php echo esc_attr( $args['field_name'] ); ?>"
-				value="<?php echo esc_attr( $selected ); ?>"/>
-			<?php
-		} else {
+		if ( $pages_count->publish <= 25 ) {
 			self::wp_pages_dropdown( $args );
+			return;
 		}
+
+		wp_enqueue_script( 'jquery-ui-autocomplete' );
+
+		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+		$title = '';
+
+		if ( $selected ) {
+			$title = get_the_title( $selected );
+		}
+
+		?>
+		<input type="text" class="frm-page-search"
+			placeholder="<?php esc_html_e( 'Select a Page...', 'formidable' ); ?>"
+			value="<?php echo esc_attr( $title ); ?>" />
+		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
+			value="<?php echo esc_attr( $selected ); ?>" />
+		<?php
 	}
 
 	/**
@@ -1120,18 +1094,7 @@ class FrmAppHelper {
 	 * @param boolean $truncate Deprecated.
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
-		if ( ! is_array( $args ) ) {
-			$args = array(
-				'field_name' => $args,
-				'page_id'    => $page_id,
-				'truncate'   => $truncate,
-			);
-		} else {
-			$args['page_id'] = ! empty( $page_id ) ? $page_id : ( isset( $args['page_id'] ) ? $args['page_id'] : '' );
-			$args['truncate'] = $truncate ? $truncate : ( isset( $args['truncate'] ) ? $args['truncate'] : false );
-		}
-
-		$args = apply_filters( 'frm_preformat_pages_selection_args', $args );
+		self::prep_page_dropdown_params( $page_id, $truncate, $args );
 
 		$pages    = self::get_pages();
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
@@ -1146,6 +1109,40 @@ class FrmAppHelper {
 			<?php } ?>
 		</select>
 		<?php
+	}
+
+	/**
+	 * Fill in missing parameters passed to wp_pages_dropdown().
+	 * This is for reverse compatibility with switching 3 params to 1.
+	 *
+	 * @since 4.04
+	 */
+	private static function prep_page_dropdown_params( $page_id, $truncate, &$args ) {
+		if ( ! is_array( $args ) ) {
+			$args = array(
+				'field_name' => $args,
+				'page_id'    => $page_id,
+				'truncate'   => $truncate,
+			);
+		}
+
+		$args = self::preformat_selection_args( $args );
+	}
+
+	/**
+	 * Filter to format args for page dropdown or autocomplete
+	 *
+	 * @since 4.04
+	 */
+	private static function preformat_selection_args( $args ) {
+		$defaults = array(
+			'truncate'    => false,
+			'placeholder' => ' ',
+			'field_name'  => '',
+			'page_id'     => '',
+		);
+
+		return array_merge( $defaults, $args );
 	}
 
 	public static function post_edit_link( $post_id ) {

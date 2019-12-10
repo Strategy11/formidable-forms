@@ -4626,28 +4626,14 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
-	function autoCompleteSelectFromResults( event, ui ) {
-		var new_label = '';
-		var new_value = '';
-
-		event.preventDefault();
-
-		if( ui.item.value ) {
-			new_label = ui.item.label;
-			new_value = ui.item.value;
-		}
-
-		jQuery( this ).val( new_label );
-		jQuery( this ).next( 'input[type="hidden"]' ).val( new_value );
-	}
-
 	function initPageSelectionAutocomplete() {
-		if( jQuery.fn.autocomplete && jQuery( '.frm-page-search' ).length > 0 ) {
+		if ( jQuery.fn.autocomplete && jQuery( '.frm-page-search' ).length > 0 ) {
 			jQuery( '.frm-page-search' ).autocomplete( {
-				delay: 200,
+				delay: 100,
 				minLength: 0,
-				source: ajaxurl + '?action=page_search&nonce=' + frmGlobal.nonce,
+				source: ajaxurl + '?action=frm_page_search&nonce=' + frmGlobal.nonce,
 				select: autoCompleteSelectFromResults,
+				focus: autoCompleteSelectFromResults,
 				position: {
 					my: 'left top',
 					at: 'left bottom',
@@ -4659,7 +4645,6 @@ function frmAdminBuildJS() {
 						ui.content.push( noResult );
 					}
 				},
-				focus: autoCompleteSelectFromResults,
 				create: function( event, ui ) {
 					var $container = jQuery( this ).parents( '.frm_page_selection' );
 
@@ -4669,8 +4654,21 @@ function frmAdminBuildJS() {
 
 					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
 				}
+			} )
+			.focus( function(){
+				// Show options on click to make it work more like a dropdown.
+				if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+					jQuery( this ).autocomplete( 'search', this.value );
+				}
 			} );
 		}
+	}
+
+	function autoCompleteSelectFromResults( event, ui ) {
+		event.preventDefault();
+
+		this.value = ui.item.label;
+		this.nextElementSibling.value = ui.item.value;
 	}
 
 	function frmApiPreview( cont, link ) {
