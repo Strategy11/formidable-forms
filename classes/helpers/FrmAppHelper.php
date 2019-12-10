@@ -1015,7 +1015,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.04
 	 */
-	public static function page_search() {
+	public static function wp_ajax_frm_page_search() {
 		global $wpdb;
 
 		$nonce = self::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
