@@ -3760,7 +3760,7 @@ h2.frm-h2,
 	color: var(--dark-grey);
 }
 
-#form_settings_page .ui-autocomplete li:hover {
+#form_settings_page .ui-autocomplete li.ui-state-focus {
 	background: rgb(65, 153, 253);
 	border: none;
 	color: #fff;

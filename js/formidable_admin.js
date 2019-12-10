@@ -4626,29 +4626,30 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
+	function autoCompleteSelectFromResults( event, ui ) {
+		var new_label = '';
+		var new_value = '';
+
+		event.preventDefault();
+
+		if( ui.item.value ) {
+			new_label = ui.item.label;
+			new_value = ui.item.value;
+		}
+
+		jQuery( this ).val( new_label );
+		jQuery( this ).next( 'input[type="hidden"]' ).val( new_value );
+	}
+
 	function initPageSelectionAutocomplete() {
 		if(jQuery.fn.autocomplete && jQuery('.frm-page-search').length > 0) {
+
+
 			jQuery('.frm-page-search').autocomplete( {
 				delay: 200,
-				classes: {
-					'ui-autocomplete': 'highlight'
-				},
 				minLength: 0,
 				source: ajaxurl + '?action=page_search&nonce=' + frmGlobal.nonce,
-				select: function(event, ui) {
-					var new_label = '';
-					var new_value = '';
-
-					if(ui.item.value) {
-						new_label = ui.item.label;
-						new_value = ui.item.value;
-					}
-
-					jQuery(this).val(new_label);
-					jQuery(this).next("input[type='hidden']").val(new_value);
-
-					return false;
-				},
+				select: autoCompleteSelectFromResults,
 				position: {
 					my: 'left top',
 					at: 'left bottom',
@@ -4659,7 +4660,8 @@ function frmAdminBuildJS() {
 						var noResult = { value: '', label: frm_admin_js.no_items_found };
 						ui.content.push(noResult);
 					}
-				}
+				},
+				focus: autoCompleteSelectFromResults
 			} );
 		}
 	}
