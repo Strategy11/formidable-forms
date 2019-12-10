@@ -24,6 +24,8 @@
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
 	--biggest-sidebar: 450px;
+	--wp-sidebar-width: 160px;
+	--scrollbar-cushion: 10px;
 }
 
 a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
@@ -486,6 +488,20 @@ ul.frm_form_nav > li {
 	width: auto;
 	float: none;
 	flex: 2;
+}
+
+#frm_builder_page  .frm_page_container,
+#form_settings_page .frm_page_container,
+#frm_styling_form,
+#form_global_settings {
+	width: calc(100vw - var(--wp-sidebar-width) - var(--scrollbar-cushion));
+}
+
+#frm_builder_page.frm_wrap #post-body-content,
+#form_settings_page.frm_wrap #post-body-content,
+#frm_styling_form #post-body-content,
+#form_global_settings #post-body-content {
+	min-width: auto;
 }
 
 .frm_wrap .columns-2 {
@@ -1919,6 +1935,20 @@ table.frm-list-templates thead th {
 
 .frm-admin-page-formidableedit #frm_builder_page {
 	display: block !important;
+}
+
+.frm-admin-page-formidableedit #frm_builder_page,
+#form_settings_page,
+#frm_styling_form,
+#form_global_settings {
+       position: fixed;
+}
+
+.frm-admin-page-formidableedit #wpfooter,
+.frm-admin-page-formidablesettings #wpfooter,
+.formidable_page_formidable-styles #wpfooter,
+.formidable_page_formidable-settings #wpfooter {
+       display: none;
 }
 
 .frm-white-body .updated,
@@ -6738,6 +6768,10 @@ Responsive Design
 }
 
 @media only screen and (max-width: 960px) {
+	.frm_wrap {
+		--wp-sidebar-width: 36px;
+	}
+
 	.auto-fold #adminmenuwrap {
 		width: 36px;
 	}
@@ -6863,7 +6897,9 @@ Responsive Design
 @media only screen and (max-width: 782px) {
 	.frm_wrap {
 		--small-sidebar: 20%;
-		--medium-sidebar: 35%
+		--medium-sidebar: 35%;
+		--wp-sidebar-width: 0px;
+		--scrollbar-cushion: 0vw;
 	}
 
 	#form_settings_page .advanced_settings .form-table td, .form-table th {
