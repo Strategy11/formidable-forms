@@ -1025,7 +1025,7 @@ class FrmAppHelper {
 			wp_send_json(
 				array(
 					'status' => 'error',
-					'message' => esc_html__('Forbidden request', 'formidable'),
+					'message' => esc_html__( 'Forbidden request', 'formidable' ),
 				)
 			);
 		}
@@ -1102,7 +1102,7 @@ class FrmAppHelper {
 
 			?>
 			<input type="text"
-				placeholder="<?php esc_html_e( 'Search page...', 'formidable' ); ?>"
+				placeholder="<?php esc_html_e( 'Select a Page...', 'formidable' ); ?>"
 				class="frm-page-search"
 				value="<?php echo esc_attr( $title ); ?>" />
 			<input type="hidden"
@@ -1127,7 +1127,7 @@ class FrmAppHelper {
 				'truncate'   => $truncate,
 			);
 		} else {
-			$args['page_id'] = ! empty ( $page_id ) ? $page_id : ( isset( $args['page_id'] ) ? $args['page_id'] : '' );
+			$args['page_id'] = ! empty( $page_id ) ? $page_id : ( isset( $args['page_id'] ) ? $args['page_id'] : '' );
 			$args['truncate'] = $truncate ? $truncate : ( isset( $args['truncate'] ) ? $args['truncate'] : false );
 		}
 
