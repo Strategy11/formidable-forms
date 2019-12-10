@@ -3752,17 +3752,18 @@ h2.frm-h2,
 	border: 1px solid #ccc;
 	background: var(--lightest-grey);
 	position: absolute;
+	font-size: 15px;
 }
 
 #form_settings_page .ui-autocomplete li {
 	padding: 10px;
 	background: none;
 	color: var(--dark-grey);
+	border: none;
 }
 
 #form_settings_page .ui-autocomplete li.ui-state-focus {
 	background: rgb(65, 153, 253);
-	border: none;
 	color: #fff;
 }
 
