@@ -4659,7 +4659,16 @@ function frmAdminBuildJS() {
 						ui.content.push( noResult );
 					}
 				},
-				focus: autoCompleteSelectFromResults
+				focus: autoCompleteSelectFromResults,
+				create: function( event, ui ) {
+					var $container = jQuery( this ).parents( '.frm_page_selection' );
+
+					if ( $container.length == 0 ) {
+						$container = 'body';
+					}
+
+					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+				}
 			} );
 		}
 	}
