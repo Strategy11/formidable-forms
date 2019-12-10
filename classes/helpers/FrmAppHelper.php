@@ -1126,6 +1126,9 @@ class FrmAppHelper {
 				'page_id'    => $page_id,
 				'truncate'   => $truncate,
 			);
+		} else {
+			$args['page_id'] = ! empty ( $page_id ) ? $page_id : ( isset( $args['page_id'] ) ? $args['page_id'] : '' );
+			$args['truncate'] = $truncate ? $truncate : ( isset( $args['truncate'] ) ? $args['truncate'] : false );
 		}
 
 		$args = apply_filters( 'frm_preformat_pages_selection_args', $args );
