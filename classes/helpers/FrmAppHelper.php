@@ -1025,7 +1025,7 @@ class FrmAppHelper {
 			wp_send_json(
 				array(
 					'status' => 'error',
-					'message' => 'Forbidden request',
+					'message' => esc_html__('Forbidden request', 'formidable'),
 				)
 			);
 		}
