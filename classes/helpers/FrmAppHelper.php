@@ -1013,7 +1013,7 @@ class FrmAppHelper {
 	/**
 	 * Autocomplete page admin ajax endpoint
 	 *
-	 * @since 4.04
+	 * @since 4.03.06
 	 */
 	public static function page_search() {
 		global $wpdb;
@@ -1055,17 +1055,17 @@ class FrmAppHelper {
 	}
 
 	/**
-	* Renders an autocomplete page selection or a regular dropdown depending on
-	* the total page count
-	*
-	* @since 4.04
+	 * Renders an autocomplete page selection or a regular dropdown depending on
+	 * the total page count
+	 *
+	 * @since 4.03.06
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
 		$args = self::preformat_selection_args( $args );
 
 		$pages_count = wp_count_posts( 'page' );
 
-		if ( $pages_count->publish <= 25 ) {
+		if ( $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
 			return;
 		}
@@ -1115,7 +1115,7 @@ class FrmAppHelper {
 	 * Fill in missing parameters passed to wp_pages_dropdown().
 	 * This is for reverse compatibility with switching 3 params to 1.
 	 *
-	 * @since 4.04
+	 * @since 4.03.06
 	 */
 	private static function prep_page_dropdown_params( $page_id, $truncate, &$args ) {
 		if ( ! is_array( $args ) ) {
@@ -1132,7 +1132,7 @@ class FrmAppHelper {
 	/**
 	 * Filter to format args for page dropdown or autocomplete
 	 *
-	 * @since 4.04
+	 * @since 4.03.06
 	 */
 	private static function preformat_selection_args( $args ) {
 		$defaults = array(
