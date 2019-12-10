@@ -1034,7 +1034,7 @@ class FrmAppHelper {
 		$pages = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT
-					*
+					ID, post_title
 				FROM {$wpdb->posts}
 				WHERE
 					post_status = %s
