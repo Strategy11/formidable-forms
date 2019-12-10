@@ -128,7 +128,7 @@ class FrmHooksController {
 		add_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
 		add_action( 'wp_ajax_frm_settings_tab', 'FrmSettingsController::load_settings_tab' );
 		add_action( 'wp_ajax_page_search', 'FrmAppHelper::page_search' );
-		add_filter( 'frm_preformat_pages_selection_args', 'FrmAppHelper::frm_preformat_selection_args', 10, 3 );
+		add_filter( 'frm_preformat_pages_selection_args', 'FrmAppHelper::preformat_selection_args', 10, 3 );
 
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );

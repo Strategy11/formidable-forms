@@ -1066,7 +1066,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.04
 	 */
-	public static function frm_preformat_selection_args( $args = array() ) {
+	public static function preformat_selection_args( $args = array() ) {
 		$defaults = array(
 			'truncate'    => false,
 			'placeholder' => ' ',
