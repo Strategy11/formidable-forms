@@ -90,6 +90,7 @@
 					array(
 						'field_name'  => 'options[success_page_id]',
 						'page_id'     => isset( $values['success_page_id'] ) ? $values['success_page_id'] : '',
+						'placeholder' => __( 'Select a Page', 'formidable' ),
 					)
 				);
 				?>
