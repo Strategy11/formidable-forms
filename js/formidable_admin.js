@@ -4642,10 +4642,8 @@ function frmAdminBuildJS() {
 	}
 
 	function initPageSelectionAutocomplete() {
-		if(jQuery.fn.autocomplete && jQuery('.frm-page-search').length > 0) {
-
-
-			jQuery('.frm-page-search').autocomplete( {
+		if( jQuery.fn.autocomplete && jQuery( '.frm-page-search' ).length > 0 ) {
+			jQuery( '.frm-page-search' ).autocomplete( {
 				delay: 200,
 				minLength: 0,
 				source: ajaxurl + '?action=page_search&nonce=' + frmGlobal.nonce,
@@ -4655,10 +4653,10 @@ function frmAdminBuildJS() {
 					at: 'left bottom',
 					collision: 'flip'
 				},
-				response: function(event, ui) {
+				response: function( event, ui ) {
 					if ( !ui.content.length ) {
 						var noResult = { value: '', label: frm_admin_js.no_items_found };
-						ui.content.push(noResult);
+						ui.content.push( noResult );
 					}
 				},
 				focus: autoCompleteSelectFromResults
