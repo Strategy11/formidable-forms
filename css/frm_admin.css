@@ -493,7 +493,7 @@ ul.frm_form_nav > li {
 
 #frm_builder_page  .frm_page_container,
 #form_settings_page .frm_page_container,
-#frm_styling_form,
+.formidable_page_formidable-styles .frm_page_container,
 #form_global_settings {
 	width: calc(100vw - var(--wp-sidebar-width) - var(--scrollbar-cushion));
 }
@@ -501,6 +501,7 @@ ul.frm_form_nav > li {
 #frm_builder_page.frm_wrap #post-body-content,
 #form_settings_page.frm_wrap #post-body-content,
 #frm_styling_form #post-body-content,
+.formidable_page_formidable-styles #post-body-content,
 #form_global_settings #post-body-content {
 	min-width: auto;
 }
@@ -1940,7 +1941,7 @@ table.frm-list-templates thead th {
 
 .frm-admin-page-formidableedit #frm_builder_page,
 #form_settings_page,
-#frm_styling_form,
+.formidable_page_formidable-styles .frm_page_container,
 #form_global_settings {
        position: fixed;
 }
