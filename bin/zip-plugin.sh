@@ -35,6 +35,7 @@ status "Creating archive..."
 zip -r $zipname $destination \
 	-x "*/.*" \
 	-x "*/.git/*" \
+	-x "*/.github/*" \
 	-x "*/bin/*" \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \

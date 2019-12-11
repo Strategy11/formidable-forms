@@ -1081,7 +1081,7 @@ class FrmAppHelper {
 
 		?>
 		<input type="text" class="frm-page-search"
-			placeholder="<?php esc_html_e( 'Select a Page...', 'formidable' ); ?>"
+			placeholder="<?php esc_html_e( 'Select a Page', 'formidable' ); ?>"
 			value="<?php echo esc_attr( $title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
 			value="<?php echo esc_attr( $selected ); ?>" />
