@@ -2554,7 +2554,7 @@ function frmAdminBuildJS() {
 			isProduct = isProductField( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
-			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 ) {
+			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
 				continue;
 			}
 			saved = optVals[ i ].value;
@@ -5658,9 +5658,8 @@ function frmAdminBuildJS() {
 
 		updateOpts: function( field_id, opts, modal ) {
 			var separate = usingSeparateValues( field_id ),
-			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' ),
-			action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
-			empty( $fieldOpts );
+				$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' ),
+				action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
 			jQuery.ajax( {
 				type: 'POST',
 				url: ajaxurl,
