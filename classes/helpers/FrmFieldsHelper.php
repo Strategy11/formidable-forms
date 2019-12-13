@@ -192,7 +192,9 @@ class FrmFieldsHelper {
 			// TODO: Remove stripslashes on output, and use on input only.
 			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
 		} else {
-			$value = wp_kses_post( wp_unslash( $_POST['field_options'][ $setting ] ) );
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$value = wp_unslash( $_POST['field_options'][ $setting ] );
+			FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
 		}
 	}
 
