@@ -604,7 +604,9 @@ class FrmFieldsHelper {
 			$value = trim( $value );
 		}
 
-		return wp_kses_post( $value );
+		FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+
+		return $value;
 	}
 
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
