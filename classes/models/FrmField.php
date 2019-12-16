@@ -953,7 +953,18 @@ class FrmField {
 	}
 
 	public static function get_option_in_array( $field, $option ) {
-		return isset( $field[ $option ] ) ? $field[ $option ] : '';
+		/**
+		 * @since 4.04
+		 */
+		if ( isset( $field[ $option ] ) && ! empty( $field[ $option ] ) ) {
+			return $field[ $option ];
+
+		} elseif ( isset( $field['field_options'] ) && is_array( $field['field_options'] ) ) {
+
+			return isset( $field['field_options'][ $option ] ) ? $field['field_options'][ $option ] : '';
+		}
+
+		return '';
 	}
 
 	public static function get_option_in_object( $field, $option ) {
