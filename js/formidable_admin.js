@@ -4626,42 +4626,51 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
-	function initPageSelectionAutocomplete() {
-		if ( jQuery.fn.autocomplete && jQuery( '.frm-page-search' ).length > 0 ) {
-			jQuery( '.frm-page-search' ).autocomplete( {
-				delay: 100,
-				minLength: 0,
-				source: ajaxurl + '?action=frm_page_search&nonce=' + frmGlobal.nonce,
-				select: autoCompleteSelectFromResults,
-				focus: autoCompleteSelectFromResults,
-				position: {
-					my: 'left top',
-					at: 'left bottom',
-					collision: 'flip'
-				},
-				response: function( event, ui ) {
-					if ( !ui.content.length ) {
-						var noResult = { value: '', label: frm_admin_js.no_items_found };
-						ui.content.push( noResult );
-					}
-				},
-				create: function( event, ui ) {
-					var $container = jQuery( this ).parent();
-
-					if ( $container.length == 0 ) {
-						$container = 'body';
-					}
-
-					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
-				}
-			} )
-			.focus( function(){
-				// Show options on click to make it work more like a dropdown.
-				if ( this.value === '' || this.nextElementSibling.value < 1 ) {
-					jQuery( this ).autocomplete( 'search', this.value );
-				}
-			} );
+	function initSelectionAutocomplete() {
+		if ( jQuery.fn.autocomplete ) {
+			initAutocomplete( 'page' );
+			initAutocomplete( 'user' );
 		}
+	}
+
+	function initAutocomplete( type ) {
+		if ( jQuery( '.frm-' + type + '-search' ).length < 1 ) {
+			return;
+		}
+
+		jQuery( '.frm-' + type + '-search' ).autocomplete( {
+			delay: 100,
+			minLength: 0,
+			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
+			select: autoCompleteSelectFromResults,
+			focus: autoCompleteSelectFromResults,
+			position: {
+				my: 'left top',
+				at: 'left bottom',
+				collision: 'flip'
+			},
+			response: function( event, ui ) {
+				if ( !ui.content.length ) {
+					var noResult = { value: '', label: frm_admin_js.no_items_found };
+					ui.content.push( noResult );
+				}
+			},
+			create: function( event, ui ) {
+				var $container = jQuery( this ).parent();
+
+				if ( $container.length == 0 ) {
+					$container = 'body';
+				}
+
+				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+			}
+		} )
+		.focus( function(){
+			// Show options on click to make it work more like a dropdown.
+			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+				jQuery( this ).autocomplete( 'search', this.value );
+			}
+		} );
 	}
 
 	function autoCompleteSelectFromResults( event, ui ) {
@@ -4965,6 +4974,7 @@ function frmAdminBuildJS() {
 			} else {
 				// New form selection page
 				initNewFormModal();
+				initSelectionAutocomplete();
 
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
@@ -5282,7 +5292,7 @@ function frmAdminBuildJS() {
 			} );
 
             // Page Selection Autocomplete
-			initPageSelectionAutocomplete();
+			initSelectionAutocomplete();
 		},
 
 		panelInit: function() {
