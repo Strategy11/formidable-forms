@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.03.06 =
+* New: Use autocomplete for settings for selecting a WordPress page for faster load time on sites with many pages.
+* Fix: When saving conditional logic settings in WP 5.3.1, there was a PHP error message showing on some sites.
+* Fix: Custom CSS was being sanitized incorrectly and > was switched to &rt;
+
 = 4.03.05 =
 * New: Add a center alignment option for section headings.
 * Keep the add field & field options links fixed to prevent extra scrolling to add more fields.

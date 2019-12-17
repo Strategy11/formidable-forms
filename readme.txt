@@ -4,7 +4,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.2.3
 Requires PHP: 5.6
-Stable tag: 4.03.05
+Stable tag: 4.03.06
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -356,16 +356,16 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced forms, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 == Changelog ==
+= 4.03.06 =
+* New: Use autocomplete for settings for selecting a WordPress page for faster load time on sites with many pages.
+* Fix: When saving conditional logic settings in WP 5.3.1, there was a PHP error message showing on some sites.
+* Fix: Custom CSS was being sanitized incorrectly and > was switched to &rt;
+
 = 4.03.05 =
 * New: Add a center alignment option for section headings.
 * Keep the add field & field options links fixed to prevent extra scrolling to add more fields.
 * Add live searching on the add-ons page.
 * Fix: When only one box was selected for the default value in a checkbox field, it wasn't being checked.
 * Fix: Recaptcha labels are included for accessibility.
-
-= 4.03.04 =
-* Better compatibility with WP 5.3.
-* Switch from using date to gmdate per WP codestyling recommendations.
-* Fix: Prevent undefined get_plugins error on some sites.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
