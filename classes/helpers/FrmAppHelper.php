@@ -1016,19 +1016,12 @@ class FrmAppHelper {
 	 * @since 4.03.06
 	 */
 	public static function page_search() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
 		global $wpdb;
 
-		$nonce = self::get_param( 'nonce', '', 'get', 'sanitize_text_field' );
 		$term = self::get_param( 'term', '', 'get', 'sanitize_text_field' );
-
-		if ( ! wp_verify_nonce( $nonce, 'frm_ajax' ) ) {
-			wp_send_json(
-				array(
-					'status'  => 'error',
-					'message' => esc_html__( 'You do not have permission to do that', 'formidable' ),
-				)
-			);
-		}
 
 		$results = array();
 		$pages = $wpdb->get_results(
