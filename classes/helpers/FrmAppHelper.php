@@ -1023,25 +1023,25 @@ class FrmAppHelper {
 
 		$term = self::get_param( 'term', '', 'get', 'sanitize_text_field' );
 
-		$results = array();
-		$pages = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT ID, post_title FROM {$wpdb->posts}
-				WHERE post_status = %s AND post_type = %s AND post_title LIKE %s
-				LIMIT 25",
-				'publish',
-				'page',
-				'%' . $wpdb->esc_like( $term ) . '%'
-			)
+		$where = array(
+			'post_status'     => 'publish',
+			'post_type'       => 'page',
+			'post_title LIKE' => $term,
 		);
 
-		if ( count( $pages ) ) {
-			foreach ( $pages as $page ) {
-				$results[] = array(
-					'value' => $page->ID,
-					'label' => $page->post_title,
-				);
-			}
+		$atts = array(
+			'limit'    => 25,
+			'order_by' => 'post_title'
+		);
+
+		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
+
+		$results = array();
+		foreach ( $pages as $page ) {
+			$results[] = array(
+				'value' => $page->ID,
+				'label' => $page->post_title,
+			);
 		}
 
 		wp_send_json( $results );
