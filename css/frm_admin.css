@@ -3770,6 +3770,9 @@ h2.frm-h2,
 	position: absolute;
 	padding: 3px 0;
 	font-size: 15px;
+	max-height: 310px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .frm_wrap .ui-widget {

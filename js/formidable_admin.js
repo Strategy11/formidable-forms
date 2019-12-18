@@ -4643,7 +4643,7 @@ function frmAdminBuildJS() {
 			minLength: 0,
 			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
 			select: autoCompleteSelectFromResults,
-			focus: autoCompleteSelectFromResults,
+			focus: autoCompleteFocus,
 			position: {
 				my: 'left top',
 				at: 'left bottom',
@@ -4673,8 +4673,15 @@ function frmAdminBuildJS() {
 		} );
 	}
 
-	function autoCompleteSelectFromResults( event, ui ) {
-		event.preventDefault();
+	/**
+	 * Prevent the value from changing when using keyboard to scroll.
+	 */
+	function autoCompleteFocus( e, ui ) {
+		return false;
+	}
+
+	function autoCompleteSelectFromResults( e, ui ) {
+		e.preventDefault();
 
 		if ( ui.item.value === '' ) {
 			this.value = '';
