@@ -315,7 +315,7 @@ class FrmSettingsController {
 
 		$atts = array(
 			'limit'    => 25,
-			'order_by' => 'post_title'
+			'order_by' => 'post_title',
 		);
 
 		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
