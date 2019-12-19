@@ -350,7 +350,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		jQuery('.frm-confirm-msg').html( link.getAttribute( 'data-frmverify' ) );
+		var caution = link.getAttribute('data-frmcaution');
+		var cautionHtml = caution ? '<span class="frm-caution">' + caution + '</span> ' : '';
+
+		jQuery('.frm-confirm-msg').html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
 
 		removeAtts = continueButton.dataset;
 		for ( i in dataAtts ) {
@@ -1871,9 +1874,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		// If deleting a section, add an extra message.
+		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirm_msg += '\n\n' + frm_admin_js.conf_delete_sec;
+			confirm_msg = frm_admin_js.conf_delete_sec;
+			this.setAttribute('data-frmcaution', frm_admin_js.caution);
 		}
 
 		this.setAttribute( 'data-frmverify', confirm_msg );

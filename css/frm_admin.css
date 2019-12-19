@@ -5770,6 +5770,12 @@ ul .frm_col_two {
 	color: var(--orange)
 }
 
+.frm-caution {
+	text-transform: uppercase;
+	font-weight: bold;
+	color: var(--dark-grey);
+}
+
 .field_type_list > li {
 	width: 50%;
 }
