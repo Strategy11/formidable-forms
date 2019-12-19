@@ -2282,7 +2282,7 @@ class FrmAppHelper {
 				'caution'           => __( 'Heads up', 'formidable' ),
 				'confirm'           => __( 'Are you sure?', 'formidable' ),
 				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
-				'conf_delete_sec'   => __( 'All fields inside this Section and associated data will also be deleted.  Are you sure you want to delete this Section?', 'formidable' ),
+				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
 				'conf_no_repeat'    => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
 				'default_unique'    => $frm_settings->unique_msg,
 				'default_conf'      => __( 'The entered values do not match', 'formidable' ),
