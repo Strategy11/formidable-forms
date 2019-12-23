@@ -2202,6 +2202,8 @@ class FrmAppHelper {
 	 * @param string $location
 	 */
 	public static function localize_script( $location ) {
+		global $wp_scripts;
+
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
@@ -2218,7 +2220,11 @@ class FrmAppHelper {
 			'calc_error'   => __( 'There is an error in the calculation in the field with key', 'formidable' ),
 			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 		);
-		wp_localize_script( 'formidable', 'frm_js', $script_strings );
+
+		$data = $wp_scripts->get_data( 'formidable', 'data' );
+		if ( empty( $data ) ) {
+			wp_localize_script( 'formidable', 'frm_js', $script_strings );
+		}
 
 		if ( $location == 'admin' ) {
 			$frm_settings         = self::get_settings();
@@ -2265,7 +2271,11 @@ class FrmAppHelper {
 				'active'            => __( 'Active', 'formidable' ),
 				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
-			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
+
+			$data = $wp_scripts->get_data( 'formidable_admin', 'data' );
+			if ( empty( $data ) ) {
+				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
+			}
 		}
 	}
 
