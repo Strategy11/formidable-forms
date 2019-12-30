@@ -61,7 +61,10 @@
 </p>
 
 <p>
-	<label class="frm_left_label"><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?></label>
+	<label class="frm_left_label"><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon"
+			 title="<?php esc_attr_e( 'The default label for the submit button.', 'formidable' ); ?>"></span>
+	</label>
 	<input type="text"
 		value="<?php echo esc_attr( $frm_settings->submit_value ); ?>"
 		id="frm_submit_value" name="frm_submit_value"
