@@ -14,7 +14,6 @@
 	--sidebar-hover: rgb(227, 232, 235);
 	--primary-color: rgb(65, 153, 253);
 	--primary-hover: rgb(49, 119, 199);
-	--tooltip-font-size: 14px;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
@@ -594,8 +593,10 @@ p.frm_has_shortcodes {
 	text-align: center;
 }
 
+#frm_info_modal .dismiss .frmsvg,
 #frm_confirm_modal .dismiss .frmsvg,
 #frm_upgrade_modal .dismiss .frmsvg,
+#frm_info_modal .dismiss i,
 #frm_confirm_modal .dismiss i,
 #frm_upgrade_modal .dismiss i {
 	top: 7px;
@@ -1501,6 +1502,7 @@ form .frm_blank_field label {
 }
 
 .frm_error_style,
+.frm_warning_style,
 .frm_message,
 #post-body-content .frm_updated_message,
 div.frm_updated_message {
@@ -1526,6 +1528,13 @@ div.frm_updated_message {
 	color: #B94A48;
 	border-color: #EBCCD1;
 	background-color: #F2DEDE;
+}
+
+.frm_warning_style {
+	color: #4c4c40;
+	border-color: #e6e6c2;
+	background-color: #ffffd7;
+	padding-top: 15px
 }
 
 .frm_updated_message ul,
