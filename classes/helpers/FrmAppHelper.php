@@ -1108,37 +1108,11 @@ class FrmAppHelper {
 		$post = get_post( $post_id );
 		if ( $post ) {
 			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-			$post_url = self::maybe_full_screen_link( $post_url );
 
 			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
 		}
 
 		return '';
-	}
-
-	/**
-	 * Hide the WordPress menus on some pages.
-	 *
-	 * @since 4.0
-	 */
-	public static function is_full_screen() {
-		$action       = self::simple_get( 'frm_action', 'sanitize_title' );
-		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
-		$styler       = self::is_admin_page( 'formidable-styles' );
-		$full_entries = self::simple_get( 'frm-full', 'absint' );
-
-		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
-	}
-
-	/**
-	 * @since 4.0
-	 */
-	public static function maybe_full_screen_link( $link ) {
-		$is_full = self::simple_get( 'frm-full', 'absint' );
-		if ( $is_full && ! empty( $link ) && $link !== '#' ) {
-			$link .= '&frm-full=1';
-		}
-		return $link;
 	}
 
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
@@ -2624,5 +2598,25 @@ class FrmAppHelper {
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		return FrmDeprecated::prepend_and_or_where( $starts_with, $where );
+	}
+
+	/**
+	 * @since 4.0
+	 * @deprecated 4.03.07
+	 */
+	public static function maybe_full_screen_link( $link ) {
+		//_deprecated_function( __METHOD__, '4.03.07' );
+		return $link;
+	}
+
+	/**
+	 * Hide the WordPress menus on some pages.
+	 *
+	 * @since 4.0
+	 * @deprecated 4.03.07
+	 */
+	public static function is_full_screen() {
+		//_deprecated_function( __METHOD__, '4.03.07' );
+		return false;
 	}
 }
