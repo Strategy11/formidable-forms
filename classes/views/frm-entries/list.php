@@ -20,7 +20,7 @@
 					<?php
 					FrmAppHelper::add_new_item_link(
 						array(
-							'new_link' => FrmAppHelper::maybe_full_screen_link( admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ) ),
+							'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
 						)
 					);
 					?>

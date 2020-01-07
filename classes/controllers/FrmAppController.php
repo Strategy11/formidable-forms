@@ -53,10 +53,6 @@ class FrmAppController {
 			}
 		}
 
-		if ( FrmAppHelper::is_full_screen() ) {
-			$classes .= apply_filters( 'frm_admin_full_screen_class', '' );
-		}
-
 		return $classes;
 	}
 
@@ -154,7 +150,7 @@ class FrmAppController {
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => admin_url( 'admin.php?page=formidable-entries&frm-full=1&frm_action=list&form=' . absint( $id ) ),
+				'link'       => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $id ) ),
 				'label'      => __( 'Entries', 'formidable' ),
 				'current'    => array(),
 				'page'       => 'formidable-entries',
