@@ -8,8 +8,10 @@ abstract class FrmFormMigrator {
 	public $path;
 	public $name;
 
-	public $response = array();
-	public $tracking = 'frm_forms_imported';
+	public $response               = array();
+	public $tracking               = 'frm_forms_imported';
+	protected $fields_map          = array();
+	protected $current_source_form = null;
 
 	/**
 	 * Define required properties.
@@ -49,7 +51,7 @@ abstract class FrmFormMigrator {
 						Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>. <br/>
 						Select the forms to import.
 					</p>
-					<form id="frm_form_importer" method="post"
+					<form class="frm_form_importer" method="post"
 						action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
@@ -73,7 +75,7 @@ abstract class FrmFormMigrator {
 						</div>
 						<button type="submit" class="button button-primary button-hero">Start Import</button>
 					</form>
-					<div id="frm-importer-process" class="frm_hidden">
+					<div class="frm-importer-process frm_hidden">
 
 						<p class="process-count">
 							<span class="frm-wait" aria-hidden="true"></span>
@@ -130,7 +132,9 @@ abstract class FrmFormMigrator {
 
 		$source_form      = $this->get_form( $source_id );
 		$source_form_name = $this->get_form_name( $source_form );
-		$source_fields    = $this->get_form_fields( $source_id );
+		$source_fields    = $this->get_form_fields( $source_form );
+
+		$this->current_source_form = $source_form;
 
 		// If form does not contain fields, bail.
 		if ( empty( $source_fields ) ) {
@@ -149,7 +153,12 @@ abstract class FrmFormMigrator {
 
 		$this->prepare_form( $source_form, $form );
 
-		return $this->add_form( $form );
+		$response = $this->add_form( $form );
+
+		// reset
+		$this->current_source_form = null;
+
+		return $response;
 	}
 
 	protected function prepare_new_form( $source_id, $source_form_name ) {
@@ -185,7 +194,7 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_field                = FrmFieldsHelper::setup_new_vars( $this->convert_field_type( $type ) );
+			$new_field                = FrmFieldsHelper::setup_new_vars( $this->convert_field_type( $field ) );
 			$new_field['name']        = $label;
 			$new_field['field_order'] = $field_order;
 			$new_field['original']    = $type;
@@ -201,8 +210,16 @@ abstract class FrmFormMigrator {
 		// customize this function
 	}
 
-	protected function convert_field_type( $type ) {
-		return $type;
+	/**
+	 * @param object|array $field
+	 * @param string       $use   Which field type to prefer to consider $field as.
+	                              This also eases the recursive use of the method,
+	                              particularly the overrides in child classes, as
+	                              there will be no need to rebuild the converter
+	                              array at usage locations.
+	 */
+	protected function convert_field_type( $field, $use = '' ) {
+		return $use ? $use : ( is_array( $field ) ? $field['type'] : $field->type );
 	}
 
 	/**
@@ -213,25 +230,13 @@ abstract class FrmFormMigrator {
 	 * @param array $form Form to import.
 	 * @param array $upgrade_omit No field alternative
 	 */
-	private function add_form( $form, $upgrade_omit = array() ) {
+	protected function add_form( $form, $upgrade_omit = array() ) {
 
 		// Create empty form so we have an ID to work with.
-		$form_id = FrmForm::create(
-			array(
-				'name'        => $form['name'],
-				'description' => $form['description'],
-				'options'     => $form['options'],
-				'form_key'    => $form['name'],
-				'status'      => 'published',
-			)
-		);
+		$form_id = $this->create_form( $form );
 
 		if ( empty( $form_id ) ) {
-			return array(
-				'error' => true,
-				'name'  => sanitize_text_field( $form['settings']['form_title'] ),
-				'msg'   => esc_html__( 'There was an error while creating a new form.', 'formidable' ),
-			);
+			return $this->form_creation_error_response( $form );
 		}
 
 		foreach ( $form['fields'] as $key => $new_field ) {
@@ -266,6 +271,26 @@ abstract class FrmFormMigrator {
 		);
 	}
 
+	protected function create_form( $form ) {
+		return FrmForm::create(
+			array(
+				'name'        => $form['name'],
+				'description' => $form['description'],
+				'options'     => $form['options'],
+				'form_key'    => $form['name'],
+				'status'      => 'published',
+			)
+		);
+	}
+
+	protected function form_creation_error_response( $form ) {
+		return array(
+			'error' => true,
+			'name'  => sanitize_text_field( $form['name'] ),
+			'msg'   => esc_html__( 'There was an error while creating a new form.', 'formidable' ),
+		);
+	}
+
 	/**
 	 * After a form has been successfully imported we track it, so that in the
 	 * future we can alert users if they try to import a form that has already
@@ -274,7 +299,7 @@ abstract class FrmFormMigrator {
 	 * @param int $source_id Imported plugin form ID
 	 * @param int $new_form_id Formidable form ID
 	 */
-	private function track_import( $source_id, $new_form_id ) {
+	protected function track_import( $source_id, $new_form_id ) {
 
 		$imported = $this->get_tracked_import();
 
@@ -370,7 +395,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array|int $source_form
+	 * @param object|array $source_form
 	 *
 	 * @return array
 	 */
