@@ -1,8 +1,8 @@
 == Changelog ==
 = 4.03.07 =
 * Project Delight: Make admin-side tooltips more enjoyable and helpful.
-* Project Delight: Adjust the process before a section is deleted to reinforce the warning about deleting all child fields.
 * Add several missing countries to the country list.
+* Fix: Prevent duplicate localization strings from showing in the page source.
 
 = 4.03.06 =
 * New: Use autocomplete for settings for selecting a WordPress page for faster load time on sites with many pages.
