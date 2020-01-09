@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.03.07 =
+* Project Delight: Make admin-side tooltips more enjoyable and helpful.
+* Project Delight: Adjust the process before a section is deleted to reinforce the warning about deleting all child fields.
+* Add several missing countries to the country list.
+
 = 4.03.06 =
 * New: Use autocomplete for settings for selecting a WordPress page for faster load time on sites with many pages.
 * Fix: When saving conditional logic settings in WP 5.3.1, there was a PHP error message showing on some sites.
