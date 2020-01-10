@@ -2270,6 +2270,7 @@ class FrmAppHelper {
 				'slug_is_reserved'  => __( 'Your Detail Page Slug is a reserved word. This can cause problems. We recommend that you change your slug unless you are an expert.', 'formidable' ),
 				'param_is_reserved' => __( 'The name of your param is a reserved word:', 'formidable' ),
 				'reserved_danger'   => __( 'This can cause problems if you are passing your params in the URL.  We recommend you change the param name unless you are an expert. ', 'formidable' ),
+				'reserved_words'    => __( 'See the list of reserved words in WordPress', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),

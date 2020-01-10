@@ -1229,6 +1229,7 @@ function frmAdminBuildJS() {
 		slug = slug.trim().toLowerCase();
 		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) {
 			msg = frm_admin_js.slug_is_reserved;
+			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars">' + frm_admin_js.reserved_words + '</a>';
 			infoModal( msg );
 		}
 	}
@@ -1257,6 +1258,7 @@ function frmAdminBuildJS() {
 			msg = frm_admin_js.param_is_reserved;
 			msg += '\n\n' + unsafeParams + '\n\n';
 			msg += frm_admin_js.reserved_danger;
+			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars">' + frm_admin_js.reserved_words + '</a>';
 
 			infoModal( msg );
 		}
