@@ -25,6 +25,7 @@
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
 	--biggest-sidebar: 450px;
+	--scrollbar-cushion: 10px;
 	--wp-sidebar-width: 160px;
 }
 
@@ -444,6 +445,7 @@ ul.frm_form_nav > li {
 	flex: 1;
 	display: flex;
 	overflow: hidden;
+	width: calc(100% - var(--scrollbar-cushion));
 }
 
 .frm_wrap .columns-2 > div {
@@ -6837,6 +6839,7 @@ Responsive Design
 		--small-sidebar: 20%;
 		--medium-sidebar: 35%;
 		--wp-sidebar-width: 0px;
+		--scrollbar-cushion: 0px;
 	}
 
 	#form_settings_page .advanced_settings .form-table td, .form-table th {
