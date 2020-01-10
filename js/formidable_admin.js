@@ -1513,8 +1513,8 @@ function frmAdminBuildJS() {
 
 	function getFieldList() {
 		var i,
-fields = [],
-			allFields = document.querySelectorAll( 'li.frm_field_box' );
+		fields = [],
+		allFields = document.querySelectorAll( 'li.frm_field_box' );
 
 		for ( i = 0; i < allFields.length; i++ ) {
 			var fieldId = allFields[ i ].getAttribute( 'data-fid' );
@@ -1711,8 +1711,7 @@ fields = [],
 
 		jQuery( builderForm ).on( 'click', 'a.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
-			var i, key, label,
-content = '',
+			var i, key, label, content = '',
 				fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' ),
 				separate = usingSeparateValues( fieldId ),
 				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
@@ -1888,9 +1887,7 @@ content = '',
 		var $self = jQuery( this );
 		if ( $self.is( ':checked' ) ) {
 			var uncheck = function() {
-				setTimeout( function() {
- $self.removeAttr( 'checked' );
-}, 0 );
+				setTimeout( function() { $self.removeAttr( 'checked' ); }, 0 );
 			};
 			var unbind = function() {
 				$self.unbind( 'mouseup', up );
@@ -2499,7 +2496,7 @@ content = '',
 
 	function getMultipleOpts( fieldId ) {
 		var i, saved, labelName, label, key,
-opts = [],
+			opts = [],
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
 			separateValues = usingSeparateValues( fieldId );
 
