@@ -211,9 +211,11 @@ class FrmFormsController {
 			return false;
 		}
 
+		$reserved_words_list_link = wp_kses_post( __( '<a href="https://codex.wordpress.org/WordPress_Query_Vars">See the list of reserved words.</a>', 'formidable' ) );
+
 		if ( $count == 1 ) {
 			/* translators: %s: the name of a param in the redirect URL */
-			return sprintf( esc_html__( 'Your redirect URL has a param %s, which is a reserved word. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution;
+			return sprintf( esc_html__( 'Your redirect URL has a param %s, which is a reserved word. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_list_link;
 		}
 
 		$unsafe_params_in_redirect[ $count - 1 ] = 'and ' . $unsafe_params_in_redirect[ $count - 1 ];
@@ -221,7 +223,7 @@ class FrmFormsController {
 		$unsafe_params_string                    = implode( $connector, $unsafe_params_in_redirect );
 
 		/* translators: %s: the names of params in the redirect URL */
-		return sprintf( esc_html__( 'Your redirect URL has params %s, which are reserved words. ', 'formidable' ), $unsafe_params_string ) . $caution;
+		return sprintf( esc_html__( 'Your redirect URL has params %s, which are reserved words. ', 'formidable' ), $unsafe_params_string ) . $caution .  $reserved_words_list_link;
 	}
 
 	public static function update( $values = array() ) {
