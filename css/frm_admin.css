@@ -1531,14 +1531,23 @@ div.frm_updated_message {
 }
 
 .frm_warning_style {
-	color: #4c4c40;
-	border-color: #e6e6c2;
-	background-color: #ffffd7;
-	padding-top: 15px
+	color: #8B6E3C;
+	border-color: #FBECCD;
+	background-color: #FDF9E3;
+	border-radius: 10px;
+	text-align: left;
+	padding-top: 5px;
+}
+
+.frm_warning_heading{
+	font-weight: bold;
+	margin-bottom:4px;
 }
 
 .frm_updated_message ul,
 .frm_updated_message li,
+.frm_warning_style ul,
+.frm_warning_style li,
 .frm_error_style ul,
 .frm_error_style li {
 	margin: 0;
