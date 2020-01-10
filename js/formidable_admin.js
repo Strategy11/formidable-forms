@@ -4904,17 +4904,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function setScrollbarCushion() {
-		var frmWrap = jQuery( '.frm_wrap' );
-		var cushion = hasScrollbar() ? '10' : '0';
-		var cushionString = '--scrollbar-cushion: ' + cushion + 'px';
-		frmWrap.attr( 'style', cushionString );
-	}
-
-	function hasScrollbar() {
-		return ( window.innerWidth - document.documentElement.clientWidth ) > 0;
-	}
-
 	function removeWPUnload() {
 		window.onbeforeunload = null;
 		var w = jQuery( window );
@@ -5058,9 +5047,6 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
-
-			// If two scrollbars are present, add a cushion between them so they both show.
-			jQuery( window ).on( 'resize load', setScrollbarCushion );
 		},
 
 		buildInit: function() {
