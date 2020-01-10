@@ -11,7 +11,7 @@
 					</p>
 					<br/>
 					<a href="#" id="frm-info-click" class="button button-primary frm-button-primary dismiss">
-						<?php esc_html_e( 'Got it', 'formidable' ); ?>
+						<?php esc_html_e( 'Got it!', 'formidable' ); ?>
 					</a>
 				</div>
 			</div>

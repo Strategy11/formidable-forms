@@ -484,12 +484,6 @@ function frmAdminBuildJS() {
 	}
 
 	function loadTooltips() {
-		var tooltipOpts = {
-			template: '<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
-			placement: 'bottom',
-			container: 'body',
-		};
-
 		var wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' );
 
