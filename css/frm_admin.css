@@ -24,7 +24,7 @@
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
 	--biggest-sidebar: 450px;
-	--scrollbar-cushion: 10px;
+	--scrollbar-cushion: 8px;
 	--wp-sidebar-width: 160px;
 }
 
@@ -81,10 +81,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 
 .frm-white-body #screen-meta-links .show-settings:after {
 	color: var(--grey);
-}
-
-.frm-white-body .columns-2 {
-	border-bottom: 1px solid var(--grey-border);
 }
 
 body.formidable_page_formidable-pro-upgrade,
@@ -186,6 +182,7 @@ td.column-title .frm_actions_dropdown {
 }
 
 .post-type-frm_display:not(.edit-php) #frm_top_bar,
+.post-type-frm_display.edit-php #frm_top_bar.frm-has-nav,
 .frm_page_container #frm_top_bar {
 	border-bottom: 1px solid var(--grey-border);
 	padding: 0 20px;
@@ -230,7 +227,7 @@ a .frmsvg,
 	margin: 0 15px 0 0;
 }
 
-.post-type-frm_display .frm-header-logo,
+.post-type-frm_display .frm-has-nav .frm-header-logo,
 .frm_page_container .frm-header-logo {
 	margin: 13px 0 0;
 }
@@ -305,10 +302,16 @@ ul.frm_form_nav > li {
 	line-height: 1.4;
 }
 
-.post-type-frm_display #frm_top_bar h1,
+.edit-php.post-type-frm_display #frm_top_bar.frm-has-nav h1,
+.post-type-frm_display #frm_top_bar.frm-has-nav h1,
 .frm_page_container #frm_top_bar h1 {
 	margin: 0 15px;
 	padding: 20px 0 0;
+}
+
+.edit-php.post-type-frm_display #frm_top_bar h1,
+.post-type-frm_display #frm_top_bar h1,
+.frm_page_container #frm_top_bar h1 {
 	text-align: left;
 	width: 200px;
 	line-height: 1.16;
@@ -427,6 +430,8 @@ ul.frm_form_nav > li {
 
 #frm_builder_page  .frm_page_container,
 #form_settings_page .frm_page_container,
+#form_entries_page.frm_single_entry_page .frm_page_container,
+#form_show_entry_page .frm_page_container,
 .formidable_page_formidable-styles .frm_page_container,
 #form_global_settings {
 	width: calc(100vw - var(--wp-sidebar-width));
@@ -434,6 +439,8 @@ ul.frm_form_nav > li {
 
 #frm_builder_page.frm_wrap #post-body-content,
 #form_settings_page.frm_wrap #post-body-content,
+#form_entries_page.frm_single_entry_page #post-body-content,
+#form_show_entry_page.frm_wrap #post-body-content,
 #frm_styling_form #post-body-content,
 .formidable_page_formidable-styles #post-body-content,
 #form_global_settings #post-body-content {
@@ -1880,6 +1887,8 @@ table.frm-list-templates thead th {
 .frm-admin-page-formidableedit #frm_builder_page,
 #form_settings_page,
 .formidable_page_formidable-styles .frm_page_container,
+#form_entries_page.frm_single_entry_page,
+#form_show_entry_page,
 #form_global_settings {
        position: fixed;
 }
@@ -1887,6 +1896,7 @@ table.frm-list-templates thead th {
 .frm-admin-page-formidableedit #wpfooter,
 .frm-admin-page-formidablesettings #wpfooter,
 .formidable_page_formidable-styles #wpfooter,
+.formidable_page_formidable-entries #wpfooter,
 .formidable_page_formidable-settings #wpfooter {
        display: none;
 }
