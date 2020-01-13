@@ -354,7 +354,7 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
-	private function should_skip_field( $type ) {
+	protected function should_skip_field( $type ) {
 		$skip_pro_fields = $this->skip_pro_fields();
 
 		return ( ! FrmAppHelper::pro_is_installed() && in_array( $type, $skip_pro_fields, true ) );
