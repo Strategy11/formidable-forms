@@ -24,7 +24,7 @@
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
 	--biggest-sidebar: 450px;
-	--scrollbar-cushion: 8px;
+	--scrollbar-cushion: 18px;
 	--wp-sidebar-width: 160px;
 }
 
@@ -438,6 +438,7 @@ ul.frm_form_nav > li {
 #form_show_entry_page .frm_page_container,
 .formidable_page_formidable-styles .frm_page_container,
 #form_global_settings {
+	width: 86vw;
 	width: calc(100vw - var(--wp-sidebar-width));
 }
 
@@ -6789,6 +6790,17 @@ Responsive Design
 	ul.frm_form_nav > li {
 		margin-right: 2.5%;
 	}
+
+	/* For IE only.  When we stop supporting IE, this can be removed.*/
+	#frm_builder_page  .frm_page_container,
+	#form_settings_page .frm_page_container,
+	#form_entries_page.frm_single_entry_page .frm_page_container,
+	#form_show_entry_page .frm_page_container,
+	.formidable_page_formidable-styles .frm_page_container,
+	#form_global_settings {
+		width: 84vw;
+		width: calc(100vw - var(--wp-sidebar-width));
+	}
 }
 
 @media only screen and (max-width: 1050px) {
@@ -6833,6 +6845,17 @@ Responsive Design
 
 	ul.frm_form_nav > li {
 		margin-right: 3.5%;
+	}
+
+	/* For IE only.  When we stop supporting IE, this can be removed.*/
+	#frm_builder_page  .frm_page_container,
+	#form_settings_page .frm_page_container,
+	#form_entries_page.frm_single_entry_page .frm_page_container,
+	#form_show_entry_page .frm_page_container,
+	.formidable_page_formidable-styles .frm_page_container,
+	#form_global_settings {
+		width: 95vw;
+		width: calc(100vw - var(--wp-sidebar-width));
 	}
 }
 
@@ -6921,6 +6944,17 @@ Responsive Design
 		margin-bottom: 20px;
 		border-radius: var(--small-radius);
 		border-top-width: 1px;
+	}
+
+	/* For IE only.  When we stop supporting IE, this can be removed.*/
+	#frm_builder_page  .frm_page_container,
+	#form_settings_page .frm_page_container,
+	#form_entries_page.frm_single_entry_page .frm_page_container,
+	#form_show_entry_page .frm_page_container,
+	.formidable_page_formidable-styles .frm_page_container,
+	#form_global_settings {
+		width: 92vw;
+		width: calc(100vw - var(--wp-sidebar-width));
 	}
 }
 
@@ -7068,6 +7102,17 @@ Responsive Design
 
 	#wp-content-media-buttons a.frm_insert_form {
 		padding: 0 15px;
+	}
+
+	/* For IE only.  When we stop supporting IE, this can be removed.*/
+	#frm_builder_page  .frm_page_container,
+	#form_settings_page .frm_page_container,
+	#form_entries_page.frm_single_entry_page .frm_page_container,
+	#form_show_entry_page .frm_page_container,
+	.formidable_page_formidable-styles .frm_page_container,
+	#form_global_settings {
+		width: 100vw;
+		width: calc(100vw - var(--wp-sidebar-width));
 	}
 }
 
