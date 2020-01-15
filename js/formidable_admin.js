@@ -1255,13 +1255,18 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			msg = frm_admin_js.param_is_reserved;
-			msg += '\n\n' + unsafeParams + '\n\n';
-			msg += frm_admin_js.reserved_danger;
+			msg =  addHtmlTags( frm_admin_js.param_is_reserved, 'p' );
+			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong') );
+			msg += addHtmlTags( frm_admin_js.reserved_danger, 'p' );
 			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars">' + frm_admin_js.reserved_words + '</a>';
 
 			infoModal( msg );
 		}
+	}
+
+	function addHtmlTags( text, tag ){
+		tag = tag ? tag : 'p';
+		return '<' + tag + '>' + text + '</' + tag + '>';
 	}
 
 	/**
