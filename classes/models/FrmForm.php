@@ -732,6 +732,7 @@ class FrmForm {
 			'calendar',
 			'cat',
 			'category',
+			'category_name',
 			'custom',
 			'day',
 			'feed',
