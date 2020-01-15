@@ -1,4 +1,6 @@
-<div id="frm_top_bar" <?php if ( $has_nav ) { ?> class="frm-has-nav" <?php } ?> >
+<div id="frm_top_bar" <?php if ( $has_nav ) {
+		?> class="frm-has-nav"
+	<?php } ?> >
 	<div id="frm-publishing">
 	<?php
 	if ( isset( $atts['publish'] ) ) {
