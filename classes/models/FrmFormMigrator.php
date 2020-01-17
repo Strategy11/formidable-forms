@@ -418,6 +418,12 @@ abstract class FrmFormMigrator {
 	 * @return string
 	 */
 	protected function get_field_label( $field ) {
+		$label = is_array( $field ) ? ( isset( $field['label'] ) ? $field['label'] : '' ) :
+									  ( isset( $field->label )   ? $field->label   : '' );
+		if ( ! empty( $label ) ) {
+			return sanitize_text_field( $label );
+		}
+
 		$type  = $this->get_field_type( $field );
 		$label = sprintf(
 			/* translators: %1$s - field type */
