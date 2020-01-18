@@ -1229,6 +1229,7 @@ function frmAdminBuildJS() {
 		slug = slug.trim().toLowerCase();
 		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) {
 			msg = frm_admin_js.slug_is_reserved;
+			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars">' + frm_admin_js.reserved_words + '</a>';
 			infoModal( msg );
 		}
@@ -1246,7 +1247,7 @@ function frmAdminBuildJS() {
 		while ( match != null ) {
 			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[ 1 ] ) ) {
 				if ( unsafeParams !== '' ) {
-					unsafeParams += ', ' + match[ 1 ];
+					unsafeParams += '", "' + match[ 1 ];
 				} else {
 					unsafeParams = match[ 1 ];
 				}
@@ -1255,9 +1256,8 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			msg =  addHtmlTags( frm_admin_js.param_is_reserved, 'p' );
-			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong') );
-			msg += addHtmlTags( frm_admin_js.reserved_danger, 'p' );
+			msg =  frm_admin_js.param_is_reserved;
+			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars">' + frm_admin_js.reserved_words + '</a>';
 
 			infoModal( msg );

@@ -204,8 +204,10 @@ class FrmFormsController {
 	 * @return bool|string A string with an unsafe param message or false.
 	 */
 	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
-		$count   = count( $unsafe_params_in_redirect );
-		$caution = esc_html__( 'Using reserved words as param names in a URL can cause problems and is not recommended unless you are an expert. ', 'formidable' );
+		$count                = count( $unsafe_params_in_redirect );
+		$caution              = esc_html__( 'Using these parameters in the URL is not recommended.', 'formidable' );
+		$reserved_words_intro = esc_html__( ' See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars">' . $reserved_words_intro . '</a>';
 
 		if ( $count === 0 ) {
 			return false;
@@ -213,13 +215,13 @@ class FrmFormsController {
 
 		if ( $count == 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */
-			return sprintf( esc_html__( 'Your redirect URL has a param %s, which is a reserved word. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution;
+			return sprintf( esc_html__( 'The redirect URL is using the parameter "%s", which is reserved by WordPress. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_link;
 		}
 
-		$unsafe_params_string = implode( ',', $unsafe_params_in_redirect );
+		$unsafe_params_string = implode( '", "', $unsafe_params_in_redirect );
 
 		/* translators: %s: the names of two or more parameters in the redirect URL, separated by commas */
-		return sprintf( esc_html__( 'Your redirect URL has params %s, which are reserved words. ', 'formidable' ), $unsafe_params_string ) . $caution;
+		return sprintf( esc_html__( 'The redirect URL is using the parameters "%s", which are reserved by WordPress. ', 'formidable' ), $unsafe_params_string ) . $caution . $reserved_words_link;
 	}
 
 	public static function update( $values = array() ) {
