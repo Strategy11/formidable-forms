@@ -2265,13 +2265,13 @@ class FrmAppHelper {
 				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
 				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				'only_one_action'   => __( 'You can only have one of these per form.  This form already has one.  You can delete it and create a new one, if you like.', 'formidable' ),
+				'only_one_action'   => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
 				'unsafe_params'     => FrmForm::reserved_words(),
-				'slug_is_reserved'  => __( 'Your Detail Page Slug is a reserved word. This can cause problems. We recommend that you change your slug unless you are an expert.', 'formidable' ),
+				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
+				'slug_is_reserved' => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems and isn’t recommended.', 'formidable' ), '****'),
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
-				'param_is_reserved' => sprintf( __( 'The name of your param %s is a reserved word. ', 'formidable' ), '****'),
-				'reserved_danger'   => __( 'This can cause problems if you are passing your params in the URL.  We recommend you change the param name unless you are an expert. ', 'formidable' ),
-				'reserved_words'    => __( 'See the list of reserved words in WordPress', 'formidable' ),
+				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL and isn’t recommended. ', 'formidable' ), '****'),
+				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),
