@@ -12,6 +12,7 @@ abstract class FrmFormMigrator {
 	public $tracking               = 'frm_forms_imported';
 	protected $fields_map          = array();
 	protected $current_source_form = null;
+	protected $current_section     = null;
 
 	/**
 	 * Define required properties.
@@ -200,10 +201,38 @@ abstract class FrmFormMigrator {
 			$new_field['original']    = $type;
 
 			$this->prepare_field( $field, $new_field );
-			$form['fields'][] = $new_field;
 
-			$field_order ++;
+			if ( null !== $this->current_section ) {
+				$new_field['field_options']['in_section'] = $this->current_section['id'];
+			}
+
+			if ( $this->should_add_field( $field ) ) {
+
+				$form['fields'][] = $new_field;
+
+				$field_order ++;
+
+				$this->maybe_prepare_section_fields( $field, $form, $field_order );
+			}
+
+			if ( isset( $new_field['fields'] ) && is_array( $new_field['fields'] ) && ! empty( $new_field['fields'] ) ) {
+
+				// we have (inner) fields to merge
+
+				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
+				// set the new field_order as it would have changed
+				$field_order    = $new_field['field_order'];
+			}
 		}
+
+		$this->maybe_close_prev_section( $form, $field_order );
+	}
+
+	/**
+	 * Some fields may not need to be added directly but their subfields instead e.g. 'name' field of gravityforms.
+	 */
+	protected function should_add_field( $field ) {
+		return true;
 	}
 
 	protected function prepare_field( $field, &$new_field ) {
@@ -220,6 +249,24 @@ abstract class FrmFormMigrator {
 	 */
 	protected function convert_field_type( $field, $use = '' ) {
 		return $use ? $use : ( is_array( $field ) ? $field['type'] : $field->type );
+	}
+
+	protected function maybe_close_prev_section( &$form, &$field_order ) {
+		if ( null !== $this->current_section ) {
+			$new_field                = FrmFieldsHelper::setup_new_vars( 'end_divider' );
+			$new_field['name']        = __( 'Section Buttons', 'formidable' );
+			$new_field['field_order'] = $field_order;
+			$new_field['original']    = '';
+
+			$form['fields'][]         = $new_field;
+			$this->current_section    = null;
+
+			++$field_order;
+		}
+	}
+
+	protected function maybe_prepare_section_fields( $field, &$form, &$field_order ) {
+		// override
 	}
 
 	/**
