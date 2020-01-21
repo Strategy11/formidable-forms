@@ -4911,6 +4911,36 @@ function frmAdminBuildJS() {
 		w.off( 'beforeunload.edit-post' );
 	}
 
+	function setScrollbarCushion() {
+		var frmWrap = jQuery( '.frm_wrap' );
+		var cushion = getScrollbarWidth() + 1;
+		var cushionString = '--scrollbar-cushion: ' + cushion + 'px';
+		frmWrap.attr( 'style', cushionString );
+	}
+
+	// source: https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript/13382873#13382873
+	function getScrollbarWidth() {
+
+		// Creating invisible container
+		const outer = document.createElement( 'div' );
+		outer.style.visibility = 'hidden';
+		outer.style.overflow = 'scroll'; // forcing scrollbar to appear
+		outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
+		document.body.appendChild( outer );
+
+		// Creating inner element and placing it in the container
+		const inner = document.createElement( 'div' );
+		outer.appendChild( inner );
+
+		// Calculating difference between container's full width and the child width
+		const scrollbarWidth = ( outer.offsetWidth - inner.offsetWidth );
+
+		// Removing temporary elements from the DOM
+		outer.parentNode.removeChild( outer );
+
+		return scrollbarWidth;
+	}
+
 	function maybeChangeEmbedFormMsg() {
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		var fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
@@ -5047,6 +5077,8 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
+
+			jQuery( window ).on( 'resize load', setScrollbarCushion );
 		},
 
 		buildInit: function() {

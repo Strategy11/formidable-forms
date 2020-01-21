@@ -450,10 +450,13 @@ ul.frm_form_nav > li {
 }
 
 .frm_wrap .columns-2 {
+	--cushion-transition: 0.1s;
 	flex: 1;
 	display: flex;
 	overflow: hidden;
 	width: calc(100% - var(--scrollbar-cushion));
+	-webkit-transition: width var(--cushion-transition); /* For Safari 3.1 to 6.0 */
+	transition: width var(--cushion-transition);
 }
 
 .frm_wrap .columns-2 > div {
