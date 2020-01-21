@@ -294,4 +294,40 @@ class FrmSettingsController {
 		wp_send_json_success();
 	}
 
+	/**
+	 * Autocomplete page admin ajax endpoint
+	 *
+	 * @since 4.03.06
+	 */
+	public static function page_search() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		global $wpdb;
+
+		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+
+		$where = array(
+			'post_status'     => 'publish',
+			'post_type'       => 'page',
+			'post_title LIKE' => $term,
+		);
+
+		$atts = array(
+			'limit'    => 25,
+			'order_by' => 'post_title',
+		);
+
+		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
+
+		$results = array();
+		foreach ( $pages as $page ) {
+			$results[] = array(
+				'value' => $page->ID,
+				'label' => $page->post_title,
+			);
+		}
+
+		wp_send_json( $results );
+	}
 }

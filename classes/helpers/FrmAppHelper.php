@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.03.03';
+	public static $plug_version = '4.03.07';
 
 	/**
 	 * @since 1.07.02
@@ -1011,26 +1011,46 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Renders an autocomplete page selection or a regular dropdown depending on
+	 * the total page count
+	 *
+	 * @since 4.03.06
+	 */
+	public static function maybe_autocomplete_pages_options( $args ) {
+		$args = self::preformat_selection_args( $args );
+
+		$pages_count = wp_count_posts( 'page' );
+
+		if ( $pages_count->publish <= 50 ) {
+			self::wp_pages_dropdown( $args );
+			return;
+		}
+
+		wp_enqueue_script( 'jquery-ui-autocomplete' );
+
+		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+		$title = '';
+
+		if ( $selected ) {
+			$title = get_the_title( $selected );
+		}
+
+		?>
+		<input type="text" class="frm-page-search"
+			placeholder="<?php esc_html_e( 'Select a Page', 'formidable' ); ?>"
+			value="<?php echo esc_attr( $title ); ?>" />
+		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
+			value="<?php echo esc_attr( $selected ); ?>" />
+		<?php
+	}
+
+	/**
 	 * @param array   $args
 	 * @param string  $page_id Deprecated.
 	 * @param boolean $truncate Deprecated.
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
-		if ( ! is_array( $args ) ) {
-			$args = array(
-				'field_name' => $args,
-				'page_id'    => $page_id,
-				'truncate'   => $truncate,
-			);
-		}
-
-		$defaults = array(
-			'truncate'    => false,
-			'placeholder' => ' ',
-			'field_name'  => '',
-			'page_id'     => '',
-		);
-		$args = array_merge( $defaults, $args );
+		self::prep_page_dropdown_params( $page_id, $truncate, $args );
 
 		$pages    = self::get_pages();
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
@@ -1040,11 +1060,45 @@ class FrmAppHelper {
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-					<?php echo esc_html( $truncate ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
 				</option>
 			<?php } ?>
 		</select>
 		<?php
+	}
+
+	/**
+	 * Fill in missing parameters passed to wp_pages_dropdown().
+	 * This is for reverse compatibility with switching 3 params to 1.
+	 *
+	 * @since 4.03.06
+	 */
+	private static function prep_page_dropdown_params( $page_id, $truncate, &$args ) {
+		if ( ! is_array( $args ) ) {
+			$args = array(
+				'field_name' => $args,
+				'page_id'    => $page_id,
+				'truncate'   => $truncate,
+			);
+		}
+
+		$args = self::preformat_selection_args( $args );
+	}
+
+	/**
+	 * Filter to format args for page dropdown or autocomplete
+	 *
+	 * @since 4.03.06
+	 */
+	private static function preformat_selection_args( $args ) {
+		$defaults = array(
+			'truncate'    => false,
+			'placeholder' => ' ',
+			'field_name'  => '',
+			'page_id'     => '',
+		);
+
+		return array_merge( $defaults, $args );
 	}
 
 	public static function post_edit_link( $post_id ) {
@@ -1114,9 +1168,9 @@ class FrmAppHelper {
 
 	public static function frm_capabilities( $type = 'auto' ) {
 		$cap = array(
-			'frm_view_forms'      => __( 'View Forms and Templates', 'formidable' ),
-			'frm_edit_forms'      => __( 'Add/Edit Forms and Templates', 'formidable' ),
-			'frm_delete_forms'    => __( 'Delete Forms and Templates', 'formidable' ),
+			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
+			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
 			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
 			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
 			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
@@ -2148,6 +2202,8 @@ class FrmAppHelper {
 	 * @param string $location
 	 */
 	public static function localize_script( $location ) {
+		global $wp_scripts;
+
 		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
@@ -2164,7 +2220,11 @@ class FrmAppHelper {
 			'calc_error'   => __( 'There is an error in the calculation in the field with key', 'formidable' ),
 			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 		);
-		wp_localize_script( 'formidable', 'frm_js', $script_strings );
+
+		$data = $wp_scripts->get_data( 'formidable', 'data' );
+		if ( empty( $data ) ) {
+			wp_localize_script( 'formidable', 'frm_js', $script_strings );
+		}
 
 		if ( $location == 'admin' ) {
 			$frm_settings         = self::get_settings();
@@ -2181,9 +2241,10 @@ class FrmAppHelper {
 				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
 				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
 				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
+				'caution'           => __( 'Heads up', 'formidable' ),
 				'confirm'           => __( 'Are you sure?', 'formidable' ),
 				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
-				'conf_delete_sec'   => __( 'WARNING: This will delete all fields inside of the section as well.', 'formidable' ),
+				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
 				'conf_no_repeat'    => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
 				'default_unique'    => $frm_settings->unique_msg,
 				'default_conf'      => __( 'The entered values do not match', 'formidable' ),
@@ -2209,8 +2270,13 @@ class FrmAppHelper {
 				'install'           => __( 'Install', 'formidable' ),
 				'active'            => __( 'Active', 'formidable' ),
 				'select_a_field'    => __( 'Select a Field', 'formidable' ),
+				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
-			wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
+
+			$data = $wp_scripts->get_data( 'formidable_admin', 'data' );
+			if ( empty( $data ) ) {
+				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
+			}
 		}
 	}
 

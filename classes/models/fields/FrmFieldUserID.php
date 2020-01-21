@@ -37,16 +37,22 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	public function prepare_field_html( $args ) {
-		$args = $this->fill_display_field_values( $args );
+		$args  = $this->fill_display_field_values( $args );
+		$value = $this->get_field_value( $args );
 
+		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>' . "\n";
+	}
+
+	/**
+	 * @since 4.03.06
+	 */
+	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();
 		$user_ID      = ( $user_ID ? $user_ID : '' );
 		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // WPCS: CSRF ok.
 		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
 		$updating     = $action == 'update';
-		$value        = ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
-
-		echo '<input type="hidden" name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" value="' . esc_attr( $value ) . '" data-frmval="' . esc_attr( $value ) . '"/>' . "\n";
+		return ( is_numeric( $this->field['value'] ) || $posted_value || $updating ) ? $this->field['value'] : $user_ID;
 	}
 
 	public function validate( $args ) {

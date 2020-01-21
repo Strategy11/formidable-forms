@@ -127,6 +127,7 @@ class FrmHooksController {
 		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 		add_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
 		add_action( 'wp_ajax_frm_settings_tab', 'FrmSettingsController::load_settings_tab' );
+		add_action( 'wp_ajax_frm_page_search', 'FrmSettingsController::page_search' );
 
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );

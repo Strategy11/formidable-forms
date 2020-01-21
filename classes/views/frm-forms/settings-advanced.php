@@ -84,8 +84,9 @@
 			</span>
 
 			<span class="success_action_page_box success_action_box<?php echo esc_attr( $values['success_action'] === 'page' ? '' : ' frm_hidden' ); ?>">
+
 				<?php
-				FrmAppHelper::wp_pages_dropdown(
+				FrmAppHelper::maybe_autocomplete_pages_options(
 					array(
 						'field_name'  => 'options[success_page_id]',
 						'page_id'     => isset( $values['success_page_id'] ) ? $values['success_page_id'] : '',
@@ -133,7 +134,7 @@
 
 <!--AJAX Section-->
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
-	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ); ?>" ></span>
+	<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ); ?>" ></span>
 </h3>
 <?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
 <table class="form-table">

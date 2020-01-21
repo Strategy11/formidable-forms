@@ -350,7 +350,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		jQuery('.frm-confirm-msg').html( link.getAttribute( 'data-frmverify' ) );
+		var caution = link.getAttribute('data-frmcaution');
+		var cautionHtml = caution ? '<span class="frm-caution">' + caution + '</span> ' : '';
+
+		jQuery('.frm-confirm-msg').html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
 
 		removeAtts = continueButton.dataset;
 		for ( i in dataAtts ) {
@@ -468,12 +471,6 @@ function frmAdminBuildJS() {
 	}
 
 	function loadTooltips() {
-		var tooltipOpts = {
-			template: '<div class="frm_tooltip tooltip"><div class="tooltip-inner"></div></div>',
-			placement: 'bottom',
-			container: 'body'
-		};
-
 		var wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' );
 
@@ -487,18 +484,14 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
-		wrapClass.on( 'mouseenter.frm', '.frm_help', function() {
+		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function () {
 			jQuery( this ).off( 'mouseenter.frm' );
-			jQuery( '.frm_help' ).tooltip( tooltipOpts );
+
+			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 			jQuery( this ).tooltip( 'show' );
 		} );
-		jQuery( '.frm_help' ).tooltip( tooltipOpts );
-		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip', function() {
-			jQuery( this ).off( 'mouseenter.frm' );
-			jQuery( '.frm_bstooltip' ).tooltip();
-			jQuery( this ).tooltip( 'show' );
-		} );
-		jQuery( '.frm_bstooltip' ).tooltip();
+
+		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 	}
 
 	function removeThisTag() {
@@ -1960,9 +1953,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		// If deleting a section, add an extra message.
+		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirm_msg += '\n\n' + frm_admin_js.conf_delete_sec;
+			confirm_msg = frm_admin_js.conf_delete_sec;
+			this.setAttribute('data-frmcaution', frm_admin_js.caution);
 		}
 
 		this.setAttribute( 'data-frmverify', confirm_msg );
@@ -4745,6 +4739,72 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
+	function initSelectionAutocomplete() {
+		if ( jQuery.fn.autocomplete ) {
+			initAutocomplete( 'page' );
+			initAutocomplete( 'user' );
+		}
+	}
+
+	function initAutocomplete( type ) {
+		if ( jQuery( '.frm-' + type + '-search' ).length < 1 ) {
+			return;
+		}
+
+		jQuery( '.frm-' + type + '-search' ).autocomplete( {
+			delay: 100,
+			minLength: 0,
+			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
+			select: autoCompleteSelectFromResults,
+			focus: autoCompleteFocus,
+			position: {
+				my: 'left top',
+				at: 'left bottom',
+				collision: 'flip'
+			},
+			response: function( event, ui ) {
+				if ( !ui.content.length ) {
+					var noResult = { value: '', label: frm_admin_js.no_items_found };
+					ui.content.push( noResult );
+				}
+			},
+			create: function( event, ui ) {
+				var $container = jQuery( this ).parent();
+
+				if ( $container.length == 0 ) {
+					$container = 'body';
+				}
+
+				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+			}
+		} )
+		.focus( function(){
+			// Show options on click to make it work more like a dropdown.
+			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+				jQuery( this ).autocomplete( 'search', this.value );
+			}
+		} );
+	}
+
+	/**
+	 * Prevent the value from changing when using keyboard to scroll.
+	 */
+	function autoCompleteFocus( e, ui ) {
+		return false;
+	}
+
+	function autoCompleteSelectFromResults( e, ui ) {
+		e.preventDefault();
+
+		if ( ui.item.value === '' ) {
+			this.value = '';
+		} else {
+			this.value = ui.item.label;
+		}
+
+		this.nextElementSibling.value = ui.item.value;
+	}
+
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
 		jQuery.ajax( {
@@ -5064,6 +5124,7 @@ function frmAdminBuildJS() {
 			} else {
 				// New form selection page
 				initNewFormModal();
+				initSelectionAutocomplete();
 
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
@@ -5193,7 +5254,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
-			$builderForm.on( 'change', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
+			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
@@ -5387,6 +5448,9 @@ function frmAdminBuildJS() {
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			} );
+
+            // Page Selection Autocomplete
+			initSelectionAutocomplete();
 		},
 
 		panelInit: function() {
