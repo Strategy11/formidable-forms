@@ -1709,8 +1709,6 @@ class FrmFieldsHelper {
 	public static function show_add_field_buttons( $args ) {
 		$field_key      = $args['field_key'];
 		$field_type     = $args['field_type'];
-		$id             = $args['id'];
-		$no_allow_class = $args['no_allow_class'];
 		$field_label    = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
 		$field_name     = FrmFormsHelper::get_field_link_name( $field_type );
 		$field_label   .= ' <span>' . $field_name . '</span>';
@@ -1736,14 +1734,14 @@ class FrmFieldsHelper {
 			}
 		}
 		?>
-					<li class="frmbutton <?php echo esc_attr( $no_allow_class . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
+		<li class="frmbutton <?php echo esc_attr( $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
 		<?php
 		if ( $run_filter ) {
-			$field_label = apply_filters( 'frmpro_field_links', $field_label, $id, $field_key );
+			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
 		}
 		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // WPCS: XSS ok.
 		?>
-					</li>
+		</li>
 		<?php
 	}
 

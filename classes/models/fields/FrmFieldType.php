@@ -369,8 +369,8 @@ DEFAULT_HTML;
 		}
 
 		$this->field_choices_heading( $args );
-		$extra_classes = $this->extra_field_choices_class();
-		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $extra_classes ) . '">';
+
+		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
@@ -414,6 +414,9 @@ DEFAULT_HTML;
 		return __( 'Add Option', 'formidable' );
 	}
 
+	/**
+	 * @since 4.04
+	 */
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
 	}
@@ -457,7 +460,7 @@ DEFAULT_HTML;
 	protected function field_choices_heading( $args ) {
 		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 		?>
-		<h3<?php $this->field_choices_heading_attrs( $args ); ?>>
+		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
 			printf(
 				/* translators: %s: Field type */
