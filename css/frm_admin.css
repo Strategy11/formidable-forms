@@ -3294,6 +3294,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	padding-bottom: 5px;
 }
 
+.frm_product_price_wrapper,
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
 	width: calc(100% - 73px);
@@ -3311,7 +3312,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 .frm_single_option .frm-drag {
 	font-size: 23px;
 	width: 22px;
-	height: 22px;
+	height: 19px;
 	margin-left: -6px;
 	color: var(--grey);
 }
@@ -5137,59 +5138,38 @@ tr.frm_options_heading td {
 	font-size: 15px;
 }
 
-.frm-single-settings .frm_product_price_wrapper {
-	width: calc(100% - 73px);
+.frm_product_price_wrapper {
 	display: inline-block;
 	vertical-align: middle;
 }
 
-.frm-single-settings .frm_product_price_wrapper::after {
-	content: '';
-	display: table;
-	clear: both;
+.frm_prod_type_single .frm_product_price_wrapper {
+	width: 100%;
 }
 
-#new_fields .frm-single-settings .frm_product_price_wrapper input:first-child {
+#new_fields .frm_product_price_wrapper input:first-child {
 	width: 60%;
 	float: left;
 }
 
-#new_fields .frm-single-settings .frm_product_price_wrapper input:last-child {
+#new_fields .frm_product_price_wrapper input:last-child {
 	width: 37%;
 	float: right;
 }
 
 li.frm_single_option:not(:last-child) {
-	padding-bottom: 15px;
+	padding-bottom: 11px;
 	margin-bottom: 10px;
 	border-bottom: 1px solid var(--sidebar-hover);
 }
 
-.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_sortable_field_opts li:nth-child( n + 3 ) {
-	display: none;
-}
-
-.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_sortable_field_opts .frm_remove_tag {
-	display: none;
-}
-
-.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm_form_field:not(.frm_product_type):not(.frm_sep_val_product) {
-	display: none;
-}
-
-.frm_grid_container.frm-collapse-me.frm_prod_type_user_def .frm_sortable_field_opts {
-	display: none;
-}
-
-.frm_grid_container.frm-collapse-me.frm_prod_type_user_def .frm-bulk-edit-link,
-.frm_grid_container.frm-collapse-me.frm_prod_type_single .frm-bulk-edit-link {
-	display: none;
-}
-
-.frm_grid_container.frm-collapse-me.frm_prod_type_user_def .frm_form_field:not(.frm_product_type) {
-	display: none;
-}
-
+.frm_prod_type_single input[type=radio],
+.frm_prod_type_single .frm_drag_icon,
+.frm_prod_type_single .frm_sortable_field_opts li:nth-child( n + 3 ),
+.frm_prod_type_single .frm_sortable_field_opts .frm_remove_tag,
+.frm_prod_type_single .frm_form_field:not(.frm_product_type):not(.frm_sep_val_product),
+.frm_prod_type_single .frm-bulk-edit-link,
+.frm_prod_type_user_def.frm_grid_container,
 .frm_prod_options_heading.frm_prod_user_def {
 	display: none;
 }

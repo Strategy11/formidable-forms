@@ -2800,7 +2800,7 @@ function frmAdminBuildJS() {
 	 */
 	function hideEmptyEle() {
 		jQuery( '.frm-hide-empty' ).each( function() {
-		    if ( jQuery( this ).text().trim().length == 0 ) {
+		    if ( jQuery( this ).text().trim().length === 0 ) {
 		        jQuery( this ).remove();
 		    }
 		});
@@ -4771,7 +4771,7 @@ function frmAdminBuildJS() {
 			create: function( event, ui ) {
 				var $container = jQuery( this ).parent();
 
-				if ( $container.length == 0 ) {
+				if ( $container.length === 0 ) {
 					$container = 'body';
 				}
 
@@ -4837,9 +4837,9 @@ function frmAdminBuildJS() {
 
 	function installNewForm( form, action ) {
 		var data,
-			formName = form.elements['template_name'].value,
-			formDesc = form.elements['template_desc'].value,
-			link = form.elements['link'].value;
+			formName = form.elements.template_name.value,
+			formDesc = form.elements.template_desc.value,
+			link = form.elements.link.value;
 
 		data = {
 			action: action,
@@ -5051,23 +5051,19 @@ function frmAdminBuildJS() {
 	}
 
 	function toggleProductType() {
-		var $this = jQuery( this ),
-			settings = $this.closest( '.frm-single-settings' ),
+		var settings = jQuery( this ).closest( '.frm-single-settings' ),
 			container = settings.find( '.frmjs_product_choices' ),
 			heading = settings.find( '.frm_prod_options_heading' ),
 			currentVal = this.options[ this.selectedIndex ].value;
 
+		container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
+		heading.removeClass( 'frm_prod_user_def' );
+
 		if ( 'single' === currentVal ) {
-			container.removeClass( 'frm_prod_type_user_def' );
 			container.addClass( 'frm_prod_type_single' );
-			heading.removeClass( 'frm_prod_user_def' );
 		} else if ( 'user_def' === currentVal ) {
-			container.removeClass( 'frm_prod_type_single' );
 			container.addClass( 'frm_prod_type_user_def' );
 			heading.addClass( 'frm_prod_user_def' );
-		} else {
-			container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
-			heading.removeClass( 'frm_prod_user_def' );
 		}
 	}
 
