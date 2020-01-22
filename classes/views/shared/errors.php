@@ -12,7 +12,7 @@ if ( isset( $message ) && '' !== $message ) {
 if ( isset( $warnings ) && is_array( $warnings ) && count( $warnings ) > 0 ) {
 	?>
 	<div class="frm_warning_style inline" role="alert">
-		<div class="frm_warning_heading"> <?php echo esc_html__('Warning:', 'formidable'); ?></div>
+		<div class="frm_warning_heading"> <?php echo esc_html__( 'Warning:', 'formidable' ); ?></div>
 		<ul id="frm_warnings">
 			<?php
 			foreach ( $warnings as $warning ) {

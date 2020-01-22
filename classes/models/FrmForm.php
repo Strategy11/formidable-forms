@@ -757,7 +757,7 @@ class FrmForm {
 			'title',
 			'type',
 			'w',
-			'year'
+			'year',
 		);
 	}
 
