@@ -1089,12 +1089,11 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeHideQuantityProductFieldOption() {
-		var hide, opts = document.querySelectorAll( '.frmjs_prod_field_opt_cont' );
+		var hide = true,
+			opts = document.querySelectorAll( '.frmjs_prod_field_opt_cont' );
 
 		if ( $newFields.find( 'li.edit_field_type_product' ).length > 1 ) {
 			hide = false;
-		} else {
-			hide = true;
 		}
 
 		for ( var i = 0; i < opts.length; i++ ) {
@@ -1140,8 +1139,8 @@ function frmAdminBuildJS() {
 			field = document.getElementById( match[1] ),
 			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
 			$thisSection = jQuery( section ),
-			toggled = false,
-			type = field.getAttribute( 'data-type' );
+			type = field.getAttribute( 'data-type' ),
+			toggled = false;
 
 		setupSortable( section );
 
@@ -2495,8 +2494,8 @@ function frmAdminBuildJS() {
 		}
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
-			showOther = atts.other,
-			isProduct = isProductField( sourceID );
+			isProduct = isProductField( sourceID )
+			showOther = atts.other;
 
 		removeDropdownOpts( field );
 		var opts = getMultipleOpts( sourceID ),
