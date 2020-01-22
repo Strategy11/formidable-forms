@@ -150,7 +150,7 @@ class FrmFormsController {
 
 		$redirect_warning = self::check_redirect_url_for_unsafe_params( $values );
 
-		if ( $redirect_warning ){
+		if ( $redirect_warning ) {
 			$warnings[] = $redirect_warning;
 		}
 
@@ -171,7 +171,7 @@ class FrmFormsController {
 
 		$options = $values['options'];
 
-		if ( ( ! isset ( $options['success_action'] ) ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
+		if ( ( ! isset( $options['success_action'] ) ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
 			return false;
 		}
 
