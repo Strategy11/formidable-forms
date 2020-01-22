@@ -207,7 +207,7 @@ class FrmFormsController {
 		$count                = count( $unsafe_params_in_redirect );
 		$caution              = esc_html__( 'Using these parameters in the URL is not recommended.', 'formidable' );
 		$reserved_words_intro = esc_html__( ' See the list of reserved words in WordPress.', 'formidable' );
-		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars">' . $reserved_words_intro . '</a>';
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank">' . $reserved_words_intro . '</a>';
 
 		if ( $count === 0 ) {
 			return false;

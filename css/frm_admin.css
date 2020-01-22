@@ -5789,6 +5789,14 @@ ul .frm_col_two {
 	color: var(--orange)
 }
 
+.cta-inside a.frm-standard-link {
+	color: var(--primary-color);
+}
+
+.cta-inside a.frm-standard-link:hover {
+	color: var(--primary-hover);
+}
+
 .frm-caution {
 	text-transform: uppercase;
 	font-weight: bold;
