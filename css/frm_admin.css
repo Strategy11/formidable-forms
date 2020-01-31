@@ -5764,6 +5764,10 @@ ul .frm_col_two {
 	margin-right: 0;
 }
 
+.frm-info-modal a,
+.frm-info-modal ul,
+.frm-info-modal p,
+.frm-info-modal,
 .settings-lite-cta a,
 .settings-lite-cta ul,
 .settings-lite-cta p,
@@ -5773,6 +5777,7 @@ ul .frm_col_two {
 	box-shadow: none !important;
 }
 
+.frm-info-modal h3,
 .settings-lite-cta h3 {
 	font-size: 17px !important;
 }
@@ -5781,6 +5786,7 @@ ul .frm_col_two {
 	color: var(--green);
 }
 
+.frm-info-modal .postbox .inside,
 .settings-lite-cta .postbox .inside {
 	padding: 20px 40px;
 }
@@ -5789,11 +5795,11 @@ ul .frm_col_two {
 	color: var(--orange)
 }
 
-.cta-inside a.frm-standard-link {
+.info-modal-inside a.frm-standard-link {
 	color: var(--primary-color);
 }
 
-.cta-inside a.frm-standard-link:hover {
+.info-modal-inside a.frm-standard-link:hover {
 	color: var(--primary-hover);
 }
 

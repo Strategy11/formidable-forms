@@ -125,7 +125,7 @@ class FrmFormsController {
 		$warnings = self::check_for_warnings( $_POST );
 
 		if ( count( $errors ) > 0 ) {
-			return self::get_settings_vars( $id, $errors, $warnings );
+			return self::get_settings_vars( $id, $errors, array( 'warnings' => $warnings ) );
 		}
 
 		do_action( 'frm_before_update_form_settings', $id );
@@ -134,9 +134,13 @@ class FrmFormsController {
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
-		return self::get_settings_vars( $id, array(), $message, $warnings );
-	}
+		$args = array(
+			'message'  => $message,
+			'warnings' => $warnings,
+		);
 
+		return self::get_settings_vars( $id, array(), $args );
+	}
 
 	/**
 	 * Checks for warnings to be displayed after form settings are saved.
@@ -170,12 +174,14 @@ class FrmFormsController {
 		}
 
 		$options = $values['options'];
+		FrmAppHelper::sanitize_with_html( $options );
 
 		if ( ( ! isset( $options['success_action'] ) ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
 			return false;
 		}
 
 		$unsafe_params_in_redirect = self::get_unsafe_params( $options['success_url'] );
+
 		return self::create_unsafe_param_warning( $unsafe_params_in_redirect );
 	}
 
@@ -190,7 +196,7 @@ class FrmFormsController {
 		$redirect_components = parse_url( $url );
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
-		$reserved_words            = FrmForm::reserved_words();
+		$reserved_words            = FrmFormsHelper::reserved_words();
 		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, $reserved_words );
 
 		return array_values( $unsafe_params_in_redirect );
@@ -206,8 +212,8 @@ class FrmFormsController {
 	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
 		$count                = count( $unsafe_params_in_redirect );
 		$caution              = esc_html__( 'Using these parameters in the URL is not recommended.', 'formidable' );
-		$reserved_words_intro = esc_html__( ' See the list of reserved words in WordPress.', 'formidable' );
-		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank">' . $reserved_words_intro . '</a>';
+		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
 
 		if ( $count === 0 ) {
 			return false;
@@ -986,7 +992,19 @@ class FrmFormsController {
 		}
 	}
 
-	public static function get_settings_vars( $id, $errors = array(), $message = '', $warnings = array() ) {
+	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
+		if ( ! is_array( $args ) ) {
+			$message = $args;
+		} else {
+			$defaults = array(
+				'message' => '',
+				'warnings' => array(),
+			);
+			$args = array_merge( $defaults, $args );
+			$message = $args['message'];
+			$warnings = $args['warnings'];
+		}
+
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		global $frm_vars;

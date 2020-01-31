@@ -1214,7 +1214,7 @@ function frmAdminBuildJS() {
 		warningMessage += checkShortcodes( calculation, this );
 
 		if ( warningMessage !== '' ) {
-			infoModal( calculation + '\n\n' + warningMessage );
+			infoModal( calculation + "\n\n" + warningMessage );
 		}
 	}
 
@@ -1303,7 +1303,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + '\n\n';
+			msg = frm_admin_js.unmatched_parens + "\n\n";
 			return msg;
 		}
 
@@ -1893,7 +1893,7 @@ function frmAdminBuildJS() {
 		var $self = jQuery( this );
 		if ( $self.is( ':checked' ) ) {
 			var uncheck = function() {
-				setTimeout( function() { $self.removeAttr( 'checked' ); }, 0 );
+				setTimeout( function(){ $self.removeAttr( 'checked' ); },0 );
 			};
 			var unbind = function() {
 				$self.unbind( 'mouseup', up );
@@ -5656,6 +5656,7 @@ function frmAdminBuildJS() {
 				success: function( html ) {
 					document.getElementById( 'frm_field_' + field_id + '_opts' ).innerHTML = html;
 					resetDisplayedOpts( field_id );
+
 					if ( typeof modal !== 'undefined' ) {
 						modal.dialog( 'close' );
 						document.getElementById( 'frm-update-bulk-opts' ).classList.remove( 'frm_loading_button' );
