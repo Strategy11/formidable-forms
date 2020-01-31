@@ -372,6 +372,19 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function infoModal( msg ) {
+		var $info = initModal( '#frm_info_modal', '400px' );
+
+		if ( $info === false ) {
+			return false;
+		}
+
+		jQuery( '.frm-info-msg' ).html( msg );
+
+		$info.dialog( 'open' );
+		return false;
+	}
+
 	function toggleItem( e ) {
 		/*jshint validthis:true */
 		var toggle = this.getAttribute( 'data-frmtoggle' ),
@@ -673,6 +686,7 @@ function frmAdminBuildJS() {
 		if ( auto !== 'auto' ) {
 			// Hide success message on tab change.
 			jQuery( '.frm_updated_message' ).hide();
+			jQuery( '.frm_warning_style' ).hide();
 		}
 
 		if ( jQuery( link ).closest( '#frm_adv_info' ).length ) {
@@ -1075,7 +1089,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown ) {
-		alert( errorThrown + '. Please try again.' );
+		infoModal( errorThrown + '. Please try again.' );
 		if ( 'summary' === fieldType ) {
 			addBtn.removeClass( 'disabled' );
 			fieldButton.draggable( 'enable' );
@@ -1200,7 +1214,49 @@ function frmAdminBuildJS() {
 		warningMessage += checkShortcodes( calculation, this );
 
 		if ( warningMessage !== '' ) {
-			alert( calculation + "\n\n" + warningMessage );
+			infoModal( calculation + '\n\n' + warningMessage );
+		}
+	}
+
+	/**
+	 * Checks the Detail Page slug to see if it's a reserved word and displays a message if it is.
+	 */
+	function checkDetailPageSlug() {
+		var slug = jQuery( '#param' ).val(),
+			msg;
+		slug = slug.trim().toLowerCase();
+		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) {
+			msg = frm_admin_js.slug_is_reserved;
+			infoModal( msg );
+		}
+	}
+
+	/**
+	 * Checks View filter value for params named with reserved words and displays a message if any are found.
+	 */
+	function checkFilterParamNames() {
+		var regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig,
+			filterValue = jQuery( this ).val(),
+			match = regEx.exec( filterValue ),
+			unsafeParams = '';
+
+		while ( match != null ) {
+			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[ 1 ] ) ) {
+				if ( unsafeParams !== '' ) {
+					unsafeParams += ', ' + match[ 1 ];
+				} else {
+					unsafeParams = match[ 1 ];
+				}
+			}
+			match = regEx.exec( filterValue );
+		}
+
+		if ( unsafeParams !== '' ) {
+			msg = frm_admin_js.param_is_reserved;
+			msg += '\n\n' + unsafeParams + '\n\n';
+			msg += frm_admin_js.reserved_danger;
+
+			infoModal( msg );
 		}
 	}
 
@@ -2231,7 +2287,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			alert( frm_admin_js.repeat_limit_min );
+			infoModal( frm_admin_js.repeat_limit_min );
 			this.value = '';
 		}
 	}
@@ -2240,7 +2296,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			alert( frm_admin_js.checkbox_limit );
+			infoModal( frm_admin_js.checkbox_limit );
 			this.value = '';
 		}
 	}
@@ -2494,7 +2550,7 @@ function frmAdminBuildJS() {
 				var c = false;
 				if ( !c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
 					c = true;
-					alert( 'Saved values cannot be identical.' );
+					infoModal( 'Saved values cannot be identical.' );
 				}
 			} );
 		}
@@ -3155,11 +3211,18 @@ function frmAdminBuildJS() {
 	function checkActiveAction( type ) {
 		var limit = parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ) );
 		var len = jQuery( '.frm_single_' + type + '_settings' ).length;
+		var limitClass;
 		if ( len >= limit ) {
-			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_active_action' ).addClass( 'frm_inactive_action' );
+			limitClass = 'frm_inactive_action';
+			limitClass += ( limit > 0 ) ? ' frm_already_used' : '';
+			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_active_action' ).addClass( limitClass );
 		} else {
-			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_inactive_action' ).addClass( 'frm_active_action' );
+			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_inactive_action frm_already_used' ).addClass( 'frm_active_action' );
 		}
+	}
+
+	function onlyOneActionMessage() {
+		infoModal( frm_admin_js.only_one_action );
 	}
 
 	function addFormLogicRow() {
@@ -3299,7 +3362,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				alert( 'Oops. You have already used that field.' );
+				infoModal( 'Oops. You have already used that field.' );
 				return false;
 			}
 		} );
@@ -4110,7 +4173,7 @@ function frmAdminBuildJS() {
 		// Check if there is enough space for text
 		var textSpace = height - size - paddingTop - paddingBottom - 3;
 		if ( textSpace < 0 ) {
-			alert( frm_admin_js.css_invalid_size );
+			infoModal( frm_admin_js.css_invalid_size );
 		}
 	}
 
@@ -5195,6 +5258,7 @@ function frmAdminBuildJS() {
 			var formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
+			formSettings.on( 'click', '.frm_already_used', onlyOneActionMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
@@ -5373,6 +5437,9 @@ function frmAdminBuildJS() {
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			$advInfo.before( '<div id="frm_position_ele"></div>' );
 			setupMenuOffset();
+
+			jQuery( document ).on( 'blur', '#param', checkDetailPageSlug );
+			jQuery( document ).on( 'blur', 'input[name^="options[where_val]"]', checkFilterParamNames );
 
 			// Show loading indicator.
 			jQuery( '#publish' ).mousedown( function() {

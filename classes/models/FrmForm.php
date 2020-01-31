@@ -714,6 +714,52 @@ class FrmForm {
 		return apply_filters( 'frm_validate_form', $errors, $values );
 	}
 
+
+	/**
+	 * Returns an array of common reserved words in WordPress.
+	 *
+	 * An edited list of reserved terms from the Codex.
+	 * https://codex.wordpress.org/Reserved_Terms
+	 *
+	 * @return array Array of WordPress reserved words.
+	 */
+	public static function reserved_words() {
+		return array(
+			'id',
+			'date',
+			'author',
+			'author_name',
+			'calendar',
+			'cat',
+			'category',
+			'custom',
+			'day',
+			'feed',
+			'hour',
+			'm',
+			'minute',
+			'more',
+			'name',
+			'order',
+			'p',
+			'page',
+			'post',
+			's',
+			'search',
+			'second',
+			'sentence',
+			'tag',
+			'taxonomy',
+			'term',
+			'terms',
+			'theme',
+			'title',
+			'type',
+			'w',
+			'year'
+		);
+	}
+
 	public static function get_params( $form = null ) {
 		global $frm_vars;
 

@@ -260,6 +260,17 @@ class FrmAppController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/confirm-overlay.php' );
 	}
 
+	public static function include_info_overlay() {
+		wp_enqueue_script( 'jquery-ui-dialog' );
+		wp_enqueue_style( 'jquery-ui-dialog' );
+
+		add_action( 'admin_footer', 'FrmAppController::info_overlay_html' );
+	}
+
+	public static function info_overlay_html() {
+		include( FrmAppHelper::plugin_path() . '/classes/views/shared/info-overlay.php' );
+	}
+
 	/**
 	 * @since 3.04.02
 	 */
@@ -409,6 +420,7 @@ class FrmAppController {
 
 			do_action( 'frm_enqueue_builder_scripts' );
 			self::include_upgrade_overlay();
+			self::include_info_overlay();
 		} elseif ( FrmAppHelper::is_view_builder_page() ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
 				$post_type = sanitize_title( wp_unslash( $_REQUEST['post_type'] ) );
@@ -428,6 +440,7 @@ class FrmAppController {
 				wp_enqueue_script( 'formidable_admin' );
 				wp_enqueue_style( 'formidable-admin' );
 				FrmAppHelper::localize_script( 'admin' );
+				self::include_info_overlay();
 			}
 		} elseif ( $pagenow == 'widgets.php' ) {
 			FrmAppHelper::load_admin_wide_js();
