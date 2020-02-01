@@ -125,7 +125,6 @@ class FrmFieldsHelper {
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
 		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] );
-
 		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
 			$defaults['required_indicator'] = '';
@@ -418,8 +417,16 @@ class FrmFieldsHelper {
 
 		$default_type = self::get_default_value_type( $field );
 
+		$default_image = '';
+
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
+			$image     = self::get_image_from_array( $opt, $opt_key, $field );
+			$image_url = self::get_image_url( $image );
+
+			$image_title = self::get_image_title( $image );
+			$image_filename = self::get_image_filename( $image );
+			$label = self::create_single_option_label( $field, $opt, $image_url);
 			$opt       = self::get_label_from_array( $opt, $opt_key, $field );
 
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
@@ -437,6 +444,35 @@ class FrmFieldsHelper {
 
 			unset( $checked );
 		}
+	}
+
+	public static function create_single_option_label( $field, $opt, $image_url ) {
+		if ( empty( $field['image_options'] ) ) {
+			return $opt;
+		}
+
+		$show_label  = ! empty( $field['show_label_with_image'] );
+		$label_class = $show_label ? 'frm_label_with_image ' : '';
+		$text_label  =  self::get_label_from_opt( $opt );
+		$image       = ! empty ( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url"></div>';
+
+		$label = '<div class="frm_image_option_container ' . $label_class . '">' . $image;
+
+		if ( $show_label ) {
+			$label .= '<span class="frm_label_with_image">' . $text_label . '</span>';
+		}
+
+		$label .= '</div>';
+
+		return $label;
+	}
+
+	private static function get_label_from_opt ( $opt ){
+		if ( is_array ($opt)  ) {
+			return isset ( $opt['label'] ) ? $opt['label'] : '';
+		}
+
+		return $opt;
 	}
 
 	/**
@@ -489,6 +525,50 @@ class FrmFieldsHelper {
 		$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
 
 		return FrmFieldsController::check_label( $opt );
+	}
+
+	public static function get_image_from_array( $opt, $opt_key, $field ) {
+		$opt = apply_filters( 'frm_field_image_id', $opt, $opt_key, $field );
+
+		return FrmFieldsController::check_image( $opt, $opt_key, $field );
+	}
+
+	public static function get_image_url( $image_id ) {
+		if ( empty( $image_id )){
+			return '';
+		}
+
+		$url = wp_get_attachment_image_src( ( int ) $image_id, 'medium')[0];
+
+		if ( ! $url ){
+			$url =  wp_get_attachment_image_url( ( int ) $image_id );
+		}
+
+		return $url ? $url : '';
+	}
+
+	public static function get_image_title( $image_id ) {
+		if ( empty( $image_id )){
+			return '';
+		}
+
+		$title = get_the_title( (int) $image_id );
+
+		return $title ? $title : '';
+	}
+
+	public static function get_image_filename( $image_id ) {
+		if ( empty( $image_id ) ) {
+			return '';
+		}
+
+		$filename = get_post_meta( (int) $image_id, '_wp_attached_file', true );
+
+		$matches = array();
+
+		preg_match('/([A-Za-z0-9.\-_]+)$/', $filename, $matches);
+
+		return isset( $matches[0] ) ? $matches[0] : '';
 	}
 
 	/**
@@ -1055,7 +1135,6 @@ class FrmFieldsHelper {
 		}
 
 		// Check posted vals before checking saved values
-
 		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
 		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {

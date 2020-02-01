@@ -1014,6 +1014,16 @@ class FrmField {
 		return ( $type == 'url' && self::get_option( $field, 'show_image' ) );
 	}
 
+	public static function is_image_option( $field ) {
+		$type = self::get_field_type( $field );
+
+		return self::has_image_options( $type, $field ) || ( 'data' === $type );
+	}
+
+	private static function has_image_options( $type, $field ) {
+		return ( in_array( $type, array( 'radio', 'checkbox' ) ) && self::get_option( $field, 'image_options' ) );
+	}
+
 	/**
 	 * Check if field is radio or Dynamic radio
 	 *

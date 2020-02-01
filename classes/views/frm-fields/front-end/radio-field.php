@@ -17,9 +17,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		}
 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
+		$image     = FrmFieldsHelper::get_image_from_array( $opt, $opt_key, $field );
+		$image_url = FrmFieldsHelper::get_image_url( $image );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+		$label = FrmFieldsHelper::create_single_option_label( $field, $opt, $image_url);
 		?>
-		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
+		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?> <?php echo ( ! empty( $field['image_options'] )  ? 'frm_image_option' : '' ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
 			?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
@@ -36,7 +39,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
+			echo ' ' . FrmAppHelper::kses( $label, 'all') . '</label>'; // WPCS: XSS ok.
 		}
 
 		$other_args = array(

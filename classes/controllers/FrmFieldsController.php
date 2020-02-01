@@ -758,6 +758,18 @@ class FrmFieldsController {
 		return $opt;
 	}
 
+	public static function check_image( $opt, $opt_key, $field ) {
+		if ( is_array( $opt ) ) {
+			if ( FrmField::is_option_true( $field, 'image_options' ) ) {
+				$opt = isset( $opt['image'] ) ? $opt['image']  : 0;
+			} else {
+				$opt = 0;
+			}
+		}
+
+		return $opt;
+	}
+
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
 			$opt = ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );

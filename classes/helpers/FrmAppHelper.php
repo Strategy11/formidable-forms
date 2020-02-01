@@ -1104,13 +1104,27 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0
 	 */
+
+	/**
+	 * Hide the WordPress menus on some pages.
+	 *
+	 * @since 4.0
+	 */
 	public static function is_full_screen() {
-		$action       = self::simple_get( 'frm_action', 'sanitize_title' );
-		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
+		$action       = self::get_action();
+		$full_builder = self::is_form_builder_page( $action );
 		$styler       = self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
 		$full_entries = self::simple_get( 'frm-full', 'absint' );
 
 		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
+	}
+
+	public static function get_action(){
+		return self::simple_get( 'frm_action', 'sanitize_title' );
+	}
+
+	public static function is_form_builder_page( $action ){
+		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 	}
 
 	/**
@@ -2355,6 +2369,7 @@ class FrmAppHelper {
 				'slug_is_reserved' => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
 				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
+				'image_label_placeholder' => self::image_label_placeholder(),
 				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
@@ -2369,6 +2384,10 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
+	}
+
+	public static function image_label_placeholder(){
+		return __( 'Text label (required with an image)', 'formidable');
 	}
 
 	/**
