@@ -243,10 +243,16 @@ class FrmEntriesHelper {
 		);
 
 		$atts = wp_parse_args( $atts, $defaults );
+		$image_option = FrmField::is_image_option( $field );
 
-		if ( FrmField::is_image( $field ) || $field->type == 'star' ) {
+		if ( FrmField::is_image( $field ) || $field->type == 'star' || $image_option ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
+		}
+
+		if ( $image_option ){
+			$atts['show_filename'] = false;
+			$atts['show_image'] = true;
 		}
 
 		$atts = apply_filters( 'frm_display_value_atts', $atts, $field, $value );
@@ -291,6 +297,10 @@ class FrmEntriesHelper {
 		}
 
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
+	}
+
+	private static function has_image_option_markup( $value ){
+		return strpos( $value, 'frm_image_option_container' ) !== false;
 	}
 
 	public static function set_posted_value( $field, $value, $args ) {

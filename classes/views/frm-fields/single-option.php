@@ -2,13 +2,24 @@
 	<?php FrmAppHelper::icon_by_class( 'frmfont frm_drag_icon frm-drag' ); ?>
 	<input type="<?php echo esc_attr( $default_type ); ?>" name="<?php echo esc_attr( $field_name ); ?>" <?php echo ( isset( $checked ) && $checked ? 'checked="checked"' : '' ); ?> value="<?php echo esc_attr( $field_val ); ?>"/>
 
-	<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][label]" value="<?php echo esc_attr( $opt ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" data-frmchange="trim" />
+	<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][label]" value="<?php echo esc_attr( $opt ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>"
+	       data-frmchange="trim" data-frmimageurl="<?php echo ! empty ($image_url) ? esc_attr( $image_url ) : ''; ?>"
+	       <?php if ( isset( $field['image_options'] ) &&  $field['image_options'] ) { ?>
+	       placeholder="<?php echo esc_attr( FrmAppHelper::image_label_placeholder() ); ?>"
+	       <?php } ?>
+	/>
 
 	<a href="javascript:void(0)" class="frm_icon_font frm_remove_tag" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-removeid="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-removemore="#frm_<?php echo esc_attr( $default_type . '_' . $field['id'] . '-' . $opt_key ); ?>" data-showlast="#frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>"></a>
 
-	<span class="frm_option_key frm-with-right-icon field_<?php echo esc_attr( $field['id'] ); ?>_option_key<?php echo esc_attr( $field['separate_value'] ? '' : ' frm_hidden' ); ?>">
+	<span class="frm_option_key frm_separate_value frm-with-right-icon field_<?php echo esc_attr( $field['id'] ); ?>_option_key<?php echo esc_attr( $field['separate_value'] ? '' : ' frm_hidden' ); ?>">
 		<input type="<?php echo esc_attr( $default_type ); ?>" class="frm_invisible" />
 		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][value]" id="field_key_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>" placeholder="<?php esc_attr_e( 'Saved Value', 'formidable' ); ?>" data-frmchange="trim" />
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_save_icon' ); ?>
-	</span>
+		</span>
+
+	<?php if ( FrmAppHelper::pro_is_installed() ) {
+		include( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/image-selector.php' );
+	}
+	?>
 </li>
+

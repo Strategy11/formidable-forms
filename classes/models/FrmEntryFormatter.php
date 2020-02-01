@@ -123,14 +123,14 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_entry( $atts ) {
-		if ( is_object( $atts['entry'] ) ) {
+		if ( isset($atts['entry']) && is_object( $atts['entry'] ) ) {
 
 			if ( isset( $atts['entry']->metas ) ) {
 				$this->entry = $atts['entry'];
 			} else {
 				$this->entry = FrmEntry::getOne( $atts['entry']->id, true );
 			}
-		} elseif ( $atts['id'] ) {
+		} elseif ( ! empty( $atts['id'] ) ) {
 			$this->entry = FrmEntry::getOne( $atts['id'], true );
 		}
 	}
@@ -415,6 +415,11 @@ class FrmEntryFormatter {
 	protected function add_field_values_to_content( &$content ) {
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
 
+			unset( $this->atts['plain_text']);
+			// Add plain_text back in to for radio and checkbox fields, which may have images.
+			if ( in_array( $field_value->get_field_type(), array( 'radio', 'checkbox' ) ) ) {
+				$this->atts['plain_text'] = $this->is_plain_text;
+			}
 			/**
 			 * @var FrmFieldValue $field_value
 			 */

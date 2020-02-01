@@ -371,6 +371,7 @@ DEFAULT_HTML;
 		$this->field_choices_heading( $args );
 
 		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
+		$this->show_priority_field_choices( $args );
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
@@ -435,6 +436,12 @@ DEFAULT_HTML;
 	 */
 	protected function has_field_choices( $field ) {
 		return ! empty( $this->displayed_field_type( $field ) );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function show_priority_field_choices( $args = array() ) {
 	}
 
 	/**
@@ -591,7 +598,7 @@ DEFAULT_HTML;
 	}
 
 	public function get_default_field_options() {
-		$opts       = array(
+		$opts = array(
 			'size'               => '',
 			'max'                => '',
 			'label'              => '',
@@ -599,6 +606,8 @@ DEFAULT_HTML;
 			'required_indicator' => '*',
 			'invalid'            => '',
 			'separate_value'     => 0,
+			'image_options'      => 0,
+			'show_label_with_image' => 0,
 			'clear_on_focus'     => 0,
 			'classes'            => '',
 			'custom_html'        => '',
