@@ -117,6 +117,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'user_id' => get_current_user_id(),
 			'phone'  => '222-222-2222',
 			'html'   => '',
+			'quantity' => 2,
 		);
 
 		if ( isset( $field_values[ $field->type ] ) ) {
