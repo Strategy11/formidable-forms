@@ -125,7 +125,7 @@ class FrmFormsController {
 		$warnings = FrmFormsHelper::check_for_warnings( $_POST );
 
 		if ( count( $errors ) > 0 ) {
-			return self::get_settings_vars( $id, $errors, array( 'warnings' => $warnings ) );
+			return self::get_settings_vars( $id, $errors, compact( 'warnings' ) );
 		}
 
 		do_action( 'frm_before_update_form_settings', $id );
@@ -134,12 +134,7 @@ class FrmFormsController {
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
-		$args = array(
-			'message'  => $message,
-			'warnings' => $warnings,
-		);
-
-		return self::get_settings_vars( $id, array(), $args );
+		return self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
 	}
 
 	public static function update( $values = array() ) {
