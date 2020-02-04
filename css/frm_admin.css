@@ -6220,7 +6220,7 @@ iframe#dyncontent_ifr {
 	z-index: 9999999;
 	display: block;
 	visibility: visible;
-	font-size: var(--tooltip-font-size);
+	font-size: 14px;
 	line-height: 1.4;
 	opacity: 0;
 	filter: alpha(opacity=0);
