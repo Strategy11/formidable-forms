@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.04 =
+* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
+* New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
+* New: Show the new pricing fields in the builder for product education.
+
 = 4.03.07 =
 * Project Delight: Make admin-side tooltips more enjoyable and helpful.
 * Add several missing countries to the country list.
