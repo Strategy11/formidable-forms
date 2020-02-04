@@ -369,10 +369,63 @@ DEFAULT_HTML;
 		}
 
 		$this->field_choices_heading( $args );
-		echo '<div class="frm_grid_container frm-collapse-me">';
+
+		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	public function show_field_options( $args ) {
+		if ( ! $this->should_continue_to_field_options( $args ) ) {
+			return;
+		}
+
+		$has_options = ! empty( $args['field']['options'] );
+		$short_name  = FrmAppHelper::truncate( strip_tags( str_replace( '"', '&quot;', $args['field']['name'] ) ), 20 );
+
+		/* translators: %s: Field name */
+		$option_title = sprintf( __( '%s Options', 'formidable' ), $short_name );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function should_continue_to_field_options( $args ) {
+		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ) );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function get_bulk_edit_string() {
+		return __( 'Bulk Edit Options', 'formidable' );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function get_add_option_string() {
+		return __( 'Add Option', 'formidable' );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function show_single_option( $args ) {
+		FrmFieldsHelper::show_single_option( $args['field'] );
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function extra_field_choices_class() {
+		return '';
 	}
 
 	/**
@@ -407,7 +460,7 @@ DEFAULT_HTML;
 	protected function field_choices_heading( $args ) {
 		$all_field_types = array_merge( FrmField::pro_field_selection(), FrmField::field_selection() );
 		?>
-		<h3>
+		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
 			printf(
 				/* translators: %s: Field type */
@@ -418,6 +471,13 @@ DEFAULT_HTML;
 			<i class="frm_icon_font frm_arrowdown6_icon"></i>
 		</h3>
 		<?php
+	}
+
+	/**
+	 * @since 4.04
+	 */
+	protected function field_choices_heading_attrs( $args ) {
+		return;
 	}
 
 	/**

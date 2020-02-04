@@ -175,6 +175,21 @@ class FrmField {
 					<img src="https://s3.amazonaws.com/fp.strategy11.com/images/appointments/appointments.png" alt="Scheduling" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
+			'product' => array(
+				'name'    => __( 'Product', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_product_icon',
+				'section' => 'pricing',
+			),
+			'quantity' => array(
+				'name'    => __( 'Quantity', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_quantity_icon',
+				'section' => 'pricing',
+			),
+			'total' => array(
+				'name'    => __( 'Total', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_total_icon',
+				'section' => 'pricing',
+			),
 		);
 
 		// Since the signature field may be in a different section, don't show it twice.
@@ -944,7 +959,15 @@ class FrmField {
 	}
 
 	public static function get_option_in_array( $field, $option ) {
-		return isset( $field[ $option ] ) ? $field[ $option ] : '';
+		$this_option = '';
+
+		if ( isset( $field[ $option ] ) && ! empty( $field[ $option ] ) ) {
+			$this_option = $field[ $option ];
+		} elseif ( isset( $field['field_options'] ) && is_array( $field['field_options'] ) ) {
+			$this_option = isset( $field['field_options'][ $option ] ) ? $field['field_options'][ $option ] : '';
+		}
+
+		return $this_option;
 	}
 
 	public static function get_option_in_object( $field, $option ) {
@@ -1030,10 +1053,19 @@ class FrmField {
 		$field_type = self::get_original_field_type( $field );
 		$data_type  = self::get_option( $field, 'data_type' );
 
-		return (
+		$is_field_type = (
 			$is_type === $field_type ||
 			( 'data' === $field_type && $is_type === $data_type ) ||
-			( 'lookup' === $field_type && $is_type === $data_type )
+			( 'lookup' === $field_type && $is_type === $data_type ) ||
+			( 'product' === $field_type && $is_type === $data_type )
 		);
+
+		/**
+		 * When a field type is checked, allow individual fields
+		 * to set the type.
+		 *
+		 * @since 4.04
+		 */
+		return apply_filters( 'frm_is_field_type', $is_field_type, compact( 'field', 'is_type' ) );
 	}
 }
