@@ -122,8 +122,10 @@ class FrmFormsController {
 		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
 		$errors = FrmForm::validate( $_POST );
+		$warnings = self::check_for_warnings( $_POST );
+
 		if ( count( $errors ) > 0 ) {
-			return self::get_settings_vars( $id, $errors );
+			return self::get_settings_vars( $id, $errors, array( 'warnings' => $warnings ) );
 		}
 
 		do_action( 'frm_before_update_form_settings', $id );
@@ -132,7 +134,100 @@ class FrmFormsController {
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
-		return self::get_settings_vars( $id, array(), $message );
+		$args = array(
+			'message'  => $message,
+			'warnings' => $warnings,
+		);
+
+		return self::get_settings_vars( $id, array(), $args );
+	}
+
+	/**
+	 * Checks for warnings to be displayed after form settings are saved.
+	 *
+	 * @param array $values The $_POST array, which contains values submitted in a form.
+	 *
+	 * @return array An array of warnings or an empty array.
+	 */
+	public static function check_for_warnings( $values ) {
+		$warnings = array();
+
+		$redirect_warning = self::check_redirect_url_for_unsafe_params( $values );
+
+		if ( $redirect_warning ) {
+			$warnings[] = $redirect_warning;
+		}
+
+		return apply_filters( 'frm_check_for_warnings', $warnings, $values );
+	}
+
+	/**
+	 * Checks the redirect URL for params whose names are reserved words.
+	 *
+	 * @param array $values The $_POST array, which contains the values submitted in a form.
+	 *
+	 * @return bool|string A warning message about unsafe params or false.
+	 */
+	private static function check_redirect_url_for_unsafe_params( $values ) {
+		if ( ! isset( $values['options'] ) ) {
+			return false;
+		}
+
+		$options = $values['options'];
+		FrmAppHelper::sanitize_with_html( $options );
+
+		if ( ( ! isset( $options['success_action'] ) ) || $options['success_action'] !== 'redirect' || ! isset( $options['success_url'] ) ) {
+			return false;
+		}
+
+		$unsafe_params_in_redirect = self::get_unsafe_params( $options['success_url'] );
+
+		return self::create_unsafe_param_warning( $unsafe_params_in_redirect );
+	}
+
+	/**
+	 * Returns an array of params whose names are reserved words in the specified URL.
+	 *
+	 * @param string $url The URL whose params are being checked.
+	 *
+	 * @return array An array of params whose names are reserved words or an empty array.
+	 */
+	private static function get_unsafe_params( $url ) {
+		$redirect_components = parse_url( $url );
+		parse_str( $redirect_components['query'], $redirect_params );
+		$redirect_param_names      = array_keys( $redirect_params );
+		$reserved_words            = FrmFormsHelper::reserved_words();
+		$unsafe_params_in_redirect = array_intersect( $redirect_param_names, $reserved_words );
+
+		return array_values( $unsafe_params_in_redirect );
+	}
+
+	/**
+	 * Returns a warning if reserved words have been used as param names in the redirect URL.
+	 *
+	 * @param array $unsafe_params_in_redirect Array of params from the redirect URL whose names are reserved words.
+	 *
+	 * @return bool|string A string with an unsafe param message or false.
+	 */
+	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
+		$count                = count( $unsafe_params_in_redirect );
+		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
+		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
+
+		if ( $count === 0 ) {
+			return false;
+		}
+
+		if ( $count == 1 ) {
+			/* translators: %s: the name of a single parameter in the redirect URL */
+			return sprintf( esc_html__( 'The redirect URL is using the parameter "%s", which is reserved by WordPress. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_link;
+		}
+
+		$unsafe_params_string = implode( '", "', $unsafe_params_in_redirect );
+
+		/* translators: %s: the names of two or more parameters in the redirect URL, separated by commas */
+		return sprintf( esc_html__( 'The redirect URL is using the parameters "%s", which are reserved by WordPress. ', 'formidable' ), $unsafe_params_string ) . $caution . $reserved_words_link;
 	}
 
 	public static function update( $values = array() ) {
@@ -897,7 +992,19 @@ class FrmFormsController {
 		}
 	}
 
-	public static function get_settings_vars( $id, $errors = array(), $message = '' ) {
+	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
+		if ( ! is_array( $args ) ) {
+			$message = $args;
+		} else {
+			$defaults = array(
+				'message' => '',
+				'warnings' => array(),
+			);
+			$args = array_merge( $defaults, $args );
+			$message = $args['message'];
+			$warnings = $args['warnings'];
+		}
+
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		global $frm_vars;
