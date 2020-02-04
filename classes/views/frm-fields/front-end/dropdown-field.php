@@ -18,20 +18,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 		<?php
 	}
 
-	$placeholder = FrmField::get_option( $field, 'placeholder' );
-	if ( empty( $placeholder ) ) {
-		$placeholder = FrmFieldsController::get_default_value_from_name( $field );
-	}
+	$placeholder = FrmFieldsController::add_placeholder_to_select( $field );
 
 	$skipped = false;
-	if ( $placeholder !== '' ) {
-		?>
-		<option value="">
-			<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
-		</option>
-		<?php
-	}
-
 	$other_opt = false;
 	$other_checked = false;
 	if ( empty( $field['options'] ) ) {
@@ -48,7 +37,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' &&
 			}
 		}
 
-		if ( ! empty( $placeholder ) && $opt == '' && ! $skipped ) {
+		if ( $placeholder && $opt == '' && ! $skipped ) {
 			$skipped = true;
 			continue;
 		}

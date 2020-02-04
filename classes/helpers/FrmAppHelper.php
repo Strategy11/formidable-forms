@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.03.06';
+	public static $plug_version = '4.04b';
 
 	/**
 	 * @since 1.07.02
@@ -1168,9 +1168,9 @@ class FrmAppHelper {
 
 	public static function frm_capabilities( $type = 'auto' ) {
 		$cap = array(
-			'frm_view_forms'      => __( 'View Forms and Templates', 'formidable' ),
-			'frm_edit_forms'      => __( 'Add/Edit Forms and Templates', 'formidable' ),
-			'frm_delete_forms'    => __( 'Delete Forms and Templates', 'formidable' ),
+			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
+			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
 			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
 			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
 			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
@@ -2269,6 +2269,7 @@ class FrmAppHelper {
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),
 				'active'            => __( 'Active', 'formidable' ),
+				'select_a_field'    => __( 'Select a Field', 'formidable' ),
 				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
 

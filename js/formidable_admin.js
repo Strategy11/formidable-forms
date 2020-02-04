@@ -1001,6 +1001,7 @@ function frmAdminBuildJS() {
 
 				initiateMultiselect();
 				renumberPageBreaks();
+				maybeHideQuantityProductFieldOption();
 			},
 		} );
 	}
@@ -1087,6 +1088,23 @@ function frmAdminBuildJS() {
 		return $newFields.children( 'li.edit_field_type_summary' ).length > 0;
 	}
 
+	function maybeHideQuantityProductFieldOption() {
+		var hide = true,
+			opts = document.querySelectorAll( '.frmjs_prod_field_opt_cont' );
+
+		if ( $newFields.find( 'li.edit_field_type_product' ).length > 1 ) {
+			hide = false;
+		}
+
+		for ( var i = 0; i < opts.length; i++ ) {
+			if ( hide ) {
+				opts[ i ].classList.add( 'frm_hidden' );
+			} else {
+				opts[ i ].classList.remove( 'frm_hidden' );
+			}
+		}
+	}
+
 	function duplicateField() {
 		/*jshint validthis:true */
 		var thisField = jQuery( this ).closest( 'li' );
@@ -1121,9 +1139,21 @@ function frmAdminBuildJS() {
 			field = document.getElementById( match[1] ),
 			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
 			$thisSection = jQuery( section ),
+			type = field.getAttribute( 'data-type' ),
 			toggled = false;
 
 		setupSortable( section );
+
+		if ( 'quantity' === type ) {
+			// try to automatically attach a product field
+			maybeSetProductField( field );
+		}
+
+		if ( 'product' === type || 'quantity' === type ) {
+			// quantity too needs to be a part of the if stmt especially cos of the very
+			// 1st quantity field (or even if it's just one quantity field in the form).
+			maybeHideQuantityProductFieldOption();
+		}
 
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
@@ -1325,13 +1355,17 @@ function frmAdminBuildJS() {
 		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
 	}
 
-	function isSummaryCalcBox( box ) {
+	function isCalcBoxType( box, listClass ) {
 		var list = jQuery( box ).find( '.frm_code_list' );
-		return 1 === list.length && list.hasClass( 'frm_js_summary_list' );
+		return 1 === list.length && list.hasClass( listClass );
 	}
 
 	function extractExcludedOptions( exclude ) {
 		var opts = [];
+		if ( ! Array.isArray( exclude ) ) {
+			return opts;
+		}
+
 		for ( var i = 0; i < exclude.length; i++ ) {
 			if ( exclude[ i ].startsWith( '[' ) ) {
 				opts.push( exclude[ i ] );
@@ -1372,7 +1406,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		var isSummary = isSummaryCalcBox( v );
+		var isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
 
 		var form_id = jQuery( 'input[name="id"]' ).val();
 		var fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
@@ -1391,7 +1425,7 @@ function frmAdminBuildJS() {
 		list.innerHTML = '';
 
 		for ( i = 0; i < fields.length; i++ ) {
-			if ( exclude.includes( fields[ i ].fieldType ) ||
+			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
@@ -1453,11 +1487,17 @@ function frmAdminBuildJS() {
 		popCalcFields( jQuery( '.frm-inline-modal.postbox:has(.frm_js_summary_list)' )[0], true );
 	}
 
-	function getFieldList() {
+	function getFieldList( fieldType ) {
 		var i, fields = [],
-			allFields = document.querySelectorAll( 'li.frm_field_box' );
+			allFields = document.querySelectorAll( 'li.frm_field_box' ),
+			checkType = 'undefined' !== typeof fieldType;
 
 		for ( i = 0; i < allFields.length; i++ ) {
+			// data-ftype is better (than data-type) cos of fields loaded by AJAX - which might not be ready yet
+			if ( checkType && allFields[ i ].getAttribute( 'data-ftype' ) !== fieldType ) {
+				continue;
+			}
+
 			var fieldId = allFields[ i ].getAttribute( 'data-fid' );
 			if ( typeof fieldId !== 'undefined' && fieldId ) {
 				fields.push( {
@@ -1467,10 +1507,54 @@ function frmAdminBuildJS() {
 					'fieldKey': getPossibleValue( 'field_options_field_key_' + fieldId )
 				} );
 			}
+		}
 
-			if ( i === allFields.length - 1 ) {
-				return fields;
+		return fields;
+	}
+
+	function popProductFields( field ) {
+		var options = [], fields, i, selected, current;
+
+		current = field.getAttribute( 'data-frmcurrent' );
+
+		fields = getFieldList( 'product' );
+
+		options.push( '<option value="">' + frm_admin_js.select_a_field + '</option>' );
+
+		for ( i = 0; i < fields.length; i++ ) {
+			selected = current == fields[ i ].fieldId ? ' selected' : '';
+			options.push( '<option value="'+ fields[ i ].fieldId +'"' + selected + '>'+ fields[ i ].fieldName +'</option>' );
+		}
+
+		field.innerHTML = options.join( '' );
+	}
+
+	function popAllProductFields() {
+		var opts = document.querySelectorAll( '.frmjs_prod_field_opt' );
+		for ( var i = 0; i < opts.length; i++ ) {
+			popProductFields( opts[ i ] );
+		}
+	}
+
+	function maybeSetProductField( field ) {
+		var productFields, quantityFields, fieldsList, productFieldOpt, fieldId;
+
+		fieldsList = jQuery( field ).closest( 'ul.frm_sorting' );
+		productFields = fieldsList.children( '.edit_field_type_product' );
+		quantityFields = fieldsList.children( '.edit_field_type_quantity' );
+
+		if ( 1 === quantityFields.length && 1 === productFields.length ) {
+			fieldId = field.getAttribute( 'data-fid' );
+			productFieldOpt = document.getElementById( 'field_options[product_field_' + fieldId + ']' );
+			if ( null === productFieldOpt ) {
+				return; // very unlikely though
 			}
+
+			productFieldOpt.setAttribute( 'data-frmcurrent', productFields[0].getAttribute( 'data-fid' ) );
+			popProductFields( productFieldOpt );
+			// in order to move its settings to that LHS panel where
+			// the update form resides, else it'll lose this setting
+			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
 		}
 	}
 
@@ -1656,7 +1740,8 @@ function frmAdminBuildJS() {
 				fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' ),
 				separate = usingSeparateValues( fieldId ),
 				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
-				opts = optList.getElementsByTagName( 'li' );
+				opts = optList.getElementsByTagName( 'li' ),
+				product = isProductField( fieldId );
 
 			document.getElementById( 'bulk-field-id' ).value = fieldId;
 
@@ -1668,6 +1753,9 @@ function frmAdminBuildJS() {
 						content += label.value;
 						if ( separate ) {
 							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][value]' )[0].value;
+						}
+						if ( product ) {
+							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][price]' )[0].value;
 						}
 						content += "\r\n";
 					}
@@ -1914,13 +2002,19 @@ function frmAdminBuildJS() {
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {
-					var $section = $thisField.closest( '.start_divider' );
+					var $section = $thisField.closest( '.start_divider' ),
+						type = $thisField.data( 'type' );
 					$thisField.remove();
-					if ( $thisField.data( 'type' ) === 'break' ) {
+					if ( type === 'break' ) {
 						renumberPageBreaks();
 					}
-					if ( $thisField.data( 'type' ) === 'summary' ) {
+					if ( type === 'summary' ) {
 						reenableAddSummaryBtn();
+					}
+					if ( type === 'product' ) {
+						maybeHideQuantityProductFieldOption();
+						// a product field attached to a quantity field earlier might be the one deleted, so re-populate
+						popAllProductFields();
 					}
 					if ( jQuery( '#frm-show-fields li' ).length === 0 ) {
 						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
@@ -2137,6 +2231,10 @@ function frmAdminBuildJS() {
 	}
 
 	function clickLabel() {
+		if ( ! this.id ) {
+			return;
+		}
+
 		/*jshint validthis:true */
 		var setting = document.querySelectorAll( '[data-changeme="' + this.id + '"]' )[0],
 			fieldId = this.id.replace( 'field_label_', '' ),
@@ -2364,29 +2462,30 @@ function frmAdminBuildJS() {
 			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
+			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
+				isProduct = isProductField( fieldId );
 
 			for ( i = 0; i < opts.length; i++ ) {
-				addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey );
+				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct ) );
 			}
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-			id = 'field_' + fieldKey + '-' + opt.key,
-			container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' );
+			id = 'field_' + fieldKey + '-' + opt.key;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
 		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"> ' + opt.label + '</label>' +
+			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + '> ' + opt.label + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
-		container.append( single );
+		return single;
 	}
 
 	function fillDropdownOpts( field, atts ) {
@@ -2395,6 +2494,7 @@ function frmAdminBuildJS() {
 		}
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
+			isProduct = isProductField( sourceID )
 			showOther = atts.other;
 
 		removeDropdownOpts( field );
@@ -2416,6 +2516,11 @@ function frmAdminBuildJS() {
 				var opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
 				opt.innerHTML = label;
+
+				if ( isProduct ) {
+					opt.setAttribute( 'data-price', opts[ i ].price );
+				}
+
 				field.appendChild( opt );
 			}
 		}
@@ -2436,12 +2541,13 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, opts = [],
+		var i, saved, labelName, label, key, opts = [], optObj,
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
-			separateValues = usingSeparateValues( fieldId );
+			separateValues = usingSeparateValues( fieldId ),
+			isProduct = isProductField( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
-			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 ) {
+			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
 				continue;
 			}
 			saved = optVals[ i ].value;
@@ -2453,11 +2559,18 @@ function frmAdminBuildJS() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 			}
 
-			opts.push( {
+			optObj = {
 				saved: saved,
 				label: label,
 				key: key
-			} );
+			};
+
+			if ( isProduct ) {
+				labelName = optVals[ i ].name.replace( '[label]', '[price]' );
+				optObj.price = jQuery( 'input[name="' + labelName + '"]' ).val();
+			}
+
+			opts.push( optObj );
 		}
 
 		return opts;
@@ -2686,7 +2799,7 @@ function frmAdminBuildJS() {
 	 */
 	function hideEmptyEle() {
 		jQuery( '.frm-hide-empty' ).each( function() {
-		    if ( jQuery( this ).text().trim().length == 0 ) {
+		    if ( jQuery( this ).text().trim().length === 0 ) {
 		        jQuery( this ).remove();
 		    }
 		});
@@ -3099,6 +3212,7 @@ function frmAdminBuildJS() {
 	function showFieldOptions( obj ) {
 		var i, singleField,
 			fieldId = obj.getAttribute( 'data-fid' ),
+			fieldType = obj.getAttribute( 'data-type' ),
 			allFieldSettings = document.querySelectorAll( '.frm-single-settings:not(.frm_hidden)' );
 
 		for ( i = 0; i < allFieldSettings.length; i++ ) {
@@ -3107,6 +3221,10 @@ function frmAdminBuildJS() {
 
 		singleField = document.getElementById( 'frm-single-settings-' + fieldId );
 		moveFieldSettings( singleField );
+
+		if ( fieldType && 'quantity' === fieldType ) {
+			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0] );
+		}
 
 		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
@@ -4653,7 +4771,7 @@ function frmAdminBuildJS() {
 			create: function( event, ui ) {
 				var $container = jQuery( this ).parent();
 
-				if ( $container.length == 0 ) {
+				if ( $container.length === 0 ) {
 					$container = 'body';
 				}
 
@@ -4719,9 +4837,9 @@ function frmAdminBuildJS() {
 
 	function installNewForm( form, action ) {
 		var data,
-			formName = form.elements['template_name'].value,
-			formDesc = form.elements['template_desc'].value,
-			link = form.elements['link'].value;
+			formName = form.elements.template_name.value,
+			formDesc = form.elements.template_desc.value,
+			link = form.elements.link.value;
 
 		data = {
 			action: action,
@@ -4929,6 +5047,32 @@ function frmAdminBuildJS() {
 		} else {
 			fieldItem.find( '.frm-not-set' )[0].classList.remove( 'frm_hidden' );
 			fieldItem.find( '.frm-embed-field-placeholder' )[0].classList.add( 'frm_hidden' );
+		}
+	}
+
+	function toggleProductType() {
+		var settings = jQuery( this ).closest( '.frm-single-settings' ),
+			container = settings.find( '.frmjs_product_choices' ),
+			heading = settings.find( '.frm_prod_options_heading' ),
+			currentVal = this.options[ this.selectedIndex ].value;
+
+		container.removeClass( 'frm_prod_type_single frm_prod_type_user_def' );
+		heading.removeClass( 'frm_prod_user_def' );
+
+		if ( 'single' === currentVal ) {
+			container.addClass( 'frm_prod_type_single' );
+		} else if ( 'user_def' === currentVal ) {
+			container.addClass( 'frm_prod_type_user_def' );
+			heading.addClass( 'frm_prod_user_def' );
+		}
+	}
+
+	function isProductField( fieldId ) {
+		var field = document.getElementById( 'frm_field_id_' + fieldId );
+		if ( field === null ) {
+			return false;
+		} else {
+			return 'product' === field.getAttribute( 'data-type' );
 		}
 	}
 
@@ -5156,9 +5300,17 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
+			popAllProductFields();
+			jQuery( document ).on( 'change', '.frmjs_prod_field_opt', function () {
+				this.setAttribute( 'data-frmcurrent', this.options[ this.selectedIndex ].value );
+			} );
+
+			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
+
 			initBulkOptionsOverlay();
 			hideEmptyEle();
 			maybeDisableAddSummaryBtn();
+			maybeHideQuantityProductFieldOption();
 		},
 
 		settingsInit: function() {
@@ -5565,14 +5717,14 @@ function frmAdminBuildJS() {
 		},
 
 		updateOpts: function( field_id, opts, modal ) {
-			var separate = usingSeparateValues( field_id );
-			$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' );
-			empty( $fieldOpts );
+			var separate = usingSeparateValues( field_id ),
+				$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' ),
+				action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
 			jQuery.ajax( {
 				type: 'POST',
 				url: ajaxurl,
 				data: {
-					action: 'frm_import_options',
+					action: action,
 					field_id: field_id,
 					opts: opts,
 					separate: separate,

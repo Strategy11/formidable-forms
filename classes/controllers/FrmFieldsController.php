@@ -614,6 +614,31 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Maybe add a blank placeholder option before any options
+	 * in a dropdown.
+	 *
+	 * @since 4.04
+	 * @return bool True if placeholder was added.
+	 */
+	public static function add_placeholder_to_select( $field ) {
+		$placeholder = FrmField::get_option( $field, 'placeholder' );
+		if ( empty( $placeholder ) ) {
+			$placeholder = self::get_default_value_from_name( $field );
+		}
+
+		if ( $placeholder !== '' ) {
+			?>
+			<option value="">
+				<?php echo esc_html( FrmField::get_option( $field, 'autocom' ) ? '' : $placeholder ); ?>
+			</option>
+			<?php
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Use HMTL5 placeholder with js fallback
 	 *
 	 * @param array $field
