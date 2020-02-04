@@ -746,7 +746,7 @@ p.frm_has_shortcodes {
 	position: sticky;
 	top: 0;
 	background-color: var(--sidebar-color);
-	z-index: 1000;
+	z-index: 98; /* must be < 99 */
 	margin-top: 0;
 	padding-top: 5px;
 }
@@ -5145,6 +5145,10 @@ tr.frm_options_heading td {
 
 .frm_prod_type_single .frm_product_price_wrapper {
 	width: 100%;
+}
+
+.frm-type-quantity .frm-step {
+	display: none;
 }
 
 #new_fields .frm_product_price_wrapper input:first-child {
