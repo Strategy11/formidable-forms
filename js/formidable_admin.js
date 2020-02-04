@@ -4911,34 +4911,31 @@ function frmAdminBuildJS() {
 		w.off( 'beforeunload.edit-post' );
 	}
 
-	function setScrollbarCushion() {
-		var frmWrap = jQuery( '.frm_wrap' );
-		var cushion = getScrollbarWidth() + 1;
-		var cushionString = '--scrollbar-cushion: ' + cushion + 'px';
-		frmWrap.attr( 'style', cushionString );
+	function isChrome() {
+		var isChromium = window.chrome,
+			winNav = window.navigator,
+			vendorName = winNav.vendor,
+			isOpera = typeof window.opr !== 'undefined',
+			isIEedge = winNav.userAgent.indexOf('Edge') > -1,
+			isIOSChrome = winNav.userAgent.match('CriOS');
+
+		if ( isIOSChrome ) {
+			return true;
+		} else if (
+			isChromium !== null &&
+			typeof isChromium !== 'undefined' &&
+			vendorName === 'Google Inc.' &&
+			isOpera === false &&
+			isIEedge === false
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
-	// source: https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript/13382873#13382873
-	function getScrollbarWidth() {
-
-		// Creating invisible container
-		const outer = document.createElement( 'div' );
-		outer.style.visibility = 'hidden';
-		outer.style.overflow = 'scroll'; // forcing scrollbar to appear
-		outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
-		document.body.appendChild( outer );
-
-		// Creating inner element and placing it in the container
-		const inner = document.createElement( 'div' );
-		outer.appendChild( inner );
-
-		// Calculating difference between container's full width and the child width
-		const scrollbarWidth = ( outer.offsetWidth - inner.offsetWidth );
-
-		// Removing temporary elements from the DOM
-		outer.parentNode.removeChild( outer );
-
-		return scrollbarWidth;
+	function setScrollbarCushion() {
+		jQuery( '.frm_wrap' ).attr( 'style', '--scrollbar-cushion: 15px' );
 	}
 
 	function maybeChangeEmbedFormMsg() {
@@ -5078,7 +5075,9 @@ function frmAdminBuildJS() {
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
 
-			jQuery( window ).on( 'resize load', setScrollbarCushion );
+			if ( ! isChrome() ) {
+				jQuery( window ).on( 'resize load', setScrollbarCushion );
+			}
 		},
 
 		buildInit: function() {
