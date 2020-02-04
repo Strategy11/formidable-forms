@@ -1019,6 +1019,7 @@ h2 .frm-button-primary {
 	transition: all .2s ease;
 	padding: 0 15px;
 	height: 28px;
+	min-height: 28px;
 	outline: none;
 	line-height: 26px;
 }
