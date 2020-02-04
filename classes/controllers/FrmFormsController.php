@@ -900,6 +900,8 @@ class FrmFormsController {
 	}
 
 	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
 		global $frm_vars;
 
 		if ( ! is_array( $args ) ) {
@@ -916,8 +918,6 @@ class FrmFormsController {
 		$args     = array_merge( $defaults, $args );
 		$message  = $args['message'];
 		$warnings = $args['warnings'];
-
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$form   = FrmForm::getOne( $id );
 		$fields = FrmField::get_all_for_form( $id );
