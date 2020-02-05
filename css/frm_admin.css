@@ -6679,6 +6679,10 @@ iframe#dyncontent_ifr {
 	padding: 3px;
 }
 
+#frm-welcome #frm-using-lite {
+	display: none;
+}
+
 /* Chrome Scrollbars for Windows */
 .windows::-webkit-scrollbar,
 .windows ::-webkit-scrollbar {
