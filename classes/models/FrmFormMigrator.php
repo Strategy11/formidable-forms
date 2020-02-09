@@ -202,30 +202,40 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			if ( null !== $this->current_section ) {
-				$new_field['field_options']['in_section'] = $this->current_section['id'];
-			}
-
 			if ( $this->should_add_field( $field ) ) {
 
-				$form['fields'][] = $new_field;
+				if ( null !== $this->current_section ) {
+					if ( in_array( $type, array( 'list', 'section', 'page' ) ) ) {
+						$this->close_prev_section( $form, $field_order );
+					} else {
+						$new_field['field_options']['in_section'] = $this->current_section['id'];
+					}
+				}
 
+				// field_order might have changed, so update
+				$new_field['field_order'] = $field_order;
+
+				$form['fields'][]         = $new_field;
+
+				$this->maybe_prepare_section_for_fields( $field, $new_field, $form, $field_order );
+
+				// This may occassionally skip one level/order e.g. after adding a
+				// list field, as field_order would already be prepared to be used.
 				$field_order ++;
-
-				$this->maybe_prepare_section_fields( $field, $form, $field_order );
 			}
 
 			if ( isset( $new_field['fields'] ) && is_array( $new_field['fields'] ) && ! empty( $new_field['fields'] ) ) {
-
 				// we have (inner) fields to merge
 
 				$form['fields'] = array_merge( $form['fields'], $new_field['fields'] );
 				// set the new field_order as it would have changed
-				$field_order    = $new_field['field_order'];
+				$field_order    = $new_field['current_order'];
 			}
 		}
 
-		$this->maybe_close_prev_section( $form, $field_order );
+		if ( null !== $this->current_section ) {
+			$this->close_prev_section( $form, $field_order );
+		}
 	}
 
 	/**
@@ -251,21 +261,22 @@ abstract class FrmFormMigrator {
 		return $use ? $use : ( is_array( $field ) ? $field['type'] : $field->type );
 	}
 
-	protected function maybe_close_prev_section( &$form, &$field_order ) {
-		if ( null !== $this->current_section ) {
-			$new_field                = FrmFieldsHelper::setup_new_vars( 'end_divider' );
-			$new_field['name']        = __( 'Section Buttons', 'formidable' );
-			$new_field['field_order'] = $field_order;
-			$new_field['original']    = '';
+	protected function close_prev_section( &$form, &$field_order ) {
+		$new_field                = FrmFieldsHelper::setup_new_vars( 'end_divider' );
+		$new_field['name']        = __( 'Section Buttons', 'formidable-pro' );
+		// This pre-inc may make us skip a level/order occassionally, but that's fine.
+		// This & the 2nd increment below are here for better abstraction, the caller
+		// shouldn't have to worry about the right order when closing a section.
+		$new_field['field_order'] = ++$field_order;
+		$new_field['original']    = '';
 
-			$form['fields'][]         = $new_field;
-			$this->current_section    = null;
+		$form['fields'][]         = $new_field;
+		$this->current_section    = null;
 
-			++$field_order;
-		}
+		++$field_order;
 	}
 
-	protected function maybe_prepare_section_fields( $field, &$form, &$field_order ) {
+	protected function maybe_prepare_section_for_fields( $field, &$new_field, &$form, &$field_order ) {
 		// override
 	}
 
@@ -318,16 +329,18 @@ abstract class FrmFormMigrator {
 		);
 	}
 
+	/**
+	 * @param array $form parameters for the new form to be created. Only
+	 *					  the name key is a must. The keys are the column
+	 *					  names of the forms table in the DB.
+	 *
+	 * @return int 		  The ID of the newly created form.
+	 */
 	protected function create_form( $form ) {
-		return FrmForm::create(
-			array(
-				'name'        => $form['name'],
-				'description' => $form['description'],
-				'options'     => $form['options'],
-				'form_key'    => $form['name'],
-				'status'      => 'published',
-			)
-		);
+		$form['form_key'] = $form['name'];
+		$form['status']   = 'published';
+
+		return FrmForm::create( $form );
 	}
 
 	protected function form_creation_error_response( $form ) {
