@@ -205,6 +205,9 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
+		if ( $type === 'var' && ! isset( $args['limit'] ) ) {
+			$args['limit'] = 1;
+		}
 
 		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 

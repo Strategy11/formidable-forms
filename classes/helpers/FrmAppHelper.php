@@ -1504,10 +1504,7 @@ class FrmAppHelper {
 				$column => $key,
 				'ID !'  => $id,
 			),
-			$column,
-			array(
-				'limit' => 1,
-			)
+			$column
 		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
