@@ -1504,24 +1504,15 @@ class FrmAppHelper {
 				$column => $key,
 				'ID !'  => $id,
 			),
-			$column
+			$column,
+			array(
+				'limit' => 1,
+			)
 		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
-			$suffix = 2;
-			do {
-				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
-				$key_check     = FrmDb::get_var(
-					$table_name,
-					array(
-						$column => $alt_post_name,
-						'ID !'  => $id,
-					),
-					$column
-				);
-				$suffix ++;
-			} while ( $key_check || is_numeric( $key_check ) );
-			$key = $alt_post_name;
+			// Create a unique field id if it has already been used.
+			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
 		return $key;
