@@ -94,13 +94,13 @@ class FrmEntryValidate {
 			$_POST['item_name'] = $value;
 		}
 
-		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
-
-		self::validate_field_types( $errors, $posted_field, $value, $args );
-
 		// Field might want to modify value before other parts of the system
 		// e.g. trim off excess values like in the case of fields with limit.
 		$value = apply_filters( 'frm_modify_posted_field_value', $value, $errors, $posted_field, $args );
+
+		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
+
+		self::validate_field_types( $errors, $posted_field, $value, $args );
 
 		if ( $value != '' ) {
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
