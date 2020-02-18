@@ -133,7 +133,7 @@
 							<div class="frm_hidden">
 								<?php
 								esc_html_e( 'Category:', 'formidable' );
-								echo esc_html( implode( $template['categories'], ', ' ) );
+								echo esc_html( implode( ', ', $template['categories'] ) );
 								?>
 							</div>
 						<?php } ?>

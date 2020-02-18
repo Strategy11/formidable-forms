@@ -322,7 +322,7 @@ class FrmFieldsController {
 		}
 
 		if ( $display['clear_on_focus'] && is_array( $field['placeholder'] ) ) {
-			$field['placeholder'] = implode( $field['placeholder'], ', ' );
+			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
 	}
