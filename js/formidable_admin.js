@@ -2894,6 +2894,7 @@ function frmAdminBuildJS() {
 		var p = $thisEle.html();
 
 		preFormSave( this );
+		maybeUpdateFieldOptionValues();
 
 		var $form = jQuery( builderForm );
 		var v = JSON.stringify( $form.serializeArray() );
@@ -2921,10 +2922,42 @@ function frmAdminBuildJS() {
 	function submitNoAjax() {
 		/*jshint validthis:true */
 		preFormSave( this );
+		maybeUpdateFieldOptionValues();
 
 		var form = jQuery( builderForm );
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( JSON.stringify( form.serializeArray() ) );
 		jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
+	}
+
+	function maybeUpdateFieldOptionValues() {
+		var labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"]' ),
+			value, label, match, defaultVal, separateValues;
+
+		for ( var i = 0; i < labels.length; i++ ) {
+			label = labels[ i ];
+			match = label.name.match( /field_options\[options_(\d+)\]\[\d+\]\[label\]/i );
+			if ( ! match || typeof match[1] === 'undefined' ) {
+				continue;
+			}
+
+			value = document.getElementsByName( label.name.replace( /\[label\]/i, '[value]' ) );
+			if ( ! value.length ) {
+				// unlikely though
+				continue;
+			}
+
+			separateValues = usingSeparateValues( match[1] );
+
+			if ( ! separateValues ) {
+				value[0].value = label.value;
+			}
+
+			defaultVal = jQuery( label ).closest( '.frm_single_option' ).find( '[name^="default_value_"]' );
+			if ( ! defaultVal.length ) {
+				continue;
+			}
+			defaultVal[0].value = separateValues ? value[0].value : label.value;
+		}
 	}
 
 	function preFormSave( b ) {
