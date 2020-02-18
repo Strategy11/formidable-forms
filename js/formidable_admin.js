@@ -1894,14 +1894,18 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var parentLi = this.parentNode;
 		var parentUl = parentLi.parentNode;
-		var field_id = this.getAttribute( 'data-fid' );
+		var field_id = this.getAttribute( 'data-fid' ),
+			otherInput;
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
 			jQuery( parentLi ).remove();
 
 			var hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
-				document.getElementById( 'other_input_' + field_id ).value = 0;
+				otherInput = document.getElementById( 'other_input_' + field_id );
+				if ( otherInput ) {
+					otherInput.value = 0;
+				}
 				jQuery( '#other_button_' + field_id ).fadeIn( 'slow' );
 			}
 		} );
