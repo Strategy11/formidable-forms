@@ -5166,10 +5166,6 @@ tr.frm_options_heading td {
 	width: 100%;
 }
 
-.frm-type-quantity .frm-step {
-	display: none;
-}
-
 #new_fields .frm_product_price_wrapper input:first-child {
 	width: 60%;
 	float: left;
