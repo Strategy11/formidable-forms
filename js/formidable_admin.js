@@ -2934,11 +2934,21 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeUpdateFieldOptionValues() {
-		var labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"]' ),
+		var labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"],[name^="field_options[options_"][value="Other"]' ),
 			value, label, match, defaultVal, separateValues;
 
 		for ( var i = 0; i < labels.length; i++ ) {
 			label = labels[ i ];
+
+			// if it's an 'Other' option, just adjust the default value & continue:
+			if ( label.name.match( /field_options\[options_\d+\]\[other_\d+\]/i ) ) {
+				defaultVal = jQuery( label ).closest( '.frm_single_option' ).find( '[name^="default_value_"]' );
+				if ( defaultVal.length ) {
+					defaultVal[0].value = label.value;
+				}
+				continue;
+			}
+
 			match = label.name.match( /field_options\[options_(\d+)\]\[\d+\]\[label\]/i );
 			if ( ! match || typeof match[1] === 'undefined' ) {
 				continue;
