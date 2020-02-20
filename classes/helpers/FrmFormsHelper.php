@@ -1419,7 +1419,7 @@ BEFORE_HTML;
 	 */
 	private static function get_unsafe_params( $url ) {
 		$redirect_components = parse_url( $url );
-		if ( empty ( $redirect_components['query'] ) ) {
+		if ( empty( $redirect_components['query'] ) ) {
 			return array();
 		}
 		parse_str( $redirect_components['query'], $redirect_params );
