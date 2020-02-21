@@ -1513,17 +1513,19 @@ function frmAdminBuildJS() {
 	}
 
 	function popProductFields( field ) {
-		var options = [], fields, i, selected, current;
+		var options = [], fields, i, selected, currents, fName, id;
 
-		current = field.getAttribute( 'data-frmcurrent' );
-
-		fields = getFieldList( 'product' );
-
-		options.push( '<option value="">' + frm_admin_js.select_a_field + '</option>' );
+		currents = JSON.parse( field.getAttribute( 'data-frmcurrent' ) );
+		fName    = field.getAttribute( 'data-frmfname' );
+		fields   = getFieldList( 'product' );
 
 		for ( i = 0; i < fields.length; i++ ) {
-			selected = current == fields[ i ].fieldId ? ' selected' : '';
-			options.push( '<option value="'+ fields[ i ].fieldId +'"' + selected + '>'+ fields[ i ].fieldName +'</option>' );
+			// let's be double sure it's string, else indexOf will fail
+			id = fields[ i ].fieldId.toString();
+			checked = -1 === currents.indexOf( id ) ? '' : ' checked';
+			options.push( '<label class="frm_inline_label">' );
+			options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + fields[ i ].fieldName );
+			options.push( '</label>' );
 		}
 
 		field.innerHTML = options.join( '' );
@@ -1550,7 +1552,7 @@ function frmAdminBuildJS() {
 				return; // very unlikely though
 			}
 
-			productFieldOpt.setAttribute( 'data-frmcurrent', productFields[0].getAttribute( 'data-fid' ) );
+			productFieldOpt.setAttribute( 'data-frmcurrent', JSON.stringify( [ productFields[0].getAttribute( 'data-fid' ) ] ) );
 			popProductFields( productFieldOpt );
 			// in order to move its settings to that LHS panel where
 			// the update form resides, else it'll lose this setting
@@ -5049,6 +5051,20 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function updateCurrentProductFields() {
+		var cont = jQuery( this ).closest( '.frmjs_prod_field_opt' ),
+			products = cont.find( '[type="checkbox"]' ),
+			idsArray = [];
+
+		products.each( function() {
+			if ( this.checked ) {
+				idsArray.push( this.value );
+			}
+		} );
+
+		cont[0].setAttribute( 'data-frmcurrent', JSON.stringify( idsArray ) );
+	}
+
 	function toggleProductType() {
 		var settings = jQuery( this ).closest( '.frm-single-settings' ),
 			container = settings.find( '.frmjs_product_choices' ),
@@ -5300,9 +5316,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			popAllProductFields();
-			jQuery( document ).on( 'change', '.frmjs_prod_field_opt', function () {
-				this.setAttribute( 'data-frmcurrent', this.options[ this.selectedIndex ].value );
-			} );
+			jQuery( document ).on( 'change', '.frmjs_prod_field_opt [type="checkbox"]', updateCurrentProductFields );
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
