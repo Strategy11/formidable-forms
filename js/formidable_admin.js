@@ -1513,17 +1513,18 @@ function frmAdminBuildJS() {
 	}
 
 	function popProductFields( field ) {
-		var options = [], fields, i, selected, currents, fName, id;
+		var options = [], fields, i, checked, current,
+			fName, id;
 
-		currents = JSON.parse( field.getAttribute( 'data-frmcurrent' ) );
+		current = JSON.parse( field.getAttribute( 'data-frmcurrent' ) );
 		fName    = field.getAttribute( 'data-frmfname' );
 		fields   = getFieldList( 'product' );
 
 		for ( i = 0; i < fields.length; i++ ) {
 			// let's be double sure it's string, else indexOf will fail
 			id = fields[ i ].fieldId.toString();
-			checked = -1 === currents.indexOf( id ) ? '' : ' checked';
-			options.push( '<label class="frm_inline_label">' );
+			checked = -1 === current.indexOf( id ) ? '' : ' checked';
+			options.push( '<label class="frm6">' );
 			options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + fields[ i ].fieldName );
 			options.push( '</label>' );
 		}
@@ -2496,7 +2497,7 @@ function frmAdminBuildJS() {
 		}
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
-			isProduct = isProductField( sourceID )
+			isProduct = isProductField( sourceID ),
 			showOther = atts.other;
 
 		removeDropdownOpts( field );
