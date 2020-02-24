@@ -1892,10 +1892,10 @@ function frmAdminBuildJS() {
 
 	function deleteFieldOption() {
 		/*jshint validthis:true */
-		var parentLi = this.parentNode;
-		var parentUl = parentLi.parentNode;
-		var field_id = this.getAttribute( 'data-fid' ),
-			otherInput;
+		var otherInput,
+			parentLi = this.parentNode,
+			parentUl = parentLi.parentNode,
+			field_id = this.getAttribute( 'data-fid' );
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
 			jQuery( parentLi ).remove();
@@ -1903,7 +1903,7 @@ function frmAdminBuildJS() {
 			var hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
 				otherInput = document.getElementById( 'other_input_' + field_id );
-				if ( otherInput ) {
+				if ( otherInput !== null ) {
 					otherInput.value = 0;
 				}
 				jQuery( '#other_button_' + field_id ).fadeIn( 'slow' );
@@ -2498,7 +2498,7 @@ function frmAdminBuildJS() {
 		}
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
-			isProduct = isProductField( sourceID )
+			isProduct = isProductField( sourceID ),
 			showOther = atts.other;
 
 		removeDropdownOpts( field );
@@ -2934,13 +2934,13 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeUpdateFieldOptionValues() {
-		var labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"],[name^="field_options[options_"][value="Other"]' ),
-			value, label, match, defaultVal, separateValues;
+		var i, value, label, match, defaultVal, separateValues,
+			labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"],[name^="field_options[options_"][value="Other"]' );
 
-		for ( var i = 0; i < labels.length; i++ ) {
+		for ( i = 0; i < labels.length; i++ ) {
 			label = labels[ i ];
 
-			// if it's an 'Other' option, just adjust the default value & continue:
+			// If it's an 'Other' option, just adjust the default value & continue.
 			if ( label.name.match( /field_options\[options_\d+\]\[other_\d+\]/i ) ) {
 				defaultVal = jQuery( label ).closest( '.frm_single_option' ).find( '[name^="default_value_"]' );
 				if ( defaultVal.length ) {
