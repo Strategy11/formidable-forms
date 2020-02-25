@@ -5053,13 +5053,11 @@ function frmAdminBuildJS() {
 
 	function updateCurrentProductFields() {
 		var cont = jQuery( this ).closest( '.frmjs_prod_field_opt' ),
-			products = cont.find( '[type="checkbox"]' ),
+			products = cont.find( '[type="checkbox"]:checked' ),
 			idsArray = [];
 
 		products.each( function() {
-			if ( this.checked ) {
-				idsArray.push( this.value );
-			}
+			idsArray.push( this.value );
 		} );
 
 		cont[0].setAttribute( 'data-frmcurrent', JSON.stringify( idsArray ) );
