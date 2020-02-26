@@ -1516,9 +1516,9 @@ function frmAdminBuildJS() {
 		var options = [], fields, i, checked, current,
 			fName, id;
 
-		current = JSON.parse( field.getAttribute( 'data-frmcurrent' ) );
-		fName    = field.getAttribute( 'data-frmfname' );
-		fields   = getFieldList( 'product' );
+		current = getCurrentProductFields( field );
+		fName   = field.getAttribute( 'data-frmfname' );
+		fields  = getFieldList( 'product' );
 
 		for ( i = 0; i < fields.length; i++ ) {
 			// let's be double sure it's string, else indexOf will fail
@@ -1530,6 +1530,17 @@ function frmAdminBuildJS() {
 		}
 
 		field.innerHTML = options.join( '' );
+	}
+
+	function getCurrentProductFields( prodFieldOpt ) {
+		var products = prodFieldOpt.querySelectorAll( '[type="checkbox"]:checked' ),
+			idsArray = [];
+
+		for ( var i = 0; i < products.length; i++ ) {
+			idsArray.push( products[ i ].value );
+		}
+
+		return idsArray;
 	}
 
 	function popAllProductFields() {
@@ -1553,7 +1564,6 @@ function frmAdminBuildJS() {
 				return; // very unlikely though
 			}
 
-			productFieldOpt.setAttribute( 'data-frmcurrent', JSON.stringify( [ productFields[0].getAttribute( 'data-fid' ) ] ) );
 			popProductFields( productFieldOpt );
 			// in order to move its settings to that LHS panel where
 			// the update form resides, else it'll lose this setting
@@ -5052,18 +5062,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function updateCurrentProductFields() {
-		var cont = jQuery( this ).closest( '.frmjs_prod_field_opt' ),
-			products = cont.find( '[type="checkbox"]:checked' ),
-			idsArray = [];
-
-		products.each( function() {
-			idsArray.push( this.value );
-		} );
-
-		cont[0].setAttribute( 'data-frmcurrent', JSON.stringify( idsArray ) );
-	}
-
 	function toggleProductType() {
 		var settings = jQuery( this ).closest( '.frm-single-settings' ),
 			container = settings.find( '.frmjs_product_choices' ),
@@ -5315,7 +5313,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			popAllProductFields();
-			jQuery( document ).on( 'change', '.frmjs_prod_field_opt [type="checkbox"]', updateCurrentProductFields );
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
