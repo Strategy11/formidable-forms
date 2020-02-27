@@ -1559,7 +1559,7 @@ function frmAdminBuildJS() {
 			productFieldOpt = document.getElementById( 'field_options[product_field_' + fieldId + ']' );
 
 		if ( null === productFieldOpt ) {
-			return; // very unlikely though
+			return;
 		}
 
 		popProductFields( productFieldOpt );
