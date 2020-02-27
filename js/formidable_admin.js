@@ -1578,20 +1578,38 @@ function frmAdminBuildJS() {
 	}
 
 	function popProductFields( field ) {
-		var options = [], fields, i, selected, current;
+		var options = [], products, i, checked, current,
+			fName, id, auto, quantities;
 
-		current = field.getAttribute( 'data-frmcurrent' );
+		current    = getCurrentProductFields( field );
+		fName      = field.getAttribute( 'data-frmfname' );
+		products   = getFieldList( 'product' );
+		quantities = getFieldList( 'quantity' );
 
-		fields = getFieldList( 'product' );
+		// whether we have just 1 product and 1 quantity field & should therefore attach the latter to the former
+		auto = 1 === quantities.length && 1 === products.length;
 
-		options.push( '<option value="">' + frm_admin_js.select_a_field + '</option>' );
-
-		for ( i = 0; i < fields.length; i++ ) {
-			selected = current == fields[ i ].fieldId ? ' selected' : '';
-			options.push( '<option value="'+ fields[ i ].fieldId +'"' + selected + '>'+ fields[ i ].fieldName +'</option>' );
+		for ( i = 0 ; i < products.length ; i++ ) {
+			// let's be double sure it's string, else indexOf will fail
+			id = products[ i ].fieldId.toString();
+			checked = ( auto || -1 !== current.indexOf( id ) ) ? ' checked' : '';
+			options.push( '<label class="frm6">' );
+			options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + products[ i ].fieldName );
+			options.push( '</label>' );
 		}
 
 		field.innerHTML = options.join( '' );
+	}
+
+	function getCurrentProductFields( prodFieldOpt ) {
+		var products = prodFieldOpt.querySelectorAll( '[type="checkbox"]:checked' ),
+			idsArray = [];
+
+		for ( var i = 0; i < products.length; i++ ) {
+			idsArray.push( products[ i ].value );
+		}
+
+		return idsArray;
 	}
 
 	function popAllProductFields() {
@@ -1602,25 +1620,17 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeSetProductField( field ) {
-		var productFields, quantityFields, fieldsList, productFieldOpt, fieldId;
-
-		fieldsList = jQuery( field ).closest( 'ul.frm_sorting' );
-		productFields = fieldsList.children( '.edit_field_type_product' );
-		quantityFields = fieldsList.children( '.edit_field_type_quantity' );
-
-		if ( 1 === quantityFields.length && 1 === productFields.length ) {
-			fieldId = field.getAttribute( 'data-fid' );
+		var fieldId = field.getAttribute( 'data-fid' ),
 			productFieldOpt = document.getElementById( 'field_options[product_field_' + fieldId + ']' );
-			if ( null === productFieldOpt ) {
-				return; // very unlikely though
-			}
 
-			productFieldOpt.setAttribute( 'data-frmcurrent', productFields[0].getAttribute( 'data-fid' ) );
-			popProductFields( productFieldOpt );
-			// in order to move its settings to that LHS panel where
-			// the update form resides, else it'll lose this setting
-			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+		if ( null === productFieldOpt ) {
+			return;
 		}
+
+		popProductFields( productFieldOpt );
+		// in order to move its settings to that LHS panel where
+		// the update form resides, else it'll lose this setting
+		moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
 	}
 
 	/**
@@ -2559,7 +2569,7 @@ function frmAdminBuildJS() {
 		}
 		var sourceID = atts.sourceID,
 			placeholder = atts.placeholder,
-			isProduct = isProductField( sourceID )
+			isProduct = isProductField( sourceID ),
 			showOther = atts.other;
 
 		removeDropdownOpts( field );
@@ -5372,9 +5382,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			popAllProductFields();
-			jQuery( document ).on( 'change', '.frmjs_prod_field_opt', function () {
-				this.setAttribute( 'data-frmcurrent', this.options[ this.selectedIndex ].value );
-			} );
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
