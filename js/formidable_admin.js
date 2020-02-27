@@ -1513,19 +1513,23 @@ function frmAdminBuildJS() {
 	}
 
 	function popProductFields( field ) {
-		var options = [], fields, i, checked, current,
-			fName, id;
+		var options = [], products, i, checked, current,
+			fName, id, auto, quantities;
 
-		current = getCurrentProductFields( field );
-		fName   = field.getAttribute( 'data-frmfname' );
-		fields  = getFieldList( 'product' );
+		current    = getCurrentProductFields( field );
+		fName      = field.getAttribute( 'data-frmfname' );
+		products   = getFieldList( 'product' );
+		quantities = getFieldList( 'quantity' );
 
-		for ( i = 0; i < fields.length; i++ ) {
+		// whether we have just 1 product and 1 quantity field & should therefore attach the latter to the former
+		auto = 1 === quantities.length && 1 === products.length;
+
+		for ( i = 0 ; i < products.length ; i++ ) {
 			// let's be double sure it's string, else indexOf will fail
-			id = fields[ i ].fieldId.toString();
-			checked = -1 === current.indexOf( id ) ? '' : ' checked';
+			id = products[ i ].fieldId.toString();
+			checked = ( auto || -1 !== current.indexOf( id ) ) ? ' checked' : '';
 			options.push( '<label class="frm6">' );
-			options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + fields[ i ].fieldName );
+			options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + products[ i ].fieldName );
 			options.push( '</label>' );
 		}
 
@@ -1551,24 +1555,17 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeSetProductField( field ) {
-		var productFields, quantityFields, fieldsList, productFieldOpt, fieldId;
-
-		fieldsList = jQuery( field ).closest( 'ul.frm_sorting' );
-		productFields = fieldsList.children( '.edit_field_type_product' );
-		quantityFields = fieldsList.children( '.edit_field_type_quantity' );
-
-		if ( 1 === quantityFields.length && 1 === productFields.length ) {
-			fieldId = field.getAttribute( 'data-fid' );
+		var fieldId = field.getAttribute( 'data-fid' ),
 			productFieldOpt = document.getElementById( 'field_options[product_field_' + fieldId + ']' );
-			if ( null === productFieldOpt ) {
-				return; // very unlikely though
-			}
 
-			popProductFields( productFieldOpt );
-			// in order to move its settings to that LHS panel where
-			// the update form resides, else it'll lose this setting
-			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+		if ( null === productFieldOpt ) {
+			return; // very unlikely though
 		}
+
+		popProductFields( productFieldOpt );
+		// in order to move its settings to that LHS panel where
+		// the update form resides, else it'll lose this setting
+		moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
 	}
 
 	/**
