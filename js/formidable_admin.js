@@ -1578,24 +1578,35 @@ function frmAdminBuildJS() {
 	}
 
 	function popProductFields( field ) {
-		var options = [], products, i, checked, current,
-			fName, id, auto, quantities;
+		var i, checked, id,
+			options = [],
+			current = getCurrentProductFields( field ),
+			fName = field.getAttribute( 'data-frmfname' ),
+			products = getFieldList( 'product' ),
+			quantities = getFieldList( 'quantity' ),
+			isSelect = field.tagName === 'SELECT', // for reverse compatibility.
+			// whether we have just 1 product and 1 quantity field & should therefore attach the latter to the former
+			auto = 1 === quantities.length && 1 === products.length;
 
-		current    = getCurrentProductFields( field );
-		fName      = field.getAttribute( 'data-frmfname' );
-		products   = getFieldList( 'product' );
-		quantities = getFieldList( 'quantity' );
-
-		// whether we have just 1 product and 1 quantity field & should therefore attach the latter to the former
-		auto = 1 === quantities.length && 1 === products.length;
+		if ( isSelect ) {
+			// This fallback can be removed after 4.05.
+			current = field.getAttribute( 'data-frmcurrent' );
+		}
 
 		for ( i = 0 ; i < products.length ; i++ ) {
 			// let's be double sure it's string, else indexOf will fail
 			id = products[ i ].fieldId.toString();
-			checked = ( auto || -1 !== current.indexOf( id ) ) ? ' checked' : '';
-			options.push( '<label class="frm6">' );
-			options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + products[ i ].fieldName );
-			options.push( '</label>' );
+			checked = auto || -1 !== current.indexOf( id );
+			if ( isSelect ) {
+				// This fallback can be removed after 4.05.
+				checked = checked ? ' selected' : '';
+				options.push( '<option value="'+ id +'"' + checked + '>'+ products[ i ].fieldName +'</option>' );
+			} else {
+				checked = checked ? ' checked' : '';
+				options.push( '<label class="frm6">' );
+				options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + products[ i ].fieldName );
+				options.push( '</label>' );
+			}
 		}
 
 		field.innerHTML = options.join( '' );
