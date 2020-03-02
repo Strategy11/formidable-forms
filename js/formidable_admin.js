@@ -2934,7 +2934,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeUpdateFieldOptionValues() {
-		var labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"],[name^="field_options[options_"][value="Other"]' ),
+		var labels = document.querySelectorAll( '#new_fields .frm_single_option:not([data-optkey="000"]) [name^="field_options[options_"][name$="[label]"],[name^="field_options[options_"][name*="other_"]' ),
 			value, label, match, defaultVal, separateValues;
 
 		for ( var i = 0; i < labels.length; i++ ) {
