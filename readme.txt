@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 4.04
+Stable tag: 4.04.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -357,6 +357,14 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced forms, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 == Changelog ==
+= 4.04.01 =
+* Performance: Improve speed when creating a unique entry key.
+* Performance: Always return a single result with FrmDb::get_var().
+* Fix: Resolve php warning showing on form builder with some fields.
+* Fix: Fix deprecated implode() strings for PHP 7.4.
+* Fix: Prevent possibility of extra entry being deleted when switching forms right after deleting an entry.
+* Fix: In some cases, a PHP warning was shown when redirecting after submit.
+
 = 4.04 =
 * New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
 * New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
