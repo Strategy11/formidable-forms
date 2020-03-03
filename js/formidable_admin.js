@@ -5059,6 +5059,14 @@ function frmAdminBuildJS() {
 		setTimeout( success, 1000 );
 	}
 
+	function invisible(classes) {
+		jQuery(classes).css('visibility', 'hidden');
+	}
+
+	function visible(classes) {
+		jQuery(classes).css('visibility', 'visible');
+	}
+
 	function initModal( id, width ) {
 		var $info = jQuery( id );
 		if ( $info.length < 1 ) {
@@ -5481,9 +5489,9 @@ function frmAdminBuildJS() {
 			var $loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).change( function() {
 				if ( this.checked ) {
-					frmFrontForm.visible( '.hide_logged_in' );
+					visible( '.hide_logged_in' );
 				} else {
-					frmFrontForm.invisible( '.hide_logged_in' );
+					invisible( '.hide_logged_in' );
 				}
 			} );
 
@@ -5499,9 +5507,9 @@ function frmAdminBuildJS() {
 			var $singleEntry = document.getElementById( 'single_entry' );
 			jQuery( $singleEntry ).change( function() {
 				if ( this.checked ) {
-					frmFrontForm.visible( '.hide_single_entry' );
+					visible( '.hide_single_entry' );
 				} else {
-					frmFrontForm.invisible( '.hide_single_entry' );
+					invisible( '.hide_single_entry' );
 				}
 
 				if ( this.checked && jQuery( document.getElementById( 'frm_single_entry_type' ) ).val() === 'cookie' ) {
