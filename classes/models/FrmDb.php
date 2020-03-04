@@ -334,10 +334,10 @@ class FrmDb {
 
 		$table_parts = explode( ' ', $table );
 		$group       = reset( $table_parts );
-		$group       = str_replace( $wpdb->prefix, '', $group );
+		self::maybe_remove_prefix( $wpdb->prefix, $group );
 
 		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
-		$group  = str_replace( $prefix, '', $group );
+		self::maybe_remove_prefix( $prefix, $group );
 
 		if ( $group == $table ) {
 			$table = $wpdb->prefix . $table;
@@ -345,6 +345,17 @@ class FrmDb {
 
 		// switch to singular group name
 		$group = rtrim( $group, 's' );
+	}
+
+	/**
+	 * Only remove the db prefix when at the beginning.
+	 *
+	 * @since 4.04.02
+	 */
+	private static function maybe_remove_prefix( $prefix, &$name ) {
+		if ( substr( $name, 0, strlen( $prefix ) ) === $prefix ) {
+		    $name = substr( $name, strlen( $prefix ) );
+		}
 	}
 
 	private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
