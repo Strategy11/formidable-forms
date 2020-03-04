@@ -354,7 +354,7 @@ class FrmDb {
 	 */
 	private static function maybe_remove_prefix( $prefix, &$name ) {
 		if ( substr( $name, 0, strlen( $prefix ) ) === $prefix ) {
-		    $name = substr( $name, strlen( $prefix ) );
+			$name = substr( $name, strlen( $prefix ) );
 		}
 	}
 
