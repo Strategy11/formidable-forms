@@ -267,7 +267,11 @@ class FrmForm {
 	private static function sanitize_field_opt( $opt, &$value ) {
 		if ( is_string( $value ) ) {
 			if ( $opt === 'calc' ) {
+				$allow = array( '<= ', ' >=' ); // Allow <= and >=
+				$temp  = array( '< = ', ' > =' );
+				$value = str_replace( $allow, $temp, $value );
 				$value = strip_tags( $value );
+				$value = str_replace( $temp, $allow, $value );
 			} else {
 				$value = FrmAppHelper::kses( $value, 'all' );
 			}

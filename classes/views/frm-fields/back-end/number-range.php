@@ -11,7 +11,7 @@
 		</span>
 	</span>
 </p>
-<p class="frm3 frm_last frm_form_field">
+<p class="frm3 frm_last frm_form_field frm-step">
 	<label for="frm_step_<?php echo esc_attr( $field['field_key'] ); ?>">
 		<?php esc_html_e( 'Step', 'formidable' ); ?>
 	</label>

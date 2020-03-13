@@ -122,8 +122,10 @@ class FrmFormsController {
 		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
 		$errors = FrmForm::validate( $_POST );
+		$warnings = FrmFormsHelper::check_for_warnings( $_POST );
+
 		if ( count( $errors ) > 0 ) {
-			return self::get_settings_vars( $id, $errors );
+			return self::get_settings_vars( $id, $errors, compact( 'warnings' ) );
 		}
 
 		do_action( 'frm_before_update_form_settings', $id );
@@ -132,7 +134,7 @@ class FrmFormsController {
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
-		return self::get_settings_vars( $id, array(), $message );
+		return self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
 	}
 
 	public static function update( $values = array() ) {
@@ -897,10 +899,25 @@ class FrmFormsController {
 		}
 	}
 
-	public static function get_settings_vars( $id, $errors = array(), $message = '' ) {
+	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		global $frm_vars;
+
+		if ( ! is_array( $args ) ) {
+			// For reverse compatibility.
+			$args = array(
+				'message' => $args,
+			);
+		}
+
+		$defaults = array(
+			'message'  => '',
+			'warnings' => array(),
+		);
+		$args     = array_merge( $defaults, $args );
+		$message  = $args['message'];
+		$warnings = $args['warnings'];
 
 		$form   = FrmForm::getOne( $id );
 		$fields = FrmField::get_all_for_form( $id );

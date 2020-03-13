@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.04b';
+	public static $plug_version = '4.04.01';
 
 	/**
 	 * @since 1.07.02
@@ -1508,20 +1508,8 @@ class FrmAppHelper {
 		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
-			$suffix = 2;
-			do {
-				$alt_post_name = substr( $key, 0, 200 - ( strlen( $suffix ) + 1 ) ) . $suffix;
-				$key_check     = FrmDb::get_var(
-					$table_name,
-					array(
-						$column => $alt_post_name,
-						'ID !'  => $id,
-					),
-					$column
-				);
-				$suffix ++;
-			} while ( $key_check || is_numeric( $key_check ) );
-			$key = $alt_post_name;
+			// Create a unique field id if it has already been used.
+			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
 		return $key;
@@ -2265,6 +2253,13 @@ class FrmAppHelper {
 				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
 				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
 				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
+				'only_one_action'   => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
+				'unsafe_params'     => FrmFormsHelper::reserved_words(),
+				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
+				'slug_is_reserved' => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
+				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
+				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
+				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
 				'install'           => __( 'Install', 'formidable' ),

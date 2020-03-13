@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.3.2
 Requires PHP: 5.6
-Stable tag: 4.03.07
+Stable tag: 4.04.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -113,21 +113,21 @@ Our customers use Formidable Views to create data-driven web applications like r
 
 As you can see, Formidable is not your average contact form plugin. It's a true all-in-one WordPress form solution.
 
-= Increase Your Sales with WooCommerce Product Forms = 
+= Increase Your Sales with WooCommerce Product Order Forms =
 
-Formidable is the only WordPress form builder plugin that offers extensive integration with WooCommerce.
+Formidable is the only WordPress form builder plugin that offers extensive integration with WooCommerce orders.
 
-Our goal is to empower you to build powerful WooCommerce product forms, so you can increase your store sales.
+Our goal is to empower you to build powerful WooCommerce product order forms, so you can increase your store sales.
 
-You can use Formidable to add a WooCommerce Product configurator with custom calculation fields, and automatically send the data to the WooCommerce cart with variable pricing options.
+You can use Formidable to add a WooCommerce product configurator with custom calculation fields. Then automatically send the order info to the WooCommerce cart with variable pricing options.
 
-Need your customers to upload a file when they purchase a product? No problem. Simply drag & drop a file upload field into your WooCommerce form and you're done.
+Need your customers to upload a file when they purchase a product? No problem. Simply drag & drop a file upload field into your linked up WooCommerce order form and you're done.
 
 You can even show submitted form values in the WooCommerce purchase receipt emails as well as trigger SMS text messages or marketing integrations when an order is completed.
 
 = Make Powerful Quiz Forms & Calculators =
 
-You can also use Formidable to create quiz forms and calculator forms.
+In addition to simple order forms, you can also use Formidable to create quiz forms and calculator forms.
 
 More on quiz forms later, but here are some example web calculators you can quickly add to your WordPress site:
 
@@ -200,6 +200,7 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * <a href="https://formidableforms.com/features/conditional-logic-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Conditional logic for smart forms</a>. Show or hide form fields based on user selections or user roles. Make complex forms simple and increase form conversion rates.
 * <a href="https://formidableforms.com/features/email-autoresponders-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Send email notifications & autoresponders</a>. Automatically let clients know you received their message. Then create customized email notifications for multiple recipients and get info from an email form to those who need it.
 * Email routing: Conditionally send multiple autoresponder emails and notifications based on values in email forms, payment forms, and registration forms.
+* Pricing fields for easy eCommerce forms with automatic calculations. Drop in a product field, quantity, and total and you're good to go.
 * <a href="https://formidableforms.com/features/wordpress-calculated-fields-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields for a mortgage calculator, auto loan calculator, or many other calculator forms. Even a contact form could benefit from calculations for easy quotes and price estimates.
 * <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual form style creator</a>. Our form creator for email forms, calculators, and other online forms not only allows you to build forms, but also create branded forms that match your site. Change colors, borders, padding and much more without any code.
 * <a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Flexible form layout design</a>. Build mobile responsive forms and advanced form layouts with multiple fields in a row by using our CSS layout classes.
@@ -234,8 +235,8 @@ In addition to all the features listed above, power up your forms with these int
 * <a href="https://formidableforms.com/features/paypal-wordpress-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">PayPal Payment Forms</a>. Automate your business by collecting instant payments and recurring payments from clients. Collect information, calculate a total, and send clients to PayPal from your payment forms.
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Payment Forms</a>. Keep users on your site while collecting payments from a credit card form. Select from one time and recurring charges in order forms and donation forms.
 * <a href="https://formidableforms.com/features/authorize-net-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Authorize.net AIM Payment Forms</a>. Process one-time payments in order forms, registration forms, and calculator forms with Authorize.net AIM.
-* <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product form and collect extra data when a product is added to the cart. Use form calculations for variable pricing, upload a file with the purchase, and send custom emails when a purchase is completed.
-* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Forms</a>. Add and update leads in a MailChimp email marketing list from lead forms, order forms, and email forms.
+* <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use form calculations for variable pricing, upload a file with the purchase, and send custom emails when a purchase is completed.
+* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Forms</a>. Add and update leads in a MailChimp email marketing list from lead forms, online order forms, and email forms.
 * <a href="https://formidableforms.com/features/entries-to-constant-contact/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Constant Contact Forms</a>. Create leads automatically in Constant Contact with newsletter signup forms.
 * <a href="https://formidableforms.com/features/form-entries-to-getresponse/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">GetResponse Forms</a>. Collect leads in WordPress forms, add them to GetResponse, and trigger GetResponse marketing automations.
 * <a href="https://formidableforms.com/features/aweber-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">AWeber Forms</a>. Subscribe users to an AWeber mailing list when a newsletter signup form is submitted.
@@ -356,14 +357,22 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced forms, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 == Changelog ==
+= 4.04.01 =
+* Performance: Improve speed when creating a unique entry key.
+* Performance: Always return a single result with FrmDb::get_var().
+* Fix: Resolve php warning showing on form builder with some fields.
+* Fix: Fix deprecated implode() strings for PHP 7.4.
+* Fix: Prevent possibility of extra entry being deleted when switching forms right after deleting an entry.
+* Fix: In some cases, a PHP warning was shown when redirecting after submit.
+
+= 4.04 =
+* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
+* New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
+* New: Show the new pricing fields in the builder for product education.
+
 = 4.03.07 =
 * Project Delight: Make admin-side tooltips more enjoyable and helpful.
 * Add several missing countries to the country list.
 * Fix: Prevent duplicate localization strings from showing in the page source.
-
-= 4.03.06 =
-* New: Use autocomplete for settings for selecting a WordPress page for faster load time on sites with many pages.
-* Fix: When saving conditional logic settings in WP 5.3.1, there was a PHP error message showing on some sites.
-* Fix: Custom CSS was being sanitized incorrectly and > was switched to &rt;
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
