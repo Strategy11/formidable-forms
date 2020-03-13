@@ -108,15 +108,16 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	function set_field_value( $field ) {
 		$value = rand_str();
 		$field_values = array(
-			'email'  => 'admin@example.org',
-			'url'    => 'http://test.com',
-			'number' => 120,
-			'scale'  => 8,
-			'date'   => '2015-01-01',
-			'time'   => '13:30:00',
-			'user_id' => get_current_user_id(),
-			'phone'  => '222-222-2222',
-			'html'   => '',
+			'email'    => 'admin@example.org',
+			'url'      => 'http://test.com',
+			'number'   => 120,
+			'scale'    => 8,
+			'date'     => '2015-01-01',
+			'time'     => '13:30:00',
+			'user_id'  => get_current_user_id(),
+			'phone'    => '222-222-2222',
+			'html'     => '',
+			'quantity' => 4,
 		);
 
 		if ( isset( $field_values[ $field->type ] ) ) {
