@@ -217,7 +217,7 @@ abstract class FrmFormMigrator {
 
 				$form['fields'][]         = $new_field;
 
-				$this->maybe_prepare_section_for_fields( $field, $new_field, $form, $field_order );
+				$this->before_add_field( $field, $new_field, $form, $field_order );
 
 				// This may occassionally skip one level/order e.g. after adding a
 				// list field, as field_order would already be prepared to be used.
@@ -276,7 +276,7 @@ abstract class FrmFormMigrator {
 		++$field_order;
 	}
 
-	protected function maybe_prepare_section_for_fields( $field, &$new_field, &$form, &$field_order ) {
+	protected function before_add_field( $field, &$new_field, &$form, &$field_order ) {
 		// override
 	}
 
