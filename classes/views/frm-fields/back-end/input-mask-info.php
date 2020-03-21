@@ -4,9 +4,7 @@
 <p>
 	9 - <?php esc_html_e( 'Numeric', 'formidable' ); ?> (0-9)<br/>
 	a - <?php esc_html_e( 'Alphabetical', 'formidable' ); ?> (a-z, A-Z)<br/>
-	A - <?php esc_html_e( 'Uppercase alphabetical', 'formidable' ); ?> (A-Z)<br/>
 	* - <?php esc_html_e( 'Alphanumeric', 'formidable' ); ?> (0-9, a-z, A-Z)<br/>
-	& - <?php esc_html_e( 'Uppercase alphanumeric', 'formidable' ); ?> (0-9, A-Z)
 </p>
 <p>
 	<?php esc_html_e( 'Example:', 'formidable' ); ?> 1 (999)-999-9999
