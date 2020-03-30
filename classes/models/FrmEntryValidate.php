@@ -79,11 +79,6 @@ class FrmEntryValidate {
 
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
-		// Reset arrays with only one value if it's not a field where array keys need to be preserved
-		if ( is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) ) {
-			$value = reset( $value );
-		}
-
 		if ( ! is_array( $value ) ) {
 			$value = trim( $value );
 		}
