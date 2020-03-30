@@ -187,7 +187,7 @@ class FrmFormAction {
 		$this->id     = $this->id_base . '-' . $number;
 	}
 
-	public function prepare_new( $form_id = false, $post_content = array() ) {
+	public function prepare_new( $form_id = false ) {
 		if ( $form_id ) {
 			$this->form_id = $form_id;
 		}
@@ -201,14 +201,8 @@ class FrmFormAction {
 			$post_content['event'] = array( reset( $this->action_options['event'] ) );
 		}
 
-		$name = $this->name;
-		if ( isset( $post_content['action_name'] ) ) {
-			$name = $post_content['action_name'];
-			unset( $post_content['action_name'] );
-		}
-
 		$form_action = array(
-			'post_title'   => $name,
+			'post_title'   => $this->name,
 			'post_content' => $post_content,
 			'post_excerpt' => $this->id_base,
 			'ID'           => '',
