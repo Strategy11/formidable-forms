@@ -3,7 +3,7 @@ Plugin Name: Formidable Forms - Contact Forms, Surveys & Quiz Forms Plugin for W
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
-Tested up to: 5.3.2
+Tested up to: 5.4
 Requires PHP: 5.6
 Stable tag: 4.04.01
 
