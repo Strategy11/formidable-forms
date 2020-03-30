@@ -35,6 +35,7 @@
 		</form>
 		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
 
+		<?php do_action( 'frm_import_settings' ); ?>
 		<br/><br/>
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">
