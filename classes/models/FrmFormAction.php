@@ -192,6 +192,7 @@ class FrmFormAction {
 			$this->form_id = $form_id;
 		}
 
+		$post_content   = array();
 		$default_values = $this->get_global_defaults();
 
 		// fill default values
