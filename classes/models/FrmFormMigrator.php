@@ -81,7 +81,7 @@ abstract class FrmFormMigrator {
 						</div>
 						<button type="submit" class="button button-primary button-hero">Start Import</button>
 					</form>
-					<div id="frm-importer-process" class="frm_hidden">
+					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
 						<p class="process-count">
 							<span class="frm-wait" aria-hidden="true"></span>
