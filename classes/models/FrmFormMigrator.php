@@ -8,8 +8,9 @@ abstract class FrmFormMigrator {
 	public $path;
 	public $name;
 
-	public $response               = array();
-	public $tracking               = 'frm_forms_imported';
+	public $response = array();
+	public $tracking = 'frm_forms_imported';
+
 	protected $fields_map          = array();
 	protected $current_source_form = null;
 	protected $current_section     = null;
@@ -37,19 +38,18 @@ abstract class FrmFormMigrator {
 	}
 
 	private function maybe_add_to_import_page() {
-		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
-		add_action( $menu_name . '_page_formidable-import', array( $this, 'import_page' ), 1 );
+		add_action( 'frm_import_settings', array( $this, 'import_page' ) );
 		add_action( 'wp_ajax_frm_import_' . $this->slug, array( $this, 'import_forms' ) );
 	}
 
 	public function import_page() {
 		?>
 		<div class="wrap">
+			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
+			<p class="howto">Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>.</p>
 			<div class="welcome-panel" id="welcome-panel">
-				<h2><?php echo esc_html( $this->name ); ?> Importer</h2>
 				<div class="welcome-panel-content" style="text-align:center;margin-bottom:10px;">
 					<p class="about-description">
-						Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>. <br/>
 						Select the forms to import.
 					</p>
 					<form class="frm_form_importer" method="post"
@@ -58,6 +58,11 @@ abstract class FrmFormMigrator {
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
 						<div style="margin:10px auto;max-width:400px;text-align:left;">
+							<?php
+							if ( empty( $this->get_forms() ) ) {
+								esc_html_e( 'No Forms Found.', 'formidable' );
+							}
+							?>
 							<?php foreach ( $this->get_forms() as $form_id => $name ) { ?>
 								<p>
 									<label>
