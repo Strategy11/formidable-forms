@@ -189,8 +189,8 @@ class FrmEntryValidate {
 
 		// Switch generic values out for their regular expression
 		$pattern = preg_replace( '/\d/', '\d', $pattern );
-		$pattern = str_replace( 'a', '[a-z]', $pattern );
 		$pattern = str_replace( 'A', '[A-Z]', $pattern );
+		$pattern = str_replace( 'a', '[a-zA-Z]', $pattern );
 		$pattern = str_replace( '*', 'w', $pattern );
 		$pattern = str_replace( '/', '\/', $pattern );
 
