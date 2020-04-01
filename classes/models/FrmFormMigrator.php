@@ -284,7 +284,7 @@ abstract class FrmFormMigrator {
 		$form['fields'][]         = $new_field;
 		$this->current_section    = null;
 
-		++$field_order;
+		$field_order++;
 	}
 
 	protected function before_add_field( $field, &$new_field, &$form, &$field_order ) {
