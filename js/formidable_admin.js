@@ -4326,7 +4326,7 @@ function frmAdminBuildJS() {
 
 		// Hide the form select section.
 		var $form = jQuery( targetForm ),
-			$processSettings = $form.next( '.frm-importer-process' );
+			$processSettings = $form.next( '.frm_hidden' );
 
 		// Display total number of forms we have to import.
 		$processSettings.find( '.form-total' ).text( forms.length );
