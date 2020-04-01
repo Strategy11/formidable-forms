@@ -143,7 +143,7 @@ class FrmSettings {
 		$settings = $this->default_options();
 
 		// Use grids and fade in as default for new installs.
-		if ( isset( $params['frm_tracking'] ) ) {
+		if ( isset( $params['frm_currency'] ) ) {
 			$settings['old_css']   = false;
 			$settings['fade_form'] = true;
 		}
