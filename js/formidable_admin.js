@@ -2781,17 +2781,23 @@ function frmAdminBuildJS() {
 		return img.attr( 'src' );
 	}
 
-	function getImageLabel( label, showLabelWithImage, imageUrl ){
-		var originalLabel = label;
+	function getImageLabel( label, showLabelWithImage, imageUrl ) {
+		var imageLabelClass,
+			originalLabel = label,
+			fullLabel = frm_admin_js.checkmark_icon + frm_admin_js.image_placeholder_icon;
 
 		if ( imageUrl ) {
-			label = '<img src="' + imageUrl + '" alt="' + originalLabel + '">';
-			if ( showLabelWithImage ) {
-				label += originalLabel;
-			}
+			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '">';
+		} else {
+			fullLabel += '<div class="frm_empty_url"></div>';
+		}
+		if ( showLabelWithImage ) {
+			fullLabel += '<span class="frm_text_label_for_image">' + originalLabel + '</span>';
 		}
 
-		return '<span class="frm_image_option_container" >' + label + '</span>';
+		imageLabelClass = showLabelWithImage ? ' frm_label_with_image ' : '';
+
+		return ( '<span class="frm_image_option_container' + imageLabelClass + '" >' + fullLabel + '</span>' );
 	}
 
 	function removeDropdownOpts( field ) {

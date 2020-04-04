@@ -2274,6 +2274,8 @@ class FrmAppHelper {
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
 				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
 				'image_label_placeholder' => self::image_label_placeholder(),
+				'checkmark_icon'    => FrmFieldsHelper::get_checkmark_markup(),
+				'image_placeholder_icon' => FrmFieldsHelper::get_image_icon_markup(),
 				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
