@@ -415,6 +415,37 @@ a.frm_save_draft{
 	flex-wrap: wrap;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	position: relative;
+	margin-top: 10px;
+}
+
+.frm_image_option_container .frm_selected_checkmark,
+.frm_image_option_container .frm_image_placeholder_icon {
+	position: absolute;
+}
+
+.frm_image_option_container .frm_selected_checkmark{
+	z-index: 999999;
+	left: -10px;
+	top: -12px;
+	display: none;
+}
+
+.frm_image_option_container .frm_image_placeholder_icon {
+	left: 90px;
+	top: 45px;
+}
+
+.frm_image_option_container .frm_selected_checkmark svg{
+	 fill: white;
+	 background-color: #4199FD;
+	 width: 24px;
+	 height: 24px;
+	 border-radius: 50%;
+ }
+
+.frm_image_option_container .frm_image_placeholder_icon svg{
+	width: 63px;
 }
 
 .with_frm_style .frm_radio .frm_image_option_container.frm_label_with_image,
@@ -423,13 +454,17 @@ a.frm_save_draft{
 	height: 298px;
 }
 
-.with_frm_style .frm_label_with_image {
+.with_frm_style .frm_text_label_for_image {
 	text-align: center;
 	width: 100%;
 }
 
 .with_frm_style input[type="radio"]:checked + .frm_image_option_container{
 	border: 2px solid #4199FD;
+}
+
+.with_frm_style input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmark{
+	display: block;
 }
 
 .with_frm_style .frm_image_option_container:hover {

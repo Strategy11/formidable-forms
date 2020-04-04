@@ -456,10 +456,10 @@ class FrmFieldsHelper {
 		$text_label  =  self::get_label_from_opt( $opt );
 		$image       = ! empty ( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url"></div>';
 
-		$label = '<div class="frm_image_option_container ' . $label_class . '">' . $image;
+		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_markup() . self::get_image_icon_markup() . $image;
 
 		if ( $show_label ) {
-			$label .= '<span class="frm_label_with_image">' . $text_label . '</span>';
+			$label .= '<span class="frm_text_label_for_image">' . $text_label . '</span>';
 		}
 
 		$label .= '</div>';
@@ -473,6 +473,14 @@ class FrmFieldsHelper {
 		}
 
 		return $opt;
+	}
+
+	public static function get_checkmark_markup( ){
+		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'echo' => false ) ) . '</div>';
+	}
+
+	public static function get_image_icon_markup( ){
+		return '<div class="frm_image_placeholder_icon">' . FrmAppHelper::icon_by_class( 'frmfont frm_placeholder_image_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
 	/**
