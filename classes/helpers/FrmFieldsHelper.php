@@ -1616,6 +1616,7 @@ class FrmFieldsHelper {
 			__( 'Zimbabwe', 'formidable' ),
 		);
 
+		sort( $countries, SORT_LOCALE_STRING );
 		return apply_filters( 'frm_countries', $countries );
 	}
 
