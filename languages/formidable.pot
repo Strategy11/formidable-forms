@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.04.01\n"
+"Project-Id-Version: Formidable Forms 4.02.02\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-03-02T20:04:17+01:00\n"
+"POT-Creation-Date: 2020-04-08T23:00:42+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -380,7 +380,7 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: classes/models/FrmDb.php:433
+#: classes/models/FrmDb.php:444
 msgid "Use the query in an array format so it can be properly prepared."
 msgstr ""
 
@@ -394,12 +394,12 @@ msgstr ""
 msgid "You do not have permission to do that"
 msgstr ""
 
-#: classes/models/FrmEntryValidate.php:232
-#: classes/models/FrmEntryValidate.php:241
+#: classes/models/FrmEntryValidate.php:227
+#: classes/models/FrmEntryValidate.php:236
 msgid "Your entry appears to be spam!"
 msgstr ""
 
-#: classes/models/FrmEntryValidate.php:236
+#: classes/models/FrmEntryValidate.php:231
 msgid "Your entry appears to be blacklist spam!"
 msgstr ""
 
@@ -2642,22 +2642,14 @@ msgid "Alphabetical"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/input-mask-info.php:7
-msgid "Uppercase alphabetical"
-msgstr ""
-
-#: classes/views/frm-fields/back-end/input-mask-info.php:8
 msgid "Alphanumeric"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/input-mask-info.php:9
-msgid "Uppercase alphanumeric"
-msgstr ""
-
-#: classes/views/frm-fields/back-end/input-mask-info.php:12
+#: classes/views/frm-fields/back-end/input-mask-info.php:10
 msgid "Example:"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/input-mask-info.php:26
+#: classes/views/frm-fields/back-end/input-mask-info.php:24
 msgid "See more examples and docs"
 msgstr ""
 
@@ -2916,7 +2908,7 @@ msgid "Updated: %1$s"
 msgstr ""
 
 #: classes/views/frm-entries/show.php:7
-#: classes/helpers/FrmEntriesHelper.php:634
+#: classes/helpers/FrmEntriesHelper.php:640
 msgid "View Entry"
 msgstr ""
 
@@ -4363,128 +4355,128 @@ msgstr ""
 msgid "Zimbabwe"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1623
+#: classes/helpers/FrmFieldsHelper.php:1624
 msgid "Countries"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1628
+#: classes/helpers/FrmFieldsHelper.php:1629
 msgid "U.S. State Abbreviations"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1632
+#: classes/helpers/FrmFieldsHelper.php:1633
 msgid "U.S. States"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1635
+#: classes/helpers/FrmFieldsHelper.php:1636
 msgid "Age"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1636
+#: classes/helpers/FrmFieldsHelper.php:1637
 msgid "Under 18"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1637
+#: classes/helpers/FrmFieldsHelper.php:1638
 msgid "18-24"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1638
+#: classes/helpers/FrmFieldsHelper.php:1639
 msgid "25-34"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1639
+#: classes/helpers/FrmFieldsHelper.php:1640
 msgid "35-44"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1640
+#: classes/helpers/FrmFieldsHelper.php:1641
 msgid "45-54"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1641
+#: classes/helpers/FrmFieldsHelper.php:1642
 msgid "55-64"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1642
+#: classes/helpers/FrmFieldsHelper.php:1643
 msgid "65 or Above"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1643
+#: classes/helpers/FrmFieldsHelper.php:1644
 msgid "Prefer Not to Answer"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1646
+#: classes/helpers/FrmFieldsHelper.php:1647
 msgid "Satisfaction"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1647
+#: classes/helpers/FrmFieldsHelper.php:1648
 msgid "Very Satisfied"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1648
+#: classes/helpers/FrmFieldsHelper.php:1649
 msgid "Satisfied"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1649
-#: classes/helpers/FrmFieldsHelper.php:1658
-#: classes/helpers/FrmFieldsHelper.php:1667
+#: classes/helpers/FrmFieldsHelper.php:1650
+#: classes/helpers/FrmFieldsHelper.php:1659
+#: classes/helpers/FrmFieldsHelper.php:1668
 msgid "Neutral"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1650
+#: classes/helpers/FrmFieldsHelper.php:1651
 msgid "Unsatisfied"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1651
+#: classes/helpers/FrmFieldsHelper.php:1652
 msgid "Very Unsatisfied"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1652
-#: classes/helpers/FrmFieldsHelper.php:1661
-#: classes/helpers/FrmFieldsHelper.php:1670
+#: classes/helpers/FrmFieldsHelper.php:1653
+#: classes/helpers/FrmFieldsHelper.php:1662
+#: classes/helpers/FrmFieldsHelper.php:1671
 msgid "N/A"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1655
+#: classes/helpers/FrmFieldsHelper.php:1656
 msgid "Importance"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1656
+#: classes/helpers/FrmFieldsHelper.php:1657
 msgid "Very Important"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1657
+#: classes/helpers/FrmFieldsHelper.php:1658
 msgid "Important"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1659
+#: classes/helpers/FrmFieldsHelper.php:1660
 msgid "Somewhat Important"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1660
+#: classes/helpers/FrmFieldsHelper.php:1661
 msgid "Not at all Important"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1664
+#: classes/helpers/FrmFieldsHelper.php:1665
 msgid "Agreement"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1665
+#: classes/helpers/FrmFieldsHelper.php:1666
 msgid "Strongly Agree"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1666
+#: classes/helpers/FrmFieldsHelper.php:1667
 msgid "Agree"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1668
+#: classes/helpers/FrmFieldsHelper.php:1669
 msgid "Disagree"
 msgstr ""
 
-#: classes/helpers/FrmFieldsHelper.php:1669
+#: classes/helpers/FrmFieldsHelper.php:1670
 msgid "Strongly Disagree"
 msgstr ""
 
 #. translators: %s: Field name
-#: classes/helpers/FrmFieldsHelper.php:1717
+#: classes/helpers/FrmFieldsHelper.php:1718
 msgid "%s fields"
 msgstr ""
 
@@ -4601,33 +4593,33 @@ msgstr ""
 msgid "Select All"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:524
-#: classes/helpers/FrmEntriesHelper.php:525
+#: classes/helpers/FrmEntriesHelper.php:530
+#: classes/helpers/FrmEntriesHelper.php:531
 msgid "Unknown"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:642
+#: classes/helpers/FrmEntriesHelper.php:648
 msgid "Delete Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:645
+#: classes/helpers/FrmEntriesHelper.php:651
 msgid "Delete this form entry?"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:653
+#: classes/helpers/FrmEntriesHelper.php:659
 msgid "Print Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:663
-#: classes/helpers/FrmEntriesHelper.php:666
+#: classes/helpers/FrmEntriesHelper.php:669
+#: classes/helpers/FrmEntriesHelper.php:672
 msgid "Resend Emails"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:675
+#: classes/helpers/FrmEntriesHelper.php:681
 msgid "Edit Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:678
+#: classes/helpers/FrmEntriesHelper.php:684
 msgid "Entry edits"
 msgstr ""
 
