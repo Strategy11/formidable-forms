@@ -41,6 +41,10 @@ fi
 
 echo "Creating new GitHub release"
 git fetch
+github-release delete \
+  --owner Strategy11 \
+  --repo $repo \
+  --tag "v$version" \
 export GIT_RELEASE_NOTES="$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
 github-release upload \
 	--owner Strategy11 \
