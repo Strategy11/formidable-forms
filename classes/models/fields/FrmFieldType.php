@@ -607,7 +607,7 @@ DEFAULT_HTML;
 			'invalid'            => '',
 			'separate_value'     => 0,
 			'image_options'      => 0,
-			'show_label_with_image' => 0,
+			'hide_image_option_text' => 0,
 			'clear_on_focus'     => 0,
 			'classes'            => '',
 			'custom_html'        => '',

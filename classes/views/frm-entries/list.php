@@ -45,8 +45,7 @@
 
 				<div class="clear"></div>
 				<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-				<?php
-				$wp_list_table->display(); ?>
+				<?php $wp_list_table->display(); ?>
 			</form>
 		</div>
 	<?php if ( $form ) { ?>

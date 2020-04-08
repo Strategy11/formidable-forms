@@ -1984,7 +1984,7 @@ function frmAdminBuildJS() {
 	}
 
 	function setInputPlaceholder( fieldId ) {
-		var placeholder = usingImagesForOptions( fieldId ) ? frm_admin_js.image_label_placeholder : '';
+		var placeholder = imagesAsOptions( fieldId ) ? frm_admin_js.image_label_placeholder : '';
 		jQuery( '.field_' + fieldId + '_option' ).attr( 'placeholder', placeholder );
 	}
 
@@ -2005,6 +2005,7 @@ function frmAdminBuildJS() {
 		var postID = 0;
 
 		event.preventDefault();
+
 		if ( fileFrame ) {
 			fileFrame.uploader.uploader.param( 'post_id', postID );
 			fileFrame.open();
@@ -2012,6 +2013,7 @@ function frmAdminBuildJS() {
 		} else {
 			wp.media.model.settings.post.id = postID;
 		}
+
 		fileFrame = wp.media.frames.file_frame = wp.media( {
 			multiple: false,
 		} );
@@ -2026,6 +2028,7 @@ function frmAdminBuildJS() {
 			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).change();
 			wp.media.model.settings.post.id = postID;
 		} );
+
 		fileFrame.open();
 	}
 
@@ -2597,7 +2600,7 @@ function frmAdminBuildJS() {
 			optHTML = '',
 			optKey = thisOpt.data( 'optkey' ),
 			separateValues = usingSeparateValues( fieldId ),
-			imagesForOptions = usingImagesForOptions( fieldId ),
+			hasImageOptions = imagesAsOptions( fieldId ),
 			showLabelWithImage = showingLabelWithImage( fieldId ),
 			single = jQuery( 'label[for="field_' + fieldKey + '-' + optKey + '"]' ),
 			baseName = 'field_options[options_' + fieldId + '][' + optKey + ']',
@@ -2629,9 +2632,9 @@ function frmAdminBuildJS() {
 		if ( label.length ) {
 			// Set the displayed value.
 			text = single[0].childNodes;
-			previewSpan = label.find('.frm-preview-label-opt');
+			previewSpan = label.find( '.frm-preview-label-opt' );
 
-			if ( imagesForOptions ) {
+			if ( hasImageOptions ) {
 				labelForDisplay = label.val();
 				image = thisOpt.find( 'img' );
 
@@ -2661,6 +2664,18 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Is the box checked to use images as options?
+	 */
+	function imagesAsOptions( fieldId ) {
+		var field = document.getElementById( 'image_options_' + fieldId );
+		if ( field === null ) {
+			return false;
+		} else {
+			return field.checked;
+		}
+	}
+
 	function resetDisplayedOpts( fieldId ) {
 		var i, opts, type, placeholder, fieldInfo,
 			input = jQuery( '[name^="item_meta[' + fieldId + ']"]' );
@@ -2685,22 +2700,24 @@ function frmAdminBuildJS() {
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
-				isProduct = isProductField( fieldId );
+				isProduct = isProductField( fieldId ),
+				hasImageOptions = imagesAsOptions( fieldId );
 
 			for ( i = 0; i < opts.length; i++ ) {
-				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct ) );
+				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, hasImageOptions ) );
 			}
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, hasImageOptions ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
+			imageOptionClass = hasImageOptions ? ' frm_image_option ' : '';
 		id = 'field_' + fieldKey + '-' + opt.key;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+		single = '<div class="frm_' + type + ' ' + type + imageOptionClass + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + '> ' + opt.label + '</label>' +
@@ -2772,7 +2789,7 @@ function frmAdminBuildJS() {
 >>>>>>> Adds image options for radio buttons.
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
 			separateValues = usingSeparateValues( fieldId ),
-			imagesForOptions = usingImagesForOptions( fieldId ),
+			hasImageOptions = imagesAsOptions( fieldId ),
 			showLabelWithImage = showingLabelWithImage( fieldId ),
 			isProduct = isProductField( fieldId );
 
@@ -2789,7 +2806,7 @@ function frmAdminBuildJS() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 			}
 
-			if ( imagesForOptions ) {
+			if ( hasImageOptions ) {
 				imageUrl = getImageUrlFromInput( optVals[i] );
 				label = getImageLabel(  label, showLabelWithImage, imageUrl );
 			}
@@ -2830,12 +2847,12 @@ function frmAdminBuildJS() {
 	function getImageLabel( label, showLabelWithImage, imageUrl ) {
 		var imageLabelClass,
 			originalLabel = label,
-			fullLabel = frm_admin_js.checkmark_icon + frm_admin_js.image_placeholder_icon;
+			fullLabel = frm_admin_js.checkmark_icon;
 
 		if ( imageUrl ) {
 			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '">';
 		} else {
-			fullLabel += '<div class="frm_empty_url"></div>';
+			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
 		}
 		if ( showLabelWithImage ) {
 			fullLabel += '<span class="frm_text_label_for_image">' + originalLabel + '</span>';
@@ -2870,26 +2887,14 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Is the box checked to use images as options?
-	 */
-	function usingImagesForOptions( fieldId ) {
-		var field = document.getElementById( 'image_options_' + fieldId );
-		if ( field === null ) {
-			return false;
-		} else {
-			return field.checked;
-		}
-	}
-
-	/**
 	 * Is the box checked to show label with image?
 	 */
 	function showingLabelWithImage( fieldId ) {
-		var field = document.getElementById( 'show_label_with_image_' + fieldId );
+		var field = document.getElementById( 'hide_image_option_text_' + fieldId );
 		if ( field === null ) {
-			return false;
+			return true;
 		} else {
-			return field.checked;
+			return ! field.checked;
 		}
 	}
 
@@ -5694,7 +5699,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_toggle_image_options', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_remove_image_option', removeImageFromOption );
 			$builderForm.on( 'click', '.frm_choose_image_box', addImageToOption );
-			$builderForm.on( 'change', '.frm_show_label_with_image', refreshOptionDisplay );
+			$builderForm.on( 'change', '.frm_hide_image_option_text', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
