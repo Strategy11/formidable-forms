@@ -81,7 +81,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * @since 3.04.02
 	 *
 	 * @param string $string The feedback string.
+	 * @param mixed  ...$args Optional text replacements.
 	 */
-	public function feedback( $string ) {}
+	public function feedback( $string, ...$args ) {}
 
 }
