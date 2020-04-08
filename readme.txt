@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form, form creator
 Requires at least: 4.6
 Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 4.04.01
+Stable tag: 4.04.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -357,6 +357,15 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced forms, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 == Changelog ==
+= 4.04.02 =
+* Don't load the front end form js in the builder/settings.
+* Fix: Some database prefixes weren't working correctly with many database calls: "rm", "fr", "_".
+* Fix: Remove incorrect instructions for input masks and allow uppercase characters with 'a' in the input mask.
+* Fix: Save value as array when single box is checked. This resolves a conflict when used with ACF.
+* Fix: The 5/6th class was the wrong size when CSS grids are turned off.
+* Fix: More accurately set the default options to fade in fields and use CSS grids.
+* Fix: Sort country list by the current locale.
+
 = 4.04.01 =
 * Performance: Improve speed when creating a unique entry key.
 * Performance: Always return a single result with FrmDb::get_var().
@@ -364,15 +373,5 @@ To get access to more features, integrations, and support, <a href="https://form
 * Fix: Fix deprecated implode() strings for PHP 7.4.
 * Fix: Prevent possibility of extra entry being deleted when switching forms right after deleting an entry.
 * Fix: In some cases, a PHP warning was shown when redirecting after submit.
-
-= 4.04 =
-* New: Show a warning if a WordPress parameter is used in the redirect URL to prevent unintented results.
-* New: Added frm_is_field_type hook to set if an individual field is shown as radio or checkbox
-* New: Show the new pricing fields in the builder for product education.
-
-= 4.03.07 =
-* Project Delight: Make admin-side tooltips more enjoyable and helpful.
-* Add several missing countries to the country list.
-* Fix: Prevent duplicate localization strings from showing in the page source.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

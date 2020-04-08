@@ -1,4 +1,13 @@
 == Changelog ==
+= 4.04.02 =
+* Don't load the front end form js in the builder/settings.
+* Fix: Some database prefixes weren't working correctly with many database calls: "rm", "fr", "_".
+* Fix: Remove incorrect instructions for input masks and allow uppercase characters with 'a' in the input mask.
+* Fix: Save value as array when single box is checked. This resolves a conflict when used with ACF.
+* Fix: The 5/6th class was the wrong size when CSS grids are turned off.
+* Fix: More accurately set the default options to fade in fields and use CSS grids.
+* Fix: Sort country list by the current locale.
+
 = 4.04.01 =
 * Performance: Improve speed when creating a unique entry key.
 * Performance: Always return a single result with FrmDb::get_var().
