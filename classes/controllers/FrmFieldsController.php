@@ -606,6 +606,9 @@ class FrmFieldsController {
 		$position = FrmField::get_option( $field, 'label' );
 		if ( $position == 'inside' ) {
 			$default_value = $field['name'];
+			if ( FrmField::is_required( $field ) ) {
+				$default_value .= ' ' . $field['required_indicator'];
+			}
 		} else {
 			$default_value = '';
 		}
