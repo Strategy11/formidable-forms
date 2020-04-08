@@ -46,11 +46,5 @@ github-release delete \
   --repo $repo \
   --tag "v$version" \
 export GIT_RELEASE_NOTES="$(git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:'%h %B')"
-github-release upload \
-	--owner Strategy11 \
-	--repo $repo \
-	--tag "v$version" \
-	--name "v$version" \
-	--body "${GIT_RELEASE_NOTES}" \
-		$attachments
+
 echo "New version created."
