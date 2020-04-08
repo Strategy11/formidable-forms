@@ -451,12 +451,12 @@ class FrmFieldsHelper {
 			return $opt;
 		}
 
-		$show_label  = ! empty( $field['show_label_with_image'] );
+		$show_label  = empty( $field['hide_image_option_text'] );
 		$label_class = $show_label ? 'frm_label_with_image ' : '';
 		$text_label  =  self::get_label_from_opt( $opt );
-		$image       = ! empty ( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url"></div>';
+		$image       = ! empty ( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url">' . FrmFieldsHelper::get_image_icon_markup() . '</div>';
 
-		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_markup() . self::get_image_icon_markup() . $image;
+		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_markup() . $image;
 
 		if ( $show_label ) {
 			$label .= '<span class="frm_text_label_for_image">' . $text_label . '</span>';
@@ -476,7 +476,7 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_checkmark_markup( ){
-		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'echo' => false ) ) . '</div>';
+		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
 	public static function get_image_icon_markup( ){

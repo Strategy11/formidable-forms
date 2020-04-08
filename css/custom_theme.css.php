@@ -384,7 +384,7 @@ a.frm_save_draft{
 	height: 248px;
 	min-width: 248px;
 	width: 248px;
-	border: 1px solid rgba(40, 47, 54, 0.2);
+	border: 1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;;
 	border-radius:  3.1358px;
 	display: flex;
 	flex-wrap: wrap;
@@ -432,6 +432,8 @@ a.frm_save_draft{
 .with_frm_style .frm_text_label_for_image {
 	text-align: center;
 	width: 100%;
+	max-height: 50px;
+	overflow: hidden;
 }
 
 .with_frm_style input[type="radio"]:checked + .frm_image_option_container{
@@ -453,6 +455,7 @@ a.frm_save_draft{
 	min-width: 246px;
 	width: 246px;
 	object-fit: cover;
+	transition: height 0.1s linear, width 0.1s linear;
 }
 
 .with_frm_style input[type="radio"]:checked + .frm_image_option_container .frm_empty_url,
