@@ -28,10 +28,15 @@
 		// Used when no form is currently selected.
 		?>
 
-	<div class="frm_top_left">
+	<div class="frm_top_left <?php echo esc_attr( $atts['import_link'] ? 'frm_top_wide' : '' ); ?>">
 		<h1>
 			<?php echo esc_html( $atts['label'] ); ?>
 			<?php FrmAppHelper::add_new_item_link( $atts ); ?>
+			<?php if ( $atts['import_link'] ) { ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
+					<?php esc_html_e( 'Import', 'formidable' ); ?>
+				</a>
+			<?php } ?>
 			<?php if ( isset( $atts['cancel_link'] ) ) { ?>
 				<a href="<?php echo esc_url( $atts['cancel_link'] ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
 					<?php esc_html_e( 'Cancel', 'formidable' ); ?>

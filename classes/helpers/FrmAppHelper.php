@@ -886,6 +886,9 @@ class FrmAppHelper {
 		if ( ! isset( $atts['close'] ) || empty( $atts['close'] ) ) {
 			$atts['close'] = admin_url( 'admin.php?page=formidable' );
 		}
+		if ( ! isset( $atts['import_link'] ) ) {
+			$atts['import_link'] = false;
+		}
 
 		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );
 	}

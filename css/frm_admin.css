@@ -258,6 +258,10 @@ a .frmsvg,
 	text-overflow: ellipsis;
 }
 
+.frm_top_left.frm_top_wide {
+	max-width: 100%;
+}
+
 .frm-header-logo,
 .edit-php.post-type-frm_display .frm-header-logo {
 	float: left;
@@ -972,6 +976,7 @@ p.frm_has_shortcodes {
 
 h1 .frm-button-secondary,
 h1 .frm-button-primary,
+h2 .frm-button-secondary,
 h2 .frm-button-primary {
 	font-size: 14px !important;
 	font-weight: normal;

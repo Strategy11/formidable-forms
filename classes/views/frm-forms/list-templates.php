@@ -50,6 +50,14 @@
 					</a>
 				</li>
 			<?php } ?>
+			<li>
+				<a class="frm-featured-form" href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
+					<span class="frm-inner-circle" style="background-color:var(--orange)">
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
+					</span>
+					<h3><?php esc_html_e( 'Import', 'formidable' ); ?></h3>
+				</a>
+			</li>
 		</ul>
 
 		<?php
