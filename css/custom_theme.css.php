@@ -462,7 +462,7 @@ a.frm_save_draft{
 }
 
 .with_frm_style input[type="radio"]:checked + .frm_image_option_container{
-	border: 2px solid #4199FD;
+	border: 1px solid #4199FD;
 }
 
 .with_frm_style input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmark{
@@ -480,15 +480,6 @@ a.frm_save_draft{
 	min-width: 246px;
 	width: 246px;
 	object-fit: cover;
-	transition: height 0.1s linear, width 0.1s linear;
-}
-
-.with_frm_style input[type="radio"]:checked + .frm_image_option_container .frm_empty_url,
-.with_frm_style input[type="radio"]:checked + .frm_image_option_container img {
-	min-height: 244px;
-	height: 244px;
-	min-width: 244px;
-	width: 244px;
 }
 
 .with_frm_style .frm_image_option_container .frm_empty_url {
