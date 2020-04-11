@@ -3327,7 +3327,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: calc(100% - 73px);
 }
 
-/* Image options*/
+/* Image options for Radio and Checkbox */
 
 .frm_image_option_container .frm_empty_url,
 .frm_image_option_container img {
@@ -3350,6 +3350,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	display: none;
 }
 
+#form_entries_page .frm_image_option_container,
 .frm_radio .frm_image_option_container,
 .frm_checkbox .frm_image_option_container {
 	min-height: 248px;
@@ -3400,6 +3401,7 @@ input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmar
 	display: block;
 }
 
+
 .frm_radio .frm_image_option_container.frm_label_with_image,
 .frm_checkbox .frm_image_option_container.frm_label_with_image {
 	min-height: 298px;
@@ -3411,15 +3413,7 @@ input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmar
 }
 
 input[type="radio"]:checked + .frm_image_option_container {
-	border: 2px solid #4199FD;
-}
-
-input[type="radio"]:checked + .frm_image_option_container .frm_empty_url,
-input[type="radio"]:checked + .frm_image_option_container img {
-	min-height: 244px;
-	height: 244px;
-	min-width: 244px;
-	width: 244px;
+	border: 1px solid #4199FD;
 }
 
 .frm_image_option_container .frm_empty_url {

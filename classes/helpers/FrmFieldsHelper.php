@@ -453,7 +453,7 @@ class FrmFieldsHelper {
 
 		$show_label  = empty( $field['hide_image_option_text'] );
 		$label_class = $show_label ? 'frm_label_with_image ' : '';
-		$text_label  =  self::get_label_from_opt( $opt );
+		$text_label  = self::get_label_from_opt( $opt );
 		$image       = ! empty ( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url">' . FrmFieldsHelper::get_image_icon_markup() . '</div>';
 
 		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_markup() . $image;
@@ -467,19 +467,19 @@ class FrmFieldsHelper {
 		return $label;
 	}
 
-	private static function get_label_from_opt ( $opt ){
-		if ( is_array ($opt)  ) {
+	private static function get_label_from_opt( $opt ) {
+		if ( is_array( $opt ) ) {
 			return isset ( $opt['label'] ) ? $opt['label'] : '';
 		}
 
 		return $opt;
 	}
 
-	public static function get_checkmark_markup( ){
+	public static function get_checkmark_markup() {
 		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
-	public static function get_image_icon_markup( ){
+	public static function get_image_icon_markup() {
 		return '<div class="frm_image_placeholder_icon">' . FrmAppHelper::icon_by_class( 'frmfont frm_placeholder_image_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
@@ -541,22 +541,22 @@ class FrmFieldsHelper {
 		return FrmFieldsController::check_image( $opt, $opt_key, $field );
 	}
 
-	public static function get_image_url( $image_id ) {
-		if ( empty( $image_id )){
+	public static function get_image_url( $image_id, $size = 'medium' ) {
+		if ( empty( $image_id ) ) {
 			return '';
 		}
 
-		$url = wp_get_attachment_image_src( ( int ) $image_id, 'medium')[0];
+		$url = wp_get_attachment_image_src( ( int ) $image_id, $size )[0];
 
-		if ( ! $url ){
-			$url =  wp_get_attachment_image_url( ( int ) $image_id );
+		if ( ! $url ) {
+			$url = wp_get_attachment_image_url( ( int ) $image_id );
 		}
 
 		return $url ? $url : '';
 	}
 
 	public static function get_image_title( $image_id ) {
-		if ( empty( $image_id )){
+		if ( empty( $image_id ) ) {
 			return '';
 		}
 
