@@ -1104,12 +1104,6 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0
 	 */
-
-	/**
-	 * Hide the WordPress menus on some pages.
-	 *
-	 * @since 4.0
-	 */
 	public static function is_full_screen() {
 		$action       = self::get_action();
 		$full_builder = self::is_form_builder_page( $action );
