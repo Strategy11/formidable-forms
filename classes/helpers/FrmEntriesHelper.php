@@ -250,7 +250,7 @@ class FrmEntriesHelper {
 			$atts['html']     = true;
 		}
 
-		if ( $image_option ){
+		if ( $image_option ) {
 			$atts['show_filename'] = false;
 			$atts['show_image'] = true;
 		}
@@ -299,7 +299,7 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
 	}
 
-	private static function has_image_option_markup( $value ){
+	private static function has_image_option_markup( $value ) {
 		return strpos( $value, 'frm_image_option_container' ) !== false;
 	}
 

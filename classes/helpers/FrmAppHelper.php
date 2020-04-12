@@ -1127,11 +1127,11 @@ class FrmAppHelper {
 		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
 	}
 
-	public static function get_action(){
+	public static function get_action() {
 		return self::simple_get( 'frm_action', 'sanitize_title' );
 	}
 
-	public static function is_form_builder_page( $action ){
+	public static function is_form_builder_page( $action ) {
 		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 	}
 
@@ -2286,8 +2286,8 @@ class FrmAppHelper {
 		}
 	}
 
-	public static function image_label_placeholder(){
-		return __( 'Text label (required with an image)', 'formidable');
+	public static function image_label_placeholder() {
+		return __( 'Text label (required with an image)', 'formidable' );
 	}
 
 	/**
