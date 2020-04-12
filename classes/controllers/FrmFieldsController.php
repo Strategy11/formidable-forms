@@ -761,7 +761,7 @@ class FrmFieldsController {
 	public static function check_image( $opt, $opt_key, $field ) {
 		if ( is_array( $opt ) ) {
 			if ( FrmField::is_option_true( $field, 'image_options' ) ) {
-				$opt = isset( $opt['image'] ) ? $opt['image']  : 0;
+				$opt = isset( $opt['image'] ) ? $opt['image'] : 0;
 			} else {
 				$opt = 0;
 			}

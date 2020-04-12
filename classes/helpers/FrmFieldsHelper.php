@@ -426,7 +426,7 @@ class FrmFieldsHelper {
 
 			$image_title = self::get_image_title( $image );
 			$image_filename = self::get_image_filename( $image );
-			$label = self::create_single_option_label( $field, $opt, $image_url);
+			$label = self::create_single_option_label( $field, $opt, $image_url );
 			$opt       = self::get_label_from_array( $opt, $opt_key, $field );
 
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
@@ -454,7 +454,7 @@ class FrmFieldsHelper {
 		$show_label  = empty( $field['hide_image_option_text'] );
 		$label_class = $show_label ? 'frm_label_with_image ' : '';
 		$text_label  = self::get_label_from_opt( $opt );
-		$image       = ! empty ( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url">' . FrmFieldsHelper::get_image_icon_markup() . '</div>';
+		$image       = ! empty( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url">' . self::get_image_icon_markup() . '</div>';
 
 		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_markup() . $image;
 
@@ -546,10 +546,10 @@ class FrmFieldsHelper {
 			return '';
 		}
 
-		$url = wp_get_attachment_image_src( ( int ) $image_id, $size )[0];
+		$url = wp_get_attachment_image_src( (int) $image_id, $size )[0];
 
 		if ( ! $url ) {
-			$url = wp_get_attachment_image_url( ( int ) $image_id );
+			$url = wp_get_attachment_image_url( (int) $image_id );
 		}
 
 		return $url ? $url : '';
@@ -574,7 +574,7 @@ class FrmFieldsHelper {
 
 		$matches = array();
 
-		preg_match('/([A-Za-z0-9.\-_]+)$/', $filename, $matches);
+		preg_match( '/([A-Za-z0-9.\-_]+)$/', $filename, $matches );
 
 		return isset( $matches[0] ) ? $matches[0] : '';
 	}
