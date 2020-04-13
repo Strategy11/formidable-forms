@@ -469,7 +469,7 @@ class FrmFieldsHelper {
 
 	private static function get_label_from_opt( $opt ) {
 		if ( is_array( $opt ) ) {
-			return isset ( $opt['label'] ) ? $opt['label'] : '';
+			return isset( $opt['label'] ) ? $opt['label'] : '';
 		}
 
 		return $opt;
