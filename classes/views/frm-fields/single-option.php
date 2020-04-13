@@ -1,7 +1,7 @@
 <li id="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-optkey="<?php echo esc_attr( $opt_key ); ?>" class="frm_single_option <?php echo $opt_key === '000' ? 'frm_hidden frm_option_template' : ''; ?>">
 	<?php FrmAppHelper::icon_by_class( 'frmfont frm_drag_icon frm-drag' ); ?>
 	<input type="<?php echo esc_attr( $default_type ); ?>" name="<?php echo esc_attr( $field_name ); ?>" <?php echo ( isset( $checked ) && $checked ? 'checked="checked"' : '' ); ?> value="<?php echo esc_attr( $field_val ); ?>"/>
-	
+
 	<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][label]" value="<?php echo esc_attr( $opt ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" data-frmchange="trim,updateOption" data-frmimageurl="<?php echo ! empty ($image_url) ? esc_attr( $image_url ) : ''; ?>"
 	       <?php if ( isset( $field['image_options'] ) &&  $field['image_options'] ) { ?>
 	       placeholder="<?php echo esc_attr( FrmAppHelper::image_label_placeholder() ); ?>"

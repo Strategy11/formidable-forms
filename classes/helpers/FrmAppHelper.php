@@ -201,6 +201,14 @@ class FrmAppHelper {
 		return apply_filters( 'frm_pro_installed', false );
 	}
 
+	/**
+	 * @since 4.05
+	 */
+	public static function is_form_builder_page() {
+		$action = self::simple_get( 'frm_action', 'sanitize_title' );
+		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
+	}
+
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
 		$is_formidable = strpos( $page, 'formidable' ) !== false;
@@ -1105,20 +1113,11 @@ class FrmAppHelper {
 	 * @since 4.0
 	 */
 	public static function is_full_screen() {
-		$action       = self::get_action();
-		$full_builder = self::is_form_builder_page( $action );
+		$full_builder = self::is_form_builder_page();
 		$styler       = self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
 		$full_entries = self::simple_get( 'frm-full', 'absint' );
 
 		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
-	}
-
-	public static function get_action() {
-		return self::simple_get( 'frm_action', 'sanitize_title' );
-	}
-
-	public static function is_form_builder_page( $action ) {
-		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 	}
 
 	/**

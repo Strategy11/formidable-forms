@@ -1427,7 +1427,6 @@ BEFORE_HTML;
 	 */
 	private static function get_unsafe_params( $url ) {
 		$redirect_components = parse_url( $url );
-
 		if ( empty( $redirect_components['query'] ) ) {
 			return array();
 		}
