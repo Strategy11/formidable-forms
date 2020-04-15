@@ -357,12 +357,6 @@ a.frm_save_draft{
 	text-indent: -20px;
 }
 
-.with_frm_style .vertical_radio .frm_checkbox.frm_image_option label,
-.with_frm_style .vertical_radio .frm_radio.frm_image_option label{
-	padding-left: 0;
-	text-indent: 0;
-}
-
 .frm_file_container .frm_file_link,
 .with_frm_style .frm_radio label .frm_file_container,
 .with_frm_style .frm_checkbox label .frm_file_container{
@@ -390,100 +384,6 @@ a.frm_save_draft{
 	border:none;
 	vertical-align:baseline;
 	position: initial; /* override Bootstrap */
-}
-
-.frm_form_field .frm_radio.frm_image_option,
-.frm_form_field .frm_radio + .frm_radio.frm_image_option,
-.frm_form_field .frm_checkbox.frm_image_option {
-	margin-bottom: 33px;
-}
-
-.with_frm_style .frm_radio.frm_image_option input[type=radio],
-.with_frm_style .frm_checkbox.frm_image_option input[type=checkbox]{
-	display: none;
-}
-
-.with_frm_style .frm_radio .frm_image_option_container,
-.with_frm_style .frm_checkbox .frm_image_option_container {
-	min-height: 248px;
-	height: 248px;
-	min-width: 248px;
-	width: 248px;
-	border: 1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;;
-	border-radius:  3.1358px;
-	display: flex;
-	flex-wrap: wrap;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	position: relative;
-	margin-top: 10px;
-}
-
-.frm_image_option_container .frm_selected_checkmark,
-.frm_image_option_container .frm_image_placeholder_icon {
-	position: absolute;
-}
-
-.frm_image_option_container .frm_selected_checkmark{
-	z-index: 999999;
-	left: -10px;
-	top: -12px;
-	display: none;
-}
-
-.frm_image_option_container .frm_image_placeholder_icon {
-	left: 90px;
-	top: 45px;
-}
-
-.frm_image_option_container .frm_selected_checkmark svg{
-	 fill: white;
-	 background-color: #4199FD;
-	 width: 24px;
-	 height: 24px;
-	 border-radius: 50%;
- }
-
-.frm_image_option_container .frm_image_placeholder_icon svg{
-	width: 63px;
-}
-
-.with_frm_style .frm_radio .frm_image_option_container.frm_label_with_image,
-.with_frm_style .frm_checkbox .frm_image_option_container.frm_label_with_image {
-	min-height: 298px;
-	height: 298px;
-}
-
-.with_frm_style .frm_text_label_for_image {
-	text-align: center;
-	width: 100%;
-	max-height: 50px;
-	overflow: hidden;
-}
-
-.with_frm_style input[type="radio"]:checked + .frm_image_option_container{
-	border: 1px solid #4199FD;
-}
-
-.with_frm_style input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmark{
-	display: block;
-}
-
-.with_frm_style .frm_image_option_container:hover {
-	border: 1px solid #4199FD;
-}
-
-.with_frm_style .frm_image_option_container .frm_empty_url,
-.with_frm_style .frm_image_option_container img {
-	min-height: 246px;
-	height: 246px;
-	min-width: 246px;
-	width: 246px;
-	object-fit: cover;
-}
-
-.with_frm_style .frm_image_option_container .frm_empty_url {
-	background: linear-gradient(0deg, #EAECF4, #EAECF4);
 }
 
 .with_frm_style :invalid,
