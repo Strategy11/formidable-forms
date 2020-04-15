@@ -273,6 +273,8 @@ if ( ! empty( $important ) ) {
 	box-shadow:<?php echo esc_html( ( isset( $remove_box_shadow ) && $remove_box_shadow ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset' ) . esc_html( $important ); ?>;
 }
 
+// TODO Laura -- remove this
+	/*
 .<?php echo esc_html( $style_class ); ?> .frm_radio .frm_image_option_container,
 .<?php echo esc_html( $style_class ); ?> .frm_checkbox .frm_image_option_container {
 	border: 1px solid <?php echo esc_html( $border_color . $important ); ?>;
@@ -289,6 +291,7 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ); ?> .frm_image_option_container:hover {
 	border: 1px solid <?php echo esc_html( $border_color_active . $important ); ?>;
 }
+*/
 
 .<?php echo esc_html( $style_class ); ?> input[type=radio],
 .<?php echo esc_html( $style_class ); ?> input[type=checkbox]{
