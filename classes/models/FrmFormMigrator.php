@@ -85,7 +85,7 @@ abstract class FrmFormMigrator {
 						</div>
 						<button type="submit" class="button button-primary button-hero">Start Import</button>
 					</form>
-					<div class="frm-importer-process frm_hidden">
+					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
 						<p class="process-count">
 							<span class="frm-wait" aria-hidden="true"></span>
@@ -205,7 +205,13 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_field                = FrmFieldsHelper::setup_new_vars( $this->convert_field_type( $field ) );
+			$new_type = @$this->convert_field_type( $field );
+			if ( is_array( $new_type ) || is_object( $new_type ) ) {
+				// the field itself was returned e.g. for Pirate forms importer that can't handle field arg
+				$new_type = $this->convert_field_type( $type );
+			}
+
+			$new_field                = FrmFieldsHelper::setup_new_vars( $new_type );
 			$new_field['name']        = $label;
 			$new_field['field_order'] = $field_order;
 			$new_field['original']    = $type;
@@ -268,6 +274,11 @@ abstract class FrmFormMigrator {
 	 *                            array at usage locations.
 	 */
 	protected function convert_field_type( $field, $use = '' ) {
+		// for reverse compat
+		if ( is_string( $field ) ) {
+			return $field;
+		}
+
 		return $use ? $use : ( is_array( $field ) ? $field['type'] : $field->type );
 	}
 
@@ -283,7 +294,7 @@ abstract class FrmFormMigrator {
 		$form['fields'][]         = $new_field;
 		$this->current_section    = null;
 
-		++$field_order;
+		$field_order++;
 	}
 
 	protected function before_add_field( $field, &$new_field, &$form, &$field_order ) {

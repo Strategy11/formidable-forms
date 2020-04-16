@@ -4307,16 +4307,17 @@ function frmAdminBuildJS() {
 		event.preventDefault();
 
 		var checkedBoxes = jQuery( event.target ).find( 'input:checked' );
-		if ( checkedBoxes.length ) {
-
-			var ids = [];
-			checkedBoxes.each( function( i ) {
-				ids[i] = this.value;
-			} );
-
-			// Begin the import process.
-			importForms( ids, event.target );
+		if ( ! checkedBoxes.length ) {
+			return;
 		}
+
+		var ids = [];
+		checkedBoxes.each( function( i ) {
+			ids[i] = this.value;
+		} );
+
+		// Begin the import process.
+		importForms( ids, event.target );
 	}
 
 	/**
