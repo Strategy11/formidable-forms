@@ -23,6 +23,10 @@ abstract class FrmFormMigrator {
 			return;
 		}
 
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
+
 		$this->source_active = is_plugin_active( $this->path );
 		if ( ! $this->source_active ) {
 			// if source plugin is not installed, do nothing
@@ -184,6 +188,7 @@ abstract class FrmFormMigrator {
 
 	protected function prepare_fields( $fields, &$form ) {
 		$field_order = 1;
+
 		foreach ( $fields as $field ) {
 
 			$label = $this->get_field_label( $field );
@@ -388,8 +393,14 @@ abstract class FrmFormMigrator {
 	private function is_imported( $source_id ) {
 		$imported    = $this->get_tracked_import();
 		$new_form_id = 0;
-		if ( isset( $imported[ $this->slug ] ) && in_array( $source_id, $imported[ $this->slug ] ) ) {
-			$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
+		if ( ! isset( $imported[ $this->slug ] ) || ! in_array( $source_id, $imported[ $this->slug ] ) ) {
+			return $new_form_id;
+		}
+
+		$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
+		if ( ! empty( $new_form_id ) && empty( FrmForm::get_key_by_id( $new_form_id ) ) ) {
+			// Allow reimport if the form was deleted.
+			$new_form_id = 0;
 		}
 
 		return $new_form_id;
