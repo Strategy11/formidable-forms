@@ -13,7 +13,7 @@ abstract class FrmFormMigrator {
 
 	protected $fields_map          = array();
 	protected $current_source_form = null;
-	protected $current_section     = null;
+	protected $current_section     = array();
 
 	/**
 	 * Define required properties.
@@ -143,6 +143,7 @@ abstract class FrmFormMigrator {
 		$source_form      = $this->get_form( $source_id );
 		$source_form_name = $this->get_form_name( $source_form );
 		$source_fields    = $this->get_form_fields( $source_form );
+		$this->maybe_add_end_fields( $source_fields );
 
 		$this->current_source_form = $source_form;
 
@@ -190,6 +191,7 @@ abstract class FrmFormMigrator {
 		$field_order = 1;
 
 		foreach ( $fields as $field ) {
+			$field = (array) $field;
 
 			$label = $this->get_field_label( $field );
 			$type  = $this->get_field_type( $field );
@@ -205,11 +207,7 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_type = @$this->convert_field_type( $field );
-			if ( is_array( $new_type ) || is_object( $new_type ) ) {
-				// the field itself was returned e.g. for Pirate forms importer that can't handle field arg
-				$new_type = $this->convert_field_type( $type );
-			}
+			$new_type = $this->convert_field_type( $type, $field );
 
 			$new_field                = FrmFieldsHelper::setup_new_vars( $new_type );
 			$new_field['name']        = $label;
@@ -218,27 +216,24 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			if ( $this->should_add_field( $field ) ) {
-
-				if ( null !== $this->current_section ) {
-					if ( in_array( $type, array( 'list', 'section', 'page' ) ) ) {
-						$this->close_prev_section( $form, $field_order );
-					} else {
-						$new_field['field_options']['in_section'] = $this->current_section['id'];
-					}
-				}
-
-				// field_order might have changed, so update
-				$new_field['field_order'] = $field_order;
-
-				$form['fields'][]         = $new_field;
-
-				$this->before_add_field( $field, $new_field, $form, $field_order );
-
-				// This may occassionally skip one level/order e.g. after adding a
-				// list field, as field_order would already be prepared to be used.
-				$field_order ++;
+			if ( ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end() ) && $new_type !== 'break' ) {
+				$new_field['field_options']['in_section'] = $this->current_section['id'];
 			}
+
+			// field_order might have changed, so update
+			$new_field['field_order'] = $field_order;
+
+			$form['fields'][]         = $new_field;
+
+			if ( in_array( $new_type, $this->fields_with_end() ) ) {
+				$this->current_section = $field;
+			}
+
+			$this->before_add_field( $field, $new_field, $form, $field_order );
+
+			// This may occassionally skip one level/order e.g. after adding a
+			// list field, as field_order would already be prepared to be used.
+			$field_order ++;
 
 			if ( isset( $new_field['fields'] ) && is_array( $new_field['fields'] ) && ! empty( $new_field['fields'] ) ) {
 				// we have (inner) fields to merge
@@ -248,17 +243,6 @@ abstract class FrmFormMigrator {
 				$field_order    = $new_field['current_order'];
 			}
 		}
-
-		if ( null !== $this->current_section ) {
-			$this->close_prev_section( $form, $field_order );
-		}
-	}
-
-	/**
-	 * Some fields may not need to be added directly but their subfields instead e.g. 'name' field of gravityforms.
-	 */
-	protected function should_add_field( $field ) {
-		return true;
 	}
 
 	protected function prepare_field( $field, &$new_field ) {
@@ -266,20 +250,76 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $field
-	 * @param string       $use   Which field type to prefer to consider $field as.
-	 *                            This also eases the recursive use of the method,
-	 *                            particularly the overrides in child classes, as
-	 *                            there will be no need to rebuild the converter
-	 *                            array at usage locations.
+	 * Add any field types that will need an end section field.
 	 */
-	protected function convert_field_type( $field, $use = '' ) {
-		// for reverse compat
-		if ( is_string( $field ) ) {
-			return $field;
+	protected function fields_with_end() {
+		return array( 'divider' );
+	}
+
+	protected function maybe_add_end_fields( &$fields ) {
+		$with_end = $this->fields_with_end();
+		if ( empty( $with_end ) ) {
+			return;
 		}
 
-		return $use ? $use : ( is_array( $field ) ? $field['type'] : $field->type );
+		$open = array();
+
+		$order = 0;
+		foreach ( $fields as $field ) {
+			$order ++;
+			$type     = $this->get_field_type( $field );
+			$new_type = $this->convert_field_type( $type, $field );
+			if ( ! in_array( $new_type, $with_end ) && $new_type !== 'break' ) {
+				continue;
+			}
+
+			if ( ! empty( $open ) ) {
+				$this->insert_end_section( $fields, $order );
+				$open = array();
+			}
+
+			if ( in_array( $new_type, $with_end ) ) {
+				$open = $field;
+			}
+		}
+
+		if ( ! empty( $open ) ) {
+			$this->insert_end_section( $fields, $order );
+		}
+	}
+
+	protected function insert_end_section( &$fields, &$order ) {
+		$sub         = FrmFieldsHelper::setup_new_vars( 'end_divider' );
+		$sub['name'] = __( 'Section Buttons', 'formidable' );
+		$subs        = array( $sub );
+		$this->insert_fields_in_array( $subs, $order, 0, $fields );
+		$order ++;
+	}
+
+	/**
+	 * Replace the original combo field with a group.
+	 * This switches the name field to individual fields.
+	 */
+	protected function insert_fields_in_array( $subs, $start, $remove, &$fields ) {
+		array_splice( $fields, $start, $remove, $subs );
+	}
+
+	/**
+	 * @param string $type
+	 * @param array  $field
+	 * @param string $use   Which field type to prefer to consider $field as.
+	 *                      This also eases the recursive use of the method,
+	 *                      particularly the overrides in child classes, as
+	 *                      there will be no need to rebuild the converter
+	 *                      array at usage locations.
+	 */
+	protected function convert_field_type( $type, $field = array(), $use = '' ) {
+		// for reverse compatability.
+		if ( empty( $field ) ) {
+			return $type;
+		}
+
+		return $use ? $use : $field['type'];
 	}
 
 	protected function close_prev_section( &$form, &$field_order ) {
@@ -292,9 +332,10 @@ abstract class FrmFormMigrator {
 		$new_field['original']    = '';
 
 		$form['fields'][]         = $new_field;
-		$this->current_section    = null;
 
 		$field_order++;
+
+		$this->current_section = array();
 	}
 
 	protected function before_add_field( $field, &$new_field, &$form, &$field_order ) {
@@ -491,24 +532,23 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * @param object|array $field
+	 * @param array $field
 	 *
 	 * @return string
 	 */
 	protected function get_field_type( $field ) {
-		return is_array( $field ) ? $field['type'] : $field->type;
+		return $field['type'];
 	}
 
 	/**
-	 * @param object|array $field
+	 * @param array $field
 	 *
 	 * @return string
 	 */
 	protected function get_field_label( $field ) {
-		$label = is_array( $field ) ? ( isset( $field['label'] ) ? $field['label'] : '' ) :
-									  ( isset( $field->label )   ? $field->label   : '' );
+		$label = isset( $field['label'] ) ? $field['label'] : '';
 		if ( ! empty( $label ) ) {
-			return sanitize_text_field( $label );
+			return $label;
 		}
 
 		$type  = $this->get_field_type( $field );
