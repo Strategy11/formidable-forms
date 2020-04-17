@@ -393,8 +393,8 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @param array $form parameters for the new form to be created. Only
-	 *					the name key is a must. The keys are the column
-	 *					names of the forms table in the DB.
+	 *              the name key is a must. The keys are the column
+	 *              names of the forms table in the DB.
 	 *
 	 * @return int The ID of the newly created form.
 	 */
