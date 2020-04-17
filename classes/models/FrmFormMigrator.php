@@ -24,7 +24,7 @@ abstract class FrmFormMigrator {
 		}
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
-		    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}
 
 		$this->source_active = is_plugin_active( $this->path );
@@ -324,7 +324,7 @@ abstract class FrmFormMigrator {
 
 	protected function close_prev_section( &$form, &$field_order ) {
 		$new_field                = FrmFieldsHelper::setup_new_vars( 'end_divider' );
-		$new_field['name']        = __( 'Section Buttons', 'formidable-pro' );
+		$new_field['name']        = __( 'Section Buttons', 'formidable' );
 		// This pre-inc may make us skip a level/order occassionally, but that's fine.
 		// This & the 2nd increment below are here for better abstraction, the caller
 		// shouldn't have to worry about the right order when closing a section.
@@ -393,10 +393,10 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @param array $form parameters for the new form to be created. Only
-	 *					  the name key is a must. The keys are the column
-	 *					  names of the forms table in the DB.
+	 *					the name key is a must. The keys are the column
+	 *					names of the forms table in the DB.
 	 *
-	 * @return int 		  The ID of the newly created form.
+	 * @return int The ID of the newly created form.
 	 */
 	protected function create_form( $form ) {
 		$form['form_key'] = $form['name'];
