@@ -3373,7 +3373,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 }
 
 .frm_image_option_container .frm_selected_checkmark{
-	z-index: 999999;
+	z-index: 9999;
 	left: -10px;
 	top: -12px;
 	display: none;
