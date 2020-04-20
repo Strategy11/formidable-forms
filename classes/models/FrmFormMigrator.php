@@ -249,11 +249,16 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * Add any field types that will need an end section field.
+	 *
+	 * @since 4.04.03
 	 */
 	protected function fields_with_end() {
 		return array( 'divider' );
 	}
 
+	/**
+	 * @since 4.04.03
+	 */
 	protected function maybe_add_end_fields( &$fields ) {
 		$with_end = $this->fields_with_end();
 		if ( empty( $with_end ) ) {
@@ -286,6 +291,9 @@ abstract class FrmFormMigrator {
 		}
 	}
 
+	/**
+	 * @since 4.04.03
+	 */
 	protected function insert_end_section( &$fields, &$order ) {
 		$sub         = FrmFieldsHelper::setup_new_vars( 'end_divider' );
 		$sub['name'] = __( 'Section Buttons', 'formidable' );
@@ -297,6 +305,8 @@ abstract class FrmFormMigrator {
 	/**
 	 * Replace the original combo field with a group.
 	 * This switches the name field to individual fields.
+	 *
+	 * @since 4.04.03
 	 */
 	protected function insert_fields_in_array( $subs, $start, $remove, &$fields ) {
 		array_splice( $fields, $start, $remove, $subs );
@@ -312,8 +322,8 @@ abstract class FrmFormMigrator {
 	 *                      array at usage locations.
 	 */
 	protected function convert_field_type( $type, $field = array(), $use = '' ) {
-		// for reverse compatability.
 		if ( empty( $field ) ) {
+			// For reverse compatability.
 			return $type;
 		}
 
@@ -321,9 +331,7 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * Add the new form to the database and return AJAX data.
-	 *
-	 * @since 1.4.2
+	 * Add the new form to the database and return AJAX data.å
 	 *
 	 * @param array $form Form to import.
 	 * @param array $upgrade_omit No field alternative
@@ -337,12 +345,67 @@ abstract class FrmFormMigrator {
 			return $this->form_creation_error_response( $form );
 		}
 
+		$this->create_fields( $form_id, $form );
+
+		$this->create_emails( $form );
+
+		$this->track_import( $form['import_form_id'], $form_id );
+
+		// Build and send final AJAX response!
+		return array(
+			'name'         => $form['name'],
+			'id'           => $form_id,
+			'link'         => esc_url_raw( FrmForm::get_edit_link( $form_id ) ),
+			'upgrade_omit' => $this->response['upgrade_omit'],
+		);
+	}
+
+	/**
+	 * @since 4.04.03
+	 *
+	 * @param array $form parameters for the new form to be created. Only
+	 *              the name key is a must. The keys are the column
+	 *              names of the forms table in the DB.
+	 *
+	 * @return int The ID of the newly created form.
+	 */
+	protected function create_form( $form ) {
+		$form['form_key'] = $form['name'];
+		$form['status']   = 'published';
+
+		return FrmForm::create( $form );
+	}
+
+	/**
+	 * @since 4.04.03
+	 */
+	protected function form_creation_error_response( $form ) {
+		return array(
+			'error' => true,
+			'name'  => sanitize_text_field( $form['name'] ),
+			'msg'   => esc_html__( 'There was an error while creating a new form.', 'formidable' ),
+		);
+	}
+
+	/**
+	 * @since 4.04.03
+	 *
+	 * @param int $form_id
+	 * @param array $form
+	 */
+	protected function create_fields( $form_id, &$form ) {
 		foreach ( $form['fields'] as $key => $new_field ) {
 			$new_field['form_id']         = $form_id;
 			$form['fields'][ $key ]['id'] = FrmField::create( $new_field );
 		}
+	}
 
-		// create emails
+	/**
+	 * @since 4.04.03
+	 *
+	 * @param array $form
+	 */
+	protected function create_emails( $form ) {
 		foreach ( $form['actions'] as $action ) {
 			$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
 			unset( $action['type'] );
@@ -357,38 +420,6 @@ abstract class FrmFormMigrator {
 
 			$action_control->save_settings( $new_action );
 		}
-
-		$this->track_import( $form['import_form_id'], $form_id );
-
-		// Build and send final AJAX response!
-		return array(
-			'name'         => $form['name'],
-			'id'           => $form_id,
-			'link'         => esc_url_raw( FrmForm::get_edit_link( $form_id ) ),
-			'upgrade_omit' => $this->response['upgrade_omit'],
-		);
-	}
-
-	/**
-	 * @param array $form parameters for the new form to be created. Only
-	 *              the name key is a must. The keys are the column
-	 *              names of the forms table in the DB.
-	 *
-	 * @return int The ID of the newly created form.
-	 */
-	protected function create_form( $form ) {
-		$form['form_key'] = $form['name'];
-		$form['status']   = 'published';
-
-		return FrmForm::create( $form );
-	}
-
-	protected function form_creation_error_response( $form ) {
-		return array(
-			'error' => true,
-			'name'  => sanitize_text_field( $form['name'] ),
-			'msg'   => esc_html__( 'There was an error while creating a new form.', 'formidable' ),
-		);
 	}
 
 	/**
