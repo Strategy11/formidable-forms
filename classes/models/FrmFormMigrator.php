@@ -216,20 +216,18 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			if ( ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end() ) && $new_type !== 'break' ) {
+			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end() ) && $new_type !== 'break';
+			if ( $in_section ) {
 				$new_field['field_options']['in_section'] = $this->current_section['id'];
 			}
 
-			// field_order might have changed, so update
-			$new_field['field_order'] = $field_order;
-
-			$form['fields'][]         = $new_field;
+			$form['fields'][] = $new_field;
 
 			if ( in_array( $new_type, $this->fields_with_end() ) ) {
 				$this->current_section = $field;
+			} elseif ( $new_type === 'break' || $new_type === 'end_divider' ) {
+				$this->current_section = array();
 			}
-
-			$this->before_add_field( $field, $new_field, $form, $field_order );
 
 			// This may occassionally skip one level/order e.g. after adding a
 			// list field, as field_order would already be prepared to be used.
@@ -320,26 +318,6 @@ abstract class FrmFormMigrator {
 		}
 
 		return $use ? $use : $field['type'];
-	}
-
-	protected function close_prev_section( &$form, &$field_order ) {
-		$new_field                = FrmFieldsHelper::setup_new_vars( 'end_divider' );
-		$new_field['name']        = __( 'Section Buttons', 'formidable' );
-		// This pre-inc may make us skip a level/order occassionally, but that's fine.
-		// This & the 2nd increment below are here for better abstraction, the caller
-		// shouldn't have to worry about the right order when closing a section.
-		$new_field['field_order'] = ++$field_order;
-		$new_field['original']    = '';
-
-		$form['fields'][]         = $new_field;
-
-		$field_order++;
-
-		$this->current_section = array();
-	}
-
-	protected function before_add_field( $field, &$new_field, &$form, &$field_order ) {
-		// override
 	}
 
 	/**
