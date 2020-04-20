@@ -347,7 +347,7 @@ abstract class FrmFormMigrator {
 
 		$this->create_fields( $form_id, $form );
 
-		$this->create_emails( $form );
+		$this->create_emails( $form, $form_id );
 
 		$this->track_import( $form['import_form_id'], $form_id );
 
@@ -405,21 +405,34 @@ abstract class FrmFormMigrator {
 	 *
 	 * @param array $form
 	 */
-	protected function create_emails( $form ) {
+	protected function create_emails( $form, $form_id ) {
 		foreach ( $form['actions'] as $action ) {
-			$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
-			unset( $action['type'] );
-			$new_action = $action_control->prepare_new( $form_id );
-			foreach ( $action as $key => $value ) {
-				if ( $key === 'post_title' ) {
-					$new_action->post_title = $value;
-				} else {
-					$new_action->post_content[ $key ] = $this->replace_smart_tags( $value, $form['fields'] );
-				}
-			}
-
-			$action_control->save_settings( $new_action );
+			$this->save_action( $action, $form, $form_id );
 		}
+	}
+
+	/**
+	 * @since 4.04.03
+	 *
+	 * @param array $form
+	 */
+	protected function save_action( $action, $form, $form_id ) {
+		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
+		unset( $action['type'] );
+		$new_action = $action_control->prepare_new( $form_id );
+		foreach ( $action as $key => $value ) {
+			if ( $key === 'post_title' ) {
+				$new_action->post_title = $value;
+			} elseif ( is_array( $value ) ) {
+				foreach ( $value as $k2 => $v2 ) {
+					$new_action->post_content[ $key ][ $k2 ] = $this->replace_smart_tags( $v2, $form['fields'] );
+				}
+			} else {
+				$new_action->post_content[ $key ] = $this->replace_smart_tags( $value, $form['fields'] );
+			}
+		}
+
+		return $action_control->save_settings( $new_action );
 	}
 
 	/**
