@@ -4399,52 +4399,54 @@ function frmAdminBuildJS() {
 	function startFormMigration( event ) {
 		event.preventDefault();
 
-		var checkedBoxes = jQuery( '#frm_form_importer input:checked' );
-		if ( checkedBoxes.length ) {
-
-			var ids = [];
-			checkedBoxes.each( function( i ) {
-				ids[i] = this.value;
-			} );
-
-			// Begin the import process.
-			importForms( ids );
+		var checkedBoxes = jQuery( event.target ).find( 'input:checked' );
+		if ( ! checkedBoxes.length ) {
+			return;
 		}
+
+		var ids = [];
+		checkedBoxes.each( function( i ) {
+			ids[i] = this.value;
+		} );
+
+		// Begin the import process.
+		importForms( ids, event.target );
 	}
 
 	/**
 	 * Begins the process of importing the forms.
 	 */
-	function importForms( forms ) {
+	function importForms( forms, targetForm ) {
 
-		var $processSettings = jQuery( '#frm-importer-process' );
+		// Hide the form select section.
+		var $form = jQuery( targetForm ),
+			$processSettings = $form.next( '.frm-importer-process' );
 
 		// Display total number of forms we have to import.
 		$processSettings.find( '.form-total' ).text( forms.length );
 		$processSettings.find( '.form-current' ).text( '1' );
 
-		// Hide the form select section.
-		jQuery( '#frm_form_importer' ).hide();
+		$form.hide();
 
 		// Show processing status.
-		$processSettings.show();
+		// '.process-completed' might have been shown earlier during a previous import, so hide now.
 		$processSettings.find( '.process-completed' ).hide();
+		$processSettings.show();
 
 		// Create global import queue.
 		s.importQueue = forms;
 		s.imported = 0;
 
 		// Import the first form in the queue.
-		importForm();
+		importForm( $processSettings );
 	}
 
 	/**
 	 * Imports a single form from the import queue.
 	 */
-	function importForm() {
-		var $processSettings = jQuery( '#frm-importer-process' ),
-			formID = s.importQueue[0],
-			provider = jQuery( 'input[name="slug"]' ).val(),
+	function importForm( $processSettings ) {
+		var formID = s.importQueue[0],
+			provider = $processSettings.closest( '.welcome-panel-content' ).find( 'input[name="slug"]' ).val(),
 			data = {
 				action: 'frm_import_' + provider,
 				form_id: formID,
@@ -4479,7 +4481,7 @@ function frmAdminBuildJS() {
 				} else {
 					// Import next form in the queue.
 					$processSettings.find( '.form-current' ).text( s.imported + 1 );
-					importForm();
+					importForm( $processSettings );
 				}
 			}
 		} );
@@ -5808,7 +5810,7 @@ function frmAdminBuildJS() {
 		},
 
 		exportInit: function() {
-			jQuery( '#frm_form_importer' ).submit( startFormMigration );
+			jQuery( '.frm_form_importer' ).submit( startFormMigration );
 			jQuery( document.getElementById( 'frm_export_xml' ) ).submit( validateExport );
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).change( removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).change( checkCSVExtension );
