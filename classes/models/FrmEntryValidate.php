@@ -79,6 +79,11 @@ class FrmEntryValidate {
 
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
+		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+		if ( $should_trim ) {
+			$value = reset( $value );
+		}
+
 		if ( ! is_array( $value ) ) {
 			$value = trim( $value );
 		}
