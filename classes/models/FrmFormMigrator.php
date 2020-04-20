@@ -423,12 +423,10 @@ abstract class FrmFormMigrator {
 		foreach ( $action as $key => $value ) {
 			if ( $key === 'post_title' ) {
 				$new_action->post_title = $value;
-			} elseif ( is_array( $value ) ) {
-				foreach ( $value as $k2 => $v2 ) {
-					$new_action->post_content[ $key ][ $k2 ] = $this->replace_smart_tags( $v2, $form['fields'] );
-				}
-			} else {
+			} elseif ( is_string( $value ) ) {
 				$new_action->post_content[ $key ] = $this->replace_smart_tags( $value, $form['fields'] );
+			} else {
+				$new_action->post_content[ $key ] = $value;
 			}
 		}
 
