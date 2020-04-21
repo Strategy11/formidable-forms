@@ -18,9 +18,8 @@
 		</span>
 
 	<?php
-	if ( FrmAppHelper::pro_is_installed() ) {
+	if ( FrmAppHelper::pro_is_installed() && file_exists( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/image-selector.php' ) ) {
 		include( FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/image-selector.php' );
 	}
 	?>
 </li>
-
