@@ -141,7 +141,7 @@ class FrmAddon {
 	 */
 	protected function maybe_get_pro_license() {
 		// prevent a loop if $this is the pro plugin
-		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name != 'Formidable Pro';
+		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name != 'Formidable Pro' && $this->plugin_name != 'Formidable Forms';
 
 		if ( ! $get_license ) {
 			return false;
