@@ -1563,7 +1563,10 @@ class FrmAppHelper {
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
 		if ( ! empty( $fields ) ) {
 			foreach ( (array) $fields as $field ) {
-				$field->default_value   = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
+				if ( ! self::is_admin_page() ) {
+					// Don't prep default values on the form settings page.
+					$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
+				}
 				$args['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
 				self::fill_field_defaults( $field, $record, $values, $args );
 			}
