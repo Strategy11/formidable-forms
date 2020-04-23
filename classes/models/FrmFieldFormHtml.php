@@ -433,10 +433,22 @@ class FrmFieldFormHtml {
 			$classes .= ' ' . $extra_classes;
 		}
 
+		$classes .= $this->get_image_option_classes();
+
 		$classes .= $this->field_obj->get_container_class();
 
 		// Get additional classes
 		return apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
+	}
+
+	private function get_image_option_classes( ){
+		if ( empty ( $this->field_obj->get_field_column( 'image_options' ) ) ) {
+			return '';
+		}
+
+		$image_size = ( ! empty ( $this->field_obj->get_field_column( 'image_size' ) ) ) ? $this->field_obj->get_field_column( 'image_size' ) : 'medium';
+
+		return (' frm_image_options frm_image_size_' . $image_size . ' ');
 	}
 
 	/**
