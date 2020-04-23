@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.04.03 =
+* Add option to Import forms on the form listing page and in the new form process.
+* Improve performance on the form settings page when default values are used in fields.
+* Update the base migrator class for more flexibility.
+* Fix: Prevent a few PHP warnings.
+
 = 4.04.02 =
 * Don't load the front end form js in the builder/settings.
 * Fix: Some database prefixes weren't working correctly with many database calls: "rm", "fr", "_".
