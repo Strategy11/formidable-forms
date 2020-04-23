@@ -615,7 +615,9 @@ class FrmDb {
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
-		$filters = $wp_filter['content_save_pre'];
+		if ( isset( $wp_filter['content_save_pre'] ) ) {
+			$filters = $wp_filter['content_save_pre'];
+		}
 
 		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
 		remove_all_filters( 'content_save_pre' );
@@ -623,7 +625,9 @@ class FrmDb {
 		$post = wp_insert_post( $settings );
 
 		// add the content filters back for views or posts
-		$wp_filter['content_save_pre'] = $filters;
+		if ( isset( $filters ) ) {
+			$wp_filter['content_save_pre'] = $filters;
+		}
 
 		return $post;
 	}
