@@ -1128,13 +1128,17 @@ class FrmFieldsHelper {
 	 * @return array $other_args
 	 */
 	public static function prepare_other_input( $args, &$other_opt, &$checked ) {
+		$other_args = array(
+			'name'  => '',
+			'value' => '',
+		);
+
 		//Check if this is an "Other" option
 		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
-			return;
+			return $other_args;
 		}
 
 		$other_opt  = true;
-		$other_args = array();
 
 		self::set_other_name( $args, $other_args );
 		self::set_other_value( $args, $other_args );
