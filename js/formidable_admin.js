@@ -1949,16 +1949,59 @@ function frmAdminBuildJS() {
 
 	function toggleImageOptions( event ) {
 		/*jshint validthis:true */
-		var $field = jQuery( this ).closest( '.frm-single-settings' );
-		var fieldId = $field.data( 'fid' );
+		var hasImageOptions,
+			imageSize,
+			$field = jQuery( this ).closest( '.frm-single-settings' ),
+			fieldId = $field.data( 'fid' ),
+			$displayField = jQuery( '#frm_field_id_' + fieldId );
+
 		toggle( jQuery( '.field_' + fieldId + '_image_id' ) );
 		toggle( jQuery( '.frm_toggle_image_options_' + fieldId ) );
-		setInputPlaceholder( fieldId );
+		toggle( jQuery( '.frm_image_size_' + fieldId ) );
+		toggle( jQuery( '.frm_alignment_' + fieldId ) );
+		hasImageOptions = imagesAsOptions( fieldId );
+
+		if ( hasImageOptions ) {
+			setAlignment( fieldId, 'inline' );
+			removeImageSizeClassesFromField( $displayField );
+			imageSize = getImageOptionSize( fieldId );
+			$displayField.addClass( ' frm_image_options frm_image_size_' + imageSize + ' ' );
+		} else {
+			$displayField.removeClass( 'frm_image_options' );
+			removeImageSizeClassesFromField( $displayField );
+			setAlignment( fieldId, 'block' );
+		}
+
+		setInputPlaceholder( fieldId, hasImageOptions );
 	}
 
-	function setInputPlaceholder( fieldId ) {
-		var placeholder = imagesAsOptions( fieldId ) ? frm_admin_js.image_label_placeholder : '';
+	function removeImageSizeClassesFromField( $field ) {
+		$field.removeClass( 'frm_image_size_small frm_image_size_medium frm_image_size_large' );
+	}
+
+	function setAlignment( fieldId, alignment ) {
+		jQuery( '#field_options_align_' + fieldId ).val( alignment ).change();
+	}
+
+	function setInputPlaceholder( fieldId, hasImageOptions ) {
+		var placeholder = hasImageOptions ? frm_admin_js.image_label_placeholder : '';
 		jQuery( '.field_' + fieldId + '_option' ).attr( 'placeholder', placeholder );
+	}
+
+	function setImageSize( event ) {
+		var hasImageOptions,
+			imageSize,
+			$field = jQuery( this ).closest( '.frm-single-settings' ),
+			fieldId = $field.data( 'fid' ),
+			$displayField = jQuery( '#frm_field_id_' + fieldId );
+
+		hasImageOptions = imagesAsOptions( fieldId );
+
+		if ( hasImageOptions ) {
+			removeImageSizeClassesFromField( $displayField );
+			imageSize = getImageOptionSize( fieldId );
+			$displayField.addClass( ' frm_image_options frm_image_size_' + imageSize + ' ' );
+		}
 	}
 
 	function refreshOptionDisplay( event ) {
@@ -2635,6 +2678,18 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 *  Get image size, if available, or use default of medium
+	 */
+	function getImageOptionSize( fieldId ) {
+		var $field = jQuery( '#field_options_image_size_' + fieldId );
+		if ( ! $field ) {
+			return 'medium';
+		} else {
+			return $field.val() ? $field.val() : 'medium';
+		}
+	}
+
 	function resetDisplayedOpts( fieldId ) {
 		var i, opt, opts, type, placeholder, fieldInfo,
 			input = jQuery( '[name^="item_meta[' + fieldId + ']"]' );
@@ -2658,20 +2713,23 @@ function frmAdminBuildJS() {
 			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
+
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
 				isProduct = isProductField( fieldId ),
-				hasImageOptions = imagesAsOptions( fieldId );
+				hasImageOptions = imagesAsOptions( fieldId ),
+				imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '',
+				imageOptionClass = hasImageOptions ? ( ' frm_image_option frm_image_' + imageSize + ' ' )  : '';
 
 			for ( i = 0; i < opts.length; i++ ) {
-				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, hasImageOptions ) );
+				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, hasImageOptions ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, imageOptionClass ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-			imageOptionClass = hasImageOptions ? ' frm_image_option ' : '';
+
 		id = 'field_' + fieldKey + '-' + opt.key;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
@@ -5543,6 +5601,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_remove_image_option', removeImageFromOption );
 			$builderForm.on( 'click', '.frm_choose_image_box', addImageToOption );
 			$builderForm.on( 'change', '.frm_hide_image_option_text', refreshOptionDisplay );
+			$builderForm.on( 'change', '.frm_field_options_image_size', setImageSize );
+			$builderForm.on( 'change', '.frm_field_options_image_size', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
