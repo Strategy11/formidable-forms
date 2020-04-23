@@ -120,6 +120,28 @@ function frmFrontFormJS(){
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).removeAttr( 'disabled' );
 	}
 
+	/**
+	 * Disable the save draft link for a given jQuery form object
+	 *
+	 * @since 4.04.03
+	 *
+	 * @param {object} $form
+	 */
+	function disableSaveDraft( $form ) {
+		$form.find( 'a.frm_save_draft' ).css( 'pointer-events', 'none' );
+	}
+
+	/**
+	 * Enable the save draft link for a given jQuery form object
+	 *
+	 * @since 4.04.03
+	 *
+	 * @param {object} $form
+	 */
+	function enableSaveDraft( $form ) {
+		$form.find( 'a.frm_save_draft' ).css( 'pointer-events', '' );
+	}
+
 	function validateForm( object ) {
 		var errors = [];
 
@@ -629,6 +651,7 @@ function frmFrontFormJS(){
 	function showSubmitLoading( $object ) {
 		showLoadingIndicator( $object );
 		disableSubmitButton( $object );
+		disableSaveDraft( $object );
 	}
 
 	function showLoadingIndicator( $object ) {
@@ -661,6 +684,7 @@ function frmFrontFormJS(){
 
 		if ( enable === 'enable' ) {
 			enableSubmitButton( loadingForm );
+			enableSaveDraft( loadingForm );
 		}
 	}
 
