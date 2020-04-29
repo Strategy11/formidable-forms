@@ -19,7 +19,7 @@
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--border-radius: 35px;
-	--small-radius: 4px;
+	--small-radius: 6px;
 	--small-sidebar: 275px;
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
@@ -3740,6 +3740,42 @@ label.default-style-box input[type="checkbox"] {
 .tabs-panel.active .tabs-panel, .frm_settings_form .tabs-panel .tabs-panel {
 	border: none;
 	padding: 0;
+}
+
+.frm-feature-banner {
+	background: var(--dark-grey);
+	color: #fff;
+	border-radius: var(--small-radius);
+	padding: 20px;
+	margin: 10px 0;
+}
+
+.frm-feature-banner p {
+	font-size: 14px;
+}
+
+.frm-feature-banner .dismiss {
+    margin-top: -10px;
+    margin-right: -10px;
+}
+
+.frm-feature-banner .dismiss svg {
+	color: #fff;
+}
+
+.frm-feature-banner .frm-big-icon {
+	padding-right: 20px;
+	float: left;
+	min-height: 60px;
+}
+
+.frm-big-icon svg {
+	height: 60px;
+	width: 60px;
+}
+
+.frm-feature-banner p {
+	margin-top: 0;
 }
 
 /*for add-on reverse compatibility */

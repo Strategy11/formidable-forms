@@ -4713,8 +4713,8 @@ function frmAdminBuildJS() {
 				if ( response.form ) {
 					loader.hide();
 					jQuery( '.frm-inline-error' ).remove();
-					//proceed.val(monsterinsights_admin.proceed);
-					//proceed.after('<span class="frm-inline-error">' + monsterinsights_admin.connect_error + '</span>');
+					//proceed.val(admin.proceed);
+					//proceed.after('<span class="frm-inline-error">' + admin.connect_error + '</span>');
 					return;
 				}
 
@@ -4739,6 +4739,12 @@ function frmAdminBuildJS() {
 		// Proceed with CSS changes
 		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active');
 		button.removeClass('frm_loading_button');
+
+		// Maybe refresh
+		var importPage = document.getElementsByClassName( 'frm-admin-page-import' );
+		if ( importPage.length > 0 ) {
+			window.location.reload();
+		}
 	}
 
 	function addonError( response, el, button ) {
@@ -5817,6 +5823,16 @@ function frmAdminBuildJS() {
 			jQuery( 'select[name="format"]' ).change( checkExportTypes ).change();
 			jQuery( 'input[name="frm_export_forms[]"]' ).click( preventMultipleExport );
 			initiateMultiselect();
+
+			jQuery( '.frm-feature-banner .dismiss' ).click( function( event ) {
+				event.preventDefault();
+				jQuery.post( ajaxurl, {
+					action: 'frm_dismiss_migrator',
+					plugin: this.id,
+					nonce: frmGlobal.nonce
+				} );
+				this.parentElement.remove();
+			} );
 		},
 
 		updateOpts: function( field_id, opts, modal ) {

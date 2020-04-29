@@ -140,6 +140,8 @@ class FrmHooksController {
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
+
+		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
 	}
 
 	public static function load_ajax_hooks() {
