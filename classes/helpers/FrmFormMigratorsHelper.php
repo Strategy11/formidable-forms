@@ -46,6 +46,7 @@ class FrmFormMigratorsHelper {
 			if ( ! self::is_dismissed( $form ) ) {
 				self::install_banner( $form );
 			} else {
+				/* translators: %s: Name of the plugin */
 				$label = sprintf( __( 'Import from %s', 'formidable' ), $form['name'] );
 				self::install_button( $form, $label );
 			}
@@ -116,7 +117,7 @@ class FrmFormMigratorsHelper {
 			$label   = __( 'Get Started', 'formidable' );
 			$primary = 'button-primary frm-button-primary ';
 		}
-		
+
 		if ( $install['installed'] ) {
 			?>
 			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( empty( $install['link'] ) ? 'frm_hidden' : '' ) ); ?>">
