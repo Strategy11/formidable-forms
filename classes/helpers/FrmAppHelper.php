@@ -289,26 +289,11 @@ class FrmAppHelper {
 	 * @return boolean
 	 */
 	public static function doing_ajax() {
-		return self::wp_doing_ajax() && ! self::is_preview_page();
+		return wp_doing_ajax() && ! self::is_preview_page();
 	}
 
 	public static function js_suffix() {
 		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	}
-
-	/**
-	 * Use the WP 4.7 wp_doing_ajax function
-	 *
-	 * @since 2.05.07
-	 */
-	public static function wp_doing_ajax() {
-		if ( function_exists( 'wp_doing_ajax' ) ) {
-			$doing_ajax = wp_doing_ajax();
-		} else {
-			$doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
-		}
-
-		return $doing_ajax;
 	}
 
 	/**
@@ -330,7 +315,7 @@ class FrmAppHelper {
 	 * @return boolean
 	 */
 	public static function is_admin() {
-		return is_admin() && ! self::wp_doing_ajax();
+		return is_admin() && ! wp_doing_ajax();
 	}
 
 	/**
@@ -2450,6 +2435,17 @@ class FrmAppHelper {
 		$locales = apply_filters( 'frm_locales', $locales );
 
 		return $locales;
+	}
+
+	/**
+	 * Use the WP 4.7 wp_doing_ajax function
+	 *
+	 * @since 2.05.07
+	 * @deprecated 4.04.04
+	 */
+	public static function wp_doing_ajax() {
+		_deprecated_function( __METHOD__, '4.04.04', 'wp_doing_ajax' );
+		return wp_doing_ajax();
 	}
 
 	/**
