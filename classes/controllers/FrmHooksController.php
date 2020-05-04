@@ -142,6 +142,8 @@ class FrmHooksController {
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
 		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
+
+		FrmSMTPController::load_hooks();
 	}
 
 	public static function load_ajax_hooks() {
