@@ -247,6 +247,7 @@ class FrmSMTPController {
 			)
 		);
 
+		// WPCS: XSS ok.
 		printf(
 			'<section class="step step-install">
 				<aside class="num">
@@ -259,8 +260,7 @@ class FrmSMTPController {
 					<a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a>
 				</div>		
 			</section>',
-			// WPCS: XSS ok.
-			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ),
+			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // WPCS: XSS ok.
 			esc_html__( 'Install and Activate WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
 			esc_attr( $step['plugin'] ),
@@ -292,6 +292,7 @@ class FrmSMTPController {
 			)
 		);
 
+		// WPCS: XSS ok.
 		printf(
 			'<section class="step step-setup %1$s">
 				<aside class="num">
@@ -305,8 +306,7 @@ class FrmSMTPController {
 				</div>		
 			</section>',
 			esc_attr( $step['section_class'] ),
-			// WPCS: XSS ok.
-			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ),
+			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // WPCS: XSS ok.
 			esc_html__( 'Set Up WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),
 			esc_attr( $step['button_class'] ),
