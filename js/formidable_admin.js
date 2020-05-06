@@ -4740,9 +4740,9 @@ function frmAdminBuildJS() {
 		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active');
 		button.removeClass('frm_loading_button');
 
-		// Maybe refresh
-		var importPage = document.getElementsByClassName( 'frm-admin-page-import' );
-		if ( importPage.length > 0 ) {
+		// Maybe refresh import and SMTP pages
+		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp' );
+		if ( refreshPage.length > 0 ) {
 			window.location.reload();
 		}
 	}

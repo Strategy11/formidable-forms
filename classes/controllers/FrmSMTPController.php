@@ -51,7 +51,9 @@ class FrmSMTPController {
 			add_action( 'wp_ajax_frm_smtp_page_check_plugin_status', array( $self, 'ajax_check_plugin_status' ) );
 		}
 
+		add_filter( 'wp_mail_smtp_core_get_upgrade_link', array( $self, 'link' ) );
 		add_action( 'admin_menu', array( $self, 'menu' ), 999 );
+		add_action( 'wp_mail_smtp_core_recommendations_plugins', 'FrmAppController::remove_wpforms_nag' );
 
 		// Only load if we are actually on the SMTP page.
 		if ( ! FrmAppHelper::is_admin_page( $self->slug ) ) {
@@ -59,10 +61,35 @@ class FrmSMTPController {
 		}
 
 		add_action( 'admin_init', array( $self, 'redirect_to_smtp_settings' ) );
-		//add_action( 'admin_enqueue_scripts', array( $self, 'enqueue_assets' ) );
 
 		// Hook for addons.
 		do_action( 'frm_admin_pages_smtp_hooks' );
+	}
+
+	/**
+	 * Customize the upgrade link.
+	 */
+	public function link( $link ) {
+		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
+		$link     = str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
+		return $link;
+	}
+
+	/**
+	 * Don't nag people to install WPForms
+	 *
+	 * @since 4.04.04
+	 */
+	public static function remove_wpforms_nag( $upsell ) {
+		if ( is_array( $upsell ) ) {
+			foreach ( $upsell as $k => $plugin ) {
+				if ( strpos( $plugin['slug'], 'wpforms' ) !== false ) {
+					unset( $upsell[ $k ] );
+				}
+			}
+		}
+
+		return $upsell;
 	}
 
 	/**
@@ -70,77 +97,6 @@ class FrmSMTPController {
 	 */
 	public function menu() {
 		add_submenu_page( 'formidable', __( 'SMTP', 'formidable' ) . ' | Formidable', __( 'SMTP', 'formidable' ), 'activate_plugins', 'formidable-smtp', array( $this, 'output' ) );
-	}
-
-	/**
-	 * Enqueue JS and CSS files.
-	 *
-	 * @since 4.04.04
-	 */
-	public function enqueue_assets() {
-
-		wp_enqueue_script(
-			'frm-admin-page-smtp',
-			FrmAppHelper::plugin_url() . 'assets/js/components/admin/pages/smtp.js',
-			array( 'jquery' ),
-			WPFORMS_VERSION,
-			true
-		);
-
-		wp_localize_script(
-			'frm-admin-page-smtp',
-			'frm_pluginlanding',
-			$this->get_js_strings()
-		);
-	}
-
-	/**
-	 * JS Strings.
-	 *
-	 * @since 4.04.04
-	 *
-	 * @return array Array of strings.
-	 */
-	protected function get_js_strings() {
-
-		$error_could_not_install = sprintf(
-			wp_kses( /* translators: %s - Lite plugin download URL. */
-				__( 'Could not install plugin. Please <a href="%s">download</a> and install manually.', 'formidable' ),
-				array(
-					'a' => array(
-						'href' => true,
-					),
-				)
-			),
-			esc_url( $this->config['lite_download_url'] )
-		);
-
-		$error_could_not_activate = sprintf(
-			wp_kses( /* translators: %s - Lite plugin download URL. */
-				__( 'Could not activate plugin. Please activate from the <a href="%s">Plugins page</a>.', 'formidable' ),
-				array(
-					'a' => array(
-						'href' => true,
-					),
-				)
-			),
-			esc_url( admin_url( 'plugins.php' ) )
-		);
-
-		return array(
-			'installing'               => esc_html__( 'Installing...', 'formidable' ),
-			'activating'               => esc_html__( 'Activating...', 'formidable' ),
-			'activated'                => esc_html__( 'WP Mail SMTP Installed & Activated', 'formidable' ),
-			'install_now'              => esc_html__( 'Install Now', 'formidable' ),
-			'activate_now'             => esc_html__( 'Activate Now', 'formidable' ),
-			'download_now'             => esc_html__( 'Download Now', 'formidable' ),
-			'plugins_page'             => esc_html__( 'Go to Plugins page', 'formidable' ),
-			'error_could_not_install'  => $error_could_not_install,
-			'error_could_not_activate' => $error_could_not_activate,
-			'manual_install_url'       => $this->config['lite_download_url'],
-			'manual_activate_url'      => admin_url( 'plugins.php' ),
-			'smtp_settings_button'     => esc_html__( 'Go to SMTP Settings', 'formidable' ),
-		);
 	}
 
 	/**
@@ -247,6 +203,9 @@ class FrmSMTPController {
 			)
 		);
 
+		/* translators: %s: Name of the plugin */
+		$label = sprintf( __( 'Install and Activate %s', 'formidable' ), 'WP Mail SMTP' );
+
 		// WPCS: XSS ok.
 		printf(
 			'<section class="step step-install">
@@ -257,11 +216,11 @@ class FrmSMTPController {
 				<div>
 					<h2>%2$s</h2>
 					<p>%3$s</p>
-					<a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a>
+					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a></span>
 				</div>		
 			</section>',
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // WPCS: XSS ok.
-			esc_html__( 'Install and Activate WP Mail SMTP', 'formidable' ),
+			esc_html( $label ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
 			esc_attr( $step['plugin'] ),
 			esc_attr( $step['button_class'] ),
@@ -302,15 +261,15 @@ class FrmSMTPController {
 				<div>
 					<h2>%3$s</h2>
 					<p>%4$s</p>
-					<button class="button %5$s" data-url="%6$s">%7$s</button>
+					<span><a href="%5$s" class="button button-primary frm-button-primary %6$s">%7$s</a></span>
 				</div>		
 			</section>',
 			esc_attr( $step['section_class'] ),
 			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // WPCS: XSS ok.
 			esc_html__( 'Set Up WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),
-			esc_attr( $step['button_class'] ),
 			esc_url( admin_url( $this->config['smtp_settings'] ) ),
+			esc_attr( $step['button_class'] ),
 			esc_html( $step['button_text'] )
 		);
 	}
@@ -341,7 +300,7 @@ class FrmSMTPController {
 			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );
 			$step['button_class']  = 'frm-install-addon';
 			$step['button_action'] = __( 'Install', 'formidable' );
-			$step['plugin']        = $lite_plugin->get_install_link();
+			$step['plugin']        = $this->config['lite_download_url'];
 		} else {
 			$this->output_data['plugin_activated'] = $this->is_smtp_activated();
 			$this->output_data['plugin_setup']     = $this->is_smtp_configured();
@@ -390,40 +349,38 @@ class FrmSMTPController {
 	}
 
 	/**
-	 * Ajax endpoint. Check plugin setup status.
-	 * Used to properly init step 'Setup' section after completing step 'Install'.
+	 * Whether WP Mail SMTP plugin configured or not.
 	 *
 	 * @since 4.04.04
+	 *
+	 * @return bool True if some mailer is selected and configured properly.
 	 */
-	public function ajax_check_plugin_status() {
-
-		// Security checks.
-		if (
-			! check_ajax_referer( 'wpforms-admin', 'nonce', false ) ||
-			! wpforms_current_user_can()
-		) {
-			wp_send_json_error(
-				array(
-					'error' => esc_html__( 'You do not have permission.', 'formidable' ),
-				)
-			);
-		}
-
-		$result = array();
+	protected function is_smtp_configured() {
 
 		if ( ! $this->is_smtp_activated() ) {
-			wp_send_json_error(
-				array(
-					'error' => esc_html__( 'Plugin unavailable.', 'formidable' ),
-				)
-			);
+			return false;
 		}
 
-		$result['setup_status']  = (int) $this->is_smtp_configured();
-		$result['license_level'] = wp_mail_smtp()->get_license_type();
+		$phpmailer = $this->get_phpmailer();
 
-		wp_send_json_success( $result );
+		$mailer             = WPMailSMTP\Options::init()->get( 'mail', 'mailer' );
+		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $phpmailer )->is_mailer_complete();
+
+		return 'mail' !== $mailer && $is_mailer_complete;
 	}
+
+	/**
+	 * Whether WP Mail SMTP plugin active or not.
+	 *
+	 * @since 4.04.04
+	 *
+	 * @return bool True if SMTP plugin is active.
+	 */
+	protected function is_smtp_activated() {
+
+		return function_exists( 'wp_mail_smtp' ) && ( is_plugin_active( $this->config['lite_plugin'] ) || is_plugin_active( $this->config['pro_plugin'] ) );
+	}
+
 
 	/**
 	 * Get $phpmailer instance.
@@ -442,39 +399,6 @@ class FrmSMTPController {
 		}
 
 		return $phpmailer;
-	}
-
-	/**
-	 * Whether WP Mail SMTP plugin configured or not.
-	 *
-	 * @since 4.04.04
-	 *
-	 * @return bool True if some mailer is selected and configured properly.
-	 */
-	protected function is_smtp_configured() {
-
-		if ( ! $this->is_smtp_activated() ) {
-			return false;
-		}
-
-		$phpmailer = $this->get_phpmailer();
-
-		$mailer             = \WPMailSMTP\Options::init()->get( 'mail', 'mailer' );
-		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $phpmailer )->is_mailer_complete();
-
-		return 'mail' !== $mailer && $is_mailer_complete;
-	}
-
-	/**
-	 * Whether WP Mail SMTP plugin active or not.
-	 *
-	 * @since 4.04.04
-	 *
-	 * @return bool True if SMTP plugin is active.
-	 */
-	protected function is_smtp_activated() {
-
-		return function_exists( 'wp_mail_smtp' ) && ( is_plugin_active( $this->config['lite_plugin'] ) || is_plugin_active( $this->config['pro_plugin'] ) );
 	}
 
 	/**
@@ -596,12 +520,18 @@ class FrmSMTPController {
 }
 #frm-admin-smtp .grey {
 	opacity: 0.5;
+	background: #F6F6F6 !important;
+	border-color: #ddd !important;
+	color: #9FA5AA !important;
 }
 #frm-admin-smtp .step h2 {
 	font-size: 24px;
 	line-height: 22px;
 	margin-top: 0;
 	margin-bottom: 15px;
+}
+#frm-admin-smtp .button.disabled {
+	cursor: default;
 }
 </style>
 		<?php

@@ -46,9 +46,9 @@ class FrmFormMigratorsHelper {
 			if ( ! self::is_dismissed( $form ) ) {
 				self::install_banner( $form );
 			} else {
-				/* translators: %s: Name of the plugin */
-				$label = sprintf( __( 'Import from %s', 'formidable' ), $form['name'] );
-				self::install_button( $form, $label );
+				echo '<span>';
+				self::install_button( $form, 'auto' );
+				echo '</span>';
 			}
 		}
 	}
@@ -81,12 +81,14 @@ class FrmFormMigratorsHelper {
 				'plugin'   => 'gravityforms/gravityforms.php',
 				'importer' => 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php',
 				'name'     => 'Gravity Forms',
+				'package'  => 'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
 			),*/
 			'pf' => array(
 				'class'    => 'FrmPirateImporter',
 				'plugin'   => 'pirate-forms/pirate-forms.php',
 				'importer' => 'formidable-import-pirate-forms/pf-to-frm.php',
 				'name'     => 'Pirate Forms',
+				'package'  => 'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
 			),
 		);
 	}
@@ -122,10 +124,18 @@ class FrmFormMigratorsHelper {
 			?>
 			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( empty( $install['link'] ) ? 'frm_hidden' : '' ) ); ?>">
 			<?php
+			if ( $label === 'auto' ) {
+				/* translators: %s: Name of the plugin */
+				$label = sprintf( __( 'Activate %s', 'formidable' ), $install['name'] );
+			}
 		} else {
 			?>
-			<a rel="<?php echo esc_attr( $install['link'] ); ?>" class="frm-install-addon button <?php echo esc_attr( $primary ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
+			<a rel="<?php echo esc_attr( $install['package'] ); ?>" class="frm-install-addon button <?php echo esc_attr( $primary ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
 			<?php
+			if ( $label === 'auto' ) {
+				/* translators: %s: Name of the plugin */
+				$label = sprintf( __( 'Install %s Importer', 'formidable' ), $install['name'] );
+			}
 		}
 		?>
 		<?php echo esc_html( $label ); ?>

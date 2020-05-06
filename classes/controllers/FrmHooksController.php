@@ -92,7 +92,6 @@ class FrmHooksController {
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
-		add_action( 'wp_mail_smtp_core_recommendations_plugins', 'FrmAppController::remove_wpforms_nag' );
 
 		// Addons Controller.
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );

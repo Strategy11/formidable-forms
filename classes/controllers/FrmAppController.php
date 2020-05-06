@@ -280,23 +280,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * Don't nag people to install WPForms
-	 *
-	 * @since 3.05
-	 */
-	public static function remove_wpforms_nag( $upsell ) {
-		if ( is_array( $upsell ) ) {
-			foreach ( $upsell as $k => $plugin ) {
-				if ( strpos( $plugin['slug'], 'wpforms' ) !== false ) {
-					unset( $upsell[ $k ] );
-				}
-			}
-		}
-
-		return $upsell;
-	}
-
-	/**
 	 * If there are CURL problems on this server, wp_remote_post won't work for installing
 	 * Use a javascript fallback instead.
 	 *
