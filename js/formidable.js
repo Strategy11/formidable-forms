@@ -761,7 +761,13 @@ function frmFrontFormJS(){
 				nonce:frm_js.nonce
 			},
 			success:function(msg){
-				label.html(msg);
+				var admin = document.getElementById( 'wpbody' );
+				if ( admin === null ) {
+					label.html( msg );
+				} else {
+					label.html( '' );
+					$link.after( msg );
+				}
 			}
 		});
 		return false;

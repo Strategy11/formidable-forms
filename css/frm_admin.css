@@ -2009,6 +2009,7 @@ table.frm-list-templates thead th {
 	height: 50px;
 }
 
+.frm-right-panel .inside a.frm_pro_tip,
 a.frm_pro_tip {
 	font-size: 14px;
 	border: 1px solid var(--orange);
