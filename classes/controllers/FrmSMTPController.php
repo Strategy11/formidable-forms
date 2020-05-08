@@ -14,7 +14,7 @@ class FrmSMTPController {
 	 *
 	 * @var string
 	 */
-	public $slug = 'formidable-smtp';
+	private $slug = 'formidable-smtp';
 
 	/**
 	 * @since 4.04.04
@@ -96,7 +96,7 @@ class FrmSMTPController {
 	 * SMTP submenu page.
 	 */
 	public function menu() {
-		add_submenu_page( 'formidable', __( 'SMTP', 'formidable' ) . ' | Formidable', __( 'SMTP', 'formidable' ), 'activate_plugins', 'formidable-smtp', array( $this, 'output' ) );
+		add_submenu_page( 'formidable', __( 'SMTP', 'formidable' ) . ' | Formidable', __( 'SMTP', 'formidable' ), 'activate_plugins', $this->slug, array( $this, 'output' ) );
 	}
 
 	/**
