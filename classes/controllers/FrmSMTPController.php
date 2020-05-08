@@ -296,26 +296,29 @@ class FrmSMTPController {
 			'button_action' => '',
 		);
 
-		if ( ! $this->output_data['plugin_installed'] && ! $this->output_data['pro_plugin_installed'] ) {
+		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
+		if ( ! $is_installed ) {
+			// Return the download url.
 			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );
 			$step['button_class']  = 'frm-install-addon';
 			$step['button_action'] = __( 'Install', 'formidable' );
 			$step['plugin']        = $this->config['lite_download_url'];
+			return $step;
+		}
+
+		$this->output_data['plugin_activated'] = $this->is_smtp_activated();
+		$this->output_data['plugin_setup']     = $this->is_smtp_configured();
+
+		$step['plugin'] = $this->output_data['pro_plugin_installed'] ? $this->config['pro_plugin'] : $this->config['lite_plugin'];
+
+		if ( $this->output_data['plugin_activated'] ) {
+			$step['icon']          = 'frm_step_complete_icon';
+			$step['button_text']   = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
+			$step['button_class']  = 'grey disabled';
 		} else {
-			$this->output_data['plugin_activated'] = $this->is_smtp_activated();
-			$this->output_data['plugin_setup']     = $this->is_smtp_configured();
-
-			$step['plugin'] = $this->output_data['pro_plugin_installed'] ? $this->config['pro_plugin'] : $this->config['lite_plugin'];
-
-			if ( $this->output_data['plugin_activated'] ) {
-				$step['icon']          = 'frm_step_complete_icon';
-				$step['button_text']   = __( 'WP Mail SMTP Installed & Activated', 'formidable' );
-				$step['button_class']  = 'grey disabled';
-			} else {
-				$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
-				$step['button_class']  = 'frm-activate-addon';
-				$step['button_action'] = __( 'Activate', 'formidable' );
-			}
+			$step['button_text']   = __( 'Activate WP Mail SMTP', 'formidable' );
+			$step['button_class']  = 'frm-activate-addon';
+			$step['button_action'] = __( 'Activate', 'formidable' );
 		}
 
 		return $step;
@@ -377,7 +380,6 @@ class FrmSMTPController {
 	 * @return bool True if SMTP plugin is active.
 	 */
 	protected function is_smtp_activated() {
-
 		return function_exists( 'wp_mail_smtp' ) && ( is_plugin_active( $this->config['lite_plugin'] ) || is_plugin_active( $this->config['pro_plugin'] ) );
 	}
 
@@ -390,7 +392,6 @@ class FrmSMTPController {
 	 * @return PHPMailer Instance of PHPMailer.
 	 */
 	protected function get_phpmailer() {
-
 		global $phpmailer;
 
 		if ( ! is_object( $phpmailer ) || ! is_a( $phpmailer, 'PHPMailer' ) ) {
@@ -402,13 +403,11 @@ class FrmSMTPController {
 	}
 
 	/**
-	 * Redirect to SMTP settings page.
+	 * Redirect to SMTP settings page if it is activated..
 	 *
 	 * @since 4.04.04
 	 */
 	public function redirect_to_smtp_settings() {
-
-		// Redirect to SMTP plugin if it is activated.
 		if ( $this->is_smtp_configured() ) {
 			wp_safe_redirect( admin_url( $this->config['smtp_settings'] ) );
 			exit;
