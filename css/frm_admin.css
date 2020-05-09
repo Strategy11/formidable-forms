@@ -3430,7 +3430,6 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	display: none;
 }
 
-#form_entries_page .frm_image_option_container,
 .frm_radio .frm_image_option_container,
 .frm_checkbox .frm_image_option_container {
 	border: 1px solid rgba(40, 47, 54, 0.2);
@@ -3483,7 +3482,7 @@ input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmar
 	display: block;
 }
 
-.frm_image_option_container:hover {
+.frm_image_option .frm_image_option_container:hover {
 	border: 1px solid #4199FD;
 }
 
