@@ -1875,29 +1875,20 @@ function frmAdminBuildJS() {
 	//Add new option or "Other" option to radio/checkbox/dropdown
 	function addFieldOption() {
 		/*jshint validthis:true */
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
-			newOption = jQuery( '#frm_field_' + field_id + '_opts .frm_option_template' ).prop('outerHTML'),
+		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+			newOption = jQuery( '#frm_field_' + fieldId + '_opts .frm_option_template' ).prop('outerHTML'),
 			opt_type = jQuery( this ).data( 'opttype' ),
 			optKey = 0,
-			lastKey = 0,
 			oldKey = '000',
-			lastOpt = jQuery( '#frm_field_' + field_id + '_opts li:last' );
+			lastKey = getHighestOptKey( fieldId );
 
-		if ( lastOpt.length ) {
-			optKey = lastOpt.data( 'optkey');
-			lastKey = parseInt( optKey );
-			if ( isNaN( lastKey ) ) {
-				lastKey = jQuery( '#frm_field_' + field_id + '_opts li' ).length;
-				if ( document.getElementById( 'frm_delete_field_' + field_id + '-' + ( lastKey + 1 ) + '_container' ) !== null ) {
-					lastKey = lastKey + 2;
-				}
-			}
+		if ( lastKey !== oldKey ) {
 			optKey = lastKey + 1;
 		}
 
 		//Update hidden field
 		if ( opt_type === 'other' ) {
-			document.getElementById( 'other_input_' + field_id ).value = 1;
+			document.getElementById( 'other_input_' + fieldId ).value = 1;
 
 			//Hide "Add Other" option now if this is radio field
 			var ftype = jQuery( this ).data( 'ftype' );
@@ -1906,13 +1897,15 @@ function frmAdminBuildJS() {
 			}
 
 			var data = {
-				action: 'frm_add_field_option', field_id: field_id,
+				action: 'frm_add_field_option',
+				field_id: fieldId,
 				opt_key: optKey,
-				opt_type: opt_type, nonce: frmGlobal.nonce
+				opt_type: opt_type,
+				nonce: frmGlobal.nonce
 			};
 			jQuery.post( ajaxurl, data, function( msg ) {
-				jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( msg );
-				resetDisplayedOpts( field_id );
+				jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( msg );
+				resetDisplayedOpts( fieldId );
 			} );
 		} else {
 			newOption = newOption.replace( new RegExp( 'optkey="' + oldKey + '"', 'g' ), 'optkey="' + optKey + '"' );
@@ -1920,9 +1913,33 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '-' + oldKey + '"', 'g' ), '-' + optKey + '"' );
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
-			jQuery( document.getElementById( 'frm_field_' + field_id + '_opts' ) ).append( newOption );
-			resetDisplayedOpts( field_id );
+			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
+			resetDisplayedOpts( fieldId );
 		}
+	}
+
+	function getHighestOptKey( fieldId ) {
+		var i = 0,
+			optKey = 0,
+			opts = jQuery( '#frm_field_' + fieldId + '_opts li' ),
+			lastKey = 0;
+
+		for ( i; i < opts.length; i ++ ) {
+			optKey = opts[i].getAttribute( 'data-optkey' );
+			if ( opts.length === 1 ) {
+				return optKey;
+			}
+			if ( optKey != '000' ) {
+				optKey = optKey.replace( 'other_', '' );
+				optKey = parseInt( optKey );
+			}
+
+			if ( ! isNaN( lastKey ) && ( optKey > lastKey || lastKey === '000' ) ) {
+				lastKey = optKey;
+			}
+		}
+
+		return lastKey;
 	}
 
 	function toggleMultSel() {
