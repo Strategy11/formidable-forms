@@ -1978,16 +1978,20 @@ function frmAdminBuildJS() {
 
 	function deleteFieldOption() {
 		/*jshint validthis:true */
-		var parentLi = this.parentNode;
-		var parentUl = parentLi.parentNode;
-		var field_id = this.getAttribute( 'data-fid' );
+		var otherInput,
+			parentLi = this.parentNode,
+			parentUl = parentLi.parentNode,
+			field_id = this.getAttribute( 'data-fid' );
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
 			jQuery( parentLi ).remove();
 
 			var hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
-				document.getElementById( 'other_input_' + field_id ).value = 0;
+				otherInput = document.getElementById( 'other_input_' + field_id );
+				if ( otherInput !== null ) {
+					otherInput.value = 0;
+				}
 				jQuery( '#other_button_' + field_id ).fadeIn( 'slow' );
 			}
 		} );
@@ -2970,8 +2974,63 @@ function frmAdminBuildJS() {
 
 	function changeInputtedValue() {
 		/*jshint validthis:true */
-		var action = this.getAttribute( 'data-frmchange' );
-		this.value = this.value[ action ]();
+		var i,
+			action = this.getAttribute( 'data-frmchange' ).split( ',' );
+
+		for ( i = 0; i < action.length; i ++ ) {
+			if ( action[i] == 'updateOption' ) {
+				changeHiddenSeparateValue( this );
+			} else if ( action[i] == 'updateDefault' ) {
+				changeDefaultRadioValue( this );
+			} else {
+				this.value = this.value[ action[i] ]();
+			}
+		}
+	}
+
+	/**
+	 * When the saved value is changed, update the default value radio.
+	 */
+	function changeDefaultRadioValue( input ) {
+		var parentLi = getOptionParent( input ),
+			key = parentLi.getAttribute( 'data-optkey' ),
+			fieldId = getOptionFieldId( parentLi, key ),
+			defaultRadio = parentLi.querySelector( 'input[name="default_value_' + fieldId + '"]' );
+
+		defaultRadio.value = input.value;
+	}
+
+	/**
+	 * If separate values are not enabled, change the saved value when
+	 * the displayed value is changed.
+	 */
+	function changeHiddenSeparateValue( input ) {
+		var savedVal,
+			parentLi = getOptionParent( input ),
+			key = parentLi.getAttribute( 'data-optkey' ),
+			fieldId = getOptionFieldId( parentLi, key ),
+			sep = document.getElementById( 'separate_value_' + fieldId );
+
+		if ( sep.checked === false ) {
+			// If separate values are not turned on.
+			savedVal = document.getElementById( 'field_key_' + fieldId + '-' + key );
+			savedVal.value = input.value;
+			changeDefaultRadioValue( savedVal );
+		}
+	}
+
+	function getOptionParent( input ) {
+		var parentLi = input.parentNode;
+		if ( parentLi.tagName !== 'LI' ) {
+			parentLi = parentLi.parentNode;
+		}
+		return parentLi;
+	}
+
+	function getOptionFieldId( li, key ) {
+		var liId = li.id;
+
+		return liId.replace( 'frm_delete_field_', '' ).replace( '-' + key + '_container', '' );
 	}
 
 	function submitBuild() {
