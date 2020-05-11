@@ -1,11 +1,11 @@
 === Formidable Form Builder - Contact Form, Survey & Quiz Forms Plugin for WordPress ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, registration form, quiz, quiz form, order form, paypal, paypal form, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, mortgage calculator, calculator form, calculator, price calculator, quote form, mailchimp, mailchimp form, feedback form, feedback, contact button, contact me, custom contact form, form manager, form, forms builder, forms creator, captcha, recaptcha, Akismet, email form, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor
+Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, registration form, quiz, quiz form, order form, paypal, paypal form, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, mortgage calculator, calculator form, calculator, price calculator, quote form, contact button, contact me, custom contact form, form manager, form, forms builder, forms creator, captcha, recaptcha, Akismet, email form, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor
 Requires at least: 4.7
 Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 4.04.03
+Stable tag: 4.04.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -444,19 +444,17 @@ Yes, Formidable is not your basic contact form plugin. You can use it to create 
 Our Stripe integration helps you quickly accept credit card payments online. Our PayPal form integration allows you to accept PayPal payments, subscriptions, and donations online.
 
 == Changelog ==
+= 4.04.04 =
+* Increased WP version requirement to 4.7.
+* Added more options on Import/Export page depending on what other plugins are installed.
+* More reliably add new options in fields when also reordering.
+* Fix: When a newly added option is set as the default value, save it correctly.
+* Added an easy way to install and SMTP plugin for better email deliverability.
+
 = 4.04.03 =
 * Add option to Import forms on the listing page and in the new form process.
 * Improve performance on the settings page when default values are used in fields.
 * Update the base migrator class for more flexibility.
 * Fix: Prevent a few PHP warnings.
-
-= 4.04.02 =
-* Don't load the front end js in the builder/settings.
-* Fix: Some database prefixes weren't working correctly with many database calls: "rm", "fr", "_".
-* Fix: Remove incorrect instructions for input masks and allow uppercase characters with 'a' in the input mask.
-* Fix: Save value as array when single box is checked. This resolves a conflict when used with ACF.
-* Fix: The 5/6th class was the wrong size when CSS grids are turned off.
-* Fix: More accurately set the default options to fade in fields and use CSS grids.
-* Fix: Sort country list by the current locale.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

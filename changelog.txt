@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.04.04 =
+* Increased WP version requirement to 4.7.
+* Added more options on Import/Export page depending on what other plugins are installed.
+* More reliably add new options in fields when also reordering.
+* Fix: When a newly added option is set as the default value, save it correctly.
+* Added an easy way to install and SMTP plugin for better email deliverability.
+
 = 4.04.03 =
 * Add option to Import forms on the form listing page and in the new form process.
 * Improve performance on the form settings page when default values are used in fields.
