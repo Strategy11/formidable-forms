@@ -206,7 +206,6 @@ class FrmSMTPController {
 		/* translators: %s: Name of the plugin */
 		$label = sprintf( __( 'Install and Activate %s', 'formidable' ), 'WP Mail SMTP' );
 
-		// WPCS: XSS ok.
 		printf(
 			'<section class="step step-install">
 				<aside class="num">
@@ -226,7 +225,7 @@ class FrmSMTPController {
 			esc_attr( $step['button_class'] ),
 			esc_attr( $step['button_action'] ),
 			esc_html( $step['button_text'] )
-		);
+		); // WPCS: XSS ok.
 	}
 
 	/**
@@ -251,7 +250,6 @@ class FrmSMTPController {
 			)
 		);
 
-		// WPCS: XSS ok.
 		printf(
 			'<section class="step step-setup %1$s">
 				<aside class="num">
@@ -271,7 +269,7 @@ class FrmSMTPController {
 			esc_url( admin_url( $this->config['smtp_settings'] ) ),
 			esc_attr( $step['button_class'] ),
 			esc_html( $step['button_text'] )
-		);
+		); // WPCS: XSS ok.
 	}
 
 	/**
