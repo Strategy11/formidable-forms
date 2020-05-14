@@ -3,24 +3,25 @@
 /* exported frm_install_now, frmSelectSubnav, frmCreatePostEntry */
 
 jQuery(document).ready(function(){
-    var installLink = document.getElementById('frm_install_link');
-    if(installLink !== null){
+    var deauthLink,
+		installLink = document.getElementById('frm_install_link');
+    if ( installLink !== null ) {
         jQuery(installLink).click(frmInstallPro);
     }
 
-	var deauthLink = jQuery('.frm_deauthorize_link');
-	if(deauthLink.length){
+	deauthLink = jQuery('.frm_deauthorize_link');
+	if ( deauthLink.length ) {
 		deauthLink.click(frmDeauthorizeNow);
 	}
 
-    if(typeof tb_remove === 'function') {
+    if ( typeof tb_remove === 'function' ) {
         frmAdminPopup.init();
     }
 });
 
 function frm_install_now(){
 	var $msg = jQuery(document.getElementById('frm_install_message'));
-	$msg.html('<div class="frm_plugin_updating">'+frmGlobal.updating_msg+'<div class="spinner frm_spinner"></div></div>');
+	$msg.html('<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>');
 	jQuery.ajax({
 		type:'POST',url:ajaxurl,
 		data:{action:'frm_install',nonce:frmGlobal.nonce},
@@ -30,14 +31,15 @@ function frm_install_now(){
 }
 
 function frmInstallPro( e ){
-	var plugin = this.getAttribute('data-prourl');
+	var $msg,
+		plugin = this.getAttribute('data-prourl');
 	if ( plugin === '' ) {
 		return true;
 	}
 
 	e.preventDefault();
 
-	var $msg = jQuery(document.getElementById('frm_install_message'));
+	$msg = jQuery(document.getElementById('frm_install_message'));
 	$msg.html('<div class="frm_plugin_updating">'+frmGlobal.updating_msg+'<div class="spinner frm_spinner"></div></div>');
 	$msg.fadeIn('slow');
 
@@ -50,7 +52,7 @@ function frmInstallPro( e ){
 		data: {
 			action: 'frm_install_addon',
 			nonce:  frmGlobal.nonce,
-			plugin: plugin
+			plugin: plugin,
 		},
 		success: function() {
 			$msg.fadeOut('slow');
@@ -58,13 +60,13 @@ function frmInstallPro( e ){
 		},
 		error: function() {
 			$msg.fadeOut('slow');
-		}
+		},
 	});
 	return false;
 }
 
 function frmDeauthorizeNow(){
-    if(!confirm(frmGlobal.deauthorize)){
+    if ( ! confirm(frmGlobal.deauthorize) ) {
 	    return false;
     }
     jQuery(this).html('<span class="spinner"></span>');
@@ -93,29 +95,31 @@ function frmCreatePostEntry(id,post_id){
 
 function frmAdminPopupJS(){
     function switchSc(){
+		var val;
         jQuery('.frm_switch_sc').removeClass( 'active' );
         jQuery(this).addClass( 'active' );
         toggleMenu();
         jQuery('#frm_popup_content .media-frame-title h1').html(jQuery(this).children('.howto').text() +' <span class="spinner" style="float:left;"></span>');
-        var val = this.id.replace('sc-link-', '');
+        val = this.id.replace('sc-link-', '');
         populateOpts(val);
         return false;
     }
 
     function populateOpts(val){
-		var sc = document.getElementById('frm_complete_shortcode');
+		var $settings, $scOpts, $spinner
+			sc = document.getElementById('frm_complete_shortcode');
 		if ( sc !== null) {
 			sc.value = '['+ val +']';
 		}
         jQuery('.frm_shortcode_option').hide();
 
-        var $settings = document.getElementById('sc-opts-'+ val);
-        if($settings !== null){
+        $settings = document.getElementById('sc-opts-'+ val);
+        if ( $settings !== null ) {
             $settings.style.display = '';
             jQuery(document.getElementById('sc-'+ val)).click();
-        }else{
-            var $scOpts = jQuery(document.getElementById('frm_shortcode_options'));
-            var $spinner = jQuery('.media-frame-title .spinner');
+        } else {
+            $scOpts = jQuery(document.getElementById('frm_shortcode_options'));
+            $spinner = jQuery('.media-frame-title .spinner');
             $spinner.show();
             jQuery.ajax({
     		    type:'POST',url:ajaxurl,
@@ -141,7 +145,7 @@ function frmAdminPopupJS(){
                 var attrVal = $thisInput.val();
 
                 if(($thisInput.attr('type') === 'checkbox' && !this.checked) || (($thisInput.attr('type') === 'text' || $thisInput.is('select')) && attrVal === '')){
-                }else{
+                } else {
                     output += ' '+ attrName +'="'+ attrVal +'"';
                 }
             }
@@ -157,7 +161,7 @@ function frmAdminPopupJS(){
 
     function getFieldSelection(){
         var form_id = this.value;
-        if(form_id){
+        if ( form_id ) {
             var thisId = this.id;
             jQuery.ajax({
                 type:'POST',url:ajaxurl,
@@ -197,16 +201,16 @@ var frmAdminPopup = frmAdminPopupJS();
 function frmWidgetsJS(){
     function toggleCatOpt(){
         var catOpts = jQuery(this).closest('.widget-content').children('.frm_list_items_hide_cat_opts');
-        if(this.checked){
+        if ( this.checked ) {
             catOpts.fadeIn();
-        }else{
+        } else {
             catOpts.fadeOut();
         }
     }
 
     function getFields(){
         var display_id = this.value;
-        if(display_id !== ''){
+        if ( display_id !== '' ) {
             var widget = jQuery(this).closest('.widget-content');
 
             jQuery.ajax({

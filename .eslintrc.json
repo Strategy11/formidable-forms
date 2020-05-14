@@ -31,7 +31,7 @@
 		}
 	},
 	"rules": {
-		"camelcase": ["error", { "properties": "never" }],
+		"camelcase": ["warn", { "properties": "never" }],
 		"comma-dangle": ["error", "always-multiline"],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
@@ -50,7 +50,7 @@
 		"react/no-children-prop": "off",
 		"react/no-find-dom-node": "warn",
 		"react/prop-types": "off",
-		"space-in-parens": ["error", "always"],
+		"space-in-parens": "warn",
 		"yoda": "off"
 	}
 }
