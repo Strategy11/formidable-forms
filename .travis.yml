@@ -63,12 +63,9 @@ before_script:
 - mysql -u root -e "CREATE DATABASE wordpress_tests;"
 - cd "/tmp/wordpress/src/wp-content/plugins/formidable"
 - phpenv rehash
-# Install JSCS: JavaScript Code Style checker.
-# @link http://jscs.info/
-- if [[ "$SNIFF" == "1" ]]; then npm install -g jscs; fi
 # Install JSHint, a JavaScript Code Quality Tool.
 # @link http://jshint.com/docs/
-- if [[ "$SNIFF" == "1" ]]; then npm install -g jshint; fi
+- if [[ "$SNIFF" == "1" ]]; then npm install eslint; fi
 # Pull in the WP Core jshint rules.
 - if [[ "$SNIFF" == "1" ]]; then wget https://develop.svn.wordpress.org/trunk/.jshintrc; fi
 
@@ -76,9 +73,7 @@ script:
 - if [[ "$SCRIPT_DUBUG" == "1" ]]; then php -r "define('SCRIPT_DUBUG', true);"; fi
 - if [[ "$SCRIPT_DUBUG" == "0" ]]; then php -r "define('SCRIPT_DUBUG', false);"; fi
 # Run the theme through JSHint. Turn on in 3.0
-- if [[ "$SNIFF" == "1" ]]; then jshint ./js/formidable*; fi
-# Run the theme through JavaScript Code Style checker. Turn on in 3.0
-- if [[ "$SNIFF" == "1" ]]; then jscs .; fi
+- if [[ "$SNIFF" == "1" ]]; then eslint ./js/formidable*; fi
 - |
   if [ "$PHPUNIT" != "0" ]; then
     ./vendor/bin/phpunit --group=ajax -c phpunit.xml

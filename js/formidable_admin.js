@@ -3430,7 +3430,7 @@ function frmAdminBuildJS() {
 	}
 
 	function checkActiveAction( type ) {
-		var limit = parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ) );
+		var limit = parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ), 10 );
 		var len = jQuery( '.frm_single_' + type + '_settings' ).length;
 		var limitClass;
 		if ( len >= limit ) {
@@ -3497,7 +3497,6 @@ function frmAdminBuildJS() {
 		var meta_name = 0;
 		if ( jQuery( '#frm_submit_logic_row .frm_logic_row' ).length > 0 ) {
 			var last = jQuery( '#frm_submit_logic_row .frm_logic_row:last' );
-			var submitRowID = last.attr( 'id' );
 
 			meta_name = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
 		}
@@ -5112,7 +5111,7 @@ function frmAdminBuildJS() {
 
 	function postAjax( data, success ) {
 		var xmlHttp = new XMLHttpRequest();
-		var params = typeof data == 'string' ? data : Object.keys( data ).map(
+		var params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k] );
 			}
@@ -5164,7 +5163,7 @@ function frmAdminBuildJS() {
 			width: width,
 			resizable: false,
 			draggable: false,
-			open: function( event ) {
+			open: function() {
 				jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 				jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 				jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
@@ -5564,7 +5563,7 @@ function frmAdminBuildJS() {
 			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).change( function() {
 				maybeShowFormMessages();
 			} );
-			jQuery( "select[name='options[success_action]'], select[name='options[edit_action]']" ).change( showSuccessOpt );
+			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).change( showSuccessOpt );
 
 			var $loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).change( function() {
@@ -5646,7 +5645,6 @@ function frmAdminBuildJS() {
 
 			var settingsPage = document.getElementById( 'form_settings_page' ),
 				viewPage = document.body.classList.contains( 'post-type-frm_display' ),
-				htmlTab = document.getElementById( 'frm_html_tags_tab' ),
 				insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
 
 			if ( settingsPage !== null || viewPage ) {
@@ -5746,7 +5744,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_field_pad' ).addEventListener( 'change', textSquishCheck );
 
 			jQuery( 'input.hex' ).wpColorPicker( {
-				change: function( event, ui ) {
+				change: function( event ) {
 					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
 					jQuery( event.target ).val( hexcolor ).change();
 				}
@@ -5774,7 +5772,7 @@ function frmAdminBuildJS() {
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).bind( 'click', function( e ) {
-				var selectAreaMatch, panelId, wrapper, items,
+				var panelId, wrapper,
 					target = jQuery( e.target );
 
 				if ( e.target.className.indexOf( 'nav-tab-link' ) !== -1 ) {
@@ -5839,7 +5837,6 @@ function frmAdminBuildJS() {
 
 			jQuery( 'select[name$="[theme_selector]"]' ).change( function() {
 				var themeVal = jQuery( this ).val();
-				var themeName = themeVal;
 				var css = themeVal;
 				if ( themeVal !== -1 ) {
 					if ( themeVal === 'ui-lightness' && frm_admin_js.pro_url !== '' ) {
@@ -5861,7 +5858,7 @@ function frmAdminBuildJS() {
 			/* deprecated since WP 4.9 */
 			var customCSS = document.getElementById( 'frm_custom_css_box' );
 			if ( customCSS !== null ) {
-				var editor = CodeMirror.fromTextArea( customCSS, {
+				CodeMirror.fromTextArea( customCSS, {
 					lineNumbers: true
 				} );
 			}
@@ -5909,7 +5906,6 @@ function frmAdminBuildJS() {
 
 		updateOpts: function( field_id, opts, modal ) {
 			var separate = usingSeparateValues( field_id ),
-				$fieldOpts = document.getElementById( 'frm_field_' + field_id + '_opts' ),
 				action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
 			jQuery.ajax( {
 				type: 'POST',
@@ -5950,7 +5946,7 @@ function frmAdminBuildJS() {
 
 var frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function( $ ) {
+jQuery( document ).ready( function( $) {
 	frmAdminBuild.init();
 } );
 
@@ -5969,25 +5965,25 @@ function frm_show_div( div, value, show_if, class_id ) {
 
 function frmCheckAll( checked, n ) {
 	if ( checked ) {
-		jQuery( "input[name^='" + n + "']" ).attr( 'checked', 'checked' );
+		jQuery( 'input[name^="' + n + '"]' ).attr( 'checked', 'checked' );
 	} else {
-		jQuery( "input[name^='" + n + "']" ).removeAttr( 'checked' );
+		jQuery( 'input[name^="' + n + '"]' ).removeAttr( 'checked' );
 	}
 }
 
 function frmCheckAllLevel( checked, n, level ) {
-	var $kids = jQuery( ".frm_catlevel_" + level ).children( ".frm_checkbox" ).children( 'label' );
+	var $kids = jQuery( '.frm_catlevel_' + level ).children( '.frm_checkbox' ).children( 'label' );
 	if ( checked ) {
-		$kids.children( "input[name^='" + n + "']" ).attr( "checked", "checked" );
+		$kids.children( 'input[name^="' + n + '"]' ).attr( 'checked', 'checked' );
 	} else {
-		$kids.children( "input[name^='" + n + "']" ).removeAttr( "checked" );
+		$kids.children( 'input[name^="' + n + '"]' ).removeAttr( 'checked' );
 	}
 }
 
 function frm_add_logic_row( id, form_id ) {
 	console.warn( 'DEPRECATED: function frm_add_logic_row in v2.0' );
 	jQuery.ajax( {
-		type: "POST", url: ajaxurl,
+		type: 'POST', url: ajaxurl,
 		data: {
 			action: 'frm_add_logic_row',
 			form_id: form_id,
@@ -6017,12 +6013,12 @@ function frmGetFieldValues( field_id, cur, row_number, field_type, html_name ) {
 
 function frmImportCsv( formID ) {
 	var urlVars = '';
-	if ( typeof __FRMURLVARS != 'undefined' ) {
+	if ( typeof __FRMURLVARS !== 'undefined' ) {
 		urlVars = __FRMURLVARS;
 	}
 
 	jQuery.ajax( {
-		type: "POST", url: ajaxurl,
+		type: 'POST', url: ajaxurl,
 		data: 'action=frm_import_csv&nonce=' + frmGlobal.nonce + '&frm_skip_cookie=1' + urlVars,
 		success: function( count ) {
 			var max = jQuery( '.frm_admin_progress_bar' ).attr( 'aria-valuemax' );
