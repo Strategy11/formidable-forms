@@ -36,9 +36,9 @@ function frmFrontFormJS() {
 
 		if ( fieldName === '' ) {
 			if ( field instanceof jQuery ) {
-				fieldName = field.data('name' );
+				fieldName = field.data( 'name' );
 			} else {
-				fieldName = field.getAttribute('data-name' );
+				fieldName = field.getAttribute( 'data-name' );
 			}
 
 			if ( typeof fieldName === 'undefined' ) {
@@ -51,20 +51,20 @@ function frmFrontFormJS() {
 			return 0;
 		}
 
-		var nameParts = fieldName.replace('item_meta[', '' ).replace('[]', '' ).split(']' );
+		var nameParts = fieldName.replace( 'item_meta[', '' ).replace( '[]', '' ).split( ']' );
 		//TODO: Fix this for checkboxes and address fields
 		if ( nameParts.length < 1 ) {
 			return 0;
 		}
-		nameParts = nameParts.filter( function(n) {
+		nameParts = nameParts.filter( function( n ) {
 			return n !== '';
 		});
 
-		var field_id = nameParts[0];
+		var fieldId = nameParts[0];
 		var isRepeating = false;
 
 		if ( nameParts.length === 1 ) {
-			return field_id;
+			return fieldId;
 		}
 
 		if ( nameParts[1] === '[form' || nameParts[1] === '[row_ids' ) {
@@ -73,34 +73,34 @@ function frmFrontFormJS() {
 
 
 		// Check if 'this' is in a repeating section
-		if ( jQuery( 'input[name="item_meta[' + field_id + '][form]"]' ).length ) {
+		if ( jQuery( 'input[name="item_meta[' + fieldId + '][form]"]' ).length ) {
 
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
-			field_id = nameParts[2].replace('[', '' );
+			fieldId = nameParts[2].replace('[', '' );
 			isRepeating = true;
 		}
 
 		// Check if 'this' is an other text field and get field ID for it
-		if ( 'other' === field_id ) {
+		if ( 'other' === fieldId ) {
 			if ( isRepeating ) {
 				// name for other fields: item_meta[370][0][other][414]
-				field_id = nameParts[3].replace('[', '' );
+				fieldId = nameParts[3].replace('[', '' );
 			} else {
 				// Other field name: item_meta[other][370]
-				field_id = nameParts[1].replace('[', '' );
+				fieldId = nameParts[1].replace('[', '' );
 			}
 		}
 
 		if ( fullID === true ) {
 			// For use in the container div id
-			if ( field_id === nameParts[0] ) {
-				field_id = field_id + '-' + nameParts[1].replace( '[', '' );
+			if ( fieldId === nameParts[0] ) {
+				fieldId = fieldId + '-' + nameParts[1].replace( '[', '' );
 			} else {
-				field_id = field_id + '-' + nameParts[0] + '-' + nameParts[1].replace( '[', '' );
+				fieldId = fieldId + '-' + nameParts[0] + '-' + nameParts[1].replace( '[', '' );
 			}
 		}
 
-		return field_id;
+		return fieldId;
 	}
 
 	/**
@@ -185,12 +185,12 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
-	function maybeValidateChange( field_id, field ) {
+	function maybeValidateChange( fieldId, field ) {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
-		if ( jQuery(field).closest('form' ).hasClass('frm_js_validate') ) {
-			validateField( field_id, field );
+		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
+			validateField( fieldId, field );
 		}
 	}
 
@@ -580,20 +580,20 @@ function frmFrontFormJS() {
 		key = encodeURI( key );
 		value = encodeURI( value );
 
-		var kvp = document.location.search.substr(1).split('&' );
+		var kvp = document.location.search.substr( 1 ).split( '&' );
 
-		var i=kvp.length; var x; while(i--) {
-			x = kvp[i].split('=' );
+		var i = kvp.length; var x; while ( i-- ) {
+			x = kvp[i].split( '=' );
 
-			if (x[0]==key) {
+			if ( x[0] == key ) {
 				x[1] = value;
-				kvp[i] = x.join('=' );
+				kvp[i] = x.join( '=' );
 				break;
 			}
 		}
 
-		if (i<0) {
-			kvp[kvp.length] = [key,value].join('=' );
+		if ( i < 0 ) {
+			kvp[ kvp.length ] = [ key, value ].join( '=' );
 		}
 
 		return kvp.join('&' );
@@ -665,7 +665,7 @@ function frmFrontFormJS() {
 			$object.trigger( 'frmStartFormLoading' );
 		}
 	}
-	
+
 	function addLoadingClass( $object ) {
 		var loading_class = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
@@ -748,24 +748,24 @@ function frmFrontFormJS() {
 	function resendEmail() {
 		/*jshint validthis:true */
 		var $link = jQuery( this ),
-			entry_id = this.getAttribute( 'data-eid' ),
-			form_id = this.getAttribute( 'data-fid' ),
+			entryId = this.getAttribute( 'data-eid' ),
+			formId = this.getAttribute( 'data-fid' ),
 			label = $link.find( '.frm_link_label' );
 		if ( label.length < 1 ) {
 			label = $link;
 		}
-		label.append('<span class="frm-wait"></span>' );
+		label.append( '<span class="frm-wait"></span>' );
 
 		jQuery.ajax({
-			type:'POST',
-			url:frm_js.ajax_url,
+			type: 'POST',
+			url: frm_js.ajax_url,
 			data:{
-				action:'frm_entries_send_email',
-				entry_id:entry_id,
-				form_id:form_id,
-				nonce:frm_js.nonce
+				action: 'frm_entries_send_email',
+				entry_id: entryId,
+				form_id: formId,
+				nonce: frm_js.nonce
 			},
-			success:function(msg) {
+			success: function( msg ) {
 				var admin = document.getElementById( 'wpbody' );
 				if ( admin === null ) {
 					label.html( msg );
@@ -804,8 +804,8 @@ function frmFrontFormJS() {
 	 *********************************************/
 
 	function addIndexOfFallbackForIE8() {
-		if ( !Array.prototype.indexOf ) {
-			Array.prototype.indexOf = function(elt /*, from*/) {
+		if ( ! Array.prototype.indexOf ) {
+			Array.prototype.indexOf = function( elt /*, from*/ ) {
 				var len = this.length >>> 0;
 
 				var from = Number(arguments[1]) || 0;
@@ -864,25 +864,25 @@ function frmFrontFormJS() {
 	}
 
 	function addKeysFallbackForIE8() {
-		if ( !Object.keys ) {
-		  Object.keys = function(obj) {
-		    var keys = [];
+		if ( ! Object.keys ) {
+			Object.keys = function( obj ) {
+				var keys = [];
 
-		    for (var i in obj) {
-		      if (obj.hasOwnProperty(i)) {
-		        keys.push(i);
-		      }
-		    }
+				for ( var i in obj ) {
+					if ( obj.hasOwnProperty( i ) ) {
+						keys.push( i );
+					}
+				}
 
-		    return keys;
-		  };
+				return keys;
+			};
 		}
 	}
 
-	return{
+	return {
 		init: function() {
-			jQuery( document ).off( 'submit.formidable','.frm-show-form' );
-			jQuery( document ).on( 'submit.formidable','.frm-show-form', frmFrontForm.submitForm );
+			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
+			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
 			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
 				if ( jQuery( this ).val() === '' ) {
@@ -995,7 +995,7 @@ function frmFrontFormJS() {
 			var classList = object.className.trim().split( /\s+/gi );
 			if ( classList.indexOf('frm_ajax_submit') > -1 ) {
 				var hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter(function() {
-					return !!this.value;
+					return !! this.value;
 				}).length;
 				if ( hasFileFields < 1 ) {
 					action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
@@ -1058,7 +1058,7 @@ function frmFrontFormJS() {
 			scrollToFirstField( object );
 		},
 
-		checkFormErrors: function(object, action) {
+		checkFormErrors: function( object, action ) {
 			getFormErrors( object, action );
 		},
 
@@ -1074,7 +1074,7 @@ function frmFrontFormJS() {
 			removeSubmitLoading( $object, enable, processesRunning );
 		},
 
-        scrollToID: function(id) {
+        scrollToID: function( id ) {
             var object = jQuery( document.getElementById( id ) );
             frmFrontForm.scrollMsg( object, false );
         },
@@ -1096,7 +1096,7 @@ function frmFrontFormJS() {
 			if ( ! newPos ) {
 				return;
 			}
-			newPos = newPos-frm_js.offset;
+			newPos = newPos - frm_js.offset;
 
 			var m = jQuery( 'html' ).css( 'margin-top' );
 			var b = jQuery( 'body' ).css( 'margin-top' );
@@ -1120,74 +1120,74 @@ function frmFrontFormJS() {
 			}
 		},
 
-		fieldValueChanged: function(e) {
+		fieldValueChanged: function( e ) {
 			/*jshint validthis:true */
 
-			var field_id = frmFrontForm.getFieldId( this, false );
-			if ( ! field_id || typeof field_id === 'undefined' ) {
+			var fieldId = frmFrontForm.getFieldId( this, false );
+			if ( ! fieldId || typeof fieldId === 'undefined' ) {
 				return;
 			}
 
-			if ( e.frmTriggered && e.frmTriggered == field_id ) {
+			if ( e.frmTriggered && e.frmTriggered == fieldId ) {
 				return;
 			}
 
-			jQuery( document ).trigger( 'frmFieldChanged', [ this, field_id, e ] );
+			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ] );
 
 			if ( e.selfTriggered !== true ) {
-				maybeValidateChange( field_id, this );
+				maybeValidateChange( fieldId, this );
 			}
 		},
 
 		savingDraft: function( object ) {
-			console.warn('DEPRECATED: function frmFrontForm.savingDraft in v3.0 use frmProForm.savingDraft' );
+			console.warn( 'DEPRECATED: function frmFrontForm.savingDraft in v3.0 use frmProForm.savingDraft' );
 			if ( typeof frmProForm !== 'undefined' ) {
 				return frmProForm.savingDraft( object );
 			}
 		},
 
 		goingToPreviousPage: function( object ) {
-			console.warn('DEPRECATED: function frmFrontForm.goingToPreviousPage in v3.0 use frmProForm.goingToPreviousPage' );
+			console.warn( 'DEPRECATED: function frmFrontForm.goingToPreviousPage in v3.0 use frmProForm.goingToPreviousPage' );
 			if ( typeof frmProForm !== 'undefined' ) {
 				return frmProForm.goingToPreviousPage( object );
 			}
 		},
 
 		hideOrShowFields: function() {
-			console.warn('DEPRECATED: function frmFrontForm.hideOrShowFields in v3.0 use frmProForm.hideOrShowFields' );
+			console.warn( 'DEPRECATED: function frmFrontForm.hideOrShowFields in v3.0 use frmProForm.hideOrShowFields' );
 			if ( typeof frmProForm !== 'undefined' ) {
 				frmProForm.hideOrShowFields();
 			}
 		},
 
 		hidePreviouslyHiddenFields: function() {
-			console.warn('DEPRECATED: function frmFrontForm.hidePreviouslyHiddenFields in v3.0 use frmProForm.hidePreviouslyHiddenFields' );
+			console.warn( 'DEPRECATED: function frmFrontForm.hidePreviouslyHiddenFields in v3.0 use frmProForm.hidePreviouslyHiddenFields' );
 			if ( typeof frmProForm !== 'undefined' ) {
 				frmProForm.hidePreviouslyHiddenFields();
 			}
 		},
 
-		checkDependentDynamicFields: function(ids) {
-			console.warn('DEPRECATED: function frmFrontForm.checkDependentDynamicFields in v3.0 use frmProForm.checkDependentDynamicFields' );
+		checkDependentDynamicFields: function( ids ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.checkDependentDynamicFields in v3.0 use frmProForm.checkDependentDynamicFields' );
 			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.checkDependentDynamicFields(ids);
+				frmProForm.checkDependentDynamicFields( ids );
 			}
 		},
 
-		checkDependentLookupFields: function(ids) {
-			console.warn('DEPRECATED: function frmFrontForm.checkDependentLookupFields in v3.0 use frmProForm.checkDependentLookupFields' );
+		checkDependentLookupFields: function( ids ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.checkDependentLookupFields in v3.0 use frmProForm.checkDependentLookupFields' );
 			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.checkDependentLookupFields(ids);
+				frmProForm.checkDependentLookupFields( ids );
 			}
 		},
 
 		loadGoogle: function() {
-			console.warn('DEPRECATED: function frmFrontForm.loadGoogle in v3.0 use frmProForm.loadGoogle' );
+			console.warn( 'DEPRECATED: function frmFrontForm.loadGoogle in v3.0 use frmProForm.loadGoogle' );
 			frmProForm.loadGoogle();
 		},
 
 		removeUsedTimes: function() {
-			console.warn('DEPRECATED: function frmFrontForm.removeUsedTimes in v3.0 use frmProForm.removeUsedTimes' );
+			console.warn( 'DEPRECATED: function frmFrontForm.removeUsedTimes in v3.0 use frmProForm.removeUsedTimes' );
 			if ( typeof frmProForm !== 'undefined' ) {
 				frmProForm.removeUsedTimes();
 			}
@@ -1195,25 +1195,25 @@ function frmFrontFormJS() {
 
 		escapeHtml: function(text) {
 			return text
-				.replace(/&/g, '&amp;')
-				.replace(/</g, '&lt;')
-				.replace(/>/g, '&gt;')
-				.replace(/"/g, '&quot;')
-				.replace(/'/g, '&#039;' );
+				.replace( /&/g, '&amp;' )
+				.replace( /</g, '&lt;' )
+				.replace( />/g, '&gt;' )
+				.replace( /"/g, '&quot;' )
+				.replace( /'/g, '&#039;' );
 		},
 
-		invisible: function(classes) {
-			jQuery(classes).css('visibility', 'hidden' );
+		invisible: function( classes ) {
+			jQuery( classes ).css( 'visibility', 'hidden' );
 		},
 
-		visible: function(classes) {
-			jQuery(classes).css('visibility', 'visible' );
+		visible: function( classes ) {
+			jQuery( classes ).css( 'visibility', 'visible' );
 		}
 	};
 }
 var frmFrontForm = frmFrontFormJS();
 
-jQuery( document ).ready(function() {
+jQuery( document ).ready( function() {
 	frmFrontForm.init();
 });
 
@@ -1224,70 +1224,69 @@ function frmRecaptcha() {
 	}
 }
 
-function frmAfterRecaptcha(token) {
+function frmAfterRecaptcha( token ) {
 	frmFrontForm.afterSingleRecaptcha(token);
 }
 
-function frmUpdateField(entry_id,field_id,value,message,num) {
-	jQuery( document.getElementById( 'frm_update_field_' + entry_id + '_' + field_id + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
+function frmUpdateField( entryId, fieldId, value, message, num ) {
+	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
 	jQuery.ajax({
 		type:'POST',
 		url:frm_js.ajax_url,
 		data:{
 			action: 'frm_entries_update_field_ajax',
-			entry_id: entry_id,
-			field_id: field_id,
+			entry_id: entryId,
+			field_id: fieldId,
 			value: value,
 			nonce: frm_js.nonce
 		},
 		success:function() {
-			if ( message.replace(/^\s+|\s+$/g,'') === '' ) {
-				jQuery( document.getElementById( 'frm_update_field_' + entry_id + '_' + field_id + '_' + num ) ).fadeOut( 'slow' );
+			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
+				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
 			} else {
-				jQuery( document.getElementById( 'frm_update_field_' + entry_id + '_' + field_id + '_' + num ) ).replaceWith( message );
+				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
 			}
 		}
 	});
 }
 
-function frmDeleteEntry(entry_id,prefix) {
-	console.warn('DEPRECATED: function frmDeleteEntry in v2.0.13 use frmFrontForm.deleteEntry' );
-	jQuery( document.getElementById( 'frm_delete_' + entry_id ) ).replaceWith( '<span class="frm-loading-img" id="frm_delete_' + entry_id + '"></span>' );
+function frmDeleteEntry( entryId, prefix ) {
+	console.warn( 'DEPRECATED: function frmDeleteEntry in v2.0.13 use frmFrontForm.deleteEntry' );
+	jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( '<span class="frm-loading-img" id="frm_delete_' + entryId + '"></span>' );
 	jQuery.ajax({
 		type: 'POST',
 		url: frm_js.ajax_url,
 		data: {
 			action: 'frm_entries_destroy',
-			entry: entry_id,
+			entry: entryId,
 			nonce: frm_js.nonce
 		},
 		success:function( html ) {
 			if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
-				jQuery( document.getElementById( prefix + entry_id ) ).fadeOut( 'slow' );
+				jQuery( document.getElementById( prefix + entryId ) ).fadeOut( 'slow' );
 			} else {
-				jQuery( document.getElementById( 'frm_delete_' + entry_id ) ).replaceWith(html);
+				jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( html );
 			}
-
 		}
 	});
 }
 
-function frmOnSubmit(e) {
-	console.warn('DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm' );
-	frmFrontForm.submitForm(e, this);
+function frmOnSubmit( e ) {
+	console.warn( 'DEPRECATED: function frmOnSubmit in v2.0 use frmFrontForm.submitForm' );
+	frmFrontForm.submitForm( e, this );
 }
 
-function frm_resend_email( entry_id, form_id ) {
-	console.warn( 'DEPRECATED: function frm_resend_email in v2.0' );
+function frm_resend_email( entryId, formId ) {
 	var $link = jQuery( document.getElementById( 'frm_resend_email' ) );
+	console.warn( 'DEPRECATED: function frm_resend_email in v2.0' );
 	$link.append( '<span class="spinner" style="display:inline"></span>' );
 	jQuery.ajax({
 		type: 'POST',
 		url: frm_js.ajax_url,
 		data: {
 			action: 'frm_entries_send_email',
-			entry_id: entry_id,
-			form_id: form_id,
+			entry_id: entryId,
+			form_id: formId,
 			nonce: frm_js.nonce
 		},
 		success:function( msg ) {

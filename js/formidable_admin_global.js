@@ -23,7 +23,7 @@ jQuery( document ).ready( function() {
 
 function frm_install_now() {
 	var $msg = jQuery( document.getElementById( 'frm_install_message' ) );
-	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>');
+	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>' );
 	jQuery.ajax({
 		type: 'POST',
 		url: ajaxurl,
@@ -99,7 +99,7 @@ function frmSelectSubnav() {
 }
 
 function frmCreatePostEntry( id, post_id ) {
-    jQuery('#frm_create_entry p' ).replaceWith( '<img src="' + frmGlobal.url + '/images/wpspin_light.gif" alt="' + frmGlobal.loading + '" />' );
+    jQuery( '#frm_create_entry p' ).replaceWith( '<img src="' + frmGlobal.url + '/images/wpspin_light.gif" alt="' + frmGlobal.loading + '" />' );
     jQuery.ajax({
         type: 'POST',
 		url: ajaxurl,
@@ -189,8 +189,8 @@ function frmAdminPopupJS() {
 
     function getFieldSelection() {
 		var thisId,
-			form_id = this.value;
-        if ( form_id ) {
+			formId = this.value;
+        if ( formId ) {
             thisId = this.id;
             jQuery.ajax({
                 type: 'POST',
@@ -198,7 +198,7 @@ function frmAdminPopupJS() {
                 data: {
 					action: 'frm_get_field_selection',
 					field_id: 0,
-					form_id: form_id,
+					form_id: formId,
 					nonce: frmGlobal.nonce
 				},
                 success: function( msg ) {
@@ -230,7 +230,7 @@ function frmAdminPopupJS() {
 
             jQuery( '#frm_popup_content .media-modal-close' ).click( tb_remove );
             jQuery( '#frm_popup_content .media-frame-title h1' ).click( toggleMenu );
-        },
+        }
     };
 }
 frmAdminPopup = frmAdminPopupJS();
@@ -247,8 +247,8 @@ function frmWidgetsJS() {
 
     function getFields() {
 		var widget,
-			display_id = this.value;
-        if ( display_id !== '' ) {
+			displayId = this.value;
+        if ( displayId !== '' ) {
 			widget = jQuery( this ).closest( '.widget-content' );
 
             jQuery.ajax({
@@ -257,7 +257,7 @@ function frmWidgetsJS() {
                 dataType: 'json',
                 data: {
 					action: 'frm_get_dynamic_widget_opts',
-					display_id: display_id,
+					display_id: displayId,
 					nonce: frmGlobal.nonce
 				},
                 success: function( opts ) {
@@ -284,7 +284,7 @@ function frmWidgetsJS() {
         init: function() {
             jQuery( document ).on( 'click', '.frm_list_items_cat_list', toggleCatOpt );
             jQuery( document ).on( 'change', '.frm_list_items_display_id', getFields );
-        },
+        }
     };
 }
 if ( typeof adminpage !== 'undefined' && adminpage === 'widgets-php' ) {

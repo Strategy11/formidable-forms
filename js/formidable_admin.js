@@ -7,7 +7,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 	var el = {
 		licenseBox: document.getElementById( 'frm_license_top' ),
 		messageBox: document.getElementsByClassName( 'frm_pro_license_msg' )[0],
-		btn: document.getElementById('frm-settings-connect-btn'),
+		btn: document.getElementById( 'frm-settings-connect-btn' ),
 		reset: document.getElementById( 'frm_reconnect_link' )
 	};
 
@@ -32,22 +32,22 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				$( el.reset ).click( app.reauthorize );
 			}
 
-			$( el.btn ).on( 'click', function(e) {
+			$( el.btn ).on( 'click', function( e ) {
 				e.preventDefault();
 				app.gotoUpgradeUrl();
 			} );
 
-			window.addEventListener('message', function(msg) {
-				if ( msg.origin.replace(/\/$/, '') !== frmGlobal.app_url.replace(/\/$/, '') ) {
+			window.addEventListener( 'message', function( msg ) {
+				if ( msg.origin.replace( /\/$/, '' ) !== frmGlobal.app_url.replace( /\/$/, '' ) ) {
 					return;
 				}
 
 				if ( ! msg.data || 'object' !== typeof msg.data ) {
-					console.error('Messages from "' + frmGlobal.app_url + '" must contain an api key string.');
+					console.error( 'Messages from "' + frmGlobal.app_url + '" must contain an api key string.' );
 					return;
 				}
 
-				app.updateForm(msg.data);
+				app.updateForm( msg.data );
 			});
 		},
 
@@ -57,25 +57,25 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		 * @since 4.03
 		 */
 		gotoUpgradeUrl: function() {
-			var w = window.open(frmGlobal.app_url + '/api-connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0');
+			var w = window.open( frmGlobal.app_url + '/api-connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0' );
 			w.focus();
 		},
 
-		updateForm: function(response) {
+		updateForm: function( response ) {
 
 			// Start spinner.
 			var btn = el.btn;
-			btn.classList.add('frm_loading_button');
+			btn.classList.add( 'frm_loading_button' );
 
 			if ( response.url !== '' ) {
 				app.showProgress({
-					success:true,
-					message:'Installing...'
+					success: true,
+					message: 'Installing...'
 				});
 				var fallback = setTimeout( function() {
 					app.showProgress({
-						success:true,
-						message:'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
+						success: true,
+						message: 'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
 					});
 				}, 10000 );
 				$.ajax( {
@@ -91,11 +91,11 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						clearTimeout( fallback );
 						app.activateKey( response );
 					},
-					error: function(xhr, textStatus, e) {
+					error: function( xhr, textStatus, e ) {
 						clearTimeout( fallback );
-						btn.classList.remove('frm_loading_button');
+						btn.classList.remove( 'frm_loading_button' );
 						app.showMessage({
-							success:false,
+							success: false,
 							message: e
 						});
 					}
@@ -108,11 +108,11 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		activateKey: function( response ) {
 			var btn = el.btn;
 			if ( response.key === '' ) {
-				btn.classList.remove('frm_loading_button');
+				btn.classList.remove( 'frm_loading_button' );
 			} else {
 				app.showProgress({
-					success:true,
-					message:'Activating...'
+					success: true,
+					message: 'Activating...'
 				});
 				$.ajax( {
 					type: 'POST',
@@ -126,7 +126,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						nonce: frmGlobal.nonce
 					},
 					success: function( msg ) {
-						btn.classList.remove('frm_loading_button');
+						btn.classList.remove( 'frm_loading_button' );
 
 						if ( msg.success === true ) {
 							el.licenseBox.classList.replace( 'frm_unauthorized_box', 'frm_authorized_box' );
@@ -134,10 +134,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 						app.showMessage( msg );
 					},
-					error: function(xhr, textStatus, e) {
-						btn.classList.remove('frm_loading_button');
+					error: function( xhr, textStatus, e ) {
+						btn.classList.remove( 'frm_loading_button' );
 						app.showMessage({
-							success:false,
+							success: false,
 							message: e
 						});
 					}
@@ -149,7 +149,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 		authorize: function() {
 			/*jshint validthis:true */
 			var button = this;
-			var pluginSlug = this.getAttribute('data-plugin');
+			var pluginSlug = this.getAttribute( 'data-plugin' );
 			var input = document.getElementById( 'edd_' + pluginSlug + '_license_key' );
 			var license = input.value;
 			var wpmu = document.getElementById( 'proplug-wpmu' );
@@ -162,7 +162,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				wpmu = 0;
 			}
 
-			$.ajax( {
+			$.ajax({
 				type: 'POST', url: ajaxurl, dataType: 'json',
 				data: {
 					action: 'frm_addon_activate',
@@ -352,7 +352,7 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		var caution = link.getAttribute('data-frmcaution');
+		var caution = link.getAttribute('data-frmcaution' );
 		var cautionHtml = caution ? '<span class="frm-caution">' + caution + '</span> ' : '';
 
 		jQuery('.frm-confirm-msg').html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
@@ -369,7 +369,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		$info.dialog('open');
+		$info.dialog('open' );
 		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
 		return false;
 	}
@@ -1260,7 +1260,7 @@ function frmAdminBuildJS() {
 			msg = frm_admin_js.slug_is_reserved;
 			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div');
+			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' );
 			infoModal( msg );
 		}
 	}
@@ -1854,7 +1854,7 @@ function frmAdminBuildJS() {
 				}
 			}
 
-			$info.dialog('open');
+			$info.dialog('open' );
 
 			return false;
 		} );
@@ -3147,10 +3147,10 @@ function frmAdminBuildJS() {
 			jQuery('.frm_feature_label').html( this.getAttribute( 'data-upgrade' ) );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 
-			$info.dialog('open');
+			$info.dialog('open' );
 
 			// set the utm medium
-			var button = $info.find('.button-primary:not(#frm-oneclick-button)');
+			var button = $info.find('.button-primary:not(#frm-oneclick-button)' );
 			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
 			var content = this.getAttribute( 'data-content' );
 			if ( content === undefined ) {
@@ -3189,13 +3189,13 @@ function frmAdminBuildJS() {
 
 		// Use a custom message in the modal.
 		if ( newMessage === null || typeof newMessage === 'undefined' || newMessage === '' ) {
-			newMessage = upgradeMessage.getAttribute('data-default');
+			newMessage = upgradeMessage.getAttribute('data-default' );
 		}
 		upgradeMessage.innerHTML = newMessage;
 
 		// Either set the link or use the default.
 		if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
-			customLink = showLink.getAttribute('data-default');
+			customLink = showLink.getAttribute('data-default' );
 		}
 		showLink.href = customLink;
 
@@ -4713,7 +4713,7 @@ function frmAdminBuildJS() {
 		var el = button.parent();
 		var message = el.parent().find( '.addon-status-label' );
 
-		button.addClass('frm_loading_button');
+		button.addClass('frm_loading_button' );
 
 		// Process the Ajax to perform the activation.
 		jQuery.ajax( {
@@ -4753,7 +4753,7 @@ function frmAdminBuildJS() {
 				afterAddonInstall( response, button, message, el );
 			},
 			error: function() {
-				button.removeClass('frm_loading_button');
+				button.removeClass('frm_loading_button' );
 			}
 		} );
 	}
@@ -4793,7 +4793,7 @@ function frmAdminBuildJS() {
 					loader.hide();
 					jQuery( '.frm-inline-error' ).remove();
 					//proceed.val(admin.proceed);
-					//proceed.after('<span class="frm-inline-error">' + admin.connect_error + '</span>');
+					//proceed.after('<span class="frm-inline-error">' + admin.connect_error + '</span>' );
 					return;
 				}
 
@@ -4816,8 +4816,8 @@ function frmAdminBuildJS() {
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
 
 		// Proceed with CSS changes
-		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active');
-		button.removeClass('frm_loading_button');
+		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active' );
+		button.removeClass('frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
 		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp' );
@@ -5007,7 +5007,7 @@ function frmAdminBuildJS() {
 
 	function installTemplate( e ) {
 		/*jshint validthis:true */
-		var action = this.elements['type'].value,
+		var action = this.elements.type.value,
 			button = this.querySelector( 'button' );
 		e.preventDefault();
 		button.classList.add( 'frm_loading_button' );
@@ -5147,11 +5147,11 @@ function frmAdminBuildJS() {
 	}
 
 	function invisible(classes) {
-		jQuery(classes).css('visibility', 'hidden');
+		jQuery(classes).css('visibility', 'hidden' );
 	}
 
 	function visible(classes) {
-		jQuery(classes).css('visibility', 'visible');
+		jQuery(classes).css('visibility', 'visible' );
 	}
 
 	function initModal( id, width ) {
@@ -5220,7 +5220,7 @@ function frmAdminBuildJS() {
 	function maybeChangeEmbedFormMsg() {
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		var fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
-		if ( null === fieldItem || 'form' !== fieldItem.dataset['type'] ) {
+		if ( null === fieldItem || 'form' !== fieldItem.dataset.type ) {
 			return;
 		}
 

@@ -2215,7 +2215,7 @@ class FrmAppHelper {
 				'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
 				'ok'                => __( 'OK', 'formidable' ),
 				'cancel'            => __( 'Cancel', 'formidable' ),
-				'default'           => __( 'Default', 'formidable' ),
+				'default_label'     => __( 'Default', 'formidable' ),
 				'clear_default'     => __( 'Clear default value when typing', 'formidable' ),
 				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
 				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
