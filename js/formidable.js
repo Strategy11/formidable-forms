@@ -93,7 +93,7 @@ function frmFrontFormJS() {
 
 		if ( fullID === true ) {
 			// For use in the container div id
-			if ( fieldId === nameParts[0] ) {
+			if ( fieldId === nameParts[0]) {
 				fieldId = fieldId + '-' + nameParts[1].replace( '[', '' );
 			} else {
 				fieldId = fieldId + '-' + nameParts[0] + '-' + nameParts[1].replace( '[', '' );
@@ -206,7 +206,7 @@ function frmFrontFormJS() {
 		var errors = [];
 
 		var $fieldCont = jQuery( field ).closest( '.frm_form_field' );
-		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery(field).hasClass( 'frm_optional' ) ) {
+		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -239,7 +239,7 @@ function frmFrontFormJS() {
 		var fieldID = '';
 		if ( field.type === 'checkbox' || field.type === 'radio' ) {
 			var checkGroup = jQuery( 'input[name="' + field.name + '"]' ).closest( '.frm_required_field' ).find( 'input:checked' );
-			jQuery( checkGroup ).each(function() {
+			jQuery( checkGroup ).each( function() {
 				val = this.value;
 			});
 		} else if ( field.type === 'file' || fileID ) {
@@ -620,7 +620,7 @@ function frmFrontFormJS() {
 			}
 			input.attr( 'aria-invalid', true );
 
-			jQuery( document ).trigger( 'frmAddFieldError', [$fieldCont, key, jsErrors] );
+			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
 	}
 
@@ -1113,7 +1113,7 @@ function frmFrontFormJS() {
 					if ( typeof animate === 'undefined' ) {
 						jQuery( window ).scrollTop( newPos );
 					} else {
-						jQuery( 'html,body' ).animate({ scrollTop: newPos }, 500);
+						jQuery( 'html,body' ).animate({ scrollTop: newPos }, 500 );
 					}
 					return false;
 				}
@@ -1132,7 +1132,7 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ] );
+			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ]);
 
 			if ( e.selfTriggered !== true ) {
 				maybeValidateChange( fieldId, this );
@@ -1220,7 +1220,7 @@ jQuery( document ).ready( function() {
 function frmRecaptcha() {
 	var captchas = jQuery( '.frm-g-recaptcha' );
 	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
-		frmFrontForm.renderRecaptcha( captchas[c] );
+		frmFrontForm.renderRecaptcha( captchas[c]);
 	}
 }
 
