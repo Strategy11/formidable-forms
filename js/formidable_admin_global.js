@@ -98,7 +98,7 @@ function frmSelectSubnav() {
     jQuery( '#toplevel_page_formidable a.wp-has-submenu' ).removeClass( 'wp-not-current-submenu' ).addClass( 'wp-has-current-submenu wp-menu-open' );
 }
 
-function frmCreatePostEntry( id, post_id ) {
+function frmCreatePostEntry( id, postId ) {
     jQuery( '#frm_create_entry p' ).replaceWith( '<img src="' + frmGlobal.url + '/images/wpspin_light.gif" alt="' + frmGlobal.loading + '" />' );
     jQuery.ajax({
         type: 'POST',
@@ -106,7 +106,7 @@ function frmCreatePostEntry( id, post_id ) {
         data: {
 			action: 'frm_create_post_entry',
 			id: id,
-			post_id: post_id,
+			post_id: postId,
 			nonce: frmGlobal.nonce
 		},
         success: function() {

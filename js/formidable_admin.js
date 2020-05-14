@@ -35,7 +35,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			$( el.btn ).on( 'click', function( e ) {
 				e.preventDefault();
 				app.gotoUpgradeUrl();
-			} );
+			});
 
 			window.addEventListener( 'message', function( msg ) {
 				if ( msg.origin.replace( /\/$/, '' ) !== frmGlobal.app_url.replace( /\/$/, '' ) ) {
@@ -78,7 +78,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						message: 'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
 					});
 				}, 10000 );
-				$.ajax( {
+				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					dataType: 'json',
@@ -114,7 +114,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					success: true,
 					message: 'Activating...'
 				});
-				$.ajax( {
+				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					dataType: 'json',
@@ -175,7 +175,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					app.afterAuthorize( msg, input );
 					button.classList.remove( 'frm_loading_button' );
 				}
-			} );
+			});
 		},
 
 		afterAuthorize: function( msg, input ) {
@@ -228,7 +228,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			/*jshint validthis:true */
 			this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;float:none"></span>';
 
-			$.ajax( {
+			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				dataType: 'json',
@@ -243,7 +243,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						window.location.reload();
 					}
 				}
-			} );
+			});
 			return false;
 		},
 
@@ -259,7 +259,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 			this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;"></span>';
 
-			$.ajax( {
+			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: {
@@ -273,7 +273,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					input.value = '';
 					link.innerHTML = '';
 				}
-			} );
+			});
 			return false;
 		}
 	};
@@ -504,7 +504,7 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 			jQuery( this ).tooltip( 'show' );
-		} );
+		});
 
 		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 	}
@@ -565,13 +565,13 @@ function frmAdminBuildJS() {
 				var type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
 				checkActiveAction( type );
 			}
-		} );
+		});
 
 		if ( typeof removeMore !== 'undefined' ) {
 			removeMore = jQuery( removeMore );
 			removeMore.fadeOut( 400, function() {
 				removeMore.remove();
-			} );
+			});
 		}
 
 		if ( show !== '' ) {
@@ -605,7 +605,7 @@ function frmAdminBuildJS() {
 			if ( action_type ) {
 				inside.html( '<span class="frm-wait frm_spinner"></span>' );
 				cont.find( '.spinner' ).fadeIn( 'slow' );
-				jQuery.ajax( {
+				jQuery.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					data: {
@@ -619,7 +619,7 @@ function frmAdminBuildJS() {
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr('id') );
 					}
-				} );
+				});
 			}
 		}
 
@@ -800,7 +800,7 @@ function frmAdminBuildJS() {
 						//scrolling up
 						return v - Math.abs( y * 0.1 );
 					}
-				} );
+				});
 			}
 		};
 
@@ -881,7 +881,7 @@ function frmAdminBuildJS() {
 		var formId = getFormIdForFieldPlacement( section );
 		var sectionId = getSectionIdForFieldPlacement( section );
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_update_field_after_move',
@@ -894,7 +894,7 @@ function frmAdminBuildJS() {
 				toggleSectionHolder();
 				updateInSectionValue( fieldId, sectionId );
 			}
-		} );
+		});
 	}
 
 	// Update the in_section field value
@@ -932,7 +932,7 @@ function frmAdminBuildJS() {
 			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' ).length > 0 ? 1 : 0;
 		}
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_insert_field',
@@ -952,7 +952,7 @@ function frmAdminBuildJS() {
 			error: function( jqXHR, textStatus, errorThrown ) {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
 			}
-		} );
+		});
 	}
 
 	// don't allow page break, embed form, captcha, summary, or section inside section field
@@ -987,9 +987,9 @@ function frmAdminBuildJS() {
 		var h = [];
 		jQuery.each( fields, function( k, v ) {
 			h.push( jQuery( v ).find( '.frm_hidden_fdata' ).html() );
-		} );
+		});
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {action: 'frm_load_field', field: h, form_id: this_form_id, nonce: frmGlobal.nonce},
 			success: function( html ) {
@@ -1044,7 +1044,7 @@ function frmAdminBuildJS() {
 
 		var form_id = this_form_id;
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -1132,7 +1132,7 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_duplicate_field',
@@ -1146,7 +1146,7 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -1205,7 +1205,7 @@ function frmAdminBuildJS() {
 					top: container.scrollHeight,
 					left: 0,
 					behavior: 'smooth'
-				} );
+				});
 			}
 
 			if ( toggled === false ) {
@@ -1571,7 +1571,7 @@ function frmAdminBuildJS() {
 					'fieldName': getPossibleValue( 'frm_name_' + fieldId ),
 					'fieldType': getPossibleValue( 'field_options_type_' + fieldId ),
 					'fieldKey': getPossibleValue( 'field_options_field_key_' + fieldId )
-				} );
+				});
 			}
 		}
 
@@ -1857,13 +1857,13 @@ function frmAdminBuildJS() {
 			$info.dialog('open' );
 
 			return false;
-		} );
+		});
 
 		jQuery( '#frm-update-bulk-opts' ).click( function() {
 			var fieldId = document.getElementById( 'bulk-field-id' ).value;
 			this.classList.add( 'frm_loading_button' );
 			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
-		} );
+		});
 	}
 
 	function insertBulkPreset( event ) {
@@ -1908,7 +1908,7 @@ function frmAdminBuildJS() {
 			jQuery.post( ajaxurl, data, function( msg ) {
 				jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( msg );
 				resetDisplayedOpts( fieldId );
-			} );
+			});
 		} else {
 			newOption = newOption.replace( new RegExp( 'optkey="' + oldKey + '"', 'g' ), 'optkey="' + optKey + '"' );
 			newOption = newOption.replace( new RegExp( '-' + oldKey + '_', 'g' ), '-' + optKey + '_' );
@@ -2013,7 +2013,7 @@ function frmAdminBuildJS() {
 				}
 				jQuery( '#other_button_' + field_id ).fadeIn( 'slow' );
 			}
-		} );
+		});
 	}
 
 	/**
@@ -2092,13 +2092,13 @@ function frmAdminBuildJS() {
 				//if(n.hasClass('edit_field_type_end_divider')){
 				deleteField( this.getAttribute( 'data-fid' ) );
 				//}
-			} );
+			});
 		}
 		toggleSectionHolder();
 	}
 
 	function deleteField( field_id ) {
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {action: 'frm_delete_field', field_id: field_id, nonce: frmGlobal.nonce},
@@ -2132,9 +2132,9 @@ function frmAdminBuildJS() {
 					} else if ( $section.length ) {
 						toggleOneSectionHolder( $section );
 					}
-				} );
+				});
 			}
-		} );
+		});
 	}
 
 	function addFieldLogicRow() {
@@ -2146,7 +2146,7 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row' ).length > 0 ) {
 			meta_name = 1 + parseInt( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_logic_row',
@@ -2161,9 +2161,9 @@ function frmAdminBuildJS() {
 					var logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					logicRow.append( html );
 					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
-				} );
+				});
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -2178,7 +2178,7 @@ function frmAdminBuildJS() {
 			row_key = 1 + parseInt( lastRowId.replace( 'frm_watch_lookup_' + id + '_', '' ), 10 );
 		}
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_watch_lookup_row',
@@ -2192,7 +2192,7 @@ function frmAdminBuildJS() {
 				watchRowBlock.append( newRow );
 				watchRowBlock.fadeIn( 'slow' );
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -2206,7 +2206,7 @@ function frmAdminBuildJS() {
 			fieldSelect.options.length = 1;
 		} else {
 			var formID = this.value;
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_options_for_get_values_field',
@@ -2217,7 +2217,7 @@ function frmAdminBuildJS() {
 				success: function( fields ) {
 					fieldSelect.innerHTML = fields;
 				}
-			} );
+			});
 		}
 	}
 
@@ -2309,7 +2309,7 @@ function frmAdminBuildJS() {
 				if ( i === slide - 1 ) {
 					jQuery( toCollapse[ i ] ).slideDown( 150, function() {
 						toCollapse.show();
-					} );
+					});
 				} else {
 					jQuery( toCollapse[ i ] ).slideDown( 150 );
 				}
@@ -2321,7 +2321,7 @@ function frmAdminBuildJS() {
 				if ( i === slide - 1 ) {
 					jQuery( toCollapse[ i ] ).slideUp( 150, function() {
 						toCollapse.css( 'cssText', 'display:none !important;' );
-					} );
+					});
 				} else {
 					jQuery( toCollapse[ i ] ).slideUp( 150 );
 				}
@@ -2463,7 +2463,7 @@ function frmAdminBuildJS() {
 		var children = [];
 		jQuery( document.getElementById( 'frm_field_id_' + id ) ).find( 'li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)' ).each( function() {
 			children.push( jQuery( this ).data( 'fid' ) );
-		} );
+		});
 		return children;
 	}
 
@@ -2566,7 +2566,7 @@ function frmAdminBuildJS() {
 				fillDropdownOpts( input[0], {
 					sourceID: fieldId,
 					placeholder: placeholder.value
-				} );
+				});
 			}
 		} else {
 			opts = getMultipleOpts( fieldId );
@@ -2721,7 +2721,7 @@ function frmAdminBuildJS() {
 					c = true;
 					infoModal( 'Saved values cannot be identical.' );
 				}
-			} );
+			});
 		}
 	}
 
@@ -2816,7 +2816,7 @@ function frmAdminBuildJS() {
 						sourceID: val,
 						placeholder: '',
 						other: true
-					} );
+					});
 				}
 			} else {
 				var thisType = this.getAttribute( 'data-type' );
@@ -2836,13 +2836,13 @@ function frmAdminBuildJS() {
 
 	function getTaxOrFieldSelection( form_id, field_id ) {
 		if ( form_id ) {
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {action: 'frm_get_field_selection', field_id: field_id, form_id: form_id, nonce: frmGlobal.nonce},
 				success: function( msg ) {
 					jQuery( '#frm_show_selected_fields_' + field_id ).html( msg ).show();
 				}
-			} );
+			});
 		}
 	}
 
@@ -2864,13 +2864,13 @@ function frmAdminBuildJS() {
 					moveFieldSettings( singleField );
 				}
 			}
-		} );
+		});
 	}
 
 	function toggleSectionHolder() {
 		jQuery( '.start_divider' ).each( function() {
 			toggleOneSectionHolder( jQuery( this ) );
-		} );
+		});
 	}
 
 	function toggleOneSectionHolder( $section ) {
@@ -3064,7 +3064,7 @@ function frmAdminBuildJS() {
 		var v = JSON.stringify( $form.serializeArray() );
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {action: 'frm_save_form', 'frm_compact_fields': v, nonce: frmGlobal.nonce},
@@ -3080,7 +3080,7 @@ function frmAdminBuildJS() {
 			error: function() {
 				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
 			}
-		} );
+		});
 	}
 
 	function submitNoAjax() {
@@ -3116,11 +3116,11 @@ function frmAdminBuildJS() {
 		setTimeout( function() {
 			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
 				this.parentNode.removeChild( this );
-			} );
+			});
 			$button.fadeOut( 'slow', function() {
 				$button.html( buttonVal );
 				$button.show();
-			} );
+			});
 		}, 5000 );
 	}
 
@@ -3159,7 +3159,7 @@ function frmAdminBuildJS() {
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.attr( 'href', link );
 			return false;
-		} );
+		});
 	}
 
 	/**
@@ -3257,11 +3257,11 @@ function frmAdminBuildJS() {
 		// the .html() gets original values, so they need to be set
 		action.find( 'input[type=text], textarea, input[type=number]' ).prop( 'defaultValue', function() {
 			return this.value;
-		} );
+		});
 
 		action.find( 'input[type=checkbox], input[type=radio]' ).prop( 'defaultChecked', function() {
 			return this.checked;
-		} );
+		});
 
 		var rename = new RegExp( '\\[' + currentID + '\\]', 'g' );
 		var reid = new RegExp( '_' + currentID + '"', 'g' );
@@ -3292,7 +3292,7 @@ function frmAdminBuildJS() {
 		var type = jQuery( this ).data( 'actiontype' );
 		var formId = this_form_id;
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_action',
@@ -3315,14 +3315,14 @@ function frmAdminBuildJS() {
 					top: newAction.offsetTop + 10,
 					left: 0,
 					behavior: 'smooth'
-				} );
+				});
 
 				//check if icon should be active
 				checkActiveAction( type );
 				initiateMultiselect();
 				showInputIcon( '#frm_form_action_' + actionId );
 			}
-		} );
+		});
 	}
 
 	function toggleActionGroups() {
@@ -3433,7 +3433,7 @@ function frmAdminBuildJS() {
 		jQuery( action_box ).find( emailButtonSelector ).fadeIn( 'slow' );
 		jQuery( action_box ).find( emailRowSelector ).fadeOut( 'slow', function() {
 			jQuery( action_box ).find( emailRowSelector + ' input' ).val( '' );
-		} );
+		});
 	}
 
 	function checkActiveAction( type ) {
@@ -3462,7 +3462,7 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_form_action_' + id + ' .frm_logic_row' ).length ) {
 			meta_name = 1 + parseInt( jQuery( '#frm_form_action_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_logic_row',
@@ -3477,9 +3477,9 @@ function frmAdminBuildJS() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					$logicRow.append( html );
 					$logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
-				} );
+				});
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -3507,7 +3507,7 @@ function frmAdminBuildJS() {
 
 			meta_name = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -3521,7 +3521,7 @@ function frmAdminBuildJS() {
 				$logicRow.append( html );
 				$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -3591,7 +3591,7 @@ function frmAdminBuildJS() {
 				infoModal( 'Oops. You have already used that field.' );
 				return false;
 			}
-		} );
+		});
 	}
 
 	function togglePostContent() {
@@ -3618,14 +3618,14 @@ function frmAdminBuildJS() {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
 		} else {
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {action: 'frm_display_get_content', id: v, nonce: frmGlobal.nonce},
 				success: function( val ) {
 					$dyn.val( val );
 					jQuery( '.frm_dyncontent_opt' ).show();
 				}
-			} );
+			});
 		}
 	}
 
@@ -3638,7 +3638,7 @@ function frmAdminBuildJS() {
 		var new_select;
 
 		// Get new category/taxonomy options
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {action: 'frm_replace_posttax_options', post_type: post_type, nonce: frmGlobal.nonce},
 			success: function( html ) {
@@ -3663,7 +3663,7 @@ function frmAdminBuildJS() {
 					cat_rows[i].replaceChild( new_select, cur_select );
 				}
 			}
-		} );
+		});
 	}
 
 	function addPosttaxRow() {
@@ -3691,7 +3691,7 @@ function frmAdminBuildJS() {
 				meta_name = 1;
 			}
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_post' + type + '_row', form_id: id,
@@ -3709,7 +3709,7 @@ function frmAdminBuildJS() {
 					jQuery( '.frm_posttax_labels' ).show();
 				}
 			}
-		} );
+		});
 	}
 
 	function getMetaValue( id, meta_name ) {
@@ -3733,10 +3733,10 @@ function frmAdminBuildJS() {
 		var tax_key = jQuery( this ).closest( '.frm_posttax_row' ).attr( 'id' ).replace( 'frm_posttax_', '' );
 		var meta_name = jQuery( this ).val();
 		var show_exclude = jQuery( document.getElementById( tax_key + '_show_exclude' ) ).is( ':checked' ) ? 1 : 0;
-		var field_id = jQuery( 'select[name$="[post_category][' + tax_key + '][field_id]"]' ).val();
+		var fieldId = jQuery( 'select[name$="[post_category][' + tax_key + '][field_id]"]' ).val();
 		var id = jQuery( 'input[name="id"]' ).val();
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_posttax_row',
@@ -3745,7 +3745,7 @@ function frmAdminBuildJS() {
 				tax_key: tax_key,
 				action_key: action_key,
 				meta_name: meta_name,
-				field_id: field_id,
+				field_id: fieldId,
 				show_exclude: show_exclude,
 				nonce: frmGlobal.nonce
 			},
@@ -3753,7 +3753,7 @@ function frmAdminBuildJS() {
 				var $tax = jQuery( document.getElementById( 'frm_posttax_' + tax_key ) );
 				$tax.replaceWith( html );
 			}
-		} );
+		});
 	}
 
 	function toggleCfOpts() {
@@ -3834,21 +3834,21 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {action: 'frm_get_cd_tags_box', form_id: form_id, nonce: frmGlobal.nonce},
 			success: function( html ) {
 				jQuery( '#frm_adv_info .categorydiv' ).html( html );
 			}
-		} );
+		});
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {action: 'frm_get_date_field_select', form_id: form_id, nonce: frmGlobal.nonce},
 			success: function( html ) {
 				jQuery( document.getElementById( 'date_select_container' ) ).html( html );
 			}
-		} );
+		});
 	}
 
 	function clickTabsAfterAjax() {
@@ -3881,7 +3881,7 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_order_options .frm_logic_rows div:last' ).length > 0 ) {
 			l = jQuery( '#frm_order_options .frm_logic_rows div:last' ).attr( 'id' ).replace( 'frm_order_field_', '' );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_order_row',
@@ -3892,7 +3892,7 @@ function frmAdminBuildJS() {
 			success: function( html ) {
 				jQuery( '#frm_order_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_order_row' ).hide();
 			}
-		} );
+		});
 	}
 
 	function addWhereRow() {
@@ -3900,7 +3900,7 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_where_options .frm_logic_rows div:last' ).length ) {
 			l = jQuery( '#frm_where_options .frm_logic_rows div:last' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_where_row',
@@ -3911,20 +3911,20 @@ function frmAdminBuildJS() {
 			success: function( html ) {
 				jQuery( '#frm_where_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_where_row' ).hide();
 			}
-		} );
+		});
 	}
 
 	function insertWhereOptions() {
 		/*jshint validthis:true */
 		var value = this.value;
 		var where_key = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {action: 'frm_add_where_options', where_key: where_key, field_id: value, nonce: frmGlobal.nonce},
 			success: function( html ) {
 				jQuery( document.getElementById( 'where_field_options_' + where_key ) ).html( html );
 			}
-		} );
+		});
 	}
 
 	function hideWhereOptions() {
@@ -4014,7 +4014,7 @@ function frmAdminBuildJS() {
 			if ( variable === '[default-plain]' ) {
 				p = 1;
 			}
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_default_html',
@@ -4025,7 +4025,7 @@ function frmAdminBuildJS() {
 				success: function( msg ) {
 					insertContent( content_box, msg );
 				}
-			} );
+			});
 		} else {
 			insertContent( content_box, variable );
 		}
@@ -4245,7 +4245,7 @@ function frmAdminBuildJS() {
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
-			} );
+			});
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -4253,7 +4253,7 @@ function frmAdminBuildJS() {
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
-			} );
+			});
 		} else {
 			jQuery( '#frm_dyncontent' ).on( 'mouseover mouseout', '.wp-editor-wrap', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
@@ -4262,7 +4262,7 @@ function frmAdminBuildJS() {
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
-			} );
+			});
 		}
 	}
 
@@ -4409,7 +4409,7 @@ function frmAdminBuildJS() {
 		var holder = anchor.replace( '#', '' );
 		var holderContainer = jQuery( '.frm_' + holder + '_ajax' );
 		if ( holderContainer.length ) {
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
 					'action': 'frm_settings_tab',
@@ -4419,7 +4419,7 @@ function frmAdminBuildJS() {
 				success: function( html ) {
 					holderContainer.replaceWith( html );
 				}
-			} );
+			});
 		}
 	}
 
@@ -4427,7 +4427,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		if ( confirmLinkClick( this ) === true ) {
 			jQuery( '.frm_uninstall .frm-wait' ).css( 'visibility', 'visible' );
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: 'action=frm_uninstall&nonce=' + frmGlobal.nonce,
@@ -4435,7 +4435,7 @@ function frmAdminBuildJS() {
 					jQuery( '.frm_uninstall' ).fadeOut( 'slow' );
 					window.location = msg;
 				}
-			} );
+			});
 		}
 		return false;
 	}
@@ -4447,7 +4447,7 @@ function frmAdminBuildJS() {
 		var pluginSlug = this.getAttribute( 'data-plugin' );
 		var action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
 		var license = document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value;
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl, dataType: 'json',
 			data: {action: 'frm_addon_' + action, license: license, plugin: pluginSlug, nonce: frmGlobal.nonce},
 			success: function( msg ) {
@@ -4470,7 +4470,7 @@ function frmAdminBuildJS() {
 					}, 15000 );
 				}
 			}
-		} );
+		});
 	}
 
 	/* Import/Export page */
@@ -4486,7 +4486,7 @@ function frmAdminBuildJS() {
 		var ids = [];
 		checkedBoxes.each( function( i ) {
 			ids[i] = this.value;
-		} );
+		});
 
 		// Begin the import process.
 		importForms( ids, event.target );
@@ -4550,7 +4550,7 @@ function frmAdminBuildJS() {
 				// Remove this form ID from the queue.
 				s.importQueue = jQuery.grep( s.importQueue, function( value ) {
 					return value != formID;
-				} );
+				});
 				s.imported++;
 
 				if ( s.importQueue.length === 0 ) {
@@ -4563,7 +4563,7 @@ function frmAdminBuildJS() {
 					importForm( $processSettings );
 				}
 			}
-		} );
+		});
 	}
 
 	function validateExport( e ) {
@@ -4636,7 +4636,7 @@ function frmAdminBuildJS() {
 			} else {
 				this.disabled = true;
 			}
-		} );
+		});
 
 		if ( $dropdown.val() === 'csv' ) {
 			jQuery( '.csv_opts' ).show();
@@ -4688,10 +4688,10 @@ function frmAdminBuildJS() {
 						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
 							jQuery( event.currentTarget ).removeClass( 'open' );
 						}
-					} );
+					});
 				}
 			}
-		} );
+		});
 	}
 
 	/* Addons page */
@@ -4716,7 +4716,7 @@ function frmAdminBuildJS() {
 		button.addClass('frm_loading_button' );
 
 		// Process the Ajax to perform the activation.
-		jQuery.ajax( {
+		jQuery.ajax({
 			url: ajaxurl,
 			type: 'POST',
 			async: true,
@@ -4755,7 +4755,7 @@ function frmAdminBuildJS() {
 			error: function() {
 				button.removeClass('frm_loading_button' );
 			}
-		} );
+		});
 	}
 
 	function installAddonWithCreds( e ) {
@@ -4768,7 +4768,7 @@ function frmAdminBuildJS() {
 
 		proceed.addClass( 'frm_loading_button' );
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			url: ajaxurl,
 			type: 'POST',
 			async: true,
@@ -4802,7 +4802,7 @@ function frmAdminBuildJS() {
 			error: function() {
 				proceed.removeClass( 'frm_loading_button' );
 			}
-		} );
+		});
 	}
 
 	function afterAddonInstall( response, button, message, el ) {
@@ -4843,7 +4843,7 @@ function frmAdminBuildJS() {
 		jQuery( '.frm-new-form-button' ).click( function( event ) {
 			event.preventDefault();
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( document ).on( 'submit', '#frm-new-form', installTemplate );
 	}
@@ -4867,7 +4867,7 @@ function frmAdminBuildJS() {
 					frmApiPreview( cont, link );
 				}
 				$preview.dialog( 'open' );
-			} );
+			});
 		}
 
 		var $info = initModal( '#frm_template_modal', '650px' );
@@ -4887,7 +4887,7 @@ function frmAdminBuildJS() {
 			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
 			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( '.frm-build-template' ).click( function( event ) {
 			event.preventDefault();
@@ -4900,7 +4900,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_link' ).value = this.getAttribute( 'data-formid' );
 			document.getElementById( 'frm_action_type' ).value = 'frm_build_template';
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( '.frm-new-form-button' ).click( function( event ) {
 			event.preventDefault();
@@ -4913,7 +4913,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_link' ).value = '';
 			document.getElementById( 'frm_action_type' ).value = 'frm_install_form';
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
@@ -4962,7 +4962,7 @@ function frmAdminBuildJS() {
 			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
 				jQuery( this ).autocomplete( 'search', this.value );
 			}
-		} );
+		});
 	}
 
 	/**
@@ -4986,7 +4986,7 @@ function frmAdminBuildJS() {
 
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
-		jQuery.ajax( {
+		jQuery.ajax({
 			dataType: 'json',
 			url: link,
 			success: function( json ) {
@@ -5002,7 +5002,7 @@ function frmAdminBuildJS() {
 					document.getElementById( 'frm-show-me' ).style.opacity = '1';
 				}, 300 );
 			}
-		} );
+		});
 	}
 
 	function installTemplate( e ) {
@@ -5034,7 +5034,7 @@ function frmAdminBuildJS() {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				// TODO: show response.message
 			}
-		} );
+		});
 	}
 
 	function trashTemplate( e ) {
@@ -5051,8 +5051,8 @@ function frmAdminBuildJS() {
 			var card = document.getElementById( 'frm-template-custom-' + id );
 			fadeOut( card, function() {
 				card.parentNode.removeChild( card );
-			} );
-		} );
+			});
+		});
 	}
 
 	function searchContent() {
@@ -5180,13 +5180,13 @@ function frmAdminBuildJS() {
 				// close dialog by clicking the overlay behind it
 				jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function() {
 					$info.dialog( 'close' );
-				} );
+				});
 			},
 			close: function() {
 				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 			}
-		} );
+		});
 
 		return $info;
 	}
@@ -5274,7 +5274,7 @@ function frmAdminBuildJS() {
 				if ( $openDrop.length && ! t.hasClass( 'dropdown' ) && ! t.closest( '.dropdown' ).length ) {
 					$openDrop.removeClass( 'open' );
 				}
-			} );
+			});
 			jQuery( '#frm_bs_dropdown:not(.open) a' ).click( focusSearchBox );
 
 			if ( typeof this_form_id === 'undefined' ) {
@@ -5312,7 +5312,7 @@ function frmAdminBuildJS() {
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
 					return false;
-				} );
+				});
 			}
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
@@ -5333,13 +5333,13 @@ function frmAdminBuildJS() {
 						this.style.display = 'none';
 					}
 					return false;
-				} );
+				});
 
 				jQuery( '.cancel-frm_shortcode', '#frm_shortcodediv' ).click( function() {
 					$shortCodeDiv.slideUp( 'fast' );
 					$shortCodeDiv.siblings( 'a.edit-frm_shortcode' ).show();
 					return false;
-				} );
+				});
 			}
 
 			// tabs
@@ -5349,7 +5349,7 @@ function frmAdminBuildJS() {
 					clickTab( this );
 					return false;
 				}
-			} );
+			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
@@ -5358,11 +5358,11 @@ function frmAdminBuildJS() {
 				jQuery( 'select[name="fid"]' ).val( val );
 				jQuery( document.getElementById( 'posts-filter' ) ).submit();
 				return false;
-			} );
+			});
 
 			jQuery( '.frm_select_box' ).on( 'click focus', function() {
 				this.select();
-			} );
+			});
 
 			jQuery( document ).on( 'input search change', '.frm-auto-search', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
@@ -5383,8 +5383,8 @@ function frmAdminBuildJS() {
 
 		buildInit: function() {
 			if ( jQuery( '.frm_field_loading' ).length ) {
-				var load_field_id = jQuery( '.frm_field_loading' ).first().attr( 'id' );
-				loadFields( load_field_id );
+				var loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
+				loadFields( loadFieldId );
 			}
 
 			setupSortable( 'ul.frm_sorting' );
@@ -5403,7 +5403,7 @@ function frmAdminBuildJS() {
 				revert: 'invalid',
 				delay: 10,
 				cancel: '.frm-dropdown-menu'
-			} );
+			});
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
 			jQuery( '.frm_submit_ajax' ).click( submitBuild );
@@ -5417,11 +5417,11 @@ function frmAdminBuildJS() {
 				jQuery( document.getElementById( 'form-status-display' ) ).html( newStatus );
 				jQuery( '.cancel-form-status' ).click();
 				return false;
-			} );
+			});
 
 			jQuery( '.frm_form_builder form:first' ).submit( function() {
 				jQuery( '.inplace_field' ).blur();
-			} );
+			});
 
 			initiateMultiselect();
 			renumberPageBreaks();
@@ -5448,10 +5448,10 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_js_checkbox_limit', checkCheckboxSelectionsLimit );
 			$builderForm.on( 'input', 'input[name^="field_options[add_label_"]', function() {
 				updateRepeatText( this, 'add' );
-			} );
+			});
 			$builderForm.on( 'input', 'input[name^="field_options[remove_label_"]', function() {
 				updateRepeatText( this, 'remove' );
-			} );
+			});
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
@@ -5525,7 +5525,7 @@ function frmAdminBuildJS() {
 				if ( icon.css('background-image') !== 'none' ) {
 					icon.addClass( 'frm-inverse' );
 				}
-			} );
+			});
 
 			jQuery( '.frm_submit_settings_btn' ).click( submitSettings );
 
@@ -5555,7 +5555,7 @@ function frmAdminBuildJS() {
 				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
-			} );
+			});
 
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).change( function() {
@@ -5565,12 +5565,12 @@ function frmAdminBuildJS() {
 						jQuery( this ).attr( 'checked', false );
 					}
 				}
-			} );
+			});
 
 			//Show/hide Messages header
 			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).change( function() {
 				maybeShowFormMessages();
-			} );
+			});
 			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).change( showSuccessOpt );
 
 			var $loggedIn = document.getElementById( 'logged_in' );
@@ -5580,7 +5580,7 @@ function frmAdminBuildJS() {
 				} else {
 					invisible( '.hide_logged_in' );
 				}
-			} );
+			});
 
 			var $cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
 			jQuery( document.getElementById( 'frm_single_entry_type' ) ).change( function() {
@@ -5589,7 +5589,7 @@ function frmAdminBuildJS() {
 				} else {
 					$cookieExp.fadeOut( 'slow' );
 				}
-			} );
+			});
 
 			var $singleEntry = document.getElementById( 'single_entry' );
 			jQuery( $singleEntry ).change( function() {
@@ -5604,7 +5604,7 @@ function frmAdminBuildJS() {
 				} else {
 					$cookieExp.fadeOut( 'slow' );
 				}
-			} );
+			});
 
 			jQuery( '.hide_save_draft' ).hide();
 
@@ -5615,7 +5615,7 @@ function frmAdminBuildJS() {
 				} else {
 					jQuery( '.hide_save_draft' ).fadeOut( 'slow' );
 				}
-			} );
+			});
 			$saveDraft.change();
 
 			//If Allow editing is checked/unchecked
@@ -5628,7 +5628,7 @@ function frmAdminBuildJS() {
 					jQuery( '.hide_editable' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
-			} );
+			});
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
@@ -5639,7 +5639,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '.frm_insert_val', function() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
 				jQuery( this ).val( '' );
-			} );
+			});
 
 			jQuery( document ).on( 'click change', '#frm-id-key-condition', resetLogicBuilder );
 			jQuery( document ).on( 'keyup change', '.frm-build-logic', setLogicExample );
@@ -5685,20 +5685,20 @@ function frmAdminBuildJS() {
 						toggleAllowedShortcodes( this.id, e.type );
 					}
 				}
-			} );
+			});
 			}
 
 			jQuery( '.frm_wrap, #postbox-container-1' ).on( 'mousedown', '#frm_adv_info a, .frm_field_list a', function( e ) {
 				e.preventDefault();
-			} );
+			});
 
 			var customPanel = jQuery( '#frm_adv_info' );
 			customPanel.on( 'click', '.subsubsub a.frmids', function( e ) {
 				toggleKeyID( 'frmids', e );
-			} );
+			});
 			customPanel.on( 'click', '.subsubsub a.frmkeys', function( e ) {
 				toggleKeyID( 'frmkeys', e );
-			} );
+			});
 		},
 
 		templateInit: function() {
@@ -5756,16 +5756,16 @@ function frmAdminBuildJS() {
 					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
 					jQuery( event.target ).val( hexcolor ).change();
 				}
-			} );
+			});
 			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
 				return oldText === 'Select Color' ? 'Select' : oldText;
-			} );
+			});
 
 			// update styling on change
 			jQuery( '#frm_styling_form .styling_settings' ).change( function() {
 				var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
 				locStr = JSON.stringify( locStr );
-				jQuery.ajax( {
+				jQuery.ajax({
 					type: 'POST', url: ajaxurl,
 					data: {
 						action: 'frm_change_styling',
@@ -5775,8 +5775,8 @@ function frmAdminBuildJS() {
 					success: function( css ) {
 						document.getElementById( 'this_css' ).innerHTML = css;
 					}
-				} );
-			} );
+				});
+			});
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).bind( 'click', function( e ) {
@@ -5801,7 +5801,7 @@ function frmAdminBuildJS() {
 
 					e.preventDefault();
 				}
-			} );
+			});
 
 			jQuery( '.multiselect-container.frm-dropdown-menu li a' ).click( function() {
 				var radio = this.children[0].children[0];
@@ -5813,7 +5813,7 @@ function frmAdminBuildJS() {
 				// set active class
 				btnGrp.find( 'li.active' ).removeClass( 'active' );
 				jQuery( this ).closest( 'li' ).addClass( 'active' );
-			} );
+			});
 
 			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
 				var button = document.getElementById( 'frm_reset_style' );
@@ -5821,7 +5821,7 @@ function frmAdminBuildJS() {
 				button.classList.add( 'frm_loading_button' );
 				e.stopPropagation();
 
-				jQuery.ajax( {
+				jQuery.ajax({
 					type: 'POST', url: ajaxurl,
 					data: {action: 'frm_settings_reset', nonce: frmGlobal.nonce},
 					success: function( errObj ) {
@@ -5836,10 +5836,10 @@ function frmAdminBuildJS() {
 						jQuery( document.getElementById( 'frm_fieldset' ) ).change();
 						button.classList.remove( 'frm_loading_button' );
 					}
-				} );
-			} );
+				});
+			});
 
-			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker( {changeMonth: true, changeYear: true} );
+			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker( {changeMonth: true, changeYear: true } );
 
 			jQuery( document.getElementById( 'frm_position' ) ).change( setPosClass );
 
@@ -5868,7 +5868,7 @@ function frmAdminBuildJS() {
 			if ( customCSS !== null ) {
 				CodeMirror.fromTextArea( customCSS, {
 					lineNumbers: true
-				} );
+				});
 			}
 		},
 
@@ -5887,9 +5887,9 @@ function frmAdminBuildJS() {
 				event.preventDefault();
 				jQuery.post( ajaxurl, {
 					action: 'frm_lite_settings_upgrade'
-				} );
+				});
 				jQuery( '.settings-lite-cta' ).remove();
-			} );
+			});
 		},
 
 		exportInit: function() {
@@ -5907,34 +5907,34 @@ function frmAdminBuildJS() {
 					action: 'frm_dismiss_migrator',
 					plugin: this.id,
 					nonce: frmGlobal.nonce
-				} );
+				});
 				this.parentElement.remove();
-			} );
+			});
 		},
 
-		updateOpts: function( field_id, opts, modal ) {
-			var separate = usingSeparateValues( field_id ),
-				action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
-			jQuery.ajax( {
+		updateOpts: function( fieldId, opts, modal ) {
+			var separate = usingSeparateValues( fieldId ),
+				action = isProductField( fieldId ) ? 'frm_bulk_products' : 'frm_import_options';
+			jQuery.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: {
 					action: action,
-					field_id: field_id,
+					field_id: fieldId,
 					opts: opts,
 					separate: separate,
 					nonce: frmGlobal.nonce
 				},
 				success: function( html ) {
-					document.getElementById( 'frm_field_' + field_id + '_opts' ).innerHTML = html;
-					resetDisplayedOpts( field_id );
+					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {
 						modal.dialog( 'close' );
 						document.getElementById( 'frm-update-bulk-opts' ).classList.remove( 'frm_loading_button' );
 					}
 				}
-			} );
+			});
 		},
 
 		/* remove conditional logic if the field doesn't exist */
@@ -5954,20 +5954,20 @@ function frmAdminBuildJS() {
 
 var frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function( $) {
+jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
-} );
+});
 
-function frm_remove_tag( html_tag ) {
+function frm_remove_tag( htmlTag ) {
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
-	jQuery( html_tag ).remove();
+	jQuery( htmlTag ).remove();
 }
 
-function frm_show_div( div, value, show_if, class_id ) {
-	if ( value == show_if ) {
-		jQuery( class_id + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
+function frm_show_div( div, value, showIf, classId ) {
+	if ( value == showIf ) {
+		jQuery( classId + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
 	} else {
-		jQuery( class_id + div ).fadeOut( 'slow' );
+		jQuery( classId + div ).fadeOut( 'slow' );
 	}
 }
 
@@ -5988,13 +5988,14 @@ function frmCheckAllLevel( checked, n, level ) {
 	}
 }
 
-function frm_add_logic_row( id, form_id ) {
+function frm_add_logic_row( id, formId ) {
 	console.warn( 'DEPRECATED: function frm_add_logic_row in v2.0' );
-	jQuery.ajax( {
-		type: 'POST', url: ajaxurl,
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
 		data: {
 			action: 'frm_add_logic_row',
-			form_id: form_id,
+			form_id: formId,
 			field_id: id,
 			meta_name: jQuery( '#frm_logic_row_' + id + ' > div' ).size(),
 			nonce: frmGlobal.nonce
@@ -6002,20 +6003,20 @@ function frm_add_logic_row( id, form_id ) {
 		success: function( html ) {
 			jQuery( '#frm_logic_row_' + id ).append( html );
 		}
-	} );
+	});
 	return false;
 }
 
-function frmGetFieldValues( field_id, cur, row_number, field_type, html_name ) {
+function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName ) {
 
-	if ( field_id ) {
-		jQuery.ajax( {
+	if ( fieldId ) {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
-			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + field_id + '&name=' + html_name + '&t=' + field_type + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
+			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + fieldId + '&name=' + htmlName + '&t=' + fieldType + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
 			success: function( msg ) {
-				document.getElementById( 'frm_show_selected_values_' + cur + '_' + row_number ).innerHTML = msg;
+				document.getElementById( 'frm_show_selected_values_' + cur + '_' + rowNumber ).innerHTML = msg;
 			}
-		} );
+		});
 	}
 }
 
@@ -6025,13 +6026,13 @@ function frmImportCsv( formID ) {
 		urlVars = __FRMURLVARS;
 	}
 
-	jQuery.ajax( {
+	jQuery.ajax({
 		type: 'POST', url: ajaxurl,
 		data: 'action=frm_import_csv&nonce=' + frmGlobal.nonce + '&frm_skip_cookie=1' + urlVars,
 		success: function( count ) {
 			var max = jQuery( '.frm_admin_progress_bar' ).attr( 'aria-valuemax' );
 			var imported = max - count;
-			var percent = (imported / max) * 100;
+			var percent = ( imported / max ) * 100;
 			jQuery( '.frm_admin_progress_bar' ).css( 'width', percent + '%' ).attr( 'aria-valuenow', imported );
 
 			if ( parseInt( count, 10 ) > 0 ) {
@@ -6044,7 +6045,7 @@ function frmImportCsv( formID ) {
 				}, 2000 );
 			}
 		}
-	} );
+	});
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
