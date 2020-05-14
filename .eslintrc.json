@@ -51,7 +51,6 @@
 		"react/no-children-prop": "off",
 		"react/no-find-dom-node": "warn",
 		"react/prop-types": "off",
-		"space-in-parens": "warn",
 		"vars-on-top": "warn",
 		"yoda": "off"
 	}

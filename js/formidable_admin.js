@@ -365,7 +365,7 @@ function frmAdminBuildJS() {
 		dataAtts = link.dataset;
 		for ( i in dataAtts ) {
 			if ( i !== 'frmverify' ) {
-				continueButton.setAttribute( 'data-' + i, dataAtts[i] );
+				continueButton.setAttribute( 'data-' + i, dataAtts[i]);
 			}
 		}
 
@@ -758,7 +758,7 @@ function frmAdminBuildJS() {
 				}
 				if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
 					// If a page if collapsed, expand it before dragging since only the page break will move.
-					toggleCollapsePage( jQuery(ui.item[0]) );
+					toggleCollapsePage( jQuery( ui.item[0]) );
 				}
 			},
 			helper: function( e, li ) {
@@ -1001,7 +1001,7 @@ function frmAdminBuildJS() {
 				html = jQuery.parseJSON( html );
 
 				for ( var key in html ) {
-					jQuery( '#frm_field_id_' + key ).replaceWith( html[key] );
+					jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
 					setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
 				}
 
@@ -1153,7 +1153,7 @@ function frmAdminBuildJS() {
 	function afterAddField( msg, addFocus ) {
 		var regex = /id="(\S+)"/,
 			match = regex.exec( msg ),
-			field = document.getElementById(match[1]),
+			field = document.getElementById( match[1]),
 			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
 			$thisSection = jQuery( section ),
 			type = field.getAttribute( 'data-type' ),
@@ -1235,7 +1235,7 @@ function frmAdminBuildJS() {
 			jQuery( container ).scrollTop( newPos );
 		} else {
 			// TODO: smooth scroll
-			jQuery( container ).animate({ scrollTop: newPos }, 500);
+			jQuery( container ).animate({ scrollTop: newPos }, 500 );
 		}
 	}
 
@@ -1275,7 +1275,7 @@ function frmAdminBuildJS() {
 			unsafeParams = '';
 
 		while ( match != null ) {
-			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[ 1 ] ) ) {
+			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) {
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -1321,14 +1321,14 @@ function frmAdminBuildJS() {
 			i, top;
 
 		for ( i = 0; i < length; i++ ) {
-			if ( opening.includes( formula_array[i] ) ) {
-				stack.push( formula_array[i] );
+			if ( opening.includes( formula_array[i]) ) {
+				stack.push( formula_array[i]);
 				continue;
 			}
-			if ( closing.hasOwnProperty( formula_array[i] ) ) {
+			if ( closing.hasOwnProperty( formula_array[i]) ) {
 				top = stack.pop();
-				if ( top !== closing[formula_array[i]] ) {
-					unmatchedClosing.push( formula_array[i] );
+				if ( top !== closing[formula_array[i]]) {
+					unmatchedClosing.push( formula_array[i]);
 				}
 			}
 		}
@@ -1434,7 +1434,7 @@ function frmAdminBuildJS() {
 
 		for ( var i = 0; i < exclude.length; i++ ) {
 			if ( exclude[ i ].startsWith( '[' ) ) {
-				opts.push( exclude[ i ] );
+				opts.push( exclude[ i ]);
 				// remove it
 				exclude.splice( i, 1 );
 				// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
@@ -1450,7 +1450,7 @@ function frmAdminBuildJS() {
 		for ( var i = 0; i < excludedOpts.length; i++ ) {
 			var inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
 			// 2nd condition checks that there's at least one non-empty value
-			if ( inputs.length && jQuery( inputs[0] ).val() ) {
+			if ( inputs.length && jQuery( inputs[0]).val() ) {
 				hasOption = true;
 				break;
 			}
@@ -1522,7 +1522,7 @@ function frmAdminBuildJS() {
 			var includedExtras = getIncludedExtras();
 			if ( includedExtras.length ) {
 				for ( var i = 0; i < exclude.length; i++ ) {
-					if ( includedExtras.includes( exclude[ i ] ) ) {
+					if ( includedExtras.includes( exclude[ i ]) ) {
 						// remove it
 						exclude.splice( i, 1 );
 						// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
@@ -1627,7 +1627,7 @@ function frmAdminBuildJS() {
 	function popAllProductFields() {
 		var opts = document.querySelectorAll( '.frmjs_prod_field_opt' );
 		for ( var i = 0; i < opts.length; i++ ) {
-			popProductFields( opts[ i ] );
+			popProductFields( opts[ i ]);
 		}
 	}
 
@@ -2307,11 +2307,11 @@ function frmAdminBuildJS() {
 			toCollapse.removeClass( 'frm-is-collapsed' );
 			for ( i = 0; i < slide; i++ ) {
 				if ( i === slide - 1 ) {
-					jQuery( toCollapse[ i ] ).slideDown( 150, function() {
+					jQuery( toCollapse[ i ]).slideDown( 150, function() {
 						toCollapse.show();
 					});
 				} else {
-					jQuery( toCollapse[ i ] ).slideDown( 150 );
+					jQuery( toCollapse[ i ]).slideDown( 150 );
 				}
 			}
 		} else {
@@ -2319,11 +2319,11 @@ function frmAdminBuildJS() {
 			toCollapse.addClass( 'frm-is-collapsed' );
 			for ( i = 0; i < slide; i++ ) {
 				if ( i === slide - 1 ) {
-					jQuery( toCollapse[ i ] ).slideUp( 150, function() {
+					jQuery( toCollapse[ i ]).slideUp( 150, function() {
 						toCollapse.css( 'cssText', 'display:none !important;' );
 					});
 				} else {
-					jQuery( toCollapse[ i ] ).slideUp( 150 );
+					jQuery( toCollapse[ i ]).slideUp( 150 );
 				}
 			}
 		}
@@ -3389,7 +3389,7 @@ function frmAdminBuildJS() {
 		moveFieldSettings( singleField );
 
 		if ( fieldType && 'quantity' === fieldType ) {
-			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0] );
+			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0]);
 		}
 
 		singleField.classList.remove( 'frm_hidden' );
@@ -5121,7 +5121,7 @@ function frmAdminBuildJS() {
 		var xmlHttp = new XMLHttpRequest();
 		var params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k] );
+				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k]);
 			}
 		).join( '&' );
 
@@ -5393,7 +5393,7 @@ function frmAdminBuildJS() {
 			var frmSorting = jQuery( '.start_divider.frm_sorting' );
 			for ( i = 0; i < frmSorting.length; i++ ) {
 				if ( frmSorting[i].children.length < 2 ) {
-					jQuery( frmSorting[i] ).parent().children( '.frm_no_section_fields' ).addClass( 'frm_block' );
+					jQuery( frmSorting[i]).parent().children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 				}
 			}
 
@@ -5830,7 +5830,7 @@ function frmAdminBuildJS() {
 							errObj = jQuery.parseJSON( errObj );
 						}
 						for ( var key in errObj ) {
-							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key] );
+							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
 						}
 						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 						jQuery( document.getElementById( 'frm_fieldset' ) ).change();
