@@ -2845,7 +2845,7 @@ function frmAdminBuildJS() {
 		renumberPageBreaks();
 		jQuery( '#frm-show-fields' ).each( function( i ) {
 			var fields = jQuery( 'li.frm_field_box', this );
-			for ( var i = 0; i < fields.length; i ++ ) {
+			for ( i = 0; i < fields.length; i ++ ) {
 				var fieldId = fields[ i ].getAttribute( 'data-fid' ),
 					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
 					currentOrder = field.val(),
@@ -3498,7 +3498,6 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_submit_logic_row .frm_logic_row' ).length > 0 ) {
 			var last = jQuery( '#frm_submit_logic_row .frm_logic_row:last' );
 			var submitRowID = last.attr( 'id' );
-			var idFromSubmitRow = submitRowID.replace( 'frm_logic_submit_', '' );
 
 			meta_name = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
 		}
@@ -3535,9 +3534,9 @@ function frmAdminBuildJS() {
 
 	function formatEmailSetting() {
 		/*jshint validthis:true */
-		var val = jQuery( this ).val();
+		/*var val = jQuery( this ).val();
 		var email = val.match( /(\s[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi );
-		/*if(email !== null && email.length) {
+		if(email !== null && email.length) {
 			//has email
 			//TODO: add < > if they aren't there
 		}*/
@@ -3641,7 +3640,7 @@ function frmAdminBuildJS() {
 				// Loop through each category row, and replace the first dropdown
 				for ( i = 0; i < cat_rows.length; i++ ) {
 					// Check if current element is a div
-					if ( cat_rows[i].tagName != 'DIV' ) {
+					if ( cat_rows[i].tagName !== 'DIV' ) {
 						continue;
 					}
 
@@ -3649,7 +3648,7 @@ function frmAdminBuildJS() {
 					cur_select = cat_rows[i].getElementsByTagName( 'select' )[0];
 
 					// Set up new select
-					new_select = document.createElement( "select" );
+					new_select = document.createElement( 'select' );
 					new_select.innerHTML = html;
 					new_select.className = cur_select.className;
 					new_select.name = cur_select.name;
@@ -3936,7 +3935,7 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private;
+			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private_label;
 			document.getElementById( 'hidden-post-visibility' ).value = 'private';
 			document.getElementById( 'visibility-radio-private' ).checked = true;
 		}
@@ -4057,8 +4056,8 @@ function frmAdminBuildJS() {
 			return textToInsert;
 		}
 
-		var startPattern = new RegExp( separator + "\\s*$" );
-		var endPattern = new RegExp( "^\\s*" + separator );
+		var startPattern = new RegExp( separator + '\\s*$' );
+		var endPattern = new RegExp( '^\\s*' + separator );
 
 		if ( value.substr( 0, selectionStart ).trim().length && false === startPattern.test( value.substr( 0, selectionStart ) ) ) {
 			textToInsert = separator + textToInsert;
@@ -4101,7 +4100,7 @@ function frmAdminBuildJS() {
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
-	function showBuilderModal( e ) {
+	function showBuilderModal() {
 		/*jshint validthis:true */
 		var moreIcon = getIconForInput( this );
 		showInlineModal( moreIcon, this );
@@ -4233,7 +4232,7 @@ function frmAdminBuildJS() {
 
 		DOM = tinymce.DOM;
 		if ( typeof(DOM.events) !== 'undefined' && typeof(DOM.events.add) !== 'undefined' ) {
-			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseover', function( e ) {
+			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseover', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
 				}
@@ -4241,7 +4240,7 @@ function frmAdminBuildJS() {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
 			} );
-			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function( e ) {
+			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
 				}
@@ -4250,7 +4249,7 @@ function frmAdminBuildJS() {
 				}
 			} );
 		} else {
-			jQuery( '#frm_dyncontent' ).on( 'mouseover mouseout', '.wp-editor-wrap', function( e ) {
+			jQuery( '#frm_dyncontent' ).on( 'mouseover mouseout', '.wp-editor-wrap', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
 				}
@@ -4261,7 +4260,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function toggleAllowedShortcodes( id, f ) {
+	function toggleAllowedShortcodes( id ) {
 		var c, clickedID;
 		if ( typeof(id) === 'undefined' ) {
 			id = '';
@@ -4316,7 +4315,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function toggleAllowedHTML( input, f ) {
+	function toggleAllowedHTML( input ) {
 		var b, id = input.id;
 		if ( typeof id === 'undefined' || id.indexOf( '-search-input' ) !== -1 ) {
 			return;
@@ -4624,7 +4623,7 @@ function frmAdminBuildJS() {
 			this.checked = false;
 			if ( s.indexOf( this.value ) >= 0 ) {
 				this.disabled = false;
-				if ( multiple == -1 ) {
+				if ( multiple === -1 ) {
 					this.checked = true;
 				}
 			} else {
@@ -4746,7 +4745,7 @@ function frmAdminBuildJS() {
 
 				afterAddonInstall( response, button, message, el );
 			},
-			error: function(xhr, textStatus, e) {
+			error: function() {
 				button.removeClass('frm_loading_button');
 			}
 		} );
@@ -4793,7 +4792,7 @@ function frmAdminBuildJS() {
 
 				afterAddonInstall( response, proceed, message, el );
 			},
-			error: function(xhr, textStatus ,e) {
+			error: function() {
 				proceed.removeClass( 'frm_loading_button' );
 			}
 		} );
@@ -4941,7 +4940,7 @@ function frmAdminBuildJS() {
 					ui.content.push( noResult );
 				}
 			},
-			create: function( event, ui ) {
+			create: function() {
 				var $container = jQuery( this ).parent();
 
 				if ( $container.length === 0 ) {
@@ -4962,7 +4961,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Prevent the value from changing when using keyboard to scroll.
 	 */
-	function autoCompleteFocus( e, ui ) {
+	function autoCompleteFocus() {
 		return false;
 	}
 
