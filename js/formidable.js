@@ -1,7 +1,10 @@
+/* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField, frmDeleteEntry, frmOnSubmit, frm_resend_email */
+
 function frmFrontFormJS(){
 	'use strict';
 
     /*global jQuery:false, frm_js, grecaptcha, frmProForm, tinyMCE */
+	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
 	var action = '';
 	var jsErrors = [];

@@ -22,6 +22,8 @@
 		"wp": true,
 		"wpApiSettings": true,
 		"window": true,
+		"console": true,
+		"confirm": true,
 		"document": true
 	},
 	"plugins": ["react", "jsx-a11y"],
