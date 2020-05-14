@@ -1,3 +1,5 @@
+/*global jQuery:false, frmGlobal, tb_remove, ajaxurl, adminpage */
+
 jQuery(document).ready(function(){
     var installLink = document.getElementById('frm_install_link');
     if(installLink !== null){
@@ -9,7 +11,7 @@ jQuery(document).ready(function(){
 		deauthLink.click(frmDeauthorizeNow);
 	}
 
-    if(typeof tb_remove == 'function') {
+    if(typeof tb_remove === 'function') {
         frmAdminPopup.init();
     }
 });
@@ -52,7 +54,7 @@ function frmInstallPro( e ){
 			$msg.fadeOut('slow');
 			$msg.parent().fadeOut('slow');
 		},
-		error: function(xhr, textStatus, e) {
+		error: function() {
 			$msg.fadeOut('slow');
 		}
 	});
@@ -67,7 +69,7 @@ function frmDeauthorizeNow(){
     jQuery.ajax({
         type:'POST',url:ajaxurl,
         data:{action:'frm_deauthorize',nonce:frmGlobal.nonce},
-        success:function(msg){jQuery('.error').fadeOut('slow');}
+        success:function(){jQuery('.error').fadeOut('slow');}
     });
     return false;
 }
@@ -83,7 +85,7 @@ function frmCreatePostEntry(id,post_id){
     jQuery.ajax({
         type:'POST',url:ajaxurl,
         data:{action:'frm_create_post_entry',id:id,post_id:post_id,nonce:frmGlobal.nonce},
-        success:function(msg){jQuery(document.getElementById('frm_create_entry')).fadeOut('slow');}
+        success:function(){jQuery(document.getElementById('frm_create_entry')).fadeOut('slow');}
     });
 }
 
@@ -136,7 +138,7 @@ function frmAdminPopupJS(){
                 var attrName = attrId.replace('frmsc_'+ sc +'_', '');
                 var attrVal = $thisInput.val();
 
-                if(($thisInput.attr('type') == 'checkbox' && !this.checked) || (($thisInput.attr('type') == 'text' || $thisInput.is('select')) && attrVal === '')){
+                if(($thisInput.attr('type') === 'checkbox' && !this.checked) || (($thisInput.attr('type') === 'text' || $thisInput.is('select')) && attrVal === '')){
                 }else{
                     output += ' '+ attrName +'="'+ attrVal +'"';
                 }
@@ -235,7 +237,7 @@ function frmWidgetsJS(){
         }
     };
 }
-if(typeof adminpage != 'undefined' && adminpage == 'widgets-php'){
+if(typeof adminpage !== 'undefined' && adminpage === 'widgets-php'){
     var frmWidgets = frmWidgetsJS();
     frmWidgets.init();
 }

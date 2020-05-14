@@ -266,7 +266,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					plugin: pluginSlug,
 					nonce: frmGlobal.nonce
 				},
-				success: function( msg ) {
+				success: function() {
 					el.licenseBox.className = el.licenseBox.className.replace( 'frm_authorized_box', 'frm_unauthorized_box' );
 					input.value = '';
 					link.innerHTML = '';
@@ -661,7 +661,7 @@ function frmAdminBuildJS() {
 		}
 
 		var c = t.replace( '#', '.' );
-		var pro = jQuery( '.frm-category-tabs li' ).length > 2;
+
 		link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		if ( link.closest( 'div' ).find( '.tabs-panel' ).length ) {
 			link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
@@ -769,7 +769,7 @@ function frmAdminBuildJS() {
 					toggleCollapsePage( jQuery( previous ) );
 				}
 			},
-			stop: function( event, ui ) {
+			stop: function() {
 				var moving = jQuery( this );
 				copyHelper && copyHelper.remove();
 				if ( cancelSort ) {
@@ -906,7 +906,7 @@ function frmAdminBuildJS() {
 	 * @param {object} fieldButton
 	 * @param {object} opts
 	 */
-	function insertNewFieldByDragging( selectedItem, fieldButton, opts ) {
+	function insertNewFieldByDragging( selectedItem, fieldButton ) {
 		var fieldType = fieldButton.attr( 'id' );
 
 		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
@@ -975,9 +975,9 @@ function frmAdminBuildJS() {
 		var $thisField = jQuery( document.getElementById( field_id ) );
 		var fields;
 		if ( jQuery.isFunction( jQuery.fn.addBack ) ) {
-			fields = $thisField.nextAll( "*:lt(14)" ).addBack();
+			fields = $thisField.nextAll( '*:lt(14)' ).addBack();
 		} else {
-			fields = $thisField.nextAll( "*:lt(14)" ).andSelf();
+			fields = $thisField.nextAll( '*:lt(14)' ).andSelf();
 		}
 		fields.addClass( 'frm_load_now' );
 
@@ -1226,9 +1226,7 @@ function frmAdminBuildJS() {
 
 	function scrollToField( field ) {
 		var newPos = field.getBoundingClientRect().top,
-			container = document.getElementById( 'post-body-content' ),
-			pos = container.getBoundingClientRect(),
-			screenTop = pos.top;
+			container = document.getElementById( 'post-body-content' );
 
 		if ( typeof animate === 'undefined' ) {
 			jQuery( container ).scrollTop(newPos);
@@ -1309,15 +1307,15 @@ function frmAdminBuildJS() {
 		var stack = [],
 			formula_array = formula.split( '' ),
 			length = formula_array.length,
-			opening = ["{", "[", "("],
+			opening = ['{', '[', '('],
 			closing = {
-				"}": "{",
-				")": "(",
-				"]": "[",
+				'}': '{',
+				')': '(',
+				']': '[',
 			},
 			unmatchedClosing = [],
 			msg = '',
-			i, next, top;
+			i, top;
 
 		for ( i = 0; i < length; i++ ) {
 			if ( opening.includes( formula_array[i] ) ) {
@@ -1383,7 +1381,7 @@ function frmAdminBuildJS() {
 	 * @param inputElement
 	 */
 	function isTextCalculation( inputElement ) {
-		return jQuery( inputElement ).siblings( "label[for^='calc_type']" ).children( "input" ).prop( "checked" );
+		return jQuery( inputElement ).siblings( 'label[for^="calc_type"]' ).children( 'input' ).prop( 'checked' );
 	}
 
 	/**
@@ -1473,7 +1471,6 @@ function frmAdminBuildJS() {
 
 		var isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
 
-		var form_id = jQuery( 'input[name="id"]' ).val();
 		var fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
 
 		if ( force ) {
@@ -1929,7 +1926,7 @@ function frmAdminBuildJS() {
 			if ( opts.length === 1 ) {
 				return optKey;
 			}
-			if ( optKey != '000' ) {
+			if ( optKey !== '000' ) {
 				optKey = optKey.replace( 'other_', '' );
 				optKey = parseInt( optKey );
 			}
@@ -2018,7 +2015,7 @@ function frmAdminBuildJS() {
 	 * If a radio button is set as default, allow a click to
 	 * deselect it.
 	 */
-	function maybeUncheckRadio( e ) {
+	function maybeUncheckRadio() {
 		/*jshint validthis:true */
 		var $self = jQuery( this );
 		if ( $self.is( ':checked' ) ) {
@@ -2098,7 +2095,7 @@ function frmAdminBuildJS() {
 			type: 'POST',
 			url: ajaxurl,
 			data: {action: 'frm_delete_field', field_id: field_id, nonce: frmGlobal.nonce},
-			success: function( msg ) {
+			success: function() {
 				var $thisField = jQuery( document.getElementById( 'frm_field_id_' + field_id ) ),
 					settings = jQuery( '#frm-single-settings-' + field_id );
 
@@ -2302,7 +2299,7 @@ function frmAdminBuildJS() {
 			field.removeClass( 'frm-page-collapsed' );
 			toCollapse.removeClass( 'frm-is-collapsed' );
 			for ( i = 0; i < slide; i++ ) {
-				if ( i == slide - 1 ) {
+				if ( i === slide - 1 ) {
 					jQuery( toCollapse[ i ] ).slideDown( 150, function() {
 						toCollapse.show();
 					} );
@@ -2314,7 +2311,7 @@ function frmAdminBuildJS() {
 			field.addClass( 'frm-page-collapsed' );
 			toCollapse.addClass( 'frm-is-collapsed' );
 			for ( i = 0; i < slide; i++ ) {
-				if ( i == slide - 1 ) {
+				if ( i === slide - 1 ) {
 					jQuery( toCollapse[ i ] ).slideUp( 150, function() {
 						toCollapse.css( 'cssText', 'display:none !important;' );
 					} );
@@ -2547,7 +2544,7 @@ function frmAdminBuildJS() {
 	}
 
 	function resetDisplayedOpts( fieldId ) {
-		var i, opt, opts, type, placeholder, fieldInfo,
+		var i, opts, type, placeholder, fieldInfo,
 			input = jQuery( '[name^="item_meta[' + fieldId + ']"]' );
 
 		if ( input.length < 1 ) {

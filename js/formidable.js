@@ -1,7 +1,7 @@
 function frmFrontFormJS(){
 	'use strict';
 
-    /*global jQuery:false, frm_js */
+    /*global jQuery:false, frm_js, grecaptcha, frmProForm, tinyMCE */
 
 	var action = '';
 	var jsErrors = [];
@@ -567,7 +567,7 @@ function frmFrontFormJS(){
 	function addUrlParam(response){
 		if ( history.pushState && typeof response.page !== 'undefined' ) {
 			var url = addQueryVar('frm_page', response.page);
-			window.history.pushState({"html":response.html}, '', '?'+ url);
+			window.history.pushState({'html':response.html}, '', '?'+ url);
 		}
 	}
 
@@ -731,7 +731,7 @@ function frmFrontFormJS(){
 		}
 		var thisVal = $thisField.val().replace(/(\n|\r\n)/g, '\r');
 
-		if ( 'replace' == e ) {
+		if ( 'replace' === e ) {
 			if ( thisVal === '' ) {
 				$thisField.addClass('frm_default').val(v);
 			}
@@ -847,8 +847,9 @@ function frmFrontFormJS(){
 				for (var i = 0; i < len; i++) {
 					if ( i in t ) {
 						var val = t[i]; // in case fun mutates this
-						if (fun.call(thisp, val, i, t))
+						if (fun.call(thisp, val, i, t)) {
 							res.push(val);
+						}
 					}
 				}
 
@@ -933,7 +934,7 @@ function frmFrontFormJS(){
 			captcha.setAttribute('data-rid', recaptchaID);
 		},
 
-		afterSingleRecaptcha: function(token){
+		afterSingleRecaptcha: function(){
 			var object = jQuery('.frm-show-form .g-recaptcha').closest('form')[0];
 			frmFrontForm.submitFormNow( object );
 		},
@@ -1147,7 +1148,7 @@ function frmFrontFormJS(){
 			}
 		},
 
-		hideOrShowFields: function(ids, event ){
+		hideOrShowFields: function(){
 			console.warn('DEPRECATED: function frmFrontForm.hideOrShowFields in v3.0 use frmProForm.hideOrShowFields');
 			if ( typeof frmProForm !== 'undefined' ) {
 				frmProForm.hideOrShowFields();
@@ -1180,7 +1181,7 @@ function frmFrontFormJS(){
 			frmProForm.loadGoogle();
 		},
 
-		removeUsedTimes: function( obj, timeField ) {
+		removeUsedTimes: function() {
 			console.warn('DEPRECATED: function frmFrontForm.removeUsedTimes in v3.0 use frmProForm.removeUsedTimes');
 			if ( typeof frmProForm !== 'undefined' ) {
 				frmProForm.removeUsedTimes();
@@ -1207,7 +1208,7 @@ function frmFrontFormJS(){
 }
 var frmFrontForm = frmFrontFormJS();
 
-jQuery(document).ready(function($){
+jQuery(document).ready(function(){
 	frmFrontForm.init();
 });
 
@@ -1244,10 +1245,11 @@ function frmDeleteEntry(entry_id,prefix){
 		type:'POST',url:frm_js.ajax_url,
 		data:{action:'frm_entries_destroy', entry:entry_id, nonce:frm_js.nonce},
 		success:function(html){
-			if(html.replace(/^\s+|\s+$/g,'') === 'success')
+			if(html.replace(/^\s+|\s+$/g,'') === 'success'){
 				jQuery(document.getElementById(prefix+entry_id)).fadeOut('slow');
-			else
+			}else{
 				jQuery(document.getElementById('frm_delete_'+entry_id)).replaceWith(html);
+			}
 
 		}
 	});
