@@ -73,7 +73,7 @@ script:
 - if [[ "$SCRIPT_DUBUG" == "1" ]]; then php -r "define('SCRIPT_DUBUG', true);"; fi
 - if [[ "$SCRIPT_DUBUG" == "0" ]]; then php -r "define('SCRIPT_DUBUG', false);"; fi
 # Run the theme through JSHint. Turn on in 3.0
-- if [[ "$SNIFF" == "1" ]]; then eslint ./js/formidable*; fi
+- if [[ "$SNIFF" == "1" ]]; then ./node_modules/.bin/eslint ./js/formidable*; fi
 - |
   if [ "$PHPUNIT" != "0" ]; then
     ./vendor/bin/phpunit --group=ajax -c phpunit.xml
