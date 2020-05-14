@@ -34,6 +34,7 @@
 		"camelcase": ["warn", { "properties": "never" }],
 		"key-spacing": "off",
 		"lines-around-comment": "off",
+		"quote": "warn",
 		"react/display-name": "off",
 		"react/jsx-curly-spacing": [
 			"error",

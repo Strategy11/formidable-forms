@@ -29,11 +29,11 @@ function frm_install_now() {
 		url: ajaxurl,
 		data: {
 			action: 'frm_install',
-			nonce: frmGlobal.nonce,
+			nonce: frmGlobal.nonce
 		},
 		success: function() {
 			$msg.fadeOut( 'slow' );
-		},
+		}
 	});
 	return false;
 }
@@ -60,7 +60,7 @@ function frmInstallPro( e ) {
 		data: {
 			action: 'frm_install_addon',
 			nonce: frmGlobal.nonce,
-			plugin: plugin,
+			plugin: plugin
 		},
 		success: function() {
 			$msg.fadeOut( 'slow' );
@@ -68,7 +68,7 @@ function frmInstallPro( e ) {
 		},
 		error: function() {
 			$msg.fadeOut( 'slow' );
-		},
+		}
 	});
 	return false;
 }
@@ -83,11 +83,11 @@ function frmDeauthorizeNow() {
 		url: ajaxurl,
         data: {
 			action: 'frm_deauthorize',
-			nonce: frmGlobal.nonce,
+			nonce: frmGlobal.nonce
 		},
         success: function() {
 			jQuery( '.error' ).fadeOut( 'slow' );
-		},
+		}
     });
     return false;
 }
@@ -107,11 +107,11 @@ function frmCreatePostEntry( id, post_id ) {
 			action: 'frm_create_post_entry',
 			id: id,
 			post_id: post_id,
-			nonce: frmGlobal.nonce,
+			nonce: frmGlobal.nonce
 		},
         success: function() {
 			jQuery( document.getElementById( 'frm_create_entry' ) ).fadeOut( 'slow' );
-		},
+		}
     });
 }
 
@@ -149,13 +149,13 @@ function frmAdminPopupJS() {
 				data: {
 					action: 'frm_get_shortcode_opts',
 					shortcode: val,
-					nonce: frmGlobal.nonce,
+					nonce: frmGlobal.nonce
 				},
 				success: function( html ) {
 					$spinner.hide();
 					$scOpts.append( html );
 					jQuery( document.getElementById( 'sc-' + val ) ).click();
-				},
+				}
 			});
 		}
 	}
@@ -199,13 +199,13 @@ function frmAdminPopupJS() {
 					action: 'frm_get_field_selection',
 					field_id: 0,
 					form_id: form_id,
-					nonce: frmGlobal.nonce,
+					nonce: frmGlobal.nonce
 				},
                 success: function( msg ) {
                     var baseId = thisId.replace( '_form', '' );
                     msg = msg.replace( 'name="field_options[form_select_0]"', 'id="frmsc_' + baseId + '_fields"' );
                     jQuery( document.getElementById( baseId + '_fields_container' ) ).html( msg );
-                },
+                }
             });
         }
     }
@@ -258,7 +258,7 @@ function frmWidgetsJS() {
                 data: {
 					action: 'frm_get_dynamic_widget_opts',
 					display_id: display_id,
-					nonce: frmGlobal.nonce,
+					nonce: frmGlobal.nonce
 				},
                 success: function( opts ) {
 					var titleField,
@@ -275,7 +275,7 @@ function frmWidgetsJS() {
                     jQuery.each( opts.titleValues, function( key, value ) {
                         titleField.append( jQuery( '<option></option>' ).attr( 'value', key ).text( value ) );
                     });
-                },
+                }
             });
         }
     }
