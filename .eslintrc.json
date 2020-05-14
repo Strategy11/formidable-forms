@@ -32,7 +32,6 @@
 	},
 	"rules": {
 		"camelcase": ["warn", { "properties": "never" }],
-		"comma-dangle": "warn",
 		"key-spacing": "off",
 		"lines-around-comment": "off",
 		"react/display-name": "off",

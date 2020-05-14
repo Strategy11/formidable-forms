@@ -1294,7 +1294,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function addHtmlTags( text, tag ){
+	function addHtmlTags( text, tag ) {
 		tag = tag ? tag : 'p';
 		return '<' + tag + '>' + text + '</' + tag + '>';
 	}
@@ -1309,7 +1309,7 @@ function frmAdminBuildJS() {
 		var stack = [],
 			formula_array = formula.split( '' ),
 			length = formula_array.length,
-			opening = ['{', '[', '('],
+			opening = [ '{', '[', '(' ],
 			closing = {
 				'}': '{',
 				')': '(',
@@ -1552,7 +1552,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldList( fieldType ) {
-		var i, fields = [],
+		var i,
+			fields = [],
 			allFields = document.querySelectorAll( 'li.frm_field_box' ),
 			checkType = 'undefined' !== typeof fieldType;
 
@@ -1599,11 +1600,11 @@ function frmAdminBuildJS() {
 			if ( isSelect ) {
 				// This fallback can be removed after 4.05.
 				checked = checked ? ' selected' : '';
-				options.push( '<option value="'+ id +'"' + checked + '>'+ products[ i ].fieldName +'</option>' );
+				options.push( '<option value="' + id + '"' + checked + '>'+ products[ i ].fieldName + '</option>' );
 			} else {
 				checked = checked ? ' checked' : '';
 				options.push( '<label class="frm6">' );
-				options.push( '<input type="checkbox" name="'+ fName +'" value="'+ id +'"' + checked + '> ' + products[ i ].fieldName );
+				options.push( '<input type="checkbox" name="' + fName + '" value="' + id + '"' + checked + '> ' + products[ i ].fieldName );
 				options.push( '</label>' );
 			}
 		}
@@ -1821,7 +1822,8 @@ function frmAdminBuildJS() {
 
 		jQuery( builderForm ).on( 'click', 'a.frm-bulk-edit-link', function( event ) {
 			event.preventDefault();
-			var i, key, label, content = '',
+			var i, key, label,
+				content = '',
 				fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' ),
 				separate = usingSeparateValues( fieldId ),
 				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
@@ -1923,7 +1925,7 @@ function frmAdminBuildJS() {
 			opts = jQuery( '#frm_field_' + fieldId + '_opts li' ),
 			lastKey = 0;
 
-		for ( i; i < opts.length; i ++ ) {
+		for ( i; i < opts.length; i++ ) {
 			optKey = opts[i].getAttribute( 'data-optkey' );
 			if ( opts.length === 1 ) {
 				return optKey;
@@ -2022,7 +2024,9 @@ function frmAdminBuildJS() {
 		var $self = jQuery( this );
 		if ( $self.is( ':checked' ) ) {
 			var uncheck = function() {
-				setTimeout( function(){ $self.removeAttr( 'checked' ); },0 );
+				setTimeout( function() {
+					$self.removeAttr( 'checked' );
+				}, 0 );
 			};
 			var unbind = function() {
 				$self.unbind( 'mouseup', up );
@@ -2647,7 +2651,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, opts = [], optObj,
+		var i, saved, labelName, label, key, optObj,
+			opts = [],
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
 			separateValues = usingSeparateValues( fieldId ),
 			isProduct = isProductField( fieldId );
@@ -2711,7 +2716,7 @@ function frmAdminBuildJS() {
 			var a = id.split( '-' );
 			jQuery.each( jQuery( 'label[id^="' + a[0] + '"]' ), function( k, v ) {
 				var c = false;
-				if ( !c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
+				if ( ! c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
 					c = true;
 					infoModal( 'Saved values cannot be identical.' );
 				}
@@ -2845,7 +2850,7 @@ function frmAdminBuildJS() {
 		renumberPageBreaks();
 		jQuery( '#frm-show-fields' ).each( function( i ) {
 			var fields = jQuery( 'li.frm_field_box', this );
-			for ( i = 0; i < fields.length; i ++ ) {
+			for ( i = 0; i < fields.length; i++ ) {
 				var fieldId = fields[ i ].getAttribute( 'data-fid' ),
 					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
 					currentOrder = field.val(),
