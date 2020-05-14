@@ -1245,7 +1245,7 @@ function frmAdminBuildJS() {
 		warningMessage += checkShortcodes( calculation, this );
 
 		if ( warningMessage !== '' ) {
-			infoModal( calculation + "\n\n" + warningMessage );
+			infoModal( calculation + '\n\n' + warningMessage );
 		}
 	}
 
@@ -1334,7 +1334,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + "\n\n";
+			msg = frm_admin_js.unmatched_parens + '\n\n';
 			return msg;
 		}
 
@@ -1372,7 +1372,7 @@ function frmAdminBuildJS() {
 		var nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = frm_admin_js.text_shortcodes + "\n\n";
+			msg = frm_admin_js.text_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -1405,7 +1405,7 @@ function frmAdminBuildJS() {
 			msg = '';
 
 		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + "\n\n";
+			msg += frm_admin_js.view_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -1845,7 +1845,7 @@ function frmAdminBuildJS() {
 						if ( product ) {
 							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][price]' )[0].value;
 						}
-						content += "\r\n";
+						content += '\r\n';
 					}
 				}
 
@@ -1870,7 +1870,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var opts = JSON.parse( this.getAttribute( 'data-opts' ) );
 		event.preventDefault();
-		document.getElementById( 'frm_bulk_options' ).value = opts.join( "\n" );
+		document.getElementById( 'frm_bulk_options' ).value = opts.join( '\n' );
 		return false;
 	}
 
