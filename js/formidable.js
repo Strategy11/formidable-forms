@@ -451,7 +451,7 @@ function frmFrontFormJS() {
 			data: jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce,
 			success: function( response ) {
 				var formID, replaceContent, pageOrder, formReturned, contSubmit,
-					showCaptcha, $fieldCont, key,
+					showCaptcha, $fieldCont, key, inCollapsedSection, frmTrigger,
 					defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
 				if ( response === null ) {
 					response = defaultResponse;
@@ -503,13 +503,15 @@ function frmFrontFormJS() {
 					$fieldCont = null;
 
 					for ( key in response.errors ) {
+						var $recaptcha, recaptchaID;
+
 						$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
 
 						if ( $fieldCont.length ) {
 							if ( ! $fieldCont.is( ':visible' ) ) {
-								var inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' );
+								inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' );
 								if ( inCollapsedSection.length ) {
-									var frmTrigger = inCollapsedSection.prev();
+									frmTrigger = inCollapsedSection.prev();
 									if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
 										// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 										frmTrigger = frmTrigger.prev( '.frm_trigger' );
@@ -523,10 +525,10 @@ function frmFrontFormJS() {
 
 								contSubmit = false;
 
-								var $recaptcha = jQuery( object ).find( '#frm_field_' + key + '_container .frm-g-recaptcha, #frm_field_' + key + '_container .g-recaptcha' );
+								$recaptcha = jQuery( object ).find( '#frm_field_' + key + '_container .frm-g-recaptcha, #frm_field_' + key + '_container .g-recaptcha' );
 								if ( $recaptcha.length ) {
 									showCaptcha = true;
-									var recaptchaID = $recaptcha.data( 'rid' );
+									recaptchaID = $recaptcha.data( 'rid' );
 									if ( jQuery().grecaptcha ) {
 										if ( recaptchaID ) {
 											grecaptcha.reset( recaptchaID );
@@ -595,14 +597,14 @@ function frmFrontFormJS() {
 	}
 
 	function addQueryVar( key, value ) {
-		var kvp, i;
+		var kvp, i, x;
 
 		key = encodeURI( key );
 		value = encodeURI( value );
 
 		kvp = document.location.search.substr( 1 ).split( '&' );
 
-		i = kvp.length; var x; while ( i-- ) {
+		i = kvp.length; x; while ( i-- ) {
 			x = kvp[i].split( '=' );
 
 			if ( x[0] == key ) {
@@ -880,8 +882,9 @@ function frmFrontFormJS() {
 				res = [];
 				thisp = arguments[1];
 				for ( i = 0; i < len; i++ ) {
+					var val;
 					if ( i in t ) {
-						var val = t[i]; // in case fun mutates this
+						val = t[i]; // in case fun mutates this
 						if ( fun.call( thisp, val, i, t ) ) {
 							res.push( val );
 						}
@@ -1079,10 +1082,11 @@ function frmFrontFormJS() {
 		},
 
 		addAjaxFormErrors: function( object ) {
+			var key, $fieldCont;
 			removeAllErrors();
 
-			for ( var key in jsErrors ) {
-				var $fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
+			for ( key in jsErrors ) {
+				$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
 
 				if ( $fieldCont.length ) {
 					addFieldError( $fieldCont, key, jsErrors );
@@ -1117,7 +1121,8 @@ function frmFrontFormJS() {
         },
 
 		scrollMsg: function( id, object, animate ) {
-			var scrollObj = '';
+			var newPos, m, b, screenTop, screenBottom,
+				scrollObj = '';
 			if ( typeof object === 'undefined' ) {
 				scrollObj = jQuery( document.getElementById( 'frm_form_' + id + '_container' ) );
 				if ( scrollObj.length < 1 ) {
@@ -1129,21 +1134,21 @@ function frmFrontFormJS() {
 				scrollObj = id;
 			}
 
-			var newPos = scrollObj.offset().top;
+			newPos = scrollObj.offset().top;
 			if ( ! newPos ) {
 				return;
 			}
 			newPos = newPos - frm_js.offset;
 
-			var m = jQuery( 'html' ).css( 'margin-top' );
-			var b = jQuery( 'body' ).css( 'margin-top' );
+			m = jQuery( 'html' ).css( 'margin-top' );
+			b = jQuery( 'body' ).css( 'margin-top' );
 			if ( m || b ) {
 				newPos = newPos - parseInt( m ) - parseInt( b );
 			}
 
 			if ( newPos && window.innerHeight ) {
-				var screenTop = document.documentElement.scrollTop || document.body.scrollTop;
-				var screenBottom = screenTop + window.innerHeight;
+				screenTop = document.documentElement.scrollTop || document.body.scrollTop;
+				screenBottom = screenTop + window.innerHeight;
 
 				if ( newPos > screenBottom || newPos < screenTop ) {
 					// Not in view
