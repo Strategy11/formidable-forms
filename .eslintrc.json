@@ -32,7 +32,7 @@
 	},
 	"rules": {
 		"camelcase": ["error", { "properties": "never" }],
-		"key-spacing": "off",
+		"key-spacing": "warn",
 		"lines-around-comment": "off",
 		"react/display-name": "off",
 		"react/jsx-curly-spacing": [
