@@ -479,10 +479,10 @@ function frmFrontFormJS() {
 					removeSubmitLoading( jQuery( object ), 'enable' );
 
 					//show errors
-					var cont_submit = true;
+					var contSubmit = true;
 					removeAllErrors();
 
-					var show_captcha = false;
+					var showCaptcha = false;
 					var $fieldCont = null;
 
 					for ( var key in response.errors ) {
@@ -504,11 +504,11 @@ function frmFrontFormJS() {
 							if ( $fieldCont.is( ':visible' ) ) {
 								addFieldError( $fieldCont, key, response.errors );
 
-								cont_submit = false;
+								contSubmit = false;
 
 								var $recaptcha = jQuery( object ).find( '#frm_field_' + key + '_container .frm-g-recaptcha, #frm_field_' + key + '_container .g-recaptcha' );
 								if ( $recaptcha.length ) {
-									show_captcha = true;
+									showCaptcha = true;
 									var recaptchaID = $recaptcha.data( 'rid' );
 									if ( jQuery().grecaptcha ) {
 										if ( recaptchaID ) {
@@ -527,11 +527,11 @@ function frmFrontFormJS() {
 					fieldset.removeClass( 'frm_doing_ajax' );
 					scrollToFirstField( object );
 
-					if ( show_captcha !== true ) {
+					if ( showCaptcha !== true ) {
 						replaceCheckedRecaptcha( object, false );
 					}
 
-					if ( cont_submit ) {
+					if ( contSubmit ) {
 						object.submit();
 					} else {
 						jQuery( object ).prepend( response.error_message );
@@ -667,9 +667,9 @@ function frmFrontFormJS() {
 	}
 
 	function addLoadingClass( $object ) {
-		var loading_class = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
+		var loadingClass = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
-		$object.addClass( loading_class );
+		$object.addClass( loadingClass );
 	}
 
 	function isGoingToPrevPage( $object ) {
@@ -696,8 +696,8 @@ function frmFrontFormJS() {
 	function showFileLoading( object ) {
 		var loading = document.getElementById( 'frm_loading' );
 		if ( loading !== null ) {
-			var file_val = jQuery( object ).find( 'input[type=file]' ).val();
-			if ( typeof file_val !== 'undefined' && file_val !== '' ) {
+			var fileval = jQuery( object ).find( 'input[type=file]' ).val();
+			if ( typeof fileval !== 'undefined' && fileval !== '' ) {
 				setTimeout( function() {
 					jQuery( loading ).fadeIn( 'slow' );
 				}, 2000 );
