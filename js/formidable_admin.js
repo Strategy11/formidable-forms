@@ -1280,7 +1280,7 @@ function frmAdminBuildJS() {
 			match = regEx.exec( filterValue ),
 			unsafeParams = '';
 
-		while ( match != null ) {
+		while ( match !== null ) {
 			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) {
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
@@ -6005,12 +6005,12 @@ jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
 });
 
-function frm_remove_tag( htmlTag ) {
+function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
 	jQuery( htmlTag ).remove();
 }
 
-function frm_show_div( div, value, showIf, classId ) {
+function frm_show_div( div, value, showIf, classId ) { // eslint-disable-line camelcase
 	if ( value == showIf ) {
 		jQuery( classId + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
 	} else {
@@ -6035,7 +6035,7 @@ function frmCheckAllLevel( checked, n, level ) {
 	}
 }
 
-function frm_add_logic_row( id, formId ) {
+function frm_add_logic_row( id, formId ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_add_logic_row in v2.0' );
 	jQuery.ajax({
 		type: 'POST',
