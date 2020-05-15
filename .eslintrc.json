@@ -31,6 +31,7 @@
 		}
 	},
 	"rules": {
+		"camelcase": ["error", { "properties": "never" }],
 		"key-spacing": "off",
 		"lines-around-comment": "off",
 		"react/display-name": "off",
