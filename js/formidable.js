@@ -1,5 +1,7 @@
 /* exported frmRecaptcha, frmAfterRecaptcha, frmUpdateField, frmDeleteEntry, frmOnSubmit, frm_resend_email */
 
+var frmFrontForm;
+
 function frmFrontFormJS() {
 	'use strict';
 
@@ -452,6 +454,7 @@ function frmFrontFormJS() {
 			success: function( response ) {
 				var formID, replaceContent, pageOrder, formReturned, contSubmit,
 					showCaptcha, $fieldCont, key, inCollapsedSection, frmTrigger,
+					$recaptcha, recaptchaID,
 					defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
 				if ( response === null ) {
 					response = defaultResponse;
@@ -503,7 +506,6 @@ function frmFrontFormJS() {
 					$fieldCont = null;
 
 					for ( key in response.errors ) {
-						var $recaptcha, recaptchaID;
 
 						$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
 
@@ -604,7 +606,8 @@ function frmFrontFormJS() {
 
 		kvp = document.location.search.substr( 1 ).split( '&' );
 
-		i = kvp.length; x; while ( i-- ) {
+		i = kvp.length;
+		while ( i-- ) {
 			x = kvp[i].split( '=' );
 
 			if ( x[0] == key ) {
@@ -863,7 +866,7 @@ function frmFrontFormJS() {
 	}
 
 	function addFilterFallbackForIE8() {
-		var t, len, res, thisp, i;
+		var t, len, res, thisp, i, val;
 
 		if ( ! Array.prototype.filter ) {
 
@@ -882,7 +885,6 @@ function frmFrontFormJS() {
 				res = [];
 				thisp = arguments[1];
 				for ( i = 0; i < len; i++ ) {
-					var val;
 					if ( i in t ) {
 						val = t[i]; // in case fun mutates this
 						if ( fun.call( thisp, val, i, t ) ) {
@@ -1253,15 +1255,16 @@ function frmFrontFormJS() {
 		}
 	};
 }
-var frmFrontForm = frmFrontFormJS();
+frmFrontForm = frmFrontFormJS();
 
 jQuery( document ).ready( function() {
 	frmFrontForm.init();
 });
 
 function frmRecaptcha() {
-	var captchas = jQuery( '.frm-g-recaptcha' );
-	for ( var c = 0, cl = captchas.length; c < cl; c++ ) {
+	var c,
+		captchas = jQuery( '.frm-g-recaptcha' );
+	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
 		frmFrontForm.renderRecaptcha( captchas[c]);
 	}
 }
