@@ -16,12 +16,12 @@ jQuery( document ).ready( function() {
 		deauthLink.click( frmDeauthorizeNow );
 	}
 
-    if ( typeof tb_remove === 'function' ) {
+    if ( typeof tb_remove === 'function' ) { // eslint-disable-line camelcase
         frmAdminPopup.init();
     }
 });
 
-function frm_install_now() {
+function frm_install_now() { // eslint-disable-line camelcase
 	var $msg = jQuery( document.getElementById( 'frm_install_message' ) );
 	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>' );
 	jQuery.ajax({

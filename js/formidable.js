@@ -485,7 +485,7 @@ function frmFrontFormJS() {
 
 					addUrlParam( response );
 
-					if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) {
+					if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
 						pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
 						formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
 						frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
@@ -632,7 +632,7 @@ function frmFrontFormJS() {
 			id = 'frm_error_field_' + key;
 			describedBy = input.attr( 'aria-describedby' );
 
-			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) {
+			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 				frmThemeOverride_frmPlaceError( key, jsErrors );
 			} else {
 				$fieldCont.append( '<div class="frm_error" id="' + id + '">' + jsErrors[key] + '</div>' );
@@ -1070,7 +1070,7 @@ function frmFrontFormJS() {
 			var customErrors, key;
 
 			jsErrors = validateForm( object );
-			if ( typeof frmThemeOverride_jsErrors === 'function' ) {
+			if ( typeof frmThemeOverride_jsErrors === 'function' ) { // eslint-disable-line camelcase
 				action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 				customErrors = frmThemeOverride_jsErrors( action, object );
 				if ( Object.keys( customErrors ).length  ) {
@@ -1321,7 +1321,7 @@ function frmOnSubmit( e ) {
 	frmFrontForm.submitForm( e, this );
 }
 
-function frm_resend_email( entryId, formId ) {
+function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
 	var $link = jQuery( document.getElementById( 'frm_resend_email' ) );
 	console.warn( 'DEPRECATED: function frm_resend_email in v2.0' );
 	$link.append( '<span class="spinner" style="display:inline"></span>' );
