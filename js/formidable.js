@@ -566,7 +566,7 @@ function frmFrontFormJS() {
 					object.submit();
 				}
 			},
-			error:function() {
+			error: function() {
 				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).removeAttr( 'disabled' );
 				object.submit();
 			}
@@ -790,7 +790,7 @@ function frmFrontFormJS() {
 		jQuery.ajax({
 			type: 'POST',
 			url: frm_js.ajax_url,
-			data:{
+			data: {
 				action: 'frm_entries_send_email',
 				entry_id: entryId,
 				form_id: formId,
@@ -1276,16 +1276,16 @@ function frmAfterRecaptcha( token ) {
 function frmUpdateField( entryId, fieldId, value, message, num ) {
 	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
 	jQuery.ajax({
-		type:'POST',
-		url:frm_js.ajax_url,
-		data:{
+		type: 'POST',
+		url: frm_js.ajax_url,
+		data: {
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
 			field_id: fieldId,
 			value: value,
 			nonce: frm_js.nonce
 		},
-		success:function() {
+		success: function() {
 			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
 			} else {
@@ -1306,7 +1306,7 @@ function frmDeleteEntry( entryId, prefix ) {
 			entry: entryId,
 			nonce: frm_js.nonce
 		},
-		success:function( html ) {
+		success: function( html ) {
 			if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
 				jQuery( document.getElementById( prefix + entryId ) ).fadeOut( 'slow' );
 			} else {
@@ -1334,7 +1334,7 @@ function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
 			form_id: formId,
 			nonce: frm_js.nonce
 		},
-		success:function( msg ) {
+		success: function( msg ) {
 			$link.replaceWith( msg );
 		}
 	});

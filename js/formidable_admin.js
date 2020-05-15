@@ -1,5 +1,7 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 
+var frmAdminBuild;
+
 var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -718,10 +720,10 @@ function frmAdminBuildJS() {
 			forcePlaceholderSize: false,
 			tolerance: 'pointer',
 			handle: '.frm-move',
-			over : function() {
+			over: function() {
 				this.classList.add( 'drop-me' );
 			},
-			out : function() {
+			out: function() {
 				this.classList.remove( 'drop-me' );
 			},
 			receive: function( event, ui ) {
@@ -4771,7 +4773,7 @@ function frmAdminBuildJS() {
 			dataType: 'json',
 			data: {
 				action: action,
-				nonce:  frmGlobal.nonce,
+				nonce: frmGlobal.nonce,
 				plugin: plugin
 			},
 			success: function( response ) {
@@ -5545,7 +5547,8 @@ function frmAdminBuildJS() {
 		},
 
 		settingsInit: function() {
-			var $formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
+			var formSettings, $loggedIn, $cookieExp, $editable,
+				$formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
 			//BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
 			$formActions.on( 'click', '.frm_remove_field', hideEmailRow );
@@ -5576,7 +5579,7 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_submit_settings_btn' ).click( submitSettings );
 
-			var formSettings = jQuery( '.frm_form_settings' );
+			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
 			formSettings.on( 'click', '.frm_already_used', onlyOneActionMessage );
@@ -5620,7 +5623,7 @@ function frmAdminBuildJS() {
 			});
 			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).change( showSuccessOpt );
 
-			var $loggedIn = document.getElementById( 'logged_in' );
+			$loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).change( function() {
 				if ( this.checked ) {
 					visible( '.hide_logged_in' );
@@ -5629,7 +5632,7 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			var $cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
+			$cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
 			jQuery( document.getElementById( 'frm_single_entry_type' ) ).change( function() {
 				if ( this.value === 'cookie' ) {
 					$cookieExp.fadeIn( 'slow' );
@@ -5666,7 +5669,7 @@ function frmAdminBuildJS() {
 			$saveDraft.change();
 
 			//If Allow editing is checked/unchecked
-			var $editable = document.getElementById( 'editable' );
+			$editable = document.getElementById( 'editable' );
 			jQuery( $editable ).change( function() {
 				if ( this.checked ) {
 					jQuery( '.hide_editable' ).fadeIn( 'slow' );
@@ -5682,6 +5685,8 @@ function frmAdminBuildJS() {
 		},
 
 		panelInit: function() {
+			var customPanel, settingsPage, viewPage, insertFieldsTab;
+
 			jQuery( '.frm_wrap, #postbox-container-1' ).on( 'click', '.frm_insert_code', insertCode );
 			jQuery( document ).on( 'change', '.frm_insert_val', function() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
@@ -5698,12 +5703,13 @@ function frmAdminBuildJS() {
 			});
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
 
-			var settingsPage = document.getElementById( 'form_settings_page' ),
-				viewPage = document.body.classList.contains( 'post-type-frm_display' ),
-				insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
+			settingsPage = document.getElementById( 'form_settings_page' );
+			viewPage = document.body.classList.contains( 'post-type-frm_display' );
+			insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
 
 			if ( settingsPage !== null || viewPage ) {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
+				var htmlTab;
 				e.stopPropagation();
 				maybeShowModal( this );
 
@@ -5715,7 +5721,7 @@ function frmAdminBuildJS() {
 
 					if ( settingsPage !== null ) {
 						/* form settings page */
-						var htmlTab = jQuery( '#frm_html_tab' );
+						htmlTab = jQuery( '#frm_html_tab' );
 						if ( jQuery( this ).closest( '#html_settings' ).length > 0 ) {
 							htmlTab.show();
 							htmlTab.siblings().hide();
@@ -5739,7 +5745,7 @@ function frmAdminBuildJS() {
 				e.preventDefault();
 			});
 
-			var customPanel = jQuery( '#frm_adv_info' );
+			customPanel = jQuery( '#frm_adv_info' );
 			customPanel.on( 'click', '.subsubsub a.frmids', function( e ) {
 				toggleKeyID( 'frmids', e );
 			});
@@ -5754,7 +5760,8 @@ function frmAdminBuildJS() {
 		},
 
 		viewInit: function() {
-			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
+			var $addRemove,
+				$advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			$advInfo.before( '<div id="frm_position_ele"></div>' );
 			setupMenuOffset();
 
@@ -5782,7 +5789,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document.getElementById( 'form_id' ) ).change( displayFormSelected );
 
-			var $addRemove = jQuery( '.frm_repeat_rows' );
+			$addRemove = jQuery( '.frm_repeat_rows' );
 			$addRemove.on( 'click', '.frm_add_order_row', addOrderRow );
 			$addRemove.on( 'click', '.frm_add_where_row', addWhereRow );
 			$addRemove.on( 'change', '.frm_insert_where_options', insertWhereOptions );
@@ -5872,11 +5879,12 @@ function frmAdminBuildJS() {
 					type: 'POST', url: ajaxurl,
 					data: {action: 'frm_settings_reset', nonce: frmGlobal.nonce},
 					success: function( errObj ) {
+						var key;
 						errObj = errObj.replace( /^\s+|\s+$/g, '' );
 						if ( errObj.indexOf( '{' ) === 0 ) {
 							errObj = jQuery.parseJSON( errObj );
 						}
-						for ( var key in errObj ) {
+						for ( key in errObj ) {
 							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
 						}
 						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
@@ -5920,12 +5928,14 @@ function frmAdminBuildJS() {
 		},
 
 		globalSettingsInit: function() {
+			var licenseTab;
+
 			jQuery( document ).on( 'click', '[data-frmuninstall]', uninstallNow );
 
 			initiateMultiselect();
 
 			// activate addon licenses
-			var licenseTab = document.getElementById( 'licenses_settings' );
+			licenseTab = document.getElementById( 'licenses_settings' );
 			if ( licenseTab !== null ) {
 				jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
 			}
@@ -5999,7 +6009,7 @@ function frmAdminBuildJS() {
 	};
 }
 
-var frmAdminBuild = frmAdminBuildJS();
+frmAdminBuild = frmAdminBuildJS();
 
 jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
