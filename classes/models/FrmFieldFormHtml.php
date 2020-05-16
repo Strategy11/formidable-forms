@@ -442,8 +442,9 @@ class FrmFieldFormHtml {
 	}
 
 	private function get_image_option_classes( ){
-		if ( $this->is_dynamic_field_with_image_options() ) {
+		if ( $this->field_obj->get_field_column( 'type' ) === 'data' ){
 			//return image class plus size class
+			return $this->get_dynamic_field_image_classes();
 		}
 
 		if ( empty ( $this->field_obj->get_field_column( 'image_options' ) ) ) {
@@ -455,20 +456,25 @@ class FrmFieldFormHtml {
 		return (' frm_image_options frm_image_size_' . $image_size . ' ');
 	}
 
-	private function is_dynamic_field_with_image_options() {
-		if ( $this->field_obj->get_field_column( 'type' ) !== 'data' ) {
-			return false;
-		}
-
+	private function get_dynamic_field_image_classes() {
+		// TODO Laura -- fix this function!
 		$options = $this->field_obj->get_field_column( 'options' );
 
 		if ( ! $options || ! is_array( $options ) ) {
-			return false;
+			return '';
 		}
 
 		$first_option = reset( $options );
 
-		return ( ! strpos( $first_option, 'frm_image_option' ) === false );
+		if  ( strpos( $first_option, 'frm_image_option' ) === false ) {
+			return '';
+		}
+
+		// TODO Laura -- add image size
+		// get match for frm_image_option_size_()
+		// use frm_image_option_size_{size}
+		$image_size = 'medium';
+		return (' frm_image_options frm_image_size_' . $image_size . ' ');
 	}
 
 	/**
