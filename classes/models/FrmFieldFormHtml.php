@@ -442,6 +442,10 @@ class FrmFieldFormHtml {
 	}
 
 	private function get_image_option_classes( ){
+		if ( $this->is_dynamic_field_with_image_options() ) {
+			//return image class plus size class
+		}
+
 		if ( empty ( $this->field_obj->get_field_column( 'image_options' ) ) ) {
 			return '';
 		}
@@ -449,6 +453,22 @@ class FrmFieldFormHtml {
 		$image_size = ( ! empty ( $this->field_obj->get_field_column( 'image_size' ) ) ) ? $this->field_obj->get_field_column( 'image_size' ) : 'medium';
 
 		return (' frm_image_options frm_image_size_' . $image_size . ' ');
+	}
+
+	private function is_dynamic_field_with_image_options() {
+		if ( $this->field_obj->get_field_column( 'type' ) !== 'data' ) {
+			return false;
+		}
+
+		$options = $this->field_obj->get_field_column( 'options' );
+
+		if ( ! $options || ! is_array( $options ) ) {
+			return false;
+		}
+
+		$first_option = reset( $options );
+
+		return ( ! strpos( $first_option, 'frm_image_option' ) === false );
 	}
 
 	/**
