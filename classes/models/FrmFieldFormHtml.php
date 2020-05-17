@@ -110,6 +110,7 @@ class FrmFieldFormHtml {
 		$this->replace_shortcodes_before_input();
 		$this->replace_shortcodes_with_atts();
 		$this->replace_shortcodes_after_input();
+		$this->add_svg_icons();
 
 		return $this->html;
 	}
@@ -442,9 +443,10 @@ class FrmFieldFormHtml {
 	}
 
 	private function get_image_option_classes( ){
+		// TODO Laura -- switch to clunky regex approach for all options to simplify code?
+		// TODO Laura -- add lookup if going to show images for lookup
 		if ( $this->field_obj->get_field_column( 'type' ) === 'data' ){
-			//return image class plus size class
-			return $this->get_dynamic_field_image_classes();
+			return $this->get_image_classes_from_option();
 		}
 
 		if ( empty ( $this->field_obj->get_field_column( 'image_options' ) ) ) {
@@ -456,8 +458,7 @@ class FrmFieldFormHtml {
 		return (' frm_image_options frm_image_size_' . $image_size . ' ');
 	}
 
-	private function get_dynamic_field_image_classes() {
-		// TODO Laura -- fix this function!
+	private function get_image_classes_from_option() {
 		$options = $this->field_obj->get_field_column( 'options' );
 
 		if ( ! $options || ! is_array( $options ) ) {
@@ -466,22 +467,25 @@ class FrmFieldFormHtml {
 
 		$first_option = reset( $options );
 
-		if  ( strpos( $first_option, 'frm_image_option' ) === false ) {
+		if ( strpos( $first_option, 'frm_image_option' ) === false ) {
 			return '';
 		}
 
-		// TODO Laura -- add image size
-		// get match for frm_image_option_size_()
-		// use frm_image_option_size_{size}
-		$size = $this->get_image_size( $first_option );
+		$size       = $this->get_image_size( $first_option );
 		$image_size = $size ? $size : 'medium';
-		return (' frm_image_options frm_image_size_' . $image_size . ' ');
+
+		return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
 	}
 
 	private function get_image_size( $option ){
 		$size_class_pattern = '~frm_image_option_size_([a-z]+)\s~';
 		preg_match (  $size_class_pattern , $option, $matches);
 		return $matches[1];
+	}
+
+	private function add_svg_icons( ){
+		$this->html = preg_replace( '/~~add checkmark icon~~/', FrmFieldsHelper::get_checkmark_markup(), $this->html);
+		$this->html = preg_replace( '/~~add image icon~~/', FrmFieldsHelper::get_image_icon_markup(), $this->html);
 	}
 
 	/**
