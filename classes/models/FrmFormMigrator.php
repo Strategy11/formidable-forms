@@ -423,6 +423,8 @@ abstract class FrmFormMigrator {
 		foreach ( $action as $key => $value ) {
 			if ( $key === 'post_title' ) {
 				$new_action->post_title = $value;
+			} elseif ( $key === 'ID' ) {
+				$new_action->ID = $value;
 			} elseif ( $key === 'the_post_title' ) {
 				$new_action->post_content['post_title'] = $value;
 			} elseif ( is_string( $value ) ) {
