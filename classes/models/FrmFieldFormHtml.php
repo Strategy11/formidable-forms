@@ -427,6 +427,8 @@ class FrmFieldFormHtml {
 
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
+		// TODO Laura --
+		// if first option has frm_image_option_container, then layout class is horizontal radio or horizontal checkbox (confirm this is right)
 		if ( ! empty( $extra_classes ) ) {
 			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
@@ -467,21 +469,29 @@ class FrmFieldFormHtml {
 
 		$first_option = reset( $options );
 
-		if ( strpos( $first_option, 'frm_image_option' ) === false ) {
+		if ( ! FrmProFieldsHelper::is_image_option( $first_option ) ){
 			return '';
 		}
 
-		$size       = $this->get_image_size( $first_option );
+		// TODO Laura -- remove this when switch is complete
+//		if ( strpos( $first_option, 'frm_image_option' ) === false ) {
+//			return '';
+//		}
+
+		//TODO Laura -- fix this up
+		//$size       = $this->get_image_size( $first_option );
+		$size = FrmFieldsHelper::get_image_size( $first_option );
 		$image_size = $size ? $size : 'medium';
 
 		return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
 	}
 
-	private function get_image_size( $option ){
-		$size_class_pattern = '~frm_image_option_size_([a-z]+)\s~';
-		preg_match (  $size_class_pattern , $option, $matches);
-		return $matches[1];
-	}
+	// TODO Laura -- remove this once it's not needed
+//	private function get_image_size( $option ){
+//		$size_class_pattern = '~frm_image_option_size_([a-z]+)\s~';
+//		preg_match (  $size_class_pattern , $option, $matches);
+//		return $matches[1];
+//	}
 
 	private function add_svg_icons( ){
 		$this->html = preg_replace( '/~~add checkmark icon~~/', FrmFieldsHelper::get_checkmark_markup(), $this->html);

@@ -198,28 +198,7 @@ class FrmFieldsController {
 
 		$options = FrmField::get_option( $field, 'options' );
 		$first_option = reset( $options );
-		$field['image_options'] = 1;
 
-
-		// TODO Laura -- move to Pro and check if this function is callable
-
-		if ( ! FrmProFieldsHelper::is_image_option( $first_option ) ){
-			return $field;
-		}
-
-		// TODO Laura -- remove this when switch is complete
-//		if ( strpos( $first_option, 'frm_image_option' ) === false ) {
-//			return '';
-//		}
-
-		$size       = FrmFieldsHelper::get_image_size( $first_option );
-		$field['image_size'] = $size ? $size : 'medium';
-		$field['align'] = 'inline';
-
-		return $field;
-
-		// TODO Laura -- remove this
-		//return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
 	}
 
 	/**
@@ -636,7 +615,7 @@ class FrmFieldsController {
 		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
 		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ) );
 
-		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$placeholder = $field['placeholder'];
 		if ( empty( $placeholder ) && $is_placeholder_field && ! $is_combo_field ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
@@ -658,9 +637,6 @@ class FrmFieldsController {
 		$position = FrmField::get_option( $field, 'label' );
 		if ( $position == 'inside' ) {
 			$default_value = $field['name'];
-			if ( FrmField::is_required( $field ) ) {
-				$default_value .= ' ' . $field['required_indicator'];
-			}
 		} else {
 			$default_value = '';
 		}

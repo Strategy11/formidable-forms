@@ -237,6 +237,7 @@ DEFAULT_HTML;
 		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
 
 		$display = $this->display_field_settings();
+		//TODO Laura add icons here
 		include( $this->include_form_builder_file() );
 	}
 
