@@ -3459,6 +3459,7 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 
 .frm_image_option_container .frm_image_placeholder_icon svg{
 	width: 63px;
+	height: 150px;	
 }
 
 .frm_text_label_for_image {
