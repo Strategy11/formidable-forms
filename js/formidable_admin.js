@@ -1,5 +1,7 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 
+var frmAdminBuild;
+
 var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -35,7 +37,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			$( el.btn ).on( 'click', function( e ) {
 				e.preventDefault();
 				app.gotoUpgradeUrl();
-			} );
+			});
 
 			window.addEventListener( 'message', function( msg ) {
 				if ( msg.origin.replace( /\/$/, '' ) !== frmGlobal.app_url.replace( /\/$/, '' ) ) {
@@ -78,7 +80,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						message: 'Installing is taking longer than expected. <a class="frm-install-addon button button-primary frm-button-primary" rel="' + response.url + '" aria-label="Install">Install Now</a>'
 					});
 				}, 10000 );
-				$.ajax( {
+				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					dataType: 'json',
@@ -114,7 +116,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					success: true,
 					message: 'Activating...'
 				});
-				$.ajax( {
+				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					dataType: 'json',
@@ -175,7 +177,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					app.afterAuthorize( msg, input );
 					button.classList.remove( 'frm_loading_button' );
 				}
-			} );
+			});
 		},
 
 		afterAuthorize: function( msg, input ) {
@@ -228,7 +230,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			/*jshint validthis:true */
 			this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;float:none"></span>';
 
-			$.ajax( {
+			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				dataType: 'json',
@@ -243,7 +245,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 						window.location.reload();
 					}
 				}
-			} );
+			});
 			return false;
 		},
 
@@ -252,14 +254,14 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			if ( ! confirm( frmGlobal.deauthorize ) ) {
 				return false;
 			}
-			var pluginSlug = this.getAttribute('data-plugin'),
+			var pluginSlug = this.getAttribute( 'data-plugin' ),
 				input = document.getElementById( 'edd_' + pluginSlug + '_license_key' ),
 				license = input.value,
 				link = this;
 
 			this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;"></span>';
 
-			$.ajax( {
+			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: {
@@ -273,7 +275,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					input.value = '';
 					link.innerHTML = '';
 				}
-			} );
+			});
 			return false;
 		}
 	};
@@ -294,9 +296,9 @@ function frmAdminBuildJS() {
 	var cancelSort = false;
 	var copyHelper = false;
 
-	var this_form_id = 0;
+	var thisFormId = 0;
 	if ( thisForm !== null ) {
-		this_form_id = thisForm.value;
+		thisFormId = thisForm.value;
 	}
 
 	// Global settings
@@ -352,10 +354,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		var caution = link.getAttribute('data-frmcaution' );
+		var caution = link.getAttribute( 'data-frmcaution' );
 		var cautionHtml = caution ? '<span class="frm-caution">' + caution + '</span> ' : '';
 
-		jQuery('.frm-confirm-msg').html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
+		jQuery( '.frm-confirm-msg' ).html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
 
 		removeAtts = continueButton.dataset;
 		for ( i in dataAtts ) {
@@ -365,11 +367,11 @@ function frmAdminBuildJS() {
 		dataAtts = link.dataset;
 		for ( i in dataAtts ) {
 			if ( i !== 'frmverify' ) {
-				continueButton.setAttribute( 'data-' + i, dataAtts[ i ] );
+				continueButton.setAttribute( 'data-' + i, dataAtts[i]);
 			}
 		}
 
-		$info.dialog('open' );
+		$info.dialog( 'open' );
 		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
 		return false;
 	}
@@ -504,7 +506,7 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 			jQuery( this ).tooltip( 'show' );
-		} );
+		});
 
 		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 	}
@@ -565,13 +567,13 @@ function frmAdminBuildJS() {
 				var type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
 				checkActiveAction( type );
 			}
-		} );
+		});
 
 		if ( typeof removeMore !== 'undefined' ) {
 			removeMore = jQuery( removeMore );
 			removeMore.fadeOut( 400, function() {
 				removeMore.remove();
-			} );
+			});
 		}
 
 		if ( show !== '' ) {
@@ -600,26 +602,26 @@ function frmAdminBuildJS() {
 		var inside = cont.children( '.widget-inside' );
 
 		if ( cont.length && inside.find( 'p, div, table' ).length < 1 ) {
-			var action_id = cont.find( 'input[name$="[ID]"]' ).val();
-			var action_type = cont.find( 'input[name$="[post_excerpt]"]' ).val();
-			if ( action_type ) {
+			var actionId = cont.find( 'input[name$="[ID]"]' ).val();
+			var actionType = cont.find( 'input[name$="[post_excerpt]"]' ).val();
+			if ( actionType ) {
 				inside.html( '<span class="frm-wait frm_spinner"></span>' );
 				cont.find( '.spinner' ).fadeIn( 'slow' );
-				jQuery.ajax( {
+				jQuery.ajax({
 					type: 'POST',
 					url: ajaxurl,
 					data: {
 						action: 'frm_form_action_fill',
-						action_id: action_id,
-						action_type: action_type,
+						action_id: actionId,
+						action_type: actionType,
 						nonce: frmGlobal.nonce
 					},
 					success: function( html ) {
 						inside.html( html );
 						initiateMultiselect();
-						showInputIcon( '#' + cont.attr('id') );
+						showInputIcon( '#' + cont.attr( 'id' ) );
 					}
-				} );
+				});
 			}
 		}
 
@@ -718,10 +720,10 @@ function frmAdminBuildJS() {
 			forcePlaceholderSize: false,
 			tolerance: 'pointer',
 			handle: '.frm-move',
-			over : function() {
+			over: function() {
 				this.classList.add( 'drop-me' );
 			},
-			out : function() {
+			out: function() {
 				this.classList.remove( 'drop-me' );
 			},
 			receive: function( event, ui ) {
@@ -758,7 +760,7 @@ function frmAdminBuildJS() {
 				}
 				if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
 					// If a page if collapsed, expand it before dragging since only the page break will move.
-					toggleCollapsePage( jQuery( ui.item[0] ) );
+					toggleCollapsePage( jQuery( ui.item[0]) );
 				}
 			},
 			helper: function( e, li ) {
@@ -800,7 +802,7 @@ function frmAdminBuildJS() {
 						//scrolling up
 						return v - Math.abs( y * 0.1 );
 					}
-				} );
+				});
 			}
 		};
 
@@ -842,22 +844,22 @@ function frmAdminBuildJS() {
 
 	// Get the form ID where a field is dropped
 	function getFormIdForFieldPlacement( section ) {
-		var form_id = '';
+		var formId = '';
 
 		if ( typeof section[0] !== 'undefined' ) {
 			var sDivide = section.children( '.start_divider' );
 			sDivide.children( '.edit_field_type_end_divider' ).appendTo( sDivide );
 			if ( typeof section.attr( 'data-formid' ) !== 'undefined' ) {
 				var fieldId = section.attr( 'data-fid' );
-				form_id = jQuery( 'input[name="field_options[form_select_' + fieldId + ']"]' ).val();
+				formId = jQuery( 'input[name="field_options[form_select_' + fieldId + ']"]' ).val();
 			}
 		}
 
-		if ( typeof form_id === 'undefined' || form_id === '' ) {
-			form_id = this_form_id;
+		if ( typeof formId === 'undefined' || formId === '' ) {
+			formId = thisFormId;
 		}
 
-		return form_id;
+		return formId;
 	}
 
 	// Get the section ID where a field is dropped
@@ -881,7 +883,7 @@ function frmAdminBuildJS() {
 		var formId = getFormIdForFieldPlacement( section );
 		var sectionId = getSectionIdForFieldPlacement( section );
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_update_field_after_move',
@@ -894,7 +896,7 @@ function frmAdminBuildJS() {
 				toggleSectionHolder();
 				updateInSectionValue( fieldId, sectionId );
 			}
-		} );
+		});
 	}
 
 	// Update the in_section field value
@@ -932,7 +934,7 @@ function frmAdminBuildJS() {
 			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' ).length > 0 ? 1 : 0;
 		}
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_insert_field',
@@ -952,7 +954,7 @@ function frmAdminBuildJS() {
 			error: function( jqXHR, textStatus, errorThrown ) {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
 			}
-		} );
+		});
 	}
 
 	// don't allow page break, embed form, captcha, summary, or section inside section field
@@ -974,8 +976,8 @@ function frmAdminBuildJS() {
 			ui.item.hasClass( 'edit_field_type_divider' ) );
 	}
 
-	function loadFields( field_id ) {
-		var $thisField = jQuery( document.getElementById( field_id ) );
+	function loadFields( fieldId ) {
+		var $thisField = jQuery( document.getElementById( fieldId ) );
 		var fields;
 		if ( jQuery.isFunction( jQuery.fn.addBack ) ) {
 			fields = $thisField.nextAll( '*:lt(14)' ).addBack();
@@ -987,11 +989,16 @@ function frmAdminBuildJS() {
 		var h = [];
 		jQuery.each( fields, function( k, v ) {
 			h.push( jQuery( v ).find( '.frm_hidden_fdata' ).html() );
-		} );
+		});
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_load_field', field: h, form_id: this_form_id, nonce: frmGlobal.nonce},
+			data: {
+				action: 'frm_load_field',
+				field: h,
+				form_id: thisFormId,
+				nonce: frmGlobal.nonce
+			},
 			success: function( html ) {
 				html = html.replace( /^\s+|\s+$/g, '' );
 				if ( html.indexOf( '{' ) !== 0 ) {
@@ -1001,7 +1008,7 @@ function frmAdminBuildJS() {
 				html = jQuery.parseJSON( html );
 
 				for ( var key in html ) {
-					jQuery( '#frm_field_id_' + key ).replaceWith( html[key] );
+					jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
 					setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
 				}
 
@@ -1042,14 +1049,14 @@ function frmAdminBuildJS() {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
-		var form_id = this_form_id;
+		var formId = thisFormId;
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_insert_field',
-				form_id: form_id,
+				form_id: formId,
 				field_type: fieldType,
 				section_id: 0,
 				nonce: frmGlobal.nonce,
@@ -1125,19 +1132,20 @@ function frmAdminBuildJS() {
 	function duplicateField() {
 		/*jshint validthis:true */
 		var thisField = jQuery( this ).closest( 'li' );
-		var field_id = thisField.data( 'fid' );
-		var children = fieldsInSection( field_id );
+		var fieldId = thisField.data( 'fid' );
+		var children = fieldsInSection( fieldId );
 
 		if ( thisField.hasClass( 'frm-section-collapsed' ) || thisField.hasClass( 'frm-page-collapsed' ) ) {
 			return false;
 		}
 
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_duplicate_field',
-				field_id: field_id,
-				form_id: this_form_id,
+				field_id: fieldId,
+				form_id: thisFormId,
 				children: children,
 				nonce: frmGlobal.nonce
 			},
@@ -1146,14 +1154,14 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 			}
-		} );
+		});
 		return false;
 	}
 
 	function afterAddField( msg, addFocus ) {
 		var regex = /id="(\S+)"/,
 			match = regex.exec( msg ),
-			field = document.getElementById( match[1] ),
+			field = document.getElementById( match[1]),
 			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
 			$thisSection = jQuery( section ),
 			type = field.getAttribute( 'data-type' ),
@@ -1201,11 +1209,11 @@ function frmAdminBuildJS() {
 				);
 
 			if ( ! inView ) {
-				container.scroll( {
+				container.scroll({
 					top: container.scrollHeight,
 					left: 0,
 					behavior: 'smooth'
-				} );
+				});
 			}
 
 			if ( toggled === false ) {
@@ -1232,10 +1240,10 @@ function frmAdminBuildJS() {
 			container = document.getElementById( 'post-body-content' );
 
 		if ( typeof animate === 'undefined' ) {
-			jQuery( container ).scrollTop(newPos);
+			jQuery( container ).scrollTop( newPos );
 		} else {
 			// TODO: smooth scroll
-			jQuery( container ).animate({scrollTop: newPos}, 500);
+			jQuery( container ).animate({ scrollTop: newPos }, 500 );
 		}
 	}
 
@@ -1245,7 +1253,7 @@ function frmAdminBuildJS() {
 		warningMessage += checkShortcodes( calculation, this );
 
 		if ( warningMessage !== '' ) {
-			infoModal( calculation + "\n\n" + warningMessage );
+			infoModal( calculation + '\n\n' + warningMessage );
 		}
 	}
 
@@ -1274,8 +1282,8 @@ function frmAdminBuildJS() {
 			match = regEx.exec( filterValue ),
 			unsafeParams = '';
 
-		while ( match != null ) {
-			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[ 1 ] ) ) {
+		while ( match !== null ) {
+			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) {
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -1308,8 +1316,8 @@ function frmAdminBuildJS() {
 	function checkMatchingParens( formula ) {
 
 		var stack = [],
-			formula_array = formula.split( '' ),
-			length = formula_array.length,
+			formulaArray = formula.split( '' ),
+			length = formulaArray.length,
 			opening = [ '{', '[', '(' ],
 			closing = {
 				'}': '{',
@@ -1321,20 +1329,20 @@ function frmAdminBuildJS() {
 			i, top;
 
 		for ( i = 0; i < length; i++ ) {
-			if ( opening.includes( formula_array[i] ) ) {
-				stack.push( formula_array[i] );
+			if ( opening.includes( formulaArray[i]) ) {
+				stack.push( formulaArray[i]);
 				continue;
 			}
-			if ( closing.hasOwnProperty( formula_array[i] ) ) {
+			if ( closing.hasOwnProperty( formulaArray[i]) ) {
 				top = stack.pop();
-				if ( top !== closing[formula_array[i]] ) {
-					unmatchedClosing.push( formula_array[i] );
+				if ( top !== closing[formulaArray[i]]) {
+					unmatchedClosing.push( formulaArray[i]);
 				}
 			}
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + "\n\n";
+			msg = frm_admin_js.unmatched_parens + '\n\n';
 			return msg;
 		}
 
@@ -1372,7 +1380,7 @@ function frmAdminBuildJS() {
 		var nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = frm_admin_js.text_shortcodes + "\n\n";
+			msg = frm_admin_js.text_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -1405,7 +1413,7 @@ function frmAdminBuildJS() {
 			msg = '';
 
 		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + "\n\n";
+			msg += frm_admin_js.view_shortcodes + '\n\n';
 		}
 
 		return msg;
@@ -1434,7 +1442,7 @@ function frmAdminBuildJS() {
 
 		for ( var i = 0; i < exclude.length; i++ ) {
 			if ( exclude[ i ].startsWith( '[' ) ) {
-				opts.push( exclude[ i ] );
+				opts.push( exclude[ i ]);
 				// remove it
 				exclude.splice( i, 1 );
 				// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
@@ -1450,7 +1458,7 @@ function frmAdminBuildJS() {
 		for ( var i = 0; i < excludedOpts.length; i++ ) {
 			var inputs = document.getElementsByName( getFieldOptionInputName( excludedOpts[ i ], field.fieldId ) );
 			// 2nd condition checks that there's at least one non-empty value
-			if ( inputs.length && jQuery( inputs[0] ).val() ) {
+			if ( inputs.length && jQuery( inputs[0]).val() ) {
 				hasOption = true;
 				break;
 			}
@@ -1522,7 +1530,7 @@ function frmAdminBuildJS() {
 			var includedExtras = getIncludedExtras();
 			if ( includedExtras.length ) {
 				for ( var i = 0; i < exclude.length; i++ ) {
-					if ( includedExtras.includes( exclude[ i ] ) ) {
+					if ( includedExtras.includes( exclude[ i ]) ) {
 						// remove it
 						exclude.splice( i, 1 );
 						// https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
@@ -1566,12 +1574,12 @@ function frmAdminBuildJS() {
 
 			var fieldId = allFields[ i ].getAttribute( 'data-fid' );
 			if ( typeof fieldId !== 'undefined' && fieldId ) {
-				fields.push( {
+				fields.push({
 					'fieldId': fieldId,
 					'fieldName': getPossibleValue( 'frm_name_' + fieldId ),
 					'fieldType': getPossibleValue( 'field_options_type_' + fieldId ),
 					'fieldKey': getPossibleValue( 'field_options_field_key_' + fieldId )
-				} );
+				});
 			}
 		}
 
@@ -1627,7 +1635,7 @@ function frmAdminBuildJS() {
 	function popAllProductFields() {
 		var opts = document.querySelectorAll( '.frmjs_prod_field_opt' );
 		for ( var i = 0; i < opts.length; i++ ) {
-			popProductFields( opts[ i ] );
+			popProductFields( opts[ i ]);
 		}
 	}
 
@@ -1740,16 +1748,16 @@ function frmAdminBuildJS() {
 
 	function markUnique() {
 		/*jshint validthis:true */
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		var $thisField = jQuery( '.frm_unique_details' + field_id );
+		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		var $thisField = jQuery( '.frm_unique_details' + fieldId );
 		if ( this.checked ) {
 			$thisField.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
-			$unqDetail = jQuery( '.frm_unique_details' + field_id + ' input' );
+			$unqDetail = jQuery( '.frm_unique_details' + fieldId + ' input' );
 			if ( $unqDetail.val() === '' ) {
 				$unqDetail.val( frm_admin_js.default_unique );
 			}
 		} else {
-			var v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + field_id + '):visible' ).length;
+			var v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
 			if ( v === 0 ) {
 				$thisField.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
@@ -1759,20 +1767,20 @@ function frmAdminBuildJS() {
 	//Fade confirmation field and validation option in or out
 	function addConf() {
 		/*jshint validthis:true */
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		var val = jQuery( this ).val();
-		var $thisField = jQuery( document.getElementById( 'frm_field_id_' + field_id ) );
+		var $thisField = jQuery( document.getElementById( 'frm_field_id_' + fieldId ) );
 
-		toggleValidationBox( val !== '', '.frm_conf_details' + field_id );
+		toggleValidationBox( val !== '', '.frm_conf_details' + fieldId );
 
 		if ( val !== '' ) {
 			//Add default validation message if empty
-			var valMsg = jQuery( '.frm_validation_box .frm_conf_details' + field_id + ' input' );
+			var valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
 			if ( valMsg.val() === '' ) {
 				valMsg.val( frm_admin_js.default_conf );
 			}
 
-			setConfirmationFieldDescriptions( field_id );
+			setConfirmationFieldDescriptions( fieldId );
 
 			//Add or remove class for confirmation field styling
 			if ( val === 'inline' ) {
@@ -1780,25 +1788,25 @@ function frmAdminBuildJS() {
 			} else if ( val === 'below' ) {
 				$thisField.removeClass( 'frm_conf_inline' ).addClass( 'frm_conf_below' );
 			}
-			jQuery( '.frm-conf-box-' + field_id ).removeClass( 'frm_hidden' );
+			jQuery( '.frm-conf-box-' + fieldId ).removeClass( 'frm_hidden' );
 		} else {
-			jQuery( '.frm-conf-box-' + field_id ).addClass( 'frm_hidden' );
+			jQuery( '.frm-conf-box-' + fieldId ).addClass( 'frm_hidden' );
 			setTimeout( function() {
 				$thisField.removeClass( 'frm_conf_inline frm_conf_below' );
 			}, 200 );
 		}
 	}
 
-	function setConfirmationFieldDescriptions( field_id ) {
-		var fieldType = document.getElementsByName( 'field_options[type_' + field_id + ']' )[0].value;
+	function setConfirmationFieldDescriptions( fieldId ) {
+		var fieldType = document.getElementsByName( 'field_options[type_' + fieldId + ']' )[0].value;
 
-		var fieldDescription = document.getElementById( 'field_description_' + field_id );
-		var hiddenDescName = 'field_options[description_' + field_id + ']';
+		var fieldDescription = document.getElementById( 'field_description_' + fieldId );
+		var hiddenDescName = 'field_options[description_' + fieldId + ']';
 		var newValue = frm_admin_js['enter_' + fieldType];
 		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
-		var confFieldDescription = document.getElementById( 'conf_field_description_' + field_id );
-		var hiddenConfName = 'field_options[conf_desc_' + field_id + ']';
+		var confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
+		var hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
 		var newConfValue = frm_admin_js['confirm_' + fieldType];
 		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
@@ -1845,7 +1853,7 @@ function frmAdminBuildJS() {
 						if ( product ) {
 							content += '|' + document.getElementsByName( 'field_options[options_' + fieldId + '][' + key + '][price]' )[0].value;
 						}
-						content += "\r\n";
+						content += '\r\n';
 					}
 				}
 
@@ -1854,23 +1862,23 @@ function frmAdminBuildJS() {
 				}
 			}
 
-			$info.dialog('open' );
+			$info.dialog( 'open' );
 
 			return false;
-		} );
+		});
 
 		jQuery( '#frm-update-bulk-opts' ).click( function() {
 			var fieldId = document.getElementById( 'bulk-field-id' ).value;
 			this.classList.add( 'frm_loading_button' );
 			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
-		} );
+		});
 	}
 
 	function insertBulkPreset( event ) {
 		/*jshint validthis:true */
 		var opts = JSON.parse( this.getAttribute( 'data-opts' ) );
 		event.preventDefault();
-		document.getElementById( 'frm_bulk_options' ).value = opts.join( "\n" );
+		document.getElementById( 'frm_bulk_options' ).value = opts.join( '\n' );
 		return false;
 	}
 
@@ -1878,8 +1886,8 @@ function frmAdminBuildJS() {
 	function addFieldOption() {
 		/*jshint validthis:true */
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
-			newOption = jQuery( '#frm_field_' + fieldId + '_opts .frm_option_template' ).prop('outerHTML'),
-			opt_type = jQuery( this ).data( 'opttype' ),
+			newOption = jQuery( '#frm_field_' + fieldId + '_opts .frm_option_template' ).prop( 'outerHTML' ),
+			optType = jQuery( this ).data( 'opttype' ),
 			optKey = 0,
 			oldKey = '000',
 			lastKey = getHighestOptKey( fieldId );
@@ -1889,7 +1897,7 @@ function frmAdminBuildJS() {
 		}
 
 		//Update hidden field
-		if ( opt_type === 'other' ) {
+		if ( optType === 'other' ) {
 			document.getElementById( 'other_input_' + fieldId ).value = 1;
 
 			//Hide "Add Other" option now if this is radio field
@@ -1902,13 +1910,13 @@ function frmAdminBuildJS() {
 				action: 'frm_add_field_option',
 				field_id: fieldId,
 				opt_key: optKey,
-				opt_type: opt_type,
+				opt_type: optType,
 				nonce: frmGlobal.nonce
 			};
 			jQuery.post( ajaxurl, data, function( msg ) {
 				jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( msg );
 				resetDisplayedOpts( fieldId );
-			} );
+			});
 		} else {
 			newOption = newOption.replace( new RegExp( 'optkey="' + oldKey + '"', 'g' ), 'optkey="' + optKey + '"' );
 			newOption = newOption.replace( new RegExp( '-' + oldKey + '_', 'g' ), '-' + optKey + '_' );
@@ -1946,8 +1954,8 @@ function frmAdminBuildJS() {
 
 	function toggleMultSel() {
 		/*jshint validthis:true */
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		toggleMultiSelect( field_id, this.value );
+		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		toggleMultiSelect( fieldId, this.value );
 	}
 
 	function toggleMultiSelect( fieldId, value ) {
@@ -1961,9 +1969,9 @@ function frmAdminBuildJS() {
 
 	function toggleSepValues() {
 		/*jshint validthis:true */
-		var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		toggle( jQuery( '.field_' + field_id + '_option_key' ) );
-		jQuery( '.field_' + field_id + '_option' ).toggleClass( 'frm_with_key' );
+		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+		toggle( jQuery( '.field_' + fieldId + '_option_key' ) );
+		jQuery( '.field_' + fieldId + '_option' ).toggleClass( 'frm_with_key' );
 	}
 
 	function toggleMultiselect() {
@@ -2000,20 +2008,20 @@ function frmAdminBuildJS() {
 		var otherInput,
 			parentLi = this.parentNode,
 			parentUl = parentLi.parentNode,
-			field_id = this.getAttribute( 'data-fid' );
+			fieldId = this.getAttribute( 'data-fid' );
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
 			jQuery( parentLi ).remove();
 
 			var hasOther = jQuery( parentUl ).find( '.frm_other_option' );
 			if ( hasOther.length < 1 ) {
-				otherInput = document.getElementById( 'other_input_' + field_id );
+				otherInput = document.getElementById( 'other_input_' + fieldId );
 				if ( otherInput !== null ) {
 					otherInput.value = 0;
 				}
-				jQuery( '#other_button_' + field_id ).fadeIn( 'slow' );
+				jQuery( '#other_button_' + fieldId ).fadeIn( 'slow' );
 			}
-		} );
+		});
 	}
 
 	/**
@@ -2053,7 +2061,7 @@ function frmAdminBuildJS() {
 
 	function clickDeleteField() {
 		/*jshint validthis:true */
-		var confirm_msg = frm_admin_js.conf_delete,
+		var confirmMsg = frm_admin_js.conf_delete,
 			maybeDivider = this.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li' ),
@@ -2065,11 +2073,11 @@ function frmAdminBuildJS() {
 
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirm_msg = frm_admin_js.conf_delete_sec;
-			this.setAttribute('data-frmcaution', frm_admin_js.caution);
+			confirmMsg = frm_admin_js.conf_delete_sec;
+			this.setAttribute( 'data-frmcaution', frm_admin_js.caution );
 		}
 
-		this.setAttribute( 'data-frmverify', confirm_msg );
+		this.setAttribute( 'data-frmverify', confirmMsg );
 		this.setAttribute( 'data-deletefield', fieldId );
 
 		confirmLinkClick( this );
@@ -2092,19 +2100,23 @@ function frmAdminBuildJS() {
 				//if(n.hasClass('edit_field_type_end_divider')){
 				deleteField( this.getAttribute( 'data-fid' ) );
 				//}
-			} );
+			});
 		}
 		toggleSectionHolder();
 	}
 
-	function deleteField( field_id ) {
-		jQuery.ajax( {
+	function deleteField( fieldId ) {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: {action: 'frm_delete_field', field_id: field_id, nonce: frmGlobal.nonce},
+			data: {
+				action: 'frm_delete_field',
+				field_id: fieldId,
+				nonce: frmGlobal.nonce
+			},
 			success: function() {
-				var $thisField = jQuery( document.getElementById( 'frm_field_id_' + field_id ) ),
-					settings = jQuery( '#frm-single-settings-' + field_id );
+				var $thisField = jQuery( document.getElementById( 'frm_field_id_' + fieldId ) ),
+					settings = jQuery( '#frm-single-settings-' + fieldId );
 
 				// Remove settings from sidebar.
 				if ( settings.is( ':visible' ) ) {
@@ -2132,28 +2144,29 @@ function frmAdminBuildJS() {
 					} else if ( $section.length ) {
 						toggleOneSectionHolder( $section );
 					}
-				} );
+				});
 			}
-		} );
+		});
 	}
 
 	function addFieldLogicRow() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
-			form_id = this_form_id,
-			meta_name = 0;
+			formId = thisFormId,
+			metaName = 0;
 
 		if ( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row' ).length > 0 ) {
-			meta_name = 1 + parseInt( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
+			metaName = 1 + parseInt( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_add_logic_row',
-				form_id: form_id,
+				form_id: formId,
 				field_id: id,
 				nonce: frmGlobal.nonce,
-				meta_name: meta_name,
+				meta_name: metaName,
 				fields: getFieldList()
 			},
 			success: function( html ) {
@@ -2161,30 +2174,33 @@ function frmAdminBuildJS() {
 					var logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					logicRow.append( html );
 					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
-				} );
+				});
 			}
-		} );
+		});
 		return false;
 	}
 
 	function addWatchLookupRow() {
 		/*jshint validthis:true */
-		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-		var form_id = this_form_id;
-		var row_key = 0;
-		var lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children;
+		var lastRowId,
+			id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
+			formId = thisFormId,
+			rowKey = 0,
+			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children;
+
 		if ( lookupBlockRows.length > 0 ) {
-			var lastRowId = lookupBlockRows[lookupBlockRows.length - 1].id;
-			row_key = 1 + parseInt( lastRowId.replace( 'frm_watch_lookup_' + id + '_', '' ), 10 );
+			lastRowId = lookupBlockRows[lookupBlockRows.length - 1].id;
+			rowKey = 1 + parseInt( lastRowId.replace( 'frm_watch_lookup_' + id + '_', '' ), 10 );
 		}
 
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_add_watch_lookup_row',
-				form_id: form_id,
+				form_id: formId,
 				field_id: id,
-				row_key: row_key,
+				row_key: rowKey,
 				nonce: frmGlobal.nonce
 			},
 			success: function( newRow ) {
@@ -2192,7 +2208,7 @@ function frmAdminBuildJS() {
 				watchRowBlock.append( newRow );
 				watchRowBlock.fadeIn( 'slow' );
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -2206,7 +2222,7 @@ function frmAdminBuildJS() {
 			fieldSelect.options.length = 1;
 		} else {
 			var formID = this.value;
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_options_for_get_values_field',
@@ -2217,7 +2233,7 @@ function frmAdminBuildJS() {
 				success: function( fields ) {
 					fieldSelect.innerHTML = fields;
 				}
-			} );
+			});
 		}
 	}
 
@@ -2307,11 +2323,11 @@ function frmAdminBuildJS() {
 			toCollapse.removeClass( 'frm-is-collapsed' );
 			for ( i = 0; i < slide; i++ ) {
 				if ( i === slide - 1 ) {
-					jQuery( toCollapse[ i ] ).slideDown( 150, function() {
+					jQuery( toCollapse[ i ]).slideDown( 150, function() {
 						toCollapse.show();
-					} );
+					});
 				} else {
-					jQuery( toCollapse[ i ] ).slideDown( 150 );
+					jQuery( toCollapse[ i ]).slideDown( 150 );
 				}
 			}
 		} else {
@@ -2319,11 +2335,11 @@ function frmAdminBuildJS() {
 			toCollapse.addClass( 'frm-is-collapsed' );
 			for ( i = 0; i < slide; i++ ) {
 				if ( i === slide - 1 ) {
-					jQuery( toCollapse[ i ] ).slideUp( 150, function() {
+					jQuery( toCollapse[ i ]).slideUp( 150, function() {
 						toCollapse.css( 'cssText', 'display:none !important;' );
-					} );
+					});
 				} else {
-					jQuery( toCollapse[ i ] ).slideUp( 150 );
+					jQuery( toCollapse[ i ]).slideUp( 150 );
 				}
 			}
 		}
@@ -2463,7 +2479,7 @@ function frmAdminBuildJS() {
 		var children = [];
 		jQuery( document.getElementById( 'frm_field_id_' + id ) ).find( 'li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)' ).each( function() {
 			children.push( jQuery( this ).data( 'fid' ) );
-		} );
+		});
 		return children;
 	}
 
@@ -2561,12 +2577,12 @@ function frmAdminBuildJS() {
 		if ( input.is( 'select' ) ) {
 			placeholder = document.getElementById( 'frm_placeholder_' + fieldId );
 			if ( placeholder !== null && placeholder.value === '' ) {
-				fillDropdownOpts( input[0], { sourceID: fieldId } );
+				fillDropdownOpts( input[0], { sourceID: fieldId });
 			} else {
 				fillDropdownOpts( input[0], {
 					sourceID: fieldId,
 					placeholder: placeholder.value
-				} );
+				});
 			}
 		} else {
 			opts = getMultipleOpts( fieldId );
@@ -2721,7 +2737,7 @@ function frmAdminBuildJS() {
 					c = true;
 					infoModal( 'Saved values cannot be identical.' );
 				}
-			} );
+			});
 		}
 	}
 
@@ -2774,7 +2790,7 @@ function frmAdminBuildJS() {
 
 	function getFieldValues() {
 		/*jshint validthis:true */
-		var is_taxonomy,
+		var isTaxonomy,
 			val = this.value;
 
 		if ( val ) {
@@ -2787,12 +2803,12 @@ function frmAdminBuildJS() {
 			var optionName = 'field_options[hide_opt_' + fieldID + '][]';
 			var optionID = 'frm_field_logic_opt_' + fieldID;
 			var input = false;
-			var showSelect = (valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio' );
+			var showSelect = ( valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio' );
 			var showText = ( valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number' );
 
 			if ( showSelect ) {
-				is_taxonomy = document.getElementById( 'frm_has_hidden_options_' + val );
-				if ( is_taxonomy !== null ) {
+				isTaxonomy = document.getElementById( 'frm_has_hidden_options_' + val );
+				if ( isTaxonomy !== null ) {
 					// get the category options with ajax
 					showSelect = false;
 				}
@@ -2816,7 +2832,7 @@ function frmAdminBuildJS() {
 						sourceID: val,
 						placeholder: '',
 						other: true
-					} );
+					});
 				}
 			} else {
 				var thisType = this.getAttribute( 'data-type' );
@@ -2827,22 +2843,28 @@ function frmAdminBuildJS() {
 
 	function getFieldSelection() {
 		/*jshint validthis:true */
-		var form_id = this.value;
-		if ( form_id ) {
-			var field_id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
-			getTaxOrFieldSelection( form_id, field_id );
+		var formId = this.value;
+		if ( formId ) {
+			var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
+			getTaxOrFieldSelection( formId, fieldId );
 		}
 	}
 
-	function getTaxOrFieldSelection( form_id, field_id ) {
-		if ( form_id ) {
-			jQuery.ajax( {
-				type: 'POST', url: ajaxurl,
-				data: {action: 'frm_get_field_selection', field_id: field_id, form_id: form_id, nonce: frmGlobal.nonce},
+	function getTaxOrFieldSelection( formId, fieldId ) {
+		if ( formId ) {
+			jQuery.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'frm_get_field_selection',
+					field_id: fieldId,
+					form_id: formId,
+					nonce: frmGlobal.nonce
+				},
 				success: function( msg ) {
-					jQuery( '#frm_show_selected_fields_' + field_id ).html( msg ).show();
+					jQuery( '#frm_show_selected_fields_' + fieldId ).html( msg ).show();
 				}
-			} );
+			});
 		}
 	}
 
@@ -2864,13 +2886,13 @@ function frmAdminBuildJS() {
 					moveFieldSettings( singleField );
 				}
 			}
-		} );
+		});
 	}
 
 	function toggleSectionHolder() {
 		jQuery( '.start_divider' ).each( function() {
 			toggleOneSectionHolder( jQuery( this ) );
-		} );
+		});
 	}
 
 	function toggleOneSectionHolder( $section ) {
@@ -3064,7 +3086,7 @@ function frmAdminBuildJS() {
 		var v = JSON.stringify( $form.serializeArray() );
 
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( v );
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {action: 'frm_save_form', 'frm_compact_fields': v, nonce: frmGlobal.nonce},
@@ -3080,7 +3102,7 @@ function frmAdminBuildJS() {
 			error: function() {
 				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
 			}
-		} );
+		});
 	}
 
 	function submitNoAjax() {
@@ -3116,11 +3138,11 @@ function frmAdminBuildJS() {
 		setTimeout( function() {
 			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
 				this.parentNode.removeChild( this );
-			} );
+			});
 			$button.fadeOut( 'slow', function() {
 				$button.html( buttonVal );
 				$button.show();
-			} );
+			});
 		}, 5000 );
 	}
 
@@ -3144,14 +3166,14 @@ function frmAdminBuildJS() {
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
 
-			jQuery('.frm_feature_label').html( this.getAttribute( 'data-upgrade' ) );
+			jQuery( '.frm_feature_label' ).html( this.getAttribute( 'data-upgrade' ) );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 
-			$info.dialog('open' );
+			$info.dialog( 'open' );
 
 			// set the utm medium
-			var button = $info.find('.button-primary:not(#frm-oneclick-button)' );
-			var link = button.attr('href').replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
+			var button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
+			var link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
 			var content = this.getAttribute( 'data-content' );
 			if ( content === undefined ) {
 				content = '';
@@ -3159,7 +3181,7 @@ function frmAdminBuildJS() {
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.attr( 'href', link );
 			return false;
-		} );
+		});
 	}
 
 	/**
@@ -3171,7 +3193,7 @@ function frmAdminBuildJS() {
 			customLink = link.getAttribute( 'data-link' ),
 			showLink = document.getElementById( 'frm-upgrade-modal-link' ),
 			upgradeMessage = document.getElementById( 'frm-upgrade-message' ),
-			newMessage = link.getAttribute('data-message'),
+			newMessage = link.getAttribute( 'data-message' ),
 			button = document.getElementById( 'frm-oneclick-button' ),
 			showIt = 'block',
 			hideIt = 'none';
@@ -3189,13 +3211,13 @@ function frmAdminBuildJS() {
 
 		// Use a custom message in the modal.
 		if ( newMessage === null || typeof newMessage === 'undefined' || newMessage === '' ) {
-			newMessage = upgradeMessage.getAttribute('data-default' );
+			newMessage = upgradeMessage.getAttribute( 'data-default' );
 		}
 		upgradeMessage.innerHTML = newMessage;
 
 		// Either set the link or use the default.
 		if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
-			customLink = showLink.getAttribute('data-default' );
+			customLink = showLink.getAttribute( 'data-default' );
 		}
 		showLink.href = customLink;
 
@@ -3257,11 +3279,11 @@ function frmAdminBuildJS() {
 		// the .html() gets original values, so they need to be set
 		action.find( 'input[type=text], textarea, input[type=number]' ).prop( 'defaultValue', function() {
 			return this.value;
-		} );
+		});
 
 		action.find( 'input[type=checkbox], input[type=radio]' ).prop( 'defaultChecked', function() {
 			return this.checked;
-		} );
+		});
 
 		var rename = new RegExp( '\\[' + currentID + '\\]', 'g' );
 		var reid = new RegExp( '_' + currentID + '"', 'g' );
@@ -3290,9 +3312,9 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var actionId = getNewActionId();
 		var type = jQuery( this ).data( 'actiontype' );
-		var formId = this_form_id;
+		var formId = thisFormId;
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_action',
@@ -3311,18 +3333,18 @@ function frmAdminBuildJS() {
 				var newAction = document.getElementById( 'frm_form_action_' + actionId );
 
 				newAction.classList.add( 'open' );
-				document.getElementById( 'post-body-content' ).scroll( {
+				document.getElementById( 'post-body-content' ).scroll({
 					top: newAction.offsetTop + 10,
 					left: 0,
 					behavior: 'smooth'
-				} );
+				});
 
 				//check if icon should be active
 				checkActiveAction( type );
 				initiateMultiselect();
 				showInputIcon( '#frm_form_action_' + actionId );
 			}
-		} );
+		});
 	}
 
 	function toggleActionGroups() {
@@ -3389,7 +3411,7 @@ function frmAdminBuildJS() {
 		moveFieldSettings( singleField );
 
 		if ( fieldType && 'quantity' === fieldType ) {
-			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0] );
+			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0]);
 		}
 
 		singleField.classList.remove( 'frm_hidden' );
@@ -3424,16 +3446,15 @@ function frmAdminBuildJS() {
 
 	function hideEmailRow() {
 		/*jshint validthis:true */
-		var action_box = jQuery( this ).closest( '.frm_form_action_settings' );
-		var rowType = this.getAttribute( 'data-emailrow' );
+		var actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
+			rowType = this.getAttribute( 'data-emailrow' ),
+			emailRowSelector = '.frm_' + rowType + '_row',
+			emailButtonSelector = '.frm_' + rowType + '_button';
 
-		var emailRowSelector = '.frm_' + rowType + '_row';
-		var emailButtonSelector = '.frm_' + rowType + '_button';
-
-		jQuery( action_box ).find( emailButtonSelector ).fadeIn( 'slow' );
-		jQuery( action_box ).find( emailRowSelector ).fadeOut( 'slow', function() {
-			jQuery( action_box ).find( emailRowSelector + ' input' ).val( '' );
-		} );
+		jQuery( actionBox ).find( emailButtonSelector ).fadeIn( 'slow' );
+		jQuery( actionBox ).find( emailRowSelector ).fadeOut( 'slow', function() {
+			jQuery( actionBox ).find( emailRowSelector + ' input' ).val( '' );
+		});
 	}
 
 	function checkActiveAction( type ) {
@@ -3455,20 +3476,20 @@ function frmAdminBuildJS() {
 
 	function addFormLogicRow() {
 		/*jshint validthis:true */
-		var id = jQuery( this ).data( 'emailkey' );
-		var type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
-		var meta_name = 0;
-		var form_id = document.getElementById( 'form_id' ).value;
+		var id = jQuery( this ).data( 'emailkey' ),
+			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
+			metaName = 0,
+			formId = document.getElementById( 'form_id' ).value;
 		if ( jQuery( '#frm_form_action_' + id + ' .frm_logic_row' ).length ) {
-			meta_name = 1 + parseInt( jQuery( '#frm_form_action_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
+			metaName = 1 + parseInt( jQuery( '#frm_form_action_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_logic_row',
 				email_id: id,
-				form_id: form_id,
-				meta_name: meta_name,
+				form_id: formId,
+				meta_name: metaName,
 				type: type,
 				nonce: frmGlobal.nonce
 			},
@@ -3477,9 +3498,9 @@ function frmAdminBuildJS() {
 					var $logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					$logicRow.append( html );
 					$logicRow.parent( '.frm_logic_rows' ).fadeIn( 'slow' );
-				} );
+				});
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -3500,20 +3521,21 @@ function frmAdminBuildJS() {
 	 */
 	function addSubmitLogic() {
 		/*jshint validthis:true */
-		var form_id = this_form_id;
-		var meta_name = 0;
+		var last,
+			formId = thisFormId,
+			metaName = 0;
 		if ( jQuery( '#frm_submit_logic_row .frm_logic_row' ).length > 0 ) {
-			var last = jQuery( '#frm_submit_logic_row .frm_logic_row:last' );
+			last = jQuery( '#frm_submit_logic_row .frm_logic_row:last' );
 
-			meta_name = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
+			metaName = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_add_submit_logic_row',
-				form_id: form_id,
-				meta_name: meta_name,
+				form_id: formId,
+				meta_name: metaName,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
@@ -3521,7 +3543,7 @@ function frmAdminBuildJS() {
 				$logicRow.append( html );
 				$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
 			}
-		} );
+		});
 		return false;
 	}
 
@@ -3530,11 +3552,11 @@ function frmAdminBuildJS() {
 	 */
 	function addSubmitLogicOpts() {
 		var fieldOpt = jQuery( this );
-		var field_id = fieldOpt.find( ':selected' ).val();
+		var fieldId = fieldOpt.find( ':selected' ).val();
 
-		if ( field_id ) {
+		if ( fieldId ) {
 			var row = fieldOpt.data( 'row' );
-			frmGetFieldValues( field_id, 'submit', row, '', 'options[submit_conditions][hide_opt][]' );
+			frmGetFieldValues( fieldId, 'submit', row, '', 'options[submit_conditions][hide_opt][]' );
 		}
 	}
 
@@ -3591,7 +3613,7 @@ function frmAdminBuildJS() {
 				infoModal( 'Oops. You have already used that field.' );
 				return false;
 			}
-		} );
+		});
 	}
 
 	function togglePostContent() {
@@ -3618,52 +3640,56 @@ function frmAdminBuildJS() {
 			$dyn.val( '' );
 			jQuery( '.frm_dyncontent_opt' ).show();
 		} else {
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {action: 'frm_display_get_content', id: v, nonce: frmGlobal.nonce},
 				success: function( val ) {
 					$dyn.val( val );
 					jQuery( '.frm_dyncontent_opt' ).show();
 				}
-			} );
+			});
 		}
 	}
 
 	function switchPostType() {
 		/*jshint validthis:true */
 		// update all rows of categories/taxonomies
-		var cat_rows = document.getElementById( 'frm_posttax_rows' ).childNodes;
-		var post_type = this.value;
-		var cur_select;
-		var new_select;
+		var curSelect, newSelect,
+			catRows = document.getElementById( 'frm_posttax_rows' ).childNodes,
+			postType = this.value;
 
 		// Get new category/taxonomy options
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_replace_posttax_options', post_type: post_type, nonce: frmGlobal.nonce},
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_replace_posttax_options',
+				post_type: postType,
+				nonce: frmGlobal.nonce
+			},
 			success: function( html ) {
 
 				// Loop through each category row, and replace the first dropdown
-				for ( i = 0; i < cat_rows.length; i++ ) {
+				for ( i = 0; i < catRows.length; i++ ) {
 					// Check if current element is a div
-					if ( cat_rows[i].tagName !== 'DIV' ) {
+					if ( catRows[i].tagName !== 'DIV' ) {
 						continue;
 					}
 
 					// Get current category select
-					cur_select = cat_rows[i].getElementsByTagName( 'select' )[0];
+					curSelect = catRows[i].getElementsByTagName( 'select' )[0];
 
 					// Set up new select
-					new_select = document.createElement( 'select' );
-					new_select.innerHTML = html;
-					new_select.className = cur_select.className;
-					new_select.name = cur_select.name;
+					newSelect = document.createElement( 'select' );
+					newSelect.innerHTML = html;
+					newSelect.className = curSelect.className;
+					newSelect.name = curSelect.name;
 
 					// Replace the old select with the new select
-					cat_rows[i].replaceChild( new_select, cur_select );
+					catRows[i].replaceChild( newSelect, curSelect );
 				}
 			}
-		} );
+		});
 	}
 
 	function addPosttaxRow() {
@@ -3677,26 +3703,30 @@ function frmAdminBuildJS() {
 	}
 
 	function addPostRow( type, button ) {
-		var id = jQuery( 'input[name="id"]' ).val();
-		var settings = jQuery( button ).closest( '.frm_form_action_settings' );
-		var key = settings.data( 'actionkey' );
-		var post_type = settings.find( '.frm_post_type' ).val();
+		var id = jQuery( 'input[name="id"]' ).val(),
+			settings = jQuery( button ).closest( '.frm_form_action_settings' ),
+			key = settings.data( 'actionkey' ),
+			postType = settings.find( '.frm_post_type' ).val(),
+			metaName = 0;
 
-		var meta_name = 0;
 		if ( jQuery( '.frm_post' + type + '_row' ).length ) {
 			var name = jQuery( '.frm_post' + type + '_row:last' ).attr( 'id' ).replace( 'frm_post' + type + '_', '' );
 			if ( jQuery.isNumeric( name ) ) {
-				meta_name = 1 + parseInt( name, 10 );
+				metaName = 1 + parseInt( name, 10 );
 			} else {
-				meta_name = 1;
+				metaName = 1;
 			}
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
-				action: 'frm_add_post' + type + '_row', form_id: id,
-				meta_name: meta_name, tax_key: meta_name,
-				post_type: post_type, action_key: key, nonce: frmGlobal.nonce
+				action: 'frm_add_post' + type + '_row',
+				form_id: id,
+				meta_name: metaName,
+				tax_key: metaName,
+				post_type: postType,
+				action_key: key,
+				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
 				jQuery( document.getElementById( 'frm_post' + type + '_rows' ) ).append( html );
@@ -3709,15 +3739,15 @@ function frmAdminBuildJS() {
 					jQuery( '.frm_posttax_labels' ).show();
 				}
 			}
-		} );
+		});
 	}
 
-	function getMetaValue( id, meta_name ) {
-		var new_meta = meta_name;
-		if ( jQuery( document.getElementById( id + meta_name ) ).length > 0 ) {
-			new_meta = getMetaValue( id, meta_name + 1 );
+	function getMetaValue( id, metaName ) {
+		var newMeta = metaName;
+		if ( jQuery( document.getElementById( id + metaName ) ).length > 0 ) {
+			newMeta = getMetaValue( id, metaName + 1 );
 		}
-		return new_meta;
+		return newMeta;
 	}
 
 	function changePosttaxRow() {
@@ -3728,32 +3758,33 @@ function frmAdminBuildJS() {
 
 		jQuery( this ).closest( '.frm_posttax_row' ).find( '.frm_posttax_opt_list' ).html( '<div class="spinner frm_spinner" style="display:block"></div>' );
 
-		var post_type = jQuery( this ).closest( '.frm_form_action_settings' ).find( 'select[name$="[post_content][post_type]"]' ).val();
-		var action_key = jQuery( this ).closest( '.frm_form_action_settings' ).data( 'actionkey' );
-		var tax_key = jQuery( this ).closest( '.frm_posttax_row' ).attr( 'id' ).replace( 'frm_posttax_', '' );
-		var meta_name = jQuery( this ).val();
-		var show_exclude = jQuery( document.getElementById( tax_key + '_show_exclude' ) ).is( ':checked' ) ? 1 : 0;
-		var field_id = jQuery( 'select[name$="[post_category][' + tax_key + '][field_id]"]' ).val();
-		var id = jQuery( 'input[name="id"]' ).val();
+		var postType = jQuery( this ).closest( '.frm_form_action_settings' ).find( 'select[name$="[post_content][post_type]"]' ).val(),
+			actionKey = jQuery( this ).closest( '.frm_form_action_settings' ).data( 'actionkey' ),
+			taxKey = jQuery( this ).closest( '.frm_posttax_row' ).attr( 'id' ).replace( 'frm_posttax_', '' ),
+			metaName = jQuery( this ).val(),
+			showExclude = jQuery( document.getElementById( taxKey + '_show_exclude' ) ).is( ':checked' ) ? 1 : 0,
+			fieldId = jQuery( 'select[name$="[post_category][' + taxKey + '][field_id]"]' ).val(),
+			id = jQuery( 'input[name="id"]' ).val();
 
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_add_posttax_row',
 				form_id: id,
-				post_type: post_type,
-				tax_key: tax_key,
-				action_key: action_key,
-				meta_name: meta_name,
-				field_id: field_id,
-				show_exclude: show_exclude,
+				post_type: postType,
+				tax_key: taxKey,
+				action_key: actionKey,
+				meta_name: metaName,
+				field_id: fieldId,
+				show_exclude: showExclude,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
-				var $tax = jQuery( document.getElementById( 'frm_posttax_' + tax_key ) );
+				var $tax = jQuery( document.getElementById( 'frm_posttax_' + taxKey ) );
 				$tax.replaceWith( html );
 			}
-		} );
+		});
 	}
 
 	function toggleCfOpts() {
@@ -3828,27 +3859,37 @@ function frmAdminBuildJS() {
 
 	function displayFormSelected() {
 		/*jshint validthis:true */
-		var form_id = jQuery( this ).val();
-		this_form_id = form_id; // set the global form id
-		if ( form_id === '' ) {
+		var formId = jQuery( this ).val();
+		thisFormId = formId; // set the global form id
+		if ( formId === '' ) {
 			return;
 		}
 
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_get_cd_tags_box', form_id: form_id, nonce: frmGlobal.nonce},
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_get_cd_tags_box',
+				form_id: formId,
+				nonce: frmGlobal.nonce
+			},
 			success: function( html ) {
 				jQuery( '#frm_adv_info .categorydiv' ).html( html );
 			}
-		} );
+		});
 
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_get_date_field_select', form_id: form_id, nonce: frmGlobal.nonce},
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_get_date_field_select',
+				form_id: formId,
+				nonce: frmGlobal.nonce
+			},
 			success: function( html ) {
 				jQuery( document.getElementById( 'date_select_container' ) ).html( html );
 			}
-		} );
+		});
 	}
 
 	function clickTabsAfterAjax() {
@@ -3881,18 +3922,18 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_order_options .frm_logic_rows div:last' ).length > 0 ) {
 			l = jQuery( '#frm_order_options .frm_logic_rows div:last' ).attr( 'id' ).replace( 'frm_order_field_', '' );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_order_row',
-				form_id: this_form_id,
-				order_key: (parseInt( l, 10 ) + 1),
+				form_id: thisFormId,
+				order_key: ( parseInt( l, 10 ) + 1 ),
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
 				jQuery( '#frm_order_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_order_row' ).hide();
 			}
-		} );
+		});
 	}
 
 	function addWhereRow() {
@@ -3900,41 +3941,49 @@ function frmAdminBuildJS() {
 		if ( jQuery( '#frm_where_options .frm_logic_rows div:last' ).length ) {
 			l = jQuery( '#frm_where_options .frm_logic_rows div:last' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 		}
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_where_row',
-				form_id: this_form_id,
-				where_key: (parseInt( l, 10 ) + 1),
+				form_id: thisFormId,
+				where_key: ( parseInt( l, 10 ) + 1 ),
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
 				jQuery( '#frm_where_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_where_row' ).hide();
 			}
-		} );
+		});
 	}
 
 	function insertWhereOptions() {
 		/*jshint validthis:true */
-		var value = this.value;
-		var where_key = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
-		jQuery.ajax( {
-			type: 'POST', url: ajaxurl,
-			data: {action: 'frm_add_where_options', where_key: where_key, field_id: value, nonce: frmGlobal.nonce},
+		var value = this.value,
+			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_add_where_options',
+				where_key: whereKey,
+				field_id: value,
+				nonce: frmGlobal.nonce
+			},
 			success: function( html ) {
-				jQuery( document.getElementById( 'where_field_options_' + where_key ) ).html( html );
+				jQuery( document.getElementById( 'where_field_options_' + whereKey ) ).html( html );
 			}
-		} );
+		});
 	}
 
 	function hideWhereOptions() {
 		/*jshint validthis:true */
-		var value = this.value;
-		var where_key = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+		var value = this.value,
+			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
+
 		if ( value === 'group_by' || value === 'group_by_newest' ) {
-			document.getElementById( 'where_field_options_' + where_key ).style.display = 'none';
+			document.getElementById( 'where_field_options_' + whereKey ).style.display = 'none';
 		} else {
-			document.getElementById( 'where_field_options_' + where_key ).style.display = 'inline-block';
+			document.getElementById( 'where_field_options_' + whereKey ).style.display = 'inline-block';
 		}
 	}
 
@@ -3957,41 +4006,41 @@ function frmAdminBuildJS() {
 
 	function insertFieldCode( element, variable ) {
 		var rich = false,
-			element_id = element;
+			elementId = element;
 		if ( typeof element === 'object' ) {
 			if ( element.hasClass( 'frm_noallow' ) ) {
 				return;
 			}
 
-			element_id = jQuery( element ).closest( '[data-fills]' ).attr( 'data-fills' );
-			if ( typeof element_id === 'undefined' ) {
-				element_id = element.closest( 'div' ).attr( 'class' );
-				if ( typeof element_id !== 'undefined' ) {
-					element_id = element_id.split( ' ' )[1];
+			elementId = jQuery( element ).closest( '[data-fills]' ).attr( 'data-fills' );
+			if ( typeof elementId === 'undefined' ) {
+				elementId = element.closest( 'div' ).attr( 'class' );
+				if ( typeof elementId !== 'undefined' ) {
+					elementId = elementId.split( ' ' )[1];
 				}
 			}
 		}
 
-		if ( typeof element_id === 'undefined' ) {
+		if ( typeof elementId === 'undefined' ) {
 			var active = document.activeElement;
 			if ( active.type === 'search' ) {
 				// If the search field has focus, find the correct field.
-				element_id = active.id.replace( '-search-input', '' );
-				if ( element_id.match( /\d/gi ) === null ) {
-					active = jQuery( '.frm-single-settings:visible .' + element_id );
-					element_id = active.attr( 'id' );
+				elementId = active.id.replace( '-search-input', '' );
+				if ( elementId.match( /\d/gi ) === null ) {
+					active = jQuery( '.frm-single-settings:visible .' + elementId );
+					elementId = active.attr( 'id' );
 				}
 			} else {
-				element_id = active.id;
+				elementId = active.id;
 			}
 		}
 
-		if ( element_id ) {
-			rich = jQuery( '#wp-' + element_id + '-wrap.wp-editor-wrap' ).length > 0;
+		if ( elementId ) {
+			rich = jQuery( '#wp-' + elementId + '-wrap.wp-editor-wrap' ).length > 0;
 		}
 
-		var content_box = jQuery( document.getElementById( element_id ) );
-		if ( typeof element.attr('data-shortcode') === 'undefined' && ( ! content_box.length || typeof content_box.attr('data-shortcode') === 'undefined' ) ) {
+		var contentBox = jQuery( document.getElementById( elementId ) );
+		if ( typeof element.attr( 'data-shortcode' ) === 'undefined' && ( ! contentBox.length || typeof contentBox.attr( 'data-shortcode' ) === 'undefined' ) ) {
 			// this helps to exclude those that don't want shortcode-like inserted content e.g. frm-pro's summary field
 			var doShortcode = element.parents( 'ul.frm_code_list' ).attr( 'data-shortcode' );
 			if ( doShortcode === 'undefined' || doShortcode !== 'no' ) {
@@ -4000,12 +4049,12 @@ function frmAdminBuildJS() {
 		}
 
 		if ( rich ) {
-			wpActiveEditor = element_id;
+			wpActiveEditor = elementId;
 			send_to_editor( variable );
 			return;
 		}
 
-		if ( ! content_box.length ) {
+		if ( ! contentBox.length ) {
 			return false;
 		}
 
@@ -4014,7 +4063,7 @@ function frmAdminBuildJS() {
 			if ( variable === '[default-plain]' ) {
 				p = 1;
 			}
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
 					action: 'frm_get_default_html',
@@ -4023,31 +4072,31 @@ function frmAdminBuildJS() {
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					insertContent( content_box, msg );
+					insertContent( contentBox, msg );
 				}
-			} );
+			});
 		} else {
-			insertContent( content_box, variable );
+			insertContent( contentBox, variable );
 		}
 		return false;
 	}
 
-	function insertContent( content_box, variable ) {
+	function insertContent( contentBox, variable ) {
 		if ( document.selection ) {
-			content_box[0].focus();
+			contentBox[0].focus();
 			document.selection.createRange().text = variable;
 		} else {
-			obj = content_box[0];
+			obj = contentBox[0];
 			var e = obj.selectionEnd;
 
-			variable = maybeFormatInsertedContent( content_box, variable, obj.selectionStart, e );
+			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
 			var s = e + variable.length;
 			obj.focus();
 			obj.setSelectionRange( s, s );
 		}
-		content_box.change(); //trigger change
+		contentBox.change(); //trigger change
 	}
 
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
@@ -4245,7 +4294,7 @@ function frmAdminBuildJS() {
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
-			} );
+			});
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -4253,7 +4302,7 @@ function frmAdminBuildJS() {
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
-			} );
+			});
 		} else {
 			jQuery( '#frm_dyncontent' ).on( 'mouseover mouseout', '.wp-editor-wrap', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
@@ -4262,7 +4311,7 @@ function frmAdminBuildJS() {
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ), 'focusin' );
 				}
-			} );
+			});
 		}
 	}
 
@@ -4307,7 +4356,7 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_code_list a.hide_' + id ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		} else if ( jQuery.inArray( id, b ) >= 0 ) {
 			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a:not(.show_' + id + ')' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
-			jQuery( '.frm_code_list a.show_' + id ).removeClass('frm_noallow').addClass( 'frm_allow' );
+			jQuery( '.frm_code_list a.show_' + id ).removeClass( 'frm_noallow' ).addClass( 'frm_allow' );
 		} else {
 			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a' ).addClass( 'frm_noallow' ).removeClass( 'frm_allow' );
 		}
@@ -4340,12 +4389,12 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function toggleKeyID( switch_to, e ) {
+	function toggleKeyID( switchTo, e ) {
 		e.stopPropagation();
 		jQuery( '.frm_code_list .frmids, .frm_code_list .frmkeys' ).addClass( 'frm_hidden' );
-		jQuery( '.frm_code_list .' + switch_to ).removeClass( 'frm_hidden' );
+		jQuery( '.frm_code_list .' + switchTo ).removeClass( 'frm_hidden' );
 		jQuery( '.frmids, .frmkeys' ).removeClass( 'current' );
-		jQuery( '.' + switch_to ).addClass( 'current' );
+		jQuery( '.' + switchTo ).addClass( 'current' );
 	}
 
 	/* Styling */
@@ -4409,7 +4458,7 @@ function frmAdminBuildJS() {
 		var holder = anchor.replace( '#', '' );
 		var holderContainer = jQuery( '.frm_' + holder + '_ajax' );
 		if ( holderContainer.length ) {
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST', url: ajaxurl,
 				data: {
 					'action': 'frm_settings_tab',
@@ -4419,7 +4468,7 @@ function frmAdminBuildJS() {
 				success: function( html ) {
 					holderContainer.replaceWith( html );
 				}
-			} );
+			});
 		}
 	}
 
@@ -4427,7 +4476,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		if ( confirmLinkClick( this ) === true ) {
 			jQuery( '.frm_uninstall .frm-wait' ).css( 'visibility', 'visible' );
-			jQuery.ajax( {
+			jQuery.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: 'action=frm_uninstall&nonce=' + frmGlobal.nonce,
@@ -4435,7 +4484,7 @@ function frmAdminBuildJS() {
 					jQuery( '.frm_uninstall' ).fadeOut( 'slow' );
 					window.location = msg;
 				}
-			} );
+			});
 		}
 		return false;
 	}
@@ -4447,7 +4496,7 @@ function frmAdminBuildJS() {
 		var pluginSlug = this.getAttribute( 'data-plugin' );
 		var action = buttonName.replace( 'edd_' + pluginSlug + '_license_', '' );
 		var license = document.getElementById( 'edd_' + pluginSlug + '_license_key' ).value;
-		jQuery.ajax( {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl, dataType: 'json',
 			data: {action: 'frm_addon_' + action, license: license, plugin: pluginSlug, nonce: frmGlobal.nonce},
 			success: function( msg ) {
@@ -4470,7 +4519,7 @@ function frmAdminBuildJS() {
 					}, 15000 );
 				}
 			}
-		} );
+		});
 	}
 
 	/* Import/Export page */
@@ -4486,7 +4535,7 @@ function frmAdminBuildJS() {
 		var ids = [];
 		checkedBoxes.each( function( i ) {
 			ids[i] = this.value;
-		} );
+		});
 
 		// Begin the import process.
 		importForms( ids, event.target );
@@ -4550,7 +4599,7 @@ function frmAdminBuildJS() {
 				// Remove this form ID from the queue.
 				s.importQueue = jQuery.grep( s.importQueue, function( value ) {
 					return value != formID;
-				} );
+				});
 				s.imported++;
 
 				if ( s.importQueue.length === 0 ) {
@@ -4563,7 +4612,7 @@ function frmAdminBuildJS() {
 					importForm( $processSettings );
 				}
 			}
-		} );
+		});
 	}
 
 	function validateExport( e ) {
@@ -4636,7 +4685,7 @@ function frmAdminBuildJS() {
 			} else {
 				this.disabled = true;
 			}
-		} );
+		});
 
 		if ( $dropdown.val() === 'csv' ) {
 			jQuery( '.csv_opts' ).show();
@@ -4677,7 +4726,7 @@ function frmAdminBuildJS() {
 	}
 
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).multiselect( {
+		jQuery( '.frm_multiselect' ).multiselect({
 			templates: {ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>'},
 			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 			nonSelectedText: frm_admin_js.default_label,
@@ -4688,10 +4737,10 @@ function frmAdminBuildJS() {
 						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
 							jQuery( event.currentTarget ).removeClass( 'open' );
 						}
-					} );
+					});
 				}
 			}
-		} );
+		});
 	}
 
 	/* Addons page */
@@ -4713,10 +4762,10 @@ function frmAdminBuildJS() {
 		var el = button.parent();
 		var message = el.parent().find( '.addon-status-label' );
 
-		button.addClass('frm_loading_button' );
+		button.addClass( 'frm_loading_button' );
 
 		// Process the Ajax to perform the activation.
-		jQuery.ajax( {
+		jQuery.ajax({
 			url: ajaxurl,
 			type: 'POST',
 			async: true,
@@ -4724,7 +4773,7 @@ function frmAdminBuildJS() {
 			dataType: 'json',
 			data: {
 				action: action,
-				nonce:  frmGlobal.nonce,
+				nonce: frmGlobal.nonce,
 				plugin: plugin
 			},
 			success: function( response ) {
@@ -4753,9 +4802,9 @@ function frmAdminBuildJS() {
 				afterAddonInstall( response, button, message, el );
 			},
 			error: function() {
-				button.removeClass('frm_loading_button' );
+				button.removeClass( 'frm_loading_button' );
 			}
-		} );
+		});
 	}
 
 	function installAddonWithCreds( e ) {
@@ -4768,7 +4817,7 @@ function frmAdminBuildJS() {
 
 		proceed.addClass( 'frm_loading_button' );
 
-		jQuery.ajax( {
+		jQuery.ajax({
 			url: ajaxurl,
 			type: 'POST',
 			async: true,
@@ -4802,7 +4851,7 @@ function frmAdminBuildJS() {
 			error: function() {
 				proceed.removeClass( 'frm_loading_button' );
 			}
-		} );
+		});
 	}
 
 	function afterAddonInstall( response, button, message, el ) {
@@ -4816,8 +4865,8 @@ function frmAdminBuildJS() {
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
 
 		// Proceed with CSS changes
-		el.parent().removeClass('frm-addon-not-installed frm-addon-installed').addClass('frm-addon-active' );
-		button.removeClass('frm_loading_button' );
+		el.parent().removeClass( 'frm-addon-not-installed frm-addon-installed' ).addClass( 'frm-addon-active' );
+		button.removeClass( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
 		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp' );
@@ -4843,7 +4892,7 @@ function frmAdminBuildJS() {
 		jQuery( '.frm-new-form-button' ).click( function( event ) {
 			event.preventDefault();
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( document ).on( 'submit', '#frm-new-form', installTemplate );
 	}
@@ -4867,7 +4916,7 @@ function frmAdminBuildJS() {
 					frmApiPreview( cont, link );
 				}
 				$preview.dialog( 'open' );
-			} );
+			});
 		}
 
 		var $info = initModal( '#frm_template_modal', '650px' );
@@ -4887,7 +4936,7 @@ function frmAdminBuildJS() {
 			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
 			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( '.frm-build-template' ).click( function( event ) {
 			event.preventDefault();
@@ -4900,7 +4949,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_link' ).value = this.getAttribute( 'data-formid' );
 			document.getElementById( 'frm_action_type' ).value = 'frm_build_template';
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( '.frm-new-form-button' ).click( function( event ) {
 			event.preventDefault();
@@ -4913,7 +4962,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_link' ).value = '';
 			document.getElementById( 'frm_action_type' ).value = 'frm_install_form';
 			$info.dialog( 'open' );
-		} );
+		});
 
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
@@ -4930,7 +4979,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		jQuery( '.frm-' + type + '-search' ).autocomplete( {
+		jQuery( '.frm-' + type + '-search' ).autocomplete({
 			delay: 100,
 			minLength: 0,
 			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
@@ -4956,13 +5005,13 @@ function frmAdminBuildJS() {
 
 				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
 			}
-		} )
+		})
 		.focus( function() {
 			// Show options on click to make it work more like a dropdown.
 			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
 				jQuery( this ).autocomplete( 'search', this.value );
 			}
-		} );
+		});
 	}
 
 	/**
@@ -4986,7 +5035,7 @@ function frmAdminBuildJS() {
 
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
-		jQuery.ajax( {
+		jQuery.ajax({
 			dataType: 'json',
 			url: link,
 			success: function( json ) {
@@ -5002,7 +5051,7 @@ function frmAdminBuildJS() {
 					document.getElementById( 'frm-show-me' ).style.opacity = '1';
 				}, 300 );
 			}
-		} );
+		});
 	}
 
 	function installTemplate( e ) {
@@ -5034,7 +5083,7 @@ function frmAdminBuildJS() {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				// TODO: show response.message
 			}
-		} );
+		});
 	}
 
 	function trashTemplate( e ) {
@@ -5051,8 +5100,8 @@ function frmAdminBuildJS() {
 			var card = document.getElementById( 'frm-template-custom-' + id );
 			fadeOut( card, function() {
 				card.parentNode.removeChild( card );
-			} );
-		} );
+			});
+		});
 	}
 
 	function searchContent() {
@@ -5065,7 +5114,7 @@ function frmAdminBuildJS() {
 
 		if ( this.tagName === 'SELECT' ) {
 			searchText = selectedOptions( this );
-			searchText = searchText.join('|').toLowerCase();
+			searchText = searchText.join( '|' ).toLowerCase();
 			regEx = true;
 		}
 
@@ -5121,7 +5170,7 @@ function frmAdminBuildJS() {
 		var xmlHttp = new XMLHttpRequest();
 		var params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k] );
+				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k]);
 			}
 		).join( '&' );
 
@@ -5146,12 +5195,12 @@ function frmAdminBuildJS() {
 		setTimeout( success, 1000 );
 	}
 
-	function invisible(classes) {
-		jQuery(classes).css('visibility', 'hidden' );
+	function invisible( classes ) {
+		jQuery( classes ).css( 'visibility', 'hidden' );
 	}
 
-	function visible(classes) {
-		jQuery(classes).css('visibility', 'visible' );
+	function visible( classes ) {
+		jQuery( classes ).css( 'visibility', 'visible' );
 	}
 
 	function initModal( id, width ) {
@@ -5163,7 +5212,7 @@ function frmAdminBuildJS() {
 		if ( typeof width === 'undefined' ) {
 			width = '550px';
 		}
-		$info.dialog( {
+		$info.dialog({
 			dialogClass: 'frm-dialog',
 			modal: true,
 			autoOpen: false,
@@ -5180,13 +5229,13 @@ function frmAdminBuildJS() {
 				// close dialog by clicking the overlay behind it
 				jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function() {
 					$info.dialog( 'close' );
-				} );
+				});
 			},
 			close: function() {
 				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 			}
-		} );
+		});
 
 		return $info;
 	}
@@ -5274,11 +5323,11 @@ function frmAdminBuildJS() {
 				if ( $openDrop.length && ! t.hasClass( 'dropdown' ) && ! t.closest( '.dropdown' ).length ) {
 					$openDrop.removeClass( 'open' );
 				}
-			} );
+			});
 			jQuery( '#frm_bs_dropdown:not(.open) a' ).click( focusSearchBox );
 
-			if ( typeof this_form_id === 'undefined' ) {
-				this_form_id = jQuery( document.getElementById( 'form_id' ) ).val();
+			if ( typeof thisFormId === 'undefined' ) {
+				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
 			if ( $newFields.length > 0 ) {
@@ -5312,7 +5361,7 @@ function frmAdminBuildJS() {
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
 					return false;
-				} );
+				});
 			}
 
 			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
@@ -5333,13 +5382,13 @@ function frmAdminBuildJS() {
 						this.style.display = 'none';
 					}
 					return false;
-				} );
+				});
 
 				jQuery( '.cancel-frm_shortcode', '#frm_shortcodediv' ).click( function() {
 					$shortCodeDiv.slideUp( 'fast' );
 					$shortCodeDiv.siblings( 'a.edit-frm_shortcode' ).show();
 					return false;
-				} );
+				});
 			}
 
 			// tabs
@@ -5349,7 +5398,7 @@ function frmAdminBuildJS() {
 					clickTab( this );
 					return false;
 				}
-			} );
+			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
@@ -5358,11 +5407,11 @@ function frmAdminBuildJS() {
 				jQuery( 'select[name="fid"]' ).val( val );
 				jQuery( document.getElementById( 'posts-filter' ) ).submit();
 				return false;
-			} );
+			});
 
 			jQuery( '.frm_select_box' ).on( 'click focus', function() {
 				this.select();
-			} );
+			});
 
 			jQuery( document ).on( 'input search change', '.frm-auto-search', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
@@ -5383,27 +5432,27 @@ function frmAdminBuildJS() {
 
 		buildInit: function() {
 			if ( jQuery( '.frm_field_loading' ).length ) {
-				var load_field_id = jQuery( '.frm_field_loading' ).first().attr( 'id' );
-				loadFields( load_field_id );
+				var loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
+				loadFields( loadFieldId );
 			}
 
 			setupSortable( 'ul.frm_sorting' );
 
 			// Show message if section has no fields inside
-			var frm_sorting = jQuery( '.start_divider.frm_sorting' );
-			for ( i = 0; i < frm_sorting.length; i++ ) {
-				if ( frm_sorting[i].children.length < 2 ) {
-					jQuery( frm_sorting[i] ).parent().children( '.frm_no_section_fields' ).addClass( 'frm_block' );
+			var frmSorting = jQuery( '.start_divider.frm_sorting' );
+			for ( i = 0; i < frmSorting.length; i++ ) {
+				if ( frmSorting[i].children.length < 2 ) {
+					jQuery( frmSorting[i]).parent().children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 				}
 			}
 
-			jQuery( '.field_type_list > li:not(.frm_noallow)' ).draggable( {
+			jQuery( '.field_type_list > li:not(.frm_noallow)' ).draggable({
 				connectToSortable: '#frm-show-fields',
 				helper: 'clone',
 				revert: 'invalid',
 				delay: 10,
 				cancel: '.frm-dropdown-menu'
-			} );
+			});
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
 			jQuery( '.frm_submit_ajax' ).click( submitBuild );
@@ -5417,11 +5466,11 @@ function frmAdminBuildJS() {
 				jQuery( document.getElementById( 'form-status-display' ) ).html( newStatus );
 				jQuery( '.cancel-form-status' ).click();
 				return false;
-			} );
+			});
 
 			jQuery( '.frm_form_builder form:first' ).submit( function() {
 				jQuery( '.inplace_field' ).blur();
-			} );
+			});
 
 			initiateMultiselect();
 			renumberPageBreaks();
@@ -5448,10 +5497,10 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_js_checkbox_limit', checkCheckboxSelectionsLimit );
 			$builderForm.on( 'input', 'input[name^="field_options[add_label_"]', function() {
 				updateRepeatText( this, 'add' );
-			} );
+			});
 			$builderForm.on( 'input', 'input[name^="field_options[remove_label_"]', function() {
 				updateRepeatText( this, 'remove' );
-			} );
+			});
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
@@ -5498,7 +5547,8 @@ function frmAdminBuildJS() {
 		},
 
 		settingsInit: function() {
-			var $formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
+			var formSettings, $loggedIn, $cookieExp, $editable,
+				$formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
 			//BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
 			$formActions.on( 'click', '.frm_remove_field', hideEmailRow );
@@ -5513,7 +5563,7 @@ function frmAdminBuildJS() {
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
 			jQuery( 'select[data-toggleclass], input[data-toggleclass]' ).change( toggleFormOpts );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
-			jQuery( '#frm-show-groups, #frm-hide-groups').click( toggleActionGroups );
+			jQuery( '#frm-show-groups, #frm-hide-groups' ).click( toggleActionGroups );
 			initiateMultiselect();
 
 			//set actions icons to inactive
@@ -5522,14 +5572,14 @@ function frmAdminBuildJS() {
 
 				// If the icon is a background image, don't add BG color.
 				var icon = jQuery( this ).find( 'i' );
-				if ( icon.css('background-image') !== 'none' ) {
+				if ( icon.css( 'background-image' ) !== 'none' ) {
 					icon.addClass( 'frm-inverse' );
 				}
-			} );
+			});
 
 			jQuery( '.frm_submit_settings_btn' ).click( submitSettings );
 
-			var formSettings = jQuery( '.frm_form_settings' );
+			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
 			formSettings.on( 'click', '.frm_already_used', onlyOneActionMessage );
@@ -5555,7 +5605,7 @@ function frmAdminBuildJS() {
 				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
-			} );
+			});
 
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).change( function() {
@@ -5565,31 +5615,31 @@ function frmAdminBuildJS() {
 						jQuery( this ).attr( 'checked', false );
 					}
 				}
-			} );
+			});
 
 			//Show/hide Messages header
 			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).change( function() {
 				maybeShowFormMessages();
-			} );
+			});
 			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).change( showSuccessOpt );
 
-			var $loggedIn = document.getElementById( 'logged_in' );
+			$loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).change( function() {
 				if ( this.checked ) {
 					visible( '.hide_logged_in' );
 				} else {
 					invisible( '.hide_logged_in' );
 				}
-			} );
+			});
 
-			var $cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
+			$cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
 			jQuery( document.getElementById( 'frm_single_entry_type' ) ).change( function() {
 				if ( this.value === 'cookie' ) {
 					$cookieExp.fadeIn( 'slow' );
 				} else {
 					$cookieExp.fadeOut( 'slow' );
 				}
-			} );
+			});
 
 			var $singleEntry = document.getElementById( 'single_entry' );
 			jQuery( $singleEntry ).change( function() {
@@ -5604,7 +5654,7 @@ function frmAdminBuildJS() {
 				} else {
 					$cookieExp.fadeOut( 'slow' );
 				}
-			} );
+			});
 
 			jQuery( '.hide_save_draft' ).hide();
 
@@ -5615,11 +5665,11 @@ function frmAdminBuildJS() {
 				} else {
 					jQuery( '.hide_save_draft' ).fadeOut( 'slow' );
 				}
-			} );
+			});
 			$saveDraft.change();
 
 			//If Allow editing is checked/unchecked
-			var $editable = document.getElementById( 'editable' );
+			$editable = document.getElementById( 'editable' );
 			jQuery( $editable ).change( function() {
 				if ( this.checked ) {
 					jQuery( '.hide_editable' ).fadeIn( 'slow' );
@@ -5628,18 +5678,20 @@ function frmAdminBuildJS() {
 					jQuery( '.hide_editable' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
-			} );
+			});
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
 		},
 
 		panelInit: function() {
+			var customPanel, settingsPage, viewPage, insertFieldsTab;
+
 			jQuery( '.frm_wrap, #postbox-container-1' ).on( 'click', '.frm_insert_code', insertCode );
 			jQuery( document ).on( 'change', '.frm_insert_val', function() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
 				jQuery( this ).val( '' );
-			} );
+			});
 
 			jQuery( document ).on( 'click change', '#frm-id-key-condition', resetLogicBuilder );
 			jQuery( document ).on( 'keyup change', '.frm-build-logic', setLogicExample );
@@ -5651,12 +5703,13 @@ function frmAdminBuildJS() {
 			});
 			jQuery( document ).on( 'mousedown', '.frm-show-box', showShortcodes );
 
-			var settingsPage = document.getElementById( 'form_settings_page' ),
-				viewPage = document.body.classList.contains( 'post-type-frm_display' ),
-				insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
+			settingsPage = document.getElementById( 'form_settings_page' );
+			viewPage = document.body.classList.contains( 'post-type-frm_display' );
+			insertFieldsTab = document.getElementById( 'frm_insert_fields_tab' );
 
 			if ( settingsPage !== null || viewPage ) {
 			jQuery( document ).on( 'focusin', 'form input, form textarea', function( e ) {
+				var htmlTab;
 				e.stopPropagation();
 				maybeShowModal( this );
 
@@ -5668,7 +5721,7 @@ function frmAdminBuildJS() {
 
 					if ( settingsPage !== null ) {
 						/* form settings page */
-						var htmlTab = jQuery( '#frm_html_tab' );
+						htmlTab = jQuery( '#frm_html_tab' );
 						if ( jQuery( this ).closest( '#html_settings' ).length > 0 ) {
 							htmlTab.show();
 							htmlTab.siblings().hide();
@@ -5685,20 +5738,20 @@ function frmAdminBuildJS() {
 						toggleAllowedShortcodes( this.id, e.type );
 					}
 				}
-			} );
+			});
 			}
 
 			jQuery( '.frm_wrap, #postbox-container-1' ).on( 'mousedown', '#frm_adv_info a, .frm_field_list a', function( e ) {
 				e.preventDefault();
-			} );
+			});
 
-			var customPanel = jQuery( '#frm_adv_info' );
+			customPanel = jQuery( '#frm_adv_info' );
 			customPanel.on( 'click', '.subsubsub a.frmids', function( e ) {
 				toggleKeyID( 'frmids', e );
-			} );
+			});
 			customPanel.on( 'click', '.subsubsub a.frmkeys', function( e ) {
 				toggleKeyID( 'frmkeys', e );
-			} );
+			});
 		},
 
 		templateInit: function() {
@@ -5707,7 +5760,8 @@ function frmAdminBuildJS() {
 		},
 
 		viewInit: function() {
-			var $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
+			var $addRemove,
+				$advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 			$advInfo.before( '<div id="frm_position_ele"></div>' );
 			setupMenuOffset();
 
@@ -5735,7 +5789,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document.getElementById( 'form_id' ) ).change( displayFormSelected );
 
-			var $addRemove = jQuery( '.frm_repeat_rows' );
+			$addRemove = jQuery( '.frm_repeat_rows' );
 			$addRemove.on( 'click', '.frm_add_order_row', addOrderRow );
 			$addRemove.on( 'click', '.frm_add_where_row', addWhereRow );
 			$addRemove.on( 'change', '.frm_insert_where_options', insertWhereOptions );
@@ -5751,21 +5805,21 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', textSquishCheck );
 			document.getElementById( 'frm_field_pad' ).addEventListener( 'change', textSquishCheck );
 
-			jQuery( 'input.hex' ).wpColorPicker( {
+			jQuery( 'input.hex' ).wpColorPicker({
 				change: function( event ) {
 					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
 					jQuery( event.target ).val( hexcolor ).change();
 				}
-			} );
+			});
 			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
 				return oldText === 'Select Color' ? 'Select' : oldText;
-			} );
+			});
 
 			// update styling on change
 			jQuery( '#frm_styling_form .styling_settings' ).change( function() {
 				var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
 				locStr = JSON.stringify( locStr );
-				jQuery.ajax( {
+				jQuery.ajax({
 					type: 'POST', url: ajaxurl,
 					data: {
 						action: 'frm_change_styling',
@@ -5775,8 +5829,8 @@ function frmAdminBuildJS() {
 					success: function( css ) {
 						document.getElementById( 'this_css' ).innerHTML = css;
 					}
-				} );
-			} );
+				});
+			});
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).bind( 'click', function( e ) {
@@ -5801,7 +5855,7 @@ function frmAdminBuildJS() {
 
 					e.preventDefault();
 				}
-			} );
+			});
 
 			jQuery( '.multiselect-container.frm-dropdown-menu li a' ).click( function() {
 				var radio = this.children[0].children[0];
@@ -5813,7 +5867,7 @@ function frmAdminBuildJS() {
 				// set active class
 				btnGrp.find( 'li.active' ).removeClass( 'active' );
 				jQuery( this ).closest( 'li' ).addClass( 'active' );
-			} );
+			});
 
 			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
 				var button = document.getElementById( 'frm_reset_style' );
@@ -5821,25 +5875,26 @@ function frmAdminBuildJS() {
 				button.classList.add( 'frm_loading_button' );
 				e.stopPropagation();
 
-				jQuery.ajax( {
+				jQuery.ajax({
 					type: 'POST', url: ajaxurl,
 					data: {action: 'frm_settings_reset', nonce: frmGlobal.nonce},
 					success: function( errObj ) {
+						var key;
 						errObj = errObj.replace( /^\s+|\s+$/g, '' );
 						if ( errObj.indexOf( '{' ) === 0 ) {
 							errObj = jQuery.parseJSON( errObj );
 						}
-						for ( var key in errObj ) {
-							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key] );
+						for ( key in errObj ) {
+							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
 						}
 						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 						jQuery( document.getElementById( 'frm_fieldset' ) ).change();
 						button.classList.remove( 'frm_loading_button' );
 					}
-				} );
-			} );
+				});
+			});
 
-			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker( {changeMonth: true, changeYear: true} );
+			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 
 			jQuery( document.getElementById( 'frm_position' ) ).change( setPosClass );
 
@@ -5859,7 +5914,7 @@ function frmAdminBuildJS() {
 				updateUICSS( css );
 				document.getElementById( 'frm_theme_css' ).value = themeVal;
 				return false;
-			} ).change();
+			}).change();
 		},
 
 		customCSSInit: function() {
@@ -5868,17 +5923,19 @@ function frmAdminBuildJS() {
 			if ( customCSS !== null ) {
 				CodeMirror.fromTextArea( customCSS, {
 					lineNumbers: true
-				} );
+				});
 			}
 		},
 
 		globalSettingsInit: function() {
-			jQuery( document).on( 'click', '[data-frmuninstall]', uninstallNow );
+			var licenseTab;
+
+			jQuery( document ).on( 'click', '[data-frmuninstall]', uninstallNow );
 
 			initiateMultiselect();
 
 			// activate addon licenses
-			var licenseTab = document.getElementById( 'licenses_settings' );
+			licenseTab = document.getElementById( 'licenses_settings' );
 			if ( licenseTab !== null ) {
 				jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
 			}
@@ -5887,9 +5944,9 @@ function frmAdminBuildJS() {
 				event.preventDefault();
 				jQuery.post( ajaxurl, {
 					action: 'frm_lite_settings_upgrade'
-				} );
+				});
 				jQuery( '.settings-lite-cta' ).remove();
-			} );
+			});
 		},
 
 		exportInit: function() {
@@ -5907,34 +5964,34 @@ function frmAdminBuildJS() {
 					action: 'frm_dismiss_migrator',
 					plugin: this.id,
 					nonce: frmGlobal.nonce
-				} );
+				});
 				this.parentElement.remove();
-			} );
+			});
 		},
 
-		updateOpts: function( field_id, opts, modal ) {
-			var separate = usingSeparateValues( field_id ),
-				action = isProductField( field_id ) ? 'frm_bulk_products' : 'frm_import_options';
-			jQuery.ajax( {
+		updateOpts: function( fieldId, opts, modal ) {
+			var separate = usingSeparateValues( fieldId ),
+				action = isProductField( fieldId ) ? 'frm_bulk_products' : 'frm_import_options';
+			jQuery.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: {
 					action: action,
-					field_id: field_id,
+					field_id: fieldId,
 					opts: opts,
 					separate: separate,
 					nonce: frmGlobal.nonce
 				},
 				success: function( html ) {
-					document.getElementById( 'frm_field_' + field_id + '_opts' ).innerHTML = html;
-					resetDisplayedOpts( field_id );
+					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {
 						modal.dialog( 'close' );
 						document.getElementById( 'frm-update-bulk-opts' ).classList.remove( 'frm_loading_button' );
 					}
 				}
-			} );
+			});
 		},
 
 		/* remove conditional logic if the field doesn't exist */
@@ -5952,22 +6009,22 @@ function frmAdminBuildJS() {
 	};
 }
 
-var frmAdminBuild = frmAdminBuildJS();
+frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function( $) {
+jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
-} );
+});
 
-function frm_remove_tag( html_tag ) {
+function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
-	jQuery( html_tag ).remove();
+	jQuery( htmlTag ).remove();
 }
 
-function frm_show_div( div, value, show_if, class_id ) {
-	if ( value == show_if ) {
-		jQuery( class_id + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
+function frm_show_div( div, value, showIf, classId ) { // eslint-disable-line camelcase
+	if ( value == showIf ) {
+		jQuery( classId + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
 	} else {
-		jQuery( class_id + div ).fadeOut( 'slow' );
+		jQuery( classId + div ).fadeOut( 'slow' );
 	}
 }
 
@@ -5988,13 +6045,14 @@ function frmCheckAllLevel( checked, n, level ) {
 	}
 }
 
-function frm_add_logic_row( id, form_id ) {
+function frm_add_logic_row( id, formId ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_add_logic_row in v2.0' );
-	jQuery.ajax( {
-		type: 'POST', url: ajaxurl,
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
 		data: {
 			action: 'frm_add_logic_row',
-			form_id: form_id,
+			form_id: formId,
 			field_id: id,
 			meta_name: jQuery( '#frm_logic_row_' + id + ' > div' ).size(),
 			nonce: frmGlobal.nonce
@@ -6002,20 +6060,20 @@ function frm_add_logic_row( id, form_id ) {
 		success: function( html ) {
 			jQuery( '#frm_logic_row_' + id ).append( html );
 		}
-	} );
+	});
 	return false;
 }
 
-function frmGetFieldValues( field_id, cur, row_number, field_type, html_name ) {
+function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName ) {
 
-	if ( field_id ) {
-		jQuery.ajax( {
+	if ( fieldId ) {
+		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
-			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + field_id + '&name=' + html_name + '&t=' + field_type + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
+			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + fieldId + '&name=' + htmlName + '&t=' + fieldType + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
 			success: function( msg ) {
-				document.getElementById( 'frm_show_selected_values_' + cur + '_' + row_number ).innerHTML = msg;
+				document.getElementById( 'frm_show_selected_values_' + cur + '_' + rowNumber ).innerHTML = msg;
 			}
-		} );
+		});
 	}
 }
 
@@ -6025,13 +6083,13 @@ function frmImportCsv( formID ) {
 		urlVars = __FRMURLVARS;
 	}
 
-	jQuery.ajax( {
+	jQuery.ajax({
 		type: 'POST', url: ajaxurl,
 		data: 'action=frm_import_csv&nonce=' + frmGlobal.nonce + '&frm_skip_cookie=1' + urlVars,
 		success: function( count ) {
 			var max = jQuery( '.frm_admin_progress_bar' ).attr( 'aria-valuemax' );
 			var imported = max - count;
-			var percent = (imported / max) * 100;
+			var percent = ( imported / max ) * 100;
 			jQuery( '.frm_admin_progress_bar' ).css( 'width', percent + '%' ).attr( 'aria-valuenow', imported );
 
 			if ( parseInt( count, 10 ) > 0 ) {
@@ -6044,7 +6102,7 @@ function frmImportCsv( formID ) {
 				}, 2000 );
 			}
 		}
-	} );
+	});
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill

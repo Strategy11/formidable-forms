@@ -16,12 +16,12 @@ jQuery( document ).ready( function() {
 		deauthLink.click( frmDeauthorizeNow );
 	}
 
-    if ( typeof tb_remove === 'function' ) {
+    if ( typeof tb_remove === 'function' ) { // eslint-disable-line camelcase
         frmAdminPopup.init();
     }
 });
 
-function frm_install_now() {
+function frm_install_now() { // eslint-disable-line camelcase
 	var $msg = jQuery( document.getElementById( 'frm_install_message' ) );
 	$msg.html( '<div class="frm_plugin_updating">' + frmGlobal.updating_msg + '<div class="spinner frm_spinner"></div></div>' );
 	jQuery.ajax({
@@ -98,7 +98,7 @@ function frmSelectSubnav() {
     jQuery( '#toplevel_page_formidable a.wp-has-submenu' ).removeClass( 'wp-not-current-submenu' ).addClass( 'wp-has-current-submenu wp-menu-open' );
 }
 
-function frmCreatePostEntry( id, post_id ) {
+function frmCreatePostEntry( id, postId ) {
     jQuery( '#frm_create_entry p' ).replaceWith( '<img src="' + frmGlobal.url + '/images/wpspin_light.gif" alt="' + frmGlobal.loading + '" />' );
     jQuery.ajax({
         type: 'POST',
@@ -106,7 +106,7 @@ function frmCreatePostEntry( id, post_id ) {
         data: {
 			action: 'frm_create_post_entry',
 			id: id,
-			post_id: post_id,
+			post_id: postId,
 			nonce: frmGlobal.nonce
 		},
         success: function() {

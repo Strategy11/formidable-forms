@@ -31,10 +31,8 @@
 		}
 	},
 	"rules": {
-		"camelcase": ["warn", { "properties": "never" }],
-		"key-spacing": "off",
+		"camelcase": ["error", { "properties": "never" }],
 		"lines-around-comment": "off",
-		"quotes": "warn",
 		"react/display-name": "off",
 		"react/jsx-curly-spacing": [
 			"error",
@@ -51,7 +49,6 @@
 		"react/no-children-prop": "off",
 		"react/no-find-dom-node": "warn",
 		"react/prop-types": "off",
-		"space-in-parens": "warn",
 		"vars-on-top": "warn",
 		"yoda": "off"
 	}

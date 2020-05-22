@@ -76,13 +76,13 @@ class FrmFormMigratorsHelper {
 
 	private static function importable_forms() {
 		return array(
-			/*'gf' => array(
+			'gf' => array(
 				'class'    => 'FrmGravityImporter',
 				'plugin'   => 'gravityforms/gravityforms.php',
 				'importer' => 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php',
 				'name'     => 'Gravity Forms',
 				'package'  => 'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
-			),*/
+			),
 			'pf' => array(
 				'class'    => 'FrmPirateImporter',
 				'plugin'   => 'pirate-forms/pirate-forms.php',

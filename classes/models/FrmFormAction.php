@@ -766,6 +766,11 @@ class FrmFormAction {
 		if ( $logic_value == 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
+
+		/**
+		 * @since 4.04.05
+		 */
+		$logic_value = apply_filters( 'frm_action_logic_value', $logic_value );
 	}
 
 	/**
