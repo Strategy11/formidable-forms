@@ -198,14 +198,14 @@ class FrmFieldsController {
 
 		$options = FrmField::get_option( $field, 'options' );
 		$first_option = reset( $options );
-		$field['image_options'] = 1;
-
 
 		// TODO Laura -- move to Pro and check if this function is callable
 
 		if ( ! FrmProFieldsHelper::is_image_option( $first_option ) ){
 			return $field;
 		}
+
+		$field['image_options'] = 1;
 
 		// TODO Laura -- remove this when switch is complete
 //		if ( strpos( $first_option, 'frm_image_option' ) === false ) {

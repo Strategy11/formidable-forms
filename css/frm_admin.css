@@ -3396,19 +3396,6 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 
 /* Image options for Radio and Checkbox */
 
-.frm_image_option,
-.frm_image_medium {
-	width: 320px;
-}
-
-.frm_image_small {
-	width: 240px;
-}
-
-.frm_image_large {
-	width: 400px;
-}
-
 .frm_image_options .frm_opt_container {
 	display: grid;
 	grid-template-columns: repeat( auto-fill, 320px );
@@ -3425,10 +3412,11 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	grid-template-columns: repeat( auto-fill, 400px );
 }
 
-.frm_radio.frm_image_option input[type=radio],
-.frm_checkbox.frm_image_option input[type=checkbox]{
+.frm_image_options input[type=checkbox],
+.frm_image_options input[type=radio] {
 	display: none;
 }
+
 
 .frm-summary-page-wrapper .frm_image_option_container,
 #form_show_entry_page .frm_image_option_container {
@@ -3439,8 +3427,7 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	align-items: center;
 }
 
-.frm_radio .frm_image_option_container,
-.frm_checkbox .frm_image_option_container {
+.frm_image_options .frm_image_option_container {
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid rgba(40, 47, 54, 0.2);
@@ -3465,7 +3452,6 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 
 .frm_image_option_container .frm_selected_checkmark svg{
 	fill: #4199FD;
-	background-color: #4199FD;
 	width: 24px;
 	height: 24px;
 	border-radius: 50%;
@@ -3473,13 +3459,11 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 
 .frm_image_option_container .frm_image_placeholder_icon svg{
 	width: 63px;
-	height: 150px;
 }
 
 .frm_text_label_for_image {
 	text-align: center;
 	width: 100%;
-	overflow: hidden;
 	padding: 10px;
 }
 
@@ -3492,37 +3476,19 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	display: none;
 }
 
-input[type="radio"]:checked + .frm_image_option_container{
+input[type="radio"]:checked + .frm_image_option_container,
+input[type="checkbox"]:checked + .frm_image_option_container {
 	border: 1px solid #4199FD;
 }
 
-input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmark{
+input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmark,
+input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_checkmark {
 	display: block;
 }
 
 .frm_image_option .frm_image_option_container:hover {
 	border: 1px solid #4199FD;
 }
-
-.frm_image_option_container .frm_empty_url,
-.frm_image_option_container img {
-	width: 150px;
-	height: 150px;
-	object-fit: cover;
-}
-
-/*
-// TODO Laura -- fix this
-// This doesn't seem to match the front-end CSS.
- */
-/*
-.frm_image_option .frm_image_option_container .frm_empty_url,
-.frm_image_option .frm_image_option_container img {
-	width: auto;
-	height: auto;
-	object-fit: cover;
-}
- */
 
 .frm_image_options .frm_image_option_container .frm_empty_url,
 .frm_image_options .frm_image_option_container img {
@@ -3548,6 +3514,10 @@ input[type="radio"]:checked + .frm_image_option_container .frm_selected_checkmar
 	align-items: center;
 }
 
+/*
+ TODO Laura -- there's no frm_image_option in the form builder for Dynamc fields.
+ Should this matter?
+ */
 .vertical_radio .frm_checkbox.frm_image_option label,
 .vertical_radio .frm_radio.frm_image_option label{
 	padding-left: 0;
