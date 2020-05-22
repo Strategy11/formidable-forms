@@ -179,7 +179,8 @@ class FrmFieldsController {
 			}
 			// TODO Laura -- set up inline, image options, image size, maybe convert options to add the icons here, save in $field
 			// TODO Laura -- once this is working, add a filter here and move the function to Pro
-			$field = self::set_up_image_options( $field );
+			//$field = self::set_up_image_options( $field );
+			$field = apply_filters( 'frm_before_get_admin_field_classes', $field );
 
 			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 			$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -188,39 +189,7 @@ class FrmFieldsController {
 		}
 	}
 
-	private static function set_up_image_options( $field ){
-		if ( ! FrmField::get_option( $field, 'type')  === 'data' ) {
-			return $field;
-		}
-		if ( ! in_array( FrmField::get_option( $field, 'data_type'), array( 'radio', 'checkbox' ) ) ) {
-			return $field;
-		}
 
-		$options = FrmField::get_option( $field, 'options' );
-		$first_option = reset( $options );
-
-		// TODO Laura -- move to Pro and check if this function is callable
-
-		if ( ! FrmProFieldsHelper::is_image_option( $first_option ) ){
-			return $field;
-		}
-
-		$field['image_options'] = 1;
-
-		// TODO Laura -- remove this when switch is complete
-//		if ( strpos( $first_option, 'frm_image_option' ) === false ) {
-//			return '';
-//		}
-
-		$size       = FrmFieldsHelper::get_image_size( $first_option );
-		$field['image_size'] = $size ? $size : 'medium';
-		$field['align'] = 'inline';
-
-		return $field;
-
-		// TODO Laura -- remove this
-		//return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
-	}
 
 	/**
 	 * @since 3.0
