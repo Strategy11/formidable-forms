@@ -205,7 +205,7 @@ class FrmFieldsController {
 		}
 
 		$li_classes .= ' frm_form_field frmstart ' . $classes . ' frmend';
-		$li_classes .= self::get_image_classes_for_container( $field );
+		$li_classes .= self::get_image_classes_for_builder_field_container( $field );
 		if ( ! empty( $field ) ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
@@ -213,11 +213,7 @@ class FrmFieldsController {
 		return $li_classes;
 	}
 
-	private static function get_image_classes_for_container( $field ) {
-		// TODO Laura
-		// test if have image options
-		// Use code from front end image classes -- Dynamic field $field['options] has the options, with markup; 'type = 'data',
-//field['field_options']['data_type'] = radio
+	private static function get_image_classes_for_builder_field_container( $field ) {
 		if ( empty ( $field['image_options'] ) ) {
 			return '';
 		}

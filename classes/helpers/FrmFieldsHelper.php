@@ -475,14 +475,6 @@ class FrmFieldsHelper {
 		return $opt;
 	}
 
-	public static function add_svg_icons( $html ){
-		$html = preg_replace( '/~~add image icon~~/', self::get_image_icon_markup(), $html);
-		$html = preg_replace( '/~~add checkmark icon~~/', self::get_checkmark_markup(), $html);
-
-		return $html;
-	}
-
-
 	public static function get_checkmark_markup() {
 		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon', array( 'echo' => false ) ) . '</div>';
 	}

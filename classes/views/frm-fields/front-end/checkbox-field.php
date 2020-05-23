@@ -11,13 +11,28 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
+	// TODO Laura Keep this?
+	$image_size = ! empty ( $field['image_size'] ) ? $field[ 'image_size' ] : 'medium';
+	$image_option_class = ! empty( $field['image_options'] ) ? ' frm_image_option frm_image_' . $image_size : '';
+	// TODO Laura -- end keep this?
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
 			continue;
 		}
 
+		// TODO Laura -- maybe put this back
+		/*
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+		*/
+
+		// TODO Laura -- maybe remove this
+		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
+		$image     = FrmFieldsHelper::get_image_from_array( $opt, $opt_key, $field );
+		$image_url = FrmFieldsHelper::get_image_url( $image );
+		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+		$label = FrmFieldsHelper::create_single_option_label( $field, $opt, $image_url );
+		// TODO Laura -- end maybe remove this
 
 		$checked = ''; // init
 		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) ) {
@@ -32,8 +47,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $checked );
 
 		?>
-		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
-
+		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?> <?php echo ( $image_option_class ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'checkbox' ) ); ?>"><?php
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
 			?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
 		}
@@ -44,7 +58,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		?> /><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
+			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // WPCS: XSS ok.
 		}
 
 		$other_args = array(
