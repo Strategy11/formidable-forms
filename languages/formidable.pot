@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.04.04\n"
+"Project-Id-Version: Formidable Forms 4.04.05\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-05-12T01:18:59+02:00\n"
+"POT-Creation-Date: 2020-05-28T00:31:36+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -512,23 +512,23 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:811
+#: classes/models/FrmFormAction.php:818
 msgid "Draft is saved"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:812
+#: classes/models/FrmFormAction.php:819
 msgid "Entry is created"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:813
+#: classes/models/FrmFormAction.php:820
 msgid "Entry is updated"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:814
+#: classes/models/FrmFormAction.php:821
 msgid "Entry is deleted"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:815
+#: classes/models/FrmFormAction.php:822
 msgid "Entry is imported"
 msgstr ""
 
@@ -545,13 +545,13 @@ msgstr ""
 msgid "There was an error while creating a new form."
 msgstr ""
 
-#: classes/models/FrmFormMigrator.php:544
+#: classes/models/FrmFormMigrator.php:546
 msgid "Default Form"
 msgstr ""
 
 #. translators: %1$s - field type
 #. translators: %1$s: Number of items
-#: classes/models/FrmFormMigrator.php:579
+#: classes/models/FrmFormMigrator.php:581
 #: classes/helpers/FrmXMLHelper.php:981
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
