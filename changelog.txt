@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.04.05 =
+* When some styling settings are blank, allow inheritance from theme styling.
+* Allow a form action to be updated during form migration.
+* Code: Update javascript codestyling.
+
 = 4.04.04 =
 * Increased WP version requirement to 4.7.
 * Added more options on Import/Export page depending on what other plugins are installed.
