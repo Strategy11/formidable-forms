@@ -767,7 +767,7 @@ class FrmFormAction {
 			$logic_value = get_current_user_id();
 		}
 
-		$logic_value = apply_filters( 'frm_content', $logic_value, $action->menu_id, $entry );
+		$logic_value = apply_filters( 'frm_content', $logic_value, $action->menu_order, $entry );
 
 		/**
 		 * @since 4.04.05
