@@ -1138,7 +1138,7 @@ function frmFrontFormJS() {
 			}
 
 			newPos = scrollObj.offset().top;
-			if ( ! newPos ) {
+			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;
 			}
 			newPos = newPos - frm_js.offset;
