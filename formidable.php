@@ -25,7 +25,10 @@ Text Domain: formidable
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
+add_filter('frm_scroll_offset', 'frm_scroll_offset');
+function frm_scroll_offset(){
+  return -1; //this will disable the autoscroll
+}
 add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
 function load_formidable_forms() {
 	global $frm_vars;
