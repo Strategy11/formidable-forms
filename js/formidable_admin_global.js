@@ -101,15 +101,15 @@ function frmSelectSubnav() {
 function frmCreatePostEntry( id, postId ) {
     jQuery( '#frm_create_entry p' ).replaceWith( '<img src="' + frmGlobal.url + '/images/wpspin_light.gif" alt="' + frmGlobal.loading + '" />' );
     jQuery.ajax({
-        type: 'POST',
+		type: 'POST',
 		url: ajaxurl,
-        data: {
+		data: {
 			action: 'frm_create_post_entry',
 			id: id,
 			post_id: postId,
 			nonce: frmGlobal.nonce
 		},
-        success: function() {
+		success: function() {
 			jQuery( document.getElementById( 'frm_create_entry' ) ).fadeOut( 'slow' );
 		}
     });
@@ -193,7 +193,7 @@ function frmAdminPopupJS() {
         if ( formId ) {
             thisId = this.id;
             jQuery.ajax({
-                type: 'POST',
+				type: 'POST',
 				url: ajaxurl,
                 data: {
 					action: 'frm_get_field_selection',

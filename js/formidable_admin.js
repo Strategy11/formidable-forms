@@ -3205,7 +3205,7 @@ function frmAdminBuildJS() {
 			oneclick = JSON.parse( oneclick );
 
 			button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-			button.className = button.className + ' ' + oneclick.className;
+			button.className = button.className + ' ' + oneclick.class;
 			button.rel = oneclick.url;
 		}
 
