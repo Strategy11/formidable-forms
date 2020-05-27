@@ -13,10 +13,11 @@ function frmFrontFormJS() {
 
 	function maybeShowLabel() {
 		/*jshint validthis:true */
-		var $field = jQuery( this );
-		var $label = $field.closest( '.frm_inside_container' ).find( '.frm_primary_label' );
+		var $field = jQuery( this ),
+			$label = $field.closest( '.frm_inside_container' ).find( '.frm_primary_label' ),
+			val = $field.val();
 
-		if ( $field.val().length > 0 ) {
+		if ( val !== null && val.length > 0 ) {
 			$label.addClass( 'frm_visible' );
 		} else {
 			$label.removeClass( 'frm_visible' );
@@ -150,7 +151,7 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var r, n, emailFields, fields, field, value,
+		var r, n, nl, emailFields, fields, field, value,
 			errors = [];
 
 		// Make sure required text field is filled in

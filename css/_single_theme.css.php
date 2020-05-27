@@ -35,54 +35,98 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 <?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_fields  > fieldset{
-	border-width:<?php echo esc_html( $fieldset . $important ); ?>;
+	<?php if ( ! empty( $fieldset ) ) { ?>
+		border-width:<?php echo esc_html( $fieldset . $important ); ?>;
+	<?php } ?>
 	border-style:solid;
-	border-color:<?php echo esc_html( $fieldset_color . $important ); ?>;
+	<?php if ( ! empty( $fieldset_color ) ) { ?>
+		border-color:<?php echo esc_html( $fieldset_color . $important ); ?>;
+	<?php } ?>
 	margin:0;
-	padding:<?php echo esc_html( $fieldset_padding . $important ); ?>;
-	background-color:<?php echo esc_html( $fieldset_bg_color ); ?>;
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $fieldset_padding ) ) { ?>
+		padding:<?php echo esc_html( $fieldset_padding . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $fieldset_bg_color ) ) { ?>
+		background-color:<?php echo esc_html( $fieldset_bg_color ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 }
 
 .<?php echo esc_html( $style_class ); ?> legend + h3,
 .<?php echo esc_html( $style_class ); ?> h3.frm_form_title{
-	font-size:<?php echo esc_html( $title_size . $important ); ?>;
-	color:<?php echo esc_html( $title_color . $important ); ?>;
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
-	margin-top:<?php echo esc_html( $title_margin_top . $important ); ?>;
-	margin-bottom:<?php echo esc_html( $title_margin_bottom . $important ); ?>;
+	<?php if ( ! empty( $title_size ) ) { ?>
+		font-size:<?php echo esc_html( $title_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $title_color ) ) { ?>
+		color:<?php echo esc_html( $title_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $title_margin_top ) ) { ?>
+		margin-top:<?php echo esc_html( $title_margin_top . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $title_margin_bottom ) ) { ?>
+		margin-bottom:<?php echo esc_html( $title_margin_bottom . $important ); ?>;
+	<?php } ?>
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_primary_label{
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
-	font-size:<?php echo esc_html( $font_size . $important ); ?>;
-	color:<?php echo esc_html( $label_color . $important ); ?>;
-	font-weight:<?php echo esc_html( $weight . $important ); ?>;
-	text-align:<?php echo esc_html( $align . $important ); ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $font_size ) ) { ?>
+		font-size:<?php echo esc_html( $font_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $label_color ) ) { ?>
+		color:<?php echo esc_html( $label_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $weight ) ) { ?>
+		font-weight:<?php echo esc_html( $weight . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $align ) ) { ?>
+		text-align:<?php echo esc_html( $align . $important ); ?>;
+	<?php } ?>
 	margin:0;
-	padding:<?php echo esc_html( $label_padding . $important ); ?>;
+	<?php if ( ! empty( $label_padding ) ) { ?>
+		padding:<?php echo esc_html( $label_padding . $important ); ?>;
+	<?php } ?>
 	width:auto;
 	display:block;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_html_container,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field .frm_show_it{
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
-	color:<?php echo esc_html( $form_desc_color . $important ); ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $form_desc_color ) ) { ?>
+		color:<?php echo esc_html( $form_desc_color . $important ); ?>;
+	<?php } ?>
 }
 
+<?php if ( ! empty( $form_desc_size ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_html_container{
 	font-size:<?php echo esc_html( $form_desc_size . $important ); ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_field .frm_show_it{
-	font-size:<?php echo esc_html( $field_font_size . $important ); ?>;
-	font-weight:<?php echo esc_html( $field_weight ); ?>;
+	<?php if ( ! empty( $field_font_size ) ) { ?>
+		font-size:<?php echo esc_html( $field_font_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $field_weight ) ) { ?>
+		font-weight:<?php echo esc_html( $field_weight ); ?>;
+	<?php } ?>
 }
 
+<?php if ( ! empty( $label_color ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_icon_font{
 	color:<?php echo esc_html( $label_color . $important ); ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before{
 	content:"\e<?php echo esc_html( isset( $minus_icons[ $repeat_icon ] ) ? $minus_icons[ $repeat_icon ]['-'] : $minus_icons[1]['-'] ); ?>";
@@ -94,23 +138,31 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 
 .<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_minus_icon:before,
 .<?php echo esc_html( $style_class ); ?> .frm_icon_font.frm_plus_icon:before{
-	color:<?php echo esc_html( $submit_text_color . $important ); ?>;
+	<?php if ( ! empty( $submit_text_color ) ) { ?>
+		color:<?php echo esc_html( $submit_text_color . $important ); ?>;
+	<?php } ?>
 	vertical-align:middle;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_trigger.active .frm_icon_font.frm_arrow_icon:before{
 	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['-'] : $arrow_icons[1]['-'] ); ?>";
-	color:<?php echo esc_html( $section_color . $important ); ?>;
+	<?php if ( ! empty( $section_color ) ) { ?>
+		color:<?php echo esc_html( $section_color . $important ); ?>;
+	<?php } ?>
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_trigger .frm_icon_font.frm_arrow_icon:before{
 	content:"\e<?php echo esc_html( isset( $arrow_icons[ $collapse_icon ] ) ? $arrow_icons[ $collapse_icon ]['+'] : $arrow_icons[1]['+'] ); ?>";
-	color:<?php echo esc_html( $section_color . $important ); ?>;
+	<?php if ( ! empty( $section_color ) ) { ?>
+		color:<?php echo esc_html( $section_color . $important ); ?>;
+	<?php } ?>
 }
 
+<?php if ( ! empty( $field_margin ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field{
 	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
 }
+<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_grid,
 .<?php echo esc_html( $style_class ); ?> .frm_grid_first,
 .<?php echo esc_html( $style_class ); ?> .frm_grid_odd {
@@ -125,24 +177,45 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> div.frm_description,
 .<?php echo esc_html( $style_class ); ?> .frm-show-form > div.frm_description,
 .<?php echo esc_html( $style_class ); ?> .frm_error{
-	margin:<?php echo esc_html( $description_margin . $important ); ?>;
+	<?php if ( ! empty( $description_margin ) ) { ?>
+		margin:<?php echo esc_html( $description_margin . $important ); ?>;
+	<?php } ?>
 	padding:0;
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
-	font-size:<?php echo esc_html( $description_font_size . $important ); ?>;
-	color:<?php echo esc_html( $description_color . $important ); ?>;
-	font-weight:<?php echo esc_html( $description_weight . $important ); ?>;
-	text-align:<?php echo esc_html( $description_align . $important ); ?>;
-	font-style:<?php echo esc_html( $description_style . $important ); ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $description_font_size ) ) { ?>
+		font-size:<?php echo esc_html( $description_font_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $description_color ) ) { ?>
+		color:<?php echo esc_html( $description_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $description_weight ) ) { ?>
+		font-weight:<?php echo esc_html( $description_weight . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $description_align ) ) { ?>
+		text-align:<?php echo esc_html( $description_align . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $description_style ) ) { ?>
+		font-style:<?php echo esc_html( $description_style . $important ); ?>;
+	<?php } ?>
 	max-width:100%;
 }
 
 /* Form description */
 .<?php echo esc_html( $style_class ); ?> .frm-show-form div.frm_description p{
-	font-size:<?php echo esc_html( $form_desc_size . $important ); ?>;
-	color:<?php echo esc_html( $form_desc_color . $important ); ?>;
-	margin-top:<?php echo esc_html( $form_desc_margin_top . $important ); ?>;
-	margin-bottom:<?php echo esc_html( $form_desc_margin_bottom . $important ); ?>;
-
+	<?php if ( ! empty( $form_desc_size ) ) { ?>
+		font-size:<?php echo esc_html( $form_desc_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $form_desc_color ) ) { ?>
+		color:<?php echo esc_html( $form_desc_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $form_desc_margin_top ) ) { ?>
+		margin-top:<?php echo esc_html( $form_desc_margin_top . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $form_desc_margin_bottom ) ) { ?>
+		margin-bottom:<?php echo esc_html( $form_desc_margin_bottom . $important ); ?>;
+	<?php } ?>
 }
 
 /* Left and right labels */
@@ -200,15 +273,27 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_scale label{
-	font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
-	font-size:<?php echo esc_html( $check_font_size . $important ); ?>;
-	color:<?php echo esc_html( $check_label_color . $important ); ?>;
+	<?php if ( ! empty( $check_weight ) ) { ?>
+		font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $check_font_size ) ) { ?>
+		font-size:<?php echo esc_html( $check_font_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $check_label_color ) ) { ?>
+		color:<?php echo esc_html( $check_label_color . $important ); ?>;
+	<?php } ?>
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_required{
-	color:<?php echo esc_html( $required_color . $important ); ?>;
-	font-weight:<?php echo esc_html( $required_weight . $important ); ?>;
+	<?php if ( ! empty( $required_color ) ) { ?>
+		color:<?php echo esc_html( $required_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $required_weight ) ) { ?>
+		font-weight:<?php echo esc_html( $required_weight . $important ); ?>;
+	<?php } ?>
 }
 
 .<?php echo esc_html( $style_class ); ?> input[type=text],
@@ -222,8 +307,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> textarea,
 .<?php echo esc_html( $style_class ); ?> .frm-card-element.StripeElement,
 .<?php echo esc_html( $style_class ); ?> .chosen-container{
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
-	font-size:<?php echo esc_html( $field_font_size ); ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $field_font_size ) ) { ?>
+		font-size:<?php echo esc_html( $field_font_size ); ?>;
+	<?php } ?>
 	margin-bottom:0<?php echo esc_html( $important ); ?>;
 }
 
@@ -300,7 +389,9 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ); ?> input[type=file]{
 	color: <?php echo esc_html( $text_color . $important ); ?>;
 	padding:0px;
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 	font-size:<?php echo esc_html( $field_font_size . $important ); ?>;
 }
 
@@ -407,7 +498,9 @@ if ( ! empty( $important ) ) {
 .frm_form_submit_style,
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn {
 	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 	font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
 	height:<?php echo esc_html( $submit_height . $important ); ?>;
 	line-height:normal<?php echo esc_html( $important ); ?>;
@@ -507,7 +600,9 @@ if ( ! empty( $important ) ) {
 .<?php echo esc_html( $style_class ); ?>.frm_inline_top .frm_submit::before,
 .<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before {
 	content:"before";
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 	font-size:<?php echo esc_html( $font_size . $important ); ?>;
 	color:<?php echo esc_html( $label_color . $important ); ?>;
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
@@ -526,13 +621,17 @@ if ( ! empty( $important ) ) {
 }
 
 .<?php echo esc_html( $style_class ); ?> a.frm_save_draft{
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 	font-size:<?php echo esc_html( $submit_font_size ); ?>;
 	font-weight:<?php echo esc_html( $submit_weight ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> #frm_field_cptch_number_container{
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 	font-size:<?php echo esc_html( $font_size . $important ); ?>;
 	color:<?php echo esc_html( $label_color . $important ); ?>;
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
@@ -561,7 +660,9 @@ if ( ! empty( $important ) ) {
 
 .<?php echo esc_html( $style_class ); ?> .frm_radio label,
 .<?php echo esc_html( $style_class ); ?> .frm_checkbox label{
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
 	font-size:<?php echo esc_html( $check_font_size . $important ); ?>;
 	color:<?php echo esc_html( $check_label_color . $important ); ?>;
 	font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
@@ -711,18 +812,38 @@ if ( ! empty( $important ) ) {
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_button{
-	padding:<?php echo esc_html( $submit_padding . $important ); ?>;
-	-moz-border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-	-webkit-border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-	border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-	font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
-	font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
-	font-weight:<?php echo esc_html( $submit_weight . $important ); ?>;
-	color:<?php echo esc_html( $submit_text_color . $important ); ?>;
-	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
-	border-width:<?php echo esc_html( $submit_border_width ); ?>;
-	border-color: <?php echo esc_html( $submit_border_color . $important ); ?>;
-	height:<?php echo esc_html( $submit_height . $important ); ?>;
+	<?php if ( ! empty( $submit_padding ) ) { ?>
+		padding:<?php echo esc_html( $submit_padding . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $border_radius ) ) { ?>
+		-moz-border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
+		-webkit-border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
+		border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_font_size ) ) { ?>
+		font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $font ) ) { ?>
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_weight ) ) { ?>
+		font-weight:<?php echo esc_html( $submit_weight . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_text_color ) ) { ?>
+		color:<?php echo esc_html( $submit_text_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_bg_color ) ) { ?>
+		background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_border_width ) ) { ?>
+		border-width:<?php echo esc_html( $submit_border_width ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_border_color ) ) { ?>
+		border-color: <?php echo esc_html( $submit_border_color . $important ); ?>;
+	<?php } ?>
+	<?php if ( ! empty( $submit_height ) ) { ?>
+		height:<?php echo esc_html( $submit_height . $important ); ?>;
+	<?php } ?>
 }
 
 <?php do_action( 'frm_output_single_style', $settings ); ?>

@@ -412,7 +412,9 @@ a.frm_save_draft{
 	padding:5px;
 	border-width:1px;
 	border-style:solid;
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+		border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+	<?php } ?>
 	border-top:none;
 	border-left:none;
 	border-right:none;
@@ -451,9 +453,13 @@ table.form_results.with_frm_style{
 
 table.form_results.with_frm_style tr td{
 	text-align:left;
-	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	<?php if ( ! empty( $defaults['text_color'] ) ) { ?>
+		color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	<?php } ?>
 	padding:7px 9px;
-	border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
+	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+		border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
+	<?php } ?>
 }
 
 table.form_results.with_frm_style tr.frm_even,
@@ -463,7 +469,9 @@ table.form_results.with_frm_style tr.frm_even,
 
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
+	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+		background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
+	<?php } ?>
 }
 
 .frm_collapse .ui-icon{
@@ -535,7 +543,9 @@ table.form_results.with_frm_style tr.frm_odd,
 
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 #frm_loading .progress-striped .progress-bar{
-	background-image:linear-gradient(45deg, <?php echo esc_html( $defaults['border_color'] ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+		background-image:linear-gradient(45deg, <?php echo esc_html( $defaults['border_color'] ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 50%, <?php echo esc_html( $defaults['border_color'] ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+	<?php } ?>
 	background-size:40px 40px;
 }
 <?php } ?>
@@ -589,7 +599,9 @@ select.frm_loading_lookup{
 	padding:5px;
 	border-width:1px;
 	border-style:solid;
-	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+		border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+	<?php } ?>
 	border-left:none;
 	border-right:none;
 }
@@ -620,14 +632,18 @@ select.frm_loading_lookup{
 	margin-top:20px;
 }
 
+<?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 .frm_grid_first,
 .frm_grid_odd{
 	background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
 }
+<?php } ?>
 
+<?php if ( ! empty( $defaults['bg_color_active'] ) ) { ?>
 .frm_grid{
 	background-color:<?php echo esc_html( $defaults['bg_color_active'] ); ?>;
 }
+<?php } ?>
 
 .frm_grid .frm_primary_label,
 .frm_grid_first .frm_primary_label,
