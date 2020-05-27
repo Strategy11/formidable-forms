@@ -5,7 +5,7 @@ var frmFrontForm;
 function frmFrontFormJS() {
 	'use strict';
 
-    /*global jQuery:false, frm_js, grecaptcha, frmProForm, tinyMCE */
+	/*global jQuery:false, frm_js, grecaptcha, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
 	var action = '';
@@ -151,11 +151,11 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var r, n, nl, emailFields, fields, field, value,
+		var r, rl, n, nl, emailFields, fields, field, value, requiredFields,
 			errors = [];
 
 		// Make sure required text field is filled in
-		var requiredFields = jQuery( object ).find(
+		requiredFields = jQuery( object ).find(
 			'.frm_required_field:visible input, .frm_required_field:visible select, .frm_required_field:visible textarea'
 		).filter( ':not(.frm_optional)' );
 		if ( requiredFields.length ) {
@@ -1231,13 +1231,6 @@ function frmFrontFormJS() {
 			frmProForm.loadGoogle();
 		},
 
-		removeUsedTimes: function() {
-			console.warn( 'DEPRECATED: function frmFrontForm.removeUsedTimes in v3.0 use frmProForm.removeUsedTimes' );
-			if ( typeof frmProForm !== 'undefined' ) {
-				frmProForm.removeUsedTimes();
-			}
-		},
-
 		escapeHtml: function( text ) {
 			return text
 				.replace( /&/g, '&amp;' )
@@ -1263,7 +1256,7 @@ jQuery( document ).ready( function() {
 });
 
 function frmRecaptcha() {
-	var c,
+	var c, cl,
 		captchas = jQuery( '.frm-g-recaptcha' );
 	for ( c = 0, cl = captchas.length; c < cl; c++ ) {
 		frmFrontForm.renderRecaptcha( captchas[c]);
