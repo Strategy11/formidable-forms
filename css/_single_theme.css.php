@@ -801,6 +801,8 @@ if ( ! empty( $important ) ) {
 	outline:none<?php echo esc_html( $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big input,
+.<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big textarea,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total input,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total textarea{
 	color: <?php echo esc_html( $text_color . $important ); ?>;

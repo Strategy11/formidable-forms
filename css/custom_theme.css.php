@@ -865,6 +865,8 @@ select.frm_loading_lookup{
 	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 
+.frm_form_field.frm_total_big input,
+.frm_form_field.frm_total_big textarea,
 .frm_form_field.frm_total input,
 .frm_form_field.frm_total textarea{
 	opacity:1;
@@ -880,11 +882,15 @@ select.frm_loading_lookup{
 	padding:0;
 }
 
+.frm_form_field.frm_total_big input::-webkit-outer-spin-button,
+.frm_form_field.frm_total_big input::-webkit-inner-spin-button,
 .frm_form_field.frm_total input::-webkit-outer-spin-button,
 .frm_form_field.frm_total input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 }
 
+.frm_form_field.frm_total_big input:focus,
+.frm_form_field.frm_total_big textarea:focus,
 .frm_form_field.frm_total input:focus,
 .frm_form_field.frm_total textarea:focus{
 	background-color:transparent;

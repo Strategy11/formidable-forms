@@ -347,9 +347,9 @@ class FrmStyle {
 			'form_desc_margin_bottom' => '25px',
 
 			'font'            => '"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif',
-			'font_size'       => '14px',
-			'label_color'     => '444444',
-			'weight'          => 'bold',
+			'font_size'       => '15px',
+			'label_color'     => '3f4b5b',
+			'weight'          => 'normal',
 			'position'        => 'none',
 			'align'           => 'left',
 			'width'           => '150px',
@@ -374,7 +374,7 @@ class FrmStyle {
 			'field_weight'       => 'normal',
 			'text_color'         => '555555',
 			//'border_color_hv'   => 'cccccc',
-			'border_color'       => 'cccccc',
+			'border_color'       => 'BFC3C8',
 			'field_border_width' => '1px',
 			'field_border_style' => 'solid',
 
@@ -448,11 +448,11 @@ class FrmStyle {
 
 			'important_style' => false,
 
-			'progress_bg_color'        => 'dddddd',
+			'progress_bg_color'        => 'D8D9DC',
 			'progress_active_color'    => 'ffffff',
-			'progress_active_bg_color' => '4199FD',
+			'progress_active_bg_color' => '579AF6',
 			'progress_color'           => 'ffffff',
-			'progress_border_color'    => 'dfdfdf',
+			'progress_border_color'    => 'E5E5E5',
 			'progress_border_size'     => '2px',
 			'progress_size'            => '30px',
 
