@@ -3477,8 +3477,12 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	display: none;
 }
 
+#form_entries_page .frm-summary-page-wrapper .frm_text_label_for_image {
+	display: block;
+}
+
 input[type="radio"]:checked + .frm_image_option_container,
-input[type="checkbox"]:checked + .frm_image_option_container {
+input[type="checkbox"]:c.hecked + .frm_image_option_container {
 	border: 1px solid #4199FD;
 }
 

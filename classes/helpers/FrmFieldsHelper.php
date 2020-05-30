@@ -446,7 +446,7 @@ class FrmFieldsHelper {
 		}
 	}
 
-	public static function create_single_option_label( $field, $opt, $image_url ) {
+	public static function create_single_option_label( $field, $opt, $image_url = '' ) {
 		if ( empty( $field['image_options'] ) ) {
 			return $opt;
 		}

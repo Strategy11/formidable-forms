@@ -240,12 +240,12 @@ class FrmEntriesHelper {
 			'field'         => $field,
 			'keepjs'        => 0,
 			'return_array'  => false,
+			'display_type'  => '',
 		);
 
 		$atts = wp_parse_args( $atts, $defaults );
 		$image_option = FrmField::is_image_option( $field );
-		// TODO Laura -- add atts earlier so that they can be checked for front-end field option vs. front-end value display
-
+		
 		if ( FrmField::is_image( $field ) || $field->type == 'star' || $image_option ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;

@@ -26,13 +26,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		*/
 
-		// TODO Laura -- maybe remove this
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$image     = FrmFieldsHelper::get_image_from_array( $opt, $opt_key, $field );
 		$image_url = FrmFieldsHelper::get_image_url( $image );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		$label = FrmFieldsHelper::create_single_option_label( $field, $opt, $image_url );
-		// TODO Laura -- end maybe remove this
 
 		$checked = ''; // init
 		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) ) {
