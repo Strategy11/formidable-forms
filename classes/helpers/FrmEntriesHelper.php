@@ -245,7 +245,7 @@ class FrmEntriesHelper {
 
 		$atts = wp_parse_args( $atts, $defaults );
 		$image_option = FrmField::is_image_option( $field );
-		
+
 		if ( FrmField::is_image( $field ) || $field->type == 'star' || $image_option ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
