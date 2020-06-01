@@ -6518,16 +6518,16 @@ iframe#dyncontent_ifr {
 }
 
 #frm_styling_form .wp-color-result-text {
-	line-height: 28px !important;
+	line-height: 30px !important;
 	font-size: 15px;
 	background: #fff !important;
 }
 
 .wp-picker-open + .wp-picker-input-wrap {
 	position: absolute;
-	margin-left: -80px;
-	margin-top: 2px;
-	width: 79px;
+	margin-left: -87px;
+	margin-top: 1px;
+	width: 86px;
 }
 
 .frm6 .wp-picker-open + .wp-picker-input-wrap {
@@ -6541,6 +6541,8 @@ iframe#dyncontent_ifr {
 	color: var(--dark-grey);
 	font-size: 15px;
 	width: 100%;
+	line-height: 1;
+	text-align: center;
 }
 
 .wp-picker-input-wrap .wp-picker-clear {
