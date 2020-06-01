@@ -15,6 +15,7 @@ if ( ! isset( $frm_style ) ) {
 $styles = $frm_style->get_all();
 $default_style = $frm_style->get_default_style( $styles );
 $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
+$important = empty( $defaults['important_style'] ) ? '' : ' !important';
 
 $vars = array( 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled' );
 ?>
