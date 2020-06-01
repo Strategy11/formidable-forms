@@ -1138,7 +1138,6 @@ BEFORE_HTML;
 				'label' => __( 'Color Block', 'formidable' ),
 				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
 			),
-			),
 			'frm_capitalize' => array(
 				'label' => __( 'Capitalize', 'formidable' ),
 				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
