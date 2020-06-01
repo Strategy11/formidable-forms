@@ -474,6 +474,18 @@ table.form_results.with_frm_style tr.frm_odd,
 	<?php } ?>
 }
 
+<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+.frm_color_block {
+	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
+	padding: 40px;
+}
+
+.with_frm_style .frm-show-form .frm_color_block.frm_section_heading h3,
+.frm_color_block.frm_section_heading h3 {
+	border-width: 0 !important;
+}
+<?php } ?>
+
 .frm_collapse .ui-icon{
 	display:inline-block;
 }

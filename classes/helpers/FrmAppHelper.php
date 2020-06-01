@@ -1605,7 +1605,7 @@ class FrmAppHelper {
 			$field_array['unique_msg'] = '';
 		}
 
-		$field_array = array_merge( $field->field_options, $field_array );
+		$field_array = array_merge( (array) $field->field_options, $field_array );
 
 		$values['fields'][ $field->id ] = $field_array;
 	}

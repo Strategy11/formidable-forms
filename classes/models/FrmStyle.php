@@ -404,7 +404,7 @@ class FrmStyle {
 			'section_weight'       => 'bold',
 			'section_pad'          => '15px 0 3px 0',
 			'section_mar_top'      => '15px',
-			'section_mar_bottom'   => '12px',
+			'section_mar_bottom'   => '30px',
 			'section_bg_color'     => '',
 			'section_border_color' => 'e8e8e8',
 			'section_border_width' => '2px',
@@ -448,7 +448,7 @@ class FrmStyle {
 
 			'important_style' => false,
 
-			'progress_bg_color'        => 'E5E5E5',
+			'progress_bg_color'        => 'eaeaea',
 			'progress_active_color'    => 'ffffff',
 			'progress_active_bg_color' => '579AF6',
 			'progress_color'           => '3f4b5b',
