@@ -16,7 +16,17 @@ $styles = $frm_style->get_all();
 $default_style = $frm_style->get_default_style( $styles );
 $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
 
+$vars = array( 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled' );
 ?>
+.with_frm_style {
+	<?php
+	foreach ( $vars as $var ) {
+		?>
+		--<?php echo esc_html( str_replace( '_', '-', $var ) ); ?>:<?php echo esc_html( $defaults[ $var ] ); ?>;
+		<?php
+	}
+	?>
+}
 
 .frm_hidden,
 .frm_add_form_row.frm_hidden,
@@ -65,6 +75,20 @@ legend.frm_hidden{
 
 .with_frm_style input[type=file]{
 	display:initial;
+}
+
+.with_frm_style input[disabled],
+.with_frm_style select[disabled],
+.with_frm_style textarea[disabled],
+.with_frm_style input[readonly],
+.with_frm_style select[readonly],
+.with_frm_style textarea[readonly]{
+	background-color:<?php echo esc_html( $defaults['bg_color_disabled'] ); ?>;
+	background-color:var(--bg-color-disabled)<?php echo esc_html( $important ); ?>;
+	color:<?php echo esc_html( $defaults['text_color_disabled'] ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
+	border-color:<?php echo esc_html( $defaults['border_color_disabled'] ); ?>;
+	border-color:var(--border-color-disabled)<?php echo esc_html( $important ); ?>;
 }
 
 .frm_preview_page:before{
