@@ -3460,15 +3460,12 @@ function frmAdminBuildJS() {
 	function showEmailWarning() {
 		/*jshint validthis:true */
 		var actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
-			//rowType = this.getAttribute( 'data-emailrow' ),
-			emailRowSelector = '.frm_from_to_match_row';
-			//emailButtonSelector = '.frm_' + rowType + '_button';
+			emailRowSelector = '.frm_from_to_match_row',
+			match = false,
+			fromVal = actionBox.find( 'input[name$="[post_content][from]"]' ).val(),
+			toVal = actionBox.find( 'input[name$="[post_content][email_to]"]' ).val();
 
-		var from = actionBox.find( 'input[name$="[post_content][from]"]' ).val()
-		var to = actionBox.find( 'input[name$="[post_content][email_to]"]' ).val()
-
-		var match = false;
-		if ( from === to ) {
+		if ( fromVal === toVal ) {
 			match = true;
 		}
 
