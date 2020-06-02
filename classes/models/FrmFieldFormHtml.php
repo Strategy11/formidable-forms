@@ -441,7 +441,7 @@ class FrmFieldFormHtml {
 		// Get additional classes
 		return apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
 	}
-	
+
 	/**
 	 * This filters shortcodes in the field HTML
 	 *
