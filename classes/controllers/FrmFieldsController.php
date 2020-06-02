@@ -205,22 +205,12 @@ class FrmFieldsController {
 		}
 
 		$li_classes .= ' frm_form_field frmstart ' . $classes . ' frmend';
-		$li_classes .= self::get_image_classes_for_builder_field_container( $field );
+
 		if ( ! empty( $field ) ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
 
 		return $li_classes;
-	}
-
-	private static function get_image_classes_for_builder_field_container( $field ) {
-		if ( empty ( $field['image_options'] ) ) {
-			return '';
-		}
-
-		$image_size = ( ! empty ( $field[ 'image_size'] ) ) ? $field['image_size'] : 'medium';
-
-		return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
 	}
 
 	public static function destroy() {
