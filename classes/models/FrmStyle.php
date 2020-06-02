@@ -337,10 +337,10 @@ class FrmStyle {
 			'fieldset_padding'  => '0 0 15px 0',
 			'fieldset_bg_color' => '',
 
-			'title_size'              => '20px',
+			'title_size'              => '40px',
 			'title_color'             => '444444',
 			'title_margin_top'        => '10px',
-			'title_margin_bottom'     => '10px',
+			'title_margin_bottom'     => '60px',
 			'form_desc_size'          => '14px',
 			'form_desc_color'         => '666666',
 			'form_desc_margin_top'    => '10px',

@@ -913,6 +913,7 @@ select.frm_loading_lookup{
 	-moz-box-shadow:none;
 	-webkit-box-shadow:none;
 	width:auto !important;
+	height:auto !important;
 	box-shadow:none !important;
 	display:inline;
 	-moz-appearance:textfield;
