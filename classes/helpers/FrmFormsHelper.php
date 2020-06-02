@@ -1118,6 +1118,10 @@ BEFORE_HTML;
 				'label' => __( 'Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
 			),
+			'frm_total_big'  => array(
+				'label' => __( 'Big Total', 'formidable' ),
+				'title' => __( 'Add this to a read-only field to display the text in large, bold text without a border or background.', 'formidable' ),
+			),
 			'frm_scroll_box' => array(
 				'label' => __( 'Scroll Box', 'formidable' ),
 				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
@@ -1130,6 +1134,10 @@ BEFORE_HTML;
 			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
 			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
 			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
+			'frm_color_block' => array(
+				'label' => __( 'Color Block', 'formidable' ),
+				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
+			),
 			'frm_capitalize' => array(
 				'label' => __( 'Capitalize', 'formidable' ),
 				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),

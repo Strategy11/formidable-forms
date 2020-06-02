@@ -9,7 +9,19 @@ $label_margin = (int) $width + 10;
 $minus_icons = FrmStylesHelper::minus_icons();
 $arrow_icons = FrmStylesHelper::arrow_icons();
 
+$vars = array( 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled' );
 ?>
+.<?php echo esc_html( $style_class ); ?> {
+	<?php
+	foreach ( $vars as $var ) {
+		if ( isset( $settings[ $var ] ) && $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] ) {
+			?>
+		--<?php echo esc_html( str_replace( '_', '-', $var ) ); ?>:<?php echo esc_html( $settings[ $var ] ); ?>;
+			<?php
+		}
+	}
+	?>
+}
 
 .frm_forms.<?php echo esc_html( $style_class ); ?>{
 	max-width:<?php echo esc_html( $form_width . $important ); ?>;
@@ -424,17 +436,6 @@ if ( ! empty( $important ) ) {
 	width:auto<?php echo esc_html( $important ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> input[disabled],
-.<?php echo esc_html( $style_class ); ?> select[disabled],
-.<?php echo esc_html( $style_class ); ?> textarea[disabled],
-.<?php echo esc_html( $style_class ); ?> input[readonly],
-.<?php echo esc_html( $style_class ); ?> select[readonly],
-.<?php echo esc_html( $style_class ); ?> textarea[readonly]{
-	background-color:<?php echo esc_html( $bg_color_disabled . $important ); ?>;
-	color:<?php echo esc_html( $text_color_disabled . $important ); ?>;
-	border-color:<?php echo esc_html( $border_color_disabled . $important ); ?>;
-}
-
 /* These do not work if they are combined */
 .<?php echo esc_html( $style_class ); ?> input::placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
@@ -801,6 +802,8 @@ if ( ! empty( $important ) ) {
 	outline:none<?php echo esc_html( $important ); ?>;
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big input,
+.<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big textarea,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total input,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total textarea{
 	color: <?php echo esc_html( $text_color . $important ); ?>;
