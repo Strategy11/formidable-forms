@@ -110,7 +110,6 @@ class FrmFieldFormHtml {
 		$this->replace_shortcodes_before_input();
 		$this->replace_shortcodes_with_atts();
 		$this->replace_shortcodes_after_input();
-		//$this->add_svg_icons();
 
 		$this->html = apply_filters( 'frm_after_shortcodes_replaced', $this->html, $this->field_obj->get_field() );
 
@@ -437,55 +436,12 @@ class FrmFieldFormHtml {
 			$classes .= ' ' . $extra_classes;
 		}
 
-		$classes .= $this->get_image_option_classes();
-
 		$classes .= $this->field_obj->get_container_class();
 
 		// Get additional classes
 		return apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
 	}
-
-	// TODO Laura -- move to Pro
-	// TODO Laura -- hook to frm_field_div_classes
-	private function get_image_option_classes( ){
-		// TODO if Lookups will display image options, add them here or add code to use the linked field's image options.
-		if ( $this->field_obj->get_field_column( 'type' ) === 'data' ){
-			return $this->get_image_classes_from_option_markup();
-		}
-
-		if ( empty ( $this->field_obj->get_field_column( 'image_options' ) ) ) {
-			return '';
-		}
-
-		$image_size = ( ! empty ( $this->field_obj->get_field_column( 'image_size' ) ) ) ? $this->field_obj->get_field_column( 'image_size' ) : 'medium';
-
-		return (' frm_image_options frm_image_size_' . $image_size . ' ');
-	}
-
-	// TODO Laura -- move to Pro
-	private function get_image_classes_from_option_markup() {
-		$options = $this->field_obj->get_field_column( 'options' );
-
-		if ( ! $options || ! is_array( $options ) ) {
-			return '';
-		}
-
-		$first_option = reset( $options );
-
-		if ( ! FrmProFieldsHelper::is_image_option( $first_option ) ){
-			return '';
-		}
-
-		$size = FrmFieldsHelper::get_image_size( $first_option );
-		$image_size = $size ? $size : 'medium';
-
-		return ( ' frm_image_options frm_image_size_' . $image_size . ' ' );
-	}
-
-	private function add_svg_icons( ){
-		//$this->html = FrmFieldsHelper::add_svg_icons( $this->html );
-	}
-
+	
 	/**
 	 * This filters shortcodes in the field HTML
 	 *

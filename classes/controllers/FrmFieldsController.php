@@ -167,7 +167,7 @@ class FrmFieldsController {
 
 		$ajax_loading    = isset( $values['ajax_load'] ) && $values['ajax_load'];
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ) );
-		//TODO Laura -- maybe change field properties here in $field_obj and $field
+
 		if ( $ajax_loading && $ajax_this_field ) {
 			$li_classes = self::get_classes_for_builder_field( array(), $display, $field_obj );
 			include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/ajax-field-placeholder.php' );
@@ -177,9 +177,7 @@ class FrmFieldsController {
 
 				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 			}
-			// TODO Laura -- set up inline, image options, image size, maybe convert options to add the icons here, save in $field
-			// TODO Laura -- once this is working, add a filter here and move the function to Pro
-			//$field = self::set_up_image_options( $field );
+
 			$field = apply_filters( 'frm_before_get_admin_field_classes', $field );
 
 			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );

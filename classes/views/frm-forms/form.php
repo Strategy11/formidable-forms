@@ -25,7 +25,6 @@
 			$values['count'] = 0;
 			foreach ( $values['fields'] as $field ) {
 				$values['count']++;
-				// TODO Laura -- fix Dynamic field display starting here, maybe
 				FrmFieldsController::load_single_field( $field, $values );
 				unset( $field );
 			}
