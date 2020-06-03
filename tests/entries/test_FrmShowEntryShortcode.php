@@ -781,9 +781,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
 			$defaults = $this->get_defaults();
-			$atts     = array_merge( $defaults, $atts );
-			$font_size = $atts['font_size'];
-			$border_width = $atts['border_width'];
+			$atts         = array_merge( $defaults, $atts );
+			$font_size    = $atts['font_size'];
+			$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : $atts['field_border_width'];
 			$border_color = $atts['border_color'];
 
 			$header .= ' style="font-size:' . $font_size . ';line-height:135%;';
