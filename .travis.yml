@@ -11,15 +11,14 @@ matrix:
       env: WP_VERSION=master WP_MULTISITE=1
     - php: 7.0
       env: WP_VERSION=master SCRIPT_DEBUG=1
-    - php: 7.0
-      env: WP_VERSION=4.9 COVERAGE=1 PHPUNIT=0
+    #- php: 7.0 TODO: Fix code coverage
+    #  env: WP_VERSION=4.9 COVERAGE=1 PHPUNIT=0
     - php: 5.6
       env: WP_VERSION=4.7
     - php: nightly
       env: WP_VERSION=master
   allow_failures:
     - php: nightly
-    - php: 7.0
 
 before_script:
 - |
