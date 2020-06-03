@@ -490,7 +490,7 @@ class FrmFieldsHelper {
 
 		$image_size = ( ! empty ( $field['image_size'] ) ) ? $field['image_size'] : 'medium';
 
-		return (' frm_image_options frm_image_size_' . $image_size . ' ');
+		return ' frm_image_options frm_image_size_' . $image_size . ' ';
 	}
 
 	public static function get_image_size( $option ){
