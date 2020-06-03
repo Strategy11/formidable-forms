@@ -11,20 +11,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
-	// TODO Laura Keep this?
 	$image_size = ! empty ( $field['image_size'] ) ? $field[ 'image_size' ] : 'medium';
 	$image_option_class = ! empty( $field['image_options'] ) ? ' frm_image_option frm_image_' . $image_size : '';
-	// TODO Laura -- end keep this?
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
 			continue;
 		}
-
-		// TODO Laura -- maybe put this back
-		/*
-		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
-		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
-		*/
 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$image     = FrmFieldsHelper::get_image_from_array( $opt, $opt_key, $field );

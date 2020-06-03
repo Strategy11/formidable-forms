@@ -3519,16 +3519,6 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 	align-items: center;
 }
 
-/*
- TODO Laura -- there's no frm_image_option in the form builder for Dynamc fields.
- Should this matter?
- */
-.vertical_radio .frm_checkbox.frm_image_option label,
-.vertical_radio .frm_radio.frm_image_option label{
-	padding-left: 0;
-	text-indent: 0;
-}
-
 .frm_image_preview_wrapper.frm_option_key {
 	width: 100%;
 	margin-top: 17px;
