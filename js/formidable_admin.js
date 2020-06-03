@@ -3457,6 +3457,20 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function showEmailWarning() {
+		/*jshint validthis:true */
+		var actionBox = jQuery( this ).closest( '.frm_form_action_settings' ),
+			emailRowSelector = '.frm_from_to_match_row',
+			fromVal = actionBox.find( 'input[name$="[post_content][from]"]' ).val(),
+			toVal = actionBox.find( 'input[name$="[post_content][email_to]"]' ).val();
+
+		if ( fromVal === toVal ) {
+			jQuery( actionBox ).find( emailRowSelector ).fadeIn( 'slow' );
+		} else {
+			jQuery( actionBox ).find( emailRowSelector ).fadeOut( 'slow' );
+		}
+	}
+
 	function checkActiveAction( type ) {
 		var limit = parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ), 10 );
 		var len = jQuery( '.frm_single_' + type + '_settings' ).length;
@@ -5552,6 +5566,7 @@ function frmAdminBuildJS() {
 			//BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
 			$formActions.on( 'click', '.frm_remove_field', hideEmailRow );
+			$formActions.on( 'change', '.frm_to_row, .frm_from_row', showEmailWarning );
 			$formActions.on( 'change', '.frm_tax_selector', changePosttaxRow );
 			$formActions.on( 'change', 'select.frm_single_post_field', checkDupPost );
 			$formActions.on( 'change', 'select.frm_toggle_post_content', togglePostContent );
