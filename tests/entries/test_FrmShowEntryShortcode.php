@@ -19,6 +19,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected $tr_style = ' style="background-color:#ffffff;"';
 	protected $td_style = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
+	public function __construct() {
+		parent::__construct();
+
+		$defaults = $this->get_defaults();
+		$this->td_style = str_replace( '#555555', $defaults['text_color'], $this->td_style );
+		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
+	}
+
 	/**
 	 * Tests no entry or id passed
 	 *
@@ -391,8 +399,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		);
 
 		$this->tr_style = str_replace( 'background-color:#ffffff', 'background-color:' . $atts['bg_color'], $this->tr_style );
-		$this->td_style = str_replace( '#555555', $atts['text_color'], $this->td_style );
-		$this->td_style = str_replace( '1px solid #cccccc', $atts['border_width'] . ' solid ' . $atts['border_color'], $this->td_style );
+
+		$defaults = $this->get_defaults();
+
+		$this->td_style = str_replace( 'color:' . $defaults['text_color'], 'color:' . $atts['text_color'], $this->td_style );
+		$this->td_style = str_replace( '1px solid ' . $defaults['border_color'], $atts['border_width'] . ' solid ' . $atts['border_color'], $this->td_style );
 
 		$content = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_html_content( $atts );
