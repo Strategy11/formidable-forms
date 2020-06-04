@@ -1986,6 +1986,8 @@ function frmAdminBuildJS() {
 		toggle( jQuery( '.frm_toggle_image_options_' + fieldId ) );
 		toggle( jQuery( '.frm_image_size_' + fieldId ) );
 		toggle( jQuery( '.frm_alignment_' + fieldId ) );
+		toggle( jQuery( '#other_button_' + fieldId ) );
+
 		hasImageOptions = imagesAsOptions( fieldId );
 
 		if ( hasImageOptions ) {
