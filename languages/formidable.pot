@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-06-05T20:25:46+02:00\n"
+"POT-Creation-Date: 2020-06-05T20:31:36+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -982,6 +982,7 @@ msgid "Check Box & Radio Fields"
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:397
+#: classes/views/frm-forms/settings-buttons.php:41
 msgid "Buttons"
 msgstr ""
 
@@ -1375,6 +1376,10 @@ msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:28
 msgid "In Theme"
+msgstr ""
+
+#: classes/views/frm-forms/add_form_style_options.php:4
+msgid "Page Turn Transitions"
 msgstr ""
 
 #: classes/views/frm-forms/add_form_style_options.php:10
