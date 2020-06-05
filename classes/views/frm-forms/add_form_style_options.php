@@ -1,17 +1,17 @@
 <tr>
-    <td>
+	<td>
 		<label for="frm_option_transition" class="frm_show_upgrade frm_noallow" data-medium="transitions" data-upgrade="Form transitions">
-			<?php esc_html_e( 'Page Turn Transitions', 'formidable-pro' ); ?>
+			<?php esc_html_e( 'Page Turn Transitions', 'formidable' ); ?>
 		</label>
-    </td>
-    <td>
-        <select id="frm_option_transition" >
+	</td>
+	<td>
+		<select id="frm_option_transition" >
 			<option disabled>
 				<?php esc_html_e( 'Slide horizonally', 'formidable' ); ?>
 			</option>
 			<option disabled>
 				<?php esc_html_e( 'Slide vertically', 'formidable' ); ?>
 			</option>
-        </select>
-    </td>
+		</select>
+	</td>
 </tr>

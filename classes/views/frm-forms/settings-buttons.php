@@ -37,8 +37,8 @@
 	</tr>
 	<?php do_action( 'frm_add_form_style_tab_options', $values ); ?>
 	<tr>
-	    <td colspan="2">
-			<h3><?php esc_html_e( 'Buttons', 'formidable-pro' ); ?></h3>
+		<td colspan="2">
+			<h3><?php esc_html_e( 'Buttons', 'formidable' ); ?></h3>
 		</td>
 	</tr>
 	<tr>
