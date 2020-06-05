@@ -2733,12 +2733,18 @@ function frmAdminBuildJS() {
 	 *  Get image size, if available, or use default of medium
 	 */
 	function getImageOptionSize( fieldId ) {
-		var $field = jQuery( '#field_options_image_size_' + fieldId );
+		var $field = jQuery( '#field_options_image_size_' + fieldId ),
+			defaultSize = getDefaultImageOptionSize();
+
 		if ( ! $field ) {
-			return 'medium';
+			return defaultSize;
 		} else {
-			return $field.val() ? $field.val() : 'medium';
+			return $field.val() ? $field.val() : defaultSize;
 		}
+	}
+
+	function getDefaultImageOptionSize() {
+		return frm_admin_js.default_image_option_size;
 	}
 
 	function resetDisplayedOpts( fieldId ) {

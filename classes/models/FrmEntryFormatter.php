@@ -417,7 +417,7 @@ class FrmEntryFormatter {
 
 			unset( $this->atts['plain_text'] );
 			// Add plain_text back in to for radio and checkbox fields, which may have images.
-			if ( in_array( $field_value->get_field_type(), array( 'radio', 'checkbox' ) ) ) {
+			if ( in_array( $field_value->get_field_type(), array( 'radio', 'checkbox', 'data' ) ) ) {
 				$this->atts['plain_text'] = $this->is_plain_text;
 			}
 			/**
