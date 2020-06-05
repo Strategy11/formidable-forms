@@ -1401,6 +1401,15 @@ class FrmFormsController {
 		return $errors;
 	}
 
+	/**
+	 * Education for premium features.
+	 *
+	 * @since 4.05
+	 */
+	public static function add_form_style_tab_options() {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php' );
+	}
+
 	/* FRONT-END FORMS */
 	public static function admin_bar_css() {
 		if ( is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {

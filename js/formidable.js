@@ -453,7 +453,7 @@ function frmFrontFormJS() {
 			type: 'POST', url: frm_js.ajax_url,
 			data: jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce,
 			success: function( response ) {
-				var formID, replaceContent, pageOrder, formReturned, contSubmit,
+				var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
 					showCaptcha, $fieldCont, key, inCollapsedSection, frmTrigger,
 					$recaptcha, recaptchaID,
 					defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
@@ -482,17 +482,25 @@ function frmFrontFormJS() {
 					response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
 					replaceContent = jQuery( object ).closest( '.frm_forms' );
 					removeAddedScripts( replaceContent, formID );
-					replaceContent.replaceWith( response.content );
-
+					delay = maybeSlideOut( replaceContent, response.content );
 					addUrlParam( response );
 
-					if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
-						pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
-						formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
-						frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
-					}
+					setTimeout(
+						function() {
+							replaceContent.replaceWith( response.content );
 
-					afterFormSubmitted( object, response );
+							addUrlParam( response );
+
+							if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
+								pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
+								formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
+								frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
+							}
+
+							afterFormSubmitted( object, response );
+						},
+						delay
+					);
 
 				} else if ( Object.keys( response.errors ).length ) {
 					// errors were returned
@@ -589,6 +597,21 @@ function frmFrontFormJS() {
 			formContainer.nextUntil( '.frm_end_ajax_' + formID ).remove();
 			endReplace.remove();
 		}
+	}
+
+	function maybeSlideOut( oldContent, newContent ) {
+		var c,
+			newClass = 'frm_slideout';
+		if ( newContent.indexOf( ' frm_slide' ) !== -1 ) {
+			c = oldContent.children();
+			if ( newContent.indexOf( ' frm_going_back' ) !== -1 ) {
+				newClass += ' frm_going_back';
+			}
+			c.removeClass( 'frm_going_back' );
+			c.addClass( newClass );
+			return 300;
+		}
+		return 0;
 	}
 
 	function addUrlParam( response ) {
