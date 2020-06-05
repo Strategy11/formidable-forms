@@ -483,7 +483,6 @@ function frmFrontFormJS() {
 					replaceContent = jQuery( object ).closest( '.frm_forms' );
 					removeAddedScripts( replaceContent, formID );
 					delay = maybeSlideOut( replaceContent, response.content );
-					addUrlParam( response );
 
 					setTimeout(
 						function() {
