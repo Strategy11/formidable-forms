@@ -370,6 +370,7 @@ class FrmXMLHelper {
 				}
 			}
 
+			self::maybe_add_required( $f );
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
 			self::maybe_update_get_values_form_setting( $imported, $f );
@@ -421,6 +422,17 @@ class FrmXMLHelper {
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
 			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
 		);
+	}
+
+	/**
+	 * Make sure the required indicator is set.
+	 *
+	 * @since 4.05
+	 */
+	private static function maybe_add_required( &$f ) {
+		if ( $f['required'] && ! isset( $f['field_options']['required_indicator'] ) ) {
+			$f['field_options']['required_indicator'] = '*';
+		}
 	}
 
 	/**
