@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.04.05\n"
+"Project-Id-Version: Formidable Forms 4.05b2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-05-28T00:31:36+02:00\n"
+"POT-Creation-Date: 2020-06-05T20:31:36+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -464,7 +464,7 @@ msgstr ""
 #: classes/models/fields/FrmFieldType.php:570
 #: classes/helpers/FrmFieldsHelper.php:167
 #: classes/helpers/FrmFieldsHelper.php:296
-#: classes/helpers/FrmXMLHelper.php:1099
+#: classes/helpers/FrmXMLHelper.php:1111
 msgid "%s is invalid"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr ""
 #. translators: %1$s - field type
 #. translators: %1$s: Number of items
 #: classes/models/FrmFormMigrator.php:581
-#: classes/helpers/FrmXMLHelper.php:981
+#: classes/helpers/FrmXMLHelper.php:993
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
 msgstr[0] ""
@@ -586,7 +586,7 @@ msgstr ""
 #: classes/controllers/FrmAddonsController.php:19
 #: classes/controllers/FrmAddonsController.php:20
 #: classes/views/frm-fields/back-end/smart-values.php:11
-#: classes/helpers/FrmFormsHelper.php:1277
+#: classes/helpers/FrmFormsHelper.php:1285
 msgid "Upgrade"
 msgstr ""
 
@@ -982,6 +982,7 @@ msgid "Check Box & Radio Fields"
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:397
+#: classes/views/frm-forms/settings-buttons.php:41
 msgid "Buttons"
 msgstr ""
 
@@ -1255,7 +1256,7 @@ msgstr ""
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1468
+#: classes/controllers/FrmFormsController.php:1477
 #: classes/views/frm-forms/list-templates.php:198
 #: classes/views/xml/import_form.php:128
 #: classes/views/styles/manage.php:54
@@ -1267,17 +1268,17 @@ msgstr ""
 msgid "(no title)"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1514
-#: classes/controllers/FrmFormsController.php:1528
+#: classes/controllers/FrmFormsController.php:1523
+#: classes/controllers/FrmFormsController.php:1537
 msgid "Please select a valid form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1760
+#: classes/controllers/FrmFormsController.php:1769
 msgid "Please wait while you are redirected."
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:1796
+#: classes/controllers/FrmFormsController.php:1805
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
@@ -1375,6 +1376,18 @@ msgstr ""
 
 #: classes/views/frm-forms/_publish_box.php:28
 msgid "In Theme"
+msgstr ""
+
+#: classes/views/frm-forms/add_form_style_options.php:4
+msgid "Page Turn Transitions"
+msgstr ""
+
+#: classes/views/frm-forms/add_form_style_options.php:10
+msgid "Slide horizonally"
+msgstr ""
+
+#: classes/views/frm-forms/add_form_style_options.php:13
+msgid "Slide vertically"
 msgstr ""
 
 #: classes/views/frm-forms/settings-html.php:3
@@ -1522,7 +1535,7 @@ msgstr ""
 
 #: classes/views/frm-forms/list-templates.php:259
 #: classes/views/frm-forms/list-templates.php:260
-#: classes/helpers/FrmFormsHelper.php:1264
+#: classes/helpers/FrmFormsHelper.php:1272
 msgid "Create Form"
 msgstr ""
 
@@ -1715,7 +1728,7 @@ msgstr ""
 msgid "Do not use Formidable styling"
 msgstr ""
 
-#: classes/views/frm-forms/settings-buttons.php:39
+#: classes/views/frm-forms/settings-buttons.php:45
 #: classes/views/frm-settings/messages.php:64
 msgid "Submit Button Text"
 msgstr ""
@@ -1806,28 +1819,32 @@ msgstr ""
 msgid "From"
 msgstr ""
 
-#: classes/views/frm-form-actions/_email_settings.php:45
-#: classes/views/frm-form-actions/_email_settings.php:51
+#: classes/views/frm-form-actions/_email_settings.php:44
+msgid "Warning: If you are sending an email to the user, the To and From fields should not match."
+msgstr ""
+
+#: classes/views/frm-form-actions/_email_settings.php:49
+#: classes/views/frm-form-actions/_email_settings.php:55
 msgid "Reply To"
 msgstr ""
 
-#: classes/views/frm-form-actions/_email_settings.php:60
+#: classes/views/frm-form-actions/_email_settings.php:64
 msgid "Subject"
 msgstr ""
 
-#: classes/views/frm-form-actions/_email_settings.php:67
+#: classes/views/frm-form-actions/_email_settings.php:71
 msgid "Message"
 msgstr ""
 
-#: classes/views/frm-form-actions/_email_settings.php:75
+#: classes/views/frm-form-actions/_email_settings.php:79
 msgid "Append IP Address, Browser, and Referring URL to message"
 msgstr ""
 
-#: classes/views/frm-form-actions/_email_settings.php:77
+#: classes/views/frm-form-actions/_email_settings.php:81
 msgid "Append Browser and Referring URL to message"
 msgstr ""
 
-#: classes/views/frm-form-actions/_email_settings.php:84
+#: classes/views/frm-form-actions/_email_settings.php:88
 msgid "Send Emails in Plain Text"
 msgstr ""
 
@@ -3390,7 +3407,7 @@ msgstr ""
 
 #: classes/helpers/FrmFormsListHelper.php:160
 #: classes/helpers/FrmFormsHelper.php:1096
-#: classes/helpers/FrmFormsHelper.php:1191
+#: classes/helpers/FrmFormsHelper.php:1199
 msgid "Trash"
 msgstr ""
 
@@ -3404,7 +3421,7 @@ msgid "Saving entries is disabled for this form"
 msgstr ""
 
 #: classes/helpers/FrmFormsListHelper.php:344
-#: classes/helpers/FrmFormsHelper.php:1190
+#: classes/helpers/FrmFormsHelper.php:1198
 #: classes/helpers/FrmCSVExportHelper.php:152
 msgid "Draft"
 msgstr ""
@@ -4592,7 +4609,7 @@ msgid "Left"
 msgstr ""
 
 #: classes/helpers/FrmStylesHelper.php:110
-#: classes/helpers/FrmFormsHelper.php:1129
+#: classes/helpers/FrmFormsHelper.php:1133
 msgid "Right"
 msgstr ""
 
@@ -4821,69 +4838,85 @@ msgid "Add this to a read-only field to display the text in bold without a borde
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1122
-msgid "Scroll Box"
+msgid "Big Total"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1123
-msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field."
+msgid "Add this to a read-only field to display the text in large, bold text without a border or background."
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1126
-msgid "First"
+msgid "Scroll Box"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1127
-msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
+msgid "If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field."
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1130
-msgid "First Grid Row"
+msgid "First"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1131
-msgid "Even Grid Row"
-msgstr ""
-
-#: classes/helpers/FrmFormsHelper.php:1132
-msgid "Odd Grid Row"
+msgid "Add this to the first field in each row along with a width. ie frm_first frm4"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1134
-msgid "Capitalize"
+msgid "First Grid Row"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1135
+msgid "Even Grid Row"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:1136
+msgid "Odd Grid Row"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:1138
+msgid "Color Block"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:1139
+msgid "Add a background color to the field or section."
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:1142
+msgid "Capitalize"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:1143
 msgid "Automatically capitalize the first letter in each word."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1192
+#: classes/helpers/FrmFormsHelper.php:1200
 msgid "Published"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1272
+#: classes/helpers/FrmFormsHelper.php:1280
 msgid "Renew"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1336
+#: classes/helpers/FrmFormsHelper.php:1344
 msgid "License plan required:"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1444
+#: classes/helpers/FrmFormsHelper.php:1452
 msgid "Is this intentional?"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1445
+#: classes/helpers/FrmFormsHelper.php:1453
 #: classes/helpers/FrmAppHelper.php:2253
 msgid "See the list of reserved words in WordPress."
 msgstr ""
 
 #. translators: %s: the name of a single parameter in the redirect URL
-#: classes/helpers/FrmFormsHelper.php:1454
+#: classes/helpers/FrmFormsHelper.php:1462
 msgid "The redirect URL is using the parameter \"%s\", which is reserved by WordPress. "
 msgstr ""
 
 #. translators: %s: the names of two or more parameters in the redirect URL, separated by commas
-#: classes/helpers/FrmFormsHelper.php:1460
+#: classes/helpers/FrmFormsHelper.php:1468
 msgid "The redirect URL is using the parameters \"%s\", which are reserved by WordPress. "
 msgstr ""
 
@@ -5489,69 +5522,69 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:938
+#: classes/helpers/FrmXMLHelper.php:950
 msgid "Imported"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:939
+#: classes/helpers/FrmXMLHelper.php:951
 msgid "Updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:964
+#: classes/helpers/FrmXMLHelper.php:976
 msgid "Nothing was imported or updated"
 msgstr ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:979
+#: classes/helpers/FrmXMLHelper.php:991
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:983
+#: classes/helpers/FrmXMLHelper.php:995
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:985
+#: classes/helpers/FrmXMLHelper.php:997
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:987
+#: classes/helpers/FrmXMLHelper.php:999
 msgid "%1$s Post"
 msgid_plural "%1$s Posts"
 msgstr[0] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:989
+#: classes/helpers/FrmXMLHelper.php:1001
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:991
+#: classes/helpers/FrmXMLHelper.php:1003
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:993
+#: classes/helpers/FrmXMLHelper.php:1005
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 
-#: classes/helpers/FrmXMLHelper.php:1017
+#: classes/helpers/FrmXMLHelper.php:1029
 msgid "Go to imported form"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1222
+#: classes/helpers/FrmXMLHelper.php:1234
 msgid "Create Posts"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1349
+#: classes/helpers/FrmXMLHelper.php:1361
 msgid "Email Notification"
 msgstr ""
 
