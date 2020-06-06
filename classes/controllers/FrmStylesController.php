@@ -45,10 +45,11 @@ class FrmStylesController {
 
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
+		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles2', 'FrmStylesController::route' );
 	}
 
 	public static function admin_init() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-styles' ) && ! FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
 			return;
 		}
 

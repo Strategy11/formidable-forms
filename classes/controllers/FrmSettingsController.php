@@ -6,7 +6,10 @@ class FrmSettingsController {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
+		$inbox  = new FrmInbox();
+		$unread = $inbox->unread_html();
+
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ) . $unread, 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
 	}
 
 	public static function license_box() {
@@ -29,12 +32,22 @@ class FrmSettingsController {
 	}
 
 	private static function get_settings_tabs() {
+		$inbox  = new FrmInbox();
+		$unread = $inbox->unread_html();
+
 		$sections = array(
 			'general' => array(
 				'class'    => __CLASS__,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
+			),
+			'inbox' => array(
+				'class'    => __CLASS__,
+				'function' => 'inbox',
+				'name'     => __( 'Inbox', 'formidable' ) . $unread,
+				'icon'     => 'frm_icon_font frm_email_icon',
+				'ajax'     => true,
 			),
 			'messages' => array(
 				'class'    => __CLASS__,
@@ -152,6 +165,17 @@ class FrmSettingsController {
 		$target_path = $uploads['basedir'] . '/formidable/css';
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/general.php' );
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function inbox() {
+		$inbox    = new FrmInbox();
+		$messages = $inbox->get_messages();
+		$messages = array_reverse( $messages );
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/inbox.php' );
 	}
 
 	/**

@@ -1,6 +1,5 @@
 <?php
 
-// TODO: change class name to FrmEmailController by 08/2017 or later
 class FrmNotification {
 	public function __construct() {
 		if ( ! defined( 'ABSPATH' ) ) {

@@ -1,14 +1,7 @@
 <div class="notice notice-info is-dismissible frm-review-notice">
 	<div class="frm-satisfied">
 		<p>
-			<?php
-			printf(
-				/* translators: %s: User name, %2$d: number of entries */
-				esc_html__( 'Congratulations%1$s! You have collected %2$d form submissions.', 'formidable' ),
-				esc_html( $name ),
-				absint( $entries )
-			);
-			?>
+			<?php echo esc_html( $title ); ?>
 			<br/>
 			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?>
 		</p>
