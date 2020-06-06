@@ -75,17 +75,16 @@ class FrmInbox extends FrmFormApi {
 		$this->set_messages();
 
 		$removed  = false;
-		foreach ( $messages as $t => $message ) {
+		foreach ( $this->messages as $t => $message ) {
 			$read    = isset( $message['read'] ) && ! empty( $message['read'] );
 			$expired = isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
 			if ( $read && $expired ) {
-				unset( $messages[ $t ] );
+				unset( $this->messages[ $t ] );
 				$removed = true;
 			}
 		}
 
 		if ( $removed ) {
-			$this->messages = $messages;
 			$this->update_list();
 		}
 	}
