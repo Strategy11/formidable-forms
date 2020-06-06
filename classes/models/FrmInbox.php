@@ -12,6 +12,7 @@ class FrmInbox extends FrmFormApi {
 
 	public function __construct( $for_parent = null ) {
 		$this->set_cache_key();
+		$this->set_messages();
 	}
 
 	/**
@@ -32,24 +33,19 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05
 	 */
 	public function get_messages() {
-		if ( $this->messages === false ) {
-			$this->set_messages();
-		}
 		return $this->messages;
 	}
 
 	/**
 	 * @since 4.05
 	 */
-	public function set_messages( $skip = '' ) {
+	public function set_messages() {
 		$this->messages = get_option( $this->option );
 		if ( empty( $this->messages ) ) {
 			$this->messages = array();
 		}
 
-		if ( $skip !== 'skip' ) {
-			$this->add_api_messages();
-		}
+		$this->add_api_messages();
 
 		/**
 		 * Messages are in an array.
@@ -71,29 +67,10 @@ class FrmInbox extends FrmFormApi {
 		}
 	}
 
-	private function clean_messages() {
-		$this->set_messages();
-
-		$removed  = false;
-		foreach ( $this->messages as $t => $message ) {
-			$read    = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$expired = isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
-			if ( $read || $expired ) {
-				unset( $this->messages[ $t ] );
-				$removed = true;
-			}
-		}
-
-		if ( $removed ) {
-			$this->update_list();
-		}
-	}
-
 	/**
 	 * @param array $message
 	 */
 	public function add_message( $message ) {
-		$this->set_messages( 'skip' );
 		$time = isset( $message['time'] ) ? $message['time'] : time();
 
 		if ( isset( $this->messages[ $message['key'] ] ) && ! isset( $message['force'] ) ) {
@@ -118,11 +95,26 @@ class FrmInbox extends FrmFormApi {
 		$this->clean_messages();
 	}
 
+	private function clean_messages() {
+		$removed  = false;
+		foreach ( $this->messages as $t => $message ) {
+			$read    = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
+			$expired = isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
+			if ( $read || $expired ) {
+				unset( $this->messages[ $t ] );
+				$removed = true;
+			}
+		}
+
+		if ( $removed ) {
+			$this->update_list();
+		}
+	}
+
 	/**
 	 * @param string $key in time format.
 	 */
 	public function mark_read( $key ) {
-		$this->set_messages();
 		if ( ! isset( $this->messages[ $key ] ) ) {
 			return;
 		}
@@ -133,6 +125,10 @@ class FrmInbox extends FrmFormApi {
 		$this->messages[ $key ]['read'][ get_current_user_id() ] = time();
 
 		$this->update_list();
+	}
+
+	private function update_list() {
+		update_option( $this->option, $this->messages, 'no' );
 	}
 
 	public function unread() {
@@ -153,9 +149,5 @@ class FrmInbox extends FrmFormApi {
 			$html = '<span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
 		}
 		return $html;
-	}
-
-	private function update_list() {
-		update_option( $this->option, $this->messages, 'no' );
 	}
 }
