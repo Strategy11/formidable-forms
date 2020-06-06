@@ -9,6 +9,24 @@ if ( isset( $message ) && '' !== $message ) {
 	}
 }
 
+if ( ! isset( $messages ) ) {
+	$messages = array();
+}
+$messages = apply_filters( 'frm_message_list', $messages );
+if ( is_array( $messages ) && count( $messages ) > 0 ) {
+	?>
+	<div class="frm_warning_style" role="alert">
+		<ul id="frm_messages">
+			<?php
+			foreach ( $messages as $m) {
+				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br' ) ) . '</li>'; // WPCS: XSS ok.
+			}
+			?>
+		</ul>
+	</div>
+	<?php
+}
+
 if ( isset( $warnings ) && is_array( $warnings ) && count( $warnings ) > 0 ) {
 	?>
 	<div class="frm_warning_style inline" role="alert">

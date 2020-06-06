@@ -231,7 +231,10 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 		if ( $pagenow ) {
 			// allow this to be true during ajax load i.e. ajax form builder loading
-			return ( $pagenow == 'admin.php' || $pagenow == 'admin-ajax.php' ) && $get_page == $page;
+			$is_page = ( $pagenow == 'admin.php' || $pagenow == 'admin-ajax.php' ) && $get_page == $page;
+			if ( $is_page ) {
+				return true;
+			}
 		}
 
 		return is_admin() && $get_page == $page;
@@ -1109,7 +1112,7 @@ class FrmAppHelper {
 	public static function is_full_screen() {
 		$action       = self::simple_get( 'frm_action', 'sanitize_title' );
 		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
-		$styler       = self::is_admin_page( 'formidable-styles' );
+		$styler       = self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
 		$full_entries = self::simple_get( 'frm-full', 'absint' );
 
 		return $full_builder || $full_entries || $styler || self::is_view_builder_page();

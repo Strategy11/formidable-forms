@@ -98,8 +98,33 @@ class FrmReviews {
 			$name = ' ' . $name;
 		}
 
+		$title = sprintf(
+			/* translators: %s: User name, %2$d: number of entries */
+			esc_html__( 'Congratulations%1$s! You have collected %2$d form submissions.', 'formidable' ),
+			esc_html( $name ),
+			absint( $entries )
+		);
+
+		$this->add_to_inbox( $title );
+
 		// We have a candidate! Output a review message.
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/review.php' );
+	}
+
+	private function add_to_inbox( $title ) {
+		$message = new FrmInbox();
+		$message->add_message(
+			array(
+				'key'     => 'review',
+				'force'   => true,
+				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
+					'- Steph Wells<br/>' .
+					'<span>' . esc_html__( 'Founder and Lead Developer of Formidable Forms', 'formidable' ) . '<span>',
+				'subject' => $title,
+				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button-secondary frm-button-secondary" data-link="yes" target="_blank" rel="noopener">' .
+					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
+			)
+		);
 	}
 
 	/**

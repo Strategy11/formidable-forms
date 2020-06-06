@@ -8,7 +8,10 @@ class FrmAppController {
 			return;
 		}
 
-		$menu_name = FrmAppHelper::get_menu_name();
+		$inbox  = new FrmInbox();
+		$unread = $inbox->unread_html();
+
+		$menu_name = FrmAppHelper::get_menu_name() . $unread;
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 	}
 
@@ -88,6 +91,7 @@ class FrmAppController {
 			'formidable-import',
 			'formidable-settings',
 			'formidable-styles',
+			'formidable-styles2',
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
@@ -365,7 +369,7 @@ class FrmAppController {
 			'bootstrap-multiselect',
 		);
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) || FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
 			$dependecies[] = 'wp-color-picker';
 		}
 
@@ -390,7 +394,7 @@ class FrmAppController {
 			FrmAppHelper::localize_script( 'admin' );
 
 			wp_enqueue_style( 'formidable-admin' );
-			if ( 'formidable-styles' !== $page ) {
+			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_style( 'formidable-dropzone' );
 			} else {

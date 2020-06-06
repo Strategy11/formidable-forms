@@ -3,8 +3,8 @@
 class FrmXMLController {
 
 	public static function menu() {
-		$notification_count = FrmFormMigratorsHelper::notification_count();
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ) . $notification_count, 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
+		FrmFormMigratorsHelper::maybe_add_to_inbox();
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
 	}
 
 	public static function add_default_templates() {

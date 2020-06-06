@@ -2912,6 +2912,7 @@ img.frm_help {
 	width: 20px;
 	height: 20px;
 	position: relative;
+	display: inline-block;
 }
 
 #frm-show-fields .frm-wait:only-child {
@@ -3661,6 +3662,81 @@ label.frm-example-icon {
 
 .edd_frm_status_icon.frm_icon_font.frm_inactive_icon {
 	color: green;
+}
+
+/* Inbox */
+#inbox_settings h2.frm-h2 {
+	margin-bottom: 0 !important;
+}
+
+.frm_inbox_card {
+	display: grid;
+	grid-template-columns: 72px 1fr;
+	grid-gap: 10px;
+	border-bottom: 1px solid var(--grey-border);
+	padding: 25px 0;
+}
+
+.frm_inbox_card_icon {
+	grid-row: span 3 / span 3;
+	padding-top: 20px;
+	text-align: center
+}
+
+.frm_inbox_card_icon svg {
+	height: 48px;
+	width: 48px;
+	color: var(--blue-border);
+}
+
+.frm_inbox_card header {
+	display: grid;
+	grid-template-columns: 1fr 150px;
+	align-items: center;
+}
+
+#form_global_settings .frm_inbox_card h3 {
+	border: none;
+	text-transform: none;
+	margin: 0;
+	padding: 0;
+	font-weight: 600;
+}
+
+.frm_inbox_date {
+	text-align: right;
+}
+
+.frm_inbox_count,
+.frm_inbox_unread {
+	background: var(--orange);
+	color: #fff;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 8px;
+	font-size: 11px;
+	text-align: center;
+}
+
+.frm_inbox_unread {
+	width: 8px;
+	height: 8px;
+}
+
+.frm_inbox_count {
+	min-width: 18px;
+	height: 18px;
+	margin-left: 2px;
+	vertical-align: text-bottom;
+}
+
+#inbox_settings .frm_inbox_count {
+	display: none;
+}
+
+a:hover span.plugin-count,
+.frm-category-tabs > li.active span.plugin-count {
+	color: #fff;
 }
 
 /* Styles tabs */

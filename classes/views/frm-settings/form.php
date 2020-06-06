@@ -34,14 +34,14 @@
 									<?php } ?>
 									<div id="<?php echo esc_attr( $section['anchor'] ); ?>"
 											class="<?php echo esc_attr( $section['anchor'] ); ?> tabs-panel <?php echo esc_attr( $current === $section['anchor'] ? 'frm_block' : 'frm_hidden' ); ?>">
+											<h2 class="frm-h2">
+												<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // WPCS: XSS ok. ?>
+											</h2>
 										<?php if ( isset( $section['ajax'] ) ) { ?>
 											<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $section['anchor'] ); ?>_ajax">
 												<span class="frm-wait"></span>
 											</div>
 										<?php } else { ?>
-											<h2 class="frm-h2">
-												<?php echo esc_html( $section['name'] ); ?>
-											</h2>
 											<?php
 											if ( isset( $section['class'] ) ) {
 												call_user_func( array( $section['class'], $section['function'] ) );
