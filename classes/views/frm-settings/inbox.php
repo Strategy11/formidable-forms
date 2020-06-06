@@ -26,7 +26,7 @@ foreach ( $messages as $key => $message ) {
 					esc_html__( '%s ago', 'formidable' ),
 					esc_html( FrmAppHelper::human_time_diff( $message['created'] ) )
 				);
-				?>
+	?>
 			</span>
 		</header>
 		<div class="frm_inbox_body">
