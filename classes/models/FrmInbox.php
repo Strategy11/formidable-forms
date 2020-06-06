@@ -71,28 +71,42 @@ class FrmInbox extends FrmFormApi {
 	 * @param array $message
 	 */
 	public function add_message( $message ) {
-		$time = isset( $message['time'] ) ? $message['time'] : time();
-
 		if ( isset( $this->messages[ $message['key'] ] ) && ! isset( $message['force'] ) ) {
 			// Don't replace messages unless required.
 			return;
-		} else {
+		}
+
+		if ( isset( $this->messages[ $message['key'] ] ) ) {
 			// Move up and mark as new.
 			unset( $this->messages[ $message['key'] ] );
 		}
 
+		$message = $this->fill_message( $message );
 		$this->messages[ $message['key'] ] = array(
-			'created' => $time,
+			'created' => $message['time'],
 			'message' => $message['message'],
 			'subject' => $message['subject'],
-			'icon'    => isset( $message['icon'] ) ? $message['icon'] : 'frm_tooltip_icon',
+			'icon'    => $message['icon'],
 			'cta'     => $message['cta'],
-			'expires' => isset( $message['expires'] ) ? $message['expires'] : false,
+			'expires' => $message['expires'],
 		);
 
 		$this->update_list();
 
 		$this->clean_messages();
+	}
+
+	private function fill_message( $message ) {
+		$defaults = array(
+			'time'    => time(),
+			'message' => '',
+			'subject' => '',
+			'icon'    => 'frm_tooltip_icon',
+			'cta'     => '',
+			'expires' => false,
+		);
+
+		return array_merge( $defaults, $message );
 	}
 
 	private function clean_messages() {
