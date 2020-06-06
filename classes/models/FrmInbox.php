@@ -18,7 +18,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_inbox_cach';
+		$this->cache_key = 'frm_inbox_cache';
 	}
 
 	/**
