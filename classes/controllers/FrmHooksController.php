@@ -141,8 +141,6 @@ class FrmHooksController {
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
-		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
-
 		FrmSMTPController::load_hooks();
 	}
 
@@ -178,6 +176,8 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
 		add_action( 'wp_ajax_frm_install_form', 'FrmFormsController::build_new_form' );
 		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
+
+		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
 
 		// Settings.
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );

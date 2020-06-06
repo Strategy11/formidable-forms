@@ -47,7 +47,7 @@ class FrmInbox extends FrmFormApi {
 			$this->messages = array();
 		}
 
-		if ( $skip !== 'api' ) {
+		if ( $skip !== 'skip' ) {
 			$this->add_api_messages();
 		}
 
@@ -94,7 +94,7 @@ class FrmInbox extends FrmFormApi {
 	 * @param array $message
 	 */
 	public function add_message( $message ) {
-		$this->set_messages( 'api' );
+		$this->set_messages( 'skip' );
 		$time = isset( $message['time'] ) ? $message['time'] : time();
 
 		if ( isset( $this->messages[ $message['key'] ] ) && ! isset( $message['force'] ) ) {

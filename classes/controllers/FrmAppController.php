@@ -8,8 +8,7 @@ class FrmAppController {
 			return;
 		}
 
-		$inbox  = new FrmInbox();
-		$unread = $inbox->unread_html();
+		$unread = self::get_notice_count();
 
 		$menu_name = FrmAppHelper::get_menu_name() . $unread;
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
@@ -17,6 +16,16 @@ class FrmAppController {
 
 	private static function get_menu_position() {
 		return apply_filters( 'frm_menu_position', '29.3' );
+	}
+
+	/**
+	 * @since 4.05
+	 */
+	private static function get_notice_count() {
+		FrmFormMigratorsHelper::maybe_add_to_inbox();
+
+		$inbox  = new FrmInbox();
+		return $inbox->unread_html();
 	}
 
 	/**

@@ -3,7 +3,6 @@
 class FrmXMLController {
 
 	public static function menu() {
-		FrmFormMigratorsHelper::maybe_add_to_inbox();
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
 	}
 
