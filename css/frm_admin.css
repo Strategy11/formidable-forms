@@ -3436,6 +3436,7 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	-moz-box-sizing: border-box;
 	position: relative;
 	height: 100%;
+	align-items: center;
 }
 
 .frm_image_option_container .frm_selected_checkmark,
