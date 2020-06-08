@@ -4,4 +4,5 @@
  */
 
 import './form/block';
+import './form/calculator';
 
