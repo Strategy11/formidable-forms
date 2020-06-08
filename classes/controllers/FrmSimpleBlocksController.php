@@ -26,6 +26,7 @@ class FrmSimpleBlocksController {
 			'forms' => self::get_forms_options(),
 			'icon'  => $icon,
 			'name'  => $block_name,
+			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
