@@ -42,13 +42,6 @@ class FrmSettingsController {
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
-			'inbox' => array(
-				'class'    => __CLASS__,
-				'function' => 'inbox',
-				'name'     => __( 'Inbox', 'formidable' ) . $unread,
-				'icon'     => 'frm_icon_font frm_email_icon',
-				'ajax'     => true,
-			),
 			'messages' => array(
 				'class'    => __CLASS__,
 				'function' => 'message_settings',
@@ -75,6 +68,13 @@ class FrmSettingsController {
 					'medium'  => 'white-label',
 					'upgrade' => __( 'White labeling options', 'formidable' ),
 				),
+			),
+			'inbox' => array(
+				'class'    => __CLASS__,
+				'function' => 'inbox',
+				'name'     => __( 'Inbox', 'formidable' ) . $unread,
+				'icon'     => 'frm_icon_font frm_email_icon',
+				'ajax'     => true,
 			),
 		);
 
