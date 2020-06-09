@@ -5,29 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormMigratorsHelper {
 
-	public static function notification_count() {
-		$forms = self::import_links();
-		if ( empty( $forms ) ) {
-			return '';
-		}
-
-		$count = count( $forms );
-		$dismissed = get_option( 'frm_dismissed' );
-		if ( ! empty( $dismissed ) ) {
-			foreach ( $forms as $form ) {
-				if ( self::is_dismissed( $form, $dismissed ) ) {
-					$count --;
-				}
-			}
-		}
-
-		if ( $count < 1 ) {
-			return '';
-		}
-
-		return ' <span class="update-plugins"><span class="plugin-count">' . absint( $count ) . '</span></span>';
-	}
-
 	private static function is_dismissed( $form, $dismissed = null ) {
 		if ( $dismissed === null ) {
 			$dismissed = get_option( 'frm_dismissed' );
@@ -172,5 +149,12 @@ class FrmFormMigratorsHelper {
 		$dismissed[] = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		update_option( 'frm_dismissed', array_filter( $dismissed ), 'no' );
 		wp_die();
+	}
+
+	/**
+	 * @deprecated 4.05
+	 */
+	public static function notification_count() {
+		_deprecated_function( __METHOD__, '4.05' );
 	}
 }
