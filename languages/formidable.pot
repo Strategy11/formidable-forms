@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.05b3\n"
+"Project-Id-Version: Formidable Forms 4.05\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-06-09T01:09:34+02:00\n"
+"POT-Creation-Date: 2020-06-09T21:57:10+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -263,6 +263,7 @@ msgstr ""
 
 #: classes/models/FrmField.php:34
 #: classes/controllers/FrmFormsController.php:1166
+#: classes/views/inbox/list.php:21
 msgid "Email"
 msgstr ""
 
@@ -659,18 +660,18 @@ msgstr ""
 msgid "Your plugin has been activated. Please reload the page to see more options."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:157
+#: classes/controllers/FrmAppController.php:156
 msgid "Build"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:164
+#: classes/controllers/FrmAppController.php:163
 #: classes/views/frm-forms/settings.php:8
 #: classes/views/frm-settings/form.php:9
 #: classes/helpers/FrmFormsListHelper.php:304
 msgid "Settings"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:171
+#: classes/controllers/FrmAppController.php:170
 #: classes/controllers/FrmXMLController.php:133
 #: classes/controllers/FrmFormsController.php:729
 #: classes/controllers/FrmEntriesController.php:8
@@ -679,17 +680,17 @@ msgstr ""
 msgid "Entries"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:182
-#: classes/controllers/FrmAppController.php:188
+#: classes/controllers/FrmAppController.php:181
+#: classes/controllers/FrmAppController.php:187
 msgid "Views"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:194
-#: classes/controllers/FrmAppController.php:200
+#: classes/controllers/FrmAppController.php:193
+#: classes/controllers/FrmAppController.php:199
 msgid "Reports"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:216
+#: classes/controllers/FrmAppController.php:215
 msgid "Build a Form"
 msgstr ""
 
@@ -734,54 +735,50 @@ msgstr ""
 msgid "There are no entries for that form."
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:12
+#: classes/controllers/FrmSettingsController.php:9
 msgid "Global Settings"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:42
+#: classes/controllers/FrmSettingsController.php:36
 msgid "General Settings"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:48
+#: classes/controllers/FrmSettingsController.php:42
 msgid "Message Defaults"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:54
+#: classes/controllers/FrmSettingsController.php:48
 msgid "Permissions"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:60
+#: classes/controllers/FrmSettingsController.php:54
 msgid "reCaptcha"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:64
+#: classes/controllers/FrmSettingsController.php:58
 msgid "White Labeling"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:69
+#: classes/controllers/FrmSettingsController.php:63
 msgid "White labeling options"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:75
-msgid "Inbox"
-msgstr ""
-
-#: classes/controllers/FrmSettingsController.php:96
+#: classes/controllers/FrmSettingsController.php:83
 #: classes/views/addons/settings.php:2
 msgid "Plugin Licenses"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:105
+#: classes/controllers/FrmSettingsController.php:92
 #: classes/views/frm-forms/settings-advanced.php:181
 msgid "Miscellaneous"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:239
-#: classes/controllers/FrmSettingsController.php:242
+#: classes/controllers/FrmSettingsController.php:215
+#: classes/controllers/FrmSettingsController.php:218
 msgid "Settings Saved"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:261
+#: classes/controllers/FrmSettingsController.php:237
 #: classes/views/frm-forms/_publish_box.php:9
 #: classes/views/frm-forms/edit.php:23
 #: classes/views/frm-forms/add_field_links.php:159
@@ -792,64 +789,73 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:288
+#: classes/controllers/FrmSettingsController.php:264
 msgid "Extra form features like file uploads, pagination, etc"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:289
+#: classes/controllers/FrmSettingsController.php:265
 msgid "Repeaters & cascading fields for advanced forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:290
+#: classes/controllers/FrmSettingsController.php:266
 msgid "Flexibly view, search, edit, and delete entries anywhere"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:291
+#: classes/controllers/FrmSettingsController.php:267
 msgid "Display entries with virtually limitless Formidable views"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:292
+#: classes/controllers/FrmSettingsController.php:268
 msgid "Create surveys & polls"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:293
+#: classes/controllers/FrmSettingsController.php:269
 msgid "WordPress user registration and login forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:294
+#: classes/controllers/FrmSettingsController.php:270
 msgid "Create Stripe, PayPal or Authorize.net payment forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:295
+#: classes/controllers/FrmSettingsController.php:271
 msgid "Powerful conditional logic for smart forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:296
+#: classes/controllers/FrmSettingsController.php:272
 msgid "Integrations with 1000+ marketing & payment services"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:297
+#: classes/controllers/FrmSettingsController.php:273
 msgid "Collect digital signatures"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:298
+#: classes/controllers/FrmSettingsController.php:274
 msgid "Accept user-submitted content with Post submissions"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:299
+#: classes/controllers/FrmSettingsController.php:275
 msgid "Email routing"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:300
+#: classes/controllers/FrmSettingsController.php:276
 msgid "Create calculator forms"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:301
+#: classes/controllers/FrmSettingsController.php:277
 msgid "Save draft entries and return later"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:302
+#: classes/controllers/FrmSettingsController.php:278
 msgid "Analyze form data with graphs & stats"
+msgstr ""
+
+#: classes/controllers/FrmInboxController.php:13
+#: classes/views/inbox/list.php:6
+msgid "Inbox"
+msgstr ""
+
+#: classes/controllers/FrmInboxController.php:73
+msgid "Help Formidable improve with usage tracking"
 msgstr ""
 
 #: classes/controllers/FrmSMTPController.php:99
@@ -1403,6 +1409,27 @@ msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:445
 msgid "Entry was Successfully Deleted"
+msgstr ""
+
+#: classes/views/inbox/list.php:14
+msgid "You don't have any messages"
+msgstr ""
+
+#: classes/views/inbox/list.php:16
+msgid "Get the details about new updates, tips, sales, and more. We'll keep you in the loop."
+msgstr ""
+
+#: classes/views/inbox/list.php:17
+msgid "Want more news and email updates?"
+msgstr ""
+
+#: classes/views/inbox/list.php:26
+msgid "Subscribe"
+msgstr ""
+
+#. translators: %s: Time stamp
+#: classes/views/inbox/list.php:63
+msgid "%s ago"
 msgstr ""
 
 #: classes/views/frm-forms/actions-dropdown.php:2
@@ -2883,11 +2910,6 @@ msgstr ""
 
 #: classes/views/frm-settings/permissions.php:2
 msgid "Select users that are allowed access to Formidable. Without access to View Forms, users will be unable to see the Formidable menu."
-msgstr ""
-
-#. translators: %s: Time stamp
-#: classes/views/frm-settings/inbox.php:26
-msgid "%s ago"
 msgstr ""
 
 #: classes/views/frm-settings/settings_cta.php:8
