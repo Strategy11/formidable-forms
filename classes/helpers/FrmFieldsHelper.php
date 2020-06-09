@@ -488,7 +488,7 @@ class FrmFieldsHelper {
 			return '';
 		}
 
-		$image_size = ( ! empty ( $field['image_size'] ) ) ? $field['image_size'] : 'medium';
+		$image_size = ( ! empty ( $field['image_size'] ) ) ? $field['image_size'] : FrmAppHelper::get_default_image_option_size();
 
 		return ' frm_image_options frm_image_size_' . $image_size . ' ';
 	}
@@ -556,10 +556,12 @@ class FrmFieldsHelper {
 		return FrmFieldsController::check_image( $opt, $opt_key, $field );
 	}
 
-	public static function get_image_url( $image_id, $size = 'medium' ) {
+	public static function get_image_url( $image_id, $size = false ) {
 		if ( empty( $image_id ) ) {
 			return '';
 		}
+
+		$size = ! empty( $size ) ? $size : FrmAppHelper::get_default_image_option_size();
 
 		$url = wp_get_attachment_image_src( (int) $image_id, $size )[0];
 

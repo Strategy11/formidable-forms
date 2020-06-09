@@ -12,7 +12,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( is_array( $field['options'] ) ) {
 
-	$image_size = ! empty ( $field['image_size'] ) ? $field[ 'image_size' ] : 'medium';
+	$image_size = ! empty ( $field['image_size'] ) ? $field[ 'image_size' ] : FrmAppHelper::get_default_image_option_size();
 	$image_option_class = ! empty( $field['image_options'] ) ? ' frm_image_option frm_image_' . $image_size : '';
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
