@@ -3443,15 +3443,7 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 }
 
 .frm_image_options .frm_image_option_container {
-	display: flex;
-	flex-wrap: wrap;
 	border: 1px solid rgba(40, 47, 54, 0.2);
-	border-radius:  3px;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	position: relative;
-	height: 100%;
-	align-items: center;
 }
 
 .frm_image_option_container .frm_selected_checkmark,
