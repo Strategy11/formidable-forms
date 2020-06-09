@@ -22,8 +22,6 @@ class FrmAppController {
 	 * @since 4.05
 	 */
 	private static function get_notice_count() {
-		FrmFormMigratorsHelper::maybe_add_to_inbox();
-
 		$inbox  = new FrmInbox();
 		return $inbox->unread_html();
 	}
@@ -101,6 +99,7 @@ class FrmAppController {
 			'formidable-settings',
 			'formidable-styles',
 			'formidable-styles2',
+			'formidable-inbox',
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
