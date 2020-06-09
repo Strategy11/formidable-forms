@@ -459,7 +459,7 @@ class FrmFieldsHelper {
 		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_markup() . $image;
 
 		if ( $show_label ) {
-			$label .= '<span class="frm_text_label_for_image">' . $text_label . '</span>';
+			$label .= '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' . $text_label . '</span></span>';
 		}
 
 		$label .= '</div>';

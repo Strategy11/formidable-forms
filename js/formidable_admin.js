@@ -2929,7 +2929,7 @@ function frmAdminBuildJS() {
 			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
 		}
 		if ( showLabelWithImage ) {
-			fullLabel += '<span class="frm_text_label_for_image">' + originalLabel + '</span>';
+			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image ' : '';
