@@ -229,12 +229,14 @@ class FrmEntriesHelper {
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
 
+		$image_option = FrmField::is_image_option( $field );
+
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
 			'show_filename' => true,
 			'truncate'      => false,
-			'sep'           => ', ',
+			'sep'           => $image_option ? '' : ', ',
 			'post_id'       => 0,
 			'form_id'       => $field->form_id,
 			'field'         => $field,
@@ -244,7 +246,6 @@ class FrmEntriesHelper {
 		);
 
 		$atts = wp_parse_args( $atts, $defaults );
-		$image_option = FrmField::is_image_option( $field );
 
 		if ( FrmField::is_image( $field ) || $field->type == 'star' || $image_option ) {
 			$atts['truncate'] = false;
