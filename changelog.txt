@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.05 =
+* Updates to the default form styling.
+* New: Added an inbox as a centralized place for notices and communication.
+* Help prevent common email issues by showing a warning in the email settings when the from and to email addresses are the same.
+* Fix: Forms edited after export and reimported were losing the required indicator in some cases.
+
 = 4.04.05 =
 * When some styling settings are blank, allow inheritance from theme styling.
 * Allow a form action to be updated during form migration.

@@ -113,8 +113,9 @@ class FrmInbox extends FrmFormApi {
 		$removed  = false;
 		foreach ( $this->messages as $t => $message ) {
 			$read    = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
+			$dismissed = isset( $message['dismissed'] ) && ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
 			$expired = isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
-			if ( $read || $expired ) {
+			if ( $read || $expired || $dismissed ) {
 				unset( $this->messages[ $t ] );
 				$removed = true;
 			}
@@ -126,7 +127,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $key in time format.
+	 * @param string $key
 	 */
 	public function mark_read( $key ) {
 		if ( ! isset( $this->messages[ $key ] ) ) {
@@ -137,6 +138,22 @@ class FrmInbox extends FrmFormApi {
 			$this->messages[ $key ]['read'] = array();
 		}
 		$this->messages[ $key ]['read'][ get_current_user_id() ] = time();
+
+		$this->update_list();
+	}
+
+	/**
+	 * @param string $key
+	 */
+	public function dismiss( $key ) {
+		if ( ! isset( $this->messages[ $key ] ) ) {
+			return;
+		}
+
+		if ( ! isset( $this->messages[ $key ]['dismissed'] ) ) {
+			$this->messages[ $key ]['dismissed'] = array();
+		}
+		$this->messages[ $key ]['dismissed'][ get_current_user_id() ] = time();
 
 		$this->update_list();
 	}
@@ -160,7 +177,7 @@ class FrmInbox extends FrmFormApi {
 		$html = '';
 		$count = count( $this->unread() );
 		if ( $count ) {
-			$html = '<span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
 		}
 		return $html;
 	}

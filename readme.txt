@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 4.04.05
+Stable tag: 4.05
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -444,16 +444,15 @@ Yes, Formidable is not your basic contact form plugin. You can use it to create 
 Our Stripe integration helps you quickly accept credit card payments online. Our PayPal form integration allows you to accept PayPal payments, subscriptions, and donations online.
 
 == Changelog ==
+= 4.05 =
+* Updates to the default form styling.
+* New: Added an inbox as a centralized place for notices and communication.
+* Help prevent common email issues by showing a warning in the email settings when the from and to email addresses are the same.
+* Fix: Forms edited after export and reimported were losing the required indicator in some cases.
+
 = 4.04.05 =
 * When some styling settings are blank, allow inheritance from theme styling.
 * Allow a form action to be updated during form migration.
 * Code: Update javascript codestyling.
-
-= 4.04.04 =
-* Increased WP version requirement to 4.7.
-* Added more options on Import/Export page depending on what other plugins are installed.
-* More reliably add new options in fields when also reordering.
-* Fix: When a newly added option is set as the default value, save it correctly.
-* Added an easy way to install and SMTP plugin for better email deliverability.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

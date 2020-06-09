@@ -5367,6 +5367,9 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
+			} else if ( document.getElementById( 'frm_inbox_page' ) !== null ) {
+				// Inbox page
+				frmAdminBuild.inboxInit();
 			} else {
 				// New form selection page
 				initNewFormModal();
@@ -5811,6 +5814,31 @@ function frmAdminBuildJS() {
 			$addRemove.on( 'change', '.frm_where_is_options', hideWhereOptions );
 
 			setDefaultPostStatus();
+		},
+
+		inboxInit: function() {
+			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).click( function( e ) {
+				var message = this.parentNode.parentNode,
+					key = message.getAttribute( 'data-message' ),
+					href = this.getAttribute( 'href' );
+
+				e.preventDefault();
+
+				data = {
+					action: 'frm_inbox_dismiss',
+					key: key,
+					nonce: frmGlobal.nonce
+				};
+				postAjax( data, function() {
+					if ( href !== '#' ) {
+						window.location = href;
+						return true;
+					}
+					fadeOut( message, function() {
+						message.parentNode.removeChild( message );
+					});
+				});
+			});
 		},
 
 		styleInit: function() {

@@ -122,6 +122,9 @@ class FrmHooksController {
 		// Forms Model.
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
 
+		// Inbox Controller.
+		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
+
 		// Settings Controller.
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
 		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
@@ -178,6 +181,9 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
 
 		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
+
+		// Inbox.
+		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );
 
 		// Settings.
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );
