@@ -3476,11 +3476,11 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	padding: 10px;
 }
 
-#form_entries_page .frm_text_label_for_image {
+.frm_list_entry_page .frm_text_label_for_image {
 	display: none;
 }
 
-#form_entries_page .frm-summary-page-wrapper .frm_text_label_for_image {
+.frm-summary-page-wrapper .frm_text_label_for_image {
 	display: block;
 }
 
