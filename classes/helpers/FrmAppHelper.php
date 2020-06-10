@@ -1837,9 +1837,26 @@ class FrmAppHelper {
 
 		$time_strings = self::get_time_strings();
 
+		if ( ! is_numeric( $levels ) ) {
+			// Show time in specified unit.
+			$levels = self::get_unit( $levels );
+			if ( isset( $time_strings[ $levels ] ) ) {
+				$diff = array(
+					$levels => self::time_format( $levels, $diff ),
+				);
+				$time_strings = array(
+					$levels => $time_strings[ $levels ],
+				);
+			}
+			$levels = 1;
+		}
+
 		foreach ( $time_strings as $k => $v ) {
-			if ( $diff[ $k ] ) {
+			if ( isset( $diff[ $k ] ) && $diff[ $k ] ) {
 				$time_strings[ $k ] = $diff[ $k ] . ' ' . ( $diff[ $k ] > 1 ? $v[1] : $v[0] );
+			} elseif ( isset( $diff[ $k ] ) && count( $time_strings ) === 1 ) {
+				// Account for 0.
+				$time_strings[ $k ] = $diff[ $k ] . ' ' . $v[1];
 			} else {
 				unset( $time_strings[ $k ] );
 			}
@@ -1847,9 +1864,69 @@ class FrmAppHelper {
 
 		$levels_deep     = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
 		$time_strings    = array_slice( $time_strings, 0, $levels_deep );
-		$time_ago_string = $time_strings ? implode( ' ', $time_strings ) : '0 ' . __( 'seconds', 'formidable' );
+		$time_ago_string = implode( ' ', $time_strings );
 
 		return $time_ago_string;
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private static function time_format( $unit, $diff ) {
+		$return = array(
+			'y' => 'y',
+			'd' => 'days',
+		);
+		if ( isset( $return[ $unit ] ) ) {
+			return $diff[ $return[ $unit ] ];
+		}
+
+		$total = $diff['days'] * self::convert_time( 'd', $unit );
+
+		$times = array( 'h', 'i', 's' );
+
+		foreach ( $times as $time ) {
+			if ( ! isset( $diff[ $time ] ) ) {
+				continue;
+			}
+
+			$total += $diff[ $time ] * self::convert_time( $time, $unit );
+		}
+
+		return floor( $total );
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private static function convert_time( $from, $to ) {
+		$convert = array(
+			's' => 1,
+			'i' => MINUTE_IN_SECONDS,
+			'h' => HOUR_IN_SECONDS,
+			'd' => DAY_IN_SECONDS,
+			'w' => WEEK_IN_SECONDS,
+			'm' => DAY_IN_SECONDS * 30.42,
+			'y' => DAY_IN_SECONDS * 365.25,
+		);
+
+		return $convert[ $from ] / $convert[ $to ];
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private static function get_unit( $unit ) {
+		$units = self::get_time_strings();
+		if ( isset( $units[ $unit ] ) || is_numeric( $unit ) ) {
+			return $unit;
+		}
+
+		foreach ( $units as $u => $strings ) {
+			if ( in_array( $unit, $strings ) ) {
+				return $u;
+			}
+		}
 	}
 
 	/**
