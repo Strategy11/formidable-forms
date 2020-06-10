@@ -178,8 +178,6 @@ class FrmFieldsController {
 				$field = FrmFieldsHelper::setup_edit_vars( $field_object );
 			}
 
-			$field = apply_filters( 'frm_before_get_admin_field_classes', $field );
-
 			$li_classes = self::get_classes_for_builder_field( $field, $display, $field_obj );
 			$li_classes .= ' ui-state-default widgets-holder-wrap';
 
