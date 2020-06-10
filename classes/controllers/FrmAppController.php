@@ -8,22 +8,12 @@ class FrmAppController {
 			return;
 		}
 
-		$unread = self::get_notice_count();
-
-		$menu_name = FrmAppHelper::get_menu_name() . $unread;
+		$menu_name = FrmAppHelper::get_menu_name();
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 	}
 
 	private static function get_menu_position() {
 		return apply_filters( 'frm_menu_position', '29.3' );
-	}
-
-	/**
-	 * @since 4.05
-	 */
-	private static function get_notice_count() {
-		$inbox  = new FrmInbox();
-		return $inbox->unread_html();
 	}
 
 	/**
@@ -365,7 +355,7 @@ class FrmAppController {
 
 	public static function admin_js() {
 		$version = FrmAppHelper::plugin_version();
-		FrmAppHelper::load_admin_wide_js( false );
+		FrmAppHelper::load_admin_wide_js();
 
 		$dependecies = array(
 			'formidable_admin_global',
@@ -441,8 +431,6 @@ class FrmAppController {
 				FrmAppHelper::localize_script( 'admin' );
 				self::include_info_overlay();
 			}
-		} elseif ( $pagenow == 'widgets.php' ) {
-			FrmAppHelper::load_admin_wide_js();
 		}
 	}
 
