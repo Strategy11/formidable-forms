@@ -1995,10 +1995,12 @@ function frmAdminBuildJS() {
 			removeImageSizeClassesFromField( $displayField );
 			imageSize = getImageOptionSize( fieldId );
 			$displayField.addClass( ' frm_image_options frm_image_size_' + imageSize + ' ' );
+			$field.find('.frm-bulk-edit-link').hide();
 		} else {
 			$displayField.removeClass( 'frm_image_options' );
 			removeImageSizeClassesFromField( $displayField );
 			setAlignment( fieldId, 'block' );
+			$field.find('.frm-bulk-edit-link').show();
 		}
 
 		setInputPlaceholder( fieldId, hasImageOptions );
