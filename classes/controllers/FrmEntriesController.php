@@ -601,10 +601,6 @@ class FrmEntriesController {
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
 
-		if ( ! empty( $atts['plain_text'] ) ){
-			$atts['show_image_options'] = false;
-		}
-
 		$atts = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
