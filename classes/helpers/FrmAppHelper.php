@@ -1922,23 +1922,53 @@ class FrmAppHelper {
 				return $u;
 			}
 		}
+		return 1;
 	}
 
 	/**
-	 * Get the translatable time strings
+	 * Get the translatable time strings. The untranslated version is a failsafe
+	 * in case langauges are changing for the unit set in the shortcode.
 	 *
 	 * @since 2.0.20
 	 * @return array
 	 */
 	private static function get_time_strings() {
 		return array(
-			'y' => array( __( 'year', 'formidable' ), __( 'years', 'formidable' ) ),
-			'm' => array( __( 'month', 'formidable' ), __( 'months', 'formidable' ) ),
-			'w' => array( __( 'week', 'formidable' ), __( 'weeks', 'formidable' ) ),
-			'd' => array( __( 'day', 'formidable' ), __( 'days', 'formidable' ) ),
-			'h' => array( __( 'hour', 'formidable' ), __( 'hours', 'formidable' ) ),
-			'i' => array( __( 'minute', 'formidable' ), __( 'minutes', 'formidable' ) ),
-			's' => array( __( 'second', 'formidable' ), __( 'seconds', 'formidable' ) ),
+			'y' => array(
+				__( 'year', 'formidable' ),
+				__( 'years', 'formidable' ),
+				'year',
+			),
+			'm' => array(
+				__( 'month', 'formidable' ),
+				__( 'months', 'formidable' ),
+				'month',
+			),
+			'w' => array(
+				__( 'week', 'formidable' ),
+				__( 'weeks', 'formidable' ),
+				'week',
+			),
+			'd' => array(
+				__( 'day', 'formidable' ),
+				__( 'days', 'formidable' ),
+				'day',
+			),
+			'h' => array(
+				__( 'hour', 'formidable' ),
+				__( 'hours', 'formidable' ),
+				'hour',
+			),
+			'i' => array(
+				__( 'minute', 'formidable' ),
+				__( 'minutes', 'formidable' ),
+				'minute',
+			),
+			's' => array(
+				__( 'second', 'formidable' ),
+				__( 'seconds', 'formidable' ),
+				'second',
+			),
 		);
 	}
 
