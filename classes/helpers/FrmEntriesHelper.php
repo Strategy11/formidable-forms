@@ -229,7 +229,7 @@ class FrmEntriesHelper {
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
 
-		$image_option = FrmField::is_image_option( $field );
+		$image_option = empty( $atts['dynamic'] )  ? FrmField::is_image_option( $field ) : false;
 
 		$defaults = array(
 			'type'          => '',
@@ -250,6 +250,10 @@ class FrmEntriesHelper {
 		if ( FrmField::is_image( $field ) || $field->type == 'star' || $image_option ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
+		}
+
+		if ( ! empty( $atts['dynamic'] ) ) {
+			$atts['show_image'] = false;
 		}
 
 		if ( $image_option ) {
