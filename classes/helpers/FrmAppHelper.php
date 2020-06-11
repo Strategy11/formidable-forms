@@ -243,12 +243,20 @@ class FrmAppHelper {
 	 */
 	public static function is_view_builder_page() {
 		global $pagenow;
-		$post_type     = self::simple_get( 'post_type', 'sanitize_title' );
-		$is_formidable = ( $post_type === 'frm_display' );
 
-		if ( empty( $post_type ) && $pagenow === 'post.php' ) {
+		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+			return false;
+		}
+
+		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
+
+		if ( empty( $post_type ) ) {
 			global $post;
-			$is_formidable = ( $post && $post->post_type === 'frm_display' );
+			if ( empty( $post ) ) {
+				$post_id = self::simple_get( 'post', 'absint' );
+				$post    = get_post( $post_id );
+			}
+			$post_type = $post ? $post->post_type : '';
 		}
 
 		return $post_type === 'frm_display';
