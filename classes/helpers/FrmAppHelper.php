@@ -1858,7 +1858,7 @@ class FrmAppHelper {
 		}
 
 		$levels_deep     = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
-		$time_strings    = array_slice( $time_strings, 0, $levels_deep );
+		$time_strings    = array_slice( $time_strings, 0, absint( $levels_deep ) );
 		$time_ago_string = implode( ' ', $time_strings );
 
 		return $time_ago_string;
