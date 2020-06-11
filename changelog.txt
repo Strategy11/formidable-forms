@@ -1,4 +1,8 @@
 == Changelog ==
+= 4.05.01 =
+* Fix: The entry list wasn't always showing the entries.
+* Better sync between review requests in inbox and message.
+
 = 4.05 =
 * Updates to the default form styling.
 * New: Added an inbox as a centralized place for notices and communication.
