@@ -49,6 +49,10 @@ class FrmInboxController {
 		if ( ! empty( $key ) ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
+			if ( $key === 'review' ) {
+				$reviews = new FrmReviews();
+				$reviews->dismiss_review();
+			}
 		}
 
 		wp_die();

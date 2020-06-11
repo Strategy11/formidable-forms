@@ -444,16 +444,15 @@ Yes, Formidable is not your basic contact form plugin. You can use it to create 
 Our Stripe integration helps you quickly accept credit card payments online. Our PayPal form integration allows you to accept PayPal payments, subscriptions, and donations online.
 
 == Changelog ==
+= 4.05.01 =
+* Fix: The entry list wasn't always showing the entries.
+* Better sync between review requests in inbox and message.
+
 = 4.05 =
 * Updates to the default form styling.
 * New: Added an inbox as a centralized place for notices and communication.
 * New: Added frm_color_block and frm_total_big classes for more beautiful forms.
 * Help prevent common email issues by showing a warning in the email settings when the from and to email addresses are the same.
 * Fix: Forms edited after export and reimported were losing the required indicator in some cases.
-
-= 4.04.05 =
-* When some styling settings are blank, allow inheritance from theme styling.
-* Allow a form action to be updated during form migration.
-* Code: Update javascript codestyling.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
