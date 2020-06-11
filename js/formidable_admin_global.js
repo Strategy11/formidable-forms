@@ -26,7 +26,7 @@ jQuery( document ).ready( function() {
 function frmMoveInboxBadge() {
 	var link = jQuery( 'a[href="admin.php?page=formidable-inbox"] > span' );
 	if ( link.length ) {
-		jQuery( 'li.toplevel_page_formidable > .wp-menu-name' ).append( link.clone() );
+		jQuery( '#toplevel_page_formidable .wp-menu-name' ).append( link.clone() );
 	}
 }
 

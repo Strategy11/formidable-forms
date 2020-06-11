@@ -204,14 +204,9 @@ class FrmAppHelper {
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
 		$is_formidable = strpos( $page, 'formidable' ) !== false;
-		if ( empty( $page ) ) {
-			global $pagenow;
-			$post_type     = self::simple_get( 'post_type', 'sanitize_title' );
-			$is_formidable = ( $post_type == 'frm_display' );
-			if ( empty( $post_type ) && $pagenow == 'post.php' ) {
-				global $post;
-				$is_formidable = ( $post && $post->post_type == 'frm_display' );
-			}
+
+		if ( empty( $page ) && ! $is_formidable ) {
+			$is_formidable = self::is_view_builder_page();
 		}
 
 		return $is_formidable;
@@ -248,19 +243,12 @@ class FrmAppHelper {
 	 */
 	public static function is_view_builder_page() {
 		global $pagenow;
+		$post_type     = self::simple_get( 'post_type', 'sanitize_title' );
+		$is_formidable = ( $post_type === 'frm_display' );
 
-		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
-			return false;
-		}
-
-		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
-
-		if ( empty( $post_type ) ) {
-			$post_id = self::simple_get( 'post', 'absint' );
-			$post    = get_post( $post_id );
-			if ( ! empty( $post ) ) {
-				$post_type = $post->post_type;
-			}
+		if ( empty( $post_type ) && $pagenow === 'post.php' ) {
+			global $post;
+			$is_formidable = ( $post && $post->post_type === 'frm_display' );
 		}
 
 		return $post_type === 'frm_display';

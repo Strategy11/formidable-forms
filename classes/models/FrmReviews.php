@@ -6,6 +6,8 @@ class FrmReviews {
 
 	private $review_status = array();
 
+	private $inbox_key = 'review';
+
 	/**
 	 * Add admin notices as needed for reviews
 	 *
@@ -115,7 +117,7 @@ class FrmReviews {
 		$message = new FrmInbox();
 		$message->add_message(
 			array(
-				'key'     => 'review',
+				'key'     => $this->inbox_key,
 				'force'   => true,
 				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
 					'- Steph Wells<br/>' .
@@ -125,6 +127,22 @@ class FrmReviews {
 					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
 			)
 		);
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private function set_inbox_dismissed() {
+		$message = new FrmInbox();
+		$message->dismiss( $this->inbox_key );
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private function set_inbox_read() {
+		$message = new FrmInbox();
+		$message->mark_read( $this->inbox_key );
 	}
 
 	/**
@@ -144,6 +162,7 @@ class FrmReviews {
 
 		if ( isset( $review['dismissed'] ) && $review['dismissed'] === 'done' ) {
 			// if feedback was submitted, don't update it again when the review is dismissed
+			$this->set_inbox_dismissed();
 			wp_die();
 		}
 
@@ -153,6 +172,7 @@ class FrmReviews {
 		$review['asked']     = isset( $review['asked'] ) ? $review['asked'] + 1 : 1;
 
 		update_user_meta( $user_id, $this->option_name, $review );
+		$this->set_inbox_read();
 		wp_die();
 	}
 }
