@@ -17,7 +17,8 @@ $default_style = $frm_style->get_default_style( $styles );
 $defaults = FrmStylesHelper::get_settings_for_output( $default_style );
 $important = empty( $defaults['important_style'] ) ? '' : ' !important';
 
-$vars = array( 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled' );
+$vars = array( 'font_size', 'label_color', 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled', 'success_border_color', 'success_bg_color', 'success_text_color', 'border_radius', 'success_font_size' );
+
 ?>
 .with_frm_style {
 	<?php
@@ -413,6 +414,35 @@ a.frm_save_draft{
 
 .with_frm_style .frm_message p{
 	margin-bottom:5px;
+	color:<?php echo esc_html( $defaults['success_text_color'] ); ?>;
+	color:var(--success-text-color)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style .frm_message,
+.frm_success_style{
+	margin:5px 0 15px;
+	border:1px solid <?php echo esc_html( $defaults['success_border_color'] ); ?>;
+	border-color:var(--success-border-color);
+	background-color:<?php echo esc_html( $defaults['success_bg_color'] ); ?>;
+	background-color:var(--success_bg_color);
+	color:<?php echo esc_html( $defaults['success_text_color'] ); ?>;
+	color:var(--success-text-color)<?php echo esc_html( $important ); ?>;
+	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
+	border-radius:var(--border-radius);
+	font-size:<?php echo esc_html( $defaults['success_font_size'] ); ?>;
+	font-size:var(--success_font_size)<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style .frm_plain_success .frm_message {
+	background-color: transparent;
+	padding:0;
+	border:none;
+	font-size:inherit<?php echo esc_html( $important ); ?>;
+	color:inherit<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style .frm_plain_success .frm_message p {
+	color:inherit<?php echo esc_html( $important ); ?>;
 }
 
 .frm_form_fields_style,

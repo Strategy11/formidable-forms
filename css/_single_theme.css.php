@@ -9,7 +9,7 @@ $label_margin = (int) $width + 10;
 $minus_icons = FrmStylesHelper::minus_icons();
 $arrow_icons = FrmStylesHelper::arrow_icons();
 
-$vars = array( 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled' );
+$vars = array( 'font_size', 'label_color', 'bg_color_disabled', 'text_color_disabled', 'border_color_disabled', 'success_border_color', 'success_bg_color', 'success_text_color', 'border_radius', 'success_font_size' );
 ?>
 .<?php echo esc_html( $style_class ); ?> {
 	<?php
@@ -719,23 +719,6 @@ if ( ! empty( $important ) ) {
 	font-size:<?php echo esc_html( $error_font_size . $important ); ?>;
 	margin:0;
 	margin-bottom:<?php echo esc_html( $field_margin ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_message,
-.frm_success_style{
-	border:1px solid <?php echo esc_html( $success_border_color ); ?>;
-	background-color:<?php echo esc_html( $success_bg_color . $important ); ?>;
-	color:<?php echo esc_html( $success_text_color . $important ); ?>;
-	border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_message p{
-	color:<?php echo esc_html( $success_text_color . $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_message{
-	margin:5px 0 15px;
-	font-size:<?php echo esc_html( $success_font_size . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm-grid td,
