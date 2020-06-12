@@ -1416,8 +1416,20 @@ class FrmFormsController {
 			return;
 		}
 
+		self::move_menu_to_footer();
+
 		add_action( 'wp_before_admin_bar_render', 'FrmFormsController::admin_bar_configure' );
 		FrmAppHelper::load_font_style();
+	}
+
+	/**
+	 * @since 4.05.02
+	 */
+	private static function move_menu_to_footer() {
+		$settings = FrmAppHelper::get_settings();
+		if ( empty( $settings->admin_bar ) ) {
+			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
+		}
 	}
 
 	public static function admin_bar_configure() {

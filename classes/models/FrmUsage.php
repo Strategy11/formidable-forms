@@ -135,6 +135,7 @@ class FrmUsage {
 			'no_ips',
 			'btsp_css',
 			'btsp_errors',
+			'admin_bar',
 		);
 
 		foreach ( $pass_settings as $setting ) {

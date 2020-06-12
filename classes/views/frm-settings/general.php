@@ -51,5 +51,11 @@
 		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> />
 		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDPR compliance.', 'formidable' ); ?>
 	</label>
+</p>
 
+<p>
+	<label for="frm_admin_bar">
+		<input type="checkbox" name="frm_admin_bar" id="frm_admin_bar" value="1" <?php checked( $frm_settings->admin_bar, 1 ); ?> />
+		<?php esc_html_e( 'Do not include Formidable in the admin bar.', 'formidable' ); ?>
+	</label>
 </p>
