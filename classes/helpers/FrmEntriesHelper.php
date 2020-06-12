@@ -305,7 +305,7 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
 	}
 
-	private static function has_image_option_markup( $value ) {
+	public static function has_image_option_markup( $value ) {
 		return strpos( $value, 'frm_image_option_container' ) !== false;
 	}
 
