@@ -3435,22 +3435,22 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	text-align: center;
 	align-items: center;
 	width: 150px;
-	height: 200px;
 	margin-right: 10px;
 	margin-bottom: 10px;
+}
+
+#form_show_entry_page .frm_image_options_grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, 150px );
+	grid-gap: 12px;
+	align-items: stretch;
+	margin-top: 10px;
 }
 
 #form_show_entry_page .frm_image_option_container img {
 	width: 150px;
 	height: 150px;
 	object-fit: cover;
-}
-
-#form_show_entry_page  .frm_text_label_for_image {
-	overflow:hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	text-align: center;
 }
 
 .frm_image_option_container .frm_selected_checkmark,
