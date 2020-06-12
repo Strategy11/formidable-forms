@@ -11,7 +11,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
-	$image_size = ! empty ( $field['image_size'] ) ? $field[ 'image_size' ] : FrmAppHelper::get_default_image_option_size();
+	$image_size = ! empty( $field['image_size'] ) ? $field['image_size'] : FrmAppHelper::get_default_image_option_size();
 	$image_option_class = ! empty( $field['image_options'] ) ? ' frm_image_option frm_image_' . $image_size : '';
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
@@ -37,7 +37,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $checked );
 
 		?>
-		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?> <?php echo ( $image_option_class ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'checkbox' ) ); ?>"><?php
+		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?> <?php echo esc_attr( $image_option_class ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'checkbox' ) ); ?>"><?php
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
 			?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
 		}

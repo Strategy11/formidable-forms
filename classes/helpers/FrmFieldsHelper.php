@@ -483,19 +483,19 @@ class FrmFieldsHelper {
 		return '<div class="frm_image_placeholder_icon">' . FrmAppHelper::icon_by_class( 'frmfont frm_placeholder_image_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
-	public function get_image_option_classes_from_field_array ( $field ){
-		if ( empty ( $field['image_options'] ) ) {
+	public function get_image_option_classes_from_field_array( $field ) {
+		if ( empty( $field['image_options'] ) ) {
 			return '';
 		}
 
-		$image_size = ( ! empty ( $field['image_size'] ) ) ? $field['image_size'] : FrmAppHelper::get_default_image_option_size();
+		$image_size = ( ! empty( $field['image_size'] ) ) ? $field['image_size'] : FrmAppHelper::get_default_image_option_size();
 
 		return ' frm_image_options frm_image_size_' . $image_size . ' ';
 	}
 
-	public static function get_image_size( $option ){
+	public static function get_image_size( $option ) {
 		$size_class_pattern = '~frm_image_option_size_([a-z]+)\s~';
-		preg_match (  $size_class_pattern , $option, $matches);
+		preg_match( $size_class_pattern, $option, $matches);
 		return $matches[1];
 	}
 	/**

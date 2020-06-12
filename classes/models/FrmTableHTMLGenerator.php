@@ -267,7 +267,7 @@ class FrmTableHTMLGenerator {
 			$row .= ' class="frm-empty-row"';
 		}
 		$row .= '>';
-		
+
 		$value = FrmEntriesHelper::has_image_option_markup( $value ) ? '<div class="frm_has_image_options">' . $value . ' </div>' : $value;
 
 		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
