@@ -122,7 +122,7 @@ legend.frm_hidden{
 	color:var(--title-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['title_margin_top'] ) ) { ?>
