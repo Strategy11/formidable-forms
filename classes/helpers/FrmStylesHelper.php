@@ -292,6 +292,34 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 4.05.02
+	 */
+	public static function get_css_vars( $vars = array() ) {
+		$vars = apply_filters( 'frm_css_vars', $vars );
+		return array_unique( $vars );
+	}
+
+	/**
+	 * @since 4.05.02
+	 */
+	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
+		if ( empty( $vars ) ) {
+			$vars = self::get_css_vars( array_keys( $settings ) );
+		}
+		foreach ( $vars as $var ) {
+			if ( ! isset( $settings[ $var ] ) ) {
+				continue;
+			}
+			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
+			if ( $show ) {
+				?>
+			--<?php echo esc_html( str_replace( '_', '-', $var ) ); ?>:<?php echo $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ); // WPCS: XSS ok. ?>;
+				<?php
+			}
+		}
+	}
+
+	/**
 	 * @since 2.3
 	 */
 	public static function get_settings_for_output( $style ) {
@@ -338,6 +366,11 @@ class FrmStylesHelper {
 		}
 
 		self::prepare_color_output( $settings );
+
+		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
+		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
+		$settings['auto_width']   =  $settings['auto_width'] ? 'auto' : $settings['field_width'];
+		$settings['box_shadow']   = ( isset( $settings['remove_box_shadow'] ) && $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
 
 		return $settings;
 	}
