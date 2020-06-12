@@ -1986,7 +1986,7 @@ function frmAdminBuildJS() {
 		toggle( jQuery( '.frm_toggle_image_options_' + fieldId ) );
 		toggle( jQuery( '.frm_image_size_' + fieldId ) );
 		toggle( jQuery( '.frm_alignment_' + fieldId ) );
-		toggle( jQuery( '#other_button_' + fieldId ) );
+		toggle( jQuery( '.frm-add-other#frm_add_field_' + fieldId ) );
 
 		hasImageOptions = imagesAsOptions( fieldId );
 
@@ -1995,12 +1995,12 @@ function frmAdminBuildJS() {
 			removeImageSizeClassesFromField( $displayField );
 			imageSize = getImageOptionSize( fieldId );
 			$displayField.addClass( ' frm_image_options frm_image_size_' + imageSize + ' ' );
-			$field.find('.frm-bulk-edit-link').hide();
+			$field.find( '.frm-bulk-edit-link' ).hide();
 		} else {
 			$displayField.removeClass( 'frm_image_options' );
 			removeImageSizeClassesFromField( $displayField );
 			setAlignment( fieldId, 'block' );
-			$field.find('.frm-bulk-edit-link').show();
+			$field.find( '.frm-bulk-edit-link' ).show();
 		}
 
 		setInputPlaceholder( fieldId, hasImageOptions );
