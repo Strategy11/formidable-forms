@@ -495,7 +495,7 @@ class FrmFieldsHelper {
 
 	public static function get_image_size( $option ) {
 		$size_class_pattern = '~frm_image_option_size_([a-z]+)\s~';
-		preg_match( $size_class_pattern, $option, $matches);
+		preg_match( $size_class_pattern, $option, $matches );
 		return $matches[1];
 	}
 	/**

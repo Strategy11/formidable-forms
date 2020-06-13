@@ -2848,13 +2848,10 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-<<<<<<< HEAD
-		var i, saved, labelName, label, key, optObj,
+		var i, saved, labelName, label, key, optObj, image, savedLabel,
 			opts = [],
-=======
-		var i, saved, labelName, label, key, opts = [], optObj, image, savedLabel,
 			imageUrl = '',
->>>>>>> Adds image options for radio buttons.
+
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
 			separateValues = usingSeparateValues( fieldId ),
 			hasImageOptions = imagesAsOptions( fieldId ),
