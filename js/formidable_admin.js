@@ -2061,9 +2061,9 @@ function frmAdminBuildJS() {
 			wp.media.model.settings.post.id = postID;
 		}
 
-		fileFrame = wp.media.frames.file_frame = wp.media( {
-			multiple: false,
-		} );
+		fileFrame = wp.media.frames.file_frame = wp.media({
+			multiple: false
+		});
 
 		fileFrame.on( 'select', function() {
 			attachment = fileFrame.state().get( 'selection' ).first().toJSON();
@@ -2074,7 +2074,7 @@ function frmAdminBuildJS() {
 			$imagePreview.find( 'input.frm_choose_image_box' ).hide();
 			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).change();
 			wp.media.model.settings.post.id = postID;
-		} );
+		});
 
 		fileFrame.open();
 	}
@@ -2858,7 +2858,7 @@ function frmAdminBuildJS() {
 			showLabelWithImage = showingLabelWithImage( fieldId ),
 			isProduct = isProductField( fieldId );
 
-		for ( i = 0; i < optVals.length; i ++ ) {
+		for ( i = 0; i < optVals.length; i++ ) {
 			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[image]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
 				continue;
 			}
@@ -2872,14 +2872,14 @@ function frmAdminBuildJS() {
 			}
 
 			if ( hasImageOptions ) {
-				imageUrl = getImageUrlFromInput( optVals[i] );
+				imageUrl = getImageUrlFromInput( optVals[i]);
 				label = getImageLabel(  label, showLabelWithImage, imageUrl );
 			}
 
 			optObj = {
 				saved: saved,
 				label: label,
-				key: key,
+				key: key
 			};
 
 			if ( isProduct ) {
