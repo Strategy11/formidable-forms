@@ -1017,7 +1017,7 @@ class FrmField {
 	public static function is_image_option( $field ) {
 		$type = self::get_field_type( $field );
 
-		return self::has_image_options( $type, $field ) || ( 'data' === $type );
+		return self::has_image_options( $type, $field );
 	}
 
 	private static function has_image_options( $type, $field ) {
