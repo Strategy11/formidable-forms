@@ -2878,13 +2878,7 @@ function frmAdminBuildJS() {
 				label = getImageLabel(  label, showLabelWithImage, imageUrl );
 			}
 
-			field = jQuery( '#' + optVals[ i ].id );
-			if ( field.length ) {
-				checkbox = field.siblings( 'input[type=checkbox]' );
-				if ( checkbox.length ) {
-					checked = checkbox.prop( 'checked' );
-				}
-			}
+			checked = getChecked( optVals[ i ].id  );
 
 			optObj = {
 				saved: saved,
@@ -2938,6 +2932,20 @@ function frmAdminBuildJS() {
 
 		return ( '<span class="frm_image_option_container' + imageLabelClass + '" >' + fullLabel + '</span>' );
 	}
+
+	function getChecked( id ) {
+		field = jQuery( '#' + id );
+
+		if ( field.length === 0 ) {
+			return false;
+		}
+
+		checkbox = field.siblings( 'input[type=checkbox]' );
+
+		return checkbox.length && checkbox.prop( 'checked' );
+
+	}
+
 
 	function removeDropdownOpts( field ) {
 		var i;
