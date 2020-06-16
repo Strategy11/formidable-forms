@@ -229,7 +229,7 @@ class FrmEntriesHelper {
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
 
-		$image_option = empty( $atts['dynamic'] ) ? FrmField::is_image_option( $field ) : false;
+		$image_option = empty( $atts['dynamic'] ) ? FrmField::is_image_option( $field ) : ! empty( $atts['show_image'] ) ? true: false;
 
 		$defaults = array(
 			'type'          => '',
