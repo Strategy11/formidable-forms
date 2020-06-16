@@ -2848,7 +2848,9 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, optObj, image, savedLabel,
+		debugger;
+		var i, saved, labelName, label, key, optObj, image, savedLabel, input, field, checkbox,
+			checked = false,
 			opts = [],
 			imageUrl = '',
 
@@ -2876,9 +2878,18 @@ function frmAdminBuildJS() {
 				label = getImageLabel(  label, showLabelWithImage, imageUrl );
 			}
 
+			field = jQuery( '#' + optVals[ i ].id );
+			if ( field.length ) {
+				checkbox = field.siblings( 'input[type=checkbox]' );
+				if ( checkbox.length ) {
+					checked = checkbox.prop( 'checked' );
+				}
+			}
+
 			optObj = {
 				saved: saved,
 				label: label,
+				checked: checked,
 				key: key
 			};
 
