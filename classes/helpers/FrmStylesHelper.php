@@ -306,7 +306,7 @@ class FrmStylesHelper {
 		if ( empty( $vars ) ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
-		$remove = array( 'remove_box_shadow' );
+		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon' );
 		$vars   = array_diff( $vars, $remove );
 
 		foreach ( $vars as $var ) {
@@ -315,9 +315,7 @@ class FrmStylesHelper {
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show ) {
-				?>
-			--<?php echo esc_html( str_replace( '_', '-', $var ) ); ?>:<?php echo $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ); // WPCS: XSS ok. ?>;
-				<?php
+				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // WPCS: XSS ok.
 			}
 		}
 	}
