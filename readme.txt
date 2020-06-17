@@ -1,7 +1,7 @@
 === Formidable Form Builder - Contact Form, Survey & Quiz Forms Plugin for WordPress ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, registration form, paypal, paypal form, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, contact me, form manager, forms creator, Akismet, email form, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor
+Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, registration form, paypal, paypal form, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, contact me, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor
 Requires at least: 4.7
 Tested up to: 5.4
 Requires PHP: 5.6
@@ -42,7 +42,7 @@ Formidable allows you to view all your form, quiz, and survey entries right from
 
 Formidable is a **100% GDPR-friendly** form generator. You can turn off IP tracking or stop saving submissions entirely. Or add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
-Need to import your leads to an email marketing service like MailChimp? No problem. **Export leads to a CSV**, open it in Excel, or import anywhere.
+Need to import your leads to an external service like MailChimp? No problem. **Export leads to a CSV**, open it in Excel, or import anywhere.
 
 You can also configure unlimited email notifications and autoresponders triggered by form submissions. 
 
@@ -68,7 +68,7 @@ The best part is that you can do this all within Formidable without any third-pa
 
 Whether you need to create a youth sports team, event, or church retreat registration, Formidable has you covered. Unlike other form plugins, Formidable comes with a repeater field that allows you to create the best registration forms.
 
-Then, our marketing integrations and APIs can send the email form and other form data anywhere you want.
+Then, our marketing integrations and APIs can send the contact form and other form data anywhere you want.
 
 == Accept Credit Cards and Easily Collect Payments ==
 
@@ -162,7 +162,7 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * Email routing. Conditionally send multiple autoresponder emails and notifications based on values in email forms, user registration forms, and payment forms.
 * Pricing fields for easy eCommerce forms with automatic price calculations. Drop in a product field, quantity, and total and you're good to go.
 * <a href="https://formidableforms.com/wordpress-calculator-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields. This is great for a mortgage calculator, auto loan calculator, and many other calculators. Even a contact form can benefit from price calculations for easy quotes and price estimates. We recommend adding range sliders for calculator forms your clients will love.
-* <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual style creator</a>. Having trouble styling your WordPress forms? Our form creator not only allows you to build contact forms, but also brand calculator forms, email forms, quiz forms, and other web forms to match your site. Change colors, borders, font sizes, and more without any code.
+* <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual style creator</a>. Having trouble styling your WordPress forms? Our form creator not only allows you to build contact forms, but also brand calculator forms, email forms, quiz forms, and other WP forms to match your site. Change colors, borders, font sizes, and more without any code.
 * <a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Flexible form layout design</a>. Build mobile responsive forms and advanced layouts with multiple fields in a row by using our CSS layout classes.
 * <a href="https://formidableforms.com/features/wordpress-mobile-friendly-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mobile-friendly, responsive forms</a>. All of our forms are sized automatically for every screen size. Ensure that everyone can see and submit your surveys, calculator forms, Stripe forms, and web forms from any device.
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and even custom post types from your front-end online forms. Send user-generated content quickly from a post creation form to a page.
@@ -184,7 +184,7 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * <a href="https://formidableforms.com/features/white-label-form-builder-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">White label forms</a>. Replace the Formidable branding with your own in the admin area. Plus, we never show "powered by" links in your free contact form or other online form.
 * <a href="https://formidableforms.com/features/wordpress-user-registration/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WordPress user registration forms</a>. Register WordPress users, edit profiles, reset passwords, and add a login form. You can even allow logged in and logged out users to create new subdomains with WordPress multisite forms.
 * <a href="https://formidableforms.com/features/digital-form-signatures/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Digital signature forms</a>. Eliminate paper forms with a digital signature field in contracts, application forms and more.
-* <a href="https://formidableforms.com/features/form-action-automation-scheduling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form action automation</a>. Schedule form email notifications, SMS messages, and webhooks to trigger at a later time. You can automatically delete guest posts after 30 days, send weekly digest emails, or trigger happy birthday text messages from a lead form.
+* <a href="https://formidableforms.com/features/form-action-automation-scheduling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form action automation</a>. Schedule form email notifications, SMS messages, and webhooks to trigger at a later time. You can automatically delete guest posts after 30 days, send weekly digests, or trigger happy birthday text messages from a lead form.
 * <a href="https://formidableforms.com/features/wordpress-form-api/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Formidable Forms API</a>. Send form entries to other REST APIs and add a set of form webhooks. This includes the option to send form entries from one Formidable site to another.
 * <a href="https://formidableforms.com/features/quiz-maker-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Quiz maker forms</a>. Write your quiz form questions, submit an entry as the quiz key, and publish the quiz on a page. Then all the quiz grading is automatically done for you with our quiz plugin.
 * <a href="https://formidableforms.com/knowledgebase/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">World class support</a>. Have questions on how to use our contact form maker or set up your web application? We are happy to help. Our passion is to help you <strong>defy the limits</strong> to take on bigger projects, earn more clients, and grow your business.
@@ -246,7 +246,7 @@ The fastest way to build a form is to use the template we built for you. After y
 
 Want to make a new form? Go to the Formidable -> Forms page and click "add new". Choose the Contact Us form template or another free template and click "Create".
 
-Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode builder. Choose your new registration form, Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads.
+Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new registration form, Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads.
 
 Learn more about <a href="https://formidableforms.com/wordpress-contact-form-template-to-unique/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">using the contact form template</a>.
 
@@ -258,7 +258,7 @@ When you do not receive emails, try the following steps:
    3. Check your SPAM box.
    4. Try a different email address in your form settings.
    5. Install WP Mail SMPT or another similar emailing plugin and configure the SMTP settings.
-   6. If these steps don't fix the email problem and other WP emails are not going out, please contact your web host.
+   6. If these steps don't fix the problem and other WP emails are not going out, please contact your web host.
 
 <a href="https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Read more about WordPress emails not sending</a> in our blog.
 
