@@ -743,7 +743,7 @@ a.frm_save_draft{
 	border:1px solid <?php echo esc_html( $defaults['success_border_color'] ); ?>;
 	border-color:var(--success-border-color);
 	background-color:<?php echo esc_html( $defaults['success_bg_color'] ); ?>;
-	background-color:var(--success_bg-color);
+	background-color:var(--success-bg-color);
 	color:<?php echo esc_html( $defaults['success_text_color'] ); ?>;
 	color:var(--success-text-color)<?php echo esc_html( $important ); ?>;
 	border-radius:<?php echo esc_html( $defaults['border_radius'] ); ?>;
