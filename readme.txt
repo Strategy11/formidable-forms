@@ -432,6 +432,14 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.05.02 =
+* New: Added frm_message_placement hook to show the form message below the form
+* New: New classes that can be used in the 'form class' setting: frm_plain_success (Removes styling from the success message) and frm_below_success (Movs the success message below the form).
+* Add Formidable back to the admin bar. This is now a setting if the default WordPress v5.2+ behavior is desired.
+* Fix: Reiew requests were added to the inbox too frequently with sites with multiple admins.
+* Fix: Elementor conflict by using the glost $post in the admin area.
+* Fix: The color picker position in the styling settings was off for some options.
+
 = 4.05.01 =
 * Fix: The entry list wasn't always showing the entries.
 * Better sync between review requests in inbox and message.
