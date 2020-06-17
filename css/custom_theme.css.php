@@ -190,8 +190,8 @@ legend.frm_hidden{
 	font-family:var(--font)<?php echo esc_html( $important ); ?>;
 <?php if ( ! empty( $defaults['field_font_size'] ) ) { ?>
 	font-size:<?php echo esc_html( $defaults['field_font_size'] ); ?>;
-<?php } ?>
 	font-size:var(--field-font-size)<?php echo esc_html( $important ); ?>;
+<?php } ?>
 	margin-bottom:0<?php echo esc_html( $important ); ?>;
 }
 
@@ -267,7 +267,7 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	height:<?php echo esc_html( ( $defaults['field_height'] ) ); ?>;
+	height:<?php echo esc_html( $defaults['field_height'] ); ?>;
 	height:var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
@@ -830,16 +830,16 @@ table.form_results.with_frm_style{
 
 table.form_results.with_frm_style tr td{
 	text-align:left;
-	<?php if ( ! empty( $defaults['text_color'] ) ) { ?>
-		color:<?php echo esc_html( $defaults['text_color'] ); ?>;
-	<?php } ?>
-	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	padding:7px 9px;
-	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-		border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
-		border-top-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
-		border-top-color:var(--border-color)<?php echo esc_html( $important ); ?>;
-	<?php } ?>
+<?php if ( ! empty( $defaults['text_color'] ) ) { ?>
+	color:<?php echo esc_html( $defaults['text_color'] ); ?>;
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+	border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
+	border-top-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-top-color:var(--border-color)<?php echo esc_html( $important ); ?>;
+<?php } ?>
 }
 
 table.form_results.with_frm_style tr.frm_even,
@@ -851,7 +851,7 @@ table.form_results.with_frm_style tr.frm_even,
 <?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
+	background-color:<?php echo esc_html( $defaults['bg_color'] ); ?>;
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
