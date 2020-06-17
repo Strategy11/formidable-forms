@@ -38,7 +38,7 @@ Our form maker comes with all the powerful form fields that you need to create a
 
 == Complete Entry Management for Forms and Surveys ==
 
-Formidable allows you to view all your form and survey entries right from your WordPress dashboard. Once a user submits a form, their response is stored in your WordPress database so you won't lose any leads.
+Formidable allows you to view all your form, quiz, and survey entries right from your WordPress dashboard. Once a user submits a form, their response is stored in your WordPress database so you won't lose any leads.
 
 Formidable is a **100% GDPR-friendly** form generator. You can turn off IP tracking or stop saving submissions entirely. Or add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
@@ -122,7 +122,7 @@ Now you can go beyond a simple contact form and create custom form-based solutio
 
 If you run a WordPress membership site, then you need more advanced forms. The Formidable form maker allows you to customize your WordPress user registration form and collect data with a user profile.
 
-With our front-end editing, you can build a custom profile form for users to keep their profile up to date. You can even progressively add to the profile from a set of forms. Everything from the first contact form or lead form to the last payment form can extend the user profile.
+With our front-end editing, you can build a custom profile form for users to keep their profile up to date. You can even progressively add to the profile from a set of forms. Everything from the first contact form or lead form to the last payment form can extend the user profile. Once logged in, all new submissions in quiz forms, calculators, support forms, and contact forms can be linked to that user account.
 
 You will not find any other WordPress form plugin offering a front-end editing solution with the same level of extendability.
 
@@ -146,7 +146,7 @@ On top of that, our hooks and filters allow you to extend Formidable to meet you
 
 Since Formidable is not your average WordPress form plugin, this feature list is going to be very long. Read through it, or just install the most powerful WordPress form maker. Your choice :)
 
-* <a href="https://formidableforms.com/features/drag-drop-form-builder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Online drag and drop form builder</a>. Build everything from a contact form or email form to a price calculator or complex online form. Make awesome forms the easy way with a simple WordPress drag and drop form maker. You don't have to be a code ninja.
+* <a href="https://formidableforms.com/features/drag-drop-form-builder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Online drag and drop form builder</a>. Build everything from a contact form or email form to a price calculator or complex online form. Make awesome quiz forms, calculators, and online forms the easy way with a simple WordPress drag and drop form maker. You don't have to be a code ninja.
 * <a href="https://formidableforms.com/features/display-form-data-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Display form data with Views</a>. Other WordPress form builder plugins only let you collect data. Formidable lets you format, filter, and display form submissions in Formidable Views to turn forms into solutions. Think job boards, event calendars, business directories, ratings systems, management solutions, and pretty much anything else you can come up with.
 * <a href="https://formidableforms.com/features/dynamically-add-form-fields/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Repeating field groups (repeaters)</a>. Allow visitors to add sets of fields on the fly. This is great for a registration form, application, calculator, or email form.
 * <a href="https://formidableforms.com/features/wordpress-multiple-file-upload-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Drag and drop multiple file upload forms</a>. Easily upload documents, files, photos, and music, with any number of files. This is great for a job application form (resumes), WordPress User Profile Form (avatars), or get a quote form.
@@ -190,7 +190,7 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * <a href="https://formidableforms.com/knowledgebase/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">World class support</a>. Have questions on how to use our contact form maker or set up your web application? We are happy to help. Our passion is to help you <strong>defy the limits</strong> to take on bigger projects, earn more clients, and grow your business.
 
 == Payment Forms, Form APIs, and Marketing Integrations ==
-In addition to all the features listed above, power up with these integrations.
+In addition to all the features listed above, power up your contact forms, surveys, quiz forms, registration forms, and calculators with these integrations.
 
 * <a href="https://formidableforms.com/features/paypal-wordpress-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">PayPal Payment Forms</a>. Automate your business by collecting instant payments and recurring payments from clients. Collect information, calculate a total, and send clients to PayPal from your payment forms and donation forms.
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Payment Forms</a>. Keep users on your site while collecting Stripe payments from a credit card form. Select from one time and recurring charges in order forms and donation forms. Stripe processes payments with simple PCI compliance.
@@ -318,6 +318,10 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 * User Age Calculator
 * Online Quote Calculator
 * Recipe Reviews
+* Personality Quiz
+* Viral Quiz
+* Cosmos Style Quiz
+* Create Your Own Adventure Quiz
 
 To see more, visit our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin">Form Template Gallery</a> which has almost 100 pre-made templates.
 
