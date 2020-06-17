@@ -6,9 +6,16 @@
 	<?php
 }
 
-include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+if ( $message_placement !== 'after' ) {
+	include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+}
+
 $form_action = 'create';
 require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php' );
+
+if ( $message_placement === 'after' ) {
+	include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+}
 
 if ( ! isset( $include_form_tag ) || $include_form_tag ) {
 	?>

@@ -9,6 +9,7 @@ class FrmSettings {
 	public $accordion_js;
 	public $fade_form;
 	public $old_css;
+	public $admin_bar;
 
 	public $success_msg;
 	public $blank_msg;
@@ -92,6 +93,7 @@ class FrmSettings {
 			'accordion_js' => false,
 			'fade_form'    => false,
 			'old_css'      => true,
+			'admin_bar'    => false,
 
 			're_multi' => 1,
 
@@ -253,7 +255,7 @@ class FrmSettings {
 
 		$this->load_style = $params['frm_load_style'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
 		}

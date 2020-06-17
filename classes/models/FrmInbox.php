@@ -144,6 +144,19 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @param string $key
+	 *
+	 * @since 4.05.02
+	 */
+	public function mark_unread( $key ) {
+		$is_read = isset( $this->messages[ $key ] ) && isset( $this->messages[ $key ]['read'] ) && isset( $this->messages[ $key ]['read'][ get_current_user_id() ] );
+		if ( $is_read ) {
+			unset( $this->messages[ $key ]['read'][ get_current_user_id() ] );
+			$this->update_list();
+		}
+	}
+
+	/**
+	 * @param string $key
 	 */
 	public function dismiss( $key ) {
 		if ( ! isset( $this->messages[ $key ] ) ) {
@@ -156,10 +169,6 @@ class FrmInbox extends FrmFormApi {
 		$this->messages[ $key ]['dismissed'][ get_current_user_id() ] = time();
 
 		$this->update_list();
-	}
-
-	private function update_list() {
-		update_option( $this->option, $this->messages, 'no' );
 	}
 
 	public function unread() {
@@ -180,5 +189,19 @@ class FrmInbox extends FrmFormApi {
 			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
 		}
 		return $html;
+	}
+
+	/**
+	 * @since 4.05.02
+	 */
+	public function remove( $key ) {
+		if ( isset( $this->messages[ $key ] ) ) {
+			unset( $this->messages[ $key ] );
+			$this->update_list();
+		}
+	}
+
+	private function update_list() {
+		update_option( $this->option, $this->messages, 'no' );
 	}
 }

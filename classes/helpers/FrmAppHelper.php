@@ -250,11 +250,8 @@ class FrmAppHelper {
 		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
 
 		if ( empty( $post_type ) ) {
-			global $post;
-			if ( empty( $post ) ) {
-				$post_id = self::simple_get( 'post', 'absint' );
-				$post    = get_post( $post_id );
-			}
+			$post_id = self::simple_get( 'post', 'absint' );
+			$post    = get_post( $post_id );
 			$post_type = $post ? $post->post_type : '';
 		}
 
