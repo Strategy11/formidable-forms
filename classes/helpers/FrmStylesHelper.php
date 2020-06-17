@@ -306,6 +306,9 @@ class FrmStylesHelper {
 		if ( empty( $vars ) ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
+		$remove = array( 'remove_box_shadow' );
+		$vars   = array_diff( $vars, $remove );
+
 		foreach ( $vars as $var ) {
 			if ( ! isset( $settings[ $var ] ) ) {
 				continue;

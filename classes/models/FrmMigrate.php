@@ -233,6 +233,7 @@ class FrmMigrate {
 		delete_option( 'frm_install_running' );
 		delete_option( 'frm_lite_settings_upgrade' );
 		delete_option( 'frm-usage-uuid' );
+		delete_option( 'frm_inbox' );
 
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();

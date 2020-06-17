@@ -140,7 +140,7 @@ class FrmReviews {
 				'key'     => $key,
 				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
 					'- Steph Wells<br/>' .
-					'<span>' . esc_html__( 'Founder and Lead Developer of Formidable Forms', 'formidable' ) . '<span>',
+					'<span>' . esc_html__( 'Co-Founder and CTO of Formidable Forms', 'formidable' ) . '<span>',
 				'subject' => str_replace( $name, '', $title ),
 				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button-secondary frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
 					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
