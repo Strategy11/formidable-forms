@@ -417,53 +417,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin-bottom:<?php echo esc_html( $field_margin ); ?>;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm-grid td,
-.frm-grid th{
-	border-color:<?php echo esc_html( $border_color ); ?>;
-}
-
-.form_results.<?php echo esc_html( $style_class ); ?>{
-	border:<?php echo esc_html( $field_border_width ); ?> solid <?php echo esc_html( $border_color . $important ); ?>;
-}
-
-.form_results.<?php echo esc_html( $style_class ); ?> tr td{
-	color: <?php echo esc_html( $text_color . $important ); ?>;
-	border-top:<?php echo esc_html( $field_border_width ); ?> solid <?php echo esc_html( $border_color . $important ); ?>;
-}
-
-.form_results.<?php echo esc_html( $style_class ); ?> tr.frm_even,
-.frm-grid .frm_even{
-	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
-}
-
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-striped .progress-bar{
 	background-image:linear-gradient(45deg, <?php echo esc_html( $border_color ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $border_color ); ?> 50%, <?php echo esc_html( $border_color ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
 }
 
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-bar{
 	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_grid,
-.<?php echo esc_html( $style_class ); ?> .frm_grid_first,
-.<?php echo esc_html( $style_class ); ?> .frm_grid_odd{
-	border-color:<?php echo esc_html( $border_color ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_grid.frm_blank_field,
-.<?php echo esc_html( $style_class ); ?> .frm_grid_first.frm_blank_field,
-.<?php echo esc_html( $style_class ); ?> .frm_grid_odd.frm_blank_field{
-	background-color:<?php echo esc_html( $error_bg . $important ); ?>;
-	border-color:<?php echo esc_html( $error_border ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_grid_first,
-.<?php echo esc_html( $style_class ); ?> .frm_grid_odd{
-	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_grid{
-	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big input,
@@ -514,11 +473,3 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 <?php do_action( 'frm_output_single_style', $settings ); ?>
-
-@media only screen and (max-width: 600px){
-	.<?php echo esc_html( $style_class ); ?> .frm_repeat_inline,
-	.<?php echo esc_html( $style_class ); ?> .frm_repeat_grid{
-		margin: 20px 0;
-	}
-}
-

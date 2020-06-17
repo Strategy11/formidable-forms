@@ -788,6 +788,7 @@ a.frm_save_draft{
 	border-style:solid;
 	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
 		border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+		border-color:var(--border-color);
 	<?php } ?>
 	border-top:none;
 	border-left:none;
@@ -822,7 +823,9 @@ a.frm_save_draft{
 }
 
 table.form_results.with_frm_style{
-	border:1px solid #ccc;
+	border:<?php echo esc_html( $defaults['field_border_width'] ); ?> solid <?php echo esc_html( $defaults['border_color'] . $important ); ?>;
+	border-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
+	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 }
 
 table.form_results.with_frm_style tr td{
@@ -830,24 +833,28 @@ table.form_results.with_frm_style tr td{
 	<?php if ( ! empty( $defaults['text_color'] ) ) { ?>
 		color:<?php echo esc_html( $defaults['text_color'] ); ?>;
 	<?php } ?>
-	color:var(--text-color);
+	color:var(--text-color)<?php echo esc_html( $important ); ?>;
 	padding:7px 9px;
 	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
 		border-top:1px solid <?php echo esc_html( $defaults['border_color'] ); ?>;
+		border-top-width:var(--field-border-width)<?php echo esc_html( $important ); ?>;
+		border-top-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	<?php } ?>
 }
 
 table.form_results.with_frm_style tr.frm_even,
 .frm-grid .frm_even{
 	background-color:#fff;
+	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
 
+<?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 table.form_results.with_frm_style tr.frm_odd,
 .frm-grid .frm_odd{
-	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
-		background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
-	<?php } ?>
+	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
+	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
+<?php } ?>
 
 <?php if ( ! empty( $defaults['border_color'] ) ) { ?>
 .frm_color_block {
@@ -1031,9 +1038,20 @@ select.frm_loading_lookup{
 
 <?php if ( ! empty( $defaults['bg_color_active'] ) ) { ?>
 .frm_grid{
-	background-color:<?php echo esc_html( $defaults['bg_color_active'] ); ?>;
+	background-color:<?php echo esc_html( $defaults['bg_color_active'] . $important ); ?>;
+	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
+
+
+.with_frm_style .frm_grid.frm_blank_field,
+.with_frm_style .frm_grid_first.frm_blank_field,
+.with_frm_style .frm_grid_odd.frm_blank_field{
+	background-color:<?php echo esc_html( $defaults['error_bg'] . $important ); ?>;
+	background-color:var(--error-bg)<?php echo esc_html( $important ); ?>;
+	border-color:<?php echo esc_html( $defaults['error_border'] ); ?>;
+	border-color:var(--error-bg);
+}
 
 .frm_grid .frm_primary_label,
 .frm_grid_first .frm_primary_label,
@@ -1327,6 +1345,7 @@ select.frm_loading_lookup{
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
 
 /* Responsive */
+
 @media only screen and (max-width: 900px) {
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_sixth .frm_primary_label,
 	.frm_form_field .frm_repeat_grid .frm_form_field.frm_seventh .frm_primary_label,
@@ -1338,6 +1357,11 @@ select.frm_loading_lookup{
 @media only screen and (max-width: 600px) {
 	.frm_form_field.frm_four_col .frm_opt_container{
 		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.with_frm_style .frm_repeat_inline,
+	.with_frm_style .frm_repeat_grid{
+		margin: 20px 0;
 	}
 }
 
