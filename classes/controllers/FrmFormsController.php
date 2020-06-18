@@ -1812,7 +1812,7 @@ class FrmFormsController {
 	 * @param array $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
-		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message">' . $success_msg . '<br/>' .
+		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message" role="status">' . $success_msg . '<br/>' .
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
 			'</div></div>';
