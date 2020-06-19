@@ -2723,9 +2723,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/**
-	 *  Get image size, if available, or use default of medium
-	 */
 	function getImageOptionSize( fieldId ) {
 		var $field = jQuery( '#field_options_image_size_' + fieldId ),
 			defaultSize = getDefaultImageOptionSize();
