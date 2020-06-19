@@ -3516,7 +3516,7 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 }
 
 .frm_image_option .frm_image_option_container:hover {
-	border: 1px solid #4199FD;
+	border-color: #4199FD;
 }
 
 .frm_image_options .frm_image_option_container .frm_empty_url,
