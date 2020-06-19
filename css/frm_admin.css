@@ -1019,7 +1019,7 @@ h2 .frm-button-primary {
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 .wp-core-ui.frm-white-body .button:not(.button-small),
-.frm-white-body button:not(.wp-switch-editor):not(.dropdown-toggle) {
+.frm-white-body button:not(.wp-switch-editor):not(.dropdown-toggle):not(.media-menu-item):not(.media-modal-close){
 	text-shadow: none;
 	box-shadow: none;
 	border-radius: 30px;
