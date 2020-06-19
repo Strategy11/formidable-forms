@@ -3483,6 +3483,16 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	padding: 10px;
 }
 
+.frm_list_entry_page .frm_image_option_container {
+	display: block;
+}
+
+.frm_list_entry_page .frm_image_option_container img {
+	width: 75px;
+	height: 75px;
+	object-fit: cover;
+}
+
 .frm_list_entry_page .frm_text_label_for_image {
 	display: none;
 }
