@@ -110,9 +110,7 @@ class FrmFieldFormHtml {
 		$this->replace_shortcodes_before_input();
 		$this->replace_shortcodes_with_atts();
 		$this->replace_shortcodes_after_input();
-
-		$this->html = apply_filters( 'frm_after_shortcodes_replaced', $this->html, $this->field_obj->get_field() );
-
+		
 		return $this->html;
 	}
 
