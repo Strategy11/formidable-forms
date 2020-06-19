@@ -2846,7 +2846,7 @@ function frmAdminBuildJS() {
 
 	function getMultipleOpts( fieldId ) {
 		debugger;
-		var i, saved, labelName, label, key, optObj, image, savedLabel, input, field, checkbox,
+		var i, saved, labelName, label, key, optObj, image, savedLabel, input, field, checkbox, fieldType,
 			checked = false,
 			opts = [],
 			imageUrl = '',
@@ -2872,7 +2872,8 @@ function frmAdminBuildJS() {
 
 			if ( hasImageOptions ) {
 				imageUrl = getImageUrlFromInput( optVals[i]);
-				label = getImageLabel(  label, showLabelWithImage, imageUrl );
+				fieldType = radioOrCheckbox( fieldId );
+				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
 			checked = getChecked( optVals[ i ].id  );
@@ -2893,6 +2894,15 @@ function frmAdminBuildJS() {
 		}
 
 		return opts;
+	}
+
+	function radioOrCheckbox( fieldId ) {
+		var settings = jQuery( '#frm-single-settings-' + fieldId );
+		if ( ! settings ) {
+			return 'radio';
+		}
+
+		return settings.hasClass( 'frm-type-checkbox' ) ? 'checkbox' : 'radio';
 	}
 
 	function getImageUrlFromInput( optVal ) {
