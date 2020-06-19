@@ -2363,7 +2363,6 @@ class FrmAppHelper {
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
 				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
 				'image_label_placeholder' => self::image_label_placeholder(),
-				'other_images_warning'    => self::other_images_warning(),
 				'default_image_option_size'  => self::get_default_image_option_size(),
 				'checkmark_icon'          => FrmFieldsHelper::get_checkmark_markup(),
 				'image_placeholder_icon'  => FrmFieldsHelper::get_image_icon_markup(),
@@ -2385,10 +2384,6 @@ class FrmAppHelper {
 
 	public static function image_label_placeholder() {
 		return __( 'Text label (required with an image)', 'formidable' );
-	}
-
-	public static function other_images_warning() {
-		return __( 'Please delete. Does not work with images.', 'formidable' );
 	}
 
 	public static function get_default_image_option_size() {
