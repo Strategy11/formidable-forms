@@ -2007,7 +2007,7 @@ function frmAdminBuildJS() {
 	}
 
 	function removeImageSizeClassesFromField( $field ) {
-		$field.removeClass( 'frm_image_size_small frm_image_size_medium frm_image_size_large' );
+		$field.removeClass( 'frm_image_size_extra-small frm_image_size_small frm_image_size_medium frm_image_size_large' );
 	}
 
 	function setAlignment( fieldId, alignment ) {
