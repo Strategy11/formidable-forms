@@ -2643,7 +2643,7 @@ function frmAdminBuildJS() {
 	}
 
 	function resetSingleOpt( fieldId, fieldKey, thisOpt ) {
-		var saved, text, defaultVal, previewInput, labelForDisplay, image, optContainer, previewSpan, imageUrl,
+		var saved, text, defaultVal, previewInput, labelForDisplay, image, optContainer, previewSpan, imageUrl, fieldType,
 			optHTML = '',
 			optKey = thisOpt.data( 'optkey' ),
 			separateValues = usingSeparateValues( fieldId ),
@@ -2689,7 +2689,8 @@ function frmAdminBuildJS() {
 					imageUrl = image.attr( 'src' );
 				}
 
-				labelForDisplay = getImageLabel(  labelForDisplay, showLabelWithImage, imageUrl );
+				fieldType = radioOrCheckbox( fieldId );
+				labelForDisplay = getImageLabel( labelForDisplay, showLabelWithImage, imageUrl, fieldType );
 				optContainer =	single.find( '.frm_image_option_container' );
 
 				if ( optContainer.length > 0 ) {
@@ -2845,7 +2846,6 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		debugger;
 		var i, saved, labelName, label, key, optObj, image, savedLabel, input, field, checkbox, fieldType,
 			checked = false,
 			opts = [],
@@ -2921,10 +2921,10 @@ function frmAdminBuildJS() {
 		return img.attr( 'src' );
 	}
 
-	function getImageLabel( label, showLabelWithImage, imageUrl ) {
+	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
 		var imageLabelClass,
 			originalLabel = label,
-			fullLabel = frm_admin_js.checkmark_icon;
+			fullLabel = fieldType === 'checkbox' ? frm_admin_js.checkmark_icon_for_checkbox : frm_admin_js.checkmark_icon_for_radio;
 
 		if ( imageUrl ) {
 			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '">';
@@ -2977,9 +2977,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/**
-	 * Is the box checked to show label with image?
-	 */
 	function showingLabelWithImage( fieldId ) {
 		var field = document.getElementById( 'hide_image_option_text_' + fieldId );
 		if ( field === null ) {

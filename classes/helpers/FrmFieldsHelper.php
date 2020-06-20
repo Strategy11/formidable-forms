@@ -455,8 +455,10 @@ class FrmFieldsHelper {
 		$label_class = $show_label ? 'frm_label_with_image ' : '';
 		$text_label  = self::get_label_from_opt( $opt );
 		$image       = ! empty( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url">' . self::get_image_icon_markup() . '</div>';
+		$field_type = FrmField::get_option(  $field,'type' );
+		$checkmark_icon_markup = ( $field_type === 'checkbox' ) ? self::get_checkmark_square_markup() : self::get_checkmark_circle_markup();
 
-		$label = '<div class="frm_image_option_container ' . $label_class . '">' . self::get_checkmark_circle_markup() . $image;
+		$label = '<div class="frm_image_option_container ' . $label_class . '">' . $checkmark_icon_markup . $image;
 
 		if ( $show_label ) {
 			$label .= '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' . $text_label . '</span></span>';
@@ -476,8 +478,8 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_checkmark_square_markup() {
-		// TODO [image options] Using other checkmark icon as placeholder until new icon is available.
-		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_check_icon', array( 'echo' => false ) ) . '</div>';
+		// TODO [image options] Using different icon as placeholder until new icon is available.
+		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_arrowup5_solid_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
 	public static function get_checkmark_circle_markup() {
