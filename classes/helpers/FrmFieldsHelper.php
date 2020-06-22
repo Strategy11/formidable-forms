@@ -455,7 +455,7 @@ class FrmFieldsHelper {
 		$label_class = $show_label ? 'frm_label_with_image ' : '';
 		$text_label  = self::get_label_from_opt( $opt );
 		$image       = ! empty( $image_url ) ? '<img src="' . esc_url( $image_url ) . '" alt="' . $text_label . '">' : '<div class="frm_empty_url">' . self::get_image_icon_markup() . '</div>';
-		$field_type = FrmField::get_option(  $field,'type' );
+		$field_type = FrmField::get_option( $field, 'type' );
 		$checkmark_icon_markup = ( $field_type === 'checkbox' ) ? self::get_checkmark_square_markup() : self::get_checkmark_circle_markup();
 
 		$label = '<div class="frm_image_option_container ' . $label_class . '">' . $checkmark_icon_markup . $image;
