@@ -478,8 +478,7 @@ class FrmFieldsHelper {
 	}
 
 	public static function get_checkmark_square_markup() {
-		// TODO [image options] Using different icon as placeholder until new icon is available.
-		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_arrowup5_solid_icon', array( 'echo' => false ) ) . '</div>';
+		return '<div class="frm_selected_checkmark">' . FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_square_icon', array( 'echo' => false ) ) . '</div>';
 	}
 
 	public static function get_checkmark_circle_markup() {
