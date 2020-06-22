@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.05.01';
+	public static $plug_version = '4.05.02';
 
 	/**
 	 * @since 1.07.02
@@ -258,11 +258,8 @@ class FrmAppHelper {
 		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
 
 		if ( empty( $post_type ) ) {
-			global $post;
-			if ( empty( $post ) ) {
-				$post_id = self::simple_get( 'post', 'absint' );
-				$post    = get_post( $post_id );
-			}
+			$post_id = self::simple_get( 'post', 'absint' );
+			$post    = get_post( $post_id );
 			$post_type = $post ? $post->post_type : '';
 		}
 

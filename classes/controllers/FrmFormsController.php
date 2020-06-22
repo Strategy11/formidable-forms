@@ -1416,8 +1416,20 @@ class FrmFormsController {
 			return;
 		}
 
+		self::move_menu_to_footer();
+
 		add_action( 'wp_before_admin_bar_render', 'FrmFormsController::admin_bar_configure' );
 		FrmAppHelper::load_font_style();
+	}
+
+	/**
+	 * @since 4.05.02
+	 */
+	private static function move_menu_to_footer() {
+		$settings = FrmAppHelper::get_settings();
+		if ( empty( $settings->admin_bar ) ) {
+			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
+		}
 	}
 
 	public static function admin_bar_configure() {
@@ -1858,7 +1870,28 @@ class FrmFormsController {
 		global $frm_vars;
 		self::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
 
+		$message_placement = self::message_placement( $form, $message );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
+	}
+
+	/**
+	 * @return string - 'before' or 'after'
+	 *
+	 * @since 4.05.02
+	 */
+	private static function message_placement( $form, $message ) {
+		$place = 'before';
+		if ( ! empty( $message ) && isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_below_success' ) !== false ) {
+			$place = 'after';
+		}
+
+		/**
+		 * @return string - 'before' or 'after'
+		 *
+		 * @since 4.05.02
+		 */
+		return apply_filters( 'frm_message_placement', $place, compact( 'form', 'message' ) );
 	}
 
 	/**
