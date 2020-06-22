@@ -372,6 +372,10 @@ class FrmAddonsController {
 				);
 			}
 
+			if ( ! empty( $link ) ) {
+				$link['status'] = $addon['status']['type'];
+			}
+
 			return $link;
 		}
 	}
@@ -815,6 +819,37 @@ class FrmAddonsController {
 
 		// Send back a response.
 		echo json_encode( __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' ) );
+		wp_die();
+	}
+
+	/**
+	 * @since 4.x
+	 */
+	public static function ajax_multiple_addons() {
+		self::install_addon_permissions();
+
+		// Set the current screen to avoid undefined notices.
+		global $hook_suffix;
+		set_current_screen();
+
+		$download_urls = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
+		$download_urls = explode( ',', $download_urls );
+		foreach ( $download_urls as $download_url ) {
+			$_POST['plugin'] = $download_url;
+			if ( strpos( $download_url, 'http' ) !== false ) {
+				// Installing.
+				self::maybe_show_cred_form();
+
+				$installed = self::install_addon();
+				self::maybe_activate_addon( $installed );
+			} else {
+				// Activating.
+				self::maybe_activate_addon( $download_url );
+			}
+		}
+
+		echo json_encode( __( 'Your plugins have been installed and activated.', 'formidable' ) );
+
 		wp_die();
 	}
 

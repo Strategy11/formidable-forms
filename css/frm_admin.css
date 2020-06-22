@@ -6797,24 +6797,6 @@ iframe#dyncontent_ifr {
 	background-color: var(--sidebar-color);
 }
 
-#frm-welcome {
-	background: #fff;
-	border: 1px solid var(--grey-border);
-	margin-top: 100px !important;
-}
-
-#frm-welcome .frm-logo svg {
-	margin: -75px auto 30px;
-	display: block;
-	background: #fff;
-	border-radius: 70px;
-	padding: 3px;
-}
-
-#frm-welcome #frm-using-lite {
-	display: none;
-}
-
 /* Chrome Scrollbars for Windows */
 .windows::-webkit-scrollbar,
 .windows ::-webkit-scrollbar {

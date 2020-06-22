@@ -4758,6 +4758,11 @@ function frmAdminBuildJS() {
 	}
 
 	/* Addons page */
+	function installMultipleAddons( e ) {
+		e.preventDefault();
+		installOrActivate( this, 'frm_multiple_addons' );
+	}
+
 	function activateAddon( e ) {
 		e.preventDefault();
 		installOrActivate( this, 'frm_activate_addon' );
@@ -4883,7 +4888,7 @@ function frmAdminBuildJS() {
 		button.removeClass( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
-		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp' );
+		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
 		}
@@ -5442,6 +5447,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'click', '.frm-install-addon', installAddon );
 			jQuery( document ).on( 'click', '.frm-activate-addon', activateAddon );
+			jQuery( document ).on( 'click', '.frm-solution-multiple', installMultipleAddons );
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
