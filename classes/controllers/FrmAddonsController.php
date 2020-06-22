@@ -16,8 +16,8 @@ class FrmAddonsController {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			add_submenu_page(
 				'formidable',
-				'Formidable | ' . __( 'Upgrade to Pro', 'formidable' ),
-				'<span style="color:#fe5a1d">' . __( 'Upgrade to Pro', 'formidable' ) . '</span>',
+				'Formidable | ' . __( 'Upgrade', 'formidable' ),
+				'<span style="color:#fe5a1d">' . __( 'Upgrade', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'
@@ -85,7 +85,7 @@ class FrmAddonsController {
 	private static function fallback_plugin_list() {
 		return array(
 			'formidable-pro' => array(
-				'title'   => 'Formidable Pro',
+				'title'   => 'Formidable Forms',
 				'link'    => 'pricing/',
 				'docs'    => '',
 				'excerpt' => 'Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in minutes.',

@@ -79,8 +79,8 @@ class FrmEntryValidate {
 
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
-		// Reset arrays with only one value if it's not a field where array keys need to be preserved
-		if ( is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) ) {
+		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+		if ( $should_trim ) {
 			$value = reset( $value );
 		}
 
@@ -194,8 +194,8 @@ class FrmEntryValidate {
 
 		// Switch generic values out for their regular expression
 		$pattern = preg_replace( '/\d/', '\d', $pattern );
-		$pattern = str_replace( 'a', '[a-z]', $pattern );
 		$pattern = str_replace( 'A', '[A-Z]', $pattern );
+		$pattern = str_replace( 'a', '[a-zA-Z]', $pattern );
 		$pattern = str_replace( '*', 'w', $pattern );
 		$pattern = str_replace( '/', '\/', $pattern );
 

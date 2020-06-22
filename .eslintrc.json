@@ -7,7 +7,7 @@
 		"plugin:jsx-a11y/recommended"
 	],
 	"env": {
-		"browser": false,
+		"browser": true,
 		"es6": true,
 		"node": true,
 		"mocha": true
@@ -32,7 +32,6 @@
 	},
 	"rules": {
 		"camelcase": ["error", { "properties": "never" }],
-		"comma-dangle": ["error", "always-multiline"],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
 		"react/jsx-curly-spacing": [
@@ -50,7 +49,7 @@
 		"react/no-children-prop": "off",
 		"react/no-find-dom-node": "warn",
 		"react/prop-types": "off",
-		"space-in-parens": ["error", "always"],
+		"vars-on-top": "warn",
 		"yoda": "off"
 	}
 }

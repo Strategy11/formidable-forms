@@ -206,7 +206,7 @@ class FrmListHelper {
 		}
 
 		// Redirect if page number is invalid and headers are not already sent.
-		if ( ! headers_sent() && ! FrmAppHelper::wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
+		if ( ! headers_sent() && ! wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
 			wp_redirect( add_query_arg( 'paged', $args['total_pages'] ) );
 			exit;
 		}

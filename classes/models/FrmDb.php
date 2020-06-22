@@ -205,6 +205,9 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
+		if ( $type === 'var' && ! isset( $args['limit'] ) ) {
+			$args['limit'] = 1;
+		}
 
 		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
@@ -331,10 +334,10 @@ class FrmDb {
 
 		$table_parts = explode( ' ', $table );
 		$group       = reset( $table_parts );
-		$group       = str_replace( $wpdb->prefix, '', $group );
+		self::maybe_remove_prefix( $wpdb->prefix, $group );
 
 		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
-		$group  = str_replace( $prefix, '', $group );
+		self::maybe_remove_prefix( $prefix, $group );
 
 		if ( $group == $table ) {
 			$table = $wpdb->prefix . $table;
@@ -342,6 +345,17 @@ class FrmDb {
 
 		// switch to singular group name
 		$group = rtrim( $group, 's' );
+	}
+
+	/**
+	 * Only remove the db prefix when at the beginning.
+	 *
+	 * @since 4.04.02
+	 */
+	private static function maybe_remove_prefix( $prefix, &$name ) {
+		if ( substr( $name, 0, strlen( $prefix ) ) === $prefix ) {
+			$name = substr( $name, strlen( $prefix ) );
+		}
 	}
 
 	private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
@@ -601,7 +615,9 @@ class FrmDb {
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
-		$filters = $wp_filter['content_save_pre'];
+		if ( isset( $wp_filter['content_save_pre'] ) ) {
+			$filters = $wp_filter['content_save_pre'];
+		}
 
 		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
 		remove_all_filters( 'content_save_pre' );
@@ -609,7 +625,9 @@ class FrmDb {
 		$post = wp_insert_post( $settings );
 
 		// add the content filters back for views or posts
-		$wp_filter['content_save_pre'] = $filters;
+		if ( isset( $filters ) ) {
+			$wp_filter['content_save_pre'] = $filters;
+		}
 
 		return $post;
 	}

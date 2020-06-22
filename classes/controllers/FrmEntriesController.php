@@ -7,7 +7,9 @@ class FrmEntriesController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		self::load_manage_entries_hooks();
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			self::load_manage_entries_hooks();
+		}
 	}
 
 	/**

@@ -303,7 +303,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function test_create_regular_expression_from_format() {
 		$formats = array(
 			'(999)999-2323' => '^\(\d\d\d\)\d\d\d-\d\d\d\d$',
-			'a9AA2328'      => '^[a-z]\d[A-Z][A-Z]\d\d\d\d$',
+			'a9aa2328'      => '^[a-zA-Z]\d[a-zA-Z][a-zA-Z]\d\d\d\d$',
 			'****'          => '^\w\w\w\w$',
 			'99/23'         => '^\d\d\/\d\d$',
 			'99?99'        => '^\d\d(\d\d)?$',

@@ -748,7 +748,7 @@ class FrmField {
 		// Allow a single box to be checked for the default value.
 		$before = $results->default_value;
 		FrmAppHelper::unserialize_or_decode( $results->default_value );
-		if ( $before === $results->default_value && strpos( $before, '["' ) === 0 ) {
+		if ( $before === $results->default_value && ! is_array( $before ) && strpos( $before, '["' ) === 0 ) {
 			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 		}
 	}

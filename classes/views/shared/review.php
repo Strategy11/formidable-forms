@@ -1,14 +1,7 @@
 <div class="notice notice-info is-dismissible frm-review-notice">
 	<div class="frm-satisfied">
 		<p>
-			<?php
-			printf(
-				/* translators: %s: User name, %2$d: number of entries */
-				esc_html__( 'Congratulations%1$s! You have collected %2$d form submissions.', 'formidable' ),
-				esc_html( $name ),
-				absint( $entries )
-			);
-			?>
+			<?php echo esc_html( $title ); ?>
 			<br/>
 			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?>
 		</p>
@@ -22,7 +15,7 @@
 	<div class="frm-review-request frm_hidden">
 		<p><?php esc_html_e( 'Awesome! Could you do me a BIG favor and give Formidable Forms a review to help me grow my little business and boost our motivation?', 'formidable' ); ?></p>
 		<p>- Steph Wells<br/>
-			<span><?php esc_html_e( 'Founder and Lead Developer of Formidable Forms', 'formidable' ); ?><span>
+			<span><?php esc_html_e( 'Co-Founder and CTO of Formidable Forms', 'formidable' ); ?><span>
 		</p>
 		<a href="#" class="frm-dismiss-review-notice frm_reverse_button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'No thanks, maybe later', 'formidable' ); ?>

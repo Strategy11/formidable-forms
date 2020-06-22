@@ -292,7 +292,7 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
-		} elseif ( empty( $entry ) ) {
+		} elseif ( empty( $entry ) || 'false' === $entry ) {
 			$entry = false;
 		}
 	}

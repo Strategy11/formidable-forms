@@ -13,7 +13,7 @@
 				?>
 				>
 				<?php FrmAppHelper::icon_by_class( $section['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_html( $section['name'] ); ?>
+				<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // WPCS: XSS ok. ?>
 			</a>
 		</li>
 	<?php } ?>

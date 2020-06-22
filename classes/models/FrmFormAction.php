@@ -729,7 +729,7 @@ class FrmFormAction {
 				continue;
 			}
 
-			self::prepare_logic_value( $condition['hide_opt'] );
+			self::prepare_logic_value( $condition['hide_opt'], $action, $entry );
 
 			$observed_value = self::get_value_from_entry( $entry, $condition['hide_field'] );
 
@@ -758,7 +758,7 @@ class FrmFormAction {
 	 *
 	 * @param array|string $logic_value
 	 */
-	private static function prepare_logic_value( &$logic_value ) {
+	private static function prepare_logic_value( &$logic_value, $action, $entry ) {
 		if ( is_array( $logic_value ) ) {
 			$logic_value = reset( $logic_value );
 		}
@@ -766,6 +766,13 @@ class FrmFormAction {
 		if ( $logic_value == 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
+
+		$logic_value = apply_filters( 'frm_content', $logic_value, $action->menu_order, $entry );
+
+		/**
+		 * @since 4.04.05
+		 */
+		$logic_value = apply_filters( 'frm_action_logic_value', $logic_value );
 	}
 
 	/**

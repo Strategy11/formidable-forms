@@ -9,6 +9,7 @@
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
+				'import_link' => $form ? false : true,
 			)
 		);
 		?>
@@ -24,6 +25,9 @@
 						)
 					);
 					?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
+						<?php esc_html_e( 'Import', 'formidable' ); ?>
+					</a>
 				</h2>
 				<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 				<div class="clear"></div>

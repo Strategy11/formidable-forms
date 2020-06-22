@@ -512,7 +512,7 @@ DEFAULT_HTML;
 		if ( empty( $is_empty ) ) {
 			$default_value = '';
 		} else {
-			$default_value = implode( $default_value, ',' );
+			$default_value = implode( ',', $default_value );
 		}
 	}
 

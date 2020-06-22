@@ -93,7 +93,6 @@ class FrmHooksController {
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
-		add_action( 'wp_mail_smtp_core_recommendations_plugins', 'FrmAppController::remove_wpforms_nag' );
 
 		// Addons Controller.
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
@@ -108,6 +107,7 @@ class FrmHooksController {
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );
+			add_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		}
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
@@ -122,6 +122,9 @@ class FrmHooksController {
 
 		// Forms Model.
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
+
+		// Inbox Controller.
+		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
 
 		// Settings Controller.
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
@@ -141,6 +144,8 @@ class FrmHooksController {
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
+
+		FrmSMTPController::load_hooks();
 	}
 
 	public static function load_ajax_hooks() {
@@ -175,6 +180,11 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
 		add_action( 'wp_ajax_frm_install_form', 'FrmFormsController::build_new_form' );
 		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
+
+		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
+
+		// Inbox.
+		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );
 
 		// Settings.
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );

@@ -33,8 +33,10 @@
 				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ); ?>" class="button-primary frm-button-primary" />
 			</p>
 		</form>
+		<?php FrmFormMigratorsHelper::maybe_show_download_link(); ?>
 		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
 
+		<?php do_action( 'frm_import_settings' ); ?>
 		<br/><br/>
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">

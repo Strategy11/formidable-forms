@@ -6,6 +6,8 @@ class FrmReviews {
 
 	private $review_status = array();
 
+	private $inbox_key = 'review';
+
 	/**
 	 * Add admin notices as needed for reviews
 	 *
@@ -98,8 +100,92 @@ class FrmReviews {
 			$name = ' ' . $name;
 		}
 
+		$title = sprintf(
+			/* translators: %s: User name, %2$d: number of entries */
+			esc_html__( 'Congratulations%1$s! You have collected %2$d form submissions.', 'formidable' ),
+			esc_html( $name ),
+			absint( $entries )
+		);
+
+		$this->add_to_inbox( $title, $name, $asked );
+
 		// We have a candidate! Output a review message.
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/review.php' );
+	}
+
+	private function add_to_inbox( $title, $name, $asked ) {
+		$message = new FrmInbox();
+		$requests = $message->get_messages();
+		$key      = $this->inbox_key . ( $asked ? $asked : '' );
+
+		if ( isset( $requests[ $key ] ) ) {
+			return;
+		}
+
+		// Remove previous requests.
+		if ( $asked > 0 ) {
+			$message->remove( $this->inbox_key );
+		}
+		if ( $asked > 1 ) {
+			$message->remove( $this->inbox_key . '1' );
+		}
+
+		if ( $this->has_later_request( $requests, $asked ) ) {
+			// Don't add a request that has already been passed.
+			return;
+		}
+
+		$message->add_message(
+			array(
+				'key'     => $key,
+				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
+					'- Steph Wells<br/>' .
+					'<span>' . esc_html__( 'Co-Founder and CTO of Formidable Forms', 'formidable' ) . '<span>',
+				'subject' => str_replace( $name, '', $title ),
+				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button-secondary frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
+					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
+			)
+		);
+	}
+
+	/**
+	 * If there are already later requests, don't add it to the inbox again.
+	 *
+	 * @since 4.05.02
+	 */
+	private function has_later_request( $requests, $asked ) {
+		return isset( $requests[ $this->inbox_key . ( $asked + 1 ) ] ) || isset( $requests[ $this->inbox_key . ( $asked + 2 ) ] );
+	}
+
+	/**
+	 * @since 4.05.02
+	 */
+	private function inbox_keys() {
+		return array(
+			$this->inbox_key,
+			$this->inbox_key . '1',
+			$this->inbox_key . '2',
+		);
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private function set_inbox_dismissed() {
+		$message = new FrmInbox();
+		foreach ( $this->inbox_keys() as $key ) {
+			$message->dismiss( $key );
+		}
+	}
+
+	/**
+	 * @since 4.05.01
+	 */
+	private function set_inbox_read() {
+		$message = new FrmInbox();
+		foreach ( $this->inbox_keys() as $key ) {
+			$message->mark_read( $key );
+		}
 	}
 
 	/**
@@ -119,6 +205,7 @@ class FrmReviews {
 
 		if ( isset( $review['dismissed'] ) && $review['dismissed'] === 'done' ) {
 			// if feedback was submitted, don't update it again when the review is dismissed
+			$this->set_inbox_dismissed();
 			wp_die();
 		}
 
@@ -128,6 +215,7 @@ class FrmReviews {
 		$review['asked']     = isset( $review['asked'] ) ? $review['asked'] + 1 : 1;
 
 		update_user_meta( $user_id, $this->option_name, $review );
+		$this->set_inbox_read();
 		wp_die();
 	}
 }

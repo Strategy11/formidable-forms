@@ -19,7 +19,7 @@
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--border-radius: 35px;
-	--small-radius: 4px;
+	--small-radius: 6px;
 	--small-sidebar: 275px;
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
@@ -258,6 +258,10 @@ a .frmsvg,
 	text-overflow: ellipsis;
 }
 
+.frm_top_left.frm_top_wide {
+	max-width: 100%;
+}
+
 .frm-header-logo,
 .edit-php.post-type-frm_display .frm-header-logo {
 	float: left;
@@ -268,6 +272,10 @@ a .frmsvg,
 .post-type-frm_display .frm-header-logo,
 .frm_page_container .frm-header-logo {
 	margin: 13px 0 0;
+}
+
+.frm_page_container .frm-header-logo {
+	margin-bottom: 6px;
 }
 
 ul.frm_form_nav {
@@ -972,6 +980,7 @@ p.frm_has_shortcodes {
 
 h1 .frm-button-secondary,
 h1 .frm-button-primary,
+h2 .frm-button-secondary,
 h2 .frm-button-primary {
 	font-size: 14px !important;
 	font-weight: normal;
@@ -2004,6 +2013,7 @@ table.frm-list-templates thead th {
 	height: 50px;
 }
 
+.frm-right-panel .inside a.frm_pro_tip,
 a.frm_pro_tip {
 	font-size: 14px;
 	border: 1px solid var(--orange);
@@ -2906,6 +2916,7 @@ img.frm_help {
 	width: 20px;
 	height: 20px;
 	position: relative;
+	display: inline-block;
 }
 
 #frm-show-fields .frm-wait:only-child {
@@ -3657,6 +3668,97 @@ label.frm-example-icon {
 	color: green;
 }
 
+/* Empty List */
+
+.frm_no_items {
+	margin: 75px auto;
+	text-align: center;
+	color: var(--dark-grey);
+	max-width: 500px;
+}
+
+.frm_no_items h2 {
+	font-size: 25px;
+	margin-bottom: 30px !important;
+}
+
+.frm_no_items p {
+	font-size: 14px;
+}
+
+.frm-subscribe {
+	margin: 30px 0;
+}
+
+/* Inbox */
+
+#frm_inbox_page .frm_page_container {
+	height: auto;
+}
+
+.frm_inbox_card {
+	display: grid;
+	grid-template-columns: 72px 1fr;
+	grid-gap: 15px;
+	border-bottom: 1px solid var(--grey-border);
+	padding: 25px;
+}
+
+.frm_inbox_card_icon {
+	grid-row: span 3 / span 3;
+	padding-top: 20px;
+	text-align: center
+}
+
+.frm_inbox_card_icon svg {
+	height: 48px;
+	width: 48px;
+	color: var(--blue-border);
+}
+
+.frm_inbox_card header {
+	display: grid;
+	grid-template-columns: 1fr 150px;
+	align-items: center;
+}
+
+.frm_inbox_card h3 {
+	border: none;
+	text-transform: none;
+	margin: 0;
+	padding: 0;
+	font-weight: 600;
+	color: var(--medium-grey);
+	font-size: 16px;
+}
+
+.frm_inbox_date {
+	text-align: right;
+}
+
+.frm_inbox_count,
+.frm_inbox_unread {
+	background: var(--orange);
+	color: #fff;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 8px;
+	font-size: 11px;
+	text-align: center;
+}
+
+.frm_inbox_unread {
+	width: 8px;
+	height: 8px;
+}
+
+.frm_inbox_count {
+	min-width: 18px;
+	height: 18px;
+	margin-left: 2px;
+	vertical-align: text-bottom;
+}
+
 /* Styles tabs */
 
 #frm_styling_form #frm_delete_style {
@@ -3735,6 +3837,42 @@ label.default-style-box input[type="checkbox"] {
 .tabs-panel.active .tabs-panel, .frm_settings_form .tabs-panel .tabs-panel {
 	border: none;
 	padding: 0;
+}
+
+.frm-feature-banner {
+	background: var(--dark-grey);
+	color: #fff;
+	border-radius: var(--small-radius);
+	padding: 20px;
+	margin: 10px 0;
+}
+
+.frm-feature-banner p {
+	font-size: 14px;
+}
+
+.frm-feature-banner .dismiss {
+    margin-top: -10px;
+    margin-right: -10px;
+}
+
+.frm-feature-banner .dismiss svg {
+	color: #fff;
+}
+
+.frm-feature-banner .frm-big-icon {
+	padding-right: 20px;
+	float: left;
+	min-height: 60px;
+}
+
+.frm-big-icon svg {
+	height: 60px;
+	width: 60px;
+}
+
+.frm-feature-banner p {
+	margin-top: 0;
 }
 
 /*for add-on reverse compatibility */
@@ -4469,7 +4607,7 @@ a.frm_action_icon:hover {
 .frm-field-action-icons a {
 	margin-left: 15px;
 	float: right;
-	font-size: 17px;
+	font-size: 16px;
 	width: 17px;
 }
 
@@ -5164,10 +5302,6 @@ tr.frm_options_heading td {
 
 .frm_prod_type_single .frm_product_price_wrapper {
 	width: 100%;
-}
-
-.frm-type-quantity .frm-step {
-	display: none;
 }
 
 #new_fields .frm_product_price_wrapper input:first-child {
@@ -6480,20 +6614,16 @@ iframe#dyncontent_ifr {
 }
 
 #frm_styling_form .wp-color-result-text {
-	line-height: 28px !important;
+	line-height: 30px !important;
 	font-size: 15px;
 	background: #fff !important;
 }
 
 .wp-picker-open + .wp-picker-input-wrap {
 	position: absolute;
-	margin-left: -80px;
-	margin-top: 2px;
-	width: 79px;
-}
-
-.frm6 .wp-picker-open + .wp-picker-input-wrap {
-	margin-left: -110px;
+	margin-left: -87px;
+	margin-top: 1px;
+	width: 86px;
 }
 
 .wp-picker-container input[type="text"].wp-color-picker {
@@ -6503,6 +6633,8 @@ iframe#dyncontent_ifr {
 	color: var(--dark-grey);
 	font-size: 15px;
 	width: 100%;
+	line-height: 1;
+	text-align: center;
 }
 
 .wp-picker-input-wrap .wp-picker-clear {

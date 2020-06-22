@@ -35,6 +35,12 @@
 		<?php } ?>
 		</td>
 	</tr>
+	<?php do_action( 'frm_add_form_style_tab_options', $values ); ?>
+	<tr>
+		<td colspan="2">
+			<h3><?php esc_html_e( 'Buttons', 'formidable' ); ?></h3>
+		</td>
+	</tr>
 	<tr>
 		<td><label><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?></label></td>
 		<td>

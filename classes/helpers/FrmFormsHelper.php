@@ -92,7 +92,7 @@ class FrmFormsHelper {
 		}
 
 		$frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy_all' ) ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy', 'destroy_all' ) ) ) {
 			$args['frm_action'] = 'list';
 			$args['form']       = 0;
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
@@ -1118,6 +1118,10 @@ BEFORE_HTML;
 				'label' => __( 'Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
 			),
+			'frm_total_big'  => array(
+				'label' => __( 'Big Total', 'formidable' ),
+				'title' => __( 'Add this to a read-only field to display the text in large, bold text without a border or background.', 'formidable' ),
+			),
 			'frm_scroll_box' => array(
 				'label' => __( 'Scroll Box', 'formidable' ),
 				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
@@ -1130,6 +1134,10 @@ BEFORE_HTML;
 			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
 			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
 			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
+			'frm_color_block' => array(
+				'label' => __( 'Color Block', 'formidable' ),
+				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
+			),
 			'frm_capitalize' => array(
 				'label' => __( 'Capitalize', 'formidable' ),
 				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
@@ -1419,6 +1427,9 @@ BEFORE_HTML;
 	 */
 	private static function get_unsafe_params( $url ) {
 		$redirect_components = parse_url( $url );
+		if ( empty( $redirect_components['query'] ) ) {
+			return array();
+		}
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
 		$reserved_words            = self::reserved_words();

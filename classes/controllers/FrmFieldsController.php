@@ -322,7 +322,7 @@ class FrmFieldsController {
 		}
 
 		if ( $display['clear_on_focus'] && is_array( $field['placeholder'] ) ) {
-			$field['placeholder'] = implode( $field['placeholder'], ', ' );
+			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
 	}
@@ -584,7 +584,7 @@ class FrmFieldsController {
 		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
 		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ) );
 
-		$placeholder = $field['placeholder'];
+		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
 		if ( empty( $placeholder ) && $is_placeholder_field && ! $is_combo_field ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
@@ -606,6 +606,9 @@ class FrmFieldsController {
 		$position = FrmField::get_option( $field, 'label' );
 		if ( $position == 'inside' ) {
 			$default_value = $field['name'];
+			if ( FrmField::is_required( $field ) ) {
+				$default_value .= ' ' . $field['required_indicator'];
+			}
 		} else {
 			$default_value = '';
 		}
