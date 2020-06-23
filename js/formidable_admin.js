@@ -222,6 +222,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					messageBox.classList.add( 'frm_hidden' );
 					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
 				}, 10000 );
+				var refreshPage = document.querySelectorAll( '#frm-welcome' );
+				if ( refreshPage.length > 0 ) {
+					window.location.reload();
+				}
 			}
 		},
 

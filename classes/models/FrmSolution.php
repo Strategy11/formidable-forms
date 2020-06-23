@@ -158,6 +158,22 @@ class FrmSolution {
 		<section class="top">
 			<div class="frm-smtp-logos">
 				<?php FrmAppHelper::show_logo( $size ); ?>
+				<?php
+				FrmAppHelper::icon_by_class(
+					'frmfont frm_arrow_right_icon',
+					array(
+						'aria-label' => 'Install',
+						'style'      => 'width:30px;height:30px;margin:0 35px;',
+					)
+				);
+				FrmAppHelper::icon_by_class(
+					'frmfont frm_wordpress_icon',
+					array(
+						'aria-label' => 'WordPress',
+						'style'      => 'width:90px;height:90px;',
+					)
+				);
+				?>
 			</div>
 			<h1><?php echo esc_html( $this->page_title() ); ?></h1>
 			<p><?php echo esc_html( $this->page_description() ); ?></p>
@@ -176,7 +192,7 @@ class FrmSolution {
 			$this->license_box();
 			$shown = $this->show_plugin_install();
 			$step  = $shown ? 3 : 2;
-			$this->show_app_install( $step );
+			$this->show_app_install( $step, $shown );
 			//$this->show_page_links();
 		}
 	}
@@ -185,11 +201,23 @@ class FrmSolution {
 	}
 
 	protected function get_step_data( $num ) {
+		global $frm_vars;
+
+		$pro_installed = FrmAppHelper::pro_is_installed() && $frm_vars['pro_is_authorized'];
+
 		$step = array(
 			'num'           => $num,
 			'icon'          => 'frm_step' . $num . '_icon',
 			'section_class' => '',
+			'current'       => $pro_installed ? false : 1,
 		);
+
+		if ( $num === 1 && $pro_installed ) {
+			$step['section_class'] = 'grey';
+			$step['icon']          = 'frm_step_complete_icon';
+		} elseif ( $step['current'] && $step['current'] !== $num  ) {
+			$step['section_class'] = 'grey';
+		}
 
 		return $step;
 	}
@@ -198,11 +226,9 @@ class FrmSolution {
 	 * Generate and output Connect step section HTML.
 	 */
 	protected function license_box() {
-		global $frm_vars;
-
 		$step = $this->get_step_data( 1 );
-		$step['section_class'] = FrmAppHelper::pro_is_installed() && $frm_vars['pro_is_authorized'] ? 'grey' : '';
 		$step['label'] = __( 'Connect to FormidableForms.com', 'formidable' );
+
 		$this->step_top( $step );
 
 		if ( $step['section_class'] === 'grey' ) { ?>
@@ -218,9 +244,6 @@ class FrmSolution {
 	}
 
 	protected function step_top( $step ) {
-		if ( strpos( $step['section_class'], 'grey' ) !== false ) {
-			$step['icon'] = 'frm_step_complete_icon';
-		}
 		?>
 		<section class="step step-install <?php echo esc_attr( $step['section_class'] ); ?>">
 			<aside class="num">
@@ -269,12 +292,18 @@ class FrmSolution {
 			}
 		}
 
-		$step['section_class'] = empty( $links ) ? 'grey' : '';
+		$step['section_class'] = empty( $links ) ? 'grey' : $step['section_class'];
+		if ( empty( $links ) ) {
+			$step['icon'] = 'frm_step_complete_icon';
+		}
 		$this->step_top( $step );
 
+		$complete = 'incomplete';
+
 		if ( empty( $links ) ) {
+			$complete = 'complete';
 			?>
-			<a rel="" class="button button-primary frm-button-primary disabled">
+			<a rel="" class="button-primary frm-button-primary grey disabled">
 				<?php esc_html_e( 'Install & Activate', 'formidable' ); ?>
 			</a>
 			<?php
@@ -292,7 +321,7 @@ class FrmSolution {
 				<span class="frm_error">
 					<?php
 					printf(
-						esc_html__( 'You need permission to download the Formidable %1%s plugin', 'formidable' ),
+						esc_html__( 'You need permission to download the Formidable %1$s plugin', 'formidable' ),
 						array_key_first( $links )
 					);
 					?>
@@ -308,12 +337,17 @@ class FrmSolution {
 		}
 
 		$this->step_bottom( $step );
-		return true;
+		return $complete;
 	}
 
-	protected function show_app_install( $num ) {
+	protected function show_app_install( $num, $previous_complete ) {
 		$step          = $this->get_step_data( $num );
 		$step['label'] = __( 'Create Forms and Views', 'formidable' );
+		if ( $previous_complete === 'incomplete' ) {
+			$step['section_class'] = 'grey';
+		}
+
+		// $step['icon'] = 'frm_step_complete_icon';
 
 		$this->step_top( $step );
 
