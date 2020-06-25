@@ -63,6 +63,11 @@ class FrmXMLController {
 				'redirect' => FrmForm::get_edit_link( $form_id ),
 				'success'  => 1,
 			);
+			if ( ! empty( $imported['imported']['posts'] ) ) {
+				// Return the link to the last page created.
+				$post_id = end( $imported['posts'] );
+				$response['redirect'] = get_permalink( $post_id );
+			}
 		} else {
 			$response = array(
 				'message' => __( 'There was an error importing form', 'formidable' ),
@@ -87,6 +92,12 @@ class FrmXMLController {
 			return;
 		}
 
+		$name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+		$description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+		if ( empty( $name ) && empty( $description ) ) {
+			return;
+		}
+
 		// Get the main form ID.
 		$set_name = 0;
 		foreach ( $xml->form as $form ) {
@@ -98,8 +109,8 @@ class FrmXMLController {
 		foreach ( $xml->form as $form ) {
 			// Maybe set the form name if this isn't a child form.
 			if ( $set_name == $form->id ) {
-				$form->name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
-				$form->description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+				$form->name        = $name;
+				$form->description = $description;
 			}
 
 			// Use a unique key to prevent editing existing form.

@@ -5056,6 +5056,11 @@ function frmAdminBuildJS() {
 		this.nextElementSibling.value = ui.item.value;
 	}
 
+	function nextInstallStep( thisStep ) {
+		thisStep.classList.add( 'grey' );
+		thisStep.nextElementSibling.classList.remove( 'grey' );
+	}
+
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
 		jQuery.ajax({
@@ -5083,11 +5088,11 @@ function frmAdminBuildJS() {
 			button = this.querySelector( 'button' );
 		e.preventDefault();
 		button.classList.add( 'frm_loading_button' );
-		installNewForm( this, action );
+		installNewForm( this, action, button );
 	}
 
-	function installNewForm( form, action ) {
-		var data,
+	function installNewForm( form, action, button ) {
+		var data, redirect, href,
 			formName = form.elements.template_name.value,
 			formDesc = form.elements.template_desc.value,
 			link = form.elements.link.value;
@@ -5100,12 +5105,25 @@ function frmAdminBuildJS() {
 			nonce: frmGlobal.nonce
 		};
 		postAjax( data, function( response ) {
-			if ( typeof response.redirect !== 'undefined' ) {
-				window.location = response.redirect;
+			redirect = response.redirect;
+			if ( typeof redirect !== 'undefined' ) {
+				if ( typeof form.elements.redirect === 'undefined' ) {
+					window.location = redirect;
+				} else {
+					href = document.getElementById( 'frm-redirect-link' );
+					if ( typeof link !== 'undefined' ) {
+						// Show the next installation step.
+						href.setAttribute( 'href', redirect );
+						href.classList.remove( 'grey', 'disabled' );
+						nextInstallStep( form.parentNode.parentNode );
+						button.classList.add( 'grey', 'disabled' );
+					}
+				}
 			} else {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				// TODO: show response.message
 			}
+			button.classList.remove( 'frm_loading_button' );
 		});
 	}
 
@@ -5379,6 +5397,9 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_inbox_page' ) !== null ) {
 				// Inbox page
 				frmAdminBuild.inboxInit();
+			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
+				// Solution install page
+				jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 			} else {
 				// New form selection page
 				initNewFormModal();
