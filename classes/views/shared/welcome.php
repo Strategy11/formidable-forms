@@ -1,6 +1,5 @@
 <div class="intro">
 	<div class="block">
-		<h1><?php esc_html_e( 'Welcome to Formidable Forms', 'formidable' ); ?></h1>
 		<strong><?php esc_html_e( 'Thanks for choosing Formidable Forms — the most powerful and versatile form builder for WordPress.', 'formidable' ); ?></strong>
 	</div>
 

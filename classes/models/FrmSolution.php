@@ -19,6 +19,8 @@ class FrmSolution {
 
 	protected $plugin_slug = 'formidable';
 
+	protected $plugin_file = '';
+
 	/**
 	 * Hidden welcome page slug.
 	 *
@@ -27,10 +29,13 @@ class FrmSolution {
 	protected $page = 'formidable-getting-started';
 
 	public function __construct( $atts = array() ) {
-		add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
-
 		if ( $this->plugin_slug !== 'formidable' ) {
+			add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
 			add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
+		}
+
+		if ( empty( $this->plugin_file ) ) {
+			$this->plugin_file = $this->plugin_slug . '.php';
 		}
 	}
 
@@ -50,8 +55,18 @@ class FrmSolution {
 			return;
 		}
 
+		add_filter( 'plugin_action_links_' . $this->plugin_slug . '/' . $this->plugin_file, array( $this, 'plugin_links' ) );
 		add_action( 'admin_menu', array( $this, 'register' ) );
 		add_action( 'admin_head', array( $this, 'hide_menu' ) );
+	}
+
+	public function plugin_links( $links ) {
+		if ( ! $this->is_complete() ) {
+			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . __( 'Setup', 'formidable' ) . '</a>';
+			array_unshift( $links, $settings );
+		}
+
+		return $links;
 	}
 
 	/**
@@ -122,8 +137,12 @@ class FrmSolution {
 		delete_transient( 'frm_activation_redirect' );
 
 		// Initial install.
-		wp_safe_redirect( admin_url( 'index.php?page=' . $this->page ) );
+		wp_safe_redirect( $this->settings_link() );
 		exit;
+	}
+
+	protected function settings_link() {
+		return admin_url( 'index.php?page=' . $this->page );
 	}
 
 	/**
@@ -490,13 +509,12 @@ class FrmSolution {
 	 */
 	protected function add_to_inbox() {
 		$message = new FrmInbox();
-		$link    = admin_url( 'index.php?page=' . $this->page );
 		$message->add_message(
 			array(
 				'key'     => $this->plugin_slug . '-solution',
 				'message' => __( 'Your plugin setup isn\'t quite complete.', 'formidable' ),
 				'subject' => $this->page_title(),
-				'cta'     => '<a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">' .
+				'cta'     => '<a href="' . esc_url( $this->settings_link() ) . '" class="button-primary frm-button-primary">' .
 					esc_html__( 'Continue Install', 'formidable' ) . '</a>',
 			)
 		);
