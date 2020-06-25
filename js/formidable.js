@@ -1159,6 +1159,7 @@ function frmFrontFormJS() {
 				scrollObj = id;
 			}
 
+			scrollObj.focus();
 			newPos = scrollObj.offset().top;
 			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;
