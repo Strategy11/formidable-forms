@@ -3595,6 +3595,10 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 	text-overflow: ellipsis;
 }
 
+.frm_wrap .frm_image_preview_wrapper input[readonly].frm_choose_image_box {
+	cursor: pointer;
+}
+
 .frm_remove_image_option {
 	margin-top: 9px;
 	color: rgba(40, 47, 54, 0.4);
