@@ -2389,7 +2389,7 @@ class FrmAppHelper {
 			return FrmProFieldsController::get_default_image_option_size();
 		}
 
-		return 'small';
+		return 'extra-small';
 	}
 
 	/**
