@@ -3601,6 +3601,10 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 	cursor: pointer;
 }
 
+.frm_remove_image_option:hover {
+	color: rgba(40, 47, 54, 0.8);
+}
+
 /* Form settings */
 
 #form_settings_page label,
