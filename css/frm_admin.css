@@ -3597,6 +3597,7 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 
 .frm_wrap .frm_image_preview_wrapper input[readonly].frm_choose_image_box {
 	cursor: pointer;
+	color: rgb(97, 104, 113);
 }
 
 .frm_remove_image_option {
