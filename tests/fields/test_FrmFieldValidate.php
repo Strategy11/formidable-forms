@@ -367,7 +367,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertFalse( $is_spam );
 
 		$blocked = '23.343.12332';
-		$new_block = $blocked . "\r\nspamemail@example.com";
+		$new_block = $blocked . "\nspamemail@example.com";
 		update_option( 'blacklist_keys', $new_block );
 		$this->assertSame( $new_block, get_option( 'blacklist_keys' ) );
 
