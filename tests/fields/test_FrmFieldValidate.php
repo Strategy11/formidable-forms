@@ -366,7 +366,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
-		update_option( 'blacklist_keys', "23.343.12332\r\nspamemail@example.com" );
+		$new_block = "23.343.12332\r\nspamemail@example.com";
+		update_option( 'blacklist_keys', $new_block );
+		$this->assertSame( $new_block, get_option( 'blacklist_keys' ) );
 
 		$is_spam = FrmEntryValidate::blacklist_check( array( 'item_meta' => array( '', '' ) ) );
 		$this->assertFalse( $is_spam );
