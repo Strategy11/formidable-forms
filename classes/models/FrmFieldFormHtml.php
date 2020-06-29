@@ -426,7 +426,6 @@ class FrmFieldFormHtml {
 
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
-
 		if ( ! empty( $extra_classes ) ) {
 			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';

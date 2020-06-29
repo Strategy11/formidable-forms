@@ -2007,7 +2007,7 @@ function frmAdminBuildJS() {
 	}
 
 	function removeImageSizeClassesFromField( $field ) {
-		$field.removeClass( 'frm_image_size_extra-small frm_image_size_small frm_image_size_medium frm_image_size_large' );
+		$field.removeClass( 'frm_image_size_xsmall frm_image_size_small frm_image_size_medium frm_image_size_large' );
 	}
 
 	function setAlignment( fieldId, alignment ) {
@@ -2071,7 +2071,7 @@ function frmAdminBuildJS() {
 			$imagePreview.find( '.frm_image_preview_frame' ).show();
 			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
-			$imagePreview.find( 'input.frm_choose_image_box' ).hide();
+			$imagePreview.find( '.frm_choose_image_box' ).hide();
 			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).change();
 			wp.media.model.settings.post.id = postID;
 		});
@@ -2090,7 +2090,7 @@ function frmAdminBuildJS() {
 
 		previewWrapper.find( 'img' ).attr( 'src', '' );
 		previewWrapper.find( '.frm_image_preview_frame' ).hide();
-		previewWrapper.find( 'input.frm_choose_image_box' ).show();
+		previewWrapper.find( '.frm_choose_image_box' ).show();
 		previewWrapper.find( 'input.frm_image_id' ).val( 0 ).change();
 	}
 
@@ -2978,7 +2978,7 @@ function frmAdminBuildJS() {
 	}
 
 	function showingLabelWithImage( fieldId ) {
-		var field = document.getElementById( 'hide_image_option_text_' + fieldId );
+		var field = document.getElementById( 'hide_image_text_' + fieldId );
 		if ( field === null ) {
 			return true;
 		} else {
@@ -3298,7 +3298,9 @@ function frmAdminBuildJS() {
 			fieldId = getOptionFieldId( parentLi, key ),
 			defaultRadio = parentLi.querySelector( 'input[name="default_value_' + fieldId + '"]' );
 
-		defaultRadio.value = input.value;
+		if ( defaultRadio !== null ) {
+			defaultRadio.value = input.value;
+		}
 	}
 
 	/**
@@ -5787,7 +5789,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_toggle_image_options', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_remove_image_option', removeImageFromOption );
 			$builderForm.on( 'click', '.frm_choose_image_box', addImageToOption );
-			$builderForm.on( 'change', '.frm_hide_image_option_text', refreshOptionDisplay );
+			$builderForm.on( 'change', '.frm_hide_image_text', refreshOptionDisplay );
 			$builderForm.on( 'change', '.frm_field_options_image_size', setImageSize );
 			$builderForm.on( 'change', '.frm_field_options_image_size', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );

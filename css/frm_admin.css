@@ -1019,7 +1019,7 @@ h2 .frm-button-primary {
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 .wp-core-ui.frm-white-body .button:not(.button-small),
-.frm-white-body button:not(.wp-switch-editor):not(.dropdown-toggle):not(.media-menu-item):not(.media-modal-close){
+.frm-white-body button:not(.wp-switch-editor):not(.dropdown-toggle):not(.media-menu-item):not(.media-modal-close):not(.frm_no_style_button){
 	text-shadow: none;
 	box-shadow: none;
 	border-radius: 30px;
@@ -3330,6 +3330,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	padding-bottom: 5px;
 }
 
+button.frm_choose_image_box,
 .frm_product_price_wrapper,
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text],
@@ -3398,21 +3399,21 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 
 .frm_image_options .frm_opt_container {
 	display: grid;
-	grid-template-columns: repeat( auto-fill, 320px );
+	grid-template-columns: repeat( auto-fill, 150px );
 	grid-gap: 20px;
 	align-items: stretch;
 	margin-top: 10px;
 }
 
-.frm_image_options.frm_image_size_extra-small .frm_opt_container {
-	grid-template-columns: repeat( auto-fill, 150px );
-}
-
-.frm_image_options.frm_image_size_small .frm_opt_container {
+.frm_image_options.frm_image_size_medium .frm_opt_container {
 	grid-template-columns: repeat( auto-fill, 250px );
 }
 
 .frm_image_options.frm_image_size_large .frm_opt_container {
+	grid-template-columns: repeat( auto-fill, 320px );
+}
+
+.frm_image_options.frm_image_size_xlarge .frm_opt_container {
 	grid-template-columns: repeat( auto-fill, 400px );
 }
 
@@ -3521,18 +3522,18 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 .frm_image_options .frm_image_option_container .frm_empty_url,
 .frm_image_options .frm_image_option_container img {
 	width: 100%;
-	height: 320px;
+	height: 150px;
 	object-fit: cover;
 }
 
-.frm_image_options.frm_image_size_extra-small .frm_image_option_container .frm_empty_url,
-.frm_image_options.frm_image_size_extra-small .frm_image_option_container img {
-	height: 150px;
+.frm_image_options.frm_image_size_medium .frm_image_option_container .frm_empty_url,
+.frm_image_options.frm_image_size_medium .frm_image_option_container img {
+	height: 240px;
 }
 
-.frm_image_options.frm_image_size_small .frm_image_option_container .frm_empty_url,
-.frm_image_options.frm_image_size_small .frm_image_option_container img {
-	height: 240px;
+.frm_image_options.frm_image_size_large .frm_image_option_container .frm_empty_url,
+.frm_image_options.frm_image_size_large .frm_image_option_container img {
+	height: 320px;
 }
 
 .frm_image_options.frm_image_size_large .frm_image_option_container .frm_empty_url,
@@ -3552,7 +3553,7 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 	margin-top: 17px;
 }
 
-.frm_wrap input[type="text"].frm_choose_image_box{
+.frm_wrap .frm_choose_image_box{
 	background-color: #F2F2F2;
 	margin-left: 24px;
 	text-align: center;
@@ -3595,7 +3596,7 @@ input[type="checkbox"]:checked + .frm_image_option_container .frm_selected_check
 	text-overflow: ellipsis;
 }
 
-.frm_wrap .frm_image_preview_wrapper input[readonly].frm_choose_image_box {
+.frm_wrap .frm_image_preview_wrapper .frm_choose_image_box {
 	cursor: pointer;
 	color: rgb(97, 104, 113);
 }
@@ -6916,6 +6917,7 @@ iframe#dyncontent_ifr {
 #postbox-container-2 input[type="number"],
 #postbox-container-2 select,
 #postbox-container-2 textarea,
+button.frm_choose_image_box,
 #titlediv input[type="text"],
 .frm-fields button.btn,
 .frm_wrap textarea,

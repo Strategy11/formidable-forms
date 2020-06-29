@@ -185,8 +185,6 @@ class FrmFieldsController {
 		}
 	}
 
-
-
 	/**
 	 * @since 3.0
 	 */
@@ -201,7 +199,6 @@ class FrmFieldsController {
 		}
 
 		$li_classes .= ' frm_form_field frmstart ' . $classes . ' frmend';
-
 		if ( ! empty( $field ) ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
@@ -755,18 +752,6 @@ class FrmFieldsController {
 				$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
 			} else {
 				$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
-			}
-		}
-
-		return $opt;
-	}
-
-	public static function check_image( $opt, $opt_key, $field ) {
-		if ( is_array( $opt ) ) {
-			if ( FrmField::is_option_true( $field, 'image_options' ) ) {
-				$opt = isset( $opt['image'] ) ? $opt['image'] : 0;
-			} else {
-				$opt = 0;
 			}
 		}
 

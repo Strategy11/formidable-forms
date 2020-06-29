@@ -202,7 +202,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.05
+	 * @since 4.06
 	 */
 	public static function is_form_builder_page() {
 		$action = self::simple_get( 'frm_action', 'sanitize_title' );
@@ -2359,11 +2359,6 @@ class FrmAppHelper {
 				'slug_is_reserved' => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
 				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
-				'image_label_placeholder' => self::image_label_placeholder(),
-				'default_image_option_size'  => self::get_default_image_option_size(),
-				'checkmark_icon_for_radio'    => FrmFieldsHelper::get_checkmark_circle_markup(),
-				'checkmark_icon_for_checkbox' => FrmFieldsHelper::get_checkmark_square_markup(),
-				'image_placeholder_icon'  => FrmFieldsHelper::get_image_icon_markup(),
 				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
 				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
 				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
@@ -2372,24 +2367,13 @@ class FrmAppHelper {
 				'select_a_field'    => __( 'Select a Field', 'formidable' ),
 				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
+			$admin_script_strings = apply_filters( 'frm_admin_script_strings', $admin_script_strings );
 
 			$data = $wp_scripts->get_data( 'formidable_admin', 'data' );
 			if ( empty( $data ) ) {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
-	}
-
-	public static function image_label_placeholder() {
-		return __( 'Text label (required with an image)', 'formidable' );
-	}
-
-	public static function get_default_image_option_size() {
-		if ( is_callable( 'FrmProFieldsController::get_default_image_option_size' ) ) {
-			return FrmProFieldsController::get_default_image_option_size();
-		}
-
-		return 'extra-small';
 	}
 
 	/**

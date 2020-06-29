@@ -439,12 +439,6 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since 4.04
-	 */
-	protected function show_priority_field_choices( $args = array() ) {
-	}
-
-	/**
 	 * Get the type of field being displayed for lookups and dynamic fields.
 	 *
 	 * @since 4.02.01
@@ -484,6 +478,15 @@ DEFAULT_HTML;
 	 * @since 4.04
 	 */
 	protected function field_choices_heading_attrs( $args ) {
+		return;
+	}
+
+	/**
+	 * Show settings above the multiple options settings.
+	 *
+	 * @since 4.06
+	 */
+	protected function show_priority_field_choices( $args = array() ) {
 		return;
 	}
 
@@ -598,7 +601,7 @@ DEFAULT_HTML;
 	}
 
 	public function get_default_field_options() {
-		$opts = array(
+		$opts       = array(
 			'size'               => '',
 			'max'                => '',
 			'label'              => '',

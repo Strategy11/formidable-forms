@@ -229,29 +229,29 @@ class FrmEntriesHelper {
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
 
-		$image_option = empty( $atts['dynamic'] ) && ( $atts['display_type'] !== 'select' ) ? FrmField::is_image_option( $field ) : false;
+		//$image_option = empty( $atts['dynamic'] ) && ( $atts['display_type'] !== 'select' ) ? FrmField::has_image_options( $field ) : false;
 
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
 			'show_filename' => true,
 			'truncate'      => false,
-			'sep'           => $image_option ? '' : ', ',
+			'sep'           => ', ',
 			'post_id'       => 0,
 			'form_id'       => $field->form_id,
 			'field'         => $field,
 			'keepjs'        => 0,
 			'return_array'  => false,
-			'display_type'  => '',
+			//'display_type'  => '',
 		);
 
 		$atts = wp_parse_args( $atts, $defaults );
 
-		if ( FrmField::is_image( $field ) || $field->type == 'star' || $image_option ) {
+		if ( FrmField::is_image( $field ) || $field->type == 'star' ) {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
 		}
-
+		/*
 		if ( ! empty( $atts['dynamic'] ) ) {
 			$atts['show_image'] = false;
 		}
@@ -260,6 +260,7 @@ class FrmEntriesHelper {
 			$atts['show_filename'] = false;
 			$atts['show_image'] = true;
 		}
+		*/
 
 		$atts = apply_filters( 'frm_display_value_atts', $atts, $field, $value );
 
@@ -303,10 +304,6 @@ class FrmEntriesHelper {
 		}
 
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
-	}
-
-	public static function has_image_option_markup( $value ) {
-		return strpos( $value, 'frm_image_option_container' ) !== false;
 	}
 
 	public static function set_posted_value( $field, $value, $args ) {
