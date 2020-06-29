@@ -159,6 +159,11 @@ class FrmInbox extends FrmFormApi {
 	 * @param string $key
 	 */
 	public function dismiss( $key ) {
+		if ( $key === 'all' ) {
+			$this->dismiss_all();
+			return;
+		}
+
 		if ( ! isset( $this->messages[ $key ] ) ) {
 			return;
 		}
@@ -168,6 +173,23 @@ class FrmInbox extends FrmFormApi {
 		}
 		$this->messages[ $key ]['dismissed'][ get_current_user_id() ] = time();
 
+		$this->update_list();
+	}
+
+	/**
+	 * @since 4.06
+	 */
+	private function dismiss_all() {
+		$user_id = get_current_user_id();
+		foreach ( $this->messages as $key => $message ) {
+			if ( ! isset( $message['dismissed'] ) ) {
+				$this->messages[ $key ]['dismissed'] = array();
+			}
+
+			if ( ! isset( $message['dismissed'][ $user_id ] ) ) {
+				$this->messages[ $key ]['dismissed'][ $user_id ] = time();
+			}
+		}
 		$this->update_list();
 	}
 
