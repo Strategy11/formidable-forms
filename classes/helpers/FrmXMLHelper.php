@@ -350,26 +350,7 @@ class FrmXMLHelper {
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
 
-			$has_default = array(
-				'text',
-				'email',
-				'url',
-				'textarea',
-				'number',
-				'phone',
-				'date',
-				'hidden',
-				'password',
-				'tag',
-			);
-			if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
-				if ( count( $f['default_value'] ) === 1 ) {
-					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
-				} else {
-					$f['default_value'] = reset( $f['default_value'] );
-				}
-			}
-
+			self::set_default_value( $f );
 			self::maybe_add_required( $f );
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
@@ -422,6 +403,32 @@ class FrmXMLHelper {
 			'options'       => FrmAppHelper::maybe_json_decode( (string) $field->options ),
 			'field_options' => FrmAppHelper::maybe_json_decode( (string) $field->field_options ),
 		);
+	}
+
+	/**
+	 * @since 4.06
+	 */
+	private static function set_default_value( &$f ) {
+		$has_default = array(
+			'text',
+			'email',
+			'url',
+			'textarea',
+			'number',
+			'phone',
+			'date',
+			'hidden',
+			'password',
+			'tag',
+		);
+
+		if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
+			if ( count( $f['default_value'] ) === 1 ) {
+				$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
+			} else {
+				$f['default_value'] = reset( $f['default_value'] );
+			}
+		}
 	}
 
 	/**
