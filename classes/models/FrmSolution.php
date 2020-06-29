@@ -12,7 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
 TODO:
-- Directory: create a view with reviews
+- Directory: edit in place and go to page 4 -> ugly error
+- Directory with 3 grid
+- Hide install formidable button while installing it
+- Add connect box on add-omns page. Don't show "Missing add-ons" message if not connected.
+- Add url box to install lite in docs
+- After install, show message to pick a view and publish
+- Show a list of all forms, pages, and views created
+- Create a page with the form for new listings
 */
 
 class FrmSolution {
@@ -270,7 +277,7 @@ class FrmSolution {
 
 			// Set disabled buttons.
 			$class = isset( $step['button_class'] ) ? $step['button_class'] : '';
-			$class .= 'button-primary frm-button-primary';
+			$class .= ' button-primary frm-button-primary';
 			if ( ! $steps[ $k ]['current'] ) {
 				$class .= ' grey disabled';
 			}
@@ -313,7 +320,7 @@ class FrmSolution {
 			);
 		} else {
 			$steps['plugin']['links'] = $rel;
-			$steps['plugin']['button_class'] = 'frm-solution-multiple';
+			$steps['plugin']['button_class'] = 'frm-solution-multiple ';
 		}
 
 		if ( $steps['license']['complete'] && ! $steps['plugin']['complete'] ) {
