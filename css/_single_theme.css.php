@@ -4,7 +4,6 @@ $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings );
 
 $important = empty( $important_style ) ? '' : ' !important';
-$label_margin = (int) $width + 10;
 
 $minus_icons = FrmStylesHelper::minus_icons();
 $arrow_icons = FrmStylesHelper::arrow_icons();
@@ -435,41 +434,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	display:inline<?php echo esc_html( $important ); ?>;
 	width:auto<?php echo esc_html( $important ); ?>;
 	padding:0<?php echo esc_html( $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_button{
-	<?php if ( ! empty( $submit_padding ) ) { ?>
-		padding:<?php echo esc_html( $submit_padding . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $border_radius ) ) { ?>
-		-moz-border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-		-webkit-border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-		border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_font_size ) ) { ?>
-		font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_weight ) ) { ?>
-		font-weight:<?php echo esc_html( $submit_weight . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_text_color ) ) { ?>
-		color:<?php echo esc_html( $submit_text_color . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_bg_color ) ) { ?>
-		background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_border_width ) ) { ?>
-		border-width:<?php echo esc_html( $submit_border_width ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_border_color ) ) { ?>
-		border-color: <?php echo esc_html( $submit_border_color . $important ); ?>;
-	<?php } ?>
-	<?php if ( ! empty( $submit_height ) ) { ?>
-		height:<?php echo esc_html( $submit_height . $important ); ?>;
-	<?php } ?>
 }
 
 <?php do_action( 'frm_output_single_style', $settings ); ?>

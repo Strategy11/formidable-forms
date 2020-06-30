@@ -313,6 +313,9 @@ class FrmStylesHelper {
 			if ( ! isset( $settings[ $var ] ) ) {
 				continue;
 			}
+			if ( ! isset( $defaults[ $var ] ) ) {
+				$defaults[ $var ] = '';
+			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show ) {
 				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // WPCS: XSS ok.

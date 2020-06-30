@@ -211,7 +211,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertContains( '<div class="frm_message"><p>Done!</p>', $response );
+		$this->assertContains( '<div class="frm_message" role="status"><p>Done!</p>', $response );
 		$this->assertContains( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
 
 		if ( $show_form ) {

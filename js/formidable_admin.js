@@ -5839,6 +5839,18 @@ function frmAdminBuildJS() {
 					});
 				});
 			});
+			jQuery( '#frm-dismiss-inbox' ).click( function( e ) {
+				data = {
+					action: 'frm_inbox_dismiss',
+					key: 'all',
+					nonce: frmGlobal.nonce
+				};
+				postAjax( data, function() {
+					fadeOut( document.getElementById( 'frm_message_list' ), function() {
+						document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
+					});
+				});
+			});
 		},
 
 		styleInit: function() {

@@ -24,6 +24,28 @@ class FrmInboxController {
 	}
 
 	/**
+	 * @since 4.06
+	 */
+	public static function dismiss_all_button( $atts ) {
+		$user_id      = get_current_user_id();
+		$has_messages = false;
+		foreach ( $atts['messages'] as $key => $message ) {
+			if ( isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] ) ) {
+				continue;
+			}
+			$has_messages = true;
+			break;
+		}
+		if ( ! $has_messages ) {
+			return;
+		}
+
+		echo '<button class="button-secondary frm-button-secondary" id="frm-dismiss-inbox" type="button">' .
+			esc_html__( 'Dismiss All', 'formidable' ) .
+			'</button>';
+	}
+
+	/**
 	 * @since 4.05
 	 */
 	public static function inbox() {

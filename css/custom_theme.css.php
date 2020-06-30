@@ -57,7 +57,8 @@ $important = empty( $defaults['important_style'] ) ? '' : ' !important';
 }
 
 form input.frm_verify{
-	display:none !important;
+	position:absolute;
+	left:-3000px;
 }
 
 .with_frm_style fieldset{
@@ -472,9 +473,59 @@ legend.frm_hidden{
 .with_frm_style .frm_button{
 	text-decoration:none;
 	border:1px solid #eee;
-	padding:5px;
 	display:inline;
+<?php if ( ! empty( $defaults['submit_padding'] ) ) { ?>
+	padding:<?php echo esc_html( $defaults['submit_padding'] . $important ); ?>;
+	padding:var(--submit-padding)<?php echo esc_html( $important ); ?>;
+<?php } else { ?>
+	padding:5px;
+<?php } ?>
+<?php if ( ! empty( $defaults['border_radius'] ) ) { ?>
+	-moz-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
+	-webkit-border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
+	border-radius:<?php echo esc_html( $defaults['border_radius'] . $important ); ?>;
+	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_font_size'] ) ) { ?>
+	font-size:<?php echo esc_html( $defaults['submit_font_size'] . $important ); ?>;
+	font-size:var(--submit-font-size)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['font'] ) ) { ?>
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] . $important ); // WPCS: XSS ok. ?>;
+	font-family:var(--font)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_weight'] ) ) { ?>
+	font-weight:<?php echo esc_html( $defaults['submit_weight'] . $important ); ?>;
+	font-weight:var(--submit-weight)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_text_color'] ) ) { ?>
+	color:<?php echo esc_html( $defaults['submit_text_color'] . $important ); ?>;
+	color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_bg_color'] ) ) { ?>
+	background:<?php echo esc_html( $defaults['submit_bg_color'] . $important ); ?>;
+	background:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_border_width'] ) ) { ?>
+	border-width:<?php echo esc_html( $defaults['submit_border_width'] ); ?>;
+	border-width:var(--submit-border-width)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_border_color'] ) ) { ?>
+	border-color:<?php echo esc_html( $defaults['submit_border_color'] . $important ); ?>;
+	border-color:var(--submit-border-color)<?php echo esc_html( $important ); ?>;
+<?php } ?>
+<?php if ( ! empty( $defaults['submit_height'] ) ) { ?>
+	height:<?php echo esc_html( $defaults['submit_height'] . $important ); ?>;
+	height:var(--submit-height)<?php echo esc_html( $important ); ?>;
+<?php } ?>
 }
+
+<?php if ( ! empty( $defaults['submit_text_color'] ) ) { ?>
+.with_frm_style .frm_button.frm_inverse{
+	color:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
+	background:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
+}
+<?php } ?>
 
 .with_frm_style .frm_submit{
 	clear:both;
@@ -574,6 +625,9 @@ foreach ( $styles as $style ) {
 	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
 	unset( $style );
 }
+
+// Set it again since it may have been overridden.
+$important = empty( $defaults['important_style'] ) ? '' : ' !important';
 ?>
 
 .frm_ajax_loading{
@@ -1042,7 +1096,6 @@ select.frm_loading_lookup{
 	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
-
 
 .with_frm_style .frm_grid.frm_blank_field,
 .with_frm_style .frm_grid_first.frm_blank_field,
