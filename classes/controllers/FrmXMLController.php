@@ -34,7 +34,7 @@ class FrmXMLController {
 	 * @since 3.06
 	 */
 	public static function install_template() {
-		FrmAppHelper::permission_check( 'frm_create_forms' );
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
