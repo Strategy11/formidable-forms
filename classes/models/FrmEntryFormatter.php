@@ -329,7 +329,7 @@ class FrmEntryFormatter {
 		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'form_id', 'format', 'plain_text' );
+		$unset = array( 'id', 'entry', 'form_id', 'format' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
@@ -415,11 +415,6 @@ class FrmEntryFormatter {
 	protected function add_field_values_to_content( &$content ) {
 		foreach ( $this->entry_values->get_field_values() as $field_id => $field_value ) {
 
-			unset( $this->atts['plain_text'] );
-			// Add plain_text back in to for radio and checkbox fields, which may have images.
-			if ( in_array( $field_value->get_field_type(), array( 'radio', 'checkbox', 'data' ) ) ) {
-				$this->atts['plain_text'] = $this->is_plain_text;
-			}
 			/**
 			 * @var FrmFieldValue $field_value
 			 */
