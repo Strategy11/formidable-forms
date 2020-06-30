@@ -4562,12 +4562,6 @@ table td, .form-table tr td {
 	margin-bottom: 5px;
 }
 
-.frm_priority_field_choices {
-	border-bottom: 1px solid var(--sidebar-hover);
-	margin-bottom: 13px;
-	padding-bottom: 10px;
-}
-
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
 }
@@ -5448,11 +5442,13 @@ tr.frm_options_heading td {
 	float: right;
 }
 
+.frm_priority_field_choices,
 li.frm_single_option {
 	padding-bottom: 16px;
 	border-bottom: 1px solid var(--sidebar-hover);
 }
 
+.frm_priority_field_choices,
 li.frm_single_option:not(:last-child) {
 	margin-bottom: 16px;
 }
