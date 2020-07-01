@@ -11,4 +11,6 @@
 		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][value]" id="field_key_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>" placeholder="<?php esc_attr_e( 'Saved Value', 'formidable' ); ?>" data-frmchange="trim,updateDefault" />
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_save_icon' ); ?>
 	</span>
+
+	<?php do_action( 'frm_admin_single_opt', compact( 'field', 'opt', 'opt_key' ) ); ?>
 </li>
