@@ -6,6 +6,8 @@
 	<?php
 }
 
+$message_placement = isset( $message_placement ) ? $message_placement : 'before';
+
 if ( $message_placement !== 'after' ) {
 	include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
 }
