@@ -1974,13 +1974,14 @@ function frmAdminBuildJS() {
 		jQuery( '.field_' + fieldId + '_option' ).toggleClass( 'frm_with_key' );
 	}
 
-	function toggleImageOptions( event ) {
+	function toggleImageOptions() {
 		/*jshint validthis:true */
-		var hasImageOptions,
-			imageSize,
+		var hasImageOptions, imageSize,
 			$field = jQuery( this ).closest( '.frm-single-settings' ),
 			fieldId = $field.data( 'fid' ),
-			$displayField = jQuery( '#frm_field_id_' + fieldId );
+			displayField = document.getElementById( 'frm_field_id_' + fieldId );
+
+		refreshOptionDisplayNow( jQuery( this ) );
 
 		toggle( jQuery( '.field_' + fieldId + '_image_id' ) );
 		toggle( jQuery( '.frm_toggle_image_options_' + fieldId ) );
@@ -1992,13 +1993,14 @@ function frmAdminBuildJS() {
 
 		if ( hasImageOptions ) {
 			setAlignment( fieldId, 'inline' );
-			removeImageSizeClassesFromField( $displayField );
+			removeImageSizeClasses( displayField );
 			imageSize = getImageOptionSize( fieldId );
-			$displayField.addClass( ' frm_image_options frm_image_size_' + imageSize + ' ' );
+			displayField.classList.add( 'frm_image_options' );
+			displayField.classList.add( 'frm_image_size_' + imageSize );
 			$field.find( '.frm-bulk-edit-link' ).hide();
 		} else {
-			$displayField.removeClass( 'frm_image_options' );
-			removeImageSizeClassesFromField( $displayField );
+			displayField.classList.remove( 'frm_image_options' );
+			removeImageSizeClasses( displayField );
 			setAlignment( fieldId, 'block' );
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
@@ -2006,8 +2008,8 @@ function frmAdminBuildJS() {
 		setInputPlaceholder( fieldId, hasImageOptions );
 	}
 
-	function removeImageSizeClassesFromField( $field ) {
-		$field.removeClass( 'frm_image_size_xsmall frm_image_size_small frm_image_size_medium frm_image_size_large' );
+	function removeImageSizeClasses( field ) {
+		field.classList.remove( 'frm_image_size_small', 'frm_image_size_medium', 'frm_image_size_large', 'frm_image_size_xlarge' );
 	}
 
 	function setAlignment( fieldId, alignment ) {
@@ -2019,27 +2021,29 @@ function frmAdminBuildJS() {
 		jQuery( '.field_' + fieldId + '_option' ).attr( 'placeholder', placeholder );
 	}
 
-	function setImageSize( event ) {
-		var hasImageOptions,
-			imageSize,
-			$field = jQuery( this ).closest( '.frm-single-settings' ),
+	function setImageSize() {
+		var $field = jQuery( this ).closest( '.frm-single-settings' ),
 			fieldId = $field.data( 'fid' ),
-			$displayField = jQuery( '#frm_field_id_' + fieldId );
+			displayField = document.getElementById( 'frm_field_id_' + fieldId );
 
-		hasImageOptions = imagesAsOptions( fieldId );
+		refreshOptionDisplay();
 
-		if ( hasImageOptions ) {
-			removeImageSizeClassesFromField( $displayField );
-			imageSize = getImageOptionSize( fieldId );
-			$displayField.addClass( ' frm_image_options frm_image_size_' + imageSize + ' ' );
+		if ( imagesAsOptions( fieldId ) ) {
+			removeImageSizeClasses( displayField );
+			displayField.classList.add( 'frm_image_options' );
+			displayField.classList.add( 'frm_image_size_' + getImageOptionSize( fieldId ) );
 		}
 	}
 
-	function refreshOptionDisplay( event ) {
-		/*jshint validthis:true */
-		var $field = jQuery( this ).closest( '.frm-single-settings' ),
+	function refreshOptionDisplayNow( object ) {
+		var $field = object.closest( '.frm-single-settings' ),
 			fieldID = $field.data( 'fid' );
 		jQuery( '.field_' + fieldID + '_option' ).change();
+	}
+
+	function refreshOptionDisplay() {
+		/*jshint validthis:true */
+		refreshOptionDisplayNow( jQuery( this ) );
 	}
 
 	function addImageToOption( event ) {
@@ -2052,13 +2056,7 @@ function frmAdminBuildJS() {
 
 		event.preventDefault();
 
-		if ( fileFrame ) {
-			fileFrame.uploader.uploader.param( 'post_id', postID );
-			fileFrame.open();
-			return;
-		} else {
-			wp.media.model.settings.post.id = postID;
-		}
+		wp.media.model.settings.post.id = postID;
 
 		fileFrame = wp.media.frames.file_frame = wp.media({
 			multiple: false
@@ -2839,7 +2837,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, optObj, image, savedLabel, input, field, checkbox, fieldType,
+		var i, saved, labelName, label, key, optObj,
+			image, savedLabel, input, field, checkbox, fieldType,
 			checked = false,
 			opts = [],
 			imageUrl = '',
@@ -2890,12 +2889,12 @@ function frmAdminBuildJS() {
 	}
 
 	function radioOrCheckbox( fieldId ) {
-		var settings = jQuery( '#frm-single-settings-' + fieldId );
-		if ( ! settings ) {
+		var settings = document.getElementById( 'frm-single-settings-' + fieldId );
+		if ( settings === null ) {
 			return 'radio';
 		}
 
-		return settings.hasClass( 'frm-type-checkbox' ) ? 'checkbox' : 'radio';
+		return settings.classList.contains( 'frm-type-checkbox' ) ? 'checkbox' : 'radio';
 	}
 
 	function getImageUrlFromInput( optVal ) {
@@ -2920,7 +2919,7 @@ function frmAdminBuildJS() {
 			fullLabel = fieldType === 'checkbox' ? frm_admin_js.checkmark_icon_for_checkbox : frm_admin_js.checkmark_icon_for_radio;
 
 		if ( imageUrl ) {
-			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '">';
+			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
 		} else {
 			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
 		}
@@ -2928,9 +2927,9 @@ function frmAdminBuildJS() {
 			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
 		}
 
-		imageLabelClass = showLabelWithImage ? ' frm_label_with_image ' : '';
+		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		return ( '<span class="frm_image_option_container' + imageLabelClass + '" >' + fullLabel + '</span>' );
+		return ( '<span class="frm_image_option_container' + imageLabelClass + '">' + fullLabel + '</span>' );
 	}
 
 	function getChecked( id ) {
@@ -2943,9 +2942,7 @@ function frmAdminBuildJS() {
 		checkbox = field.siblings( 'input[type=checkbox]' );
 
 		return checkbox.length && checkbox.prop( 'checked' );
-
 	}
-
 
 	function removeDropdownOpts( field ) {
 		var i;
@@ -5785,12 +5782,10 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_toggle_image_options', toggleImageOptions );
-			$builderForm.on( 'click', '.frm_toggle_image_options', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_remove_image_option', removeImageFromOption );
 			$builderForm.on( 'click', '.frm_choose_image_box', addImageToOption );
 			$builderForm.on( 'change', '.frm_hide_image_text', refreshOptionDisplay );
 			$builderForm.on( 'change', '.frm_field_options_image_size', setImageSize );
-			$builderForm.on( 'change', '.frm_field_options_image_size', refreshOptionDisplay );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
