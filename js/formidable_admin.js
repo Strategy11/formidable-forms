@@ -1974,6 +1974,124 @@ function frmAdminBuildJS() {
 		jQuery( '.field_' + fieldId + '_option' ).toggleClass( 'frm_with_key' );
 	}
 
+	function toggleImageOptions() {
+		/*jshint validthis:true */
+		var hasImageOptions, imageSize,
+			$field = jQuery( this ).closest( '.frm-single-settings' ),
+			fieldId = $field.data( 'fid' ),
+			displayField = document.getElementById( 'frm_field_id_' + fieldId );
+
+		refreshOptionDisplayNow( jQuery( this ) );
+
+		toggle( jQuery( '.field_' + fieldId + '_image_id' ) );
+		toggle( jQuery( '.frm_toggle_image_options_' + fieldId ) );
+		toggle( jQuery( '.frm_image_size_' + fieldId ) );
+		toggle( jQuery( '.frm_alignment_' + fieldId ) );
+		toggle( jQuery( '.frm-add-other#frm_add_field_' + fieldId ) );
+
+		hasImageOptions = imagesAsOptions( fieldId );
+
+		if ( hasImageOptions ) {
+			setAlignment( fieldId, 'inline' );
+			removeImageSizeClasses( displayField );
+			imageSize = getImageOptionSize( fieldId );
+			displayField.classList.add( 'frm_image_options' );
+			displayField.classList.add( 'frm_image_size_' + imageSize );
+			$field.find( '.frm-bulk-edit-link' ).hide();
+		} else {
+			displayField.classList.remove( 'frm_image_options' );
+			removeImageSizeClasses( displayField );
+			setAlignment( fieldId, 'block' );
+			$field.find( '.frm-bulk-edit-link' ).show();
+		}
+
+		setInputPlaceholder( fieldId, hasImageOptions );
+	}
+
+	function removeImageSizeClasses( field ) {
+		field.classList.remove( 'frm_image_size_small', 'frm_image_size_medium', 'frm_image_size_large', 'frm_image_size_xlarge' );
+	}
+
+	function setAlignment( fieldId, alignment ) {
+		jQuery( '#field_options_align_' + fieldId ).val( alignment ).change();
+	}
+
+	function setInputPlaceholder( fieldId, hasImageOptions ) {
+		var placeholder = hasImageOptions ? frm_admin_js.image_label_placeholder : '';
+		jQuery( '.field_' + fieldId + '_option' ).attr( 'placeholder', placeholder );
+	}
+
+	function setImageSize() {
+		var $field = jQuery( this ).closest( '.frm-single-settings' ),
+			fieldId = $field.data( 'fid' ),
+			displayField = document.getElementById( 'frm_field_id_' + fieldId );
+
+		refreshOptionDisplay();
+
+		if ( imagesAsOptions( fieldId ) ) {
+			removeImageSizeClasses( displayField );
+			displayField.classList.add( 'frm_image_options' );
+			displayField.classList.add( 'frm_image_size_' + getImageOptionSize( fieldId ) );
+		}
+	}
+
+	function refreshOptionDisplayNow( object ) {
+		var $field = object.closest( '.frm-single-settings' ),
+			fieldID = $field.data( 'fid' );
+		jQuery( '.field_' + fieldID + '_option' ).change();
+	}
+
+	function refreshOptionDisplay() {
+		/*jshint validthis:true */
+		refreshOptionDisplayNow( jQuery( this ) );
+	}
+
+	function addImageToOption( event ) {
+		var fileFrame,
+			$this = jQuery( this ),
+			$field = $this.closest( '.frm-single-settings' ),
+			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
+			fieldId = $field.data( 'fid' ),
+			postID = 0;
+
+		event.preventDefault();
+
+		wp.media.model.settings.post.id = postID;
+
+		fileFrame = wp.media.frames.file_frame = wp.media({
+			multiple: false
+		});
+
+		fileFrame.on( 'select', function() {
+			attachment = fileFrame.state().get( 'selection' ).first().toJSON();
+			$imagePreview.find( 'img' ).attr( 'src', attachment.url );
+			$imagePreview.find( '.frm_image_preview_frame' ).show();
+			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
+			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
+			$imagePreview.find( '.frm_choose_image_box' ).hide();
+			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).change();
+			wp.media.model.settings.post.id = postID;
+		});
+
+		fileFrame.open();
+	}
+
+	function removeImageFromOption( event ) {
+		var $this = jQuery( this ),
+			$field = $this.closest( '.frm-single-settings' ),
+			fieldId = $field.data( 'fid' ),
+			previewWrapper = $this.closest( '.frm_image_preview_wrapper' );
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		previewWrapper.find( 'img' ).attr( 'src', '' );
+		previewWrapper.find( '.frm_image_preview_frame' ).hide();
+		previewWrapper.find( '.frm_choose_image_box' ).show();
+		previewWrapper.find( 'input.frm_image_id' ).val( 0 ).change();
+	}
+
+
 	function toggleMultiselect() {
 		/*jshint validthis:true */
 		var dropdown = jQuery( this ).closest( 'li' ).find( '.frm_form_fields select' );
@@ -2522,11 +2640,11 @@ function frmAdminBuildJS() {
 	}
 
 	function resetSingleOpt( fieldId, fieldKey, thisOpt ) {
-		var saved, text, defaultVal, previewInput,
+		var saved, text, defaultVal, previewInput, labelForDisplay, optContainer,
 			optKey = thisOpt.data( 'optkey' ),
 			separateValues = usingSeparateValues( fieldId ),
 			single = jQuery( 'label[for="field_' + fieldKey + '-' + optKey + '"]' ),
-			baseName = 'field_options[options_' + fieldId + '][' + optKey + ']';
+			baseName = 'field_options[options_' + fieldId + '][' + optKey + ']',
 			label = jQuery( 'input[name="' + baseName + '[label]"]' );
 
 		if ( single.length < 1 ) {
@@ -2552,18 +2670,64 @@ function frmAdminBuildJS() {
 			saved = label.val();
 		}
 
-		if ( label.length ) {
-			// Set the displayed value.
-			text = single[0].childNodes;
-			text[ text.length - 1 ].nodeValue = ' ' + label.val();
-
-			// Set saved value.
-			previewInput.val( saved );
-
-			// Set the default value.
-			defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
-			previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+		if ( label.length < 1 ) {
+			return;
 		}
+
+		// Set the displayed value.
+		text = single[0].childNodes;
+
+		if ( imagesAsOptions( fieldId ) ) {
+			labelForDisplay = getImageDisplayValue( thisOpt, fieldId, label );
+			optContainer = single.find( '.frm_image_option_container' );
+
+			if ( optContainer.length > 0 ) {
+				optContainer.replaceWith( labelForDisplay );
+			} else {
+				text[ text.length - 1 ].nodeValue = '';
+				single.append( labelForDisplay );
+			}
+		} else {
+			text[ text.length - 1 ].nodeValue = ' ' + label.val();
+		}
+
+		// Set saved value.
+		previewInput.val( saved );
+
+		// Set the default value.
+		defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
+		previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+	}
+
+	/**
+	 * Set the displayed value for an image option.
+	 */
+	function getImageDisplayValue( thisOpt, fieldId, label ) {
+		var image, imageUrl, showLabelWithImage, fieldType;
+
+		image = thisOpt.find( 'img' );
+		if ( image ) {
+			imageUrl = image.attr( 'src' );
+		}
+
+		showLabelWithImage = showingLabelWithImage( fieldId );
+		fieldType = radioOrCheckbox( fieldId );
+		return getImageLabel( label.val(), showLabelWithImage, imageUrl, fieldType );
+	}
+
+	function getImageOptionSize( fieldId ) {
+		var val,
+			field = document.getElementById( 'field_options_image_size_' + fieldId ),
+			size = frm_admin_js.default_image_option_size;
+
+		if ( field !== null ) {
+			val = field.value;
+			if ( val !== '' ) {
+				size = val;
+			}
+		}
+
+		return size;
 	}
 
 	function resetDisplayedOpts( fieldId ) {
@@ -2589,26 +2753,31 @@ function frmAdminBuildJS() {
 			type = input.attr( 'type' );
 			jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ).html( '' );
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
+
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
+				hasImageOptions = imagesAsOptions( fieldId ),
+				imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '',
+				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
 				isProduct = isProductField( fieldId );
 
 			for ( i = 0; i < opts.length; i++ ) {
-				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct ) );
+				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
-			id = 'field_' + fieldKey + '-' + opt.key;
+
+		id = 'field_' + fieldKey + '-' + opt.key;
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + '> ' + opt.label + '</label>' +
+			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + opt.label + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
@@ -2669,13 +2838,19 @@ function frmAdminBuildJS() {
 
 	function getMultipleOpts( fieldId ) {
 		var i, saved, labelName, label, key, optObj,
+			image, savedLabel, input, field, checkbox, fieldType,
+			checked = false,
 			opts = [],
+			imageUrl = '',
+
 			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
 			separateValues = usingSeparateValues( fieldId ),
+			hasImageOptions = imagesAsOptions( fieldId ),
+			showLabelWithImage = showingLabelWithImage( fieldId ),
 			isProduct = isProductField( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
-			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
+			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[image]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
 				continue;
 			}
 			saved = optVals[ i ].value;
@@ -2687,9 +2862,18 @@ function frmAdminBuildJS() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 			}
 
+			if ( hasImageOptions ) {
+				imageUrl = getImageUrlFromInput( optVals[i]);
+				fieldType = radioOrCheckbox( fieldId );
+				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
+			}
+
+			checked = getChecked( optVals[ i ].id  );
+
 			optObj = {
 				saved: saved,
 				label: label,
+				checked: checked,
 				key: key
 			};
 
@@ -2702,6 +2886,62 @@ function frmAdminBuildJS() {
 		}
 
 		return opts;
+	}
+
+	function radioOrCheckbox( fieldId ) {
+		var settings = document.getElementById( 'frm-single-settings-' + fieldId );
+		if ( settings === null ) {
+			return 'radio';
+		}
+
+		return settings.classList.contains( 'frm-type-checkbox' ) ? 'checkbox' : 'radio';
+	}
+
+	function getImageUrlFromInput( optVal ) {
+		var img,
+			wrapper = jQuery( optVal ).siblings( '.frm_image_preview_wrapper' );
+
+		if ( ! wrapper.length ) {
+			return '';
+		}
+
+		img = wrapper.find( 'img' );
+		if ( ! img.length ) {
+			return '';
+		}
+
+		return img.attr( 'src' );
+	}
+
+	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
+		var imageLabelClass,
+			originalLabel = label,
+			fullLabel = fieldType === 'checkbox' ? frm_admin_js.checkmark_icon_for_checkbox : frm_admin_js.checkmark_icon_for_radio;
+
+		if ( imageUrl ) {
+			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
+		} else {
+			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
+		}
+		if ( showLabelWithImage ) {
+			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
+		}
+
+		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
+
+		return ( '<span class="frm_image_option_container' + imageLabelClass + '">' + fullLabel + '</span>' );
+	}
+
+	function getChecked( id ) {
+		field = jQuery( '#' + id );
+
+		if ( field.length === 0 ) {
+			return false;
+		}
+
+		checkbox = field.siblings( 'input[type=checkbox]' );
+
+		return checkbox.length && checkbox.prop( 'checked' );
 	}
 
 	function removeDropdownOpts( field ) {
@@ -2719,7 +2959,22 @@ function frmAdminBuildJS() {
 	 * Is the box checked to use separate values?
 	 */
 	function usingSeparateValues( fieldId ) {
-		var field = document.getElementById( 'separate_value_' + fieldId );
+		return isChecked( 'separate_value_' + fieldId );
+	}
+
+	/**
+	 * Is the box checked to use images as options?
+	 */
+	function imagesAsOptions( fieldId ) {
+		return isChecked( 'image_options_' + fieldId );
+	}
+
+	function showingLabelWithImage( fieldId ) {
+		return ! isChecked( 'hide_image_text_' + fieldId );
+	}
+
+	function isChecked( id ) {
+		var field = document.getElementById( id );
 		if ( field === null ) {
 			return false;
 		} else {
@@ -3039,7 +3294,9 @@ function frmAdminBuildJS() {
 			fieldId = getOptionFieldId( parentLi, key ),
 			defaultRadio = parentLi.querySelector( 'input[name="default_value_' + fieldId + '"]' );
 
-		defaultRadio.value = input.value;
+		if ( defaultRadio !== null ) {
+			defaultRadio.value = input.value;
+		}
 	}
 
 	/**
@@ -3605,7 +3862,7 @@ function frmAdminBuildJS() {
 		if ( editable !== null ) {
 			show = editable.checked && jQuery( document.getElementById( 'edit_action' ) ).val() === 'message';
 			if ( ! show ) {
-				show = document.getElementById( 'save_draft' ).checked;
+				show = isChecked( 'save_draft' );
 			}
 		}
 		return show;
@@ -5524,6 +5781,11 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
+			$builderForm.on( 'click', '.frm_toggle_image_options', toggleImageOptions );
+			$builderForm.on( 'click', '.frm_remove_image_option', removeImageFromOption );
+			$builderForm.on( 'click', '.frm_choose_image_box', addImageToOption );
+			$builderForm.on( 'change', '.frm_hide_image_text', refreshOptionDisplay );
+			$builderForm.on( 'change', '.frm_field_options_image_size', setImageSize );
 			$builderForm.on( 'click', '.frm_multiselect_opt', toggleMultiselect );
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
@@ -5533,6 +5795,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
+			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 			$builderForm.on( 'focusin', '.frm_classes', showBuilderModal );
 
