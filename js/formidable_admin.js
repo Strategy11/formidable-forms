@@ -2717,18 +2717,6 @@ function frmAdminBuildJS() {
 		return getImageLabel( label.val(), showLabelWithImage, imageUrl, fieldType );
 	}
 
-	/**
-	 * Is the box checked to use images as options?
-	 */
-	function imagesAsOptions( fieldId ) {
-		var field = document.getElementById( 'image_options_' + fieldId );
-		if ( field === null ) {
-			return false;
-		} else {
-			return field.checked;
-		}
-	}
-
 	function getImageOptionSize( fieldId ) {
 		var val,
 			field = document.getElementById( 'field_options_image_size_' + fieldId ),
@@ -2975,6 +2963,13 @@ function frmAdminBuildJS() {
 	 */
 	function usingSeparateValues( fieldId ) {
 		return isChecked( 'separate_value_' + fieldId );
+	}
+
+	/**
+	 * Is the box checked to use images as options?
+	 */
+	function imagesAsOptions( fieldId ) {
+		return isChecked( 'image_options_' + fieldId );
 	}
 
 	function showingLabelWithImage( fieldId ) {
