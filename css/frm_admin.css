@@ -3423,10 +3423,6 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	object-fit: cover;
 }
 
-.frm_list_entry_page .frm_text_label_for_image {
-	display: none;
-}
-
 .frm-summary-page-wrapper .frm_text_label_for_image {
 	display: block;
 }

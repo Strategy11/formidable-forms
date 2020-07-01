@@ -229,8 +229,6 @@ class FrmEntriesHelper {
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
 
-		//$image_option = empty( $atts['dynamic'] ) && ( $atts['display_type'] !== 'select' ) ? FrmField::has_image_options( $field ) : false;
-
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
@@ -242,7 +240,6 @@ class FrmEntriesHelper {
 			'field'         => $field,
 			'keepjs'        => 0,
 			'return_array'  => false,
-			//'display_type'  => '',
 		);
 
 		$atts = wp_parse_args( $atts, $defaults );
@@ -251,16 +248,6 @@ class FrmEntriesHelper {
 			$atts['truncate'] = false;
 			$atts['html']     = true;
 		}
-		/*
-		if ( ! empty( $atts['dynamic'] ) ) {
-			$atts['show_image'] = false;
-		}
-
-		if ( $image_option ) {
-			$atts['show_filename'] = false;
-			$atts['show_image'] = true;
-		}
-		*/
 
 		$atts = apply_filters( 'frm_display_value_atts', $atts, $field, $value );
 
