@@ -2037,19 +2037,18 @@ function frmAdminBuildJS() {
 
 	function refreshOptionDisplay( event ) {
 		/*jshint validthis:true */
-		var $field = jQuery( this ).closest( '.frm-single-settings' );
-		var fieldID = $field.data( 'fid' );
+		var $field = jQuery( this ).closest( '.frm-single-settings' ),
+			fieldID = $field.data( 'fid' );
 		jQuery( '.field_' + fieldID + '_option' ).change();
 	}
 
 	function addImageToOption( event ) {
 		var fileFrame,
-			$this = jQuery( this );
-
-		var $field = $this.closest( '.frm-single-settings' );
-		var $imagePreview = $this.closest( '.frm_image_preview_wrapper' );
-		var fieldId = $field.data( 'fid' );
-		var postID = 0;
+			$this = jQuery( this ),
+			$field = $this.closest( '.frm-single-settings' ),
+			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
+			fieldId = $field.data( 'fid' ),
+			postID = 0;
 
 		event.preventDefault();
 
@@ -2643,12 +2642,9 @@ function frmAdminBuildJS() {
 	}
 
 	function resetSingleOpt( fieldId, fieldKey, thisOpt ) {
-		var saved, text, defaultVal, previewInput, labelForDisplay, image, optContainer, previewSpan, imageUrl, fieldType,
-			optHTML = '',
+		var saved, text, defaultVal, previewInput, labelForDisplay, optContainer,
 			optKey = thisOpt.data( 'optkey' ),
 			separateValues = usingSeparateValues( fieldId ),
-			hasImageOptions = imagesAsOptions( fieldId ),
-			showLabelWithImage = showingLabelWithImage( fieldId ),
 			single = jQuery( 'label[for="field_' + fieldKey + '-' + optKey + '"]' ),
 			baseName = 'field_options[options_' + fieldId + '][' + optKey + ']',
 			label = jQuery( 'input[name="' + baseName + '[label]"]' );
@@ -2676,40 +2672,49 @@ function frmAdminBuildJS() {
 			saved = label.val();
 		}
 
-		if ( label.length ) {
-			// Set the displayed value.
-			text = single[0].childNodes;
-			previewSpan = label.find( '.frm-preview-label-opt' );
-
-			if ( hasImageOptions ) {
-				labelForDisplay = label.val();
-				image = thisOpt.find( 'img' );
-
-				if ( image ) {
-					imageUrl = image.attr( 'src' );
-				}
-
-				fieldType = radioOrCheckbox( fieldId );
-				labelForDisplay = getImageLabel( labelForDisplay, showLabelWithImage, imageUrl, fieldType );
-				optContainer =	single.find( '.frm_image_option_container' );
-
-				if ( optContainer.length > 0 ) {
-					optContainer.replaceWith( labelForDisplay );
-				} else {
-					text[ text.length - 1 ].nodeValue = '';
-					single.append( labelForDisplay );
-				}
-			} else {
-				text[ text.length - 1 ].nodeValue = ' ' + label.val();
-			}
-
-			// Set saved value.
-			previewInput.val( saved );
-
-			// Set the default value.
-			defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
-			previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+		if ( label.length < 1 ) {
+			return;
 		}
+
+		// Set the displayed value.
+		text = single[0].childNodes;
+
+		if ( imagesAsOptions( fieldId ) ) {
+			labelForDisplay = getImageDisplayValue( thisOpt, fieldId, label );
+			optContainer = single.find( '.frm_image_option_container' );
+
+			if ( optContainer.length > 0 ) {
+				optContainer.replaceWith( labelForDisplay );
+			} else {
+				text[ text.length - 1 ].nodeValue = '';
+				single.append( labelForDisplay );
+			}
+		} else {
+			text[ text.length - 1 ].nodeValue = ' ' + label.val();
+		}
+
+		// Set saved value.
+		previewInput.val( saved );
+
+		// Set the default value.
+		defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
+		previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+	}
+
+	/**
+	 * Set the displayed value for an image option.
+	 */
+	function getImageDisplayValue( thisOpt, fieldId, label ) {
+		var image, imageUrl, showLabelWithImage, fieldType;
+
+		image = thisOpt.find( 'img' );
+		if ( image ) {
+			imageUrl = image.attr( 'src' );
+		}
+
+		showLabelWithImage = showingLabelWithImage( fieldId );
+		fieldType = radioOrCheckbox( fieldId );
+		return getImageLabel( label.val(), showLabelWithImage, imageUrl, fieldType );
 	}
 
 	/**
@@ -2725,18 +2730,18 @@ function frmAdminBuildJS() {
 	}
 
 	function getImageOptionSize( fieldId ) {
-		var $field = jQuery( '#field_options_image_size_' + fieldId ),
-			defaultSize = getDefaultImageOptionSize();
+		var val,
+			field = document.getElementById( 'field_options_image_size_' + fieldId ),
+			size = frm_admin_js.default_image_option_size;
 
-		if ( ! $field ) {
-			return defaultSize;
-		} else {
-			return $field.val() ? $field.val() : defaultSize;
+		if ( field !== null ) {
+			val = field.value;
+			if ( val !== '' ) {
+				size = val;
+			}
 		}
-	}
 
-	function getDefaultImageOptionSize() {
-		return frm_admin_js.default_image_option_size;
+		return size;
 	}
 
 	function resetDisplayedOpts( fieldId ) {
@@ -2764,10 +2769,10 @@ function frmAdminBuildJS() {
 			fieldInfo = getFieldKeyFromOpt( jQuery( '#frm_delete_field_' + fieldId + '-000_container' ) );
 
 			var container = jQuery( '#field_' + fieldId + '_inner_container > .frm_form_fields' ),
-				isProduct = isProductField( fieldId ),
 				hasImageOptions = imagesAsOptions( fieldId ),
 				imageSize = hasImageOptions ? getImageOptionSize( fieldId ) : '',
-				imageOptionClass = hasImageOptions ? ( ' frm_image_option frm_image_' + imageSize + ' ' )  : '';
+				imageOptionClass = hasImageOptions ? ( 'frm_image_option frm_image_' + imageSize + ' ' ) : '',
+				isProduct = isProductField( fieldId );
 
 			for ( i = 0; i < opts.length; i++ ) {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
@@ -2775,7 +2780,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, imageOptionClass ) {
+	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		var other, single,
 			isOther = opt.key.indexOf( 'other' ) !== -1,
 
@@ -2783,7 +2788,7 @@ function frmAdminBuildJS() {
 
 		other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
 
-		single = '<div class="frm_' + type + ' ' + type + imageOptionClass + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
+		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
 			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + opt.label + '</label>' +
@@ -2969,20 +2974,19 @@ function frmAdminBuildJS() {
 	 * Is the box checked to use separate values?
 	 */
 	function usingSeparateValues( fieldId ) {
-		var separate = document.getElementById( 'separate_value_' + fieldId );
-		if ( separate === null ) {
-			return false;
-		} else {
-			return separate.checked;
-		}
+		return isChecked( 'separate_value_' + fieldId );
 	}
 
 	function showingLabelWithImage( fieldId ) {
-		var field = document.getElementById( 'hide_image_text_' + fieldId );
+		return ! isChecked( 'hide_image_text_' + fieldId );
+	}
+
+	function isChecked( id ) {
+		var field = document.getElementById( id );
 		if ( field === null ) {
-			return true;
+			return false;
 		} else {
-			return ! field.checked;
+			return field.checked;
 		}
 	}
 
@@ -3866,7 +3870,7 @@ function frmAdminBuildJS() {
 		if ( editable !== null ) {
 			show = editable.checked && jQuery( document.getElementById( 'edit_action' ) ).val() === 'message';
 			if ( ! show ) {
-				show = document.getElementById( 'save_draft' ).checked;
+				show = isChecked( 'save_draft' );
 			}
 		}
 		return show;
