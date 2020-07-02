@@ -2004,21 +2004,14 @@ function frmAdminBuildJS() {
 			setAlignment( fieldId, 'block' );
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
-
-		setInputPlaceholder( fieldId, hasImageOptions );
 	}
 
 	function removeImageSizeClasses( field ) {
-		field.classList.remove( 'frm_image_size_small', 'frm_image_size_medium', 'frm_image_size_large', 'frm_image_size_xlarge' );
+		field.classList.remove( 'frm_image_size_', 'frm_image_size_small', 'frm_image_size_medium', 'frm_image_size_large', 'frm_image_size_xlarge' );
 	}
 
 	function setAlignment( fieldId, alignment ) {
 		jQuery( '#field_options_align_' + fieldId ).val( alignment ).change();
-	}
-
-	function setInputPlaceholder( fieldId, hasImageOptions ) {
-		var placeholder = hasImageOptions ? frm_admin_js.image_label_placeholder : '';
-		jQuery( '.field_' + fieldId + '_option' ).attr( 'placeholder', placeholder );
 	}
 
 	function setImageSize() {
@@ -2718,7 +2711,7 @@ function frmAdminBuildJS() {
 	function getImageOptionSize( fieldId ) {
 		var val,
 			field = document.getElementById( 'field_options_image_size_' + fieldId ),
-			size = frm_admin_js.default_image_option_size;
+			size = '';
 
 		if ( field !== null ) {
 			val = field.value;
@@ -2914,10 +2907,11 @@ function frmAdminBuildJS() {
 	}
 
 	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
-		var imageLabelClass,
+		var imageLabelClass, fullLabel,
 			originalLabel = label,
-			fullLabel = fieldType === 'checkbox' ? frm_admin_js.checkmark_icon_for_checkbox : frm_admin_js.checkmark_icon_for_radio;
+			shape = fieldType === 'checkbox' ? 'square' : 'circle';
 
+		fullLabel = '<div class="frm_selected_checkmark"><svg class="frmsvg"><use xlink:href="#frm_checkmark_' + shape + '_icon"></svg></div>';
 		if ( imageUrl ) {
 			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
 		} else {
@@ -5254,6 +5248,7 @@ function frmAdminBuildJS() {
 			delay: 100,
 			minLength: 0,
 			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
+			change: autoCompleteSelectBlank,
 			select: autoCompleteSelectFromResults,
 			focus: autoCompleteFocus,
 			position: {
@@ -5290,6 +5285,12 @@ function frmAdminBuildJS() {
 	 */
 	function autoCompleteFocus() {
 		return false;
+	}
+
+	function autoCompleteSelectBlank( e, ui ) {
+		if ( ui.item === null ) {
+			this.nextElementSibling.value = '';
+		}
 	}
 
 	function autoCompleteSelectFromResults( e, ui ) {
