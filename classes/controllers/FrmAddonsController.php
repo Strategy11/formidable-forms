@@ -200,10 +200,10 @@ class FrmAddonsController {
 		$type    = 'free';
 
 		if ( isset( $addons['error'] ) ) {
-			$type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : $type;
 			if ( isset( $addons['error']['code'] ) && $addons['error']['code'] === 'expired' ) {
 				return $addons['error']['code'];
 			}
+			$type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : $type;
 		}
 
 		$pro = isset( $addons['93790'] ) ? $addons['93790'] : array();
@@ -214,7 +214,7 @@ class FrmAddonsController {
 			}
 		}
 
-		if ( is_numeric( $type ) && isset( $pro['code'] ) && $pro['code'] === 'grandfathered' ) {
+		if ( isset( $pro['code'] ) && $pro['code'] === 'grandfathered' ) {
 			return $pro['code'];
 		}
 

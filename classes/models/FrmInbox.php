@@ -235,14 +235,13 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	public function unread() {
-		$messages = $this->get_messages();
+		$messages = $this->get_messages( 'filter' );
 		$user_id  = get_current_user_id();
 		foreach ( $messages as $t => $message ) {
 			if ( isset( $message['read'] ) && isset( $message['read'][ $user_id ] ) ) {
 				unset( $messages[ $t ] );
 			}
 		}
-		$this->filter_messages( $messages );
 		return $messages;
 	}
 
