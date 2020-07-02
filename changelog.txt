@@ -1,4 +1,12 @@
 == Changelog ==
+= 4.06 =
+* New: Better accessibility for honeypot field and message after submit.
+* New: Add a Dismiss all button in the inbox.
+* New: Add 'frm_user_id_display' hook for showing something other than the dispay name by default in user ID fields.
+* Set the default styling to use grids since most browsers support it now.
+* Fix: On some sites, permissions were preventing a form from being created from a template.
+* Fix: The button colors were overriding eachother with some settings.
+
 = 4.05.02 =
 * New: Added frm_message_placement hook to show the form message below the form
 * New: New classes that can be used in the 'form class' setting: frm_plain_success (Removes styling from the success message) and frm_below_success (Movs the success message below the form).
