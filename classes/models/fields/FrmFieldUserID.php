@@ -103,7 +103,7 @@ class FrmFieldUserID extends FrmFieldType {
 				$user_info = $atts['show'];
 			}
 		} else {
-			$user_info = 'display_name';
+			$user_info = apply_filters( 'frm_user_id_display', 'display_name' );
 		}
 
 		return $user_info;
