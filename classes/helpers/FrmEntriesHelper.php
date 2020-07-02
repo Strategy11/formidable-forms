@@ -213,7 +213,11 @@ class FrmEntriesHelper {
 			unset( $child_entry );
 		}
 
-		$val = implode( ', ', (array) $field_value );
+		$sep = ', ';
+		if ( strpos( implode( ' ', (array) $field_value ), '<img' ) !== false ) {
+			$sep = '<br/>';
+		}
+		$val = implode( $sep, (array) $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );
 	}

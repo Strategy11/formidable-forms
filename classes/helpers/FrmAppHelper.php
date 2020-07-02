@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.05.02';
+	public static $plug_version = '4.06b';
 
 	/**
 	 * @since 1.07.02
@@ -199,6 +199,14 @@ class FrmAppHelper {
 
 	public static function pro_is_installed() {
 		return apply_filters( 'frm_pro_installed', false );
+	}
+
+	/**
+	 * @since 4.06
+	 */
+	public static function is_form_builder_page() {
+		$action = self::simple_get( 'frm_action', 'sanitize_title' );
+		return self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
 	}
 
 	public static function is_formidable_admin() {
@@ -1102,8 +1110,7 @@ class FrmAppHelper {
 	 * @since 4.0
 	 */
 	public static function is_full_screen() {
-		$action       = self::simple_get( 'frm_action', 'sanitize_title' );
-		$full_builder = self::is_admin_page( 'formidable' ) && ( $action === 'edit' || $action === 'settings' || $action === 'duplicate' );
+		$full_builder = self::is_form_builder_page();
 		$styler       = self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
 		$full_entries = self::simple_get( 'frm-full', 'absint' );
 
@@ -2360,6 +2367,7 @@ class FrmAppHelper {
 				'select_a_field'    => __( 'Select a Field', 'formidable' ),
 				'no_items_found'    => __( 'No items found.', 'formidable' ),
 			);
+			$admin_script_strings = apply_filters( 'frm_admin_script_strings', $admin_script_strings );
 
 			$data = $wp_scripts->get_data( 'formidable_admin', 'data' );
 			if ( empty( $data ) ) {

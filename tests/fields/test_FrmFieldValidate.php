@@ -366,7 +366,20 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
-		update_option( 'blacklist_keys', "23.343.12332\r\nspamemail@example.com" );
+		$blocked = '23.343.12332';
+		$new_block = $blocked . "\nspamemail@example.com";
+		update_option( 'blacklist_keys', $new_block );
+		$this->assertSame( $new_block, get_option( 'blacklist_keys' ) );
+
+		$wp_test = wp_blacklist_check( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
+		$this->assertFalse( $wp_test );
+
+		$ip = FrmAppHelper::get_ip_address();
+		$wp_test = wp_blacklist_check( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
+		if ( ! $wp_test ) {
+			$this->markTestSkipped( 'WordPress blacklist check is failing in some cases' );
+		}
+		$this->assertTrue( $wp_test, 'WordPress missing spam for IP ' . $ip . ' agent ' . FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
 
 		$is_spam = FrmEntryValidate::blacklist_check( array( 'item_meta' => array( '', '' ) ) );
 		$this->assertFalse( $is_spam );
@@ -374,7 +387,11 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
-		$values['item_meta']['25'] = '23.343.1233234323';
+		$values['item_meta']['25'] = $blocked;
+		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$this->assertTrue( $is_spam, 'Exact match for spam missed' );
+
+		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertTrue( $is_spam );
 	}

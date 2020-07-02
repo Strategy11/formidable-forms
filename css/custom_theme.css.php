@@ -57,7 +57,8 @@ $important = empty( $defaults['important_style'] ) ? '' : ' !important';
 }
 
 form input.frm_verify{
-	display:none !important;
+	position:absolute;
+	left:-3000px;
 }
 
 .with_frm_style fieldset{
