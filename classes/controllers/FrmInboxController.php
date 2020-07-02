@@ -53,7 +53,7 @@ class FrmInboxController {
 		self::add_tracking_request();
 
 		$inbox    = new FrmInbox();
-		$messages = $inbox->get_messages();
+		$messages = $inbox->get_messages( 'filter' );
 		$messages = array_reverse( $messages );
 		$user     = wp_get_current_user();
 

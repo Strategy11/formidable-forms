@@ -85,6 +85,7 @@ class FrmFieldValue {
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
 		$this->displayed_value = $this->saved_value;
+		unset( $atts['class'] ); // This class shouldn't affect values.
 		$this->generate_displayed_value_for_field_type( $atts );
 		$this->filter_displayed_value( $atts );
 	}
