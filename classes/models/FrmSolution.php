@@ -315,6 +315,7 @@ class FrmSolution {
 			$steps['plugin']['complete'] = true;
 		} elseif ( ! empty( $missing ) ) {
 			$steps['plugin']['error'] = sprintf(
+				/* translators: %1$s: Plugin name */
 				esc_html__( 'You need permission to download the Formidable %1$s plugin', 'formidable' ),
 				implode( ', ', $missing )
 			);
@@ -339,6 +340,7 @@ class FrmSolution {
 				FrmAppHelper::icon_by_class(
 					'frmfont frm_step_complete_icon',
 					array(
+						/* translators: %1$s: Step number */
 						'aria-label' => sprintf( __( 'Step %1$d', 'formidable' ), $step['num'] ),
 						'style'      => 'width:50px;height:50px;',
 					)
@@ -373,7 +375,8 @@ class FrmSolution {
 	protected function license_box( $step ) {
 		$this->step_top( $step );
 
-		if ( $step['complete'] ) { ?>
+		if ( $step['complete'] ) {
+			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
