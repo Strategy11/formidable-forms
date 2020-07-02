@@ -12,16 +12,12 @@
 	<div id="frm_message_list">
 <?php
 
-$has_messages = false;
+$has_messages = ! empty( $messages );
 foreach ( $messages as $key => $message ) {
 	if ( ! isset( $message['icon'] ) ) {
 		$message['icon'] = 'frm_tooltip_icon';
 	}
 
-	if ( isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user->ID ] ) ) {
-		continue;
-	}
-	$has_messages = true;
 	?>
 	<section class="frm_inbox_card" data-message="<?php echo esc_attr( $key ); ?>">
 		<span class="frm_inbox_card_icon" aria-hidden="true">

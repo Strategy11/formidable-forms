@@ -32,8 +32,12 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 */
-	public function get_messages() {
-		return $this->messages;
+	public function get_messages( $filter = false ) {
+		$messages = $this->messages;
+		if ( $filter === 'filter' ) {
+			$this->filter_messages( $messages );
+		}
+		return $messages;
 	}
 
 	/**
@@ -89,6 +93,7 @@ class FrmInbox extends FrmFormApi {
 			'icon'    => $message['icon'],
 			'cta'     => $message['cta'],
 			'expires' => $message['expires'],
+			'who'     => $message['who'],
 		);
 
 		$this->update_list();
@@ -104,6 +109,7 @@ class FrmInbox extends FrmFormApi {
 			'icon'    => 'frm_tooltip_icon',
 			'cta'     => '',
 			'expires' => false,
+			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
 		);
 
 		return array_merge( $defaults, $message );
@@ -114,7 +120,7 @@ class FrmInbox extends FrmFormApi {
 		foreach ( $this->messages as $t => $message ) {
 			$read    = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = isset( $message['dismissed'] ) && ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
-			$expired = isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
+			$expired = $this->is_expired( $message );
 			if ( $read || $expired || $dismissed ) {
 				unset( $this->messages[ $t ] );
 				$removed = true;
@@ -124,6 +130,41 @@ class FrmInbox extends FrmFormApi {
 		if ( $removed ) {
 			$this->update_list();
 		}
+	}
+
+	private function filter_messages( &$messages ) {
+		$user_id = get_current_user_id();
+		foreach ( $messages as $k => $message ) {
+			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
+			if ( $this->is_expired( $message ) || $dismissed ) {
+				unset( $messages[ $k ] );
+			} elseif ( ! $this->is_for_user( $message ) ) {
+				unset( $messages[ $k ] );
+			}
+		}
+	}
+
+	private function is_expired( $message ) {
+		return isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
+	}
+
+	/**
+	 * Show different messages for different accounts.
+	 */
+	private function is_for_user( $message ) {
+		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
+			return true;
+		}
+
+		return in_array( $this->get_user_type(), (array) $message['who'] );
+	}
+
+	private function get_user_type() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return 'free';
+		}
+
+		return FrmAddonsController::license_type();
 	}
 
 	/**
@@ -201,6 +242,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $t ] );
 			}
 		}
+		$this->filter_messages( $messages );
 		return $messages;
 	}
 
