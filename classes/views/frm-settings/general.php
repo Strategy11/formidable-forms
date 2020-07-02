@@ -27,9 +27,10 @@
 </p>
 
 <p>
-	<label for="frm_old_css" class="frm_help" title="<?php esc_attr_e( 'Form layouts built using CSS grids that are not fully supported by older browsers like Internet Explorer. Leave this box unchecked for your layouts to look best in current browsers, but show in a single column in older browsers.', 'formidable' ); ?>">
+	<label for="frm_old_css">
 		<input type="checkbox" id="frm_old_css" name="frm_old_css" value="1" <?php checked( $frm_settings->old_css, 1 ); ?> />
 		<?php esc_html_e( 'Do not use CSS Grids for form layouts', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Form layouts built using CSS grids that are not fully supported by older browsers like Internet Explorer. Leave this box unchecked for your layouts to look best in current browsers, but show in a single column in older browsers.', 'formidable' ); ?>"></span>
 	</label>
 </p>
 
