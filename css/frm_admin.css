@@ -3385,9 +3385,13 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 /* Image options for Radio and Checkbox */
 
 .frm_image_options .frm_image_option_container {
-	border-color: rgba(40, 47, 54, 0.2);
+	--field-border-width: 1px;
+	--border-color: var(--grey-border);
+	--border-color-active: var(--primary-color);
+	--border-radius: var(--small-radius);
 }
 
+#form_show_entry_page .frm_file_link,
 #form_show_entry_page .frm_image_option_container {
 	display: inline-flex;
 	flex-wrap: nowrap;
@@ -3405,16 +3409,27 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	object-fit: cover;
 }
 
-.frm_image_option_container .frm_selected_checkmark svg{
-	fill: #4199FD;
+#form_show_entry_page .frm_file_link img {
+	max-width: 150px;
+	height: auto;
+}
+
+#form_show_entry_page .frm_file_link ~ br {
+	display: none;
+}
+
+#form_show_entry_page .frm_upload_label {
+	padding: 10px;
 }
 
 .frm_image_option_container .frm_image_placeholder_icon svg{
 	height: 150px;
 }
 
-.frm_list_entry_page .frm_image_option_container {
+.frm_list_entry_page .frm_file_link,
+.frm_list_entry_page .frm_image_option_container.frm_label_with_image {
 	display: block;
+	text-align: center;
 }
 
 .frm_list_entry_page .frm_image_option_container img {
@@ -3423,14 +3438,23 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	object-fit: cover;
 }
 
-.frm-summary-page-wrapper .frm_text_label_for_image {
-	display: block;
+.frm_list_entry_page .frm_file_link img {
+	max-width: 75px;
+	height: auto;
 }
 
-input[type="radio"]:checked + .frm_image_option_container,
-input[type="checkbox"]:checked + .frm_image_option_container,
-.frm_image_option .frm_image_option_container:hover {
-	border-color: #4199FD;
+.frm_image_option_container .frm_empty_url {
+	background-color: var(--sidebar-color);
+}
+
+.frm_list_entry_page .frm_image_option_container .frm_text_label_for_image {
+	display: block;
+	padding: 5px 0 10px;
+}
+
+.frm_list_entry_page .frm_upload_label,
+.frm-summary-page-wrapper .frm_text_label_for_image {
+	display: block;
 }
 
 .frm_single_option .frm_option_key {
@@ -3471,7 +3495,7 @@ input[type="checkbox"]:checked + .frm_image_option_container,
 
 .frm_wrap .frm_choose_image_box {
 	cursor: pointer;
-	color: rgb(97, 104, 113);
+	color: var(--dark-grey);
 	background-color: #F2F2F2;
 	margin-left: 24px;
 	text-align: center;
