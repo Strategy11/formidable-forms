@@ -206,10 +206,12 @@ class FrmAddonsController {
 			}
 		}
 
-		$pro  = isset( $addons['93790'] ) ? $addons['93790'] : array();
-		$type = isset( $pro['type'] ) ? $pro['type'] : $type;
+		$pro = isset( $addons['93790'] ) ? $addons['93790'] : array();
 		if ( $type === 'free' ) {
-			return $type;
+			$type = isset( $pro['type'] ) ? $pro['type'] : $type;
+			if ( $type === 'free' ) {
+				return $type;
+			}
 		}
 
 		if ( is_numeric( $type ) && isset( $pro['code'] ) && $pro['code'] === 'grandfathered' ) {
