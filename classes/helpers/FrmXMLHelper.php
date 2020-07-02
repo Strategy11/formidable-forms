@@ -387,6 +387,8 @@ class FrmXMLHelper {
 				self::create_imported_field( $f, $imported );
 			}
 		}
+
+		self::maybe_update_field_ids( $form_id );
 	}
 
 	private static function fill_field( $field, $form_id ) {
@@ -598,6 +600,33 @@ class FrmXMLHelper {
 		if ( $new_id != false ) {
 			$imported['imported']['fields'] ++;
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
+		}
+	}
+
+	/**
+	 * Update any field ids for fields created later than the existing field.
+	 *
+	 * @since 4.06
+	 */
+	protected static function maybe_update_field_ids( $form_id ) {
+		$where  = array(
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			),
+		);
+		$fields = FrmField::getAll( $where, 'field_order' );
+		foreach ( $fields as $field ) {
+			$before = (array) clone $field;
+			$field  = (array) $field;
+			erroR_log( 'Default1: '. print_r($before['default_value'],1 ) );
+			$after  = apply_filters( 'frm_duplicated_field', $field, array( 'after' => true ) );
+			erroR_log( 'Default2: '. print_r($before['default_value'],1 ) );
+			if ( $before !== $after ) {
+				// Update field again.
+				error_log('UPDATE '. $after['id'] .' '. $after['name']);
+			}
 		}
 	}
 
