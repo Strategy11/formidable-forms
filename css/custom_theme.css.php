@@ -621,8 +621,14 @@ legend.frm_hidden{
 }
 
 <?php
+$forms = FrmForm::get_published_forms();
+$used_styles = array( $default_style->ID );
+foreach ( $forms as $form ) {
+	$used_styles[] = $form->options['custom_style'];
+}
 foreach ( $styles as $style ) {
-	include( dirname( __FILE__ ) . '/_single_theme.css.php' );
+	if ( in_array( $style->ID, $used_styles) )
+		include( dirname( __FILE__ ) . '/_single_theme.css.php' );
 	unset( $style );
 }
 
