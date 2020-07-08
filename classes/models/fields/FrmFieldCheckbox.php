@@ -64,6 +64,13 @@ class FrmFieldCheckbox extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @since 4.06
+	 */
+	protected function show_priority_field_choices( $args = array() ) {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-images.php' );
+	}
+
 	protected function include_front_form_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/checkbox-field.php';
 	}

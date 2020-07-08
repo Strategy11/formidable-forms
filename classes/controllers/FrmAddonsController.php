@@ -192,6 +192,38 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * @since 4.06
+	 */
+	public static function license_type() {
+		$api     = new FrmFormApi();
+		$addons  = $api->get_api_info();
+		$type    = 'free';
+
+		if ( isset( $addons['error'] ) ) {
+			if ( isset( $addons['error']['code'] ) && $addons['error']['code'] === 'expired' ) {
+				return $addons['error']['code'];
+			}
+			$type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : $type;
+		}
+
+		$pro = isset( $addons['93790'] ) ? $addons['93790'] : array();
+		if ( $type === 'free' ) {
+			$type = isset( $pro['type'] ) ? $pro['type'] : $type;
+			if ( $type === 'free' ) {
+				return $type;
+			}
+		}
+
+		if ( isset( $pro['code'] ) && $pro['code'] === 'grandfathered' ) {
+			return $pro['code'];
+		}
+
+		$expires = isset( $pro['expires'] ) ? $pro['expires'] : '';
+		$expired = $expires ? $expires < time() : false;
+		return $expired ? 'expired' : strtolower( $type );
+	}
+
+	/**
 	 * @since 4.0.01
 	 */
 	public static function is_license_expired() {

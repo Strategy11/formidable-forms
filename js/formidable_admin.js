@@ -1091,7 +1091,8 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeDisableAddSummaryBtn() {
-		if ( formHasSummaryField() ) {
+		var summary = document.getElementById( 'summary' );
+		if ( summary && ! summary.classList.contains( 'frm_show_upgrade' ) && formHasSummaryField() ) {
 			disableAddSummaryBtn();
 		}
 	}
