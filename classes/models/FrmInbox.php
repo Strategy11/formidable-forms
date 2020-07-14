@@ -85,23 +85,15 @@ class FrmInbox extends FrmFormApi {
 			unset( $this->messages[ $message['key'] ] );
 		}
 
-		$message = $this->fill_message( $message );
-		$this->messages[ $message['key'] ] = array(
-			'created' => $message['time'],
-			'message' => $message['message'],
-			'subject' => $message['subject'],
-			'icon'    => $message['icon'],
-			'cta'     => $message['cta'],
-			'expires' => $message['expires'],
-			'who'     => $message['who'],
-		);
+		$this->fill_message( $message );
+		$this->messages[ $message['key'] ] = $message;
 
 		$this->update_list();
 
 		$this->clean_messages();
 	}
 
-	private function fill_message( $message ) {
+	private function fill_message( &$message ) {
 		$defaults = array(
 			'time'    => time(),
 			'message' => '',
@@ -110,9 +102,13 @@ class FrmInbox extends FrmFormApi {
 			'cta'     => '',
 			'expires' => false,
 			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
+			'type'    => '',
 		);
 
-		return array_merge( $defaults, $message );
+		$message = array_merge( $defaults, $message );
+
+		$message['created'] = $message['time'];
+		unset( $message['time'] );
 	}
 
 	private function clean_messages() {
