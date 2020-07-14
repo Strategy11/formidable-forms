@@ -138,6 +138,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $k ] );
 			}
 		}
+		$messages = apply_filters( 'frm_filter_inbox', $messages );
 	}
 
 	private function is_expired( $message ) {
@@ -246,6 +247,11 @@ class FrmInbox extends FrmFormApi {
 		$count = count( $this->unread() );
 		if ( $count ) {
 			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+
+			/**
+			 * @since 4.06.01
+			 */
+			$html = apply_filters( 'frm_inbox_badge', $html );
 		}
 		return $html;
 	}
