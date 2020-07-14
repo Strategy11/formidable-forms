@@ -5451,8 +5451,10 @@ function frmAdminBuildJS() {
 		xmlHttp.onreadystatechange = function() {
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
 				var response = xmlHttp.responseText;
-				if ( response !== '' ) {
+				try {
 					response = JSON.parse( response );
+				} catch( e ) {
+					// The response may not be JSON, so just return it.
 				}
 				success( response );
 			}
