@@ -3643,7 +3643,7 @@ select.frm_cancelnew, input.frm_enternew {
 .frm_toggle {
 	position: relative;
 	display: inline-block;
-	width: 35px;
+	width: 45px;
 	height: 20px;
 	vertical-align: middle;
 	margin: 2px;
@@ -3730,7 +3730,7 @@ input:checked + .frm_toggle_slider {
 }
 
 input:checked + .frm_toggle_slider:before {
-	transform: translateX(16px);
+	transform: translateX(25px);
 	background-color: #fff;
 }
 
