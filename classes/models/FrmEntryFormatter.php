@@ -326,6 +326,7 @@ class FrmEntryFormatter {
 	 */
 	protected function init_atts( $atts ) {
 		$atts['source']       = 'entry_formatter';
+		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
 		$unset = array( 'id', 'entry', 'form_id', 'format' );
@@ -822,6 +823,9 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
 		$display_value = $this->flatten_array( $display_value );
+		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
+			$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+		}
 
 		return $display_value;
 	}
