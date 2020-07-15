@@ -236,6 +236,8 @@ class FrmFieldValue {
 				'entry' => $this->entry,
 			)
 		);
+
+		$this->displayed_value = apply_filters( 'frm_display_value', $this->displayed_value, $this->field, $atts );
 	}
 
 	/**

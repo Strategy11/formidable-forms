@@ -19,16 +19,7 @@ jQuery( document ).ready( function() {
     if ( typeof tb_remove === 'function' ) { // eslint-disable-line camelcase
         frmAdminPopup.init();
     }
-
-	frmMoveInboxBadge();
 });
-
-function frmMoveInboxBadge() {
-	var link = jQuery( 'a[href="admin.php?page=formidable-inbox"] > span' );
-	if ( link.length ) {
-		jQuery( '#toplevel_page_formidable .wp-menu-name' ).append( link.clone() );
-	}
-}
 
 function frm_install_now() { // eslint-disable-line camelcase
 	var $msg = jQuery( document.getElementById( 'frm_install_message' ) );

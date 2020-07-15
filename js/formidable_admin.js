@@ -5467,8 +5467,10 @@ function frmAdminBuildJS() {
 	}
 
 	function postAjax( data, success ) {
-		var xmlHttp = new XMLHttpRequest();
-		var params = typeof data === 'string' ? data : Object.keys( data ).map(
+		var response, params,
+			xmlHttp = new XMLHttpRequest();
+
+		params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k]);
 			}
@@ -5477,9 +5479,11 @@ function frmAdminBuildJS() {
 		xmlHttp.open( 'post', ajaxurl, true );
 		xmlHttp.onreadystatechange = function() {
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
-				var response = xmlHttp.responseText;
-				if ( response !== '' ) {
+				response = xmlHttp.responseText;
+				try {
 					response = JSON.parse( response );
+				} catch ( e ) {
+					// The response may not be JSON, so just return it.
 				}
 				success( response );
 			}

@@ -598,6 +598,7 @@ class FrmEntriesController {
 			'include_extras' => '',
 			'inline_style'   => 1,
 			'child_array'    => false, // return embedded fields as nested array
+			'line_breaks'    => true,
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
 
