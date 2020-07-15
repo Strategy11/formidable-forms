@@ -202,6 +202,14 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 4.06.01
+	 */
+	public static function pro_is_connected() {
+		global $frm_vars;
+		return self::pro_is_installed() && $frm_vars['pro_is_authorized'];
+	}
+
+	/**
 	 * @since 4.06
 	 */
 	public static function is_form_builder_page() {

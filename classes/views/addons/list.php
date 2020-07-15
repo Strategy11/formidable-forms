@@ -8,16 +8,9 @@
 	?>
 	<div class="wrap">
 
-	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
-
-	<p class="alignleft">
-		<?php esc_html_e( 'Missing add-ons?', 'formidable' ); ?>
-		<a href="#" id="frm_reconnect_link" class="frm-show-authorized" data-refresh="1">
-			<?php esc_html_e( 'Check now for a recent upgrade or renewal', 'formidable' ); ?>
-		</a>
-	</p>
-
 	<?php
+	include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+
 	FrmAppHelper::show_search_box(
 		array(
 			'input_id'    => 'addon',
@@ -25,6 +18,19 @@
 			'tosearch'    => 'frm-card',
 		)
 	);
+
+	if ( FrmAppHelper::pro_is_connected() ) {
+		?>
+		<p class="alignleft">
+			<?php esc_html_e( 'Missing add-ons?', 'formidable' ); ?>
+			<a href="#" id="frm_reconnect_link" class="frm-show-authorized" data-refresh="1">
+				<?php esc_html_e( 'Check now for a recent upgrade or renewal', 'formidable' ); ?>
+			</a>
+		</p>
+		<?php
+	} else {
+		FrmSettingsController::license_box();
+	}
 	?>
 	<div class="clear"></div>
 
