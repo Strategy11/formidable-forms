@@ -144,6 +144,7 @@ class FrmReviews {
 				'subject' => str_replace( $name, '', $title ),
 				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button-secondary frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
 					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
+				'type'    => 'feedback',
 			)
 		);
 	}
