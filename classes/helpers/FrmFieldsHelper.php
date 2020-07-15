@@ -905,7 +905,9 @@ class FrmFieldsHelper {
 		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
 		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
 
-		return self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
+		$value = self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
+
+		return apply_filters( 'frm_display_value', $value, $field, $atts );
 	}
 
 	/**
