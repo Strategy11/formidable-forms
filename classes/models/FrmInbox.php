@@ -85,23 +85,15 @@ class FrmInbox extends FrmFormApi {
 			unset( $this->messages[ $message['key'] ] );
 		}
 
-		$message = $this->fill_message( $message );
-		$this->messages[ $message['key'] ] = array(
-			'created' => $message['time'],
-			'message' => $message['message'],
-			'subject' => $message['subject'],
-			'icon'    => $message['icon'],
-			'cta'     => $message['cta'],
-			'expires' => $message['expires'],
-			'who'     => $message['who'],
-		);
+		$this->fill_message( $message );
+		$this->messages[ $message['key'] ] = $message;
 
 		$this->update_list();
 
 		$this->clean_messages();
 	}
 
-	private function fill_message( $message ) {
+	private function fill_message( &$message ) {
 		$defaults = array(
 			'time'    => time(),
 			'message' => '',
@@ -110,9 +102,13 @@ class FrmInbox extends FrmFormApi {
 			'cta'     => '',
 			'expires' => false,
 			'who'     => 'all', // use 'free', 'personal', 'business', 'elite', 'grandfathered'
+			'type'    => '',
 		);
 
-		return array_merge( $defaults, $message );
+		$message = array_merge( $defaults, $message );
+
+		$message['created'] = $message['time'];
+		unset( $message['time'] );
 	}
 
 	private function clean_messages() {
@@ -142,6 +138,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $k ] );
 			}
 		}
+		$messages = apply_filters( 'frm_filter_inbox', $messages );
 	}
 
 	private function is_expired( $message ) {
@@ -250,6 +247,11 @@ class FrmInbox extends FrmFormApi {
 		$count = count( $this->unread() );
 		if ( $count ) {
 			$html = ' <span class="update-plugins frm_inbox_count"><span class="plugin-count">' . absint( $count ) . '</span></span>';
+
+			/**
+			 * @since 4.06.01
+			 */
+			$html = apply_filters( 'frm_inbox_badge', $html );
 		}
 		return $html;
 	}

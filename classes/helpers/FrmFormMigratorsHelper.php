@@ -45,6 +45,7 @@ class FrmFormMigratorsHelper {
 					'message' => 'Did you know you can import your forms created in ' . esc_html( $form['name'] ) . '?',
 					'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-import' ) ) . '" class="button-primary frm-button-primary">' . esc_html__( 'Learn More', 'formidable' ) . '</a>',
 					'icon'    => 'frm_cloud_upload_solid_icon',
+					'type'    => 'news',
 				)
 			);
 		}

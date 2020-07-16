@@ -903,8 +903,9 @@ class FrmForm {
 	 */
 	public static function get_option( $atts ) {
 		$form = $atts['form'];
+		$default = isset( $atts['default'] ) ? $atts['default'] : '';
 
-		return isset( $form->options[ $atts['option'] ] ) ? $form->options[ $atts['option'] ] : $atts['default'];
+		return isset( $form->options[ $atts['option'] ] ) ? $form->options[ $atts['option'] ] : $default;
 	}
 
 	/**
