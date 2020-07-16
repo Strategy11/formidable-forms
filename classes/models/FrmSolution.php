@@ -3,7 +3,7 @@
  * Handles the installation of a solution and any dependencies.
  * This page is shown when a Formidable plugin is activated.
  *
- * @since 4.04.02
+ * @since 4.06.01
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,12 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
 TODO:
-- Directory: edit in place and go to page 4 -> ugly error
-- Directory with 3 grid
 - Hide install formidable button while installing it
-- Add connect box on add-omns page. Don't show "Missing add-ons" message if not connected.
-- Add url box to install lite in docs
-- After install, show message to pick a view and publish
 - Show a list of all forms, pages, and views created
 - Create a page with the form for new listings
 */
@@ -31,7 +26,7 @@ class FrmSolution {
 	/**
 	 * Hidden welcome page slug.
 	 *
-	 * @since 4.04.02
+	 * @since 4.06.01
 	 */
 	protected $page = 'formidable-getting-started';
 
@@ -49,7 +44,7 @@ class FrmSolution {
 	/**
 	 * Register all WP hooks.
 	 *
-	 * @since 4.04.02
+	 * @since 4.06.01
 	 */
 	public function load_hooks() {
 		// If user is in admin ajax or doing cron, return.
@@ -82,7 +77,7 @@ class FrmSolution {
 	 * These pages will be removed from the Dashboard menu, so they will
 	 * not actually show. Sneaky, sneaky.
 	 *
-	 * @since 4.04.02
+	 * @since 4.06.01
 	 */
 	public function register() {
 
@@ -101,7 +96,7 @@ class FrmSolution {
 	 *
 	 * This means the pages are still available to us, but hidden.
 	 *
-	 * @since 4.04.02
+	 * @since 4.06.01
 	 */
 	public function hide_menu() {
 		remove_submenu_page( 'index.php', $this->page );
@@ -121,7 +116,7 @@ class FrmSolution {
 	 * This function checks if a new install or update has just occurred. If so,
 	 * then we redirect the user to the appropriate page.
 	 *
-	 * @since 4.04.02
+	 * @since 4.06.01
 	 */
 	public function redirect() {
 
@@ -223,8 +218,7 @@ class FrmSolution {
 	}
 
 	protected function get_steps_data() {
-		global $frm_vars;
-		$pro_installed = FrmAppHelper::pro_is_installed() && $frm_vars['pro_is_authorized'];
+		$pro_installed = FrmAppHelper::pro_is_connected();
 
 		$steps = array(
 			'license' => array(
@@ -244,7 +238,7 @@ class FrmSolution {
 				'num'           => 2,
 			),
 			'import' => array(
-				'label'         => __( 'Setup Forms and Views', 'formidable' ),
+				'label'         => __( 'Setup Forms, Views, and Pages', 'formidable' ),
 				'description'   => __( 'Build the forms, views, and pages automatically.', 'formidable' ),
 				'button_label'  => __( 'Create Now', 'formidable' ),
 				'complete'      => $this->is_complete(),
@@ -406,6 +400,9 @@ class FrmSolution {
 
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
+		if ( ! empty( $this->form_options() ) ) {
+			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
+		}
 
 		$this->step_top( $step );
 
@@ -427,7 +424,7 @@ class FrmSolution {
 		}
 
 		if ( ! $has_file ) {
-			echo '<p class="frm_error_style">' . esc_html__( 'Files not found.', 'formidable' ) . '</p>';
+			echo '<p class="frm_error_style">' . esc_html__( 'We didn\'t find anything to import. Please contact our team.', 'formidable' ) . '</p>';
 		} elseif ( ! isset( $addons[ $id ]['beta']['package'] ) ) {
 			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
 		} else {
@@ -439,14 +436,105 @@ class FrmSolution {
 				<input type="hidden" name="template_name" id="frm_template_name" value="" />
 				<input type="hidden" name="template_desc" id="frm_template_desc" value="" />
 				<input type="hidden" name="redirect" value="0" />
-				<button type="submit" class="<?php echo esc_attr( $step['button_class'] ); ?>">
-					<?php echo esc_html( $step['button_label'] ); ?>
-				</button>
+				<?php $this->show_form_options( $xml ); ?>
+				<?php $this->show_view_options(); ?>
+				<?php $this->show_page_options(); ?>
+				<p>
+					<button type="submit" class="<?php echo esc_attr( $step['button_class'] ); ?>">
+						<?php echo esc_html( $step['button_label'] ); ?>
+					</button>
+				</p>
 			</form>
 			<?php
 		}
 
 		$this->step_bottom( $step );
+	}
+
+	protected function show_form_options( $xml ) {
+		$this->show_import_options( $this->form_options(), 'form', $xml );
+	}
+
+	protected function show_view_options() {
+		$this->show_import_options( $this->view_options(), 'view' );
+	}
+
+	protected function show_import_options( $options, $importing, $xml = '' ) {
+		if ( empty( $options ) ) {
+			return;
+		}
+
+		$count = count( $options );
+		foreach ( $options as $info ) {
+			if ( $count > 1 && ! isset( $info['img'] ) ) {
+				$count --;
+			}
+		}
+
+		$width = floor( ( 533 - ( ( $count - 1 ) * 20 ) ) / $count );
+		$selected = false;
+
+		?>
+		<div class="frm_image_options" style="--image-size:<?php echo esc_attr( $width ); ?>px">
+			<div class="frm_opt_container">
+				<?php
+				foreach ( $options as $info ) {
+					if ( ! isset( $info['url'] ) && ! empty( $xml ) ) {
+						$info['url'] = $xml;
+					}
+
+					$value = isset( $info['url'] ) ? $info['url'] : $info['key'];
+					if ( ! isset( $info['img'] ) ) {
+						?>
+						<input type="hidden" name="<?php echo esc_attr( $importing ); ?>[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $value ); ?>" />
+						<?php
+						continue;
+					}
+					?>
+					<div class="frm_radio radio-inline radio frm_image_option <?php echo esc_attr( $importing === 'view' ? 'show_sub_opt show_' . $info['form'] : '' ); ?>" style="<?php echo esc_attr( ( $importing === 'view' && $selected && $info['form'] !== $selected ) ? 'display:none' : '' ); ?>">
+						<label>
+							<input type="radio" name="<?php echo esc_attr( $importing .  ( $importing === 'view' ? '[' . $info['form'] . ']' : '' ) ); ?>" value="<?php echo esc_attr( $value ); ?>"
+							<?php
+							if ( ! $selected ) {
+								echo ' checked="checked"';
+								$selected = $info['form'];
+							}
+							?>
+							<?php if ( $importing === 'form' ) { ?>
+								onchange="frm_show_div('show_sub_opt',this.checked,false,'.');frm_show_div('show_<?php echo esc_attr( $info['form'] ); ?>',this.checked,true,'.')"
+							<?php } ?>
+							/>
+							<div class="frm_image_option_container frm_label_with_image">
+								<?php echo FrmAppHelper::kses( $info['img'], array( 'svg' ) );  // WPCS: XSS ok. ?>
+								<span class="frm_text_label_for_image">
+									<?php echo esc_html( $info['name'] ); ?>
+								</span>
+							</div>
+						</label>
+					</div>
+				<?php } ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	protected function show_page_options() {
+		$pages = $this->needed_pages();
+		if ( empty( $pages ) ) {
+			return;
+		}
+
+		echo '<h3>Choose New Page Title</h3>';
+		foreach ( $pages as $page ) {
+			?>
+			<p>
+				<label for="pages_<?php echo esc_html( $page['type'] ); ?>">
+					<?php echo esc_html( $page['label'] ); ?>
+				</label>
+				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required />
+			</p>
+			<?php
+		}
 	}
 
 	protected function show_page_links( $step ) {
@@ -535,7 +623,50 @@ class FrmSolution {
 		$message->remove( $this->plugin_slug . '-solution' );
 	}
 
+	/**
+	 * Give options for which forms to import.
+	 */
+	protected function form_options() {
+		/**
+		 * Example:
+		 * array(
+		 *	'unique-key'     => array(
+		 *		'keys' => 'forms keys here',
+		 *		'name' => 'displayed label here',
+		 *		'img'  => 'svg code',
+		 *	),
+		 * )
+		 */
+		return array();
+	}
+
+	/**
+	 * Give options for which view to use.
+	 */
+	protected function view_options() {
+		return array();
+	}
+
+	/**
+	 * If the pages aren't imported automatically, set the page names.
+	 */
+	protected function needed_pages() {
+		/**
+		 * Example:
+		 * array(
+		 *	array(
+		 *		'label' => 'Page Name',
+		 *		'name'  => 'Default name',
+		 *		'type'  => 'form' or 'view',
+		 *	),
+		 * )
+		 */
+
+		return array();
+	}
+
 	private function css() {
+		wp_enqueue_style( 'formidable-pro-fields' );
 		?>
 <style>
 #frm-welcome *, #frm-welcome *::before, #frm-welcome  *::after {

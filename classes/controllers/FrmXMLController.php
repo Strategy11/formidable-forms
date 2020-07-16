@@ -39,6 +39,12 @@ class FrmXMLController {
 
 		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
 
+		$form = self::get_posted_form();
+		self::override_url( $form, $url );
+		if ( ! empty( $form ) ) {
+			// TODO: Create pages with the correct shortcodes.
+		}
+
 		$response = wp_remote_get( $url );
 		$body     = wp_remote_retrieve_body( $response );
 		$xml      = simplexml_load_string( $body );
@@ -76,6 +82,30 @@ class FrmXMLController {
 
 		echo wp_json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 4.06.01
+	 */
+	private static function get_posted_form() {
+		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
+		if ( empty( $form ) ) {
+			return $form;
+		}
+		$form = json_decode( $form, true );
+		FrmAppHelper::sanitize_value( 'sanitize_text_field', $form );
+		return $form;
+	}
+
+	/**
+	 * Get a different URL depending on the selection in the form.
+	 *
+	 * @since 4.06.01
+	 */
+	private static function override_url( $form, &$url ) {
+		if ( ! empty( $form ) && isset( $form['form'] ) && strpos( $form['form'], 'http' ) === 0 ) {
+			$url = $form['form'];
+		}
 	}
 
 	/**

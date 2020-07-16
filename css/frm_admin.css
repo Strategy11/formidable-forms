@@ -3399,6 +3399,12 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	--border-radius: var(--small-radius);
 }
 
+.frm_image_option_container svg {
+	width: 50px;
+	height: 50px;
+	margin: 10px auto 0;
+}
+
 #form_show_entry_page .frm_file_link,
 #form_show_entry_page .frm_image_option_container {
 	display: inline-flex;
