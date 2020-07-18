@@ -1128,17 +1128,34 @@ class FrmAppHelper {
 		return $link;
 	}
 
-	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
+	/**
+	 * @param string 		$field_name
+	 * @param string|array 	$capability
+	 * @param string 		$multiple 'single' and 'multiple'
+	 * @param string		$public 'public' or 'private'
+	 */	
+	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single', $public = 'private' ) {
+		// reformat names with arrays as ids should not contain square brackets
+		// example: field_options[admin_only_2][] becomes field_options_admin_only_2
+		$id = str_replace( '[]', '', $field_name );
+		$id = str_replace( '[', '_', $id );
+		$id = str_replace( ']', '', $id );
 		?>
-		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>"
+		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $id ); ?>"
 			<?php echo ( 'multiple' === $multiple ) ? 'multiple="multiple"' : ''; ?>
 			class="frm_multiselect">
-			<?php self::roles_options( $capability ); ?>
+			<?php self::roles_options( $capability, $public ); ?>
 		</select>
 		<?php
 	}
 
-	public static function roles_options( $capability ) {
+	/**
+	 * @param string|array 	$capability selected option values - a string will be automatically casted to an array with one item
+	 * @param string		$public 'public' or 'private'
+	 */
+	public static function roles_options( $capability, $public = 'private' ) {
+		$capability = (array) $capability;
+
 		global $frm_vars;
 		if ( isset( $frm_vars['editable_roles'] ) ) {
 			$editable_roles = $frm_vars['editable_roles'];
@@ -1147,12 +1164,32 @@ class FrmAppHelper {
 			$frm_vars['editable_roles'] = $editable_roles;
 		}
 
+		if( $public === 'public' ) {
+			?>
+			<option value=""><?php esc_html_e( 'Everyone', 'formidable-pro' ); ?></option>
+			<?php
+		}
+
 		foreach ( $editable_roles as $role => $details ) {
 			$name = translate_user_role( $details['name'] );
 			?>
-			<option value="<?php echo esc_attr( $role ); ?>" <?php echo in_array( $role, (array) $capability ) ? ' selected="selected"' : ''; ?>><?php echo esc_attr( $name ); ?> </option>
+			<option value="<?php echo esc_attr( $role ); ?>" <?php echo in_array( $role, $capability ) ? ' selected="selected"' : ''; ?>><?php echo esc_attr( $name ); ?> </option>
 			<?php
 			unset( $role, $details );
+		}
+
+		?>
+		<option value="loggedin" <?php echo in_array( 'loggedin', $capability ) ? ' selected="selected"' : ''; ?>>
+			<?php esc_html_e( 'Logged-in Users', 'formidable-pro' ); ?>
+		</option>
+		<?php
+
+		if( $public === 'public' ) {
+			?>
+			<option value="loggedout" <?php echo in_array( 'loggedout', $capability ) ? ' selected="selected"' : ''; ?>>
+				<?php esc_html_e( 'Logged-out Users', 'formidable-pro' ); ?>
+			</option>
+			<?php
 		}
 	}
 
