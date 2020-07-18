@@ -13,10 +13,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_form_is_hidden( 'editor', 'administrator', 'Editor cannot view form set to administrator' );
 		$this->assert_form_is_visible( 'editor', array( 'administrator', 'editor' ), 'Editor can view form set to both administrator and editor' );
 		$this->assert_form_is_visible( 'editor', 'loggedin', 'Editor can view form set to logged in users' );
-		$this->assert_form_is_visible( 'editor', 'everybody', 'Editor can view form set to everybody' );
-		$this->assert_form_is_visible( 'administrator', 'everybody', 'Administrator can view form set to everybody' );
-		$this->assert_form_is_visible( 'subscriber', 'everybody', 'Subscriber can view form set to everybody' );
 		$this->assert_form_is_visible( 'subscriber', 'loggedin', 'Subscriber can view form set to logged in users' );
+		$this->assert_form_is_visible( 'subscriber', 'loggedin', 'Subscriber can view form set to logged in users' );
+		$this->assert_form_is_hidden( 'loggedout', 'loggedin', 'Logged out user cannot view form set to logged in users' );
+		$this->assert_form_is_hidden( 'loggedout', 'loggedin', 'Logged out user cannot view form set to editors' );
 	}
 
 	/**
@@ -25,8 +25,14 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	 * @return bool
 	 */
 	private function form_is_visible( $capability, $visibility ) {
-		$this->set_user_by_role( $capability );
 		$form = FrmForm::getOne( 'contact-db12' );
+
+		if ( $capability === 'loggedout' ) {
+			wp_set_current_user( NULL );
+		} else {
+			$this->set_user_by_role( $capability );
+		}
+
 		$form->logged_in = 1;
 		$form->options['logged_in_role'] = $visibility;
 		return FrmFormsHelper::is_form_visible_to_user( $form );
