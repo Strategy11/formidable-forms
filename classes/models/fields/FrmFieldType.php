@@ -617,6 +617,7 @@ DEFAULT_HTML;
 			'step'               => 1,
 			'format'             => '',
 			'placeholder'        => '',
+			'tabindex'			 => ''
 		);
 		$field_opts = $this->extra_field_opts();
 		$opts       = array_merge( $opts, $field_opts );
