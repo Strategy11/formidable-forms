@@ -420,6 +420,23 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 * @covers FrmAppHelper::roles_options ($public = 'private') with '' value (which should show that "Logged-In Users" is selected)
+	 */
+	function test_roles_options_private_empty_string_option() {
+		FrmAppHelper::roles_options( '' );
+
+		$this->assert_output_contains( '>Editor' );
+		$this->assert_output_not_contains( 'selected="selected">Editor' );
+		$this->assert_output_contains( 'selected="selected">Logged-in Users' );
+
+		$this->assert_output_not_contains( 'Everyone', 'private by default should not include Everyone' );
+		$this->assert_output_not_contains( 'Logged-out Users', 'private by default should not include Logged-Out Users' );
+
+		$this->assert_output_contains( 'Logged-in Users', 'private still includes Logged-In Users' );
+	}
+
+	/**
+	 * @group visibility
 	 * @covers FrmAppHelper::roles_options ($public = 'public')
 	 */
 	function test_roles_options_public() {
@@ -435,6 +452,27 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assert_output_contains( 'Logged-in Users' );
 
 		$this->assert_output_contains( 'Everyone', 'in additon to private options, public should include Everyone' );
+		$this->assert_output_contains( 'Logged-out Users', 'in additon to private options, public should include Logged-Out Users' );
+	}
+
+	/**
+	 * @group visibility
+	 * @covers FrmAppHelper::roles_options ($public = 'public') with the '' value (Which should show that "Everyone" is selected)
+	 */
+	function test_roles_options_public_empty_string_option() {
+		FrmAppHelper::roles_options( '', 'public' );
+
+		$this->assert_output_not_contains( 'selected="selected">Editor' );
+
+		$this->assert_output_contains( '>Administrator' );
+		$this->assert_output_contains( '>Editor' );
+		$this->assert_output_not_contains( 'selected="selected">Author' );
+		$this->assert_output_not_contains( 'selected="selected">Contributor' );
+		$this->assert_output_contains( '>Subscriber' );
+		$this->assert_output_contains( 'Logged-in Users' );
+		$this->assert_output_not_contains( 'selected="selected">Logged-in Users', 'Logged-in Users potion should not be selected' );
+
+		$this->assert_output_contains( 'selected="selected">Everyone', 'Everyone option should be selected' );
 		$this->assert_output_contains( 'Logged-out Users', 'in additon to private options, public should include Logged-Out Users' );
 	}
 

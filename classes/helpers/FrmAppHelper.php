@@ -1156,6 +1156,17 @@ class FrmAppHelper {
 	public static function roles_options( $capability, $public = 'private' ) {
 		$capability = (array) $capability;
 
+		switch($public) {
+			case 'public':
+				$everyone = array( '' );
+				$loggedin = array( 'loggedin' );
+			break;
+
+			case 'private':
+				$loggedin = array( '', 'loggedin' );
+			break;
+		}
+
 		global $frm_vars;
 		if ( isset( $frm_vars['editable_roles'] ) ) {
 			$editable_roles = $frm_vars['editable_roles'];
@@ -1166,7 +1177,7 @@ class FrmAppHelper {
 
 		if ( $public === 'public' ) {
 			?>
-			<option value=""><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
+			<option value="" <?php echo array_intersect( $everyone, $capability ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
 			<?php
 		}
 
@@ -1179,16 +1190,12 @@ class FrmAppHelper {
 		}
 
 		?>
-		<option value="loggedin" <?php echo in_array( 'loggedin', $capability ) ? ' selected="selected"' : ''; ?>>
-			<?php esc_html_e( 'Logged-in Users', 'formidable' ); ?>
-		</option>
+		<option value="loggedin" <?php echo array_intersect( $loggedin, $capability ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Logged-in Users', 'formidable' ); ?></option>
 		<?php
 
 		if ( $public === 'public' ) {
 			?>
-			<option value="loggedout" <?php echo in_array( 'loggedout', $capability ) ? ' selected="selected"' : ''; ?>>
-				<?php esc_html_e( 'Logged-out Users', 'formidable' ); ?>
-			</option>
+			<option value="loggedout" <?php echo in_array( 'loggedout', $capability ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Logged-out Users', 'formidable' ); ?></option>
 			<?php
 		}
 	}
@@ -1220,8 +1227,8 @@ class FrmAppHelper {
 			return false;
 		}
 
-		// $needed_role will be equal to blank if "Logged-in users" is selected.
-		if ( ( $needed_role == '' && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
+		// $needed_role may equal blank if "Logged-in users" is selected.
+		if ( ( in_array( $needed_role, array( '', 'loggedin' ) ) && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
 			return true;
 		}
 
