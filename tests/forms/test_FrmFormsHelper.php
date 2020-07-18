@@ -28,7 +28,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$form = FrmForm::getOne( 'contact-db12' );
 
 		if ( $capability === 'loggedout' ) {
-			wp_set_current_user( NULL );
+			wp_set_current_user( null );
 		} else {
 			$this->set_user_by_role( $capability );
 		}
