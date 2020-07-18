@@ -1156,15 +1156,15 @@ class FrmAppHelper {
 	public static function roles_options( $capability, $public = 'private' ) {
 		$capability = (array) $capability;
 
-		switch($public) {
+		switch ( $public ) {
 			case 'public':
 				$everyone = array( '' );
 				$loggedin = array( 'loggedin' );
-			break;
+				break;
 
 			case 'private':
 				$loggedin = array( '', 'loggedin' );
-			break;
+				break;
 		}
 
 		global $frm_vars;
