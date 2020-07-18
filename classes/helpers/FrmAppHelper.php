@@ -1129,11 +1129,11 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string 		$field_name
-	 * @param string|array 	$capability
-	 * @param string 		$multiple 'single' and 'multiple'
-	 * @param string		$public 'public' or 'private'
-	 */	
+	 * @param string        $field_name
+	 * @param string|array  $capability
+	 * @param string        $multiple 'single' and 'multiple'
+	 * @param string        $public 'public' or 'private'
+	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single', $public = 'private' ) {
 		// reformat names with arrays as ids should not contain square brackets
 		// example: field_options[admin_only_2][] becomes field_options_admin_only_2
@@ -1164,7 +1164,7 @@ class FrmAppHelper {
 			$frm_vars['editable_roles'] = $editable_roles;
 		}
 
-		if( $public === 'public' ) {
+		if ( $public === 'public' ) {
 			?>
 			<option value=""><?php esc_html_e( 'Everyone', 'formidable-pro' ); ?></option>
 			<?php
@@ -1184,7 +1184,7 @@ class FrmAppHelper {
 		</option>
 		<?php
 
-		if( $public === 'public' ) {
+		if ( $public === 'public' ) {
 			?>
 			<option value="loggedout" <?php echo in_array( 'loggedout', $capability ) ? ' selected="selected"' : ''; ?>>
 				<?php esc_html_e( 'Logged-out Users', 'formidable-pro' ); ?>
