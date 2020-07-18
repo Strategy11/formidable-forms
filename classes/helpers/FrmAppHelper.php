@@ -1150,8 +1150,8 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string|array 	$capability selected option values - a string will be automatically casted to an array with one item
-	 * @param string		$public 'public' or 'private'
+	 * @param string|array  $capability selected option values - a string will be automatically casted to an array with one item
+	 * @param string        $public 'public' or 'private'
 	 */
 	public static function roles_options( $capability, $public = 'private' ) {
 		$capability = (array) $capability;
