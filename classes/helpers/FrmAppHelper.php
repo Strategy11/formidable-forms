@@ -1166,7 +1166,7 @@ class FrmAppHelper {
 
 		if ( $public === 'public' ) {
 			?>
-			<option value=""><?php esc_html_e( 'Everyone', 'formidable-pro' ); ?></option>
+			<option value=""><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
 			<?php
 		}
 
@@ -1180,14 +1180,14 @@ class FrmAppHelper {
 
 		?>
 		<option value="loggedin" <?php echo in_array( 'loggedin', $capability ) ? ' selected="selected"' : ''; ?>>
-			<?php esc_html_e( 'Logged-in Users', 'formidable-pro' ); ?>
+			<?php esc_html_e( 'Logged-in Users', 'formidable' ); ?>
 		</option>
 		<?php
 
 		if ( $public === 'public' ) {
 			?>
 			<option value="loggedout" <?php echo in_array( 'loggedout', $capability ) ? ' selected="selected"' : ''; ?>>
-				<?php esc_html_e( 'Logged-out Users', 'formidable-pro' ); ?>
+				<?php esc_html_e( 'Logged-out Users', 'formidable' ); ?>
 			</option>
 			<?php
 		}
