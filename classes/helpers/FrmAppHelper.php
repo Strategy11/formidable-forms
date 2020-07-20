@@ -1193,7 +1193,7 @@ class FrmAppHelper {
 	public static function user_has_permission( $needed_role ) {
 		if ( is_array( $needed_role ) ) {
 			foreach ( $needed_role as $role ) {
-				if( self::user_has_permission( $role ) ) {
+				if ( self::user_has_permission( $role ) ) {
 					return true;
 				}
 			}
