@@ -367,43 +367,22 @@ class test_FrmAppHelper extends FrmUnitTest {
 	
 	/**
 	 * @group visibility
-	 * @covers FrmAppHelper::wp_roles_dropdown (single, private)
+	 * @covers FrmAppHelper::wp_roles_dropdown (single)
 	 */
 	function test_wp_roles_dropdown() {
-		FrmAppHelper::wp_roles_dropdown( 'field_options[admin_only_2][]', 'administrator' );
+		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
 		
-		$this->assert_output_contains( 'name="field_options[admin_only_2][]"' );
-		$this->assert_output_contains( 'id="field_options_admin_only_2"' );
-		$this->assert_output_not_contains( 'multiple="multiple"', 'default is single' );
-
-		$this->assert_output_contains( '>Administrator' );
-
-		$this->assert_output_not_contains( 'Everyone', 'private by default should not include Everyone' );
-		$this->assert_output_not_contains( 'Logged-out Users', 'private by default should not include Logged-Out Users' );
-
-		$this->assert_output_contains( 'Logged-in Users', 'private still includes Logged-In Users' );
-	}
-
-	/**
-	 * @group visibility
-	 * @covers FrmAppHelper::wp_roles_dropdown (multiple, public)
-	 */
-	function test_wp_roles_dropdown_multiple_public() {
-		FrmAppHelper::wp_roles_dropdown( 'field_options', array( 'loggedin', 'loggedout' ), 'multiple', 'public' );
-
 		$this->assert_output_contains( 'name="field_options"' );
 		$this->assert_output_contains( 'id="field_options"' );
-		$this->assert_output_contains( 'multiple="multiple"' );
-
-		$this->assert_output_contains( 'Everyone', 'in additon to private options, public should include Everyone' );
-		$this->assert_output_contains( 'Logged-out Users', 'in additon to private options, public should include Logged-Out Users' );
+		$this->assert_output_not_contains( 'multiple="multiple"', 'default is single' );
+		$this->assert_output_contains( '>Administrator' );
 	}
 
 	/**
 	 * @group visibility
 	 * @covers FrmAppHelper::roles_options ($public = 'private')
 	 */
-	function test_roles_options_private() {
+	function test_roles_options() {
 		FrmAppHelper::roles_options( 'editor' );
 
 		$this->assert_output_contains( '>Administrator' );
@@ -411,69 +390,17 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assert_output_contains( '>Author' );
 		$this->assert_output_contains( '>Contributor' );
 		$this->assert_output_contains( '>Subscriber' );
-
-		$this->assert_output_not_contains( 'Everyone', 'private by default should not include Everyone' );
-		$this->assert_output_not_contains( 'Logged-out Users', 'private by default should not include Logged-Out Users' );
-
-		$this->assert_output_contains( 'Logged-in Users', 'private still includes Logged-In Users' );
 	}
 
 	/**
 	 * @group visibility
-	 * @covers FrmAppHelper::roles_options ($public = 'private') with '' value (which should show that "Logged-In Users" is selected)
+	 * @covers FrmAppHelper::roles_options
 	 */
-	function test_roles_options_private_empty_string_option() {
+	function test_roles_options_empty_string_option() {
 		FrmAppHelper::roles_options( '' );
 
 		$this->assert_output_contains( '>Editor' );
 		$this->assert_output_not_contains( 'selected="selected">Editor' );
-		$this->assert_output_contains( 'selected="selected">Logged-in Users' );
-
-		$this->assert_output_not_contains( 'Everyone', 'private by default should not include Everyone' );
-		$this->assert_output_not_contains( 'Logged-out Users', 'private by default should not include Logged-Out Users' );
-
-		$this->assert_output_contains( 'Logged-in Users', 'private still includes Logged-In Users' );
-	}
-
-	/**
-	 * @group visibility
-	 * @covers FrmAppHelper::roles_options ($public = 'public')
-	 */
-	function test_roles_options_public() {
-		FrmAppHelper::roles_options( array( 'author', 'contributor' ), 'public' );
-
-		$this->assert_output_not_contains( 'selected="selected">Editor' );
-
-		$this->assert_output_contains( '>Administrator' );
-		$this->assert_output_contains( '>Editor' );
-		$this->assert_output_contains( 'selected="selected">Author' );
-		$this->assert_output_contains( 'selected="selected">Contributor' );
-		$this->assert_output_contains( '>Subscriber' );
-		$this->assert_output_contains( 'Logged-in Users' );
-
-		$this->assert_output_contains( 'Everyone', 'in additon to private options, public should include Everyone' );
-		$this->assert_output_contains( 'Logged-out Users', 'in additon to private options, public should include Logged-Out Users' );
-	}
-
-	/**
-	 * @group visibility
-	 * @covers FrmAppHelper::roles_options ($public = 'public') with the '' value (Which should show that "Everyone" is selected)
-	 */
-	function test_roles_options_public_empty_string_option() {
-		FrmAppHelper::roles_options( '', 'public' );
-
-		$this->assert_output_not_contains( 'selected="selected">Editor' );
-
-		$this->assert_output_contains( '>Administrator' );
-		$this->assert_output_contains( '>Editor' );
-		$this->assert_output_not_contains( 'selected="selected">Author' );
-		$this->assert_output_not_contains( 'selected="selected">Contributor' );
-		$this->assert_output_contains( '>Subscriber' );
-		$this->assert_output_contains( 'Logged-in Users' );
-		$this->assert_output_not_contains( 'selected="selected">Logged-in Users', 'Logged-in Users potion should not be selected' );
-
-		$this->assert_output_contains( 'selected="selected">Everyone', 'Everyone option should be selected' );
-		$this->assert_output_contains( 'Logged-out Users', 'in additon to private options, public should include Logged-Out Users' );
 	}
 
 	/**
