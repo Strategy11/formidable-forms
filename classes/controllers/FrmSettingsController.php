@@ -63,6 +63,15 @@ class FrmSettingsController {
 					'upgrade' => __( 'White labeling options', 'formidable' ),
 				),
 			),
+			'inbox' => array(
+				'name'       => __( 'Inbox', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_email_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => array(
+					'medium'  => 'inbox-settings',
+					'upgrade' => __( 'Inbox settings', 'formidable' ),
+				),
+			),
 		);
 
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
