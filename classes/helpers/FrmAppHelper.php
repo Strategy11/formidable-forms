@@ -1222,7 +1222,21 @@ class FrmAppHelper {
 		return $cap;
 	}
 
+	/**
+	 * @param string|array $needed_role
+	 * @return bool
+	 */
 	public static function user_has_permission( $needed_role ) {
+		if ( is_array( $needed_role ) ) {
+			foreach ( $needed_role as $role ) {
+				if( self::user_has_permission( $role ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		if ( $needed_role == '-1' ) {
 			return false;
 		}

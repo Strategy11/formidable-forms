@@ -1533,12 +1533,7 @@ BEFORE_HTML;
 		$visible = ! $form->logged_in || empty( $form->options['logged_in_role'] );
 
 		if ( ! $visible && get_current_user_id() ) {
-			foreach ( (array) $form->options['logged_in_role'] as $capability ) {
-				if ( FrmAppHelper::user_has_permission( $capability ) ) {
-					$visible = true;
-					break;
-				}
-			}
+			$visible = FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
 		}
 
 		return $visible;
