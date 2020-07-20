@@ -1205,8 +1205,8 @@ class FrmAppHelper {
 			return false;
 		}
 
-		// $needed_role may equal blank if "Logged-in users" is selected.
-		if ( ( in_array( $needed_role, array( '', 'loggedin' ) ) && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
+		// $needed_role will be equal to blank if "Logged-in users" is selected.
+		if ( ( $needed_role == '' && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
 			return true;
 		}
 

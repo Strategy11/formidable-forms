@@ -1549,7 +1549,7 @@ class FrmFormsController {
 			$form = __( 'Please select a valid form', 'formidable' );
 		} elseif ( self::user_should_login( $form ) ) {
 			$form = do_shortcode( $frm_settings->login_msg );
-		} elseif ( self::user_needs_more_permission_to_view( $form ) ) {
+		} elseif ( ! FrmFormsHelper::is_form_visible_to_user( $form ) ) {
 			$form = do_shortcode( $frm_settings->login_msg );
 		} else {
 			do_action( 'frm_pre_get_form', $form );
@@ -1586,14 +1586,6 @@ class FrmFormsController {
 
 	private static function user_should_login( $form ) {
 		return $form->logged_in && ! is_user_logged_in();
-	}
-
-	/**
-	 * @param object $form
-	 * @return bool
-	 */
-	private static function user_needs_more_permission_to_view( $form ) {
-		return ! FrmFormsHelper::is_form_visible_to_user( $form );
 	}
 
 	public static function get_form( $form, $title, $description, $atts = array() ) {
