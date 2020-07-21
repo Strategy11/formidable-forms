@@ -1144,7 +1144,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string|array $capability selected option values - a string will be automatically casted to an array with one item
+	 * @param string|array $capability
 	 */
 	public static function roles_options( $capability ) {
 		global $frm_vars;
