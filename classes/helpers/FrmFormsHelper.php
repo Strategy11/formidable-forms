@@ -1530,10 +1530,10 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function &is_form_visible_to_user( $form ) {
-		$visible = ! $form->logged_in || empty( $form->options['logged_in_role'] );
-
-		if ( ! $visible && get_current_user_id() ) {
+		if( $form->logged_in && isset( $form->options['logged_in_role'] ) ) {
 			$visible = FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
+		} else {
+			$visible = true;
 		}
 
 		return $visible;

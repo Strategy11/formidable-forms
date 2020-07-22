@@ -12,11 +12,13 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_form_is_visible( 'administrator', 'editor', 'Administrator can view a form set to editor' );
 		$this->assert_form_is_hidden( 'editor', 'administrator', 'Editor cannot view form set to administrator' );
 		$this->assert_form_is_visible( 'editor', array( 'administrator', 'editor' ), 'Editor can view form set to both administrator and editor' );
-		$this->assert_form_is_visible( 'editor', 'loggedin', 'Editor can view form set to logged in users' );
-		$this->assert_form_is_visible( 'subscriber', 'loggedin', 'Subscriber can view form set to logged in users' );
-		$this->assert_form_is_visible( 'subscriber', 'loggedin', 'Subscriber can view form set to logged in users' );
-		$this->assert_form_is_hidden( 'loggedout', 'loggedin', 'Logged out user cannot view form set to logged in users' );
-		$this->assert_form_is_hidden( 'loggedout', 'loggedin', 'Logged out user cannot view form set to editors' );
+
+		// The Logged-In Users option is actually an empty string
+		$this->assert_form_is_visible( 'editor', '', 'Editor can view form set to logged in users' );
+		$this->assert_form_is_visible( 'subscriber', '', 'Subscriber can view form set to logged in users' );
+		$this->assert_form_is_visible( 'subscriber', '', 'Subscriber can view form set to logged in users' );
+		$this->assert_form_is_hidden( 'loggedout', '', 'Logged out user cannot view form set to logged in users' );
+		$this->assert_form_is_hidden( 'loggedout', '', 'Logged out user cannot view form set to editors' );
 	}
 
 	/**
