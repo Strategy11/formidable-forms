@@ -41,9 +41,6 @@ class FrmXMLController {
 
 		$form = self::get_posted_form();
 		self::override_url( $form, $url );
-		if ( ! empty( $form ) ) {
-			// TODO: Create pages with the correct shortcodes.
-		}
 
 		$response = wp_remote_get( $url );
 		$body     = wp_remote_retrieve_body( $response );
@@ -71,7 +68,16 @@ class FrmXMLController {
 			);
 			if ( ! empty( $imported['imported']['posts'] ) ) {
 				// Return the link to the last page created.
-				$post_id = end( $imported['posts'] );
+				$pages = $imported['posts'];
+			}
+
+			if ( ! empty( $form ) ) {
+				// Create selected pages with the correct shortcodes.
+				$pages = self::create_pages_for_import( $form );
+			}
+
+			if ( isset( $pages ) && ! empty( $pages ) ) {
+				$post_id = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
@@ -103,9 +109,73 @@ class FrmXMLController {
 	 * @since 4.06.01
 	 */
 	private static function override_url( $form, &$url ) {
-		if ( ! empty( $form ) && isset( $form['form'] ) && strpos( $form['form'], 'http' ) === 0 ) {
-			$url = $form['form'];
+		$selected_form = self::get_selected_in_form( $form, 'form' );
+		if ( empty( $selected_form ) ) {
+			return;
 		}
+
+		$selected_xml  = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
+		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
+			return;
+		}
+
+		$url = $selected_xml;
+	}
+
+	/**
+	 * @since 4.06.02
+	 */
+	private static function get_selected_in_form( $form, $value = 'form' ) {
+		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
+			return $form[ $value ];
+		}
+
+		return '';
+	}
+
+	/**
+	 * @since 4.06.02
+	 *
+	 * @param array $form The posted form values.
+	 *
+	 * @return array The array of created pages.
+	 */
+	private static function create_pages_for_import( $form ) {
+		if ( ! isset( $form['pages'] ) || empty( $form['pages'] ) ) {
+			return;
+		}
+
+		$form_key = self::get_selected_in_form( $form, 'form' );
+		$view_keys = self::get_selected_in_form( $form, 'view' );
+
+		$page_ids = array();
+		foreach ( (array) $form['pages'] as $for => $name ) {
+			if ( empty( $name ) ) {
+				// Don't create a page if no title is given.
+				continue;
+			}
+
+			if ( $for === 'view' ) {
+				$item_key  = is_array( $view_keys ) ? $view_keys[ $form_key ] : $view_keys;
+				$shortcode = '[display-frm-data id=%1$s filter=limited]';
+			} elseif ( $for === 'form' ) {
+				$item_key = $form_key;
+				$shortcode = '[formidable id=%1$s]';
+			} else {
+				$item_key  = self::get_selected_in_form( $form, 'form' );
+				$shortcode = '[' . esc_html( $for ) .' id=%1$s]';
+			}
+
+			$page_ids[ $for ] = wp_insert_post(
+				array(
+					'post_title'   => $name,
+					'post_type'    => 'page',
+					'post_content' => sprintf( $shortcode, $item_key ),
+				)
+			);
+		}
+
+		return $page_ids;
 	}
 
 	/**

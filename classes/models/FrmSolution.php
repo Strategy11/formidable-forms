@@ -410,6 +410,7 @@ class FrmSolution {
 		$addons = $api->get_api_info();
 
 		$id = $this->download_id();
+		$addons[$id]['beta'] = array( 'package' => 'file.xml' );
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
 		if ( ! $step['current'] ) {
@@ -429,6 +430,9 @@ class FrmSolution {
 			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
 		} else {
 			$xml = $addons[ $id ]['beta']['package'];
+			if ( is_array( $xml ) ) {
+				$xml = reset( $xml );
+			}
 			?>
 			<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
 				<input type="hidden" name="link" id="frm_link" value="<?php echo esc_attr( $xml ); ?>" />
@@ -436,6 +440,7 @@ class FrmSolution {
 				<input type="hidden" name="template_name" id="frm_template_name" value="" />
 				<input type="hidden" name="template_desc" id="frm_template_desc" value="" />
 				<input type="hidden" name="redirect" value="0" />
+				<input type="hidden" name="show_response" value="frm_install_error" />
 				<?php $this->show_form_options( $xml ); ?>
 				<?php $this->show_view_options(); ?>
 				<?php $this->show_page_options(); ?>
@@ -444,6 +449,7 @@ class FrmSolution {
 						<?php echo esc_html( $step['button_label'] ); ?>
 					</button>
 				</p>
+				<p id="frm_install_error" class="frm_error_style frm_hidden"></p>
 			</form>
 			<?php
 		}
@@ -479,11 +485,12 @@ class FrmSolution {
 			<div class="frm_opt_container">
 				<?php
 				foreach ( $options as $info ) {
-					if ( ! isset( $info['url'] ) && ! empty( $xml ) ) {
+					if ( ! empty( $xml ) && isset( $info['url'] ) && $info['url'] === 'auto' ) {
 						$info['url'] = $xml;
 					}
 
-					$value = isset( $info['url'] ) ? $info['url'] : $info['key'];
+					$url   = isset( $info['url'] ) ? $info['url'] : '';
+					$value = $importing === 'form' ? $info['form'] : $info['key'];
 					if ( ! isset( $info['img'] ) ) {
 						?>
 						<input type="hidden" name="<?php echo esc_attr( $importing ); ?>[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $value ); ?>" />
@@ -492,6 +499,9 @@ class FrmSolution {
 					}
 					?>
 					<div class="frm_radio radio-inline radio frm_image_option <?php echo esc_attr( $importing === 'view' ? 'show_sub_opt show_' . $info['form'] : '' ); ?>" style="<?php echo esc_attr( ( $importing === 'view' && $selected && $info['form'] !== $selected ) ? 'display:none' : '' ); ?>">
+						<?php if ( $importing === 'form' ) { ?>
+							<input type="hidden" name="xml[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $url ); ?>" />
+						<?php } ?>
 						<label>
 							<input type="radio" name="<?php echo esc_attr( $importing .  ( $importing === 'view' ? '[' . $info['form'] . ']' : '' ) ); ?>" value="<?php echo esc_attr( $value ); ?>"
 							<?php

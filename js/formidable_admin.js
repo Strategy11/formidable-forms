@@ -5351,7 +5351,7 @@ function frmAdminBuildJS() {
 	}
 
 	function installNewForm( form, action, button ) {
-		var data, redirect, href,
+		var data, redirect, href, showError,
 			formData = formToData( form ),
 			formName = formData.template_name,
 			formDesc = formData.template_desc,
@@ -5382,7 +5382,15 @@ function frmAdminBuildJS() {
 				}
 			} else {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
-				// TODO: show response.message
+
+				// Show response.message
+				if ( response.message && typeof form.elements.show_response !== 'undefined' ) {
+					showError = document.getElementById( form.elements.show_response.value );
+					if ( showError !== null ) {
+						showError.innerHTML = response.message;
+						showError.classList.remove( 'frm_hidden' );
+					}
+				}
 			}
 			button.classList.remove( 'frm_loading_button' );
 		});
@@ -5622,10 +5630,22 @@ function frmAdminBuildJS() {
 	 * Serialize form data with vanilla JS.
 	 */
 	function formToData( form ) {
-		var object = {},
+		var names, subKey,
+			object = {},
 			formData = new FormData( form );
 
 		formData.forEach( function( value, key ) {
+			var names = key.match(/(.*)\[(.*)\]/);
+			if ( names !== null ) {
+				key = names[1];
+				subKey = names[2];
+				if ( ! Reflect.has( object, key ) ) {
+					object[key] = {};
+				}
+				object[key][subKey] = value;
+				return;
+			}
+
 			// Reflect.has in favor of: object.hasOwnProperty(key)
 			if ( ! Reflect.has( object, key ) ) {
 				object[key] = value;
@@ -5636,6 +5656,7 @@ function frmAdminBuildJS() {
 			}
 			object[key].push( value );
 		});
+
 		return object;
 	}
 
