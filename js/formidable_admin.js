@@ -5635,7 +5635,7 @@ function frmAdminBuildJS() {
 			formData = new FormData( form );
 
 		formData.forEach( function( value, key ) {
-			var names = key.match(/(.*)\[(.*)\]/);
+			var names = key.match( /(.*)\[(.*)\]/ );
 			if ( names !== null ) {
 				key = names[1];
 				subKey = names[2];

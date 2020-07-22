@@ -86,6 +86,8 @@ class FrmXMLController {
 			);
 		}
 
+		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported' ) );
+
 		echo wp_json_encode( $response );
 		wp_die();
 	}
