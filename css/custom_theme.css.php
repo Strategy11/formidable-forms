@@ -471,7 +471,7 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_button{
-	text-decoration:none<?php echo esc_html( $important ); ?>;
+	text-decoration:none !important;;
 	border:1px solid #eee;
 	display:inline-block;
 <?php if ( ! empty( $defaults['submit_padding'] ) ) { ?>
