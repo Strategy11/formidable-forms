@@ -712,6 +712,11 @@ class FrmFormAction {
 	}
 
 	public static function action_conditions_met( $action, $entry ) {
+		if ( is_callable( 'FrmProFormActionsController::action_conditions_met' ) ) {
+			return FrmProFormActionsController::action_conditions_met( $action, $entry );
+		}
+
+		// This is here for reverse compatibility.
 		$notification = $action->post_content;
 		$stop         = false;
 		$met          = array();
@@ -755,6 +760,7 @@ class FrmFormAction {
 	 * Prepare the logic value for comparison against the entered value
 	 *
 	 * @since 2.01.02
+	 * @deprecated 4.06.02
 	 *
 	 * @param array|string $logic_value
 	 */
@@ -779,6 +785,7 @@ class FrmFormAction {
 	 * Get the value from a specific field and entry
 	 *
 	 * @since 2.01.02
+	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
 	 * @param int $field_id
