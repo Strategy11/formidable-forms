@@ -352,7 +352,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntryValidate::blacklist_check
-	 * @group testme
 	 */
 	public function test_blacklist_check() {
 		$values = array(
