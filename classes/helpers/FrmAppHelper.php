@@ -1187,13 +1187,27 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * call the WordPress current_user_can but also validate empty strings as true for any logged in user
+	 * @param string $role
+	 * @return bool
+	 */
+	public static function current_user_can( $role ) {
+		if( current_user_can( 'administrator' ) ) {
+			// always grant administrator role access
+			return true;
+		}
+
+		return $role ? current_user_can( $role ) : is_user_logged_in();
+	}
+
+	/**
 	 * @param string|array $needed_role
 	 * @return bool
 	 */
 	public static function user_has_permission( $needed_role ) {
 		if ( is_array( $needed_role ) ) {
 			foreach ( $needed_role as $role ) {
-				if ( self::user_has_permission( $role ) ) {
+				if ( self::current_user_can( $role ) ) {
 					return true;
 				}
 			}
@@ -1205,8 +1219,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		// $needed_role will be equal to blank if "Logged-in users" is selected.
-		if ( ( $needed_role == '' && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
+		if ( self::current_user_can( $needed_role ) ) {
 			return true;
 		}
 

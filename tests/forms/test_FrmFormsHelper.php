@@ -18,7 +18,32 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_form_is_visible( 'subscriber', '', 'Subscriber can view form set to logged in users' );
 		$this->assert_form_is_visible( 'subscriber', '', 'Subscriber can view form set to logged in users' );
 		$this->assert_form_is_hidden( 'loggedout', '', 'Logged out user cannot view form set to logged in users' );
-		$this->assert_form_is_hidden( 'loggedout', '', 'Logged out user cannot view form set to editors' );
+
+		$this->assert_form_is_hidden( 'loggedout', 'editor', 'Logged out user cannot view form set to editors' );
+
+		// Array options are expected to only match directly
+		$this->assert_form_is_hidden( 'editor', array( 'loggedout', 'subscriber' ), 'Editors should not set a form assigned to logged out users and subscribers' );
+		$this->assert_form_is_hidden( 'editor', array( 'contributor', 'author' ), 'Editors should not set a form assigned to contributors and authors' );
+		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
+		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
+
+		// That exact match restrict does not apply to administrators
+		$this->assert_form_is_visible( 'administrator', array( 'loggedout', 'subscriber' ), 'Adminstrator should still be able to see a form without an exact array match' );
+		$this->assert_form_is_visible( 'administrator', array( 'editor', 'author' ), 'Adminstrator should still be able to see a form without an exact array match' );
+
+		$user = wp_get_current_user();
+
+		// remove any standard roles to make room for a custom one
+		foreach( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
+			$user->remove_role( $role );
+		}
+
+		add_role( 'formidable_custom_role', 'Custom Role' );
+		$user->add_role( 'formidable_custom_role' );
+		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
+		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
+		$this->assert_form_is_hidden( 'formidable_custom_role', 'editor', 'Custom role should not be able to see a form not assigned to it' );
+		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'editor', 'subscriber' ), 'Custom role should not be able to see a form not assigned to it' );
 	}
 
 	/**
