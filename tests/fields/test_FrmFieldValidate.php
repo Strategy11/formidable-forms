@@ -362,20 +362,20 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			),
 		);
 
-		update_option( 'blacklist_keys', '' );
+		update_option( $this->get_disallowed_option_name(), '' );
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
 		$blocked = '23.343.12332';
 		$new_block = $blocked . "\nspamemail@example.com";
-		update_option( 'blacklist_keys', $new_block );
-		$this->assertSame( $new_block, get_option( 'blacklist_keys' ) );
+		update_option( $this->get_disallowed_option_name(), $new_block );
+		$this->assertSame( $new_block, get_option( $this->get_disallowed_option_name() ) );
 
-		$wp_test = wp_blacklist_check( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
+		$wp_test = $this->run_private_method( array( 'FrmEntryValidate', 'check_disallowed_words' ), array( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) );
 		$this->assertFalse( $wp_test );
 
 		$ip = FrmAppHelper::get_ip_address();
-		$wp_test = wp_blacklist_check( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
+		$wp_test = $this->run_private_method( array( 'FrmEntryValidate', 'check_disallowed_words' ), array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) );
 		if ( ! $wp_test ) {
 			$this->markTestSkipped( 'WordPress blacklist check is failing in some cases' );
 		}
@@ -394,5 +394,14 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertTrue( $is_spam );
+	}
+
+	/**
+	 * The name of the disallowed list of words was changed in WP 5.5.
+	 */
+	private function get_disallowed_option_name() {
+		$keys = get_option( 'disallowed_keys' );
+		// Fallback for WP < 5.5.
+		return $name = ( false === $keys ) ? 'blacklist_keys' : 'disallowed_keys';
 	}
 }
