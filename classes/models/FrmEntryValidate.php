@@ -272,7 +272,13 @@ class FrmEntryValidate {
 			return false;
 		}
 
-		$mod_keys = trim( get_option( 'blacklist_keys' ) );
+		$keys = get_option( 'disallowed_keys' );
+		if ( false === $keys ) {
+		    // Fallback for WP < 5.5.
+		    $keys = get_option( 'blacklist_keys' );
+		}
+
+		$mod_keys = trim( $keys );
 		if ( empty( $mod_keys ) ) {
 			return false;
 		}
