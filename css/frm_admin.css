@@ -3485,6 +3485,12 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	object-position: center;
 }
 
+.frm_image_styling_frame .frm_email_attachment_icon img {
+	height: auto;
+	width: auto;
+	max-width: 54px;
+}
+
 .frm_image_preview_title{
 	margin-top: 6px;
 	color: rgba(40, 47, 54, 0.65);
@@ -3506,12 +3512,15 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	background: #fff;
 }
 
+a.frm_remove_image_option .frmsvg,
+a.frm_remove_image_option,
 .frm_remove_image_option {
 	margin-top: 9px;
 	color: rgba(40, 47, 54, 0.4);
 	cursor: pointer;
 }
 
+a.frm_remove_image_option::hover,
 .frm_remove_image_option:hover {
 	color: rgba(40, 47, 54, 0.8);
 }
