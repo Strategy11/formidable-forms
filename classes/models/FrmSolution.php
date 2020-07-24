@@ -13,8 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
 TODO:
 - Hide install formidable button while installing it
-- Show a list of all forms, pages, and views created
-- Create a page with the form for new listings
+- Save page settings
+- Add settings page to allow importing later
+- Add completed flag
 */
 
 class FrmSolution {
@@ -481,7 +482,7 @@ class FrmSolution {
 		$selected = false;
 
 		?>
-		<div class="frm_image_options" style="--image-size:<?php echo esc_attr( $width ); ?>px">
+		<div class="frm_image_options frm_form_field" style="--image-size:<?php echo esc_attr( $width ); ?>px">
 			<div class="frm_opt_container">
 				<?php
 				foreach ( $options as $info ) {
