@@ -1188,7 +1188,7 @@ class FrmAppHelper {
 
 	/**
 	 * Call the WordPress current_user_can but also validate empty strings as true for any logged in user
-	 * 
+	 *
 	 * @param string $role
 	 * @return bool
 	 */
