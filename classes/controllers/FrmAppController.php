@@ -469,7 +469,7 @@ class FrmAppController {
 	 * @since 4.06.02
 	 */
 	public static function can_update_db() {
-		return get_option( 'frm_updating_api' );
+		return get_transient( 'frm_updating_api' );
 	}
 
 	/**
@@ -482,9 +482,8 @@ class FrmAppController {
 	 */
 	public static function network_upgrade_site( $blog_id = 0 ) {
 		// Flag to check if install is happening as intended.
-		update_option( 'frm_updating_api', true );
+		set_transient( 'frm_updating_api', true, MINUTE_IN_SECONDS );
 		$request = new WP_REST_Request( 'GET', '/frm-admin/v1/install' );
-		delete_option( 'frm_updating_api' );
 
 		if ( $blog_id ) {
 			switch_to_blog( $blog_id );
@@ -504,6 +503,7 @@ class FrmAppController {
 	 * @since 3.0
 	 */
 	public static function api_install() {
+		delete_transient( 'frm_updating_api' );
 		if ( self::needs_update() ) {
 			$running = get_option( 'frm_install_running' );
 			if ( false === $running || $running < strtotime( '-5 minutes' ) ) {
