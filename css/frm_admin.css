@@ -3520,7 +3520,8 @@ a.frm_remove_image_option,
 	cursor: pointer;
 }
 
-a.frm_remove_image_option::hover,
+a.frm_remove_image_option:hover .frmsvg,
+a.frm_remove_image_option:hover,
 .frm_remove_image_option:hover {
 	color: rgba(40, 47, 54, 0.8);
 }
