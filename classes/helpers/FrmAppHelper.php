@@ -1187,12 +1187,13 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * call the WordPress current_user_can but also validate empty strings as true for any logged in user
+	 * Call the WordPress current_user_can but also validate empty strings as true for any logged in user
+	 * 
 	 * @param string $role
 	 * @return bool
 	 */
 	public static function current_user_can( $role ) {
-		if( current_user_can( 'administrator' ) ) {
+		if ( current_user_can( 'administrator' ) ) {
 			// always grant administrator role access
 			return true;
 		}
