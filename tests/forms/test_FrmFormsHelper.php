@@ -26,20 +26,10 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_form_is_hidden( 'editor', array( 'contributor', 'author' ), 'Editors should not set a form assigned to contributors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
-
-		// That exact match restrict does not apply to administrators
-		$this->assert_form_is_visible( 'administrator', array( 'loggedout', 'subscriber' ), 'Adminstrator should still be able to see a form without an exact array match' );
-		$this->assert_form_is_visible( 'administrator', array( 'editor', 'author' ), 'Adminstrator should still be able to see a form without an exact array match' );
-
-		$user = wp_get_current_user();
-
-		// remove any standard roles to make room for a custom one
-		foreach( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
-			$user->remove_role( $role );
-		}
-
-		add_role( 'formidable_custom_role', 'Custom Role' );
-		$user->add_role( 'formidable_custom_role' );
+		$this->assert_form_is_hidden( 'administrator', array( 'loggedout', 'subscriber' ), 'Adminstrator should not be able to see a form without an exact array match' );
+		$this->assert_form_is_hidden( 'administrator', array( 'editor', 'author' ), 'Adminstrator should not be able to see a form without an exact array match' );
+		
+		// test custom roles
 		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
 		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
 		$this->assert_form_is_hidden( 'formidable_custom_role', 'editor', 'Custom role should not be able to see a form not assigned to it' );
@@ -54,11 +44,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	private function form_is_visible( $capability, $visibility ) {
 		$form = FrmForm::getOne( 'contact-db12' );
 
-		if ( $capability === 'loggedout' ) {
-			wp_set_current_user( null );
-		} else {
-			$this->set_user_by_role( $capability );
-		}
+		$this->use_frm_role( $capability );
 
 		$form->logged_in = 1;
 		$form->options['logged_in_role'] = $visibility;

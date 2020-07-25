@@ -567,4 +567,31 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Test requires PHP > ' . $required );
 		}
 	}
+
+	/**
+	 * @param string $role
+	 */
+	protected function use_frm_role( $role ) {
+		switch ( $role ) {
+			case 'loggedout':
+				wp_set_current_user( null );
+				break;
+
+			case 'formidable_custom_role':
+				$user = wp_get_current_user();
+
+				// remove any standard roles to make room for a custom one
+				foreach( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
+					$user->remove_role( $role );
+				}
+
+				add_role( 'formidable_custom_role', 'Custom Role' );
+				$user->add_role( 'formidable_custom_role' );
+				break;
+
+			default:
+				$this->set_user_by_role( $role );
+				break;
+		}
+	}
 }

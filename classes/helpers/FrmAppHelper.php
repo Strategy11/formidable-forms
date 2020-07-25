@@ -1193,12 +1193,23 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function current_user_can( $role ) {
-		if ( current_user_can( 'administrator' ) ) {
-			// always grant administrator role access
-			return true;
+		if ( $role == '-1' ) {
+			return false;
 		}
 
-		return $role ? current_user_can( $role ) : is_user_logged_in();
+		if ( $role === 'loggedout' ) {
+			return ! is_user_logged_in();
+		}
+
+		if ( $role === 'loggedin' || ! $role ) {
+			return is_user_logged_in();
+		}
+
+		if ( $role == 1 ) {
+			$role = 'administrator';
+		}
+
+		return current_user_can( $role );
 	}
 
 	/**
@@ -1216,12 +1227,10 @@ class FrmAppHelper {
 			return false;
 		}
 
-		if ( $needed_role == '-1' ) {
-			return false;
-		}
+		$can = self::current_user_can( $needed_role );
 
-		if ( self::current_user_can( $needed_role ) ) {
-			return true;
+		if ( $can || in_array( $needed_role, array( '-1', 'loggedout' ) ) ) {
+			return $can;
 		}
 
 		$roles = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' );
