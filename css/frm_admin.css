@@ -3471,6 +3471,19 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	display: block;
 }
 
+/* Show an icon on top */
+.frm_image_option_container {
+	position: relative;
+}
+
+.frm_text_label_for_image > svg {
+	width: 30px;
+	position: absolute;
+	top: 5px;
+	right: calc( 50% - 15px );
+}
+/* End show an icon on top */
+
 .frm_single_option .frm_option_key {
 	margin-top: 17px;
 }
@@ -3835,6 +3848,11 @@ label.frm-example-icon {
 
 .edd_frm_status_icon.frm_icon_font.frm_inactive_icon {
 	color: green;
+}
+
+/* Hide the install steps for solutions */
+#form_global_settings .tabs-panel .num svg {
+	display: none;
 }
 
 /* Empty List */

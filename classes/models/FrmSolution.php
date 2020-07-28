@@ -20,7 +20,7 @@ TODO:
 
 class FrmSolution {
 
-	protected $plugin_slug = 'formidable';
+	protected $plugin_slug = '';
 
 	protected $plugin_file = '';
 
@@ -29,13 +29,17 @@ class FrmSolution {
 	 *
 	 * @since 4.06.01
 	 */
-	protected $page = 'formidable-getting-started';
+	protected $page = '';
+
+	protected $icon = 'frm_icon_font frm_settings_icon';
 
 	public function __construct( $atts = array() ) {
-		if ( $this->plugin_slug !== 'formidable' ) {
-			add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
-			add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
+		if ( empty( $this->plugin_slug ) ) {
+			return;
 		}
+
+		add_action( 'plugins_loaded', array( $this, 'load_hooks' ), 50 );
+		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 
 		if ( empty( $this->plugin_file ) ) {
 			$this->plugin_file = $this->plugin_slug . '.php';
@@ -49,7 +53,13 @@ class FrmSolution {
 	 */
 	public function load_hooks() {
 		// If user is in admin ajax or doing cron, return.
-		if ( wp_doing_ajax() || wp_doing_cron() ) {
+		if ( wp_doing_cron() ) {
+			return;
+		}
+
+		add_filter( 'frm_add_settings_section', array( $this, 'add_settings' ) );
+
+		if ( wp_doing_ajax() ) {
 			return;
 		}
 
@@ -103,6 +113,10 @@ class FrmSolution {
 		remove_submenu_page( 'index.php', $this->page );
 	}
 
+	protected function plugin_name() {
+		return '';
+	}
+
 	protected function page_title() {
 		return __( 'Welcome to Formidable Forms', 'formidable' );
 	}
@@ -146,6 +160,54 @@ class FrmSolution {
 
 	protected function settings_link() {
 		return admin_url( 'index.php?page=' . $this->page );
+	}
+
+	/*
+	 * Add page to global settings.
+	 */
+	public static function add_settings( $sections ) {
+		wp_enqueue_style( 'formidable-pro-fields' );
+		$sections[ $this->plugin_slug ] = array(
+			'class'    => $this,
+			'function' => 'settings_page',
+			'name'     => $this->plugin_name(),
+			'icon'     => $this->icon,
+			'ajax'     => true,
+		);
+		return $sections;
+	}
+
+	/*
+	 * Output for global settings.
+	 */
+	public static function settings_page() {
+		$steps = $this->get_steps_data();
+		if ( ! $steps['license']['complete'] ) {
+			$this->license_box( $steps['license'] );
+		}
+
+		if ( isset( $steps['plugin'] ) && ! $steps['license']['complete'] ) {
+			$this->show_plugin_install( $steps['plugin'] );
+		}
+
+		$all_imported = $this->is_complete( 'all' );
+
+		// Always show this step in settings.
+		if ( $steps['complete']['current'] ) {
+			$steps['import']['current'] = true;
+
+			$new_class = $all_imported ? ' button frm_hidden' : '';
+			$steps['import']['button_class'] = str_replace( 'grey disabled', $new_class, $steps['import']['button_class'] );
+		}
+		if ( $all_imported ) {
+			$steps['import']['label'] = '';
+			$steps['import']['description'] = __( 'The following form(s) have been created.', 'formidable' );
+		}
+		$this->show_app_install( $steps['import'] );
+
+		if ( ! $all_imported ) {
+			$this->show_page_links( $steps['complete'] );
+		}
 	}
 
 	/**
@@ -205,17 +267,13 @@ class FrmSolution {
 	 * Override me to insert different content.
 	 */
 	protected function main_content() {
-		if ( $this->plugin_slug === 'formidable' ) {
-			include( FrmAppHelper::plugin_path() . '/classes/views/shared/welcome.php' );
-		} else {
-			$steps = $this->get_steps_data();
-			$this->license_box( $steps['license'] );
-			if ( isset( $steps['plugin'] ) ) {
-				$this->show_plugin_install( $steps['plugin'] );
-			}
-			$this->show_app_install( $steps['import'] );
-			$this->show_page_links( $steps['complete'] );
+		$steps = $this->get_steps_data();
+		$this->license_box( $steps['license'] );
+		if ( isset( $steps['plugin'] ) ) {
+			$this->show_plugin_install( $steps['plugin'] );
 		}
+		$this->show_app_install( $steps['import'] );
+		$this->show_page_links( $steps['complete'] );
 	}
 
 	protected function get_steps_data() {
@@ -401,7 +459,7 @@ class FrmSolution {
 
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
-		if ( ! empty( $this->form_options() ) ) {
+		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
 			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
 		}
 
@@ -442,9 +500,15 @@ class FrmSolution {
 				<input type="hidden" name="template_desc" id="frm_template_desc" value="" />
 				<input type="hidden" name="redirect" value="0" />
 				<input type="hidden" name="show_response" value="frm_install_error" />
-				<?php $this->show_form_options( $xml ); ?>
-				<?php $this->show_view_options(); ?>
-				<?php $this->show_page_options(); ?>
+				<?php
+				$this->show_form_options( $xml );
+				$this->show_view_options();
+
+				if ( ! $step['complete'] ) {
+					// Don't show on the settings page when complete.
+					$this->show_page_options();
+				}
+				?>
 				<p>
 					<button type="submit" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 						<?php echo esc_html( $step['button_label'] ); ?>
@@ -471,62 +535,20 @@ class FrmSolution {
 			return;
 		}
 
-		$count = count( $options );
+		$imported = $this->previously_imported_forms();
+		$count    = count( $options );
 		foreach ( $options as $info ) {
+			// Count the number of options displayed for css.
 			if ( $count > 1 && ! isset( $info['img'] ) ) {
 				$count --;
 			}
 		}
-
 		$width = floor( ( 533 - ( ( $count - 1 ) * 20 ) ) / $count );
+		unset( $count );
+
 		$selected = false;
 
-		?>
-		<div class="frm_image_options frm_form_field" style="--image-size:<?php echo esc_attr( $width ); ?>px">
-			<div class="frm_opt_container">
-				<?php
-				foreach ( $options as $info ) {
-					if ( ! empty( $xml ) && isset( $info['url'] ) && $info['url'] === 'auto' ) {
-						$info['url'] = $xml;
-					}
-
-					$url   = isset( $info['url'] ) ? $info['url'] : '';
-					$value = $importing === 'form' ? $info['form'] : $info['key'];
-					if ( ! isset( $info['img'] ) ) {
-						?>
-						<input type="hidden" name="<?php echo esc_attr( $importing ); ?>[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $value ); ?>" />
-						<?php
-						continue;
-					}
-					?>
-					<div class="frm_radio radio-inline radio frm_image_option <?php echo esc_attr( $importing === 'view' ? 'show_sub_opt show_' . $info['form'] : '' ); ?>" style="<?php echo esc_attr( ( $importing === 'view' && $selected && $info['form'] !== $selected ) ? 'display:none' : '' ); ?>">
-						<?php if ( $importing === 'form' ) { ?>
-							<input type="hidden" name="xml[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $url ); ?>" />
-						<?php } ?>
-						<label>
-							<input type="radio" name="<?php echo esc_attr( $importing .  ( $importing === 'view' ? '[' . $info['form'] . ']' : '' ) ); ?>" value="<?php echo esc_attr( $value ); ?>"
-							<?php
-							if ( ! $selected ) {
-								echo ' checked="checked"';
-								$selected = $info['form'];
-							}
-							?>
-							<?php if ( $importing === 'form' ) { ?>
-								onchange="frm_show_div('show_sub_opt',this.checked,false,'.');frm_show_div('show_<?php echo esc_attr( $info['form'] ); ?>',this.checked,true,'.')"
-							<?php } ?>
-							/>
-							<div class="frm_image_option_container frm_label_with_image">
-								<?php echo FrmAppHelper::kses( $info['img'], array( 'svg' ) );  // WPCS: XSS ok. ?>
-								<span class="frm_text_label_for_image">
-									<?php echo esc_html( $info['name'] ); ?>
-								</span>
-							</div>
-						</label>
-					</div>
-				<?php } ?>
-			</div>
-		</div>
-		<?php
+		include( FrmAppHelper::plugin_path() . '/classes/views/solutions/_import.php' );
 	}
 
 	protected function show_page_options() {
@@ -558,10 +580,6 @@ class FrmSolution {
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
-
-			if ( $step['current'] ) {
-				$this->remove_from_inbox();
-			}
 		}
 
 		$this->step_bottom( $step );
@@ -584,19 +602,36 @@ class FrmSolution {
 	 */
 	protected function is_current_plugin() {
 		$to_redirect = get_transient( 'frm_activation_redirect' );
-		if ( empty( $to_redirect ) && FrmAppHelper::is_admin_page( 'formidable-settings' ) && ! $this->is_complete() ) {
-			// The page won't be redirected but isn't complete.
-			$this->add_to_inbox();
-		}
-
 		return $to_redirect === $this->plugin_slug && empty( $this->is_complete() );
 	}
 
 	/**
 	 * Override this function to indicate when install is complete.
 	 */
-	protected function is_complete() {
-		return false;
+	protected function is_complete( $count = 1 ) {
+		$imported = $this->previously_imported_forms();
+		if ( $count === 'all' ) {
+			return count( $imported ) >= count( $this->form_options() );
+		}
+		return ! empty( $imported );
+	}
+
+	/**
+	 * Get an array of all of the forms that have been imported.
+	 *
+	 * @return array
+	 */
+	protected function previously_imported_forms() {
+		$imported = array();
+		$forms    = $this->form_options();
+		foreach ( $forms as $form ) {
+			$was_imported = isset( $form['form'] ) ? FrmForm::get_id_by_key( $form['form'] ) : false;
+			if ( $was_imported ) {
+				$imported[ $form['form'] ] = $was_imported;
+			}
+		}
+		
+		return $imported;
 	}
 
 	/**
@@ -611,27 +646,6 @@ class FrmSolution {
 	 */
 	protected function download_id() {
 		return 0;
-	}
-
-	/**
-	 * If the install wasn't completed, add a message.
-	 */
-	protected function add_to_inbox() {
-		$message = new FrmInbox();
-		$message->add_message(
-			array(
-				'key'     => $this->plugin_slug . '-solution',
-				'message' => __( 'Your plugin setup isn\'t quite complete.', 'formidable' ),
-				'subject' => $this->page_title(),
-				'cta'     => '<a href="' . esc_url( $this->settings_link() ) . '" class="button-primary frm-button-primary">' .
-					esc_html__( 'Continue Install', 'formidable' ) . '</a>',
-			)
-		);
-	}
-
-	protected function remove_from_inbox() {
-		$message = new FrmInbox();
-		$message->remove( $this->plugin_slug . '-solution' );
 	}
 
 	/**
