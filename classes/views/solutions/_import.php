@@ -36,7 +36,7 @@
 					<?php } ?>
 					/>
 					<div class="frm_image_option_container frm_label_with_image">
-						<?php echo FrmAppHelper::kses( $info['img'], array( 'svg' ) );  // WPCS: XSS ok. ?>
+						<?php echo FrmAppHelper::kses( $info['img'], array( 'svg', 'rect', 'path' ) );  // WPCS: XSS ok. ?>
 						<span class="frm_text_label_for_image">
 							<?php
 							if ( ! empty( $disabled ) ) {

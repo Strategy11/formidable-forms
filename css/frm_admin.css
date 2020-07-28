@@ -3400,7 +3400,6 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 }
 
 .frm_image_option_container svg {
-	width: 50px;
 	height: 50px;
 	margin: 10px auto 0;
 }
@@ -3469,6 +3468,16 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 .frm_list_entry_page .frm_upload_label,
 .frm-summary-page-wrapper .frm_text_label_for_image {
 	display: block;
+}
+
+#frm-welcome .frm_image_options .frm_image_option_container,
+#form_global_settings .frm_image_options .frm_image_option_container{
+	background: var(--sidebar-color);
+}
+
+#frm-welcome .frm_image_option_container svg,
+#form_global_settings .frm_image_option_container svg {
+	max-width: calc( 100% - 20px );
 }
 
 /* Show an icon on top */

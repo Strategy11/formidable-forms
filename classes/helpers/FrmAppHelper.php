@@ -740,6 +740,10 @@ class FrmAppHelper {
 				'width'  => true,
 				'x'      => true,
 				'y'      => true,
+				'rx'     => true,
+				'stroke' => true,
+				'stroke-opacity' => true,
+				'stroke-width'   => true,
 			),
 			'section'    => $allow_class,
 			'span'       => array(
@@ -763,6 +767,7 @@ class FrmAppHelper {
 				'width'   => true,
 				'height'  => true,
 				'style'   => true,
+				'fill'    => true,
 			),
 			'use'        => array(
 				'href'   => true,
