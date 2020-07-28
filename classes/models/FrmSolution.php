@@ -469,7 +469,6 @@ class FrmSolution {
 		$addons = $api->get_api_info();
 
 		$id = $this->download_id();
-		$addons[$id]['beta'] = array( 'package' => 'file.xml' );
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
 		if ( ! $step['current'] ) {

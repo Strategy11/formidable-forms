@@ -48,7 +48,11 @@
 								);
 							}
 
-							echo esc_html( $info['name'] );
+							if ( $importing === 'form' && $disabled ) {
+								echo FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] );
+							} else {
+								echo esc_html( $info['name'] );
+							}
 							?>
 						</span>
 					</div>

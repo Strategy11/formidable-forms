@@ -85,7 +85,13 @@
 							<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 						</a>
 					<?php } else { ?>
-						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $pricing . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+						<?php
+						if ( isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'] ) ) {
+							// Solutions will go to a separate page.
+							$pricing = FrmAppHelper::admin_upgrade_link( 'addons', $addon['link'] );
+						}
+						?>
+						<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $pricing . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
 							<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 						</a>
 					<?php } ?>

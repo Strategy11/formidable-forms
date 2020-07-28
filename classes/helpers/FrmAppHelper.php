@@ -82,6 +82,7 @@ class FrmAppHelper {
 		if ( empty( $page ) ) {
 			$page = 'https://formidableforms.com/lite-upgrade/';
 		} else {
+			$page = str_replace( 'https://formidableforms.com/', '', $page );
 			$page = 'https://formidableforms.com/' . $page;
 		}
 
