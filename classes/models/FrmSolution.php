@@ -192,21 +192,26 @@ class FrmSolution {
 
 		$all_imported = $this->is_complete( 'all' );
 
-		// Always show this step in settings.
+		$step = $steps['import'];
+		$step['label'] = '';
+		$step['nested'] = true;
 		if ( $steps['complete']['current'] ) {
-			$steps['import']['current'] = true;
+			// Always show this step in settings.
+			$step['current'] = true;
 
 			$new_class = $all_imported ? ' button frm_hidden' : '';
-			$steps['import']['button_class'] = str_replace( 'grey disabled', $new_class, $steps['import']['button_class'] );
+			$step['button_class'] = str_replace( 'frm_grey disabled', $new_class, $step['button_class'] );
 		}
 		if ( $all_imported ) {
-			$steps['import']['label'] = '';
-			$steps['import']['description'] = __( 'The following form(s) have been created.', 'formidable' );
+			$step['description'] = __( 'The following form(s) have been created.', 'formidable' );
 		}
-		$this->show_app_install( $steps['import'] );
+		$this->show_app_install( $step );
 
 		if ( ! $all_imported ) {
-			$this->show_page_links( $steps['complete'] );
+			$step = $steps['complete'];
+			$step['current'] = false;
+			$step['button_class'] .= ' frm_grey disabled';
+			$this->show_page_links( $step );
 		}
 	}
 
@@ -332,7 +337,7 @@ class FrmSolution {
 			$class = isset( $step['button_class'] ) ? $step['button_class'] : '';
 			$class .= ' button-primary frm-button-primary';
 			if ( ! $steps[ $k ]['current'] ) {
-				$class .= ' grey disabled';
+				$class .= ' frm_grey disabled';
 			}
 			$steps[ $k ]['button_class'] = $class;
 		}
@@ -383,7 +388,7 @@ class FrmSolution {
 	}
 
 	protected function step_top( $step ) {
-		$section_class = ( ! isset( $step['current'] ) || ! $step['current'] ) ? 'grey' : '';
+		$section_class = ( ! isset( $step['current'] ) || ! $step['current'] ) ? 'frm_grey' : '';
 
 		?>
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
@@ -407,7 +412,9 @@ class FrmSolution {
 				<i class="loader hidden"></i>
 			</aside>
 			<div>
-				<h2><?php echo esc_html( $step['label'] ); ?></h2>
+				<?php if ( $step['label'] ) { ?>
+				<h3 class="frm-step-heading"><?php echo esc_html( $step['label'] ); ?></h3>
+				<?php } ?>
 				<p><?php echo esc_html( $step['description'] ); ?></p>
 				<?php if ( isset( $step['error'] ) ) { ?>
 					<p class="frm_error"><?php echo esc_html( $step['error'] ); ?></p>
@@ -491,8 +498,14 @@ class FrmSolution {
 			if ( is_array( $xml ) ) {
 				$xml = reset( $xml );
 			}
+
+			if ( isset( $step['nested'] ) ) {
+				echo '<fieldset id="frm-new-template" class="field-group">';
+			} else {
+				echo '<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">';
+			}
+
 			?>
-			<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
 				<input type="hidden" name="link" id="frm_link" value="<?php echo esc_attr( $xml ); ?>" />
 				<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
 				<input type="hidden" name="template_name" id="frm_template_name" value="" />
@@ -503,19 +516,23 @@ class FrmSolution {
 				$this->show_form_options( $xml );
 				$this->show_view_options();
 
-				if ( ! $step['complete'] ) {
+				if ( ! $this->is_complete( 'all' ) ) {
 					// Don't show on the settings page when complete.
 					$this->show_page_options();
 				}
 				?>
 				<p>
-					<button type="submit" class="<?php echo esc_attr( $step['button_class'] ); ?>">
+					<button <?php echo esc_html( isset( $step['nested'] ) ? '' : 'type="submit" ' ); ?>class="<?php echo esc_attr( $step['button_class'] ); ?>">
 						<?php echo esc_html( $step['button_label'] ); ?>
 					</button>
 				</p>
 				<p id="frm_install_error" class="frm_error_style frm_hidden"></p>
-			</form>
 			<?php
+			if ( isset( $step['nested'] ) ) {
+				echo '</fieldset>';
+			} else {
+				echo '</form>';
+			}
 		}
 
 		$this->step_bottom( $step );
@@ -570,30 +587,19 @@ class FrmSolution {
 	}
 
 	protected function show_page_links( $step ) {
-		$this->step_top( $step );
-
-		$page_link = $step['current'] ? $this->get_page_link() : '#';
-		if ( ! empty( $page_link ) ) {
-			?>
-			<a href="<?php echo esc_url( $page_link ); ?>" target="_blank" rel="noopener" id="frm-redirect-link" class="<?php echo esc_attr( $step['button_class'] ); ?>">
-				<?php echo esc_html( $step['button_label'] ); ?>
-			</a>
-			<?php
+		if ( $step['current'] ) {
+			return;
 		}
 
+		$this->step_top( $step );
+
+		?>
+		<a href="#" target="_blank" rel="noopener" id="frm-redirect-link" class="<?php echo esc_attr( $step['button_class'] ); ?>">
+			<?php echo esc_html( $step['button_label'] ); ?>
+		</a>
+		<?php
+
 		$this->step_bottom( $step );
-	}
-
-	protected function get_page_link() {
-		$page_slug = $this->new_page_slug();
-		return get_permalink( get_page_by_path( $page_slug ) );
-	}
-
-	/**
-	 * This function needs an override.
-	 */
-	protected function new_page_slug() {
-		return '';
 	}
 
 	/**
@@ -787,13 +793,7 @@ class FrmSolution {
 	padding: 30px;
 	border-left: 1px solid #eee;
 }
-#frm-welcome .grey {
-	opacity: 0.5;
-	background: #F6F6F6 !important;
-	border-color: #ddd !important;
-	color: #9FA5AA !important;
-}
-#frm-welcome .step h2 {
+#frm-welcome .step h3.frm-step-heading {
 	font-size: 24px;
 	line-height: 22px;
 	margin-top: 0;

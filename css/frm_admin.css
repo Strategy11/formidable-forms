@@ -7012,6 +7012,15 @@ button.frm_choose_image_box,
 	background-color: var(--sidebar-color);
 }
 
+.wp-core-ui .frm_grey.frm-button-primary.disabled,
+.wp-core-ui .frm_grey.frm-button-primary,
+#frm-welcome .frm_grey {
+	opacity: 0.5;
+	background: #F6F6F6 !important;
+	border-color: #ddd !important;
+	color: #9FA5AA !important;
+}
+
 /* Chrome Scrollbars for Windows */
 .windows::-webkit-scrollbar,
 .windows ::-webkit-scrollbar {

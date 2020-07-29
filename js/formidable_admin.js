@@ -5316,8 +5316,8 @@ function frmAdminBuildJS() {
 	}
 
 	function nextInstallStep( thisStep ) {
-		thisStep.classList.add( 'grey' );
-		thisStep.nextElementSibling.classList.remove( 'grey' );
+		thisStep.classList.add( 'frm_grey' );
+		thisStep.nextElementSibling.classList.remove( 'frm_grey' );
 	}
 
 	function frmApiPreview( cont, link ) {
@@ -5339,6 +5339,16 @@ function frmAdminBuildJS() {
 				}, 300 );
 			}
 		});
+	}
+
+	function installTemplateFieldset( e ) {
+		/*jshint validthis:true */
+		var fieldset = this.parentNode.parentNode,
+			action = fieldset.elements.type.value,
+			button = this;
+		e.preventDefault();
+		button.classList.add( 'frm_loading_button' );
+		installNewForm( fieldset, action, button );
 	}
 
 	function installTemplate( e ) {
@@ -5372,12 +5382,12 @@ function frmAdminBuildJS() {
 					window.location = redirect;
 				} else {
 					href = document.getElementById( 'frm-redirect-link' );
-					if ( typeof link !== 'undefined' ) {
+					if ( typeof link !== 'undefined' && href !== null ) {
 						// Show the next installation step.
 						href.setAttribute( 'href', redirect );
-						href.classList.remove( 'grey', 'disabled' );
+						href.classList.remove( 'frm_grey', 'disabled' );
 						nextInstallStep( form.parentNode.parentNode );
-						button.classList.add( 'grey', 'disabled' );
+						button.classList.add( 'frm_grey', 'disabled' );
 					}
 				}
 			} else {
@@ -5630,12 +5640,20 @@ function frmAdminBuildJS() {
 	 * Serialize form data with vanilla JS.
 	 */
 	function formToData( form ) {
-		var names, subKey,
+		var subKey, i,
 			object = {},
-			formData = new FormData( form );
+			formData = form.elements;
 
-		formData.forEach( function( value, key ) {
-			var names = key.match( /(.*)\[(.*)\]/ );
+		for ( i = 0; i < formData.length; i ++ ) {
+			var input = formData[i],
+				key = input.name,
+				value = input.value,
+				names = key.match( /(.*)\[(.*)\]/ );
+
+			if ( ( input.type === 'radio' || input.type === 'checkbox' ) && ! input.checked ) {
+				continue;
+			}
+
 			if ( names !== null ) {
 				key = names[1];
 				subKey = names[2];
@@ -5643,19 +5661,19 @@ function frmAdminBuildJS() {
 					object[key] = {};
 				}
 				object[key][subKey] = value;
-				return;
+				continue;
 			}
 
 			// Reflect.has in favor of: object.hasOwnProperty(key)
 			if ( ! Reflect.has( object, key ) ) {
 				object[key] = value;
-				return;
+				continue;
 			}
 			if ( ! Array.isArray( object[key]) ) {
 				object[key] = [ object[key] ];
 			}
 			object[key].push( value );
-		});
+		}
 
 		return object;
 	}
@@ -5706,7 +5724,7 @@ function frmAdminBuildJS() {
 				frmAdminBuild.inboxInit();
 			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
 				// Solution install page
-				jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
+				frmAdminBuild.solutionInit();
 			} else {
 				// New form selection page
 				initNewFormModal();
@@ -6197,6 +6215,10 @@ function frmAdminBuildJS() {
 			});
 		},
 
+		solutionInit: function() {
+			jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
+		},
+
 		styleInit: function() {
 			collapseAllSections();
 
@@ -6338,6 +6360,9 @@ function frmAdminBuildJS() {
 			if ( licenseTab !== null ) {
 				jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
 			}
+
+			// Solution install page
+			jQuery( document ).on( 'click', '#frm-new-template button', installTemplateFieldset );
 
 			jQuery( '#frm-dismissable-cta .dismiss' ).click( function( event ) {
 				event.preventDefault();
