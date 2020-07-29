@@ -39,6 +39,9 @@ class FrmXMLController {
 
 		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
 
+		$form = self::get_posted_form();
+		self::override_url( $form, $url );
+
 		$response = wp_remote_get( $url );
 		$body     = wp_remote_retrieve_body( $response );
 		$xml      = simplexml_load_string( $body );
@@ -63,14 +66,128 @@ class FrmXMLController {
 				'redirect' => FrmForm::get_edit_link( $form_id ),
 				'success'  => 1,
 			);
+			if ( ! empty( $imported['imported']['posts'] ) ) {
+				// Return the link to the last page created.
+				$pages = $imported['posts'];
+			}
+
+			if ( ! empty( $form ) ) {
+				// Create selected pages with the correct shortcodes.
+				$pages = self::create_pages_for_import( $form );
+			}
+
+			if ( isset( $pages ) && ! empty( $pages ) ) {
+				$post_id = end( $pages );
+				$response['redirect'] = get_permalink( $post_id );
+			}
 		} else {
+			if ( isset( $imported['error'] ) ) {
+				$message = $imported['error'];
+			} else {
+				$message = __( 'There was an error importing form', 'formidable' );
+			}
 			$response = array(
-				'message' => __( 'There was an error importing form', 'formidable' ),
+				'message' => $message,
 			);
+
 		}
+
+		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported' ) );
 
 		echo wp_json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 4.06.02
+	 */
+	private static function get_posted_form() {
+		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
+		if ( empty( $form ) ) {
+			return $form;
+		}
+		$form = json_decode( $form, true );
+		return $form;
+	}
+
+	/**
+	 * Get a different URL depending on the selection in the form.
+	 *
+	 * @since 4.06.02
+	 */
+	private static function override_url( $form, &$url ) {
+		$selected_form = self::get_selected_in_form( $form, 'form' );
+		if ( empty( $selected_form ) ) {
+			return;
+		}
+
+		$selected_xml  = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
+		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
+			return;
+		}
+
+		$url = $selected_xml;
+	}
+
+	/**
+	 * @since 4.06.02
+	 */
+	private static function get_selected_in_form( $form, $value = 'form' ) {
+		if ( ! empty( $form ) && isset( $form[ $value ] ) && ! empty( $form[ $value ] ) ) {
+			return $form[ $value ];
+		}
+
+		return '';
+	}
+
+	/**
+	 * @since 4.06.02
+	 *
+	 * @param array $form The posted form values.
+	 *
+	 * @return array The array of created pages.
+	 */
+	private static function create_pages_for_import( $form ) {
+		if ( ! isset( $form['pages'] ) || empty( $form['pages'] ) ) {
+			return;
+		}
+
+		$form_key = self::get_selected_in_form( $form, 'form' );
+		$view_keys = self::get_selected_in_form( $form, 'view' );
+
+		$page_ids = array();
+		foreach ( (array) $form['pages'] as $for => $name ) {
+			if ( empty( $name ) ) {
+				// Don't create a page if no title is given.
+				continue;
+			}
+
+			if ( $for === 'view' ) {
+				$item_key  = is_array( $view_keys ) ? $view_keys[ $form_key ] : $view_keys;
+				$shortcode = '[display-frm-data id=%1$s filter=limited]';
+			} elseif ( $for === 'form' ) {
+				$item_key = $form_key;
+				$shortcode = '[formidable id=%1$s]';
+			} else {
+				$item_key  = self::get_selected_in_form( $form, 'form' );
+				$shortcode = '[' . esc_html( $for ) . ' id=%1$s]';
+			}
+
+			if ( empty( $item_key ) ) {
+				// Don't create it if the shortcode won't show anything.
+				continue;
+			}
+
+			$page_ids[ $for ] = wp_insert_post(
+				array(
+					'post_title'   => $name,
+					'post_type'    => 'page',
+					'post_content' => sprintf( $shortcode, $item_key ),
+				)
+			);
+		}
+
+		return $page_ids;
 	}
 
 	/**
@@ -87,6 +204,12 @@ class FrmXMLController {
 			return;
 		}
 
+		$name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
+		$description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+		if ( empty( $name ) && empty( $description ) ) {
+			return;
+		}
+
 		// Get the main form ID.
 		$set_name = 0;
 		foreach ( $xml->form as $form ) {
@@ -98,8 +221,8 @@ class FrmXMLController {
 		foreach ( $xml->form as $form ) {
 			// Maybe set the form name if this isn't a child form.
 			if ( $set_name == $form->id ) {
-				$form->name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
-				$form->description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
+				$form->name        = $name;
+				$form->description = $description;
 			}
 
 			// Use a unique key to prevent editing existing form.

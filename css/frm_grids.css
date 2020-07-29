@@ -346,6 +346,12 @@
    100% {opacity: 1;}
 }
 
+@media only screen and (max-width: 750px) {
+	.frm_grid_container.frm_no_grid_750{
+		display:block;
+	}
+}
+
 @media only screen and (max-width: 600px) {
 	.frm_section_heading > .frm_form_field,
 	.frm_fields_container > .frm_submit,
@@ -354,6 +360,7 @@
 		grid-column: 1 / span 12 !important;
 	}
 
+	.frm_grid_container.frm_no_grid_600,
 	.frm_form_field.frm_inline_container,
 	.frm_form_field.frm_right_container,
 	.frm_form_field.frm_left_container{

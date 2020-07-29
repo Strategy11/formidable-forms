@@ -222,6 +222,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					messageBox.classList.add( 'frm_hidden' );
 					messageBox.classList.remove( 'frm_error_style', 'frm_message', 'frm_updated_message' );
 				}, 10000 );
+				var refreshPage = document.querySelectorAll( '#frm-welcome' );
+				if ( refreshPage.length > 0 ) {
+					window.location.reload();
+				}
 			}
 		},
 
@@ -5010,6 +5014,11 @@ function frmAdminBuildJS() {
 	}
 
 	/* Addons page */
+	function installMultipleAddons( e ) {
+		e.preventDefault();
+		installOrActivate( this, 'frm_multiple_addons' );
+	}
+
 	function activateAddon( e ) {
 		e.preventDefault();
 		installOrActivate( this, 'frm_activate_addon' );
@@ -5135,7 +5144,7 @@ function frmAdminBuildJS() {
 		button.removeClass( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
-		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp' );
+		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
 		}
@@ -5306,6 +5315,11 @@ function frmAdminBuildJS() {
 		this.nextElementSibling.value = ui.item.value;
 	}
 
+	function nextInstallStep( thisStep ) {
+		thisStep.classList.add( 'frm_grey' );
+		thisStep.nextElementSibling.classList.remove( 'frm_grey' );
+	}
+
 	function frmApiPreview( cont, link ) {
 		cont.innerHTML = '<div class="frm-wait"></div>';
 		jQuery.ajax({
@@ -5327,19 +5341,30 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function installTemplateFieldset( e ) {
+		/*jshint validthis:true */
+		var fieldset = this.parentNode.parentNode,
+			action = fieldset.elements.type.value,
+			button = this;
+		e.preventDefault();
+		button.classList.add( 'frm_loading_button' );
+		installNewForm( fieldset, action, button );
+	}
+
 	function installTemplate( e ) {
 		/*jshint validthis:true */
 		var action = this.elements.type.value,
 			button = this.querySelector( 'button' );
 		e.preventDefault();
 		button.classList.add( 'frm_loading_button' );
-		installNewForm( this, action );
+		installNewForm( this, action, button );
 	}
 
-	function installNewForm( form, action ) {
-		var data,
-			formName = form.elements.template_name.value,
-			formDesc = form.elements.template_desc.value,
+	function installNewForm( form, action, button ) {
+		var data, redirect, href, showError,
+			formData = formToData( form ),
+			formName = formData.template_name,
+			formDesc = formData.template_desc,
 			link = form.elements.link.value;
 
 		data = {
@@ -5347,15 +5372,37 @@ function frmAdminBuildJS() {
 			xml: link,
 			name: formName,
 			desc: formDesc,
+			form: JSON.stringify( formData ),
 			nonce: frmGlobal.nonce
 		};
 		postAjax( data, function( response ) {
-			if ( typeof response.redirect !== 'undefined' ) {
-				window.location = response.redirect;
+			redirect = response.redirect;
+			if ( typeof redirect !== 'undefined' ) {
+				if ( typeof form.elements.redirect === 'undefined' ) {
+					window.location = redirect;
+				} else {
+					href = document.getElementById( 'frm-redirect-link' );
+					if ( typeof link !== 'undefined' && href !== null ) {
+						// Show the next installation step.
+						href.setAttribute( 'href', redirect );
+						href.classList.remove( 'frm_grey', 'disabled' );
+						nextInstallStep( form.parentNode.parentNode );
+						button.classList.add( 'frm_grey', 'disabled' );
+					}
+				}
 			} else {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
-				// TODO: show response.message
+
+				// Show response.message
+				if ( response.message && typeof form.elements.show_response !== 'undefined' ) {
+					showError = document.getElementById( form.elements.show_response.value );
+					if ( showError !== null ) {
+						showError.innerHTML = response.message;
+						showError.classList.remove( 'frm_hidden' );
+					}
+				}
 			}
+			button.classList.remove( 'frm_loading_button' );
 		});
 	}
 
@@ -5589,6 +5636,48 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Serialize form data with vanilla JS.
+	 */
+	function formToData( form ) {
+		var subKey, i,
+			object = {},
+			formData = form.elements;
+
+		for ( i = 0; i < formData.length; i++ ) {
+			var input = formData[i],
+				key = input.name,
+				value = input.value,
+				names = key.match( /(.*)\[(.*)\]/ );
+
+			if ( ( input.type === 'radio' || input.type === 'checkbox' ) && ! input.checked ) {
+				continue;
+			}
+
+			if ( names !== null ) {
+				key = names[1];
+				subKey = names[2];
+				if ( ! Reflect.has( object, key ) ) {
+					object[key] = {};
+				}
+				object[key][subKey] = value;
+				continue;
+			}
+
+			// Reflect.has in favor of: object.hasOwnProperty(key)
+			if ( ! Reflect.has( object, key ) ) {
+				object[key] = value;
+				continue;
+			}
+			if ( ! Array.isArray( object[key]) ) {
+				object[key] = [ object[key] ];
+			}
+			object[key].push( value );
+		}
+
+		return object;
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -5633,6 +5722,9 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_inbox_page' ) !== null ) {
 				// Inbox page
 				frmAdminBuild.inboxInit();
+			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
+				// Solution install page
+				frmAdminBuild.solutionInit();
 			} else {
 				// New form selection page
 				initNewFormModal();
@@ -5705,6 +5797,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'click', '.frm-install-addon', installAddon );
 			jQuery( document ).on( 'click', '.frm-activate-addon', activateAddon );
+			jQuery( document ).on( 'click', '.frm-solution-multiple', installMultipleAddons );
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
@@ -6122,6 +6215,10 @@ function frmAdminBuildJS() {
 			});
 		},
 
+		solutionInit: function() {
+			jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
+		},
+
 		styleInit: function() {
 			collapseAllSections();
 
@@ -6263,6 +6360,9 @@ function frmAdminBuildJS() {
 			if ( licenseTab !== null ) {
 				jQuery( licenseTab ).on( 'click', '.edd_frm_save_license', saveAddonLicense );
 			}
+
+			// Solution install page
+			jQuery( document ).on( 'click', '#frm-new-template button', installTemplateFieldset );
 
 			jQuery( '#frm-dismissable-cta .dismiss' ).click( function( event ) {
 				event.preventDefault();

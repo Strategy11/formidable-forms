@@ -4,7 +4,7 @@
 		<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
 	</a>
 	or
-	<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" target="_blank" class="button-secondary frm-secondary-button">
+	<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" target="_blank" class="button-secondary frm-button-secondary">
 		<?php esc_html_e( 'Get Formidable Now', 'formidable' ); ?>
 	</a>
 </p>
