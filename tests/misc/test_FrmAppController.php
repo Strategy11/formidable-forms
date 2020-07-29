@@ -174,8 +174,6 @@ class test_FrmAppController extends FrmUnitTest {
 			$this->markTestSkipped( 'Run without ajax' );
 		}
 
-		do_action( 'rest_api_init' );
-
 		$current_db = FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version;
 		$previous_db = FrmAppHelper::plugin_version() . '-' . ( absint( FrmAppHelper::$db_version ) - 1 );
 		update_option( 'frm_db_version', $previous_db );
