@@ -5644,7 +5644,7 @@ function frmAdminBuildJS() {
 			object = {},
 			formData = form.elements;
 
-		for ( i = 0; i < formData.length; i ++ ) {
+		for ( i = 0; i < formData.length; i++ ) {
 			var input = formData[i],
 				key = input.name,
 				value = input.value,
