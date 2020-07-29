@@ -864,8 +864,10 @@ class FrmAddonsController {
 		global $hook_suffix;
 		set_current_screen();
 
-		$download_urls = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
+		$download_urls = FrmAppHelper::get_param( 'plugin', '', 'post' );
 		$download_urls = explode( ',', $download_urls );
+		FrmAppHelper::sanitize_value( 'esc_url_raw', $download_urls );
+
 		foreach ( $download_urls as $download_url ) {
 			$_POST['plugin'] = $download_url;
 			if ( strpos( $download_url, 'http' ) !== false ) {
