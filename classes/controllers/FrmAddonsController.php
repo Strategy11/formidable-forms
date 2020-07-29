@@ -855,7 +855,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @since 4.x
+	 * @since 4.06.02
 	 */
 	public static function ajax_multiple_addons() {
 		self::install_addon_permissions();
