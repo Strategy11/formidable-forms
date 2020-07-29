@@ -81,9 +81,15 @@ class FrmXMLController {
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
+			if ( isset( $imported['error'] ) ) {
+				$message = $imported['error'];
+			} else {
+				$message = __( 'There was an error importing form', 'formidable' );
+			}
 			$response = array(
-				'message' => __( 'There was an error importing form', 'formidable' ),
+				'message' => $message,
 			);
+
 		}
 
 		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported' ) );
@@ -101,7 +107,6 @@ class FrmXMLController {
 			return $form;
 		}
 		$form = json_decode( $form, true );
-		FrmAppHelper::sanitize_value( 'sanitize_text_field', $form );
 		return $form;
 	}
 
@@ -166,6 +171,11 @@ class FrmXMLController {
 			} else {
 				$item_key  = self::get_selected_in_form( $form, 'form' );
 				$shortcode = '[' . esc_html( $for ) .' id=%1$s]';
+			}
+
+			if ( empty( $item_key ) ) {
+				// Don't create it if the shortcode won't show anything.
+				continue;
 			}
 
 			$page_ids[ $for ] = wp_insert_post(

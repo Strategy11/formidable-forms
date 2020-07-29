@@ -59,6 +59,10 @@ class FrmXMLHelper {
 	 * @return array The number of items imported
 	 */
 	public static function import_xml_now( $xml ) {
+		if ( ! defined( 'WP_IMPORTING' ) ) {
+			define( 'WP_IMPORTING', true );
+		}
+
 		$imported = self::pre_import_data();
 
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
@@ -70,7 +74,16 @@ class FrmXMLHelper {
 			}
 		}
 
-		return apply_filters( 'frm_importing_xml', $imported, $xml );
+		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
+
+		if ( ! isset( $imported['form_status'] ) || empty( $imported['form_status'] ) ) {
+			// Check for an error message in the XML.
+			if ( isset( $xml->Code ) && isset( $xml->Message ) ) {
+				$imported['error'] = reset( $xml->Message );
+			}
+		}
+
+		return $imported;
 	}
 
 	/**
@@ -211,12 +224,8 @@ class FrmXMLHelper {
 			'editable'       => (int) $item->editable,
 			'status'         => (string) $item->status,
 			'parent_form_id' => isset( $item->parent_form_id ) ? (int) $item->parent_form_id : 0,
-			'created_at'     => gmdate( 'Y-m-d H:i:s', strtotime( (string) $item->created_at ) ),
+			'created_at'     => current_time( 'mysql', 1 ),
 		);
-
-		if ( empty( $item->created_at ) ) {
-			$form['created_at'] = current_time( 'mysql', 1 );
-		}
 
 		$form['options'] = FrmAppHelper::maybe_json_decode( $form['options'] );
 
