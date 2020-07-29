@@ -15,6 +15,7 @@ class FrmAddon {
 	public $version;
 	public $author = 'Strategy11';
 	public $is_parent_licence = false;
+	public $needs_license = true;
 	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;

@@ -82,6 +82,7 @@ class FrmAppHelper {
 		if ( empty( $page ) ) {
 			$page = 'https://formidableforms.com/lite-upgrade/';
 		} else {
+			$page = str_replace( 'https://formidableforms.com/', '', $page );
 			$page = 'https://formidableforms.com/' . $page;
 		}
 
@@ -199,6 +200,14 @@ class FrmAppHelper {
 
 	public static function pro_is_installed() {
 		return apply_filters( 'frm_pro_installed', false );
+	}
+
+	/**
+	 * @since 4.06.02
+	 */
+	public static function pro_is_connected() {
+		global $frm_vars;
+		return self::pro_is_installed() && $frm_vars['pro_is_authorized'];
 	}
 
 	/**
@@ -732,6 +741,10 @@ class FrmAppHelper {
 				'width'  => true,
 				'x'      => true,
 				'y'      => true,
+				'rx'     => true,
+				'stroke' => true,
+				'stroke-opacity' => true,
+				'stroke-width'   => true,
 			),
 			'section'    => $allow_class,
 			'span'       => array(
@@ -755,6 +768,7 @@ class FrmAppHelper {
 				'width'   => true,
 				'height'  => true,
 				'style'   => true,
+				'fill'    => true,
 			),
 			'use'        => array(
 				'href'   => true,

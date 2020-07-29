@@ -1672,6 +1672,14 @@ h2.frm-h2 + .howto {
 	margin: 5px 0 20px;
 }
 
+.frm-admin-page-addons #frm-using-lite {
+	display: none;
+}
+
+.frm-admin-page-addons .frm-search {
+	margin-top: 0;
+}
+
 .frm-addons {
 	margin-top: 30px;
 	display: grid;
@@ -3391,6 +3399,11 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 	--border-radius: var(--small-radius);
 }
 
+.frm_image_option_container svg {
+	height: 50px;
+	margin: 10px auto 0;
+}
+
 #form_show_entry_page .frm_file_link,
 #form_show_entry_page .frm_image_option_container {
 	display: inline-flex;
@@ -3456,6 +3469,29 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 .frm-summary-page-wrapper .frm_text_label_for_image {
 	display: block;
 }
+
+#frm-welcome .frm_image_options .frm_image_option_container,
+#form_global_settings .frm_image_options .frm_image_option_container{
+	background: var(--sidebar-color);
+}
+
+#frm-welcome .frm_image_option_container svg,
+#form_global_settings .frm_image_option_container svg {
+	max-width: calc( 100% - 20px );
+}
+
+/* Show an icon on top */
+.frm_image_option_container {
+	position: relative;
+}
+
+.frm_text_label_for_image > svg {
+	width: 30px;
+	position: absolute;
+	top: 5px;
+	right: calc( 50% - 15px );
+}
+/* End show an icon on top */
 
 .frm_single_option .frm_option_key {
 	margin-top: 17px;
@@ -3821,6 +3857,11 @@ label.frm-example-icon {
 
 .edd_frm_status_icon.frm_icon_font.frm_inactive_icon {
 	color: green;
+}
+
+/* Hide the install steps for solutions */
+#form_global_settings .tabs-panel .num svg {
+	display: none;
 }
 
 /* Empty List */
@@ -6964,6 +7005,17 @@ button.frm_choose_image_box,
 
 .global-font .field-group input[type="text"] {
 	width: auto;
+}
+
+/* Welcome page */
+
+.wp-core-ui .frm_grey.frm-button-primary.disabled,
+.wp-core-ui .frm_grey.frm-button-primary,
+#frm-welcome .frm_grey {
+	opacity: 0.5;
+	background: #F6F6F6 !important;
+	border-color: #ddd !important;
+	color: #9FA5AA !important;
 }
 
 /* Chrome Scrollbars for Windows */
