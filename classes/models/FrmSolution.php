@@ -627,7 +627,7 @@ class FrmSolution {
 				$imported[ $form['form'] ] = $was_imported;
 			}
 		}
-		
+
 		return $imported;
 	}
 
@@ -652,11 +652,11 @@ class FrmSolution {
 		/**
 		 * Example:
 		 * array(
-		 *	'unique-key'     => array(
-		 *		'keys' => 'forms keys here',
-		 *		'name' => 'displayed label here',
-		 *		'img'  => 'svg code',
-		 *	),
+		 *  'unique-key' => array(
+		 *    'keys' => 'forms keys here',
+		 *	  'name' => 'displayed label here',
+		 *	  'img'  => 'svg code',
+		 *  ),
 		 * )
 		 */
 		return array();
@@ -676,11 +676,11 @@ class FrmSolution {
 		/**
 		 * Example:
 		 * array(
-		 *	array(
-		 *		'label' => 'Page Name',
-		 *		'name'  => 'Default name',
-		 *		'type'  => 'form' or 'view',
-		 *	),
+		 *   array(
+		 *	   'label' => 'Page Name',
+		 *	   'name'  => 'Default name',
+		 *	   'type'  => 'form' or 'view',
+		 *   ),
 		 * )
 		 */
 

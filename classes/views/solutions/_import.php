@@ -23,7 +23,7 @@
 					<input type="hidden" name="xml[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $url ); ?>" <?php echo esc_attr( $disabled ); ?>/>
 				<?php } ?>
 				<label>
-					<input type="radio" name="<?php echo esc_attr( $importing .  ( $importing === 'view' ? '[' . $info['form'] . ']' : '' ) ); ?>" value="<?php echo esc_attr( $value ); ?>"
+					<input type="radio" name="<?php echo esc_attr( $importing . ( $importing === 'view' ? '[' . $info['form'] . ']' : '' ) ); ?>" value="<?php echo esc_attr( $value ); ?>"
 					<?php
 					echo esc_attr( $disabled );
 					if ( ! $selected && empty( $disabled ) ) {
@@ -49,7 +49,7 @@
 							}
 
 							if ( $importing === 'form' && $disabled ) {
-								echo FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] );
+								echo FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] ); // WPCS: XSS ok.
 							} else {
 								echo esc_html( $info['name'] );
 							}

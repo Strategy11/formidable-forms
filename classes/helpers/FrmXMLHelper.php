@@ -78,8 +78,8 @@ class FrmXMLHelper {
 
 		if ( ! isset( $imported['form_status'] ) || empty( $imported['form_status'] ) ) {
 			// Check for an error message in the XML.
-			if ( isset( $xml->Code ) && isset( $xml->Message ) ) {
-				$imported['error'] = reset( $xml->Message );
+			if ( isset( $xml->Code ) && isset( $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
+				$imported['error'] = reset( $xml->Message ); // phpcs:ignore WordPress.NamingConventions
 			}
 		}
 

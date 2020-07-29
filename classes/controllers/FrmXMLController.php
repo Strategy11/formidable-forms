@@ -170,7 +170,7 @@ class FrmXMLController {
 				$shortcode = '[formidable id=%1$s]';
 			} else {
 				$item_key  = self::get_selected_in_form( $form, 'form' );
-				$shortcode = '[' . esc_html( $for ) .' id=%1$s]';
+				$shortcode = '[' . esc_html( $for ) . ' id=%1$s]';
 			}
 
 			if ( empty( $item_key ) ) {
