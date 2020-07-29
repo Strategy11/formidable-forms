@@ -99,7 +99,7 @@ class FrmXMLController {
 	}
 
 	/**
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
@@ -113,7 +113,7 @@ class FrmXMLController {
 	/**
 	 * Get a different URL depending on the selection in the form.
 	 *
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	private static function override_url( $form, &$url ) {
 		$selected_form = self::get_selected_in_form( $form, 'form' );

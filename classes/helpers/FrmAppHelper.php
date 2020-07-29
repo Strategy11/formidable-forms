@@ -203,7 +203,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	public static function pro_is_connected() {
 		global $frm_vars;

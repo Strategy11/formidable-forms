@@ -7008,9 +7008,6 @@ button.frm_choose_image_box,
 }
 
 /* Welcome page */
-.dashboard_page_formidable-getting-started {
-	background-color: var(--sidebar-color);
-}
 
 .wp-core-ui .frm_grey.frm-button-primary.disabled,
 .wp-core-ui .frm_grey.frm-button-primary,

@@ -3,20 +3,12 @@
  * Handles the installation of a solution and any dependencies.
  * This page is shown when a Formidable plugin is activated.
  *
- * @since 4.06.01
+ * @since 4.06.02
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-/**
-TODO:
-- Hide install formidable button while installing it
-- Save page settings
-- Add settings page to allow importing later
-- Add completed flag
-*/
 
 class FrmSolution {
 
@@ -27,7 +19,7 @@ class FrmSolution {
 	/**
 	 * Hidden welcome page slug.
 	 *
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	protected $page = '';
 
@@ -49,7 +41,7 @@ class FrmSolution {
 	/**
 	 * Register all WP hooks.
 	 *
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	public function load_hooks() {
 		// If user is in admin ajax or doing cron, return.
@@ -88,7 +80,7 @@ class FrmSolution {
 	 * These pages will be removed from the Dashboard menu, so they will
 	 * not actually show. Sneaky, sneaky.
 	 *
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	public function register() {
 
@@ -107,7 +99,7 @@ class FrmSolution {
 	 *
 	 * This means the pages are still available to us, but hidden.
 	 *
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	public function hide_menu() {
 		remove_submenu_page( 'index.php', $this->page );
@@ -131,7 +123,7 @@ class FrmSolution {
 	 * This function checks if a new install or update has just occurred. If so,
 	 * then we redirect the user to the appropriate page.
 	 *
-	 * @since 4.06.01
+	 * @since 4.06.02
 	 */
 	public function redirect() {
 

@@ -49,9 +49,6 @@ class FrmMigrate {
 
 			if ( ! $old_db_version ) {
 				$this->maybe_create_contact_form();
-
-				// Add transient to trigger redirect to the Welcome screen.
-				set_transient( 'frm_activation_redirect', 'formidable', 30 );
 			}
 		}
 
