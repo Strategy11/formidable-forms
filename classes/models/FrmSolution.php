@@ -654,8 +654,8 @@ class FrmSolution {
 		 * array(
 		 *  'unique-key' => array(
 		 *    'keys' => 'forms keys here',
-		 *	  'name' => 'displayed label here',
-		 *	  'img'  => 'svg code',
+		 *    'name' => 'displayed label here',
+		 *    'img'  => 'svg code',
 		 *  ),
 		 * )
 		 */
@@ -677,9 +677,9 @@ class FrmSolution {
 		 * Example:
 		 * array(
 		 *   array(
-		 *	   'label' => 'Page Name',
-		 *	   'name'  => 'Default name',
-		 *	   'type'  => 'form' or 'view',
+		 *     'label' => 'Page Name',
+		 *     'name'  => 'Default name',
+		 *     'type'  => 'form' or 'view',
 		 *   ),
 		 * )
 		 */
