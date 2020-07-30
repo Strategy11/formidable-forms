@@ -673,6 +673,7 @@ a.frm_save_draft{
 .horizontal_radio .frm_radio,
 .horizontal_radio .frm_catlevel_1{
 	display:inline-block;
+	padding-left: 0;
 }
 
 .with_frm_style .frm_radio{

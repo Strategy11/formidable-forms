@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.06.02 =
+* New: Added frm_field_value_object hook for making adjustments to the field before it's label and value is displayed.
+* New: Added frm_xml_response hook for altering the message/response when an XML file is imported.
+* Fix: Updated deprecated blacklist functions in WP 5.5.
+* Fix: Add more checks to the installation triggers to prevent them from being triggered at unintended times.
+* Show a more helpful error message in some cases when the XML import fails.
+
 = 4.06.01 =
 * Remove the top level nav notification for inbox notifications.
 * Use the frm_display_value hook for each different case where values are displayed (entries list table, view an entry, summary field...)
