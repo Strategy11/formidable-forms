@@ -224,8 +224,12 @@ class FrmXMLHelper {
 			'editable'       => (int) $item->editable,
 			'status'         => (string) $item->status,
 			'parent_form_id' => isset( $item->parent_form_id ) ? (int) $item->parent_form_id : 0,
-			'created_at'     => current_time( 'mysql', 1 ),
+			'created_at'     => gmdate( 'Y-m-d H:i:s', strtotime( (string) $item->created_at ) ),
 		);
+
+		if ( empty( $item->created_at ) ) {
+			$form['created_at'] = current_time( 'mysql', 1 );
+		}
 
 		$form['options'] = FrmAppHelper::maybe_json_decode( $form['options'] );
 
