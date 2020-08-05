@@ -157,7 +157,7 @@ class FrmSolution {
 	/*
 	 * Add page to global settings.
 	 */
-	public static function add_settings( $sections ) {
+	public function add_settings( $sections ) {
 		wp_enqueue_style( 'formidable-pro-fields' );
 		$sections[ $this->plugin_slug ] = array(
 			'class'    => $this,
@@ -172,21 +172,21 @@ class FrmSolution {
 	/*
 	 * Output for global settings.
 	 */
-	public static function settings_page() {
+	public function settings_page() {
 		$steps = $this->get_steps_data();
-		if ( ! $steps['license']['complete'] ) {
-			$this->license_box( $steps['license'] );
-		}
-
-		if ( isset( $steps['plugin'] ) && ! $steps['license']['complete'] ) {
-			$this->show_plugin_install( $steps['plugin'] );
+		if ( ! $steps['license']['complete'] || ( isset( $steps['plugin'] ) && ! $steps['plugin']['complete'] ) ) {
+			// Redirect to the welcome page if install hasn't been done.
+			$url = $this->settings_link();
+			echo '<script>window.location.replace("' . esc_url_raw( $url ) . '");</script>';
+			return;
 		}
 
 		$all_imported = $this->is_complete( 'all' );
 
-		$step = $steps['import'];
-		$step['label'] = '';
+		$step           = $steps['import'];
+		$step['label']  = '';
 		$step['nested'] = true;
+
 		if ( $steps['complete']['current'] ) {
 			// Always show this step in settings.
 			$step['current'] = true;
@@ -200,7 +200,7 @@ class FrmSolution {
 		$this->show_app_install( $step );
 
 		if ( ! $all_imported ) {
-			$step = $steps['complete'];
+			$step            = $steps['complete'];
 			$step['current'] = false;
 			$step['button_class'] .= ' frm_grey disabled';
 			$this->show_page_links( $step );
