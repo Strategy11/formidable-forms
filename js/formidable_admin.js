@@ -5926,7 +5926,7 @@ function frmAdminBuildJS() {
 		},
 
 		settingsInit: function() {
-			var formSettings, $loggedIn, $cookieExp, $editable,
+			var formSettings, $loggedIn, $cookieExp, $editable, $protect_files,
 				$formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
 			//BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
