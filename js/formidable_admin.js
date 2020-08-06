@@ -5926,7 +5926,7 @@ function frmAdminBuildJS() {
 		},
 
 		settingsInit: function() {
-			var formSettings, $loggedIn, $cookieExp, $editable, $protect_files,
+			var formSettings, $loggedIn, $cookieExp, $editable, $protectFiles,
 				$formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
 			//BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
@@ -6061,8 +6061,8 @@ function frmAdminBuildJS() {
 			});
 
 			//If File Protection is checked/unchecked
-			$protect_files = document.getElementById( 'protect_files' );
-			jQuery( $protect_files ).change( function() {
+			$protectFiles = document.getElementById( 'protect_files' );
+			jQuery( $protectFiles ).change( function() {
 				if ( this.checked ) {
 					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
 					jQuery( '#edit_action' ).change();
