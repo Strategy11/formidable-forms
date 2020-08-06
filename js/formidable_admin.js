@@ -6060,6 +6060,18 @@ function frmAdminBuildJS() {
 				}
 			});
 
+			//If File Protection is checked/unchecked
+			$protect_files = document.getElementById( 'protect_files' );
+			jQuery( $protect_files ).change( function() {
+				if ( this.checked ) {
+					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
+					jQuery( '#edit_action' ).change();
+				} else {
+					jQuery( '.hide_protect_files' ).fadeOut( 'slow' );
+					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
+				}
+			});
+
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
 		},
