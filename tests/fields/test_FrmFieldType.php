@@ -131,4 +131,26 @@ class test_FrmFieldType extends FrmUnitTest {
 			$this->assertEquals( $value['expected'], $value['value'] );
 		}
 	}
+
+	/**
+	 * @covers FrmFieldType::get_import_value
+	 */
+	public function test_get_import_value() {
+		$field = new stdClass;
+		$field->type = 'checkbox';
+		$field->options = array(
+			array( 'value' => 'a', 'label' => 'A' ),
+			array( 'value' => 'b', 'label' => 'B' ),
+			array( 'value' => 'c', 'label' => 'C' ),
+			array( 'value' => 'a,b', 'label' => 'A, B' ),
+			array( 'value' => 'a,b,c', 'label' => 'A, B, C' ),
+			array( 'value' => 'a, b, c', 'label' => 'A, B, C' ),
+		);
+
+		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );
+
+		$this->assertEquals( $checkbox->get_import_value( 'a,b' ), 'a,b' );
+		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
+		$this->assertEquals( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
+	}
 }
