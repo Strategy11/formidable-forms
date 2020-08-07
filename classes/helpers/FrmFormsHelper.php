@@ -455,8 +455,10 @@ BEFORE_HTML;
 	}
 
 	public static function get_prepared_custom_submit() {
-		extract( self::$prepared_custom_submit );
-		self::get_custom_submit( $html, $form, $submit, $form_action, $values );
+		if ( isset( self::$prepared_custom_submit ) ) {
+			extract( self::$prepared_custom_submit );
+			self::get_custom_submit( $html, $form, $submit, $form_action, $values );
+		}
 	}
 
 	/**
