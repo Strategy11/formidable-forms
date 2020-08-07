@@ -1213,7 +1213,7 @@ DEFAULT_HTML;
 			$filtered_checked = $checked;
 			$csv_values_checked = array();
 			foreach ( (array) $this->field->options as $option ) {
-				if ( $checked === $option['value'] ) {
+				if ( strpos( $checked, $option['value'] ) !== false ) {
 					$csv_values_checked[] = $option['value'];
 					$filtered_checked = str_replace( $option['value'], '', $checked );
 				}
