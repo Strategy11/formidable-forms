@@ -448,6 +448,17 @@ BEFORE_HTML;
 		echo $button_parts[1]; // WPCS: XSS ok.
 	}
 
+	private static $prepared_custom_submit;
+
+	public static function prepare_custom_submit( $html, $form, $submit, $form_action, $values ) {
+		self::$prepared_custom_submit = compact( 'html', 'form', 'submit', 'form_action', 'values' );
+	}
+
+	public static function get_prepared_custom_submit() {
+		extract( self::$prepared_custom_submit );
+		self::get_custom_submit( $html, $form, $submit, $form_action, $values );
+	}
+
 	/**
 	 * @since 4.0
 	 */
