@@ -32,7 +32,7 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		// test custom roles
 		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
 		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
-		$this->assert_form_is_hidden( 'formidable_custom_role', 'editor', 'Custom role should not be able to see a form not assigned to it' );
+		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'administrator' ), 'Custom role should not be able to see a form not assigned to it' );
 		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'editor', 'subscriber' ), 'Custom role should not be able to see a form not assigned to it' );
 	}
 
