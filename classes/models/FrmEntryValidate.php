@@ -233,7 +233,7 @@ class FrmEntryValidate {
 		}
 
 		if ( self::blacklist_check( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be blacklist spam!', 'formidable' );
+			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
 		}
 
 		if ( self::is_akismet_spam( $values ) ) {
@@ -272,7 +272,7 @@ class FrmEntryValidate {
 			return false;
 		}
 
-		$mod_keys = trim( get_option( 'blacklist_keys' ) );
+		$mod_keys = trim( self::get_disallowed_words() );
 		if ( empty( $mod_keys ) ) {
 			return false;
 		}
@@ -286,7 +286,34 @@ class FrmEntryValidate {
 		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
 		$user_info  = self::get_spam_check_user_info( $values );
 
-		return wp_blacklist_check( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
+		return self::check_disallowed_words( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
+	}
+
+	/**
+	 * For WP 5.5 compatibility.
+	 *
+	 * @since 4.06.02
+	 */
+	private static function check_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {
+		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
+			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
+		} else {
+			return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
+		}
+	}
+
+	/**
+	 * For WP 5.5 compatibility.
+	 *
+	 * @since 4.06.02
+	 */
+	private static function get_disallowed_words() {
+		$keys = get_option( 'disallowed_keys' );
+		if ( false === $keys ) {
+			// Fallback for WP < 5.5.
+			$keys = get_option( 'blacklist_keys' );
+		}
+		return $keys;
 	}
 
 	/**

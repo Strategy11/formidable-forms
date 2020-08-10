@@ -456,8 +456,20 @@ class FrmAppController {
 		$args = array(
 			'methods'  => 'GET',
 			'callback' => 'FrmAppController::api_install',
+			'permission_callback' => __CLASS__ . '::can_update_db',
 		);
+
 		register_rest_route( 'frm-admin/v1', '/install', $args );
+	}
+
+	/**
+	 * Make sure the install is only being run when we tell it to.
+	 * We don't want to run manually by people calling the API.
+	 *
+	 * @since 4.06.02
+	 */
+	public static function can_update_db() {
+		return get_transient( 'frm_updating_api' );
 	}
 
 	/**
@@ -469,7 +481,8 @@ class FrmAppController {
 	 * @param int $blog_id Blog ID.
 	 */
 	public static function network_upgrade_site( $blog_id = 0 ) {
-
+		// Flag to check if install is happening as intended.
+		set_transient( 'frm_updating_api', true, MINUTE_IN_SECONDS );
 		$request = new WP_REST_Request( 'GET', '/frm-admin/v1/install' );
 
 		if ( $blog_id ) {
@@ -490,6 +503,7 @@ class FrmAppController {
 	 * @since 3.0
 	 */
 	public static function api_install() {
+		delete_transient( 'frm_updating_api' );
 		if ( self::needs_update() ) {
 			$running = get_option( 'frm_install_running' );
 			if ( false === $running || $running < strtotime( '-5 minutes' ) ) {

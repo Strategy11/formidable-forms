@@ -51,7 +51,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_code_icon',
 			),
 			'hidden'   => array(
-				'name' => __( 'Hidden Field', 'formidable' ),
+				'name' => __( 'Hidden', 'formidable' ),
 				'icon' => 'frm_icon_font frm_eye_slash_icon',
 			),
 			'user_id'  => array(

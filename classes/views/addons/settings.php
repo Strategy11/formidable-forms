@@ -1,10 +1,8 @@
 <div class="wrap">
-	<h2 class="frm-h2"><?php esc_html_e( 'Plugin Licenses', 'formidable' ); ?></h2>
-
 	<?php
 
 	foreach ( $plugins as $slug => $plugin ) {
-		if ( $slug == 'formidable_pro' || $plugin->is_parent_licence ) {
+		if ( $slug == 'formidable_pro' || $plugin->is_parent_licence || ! $plugin->needs_license ) {
 			continue;
 		}
 

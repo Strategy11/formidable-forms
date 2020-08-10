@@ -1210,7 +1210,16 @@ DEFAULT_HTML;
 		FrmAppHelper::unserialize_or_decode( $checked );
 
 		if ( ! is_array( $checked ) ) {
-			$checked = explode( ',', $checked );
+			$filtered_checked = $checked;
+			$csv_values_checked = array();
+			foreach ( (array) $this->field->options as $option ) {
+				if ( strpos( $checked, $option['value'] ) !== false ) {
+					$csv_values_checked[] = $option['value'];
+					$filtered_checked = str_replace( $option['value'], '', $checked );
+				}
+			}
+
+			$checked = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
 		if ( ! empty( $checked ) && count( $checked ) > 1 ) {

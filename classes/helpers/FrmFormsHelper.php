@@ -1357,11 +1357,15 @@ BEFORE_HTML;
 			return false;
 		}
 
-		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
+		$plans = array( 'free', 'Basic', 'Personal', 'Business', 'Elite' );
 
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans ) ) {
 				unset( $item['categories'][ $k ] );
+				if ( $category === 'Personal' ) {
+					// Show the current package name.
+					$category = 'Basic';
+				}
 				return $category;
 			}
 		}

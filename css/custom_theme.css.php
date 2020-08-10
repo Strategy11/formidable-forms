@@ -471,9 +471,9 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_button{
-	text-decoration:none;
+	text-decoration:none !important;;
 	border:1px solid #eee;
-	display:inline;
+	display:inline-block;
 <?php if ( ! empty( $defaults['submit_padding'] ) ) { ?>
 	padding:<?php echo esc_html( $defaults['submit_padding'] . $important ); ?>;
 	padding:var(--submit-padding)<?php echo esc_html( $important ); ?>;
@@ -673,6 +673,7 @@ a.frm_save_draft{
 .horizontal_radio .frm_radio,
 .horizontal_radio .frm_catlevel_1{
 	display:inline-block;
+	padding-left: 0;
 }
 
 .with_frm_style .frm_radio{
@@ -851,10 +852,18 @@ a.frm_save_draft{
 
 .frm-alt-table {
 	width:100%;
-	border-collapse:collapse;
+	border-collapse:separate;
 	margin-top:0.5em;
 	font-size:15px;
+	border-width:1px;
 }
+
+<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+.with_frm_style .frm-alt-table{
+	border-color:<?php echo esc_html( $defaults['border_color'] ); ?>;
+	border-color:var(--border-color);
+}
+<?php } ?>
 
 .frm-alt-table th {
 	width:200px;
@@ -870,6 +879,7 @@ a.frm_save_draft{
 	vertical-align:top;
 	text-align:left;
 	padding:20px;
+	border-color:transparent;
 }
 
 .frm-alt-table tr:nth-child(even) {

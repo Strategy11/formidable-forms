@@ -59,6 +59,10 @@ class FrmXMLHelper {
 	 * @return array The number of items imported
 	 */
 	public static function import_xml_now( $xml ) {
+		if ( ! defined( 'WP_IMPORTING' ) ) {
+			define( 'WP_IMPORTING', true );
+		}
+
 		$imported = self::pre_import_data();
 
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
@@ -70,7 +74,16 @@ class FrmXMLHelper {
 			}
 		}
 
-		return apply_filters( 'frm_importing_xml', $imported, $xml );
+		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
+
+		if ( ! isset( $imported['form_status'] ) || empty( $imported['form_status'] ) ) {
+			// Check for an error message in the XML.
+			if ( isset( $xml->Code ) && isset( $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
+				$imported['error'] = reset( $xml->Message ); // phpcs:ignore WordPress.NamingConventions
+			}
+		}
+
+		return $imported;
 	}
 
 	/**
