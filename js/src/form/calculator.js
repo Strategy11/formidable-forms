@@ -58,6 +58,7 @@ registerBlockType( 'formidable/calculator', {
 								{ __( 'Upgrade Formidable Forms.', 'formidable' ) }
 							</a>
 						</Notice>
+						<img src={ formidable_form_selector.url + '/images/conversion-calc.jpg' } alt={ __( 'Calculator Form', 'formidable' ) } />
 					</div>
 				</div>
 			</div>
