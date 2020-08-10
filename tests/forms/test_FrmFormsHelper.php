@@ -26,9 +26,9 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_form_is_hidden( 'editor', array( 'contributor', 'author' ), 'Editors should not set a form assigned to contributors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
-		$this->assert_form_is_hidden( 'administrator', array( 'subscriber' ), 'Adminstrator should not be able to see a form without an exact array match' );
-		$this->assert_form_is_hidden( 'administrator', array( 'editor', 'author' ), 'Adminstrator should not be able to see a form without an exact array match' );
-		
+		$this->assert_form_is_hidden( 'administrator', array( 'subscriber' ), 'Administrator should not be able to see a form without an exact array match' );
+		$this->assert_form_is_hidden( 'administrator', array( 'editor', 'author' ), 'Administrator should not be able to see a form without an exact array match' );
+
 		// test custom roles
 		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
 		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
