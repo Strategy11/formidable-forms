@@ -113,6 +113,7 @@ class FrmHooksController {
 		// Forms Controller.
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
+		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
