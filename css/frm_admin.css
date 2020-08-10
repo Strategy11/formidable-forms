@@ -3858,7 +3858,7 @@ label.frm-example-icon {
 /* Empty List */
 
 .frm_no_items {
-	margin: 75px auto;
+	margin: 0 auto 50px;
 	text-align: center;
 	color: var(--dark-grey);
 	max-width: 500px;
