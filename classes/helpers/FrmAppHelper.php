@@ -1207,7 +1207,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function current_user_can( $role ) {
-		if ( $role == '-1' ) {
+		if ( $role === '-1' ) {
 			return false;
 		}
 
@@ -1223,7 +1223,12 @@ class FrmAppHelper {
 			$role = 'administrator';
 		}
 
-		return current_user_can( $role );
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		$user = wp_get_current_user();
+		return in_array( $role, $user->roles, true );
 	}
 
 	/**
