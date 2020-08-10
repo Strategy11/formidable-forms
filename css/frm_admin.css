@@ -1146,10 +1146,6 @@ h2 .frm-button-primary {
 	opacity: 1;
 }
 
-.preview .button .caret {
-	border-top-color: var(--primary-color);
-}
-
 .major-publishing-actions.frm_create_form_header {
 	padding: 8px 0;
 }
@@ -2087,14 +2083,16 @@ h1 .fa-caret-down {
 
 .caret {
 	display: inline-block;
-	width: 0;
-	height: 0;
-	margin-left: 2px;
+	width: 19px;
+	height: 9px;
+	margin-right: -8px;
 	vertical-align: middle;
-	border-top: 4px solid #AAA;
-	border-right: 4px solid transparent;
-	border-left: 4px solid transparent;
-	border-bottom: 0 dotted;
+}
+
+.caret,
+.frm_wrap .ui-autocomplete-input {
+	background:#fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+	background-size: 16px 16px;
 }
 
 .frm-btn-group .caret {
@@ -2511,28 +2509,21 @@ a.frm_option_icon:hover::before {
 	font-weight: 700
 }
 
-.multiselect-container > li > a {
+.frm-dropdown-menu.multiselect-container > li > a {
 	padding: 0
 }
 
 .multiselect-container > li > a > label {
 	margin: 0;
+	padding: 3px 25px;
 	height: 100%;
 	cursor: pointer;
 	font-weight: 400;
+	display: block;
 }
 
 .accordion-container .multiselect-container > li > a > label {
 	padding: 3px 19px 3px 7px;
-}
-
-.multiselect-container > li > a > label.radio,
-.multiselect-container > li > a > label.checkbox {
-	margin: 0
-}
-
-.multiselect-container > li > a > label > input[type=checkbox] {
-	margin-bottom: 5px
 }
 
 .frm-btn-group.btn-group > .btn-group:nth-child(2) > .multiselect.btn {
@@ -5909,6 +5900,11 @@ i.frm-show-inline-modal {
 	text-overflow: ellipsis;
 }
 
+span.multiselect-selected-text {
+	white-space: nowrap;
+	display: inline-block;
+}
+
 .frm-search span.multiselect-selected-text {
 	white-space: nowrap;
 }
@@ -5925,7 +5921,7 @@ i.frm-show-inline-modal {
 }
 
 .frm-search #search-submit .caret {
-	border-top-color: var(--primary-color);
+	opacity:.7;
 }
 
 .frm-not-set input {

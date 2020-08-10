@@ -1588,8 +1588,12 @@ class FrmFormsController {
 		return $form->logged_in && ! is_user_logged_in();
 	}
 
+	/**
+	 * @param object $form
+	 * @return bool
+	 */
 	private static function user_has_permission_to_view( $form ) {
-		return $form->logged_in && get_current_user_id() && isset( $form->options['logged_in_role'] ) && $form->options['logged_in_role'] != '' && ! FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
+		return ! FrmFormsHelper::is_form_visible_to_user( $form );
 	}
 
 	public static function get_form( $form, $title, $description, $atts = array() ) {
