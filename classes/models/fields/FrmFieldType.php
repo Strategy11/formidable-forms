@@ -1201,8 +1201,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function get_multi_opts_for_import( $value ) {
-
-		if ( ! $this->field || empty( $value ) || in_array( $value, (array) $this->field->options ) ) {
+		if ( ! $this->field || ! $value || in_array( $value, (array) $this->field->options ) ) {
 			return $value;
 		}
 
@@ -1210,7 +1209,22 @@ DEFAULT_HTML;
 		FrmAppHelper::unserialize_or_decode( $checked );
 
 		if ( ! is_array( $checked ) ) {
-			$checked = explode( ',', $checked );
+			$filtered_checked   = $checked;
+			$csv_values_checked = array();
+
+			$options = (array) $this->field->options;
+			$options = array_reverse( $options );
+
+			foreach ( $options as $option ) {
+				if ( isset( $option['value'] ) && strpos( $filtered_checked, $option['value'] ) !== false ) {
+					$csv_values_checked[] = $option['value'];
+					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
+				}
+			}
+
+			$csv_values_checked = array_reverse( $csv_values_checked );
+
+			$checked = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
 		if ( ! empty( $checked ) && count( $checked ) > 1 ) {
