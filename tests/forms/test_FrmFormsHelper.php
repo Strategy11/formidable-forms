@@ -22,11 +22,11 @@ class test_FrmFormsHelper extends FrmUnitTest {
 		$this->assert_form_is_hidden( 'loggedout', 'editor', 'Logged out user cannot view form set to editors' );
 
 		// Array options are expected to only match directly
-		$this->assert_form_is_hidden( 'editor', array( 'loggedout', 'subscriber' ), 'Editors should not set a form assigned to logged out users and subscribers' );
+		$this->assert_form_is_hidden( 'editor', array( 'subscriber' ), 'Editors should not set a form assigned to subscribers' );
 		$this->assert_form_is_hidden( 'editor', array( 'contributor', 'author' ), 'Editors should not set a form assigned to contributors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
-		$this->assert_form_is_hidden( 'administrator', array( 'loggedout', 'subscriber' ), 'Adminstrator should not be able to see a form without an exact array match' );
+		$this->assert_form_is_hidden( 'administrator', array( 'subscriber' ), 'Adminstrator should not be able to see a form without an exact array match' );
 		$this->assert_form_is_hidden( 'administrator', array( 'editor', 'author' ), 'Adminstrator should not be able to see a form without an exact array match' );
 		
 		// test custom roles
