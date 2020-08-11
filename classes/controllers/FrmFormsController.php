@@ -1896,7 +1896,7 @@ class FrmFormsController {
 	 *
 	 * @since 4.05.02
 	 */
-	public static function message_placement( $form, $message ) {
+	private static function message_placement( $form, $message ) {
 		$place = 'before';
 
 		if ( $message && isset( $form->options['form_class'] ) ) {
