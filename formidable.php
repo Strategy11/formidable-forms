@@ -36,6 +36,7 @@ function load_formidable_forms() {
 		'pro_is_authorized' => false,
 	);
 
+	// For reverse compatibility. Load Pro if it's still nested.
 	$frm_path = dirname( __FILE__ );
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include( $frm_path . '/pro/formidable-pro.php' );
