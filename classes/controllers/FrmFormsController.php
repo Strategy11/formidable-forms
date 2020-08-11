@@ -1892,14 +1892,19 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @return string - 'before' or 'after'
+	 * @return string - 'before', 'after', or 'submit'
 	 *
 	 * @since 4.05.02
 	 */
-	private static function message_placement( $form, $message ) {
+	public static function message_placement( $form, $message ) {
 		$place = 'before';
-		if ( ! empty( $message ) && isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_below_success' ) !== false ) {
-			$place = 'after';
+
+		if ( $message && isset( $form->options['form_class'] ) ) {
+			if ( strpos( $form->options['form_class'], 'frm_below_success' ) !== false ) {
+				$place = 'after';
+			} elseif ( strpos( $form->options['form_class'], 'frm_submit_success' ) !== false ) {
+				$place = 'submit';
+			}
 		}
 
 		/**

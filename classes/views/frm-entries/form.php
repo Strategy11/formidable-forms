@@ -77,7 +77,18 @@ if ( FrmForm::show_submit( $form ) ) {
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
-	FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
+	if ( isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_submit_success' ) !== false ) {
+		?>
+	<div class="frm_half">
+		<?php FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values ); ?>
+	</div>
+	<div class="frm_half">
+		<?php include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php'; ?>
+	</div>
+		<?php
+	} else {
+		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
+	}
 }
 ?>
 <div class="frm_verify" aria-hidden="true">
