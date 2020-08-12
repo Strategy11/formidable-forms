@@ -549,15 +549,23 @@ legend.frm_hidden{
 
 .with_frm_style.frm_center_submit .frm_submit{
 	text-align:center;
+	margin: 10px 0;
 }
 
 .with_frm_style .frm_inline_success .frm_submit{
 	display: flex;
 	flex-direction: row;
+	align-items: center;
+	margin: 0;
 }
 
 .with_frm_style .frm_inline_success .frm_submit .frm_message{
 	flex: 1;
+	margin: 0;
+}
+
+.with_frm_style .frm_inline_success:not(.frm_alignright_success) .frm_submit .frm_message{
+	padding-left: 10px;
 }
 
 .with_frm_style .frm_inline_success.frm_alignright_success .frm_submit .frm_message{
