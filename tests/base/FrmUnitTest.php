@@ -17,7 +17,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	public function __construct() {
 		parent::__construct();
-		FrmHooksController::load_hooks();		
+		FrmHooksController::load_hooks();
+
+		if ( class_exists( 'FrmProHooksController' ) ) {
+			FrmProHooksController::load_hooks();
+		}
 	}
 
 	/**
