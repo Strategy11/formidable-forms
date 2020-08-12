@@ -597,7 +597,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 				add_role( 'formidable_custom_role', 'Custom Role' );
 				$user->add_role( 'formidable_custom_role' );
 
-				$this->set_user_by_role( 'formidable_custom_role' );
+				wp_set_current_user( $user->ID );
 				break;
 
 			default:
