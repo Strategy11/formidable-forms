@@ -363,5 +363,59 @@ class test_FrmAppHelper extends FrmUnitTest {
         foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$this->assertTrue( current_user_can( $frm_role ), 'Admin cannot ' . $frm_role );
         }
-    }
+	}
+	
+	/**
+	 * @group visibility
+	 * @covers FrmAppHelper::wp_roles_dropdown (single)
+	 */
+	function test_wp_roles_dropdown() {
+		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
+		
+		$this->assert_output_contains( 'name="field_options"' );
+		$this->assert_output_contains( 'id="field_options"' );
+		$this->assert_output_not_contains( 'multiple="multiple"', 'default is single' );
+		$this->assert_output_contains( '>Administrator' );
+	}
+
+	/**
+	 * @group visibility
+	 * @covers FrmAppHelper::roles_options ($public = 'private')
+	 */
+	function test_roles_options() {
+		FrmAppHelper::roles_options( 'editor' );
+
+		$this->assert_output_contains( '>Administrator' );
+		$this->assert_output_contains( 'selected="selected">Editor' );
+		$this->assert_output_contains( '>Author' );
+		$this->assert_output_contains( '>Contributor' );
+		$this->assert_output_contains( '>Subscriber' );
+	}
+
+	/**
+	 * @group visibility
+	 * @covers FrmAppHelper::roles_options
+	 */
+	function test_roles_options_empty_string_option() {
+		FrmAppHelper::roles_options( '' );
+
+		$this->assert_output_contains( '>Editor' );
+		$this->assert_output_not_contains( 'selected="selected">Editor' );
+	}
+
+	/**
+	 * @param string $substring
+	 * @param string $message
+	 */
+	private function assert_output_contains( $substring, $message = '' ) {
+		$this->assertTrue( strpos( $this->getActualOutput(), $substring ) !== FALSE, $message );
+	}
+
+	/**
+	 * @param string $substring
+	 * @param string $message
+	 */
+	private function assert_output_not_contains( $substring, $message = '' ) {
+		$this->assertTrue( strpos( $this->getActualOutput(), $substring ) === FALSE, $message );
+	}
 }

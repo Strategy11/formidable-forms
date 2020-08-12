@@ -48,6 +48,8 @@ class FrmInboxController {
 		$messages = array_reverse( $messages );
 		$user     = wp_get_current_user();
 
+		wp_enqueue_script( 'frm-ac', FrmAppHelper::plugin_url() . '/js/ac.js', array(), FrmAppHelper::plugin_version(), true );
+
 		include( FrmAppHelper::plugin_path() . '/classes/views/inbox/list.php' );
 	}
 

@@ -36,6 +36,18 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Show a message about conditional logic
+	 *
+	 * @since 4.06.03
+	 */
+	public static function logic_tip() {
+		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr__( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' ) . esc_attr( ' <img src="https://cdn.formidableforms.com/wp-content/themes/fp2015git/images/survey/survey-logic.png" srcset="https://cdn.formidableforms.com/wp-content/themes/fp2015git/images/survey/survey-logic@2x.png 2x" alt="Conditional Logic options"/>' ) . '" data-medium="builder" data-content="logic">';
+		FrmAppHelper::icon_by_class( 'frmfont frm_swap_icon' );
+		esc_html_e( 'Add Conditional Logic', 'formidable' );
+		echo '</a>';
+	}
+
+	/**
 	 * By default, Divi processes form shortcodes on the edit post page.
 	 * Now that won't do.
 	 *
@@ -1588,8 +1600,12 @@ class FrmFormsController {
 		return $form->logged_in && ! is_user_logged_in();
 	}
 
+	/**
+	 * @param object $form
+	 * @return bool
+	 */
 	private static function user_has_permission_to_view( $form ) {
-		return $form->logged_in && get_current_user_id() && isset( $form->options['logged_in_role'] ) && $form->options['logged_in_role'] != '' && ! FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
+		return ! FrmFormsHelper::is_form_visible_to_user( $form );
 	}
 
 	public static function get_form( $form, $title, $description, $atts = array() ) {

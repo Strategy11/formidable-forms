@@ -4999,7 +4999,7 @@ function frmAdminBuildJS() {
 		jQuery( '.frm_multiselect' ).multiselect({
 			templates: {ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>'},
 			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-			nonSelectedText: frm_admin_js.default_label,
+			nonSelectedText: '',
 			onDropdownShown: function( event ) {
 				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 				if ( action.length ) {

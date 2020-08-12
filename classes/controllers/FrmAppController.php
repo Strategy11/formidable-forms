@@ -280,6 +280,7 @@ class FrmAppController {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
 		remove_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
+		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
 	/**

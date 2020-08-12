@@ -1142,6 +1142,11 @@ class FrmAppHelper {
 		return $link;
 	}
 
+	/**
+	 * @param string        $field_name
+	 * @param string|array  $capability
+	 * @param string        $multiple 'single' and 'multiple'
+	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>"
@@ -1152,6 +1157,9 @@ class FrmAppHelper {
 		<?php
 	}
 
+	/**
+	 * @param string|array $capability
+	 */
 	public static function roles_options( $capability ) {
 		global $frm_vars;
 		if ( isset( $frm_vars['editable_roles'] ) ) {
@@ -1192,14 +1200,56 @@ class FrmAppHelper {
 		return $cap;
 	}
 
-	public static function user_has_permission( $needed_role ) {
-		if ( $needed_role == '-1' ) {
+	/**
+	 * Call the WordPress current_user_can but also validate empty strings as true for any logged in user
+	 *
+	 * @param string $role
+	 * @return bool
+	 */
+	public static function current_user_can( $role ) {
+		if ( $role === '-1' ) {
 			return false;
 		}
 
-		// $needed_role will be equal to blank if "Logged-in users" is selected.
-		if ( ( $needed_role == '' && is_user_logged_in() ) || current_user_can( $needed_role ) ) {
-			return true;
+		if ( $role === 'loggedout' ) {
+			return ! is_user_logged_in();
+		}
+
+		if ( $role === 'loggedin' || ! $role ) {
+			return is_user_logged_in();
+		}
+
+		if ( $role == 1 ) {
+			$role = 'administrator';
+		}
+
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		$user = wp_get_current_user();
+		return in_array( $role, $user->roles, true );
+	}
+
+	/**
+	 * @param string|array $needed_role
+	 * @return bool
+	 */
+	public static function user_has_permission( $needed_role ) {
+		if ( is_array( $needed_role ) ) {
+			foreach ( $needed_role as $role ) {
+				if ( self::current_user_can( $role ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		$can = self::current_user_can( $needed_role );
+
+		if ( $can || in_array( $needed_role, array( '-1', 'loggedout' ) ) ) {
+			return $can;
 		}
 
 		$roles = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' );
