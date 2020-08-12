@@ -397,6 +397,9 @@ class test_FrmEmail extends FrmUnitTest {
 
 	protected function prepare_subject( $subject ) {
 		$subject = wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
+		return $subject;
+
+		// TODO: Run this with the frm_encode_subject filter.
 		$charset = get_option('blog_charset');
 		return '=?' . $charset . '?B?' . base64_encode( $subject ) . '?=';
 	}
