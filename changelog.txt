@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.06.03 =
+* More consistent dropdown styling with multiselect dropdowns.
+* Prepare the code for handling permissions options as an array of roles.
+* Fix: WP 5.5 - Email subject lines were coming through encoded.
+* Fix: WP 5.5 - When WP Mail SMTP was installed, the Formidable SMTP page has an error.
+
 = 4.06.02 =
 * New: Added frm_field_value_object hook for making adjustments to the field before it's label and value is displayed.
 * New: Added frm_xml_response hook for altering the message/response when an XML file is imported.
