@@ -1902,7 +1902,7 @@ class FrmFormsController {
 		if ( $message && isset( $form->options['form_class'] ) ) {
 			if ( strpos( $form->options['form_class'], 'frm_below_success' ) !== false ) {
 				$place = 'after';
-			} elseif ( strpos( $form->options['form_class'], 'frm_submit_success' ) !== false ) {
+			} elseif ( strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
 				$place = 'submit';
 			}
 		}

@@ -551,6 +551,11 @@ legend.frm_hidden{
 	text-align:center;
 }
 
+.with_frm_style .frm_inline_success .frm_submit,
+.with_frm_style .frm_inline_success .frm_message{
+	grid-column: span 6 / span 12
+}
+
 .with_frm_style.frm_center_submit .frm_submit input[type=submit],
 .with_frm_style.frm_center_submit .frm_submit input[type=button],
 .with_frm_style.frm_center_submit .frm_submit button{
