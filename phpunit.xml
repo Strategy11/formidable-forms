@@ -11,12 +11,11 @@
 	stopOnFailure="false"
 	stopOnIncomplete="false"
 	stopOnSkipped="false"
-	syntaxCheck="false"
 	verbose="true"
 	ignoreDeprecatedCodeUnitsFromCodeCoverage="true"
 	>
 	<testsuites>
-		<testsuite>
+		<testsuite name="default">
 			<directory prefix="test_" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
