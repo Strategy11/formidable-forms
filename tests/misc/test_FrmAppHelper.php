@@ -370,12 +370,15 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::wp_roles_dropdown (single)
 	 */
 	function test_wp_roles_dropdown() {
+		ob_start();
 		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
-		
-		$this->assert_output_contains( 'name="field_options"' );
-		$this->assert_output_contains( 'id="field_options"' );
-		$this->assert_output_not_contains( 'multiple="multiple"', 'default is single' );
-		$this->assert_output_contains( '>Administrator' );
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		$this->assert_output_contains( $output, 'name="field_options"' );
+		$this->assert_output_contains( $output, 'id="field_options"' );
+		$this->assert_output_not_contains( $output. 'multiple="multiple"', 'default is single' );
+		$this->assert_output_contains( $output, '>Administrator' );
 	}
 
 	/**
@@ -383,13 +386,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::roles_options ($public = 'private')
 	 */
 	function test_roles_options() {
+		ob_start();
 		FrmAppHelper::roles_options( 'editor' );
+		$output = ob_get_contents();
+		ob_end_clean();
 
-		$this->assert_output_contains( '>Administrator' );
-		$this->assert_output_contains( 'selected="selected">Editor' );
-		$this->assert_output_contains( '>Author' );
-		$this->assert_output_contains( '>Contributor' );
-		$this->assert_output_contains( '>Subscriber' );
+		$this->assert_output_contains( $output, '>Administrator' );
+		$this->assert_output_contains( $output, 'selected="selected">Editor' );
+		$this->assert_output_contains( $output, '>Author' );
+		$this->assert_output_contains( $output, '>Contributor' );
+		$this->assert_output_contains( $output, '>Subscriber' );
 	}
 
 	/**
@@ -397,25 +403,28 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::roles_options
 	 */
 	function test_roles_options_empty_string_option() {
+		ob_start();
 		FrmAppHelper::roles_options( '' );
+		$output = ob_get_contents();
+		ob_end_clean();
 
-		$this->assert_output_contains( '>Editor' );
-		$this->assert_output_not_contains( 'selected="selected">Editor' );
+		$this->assert_output_contains( $output, '>Editor' );
+		$this->assert_output_not_contains( $output, 'selected="selected">Editor' );
 	}
 
 	/**
 	 * @param string $substring
 	 * @param string $message
 	 */
-	private function assert_output_contains( $substring, $message = '' ) {
-		$this->assertTrue( strpos( $this->getActualOutput(), $substring ) !== FALSE, $message );
+	private function assert_output_contains( $output, $substring, $message = '' ) {
+		$this->assertTrue( strpos( $output, $substring ) !== false, $message );
 	}
 
 	/**
 	 * @param string $substring
 	 * @param string $message
 	 */
-	private function assert_output_not_contains( $substring, $message = '' ) {
-		$this->assertTrue( strpos( $this->getActualOutput(), $substring ) === FALSE, $message );
+	private function assert_output_not_contains( $output, $substring, $message = '' ) {
+		$this->assertTrue( strpos( $output, $substring ) === false, $message );
 	}
 }
