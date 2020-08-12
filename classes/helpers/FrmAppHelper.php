@@ -1203,7 +1203,10 @@ class FrmAppHelper {
 	/**
 	 * Call the WordPress current_user_can but also validate empty strings as true for any logged in user
 	 *
+	 * @since 4.06.03
+	 *
 	 * @param string $role
+	 *
 	 * @return bool
 	 */
 	public static function current_user_can( $role ) {
@@ -1227,8 +1230,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		$user = wp_get_current_user();
-		return in_array( $role, $user->roles, true );
+		return current_user_can( $role );
 	}
 
 	/**
