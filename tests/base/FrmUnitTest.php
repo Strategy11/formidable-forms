@@ -15,15 +15,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	protected $is_pro_active = false;
 
-	public function __construct() {
-		parent::__construct();
-		FrmHooksController::load_hooks();
-
-		if ( class_exists( 'FrmProHooksController' ) ) {
-			FrmProHooksController::load_hooks();
-		}
-	}
-
 	/**
 	 * Ensure that the plugin has been installed and activated.
 	 */
