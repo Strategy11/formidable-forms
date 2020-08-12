@@ -22,6 +22,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		if ( class_exists( 'FrmProHooksController' ) ) {
 			FrmProHooksController::load_hooks();
 		}
+
+		FrmFormsController::register_widgets();
+		FrmFormActionsController::register_post_types();
 	}
 
 	/**
