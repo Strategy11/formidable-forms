@@ -79,7 +79,7 @@ if ( FrmForm::show_submit( $form ) ) {
 	if ( isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
 		ob_start();
 		ob_implicit_flush( false );
-		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );	
+		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 		$clip = ob_get_clean();
 
 		ob_start();
