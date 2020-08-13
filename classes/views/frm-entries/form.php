@@ -87,7 +87,7 @@ if ( FrmForm::show_submit( $form ) ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 		$message = ob_get_clean();
 
-		echo str_replace( '</div>', $message . '</div>', $clip ); // WPCS: XSS ok.
+		echo preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $message . '</div>', $clip ); // WPCS: XSS ok.
 	} else {
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 	}
