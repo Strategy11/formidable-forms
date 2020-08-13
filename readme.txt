@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 4.06.02
+Stable tag: 4.06.03
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -436,6 +436,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.06.03 =
+* More consistent dropdown styling with multiselect dropdowns.
+* Prepare the code for handling permissions options as an array of roles.
+* Fix: WP 5.5 - Email subject lines were coming through encoded.
+* Fix: WP 5.5 - When WP Mail SMTP was installed, the Formidable SMTP page has an error.
+
 = 4.06.02 =
 * New: Added frm_field_value_object hook for making adjustments to the field before it's label and value is displayed.
 * New: Added frm_xml_response hook for altering the message/response when an XML file is imported.
@@ -448,13 +454,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Use the frm_display_value hook for each different case where values are displayed (entries list table, view an entry, summary field...)
 * Fix: Left and right margin setting on buttons was being ignored. Use something like "10px 10px" in the button margin setting to show margins on the sides.
 * Fix: Prevent a js error in some cases when the ajax response isn't json.
-
-= 4.06 =
-* New: Better accessibility for honeypot field and message after submit.
-* New: Add a Dismiss all button in the inbox.
-* New: Add 'frm_user_id_display' hook for showing something other than the dispay name by default in user ID fields.
-* Set the default styling to use grids since most browsers support it now.
-* Fix: On some sites, permissions were preventing a form from being created from a template.
-* Fix: The button colors were overriding eachother with some settings.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

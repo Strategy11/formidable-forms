@@ -777,7 +777,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function encode_subject( $subject ) {
-		if ( apply_filters( 'frm_encode_subject', 1, $subject ) ) {
+		if ( apply_filters( 'frm_encode_subject', false, $subject ) ) {
 			$subject = '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
 		}
 
