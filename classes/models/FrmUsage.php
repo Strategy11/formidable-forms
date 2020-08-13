@@ -234,6 +234,7 @@ class FrmUsage {
 			'draft_msg',
 			'submit_align',
 			'protect_files',
+			'protect_files_role',
 			'max_entries',
 			'open_status',
 			'closed_msg',
