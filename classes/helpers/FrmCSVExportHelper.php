@@ -116,25 +116,45 @@ class FrmCSVExportHelper {
 		self::print_csv_row( $headings );
 	}
 
-	private static function csv_headings( &$headings ) {
-		foreach ( self::$fields as $col ) {
-			$field_headings = array();
-			$separate_values = array( 'user_id', 'file', 'data', 'date' );
-			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, $separate_values, true ) ) {
-				$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
-			}
-
-			$field_headings[ $col->id ] = strip_tags( $col->name );
-			$field_headings             = apply_filters(
-				'frm_csv_field_columns',
-				$field_headings,
-				array(
-					'field' => $col,
-				)
-			);
-
-			$headings += $field_headings;
+	private static function field_headings( $col ) {
+		$field_headings  = array();
+		$separate_values = array( 'user_id', 'file', 'data', 'date' );
+		if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, $separate_values, true ) ) {
+			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 		}
+
+		$field_headings[ $col->id ] = strip_tags( $col->name );
+		$field_headings             = apply_filters(
+			'frm_csv_field_columns',
+			$field_headings,
+			array(
+				'field' => $col,
+			)
+		);
+
+		return $field_headings;
+	}
+
+	private static function csv_headings( &$headings ) {
+		$fields_by_repeater_id = array();
+		$repeater_ids          = array();
+
+		foreach ( self::$fields as $col ) {
+			if ( $col->form_id === self::$form_id ) {
+				$headings += self::field_headings( $col );
+			} else {
+				$repeater_fields_by_id[ $col->id ] = $col;
+				$repeater_id                       = $col->field_options['in_section'];
+
+				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
+					$fields_by_repeater_id[ $repeater_id ] = array();
+					$repeater_ids[]                        = $repeater_id;
+				}
+
+				$fields_by_repeater_id[ $repeater_id ][] = $col;
+			}
+		}
+		unset( $repeater_id, $col );
 
 		if ( self::$comment_count ) {
 			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
@@ -143,6 +163,38 @@ class FrmCSVExportHelper {
 				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
 			}
 			unset( $i );
+		}
+
+		if ( $repeater_ids ) {
+			$where         = array( 'field_id' => $repeater_ids );
+			$repeater_meta = FrmDb::get_results( 'frm_item_metas', $where, 'field_id, meta_value' );
+			$max           = array_fill_keys( $repeater_ids, 0 );
+
+			foreach ( $repeater_meta as $row ) {
+				$start  = strpos( $row->meta_value, 'a:' ) + 2;
+				$end    = strpos( $row->meta_value, ':{' );
+				$length = substr( $row->meta_value, $start, $end - $start );
+
+				if ( $length > $max[ $row->field_id ] ) {
+					$max[ $row->field_id ] = $length;
+				}
+			}
+			unset( $start, $end, $length, $row );
+
+			foreach ( $repeater_ids as $repeater_id ) {
+				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
+					$field_headings = self::field_headings( $col );
+
+					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
+						foreach ( $field_headings as $key => $name ) {
+							$headings[ $key . '[' . $i . ']' ] = $name;
+						}
+					}
+					unset( $i );
+				}
+				unset( $col );
+			}
+			unset( $repeater_id );
 		}
 
 		$headings['created_at'] = __( 'Timestamp', 'formidable' );
