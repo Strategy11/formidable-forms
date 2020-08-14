@@ -66,7 +66,7 @@ class test_FrmForm extends FrmUnitTest {
 
 	/**
 	 * @group visibility
-	 * @covers FrmFormsHelper::is_form_visible_to_user
+	 * @covers FrmForm::is_visible_to_user
 	 */
 	public function test_is_form_visible_to_user() {
 		$this->assert_form_is_visible( 'administrator', 'editor', 'Administrator can view a form set to editor' );
