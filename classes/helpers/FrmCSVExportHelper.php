@@ -143,6 +143,8 @@ class FrmCSVExportHelper {
 			if ( $col->form_id === self::$form_id ) {
 				$headings += self::field_headings( $col );
 			} else {
+				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+
 				$repeater_fields_by_id[ $col->id ] = $col;
 				$repeater_id                       = $col->field_options['in_section'];
 
@@ -155,15 +157,6 @@ class FrmCSVExportHelper {
 			}
 		}
 		unset( $repeater_id, $col );
-
-		if ( self::$comment_count ) {
-			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
-				$headings[ 'comment' . $i ]            = __( 'Comment', 'formidable' );
-				$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
-				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
-			}
-			unset( $i );
-		}
 
 		if ( $repeater_ids ) {
 			$where         = array( 'field_id' => $repeater_ids );
@@ -187,7 +180,7 @@ class FrmCSVExportHelper {
 
 					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
 						foreach ( $field_headings as $key => $name ) {
-							$headings[ $key . '[' . $i . ']' ] = $name;
+							$headings[ 'repeater' . $repeater_id ][ $key . '[' . $i . ']' ] = $name;
 						}
 					}
 					unset( $i );
@@ -195,6 +188,28 @@ class FrmCSVExportHelper {
 				unset( $col );
 			}
 			unset( $repeater_id );
+
+			$flat = array();
+			foreach ( $headings as $key => $heading ) {
+				if ( is_array( $heading ) ) {
+					$flat += $heading;
+				} else {
+					$flat[ $key ] = $heading;
+				}
+			}
+			unset( $key, $heading );
+
+			$headings = $flat;
+			unset( $flat );
+		}
+
+		if ( self::$comment_count ) {
+			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
+				$headings[ 'comment' . $i ]            = __( 'Comment', 'formidable' );
+				$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
+				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
+			}
+			unset( $i );
 		}
 
 		$headings['created_at'] = __( 'Timestamp', 'formidable' );
