@@ -170,7 +170,7 @@ class FrmCSVExportHelper {
 					$max[ $row->field_id ] = $length;
 				}
 			}
-			unset( $start, $end, $length, $row, $repeater_meta );
+			unset( $start, $end, $length, $row, $repeater_meta, $where );
 
 			foreach ( $repeater_ids as $repeater_id ) {
 				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
@@ -368,21 +368,27 @@ class FrmCSVExportHelper {
 		$sep = '';
 
 		foreach ( self::$headings as $k => $heading ) {
-			$row = isset( $rows[ $k ] ) ? $rows[ $k ] : '';
+			$row = '';
+			if ( ! isset( $rows[ $k ] ) ) {
+				if ( $k[ strlen( $k ) - 1 ] === ']' ) {
+					// array indexed data is not at $rows[ $k ] so $row is currently an empty string
+					$start = strrpos( $k, '[' );
+					$key   = substr( $k, 0, $start ++ );
+					$index = substr( $k, $start, strlen( $k ) - 1 - $start );
+
+					if ( isset( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {
+						$row = $rows[ $key ][ $index ];
+					}
+
+					unset( $start, $key, $index );
+				}
+			} else {
+				$row = $rows[ $k ];
+			}
+
 			if ( is_array( $row ) ) {
 				// implode the repeated field values
 				$row = implode( self::$separator, FrmAppHelper::array_flatten( $row, 'reset' ) );
-			} elseif ( $k[ strlen( $k ) - 1 ] === ']' ) {
-				// array indexed data is not at $rows[ $k ] so $row is currently an empty string
-				$start = strrpos( $k, '[' );
-				$key   = substr( $k, 0, $start ++ );
-				$index = substr( $k, $start, strlen( $k ) - 1 - $start );
-
-				if ( isset( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {
-					$row = $rows[ $key ][ $index ];
-				}
-
-				unset( $start, $key, $index );
 			}
 
 			$val = self::encode_value( $row );
