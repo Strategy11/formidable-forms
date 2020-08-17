@@ -30,6 +30,9 @@
             "classes/views/"
 		]
 	},
+    "require-dev": {
+        "phpunit/phpunit": "6.*"
+    },
 	"scripts": {
 		"post-install-cmd": [
 			"xrstf\\Composer52\\Generator::onPostInstallCmd"
