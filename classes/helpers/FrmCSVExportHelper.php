@@ -368,10 +368,12 @@ class FrmCSVExportHelper {
 		$sep = '';
 
 		foreach ( self::$headings as $k => $heading ) {
-			$row = '';
-			if ( ! isset( $rows[ $k ] ) ) {
+			if ( isset( $rows[ $k ] ) ) {
+				$row = $rows[ $k ];
+			} else {
+				$row = '';
+				// array indexed data is not at $rows[ $k ]
 				if ( $k[ strlen( $k ) - 1 ] === ']' ) {
-					// array indexed data is not at $rows[ $k ] so $row is currently an empty string
 					$start = strrpos( $k, '[' );
 					$key   = substr( $k, 0, $start ++ );
 					$index = substr( $k, $start, strlen( $k ) - 1 - $start );
@@ -382,8 +384,6 @@ class FrmCSVExportHelper {
 
 					unset( $start, $key, $index );
 				}
-			} else {
-				$row = $rows[ $k ];
 			}
 
 			if ( is_array( $row ) ) {
