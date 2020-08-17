@@ -12,8 +12,6 @@ class FrmCSVExportHelper {
 	protected static $form_id               = 0;
 	protected static $headings              = array();
 	protected static $fields                = array();
-	protected static $fields_by_repeater_id = array();
-	protected static $repeater_ids          = array();
 	protected static $entry;
 	protected static $has_parent_id;
 
@@ -54,7 +52,6 @@ class FrmCSVExportHelper {
 		);
 		self::$comment_count = $comment_count;
 
-		self::check_for_repeaters();
 		self::prepare_csv_headings();
 
 		// fetch 20 posts at a time rather than loading the entire table into memory
@@ -103,21 +100,6 @@ class FrmCSVExportHelper {
 		self::$to_encoding = $csv_format;
 	}
 
-	private static function check_for_repeaters() {
-		foreach ( self::$fields as $col ) {
-			if ( $col->form_id !== self::$form_id ) {
-				$repeater_id = $col->field_options['in_section'];
-
-				if ( ! isset( self::$fields_by_repeater_id[ $repeater_id ] ) ) {
-					self::$fields_by_repeater_id[ $repeater_id ] = array();
-					self::$repeater_ids[]                        = $repeater_id;
-				}
-
-				self::$fields_by_repeater_id[ $repeater_id ][] = $col;
-			}
-		}
-	}
-
 	private static function prepare_csv_headings() {
 		$headings = array();
 		self::csv_headings( $headings );
@@ -154,20 +136,30 @@ class FrmCSVExportHelper {
 	}
 
 	private static function csv_headings( &$headings ) {
+		$fields_by_repeater_id = array();
+		$repeater_ids          = array();
+
 		foreach ( self::$fields as $col ) {
 			if ( $col->form_id === self::$form_id ) {
 				$headings += self::field_headings( $col );
 			} else {
 				$repeater_id                           = $col->field_options['in_section'];
 				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+
+				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
+					$fields_by_repeater_id[ $repeater_id ] = array();
+					$repeater_ids[]                        = $repeater_id;
+				}
+
+				$fields_by_repeater_id[ $repeater_id ][] = $col;
 			}
 		}
 		unset( $repeater_id, $col );
 
-		if ( self::$repeater_ids ) {
-			$where         = array( 'field_id' => self::$repeater_ids );
+		if ( $repeater_ids ) {
+			$where         = array( 'field_id' => $repeater_ids );
 			$repeater_meta = FrmDb::get_results( 'frm_item_metas', $where, 'field_id, meta_value' );
-			$max           = array_fill_keys( self::$repeater_ids, 0 );
+			$max           = array_fill_keys( $repeater_ids, 0 );
 
 			foreach ( $repeater_meta as $row ) {
 				$start  = strpos( $row->meta_value, 'a:' ) + 2;
@@ -178,10 +170,10 @@ class FrmCSVExportHelper {
 					$max[ $row->field_id ] = $length;
 				}
 			}
-			unset( $start, $end, $length, $row );
+			unset( $start, $end, $length, $row, $repeater_meta );
 
-			foreach ( self::$repeater_ids as $repeater_id ) {
-				foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $col ) {
+			foreach ( $repeater_ids as $repeater_id ) {
+				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
 					$field_headings = self::field_headings( $col );
 
 					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
@@ -389,6 +381,8 @@ class FrmCSVExportHelper {
 				if ( isset( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {
 					$row = $rows[ $key ][ $index ];
 				}
+
+				unset( $start, $key, $index );
 			}
 
 			$val = self::encode_value( $row );
