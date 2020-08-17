@@ -8,15 +8,15 @@
 
 $message_placement = isset( $message_placement ) ? $message_placement : 'before';
 
-if ( $message_placement !== 'after' ) {
-	include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+if ( ! in_array( $message_placement, array( 'after', 'submit' ), true ) ) {
+	include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 }
 
 $form_action = 'create';
-require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php' );
+require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php';
 
 if ( $message_placement === 'after' ) {
-	include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php' );
+	include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 }
 
 if ( ! isset( $include_form_tag ) || $include_form_tag ) {
