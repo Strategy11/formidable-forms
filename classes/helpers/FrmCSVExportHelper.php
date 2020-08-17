@@ -181,7 +181,7 @@ class FrmCSVExportHelper {
 							$headings[ 'repeater' . $repeater_id ][ $key . '[' . $i . ']' ] = $name;
 						}
 					}
-					unset( $i );
+					unset( $key, $name, $i );
 				}
 				unset( $col );
 			}
