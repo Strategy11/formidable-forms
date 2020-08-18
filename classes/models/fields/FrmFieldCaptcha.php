@@ -64,6 +64,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return str_replace( ' for="field_[key]"', ' for="g-recaptcha-response"', $html );
 	}
 
+	/**
+	 * @return bool
+	 */
+	protected function should_show_captcha() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return ! empty( $frm_settings->pubkey );
+	}
+
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( empty( $frm_settings->pubkey ) ) {
@@ -139,13 +147,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
-			// If captcha is missing, check if it was already verified.
-			$checked = FrmAppHelper::get_param( 'recaptcha_checked', '', 'post', 'sanitize_text_field' );
-			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $checked, 'frm_ajax' ) ) {
-				// There was no captcha submitted.
-				$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
-			}
-
+			$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
 			return $errors;
 		}
 
@@ -173,13 +175,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return false;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( empty( $frm_settings->pubkey ) ) {
-			// don't require the captcha if it shouldn't be shown
-			return false;
-		}
-
-		return true;
+		// don't require the captcha if it shouldn't be shown
+		return $this->should_show_captcha();
 	}
 
 	protected function send_api_check( $frm_settings ) {

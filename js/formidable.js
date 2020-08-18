@@ -767,7 +767,7 @@ function frmFrontFormJS() {
 					return;
 				}
 			}
-			$recapField.closest( '.frm_form_field' ).replaceWith( '<input type="hidden" name="recaptcha_checked" value="' + frm_js.nonce + '">' );
+			$recapField.closest( '.frm_form_field' ).replaceWith( '' );
 		}
 	}
 
