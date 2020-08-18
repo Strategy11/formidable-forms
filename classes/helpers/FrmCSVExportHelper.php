@@ -172,30 +172,26 @@ class FrmCSVExportHelper {
 			}
 			unset( $start, $end, $length, $row, $repeater_meta, $where );
 
-			foreach ( $repeater_ids as $repeater_id ) {
-				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
-					$field_headings = self::field_headings( $col );
-
-					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
-						foreach ( $field_headings as $key => $name ) {
-							$headings[ 'repeater' . $repeater_id ][ $key . '[' . $i . ']' ] = $name;
-						}
-					}
-					unset( $key, $name, $i );
-				}
-				unset( $col );
-			}
-			unset( $field_headings, $repeater_id );
-
 			$flat = array();
 			foreach ( $headings as $key => $heading ) {
 				if ( is_array( $heading ) ) {
-					$flat += $heading;
+					$repeater_id = str_replace( 'repeater', '', $key );
+
+					$repeater_headings = array();
+					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
+						$repeater_headings += self::field_headings( $col );
+					}
+
+					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
+						foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
+							$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
+						}
+					}
 				} else {
 					$flat[ $key ] = $heading;
 				}
 			}
-			unset( $key, $heading );
+			unset( $key, $heading, $max, $repeater_headings, $repeater_id );
 
 			$headings = $flat;
 			unset( $flat );
