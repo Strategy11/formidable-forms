@@ -2,16 +2,16 @@
 
 class FrmCSVExportHelper {
 
-	protected static $separator             = ', ';
-	protected static $column_separator      = ',';
-	protected static $line_break            = 'return';
-	protected static $charset               = 'UTF-8';
-	protected static $to_encoding           = 'UTF-8';
-	protected static $wp_date_format        = 'Y-m-d H:i:s';
-	protected static $comment_count         = 0;
-	protected static $form_id               = 0;
-	protected static $headings              = array();
-	protected static $fields                = array();
+	protected static $separator        = ', ';
+	protected static $column_separator = ',';
+	protected static $line_break       = 'return';
+	protected static $charset          = 'UTF-8';
+	protected static $to_encoding      = 'UTF-8';
+	protected static $wp_date_format   = 'Y-m-d H:i:s';
+	protected static $comment_count    = 0;
+	protected static $form_id          = 0;
+	protected static $headings         = array();
+	protected static $fields           = array();
 	protected static $entry;
 	protected static $has_parent_id;
 
