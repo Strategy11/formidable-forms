@@ -1641,6 +1641,13 @@ class FrmFormsController {
 				$pass_args['reset']       = true;
 				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
+				foreach ( $fields as $field ) {
+					if ( $field->field_options['original_type'] === 'captcha' ) {
+						$captcha = FrmFieldFactory::get_field_type( 'captcha', $field );
+						$captcha->cleanup_transient_on_submit( array( 'id' => $field->id ) );
+					}
+				}
+
 				self::run_success_action( $pass_args );
 
 				do_action(

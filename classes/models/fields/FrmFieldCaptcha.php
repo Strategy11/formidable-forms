@@ -139,6 +139,22 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $captcha_size;
 	}
 
+	public function cleanup_transient_on_submit( $args ) {
+		delete_transient( $this->transient_key( $args ) );
+	}
+
+	/**
+	 * @param array $args
+	 * @return string
+	 */
+	protected function transient_key( $args ) {
+		return 'frm_recaptcha_' . $args['id'] . '_' . FrmAppHelper::get_param( 'nonce', '', 'post' );
+	}
+
+	/**
+	 * @param array $args
+	 * @return array
+	 */
 	public function validate( $args ) {
 		$errors = array();
 
@@ -147,6 +163,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
+			if ( get_transient( $this->transient_key( $args ) ) ) {
+				// previously validated
+				return $errors;
+			}
+
 			$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
 			return $errors;
 		}
@@ -164,6 +185,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$error_string                    = $resp->get_error_message();
 			$errors[ 'field' . $args['id'] ] = __( 'There was a problem verifying your recaptcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
+		} else {
+			// on success, set a transient value to check for other pages
+			set_transient( $this->transient_key( $args ), 1 );
 		}
 
 		return $errors;
