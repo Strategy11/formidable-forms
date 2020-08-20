@@ -1158,6 +1158,18 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param array|string $selected $selected
+	 * @param string $current
+	 */
+	private static function selected( $selected, $current ) {
+		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
+			FrmProAppHelper::selected( $selected, $current );
+		} else {
+			selected( in_array( $current, (array) $selected, true ), true );
+		}
+	}
+
+	/**
 	 * @param string|array $capability
 	 */
 	public static function roles_options( $capability ) {
@@ -1172,7 +1184,7 @@ class FrmAppHelper {
 		foreach ( $editable_roles as $role => $details ) {
 			$name = translate_user_role( $details['name'] );
 			?>
-			<option value="<?php echo esc_attr( $role ); ?>" <?php echo in_array( $role, (array) $capability ) ? ' selected="selected"' : ''; ?>><?php echo esc_attr( $name ); ?> </option>
+			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_attr( $name ); ?> </option>
 			<?php
 			unset( $role, $details );
 		}
