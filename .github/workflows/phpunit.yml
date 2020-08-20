@@ -7,13 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [5.6, 7.3, 7.4]
-        wordpress: [4.7, master]
-        exclude:
-          - php: 7.3
-            wordpress: 4.7
-          - php: 7.4
-            wordpress: 4.7
+        php: [7.3, 7.4] # TODO add 5.6 with phpunit 4.x
+        wordpress: [master] # TODO test with 4.7
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
       - uses: actions/checkout@v2
