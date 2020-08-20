@@ -2293,6 +2293,7 @@ a.frm_option_icon:hover::before {
 	left: auto;
 	font-size: 14px;
 	padding-top: 3px;
+    margin-bottom: 3px;
 }
 
 .frm-right-panel .accordion-section-content {
@@ -5401,8 +5402,11 @@ li.selected .divider_section_only:before {
 	content: '\e62a';
 }
 
+.frm-collapsed + .frm-collapse-me {
+    overflow: hidden !important;
+}
+
 .frm-collapse-me {
-	overflow: hidden !important;
 	padding-bottom: 10px;
 }
 
