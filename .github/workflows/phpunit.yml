@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.3, 7.4] # TODO add 5.6 with phpunit 4.x
+        php: [7.1, 7.4] # TODO add 5.6 with phpunit 4.x
         wordpress: [master] # TODO test with 4.7
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
