@@ -1158,7 +1158,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param array|string $selected $selected
+	 * @param array|string $selected
 	 * @param string $current
 	 */
 	private static function selected( $selected, $current ) {
