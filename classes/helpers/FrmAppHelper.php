@@ -1158,6 +1158,7 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 4.07
 	 * @param array|string $selected
 	 * @param string $current
 	 */
