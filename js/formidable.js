@@ -455,7 +455,6 @@ function frmFrontFormJS() {
 			success: function( response ) {
 				var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
 					$fieldCont, key, inCollapsedSection, frmTrigger,
-					$recaptcha, recaptchaID,
 					defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
 				if ( response === null ) {
 					response = defaultResponse;
@@ -518,7 +517,6 @@ function frmFrontFormJS() {
 					$fieldCont = null;
 
 					for ( key in response.errors ) {
-
 						$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
 
 						if ( $fieldCont.length ) {
@@ -536,23 +534,23 @@ function frmFrontFormJS() {
 
 							if ( $fieldCont.is( ':visible' ) ) {
 								addFieldError( $fieldCont, key, response.errors );
-
 								contSubmit = false;
-
-								$recaptcha = jQuery( object ).find( '#frm_field_' + key + '_container .frm-g-recaptcha, #frm_field_' + key + '_container .g-recaptcha' );
-								if ( $recaptcha.length ) {
-									recaptchaID = $recaptcha.data( 'rid' );
-									if ( jQuery().grecaptcha ) {
-										if ( recaptchaID ) {
-											grecaptcha.reset( recaptchaID );
-										} else {
-											grecaptcha.reset();
-										}
-									}
-								}
 							}
 						}
 					}
+
+					jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha' ).each( function() {
+						var $recaptcha  = jQuery( this ),
+							recaptchaID = $recaptcha.data( 'rid' );
+
+						if ( jQuery().grecaptcha ) {
+							if ( recaptchaID ) {
+								grecaptcha.reset( recaptchaID );
+							} else {
+								grecaptcha.reset();
+							}
+						}
+					} );
 
 					jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
