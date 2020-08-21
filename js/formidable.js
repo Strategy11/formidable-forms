@@ -550,7 +550,7 @@ function frmFrontFormJS() {
 								grecaptcha.reset();
 							}
 						}
-					} );
+					});
 
 					jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
