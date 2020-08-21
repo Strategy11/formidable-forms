@@ -5904,13 +5904,9 @@ i.frm-show-inline-modal {
 	text-overflow: ellipsis;
 }
 
-span.multiselect-selected-text {
-	white-space: nowrap;
-	display: inline-block;
-}
-
 .frm-search span.multiselect-selected-text {
 	white-space: nowrap;
+    display: inline-block;
 }
 
 .frm-search #search-submit {
