@@ -1165,7 +1165,7 @@ class FrmAppHelper {
 		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
 			FrmProAppHelper::selected( $selected, $current );
 		} else {
-			selected( in_array( $current, (array) $selected, true ), true );
+			selected( in_array( $current, (array) $selected, true ) );
 		}
 	}
 
