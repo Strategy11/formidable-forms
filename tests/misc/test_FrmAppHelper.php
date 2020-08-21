@@ -392,7 +392,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 		ob_end_clean();
 
 		$this->assert_output_contains( $output, '>Administrator' );
-		$this->assert_output_contains( $output, 'selected="selected">Editor' );
+
+		$this->assert_output_contains( $output, "selected='selected'>Editor" );
 		$this->assert_output_contains( $output, '>Author' );
 		$this->assert_output_contains( $output, '>Contributor' );
 		$this->assert_output_contains( $output, '>Subscriber' );
@@ -409,7 +410,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		ob_end_clean();
 
 		$this->assert_output_contains( $output, '>Editor' );
-		$this->assert_output_not_contains( $output, 'selected="selected">Editor' );
+		$this->assert_output_not_contains( $output, "selected='selected'>Editor" );
 	}
 
 	/**
