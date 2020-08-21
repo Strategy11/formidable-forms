@@ -36,7 +36,7 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <input type="hidden" name="item_meta[0]" value="" />
 
 <?php
-if ( isset( $_POST['g-recaptcha-response'] ) ) {
+if ( isset( $_POST['g-recaptcha-response'] ) && is_callable( 'FrmProFieldCaptcha::checked' ) ) {
 	$checked = FrmProFieldCaptcha::checked();
 	if ( $checked ) {
 		?>
