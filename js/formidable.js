@@ -454,7 +454,7 @@ function frmFrontFormJS() {
 			data: jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce,
 			success: function( response ) {
 				var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-					showCaptcha, $fieldCont, key, inCollapsedSection, frmTrigger,
+					$fieldCont, key, inCollapsedSection, frmTrigger,
 					$recaptcha, recaptchaID,
 					defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
 				if ( response === null ) {
@@ -496,11 +496,16 @@ function frmFrontFormJS() {
 								frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 							}
 
+							if ( typeof response.recaptcha !== 'undefined' ) {
+								jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' ).append(
+									'<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">'
+								);
+							}
+
 							afterFormSubmitted( object, response );
 						},
 						delay
 					);
-
 				} else if ( Object.keys( response.errors ).length ) {
 					// errors were returned
 
@@ -510,7 +515,6 @@ function frmFrontFormJS() {
 					contSubmit = true;
 					removeAllErrors();
 
-					showCaptcha = false;
 					$fieldCont = null;
 
 					for ( key in response.errors ) {
@@ -537,7 +541,6 @@ function frmFrontFormJS() {
 
 								$recaptcha = jQuery( object ).find( '#frm_field_' + key + '_container .frm-g-recaptcha, #frm_field_' + key + '_container .g-recaptcha' );
 								if ( $recaptcha.length ) {
-									showCaptcha = true;
 									recaptchaID = $recaptcha.data( 'rid' );
 									if ( jQuery().grecaptcha ) {
 										if ( recaptchaID ) {
@@ -556,10 +559,6 @@ function frmFrontFormJS() {
 					fieldset.removeClass( 'frm_doing_ajax' );
 					scrollToFirstField( object );
 
-					if ( showCaptcha !== true ) {
-						replaceCheckedRecaptcha( object, false );
-					}
-
 					if ( contSubmit ) {
 						object.submit();
 					} else {
@@ -569,7 +568,6 @@ function frmFrontFormJS() {
 					// there may have been a plugin conflict, or the form is not set to submit with ajax
 
 					showFileLoading( object );
-					replaceCheckedRecaptcha( object, true );
 
 					object.submit();
 				}
@@ -754,20 +752,6 @@ function frmFrontFormJS() {
 					jQuery( loading ).fadeIn( 'slow' );
 				}, 2000 );
 			}
-		}
-	}
-
-	function replaceCheckedRecaptcha( object, checkPage ) {
-		var morePages,
-			$recapField = jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha' );
-		if ( $recapField.length ) {
-			if ( checkPage ) {
-				morePages = jQuery( object ).find( '.frm_next_page' ).length < 1 || jQuery( object ).find( '.frm_next_page' ).val() < 1;
-				if ( ! morePages ) {
-					return;
-				}
-			}
-			$recapField.closest( '.frm_form_field' ).replaceWith( '<input type="hidden" name="recaptcha_checked" value="' + frm_js.nonce + '">' );
 		}
 	}
 
