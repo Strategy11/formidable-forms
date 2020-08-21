@@ -202,7 +202,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	public static function render_checked_response() {
-		if ( class_exists( 'FrmProFieldCaptcha' ) ) {
+		if ( class_exists( 'FrmProFieldCaptcha' ) && is_callable( 'FrmProFieldCaptcha::render_checked_response' ) ) {
 			FrmProFieldCaptcha::render_checked_response();
 		}
 	}
