@@ -14,6 +14,11 @@ class FrmListHelper {
 	public $items;
 
 	/**
+	 * @since 4.07
+	 */
+	public $total_items = false;
+
+	/**
 	 * Various information about the current table
 	 *
 	 * @since 2.0.18
@@ -945,6 +950,10 @@ class FrmListHelper {
 				$class = "class='" . esc_attr( join( ' ', $class ) ) . "'";
 			}
 
+			if ( ! $this->has_min_items() && ! $with_id ) {
+				// Hide the labels but show the border.
+				$column_display_name = '';
+			}
 			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // WPCS: XSS ok.
 		}
 	}
@@ -961,22 +970,25 @@ class FrmListHelper {
 		$this->display_tablenav( 'top' );
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
+			<?php if ( $this->has_min_items( 1 ) ) { ?>
 			<thead>
 				<tr>
 					<?php $this->print_column_headers(); ?>
 				</tr>
 			</thead>
+			<?php } ?>
 
 			<tbody id="the-list"<?php echo( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); // WPCS: XSS ok. ?>>
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
+			<?php if ( $this->has_min_items( 1 ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
 				</tr>
 			</tfoot>
-
+			<?php } ?>
 		</table>
 		<?php
 		$this->display_tablenav( 'bottom' );
@@ -1005,6 +1017,13 @@ class FrmListHelper {
 	protected function display_tablenav( $which ) {
 		if ( 'top' == $which ) {
 			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+			if ( ! $this->has_min_items( 1 ) ) {
+				// Don't show bulk actions if no items.
+				return;
+			}
+		} elseif ( ! $this->has_min_items() ) {
+			// don't show the bulk actions when there aren't many rows.
+			return;
 		}
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
@@ -1020,6 +1039,16 @@ class FrmListHelper {
 			<br class="clear"/>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Use this to exclude the footer labels and bulk items.
+	 * When close together, it feels like duplicates.
+	 *
+	 * @since 4.07
+	 */
+	protected function has_min_items( $limit = 5 ) {
+		return $this->has_items() && ( $this->total_items === false || $this->total_items >= $limit );
 	}
 
 	/**
