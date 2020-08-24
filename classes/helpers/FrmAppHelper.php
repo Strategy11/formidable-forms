@@ -116,6 +116,27 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 4.07
+	 */
+	public static function renewal_message() {
+		if ( ! FrmAddonsController::is_license_expired() ) {
+			return;
+		}
+		?>
+		<div class="frm_error_style" style="text-align:left">
+			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
+			&nbsp;
+			<?php esc_attr_e( 'Your account has expired', 'formidable' ); ?>
+			<div style="float:right">
+				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
+					Renew Now
+				</a>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Get the Formidable settings
 	 *
 	 * @since 2.0
