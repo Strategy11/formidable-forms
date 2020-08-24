@@ -1,8 +1,9 @@
 name: PHPUnit
 
-on: [push]
-  branches-ignore:
-    - '**'
+on:
+  push:
+    branches:
+      - '!**'
 
 jobs:
   build-test:
