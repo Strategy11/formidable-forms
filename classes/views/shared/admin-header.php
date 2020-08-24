@@ -11,7 +11,8 @@
 		echo '<div id="frm-publishing">';
 		call_user_func( $atts['publish'][0], $atts['publish'][1] );
 		echo '</div>';
-	} elseif ( ! FrmAppHelper::pro_is_installed() ) { ?>
+	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
+		?>
 		<div id="frm-publishing">
 			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
 				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>

@@ -920,7 +920,8 @@ class FrmAppHelper {
 	 * @since 3.0
 	 */
 	public static function add_new_item_link( $atts ) {
-		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) { ?>
+		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) {
+			?>
 			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm-with-plus">
 				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
 				<?php esc_html_e( 'Add New', 'formidable' ); ?>
