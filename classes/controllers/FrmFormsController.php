@@ -1386,6 +1386,10 @@ class FrmFormsController {
 			case 'settings':
 			case 'update_settings':
 				return self::$action( $vars );
+			case 'lite-reports':
+				return self::no_reports( $vars );
+			case 'views':
+				return self::no_views( $vars );
 			default:
 				do_action( 'frm_form_action_' . $action );
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
@@ -1420,6 +1424,31 @@ class FrmFormsController {
 	 */
 	public static function add_form_style_tab_options() {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php' );
+	}
+
+	/**
+	 * Add education about views.
+	 *
+	 * @since 4.07
+	 */
+	public static function no_views( $values = array() ) {
+		FrmAppHelper::include_svg();
+		$id   = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
+		$form = $id ? FrmForm::getOne( $id ) : false;
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/views-info.php';
+	}
+
+	/**
+	 * Add education about reports.
+	 *
+	 * @since 4.07
+	 */
+	public static function no_reports( $values = array() ) {
+		$id   = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
+		$form = $id ? FrmForm::getOne( $id ) : false;
+
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/reports-info.php';
 	}
 
 	/* FRONT-END FORMS */
