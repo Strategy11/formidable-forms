@@ -7,6 +7,10 @@ class FrmEntriesController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
+		}
+
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 			self::load_manage_entries_hooks();
 		}

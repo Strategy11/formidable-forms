@@ -6,13 +6,21 @@
 			</a>
 		</div>
 	<?php } ?>
-	<div id="frm-publishing">
 	<?php
 	if ( isset( $atts['publish'] ) ) {
+		echo '<div id="frm-publishing">';
 		call_user_func( $atts['publish'][0], $atts['publish'][1] );
+		echo '</div>';
+	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
+		?>
+		<div id="frm-publishing">
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
+				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
+			</a>
+		</div>
+		<?php
 	}
 	?>
-	</div>
 
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 		<?php FrmAppHelper::show_header_logo(); ?>
@@ -27,7 +35,6 @@
 	} else {
 		// Used when no form is currently selected.
 		?>
-
 	<div class="frm_top_left <?php echo esc_attr( $atts['import_link'] ? 'frm_top_wide' : '' ); ?>">
 		<h1>
 			<?php echo esc_html( $atts['label'] ); ?>

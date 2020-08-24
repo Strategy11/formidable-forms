@@ -22,6 +22,20 @@ $wp_list_table->views();
 $wp_list_table->search_box( __( 'Search', 'formidable' ), 'entry' );
 $wp_list_table->display();
 
+if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_table->status === '' ) {
+	$is_default = false;
+	foreach ( $wp_list_table->items as $item ) {
+		$is_default = $item->form_key === 'contact-form';
+	}
+	// Show no form created info if only the default form exists.
+	if ( $is_default ) {
+		$title = __( 'You have not created any forms yet', 'formidable' );
+		$info  = __( 'Start collecting leads and data today.', 'formidable' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_no_forms.php';
+	}
+}
+
+FrmAppHelper::renewal_message();
 ?>
 </form>
 
