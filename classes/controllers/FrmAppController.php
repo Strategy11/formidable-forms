@@ -83,6 +83,7 @@ class FrmAppController {
 		$white_pages = array(
 			'formidable',
 			'formidable-entries',
+			'formidable-views',
 			'formidable-pro-upgrade',
 			'formidable-addons',
 			'formidable-import',
@@ -167,27 +168,23 @@ class FrmAppController {
 		// Let people know reports and views exist.
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
-				'link'    => '',
+				'link'    => admin_url( 'admin.php?page=formidable-views&frm-full=1&form=' . absint( $id ) ),
 				'label'   => __( 'Views', 'formidable' ),
 				'current' => array(),
-				'page'    => '',
+				'page'    => 'formidable-views',
 				'permission' => 'frm_view_entries',
 				'atts'    => array(
-					'class'        => 'frm_show_upgrade frm_noallow',
-					'data-upgrade' => __( 'Views', 'formidable' ),
-					'data-medium'  => 'views-nav',
+					'class' => 'frm_noallow',
 				),
 			);
 			$nav_items[] = array(
-				'link'    => '',
+				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&frm-full=1&form=' . absint( $id ) ),
 				'label'   => __( 'Reports', 'formidable' ),
-				'current' => array(),
-				'page'    => '',
+				'current' => array( 'reports' ),
+				'page'    => 'formidable',
 				'permission' => 'frm_view_entries',
 				'atts'    => array(
-					'class'        => 'frm_show_upgrade frm_noallow',
-					'data-upgrade' => __( 'Reports', 'formidable' ),
-					'data-medium'  => 'reports-nav',
+					'class' => 'frm_noallow',
 				),
 			);
 		}
