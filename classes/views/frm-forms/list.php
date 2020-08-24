@@ -29,7 +29,7 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 	}
 	// Show no form created info if only the default form exists.
 	if ( $is_default ) {
-		$title = __( 'You haven\'t created any forms yet', 'formidable' );
+		$title = __( 'You have not created any forms yet', 'formidable' );
 		$info  = __( 'Start collecting leads and data today.', 'formidable' );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_no_forms.php';
 	}
