@@ -131,40 +131,54 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $captcha_size;
 	}
 
-	public function validate( $args ) {
-		$errors = array();
-
-		if ( ! $this->should_validate() ) {
-			return $errors;
-		}
-
-		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
-			// If captcha is missing, check if it was already verified.
-			$checked = FrmAppHelper::get_param( 'recaptcha_checked', '', 'post', 'sanitize_text_field' );
-			if ( ! isset( $_POST['recaptcha_checked'] ) || ! wp_verify_nonce( $checked, 'frm_ajax' ) ) {
-				// There was no captcha submitted.
-				$errors[ 'field' . $args['id'] ] = __( 'The captcha is missing from this form', 'formidable' );
-			}
-
-			return $errors;
-		}
-
+	/**
+	 * @since 4.07
+	 * @param array $args
+	 * @return array
+	 */
+	protected function validate_against_api( $args ) {
+		$errors       = array();
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$resp     = $this->send_api_check( $frm_settings );
-		$response = json_decode( wp_remote_retrieve_body( $resp ), true );
+		$resp         = $this->send_api_check( $frm_settings );
+		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
 		if ( isset( $response['success'] ) && ! $response['success'] ) {
 			// What happens when the CAPTCHA was entered incorrectly
 			$invalid_message                 = FrmField::get_option( $this->field, 'invalid' );
 			$errors[ 'field' . $args['id'] ] = ( $invalid_message == '' ? $frm_settings->re_msg : $invalid_message );
 		} elseif ( is_wp_error( $resp ) ) {
-			$error_string                    = $resp->get_error_message();
-			$errors[ 'field' . $args['id'] ] = __( 'There was a problem verifying your recaptcha', 'formidable' );
+			$error_string                     = $resp->get_error_message();
+			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your recaptcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * @param array $args
+	 * @return array
+	 */
+	public function validate( $args ) {
+		if ( ! $this->should_validate() ) {
+			return array();
+		}
+
+		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
+			// There was no captcha submitted.
+			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
+		}
+
+		return $this->validate_against_api( $args );
+	}
+
+	/**
+	 * @since 4.07
+	 * @return bool
+	 */
+	private function should_show_captcha() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return ! empty( $frm_settings->pubkey );
 	}
 
 	protected function should_validate() {
@@ -173,13 +187,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return false;
 		}
 
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( empty( $frm_settings->pubkey ) ) {
-			// don't require the captcha if it shouldn't be shown
-			return false;
-		}
-
-		return true;
+		// don't require the captcha if it shouldn't be shown
+		return $this->should_show_captcha();
 	}
 
 	protected function send_api_check( $frm_settings ) {
