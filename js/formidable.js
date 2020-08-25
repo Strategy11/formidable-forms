@@ -412,10 +412,10 @@ function frmFrontFormJS() {
 			$recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
 		if ( $recaptcha.length ) {
 			recaptchaID = $recaptcha.data( 'rid' );
-			
+
 			try {
 				response = grecaptcha.getResponse( recaptchaID );
-			} catch( e ) {
+			} catch ( e ) {
 				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
 					return errors;
 				} else {
