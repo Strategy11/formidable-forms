@@ -358,8 +358,7 @@ class FrmXMLHelper {
 	 * TODO: Cut down on params
 	 */
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
-		global $frm_keys_by_original_field_id;
-		$frm_keys_by_original_field_id = array();
+		$keys_by_original_field_id = array();
 
 		$in_section = 0;
 
@@ -386,7 +385,7 @@ class FrmXMLHelper {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
 				} elseif ( isset( $form_fields[ $f['field_key'] ] ) ) {
-					$frm_keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
+					$keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
 
 					// check for field to edit by field key
 					unset( $f['id'] );
@@ -406,7 +405,9 @@ class FrmXMLHelper {
 			}
 		}
 
-		self::maybe_update_field_ids( $form_id );
+		if ( $keys_by_original_field_id ) {
+			self::maybe_update_field_ids( $form_id, $keys_by_original_field_id );
+		}
 	}
 
 	private static function fill_field( $field, $form_id ) {
@@ -625,10 +626,11 @@ class FrmXMLHelper {
 	 * Fix field ids for fields that already exist prior to import.
 	 *
 	 * @since 4.07
+	 * @param int $form_id
+	 * @param array $keys_by_original_field_id
 	 */
-	protected static function maybe_update_field_ids( $form_id ) {
+	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
 		global $frm_duplicate_ids;
-		global $frm_keys_by_original_field_id;
 
 		$former_duplicate_ids = $frm_duplicate_ids;
 		$where                = array(
@@ -644,7 +646,7 @@ class FrmXMLHelper {
 		foreach ( $fields as $field ) {
 			$before            = (array) clone $field;
 			$field             = (array) $field;
-			$frm_duplicate_ids = $frm_keys_by_original_field_id;
+			$frm_duplicate_ids = $keys_by_original_field_id;
 			$after             = FrmFieldsHelper::switch_field_ids( $field );
 
 			if ( $before['field_options'] !== $after['field_options'] ) {
