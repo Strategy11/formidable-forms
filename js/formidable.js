@@ -498,10 +498,10 @@ function frmFrontFormJS() {
 							if ( typeof response.recaptcha !== 'undefined' ) {
 								var container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' ),
 									input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">',
-									previous_input = container.find( 'input[name="recaptcha_checked"]' );
+									previousInput = container.find( 'input[name="recaptcha_checked"]' );
 
-								if ( previous_input.length ) {
-									previous_input.replaceWith( input );
+								if ( previousInput.length ) {
+									previousInput.replaceWith( input );
 								} else {
 									container.append( input );
 								}
