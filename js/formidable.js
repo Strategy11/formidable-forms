@@ -485,6 +485,8 @@ function frmFrontFormJS() {
 
 					setTimeout(
 						function() {
+							var container, input, previousInput;
+
 							replaceContent.replaceWith( response.content );
 
 							addUrlParam( response );
@@ -496,9 +498,9 @@ function frmFrontFormJS() {
 							}
 
 							if ( typeof response.recaptcha !== 'undefined' ) {
-								var container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' ),
-									input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">',
-									previousInput = container.find( 'input[name="recaptcha_checked"]' );
+								container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
+								input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
+								previousInput = container.find( 'input[name="recaptcha_checked"]' );
 
 								if ( previousInput.length ) {
 									previousInput.replaceWith( input );
