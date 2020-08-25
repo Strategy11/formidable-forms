@@ -70,10 +70,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return '';
 		}
 
-		if ( class_exists( 'FrmProFieldCaptcha' ) && is_callable( 'FrmProFieldCaptcha::checked' ) && FrmProFieldCaptcha::checked() ) {
-			return '';
-		}
-
 		$class_prefix  = $this->class_prefix();
 		$captcha_size  = $this->captcha_size();
 		$allow_mutiple = $frm_settings->re_multi;
