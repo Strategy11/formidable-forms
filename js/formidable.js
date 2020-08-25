@@ -543,7 +543,7 @@ function frmFrontFormJS() {
 						var $recaptcha  = jQuery( this ),
 							recaptchaID = $recaptcha.data( 'rid' );
 
-						if ( jQuery().grecaptcha ) {
+						if ( typeof grecaptcha !== 'undefined' && grecaptcha ) {
 							if ( recaptchaID ) {
 								grecaptcha.reset( recaptchaID );
 							} else {
