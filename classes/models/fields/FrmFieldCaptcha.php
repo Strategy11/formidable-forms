@@ -202,13 +202,4 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		return wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $arg_array );
 	}
-
-	/**
-	 * @since 4.07
-	 */
-	public static function render_checked_response() {
-		if ( class_exists( 'FrmProFieldCaptcha' ) && is_callable( 'FrmProFieldCaptcha::render_checked_response' ) ) {
-			FrmProFieldCaptcha::render_checked_response();
-		}
-	}
 }
