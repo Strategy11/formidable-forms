@@ -358,9 +358,8 @@ class FrmXMLHelper {
 	 * TODO: Cut down on params
 	 */
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
+		$in_section                = 0;
 		$keys_by_original_field_id = array();
-
-		$in_section = 0;
 
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
