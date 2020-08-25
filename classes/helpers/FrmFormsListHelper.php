@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsListHelper extends FrmListHelper {
 	public $status = '';
 
+	public $total_items = 0;
+
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
@@ -88,6 +90,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
 		$total_items = FrmDb::get_count( 'frm_forms', $s_query );
+		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
 			array(
@@ -98,24 +101,19 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	public function no_items() {
-		echo '<p>';
 		if ( $this->status === 'trash' ) {
+			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
 			</a>
 			<?php
+			echo '</p>';
 		} else {
-
-			esc_html_e( 'No Forms Found.', 'formidable' );
-			?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ); ?>">
-				<?php esc_html_e( 'Add New', 'formidable' ); ?>
-			</a>
-			<?php
+			$title = __( 'No Forms Found', 'formidable' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_no_forms.php';
 		}
-		echo '</p>';
 	}
 
 	public function get_bulk_actions() {

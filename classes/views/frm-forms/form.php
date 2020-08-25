@@ -31,6 +31,7 @@
 		}
 		?>
 	</ul>
+	<?php FrmAppHelper::renewal_message(); ?>
 	<p id="frm-form-button">
 		<button class="frm_button_submit" disabled="disabled">
 			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>

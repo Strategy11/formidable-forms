@@ -5,6 +5,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected $item;
 	protected $field;
 
+	/**
+	 * @since 4.07
+	 */
+	public $total_items = 0;
+
 	public function prepare_items() {
 		global $per_page;
 
@@ -70,6 +75,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$limit       = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 		$total_items = FrmEntry::getRecordCount( $s_query );
+		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
 			array(
