@@ -496,9 +496,15 @@ function frmFrontFormJS() {
 							}
 
 							if ( typeof response.recaptcha !== 'undefined' ) {
-								jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' ).append(
-									'<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">'
-								);
+								var container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' ),
+									input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">',
+									previous_input = container.find( 'input[name="recaptcha_checked"]' );
+
+								if ( previous_input.length ) {
+									previous_input.replaceWith( input );
+								} else {
+									container.append( input );
+								}
 							}
 
 							afterFormSubmitted( object, response );
