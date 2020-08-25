@@ -412,7 +412,16 @@ function frmFrontFormJS() {
 			$recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
 		if ( $recaptcha.length ) {
 			recaptchaID = $recaptcha.data( 'rid' );
-			response = grecaptcha.getResponse( recaptchaID );
+			
+			try {
+				response = grecaptcha.getResponse( recaptchaID );
+			} catch( e ) {
+				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
+					return errors;
+				} else {
+					response = '';
+				}
+			}
 
 			if ( response.length === 0 ) {
 				fieldContainer = $recaptcha.closest( '.frm_form_field' );
