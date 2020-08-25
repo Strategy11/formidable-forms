@@ -412,7 +412,16 @@ function frmFrontFormJS() {
 			$recaptcha = jQuery( form ).find( '.frm-g-recaptcha' );
 		if ( $recaptcha.length ) {
 			recaptchaID = $recaptcha.data( 'rid' );
-			response = grecaptcha.getResponse( recaptchaID );
+
+			try {
+				response = grecaptcha.getResponse( recaptchaID );
+			} catch ( e ) {
+				if ( jQuery( form ).find( 'input[name="recaptcha_checked"]' ).length ) {
+					return errors;
+				} else {
+					response = '';
+				}
+			}
 
 			if ( response.length === 0 ) {
 				fieldContainer = $recaptcha.closest( '.frm_form_field' );
@@ -485,6 +494,8 @@ function frmFrontFormJS() {
 
 					setTimeout(
 						function() {
+							var container, input, previousInput;
+
 							replaceContent.replaceWith( response.content );
 
 							addUrlParam( response );
@@ -496,9 +507,15 @@ function frmFrontFormJS() {
 							}
 
 							if ( typeof response.recaptcha !== 'undefined' ) {
-								jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' ).append(
-									'<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">'
-								);
+								container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
+								input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
+								previousInput = container.find( 'input[name="recaptcha_checked"]' );
+
+								if ( previousInput.length ) {
+									previousInput.replaceWith( input );
+								} else {
+									container.append( input );
+								}
 							}
 
 							afterFormSubmitted( object, response );
@@ -543,7 +560,7 @@ function frmFrontFormJS() {
 						var $recaptcha  = jQuery( this ),
 							recaptchaID = $recaptcha.data( 'rid' );
 
-						if ( jQuery().grecaptcha ) {
+						if ( typeof grecaptcha !== 'undefined' && grecaptcha ) {
 							if ( recaptchaID ) {
 								grecaptcha.reset( recaptchaID );
 							} else {
