@@ -34,6 +34,8 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_no_forms.php';
 	}
 }
+
+FrmAppHelper::renewal_message();
 ?>
 </form>
 
