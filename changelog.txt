@@ -1,4 +1,8 @@
 == Changelog ==
+* New: Use frm_inline_success for the form class in the customized HTML to move the success message next to the submit button. "frm_inline_success frm_alignright_success" will right-align the message.
+* Tweak: Improve the form listing page and entry listings page when nothing has been created.
+* Fix: Update the recaptcha for better reliability to catch more spam.
+
 = 4.06.03 =
 * More consistent dropdown styling with multiselect dropdowns.
 * Prepare the code for handling permissions options as an array of roles.
