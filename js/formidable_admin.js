@@ -4996,7 +4996,7 @@ function frmAdminBuildJS() {
 	}
 
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).multiselect({
+		jQuery( '.frm_multiselect' ).hide().multiselect({
 			templates: {ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>'},
 			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 			nonSelectedText: '',
