@@ -4995,11 +4995,22 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function accessibility() {
+		jQuery( '.multiselect-container' ).find('input[type="checkbox"]').each(function() {
+			var checkbox = jQuery(this);
+			checkbox.closest('li').attr(
+				'aria-describedby',
+				checkbox.is(':checked') ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
+			);
+		});
+	}
+
 	function initiateMultiselect() {
 		jQuery( '.frm_multiselect' ).multiselect({
 			templates: {
 				ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
-				li: '<li role="option"><a tabindex="0"><label></label></a></li>'
+				li: '<li role="option"><a tabindex="0"><label></label></a></li>',
+				button: '<button role="listbox" type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 			},
 			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 			nonSelectedText: '',
@@ -5012,6 +5023,11 @@ function frmAdminBuildJS() {
 						}
 					});
 				}
+
+				accessibility();
+			},
+			onChange: function( event ) {
+				accessibility();
 			}
 		});
 	}

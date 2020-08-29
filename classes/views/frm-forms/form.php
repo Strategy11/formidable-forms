@@ -49,4 +49,6 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<?php FrmFieldsHelper::bulk_options_overlay(); ?>
+<?php
+FrmFieldsHelper::bulk_options_overlay();
+FrmAppHelper::accessibility();

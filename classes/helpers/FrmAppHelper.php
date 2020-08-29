@@ -2648,6 +2648,10 @@ class FrmAppHelper {
 		return $locales;
 	}
 
+	public static function accessibility() {
+		require self::plugin_path() . '/classes/views/frm-forms/accessibility.php';
+	}
+
 	/**
 	 * Use the WP 4.7 wp_doing_ajax function
 	 *
