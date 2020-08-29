@@ -4996,11 +4996,11 @@ function frmAdminBuildJS() {
 	}
 
 	function accessibility() {
-		jQuery( '.multiselect-container' ).find('input[type="checkbox"]').each(function() {
-			var checkbox = jQuery(this);
-			checkbox.closest('li').attr(
+		jQuery( '.multiselect-container' ).find( 'input[type="checkbox"]' ).each( function() {
+			var checkbox = jQuery( this );
+			checkbox.closest( 'li' ).attr(
 				'aria-describedby',
-				checkbox.is(':checked') ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
+				checkbox.is( ':checked' ) ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
 			);
 		});
 	}
