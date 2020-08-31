@@ -359,9 +359,7 @@ class FrmFieldFormHtml {
 			unset( $shortcode_atts['class'] );
 		}
 
-		if ( isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
-			$shortcode_atts['aria-invalid'] = 'true';
-		}
+		$shortcode_atts['aria-invalid'] = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
 
 		$this->field_obj->set_field_column( 'shortcodes', $shortcode_atts );
 
