@@ -5008,9 +5008,9 @@ function frmAdminBuildJS() {
 	function initiateMultiselect() {
 		jQuery( '.frm_multiselect' ).each( function() {
 			var $select = jQuery( this ),
-				id = $select.attr( 'id' ).replace( '[]', '' ),
-				labelledBy = jQuery( '#for_' + id );
-			labelledBy = labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+				id = $select.is('[id]') ? $select.attr( 'id' ).replace( '[]', '' ) : false,
+				labelledBy = id ? jQuery( '#for_' + id ) : false;
+			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 			$select.multiselect({
 				templates: {
 					ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
