@@ -4995,7 +4995,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function accessibility() {
+	function multiselect_accessibility() {
 		jQuery( '.multiselect-container' ).find( 'input[type="checkbox"]' ).each( function() {
 			var checkbox = jQuery( this );
 			checkbox.closest( 'a' ).attr(
@@ -5029,10 +5029,10 @@ function frmAdminBuildJS() {
 						});
 					}
 
-					accessibility();
+					multiselect_accessibility();
 				},
 				onChange: function( event ) {
-					accessibility();
+					multiselect_accessibility();
 				}
 			});
 		});
