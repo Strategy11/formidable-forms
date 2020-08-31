@@ -6061,8 +6061,7 @@ function frmAdminBuildJS() {
 			});
 
 			//If File Protection is checked/unchecked
-			$protectFiles = document.getElementById( 'protect_files' );
-			jQuery( $protectFiles ).change( function() {
+			jQuery( document ).on( 'change', '#protect_files', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
 					jQuery( '#edit_action' ).change();
