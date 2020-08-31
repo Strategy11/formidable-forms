@@ -5006,11 +5006,11 @@ function frmAdminBuildJS() {
 	}
 
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).each(function() {
+		jQuery( '.frm_multiselect' ).each( function() {
 			var $select = jQuery( this ),
 				id = $select.attr( 'id' ).replace( '[]', '' ),
 				labelledBy = jQuery( '#for_' + id );
-			labelledBy = labelledBy.length ? 'aria-labelledby="' + labelledBy.attr('id') + '"' : '';
+			labelledBy = labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 			$select.multiselect({
 				templates: {
 					ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
