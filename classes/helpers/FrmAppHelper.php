@@ -2652,7 +2652,7 @@ class FrmAppHelper {
 	 * Output HTML containing reference text for accessibility
 	 */
 	public static function multiselect_accessibility() {
-		include_once self::plugin_path() . '/classes/views/frm-forms/accessibility.php';
+		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
 	}
 
 	/**
