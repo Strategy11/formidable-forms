@@ -17,8 +17,8 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			array( $form_id, $form )
 		);
 
-		$this->set_private_property( 'FrmCsvExportHelper', 'form_id', $form_id );
-		$this->set_private_property( 'FrmCsvExportHelper', 'fields', $form_cols );
+		$this->set_private_property( 'FrmCSVExportHelper', 'form_id', $form_id );
+		$this->set_private_property( 'FrmCSVExportHelper', 'fields', $form_cols );
 
 		$headings = array();
 		$this->run_private_method(
