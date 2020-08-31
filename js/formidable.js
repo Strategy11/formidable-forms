@@ -177,6 +177,8 @@ function frmFrontFormJS() {
 						errors = checkNumberField( field, errors );
 					} else if ( field.type === 'email' ) {
 						errors = checkEmailField( field, errors, emailFields );
+					} else if ( field.type === 'url' ) {
+						errors = checkUrlField( field, errors );
 					} else if ( field.pattern !== null ) {
 						errors = checkPatternField( field, errors );
 					}
@@ -221,6 +223,8 @@ function frmFrontFormJS() {
 				errors = checkEmailField( field, errors, emailFields );
 			} else if ( field.type === 'number' ) {
 				errors = checkNumberField( field, errors );
+			} else if ( field.type === 'url' ) {
+				errors = checkUrlField( field, errors );
 			} else if ( field.pattern !== null ) {
 				errors = checkPatternField( field, errors );
 			}
@@ -318,6 +322,19 @@ function frmFrontFormJS() {
 			}
 		});
 		return val;
+	}
+
+	function checkUrlField( field, errors ) {
+		var fieldID,
+			url = field.value;
+
+		if ( url !== '' && ! /^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i.test( url ) ) {
+			fieldID = getFieldId( field, true );
+			if ( ! ( fieldID in errors ) ) {
+				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+			}
+		}
+		return errors;
 	}
 
 	function checkEmailField( field, errors, emailFields ) {
