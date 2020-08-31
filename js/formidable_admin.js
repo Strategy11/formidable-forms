@@ -4995,21 +4995,46 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function multiselectAccessibility() {
+		jQuery( '.multiselect-container' ).find( 'input[type="checkbox"]' ).each( function() {
+			var checkbox = jQuery( this );
+			checkbox.closest( 'a' ).attr(
+				'aria-describedby',
+				checkbox.is( ':checked' ) ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
+			);
+		});
+	}
+
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).hide().multiselect({
-			templates: {ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>'},
-			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-			nonSelectedText: '',
-			onDropdownShown: function( event ) {
-				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
-				if ( action.length ) {
-					jQuery( '#wpcontent' ).click( function() {
-						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
-							jQuery( event.currentTarget ).removeClass( 'open' );
-						}
-					});
+		jQuery( '.frm_multiselect' ).hide().each( function() {
+			var $select = jQuery( this ),
+				id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false,
+				labelledBy = id ? jQuery( '#for_' + id ) : false;
+			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+			$select.multiselect({
+				templates: {
+					ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
+					li: '<li><a tabindex="0"><label></label></a></li>',
+					button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown" aria-describedby="frm_multiselect_button" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+				},
+				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
+				nonSelectedText: '',
+				onDropdownShown: function( event ) {
+					var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
+					if ( action.length ) {
+						jQuery( '#wpcontent' ).click( function() {
+							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
+								jQuery( event.currentTarget ).removeClass( 'open' );
+							}
+						});
+					}
+
+					multiselectAccessibility();
+				},
+				onChange: function( event ) {
+					multiselectAccessibility();
 				}
-			}
+			});
 		});
 	}
 
