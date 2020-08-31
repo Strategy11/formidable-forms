@@ -552,14 +552,28 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	/**
-	* Skip this if running < php 5.3
-	*/
-	protected function get_private_property( $object, $property ) {
+	 * Skip this if running < php 5.3
+	 *
+	 * @param mixed $object
+	 * @param string $property
+	 * @return ReflectionProperty
+	 */
+	protected function get_accessible_property( $object, $property ) {
 		$this->check_php_version( '5.3' );
 		$rc = new ReflectionClass( $object );
 		$p = $rc->getProperty( $property );
 		$p->setAccessible( true );
+		return $p;
+	}
+
+	protected function get_private_property( $object, $property ) {
+		$p = $this->get_accessible_property( $object, $property );
 		return $p->getValue( $object );
+	}
+
+	protected function set_private_property( $object, $property, $value ) {
+		$p = $this->get_accessible_property( $object, $property );
+		$p->setValue( $object, $value );
 	}
 
 	protected function check_php_version( $required ) {
