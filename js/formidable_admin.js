@@ -5006,29 +5006,35 @@ function frmAdminBuildJS() {
 	}
 
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).multiselect({
-			templates: {
-				ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
-				li: '<li><a tabindex="0"><label></label></a></li>',
-				button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown" aria-describedby="frm_multiselect_button"><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
-			},
-			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-			nonSelectedText: '',
-			onDropdownShown: function( event ) {
-				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
-				if ( action.length ) {
-					jQuery( '#wpcontent' ).click( function() {
-						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
-							jQuery( event.currentTarget ).removeClass( 'open' );
-						}
-					});
-				}
+		jQuery( '.frm_multiselect' ).each(function() {
+			var select = jQuery( this ),
+				id = select.attr( 'id' ).replace( '[]', '' ),
+				labelled_by = jQuery( '#for_' + id );
+			labelled_by = labelled_by.length ? 'aria-labelledby="' + labelled_by.attr('id') + '"' : '';
+			select.multiselect({
+				templates: {
+					ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
+					li: '<li><a tabindex="0"><label></label></a></li>',
+					button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown" aria-describedby="frm_multiselect_button" ' + labelled_by + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+				},
+				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
+				nonSelectedText: '',
+				onDropdownShown: function( event ) {
+					var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
+					if ( action.length ) {
+						jQuery( '#wpcontent' ).click( function() {
+							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
+								jQuery( event.currentTarget ).removeClass( 'open' );
+							}
+						});
+					}
 
-				accessibility();
-			},
-			onChange: function( event ) {
-				accessibility();
-			}
+					accessibility();
+				},
+				onChange: function( event ) {
+					accessibility();
+				}
+			});
 		});
 	}
 
