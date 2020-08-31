@@ -15,3 +15,6 @@
 		</tr>
 	<?php } ?>
 </table>
+
+<?php
+FrmAppHelper::accessibility();

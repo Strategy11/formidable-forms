@@ -58,3 +58,6 @@
 	</div>
 	</form>
 </div>
+
+<?php
+FrmAppHelper::accessibility();
