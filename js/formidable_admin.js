@@ -5006,7 +5006,7 @@ function frmAdminBuildJS() {
 	}
 
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).each( function() {
+		jQuery( '.frm_multiselect' ).hide().each( function() {
 			var $select = jQuery( this ),
 				id = $select.is('[id]') ? $select.attr( 'id' ).replace( '[]', '' ) : false,
 				labelledBy = id ? jQuery( '#for_' + id ) : false;
