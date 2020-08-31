@@ -60,4 +60,4 @@
 </div>
 
 <?php
-FrmAppHelper::accessibility();
+FrmAppHelper::multiselect_accessibility();

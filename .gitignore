@@ -12,3 +12,7 @@ languages/formidable-js-strings.php
 node_modules
 node_modules/*
 npm-debug.log
+
+# Composer
+vendor
+composer.lock

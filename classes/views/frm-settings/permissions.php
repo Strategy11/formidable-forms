@@ -17,4 +17,4 @@
 </table>
 
 <?php
-FrmAppHelper::accessibility();
+FrmAppHelper::multiselect_accessibility();

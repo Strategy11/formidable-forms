@@ -51,4 +51,4 @@
 </div>
 <?php
 FrmFieldsHelper::bulk_options_overlay();
-FrmAppHelper::accessibility();
+FrmAppHelper::multiselect_accessibility();
