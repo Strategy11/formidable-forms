@@ -364,7 +364,6 @@ function frmFrontFormJS() {
 				}
 			}
 		}
-		console.log({ event: 'email errors', errors });
 		return errors;
 	}
 
