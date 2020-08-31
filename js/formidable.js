@@ -966,42 +966,6 @@ function frmFrontFormJS() {
 				}
 			});
 
-			jQuery( document ).on( 'blur', 'form.frm_js_validate input', function() {
-				var input = jQuery( this ),
-					fieldId = getFieldId( input[0], true ),
-					errors = {};
-				switch ( input.attr( 'type' ) ) {
-					case 'email':
-						errors = checkEmailField( input[0], errors );
-						break;
-
-					case 'number':
-						errors = checkNumberField( input[0], errors );
-						break;
-
-					case 'url':
-						errors = checkUrlField( input[0], errors );
-						break;
-
-					case 'hidden':
-						break;
-
-					default: case 'text':
-						if ( input.is( '[pattern]' ) ) {
-							errors = checkPatternField( input[0], errors );
-						}
-						break;
-				}
-
-				invalid = errors.hasOwnProperty( fieldId );
-				if ( ! invalid && input.hasClass( 'frm_required_field' ) ) {
-					errors = checkRequiredField( input[0], errors );
-					invalid = errors.hasOwnProperty( fieldId );
-				}
-
-				input.attr( 'aria-invalid', invalid );
-			});
-
 			jQuery( document ).on( 'focus', '.frm_toggle_default', clearDefault );
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
 			jQuery( '.frm_toggle_default' ).blur();
