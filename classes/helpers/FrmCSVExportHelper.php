@@ -142,16 +142,20 @@ class FrmCSVExportHelper {
 		foreach ( self::$fields as $col ) {
 			if ( $col->form_id === self::$form_id ) {
 				$headings += self::field_headings( $col );
-			} else {
-				$repeater_id                           = $col->field_options['in_section'];
-				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+			} elseif ( $col->field_options['in_section'] ) {
+				$repeater_id = $col->field_options['in_section'];
+				$section     = FrmField::getOne( $repeater_id );
 
-				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
-					$fields_by_repeater_id[ $repeater_id ] = array();
-					$repeater_ids[]                        = $repeater_id;
+				if ( $section && FrmField::is_repeating_field( $section ) ) {
+					$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+
+					if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
+						$fields_by_repeater_id[ $repeater_id ] = array();
+						$repeater_ids[]                        = $repeater_id;
+					}
+
+					$fields_by_repeater_id[ $repeater_id ][] = $col;
 				}
-
-				$fields_by_repeater_id[ $repeater_id ][] = $col;
 			}
 		}
 		unset( $repeater_id, $col );
