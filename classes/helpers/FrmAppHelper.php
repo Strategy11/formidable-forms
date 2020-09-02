@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.06.03';
+	public static $plug_version = '4.07';
 
 	/**
 	 * @since 1.07.02
@@ -2646,6 +2646,13 @@ class FrmAppHelper {
 		$locales = apply_filters( 'frm_locales', $locales );
 
 		return $locales;
+	}
+
+	/**
+	 * Output HTML containing reference text for accessibility
+	 */
+	public static function multiselect_accessibility() {
+		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
 	}
 
 	/**
