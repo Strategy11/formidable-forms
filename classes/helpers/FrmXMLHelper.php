@@ -343,29 +343,11 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_update_child_form_parent_id( $imported_forms, $child_forms ) {
 		foreach ( $child_forms as $child_form_id => $old_parent_form_id ) {
-			if ( isset( $imported_forms[ $old_parent_form_id ] ) && $imported_forms[ $old_parent_form_id ] != $old_parent_form_id ) {
+			if ( isset( $imported_forms[ $old_parent_form_id ] ) && (int) $imported_forms[ $old_parent_form_id ] !== (int) $old_parent_form_id ) {
 				// Update all children with this old parent_form_id
 				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
-
 				FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
-
-				// set missing in_section values for repeater fields
-				$child_form_fields = FrmField::get_all_for_form( $child_form_id );
-
-				foreach ( $child_form_fields as $child_field ) {
-					if ( ! $child_field->field_options['in_section'] ) {
-						// fix missing in_section data for child form fields
-						$dividers = FrmField::get_all_types_in_form( $new_parent_form_id, 'divider' );
-
-						foreach ( $dividers as $divider ) {
-							if ( FrmField::is_repeating_field( $divider ) && (int) $divider->field_options['form_select'] === (int) $child_form_id ) {
-								$child_field->field_options['in_section'] = $divider->id;
-								FrmProXMLHelper::add_in_section_value_to_field_ids( array( $child_field->id ), $divider->id );
-								break;
-							}
-						}
-					}
-				}
+				do_action( 'frm_update_child_form_parent_id', $child_form_id, $new_parent_form_id );
 			}
 		}
 	}
@@ -483,10 +465,9 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * Update the current in_section value
+	 * Update the current in_section value at the beginning of the field loop
 	 *
 	 * @since 2.0.25
-	 *
 	 * @param int $in_section
 	 * @param array $f
 	 */
