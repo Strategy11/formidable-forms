@@ -2328,16 +2328,16 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function onRadioOptionTextFocus() {
+	function onOptionTextFocus() {
 		var input = jQuery( this );
 		input.attr( 'data-value-on-focus', input.val() );
 	}
 
-	function onRadioOptionTextBlur() {
+	function onOptionTextBlur() {
 		var input = jQuery( this ),
 			oldValue = input.attr( 'data-value-on-focus' ),
 			newValue = input.val(),
-			fieldId = input.closest( '.frm-type-radio' ).attr( 'data-fid' );
+			fieldId = input.closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
 
 		if ( oldValue === newValue ) {
 			return;
@@ -5975,8 +5975,8 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
-			jQuery( document ).on( 'focus', '.frm-type-radio ul input[type="text"]', onRadioOptionTextFocus );
-			jQuery( document ).on( 'blur', '.frm-type-radio ul input[type="text"]', onRadioOptionTextBlur );
+			jQuery( document ).on( 'focus', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextFocus );
+			jQuery( document ).on( 'blur', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextBlur );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
