@@ -3309,7 +3309,7 @@ function frmAdminBuildJS() {
 			fieldId = getOptionFieldId( parentLi, key ),
 			sep = document.getElementById( 'separate_value_' + fieldId );
 
-		if ( sep.checked === false ) {
+		if ( sep !== null && sep.checked === false ) {
 			// If separate values are not turned on.
 			savedVal = document.getElementById( 'field_key_' + fieldId + '-' + key );
 			savedVal.value = input.value;
