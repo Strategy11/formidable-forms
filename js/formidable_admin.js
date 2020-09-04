@@ -4497,6 +4497,22 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function fieldUpdated() {
+		frmGlobal.fieldsUpdated = 1;
+		window.addEventListener( 'beforeunload', confirmExit );
+	}
+
+	function buildSubmittedNoAjax() {
+		// set frmGlobal.fieldsUpdate to 0 to avoid the unsaved changes pop up
+		frmGlobal.fieldsUpdated = 0;
+	}
+
+	function confirmExit( event ) {
+		if ( frmGlobal.fieldsUpdated ) {
+			event.preventDefault();
+		}
+	}
+
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
@@ -5939,6 +5955,9 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
+
+			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
+			jQuery( document ).on( 'change', '#frm_builder_page input, #frm_builder_page select', fieldUpdated );
 
 			popAllProductFields();
 
