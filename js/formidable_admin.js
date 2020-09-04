@@ -2328,6 +2328,37 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function onRadioOptionTextFocus() {
+		var input = jQuery( this );
+		input.attr( 'data-value-on-focus', input.val() );
+	}
+
+	function onRadioOptionTextBlur() {
+		var input = jQuery( this ),
+			oldValue = input.attr( 'data-value-on-focus' ),
+			newValue = input.val(),
+			fieldId = input.closest( '.frm-type-radio' ).attr( 'data-fid' );
+
+		if ( oldValue === newValue ) {
+			return;
+		}
+
+		jQuery( '.frm_logic_rows' ).children( 'div' ).each( function() {
+			var row = jQuery( this ),
+				logicId = row.closest( '.frm_logic_rows' ).attr( 'id' ).replace( 'frm_logic_rows_', '' );
+
+			if ( row.find( '.frm_logic_field_opts' ).val() !== fieldId ) {
+				return true;
+			}
+
+			var valueSelect = row.find( 'select[name="field_options[hide_opt_' + logicId + '][]"]' ),
+				oldOption = valueSelect.find( 'option[value="' + oldValue + '"]' );
+
+			oldOption.attr( 'value', newValue );
+			oldOption.text( newValue );
+		});
+	}
+
 	function updateGetValueFieldSelection() {
 		/*jshint validthis:true */
 		var fieldID = this.id.replace( 'get_values_form_', '' );
@@ -5943,6 +5974,9 @@ function frmAdminBuildJS() {
 			popAllProductFields();
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
+
+			jQuery( document ).on( 'focus', '.frm-type-radio ul input[type="text"]', onRadioOptionTextFocus );
+			jQuery( document ).on( 'blur', '.frm-type-radio ul input[type="text"]', onRadioOptionTextBlur );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
