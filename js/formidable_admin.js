@@ -1682,8 +1682,6 @@ function frmAdminBuildJS() {
 		}
 
 		if ( att !== null ) {
-			console.log( 'live changes' );
-
 			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
 				option = changes.options[0];
 				if ( option.value === '' ) {
@@ -1891,8 +1889,6 @@ function frmAdminBuildJS() {
 
 	//Add new option or "Other" option to radio/checkbox/dropdown
 	function addFieldOption() {
-		console.log( 'addFieldOption' );
-
 		/*jshint validthis:true */
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			newOption = jQuery( '#frm_field_' + fieldId + '_opts .frm_option_template' ).prop( 'outerHTML' ),
@@ -1904,7 +1900,7 @@ function frmAdminBuildJS() {
 		if ( lastKey !== oldKey ) {
 			optKey = lastKey + 1;
 		}
-s
+
 		//Update hidden field
 		if ( optType === 'other' ) {
 			document.getElementById( 'other_input_' + fieldId ).value = 1;
@@ -1933,15 +1929,6 @@ s
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
-
-			console.log({
-				event: 'new option',
-				lastKey,
-				optKey,
-				fieldId,
-				opts: document.getElementById( 'frm_field_' + fieldId + '_opts' )
-			});
-
 			resetDisplayedOpts( fieldId );
 		}
 	}
@@ -2356,11 +2343,15 @@ s
 			return;
 		}
 
-		jQuery( '.frm_logic_rows' ).each( function() {
-			var logicId = jQuery( this ).attr( 'id' ).replace( 'frm_logic_rows_', '' );
+		jQuery( document.getElementById( 'frm_builder_page' ) ).find( '.frm-single-settings' ).each( function() {
+			var singleField = jQuery( this ),
+				logicId = singleField.attr( 'data-fid' ),
+				updated = false;
 
-			jQuery( this ).find( '.frm_logic_row' ).each( function() {
-				var row = jQuery( this ), valueSelect, option;
+			singleField.find( '.frm_logic_rows .frm_logic_row' ).each( function() {
+				var row = jQuery( this ),
+					valueSelect,
+					option;
 
 				if ( row.find( '.frm_logic_field_opts' ).val() !== fieldId ) {
 					return true;
@@ -2374,7 +2365,13 @@ s
 					option = valueSelect.find( 'option[value="' + oldValue + '"]' );
 					option.attr( 'value', newValue ).text( newValue );
 				}
+
+				updated = true;
 			});
+
+			if ( updated ) {
+				moveFieldSettings( singleField.get(0) );
+			}
 		});
 	}
 
