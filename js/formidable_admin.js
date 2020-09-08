@@ -2370,7 +2370,7 @@ function frmAdminBuildJS() {
 			});
 
 			if ( updated ) {
-				moveFieldSettings( singleField.get(0) );
+				moveFieldSettings( this );
 			}
 		});
 	}
