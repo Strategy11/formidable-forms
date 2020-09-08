@@ -2334,45 +2334,62 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextBlur() {
-		var input = jQuery( this ),
-			oldValue = input.attr( 'data-value-on-focus' ),
-			newValue = input.val(),
-			fieldId = input.closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
+		var oldValue = this.getAttribute( 'data-value-on-focus' ),
+			newValue = this.value,
+			fieldId,
+			fields,
+			fieldLength,
+			fieldIndex,
+			field,
+			logicId,
+			updated,
+			logicRows,
+			row,
+			rowLength,
+			rowIndex,
+			valueSelect,
+			opt;
 
 		if ( oldValue === newValue ) {
 			return;
 		}
 
-		jQuery( document.getElementById( 'frm_builder_page' ) ).find( '.frm-single-settings' ).each( function() {
-			var singleField = jQuery( this ),
-				logicId = singleField.attr( 'data-fid' ),
-				updated = false;
+		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
+		fields = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm-single-settings' );
+		fieldLength = fields.length;
+		for ( fieldIndex = 0; fieldIndex < fieldLength; fieldIndex ++ ) {
+			field = fields[ fieldIndex ];
+			logicId = field.getAttribute( 'data-fid' );
+			updated = false;
+			logicRows = field.querySelectorAll( '.frm_logic_row' );
+			rowLength = logicRows.length;
+			
+			for ( rowIndex = 0; rowIndex < rowLength; rowIndex ++ ) {
+				row = logicRows[ rowIndex ];
+				opt = row.querySelector( '.frm_logic_field_opts' );
 
-			singleField.find( '.frm_logic_rows .frm_logic_row' ).each( function() {
-				var row = jQuery( this ),
-					valueSelect,
-					option;
-
-				if ( row.find( '.frm_logic_field_opts' ).val() !== fieldId ) {
-					return true;
+				if ( opt.value !== fieldId ) {
+					continue;
 				}
 
-				valueSelect = row.find( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+				valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
 
 				if ( oldValue === '' ) {
-					valueSelect.append( '<option value="' + newValue + '">' + newValue + '</option>' );
+					option = document.createElement( 'option' );
+					valueSelect.appendChild( option );
 				} else {
-					option = valueSelect.find( 'option[value="' + oldValue + '"]' );
-					option.attr( 'value', newValue ).text( newValue );
+					option = valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
 				}
 
+				option.setAttribute( 'value', newValue );
+				option.textContent = newValue;
 				updated = true;
-			});
+			}
 
 			if ( updated ) {
-				moveFieldSettings( this );
-			}
-		});
+				moveFieldSettings( field );
+			}	
+		}
 	}
 
 	function updateGetValueFieldSelection() {
