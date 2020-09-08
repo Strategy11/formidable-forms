@@ -2357,14 +2357,14 @@ function frmAdminBuildJS() {
 		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
 		fields = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm-single-settings' );
 		fieldLength = fields.length;
-		for ( fieldIndex = 0; fieldIndex < fieldLength; fieldIndex ++ ) {
+		for ( fieldIndex = 0; fieldIndex < fieldLength; fieldIndex++ ) {
 			field = fields[ fieldIndex ];
 			logicId = field.getAttribute( 'data-fid' );
 			updated = false;
 			logicRows = field.querySelectorAll( '.frm_logic_row' );
 			rowLength = logicRows.length;
-			
-			for ( rowIndex = 0; rowIndex < rowLength; rowIndex ++ ) {
+
+			for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 				row = logicRows[ rowIndex ];
 				opt = row.querySelector( '.frm_logic_field_opts' );
 
@@ -2388,7 +2388,7 @@ function frmAdminBuildJS() {
 
 			if ( updated ) {
 				moveFieldSettings( field );
-			}	
+			}
 		}
 	}
 
