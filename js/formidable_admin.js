@@ -1682,6 +1682,8 @@ function frmAdminBuildJS() {
 		}
 
 		if ( att !== null ) {
+			console.log( 'live changes' );
+
 			if ( changes.tagName === 'SELECT' && att === 'placeholder' ) {
 				option = changes.options[0];
 				if ( option.value === '' ) {
@@ -1889,6 +1891,8 @@ function frmAdminBuildJS() {
 
 	//Add new option or "Other" option to radio/checkbox/dropdown
 	function addFieldOption() {
+		console.log( 'addFieldOption' );
+
 		/*jshint validthis:true */
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			newOption = jQuery( '#frm_field_' + fieldId + '_opts .frm_option_template' ).prop( 'outerHTML' ),
@@ -1900,7 +1904,7 @@ function frmAdminBuildJS() {
 		if ( lastKey !== oldKey ) {
 			optKey = lastKey + 1;
 		}
-
+s
 		//Update hidden field
 		if ( optType === 'other' ) {
 			document.getElementById( 'other_input_' + fieldId ).value = 1;
@@ -1929,6 +1933,15 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
+
+			console.log({
+				event: 'new option',
+				lastKey,
+				optKey,
+				fieldId,
+				opts: document.getElementById( 'frm_field_' + fieldId + '_opts' )
+			});
+
 			resetDisplayedOpts( fieldId );
 		}
 	}
@@ -2343,19 +2356,25 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		jQuery( '.frm_logic_rows' ).children( 'div' ).each( function() {
-			var row = jQuery( this ),
-				logicId = row.closest( '.frm_logic_rows' ).attr( 'id' ).replace( 'frm_logic_rows_', '' );
+		jQuery( '.frm_logic_rows' ).each( function() {
+			var logicId = jQuery( this ).attr( 'id' ).replace( 'frm_logic_rows_', '' );
 
-			if ( row.find( '.frm_logic_field_opts' ).val() !== fieldId ) {
-				return true;
-			}
+			jQuery( this ).find( '.frm_logic_row' ).each( function() {
+				var row = jQuery( this ), valueSelect, option;
 
-			var valueSelect = row.find( 'select[name="field_options[hide_opt_' + logicId + '][]"]' ),
-				oldOption = valueSelect.find( 'option[value="' + oldValue + '"]' );
+				if ( row.find( '.frm_logic_field_opts' ).val() !== fieldId ) {
+					return true;
+				}
 
-			oldOption.attr( 'value', newValue );
-			oldOption.text( newValue );
+				valueSelect = row.find( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+
+				if ( oldValue === '' ) {
+					valueSelect.append( '<option value="' + newValue + '">' + newValue + '</option>' );
+				} else {
+					option = valueSelect.find( 'option[value="' + oldValue + '"]' );
+					option.attr( 'value', newValue ).text( newValue );
+				}
+			});
 		});
 	}
 
