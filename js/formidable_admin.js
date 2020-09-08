@@ -299,7 +299,7 @@ function frmAdminBuildJS() {
 		thisForm = document.getElementById( 'form_id' ),
 		cancelSort = false,
 		copyHelper = false,
-		fieldsUpdated = false,
+		fieldsUpdated = 0,
 		thisFormId = 0;
 
 	if ( thisForm !== null ) {
