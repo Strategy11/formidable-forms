@@ -294,13 +294,14 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
-	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
-	var builderForm = document.getElementById( 'new_fields' );
-	var thisForm = document.getElementById( 'form_id' );
-	var cancelSort = false;
-	var copyHelper = false;
+	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
+		builderForm = document.getElementById( 'new_fields' ),
+		thisForm = document.getElementById( 'form_id' ),
+		cancelSort = false,
+		copyHelper = false,
+		fieldsUpdated = false,
+		thisFormId = 0;
 
-	var thisFormId = 0;
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
 	}
@@ -4498,17 +4499,17 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldUpdated() {
-		frmGlobal.fieldsUpdated = 1;
+		fieldsUpdated = 1;
 		window.addEventListener( 'beforeunload', confirmExit );
 	}
 
 	function buildSubmittedNoAjax() {
-		// set frmGlobal.fieldsUpdate to 0 to avoid the unsaved changes pop up
-		frmGlobal.fieldsUpdated = 0;
+		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
+		fieldsUpdated = 0;
 	}
 
 	function confirmExit( event ) {
-		if ( frmGlobal.fieldsUpdated ) {
+		if ( fieldsUpdated ) {
 			event.preventDefault();
 		}
 	}
