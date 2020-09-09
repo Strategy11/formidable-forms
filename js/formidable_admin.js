@@ -2344,7 +2344,9 @@ function frmAdminBuildJS() {
 			rowIndex,
 			valueSelect,
 			opts,
-			fieldIds;
+			fieldIds,
+			settingId,
+			setting;
 
 		if ( oldValue === newValue ) {
 			return;
@@ -2375,13 +2377,15 @@ function frmAdminBuildJS() {
 			option.setAttribute( 'value', newValue );
 			option.textContent = newValue;
 
-			if ( fieldIds.indexOf( fieldId ) === -1 ) {
-				fieldIds.push( fieldId );
+			if ( fieldIds.indexOf( logicId ) === -1 ) {
+				fieldIds.push( logicId );
 			}
 		}
 
 		for ( fieldIndex in fieldIds ) {
-			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldIds[ fieldIndex ] ) );
+			settingId = fieldIds[ fieldIndex ];
+			setting = document.getElementById( 'frm-single-settings-' + settingId );
+			moveFieldSettings( setting );
 		}
 	}
 
