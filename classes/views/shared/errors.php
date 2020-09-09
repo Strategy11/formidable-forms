@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
 		echo '<div class="frm_updated_message">';

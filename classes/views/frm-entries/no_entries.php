@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frmcenter frm_no_entries_form">
 <?php if ( $form && isset( $form->options['no_save'] ) && $form->options['no_save'] ) { ?>
 <h3><?php esc_html_e( 'This form is not set to save any entries.', 'formidable' ); ?></h3>

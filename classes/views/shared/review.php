@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="notice notice-info is-dismissible frm-review-notice">
 	<div class="frm-satisfied">
 		<p>

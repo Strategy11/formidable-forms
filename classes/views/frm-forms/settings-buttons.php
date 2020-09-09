@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="howto">
 	<?php esc_html_e( 'Select a style for this form and set your button text.', 'formidable' ); ?>
 </p>

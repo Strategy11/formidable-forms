@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_wrap">
 	<?php
 	FrmAppHelper::get_admin_header(
@@ -10,7 +15,7 @@
 	?>
 	<div class="wrap">
 <?php
-require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' );
+require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 $wp_list_table->views();
 ?>
 

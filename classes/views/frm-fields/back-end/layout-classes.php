@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm-layout-classes">
 	<p class="howto">
 		<?php esc_html_e( 'Click on any box below to set the width for your selected field.', 'formidable' ); ?>

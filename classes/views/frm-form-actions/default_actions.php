@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 // add post action
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {

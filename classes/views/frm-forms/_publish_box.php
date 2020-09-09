@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
 	$class = 'frm_submit_settings_btn';
 } else {

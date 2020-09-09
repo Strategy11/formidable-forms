@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_confirm_modal" class="frm_hidden settings-lite-cta frm-inline-modal">
 	<div class="metabox-holder">
 		<div class="postbox">

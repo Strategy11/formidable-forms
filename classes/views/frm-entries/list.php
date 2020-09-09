@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
 	<?php if ( $form ) { ?>
 	<div class="frm_page_container">
