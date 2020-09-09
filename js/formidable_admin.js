@@ -2358,13 +2358,13 @@ function frmAdminBuildJS() {
 		rowLength = rows.length;
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 			row = rows[ rowIndex ];
-			logicId = row.id.split( '_' )[ 2 ];
 			opts = row.querySelector( '.frm_logic_field_opts' );
 
 			if ( opts.value !== fieldId ) {
 				continue;
 			}
 
+			logicId = row.id.split( '_' )[ 2 ];
 			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
 
 			if ( oldValue === '' ) {
