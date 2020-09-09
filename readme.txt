@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 4.07
+Stable tag: 4.07.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
 
@@ -436,6 +436,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.07.01 =
+* New: Show a warning when leaving the form builder page with unsaved changes.
+* Fix: Make any multiselect dropdowns in admin settings accessible.
+* Fix: aria-invalid attribute was missing on form elements for accessibility.
+
 = 4.07 =
 * New: Use frm_inline_success for the form class in the customized HTML to move the success message next to the submit button. "frm_inline_success frm_alignright_success" will right-align the message.
 * Tweak: Improve the form listing page and entry listings page when nothing has been created.
@@ -453,11 +458,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Updated deprecated blacklist functions in WP 5.5.
 * Fix: Add more checks to the installation triggers to prevent them from being triggered at unintended times.
 * Show a more helpful error message in some cases when the XML import fails.
-
-= 4.06.01 =
-* Remove the top level nav notification for inbox notifications.
-* Use the frm_display_value hook for each different case where values are displayed (entries list table, view an entry, summary field...)
-* Fix: Left and right margin setting on buttons was being ignored. Use something like "10px 10px" in the button margin setting to show margins on the sides.
-* Fix: Prevent a js error in some cases when the ajax response isn't json.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
