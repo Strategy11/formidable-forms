@@ -2337,58 +2337,50 @@ function frmAdminBuildJS() {
 		var oldValue = this.getAttribute( 'data-value-on-focus' ),
 			newValue = this.value,
 			fieldId,
-			fields,
-			fieldLength,
-			fieldIndex,
-			field,
 			logicId,
-			updated,
-			logicRows,
 			row,
 			rowLength,
 			rowIndex,
 			valueSelect,
-			opt;
+			opts,
+			fieldIds;
 
 		if ( oldValue === newValue ) {
 			return;
 		}
 
 		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
-		fields = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm-single-settings' );
-		fieldLength = fields.length;
-		for ( fieldIndex = 0; fieldIndex < fieldLength; fieldIndex++ ) {
-			field = fields[ fieldIndex ];
-			logicId = field.getAttribute( 'data-fid' );
-			updated = false;
-			logicRows = field.querySelectorAll( '.frm_logic_row' );
-			rowLength = logicRows.length;
+		fieldIds = [];
+		rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' );
+		rowLength = rows.length;
+		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
+			row = rows[ rowIndex ];
+			logicId = row.id.split( '_' )[ 2 ];
+			opts = row.querySelector( '.frm_logic_field_opts' );
 
-			for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
-				row = logicRows[ rowIndex ];
-				opt = row.querySelector( '.frm_logic_field_opts' );
-
-				if ( opt.value !== fieldId ) {
-					continue;
-				}
-
-				valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
-
-				if ( oldValue === '' ) {
-					option = document.createElement( 'option' );
-					valueSelect.appendChild( option );
-				} else {
-					option = valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
-				}
-
-				option.setAttribute( 'value', newValue );
-				option.textContent = newValue;
-				updated = true;
+			if ( opts.value !== fieldId ) {
+				continue;
 			}
 
-			if ( updated ) {
-				moveFieldSettings( field );
+			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+
+			if ( oldValue === '' ) {
+				option = document.createElement( 'option' );
+				valueSelect.appendChild( option );
+			} else {
+				option = valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
 			}
+
+			option.setAttribute( 'value', newValue );
+			option.textContent = newValue;
+			
+			if ( fieldIds.indexOf( fieldId ) === -1 ) {
+				fieldIds.push( fieldId );
+			}
+		}
+
+		for ( var fieldIndex in fieldIds ) {
+			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldIds[ fieldIndex ] ) );
 		}
 	}
 
