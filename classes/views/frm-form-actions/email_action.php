@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmEmailAction extends FrmFormAction {
 
@@ -19,7 +22,7 @@ class FrmEmailAction extends FrmFormAction {
 	public function form( $form_action, $args = array() ) {
 		extract( $args );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_email_settings.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_email_settings.php';
 	}
 
 	public function get_defaults() {

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_with_icons frm_no_print">
 	<h3>
 		<?php esc_html_e( 'Entry Actions', 'formidable' ); ?>

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Size', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'field_font_size' ) ); ?>" id="frm_field_font_size" value="<?php echo esc_attr( $style->post_content['field_font_size'] ); ?>" />

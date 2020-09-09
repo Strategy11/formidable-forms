@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 if ( ! empty( $form_id ) ) {
 	?>
 	<h4 class="frm_left_label"><?php esc_html_e( 'Select a form:', 'formidable' ); ?></h4>

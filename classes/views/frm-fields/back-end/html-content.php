@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm-has-modal">
 	<label>
 		<?php esc_html_e( 'Content', 'formidable' ); ?>

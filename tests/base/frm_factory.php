@@ -15,6 +15,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		// This is a workaround for WP_UnitTest_Factory_For_Thing::generate_args
 		// Non-scalar values are not currently allowed in default definitions
 		$this->default_generation_definitions['rootline_titles'] = '';
+		$this->default_generation_definitions['protect_files_role'] = '';
 	}
 
 	function create_object( $args ) {

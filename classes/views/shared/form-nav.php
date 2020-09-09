@@ -1,4 +1,10 @@
-<?php FrmFormsHelper::form_switcher( $form ); ?>
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+FrmFormsHelper::form_switcher( $form );
+?>
 
 <ul class="frm_form_nav">
 <?php

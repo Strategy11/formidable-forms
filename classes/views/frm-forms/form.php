@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_form_editor_container" class="<?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
 
 	<?php
@@ -49,4 +54,6 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<?php FrmFieldsHelper::bulk_options_overlay(); ?>
+<?php
+FrmFieldsHelper::bulk_options_overlay();
+FrmAppHelper::multiselect_accessibility();

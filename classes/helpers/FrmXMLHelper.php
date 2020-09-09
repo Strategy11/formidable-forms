@@ -358,7 +358,8 @@ class FrmXMLHelper {
 	 * TODO: Cut down on params
 	 */
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
-		$in_section = 0;
+		$in_section                = 0;
+		$keys_by_original_field_id = array();
 
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
@@ -383,6 +384,8 @@ class FrmXMLHelper {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
 				} elseif ( isset( $form_fields[ $f['field_key'] ] ) ) {
+					$keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
+
 					// check for field to edit by field key
 					unset( $f['id'] );
 
@@ -399,6 +402,10 @@ class FrmXMLHelper {
 
 				self::create_imported_field( $f, $imported );
 			}
+		}
+
+		if ( $keys_by_original_field_id ) {
+			self::maybe_update_field_ids( $form_id, $keys_by_original_field_id );
 		}
 	}
 
@@ -612,6 +619,46 @@ class FrmXMLHelper {
 			$imported['imported']['fields'] ++;
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
+	}
+
+	/**
+	 * Fix field ids for fields that already exist prior to import.
+	 *
+	 * @since 4.07
+	 * @param int $form_id
+	 * @param array $keys_by_original_field_id
+	 */
+	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
+		global $frm_duplicate_ids;
+
+		$former_duplicate_ids = $frm_duplicate_ids;
+		$where                = array(
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			),
+		);
+		$fields               = FrmField::getAll( $where, 'field_order' );
+		$field_id_by_key      = wp_list_pluck( $fields, 'id', 'field_key' );
+
+		foreach ( $fields as $field ) {
+			$before            = (array) clone $field;
+			$field             = (array) $field;
+			$frm_duplicate_ids = $keys_by_original_field_id;
+			$after             = FrmFieldsHelper::switch_field_ids( $field );
+
+			if ( $before['field_options'] !== $after['field_options'] ) {
+				$frm_duplicate_ids = $field_id_by_key;
+				$after             = FrmFieldsHelper::switch_field_ids( $after );
+
+				if ( $before['field_options'] !== $after['field_options'] ) {
+					FrmField::update( $field['id'], array( 'field_options' => $after['field_options'] ) );
+				}
+			}
+		}
+
+		$frm_duplicate_ids = $former_duplicate_ids;
 	}
 
 	/**

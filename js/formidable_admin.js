@@ -294,13 +294,14 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
-	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
-	var builderForm = document.getElementById( 'new_fields' );
-	var thisForm = document.getElementById( 'form_id' );
-	var cancelSort = false;
-	var copyHelper = false;
+	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
+		builderForm = document.getElementById( 'new_fields' ),
+		thisForm = document.getElementById( 'form_id' ),
+		cancelSort = false,
+		copyHelper = false,
+		fieldsUpdated = 0,
+		thisFormId = 0;
 
-	var thisFormId = 0;
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
 	}
@@ -3309,7 +3310,7 @@ function frmAdminBuildJS() {
 			fieldId = getOptionFieldId( parentLi, key ),
 			sep = document.getElementById( 'separate_value_' + fieldId );
 
-		if ( sep.checked === false ) {
+		if ( sep !== null && sep.checked === false ) {
 			// If separate values are not turned on.
 			savedVal = document.getElementById( 'field_key_' + fieldId + '-' + key );
 			savedVal.value = input.value;
@@ -4497,6 +4498,22 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function fieldUpdated() {
+		fieldsUpdated = 1;
+		window.addEventListener( 'beforeunload', confirmExit );
+	}
+
+	function buildSubmittedNoAjax() {
+		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
+		fieldsUpdated = 0;
+	}
+
+	function confirmExit( event ) {
+		if ( fieldsUpdated ) {
+			event.preventDefault();
+		}
+	}
+
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
@@ -4995,21 +5012,46 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function multiselectAccessibility() {
+		jQuery( '.multiselect-container' ).find( 'input[type="checkbox"]' ).each( function() {
+			var checkbox = jQuery( this );
+			checkbox.closest( 'a' ).attr(
+				'aria-describedby',
+				checkbox.is( ':checked' ) ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
+			);
+		});
+	}
+
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).multiselect({
-			templates: {ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>'},
-			buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-			nonSelectedText: '',
-			onDropdownShown: function( event ) {
-				var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
-				if ( action.length ) {
-					jQuery( '#wpcontent' ).click( function() {
-						if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
-							jQuery( event.currentTarget ).removeClass( 'open' );
-						}
-					});
+		jQuery( '.frm_multiselect' ).hide().each( function() {
+			var $select = jQuery( this ),
+				id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false,
+				labelledBy = id ? jQuery( '#for_' + id ) : false;
+			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+			$select.multiselect({
+				templates: {
+					ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
+					li: '<li><a tabindex="0"><label></label></a></li>',
+					button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown" aria-describedby="frm_multiselect_button" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+				},
+				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
+				nonSelectedText: '',
+				onDropdownShown: function( event ) {
+					var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
+					if ( action.length ) {
+						jQuery( '#wpcontent' ).click( function() {
+							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
+								jQuery( event.currentTarget ).removeClass( 'open' );
+							}
+						});
+					}
+
+					multiselectAccessibility();
+				},
+				onChange: function( event ) {
+					multiselectAccessibility();
 				}
-			}
+			});
 		});
 	}
 
@@ -5915,6 +5957,9 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
+			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
+			jQuery( document ).on( 'change', '#frm_builder_page input, #frm_builder_page select', fieldUpdated );
+
 			popAllProductFields();
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
@@ -6056,6 +6101,17 @@ function frmAdminBuildJS() {
 					jQuery( '#edit_action' ).change();
 				} else {
 					jQuery( '.hide_editable' ).fadeOut( 'slow' );
+					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
+				}
+			});
+
+			//If File Protection is checked/unchecked
+			jQuery( document ).on( 'change', '#protect_files', function() {
+				if ( this.checked ) {
+					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
+					jQuery( '#edit_action' ).change();
+				} else {
+					jQuery( '.hide_protect_files' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			});

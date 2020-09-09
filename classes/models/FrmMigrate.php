@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmMigrate {
 	public $fields;
@@ -7,10 +10,6 @@ class FrmMigrate {
 	public $entry_metas;
 
 	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
 		global $wpdb;
 		$this->fields      = $wpdb->prefix . 'frm_fields';
 		$this->forms       = $wpdb->prefix . 'frm_forms';

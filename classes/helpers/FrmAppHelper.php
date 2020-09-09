@@ -2649,6 +2649,13 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Output HTML containing reference text for accessibility
+	 */
+	public static function multiselect_accessibility() {
+		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
+	}
+
+	/**
 	 * Use the WP 4.7 wp_doing_ajax function
 	 *
 	 * @since 2.05.07

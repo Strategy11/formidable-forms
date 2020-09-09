@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_wrap wrap upgrade_to_pro frm-fields">
 	<h1 class="frm_pro_heading">
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/logo.png" alt="Upgrade to Pro" />

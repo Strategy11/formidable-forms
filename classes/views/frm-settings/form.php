@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="form_global_settings" class="frm_wrap">
 	<form name="frm_settings_form" method="post" class="frm_settings_form"
 		action="?page=formidable-settings<?php echo esc_html( $current ? '&amp;t=' . $current : '' ); ?>">

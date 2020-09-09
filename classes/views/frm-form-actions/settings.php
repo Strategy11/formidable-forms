@@ -1,7 +1,12 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="howto">
 	<?php esc_html_e( 'Add form actions to your form to perform tasks when an entry is created, updated, imported, and more.', 'formidable' ); ?>
 </p>
-				
+
 <div id="frm_email_addon_menu" class="frm-limited-actions">
 	<?php
 	FrmAppHelper::show_search_box(
