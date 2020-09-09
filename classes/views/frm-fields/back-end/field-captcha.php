@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 $frm_settings = FrmAppHelper::get_settings();
 if ( empty( $frm_settings->pubkey ) ) {
 	?>

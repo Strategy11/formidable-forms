@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 <p id="frm-connect-btns" class="frm-show-unauthorized">
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings' ) ); ?>" target="_blank" class="button-primary frm-button-primary" id="frm-settings-connect-btn">

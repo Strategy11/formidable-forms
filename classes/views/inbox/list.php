@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_wrap" id="frm_inbox_page">
 	<div class="frm_page_container">
 	<?php

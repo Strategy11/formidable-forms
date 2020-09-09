@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_wrap">
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
 	<div class="frm_page_container frm-fields">

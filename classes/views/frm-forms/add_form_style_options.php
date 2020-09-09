@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <tr>
 	<td>
 		<label for="frm_option_transition" class="frm_show_upgrade frm_noallow" data-medium="transitions" data-upgrade="Form transitions">

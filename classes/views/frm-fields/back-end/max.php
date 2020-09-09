@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm6 frm_form_field">
 	<label for="field_options_max_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php

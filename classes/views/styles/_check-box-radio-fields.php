@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm6 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Radio', 'formidable' ); ?></label>
 	<select name="<?php echo esc_attr( $frm_style->get_field_name( 'radio_align' ) ); ?>" id="frm_radio_align">

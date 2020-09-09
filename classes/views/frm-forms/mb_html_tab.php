@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm-html-tags" class="tabs-panel">
 	<ul class="frm_code_list frm-full-hover">
 		<?php

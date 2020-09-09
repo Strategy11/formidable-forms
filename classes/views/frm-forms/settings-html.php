@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_field_html_box frm_top_container">
 	<p>
 		<label><?php esc_html_e( 'Form Classes', 'formidable' ); ?></label>
