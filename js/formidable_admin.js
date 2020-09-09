@@ -2346,7 +2346,9 @@ function frmAdminBuildJS() {
 			opts,
 			fieldIds,
 			settingId,
-			setting;
+			setting,
+			optionMatches,
+			option;
 
 		if ( oldValue === newValue ) {
 			return;
@@ -2366,12 +2368,19 @@ function frmAdminBuildJS() {
 
 			logicId = row.id.split( '_' )[ 2 ];
 			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+			optionMatches = valueSelect.querySelectorAll( 'option[value="' + oldValue + '"]' );
 
-			if ( oldValue === '' ) {
-				option = document.createElement( 'option' );
-				valueSelect.appendChild( option );
-			} else {
-				option = valueSelect.querySelector( 'option[value="' + oldValue + '"]' );
+			if ( ! optionMatches.length ) {
+				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
+
+				if ( ! optionMatches.length ) {
+					option = document.createElement( 'option' );
+					valueSelect.appendChild( option );
+				}
+			}
+
+			if ( optionMatches.length ) {
+				option = optionMatches[ optionMatches.length - 1 ];
 			}
 
 			option.setAttribute( 'value', newValue );
