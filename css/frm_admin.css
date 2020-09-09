@@ -1526,6 +1526,11 @@ div.frm_updated_message {
 	text-align: center;
 }
 
+#frm_top_bar + .wrap > .frm_updated_message {
+	display: inline-block;
+	width: calc( 100% - 50px );
+}
+
 #post-body-content > .frm_updated_message {
 	margin: 5px 65px;
 }
