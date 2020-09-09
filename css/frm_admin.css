@@ -1528,7 +1528,8 @@ div.frm_updated_message {
 
 #frm_top_bar + .wrap > .frm_updated_message {
 	display: inline-block;
-	width: calc( 100% - 50px );
+	width: 100%;
+	box-sizing: border-box;
 }
 
 #post-body-content > .frm_updated_message {
