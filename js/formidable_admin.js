@@ -2337,6 +2337,7 @@ function frmAdminBuildJS() {
 		var oldValue = this.getAttribute( 'data-value-on-focus' ),
 			newValue = this.value,
 			fieldId,
+			fieldIndex,
 			logicId,
 			row,
 			rowLength,
@@ -2373,13 +2374,13 @@ function frmAdminBuildJS() {
 
 			option.setAttribute( 'value', newValue );
 			option.textContent = newValue;
-			
+
 			if ( fieldIds.indexOf( fieldId ) === -1 ) {
 				fieldIds.push( fieldId );
 			}
 		}
 
-		for ( var fieldIndex in fieldIds ) {
+		for ( fieldIndex in fieldIds ) {
 			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldIds[ fieldIndex ] ) );
 		}
 	}
