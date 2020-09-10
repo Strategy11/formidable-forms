@@ -2329,15 +2329,22 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextFocus() {
-		if ( this.getAttribute( 'data-value-on-load' ) === null ) {
-			this.setAttribute( 'data-value-on-load', this.value );
+		var strippedValue = this.value.replace( /[^\w\d]/g, '' ),
+			input;
 
-			var input = document.createElement( 'input' );
-			input.id = 'optionmap_' + this.value.replace( /[^\w]/g, '' );
-			input.value = this.value;
-			input.setAttribute( 'type', 'hidden' );
-			input.setAttribute( 'name', 'optionmap[' + this.value + ']' );
-			this.parentNode.appendChild( input );
+		if ( this.getAttribute( 'data-value-on-load' ) === null ) {
+			if ( strippedValue !== '' ) {
+				this.setAttribute( 'data-value-on-load', this.value );
+
+				input = document.createElement( 'input' );
+				input.id = 'optionmap_' + strippedValue;
+				input.value = this.value;
+				input.setAttribute( 'type', 'hidden' );
+				input.setAttribute( 'name', 'optionmap[' + this.value + ']' );
+				this.parentNode.appendChild( input );
+			} else {
+				this.setAttribute( 'data-value-on-load', '' );
+			}
 		}
 
 		this.setAttribute( 'data-value-on-focus', this.value );
