@@ -143,9 +143,9 @@ class FrmCSVExportHelper {
 		$repeater_ids          = array();
 
 		foreach ( self::$fields as $col ) {
-			if ( $col->form_id === self::$form_id ) {
+			if ( $col->form_id === self::$form_id || ! $col->field_options['in_section'] ) {
 				$headings += self::field_headings( $col );
-			} elseif ( $col->field_options['in_section'] ) {
+			} else {
 				$repeater_id = $col->field_options['in_section'];
 				$section     = FrmField::getOne( $repeater_id );
 
