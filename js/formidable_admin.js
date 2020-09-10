@@ -494,7 +494,9 @@ function frmAdminBuildJS() {
 
 	function loadTooltips() {
 		var wrapClass = jQuery( '.wrap, .frm_wrap' ),
-			confirmModal = document.getElementById( 'frm_confirm_modal' );
+			confirmModal = document.getElementById( 'frm_confirm_modal' ),
+			doAction,
+			confirmedBulkDelete;
 
 		jQuery( confirmModal ).on( 'click', '[data-deletefield]', deleteFieldConfirmed );
 		jQuery( confirmModal ).on( 'click', '[data-removeid]', removeThisTag );
@@ -514,6 +516,33 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
+
+		doAction = document.getElementById( 'doaction' );
+		doAction.addEventListener( 'click', function( event ) {
+			var link;
+
+			if ( ! confirmedBulkDelete && document.getElementById( 'bulk-action-selector-top' ).value === 'bulk_delete' ) {
+				event.preventDefault();
+
+				link = document.createElement( 'a' );
+				link.setAttribute( 'href', 'confirm-bulk-delete' );
+				link.setAttribute( 'data-frmcaution', doAction.getAttribute( 'data-frmcaution-bulk_delete' ) );
+				link.setAttribute( 'data-frmverify', doAction.getAttribute( 'data-frmverify-bulk_delete' ) );
+				confirmedBulkDelete = false;
+				confirmLinkClick( link );
+
+				return false;
+			}
+		});
+
+		jQuery( document ).on( 'click', '#frm-confirmed-click', function( event ) {
+			if ( this.getAttribute( 'href' ) === 'confirm-bulk-delete' ) {
+				event.preventDefault();
+				confirmedBulkDelete = true;
+				jQuery( '#doaction' ).click();
+				return false;
+			}
+		});
 	}
 
 	function removeThisTag() {

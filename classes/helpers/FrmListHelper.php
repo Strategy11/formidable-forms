@@ -398,7 +398,12 @@ class FrmListHelper {
 
 		echo "</select>\n";
 
-		submit_button( __( 'Apply', 'formidable' ), 'action', '', false, array( 'id' => "doaction$two" ) );
+		$other_attributes = array(
+			'id'                          => "doaction$two",
+			'data-frmcaution-bulk_delete' => __( 'Heads up', 'formidable' ),
+			'data-frmverify-bulk_delete'  => __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' ),
+		);
+		submit_button( __( 'Apply', 'formidable' ), 'action', '', false, $other_attributes );
 		echo "\n";
 	}
 
