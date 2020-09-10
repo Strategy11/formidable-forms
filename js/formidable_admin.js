@@ -2330,6 +2330,11 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function resetOptionTextDetails() {
+		jQuery( '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]' ).filter( '[data-value-on-load]' ).removeAttr( 'data-value-on-load' );
+		jQuery( 'input[type="hidden"][name^=optionmap]' ).remove();
+	}
+
 	function onOptionTextFocus() {
 		var input,
 			fieldId;
@@ -3488,6 +3493,7 @@ function frmAdminBuildJS() {
 	function afterFormSave( $button, buttonVal ) {
 		$button.removeClass( 'frm_loading_form' ).removeClass( 'frm_loading_button' );
 		$button.html( frm_admin_js.saved );
+		resetOptionTextDetails();
 
 		setTimeout( function() {
 			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
