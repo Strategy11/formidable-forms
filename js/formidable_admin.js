@@ -2336,7 +2336,7 @@ function frmAdminBuildJS() {
 			input.id = 'optionmap_' + this.value.replace( /[^\w]/g, '' );
 			input.value = this.value;
 			input.setAttribute( 'type', 'hidden' );
-			input.setAttribute( 'name', 'optionmap[' + this.value + ']' );			
+			input.setAttribute( 'name', 'optionmap[' + this.value + ']' );
 			this.parentNode.appendChild( input );
 		}
 
