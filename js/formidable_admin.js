@@ -300,7 +300,8 @@ function frmAdminBuildJS() {
 		cancelSort = false,
 		copyHelper = false,
 		fieldsUpdated = 0,
-		thisFormId = 0;
+		thisFormId = 0,
+		optionMap = {};
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -2330,22 +2331,24 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextFocus() {
-		var strippedValue = this.value.replace( /[^\w\d]/g, '' ),
-			input;
+		var input,
+			fieldId;
 
 		if ( this.getAttribute( 'data-value-on-load' ) === null ) {
-			if ( strippedValue !== '' ) {
-				this.setAttribute( 'data-value-on-load', this.value );
+			this.setAttribute( 'data-value-on-load', this.value );
 
-				input = document.createElement( 'input' );
-				input.id = 'optionmap_' + strippedValue;
-				input.value = this.value;
-				input.setAttribute( 'type', 'hidden' );
-				input.setAttribute( 'name', 'optionmap[' + this.value + ']' );
-				this.parentNode.appendChild( input );
-			} else {
-				this.setAttribute( 'data-value-on-load', '' );
+			fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
+			input = document.createElement( 'input' );
+			input.value = this.value;
+			input.setAttribute( 'type', 'hidden' );
+			input.setAttribute( 'name', 'optionmap[' + fieldId + '][' + this.value + ']' );
+			this.parentNode.appendChild( input );
+
+			if ( typeof optionMap[ fieldId ] === 'undefined' ) {
+				optionMap[ fieldId ] = {};
 			}
+
+			optionMap[ fieldId ][ this.value ] = input;
 		}
 
 		this.setAttribute( 'data-value-on-focus', this.value );
@@ -2366,7 +2369,6 @@ function frmAdminBuildJS() {
 			fieldIds,
 			settingId,
 			setting,
-			optionMap,
 			optionMatches,
 			option;
 
@@ -2374,13 +2376,13 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
 		originalValue = this.getAttribute( 'data-value-on-load' );
-		optionMap = document.getElementById( 'optionmap_' + originalValue.replace( /[^\w]/g, '' ) );
-		if ( optionMap !== null ) {
-			optionMap.value = newValue;
+
+		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 
-		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
 		fieldIds = [];
 		rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' );
 		rowLength = rows.length;
