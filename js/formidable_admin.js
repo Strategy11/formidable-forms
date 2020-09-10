@@ -2329,12 +2329,23 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextFocus() {
-		var input = jQuery( this );
-		input.attr( 'data-value-on-focus', input.val() );
+		if ( this.getAttribute( 'data-value-on-load' ) === null ) {
+			this.setAttribute( 'data-value-on-load', this.value );
+
+			var input = document.createElement( 'input' );
+			input.id = 'optionmap_' + this.value.replace( /[^\w]/g, '' );
+			input.value = this.value;
+			input.setAttribute( 'type', 'hidden' );
+			input.setAttribute( 'name', 'optionmap[' + this.value + ']' );			
+			this.parentNode.appendChild( input );
+		}
+
+		this.setAttribute( 'data-value-on-focus', this.value );
 	}
 
 	function onOptionTextBlur() {
-		var oldValue = this.getAttribute( 'data-value-on-focus' ),
+		var originalValue,
+			oldValue = this.getAttribute( 'data-value-on-focus' ),
 			newValue = this.value,
 			fieldId,
 			fieldIndex,
@@ -2347,11 +2358,18 @@ function frmAdminBuildJS() {
 			fieldIds,
 			settingId,
 			setting,
+			optionMap,
 			optionMatches,
 			option;
 
 		if ( oldValue === newValue ) {
 			return;
+		}
+
+		originalValue = this.getAttribute( 'data-value-on-load' );
+		optionMap = document.getElementById( 'optionmap_' + originalValue.replace( /[^\w]/g, '' ) );
+		if ( optionMap !== null ) {
+			optionMap.value = newValue;
 		}
 
 		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
