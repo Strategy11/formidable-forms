@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 /**
  * Show the checkbox field on the front-end.
  * Extra line breaks show as space on the front-end when

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_image_options frm_form_field" style="--image-size:<?php echo esc_attr( $width ); ?>px">
 	<div class="frm_opt_container">
 		<?php

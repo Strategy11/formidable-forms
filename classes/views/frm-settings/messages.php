@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="howto">
 	<?php esc_html_e( 'These messages will be used by default for new forms. Many can be overridden in form or field settings.', 'formidable' ); ?>
 </p>

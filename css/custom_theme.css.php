@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 

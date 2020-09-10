@@ -294,13 +294,14 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
-	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) );
-	var builderForm = document.getElementById( 'new_fields' );
-	var thisForm = document.getElementById( 'form_id' );
-	var cancelSort = false;
-	var copyHelper = false;
+	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
+		builderForm = document.getElementById( 'new_fields' ),
+		thisForm = document.getElementById( 'form_id' ),
+		cancelSort = false,
+		copyHelper = false,
+		fieldsUpdated = 0,
+		thisFormId = 0;
 
-	var thisFormId = 0;
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
 	}
@@ -4592,6 +4593,22 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function fieldUpdated() {
+		fieldsUpdated = 1;
+		window.addEventListener( 'beforeunload', confirmExit );
+	}
+
+	function buildSubmittedNoAjax() {
+		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
+		fieldsUpdated = 0;
+	}
+
+	function confirmExit( event ) {
+		if ( fieldsUpdated ) {
+			event.preventDefault();
+		}
+	}
+
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
@@ -6034,6 +6051,9 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
+
+			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
+			jQuery( document ).on( 'change', '#frm_builder_page input, #frm_builder_page select', fieldUpdated );
 
 			popAllProductFields();
 

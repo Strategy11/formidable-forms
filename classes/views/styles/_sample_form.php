@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <h2 class="frm-h2">
 	<?php esc_html_e( 'Style a Sample Form', 'formidable' ); ?>
 </h2>

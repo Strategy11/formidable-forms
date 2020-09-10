@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_insert_form" class="frm_hidden hidden">
 	<div id="frm_popup_content">
 		<div class="media-modal wp-core-ui">

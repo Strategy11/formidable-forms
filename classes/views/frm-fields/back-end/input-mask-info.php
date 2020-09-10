@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="howto">
 	<?php esc_html_e( 'To create a custom input mask, you’ll need to use this specific set of symbols:', 'formidable' ); ?>
 </p>

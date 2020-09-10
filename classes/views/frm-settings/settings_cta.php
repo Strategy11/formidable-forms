@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="settings-lite-cta" id="frm-dismissable-cta">
 		<div class="postbox" style="border:none;">
 			<div class="inside">

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm-right-panel">
 	<div class="frm_field_list">
 		<ul id="frm-nav-tabs" class="frm-nav-tabs">

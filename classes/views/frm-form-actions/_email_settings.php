@@ -1,3 +1,9 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
+
 <p class="frm_has_shortcodes frm_to_row frm_email_row">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>>
 		<?php esc_html_e( 'To', 'formidable' ); ?>

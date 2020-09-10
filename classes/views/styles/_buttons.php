@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm_no_top_margin">
 	<label for="frm_submit_style">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'submit_style' ) ); ?>" id="frm_submit_style" <?php checked( $style->post_content['submit_style'], 1 ); ?> value="1" />
