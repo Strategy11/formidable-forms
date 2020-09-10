@@ -1,4 +1,10 @@
-<?php the_generator( 'export' ); ?>
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+the_generator( 'export' );
+?>
 
 <channel>
 	<title><?php bloginfo_rss( 'name' ); ?></title>

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 if ( isset( $field['post_field'] ) && 'post_category' === $field['post_field'] && FrmAppHelper::pro_is_installed() ) {
 	echo FrmProPost::get_category_dropdown( // WPCS: XSS ok.

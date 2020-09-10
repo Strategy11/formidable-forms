@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 _deprecated_file( esc_html( basename( __FILE__ ) ), '4.0', null );
 
@@ -7,5 +10,5 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } else {
 	$read_only  = $field['read_only'];
-	include( dirname( __FILE__ ) . '/' . $field['type'] . '-field.php' );
+	include dirname( __FILE__ ) . '/' . $field['type'] . '-field.php';
 }

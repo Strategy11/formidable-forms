@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 		<h4><span><?php esc_html_e( 'Success Messages', 'formidable' ); ?></span></h4>
 		<p class="frm4 frm_first frm_form_field">
 			<label><?php esc_html_e( 'BG color', 'formidable' ); ?></label>

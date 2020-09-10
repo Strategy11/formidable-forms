@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_license_box">
 	<h3 class="frm-no-border frm_no_top_margin"><?php esc_html_e( 'License Key', 'formidable' ); ?></h3>
 	<p class="howto">

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <li class="frm-action <?php echo esc_attr( $group_class . ( isset( $data['data-upgrade'] ) ? ' frm-not-installed' : '' ) ); ?>">
 	<a href="javascript:void(0)" class="<?php echo esc_attr( $classes ); ?>"
 		data-limit="<?php echo esc_attr( $action_control->action_options['limit'] ); ?>"

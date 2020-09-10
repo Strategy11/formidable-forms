@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_top_bar">
 	<?php if ( FrmAppHelper::is_full_screen() ) { ?>
 		<div class="frm-full-close">
