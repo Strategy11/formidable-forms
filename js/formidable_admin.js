@@ -517,20 +517,17 @@ function frmAdminBuildJS() {
 
 		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 
-		doAction = document.getElementById( 'doaction' );
-		doAction.addEventListener( 'click', function( event ) {
-			var link;
+		// doaction and doaction2
 
-			if ( ! confirmedBulkDelete && document.getElementById( 'bulk-action-selector-top' ).value === 'bulk_delete' ) {
+		jQuery( document ).on( 'click', '#doaction, #doaction2', function( event ) {
+			var link,
+				isTop = this.id === 'doaction',
+				suffix = isTop ? 'top' : 'bottom';
+
+			if ( ! confirmedBulkDelete && document.getElementById( 'bulk-action-selector-' + suffix ).value === 'bulk_delete' ) {
 				event.preventDefault();
-
-				link = document.createElement( 'a' );
-				link.setAttribute( 'href', 'confirm-bulk-delete' );
-				link.setAttribute( 'data-frmcaution', doAction.getAttribute( 'data-frmcaution-bulk_delete' ) );
-				link.setAttribute( 'data-frmverify', doAction.getAttribute( 'data-frmverify-bulk_delete' ) );
 				confirmedBulkDelete = false;
-				confirmLinkClick( link );
-
+				confirmLinkClick( document.getElementById( 'confirm-bulk-delete-' + suffix ) );
 				return false;
 			}
 		});
