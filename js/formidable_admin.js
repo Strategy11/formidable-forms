@@ -517,12 +517,12 @@ function frmAdminBuildJS() {
 
 		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 
-		// doaction and doaction2
-
 		jQuery( document ).on( 'click', '#doaction, #doaction2', function( event ) {
 			var link,
 				isTop = this.id === 'doaction',
 				suffix = isTop ? 'top' : 'bottom';
+
+			doAction = this;
 
 			if ( ! confirmedBulkDelete && document.getElementById( 'bulk-action-selector-' + suffix ).value === 'bulk_delete' ) {
 				event.preventDefault();
@@ -536,7 +536,7 @@ function frmAdminBuildJS() {
 			if ( this.getAttribute( 'href' ) === 'confirm-bulk-delete' ) {
 				event.preventDefault();
 				confirmedBulkDelete = true;
-				jQuery( '#doaction' ).click();
+				jQuery( doAction ).click();
 				return false;
 			}
 		});
