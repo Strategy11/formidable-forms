@@ -3391,6 +3391,7 @@ function frmAdminBuildJS() {
 	function afterFormSave( $button, buttonVal ) {
 		$button.removeClass( 'frm_loading_form' ).removeClass( 'frm_loading_button' );
 		$button.html( frm_admin_js.saved );
+		fieldsUpdated = 0;
 
 		setTimeout( function() {
 			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
