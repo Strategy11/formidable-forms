@@ -2337,7 +2337,7 @@ function frmAdminBuildJS() {
 
 	function optionTextAlreadyExists( input ) {
 		var fieldId = jQuery( input ).closest( '.frm-single-settings' ).attr( 'data-fid' ),
-			optionInputs = jQuery( input ).closest( 'ul' ).get(0).querySelectorAll( '.field_' + fieldId + '_option' ),
+			optionInputs = jQuery( input ).closest( 'ul' ).get( 0 ).querySelectorAll( '.field_' + fieldId + '_option' ),
 			index,
 			optionInput;
 
@@ -2414,7 +2414,7 @@ function frmAdminBuildJS() {
 		// if it is, mark as duplicate and return
 		if ( optionTextAlreadyExists( this ) ) {
 			this.setAttribute( 'data-duplicate', 'true' );
-			
+
 			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
 				// unmap any other change that may have happened before instead of changing it to something unused
 				optionMap[ fieldId ][ originalValue ].value = originalValue;
