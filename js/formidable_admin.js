@@ -4518,6 +4518,10 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function triggerNewFormModal() {
+		
+	}
+
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
@@ -5775,6 +5779,8 @@ function frmAdminBuildJS() {
 				// New form selection page
 				initNewFormModal();
 				initSelectionAutocomplete();
+
+				jQuery( document ).on( 'click', '.trigger-new-form-modal', triggerNewFormModal );
 
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();

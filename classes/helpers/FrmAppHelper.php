@@ -918,11 +918,19 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.0
+	 * @param array $atts
 	 */
 	public static function add_new_item_link( $atts ) {
-		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) {
+		if ( ! empty( $atts['new_link'] ) ) {
 			?>
 			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm-with-plus">
+				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
+				<?php esc_html_e( 'Add New', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( ! empty( $atts['trigger_new_form_modal'] ) ) {
+			?>
+			<a href="#" class="button button-primary frm-button-primary frm-with-plus trigger-new-form-modal">
 				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
 				<?php esc_html_e( 'Add New', 'formidable' ); ?>
 			</a>
