@@ -400,15 +400,15 @@ class FrmListHelper {
 
 		if ( isset( $this->_actions['bulk_delete'] ) ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-				$verify = 'ALL selected forms in this form will be permanently deleted. Want to proceed?';
+				$verify = __( 'ALL selected forms in this form will be permanently deleted. Want to proceed?', 'formidable' );
 			} elseif ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
-				$verify = 'ALL selected entries in this form will be permanently deleted. Want to proceed?';
+				$verify = __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' );
 			} else {
 				$verify = false;
 			}
 
 			if ( $verify ) {
-				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmcaution='" . esc_html__( 'Heads up', 'formidable' ) . "' data-frmverify='" . esc_html__( $verify, 'formidable' ) . "'></a>";
+				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmcaution='" . esc_html__( 'Heads up', 'formidable' ) . "' data-frmverify='" . esc_attr( $verify ) . "'></a>";
 			}
 		}
 
