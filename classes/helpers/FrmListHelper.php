@@ -399,13 +399,7 @@ class FrmListHelper {
 		echo "</select>\n";
 
 		if ( isset( $this->_actions['bulk_delete'] ) ) {
-			if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-				$verify = __( 'ALL selected forms in this form will be permanently deleted. Want to proceed?', 'formidable' );
-			} elseif ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
-				$verify = __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' );
-			} else {
-				$verify = false;
-			}
+			$verify = $this->confirm_bulk_delete();
 
 			if ( $verify ) {
 				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmcaution='" . esc_html__( 'Heads up', 'formidable' ) . "' data-frmverify='" . esc_attr( $verify ) . "'></a>";
@@ -414,6 +408,13 @@ class FrmListHelper {
 
 		submit_button( __( 'Apply', 'formidable' ), 'action', '', false, array( 'id' => "doaction$two" ) );
 		echo "\n";
+	}
+
+	/**
+	 * @return string if empty there will be no confirmation pop up
+	 */
+	protected function confirm_bulk_delete() {
+		return '';
 	}
 
 	/**
