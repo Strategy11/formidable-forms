@@ -2407,15 +2407,21 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
+		originalValue = this.getAttribute( 'data-value-on-load' );
+
 		// check if the newValue is already mapped to another option
 		// if it is, mark as duplicate and return
 		if ( optionTextAlreadyExists( this ) ) {
 			this.setAttribute( 'data-duplicate', 'true' );
+			
+			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+				// unmap any other change that may have happened before instead of changing it to something unused
+				optionMap[ fieldId ][ originalValue ].value = originalValue;
+			}
+
 			return;
 		}
-
-		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
-		originalValue = this.getAttribute( 'data-value-on-load' );
 
 		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
 			optionMap[ fieldId ][ originalValue ].value = newValue;
