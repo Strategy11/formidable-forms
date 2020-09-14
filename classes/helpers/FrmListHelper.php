@@ -398,8 +398,23 @@ class FrmListHelper {
 
 		echo "</select>\n";
 
+		if ( isset( $this->_actions['bulk_delete'] ) ) {
+			$verify = $this->confirm_bulk_delete();
+
+			if ( $verify ) {
+				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmcaution='" . esc_html__( 'Heads up', 'formidable' ) . "' data-frmverify='" . esc_attr( $verify ) . "'></a>";
+			}
+		}
+
 		submit_button( __( 'Apply', 'formidable' ), 'action', '', false, array( 'id' => "doaction$two" ) );
 		echo "\n";
+	}
+
+	/**
+	 * @return string if empty there will be no confirmation pop up
+	 */
+	protected function confirm_bulk_delete() {
+		return '';
 	}
 
 	/**
