@@ -521,14 +521,15 @@ function frmAdminBuildJS() {
 			var link,
 				isTop = this.id === 'doaction',
 				suffix = isTop ? 'top' : 'bottom',
-				bulkActionSelector = document.getElementById( 'bulk-action-selector-' + suffix );
+				bulkActionSelector = document.getElementById( 'bulk-action-selector-' + suffix ),
+				confirmBulkDelete = document.getElementById( 'confirm-bulk-delete-' + suffix );
 
-			if ( bulkActionSelector !== null ) {
+			if ( bulkActionSelector !== null && confirmBulkDelete !== null ) {
 				doAction = this;
 
 				if ( ! confirmedBulkDelete && bulkActionSelector.value === 'bulk_delete' ) {
 					event.preventDefault();
-					confirmLinkClick( document.getElementById( 'confirm-bulk-delete-' + suffix ) );
+					confirmLinkClick( confirmBulkDelete );
 					return false;
 				}
 			} else {
