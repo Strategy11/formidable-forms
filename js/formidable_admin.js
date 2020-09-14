@@ -526,7 +526,7 @@ function frmAdminBuildJS() {
 			if ( bulkActionSelector !== null ) {
 				doAction = this;
 
-				if ( ! confirmedBulkDelete && document.getElementById( 'bulk-action-selector-' + suffix ).value === 'bulk_delete' ) {
+				if ( ! confirmedBulkDelete && bulkActionSelector.value === 'bulk_delete' ) {
 					event.preventDefault();
 					confirmLinkClick( document.getElementById( 'confirm-bulk-delete-' + suffix ) );
 					return false;
