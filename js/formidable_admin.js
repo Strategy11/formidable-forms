@@ -2335,6 +2335,22 @@ function frmAdminBuildJS() {
 		jQuery( 'input[type="hidden"][name^=optionmap]' ).remove();
 	}
 
+	function optionTextAlreadyExists( input ) {
+		var fieldId = jQuery( input ).closest( '.frm-single-settings' ).attr( 'data-fid' ),
+			optionInputs = jQuery( input ).closest( 'ul' ).get(0).querySelectorAll( '.field_' + fieldId + '_option' ),
+			index,
+			optionInput;
+
+		for ( index in optionInputs ) {
+			optionInput = optionInputs[ index ];
+			if ( optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute( 'data-duplicate' ) !== 'true' ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	function onOptionTextFocus() {
 		var input,
 			fieldId;
@@ -2354,6 +2370,16 @@ function frmAdminBuildJS() {
 			}
 
 			optionMap[ fieldId ][ this.value ] = input;
+		}
+
+		if ( this.getAttribute( 'data-duplicate' ) === 'true' ) {
+			this.removeAttribute( 'data-duplicate' );
+
+			// we want to use original value if actually still a duplicate
+			if ( optionTextAlreadyExists( this ) ) {
+				this.setAttribute( 'data-value-on-focus', this.getAttribute( 'data-value-on-load' ) );
+				return;
+			}
 		}
 
 		this.setAttribute( 'data-value-on-focus', this.value );
@@ -2381,7 +2407,14 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		fieldId = jQuery( this ).closest( '.frm-type-radio, .frm-type-checkbox' ).attr( 'data-fid' );
+		// check if the newValue is already mapped to another option
+		// if it is, mark as duplicate and return
+		if ( optionTextAlreadyExists( this ) ) {
+			this.setAttribute( 'data-duplicate', 'true' );
+			return;
+		}
+
+		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
 		originalValue = this.getAttribute( 'data-value-on-load' );
 
 		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
