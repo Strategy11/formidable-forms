@@ -1,13 +1,13 @@
-=== Formidable Form Builder - Contact Form, Survey & Quiz Forms Plugin for WordPress ===
-Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for WordPress
+=== Formidable Form Builder - Contact Form, Survey & Quiz Form Plugin for WordPress ===
+Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Plugin for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, contact me, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, feedback form, mailchimp form
+Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, price calculator, quote form, contact button, contact me, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, feedback form, mailchimp form
 Requires at least: 4.7
 Tested up to: 5.5
 Requires PHP: 5.6
 Stable tag: 4.07.01
 
-The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quiz forms, and more.
+The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
 == Description ==
 
@@ -28,7 +28,7 @@ You can start with our pre-built templates or create totally custom forms from s
 
 https://www.youtube.com/watch?v=d2IPmicn2x8&rel=0
 
-Let’s take a look at all the powerful features for making an amazing lead form, survey form, poll, subscription form, request a quote form, donation form, user registration form, quiz, or payment form.
+Let’s take a look at all the powerful features for making an amazing lead form, survey form, poll, subscription form, request a quote form, donation form, user registration form, or payment form.
 
 == Drag & Drop Form Maker and Advanced Form Builder ==
 
@@ -38,7 +38,7 @@ Our form maker comes with all the powerful fields that you need to create a solu
 
 == Complete Entry Management for Forms and Surveys ==
 
-Formidable allows you to view all your quiz and survey entries right from your WordPress dashboard. Once a user submits a form, their response is stored in your WordPress database so you won't lose any leads.
+Formidable allows you to view all your survey entries right from your WordPress dashboard. Once a user submits a form, their response is stored in your WordPress database so you won't lose any leads.
 
 Formidable is a **100% GDPR-friendly** form generator. You can turn off IP tracking or stop saving submissions entirely. Or add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
@@ -52,7 +52,7 @@ On top of that, you can easily customize the success message after a form is sub
 
 With our built-in styler, you can instantly customize the look and feel of your contact form. With just a few clicks, your email form can be transformed to match your website design.
 
-By default, Formidable applies a single styling template to your WordPress forms. If you want a custom form style for each quiz and sidebar form, check out the premium version of Formidable.
+By default, Formidable applies a single styling template to your WordPress forms. If you want a custom form style for each footer and sidebar form, check out the premium version of Formidable.
 
 == Build Smart Surveys with Beautiful Reports ==
 
@@ -96,9 +96,9 @@ You can add a WooCommerce product configurator with custom calculation fields. T
 
 == Make Powerful Quiz Forms & Calculators ==
 
-In addition to a simple order form, you can also use Formidable to create quizzes or calculators.
+In addition to a simple order form, you can also use Formidable to create quizzes or web calculators.
 
-More on quizzes later, but here are some example web calculators you can quickly add to your WordPress site:
+More on quizzes later, but here are some examples that you can quickly add to your WordPress site:
 
 * <a href="https://formidableforms.com/form-templates/advanced-mortgage-calculator-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Advanced Mortgage Calculator</a>
 * <a href="https://formidableforms.com/form-templates/simple-mortgage-calculator-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Basic Mortgage Calculator</a>
@@ -112,7 +112,7 @@ More on quizzes later, but here are some example web calculators you can quickly
 * Booking Cost Calculator
 * Price Calculator
 
-... and our powerful calculated fields allow you to build just about any other type of calculator.
+... and our powerful calculated fields allow you to build just about anything.
 
 You can also create a poll, or survey on your WordPress site and display the results. This is great for membership sites, LMS, or just for viral quizzes to grow your email list.
 
@@ -122,7 +122,7 @@ Now you can go beyond a simple contact form and create custom form-based solutio
 
 If you run a WordPress membership site, then you need more advanced forms. The Formidable form maker allows you to customize your WordPress user registration form and collect data with a user profile.
 
-With our front-end editing, you can build a custom profile form for users to keep their profile up to date. You can even progressively add to the profile from a set of forms. Everything from the first lead form to the last payment form can extend the user profile. Once logged in, all new submissions in a quiz, calculator, or support form can be linked to that user account.
+With our front-end editing, you can build a custom profile form for users to keep their profile up to date. You can even progressively add to the profile from a set of forms. Everything from the first lead form to the last payment form can extend the user profile. Once logged in, all new submissions in a support form can be linked to that user account.
 
 You will not find any other WordPress form plugin offering a front-end editing solution with the same level of extendability.
 
@@ -146,9 +146,9 @@ On top of that, our hooks and filters allow you to extend Formidable to meet you
 
 Since Formidable is not your average WordPress form plugin, this feature list is going to be very long. Read through it, or just install the most powerful WordPress form maker. Your choice :)
 
-* <a href="https://formidableforms.com/features/drag-drop-form-builder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Online drag and drop form builder</a>. Build everything from a contact form or email form to a price calculator or complex online form. Make awesome quiz forms, calculators, and online forms the easy way with a simple WordPress drag and drop form maker. You don't have to be a code ninja.
+* <a href="https://formidableforms.com/features/drag-drop-form-builder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Online drag and drop form builder</a>. Build everything from a contact form or email form to a price calculator or complex online form. Make awesome quiz forms and online forms the easy way with a simple WordPress drag and drop form maker. You don't have to be a code ninja.
 * <a href="https://formidableforms.com/features/display-form-data-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Display form data with Views</a>. Other WordPress form builder plugins only let you collect data. Formidable lets you format, filter, and display form submissions in Formidable Views to turn forms into solutions. Think job boards, event calendars, business directories, ratings systems, management solutions, and pretty much anything else you can come up with.
-* <a href="https://formidableforms.com/features/dynamically-add-form-fields/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Repeating field groups (repeaters)</a>. Allow visitors to add sets of fields on the fly. This is great for a registration form, application, calculator, or email form.
+* <a href="https://formidableforms.com/features/dynamically-add-form-fields/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Repeating field groups (repeaters)</a>. Allow visitors to add sets of fields on the fly. This is great for a registration form, application, or email form.
 * <a href="https://formidableforms.com/features/wordpress-multiple-file-upload-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Drag and drop multiple file upload forms</a>. Easily upload documents, files, photos, and music, with any number of files. This is great for a job application form (resumes), WordPress User Profile Form (avatars), or get a quote form.
 * <a href="https://formidableforms.com/features/wordpress-multi-step-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Multi-step forms with progress bars</a>. Want to increase conversion rates and collect more leads with a smart contact form? Create beautiful paged forms with rootline and progress indicators. Add conditional logic to page breaks for a smart branching form.
 * <a href="https://formidableforms.com/features/cascading-dropdown-lookup-field/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Cascading lookup fields</a>. Autofill values in other form fields or drill down through options to reveal a final value. Designed for year/make/model fields in auto forms and country/state/city fields. You can even use lookup fields to get a price from a separate product form.
@@ -161,24 +161,24 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * <a href="https://formidableforms.com/features/email-autoresponders-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Send email notifications & autoresponders</a>. Automatically let clients know you received their message. Then create customized email notifications for multiple recipients and get info from an email form to those who need it.
 * Email routing. Conditionally send multiple autoresponder emails and notifications based on values in email forms, user registration forms, and payment forms.
 * Pricing fields for easy eCommerce forms with automatic price calculations. Drop in a product field, quantity, and total and you're good to go.
-* <a href="https://formidableforms.com/wordpress-calculator-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields. This is great for a mortgage calculator, auto loan calculator, and many other calculators. Your visitors can benefit from price calculations for easy quotes and price estimates. We recommend adding range sliders for calculator forms your clients will love.
+* <a href="https://formidableforms.com/wordpress-calculator-plugin/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Calculator forms</a>. Create basic and complex calculations, and even combine text from multiple fields. This is great for a mortgage calculator, auto loan calculator, and many more. Your visitors can benefit from price calculations for easy quotes and price estimates. We recommend adding range sliders for calculator forms your clients will love.
 * <a href="https://formidableforms.com/features/wordpress-visual-form-styler/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Visual style creator</a>. Having trouble styling your WordPress forms? Our form creator allows you to brand calculator forms, email forms, quiz forms, and other WP forms to match your site. Change colors, borders, font sizes, and more without any code.
 * <a href="https://formidableforms.com/features/flexible-layouts-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Flexible form layout design</a>. Build mobile responsive forms and advanced layouts with multiple fields in a row by using our CSS layout classes.
 * <a href="https://formidableforms.com/features/wordpress-mobile-friendly-responsive-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mobile-friendly, responsive forms</a>. All of our forms are sized automatically for every screen size. Ensure that everyone can see and submit your surveys, calculator forms, Stripe forms, and web forms from any device.
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and even custom post types from your front-end online forms. Send user-generated content quickly from a post creation form to a page.
 * <a href="https://formidableforms.com/features/form-entry-management-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Simple entry management</a>. Flexibly display, edit, and delete form entries from anywhere on your site. Set permissions so logged-in users can manage their personal journal entries, weight tracking, guest blog posts, RSVP status, and more.
 * <a href="https://formidableforms.com/features/front-end-editing-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WordPress front-end editing</a>. Allow users to edit their form entries and posts from the front-end of your site. Create an online journaling platform, member directory, classified ads, community recipes, and more.
-* Logged-in users can <a href="https://formidableforms.com/features/save-and-continue-partial-submissions/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">save and continue partial form submissions</a>. Whether it's a basic email form or a long multi-paged quiz form, users can save form progress and pick up where they left off.
+* Logged-in users can <a href="https://formidableforms.com/features/save-and-continue-partial-submissions/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">save and continue partial form submissions</a>. Whether it's a basic email form or a long multi-paged registration form, users can save form progress and pick up where they left off.
 * <a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Graphs and charts for data visualization</a>. Display statistics from a survey, poll, and questionnaire. Or graph data in a variety of ways. Whatever you choose, it can automatically update as new data is submitted (great for weight tracking over time).
 * Permission settings. Limit visibility of specialized forms based on user role.
-* Entry limits. Limit surveys, bookings, quizzes, or directory submissions to only allow one entry per user, IP, or cookie.
+* Entry limits. Limit surveys, registration forms, bookings, quizzes, or directory submissions to only allow one entry per user, IP, or cookie.
 * <a href="https://formidableforms.com/features/wordpress-schedule-forms-limit-responses/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form scheduling</a>. Open and close event registration and signup forms on a specific date. Or close registration forms when the seat limit has been reached.
-* Conditionally redirect after a custom search form, payment form, support ticket form, quiz, or other online form is submitted. Help clients find the answers they are looking for and show a tailored result based on their selections and calculated fields.
+* Conditionally redirect after a custom search form, payment form, support ticket form, or other online form is submitted. Help clients find the answers they are looking for and show a tailored result based on their selections and calculated fields.
 * We believe that forms should be extendable to meet your needs. So we give you access to <a href="https://formidableforms.com/features/customize-form-html-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">customize the form HTML</a> (like Contact Form 7). But you keep the ease and speed of a drag & drop form builder plugin. Our team labors for simplicity without sacrificing flexibility.
 * <a href="https://formidableforms.com/features/importing-exporting-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Import and export forms, form submissions, styles, and views</a>. Quickly move forms, entries, views and styles to another site. Need to export leads to another service? Check.
 * <a href="https://formidableforms.com/features/wordpress-form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form templates for instant form building</a>. Get started quickly with the most advanced form creator that includes form templates, style templates, and Formidable View templates. Our WordPress form generator makes it FAST to build job application forms, calculator forms, and other types of online forms.
-* Import our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">pre-built form/view templates</a> as a shortcut to a final product. Our growing form template library includes payment forms, calculators, a WooCommerce product creator, and more.
-* <a href="https://formidableforms.com/features/wcag-accessible-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WCAG accessible forms with A11Y and ADA compliance</a>. Don't alienate your audience. Ensure your survey, calculator, lead capture form, quizzes, and other online forms are compliant and available to everyone. Allow those using screenreaders to successfully use your WordPress forms.
+* Import our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">pre-built form/view templates</a> as a shortcut to a final product. Our growing form template library includes payment forms, a WooCommerce product creator, and more.
+* <a href="https://formidableforms.com/features/wcag-accessible-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WCAG accessible forms with A11Y and ADA compliance</a>. Don't alienate your audience. Ensure your survey, lead capture form, quizzes, and other online forms are compliant and available to everyone. Allow those using screenreaders to successfully use your WordPress forms.
 * <a href="https://formidableforms.com/features/invisible-spam-protection/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Invisible SPAM protection</a>. Don't waste time sorting through SPAM. Get instant and powerful anti-spam features from honeypot, invisible Google reCAPTCHA, Akismet, and the WordPress comment blacklist.
 * <a href="https://formidableforms.com/features/fill-out-forms-automatically/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Fill out forms automatically</a> with values from the user profile or posts (i.e. custom fields). When a user is logged in, prefill known values like first name, last name, and email address.
 * <a href="https://formidableforms.com/features/white-label-form-builder-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">White label forms</a>. Replace the Formidable branding with your own in the admin area. Plus, we never show "powered by" links in your free contact form or other online form.
@@ -186,11 +186,11 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * <a href="https://formidableforms.com/features/digital-form-signatures/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Digital signature forms</a>. Eliminate paper forms with a digital signature field in contracts, application forms and more.
 * <a href="https://formidableforms.com/features/form-action-automation-scheduling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form action automation</a>. Schedule form email notifications, SMS messages, and webhooks to trigger at a later time. You can automatically delete guest posts after 30 days, send weekly digests, or trigger happy birthday text messages from a lead form.
 * <a href="https://formidableforms.com/features/wordpress-form-api/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Formidable Forms API</a>. Send form entries to other REST APIs and add a set of form webhooks. This includes the option to send form entries from one Formidable site to another.
-* <a href="https://formidableforms.com/features/quiz-maker-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Quiz maker forms</a>. Write your quiz form questions, submit an entry as the quiz key, and publish the quiz on a page. Then all the quiz grading is automatically done for you with our quiz plugin.
+* <a href="https://formidableforms.com/features/quiz-maker-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Quiz maker forms</a>. Write your quiz form questions, submit an entry as the key, and publish it on a page. Then all the grading is automatically done for you with our quiz plugin.
 * <a href="https://formidableforms.com/knowledgebase/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">World class support</a>. Have questions on how to use our contact form maker or set up your web application? We are happy to help. Our passion is to help you <strong>defy the limits</strong> to take on bigger projects, earn more clients, and grow your business.
 
 == Payment Forms, Form APIs, and Marketing Integrations ==
-In addition to all the features listed above, power up your email forms, surveys, quizzes, and calculators with these integrations.
+In addition to all the features listed above, power up your email forms, surveys, and quizzes with these integrations.
 
 * <a href="https://formidableforms.com/features/paypal-wordpress-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">PayPal Payment Forms</a>. Automate your business by collecting instant payments and recurring payments from clients. Collect information and calculate a total in a PayPal form or donation form.
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Payment Forms</a>. Keep users on your site while collecting Stripe payments from a credit card form. Select from one time and recurring charges in order forms and donation forms. Stripe processes payments with simple PCI compliance.
@@ -209,14 +209,14 @@ In addition to all the features listed above, power up your email forms, surveys
 * <a href="https://formidableforms.com/features/wpml-translated-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WPML Multilingual Forms</a>. Translate your WordPress forms into multiple languages using our integrated multilingual forms.
 * <a href="https://formidableforms.com/features/polylang-multilingual-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Polylang Multilingual Forms</a>. Get the form creator with Polylang bilingual or multilingual contact forms.
 * <a href="https://formidableforms.com/features/form-entry-routing-with-zapier/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Zapier Forms</a>. Connect with thousands of applications through Zapier from a lead form, quote form, and other web forms. Insert a new row in a Google docs spreadsheet, post on Twitter, or upload a Dropbox file from a calculator form.
-* <a href="https://formidableforms.com/features/bootstrap-form-styling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Form Styles</a>. Instantly add Bootstrap form styling to a survey form, quiz form, and registration form.
+* <a href="https://formidableforms.com/features/bootstrap-form-styling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Form Styles</a>. Instantly add Bootstrap form styling to a survey form and registration form.
 * <a href="https://formidableforms.com/features/bootstrap-modal-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Modal Form</a>. Open login forms, Formidable views, shortcodes, and other content in a Bootstrap modal popup.
 
 After reading this feature list, you can probably imagine why Formidable is the most advanced WordPress form plugin on the market.
 
-Give Formidable Forms a try.
+Give Formidable a try.
 
-Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to our Premium forms</a> to get all the features for smart forms and full web applications.
+Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade</a> to get all the features for smart forms and full web applications.
 
 == Credits ==
 This online form builder plugin is created by Steve and Steph Wells and the amazing Formidable Team.
@@ -230,7 +230,7 @@ Formidable is part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> f
 4. Activate Formidable through the 'Plugins' menu
 5. Go to the newly added 'Formidable' menu
 6. Click the 'Add New' button to go to the form generator page and create a new email form
-7. Insert your newly created user registration form, quiz, or survey form on a page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add it in a page template
+7. Insert your newly created user registration form or survey form on a page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add it in a page template
 
 == Screenshots ==
 1. Build professional WP forms without any code.
@@ -246,7 +246,7 @@ The fastest way to build a form is to use the template we built for you. After y
 
 Go to the Formidable -> Forms page and click "add new". Choose the Contact Us form template or another free template and click "Create".
 
-Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new registration form, Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads.
+Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new registration form, Stripe form, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads.
 
 Learn more about <a href="https://formidableforms.com/wordpress-contact-form-template-to-unique/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">using the contact form template</a>.
 
@@ -272,7 +272,7 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 * Job Applications
 * Feedback Surveys
 * Make a Suggestion
-* Testimonials Form
+* Testimonials
 * Change Requests
 * Online Booking
 * Event Booking
@@ -326,7 +326,7 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 To see more, visit our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin">Form Template Gallery</a> which has almost 100 pre-made templates.
 
 = How can I get access to all advanced features? =
-To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Forms Pro</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced options, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
+To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade now</a>. A Pro license gives you access to the full version of Formidable Forms for more advanced options, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
 
 = Can I create a Payment Form with Formidable? =
 
@@ -392,7 +392,7 @@ Formidable also allows you to import from other WordPress contact form plugins s
 
 = Can I integrate Formidable with my CRM or email marketing service? =
 
-Yes! We know that marketing is the key to grow your business. That's why Formidable allows you to connect your WP form, payment form, or calculator, with the marketing platform of your choice. You can easily send data from your WordPress forms to your favorite CRM, email newsletter, and other marketing platforms.
+Yes! We know that marketing is the key to grow your business. That's why Formidable allows you to connect your WP form, or payment form with the marketing platform of your choice. You can easily send data from your WordPress forms to your favorite CRM, email newsletter, and other marketing platforms.
 
 Here is a list of our popular marketing integrations:
 
