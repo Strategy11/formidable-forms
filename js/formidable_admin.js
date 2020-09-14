@@ -544,7 +544,7 @@ function frmAdminBuildJS() {
 			if ( this.getAttribute( 'href' ) === 'confirm-bulk-delete' ) {
 				event.preventDefault();
 				confirmedBulkDelete = true;
-				jQuery( doAction ).click();
+				doAction.click();
 				return false;
 			}
 		});
