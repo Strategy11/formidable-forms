@@ -1526,6 +1526,12 @@ div.frm_updated_message {
 	text-align: center;
 }
 
+#frm_top_bar + .wrap > .frm_updated_message {
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
 #post-body-content > .frm_updated_message {
 	margin: 5px 65px;
 }
@@ -5812,7 +5818,7 @@ i.frm-show-inline-modal,
 .frm-with-left-icon .frmsvg,
 .frm-with-right-icon .frmsvg,
 .frm-search > .frmsvg,
-.frm-search span:not(.multiselect-selected-text) {
+.frm-search span:not(.multiselect-selected-text):not(.multiselect-native-select) {
 	position: absolute;
 	padding: 7px 10px;
 	pointer-events: none;
