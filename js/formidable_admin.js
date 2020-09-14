@@ -4500,8 +4500,10 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldUpdated() {
-		fieldsUpdated = 1;
-		window.addEventListener( 'beforeunload', confirmExit );
+		if ( ! fieldsUpdated ) {
+			fieldsUpdated = 1;
+			window.addEventListener( 'beforeunload', confirmExit );
+		}
 	}
 
 	function buildSubmittedNoAjax() {
@@ -4512,6 +4514,7 @@ function frmAdminBuildJS() {
 	function confirmExit( event ) {
 		if ( fieldsUpdated ) {
 			event.preventDefault();
+			event.returnValue = '';
 		}
 	}
 
