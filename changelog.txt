@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.07.01 =
+* New: Show a warning when leaving the form builder page with unsaved changes.
+* Fix: Make any multiselect dropdowns in admin settings accessible.
+* Fix: aria-invalid attribute was missing on form elements for accessibility.
+
+= 4.07 =
 * New: Use frm_inline_success for the form class in the customized HTML to move the success message next to the submit button. "frm_inline_success frm_alignright_success" will right-align the message.
 * Tweak: Improve the form listing page and entry listings page when nothing has been created.
 * Fix: Update the recaptcha for better reliability to catch more spam.

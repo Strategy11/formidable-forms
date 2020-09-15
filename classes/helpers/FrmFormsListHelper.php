@@ -352,4 +352,11 @@ class FrmFormsListHelper extends FrmListHelper {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	protected function confirm_bulk_delete() {
+		return __( 'ALL selected forms and their entries will be permanently deleted. Want to proceed?', 'formidable' );
+	}
 }

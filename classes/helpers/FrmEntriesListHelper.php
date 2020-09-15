@@ -336,4 +336,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
 	}
+
+	/**
+	 * @return string
+	 */
+	protected function confirm_bulk_delete() {
+		return __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' );
+	}
 }
