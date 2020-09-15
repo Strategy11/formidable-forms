@@ -256,10 +256,12 @@ class FrmAppController {
 			'content' => 'upgrade',
 		);
 		$default_link = FrmAppHelper::admin_upgrade_link( $upgrade_link );
+		$plugin_path  = FrmAppHelper::plugin_path();
+		$shared_path  = $plugin_path . '/classes/views/shared/';
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/confirm-overlay.php' );
+		include $shared_path . 'upgrade_overlay.php';
+		include $shared_path . 'confirm-overlay.php';
+		include $shared_path . 'new-form-overlay.php';
 	}
 
 	public static function include_info_overlay() {

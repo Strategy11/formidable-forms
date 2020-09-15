@@ -830,6 +830,13 @@ class FrmFormsController {
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
 	}
 
+	public static function list_templates_new() {
+		$api       = new FrmFormTemplateApi();
+		$templates = $api->get_api_info();
+
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates-new.php';
+	}
+
 	/**
 	 * @since 4.03.01
 	 */

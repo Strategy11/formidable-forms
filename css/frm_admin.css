@@ -1981,6 +1981,86 @@ table.frm-list-templates thead th {
 	padding: 10px 20px;
 }
 
+/* Form Templates (New) */
+#frm_new_form_modal .postbox {
+	max-height: 600px;
+	overflow: hidden;
+}
+
+#frm_new_form_modal .postbox > div:first-child {
+	padding: 20px;
+	position: relative;
+	border-bottom: 1px solid rgba(40, 47, 54, 0.2);
+}
+
+#frm_new_form_modal .postbox > div:first-child > div:first-child {
+	display: inline-block;
+	font-size: 24px;
+	color: #282F36;
+}
+
+#frm_new_form_modal .postbox > div:first-child > div:last-child {
+	position: absolute;
+	right: 20px;
+	top: 27px;
+}
+
+#frm_new_form_modal .postbox > div:first-child > div:last-child a {
+	color: rgba(40, 47, 54, 0.45);
+}
+
+#frm_new_form_modal .postbox > div.inside {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+#frm_new_form_modal .postbox > div.inside .cta-inside {
+	overflow-y: auto;
+	height: auto;
+}
+
+.frm-featured-forms-new {
+	margin-top: 30px;
+	overflow-y: auto;
+	max-height: 474px;
+}
+
+.frm-featured-forms-new li {
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+	position: relative;
+}
+
+.frm-featured-forms-new li > a > div {
+	vertical-align: middle;
+}
+
+.frm-featured-forms-new li > a > div:first-child {
+	max-width: 20px;
+	max-height: 20px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.frm-featured-forms-new li > a > div:last-child {
+	display: inline-block;
+	width: calc( 100% - 20px );
+}
+
+.frm-featured-forms-new li h3, .frm-featured-forms-new li p {
+	text-align: left;
+	margin: 0;
+}
+
+.frm-featured-forms-new li h3 {
+	font-size: 14px !important;
+}
+
+.frm-featured-forms-new li p {
+	font-size: 13px;
+}
+
 /* Bulk Options */
 #frm-bulk-modal .frm_grid_container {
 	border-top: 1px solid var(--grey-border);

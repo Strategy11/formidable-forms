@@ -4518,8 +4518,18 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function triggerNewFormModal() {
-		
+	function triggerNewFormModal( event ) {
+		var $modal;
+
+		event.preventDefault();
+		$modal = initModal( '#frm_new_form_modal', '514px' );		
+		$modal.dialog( 'open' );
+
+		// close dialog by clicking the overlay behind it
+		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( e ) {
+			e.preventDefault();
+			$modal.dialog( 'close' );
+		});
 	}
 
 	/**
