@@ -62,7 +62,8 @@ FrmAppHelper::show_search_box(
 					</div><div>
 						<div class="accordion-section-title">
 							<h3><?php echo esc_attr( $category ); ?></h3>
-							<p><?php echo count( $category_templates ); ?> <?php esc_html_e( 'templates', 'formidable' ); ?></p>
+							<?php $count = count( $category_templates ); ?>
+							<p><span class="frm-template-count"><?php echo esc_html( $count ); ?></span> <span class="templates-plural <?php echo $count === 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'templates', 'formidable' ); ?></span><span class="templates-singular <?php echo $count !== 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'template', 'formidable' ); ?></span></p>
 						</div>
 						<div class="accordion-section-content" aria-expanded="false">
 							<ul>

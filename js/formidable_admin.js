@@ -5914,17 +5914,23 @@ function frmAdminBuildJS() {
 				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
 					var categories = document.getElementById( 'frm_new_form_modal' ).querySelector( '.categories-list' ).children,
 						categoryIndex,
-						category;
+						category,
+						count;
 
 					for ( categoryIndex in categories ) {
 						if ( isNaN( categoryIndex ) ) {
 							continue;
 						}
 
-						// TO DO we probably don't want to hide the category if the name of the category is being searched either
-
 						category = categories[ categoryIndex ];
-						jQuery( category ).toggleClass( 'frm_hidden', ! category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' ).length );
+						count = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' ).length;
+						jQuery( category ).toggleClass( 'frm_hidden', ! count );
+
+						if ( count ) {
+							category.querySelector( '.frm-template-count' ).textContent = count;
+							jQuery( category ).find( '.templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
+							jQuery( category ).find( '.templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
+						}
 					}
 				});
 			}

@@ -2059,7 +2059,7 @@ table.frm-list-templates thead th {
 
 .frm-featured-forms-new li.selectable:hover h3,
 .frm-featured-forms-new li.selectable:hover p {
-	max-width: calc( 100% - 60px );
+	max-width: calc( 100% - 65px );
 }
 
 .frm-featured-forms-new li > div {
@@ -2199,31 +2199,30 @@ table.frm-list-templates thead th {
 	right: 0;
 	top: 0;
 	height: 20px;
-	width: 60px !important;
+	width: 65px !important;
 	height: 100%;
 	box-sizing: border-box;
-	padding: 14px 5px 0 !important;
+	padding: 14px 10px 0 5px !important;
 	border-radius: 6px;
-	text-align: center;
+	text-align: right;
 }
 
 .hover-icons a {
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 22px;
 	display: inline-block;
 	border-radius: 50%;
-}
-
-.hover-icons > .preview-form {
-	border: 1px solid #4199FD;
+	box-sizing: border-box;
 	line-height: 20px;
 	text-align: center;
 }
 
+.hover-icons > .preview-form {
+	border: 1px solid #4199FD;
+}
+
 .hover-icons > .create-form {
 	background-color: #4199FD;
-	text-align: center;
-	line-height: 18px;
 	margin-left: 5px;
 }
 
