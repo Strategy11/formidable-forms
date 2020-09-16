@@ -52,13 +52,13 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				app.updateForm( msg.data );
 			});
 
-			jQuery( document ).on( 'mouseover', '#frm_new_form_modal .selectable', function() {
+			jQuery( document ).on( 'mouseover', '#frm_new_form_modal .frm-selectable', function() {
 				var $item = jQuery( this ),
-					$icons = $item.find( '.hover-icons' ),
+					$icons = $item.find( '.frm-hover-icons' ),
 					$clone;
 
 				if ( ! $icons.length ) {
-					$clone = jQuery( '#hover-icons-template' ).clone();
+					$clone = jQuery( '#frm-hover-icons-template' ).clone();
 					$clone.removeAttr( 'id' );
 					$item.append( $clone );
 				}
@@ -66,9 +66,9 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				$icons.show();
 			});
 
-			jQuery( document ).on( 'mouseout', '#frm_new_form_modal .selectable', function() {
+			jQuery( document ).on( 'mouseout', '#frm_new_form_modal .frm-selectable', function() {
 				var $item = jQuery( this ),
-					$icons = $item.find( '.hover-icons' );
+					$icons = $item.find( '.frm-hover-icons' );
 
 				if ( $icons.length ) {
 					$icons.hide();
@@ -4583,6 +4583,7 @@ function frmAdminBuildJS() {
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 		$modal.find( '#frm-create-new-form-title, #frm-new-block' ).removeClass( 'frm_hidden' );
 		$modal.find( '#frm-preview-block, #frm-details-block' ).addClass( 'frm_hidden' );
+		$modal.find( '#frm-preview-title' ).parent().addClass( 'frm_hidden' );
 		$modal.dialog( 'open' );
 
 		// close dialog by clicking the overlay behind it
@@ -5816,7 +5817,8 @@ function frmAdminBuildJS() {
 		init: function() {
 			var blankFormTrigger,
 				templateFormTrigger,
-				previewFormTrigger;
+				previewFormTrigger,
+				activeHoverIcons;
 
 			s = {};
 
@@ -5868,7 +5870,7 @@ function frmAdminBuildJS() {
 				initNewFormModal();
 				initSelectionAutocomplete();
 
-				jQuery( document ).on( 'click', '.trigger-new-form-modal', triggerNewFormModal );
+				jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
 
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
@@ -5891,7 +5893,7 @@ function frmAdminBuildJS() {
 
 				initTemplateModal( $modal );
 
-				jQuery( document ).on( 'click', '.hover-icons .preview-form', function( event ) {
+				jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
 					var $li;
 
 					event.preventDefault();
@@ -5904,9 +5906,11 @@ function frmAdminBuildJS() {
 					jQuery( '#frm-preview-block' ).removeClass( 'frm_hidden' );
 					jQuery( '#frm-create-new-form-title' ).addClass( 'frm_hidden' );					
 					jQuery( '#frm-preview-title' ).text( $li.find( 'h3' ).text() ).parent().removeClass( 'frm_hidden' );
+
+					activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 				});
 
-				jQuery( document ).on( 'click', 'li .hover-icons .create-form', function( event ) {
+				jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
 					var $li;
 
 					event.preventDefault();
@@ -5960,6 +5964,15 @@ function frmAdminBuildJS() {
 					jQuery( '#frm-preview-block, #frm-details-block' ).addClass( 'frm_hidden' );
 					jQuery( '#frm-preview-title' ).parent().addClass( 'frm_hidden' );
 					jQuery( '#frm-create-new-form-title, #frm-new-block' ).removeClass( 'frm_hidden' );
+				});
+
+				jQuery( document ).on( 'click', '.frm-back-to-all-templates', function( event ) {
+					jQuery( this ).closest( '.ui-dialog' ).find( '.frm-modal-back' ).click();
+				});
+
+				jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
+					event.preventDefault();
+					activeHoverIcons.find( '.frm-create-form' ).click();
 				});
 			}
 

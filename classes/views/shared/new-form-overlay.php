@@ -61,6 +61,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</a>
 				</form>
 			</div>
+			<div id="frm-preview-footer">
+				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
+					<?php esc_html_e( 'Back to all templates', 'formidable' ); ?>
+				</a>
+				<a href="#" class="button button-primary frm-button-primary frm-use-this-template">
+					<?php esc_html_e( 'Use this template', 'formidable' ); ?>
+				</a>
+			</div>
 		</div>
 	</div>
 </div>
@@ -70,12 +78,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
 	?>
-	<div id="hover-icons-template" class="hover-icons">
-		<a href="#" class="preview-form" title="<?php esc_html_e( 'Preview form', 'formidable' ); ?>">
+	<div id="frm-hover-icons-template" class="frm-hover-icons">
+		<a href="#" class="frm-preview-form" title="<?php esc_html_e( 'Preview form', 'formidable' ); ?>">
 			<svg class="frmsvg">
 				<use xlink:href="#frm_eye_simple"></use>
 			</svg>
-		</a><a href="#" class="create-form" title="<?php esc_html_e( 'Create form', 'formidable' ); ?>">
+		</a><a href="#" class="frm-create-form" title="<?php esc_html_e( 'Create form', 'formidable' ); ?>">
 			<svg class="frmsvg">
 				<use xlink:href="#frm_plus_icon"></use>
 			</svg>

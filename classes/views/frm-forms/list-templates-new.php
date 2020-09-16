@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <ul class="frm-featured-forms-new">
-	<li class="frm-add-blank-form selectable">
+	<li class="frm-add-blank-form frm-selectable">
 		<div class="frm-new-form-button frm-featured-form">
 			<div style="background-color: #F4AD3D;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$template      = $templates[ $template ];
 		$plan_required = FrmFormsHelper::get_plan_required( $template );
 		$link          = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) );
-		?><li class="selectable" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
+		?><li class="frm-selectable" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
 			<div class="frm-featured-form">
 				<div>
 					<?php FrmFormsHelper::template_icon( isset( $template['categories'] ) ? $template['categories'] : array() ); ?>
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<p><?php echo esc_html( $template['description'] ); ?></p>
 				</div>
 			</div>
-		</li><?php } ?><li class="selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
+		</li><?php } ?><li class="frm-selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
 		<div class="frm-featured-form">
 			<div style="background-color: #805EF6;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
@@ -69,7 +69,7 @@ FrmAppHelper::show_search_box(
 							<ul>
 							<?php foreach ( $category_templates as $template ) { ?>
 								<?php $link = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) ); ?>
-								<li class="selectable frm-searchable-template" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
+								<li class="frm-selectable frm-searchable-template" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
 									<div>
 										<h3><?php echo esc_html( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ); ?></h3>
 										<p><?php echo esc_html( $template['description'] ); ?></p>
