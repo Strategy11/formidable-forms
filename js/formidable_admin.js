@@ -5583,11 +5583,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		console.log({
-			length: items.length,
-			toSearch,
-			searchText
-		})
+		jQuery( this ).trigger( 'frmAfterSearch' );
 	}
 
 	function stopPropagation( e ) {
@@ -5912,6 +5908,23 @@ function frmAdminBuildJS() {
 						templateFormTrigger.setAttribute( 'rel', $li.attr( 'data-rel' ) );
 						$li.append( templateFormTrigger );
 						templateFormTrigger.click();
+					}
+				});
+
+				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
+					var categories = document.getElementById( 'frm_new_form_modal' ).querySelector( '.categories-list' ).children,
+						categoryIndex,
+						category;
+
+					for ( categoryIndex in categories ) {
+						if ( isNaN( categoryIndex ) ) {
+							continue;
+						}
+
+						// TO DO we probably don't want to hide the category if the name of the category is being searched either
+
+						category = categories[ categoryIndex ];
+						jQuery( category ).toggleClass( 'frm_hidden', ! category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' ).length );
 					}
 				});
 			}

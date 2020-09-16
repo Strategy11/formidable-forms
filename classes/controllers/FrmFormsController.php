@@ -849,9 +849,8 @@ class FrmFormsController {
 			}
 		}
 
-		$exclude_categories = FrmFormsHelper::ignore_template_categories();
-		$categories         = array_keys( $templates_by_category );
-		$categories         = array_diff( $categories, $exclude_categories );
+		$categories = array_keys( $templates_by_category );
+		$categories = array_diff( $categories, FrmFormsHelper::ignore_template_categories() );
 		sort( $categories );
 
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
