@@ -5904,7 +5904,7 @@ function frmAdminBuildJS() {
 
 					jQuery( '#frm-new-block' ).addClass( 'frm_hidden' );
 					jQuery( '#frm-preview-block' ).removeClass( 'frm_hidden' );
-					jQuery( '#frm-create-new-form-title' ).addClass( 'frm_hidden' );					
+					jQuery( '#frm-create-new-form-title' ).addClass( 'frm_hidden' );
 					jQuery( '#frm-preview-title' ).text( $li.find( 'h3' ).text() ).parent().removeClass( 'frm_hidden' );
 
 					activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
@@ -6313,7 +6313,7 @@ function frmAdminBuildJS() {
 				}
 			});
 
-            // Page Selection Autocomplete
+			// Page Selection Autocomplete
 			initSelectionAutocomplete();
 		},
 
