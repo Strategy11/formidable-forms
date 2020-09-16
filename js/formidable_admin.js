@@ -4580,7 +4580,7 @@ function frmAdminBuildJS() {
 		var $modal;
 
 		event.preventDefault();
-		$modal = initModal( '#frm_new_form_modal', '600px' );		
+		$modal = initModal( '#frm_new_form_modal', '600px' );
 		$modal.dialog( 'open' );
 
 		// close dialog by clicking the overlay behind it
@@ -5350,7 +5350,7 @@ function frmAdminBuildJS() {
 			$info.dialog( 'open' );
 		});
 
-		jQuery( '.frm-new-form-button' ).click( function( event ) {			
+		jQuery( '.frm-new-form-button' ).click( function( event ) {
 			var nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
 
@@ -5898,7 +5898,7 @@ function frmAdminBuildJS() {
 					$li = jQuery( this ).closest( 'li' );
 
 					if ( $li.hasClass( 'frm-add-blank-form' ) ) {
-						jQuery( '#frm_new_form_modal' ).dialog( 'close' );
+					//	jQuery( '#frm_new_form_modal' ).dialog( 'close' );
 						blankFormTrigger.click();
 					} else if ( $li.is( '[data-href]' ) ) {
 						window.location = $li.attr( 'data-href' );

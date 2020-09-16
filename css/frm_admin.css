@@ -2056,7 +2056,7 @@ table.frm-list-templates thead th {
 
 .frm-featured-forms-new li.selectable:hover h3,
 .frm-featured-forms-new li.selectable:hover p {
-	max-width: 70%;
+	max-width: calc( 100% - 60px );
 }
 
 .frm-featured-forms-new li > div {
@@ -2196,7 +2196,7 @@ table.frm-list-templates thead th {
 	right: 0;
 	top: 0;
 	height: 20px;
-	width: 70px !important;
+	width: 60px !important;
 	height: 100%;
 	box-sizing: border-box;
 	padding: 14px 5px 0 !important;
@@ -2237,6 +2237,14 @@ table.frm-list-templates thead th {
 
 .hover-icons .create-form svg {
 	color: #fff;
+}
+
+li .hover-icons .preview-form {
+	display: none;
+}
+
+li[data-preview] .hover-icons .preview-form {
+	display: inline-block;
 }
 
 /* Bulk Options */
