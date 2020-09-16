@@ -51,6 +51,29 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 
 				app.updateForm( msg.data );
 			});
+
+			jQuery( document ).on( 'mouseover', '#frm_new_form_modal .selectable', function() {
+				var $item = jQuery( this ),
+					$icons = $item.find( '.hover-icons' ),
+					$clone;
+
+				if ( ! $icons.length ) {
+					$clone = jQuery( '#hover-icons-template' ).clone();
+					$clone.removeAttr( 'id' );
+					$item.append( $clone );
+				}
+
+				$icons.show();
+			});
+
+			jQuery( document ).on( 'mouseout', '#frm_new_form_modal .selectable', function() {
+				var $item = jQuery( this ),
+					$icons = $item.find( '.hover-icons' );
+
+				if ( $icons.length ) {
+					$icons.hide();
+				}
+			});
 		},
 
 		/**
@@ -4557,7 +4580,7 @@ function frmAdminBuildJS() {
 		var $modal;
 
 		event.preventDefault();
-		$modal = initModal( '#frm_new_form_modal', '514px' );		
+		$modal = initModal( '#frm_new_form_modal', '600px' );		
 		$modal.dialog( 'open' );
 
 		// close dialog by clicking the overlay behind it
@@ -5268,15 +5291,19 @@ function frmAdminBuildJS() {
 	}
 
 	function initTemplateModal() {
-		var $preview = initModal( '#frm_preview_template_modal', '700px' );
+		var $preview = initModal( '#frm_preview_template_modal', '700px' ),
+			$info;
+
 		if ( $preview !== false ) {
 			jQuery( '.frm-preview-template' ).click( function( event ) {
-				event.preventDefault();
 				var link = this.attributes.rel.value,
-					cont = document.getElementById( 'frm-preview-block' );
+					cont = document.getElementById( 'frm-preview-block' ),
+					iframe;
+
+				event.preventDefault();
 
 				if ( link.indexOf( ajaxurl ) > -1 ) {
-					var iframe = document.createElement( 'iframe' );
+					iframe = document.createElement( 'iframe' );
 					iframe.src = link;
 					iframe.height = '400';
 					iframe.width = '100%';
@@ -5289,16 +5316,17 @@ function frmAdminBuildJS() {
 			});
 		}
 
-		var $info = initModal( '#frm_template_modal', '650px' );
+		$info = initModal( '#frm_template_modal', '650px' );
 		if ( $info === false ) {
 			return;
 		}
 
 		jQuery( '.frm-install-template' ).click( function( event ) {
-			event.preventDefault();
 			var oldName = jQuery( this ).closest( 'li, td' ).find( 'h3' ).html(),
 				nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
+
+			event.preventDefault();
 
 			document.getElementById( 'frm_template_name' ).value = oldName;
 			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
@@ -5309,9 +5337,10 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( '.frm-build-template' ).click( function( event ) {
-			event.preventDefault();
 			var nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
+
+			event.preventDefault();
 
 			nameLabel.innerHTML = nameLabel.getAttribute( 'data-template' );
 			descLabel.innerHTML = descLabel.getAttribute( 'data-template' );
@@ -5321,10 +5350,11 @@ function frmAdminBuildJS() {
 			$info.dialog( 'open' );
 		});
 
-		jQuery( '.frm-new-form-button' ).click( function( event ) {
-			event.preventDefault();
+		jQuery( '.frm-new-form-button' ).click( function( event ) {			
 			var nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
+
+			event.preventDefault();
 
 			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
 			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
@@ -5775,6 +5805,10 @@ function frmAdminBuildJS() {
 
 	return {
 		init: function() {
+			var blankFormTrigger,
+				templateFormTrigger,
+				previewFormTrigger;
+
 			s = {};
 
 			// Bootstrap dropdown button
@@ -5830,6 +5864,49 @@ function frmAdminBuildJS() {
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
 					return false;
+				});
+
+				blankFormTrigger = document.createElement( 'a' );
+				blankFormTrigger.classList.add( 'frm-new-form-button', 'frm_hidden' );
+				document.body.appendChild( blankFormTrigger );
+
+				templateFormTrigger = document.createElement( 'a' );
+				templateFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
+				document.body.appendChild( templateFormTrigger );
+
+				previewFormTrigger = document.createElement( 'a' );
+				previewFormTrigger.classList.add( 'frm-preview-template', 'frm_hidden' );
+				document.body.appendChild( previewFormTrigger );
+
+				initTemplateModal();
+
+				jQuery( document ).on( 'click', '.hover-icons .preview-form', function( event ) {
+					var $li;
+
+					event.preventDefault();
+
+					$li = jQuery( this ).closest( 'li' );
+					previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
+					previewFormTrigger.click();
+				});
+
+				jQuery( document ).on( 'click', 'li .hover-icons .create-form', function( event ) {
+					var $li;
+
+					event.preventDefault();
+
+					$li = jQuery( this ).closest( 'li' );
+
+					if ( $li.hasClass( 'frm-add-blank-form' ) ) {
+						jQuery( '#frm_new_form_modal' ).dialog( 'close' );
+						blankFormTrigger.click();
+					} else if ( $li.is( '[data-href]' ) ) {
+						window.location = $li.attr( 'data-href' );
+					} else if ( $li.is( '[data-rel]' ) ) {
+						templateFormTrigger.setAttribute( 'rel', $li.attr( 'data-rel' ) );
+						$li.append( templateFormTrigger );
+						templateFormTrigger.click();
+					}
 				});
 			}
 
@@ -6067,7 +6144,6 @@ function frmAdminBuildJS() {
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
-
 
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {

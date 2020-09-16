@@ -1266,7 +1266,7 @@ BEFORE_HTML;
 			'atts'  => true,
 		);
 
-		if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
+		if ( ! empty( $template['url'] ) ) {
 			$link = array(
 				'url'   => $template['url'],
 				'label' => __( 'Create Form', 'formidable' ),

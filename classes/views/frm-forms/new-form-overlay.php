@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</label><br/>
 							<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
 						</p>
-						
+
 						<p>
 							<label for="frm_template_desc" id="frm_new_desc" data-template="<?php esc_attr_e( 'Template Description', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Description', 'formidable' ); ?>">
 								<?php esc_html_e( 'Form Description', 'formidable' ); ?>

@@ -1877,7 +1877,7 @@ a.frm-featured-form:hover + .frm-preview-template {
 	background: #fff;
 }
 
-.frm-add-blank-form .frmsvg {
+.frm-featured-forms .frm-add-blank-form .frmsvg {
 	color: var(--medium-grey);
 }
 
@@ -1988,7 +1988,7 @@ table.frm-list-templates thead th {
 }
 
 #frm_new_form_modal .postbox > div:first-child {
-	padding: 20px;
+	padding: 30px 20px;
 	position: relative;
 	border-bottom: 1px solid rgba(40, 47, 54, 0.2);
 }
@@ -2002,7 +2002,7 @@ table.frm-list-templates thead th {
 #frm_new_form_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
 	right: 20px;
-	top: 27px;
+	top: 37px;
 }
 
 #frm_new_form_modal .postbox > div:first-child > div:last-child a {
@@ -2012,17 +2012,22 @@ table.frm-list-templates thead th {
 #frm_new_form_modal .postbox > div.inside {
 	padding-left: 0;
 	padding-right: 0;
+	max-height: 490px;
+	overflow-y: auto;
 }
 
 #frm_new_form_modal .postbox > div.inside .cta-inside {
 	overflow-y: auto;
 	height: auto;
+	padding: 0 15px;
+}
+
+#frm_new_form_modal .accordion-container {
+	width: 100%;
 }
 
 .frm-featured-forms-new {
-	margin-top: 30px;
-	overflow-y: auto;
-	max-height: 474px;
+	margin-top: 0px;
 }
 
 .frm-featured-forms-new li {
@@ -2030,35 +2035,208 @@ table.frm-list-templates thead th {
 	width: 50%;
 	vertical-align: top;
 	position: relative;
+	box-sizing: border-box;
+	border-radius: 6px;
+	border: 1px solid transparent;
+	text-align: left;
 }
 
-.frm-featured-forms-new li > a > div {
+.frm-featured-forms-new.categories-list li {
+	width: 100%;
+}
+
+.frm-featured-forms-new li.selectable {
+	cursor: pointer;
+}
+
+.frm-featured-forms-new li.selectable:hover {
+	background: rgba(188, 224, 253, 0.23);
+	border-color: rgba(65, 153, 253, 0.5);
+}
+
+.frm-featured-forms-new li.selectable:hover h3,
+.frm-featured-forms-new li.selectable:hover p {
+	max-width: 70%;
+}
+
+.frm-featured-forms-new li > div {
+	display: inline-block;
+	width: 95%;
+	padding: 5px;
+}
+
+.frm-featured-forms-new li li > div {
+	padding-left: 0;
+}
+
+.frm-featured-forms-new li > div > div {
 	vertical-align: middle;
 }
 
-.frm-featured-forms-new li > a > div:first-child {
-	max-width: 20px;
-	max-height: 20px;
+.frm-featured-forms-new li > div > div:first-child {
+	/* rounded square icons in Create new form modal */
+	width: 40px;
+	height: 40px;
 	overflow: hidden;
 	display: inline-block;
+	border-radius: 4px;
+	text-align: center;
+	vertical-align: top;
 }
 
-.frm-featured-forms-new li > a > div:last-child {
+#frm_new_form_modal .accordion-section-title:hover,
+.control-section:hover .accordion-section-title,
+#frm_new_form_modal .accordion-section.open .accordion-section-title
+{
+	background: #fff !important;
+	border-bottom: none;
+}
+
+#frm_new_form_modal .accordion-section.open:hover {
+	border-bottom: none;
+}
+
+.frm-featured-forms-new li > div > div:last-child {
+	/* the content container to the right of the icon in Create new form modal */
 	display: inline-block;
-	width: calc( 100% - 20px );
+	width: calc( 100% - 40px );
+	padding-left: 10px;
+	box-sizing: border-box;
 }
 
-.frm-featured-forms-new li h3, .frm-featured-forms-new li p {
+.frm-featured-forms-new li h3,
+.frm-featured-forms-new li p {
 	text-align: left;
 	margin: 0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
-.frm-featured-forms-new li h3 {
+.frm-featured-forms-new li h3,
+.frm-featured-forms-new .frm-install-template h3 {
 	font-size: 14px !important;
 }
 
 .frm-featured-forms-new li p {
 	font-size: 13px;
+	color: rgba(40, 47, 54, 0.6);
+}
+
+.frm-featured-forms-new .frm-install-template div {
+	text-align: left;
+}
+
+.frm-featured-forms-new .frm-new-form-button .frmsvg,
+.frm-featured-forms-new li:last-child div:not(.hover-icons) > .frmsvg {
+	color: #fff;
+	scale: 0.6;
+	transform: translateY(10px);
+}
+
+.frm-featured-forms-new .frm-inner-circle {
+	border-radius: 4px;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm-featured-forms-new .frm-inner-circle use {
+	scale: 0.6;
+	transform: translateX(10px) translateY(10px);
+}
+
+#frm_new_form_modal .frm-search {
+	width: calc( 100% - 20px );
+	margin: 40px 10px 30px;
+}
+
+#frm_new_form_modal #template-search-input {
+	border: 2px solid rgba(40, 47, 54, 0.2);
+	border-radius: 4px !important;
+}
+
+#frm_new_form_modal .accordion-container {
+	display: inline-block;
+	padding: 15px 5px 0;
+	border-top: 1px solid rgba(40, 47, 54, 0.2);
+	box-sizing: border-box;
+	margin: 0 10px;
+	width: calc( 100% - 20px );
+}
+
+#frm_new_form_modal .accordion-section-title {
+	padding: 0;
+}
+
+#frm_new_form_modal .frm-featured-forms-new.categories-list .accordion-section-title {
+	padding-left: 10px;
+}
+
+#frm_new_form_modal .frm-featured-forms-new.categories-list li.selectable {
+	padding: 0 10px;
+}
+
+#frm_new_form_modal .accordion-section-content {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.frm-featured-forms-new.categories-list li > div > div:last-child {
+	padding-left: 0;
+}
+
+.hover-icons {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 20px;
+	width: 70px !important;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 14px 5px 0 !important;
+	border-radius: 6px;
+	text-align: center;
+}
+
+.hover-icons a {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	border-radius: 50%;
+}
+
+.hover-icons > .preview-form {
+	border: 1px solid #4199FD;
+	line-height: 20px;
+	text-align: center;
+}
+
+.hover-icons > .create-form {
+	background-color: #4199FD;
+	text-align: center;
+	line-height: 18px;
+	margin-left: 5px;
+}
+
+.hover-icons > .preview-form .frmsvg {
+	width: 16px;
+	height: 16px;
+	color: #4199FD;
+}
+
+.hover-icons > .create-form .frmsvg {
+	width: 14px;
+	height: 14px;
+}
+
+.hover-icons .create-form svg {
+	color: #fff;
 }
 
 /* Bulk Options */
@@ -2480,7 +2658,9 @@ a.frm_option_icon:hover::before {
 }
 
 .frm-right-panel .accordion-section-title:before,
-.frm-right-panel .accordion-section-title:after {
+.frm-right-panel .accordion-section-title:after,
+#frm_new_form_modal .accordion-section-title:after
+{
 	content: "\e913" !important;
 	font-family: "s11-fp" !important;
 	font-size: 18px;

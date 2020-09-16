@@ -831,8 +831,25 @@ class FrmFormsController {
 	}
 
 	public static function list_templates_new() {
-		$api       = new FrmFormTemplateApi();
-		$templates = $api->get_api_info();
+		$api                   = new FrmFormTemplateApi();
+		$templates             = $api->get_api_info();
+		$templates_by_category = array();
+
+		foreach ( $templates as $template ) {
+			if ( ! isset( $template['categories'] ) ) {
+				continue;
+			}
+
+			foreach ( $template['categories'] as $category ) {
+				if ( ! isset( $templates_by_category[ $category ] ) ) {
+					$templates_by_category[ $category ] = array();
+				}
+
+				$templates_by_category[ $category ][] = $template;
+			}
+		}
+
+		wp_enqueue_script( 'accordion' ); // register accordion for template groups
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates-new.php';
 	}
