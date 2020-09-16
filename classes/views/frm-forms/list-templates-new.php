@@ -84,5 +84,3 @@ FrmAppHelper::show_search_box(
 		<?php } ?>
 	</ul>
 </div>
-<?php
-include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/template-name-overlay.php';

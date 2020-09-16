@@ -4581,8 +4581,8 @@ function frmAdminBuildJS() {
 
 		event.preventDefault();
 		$modal = initModal( '#frm_new_form_modal', '600px' );
-		$modal.find( '#frm-new-block' ).removeClass( 'frm_hidden' );
-		$modal.find( '#frm-preview-block' ).addClass( 'frm_hidden' );
+		$modal.find( '#frm-create-new-form-title, #frm-new-block' ).removeClass( 'frm_hidden' );
+		$modal.find( '#frm-preview-block, #frm-details-block' ).addClass( 'frm_hidden' );
 		$modal.dialog( 'open' );
 
 		// close dialog by clicking the overlay behind it
@@ -5297,6 +5297,9 @@ function frmAdminBuildJS() {
 		
 		if ( typeof $preview === 'undefined' ) {
 			$preview = initModal( '#frm_preview_template_modal', '700px' );
+			$info = initModal( '#frm_template_modal', '650px' );
+		} else {
+			$info = $preview;
 		}
 
 		if ( $preview !== false ) {
@@ -5321,7 +5324,6 @@ function frmAdminBuildJS() {
 			});
 		}
 
-		$info = initModal( '#frm_template_modal', '650px' );
 		if ( $info === false ) {
 			return;
 		}
@@ -5900,7 +5902,6 @@ function frmAdminBuildJS() {
 
 					jQuery( '#frm-new-block' ).addClass( 'frm_hidden' );
 					jQuery( '#frm-preview-block' ).removeClass( 'frm_hidden' );
-
 					jQuery( '#frm-create-new-form-title' ).addClass( 'frm_hidden' );					
 					jQuery( '#frm-preview-title' ).text( $li.find( 'h3' ).text() ).parent().removeClass( 'frm_hidden' );
 				});
@@ -5912,16 +5913,24 @@ function frmAdminBuildJS() {
 
 					$li = jQuery( this ).closest( 'li' );
 
-					if ( $li.hasClass( 'frm-add-blank-form' ) ) {
-					//	jQuery( '#frm_new_form_modal' ).dialog( 'close' );
-						blankFormTrigger.click();
-					} else if ( $li.is( '[data-href]' ) ) {
+					if ( $li.is( '[data-href]' ) ) {
 						window.location = $li.attr( 'data-href' );
+						return;
+					}
+
+					if ( $li.hasClass( 'frm-add-blank-form' ) ) {
+						blankFormTrigger.click();
 					} else if ( $li.is( '[data-rel]' ) ) {
 						templateFormTrigger.setAttribute( 'rel', $li.attr( 'data-rel' ) );
 						$li.append( templateFormTrigger );
 						templateFormTrigger.click();
+					} else {
+						return;
 					}
+
+					jQuery( '#frm-create-new-form-title, #frm-new-block, #frm-preview-block' ).addClass( 'frm_hidden' );
+					jQuery( '#frm-preview-title' ).text( jQuery( '#frm-create-new-form-title' ).text() ).parent().removeClass( 'frm_hidden' );
+					jQuery( '#frm-details-block' ).removeClass( 'frm_hidden' );
 				});
 
 				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
@@ -5948,11 +5957,9 @@ function frmAdminBuildJS() {
 				});
 
 				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back', function( event ) {
+					jQuery( '#frm-preview-block, #frm-details-block' ).addClass( 'frm_hidden' );
 					jQuery( '#frm-preview-title' ).parent().addClass( 'frm_hidden' );
-					jQuery( '#frm-create-new-form-title' ).removeClass( 'frm_hidden' );
-
-					jQuery( '#frm-preview-block' ).addClass( 'frm_hidden' );
-					jQuery( '#frm-new-block' ).removeClass( 'frm_hidden' );
+					jQuery( '#frm-create-new-form-title, #frm-new-block' ).removeClass( 'frm_hidden' );
 				});
 			}
 

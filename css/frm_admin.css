@@ -2369,6 +2369,10 @@ a.frm_pro_tip i {
 	overflow-x: hidden;
 }
 
+#frm_new_form_modal #frm-details-block {
+	padding: 20px 40px;
+}
+
 .frm-modal-back {
 	cursor: pointer;
 	font-size: 17px;
