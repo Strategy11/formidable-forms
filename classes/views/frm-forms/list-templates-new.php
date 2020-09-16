@@ -47,13 +47,14 @@ FrmAppHelper::show_search_box(
 	array(
 		'input_id'    => 'template',
 		'placeholder' => __( 'Search Templates', 'formidable' ),
-		'tosearch'    => 'frm-template-row',
+		'tosearch'    => 'frm-searchable-template',
 	)
 );
 ?>
 <div class="accordion-container">
 	<ul class="frm-featured-forms-new categories-list">
-		<?php foreach ( $templates_by_category as $category => $category_templates ) { ?>
+		<?php foreach ( $categories as $category ) { ?>
+			<?php $category_templates = $templates_by_category[ $category ]; ?>
 			<li class="control-section accordion-section">
 				<div class="frm-featured-form">
 					<div style="background-color: #805EF6;">
@@ -67,7 +68,7 @@ FrmAppHelper::show_search_box(
 							<ul>
 							<?php foreach ( $category_templates as $template ) { ?>
 								<?php $link = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) ); ?>
-								<li class="selectable" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
+								<li class="selectable frm-searchable-template" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
 									<div>
 										<h3><?php echo esc_html( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ); ?></h3>
 										<p><?php echo esc_html( $template['description'] ); ?></p>

@@ -2031,7 +2031,6 @@ table.frm-list-templates thead th {
 }
 
 .frm-featured-forms-new li {
-	display: inline-block;
 	width: 50%;
 	vertical-align: top;
 	position: relative;
@@ -2039,6 +2038,10 @@ table.frm-list-templates thead th {
 	border-radius: 6px;
 	border: 1px solid transparent;
 	text-align: left;
+}
+
+.frm-featured-forms-new li:not(.frm_hidden) {
+	display: inline-block;
 }
 
 .frm-featured-forms-new.categories-list li {

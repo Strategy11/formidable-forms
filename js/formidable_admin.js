@@ -5582,6 +5582,12 @@ function frmAdminBuildJS() {
 				items[i].classList.remove( 'frm-search-result' );
 			}
 		}
+
+		console.log({
+			length: items.length,
+			toSearch,
+			searchText
+		})
 	}
 
 	function stopPropagation( e ) {
