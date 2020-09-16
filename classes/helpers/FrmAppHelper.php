@@ -931,8 +931,10 @@ class FrmAppHelper {
 		} elseif ( ! empty( $atts['trigger_new_form_modal'] ) ) {
 			?>
 			<a href="#" class="button button-primary frm-button-primary frm-with-plus trigger-new-form-modal">
-				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
-				<?php esc_html_e( 'Add New', 'formidable' ); ?>
+				<?php
+				self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' );
+				esc_html_e( 'Add New', 'formidable' );
+				?>
 			</a>
 			<?php
 		} elseif ( isset( $atts['link_hook'] ) ) {

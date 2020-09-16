@@ -8,7 +8,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="postbox">
 			<div>
 				<div>
-					<?php esc_html_e( 'Create new form', 'formidable' ); ?>
+					<div id="frm-create-new-form-title">
+						<?php esc_html_e( 'Create new form', 'formidable' ); ?>
+					</div>
+					<div class="frm_hidden">
+						<span class="frm-modal-back" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
+							<svg class="frmsvg">
+								<use xlink:href="#frm_back"></use>
+							</svg>
+						</span>
+						<span id="frm-preview-title"></span>
+					</div>
 				</div>
 				<div>
 					<a href="#" class="dismiss">
@@ -16,11 +26,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</a>
 				</div>
 			</div>
-			<div class="inside">
+			<div class="inside" id="frm-new-block">
 				<div class="cta-inside frmcenter">
 					<?php FrmFormsController::list_templates_new(); ?>
 				</div>
 			</div>
+			<div class="inside frm_hidden" id="frm-preview-block"></div>
 		</div>
 	</div>
 </div>
@@ -28,6 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::icon_by_class( 'frmfont frm_eye_simple' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
+	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
 	?>
 	<div id="hover-icons-template" class="hover-icons">
 		<a href="#" class="preview-form" title="<?php esc_html_e( 'Preview form', 'formidable' ); ?>">

@@ -4581,6 +4581,8 @@ function frmAdminBuildJS() {
 
 		event.preventDefault();
 		$modal = initModal( '#frm_new_form_modal', '600px' );
+		$modal.find( '#frm-new-block' ).removeClass( 'frm_hidden' );
+		$modal.find( '#frm-preview-block' ).addClass( 'frm_hidden' );
 		$modal.dialog( 'open' );
 
 		// close dialog by clicking the overlay behind it
@@ -5290,9 +5292,12 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-form', installTemplate );
 	}
 
-	function initTemplateModal() {
-		var $preview = initModal( '#frm_preview_template_modal', '700px' ),
-			$info;
+	function initTemplateModal( $preview ) {
+		var $info;
+		
+		if ( typeof $preview === 'undefined' ) {
+			$preview = initModal( '#frm_preview_template_modal', '700px' );
+		}
 
 		if ( $preview !== false ) {
 			jQuery( '.frm-preview-template' ).click( function( event ) {
@@ -5868,6 +5873,8 @@ function frmAdminBuildJS() {
 					return false;
 				});
 
+				var $modal = initModal( '#frm_new_form_modal', '600px' );
+
 				blankFormTrigger = document.createElement( 'a' );
 				blankFormTrigger.classList.add( 'frm-new-form-button', 'frm_hidden' );
 				document.body.appendChild( blankFormTrigger );
@@ -5880,7 +5887,7 @@ function frmAdminBuildJS() {
 				previewFormTrigger.classList.add( 'frm-preview-template', 'frm_hidden' );
 				document.body.appendChild( previewFormTrigger );
 
-				initTemplateModal();
+				initTemplateModal( $modal );
 
 				jQuery( document ).on( 'click', '.hover-icons .preview-form', function( event ) {
 					var $li;
@@ -5890,6 +5897,12 @@ function frmAdminBuildJS() {
 					$li = jQuery( this ).closest( 'li' );
 					previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
 					previewFormTrigger.click();
+
+					jQuery( '#frm-new-block' ).addClass( 'frm_hidden' );
+					jQuery( '#frm-preview-block' ).removeClass( 'frm_hidden' );
+
+					jQuery( '#frm-create-new-form-title' ).addClass( 'frm_hidden' );					
+					jQuery( '#frm-preview-title' ).text( $li.find( 'h3' ).text() ).parent().removeClass( 'frm_hidden' );
 				});
 
 				jQuery( document ).on( 'click', 'li .hover-icons .create-form', function( event ) {
@@ -5932,6 +5945,14 @@ function frmAdminBuildJS() {
 							jQuery( category ).find( '.templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
 						}
 					}
+				});
+
+				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back', function( event ) {
+					jQuery( '#frm-preview-title' ).parent().addClass( 'frm_hidden' );
+					jQuery( '#frm-create-new-form-title' ).removeClass( 'frm_hidden' );
+
+					jQuery( '#frm-preview-block' ).addClass( 'frm_hidden' );
+					jQuery( '#frm-new-block' ).removeClass( 'frm_hidden' );
 				});
 			}
 

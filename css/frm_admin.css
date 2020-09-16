@@ -2364,6 +2364,24 @@ a.frm_pro_tip i {
 	color: var(--primary-color);
 }
 
+#frm_new_form_modal #frm-preview-block {
+	padding: 20px 40px;
+	overflow-x: hidden;
+}
+
+.frm-modal-back {
+	cursor: pointer;
+	font-size: 17px;
+	vertical-align: top;
+	margin-top: 4px;
+	margin-right: 4px;
+	display: inline-block;
+}
+
+.frm-modal-back svg {
+	color: #7F7F7F;
+}
+
 /*Switch form dropdown*/
 h1 .fa-caret-down {
 	font-size: 18px;
