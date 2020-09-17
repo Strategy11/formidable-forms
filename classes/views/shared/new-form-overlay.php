@@ -3,22 +3,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_new_form_modal" class="frm_hidden">
+<div id="frm_new_form_modal" class="frm_hidden" frm-active-modal-page="create">
 	<div class="metabox-holder">
 		<div class="postbox">
 			<div>
 				<div>
-					<div id="frm-create-new-form-title">
+					<span class="frm-modal-back" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
+						<svg class="frmsvg">
+							<use xlink:href="#frm_back"></use>
+						</svg>
+					</span>
+					<span id="frm-create-title">
 						<?php esc_html_e( 'Create new form', 'formidable' ); ?>
-					</div>
-					<div class="frm_hidden">
-						<span class="frm-modal-back" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
-							<svg class="frmsvg">
-								<use xlink:href="#frm_back"></use>
-							</svg>
-						</span>
-						<span id="frm-preview-title"></span>
-					</div>
+					</span>
+					<span id="frm-upgrade-title">
+						<?php esc_html_e( 'Upgrade your account', 'formidable' ); ?>
+					</span>
+					<span id="frm-preview-title"></span>
+					<span id="frm-details-title">
+						<?php esc_html_e( 'Create new form', 'formidable' ); ?>
+					</span>
 				</div>
 				<div>
 					<a href="#" class="dismiss">
@@ -26,13 +30,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</a>
 				</div>
 			</div>
-			<div class="inside" id="frm-new-block">
+			<div class="inside" id="frm-create-block">
 				<div class="cta-inside frmcenter">
 					<?php FrmFormsController::list_templates_new(); ?>
 				</div>
 			</div>
-			<div class="inside frm_hidden" id="frm-preview-block"></div>
-			<div class="inside frm_hidden" id="frm-details-block">
+			<div class="inside" id="frm-preview-block"></div>
+			<div class="inside" id="frm-details-block">
 				<form name="frm-new-template" id="frm-new-template" method="post" class="field-group">
 					<p>
 						<label for="frm_template_name" id="frm_new_name" data-template="<?php esc_attr_e( 'Template Name', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Name', 'formidable' ); ?>">
@@ -61,12 +65,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</a>
 				</form>
 			</div>
+			<div class="inside" id="frm-upgrade-block">
+				<?php require dirname( __FILE__ ) . '/upgrade-body.php'; ?>
+			</div>
 			<div id="frm-preview-footer">
 				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
 					<?php esc_html_e( 'Back to all templates', 'formidable' ); ?>
 				</a>
 				<a href="#" class="button button-primary frm-button-primary frm-use-this-template">
 					<?php esc_html_e( 'Use this template', 'formidable' ); ?>
+				</a>
+			</div>
+			<div id="frm-upgrade-footer">
+				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( array( 'medium' => 'upgrade', 'content' => 'button' ) ) ); ?>" class="button button-primary frm-button-primary">
+					<?php esc_html_e( 'Continue to upgrade', 'formidable' ); ?>
 				</a>
 			</div>
 		</div>
