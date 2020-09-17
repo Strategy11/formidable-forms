@@ -833,7 +833,10 @@ class FrmFormsController {
 	public static function list_templates_new() {
 		$api                   = new FrmFormTemplateApi();
 		$templates             = $api->get_api_info();
+		$custom_templates      = array();
 		$templates_by_category = array();
+
+		self::add_user_templates( $custom_templates );
 
 		foreach ( $templates as $template ) {
 			if ( ! isset( $template['categories'] ) ) {
@@ -852,6 +855,16 @@ class FrmFormsController {
 		$categories = array_keys( $templates_by_category );
 		$categories = array_diff( $categories, FrmFormsHelper::ignore_template_categories() );
 		sort( $categories );
+
+		if ( $custom_templates ) {
+			$categories = array_merge( array( 'My Templates' ), $categories );
+
+			array_walk( $custom_templates, function( &$template ) {
+				$template['custom'] = true;
+			} );
+
+			$templates_by_category['My Templates'] = $custom_templates;
+		}
 
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
 

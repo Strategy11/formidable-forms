@@ -77,6 +77,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</a>
 			</div>
 			<div id="frm-upgrade-footer">
+				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates align-left">
+					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+				</a>
 				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( array( 'medium' => 'upgrade', 'content' => 'button' ) ) ); ?>" class="button button-primary frm-button-primary">
 					<?php esc_html_e( 'Continue to upgrade', 'formidable' ); ?>
 				</a>

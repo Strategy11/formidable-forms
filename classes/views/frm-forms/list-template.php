@@ -2,12 +2,20 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-?><li class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template' : ''; ?>" data-rel="<?php echo esc_url( $link['url'] ); ?>" data-preview="<?php echo esc_url( 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/' . $template['key'] . '?return=html' ); ?>">
+
+if ( ! empty( $template['custom'] ) ) {
+	$preview_base = admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' );
+	$preview_end  = '';
+} else {
+	$preview_base = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/';
+	$preview_end  = '?return=html';
+}
+?><li class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template' : ''; ?>" <?php echo ( ! empty( $template['custom'] ) ? "data-href='" . esc_url( $template['url'] ) . "'" : "data-rel='" . esc_url( $link['url'] ) . "'" ); ?> data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>">
 	<div class="frm-featured-form">
 		<?php
 		if ( $render_icon ) {
 			?><div>
-				<?php FrmFormsHelper::template_icon( isset( $template['categories'] ) ? $template['categories'] : array() ); ?>
+				<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
 			</div><?php
 		}
 		?><div>

@@ -2010,10 +2010,10 @@ table.frm-list-templates thead th {
 }
 
 #frm_new_form_modal .postbox > div.inside {
-	padding-left: 0;
-	padding-right: 0;
 	max-height: 490px;
 	overflow-y: auto;
+	margin: 0;
+	padding: 10px 0 0;
 }
 
 #frm_new_form_modal .postbox > div.inside .cta-inside {
@@ -2286,6 +2286,10 @@ table.frm-list-templates thead th {
 	margin-top: 4px;
 	margin-right: 4px;
 	display: none;
+}
+
+#frm_new_form_modal[frm-active-modal-page="upgrade"] .button-secondary {
+	float: left;
 }
 
 li .frm-hover-icons .frm-preview-form,

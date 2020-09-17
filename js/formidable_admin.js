@@ -5329,7 +5329,7 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery( '.frm-install-template' ).click( function( event ) {
-			var oldName = jQuery( this ).closest( 'li, td' ).find( 'h3' ).html(),
+			var oldName = jQuery( this ).closest( 'li, td' ).find( 'h3' ).html().trim(),
 				nameLabel = document.getElementById( 'frm_new_name' ),
 				descLabel = document.getElementById( 'frm_new_desc' );
 
@@ -5929,7 +5929,7 @@ function frmAdminBuildJS() {
 						return;
 					}
 
-					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'create' );
+					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'details' );
 				});
 
 				jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-unlock-form', function( event ) {
