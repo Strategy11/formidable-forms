@@ -855,6 +855,18 @@ class FrmFormsController {
 
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
 
+		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+
+		$license_type = '';
+		if ( isset( $templates['error'] ) ) {
+			$error   = $templates['error']['message'];
+			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
+			$expired = ( $templates['error']['code'] === 'expired' );
+
+			$license_type = isset( $templates['error']['type'] ) ? $templates['error']['type'] : '';
+			unset( $templates['error'] );
+		}
+
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates-new.php';
 	}
 

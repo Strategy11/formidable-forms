@@ -5295,7 +5295,7 @@ function frmAdminBuildJS() {
 
 	function initTemplateModal( $preview ) {
 		var $info;
-		
+
 		if ( typeof $preview === 'undefined' ) {
 			$preview = initModal( '#frm_preview_template_modal', '700px' );
 			$info = initModal( '#frm_template_modal', '650px' );

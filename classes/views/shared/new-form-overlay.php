@@ -77,6 +77,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_eye_simple' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
+	FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+	FrmAppHelper::icon_by_class( 'frmfont frm_unlock_simple' );
 	?>
 	<div id="frm-hover-icons-template" class="frm-hover-icons">
 		<a href="#" class="frm-preview-form" title="<?php esc_html_e( 'Preview form', 'formidable' ); ?>">
@@ -86,6 +88,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a><a href="#" class="frm-create-form" title="<?php esc_html_e( 'Create form', 'formidable' ); ?>">
 			<svg class="frmsvg">
 				<use xlink:href="#frm_plus_icon"></use>
+			</svg>
+		</a><a href="#" class="frm-unlock-form" title="<?php esc_html_e( 'Unlock form', 'formidable' ); ?>">
+			<svg class="frmsvg">
+				<use xlink:href="#frm_unlock_simple"></use>
 			</svg>
 		</a>
 	</div>

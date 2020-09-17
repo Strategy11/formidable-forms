@@ -2219,17 +2219,28 @@ table.frm-list-templates thead th {
 
 .frm-hover-icons > .frm-preview-form {
 	border: 1px solid #4199FD;
+	margin-right: 5px;
 }
 
 .frm-hover-icons > .frm-create-form {
 	background-color: #4199FD;
-	margin-left: 5px;
 }
 
 .frm-hover-icons > .frm-preview-form .frmsvg {
 	width: 16px;
 	height: 16px;
 	color: #4199FD;
+}
+
+.frm-hover-icons > .frm-unlock-form {
+	background-color: #4199FD;
+}
+
+.frm-hover-icons > .frm-unlock-form .frmsvg {
+	width: 12px;
+	height: 12px;
+	background-color: #4199FD;
+	transform: translateY(-2px);
 }
 
 .frm-hover-icons > .frm-create-form .frmsvg {
@@ -2243,6 +2254,25 @@ table.frm-list-templates thead th {
 
 li .frm-hover-icons .frm-preview-form {
 	display: none;
+}
+
+.frm-locked-template h3 .frmsvg {
+	height: 12px;
+	width: 14px;
+	vertical-align: top;
+	padding-top: 4px;
+}
+
+.frm-hover-icons .frm-unlock-form {
+	display: none;
+}
+
+.frm-locked-template .frm-hover-icons .frm-create-form {
+	display: none;
+}
+
+.frm-locked-template .frm-hover-icons .frm-unlock-form {
+	display: inline-block;
 }
 
 li[data-preview] .frm-hover-icons .frm-preview-form {

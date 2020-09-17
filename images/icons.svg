@@ -922,6 +922,10 @@
 <title>Preview</title>
 <symbol id="frm_eye_simple" viewBox="0 0 18 16"><path d="M1.667 8S4.333 2.667 9 2.667 16.333 8 16.333 8 13.667 13.333 9 13.333 1.667 8 1.667 8z" fill="#4199FD" stroke="#4199FD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 10a2 2 0 100-4 2 2 0 000 4z" fill="#F0F8FF" stroke="#F1F9FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <title>Back</title>
-<symbol id="frm_back" viewBox="0 0 24 25"><path d="M19 12.031H5M12 19.031l-7-7 7-7" stroke="#7F7F7F" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="frm_back" viewBox="0 0 24 25" fill="none"><path d="M19 12.031H5M12 19.031l-7-7 7-7" stroke="#7F7F7F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<title>Locked</title>
+<symbol id="frm_lock_simple" viewBox="0 0 12 14" fill="none"><path d="M10.714 6.125h-.643V4.156C10.071 1.865 8.245 0 6 0 3.755 0 1.929 1.865 1.929 4.156v1.969h-.643C.576 6.125 0 6.713 0 7.438v5.25C0 13.412.576 14 1.286 14h9.428c.71 0 1.286-.588 1.286-1.313v-5.25c0-.724-.576-1.312-1.286-1.312zm-2.785 0H4.07V4.156c0-1.085.866-1.968 1.929-1.968 1.063 0 1.929.883 1.929 1.968v1.969z" fill="#282F36" fill-opacity=".5"/></symbol>
+<title>Unlock</title>
+<symbol id="frm_unlock_simple" viewBox="0 0 12 14" fill="none"><path d="M10.714 7H4.071V4.18c0-1.083.85-1.983 1.91-1.993 1.072-.011 1.948.877 1.948 1.968v.438c0 .363.286.656.642.656h.858a.648.648 0 00.642-.656v-.438c0-2.297-1.834-4.164-4.084-4.156-2.25.008-4.058 1.9-4.058 4.197V7h-.643C.576 7 0 7.587 0 8.312v4.375c0 .724.576 1.312 1.286 1.312h9.428c.71 0 1.286-.588 1.286-1.312V8.312c0-.725-.576-1.313-1.286-1.313z" fill="#F0F8FF"/></symbol>
 </defs>
 </svg>
