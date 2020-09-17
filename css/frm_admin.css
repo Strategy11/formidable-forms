@@ -2119,6 +2119,7 @@ table.frm-list-templates thead th {
 .frm-featured-forms-new li h3,
 .frm-featured-forms-new .frm-install-template h3 {
 	font-size: 14px !important;
+	line-height: 22px;
 }
 
 .frm-featured-forms-new li p {
@@ -2290,6 +2291,19 @@ table.frm-list-templates thead th {
 
 #frm_new_form_modal[frm-active-modal-page="upgrade"] .button-secondary {
 	float: left;
+}
+
+.frm-plan-required-tag {
+	background: #FDE6DE;
+	color: #F15A24;
+	font-size: 10px;
+	padding: 4px 8px;
+	border-radius: 4px;
+	text-transform: uppercase;
+	font-weight: normal;
+	display: inline-block;
+	line-height: 12px;
+	transform: translateY(-1px);
 }
 
 li .frm-hover-icons .frm-preview-form,

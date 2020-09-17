@@ -68,7 +68,8 @@ FrmAppHelper::show_search_box(
 							<?php
 							$searchable  = true;
 							$render_icon = false;
-							foreach ( $category_templates as $template ) {
+							foreach ( $category_templates as $category_template ) {
+								$template              = $category_template;
 								$plan_required         = FrmFormsHelper::get_plan_required( $template );
 								$args['plan_required'] = $plan_required;
 								$link                  = FrmFormsHelper::get_template_install_link( $template, $args );

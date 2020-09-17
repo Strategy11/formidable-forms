@@ -1360,7 +1360,7 @@ BEFORE_HTML;
 		$plans = array( 'free', 'Basic', 'Personal', 'Business', 'Elite' );
 
 		foreach ( $item['categories'] as $k => $category ) {
-			if ( in_array( $category, $plans ) ) {
+			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 				if ( $category === 'Personal' ) {
 					// Show the current package name.

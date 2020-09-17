@@ -26,6 +26,17 @@ if ( ! empty( $template['custom'] ) ) {
 					</svg>
 				<?php } ?>
 				<?php echo esc_html( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ); ?>
+				<?php if ( $plan_required ) { ?>
+					<span class="frm-plan-required-tag">
+						<?php
+						echo esc_html( $plan_required );
+
+						if ( $plan_required !== 'Elite' ) {
+							echo esc_html( ' +' );
+						}
+						?>
+					</span>
+				<?php } ?>
 			</h3>
 			<p><?php echo esc_html( $template['description'] ); ?></p>
 		</div>
