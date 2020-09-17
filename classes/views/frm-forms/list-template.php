@@ -3,6 +3,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+// TODO remove this
+// start temporary workaround since API has not been updated
+if ( isset( $template['url'] ) && in_array( 'free', $template['categories'], true ) && ! FrmAppHelper::pro_is_installed() ) {
+	$plan_required = 'free';
+}
+// end temporary workaround
+
 if ( ! empty( $template['custom'] ) ) {
 	$preview_base = admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' );
 	$preview_end  = '';
@@ -10,7 +17,7 @@ if ( ! empty( $template['custom'] ) ) {
 	$preview_base = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/';
 	$preview_end  = '?return=html';
 }
-?><li class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template' : ''; ?>" <?php echo ( ! empty( $template['custom'] ) ? "data-href='" . esc_url( $template['url'] ) . "'" : "data-rel='" . esc_url( $link['url'] ) . "'" ); ?> data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>">
+?><li class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>" <?php echo ( ! empty( $template['custom'] ) ? "data-href='" . esc_url( $template['url'] ) . "'" : "data-rel='" . esc_url( $link['url'] ) . "'" ); ?> data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>">
 	<div class="frm-featured-form">
 		<?php
 		if ( $render_icon ) {

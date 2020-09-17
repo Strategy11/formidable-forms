@@ -23,6 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span id="frm-details-title">
 						<?php esc_html_e( 'Create new form', 'formidable' ); ?>
 					</span>
+					<span id="frm-email-title">
+						<?php esc_html_e( 'Leave your email address', 'formidable' ); ?>
+					</span>
 				</div>
 				<div>
 					<a href="#" class="dismiss">
@@ -66,7 +69,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</form>
 			</div>
 			<div class="inside" id="frm-upgrade-block">
-				<?php require dirname( __FILE__ ) . '/upgrade-body.php'; ?>
+				<?php require dirname( __FILE__ ) . '/new-form-overlay/upgrade-body.php'; ?>
+			</div>
+			<div class="inside" id="frm-email-block">
+				<?php require dirname( __FILE__ ) . '/new-form-overlay/leave-email.php'; ?>
 			</div>
 			<div id="frm-preview-footer">
 				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
@@ -94,6 +100,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 					class="button button-primary frm-button-primary"
 				>
 					<?php esc_html_e( 'Continue to upgrade', 'formidable' ); ?>
+				</a>
+			</div>
+			<div id="frm-email-footer">
+				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates align-left">
+					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+				</a>
+				<a href="#" class="button button-primary frm-button-primary frm-add-my-email-address">
+					<?php esc_html_e( 'Add my email address', 'formidable' ); ?>
 				</a>
 			</div>
 		</div>

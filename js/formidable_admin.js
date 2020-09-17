@@ -5933,9 +5933,20 @@ function frmAdminBuildJS() {
 					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'details' );
 				});
 
-				jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-unlock-form', function( event ) {
+				jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
+					var $li,
+						activePage;
+
 					event.preventDefault();
-					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'upgrade' );
+
+					$li = jQuery( this ).closest( '.frm-locked-template' );
+					if ( $li.hasClass( 'frm-free-template' ) ) {
+						activePage = 'email';
+					} else {
+						activePage = 'upgrade';
+					}
+
+					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', activePage );
 				});
 
 				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {

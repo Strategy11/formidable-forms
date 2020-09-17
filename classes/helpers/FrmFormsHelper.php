@@ -1306,7 +1306,7 @@ BEFORE_HTML;
 		$included = $args['license_type'] === strtolower( $args['plan_required'] );
 
 		$plans = array( 'free', 'personal', 'business', 'elite' );
-		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans ) ) {
+		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans, true ) ) {
 			return $included;
 		}
 
@@ -1353,7 +1353,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 */
 	public static function get_plan_required( &$item ) {
-		if ( ! isset( $item['categories'] ) || ( isset( $item['url'] ) && ! empty( $item['url'] ) ) ) {
+		if ( ! isset( $item['categories'] ) || ! empty( $item['url'] ) ) {
 			return false;
 		}
 
@@ -1362,10 +1362,12 @@ BEFORE_HTML;
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
+
 				if ( $category === 'Personal' ) {
 					// Show the current package name.
 					$category = 'Basic';
 				}
+
 				return $category;
 			}
 		}

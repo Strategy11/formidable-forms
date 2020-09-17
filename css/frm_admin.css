@@ -2012,6 +2012,7 @@ table.frm-list-templates thead th {
 #frm_new_form_modal .postbox > div.inside {
 	max-height: 490px;
 	overflow-y: auto;
+	overflow-x: hidden;
 	margin: 0;
 	padding: 10px 0 0;
 }
@@ -2103,8 +2104,9 @@ table.frm-list-templates thead th {
 	/* the content container to the right of the icon in Create new form modal */
 	display: inline-block;
 	width: calc( 100% - 40px );
-	padding-left: 10px;
+	padding-left: 13px;
 	box-sizing: border-box;
+	transform: translateY(-2px);
 }
 
 .frm-featured-forms-new li h3,
@@ -2119,7 +2121,8 @@ table.frm-list-templates thead th {
 .frm-featured-forms-new li h3,
 .frm-featured-forms-new .frm-install-template h3 {
 	font-size: 14px !important;
-	line-height: 22px;
+	line-height: 24px;
+	height: 24px;
 }
 
 .frm-featured-forms-new li p {
@@ -2160,9 +2163,22 @@ table.frm-list-templates thead th {
 	margin: 40px 10px 30px;
 }
 
-#frm_new_form_modal #template-search-input {
+#frm_new_form_modal #template-search-input,
+#frm_new_form_modal #frm_leave_email
+{
 	border: 2px solid var(--grey-border);
 	border-radius: 4px !important;
+}
+
+#frm_leave_email {
+	width: 80%;
+	max-width: 500px;
+}
+
+#frm-email-block .frm-with-left-icon .frmsvg {
+	padding: 0;
+	top: 0;
+	left: 13px;
 }
 
 #frm_new_form_modal .accordion-container {
@@ -2257,10 +2273,13 @@ table.frm-list-templates thead th {
 	height: 12px;
 	width: 14px;
 	vertical-align: top;
-	padding-top: 4px;
+	padding-top: 6px;
 }
 
-#frm-preview-footer, #frm-upgrade-footer {
+#frm-preview-footer,
+#frm-upgrade-footer,
+#frm-email-footer
+{
 	background-color: #fff;
 	padding: 30px 20px;
 	text-align: right;
@@ -2286,10 +2305,11 @@ table.frm-list-templates thead th {
 	vertical-align: top;
 	margin-top: 4px;
 	margin-right: 4px;
-	display: none;
 }
 
-#frm_new_form_modal[frm-active-modal-page="upgrade"] .button-secondary {
+#frm_new_form_modal[frm-active-modal-page="upgrade"] .button-secondary,
+#frm_new_form_modal[frm-active-modal-page="email"] .button-secondary
+{
 	float: left;
 }
 
@@ -2304,21 +2324,21 @@ table.frm-list-templates thead th {
 	display: inline-block;
 	line-height: 12px;
 	transform: translateY(-1px);
+	margin-left: 5px;
+}
+
+#frm-email-block p {
+	padding: 0 40px;
+	max-width: 400px;
+	margin: 0 auto 20px;
 }
 
 li .frm-hover-icons .frm-preview-form,
 .frm-hover-icons .frm-unlock-form,
 .frm-locked-template .frm-hover-icons .frm-create-form,
-#frm_new_form_modal #frm-create-title,
-#frm_new_form_modal #frm-preview-title,
-#frm_new_form_modal #frm-details-title,
-#frm_new_form_modal #frm-upgrade-title,
-#frm_new_form_modal #frm-create-block,
-#frm_new_form_modal #frm-preview-block,
-#frm_new_form_modal #frm-details-block,
-#frm_new_form_modal #frm-upgrade-block,
-#frm_new_form_modal #frm-preview-footer,
-#frm_new_form_modal #frm-upgrade-footer
+#frm_new_form_modal .frm-modal-back ~ span,
+#frm_new_form_modal .postbox > div:first-child ~ div,
+.frm-modal-back
 {
 	display: none;
 }
@@ -2328,6 +2348,7 @@ li .frm-hover-icons .frm-preview-form,
 #frm_new_form_modal[frm-active-modal-page="preview"] #frm-preview-title,
 #frm_new_form_modal[frm-active-modal-page="details"] #frm-details-title,
 #frm_new_form_modal[frm-active-modal-page="upgrade"] #frm-upgrade-title,
+#frm_new_form_modal[frm-active-modal-page="email"] #frm-email-title,
 .frm-locked-template .frm-hover-icons .frm-unlock-form,
 li[data-preview] .frm-hover-icons .frm-preview-form
 {
@@ -2338,8 +2359,11 @@ li[data-preview] .frm-hover-icons .frm-preview-form
 #frm_new_form_modal[frm-active-modal-page="preview"] #frm-preview-block,
 #frm_new_form_modal[frm-active-modal-page="details"] #frm-details-block,
 #frm_new_form_modal[frm-active-modal-page="upgrade"] #frm-upgrade-block,
+#frm_new_form_modal[frm-active-modal-page="email"] #frm-email-block,
 #frm_new_form_modal[frm-active-modal-page="preview"] #frm-preview-footer,
-#frm_new_form_modal[frm-active-modal-page="upgrade"] #frm-upgrade-footer {
+#frm_new_form_modal[frm-active-modal-page="upgrade"] #frm-upgrade-footer,
+#frm_new_form_modal[frm-active-modal-page="email"] #frm-email-footer
+{
 	display: block;
 }
 
