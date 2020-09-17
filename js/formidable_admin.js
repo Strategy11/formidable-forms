@@ -5893,17 +5893,18 @@ function frmAdminBuildJS() {
 				initTemplateModal( $modal );
 
 				jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
-					var $li;
+					var $li,
+						$titleClone;
 
 					event.preventDefault();
 
 					$li = jQuery( this ).closest( 'li' );
 					previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
 					previewFormTrigger.click();
-
-					jQuery( '#frm-preview-title' ).text( $li.find( 'h3' ).text() );
+					$titleClone = $li.find( 'h3' ).clone();
+					$titleClone.find( '.frm-plan-required-tag' ).remove();
+					jQuery( '#frm-preview-title' ).text( $titleClone.text() );
 					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'preview' );
-
 					activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 				});
 
