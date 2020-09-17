@@ -5967,7 +5967,7 @@ function frmAdminBuildJS() {
 								availableCount = 0;
 								for ( templateIndex in searchableTemplates ) {
 									if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
-										availableCount ++;
+										availableCount++;
 									}
 								}
 
