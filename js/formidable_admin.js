@@ -4582,7 +4582,7 @@ function frmAdminBuildJS() {
 		event.preventDefault();
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 		$modal.removeClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'create' );
-
+		$modal.find( '#template-search-input' ).val( '' ).change();
 		$modal.dialog( 'open' );
 
 		// close dialog by clicking the overlay behind it
@@ -5941,7 +5941,11 @@ function frmAdminBuildJS() {
 					var categories = document.getElementById( 'frm_new_form_modal' ).querySelector( '.categories-list' ).children,
 						categoryIndex,
 						category,
-						count;
+						templateIndex,
+						searchableTemplates,
+						count,
+						availableCounter,
+						availableCount;
 
 					for ( categoryIndex in categories ) {
 						if ( isNaN( categoryIndex ) ) {
@@ -5949,13 +5953,26 @@ function frmAdminBuildJS() {
 						}
 
 						category = categories[ categoryIndex ];
-						count = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' ).length;
+						searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
+						count = searchableTemplates.length;
 						jQuery( category ).toggleClass( 'frm_hidden', ! count );
 
 						if ( count ) {
 							category.querySelector( '.frm-template-count' ).textContent = count;
 							jQuery( category ).find( '.templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
 							jQuery( category ).find( '.templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
+
+							availableCounter = category.querySelector( '.frm-available-templates-count' );
+							if ( availableCounter !== null ) {
+								availableCount = 0;
+								for ( templateIndex in searchableTemplates ) {
+									if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
+										availableCount ++;
+									}
+								}
+
+								availableCounter.textContent = availableCount;
+							}
 						}
 					}
 				});

@@ -859,12 +859,17 @@ class FrmFormsController {
 		if ( $custom_templates ) {
 			$categories = array_merge( array( 'My Templates' ), $categories );
 
-			array_walk( $custom_templates, function( &$template ) {
-				$template['custom'] = true;
-			} );
+			array_walk(
+				$custom_templates,
+				function( &$template ) {
+					$template['custom'] = true;
+				}
+			);
 
 			$templates_by_category['My Templates'] = $custom_templates;
 		}
+
+		unset( $custom_templates );
 
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
 
@@ -879,6 +884,9 @@ class FrmFormsController {
 			$license_type = isset( $templates['error']['type'] ) ? $templates['error']['type'] : '';
 			unset( $templates['error'] );
 		}
+
+		$args = compact( 'pricing', 'license_type' );
+		unset( $pricing, $license_type );
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates-new.php';
 	}

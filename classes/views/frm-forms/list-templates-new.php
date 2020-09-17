@@ -20,9 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			continue;
 		}
 
-		$template      = $templates[ $template ];
-		$plan_required = FrmFormsHelper::get_plan_required( $template );
-		$link          = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) );
+		$template              = $templates[ $template ];
+		$plan_required         = FrmFormsHelper::get_plan_required( $template );
+		$args['plan_required'] = $plan_required;
+		$link                  = FrmFormsHelper::get_template_install_link( $template, $args );
 		require dirname( __FILE__ ) . '/list-template.php';
 	}
 	?><li class="frm-selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
@@ -51,6 +52,7 @@ FrmAppHelper::show_search_box(
 			<?php
 			$category_templates = $templates_by_category[ $category ];
 			$count              = count( $category_templates );
+			$available          = FrmFormsHelper::available_count( $category_templates, $args );
 			?>
 			<li class="control-section accordion-section">
 				<div class="frm-featured-form">
@@ -59,7 +61,7 @@ FrmAppHelper::show_search_box(
 					</div><div>
 						<div class="accordion-section-title">
 							<h3><?php echo esc_attr( $category ); ?></h3>
-							<p><span class="frm-template-count"><?php echo esc_html( $count ); ?></span> <span class="templates-plural <?php echo $count === 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'templates', 'formidable' ); ?></span><span class="templates-singular <?php echo $count !== 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'template', 'formidable' ); ?></span></p>
+							<p><span class="frm-template-count"><?php echo esc_html( $count ); ?></span> <span class="templates-plural <?php echo $count === 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'templates', 'formidable' ); ?></span><span class="templates-singular <?php echo $count !== 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'template', 'formidable' ); ?></span><?php echo $available ? '&nbsp;&nbsp;|&nbsp;&nbsp;<span class="frm-available-templates-count">' . esc_html( $available ) . '</span> ' . esc_html__( 'available', 'formidable' ) : ''; ?></p>
 						</div>
 						<div class="accordion-section-content" aria-expanded="false">
 							<ul>
@@ -67,8 +69,9 @@ FrmAppHelper::show_search_box(
 							$searchable  = true;
 							$render_icon = false;
 							foreach ( $category_templates as $template ) {
-								$plan_required = FrmFormsHelper::get_plan_required( $template );
-								$link          = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) );
+								$plan_required         = FrmFormsHelper::get_plan_required( $template );
+								$args['plan_required'] = $plan_required;
+								$link                  = FrmFormsHelper::get_template_install_link( $template, $args );
 								require dirname( __FILE__ ) . '/list-template.php';
 							}
 							?>

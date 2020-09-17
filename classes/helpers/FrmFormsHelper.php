@@ -1298,7 +1298,7 @@ BEFORE_HTML;
 	 *
 	 * @return bool
 	 */
-	private static function plan_is_allowed( $args ) {
+	public static function plan_is_allowed( $args ) {
 		if ( empty( $args['license_type'] ) ) {
 			return false;
 		}
@@ -1526,6 +1526,32 @@ BEFORE_HTML;
 			'type',
 			'w',
 			'year',
+		);
+	}
+
+	/**
+	 * Check an array of templates, determine how many the logged in user can use
+	 *
+	 * @param array $templates
+	 * @param array $args
+	 * @return int
+	 */
+	public static function available_count( $templates, $args ) {
+		return array_reduce(
+			$templates,
+			function( $total, $template ) use ( $args ) {
+				if ( ! empty( $template['url'] ) ) {
+					return $total + 1;
+				}
+
+				$args['plan_required'] = self::get_plan_required( $template );
+				if ( self::plan_is_allowed( $args ) ) {
+					return $total + 1;
+				}
+
+				return $total;
+			},
+			0
 		);
 	}
 }
