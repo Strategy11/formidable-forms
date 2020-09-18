@@ -5,8 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormTemplateApi extends FrmFormApi {
 
-	private static $email_option_name = 'frm_email';
-	private static $code_option_name  = 'frm_template_api_code';
+	protected static $email_option_name = 'frm_email';
+	protected static $code_option_name  = 'frm_license_code';
+
+	protected $free_license;
 
 	/**
 	 * @since 3.06
@@ -19,7 +21,18 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @since 3.06
 	 */
 	protected function api_url() {
-		return 'https://formidableforms.com/wp-json/form-templates/v1/list';
+		$url = 'https://formidableforms.com/wp-json/form-templates/v1/list';
+
+		if ( empty( $this->license ) ) {
+			$free_license = $this->get_free_license();
+
+			if ( $free_license ) {
+				$url .= '?l=' . urlencode( base64_encode( $free_license ) );
+				$url .= '&v=' . FrmAppHelper::plugin_version();
+			}
+		}
+
+		return $url;
 	}
 
 	/**
@@ -27,6 +40,17 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 */
 	protected function skip_categories() {
 		return array();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_free_license() {
+		if ( ! isset( $this->free_license ) ) {
+			$this->free_license = get_option( self::$code_option_name );
+		}
+
+		return $this->free_license;
 	}
 
 	/**

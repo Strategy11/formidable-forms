@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div>
 		<span class="frm-with-left-icon">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
-			<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" />
+			<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
 		</span>
 		<div class="clear"></div>
 	</div>

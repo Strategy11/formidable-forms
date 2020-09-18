@@ -263,6 +263,7 @@ class FrmAppController {
 		include $shared_path . 'confirm-overlay.php';
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && '' === FrmAppHelper::get_param( 'frm_action' ) ) {
+			$user      = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
 			$view_path = $shared_path . 'new-form-overlay/';
 			include $shared_path . 'new-form-overlay.php';
 		}
