@@ -5952,6 +5952,19 @@ function frmAdminBuildJS() {
 					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', activePage );
 				});
 
+				var handleError = function( inputId, errorId, type ) {
+					var $error = jQuery( errorId );
+					$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
+
+					jQuery( inputId ).one( 'keyup', function() {
+						$error.addClass( 'frm_hidden' );
+					});
+				};
+
+				var handleEmailAddressError = function( type ) {
+					handleError( '#frm_leave_email', '#frm_leave_email_error', type );
+				};
+
 				jQuery( document ).on( 'click', '.frm-add-my-email-address', function( event ) {
 					var email = document.getElementById( 'frm_leave_email' ).value.trim(),
 						regex;
@@ -5959,14 +5972,14 @@ function frmAdminBuildJS() {
 					event.preventDefault();
 
 					if ( '' === email ) {
-						// TODO handle empty error
+						handleEmailAddressError( 'empty' );
 						return;
 					}
 
 					regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 
 					if ( regex.test( email ) === false ) {
-						// TODO handle invalid email error
+						handleEmailAddressError( 'invalid' );
 						return;
 					}
 
@@ -5982,15 +5995,14 @@ function frmAdminBuildJS() {
 						success: function( response ) {
 							if ( response.success ) {
 								jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'code' );
-							} else {
-								// TODO handle AJAX error
 							}
-						},
-						error: function() {
-							// TODO handle AJAX error
 						}
 					});
 				});
+
+				var handleConfirmEmailAddressError = function( type ) {
+					handleError( '#frm_code_from_email', '#frm_code_from_email_error', type );
+				};
 
 				jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
 					var code = document.getElementById( 'frm_code_from_email' ).value.trim();
@@ -5998,12 +6010,10 @@ function frmAdminBuildJS() {
 					event.preventDefault();
 
 					if ( '' === code ) {
-						// TODO handle empty error
+						handleConfirmEmailAddressError( 'empty' );
 						return;
 					}
 
-					// TODO On error, add options for "Change email address" and "Resend code"
-					// TODO Support the "Verification code is wrong" error in the design
 					jQuery.ajax({
 						type: 'POST',
 						url: ajaxurl,
@@ -6018,11 +6028,9 @@ function frmAdminBuildJS() {
 							if ( response.success ) {
 								// TODO on success, continue process to create our new form
 							} else {
-								// TODO handle AJAX error
+								handleConfirmEmailAddressError( 'wrong-code' );
+								// TODO On error, add options for "Change email address" and "Resend code"
 							}
-						},
-						error: function() {
-							// TODO handle AJAX error
 						}
 					});
 				});

@@ -2166,8 +2166,7 @@ table.frm-list-templates thead th {
 #frm_leave_email,
 #frm_code_from_email
 {
-	width: 80%;
-	max-width: 500px;
+	width: 480px;
 }
 
 #frm_new_form_modal #template-search-input,
@@ -2352,7 +2351,9 @@ li .frm-hover-icons .frm-preview-form,
 #frm_new_form_modal .frm-modal-back ~ span,
 #frm_new_form_modal .postbox > div:first-child ~ div,
 .frm-modal-back,
-#frm_new_form_modal:not([frm-page="create"]) a.dismiss
+#frm_new_form_modal:not([frm-page="create"]) a.dismiss,
+#frm_code_from_email_error span,
+#frm_leave_email_error span
 {
 	display: none;
 }
@@ -2366,7 +2367,11 @@ li .frm-hover-icons .frm-preview-form,
 #frm_new_form_modal[frm-page="code"] #frm-email-title,
 #frm_new_form_modal[frm-page="renew"] #frm-renew-title,
 .frm-locked-template .frm-hover-icons .frm-unlock-form,
-li[data-preview] .frm-hover-icons .frm-preview-form
+li[data-preview] .frm-hover-icons .frm-preview-form,
+#frm_code_from_email_error[frm-error="wrong-code"] span[frm-error="wrong-code"],
+#frm_code_from_email_error[frm-error="empty"] span[frm-error="empty"],
+#frm_leave_email_error[frm-error="invalid"] span[frm-error="invalid"],
+#frm_leave_email_error[frm-error="empty"] span[frm-error="empty"]
 {
 	display: inline-block;
 }

@@ -858,10 +858,6 @@ class FrmFormsController {
 			unset( $frm_templates['error'] );
 		}
 
-	//	echo '<pre>';
-	//	print_r( $frm_templates );
-	//	die();
-
 		// TODO remove this
 		// temporary workaround to display the expired alert (still requires that FrmAddonsController::is_license_expired is also true)
 		if ( FrmAddonsController::is_license_expired() ) {
