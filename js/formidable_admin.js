@@ -5817,7 +5817,8 @@ function frmAdminBuildJS() {
 			var blankFormTrigger,
 				templateFormTrigger,
 				previewFormTrigger,
-				activeHoverIcons;
+				activeHoverIcons,
+				activeTemplateKey;
 
 			s = {};
 
@@ -5940,8 +5941,10 @@ function frmAdminBuildJS() {
 					event.preventDefault();
 
 					$li = jQuery( this ).closest( '.frm-locked-template' );
+
 					if ( $li.hasClass( 'frm-free-template' ) ) {
 						activePage = 'email';
+						activeTemplateKey = $li.attr( 'data-key' );
 					} else {
 						activePage = 'upgrade';
 					}
@@ -5999,6 +6002,7 @@ function frmAdminBuildJS() {
 
 					event.preventDefault();
 
+					// TODO On error, add options for "Change email address" and "Resend code"
 					// TODO Support the "Verification code is wrong" error in the design
 					jQuery.ajax({
 						type: 'POST',
@@ -6007,13 +6011,12 @@ function frmAdminBuildJS() {
 						data: {
 							action: 'template_api_signup',
 							nonce: frmGlobal.nonce,
-							code: code
+							code: code,
+							key: activeTemplateKey
 						},
 						success: function( response ) {
 							if ( response.success ) {
-								// TODO On error, add options for "Change email address" and "Resend code"
-								// TODO On success, close the modal, and move onto our unlocked template !
-								
+								// TODO on success, continue process to create our new form
 							} else {
 								// TODO handle AJAX error
 							}

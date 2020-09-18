@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormTemplateApi extends FrmFormApi {
 
+	private static $email_option_name = 'frm_email';
+	private static $code_option_name  = 'frm_template_api_code';
+
 	/**
 	 * @since 3.06
 	 */
@@ -31,28 +34,54 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 */
 	private static function verify_email( $email ) {
 		// TODO call the API with this email to trigger an email with the required code
-		// TODO save this email somewhere in the database
+		self::on_api_verify_email_success( $email );
 		wp_send_json_success();
 	}
 
 	/**
-	 * @param string $code
+	 * @param string $email
+	 */
+	private static function on_api_verify_email_success( $email ) {
+		update_option( self::$email_option_name, $email );
+	}
+
+	/**
+	 * @param string $code the code from the email sent from the API
 	 */
 	private static function verify_code( $code ) {
-		// TODO call the API with this code, verify that it's a valid code
-		// TODO Save the code in the database for later use when calling the API for free templates
+		// TODO call the API with email and code, verify that it's a valid code
+		// $email = get_option( self::$email_option_name );
 
 		// TODO remove this
 		// start temporary workaround since API has not been updated
 		// Return a success response if the code entered is "frm", for testing
 		// Otherwise, return an error
 		if ( $code === 'frm' ) {
-			wp_send_json_success();
+			self::on_api_verify_code_success( $code );
 		}
 		wp_send_json_error();
 		// end temporary workaround
 	}
 
+	/**
+	 * @param string $code
+	 */
+	private static function on_api_verify_code_success( $code ) {
+		update_option( self::$code_option_name, $code );
+
+		$data = array();
+		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
+
+		if ( $key ) {
+			// TODO return a url to use for creating the new form
+		}
+
+		wp_send_json_success( $data );
+	}
+
+	/**
+	 * AJAX Hook for signing free users up for a template API key
+	 */
 	public static function signup() {
 		$email = FrmAppHelper::get_param( 'email', '', 'post', 'sanitize_email' );
 		$code  = FrmAppHelper::get_param( 'code', '', 'post' );
@@ -61,12 +90,12 @@ class FrmFormTemplateApi extends FrmFormApi {
 			if ( is_email( $email ) ) {
 				self::verify_email( $email );
 			} else {
-				// todo handle invalid email
+				// TODO handle invalid email
 			}
 		} elseif ( $code ) {
 			self::verify_code( $code );
 		} else {
-			// todo handle invalid input
+			// TODO handle invalid input
 		}
 	}
 }

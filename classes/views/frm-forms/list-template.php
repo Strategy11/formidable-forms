@@ -3,6 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+$plan_required         = FrmFormsHelper::get_plan_required( $template );
+$args['plan_required'] = $plan_required;
+
 // TODO remove this
 // start temporary workaround since API has not been updated
 if ( isset( $template['url'] ) && in_array( 'free', $template['categories'], true ) && ! FrmAppHelper::pro_is_installed() ) {
@@ -17,7 +20,20 @@ if ( ! empty( $template['custom'] ) ) {
 	$preview_base = 'https://sandbox.formidableforms.com/demos/wp-json/frm/v2/forms/';
 	$preview_end  = '?return=html';
 }
-?><li class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>" <?php echo ( ! empty( $template['custom'] ) ? "data-href='" . esc_url( $template['url'] ) . "'" : "data-rel='" . esc_url( $link['url'] ) . "'" ); ?> data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>">
+?><li
+	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
+	<?php
+	if ( 'free' === $plan_required ) {
+		echo "data-key='" . esc_attr( $template['key'] ) . "'";
+	} elseif ( ! empty( $template['custom'] ) ) {
+		echo "data-href='" . esc_url( $template['url'] ) . "'";
+	} else {
+		$link = FrmFormsHelper::get_template_install_link( $template, $args );
+		echo "data-rel='" . esc_url( $link['url'] ) . "'";
+	}
+	?>
+	data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>"
+>
 	<div class="frm-featured-form">
 		<?php
 		if ( $render_icon ) {

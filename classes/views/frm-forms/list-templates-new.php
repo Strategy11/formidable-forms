@@ -16,15 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</li><?php
 	$render_icon = true;
 	foreach ( array( 20872734, 20874748, 20882522, 20874739 ) as $template ) {
-		if ( ! isset( $templates[ $template ] ) ) {
-			continue;
+		if ( isset( $templates[ $template ] ) ) {
+			$template = $templates[ $template ];
+			require $view_path . 'list-template.php';
 		}
-
-		$template              = $templates[ $template ];
-		$plan_required         = FrmFormsHelper::get_plan_required( $template );
-		$args['plan_required'] = $plan_required;
-		$link                  = FrmFormsHelper::get_template_install_link( $template, $args );
-		require dirname( __FILE__ ) . '/list-template.php';
 	}
 	?><li class="frm-selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
 		<div class="frm-featured-form">
@@ -69,11 +64,8 @@ FrmAppHelper::show_search_box(
 							$searchable  = true;
 							$render_icon = false;
 							foreach ( $category_templates as $category_template ) {
-								$template              = $category_template;
-								$plan_required         = FrmFormsHelper::get_plan_required( $template );
-								$args['plan_required'] = $plan_required;
-								$link                  = FrmFormsHelper::get_template_install_link( $template, $args );
-								require dirname( __FILE__ ) . '/list-template.php';
+								$template = $category_template;
+								require $view_path . 'list-template.php';
 							}
 							?>
 							</ul>

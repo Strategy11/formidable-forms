@@ -888,7 +888,8 @@ class FrmFormsController {
 		$args = compact( 'pricing', 'license_type' );
 		unset( $pricing, $license_type );
 
-		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates-new.php';
+		$view_path = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
+		require $view_path . 'list-templates-new.php';
 	}
 
 	/**
