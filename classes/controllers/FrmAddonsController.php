@@ -25,6 +25,9 @@ class FrmAddonsController {
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'
 			);
+		} elseif ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
 		}
 	}
 
