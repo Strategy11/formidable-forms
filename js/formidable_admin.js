@@ -5949,30 +5949,83 @@ function frmAdminBuildJS() {
 					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', activePage );
 				});
 
-				jQuery( 'document' ).on( 'click', '.frm-add-my-email-address', function( event ) {
+				jQuery( document ).on( 'click', '.frm-add-my-email-address', function( event ) {
+					var email = document.getElementById( 'frm_leave_email' ).value.trim(),
+						regex;
+
 					event.preventDefault();
 
-					// Validate email is valid
-					// Call an AJAX action with email address input
-					// For now, the AJAX action will not be calling an API but it will in the end
-					// Return a success response
-					// On success, trigger the "code" page of the modal
+					if ( '' === email ) {
+						// TODO handle empty error
+						return;
+					}
+
+					regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+
+					if ( regex.test( email ) === false ) {
+						// TODO handle invalid email error
+						return;
+					}
+
+					jQuery.ajax({
+						type: 'POST',
+						url: ajaxurl,
+						dataType: 'json',
+						data: {
+							action: 'template_api_signup',
+							nonce: frmGlobal.nonce,
+							email: email
+						},
+						success: function( response ) {
+							if ( response.success ) {
+								jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'code' );
+							} else {
+								// TODO handle AJAX error
+							}
+						},
+						error: function() {
+							// TODO handle AJAX error
+						}
+					});
 				});
 
-				jQuery( 'document' ).on( 'click', '.frm-confirm-email-address', function( event ) {
+				jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
+					var code = document.getElementById( 'frm_code_from_email' ).value.trim();
+
+					if ( '' === code ) {
+						// TODO handle empty error
+						return;
+					}
+
 					event.preventDefault();
 
-					// Call an AJAX action with code input
-					// For now, the AJAX action will not be calling an API but it will in the end
-					// Save the code in the database for later use when calling the API for free templates
-					// Return a success response if the code entered is "frm", for testing
-					// Support the "Verification code is wrong" error in the design
-					// On error, add options for "Change email address" and "Resend code"
-					// On success, close the modal, and move onto our unlocked template !
+					// TODO Support the "Verification code is wrong" error in the design
+					jQuery.ajax({
+						type: 'POST',
+						url: ajaxurl,
+						dataType: 'json',
+						data: {
+							action: 'template_api_signup',
+							nonce: frmGlobal.nonce,
+							code: code
+						},
+						success: function( response ) {
+							if ( response.success ) {
+								// TODO On error, add options for "Change email address" and "Resend code"
+								// TODO On success, close the modal, and move onto our unlocked template !
+								
+							} else {
+								// TODO handle AJAX error
+							}
+						},
+						error: function() {
+							// TODO handle AJAX error
+						}
+					});
 				});
 
 				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
-					var categories = document.getElementById( 'frm_new_form_modal' ).querySelector( '.categories-list' ).children,
+					var categories = document.getElementById( 'frm_new_form_modal' ).querySelector( '.frm-categories-list' ).children,
 						categoryIndex,
 						category,
 						templateIndex,
@@ -5993,8 +6046,8 @@ function frmAdminBuildJS() {
 
 						if ( count ) {
 							category.querySelector( '.frm-template-count' ).textContent = count;
-							jQuery( category ).find( '.templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
-							jQuery( category ).find( '.templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
+							jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
+							jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
 
 							availableCounter = category.querySelector( '.frm-available-templates-count' );
 							if ( availableCounter !== null ) {
