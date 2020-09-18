@@ -2336,6 +2336,14 @@ table.frm-list-templates thead th {
 	border-radius: 6px;
 }
 
+#frm_code_from_email_options {
+	margin-top: 20px;
+}
+
+#frm_code_from_email_options * {
+	color: var(--primary-color);
+}
+
 #frm-email-block p,
 #frm-code-block p,
 #frm-renew-block p

@@ -14,5 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span frm-error="empty"><?php esc_html_e( 'Verification code is empty', 'formidable' ); ?></span>
 		</span>
 	</div>
+	<div id="frm_code_from_email_options" class="frm_hidden">
+		<a href="#" id="frm-change-email-address"><?php esc_html_e( 'Change email address', 'formidable' ); ?></a>
+		<span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+		<a href="#" id="frm-resend-code"><?php esc_html_e( 'Resend code', 'formidable' ); ?></a>
+	</div>
 	<div style="height: 30px;"></div>
 </div>

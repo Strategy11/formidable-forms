@@ -5965,7 +5965,7 @@ function frmAdminBuildJS() {
 					handleError( '#frm_leave_email', '#frm_leave_email_error', type );
 				};
 
-				jQuery( document ).on( 'click', '.frm-add-my-email-address', function( event ) {
+				jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
 					var email = document.getElementById( 'frm_leave_email' ).value.trim(),
 						regex;
 
@@ -6029,10 +6029,20 @@ function frmAdminBuildJS() {
 								// TODO on success, continue process to create our new form
 							} else {
 								handleConfirmEmailAddressError( 'wrong-code' );
-								// TODO On error, add options for "Change email address" and "Resend code"
+								jQuery( '#frm_code_from_email_options' ).removeClass( 'frm_hidden' );
 							}
 						}
 					});
+				});
+
+				jQuery( document ).on( 'click', '#frm-change-email-address', function() {
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'email' );
+				});
+
+				jQuery( document ).on( 'click', '#frm-resend-code', function() {
+					document.getElementById( 'frm_code_from_email' ).value = '';
+					jQuery( '#frm_code_from_email_options, #frm_code_from_email_error' ).addClass( 'frm_hidden' );
+					document.getElementById( 'frm-add-my-email-address' ).click();
 				});
 
 				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {

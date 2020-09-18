@@ -117,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
 					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 				</a>
-				<a href="#" class="button button-primary frm-button-primary frm-add-my-email-address">
+				<a id="frm-add-my-email-address" href="#" class="button button-primary frm-button-primary">
 					<?php esc_html_e( 'Add my email address', 'formidable' ); ?>
 				</a>
 			</div>
