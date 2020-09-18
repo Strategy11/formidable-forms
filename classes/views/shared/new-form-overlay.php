@@ -20,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php esc_html_e( 'Upgrade your account', 'formidable' ); ?>
 					</span>
 					<span id="frm-preview-title"></span>
-					<span id="frm-details-title">
-						<?php esc_html_e( 'Create new form', 'formidable' ); ?>
-					</span>
 					<span id="frm-email-title">
 						<?php esc_html_e( 'Leave your email address', 'formidable' ); ?>
+					</span>
+					<span id="frm-renew-title">
+						<?php esc_html_e( 'Renew your account', 'formidable' ); ?>
 					</span>
 				</div>
 				<div>
@@ -69,12 +69,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</form>
 			</div>
 			<div class="inside" id="frm-upgrade-block">
-				<?php require dirname( __FILE__ ) . '/new-form-overlay/upgrade-body.php'; ?>
+				<?php require $view_path . 'upgrade-body.php'; ?>
 			</div>
 			<div class="inside" id="frm-email-block">
-				<?php require dirname( __FILE__ ) . '/new-form-overlay/leave-email.php'; ?>
+				<?php require $view_path . 'leave-email.php'; ?>
 			</div>
-			<div id="frm-preview-footer">
+			<div class="inside" id="frm-code-block">
+				<?php require $view_path . 'code-from-email.php'; ?>
+			</div>
+			<div class="inside" id="frm-renew-block">
+				<?php require $view_path . 'renew-account.php'; ?>
+			</div>
+			<div id="frm-preview-footer" class="frm_modal_footer">
 				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
 					<?php esc_html_e( 'Back to all templates', 'formidable' ); ?>
 				</a>
@@ -82,8 +88,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php esc_html_e( 'Use this template', 'formidable' ); ?>
 				</a>
 			</div>
-			<div id="frm-upgrade-footer">
-				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates align-left">
+			<div id="frm-upgrade-footer" class="frm_modal_footer">
+				<a href="#" class="button button-secondary frm-modal-cancel frm-back-to-all-templates align-left">
 					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 				</a>
 				<a
@@ -102,12 +108,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php esc_html_e( 'Continue to upgrade', 'formidable' ); ?>
 				</a>
 			</div>
-			<div id="frm-email-footer">
-				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates align-left">
+			<div id="frm-email-footer" class="frm_modal_footer">
+				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
 					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 				</a>
 				<a href="#" class="button button-primary frm-button-primary frm-add-my-email-address">
 					<?php esc_html_e( 'Add my email address', 'formidable' ); ?>
+				</a>
+			</div>
+			<div id="frm-code-footer" class="frm_modal_footer">
+				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
+					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+				</a>
+				<a href="#" class="button button-primary frm-button-primary frm-confirm-email-address">
+					<?php esc_html_e( 'Confirm my email address', 'formidable' ); ?>
+				</a>
+			</div>
+			<div id="frm-renew-footer" class="frm_modal_footer">
+				<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
+					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+				</a>
+				<a
+					href="<?php
+					echo esc_url(
+						FrmAppHelper::admin_upgrade_link(
+							array(
+								'medium'  => 'outdate',
+								'content' => 'button',
+							)
+						)
+					);
+					?>"
+					class="button button-primary frm-button-primary"
+				>
+					<?php esc_html_e( 'Renew my account', 'formidable' ); ?>
 				</a>
 			</div>
 		</div>

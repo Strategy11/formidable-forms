@@ -4581,7 +4581,7 @@ function frmAdminBuildJS() {
 
 		event.preventDefault();
 		$modal = initModal( '#frm_new_form_modal', '600px' );
-		$modal.removeClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'create' );
+		$modal.attr( 'frm-active-modal-page', 'create' );
 		$modal.find( '#template-search-input' ).val( '' ).change();
 		$modal.dialog( 'open' );
 
@@ -5904,7 +5904,7 @@ function frmAdminBuildJS() {
 					$titleClone = $li.find( 'h3' ).clone();
 					$titleClone.find( '.frm-plan-required-tag' ).remove();
 					jQuery( '#frm-preview-title' ).text( $titleClone.text() );
-					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'preview' );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'preview' );
 					activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 				});
 
@@ -5930,7 +5930,7 @@ function frmAdminBuildJS() {
 						return;
 					}
 
-					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'details' );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'details' );
 				});
 
 				jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
@@ -5946,7 +5946,29 @@ function frmAdminBuildJS() {
 						activePage = 'upgrade';
 					}
 
-					jQuery( '#frm_new_form_modal' ).addClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', activePage );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', activePage );
+				});
+
+				jQuery( 'document' ).on( 'click', '.frm-add-my-email-address', function( event ) {
+					event.preventDefault();
+
+					// Validate email is valid
+					// Call an AJAX action with email address input
+					// For now, the AJAX action will not be calling an API but it will in the end
+					// Return a success response
+					// On success, trigger the "code" page of the modal
+				});
+
+				jQuery( 'document' ).on( 'click', '.frm-confirm-email-address', function( event ) {
+					event.preventDefault();
+
+					// Call an AJAX action with code input
+					// For now, the AJAX action will not be calling an API but it will in the end
+					// Save the code in the database for later use when calling the API for free templates
+					// Return a success response if the code entered is "frm", for testing
+					// Support the "Verification code is wrong" error in the design
+					// On error, add options for "Change email address" and "Resend code"
+					// On success, close the modal, and move onto our unlocked template !
 				});
 
 				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
@@ -5989,12 +6011,8 @@ function frmAdminBuildJS() {
 					}
 				});
 
-				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back', function( event ) {
-					jQuery( '#frm_new_form_modal' ).removeClass( 'frm-has-back-button' ).attr( 'frm-active-modal-page', 'create' );
-				});
-
-				jQuery( document ).on( 'click', '.frm-back-to-all-templates', function( event ) {
-					jQuery( this ).closest( '.ui-dialog' ).find( '.frm-modal-back' ).click();
+				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'create' );
 				});
 
 				jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {

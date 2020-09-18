@@ -263,6 +263,7 @@ class FrmAppController {
 		include $shared_path . 'confirm-overlay.php';
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && '' === FrmAppHelper::get_param( 'frm_action' ) ) {
+			$view_path = $shared_path . 'new-form-overlay/';
 			include $shared_path . 'new-form-overlay.php';
 		}
 	}
