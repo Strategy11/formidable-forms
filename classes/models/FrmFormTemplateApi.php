@@ -113,13 +113,11 @@ class FrmFormTemplateApi extends FrmFormApi {
 		if ( $email ) {
 			if ( is_email( $email ) ) {
 				self::verify_email( $email );
-			} else {
-				// TODO handle invalid email
 			}
 		} elseif ( $code ) {
 			self::verify_code( $code );
-		} else {
-			// TODO handle invalid input
 		}
+
+		wp_send_json_error();
 	}
 }

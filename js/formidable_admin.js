@@ -5995,6 +5995,8 @@ function frmAdminBuildJS() {
 						success: function( response ) {
 							if ( response.success ) {
 								jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'code' );
+							} else {
+								handleEmailAddressError( 'invalid' );
 							}
 						}
 					});
