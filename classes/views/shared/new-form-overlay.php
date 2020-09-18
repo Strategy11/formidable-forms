@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_new_form_modal" class="frm_hidden" frm-active-modal-page="create">
+<div id="frm_new_form_modal" class="frm_hidden <?php echo FrmFormsController::expired() ? 'frm-expired' : ''; ?> " frm-page="create">
 	<div class="metabox-holder">
 		<div class="postbox">
 			<div>
@@ -80,6 +80,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="inside" id="frm-renew-block">
 				<?php require $view_path . 'renew-account.php'; ?>
 			</div>
+			<?php if ( FrmFormsController::expired() ) { ?>
+				<div id="frm-create-footer" class="frm_modal_footer">
+					<?php FrmAppHelper::renewal_message(); ?>
+				</div>
+			<?php } ?>
 			<div id="frm-preview-footer" class="frm_modal_footer">
 				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
 					<?php esc_html_e( 'Back to all templates', 'formidable' ); ?>

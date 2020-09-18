@@ -830,9 +830,54 @@ class FrmFormsController {
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
 	}
 
+	/**
+	 * @return bool
+	 */
+	public static function expired() {
+		global $frm_expired;
+		return $frm_expired;
+	}
+
+	/**
+	 * Get data from api before rendering it so that we can flag the modal as expired
+	 */
+	public static function before_list_templates_new() {
+		global $frm_templates;
+		global $frm_expired;
+		global $frm_license_type;
+
+		$api           = new FrmFormTemplateApi();
+		$frm_templates = $api->get_api_info();
+		$expired       = false;
+		$license_type  = '';
+		if ( isset( $frm_templates['error'] ) ) {
+			$error        = $templates['error']['message'];
+			$error        = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
+			$expired      = 'expired' === $frm_templates['error']['code'];
+			$license_type = isset( $frm_templates['error']['type'] ) ? $frm_templates['error']['type'] : '';
+			unset( $frm_templates['error'] );
+		}
+
+	//	echo '<pre>';
+	//	print_r( $frm_templates );
+	//	die();
+
+		// TODO remove this
+		// temporary workaround to display the expired alert (still requires that FrmAddonsController::is_license_expired is also true)
+		if ( FrmAddonsController::is_license_expired() ) {
+			$expired = true;
+		}
+
+		$frm_expired      = $expired;
+		$frm_license_type = $license_type;
+	}
+
 	public static function list_templates_new() {
-		$api                   = new FrmFormTemplateApi();
-		$templates             = $api->get_api_info();
+		global $frm_templates;
+		global $frm_expired;
+		global $frm_license_type;
+
+		$templates             = $frm_templates;
 		$custom_templates      = array();
 		$templates_by_category = array();
 
@@ -873,17 +918,10 @@ class FrmFormsController {
 
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
 
-		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
 
-		$license_type = '';
-		if ( isset( $templates['error'] ) ) {
-			$error   = $templates['error']['message'];
-			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
-			$expired = ( $templates['error']['code'] === 'expired' );
-
-			$license_type = isset( $templates['error']['type'] ) ? $templates['error']['type'] : '';
-			unset( $templates['error'] );
-		}
+		$pricing      = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$expired      = $frm_expired;
+		$license_type = $frm_license_type;
 
 		$args = compact( 'pricing', 'license_type' );
 		unset( $pricing, $license_type );

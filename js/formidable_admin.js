@@ -4581,7 +4581,7 @@ function frmAdminBuildJS() {
 
 		event.preventDefault();
 		$modal = initModal( '#frm_new_form_modal', '600px' );
-		$modal.attr( 'frm-active-modal-page', 'create' );
+		$modal.attr( 'frm-page', 'create' );
 		$modal.find( '#template-search-input' ).val( '' ).change();
 		$modal.dialog( 'open' );
 
@@ -5905,7 +5905,7 @@ function frmAdminBuildJS() {
 					$titleClone = $li.find( 'h3' ).clone();
 					$titleClone.find( '.frm-plan-required-tag' ).remove();
 					jQuery( '#frm-preview-title' ).text( $titleClone.text() );
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'preview' );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'preview' );
 					activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 				});
 
@@ -5931,7 +5931,7 @@ function frmAdminBuildJS() {
 						return;
 					}
 
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'details' );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'details' );
 				});
 
 				jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
@@ -5949,7 +5949,7 @@ function frmAdminBuildJS() {
 						activePage = 'upgrade';
 					}
 
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', activePage );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', activePage );
 				});
 
 				jQuery( document ).on( 'click', '.frm-add-my-email-address', function( event ) {
@@ -5981,7 +5981,7 @@ function frmAdminBuildJS() {
 						},
 						success: function( response ) {
 							if ( response.success ) {
-								jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'code' );
+								jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'code' );
 							} else {
 								// TODO handle AJAX error
 							}
@@ -5995,12 +5995,12 @@ function frmAdminBuildJS() {
 				jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
 					var code = document.getElementById( 'frm_code_from_email' ).value.trim();
 
+					event.preventDefault();
+
 					if ( '' === code ) {
 						// TODO handle empty error
 						return;
 					}
-
-					event.preventDefault();
 
 					// TODO On error, add options for "Change email address" and "Resend code"
 					// TODO Support the "Verification code is wrong" error in the design
@@ -6068,7 +6068,7 @@ function frmAdminBuildJS() {
 				});
 
 				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-active-modal-page', 'create' );
+					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'create' );
 				});
 
 				jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
