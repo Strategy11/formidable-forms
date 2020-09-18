@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormTemplateApi extends FrmFormApi {
 
 	protected static $email_option_name = 'frm_email';
-	protected static $code_option_name  = 'frm_license_code';
+	protected static $code_option_name  = 'frm_free_license_code';
 
 	protected $free_license;
 
