@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <ul class="frm-featured-forms-new">
 	<li class="frm-add-blank-form frm-selectable">
 		<div class="frm-new-form-button frm-featured-form">
-			<div style="background-color: #F4AD3D;">
+			<div class="frm-category-icon" style="background-color: #F4AD3D;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
 			</div><div>
 				<h3><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 	?><li class="frm-selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
 		<div class="frm-featured-form">
-			<div style="background-color: #805EF6;">
+			<div class="frm-category-icon" style="background-color: #805EF6;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
 			</div><div>
 				<h3><?php esc_html_e( 'Import', 'formidable' ); ?></h3>
@@ -51,7 +51,7 @@ FrmAppHelper::show_search_box(
 			?>
 			<li class="control-section accordion-section">
 				<div class="frm-featured-form">
-					<div style="background-color: #805EF6;">
+					<div class="frm-category-icon" style="background-color: #805EF6;">
 						<?php FrmFormsHelper::template_icon( array( $category ) ); ?>
 					</div><div>
 						<div class="accordion-section-title">
@@ -61,6 +61,10 @@ FrmAppHelper::show_search_box(
 						<div class="accordion-section-content" aria-expanded="false">
 							<ul>
 							<?php
+							if ( 'My Templates' === $category ) {
+								require $view_path . 'create-template-from-an-existing-form.php';
+							}
+
 							$searchable  = true;
 							$render_icon = false;
 							foreach ( $category_templates as $category_template ) {

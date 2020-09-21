@@ -892,37 +892,31 @@ class FrmFormsController {
 				$templates_by_category[ $category ][] = $template;
 			}
 		}
+		unset( $template );
 
 		$categories = array_keys( $templates_by_category );
 		$categories = array_diff( $categories, FrmFormsHelper::ignore_template_categories() );
 		sort( $categories );
 
-		if ( $custom_templates ) {
-			$categories = array_merge( array( 'My Templates' ), $categories );
+		array_walk(
+			$custom_templates,
+			function( &$template ) {
+				$template['custom'] = true;
+			}
+		);
 
-			array_walk(
-				$custom_templates,
-				function( &$template ) {
-					$template['custom'] = true;
-				}
-			);
+		$categories                            = array_merge( array( 'My Templates' ), $categories );
+		$templates_by_category['My Templates'] = $custom_templates;
+		$pricing                               = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$expired                               = $frm_expired;
+		$license_type                          = $frm_license_type;
+		$args                                  = compact( 'pricing', 'license_type' );
+		$where                                 = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms                                 = FrmForm::get_published_forms( $where );
+		$view_path                             = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
 
-			$templates_by_category['My Templates'] = $custom_templates;
-		}
-
-		unset( $custom_templates );
-
+		unset( $pricing, $license_type, $where );
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
-
-
-		$pricing      = FrmAppHelper::admin_upgrade_link( 'form-templates' );
-		$expired      = $frm_expired;
-		$license_type = $frm_license_type;
-
-		$args = compact( 'pricing', 'license_type' );
-		unset( $pricing, $license_type );
-
-		$view_path = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
 		require $view_path . 'list-templates-new.php';
 	}
 

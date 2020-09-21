@@ -37,7 +37,7 @@ if ( ! empty( $template['custom'] ) ) {
 	<div class="frm-featured-form">
 		<?php
 		if ( $render_icon ) {
-			?><div>
+			?><div class="frm-category-icon">
 				<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
 			</div><?php
 		}
@@ -61,7 +61,7 @@ if ( ! empty( $template['custom'] ) ) {
 					</span>
 				<?php } ?>
 			</h3>
-			<p><?php echo esc_html( $template['description'] ); ?></p>
+			<p><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
 		</div>
 	</div>
 </li><?php

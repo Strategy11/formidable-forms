@@ -2077,8 +2077,7 @@ table.frm-list-templates thead th {
 	vertical-align: middle;
 }
 
-.frm-featured-forms-new li > div > div:first-child {
-	/* rounded square icons in Create new form modal */
+.frm-featured-forms-new li .frm-category-icon {
 	width: 40px;
 	height: 40px;
 	overflow: hidden;

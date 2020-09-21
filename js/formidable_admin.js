@@ -5952,6 +5952,10 @@ function frmAdminBuildJS() {
 					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', activePage );
 				});
 
+				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-build-template', function() {
+					document.getElementById( 'frm_new_form_modal' ).setAttribute( 'frm-page', 'details' );
+				});
+
 				var handleError = function( inputId, errorId, type ) {
 					var $error = jQuery( errorId );
 					$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
@@ -6065,7 +6069,8 @@ function frmAdminBuildJS() {
 						category = categories[ categoryIndex ];
 						searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
 						count = searchableTemplates.length;
-						jQuery( category ).toggleClass( 'frm_hidden', ! count );
+
+						jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
 
 						if ( count ) {
 							category.querySelector( '.frm-template-count' ).textContent = count;
