@@ -120,13 +120,43 @@ class FrmAppHelper {
 	 */
 	public static function renewal_message() {
 		if ( ! FrmAddonsController::is_license_expired() ) {
+			self::expiring_message();
 			return;
 		}
 		?>
 		<div class="frm_error_style" style="text-align:left">
 			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
 			&nbsp;
-			<?php esc_attr_e( 'Your account has expired', 'formidable' ); ?>
+			<?php esc_html_e( 'Your account has expired', 'formidable' ); ?>
+			<div style="float:right">
+				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
+					Renew Now
+				</a>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	public static function expiring_message() {
+		$expiring = FrmAddonsController::is_license_expiring();
+		if ( ! $expiring ) {
+			return;
+		}
+		?>
+		<div class="frm_warning_style" style="text-align:left">
+			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
+			&nbsp;
+			<?php
+			printf(
+				/* translators: %1$s: start HTML tag, %2$s: end HTML tag */
+				esc_html__( 'Your form subscription expires in %1$s days%2$s.', 'formidable' ),
+				'<strong>' . esc_html( $expiring ),
+				'</strong>'
+			);
+			?>
 			<div style="float:right">
 				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
 					Renew Now
