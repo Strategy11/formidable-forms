@@ -5279,17 +5279,254 @@ function frmAdminBuildJS() {
 	/* Templates */
 
 	function initNewFormModal() {
-		var $info = initModal( '#frm_form_modal', '650px' );
-		if ( $info === false ) {
+		var blankFormTrigger,
+			installFormTrigger,
+			previewFormTrigger,
+			activeHoverIcons,
+			activeTemplateKey,
+			$modal,
+			$info;
+
+		$info = initModal( '#frm_form_modal', '650px' );
+		if ( $info !== false ) {
+			jQuery( '.frm-new-form-button' ).click( function( event ) {
+				event.preventDefault();
+				$info.dialog( 'open' );
+			});
+
+			jQuery( document ).on( 'submit', '#frm-new-form', installTemplate );
 			return;
 		}
 
-		jQuery( '.frm-new-form-button' ).click( function( event ) {
+		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
+		$modal = initModal( '#frm_new_form_modal', '600px' );
+
+		blankFormTrigger = document.createElement( 'a' );
+		blankFormTrigger.classList.add( 'frm-new-form-button', 'frm_hidden' );
+		document.body.appendChild( blankFormTrigger );
+
+		installFormTrigger = document.createElement( 'a' );
+		installFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
+		document.body.appendChild( installFormTrigger );
+
+		previewFormTrigger = document.createElement( 'a' );
+		previewFormTrigger.classList.add( 'frm-preview-template', 'frm_hidden' );
+		document.body.appendChild( previewFormTrigger );
+
+		initTemplateModal( $modal );
+
+		jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
+			var $li,
+				$titleClone;
+
 			event.preventDefault();
-			$info.dialog( 'open' );
+
+			$li = jQuery( this ).closest( 'li' );
+			previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
+			previewFormTrigger.click();
+			$titleClone = $li.find( 'h3' ).clone();
+			$titleClone.find( 'svg, .frm-plan-required-tag' ).remove();
+			jQuery( '#frm-preview-title' ).text( $titleClone.text() );
+			$modal.attr( 'frm-page', 'preview' );
+			activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 		});
 
-		jQuery( document ).on( 'submit', '#frm-new-form', installTemplate );
+		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
+			var $li;
+
+			event.preventDefault();
+
+			$li = jQuery( this ).closest( 'li' );
+
+			if ( $li.is( '[data-href]' ) ) {
+				window.location = $li.attr( 'data-href' );
+				return;
+			}
+
+			if ( $li.hasClass( 'frm-add-blank-form' ) ) {
+				blankFormTrigger.click();
+			} else if ( $li.is( '[data-rel]' ) && ( ! $li.is( '[data-custom]' ) || '0' === $li.attr( 'data-custom' ) ) ) {
+				installFormTrigger.setAttribute( 'rel', $li.attr( 'data-rel' ) );
+				$li.append( installFormTrigger );
+				installFormTrigger.click();
+			} else {
+				return;
+			}
+
+			$modal.attr( 'frm-page', 'details' );
+		});
+
+		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
+			var $li,
+				activePage;
+
+			event.preventDefault();
+
+			$li = jQuery( this ).closest( '.frm-locked-template' );
+
+			if ( $li.hasClass( 'frm-free-template' ) ) {
+				activePage = 'email';
+				activeTemplateKey = $li.attr( 'data-key' );
+				$li.append( installFormTrigger );
+			} else {
+				activePage = 'upgrade';
+			}
+
+			$modal.attr( 'frm-page', activePage );
+		});
+
+		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-build-template', function() {
+			$modal.attr( 'frm-page', 'details' );
+		});
+
+		var handleError = function( inputId, errorId, type ) {
+			var $error = jQuery( errorId );
+			$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
+
+			jQuery( inputId ).one( 'keyup', function() {
+				$error.addClass( 'frm_hidden' );
+			});
+		};
+
+		var handleEmailAddressError = function( type ) {
+			handleError( '#frm_leave_email', '#frm_leave_email_error', type );
+		};
+
+		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
+			var email = document.getElementById( 'frm_leave_email' ).value.trim(),
+				regex;
+
+			event.preventDefault();
+
+			if ( '' === email ) {
+				handleEmailAddressError( 'empty' );
+				return;
+			}
+
+			regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+
+			if ( regex.test( email ) === false ) {
+				handleEmailAddressError( 'invalid' );
+				return;
+			}
+
+			jQuery.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				dataType: 'json',
+				data: {
+					action: 'template_api_signup',
+					nonce: frmGlobal.nonce,
+					email: email
+				},
+				success: function( response ) {
+					if ( response.success ) {
+						$modal.attr( 'frm-page', 'code' );
+					} else {
+						handleEmailAddressError( 'invalid' );
+					}
+				}
+			});
+		});
+
+		var handleConfirmEmailAddressError = function( type ) {
+			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type );
+		};
+
+		jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
+			var code = document.getElementById( 'frm_code_from_email' ).value.trim();
+
+			event.preventDefault();
+
+			if ( '' === code ) {
+				handleConfirmEmailAddressError( 'empty' );
+				return;
+			}
+
+			jQuery.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				dataType: 'json',
+				data: {
+					action: 'template_api_signup',
+					nonce: frmGlobal.nonce,
+					code: code,
+					key: activeTemplateKey
+				},
+				success: function( response ) {
+					if ( response.success ) {
+						if ( typeof response.data !== 'undefined' && typeof response.data.url !== 'undefined' ) {
+							installFormTrigger.setAttribute( 'rel', response.data.url );
+							installFormTrigger.click();
+							$modal.attr( 'frm-page', 'details' );
+						}
+					} else {
+						handleConfirmEmailAddressError( 'wrong-code' );
+						jQuery( '#frm_code_from_email_options' ).removeClass( 'frm_hidden' );
+					}
+				}
+			});
+		});
+
+		jQuery( document ).on( 'click', '#frm-change-email-address', function() {
+			$modal.attr( 'frm-page', 'email' );
+		});
+
+		jQuery( document ).on( 'click', '#frm-resend-code', function() {
+			document.getElementById( 'frm_code_from_email' ).value = '';
+			jQuery( '#frm_code_from_email_options, #frm_code_from_email_error' ).addClass( 'frm_hidden' );
+			document.getElementById( 'frm-add-my-email-address' ).click();
+		});
+
+		jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
+			var categories = $modal.get(0).querySelector( '.frm-categories-list' ).children,
+				categoryIndex,
+				category,
+				templateIndex,
+				searchableTemplates,
+				count,
+				availableCounter,
+				availableCount;
+
+			for ( categoryIndex in categories ) {
+				if ( isNaN( categoryIndex ) ) {
+					continue;
+				}
+
+				category = categories[ categoryIndex ];
+				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
+				count = searchableTemplates.length;
+
+				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
+
+				if ( count ) {
+					category.querySelector( '.frm-template-count' ).textContent = count;
+					jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
+					jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
+
+					availableCounter = category.querySelector( '.frm-available-templates-count' );
+					if ( availableCounter !== null ) {
+						availableCount = 0;
+						for ( templateIndex in searchableTemplates ) {
+							if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
+								availableCount++;
+							}
+						}
+
+						availableCounter.textContent = availableCount;
+					}
+				}
+			}
+		});
+
+		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
+			$modal.attr( 'frm-page', 'create' );
+		});
+
+		jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
+			event.preventDefault();
+			activeHoverIcons.find( '.frm-create-form' ).click();
+		});
 	}
 
 	function initTemplateModal( $preview ) {
@@ -5329,9 +5566,13 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery( '.frm-install-template' ).click( function( event ) {
-			var oldName = jQuery( this ).closest( 'li, td' ).find( 'h3' ).html().trim(),
+			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),
 				nameLabel = document.getElementById( 'frm_new_name' ),
-				descLabel = document.getElementById( 'frm_new_desc' );
+				descLabel = document.getElementById( 'frm_new_desc' ),
+				oldName;
+
+			$h3Clone.find( 'svg, .frm-plan-required-tag' ).remove();
+			oldName = $h3Clone.html().trim();
 
 			event.preventDefault();
 
@@ -5814,12 +6055,6 @@ function frmAdminBuildJS() {
 
 	return {
 		init: function() {
-			var blankFormTrigger,
-				templateFormTrigger,
-				previewFormTrigger,
-				activeHoverIcons,
-				activeTemplateKey;
-
 			s = {};
 
 			// Bootstrap dropdown button
@@ -5870,235 +6105,9 @@ function frmAdminBuildJS() {
 				initNewFormModal();
 				initSelectionAutocomplete();
 
-				jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
-
 				jQuery( '[data-frmprint]' ).click( function() {
 					window.print();
 					return false;
-				});
-
-				var $modal = initModal( '#frm_new_form_modal', '600px' );
-
-				blankFormTrigger = document.createElement( 'a' );
-				blankFormTrigger.classList.add( 'frm-new-form-button', 'frm_hidden' );
-				document.body.appendChild( blankFormTrigger );
-
-				templateFormTrigger = document.createElement( 'a' );
-				templateFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
-				document.body.appendChild( templateFormTrigger );
-
-				previewFormTrigger = document.createElement( 'a' );
-				previewFormTrigger.classList.add( 'frm-preview-template', 'frm_hidden' );
-				document.body.appendChild( previewFormTrigger );
-
-				initTemplateModal( $modal );
-
-				jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
-					var $li,
-						$titleClone;
-
-					event.preventDefault();
-
-					$li = jQuery( this ).closest( 'li' );
-					previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
-					previewFormTrigger.click();
-					$titleClone = $li.find( 'h3' ).clone();
-					$titleClone.find( '.frm-plan-required-tag' ).remove();
-					jQuery( '#frm-preview-title' ).text( $titleClone.text() );
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'preview' );
-					activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
-				});
-
-				jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
-					var $li;
-
-					event.preventDefault();
-
-					$li = jQuery( this ).closest( 'li' );
-
-					if ( $li.is( '[data-href]' ) ) {
-						window.location = $li.attr( 'data-href' );
-						return;
-					}
-
-					if ( $li.hasClass( 'frm-add-blank-form' ) ) {
-						blankFormTrigger.click();
-					} else if ( $li.is( '[data-rel]' ) ) {
-						templateFormTrigger.setAttribute( 'rel', $li.attr( 'data-rel' ) );
-						$li.append( templateFormTrigger );
-						templateFormTrigger.click();
-					} else {
-						return;
-					}
-
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'details' );
-				});
-
-				jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
-					var $li,
-						activePage;
-
-					event.preventDefault();
-
-					$li = jQuery( this ).closest( '.frm-locked-template' );
-
-					if ( $li.hasClass( 'frm-free-template' ) ) {
-						activePage = 'email';
-						activeTemplateKey = $li.attr( 'data-key' );
-					} else {
-						activePage = 'upgrade';
-					}
-
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', activePage );
-				});
-
-				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-build-template', function() {
-					document.getElementById( 'frm_new_form_modal' ).setAttribute( 'frm-page', 'details' );
-				});
-
-				var handleError = function( inputId, errorId, type ) {
-					var $error = jQuery( errorId );
-					$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
-
-					jQuery( inputId ).one( 'keyup', function() {
-						$error.addClass( 'frm_hidden' );
-					});
-				};
-
-				var handleEmailAddressError = function( type ) {
-					handleError( '#frm_leave_email', '#frm_leave_email_error', type );
-				};
-
-				jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
-					var email = document.getElementById( 'frm_leave_email' ).value.trim(),
-						regex;
-
-					event.preventDefault();
-
-					if ( '' === email ) {
-						handleEmailAddressError( 'empty' );
-						return;
-					}
-
-					regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-
-					if ( regex.test( email ) === false ) {
-						handleEmailAddressError( 'invalid' );
-						return;
-					}
-
-					jQuery.ajax({
-						type: 'POST',
-						url: ajaxurl,
-						dataType: 'json',
-						data: {
-							action: 'template_api_signup',
-							nonce: frmGlobal.nonce,
-							email: email
-						},
-						success: function( response ) {
-							if ( response.success ) {
-								jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'code' );
-							} else {
-								handleEmailAddressError( 'invalid' );
-							}
-						}
-					});
-				});
-
-				var handleConfirmEmailAddressError = function( type ) {
-					handleError( '#frm_code_from_email', '#frm_code_from_email_error', type );
-				};
-
-				jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
-					var code = document.getElementById( 'frm_code_from_email' ).value.trim();
-
-					event.preventDefault();
-
-					if ( '' === code ) {
-						handleConfirmEmailAddressError( 'empty' );
-						return;
-					}
-
-					jQuery.ajax({
-						type: 'POST',
-						url: ajaxurl,
-						dataType: 'json',
-						data: {
-							action: 'template_api_signup',
-							nonce: frmGlobal.nonce,
-							code: code,
-							key: activeTemplateKey
-						},
-						success: function( response ) {
-							if ( response.success ) {
-								// TODO on success, continue process to create our new form
-							} else {
-								handleConfirmEmailAddressError( 'wrong-code' );
-								jQuery( '#frm_code_from_email_options' ).removeClass( 'frm_hidden' );
-							}
-						}
-					});
-				});
-
-				jQuery( document ).on( 'click', '#frm-change-email-address', function() {
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'email' );
-				});
-
-				jQuery( document ).on( 'click', '#frm-resend-code', function() {
-					document.getElementById( 'frm_code_from_email' ).value = '';
-					jQuery( '#frm_code_from_email_options, #frm_code_from_email_error' ).addClass( 'frm_hidden' );
-					document.getElementById( 'frm-add-my-email-address' ).click();
-				});
-
-				jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
-					var categories = document.getElementById( 'frm_new_form_modal' ).querySelector( '.frm-categories-list' ).children,
-						categoryIndex,
-						category,
-						templateIndex,
-						searchableTemplates,
-						count,
-						availableCounter,
-						availableCount;
-
-					for ( categoryIndex in categories ) {
-						if ( isNaN( categoryIndex ) ) {
-							continue;
-						}
-
-						category = categories[ categoryIndex ];
-						searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
-						count = searchableTemplates.length;
-
-						jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-
-						if ( count ) {
-							category.querySelector( '.frm-template-count' ).textContent = count;
-							jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
-							jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
-
-							availableCounter = category.querySelector( '.frm-available-templates-count' );
-							if ( availableCounter !== null ) {
-								availableCount = 0;
-								for ( templateIndex in searchableTemplates ) {
-									if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
-										availableCount++;
-									}
-								}
-
-								availableCounter.textContent = availableCount;
-							}
-						}
-					}
-				});
-
-				jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
-					jQuery( '#frm_new_form_modal' ).attr( 'frm-page', 'create' );
-				});
-
-				jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
-					event.preventDefault();
-					activeHoverIcons.find( '.frm-create-form' ).click();
 				});
 			}
 

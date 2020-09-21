@@ -97,7 +97,15 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
 
 		if ( $key ) {
-			// TODO return a url to use for creating the new form
+			$api       = new self();
+			$templates = $api->get_api_info();
+
+			foreach ( $templates as $template ) {
+				if ( $key === $template['key'] ) {
+					$data['url'] = $template['url'];
+					break;
+				}
+			}
 		}
 
 		wp_send_json_success( $data );

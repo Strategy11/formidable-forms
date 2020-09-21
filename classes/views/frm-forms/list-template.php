@@ -8,7 +8,7 @@ $args['plan_required'] = $plan_required;
 
 // TODO remove this
 // start temporary workaround since API has not been updated
-if ( isset( $template['url'] ) && in_array( 'free', $template['categories'], true ) && ! FrmAppHelper::pro_is_installed() ) {
+if ( isset( $template['url'] ) && in_array( 'free', $template['categories'], true ) && ! FrmAppHelper::pro_is_installed() && ! ( new FrmFormTemplateApi() )->get_free_license() ) {
 	$plan_required = 'free';
 }
 // end temporary workaround
@@ -21,15 +21,17 @@ if ( ! empty( $template['custom'] ) ) {
 	$preview_end  = '?return=html';
 }
 ?><li
-	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
+	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo ! empty( $template['custom'] ) ? 'frm-build-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
 	<?php
 	if ( 'free' === $plan_required ) {
-		echo "data-key='" . esc_attr( $template['key'] ) . "'";
+		echo "data-key='" . esc_attr( $template['key'] ) . "' ";
 	} elseif ( ! empty( $template['custom'] ) ) {
-		echo "data-href='" . esc_url( $template['url'] ) . "'";
-	} else {
+		echo 'data-custom="1" ';
+		echo 'data-fullname="' . esc_attr( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ) . '" ';
+		echo 'data-formid="' . absint( $template['id'] ) . '" ';
+	} elseif ( ! $plan_required ) {
 		$link = FrmFormsHelper::get_template_install_link( $template, $args );
-		echo "data-rel='" . esc_url( $link['url'] ) . "'";
+		echo "data-rel='" . esc_url( $link['url'] ) . "' ";
 	}
 	?>
 	data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>"
