@@ -379,7 +379,6 @@ function frmFrontFormJS() {
 		isConfirmation = fieldID !== strippedFieldID;
 		$firstField = $fields.filter( '[name="item_meta[' + strippedFieldID + ']"]' );
 
-		// if both fields are valid emails, check that they match
 		if ( isConfirmation ) {
 			value = $firstField.val();
 			confirmValue = $confirmField.val();
