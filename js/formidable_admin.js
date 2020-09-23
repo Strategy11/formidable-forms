@@ -300,7 +300,8 @@ function frmAdminBuildJS() {
 		cancelSort = false,
 		copyHelper = false,
 		fieldsUpdated = 0,
-		thisFormId = 0;
+		thisFormId = 0,
+		optionMap = {};
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -2364,6 +2365,146 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function resetOptionTextDetails() {
+		jQuery( '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]' ).filter( '[data-value-on-load]' ).removeAttr( 'data-value-on-load' );
+		jQuery( 'input[type="hidden"][name^=optionmap]' ).remove();
+	}
+
+	function optionTextAlreadyExists( input ) {
+		var fieldId = jQuery( input ).closest( '.frm-single-settings' ).attr( 'data-fid' ),
+			optionInputs = jQuery( input ).closest( 'ul' ).get( 0 ).querySelectorAll( '.field_' + fieldId + '_option' ),
+			index,
+			optionInput;
+
+		for ( index in optionInputs ) {
+			optionInput = optionInputs[ index ];
+			if ( optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute( 'data-duplicate' ) !== 'true' ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	function onOptionTextFocus() {
+		var input,
+			fieldId;
+
+		if ( this.getAttribute( 'data-value-on-load' ) === null ) {
+			this.setAttribute( 'data-value-on-load', this.value );
+
+			fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
+			input = document.createElement( 'input' );
+			input.value = this.value;
+			input.setAttribute( 'type', 'hidden' );
+			input.setAttribute( 'name', 'optionmap[' + fieldId + '][' + this.value + ']' );
+			this.parentNode.appendChild( input );
+
+			if ( typeof optionMap[ fieldId ] === 'undefined' ) {
+				optionMap[ fieldId ] = {};
+			}
+
+			optionMap[ fieldId ][ this.value ] = input;
+		}
+
+		if ( this.getAttribute( 'data-duplicate' ) === 'true' ) {
+			this.removeAttribute( 'data-duplicate' );
+
+			// we want to use original value if actually still a duplicate
+			if ( optionTextAlreadyExists( this ) ) {
+				this.setAttribute( 'data-value-on-focus', this.getAttribute( 'data-value-on-load' ) );
+				return;
+			}
+		}
+
+		this.setAttribute( 'data-value-on-focus', this.value );
+	}
+
+	function onOptionTextBlur() {
+		var originalValue,
+			oldValue = this.getAttribute( 'data-value-on-focus' ),
+			newValue = this.value,
+			fieldId,
+			fieldIndex,
+			logicId,
+			row,
+			rowLength,
+			rowIndex,
+			valueSelect,
+			opts,
+			fieldIds,
+			settingId,
+			setting,
+			optionMatches,
+			option;
+
+		if ( oldValue === newValue ) {
+			return;
+		}
+
+		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
+		originalValue = this.getAttribute( 'data-value-on-load' );
+
+		// check if the newValue is already mapped to another option
+		// if it is, mark as duplicate and return
+		if ( optionTextAlreadyExists( this ) ) {
+			this.setAttribute( 'data-duplicate', 'true' );
+
+			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+				// unmap any other change that may have happened before instead of changing it to something unused
+				optionMap[ fieldId ][ originalValue ].value = originalValue;
+			}
+
+			return;
+		}
+
+		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+			optionMap[ fieldId ][ originalValue ].value = newValue;
+		}
+
+		fieldIds = [];
+		rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' );
+		rowLength = rows.length;
+		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
+			row = rows[ rowIndex ];
+			opts = row.querySelector( '.frm_logic_field_opts' );
+
+			if ( opts.value !== fieldId ) {
+				continue;
+			}
+
+			logicId = row.id.split( '_' )[ 2 ];
+			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+			optionMatches = valueSelect.querySelectorAll( 'option[value="' + oldValue + '"]' );
+
+			if ( ! optionMatches.length ) {
+				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
+
+				if ( ! optionMatches.length ) {
+					option = document.createElement( 'option' );
+					valueSelect.appendChild( option );
+				}
+			}
+
+			if ( optionMatches.length ) {
+				option = optionMatches[ optionMatches.length - 1 ];
+			}
+
+			option.setAttribute( 'value', newValue );
+			option.textContent = newValue;
+
+			if ( fieldIds.indexOf( logicId ) === -1 ) {
+				fieldIds.push( logicId );
+			}
+		}
+
+		for ( fieldIndex in fieldIds ) {
+			settingId = fieldIds[ fieldIndex ];
+			setting = document.getElementById( 'frm-single-settings-' + settingId );
+			moveFieldSettings( setting );
+		}
+	}
+
 	function updateGetValueFieldSelection() {
 		/*jshint validthis:true */
 		var fieldID = this.id.replace( 'get_values_form_', '' );
@@ -3426,6 +3567,7 @@ function frmAdminBuildJS() {
 	function afterFormSave( $button, buttonVal ) {
 		$button.removeClass( 'frm_loading_form' ).removeClass( 'frm_loading_button' );
 		$button.html( frm_admin_js.saved );
+		resetOptionTextDetails();
 		fieldsUpdated = 0;
 
 		setTimeout( function() {
@@ -6004,6 +6146,9 @@ function frmAdminBuildJS() {
 			popAllProductFields();
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
+
+			jQuery( document ).on( 'focus', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextFocus );
+			jQuery( document ).on( 'blur', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextBlur );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
