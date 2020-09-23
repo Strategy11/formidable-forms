@@ -5854,6 +5854,8 @@ function frmAdminBuildJS() {
 			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
+			jQuery( '.post-type-frm_display #screen-options-wrap:hidden input[type="checkbox"]' ).attr( 'disabled', true );
+
 			// submit the search form with dropdown
 			jQuery( '#frm-fid-search-menu a' ).click( function() {
 				var val = this.id.replace( 'fid-', '' );
