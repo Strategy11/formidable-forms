@@ -384,7 +384,7 @@ function frmFrontFormJS() {
 			value = $firstField.val();
 			confirmValue = $confirmField.val();
 			if ( typeof errors[ 'conf_' + strippedFieldID ] === 'undefined' && '' !== value && '' !== confirmValue && value !== confirmValue ) {
-				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
+				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-confmsg' );
 			}
 		} else {
 			validateField( 'conf_' + strippedFieldID, $confirmField.get( 0 ) );
