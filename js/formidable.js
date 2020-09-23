@@ -151,7 +151,7 @@ function frmFrontFormJS() {
 	}
 
 	function validateForm( object ) {
-		var r, rl, n, nl, emailFields, fields, field, value, requiredFields,
+		var r, rl, n, nl, emailFields, passwordFields, fields, field, value, requiredFields,
 			errors = [];
 
 		// Make sure required text field is filled in
@@ -165,6 +165,7 @@ function frmFrontFormJS() {
 		}
 
 		emailFields = jQuery( object ).find( 'input[type=email]' ).filter( ':visible' );
+		passwordFields = jQuery( object ).find( 'input[type=password]' ).filter( ':visible' );
 		fields = jQuery( object ).find( 'input,select,textarea' );
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
@@ -177,6 +178,8 @@ function frmFrontFormJS() {
 						errors = checkNumberField( field, errors );
 					} else if ( field.type === 'email' ) {
 						errors = checkEmailField( field, errors, emailFields );
+					} else if ( field.type === 'password' ) {
+						errors = checkPasswordField( field, errors, passwordFields );
 					} else if ( field.type === 'url' ) {
 						errors = checkUrlField( field, errors );
 					} else if ( field.pattern !== null ) {
@@ -209,7 +212,9 @@ function frmFrontFormJS() {
 	}
 
 	function validateField( fieldId, field ) {
-		var key, emailFields,
+		var key,
+			emailFields,
+			passwordFields,
 			errors = [];
 
 		var $fieldCont = jQuery( field ).closest( '.frm_form_field' );
@@ -221,6 +226,9 @@ function frmFrontFormJS() {
 			if ( field.type === 'email' ) {
 				emailFields = jQuery( field ).closest( 'form' ).find( 'input[type=email]' );
 				errors = checkEmailField( field, errors, emailFields );
+			} else if ( field.type === 'password' ) {
+				passwordFields = jQuery( field ).closest( 'form' ).find( 'input[type=password]' );
+				errors = checkPasswordField( field, errors, passwordFields );
 			} else if ( field.type === 'number' ) {
 				errors = checkNumberField( field, errors );
 			} else if ( field.type === 'url' ) {
@@ -343,7 +351,9 @@ function frmFrontFormJS() {
 			isConfirmation = fieldID !== strippedFieldID,
 			$emailField = $emailFields.filter( '[name="item_meta[' + strippedFieldID + ']"]' ),
 			$confirmField = $emailFields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
-			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
+			email,
+			confirmEmail;
 
 		// validate the current field we're editing first
 		if ( '' !== field.value && pattern.test( field.value ) === false ) {
@@ -356,7 +366,32 @@ function frmFrontFormJS() {
 
 		// if both fields are valid emails, check that they match
 		if ( isConfirmation ) {
-			if ( 'false' === $emailField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== $emailField.val() && '' !== $confirmField.val() && $emailField.val() !== $confirmField.val() ) {
+			email = $emailField.val();
+			confirmEmail = $confirmField.val();
+			if ( 'false' === $emailField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== email && '' !== confirmEmail && email !== confirmEmail ) {
+				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
+			}
+		} else {
+			validateField( 'conf_' + strippedFieldID, $confirmField.get( 0 ) );
+		}
+
+		return errors;
+	}
+
+	function checkPasswordField( field, errors, $passwordFields ) {
+		var fieldID = getFieldId( field, true ),
+			strippedFieldID = fieldID.replace( 'conf_', '' ),
+			isConfirmation = fieldID !== strippedFieldID,
+			$passwordField = $passwordFields.filter( '[name="item_meta[' + strippedFieldID + ']"]' ),
+			$confirmField = $passwordFields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
+			password,
+			confirmPassword;
+
+		// if both fields are valid emails, check that they match
+		if ( isConfirmation ) {
+			password = $passwordField.val();
+			confirmPassword = $confirmField.val();
+			if ( 'false' === $passwordField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== password && '' !== confirmPassword && password !== confirmPassword ) {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
 			}
 		} else {
