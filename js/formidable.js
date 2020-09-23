@@ -347,51 +347,43 @@ function frmFrontFormJS() {
 
 	function checkEmailField( field, errors, $emailFields ) {
 		var fieldID = getFieldId( field, true ),
-			strippedFieldID = fieldID.replace( 'conf_', '' ),
-			isConfirmation = fieldID !== strippedFieldID,
-			$emailField = $emailFields.filter( '[name="item_meta[' + strippedFieldID + ']"]' ),
-			$confirmField = $emailFields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
-			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
-			email,
-			confirmEmail;
+			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 
 		// validate the current field we're editing first
 		if ( '' !== field.value && pattern.test( field.value ) === false ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
-		if ( ! $confirmField.length ) {
-			return errors;
-		}
-
-		// if both fields are valid emails, check that they match
-		if ( isConfirmation ) {
-			email = $emailField.val();
-			confirmEmail = $confirmField.val();
-			if ( 'false' === $emailField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== email && '' !== confirmEmail && email !== confirmEmail ) {
-				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
-			}
-		} else {
-			validateField( 'conf_' + strippedFieldID, $confirmField.get( 0 ) );
-		}
-
+		confirmField( field, errors, $emailFields );
 		return errors;
 	}
 
 	function checkPasswordField( field, errors, $passwordFields ) {
+		confirmField( field, errors, $passwordFields );
+		return errors;
+	}
+
+	function confirmField( field, errors, $fields ) {
 		var fieldID = getFieldId( field, true ),
 			strippedFieldID = fieldID.replace( 'conf_', '' ),
-			isConfirmation = fieldID !== strippedFieldID,
-			$passwordField = $passwordFields.filter( '[name="item_meta[' + strippedFieldID + ']"]' ),
-			$confirmField = $passwordFields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
-			password,
-			confirmPassword;
+			$confirmField = $fields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
+			isConfirmation,
+			$firstField,
+			value,
+			confirmValue;
+
+		if ( ! $confirmField.length ) {
+			return;
+		}
+
+		isConfirmation = fieldID !== strippedFieldID;
+		$firstField = $fields.filter( '[name="item_meta[' + strippedFieldID + ']"]' );
 
 		// if both fields are valid emails, check that they match
 		if ( isConfirmation ) {
-			password = $passwordField.val();
-			confirmPassword = $confirmField.val();
-			if ( 'false' === $passwordField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== password && '' !== confirmPassword && password !== confirmPassword ) {
+			value = $firstField.val();
+			confirmValue = $confirmField.val();
+			if ( 'false' === $firstField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== value && '' !== confirmValue && value !== confirmValue ) {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
 			}
 		} else {
