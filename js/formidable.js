@@ -357,10 +357,10 @@ function frmFrontFormJS() {
 		// if both fields are valid emails, check that they match
 		if ( isConfirmation ) {
 			if ( 'false' === $emailField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== $emailField.val() && '' !== $confirmField.val() && $emailField.val() !== $confirmField.val() ) {
-				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get(0), 'data-nomatch' );
+				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
 			}
 		} else {
-			validateField( 'conf_' + strippedFieldID, $confirmField.get(0) );
+			validateField( 'conf_' + strippedFieldID, $confirmField.get( 0 ) );
 		}
 
 		return errors;
