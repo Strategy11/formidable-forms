@@ -337,35 +337,35 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
-	function checkEmailField( field, errors, emailFields ) {
-		var isConf, re, invalidMsg, confName, match,
-			emailAddress = field.value,
-			fieldID = getFieldId( field, true );
+	function checkEmailField( field, errors, $emailFields ) {
+		var fieldID = getFieldId( field, true ),
+			strippedFieldID = fieldID.replace( 'conf_', '' ),
+			isConfirmation = fieldID !== strippedFieldID,
+			$emailField = $emailFields.filter( '[name="item_meta[' + strippedFieldID + ']"]' ),
+			$confirmField = $emailFields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
+			pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
 
-		if ( fieldID in errors ) {
+		// validate the current field we're editing first
+		if ( '' !== field.value && pattern.test( field.value ) === false ) {
+			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
+		}
+
+		if ( ! $confirmField.length ) {
 			return errors;
 		}
 
-		isConf = ( fieldID.indexOf( 'conf_' ) === 0 );
-		if ( emailAddress !== '' || isConf ) {
-			re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-			invalidMsg = getFieldValidationMessage( field, 'data-invmsg' );
-			if ( emailAddress !== '' && re.test( emailAddress ) === false ) {
-				errors[ fieldID ] = invalidMsg;
-				if ( isConf ) {
-					errors[ fieldID.replace( 'conf_', '' ) ] = '';
-				}
-			} else if ( isConf ) {
-				confName = field.name.replace( 'conf_', '' );
-				match = emailFields.filter( '[name="' + confName + '"]' ).val();
-				if ( match !== emailAddress ) {
-					errors[ fieldID ] = '';
-					errors[ fieldID.replace( 'conf_', '' ) ] = '';
-				}
+		// if both fields are valid emails, check that they match
+		if ( isConfirmation ) {
+			if ( 'false' === $emailField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== $emailField.val() && '' !== $confirmField.val() && $emailField.val() !== $confirmField.val() ) {
+				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get(0), 'data-nomatch' );
 			}
+		} else {
+			validateField( 'conf_' + strippedFieldID, $confirmField.get(0) );
 		}
+
 		return errors;
 	}
+
 
 	function checkNumberField( field, errors ) {
 		var fieldID,
