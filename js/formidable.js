@@ -366,7 +366,6 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
-
 	function checkNumberField( field, errors ) {
 		var fieldID,
 			number = field.value;
