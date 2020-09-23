@@ -383,7 +383,7 @@ function frmFrontFormJS() {
 		if ( isConfirmation ) {
 			value = $firstField.val();
 			confirmValue = $confirmField.val();
-			if ( 'false' === $firstField.attr( 'aria-invalid' ) && 'false' === $confirmField.attr( 'aria-invalid' ) && '' !== value && '' !== confirmValue && value !== confirmValue ) {
+			if ( typeof errors[ 'conf_' + strippedFieldID ] === 'undefined' && '' !== value && '' !== confirmValue && value !== confirmValue ) {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( $confirmField.get( 0 ), 'data-nomatch' );
 			}
 		} else {
