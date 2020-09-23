@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm_license_box">
 	<h3 class="frm-no-border frm_no_top_margin"><?php esc_html_e( 'License Key', 'formidable' ); ?></h3>
 	<p class="howto">
-		<?php esc_html_e( 'Your license key provides access to automatic updates.', 'formidable' ); ?>
+		<?php esc_html_e( 'Your license key provides access to new features and updates.', 'formidable' ); ?>
 	</p>
 
 	<?php do_action( 'frm_before_settings' ); ?>

@@ -25,6 +25,9 @@ class FrmAddonsController {
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'
 			);
+		} elseif ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
 		}
 	}
 
@@ -189,9 +192,16 @@ class FrmAddonsController {
 
 		$api       = new FrmFormApi( $license );
 		$downloads = $api->get_api_info();
-		$pro       = isset( $downloads['93790'] ) ? $downloads['93790'] : array();
+		$pro       = self::get_pro_from_addons( $downloads );
 
 		return isset( $pro['url'] ) ? $pro['url'] : '';
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	private static function get_pro_from_addons( $addons ) {
+		return isset( $addons['93790'] ) ? $addons['93790'] : array();
 	}
 
 	/**
@@ -209,7 +219,7 @@ class FrmAddonsController {
 			$type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : $type;
 		}
 
-		$pro = isset( $addons['93790'] ) ? $addons['93790'] : array();
+		$pro = self::get_pro_from_addons( $addons );
 		if ( $type === 'free' ) {
 			$type = isset( $pro['type'] ) ? $pro['type'] : $type;
 			if ( $type === 'free' ) {
@@ -230,6 +240,44 @@ class FrmAddonsController {
 	 * @since 4.0.01
 	 */
 	public static function is_license_expired() {
+		$version_info = self::get_primary_license_info();
+		if ( ! isset( $version_info['error'] ) ) {
+			return false;
+		}
+
+		return $version_info['error'];
+	}
+
+	/**
+	 * @since 4.08
+	 *
+	 * @return boolean|int false or the number of days until expiration.
+	 */
+	public static function is_license_expiring() {
+		$version_info = self::get_primary_license_info();
+		if ( ! isset( $version_info['active_sub'] ) || $version_info['active_sub'] !== 'no' ) {
+			// Check for a subscription first.
+			return false;
+		}
+
+		if ( ! isset( $version_info['error'] ) || empty( $version_info['expires'] ) ) {
+			// It's either invalid or already expired.
+			return false;
+		}
+
+		$expiration = $version_info['expires'];
+		$days_left  = ( $expiration - time() ) / DAY_IN_SECONDS;
+		if ( $days_left > 30 ) {
+			return false;
+		}
+
+		return $days_left;
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	private static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
@@ -238,12 +286,7 @@ class FrmAddonsController {
 			'formidable_pro' => $installed_addons['formidable_pro'],
 		);
 
-		$version_info = self::fill_update_addon_info( $installed_addons );
-		if ( ! isset( $version_info['error'] ) ) {
-			return false;
-		}
-
-		return $version_info['error'];
+		return self::fill_update_addon_info( $installed_addons );
 	}
 
 	/**
