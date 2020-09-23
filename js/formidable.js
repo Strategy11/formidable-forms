@@ -367,7 +367,6 @@ function frmFrontFormJS() {
 		var fieldID = getFieldId( field, true ),
 			strippedFieldID = fieldID.replace( 'conf_', '' ),
 			$confirmField = $fields.filter( '[name="item_meta[conf_' + strippedFieldID + ']"]' ),
-			isConfirmation,
 			$firstField,
 			value,
 			confirmValue;
@@ -376,10 +375,8 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		isConfirmation = fieldID !== strippedFieldID;
-		$firstField = $fields.filter( '[name="item_meta[' + strippedFieldID + ']"]' );
-
-		if ( isConfirmation ) {
+		if ( fieldID !== strippedFieldID ) {
+			$firstField = $fields.filter( '[name="item_meta[' + strippedFieldID + ']"]' );
 			value = $firstField.val();
 			confirmValue = $confirmField.val();
 			if ( typeof errors[ 'conf_' + strippedFieldID ] === 'undefined' && '' !== value && '' !== confirmValue && value !== confirmValue ) {
