@@ -371,11 +371,11 @@ function frmFrontFormJS() {
 			value,
 			confirmValue;
 
-		if ( ! $confirmField.length ) {
+		if ( ! $confirmField.length || typeof errors[ 'conf_' + strippedFieldID ] !== 'undefined' ) {
 			return;
 		}
 
-		if ( fieldID !== strippedFieldID && typeof errors[ 'conf_' + strippedFieldID ] === 'undefined' ) {
+		if ( fieldID !== strippedFieldID ) {
 			$firstField = $fields.filter( '[name="item_meta[' + strippedFieldID + ']"]' );
 			value = $firstField.val();
 			confirmValue = $confirmField.val();
@@ -385,8 +385,6 @@ function frmFrontFormJS() {
 		} else {
 			validateField( 'conf_' + strippedFieldID, $confirmField.get( 0 ) );
 		}
-
-		return errors;
 	}
 
 	function checkNumberField( field, errors ) {
