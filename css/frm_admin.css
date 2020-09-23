@@ -2063,7 +2063,7 @@ table.frm-list-templates thead th {
 	max-width: calc( 100% - 65px );
 }
 
-.frm-featured-forms-new li > div {
+.frm-featured-forms-new li > div:not(.frm-hover-icons) {
 	display: inline-block;
 	width: 95%;
 	padding: 5px;
@@ -2217,12 +2217,16 @@ table.frm-list-templates thead th {
 	right: 0;
 	top: 0;
 	height: 20px;
-	width: 65px !important;
+	width: 65px;
 	height: 100%;
 	box-sizing: border-box;
 	padding: 14px 10px 0 5px !important;
 	border-radius: 6px;
 	text-align: right;
+}
+
+#frm_new_form_modal .frm-selectable[data-custom="1"] .frm-hover-icons {
+	width: 91px;
 }
 
 .frm-hover-icons a {
@@ -2235,7 +2239,8 @@ table.frm-list-templates thead th {
 	text-align: center;
 }
 
-.frm-hover-icons > .frm-preview-form {
+.frm-hover-icons > .frm-preview-form,
+.frm-hover-icons > .frm-delete-form {
 	border: 1px solid var(--primary-color);
 	margin-right: 5px;
 }
@@ -2248,6 +2253,13 @@ table.frm-list-templates thead th {
 	width: 16px;
 	height: 16px;
 	color: var(--primary-color);
+}
+
+.frm-hover-icons > .frm-delete-form .frmsvg {
+	width: 14px;
+	height: 14px;
+	color: var(--primary-color);
+	transform: translateY(-1px);
 }
 
 .frm-hover-icons > .frm-unlock-form {
@@ -2323,7 +2335,8 @@ table.frm-list-templates thead th {
 	margin-left: 5px;
 }
 
-#frm_new_form_modal.frm-expired #frm-create-block {
+#frm_new_form_modal.frm-expired #frm-create-block,
+#frm_new_form_modal.frm-expiring #frm-create-block {
     max-height: 450px;
 }
 
@@ -2360,7 +2373,8 @@ li .frm-hover-icons .frm-preview-form,
 .frm-modal-back,
 #frm_new_form_modal:not([frm-page="create"]) a.dismiss,
 #frm_code_from_email_error span,
-#frm_leave_email_error span
+#frm_leave_email_error span,
+#frm_new_form_modal .frm-delete-form
 {
 	display: none;
 }
@@ -2378,7 +2392,8 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 #frm_code_from_email_error[frm-error="wrong-code"] span[frm-error="wrong-code"],
 #frm_code_from_email_error[frm-error="empty"] span[frm-error="empty"],
 #frm_leave_email_error[frm-error="invalid"] span[frm-error="invalid"],
-#frm_leave_email_error[frm-error="empty"] span[frm-error="empty"]
+#frm_leave_email_error[frm-error="empty"] span[frm-error="empty"],
+#frm_new_form_modal .frm-selectable[data-custom="1"] .frm-hover-icons .frm-delete-form
 {
 	display: inline-block;
 }

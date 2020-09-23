@@ -5498,6 +5498,21 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', 'details' );
 		});
 
+		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-delete-form', function( event ) {
+			var $li,
+				trigger;
+
+			event.preventDefault();
+
+			$li = jQuery( this ).closest( 'li' );
+			trigger = document.createElement( 'a' );
+			trigger.setAttribute( 'href', '#' );
+			trigger.setAttribute( 'data-id', $li.attr( 'data-formid' ) );
+			$li.attr( 'id', 'frm-template-custom-' + $li.attr( 'data-formid' ) );
+			jQuery( trigger ).on( 'click', trashTemplate );
+			trigger.click();
+		});
+
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
 			var $li,
 				activePage;
@@ -5517,7 +5532,7 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', activePage );
 		});
 
-		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-build-template', function() {
+		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + ul .frm-build-template', function() {
 			$modal.attr( 'frm-page', 'details' );
 		});
 

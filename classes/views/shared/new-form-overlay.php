@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_new_form_modal" class="frm_hidden <?php echo FrmFormsController::expired() ? 'frm-expired' : ''; ?> " frm-page="create">
+<div id="frm_new_form_modal" class="frm_hidden <?php echo FrmFormsController::expired() ? 'frm-expired' : ''; ?> <?php echo FrmAddonsController::is_license_expiring() ? 'frm-expiring' : ''; ?>" frm-page="create">
 	<div class="metabox-holder">
 		<div class="postbox">
 			<div>
@@ -84,6 +84,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div id="frm-create-footer" class="frm_modal_footer">
 					<?php FrmAppHelper::renewal_message(); ?>
 				</div>
+			<?php } else { ?>
+				<div id="frm-create-footer" class="frm_modal_footer">
+					<?php FrmAppHelper::expiring_message(); ?>
+				</div>
 			<?php } ?>
 			<div id="frm-preview-footer" class="frm_modal_footer">
 				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
@@ -161,7 +165,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_unlock_simple' );
 	?>
 	<div id="frm-hover-icons-template" class="frm-hover-icons">
-		<a href="#" class="frm-preview-form" title="<?php esc_html_e( 'Preview form', 'formidable' ); ?>">
+		<a href="#" class="frm-delete-form" title="<?php esc_html_e( 'Delete form', 'formidable' ); ?>">
+			<svg class="frmsvg">
+				<use xlink:href="#frm_delete_solid_icon"></use>
+			</svg>
+		</a><a href="#" class="frm-preview-form" title="<?php esc_html_e( 'Preview form', 'formidable' ); ?>">
 			<svg class="frmsvg">
 				<use xlink:href="#frm_eye_simple"></use>
 			</svg>
