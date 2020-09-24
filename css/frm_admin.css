@@ -1110,6 +1110,10 @@ h2 .frm-button-primary {
 	padding-left: 10px !important;
 }
 
+.frm-with-plus .frmsvg {
+	margin-right: 5px;
+}
+
 .frm-button-primary .frmsvg {
 	color: #fff;
 }
