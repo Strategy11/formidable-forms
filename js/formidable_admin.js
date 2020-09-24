@@ -5525,6 +5525,8 @@ function frmAdminBuildJS() {
 				activePage = 'email';
 				activeTemplateKey = $li.attr( 'data-key' );
 				$li.append( installFormTrigger );
+			} else if( $modal.hasClass( 'frm-expired' ) ) {
+				activePage = 'renew';
 			} else {
 				activePage = 'upgrade';
 			}

@@ -2868,6 +2868,10 @@ a.frm_option_icon:hover::before {
 	text-rendering: auto;
 }
 
+#frm_new_form_modal .accordion-section.open .accordion-section-title:after {
+	transform: rotate(90deg);
+}
+
 .frm-right-panel .accordion-section-title:after {
 	right: 20px;
 }
