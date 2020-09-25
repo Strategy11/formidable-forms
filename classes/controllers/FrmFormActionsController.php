@@ -54,6 +54,7 @@ class FrmFormActionsController {
 			'constantcontact' => 'FrmDefConstContactAction',
 			'getresponse'     => 'FrmDefGetResponseAction',
 			'hubspot'         => 'FrmDefHubspotAction',
+			'zapier'          => 'FrmDefZapierAction',
 			'twilio'          => 'FrmDefTwilioAction',
 			'highrise'        => 'FrmDefHighriseAction',
 			'mailpoet'        => 'FrmDefMailpoetAction',

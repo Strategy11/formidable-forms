@@ -52,6 +52,14 @@ class FrmDefMlcmpAction extends FrmFormAction {
 	}
 }
 
+// add zapier action
+class FrmDefZapierAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = FrmFormAction::default_action_opts( 'frm_zapier_icon frm_show_upgrade' );
+		parent::__construct( 'zapier', 'Zapier', $action_ops );
+	}
+}
+
 // add twilio action
 class FrmDefTwilioAction extends FrmFormAction {
 	public function __construct() {
