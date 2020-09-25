@@ -5689,6 +5689,11 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 			activeHoverIcons.find( '.frm-create-form' ).click();
 		});
+
+		jQuery( document ).on( 'click', '.frm-submit-new-template', function( event ) {
+			event.preventDefault();
+			document.getElementById( 'frm-new-template' ).querySelector( 'button' ).click();
+		});
 	}
 
 	function initTemplateModal( $preview ) {

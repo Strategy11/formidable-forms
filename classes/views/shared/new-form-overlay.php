@@ -62,10 +62,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<button type="submit" class="button-primary frm-button-primary">
 						<?php esc_html_e( 'Create', 'formidable' ); ?>
 					</button>
-
-					<a href="#" class="dismiss">
-						<?php esc_attr_e( 'Cancel', 'formidable' ); ?>
-					</a>
 				</form>
 			</div>
 			<?php if ( in_array( 'upgrade', $blocks, true ) ) { ?>
@@ -103,6 +99,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</a>
 				<a href="#" class="button button-primary frm-button-primary frm-use-this-template">
 					<?php esc_html_e( 'Use this template', 'formidable' ); ?>
+				</a>
+			</div>
+			<div id="frm-details-footer" class="frm_modal_footer">
+				<a href="#" class="button button-secondary frm-modal-cancel frm-back-to-all-templates align-left">
+					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
+				</a>
+				<a href="#" class="button button-primary frm-button-primary frm-submit-new-template">
+					<?php esc_html_e( 'Create', 'formidable' ); ?>
 				</a>
 			</div>
 			<?php if ( in_array( 'upgrade', $blocks, true ) ) { ?>

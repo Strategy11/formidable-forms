@@ -2208,7 +2208,9 @@ table.frm-list-templates thead th {
     border-radius: 0;
 }
 
-#frm_new_form_modal .accordion-section .frm-featured-form {
+.frm-featured-forms-new.frm-categories-list li > div > div:last-child,
+#frm_new_form_modal .accordion-section .frm-featured-form
+{
 	padding-left: 0;
 }
 
@@ -2221,13 +2223,7 @@ table.frm-list-templates thead th {
 }
 
 #frm_new_form_modal .accordion-section-content {
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 0;
-}
-
-.frm-featured-forms-new.frm-categories-list li > div > div:last-child {
-	padding-left: 0;
+	padding: 10px 0;
 }
 
 .frm-hover-icons {
@@ -2309,7 +2305,7 @@ table.frm-list-templates thead th {
 
 .frm_modal_footer {
 	background-color: #fff;
-	padding: 30px 20px;
+	padding: 30px 20px 15px;
 	text-align: right;
 	border-top: 1px solid var(--grey-border);
 }
@@ -2392,7 +2388,8 @@ li .frm-hover-icons .frm-preview-form,
 #frm_new_form_modal:not([frm-page="create"]) a.dismiss,
 #frm_code_from_email_error span,
 #frm_leave_email_error span,
-#frm_new_form_modal .frm-delete-form
+#frm_new_form_modal .frm-delete-form,
+#frm-details-block #frm-new-template button
 {
 	display: none;
 }
@@ -2425,6 +2422,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 #frm_new_form_modal[frm-page="renew"] #frm-renew-block,
 #frm_new_form_modal[frm-page="create"] #frm-create-footer,
 #frm_new_form_modal[frm-page="preview"] #frm-preview-footer,
+#frm_new_form_modal[frm-page="details"] #frm-details-footer,
 #frm_new_form_modal[frm-page="upgrade"] #frm-upgrade-footer,
 #frm_new_form_modal[frm-page="email"] #frm-email-footer,
 #frm_new_form_modal[frm-page="code"] #frm-code-footer,
