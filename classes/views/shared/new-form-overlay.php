@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_new_form_modal" class="frm_hidden <?php echo FrmFormsController::expired() ? 'frm-expired' : ''; ?> <?php echo FrmAddonsController::is_license_expiring() ? 'frm-expiring' : ''; ?>" frm-page="create">
+<div id="frm_new_form_modal" class="frm_hidden <?php echo esc_attr( $modal_class ); ?>" frm-page="create">
 	<div class="metabox-holder">
 		<div class="postbox">
 			<div>

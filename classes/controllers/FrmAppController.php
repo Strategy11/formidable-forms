@@ -264,10 +264,11 @@ class FrmAppController {
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && '' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			FrmFormsController::before_list_templates_new();
-			$expired   = FrmFormsController::expired();
-			$expiring  = FrmAddonsController::is_license_expiring();
-			$user      = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
-			$view_path = $shared_path . 'new-form-overlay/';
+			$expired     = FrmFormsController::expired();
+			$expiring    = FrmAddonsController::is_license_expiring();
+			$user        = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
+			$view_path   = $shared_path . 'new-form-overlay/';
+			$modal_class = '';
 
 			// track the blocks that we actually need to render
 			$blocks = array();
@@ -286,6 +287,9 @@ class FrmAppController {
 			// avoid rendering the renew block for users who are not currently expired
 			if ( $expired ) {
 				$blocks[] = 'renew';
+				$modal_class = 'frm-expired';
+			} elseif ( $expiring ) {
+				$modal_class = 'frm-expiring';
 			}
 
 			include $shared_path . 'new-form-overlay.php';
