@@ -2069,7 +2069,7 @@ table.frm-list-templates thead th {
 
 .frm-featured-forms-new li > div:not(.frm-hover-icons) {
 	display: inline-block;
-	width: 95%;
+	width: 100%;
 	padding: 5px;
 }
 
@@ -2089,18 +2089,6 @@ table.frm-list-templates thead th {
 	border-radius: 4px;
 	text-align: center;
 	vertical-align: top;
-}
-
-#frm_new_form_modal .accordion-section-title:hover,
-.control-section:hover .accordion-section-title,
-#frm_new_form_modal .accordion-section.open .accordion-section-title
-{
-	background: #fff !important;
-	border-bottom: none;
-}
-
-#frm_new_form_modal .accordion-section.open:hover {
-	border-bottom: none;
 }
 
 .frm-featured-forms-new li > div > div:last-child {
@@ -2188,7 +2176,7 @@ table.frm-list-templates thead th {
 
 #frm_new_form_modal .accordion-container {
 	display: inline-block;
-	padding: 15px 5px 0;
+	padding: 0;
 	border-top: 1px solid var(--grey-border);
 	box-sizing: border-box;
 	margin: 0 10px;
@@ -2197,6 +2185,31 @@ table.frm-list-templates thead th {
 
 #frm_new_form_modal .accordion-section-title {
 	padding: 0;
+}
+
+#frm_new_form_modal .accordion-section-title:hover,
+.control-section:hover .accordion-section-title,
+#frm_new_form_modal .accordion-section.open .accordion-section-title
+{
+	background: #fff !important;
+	border-bottom: none;
+}
+
+#frm_new_form_modal .accordion-section.open:hover {
+	border-bottom: none;
+}
+
+#frm_new_form_modal .accordion-section {
+	padding: 8px 0 4px;
+}
+
+#frm_new_form_modal .accordion-section + .accordion-section {
+    border-top: 1px solid var(--grey-border);
+    border-radius: 0;
+}
+
+#frm_new_form_modal .accordion-section .frm-featured-form {
+	padding-left: 0;
 }
 
 #frm_new_form_modal .frm-featured-forms-new.frm-categories-list .accordion-section-title {
@@ -2210,6 +2223,7 @@ table.frm-list-templates thead th {
 #frm_new_form_modal .accordion-section-content {
 	padding-left: 0;
 	padding-right: 0;
+	padding-bottom: 0;
 }
 
 .frm-featured-forms-new.frm-categories-list li > div > div:last-child {

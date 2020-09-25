@@ -5427,7 +5427,10 @@ function frmAdminBuildJS() {
 			activeHoverIcons,
 			activeTemplateKey,
 			$modal,
-			$info;
+			$info,
+			handleError,
+			handleEmailAddressError,
+			handleConfirmEmailAddressError;
 
 		$info = initModal( '#frm_form_modal', '650px' );
 		if ( $info !== false ) {
@@ -5525,7 +5528,7 @@ function frmAdminBuildJS() {
 				activePage = 'email';
 				activeTemplateKey = $li.attr( 'data-key' );
 				$li.append( installFormTrigger );
-			} else if( $modal.hasClass( 'frm-expired' ) ) {
+			} else if ( $modal.hasClass( 'frm-expired' ) ) {
 				activePage = 'renew';
 			} else {
 				activePage = 'upgrade';
@@ -5538,7 +5541,7 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', 'details' );
 		});
 
-		var handleError = function( inputId, errorId, type ) {
+		handleError = function( inputId, errorId, type ) {
 			var $error = jQuery( errorId );
 			$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
 
@@ -5547,7 +5550,7 @@ function frmAdminBuildJS() {
 			});
 		};
 
-		var handleEmailAddressError = function( type ) {
+		handleEmailAddressError = function( type ) {
 			handleError( '#frm_leave_email', '#frm_leave_email_error', type );
 		};
 
@@ -5588,7 +5591,7 @@ function frmAdminBuildJS() {
 			});
 		});
 
-		var handleConfirmEmailAddressError = function( type ) {
+		handleConfirmEmailAddressError = function( type ) {
 			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type );
 		};
 
@@ -5638,7 +5641,7 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
-			var categories = $modal.get(0).querySelector( '.frm-categories-list' ).children,
+			var categories = $modal.get( 0 ).querySelector( '.frm-categories-list' ).children,
 				categoryIndex,
 				category,
 				templateIndex,
