@@ -264,8 +264,30 @@ class FrmAppController {
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && '' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			FrmFormsController::before_list_templates_new();
+			$expired   = FrmFormsController::expired();
+			$expiring  = FrmAddonsController::is_license_expiring();
 			$user      = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
 			$view_path = $shared_path . 'new-form-overlay/';
+
+			// track the blocks that we actually need to render
+			$blocks = array();
+
+			// avoid rendering the upgrade block for users who have upgraded
+			if ( ! $is_pro ) {
+				$blocks[] = 'upgrade';
+
+				// avoid rendering the email and code blocks for users who have upgraded or have a free license already
+				$api = new FrmFormTemplateApi();
+				if ( ! $api->get_free_license() ) {
+					array_push( $blocks, 'email', 'code' );
+				}
+			}
+
+			// avoid rendering the renew block for users who are not currently expired
+			if ( $expired ) {
+				$blocks[] = 'renew';
+			}
+
 			include $shared_path . 'new-form-overlay.php';
 		}
 	}
