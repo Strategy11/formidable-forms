@@ -333,7 +333,15 @@ class FrmEntryMeta {
 
 		$cache_key = 'ids_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'u' . $unique . FrmAppHelper::maybe_json_encode( $args );
 
-		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_var' : 'get_col' ) );
+		if ( ' LIMIT 1' === $limit ) {
+			$type = 'get_var';
+		} elseif ( ! empty( $args['return_both_id_and_parent_id'] ) ) {
+			$type = 'get_results';
+		} else {
+			$type = 'get_col';
+		}
+
+		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, $type );
 	}
 
 	/**
@@ -345,10 +353,12 @@ class FrmEntryMeta {
 		global $wpdb;
 		$query[] = 'SELECT';
 
-		$defaults = array( 'return_parent_id' => false );
+		$defaults = array( 'return_parent_id' => false, 'return_both_id_and_parent_id' => false );
 		$args     = array_merge( $defaults, $args );
 
-		if ( $args['return_parent_id'] ) {
+		if ( $args['return_both_id_and_parent_id'] ) {
+			$query[] = ( $unique ? 'DISTINCT ' : '' ) . 'e.parent_item_id, it.item_id';
+		} elseif ( $args['return_parent_id'] ) {
 			$query[] = $unique ? 'DISTINCT(e.parent_item_id)' : 'e.parent_item_id';
 		} else {
 			$query[] = $unique ? 'DISTINCT(it.item_id)' : 'it.item_id';
