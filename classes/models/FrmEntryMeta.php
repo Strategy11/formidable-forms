@@ -345,6 +345,29 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * Given a query including a form id and its child form ids, output an array of matching entry ids
+	 * If a child entry id is matched, its parent will be returned in its place
+	 *
+	 * @param array $query
+	 * @param array $args
+	 * @return array
+	 */
+	private static function get_top_level_entry_ids( $query, $args ) {
+		$args['return_both_id_and_parent_id'] = true;
+		$entry_id_rows                        = self::getEntryIds( $query, '', '', true, $args );
+		$top_level_entry_ids                  = array();
+		foreach ( $entry_id_rows as $row ) {
+			if ( $row->parent_item_id ) {
+				$top_level_entry_ids[ $row->parent_item_id ] = $row->parent_item_id;
+			} else {
+				$top_level_entry_ids[ $row->item_id ] = $row->item_id;
+			}
+		}
+
+		return array_values( $top_level_entry_ids );
+	}
+
+	/**
 	 * @param string|array $where
 	 * @param string $order_by
 	 * @param string $limit
