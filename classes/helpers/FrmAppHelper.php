@@ -151,9 +151,16 @@ class FrmAppHelper {
 			&nbsp;
 			<?php
 			printf(
-				/* translators: %1$s: start HTML tag, %2$s: end HTML tag */
-				esc_html__( 'Your form subscription expires in %1$s days%2$s.', 'formidable' ),
-				'<strong>' . esc_html( $expiring ),
+				esc_html(
+					/* translators: %1$s: start HTML tag, %2$s: end HTML tag */
+					_n(
+						'Your form subscription expires in %1$s day%2$s.',
+						'Your form subscription expires in %1$s days%2$s.',
+						$expiring,
+						'formidable'
+					)
+				),
+				'<strong>' . esc_html( number_format_i18n( $expiring ) ),
 				'</strong>'
 			);
 			?>
