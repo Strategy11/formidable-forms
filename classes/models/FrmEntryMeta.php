@@ -374,9 +374,11 @@ class FrmEntryMeta {
 	 */
 	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
 		global $wpdb;
-		$query[] = 'SELECT';
-
-		$defaults = array( 'return_parent_id' => false, 'return_both_id_and_parent_id' => false );
+		$query[]  = 'SELECT';
+		$defaults = array(
+			'return_parent_id'             => false,
+			'return_both_id_and_parent_id' => false,
+		);
 		$args     = array_merge( $defaults, $args );
 
 		if ( $args['return_both_id_and_parent_id'] ) {
@@ -423,8 +425,8 @@ class FrmEntryMeta {
 
 		if ( strpos( $where, ' GROUP BY ' ) ) {
 			// don't inject WHERE filtering after GROUP BY
-			$parts = explode( ' GROUP BY ', $where );
-			$where = $parts[0];
+			$parts  = explode( ' GROUP BY ', $where );
+			$where  = $parts[0];
 			$where .= $draft_where . $user_where;
 			$where .= ' GROUP BY ' . $parts[1];
 		} else {
