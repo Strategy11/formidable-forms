@@ -352,7 +352,7 @@ class FrmEntryMeta {
 	 * @param array $args
 	 * @return array
 	 */
-	private static function get_top_level_entry_ids( $query, $args ) {
+	public static function get_top_level_entry_ids( $query, $args ) {
 		$args['return_both_id_and_parent_id'] = true;
 		$entry_id_rows                        = self::getEntryIds( $query, '', '', true, $args );
 		$top_level_entry_ids                  = array();
