@@ -113,21 +113,19 @@ class FrmEntryValidate {
 		$errors = apply_filters( 'frm_validate_field_entry', $errors, $posted_field, $value, $args );
 	}
 
+	/**
+	 * Set $value to an empty string if it matches its label
+	 *
+	 * @param object $field
+	 * @param string $value
+	 */
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
-		$placeholder = FrmField::get_option( $field, 'placeholder' );
-		$is_default  = ( ! empty( $placeholder ) && $value == $placeholder );
-		$is_label    = false;
-
-		if ( ! $is_default ) {
-			$position = FrmField::get_option( $field, 'label' );
-			if ( empty( $position ) ) {
-				$position = FrmStylesController::get_style_val( 'position', $field->form_id );
-			}
-
-			$is_label = ( $position == 'inside' && FrmFieldsHelper::is_placeholder_field_type( $field->type ) && $value == $field->name );
+		$position = FrmField::get_option( $field, 'label' );
+		if ( ! $position ) {
+			$position = FrmStylesController::get_style_val( 'position', $field->form_id );
 		}
 
-		if ( $is_label || $is_default ) {
+		if ( $position === 'inside' && FrmFieldsHelper::is_placeholder_field_type( $field->type ) && $value === $field->name ) {
 			$value = '';
 		}
 	}

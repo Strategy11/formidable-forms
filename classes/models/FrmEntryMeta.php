@@ -332,8 +332,21 @@ class FrmEntryMeta {
 		$query = implode( ' ', $query );
 
 		$cache_key = 'ids_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'u' . $unique . FrmAppHelper::maybe_json_encode( $args );
+		$type      = 'get_' . ( ' LIMIT 1' === $limit ? 'var' : 'col' );
+		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, $type );
+	}
 
-		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_var' : 'get_col' ) );
+	/**
+	 * Given a query including a form id and its child form ids, output an array of matching entry ids
+	 * If a child entry id is matched, its parent will be returned in its place
+	 *
+	 * @param array $query
+	 * @param array $args
+	 * @return array
+	 */
+	public static function get_top_level_entry_ids( $query, $args ) {
+		$args['return_parent_id_if_0_return_id'] = true;
+		return self::getEntryIds( $query, '', '', true, $args );
 	}
 
 	/**
@@ -343,15 +356,23 @@ class FrmEntryMeta {
 	 */
 	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
 		global $wpdb;
-		$query[] = 'SELECT';
-
-		$defaults = array( 'return_parent_id' => false );
+		$query[]  = 'SELECT';
+		$defaults = array(
+			'return_parent_id'                => false,
+			'return_parent_id_if_0_return_id' => false,
+		);
 		$args     = array_merge( $defaults, $args );
 
-		if ( $args['return_parent_id'] ) {
-			$query[] = $unique ? 'DISTINCT(e.parent_item_id)' : 'e.parent_item_id';
+		if ( $unique ) {
+			$query[] = 'DISTINCT';
+		}
+
+		if ( $args['return_parent_id_if_0_return_id'] ) {
+			$query[] = 'IF ( e.parent_item_id = 0, it.item_id, e.parent_item_id )';
+		} elseif ( $args['return_parent_id'] ) {
+			$query[] = 'e.parent_item_id';
 		} else {
-			$query[] = $unique ? 'DISTINCT(it.item_id)' : 'it.item_id';
+			$query[] = 'it.item_id';
 		}
 
 		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
@@ -390,8 +411,8 @@ class FrmEntryMeta {
 
 		if ( strpos( $where, ' GROUP BY ' ) ) {
 			// don't inject WHERE filtering after GROUP BY
-			$parts = explode( ' GROUP BY ', $where );
-			$where = $parts[0];
+			$parts  = explode( ' GROUP BY ', $where );
+			$where  = $parts[0];
 			$where .= $draft_where . $user_where;
 			$where .= ' GROUP BY ' . $parts[1];
 		} else {
