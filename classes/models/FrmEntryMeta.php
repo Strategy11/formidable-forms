@@ -353,18 +353,8 @@ class FrmEntryMeta {
 	 * @return array
 	 */
 	public static function get_top_level_entry_ids( $query, $args ) {
-		$args['return_both_id_and_parent_id'] = true;
-		$entry_id_rows                        = self::getEntryIds( $query, '', '', true, $args );
-		$top_level_entry_ids                  = array();
-		foreach ( $entry_id_rows as $row ) {
-			if ( $row->parent_item_id ) {
-				$top_level_entry_ids[ $row->parent_item_id ] = $row->parent_item_id;
-			} else {
-				$top_level_entry_ids[ $row->item_id ] = $row->item_id;
-			}
-		}
-
-		return array_values( $top_level_entry_ids );
+		$args['return_parent_id_if_0_return_id'] = true;
+		return self::getEntryIds( $query, '', '', true, $args );
 	}
 
 	/**
@@ -376,17 +366,24 @@ class FrmEntryMeta {
 		global $wpdb;
 		$query[]  = 'SELECT';
 		$defaults = array(
-			'return_parent_id'             => false,
-			'return_both_id_and_parent_id' => false,
+			'return_parent_id'                => false,
+			'return_both_id_and_parent_id'    => false,
+			'return_parent_id_if_0_return_id' => false,
 		);
 		$args     = array_merge( $defaults, $args );
 
+		if ( $unique ) {
+			$query[] = 'DISTINCT';
+		}
+
 		if ( $args['return_both_id_and_parent_id'] ) {
-			$query[] = ( $unique ? 'DISTINCT ' : '' ) . 'e.parent_item_id, it.item_id';
+			$query[] = 'e.parent_item_id, it.item_id';
+		} elseif ( $args['return_parent_id_if_0_return_id'] ) {
+			$query[] = 'IF( e.parent_item_id = 0, it.item_id, e.parent_item_id )';
 		} elseif ( $args['return_parent_id'] ) {
-			$query[] = $unique ? 'DISTINCT(e.parent_item_id)' : 'e.parent_item_id';
+			$query[] = 'e.parent_item_id';
 		} else {
-			$query[] = $unique ? 'DISTINCT(it.item_id)' : 'it.item_id';
+			$query[] = 'it.item_id';
 		}
 
 		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
