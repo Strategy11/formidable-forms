@@ -5,8 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frmcenter">
 	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/leave-email.svg' ); ?>" />
-	<h3><?php esc_html_e( 'Get powerful templates for free', 'formidable' ); ?></h3>
-	<p><?php esc_html_e( 'Leave your email address and get free access to a powerful predesign form templates which will cover most of your needs', 'formidable' ); ?></p>
+	<h3><?php esc_html_e( 'Get 10+ Free Form Templates', 'formidable' ); ?></h3>
+	<p><?php esc_html_e( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' ); ?></p>
 	<div style="position: relative; width: 600px; margin: 0 auto;">
 		<span class="frm-with-left-icon">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
