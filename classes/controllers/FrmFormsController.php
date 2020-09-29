@@ -78,15 +78,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Choose which type of form to create
-	 *
-	 * @since 3.06
-	 */
-	public static function add_new() {
-		self::list_templates();
-	}
-
-	/**
 	 * Load the scripts before a modal can be triggered.
 	 *
 	 * @since 4.0
@@ -1464,10 +1455,7 @@ class FrmFormsController {
 
 		switch ( $action ) {
 			case 'new':
-				return self::new_form( $vars );
-			case 'add_new':
-			case 'list_templates':
-				return self::list_templates();
+				return self::new_form( $vars );			
 			case 'create':
 			case 'edit':
 			case 'update':
