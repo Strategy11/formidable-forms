@@ -119,15 +119,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 						echo esc_url(
 							FrmAppHelper::admin_upgrade_link(
 								array(
-									'medium'  => 'upgrade',
-									'content' => 'button',
+									'medium'  => 'new-template',
+									'content' => 'upgrade',
 								)
 							)
 						);
 						?>"
 						class="button button-primary frm-button-primary"
+						target="_blank" rel="noopener"
 					>
-						<?php esc_html_e( 'Continue to upgrade', 'formidable' ); ?>
+						<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 					</a>
 				</div>
 			<?php } ?>
@@ -137,7 +138,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 					</a>
 					<a id="frm-add-my-email-address" href="#" class="button button-primary frm-button-primary">
-						<?php esc_html_e( 'Add my email address', 'formidable' ); ?>
+						<?php esc_html_e( 'Get Code', 'formidable' ); ?>
 					</a>
 				</div>
 			<?php } ?>
@@ -147,7 +148,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 					</a>
 					<a href="#" class="button button-primary frm-button-primary frm-confirm-email-address">
-						<?php esc_html_e( 'Confirm my email address', 'formidable' ); ?>
+						<?php esc_html_e( 'Save Code', 'formidable' ); ?>
 					</a>
 				</div>
 			<?php } ?>
@@ -161,13 +162,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 						echo esc_url(
 							FrmAppHelper::admin_upgrade_link(
 								array(
-									'medium'  => 'outdate',
-									'content' => 'button',
+									'medium'  => 'new-template',
+									'content' => 'renew',
 								)
 							)
 						);
 						?>"
 						class="button button-primary frm-button-primary"
+						target="_blank" rel="noopener"
 					>
 						<?php esc_html_e( 'Renew my account', 'formidable' ); ?>
 					</a>
