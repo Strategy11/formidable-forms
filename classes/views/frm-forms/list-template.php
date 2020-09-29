@@ -64,6 +64,14 @@ if ( ! empty( $template['custom'] ) ) {
 				<?php } ?>
 			</h3>
 			<p><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
+			<?php
+			$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
+			if ( $template_is_new ) {
+				?><div class="frm_ribbon">
+					<span>New</span>
+				</div><?php
+			}
+			?>
 		</div>
 	</div>
 </li><?php

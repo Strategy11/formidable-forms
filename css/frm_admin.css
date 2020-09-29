@@ -1608,10 +1608,10 @@ div.frm_updated_message {
 	border: 25px solid transparent;
 	border-bottom: 25px solid var(--orange);
 	position: absolute;
-	top: 4px;
-	right: -38px;
-	padding: 0 10px;
-	width: 65px;
+	top: -31px;
+	right: -74px;
+	padding: 0px 10px;
+	width: 30px;
 	color: white;
 	font-family: sans-serif;
 	size: 11px;
@@ -1619,9 +1619,13 @@ div.frm_updated_message {
 
 .frm_ribbon span {
 	position: absolute;
-	top: 2px;
 	left: 25px;
-	font-size: 17px;
+	font-size: 15px;
+	top: 4px;
+}
+
+.accordion-section-content .frm-selectable:hover .frm_ribbon {
+	display: none;
 }
 
 #frm-premium-templates .frm_ribbon {
@@ -2220,6 +2224,7 @@ table.frm-list-templates thead th {
 
 #frm_new_form_modal .frm-featured-forms-new.frm-categories-list li.frm-selectable {
 	padding: 0 10px;
+	overflow: hidden;
 }
 
 #frm_new_form_modal .accordion-section-content {
