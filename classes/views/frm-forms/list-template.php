@@ -6,13 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 $plan_required         = FrmFormsHelper::get_plan_required( $template );
 $args['plan_required'] = $plan_required;
 
-// TODO remove this
-// start temporary workaround since API has not been updated
-if ( isset( $template['url'] ) && in_array( 'free', $template['categories'], true ) && ! FrmAppHelper::pro_is_installed() && ! ( new FrmFormTemplateApi() )->get_free_license() ) {
-	$plan_required = 'free';
-}
-// end temporary workaround
-
 if ( ! empty( $template['custom'] ) ) {
 	$preview_base = admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' );
 	$preview_end  = '';

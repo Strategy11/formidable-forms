@@ -5551,6 +5551,12 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', activePage );
 		});
 
+		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop', function() {
+			jQuery( this )
+				.closest( '.accordion-section-content' ).css( 'overflow', 'visible' )
+				.closest( '.accordion-section' ).css( 'z-index', 1 );
+		});
+
 		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + ul .frm-build-template', function() {
 			$modal.attr( 'frm-page', 'details' );
 		});
