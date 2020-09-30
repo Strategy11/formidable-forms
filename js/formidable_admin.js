@@ -5520,14 +5520,14 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 
 			$li = jQuery( this ).closest( 'li' );
-			siblingCount = $li.siblings( 'li.frm-selectable' ).length;
+			$li.addClass( 'frm-deleting' );
 			trigger = document.createElement( 'a' );
 			trigger.setAttribute( 'href', '#' );
 			trigger.setAttribute( 'data-id', $li.attr( 'data-formid' ) );
 			$li.attr( 'id', 'frm-template-custom-' + $li.attr( 'data-formid' ) );
 			jQuery( trigger ).on( 'click', trashTemplate );
 			trigger.click();
-			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ), siblingCount );
+			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ) );
 		});
 
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
@@ -5690,9 +5690,8 @@ function frmAdminBuildJS() {
 				category = categories[ categoryIndex ];
 				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
 				count = searchableTemplates.length;
-
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-				setTemplateCount( category, count, searchableTemplates );
+				setTemplateCount( category, searchableTemplates );
 			}
 		});
 
@@ -5724,7 +5723,14 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function setTemplateCount( category, count, searchableTemplates ) {
+	function setTemplateCount( category, searchableTemplates ) {
+		var count;
+
+		if ( typeof searchableTemplates === 'undefined' ) {
+			searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden):not(.frm-deleting)' );
+		}
+
+		count = searchableTemplates.length;
 		category.querySelector( '.frm-template-count' ).textContent = count;
 
 		jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
@@ -5733,10 +5739,6 @@ function frmAdminBuildJS() {
 		availableCounter = category.querySelector( '.frm-available-templates-count' );
 		if ( availableCounter !== null ) {
 			availableCount = 0;
-
-			if ( typeof searchableTemplates === 'undefined' ) {
-				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
-			}
 
 			for ( templateIndex in searchableTemplates ) {
 				if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
