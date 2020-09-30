@@ -41,7 +41,7 @@ FrmAppHelper::show_search_box(
 	)
 );
 ?>
-<div class="accordion-container">
+<div tabindex="0" class="accordion-container">
 	<ul class="frm-featured-forms frm-categories-list">
 		<?php foreach ( $categories as $category ) { ?>
 			<?php
@@ -54,7 +54,7 @@ FrmAppHelper::show_search_box(
 					<div class="frm-category-icon" style="background-color: #805EF6;">
 						<?php FrmFormsHelper::template_icon( array( $category ) ); ?>
 					</div><div>
-						<div class="accordion-section-title">
+						<div role="button" class="accordion-section-title">
 							<h3><?php echo esc_attr( $category ); ?></h3>
 							<p><span class="frm-template-count"><?php echo esc_html( $count ); ?></span> <span class="frm-templates-plural <?php echo $count === 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'templates', 'formidable' ); ?></span><span class="frm-templates-singular <?php echo $count !== 1 ? 'frm_hidden' : ''; ?>"><?php esc_html_e( 'template', 'formidable' ); ?></span><?php echo $available !== $count ? '&nbsp;&nbsp;|&nbsp;&nbsp;<span class="frm-available-templates-count">' . esc_html( $available ) . '</span> ' . esc_html__( 'available', 'formidable' ) : ''; ?></p>
 						</div>
