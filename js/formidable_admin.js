@@ -5501,6 +5501,14 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', 'details' );
 		});
 
+		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-featured-forms li h3', function( event ) {
+			var $li = jQuery( this ).closest( 'li' ),
+				$hoverIcons = $li.find( '.frm-hover-icons' ),
+				triggerClass = $li.hasClass( 'frm-locked-template' ) ? 'frm-unlock-form' : 'frm-create-form',
+				$trigger = $hoverIcons.find( '.' + triggerClass );
+			$trigger.click();
+		});
+
 		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-delete-form', function( event ) {
 			var $li,
 				trigger;
@@ -5686,8 +5694,16 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '.frm-use-this-template', function( event ) {
+			var $trigger;
+
 			event.preventDefault();
-			activeHoverIcons.find( '.frm-create-form' ).click();
+
+			$trigger = activeHoverIcons.find( '.frm-create-form' );
+			if ( $trigger.closest( '.frm-selectable' ).hasClass( 'frm-locked-template' ) ) {
+				$trigger = activeHoverIcons.find( '.frm-unlock-form' );
+			}
+
+			$trigger.click();
 		});
 
 		jQuery( document ).on( 'click', '.frm-submit-new-template', function( event ) {

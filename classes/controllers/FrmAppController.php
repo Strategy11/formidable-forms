@@ -263,7 +263,7 @@ class FrmAppController {
 		include $shared_path . 'confirm-overlay.php';
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && '' === FrmAppHelper::get_param( 'frm_action' ) ) {
-			FrmFormsController::before_list_templates_new();
+			FrmFormsController::before_list_templates();
 			$expired     = FrmFormsController::expired();
 			$expiring    = FrmAddonsController::is_license_expiring();
 			$user        = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field

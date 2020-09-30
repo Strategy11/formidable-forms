@@ -564,6 +564,7 @@ class FrmFormsController {
 	 * @since 3.06
 	 */
 	public static function build_template() {
+		// TODO update this
 		global $wpdb;
 
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
@@ -786,42 +787,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Show the template listing page
-	 *
-	 * @since 3.06
-	 */
-	private static function list_templates() {
-		self::init_modal();
-
-		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms = FrmForm::get_published_forms( $where );
-
-		$api       = new FrmFormTemplateApi();
-		$templates = $api->get_api_info();
-
-		$custom_templates = array();
-		self::add_user_templates( $custom_templates );
-
-		$error   = '';
-		$expired = false;
-		$license_type = '';
-		if ( isset( $templates['error'] ) ) {
-			$error   = $templates['error']['message'];
-			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
-			$expired = ( $templates['error']['code'] === 'expired' );
-
-			$license_type = isset( $templates['error']['type'] ) ? $templates['error']['type'] : '';
-			unset( $templates['error'] );
-		}
-
-		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
-
-		$categories = self::get_template_categories( $templates );
-
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
-	}
-
-	/**
 	 * @return bool
 	 */
 	public static function expired() {
@@ -832,7 +797,7 @@ class FrmFormsController {
 	/**
 	 * Get data from api before rendering it so that we can flag the modal as expired
 	 */
-	public static function before_list_templates_new() {
+	public static function before_list_templates() {
 		global $frm_templates;
 		global $frm_expired;
 		global $frm_license_type;
@@ -859,7 +824,7 @@ class FrmFormsController {
 		$frm_license_type = $license_type;
 	}
 
-	public static function list_templates_new() {
+	public static function list_templates() {
 		global $frm_templates;
 		global $frm_expired;
 		global $frm_license_type;
@@ -908,7 +873,7 @@ class FrmFormsController {
 
 		unset( $pricing, $license_type, $where );
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
-		require $view_path . 'list-templates-new.php';
+		require $view_path . 'list-templates.php';
 	}
 
 	/**
