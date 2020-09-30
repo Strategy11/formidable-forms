@@ -5425,32 +5425,6 @@ function frmAdminBuildJS() {
 
 	/* Templates */
 
-	function setTemplateCount( category, count, searchableTemplates ) {
-		category.querySelector( '.frm-template-count' ).textContent = count;
-
-		if ( count ) {	
-			jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
-			jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
-
-			availableCounter = category.querySelector( '.frm-available-templates-count' );
-			if ( availableCounter !== null ) {
-				availableCount = 0;
-
-				if ( typeof searchableTemplates === 'undefined' ) {
-					searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
-				}
-
-				for ( templateIndex in searchableTemplates ) {
-					if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
-						availableCount++;
-					}
-				}
-
-				availableCounter.textContent = availableCount;
-			}
-		}
-	}
-
 	function initNewFormModal() {
 		var blankFormTrigger,
 			installFormTrigger,
@@ -5750,36 +5724,50 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function initTemplateModal( $preview ) {
-		var $info;
+	function setTemplateCount( category, count, searchableTemplates ) {
+		category.querySelector( '.frm-template-count' ).textContent = count;
 
-		$info = $preview;
+		jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
+		jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
 
-		if ( $preview !== false ) {
-			jQuery( '.frm-preview-template' ).click( function( event ) {
-				var link = this.attributes.rel.value,
-					cont = document.getElementById( 'frm-preview-block' ),
-					iframe;
+		availableCounter = category.querySelector( '.frm-available-templates-count' );
+		if ( availableCounter !== null ) {
+			availableCount = 0;
 
-				event.preventDefault();
+			if ( typeof searchableTemplates === 'undefined' ) {
+				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
+			}
 
-				if ( link.indexOf( ajaxurl ) > -1 ) {
-					iframe = document.createElement( 'iframe' );
-					iframe.src = link;
-					iframe.height = '400';
-					iframe.width = '100%';
-					cont.innerHTML = '';
-					cont.appendChild( iframe );
-				} else {
-					frmApiPreview( cont, link );
+			for ( templateIndex in searchableTemplates ) {
+				if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
+					availableCount++;
 				}
-				$preview.dialog( 'open' );
-			});
-		}
+			}
 
-		if ( $info === false ) {
-			return;
+			availableCounter.textContent = availableCount;
 		}
+	}
+
+	function initTemplateModal( $info ) {
+		jQuery( '.frm-preview-template' ).click( function( event ) {
+			var link = this.attributes.rel.value,
+				cont = document.getElementById( 'frm-preview-block' ),
+				iframe;
+
+			event.preventDefault();
+
+			if ( link.indexOf( ajaxurl ) > -1 ) {
+				iframe = document.createElement( 'iframe' );
+				iframe.src = link;
+				iframe.height = '400';
+				iframe.width = '100%';
+				cont.innerHTML = '';
+				cont.appendChild( iframe );
+			} else {
+				frmApiPreview( cont, link );
+			}
+			$info.dialog( 'open' );
+		});
 
 		jQuery( '.frm-install-template' ).click( function( event ) {
 			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),

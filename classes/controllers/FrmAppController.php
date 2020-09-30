@@ -262,7 +262,7 @@ class FrmAppController {
 		include $shared_path . 'upgrade_overlay.php';
 		include $shared_path . 'confirm-overlay.php';
 
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) && '' === FrmAppHelper::get_param( 'frm_action' ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list' ), true ) ) {
 			FrmFormsController::before_list_templates();
 			$expired     = FrmFormsController::expired();
 			$expiring    = FrmAddonsController::is_license_expiring();
