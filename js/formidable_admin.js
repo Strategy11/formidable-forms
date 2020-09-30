@@ -4718,20 +4718,25 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function bindClickForDialogClose( $modal ) {
+		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( event ) {
+			event.preventDefault();
+			$modal.dialog( 'close' );
+		});
+	}
+
 	function triggerNewFormModal( event ) {
 		var $modal;
 
-		event.preventDefault();
+		if ( typeof event !== 'undefined' ) {
+			event.preventDefault();
+		}
+
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 		$modal.attr( 'frm-page', 'create' );
 		$modal.find( '#template-search-input' ).val( '' ).change();
 		$modal.dialog( 'open' );
-
-		// close dialog by clicking the overlay behind it
-		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( e ) {
-			e.preventDefault();
-			$modal.dialog( 'close' );
-		});
+		bindClickForDialogClose( $modal );
 	}
 
 	/**
@@ -5430,7 +5435,8 @@ function frmAdminBuildJS() {
 			$info,
 			handleError,
 			handleEmailAddressError,
-			handleConfirmEmailAddressError;
+			handleConfirmEmailAddressError,
+			urlParams;
 
 		$info = initModal( '#frm_form_modal', '650px' );
 		if ( $info !== false ) {
@@ -5710,6 +5716,11 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 			document.getElementById( 'frm-new-template' ).querySelector( 'button' ).click();
 		});
+
+		urlParams = new URLSearchParams( window.location.search );
+		if ( urlParams.get( 'triggerNewFormModal' ) ) {
+			triggerNewFormModal();
+		}
 	}
 
 	function initTemplateModal( $preview ) {
@@ -6089,6 +6100,7 @@ function frmAdminBuildJS() {
 		if ( typeof width === 'undefined' ) {
 			width = '550px';
 		}
+
 		$info.dialog({
 			dialogClass: 'frm-dialog',
 			modal: true,
@@ -6101,12 +6113,8 @@ function frmAdminBuildJS() {
 				jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 				jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 				jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
-				jQuery( id ).removeClass( 'ui-dialog-content ui-widget-content' );
-
-				// close dialog by clicking the overlay behind it
-				jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function() {
-					$info.dialog( 'close' );
-				});
+				$info.removeClass( 'ui-dialog-content ui-widget-content' );
+				bindClickForDialogClose( $info );
 			},
 			close: function() {
 				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
