@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-category-icon" style="background-color: #F4AD3D;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
 			</div><div>
-				<h3><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
-				<p><?php esc_html_e( 'Create a new form from scratch', 'formidable' ); ?></p>
+				<h3 role="button"><?php esc_html_e( 'Blank Form', 'formidable' ); ?></h3>
+				<p role="button"><?php esc_html_e( 'Create a new form from scratch', 'formidable' ); ?></p>
 			</div>
 		</div>
 	</li><?php
@@ -26,8 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-category-icon" style="background-color: #805EF6;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
 			</div><div>
-				<h3><?php esc_html_e( 'Import', 'formidable' ); ?></h3>
-				<p><?php esc_html_e( 'Upload your Formidable XML or CSV file to import forms.', 'formidable' ); ?></p>
+				<h3 role="button"><?php esc_html_e( 'Import', 'formidable' ); ?></h3>
+				<p role="button"><?php esc_html_e( 'Upload your Formidable XML or CSV file to import forms.', 'formidable' ); ?></p>
 			</div>
 		</div>
 	</li>

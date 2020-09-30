@@ -1786,15 +1786,9 @@ h2.frm-h2 + .howto {
 }
 
 /* Form Templates */
-a.frm-featured-form {
-	display: block;
-	padding: 10px 5px 5px;
-}
 
 .frm-featured-form .frm-inner-circle {
-	display: block;
 	margin: 0 auto 5px;
-	padding: 27px;
 }
 
 .frm-new-template.plugin-card-bottom {
@@ -1825,7 +1819,6 @@ a.frm-featured-form {
 	padding: 10px 20px;
 }
 
-/* Form Templates (New) */
 #frm_new_form_modal .postbox {
 	max-height: 600px;
 	overflow: hidden;

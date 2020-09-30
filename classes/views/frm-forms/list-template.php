@@ -3,8 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$plan_required         = FrmFormsHelper::get_plan_required( $template );
-$args['plan_required'] = $plan_required;
+$plan_required          = FrmFormsHelper::get_plan_required( $template );
+$args['plan_required']  = $plan_required;
+$stripped_template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 
 if ( ! empty( $template['custom'] ) ) {
 	$preview_base = admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' );
@@ -15,12 +16,13 @@ if ( ! empty( $template['custom'] ) ) {
 }
 ?><li
 	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo ! empty( $template['custom'] ) ? 'frm-build-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
+	aria-label="<?php echo esc_attr( $stripped_template_name ); ?>"
 	<?php
 	if ( 'free' === $plan_required ) {
 		echo "data-key='" . esc_attr( $template['key'] ) . "' ";
 	} elseif ( ! empty( $template['custom'] ) ) {
 		echo 'data-custom="1" ';
-		echo 'data-fullname="' . esc_attr( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ) . '" ';
+		echo 'data-fullname="' . esc_attr( $stripped_template_name ) . '" ';
 		echo 'data-formid="' . absint( $template['id'] ) . '" ';
 	} elseif ( ! $plan_required ) {
 		$link = FrmFormsHelper::get_template_install_link( $template, $args );
@@ -37,13 +39,13 @@ if ( ! empty( $template['custom'] ) ) {
 			</div><?php
 		}
 		?><div>
-			<h3>
+			<h3 role="button">
 				<?php if ( $plan_required ) { ?>
 					<svg class="frmsvg">
 						<use xlink:href="#frm_lock_simple"></use>
 					</svg>
 				<?php } ?>
-				<?php echo esc_html( preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] ) ); ?>
+				<?php echo esc_html( $stripped_template_name ); ?>
 				<?php if ( $plan_required ) { ?>
 					<span class="frm-plan-required-tag">
 						<?php
@@ -55,7 +57,7 @@ if ( ! empty( $template['custom'] ) ) {
 					</span>
 				<?php } ?>
 			</h3>
-			<p><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
+			<p role="button"><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
 			<?php
 			$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
 			if ( $template_is_new ) {

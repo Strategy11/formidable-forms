@@ -59,7 +59,6 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @param string $email
 	 */
 	private static function verify_email( $email ) {
-		// TODO call the API with this email to trigger an email with the required code
 		self::on_api_verify_email_success( $email );
 		wp_send_json_success();
 	}
