@@ -8,6 +8,8 @@ class FrmFormTemplateApi extends FrmFormApi {
 	protected static $email_option_name = 'frm_email';
 	protected static $code_option_name  = 'frm_free_license_code';
 
+	private static $base_api_url = 'https://formidableforms.com/wp-json/form-templates/v1/';
+
 	protected $free_license;
 
 	/**
@@ -21,7 +23,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @since 3.06
 	 */
 	protected function api_url() {
-		$url = 'https://formidableforms.com/wp-json/form-templates/v1/list';
+		$url = self::$base_api_url . 'list';
 
 		if ( empty( $this->license ) ) {
 			$free_license = $this->get_free_license();
@@ -70,25 +72,33 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $code the code from the email sent from the API
+	 * @param string $code the code from the email sent for the API
 	 */
 	private static function verify_code( $code ) {
-		// TODO call the API with email and code, verify that it's a valid code
-		// $email = get_option( self::$email_option_name );
+		$base64_code = base64_encode( $code );
+		$api_url     = self::$base_api_url . 'code?l=' . $base64_code;
+		$response    = wp_remote_get( $api_url );
 
-		// TODO remove this
-		// start temporary workaround since API has not been updated
-		// Return a success response if the code entered is "frm", for testing
-		// Otherwise, return an error
-		if ( $code === 'frm' ) {
-			self::on_api_verify_code_success( $code );
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( $response );
 		}
-		wp_send_json_error();
-		// end temporary workaround
+
+		if ( ! is_array( $response ) ) {
+			wp_send_json_error();
+		}
+
+		$decoded    = json_decode( $response['body'] );
+		$successful = ! empty( $decoded->response );
+
+		if ( $successful ) {
+			self::on_api_verify_code_success( $base64_code );
+		} else {
+			wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
+		}
 	}
 
 	/**
-	 * @param string $code
+	 * @param string $code the base64 encoded code
 	 */
 	private static function on_api_verify_code_success( $code ) {
 		update_option( self::$code_option_name, $code );

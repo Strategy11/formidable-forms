@@ -5555,9 +5555,13 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', 'details' );
 		});
 
-		handleError = function( inputId, errorId, type ) {
+		handleError = function( inputId, errorId, type, message ) {
 			var $error = jQuery( errorId );
 			$error.removeClass( 'frm_hidden' ).attr( 'frm-error', type );
+
+			if ( typeof message !== 'undefined' ) {
+				$error.find( 'span[frm-error="' + type + '"]' ).text( message );
+			}
 
 			jQuery( inputId ).one( 'keyup', function() {
 				$error.addClass( 'frm_hidden' );
@@ -5605,8 +5609,8 @@ function frmAdminBuildJS() {
 			});
 		});
 
-		handleConfirmEmailAddressError = function( type ) {
-			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type );
+		handleConfirmEmailAddressError = function( type, message ) {
+			handleError( '#frm_code_from_email', '#frm_code_from_email_error', type, message );
 		};
 
 		jQuery( document ).on( 'click', '.frm-confirm-email-address', function( event ) {
@@ -5637,7 +5641,12 @@ function frmAdminBuildJS() {
 							$modal.attr( 'frm-page', 'details' );
 						}
 					} else {
-						handleConfirmEmailAddressError( 'wrong-code' );
+						if ( Array.isArray( response.data ) && response.data.length ) {
+							handleConfirmEmailAddressError( 'custom', response.data[0].message );
+						} else {
+							handleConfirmEmailAddressError( 'wrong-code' );
+						}
+
 						jQuery( '#frm_code_from_email_options' ).removeClass( 'frm_hidden' );
 					}
 				}
