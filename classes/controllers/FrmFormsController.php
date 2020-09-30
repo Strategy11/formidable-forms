@@ -1420,7 +1420,7 @@ class FrmFormsController {
 
 		switch ( $action ) {
 			case 'new':
-				return self::new_form( $vars );			
+				return self::new_form( $vars );
 			case 'create':
 			case 'edit':
 			case 'update':

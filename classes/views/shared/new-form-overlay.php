@@ -114,20 +114,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<a href="#" class="button button-secondary frm-modal-cancel frm-back-to-all-templates align-left">
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 					</a>
-					<a
-						href="<?php
-						echo esc_url(
-							FrmAppHelper::admin_upgrade_link(
-								array(
-									'medium'  => 'new-template',
-									'content' => 'upgrade',
-								)
-							)
-						);
-						?>"
-						class="button button-primary frm-button-primary"
-						target="_blank" rel="noopener"
-					>
+					<?php
+					$admin_upgrade_link = FrmAppHelper::admin_upgrade_link(
+						array(
+							'medium'  => 'new-template',
+							'content' => 'upgrade',
+						)
+					);
+					?>
+					<a href="<?php echo esc_url( $admin_upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 						<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 					</a>
 				</div>
@@ -157,20 +152,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 					</a>
-					<a
-						href="<?php
-						echo esc_url(
-							FrmAppHelper::admin_upgrade_link(
-								array(
-									'medium'  => 'new-template',
-									'content' => 'renew',
-								)
-							)
-						);
-						?>"
-						class="button button-primary frm-button-primary"
-						target="_blank" rel="noopener"
-					>
+					<?php
+					$admin_upgrade_link = FrmAppHelper::admin_upgrade_link(
+						array(
+							'medium'  => 'new-template',
+							'content' => 'renew',
+						)
+					);
+					?>
+					<a href="<?php echo esc_url( $admin_upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 						<?php esc_html_e( 'Renew my account', 'formidable' ); ?>
 					</a>
 				</div>
