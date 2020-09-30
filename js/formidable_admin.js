@@ -5692,7 +5692,7 @@ function frmAdminBuildJS() {
 				count = searchableTemplates.length;
 
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-				setTemplateCount( category, count );
+				setTemplateCount( category, count, searchableTemplates );
 			}
 		});
 
