@@ -5425,6 +5425,32 @@ function frmAdminBuildJS() {
 
 	/* Templates */
 
+	function setTemplateCount( category, count, searchableTemplates ) {
+		category.querySelector( '.frm-template-count' ).textContent = count;
+
+		if ( count ) {	
+			jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
+			jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
+
+			availableCounter = category.querySelector( '.frm-available-templates-count' );
+			if ( availableCounter !== null ) {
+				availableCount = 0;
+
+				if ( typeof searchableTemplates === 'undefined' ) {
+					searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
+				}
+
+				for ( templateIndex in searchableTemplates ) {
+					if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
+						availableCount++;
+					}
+				}
+
+				availableCounter.textContent = availableCount;
+			}
+		}
+	}
+
 	function initNewFormModal() {
 		var blankFormTrigger,
 			installFormTrigger,
@@ -5514,17 +5540,20 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-delete-form', function( event ) {
 			var $li,
-				trigger;
+				trigger,
+				siblingCount;
 
 			event.preventDefault();
 
 			$li = jQuery( this ).closest( 'li' );
+			siblingCount = $li.siblings( 'li.frm-selectable' ).length;
 			trigger = document.createElement( 'a' );
 			trigger.setAttribute( 'href', '#' );
 			trigger.setAttribute( 'data-id', $li.attr( 'data-formid' ) );
 			$li.attr( 'id', 'frm-template-custom-' + $li.attr( 'data-formid' ) );
 			jQuery( trigger ).on( 'click', trashTemplate );
 			trigger.click();
+			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ), siblingCount );
 		});
 
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
@@ -5689,24 +5718,7 @@ function frmAdminBuildJS() {
 				count = searchableTemplates.length;
 
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-
-				if ( count ) {
-					category.querySelector( '.frm-template-count' ).textContent = count;
-					jQuery( category ).find( '.frm-templates-plural' ).toggleClass( 'frm_hidden', count === 1 );
-					jQuery( category ).find( '.frm-templates-singular' ).toggleClass( 'frm_hidden', count !== 1 );
-
-					availableCounter = category.querySelector( '.frm-available-templates-count' );
-					if ( availableCounter !== null ) {
-						availableCount = 0;
-						for ( templateIndex in searchableTemplates ) {
-							if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
-								availableCount++;
-							}
-						}
-
-						availableCounter.textContent = availableCount;
-					}
-				}
+				setTemplateCount( category, count );
 			}
 		});
 

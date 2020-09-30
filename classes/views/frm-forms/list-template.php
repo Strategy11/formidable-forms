@@ -15,16 +15,18 @@ if ( ! empty( $template['custom'] ) ) {
 	$preview_end  = '?return=html';
 }
 ?><li
-	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo ! empty( $template['custom'] ) ? 'frm-build-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
+	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
 	aria-label="<?php echo esc_attr( $stripped_template_name ); ?>"
 	<?php
 	if ( 'free' === $plan_required ) {
-		echo "data-key='" . esc_attr( $template['key'] ) . "' ";
+		echo 'data-key="' . esc_attr( $template['key'] ) . '" ';
 	} elseif ( ! empty( $template['custom'] ) ) {
-		echo "data-href='" . esc_url( admin_url( '?page=formidable&frm_action=duplicate&id=' . $template['id'] ) ) . "' ";
+		echo 'data-formid="' . absint( $template['id'] ) . '" ';
+		echo 'data-custom="1" ';
+		echo 'data-href="' . esc_url( admin_url( '?page=formidable&frm_action=duplicate&id=' . $template['id'] ) ) . '" ';
 	} elseif ( ! $plan_required ) {
 		$link = FrmFormsHelper::get_template_install_link( $template, $args );
-		echo "data-rel='" . esc_url( $link['url'] ) . "' ";
+		echo 'data-rel="' . esc_url( $link['url'] ) . '" ';
 	}
 	?>
 	data-preview="<?php echo esc_url( $preview_base . $template['key'] . $preview_end ); ?>"
@@ -58,7 +60,7 @@ if ( ! empty( $template['custom'] ) ) {
 			<p role="button"><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
 			<?php
 			$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
-			if ( $template_is_new ) {
+			if ( $template_is_new && empty( $template['custom'] ) ) {
 				?><div class="frm_ribbon">
 					<span>New</span>
 				</div><?php
