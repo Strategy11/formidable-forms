@@ -21,9 +21,7 @@ if ( ! empty( $template['custom'] ) ) {
 	if ( 'free' === $plan_required ) {
 		echo "data-key='" . esc_attr( $template['key'] ) . "' ";
 	} elseif ( ! empty( $template['custom'] ) ) {
-		echo 'data-custom="1" ';
-		echo 'data-fullname="' . esc_attr( $stripped_template_name ) . '" ';
-		echo 'data-formid="' . absint( $template['id'] ) . '" ';
+		echo "data-href='" . esc_url( admin_url( '?page=formidable&frm_action=duplicate&id=' . $template['id'] ) ) . "' ";
 	} elseif ( ! $plan_required ) {
 		$link = FrmFormsHelper::get_template_install_link( $template, $args );
 		echo "data-rel='" . esc_url( $link['url'] ) . "' ";

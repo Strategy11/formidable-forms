@@ -564,7 +564,6 @@ class FrmFormsController {
 	 * @since 3.06
 	 */
 	public static function build_template() {
-		// TODO update this
 		global $wpdb;
 
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
@@ -572,7 +571,7 @@ class FrmFormsController {
 
 		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
 		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
-		if ( empty( $new_form_id ) ) {
+		if ( ! $new_form_id ) {
 			$response = array(
 				'message' => __( 'There was an error creating a template.', 'formidable' ),
 			);
@@ -584,7 +583,7 @@ class FrmFormsController {
 			}
 
 			$response = array(
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=list_templates' ),
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ),
 			);
 		}
 
