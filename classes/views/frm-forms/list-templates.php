@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<ul class="frm-featured-forms-new">
+<ul class="frm-featured-forms">
 	<li class="frm-add-blank-form frm-selectable">
 		<div class="frm-new-form-button frm-featured-form">
 			<div class="frm-category-icon" style="background-color: #F4AD3D;">
@@ -42,7 +42,7 @@ FrmAppHelper::show_search_box(
 );
 ?>
 <div class="accordion-container">
-	<ul class="frm-featured-forms-new frm-categories-list">
+	<ul class="frm-featured-forms frm-categories-list">
 		<?php foreach ( $categories as $category ) { ?>
 			<?php
 			$category_templates = $templates_by_category[ $category ];

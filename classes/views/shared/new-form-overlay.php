@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<div class="inside" id="frm-create-block">
 				<div class="cta-inside frmcenter">
-					<?php FrmFormsController::list_templates_new(); ?>
+					<?php FrmFormsController::list_templates(); ?>
 				</div>
 			</div>
 			<div class="inside" id="frm-preview-block"></div>

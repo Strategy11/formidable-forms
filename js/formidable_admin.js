@@ -5699,12 +5699,7 @@ function frmAdminBuildJS() {
 	function initTemplateModal( $preview ) {
 		var $info;
 
-		if ( typeof $preview === 'undefined' ) {
-			$preview = initModal( '#frm_preview_template_modal', '700px' );
-			$info = initModal( '#frm_template_modal', '650px' );
-		} else {
-			$info = $preview;
-		}
+		$info = $preview;
 
 		if ( $preview !== false ) {
 			jQuery( '.frm-preview-template' ).click( function( event ) {
@@ -6256,8 +6251,6 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_export_xml' ) !== null ) {
 				// import/export page
 				frmAdminBuild.exportInit();
-			} else if ( document.getElementById( 'frm-templates-page' ) !== null ) {
-				frmAdminBuild.templateInit();
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
@@ -6307,7 +6300,7 @@ function frmAdminBuildJS() {
 
 			// tabs
 			jQuery( document ).on( 'click', '#frm-nav-tabs a', clickNewTab );
-			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a, #frm-templates-page .frm-nav-tabs a' ).click( function() {
+			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a' ).click( function() {
 				if ( ! this.classList.contains( 'frm_noallow' ) ) {
 					clickTab( this );
 					return false;
@@ -6692,11 +6685,6 @@ function frmAdminBuildJS() {
 			customPanel.on( 'click', '.subsubsub a.frmkeys', function( e ) {
 				toggleKeyID( 'frmkeys', e );
 			});
-		},
-
-		templateInit: function() {
-			initTemplateModal();
-			initiateMultiselect();
 		},
 
 		viewInit: function() {
