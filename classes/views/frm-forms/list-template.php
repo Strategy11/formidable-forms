@@ -4,14 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $plan_required          = FrmFormsHelper::get_plan_required( $template );
-
-// TODO remove this
-// start temporary workaround since API has not been updated
-if ( isset( $template['url'] ) && in_array( 'free', $template['categories'], true ) && ! FrmAppHelper::pro_is_installed() && ! ( new FrmFormTemplateApi() )->get_free_license() ) {
-	$plan_required = 'free';
-}
-// end temporary workaround
-
 $args['plan_required']  = $plan_required;
 $stripped_template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 

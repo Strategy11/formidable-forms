@@ -48,7 +48,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 */
 	public function get_free_license() {
 		if ( ! isset( $this->free_license ) ) {
-			$this->free_license = false;//get_option( self::$code_option_name );
+			$this->free_license = get_option( self::$code_option_name );
 		}
 
 		return $this->free_license;
