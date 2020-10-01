@@ -2135,6 +2135,24 @@ h2.frm-h2 + .howto {
 	color: #fff;
 }
 
+.frm-hover-icons .frm-create-form:hover,
+.frm-hover-icons > .frm-unlock-form:hover,
+.frm-hover-icons > .frm-unlock-form:hover .frmsvg
+{
+	background-color: var(--primary-hover) !important;
+}
+
+.frm-hover-icons .frm-preview-form:hover,
+.frm-hover-icons .frm-delete-form:hover
+{
+	border: 1px solid var(--primary-hover) !important;
+}
+
+.frm-hover-icons .frm-preview-form:hover .frmsvg,
+.frm-hover-icons .frm-delete-form:hover .frmsvg {
+	color: var(--primary-hover) !important;
+}
+
 .frm-locked-template h3 .frmsvg {
 	height: 12px;
 	width: 14px;

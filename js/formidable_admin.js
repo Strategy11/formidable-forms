@@ -5496,7 +5496,7 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_action_type' ).value = 'frm_install_form';
 		});
 
-		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"], .frm-templates-list .accordion-section.open li [role="button"]', function( event ) {
+		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {
 			var $hoverIcons, $trigger,
 				$li = jQuery( this ).closest( 'li' ),
 				triggerClass = $li.hasClass( 'frm-locked-template' ) ? 'frm-unlock-form' : 'frm-create-form';
