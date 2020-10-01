@@ -1958,7 +1958,7 @@ h2.frm-h2 + .howto {
 	text-align: left;
 }
 
-.frm-templates-list .frm-new-form-button .frmsvg,
+.frm-templates-list .frm-add-blank-form .frm-category-icon .frmsvg,
 .frm-templates-list li:last-child div:not(.frm-hover-icons) > .frmsvg {
 	color: #fff;
 	transform: translateY(10px);

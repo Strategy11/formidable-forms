@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <ul class="frm-templates-list frm-featured-forms">
 	<li class="frm-add-blank-form frm-selectable">
-		<div class="frm-new-form-button frm-featured-form">
+		<div class="frm-featured-form">
 			<div class="frm-category-icon" style="background-color: #F4AD3D;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
 			</div><div>
