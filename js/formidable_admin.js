@@ -5591,8 +5591,8 @@ function frmAdminBuildJS() {
 			});
 		};
 
-		handleEmailAddressError = function( type, message ) {
-			handleError( '#frm_leave_email', '#frm_leave_email_error', type, message );
+		handleEmailAddressError = function( type ) {
+			handleError( '#frm_leave_email', '#frm_leave_email_error', type );
 		};
 
 		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
