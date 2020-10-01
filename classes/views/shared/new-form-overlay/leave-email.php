@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frmcenter">
+	<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="https://community.formidableforms.com/wp-json/frm/v2/forms/freetemplates?return=html">
+		<span class="frm-wait"></span>
+	</div>
 	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/leave-email.svg' ); ?>" />
 	<h3><?php esc_html_e( 'Get 10+ Free Form Templates', 'formidable' ); ?></h3>
 	<p><?php esc_html_e( 'Just add your email address and you\'ll get a code for 10+ free form templates.', 'formidable' ); ?></p>

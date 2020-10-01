@@ -5597,7 +5597,9 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
 			var email = document.getElementById( 'frm_leave_email' ).value.trim(),
-				regex;
+				regex,
+				$hiddenForm,
+                $hiddenEmailField;
 
 			event.preventDefault();
 
@@ -5613,36 +5615,19 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			jQuery.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				dataType: 'json',
-				data: {
-					action: 'template_api_signup',
-					nonce: frmGlobal.nonce,
-					email: email
-				},
-				success: function( response ) {
-					var message;
-					if ( response.success ) {
-						$modal.attr( 'frm-page', 'code' );
-					} else {
-						if ( Array.isArray( response.data ) && response.data.length ) {
-							if ( 'string' === typeof response.data[0].message ) {
-								message = response.data[0].message;
-							} else {
-								for ( var key in response.data[0].message ) {
-									message = response.data[0].message[ key ];
-									break;
-								}
-							}
+			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
+            $hiddenEmailField = $hiddenForm.find( '[type="email"]' );
+            if ( ! $hiddenEmailField.length ) {
+                return;
+            }
 
-							handleEmailAddressError( 'custom', message );
-						} else {
-							handleEmailAddressError( 'invalid' );
-						}
-					}
-				}
+            $hiddenEmailField.val( email );
+			jQuery.ajax({
+                type: 'POST',
+                url: $hiddenForm.attr( 'action' ),
+                data: $hiddenForm.serialize() + '&action=frm_forms_preview'
+			}).done( function( data ) {
+				$modal.attr( 'frm-page', 'code' );
 			});
 		});
 
