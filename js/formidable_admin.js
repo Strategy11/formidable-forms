@@ -4719,8 +4719,7 @@ function frmAdminBuildJS() {
 	}
 
 	function bindClickForDialogClose( $modal ) {
-		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( event ) {
-			event.preventDefault();
+		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function() {
 			$modal.dialog( 'close' );
 		});
 	}
