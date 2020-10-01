@@ -5599,7 +5599,7 @@ function frmAdminBuildJS() {
 			var email = document.getElementById( 'frm_leave_email' ).value.trim(),
 				regex,
 				$hiddenForm,
-                $hiddenEmailField;
+				$hiddenEmailField;
 
 			event.preventDefault();
 
@@ -5616,16 +5616,16 @@ function frmAdminBuildJS() {
 			}
 
 			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
-            $hiddenEmailField = $hiddenForm.find( '[type="email"]' );
-            if ( ! $hiddenEmailField.length ) {
-                return;
-            }
+			$hiddenEmailField = $hiddenForm.find( '[type="email"]' );
+			if ( ! $hiddenEmailField.length ) {
+				return;
+			}
 
-            $hiddenEmailField.val( email );
+			$hiddenEmailField.val( email );
 			jQuery.ajax({
-                type: 'POST',
-                url: $hiddenForm.attr( 'action' ),
-                data: $hiddenForm.serialize() + '&action=frm_forms_preview'
+				type: 'POST',
+				url: $hiddenForm.attr( 'action' ),
+				data: $hiddenForm.serialize() + '&action=frm_forms_preview'
 			}).done( function( data ) {
 				var message = jQuery( data ).find( '.frm_message' ).text().trim();
 				if ( message.indexOf( 'Thanks!' ) >= 0 ) {
