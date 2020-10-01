@@ -260,7 +260,7 @@ class FrmAddonsController {
 			return false;
 		}
 
-		if ( ! isset( $version_info['error'] ) || empty( $version_info['expires'] ) ) {
+		if ( isset( $version_info['error'] ) || empty( $version_info['expires'] ) ) {
 			// It's either invalid or already expired.
 			return false;
 		}
