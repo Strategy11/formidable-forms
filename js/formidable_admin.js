@@ -5578,8 +5578,8 @@ function frmAdminBuildJS() {
 			});
 		};
 
-		handleEmailAddressError = function( type ) {
-			handleError( '#frm_leave_email', '#frm_leave_email_error', type );
+		handleEmailAddressError = function( type, message ) {
+			handleError( '#frm_leave_email', '#frm_leave_email_error', type, message );
 		};
 
 		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
@@ -5610,10 +5610,24 @@ function frmAdminBuildJS() {
 					email: email
 				},
 				success: function( response ) {
+					var message;
 					if ( response.success ) {
 						$modal.attr( 'frm-page', 'code' );
 					} else {
-						handleEmailAddressError( 'invalid' );
+						if ( Array.isArray( response.data ) && response.data.length ) {
+							if ( 'string' === typeof response.data[0].message ) {
+								message = response.data[0].message;
+							} else {
+								for ( var key in response.data[0].message ) {
+									message = response.data[0].message[ key ];
+									break;
+								}
+							}
+
+							handleEmailAddressError( 'custom', message );
+						} else {
+							handleEmailAddressError( 'invalid' );
+						}
 					}
 				}
 			});

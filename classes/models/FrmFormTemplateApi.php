@@ -49,7 +49,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 */
 	public function get_free_license() {
 		if ( ! isset( $this->free_license ) ) {
-			$this->free_license = get_option( self::$code_option_name );
+			$this->free_license = false;//get_option( self::$code_option_name );
 		}
 
 		return $this->free_license;
@@ -59,8 +59,37 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @param string $email
 	 */
 	private static function verify_email( $email ) {
-		self::on_api_verify_email_success( $email );
-		wp_send_json_success();
+		// TODO replace with, this is all temporary local database stuff
+		$url       = 'http://www.wp.dev.cc/wp-json/frm/v2/entries';
+		$form_id   = 137;
+		$field_key = 'temp-email';
+		$api_key   = '7TPE-9I6T-DQNV-C6GN';
+		// end TODO
+
+		$response  = wp_remote_post(
+			esc_url_raw( $url ),
+			array(
+				'headers' => array(
+					'Authorization' => 'Basic ' . base64_encode( $api_key . ':x' ),
+				),
+				'body'    => array(
+					'form_id'  => $form_id,
+					$field_key => $email,
+				),
+			)
+		);
+
+		self::handle_verify_response_errors_if_any( $response );
+
+		$decoded    = json_decode( $response['body'] );
+		$successful = is_object( $decoded->meta ) && ! empty( $decoded->meta->$field_key );
+
+		if ( $successful ) {
+			self::on_api_verify_email_success( $email );
+			wp_send_json_success();
+		}
+
+		wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
 	}
 
 	/**
@@ -78,13 +107,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$api_url     = self::$base_api_url . 'code?l=' . $base64_code;
 		$response    = wp_remote_get( $api_url );
 
-		if ( is_wp_error( $response ) ) {
-			wp_send_json_error( $response );
-		}
-
-		if ( ! is_array( $response ) ) {
-			wp_send_json_error();
-		}
+		self::handle_verify_response_errors_if_any( $response );
 
 		$decoded    = json_decode( $response['body'] );
 		$successful = ! empty( $decoded->response );
@@ -93,6 +116,19 @@ class FrmFormTemplateApi extends FrmFormApi {
 			self::on_api_verify_code_success( $base64_code );
 		} else {
 			wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
+		}
+	}
+
+	/**
+	 * @param array $response
+	 */
+	private static function handle_verify_response_errors_if_any( $response ) {
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( $response );
+		}
+
+		if ( ! is_array( $response ) ) {
+			wp_send_json_error();
 		}
 	}
 

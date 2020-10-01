@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input id="frm_leave_email" type="email" placeholder="<?php esc_html_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
 		</span>
 		<span id="frm_leave_email_error" class="frm_hidden" style="position: absolute; right: 71px; top: 7px; color: #973937;">
+			<span frm-error="custom"></span>
 			<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
 			<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
 		</span>
