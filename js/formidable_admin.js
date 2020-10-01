@@ -5627,7 +5627,12 @@ function frmAdminBuildJS() {
                 url: $hiddenForm.attr( 'action' ),
                 data: $hiddenForm.serialize() + '&action=frm_forms_preview'
 			}).done( function( data ) {
-				$modal.attr( 'frm-page', 'code' );
+				var message = jQuery( data ).find( '.frm_message' ).text().trim();
+				if ( message.indexOf( 'Thanks!' ) >= 0 ) {
+					$modal.attr( 'frm-page', 'code' );
+				} else {
+					handleEmailAddressError( 'invalid' );
+				}
 			});
 		});
 
