@@ -60,24 +60,26 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 */
 	private static function verify_email( $email ) {
 		// TODO replace with, this is all temporary local database stuff
-		$url       = 'http://www.wp.dev.cc/wp-json/frm/v2/entries';
-		$form_id   = 137;
-		$field_key = 'temp-email';
-		$api_key   = '7TPE-9I6T-DQNV-C6GN';
+		$url       = 'https://community.formidableforms.com/wp-admin/admin-ajax.php?action=frm_forms_preview&form=freetemplates';
+		$form_id   = 53;
 		// end TODO
 
 		$response  = wp_remote_post(
 			esc_url_raw( $url ),
 			array(
-				'headers' => array(
-					'Authorization' => 'Basic ' . base64_encode( $api_key . ':x' ),
-				),
-				'body'    => array(
-					'form_id'  => $form_id,
-					$field_key => $email,
-				),
+				'body'    => urlencode( array(
+					'frm_action'       => 'create',
+					'form_key'         => 'freetemplates',
+					'form_id'          => $form_id,
+					'item_meta[479]'   => $email,
+					'_wp_http_referer' => '/wp-json/frm/v2/forms/freetemplates?return=html'
+				) ),
 			)
 		);
+
+		echo '<pre>';
+		print_r( $response );
+		die();
 
 		self::handle_verify_response_errors_if_any( $response );
 
