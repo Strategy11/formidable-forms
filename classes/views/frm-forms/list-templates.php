@@ -61,7 +61,7 @@ FrmAppHelper::show_search_box(
 						<div class="accordion-section-content" aria-expanded="false">
 							<ul>
 							<?php
-							if ( 'My Templates' === $category ) {
+							if ( $my_templates_translation === $category ) {
 								require $view_path . 'create-template-from-an-existing-form.php';
 							}
 

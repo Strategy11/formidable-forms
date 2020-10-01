@@ -263,37 +263,54 @@ class FrmAppController {
 		include $shared_path . 'confirm-overlay.php';
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list' ), true ) ) {
-			FrmFormsController::before_list_templates();
-			$expired     = FrmFormsController::expired();
-			$expiring    = FrmAddonsController::is_license_expiring();
-			$user        = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
-			$view_path   = $shared_path . 'new-form-overlay/';
-			$modal_class = '';
-
-			// track the blocks that we actually need to render
-			$blocks = array();
-
-			// avoid rendering the upgrade block for users who have upgraded
-			if ( ! $is_pro ) {
-				$blocks[] = 'upgrade';
-
-				// avoid rendering the email and code blocks for users who have upgraded or have a free license already
-				$api = new FrmFormTemplateApi();
-				if ( ! $api->get_free_license() ) {
-					array_push( $blocks, 'email', 'code' );
-				}
-			}
-
-			// avoid rendering the renew block for users who are not currently expired
-			if ( $expired ) {
-				$blocks[] = 'renew';
-				$modal_class = 'frm-expired';
-			} elseif ( $expiring ) {
-				$modal_class = 'frm-expiring';
-			}
-
-			include $shared_path . 'new-form-overlay.php';
+			self::new_form_overlay_html( $shared_path );
 		}
+	}
+
+	/**
+	 * @param string $shared_path
+	 */
+	private static function new_form_overlay_html( $shared_path ) {
+		FrmFormsController::before_list_templates();
+		$expired          = FrmFormsController::expired();
+		$expiring         = FrmAddonsController::is_license_expiring();
+		$user             = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
+		$view_path        = $shared_path . 'new-form-overlay/';
+		$modal_class      = '';
+		$upgrade_link     = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'new-template',
+				'content' => 'upgrade',
+			)
+		);
+		$renew_link       = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'new-template',
+				'content' => 'renew',
+			)
+		);
+		$blocks_to_render = array();
+
+		// avoid rendering the upgrade block for users who have upgraded
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$blocks_to_render[] = 'upgrade';
+
+			// avoid rendering the email and code blocks for users who have upgraded or have a free license already
+			$api = new FrmFormTemplateApi();
+			if ( ! $api->get_free_license() ) {
+				array_push( $blocks_to_render, 'email', 'code' );
+			}
+		}
+
+		// avoid rendering the renew block for users who are not currently expired
+		if ( $expired ) {
+			$blocks_to_render[] = 'renew';
+			$modal_class        = 'frm-expired';
+		} elseif ( $expiring ) {
+			$modal_class = 'frm-expiring';
+		}
+
+		include $shared_path . 'new-form-overlay.php';
 	}
 
 	public static function include_info_overlay() {

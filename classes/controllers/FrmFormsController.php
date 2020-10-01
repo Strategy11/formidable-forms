@@ -806,7 +806,7 @@ class FrmFormsController {
 		$expired       = false;
 		$license_type  = '';
 		if ( isset( $frm_templates['error'] ) ) {
-			$error        = $templates['error']['message'];
+			$error        = $frm_templates['error']['message'];
 			$error        = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
 			$expired      = 'expired' === $frm_templates['error']['code'];
 			$license_type = isset( $frm_templates['error']['type'] ) ? $frm_templates['error']['type'] : '';
@@ -854,15 +854,17 @@ class FrmFormsController {
 			}
 		);
 
-		$categories                            = array_merge( array( 'My Templates' ), $categories );
-		$templates_by_category['My Templates'] = $custom_templates;
-		$pricing                               = FrmAppHelper::admin_upgrade_link( 'form-templates' );
-		$expired                               = $frm_expired;
-		$license_type                          = $frm_license_type;
-		$args                                  = compact( 'pricing', 'license_type' );
-		$where                                 = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms                                 = FrmForm::get_published_forms( $where );
-		$view_path                             = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
+		$my_templates_translation = __( 'My Templates', 'formidable' );
+		$categories               = array_merge( array( $my_templates_translation ), $categories );
+		$pricing                  = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$expired                  = $frm_expired;
+		$license_type             = $frm_license_type;
+		$args                     = compact( 'pricing', 'license_type' );
+		$where                    = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms                    = FrmForm::get_published_forms( $where );
+		$view_path                = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
+
+		$templates_by_category[ $my_templates_translation ] = $custom_templates;
 
 		unset( $pricing, $license_type, $where );
 		wp_enqueue_script( 'accordion' ); // register accordion for template groups
@@ -2178,5 +2180,13 @@ class FrmFormsController {
 	 */
 	public static function edit_description() {
 		FrmDeprecated::edit_description();
+	}
+
+	/**
+	 * @deprecated 4.08
+	 * @since 3.06
+	 */
+	public static function add_new() {
+		_deprecated_function( __FUNCTION__, '4.08' );
 	}
 }

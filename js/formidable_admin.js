@@ -5514,8 +5514,7 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-delete-form', function( event ) {
 			var $li,
-				trigger,
-				siblingCount;
+				trigger;
 
 			event.preventDefault();
 

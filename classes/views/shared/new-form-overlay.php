@@ -64,22 +64,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</button>
 				</form>
 			</div>
-			<?php if ( in_array( 'upgrade', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'upgrade', $blocks_to_render, true ) ) { ?>
 				<div class="inside" id="frm-upgrade-block">
 					<?php require $view_path . 'upgrade-body.php'; ?>
 				</div>
 			<?php } ?>
-			<?php if ( in_array( 'email', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'email', $blocks_to_render, true ) ) { ?>
 				<div class="inside" id="frm-email-block">
 					<?php require $view_path . 'leave-email.php'; ?>
 				</div>
 			<?php } ?>
-			<?php if ( in_array( 'code', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'code', $blocks_to_render, true ) ) { ?>
 				<div class="inside" id="frm-code-block">
 					<?php require $view_path . 'code-from-email.php'; ?>
 				</div>
 			<?php } ?>
-			<?php if ( in_array( 'renew', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'renew', $blocks_to_render, true ) ) { ?>
 				<div class="inside" id="frm-renew-block">
 					<?php require $view_path . 'renew-account.php'; ?>
 				</div>
@@ -109,25 +109,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php esc_html_e( 'Create', 'formidable' ); ?>
 				</a>
 			</div>
-			<?php if ( in_array( 'upgrade', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'upgrade', $blocks_to_render, true ) ) { ?>
 				<div id="frm-upgrade-footer" class="frm_modal_footer">
 					<a href="#" class="button button-secondary frm-modal-cancel frm-back-to-all-templates align-left">
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 					</a>
-					<?php
-					$admin_upgrade_link = FrmAppHelper::admin_upgrade_link(
-						array(
-							'medium'  => 'new-template',
-							'content' => 'upgrade',
-						)
-					);
-					?>
-					<a href="<?php echo esc_url( $admin_upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
+					<a href="<?php echo esc_url( $upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 						<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 					</a>
 				</div>
 			<?php } ?>
-			<?php if ( in_array( 'email', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'email', $blocks_to_render, true ) ) { ?>
 				<div id="frm-email-footer" class="frm_modal_footer">
 					<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
@@ -137,7 +129,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</a>
 				</div>
 			<?php } ?>
-			<?php if ( in_array( 'code', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'code', $blocks_to_render, true ) ) { ?>
 				<div id="frm-code-footer" class="frm_modal_footer">
 					<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
@@ -147,20 +139,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</a>
 				</div>
 			<?php } ?>
-			<?php if ( in_array( 'renew', $blocks, true ) ) { ?>
+			<?php if ( in_array( 'renew', $blocks_to_render, true ) ) { ?>
 				<div id="frm-renew-footer" class="frm_modal_footer">
 					<a href="#" class="button button-secondary frm-button-secondary frm-modal-cancel align-left">
 						<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 					</a>
-					<?php
-					$admin_upgrade_link = FrmAppHelper::admin_upgrade_link(
-						array(
-							'medium'  => 'new-template',
-							'content' => 'renew',
-						)
-					);
-					?>
-					<a href="<?php echo esc_url( $admin_upgrade_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
+					<a href="<?php echo esc_url( $renew_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener">
 						<?php esc_html_e( 'Renew my account', 'formidable' ); ?>
 					</a>
 				</div>
