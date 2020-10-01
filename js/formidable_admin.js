@@ -4725,16 +4725,21 @@ function frmAdminBuildJS() {
 	}
 
 	function triggerNewFormModal( event ) {
-		var $modal;
+		var $modal,
+			dismiss = document.getElementById( 'frm_new_form_modal' ).querySelector( 'a.dismiss' );
 
 		if ( typeof event !== 'undefined' ) {
 			event.preventDefault();
 		}
 
+		dismiss.setAttribute( 'tabindex', -1 );
+
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 		$modal.attr( 'frm-page', 'create' );
 		$modal.find( '#template-search-input' ).val( '' ).change();
 		$modal.dialog( 'open' );
+
+		dismiss.removeAttribute( 'tabindex' );
 		bindClickForDialogClose( $modal );
 	}
 
