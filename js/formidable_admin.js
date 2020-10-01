@@ -5497,7 +5497,6 @@ function frmAdminBuildJS() {
 			}
 
 			$modal.attr( 'frm-page', 'details' );
-			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
 		});
 
 		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {
@@ -5817,7 +5816,7 @@ function frmAdminBuildJS() {
 			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
 			document.getElementById( 'frm_template_name' ).value = '';
 			document.getElementById( 'frm_link' ).value = '';
-			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
+			document.getElementById( 'frm_action_type' ).value = 'frm_install_form';
 			$info.dialog( 'open' );
 		});
 
