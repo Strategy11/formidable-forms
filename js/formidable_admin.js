@@ -5678,7 +5678,6 @@ function frmAdminBuildJS() {
 			var categories = $modal.get( 0 ).querySelector( '.frm-categories-list' ).children,
 				categoryIndex,
 				category,
-				templateIndex,
 				searchableTemplates,
 				count;
 
@@ -5725,6 +5724,7 @@ function frmAdminBuildJS() {
 
 	function setTemplateCount( category, searchableTemplates ) {
 		var count,
+			templateIndex,
 			availableCounter,
 			availableCount;
 
@@ -5741,7 +5741,6 @@ function frmAdminBuildJS() {
 		availableCounter = category.querySelector( '.frm-available-templates-count' );
 		if ( availableCounter !== null ) {
 			availableCount = 0;
-
 			for ( templateIndex in searchableTemplates ) {
 				if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
 					availableCount++;
