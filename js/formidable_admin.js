@@ -5705,11 +5705,8 @@ function frmAdminBuildJS() {
 			var categories = $modal.get( 0 ).querySelector( '.frm-categories-list' ).children,
 				categoryIndex,
 				category,
-				templateIndex,
 				searchableTemplates,
-				count,
-				availableCounter,
-				availableCount;
+				count;
 
 			for ( categoryIndex in categories ) {
 				if ( isNaN( categoryIndex ) ) {
@@ -5753,7 +5750,10 @@ function frmAdminBuildJS() {
 	}
 
 	function setTemplateCount( category, searchableTemplates ) {
-		var count;
+		var count,
+			templateIndex,
+			availableCounter,
+			availableCount;
 
 		if ( typeof searchableTemplates === 'undefined' ) {
 			searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden):not(.frm-deleting)' );
@@ -5768,7 +5768,6 @@ function frmAdminBuildJS() {
 		availableCounter = category.querySelector( '.frm-available-templates-count' );
 		if ( availableCounter !== null ) {
 			availableCount = 0;
-
 			for ( templateIndex in searchableTemplates ) {
 				if ( ! isNaN( templateIndex ) && ! searchableTemplates[ templateIndex ].classList.contains( 'frm-locked-template' ) ) {
 					availableCount++;

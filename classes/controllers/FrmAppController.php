@@ -291,15 +291,17 @@ class FrmAppController {
 		);
 		$blocks_to_render = array();
 
-		// avoid rendering the upgrade block for users who have upgraded
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$blocks_to_render[] = 'upgrade';
-
 			// avoid rendering the email and code blocks for users who have upgraded or have a free license already
 			$api = new FrmFormTemplateApi();
 			if ( ! $api->get_free_license() ) {
 				array_push( $blocks_to_render, 'email', 'code' );
 			}
+		}
+
+		// avoid rendering the upgrade block for users with elite
+		if ( 'elite' !== FrmAddonsController::license_type() ) {
+			$blocks_to_render[] = 'upgrade';
 		}
 
 		// avoid rendering the renew block for users who are not currently expired
