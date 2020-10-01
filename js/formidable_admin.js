@@ -5680,9 +5680,7 @@ function frmAdminBuildJS() {
 				category,
 				templateIndex,
 				searchableTemplates,
-				count,
-				availableCounter,
-				availableCount;
+				count;
 
 			for ( categoryIndex in categories ) {
 				if ( isNaN( categoryIndex ) ) {
@@ -5726,7 +5724,9 @@ function frmAdminBuildJS() {
 	}
 
 	function setTemplateCount( category, searchableTemplates ) {
-		var count;
+		var count,
+			availableCounter,
+			availableCount;
 
 		if ( typeof searchableTemplates === 'undefined' ) {
 			searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden):not(.frm-deleting)' );
