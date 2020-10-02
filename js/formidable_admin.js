@@ -5534,13 +5534,26 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
 			var $li,
-				activePage;
+				activePage,
+				formContainer;
 
 			event.preventDefault();
 
 			$li = jQuery( this ).closest( '.frm-locked-template' );
 
 			if ( $li.hasClass( 'frm-free-template' ) ) {
+				formContainer = document.getElementById( 'frmapi-email-form' );
+				jQuery.ajax({
+					dataType: 'json',
+					url: formContainer.getAttribute( 'data-url' ),
+					success: function( json ) {
+						var form = json.renderedHtml;
+						form = form.replace( /<script\b[^<]*(community.formidableforms.com\/wp-includes\/js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
+						form = form.replace( /<link\b[^>]*(formidableforms.css)[^>]*>/gi, '' );
+						formContainer.innerHTML = form;
+					}
+				});
+
 				activePage = 'email';
 				activeTemplateKey = $li.attr( 'data-key' );
 				$li.append( installFormTrigger );
@@ -5584,7 +5597,9 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).on( 'click', '#frm-add-my-email-address', function( event ) {
 			var email = document.getElementById( 'frm_leave_email' ).value.trim(),
-				regex;
+				regex,
+				$hiddenForm,
+				$hiddenEmailField;
 
 			event.preventDefault();
 
@@ -5600,21 +5615,23 @@ function frmAdminBuildJS() {
 				return;
 			}
 
+			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
+			$hiddenEmailField = $hiddenForm.find( '[type="email"]' );
+			if ( ! $hiddenEmailField.length ) {
+				return;
+			}
+
+			$hiddenEmailField.val( email );
 			jQuery.ajax({
 				type: 'POST',
-				url: ajaxurl,
-				dataType: 'json',
-				data: {
-					action: 'template_api_signup',
-					nonce: frmGlobal.nonce,
-					email: email
-				},
-				success: function( response ) {
-					if ( response.success ) {
-						$modal.attr( 'frm-page', 'code' );
-					} else {
-						handleEmailAddressError( 'invalid' );
-					}
+				url: $hiddenForm.attr( 'action' ),
+				data: $hiddenForm.serialize() + '&action=frm_forms_preview'
+			}).done( function( data ) {
+				var message = jQuery( data ).find( '.frm_message' ).text().trim();
+				if ( message.indexOf( 'Thanks!' ) >= 0 ) {
+					$modal.attr( 'frm-page', 'code' );
+				} else {
+					handleEmailAddressError( 'invalid' );
 				}
 			});
 		});
