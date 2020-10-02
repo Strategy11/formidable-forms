@@ -5447,30 +5447,6 @@ function frmAdminBuildJS() {
 		installFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
 		document.body.appendChild( installFormTrigger );
 
-		previewFormTrigger = document.createElement( 'a' );
-		previewFormTrigger.classList.add( 'frm-preview-template', 'frm_hidden' );
-		document.body.appendChild( previewFormTrigger );
-
-		jQuery( previewFormTrigger ).click( function( event ) {
-			var link = this.attributes.rel.value,
-				cont = document.getElementById( 'frm-preview-block' ),
-				iframe;
-
-			event.preventDefault();
-
-			if ( link.indexOf( ajaxurl ) > -1 ) {
-				iframe = document.createElement( 'iframe' );
-				iframe.src = link;
-				iframe.height = '400';
-				iframe.width = '100%';
-				cont.innerHTML = '';
-				cont.appendChild( iframe );
-			} else {
-				frmApiPreview( cont, link );
-			}
-			$modal.dialog( 'open' );
-		});
-
 		jQuery( '.frm-install-template' ).click( function( event ) {
 			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),
 				nameLabel = document.getElementById( 'frm_new_name' ),
@@ -5493,17 +5469,26 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 
 		jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
-			var $li,
-				$titleClone;
+			var $li, link, iframe,
+				container = document.getElementById( 'frm-preview-block' );
 
 			event.preventDefault();
 
 			$li = jQuery( this ).closest( 'li' );
-			previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
-			previewFormTrigger.click();
-			$titleClone = $li.find( 'h3' ).clone();
-			$titleClone.find( 'svg, .frm-plan-required-tag' ).remove();
-			jQuery( '#frm-preview-title' ).text( $titleClone.text() );
+			link = $li.attr( 'data-preview' );
+
+			if ( link.indexOf( ajaxurl ) > -1 ) {
+				iframe = document.createElement( 'iframe' );
+				iframe.src = link;
+				iframe.height = '400';
+				iframe.width = '100%';
+				container.innerHTML = '';
+				container.appendChild( iframe );
+			} else {
+				frmApiPreview( container, link );
+			}
+
+			jQuery( '#frm-preview-title' ).text( getStrippedTemplateName( $li ) );
 			$modal.attr( 'frm-page', 'preview' );
 			activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 		});
