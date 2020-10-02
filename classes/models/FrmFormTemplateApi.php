@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormTemplateApi extends FrmFormApi {
 
-	protected static $email_option_name = 'frm_email';
 	protected static $code_option_name  = 'frm_free_license_code';
 
 	private static $base_api_url = 'https://formidableforms.com/wp-json/form-templates/v1/';
@@ -56,21 +55,6 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param string $email
-	 */
-	private static function verify_email( $email ) {
-		self::on_api_verify_email_success( $email );
-		wp_send_json_success();
-	}
-
-	/**
-	 * @param string $email
-	 */
-	private static function on_api_verify_email_success( $email ) {
-		update_option( self::$email_option_name, $email );
-	}
-
-	/**
 	 * @param string $code the code from the email sent for the API
 	 */
 	private static function verify_code( $code ) {
@@ -78,13 +62,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$api_url     = self::$base_api_url . 'code?l=' . $base64_code;
 		$response    = wp_remote_get( $api_url );
 
-		if ( is_wp_error( $response ) ) {
-			wp_send_json_error( $response );
-		}
-
-		if ( ! is_array( $response ) ) {
-			wp_send_json_error();
-		}
+		self::handle_verify_response_errors_if_any( $response );
 
 		$decoded    = json_decode( $response['body'] );
 		$successful = ! empty( $decoded->response );
@@ -93,6 +71,19 @@ class FrmFormTemplateApi extends FrmFormApi {
 			self::on_api_verify_code_success( $base64_code );
 		} else {
 			wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
+		}
+	}
+
+	/**
+	 * @param array $response
+	 */
+	private static function handle_verify_response_errors_if_any( $response ) {
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( $response );
+		}
+
+		if ( ! is_array( $response ) ) {
+			wp_send_json_error();
 		}
 	}
 
@@ -124,17 +115,12 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * AJAX Hook for signing free users up for a template API key
 	 */
 	public static function signup() {
-		$email = FrmAppHelper::get_param( 'email', '', 'post', 'sanitize_email' );
-		$code  = FrmAppHelper::get_param( 'code', '', 'post' );
+		$code = FrmAppHelper::get_param( 'code', '', 'post' );
 
-		if ( $email ) {
-			if ( is_email( $email ) ) {
-				self::verify_email( $email );
-			}
-		} elseif ( $code ) {
-			self::verify_code( $code );
+		if ( ! $code ) {
+			wp_send_json_error();
 		}
 
-		wp_send_json_error();
+		self::verify_code( $code );
 	}
 }
