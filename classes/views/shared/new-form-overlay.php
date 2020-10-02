@@ -14,7 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</svg>
 					</span>
 					<span id="frm-create-title">
-						<?php esc_html_e( 'Create new form', 'formidable' ); ?>
+						<span frm-type="form"><?php esc_html_e( 'Create new form', 'formidable' ); ?></span>
+						<span frm-type="template"><?php esc_html_e( 'Create new template', 'formidable' ); ?></span>
 					</span>
 					<span id="frm-upgrade-title">
 						<?php esc_html_e( 'Upgrade your account', 'formidable' ); ?>

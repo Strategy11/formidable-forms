@@ -2246,13 +2246,16 @@ li .frm-hover-icons .frm-preview-form,
 #frm_code_from_email_error span,
 #frm_leave_email_error span,
 #frm_new_form_modal .frm-delete-form,
-#frm-details-block #frm-new-template button
+#frm-details-block #frm-new-template button,
+#frm-create-title span[frm-type="template"],
+#frm-create-title[frm-type="template"] span[frm-type="form"]
 {
 	display: none;
 }
 
 #frm_new_form_modal:not([frm-page="create"]) .frm-modal-back,
 #frm_new_form_modal[frm-page="create"] #frm-create-title,
+#frm-create-title[frm-type="template"] span[frm-type="template"],
 #frm_new_form_modal[frm-page="preview"] #frm-preview-title,
 #frm_new_form_modal[frm-page="details"] #frm-create-title,
 #frm_new_form_modal[frm-page="upgrade"] #frm-upgrade-title,

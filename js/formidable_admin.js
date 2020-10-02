@@ -5732,6 +5732,7 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
+			document.getElementById( 'frm-create-title' ).removeAttribute( 'frm-type' );
 			$modal.attr( 'frm-page', 'create' );
 		});
 
@@ -5769,6 +5770,8 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_action_type' ).value = action;
 		nameLabel.innerHTML = nameLabel.getAttribute( 'data-' + type );
 		descLabel.innerHTML = descLabel.getAttribute( 'data-' + type );
+
+		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
 
 		$modal.attr( 'frm-page', 'details' );
 	}
