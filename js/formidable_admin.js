@@ -5430,8 +5430,7 @@ function frmAdminBuildJS() {
 	/* Templates */
 
 	function initNewFormModal() {
-		var blankFormTrigger,
-			installFormTrigger,
+		var installFormTrigger,
 			previewFormTrigger,
 			activeHoverIcons,
 			activeTemplateKey,
@@ -5444,38 +5443,58 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 
-		blankFormTrigger = document.createElement( 'a' );
-		blankFormTrigger.classList.add( 'frm-new-form-button', 'frm_hidden' );
-		document.body.appendChild( blankFormTrigger );
-
 		installFormTrigger = document.createElement( 'a' );
 		installFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
 		document.body.appendChild( installFormTrigger );
 
-		previewFormTrigger = document.createElement( 'a' );
-		previewFormTrigger.classList.add( 'frm-preview-template', 'frm_hidden' );
-		document.body.appendChild( previewFormTrigger );
+		jQuery( '.frm-install-template' ).click( function( event ) {
+			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),
+				nameLabel = document.getElementById( 'frm_new_name' ),
+				descLabel = document.getElementById( 'frm_new_desc' ),
+				oldName;
 
-		initTemplateModal( $modal );
+			$h3Clone.find( 'svg, .frm-plan-required-tag' ).remove();
+			oldName = $h3Clone.html().trim();
+
+			event.preventDefault();
+
+			document.getElementById( 'frm_template_name' ).value = oldName;
+			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
+			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
+			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
+			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
+			$modal.dialog( 'open' );
+		});
+
+		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 
 		jQuery( document ).on( 'click', '.frm-hover-icons .frm-preview-form', function( event ) {
-			var $li,
-				$titleClone;
+			var $li, link, iframe,
+				container = document.getElementById( 'frm-preview-block' );
 
 			event.preventDefault();
 
 			$li = jQuery( this ).closest( 'li' );
-			previewFormTrigger.setAttribute( 'rel', $li.attr( 'data-preview' ) );
-			previewFormTrigger.click();
-			$titleClone = $li.find( 'h3' ).clone();
-			$titleClone.find( 'svg, .frm-plan-required-tag' ).remove();
-			jQuery( '#frm-preview-title' ).text( $titleClone.text() );
+			link = $li.attr( 'data-preview' );
+
+			if ( link.indexOf( ajaxurl ) > -1 ) {
+				iframe = document.createElement( 'iframe' );
+				iframe.src = link;
+				iframe.height = '400';
+				iframe.width = '100%';
+				container.innerHTML = '';
+				container.appendChild( iframe );
+			} else {
+				frmApiPreview( container, link );
+			}
+
+			jQuery( '#frm-preview-title' ).text( getStrippedTemplateName( $li ) );
 			$modal.attr( 'frm-page', 'preview' );
 			activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
 		});
 
 		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
-			var $li;
+			var $li, name, link, action;
 
 			event.preventDefault();
 
@@ -5487,16 +5506,17 @@ function frmAdminBuildJS() {
 			}
 
 			if ( $li.hasClass( 'frm-add-blank-form' ) ) {
-				blankFormTrigger.click();
+				name = link = '';
+				action = 'frm_install_form';
 			} else if ( $li.is( '[data-rel]' ) ) {
-				installFormTrigger.setAttribute( 'rel', $li.attr( 'data-rel' ) );
-				$li.append( installFormTrigger );
-				installFormTrigger.click();
+				name = getStrippedTemplateName( $li );
+				link = $li.attr( 'data-rel' );
+				action = 'frm_install_template';
 			} else {
 				return;
 			}
 
-			$modal.attr( 'frm-page', 'details' );
+			transitionToAddDetails( $modal, name, link, action );
 		});
 
 		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {
@@ -5573,9 +5593,10 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + ul .frm-build-template', function() {
-			$modal.attr( 'frm-page', 'details' );
-			document.getElementById( 'frm_link' ).value = this.getAttribute( 'data-formid' );
-			document.getElementById( 'frm_action_type' ).value = 'frm_build_template';
+			var name = this.getAttribute( 'data-fullname' ),
+				link = this.getAttribute( 'data-formid' ),
+				action = 'frm_build_template';
+			transitionToAddDetails( $modal, name, link, action );
 		});
 
 		handleError = function( inputId, errorId, type, message ) {
@@ -5739,6 +5760,26 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function transitionToAddDetails( $modal, name, link, action ) {
+		var nameLabel = document.getElementById( 'frm_new_name' ),
+			descLabel = document.getElementById( 'frm_new_desc' ),
+			type = [ 'frm_install_template', 'frm_install_form' ].indexOf( action ) >= 0 ? 'form' : 'template';
+
+		document.getElementById( 'frm_template_name' ).value = name;
+		document.getElementById( 'frm_link' ).value = link;
+		document.getElementById( 'frm_action_type' ).value = action;
+		nameLabel.innerHTML = nameLabel.getAttribute( 'data-' + type );
+		descLabel.innerHTML = descLabel.getAttribute( 'data-' + type );
+
+		$modal.attr( 'frm-page', 'details' );
+	}
+
+	function getStrippedTemplateName( $li ) {
+		var $clone = $li.find( 'h3' ).clone();
+		$clone.find( 'svg, .frm-plan-required-tag' ).remove();
+		return $clone.html().trim();
+	}
+
 	function setTemplateCount( category, searchableTemplates ) {
 		var count,
 			templateIndex,
@@ -5766,77 +5807,6 @@ function frmAdminBuildJS() {
 
 			availableCounter.textContent = availableCount;
 		}
-	}
-
-	function initTemplateModal( $info ) {
-		jQuery( '.frm-preview-template' ).click( function( event ) {
-			var link = this.attributes.rel.value,
-				cont = document.getElementById( 'frm-preview-block' ),
-				iframe;
-
-			event.preventDefault();
-
-			if ( link.indexOf( ajaxurl ) > -1 ) {
-				iframe = document.createElement( 'iframe' );
-				iframe.src = link;
-				iframe.height = '400';
-				iframe.width = '100%';
-				cont.innerHTML = '';
-				cont.appendChild( iframe );
-			} else {
-				frmApiPreview( cont, link );
-			}
-			$info.dialog( 'open' );
-		});
-
-		jQuery( '.frm-install-template' ).click( function( event ) {
-			var $h3Clone = jQuery( this ).closest( 'li, td' ).find( 'h3' ).clone(),
-				nameLabel = document.getElementById( 'frm_new_name' ),
-				descLabel = document.getElementById( 'frm_new_desc' ),
-				oldName;
-
-			$h3Clone.find( 'svg, .frm-plan-required-tag' ).remove();
-			oldName = $h3Clone.html().trim();
-
-			event.preventDefault();
-
-			document.getElementById( 'frm_template_name' ).value = oldName;
-			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
-			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
-			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
-			$info.dialog( 'open' );
-		});
-
-		jQuery( '.frm-build-template' ).click( function( event ) {
-			var nameLabel = document.getElementById( 'frm_new_name' ),
-				descLabel = document.getElementById( 'frm_new_desc' );
-
-			event.preventDefault();
-
-			nameLabel.innerHTML = nameLabel.getAttribute( 'data-template' );
-			descLabel.innerHTML = descLabel.getAttribute( 'data-template' );
-			document.getElementById( 'frm_template_name' ).value = this.getAttribute( 'data-fullname' );
-			document.getElementById( 'frm_link' ).value = this.getAttribute( 'data-formid' );
-			document.getElementById( 'frm_action_type' ).value = 'frm_build_template';
-			$info.dialog( 'open' );
-		});
-
-		jQuery( '.frm-new-form-button' ).click( function( event ) {
-			var nameLabel = document.getElementById( 'frm_new_name' ),
-				descLabel = document.getElementById( 'frm_new_desc' );
-
-			event.preventDefault();
-
-			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
-			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
-			document.getElementById( 'frm_template_name' ).value = '';
-			document.getElementById( 'frm_link' ).value = '';
-			document.getElementById( 'frm_action_type' ).value = 'frm_install_form';
-			$info.dialog( 'open' );
-		});
-
-		jQuery( document ).on( 'submit', '#frm-new-template', installTemplate );
 	}
 
 	function initSelectionAutocomplete() {
