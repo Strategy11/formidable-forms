@@ -311,7 +311,7 @@ class FrmAppController {
 		} elseif ( $expiring ) {
 			$modal_class = 'frm-expiring';
 		}
-		
+
 		include $path . 'new-form-overlay.php';
 	}
 
