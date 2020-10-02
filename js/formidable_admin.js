@@ -5431,7 +5431,6 @@ function frmAdminBuildJS() {
 
 	function initNewFormModal() {
 		var installFormTrigger,
-			previewFormTrigger,
 			activeHoverIcons,
 			activeTemplateKey,
 			$modal,
