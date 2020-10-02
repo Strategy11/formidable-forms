@@ -156,7 +156,7 @@ class FrmAppHelper {
 					_n(
 						'Your form subscription expires in %1$s day%2$s.',
 						'Your form subscription expires in %1$s days%2$s.',
-						$expiring,
+						intval( $expiring ),
 						'formidable'
 					)
 				),
