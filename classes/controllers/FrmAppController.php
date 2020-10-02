@@ -263,19 +263,19 @@ class FrmAppController {
 		include $shared_path . 'confirm-overlay.php';
 
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list', 'trash' ), true ) ) {
-			self::new_form_overlay_html( $shared_path );
+			self::new_form_overlay_html();
 		}
 	}
 
-	/**
-	 * @param string $shared_path
-	 */
-	private static function new_form_overlay_html( $shared_path ) {
+	private static function new_form_overlay_html() {
 		FrmFormsController::before_list_templates();
+
+		$plugin_path      = FrmAppHelper::plugin_path();
+		$path             = $plugin_path . '/classes/views/frm-forms/';
 		$expired          = FrmFormsController::expired();
 		$expiring         = FrmAddonsController::is_license_expiring();
 		$user             = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
-		$view_path        = $shared_path . 'new-form-overlay/';
+		$view_path        = $path . 'new-form-overlay/';
 		$modal_class      = '';
 		$upgrade_link     = FrmAppHelper::admin_upgrade_link(
 			array(
@@ -311,8 +311,8 @@ class FrmAppController {
 		} elseif ( $expiring ) {
 			$modal_class = 'frm-expiring';
 		}
-
-		include $shared_path . 'new-form-overlay.php';
+		
+		include $path . 'new-form-overlay.php';
 	}
 
 	public static function include_info_overlay() {
