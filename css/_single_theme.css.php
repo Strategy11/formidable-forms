@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $settings = FrmStylesHelper::get_settings_for_output( $style );
-extract( $settings );
+extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 
 $important = empty( $important_style ) ? '' : ' !important';
 

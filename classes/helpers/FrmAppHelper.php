@@ -1584,7 +1584,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		extract( $atts );
+		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		ob_start();
 		include( $filename );
 		$contents = ob_get_contents();

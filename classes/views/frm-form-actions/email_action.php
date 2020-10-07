@@ -20,7 +20,7 @@ class FrmEmailAction extends FrmFormAction {
 	}
 
 	public function form( $form_action, $args = array() ) {
-		extract( $args );
+		extract( $args ); // phpcs:ignore WordPress.PHP.DontExtract
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_email_settings.php';
 	}
