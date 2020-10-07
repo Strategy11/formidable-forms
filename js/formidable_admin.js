@@ -2366,7 +2366,7 @@ function frmAdminBuildJS() {
 	}
 
 	function resetOptionTextDetails() {
-		jQuery( '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]' ).filter( '[data-value-on-load]' ).removeAttr( 'data-value-on-load' );
+		jQuery( '.frm-single-settings ul input[type="text"][name^="field_options[options_"]' ).filter( '[data-value-on-load]' ).removeAttr( 'data-value-on-load' );
 		jQuery( 'input[type="hidden"][name^=optionmap]' ).remove();
 	}
 
@@ -6147,8 +6147,8 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
-			jQuery( document ).on( 'focus', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextFocus );
-			jQuery( document ).on( 'blur', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextBlur );
+			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
+			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
