@@ -358,12 +358,11 @@ function frmFrontFormJS() {
 	}
 
 	function confirmField( field, errors ) {
-		var value, confirmValue,
+		var value, confirmValue, firstField,
 			fieldID = getFieldId( field, true ),
 			id = field.id,
 			strippedId = id.replace( 'conf_', '' ),
 			strippedFieldID = fieldID.replace( 'conf_', '' ),
-			firstField = document.getElementById( strippedId ),
 			confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
 		if ( confirmField === null || typeof errors[ 'conf_' + strippedFieldID ] !== 'undefined' ) {
@@ -371,6 +370,7 @@ function frmFrontFormJS() {
 		}
 
 		if ( fieldID !== strippedFieldID ) {
+			firstField = document.getElementById( strippedId );
 			value = firstField.value;
 			confirmValue = confirmField.value;
 			if ( '' !== value && '' !== confirmValue && value !== confirmValue ) {
