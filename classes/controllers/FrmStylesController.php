@@ -416,7 +416,7 @@ class FrmStylesController {
 	}
 
 	public static function include_style_section( $atts, $sec ) {
-		extract( $atts );
+		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		$style = $atts['style'];
 		FrmStylesHelper::prepare_color_output( $style->post_content, false );
 
