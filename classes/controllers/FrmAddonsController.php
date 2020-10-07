@@ -823,6 +823,17 @@ class FrmAddonsController {
 
 		self::install_addon_permissions();
 
+		self::download_and_activate();
+
+		// Send back a response.
+		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
+		wp_die();
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	private static function download_and_activate() {
 		// Set the current screen to avoid undefined notices.
 		global $hook_suffix;
 		set_current_screen();
@@ -831,10 +842,6 @@ class FrmAddonsController {
 
 		$installed = self::install_addon();
 		self::maybe_activate_addon( $installed );
-
-		// Send back a response.
-		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
-		wp_die();
 	}
 
 	/**
@@ -860,8 +867,7 @@ class FrmAddonsController {
 		if ( $show_form ) {
 			//$form = ob_get_clean();
 			//TODO: test this: echo json_encode( array( 'form' => $form ) );
-			echo json_encode( array( 'form' => __( 'Sorry, you\'re site requires FTP authentication. Please install plugins manaully.', 'formidable' ) ) );
-			wp_die();
+			wp_send_json_error( __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' ) );
 		}
 
 		ob_end_clean();
@@ -971,6 +977,96 @@ class FrmAddonsController {
 			echo json_encode( true );
 			wp_die();
 		}
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	public static function connect_link() {
+		$auth = get_option( 'frm_connect_token' );
+		if ( empty( $auth ) ) {
+			$auth = hash( 'sha512', wp_rand() );
+			update_option( 'frm_connect_token', $auth );
+		}
+		$link = FrmAppHelper::admin_upgrade_link( 'connect', 'api-connect' );
+		$args = array(
+			'v'       => 2,
+			'siteurl' => FrmAppHelper::site_url(),
+			'url'     => get_rest_url(),
+			'token'   => $auth,
+			'l'       => self::get_pro_license(),
+		);
+
+		return add_query_arg( $args, $link );
+	}
+
+	/**
+	 * Check the auth value for install permission.
+	 *
+	 * @since 4.08
+	 *
+	 * @return bool
+	 */
+	public static function can_install_addon_api() {
+		// Verify params present (auth & download link).
+		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
+		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
+
+		if ( empty( $post_auth ) || empty( $post_url ) ) {
+			return false;
+		}
+
+		// Verify auth.
+		$auth = get_option( 'frm_connect_token' );
+		if ( empty( $auth ) || ! hash_equals( $auth, $post_auth ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Install and/or activate the add-on file.
+	 *
+	 * @since 4.08
+	 */
+	public static function install_addon_api() {
+		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
+		$_POST['plugin'] = $post_url; // Set for later use.
+
+		$error = esc_html__( 'Could not install an upgrade. Please download from formidableforms.com and install manually.', 'formidable' );
+
+		// Delete so cannot replay.
+		delete_option( 'frm_connect_token' );
+
+		// If empty license, save it now.
+		if ( ! empty( self::get_pro_license() ) ) {
+			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
+			if ( empty( $license ) ) {
+				return array(
+					'success' => false,
+					'error'   => 'That site does not have a valid license key.',
+				);
+			}
+
+			$this_plugin = FrmAddon::get_addon( 'formidable_pro' );
+			$response    = $this_plugin->activate_license( $license );
+			if ( ! $response['success'] ) {
+				// Could not activate license.
+				return $response;
+			}
+		}
+
+		// It's already installed and active.
+		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		if ( is_wp_error( $active ) ) {
+			// Download plugin now.
+			self::download_and_activate();
+		}
+
+		return array(
+			'success' => true,
+		);
 	}
 
 	/**

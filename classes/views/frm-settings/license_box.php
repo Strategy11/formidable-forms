@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 <p id="frm-connect-btns" class="frm-show-unauthorized">
-	<a href="<?php echo esc_url( FrmAppHelper::connect_link() ); ?>" class="button-primary frm-button-primary">
+	<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary">
 		<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
 	</a>
 	or
