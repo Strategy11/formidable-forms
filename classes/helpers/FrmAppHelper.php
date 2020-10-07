@@ -116,6 +116,27 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 4.08
+	 */
+	public static function connect_link() {
+		$auth = get_option( 'frm_connect_token' );
+		if ( empty( $auth ) ) {
+			$auth = hash( 'sha512', wp_rand() );
+			update_option( 'frm_connect_token', $auth );
+		}
+		$link = self::admin_upgrade_link( 'connect', 'api-connect' );
+		$args = array(
+			'v'       => 2,
+			'siteurl' => self::site_url(),
+			'url'     => get_rest_url(),
+			'token'   => $auth,
+			'l'       => FrmAddonsController::get_pro_license(),
+		);
+
+		return add_query_arg( $args, $link );
+	}
+
+	/**
 	 * @since 4.07
 	 */
 	public static function renewal_message() {

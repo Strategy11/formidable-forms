@@ -168,6 +168,18 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	public static function get_pro_download_url() {
+		$license   = self::get_pro_license();
+		$api       = new FrmFormApi( $license );
+		$downloads = $api->get_api_info();
+		$pro       = self::get_pro_from_addons( $downloads );
+
+		return isset( $pro['url'] ) ? $pro['url'] : '';
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	public static function get_pro_license() {
 		$pro_cred_store = 'frmpro-credentials';
 		$pro_wpmu_store = 'frmpro-wpmu-sitewide';
 		if ( is_multisite() && get_site_option( $pro_wpmu_store ) ) {
@@ -189,12 +201,7 @@ class FrmAddonsController {
 			// this is a fix for licenses saved in the past
 			$license = strtoupper( $license );
 		}
-
-		$api       = new FrmFormApi( $license );
-		$downloads = $api->get_api_info();
-		$pro       = self::get_pro_from_addons( $downloads );
-
-		return isset( $pro['url'] ) ? $pro['url'] : '';
+		return $license;
 	}
 
 	/**
