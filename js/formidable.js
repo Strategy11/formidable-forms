@@ -360,8 +360,7 @@ function frmFrontFormJS() {
 	function confirmField( field, errors ) {
 		var value, confirmValue, firstField,
 			fieldID = getFieldId( field, true ),
-			id = field.id,
-			strippedId = id.replace( 'conf_', '' ),
+			strippedId = field.id.replace( 'conf_', '' ),
 			strippedFieldID = fieldID.replace( 'conf_', '' ),
 			confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
