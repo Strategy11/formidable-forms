@@ -3359,7 +3359,7 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function adjustFieldVisibilityValues( element, option ) {
+	function adjustVisibilityValuesForEveryoneValues( element, option ) {
 		if ( '' === option.getAttribute( 'value' ) ) {
 			onEveryoneOptionSelected( jQuery( this ) );
 		} else {
@@ -6113,7 +6113,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
-			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustFieldVisibilityValues );
+			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
@@ -6334,6 +6334,8 @@ function frmAdminBuildJS() {
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			});
+
+			jQuery( document ).on( 'frm-multiselect-changed', '#protect_files_role', adjustVisibilityValuesForEveryoneValues );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
