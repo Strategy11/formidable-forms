@@ -866,16 +866,15 @@ class FrmAddonsController {
 		}
 
 		if ( $show_form ) {
-			// TODO: test this: $form = ob_get_clean();
-			$message = __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' );
-			echo json_encode(
-				array(
-					'success' => false,
-					'form'    => $message, // TODO: test this: 'form' => $form,
-					'error'   => $message,
-				)
+			$form     = ob_get_clean();
+			$message  = __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' );
+			$data     = $form;
+			$response = array(
+				'success' => false,
+				'message' => $message,
+				'form'    => $form,
 			);
-			wp_die();
+			wp_send_json( $response );
 		}
 
 		ob_end_clean();

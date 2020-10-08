@@ -5275,25 +5275,8 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
-				// If there is a WP Error instance, output it here and quit the script.
-				if ( response.error ) {
+				if ( typeof response !== 'string' && ! response.success ) {
 					addonError( response, el, button );
-					return;
-				}
-
-				// If we need more credentials, output the form sent back to us.
-				if ( response.form ) {
-					// Display the form to gather the users credentials.
-
-					button.append( '<div class="frm-addon-error frm_error_style">' + response.form + '</div>' );
-					loader.hide();
-
-					// Add a disabled attribute the install button if the creds are needed.
-					button.attr( 'disabled', true );
-
-					el.on( 'click', '#upgrade', 'installAddonWithCreds' );
-
-					// No need to move further if we need to enter our creds.
 					return;
 				}
 
@@ -5310,8 +5293,9 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 
 		// Now let's make another Ajax request once the user has submitted their credentials.
-		var proceed = jQuery( this );
-		var el = proceed.parent().parent();
+		var proceed = jQuery( this ),
+			el = proceed.parent().parent(),
+			plugin = proceed.attr( 'rel' );
 
 		proceed.addClass( 'frm_loading_button' );
 
@@ -5330,17 +5314,8 @@ function frmAdminBuildJS() {
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
-				// If there is a WP Error instance, output it here and quit the script.
-				if ( response.error ) {
-					addonError( response, el, button );
-					return;
-				}
-
-				if ( response.form ) {
-					loader.hide();
-					jQuery( '.frm-inline-error' ).remove();
-					//proceed.val(admin.proceed);
-					//proceed.after('<span class="frm-inline-error">' + admin.connect_error + '</span>' );
+				if ( typeof response !== 'string' && ! response.success ) {
+					addonError( response, el, proceed );
 					return;
 				}
 
@@ -5374,9 +5349,19 @@ function frmAdminBuildJS() {
 	}
 
 	function addonError( response, el, button ) {
-		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.error + '</strong></p></div>' );
-		button.removeClass( 'frm_loading_button' );
-		jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
+		if ( response.form ) {
+			jQuery( '.frm-inline-error' ).remove();
+			button.closest( '.frm-card' )
+				.html( response.form )
+				.css({ padding: 5 })
+				.find( '#upgrade' )
+					.attr( 'rel', button.attr( 'rel' ) )
+					.click( installAddonWithCreds );
+		} else {
+			el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>' );
+			button.removeClass( 'frm_loading_button' );
+			jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
+		}
 	}
 
 	/* Templates */
