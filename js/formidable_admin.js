@@ -5286,10 +5286,8 @@ function frmAdminBuildJS() {
 					// Display the form to gather the users credentials.
 
 					addonError(
-						{
-							error: response.form
-						},
-						button.parent(),
+						{ error: response.form },
+						el,
 						button
 					);
 					// Add a disabled attribute the install button if the creds are needed.
@@ -5342,9 +5340,7 @@ function frmAdminBuildJS() {
 
 				if ( response.form ) {
 					addonError(
-						{
-							error: response.form
-						},
+						{ error: response.form },
 						el,
 						button
 					);
