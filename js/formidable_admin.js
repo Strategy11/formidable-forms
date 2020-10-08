@@ -5275,12 +5275,7 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
-				// If there is a WP Error instance, output it here and quit the script.
-				if ( ! response.success ) {
-					addonError({ error: response.data }, el, button );
-					return;
-				}
-
+				/*
 				// If we need more credentials, output the form sent back to us.
 				if ( response.form ) {
 					// Display the form to gather the users credentials.
@@ -5295,7 +5290,21 @@ function frmAdminBuildJS() {
 
 					// No need to move further if we need to enter our creds.
 					return;
+				}*/
+
+
+				if ( ! response.success ) {
+					addonError( response.message, el, button );
+
+					if ( response.form ) {
+						jQuery( '.frm-inline-error' ).remove();
+						button.closest( '.frm-card' )
+							.html( response.form )
+							.find( '#upgrade' ).click( installAddonWithCreds );
+					}
 				}
+
+
 
 				afterAddonInstall( response, button, message, el );
 			},
@@ -5306,6 +5315,8 @@ function frmAdminBuildJS() {
 	}
 
 	function installAddonWithCreds( e ) {
+		console.log( 'installAddonWithCreds' );
+
 		// Prevent the default action, let the user know we are attempting to install again and go with it.
 		e.preventDefault();
 
@@ -5314,6 +5325,8 @@ function frmAdminBuildJS() {
 		var el = proceed.parent().parent();
 
 		proceed.addClass( 'frm_loading_button' );
+
+		// TODO plugin is undefined
 
 		jQuery.ajax({
 			url: ajaxurl,
@@ -5330,18 +5343,14 @@ function frmAdminBuildJS() {
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
-				// If there is a WP Error instance, output it here and quit the script.
-				if ( response.error ) {
-					addonError( response, el, button );
-					return;
-				}
 
-				if ( response.form ) {
-					loader.hide();
-					jQuery( '.frm-inline-error' ).remove();
-					//proceed.val(admin.proceed);
-					//proceed.after('<span class="frm-inline-error">' + admin.connect_error + '</span>' );
-					return;
+				if ( ! response.success ) {
+					addonError( response.message, el, proceed );
+
+					if ( response.form ) {
+						jQuery( '.frm-inline-error' ).remove();
+						proceed.closest( '.frm-card' ).html( response.form );
+					}
 				}
 
 				afterAddonInstall( response, proceed, message, el );
@@ -5373,8 +5382,8 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function addonError( response, el, button ) {
-		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.error + '</strong></p></div>' );
+	function addonError( errorMessage, el, button ) {
+		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + errorMessage + '</strong></p></div>' );
 		button.removeClass( 'frm_loading_button' );
 		jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
 	}
