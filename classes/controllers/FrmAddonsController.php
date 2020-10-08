@@ -809,7 +809,8 @@ class FrmAddonsController {
 			// The plugin was installed, but not active. Download it now.
 			self::ajax_install_addon();
 		} else {
-			$response['active'] = true;
+			$response['active']  = true;
+			$response['success'] = true;
 		}
 
 		echo json_encode( $response );
@@ -865,9 +866,16 @@ class FrmAddonsController {
 		}
 
 		if ( $show_form ) {
-			//$form = ob_get_clean();
-			//TODO: test this: echo json_encode( array( 'form' => $form ) );
-			wp_send_json_error( __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' ) );
+			// TODO: test this: $form = ob_get_clean();
+			$message = __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' );
+			echo json_encode(
+				array(
+					'success' => false,
+					'form'    => $message, // TODO: test this: 'form' => $form,
+					'error'   => $message,
+				)
+			);
+			wp_die();
 		}
 
 		ob_end_clean();
