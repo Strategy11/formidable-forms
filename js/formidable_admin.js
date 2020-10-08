@@ -3359,6 +3359,29 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function adjustFieldVisibilityValues( element, option ) {
+		if ( '' === option.getAttribute( 'value' ) ) {
+			onEveryoneOptionSelected( jQuery( this ) );
+		} else {
+			unselectEveryoneOptionIfSelected( jQuery( this ) );
+		}
+	}
+
+	function onEveryoneOptionSelected( $select ) {
+		$select.val( '' );
+		$select.next( '.btn-group' ).find( '.multiselect-container li input[value!=""]' ).prop( 'checked', false );
+	}
+
+	function unselectEveryoneOptionIfSelected( $select ) {
+		var selectedValues = $select.val(),
+			index = selectedValues.indexOf( '' );
+		if ( index >= 0 ) {
+			selectedValues.splice( index, 1 );
+			$select.val( selectedValues );
+			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', false );
+		}
+	}
+
 	/**
 	 * Get rid of empty container that inserts extra space.
 	 */
@@ -5229,8 +5252,9 @@ function frmAdminBuildJS() {
 
 					multiselectAccessibility();
 				},
-				onChange: function( event ) {
+				onChange: function( element, option ) {
 					multiselectAccessibility();
+					$select.trigger( 'frm-multiselect-changed', element, option );
 				}
 			});
 		});
@@ -6081,6 +6105,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
+			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustFieldVisibilityValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
