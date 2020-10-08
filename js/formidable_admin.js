@@ -5277,6 +5277,7 @@ function frmAdminBuildJS() {
 			success: function( response ) {
 				if ( typeof response !== 'string' && ! response.success ) {
 					addonError( response, el, button );
+					return;
 				}
 
 				afterAddonInstall( response, button, message, el );
@@ -5315,6 +5316,7 @@ function frmAdminBuildJS() {
 			success: function( response ) {
 				if ( typeof response !== 'string' && ! response.success ) {
 					addonError( response, el, proceed );
+					return;
 				}
 
 				afterAddonInstall( response, proceed, message, el );
