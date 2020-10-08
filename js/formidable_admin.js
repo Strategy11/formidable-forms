@@ -5276,8 +5276,8 @@ function frmAdminBuildJS() {
 			},
 			success: function( response ) {
 				// If there is a WP Error instance, output it here and quit the script.
-				if ( response.error ) {
-					addonError( response, el, button );
+				if ( ! response.success ) {
+					addonError({ error: response.data }, el, button );
 					return;
 				}
 
