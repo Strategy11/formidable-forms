@@ -809,7 +809,8 @@ class FrmAddonsController {
 			// The plugin was installed, but not active. Download it now.
 			self::ajax_install_addon();
 		} else {
-			$response['active'] = true;
+			$response['active']  = true;
+			$response['success'] = true;
 		}
 
 		echo json_encode( $response );
