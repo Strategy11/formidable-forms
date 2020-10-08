@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 4.07.01
+Stable tag: 4.08
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.08 =
+* Updated the way Pro is installed to meet WordPress guidelines.
+* New: Added confirmation before forms are deleted in bulk.
+* Allow a value to pass validation if the entered value matches the placeholder setting.
+* Fix: Some sites have been getting duplicate entries days apart. This issue should be fixed.
+
 = 4.07.01 =
 * New: Show a warning when leaving the builder page with unsaved changes.
 * Fix: Make any multiselect dropdowns in admin settings accessible.
@@ -450,12 +456,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Prepare the code for handling permissions options as an array of roles.
 * Fix: WP 5.5 - Email subject lines were coming through encoded.
 * Fix: WP 5.5 - When WP Mail SMTP was installed, the Formidable SMTP page has an error.
-
-= 4.06.02 =
-* New: Added frm_field_value_object hook for making adjustments to the field before it's label and value is displayed.
-* New: Added frm_xml_response hook for altering the message/response when an XML file is imported.
-* Fix: Updated deprecated blacklist functions in WP 5.5.
-* Fix: Add more checks to the installation triggers to prevent them from being triggered at unintended times.
-* Show a more helpful error message in some cases when the XML import fails.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

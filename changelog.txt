@@ -1,4 +1,10 @@
 == Changelog ==
+= 4.08 =
+* Updated the way Pro is installed to meet WordPress guidelines.
+* New: Added confirmation before forms are deleted in bulk.
+* Allow a value to pass validation if the entered value matches the placeholder setting.
+* Fix: Some sites have been getting duplicate entries days apart. This issue should be fixed.
+
 = 4.07.01 =
 * New: Show a warning when leaving the form builder page with unsaved changes.
 * Fix: Make any multiselect dropdowns in admin settings accessible.
