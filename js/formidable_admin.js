@@ -3374,7 +3374,15 @@ function frmAdminBuildJS() {
 
 	function unselectEveryoneOptionIfSelected( $select ) {
 		var selectedValues = $select.val(),
-			index = selectedValues.indexOf( '' );
+			index;
+
+		if ( selectedValues === null ) {
+			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', true );
+			onEveryoneOptionSelected( $select );
+			return;
+		}
+
+		index = selectedValues.indexOf( '' );
 		if ( index >= 0 ) {
 			selectedValues.splice( index, 1 );
 			$select.val( selectedValues );
