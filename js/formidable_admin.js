@@ -5275,8 +5275,10 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
-				if ( typeof response !== 'string' && ! response.success ) {
-					addonError( response, el, button );
+				var error = extractErrorFromAddOnResponse( response );
+
+				if ( error ) {
+					addonError( error, el, button );
 					return;
 				}
 
@@ -5314,8 +5316,10 @@ function frmAdminBuildJS() {
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
-				if ( typeof response !== 'string' && ! response.success ) {
-					addonError( response, el, proceed );
+				var error = extractErrorFromAddOnResponse( response );
+
+				if ( error ) {
+					addonError( error, el, proceed );
 					return;
 				}
 
@@ -5346,6 +5350,28 @@ function frmAdminBuildJS() {
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
 		}
+	}
+
+	function extractErrorFromAddOnResponse( response ) {
+		var $message, text;
+
+		if ( typeof response !== 'string' ) {
+			if ( typeof response.success !== 'undefined' && response.success ) {
+				return false;
+			}
+
+			if ( response.form ) {
+				if ( jQuery( response.form ).is( '#message' ) ) {
+					return {
+						message: jQuery( response.form ).find( 'p' ).html()
+					};
+				}
+			}
+
+			return response;
+		}
+
+		return false;
 	}
 
 	function addonError( response, el, button ) {
