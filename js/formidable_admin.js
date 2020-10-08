@@ -5285,9 +5285,7 @@ function frmAdminBuildJS() {
 				if ( response.form ) {
 					// Display the form to gather the users credentials.
 
-					button.append( '<div class="frm-addon-error frm_error_style">' + response.form + '</div>' );
-					loader.hide();
-
+					addonError( { error: response.form }, button.parent(), button );
 					// Add a disabled attribute the install button if the creds are needed.
 					button.attr( 'disabled', true );
 
@@ -5337,10 +5335,7 @@ function frmAdminBuildJS() {
 				}
 
 				if ( response.form ) {
-					loader.hide();
-					jQuery( '.frm-inline-error' ).remove();
-					//proceed.val(admin.proceed);
-					//proceed.after('<span class="frm-inline-error">' + admin.connect_error + '</span>' );
+					addonError( { error: response.form }, el, button );
 					return;
 				}
 

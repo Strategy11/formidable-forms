@@ -1731,6 +1731,10 @@ h2.frm-h2 + .howto {
 }
 
 /* Add-on tiles */
+.frm-addons .frm-card.frm-addon-not-installed {
+	position: relative;
+}
+
 .frm-addons .plugin-card-top {
 	height: 140px;
 	padding-top: 30px;
@@ -1783,13 +1787,11 @@ h2.frm-h2 + .howto {
 
 .frm-addon-error {
 	position: absolute;
-	width: 100%;
+	top: 55px;
+	left: 10px;
+	right: 10px;
 	font-weight: bold;
 	text-align: center;
-	max-width: 291px;
-	margin: 0;
-	margin-top: -205px;
-	margin-left: -17px;
 }
 
 /* Form Templates */
