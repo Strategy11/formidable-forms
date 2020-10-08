@@ -1047,8 +1047,16 @@ class FrmAddonsController {
 		// Delete so cannot replay.
 		delete_option( 'frm_connect_token' );
 
+		// It's already installed and active.
+		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		if ( is_wp_error( $active ) ) {
+			// Download plugin now.
+			self::download_and_activate();
+		}
+
 		// If empty license, save it now.
-		if ( ! empty( self::get_pro_license() ) ) {
+		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
+			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 			if ( empty( $license ) ) {
 				return array(
@@ -1057,19 +1065,11 @@ class FrmAddonsController {
 				);
 			}
 
-			$this_plugin = FrmAddon::get_addon( 'formidable_pro' );
-			$response    = $this_plugin->activate_license( $license );
+			$response = FrmAddon::activate_license_for_plugin( $license, 'formidable_pro' );
 			if ( ! $response['success'] ) {
 				// Could not activate license.
 				return $response;
 			}
-		}
-
-		// It's already installed and active.
-		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
-		if ( is_wp_error( $active ) ) {
-			// Download plugin now.
-			self::download_and_activate();
 		}
 
 		return array(

@@ -475,11 +475,18 @@ class FrmAddon {
 		}
 
 		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		$this_plugin = self::get_addon( $plugin_slug );
-		$response    = $this_plugin->activate_license( $license );
+		$response    = self::activate_license_for_plugin( $license, $plugin_slug );
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	public static function activate_license_for_plugin( $license, $plugin_slug ) {
+		$this_plugin = self::get_addon( $plugin_slug );
+		return $this_plugin->activate_license( $license );
 	}
 
 	private function activate_license( $license ) {
