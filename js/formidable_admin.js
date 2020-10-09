@@ -5953,7 +5953,7 @@ function frmAdminBuildJS() {
 		}
 
 		$contentCheckbox = $checkboxes.filter( '[name="frm_dyncontent-hide"]' );
-		if ( ! $contentCheckbox.is( ':checked') ) {
+		if ( ! $contentCheckbox.is( ':checked' ) ) {
 			setTimeout(
 				function() {
 					$contentCheckbox.click();
