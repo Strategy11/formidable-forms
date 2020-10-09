@@ -5944,6 +5944,28 @@ function frmAdminBuildJS() {
 		return object;
 	}
 
+	function adjustScreenOptionsCheckboxesForViews() {
+		var $checkboxes = jQuery( '.post-type-frm_display #screen-options-wrap:hidden input[type="checkbox"]' ),
+			$contentCheckbox;
+
+		if ( ! $checkboxes.length ) {
+			return;
+		}
+
+		$contentCheckbox = $checkboxes.filter( '[name="frm_dyncontent-hide"]' );
+		if ( ! $contentCheckbox.is( ':checked') ) {
+			setTimeout(
+				function() {
+					$contentCheckbox.click();
+					$checkboxes.attr( 'disabled', true );
+				},
+				0
+			);
+		} else {
+			$checkboxes.attr( 'disabled', true );
+		}
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -6039,7 +6061,7 @@ function frmAdminBuildJS() {
 			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
-			jQuery( '.post-type-frm_display #screen-options-wrap:hidden input[type="checkbox"]' ).attr( 'disabled', true );
+			adjustScreenOptionsCheckboxesForViews();
 
 			// submit the search form with dropdown
 			jQuery( '#frm-fid-search-menu a' ).click( function() {
