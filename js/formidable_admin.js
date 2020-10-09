@@ -6185,7 +6185,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
-			jQuery( document ).on( 'change', '#frm_builder_page input, #frm_builder_page select', fieldUpdated );
+			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input), #frm_builder_page select', fieldUpdated );
 
 			popAllProductFields();
 
