@@ -2366,7 +2366,7 @@ function frmAdminBuildJS() {
 	}
 
 	function resetOptionTextDetails() {
-		jQuery( '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]' ).filter( '[data-value-on-load]' ).removeAttr( 'data-value-on-load' );
+		jQuery( '.frm-single-settings ul input[type="text"][name^="field_options[options_"]' ).filter( '[data-value-on-load]' ).removeAttr( 'data-value-on-load' );
 		jQuery( 'input[type="hidden"][name^=optionmap]' ).remove();
 	}
 
@@ -3357,6 +3357,37 @@ function frmAdminBuildJS() {
 		$thisId.slideUp( 'fast' );
 		$thisId.siblings( 'a' ).show();
 		return false;
+	}
+
+	function adjustVisibilityValuesForEveryoneValues( element, option ) {
+		if ( '' === option.getAttribute( 'value' ) ) {
+			onEveryoneOptionSelected( jQuery( this ) );
+		} else {
+			unselectEveryoneOptionIfSelected( jQuery( this ) );
+		}
+	}
+
+	function onEveryoneOptionSelected( $select ) {
+		$select.val( '' );
+		$select.next( '.btn-group' ).find( '.multiselect-container li input[value!=""]' ).prop( 'checked', false );
+	}
+
+	function unselectEveryoneOptionIfSelected( $select ) {
+		var selectedValues = $select.val(),
+			index;
+
+		if ( selectedValues === null ) {
+			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', true );
+			onEveryoneOptionSelected( $select );
+			return;
+		}
+
+		index = selectedValues.indexOf( '' );
+		if ( index >= 0 ) {
+			selectedValues.splice( index, 1 );
+			$select.val( selectedValues );
+			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', false );
+		}
 	}
 
 	/**
@@ -5229,8 +5260,9 @@ function frmAdminBuildJS() {
 
 					multiselectAccessibility();
 				},
-				onChange: function( event ) {
+				onChange: function( element, option ) {
 					multiselectAccessibility();
+					$select.trigger( 'frm-multiselect-changed', element, option );
 				}
 			});
 		});
@@ -6092,6 +6124,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
+			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
@@ -6152,14 +6185,14 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
-			jQuery( document ).on( 'change', '#frm_builder_page input, #frm_builder_page select', fieldUpdated );
+			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input), #frm_builder_page select', fieldUpdated );
 
 			popAllProductFields();
 
 			jQuery( document ).on( 'change', '.frmjs_prod_data_type_opt', toggleProductType );
 
-			jQuery( document ).on( 'focus', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextFocus );
-			jQuery( document ).on( 'blur', '.frm-type-radio ul input[type="text"], .frm-type-checkbox ul input[type="text"]', onOptionTextBlur );
+			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
+			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
@@ -6312,6 +6345,8 @@ function frmAdminBuildJS() {
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			});
+
+			jQuery( document ).on( 'frm-multiselect-changed', '#protect_files_role', adjustVisibilityValuesForEveryoneValues );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
