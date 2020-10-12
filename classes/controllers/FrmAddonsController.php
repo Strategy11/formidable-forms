@@ -89,7 +89,7 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	private static function fallback_plugin_list() {
-		return array(
+		$list = array(
 			'formidable-pro' => array(
 				'title'   => 'Formidable Forms',
 				'link'    => 'pricing/',
@@ -159,6 +159,16 @@ class FrmAddonsController {
 				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
 			),
 		);
+
+		$defaults = array(
+			'released' => '',
+		);
+
+		foreach ( $list as $k => $info ) {
+			$info['slug'] = $k;
+			$list[ $k ]   = array_merge( $defaults, $info );
+		}
+		return $list;
 	}
 
 	/**
