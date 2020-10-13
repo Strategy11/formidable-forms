@@ -1070,7 +1070,8 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	public static function install_addon_api() {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput - sanitize when it's used to prevent double sanitizing.
+		// Sanitize when it's used to prevent double sanitizing.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$_POST['plugin'] = isset( $_REQUEST['file_url'] ) ? $_REQUEST['file_url'] : ''; // Set for later use
 
 		$error = esc_html__( 'Could not install an upgrade. Please download from formidableforms.com and install manually.', 'formidable' );
