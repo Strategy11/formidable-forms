@@ -89,7 +89,7 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	private static function fallback_plugin_list() {
-		return array(
+		$list = array(
 			'formidable-pro' => array(
 				'title'   => 'Formidable Forms',
 				'link'    => 'pricing/',
@@ -159,6 +159,16 @@ class FrmAddonsController {
 				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
 			),
 		);
+
+		$defaults = array(
+			'released' => '',
+		);
+
+		foreach ( $list as $k => $info ) {
+			$info['slug'] = $k;
+			$list[ $k ]   = array_merge( $defaults, $info );
+		}
+		return $list;
 	}
 
 	/**
@@ -836,12 +846,17 @@ class FrmAddonsController {
 	 */
 	private static function download_and_activate() {
 		// Set the current screen to avoid undefined notices.
-		global $hook_suffix;
-		set_current_screen();
+		if ( is_admin() ) {
+			global $hook_suffix;
+			set_current_screen();
+		}
 
 		self::maybe_show_cred_form();
 
 		$installed = self::install_addon();
+		if ( is_array( $installed ) && isset( $installed['message'] ) ) {
+			return $installed;
+		}
 		self::maybe_activate_addon( $installed );
 	}
 
@@ -849,6 +864,10 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 */
 	private static function maybe_show_cred_form() {
+		if ( ! function_exists( 'request_filesystem_credentials' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/file.php' );
+		}
+
 		// Start output bufferring to catch the filesystem form if credentials are needed.
 		ob_start();
 
@@ -898,7 +917,14 @@ class FrmAddonsController {
 		// Flush the cache and return the newly installed plugin basename.
 		wp_cache_flush();
 
-		return $installer->plugin_info();
+		$plugin = $installer->plugin_info();
+		if ( empty( $plugin ) ) {
+			return array(
+				'message' => 'Plugin was not installed. ' . $installer->result,
+				'success' => false,
+			);
+		}
+		return $plugin;
 	}
 
 	/**
@@ -966,8 +992,14 @@ class FrmAddonsController {
 		if ( is_wp_error( $activate ) ) {
 			// Ignore the invalid header message that shows with nested plugins.
 			if ( $activate->get_error_code() !== 'no_plugin_header' ) {
-				echo json_encode( array( 'error' => $activate->get_error_message() ) );
-				wp_die();
+				if ( wp_doing_ajax() ) {
+					echo json_encode( array( 'error' => $activate->get_error_message() ) );
+					wp_die();
+				}
+				return array(
+					'message' => $activate->get_error_message(),
+					'success' => false,
+				);
 			}
 		}
 	}
@@ -1038,8 +1070,9 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	public static function install_addon_api() {
-		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
-		$_POST['plugin'] = $post_url; // Set for later use.
+		// Sanitize when it's used to prevent double sanitizing.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$_POST['plugin'] = isset( $_REQUEST['file_url'] ) ? $_REQUEST['file_url'] : ''; // Set for later use
 
 		$error = esc_html__( 'Could not install an upgrade. Please download from formidableforms.com and install manually.', 'formidable' );
 
@@ -1050,7 +1083,10 @@ class FrmAddonsController {
 		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 		if ( is_wp_error( $active ) ) {
 			// Download plugin now.
-			self::download_and_activate();
+			$response = self::download_and_activate();
+			if ( is_array( $response ) && isset( $response['success'] ) ) {
+				return $response;
+			}
 		}
 
 		// If empty license, save it now.
