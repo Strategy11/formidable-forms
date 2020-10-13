@@ -919,7 +919,10 @@ class FrmAddonsController {
 
 		$plugin = $installer->plugin_info();
 		if ( empty( $plugin ) ) {
-			return array( 'message' => 'Plugin was not installed. ' . $installer->result, 'success' => false );
+			return array(
+				'message' => 'Plugin was not installed. ' . $installer->result,
+				'success' => false,
+			);
 		}
 		return $plugin;
 	}
@@ -993,7 +996,10 @@ class FrmAddonsController {
 					echo json_encode( array( 'error' => $activate->get_error_message() ) );
 					wp_die();
 				}
-				return array( 'message' => $activate->get_error_message(), 'success' => false );
+				return array(
+					'message' => $activate->get_error_message(),
+					'success' => false,
+				);
 			}
 		}
 	}
@@ -1064,7 +1070,8 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	public static function install_addon_api() {
-		$_POST['plugin'] = $_REQUEST['file_url']; // Set for later use.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput - sanitize when it's used to prevent double sanitizing.
+		$_POST['plugin'] = isset( $_REQUEST['file_url'] ) ? $_REQUEST['file_url'] : ''; // Set for later use
 
 		$error = esc_html__( 'Could not install an upgrade. Please download from formidableforms.com and install manually.', 'formidable' );
 
