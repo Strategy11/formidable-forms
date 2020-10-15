@@ -305,6 +305,7 @@ class FrmCSVExportHelper {
 			FrmAppHelper::unserialize_or_decode( $field_value );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
+			$was_array   = is_array( $field_value );
 			$field_value = apply_filters(
 				'frm_csv_value',
 				$field_value,
@@ -315,8 +316,8 @@ class FrmCSVExportHelper {
 				)
 			);
 
-			if ( $col->form_id !== self::$form_id && ! is_array( $field_value ) ) {
-				$field_value = array( $field_value );
+			if ( $was_array && is_string( $field_value ) ) {
+				$field_value = explode( ', ', $field_value );
 			}
 
 			if ( ! empty( $col->field_options['separate_value'] ) ) {
