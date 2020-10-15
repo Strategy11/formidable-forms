@@ -315,6 +315,10 @@ class FrmCSVExportHelper {
 				)
 			);
 
+			if ( $col->form_id !== self::$form_id && ! is_array( $field_value ) ) {
+				$field_value = array( $field_value );
+			}
+
 			if ( ! empty( $col->field_options['separate_value'] ) ) {
 				$sep_value = FrmEntriesHelper::display_value(
 					$field_value,
