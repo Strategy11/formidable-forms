@@ -436,7 +436,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 4.08 =
-* Updated the way Pro is installed to meet WordPress guidelines.
 * New: Added confirmation before forms are deleted in bulk.
 * Allow a value to pass validation if the entered value matches the placeholder setting.
 * Fix: Email addresses were not being sent to Akismet for logged out users, and resulting in some false positive spam.
