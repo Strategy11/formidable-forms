@@ -1082,13 +1082,70 @@ DEFAULT_HTML;
 		// Override in a child class.
 	}
 
+	/**
+	 * A field is not unique if it has already been passed to this function, or if it exists in meta for this field but another entry id
+	 *
+	 * @param mixed $value
+	 * @param int $entry_id
+	 * @return bool
+	 */
 	public function is_not_unique( $value, $entry_id ) {
-		$exists = false;
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$exists = FrmProEntryMetaHelper::value_exists( $this->get_field_column( 'id' ), $value, $entry_id );
+		if ( $this->value_has_already_been_validated_as_unique( $value ) ) {
+			return true;
 		}
 
-		return $exists;
+		if ( $this->value_exists_in_meta_for_another_entry( $value, $entry_id ) ) {
+			return true;
+		}
+
+		$this->value_validated_as_unique( $value );
+		return false;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return bool
+	 */
+	private function value_has_already_been_validated_as_unique( $value ) {
+		global $frm_validated_unique_values;
+
+		if ( empty( $frm_validated_unique_values ) ) {
+			$frm_validated_unique_values = array();
+			return false;
+		}
+
+		$field_id = $this->get_field_column( 'id' );
+		if ( ! array_key_exists( $field_id, $frm_validated_unique_values ) ) {
+			$frm_validated_unique_values[ $field_id ] = array();
+			return false;
+		}
+
+		$already_validated_this_value = in_array( $value, $frm_validated_unique_values[ $field_id ], true );
+		return $already_validated_this_value;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @param int $entry_id
+	 * @return bool
+	 */
+	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+		$field_id = $this->get_field_column( 'id' );
+		return FrmProEntryMetaHelper::value_exists( $field_id, $value, $entry_id );
+	}
+
+	/**
+	 * Track that a value has been flagged as unique so that no other iterations can be for the same value for this field
+	 *
+	 * @param mixed $value
+	 */
+	private function value_validated_as_unique( $value ) {
+		global $frm_validated_unique_values;
+		$field_id                                   = $this->get_field_column( 'id' );
+		$frm_validated_unique_values[ $field_id ][] = $value;
 	}
 
 	public function get_value_to_save( $value, $atts ) {
