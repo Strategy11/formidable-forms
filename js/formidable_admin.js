@@ -3740,6 +3740,7 @@ function frmAdminBuildJS() {
 	}
 
 	function copyFormAction() {
+		/*jshint validthis:true */
 		if ( waitForActionToLoadBeforeCopy( this ) ) {
 			return;
 		}
