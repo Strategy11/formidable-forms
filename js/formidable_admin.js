@@ -634,10 +634,15 @@ function frmAdminBuildJS() {
 		popCalcFields( b, false );
 
 		var cont = jQuery( b ).closest( '.frm_form_action_settings' );
-		if ( cont.length && typeof target !== 'undefined' && ( target.parentElement.className.indexOf( 'frm_email_icons' ) > -1 || target.parentElement.className.indexOf( 'frm_toggle' ) > -1 ) ) {
-			// clicking on delete icon shouldn't open it
-			event.stopPropagation();
-			return;
+		if ( cont.length && typeof target !== 'undefined' ) {
+			var className = target.parentElement.className;
+			if ( 'string' === typeof className ) {
+				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 ) {
+					// clicking on delete icon shouldn't open it
+					event.stopPropagation();
+					return;
+				}
+			}
 		}
 
 		var inside = cont.children( '.widget-inside' );
@@ -661,6 +666,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
+						jQuery( b ).trigger( 'frm-action-loaded' );
 					}
 				});
 			}
@@ -3735,6 +3741,10 @@ function frmAdminBuildJS() {
 
 	function copyFormAction() {
 		/*jshint validthis:true */
+		if ( waitForActionToLoadBeforeCopy( this ) ) {
+			return;
+		}
+
 		var action = jQuery( this ).closest( '.frm_form_action_settings' ).clone();
 		var currentID = action.attr( 'id' ).replace( 'frm_form_action_', '' );
 		var newID = newActionId( currentID );
@@ -3762,6 +3772,26 @@ function frmAdminBuildJS() {
 
 		jQuery( '#frm_notification_settings' ).append( div + html + '</div>' );
 		initiateMultiselect();
+	}
+
+	function waitForActionToLoadBeforeCopy( element ) {
+		var $trigger = jQuery( element ),
+			$original = $trigger.closest( '.frm_form_action_settings' ),
+			$inside = $original.find( '.widget-inside' ),
+			$top;
+
+		if ( $inside.find( 'p, div, table' ).length ) {
+			return false;
+		}
+
+		$top = $original.find( '.widget-top' );
+		$top.on( 'frm-action-loaded', function() {
+			$trigger.click();
+			$original.removeClass( 'open' );
+			$inside.hide();
+		});
+		$top.click();
+		return true;
 	}
 
 	function newActionId( currentID ) {
