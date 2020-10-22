@@ -634,10 +634,15 @@ function frmAdminBuildJS() {
 		popCalcFields( b, false );
 
 		var cont = jQuery( b ).closest( '.frm_form_action_settings' );
-		if ( cont.length && typeof target !== 'undefined' && ( target.parentElement.className.indexOf( 'frm_email_icons' ) > -1 || target.parentElement.className.indexOf( 'frm_toggle' ) > -1 ) ) {
-			// clicking on delete icon shouldn't open it
-			event.stopPropagation();
-			return;
+		if ( cont.length && typeof target !== 'undefined' ) {
+			var className = target.parentElement.className;
+			if ( 'string' === typeof className ) {
+				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 ) {
+					// clicking on delete icon shouldn't open it
+					event.stopPropagation();
+					return;
+				}
+			}
 		}
 
 		var inside = cont.children( '.widget-inside' );
@@ -3769,7 +3774,6 @@ function frmAdminBuildJS() {
 	}
 
 	function waitForActionToLoadBeforeCopy( element ) {
-		return false;
 		var $trigger = jQuery( element ),
 			$original = $trigger.closest( '.frm_form_action_settings' ),
 			$inside = $original.find( '.widget-inside' ),
@@ -3782,7 +3786,8 @@ function frmAdminBuildJS() {
 		$top = $original.find( '.widget-top' );
 		$top.on( 'frm-action-loaded', function() {
 			$trigger.click();
-			$top.click();
+			$original.removeClass( 'open' );
+			$inside.hide();
 		});
 		$top.click();
 		return true;
