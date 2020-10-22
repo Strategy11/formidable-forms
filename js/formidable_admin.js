@@ -661,6 +661,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
+						jQuery( b ).trigger( 'frm-action-loaded' );
 					}
 				});
 			}
@@ -3734,7 +3735,10 @@ function frmAdminBuildJS() {
 	}
 
 	function copyFormAction() {
-		/*jshint validthis:true */
+		if ( waitForActionToLoadBeforeCopy( this ) ) {
+			return;
+		}
+
 		var action = jQuery( this ).closest( '.frm_form_action_settings' ).clone();
 		var currentID = action.attr( 'id' ).replace( 'frm_form_action_', '' );
 		var newID = newActionId( currentID );
@@ -3762,6 +3766,26 @@ function frmAdminBuildJS() {
 
 		jQuery( '#frm_notification_settings' ).append( div + html + '</div>' );
 		initiateMultiselect();
+	}
+
+	function waitForActionToLoadBeforeCopy( element ) {
+		return false;
+		var $trigger = jQuery( element ),
+			$original = $trigger.closest( '.frm_form_action_settings' ),
+			$inside = $original.find( '.widget-inside' ),
+			$top;
+
+		if ( $inside.find( 'p, div, table' ).length ) {
+			return false;
+		}
+
+		$top = $original.find( '.widget-top' );
+		$top.on( 'frm-action-loaded', function() {
+			$trigger.click();
+			$top.click();
+		});
+		$top.click();
+		return true;
 	}
 
 	function newActionId( currentID ) {
