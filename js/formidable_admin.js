@@ -6353,7 +6353,8 @@ function frmAdminBuildJS() {
 		panelInit: function() {
 			var customPanel, settingsPage, viewPage, insertFieldsTab;
 
-			jQuery( '.frm_wrap, #postbox-container-1' ).on( 'click', '.frm_insert_code', insertCode );
+			jQuery( '.frm_wrap, .postbox-container' ).on( 'click', '.frm_insert_code', insertCode );
+
 			jQuery( document ).on( 'change', '.frm_insert_val', function() {
 				insertFieldCode( jQuery( this ).data( 'target' ), jQuery( this ).val() );
 				jQuery( this ).val( '' );
