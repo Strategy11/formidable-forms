@@ -39,4 +39,8 @@ class FrmEmailAction extends FrmFormAction {
 			'event'         => array( 'create' ),
 		);
 	}
+
+	protected function get_upgrade_text() {
+		return __( 'Conditional emails', 'formidable' );
+	}
 }
