@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.07.01';
+	public static $plug_version = '4.08';
 
 	/**
 	 * @since 1.07.02
@@ -1594,7 +1594,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		extract( $atts );
+		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		ob_start();
 		include( $filename );
 		$contents = ob_get_contents();

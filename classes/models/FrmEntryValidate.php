@@ -387,6 +387,10 @@ class FrmEntryValidate {
 			$datas['comment_author_email'] = '';
 			$datas['comment_author_url']   = '';
 
+			if ( isset( $values['item_meta'] ) ) {
+				$values = $values['item_meta'];
+			}
+
 			$values = array_filter( $values );
 			foreach ( $values as $value ) {
 				if ( ! is_array( $value ) ) {

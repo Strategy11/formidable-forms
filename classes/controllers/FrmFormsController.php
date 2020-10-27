@@ -1024,6 +1024,7 @@ class FrmFormsController {
 				'data'     => array(
 					'medium'  => 'permissions',
 					'upgrade' => __( 'Form Permissions', 'formidable' ),
+					'message' => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
 				),
 			),
 			'scheduling' => array(

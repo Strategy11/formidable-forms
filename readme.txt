@@ -1,11 +1,11 @@
 === Formidable Form Builder - Contact Form, Survey & Quiz Forms Plugin for WordPress ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, contact me, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form, custom form
+Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form, custom form
 Requires at least: 4.7
-Tested up to: 5.5
+Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 4.07.01
+Stable tag: 4.08
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -194,7 +194,7 @@ In addition to all the features listed above, power up your email forms, calcula
 * <a href="https://formidableforms.com/features/paypal-wordpress-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">PayPal Payment Forms</a>. Automate your business by collecting instant payments and recurring payments from clients. Collect information and calculate a total in a PayPal form or donation form.
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Payment Forms</a>. Keep users on your site while collecting Stripe payments from a credit card form. Select from one time and recurring charges in order forms and donation forms. Stripe processes payments with simple PCI compliance.
 * <a href="https://formidableforms.com/features/authorize-net-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Authorize.net AIM Payment Forms</a>. Process one-time payments in order forms and price calculators with Authorize.net AIM. For recurring payments or easier security compliance, we recommend Stripe.
-* <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use form calculations for variable pricing or upload a file with the order.
+* <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use calculations in your WooCommerce form for variable pricing and upload files with orders.
 * <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Forms</a>. Add and update leads in a MailChimp email marketing list from a lead form, online order, or email form.
 * <a href="https://formidableforms.com/features/entries-to-constant-contact/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Constant Contact Forms</a>. Create leads automatically in Constant Contact with a newsletter signup form or registration form.
 * <a href="https://formidableforms.com/features/form-entries-to-getresponse/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">GetResponse Forms</a>. Collect leads in WordPress forms, add them to GetResponse, and trigger GetResponse marketing automations.
@@ -257,7 +257,7 @@ When you do not receive emails, try the following steps:
    3. Check your SPAM box.
    4. Try a different email address in your form settings.
    5. Install WP Mail SMPT or another similar emailing plugin and configure the SMTP settings.
-   6. If these steps don't fix the problem and other WP emails are not going out, please contact your web host.
+   6. If these steps don't fix the problem and other WP emails are not going out, please reach out to your web host.
 
 <a href="https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Read more about WordPress emails not sending</a> in our blog.
 
@@ -435,6 +435,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.08 =
+* New: Added confirmation before forms are deleted in bulk.
+* Allow a value to pass validation if the entered value matches the placeholder setting.
+* Fix: Email addresses were not being sent to Akismet for logged out users, and resulting in some false positive spam.
+* Fix: Some sites have been getting duplicate entries days apart. This issue should be fixed.
+* Fix: Searching when switching between forms no longer triggers the confirmation message when leaving the page.
+
 = 4.07.01 =
 * New: Show a warning when leaving the builder page with unsaved changes.
 * Fix: Make any multiselect dropdowns in admin settings accessible.
@@ -450,12 +457,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Prepare the code for handling permissions options as an array of roles.
 * Fix: WP 5.5 - Email subject lines were coming through encoded.
 * Fix: WP 5.5 - When WP Mail SMTP was installed, the Formidable SMTP page has an error.
-
-= 4.06.02 =
-* New: Added frm_field_value_object hook for making adjustments to the field before it's label and value is displayed.
-* New: Added frm_xml_response hook for altering the message/response when an XML file is imported.
-* Fix: Updated deprecated blacklist functions in WP 5.5.
-* Fix: Add more checks to the installation triggers to prevent them from being triggered at unintended times.
-* Show a more helpful error message in some cases when the XML import fails.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

@@ -519,6 +519,14 @@ class FrmAppController {
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );
+
+		$args = array(
+			'methods'  => 'GET',
+			'callback' => 'FrmAddonsController::install_addon_api',
+			'permission_callback' => 'FrmAddonsController::can_install_addon_api',
+		);
+
+		register_rest_route( 'frm-admin/v1', '/install-addon', $args );
 	}
 
 	/**
