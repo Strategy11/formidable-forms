@@ -1214,18 +1214,30 @@ BEFORE_HTML;
 		$categories = array_diff( $categories, $ignore );
 
 		$icons = array(
-			'WooCommerce'       => array( 'woocommerce', 'var(--purple)' ),
-			'Post'              => array( 'wordpress', 'rgb(0,160,210)' ),
-			'User Registration' => array( 'register', 'var(--pink)' ),
-			'PayPal'            => array( 'paypal' ),
-			'Stripe'            => array( 'credit_card', 'var(--green)' ),
-			'Twilio'            => array( 'sms', 'rgb(0,160,210)' ),
-			'Calculator'        => array( 'calculator', 'var(--orange)' ),
-			'Contact Form'      => array( 'address_card' ),
-			'Survey'            => array( 'align_right', 'var(--pink)' ),
-			'Application Form'  => array( 'align_right', 'rgb(0,160,210)' ),
-			''                  => array( 'align_right' ),
+			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
+			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
+			'User Registration'   => array( 'register', 'var(--pink)' ),
+			'PayPal'              => array( 'paypal' ),
+			'Stripe'              => array( 'credit_card', 'var(--green)' ),
+			'Twilio'              => array( 'sms', 'rgb(0,160,210)' ),
+			'Payment'             => array( 'credit_card', 'var(--green)' ),
+			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
+			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
+			'Real Estate'         => array( 'house', 'var(--purple)' ),
+			'Calculator'          => array( 'calculator', 'var(--purple)' ),
+			'Registrations'       => array( 'address_card' ),
+			'Customer Service'    => array( 'users_solid', 'var(--pink)' ),
+			'Education'           => array( 'pencil', 'var(--primary-color)' ),
+			'Marketing'           => array( 'eye', 'rgb(0,160,210)' ),
+			'Feedback'            => array( 'smile', 'var(--green)' ),
+			'Business Operations' => array( 'case' ),
+			'Contact Form'        => array( 'email' ),
+			'Survey'              => array( 'comment', 'var(--primary-color)' ),
+			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
+			''                    => array( 'align_right' ),
 		);
+
+		$icons[ __( 'My Templates', 'formidable' ) ] = array( 'user', 'var(--orange)' );
 
 		$icon = $icons[''];
 

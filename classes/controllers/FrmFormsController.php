@@ -843,8 +843,12 @@ class FrmFormsController {
 		}
 		unset( $template );
 
+		// Subcategories that are included elsewhere.
+		$redundant_cats = array( 'PayPal', 'Stripe', 'Twilio' );
+
 		$categories = array_keys( $templates_by_category );
 		$categories = array_diff( $categories, FrmFormsHelper::ignore_template_categories() );
+		$categories = array_diff( $categories, $redundant_cats );
 		sort( $categories );
 
 		array_walk(
