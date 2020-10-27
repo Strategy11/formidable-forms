@@ -67,10 +67,22 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	public function error( $errors ) {
 		if ( ! empty( $errors ) ) {
 			if ( ! is_string( $errors ) ) {
-				$errors = $errors->get_error_message();
+				$error   = $errors->get_error_message();
+				$message = $errors->get_error_data();
+				$errors  = $error . ' ' . $message;
 			}
-			echo json_encode( array( 'error' => $errors ) );
-			wp_die();
+			echo json_encode(
+				array(
+					'error'   => $errors,
+					'message' => $errors,
+					'success' => false,
+				)
+			);
+			if ( wp_doing_ajax() ) {
+				wp_die();
+			} else {
+				die();
+			}
 		}
 	}
 

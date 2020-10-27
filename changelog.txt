@@ -1,9 +1,10 @@
 == Changelog ==
 = 4.08 =
-* Updated the way Pro is installed to meet WordPress guidelines.
 * New: Added confirmation before forms are deleted in bulk.
 * Allow a value to pass validation if the entered value matches the placeholder setting.
+* Fix: Email addresses were not being sent to Akismet for logged out users, and resulting in some false positive spam.
 * Fix: Some sites have been getting duplicate entries days apart. This issue should be fixed.
+* Fix: Searching when switching between forms no longer triggers the confirmation message when leaving the page.
 
 = 4.07.01 =
 * New: Show a warning when leaving the form builder page with unsaved changes.

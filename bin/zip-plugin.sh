@@ -54,6 +54,7 @@ zip -r $zipname $destination \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
+	-x "*/vendor/*" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
 
