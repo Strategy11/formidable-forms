@@ -517,7 +517,7 @@ class FrmAddonsController {
 				} else {
 					$base_file = 'formidable-' . $slug;
 				}
-				$file_name       = $base_file . '/' . $base_file . '.php';
+				$file_name = $base_file . '/' . $base_file . '.php';
 				if ( ! isset( $addon['plugin'] ) ) {
 					$addon['plugin'] = $file_name;
 				}
