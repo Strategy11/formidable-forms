@@ -518,6 +518,9 @@ class FrmAddonsController {
 					$base_file = 'formidable-' . $slug;
 				}
 				$file_name = $base_file . '/' . $base_file . '.php';
+				if ( ! isset( $addon['plugin'] ) ) {
+					$addon['plugin'] = $file_name;
+				}
 			}
 
 			$addon['installed']    = self::is_installed( $file_name );
