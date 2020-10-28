@@ -1214,18 +1214,30 @@ BEFORE_HTML;
 		$categories = array_diff( $categories, $ignore );
 
 		$icons = array(
-			'WooCommerce'       => array( 'woocommerce', 'var(--purple)' ),
-			'Post'              => array( 'wordpress', 'rgb(0,160,210)' ),
-			'User Registration' => array( 'register', 'var(--pink)' ),
-			'PayPal'            => array( 'paypal' ),
-			'Stripe'            => array( 'credit_card', 'var(--green)' ),
-			'Twilio'            => array( 'sms', 'rgb(0,160,210)' ),
-			'Calculator'        => array( 'calculator', 'var(--orange)' ),
-			'Contact Form'      => array( 'address_card' ),
-			'Survey'            => array( 'align_right', 'var(--pink)' ),
-			'Application Form'  => array( 'align_right', 'rgb(0,160,210)' ),
-			''                  => array( 'align_right' ),
+			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
+			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
+			'User Registration'   => array( 'register', 'var(--pink)' ),
+			'PayPal'              => array( 'paypal' ),
+			'Stripe'              => array( 'credit_card', 'var(--green)' ),
+			'Twilio'              => array( 'sms', 'rgb(0,160,210)' ),
+			'Payment'             => array( 'credit_card', 'var(--green)' ),
+			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
+			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
+			'Real Estate'         => array( 'house', 'var(--purple)' ),
+			'Calculator'          => array( 'calculator', 'var(--purple)' ),
+			'Registrations'       => array( 'address_card' ),
+			'Customer Service'    => array( 'users_solid', 'var(--pink)' ),
+			'Education'           => array( 'pencil', 'var(--primary-color)' ),
+			'Marketing'           => array( 'eye', 'rgb(0,160,210)' ),
+			'Feedback'            => array( 'smile', 'var(--green)' ),
+			'Business Operations' => array( 'case' ),
+			'Contact Form'        => array( 'email' ),
+			'Survey'              => array( 'comment', 'var(--primary-color)' ),
+			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
+			''                    => array( 'align_right' ),
 		);
+
+		$icons[ __( 'My Templates', 'formidable' ) ] = array( 'user', 'var(--orange)' );
 
 		$icon = $icons[''];
 
@@ -1266,7 +1278,7 @@ BEFORE_HTML;
 			'atts'  => true,
 		);
 
-		if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
+		if ( ! empty( $template['url'] ) ) {
 			$link = array(
 				'url'   => $template['url'],
 				'label' => __( 'Create Form', 'formidable' ),
@@ -1298,7 +1310,7 @@ BEFORE_HTML;
 	 *
 	 * @return bool
 	 */
-	private static function plan_is_allowed( $args ) {
+	public static function plan_is_allowed( $args ) {
 		if ( empty( $args['license_type'] ) ) {
 			return false;
 		}
@@ -1306,7 +1318,7 @@ BEFORE_HTML;
 		$included = $args['license_type'] === strtolower( $args['plan_required'] );
 
 		$plans = array( 'free', 'personal', 'business', 'elite' );
-		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans ) ) {
+		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans, true ) ) {
 			return $included;
 		}
 
@@ -1353,19 +1365,21 @@ BEFORE_HTML;
 	 * @since 4.0
 	 */
 	public static function get_plan_required( &$item ) {
-		if ( ! isset( $item['categories'] ) || ( isset( $item['url'] ) && ! empty( $item['url'] ) ) ) {
+		if ( ! isset( $item['categories'] ) || ! empty( $item['url'] ) ) {
 			return false;
 		}
 
 		$plans = array( 'free', 'Basic', 'Personal', 'Business', 'Elite' );
 
 		foreach ( $item['categories'] as $k => $category ) {
-			if ( in_array( $category, $plans ) ) {
+			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
+
 				if ( $category === 'Personal' ) {
 					// Show the current package name.
 					$category = 'Basic';
 				}
+
 				return $category;
 			}
 		}
@@ -1526,6 +1540,32 @@ BEFORE_HTML;
 			'type',
 			'w',
 			'year',
+		);
+	}
+
+	/**
+	 * Check an array of templates, determine how many the logged in user can use
+	 *
+	 * @param array $templates
+	 * @param array $args
+	 * @return int
+	 */
+	public static function available_count( $templates, $args ) {
+		return array_reduce(
+			$templates,
+			function( $total, $template ) use ( $args ) {
+				if ( ! empty( $template['url'] ) ) {
+					return $total + 1;
+				}
+
+				$args['plan_required'] = self::get_plan_required( $template );
+				if ( self::plan_is_allowed( $args ) ) {
+					return $total + 1;
+				}
+
+				return $total;
+			},
+			0
 		);
 	}
 }

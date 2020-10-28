@@ -156,7 +156,7 @@ class FrmAppHelper {
 					_n(
 						'Your form subscription expires in %1$s day%2$s.',
 						'Your form subscription expires in %1$s days%2$s.',
-						$expiring,
+						intval( $expiring ),
 						'formidable'
 					)
 				),
@@ -166,7 +166,7 @@ class FrmAppHelper {
 			?>
 			<div style="float:right">
 				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
-					Renew Now
+					<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 				</a>
 			</div>
 		</div>
@@ -955,13 +955,23 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.0
+	 * @param array $atts
 	 */
 	public static function add_new_item_link( $atts ) {
-		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) {
+		if ( ! empty( $atts['new_link'] ) ) {
 			?>
 			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm-with-plus">
 				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
 				<?php esc_html_e( 'Add New', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( ! empty( $atts['trigger_new_form_modal'] ) ) {
+			?>
+			<a href="#" class="button button-primary frm-button-primary frm-with-plus frm-trigger-new-form-modal">
+				<?php
+				self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' );
+				esc_html_e( 'Add New', 'formidable' );
+				?>
 			</a>
 			<?php
 		} elseif ( isset( $atts['link_hook'] ) ) {
