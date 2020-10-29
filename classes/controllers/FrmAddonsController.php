@@ -158,6 +158,10 @@ class FrmAddonsController {
 				'docs'    => 'knowledgebase/twilio-add-on/',
 				'excerpt' => 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.',
 			),
+			'views'          => array(
+				'title'   => 'Formidable Views',
+				'excerpt' => 'Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.',
+			),
 		);
 
 		$defaults = array(
@@ -437,20 +441,14 @@ class FrmAddonsController {
 	 * Get the action link for an addon that isn't active.
 	 *
 	 * @since 3.06.03
-	 * @param string $addon The plugin slug
+	 * @param string $plugin The plugin slug
 	 * @return array
 	 */
 	public static function install_link( $plugin ) {
-		$link    = array();
-		$addons = self::get_api_addons();
-		self::prepare_addons( $addons );
+		$link  = array();
+		$addon = self::get_addon( $plugin );
 
-		foreach ( $addons as $addon ) {
-			$slug = explode( '/', $addon['plugin'] );
-			if ( $slug[0] !== 'formidable-' . $plugin ) {
-				continue;
-			}
-
+		if ( $addon ) {
 			if ( $addon['status']['type'] === 'installed' && ! empty( $addon['activate_url'] ) ) {
 				$link = array(
 					'url'   => $addon['plugin'],
@@ -470,9 +468,39 @@ class FrmAddonsController {
 			if ( ! empty( $link ) ) {
 				$link['status'] = $addon['status']['type'];
 			}
-
-			return $link;
 		}
+
+		return $link;
+	}
+
+	/**
+	 * @since 4.09
+	 * @param string $plugin The plugin slug
+	 * @return array|false
+	 */
+	private static function get_addon( $plugin ) {
+		$addons = self::get_api_addons();
+		self::prepare_addons( $addons );
+		foreach ( $addons as $addon ) {
+			$slug = explode( '/', $addon['plugin'] );
+			if ( $slug[0] === 'formidable-' . $plugin ) {
+				return $addon;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @since 4.09
+	 * @return string
+	 */
+	private static function get_license_type() {
+		$license_type = '';
+		$addons       = self::get_api_addons();
+		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
+			$license_type = $addons['error']['type'];
+		}
+		return $license_type;
 	}
 
 	/**
@@ -1110,6 +1138,14 @@ class FrmAddonsController {
 		return array(
 			'success' => true,
 		);
+	}
+
+	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
+		$addon         = self::get_addon( $plugin );
+		$license_type  = self::get_license_type();
+		$plan_required = FrmFormsHelper::get_plan_required( $addon );
+		$upgrade_link  = FrmAppHelper::admin_upgrade_link( $upgrade_link_args );
+		FrmAppHelper::conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link );
 	}
 
 	/**

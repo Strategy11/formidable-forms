@@ -74,6 +74,47 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Render a conditional action button for an add on
+	 *
+	 * @since 4.09
+	 * @param array $addon
+	 * @param string|false $license_type
+	 * @param string $plan_required
+	 * @param string $upgrade_link
+	 */
+	public static function conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link ) {
+		if ( $addon['status']['type'] === 'installed' ) {
+			?>
+			<a rel="<?php echo esc_attr( $addon['plugin'] ); ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
+				<?php esc_html_e( 'Activate', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( ! empty( $addon['url'] ) ) {
+			?>
+			<a class="frm-install-addon button button-primary frm-button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
+				<?php esc_html_e( 'Install', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( $license_type && $license_type === strtolower( $plan_required ) ) {
+			?>
+			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( self::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+				<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
+			</a>
+			<?php
+		} else {
+			if ( isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
+				// Solutions will go to a separate page.
+				$upgrade_link = self::admin_upgrade_link( 'addons', $addon['link'] );
+			}
+			?>
+			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $upgrade_link . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
+			</a>
+			<?php
+		}
+	}
+
+	/**
 	 * @since 3.04.02
 	 * @param array|string $args
 	 * @param string       $page
