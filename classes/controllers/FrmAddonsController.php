@@ -1140,6 +1140,13 @@ class FrmAddonsController {
 		);
 	}
 
+	/**
+	 * Render a conditional action button for a specified plugin
+	 *
+	 * @param string $plugin
+	 * @param array|string $upgrade_link_args
+	 * @since 4.09
+	 */
 	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
 		$addon         = self::get_addon( $plugin );
 		$license_type  = self::get_license_type();
