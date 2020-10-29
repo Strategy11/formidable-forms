@@ -61,6 +61,9 @@ class FrmFormApi {
 		$url = $this->api_url();
 		if ( ! empty( $this->license ) ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
+			if ( $this->has_nested_views_plugin() ) {
+				$url .= '&beta=1';
+			}
 		}
 
 		$addons = $this->get_cached();
@@ -93,6 +96,13 @@ class FrmFormApi {
 		}
 
 		return $addons;
+	}
+
+	private function has_nested_views_plugin() {
+		if ( ! class_exists( 'FrmViewsAppHelper' ) ) {
+			return false;
+		}
+		return '/views' === substr( untrailingslashit( FrmViewsAppHelper::plugin_path() ), -6 );
 	}
 
 	/**
