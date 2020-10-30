@@ -23,7 +23,7 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 		<ul id="frm_messages">
 			<?php
 			foreach ( $show_messages as $m ) {
-				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br' ) ) . '</li>'; // WPCS: XSS ok.
+				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br', 'span', 'p' ) ) . '</li>'; // WPCS: XSS ok.
 			}
 			?>
 		</ul>
