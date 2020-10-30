@@ -1530,7 +1530,7 @@ div.frm_updated_message {
 	text-align: center;
 }
 
-#frm_top_bar + .wrap > .frm_updated_message {
+#frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {
 	display: inline-block;
 	width: 100%;
 	box-sizing: border-box;

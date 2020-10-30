@@ -20,9 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p style="max-width:400px;margin:20px auto">
 				<?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?>
 			</p>
-			<a class="button button-primary frm-button-primary" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'views-info' ) ); ?>" target="_blank" rel="noopener">
-				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
-			</a>
+			<?php FrmAddonsController::conditional_action_button( 'views', 'views-info' ); ?>
 		</div>
 	</div>
 </div>
