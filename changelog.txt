@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.09 =
+* New: Updated the UX for creating a new blank form or from a template.
+* Fix: Duplicating a closed form action didn't copy correctly.
+* Fix: PHP warnings showed on the add-ons page on some sites.
+
 = 4.08 =
 * New: Added confirmation before forms are deleted in bulk.
 * Allow a value to pass validation if the entered value matches the placeholder setting.
