@@ -10,7 +10,8 @@ class FrmEntriesController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		if ( ! FrmAppHelper::pro_is_installed() ) {
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		if ( ! $views_installed ) {
 			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
 		}
 

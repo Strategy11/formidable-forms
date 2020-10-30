@@ -168,8 +168,9 @@ class FrmAppController {
 			),
 		);
 
-		// Let people know reports and views exist.
-		if ( ! FrmAppHelper::pro_is_installed() ) {
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+
+		if ( ! $views_installed ) {
 			$nav_items[] = array(
 				'link'    => admin_url( 'admin.php?page=formidable-views&frm-full=1&form=' . absint( $id ) ),
 				'label'   => __( 'Views', 'formidable' ),
@@ -180,6 +181,10 @@ class FrmAppController {
 					'class' => 'frm_noallow',
 				),
 			);
+		}
+
+		// Let people know reports and views exist.
+		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
 				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&frm-full=1&form=' . absint( $id ) ),
 				'label'   => __( 'Reports', 'formidable' ),

@@ -83,6 +83,15 @@ class FrmAppHelper {
 	 * @param string $upgrade_link
 	 */
 	public static function conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link ) {
+		if ( ! $addon ) {
+			?>
+			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
+			</a>
+			<?php
+			return;
+		}
+
 		if ( $addon['status']['type'] === 'installed' ) {
 			?>
 			<a rel="<?php echo esc_attr( $addon['plugin'] ); ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
