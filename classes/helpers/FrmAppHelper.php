@@ -179,7 +179,7 @@ class FrmAppHelper {
 			&nbsp;
 			<?php esc_html_e( 'Your account has expired', 'formidable' ); ?>
 			<div style="float:right">
-				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
+				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-expired', 'account/downloads/' ) ); ?>">
 					Renew Now
 				</a>
 			</div>
