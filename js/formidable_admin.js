@@ -2214,6 +2214,7 @@ function frmAdminBuildJS() {
 	function maybeClearOptText() {
 		/*jshint validthis:true */
 		if ( this.value === frm_admin_js.new_option ) {
+			this.setAttribute( 'data-value-on-focus', this.value );
 			this.value = '';
 		}
 	}
@@ -2423,7 +2424,9 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		this.setAttribute( 'data-value-on-focus', this.value );
+		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) {
+			this.setAttribute( 'data-value-on-focus', this.value );
+		}
 	}
 
 	function onOptionTextBlur() {
@@ -2481,6 +2484,8 @@ function frmAdminBuildJS() {
 
 			logicId = row.id.split( '_' )[ 2 ];
 			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+
+			console.log( 'oldValue', oldValue );
 
 			if ( '' === oldValue ) {
 				optionMatches = [];
