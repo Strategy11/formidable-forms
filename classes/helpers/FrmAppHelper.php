@@ -192,7 +192,7 @@ class FrmAppHelper {
 	 */
 	public static function expiring_message() {
 		$expiring = FrmAddonsController::is_license_expiring();
-		if ( ! $expiring ) {
+		if ( ! $expiring || $expiring < 0 ) {
 			return;
 		}
 		?>
