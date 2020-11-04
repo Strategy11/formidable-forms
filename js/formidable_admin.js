@@ -2485,8 +2485,6 @@ function frmAdminBuildJS() {
 			logicId = row.id.split( '_' )[ 2 ];
 			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
 
-			console.log( 'oldValue', oldValue );
-
 			if ( '' === oldValue ) {
 				optionMatches = [];
 			} else {
