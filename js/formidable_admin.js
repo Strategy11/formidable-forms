@@ -6412,7 +6412,29 @@ function frmAdminBuildJS() {
 			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
-			jQuery( '.post-type-frm_display #screen-options-wrap:hidden input[type="checkbox"]' ).attr( 'disabled', true );
+			var viewsUnlockIconReference = document.getElementById( 'frm_views_unlock' );
+			if ( null !== viewsUnlockIconReference ) {
+				var lock = document.createElement( 'a' ),
+					unlock = viewsUnlockIconReference.cloneNode( true ),
+					$advInfo = jQuery( '#frm_adv_info' );
+
+				lock.setAttribute( 'href', '#' );			
+				lock.appendChild( unlock );
+				$advInfo.find( '.postbox-header .handle-actions').prepend( lock );
+
+				jQuery( lock ).click(function( e ) {
+					var id, icon;
+
+					e.preventDefault();
+
+					$advInfo.toggleClass( 'frm-remove-lock' );
+					id = 'frm_views_' + ( $advInfo.hasClass( 'frm-remove-lock' ) ? 'lock' : 'unlock' );
+					icon = document.getElementById( id ).cloneNode( true );
+
+					lock.innerHTML = '';
+					lock.appendChild( icon );
+				});
+			}
 
 			// submit the search form with dropdown
 			jQuery( '#frm-fid-search-menu a' ).click( function() {

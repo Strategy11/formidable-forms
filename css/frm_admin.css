@@ -6475,17 +6475,21 @@ select.texture {
 	background: var(--sidebar-color);
 }
 
-.post-type-frm_display #frm_adv_info {
+.post-type-frm_display #frm_adv_info:not(.frm-remove-lock) {
 	width: calc( var(--big-sidebar) - 40px );
 	height: calc( 100vh - 32px );
 	overflow: hidden;
 }
 
-.post-type-frm_display #frm_adv_info:not(.frm_fixed) {
+.post-type-frm_display #frm_adv_info .frmsvg {
+	color: var(--dark-grey);
+}
+
+.post-type-frm_display #frm_adv_info:not(.frm_fixed):not(.frm-remove-lock) {
 	top: 0 !important;
 }
 
-.post-type-frm_display #frm_adv_info.frm_fixed {
+.post-type-frm_display #frm_adv_info.frm_fixed:not(.frm-remove-lock) {
 	position: fixed;
 	z-index: 9999;
 	top: 32px;
