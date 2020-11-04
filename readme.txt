@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 4.08
+Stable tag: 4.09
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09 =
+* New: Updated the UX for creating a new blank form or from a template.
+* Fix: Duplicating a closed form action didn't copy correctly.
+* Fix: PHP warnings showed on the add-ons page on some sites.
+
 = 4.08 =
 * New: Added confirmation before forms are deleted in bulk.
 * Allow a value to pass validation if the entered value matches the placeholder setting.

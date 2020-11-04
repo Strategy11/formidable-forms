@@ -168,8 +168,9 @@ class FrmAppController {
 			),
 		);
 
-		// Let people know reports and views exist.
-		if ( ! FrmAppHelper::pro_is_installed() ) {
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+
+		if ( ! $views_installed ) {
 			$nav_items[] = array(
 				'link'    => admin_url( 'admin.php?page=formidable-views&frm-full=1&form=' . absint( $id ) ),
 				'label'   => __( 'Views', 'formidable' ),
@@ -180,6 +181,10 @@ class FrmAppController {
 					'class' => 'frm_noallow',
 				),
 			);
+		}
+
+		// Let people know reports and views exist.
+		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
 				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&frm-full=1&form=' . absint( $id ) ),
 				'label'   => __( 'Reports', 'formidable' ),
@@ -256,10 +261,63 @@ class FrmAppController {
 			'content' => 'upgrade',
 		);
 		$default_link = FrmAppHelper::admin_upgrade_link( $upgrade_link );
+		$plugin_path  = FrmAppHelper::plugin_path();
+		$shared_path  = $plugin_path . '/classes/views/shared/';
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/upgrade_overlay.php' );
+		include $shared_path . 'upgrade_overlay.php';
+		include $shared_path . 'confirm-overlay.php';
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/shared/confirm-overlay.php' );
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list', 'trash' ), true ) ) {
+			self::new_form_overlay_html();
+		}
+	}
+
+	private static function new_form_overlay_html() {
+		FrmFormsController::before_list_templates();
+
+		$plugin_path      = FrmAppHelper::plugin_path();
+		$path             = $plugin_path . '/classes/views/frm-forms/';
+		$expired          = FrmFormsController::expired();
+		$expiring         = FrmAddonsController::is_license_expiring();
+		$user             = wp_get_current_user(); // $user used in leave-email.php to determine a default value for field
+		$view_path        = $path . 'new-form-overlay/';
+		$modal_class      = '';
+		$upgrade_link     = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'new-template',
+				'content' => 'upgrade',
+			)
+		);
+		$renew_link       = FrmAppHelper::admin_upgrade_link(
+			array(
+				'medium'  => 'new-template',
+				'content' => 'renew',
+			)
+		);
+		$blocks_to_render = array();
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			// avoid rendering the email and code blocks for users who have upgraded or have a free license already
+			$api = new FrmFormTemplateApi();
+			if ( ! $api->get_free_license() ) {
+				array_push( $blocks_to_render, 'email', 'code' );
+			}
+		}
+
+		// avoid rendering the upgrade block for users with elite
+		if ( 'elite' !== FrmAddonsController::license_type() ) {
+			$blocks_to_render[] = 'upgrade';
+		}
+
+		// avoid rendering the renew block for users who are not currently expired
+		if ( $expired ) {
+			$blocks_to_render[] = 'renew';
+			$modal_class        = 'frm-expired';
+		} elseif ( $expiring ) {
+			$modal_class = 'frm-expiring';
+		}
+
+		include $path . 'new-form-overlay.php';
 	}
 
 	public static function include_info_overlay() {
@@ -351,6 +409,11 @@ class FrmAppController {
 		if ( ! FrmAppHelper::doing_ajax() ) {
 			// don't continue during ajax calls
 			self::admin_js();
+		}
+
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( 'add_new', 'list_templates' ), true ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable&triggerNewFormModal=1' ) );
+			exit;
 		}
 	}
 

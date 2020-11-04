@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.08';
+	public static $plug_version = '4.09';
 
 	/**
 	 * @since 1.07.02
@@ -74,6 +74,56 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Render a conditional action button for an add on
+	 *
+	 * @since 4.09
+	 * @param array $addon
+	 * @param string|false $license_type
+	 * @param string $plan_required
+	 * @param string $upgrade_link
+	 */
+	public static function conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link ) {
+		if ( ! $addon ) {
+			?>
+			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
+			</a>
+			<?php
+			return;
+		}
+
+		if ( $addon['status']['type'] === 'installed' ) {
+			?>
+			<a rel="<?php echo esc_attr( $addon['plugin'] ); ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
+				<?php esc_html_e( 'Activate', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( ! empty( $addon['url'] ) ) {
+			?>
+			<a class="frm-install-addon button button-primary frm-button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
+				<?php esc_html_e( 'Install', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( $license_type && $license_type === strtolower( $plan_required ) ) {
+			?>
+			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( self::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+				<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
+			</a>
+			<?php
+		} else {
+			if ( isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
+				// Solutions will go to a separate page.
+				$upgrade_link = self::admin_upgrade_link( 'addons', $addon['link'] );
+			}
+			?>
+			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $upgrade_link . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
+			</a>
+			<?php
+		}
+	}
+
+	/**
 	 * @since 3.04.02
 	 * @param array|string $args
 	 * @param string       $page
@@ -129,7 +179,7 @@ class FrmAppHelper {
 			&nbsp;
 			<?php esc_html_e( 'Your account has expired', 'formidable' ); ?>
 			<div style="float:right">
-				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
+				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-expired', 'account/downloads/' ) ); ?>">
 					Renew Now
 				</a>
 			</div>
@@ -142,7 +192,7 @@ class FrmAppHelper {
 	 */
 	public static function expiring_message() {
 		$expiring = FrmAddonsController::is_license_expiring();
-		if ( ! $expiring ) {
+		if ( ! $expiring || $expiring < 0 ) {
 			return;
 		}
 		?>
@@ -156,7 +206,7 @@ class FrmAppHelper {
 					_n(
 						'Your form subscription expires in %1$s day%2$s.',
 						'Your form subscription expires in %1$s days%2$s.',
-						$expiring,
+						intval( $expiring ),
 						'formidable'
 					)
 				),
@@ -166,7 +216,7 @@ class FrmAppHelper {
 			?>
 			<div style="float:right">
 				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
-					Renew Now
+					<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 				</a>
 			</div>
 		</div>
@@ -955,13 +1005,23 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.0
+	 * @param array $atts
 	 */
 	public static function add_new_item_link( $atts ) {
-		if ( isset( $atts['new_link'] ) && ! empty( $atts['new_link'] ) ) {
+		if ( ! empty( $atts['new_link'] ) ) {
 			?>
 			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm-with-plus">
 				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
 				<?php esc_html_e( 'Add New', 'formidable' ); ?>
+			</a>
+			<?php
+		} elseif ( ! empty( $atts['trigger_new_form_modal'] ) ) {
+			?>
+			<a href="#" class="button button-primary frm-button-primary frm-with-plus frm-trigger-new-form-modal">
+				<?php
+				self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' );
+				esc_html_e( 'Add New', 'formidable' );
+				?>
 			</a>
 			<?php
 		} elseif ( isset( $atts['link_hook'] ) ) {
@@ -2665,7 +2725,6 @@ class FrmAppHelper {
 			'sv'     => __( 'Swedish', 'formidable' ),
 			'ta'     => __( 'Tamil', 'formidable' ),
 			'th'     => __( 'Thai', 'formidable' ),
-			'tu'     => __( 'Turkish', 'formidable' ),
 			'tr'     => __( 'Turkish', 'formidable' ),
 			'uk'     => __( 'Ukranian', 'formidable' ),
 			'vi'     => __( 'Vietnamese', 'formidable' ),
@@ -2673,10 +2732,10 @@ class FrmAppHelper {
 
 		if ( $type === 'captcha' ) {
 			// remove the languages unavailable for the captcha
-			$unset = array( 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta', 'tu' );
+			$unset = array( 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta' );
 		} else {
 			// remove the languages unavailable for the datepicker
-			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'tr' );
+			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419' );
 		}
 
 		$locales = array_diff_key( $locales, array_flip( $unset ) );

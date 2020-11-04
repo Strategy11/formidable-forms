@@ -78,15 +78,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Choose which type of form to create
-	 *
-	 * @since 3.06
-	 */
-	public static function add_new() {
-		self::list_templates();
-	}
-
-	/**
 	 * Load the scripts before a modal can be triggered.
 	 *
 	 * @since 4.0
@@ -580,7 +571,7 @@ class FrmFormsController {
 
 		$form_id     = FrmAppHelper::get_param( 'xml', '', 'post', 'absint' );
 		$new_form_id = FrmForm::duplicate( $form_id, 1, true );
-		if ( empty( $new_form_id ) ) {
+		if ( ! $new_form_id ) {
 			$response = array(
 				'message' => __( 'There was an error creating a template.', 'formidable' ),
 			);
@@ -592,7 +583,7 @@ class FrmFormsController {
 			}
 
 			$response = array(
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=list_templates' ),
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ),
 			);
 		}
 
@@ -795,39 +786,93 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Show the template listing page
-	 *
-	 * @since 3.06
+	 * @return bool
 	 */
-	private static function list_templates() {
-		self::init_modal();
+	public static function expired() {
+		global $frm_expired;
+		return $frm_expired;
+	}
 
-		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
-		$forms = FrmForm::get_published_forms( $where );
+	/**
+	 * Get data from api before rendering it so that we can flag the modal as expired
+	 */
+	public static function before_list_templates() {
+		global $frm_templates;
+		global $frm_expired;
+		global $frm_license_type;
 
-		$api       = new FrmFormTemplateApi();
-		$templates = $api->get_api_info();
-
-		$custom_templates = array();
-		self::add_user_templates( $custom_templates );
-
-		$error   = '';
-		$expired = false;
-		$license_type = '';
-		if ( isset( $templates['error'] ) ) {
-			$error   = $templates['error']['message'];
-			$error   = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
-			$expired = ( $templates['error']['code'] === 'expired' );
-
-			$license_type = isset( $templates['error']['type'] ) ? $templates['error']['type'] : '';
-			unset( $templates['error'] );
+		$api           = new FrmFormTemplateApi();
+		$frm_templates = $api->get_api_info();
+		$expired       = false;
+		$license_type  = '';
+		if ( isset( $frm_templates['error'] ) ) {
+			$error        = $frm_templates['error']['message'];
+			$error        = str_replace( 'utm_medium=addons', 'utm_medium=form-templates', $error );
+			$expired      = 'expired' === $frm_templates['error']['code'];
+			$license_type = isset( $frm_templates['error']['type'] ) ? $frm_templates['error']['type'] : '';
+			unset( $frm_templates['error'] );
 		}
 
-		$pricing = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$frm_expired      = $expired;
+		$frm_license_type = $license_type;
+	}
 
-		$categories = self::get_template_categories( $templates );
+	public static function list_templates() {
+		global $frm_templates;
+		global $frm_expired;
+		global $frm_license_type;
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list-templates.php' );
+		$templates             = $frm_templates;
+		$custom_templates      = array();
+		$templates_by_category = array();
+
+		self::add_user_templates( $custom_templates );
+
+		foreach ( $templates as $template ) {
+			if ( ! isset( $template['categories'] ) ) {
+				continue;
+			}
+
+			foreach ( $template['categories'] as $category ) {
+				if ( ! isset( $templates_by_category[ $category ] ) ) {
+					$templates_by_category[ $category ] = array();
+				}
+
+				$templates_by_category[ $category ][] = $template;
+			}
+		}
+		unset( $template );
+
+		// Subcategories that are included elsewhere.
+		$redundant_cats = array( 'PayPal', 'Stripe', 'Twilio' );
+
+		$categories = array_keys( $templates_by_category );
+		$categories = array_diff( $categories, FrmFormsHelper::ignore_template_categories() );
+		$categories = array_diff( $categories, $redundant_cats );
+		sort( $categories );
+
+		array_walk(
+			$custom_templates,
+			function( &$template ) {
+				$template['custom'] = true;
+			}
+		);
+
+		$my_templates_translation = __( 'My Templates', 'formidable' );
+		$categories               = array_merge( array( $my_templates_translation ), $categories );
+		$pricing                  = FrmAppHelper::admin_upgrade_link( 'form-templates' );
+		$expired                  = $frm_expired;
+		$license_type             = $frm_license_type;
+		$args                     = compact( 'pricing', 'license_type' );
+		$where                    = apply_filters( 'frm_forms_dropdown', array(), '' );
+		$forms                    = FrmForm::get_published_forms( $where );
+		$view_path                = FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
+
+		$templates_by_category[ $my_templates_translation ] = $custom_templates;
+
+		unset( $pricing, $license_type, $where );
+		wp_enqueue_script( 'accordion' ); // register accordion for template groups
+		require $view_path . 'list-templates.php';
 	}
 
 	/**
@@ -1376,9 +1421,6 @@ class FrmFormsController {
 		switch ( $action ) {
 			case 'new':
 				return self::new_form( $vars );
-			case 'add_new':
-			case 'list_templates':
-				return self::list_templates();
 			case 'create':
 			case 'edit':
 			case 'update':
@@ -2143,5 +2185,13 @@ class FrmFormsController {
 	 */
 	public static function edit_description() {
 		FrmDeprecated::edit_description();
+	}
+
+	/**
+	 * @deprecated 4.08
+	 * @since 3.06
+	 */
+	public static function add_new() {
+		_deprecated_function( __FUNCTION__, '4.08' );
 	}
 }
