@@ -6418,11 +6418,11 @@ function frmAdminBuildJS() {
 					unlock = viewsUnlockIconReference.cloneNode( true ),
 					$advInfo = jQuery( '#frm_adv_info' );
 
-				lock.setAttribute( 'href', '#' );			
+				lock.setAttribute( 'href', '#' );
 				lock.appendChild( unlock );
-				$advInfo.find( '.postbox-header .handle-actions').prepend( lock );
+				$advInfo.find( '.postbox-header .handle-actions' ).prepend( lock );
 
-				jQuery( lock ).click(function( e ) {
+				jQuery( lock ).click( function( e ) {
 					var id, icon;
 
 					e.preventDefault();
