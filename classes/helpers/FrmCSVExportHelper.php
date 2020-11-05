@@ -143,22 +143,18 @@ class FrmCSVExportHelper {
 		$repeater_ids          = array();
 
 		foreach ( self::$fields as $col ) {
-			if ( $col->form_id === self::$form_id || ! $col->field_options['in_section'] ) {
-				$headings += self::field_headings( $col );
-			} else {
-				$repeater_id = $col->field_options['in_section'];
-				$section     = FrmField::getOne( $repeater_id );
+			if ( self::is_the_child_of_a_repeater( $col ) ) {
+				$repeater_id                           = $col->field_options['in_section'];
+				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
 
-				if ( $section && FrmField::is_repeating_field( $section ) ) {
-					$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
-
-					if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
-						$fields_by_repeater_id[ $repeater_id ] = array();
-						$repeater_ids[]                        = $repeater_id;
-					}
-
-					$fields_by_repeater_id[ $repeater_id ][] = $col;
+				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
+					$fields_by_repeater_id[ $repeater_id ] = array();
+					$repeater_ids[]                        = $repeater_id;
 				}
+
+				$fields_by_repeater_id[ $repeater_id ][] = $col;
+			} else {
+				$headings += self::field_headings( $col );
 			}
 		}
 		unset( $repeater_id, $col );
@@ -224,6 +220,25 @@ class FrmCSVExportHelper {
 		if ( self::has_parent_id() ) {
 			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
 		}
+	}
+
+	/**
+	 * @param object $field
+	 * @return bool
+	 */
+	private static function is_the_child_of_a_repeater( $field ) {
+		if ( $field->form_id === self::$form_id || ! $field->field_options['in_section'] ) {
+			return false;
+		}
+
+		$section_id = $field->field_options['in_section'];
+		$section    = FrmField::getOne( $section_id );
+
+		if ( ! $section ) {
+			return false;
+		}
+
+		return FrmField::is_repeating_field( $section );
 	}
 
 	private static function has_parent_id() {
