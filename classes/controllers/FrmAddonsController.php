@@ -1105,12 +1105,12 @@ class FrmAddonsController {
 	 * @param string $plan_required
 	 * @param string $upgrade_link
 	 */
-	public static function show_conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link ) {
+	public static function show_conditional_action_button( $atts ) {
 		if ( is_callable( 'FrmProAddonsController::show_conditional_action_button' ) ) {
-			return FrmProAddonsController::show_conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link );
+			return FrmProAddonsController::show_conditional_action_button( $atts );
 		}
 
-		self::addon_upgrade_link( $addon, $upgrade_link );
+		self::addon_upgrade_link( $atts['addon'], $atts['upgrade_link'] );
 	}
 
 	/**
