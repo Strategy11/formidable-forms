@@ -819,7 +819,6 @@ class FrmFormsController {
 
 	public static function list_templates() {
 		global $frm_templates;
-		global $frm_expired;
 		global $frm_license_type;
 
 		$templates             = $frm_templates;
@@ -861,7 +860,6 @@ class FrmFormsController {
 		$my_templates_translation = __( 'My Templates', 'formidable' );
 		$categories               = array_merge( array( $my_templates_translation ), $categories );
 		$pricing                  = FrmAppHelper::admin_upgrade_link( 'form-templates' );
-		$expired                  = $frm_expired;
 		$license_type             = $frm_license_type;
 		$args                     = compact( 'pricing', 'license_type' );
 		$where                    = apply_filters( 'frm_forms_dropdown', array(), '' );

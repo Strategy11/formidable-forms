@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 	</ul>
-	<?php FrmAppHelper::renewal_message(); ?>
+
 	<p id="frm-form-button">
 		<button class="frm_button_submit" disabled="disabled">
 			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
@@ -53,6 +53,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 		<div class="clear"></div>
 	</div>
+
+	<?php do_action( 'frm_page_footer', array( 'table' => 'form-builder' ) ); ?>
 </div>
 <?php
 FrmFieldsHelper::bulk_options_overlay();

@@ -99,6 +99,7 @@ class FrmHooksController {
 		// Addons Controller.
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
 		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
+		add_action( 'frm_page_footer', 'FrmAppHelper::renewal_message' );
 
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
@@ -159,9 +160,7 @@ class FrmHooksController {
 		// Addons.
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );
 		add_action( 'wp_ajax_frm_addon_deactivate', 'FrmAddon::deactivate' );
-		add_action( 'wp_ajax_frm_install_addon', 'FrmAddonsController::ajax_install_addon' );
 		add_action( 'wp_ajax_frm_activate_addon', 'FrmAddonsController::ajax_activate_addon' );
-		add_action( 'wp_ajax_frm_multiple_addons', 'FrmAddonsController::ajax_multiple_addons' );
 		add_action( 'wp_ajax_frm_connect', 'FrmAddonsController::connect_pro' );
 
 		// Fields Controller.

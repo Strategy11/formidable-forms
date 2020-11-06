@@ -51,8 +51,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="clear"></div>
 				<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
 				<?php $wp_list_table->display(); ?>
-				<?php FrmAppHelper::renewal_message(); ?>
 			</form>
+			<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 		</div>
 	<?php if ( $form ) { ?>
 	</div>

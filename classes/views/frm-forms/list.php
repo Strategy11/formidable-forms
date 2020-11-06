@@ -40,9 +40,9 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 	}
 }
 
-FrmAppHelper::renewal_message();
 ?>
 </form>
 
+<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 </div>
 </div>
