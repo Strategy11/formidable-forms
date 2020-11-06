@@ -288,8 +288,13 @@ class FrmAddonsController {
 	 * @since 3.04.03
 	 */
 	public static function check_update( $transient ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			// Don't make any changes if only Lite is installed.
+			return $transient;
+		}
+
 		if ( is_callable( 'FrmProAddonsController::check_update' ) ) {
-			return FrmProAddonsController::check_update();
+			return FrmProAddonsController::check_update( $transient );
 		}
 
 		if ( ! is_object( $transient ) ) {

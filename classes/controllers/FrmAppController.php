@@ -343,7 +343,6 @@ class FrmAppController {
 		if ( is_callable( 'FrmProAddonsController::renewal_message' ) ) {
 			// These functions moved to Pro in 4.09.01
 			remove_action( 'frm_page_footer', 'FrmAppHelper::renewal_message' );
-			remove_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
 		}
 	}
 
