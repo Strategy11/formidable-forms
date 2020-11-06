@@ -116,24 +116,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.07
-	 */
-	public static function renewal_message() {
-		if ( is_callable( 'FrmProAddonsController::renewal_message' ) ) {
-			FrmProAddonsController::renewal_message();
-		}
-	}
-
-	/**
-	 * @since 4.08
-	 */
-	public static function expiring_message() {
-		if ( is_callable( 'FrmProAddonsController::expiring_message' ) ) {
-			FrmProAddonsController::expiring_message();
-		}
-	}
-
-	/**
 	 * Get the Formidable settings
 	 *
 	 * @since 2.0
@@ -2659,6 +2641,28 @@ class FrmAppHelper {
 	 */
 	public static function multiselect_accessibility() {
 		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
+	}
+
+	/**
+	 * @since 4.07
+	 * @deprecated 4.09.01
+	 */
+	public static function renewal_message() {
+		_deprecated_function( __METHOD__, '4.09.01', 'FrmProAddonsController::renewal_message' );
+		if ( is_callable( 'FrmProAddonsController::renewal_message' ) ) {
+			FrmProAddonsController::renewal_message();
+		}
+	}
+
+	/**
+	 * @since 4.08
+	 * @deprecated 4.09.01
+	 */
+	public static function expiring_message() {
+		_deprecated_function( __METHOD__, '4.09.01', 'FrmProAddonsController::expiring_message' );
+		if ( is_callable( 'FrmProAddonsController::expiring_message' ) ) {
+			FrmProAddonsController::expiring_message();
+		}
 	}
 
 	/**
