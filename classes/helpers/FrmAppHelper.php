@@ -74,56 +74,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Render a conditional action button for an add on
-	 *
-	 * @since 4.09
-	 * @param array $addon
-	 * @param string|false $license_type
-	 * @param string $plan_required
-	 * @param string $upgrade_link
-	 */
-	public static function conditional_action_button( $addon, $license_type, $plan_required, $upgrade_link ) {
-		if ( ! $addon ) {
-			?>
-			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
-				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
-			</a>
-			<?php
-			return;
-		}
-
-		if ( $addon['status']['type'] === 'installed' ) {
-			?>
-			<a rel="<?php echo esc_attr( $addon['plugin'] ); ?>" class="button button-primary frm-button-primary frm-activate-addon <?php echo esc_attr( empty( $addon['activate_url'] ) ? 'frm_hidden' : '' ); ?>">
-				<?php esc_html_e( 'Activate', 'formidable' ); ?>
-			</a>
-			<?php
-		} elseif ( ! empty( $addon['url'] ) ) {
-			?>
-			<a class="frm-install-addon button button-primary frm-button-primary" rel="<?php echo esc_attr( $addon['url'] ); ?>" aria-label="<?php esc_attr_e( 'Install', 'formidable' ); ?>">
-				<?php esc_html_e( 'Install', 'formidable' ); ?>
-			</a>
-			<?php
-		} elseif ( $license_type && $license_type === strtolower( $plan_required ) ) {
-			?>
-			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( self::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
-				<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
-			</a>
-			<?php
-		} else {
-			if ( isset( $addon['categories'] ) && in_array( 'Solution', $addon['categories'], true ) ) {
-				// Solutions will go to a separate page.
-				$upgrade_link = self::admin_upgrade_link( 'addons', $addon['link'] );
-			}
-			?>
-			<a class="install-now button button-secondary frm-button-secondary" href="<?php echo esc_url( $upgrade_link . '&utm_content=' . $addon['slug'] ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
-				<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
-			</a>
-			<?php
-		}
-	}
-
-	/**
 	 * @since 3.04.02
 	 * @param array|string $args
 	 * @param string       $page
@@ -169,58 +119,18 @@ class FrmAppHelper {
 	 * @since 4.07
 	 */
 	public static function renewal_message() {
-		if ( ! FrmAddonsController::is_license_expired() ) {
-			self::expiring_message();
-			return;
+		if ( is_callable( 'FrmProAddonsController::renewal_message' ) ) {
+			FrmProAddonsController::renewal_message();
 		}
-		?>
-		<div class="frm_error_style" style="text-align:left">
-			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
-			&nbsp;
-			<?php esc_html_e( 'Your account has expired', 'formidable' ); ?>
-			<div style="float:right">
-				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-expired', 'account/downloads/' ) ); ?>">
-					Renew Now
-				</a>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**
 	 * @since 4.08
 	 */
 	public static function expiring_message() {
-		$expiring = FrmAddonsController::is_license_expiring();
-		if ( ! $expiring ) {
-			return;
+		if ( is_callable( 'FrmProAddonsController::expiring_message' ) ) {
+			FrmProAddonsController::expiring_message();
 		}
-		?>
-		<div class="frm_warning_style" style="text-align:left">
-			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
-			&nbsp;
-			<?php
-			printf(
-				esc_html(
-					/* translators: %1$s: start HTML tag, %2$s: end HTML tag */
-					_n(
-						'Your form subscription expires in %1$s day%2$s.',
-						'Your form subscription expires in %1$s days%2$s.',
-						intval( $expiring ),
-						'formidable'
-					)
-				),
-				'<strong>' . esc_html( number_format_i18n( $expiring ) ),
-				'</strong>'
-			);
-			?>
-			<div style="float:right">
-				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-renew', 'account/downloads/' ) ); ?>">
-					<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
-				</a>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**
@@ -2622,7 +2532,7 @@ class FrmAppHelper {
 			if ( empty( $expired ) ) {
 				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
 			} else {
-				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest Pro version or <a href="https://downloads.wordpress.org/plugin/formidable.<?php echo esc_attr( $pro_version ); ?>.zip">download the previous Lite version</a> to revert.';
+				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version.';
 			}
 			?>
 		</div>

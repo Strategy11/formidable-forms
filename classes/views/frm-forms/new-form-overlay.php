@@ -85,15 +85,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php require $view_path . 'renew-account.php'; ?>
 				</div>
 			<?php } ?>
-			<?php if ( $expired ) { ?>
-				<div id="frm-create-footer" class="frm_modal_footer">
-					<?php FrmAppHelper::renewal_message(); ?>
-				</div>
-			<?php } elseif ( $expiring ) { ?>
-				<div id="frm-create-footer" class="frm_modal_footer">
-					<?php FrmAppHelper::expiring_message(); ?>
-				</div>
-			<?php } ?>
+			<?php do_action( 'frm_overlay_footer', array( 'type' => 'form' ) ); ?>
+
 			<div id="frm-preview-footer" class="frm_modal_footer">
 				<a href="#" class="button button-secondary frm-button-secondary frm-back-to-all-templates">
 					<?php esc_html_e( 'Back to all templates', 'formidable' ); ?>

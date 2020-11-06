@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						);
 						?>
 					</span>
-					<?php FrmAppHelper::conditional_action_button( $addon, ! empty( $license_type ) ? $license_type : false, $plan_required, $pricing ); ?>
+					<?php FrmAddonsController::show_conditional_action_button( $addon, ! empty( $license_type ) ? $license_type : false, $plan_required, $pricing ); ?>
 				</div>
 			</div>
 		<?php } ?>
