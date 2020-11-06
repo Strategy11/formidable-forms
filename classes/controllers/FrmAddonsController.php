@@ -244,7 +244,12 @@ class FrmAddonsController {
 			return FrmProAddonsController::is_license_expired();
 		}
 
-		return false;
+		$version_info = self::get_primary_license_info();
+		if ( ! isset( $version_info['error'] ) ) {
+			return false;
+		}
+
+		return $version_info['error'];
 	}
 
 	/**

@@ -2648,10 +2648,27 @@ class FrmAppHelper {
 	 * @deprecated 4.09.01
 	 */
 	public static function renewal_message() {
-		_deprecated_function( __METHOD__, '4.09.01', 'FrmProAddonsController::renewal_message' );
 		if ( is_callable( 'FrmProAddonsController::renewal_message' ) ) {
 			FrmProAddonsController::renewal_message();
+			return;
 		}
+
+		if ( ! FrmAddonsController::is_license_expired() ) {
+			return;
+		}
+
+		?>
+		<div class="frm_error_style" style="text-align:left">
+			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
+			&nbsp;
+			<?php esc_html_e( 'Your account has expired', 'formidable' ); ?>
+			<div style="float:right">
+				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-expired', 'account/downloads/' ) ); ?>">
+					<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
+				</a>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**

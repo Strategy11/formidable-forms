@@ -56,6 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php do_action( 'frm_add_form_option_section', $values ); ?>
 					<div class="clear"></div>
 					<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
+					<?php do_action( 'frm_page_footer', array( 'table' => 'form-settings' ) ); ?>
 				</div>
 			</div>
 		</div>
