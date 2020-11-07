@@ -4,28 +4,17 @@
  */
 class test_FrmCSVExportHelper extends FrmUnitTest {
 
+	private $form;
+
 	/**
-	 * @covers FrnCsvExportHelper::csv_headings
+	 * @covers FrmCsvExportHelper::csv_headings
 	 */
 	public function test_csv_headings() {
 		$this->check_php_version( '5.3' );
 
-		$form      = FrmForm::getOne( 'all_field_types' );
-		$form_id   = $form->id;
-		$form_cols = $this->run_private_method(
-			array( 'FrmXMLController', 'get_fields_for_csv_export' ),
-			array( $form_id, $form )
-		);
+		$this->set_form( FrmForm::getOne( 'all_field_types' ) );
 
-		$this->set_private_property( 'FrmCSVExportHelper', 'form_id', $form_id );
-		$this->set_private_property( 'FrmCSVExportHelper', 'fields', $form_cols );
-
-		$headings = array();
-		$this->run_private_method(
-			array( 'FrmCSVExportHelper', 'csv_headings' ),
-			array( &$headings ) // parameters go inside this array if any
-		);
-
+		$headings = $this->csv_headings();
 		$expected = array(
 			// default expected
 			'created_at' => 'Timestamp',
@@ -37,8 +26,8 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			'id'         => 'ID',
 			'item_key'   => 'Key',
 		);
+		$keys     = array_keys( $headings );
 
-		$keys = array_keys( $headings );
 		foreach ( $expected as $key => $label ) {
 			$this->assertContains( $key, $keys, "{$label} is not present in CSV Headings" );
 		}
@@ -80,5 +69,69 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		foreach ( $expected as $label ) {
 			$this->assertContains( $label, $labels, "{$label} is not present in CSV Headings" );
 		}
+	}
+
+	/**
+	 * @covers FrmCsvExportHelper::csv_headings exports the fields in a section for an embedded form
+	 */
+	public function test_csv_headings_for_embedded_sections() {
+		$this->check_php_version( '5.3' );
+
+		$embedded_form = $this->factory->form->create_and_get();
+		$section       = $this->factory->field->create_and_get( array( 
+			'form_id' => $embedded_form->id,
+			'type'    => 'divider',
+			'name'    => 'Section',
+		) );
+		$field_in_section = $this->factory->field->create_and_get( array(
+			'form_id' => $embedded_form->id,
+			'type'    => 'text',
+			'name'    => 'Text',
+			'field_options' => array(
+				'in_section' => $section->id,
+			),
+		) );
+
+		$parent_form = $this->factory->form->create_and_get();
+		$embed_field = $this->factory->field->create_and_get( array(
+			'form_id' => $parent_form->id,
+			'type'    => 'embed',
+			'field_options' => array(
+				'form_select' => $embedded_form->id,
+			),
+		) );
+
+		$this->set_form( $parent_form );
+
+		$headings = $this->csv_headings();
+		$expected = array( $field_in_section->name );
+
+		$labels = array_values( $headings );
+		foreach ( $expected as $label ) {
+			$this->assertContains( $label, $labels, "{$label} is not present in CSV Headings" );
+		}
+	}
+
+	private function set_form( $form ) {
+		$this->form = $form;
+		$this->set_private_property( 'FrmCSVExportHelper', 'form_id', $form->id );
+		$this->set_form_cols();
+	}
+
+	private function set_form_cols() {
+		$form_cols = $this->run_private_method(
+			array( 'FrmXMLController', 'get_fields_for_csv_export' ),
+			array( $this->form->id, $this->form )
+		);
+		$this->set_private_property( 'FrmCSVExportHelper', 'fields', $form_cols );
+	}
+
+	private function csv_headings() {
+		$headings = array();
+		$this->run_private_method(
+			array( 'FrmCSVExportHelper', 'csv_headings' ),
+			array( &$headings )
+		);
+		return $headings;
 	}
 }
