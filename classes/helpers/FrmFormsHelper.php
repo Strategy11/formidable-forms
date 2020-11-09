@@ -1006,22 +1006,51 @@ BEFORE_HTML;
 		return $actions;
 	}
 
-	public static function edit_form_link( $form_id ) {
-		if ( is_object( $form_id ) ) {
-			$form    = $form_id;
-			$name    = $form->name;
-			$form_id = $form->id;
-		} else {
-			$name = FrmForm::getName( $form_id );
+	public static function edit_form_link( $data ) {
+		$form_id = self::get_form_id_from_data( $data );
+
+		if ( ! $form_id ) {
+			return '';
 		}
 
-		if ( $form_id ) {
-			$val = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . ( '' == $name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
-		} else {
-			$val = '';
-		}
+		$label = self::edit_form_link_label( $data );
+		$link  = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html( $label ) . '</a>';
+		return $link;
+	}
 
-		return $val;
+	public static function edit_form_link_label( $data ) {
+		$name = self::get_form_name_from_data( $data );
+		if ( ! $name ) {
+			return __( '(no title)', 'formidable' );
+		}
+		return FrmAppHelper::truncate( $name, 40 );
+	}
+
+	/**
+	 * @param mixed data
+	 * @return int
+	 */
+	private static function get_form_id_from_data( $data ) {
+		if ( is_object( $data ) ) {
+			$form_id = $data->id;
+		} else {
+			$form_id = $data;
+		}
+		return $form_id;
+	}
+
+	/**
+	 * @param mixed $data
+	 * @return string
+	 */
+	private static function get_form_name_from_data( $data ) {
+		if ( is_object( $data ) ) {
+			$form_name = $data->name;
+		} else {
+			$form_id   = $data;
+			$form_name = FrmForm::getName( $form_id );
+		}
+		return $form_name;
 	}
 
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
