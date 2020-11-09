@@ -190,7 +190,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
 		list( $columns, $hidden, , $primary ) = $this->get_column_info();
-		$action_col = false;
+		$action_col                           = false;
+		$action_columns                       = $this->get_action_columns();
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name . ' column-' . $column_name;
@@ -199,9 +200,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$class .= ' column-primary';
 			}
 
-			if ( in_array( $column_name, $hidden ) ) {
+			if ( in_array( $column_name, $hidden, true ) ) {
 				$class .= ' frm_hidden';
-			} elseif ( ! $action_col && ! in_array( $column_name, array( 'cb', 'id', 'form_id', 'post_id' ) ) ) {
+			} elseif ( ! $action_col && ! in_array( $column_name, $action_columns, true ) ) {
 				$action_col = $column_name;
 			}
 
@@ -215,7 +216,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			if ( $this->column_name == 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
-				if ( in_array( $column_name, $hidden ) ) {
+				if ( in_array( $column_name, $hidden, true ) ) {
 					$val = '';
 				} else {
 					$val = $this->column_value( $item );
@@ -236,6 +237,20 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$r .= '</tr>';
 
 		return $r;
+	}
+
+	/**
+	 * Get the column names that the logged in user can action on
+	 */
+	private function get_action_columns() {
+		$columns = array();
+
+		$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+		if ( $user_can_edit_forms ) {
+			array_push( $columns, 'cb', 'form_id', 'id', 'post_id' );
+		}
+
+		return $columns;
 	}
 
 	private function column_value( $item ) {
@@ -260,7 +275,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
 				break;
 			case 'form_id':
-				$val = FrmFormsHelper::edit_form_link( $item->form_id );
+				$form_id             = $item->form_id;
+				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+				if ( $user_can_edit_forms ) {
+					$val = FrmFormsHelper::edit_form_link( $form_id );
+				} else {
+					$val = FrmFormsHelper::edit_form_link_label( $form_id );
+				}
 				break;
 			case 'post_id':
 				$val = FrmAppHelper::post_edit_link( $item->post_id );
