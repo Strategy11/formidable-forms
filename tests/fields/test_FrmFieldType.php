@@ -153,4 +153,39 @@ class test_FrmFieldType extends FrmUnitTest {
 		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
 		$this->assertEquals( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
 	}
+
+	/**
+	 * @covers FrmFieldType::is_not_unique
+	 */
+	public function test_is_not_unique() {
+
+		$form_id = $this->factory->form->create();
+		$field1 = $this->factory->field->create_and_get( array(
+			'type'    => 'number',
+			'form_id' => $form_id,
+		) );
+
+		$field_object1 = FrmFieldFactory::get_field_type( 'text', $field1 );
+		$entry_id     = 0;
+
+		$this->assertFalse( $field_object1->is_not_unique( 'First', $entry_id ), 'the first iteration of a new value should be flagged as okay' );
+		$this->assertTrue( $field_object1->is_not_unique( 'First', $entry_id ), 'the second iteration of a new value should should be flagged as a duplicate' );
+
+		$this->assertFalse( $field_object1->is_not_unique( 'Second', $entry_id ), 'the first iteration of a second new value should be flagged as okay' );
+		$this->assertFalse( $field_object1->is_not_unique( 'Third', $entry_id ), 'the first iteration of a third new value should be flagged as okay' );
+
+		$this->assertTrue( $field_object1->is_not_unique( 'Third', $entry_id ) );
+		$this->assertTrue( $field_object1->is_not_unique( 'Second', $entry_id ) );
+
+		$field_object2 = FrmFieldFactory::get_field_type( 'text', $field1 );
+		$this->assertTrue( $field_object2->is_not_unique( 'First', $entry_id ), 'another field object for the same field should also be flagging a duplicate' );
+
+		$field2 = $this->factory->field->create_and_get( array(
+			'type'    => 'number',
+			'form_id' => $form_id,
+		) );
+		$field_object3 = FrmFieldFactory::get_field_type( 'text', $field2 );
+
+		$this->assertFalse( $field_object3->is_not_unique( 'First', $entry_id ), 'a field object for another field should not flag a duplicate' );
+	}
 }
