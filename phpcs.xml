@@ -11,16 +11,12 @@
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
-
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 		<exclude name="WordPress.WP.GlobalVariablesOverride" />
-
-		<!-- Enable these rules right away -->
-		<exclude name="WordPress.Security.NonceVerification.Missing" />
 
 		<!-- These give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
@@ -41,6 +37,23 @@
 		</properties>
 	</rule>
 	<rule ref="Squiz.Scope.StaticThisUsage" />
+
+	<!-- Enable these rules right away -->
+	<rule ref="WordPress.Security.NonceVerification.Missing">
+		<exclude-pattern>classes/models/fields/FrmFieldCaptcha.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmStylesController.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmEntriesController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmStylesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmEntriesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 
 	<!-- Exclude specific rules for unit tests -->
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
