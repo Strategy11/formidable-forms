@@ -30,7 +30,7 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
 	}
 
-	private function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
+	protected function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
 		// Just check the first form
 		$old_child_form = reset( $old_child_forms );
 		$new_child_form = reset( $new_child_forms );
