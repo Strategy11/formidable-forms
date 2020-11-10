@@ -18,7 +18,6 @@
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 		<exclude name="WordPress.WP.GlobalVariablesOverride" />
-		<exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
 
 		<!-- Enable these rules right away -->
 		<exclude name="WordPress.Security.NonceVerification.Missing" />
