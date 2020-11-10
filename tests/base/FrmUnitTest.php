@@ -403,7 +403,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 	}
 
-	static function generate_xml( $type, $xml_args ) {
+	public static function generate_xml( $type, $xml_args ) {
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
 
