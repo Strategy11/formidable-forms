@@ -5,7 +5,6 @@
  *
  * @group entries
  * @group free
- *
  */
 class test_FrmTableHTMLGenerator extends FrmUnitTest {
 
@@ -13,7 +12,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 	 * @covers FrmTableHTMLGenerator::init_style_settings
 	 * @covers FrmTableHTMLGenerator::get_color_markup
 	 */
-	function test_init_style_settings() {
+	public function test_init_style_settings() {
 		$colors = $this->_get_colors();
 		$table_generator = new FrmTableHTMLGenerator( 'entry', $colors['start'] );
 
@@ -28,7 +27,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 	/**
 	 * @covers FrmTableHTMLGenerator::is_color_setting
 	 */
-	function test_is_color_setting() {
+	public function test_is_color_setting() {
 		$table_generator = new FrmTableHTMLGenerator( 'entry' );
 
 		$colors = array( 'border_color', 'bg_color', 'text_color', 'alt_bg_color' );
@@ -44,7 +43,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 		}
 	}
 
-	function _get_colors() {
+	private function _get_colors() {
 		$atts = array(
 			'border_color' => 'ffffff',
 			'bg_color'     => 'red',
@@ -59,6 +58,9 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 			'alt_bg_color' => '#fff',
 		);
 
-		return array( 'start' => $atts, 'expected' => $expected );
+		return array(
+			'start' => $atts,
+			'expected' => $expected,
+		);
 	}
 }

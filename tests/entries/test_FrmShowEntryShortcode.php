@@ -7,7 +7,6 @@
  * @group entries
  * @group show-entry-shortcode
  * @group free
- *
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
@@ -196,7 +195,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	public function test_default_message_with_specific_field_ids_included() {
 		$entry = $this->get_test_entry( true );
 
-		$this->set_included_fields( 'id ');
+		$this->set_included_fields( 'id ' );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -717,7 +716,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return array(
 			FrmField::get_id_by_key( 'free-text-field' ) => 'Test Testerson',
 			FrmField::get_id_by_key( 'free-paragraph-field' ) => "Test\r\nMiddle\r\nTesterson",
-			FrmField::get_id_by_key( 'free-checkboxes' ) => array ( 'Red', 'Green' ),
+			FrmField::get_id_by_key( 'free-checkboxes' ) => array( 'Red', 'Green' ),
 			FrmField::get_id_by_key( 'free-radio-button-field' ) => 'cookies',
 			FrmField::get_id_by_key( 'free-dropdown-field' ) => 'Ace Ventura',
 			FrmField::get_id_by_key( 'free-email-field' ) => 'jamie@mail.com',
@@ -862,7 +861,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
 			$content = $field_value . ': ' . $field->name;
 		} else {
-			$content = $field->name .': ' . $field_value;
+			$content = $field->name . ': ' . $field_value;
 		}
 
 		$content .= "\r\n";
@@ -1057,7 +1056,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function get_expected_default_shortcodes( $type, $atts ) {
 		$content = '';
 
-		$fields = FrmField::get_all_for_form( $atts[ 'form_id' ], '', 'include' );
+		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 
 		if ( $type === 'html' ) {
 			$content .= $this->table_header( $atts );
@@ -1151,7 +1150,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$expected = array(
 			'free-text-field' => 'Test Testerson',
 			'free-paragraph-field' => "Test\r\nMiddle\r\nTesterson",
-			'free-checkboxes' => array ( 'Red', 'Green' ),
+			'free-checkboxes' => array( 'Red', 'Green' ),
 			'free-radio-button-field' => 'cookies',
 			'free-dropdown-field' => 'Ace Ventura',
 			'free-email-field' => 'jamie@mail.com',

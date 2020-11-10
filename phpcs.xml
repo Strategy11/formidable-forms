@@ -2,7 +2,6 @@
 <ruleset name="Formidable Forms">
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
-	<exclude-pattern>tests/*</exclude-pattern>
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
@@ -12,16 +11,12 @@
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
-
 		<!-- Temporary exclusions. Enable these when we have time to address them -->
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
 		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 		<exclude name="WordPress.WP.GlobalVariablesOverride" />
-
-		<!-- Enable these rules right away -->
-		<exclude name="WordPress.Security.NonceVerification.Missing" />
 
 		<!-- These give issues with the current code base. -->
 		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
@@ -40,5 +35,49 @@
 				<element value="formidable"/>
 			</property>
 		</properties>
+	</rule>
+	<rule ref="Squiz.Scope.StaticThisUsage" />
+
+	<!-- Enable these rules right away -->
+	<rule ref="WordPress.Security.NonceVerification.Missing">
+		<exclude-pattern>classes/models/fields/FrmFieldCaptcha.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmStylesController.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmEntriesController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmStylesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmEntriesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Exclude specific rules for unit tests -->
+	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
+		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 </ruleset>

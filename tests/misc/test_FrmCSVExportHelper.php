@@ -78,28 +78,34 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$this->check_php_version( '5.3' );
 
 		$embedded_form = $this->factory->form->create_and_get();
-		$section       = $this->factory->field->create_and_get( array( 
-			'form_id' => $embedded_form->id,
-			'type'    => 'divider',
-			'name'    => 'Section',
-		) );
-		$field_in_section = $this->factory->field->create_and_get( array(
-			'form_id' => $embedded_form->id,
-			'type'    => 'text',
-			'name'    => 'Text',
-			'field_options' => array(
-				'in_section' => $section->id,
-			),
-		) );
+		$section       = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $embedded_form->id,
+				'type'    => 'divider',
+				'name'    => 'Section',
+			)
+		);
+		$field_in_section = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $embedded_form->id,
+				'type'    => 'text',
+				'name'    => 'Text',
+				'field_options' => array(
+					'in_section' => $section->id,
+				),
+			)
+		);
 
 		$parent_form = $this->factory->form->create_and_get();
-		$embed_field = $this->factory->field->create_and_get( array(
-			'form_id' => $parent_form->id,
-			'type'    => 'embed',
-			'field_options' => array(
-				'form_select' => $embedded_form->id,
-			),
-		) );
+		$embed_field = $this->factory->field->create_and_get(
+			array(
+				'form_id' => $parent_form->id,
+				'type'    => 'embed',
+				'field_options' => array(
+					'form_select' => $embedded_form->id,
+				),
+			)
+		);
 
 		$this->set_form( $parent_form );
 

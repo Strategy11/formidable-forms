@@ -9,7 +9,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	 * @covers FrmMigrate::upgrade
 	 * @todo Check if style was created
 	 */
-	public function test_upgrade( ) {
+	public function test_upgrade() {
 		$frmdb = new FrmMigrate();
 		$frmdb->upgrade();
 
@@ -22,7 +22,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	/**
 	 * @covers FrmMigrate::maybe_create_contact_form
 	 */
-	public function test_maybe_create_contact_form( ) {
+	public function test_maybe_create_contact_form() {
 		delete_option( 'frm_db_version' );
 		$frmdb = new FrmMigrate();
 		$frmdb->upgrade();
@@ -47,13 +47,15 @@ class test_FrmMigrate extends FrmUnitTest {
 	 */
 	public function test_migrate_to_17() {
 		$form_id = $this->factory->form->create();
-		$field = $this->factory->field->create_and_get( array(
-			'type' => 'text',
-			'form_id' => $form_id,
-			'field_options' => array(
-				'size' => '10', // the old size in characters
-			),
-		) );
+		$field = $this->factory->field->create_and_get(
+			array(
+				'type' => 'text',
+				'form_id' => $form_id,
+				'field_options' => array(
+					'size' => '10', // the old size in characters
+				),
+			)
+		);
 		$this->assertNotEmpty( $field );
 		$field_id = $field->id;
 
@@ -104,13 +106,15 @@ class test_FrmMigrate extends FrmUnitTest {
 		);
 		$field_ids = array();
 		foreach ( $sizes as $start_size => $new_size ) {
-			$field_id = $this->factory->field->create( array(
-				'type' => 'text',
-				'form_id' => $form_id,
-				'field_options' => array(
-					'size' => $start_size,
-				),
-			) );
+			$field_id = $this->factory->field->create(
+				array(
+					'type' => 'text',
+					'form_id' => $form_id,
+					'field_options' => array(
+						'size' => $start_size,
+					),
+				)
+			);
 			$field_ids[ $start_size ] = $field_id;
 		}
 
@@ -282,7 +286,7 @@ class test_FrmMigrate extends FrmUnitTest {
 			$field = $this->factory->field->get_object_by_id( $field_ids[ $key ] );
 			$this->assertNotEmpty( $field );
 
-			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key  );
+			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key );
 			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key );
 
 			if ( isset( $setting['start']['options'] ) ) {
@@ -318,7 +322,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	/**
 	 * @covers FrmMigrate::migrate_to_16
 	 */
-	function test_migrate_from_12_to_current() {
+	public function test_migrate_from_12_to_current() {
 		self::frm_install();
 
 		update_option( 'frm_db_version', 12 );
@@ -376,8 +380,8 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->markTestIncomplete( 'Make sure uninstall is complete' );
 		self::do_tables_exist( false );
 
-		$this->assertEmpty( get_option('frm_db_version', true ) );
-		$this->assertEmpty( get_option('frm_options', true ) );
+		$this->assertEmpty( get_option( 'frm_db_version', true ) );
+		$this->assertEmpty( get_option( 'frm_options', true ) );
 
 		// TODO: Check if roles exist FrmAppHelper::frm_capabilities()
 		// TODO: Check if any posts exist for extra types

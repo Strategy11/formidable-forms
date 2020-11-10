@@ -14,7 +14,7 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 		}
 
 		$files = scandir( $dir );
-	
+
 		foreach ( $files as $key => $value ) {
 			$path = realpath( $dir . DIRECTORY_SEPARATOR . $value );
 			if ( ! is_dir( $path ) ) {
@@ -32,12 +32,12 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 				}
 			}
 		}
-	
+
 		return $results;
 	}
 
 	private function check_for_abspath_check( $path ) {
-		return strpos( file_get_contents( $path ), "! defined( 'ABSPATH' )" ) !== FALSE;
+		return strpos( file_get_contents( $path ), "! defined( 'ABSPATH' )" ) !== false;
 	}
 
 	public function test_direct_file_access() {

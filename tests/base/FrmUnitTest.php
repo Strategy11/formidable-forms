@@ -34,7 +34,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::empty_tables();
 	}
 
-	function setUp() {
+	public function setUp() {
 		parent::setUp();
 
 		$this->is_pro_active = get_option( 'frmpro-authorized' );
@@ -59,7 +59,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected static function empty_tables() {
 		global $wpdb;
 		$tables = self::get_table_names();
-		foreach ( $tables as $table ){
+		foreach ( $tables as $table ) {
 			$exists = $wpdb->get_var( 'DESCRIBE ' . $table );
 			if ( $exists ) {
 				$wpdb->query( "TRUNCATE $table" );
@@ -88,8 +88,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		global $wpdb;
 
 		$tables = array(
-			$wpdb->prefix . 'frm_fields', $wpdb->prefix . 'frm_forms',
-			$wpdb->prefix . 'frm_items',  $wpdb->prefix . 'frm_item_metas',
+			$wpdb->prefix . 'frm_fields',
+			$wpdb->prefix . 'frm_forms',
+			$wpdb->prefix . 'frm_items',
+			$wpdb->prefix . 'frm_item_metas',
 		);
 		if ( is_multisite() && is_callable( 'FrmProCopy::table_name' ) ) {
 			$tables[] = FrmProCopy::table_name();
@@ -182,10 +184,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
 
 			if ( is_array( $values['val'] ) ) {
-				$media_ids = explode(',', $media_ids );
+				$media_ids = explode( ',', $media_ids );
 			} else {
 				$is_file_val = is_numeric( $media_ids ) || strpos( $media_ids, ',' );
-				self::assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values[ 'val' ] );
+				self::assertTrue( $is_file_val, 'The following file is not importing correctly: ' . $values['val'] );
 			}
 
 			// Insert into entries
@@ -194,12 +196,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	function get_all_fields_for_form_key( $form_key ) {
+	public function get_all_fields_for_form_key( $form_key ) {
 		$field_totals = array(
 			$this->all_fields_form_key => $this->is_pro_active ? $this->all_field_types_count : ( $this->all_field_types_count - 3 ),
 			$this->create_post_form_key => 10,
 			$this->contact_form_key => $this->contact_form_field_count,
-			$this->repeat_sec_form_key => 3
+			$this->repeat_sec_form_key => 3,
 		);
 		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
 
@@ -207,7 +209,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		$actual_field_num = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.');
+		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' );
 
 		return $fields;
 	}
@@ -215,11 +217,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 	/**
 	* Set the current user to 1
 	*/
-	function set_current_user_to_1( ) {
+	public function set_current_user_to_1() {
 		$this->set_user_by_role( 'administrator' );
 	}
 
-	function set_current_user_to_username( $login ) {
+	public function set_current_user_to_username( $login ) {
 		$user = get_user_by( 'login', $login );
 
 		if ( $user ) {
@@ -234,16 +236,16 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 *
 	 * @return WP_User
 	 */
-    function set_user_by_role( $role ) {
-	    $user = $this->get_user_by_role( $role );
-	    wp_set_current_user( $user->ID );
+	public function set_user_by_role( $role ) {
+		$user = $this->get_user_by_role( $role );
+		wp_set_current_user( $user->ID );
 
-	    $this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
+		$this->assertTrue( current_user_can( $role ), 'Failed setting the current user role' );
 
-	    FrmAppHelper::maybe_add_permissions();
+		FrmAppHelper::maybe_add_permissions();
 
 		return $user->ID;
-    }
+	}
 
 	/**
 	 * Get a user of a specific role
@@ -253,7 +255,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return WP_User
 	 */
 	public function get_user_by_role( $role ) {
-		$users = get_users( array( 'role' => $role, 'number' => 1 ) );
+		$users = get_users(
+			array(
+				'role' => $role,
+				'number' => 1,
+			)
+		);
 		if ( empty( $users ) ) {
 			$this->fail( 'No users with this role currently exist.' );
 			$user = null;
@@ -264,7 +271,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $user;
 	}
 
-	function go_to_new_post() {
+	public function go_to_new_post() {
 		$new_post = $this->factory->post->create_and_get();
 		$page = get_permalink( $new_post->ID );
 
@@ -272,7 +279,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $new_post->ID;
 	}
 
-	function set_front_end( $page = '' ) {
+	public function set_front_end( $page = '' ) {
 		if ( $page == '' ) {
 			$page = home_url( '/' );
 		}
@@ -282,12 +289,18 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertFalse( is_admin(), 'Failed to switch to the front-end' );
 	}
 
-	function set_admin_screen( $page = 'index.php' ) {
+	public function set_admin_screen( $page = 'index.php' ) {
 		global $current_screen;
 
 		$screens = array(
-			'index.php' => array( 'base' => 'dashboard', 'id' => 'dashboard' ),
-			'admin.php?page=formidable' => array( 'base' => 'admin', 'id' => 'toplevel_page_formidable' ),
+			'index.php' => array(
+				'base' => 'dashboard',
+				'id' => 'dashboard',
+			),
+			'admin.php?page=formidable' => array(
+				'base' => 'admin',
+				'id' => 'toplevel_page_formidable',
+			),
 		);
 
 		if ( $page == 'formidable-edit' ) {
@@ -299,10 +312,13 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$screens[ $page ] = array( 'base' => reset( $base ) );
 		}
 
-		$_GET = $_POST = $_REQUEST = array();
-		$GLOBALS['taxnow'] = $GLOBALS['typenow'] = '';
-		$screen = (object) $screens[ $page ];
-		$hook = parse_url( $page );
+		$_GET               = array();
+		$_POST              = array();
+		$_REQUEST           = array();
+		$GLOBALS['taxnow']  = '';
+		$GLOBALS['typenow'] = '';
+		$screen             = (object) $screens[ $page ];
+		$hook               = parse_url( $page );
 
 		$GLOBALS['hook_suffix'] = $hook['path'];
 		set_current_screen();
@@ -317,6 +333,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	/**
 	 * Set the admin page parameters for the later code to use
+	 *
 	 * @since 3.0
 	 */
 	protected function set_get_params( $url ) {
@@ -346,7 +363,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	function clean_up_global_scope() {
+	public function clean_up_global_scope() {
 		parent::clean_up_global_scope();
 		if ( isset( $GLOBALS['current_screen'] ) ) {
 			unset( $GLOBALS['current_screen'] );
@@ -368,42 +385,42 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 	}
 
-	function get_footer_output() {
-        ob_start();
-        do_action( 'wp_footer' );
-        $output = ob_get_contents();
-        ob_end_clean();
+	public function get_footer_output() {
+		ob_start();
+		do_action( 'wp_footer' );
+		$output = ob_get_contents();
+		ob_end_clean();
 
 		return $output;
 	}
 
-    public static function install_data() {
-        return array(
-        	dirname( __FILE__ ) . '/testdata.xml',
+	public static function install_data() {
+		return array(
+			dirname( __FILE__ ) . '/testdata.xml',
 			dirname( __FILE__ ) . '/free-form.xml',
-	        dirname( __FILE__ ) . '/editform.xml',
+			dirname( __FILE__ ) . '/editform.xml',
 			dirname( __FILE__ ) . '/file-upload.xml',
-        );
-    }
+		);
+	}
 
-	static function generate_xml( $type, $xml_args ) {
+	public static function generate_xml( $type, $xml_args ) {
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
 
 		$type = (array) $type;
-		if ( in_array( 'items', $type) && ! in_array( 'forms', $type) ) {
+		if ( in_array( 'items', $type ) && ! in_array( 'forms', $type ) ) {
 			// make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
-		if ( in_array( 'forms', $type) ) {
+		if ( in_array( 'forms', $type ) ) {
 			// include actions with forms
 			$type[] = 'actions';
 		}
 
 		$tables = array(
-			'items'     => $wpdb->prefix .'frm_items',
-			'forms'     => $wpdb->prefix .'frm_forms',
+			'items'     => $wpdb->prefix . 'frm_items',
+			'forms'     => $wpdb->prefix . 'frm_forms',
 			'posts'     => $wpdb->posts,
 			'styles'    => $wpdb->posts,
 			'actions'   => $wpdb->posts,
@@ -424,81 +441,85 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$join = '';
 			$table = $tables[ $tb_type ];
 
-			$select = $table .'.id';
+			$select = $table . '.id';
 			$query_vars = array();
 
 			switch ( $tb_type ) {
-                case 'forms':
-                    //add forms
-                    if ( $args['ids'] ) {
-						$where[] = array( 'or' => 1, $table . '.id' => $args['ids'], $table .'.parent_form_id' => $args['ids'] );
-                	} else {
+				case 'forms':
+					//add forms
+					if ( $args['ids'] ) {
+						$where[] = array(
+							'or' => 1,
+							$table . '.id' => $args['ids'],
+							$table . '.parent_form_id' => $args['ids'],
+						);
+					} else {
 						$where[ $table . '.status !' ] = 'draft';
-                	}
-                break;
-                case 'actions':
-                    $select = $table .'.ID';
+					}
+					break;
+				case 'actions':
+					$select = $table . '.ID';
 					$where['post_type'] = FrmFormActionsController::$action_post_type;
-                    if ( ! empty($args['ids']) ) {
+					if ( ! empty( $args['ids'] ) ) {
 						$where['menu_order'] = $args['ids'];
-                    }
-                break;
-                case 'items':
-                    //$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
-                    if ( $args['ids'] ) {
+					}
+					break;
+				case 'items':
+					//$join = "INNER JOIN {$wpdb->prefix}frm_item_metas im ON ($table.id = im.item_id)";
+					if ( $args['ids'] ) {
 						$where[ $table . '.form_id' ] = $args['ids'];
-                    }
-                break;
-                case 'styles':
-                    // Loop through all exported forms and get their selected style IDs
-                    $form_ids = $args['ids'];
-                    $style_ids = array();
-                    foreach ( $form_ids as $form_id ) {
-                        $form_data = FrmForm::getOne( $form_id );
-                        // For forms that have not been updated while running 2.0, check if custom_style is set
-                        if ( isset( $form_data->options['custom_style'] ) ) {
-                            $style_ids[] = $form_data->options['custom_style'];
-                        }
-                        unset( $form_id, $form_data );
-                    }
-                    $select = $table .'.ID';
-                    $where['post_type'] = 'frm_styles';
+					}
+					break;
+				case 'styles':
+					// Loop through all exported forms and get their selected style IDs
+					$form_ids = $args['ids'];
+					$style_ids = array();
+					foreach ( $form_ids as $form_id ) {
+						$form_data = FrmForm::getOne( $form_id );
+						// For forms that have not been updated while running 2.0, check if custom_style is set
+						if ( isset( $form_data->options['custom_style'] ) ) {
+							$style_ids[] = $form_data->options['custom_style'];
+						}
+						unset( $form_id, $form_data );
+					}
+					$select = $table . '.ID';
+					$where['post_type'] = 'frm_styles';
 
-                    // Only export selected styles
-                    if ( ! empty( $style_ids ) ) {
-                        $where['ID'] = $style_ids;
-                    }
-                break;
-                default:
-                    $select = $table .'.ID';
-                    $join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
-                    $where['pm.meta_key'] = 'frm_form_id';
+					// Only export selected styles
+					if ( ! empty( $style_ids ) ) {
+						$where['ID'] = $style_ids;
+					}
+					break;
+				default:
+					$select = $table . '.ID';
+					$join = ' INNER JOIN ' . $wpdb->postmeta . ' pm ON (pm.post_id=' . $table . '.ID)';
+					$where['pm.meta_key'] = 'frm_form_id';
 
-                    if ( empty($args['ids']) ) {
-                        $where['pm.meta_value >'] = 1;
-                    } else {
-                        $where['pm.meta_value'] = $args['ids'];
-                    }
-                break;
+					if ( empty( $args['ids'] ) ) {
+						$where['pm.meta_value >'] = 1;
+					} else {
+						$where['pm.meta_value'] = $args['ids'];
+					}
+					break;
 			}
 
 			$records[ $tb_type ] = FrmDb::get_col( $table . $join, $where, $select );
-			unset($tb_type);
+			unset( $tb_type );
 		}
 
-		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo('charset') ) . "\" ?>\n";
+		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
 		ob_start();
-		include(FrmAppHelper::plugin_path() .'/classes/views/xml/xml.php');
+		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
 		$xml_body = ob_get_contents();
 		ob_end_clean();
 
 		$xml = $xml_header . $xml_body;
 
-		$cwd = getcwd();
-		$path = "$cwd" .'/'. "temp.xml";
-		@chmod( $path,0755 );
-		$fw = fopen( $path, "w" );
-		fputs( $fw,$xml, strlen( $xml ) );
+		$cwd  = getcwd();
+		$path = "{$cwd}/temp.xml";
+		@chmod( $path, 0755 );
+		$fw = fopen( $path, 'w' );
+		fputs( $fw, $xml, strlen( $xml ) );
 		fclose( $fw );
 
 		return $path;
@@ -516,7 +537,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		$admin_args = array(
-			'user_login'  =>  'admin',
+			'user_login'  => 'admin',
 			'user_email' => 'admin@mail.com',
 			'user_pass' => 'admin',
 			'role' => 'administrator',
@@ -525,7 +546,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $admin );
 
 		$editor_args = array(
-			'user_login'  =>  'editor',
+			'user_login'  => 'editor',
 			'user_email' => 'editor@mail.com',
 			'user_pass' => 'editor',
 			'role' => 'editor',
@@ -534,7 +555,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $editor );
 
 		$subscriber_args = array(
-			'user_login'  =>  'subscriber',
+			'user_login'  => 'subscriber',
 			'user_email' => 'subscriber@mail.com',
 			'user_pass' => 'subscriber',
 			'role' => 'subscriber',
@@ -595,7 +616,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 				$user = wp_get_current_user();
 
 				// remove any standard roles to make room for a custom one
-				foreach( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
+				foreach ( array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) as $role ) {
 					$user->remove_role( $role );
 				}
 

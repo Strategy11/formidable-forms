@@ -58,17 +58,22 @@ class test_FrmEmail extends FrmUnitTest {
 	 *
 	 * @covers FrmNotification::trigger_email
 	 */
-	public function test_trigger_email_one(){
+	public function test_trigger_email_one() {
 		$pass_entry = clone $this->entry;
 
 		$expected = array(
 			'to' => array( array( $this->email_action->post_content['email_to'], '' ) ),
 			'cc' => array(),
 			'bcc' => array(),
-			'from' => FrmAppHelper::site_name() . ' <' . get_option('admin_email') . '>',
-			'reply_to' => get_option('admin_email'),
+			'from' => FrmAppHelper::site_name() . ' <' . get_option( 'admin_email' ) . '>',
+			'reply_to' => get_option( 'admin_email' ),
 			'subject' => self::prepare_subject( $this->contact_form->name . ' Form submitted on ' . FrmAppHelper::site_name() ),
-			'body' =>  FrmEntriesController::show_entry_shortcode( array( 'id' => $this->entry->id, 'entry' => $pass_entry ) ),
+			'body' => FrmEntriesController::show_entry_shortcode(
+				array(
+					'id' => $this->entry->id,
+					'entry' => $pass_entry,
+				)
+			),
 			'content_type' => 'Content-Type: text/html; charset=UTF-8',
 		);
 
@@ -102,7 +107,7 @@ class test_FrmEmail extends FrmUnitTest {
 	public function test_trigger_email_two() {
 		$entry_clone = clone $this->entry;
 		$expected = array();
-		$admin_email = get_option('admin_email');
+		$admin_email = get_option( 'admin_email' );
 
 		// Adjust entry values
 		$name_id = FrmField::get_id_by_key( $this->name_field_key );
@@ -130,11 +135,17 @@ class test_FrmEmail extends FrmUnitTest {
 
 		// Reply to
 		$this->email_action->post_content['reply_to'] = 'Reply Name';
-		$expected['reply_to'] = 'Reply Name <' . get_option('admin_email') . '>';
+		$expected['reply_to'] = 'Reply Name <' . get_option( 'admin_email' ) . '>';
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+			array(
+				'id' => $entry_clone->id,
+				'entry' => $entry_clone,
+				'plain_text' => true,
+			)
+		);
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/plain; charset=UTF-8';
@@ -179,7 +190,7 @@ class test_FrmEmail extends FrmUnitTest {
 		// To
 		$this->email_action->post_content['email_to'] = 'Name test1@mail.com, Name2<test2@mail.com>';
 		$expected['to'] = array( array( 'test1@mail.com', 'Name' ), array( 'test2@mail.com', 'Name2' ), array( 'test3@mail.com', '' ) );
-		add_filter('frm_to_email', array( $this, 'add_to_emails' ), 10, 4 );
+		add_filter( 'frm_to_email', array( $this, 'add_to_emails' ), 10, 4 );
 
 		// CC
 		$this->email_action->post_content['cc'] = '"Jamie Wahlin" <testcc1@mail.com>,';
@@ -197,7 +208,7 @@ class test_FrmEmail extends FrmUnitTest {
 
 		// From
 		$this->email_action->post_content['from'] = 'Name';
-		$expected['from'] = 'Name <' . get_option('admin_email') . '>';
+		$expected['from'] = 'Name <' . get_option( 'admin_email' ) . '>';
 
 		// Reply to
 		$this->email_action->post_content['reply_to'] = '"Reply To" <[' . $this->email_field_key . ']>';
@@ -205,7 +216,13 @@ class test_FrmEmail extends FrmUnitTest {
 
 		// Body - set inc_user_info to true
 		$this->email_action->post_content['inc_user_info'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'user_info' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+			array(
+				'id' => $entry_clone->id,
+				'entry' => $entry_clone,
+				'user_info' => true,
+			)
+		);
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/html; charset=UTF-8';
@@ -213,7 +230,7 @@ class test_FrmEmail extends FrmUnitTest {
 		FrmNotification::trigger_email( $this->email_action, $entry_clone, $this->contact_form );
 
 		// Remove filters so they don't interfere with subsequent tests
-		remove_filter('frm_to_email', array( $this, 'add_to_emails' ), 10 );
+		remove_filter( 'frm_to_email', array( $this, 'add_to_emails' ), 10 );
 		remove_filter( 'frm_email_subject', array( $this, 'change_email_subject' ), 10 );
 
 		$mock_email = end( $GLOBALS['phpmailer']->mock_sent );
@@ -272,7 +289,13 @@ class test_FrmEmail extends FrmUnitTest {
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+			array(
+				'id' => $entry_clone->id,
+				'entry' => $entry_clone,
+				'plain_text' => true,
+			)
+		);
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/plain; charset=UTF-8';
@@ -314,7 +337,7 @@ class test_FrmEmail extends FrmUnitTest {
 	public function test_trigger_email_five() {
 		$entry_clone = clone $this->entry;
 		$expected = array();
-		$admin_email = get_option('admin_email');
+		$admin_email = get_option( 'admin_email' );
 
 		// Update entry values
 		$name_id = FrmField::get_id_by_key( $this->name_field_key );
@@ -342,14 +365,20 @@ class test_FrmEmail extends FrmUnitTest {
 		if ( substr( $sitename, 0, 4 ) == 'www.' ) {
 			$sitename = substr( $sitename, 4 );
 		}
-		$expected['from'] = 'Yahoo <wordpress@' . $sitename. '>';
+		$expected['from'] = 'Yahoo <wordpress@' . $sitename . '>';
 
 		// Reply to
 		$expected['reply_to'] = $admin_email;
 
 		// Body - set plain text to true
 		$this->email_action->post_content['plain_text'] = true;
-		$expected['body'] = FrmEntriesController::show_entry_shortcode( array( 'id' => $entry_clone->id, 'entry' => $entry_clone, 'plain_text' => true ) );
+		$expected['body'] = FrmEntriesController::show_entry_shortcode(
+			array(
+				'id' => $entry_clone->id,
+				'entry' => $entry_clone,
+				'plain_text' => true,
+			)
+		);
 
 		// Content type
 		$expected['content_type'] = 'Content-Type: text/plain; charset=UTF-8';
@@ -400,7 +429,7 @@ class test_FrmEmail extends FrmUnitTest {
 		return $subject;
 
 		// TODO: Run this with the frm_encode_subject filter.
-		$charset = get_option('blog_charset');
+		$charset = get_option( 'blog_charset' );
 		return '=?' . $charset . '?B?' . base64_encode( $subject ) . '?=';
 	}
 
@@ -444,14 +473,14 @@ class test_FrmEmail extends FrmUnitTest {
 
 	protected function check_subject( $expected, $mock_email ) {
 		if ( isset( $mock_email['subject'] ) ) {
-			$this->assertSame( $expected[ 'subject' ], $mock_email[ 'subject' ], 'Subject does not match expected.' );
+			$this->assertSame( $expected['subject'], $mock_email['subject'], 'Subject does not match expected.' );
 		}
 	}
 
 	protected function check_message_body( $expected, $mock_email ) {
 		// Remove line breaks from body for comparison
-		$expected['body'] = preg_replace( "/\r|\n/", "", $expected['body'] );
-		$mock_email['body'] = preg_replace( "/\r|\n/", "", $mock_email['body'] );
+		$expected['body'] = preg_replace( "/\r|\n/", '', $expected['body'] );
+		$mock_email['body'] = preg_replace( "/\r|\n/", '', $mock_email['body'] );
 
 		$this->assertSame( $expected['body'], $mock_email['body'], 'Message body does not match expected.' );
 	}
@@ -468,13 +497,13 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertNotContains( 'Bcc:', $mock_email['header'], 'BCC is included when it should not be.' );
 	}
 
-	public function add_to_emails(  $to_emails, $values, $form_id, $args ) {
+	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
 		$to_emails[] = 'test3@mail.com';
 		$to_emails[] = '1231231234';
 		return $to_emails;
 	}
 
-	public function change_email_subject(  $subject, $args ) {
+	public function change_email_subject( $subject, $args ) {
 		$subject = 'New subject';
 		return $subject;
 	}
@@ -568,12 +597,15 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_set_message() {
 		$name_id = FrmField::get_id_by_key( $this->name_field_key );
-		$default = FrmEntriesHelper::replace_default_message( '[default-message]', array(
-			'id'         => $this->entry->id,
-			'entry'      => $this->entry,
-			'plain_text' => $this->email_action->post_content['plain_text'],
-			'user_info'  => $this->email_action->post_content['inc_user_info'],
-		) );
+		$default = FrmEntriesHelper::replace_default_message(
+			'[default-message]',
+			array(
+				'id'         => $this->entry->id,
+				'entry'      => $this->entry,
+				'plain_text' => $this->email_action->post_content['plain_text'],
+				'user_info'  => $this->email_action->post_content['inc_user_info'],
+			)
+		);
 
 		$settings = array(
 			''                   => $default,

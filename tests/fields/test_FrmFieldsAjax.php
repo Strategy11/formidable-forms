@@ -9,7 +9,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	protected $form_id = 0;
 
 	protected $user_id = 0;
-	
+
 	public function setUp() {
 		parent::setUp();
 
@@ -27,12 +27,12 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	/**
 	 * @covers FrmFieldsController::create
 	 */
-    public function test_create() {
+	public function test_create() {
 		$_POST = array(
 			'action'    => 'frm_insert_field',
-            'nonce'     => wp_create_nonce('frm_ajax'),
+			'nonce'     => wp_create_nonce( 'frm_ajax' ),
 			'form_id'   => $this->form_id,
-            'field_type'     => 'text', //create text field
+			'field_type'     => 'text', //create text field
 		);
 
 		try {
@@ -41,16 +41,16 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 			unset( $e );
 		}
 
-        global $wpdb;
-        $this->field_id = $wpdb->insert_id;
+		global $wpdb;
+		$this->field_id = $wpdb->insert_id;
 
-        $this->assertTrue( is_numeric( $this->field_id ) );
-        $this->assertNotEmpty( $this->field_id );
+		$this->assertTrue( is_numeric( $this->field_id ) );
+		$this->assertNotEmpty( $this->field_id );
 
-        // make sure the field exists
+		// make sure the field exists
 		$field = FrmField::getOne( $this->field_id );
-        $this->assertTrue( is_object( $field ) );
-    }
+		$this->assertTrue( is_object( $field ) );
+	}
 
 	/**
 	 * Test duplicating a text field
@@ -62,20 +62,22 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertTrue( current_user_can( 'frm_edit_forms' ), 'User does not have permission' );
 
 		$format = '^([a-zA-Z]\d{4})$';
-		$original_field = $this->factory->field->create_and_get( array(
-			'form_id'       => $this->form_id,
-			'type'          => 'text',
-			'field_options' => array(
-				'format'    => $format,
-				'in_section' => 0,
-			),
-		) );
+		$original_field = $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => 'text',
+				'field_options' => array(
+					'format'    => $format,
+					'in_section' => 0,
+				),
+			)
+		);
 		$this->assertNotEmpty( $original_field->id );
 		$this->assertEquals( $format, $original_field->field_options['format'] );
 
 		$_POST = array(
 			'action'   => 'frm_duplicate_field',
-			'nonce'    => wp_create_nonce('frm_ajax'),
+			'nonce'    => wp_create_nonce( 'frm_ajax' ),
 			'field_id' => $original_field->id,
 			'form_id'  => $original_field->form_id,
 		);
@@ -97,7 +99,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	}
 
 	// Get a field object by key
-	protected function get_field_by_key( $field_key ){
+	protected function get_field_by_key( $field_key ) {
 		$divider_field_id = FrmField::get_id_by_key( $field_key );
 		$field = FrmField::getOne( $divider_field_id );
 		self::check_field_prior_to_duplication( $field );
@@ -108,7 +110,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	// Check in_section variable prior to duplication
 	protected function check_field_prior_to_duplication( $field ) {
-		$this->assertTrue( isset( $field->field_options[ 'in_section' ] ), 'The in_section variable is not set correctly on import.' );
+		$this->assertTrue( isset( $field->field_options['in_section'] ), 'The in_section variable is not set correctly on import.' );
 	}
 
 	// Check if a field is created correctly

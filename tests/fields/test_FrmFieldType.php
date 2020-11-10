@@ -8,22 +8,26 @@ class test_FrmFieldType extends FrmUnitTest {
 	/**
 	 * @covers FrmFieldNumber::add_min_max
 	 */
-	function test_html_min_number() {
+	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();
-		$field = $this->factory->field->create_and_get( array(
-			'type'    => 'number',
-			'form_id' => $form_id,
-			'field_options' => array(
-				'minnum' => 10,
-				'maxnum' => 999,
-				'step'   => 'any',
-			),
-		) );
+		$field = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $form_id,
+				'field_options' => array(
+					'minnum' => 10,
+					'maxnum' => 999,
+					'step'   => 'any',
+				),
+			)
+		);
 		$this->assertNotEmpty( $field );
-		
-		$form = FrmFormsController::get_form_shortcode( array(
-			'id' => $form_id,
-		) );
+
+		$form = FrmFormsController::get_form_shortcode(
+			array(
+				'id' => $form_id,
+			)
+		);
 		$this->assertContains( ' min="10"', $form );
 		$this->assertContains( ' max="999"', $form );
 		$this->assertContains( ' step="any"', $form );
@@ -32,7 +36,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	/**
 	 * @covers FrmFieldType::sanitize_value
 	 */
-	function test_sanitize_value() {
+	public function test_sanitize_value() {
 		$frm_field_type = new FrmFieldDefault();
 
 		$values = array(
@@ -116,12 +120,12 @@ class test_FrmFieldType extends FrmUnitTest {
 				'value'    => array(
 					'6',
 					'2a',
-					'a1'
+					'a1',
 				),
 				'expected' => array(
 					'6',
 					'2',
-					'0'
+					'0',
 				),
 			),
 		);
@@ -136,15 +140,33 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * @covers FrmFieldType::get_import_value
 	 */
 	public function test_get_import_value() {
-		$field = new stdClass;
+		$field = new stdClass();
 		$field->type = 'checkbox';
 		$field->options = array(
-			array( 'value' => 'a', 'label' => 'A' ),
-			array( 'value' => 'b', 'label' => 'B' ),
-			array( 'value' => 'c', 'label' => 'C' ),
-			array( 'value' => 'a,b', 'label' => 'A, B' ),
-			array( 'value' => 'a,b,c', 'label' => 'A, B, C' ),
-			array( 'value' => 'a, b, c', 'label' => 'A, B, C' ),
+			array(
+				'value' => 'a',
+				'label' => 'A',
+			),
+			array(
+				'value' => 'b',
+				'label' => 'B',
+			),
+			array(
+				'value' => 'c',
+				'label' => 'C',
+			),
+			array(
+				'value' => 'a,b',
+				'label' => 'A, B',
+			),
+			array(
+				'value' => 'a,b,c',
+				'label' => 'A, B, C',
+			),
+			array(
+				'value' => 'a, b, c',
+				'label' => 'A, B, C',
+			),
 		);
 
 		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );

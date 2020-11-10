@@ -3,7 +3,6 @@
 /**
  * @group entries
  * @group free
- *
  */
 class test_FrmEntryValidate extends FrmUnitTest {
 
@@ -23,7 +22,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 				$made_up_name_field_id  => $test_name,
 				$made_up_email_field_id => $test_email,
 				$made_up_url_field_id   => $test_url,
-			)
+			),
 		);
 
 		wp_set_current_user( null );
@@ -32,7 +31,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertTrue( empty( $check['user_id'] ) );
 		$this->assertEquals( $test_name, $check['comment_author'] );
 		$this->assertEquals( $test_email, $check['comment_author_email'] );
-		$this->assertEquals( $test_url, $check['comment_author_url'] );		
+		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
 		wp_set_current_user( 1 );
 		$user  = wp_get_current_user();
