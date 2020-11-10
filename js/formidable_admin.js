@@ -2237,6 +2237,7 @@ function frmAdminBuildJS() {
 	function maybeClearOptText() {
 		/*jshint validthis:true */
 		if ( this.value === frm_admin_js.new_option ) {
+			this.setAttribute( 'data-value-on-focus', this.value );
 			this.value = '';
 		}
 	}
@@ -2446,7 +2447,9 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		this.setAttribute( 'data-value-on-focus', this.value );
+		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) {
+			this.setAttribute( 'data-value-on-focus', this.value );
+		}
 	}
 
 	function onOptionTextBlur() {
@@ -2504,7 +2507,12 @@ function frmAdminBuildJS() {
 
 			logicId = row.id.split( '_' )[ 2 ];
 			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
-			optionMatches = valueSelect.querySelectorAll( 'option[value="' + oldValue + '"]' );
+
+			if ( '' === oldValue ) {
+				optionMatches = [];
+			} else {
+				optionMatches = valueSelect.querySelectorAll( 'option[value="' + oldValue + '"]' );
+			}
 
 			if ( ! optionMatches.length ) {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
@@ -2968,6 +2976,64 @@ function frmAdminBuildJS() {
 				container.append( addRadioCheckboxOpt( type, opts[ i ], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass ) );
 			}
 		}
+
+		adjustConditionalLogicOptionOrders( fieldId );
+	}
+
+	function adjustConditionalLogicOptionOrders( fieldId ) {
+		var row, opts, logicId, valueSelect, rowOptions, expectedOrder, optionLength, optionIndex, expectedOption, optionMatch,
+			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
+			rowLength = rows.length,
+			fieldOptions = getFieldOptions( fieldId ),
+			optionLength = fieldOptions.length;
+
+		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
+			row = rows[ rowIndex ];
+			opts = row.querySelector( '.frm_logic_field_opts' );
+
+			if ( opts.value != fieldId ) {
+				continue;
+			}
+
+			logicId = row.id.split( '_' )[ 2 ];
+			valueSelect = row.querySelector( 'select[name="field_options[hide_opt_' + logicId + '][]"]' );
+
+			for ( optionIndex = optionLength - 1; optionIndex >= 0; optionIndex-- ) {
+				expectedOption = fieldOptions[ optionIndex ];
+				optionMatch = valueSelect.querySelector( 'option[value="' + expectedOption + '"]' );
+
+				if ( optionMatch === null ) {
+					optionMatch = document.createElement( 'option' );
+					optionMatch.setAttribute( 'value', expectedOption );
+					optionMatch.textContent = expectedOption;
+				}
+
+				valueSelect.prepend( optionMatch );
+			}
+		}
+
+		optionMatch = valueSelect.querySelector( 'option[value=""]' );
+		if ( optionMatch !== null ) {
+			valueSelect.prepend( optionMatch );
+		}
+	}
+
+	function getFieldOptions( fieldId ) {
+		var index, input, li,
+			listItems = document.getElementById( 'frm_field_' + fieldId + '_opts' ).querySelectorAll( '.frm_single_option' ),
+			options = [],
+			length = listItems.length;
+		for ( index = 0; index < length; index++ ) {
+			li = listItems[ index ];
+
+			if ( li.classList.contains( 'frm_hidden' ) ) {
+				continue;
+			}
+
+			input = li.querySelector( '.field_' + fieldId + '_option' );
+			options.push( input.value );
+		}
+		return options;
 	}
 
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
