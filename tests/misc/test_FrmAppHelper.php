@@ -7,7 +7,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::plugin_version
 	 */
-	function test_plugin_version() {
+	public function test_plugin_version() {
 		$version = FrmAppHelper::plugin_version();
 		$this->assertNotEmpty( $version );
 
@@ -19,7 +19,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::plugin_folder
 	 */
-	function test_plugin_folder() {
+	public function test_plugin_folder() {
 		$folder = FrmAppHelper::plugin_folder();
 		$expected = array( 'formidable', 'formidable-forms' );
 		$this->assertTrue( in_array( $folder, $expected ) );
@@ -28,7 +28,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::plugin_path
 	 */
-	function test_plugin_path() {
+	public function test_plugin_path() {
 		$path = FrmAppHelper::plugin_path();
 		$expected_file = $path . '/formidable.php';
 		$this->assertTrue( file_exists( $expected_file ) );
@@ -36,9 +36,10 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * The path is relative if it starts with /
+	 *
 	 * @covers FrmAppHelper::relative_plugin_url
 	 */
-	function test_relative_plugin_url() {
+	public function test_relative_plugin_url() {
 		$path = FrmAppHelper::relative_plugin_url();
 		$this->assertEquals( strpos( $path, '/' ), 0 );
 	}
@@ -46,7 +47,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::site_url
 	 */
-	function test_site_url() {
+	public function test_site_url() {
 		$url = FrmAppHelper::site_url();
 		$this->assertEquals( 'http://example.org', $url );
 	}
@@ -54,7 +55,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::plugin_url
 	 */
-	function test_plugin_url() {
+	public function test_plugin_url() {
 		$url = FrmAppHelper::plugin_url();
 		$this->assertNotEmpty( $url );
 	}
@@ -62,7 +63,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::make_affiliate_url
 	 */
-	function test_make_affiliate_url() {
+	public function test_make_affiliate_url() {
 		add_filter( 'frm_affiliate_id', '__return_false' );
 		$urls = array( 'http://site.com', 'https://site.com/page/' );
 		foreach ( $urls as $url ) {
@@ -85,7 +86,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::get_settings
 	 */
-	function test_get_settings() {
+	public function test_get_settings() {
 		$settings = FrmAppHelper::get_settings();
 		$this->assertNotEmpty( $settings );
 		$this->assertTrue( is_object( $settings ) );
@@ -95,7 +96,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::pro_is_installed
 	 */
-	function test_pro_is_installed() {
+	public function test_pro_is_installed() {
 		$active = FrmAppHelper::pro_is_installed();
 		if ( is_callable( 'FrmProEddController::pro_is_authorized' ) ) {
 			$this->assertTrue( $active );
@@ -107,7 +108,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::is_formidable_admin
 	 */
-	function test_is_formidable_admin() {
+	public function test_is_formidable_admin() {
 		$page_names = array(
 			'nope'               => false,
 			'formidable'         => true,
@@ -142,7 +143,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::is_empty_value
 	 */
-	function test_is_empty_value() {
+	public function test_is_empty_value() {
 		$empty_value = FrmAppHelper::is_empty_value( '' );
 		$this->assertTrue( $empty_value );
 
@@ -159,7 +160,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::get_server_value
 	 */
-	function test_get_server_value() {
+	public function test_get_server_value() {
 		$url = FrmAppHelper::get_server_value( 'HTTP_HOST' );
 		$this->assertEquals( $url, 'example.org' );
 
@@ -171,10 +172,12 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::get_param
 	 */
-	function test_get_param() {
-		$set_value = '<script></script>test';
-		$expected_value = 'test';
-		$_GET['test'] = $_POST['test2'] = $_POST['item_meta'][25] = $set_value;
+	public function test_get_param() {
+		$set_value              = '<script></script>test';
+		$expected_value         = 'test';
+		$_GET['test']           = $set_value;
+		$_POST['test2']         = $set_value;
+		$_POST['item_meta'][25] = $set_value;
 
 		$result = FrmAppHelper::get_param( 'test', '', 'get', 'sanitize_text_field' );
 		$this->assertEquals( $result, $expected_value );
@@ -190,7 +193,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_post_param
 	 * @covers FrmAppHelper::get_simple_request
 	 */
-	function test_get_post_param() {
+	public function test_get_post_param() {
 		$set_value = '<script></script>test';
 		$expected_value = 'test';
 		$_POST['test3'] = $set_value;
@@ -202,7 +205,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::sanitize_value
 	 */
-	function test_sanitize_value() {
+	public function test_sanitize_value() {
 		$values = array(
 			array(
 				'value'    => '<script></script>test',
@@ -229,7 +232,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::simple_get
 	 * @covers FrmAppHelper::get_simple_request
 	 */
-	function test_simple_get() {
+	public function test_simple_get() {
 		$set_value = '<script></script>test';
 		$expected_value = 'test';
 		$_GET['test4'] = $set_value;
@@ -241,43 +244,47 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::get_simple_request
 	 */
-	function test_get_simple_request() {
-		$result = FrmAppHelper::get_simple_request( array(
-			'type'  => 'request',
-			'param' => 'test5',
-		) );
+	public function test_get_simple_request() {
+		$result = FrmAppHelper::get_simple_request(
+			array(
+				'type'  => 'request',
+				'param' => 'test5',
+			)
+		);
 		$this->assertEquals( '', $result );
 
 		$set_value = '<script></script>test';
 		$expected = 'test';
 		$_REQUEST['test5'] = $set_value;
 
-		$result = FrmAppHelper::get_simple_request( array(
-			'type'  => 'request',
-			'param' => 'test5',
-		) );
+		$result = FrmAppHelper::get_simple_request(
+			array(
+				'type'  => 'request',
+				'param' => 'test5',
+			)
+		);
 		$this->assertEquals( $expected, $result );
 	}
 
 	/**
 	 * @covers FrmAppHelper::sanitize_request
 	 */
-	function test_sanitize_request() {
+	public function test_sanitize_request() {
 		$values = array(
 			'form_id' => '<script></script>12',
-            'frm_action' => '<script></script>create me',
-            'form_key'   => '<script></script>This is a <b>text</b> field',
+			'frm_action' => '<script></script>create me',
+			'form_key'   => '<script></script>This is a <b>text</b> field',
 			'content'    => '<script></script>This is a <b>text</b> field',
 		);
 
-        $sanitize_method = array(
-            'form_id'    => 'absint',
-            'frm_action' => 'sanitize_title',
-            'form_key'   => 'sanitize_text_field',
+		$sanitize_method = array(
+			'form_id'    => 'absint',
+			'frm_action' => 'sanitize_title',
+			'form_key'   => 'sanitize_text_field',
 			'content'    => 'wp_kses_post',
-        );
+		);
 
-        FrmAppHelper::sanitize_request( $sanitize_method, $values );
+		FrmAppHelper::sanitize_request( $sanitize_method, $values );
 
 		$this->assertEquals( $values['form_id'], absint( $values['form_id'] ) );
 		$this->assertEquals( $values['frm_action'], sanitize_title( $values['frm_action'] ) );
@@ -288,7 +295,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::kses
 	 */
-	function test_kses() {
+	public function test_kses() {
 		$start_value = '<script><script>';
 		$safe_value = 'Hello, <a href="/test">click here</a>';
 		$start_value .= $safe_value;
@@ -303,9 +310,10 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::remove_get_action
 	 */
-	function test_remove_get_action() {
-		$_GET['action'] = 'bulk_trash';
-		$start_url = $_SERVER['REQUEST_URI'] = admin_url( 'admin.php?page=formidable&action=bulk_trash' );
+	public function test_remove_get_action() {
+		$_GET['action']         = 'bulk_trash';
+		$start_url              = admin_url( 'admin.php?page=formidable&action=bulk_trash' );
+		$_SERVER['REQUEST_URI'] = $start_url;
 		FrmAppHelper::remove_get_action();
 		$new_url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 		$this->assertNotEquals( $new_url, $start_url );
@@ -314,16 +322,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::get_query_var
 	 */
-    function test_get_query_var() {
+	public function test_get_query_var() {
 		$new_post_id = $this->go_to_new_post();
 		$get_post_id = FrmAppHelper::get_query_var( '', 'p' );
 		$this->assertEquals( $new_post_id, $get_post_id );
-    }
+	}
 
 	/**
 	 * @covers FrmAppHelper::allowed_html
 	 */
-	function test_allowed_html() {
+	public function test_allowed_html() {
 		$safe_html = $this->run_private_method( array( 'FrmAppHelper', 'safe_html' ), array() );
 		$tests = array(
 			array(
@@ -353,23 +361,23 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::maybe_add_permissions
 	 */
-    function test_maybe_add_permissions() {
+	public function test_maybe_add_permissions() {
 		$this->set_user_by_role( 'subscriber' );
 		$this->assertFalse( current_user_can( 'frm_view_forms' ), 'Subscriber can frm_view_forms' );
 		$this->assertFalse( current_user_can( 'frm_edit_forms' ), 'Subscriber can frm_edit_forms' );
 
 		$this->set_user_by_role( 'administrator' );
-        $frm_roles = FrmAppHelper::frm_capabilities();
-        foreach ( $frm_roles as $frm_role => $frm_role_description ) {
+		$frm_roles = FrmAppHelper::frm_capabilities();
+		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$this->assertTrue( current_user_can( $frm_role ), 'Admin cannot ' . $frm_role );
-        }
+		}
 	}
-	
+
 	/**
 	 * @group visibility
 	 * @covers FrmAppHelper::wp_roles_dropdown (single)
 	 */
-	function test_wp_roles_dropdown() {
+	public function test_wp_roles_dropdown() {
 		ob_start();
 		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
 		$output = ob_get_contents();
@@ -377,7 +385,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$this->assert_output_contains( $output, 'name="field_options"' );
 		$this->assert_output_contains( $output, 'id="field_options"' );
-		$this->assert_output_not_contains( $output. 'multiple="multiple"', 'default is single' );
+		$this->assert_output_not_contains( $output . 'multiple="multiple"', 'default is single' );
 		$this->assert_output_contains( $output, '>Administrator' );
 	}
 
@@ -385,7 +393,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @group visibility
 	 * @covers FrmAppHelper::roles_options ($public = 'private')
 	 */
-	function test_roles_options() {
+	public function test_roles_options() {
 		ob_start();
 		FrmAppHelper::roles_options( 'editor' );
 		$output = ob_get_contents();
@@ -402,7 +410,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @group visibility
 	 * @covers FrmAppHelper::roles_options
 	 */
-	function test_roles_options_empty_string_option() {
+	public function test_roles_options_empty_string_option() {
 		ob_start();
 		FrmAppHelper::roles_options( '' );
 		$output = ob_get_contents();

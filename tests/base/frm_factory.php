@@ -2,7 +2,7 @@
 
 class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 
-	function __construct( $factory = null ) {
+	public function __construct( $factory = null ) {
 		parent::__construct( $factory );
 
 		$defaults = FrmFormsHelper::setup_new_vars( false );
@@ -18,7 +18,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$this->default_generation_definitions['protect_files_role'] = '';
 	}
 
-	function create_object( $args ) {
+	public function create_object( $args ) {
 		$form = FrmForm::create( $args );
 
 		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
@@ -30,21 +30,21 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		return $form;
 	}
 
-	function update_object( $form_id, $fields ) {
+	public function update_object( $form_id, $fields ) {
 		return FrmForm::update( $form_id, $fields );
 	}
 
-	function get_id_by_key( $form_key ) {
+	public function get_id_by_key( $form_key ) {
 		return FrmForm::get_id_by_key( $form_key );
 	}
 
-	function get_object_by_id( $form_id ) {
+	public function get_object_by_id( $form_id ) {
 		return FrmForm::getOne( $form_id );
 	}
 }
 
 class Field_Factory extends WP_UnitTest_Factory_For_Thing {
-	function __construct( $factory = null ) {
+	public function __construct( $factory = null ) {
 		parent::__construct( $factory );
 
 		global $wpdb;
@@ -57,7 +57,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	}
 
-	function create_object( $args ) {
+	public function create_object( $args ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $args['type'], $args['form_id'] );
 		unset( $args['type'], $args['form_id'] );
 
@@ -74,15 +74,15 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		return FrmField::create( $field_values );
 	}
 
-	function update_object( $field_id, $values ) {
+	public function update_object( $field_id, $values ) {
 		return FrmField::update( $field_id, $values );
 	}
 
-	function get_object_by_id( $field_id ) {
+	public function get_object_by_id( $field_id ) {
 		return FrmField::getOne( $field_id );
 	}
 
-	function generate_entry_array( $form ) {
+	public function generate_entry_array( $form ) {
 		$form_id = is_object( $form ) ? $form->id : $form;
 		$entry_data = array(
 			'form_id'   => $form_id,
@@ -99,14 +99,14 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 	/**
 	 * Get all fields in a form
 	 */
-	function get_fields_from_form( $form_id ) {
+	public function get_fields_from_form( $form_id ) {
 		return FrmField::get_all_for_form( $form_id );
 	}
 
 	/**
 	 * When creating an entry, set the correct data formats
 	 */
-	function set_field_value( $field ) {
+	public function set_field_value( $field ) {
 		$value = rand_str();
 		$field_values = array(
 			'email'  => 'admin@example.org',
@@ -128,14 +128,14 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		return $value;
 	}
 
-	function get_id_by_key( $field_key ) {
+	public function get_id_by_key( $field_key ) {
 		return FrmField::get_id_by_key( $field_key );
 	}
 }
 
 class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 
-	function __construct( $factory = null ) {
+	public function __construct( $factory = null ) {
 		parent::__construct( $factory );
 
 		global $wpdb;
@@ -146,24 +146,24 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	}
 
-	function create_object( $args ) {
-        $default_values = array(
-            'form_id'   => $args['form_id'],
-            'item_meta' => array(),
-        );
+	public function create_object( $args ) {
+		$default_values = array(
+			'form_id'   => $args['form_id'],
+			'item_meta' => array(),
+		);
 		$args = array_merge( $default_values, $args );
 		return FrmEntry::create( $args );
 	}
 
-	function update_object( $entry_id, $fields ) {
+	public function update_object( $entry_id, $fields ) {
 		return FrmEntry::update( $entry_id, $fields );
 	}
 
-	function get_object_by_id( $entry_id ) {
+	public function get_object_by_id( $entry_id ) {
 		return FrmEntry::getOne( $entry_id );
 	}
 
-	function get_id_by_key( $entry_key ) {
+	public function get_id_by_key( $entry_key ) {
 		return FrmEntry::get_id_by_key( $entry_key );
 	}
 }

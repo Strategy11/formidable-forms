@@ -12,7 +12,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 	 *
 	 * @covers FrmFieldsHelper::value_meets_condition
 	 */
-	function test_value_meets_condition() {
+	public function test_value_meets_condition() {
 		$tests = array(
 			array(
 				'observed_value' => 6,

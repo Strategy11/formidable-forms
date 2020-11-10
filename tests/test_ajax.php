@@ -4,14 +4,14 @@
  */
 class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 
-	function test_plugin_activated() {
+	public function test_plugin_activated() {
 		$this->assertTrue( is_plugin_active( 'formidable/formidable.php' ) );
 	}
 
-    /**
+	/**
 	 * Prevent unauthorized user from uninstalling
 	 */
-	function test_block_uninstall() {
+	public function test_block_uninstall() {
 		// log in as user
 		$role = 'editor';
 		$user_id = $this->factory->user->create( compact( 'role' ) );
@@ -30,8 +30,8 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 
 		$this->assertSame( $expected, $response );
 
-        global $wpdb;
-        $exists = $wpdb->query( 'DESCRIBE '. $wpdb->prefix . 'frm_fields' );
-        $this->assertNotEmpty( $exists );
+		global $wpdb;
+		$exists = $wpdb->query( 'DESCRIBE ' . $wpdb->prefix . 'frm_fields' );
+		$this->assertNotEmpty( $exists );
 	}
 }

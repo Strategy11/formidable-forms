@@ -17,7 +17,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	* @covers FrmFormsController::update
 	* with ajax
 	*/
-	function test_form_update_with_ajax() {
+	public function test_form_update_with_ajax() {
 		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
 		$this->assertNotEmpty( $form_id, 'Form not found with key ' . $this->contact_form_key );
 
@@ -35,7 +35,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		self::_check_updated_values( $form_id );
 	}
 
-	function _setup_post_values( $form_id ){
+	private function _setup_post_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		$form = FrmForm::getOne( $form_id );
@@ -53,7 +53,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			'name' => $form->name,
 			'frm_fields_submitted' => array(),
 			'item_meta' => array(),
-			'field_options' => array()
+			'field_options' => array(),
 		);
 
 		foreach ( $fields as $field ) {
@@ -85,7 +85,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 		}
 	}
 
-	function _check_updated_values( $form_id ) {
+	private function _check_updated_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		// Compare to posted values

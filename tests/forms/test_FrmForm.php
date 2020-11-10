@@ -7,7 +7,7 @@ class test_FrmForm extends FrmUnitTest {
 	/**
 	 * @covers FrmForm::create
 	 */
-	function test_create() {
+	public function test_create() {
 		$values = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
 		$this->assertTrue( is_numeric( $form_id ) );
@@ -17,7 +17,7 @@ class test_FrmForm extends FrmUnitTest {
 	/**
 	 * @covers FrmForm::duplicate
 	 */
-	function test_duplicate(){
+	public function test_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
 
 		$id = FrmForm::duplicate( $form->id );
@@ -30,7 +30,7 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
 	}
 
-	function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
+	private function _check_if_child_fields_duplicate( $old_child_forms, $new_child_forms ) {
 		// Just check the first form
 		$old_child_form = reset( $old_child_forms );
 		$new_child_form = reset( $new_child_forms );
@@ -46,7 +46,7 @@ class test_FrmForm extends FrmUnitTest {
 	/**
 	 * @covers FrmForm::destroy
 	 */
-	function test_destroy(){
+	public function test_destroy() {
 		$forms = FrmForm::getAll();
 		$this->assertNotEmpty( count( $forms ) );
 
