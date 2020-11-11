@@ -68,7 +68,19 @@ class FrmFormApi {
 			return $addons;
 		}
 
-		$response = wp_remote_get( $url );
+		// We need to know the version number to allow different downloads.
+		$agent = 'formidable/' . FrmAppHelper::plugin_version();
+		if ( is_callable( FrmProDb::$plug_version ) ) {
+			$agent = 'formidable-pro/' . FrmProDb::$plug_version;
+		}
+
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'    => 25,
+				'user-agent' => $agent . '; ' . get_bloginfo( 'url' ),
+			)
+		);
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 			$addons = $response['body'];
 			if ( ! empty( $addons ) ) {
