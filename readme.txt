@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.5.1
 Requires PHP: 5.6
-Stable tag: 4.09
+Stable tag: 4.09.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,9 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.01 =
+* Don't include a link in the entries list to the form page when the user doesn't have permission to see anything there.
+
 = 4.09 =
 * New: Updated the UX for creating a new blank form or from a template.
 * Fix: Duplicating a closed form action didn't copy correctly.
@@ -456,11 +459,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Use frm_inline_success for the form class in the customized HTML to move the success message next to the submit button. "frm_inline_success frm_alignright_success" will right-align the message.
 * Tweak: Improve the form listing page and entry listings page when nothing has been created.
 * Fix: Update the recaptcha for better reliability to catch more spam.
-
-= 4.06.03 =
-* More consistent dropdown styling with multiselect dropdowns.
-* Prepare the code for handling permissions options as an array of roles.
-* Fix: WP 5.5 - Email subject lines were coming through encoded.
-* Fix: WP 5.5 - When WP Mail SMTP was installed, the Formidable SMTP page has an error.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
