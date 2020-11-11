@@ -293,10 +293,6 @@ class FrmAddonsController {
 			return $transient;
 		}
 
-		if ( is_callable( 'FrmProAddonsController::check_update' ) ) {
-			return FrmProAddonsController::check_update( $transient );
-		}
-
 		if ( ! is_object( $transient ) ) {
 			$transient = new stdClass();
 		}
