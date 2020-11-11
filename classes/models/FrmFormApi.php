@@ -70,7 +70,7 @@ class FrmFormApi {
 
 		// We need to know the version number to allow different downloads.
 		$agent = 'formidable/' . FrmAppHelper::plugin_version();
-		if ( is_callable( FrmProDb::$plug_version ) ) {
+		if ( class_exists( 'FrmProDb' ) ) {
 			$agent = 'formidable-pro/' . FrmProDb::$plug_version;
 		}
 
