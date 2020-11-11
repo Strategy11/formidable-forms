@@ -182,10 +182,12 @@ class test_FrmFieldType extends FrmUnitTest {
 	public function test_is_not_unique() {
 
 		$form_id = $this->factory->form->create();
-		$field1 = $this->factory->field->create_and_get( array(
-			'type'    => 'number',
-			'form_id' => $form_id,
-		) );
+		$field1 = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $form_id,
+			)
+		);
 
 		$field_object1 = FrmFieldFactory::get_field_type( 'text', $field1 );
 		$entry_id     = 0;
@@ -202,10 +204,12 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field_object2 = FrmFieldFactory::get_field_type( 'text', $field1 );
 		$this->assertTrue( $field_object2->is_not_unique( 'First', $entry_id ), 'another field object for the same field should also be flagging a duplicate' );
 
-		$field2 = $this->factory->field->create_and_get( array(
-			'type'    => 'number',
-			'form_id' => $form_id,
-		) );
+		$field2 = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $form_id,
+			)
+		);
 		$field_object3 = FrmFieldFactory::get_field_type( 'text', $field2 );
 
 		$this->assertFalse( $field_object3->is_not_unique( 'First', $entry_id ), 'a field object for another field should not flag a duplicate' );
