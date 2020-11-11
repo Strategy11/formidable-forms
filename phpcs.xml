@@ -11,23 +11,10 @@
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
-		<!-- Temporary exclusions. Enable these when we have time to address them -->
-		<exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
-		<exclude name="Squiz.PHP.EmbeddedPhp.ContentAfterEnd" />
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
-		<exclude name="WordPress.WP.GlobalVariablesOverride" />
-
-		<!-- These give issues with the current code base. -->
-		<exclude name="WordPress.Files.FileName.UnderscoresNotAllowed" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
-		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
-		<exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
-		<exclude name="WordPress.Classes.ValidClassName.NotCamelCaps" />
-		<exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
-		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" /><!-- Some WP globals break the rule -->
-		<exclude name="WordPress.PHP.YodaConditions"/>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -38,7 +25,7 @@
 	</rule>
 	<rule ref="Squiz.Scope.StaticThisUsage" />
 
-	<!-- Enable these rules right away -->
+	<!-- HIGH PRIORITY ITEMS TO FIX -->
 	<rule ref="WordPress.Security.NonceVerification.Missing">
 		<exclude-pattern>classes/models/fields/FrmFieldCaptcha.php</exclude-pattern>
 		<exclude-pattern>classes/models/FrmFormAction.php</exclude-pattern>
@@ -55,7 +42,30 @@
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 
-	<!-- Exclude specific rules for unit tests -->
+	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
+	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
+		<exclude-pattern>classes/views/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterEnd">
+		<exclude-pattern>classes/views/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+		<exclude-pattern>classes/views/*</exclude-pattern>
+		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
+	</rule>
+
+	<!-- LOW PRIORITY ITEMS TO FIX -->
+	<rule ref="WordPress.PHP.YodaConditions">
+		<exclude-pattern>classes/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+	</rule>
+
+	<!-- Exclude specific rules for unit tests (fix when possible) -->
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
@@ -79,5 +89,20 @@
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
 		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- These rules likely won't see any changes for compatibility -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+		<!-- the getOne and getAll functions all break this rule -->
+		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntry.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
+		<!-- wpmuBaseTablePrefix breaks this rule -->
+		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
 	</rule>
 </ruleset>
