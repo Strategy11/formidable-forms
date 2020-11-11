@@ -243,14 +243,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Get the column names that the logged in user can action on
 	 */
 	private function get_action_columns() {
-		$columns = array();
-
-		$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
-		if ( $user_can_edit_forms ) {
-			array_push( $columns, 'cb', 'form_id', 'id', 'post_id' );
-		}
-
-		return $columns;
+		return array( 'cb', 'form_id', 'id', 'post_id' );
 	}
 
 	private function column_value( $item ) {
