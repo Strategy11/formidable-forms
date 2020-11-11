@@ -240,10 +240,6 @@ class FrmAddonsController {
 	 * @since 4.0.01
 	 */
 	public static function is_license_expired() {
-		if ( is_callable( 'FrmProAddonsController::is_license_expired' ) ) {
-			return FrmProAddonsController::is_license_expired();
-		}
-
 		$version_info = self::get_primary_license_info();
 		if ( ! isset( $version_info['error'] ) ) {
 			return false;
@@ -269,10 +265,6 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	protected static function get_primary_license_info() {
-		if ( is_callable( 'FrmProAddonsController::get_primary_license_info' ) ) {
-			return FrmProAddonsController::get_primary_license_info();
-		}
-
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
@@ -291,10 +283,6 @@ class FrmAddonsController {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			// Don't make any changes if only Lite is installed.
 			return $transient;
-		}
-
-		if ( is_callable( 'FrmProAddonsController::check_update' ) ) {
-			return FrmProAddonsController::check_update( $transient );
 		}
 
 		if ( ! is_object( $transient ) ) {
