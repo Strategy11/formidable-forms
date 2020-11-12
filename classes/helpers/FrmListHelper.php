@@ -190,11 +190,9 @@ class FrmListHelper {
 	/**
 	 * An internal method that sets all the necessary pagination arguments
 	 *
-	 * @param array $args An associative array with information about the pagination
-	 *
 	 * @access protected
 	 *
-	 * @param array|string $args
+	 * @param array|string $args An associative array with information about the pagination
 	 */
 	protected function set_pagination_args( $args ) {
 		$args = wp_parse_args(
@@ -460,7 +458,7 @@ class FrmListHelper {
 	 * @access protected
 	 *
 	 * @param array $actions The list of actions
-	 * @param bool $always_visible Whether the actions should be always visible
+	 * @param bool  $always_visible Whether the actions should be always visible
 	 *
 	 * @return string
 	 */
@@ -542,7 +540,7 @@ class FrmListHelper {
 	 * @access protected
 	 *
 	 * @param string $option
-	 * @param int $default
+	 * @param int    $default
 	 *
 	 * @return int
 	 */

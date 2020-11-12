@@ -71,8 +71,7 @@ class FrmSimpleBlocksController {
 	/**
 	 * Returns an array for a form with name as label and id as value
 	 *
-	 * @param $form
-	 *
+	 * @param object $form
 	 * @return array
 	 */
 	private static function set_form_options( $form ) {
@@ -125,8 +124,7 @@ class FrmSimpleBlocksController {
 	/**
 	 * Renders a form given the specified attributes.
 	 *
-	 * @param $attributes
-	 *
+	 * @param array $attributes
 	 * @return string
 	 */
 	public static function simple_form_render( $attributes ) {

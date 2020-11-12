@@ -33,9 +33,6 @@ class FrmForm {
 		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
 		$new_values['options'] = serialize( $options );
 
-		//if(isset($values['id']) && is_numeric($values['id']))
-		//    $new_values['id'] = $values['id'];
-
 		$wpdb->insert( $wpdb->prefix . 'frm_forms', $new_values );
 
 		$id = $wpdb->insert_id;
@@ -236,7 +233,7 @@ class FrmForm {
 				}
 			}
 
-			//updating the form
+			// updating the form
 			$update_options = FrmFieldsHelper::get_default_field_options_from_field( $field );
 			unset( $update_options['custom_html'] ); // don't check for POST html
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
@@ -342,12 +339,12 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int    $id
 	 * @param string $status
-	 *
 	 * @return int|boolean
 	 */
 	public static function set_status( $id, $status ) {
-		if ( 'trash' == $status ) {
+		if ( 'trash' === $status ) {
 			return self::trash( $id );
 		}
 
@@ -754,7 +751,7 @@ class FrmForm {
 		}
 
 		if ( $form->id == $values['posted_form_id'] ) {
-			//if there are two forms on the same page, make sure not to submit both
+			// if there are two forms on the same page, make sure not to submit both
 			foreach ( $default_values as $var => $default ) {
 				if ( $var == 'action' ) {
 					$values[ $var ] = FrmAppHelper::get_param( $action_var, $default, 'get', 'sanitize_title' );

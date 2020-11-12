@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @since 3.0
  */
-
 class FrmFieldFormHtml {
 
 	private $html;
@@ -42,7 +41,7 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param string $param
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	private function _set( $param, $atts ) {
 		if ( isset( $atts[ $param ] ) ) {
@@ -143,16 +142,16 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 */
 	private function replace_field_values() {
-		//replace [id]
+		// replace [id]
 		$this->html = str_replace( '[id]', $this->field_id, $this->html );
 
 		// set the label for
 		$this->html = str_replace( 'field_[key]', $this->html_id, $this->html );
 
-		//replace [key]
+		// replace [key]
 		$this->html = str_replace( '[key]', $this->field_obj->get_field_column( 'field_key' ), $this->html );
 
-		//replace [field_name]
+		// replace [field_name]
 		$this->html = str_replace( '[field_name]', $this->field_obj->get_field_column( 'name' ), $this->html );
 	}
 
@@ -264,10 +263,10 @@ class FrmFieldFormHtml {
 		if ( ! empty( $this->form ) ) {
 			$form = (array) $this->form;
 
-			//replace [form_key]
+			// replace [form_key]
 			$this->html = str_replace( '[form_key]', $form['form_key'], $this->html );
 
-			//replace [form_name]
+			// replace [form_name]
 			$this->html = str_replace( '[form_name]', $form['name'], $this->html );
 		}
 	}
@@ -290,7 +289,7 @@ class FrmFieldFormHtml {
 	private function filter_for_more_shortcodes() {
 		$atts = $this->pass_args;
 
-		//If field is not in repeating section
+		// If field is not in repeating section
 		if ( empty( $atts['section_id'] ) ) {
 			$atts = array(
 				'errors' => $this->pass_args['errors'],

@@ -20,8 +20,8 @@ class test_FrmField extends FrmUnitTest {
 	}
 
 	/**
-	* @covers FrmField::getAll
-	*/
+	 * @covers FrmField::getAll
+	 */
 	public function test_getAll() {
 		$forms = array(
 			$this->contact_form_key => $this->contact_form_field_count,

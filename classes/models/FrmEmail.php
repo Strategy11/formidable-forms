@@ -139,7 +139,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $recipients
-	 * @param array $user_id_args
+	 * @param array  $user_id_args
 	 *
 	 * @return array
 	 */
@@ -217,7 +217,7 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param $action
+	 * @param object $action
 	 */
 	private function set_is_single_recipient( $action ) {
 		$args = array(
@@ -474,9 +474,7 @@ class FrmEmail {
 	 * Get the userID field ID and key for email settings
 	 *
 	 * @since 2.03.04
-	 *
-	 * @param $form_id
-	 *
+	 * @param int $form_id
 	 * @return array
 	 */
 	private function get_user_id_args( $form_id ) {
@@ -499,7 +497,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param string $value
-	 * @param array $user_id_args
+	 * @param array  $user_id_args
 	 *
 	 * @return string
 	 */

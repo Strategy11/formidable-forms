@@ -283,6 +283,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param array  $actions
+	 * @param object $item
 	 * @param string $edit_link
 	 */
 	private function get_actions( &$actions, $item, $edit_link ) {
@@ -307,7 +309,11 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param array  $actions
 	 * @param string $edit_link
+	 * @param string $mode
+	 * @return string
 	 */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
@@ -335,6 +341,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $val
 	 */
 	private function add_draft_label( $item, &$val ) {
@@ -344,6 +351,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $val
 	 */
 	private function add_form_description( $item, &$val ) {

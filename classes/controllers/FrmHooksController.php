@@ -40,7 +40,6 @@ class FrmHooksController {
 			}
 			unset( $c );
 		}
-
 	}
 
 	public static function trigger_load_form_hooks() {

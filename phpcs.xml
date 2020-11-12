@@ -11,7 +11,21 @@
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
-		<exclude name="Squiz.Commenting" />
+		<exclude name="Squiz.Commenting.FileComment.WrongStyle" />
+		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
+		<exclude name="Squiz.Commenting.ClassComment.Missing" />
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+		<exclude name="Squiz.Commenting.VariableComment.Missing" />
+		<exclude name="Squiz.Commenting.LongConditionClosingComment.Missing" />
+		<exclude name="Squiz.Commenting.PostStatementComment.Found" />
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
+		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
+		<exclude name="Squiz.Commenting.VariableComment.WrongStyle" />
+		<exclude name="Squiz.Commenting.VariableComment.MissingVar" />
+		<exclude name="Generic.Files.LineEndings.InvalidEOLChar" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
@@ -63,6 +77,9 @@
 		<exclude-pattern>classes/*</exclude-pattern>
 		<exclude-pattern>tests/*</exclude-pattern>
 		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.ClassComment.WrongStyle">
+		<exclude-pattern>classes/views/frm-form-actions/default_actions.php</exclude-pattern>
 	</rule>
 
 	<!-- Exclude specific rules for unit tests (fix when possible) -->

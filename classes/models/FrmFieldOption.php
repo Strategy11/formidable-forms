@@ -69,7 +69,7 @@ class FrmFieldOption {
 	 * @since 2.03.05
 	 *
 	 * @param string $selected_value
-	 * @param int $truncate
+	 * @param int    $truncate
 	 */
 	public function print_single_option( $selected_value, $truncate ) {
 		if ( '' !== $this->saved_value ) {

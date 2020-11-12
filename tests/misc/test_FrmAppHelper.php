@@ -421,6 +421,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @param string $output
 	 * @param string $substring
 	 * @param string $message
 	 */
@@ -429,6 +430,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @param string $output
 	 * @param string $substring
 	 * @param string $message
 	 */

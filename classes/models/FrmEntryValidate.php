@@ -220,8 +220,8 @@ class FrmEntryValidate {
 	 * Check for spam
 	 *
 	 * @param boolean $exclude
-	 * @param array $values
-	 * @param array $errors by reference
+	 * @param array   $values
+	 * @param array   $errors by reference
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
 		if ( ! empty( $exclude ) || ! isset( $values['item_meta'] ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {

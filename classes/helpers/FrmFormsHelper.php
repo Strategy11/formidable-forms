@@ -62,11 +62,11 @@ class FrmFormsHelper {
 	}
 
 	/**
+	 * @since 2.0.6
+	 *
 	 * @param string $class
 	 * @param string $param
-	 * @param array $add_html
-	 *
-	 * @since 2.0.6
+	 * @param array  $add_html
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -622,6 +622,8 @@ BEFORE_HTML;
 	 *
 	 * @since 2.0
 	 *
+	 * @param object  $form
+	 * @param array   $fields
 	 * @param boolean $reset_fields
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
@@ -718,10 +720,10 @@ BEFORE_HTML;
 			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
 		}
 
-		//replace [form_key]
+		// replace [form_key]
 		$html = str_replace( '[form_key]', $form->form_key, $html );
 
-		//replace [frmurl]
+		// replace [frmurl]
 		$html = str_replace( '[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html );
 
 		if ( strpos( $html, '[button_label]' ) ) {
@@ -806,8 +808,7 @@ BEFORE_HTML;
 	/**
 	 * Returns appropriate class if form has top labels
 	 *
-	 * @param $form
-	 *
+	 * @param array $form
 	 * @return string
 	 */
 	private static function maybe_align_fields_top( $form ) {
@@ -817,8 +818,7 @@ BEFORE_HTML;
 	/**
 	 * Determine if a form has fields with top labels so submit button can be aligned properly
 	 *
-	 * @param $form
-	 *
+	 * @param array $form
 	 * @return bool
 	 */
 	private static function form_has_top_labels( $form ) {
@@ -846,9 +846,8 @@ BEFORE_HTML;
 	/**
 	 * Check if a field's label position is set to "top"
 	 *
-	 * @param $field
-	 * @param $form
-	 *
+	 * @param array $field
+	 * @param array $form
 	 * @return bool
 	 */
 	private static function field_has_top_label( $field, $form ) {
@@ -1027,7 +1026,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param mixed data
+	 * @param mixed $data
 	 * @return int
 	 */
 	private static function get_form_id_from_data( $data ) {

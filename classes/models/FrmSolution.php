@@ -154,8 +154,10 @@ class FrmSolution {
 		return admin_url( 'index.php?page=' . $this->page );
 	}
 
-	/*
+	/**
 	 * Add page to global settings.
+	 *
+	 * @param array $sections
 	 */
 	public function add_settings( $sections ) {
 		wp_enqueue_style( 'formidable-pro-fields' );
@@ -169,7 +171,7 @@ class FrmSolution {
 		return $sections;
 	}
 
-	/*
+	/**
 	 * Output for global settings.
 	 */
 	public function settings_page() {

@@ -297,6 +297,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param array  $actions
+	 * @param object $item
 	 * @param string $view_link
 	 */
 	private function get_actions( &$actions, $item, $view_link ) {

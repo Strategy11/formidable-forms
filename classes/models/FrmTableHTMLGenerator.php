@@ -54,7 +54,7 @@ class FrmTableHTMLGenerator {
 	 * FrmTableHTMLGenerator constructor.
 	 *
 	 * @param string $type
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	public function __construct( $type, $atts = array() ) {
 
@@ -182,7 +182,7 @@ class FrmTableHTMLGenerator {
 	private function get_color_markup( $color_markup ) {
 		$color_markup = trim( $color_markup );
 
-		//check if each character in string is valid hex digit
+		// check if each character in string is valid hex digit
 		if ( ctype_xdigit( $color_markup ) ) {
 			$color_markup = '#' . $color_markup;
 		}

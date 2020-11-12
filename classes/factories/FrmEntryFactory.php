@@ -33,7 +33,7 @@ class FrmEntryFactory {
 	 * @since 2.04
 	 *
 	 * @param int|string $form_id
-	 * @param array $atts
+	 * @param array      $atts
 	 *
 	 * @return FrmEntryShortcodeFormatter|FrmProEntryShortcodeFormatter
 	 */

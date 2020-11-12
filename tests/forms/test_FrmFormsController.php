@@ -14,18 +14,6 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->set_front_end();
 		$edit_in_place = wp_script_is( 'formidable-editinplace', 'enqueued' );
 		$this->assertFalse( $edit_in_place, 'The edit-in-place script should not be enqueued' );
-
-		/*
-		$this->set_admin_screen( 'formidable-edit' );
-
-		$edit_in_place = wp_script_is( 'formidable-editinplace', 'enqueued' );
-		$this->assertTrue( $edit_in_place, 'The edit-in-place script was not enqueued' );
-
-		if ( wp_is_mobile() ) {
-			$touchpunch = wp_script_is( 'jquery-touch-punch', 'enqueued' );
-			$this->assertTrue( $touchpunch, 'The touch punch script was not enqueued' );
-		}
-		*/
 	}
 
 	public function test_get_form_shortcode() {
@@ -34,9 +22,9 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	/**
-	* @covers FrmFormsController::update
-	* without ajax
-	*/
+	 * @covers FrmFormsController::update
+	 * without ajax
+	 */
 	public function test_form_update_no_ajax() {
 		if ( FrmAppHelper::doing_ajax() ) {
 			$this->markTestSkipped( 'Run with --filter test_form_update_no_ajax' );
@@ -66,7 +54,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			'id' => $form_id,
 			'action' => 'update',
 			'frm_save_form' => wp_create_nonce( 'frm_save_form_nonce' ),
-			//'_wp_http_referer' =>
+			// '_wp_http_referer' =>
 			'status' => 'published',
 			'new_status' => '',
 			'name' => $form->name,
@@ -104,7 +92,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		}
 	}
 
-	// Make sure DOING_AJAX is false
+	/**
+	 * Make sure DOING_AJAX is false
+	 */
 	private function _check_doing_ajax() {
 		if ( defined( 'DOING_AJAX' ) ) {
 			$doing_ajax = true;

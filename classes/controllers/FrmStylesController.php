@@ -128,7 +128,7 @@ class FrmStylesController {
 		$stylesheet_urls = array();
 
 		if ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) {
-			//include css in head
+			// include css in head
 			self::get_url_to_custom_style( $stylesheet_urls );
 		}
 
@@ -250,7 +250,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @param string $message
+	 * @param string       $message
 	 * @param array|object $forms
 	 */
 	private static function manage( $message = '', $forms = array() ) {

@@ -14,9 +14,9 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 	}
 
 	/**
-	* @covers FrmFormsController::update
-	* with ajax
-	*/
+	 * @covers FrmFormsController::update
+	 * with ajax
+	 */
 	public function test_form_update_with_ajax() {
 		$form_id = $this->factory->form->get_id_by_key( $this->contact_form_key );
 		$this->assertNotEmpty( $form_id, 'Form not found with key ' . $this->contact_form_key );
@@ -47,7 +47,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			'id' => $form_id,
 			'action' => 'update',
 			'frm_save_form' => wp_create_nonce( 'frm_save_form_nonce' ),
-			//'_wp_http_referer' =>
+			// '_wp_http_referer' =>
 			'status' => 'published',
 			'new_status' => '',
 			'name' => $form->name,

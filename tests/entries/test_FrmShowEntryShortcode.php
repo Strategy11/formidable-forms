@@ -883,9 +883,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	/**
-	 * @param array $atts
+	 * @param array    $atts
 	 * @param stdClass $field
-	 * @param mixed $field_value
+	 * @param mixed    $field_value
 	 *
 	 * @return bool
 	 */
@@ -957,6 +957,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * @param stdClass $entry
 	 * @param stdClass $field
+	 * @param array    $atts unused in this function, but used in test_FrmProShowEntryShortcode get_field_value function
 	 *
 	 * @return mixed|string
 	 */
@@ -1049,7 +1050,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * Get the expected default HTML or plain text shortcodes
 	 *
 	 * @param string $type
-	 * @param array $atts
+	 * @param array  $atts
 	 *
 	 * @return string
 	 */

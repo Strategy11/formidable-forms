@@ -37,7 +37,6 @@ class FrmAddon {
 
 	public static function load_hooks() {
 		add_filter( 'frm_include_addon_page', '__return_true' );
-		//new static();
 	}
 
 	public function insert_installed_addon( $plugins ) {
@@ -78,7 +77,7 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed $_data
+	 * @param mixed  $_data
 	 * @param string $_action
 	 * @param object $_args
 	 *
@@ -218,7 +217,7 @@ class FrmAddon {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array error
+	 * @param array $error
 	 */
 	public function maybe_clear_license( $error ) {
 		if ( $error['code'] === 'disabled' && $error['license'] === $this->license ) {
@@ -300,7 +299,7 @@ class FrmAddon {
 		}
 
 		if ( $this->is_current_version( $transient ) ) {
-			//make sure it doesn't show there is an update if plugin is up-to-date
+			// make sure it doesn't show there is an update if plugin is up-to-date
 			if ( isset( $transient->response[ $this->plugin_folder ] ) ) {
 				unset( $transient->response[ $this->plugin_folder ] );
 			}

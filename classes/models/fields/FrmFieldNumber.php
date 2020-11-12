@@ -51,7 +51,7 @@ class FrmFieldNumber extends FrmFieldType {
 
 		$this->remove_commas_from_number( $args );
 
-		//validate the number format
+		// validate the number format
 		if ( ! is_numeric( $args['value'] ) && '' !== $args['value'] ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}

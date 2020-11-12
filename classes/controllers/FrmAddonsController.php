@@ -489,7 +489,7 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.03
 	 *
-	 * @param array $addons
+	 * @param array  $addons
 	 * @param object $license The FrmAddon object
 	 *
 	 * @return array
@@ -1082,7 +1082,7 @@ class FrmAddonsController {
 	/**
 	 * Render a conditional action button for a specified plugin
 	 *
-	 * @param string $plugin
+	 * @param string       $plugin
 	 * @param array|string $upgrade_link_args
 	 * @since 4.09
 	 */
@@ -1100,10 +1100,12 @@ class FrmAddonsController {
 	 * Render a conditional action button for an add on
 	 *
 	 * @since 4.09.01
-	 * @param array $addon
-	 * @param string|false $license_type
-	 * @param string $plan_required
-	 * @param string $upgrade_link
+	 *
+	 * @param array $atts with following keys:
+	 *      array        addon
+	 *      string|false license_type
+	 *      string       plan_required
+	 *      string       upgrade_link
 	 */
 	public static function show_conditional_action_button( $atts ) {
 		if ( is_callable( 'FrmProAddonsController::show_conditional_action_button' ) ) {
@@ -1204,7 +1206,7 @@ class FrmAddonsController {
 	 * @codeCoverageIgnore
 	 *
 	 * @param boolean $return
-	 * @param string $package
+	 * @param string  $package
 	 *
 	 * @return boolean
 	 */

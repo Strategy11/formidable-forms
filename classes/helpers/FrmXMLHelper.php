@@ -322,8 +322,8 @@ class FrmXMLHelper {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $form_id
-	 * @param int $parent_form_id
+	 * @param int   $form_id
+	 * @param int   $parent_form_id
 	 * @param array $child_forms
 	 */
 	private static function track_imported_child_forms( $form_id, $parent_form_id, &$child_forms ) {
@@ -381,7 +381,7 @@ class FrmXMLHelper {
 
 					unset( $form_fields[ $f['id'] ] );
 
-					//unset old field key
+					// unset old field key
 					if ( isset( $form_fields[ $f['field_key'] ] ) ) {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
@@ -394,8 +394,8 @@ class FrmXMLHelper {
 					FrmField::update( $form_fields[ $f['field_key'] ], $f );
 					$imported['updated']['fields'] ++;
 
-					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); //unset old field id
-					unset( $form_fields[ $f['field_key'] ] ); //unset old field key
+					unset( $form_fields[ $form_fields[ $f['field_key'] ] ] ); // unset old field id
+					unset( $form_fields[ $f['field_key'] ] ); // unset old field key
 				} else {
 					// if no matching field id or key in this form, create the field
 					self::create_imported_field( $f, $imported );
@@ -468,7 +468,7 @@ class FrmXMLHelper {
 	 * Update the current in_section value at the beginning of the field loop
 	 *
 	 * @since 2.0.25
-	 * @param int $in_section
+	 * @param int   $in_section
 	 * @param array $f
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
@@ -626,7 +626,7 @@ class FrmXMLHelper {
 	 * Fix field ids for fields that already exist prior to import.
 	 *
 	 * @since 4.07
-	 * @param int $form_id
+	 * @param int   $form_id
 	 * @param array $keys_by_original_field_id
 	 */
 	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
@@ -843,7 +843,7 @@ class FrmXMLHelper {
 			'value' => (string) $meta->meta_value,
 		);
 
-		//switch old form and field ids to new ones
+		// switch old form and field ids to new ones
 		if ( $m['key'] == 'frm_form_id' && isset( $imported['forms'][ (int) $m['value'] ] ) ) {
 			$m['value'] = $imported['forms'][ (int) $m['value'] ];
 		} else {
@@ -896,7 +896,7 @@ class FrmXMLHelper {
 	/**
 	 * Add terms to post
 	 *
-	 * @param array $post by reference
+	 * @param array  $post by reference
 	 * @param object $item The XML object data
 	 */
 	private static function populate_taxonomies( &$post, $item ) {
@@ -999,7 +999,9 @@ class FrmXMLHelper {
 	}
 
 	/**
+	 * @param mixed  $result
 	 * @param string $message
+	 * @param array  $errors
 	 */
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
@@ -1289,7 +1291,11 @@ class FrmXMLHelper {
 	/**
 	 * Migrate post settings to form action
 	 *
+	 * @param array  $form_options
+	 * @param int    $form_id
 	 * @param string $post_type
+	 * @param array  $imported
+	 * @param bool   $switch
 	 */
 	private static function migrate_post_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
 		if ( ! isset( $form_options['create_post'] ) || ! $form_options['create_post'] ) {
@@ -1466,7 +1472,7 @@ class FrmXMLHelper {
 	 * @since 2.05
 	 *
 	 * @param int|string $form_id
-	 * @param array $form_options
+	 * @param array      $form_options
 	 */
 	private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
 		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
@@ -1610,7 +1616,7 @@ class FrmXMLHelper {
 	/**
 	 * Switch field IDs in pre-2.0 email conditional logic
 	 *
-	 * @param $post_content array, pass by reference
+	 * @param array $post_content pass by reference
 	 */
 	private static function switch_email_condition_field_ids( &$post_content ) {
 		// Switch field IDs in conditional logic

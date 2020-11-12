@@ -121,7 +121,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
-	 * @param array $values
+	 * @param array  $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
 		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] );
@@ -150,7 +150,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
-	 * @param array $field_array
+	 * @param array  $field_array
 	 */
 	private static function fill_cleared_strings( $field, array &$field_array ) {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -177,7 +177,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param string $setting
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	private static function get_posted_field_setting( $setting, &$value ) {
 		if ( ! isset( $_POST['field_options'][ $setting ] ) ) {
@@ -202,7 +202,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param object $field
-	 * @param array $values The field array is needed for hooks
+	 * @param array  $values The field array is needed for hooks
 	 *
 	 * @return array
 	 */
@@ -235,9 +235,9 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array $field_array
+	 * @param array  $field_array
 	 * @param object $field
-	 * @param array $atts
+	 * @param array  $atts
 	 */
 	private static function prepare_field_options_for_display( &$field_array, $field, $atts ) {
 		$field_obj   = FrmFieldFactory::get_field_object( $field );
@@ -273,9 +273,8 @@ class FrmFieldsHelper {
 	/**
 	 * @since 2.0
 	 *
-	 * @param $field
-	 * @param $error
-	 *
+	 * @param mixed  $field
+	 * @param string $error
 	 * @return string
 	 */
 	public static function get_error_msg( $field, $error ) {
@@ -331,10 +330,10 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param array $fields
-	 * @param array $errors
+	 * @param array  $fields
+	 * @param array  $errors
 	 * @param object $form
-	 * @param $form_action
+	 * @param string $form_action
 	 */
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
@@ -346,7 +345,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array $atts
+	 * @param array        $atts
 	 * @param string|array $value
 	 */
 	public static function run_wpautop( $atts, &$value ) {
@@ -735,7 +734,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.01.02
 	 *
-	 * @param array $atts - includes entry object
+	 * @param array  $atts - includes entry object
 	 * @param string $value
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
@@ -749,8 +748,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param $atts
-	 *
+	 * @param array $atts
 	 * @return string
 	 */
 	private static function get_value_for_shortcode( $atts ) {
@@ -786,8 +784,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param $atts
-	 *
+	 * @param array $atts
 	 * @return string
 	 */
 	private static function get_entry_timestamp( $atts ) {
@@ -804,8 +801,7 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param $atts
-	 *
+	 * @param array $atts
 	 * @return null|string
 	 */
 	private static function get_field_shortcode_value( $atts ) {
@@ -911,7 +907,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param $atts array Includes value, field, and atts
+	 * @param array $atts Includes value, field, and atts
 	 */
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
@@ -1122,9 +1118,9 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.6
 	 *
-	 * @param array $args should include field, opt_key and field name
+	 * @param array   $args should include field, opt_key and field name
 	 * @param boolean $other_opt
-	 * @param string $checked
+	 * @param string  $checked
 	 *
 	 * @return array $other_args
 	 */
@@ -1134,7 +1130,7 @@ class FrmFieldsHelper {
 			'value' => '',
 		);
 
-		//Check if this is an "Other" option
+		// Check if this is an "Other" option
 		if ( ! self::is_other_opt( $args['opt_key'] ) ) {
 			return $other_args;
 		}
@@ -1158,13 +1154,13 @@ class FrmFieldsHelper {
 	 * @since 2.0.6
 	 */
 	private static function set_other_name( $args, &$other_args ) {
-		//Set up name for other field
+		// Set up name for other field
 		$other_args['name'] = str_replace( '[]', '', $args['field_name'] );
 		$other_args['name'] = preg_replace( '/\[' . $args['field']['id'] . '\]$/', '', $other_args['name'] );
 		$other_args['name'] = $other_args['name'] . '[other][' . $args['field']['id'] . ']';
 
-		//Converts item_meta[field_id] => item_meta[other][field_id] and
-		//item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
+		// Converts item_meta[field_id] => item_meta[other][field_id] and
+		// item_meta[parent][0][field_id] => item_meta[parent][0][other][field_id]
 		if ( FrmField::is_field_with_multiple_values( $args['field'] ) ) {
 			$other_args['name'] .= '[' . $args['opt_key'] . ']';
 		}
@@ -1205,9 +1201,9 @@ class FrmFieldsHelper {
 	/**
 	 * If this field includes an other option, show it
 	 *
-	 * @param $args array
-	 *
 	 * @since 2.0.6
+	 *
+	 * @param array $args
 	 */
 	public static function include_other_input( $args ) {
 		if ( ! $args['other_opt'] ) {
@@ -1242,8 +1238,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0.08
 	 *
-	 * @param string $type - field type
-	 * @param string $html_id
+	 * @param string         $type - field type
+	 * @param string         $html_id
 	 * @param string|boolean $opt_key
 	 *
 	 * @return string $other_id
@@ -1252,7 +1248,7 @@ class FrmFieldsHelper {
 		$other_id = $html_id;
 
 		// If hidden radio field, add an opt key of 0
-		if ( $type == 'radio' && $opt_key === false ) {
+		if ( $type === 'radio' && $opt_key === false ) {
 			$opt_key = 0;
 		}
 
@@ -1684,7 +1680,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.03.05
 	 *
-	 * @param int $selector_field_id
+	 * @param int   $selector_field_id
 	 * @param array $selector_args
 	 */
 	public static function display_field_value_selector( $selector_field_id, $selector_args ) {
@@ -1822,10 +1818,10 @@ class FrmFieldsHelper {
 	 * @codeCoverageIgnore
 	 *
 	 * @param string $html
-	 * @param array $field
-	 * @param array $errors
+	 * @param array  $field
+	 * @param array  $errors
 	 * @param object $form
-	 * @param array $args
+	 * @param array  $args
 	 *
 	 * @return string
 	 */

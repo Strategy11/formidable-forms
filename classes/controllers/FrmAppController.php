@@ -205,7 +205,11 @@ class FrmAppController {
 		return apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
 	}
 
-	// Adds a settings link to the plugins page
+	/**
+	 * Adds a settings link to the plugins page
+	 *
+	 * @param array $links
+	 */
 	public static function settings_link( $links ) {
 		$settings = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
 		array_unshift( $links, $settings );
@@ -616,7 +620,7 @@ class FrmAppController {
 		$frmdb = new FrmMigrate();
 		$frmdb->uninstall();
 
-		//disable the plugin and redirect after uninstall so the tables don't get added right back
+		// disable the plugin and redirect after uninstall so the tables don't get added right back
 		$plugins = array( FrmAppHelper::plugin_folder() . '/formidable.php', 'formidable-pro/formidable-pro.php' );
 		deactivate_plugins( $plugins, false, false );
 		echo esc_url_raw( admin_url( 'plugins.php?deactivate=true' ) );

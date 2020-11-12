@@ -4,8 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 97; //version of the database we are moving to
-	public static $pro_db_version = 37; //deprecated
+	public static $db_version = 97; // version of the database we are moving to
+	public static $pro_db_version = 37; // deprecated
 	public static $font_version = 7;
 
 	/**
@@ -15,8 +15,6 @@ class FrmAppHelper {
 
 	/**
 	 * @since 1.07.02
-	 *
-	 * @param none
 	 *
 	 * @return string The version of this plugin
 	 */
@@ -280,23 +278,19 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_preview_page() {
 		global $pagenow;
 		$action = self::simple_get( 'action', 'sanitize_title' );
 
-		return $pagenow && $pagenow == 'admin-ajax.php' && $action == 'frm_forms_preview';
+		return $pagenow && $pagenow === 'admin-ajax.php' && $action === 'frm_forms_preview';
 	}
 
 	/**
 	 * Check for ajax except the form preview page
 	 *
 	 * @since 2.0
-	 *
-	 * @param None
 	 *
 	 * @return boolean
 	 */
@@ -322,8 +316,6 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_admin() {
@@ -335,9 +327,8 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param mixed $value - value to check
-	 * @param string
-	 *
+	 * @param mixed  $value - value to check
+	 * @param string $empty
 	 * @return boolean
 	 */
 	public static function is_empty_value( $value, $empty = '' ) {
@@ -354,7 +345,6 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param string $value
-	 *
 	 * @return string
 	 */
 	public static function get_server_value( $value ) {
@@ -455,7 +445,6 @@ class FrmAppHelper {
 	 * @param string $param
 	 * @param string $sanitize
 	 * @param string $default
-	 *
 	 * @return string|array
 	 */
 	public static function simple_get( $param, $sanitize = 'sanitize_text_field', $default = '' ) {
@@ -475,7 +464,6 @@ class FrmAppHelper {
 	 * @since 2.0.6
 	 *
 	 * @param array $args
-	 *
 	 * @return string|array
 	 */
 	public static function get_simple_request( $args ) {
@@ -520,7 +508,6 @@ class FrmAppHelper {
 	 * @since 2.0.8
 	 *
 	 * @param string $value
-	 *
 	 * @return string $value
 	 */
 	public static function preserve_backslashes( $value ) {
@@ -628,9 +615,8 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string $value
+	 * @param string       $value
 	 * @param array|string $allowed 'all' for everything included as defaults
-	 *
 	 * @return string
 	 */
 	public static function kses( $value, $allowed = array() ) {
@@ -1154,9 +1140,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string        $field_name
-	 * @param string|array  $capability
-	 * @param string        $multiple 'single' and 'multiple'
+	 * @param string       $field_name
+	 * @param string|array $capability
+	 * @param string       $multiple 'single' and 'multiple'
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
@@ -1171,7 +1157,7 @@ class FrmAppHelper {
 	/**
 	 * @since 4.07
 	 * @param array|string $selected
-	 * @param string $current
+	 * @param string       $current
 	 */
 	private static function selected( $selected, $current ) {
 		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
@@ -1546,10 +1532,11 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param string $name
 	 * @param string $table_name
 	 * @param string $column
-	 * @param int $id
-	 * @param int $num_chars
+	 * @param int    $id
+	 * @param int    $num_chars
 	 */
 	public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
@@ -1598,8 +1585,12 @@ class FrmAppHelper {
 	/**
 	 * Editing a Form or Entry
 	 *
+	 * @param object $record
 	 * @param string $table
-	 *
+	 * @param mixed  $fields
+	 * @param mixed  $default
+	 * @param array  $post_values
+	 * @param array  $args
 	 * @return bool|array
 	 */
 	public static function setup_edit_vars( $record, $table, $fields = '', $default = false, $post_values = array(), $args = array() ) {
@@ -1724,7 +1715,10 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param object $record
 	 * @param string $table
+	 * @param array  $post_values
+	 * @param array  $values
 	 */
 	private static function fill_form_opts( $record, $table, $post_values, array &$values ) {
 		if ( $table == 'entries' ) {
@@ -1903,7 +1897,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the time ago in words
 	 *
-	 * @param int $from in seconds
+	 * @param int        $from in seconds
 	 * @param int|string $to in seconds
 	 *
 	 * @return string $time_ago
@@ -2069,14 +2063,18 @@ class FrmAppHelper {
 	// Pagination Methods.
 
 	/**
-	 * @param integer $current_p
+	 * @param int $r_count
+	 * @param int $current_p
+	 * @param int $p_size
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
 		return ( ( $r_count < ( $current_p * $p_size ) ) ? $r_count : ( $current_p * $p_size ) );
 	}
 
 	/**
-	 * @param integer $current_p
+	 * @param int $r_count
+	 * @param int $current_p
+	 * @param int $p_size
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
 		if ( $current_p == 1 ) {
@@ -2720,7 +2718,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param array $settings
+	 * @param array  $settings
 	 * @param string $group
 	 *
 	 * @since 2.0.6

@@ -246,9 +246,6 @@ class FrmField {
 			unset( $k, $v );
 		}
 
-		//if(isset($values['id']) and is_numeric($values['id']))
-		//    $new_values['id'] = $values['id'];
-
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
 		$new_id        = 0;
 		if ( $query_results ) {
@@ -389,7 +386,7 @@ class FrmField {
 	 *
 	 * @since 2.0.8
 	 *
-	 * @param $values array - pass by reference
+	 * @param array $values
 	 */
 	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
@@ -444,7 +441,7 @@ class FrmField {
 
 	/**
 	 * @param string|int $id The field id or key.
-	 * @param bool $filter When true, run the frm_field filter.
+	 * @param bool       $filter When true, run the frm_field filter.
 	 */
 	public static function getOne( $id, $filter = false ) {
 		if ( empty( $id ) ) {
@@ -492,8 +489,8 @@ class FrmField {
 	/**
 	 * Get the field type by key or id
 	 *
-	 * @param int|string The field id or key
-	 * @param mixed $col The name of the column in the fields database table
+	 * @param int|string $id The field id or key
+	 * @param mixed      $col The name of the column in the fields database table
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
@@ -607,7 +604,7 @@ class FrmField {
 	 * If repeating fields should be included, adjust $where accordingly
 	 *
 	 * @param string $inc_repeat
-	 * @param array $where - pass by reference
+	 * @param array  $where - pass by reference
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat == 'include' ) {
@@ -1046,7 +1043,7 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
-	 * @param string $is_type Options include radio, checkbox, text
+	 * @param string       $is_type Options include radio, checkbox, text
 	 *
 	 * @return boolean true if field type is checkbox or Dynamic checkbox
 	 */

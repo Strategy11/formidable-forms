@@ -69,16 +69,15 @@ class FrmFieldUserID extends FrmFieldType {
 			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 		}
 
-		//add user id to post variables to be saved with entry
+		// add user id to post variables to be saved with entry
 		$_POST['frm_user_id'] = $args['value'];
 
 		return array();
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts array
-	 *
+	 * @param mixed $value
+	 * @param array $atts
 	 * @return false|mixed|string
 	 */
 	protected function prepare_display_value( $value, $atts ) {
@@ -94,8 +93,7 @@ class FrmFieldUserID extends FrmFieldType {
 	 *
 	 * @since 3.0
 	 *
-	 * @param $atts
-	 *
+	 * @param array $atts
 	 * @return string
 	 */
 	private function prepare_user_info_attribute( $atts ) {
@@ -113,9 +111,8 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
-	 *
+	 * @param mixed $value
+	 * @param array $atts
 	 * @return int
 	 */
 	protected function prepare_import_value( $value, $atts ) {

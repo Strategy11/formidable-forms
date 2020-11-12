@@ -29,7 +29,6 @@ class test_FrmStylesController extends FrmUnitTest {
 
 		if ( $frm_settings->load_style == 'all' ) {
 			$this->assertContains( $css_html, $styles, 'The formidablepro stylesheet is missing' );
-			//$this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
 		} else {
 			$this->assertNotContains( $css_html, $styles, 'The formidablepro stylesheet is missing' );
 			$this->assertNotContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );

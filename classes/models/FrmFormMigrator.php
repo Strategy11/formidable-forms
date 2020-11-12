@@ -393,7 +393,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param int $form_id
+	 * @param int   $form_id
 	 * @param array $form
 	 */
 	protected function create_fields( $form_id, &$form ) {
@@ -417,7 +417,9 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
+	 * @param array $action
 	 * @param array $form
+	 * @param int   $form_id
 	 */
 	protected function save_action( $action, $form, $form_id ) {
 		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
@@ -519,7 +521,7 @@ abstract class FrmFormMigrator {
 	 * Replace 3rd-party form provider tags/shortcodes with our own Tags.
 	 *
 	 * @param string $string String to process the smart tag in.
-	 * @param array $fields List of fields for the form.
+	 * @param array  $fields List of fields for the form.
 	 *
 	 * @return string
 	 */

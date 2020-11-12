@@ -18,7 +18,7 @@ foreach ( $type as $tb_type ) {
 		continue;
 	}
 
-	//no records
+	// no records
 	if ( ! isset( $records[ $tb_type ] ) ) {
 		continue;
 	}

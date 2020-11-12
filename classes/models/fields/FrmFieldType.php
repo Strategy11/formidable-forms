@@ -81,8 +81,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $key
-	 *
+	 * @param string $key
 	 * @return string
 	 */
 	public function __get( $key ) {
@@ -95,7 +94,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $type string
+	 * @param string $type
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
@@ -124,8 +123,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 * @param $column
-	 *
+	 * @param string $column
 	 * @return string|array
 	 */
 	public function get_field_column( $column ) {
@@ -141,7 +139,7 @@ abstract class FrmFieldType {
 
 	/**
 	 * @param string $column
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function set_field_column( $column, $value ) {
 		if ( is_object( $this->field ) ) {
@@ -161,6 +159,9 @@ abstract class FrmFieldType {
 
 	/** Field HTML **/
 
+	/**
+	 * @return string
+	 */
 	public function default_html() {
 		if ( ! $this->has_html ) {
 			return '';
@@ -228,7 +229,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param string $name
-	 * @param array $field
+	 * @param array  $field
 	 */
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
@@ -543,6 +544,9 @@ DEFAULT_HTML;
 
 	/** New field **/
 
+	/**
+	 * @return array
+	 */
 	public function get_new_field_defaults() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$field        = array(
@@ -721,7 +725,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param array $args
+	 * @param array  $args
 	 * @param string $html
 	 *
 	 * @return string
@@ -1086,7 +1090,7 @@ DEFAULT_HTML;
 	 * A field is not unique if it has already been passed to this function, or if it exists in meta for this field but another entry id
 	 *
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	public function is_not_unique( $value, $entry_id ) {
@@ -1126,7 +1130,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param mixed $value
-	 * @param int $entry_id
+	 * @param int   $entry_id
 	 * @return bool
 	 */
 	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
@@ -1168,7 +1172,7 @@ DEFAULT_HTML;
 	/**
 	 *
 	 * @param string|array $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return string
 	 */
@@ -1199,7 +1203,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 *
 	 * @param array|string $value
-	 * @param array $atts
+	 * @param array        $atts
 	 *
 	 * @return array|string
 	 */
@@ -1210,9 +1214,8 @@ DEFAULT_HTML;
 	/** Importing **/
 
 	/**
-	 * @param $value
+	 * @param mixed $value
 	 * @param array $atts
-	 *
 	 * @return mixed
 	 */
 	public function get_import_value( $value, $atts = array() ) {
@@ -1220,9 +1223,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $atts
-	 *
+	 * @param mixed $value
+	 * @param array $atts
 	 * @return mixed
 	 */
 	protected function prepare_import_value( $value, $atts ) {
@@ -1234,8 +1236,8 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.0
 	 *
-	 * @param $value
-	 * @param $atts
+	 * @param mixed $value
+	 * @param array $atts
 	 *
 	 * @internal param array $meta_value
 	 * @internal param object $field
@@ -1256,8 +1258,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 *
+	 * @param mixed $value
 	 * @return array
 	 */
 	protected function get_multi_opts_for_import( $value ) {
@@ -1295,8 +1296,8 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @param $value
-	 * @param $defaults
+	 * @param mixed $value
+	 * @param array $defaults
 	 */
 	protected function fill_values( &$value, $defaults ) {
 		if ( empty( $value ) ) {
