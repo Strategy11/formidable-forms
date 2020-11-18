@@ -308,21 +308,7 @@ class FrmCSVExportHelper {
 				$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ][] = $meta_value;
 			}
 
-			$field_ids = array_keys( self::$entry->metas );
-			$field_id  = end( $field_ids );
-			$field     = self::get_field( $field_id );
-			if ( $field && ! empty( $field->field_options['in_section'] ) ) {
-				$repeater_id = $field->field_options['in_section'];
-				if ( isset( self::$fields_by_repeater_id[ $repeater_id ] ) ) {
-					foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $repeater_child ) {
-						if ( ! isset( self::$entry->metas[ $repeater_child->id ] ) ) {
-							self::$entry->metas[ $repeater_child->id ]                               = '';
-							$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
-						}
-					}
-				}
-			}
-
+			self::$entry->metas                              = self::fill_missing_repeater_metas( self::$entry->metas, $entries );
 			$entries[ self::$entry->parent_item_id ]->metas += self::$entry->metas;
 		}
 
@@ -331,6 +317,38 @@ class FrmCSVExportHelper {
 			$entries[ self::$entry->parent_item_id ]->embedded_fields = array();
 		}
 		$entries[ self::$entry->parent_item_id ]->embedded_fields[ self::$entry->id ] = self::$entry->form_id;
+	}
+
+	/**
+	 * When an empty field is saved, it isn't saved as a meta value
+	 * The export needs all of the meta to be filled in, so we put blank strings for every missing repeater child
+	 *
+	 * @param array $metas
+	 * @param array $entries
+	 * @return array
+	 */
+	private static function fill_missing_repeater_metas( $metas, &$entries ) {
+		$field_ids = array_keys( $metas );
+		$field_id  = end( $field_ids );
+		$field     = self::get_field( $field_id );
+
+		if ( ! $field || empty( $field->field_options['in_section'] ) ) {
+			return $metas;
+		}
+
+		$repeater_id = $field->field_options['in_section'];
+		if ( ! isset( self::$fields_by_repeater_id[ $repeater_id ] ) ) {
+			return $metas;
+		}
+
+		foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $repeater_child ) {
+			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
+				$metas[ $repeater_child->id ]                                            = '';
+				$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
+			}
+		}
+
+		return $metas;
 	}
 
 	private static function get_field( $field_id ) {
