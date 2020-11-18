@@ -9,9 +9,9 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 	private $helper;
 
 	/**
-	 * @covers FrmEntriesListHelper::column_value
+	 * @covers FrmEntriesListHelper::column_value form_id
 	 */
-	public function test_column_value() {
+	public function test_column_value_form_id() {
 		$some_form_id  = 63334;
 		$this->form_id = $some_form_id;
 		$this->helper  = $this->get_new_helper_instance();
