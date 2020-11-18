@@ -268,12 +268,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
 				break;
 			case 'form_id':
-				$form_id             = $item->form_id;
-				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
-				if ( $user_can_edit_forms ) {
+				$form_id = $item->form_id;
+				if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+					$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+					if ( ! $user_can_edit_forms ) {
+						$val = FrmFormsHelper::edit_form_link_label( $form_id );
+					}
+				}
+
+				if ( ! isset( $val ) ) {
 					$val = FrmFormsHelper::edit_form_link( $form_id );
-				} else {
-					$val = FrmFormsHelper::edit_form_link_label( $form_id );
 				}
 				break;
 			case 'post_id':
