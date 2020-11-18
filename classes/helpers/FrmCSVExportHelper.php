@@ -17,6 +17,7 @@ class FrmCSVExportHelper {
 	protected static $fields           = array();
 	protected static $entry;
 	protected static $has_parent_id;
+	protected static $fields_by_repeater_id;
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
@@ -194,7 +195,10 @@ class FrmCSVExportHelper {
 					$flat[ $key ] = $heading;
 				}
 			}
-			unset( $key, $heading, $max, $repeater_headings, $repeater_id );
+
+			self::$fields_by_repeater_id = $fields_by_repeater_id;
+
+			unset( $key, $heading, $max, $repeater_headings, $repeater_id, $fields_by_repeater_id );
 
 			$headings = $flat;
 			unset( $flat );
@@ -227,7 +231,7 @@ class FrmCSVExportHelper {
 	 * @return bool
 	 */
 	private static function is_the_child_of_a_repeater( $field ) {
-		if ( $field->form_id === self::$form_id || ! $field->field_options['in_section'] ) {
+		if ( $field->form_id === self::$form_id || empty( $field->field_options['in_section'] ) ) {
 			return false;
 		}
 
@@ -303,6 +307,22 @@ class FrmCSVExportHelper {
 				//add the repeated values
 				$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ][] = $meta_value;
 			}
+
+			$field_ids = array_keys( self::$entry->metas );
+			$field_id  = end( $field_ids );
+			$field     = self::get_field( $field_id );
+			if ( $field && ! empty( $field->field_options['in_section'] ) ) {
+				$repeater_id = $field->field_options['in_section'];
+				if ( isset( self::$fields_by_repeater_id[ $repeater_id ] ) ) {
+					foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $repeater_child ) {
+						if ( ! isset( self::$entry->metas[ $repeater_child->id ] ) ) {
+							self::$entry->metas[ $repeater_child->id ]                               = '';
+							$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
+						}
+					}
+				}
+			}
+
 			$entries[ self::$entry->parent_item_id ]->metas += self::$entry->metas;
 		}
 
@@ -311,6 +331,16 @@ class FrmCSVExportHelper {
 			$entries[ self::$entry->parent_item_id ]->embedded_fields = array();
 		}
 		$entries[ self::$entry->parent_item_id ]->embedded_fields[ self::$entry->id ] = self::$entry->form_id;
+	}
+
+	private static function get_field( $field_id ) {
+		$field_id = (int) $field_id;
+		foreach ( self::$fields as $field ) {
+			if ( $field_id === (int) $field->id ) {
+				return $field;
+			}
+		}
+		return false;
 	}
 
 	private static function add_field_values_to_csv( &$row ) {
