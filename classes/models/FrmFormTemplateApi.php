@@ -55,11 +55,27 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
+	 * Check to make sure the free code is being used.
+	 *
+	 * @since 4.09.02
+	 */
+	public function has_free_access() {
+		$free_access = $this->get_free_license();
+		if ( ! $free_access ) {
+			return false;
+		}
+
+		$templates    = $this->get_api_info();
+		$contact_form = 20872734;
+		return isset( $templates[ $contact_form ] ) && ! empty( $templates[ $contact_form ]['url'] );
+	}
+
+	/**
 	 * @param string $code the code from the email sent for the API
 	 */
 	private static function verify_code( $code ) {
 		$base64_code = base64_encode( $code );
-		$api_url     = self::$base_api_url . 'code?l=' . $base64_code;
+		$api_url     = self::$base_api_url . 'code?l=' . urlencode( $base64_code );
 		$response    = wp_remote_get( $api_url );
 
 		self::handle_verify_response_errors_if_any( $response );
@@ -68,7 +84,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$successful = ! empty( $decoded->response );
 
 		if ( $successful ) {
-			self::on_api_verify_code_success( $base64_code );
+			self::on_api_verify_code_success( $code );
 		} else {
 			wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
 		}
@@ -91,7 +107,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @param string $code the base64 encoded code
 	 */
 	private static function on_api_verify_code_success( $code ) {
-		update_option( self::$code_option_name, $code );
+		update_option( self::$code_option_name, $code, 'no' );
 
 		$data = array();
 		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
@@ -101,7 +117,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 			$templates = $api->get_api_info();
 
 			foreach ( $templates as $template ) {
-				if ( $key === $template['key'] ) {
+				if ( $key === $template['key'] && isset( $template['url'] ) ) {
 					$data['url'] = $template['url'];
 					break;
 				}
