@@ -5571,7 +5571,6 @@ function frmAdminBuildJS() {
 	function initNewFormModal() {
 		var installFormTrigger,
 			activeHoverIcons,
-			activeTemplateKey,
 			$modal,
 			handleError,
 			handleEmailAddressError,
@@ -5713,7 +5712,7 @@ function frmAdminBuildJS() {
 				});
 
 				activePage = 'email';
-				activeTemplateKey = $li.attr( 'data-key' );
+				$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
 				$li.append( installFormTrigger );
 			} else if ( $modal.hasClass( 'frm-expired' ) ) {
 				activePage = 'renew';
@@ -5817,7 +5816,7 @@ function frmAdminBuildJS() {
 					action: 'template_api_signup',
 					nonce: frmGlobal.nonce,
 					code: code,
-					key: activeTemplateKey
+					key: $modal.attr( 'frm-this-form' )
 				},
 				success: function( response ) {
 					if ( response.success ) {
