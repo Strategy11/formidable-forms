@@ -128,24 +128,24 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
 
 		if ( $key ) {
-			$data['url_by_key'] = array();
-			$api                = new self();
-			$templates          = $api->get_api_info();
+			$data['urlByKey'] = array();
+			$api              = new self();
+			$templates        = $api->get_api_info();
 
 			foreach ( $templates as $template ) {
 				if ( ! isset( $template['url'] ) || ! in_array( 'free', $template['categories'], true ) ) {
 					continue;
 				}
 
-				$data['url_by_key'][ $template['key'] ] = $template['url'];
+				$data['urlByKey'][ $template['key'] ] = $template['url'];
 			}
 
-			if ( ! isset( $data['url_by_key'][ $key ] ) ) {
+			if ( ! isset( $data['urlByKey'][ $key ] ) ) {
 				$error = new WP_Error( 400, 'We were unable to retrieve the template' );
 				wp_send_json_error( $error );
 			}
 
-			$data['url'] = $data['url_by_key'][ $key ];
+			$data['url'] = $data['urlByKey'][ $key ];
 		}
 
 		wp_send_json_success( $data );

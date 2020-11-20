@@ -5826,8 +5826,8 @@ function frmAdminBuildJS() {
 							$modal.attr( 'frm-page', 'details' );
 							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
 
-							if ( typeof response.data.url_by_key !== 'undefined' ) {
-								updateTemplateModalFreeUrls( response.data.url_by_key );
+							if ( typeof response.data.urlByKey !== 'undefined' ) {
+								updateTemplateModalFreeUrls( response.data.urlByKey );
 							}
 						}
 					} else {
@@ -5902,14 +5902,14 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function updateTemplateModalFreeUrls( url_by_key ) {
+	function updateTemplateModalFreeUrls( urlByKey ) {
 		jQuery( '#frm_new_form_modal' ).find( '.frm-selectable[data-key]' ).each( function() {
 			var $template = jQuery( this ),
 				key = $template.attr( 'data-key' );
-			if ( 'undefined' !== typeof url_by_key[ key ] ) {
+			if ( 'undefined' !== typeof urlByKey[ key ] ) {
 				$template.removeClass( 'frm-locked-template' );
 				$template.find( 'h3 svg' ).remove(); // remove the lock from the title
-				$template.attr( 'data-rel', url_by_key[ key ] );
+				$template.attr( 'data-rel', urlByKey[ key ] );
 			}
 		});
 	}
