@@ -93,7 +93,6 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$successful = ! empty( $decoded->response );
 
 		if ( $successful ) {
-			self::clear_template_cache_before_getting_free_templates();
 			self::on_api_verify_code_success( $code );
 		} else {
 			wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
@@ -128,6 +127,8 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
 
 		if ( $key ) {
+			self::clear_template_cache_before_getting_free_templates();
+
 			$data['urlByKey'] = array();
 			$api              = new self();
 			$templates        = $api->get_api_info();
