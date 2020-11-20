@@ -5906,10 +5906,10 @@ function frmAdminBuildJS() {
 		jQuery( '#frm_new_form_modal' ).find( '.frm-selectable[data-key]' ).each( function() {
 			var $template = jQuery( this ),
 				key = $template.attr( 'data-key' );
-			if ( 'undefined' !== typeof urlByKey[ key ] ) {
+			if ( 'undefined' !== typeof urlByKey[ key ]) {
 				$template.removeClass( 'frm-locked-template' );
 				$template.find( 'h3 svg' ).remove(); // remove the lock from the title
-				$template.attr( 'data-rel', urlByKey[ key ] );
+				$template.attr( 'data-rel', urlByKey[ key ]);
 			}
 		});
 	}
