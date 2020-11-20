@@ -6792,7 +6792,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'frm-multiselect-changed', '#protect_files_role', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document ).on( 'submit', '.frm_form_settings', settingsSubmitted );
-			jQuery( document ).on( 'change', '#form_settings_page input, #form_settings_page select', fieldUpdated );
+			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select', fieldUpdated );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
