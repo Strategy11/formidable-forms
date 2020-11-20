@@ -5825,6 +5825,10 @@ function frmAdminBuildJS() {
 							installFormTrigger.click();
 							$modal.attr( 'frm-page', 'details' );
 							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
+
+							if ( typeof response.data.url_by_key !== 'undefined' ) {
+								updateTemplateModalFreeUrls( response.data.url_by_key );
+							}
 						}
 					} else {
 						if ( Array.isArray( response.data ) && response.data.length ) {
@@ -5896,6 +5900,18 @@ function frmAdminBuildJS() {
 		if ( urlParams.get( 'triggerNewFormModal' ) ) {
 			triggerNewFormModal();
 		}
+	}
+
+	function updateTemplateModalFreeUrls( url_by_key ) {
+		jQuery( '#frm_new_form_modal' ).find( '.frm-selectable[data-key]' ).each( function() {
+			var $template = jQuery( this ),
+				key = $template.attr( 'data-key' );
+			if ( 'undefined' !== typeof url_by_key[ key ] ) {
+				$template.removeClass( 'frm-locked-template' );
+				$template.find( 'h3 svg' ).remove(); // remove the lock from the title
+				$template.attr( 'data-rel', url_by_key[ key ] );
+			}
+		});
 	}
 
 	function transitionToAddDetails( $modal, name, link, action ) {
