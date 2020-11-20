@@ -83,8 +83,6 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @param string $code the code from the email sent for the API
 	 */
 	private static function verify_code( $code ) {
-		self::clear_template_cache_before_free_code_verification();
-
 		$base64_code = base64_encode( $code );
 		$api_url     = self::$base_api_url . 'code?l=' . urlencode( $base64_code );
 		$response    = wp_remote_get( $api_url );
@@ -95,13 +93,14 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$successful = ! empty( $decoded->response );
 
 		if ( $successful ) {
+			self::clear_template_cache_before_getting_free_templates();
 			self::on_api_verify_code_success( $code );
 		} else {
 			wp_send_json_error( new WP_Error( $decoded->code, $decoded->message ) );
 		}
 	}
 
-	private static function clear_template_cache_before_free_code_verification() {
+	private static function clear_template_cache_before_getting_free_templates() {
 		delete_option( 'frm_form_templates_l' );
 	}
 
