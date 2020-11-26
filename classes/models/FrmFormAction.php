@@ -271,6 +271,10 @@ class FrmFormAction {
 		$action->menu_order = $form_id;
 		$switch             = $this->get_global_switch_fields();
 		foreach ( (array) $action->post_content as $key => $val ) {
+			if ( $key == 'autoresponder' ) {
+                $action->post_content[ $key ] = $this->switch_autoresponder_field_ids( $action->post_content[ $key ], $val );
+            }
+
 			if ( is_numeric( $val ) && isset( $frm_duplicate_ids[ $val ] ) ) {
 				$action->post_content[ $key ] = $frm_duplicate_ids[ $val ];
 			} elseif ( ! is_array( $val ) ) {
@@ -320,6 +324,40 @@ class FrmFormAction {
 
 		return $action;
 	}
+
+	private function switch_autoresponder_field_ids( $action, $val ) {
+        $values_to_ignore = array(
+            'create',
+            'update',
+        );
+        $old_send_date = $val['send_date'];
+        $old_send_after_interval_field = $val['send_after_interval_field'];
+
+        if ( ! in_array( $old_send_date, $values_to_ignore ) ) {
+            $pos = strpos( $old_send_date, '-' );
+
+            if ( $pos !== false ) {
+                $pieces = explode( '-', $old_send_date );
+                $tmp_ids = array();
+
+                $tmp_ids[] = trim( FrmFieldsHelper::switch_field_ids( '[' . $pieces[0] . ']' ), '[]' );
+                $tmp_ids[] = trim( FrmFieldsHelper::switch_field_ids( '[' . $pieces[1] . ']' ), '[]' );
+
+                $new_send_date = implode( '-', $tmp_ids );
+            } else {
+                $new_send_date = trim( FrmFieldsHelper::switch_field_ids( '[' . $old_send_date . ']' ), '[]' );
+            }
+
+            $action['send_date'] = $new_send_date;
+        }
+
+        if ( ! empty( $old_send_after_interval_field ) ) {
+            $new_send_after_interval_field = trim( FrmFieldsHelper::switch_field_ids( '[' . $old_send_after_interval_field . ']' ), '[]' );
+            $action['send_after_interval_field'] = $new_send_after_interval_field;
+        }
+
+        return $action;
+    }
 
 	/**
 	 * Deal with changed settings.
