@@ -271,7 +271,7 @@ class FrmFormAction {
 		$action->menu_order = $form_id;
 		$switch             = $this->get_global_switch_fields();
 		foreach ( (array) $action->post_content as $key => $val ) {
-			if ( $key == 'autoresponder' ) {
+			if ( $key === 'autoresponder' ) {
                 $action->post_content[ $key ] = $this->switch_autoresponder_field_ids( $action->post_content[ $key ], $val );
             }
 
