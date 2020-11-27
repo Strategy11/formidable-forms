@@ -270,11 +270,13 @@ class FrmFormAction {
 
 		$action->menu_order = $form_id;
 		$switch             = $this->get_global_switch_fields();
-		foreach ( (array) $action->post_content as $key => $val ) {
-			if ( $key === 'autoresponder' ) {
-                $action->post_content[ $key ] = $this->switch_autoresponder_field_ids( $action->post_content[ $key ], $val );
-            }
 
+		// applies only if the action contains an autoresponder
+		if ( isset( $action->post_content['autoresponder'] ) ) {
+			$action->post_content['autoresponder'] = $this->switch_autoresponder_field_ids( $action->post_content['autoresponder'] );
+        }
+
+		foreach ( (array) $action->post_content as $key => $val ) {
 			if ( is_numeric( $val ) && isset( $frm_duplicate_ids[ $val ] ) ) {
 				$action->post_content[ $key ] = $frm_duplicate_ids[ $val ];
 			} elseif ( ! is_array( $val ) ) {
@@ -325,38 +327,42 @@ class FrmFormAction {
 		return $action;
 	}
 
-	private function switch_autoresponder_field_ids( $action, $val ) {
+	private function switch_autoresponder_field_ids( $action ) {
         $values_to_ignore = array(
             'create',
             'update',
         );
-        $old_send_date = $val['send_date'];
-        $old_send_after_interval_field = $val['send_after_interval_field'];
+        $old_send_date = $action['send_date'];
+        $old_send_after_interval_field = $action['send_after_interval_field'];
 
-        if ( ! in_array( $old_send_date, $values_to_ignore ) ) {
+        if ( ! in_array( $old_send_date, $values_to_ignore, true ) ) {
             $pos = strpos( $old_send_date, '-' );
 
             if ( $pos !== false ) {
                 $pieces = explode( '-', $old_send_date );
-                $tmp_ids = array();
+                $new_field_ids = array();
 
-                $tmp_ids[] = trim( FrmFieldsHelper::switch_field_ids( '[' . $pieces[0] . ']' ), '[]' );
-                $tmp_ids[] = trim( FrmFieldsHelper::switch_field_ids( '[' . $pieces[1] . ']' ), '[]' );
+                $new_field_ids[] = $this->trim_and_switch_field_ids( $pieces[0] );
+                $new_field_ids[] = $this->trim_and_switch_field_ids( $pieces[1] );
 
-                $new_send_date = implode( '-', $tmp_ids );
+                $new_send_date = implode( '-', $new_field_ids );
             } else {
-                $new_send_date = trim( FrmFieldsHelper::switch_field_ids( '[' . $old_send_date . ']' ), '[]' );
+                $new_send_date = $this->trim_and_switch_field_ids( $old_send_date );
             }
 
             $action['send_date'] = $new_send_date;
         }
 
         if ( ! empty( $old_send_after_interval_field ) ) {
-            $new_send_after_interval_field = trim( FrmFieldsHelper::switch_field_ids( '[' . $old_send_after_interval_field . ']' ), '[]' );
+            $new_send_after_interval_field = $this->trim_and_switch_field_ids( $old_send_after_interval_field );
             $action['send_after_interval_field'] = $new_send_after_interval_field;
         }
 
         return $action;
+    }
+
+    private function trim_and_switch_field_ids( $field_id ) {
+    	return trim( FrmFieldsHelper::switch_field_ids( '[' . $field_id . ']' ), '[]' );
     }
 
 	/**
