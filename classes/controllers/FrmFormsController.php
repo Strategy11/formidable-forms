@@ -613,14 +613,28 @@ class FrmFormsController {
 	 * @since 2.0.15
 	 */
 	public static function insert_form_button() {
-		if ( current_user_can( 'frm_view_forms' ) ) {
-			FrmAppHelper::load_admin_wide_js();
-			$menu_name = FrmAppHelper::get_menu_name();
-			$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-				FrmAppHelper::kses( $icon, 'all' ) .
-				' ' . esc_html( $menu_name ) . '</a>'; // WPCS: XSS ok.
+		if ( ! self::should_include_formidable_button_in_media_buttons() ) {
+			return;
 		}
+
+		FrmAppHelper::load_admin_wide_js();
+		$menu_name = FrmAppHelper::get_menu_name();
+		$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
+		echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
+			FrmAppHelper::kses( $icon, 'all' ) .
+			' ' . esc_html( $menu_name ) . '</a>'; // WPCS: XSS ok.
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function should_include_formidable_button_in_media_buttons() {
+		if ( ! current_user_can( 'frm_view_forms' ) || ! is_admin() ) {
+			return false;
+		}
+
+		$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_key' );
+		return ! in_array( $action, array( 'frm_add_form_row', 'frm_forms_preview' ), true );
 	}
 
 	public static function insert_form_popup() {
