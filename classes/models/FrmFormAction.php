@@ -332,40 +332,38 @@ class FrmFormAction {
 	}
 
 	private function switch_autoresponder_send_date_field_ids( $action ) {
-		if ( isset( $action->post_content['autoresponder'] ) ) {
-			$values_to_ignore = array(
-				'create',
-				'update',
-			);
-			$old_send_date = ( isset( $action->post_content['autoresponder']['send_date'] ) ) ? $action->post_content['autoresponder']['send_date'] : '';
+		$values_to_ignore = array(
+			'create',
+			'update',
+		);
 
-			if ( ! empty( $old_send_date ) && ! in_array( $old_send_date, $values_to_ignore, true ) ) {
-				$pos = strpos( $old_send_date, '-' );
+		if ( isset( $action->post_content['autoresponder'] )
+			&& isset( $action->post_content['autoresponder']['send_date'] )
+			&& ! in_array( $action->post_content['autoresponder']['send_date'], $values_to_ignore, true )
+		) {
+			$old_send_date = $action->post_content['autoresponder']['send_date'];
 
-				if ( $pos !== false ) {
-					$pieces = explode( '-', $old_send_date );
-					$new_field_ids = array();
-					$new_field_ids = array_map( array( $this, 'trim_and_switch_field_ids' ), $pieces );
-					$new_send_date = implode( '-', $new_field_ids );
-				} else {
-					$new_send_date = $this->trim_and_switch_field_ids( $old_send_date );
-				}
+			$pos = strpos( $old_send_date, '-' );
 
-				$action->post_content['autoresponder']['send_date'] = $new_send_date;
+			if ( $pos !== false ) {
+				$pieces = explode( '-', $old_send_date );
+				$new_field_ids = array_map( array( $this, 'trim_and_switch_field_ids' ), $pieces );
+				$new_send_date = implode( '-', $new_field_ids );
+			} else {
+				$new_send_date = $this->trim_and_switch_field_ids( $old_send_date );
 			}
+
+			$action->post_content['autoresponder']['send_date'] = $new_send_date;
 		}
 
 		return $action;
 	}
 
 	private function switch_autoresponder_send_after_interval_field_id( $action ) {
-		if ( isset( $action->post_content['autoresponder'] ) ) {
-			$old_send_after_interval_field = ( isset( $action->post_content['autoresponder']['send_after_interval_field'] ) ) ? $action->post_content['autoresponder']['send_after_interval_field'] : '';
-
-			if ( ! empty( $old_send_after_interval_field ) ) {
-				$new_send_after_interval_field = $this->trim_and_switch_field_ids( $old_send_after_interval_field );
-				$action->post_content['autoresponder']['send_after_interval_field'] = $new_send_after_interval_field;
-			}
+		if ( isset( $action->post_content['autoresponder'] ) && isset( $action->post_content['autoresponder']['send_after_interval_field'] ) ) {
+			$old_send_after_interval_field = $action->post_content['autoresponder']['send_after_interval_field'];
+			$new_send_after_interval_field = $this->trim_and_switch_field_ids( $old_send_after_interval_field );
+			$action->post_content['autoresponder']['send_after_interval_field'] = $new_send_after_interval_field;
 		}
 
 		return $action;
