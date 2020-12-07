@@ -1047,17 +1047,18 @@ function frmAdminBuildJS() {
 	}
 
 	function loadFields( fieldId ) {
-		var $thisField = jQuery( document.getElementById( fieldId ) );
-		var fields;
-		// TODO :lt is deprecated
-		if ( 'function' === typeof jQuery.fn.addBack ) {
-			fields = $thisField.nextAll( '*:lt(14)' ).addBack();
-		} else {
-			fields = $thisField.nextAll( '*:lt(14)' ).andSelf();
-		}
-		fields.addClass( 'frm_load_now' );
+		var fields,
+			$thisField = jQuery( document.getElementById( fieldId ) ),
+			$next = $thisField.nextAll().slice( 0, 14 ),
+			h = [];
 
-		var h = [];
+		if ( 'function' === typeof jQuery.fn.addBack ) {
+			fields = $next.addBack();
+		} else {
+			fields = $next.andSelf();
+		}
+
+		fields.addClass( 'frm_load_now' );
 		jQuery.each( fields, function( k, v ) {
 			h.push( jQuery( v ).find( '.frm_hidden_fdata' ).html() );
 		});
@@ -2338,8 +2339,7 @@ function frmAdminBuildJS() {
 		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
 			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' ),
-			replace = 'frm_logic_' + id + '_',
-			metaName = getNewRowId( logicRows, replace );
+			metaName = getNewRowId( logicRows, 'frm_logic_' + id + '_' );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -4324,13 +4324,16 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
+				var cfOpts, optIndex;
 				jQuery( document.getElementById( 'frm_post' + type + '_rows' ) ).append( html );
 				jQuery( '.frm_add_post' + type + '_row.button' ).hide();
 
 				if ( type === 'meta' ) {
 					jQuery( '.frm_name_value' ).show();
-					// TODO :last is deprecated
-					jQuery( '.frm_toggle_cf_opts' ).not( ':last' ).hide();
+					cfOpts = document.querySelectorAll( '.frm_toggle_cf_opts' );
+					for ( optIndex = 0; optIndex < cfOpts.length - 1; ++optIndex ) {
+						cfOpts[ optIndex ].style.display = 'none';
+					}
 				} else if ( type === 'tax' ) {
 					jQuery( '.frm_posttax_labels' ).show();
 				}
@@ -4522,7 +4525,8 @@ function frmAdminBuildJS() {
 			l = getNewRowId( logicRows, 'frm_order_field_' );
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_add_order_row',
 				form_id: thisFormId,
