@@ -2213,23 +2213,24 @@ function frmAdminBuildJS() {
 	 * deselect it.
 	 */
 	function maybeUncheckRadio() {
+		var $self, uncheck, unbind, up;
+
 		/*jshint validthis:true */
-		var $self = jQuery( this );
+		$self = jQuery( this );
 		if ( $self.is( ':checked' ) ) {
-			var uncheck = function() {
+			uncheck = function() {
 				setTimeout( function() {
 					$self.removeAttr( 'checked' );
 				}, 0 );
 			};
-			var unbind = function() {
-				// TODO deprecated
-				$self.unbind( 'mouseup', up );
+			unbind = function() {
+				$self.off( 'mouseup', up );
 			};
-			var up = function() {
+			up = function() {
 				uncheck();
 				unbind();
 			};
-			$self.bind( 'mouseup', up );
+			$self.on( 'mouseup', up );
 			$self.one( 'mouseout', unbind );
 		}
 	}
@@ -4857,7 +4858,7 @@ function frmAdminBuildJS() {
 
 	function bindClickForDialogClose( $modal ) {
 		// deprecated https://api.jquery.com/bind/
-		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function() {
+		jQuery( '.ui-widget-overlay, a.dismiss' ).on( 'click', function() {
 			$modal.dialog( 'close' );
 		});
 	}
@@ -7007,7 +7008,7 @@ function frmAdminBuildJS() {
 
 			// menu tabs
 			// deprecated https://api.jquery.com/bind/
-			jQuery( '#menu-settings-column' ).bind( 'click', function( e ) {
+			jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
 				var panelId, wrapper,
 					target = jQuery( e.target );
 
