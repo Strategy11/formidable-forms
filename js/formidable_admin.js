@@ -6901,7 +6901,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', 'input[name^="options[where_val]"]', checkFilterParamNames );
 
 			// Show loading indicator.
-			jQuery( '#publish' ).mousedown( function() {
+			jQuery( '#publish' ).on( 'mousedown', function() {
 				this.classList.add( 'frm_loading_button' );
 			});
 
