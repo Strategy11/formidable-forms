@@ -1406,7 +1406,7 @@ BEFORE_HTML;
 
 				if ( $category === 'Personal' ) {
 					// Show the current package name.
-					$category = 'Basic';
+					$category = 'Plus';
 				}
 
 				return $category;
