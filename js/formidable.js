@@ -605,7 +605,7 @@ function frmFrontFormJS() {
 					scrollToFirstField( object );
 
 					if ( contSubmit ) {
-						object.trigger( 'submit' );
+						object.submit();
 					} else {
 						jQuery( object ).prepend( response.error_message );
 					}
@@ -614,12 +614,12 @@ function frmFrontFormJS() {
 
 					showFileLoading( object );
 
-					object.trigger( 'submit' );
+					object.submit();
 				}
 			},
 			error: function() {
 				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).removeAttr( 'disabled' );
-				object.trigger( 'submit' );
+				object.submit();
 			}
 		});
 	}
@@ -1093,10 +1093,10 @@ function frmFrontFormJS() {
 					action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 					frmFrontForm.checkFormErrors( object, action );
 				} else {
-					object.trigger( 'submit' );
+					object.submit();
 				}
 			} else {
-				object.trigger( 'submit' );
+				object.submit();
 			}
 		},
 
