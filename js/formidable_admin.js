@@ -2338,10 +2338,10 @@ function frmAdminBuildJS() {
 		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
 			metaName = 0,
-			$logicRows = jQuery( '#frm_logic_row_' + id ).find( ' .frm_logic_row' );
+			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' );
 
-		if ( $logicRows.length ) {
-			metaName = 1 + parseInt( $logicRows.last().attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
+		if ( logicRows.length ) {
+			metaName = 1 + parseInt( logicRows[ logicRows.length - 1 ].id.replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
 
 		jQuery.ajax({
@@ -3954,11 +3954,11 @@ function frmAdminBuildJS() {
 	}
 
 	function getNewActionId() {
-		var $actionSettings = jQuery( '.frm_form_action_settings' ),
+		var actionSettings = document.querySelectorAll( '.frm_form_action_settings' ),
 			len = 0;
-		if ( $actionSettings.length ) {
+		if ( actionSettings.length ) {
 			//Get number of previous action
-			len = $actionSettings.last().attr( 'id' ).replace( 'frm_form_action_', '' );
+			len = actionSettings[ actionSettings.length - 1 ].id.replace( 'frm_form_action_', '' );
 		}
 		len = parseInt( len, 10 ) + 1;
 		if ( typeof document.getElementById( 'frm_form_action_' + len ) !== 'undefined' ) {
@@ -4083,10 +4083,10 @@ function frmAdminBuildJS() {
 			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
 			metaName = 0,
 			formId = document.getElementById( 'form_id' ).value,
-			$logicRows = jQuery( '#frm_form_action_' + id ).find( '.frm_logic_row' );
+			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' );
 
-		if ( $logicRows.length ) {
-			metaName = 1 + parseInt( $logicRows.last().attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
+		if ( logicRows.length ) {
+			metaName = 1 + parseInt( logicRows[ logicRows.length - 1 ].id.replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -4126,14 +4126,12 @@ function frmAdminBuildJS() {
 	 */
 	function addSubmitLogic() {
 		/*jshint validthis:true */
-		var last,
-			formId = thisFormId,
+		var formId = thisFormId,
 			metaName = 0,
-			$logicRows = jQuery( '#frm_submit_logic_row' ).find( '.frm_logic_row' );
+			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' );
 
-		if ( $logicRows.length ) {
-			last = $logicRows.last();
-			metaName = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
+		if ( logicRows.length ) {
+			metaName = 1 + parseInt( logicRows[ logicRows.length - 1 ].id.replace( 'frm_logic_submit_', '' ), 10 );
 		}
 
 		jQuery.ajax({
@@ -4316,10 +4314,10 @@ function frmAdminBuildJS() {
 			key = settings.data( 'actionkey' ),
 			postType = settings.find( '.frm_post_type' ).val(),
 			metaName = 0,
-			$postTypeRows = jQuery( '.frm_post' + type + '_row' );
+			postTypeRows = document.querySelectorAll( '.frm_post' + type + '_row' );
 
-		if ( $postTypeRows.length ) {
-			name = $postTypeRows.last().attr( 'id' ).replace( 'frm_post' + type + '_', '' );
+		if ( postTypeRows.length ) {
+			name = postTypeRows[ postTypeRows.length - 1 ].id.replace( 'frm_post' + type + '_', '' );
 			if ( isNumeric( name ) ) {
 				metaName = 1 + parseInt( name, 10 );
 			} else {
@@ -4552,8 +4550,9 @@ function frmAdminBuildJS() {
 	}
 
 	function addWhereRow() {
-		var $rowDivs = jQuery( '#frm_where_options' ).find( '.frm_logic_rows div' ),
-			l = $rowDivs.length ? $rowDivs.last().attr( 'id' ).replace( 'frm_where_field_', '' ) : 0;
+		var rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' ),
+			l = rowDivs.length ? rowDivs[ rowDivs.length - 1 ].id.replace( 'frm_where_field_', '' ) : 0;
+
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
