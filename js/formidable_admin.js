@@ -2084,7 +2084,7 @@ function frmAdminBuildJS() {
 	}
 
 	function setAlignment( fieldId, alignment ) {
-		jQuery( '#field_options_align_' + fieldId ).val( alignment ).change();
+		jQuery( '#field_options_align_' + fieldId ).val( alignment ).trigger( 'change' );
 	}
 
 	function setImageSize() {
@@ -2104,7 +2104,7 @@ function frmAdminBuildJS() {
 	function refreshOptionDisplayNow( object ) {
 		var $field = object.closest( '.frm-single-settings' ),
 			fieldID = $field.data( 'fid' );
-		jQuery( '.field_' + fieldID + '_option' ).change();
+		jQuery( '.field_' + fieldID + '_option' ).trigger( 'change' );
 	}
 
 	function refreshOptionDisplay() {
@@ -2135,7 +2135,7 @@ function frmAdminBuildJS() {
 			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
 			$imagePreview.find( '.frm_choose_image_box' ).hide();
-			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).change();
+			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).trigger( 'change' );
 			wp.media.model.settings.post.id = postID;
 		});
 
@@ -2154,7 +2154,7 @@ function frmAdminBuildJS() {
 		previewWrapper.find( 'img' ).attr( 'src', '' );
 		previewWrapper.find( '.frm_image_preview_frame' ).hide();
 		previewWrapper.find( '.frm_choose_image_box' ).show();
-		previewWrapper.find( 'input.frm_image_id' ).val( 0 ).change();
+		previewWrapper.find( 'input.frm_image_id' ).val( 0 ).trigger( 'change' );
 	}
 
 
@@ -4700,7 +4700,7 @@ function frmAdminBuildJS() {
 			obj.focus();
 			obj.setSelectionRange( s, s );
 		}
-		contentBox.change(); //trigger change
+		contentBox.trigger( 'change' );
 	}
 
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
@@ -4874,7 +4874,7 @@ function frmAdminBuildJS() {
 
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 		$modal.attr( 'frm-page', 'create' );
-		$modal.find( '#template-search-input' ).val( '' ).change();
+		$modal.find( '#template-search-input' ).val( '' ).trigger( 'change' );
 		$modal.dialog( 'open' );
 
 		dismiss.removeAttribute( 'tabindex' );
@@ -6683,7 +6683,7 @@ function frmAdminBuildJS() {
 			$formActions.on( 'click', '.frm_add_posttax_row', addPosttaxRow );
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
-			jQuery( 'select[data-toggleclass], input[data-toggleclass]' ).change( toggleFormOpts );
+			jQuery( 'select[data-toggleclass], input[data-toggleclass]' ).on( 'change', toggleFormOpts );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
 			jQuery( '#frm-show-groups, #frm-hide-groups' ).click( toggleActionGroups );
 			initiateMultiselect();
@@ -6729,7 +6729,7 @@ function frmAdminBuildJS() {
 			});
 
 			//Warning when user selects "Do not store entries ..."
-			jQuery( document.getElementById( 'no_save' ) ).change( function() {
+			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
 				if ( this.checked ) {
 					if ( confirm( frm_admin_js.no_save_warning ) !== true ) {
 						// Uncheck box if user hits "Cancel"
@@ -6739,13 +6739,13 @@ function frmAdminBuildJS() {
 			});
 
 			//Show/hide Messages header
-			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).change( function() {
+			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).on( 'change', function() {
 				maybeShowFormMessages();
 			});
-			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).change( showSuccessOpt );
+			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			$loggedIn = document.getElementById( 'logged_in' );
-			jQuery( $loggedIn ).change( function() {
+			jQuery( $loggedIn ).on( 'change', function() {
 				if ( this.checked ) {
 					visible( '.hide_logged_in' );
 				} else {
@@ -6754,7 +6754,7 @@ function frmAdminBuildJS() {
 			});
 
 			$cookieExp = jQuery( document.getElementById( 'frm_cookie_expiration' ) );
-			jQuery( document.getElementById( 'frm_single_entry_type' ) ).change( function() {
+			jQuery( document.getElementById( 'frm_single_entry_type' ) ).on( 'change', function() {
 				if ( this.value === 'cookie' ) {
 					$cookieExp.fadeIn( 'slow' );
 				} else {
@@ -6763,7 +6763,7 @@ function frmAdminBuildJS() {
 			});
 
 			var $singleEntry = document.getElementById( 'single_entry' );
-			jQuery( $singleEntry ).change( function() {
+			jQuery( $singleEntry ).on( 'change', function() {
 				if ( this.checked ) {
 					visible( '.hide_single_entry' );
 				} else {
@@ -6780,21 +6780,21 @@ function frmAdminBuildJS() {
 			jQuery( '.hide_save_draft' ).hide();
 
 			var $saveDraft = jQuery( document.getElementById( 'save_draft' ) );
-			$saveDraft.change( function() {
+			$saveDraft.on( 'change', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_save_draft' ).fadeIn( 'slow' );
 				} else {
 					jQuery( '.hide_save_draft' ).fadeOut( 'slow' );
 				}
 			});
-			$saveDraft.change();
+			$saveDraft.trigger( 'change' );
 
 			//If Allow editing is checked/unchecked
 			$editable = document.getElementById( 'editable' );
-			jQuery( $editable ).change( function() {
+			jQuery( $editable ).on( 'change', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_editable' ).fadeIn( 'slow' );
-					jQuery( '#edit_action' ).change();
+					jQuery( '#edit_action' ).trigger( 'change' );
 				} else {
 					jQuery( '.hide_editable' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
@@ -6805,7 +6805,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '#protect_files', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
-					jQuery( '#edit_action' ).change();
+					jQuery( '#edit_action' ).trigger( 'change' );
 				} else {
 					jQuery( '.hide_protect_files' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
@@ -6917,9 +6917,9 @@ function frmAdminBuildJS() {
 			initToggleShortcodes();
 			jQuery( '.frm_code_list:not(.frm-dropdown-menu) a' ).addClass( 'frm_noallow' );
 
-			jQuery( 'input[name="show_count"]' ).change( showCount );
+			jQuery( 'input[name="show_count"]' ).on( 'change', showCount );
 
-			jQuery( document.getElementById( 'form_id' ) ).change( displayFormSelected );
+			jQuery( document.getElementById( 'form_id' ) ).on( 'change', displayFormSelected );
 
 			$addRemove = jQuery( '.frm_repeat_rows' );
 			$addRemove.on( 'click', '.frm_add_order_row', addOrderRow );
@@ -6981,7 +6981,7 @@ function frmAdminBuildJS() {
 			jQuery( 'input.hex' ).wpColorPicker({
 				change: function( event ) {
 					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
-					jQuery( event.target ).val( hexcolor ).change();
+					jQuery( event.target ).val( hexcolor ).trigger( 'change' );
 				}
 			});
 			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
@@ -6989,7 +6989,7 @@ function frmAdminBuildJS() {
 			});
 
 			// update styling on change
-			jQuery( '#frm_styling_form .styling_settings' ).change( function() {
+			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', function() {
 				var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
 				locStr = JSON.stringify( locStr );
 				jQuery.ajax({
@@ -7062,7 +7062,7 @@ function frmAdminBuildJS() {
 							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
 						}
 						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
-						jQuery( document.getElementById( 'frm_fieldset' ) ).change();
+						jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 						button.classList.remove( 'frm_loading_button' );
 					}
 				});
@@ -7070,9 +7070,9 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 
-			jQuery( document.getElementById( 'frm_position' ) ).change( setPosClass );
+			jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
 
-			jQuery( 'select[name$="[theme_selector]"]' ).change( function() {
+			jQuery( 'select[name$="[theme_selector]"]' ).on( 'change', function() {
 				var themeVal = jQuery( this ).val();
 				var css = themeVal;
 				if ( themeVal !== -1 ) {
@@ -7088,7 +7088,7 @@ function frmAdminBuildJS() {
 				updateUICSS( css );
 				document.getElementById( 'frm_theme_css' ).value = themeVal;
 				return false;
-			}).change();
+			}).trigger( 'change' );
 		},
 
 		customCSSInit: function() {
@@ -7129,9 +7129,9 @@ function frmAdminBuildJS() {
 		exportInit: function() {
 			jQuery( '.frm_form_importer' ).on( 'submit', startFormMigration );
 			jQuery( document.getElementById( 'frm_export_xml' ) ).on( 'submit', validateExport );
-			jQuery( '#frm_export_xml input, #frm_export_xml select' ).change( removeExportError );
-			jQuery( 'input[name="frm_import_file"]' ).change( checkCSVExtension );
-			jQuery( 'select[name="format"]' ).change( checkExportTypes ).change();
+			jQuery( '#frm_export_xml input, #frm_export_xml select' ).on( 'change', removeExportError );
+			jQuery( 'input[name="frm_import_file"]' ).on( 'change', checkCSVExtension );
+			jQuery( 'select[name="format"]' ).on( 'change', checkExportTypes ).trigger( 'change' );
 			jQuery( 'input[name="frm_export_forms[]"]' ).click( preventMultipleExport );
 			initiateMultiselect();
 
