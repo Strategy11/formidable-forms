@@ -4310,7 +4310,7 @@ function frmAdminBuildJS() {
 
 		if ( jQuery( '.frm_post' + type + '_row' ).length ) {
 			var name = jQuery( '.frm_post' + type + '_row:last' ).attr( 'id' ).replace( 'frm_post' + type + '_', '' );
-			if ( jQuery.isNumeric( name ) ) {
+			if ( isNumeric( name ) ) {
 				metaName = 1 + parseInt( name, 10 );
 			} else {
 				metaName = 1;
@@ -4339,6 +4339,10 @@ function frmAdminBuildJS() {
 				}
 			}
 		});
+	}
+
+	function isNumeric( value ) {
+		return ! isNaN( parseFloat( value ) ) && isFinite( value );
 	}
 
 	function getMetaValue( id, metaName ) {
@@ -5576,7 +5580,6 @@ function frmAdminBuildJS() {
 	function initNewFormModal() {
 		var installFormTrigger,
 			activeHoverIcons,
-			activeTemplateKey,
 			$modal,
 			handleError,
 			handleEmailAddressError,
@@ -5718,7 +5721,7 @@ function frmAdminBuildJS() {
 				});
 
 				activePage = 'email';
-				activeTemplateKey = $li.attr( 'data-key' );
+				$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
 				$li.append( installFormTrigger );
 			} else if ( $modal.hasClass( 'frm-expired' ) ) {
 				activePage = 'renew';
@@ -5822,7 +5825,7 @@ function frmAdminBuildJS() {
 					action: 'template_api_signup',
 					nonce: frmGlobal.nonce,
 					code: code,
-					key: activeTemplateKey
+					key: $modal.attr( 'frm-this-form' )
 				},
 				success: function( response ) {
 					if ( response.success ) {
@@ -5831,6 +5834,10 @@ function frmAdminBuildJS() {
 							installFormTrigger.click();
 							$modal.attr( 'frm-page', 'details' );
 							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
+
+							if ( typeof response.data.urlByKey !== 'undefined' ) {
+								updateTemplateModalFreeUrls( response.data.urlByKey );
+							}
 						}
 					} else {
 						if ( Array.isArray( response.data ) && response.data.length ) {
@@ -5902,6 +5909,18 @@ function frmAdminBuildJS() {
 		if ( urlParams.get( 'triggerNewFormModal' ) ) {
 			triggerNewFormModal();
 		}
+	}
+
+	function updateTemplateModalFreeUrls( urlByKey ) {
+		jQuery( '#frm_new_form_modal' ).find( '.frm-selectable[data-key]' ).each( function() {
+			var $template = jQuery( this ),
+				key = $template.attr( 'data-key' );
+			if ( 'undefined' !== typeof urlByKey[ key ]) {
+				$template.removeClass( 'frm-locked-template' );
+				$template.find( 'h3 svg' ).remove(); // remove the lock from the title
+				$template.attr( 'data-rel', urlByKey[ key ]);
+			}
+		});
 	}
 
 	function transitionToAddDetails( $modal, name, link, action ) {

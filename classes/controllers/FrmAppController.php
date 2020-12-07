@@ -299,7 +299,7 @@ class FrmAppController {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			// avoid rendering the email and code blocks for users who have upgraded or have a free license already
 			$api = new FrmFormTemplateApi();
-			if ( ! $api->get_free_license() ) {
+			if ( ! $api->has_free_access() ) {
 				array_push( $blocks_to_render, 'email', 'code' );
 			}
 		}
