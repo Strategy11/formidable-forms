@@ -9,13 +9,22 @@ class FrmFormTemplateApi extends FrmFormApi {
 
 	private static $base_api_url = 'https://formidableforms.com/wp-json/form-templates/v1/';
 
-	protected $free_license;
+	protected static $free_license;
 
 	/**
 	 * @since 3.06
 	 */
 	protected function set_cache_key() {
-		$this->cache_key = 'frm_form_templates_l' . ( empty( $this->license ) ? '' : md5( $this->license ) );
+		$this->cache_key = 'frm_form_templates_l';
+
+		if ( ! empty( $this->license ) ) {
+			$this->cache_key .= md5( $this->license );
+		} else {
+			$free_license = $this->get_free_license();
+			if ( $free_license ) {
+				$this->cache_key .= md5( $free_license );
+			}
+		}
 	}
 
 	/**
@@ -47,11 +56,11 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @return string
 	 */
 	public function get_free_license() {
-		if ( ! isset( $this->free_license ) ) {
-			$this->free_license = get_option( self::$code_option_name );
+		if ( ! isset( self::$free_license ) ) {
+			self::$free_license = get_option( self::$code_option_name );
 		}
 
-		return $this->free_license;
+		return self::$free_license;
 	}
 
 	/**
@@ -90,6 +99,10 @@ class FrmFormTemplateApi extends FrmFormApi {
 		}
 	}
 
+	private static function clear_template_cache_before_getting_free_templates() {
+		delete_option( 'frm_form_templates_l' );
+	}
+
 	/**
 	 * @param array $response
 	 */
@@ -107,21 +120,33 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @param string $code the base64 encoded code
 	 */
 	private static function on_api_verify_code_success( $code ) {
+		self::$free_license = $code;
 		update_option( self::$code_option_name, $code, 'no' );
 
 		$data = array();
 		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
 
 		if ( $key ) {
-			$api       = new self();
-			$templates = $api->get_api_info();
+			self::clear_template_cache_before_getting_free_templates();
+
+			$data['urlByKey'] = array();
+			$api              = new self();
+			$templates        = $api->get_api_info();
 
 			foreach ( $templates as $template ) {
-				if ( $key === $template['key'] && isset( $template['url'] ) ) {
-					$data['url'] = $template['url'];
-					break;
+				if ( ! isset( $template['url'] ) || ! in_array( 'free', $template['categories'], true ) ) {
+					continue;
 				}
+
+				$data['urlByKey'][ $template['key'] ] = $template['url'];
 			}
+
+			if ( ! isset( $data['urlByKey'][ $key ] ) ) {
+				$error = new WP_Error( 400, 'We were unable to retrieve the template' );
+				wp_send_json_error( $error );
+			}
+
+			$data['url'] = $data['urlByKey'][ $key ];
 		}
 
 		wp_send_json_success( $data );
