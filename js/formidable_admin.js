@@ -2337,12 +2337,9 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
-			metaName = 0,
-			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' );
-
-		if ( logicRows.length ) {
-			metaName = 1 + parseInt( logicRows[ logicRows.length - 1 ].id.replace( 'frm_logic_' + id + '_', '' ), 10 );
-		}
+			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' ),
+			replace = 'frm_logic_' + id + '_',
+			metaName = getNewRowId( logicRows, replace );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -2366,18 +2363,20 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function getNewRowId( rows, replace ) {
+		if ( ! rows.length ) {
+			return 0;
+		}
+		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
+	}
+
 	function addWatchLookupRow() {
 		/*jshint validthis:true */
 		var lastRowId,
 			id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
-			rowKey = 0,
-			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children;
-
-		if ( lookupBlockRows.length > 0 ) {
-			lastRowId = lookupBlockRows[lookupBlockRows.length - 1].id;
-			rowKey = 1 + parseInt( lastRowId.replace( 'frm_watch_lookup_' + id + '_', '' ), 10 );
-		}
+			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children,
+			rowKey = getNewRowId( lookupBlockRows, 'frm_watch_lookup_' + id + '_' );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -3955,12 +3954,7 @@ function frmAdminBuildJS() {
 
 	function getNewActionId() {
 		var actionSettings = document.querySelectorAll( '.frm_form_action_settings' ),
-			len = 0;
-		if ( actionSettings.length ) {
-			//Get number of previous action
-			len = actionSettings[ actionSettings.length - 1 ].id.replace( 'frm_form_action_', '' );
-		}
-		len = parseInt( len, 10 ) + 1;
+			len = getNewRowId( actionSettings, 'frm_form_action_' );
 		if ( typeof document.getElementById( 'frm_form_action_' + len ) !== 'undefined' ) {
 			len = len + 100;
 		}
@@ -4081,13 +4075,10 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).data( 'emailkey' ),
 			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
-			metaName = 0,
 			formId = document.getElementById( 'form_id' ).value,
-			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' );
+			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' ),
+			metaName = getNewRowId( logicRows, 'frm_logic_' + id + '_' );
 
-		if ( logicRows.length ) {
-			metaName = 1 + parseInt( logicRows[ logicRows.length - 1 ].id.replace( 'frm_logic_' + id + '_', '' ), 10 );
-		}
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -4127,12 +4118,8 @@ function frmAdminBuildJS() {
 	function addSubmitLogic() {
 		/*jshint validthis:true */
 		var formId = thisFormId,
-			metaName = 0,
-			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' );
-
-		if ( logicRows.length ) {
-			metaName = 1 + parseInt( logicRows[ logicRows.length - 1 ].id.replace( 'frm_logic_submit_', '' ), 10 );
-		}
+			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' ),
+			metaName = getNewRowId( logicRows, 'frm_logic_submit_' );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -4531,16 +4518,15 @@ function frmAdminBuildJS() {
 	}
 
 	function addOrderRow() {
-		var l = 0;
-		if ( jQuery( '#frm_order_options' ).find( '.frm_logic_rows div' ).length > 0 ) {
-			l = jQuery( '#frm_order_options' ).find( '.frm_logic_rows div' ).last().attr( 'id' ).replace( 'frm_order_field_', '' );
-		}
+		var logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' ),
+			l = getNewRowId( logicRows, 'frm_order_field_' );
+
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_order_row',
 				form_id: thisFormId,
-				order_key: ( parseInt( l, 10 ) + 1 ),
+				order_key: l,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
@@ -4551,14 +4537,15 @@ function frmAdminBuildJS() {
 
 	function addWhereRow() {
 		var rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' ),
-			l = rowDivs.length ? rowDivs[ rowDivs.length - 1 ].id.replace( 'frm_where_field_', '' ) : 0;
+			l = getNewRowId( rowDivs, 'frm_where_field_' );
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_add_where_row',
 				form_id: thisFormId,
-				where_key: ( parseInt( l, 10 ) + 1 ),
+				where_key: l,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
