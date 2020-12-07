@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.09.01\n"
+"Project-Id-Version: Formidable Forms 4.09.02\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-11-11T19:16:15+00:00\n"
+"POT-Creation-Date: 2020-12-07T16:32:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -1268,7 +1268,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:732
 #: classes/controllers/FrmFormsController.php:736
 #: classes/views/shared/mb_adv_info.php:98
-#: classes/helpers/FrmCSVExportHelper.php:219
+#: classes/helpers/FrmCSVExportHelper.php:223
 msgid "Key"
 msgstr ""
 
@@ -1510,7 +1510,7 @@ msgid "Entry Name"
 msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:86
-#: classes/helpers/FrmCSVExportHelper.php:214
+#: classes/helpers/FrmCSVExportHelper.php:218
 msgid "Created By"
 msgstr ""
 
@@ -2434,7 +2434,7 @@ msgid "Keys"
 msgstr ""
 
 #: classes/views/shared/mb_adv_info.php:95
-#: classes/helpers/FrmCSVExportHelper.php:218
+#: classes/helpers/FrmCSVExportHelper.php:222
 #: classes/helpers/FrmAppHelper.php:2395
 msgid "ID"
 msgstr ""
@@ -3421,7 +3421,7 @@ msgid "Updated: %1$s"
 msgstr ""
 
 #: classes/views/frm-entries/show.php:12
-#: classes/helpers/FrmEntriesHelper.php:649
+#: classes/helpers/FrmEntriesHelper.php:653
 msgid "View Entry"
 msgstr ""
 
@@ -3825,7 +3825,7 @@ msgstr ""
 
 #: classes/helpers/FrmFormsListHelper.php:342
 #: classes/helpers/FrmFormsHelper.php:1227
-#: classes/helpers/FrmCSVExportHelper.php:216
+#: classes/helpers/FrmCSVExportHelper.php:220
 msgid "Draft"
 msgstr ""
 
@@ -5127,33 +5127,33 @@ msgstr ""
 msgid "Install %s Importer"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:539
-#: classes/helpers/FrmEntriesHelper.php:540
+#: classes/helpers/FrmEntriesHelper.php:543
+#: classes/helpers/FrmEntriesHelper.php:544
 msgid "Unknown"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:657
+#: classes/helpers/FrmEntriesHelper.php:661
 msgid "Delete Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:660
+#: classes/helpers/FrmEntriesHelper.php:664
 msgid "Delete this form entry?"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:668
+#: classes/helpers/FrmEntriesHelper.php:672
 msgid "Print Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:678
-#: classes/helpers/FrmEntriesHelper.php:681
+#: classes/helpers/FrmEntriesHelper.php:682
+#: classes/helpers/FrmEntriesHelper.php:685
 msgid "Resend Emails"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:690
+#: classes/helpers/FrmEntriesHelper.php:694
 msgid "Edit Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:693
+#: classes/helpers/FrmEntriesHelper.php:697
 msgid "Entry edits"
 msgstr ""
 
@@ -5340,39 +5340,39 @@ msgstr ""
 msgid "The redirect URL is using the parameters \"%s\", which are reserved by WordPress. "
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:126
+#: classes/helpers/FrmCSVExportHelper.php:127
 msgid "(label)"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:205
+#: classes/helpers/FrmCSVExportHelper.php:209
 msgid "Comment"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:206
+#: classes/helpers/FrmCSVExportHelper.php:210
 msgid "Comment User"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:207
+#: classes/helpers/FrmCSVExportHelper.php:211
 msgid "Comment Date"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:212
+#: classes/helpers/FrmCSVExportHelper.php:216
 msgid "Timestamp"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:213
+#: classes/helpers/FrmCSVExportHelper.php:217
 msgid "Last Updated"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:215
+#: classes/helpers/FrmCSVExportHelper.php:219
 msgid "Updated By"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:217
+#: classes/helpers/FrmCSVExportHelper.php:221
 msgid "IP"
 msgstr ""
 
-#: classes/helpers/FrmCSVExportHelper.php:221
+#: classes/helpers/FrmCSVExportHelper.php:225
 msgid "Parent ID"
 msgstr ""
 
