@@ -4838,6 +4838,11 @@ function frmAdminBuildJS() {
 		fieldsUpdated = 0;
 	}
 
+	function settingsSubmitted() {
+		// set fieldsUpdated to 0 to avoid the unsaved changes pop up
+		fieldsUpdated = 0;
+	}
+
 	function confirmExit( event ) {
 		if ( fieldsUpdated ) {
 			event.preventDefault();
@@ -6477,8 +6482,6 @@ function frmAdminBuildJS() {
 			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
-			jQuery( '.post-type-frm_display #screen-options-wrap:hidden input[type="checkbox"]' ).attr( 'disabled', true );
-
 			// submit the search form with dropdown
 			jQuery( '#frm-fid-search-menu a' ).click( function() {
 				var val = this.id.replace( 'fid-', '' );
@@ -6623,7 +6626,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
-			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input), #frm_builder_page select', fieldUpdated );
+			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
 
 			popAllProductFields();
 
@@ -6784,6 +6787,9 @@ function frmAdminBuildJS() {
 			});
 
 			jQuery( document ).on( 'frm-multiselect-changed', '#protect_files_role', adjustVisibilityValuesForEveryoneValues );
+
+			jQuery( document ).on( 'submit', '.frm_form_settings', settingsSubmitted );
+			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();

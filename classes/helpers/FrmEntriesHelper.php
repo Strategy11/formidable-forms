@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntriesHelper {
 
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
+		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
+
 		$values = array(
 			'name'        => '',
 			'description' => '',
@@ -129,6 +131,8 @@ class FrmEntriesHelper {
 	}
 
 	public static function setup_edit_vars( $values, $record ) {
+		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
+
 		$values['item_key'] = FrmAppHelper::get_post_param( 'item_key', $record->item_key, 'sanitize_title' );
 		$values['form_id']  = $record->form_id;
 		$values['is_draft'] = $record->is_draft;
