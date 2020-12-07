@@ -4985,14 +4985,14 @@ function frmAdminBuildJS() {
 				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
 					d = '';
 				} else {
-					id = jQuery.trim( d );
+					id = d.trim();
 				}
 				c = c + ' ' + d;
 				c = c.replace( 'widefat', '' ).replace( 'frm_with_left_label', '' );
 			}
 		}
 
-		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values' ).attr( 'data-fills', jQuery.trim( c ) );
+		jQuery( '#frm-insert-fields-box,#frm-conditionals,#frm-adv-info-tab,#frm-dynamic-values' ).attr( 'data-fills', c.trim() );
 		var a = [
 			'content', 'wpbody-content', 'dyncontent', 'success_url',
 			'success_msg', 'edit_msg', 'frm_dyncontent', 'frm_not_email_message',
@@ -5029,7 +5029,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		jQuery( '#frm-adv-info-tab' ).attr( 'data-fills', jQuery.trim( id ) );
+		jQuery( '#frm-adv-info-tab' ).attr( 'data-fills', id.trim() );
 		if ( input.classList.contains( 'field_custom_html' ) ) {
 			id = 'field_custom_html';
 		}
