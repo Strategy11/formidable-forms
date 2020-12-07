@@ -4310,7 +4310,7 @@ function frmAdminBuildJS() {
 
 		if ( jQuery( '.frm_post' + type + '_row' ).length ) {
 			var name = jQuery( '.frm_post' + type + '_row:last' ).attr( 'id' ).replace( 'frm_post' + type + '_', '' );
-			if ( jQuery.isNumeric( name ) ) {
+			if ( isNumeric( name ) ) {
 				metaName = 1 + parseInt( name, 10 );
 			} else {
 				metaName = 1;
@@ -4339,6 +4339,10 @@ function frmAdminBuildJS() {
 				}
 			}
 		});
+	}
+
+	function isNumeric( value ) {
+		return ! isNaN( parseFloat( value ) ) && isFinite( value );
 	}
 
 	function getMetaValue( id, metaName ) {
