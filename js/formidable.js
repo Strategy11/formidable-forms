@@ -1222,7 +1222,6 @@ function frmFrontFormJS() {
 			/*jshint validthis:true */
 
 			var fieldId = frmFrontForm.getFieldId( this, false );
-			console.log( 'fieldValueChanged', fieldId );
 			if ( ! fieldId || typeof fieldId === 'undefined' ) {
 				return;
 			}
