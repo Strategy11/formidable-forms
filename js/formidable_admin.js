@@ -3010,11 +3010,11 @@ function frmAdminBuildJS() {
 
 				valueSelect.prepend( optionMatch );
 			}
-		}
 
-		optionMatch = valueSelect.querySelector( 'option[value=""]' );
-		if ( optionMatch !== null ) {
-			valueSelect.prepend( optionMatch );
+			optionMatch = valueSelect.querySelector( 'option[value=""]' );
+			if ( optionMatch !== null ) {
+				valueSelect.prepend( optionMatch );
+			}
 		}
 	}
 
