@@ -1001,7 +1001,7 @@ function frmAdminBuildJS() {
 		var hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
-			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]:first' ).length > 0 ? 1 : 0;
+			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]' ).length ? 1 : 0;
 		}
 
 		jQuery.ajax({
@@ -1049,6 +1049,7 @@ function frmAdminBuildJS() {
 	function loadFields( fieldId ) {
 		var $thisField = jQuery( document.getElementById( fieldId ) );
 		var fields;
+		// TODO :lt is deprecated
 		if ( 'function' === typeof jQuery.fn.addBack ) {
 			fields = $thisField.nextAll( '*:lt(14)' ).addBack();
 		} else {
@@ -2336,11 +2337,13 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
-			metaName = 0;
+			metaName = 0,
+			$logicRows = jQuery( '#frm_logic_row_' + id ).find( ' .frm_logic_row' );
 
-		if ( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row' ).length > 0 ) {
-			metaName = 1 + parseInt( jQuery( '#frm_logic_row_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
+		if ( $logicRows.length ) {
+			metaName = 1 + parseInt( $logicRows.last().attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
+
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -3951,10 +3954,11 @@ function frmAdminBuildJS() {
 	}
 
 	function getNewActionId() {
-		var len = 0;
-		if ( jQuery( '.frm_form_action_settings:last' ).length ) {
+		var $actionSettings = jQuery( '.frm_form_action_settings' ),
+			len = 0;
+		if ( $actionSettings.length ) {
 			//Get number of previous action
-			len = jQuery( '.frm_form_action_settings:last' ).attr( 'id' ).replace( 'frm_form_action_', '' );
+			len = $actionSettings.last().attr( 'id' ).replace( 'frm_form_action_', '' );
 		}
 		len = parseInt( len, 10 ) + 1;
 		if ( typeof document.getElementById( 'frm_form_action_' + len ) !== 'undefined' ) {
@@ -4078,9 +4082,11 @@ function frmAdminBuildJS() {
 		var id = jQuery( this ).data( 'emailkey' ),
 			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
 			metaName = 0,
-			formId = document.getElementById( 'form_id' ).value;
-		if ( jQuery( '#frm_form_action_' + id + ' .frm_logic_row' ).length ) {
-			metaName = 1 + parseInt( jQuery( '#frm_form_action_' + id + ' .frm_logic_row:last' ).attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
+			formId = document.getElementById( 'form_id' ).value,
+			$logicRows = jQuery( '#frm_form_action_' + id ).find( '.frm_logic_row' );
+
+		if ( $logicRows.length ) {
+			metaName = 1 + parseInt( $logicRows.last().attr( 'id' ).replace( 'frm_logic_' + id + '_', '' ), 10 );
 		}
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -4122,12 +4128,14 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var last,
 			formId = thisFormId,
-			metaName = 0;
-		if ( jQuery( '#frm_submit_logic_row .frm_logic_row' ).length > 0 ) {
-			last = jQuery( '#frm_submit_logic_row .frm_logic_row:last' );
+			metaName = 0,
+			$logicRows = jQuery( '#frm_submit_logic_row' ).find( '.frm_logic_row' );
 
+		if ( $logicRows.length ) {
+			last = $logicRows.last();
 			metaName = 1 + parseInt( last.attr( 'id' ).replace( 'frm_logic_submit_', '' ), 10 );
 		}
+
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -4302,20 +4310,23 @@ function frmAdminBuildJS() {
 	}
 
 	function addPostRow( type, button ) {
-		var id = jQuery( 'input[name="id"]' ).val(),
+		var name,
+			id = jQuery( 'input[name="id"]' ).val(),
 			settings = jQuery( button ).closest( '.frm_form_action_settings' ),
 			key = settings.data( 'actionkey' ),
 			postType = settings.find( '.frm_post_type' ).val(),
-			metaName = 0;
+			metaName = 0,
+			$postTypeRows = jQuery( '.frm_post' + type + '_row' );
 
-		if ( jQuery( '.frm_post' + type + '_row' ).length ) {
-			var name = jQuery( '.frm_post' + type + '_row:last' ).attr( 'id' ).replace( 'frm_post' + type + '_', '' );
+		if ( $postTypeRows.length ) {
+			name = $postTypeRows.last().attr( 'id' ).replace( 'frm_post' + type + '_', '' );
 			if ( isNumeric( name ) ) {
 				metaName = 1 + parseInt( name, 10 );
 			} else {
 				metaName = 1;
 			}
 		}
+
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -4333,6 +4344,7 @@ function frmAdminBuildJS() {
 
 				if ( type === 'meta' ) {
 					jQuery( '.frm_name_value' ).show();
+					// TODO :last is deprecated
 					jQuery( '.frm_toggle_cf_opts' ).not( ':last' ).hide();
 				} else if ( type === 'tax' ) {
 					jQuery( '.frm_posttax_labels' ).show();
@@ -4522,8 +4534,8 @@ function frmAdminBuildJS() {
 
 	function addOrderRow() {
 		var l = 0;
-		if ( jQuery( '#frm_order_options .frm_logic_rows div:last' ).length > 0 ) {
-			l = jQuery( '#frm_order_options .frm_logic_rows div:last' ).attr( 'id' ).replace( 'frm_order_field_', '' );
+		if ( jQuery( '#frm_order_options' ).find( '.frm_logic_rows div' ).length > 0 ) {
+			l = jQuery( '#frm_order_options' ).find( '.frm_logic_rows div' ).last().attr( 'id' ).replace( 'frm_order_field_', '' );
 		}
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -4540,10 +4552,8 @@ function frmAdminBuildJS() {
 	}
 
 	function addWhereRow() {
-		var l = 0;
-		if ( jQuery( '#frm_where_options .frm_logic_rows div:last' ).length ) {
-			l = jQuery( '#frm_where_options .frm_logic_rows div:last' ).attr( 'id' ).replace( 'frm_where_field_', '' );
-		}
+		var $rowDivs = jQuery( '#frm_where_options' ).find( '.frm_logic_rows div' ),
+			l = $rowDivs.length ? $rowDivs.last().attr( 'id' ).replace( 'frm_where_field_', '' ) : 0;
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -5053,15 +5063,19 @@ function frmAdminBuildJS() {
 
 	//function to append a new theme stylesheet with the new style changes
 	function updateUICSS( locStr ) {
+		var $cssLink, $link;
+
 		if ( locStr == -1 ) {
 			jQuery( 'link.ui-theme' ).remove();
 			return false;
 		}
-		var cssLink = jQuery( '<link href="' + locStr + '" type="text/css" rel="Stylesheet" class="ui-theme" />' );
-		jQuery( 'head' ).append( cssLink );
 
-		if ( jQuery( 'link.ui-theme' ).length > 1 ) {
-			jQuery( 'link.ui-theme:first' ).remove();
+		$cssLink = jQuery( '<link href="' + locStr + '" type="text/css" rel="Stylesheet" class="ui-theme" />' );
+		jQuery( 'head' ).append( $cssLink );
+
+		$link = jQuery( 'link.ui-theme' );
+		if ( $link.length > 1 ) {
+			$link.first().remove();
 		}
 	}
 
@@ -6570,7 +6584,7 @@ function frmAdminBuildJS() {
 				return false;
 			});
 
-			jQuery( '.frm_form_builder form:first' ).on( 'submit', function() {
+			jQuery( '.frm_form_builder form' ).first().on( 'submit', function() {
 				jQuery( '.inplace_field' ).blur();
 			});
 

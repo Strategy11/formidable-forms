@@ -739,7 +739,7 @@ function frmFrontFormJS() {
 	}
 
 	function scrollToFirstField( object ) {
-		var field = jQuery( object ).find( '.frm_blank_field:first' );
+		var field = jQuery( object ).find( '.frm_blank_field' ).first();
 		if ( field.length ) {
 			frmFrontForm.scrollMsg( field, object, true );
 		}
