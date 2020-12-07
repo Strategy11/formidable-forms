@@ -3659,7 +3659,7 @@ function frmAdminBuildJS() {
 				$postStuff.insertBefore( $html, $postStuff.firstChild );
 			},
 			error: function() {
-				jQuery( document.getElementById( 'frm_js_build_form' ) ).trigger( 'submit' );
+				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
 			}
 		});
 	}
@@ -3670,7 +3670,7 @@ function frmAdminBuildJS() {
 
 		var form = jQuery( builderForm );
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( JSON.stringify( form.serializeArray() ) );
-		jQuery( document.getElementById( 'frm_js_build_form' ) ).trigger( 'submit' );
+		document.getElementById( 'frm_js_build_form' ).submit();
 	}
 
 	function preFormSave( b ) {
@@ -4425,7 +4425,7 @@ function frmAdminBuildJS() {
 	function submitSettings() {
 		/*jshint validthis:true */
 		preFormSave( this );
-		jQuery( '.frm_form_settings' ).trigger( 'submit' );
+		document.querySelector( '.frm_form_settings' ).submit();
 	}
 
 	/* View Functions */
@@ -5286,7 +5286,7 @@ function frmAdminBuildJS() {
 		}
 
 		e.stopPropagation();
-		this.trigger( 'submit' );
+		this.submit();
 	}
 
 	function removeExportError() {
@@ -6487,7 +6487,7 @@ function frmAdminBuildJS() {
 			jQuery( '#frm-fid-search-menu a' ).click( function() {
 				var val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );
-				jQuery( document.getElementById( 'posts-filter' ) ).trigger( 'submit' );
+				document.getElementById( 'posts-filter' ).submit();
 				return false;
 			});
 
