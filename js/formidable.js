@@ -605,7 +605,7 @@ function frmFrontFormJS() {
 					scrollToFirstField( object );
 
 					if ( contSubmit ) {
-						object.submit();
+						object.trigger( 'submit' );
 					} else {
 						jQuery( object ).prepend( response.error_message );
 					}
@@ -614,12 +614,12 @@ function frmFrontFormJS() {
 
 					showFileLoading( object );
 
-					object.submit();
+					object.trigger( 'submit' );
 				}
 			},
 			error: function() {
 				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).removeAttr( 'disabled' );
-				object.submit();
+				object.trigger( 'submit' );
 			}
 		});
 	}
@@ -986,6 +986,7 @@ function frmFrontFormJS() {
 			jQuery( document.getElementById( 'frm_resend_email' ) ).click( resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
+
 			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
@@ -1093,10 +1094,10 @@ function frmFrontFormJS() {
 					action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 					frmFrontForm.checkFormErrors( object, action );
 				} else {
-					object.submit();
+					object.trigger( 'submit' );
 				}
 			} else {
-				object.submit();
+				object.trigger( 'submit' );
 			}
 		},
 
@@ -1221,6 +1222,7 @@ function frmFrontFormJS() {
 			/*jshint validthis:true */
 
 			var fieldId = frmFrontForm.getFieldId( this, false );
+			console.log( 'fieldValueChanged', fieldId );
 			if ( ! fieldId || typeof fieldId === 'undefined' ) {
 				return;
 			}

@@ -1049,7 +1049,7 @@ function frmAdminBuildJS() {
 	function loadFields( fieldId ) {
 		var $thisField = jQuery( document.getElementById( fieldId ) );
 		var fields;
-		if ( jQuery.isFunction( jQuery.fn.addBack ) ) {
+		if ( 'function' === typeof jQuery.fn.addBack ) {
 			fields = $thisField.nextAll( '*:lt(14)' ).addBack();
 		} else {
 			fields = $thisField.nextAll( '*:lt(14)' ).andSelf();
@@ -3659,7 +3659,7 @@ function frmAdminBuildJS() {
 				$postStuff.insertBefore( $html, $postStuff.firstChild );
 			},
 			error: function() {
-				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
+				jQuery( document.getElementById( 'frm_js_build_form' ) ).trigger( 'submit' );
 			}
 		});
 	}
@@ -3670,7 +3670,7 @@ function frmAdminBuildJS() {
 
 		var form = jQuery( builderForm );
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( JSON.stringify( form.serializeArray() ) );
-		jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
+		jQuery( document.getElementById( 'frm_js_build_form' ) ).trigger( 'submit' );
 	}
 
 	function preFormSave( b ) {
@@ -4425,7 +4425,7 @@ function frmAdminBuildJS() {
 	function submitSettings() {
 		/*jshint validthis:true */
 		preFormSave( this );
-		jQuery( '.frm_form_settings' ).submit();
+		jQuery( '.frm_form_settings' ).trigger( 'submit' );
 	}
 
 	/* View Functions */
@@ -5286,7 +5286,7 @@ function frmAdminBuildJS() {
 		}
 
 		e.stopPropagation();
-		this.submit();
+		this.trigger( 'submit' );
 	}
 
 	function removeExportError() {
@@ -6487,7 +6487,7 @@ function frmAdminBuildJS() {
 			jQuery( '#frm-fid-search-menu a' ).click( function() {
 				var val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );
-				jQuery( document.getElementById( 'posts-filter' ) ).submit();
+				jQuery( document.getElementById( 'posts-filter' ) ).trigger( 'submit' );
 				return false;
 			});
 
@@ -6551,7 +6551,7 @@ function frmAdminBuildJS() {
 				return false;
 			});
 
-			jQuery( '.frm_form_builder form:first' ).submit( function() {
+			jQuery( '.frm_form_builder form:first' ).on( 'submit', function() {
 				jQuery( '.inplace_field' ).blur();
 			});
 
@@ -7101,8 +7101,8 @@ function frmAdminBuildJS() {
 		},
 
 		exportInit: function() {
-			jQuery( '.frm_form_importer' ).submit( startFormMigration );
-			jQuery( document.getElementById( 'frm_export_xml' ) ).submit( validateExport );
+			jQuery( '.frm_form_importer' ).on( 'submit', startFormMigration );
+			jQuery( document.getElementById( 'frm_export_xml' ) ).on( 'submit', validateExport );
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).change( removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).change( checkCSVExtension );
 			jQuery( 'select[name="format"]' ).change( checkExportTypes ).change();
