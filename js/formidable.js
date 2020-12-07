@@ -986,7 +986,6 @@ function frmFrontFormJS() {
 			jQuery( document.getElementById( 'frm_resend_email' ) ).click( resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
-
 			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
