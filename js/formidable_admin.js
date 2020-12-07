@@ -2365,9 +2365,9 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function getNewRowId( rows, replace ) {
+	function getNewRowId( rows, replace, defaultValue ) {
 		if ( ! rows.length ) {
-			return 0;
+			return 'undefined' !== typeof defaultValue ? defaultValue : 0;
 		}
 		return parseInt( rows[ rows.length - 1 ].id.replace( replace, '' ), 10 ) + 1;
 	}
@@ -4524,7 +4524,7 @@ function frmAdminBuildJS() {
 
 	function addOrderRow() {
 		var logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' ),
-			l = getNewRowId( logicRows, 'frm_order_field_' );
+			l = getNewRowId( logicRows, 'frm_order_field_', 1 );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -4543,7 +4543,7 @@ function frmAdminBuildJS() {
 
 	function addWhereRow() {
 		var rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' ),
-			l = getNewRowId( rowDivs, 'frm_where_field_' );
+			l = getNewRowId( rowDivs, 'frm_where_field_', 1 );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -4857,7 +4857,6 @@ function frmAdminBuildJS() {
 	}
 
 	function bindClickForDialogClose( $modal ) {
-		// deprecated https://api.jquery.com/bind/
 		jQuery( '.ui-widget-overlay, a.dismiss' ).on( 'click', function() {
 			$modal.dialog( 'close' );
 		});
@@ -7007,7 +7006,6 @@ function frmAdminBuildJS() {
 			});
 
 			// menu tabs
-			// deprecated https://api.jquery.com/bind/
 			jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
 				var panelId, wrapper,
 					target = jQuery( e.target );
