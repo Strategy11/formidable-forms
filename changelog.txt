@@ -1,4 +1,8 @@
 == Changelog ==
+= 4.09.02 =
+* Show a warning when leaving the form settings page with unsaved changes.
+* Make the process for using free form templates more clear.
+
 = 4.09.01 =
 * Don't include a link in the entries list to the form page when the user doesn't have permission to see anything there.
 

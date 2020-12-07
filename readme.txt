@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form, custom form
 Requires at least: 4.7
-Tested up to: 5.5.1
+Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 4.09.01
+Stable tag: 4.09.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.02 =
+* Show a warning when leaving the form settings page with unsaved changes.
+* Make the process for using free form templates more clear.
+
 = 4.09.01 =
 * Don't include a link in the entries list to the form page when the user doesn't have permission to see anything there.
 
@@ -454,10 +458,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Show a warning when leaving the builder page with unsaved changes.
 * Fix: Make any multiselect dropdowns in admin settings accessible.
 * Fix: aria-invalid attribute was missing on elements for accessibility.
-
-= 4.07 =
-* New: Use frm_inline_success for the form class in the customized HTML to move the success message next to the submit button. "frm_inline_success frm_alignright_success" will right-align the message.
-* Tweak: Improve the form listing page and entry listings page when nothing has been created.
-* Fix: Update the recaptcha for better reliability to catch more spam.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
