@@ -501,7 +501,7 @@ function frmFrontFormJS() {
 
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
-					response = jQuery.parseJSON( response );
+					response = JSON.parse( response );
 				} else {
 					response = defaultResponse;
 				}

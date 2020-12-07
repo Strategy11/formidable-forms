@@ -1077,7 +1077,7 @@ function frmAdminBuildJS() {
 					jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
 					return;
 				}
-				html = jQuery.parseJSON( html );
+				html = JSON.parse( html );
 
 				for ( var key in html ) {
 					jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
@@ -2222,6 +2222,7 @@ function frmAdminBuildJS() {
 				}, 0 );
 			};
 			var unbind = function() {
+				// TODO deprecated
 				$self.unbind( 'mouseup', up );
 			};
 			var up = function() {
@@ -4855,6 +4856,7 @@ function frmAdminBuildJS() {
 	}
 
 	function bindClickForDialogClose( $modal ) {
+		// deprecated https://api.jquery.com/bind/
 		jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function() {
 			$modal.dialog( 'close' );
 		});
@@ -7004,6 +7006,7 @@ function frmAdminBuildJS() {
 			});
 
 			// menu tabs
+			// deprecated https://api.jquery.com/bind/
 			jQuery( '#menu-settings-column' ).bind( 'click', function( e ) {
 				var panelId, wrapper,
 					target = jQuery( e.target );
@@ -7053,7 +7056,7 @@ function frmAdminBuildJS() {
 						var key;
 						errObj = errObj.replace( /^\s+|\s+$/g, '' );
 						if ( errObj.indexOf( '{' ) === 0 ) {
-							errObj = jQuery.parseJSON( errObj );
+							errObj = JSON.parse( errObj );
 						}
 						for ( key in errObj ) {
 							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
