@@ -3667,8 +3667,12 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	function triggerSubmit( element ) {
-		jQuery( element ).trigger( 'submit' );
+	function triggerSubmit( form ) {
+		var button = form.ownerDocument.createElement( 'input' );
+		button.style.display = 'none';
+		button.type = 'submit';
+		form.appendChild( button ).click();
+		form.removeChild( button );
 	}
 
 	function triggerChange( element ) {
@@ -6805,10 +6809,8 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '#protect_files', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
-					triggerChange( document.getElementById( 'edit_action' ) );
 				} else {
 					jQuery( '.hide_protect_files' ).fadeOut( 'slow' );
-					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
 				}
 			});
 
