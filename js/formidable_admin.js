@@ -2157,7 +2157,6 @@ function frmAdminBuildJS() {
 		previewWrapper.find( 'input.frm_image_id' ).val( 0 ).trigger( 'change' );
 	}
 
-
 	function toggleMultiselect() {
 		/*jshint validthis:true */
 		var dropdown = jQuery( this ).closest( 'li' ).find( '.frm_form_fields select' );
@@ -3659,18 +3658,27 @@ function frmAdminBuildJS() {
 				$postStuff.insertBefore( $html, $postStuff.firstChild );
 			},
 			error: function() {
-				jQuery( document.getElementById( 'frm_js_build_form' ) ).submit();
+				triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 			}
 		});
 	}
 
+	function triggerSubmit( element ) {
+		jQuery( element ).trigger( 'submit' );
+	}
+
+	function triggerChange( element ) {
+		jQuery( element ).trigger( 'change' );
+	}
+
 	function submitNoAjax() {
 		/*jshint validthis:true */
-		preFormSave( this );
+		var form;
 
-		var form = jQuery( builderForm );
+		preFormSave( this );
+		form = jQuery( builderForm );
 		jQuery( document.getElementById( 'frm_compact_fields' ) ).val( JSON.stringify( form.serializeArray() ) );
-		document.getElementById( 'frm_js_build_form' ).submit();
+		triggerSubmit( document.getElementById( 'frm_js_build_form' ) );
 	}
 
 	function preFormSave( b ) {
@@ -4423,7 +4431,7 @@ function frmAdminBuildJS() {
 	function submitSettings() {
 		/*jshint validthis:true */
 		preFormSave( this );
-		document.querySelector( '.frm_form_settings' ).submit();
+		triggerSubmit( document.querySelector( '.frm_form_settings' ) );
 	}
 
 	/* View Functions */
@@ -4689,7 +4697,7 @@ function frmAdminBuildJS() {
 			obj.focus();
 			obj.setSelectionRange( s, s );
 		}
-		contentBox.trigger( 'change' );
+		triggerChange( contentBox );
 	}
 
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
@@ -6500,7 +6508,7 @@ function frmAdminBuildJS() {
 			jQuery( '#frm-fid-search-menu a' ).on( 'click', function() {
 				var val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );
-				document.getElementById( 'posts-filter' ).submit();
+				triggerSubmit( document.getElementById( 'posts-filter' ) );
 				return false;
 			});
 
@@ -6775,14 +6783,14 @@ function frmAdminBuildJS() {
 					jQuery( '.hide_save_draft' ).fadeOut( 'slow' );
 				}
 			});
-			$saveDraft.trigger( 'change' );
+			triggerChange( $saveDraft );
 
 			//If Allow editing is checked/unchecked
 			$editable = document.getElementById( 'editable' );
 			jQuery( $editable ).on( 'change', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_editable' ).fadeIn( 'slow' );
-					jQuery( '#edit_action' ).trigger( 'change' );
+					triggerChange( document.getElementById( 'edit_action' ) );
 				} else {
 					jQuery( '.hide_editable' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
@@ -6793,7 +6801,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '#protect_files', function() {
 				if ( this.checked ) {
 					jQuery( '.hide_protect_files' ).fadeIn( 'slow' );
-					jQuery( '#edit_action' ).trigger( 'change' );
+					triggerChange( document.getElementById( 'edit_action' ) );
 				} else {
 					jQuery( '.hide_protect_files' ).fadeOut( 'slow' );
 					jQuery( '.edit_action_message_box' ).fadeOut( 'slow' );//Hide On Update message box
@@ -7049,7 +7057,7 @@ function frmAdminBuildJS() {
 							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
 						}
 						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
-						jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
+						triggerChange( document.getElementById( 'frm_fieldset' ) );
 						button.classList.remove( 'frm_loading_button' );
 					}
 				});
