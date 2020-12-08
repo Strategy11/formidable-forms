@@ -1060,7 +1060,7 @@ function frmAdminBuildJS() {
 		addHtmlToField( thisField );
 		$thisField.nextAll().slice( 0, 14 ).each(
 			function() {
-				addHtmlToField( this )
+				addHtmlToField( this );
 			}
 		);
 
