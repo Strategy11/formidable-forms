@@ -1058,7 +1058,11 @@ function frmAdminBuildJS() {
 		};
 
 		addHtmlToField( thisField );
-		$thisField.nextAll().slice( 0, 14 ).each( addHtmlToField );
+		$thisField.nextAll().slice( 0, 14 ).each(
+			function() {
+				addHtmlToField( this )
+			}
+		);
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
