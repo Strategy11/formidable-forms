@@ -2340,9 +2340,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
-			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' ),
-			metaName = getNewRowId( logicRows, 'frm_logic_' + id + '_' );
-
+			logicRows = document.getElementById( 'frm_logic_row_' + id ).querySelectorAll( '.frm_logic_row' );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -2351,7 +2349,7 @@ function frmAdminBuildJS() {
 				form_id: formId,
 				field_id: id,
 				nonce: frmGlobal.nonce,
-				meta_name: metaName,
+				meta_name: getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
 				fields: getFieldList()
 			},
 			success: function( html ) {
@@ -2377,9 +2375,7 @@ function frmAdminBuildJS() {
 		var lastRowId,
 			id = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' ),
 			formId = thisFormId,
-			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children,
-			rowKey = getNewRowId( lookupBlockRows, 'frm_watch_lookup_' + id + '_' );
-
+			lookupBlockRows = document.getElementById( 'frm_watch_lookup_block_' + id ).children;
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -2387,7 +2383,7 @@ function frmAdminBuildJS() {
 				action: 'frm_add_watch_lookup_row',
 				form_id: formId,
 				field_id: id,
-				row_key: rowKey,
+				row_key: getNewRowId( lookupBlockRows, 'frm_watch_lookup_' + id + '_' ),
 				nonce: frmGlobal.nonce
 			},
 			success: function( newRow ) {
@@ -4078,16 +4074,14 @@ function frmAdminBuildJS() {
 		var id = jQuery( this ).data( 'emailkey' ),
 			type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val(),
 			formId = document.getElementById( 'form_id' ).value,
-			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' ),
-			metaName = getNewRowId( logicRows, 'frm_logic_' + id + '_' );
-
+			logicRows = document.getElementById( 'frm_form_action_' + id ).querySelectorAll( '.frm_logic_row' );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_add_form_logic_row',
 				email_id: id,
 				form_id: formId,
-				meta_name: metaName,
+				meta_name: getNewRowId( logicRows, 'frm_logic_' + id + '_' ),
 				type: type,
 				nonce: frmGlobal.nonce
 			},
@@ -4120,16 +4114,14 @@ function frmAdminBuildJS() {
 	function addSubmitLogic() {
 		/*jshint validthis:true */
 		var formId = thisFormId,
-			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' ),
-			metaName = getNewRowId( logicRows, 'frm_logic_submit_' );
-
+			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_add_submit_logic_row',
 				form_id: formId,
-				meta_name: metaName,
+				meta_name: getNewRowId( logicRows, 'frm_logic_submit_' ),
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
@@ -4523,16 +4515,14 @@ function frmAdminBuildJS() {
 	}
 
 	function addOrderRow() {
-		var logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' ),
-			l = getNewRowId( logicRows, 'frm_order_field_', 1 );
-
+		var logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_add_order_row',
 				form_id: thisFormId,
-				order_key: l,
+				order_key: getNewRowId( logicRows, 'frm_order_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
@@ -4542,16 +4532,14 @@ function frmAdminBuildJS() {
 	}
 
 	function addWhereRow() {
-		var rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' ),
-			l = getNewRowId( rowDivs, 'frm_where_field_', 1 );
-
+		var rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
 			data: {
 				action: 'frm_add_where_row',
 				form_id: thisFormId,
-				where_key: l,
+				where_key: getNewRowId( rowDivs, 'frm_where_field_', 1 ),
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
