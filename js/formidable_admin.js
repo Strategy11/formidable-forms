@@ -1047,7 +1047,7 @@ function frmAdminBuildJS() {
 	}
 
 	function loadFields( fieldId ) {
-		var addHtmlToField,
+		var addHtmlToField, nextElement,
 			thisField = document.getElementById( fieldId ),
 			$thisField = jQuery( thisField ),
 			field = [];
@@ -1057,12 +1057,12 @@ function frmAdminBuildJS() {
 			field.push( element.querySelector( '.frm_hidden_fdata' ).innerHTML );
 		};
 
-		addHtmlToField( thisField );
-		$thisField.nextAll().slice( 0, 14 ).each(
-			function() {
-				addHtmlToField( this );
-			}
-		);
+		nextElement = thisField;
+		addHtmlToField( nextElement );
+		while ( nextElement.nextElementSibling && field.length < 15 ) {
+			addHtmlToField( nextElement.nextElementSibling );
+			nextElement = nextElement.nextElementSibling;
+		}
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
