@@ -1047,44 +1047,44 @@ function frmAdminBuildJS() {
 	}
 
 	function loadFields( fieldId ) {
-		var fields,
-			$thisField = jQuery( document.getElementById( fieldId ) ),
-			$next = $thisField.nextAll().slice( 0, 14 ),
-			h = [];
+		var addHtmlToField,
+			thisField = document.getElementById( fieldId ),
+			$thisField = jQuery( thisField ),
+			field = [];
 
-		if ( 'function' === typeof jQuery.fn.addBack ) {
-			fields = $next.addBack();
-		} else {
-			fields = $next.andSelf();
-		}
+		addHtmlToField = function( element ) {
+			element.classList.add( 'frm_load_now' );
+			field.push( element.querySelector( '.frm_hidden_fdata' ).innerHTML );
+		};
 
-		fields.addClass( 'frm_load_now' );
-		jQuery.each( fields, function( k, v ) {
-			h.push( jQuery( v ).find( '.frm_hidden_fdata' ).html() );
-		});
+		addHtmlToField( thisField );
+		$thisField.nextAll().slice( 0, 14 ).each( addHtmlToField );
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
 				action: 'frm_load_field',
-				field: h,
+				field: field,
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
+				var key, $nextSet;
+
 				html = html.replace( /^\s+|\s+$/g, '' );
 				if ( html.indexOf( '{' ) !== 0 ) {
 					jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
 					return;
 				}
+
 				html = JSON.parse( html );
 
-				for ( var key in html ) {
+				for ( key in html ) {
 					jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
 					setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
 				}
 
-				var $nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
+				$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
 				if ( $nextSet.length ) {
 					loadFields( $nextSet.attr( 'id' ) );
 				} else {
