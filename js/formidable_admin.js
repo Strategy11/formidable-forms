@@ -2636,7 +2636,7 @@ function frmAdminBuildJS() {
 	function toggleCollapseFakePage() {
 		var topLevel = document.getElementById( 'frm-fake-page' ),
 			firstField = document.getElementById( 'frm-show-fields' ).firstElementChild,
-			toCollapse = jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ).andSelf();
+			toCollapse = jQuery( firstField ).add( jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ) );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
 			// Don't collapse if the first field is a page break.
