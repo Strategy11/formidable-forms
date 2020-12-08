@@ -7232,7 +7232,7 @@ function frm_add_logic_row( id, formId ) { // eslint-disable-line camelcase
 			action: 'frm_add_logic_row',
 			form_id: formId,
 			field_id: id,
-			meta_name: jQuery( '#frm_logic_row_' + id + ' > div' ).size(),
+			meta_name: jQuery( '#frm_logic_row_' + id + ' > div' ).length,
 			nonce: frmGlobal.nonce
 		},
 		success: function( html ) {
