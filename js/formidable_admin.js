@@ -5022,7 +5022,7 @@ function frmAdminBuildJS() {
 		// Automatically select a tab.
 		if ( id === 'dyn_default_value' ) {
 			clickedID = 'frm_dynamic_values';
-			jQuery( document.getElementById( clickedID + '_tab' ) ).trigger( 'click' );
+			document.getElementById( clickedID + '_tab' ).click();
 			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_inactive' ).addClass( 'frm_hidden' );
 			jQuery( '#' + clickedID.replace( /_/g, '-' ) + ' .frm_show_active' ).removeClass( 'frm_hidden' );
 		}
