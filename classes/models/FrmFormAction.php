@@ -129,6 +129,11 @@ class FrmFormAction {
 		self::__construct( $id_base, $name, $action_options, $control_options );
 	}
 
+	public function maybe_switch_field_ids( $action ) {
+		$action = apply_filters( 'frm_maybe_switch_field_ids', $action );
+		return FrmFieldsHelper::switch_field_ids( $action );
+	}
+
 	/**
 	 * @since 4.0
 	 */
@@ -314,25 +319,12 @@ class FrmFormAction {
 				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
 				} elseif ( $ck == $subkey ) {
-					$pos = strpos( $action[ $ck ], '-' );
-
-					if ( $pos !== false ) {
-						$pieces = explode( '-', $action[ $ck ] );
-						$new_field_ids = array_map( __CLASS__ . '::trim_and_switch_field_ids', $pieces );
-						$action[ $ck ] = implode( '-', $new_field_ids );
-						continue;
-					}
-
-					$action[ $ck ] = FrmFieldsHelper::switch_field_ids( $action[ $ck ] );
+					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
 		}
 
 		return $action;
-	}
-
-	public static function trim_and_switch_field_ids( $field_id ) {
-		return trim( FrmFieldsHelper::switch_field_ids( '[' . $field_id . ']' ), '[]' );
 	}
 
 	/**
