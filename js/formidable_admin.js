@@ -569,7 +569,7 @@ function frmAdminBuildJS() {
 			if ( this.getAttribute( 'href' ) === 'confirm-bulk-delete' ) {
 				event.preventDefault();
 				confirmedBulkDelete = true;
-				doAction.trigger( 'click' );
+				doAction.click();
 				return false;
 			}
 		});
@@ -2310,7 +2310,7 @@ function frmAdminBuildJS() {
 
 				// Remove settings from sidebar.
 				if ( settings.is( ':visible' ) ) {
-					document.getElementById( 'frm_insert_fields_tab' ).trigger( 'click' );
+					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
 				settings.remove();
 
@@ -4012,7 +4012,7 @@ function frmAdminBuildJS() {
 		}
 
 		singleField.classList.remove( 'frm_hidden' );
-		document.getElementById( 'frm-options-panel-tab' ).trigger( 'click' );
+		document.getElementById( 'frm-options-panel-tab' ).click();
 	}
 
 	/**
@@ -5704,7 +5704,7 @@ function frmAdminBuildJS() {
 			trigger.setAttribute( 'data-id', $li.attr( 'data-formid' ) );
 			$li.attr( 'id', 'frm-template-custom-' + $li.attr( 'data-formid' ) );
 			jQuery( trigger ).on( 'click', trashTemplate );
-			trigger.trigger( 'click' );
+			trigger.click();
 			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ) );
 		});
 
@@ -5841,7 +5841,7 @@ function frmAdminBuildJS() {
 					if ( response.success ) {
 						if ( typeof response.data !== 'undefined' && typeof response.data.url !== 'undefined' ) {
 							installFormTrigger.setAttribute( 'rel', response.data.url );
-							installFormTrigger.trigger( 'click' );
+							installFormTrigger.click();
 							$modal.attr( 'frm-page', 'details' );
 							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
 
@@ -5869,7 +5869,7 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'click', '#frm-resend-code', function() {
 			document.getElementById( 'frm_code_from_email' ).value = '';
 			jQuery( '#frm_code_from_email_options, #frm_code_from_email_error' ).addClass( 'frm_hidden' );
-			document.getElementById( 'frm-add-my-email-address' ).trigger( 'click' );
+			document.getElementById( 'frm-add-my-email-address' ).click();
 		});
 
 		jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
@@ -5911,8 +5911,12 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( document ).on( 'click', '.frm-submit-new-template', function( event ) {
+			var button;
 			event.preventDefault();
-			document.getElementById( 'frm-new-template' ).querySelector( 'button' ).trigger( 'click' );
+			button = document.getElementById( 'frm-new-template' ).querySelector( 'button' );
+			if ( null !== button ) {
+				button.click();
+			}
 		});
 
 		urlParams = new URLSearchParams( window.location.search );
@@ -6868,7 +6872,7 @@ function frmAdminBuildJS() {
 							toggleAllowedHTML( this, e.type );
 						} else {
 							showElement( jQuery( '.frm-category-tabs li' ) );
-							insertFieldsTab.trigger( 'click' );
+							insertFieldsTab.click();
 							htmlTab.hide();
 							htmlTab.siblings().show();
 						}
