@@ -444,8 +444,12 @@ class FrmCSVExportHelper {
 					$key   = substr( $k, 0, $start ++ );
 					$index = substr( $k, $start, strlen( $k ) - 1 - $start );
 
-					if ( isset( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {
-						$row = $rows[ $key ][ $index ];
+					if ( isset( $rows[ $key ] ) ) {
+						if ( is_string( $rows[ $key ] ) ) {
+							$row = $rows[ $key ];
+						} elseif ( is_array( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {
+							$row = $rows[ $key ][ $index ];
+						}
 					}
 
 					unset( $start, $key, $index );
