@@ -501,7 +501,7 @@ function frmFrontFormJS() {
 
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
-					response = jQuery.parseJSON( response );
+					response = JSON.parse( response );
 				} else {
 					response = defaultResponse;
 				}
@@ -575,7 +575,7 @@ function frmFrontFormJS() {
 										// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 										frmTrigger = frmTrigger.prev( '.frm_trigger' );
 									}
-									frmTrigger.click();
+									frmTrigger.trigger( 'click' );
 								}
 							}
 
@@ -739,7 +739,7 @@ function frmFrontFormJS() {
 	}
 
 	function scrollToFirstField( object ) {
-		var field = jQuery( object ).find( '.frm_blank_field:first' );
+		var field = jQuery( object ).find( '.frm_blank_field' ).first();
 		if ( field.length ) {
 			frmFrontForm.scrollMsg( field, object, true );
 		}
@@ -983,13 +983,13 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
 			jQuery( '.frm_toggle_default' ).blur();
 
-			jQuery( document.getElementById( 'frm_resend_email' ) ).click( resendEmail );
+			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
-			jQuery( 'a[data-frmtoggle]' ).click( toggleDiv );
+			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();

@@ -8,12 +8,12 @@ jQuery( document ).ready( function() {
     var deauthLink,
 		installLink = document.getElementById( 'frm_install_link' );
     if ( installLink !== null ) {
-        jQuery( installLink ).click( frmInstallPro );
+        jQuery( installLink ).on( 'click', frmInstallPro );
     }
 
 	deauthLink = jQuery( '.frm_deauthorize_link' );
 	if ( deauthLink.length ) {
-		deauthLink.click( frmDeauthorizeNow );
+		deauthLink.on( 'click', frmDeauthorizeNow );
 	}
 
     if ( typeof tb_remove === 'function' ) { // eslint-disable-line camelcase
@@ -138,7 +138,7 @@ function frmAdminPopupJS() {
         $settings = document.getElementById( 'sc-opts-' + val );
         if ( $settings !== null ) {
             $settings.style.display = '';
-            jQuery( document.getElementById( 'sc-' + val ) ).click();
+            jQuery( document.getElementById( 'sc-' + val ) ).trigger( 'click' );
         } else {
             $scOpts = jQuery( document.getElementById( 'frm_shortcode_options' ) );
             $spinner = jQuery( '.media-frame-title .spinner' );
@@ -154,7 +154,7 @@ function frmAdminPopupJS() {
 				success: function( html ) {
 					$spinner.hide();
 					$scOpts.append( html );
-					jQuery( document.getElementById( 'sc-' + val ) ).click();
+					jQuery( document.getElementById( 'sc-' + val ) ).trigger( 'click' );
 				}
 			});
 		}
@@ -218,18 +218,18 @@ function frmAdminPopupJS() {
         init: function() {
 			var $scOptsDiv;
 
-            jQuery( '.frm_switch_sc' ).click( switchSc );
-            jQuery( '.button.frm_insert_form' ).click( function() {
+            jQuery( '.frm_switch_sc' ).on( 'click', switchSc );
+            jQuery( '.button.frm_insert_form' ).on( 'click', function() {
                 populateOpts( 'formidable' );
             });
-            jQuery( document.getElementById( 'frm_insert_shortcode' ) ).click( insertShortcode );
+            jQuery( document.getElementById( 'frm_insert_shortcode' ) ).on( 'click', insertShortcode );
 
 			$scOptsDiv = jQuery( document.getElementById( 'frm_shortcode_options' ) );
             $scOptsDiv.on( 'change', 'select, input', addToShortcode );
             $scOptsDiv.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
-            jQuery( '#frm_popup_content .media-modal-close' ).click( tb_remove );
-            jQuery( '#frm_popup_content .media-frame-title h1' ).click( toggleMenu );
+            jQuery( '#frm_popup_content .media-modal-close' ).on( 'click', tb_remove );
+            jQuery( '#frm_popup_content .media-frame-title h1' ).on( 'click', toggleMenu );
         }
     };
 }
