@@ -7331,6 +7331,9 @@ button.frm_choose_image_box,
 }
 
 /** TODO: After 5.5, remove the branch clases **/
+.branch-5-6 #postbox-container-2 select,
+.branch-5-6.wp-admin .frm_wrap select,
+.branch-5-6 .frm_wrap .frm_form_builder select,
 .branch-5-5 #postbox-container-2 select,
 .branch-5-5.wp-admin .frm_wrap select,
 .branch-5-5 .frm_wrap .frm_form_builder select,
