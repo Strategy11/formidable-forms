@@ -129,9 +129,19 @@ class FrmFormAction {
 		self::__construct( $id_base, $name, $action_options, $control_options );
 	}
 
+	/**
+	 * Help to switch old field id by new field id for duplicate form
+	 *
+	 * @param  string $action id of the field that needs to be switched
+	 *
+	 * @return string
+	 */
 	public function maybe_switch_field_ids( $action ) {
-		$action = apply_filters( 'frm_maybe_switch_field_ids', $action );
-		return FrmFieldsHelper::switch_field_ids( $action );
+		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
+		if ( $updated_action === $action ) {
+			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
+		}
+		return $updated_action;
 	}
 
 	/**
