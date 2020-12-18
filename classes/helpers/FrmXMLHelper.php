@@ -1667,5 +1667,24 @@ class FrmXMLHelper {
 			unset( $new_notification2 );
 		}
 	}
+
+	/**
+	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
+	 *
+	 * @param  boolean $disable
+	 *
+	 * @return boolean
+	 */
+	public static function maybe_libxml_disable_entity_loader( $disable ) {
+		if ( version_compare( phpversion(), '8.0', '<' ) ) {
+			$disable = libxml_disable_entity_loader( $disable );
+		}
+
+		return $disable;
+	}
+
+	public static function check_if_libxml_disable_entity_loader_exists() {
+		return version_compare( phpversion(), '8.0', '<' ) && function_exists( 'libxml_disable_entity_loader' );
+	}
 }
 
