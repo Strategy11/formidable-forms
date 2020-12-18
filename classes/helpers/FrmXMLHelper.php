@@ -1677,7 +1677,7 @@ class FrmXMLHelper {
 	 */
 	public static function maybe_libxml_disable_entity_loader( $disable ) {
 		if ( version_compare( phpversion(), '8.0', '<' ) ) {
-			$disable = libxml_disable_entity_loader( $disable );
+			$disable = libxml_disable_entity_loader( $disable ); // phpcs:disable Generic.PHP.DeprecatedFunctions.Deprecated
 		}
 
 		return $disable;
