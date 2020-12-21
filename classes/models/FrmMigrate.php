@@ -173,7 +173,7 @@ class FrmMigrate {
 	 * @since 3.06
 	 */
 	private function add_default_template() {
-		if ( ! FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			// XML import is not enabled on your server.
 			return;
 		}

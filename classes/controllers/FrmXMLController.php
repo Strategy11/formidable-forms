@@ -10,7 +10,7 @@ class FrmXMLController {
 	}
 
 	public static function add_default_templates() {
-		if ( ! FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			// XML import is not enabled on your server
 			return;
 		}
@@ -330,7 +330,7 @@ class FrmXMLController {
 		}
 		unset( $file_type );
 
-		if ( ! FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			$errors[] = __( 'XML import is not enabled on your server with the libxml_disable_entity_loader function.', 'formidable' );
 			self::form( $errors );
 

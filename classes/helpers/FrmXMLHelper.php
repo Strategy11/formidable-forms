@@ -1684,7 +1684,7 @@ class FrmXMLHelper {
 	}
 
 	public static function check_if_libxml_disable_entity_loader_exists() {
-		return version_compare( phpversion(), '8.0', '<' ) && function_exists( 'libxml_disable_entity_loader' );
+		return version_compare( phpversion(), '8.0', '<' ) && ! function_exists( 'libxml_disable_entity_loader' );
 	}
 }
 
