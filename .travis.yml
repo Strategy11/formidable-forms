@@ -23,6 +23,9 @@ matrix:
   allow_failures:
     - php: nightly
 
+services:
+  - mysql
+  
 before_script:
 - |
   # Remove Xdebug for a huge performance increase:
