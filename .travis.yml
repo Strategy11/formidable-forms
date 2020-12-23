@@ -5,8 +5,9 @@ sudo: false
 
 matrix:
   include:
-    - php: 8.0.0
+    - php: 8.0
       env: WP_VERSION=master WP_MULTISITE=1
+      dist: xenial
     - php: 7.1
       env: WP_VERSION=master WP_MULTISITE=1 SNIFF=1
     - php: 7.2
