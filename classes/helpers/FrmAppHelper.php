@@ -1546,12 +1546,13 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param string $name
 	 * @param string $table_name
 	 * @param string $column
 	 * @param int $id
 	 * @param int $num_chars
 	 */
-	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
+	public static function get_unique_key( string $name = '', $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
 
 		if ( ! empty( $name ) ) {
