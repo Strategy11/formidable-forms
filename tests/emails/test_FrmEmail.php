@@ -59,7 +59,6 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_one() {
-		$this->markTestSkipped( 'must be revisited.' );
 		$pass_entry = clone $this->entry;
 
 		$expected = array(

@@ -20,7 +20,6 @@ class test_FrmAddon extends FrmUnitTest {
 	 * @covers FrmAddon::__construct
 	 */
 	public function test_construct() {
-		$this->markTestSkipped( 'must be revisited.' );
 		$this->assertEquals( 'signature', $this->addon->plugin_slug );
 		$this->assertEquals( 'edd_signature_license_', $this->addon->option_name );
 
@@ -31,7 +30,6 @@ class test_FrmAddon extends FrmUnitTest {
 	 * @covers FrmAddon::insert_installed_addon
 	 */
 	public function test_insert_installed_addon() {
-		$this->markTestSkipped( 'must be revisited.' );
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		$this->assertTrue( isset( $plugins['signature'] ) );
 	}
@@ -40,7 +38,6 @@ class test_FrmAddon extends FrmUnitTest {
 	 * @covers FrmAddon::get_defined_license
 	 */
 	public function test_get_defined_license() {
-		$this->markTestSkipped( 'must be revisited.' );
 		$license = $this->addon->get_defined_license();
 		$this->assertFalse( $license, 'Not defined, but license returned: ' . $license );
 
@@ -55,7 +52,6 @@ class test_FrmAddon extends FrmUnitTest {
 	 * @covers FrmAddon::set_auto_activate_time
 	 */
 	public function test_is_time_to_auto_activate() {
-		$this->markTestSkipped( 'must be revisited.' );
 		$times = array(
 			array(
 				'time'     => time(),
