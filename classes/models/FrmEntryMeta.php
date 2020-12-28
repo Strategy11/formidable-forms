@@ -8,7 +8,7 @@ class FrmEntryMeta {
 	/**
 	 * @param string $meta_key
 	 */
-	public static function add_entry_meta( $entry_id, $field_id, string $meta_key = null, $meta_value ) {
+	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
