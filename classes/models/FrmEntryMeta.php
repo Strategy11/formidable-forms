@@ -47,7 +47,7 @@ class FrmEntryMeta {
 	 *
 	 * @return bool|false|int
 	 */
-	public static function update_entry_meta( $entry_id, $field_id, $meta_key = null, $meta_value ) {
+	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		if ( ! $field_id ) {
 			return false;
 		}
