@@ -22,7 +22,6 @@ matrix:
       env: WP_VERSION=master
   allow_failures:
     - php: nightly
-    - php: 8.0
 
 services:
   - mysql
