@@ -39,7 +39,7 @@ before_script:
   case "$TRAVIS_PHP_VERSION" in
     7.3|7.2|8.0|nightly)
       echo "Using PHPUnit 7.x"
-      travis_retry composer require --ignore-platform-reqs --no-suggest "phpunit/phpunit:^7"
+      travis_retry composer install --ignore-platform-reqs "phpunit/phpunit:^7"
       travis_retry composer update phpunit/phpunit --with-dependencies
       ;;
     7.1|7.0)
