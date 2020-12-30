@@ -5,9 +5,6 @@ sudo: false
 
 matrix:
   include:
-    - php: 8.0
-      env: WP_VERSION=master
-      dist: xenial
     - php: 7.1
       env: WP_VERSION=master WP_MULTISITE=1 SNIFF=1
     - php: 7.2
@@ -22,11 +19,7 @@ matrix:
       env: WP_VERSION=master
   allow_failures:
     - php: nightly
-    - php: 8.0
-
-services:
-  - mysql
-
+    
 before_script:
 - |
   # Remove Xdebug for a huge performance increase:
@@ -38,7 +31,7 @@ before_script:
 - |
   # Install the specified version of PHPUnit depending on the PHP version:
   case "$TRAVIS_PHP_VERSION" in
-    7.3|7.2|8.0|nightly)
+    7.3|7.2|nightly)
       echo "Using PHPUnit 7.x"
       travis_retry composer require --ignore-platform-reqs "phpunit/phpunit:^7"
       ;;
