@@ -55,9 +55,10 @@ zip -r $zipname $destination \
 	-x "*/README.md" \
 	-x "*/tests/*" \
 	-x "*/vendor/*" \
+	-x "formidable-pro/views/*" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
-#-x "formidable-pro/views/*" \
+
 if [ ! -z "$3" ]; then
 	rm -rf $destination
 fi
