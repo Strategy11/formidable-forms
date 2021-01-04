@@ -1288,8 +1288,10 @@ class FrmFieldsHelper {
 		}
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
-				$val[ $k ] = str_replace( $replace, $replace_with, $v );
-				unset( $k, $v );
+				if ( is_string( $v ) ) {
+					$val[ $k ] = str_replace( $replace, $replace_with, $v );
+					unset( $k, $v );
+				}
 			}
 		} else {
 			$val = str_replace( $replace, $replace_with, $val );
