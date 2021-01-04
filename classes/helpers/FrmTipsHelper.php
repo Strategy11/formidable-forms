@@ -72,8 +72,8 @@ class FrmTipsHelper {
 					'content' => 'page-breaks',
 					'param'   => 'wordpress-multi-page-forms',
 				),
-				'tip'  => __( 'Stop intimidating users with long forms.', 'formidable' ),
-				'call' => __( 'Use page breaks.', 'formidable' ),
+				'tip'  => __( 'Use page breaks for easier forms.', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 			array(
 				'link' => array(
@@ -97,7 +97,7 @@ class FrmTipsHelper {
 					'param'   => 'auto-fill-forms',
 				),
 				'tip'  => __( 'Save time.', 'formidable' ),
-				'call' => __( 'Prefill fields with user info.', 'formidable' ),
+				'call' => __( 'Fill out forms automatically!', 'formidable' ),
 			),
 		);
 
@@ -119,8 +119,8 @@ class FrmTipsHelper {
 					'content' => 'save-drafts',
 					'param'   => 'save-drafts-wordpress-form',
 				),
-				'tip'  => __( 'Have a long form that takes time to complete?', 'formidable' ),
-				'call' => __( 'Let logged-in users save a draft and return later.', 'formidable' ),
+				'tip'  => __( 'Have long forms?', 'formidable' ),
+				'call' => __( 'Let users save drafts and return later!', 'formidable' ),
 			),
 			array(
 				'link' => array(
@@ -134,7 +134,7 @@ class FrmTipsHelper {
 					'content' => 'form-scheduling',
 					'param'   => 'schedule-forms-wordpress',
 				),
-				'tip'  => __( 'Need to open and close your form on specific days?', 'formidable' ),
+				'tip'  => __( 'Want your form open only for a certain time period?', 'formidable' ),
 				'call' => __( 'Add form scheduling.', 'formidable' ),
 			),
 		);
@@ -165,7 +165,7 @@ class FrmTipsHelper {
 					'content' => 'user-submit',
 					'param'   => 'create-posts-pages-wordpress-forms',
 				),
-				'tip'  => __( 'Make front-end posting easy.', 'formidable' ),
+				'tip'  => __( 'Let your users submit posts on the front-end.', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 			array(
@@ -197,15 +197,15 @@ class FrmTipsHelper {
 					'content' => 'registration',
 					'page'    => 'registration-tip',
 				),
-				'tip'  => __( 'Boost your site membership.', 'formidable' ),
-				'call' => __( 'Automatically create user accounts.', 'formidable' ),
+				'tip'  => __( 'Automatically create user accounts.', 'formidable' ),
+				'call' => __( 'Upgrade to boost your site membership.', 'formidable' ),
 			),
 			array(
 				'link' => array(
 					'content' => 'profile',
 					'page'    => 'registration-profile-editing-tip',
 				),
-				'tip'  => __( 'Make front-end profile editing possible.', 'formidable' ),
+				'tip'  => __( 'Need front-end profile editing?', 'formidable' ),
 				'call' => __( 'Add user registration.', 'formidable' ),
 			),
 			array(
@@ -213,16 +213,16 @@ class FrmTipsHelper {
 					'content' => 'twilio-payment',
 					'page'    => 'twilio-tip',
 				),
-				'tip'  => __( 'Want a text when this form is submitted or when a payment is received?', 'formidable' ),
-				'call' => __( 'Use Twilio with this form.', 'formidable' ),
+				'tip'  => __( 'Want an SMS notification when a form is submitted or a payment received?', 'formidable' ),
+				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 			),
 			array(
 				'link' => array(
 					'content' => 'twilio',
 					'page'    => 'twilio-send-tip',
 				),
-				'tip'  => __( 'Send a text when this form is submitted.', 'formidable' ),
-				'call' => __( 'Get Twilio.', 'formidable' ),
+				'tip'  => __( 'Send an SMS message when a form is submitted.', 'formidable' ),
+				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 			),
 		);
 
