@@ -60,7 +60,7 @@ if ( FrmAppHelper::is_admin() ) {
 	$honeypot = apply_filters( 'frm_run_honeypot', true, compact( 'form' ) );
 	if ( $honeypot ) {
 		?>
-<div class="frm_verify" <?php echo ( $honeypot === true ) ? 'aria-hidden="true"' : ''; ?>>
+<div class="frm_verify" <?php echo ( $honeypot === true ) ? '' : 'aria-hidden="true"'; ?>>
 	<label for="frm_email_<?php echo esc_attr( $form->id ); ?>">
 		<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
 	</label>
