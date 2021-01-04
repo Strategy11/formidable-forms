@@ -126,4 +126,22 @@ class test_FrmForm extends FrmUnitTest {
 	private function assert_form_is_hidden( $capability, $visibility, $message = '' ) {
 		$this->assertFalse( $this->form_is_visible( $capability, $visibility ), $message );
 	}
+
+	/**
+	 * @covers FrmForm::sanitize_field_opt
+	 */
+	public function test_sanitize_field_opt() {
+		$opt            = 'calc';
+		$original_value = '[189] > 1 && [189] < 5 ? 20 : [189] > 5 && [189] < 8 ? 21 : 0';
+		$value          = $original_value;
+		$this->sanitize_field_opt( $opt, $value );
+		$this->assertEquals( $original_value, $value, 'comparisons should not be detected as unsafe html tags' );
+	}
+
+	private function sanitize_field_opt( $opt, &$value ) {
+		return $this->run_private_method(
+			array( 'FrmForm', 'sanitize_field_opt' ),
+			array( $opt, &$value )
+		);
+	}
 }

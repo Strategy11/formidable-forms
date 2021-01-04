@@ -1,4 +1,15 @@
 == Changelog ==
+= 4.09.03 =
+* New: Added frm_run_honeypot hook to turn off honeypot. Return false to disable or 'limit' to hide from screenreader.
+* Moved honeypot back to front of form to catch more spam.
+* Fix: dropdown fields were cut off in the admin area in WordPress 5.6.
+* Fix: Update a few deprecated jQuery functions.
+* Fix: Prevent some duplicate database queries on the back end.
+
+= 4.09.02 =
+* Show a warning when leaving the form settings page with unsaved changes.
+* Make the process for using free form templates more clear.
+
 = 4.09.01 =
 * Don't include a link in the entries list to the form page when the user doesn't have permission to see anything there.
 

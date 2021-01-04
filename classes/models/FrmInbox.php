@@ -84,6 +84,10 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
+		if ( $this->is_expired( $message ) ) {
+			return;
+		}
+
 		if ( isset( $this->messages[ $message['key'] ] ) ) {
 			// Move up and mark as new.
 			unset( $this->messages[ $message['key'] ] );
