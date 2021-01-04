@@ -173,19 +173,19 @@ class FrmMigrate {
 	 * @since 3.06
 	 */
 	private function add_default_template() {
-		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			// XML import is not enabled on your server.
 			return;
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader  = libxml_disable_entity_loader( true );
+		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
 
 		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
 		FrmXMLHelper::import_xml( $file );
 
 		libxml_use_internal_errors( $set_err );
-		libxml_disable_entity_loader( $loader );
+		FrmXMLHelper::maybe_libxml_disable_entity_loader( $loader );
 	}
 
 	/**

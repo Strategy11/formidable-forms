@@ -1667,5 +1667,24 @@ class FrmXMLHelper {
 			unset( $new_notification2 );
 		}
 	}
+
+	/**
+	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
+	 *
+	 * @param  boolean $disable
+	 *
+	 * @return boolean
+	 */
+	public static function maybe_libxml_disable_entity_loader( $loader ) {
+		if ( version_compare( phpversion(), '8.0', '<' ) && function_exists( 'libxml_disable_entity_loader' ) ) {
+			$loader = libxml_disable_entity_loader( $loader ); // phpcs:disable Generic.PHP.DeprecatedFunctions.Deprecated
+		}
+
+		return $loader;
+	}
+
+	public static function check_if_libxml_disable_entity_loader_exists() {
+		return version_compare( phpversion(), '8.0', '<' ) && ! function_exists( 'libxml_disable_entity_loader' );
+	}
 }
 
