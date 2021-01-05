@@ -1054,8 +1054,9 @@ function frmAdminBuildJS() {
 
 		addHtmlToField = function( element ) {
 			element.classList.add( 'frm_load_now' );
-			if ( element.querySelector( '.frm_hidden_fdata' ) !== null ) {
-			    field.push( element.querySelector( '.frm_hidden_fdata' ).innerHTML );
+			var frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
+			if ( frmHiddenFdata !== null ) {
+			    field.push( frmHiddenFdata.innerHTML );
 			}   
 		};
 
