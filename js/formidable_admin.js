@@ -1057,7 +1057,7 @@ function frmAdminBuildJS() {
 			var frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
 			if ( frmHiddenFdata !== null ) {
 				field.push( frmHiddenFdata.innerHTML );
-			}   
+			}
 		};
 
 		nextElement = thisField;
