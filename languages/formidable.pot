@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.09.03\n"
+"Project-Id-Version: Formidable Forms 4.09.04\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-04T17:07:39+00:00\n"
+"POT-Creation-Date: 2021-01-06T17:11:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: formidable\n"
@@ -639,31 +639,31 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:828
+#: classes/models/FrmFormAction.php:846
 msgid "Draft is saved"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:829
+#: classes/models/FrmFormAction.php:847
 msgid "Entry is created"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:830
+#: classes/models/FrmFormAction.php:848
 msgid "Entry is updated"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:831
+#: classes/models/FrmFormAction.php:849
 msgid "Entry is deleted"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:832
+#: classes/models/FrmFormAction.php:850
 msgid "Entry is imported"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:842
+#: classes/models/FrmFormAction.php:860
 msgid "Use Conditional Logic"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:849
+#: classes/models/FrmFormAction.php:867
 msgid "Conditional form actions"
 msgstr ""
 
