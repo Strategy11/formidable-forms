@@ -1053,8 +1053,11 @@ function frmAdminBuildJS() {
 			field = [];
 
 		addHtmlToField = function( element ) {
+			var frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
 			element.classList.add( 'frm_load_now' );
-			field.push( element.querySelector( '.frm_hidden_fdata' ).innerHTML );
+			if ( frmHiddenFdata !== null ) {
+				field.push( frmHiddenFdata.innerHTML );
+			}
 		};
 
 		nextElement = thisField;
