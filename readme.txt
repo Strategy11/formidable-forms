@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 4.09.03
+Stable tag: 4.09.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.04 =
+* Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
+* New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
+
 = 4.09.03 =
 * New: Added frm_run_honeypot hook to turn off honeypot. Return false to disable or 'limit' to hide from screenreader.
 * Moved honeypot back to front of form to catch more spam.
@@ -453,12 +457,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Updated the UX for creating a new blank form or from a template.
 * Fix: Duplicating a closed form action didn't copy correctly.
 * Fix: PHP warnings showed on the add-ons page on some sites.
-
-= 4.08 =
-* New: Added confirmation before forms are deleted in bulk.
-* Allow a value to pass validation if the entered value matches the placeholder setting.
-* Fix: Email addresses were not being sent to Akismet for logged out users, and resulting in some false positive spam.
-* Fix: Some sites have been getting duplicate entries days apart. This issue should be fixed.
-* Fix: Searching when switching between forms no longer triggers the confirmation message when leaving the page.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

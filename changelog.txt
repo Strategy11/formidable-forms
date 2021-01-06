@@ -1,4 +1,8 @@
 == Changelog ==
+= 4.09.04 =
+* Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
+* New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
+
 = 4.09.03 =
 * New: Added frm_run_honeypot hook to turn off honeypot. Return false to disable or 'limit' to hide from screenreader.
 * Moved honeypot back to front of form to catch more spam.
