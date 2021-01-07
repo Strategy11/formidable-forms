@@ -1500,6 +1500,10 @@ class FrmAppHelper {
 			$ver = $query->ver;
 		}
 
+		if ( version_compare( $ver, '1.12.1', '>=' ) ) {
+			$ver = '1.11.4';
+		}
+
 		return $ver;
 	}
 
