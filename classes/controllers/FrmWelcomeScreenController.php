@@ -19,11 +19,7 @@ class FrmWelcomeScreenController {
 	}
 
 	public static function screen_content() {
-		?>
-			<div class="wrap">
-				<h2>Welcome Screen</h2>
-			</div>
-		<?php
+		include( FrmAppHelper::plugin_path() . '/classes/views/welcome/screen.php' );
 	}
 
 	public static function remove_menu() {
