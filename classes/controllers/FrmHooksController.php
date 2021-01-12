@@ -149,6 +149,11 @@ class FrmHooksController {
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
+		// Welcome Screen
+		add_action( 'admin_init', 'FrmWelcomeScreenController::activation_redirect' );
+		add_action( 'admin_menu', 'FrmWelcomeScreenController::screen_page' );
+		add_action( 'admin_head', 'FrmWelcomeScreenController::remove_menu' );
+
 		FrmSMTPController::load_hooks();
 	}
 
