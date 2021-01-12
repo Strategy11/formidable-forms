@@ -6,11 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmWelcomeScreenController {
 
 	public static function activation_redirect() {
-		$activation_redirect_option = 'frm_welcome_screen_activation_redirect';
-		if ( get_option( $activation_redirect_option ) != 'yes' ) {
+		$option_name = 'frm_welcome_screen_activation_redirect';
+		if ( get_option( $option_name ) != 'yes' ) {
 			return;
 		}
-		update_option( $activation_redirect_option, 'no' );
+		update_option( $option_name, 'no' );
 		wp_safe_redirect( add_query_arg( array( 'page' => 'formidable-welcome-screen' ), admin_url( 'admin.php' ) ) );
 	}
 
