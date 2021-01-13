@@ -15,7 +15,7 @@ class FrmWelcomeScreenController {
 	}
 
 	public static function screen_page() {
-		add_submenu_page( 'formidable', 'Welcome Screen', 'Welcome Screen', 'read', 'formidable-welcome-screen', __CLASS__ . '::screen_content' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Welcome Screen', 'formidable' ), __( 'Welcome Screen', 'formidable' ), 'read', 'formidable-welcome-screen', __CLASS__ . '::screen_content' );
 	}
 
 	public static function screen_content() {
