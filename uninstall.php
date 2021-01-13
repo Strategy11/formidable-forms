@@ -10,4 +10,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) || ! defined( 'ABSPATH' ) ) {
 }
 
 // Delete Plugin Options
-delete_option( 'frm_welcome_screen_activation_redirect' );
+delete_option( FrmWelcomeScreenController::$option_name );
