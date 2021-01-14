@@ -1,0 +1,368 @@
+body {
+    background: #F6F7FB;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.frm-we-wrapper .column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.frm-we-wrapper .row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.frm-we-wrapper {
+    width: 1092px;
+    margin: 62px auto 0;
+}
+
+.frm-we-logo img {
+    width: 69px;
+    height: 68.76px;
+}
+
+.frm-we-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+
+    width: 462px;
+    height: 43px;
+    margin-top: 24px;
+}
+
+.frm-we-block-1 {
+    width: 521px;
+    height: 280px;
+}
+
+.frm-we-block-1 h1 {
+    width: 451px;
+    height: 41px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 41px;
+
+    color: #282F36;
+}
+
+.frm-we-block-1 p {
+    width: 538px;
+    height: 51px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 25px;
+    /* or 182% */
+
+
+    color: rgba(40, 47, 54, 0.8);
+}
+
+.frm-we-block-1 .frm-we-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 24px;
+
+    border: 1px solid #4199FD;
+    box-sizing: border-box;
+    border-radius: 39px;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 16px 0px;
+
+    height: 43px;
+    width: 223px;
+    left: 0px;
+    top: 0px;
+    padding: 12px, 24px, 12px, 24px;
+    cursor: pointer;
+}
+
+.frm-we-block-1 .bg-blue {
+    background: #4199FD;
+}
+
+.frm-we-block-1 .bg-blue span {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #FFFFFF;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 0px 10px;
+
+    height: 19px;
+    width: 175px;
+    left: 24px;
+    top: 12px;
+    border-radius: nullpx;
+}
+
+.frm-we-block-1 .bg-transparent {
+    margin-left: 16px;
+}
+
+.frm-we-block-1 .bg-transparent span {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #4199FD;
+
+    height: 19px;
+    width: 153px;
+    left: 35px;
+    top: 12px;
+    border-radius: nullpx;
+}
+
+.player {
+    width: 480px;
+    height: 240px;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 1;
+    margin-left: 34px;
+    margin-top: 55px;
+}
+
+.frm-we-block .icon {
+    width: 40px;
+    height: 40px;
+    margin: 24px;
+
+    background: #4199FD;
+    border-radius: 4px;
+}
+
+.frm-we-block h3 {
+    width: 188px;
+    height: 19px;
+    margin-top: -64px;
+    margin-left: 81px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    color: rgba(40, 47, 54, 0.85);
+}
+
+.frm-we-block p {
+    width: 262px;
+    height: 18px;
+    margin-left: 81px;
+    margin-top: -10px;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 18px;
+    /* identical to box height */
+
+
+    color: rgba(40, 47, 54, 0.6);
+}
+
+.frm-we-block .right-arrow {
+    height: 12px;
+    width: 6px;
+    border-radius: 0px;
+    float: right;
+    margin-top: -41px;
+    margin-right: 33px;
+}
+
+.frm-we-block .icon img {
+    margin: 8px;
+}
+
+.frm-we-block .icon .plus {
+    margin: 12px !important;
+}
+
+.frm-we-block {
+    width: 520px;
+    height: 88px;
+
+    background: #FFFFFF;
+    border: 0.725101px solid #E3E8EB;
+    box-sizing: border-box;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.frm-we-carousel-wrapper h4 {
+    margin-top: 64px;
+}
+
+.frm-we-carousel-wrapper h4 {
+    width: 180px;
+    height: 24px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 157.9%;
+    /* identical to box height, or 24px */
+    color: rgba(40, 47, 54, 0.85);
+    margin-left: 3px;
+}
+
+.frm-we-carousel-wrapper .col-4 {
+    width: 250px;
+    height: 240px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    margin-right: 21px;
+    padding-top: 16px;
+    padding-left: 16px;
+}
+
+.frm-we-carousel-wrapper .icon {
+    height: 48px;
+    width: 48px;
+    background: rgba(41, 131, 251, 0.15);
+    border-radius: 10px;
+}
+
+.frm-we-carousel-wrapper .icon img {
+    margin: 9px;
+}
+
+.frm-we-carousel-wrapper h3 {
+    width: 195px;
+    height: 19px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    color: rgba(40, 47, 54, 0.85);
+}
+
+.frm-we-carousel-wrapper p {
+    width: 201px;
+    height: 54px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 18px;
+
+    color: rgba(40, 47, 54, 0.6);
+}
+
+.frm-we-carousel-wrapper a {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #4199FD;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 10px 0px;
+}
+
+.frm-we-carousel-wrapper .btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 16px;
+    border: 1px solid #4199FD;
+    box-sizing: border-box;
+    border-radius: 48px;
+    position: relative;
+    height: 31px;
+    width: 90px;
+    top: 20px;
+    cursor: pointer;
+}
+
+.frm-we-carousel-wrapper .btn span {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #4199FD;
+
+    /* Inside Auto Layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 10px 0px;
+}
+
+.frm-we-carousel-wrapper .arrows {
+    float: right;
+    margin-top: -40px;
+    margin-right: 35px;
+}
+
+.frm-we-carousel-wrapper .arrows span {
+    cursor: pointer;
+}
+
+.frm-we-carousel-wrapper .arrows .right-arrow {
+    margin-left: 34px;
+}
+
+.second-section {
+    margin-top: 111px;
+}
