@@ -296,6 +296,11 @@ class FrmCSVExportHelper {
 					continue;
 				}
 
+				if ( ! isset( $entries[ self::$entry->parent_item_id ] ) ) {
+					$entries[ self::$entry->parent_item_id ]        = new stdClass();
+					$entries[ self::$entry->parent_item_id ]->metas = array();
+				}
+
 				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = array();
 				} elseif ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
@@ -503,8 +508,14 @@ class FrmCSVExportHelper {
 	 * Escape a " in a csv with another "
 	 *
 	 * @since 2.0
+	 * @param mixed $value
+	 * @return mixed
 	 */
 	public static function escape_csv( $value ) {
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+
 		if ( '=' === $value[0] ) {
 			// escape the = to prevent vulnerability
 			$value = "'" . $value;
