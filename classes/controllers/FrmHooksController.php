@@ -153,6 +153,7 @@ class FrmHooksController {
 		add_action( 'admin_init', 'FrmWelcomeScreenController::activation_redirect' );
 		add_action( 'admin_menu', 'FrmWelcomeScreenController::screen_page' );
 		add_action( 'admin_head', 'FrmWelcomeScreenController::remove_menu' );
+		add_action( 'admin_enqueue_scripts', 'FrmWelcomeScreenController::enqueue_styles' );
 
 		FrmSMTPController::load_hooks();
 	}

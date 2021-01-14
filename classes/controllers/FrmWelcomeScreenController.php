@@ -27,4 +27,13 @@ class FrmWelcomeScreenController {
 		remove_submenu_page( 'formidable', self::$menu_slug );
 	}
 
+	public static function enqueue_styles() {
+		if ( ! FrmAppHelper::is_admin_page( self::$menu_slug ) ) {
+			return;
+		}
+
+		$version = FrmAppHelper::plugin_version();
+		wp_enqueue_style( 'frm_welcome-screen', FrmAppHelper::plugin_url() . '/css/welcome_screen.css', array(), $version );
+	}
+
 }
