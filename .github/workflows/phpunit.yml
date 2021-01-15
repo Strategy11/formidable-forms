@@ -1,7 +1,14 @@
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 name: PHPUnit
-
-on: [push]
-
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -26,7 +33,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
       # get the PHP version
       - uses: shivammathur/setup-php@v2
@@ -54,7 +61,5 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/${GITHUB_REPOSITORY#*/}"
           pwd
-          phpunit --coverage-clover=coverage.xml
-      - name: Send code coverage report to Codecov.io
-        uses: codecov/codecov-action@v1
+          phpunit
           
