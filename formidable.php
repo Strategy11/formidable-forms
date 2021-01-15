@@ -26,11 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-/**
- * The code that runs during plugin activation.
- */
-register_activation_hook( __FILE__, array( 'FrmActivatorController', 'activate' ) );
-
 add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
 function load_formidable_forms() {
 	global $frm_vars;
@@ -99,4 +94,9 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	if ( file_exists( $filepath ) ) {
 		require( $filepath );
 	}
+}
+
+add_action( 'activate_formidable/formidable.php', 'frm_maybe_install' );
+function frm_maybe_install() {
+	set_transient( 'frm_activation_redirect', 'formidable', 60 );
 }
