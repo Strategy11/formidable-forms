@@ -795,7 +795,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function get_defaults() {
-		frm_forms_autoloader( 'FrmStyle' );
 		$frm_style = new FrmStyle();
 		$defaults = $frm_style->get_defaults();
 		FrmStylesHelper::prepare_color_output( $defaults );

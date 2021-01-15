@@ -19,6 +19,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Ensure that the plugin has been installed and activated.
 	 */
 	public static function wpSetUpBeforeClass() {
+		if ( ! function_exists( 'frm_forms_autoloader' ) ) {
+			require_once( dirname( dirname( dirname( __FILE__ ) ) ) . '/formidable.php' );
+		}
 		$_POST = array();
 		self::frm_install();
 	}
