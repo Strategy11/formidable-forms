@@ -7,6 +7,18 @@ class FrmWelcomeScreenController {
 	public static $menu_slug   = 'formidable-welcome-screen';
 	public static $option_name = 'frm_welcome_screen_activation_redirect';
 
+	public static function load_hooks() {
+		add_action( 'admin_init', __CLASS__ . '::activation_redirect' );
+
+		if ( ! FrmAppHelper::is_admin_page( self::$menu_slug ) ) {
+			return;
+		}
+
+		add_action( 'admin_menu', __CLASS__ . '::screen_page' );
+		add_action( 'admin_head', __CLASS__ . '::remove_menu' );
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_styles' );
+	}
+
 	public static function activation_redirect() {
 		if ( get_option( self::$option_name ) != 'yes' ) {
 			return;
@@ -28,10 +40,6 @@ class FrmWelcomeScreenController {
 	}
 
 	public static function enqueue_styles() {
-		if ( ! FrmAppHelper::is_admin_page( self::$menu_slug ) ) {
-			return;
-		}
-
 		$version = FrmAppHelper::plugin_version();
 		wp_enqueue_style( 'frm_welcome-screen', FrmAppHelper::plugin_url() . '/css/welcome_screen.css', array(), $version );
 	}

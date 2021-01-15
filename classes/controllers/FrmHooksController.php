@@ -149,13 +149,8 @@ class FrmHooksController {
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
-		// Welcome Screen
-		add_action( 'admin_init', 'FrmWelcomeScreenController::activation_redirect' );
-		add_action( 'admin_menu', 'FrmWelcomeScreenController::screen_page' );
-		add_action( 'admin_head', 'FrmWelcomeScreenController::remove_menu' );
-		add_action( 'admin_enqueue_scripts', 'FrmWelcomeScreenController::enqueue_styles' );
-
 		FrmSMTPController::load_hooks();
+		FrmWelcomeScreenController::load_hooks();
 	}
 
 	public static function load_ajax_hooks() {
