@@ -22,11 +22,7 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
 
-if ( file_exists( dirname( __FILE__ ) . '/../vendor/autoload_52.php' ) ) {
-	include( dirname( __FILE__ ) . '/../vendor/autoload_52.php' );
-}
-
-if ( version_compare( phpversion(), '5.3', '>=' ) && file_exists( dirname( __FILE__ ) . '/../vendor/autoload.php' ) ) {
+if ( file_exists( dirname( __FILE__ ) . '/../vendor/autoload.php' ) ) {
 	include( dirname( __FILE__ ) . '/../vendor/autoload.php' );
 }
 
