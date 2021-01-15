@@ -66,5 +66,3 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           files: /tmp/wordpress/src/wp-content/plugins/formidable/coverage.xml
-          verbose: true
-          
