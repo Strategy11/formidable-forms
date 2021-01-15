@@ -1,27 +1,39 @@
 name: PHPUnit
 
-on:
-  push:
-    branches:
-      - '!**'
+on: [push]
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.1, 7.4] # TODO add 5.6 with phpunit 4.x
-        wordpress: [master] # TODO test with 4.7
+        include:
+          - php: 7.4
+            wordpress: master
+            phpunit: 6.5.14
+          - php: 7.3
+            wordpress: master
+            phpunit: 6.5.14
+          - php: 7.1
+            wordpress: master
+            phpunit: 6.5.14
+          - php: 7.0.33
+            wordpress: 4.9
+            phpunit: 6.5.14
+          - php: 5.6.20
+            wordpress: 4.7
+            phpunit: 5.7.27
+
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
       - uses: actions/checkout@v2
 
       # get the PHP version
-      - uses: shivammathur/setup-php@v1
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          tools: phpunit:${{ matrix.phpunit }}
 
-      - uses: php-actions/composer@v1
       - name: Installing WordPress
         run: |
           export WP_DEVELOP_DIR=/tmp/wordpress/
@@ -42,4 +54,7 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/${GITHUB_REPOSITORY#*/}"
           pwd
-          vendor/bin/phpunit
+          vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v1
+          
