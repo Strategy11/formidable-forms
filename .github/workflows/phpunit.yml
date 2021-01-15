@@ -33,7 +33,7 @@ jobs:
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # get the PHP version
       - uses: shivammathur/setup-php@v2
@@ -61,5 +61,7 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/formidable"
           pwd
-          phpunit
+		  phpunit --coverage-clover=coverage.xml
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v1
           
