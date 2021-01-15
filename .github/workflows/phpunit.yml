@@ -65,6 +65,6 @@ jobs:
       - name: Send code coverage report to Codecov.io
         uses: codecov/codecov-action@v1
         with:
-          file: /tmp/wordpress/src/wp-content/plugins/formidable/coverage.xml
+          files: /tmp/wordpress/src/wp-content/plugins/formidable/coverage.xml
           verbose: true
           
