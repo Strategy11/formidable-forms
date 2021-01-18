@@ -150,6 +150,7 @@ class FrmHooksController {
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
 		FrmSMTPController::load_hooks();
+		FrmWelcomeScreenController::load_hooks();
 	}
 
 	public static function load_ajax_hooks() {

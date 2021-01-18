@@ -95,3 +95,8 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		require( $filepath );
 	}
 }
+
+add_action( 'activate_formidable/formidable.php', 'frm_maybe_install' );
+function frm_maybe_install() {
+	set_transient( 'frm_activation_redirect', 'formidable', 60 );
+}
