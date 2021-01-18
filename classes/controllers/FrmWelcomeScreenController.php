@@ -5,10 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmWelcomeScreenController {
 	public static $menu_slug   = 'formidable-welcome-screen';
-	public static $option_name = 'frm_welcome_screen_activation_redirect';
+	public static $option_name = 'frm_activation_redirect';
 
 	public static function load_hooks() {
-		add_action( 'admin_init', __CLASS__ . '::activation_redirect' );
+		add_action( 'admin_init', __CLASS__ . '::redirect' );
 
 		if ( ! FrmAppHelper::is_admin_page( self::$menu_slug ) ) {
 			return;
@@ -19,12 +19,28 @@ class FrmWelcomeScreenController {
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_styles' );
 	}
 
-	public static function activation_redirect() {
-		if ( get_option( self::$option_name ) != 'yes' ) {
+	public static function redirect() {
+		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		if ( $current_page === self::$menu_slug ) {
+			// Prevent endless loop.
 			return;
 		}
-		update_option( self::$option_name, 'no' );
-		wp_safe_redirect( add_query_arg( array( 'page' => self::$menu_slug ), admin_url( 'admin.php' ) ) );
+
+		// Only do this for single site installs.
+		if ( isset( $_GET['activate-multi'] ) || is_network_admin() ) { // WPCS: CSRF ok.
+			return;
+		}
+
+		// Check if we should consider redirection.
+		if ( ! self::is_welcome_screen() ) {
+			return;
+		}
+
+		delete_transient( self::$option_name );
+
+		// Initial install.
+		wp_safe_redirect( self::settings_link() );
+		exit;
 	}
 
 	public static function screen_page() {
@@ -44,4 +60,12 @@ class FrmWelcomeScreenController {
 		wp_enqueue_style( 'frm_welcome-screen', FrmAppHelper::plugin_url() . '/css/welcome_screen.css', array(), $version );
 	}
 
+	public static function is_welcome_screen() {
+		$to_redirect = get_transient( self::$option_name );
+		return $to_redirect === self::$menu_slug;
+	}
+
+	public static function settings_link() {
+		return admin_url( 'admin.php?page=' . self::$menu_slug );
+	}
 }
