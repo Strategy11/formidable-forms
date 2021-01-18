@@ -1,0 +1,33 @@
+<phpunit
+	backupGlobals="false"
+	backupStaticAttributes="false"
+	bootstrap="tests/bootstrap.php"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	processIsolation="false"
+	stopOnError="false"
+	stopOnFailure="false"
+	stopOnIncomplete="false"
+	stopOnSkipped="false"
+	verbose="true"
+	ignoreDeprecatedCodeUnitsFromCodeCoverage="true"
+	>
+	<testsuites>
+		<testsuite name="default">
+			<directory prefix="test_" suffix=".php">./tests/</directory>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./classes</directory>
+			<file>formidable.php</file>
+			<exclude>
+				<directory suffix=".php">./classes/views</directory>
+				<directory suffix=".php">./deprecated</directory>
+				<file>deprecated.php</file>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>

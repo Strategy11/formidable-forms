@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- generator="WordPress/3.8" created="2014-01-02 19:36" -->
+
+<channel>
+	<form>
+		<id>1</id>
+		<form_key><![CDATA[contact-form]]></form_key>
+		<name><![CDATA[Contact Us]]></name>
+		<description><![CDATA[We would like to hear from you. Please send us a message by filling out the form below and we will get back with you shortly.]]></description>
+		<created_at></created_at>
+		<logged_in>0</logged_in>
+		<is_template>0</is_template>
+		<editable>0</editable>
+		<options><![CDATA[{"custom_style":1}]]></options>
+		<status><![CDATA[published]]></status>
+		<field>
+		    <id>1</id>
+            <field_key><![CDATA[qh4icy]]></field_key>
+            <name><![CDATA[Name]]></name>
+            <description><![CDATA[First]]></description>
+            <type><![CDATA[text]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>1</field_order>
+            <form_id>1</form_id>
+            <required>1</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"blank":"","separate_value":0,"classes":"frm_first frm_half"}]]></field_options>
+		</field>
+		<field>
+		    <id>2</id>
+            <field_key><![CDATA[ocfup1]]></field_key>
+            <name><![CDATA[Last]]></name>
+            <description><![CDATA[Last]]></description>
+            <type><![CDATA[text]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>2</field_order>
+            <form_id>1</form_id>
+            <required>1</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"label":"hidden","blank":"","classes":"frm_half"}]]></field_options>
+		</field>
+		<field>
+		    <id>3</id>
+            <field_key><![CDATA[29yf4d]]></field_key>
+            <name><![CDATA[Email]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[email]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>3</field_order>
+            <form_id>1</form_id>
+            <required>1</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"blank":"","invalid":"Please enter a valid email address","classes":"frm_full"}]]></field_options>
+		</field>
+		<field>
+		    <id>5</id>
+            <field_key><![CDATA[e6lis6]]></field_key>
+            <name><![CDATA[Subject]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[text]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>5</field_order>
+            <form_id>1</form_id>
+            <required>1</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"blank":"","classes":"frm_full"}]]></field_options>
+		</field>
+		<field>
+		    <id>6</id>
+            <field_key><![CDATA[9jv0r1]]></field_key>
+            <name><![CDATA[Message]]></name>
+            <description><![CDATA[]]></description>
+            <type><![CDATA[textarea]]></type>
+            <default_value><![CDATA[]]></default_value>
+            <field_order>6</field_order>
+            <form_id>1</form_id>
+            <required>1</required>
+            <options><![CDATA[]]></options>
+            <field_options><![CDATA[{"max":"5","blank":"","classes":"frm_full"}]]></field_options>
+		</field>
+	</form>
+	<view>
+		<title>Email Notification</title>
+		<link></link>
+		<post_author><![CDATA[admin]]></post_author>
+		<description></description>
+		<content><![CDATA[{"email_to":"[admin_email]","cc":"","bcc":"","reply_to":"[3]","from":"[sitename] <[admin_email]>","email_subject":"","email_message":"[default-message]","event":["create"],"conditions":{"send_stop":"send","any_all":"any"}}]]></content>
+		<excerpt><![CDATA[email]]></excerpt>
+		<post_id>1</post_id>
+		<post_date>2015-04-06 17:18:12</post_date>
+		<post_date_gmt>2015-04-06 17:18:12</post_date_gmt>
+		<comment_status>open</comment_status>
+		<ping_status>open</ping_status>
+		<post_name>1_email_1</post_name>
+		<status>publish</status>
+		<post_parent>0</post_parent>
+		<menu_order>1</menu_order>
+		<post_type>frm_form_actions</post_type>
+		<post_password></post_password>
+		<is_sticky>0</is_sticky>
+	</view>
+</channel>

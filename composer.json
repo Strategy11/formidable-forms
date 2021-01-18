@@ -1,0 +1,35 @@
+{
+	"name": "strategy11/formidable-forms",
+	"description": "Quickly and easily create professional WordPress forms",
+	"keywords": [
+		"wordpress",
+		"forms"
+	],
+	"homepage": "https://formidableforms.com",
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Strategy11",
+			"email": "support@strategy11.com",
+			"homepage": "https://formidableforms.com/"
+		}
+	],
+	"type": "wordpress-plugin",
+	"require": {
+		"composer/installers": "~1.0",
+		"phpmailer/phpmailer": ">=5.2.25"
+	},
+	"autoload": {
+		"classmap": [
+			"classes/controllers/",
+			"classes/factories/",
+            "classes/helpers/",
+			"classes/models/",
+            "classes/widgets/",
+            "classes/views/"
+		]
+	},
+    "require-dev": {
+        "phpunit/phpunit": "6.*"
+    }
+}

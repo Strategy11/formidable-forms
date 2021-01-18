@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<ruleset name="Formidable Forms">
+	<description>Formidable Forms rules for PHP_CodeSniffer</description>
+
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>deprecated/*</exclude-pattern>
+	<exclude-pattern>bin/*</exclude-pattern>
+
+	<arg name="extensions" value="php" />
+	<arg value="nsp" />
+
+	<rule ref="WordPress">
+		<exclude name="Squiz.Commenting" />
+		<exclude name="Generic.Commenting.DocComment.MissingShort" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+	</rule>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="formidable"/>
+			</property>
+		</properties>
+	</rule>
+	<rule ref="Squiz.Scope.StaticThisUsage" />
+
+	<!-- HIGH PRIORITY ITEMS TO FIX -->
+	<rule ref="WordPress.Security.NonceVerification.Missing">
+		<exclude-pattern>classes/models/fields/FrmFieldCaptcha.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmStylesController.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmEntriesController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmStylesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmEntriesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
+	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
+		<exclude-pattern>classes/views/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterEnd">
+		<exclude-pattern>classes/views/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+		<exclude-pattern>classes/views/*</exclude-pattern>
+		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
+	</rule>
+
+	<!-- LOW PRIORITY ITEMS TO FIX -->
+	<rule ref="WordPress.PHP.YodaConditions">
+		<exclude-pattern>classes/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
+	</rule>
+
+	<!-- Exclude specific rules for unit tests (fix when possible) -->
+	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<!-- These rules likely won't see any changes for compatibility -->
+	<rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid">
+		<!-- the getOne and getAll functions all break this rule -->
+		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntry.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
+		<!-- wpmuBaseTablePrefix breaks this rule -->
+		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+	</rule>
+</ruleset>

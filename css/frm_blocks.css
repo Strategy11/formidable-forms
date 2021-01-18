@@ -1,0 +1,63 @@
+/**
+ * #.# Editor Styles
+ *
+ */
+
+.frm-block-intro-screen .frm-block-intro-content {
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-ms-flex-align: center;
+	align-items: center;
+	text-align: center;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+}
+
+.frm-block-intro-content .frm-block-title {
+	margin-bottom: 10px;
+	font-size: 20px;
+	color: #535353;
+}
+
+.frm-block-intro-content svg {
+	margin-top: 32px;
+	margin-bottom: 12px;
+	color: #4d4d4d;
+}
+
+.editor-styles-wrapper h2.frm-block-title {
+	color: #4d4d4d;
+	font-weight: 500;
+	font-size: 1.3em;
+}
+
+.frm-block-intro-content .cls-1 {
+	fill: #4d4d4d;
+}
+
+.frm-block-intro-content .cls-1.orange {
+	fill: #f05a24;
+}
+
+.frm-block-selector-screen {
+	margin-bottom: 15px;
+}
+
+.frm-view-filter-component p {
+	margin-left: 28px;
+}
+
+.frm-view-filter-component label {
+	font-weight: 600;
+}
+
+.components-panel__row.frm-row-small-top-margin {
+	margin-top: 5px;
+}
+
+.frm-admin-loading {
+	width: 200px;
+}

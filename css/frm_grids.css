@@ -1,0 +1,369 @@
+.frm_screen_reader {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important; /* many screen reader and browser combinations announce broken words as they would appear visually */
+}
+.frm_screen_reader.frm_hidden{
+	display:initial;
+}
+
+.frm_verify{
+	position:absolute;
+	left:-3000px;
+}
+
+.frm_clear_none{
+    clear:none;
+}
+
+.frm_clear{
+    clear:both;
+}
+
+.frm_form_field.frm_alignright{
+	float:right !important;
+}
+
+.with_frm_style .frm_form_field{
+    clear:both;
+}
+
+.frm_combo_inputs_container,
+.frm_grid_container,
+.frm_form_fields .frm_section_heading,
+.frm_form_fields .frm_fields_container{
+	display:grid;
+	grid-template-columns: repeat(12, 6.5%);
+	grid-auto-rows: max-content;
+	grid-gap: 0 2%;
+}
+
+.frm_combo_inputs_container > *,
+.frm_grid_container > *,
+.frm_section_heading > *,
+.frm_fields_container .frm_form_field,
+.frm_fields_container > *{
+	grid-column: span 12 / span 12;
+}
+
+.frm_inline,
+.frm_form_field.frm_left_inline,
+.frm_form_field.frm_first_inline,
+.frm_form_field.frm_inline,
+.frm_submit.frm_inline,
+.frm_form_field.frm_right_inline,
+.frm_form_field.frm_last_inline{
+    width:auto;
+	grid-column: span 2 / span 2;
+}
+
+.frm6,
+.frm_half,
+.frm_form_field.frm_three_fifths, /* 5ths deprecated */
+.frm_form_field.frm6,
+.frm_submit.frm6,
+.frm_form_field.frm_left_half,
+.frm_form_field.frm_right_half,
+.frm_form_field.frm_first_half,
+.frm_form_field.frm_last_half,
+.frm_form_field.frm_half,
+.frm_submit.frm_half{
+    grid-column:span 6 / span 6;
+}
+
+.frm4,
+.frm_third,
+.frm_form_field.frm_two_fifths, /* 5ths deprecated */
+.frm_form_field.frm4,
+.frm_submit.frm4,
+.frm_form_field.frm_left_third,
+.frm_form_field.frm_third,
+.frm_submit.frm_third,
+.frm_form_field.frm_right_third,
+.frm_form_field.frm_first_third,
+.frm_form_field.frm_last_third{
+    grid-column:span 4 / span 4;
+}
+
+.frm8,
+.frm_two_thirds,
+.frm_form_field.frm8,
+.frm_submit.frm8,
+.frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_right_two_thirds,
+.frm_form_field.frm_first_two_thirds,
+.frm_form_field.frm_last_two_thirds,
+.frm_form_field.frm_two_thirds{
+    grid-column: span 8/span 8;
+}
+
+.frm3,
+.frm_fourth,
+.frm_form_field.frm3,
+.frm_submit.frm3,
+.frm_form_field.frm_left_fourth,
+.frm_form_field.frm_fourth,
+.frm_submit.frm_fourth,
+.frm_form_field.frm_right_fourth,
+.frm_form_field.frm_first_fourth,
+.frm_form_field.frm_last_fourth{
+    grid-column: span 3/span 3;
+}
+
+.frm9,
+.frm_three_fourths,
+.frm_form_field.frm_four_fifths, /* 5ths deprecated */
+.frm_form_field.frm9,
+.frm_submit.frm9,
+.frm_form_field.frm_three_fourths{
+	grid-column: span 9/span 9;
+}
+
+/* fifths are deprecated */
+.frm_form_field.frm_left_fifth,
+.frm_form_field.frm_fifth,
+.frm_submit.frm_fifth,
+.frm_form_field.frm_right_fifth,
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_last_fifth{
+    grid-column: span 2/span 2;
+}
+
+.frm2,
+.frm_sixth,
+.frm_form_field.frm2,
+.frm_submit.frm2,
+.frm_form_field.frm_sixth,
+.frm_submit.frm_sixth,
+.frm_form_field.frm_first_sixth,
+.frm_form_field.frm_last_sixth{
+    grid-column: span 2/span 2;
+}
+
+.frm10,
+.frm_form_field.frm10,
+.frm_submit.frm10{
+	grid-column: span 10/span 10;
+}
+
+.frm1,
+.frm_form_field.frm1,
+.frm_submit.frm1,
+/* 7ths and 8ths are deprecated */
+.frm_form_field.frm_seventh,
+.frm_submit.frm_seventh,
+.frm_form_field.frm_first_seventh,
+.frm_form_field.frm_last_seventh
+.frm_form_field.frm_eighth,
+.frm_submit.frm_eighth,
+.frm_form_field.frm_first_eighth,
+.frm_form_field.frm_last_eighth{
+    grid-column: span 1/span 1;
+}
+
+.frm5,
+.frm_form_field.frm5,
+.frm_submit.frm5{
+	grid-column: span 5/span 5;
+}
+
+.frm7,
+.frm_form_field.frm7,
+.frm_submit.frm7{
+	grid-column: span 7/span 7;
+}
+
+.frm11,
+.frm_form_field.frm11,
+.frm_submit.frm11{
+	grid-column: span 11/span 11;
+}
+
+.frm12,
+.frm_full,
+.frm_full .wp-editor-wrap,
+.frm_full > input:not([type='checkbox']):not([type='radio']):not([type='button']),
+.frm_full select,
+.frm_full textarea{
+    width:100% !important;
+	grid-column: span 12/span 12;
+	box-sizing: border-box;
+}
+
+.frm_full .wp-editor-wrap input{
+    width:auto !important;
+}
+
+.frm_first,
+.frm_form_field.frm_left_half,
+.frm_form_field.frm_left_third,
+.frm_form_field.frm_left_two_thirds,
+.frm_form_field.frm_left_fourth,
+.frm_form_field.frm_left_fifth,
+.frm_form_field.frm_left_inline,
+.frm_form_field.frm_first_half,
+.frm_form_field.frm_first_third,
+.frm_form_field.frm_first_two_thirds,
+.frm_form_field.frm_first_fourth,
+.frm_form_field.frm_first_fifth,
+.frm_form_field.frm_first_sixth,
+.frm_form_field.frm_first_seventh,
+.frm_form_field.frm_first_eighth,
+.frm_form_field.frm_first_inline,
+.frm_form_field.frm_first{
+	grid-column-start:1;
+}
+
+.frm_last,
+.frm_form_field.frm_last,
+.frm_form_field.frm_alignright{
+	grid-column-end:-1;
+	grid-row-start: span 100;
+	justify-content: end;
+}
+
+/* RTL Grids */
+
+.with_frm_style.frm_rtl .frm_form_fields .star-rating{
+    float:right;
+}
+
+.with_frm_style.frm_rtl .frm_grid .frm_primary_label,
+.with_frm_style.frm_rtl .frm_grid_first .frm_primary_label,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_primary_label,
+.with_frm_style.frm_rtl .frm_grid .frm_radio,
+.with_frm_style.frm_rtl .frm_grid_first .frm_radio,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_radio,
+.with_frm_style.frm_rtl .frm_grid .frm_checkbox,
+.with_frm_style.frm_rtl .frm_grid_first .frm_checkbox,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_checkbox{
+    float:right !important;
+    margin-right:0 !important;
+}
+
+.with_frm_style.frm_rtl .frm_grid_first .frm_radio label input,
+.with_frm_style.frm_rtl .frm_grid .frm_radio label input,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_radio label input,
+.with_frm_style.frm_rtl .frm_grid_first .frm_checkbox label input,
+.with_frm_style.frm_rtl .frm_grid .frm_checkbox label input,
+.with_frm_style.frm_rtl .frm_grid_odd .frm_checkbox label input{
+    float:left;
+}
+
+.with_frm_style.frm_rtl .frm_catlevel_2,
+.with_frm_style.frm_rtl .frm_catlevel_3,
+.with_frm_style.frm_rtl .frm_catlevel_4,
+.with_frm_style.frm_rtl .frm_catlevel_5{
+	margin-right:18px;
+}
+
+.with_frm_style.frm_rtl div > .frm_time_select{
+	margin-right:5px;
+}
+
+/* Left and right label styling for non-Formidable styling */
+
+.frm_form_field.frm_inline_container,
+.frm_form_field.frm_right_container,
+.frm_form_field.frm_left_container{
+    display: grid;
+    grid-template-columns: 25% auto;
+	width:100%;
+	grid-auto-rows: min-content;
+}
+
+.frm_form_field.frm_right_container{
+    grid-template-columns: auto 25%;
+}
+
+.frm_form_field.frm_inline_container{
+    grid-template-columns: repeat(2, minmax(auto, max-content) );
+}
+
+.frm_form_field.frm_inline_container .frm_primary_label,
+.frm_form_field.frm_right_container .frm_primary_label,
+.frm_form_field.frm_left_container .frm_primary_label{
+	margin-right:10px;
+	grid-row:span 2/span 2;
+	padding-top:4px;
+}
+
+.frm_form_field.frm_left_container .frm_primary_label{
+	grid-column:1;
+	grid-row:span 2/span 2; /* cover a row for the description */
+}
+
+.frm_form_field.frm_right_container .frm_primary_label{
+	grid-column:2;
+	grid-row:1;
+	margin-right:0;
+	margin-left:10px;
+}
+
+.frm_form_field.frm_inline_container .frm_description,
+.frm_form_field.frm_left_container .frm_description{
+	grid-column:2;
+}
+
+.frm_form_field.frm_right_container .frm_description{
+	grid-column:1;
+}
+
+.frm_conf_field.frm_left_container{
+	grid-template-columns: 67%;
+}
+
+.frm_conf_field.frm_left_container .frm_description{
+	grid-column:1;
+}
+
+/* End RTL Grids */
+
+.frm-fade-in {
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+   0% {opacity: 0;}
+   100% {opacity: 1;}
+}
+
+@media only screen and (max-width: 750px) {
+	.frm_grid_container.frm_no_grid_750{
+		display:block;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.frm_section_heading > .frm_form_field,
+	.frm_fields_container > .frm_submit,
+	.frm_grid_container > .frm_form_field,
+	.frm_fields_container > .frm_form_field{
+		grid-column: 1 / span 12 !important;
+	}
+
+	.frm_grid_container.frm_no_grid_600,
+	.frm_form_field.frm_inline_container,
+	.frm_form_field.frm_right_container,
+	.frm_form_field.frm_left_container{
+		display:block;
+	}
+}

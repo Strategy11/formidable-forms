@@ -1,0 +1,4707 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable v2.05.02\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-15 19:32+0000\n"
+"PO-Revision-Date: 2018-10-15 19:34+0000\n"
+"Last-Translator: Formidable Community\n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Loco-Target-Locale: it_IT"
+
+#: classes/controllers/FrmAddonsController.php:6
+msgid "AddOns"
+msgstr "Estensioni"
+
+#: classes/controllers/FrmAddonsController.php:9
+msgid "Upgrade to Pro"
+msgstr "Aggiorna a Pro"
+
+#: classes/controllers/FrmAddonsController.php:27
+msgid "There are no plugins on your site that require a license"
+msgstr "Non ci sono plugin nel tuo sito che richiedono una licenza"
+
+#: classes/controllers/FrmAppController.php:83
+msgid "Build"
+msgstr "Crea"
+
+#: classes/controllers/FrmAppController.php:90
+#: classes/helpers/FrmFormsListHelper.php:336
+#: classes/views/frm-forms/settings.php:10
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: classes/controllers/FrmAppController.php:97
+#: classes/controllers/FrmEntriesController.php:8
+#: classes/controllers/FrmEntriesController.php:8
+#: classes/controllers/FrmEntriesController.php:126
+#: classes/controllers/FrmFormsController.php:642
+#: classes/controllers/FrmXMLController.php:57
+#: classes/views/frm-entries/list.php:5
+msgid "Entries"
+msgstr "Voci"
+
+#: classes/controllers/FrmAppController.php:113
+msgid "Build a Form"
+msgstr ""
+
+#: classes/controllers/FrmAppController.php:146
+#, php-format
+msgid ""
+"This site has been previously authorized to run Formidable Forms. "
+"%1$sInstall Formidable Pro%2$s or %3$sdeauthorize%4$s this site to continue "
+"running the free version and remove this message."
+msgstr ""
+
+#: classes/controllers/FrmAppController.php:505
+#, php-format
+msgid ""
+"Help us spread the %1$sFormidable Forms%2$s love with %3$s %5$s on WordPress."
+"org%4$s. Thank you heaps!"
+msgstr ""
+
+#: classes/controllers/FrmEntriesController.php:67
+msgid "Overview"
+msgstr "Panoramica"
+
+#: classes/controllers/FrmEntriesController.php:69
+msgid ""
+"This screen provides access to all of your entries. You can customize the "
+"display of this screen to suit your workflow."
+msgstr ""
+"Questa schermata permette di accedere a tutte le tue voci. Puoi "
+"personalizzarne la visualizzazione per adattarla al tuo workflow."
+
+#: classes/controllers/FrmEntriesController.php:71
+msgid ""
+"Hovering over a row in the entries list will display action links that allow "
+"you to manage your entry."
+msgstr ""
+"Passando il mouse sopra una riga nell'elenco voci si visualizzeranno i link "
+"d'azione che consentono di gestire la voce."
+
+#: classes/controllers/FrmEntriesController.php:77
+msgid "For more information:"
+msgstr "Per maggiori informazioni:"
+
+#: classes/controllers/FrmEntriesController.php:78
+msgid "Documentation on Entries"
+msgstr "Documentazioni sulle voci"
+
+#: classes/controllers/FrmEntriesController.php:79
+msgid "Support"
+msgstr "Supporto"
+
+#: classes/controllers/FrmEntriesController.php:105
+#: classes/controllers/FrmFormsController.php:877
+#: classes/views/frm-entries/form.php:43
+#: classes/views/frm-entries/sidebar-shared.php:38
+msgid "Entry Key"
+msgstr "Chiave voce"
+
+#: classes/controllers/FrmEntriesController.php:110
+#: classes/controllers/FrmFormsController.php:542
+#: classes/widgets/FrmShowForm.php:53
+msgid "Form"
+msgstr "Modulo"
+
+#: classes/controllers/FrmEntriesController.php:111
+msgid "Entry Name"
+msgstr "Nome voce"
+
+#: classes/controllers/FrmEntriesController.php:112
+#: classes/helpers/FrmCSVExportHelper.php:146
+msgid "Created By"
+msgstr "Creato da"
+
+#: classes/controllers/FrmEntriesController.php:115
+msgid "Entry creation date"
+msgstr "Data creazione voci"
+
+#: classes/controllers/FrmEntriesController.php:116
+msgid "Entry update date"
+msgstr "Data aggiornamento voce"
+
+#: classes/controllers/FrmEntriesController.php:416
+msgid "Your import is complete"
+msgstr "La tua importazione è completa"
+
+#: classes/controllers/FrmEntriesController.php:426
+#, php-format
+msgid ""
+"This form is in the trash and is scheduled to be deleted permanently in %s "
+"along with any entries."
+msgstr ""
+"Questo modulo è nel cestino ed è programmato per essere eliminato in modo "
+"permanente in %s insieme a tutte le voci."
+
+#: classes/controllers/FrmEntriesController.php:445
+msgid "You are trying to view an entry that does not exist."
+msgstr "Stai cercando di visualizzare una voce che non esiste."
+
+#: classes/controllers/FrmEntriesController.php:473
+msgid "Entry was Successfully Destroyed"
+msgstr "La voce è stata eliminata con successo"
+
+#: classes/controllers/FrmEntriesController.php:505
+msgid "Entries were Successfully Destroyed"
+msgstr "Le voci sono stati eliminate con successo"
+
+#: classes/controllers/FrmEntriesController.php:508
+msgid "No entries were specified"
+msgstr "Non sono state specificate le voci"
+
+#: classes/controllers/FrmFieldsController.php:304
+msgid "Other"
+msgstr "Altro"
+
+#: classes/controllers/FrmFieldsController.php:307
+msgid "New Option"
+msgstr "Nuova opzione"
+
+#: classes/controllers/FrmFormActionsController.php:11
+#: classes/views/frm-forms/settings.php:36
+msgid "Form Actions"
+msgstr "Azioni del modulo"
+
+#: classes/controllers/FrmFormActionsController.php:213
+#: classes/models/FrmEntryValidate.php:14 classes/models/FrmSettings.php:100
+msgid "You do not have permission to do that"
+msgstr "Non hai il permesso di farlo"
+
+#: classes/controllers/FrmFormsController.php:6
+#: classes/controllers/FrmFormsController.php:652
+#: classes/controllers/FrmXMLController.php:56
+#: classes/views/frm-forms/list.php:5
+msgid "Forms"
+msgstr "Moduli"
+
+#: classes/controllers/FrmFormsController.php:173
+msgid "Settings Successfully Updated"
+msgstr "Impostazioni aggiornate con successo"
+
+#: classes/controllers/FrmFormsController.php:199
+#: classes/controllers/FrmFormsController.php:723
+msgid "Form was Successfully Updated"
+msgstr "Il modulo è stato aggiornato con successo"
+
+#: classes/controllers/FrmFormsController.php:232
+#: classes/controllers/FrmFormsController.php:1712
+msgid "Form template was Successfully Created"
+msgstr "Il modello del modulo è stato creato con successo"
+
+#: classes/controllers/FrmFormsController.php:232
+msgid "Form was Successfully Copied"
+msgstr "Il modulo è stato copiato con successo"
+
+#: classes/controllers/FrmFormsController.php:236
+msgid "There was a problem creating the new template."
+msgstr "C'è stato un problema nella creazione del nuovo modello."
+
+#: classes/controllers/FrmFormsController.php:343
+msgid "Form Preview"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:386
+#: classes/controllers/FrmFormsController.php:434
+#, php-format
+msgid "%1$s form restored from the Trash."
+msgid_plural "%1$s forms restored from the Trash."
+msgstr[0] "%1$s modulo è stato ripristinato dal cestino."
+msgstr[1] "%1$s moduli sono stati ripristinati dal cestino."
+
+#: classes/controllers/FrmFormsController.php:435
+#: classes/controllers/FrmFormsController.php:459
+#, php-format
+msgid "%1$s form moved to the Trash. %2$sUndo%3$s"
+msgid_plural "%1$s forms moved to the Trash. %2$sUndo%3$s"
+msgstr[0] "%1$s form è stato spostato nel Cestino. %2$sUndo%3$s"
+msgstr[1] "%1$s moduli sono stati spostati nel cestino. %2$sAnnulla%3$s"
+
+#: classes/controllers/FrmFormsController.php:481
+#: classes/controllers/FrmFormsController.php:497
+#: classes/controllers/FrmFormsController.php:511
+#, php-format
+msgid "%1$s form permanently deleted."
+msgid_plural "%1$s forms permanently deleted."
+msgstr[0] "%1$s modulo è stato cancellato definitivamente."
+msgstr[1] "%1$s moduli sono stati cancellati definitivamente,"
+
+#: classes/controllers/FrmFormsController.php:525
+msgid "Add forms and content"
+msgstr "Aggiungi moduli e contenuti"
+
+#: classes/controllers/FrmFormsController.php:543
+#: classes/views/frm-forms/insert_form_popup.php:24
+msgid "Insert a Form"
+msgstr "Inserisci un modulo"
+
+#: classes/controllers/FrmFormsController.php:573
+msgid "Display form title"
+msgstr "Visualizza il titolo del modulo"
+
+#: classes/controllers/FrmFormsController.php:577
+msgid "Display form description"
+msgstr "Visualizza la descrizione del modulo"
+
+#: classes/controllers/FrmFormsController.php:581
+msgid "Minimize form HTML"
+msgstr "Minimizza HTML del modulo"
+
+#: classes/controllers/FrmFormsController.php:637
+msgid "Template Name"
+msgstr "Nome modello"
+
+#: classes/controllers/FrmFormsController.php:638
+msgid "Type"
+msgstr "Tipo"
+
+#: classes/controllers/FrmFormsController.php:639
+#: classes/controllers/FrmFormsController.php:643
+#: classes/helpers/FrmCSVExportHelper.php:151
+msgid "Key"
+msgstr "Chiave"
+
+#: classes/controllers/FrmFormsController.php:641
+#: classes/controllers/FrmStylesController.php:372
+#: classes/views/styles/_sample_form.php:17 classes/views/styles/manage.php:16
+msgid "Form Title"
+msgstr "Titolo modulo"
+
+#: classes/controllers/FrmFormsController.php:644
+msgid "Shortcodes"
+msgstr "Shortcode"
+
+#: classes/controllers/FrmFormsController.php:647
+#: classes/models/FrmField.php:81
+msgid "Date"
+msgstr "Data"
+
+#: classes/controllers/FrmFormsController.php:699
+msgid "You are trying to edit a form that does not exist."
+msgstr "Stai cercando di modificare un modulo che non esiste."
+
+#: classes/controllers/FrmFormsController.php:703
+#, php-format
+msgid "You are trying to edit a child form. Please edit from %1$shere%2$s"
+msgstr "Stai cercando di modificare un modulo-figlio. Modifica da %1$squi%2$s"
+
+#: classes/controllers/FrmFormsController.php:725
+msgid "Template was Successfully Updated"
+msgstr "Modello aggiornato con successo"
+
+#: classes/controllers/FrmFormsController.php:731
+#: classes/controllers/FrmFormsController.php:752
+msgid "That template cannot be edited"
+msgstr "Questo modello non può essere modificato"
+
+#: classes/controllers/FrmFormsController.php:802
+msgid ""
+"Customize the field values with the following parameters. Click to see a "
+"sample."
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:816
+msgid "Insert user information"
+msgstr "Inserisci le informazioni dell'utente"
+
+#: classes/controllers/FrmFormsController.php:837
+msgid "Separator"
+msgstr "Separatore"
+
+#: classes/controllers/FrmFormsController.php:838
+msgid "Use a different separator for checkbox fields"
+msgstr "Utilizzare un separatore diverso per i campi checkbox"
+
+#: classes/controllers/FrmFormsController.php:840
+msgid "Date Format"
+msgstr "Formato data"
+
+#: classes/controllers/FrmFormsController.php:841
+msgid "Field Label"
+msgstr "Campo etichetta"
+
+#: classes/controllers/FrmFormsController.php:843
+msgid "No Auto P"
+msgstr "Nessun P automatico"
+
+#: classes/controllers/FrmFormsController.php:844
+msgid "Do not automatically add any paragraphs or line breaks"
+msgstr "Non aggiungere automaticamente paragrafi o interruzioni di riga"
+
+#: classes/controllers/FrmFormsController.php:858
+#: classes/models/FrmField.php:58
+msgid "User ID"
+msgstr "ID utente"
+
+#: classes/controllers/FrmFormsController.php:859
+msgid "First Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:860
+msgid "Last Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:861
+msgid "Display Name"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:862
+msgid "User Login"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:863
+#: classes/models/FrmField.php:34
+msgid "Email"
+msgstr "Email"
+
+#: classes/controllers/FrmFormsController.php:864
+msgid "Avatar"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:865
+msgid "Author Link"
+msgstr ""
+
+#: classes/controllers/FrmFormsController.php:876
+#: classes/views/frm-entries/sidebar-shared.php:32
+msgid "Entry ID"
+msgstr "ID voce"
+
+#: classes/controllers/FrmFormsController.php:878
+msgid "Post ID"
+msgstr "ID articolo"
+
+#: classes/controllers/FrmFormsController.php:879
+msgid "User IP"
+msgstr "IP utente"
+
+#: classes/controllers/FrmFormsController.php:880
+msgid "Entry created"
+msgstr "Voce creata"
+
+#: classes/controllers/FrmFormsController.php:881
+msgid "Entry updated"
+msgstr "Voce aggiornata"
+
+#: classes/controllers/FrmFormsController.php:883
+msgid "Site URL"
+msgstr "URL sito"
+
+#: classes/controllers/FrmFormsController.php:884
+msgid "Site Name"
+msgstr "Nome sito"
+
+#: classes/controllers/FrmFormsController.php:892
+msgid "Default Msg"
+msgstr "Msg predefinito"
+
+#: classes/controllers/FrmFormsController.php:893
+msgid "Default HTML"
+msgstr "HTML predefinito"
+
+#: classes/controllers/FrmFormsController.php:894
+msgid "Default Plain"
+msgstr "Testo semplice predefinito"
+
+#: classes/controllers/FrmFormsController.php:982
+msgid "No forms were specified"
+msgstr "Non sono stati specificati moduli"
+
+#: classes/controllers/FrmFormsController.php:1129
+msgid "Abnormal HTML characters prevented your form from saving correctly"
+msgstr ""
+"Caratteri HTML anomali hanno impedito al modulo di essere salvato "
+"correttamente"
+
+#: classes/controllers/FrmFormsController.php:1244
+#: classes/controllers/FrmFormsController.php:1258
+msgid "Please select a valid form"
+msgstr "Seleziona un modulo valido"
+
+#: classes/controllers/FrmFormsController.php:1486
+msgid "Please wait while you are redirected."
+msgstr "Attendi di essere reindirizzato."
+
+#: classes/controllers/FrmFormsController.php:1520
+#, php-format
+msgid "%1$sClick here%2$s if you are not automatically redirected."
+msgstr "%1$sFai clic qui%2$s se non vieni reindirizzato automaticamente."
+
+#: classes/controllers/FrmSettingsController.php:9
+#: classes/views/frm-settings/form.php:2
+msgid "Global Settings"
+msgstr "Impostazioni globali"
+
+#: classes/controllers/FrmSettingsController.php:39
+#: classes/views/addons/settings.php:2
+msgid "Plugin Licenses"
+msgstr "Licenze del plugin"
+
+#: classes/controllers/FrmSettingsController.php:88
+#: classes/controllers/FrmSettingsController.php:91
+msgid "Settings Saved"
+msgstr "Impostazioni salvate"
+
+#: classes/controllers/FrmStylesController.php:17
+#: classes/controllers/FrmStylesController.php:35
+#: classes/controllers/FrmStylesController.php:47
+#: classes/controllers/FrmStylesController.php:47
+msgid "Styles"
+msgstr "Stili"
+
+#: classes/controllers/FrmStylesController.php:36
+#: classes/controllers/FrmStylesController.php:37
+#: classes/views/styles/_field-colors.php:44
+#: classes/views/styles/_field-colors.php:106
+#: classes/views/styles/_field-description.php:14
+msgid "Style"
+msgstr "Stile"
+
+#: classes/controllers/FrmStylesController.php:39
+msgid "Create a New Style"
+msgstr "Crea un nuovo stile"
+
+#: classes/controllers/FrmStylesController.php:40
+msgid "Edit Style"
+msgstr "Modifica stile"
+
+#: classes/controllers/FrmStylesController.php:213
+#: classes/controllers/FrmStylesController.php:312
+msgid "Your styling settings have been saved."
+msgstr "Le tue impostazioni di stile sono state salvate."
+
+#: classes/controllers/FrmStylesController.php:272
+msgid "Your form styles have been saved."
+msgstr "Gli stili del tuo modulo sono stati salvati."
+
+#: classes/controllers/FrmStylesController.php:371
+#: classes/views/frm-forms/settings.php:33
+#: classes/views/frm-settings/form.php:17
+msgid "General"
+msgstr "Generale"
+
+#: classes/controllers/FrmStylesController.php:373
+#: classes/views/frm-forms/mb_html_tab.php:49
+#: classes/views/frm-forms/settings.php:248
+msgid "Form Description"
+msgstr "Descrizione Modulo"
+
+#: classes/controllers/FrmStylesController.php:374
+msgid "Field Labels"
+msgstr "Etichette dei campi"
+
+#: classes/controllers/FrmStylesController.php:375
+#: classes/views/frm-forms/mb_html_tab.php:13
+msgid "Field Description"
+msgstr "Descrizione Campo"
+
+#: classes/controllers/FrmStylesController.php:376
+msgid "Field Colors"
+msgstr "Colori campo"
+
+#: classes/controllers/FrmStylesController.php:377
+#: classes/views/frm-forms/add_field.php:110
+msgid "Field Settings"
+msgstr "Impostazioni campo"
+
+#: classes/controllers/FrmStylesController.php:378
+msgid "Check Box & Radio Fields"
+msgstr "Campi Checkbox & Radio"
+
+#: classes/controllers/FrmStylesController.php:379
+msgid "Buttons"
+msgstr "Pulsanti"
+
+#: classes/controllers/FrmStylesController.php:380
+msgid "Form Messages"
+msgstr "Messaggi modulo"
+
+#: classes/controllers/FrmStylesController.php:584
+#: classes/views/frm-forms/mb_insert_fields.php:2
+msgid "Click to toggle"
+msgstr "Fai clic per attivare o disattivare"
+
+#: classes/controllers/FrmXMLController.php:6
+#: classes/views/xml/import_form.php:2
+msgid "Import/Export"
+msgstr "Importa/Esporta"
+
+#: classes/controllers/FrmXMLController.php:90
+msgid "Oops, you didn't select a file."
+msgstr "Oops, non hai selezionato un file."
+
+#: classes/controllers/FrmXMLController.php:99
+msgid "The file does not exist, please try again."
+msgstr "Il file non esiste, riprova."
+
+#: classes/controllers/FrmXMLController.php:124
+msgid ""
+"XML import is not enabled on your server with the "
+"libxml_disable_entity_loader function."
+msgstr ""
+
+#: classes/controllers/FrmXMLController.php:301
+msgid "Please select a form"
+msgstr "Seleziona un modulo"
+
+#: classes/controllers/FrmXMLController.php:357
+msgid "There are no entries for that form."
+msgstr "Per questo form non ci sono voci."
+
+#: classes/helpers/FrmAppHelper.php:566
+#: classes/helpers/FrmFormsListHelper.php:108
+msgid "Add New"
+msgstr "Aggiungi nuovo"
+
+#: classes/helpers/FrmAppHelper.php:694
+msgid "View Forms and Templates"
+msgstr "Visualizza moduli e modelli"
+
+#: classes/helpers/FrmAppHelper.php:695
+msgid "Add/Edit Forms and Templates"
+msgstr "Aggiungi/Modifica moduli e modelli"
+
+#: classes/helpers/FrmAppHelper.php:696
+msgid "Delete Forms and Templates"
+msgstr "Cancella moduli e modelli"
+
+#: classes/helpers/FrmAppHelper.php:697
+msgid "Access this Settings Page"
+msgstr "Accedi a questa Pagina impostazioni"
+
+#: classes/helpers/FrmAppHelper.php:698
+msgid "View Entries from Admin Area"
+msgstr "Visualizza le voci dall'Area di Amministrazione"
+
+#: classes/helpers/FrmAppHelper.php:699
+msgid "Delete Entries from Admin Area"
+msgstr "Elimina le voci dall'Area di Amministrazione"
+
+#: classes/helpers/FrmAppHelper.php:706
+msgid "Add Entries from Admin Area"
+msgstr "Aggiungi voci dall'area di Amministrazione"
+
+#: classes/helpers/FrmAppHelper.php:707
+msgid "Edit Entries from Admin Area"
+msgstr "Modifica le voci dall'Area di Amministrazione"
+
+#: classes/helpers/FrmAppHelper.php:708
+msgid "View Reports"
+msgstr "Rendiconti visualizzazione"
+
+#: classes/helpers/FrmAppHelper.php:709
+msgid "Add/Edit Views"
+msgstr "Aggiungi/Modifica visualizzazioni"
+
+#: classes/helpers/FrmAppHelper.php:1308
+msgid "at"
+msgstr "alle"
+
+#: classes/helpers/FrmAppHelper.php:1357 classes/helpers/FrmAppHelper.php:1376
+msgid "seconds"
+msgstr "secondi"
+
+#: classes/helpers/FrmAppHelper.php:1370
+msgid "year"
+msgstr "anno"
+
+#: classes/helpers/FrmAppHelper.php:1370
+msgid "years"
+msgstr "anni"
+
+#: classes/helpers/FrmAppHelper.php:1371
+msgid "month"
+msgstr "mese"
+
+#: classes/helpers/FrmAppHelper.php:1371
+msgid "months"
+msgstr "mesi"
+
+#: classes/helpers/FrmAppHelper.php:1372
+msgid "week"
+msgstr "settimana"
+
+#: classes/helpers/FrmAppHelper.php:1372
+msgid "weeks"
+msgstr "settimane"
+
+#: classes/helpers/FrmAppHelper.php:1373
+msgid "day"
+msgstr "giorno"
+
+#: classes/helpers/FrmAppHelper.php:1373
+msgid "days"
+msgstr "giorni"
+
+#: classes/helpers/FrmAppHelper.php:1374
+msgid "hour"
+msgstr "ora"
+
+#: classes/helpers/FrmAppHelper.php:1374
+msgid "hours"
+msgstr "ore"
+
+#: classes/helpers/FrmAppHelper.php:1375
+msgid "minute"
+msgstr "minuto"
+
+#: classes/helpers/FrmAppHelper.php:1375
+msgid "minutes"
+msgstr "minuti"
+
+#: classes/helpers/FrmAppHelper.php:1376
+msgid "second"
+msgstr "secondo"
+
+#: classes/helpers/FrmAppHelper.php:1468
+msgid "Give this action a label for easy reference."
+msgstr "Etichetta quest'azione per un facile riferimento"
+
+#: classes/helpers/FrmAppHelper.php:1469
+msgid ""
+"Add one or more recipient addresses separated by a \",\".  FORMAT: Name "
+"<name@email.com> or name@email.com.  [admin_email] is the address set in WP "
+"General Settings."
+msgstr ""
+"Aggiungi uno o più indirizzi di destinatari separati da una \",\".  FORMATO: "
+"Nome <nome@email.com> oppure nome@email.com. [admin_email] è l'indirizzo "
+"stabilito nelle Impostazioni Generali di WordPress."
+
+#: classes/helpers/FrmAppHelper.php:1470
+msgid ""
+"Add CC addresses separated by a \",\".  FORMAT: Name <name@email.com> or "
+"name@email.com."
+msgstr ""
+"Aggiungi gli indirizzi CC separati da una \",\".  FORMATO: Nome <nome@email."
+"com> oppure nome@email.com."
+
+#: classes/helpers/FrmAppHelper.php:1471
+msgid ""
+"Add BCC addresses separated by a \",\".  FORMAT: Name <name@email.com> or "
+"name@email.com."
+msgstr ""
+"Aggiungi gli indirizzi CCN separati da una \",\".  FORMATO: Nome <nome@email."
+"com> oppure nome@email.com."
+
+#: classes/helpers/FrmAppHelper.php:1472
+msgid ""
+"If you would like a different reply to address than the \"from\" address, "
+"add a single address here.  FORMAT: Name <name@email.com> or name@email.com."
+msgstr ""
+"Se preferisci ricevere la risposta a un indirizzo diverso da quello del "
+"mittente, aggiungi qui l'indirizzo. FORMATO: Nome <nome@email.com> oppure "
+"nome@email.com."
+
+#: classes/helpers/FrmAppHelper.php:1473
+msgid ""
+"Enter the name and/or email address of the sender. FORMAT: John Bates "
+"<john@example.com> or john@example.com."
+msgstr ""
+"Inserire il nome e/o l'indirizzo email del mittente. FORMATO:  John Bates "
+"<john@example.com> oppure john@example.com."
+
+#: classes/helpers/FrmAppHelper.php:1474
+#, php-format
+msgid ""
+"If you leave the subject blank, the default will be used: %1$s Form "
+"submitted on %2$s"
+msgstr ""
+"Se si lascia il soggetto vuoto, verrà utilizzato il valore predefinito:%1$s "
+"Modulo inviato il %2$s"
+
+#: classes/helpers/FrmAppHelper.php:1605 classes/helpers/FrmAppHelper.php:1675
+msgid "Please wait while your site updates."
+msgstr "Attendi che il tuo sito venga aggiornato"
+
+#: classes/helpers/FrmAppHelper.php:1606
+msgid "Are you sure you want to deauthorize Formidable Forms on this site?"
+msgstr ""
+"Sei sicuro di voler revocare l'autorizzazione a Formidable Forms su questo "
+"sito?"
+
+#: classes/helpers/FrmAppHelper.php:1636
+msgid "Remove"
+msgstr "Rimuovi"
+
+#: classes/helpers/FrmAppHelper.php:1639
+#: classes/helpers/FrmCSVExportHelper.php:150
+msgid "ID"
+msgstr "ID"
+
+#: classes/helpers/FrmAppHelper.php:1640
+msgid "No results match"
+msgstr "Nessun risultato per"
+
+#: classes/helpers/FrmAppHelper.php:1641
+msgid "That file looks like Spam."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1642
+msgid "There is an error in the calculation in the field with key"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1643
+msgid "Please complete the preceding required fields before uploading a file."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1650
+msgid ""
+"Are you sure you want to do this? Clicking OK will delete all forms, form "
+"data, and all other Formidable data. There is no Undo."
+msgstr ""
+"Sei sicuro di volerlo fare? Facendo clic su OK eliminerai tutti i moduli, i "
+"dati dei moduli e tutti gli altri dati Formidable. Non puoi tornare indietro."
+
+#: classes/helpers/FrmAppHelper.php:1651
+#: classes/views/frm-forms/add_field.php:37
+#: classes/views/frm-forms/add_field.php:50
+msgid "(Click to add description)"
+msgstr "(Fai clic per aggiungere una descrizione)"
+
+#: classes/helpers/FrmAppHelper.php:1652
+#: classes/views/frm-fields/single-option.php:8
+#: classes/views/frm-fields/single-option.php:14
+msgid "(Blank)"
+msgstr "(Vuoto)"
+
+#: classes/helpers/FrmAppHelper.php:1653
+#: classes/views/frm-forms/add_field.php:17
+msgid "(no label)"
+msgstr "(nessuna etichetta)"
+
+#: classes/helpers/FrmAppHelper.php:1654
+msgid "Saving"
+msgstr "Salvataggio in corso"
+
+#: classes/helpers/FrmAppHelper.php:1655
+msgid "Saved"
+msgstr "Salvato"
+
+#: classes/helpers/FrmAppHelper.php:1657
+msgid "Cancel"
+msgstr "Cancella"
+
+#: classes/helpers/FrmAppHelper.php:1658
+#: classes/helpers/FrmFormsListHelper.php:300
+#: classes/views/frm-forms/add_field.php:197
+#: classes/views/styles/_buttons.php:12
+#: classes/views/styles/_field-colors.php:5
+msgid "Default"
+msgstr "Predefinito"
+
+#: classes/helpers/FrmAppHelper.php:1659
+#: classes/helpers/FrmFieldsHelper.php:1153
+msgid "Clear default value when typing"
+msgstr "Elimina il valore predefinito durante la digitazione"
+
+#: classes/helpers/FrmAppHelper.php:1660
+#: classes/helpers/FrmFieldsHelper.php:1153
+msgid "Do not clear default value when typing"
+msgstr "Non eliminare il valore predefinito durante la digitazione"
+
+#: classes/helpers/FrmAppHelper.php:1661
+#: classes/helpers/FrmFieldsHelper.php:1163
+msgid "Default value will pass form validation"
+msgstr "Il valore predefinito passerà la validazione del modulo"
+
+#: classes/helpers/FrmAppHelper.php:1662
+#: classes/helpers/FrmFieldsHelper.php:1163
+msgid "Default value will NOT pass form validation"
+msgstr "Il valore predefinito NON passerà la validazione del modulo"
+
+#: classes/helpers/FrmAppHelper.php:1663
+#: classes/helpers/FrmEntriesListHelper.php:257
+#: classes/helpers/FrmFormsHelper.php:831 classes/views/styles/show.php:64
+msgid "Are you sure?"
+msgstr "Sei sicuro?"
+
+#: classes/helpers/FrmAppHelper.php:1664
+msgid ""
+"Are you sure you want to delete this field and all data associated with it?"
+msgstr "Sei sicuro di voler cancellare questi campi a date associate?"
+
+#: classes/helpers/FrmAppHelper.php:1665
+msgid "WARNING: This will delete all fields inside of the section as well."
+msgstr ""
+"ATTENZIONE: Ciò cancellerà anche tutti i campi all'interno della sezione."
+
+#: classes/helpers/FrmAppHelper.php:1666
+msgid ""
+"Warning: If you have entries with multiple rows, all but the first row will "
+"be lost."
+msgstr ""
+"Attenzione: se ci sono voci con righe multiple, verranno perse tutte le "
+"righe eccetto la prima."
+
+#: classes/helpers/FrmAppHelper.php:1668
+#: classes/helpers/FrmFieldsHelper.php:268
+msgid "The entered values do not match"
+msgstr "I valori inseriti non corrispondono"
+
+#: classes/helpers/FrmAppHelper.php:1669
+msgid "Enter Email"
+msgstr "Inserisci e-mail"
+
+#: classes/helpers/FrmAppHelper.php:1670
+msgid "Confirm Email"
+msgstr "Conferma e-mail"
+
+#: classes/helpers/FrmAppHelper.php:1671
+msgid ""
+"In certain browsers (e.g. Firefox) text will not display correctly if the "
+"field height is too small relative to the field padding and text size. "
+"Please increase your field height or decrease your field padding."
+msgstr ""
+"In alcuni browser (per es. Firefox) il testo non viene visualizzato "
+"correttamente se l'altezza del campo è troppo piccola in relazione al "
+"padding del campo e alle dimensioni del testo. Aumenta l'altezza del tuo "
+"campo oppure diminuiscine il padding."
+
+#: classes/helpers/FrmAppHelper.php:1672
+msgid "Enter Password"
+msgstr "Inserisci password"
+
+#: classes/helpers/FrmAppHelper.php:1673
+msgid "Confirm Password"
+msgstr "Conferma password"
+
+#: classes/helpers/FrmAppHelper.php:1674
+msgid "Import Complete"
+msgstr "Importazione completa"
+
+#: classes/helpers/FrmAppHelper.php:1676
+msgid "Warning: There is no way to retrieve unsaved entries."
+msgstr "Attenzione: Non c'è modo di recuperare le voci non salvate."
+
+#: classes/helpers/FrmAppHelper.php:1680
+msgid "No new licenses were found"
+msgstr "Non sono state trovate nuove licenze"
+
+#: classes/helpers/FrmAppHelper.php:1681
+msgid "This calculation has at least one unmatched ( ) { } [ ]."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1682
+msgid "This calculation may have shortcodes that work in Views but not forms."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1683
+msgid ""
+"This calculation may have shortcodes that work in text calculations but not "
+"numeric calculations."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1684
+msgid "Please enter a Repeat Limit that is greater than 1."
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:1706
+msgid ""
+"You are running an outdated version of Formidable. This plugin may not work "
+"correctly if you do not update Formidable."
+msgstr ""
+"Stai usando una versione di Formidable non aggiornata. Questo plugin "
+"potrebbe non funzionare correttamente se non aggiorni Formidable."
+
+#: classes/helpers/FrmAppHelper.php:1712
+msgid "English"
+msgstr "Inglese"
+
+#: classes/helpers/FrmAppHelper.php:1713
+msgid "English/Western"
+msgstr "English/Western"
+
+#: classes/helpers/FrmAppHelper.php:1714
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+#: classes/helpers/FrmAppHelper.php:1715
+msgid "Albanian"
+msgstr "Albanian"
+
+#: classes/helpers/FrmAppHelper.php:1716
+msgid "Arabic"
+msgstr "Arabic"
+
+#: classes/helpers/FrmAppHelper.php:1717
+msgid "Armenian"
+msgstr "Armenian"
+
+#: classes/helpers/FrmAppHelper.php:1718
+msgid "Azerbaijani"
+msgstr "Azerbaijani"
+
+#: classes/helpers/FrmAppHelper.php:1719
+msgid "Basque"
+msgstr "Basque"
+
+#: classes/helpers/FrmAppHelper.php:1720
+msgid "Bosnian"
+msgstr "Bosnian"
+
+#: classes/helpers/FrmAppHelper.php:1721
+msgid "Bulgarian"
+msgstr "Bulgarian"
+
+#: classes/helpers/FrmAppHelper.php:1722
+msgid "Catalan"
+msgstr "Catalan"
+
+#: classes/helpers/FrmAppHelper.php:1723
+msgid "Chinese Hong Kong"
+msgstr "Chinese Hong Kong"
+
+#: classes/helpers/FrmAppHelper.php:1724
+msgid "Chinese Simplified"
+msgstr "Chinese Simplified"
+
+#: classes/helpers/FrmAppHelper.php:1725
+msgid "Chinese Traditional"
+msgstr "Chinese Traditional"
+
+#: classes/helpers/FrmAppHelper.php:1726
+msgid "Croatian"
+msgstr "Croatian"
+
+#: classes/helpers/FrmAppHelper.php:1727
+msgid "Czech"
+msgstr "Czech"
+
+#: classes/helpers/FrmAppHelper.php:1728
+msgid "Danish"
+msgstr "Danish"
+
+#: classes/helpers/FrmAppHelper.php:1729
+msgid "Dutch"
+msgstr "Dutch"
+
+#: classes/helpers/FrmAppHelper.php:1730
+msgid "English/UK"
+msgstr "English/UK"
+
+#: classes/helpers/FrmAppHelper.php:1731
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: classes/helpers/FrmAppHelper.php:1732
+msgid "Estonian"
+msgstr "Estonian"
+
+#: classes/helpers/FrmAppHelper.php:1733
+msgid "Faroese"
+msgstr "Faroese"
+
+#: classes/helpers/FrmAppHelper.php:1734
+msgid "Farsi/Persian"
+msgstr "Farsi/Persian"
+
+#: classes/helpers/FrmAppHelper.php:1735
+msgid "Filipino"
+msgstr "Filipino"
+
+#: classes/helpers/FrmAppHelper.php:1736
+msgid "Finnish"
+msgstr "Finnish"
+
+#: classes/helpers/FrmAppHelper.php:1737
+msgid "French"
+msgstr "French"
+
+#: classes/helpers/FrmAppHelper.php:1738
+msgid "French/Canadian"
+msgstr "French/Canadian"
+
+#: classes/helpers/FrmAppHelper.php:1739
+msgid "French/Swiss"
+msgstr "French/Swiss"
+
+#: classes/helpers/FrmAppHelper.php:1740
+msgid "German"
+msgstr "German"
+
+#: classes/helpers/FrmAppHelper.php:1741
+msgid "German/Austria"
+msgstr "German/Austria"
+
+#: classes/helpers/FrmAppHelper.php:1742
+msgid "German/Switzerland"
+msgstr "German/Switzerland"
+
+#: classes/helpers/FrmAppHelper.php:1743
+msgid "Greek"
+msgstr "Greek"
+
+#: classes/helpers/FrmAppHelper.php:1744 classes/helpers/FrmAppHelper.php:1745
+msgid "Hebrew"
+msgstr "Hebrew"
+
+#: classes/helpers/FrmAppHelper.php:1746
+msgid "Hindi"
+msgstr "Hindi"
+
+#: classes/helpers/FrmAppHelper.php:1747
+msgid "Hungarian"
+msgstr "Hungarian"
+
+#: classes/helpers/FrmAppHelper.php:1748
+msgid "Icelandic"
+msgstr "Icelandic"
+
+#: classes/helpers/FrmAppHelper.php:1749
+msgid "Indonesian"
+msgstr "Indonesian"
+
+#: classes/helpers/FrmAppHelper.php:1750
+msgid "Italian"
+msgstr "Italiano"
+
+#: classes/helpers/FrmAppHelper.php:1751
+msgid "Japanese"
+msgstr "Japanese"
+
+#: classes/helpers/FrmAppHelper.php:1752
+msgid "Korean"
+msgstr "Korean"
+
+#: classes/helpers/FrmAppHelper.php:1753
+msgid "Latvian"
+msgstr "Latvian"
+
+#: classes/helpers/FrmAppHelper.php:1754
+msgid "Lithuanian"
+msgstr "Lithuanian"
+
+#: classes/helpers/FrmAppHelper.php:1755
+msgid "Malaysian"
+msgstr "Malaysian"
+
+#: classes/helpers/FrmAppHelper.php:1756
+msgid "Norwegian"
+msgstr "Norwegian"
+
+#: classes/helpers/FrmAppHelper.php:1757
+msgid "Polish"
+msgstr "Polish"
+
+#: classes/helpers/FrmAppHelper.php:1758
+msgid "Portuguese"
+msgstr "Portoghese"
+
+#: classes/helpers/FrmAppHelper.php:1759
+msgid "Portuguese/Brazilian"
+msgstr "Portuguese/Brazilian"
+
+#: classes/helpers/FrmAppHelper.php:1760
+msgid "Portuguese/Portugal"
+msgstr "Portuguese/Portugal"
+
+#: classes/helpers/FrmAppHelper.php:1761
+msgid "Romanian"
+msgstr "Romanian"
+
+#: classes/helpers/FrmAppHelper.php:1762
+msgid "Russian"
+msgstr "Russian"
+
+#: classes/helpers/FrmAppHelper.php:1763 classes/helpers/FrmAppHelper.php:1764
+msgid "Serbian"
+msgstr "Serbian"
+
+#: classes/helpers/FrmAppHelper.php:1765
+msgid "Slovak"
+msgstr "Slovak"
+
+#: classes/helpers/FrmAppHelper.php:1766
+msgid "Slovenian"
+msgstr "Slovenian"
+
+#: classes/helpers/FrmAppHelper.php:1767
+msgid "Spanish"
+msgstr "Spanish"
+
+#: classes/helpers/FrmAppHelper.php:1768
+msgid "Spanish/Latin America"
+msgstr "Spanish/Latin America"
+
+#: classes/helpers/FrmAppHelper.php:1769
+msgid "Swedish"
+msgstr "Swedish"
+
+#: classes/helpers/FrmAppHelper.php:1770
+msgid "Tamil"
+msgstr "Tamil"
+
+#: classes/helpers/FrmAppHelper.php:1771
+msgid "Thai"
+msgstr "Thai"
+
+#: classes/helpers/FrmAppHelper.php:1772 classes/helpers/FrmAppHelper.php:1773
+msgid "Turkish"
+msgstr "Turkish"
+
+#: classes/helpers/FrmAppHelper.php:1774
+msgid "Ukranian"
+msgstr "Ukranian"
+
+#: classes/helpers/FrmAppHelper.php:1775
+msgid "Vietnamese"
+msgstr "Vietnamese"
+
+#: classes/helpers/FrmCSVExportHelper.php:121
+msgid "(label)"
+msgstr "(etichetta)"
+
+#: classes/helpers/FrmCSVExportHelper.php:137
+msgid "Comment"
+msgstr "Commento"
+
+#: classes/helpers/FrmCSVExportHelper.php:138
+msgid "Comment User"
+msgstr "Utente commento"
+
+#: classes/helpers/FrmCSVExportHelper.php:139
+msgid "Comment Date"
+msgstr "Data commento"
+
+#: classes/helpers/FrmCSVExportHelper.php:144
+msgid "Timestamp"
+msgstr "Timestamp"
+
+#: classes/helpers/FrmCSVExportHelper.php:145
+msgid "Last Updated"
+msgstr "Ultimo aggiornamento"
+
+#: classes/helpers/FrmCSVExportHelper.php:147
+msgid "Updated By"
+msgstr "Aggiornato da"
+
+#: classes/helpers/FrmCSVExportHelper.php:148
+#: classes/helpers/FrmFormsHelper.php:945
+#: classes/helpers/FrmFormsListHelper.php:377
+msgid "Draft"
+msgstr "Bozza"
+
+#: classes/helpers/FrmCSVExportHelper.php:149
+msgid "IP"
+msgstr "IP"
+
+#: classes/helpers/FrmCSVExportHelper.php:153
+msgid "Parent ID"
+msgstr ""
+
+#: classes/helpers/FrmEntriesHelper.php:456
+#: classes/helpers/FrmEntriesHelper.php:457
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+#: classes/helpers/FrmEntriesHelper.php:543
+msgid "Really delete?"
+msgstr ""
+
+#: classes/helpers/FrmEntriesListHelper.php:90
+msgid "No Entries Found"
+msgstr "Nessuna voce trovata"
+
+#: classes/helpers/FrmEntriesListHelper.php:113
+msgid "View all forms"
+msgstr "Mostra tutti i moduli"
+
+#: classes/helpers/FrmEntriesListHelper.php:253
+#: classes/views/frm-entries/sidebar-shared.php:24
+msgid "View"
+msgstr "Visualizza"
+
+#: classes/helpers/FrmFieldsHelper.php:160
+#: classes/helpers/FrmFieldsHelper.php:276
+#: classes/models/fields/FrmFieldType.php:321
+#, php-format
+msgid "%s is invalid"
+msgstr "%s non è valido"
+
+#: classes/helpers/FrmFieldsHelper.php:272
+#, php-format
+msgid "%s must be unique"
+msgstr "%s deve essere univoco"
+
+#: classes/helpers/FrmFieldsHelper.php:275
+#: classes/models/fields/FrmFieldType.php:319
+msgid "This field is invalid"
+msgstr "Questo campo non è valido"
+
+#: classes/helpers/FrmFieldsHelper.php:479
+#, php-format
+msgid "Please add options from the WordPress \"%1$s\" page"
+msgstr "Si prega di aggiungere opzioni dalla pagina \"%1$s\" di WordPress"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Afghanistan"
+msgstr "Afghanistan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Albania"
+msgstr "Albania"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Algeria"
+msgstr "Algeria"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "American Samoa"
+msgstr "American Samoa"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Andorra"
+msgstr "Andorra"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Angola"
+msgstr "Angola"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Antarctica"
+msgstr "Antarctica"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Antigua and Barbuda"
+msgstr "Antigua and Barbuda"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Argentina"
+msgstr "Argentina"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Armenia"
+msgstr "Armenia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Aruba"
+msgstr "Aruba"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Australia"
+msgstr "Australia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Austria"
+msgstr "Austria"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Azerbaijan"
+msgstr "Azerbaijan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bahamas"
+msgstr "Bahamas"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bahrain"
+msgstr "Bahrain"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bangladesh"
+msgstr "Bangladesh"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Barbados"
+msgstr "Barbados"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Belarus"
+msgstr "Belarus"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Belgium"
+msgstr "Belgium"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Belize"
+msgstr "Belize"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Benin"
+msgstr "Benin"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bermuda"
+msgstr "Bermuda"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bhutan"
+msgstr "Bhutan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bolivia"
+msgstr "Bolivia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnia and Herzegovina"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Botswana"
+msgstr "Botswana"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Brazil"
+msgstr "Brazil"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Brunei"
+msgstr "Brunei"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Bulgaria"
+msgstr "Bulgaria"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Burundi"
+msgstr "Burundi"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Cambodia"
+msgstr "Cambodia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Cameroon"
+msgstr "Cameroon"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Canada"
+msgstr "Canada"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Cape Verde"
+msgstr "Cape Verde"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Cayman Islands"
+msgstr "Cayman Islands"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Central African Republic"
+msgstr "Central African Republic"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Chad"
+msgstr "Chad"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Chile"
+msgstr "Chile"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "China"
+msgstr "China"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Colombia"
+msgstr "Colombia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Comoros"
+msgstr "Comoros"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Congo"
+msgstr "Congo"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "C&ocirc;te d'Ivoire"
+msgstr "C&ocirc;te d'Ivoire"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Croatia"
+msgstr "Croatia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Cuba"
+msgstr "Cuba"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Cyprus"
+msgstr "Cyprus"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Czech Republic"
+msgstr "Czech Republic"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Denmark"
+msgstr "Denmark"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Djibouti"
+msgstr "Djibouti"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Dominica"
+msgstr "Dominica"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Dominican Republic"
+msgstr "Dominican Republic"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "East Timor"
+msgstr "East Timor"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Ecuador"
+msgstr "Ecuador"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Egypt"
+msgstr "Egypt"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "El Salvador"
+msgstr "El Salvador"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Equatorial Guinea"
+msgstr "Equatorial Guinea"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Eritrea"
+msgstr "Eritrea"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Estonia"
+msgstr "Estonia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Ethiopia"
+msgstr "Ethiopia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Fiji"
+msgstr "Fiji"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Finland"
+msgstr "Finland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "France"
+msgstr "France"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "French Guiana"
+msgstr "French Guiana"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "French Polynesia"
+msgstr "French Polynesia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Gabon"
+msgstr "Gabon"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Gambia"
+msgstr "Gambia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Georgia"
+msgstr "Georgia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Germany"
+msgstr "Germany"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Ghana"
+msgstr "Ghana"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Greece"
+msgstr "Greece"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Greenland"
+msgstr "Greenland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Grenada"
+msgstr "Grenada"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Guam"
+msgstr "Guam"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Guinea"
+msgstr "Guinea"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Guinea-Bissau"
+msgstr "Guinea-Bissau"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Guyana"
+msgstr "Guyana"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Haiti"
+msgstr "Haiti"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Honduras"
+msgstr "Honduras"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Hungary"
+msgstr "Hungary"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Iceland"
+msgstr "Iceland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "India"
+msgstr "India"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Indonesia"
+msgstr "Indonesia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Iran"
+msgstr "Iran"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Iraq"
+msgstr "Iraq"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Ireland"
+msgstr "Ireland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Israel"
+msgstr "Israel"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Italy"
+msgstr "Italia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Jamaica"
+msgstr "Jamaica"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Japan"
+msgstr "Japan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Jordan"
+msgstr "Jordan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Kazakhstan"
+msgstr "Kazakhstan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Kenya"
+msgstr "Kenya"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "North Korea"
+msgstr "North Korea"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "South Korea"
+msgstr "South Korea"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Kuwait"
+msgstr "Kuwait"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Kyrgyzstan"
+msgstr "Kyrgyzstan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Laos"
+msgstr "Laos"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Latvia"
+msgstr "Latvia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Lebanon"
+msgstr "Lebanon"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Liberia"
+msgstr "Liberia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Libya"
+msgstr "Libya"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Lithuania"
+msgstr "Lithuania"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Luxembourg"
+msgstr "Luxembourg"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Macedonia"
+msgstr "Macedonia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Madagascar"
+msgstr "Madagascar"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Malawi"
+msgstr "Malawi"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Malaysia"
+msgstr "Malaysia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Maldives"
+msgstr "Maldives"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Mali"
+msgstr "Mali"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Malta"
+msgstr "Malta"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Marshall Islands"
+msgstr "Marshall Islands"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Mauritania"
+msgstr "Mauritania"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Mauritius"
+msgstr "Mauritius"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Mexico"
+msgstr "Mexico"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Micronesia"
+msgstr "Micronesia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Moldova"
+msgstr "Moldova"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Monaco"
+msgstr "Monaco"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Mongolia"
+msgstr "Mongolia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Montenegro"
+msgstr "Montenegro"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Morocco"
+msgstr "Morocco"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Mozambique"
+msgstr "Mozambique"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Myanmar"
+msgstr "Myanmar"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Namibia"
+msgstr "Namibia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Nauru"
+msgstr "Nauru"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Nepal"
+msgstr "Nepal"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Netherlands"
+msgstr "Netherlands"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "New Zealand"
+msgstr "New Zealand"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Niger"
+msgstr "Niger"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Nigeria"
+msgstr "Nigeria"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Norway"
+msgstr "Norway"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Northern Mariana Islands"
+msgstr "Northern Mariana Islands"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Oman"
+msgstr "Oman"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Palau"
+msgstr "Palau"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Palestine"
+msgstr "Palestine"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Panama"
+msgstr "Panama"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Papua New Guinea"
+msgstr "Papua New Guinea"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Peru"
+msgstr "Peru"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Philippines"
+msgstr "Philippines"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Poland"
+msgstr "Poland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Portugal"
+msgstr "Portugal"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Puerto Rico"
+msgstr "Puerto Rico"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Qatar"
+msgstr "Qatar"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Romania"
+msgstr "Romania"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Russia"
+msgstr "Russia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Rwanda"
+msgstr "Rwanda"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Saint Kitts and Nevis"
+msgstr "Saint Kitts and Nevis"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Saint Lucia"
+msgstr "Saint Lucia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Saint Vincent and the Grenadines"
+msgstr "Saint Vincent and the Grenadines"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Samoa"
+msgstr "Samoa"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "San Marino"
+msgstr "San Marino"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Sao Tome and Principe"
+msgstr "Sao Tome and Principe"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Saudi Arabia"
+msgstr "Saudi Arabia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Senegal"
+msgstr "Senegal"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Serbia and Montenegro"
+msgstr "Serbia and Montenegro"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Seychelles"
+msgstr "Seychelles"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Singapore"
+msgstr "Singapore"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Slovakia"
+msgstr "Slovakia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Slovenia"
+msgstr "Slovenia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Solomon Islands"
+msgstr "Solomon Islands"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Somalia"
+msgstr "Somalia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "South Africa"
+msgstr "South Africa"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "South Sudan"
+msgstr "South Sudan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Spain"
+msgstr "Spain"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Sri Lanka"
+msgstr "Sri Lanka"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Sudan"
+msgstr "Sudan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Suriname"
+msgstr "Suriname"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Swaziland"
+msgstr "Swaziland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Sweden"
+msgstr "Sweden"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Switzerland"
+msgstr "Switzerland"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Syria"
+msgstr "Syria"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Taiwan"
+msgstr "Taiwan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Tajikistan"
+msgstr "Tajikistan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Tanzania"
+msgstr "Tanzania"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Thailand"
+msgstr "Thailand"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Togo"
+msgstr "Togo"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Tonga"
+msgstr "Tonga"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Trinidad and Tobago"
+msgstr "Trinidad and Tobago"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Tunisia"
+msgstr "Tunisia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Turkey"
+msgstr "Turkey"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Turkmenistan"
+msgstr "Turkmenistan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Uganda"
+msgstr "Uganda"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Ukraine"
+msgstr "Ukraine"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "United Arab Emirates"
+msgstr "United Arab Emirates"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "United Kingdom"
+msgstr "United Kingdom"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "United States"
+msgstr "United States"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Uzbekistan"
+msgstr "Uzbekistan"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Vatican City"
+msgstr "Vatican City"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Vietnam"
+msgstr "Vietnam"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Virgin Islands, British"
+msgstr "Virgin Islands, British"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Virgin Islands, U.S."
+msgstr "Virgin Islands, U.S."
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Yemen"
+msgstr "Yemen"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Zambia"
+msgstr "Zambia"
+
+#: classes/helpers/FrmFieldsHelper.php:1269
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#: classes/helpers/FrmFieldsHelper.php:1273
+msgid "Countries"
+msgstr "Paesi"
+
+#: classes/helpers/FrmFieldsHelper.php:1278
+msgid "U.S. State Abbreviations"
+msgstr "Abbreviazioni U.S. State"
+
+#: classes/helpers/FrmFieldsHelper.php:1282
+msgid "U.S. States"
+msgstr "U.S. States"
+
+#: classes/helpers/FrmFieldsHelper.php:1285
+msgid "Age"
+msgstr "Età"
+
+#: classes/helpers/FrmFieldsHelper.php:1286
+msgid "Under 18"
+msgstr "Sotto i 18"
+
+#: classes/helpers/FrmFieldsHelper.php:1287
+msgid "18-24"
+msgstr "18-24"
+
+#: classes/helpers/FrmFieldsHelper.php:1288
+msgid "25-34"
+msgstr "25-34"
+
+#: classes/helpers/FrmFieldsHelper.php:1289
+msgid "35-44"
+msgstr "35-44"
+
+#: classes/helpers/FrmFieldsHelper.php:1290
+msgid "45-54"
+msgstr "45-54"
+
+#: classes/helpers/FrmFieldsHelper.php:1291
+msgid "55-64"
+msgstr "55-64"
+
+#: classes/helpers/FrmFieldsHelper.php:1292
+msgid "65 or Above"
+msgstr "65 e oltre"
+
+#: classes/helpers/FrmFieldsHelper.php:1293
+msgid "Prefer Not to Answer"
+msgstr "Preferisco non rispondere"
+
+#: classes/helpers/FrmFieldsHelper.php:1296
+msgid "Satisfaction"
+msgstr "Soddisfazione"
+
+#: classes/helpers/FrmFieldsHelper.php:1297
+msgid "Very Satisfied"
+msgstr "Molto soddisfatto"
+
+#: classes/helpers/FrmFieldsHelper.php:1298
+msgid "Satisfied"
+msgstr "Soddisfatto"
+
+#: classes/helpers/FrmFieldsHelper.php:1299
+#: classes/helpers/FrmFieldsHelper.php:1308
+#: classes/helpers/FrmFieldsHelper.php:1317
+msgid "Neutral"
+msgstr "Neutro"
+
+#: classes/helpers/FrmFieldsHelper.php:1300
+msgid "Unsatisfied"
+msgstr "Insoddisfatto"
+
+#: classes/helpers/FrmFieldsHelper.php:1301
+msgid "Very Unsatisfied"
+msgstr "Molto insoddisfatto"
+
+#: classes/helpers/FrmFieldsHelper.php:1302
+#: classes/helpers/FrmFieldsHelper.php:1311
+#: classes/helpers/FrmFieldsHelper.php:1320
+msgid "N/A"
+msgstr "N/D"
+
+#: classes/helpers/FrmFieldsHelper.php:1305
+msgid "Importance"
+msgstr "Importanza"
+
+#: classes/helpers/FrmFieldsHelper.php:1306
+msgid "Very Important"
+msgstr "Molto importante"
+
+#: classes/helpers/FrmFieldsHelper.php:1307
+msgid "Important"
+msgstr "Importante"
+
+#: classes/helpers/FrmFieldsHelper.php:1309
+msgid "Somewhat Important"
+msgstr "Piuttosto importante"
+
+#: classes/helpers/FrmFieldsHelper.php:1310
+msgid "Not at all Important"
+msgstr "Per nulla importante"
+
+#: classes/helpers/FrmFieldsHelper.php:1314
+msgid "Agreement"
+msgstr "Accordo"
+
+#: classes/helpers/FrmFieldsHelper.php:1315
+msgid "Strongly Agree"
+msgstr "Completamente d'accordo"
+
+#: classes/helpers/FrmFieldsHelper.php:1316
+msgid "Agree"
+msgstr "Sono d'accordo"
+
+#: classes/helpers/FrmFieldsHelper.php:1318
+msgid "Disagree"
+msgstr "Non sono d'accordo"
+
+#: classes/helpers/FrmFieldsHelper.php:1319
+msgid "Strongly Disagree"
+msgstr "In totale disaccordo"
+
+#: classes/helpers/FrmFormsHelper.php:55
+msgid "(no title)"
+msgstr "(nessun titolo)"
+
+#: classes/helpers/FrmFormsHelper.php:55
+msgid " (child)"
+msgstr " (child)"
+
+#: classes/helpers/FrmFormsHelper.php:102
+msgid "Switch Form"
+msgstr "Cambia modulo"
+
+#: classes/helpers/FrmFormsHelper.php:731
+msgid "Create Form from Template"
+msgstr "Crea un Modulo dal Template"
+
+#: classes/helpers/FrmFormsHelper.php:737
+msgid "Duplicate Form"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:822
+msgid "Restore from Trash"
+msgstr "Ripristina dal cestino"
+
+#: classes/helpers/FrmFormsHelper.php:823
+#: classes/helpers/FrmFormsListHelper.php:118
+msgid "Restore"
+msgstr "Ripristina"
+
+#: classes/helpers/FrmFormsHelper.php:827
+msgid "Move Form to Trash"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:828
+#: classes/helpers/FrmFormsHelper.php:946
+#: classes/helpers/FrmFormsListHelper.php:192
+msgid "Trash"
+msgstr "Cestino"
+
+#: classes/helpers/FrmFormsHelper.php:834
+#: classes/helpers/FrmFormsListHelper.php:122
+msgid "Delete Permanently"
+msgstr "Rimuovi definitivamente"
+
+#: classes/helpers/FrmFormsHelper.php:835 classes/models/FrmFormAction.php:744
+#: classes/views/frm-form-actions/form_action.php:19
+msgid "Delete"
+msgstr "Elimina"
+
+#: classes/helpers/FrmFormsHelper.php:837
+msgid "Are you sure you want to delete this form and all its entries?"
+msgstr "Sei sicuro di voler cancellare questo modulo e tutte le sue voci?"
+
+#: classes/helpers/FrmFormsHelper.php:839
+msgid "Delete form & entries?"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:850
+msgid "First"
+msgstr "Primo"
+
+#: classes/helpers/FrmFormsHelper.php:851
+msgid ""
+"Add this to the first field in each row along with a width. ie frm_first frm4"
+msgstr ""
+
+#: classes/helpers/FrmFormsHelper.php:853
+#: classes/helpers/FrmStylesHelper.php:140
+msgid "Right"
+msgstr "Destra"
+
+#: classes/helpers/FrmFormsHelper.php:855
+msgid "Total"
+msgstr "Totale"
+
+#: classes/helpers/FrmFormsHelper.php:856
+msgid ""
+"Add this to a read-only field to display the text in bold without a border "
+"or background."
+msgstr ""
+"Aggiungi questo a un campo di sola lettura per visualizzare il testo in "
+"grassetto, senza un bordo o uno sfondo."
+
+#: classes/helpers/FrmFormsHelper.php:858
+msgid "First Grid Row"
+msgstr "Prima riga griglia "
+
+#: classes/helpers/FrmFormsHelper.php:859
+msgid "Even Grid Row"
+msgstr "Riga griglia pari"
+
+#: classes/helpers/FrmFormsHelper.php:860
+msgid "Odd Grid Row"
+msgstr "Riga griglia dispari"
+
+#: classes/helpers/FrmFormsHelper.php:862
+msgid "2 Col Options"
+msgstr "Opzione 2 col."
+
+#: classes/helpers/FrmFormsHelper.php:863
+msgid "Put your radio button or checkbox options into two columns."
+msgstr ""
+"Posiziona su due colonne le opzioni del pulsante radio o della check box."
+
+#: classes/helpers/FrmFormsHelper.php:866
+msgid "3 Col Options"
+msgstr "Opzione 3 col."
+
+#: classes/helpers/FrmFormsHelper.php:867
+msgid "Put your radio button or checkbox options into three columns."
+msgstr ""
+"Sistema le opzioni dei tuoi pulsanti radio o delle tue checkbox su tre "
+"colonne."
+
+#: classes/helpers/FrmFormsHelper.php:870
+msgid "4 Col Options"
+msgstr "Opzione 4 col."
+
+#: classes/helpers/FrmFormsHelper.php:871
+msgid "Put your radio button or checkbox options into four columns."
+msgstr ""
+"Posiziona su quattro colonne le opzioni del pulsante radio o della check box."
+
+#: classes/helpers/FrmFormsHelper.php:874
+msgid "Scroll Box"
+msgstr "Scroll Box"
+
+#: classes/helpers/FrmFormsHelper.php:875
+msgid ""
+"If you have many checkbox or radio button options, you may add this class to "
+"allow your user to easily scroll through the options."
+msgstr ""
+"Se ci sono checkbox o pulsanti radio con molte opzioni, è possibile "
+"aggiungere questa classe per permettere all'utente di scorrere facilmente "
+"attraverso le opzioni."
+
+#: classes/helpers/FrmFormsHelper.php:878
+msgid "Capitalize"
+msgstr "Iniziali maiuscole"
+
+#: classes/helpers/FrmFormsHelper.php:879
+msgid "Automatically capitalize the first letter in each word."
+msgstr ""
+"Imposta automaticamente la maiuscola per la la prima lettera di ogni parola."
+
+#: classes/helpers/FrmFormsHelper.php:947
+msgid "Published"
+msgstr "Pubblicato"
+
+#: classes/helpers/FrmFormsListHelper.php:104
+msgid "No Templates Found."
+msgstr "Nessun template trovato"
+
+#: classes/helpers/FrmFormsListHelper.php:106
+msgid "No Forms Found."
+msgstr "Nessun form trovato"
+
+#: classes/helpers/FrmFormsListHelper.php:125
+msgid "Move to Trash"
+msgstr "Sposta nel cestino"
+
+#: classes/helpers/FrmFormsListHelper.php:163
+msgid "Create New Template"
+msgstr "Crea nuovo modello"
+
+#: classes/helpers/FrmFormsListHelper.php:168
+msgid ""
+"You have not created any forms yet. You must create a form before you can "
+"make a template."
+msgstr ""
+
+#: classes/helpers/FrmFormsListHelper.php:189
+msgid "My Forms"
+msgstr "I miei moduli"
+
+#: classes/helpers/FrmFormsListHelper.php:190
+#: classes/views/frm-forms/edit.php:10 classes/views/frm-forms/list.php:5
+#: classes/views/frm-forms/new.php:10
+msgid "Templates"
+msgstr "Modelli"
+
+#: classes/helpers/FrmFormsListHelper.php:191
+msgid "Drafts"
+msgstr "Bozze"
+
+#: classes/helpers/FrmFormsListHelper.php:213
+#, php-format
+msgid "%1$s <span class=\"count\">(%2$s)</span>"
+msgstr "%1$s <span class=\"count\">(%2$s)</span>"
+
+#: classes/helpers/FrmFormsListHelper.php:300
+msgid "Custom"
+msgstr "Personalizzato"
+
+#: classes/helpers/FrmStylesHelper.php:116
+msgid "Edit Styles"
+msgstr "Modifica stili"
+
+#: classes/helpers/FrmStylesHelper.php:117
+msgid "Manage Form Styles"
+msgstr "Gestisci gli stili dei moduli"
+
+#: classes/helpers/FrmStylesHelper.php:118
+msgid "Custom CSS"
+msgstr "CSS personalizzato"
+
+#: classes/helpers/FrmStylesHelper.php:128
+msgid "top"
+msgstr "in alto"
+
+#: classes/helpers/FrmStylesHelper.php:129
+#: classes/views/styles/_field-description.php:33
+#: classes/views/styles/_field-labels.php:31
+#: classes/views/styles/_general.php:11
+msgid "left"
+msgstr "sinistra"
+
+#: classes/helpers/FrmStylesHelper.php:130
+#: classes/views/styles/_field-description.php:36
+#: classes/views/styles/_field-labels.php:34
+#: classes/views/styles/_general.php:14
+msgid "right"
+msgstr "destra"
+
+#: classes/helpers/FrmStylesHelper.php:131
+msgid "none"
+msgstr "nessuna"
+
+#: classes/helpers/FrmStylesHelper.php:132
+msgid "inside"
+msgstr ""
+
+#: classes/helpers/FrmStylesHelper.php:138
+msgid "Top"
+msgstr "In alto"
+
+#: classes/helpers/FrmStylesHelper.php:139
+msgid "Left"
+msgstr "Sinistra"
+
+#: classes/helpers/FrmStylesHelper.php:141
+msgid "Inline (left without a set width)"
+msgstr "In linea (lasciato senza impostare una larghezza)"
+
+#: classes/helpers/FrmStylesHelper.php:142
+msgid "None"
+msgstr "Nessuna"
+
+#: classes/helpers/FrmStylesHelper.php:143
+msgid "Hidden (but leave the space)"
+msgstr "Nascosto (ma lascia lo spazio)"
+
+#: classes/helpers/FrmStylesHelper.php:144
+msgid "Placeholder inside the field"
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:39
+msgid "Long forms can still be beautiful with sections."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:40 classes/helpers/FrmTipsHelper.php:45
+#: classes/helpers/FrmTipsHelper.php:60 classes/helpers/FrmTipsHelper.php:104
+#: classes/helpers/FrmTipsHelper.php:109 classes/helpers/FrmTipsHelper.php:177
+#: classes/helpers/FrmTipsHelper.php:189
+msgid "Upgrade to Pro."
+msgstr "Passa alla versione Pro."
+
+#: classes/helpers/FrmTipsHelper.php:44
+msgid "Use conditional logic to shorten your forms and increase conversions."
+msgstr ""
+"Usa la logica condizionale per abbreviare i tuoi moduli e aumentare le "
+"conversioni."
+
+#: classes/helpers/FrmTipsHelper.php:49
+msgid "Stop intimidating users with long forms."
+msgstr "Basta spaventare gli utenti con lunghi moduli."
+
+#: classes/helpers/FrmTipsHelper.php:50
+msgid "Use page breaks."
+msgstr "Usa le interruzioni di pagina."
+
+#: classes/helpers/FrmTipsHelper.php:54
+msgid "Cut down on back-and-forth with clients."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:55
+msgid "Allow file uploads in your form."
+msgstr "Consentire il caricamento di file nel modulo."
+
+#: classes/helpers/FrmTipsHelper.php:59
+msgid "Need to calculate a total?"
+msgstr "Hai bisogno di calcolare un totale?"
+
+#: classes/helpers/FrmTipsHelper.php:64
+msgid "Save time."
+msgstr "Tempo di salvataggio"
+
+#: classes/helpers/FrmTipsHelper.php:65
+msgid "Prefill fields with user info."
+msgstr "Precompila campi con le informazioni dell'utente."
+
+#: classes/helpers/FrmTipsHelper.php:77 classes/helpers/FrmTipsHelper.php:82
+msgid "A site with dynamic, user-generated content is within reach."
+msgstr ""
+"Un sito con contenuti dinamici, generati dall'utente è alla tua portata."
+
+#: classes/helpers/FrmTipsHelper.php:78 classes/helpers/FrmTipsHelper.php:83
+msgid "Add front-end editing."
+msgstr "Aggiungi modifiche da front-end"
+
+#: classes/helpers/FrmTipsHelper.php:87
+msgid "Have a long form that takes time to complete?"
+msgstr "Hai un modello lungo che richiede tempo per essere completato?"
+
+#: classes/helpers/FrmTipsHelper.php:88
+msgid "Let logged-in users save a draft and return later."
+msgstr ""
+"Permetti agli utenti connessi di salvare una bozza e tornare in seguito."
+
+#: classes/helpers/FrmTipsHelper.php:98
+msgid "Save time by sending the email to the right person automatically."
+msgstr "Risparmia tempo inviando le email alla persona giusta automaticamente."
+
+#: classes/helpers/FrmTipsHelper.php:99
+msgid "Add email routing."
+msgstr "Aggiungi e-mail routing"
+
+#: classes/helpers/FrmTipsHelper.php:103
+msgid "Create blog posts or pages from the front-end."
+msgstr "Crea pagine o post del blog dal front-end."
+
+#: classes/helpers/FrmTipsHelper.php:108
+msgid "Make front-end posting easy."
+msgstr "Facilita la pubblicazione dal front-end."
+
+#: classes/helpers/FrmTipsHelper.php:113
+msgid "Grow your business with automated email follow-up."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:114
+msgid "Send leads straight to MailChimp."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:118
+msgid ""
+"Save hours and increase revenue by collecting payments with every submission."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:119 classes/helpers/FrmTipsHelper.php:124
+msgid "Use PayPal with this form."
+msgstr "Usa PayPal con questo modulo."
+
+#: classes/helpers/FrmTipsHelper.php:123
+msgid "Increase revenue."
+msgstr "Aumenta gli incassi."
+
+#: classes/helpers/FrmTipsHelper.php:128
+msgid "Get paid more quickly."
+msgstr "Fatti pagare più velocemente."
+
+#: classes/helpers/FrmTipsHelper.php:129
+msgid "Use Paypal with this form."
+msgstr "Usa PayPal con questo modulo."
+
+#: classes/helpers/FrmTipsHelper.php:133
+msgid "Boost your site membership."
+msgstr "Incrementa le iscrizioni al tuo sito."
+
+#: classes/helpers/FrmTipsHelper.php:134
+msgid "Automatically create user accounts."
+msgstr "Crea automaticamente gli account utente."
+
+#: classes/helpers/FrmTipsHelper.php:138
+msgid "Make front-end profile editing possible."
+msgstr "Rendi possibile la modifica del profilo di front-end"
+
+#: classes/helpers/FrmTipsHelper.php:139
+msgid "Add user registration."
+msgstr "Aggiungi registrazione utente"
+
+#: classes/helpers/FrmTipsHelper.php:143
+msgid "Want a text when this form is submitted or when a payment is received?"
+msgstr ""
+"Vuoi ricevere un messaggio di testo quando viene inviato questo modulo o "
+"quando si riceve un pagamento?"
+
+#: classes/helpers/FrmTipsHelper.php:144
+msgid "Use Twilio with this form."
+msgstr "Usa Twilio per queso modulo."
+
+#: classes/helpers/FrmTipsHelper.php:148
+msgid "Send a text when this form is submitted."
+msgstr "Inviare un messaggio di testo quando questo modulo viene inviato."
+
+#: classes/helpers/FrmTipsHelper.php:149
+msgid "Get Twilio."
+msgstr "Ottieni Twilio."
+
+#: classes/helpers/FrmTipsHelper.php:160
+msgid "Make your sidebar or footer form stand out."
+msgstr "Fai risaltare la sidebar o il footer."
+
+#: classes/helpers/FrmTipsHelper.php:161
+msgid "Use multiple style templates."
+msgstr "Usa più modelli di stile."
+
+#: classes/helpers/FrmTipsHelper.php:171
+msgid "Want to edit or delete form submissions?"
+msgstr "Vuoi modificare o cancellare gli inserimenti del modulo?"
+
+#: classes/helpers/FrmTipsHelper.php:172
+msgid "Add entry management."
+msgstr "Aggiungi gestione delle voci."
+
+#: classes/helpers/FrmTipsHelper.php:176
+msgid "Want to search submitted entries?"
+msgstr "Vuoi cercare le voci inserite?"
+
+#: classes/helpers/FrmTipsHelper.php:188
+msgid "Want to import entries into your forms?"
+msgstr "Vuoi importare voci nei tuoi moduli?"
+
+#: classes/helpers/FrmTipsHelper.php:199
+msgid "Looking for more ways to get professional results?"
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:200
+msgid "Take your forms to the next level."
+msgstr "Porta i tuoi moduli al livello successivo."
+
+#: classes/helpers/FrmTipsHelper.php:204
+msgid "Increase conversions in long forms."
+msgstr ""
+
+#: classes/helpers/FrmTipsHelper.php:205
+msgid "Add conditional logic, page breaks, and section headings."
+msgstr ""
+"Aggiungi logica condizionale, interruzioni di pagina e intestazioni di "
+"sezione."
+
+#: classes/helpers/FrmTipsHelper.php:209
+msgid "Automate your business and increase revenue."
+msgstr "Automatizza il tuo business e incrementa le rendite."
+
+#: classes/helpers/FrmTipsHelper.php:210
+msgid "Collect instant payments, and send leads to MailChimp."
+msgstr ""
+
+#: classes/helpers/FrmXMLHelper.php:50
+msgid "Your server does not have XML enabled"
+msgstr "Il server non ha XML abilitato"
+
+#: classes/helpers/FrmXMLHelper.php:56 classes/helpers/FrmXMLHelper.php:68
+msgid "There was an error when reading this XML file"
+msgstr "Si è verificato un errore durante la lettura di questo file XML"
+
+#: classes/helpers/FrmXMLHelper.php:60
+msgid "Your server is missing the simplexml_import_dom function"
+msgstr "Sul tuo server manca la funzione simplexml_import_dom"
+
+#: classes/helpers/FrmXMLHelper.php:814
+msgid "Imported"
+msgstr "Importato"
+
+#: classes/helpers/FrmXMLHelper.php:815
+msgid "Updated"
+msgstr "Aggiornato"
+
+#: classes/helpers/FrmXMLHelper.php:840
+msgid "Nothing was imported or updated"
+msgstr "Nulla è stato importato o aggiornato"
+
+#: classes/helpers/FrmXMLHelper.php:852
+#, php-format
+msgid "%1$s Form"
+msgid_plural "%1$s Forms"
+msgstr[0] "%1$s modulo"
+msgstr[1] "%1$s moduli"
+
+#: classes/helpers/FrmXMLHelper.php:853 classes/models/FrmFormMigrator.php:388
+#, php-format
+msgid "%1$s Field"
+msgid_plural "%1$s Fields"
+msgstr[0] "%1$s Campo"
+msgstr[1] "%1$s Campi"
+
+#: classes/helpers/FrmXMLHelper.php:854
+#, php-format
+msgid "%1$s Entry"
+msgid_plural "%1$s Entries"
+msgstr[0] "%1$s Voce"
+msgstr[1] "%1$s Voci"
+
+#: classes/helpers/FrmXMLHelper.php:855
+#, php-format
+msgid "%1$s View"
+msgid_plural "%1$s Views"
+msgstr[0] "%1$s Visualizzazione"
+msgstr[1] "%1$s Visualizzazioni"
+
+#: classes/helpers/FrmXMLHelper.php:856
+#, php-format
+msgid "%1$s Post"
+msgid_plural "%1$s Posts"
+msgstr[0] "%1$s articolo"
+msgstr[1] "%1$s articoli"
+
+#: classes/helpers/FrmXMLHelper.php:857
+#, php-format
+msgid "%1$s Style"
+msgid_plural "%1$s Styles"
+msgstr[0] "%1$s Stile"
+msgstr[1] "%1$s Stili"
+
+#: classes/helpers/FrmXMLHelper.php:858
+#, php-format
+msgid "%1$s Term"
+msgid_plural "%1$s Terms"
+msgstr[0] "%1$s Termine"
+msgstr[1] "%1$s Termini"
+
+#: classes/helpers/FrmXMLHelper.php:859
+#, php-format
+msgid "%1$s Form Action"
+msgid_plural "%1$s Form Actions"
+msgstr[0] "%1$s Azione modulo"
+msgstr[1] "%1$s Azioni modulo"
+
+#: classes/helpers/FrmXMLHelper.php:953
+msgid "Create Posts"
+msgstr "Crea articolo"
+
+#: classes/helpers/FrmXMLHelper.php:1060
+#: classes/views/frm-form-actions/email_action.php:16
+msgid "Email Notification"
+msgstr "Notifica e-mail"
+
+#: classes/models/FrmAddon.php:158
+#, php-format
+msgid ""
+"Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s."
+msgstr ""
+
+#: classes/models/FrmAddon.php:290
+msgid "Oops! You forgot to enter your license number."
+msgstr "Oops! Hai dimenticato di inserire il tuo numero di licenza."
+
+#: classes/models/FrmAddon.php:366
+msgid "Your license has been activated. Enjoy!"
+msgstr "La tua licenza è stata attivata. Divertiti!"
+
+#: classes/models/FrmAddon.php:367 classes/models/FrmAddon.php:372
+msgid "That license key is invalid"
+msgstr "Questa licenza non è valida"
+
+#: classes/models/FrmAddon.php:368
+msgid "That license is expired"
+msgstr "La licenza è scaduta"
+
+#: classes/models/FrmAddon.php:369
+msgid "That license has been refunded"
+msgstr "Questa licenza è stata rimborsata"
+
+#: classes/models/FrmAddon.php:370
+msgid "That license has been used on too many sites"
+msgstr "Questa licenza è stata utilizzata troppe volte"
+
+#: classes/models/FrmAddon.php:371
+msgid "Oops! That is the wrong license key for this plugin."
+msgstr "Numero di licenza sbagliato per questo plugin."
+
+#: classes/models/FrmAddon.php:394
+msgid "That license was removed successfully"
+msgstr "La licenza è stata rimossa con successo"
+
+#: classes/models/FrmAddon.php:396
+msgid "There was an error deactivating your license."
+msgstr "C'è stato un errore nella disattivazione della tua licenza."
+
+#: classes/models/FrmAddon.php:429
+msgid "Your License Key was invalid"
+msgstr "La tua chiave di licenza non era valida"
+
+#: classes/models/FrmAddon.php:432
+#, php-format
+msgid ""
+"You had an error communicating with the Formidable API. %1$sClick here%2$s "
+"for more information."
+msgstr ""
+
+#: classes/models/FrmAddon.php:435
+msgid "You had an HTTP error connecting to the Formidable API"
+msgstr ""
+
+#: classes/models/FrmAddon.php:446
+#, php-format
+msgid "There was a %1$s error: %2$s"
+msgstr "C'è stato un errore %1$s: %2$s"
+
+#: classes/models/FrmDb.php:414
+msgid "Use the query in an array format so it can be properly prepared."
+msgstr ""
+"Usa la query in un formato array in modo che possa essere preparata in modo "
+"appropriato."
+
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:315
+msgid "You do not have permission to install plugin updates"
+msgstr ""
+
+#: classes/models/FrmEDD_SL_Plugin_Updater.php:315
+#: classes/views/styles/_field-colors.php:15
+#: classes/views/styles/_form-messages.php:7
+msgid "Error"
+msgstr "Errore"
+
+#: classes/models/FrmEmail.php:262
+#, php-format
+msgid "%1$s Form submitted on %2$s"
+msgstr "%1$s modulo inviato il %2$s"
+
+#: classes/models/FrmEmail.php:302
+#: classes/views/frm-entries/sidebar-shared.php:72
+msgid "User Information"
+msgstr "Informazioni utente"
+
+#: classes/models/FrmEmail.php:304 classes/models/FrmEntryValues.php:207
+msgid "User-Agent (Browser/OS)"
+msgstr "User-Agent (Browser/OS)"
+
+#: classes/models/FrmEmail.php:305 classes/models/FrmEntryValues.php:212
+#: classes/views/frm-entries/sidebar-shared.php:90
+msgid "Referrer"
+msgstr "Referrer"
+
+#: classes/models/FrmEmail.php:321 classes/models/FrmEntryValues.php:202
+#: classes/views/frm-entries/sidebar-shared.php:76
+msgid "IP Address"
+msgstr "Indirizzo IP"
+
+#: classes/models/FrmEntryValidate.php:9
+msgid "There was a problem with your submission. Please try again."
+msgstr "C'è stato un problema con l'invio. Riprova."
+
+#: classes/models/FrmEntryValidate.php:279
+#: classes/models/FrmEntryValidate.php:288
+msgid "Your entry appears to be spam!"
+msgstr "La tua voce sembra essere spam!"
+
+#: classes/models/FrmEntryValidate.php:283
+msgid "Your entry appears to be blacklist spam!"
+msgstr ""
+
+#: classes/models/FrmField.php:14 classes/views/styles/_buttons.php:58
+#: classes/views/styles/_buttons.php:102 classes/views/styles/_buttons.php:121
+#: classes/views/styles/_field-colors.php:31
+#: classes/views/styles/_field-colors.php:93
+#: classes/views/styles/_field-colors.php:132
+#: classes/views/styles/_form-messages.php:23
+#: classes/views/styles/_form-messages.php:46
+msgid "Text"
+msgstr "Testo"
+
+#: classes/models/FrmField.php:18
+msgid "Paragraph"
+msgstr ""
+
+#: classes/models/FrmField.php:22
+msgid "Checkboxes"
+msgstr "Check box"
+
+#: classes/models/FrmField.php:26
+msgid "Radio Button"
+msgstr ""
+
+#: classes/models/FrmField.php:30
+msgid "Dropdown"
+msgstr "Campo a discesa"
+
+#: classes/models/FrmField.php:38
+msgid "Website/URL"
+msgstr "Sito/URL"
+
+#: classes/models/FrmField.php:42
+msgid "Number"
+msgstr "Numero"
+
+#: classes/models/FrmField.php:46
+msgid "Phone"
+msgstr ""
+
+#: classes/models/FrmField.php:50
+msgid "HTML"
+msgstr "HTML"
+
+#: classes/models/FrmField.php:54
+msgid "Hidden Field"
+msgstr "Campo nascosto"
+
+#: classes/models/FrmField.php:62 classes/views/frm-settings/form.php:89
+msgid "reCAPTCHA"
+msgstr "reCAPTCHA"
+
+#: classes/models/FrmField.php:73
+msgid "File Upload"
+msgstr "Caricamento file"
+
+#: classes/models/FrmField.php:77
+msgid "Rich Text"
+msgstr "Testo ricco"
+
+#: classes/models/FrmField.php:85
+msgid "Time"
+msgstr "Orario"
+
+#: classes/models/FrmField.php:89
+msgid "Scale"
+msgstr "Scala"
+
+#: classes/models/FrmField.php:93
+msgid "Star Rating"
+msgstr ""
+
+#: classes/models/FrmField.php:97
+msgid "Slider"
+msgstr ""
+
+#: classes/models/FrmField.php:101
+msgid "Toggle"
+msgstr ""
+
+#: classes/models/FrmField.php:105
+msgid "Dynamic"
+msgstr ""
+
+#: classes/models/FrmField.php:109
+msgid "Lookup"
+msgstr "Lookup"
+
+#: classes/models/FrmField.php:113
+msgid "Repeater"
+msgstr ""
+
+#: classes/models/FrmField.php:117
+msgid "End Section"
+msgstr "Fine sezione"
+
+#: classes/models/FrmField.php:121
+msgid "Section"
+msgstr "Sezione"
+
+#: classes/models/FrmField.php:125
+msgid "Page Break"
+msgstr "Interruzione di pagina"
+
+#: classes/models/FrmField.php:129
+msgid "Embed Form"
+msgstr "Incorpora il modulo"
+
+#: classes/models/FrmField.php:133
+msgid "Password"
+msgstr "Password"
+
+#: classes/models/FrmField.php:137
+msgid "Tags"
+msgstr "Tag"
+
+#: classes/models/FrmField.php:141
+msgid "Credit Card"
+msgstr "Carta di Credito"
+
+#: classes/models/FrmField.php:145
+msgid "Address"
+msgstr "Indirizzo"
+
+#: classes/models/FrmFieldValue.php:144
+msgid ""
+"The display value has not been prepared. Please use the "
+"prepare_display_value() method before calling get_displayed_value()."
+msgstr ""
+
+#: classes/models/FrmFormAction.php:37
+msgid "There are no options for this action."
+msgstr "Non ci sono opzioni per questa azione"
+
+#: classes/models/FrmFormAction.php:741
+#: classes/views/frm-forms/_publish_box.php:30
+msgid "Save Draft"
+msgstr "Salva bozza"
+
+#: classes/models/FrmFormAction.php:742
+#: classes/views/frm-forms/add_field_links.php:7
+#: classes/views/frm-forms/form.php:61
+msgid "Create"
+msgstr "Crea"
+
+#: classes/models/FrmFormAction.php:743
+#: classes/views/frm-forms/_publish_box.php:34
+#: classes/views/frm-forms/_publish_box.php:38
+#: classes/views/frm-forms/add_field_links.php:7
+#: classes/views/frm-forms/edit.php:25 classes/views/frm-forms/form.php:61
+#: classes/views/frm-forms/settings.php:361
+msgid "Update"
+msgstr "Aggiorna"
+
+#: classes/models/FrmFormAction.php:745 classes/views/xml/import_form.php:9
+msgid "Import"
+msgstr "Importa"
+
+#: classes/models/FrmFormMigrator.php:137
+msgid "No form fields found."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:229
+msgid "There was an error while creating a new form."
+msgstr ""
+
+#: classes/models/FrmFormMigrator.php:360
+msgid "Default Form"
+msgstr ""
+
+#: classes/models/FrmMigrate.php:485
+msgid "Sending"
+msgstr "Invio in corso"
+
+#: classes/models/FrmPersonalData.php:23
+msgid "Formidable Forms Exporter"
+msgstr ""
+
+#: classes/models/FrmPersonalData.php:61
+msgid "Form Submissions"
+msgstr ""
+
+#: classes/models/FrmSettings.php:93
+msgid "Your responses were successfully submitted. Thank you!"
+msgstr "Le tue risposte sono state inviate con successo. Grazie!"
+
+#: classes/models/FrmSettings.php:94
+msgid "This field cannot be blank."
+msgstr "Questo campo non può essere vuoto."
+
+#: classes/models/FrmSettings.php:95
+msgid "This value must be unique."
+msgstr "Questo valore deve essere univoco."
+
+#: classes/models/FrmSettings.php:96
+msgid "There was a problem with your submission. Errors are marked below."
+msgstr ""
+"C'è stato un problema con l'invio. Gli errori sono evidenziati qui sotto."
+
+#: classes/models/FrmSettings.php:97
+msgid "We're sorry. It looks like you've already submitted that."
+msgstr ""
+
+#: classes/models/FrmSettings.php:98 classes/views/styles/_sample_form.php:77
+msgid "Submit"
+msgstr "Invia"
+
+#: classes/models/FrmSettings.php:99
+msgid "You do not have permission to view this form."
+msgstr "Non hai il permesso di visualizzare questo modulo."
+
+#: classes/models/FrmSettings.php:167
+msgid "The reCAPTCHA was not entered correctly"
+msgstr "Il reCAPTCHA non è stato inserito correttamente"
+
+#: classes/models/FrmStyle.php:23
+msgid "New Style"
+msgstr "Nuovo stile"
+
+#: classes/models/FrmStyle.php:149
+msgid ""
+"WARNING: Any changes made to this file will be lost when your Formidable "
+"settings are updated"
+msgstr ""
+"ATTENZIONE : quando le tue opzioni Formidable verranno aggiornate, tutte le "
+"modifiche apportate a questo file andranno perse."
+
+#: classes/models/FrmStyle.php:228
+msgid "Formidable Style"
+msgstr "Stile di Formidable"
+
+#: classes/models/FrmStyle.php:463
+#: classes/views/styles/_field-description.php:17
+msgid "normal"
+msgstr "normale"
+
+#: classes/models/FrmStyle.php:466
+msgid "bold"
+msgstr "grassetto"
+
+#: classes/widgets/FrmShowForm.php:6
+msgid "Display a Formidable Form"
+msgstr "Visualizza un modulo Formidable"
+
+#: classes/widgets/FrmShowForm.php:7
+msgid "Formidable Form"
+msgstr "Modulo Formidable"
+
+#: classes/widgets/FrmShowForm.php:46
+msgid "Title"
+msgstr "Titolo"
+
+#: classes/widgets/FrmShowForm.php:70
+msgid "Show Description"
+msgstr "Mostra descrizione"
+
+#: classes/models/fields/FrmFieldCaptcha.php:147
+msgid "The captcha is missing from this form"
+msgstr "In questo modulo manca il captcha"
+
+#: classes/models/fields/FrmFieldCaptcha.php:163
+msgid "There was a problem verifying your recaptcha"
+msgstr "C'è stato un problema con la verifica Recaptcha"
+
+#: classes/models/fields/FrmFieldCheckbox.php:38
+#: classes/models/fields/FrmFieldRadio.php:45
+#: classes/models/fields/FrmFieldSelect.php:35
+#: classes/views/styles/_sample_form.php:32
+#: classes/views/styles/_sample_form.php:61
+#: classes/views/styles/_sample_form.php:69
+msgid "Option 1"
+msgstr "Opzione 1"
+
+#: classes/models/fields/FrmFieldCheckbox.php:39
+#: classes/models/fields/FrmFieldRadio.php:46
+#: classes/views/styles/_sample_form.php:62
+#: classes/views/styles/_sample_form.php:70
+msgid "Option 2"
+msgstr "Opzione 2"
+
+#: classes/models/fields/FrmFieldNumber.php:65
+msgid "Please select a higher number"
+msgstr "Scegli un numero più alto"
+
+#: classes/models/fields/FrmFieldNumber.php:67
+msgid "Please select a lower number"
+msgstr "Scegli un numero più basso"
+
+#: classes/models/fields/FrmFieldType.php:328
+msgid "Untitled"
+msgstr "Senza titolo"
+
+#: classes/models/fields/FrmFieldUrl.php:34
+msgid "Website"
+msgstr "Sito web"
+
+#: classes/views/addons/list.php:2
+msgid "Formidable AddOns"
+msgstr ""
+
+#: classes/views/addons/list.php:19
+msgid "This plugin is already installed"
+msgstr "Questo plugin è già installato"
+
+#: classes/views/addons/list.php:19
+msgid "Installed"
+msgstr "Installato"
+
+#: classes/views/addons/list.php:21 classes/views/addons/settings.php:32
+msgid "Activate"
+msgstr "Attiva"
+
+#: classes/views/addons/list.php:24 classes/views/addons/upgrade_to_pro.php:24
+msgid "Get Started"
+msgstr "Per Iniziare"
+
+#: classes/views/addons/list.php:26
+msgid "View Docs"
+msgstr "Consulta la documentazione"
+
+#: classes/views/addons/settings.php:24
+msgid "Good to go!"
+msgstr ""
+
+#: classes/views/addons/settings.php:26
+msgid "Deactivate"
+msgstr "Disattiva"
+
+#: classes/views/addons/settings.php:40
+msgid "Autofill Licenses"
+msgstr ""
+
+#: classes/views/frm-entries/_sidebar-shared-pub.php:17
+msgid "Print"
+msgstr "Stampa"
+
+#: classes/views/frm-entries/_sidebar-shared-pub.php:23
+#, php-format
+msgid "Updated on: %1$s"
+msgstr ""
+
+#: classes/views/frm-entries/form.php:4
+msgid "Oops!"
+msgstr "Oops!"
+
+#: classes/views/frm-entries/form.php:4
+#, php-format
+msgid "You did not add any fields to your form. %1$sGo back%2$s and add some."
+msgstr ""
+"Non hai aggiunto nessun campo al tuo modulo. %1$sTorna indietro%2$s e "
+"aggiungine qualcuno."
+
+#: classes/views/frm-entries/form.php:29
+msgid "If you are human, leave this field blank."
+msgstr ""
+
+#: classes/views/frm-entries/list.php:19 classes/views/frm-forms/list.php:21
+#: classes/views/shared/mb_adv_info.php:21
+msgid "Search"
+msgstr "Cerca"
+
+#: classes/views/frm-entries/no_entries.php:3
+msgid "This form is not set to save any entries."
+msgstr "Questo modulo è impostato per non salvare nessuna voce."
+
+#: classes/views/frm-entries/no_entries.php:4
+#, php-format
+msgid ""
+"If you would like to save entries in this form, go to the %1$sform "
+"Settings%2$s page %3$s and uncheck the \"Do not store any entries submitted "
+"from this form\" box."
+msgstr ""
+
+#: classes/views/frm-entries/no_entries.php:6
+#, php-format
+msgid "No Entries for form: %s"
+msgstr "Non ci sono voci nel form: %s"
+
+#: classes/views/frm-entries/no_entries.php:7
+#, php-format
+msgid ""
+"See the %1$sform documentation%2$s for instructions on publishing your form"
+msgstr ""
+
+#: classes/views/frm-entries/no_entries.php:9
+msgid "You have not created any forms yet."
+msgstr "Non hai creato ancora alcun modulo."
+
+#: classes/views/frm-entries/no_entries.php:10
+#, php-format
+msgid "To view entries, you must first %1$sbuild a form%2$s"
+msgstr "Per vedere le voci, devi prima %1$screare un modulo%2$s"
+
+#: classes/views/frm-entries/show.php:10
+#: classes/views/frm-entries/sidebar-shared.php:7
+msgid "View Entry"
+msgstr "Visualizza voce"
+
+#: classes/views/frm-entries/show.php:21
+msgid "Entry"
+msgstr "Voce"
+
+#: classes/views/frm-entries/show.php:68
+msgid "Parent Entry ID"
+msgstr "ID Voce-genitore"
+
+#: classes/views/frm-entries/sidebar-shared.php:4
+msgid "Entry Details"
+msgstr "Inserisci dettagli"
+
+#: classes/views/frm-entries/sidebar-shared.php:17
+msgid "Post"
+msgstr "Articolo"
+
+#: classes/views/frm-entries/sidebar-shared.php:21
+msgid "Edit"
+msgstr "Modifica"
+
+#: classes/views/frm-entries/sidebar-shared.php:48
+#, php-format
+msgid "Created by: %1$s"
+msgstr "Creato da: %1$s"
+
+#: classes/views/frm-entries/sidebar-shared.php:60
+#, php-format
+msgid "Updated by: %1$s"
+msgstr "Aggiornato da: %1$s"
+
+#: classes/views/frm-entries/sidebar-shared.php:83
+msgid "Browser/OS"
+msgstr "Browser/Sistema Operativo"
+
+#: classes/views/frm-fields/import_choices.php:22
+msgid "Edit or add field options (one per line)"
+msgstr "Modificare o aggiungere opzioni al campo (uno per riga)"
+
+#: classes/views/frm-fields/import_choices.php:56
+msgid "Update Field Choices"
+msgstr "Aggiorna Scelte campo"
+
+#: classes/views/frm-form-actions/_action_inside.php:7
+msgid "Label"
+msgstr "Etichetta"
+
+#: classes/views/frm-form-actions/_action_inside.php:33
+msgid "Action Triggers"
+msgstr "Attivatori azione"
+
+#: classes/views/frm-form-actions/_action_inside.php:35
+msgid "Trigger this action after"
+msgstr "Fai partire questa azione dopo"
+
+#: classes/views/frm-form-actions/_action_inside.php:59
+#, php-format
+msgid "Action ID: %1$s"
+msgstr "ID azione: %1$s"
+
+#: classes/views/frm-form-actions/_email_settings.php:4
+msgid "To"
+msgstr "A"
+
+#: classes/views/frm-form-actions/_email_settings.php:10
+#: classes/views/frm-form-actions/_email_settings.php:16
+msgid "CC"
+msgstr "CC"
+
+#: classes/views/frm-form-actions/_email_settings.php:11
+#: classes/views/frm-form-actions/_email_settings.php:26
+msgid "BCC"
+msgstr "CCN"
+
+#: classes/views/frm-form-actions/_email_settings.php:36
+msgid "Reply to"
+msgstr "Rispondi a"
+
+#: classes/views/frm-form-actions/_email_settings.php:47
+msgid "From"
+msgstr "Da"
+
+#: classes/views/frm-form-actions/_email_settings.php:54
+msgid "Reply To"
+msgstr "Rispondi a"
+
+#: classes/views/frm-form-actions/_email_settings.php:63
+msgid "Subject"
+msgstr "Oggetto"
+
+#: classes/views/frm-form-actions/_email_settings.php:69
+msgid "Message"
+msgstr "Messaggio"
+
+#: classes/views/frm-form-actions/_email_settings.php:73
+#: classes/views/frm-forms/shortcode_opts.php:12
+msgid "Options"
+msgstr "Opzioni"
+
+#: classes/views/frm-form-actions/_email_settings.php:77
+msgid "Append IP Address, Browser, and Referring URL to message"
+msgstr "Aggiungi indirizzo IP, browser e URL di riferimento al messaggio"
+
+#: classes/views/frm-form-actions/_email_settings.php:79
+msgid "Append Browser and Referring URL to message"
+msgstr ""
+
+#: classes/views/frm-form-actions/_email_settings.php:85
+msgid "Send Emails in Plain Text"
+msgstr "Invia e-mail in testo semplice"
+
+#: classes/views/frm-form-actions/default_actions.php:8
+msgid "Create Post"
+msgstr "Creare un post"
+
+#: classes/views/frm-form-actions/default_actions.php:16
+msgid "Register User"
+msgstr "Registra utente"
+
+#: classes/views/frm-form-actions/default_actions.php:24
+msgid "Collect Payment"
+msgstr "Ricevere un pagamento"
+
+#: classes/views/frm-form-actions/default_actions.php:32
+msgid "Aweber"
+msgstr "Aweber"
+
+#: classes/views/frm-form-actions/default_actions.php:40
+msgid "MailChimp"
+msgstr "MailChimp"
+
+#: classes/views/frm-form-actions/default_actions.php:48
+msgid "Twilio"
+msgstr "Twilio"
+
+#: classes/views/frm-form-actions/default_actions.php:56
+msgid "Highrise"
+msgstr "Highrise"
+
+#: classes/views/frm-form-actions/form_action.php:17
+msgid "Duplicate"
+msgstr ""
+
+#: classes/views/frm-forms/_publish_box.php:44
+msgid "Preview"
+msgstr "Anteprima"
+
+#: classes/views/frm-forms/_publish_box.php:49
+msgid "On Blank Page"
+msgstr "Su una pagina vuota"
+
+#: classes/views/frm-forms/_publish_box.php:54
+msgid "In Theme"
+msgstr "Nel tema"
+
+#: classes/views/frm-forms/actions-dropdown.php:2
+msgid "Show options"
+msgstr ""
+
+#: classes/views/frm-forms/add_field.php:6
+msgid "Move Field"
+msgstr "Sposta campo"
+
+#: classes/views/frm-forms/add_field.php:7
+msgid "Delete Field"
+msgstr "Cancella campo"
+
+#: classes/views/frm-forms/add_field.php:8
+msgid "Duplicate Section"
+msgstr "Duplicare sezione"
+
+#: classes/views/frm-forms/add_field.php:8
+msgid "Duplicate Field"
+msgstr "Duplica campo"
+
+#: classes/views/frm-forms/add_field.php:74
+msgid "Add Option"
+msgstr "Aggiungi opzione"
+
+#: classes/views/frm-forms/add_field.php:78
+msgid "Add \"Other\""
+msgstr "Aggiungere \"altro\""
+
+#: classes/views/frm-forms/add_field.php:86
+msgid "Field Choices"
+msgstr "Scelte campo"
+
+#: classes/views/frm-forms/add_field.php:87
+msgid "Bulk Edit Options"
+msgstr "Modifica opzioni in gruppo"
+
+#: classes/views/frm-forms/add_field.php:116
+msgid "Field Type"
+msgstr "Tipo campo"
+
+#: classes/views/frm-forms/add_field.php:132
+#: classes/views/frm-forms/add_field.php:304
+msgid "Required"
+msgstr "Obbligatorio"
+
+#: classes/views/frm-forms/add_field.php:142
+msgid ""
+"Unique: Do not allow the same response multiple times. For example, if one "
+"user enters 'Joe', then no one else will be allowed to enter the same name."
+msgstr ""
+
+#: classes/views/frm-forms/add_field.php:143
+#: classes/views/frm-forms/add_field.php:323
+msgid "Unique"
+msgstr "Univoco"
+
+#: classes/views/frm-forms/add_field.php:153
+msgid ""
+"Read Only: Show this field but do not allow the field value to be edited "
+"from the front-end."
+msgstr ""
+"Sola lettura: Mostra questo campo, ma non consentire la modifica del valore "
+"del campo dal front-end."
+
+#: classes/views/frm-forms/add_field.php:155
+#: classes/views/styles/_field-colors.php:20
+msgid "Read Only"
+msgstr "Sola lettura"
+
+#: classes/views/frm-forms/add_field.php:165
+msgid "Indicate required field with"
+msgstr "Indica campo obbligatorio con"
+
+#: classes/views/frm-forms/add_field.php:173
+msgid ""
+"The field key can be used as an alternative to the field ID in many cases."
+msgstr ""
+"La Chiave del campo può essere utilizzata come alternativa all'ID del campo "
+"in molti casi."
+
+#: classes/views/frm-forms/add_field.php:174
+#: classes/views/frm-forms/mb_html_tab.php:11
+msgid "Field Key"
+msgstr "Chiave campo"
+
+#: classes/views/frm-forms/add_field.php:183
+msgid "CSS layout classes"
+msgstr "Classi layout CSS"
+
+#: classes/views/frm-forms/add_field.php:184
+msgid ""
+"Add a CSS class to the field container. Use our predefined classes to align "
+"multiple fields in single row."
+msgstr ""
+"Aggiungi una classe CSS al contenitore campo. Usa le nostre classi "
+"predefinite per allineare più campi in un'unica riga."
+
+#: classes/views/frm-forms/add_field.php:193
+#: classes/views/frm-forms/mb_html_tab.php:14
+msgid "Label Position"
+msgstr "Posizione etichetta"
+
+#: classes/views/frm-forms/add_field.php:232
+msgid "Show URL image"
+msgstr ""
+
+#: classes/views/frm-forms/add_field.php:237
+msgid ""
+"If this URL points to an image, show to image on the entries listing page."
+msgstr ""
+
+#: classes/views/frm-forms/add_field.php:246
+msgid "ReCaptcha Type"
+msgstr ""
+
+#: classes/views/frm-forms/add_field.php:247
+msgid ""
+"Set the size of the captcha field. The compact option is best if your form "
+"is in a small area."
+msgstr ""
+"Stabilisci le dimensioni del campo captcha. L'opzione compatta è preferibile "
+"se il tuo modulo è inserito in uno spazio ridotto. "
+
+#: classes/views/frm-forms/add_field.php:252
+msgid "Normal"
+msgstr "Normale"
+
+#: classes/views/frm-forms/add_field.php:255
+msgid "Compact"
+msgstr "Compatto"
+
+#: classes/views/frm-forms/add_field.php:263
+msgid "reCAPTCHA Color"
+msgstr "Colore reCAPTCHA"
+
+#: classes/views/frm-forms/add_field.php:269
+msgid "Light"
+msgstr "Chiaro"
+
+#: classes/views/frm-forms/add_field.php:272
+msgid "Dark"
+msgstr "Scuro"
+
+#: classes/views/frm-forms/add_field.php:298
+msgid "Validation"
+msgstr "Validazione"
+
+#: classes/views/frm-forms/add_field.php:314
+msgid "Invalid Format"
+msgstr "Formato non valido"
+
+#: classes/views/frm-forms/add_field.php:332
+msgid "Confirmation"
+msgstr "Conferma"
+
+#: classes/views/frm-forms/add_field.php:354
+msgid "Drag fields from your form or the sidebar into this section"
+msgstr "Trascina i campi dal tuo modulo o dalla sidebar in questa sezione"
+
+#: classes/views/frm-forms/add_field_links.php:18
+#: classes/views/shared/mb_adv_info.php:3
+msgid "Fields"
+msgstr "Campi"
+
+#: classes/views/frm-forms/add_field_links.php:21
+msgid ""
+"Open the Field Settings and click on the CSS Layout Classes option to enable "
+"this tab"
+msgstr ""
+
+#: classes/views/frm-forms/add_field_links.php:22
+msgid "Layout"
+msgstr "Layout"
+
+#: classes/views/frm-forms/add_field_links.php:100
+msgid ""
+"Click inside the \"CSS layout classes\" field option in any field to enable "
+"the options below."
+msgstr ""
+
+#: classes/views/frm-forms/add_field_links.php:103
+msgid "Click on any box below to set the width for your selected field."
+msgstr ""
+
+#: classes/views/frm-forms/edit.php:10 classes/views/frm-forms/new.php:10
+msgid "Build Form"
+msgstr ""
+
+#: classes/views/frm-forms/form.php:17
+msgid "1. Name your form"
+msgstr "1. Rinomina il tuo modulo"
+
+#: classes/views/frm-forms/form.php:21
+msgid "2. Click or drag a field to add it to your form"
+msgstr "2. Fai clic o trascina un campo per aggiungerlo al tuo modulo"
+
+#: classes/views/frm-forms/form.php:27
+msgid "Add Fields Here"
+msgstr "Aggiungi i campi qui"
+
+#: classes/views/frm-forms/form.php:30
+msgid "Or load fields from a template"
+msgstr "O carica i campi dal template"
+
+#: classes/views/frm-forms/form.php:36
+msgid "Load Template"
+msgstr "Carica Template"
+
+#: classes/views/frm-forms/form.php:41
+msgid "3. Save your form"
+msgstr "Salva il tuo modulo"
+
+#: classes/views/frm-forms/insert_form_popup.php:5
+msgid "Close panel"
+msgstr "Chiudi pannello"
+
+#: classes/views/frm-forms/insert_form_popup.php:40
+msgid "Insert into Post"
+msgstr "Inserisci nei Post"
+
+#: classes/views/frm-forms/mb_html_tab.php:3
+msgid "Use the buttons below to help customize your form HTML."
+msgstr ""
+
+#: classes/views/frm-forms/mb_html_tab.php:10
+msgid "Field ID"
+msgstr "ID campo"
+
+#: classes/views/frm-forms/mb_html_tab.php:12
+msgid "Field Name"
+msgstr "Nome Campo"
+
+#: classes/views/frm-forms/mb_html_tab.php:15
+msgid "Required Label"
+msgstr "Etichetta obbligatorio"
+
+#: classes/views/frm-forms/mb_html_tab.php:16
+msgid "Input Field"
+msgstr "Campo Input"
+
+#: classes/views/frm-forms/mb_html_tab.php:18
+msgid "Single Option"
+msgstr "Opzione singola"
+
+#: classes/views/frm-forms/mb_html_tab.php:19
+msgid ""
+"Show a single radio or checkbox option by replacing 1 with the order of the "
+"option"
+msgstr ""
+
+#: classes/views/frm-forms/mb_html_tab.php:21
+msgid "Hide Option Label"
+msgstr "Nascondi Opzione Etichetta"
+
+#: classes/views/frm-forms/mb_html_tab.php:23
+msgid "Required Class"
+msgstr "Classe Obbligatorio"
+
+#: classes/views/frm-forms/mb_html_tab.php:24
+msgid "Add class name if field is required"
+msgstr "Aggiungi nome classe se è un campo obbligatorio "
+
+#: classes/views/frm-forms/mb_html_tab.php:27
+msgid "Error Class"
+msgstr "Classe errore"
+
+#: classes/views/frm-forms/mb_html_tab.php:28
+msgid "Add class name if field has an error on form submit"
+msgstr "Aggiungi nome classe se il campo ha un errore sull'invio del modulo "
+
+#: classes/views/frm-forms/mb_html_tab.php:48
+msgid "Form Name"
+msgstr "Nome Modulo"
+
+#: classes/views/frm-forms/mb_html_tab.php:50
+#: classes/views/frm-forms/settings.php:240
+msgid "Form Key"
+msgstr "Chiave Modulo"
+
+#: classes/views/frm-forms/mb_html_tab.php:51
+msgid "Delete Entry Link"
+msgstr "Elimina link voce"
+
+#: classes/views/frm-forms/mb_html_tab.php:63
+msgid "Button Label"
+msgstr "Etichetta pulsante"
+
+#: classes/views/frm-forms/mb_html_tab.php:64
+msgid "Button Hook"
+msgstr "Hook pulsante"
+
+#: classes/views/frm-forms/mb_insert_fields.php:3
+msgid "Customization"
+msgstr "Personalizzazione"
+
+#: classes/views/frm-forms/settings.php:39
+msgid "Customize HTML"
+msgstr "Personalizza HTML"
+
+#: classes/views/frm-forms/settings.php:64
+msgid "Form Shortcodes"
+msgstr ""
+
+#: classes/views/frm-forms/settings.php:66
+msgid "Show"
+msgstr "Mostra"
+
+#: classes/views/frm-forms/settings.php:68
+msgid "Insert on a page, post, or text widget"
+msgstr "Inserisci in una pagina, in un articolo o in un widget di testo"
+
+#: classes/views/frm-forms/settings.php:73
+msgid "Insert in a template"
+msgstr "Inserisci in un modello"
+
+#: classes/views/frm-forms/settings.php:76
+msgid "Hide"
+msgstr "Nascondi"
+
+#: classes/views/frm-forms/settings.php:82
+msgid "Form Settings"
+msgstr "Opzioni modulo"
+
+#: classes/views/frm-forms/settings.php:93
+#: classes/views/frm-forms/settings.php:228
+msgid "On Submit"
+msgstr "All'invio"
+
+#: classes/views/frm-forms/settings.php:94
+msgid "Choose what will happen after the user submits this form."
+msgstr "Decidi cosa deve accadere dopo che l'utente ha inviato questo modulo."
+
+#: classes/views/frm-forms/settings.php:103
+msgid "Show Message"
+msgstr "Mostra Messaggio"
+
+#: classes/views/frm-forms/settings.php:106
+msgid "Redirect to URL"
+msgstr "Reindirizzamento all'URL"
+
+#: classes/views/frm-forms/settings.php:109
+msgid "Show Page Content"
+msgstr "Mostra il contenuto della pagina"
+
+#: classes/views/frm-forms/settings.php:119
+msgid "Use Content from Page"
+msgstr "Utilizza Contenuto da pagina"
+
+#: classes/views/frm-forms/settings.php:129
+msgid "Show the form with the confirmation message"
+msgstr "Visualizza il modulo con il messaggio di conferma"
+
+#: classes/views/frm-forms/settings.php:137
+msgid "Do not store entries submitted from this form"
+msgstr ""
+
+#: classes/views/frm-forms/settings.php:143
+msgid "Use Akismet to check entries for spam for"
+msgstr "Usa Akismet per controllare le voci in funzione anti-spam"
+
+#: classes/views/frm-forms/settings.php:146
+msgid "no one"
+msgstr "nessuno"
+
+#: classes/views/frm-forms/settings.php:149
+msgid "everyone"
+msgstr "tutti"
+
+#: classes/views/frm-forms/settings.php:152
+msgid "visitors who are not logged in"
+msgstr "i visitatori che non sono connessi"
+
+#: classes/views/frm-forms/settings.php:161
+msgid "AJAX"
+msgstr "AJAX"
+
+#: classes/views/frm-forms/settings.php:162
+msgid "Make stuff happen in the background without a page refresh"
+msgstr ""
+"Fai in modo che qualunque cambiamento avvenga senza che la pagina venga "
+"ricaricata."
+
+#: classes/views/frm-forms/settings.php:168
+msgid "Load and save form builder page with AJAX"
+msgstr "Carica e salva con AJAX la pagina del creatore di moduli"
+
+#: classes/views/frm-forms/settings.php:170
+msgid "Recommended for long forms."
+msgstr "Consigliato per i moduli lunghi."
+
+#: classes/views/frm-forms/settings.php:178
+msgid "Validate this form with javascript"
+msgstr "Valida questo modulo con javascript"
+
+#: classes/views/frm-forms/settings.php:180
+msgid ""
+"Required fields, email format, and number format can be checked instantly in "
+"your browser. You may want to turn this option off if you have any "
+"customizations to remove validation messages on certain fields."
+msgstr ""
+"Campi obbligatori, formato e-mail e formato numeri possono essere verificati "
+"all'istante nel tuo browser. In caso, puoi disabilitare questa opzione se "
+"hai qualche tipo di personalizzazione per rimuovere i messaggi di "
+"validazione in certi campi."
+
+#: classes/views/frm-forms/settings.php:189
+msgid "Styling & Buttons"
+msgstr "Stili e Pulsanti"
+
+#: classes/views/frm-forms/settings.php:190
+msgid "Select a style for this form and set the text for your buttons."
+msgstr ""
+"Seleziona uno stile per questo modulo e inserisci il testo per i tuoi "
+"pulsanti."
+
+#: classes/views/frm-forms/settings.php:195
+msgid "Style Template"
+msgstr "Modello stile"
+
+#: classes/views/frm-forms/settings.php:199
+msgid "Always use default"
+msgstr "Usa sempre il predefinito"
+
+#: classes/views/frm-forms/settings.php:203 classes/views/styles/manage.php:43
+msgid "default"
+msgstr "predefinito"
+
+#: classes/views/frm-forms/settings.php:207
+msgid "Do not use Formidable styling"
+msgstr "Non usare lo stile Formidable"
+
+#: classes/views/frm-forms/settings.php:212
+#: classes/views/frm-settings/form.php:174
+msgid "Submit Button Text"
+msgstr "Testo Pulsante invio"
+
+#: classes/views/frm-forms/settings.php:222
+msgid "Messages"
+msgstr "Messaggi"
+
+#: classes/views/frm-forms/settings.php:223
+msgid "Set up your confirmation messages."
+msgstr "Imposta i messaggi di conferma."
+
+#: classes/views/frm-forms/settings.php:236
+#: classes/views/frm-settings/form.php:182
+msgid "Miscellaneous"
+msgstr "Varie"
+
+#: classes/views/frm-forms/settings.php:262
+msgid "Add New Action"
+msgstr "Aggiungi Nuova Azione"
+
+#: classes/views/frm-forms/settings.php:284
+msgid "Click an action to add it to this form"
+msgstr "Fai clic su un'azione per aggiungerla a questo modulo"
+
+#: classes/views/frm-forms/settings.php:294
+msgid "Form Classes"
+msgstr "Classi modulo"
+
+#: classes/views/frm-forms/settings.php:300
+msgid "Before Fields"
+msgstr "Prima dei Campi"
+
+#: classes/views/frm-forms/settings.php:322
+msgid "After Fields"
+msgstr "Dopo i Campi"
+
+#: classes/views/frm-forms/settings.php:326
+msgid "Submit Button"
+msgstr "Pulsante invio"
+
+#: classes/views/frm-forms/shortcode_opts.php:4
+msgid "Select a form:"
+msgstr "Seleziona un modulo"
+
+#: classes/views/frm-settings/form.php:38
+#: classes/views/frm-settings/form.php:225
+msgid "Update Options"
+msgstr "Aggiorna opzioni"
+
+#: classes/views/frm-settings/form.php:41
+msgid "Styling & Scripts"
+msgstr "Stili & Script"
+
+#: classes/views/frm-settings/form.php:43
+msgid "Load form styling"
+msgstr "Carica stile modulo"
+
+#: classes/views/frm-settings/form.php:46
+msgid "on every page of your site"
+msgstr "su ogni pagina del tuo sito"
+
+#: classes/views/frm-settings/form.php:49
+msgid "only on applicable pages"
+msgstr "solo nelle pagine specifiche"
+
+#: classes/views/frm-settings/form.php:52
+msgid "Don't use form styling on any page"
+msgstr "Non usare lo stile del modulo in ogni pagina"
+
+#: classes/views/frm-settings/form.php:59
+msgid "Use HTML5 in forms"
+msgstr "Usa HTML5 nei moduli"
+
+#: classes/views/frm-settings/form.php:61
+msgid ""
+"We recommend using HTML 5 for your forms. It adds some nifty options like "
+"placeholders, patterns, and autocomplete."
+msgstr ""
+"Raccomandiamo di usare HTML 5 per i tuoi moduli. Esso aggiunge alcune "
+"opzioni eleganti come segnaposti, modelli e completamento automatico. "
+
+#: classes/views/frm-settings/form.php:67
+msgid "Do not use CSS Grids for form layouts"
+msgstr ""
+
+#: classes/views/frm-settings/form.php:69
+msgid ""
+"Form layouts built using CSS grids that are not fully supported by older "
+"browsers like Internet Explorer. Leave this box unchecked for your layouts "
+"to look best in current browsers, but show in a single column in older "
+"browsers."
+msgstr ""
+
+#: classes/views/frm-settings/form.php:74
+msgid "User Permissions"
+msgstr "Autorizzazioni utente"
+
+#: classes/views/frm-settings/form.php:75
+msgid ""
+"Select users that are allowed access to Formidable. Without access to View "
+"Forms, users will be unable to see the Formidable menu."
+msgstr ""
+"Selezionare gli utenti che possono accedere a Formidable. Senza l'accesso a "
+"Visualizza i moduli, gli utenti non saranno in grado di vedere il menu "
+"Formidabile."
+
+#: classes/views/frm-settings/form.php:90
+msgid ""
+"reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books "
+"while blocking spam on your blog. reCAPTCHA asks commenters to retype two "
+"words scanned from a book to prove that they are a human. This verifies that "
+"they are not a spambot."
+msgstr ""
+"reCAPTCHA è un servizio CAPTCHA libero e accessibile che aiuta a "
+"digitalizzare libri, bloccando lo spam sul tuo blog. reCAPTCHA chiede ai "
+"commentatori di ridigitare due parole scansionate da un libro per dimostrare "
+"di essere umani, provando così di non essere spambot."
+
+#: classes/views/frm-settings/form.php:94
+#, php-format
+msgid ""
+"reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree "
+"reCAPTCHA key%2$s."
+msgstr ""
+"reCAPTCHA richiede un sito e una chiave API privata. Iscriviti per ricevere "
+"una %1$schiave reCAPTCHA gratis%2$s."
+
+#: classes/views/frm-settings/form.php:97
+msgid "Site Key"
+msgstr "Chiave del sito"
+
+#: classes/views/frm-settings/form.php:98
+#: classes/views/frm-settings/form.php:101
+msgid "Optional"
+msgstr "Opzionale"
+
+#: classes/views/frm-settings/form.php:100
+msgid "Secret Key"
+msgstr "Chiave Segreta"
+
+#: classes/views/frm-settings/form.php:103
+msgid "reCAPTCHA Type"
+msgstr ""
+
+#: classes/views/frm-settings/form.php:106
+msgid "Checkbox (V2)"
+msgstr ""
+
+#: classes/views/frm-settings/form.php:109
+msgid "Invisible"
+msgstr ""
+
+#: classes/views/frm-settings/form.php:113
+msgid "reCAPTCHA Language"
+msgstr "Lingua reCAPTCHA"
+
+#: classes/views/frm-settings/form.php:115
+msgid "Browser Default"
+msgstr ""
+
+#: classes/views/frm-settings/form.php:122
+msgid "Multiple reCaptchas"
+msgstr "reCaptcha multipli"
+
+#: classes/views/frm-settings/form.php:125
+msgid "Allow multiple reCaptchas to be used on a single page"
+msgstr "Permetti l'utilizzo di reCaptcha multipli su una singola pagina"
+
+#: classes/views/frm-settings/form.php:129
+msgid "Default Messages"
+msgstr "Messaggio predefinito"
+
+#: classes/views/frm-settings/form.php:130
+msgid ""
+"You can override the success message and submit button settings on "
+"individual forms."
+msgstr ""
+"Puoi sovrascrivere il messaggio di conferma e le impostazioni del pulsante "
+"di invio su ciascun modulo individualmente."
+
+#: classes/views/frm-settings/form.php:134
+msgid "Failed/Duplicate Entry"
+msgstr "Non riuscito/Voce duplicata"
+
+#: classes/views/frm-settings/form.php:135
+msgid ""
+"The message seen when a form is submitted and passes validation, but "
+"something goes wrong."
+msgstr ""
+"Il messaggio che viene visualizzato quando un modulo viene inviato e passa "
+"la convalida, ma qualcosa va storto."
+
+#: classes/views/frm-settings/form.php:141
+msgid "Blank Field"
+msgstr "Campo vuoto"
+
+#: classes/views/frm-settings/form.php:142
+msgid "The message seen when a required field is left blank."
+msgstr ""
+"Il messaggio che viene visualizzato quando un campo obbligatorio viene "
+"lasciato vuoto."
+
+#: classes/views/frm-settings/form.php:148
+msgid "Incorrect Field"
+msgstr "Campo non corretto"
+
+#: classes/views/frm-settings/form.php:149
+msgid "The message seen when a field response is either incorrect or missing."
+msgstr ""
+"Il messaggio che viene visualizzato quando la risposta di un campo è errata "
+"o mancante."
+
+#: classes/views/frm-settings/form.php:156
+msgid "Unique Value"
+msgstr "Valore univoco"
+
+#: classes/views/frm-settings/form.php:157
+msgid ""
+"The message seen when a user selects a value in a unique field that has "
+"already been used."
+msgstr ""
+"Il messaggio che viene visualizzato quando un utente seleziona un valore in "
+"un campo univoco che è già stata utilizzato."
+
+#: classes/views/frm-settings/form.php:167
+msgid "Success Message"
+msgstr "Messaggio di conferma"
+
+#: classes/views/frm-settings/form.php:168
+msgid "The default message seen after a form is submitted."
+msgstr ""
+"Il messaggio predefinito che viene inviato di default dopo l'invio di un "
+"modulo."
+
+#: classes/views/frm-settings/form.php:188
+msgid "IP storage"
+msgstr ""
+
+#: classes/views/frm-settings/form.php:191
+msgid ""
+"Do not store IPs with form submissions. Check this box if you are in the UK."
+msgstr ""
+
+#: classes/views/frm-settings/form.php:221
+msgid "Uninstall Formidable"
+msgstr "Disinstalla Formidable"
+
+#: classes/views/frm-settings/license_box.php:5
+msgid ""
+"Get more field types including multiple file upload and cascading lookups. "
+"PLUS multi-page forms, calculations, repeatable sections, confirmation "
+"fields, conditional logic, front-end editing, views, data management, and "
+"graph & stat reporting."
+msgstr ""
+
+#: classes/views/frm-settings/license_box.php:6
+#, php-format
+msgid "%1$sClick here%2$s to go Pro."
+msgstr ""
+
+#: classes/views/frm-settings/license_box.php:9
+msgid "Click here"
+msgstr "Fai clic qui"
+
+#: classes/views/shared/mb_adv_info.php:5
+msgid "Conditionals"
+msgstr "Condizionali"
+
+#: classes/views/shared/mb_adv_info.php:7
+msgid "Advanced"
+msgstr "Avanzato"
+
+#: classes/views/shared/mb_adv_info.php:9
+msgid "HTML Tags"
+msgstr "Tag HTML"
+
+#: classes/views/shared/mb_adv_info.php:15
+#: classes/views/shared/mb_adv_info.php:87
+msgid "IDs"
+msgstr "ID"
+
+#: classes/views/shared/mb_adv_info.php:16
+#: classes/views/shared/mb_adv_info.php:88
+msgid "Keys"
+msgstr "Chiavi"
+
+#: classes/views/shared/mb_adv_info.php:18
+#: classes/views/shared/mb_adv_info.php:90
+msgid "Fields from your form"
+msgstr "Campi dal modulo"
+
+#: classes/views/shared/mb_adv_info.php:53
+msgid ""
+"Click a button below to insert extra values from form entries or your site "
+"settings."
+msgstr ""
+
+#: classes/views/shared/mb_adv_info.php:56
+msgid "Helpers"
+msgstr "Assistenti"
+
+#: classes/views/shared/mb_adv_info.php:100
+msgid "Conditional text here"
+msgstr "Testo condizionale qui"
+
+#: classes/views/shared/mb_adv_info.php:115
+msgid "Click a button below to insert sample logic into your view"
+msgstr ""
+"Fai clic in uno dei campi qui sotto per inserire nella visualizzazione un "
+"esempio di logica condizionale."
+
+#: classes/views/styles/_buttons.php:4
+msgid "Disable submit button styling"
+msgstr "Disabilita lo stile del pulsante d'invio"
+
+#: classes/views/styles/_buttons.php:5
+msgid ""
+"Note: If disabled, you may not see the change take effect until you make 2 "
+"more styling changes or click \"Update Options\"."
+msgstr ""
+"Nota: Se disattivato, non vedrai il cambiamento finché non effettuerai altre "
+"2 modifiche dello stile o non farai clic su \"Aggiorna opzioni\"."
+
+#: classes/views/styles/_buttons.php:15
+msgid "Hover"
+msgstr "Hover"
+
+#: classes/views/styles/_buttons.php:18
+msgid "Click"
+msgstr "Click"
+
+#: classes/views/styles/_buttons.php:24
+#: classes/views/styles/_check-box-radio-fields.php:40
+#: classes/views/styles/_field-description.php:26
+#: classes/views/styles/_field-labels.php:14
+#: classes/views/styles/_field-sizes.php:2
+#: classes/views/styles/_form-description.php:2
+#: classes/views/styles/_form-messages.php:27
+#: classes/views/styles/_form-messages.php:51
+#: classes/views/styles/_form-title.php:2
+msgid "Size"
+msgstr "Dimensione"
+
+#: classes/views/styles/_buttons.php:29
+#: classes/views/styles/_field-labels.php:40
+#: classes/views/styles/_field-sizes.php:12
+msgid "Width"
+msgstr "Larghezza"
+
+#: classes/views/styles/_buttons.php:34 classes/views/styles/_field-sizes.php:7
+msgid "Height"
+msgstr "Altezza"
+
+#: classes/views/styles/_buttons.php:39
+#: classes/views/styles/_check-box-radio-fields.php:30
+#: classes/views/styles/_field-description.php:6
+#: classes/views/styles/_field-labels.php:6
+#: classes/views/styles/_field-labels.php:56
+#: classes/views/styles/_field-sizes.php:38
+msgid "Weight"
+msgstr "Weight"
+
+#: classes/views/styles/_buttons.php:48
+#: classes/views/styles/_field-sizes.php:33
+msgid "Corners"
+msgstr "Angoli"
+
+#: classes/views/styles/_buttons.php:53 classes/views/styles/_buttons.php:97
+#: classes/views/styles/_buttons.php:116
+#: classes/views/styles/_field-colors.php:27
+#: classes/views/styles/_field-colors.php:71
+#: classes/views/styles/_field-colors.php:89
+#: classes/views/styles/_field-colors.php:128
+#: classes/views/styles/_form-messages.php:13
+#: classes/views/styles/_form-messages.php:35
+msgid "BG color"
+msgstr "Colore sfondo"
+
+#: classes/views/styles/_buttons.php:63 classes/views/styles/_buttons.php:107
+#: classes/views/styles/_buttons.php:126
+#: classes/views/styles/_field-colors.php:36
+#: classes/views/styles/_field-colors.php:75
+#: classes/views/styles/_field-colors.php:98
+#: classes/views/styles/_field-colors.php:137
+#: classes/views/styles/_form-messages.php:19
+#: classes/views/styles/_form-messages.php:41
+#: classes/views/styles/_general.php:33
+msgid "Border"
+msgstr "Bordo"
+
+#: classes/views/styles/_buttons.php:68
+#: classes/views/styles/_field-colors.php:40
+#: classes/views/styles/_field-colors.php:102
+msgid "Thickness"
+msgstr "Spessore"
+
+#: classes/views/styles/_buttons.php:73
+msgid "Shadow"
+msgstr "Ombra"
+
+#: classes/views/styles/_buttons.php:79
+msgid "BG Image"
+msgstr "Immagine sfondo"
+
+#: classes/views/styles/_buttons.php:84
+#: classes/views/styles/_field-description.php:41
+#: classes/views/styles/_field-sizes.php:28
+msgid "Margin"
+msgstr "Margine"
+
+#: classes/views/styles/_buttons.php:89
+#: classes/views/styles/_field-labels.php:45
+#: classes/views/styles/_field-sizes.php:23
+#: classes/views/styles/_general.php:43
+msgid "Padding"
+msgstr "Padding"
+
+#: classes/views/styles/_check-box-radio-fields.php:2
+msgid "Radio"
+msgstr "Radio"
+
+#: classes/views/styles/_check-box-radio-fields.php:5
+#: classes/views/styles/_check-box-radio-fields.php:17
+msgid "Multiple Rows"
+msgstr "Righe multiple"
+
+#: classes/views/styles/_check-box-radio-fields.php:8
+#: classes/views/styles/_check-box-radio-fields.php:20
+msgid "Single Row"
+msgstr "Riga singola"
+
+#: classes/views/styles/_check-box-radio-fields.php:14
+msgid "Check Box"
+msgstr "Check box"
+
+#: classes/views/styles/_check-box-radio-fields.php:26
+#: classes/views/styles/_field-description.php:2
+#: classes/views/styles/_field-labels.php:2
+#: classes/views/styles/_field-labels.php:52
+#: classes/views/styles/_form-description.php:7
+#: classes/views/styles/_form-title.php:7 classes/views/styles/_general.php:38
+msgid "Color"
+msgstr "Colore"
+
+#: classes/views/styles/_field-colors.php:10
+msgid "Active"
+msgstr "Attivo"
+
+#: classes/views/styles/_field-colors.php:47
+#: classes/views/styles/_field-colors.php:109
+msgid "solid"
+msgstr "solido"
+
+#: classes/views/styles/_field-colors.php:50
+#: classes/views/styles/_field-colors.php:112
+msgid "dotted"
+msgstr "punteggiato"
+
+#: classes/views/styles/_field-colors.php:53
+#: classes/views/styles/_field-colors.php:115
+msgid "dashed"
+msgstr "tratteggiato"
+
+#: classes/views/styles/_field-colors.php:56
+#: classes/views/styles/_field-colors.php:118
+msgid "double"
+msgstr "doppio"
+
+#: classes/views/styles/_field-colors.php:64
+#: classes/views/styles/_field-colors.php:82
+msgid "Remove box shadow"
+msgstr "Rimuovi box shadow"
+
+#: classes/views/styles/_field-description.php:20
+msgid "italic"
+msgstr "corsivo"
+
+#: classes/views/styles/_field-description.php:30
+#: classes/views/styles/_field-labels.php:28
+msgid "Align"
+msgstr "Allineamento"
+
+#: classes/views/styles/_field-labels.php:19
+msgid "Position"
+msgstr "Posizione"
+
+#: classes/views/styles/_field-labels.php:50
+msgid "Required Indicator"
+msgstr "Indicatore richiesto"
+
+#: classes/views/styles/_field-sizes.php:19
+msgid "Automatic Width for drop-down fields"
+msgstr "Larghezza automatica per i campi a discesa"
+
+#: classes/views/styles/_field-sizes.php:33
+msgid ""
+"Formidable uses CSS3 border-radius for corner rounding, which is not "
+"currently supported by Internet Explorer."
+msgstr ""
+"Per l'arrotondamento degli angoli, Formidable utilizza CSS3 border-radius, "
+"che attualmente non è supportato da Internet Explorer 8."
+
+#: classes/views/styles/_form-description.php:11
+#: classes/views/styles/_form-title.php:11
+msgid "Margin Top"
+msgstr "Margine Alto"
+
+#: classes/views/styles/_form-description.php:15
+#: classes/views/styles/_form-title.php:15
+msgid "Margin Bottom"
+msgstr "Margine Basso"
+
+#: classes/views/styles/_form-messages.php:4
+msgid "Success"
+msgstr "Riuscito"
+
+#: classes/views/styles/_general.php:3
+msgid "Center form on page"
+msgstr "Centra il form nella pagina"
+
+#: classes/views/styles/_general.php:3
+msgid ""
+"This will center your form on the page where it is published if the form "
+"width is less than the available width on the page."
+msgstr ""
+
+#: classes/views/styles/_general.php:8
+msgid "Alignment"
+msgstr "Allineamento"
+
+#: classes/views/styles/_general.php:17
+msgid "center"
+msgstr "centro"
+
+#: classes/views/styles/_general.php:23
+msgid "Max Width"
+msgstr "Larghezza massima"
+
+#: classes/views/styles/_general.php:28
+msgid "Background"
+msgstr "Sfondo"
+
+#: classes/views/styles/_general.php:48
+msgid "Font Family"
+msgstr "Famiglia di Font"
+
+#: classes/views/styles/_general.php:53
+msgid "Direction"
+msgstr "Direzione"
+
+#: classes/views/styles/_general.php:56
+msgid "Left to Right"
+msgstr "Da Sinistra a Destra"
+
+#: classes/views/styles/_general.php:59
+msgid "Right to Left"
+msgstr "Da Destra a Sinistra"
+
+#: classes/views/styles/_general.php:68
+msgid "Override theme styling"
+msgstr "Sovrascrivi stile tema"
+
+#: classes/views/styles/_general.php:68
+msgid ""
+"This will add !important to many of the lines in the Formidable styling to "
+"make sure it will be used."
+msgstr ""
+"Questo aggiungerà !important a molte delle righe dello stile Formidable per "
+"assicurarsi che verrà utilizzato."
+
+#: classes/views/styles/_sample_form.php:4
+#: classes/views/styles/_sample_form.php:9
+msgid "SAMPLE:"
+msgstr "ESEMPIO:"
+
+#: classes/views/styles/_sample_form.php:18
+msgid "This is an example form description for styling purposes."
+msgstr ""
+
+#: classes/views/styles/_sample_form.php:22
+msgid "Text field"
+msgstr "Campo testo"
+
+#: classes/views/styles/_sample_form.php:23
+#: classes/views/styles/_sample_form.php:38
+msgid "This is sample text"
+msgstr "Questo è un esempio di testo"
+
+#: classes/views/styles/_sample_form.php:24
+msgid "A field with a description"
+msgstr "Un campo con una descrizione"
+
+#: classes/views/styles/_sample_form.php:28
+msgid "Drop-down Select"
+msgstr "Seleziona Menu a discesa"
+
+#: classes/views/styles/_sample_form.php:37
+msgid "Text field with error"
+msgstr "Campo testo con errore"
+
+#: classes/views/styles/_sample_form.php:43
+msgid "Text field in active state"
+msgstr "Campo di testo in stato attivo"
+
+#: classes/views/styles/_sample_form.php:44
+msgid "Active state will be seen when the field is clicked"
+msgstr "Lo stato attivo si vedrà quando si fa clic sul campo"
+
+#: classes/views/styles/_sample_form.php:48
+msgid "Read-only field"
+msgstr "Campo di sola lettura"
+
+#: classes/views/styles/_sample_form.php:49
+msgid "This field is not editable"
+msgstr "Questo campo non è modificabile"
+
+#: classes/views/styles/_sample_form.php:53
+msgid "Text Area"
+msgstr "Campo paragrafo"
+
+#: classes/views/styles/_sample_form.php:55
+msgid "Another field with a description"
+msgstr "Un altro campo con una descrizione"
+
+#: classes/views/styles/_sample_form.php:59
+msgid "Radio Buttons"
+msgstr "Pulsanti radio"
+
+#: classes/views/styles/_sample_form.php:67
+msgid "Check Boxes"
+msgstr "Check box"
+
+#: classes/views/styles/custom_css.php:5
+msgid "You can add custom css here or in your theme style.css"
+msgstr ""
+"È possibile aggiungere css personalizzato qui o nello style.css del tuo tema"
+
+#: classes/views/styles/custom_css.php:39 classes/views/styles/manage.php:65
+msgid "Save Changes"
+msgstr "Salva modifiche"
+
+#: classes/views/styles/manage.php:5
+msgid ""
+"Easily change which template your forms are using by making changes below."
+msgstr ""
+
+#: classes/views/styles/manage.php:19
+msgid "Assigned Style Templates"
+msgstr "Modelli di stile assegnati"
+
+#: classes/views/styles/manage.php:47
+msgid "Styling disabled"
+msgstr "Stile disabilitato"
+
+#: classes/views/styles/manage.php:58
+msgid "No Forms Found"
+msgstr "Nessun modulo trovato"
+
+#: classes/views/styles/show.php:33
+msgid "Style Name"
+msgstr "Nome dello stile"
+
+#: classes/views/styles/show.php:34
+msgid "Enter style name here"
+msgstr "Inserisci il nome dello stile"
+
+#: classes/views/styles/show.php:46
+msgid "Make default style"
+msgstr "Rendi lo stile predefinito"
+
+#: classes/views/styles/show.php:50 classes/views/styles/show.php:75
+msgid "Save Style"
+msgstr "Salva lo stile"
+
+#: classes/views/styles/show.php:65
+msgid "Delete Style"
+msgstr "Cancella Style"
+
+#: classes/views/styles/show.php:74
+msgid "Reset to Default"
+msgstr "Ripristina predefiniti"
+
+#: classes/views/xml/import_form.php:11
+msgid ""
+"Upload your Formidable XML file to import forms into this site. If your "
+"imported form key and creation date match a form on your site, that form "
+"will be updated."
+msgstr ""
+"Carica il tuo file XML Formidable per importare i moduli in questo sito. Se "
+"la chiave del modulo importato e la data di creazione corrispondono a un "
+"modulo sul tuo sito, questo verrà aggiornato."
+
+#: classes/views/xml/import_form.php:18
+msgid "Choose a Formidable XML file"
+msgstr "Scegli un file XML Formidable"
+
+#: classes/views/xml/import_form.php:19
+#, php-format
+msgid "Maximum size: %s"
+msgstr "Dimensione massima: %s"
+
+#: classes/views/xml/import_form.php:27
+msgid "Upload file and import"
+msgstr "Carica file e importa"
+
+#: classes/views/xml/import_form.php:36
+msgid "Export"
+msgstr "Esporta"
+
+#: classes/views/xml/import_form.php:44
+msgid "Export Format"
+msgstr "Formato esportazione"
+
+#: classes/views/xml/import_form.php:56
+#: classes/views/frm-fields/back-end/value-format.php:2
+msgid "Format"
+msgstr "Formato"
+
+#: classes/views/xml/import_form.php:57
+msgid ""
+"If your CSV special characters are not working correctly, try a different "
+"formatting option."
+msgstr ""
+"Se i caratteri speciali nel CSV non funzionano correttamente, prova con "
+"un'opzione di formattazione differente."
+
+#: classes/views/xml/import_form.php:66
+msgid "Column separation"
+msgstr "Separatore colonna"
+
+#: classes/views/xml/import_form.php:74
+msgid "Data to Export"
+msgstr "Dati da esportare"
+
+#: classes/views/xml/import_form.php:76
+msgid "Include the following in the export file"
+msgstr "Includi quanto segue nel file di esportazione"
+
+#: classes/views/xml/import_form.php:88
+msgid "Select Form(s)"
+msgstr "Seleziona Modulo(i)"
+
+#: classes/views/xml/import_form.php:98
+msgid "(default template)"
+msgstr "(modello predefinito)"
+
+#: classes/views/xml/import_form.php:100
+msgid "(template)"
+msgstr "(modello)"
+
+#: classes/views/xml/import_form.php:102
+msgid "(child)"
+msgstr "(figlio)"
+
+#: classes/views/xml/import_form.php:108
+msgid "Hold down the CTRL/Command button to select multiple forms"
+msgstr "Tenere premuto il tasto CTRL/Command per selezionare più moduli"
+
+#: classes/views/xml/import_form.php:113
+msgid "Export Selection"
+msgstr "Esporta selezione"
+
+#: classes/views/frm-fields/back-end/automatic-width.php:2
+#: classes/views/frm-fields/back-end/pixels-wide.php:4
+msgid "Field Size"
+msgstr "Dimensioni campo"
+
+#: classes/views/frm-fields/back-end/automatic-width.php:6
+msgid "automatic width"
+msgstr "larghezza automatica"
+
+#: classes/views/frm-fields/back-end/field-captcha.php:5
+#, php-format
+msgid ""
+"Your captcha will not appear on your form until you %1$sset up%2$s the Site "
+"and Secret Keys"
+msgstr ""
+"Il captcha non apparirà nel tuo modulo finchè non saranno %1$simpostati%2$s "
+"il sito e la chiave privata"
+
+#: classes/views/frm-fields/back-end/field-hidden.php:3
+msgid ""
+"Note: This field will not show in the form. Enter the value to be hidden."
+msgstr ""
+"Nota: Questo campo non verrà mostrato nel modulo. Immettere il valore da "
+"nascondere."
+
+#: classes/views/frm-fields/back-end/field-html.php:3
+msgid "This is a placeholder for your custom HTML."
+msgstr "Questo è un segnaposto per il tuo HTML personalizzato."
+
+#: classes/views/frm-fields/back-end/field-html.php:4
+msgid "You can edit this content in the field settings."
+msgstr ""
+
+#: classes/views/frm-fields/back-end/field-user-id.php:2
+msgid ""
+"Note: This field will not show in the form, but will link the user id to it "
+"as long as the user is logged in at the time of form submission."
+msgstr ""
+"Nota: questo campo non verrà mostrato nel modulo, ma lo collegherà all'ID "
+"utente finché l'utente è connesso al momento dell'invio del modulo."
+
+#: classes/views/frm-fields/back-end/html-content.php:2
+msgid "Content"
+msgstr "Contenuto"
+
+#: classes/views/frm-fields/back-end/max.php:1
+msgid "rows high"
+msgstr "righe alto"
+
+#: classes/views/frm-fields/back-end/max.php:1
+msgid "characters maximum"
+msgstr "caratteri massimo"
+
+#: classes/views/frm-fields/back-end/number-range.php:3
+msgid "Number Range"
+msgstr "Intervallo numero"
+
+#: classes/views/frm-fields/back-end/number-range.php:4
+msgid ""
+"Browsers that support the HTML5 number field require a number range to "
+"determine the numbers seen when clicking the arrows next to the field."
+msgstr ""
+"I browser che supportano il campo numero HTML5 richiedono un intervallo di "
+"numeri per determinare i numeri mostrati quando si fa clic sulle frecce "
+"accanto al campo."
+
+#: classes/views/frm-fields/back-end/number-range.php:9
+msgid "minimum"
+msgstr "minimo"
+
+#: classes/views/frm-fields/back-end/number-range.php:11
+msgid "maximum"
+msgstr "massimo"
+
+#: classes/views/frm-fields/back-end/number-range.php:13
+msgid "step"
+msgstr "step"
+
+#: classes/views/frm-fields/back-end/pixels-wide.php:10
+msgid "pixels wide"
+msgstr "larghezza pixel"
+
+#: classes/views/frm-fields/back-end/value-format.php:3
+msgid ""
+"Insert the format you would like to accept. Use a regular expression "
+"starting with ^ or an exact format like (999)999-9999."
+msgstr ""
+"Inserisci il formato che vorresti accettare. Utilizza un'espressione "
+"regolare che inizia con ^ o un formato esatto come (999) 999-9999."
+
+#. Description of the plugin
+msgid "Quickly and easily create drag-and-drop forms"
+msgstr "Crea velocemente e facilmente dei moduli drag-and-drop"

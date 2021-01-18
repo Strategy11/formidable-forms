@@ -1,0 +1,66 @@
+/* dashboard icon */
+.frm_insert_form svg{
+	vertical-align: text-top;
+}
+
+.wp-media-buttons-icon.dashicons-feedback{
+	vertical-align: text-bottom !important;
+}
+
+.wp-media-buttons-icon.dashicons-feedback:before {
+    content: "\f175" !important;
+}
+
+.frm_inactive_menu{
+    opacity:.5;
+    filter:alpha(opacity=50);
+}
+
+/* media box button */
+.wp-media-buttons .button.frm_insert_form{padding-left:5px;}
+
+/* Upgrade notice */
+#frm_install_message, .frm_previous_install{padding:7px;}
+.frm_deauthorize_link .spinner{
+    display:inline-block;
+    margin-top:0;
+    float:none;
+}
+.frm_plugin_updating{line-height:24px;}
+.frm_plugin_updating .frm_spinner{float:left;display:block;visibility:visible;}
+
+.frm_hidden, input.frm_hidden{display:none;}
+
+/* Admin Bar */
+#wpadminbar #wp-admin-bar-frm-forms > .ab-item .ab-icon:before{
+	content:'';
+	background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1OTkuNjggNjAxLjM3IiB3aWR0aD0iMTgiIGhlaWdodD0iMTgiPgoJCTxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0yODkuNiAzODRoMTQwdjc2aC0xNDB6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTQwMC4yIDE0N2gtMjAwYy0xNyAwLTMwLjYgMTIuMi0zMC42IDI5LjNWMjE4aDI2MHYtNzF6TTM5Ny45IDI2NEgxNjkuNnYxOTZoNzVWMzQwSDM5OGEzMi4yIDMyLjIgMCAwIDAgMzAuMS0yMS40IDI0LjMgMjQuMyAwIDAgMCAxLjctOC43VjI2NHpNMjk5LjggNjAxLjRBMzAwLjMgMzAwLjMgMCAwIDEgMCAzMDAuN2EyOTkuOCAyOTkuOCAwIDEgMSA1MTEuOSAyMTIuNiAyOTcuNCAyOTcuNCAwIDAgMS0yMTIgODh6bTAtNTYzQTI2MiAyNjIgMCAwIDAgMzguMyAzMDAuN2EyNjEuNiAyNjEuNiAwIDEgMCA0NDYuNS0xODUuNSAyNTkuNSAyNTkuNSAwIDAgMC0xODUtNzYuOHoiLz4KCQkJPC9zdmc+") !important;
+	width:18px;
+	height:18px;
+	margin-top:3px;
+	float:left;
+	opacity:.8;
+}
+
+/* Popup shortcode builder */
+#frm_insert_form_content{margin:20px;}
+#frm_popup_content .spinner{
+	float: left;
+	position: absolute;
+	top: 16px;
+	left: 300px;
+}
+#frm_popup_content .media-frame .attachments-browser{overflow:scroll;}
+#frm_popup_content .howto{display:block;}
+#frm_popup_content .media-menu .active .howto, .media-menu .active:hover .howto{font-weight:normal;}
+#frm_shortcode_options{padding:16px;}
+#frm_shortcode_options .frm_left_label{
+	float:left;
+	width:200px;
+}
+#frm_shortcode_options.media-embed .setting span{float:left;}
+#frm_shortcode_options h4{margin:3px 0 0;}
+#frm_popup_content .media-toolbar-primary{width:33% !important;}
+#frm_popup_content .media-toolbar-secondary{width:60%;}
+#frm_complete_shortcode{margin-top:15px;width:100%;}
+.frm_box_line{border-bottom:1px solid #ddd;display:block;margin:15px 0 0;}
