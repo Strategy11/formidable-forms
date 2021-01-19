@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="second-section">
 		<div class="row">
 			<div class="column">
-				<div class="frm-we-block frm-add-blank-form frm-selectable">
+				<div class="frm-we-block">
 					<div class="icon"><img class="plus" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/plus.svg' ); ?>"></div>
 					<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 			<div class="column">
-				<div class="frm-we-block">
+				<div class="frm-we-block frm-trigger-new-form-modal">
 					<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/briefcase.svg' ); ?>"></div>
 					<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>

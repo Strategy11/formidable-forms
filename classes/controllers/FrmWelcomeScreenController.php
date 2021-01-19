@@ -69,6 +69,7 @@ class FrmWelcomeScreenController {
 	 * @return void
 	 */
 	public static function screen_content() {
+		FrmAppHelper::include_svg();
 		include( FrmAppHelper::plugin_path() . '/classes/views/welcome/screen.php' );
 	}
 
