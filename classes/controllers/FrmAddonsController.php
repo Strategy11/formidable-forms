@@ -1122,10 +1122,15 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.02
-	 * @deprecated 4.09.01
 	 */
 	public static function ajax_install_addon() {
-		FrmDeprecated::ajax_install_addon();
+		self::install_addon_permissions();
+
+		self::download_and_activate();
+
+		// Send back a response.
+		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
+		wp_die();
 	}
 
 	/**
