@@ -31,18 +31,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="row">
 			<div class="column">
 				<div class="frm-ws-block frm-create-form">
-					<div class="icon"><img class="plus" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/plus.svg' ); ?>"></div>
+					<div class="icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_plus_icon' ); ?></div>
 					<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
-					<div class="right-arrow"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/arrow-right.svg' ); ?>"></div>
+					<div class="right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_arrow_right_icon' ); ?></div>
 				</div>
 			</div>
 			<div class="column">
 				<div class="frm-ws-block frm-trigger-new-form-modal">
-					<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/briefcase.svg' ); ?>"></div>
+					<div class="icon icon-briefcase"><?php FrmAppHelper::icon_by_class( 'frmfont frm_briefcase_icon' ); ?></div>
 					<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>
-					<div class="right-arrow"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/arrow-right.svg' ); ?>"></div>
+					<div class="right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_arrow_right_icon' ); ?></div>
 				</div>
 			</div>
 		</div>
@@ -56,25 +56,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<div class="row">
 			<div class="column col-4">
-				<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/calculator.svg' ); ?>"></div>
+				<div class="icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_calculator_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Calculators', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Give instant online estimates and calculate advanced product options.', 'formidable' ); ?></p>
 				<div class="btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
 			</div>
 			<div class="column col-4">
-				<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/chat_bubbles.svg' ); ?>"></div>
+				<div class="icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_chat_bubbles_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Survey and Polls', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Collect customer feedback & data like a pro - no coding required.', 'formidable' ); ?></p>
 				<div class="btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
 			</div>
 			<div class="column col-4">
-				<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/paperclip.svg' ); ?>"></div>
+				<div class="icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_paperclip_icon' ); ?></div>
 				<h3><?php esc_html_e( 'File uploads', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Easily upload documents, files, photos, and music for user avatars, featured images, or email attachments.', 'formidable' ); ?></p>
 				<div class="btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
 			</div>
 			<div class="column col-4">
-				<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/listings.svg' ); ?>"></div>
+				<div class="icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_listings_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Display form data with views', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Now you can display form data in custom Views without any PHP.', 'formidable' ); ?></p>
 				<div class="btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>

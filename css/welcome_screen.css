@@ -211,8 +211,18 @@ body {
     margin-right: 33px;
 }
 
-.frm-ws-block .icon img {
-    margin: 8px;
+.frm-ws-block .right-arrow .frmsvg {
+    height: 15px;
+}
+
+.frm-ws-block .icon svg {
+    margin: 11px;
+}
+
+.frm-ws-block .icon-briefcase svg {
+    margin: 8px !important;
+    height: 24px;
+    width: 24px;
 }
 
 .frm-ws-block .icon .plus {
@@ -265,7 +275,9 @@ body {
     border-radius: 10px;
 }
 
-.frm-ws-carousel-wrapper .icon img {
+.frm-ws-carousel-wrapper .icon svg {
+    width: 29.09px;
+    height: 29.53px;
     margin: 9px;
 }
 
