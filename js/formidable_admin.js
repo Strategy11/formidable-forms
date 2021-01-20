@@ -75,7 +75,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 				}
 			});
 
-			jQuery( document ).on( 'click', '.frm-we-wrapper [data-location]', function() {
+			jQuery( document ).on( 'click', '.frm-ws-wrapper [data-location]', function() {
 				window.location = $( this ).data( 'location' );
 			});
 		},
@@ -5680,6 +5680,12 @@ function frmAdminBuildJS() {
 			}
 
 			transitionToAddDetails( $modal, name, link, action );
+		});
+
+		jQuery( document ).on( 'click', '.frm-ws-wrapper .frm-create-form', function( event ) {
+			event.preventDefault();
+			jQuery( '.frm-ws-wrapper .frm-trigger-new-form-modal' ).trigger( 'click' );
+			transitionToAddDetails( $modal, '', '', 'frm_install_form' );
 		});
 
 		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {

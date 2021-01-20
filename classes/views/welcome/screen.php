@@ -3,18 +3,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm-we-wrapper">
+<div class="frm-ws-wrapper">
 	<div class="row">
 		<div class="column">
-			<div class="frm-we-block-1">
-				<div class="frm-we-logo"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/logo.svg' ); ?>" alt="Logo"></div>
+			<div class="frm-ws-block-1">
+				<div class="frm-ws-logo"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/logo.svg' ); ?>" alt="Logo"></div>
 				<h1><?php esc_html_e( 'Welcome to Formidable Forms!', 'formidable' ); ?></h1>
 				<p><?php esc_html_e( 'Thanks for choosing Formidable Froms - The most powerful and vesatile form builder for Wordpress', 'formidable' ); ?></p>
-				<div class="frm-we-buttons">
-					<div class="frm-we-btn bg-blue" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin">
+				<div class="frm-ws-buttons">
+					<div class="frm-ws-btn bg-blue" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin">
 						<span><?php esc_html_e( 'Activate Formidable Form', 'formidable' ); ?></span>
 					</div>
-					<div class="frm-we-btn bg-transparent" data-location="https://formidableforms.com/api-connect?utm_source=WordPress&utm_medium=connect&utm_campaign=liteplugin&v=2&siteurl=http://strategy11.test&url=http://strategy11.test/wp-json/&token=6200a7febd03e9aa56f15a7a017a3f4eeeae14f5168591a2a60f54fb3c2acdd0466629313a31fd52fff645fc9351928e4ec9c2e3354d29526f65008991d7a4d9&l=0d8e0c8ed0d356a923c9631b437c7df2">
+					<div class="frm-ws-btn bg-transparent" data-location="https://formidableforms.com/api-connect?utm_source=WordPress&utm_medium=connect&utm_campaign=liteplugin&v=2&siteurl=http://strategy11.test&url=http://strategy11.test/wp-json/&token=6200a7febd03e9aa56f15a7a017a3f4eeeae14f5168591a2a60f54fb3c2acdd0466629313a31fd52fff645fc9351928e4ec9c2e3354d29526f65008991d7a4d9&l=0d8e0c8ed0d356a923c9631b437c7df2">
 						<span><?php esc_html_e( 'Reactivate my account', 'formidable' ); ?></span>
 					</div>
 				</div>
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="second-section">
 		<div class="row">
 			<div class="column">
-				<div class="frm-we-block">
+				<div class="frm-ws-block frm-create-form">
 					<div class="icon"><img class="plus" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/plus.svg' ); ?>"></div>
 					<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 			</div>
 			<div class="column">
-				<div class="frm-we-block frm-trigger-new-form-modal">
+				<div class="frm-ws-block frm-trigger-new-form-modal">
 					<div class="icon"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/briefcase.svg' ); ?>"></div>
 					<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>
@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="frm-we-carousel-wrapper">
+	<div class="frm-ws-carousel-wrapper">
 		<h4><?php esc_html_e( 'Unlimit your possibilities', 'formidable' ); ?></h4>
 		<div class="arrows">
 			<span class="left-arrow"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/arrow-left.svg' ); ?>"></span>

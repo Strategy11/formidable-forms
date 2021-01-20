@@ -6,29 +6,29 @@ body {
   box-sizing: border-box;
 }
 
-.frm-we-wrapper .column {
+.frm-ws-wrapper .column {
   float: left;
   width: 50%;
 }
 
 /* Clear floats after the columns */
-.frm-we-wrapper .row:after {
+.frm-ws-wrapper .row:after {
   content: "";
   display: table;
   clear: both;
 }
 
-.frm-we-wrapper {
+.frm-ws-wrapper {
     width: 1092px;
     margin: 62px auto 0;
 }
 
-.frm-we-logo img {
+.frm-ws-logo img {
     width: 69px;
     height: 68.76px;
 }
 
-.frm-we-buttons {
+.frm-ws-buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -39,12 +39,12 @@ body {
     margin-top: 24px;
 }
 
-.frm-we-block-1 {
+.frm-ws-block-1 {
     width: 521px;
     height: 280px;
 }
 
-.frm-we-block-1 h1 {
+.frm-ws-block-1 h1 {
     width: 451px;
     height: 41px;
 
@@ -57,7 +57,7 @@ body {
     color: #282F36;
 }
 
-.frm-we-block-1 p {
+.frm-ws-block-1 p {
     width: 538px;
     height: 51px;
 
@@ -72,7 +72,7 @@ body {
     color: rgba(40, 47, 54, 0.8);
 }
 
-.frm-we-block-1 .frm-we-btn {
+.frm-ws-block-1 .frm-ws-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,11 +97,11 @@ body {
     cursor: pointer;
 }
 
-.frm-we-block-1 .bg-blue {
+.frm-ws-block-1 .bg-blue {
     background: #4199FD;
 }
 
-.frm-we-block-1 .bg-blue span {
+.frm-ws-block-1 .bg-blue span {
     font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
@@ -127,11 +127,11 @@ body {
     border-radius: nullpx;
 }
 
-.frm-we-block-1 .bg-transparent {
+.frm-ws-block-1 .bg-transparent {
     margin-left: 16px;
 }
 
-.frm-we-block-1 .bg-transparent span {
+.frm-ws-block-1 .bg-transparent span {
     font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
@@ -160,7 +160,7 @@ body {
     margin-top: 55px;
 }
 
-.frm-we-block .icon {
+.frm-ws-block .icon {
     width: 40px;
     height: 40px;
     margin: 24px;
@@ -169,7 +169,7 @@ body {
     border-radius: 4px;
 }
 
-.frm-we-block h3 {
+.frm-ws-block h3 {
     width: 188px;
     height: 19px;
     margin-top: -64px;
@@ -184,7 +184,7 @@ body {
     color: rgba(40, 47, 54, 0.85);
 }
 
-.frm-we-block p {
+.frm-ws-block p {
     width: 262px;
     height: 18px;
     margin-left: 81px;
@@ -200,7 +200,7 @@ body {
     color: rgba(40, 47, 54, 0.6);
 }
 
-.frm-we-block .right-arrow {
+.frm-ws-block .right-arrow {
     height: 12px;
     width: 6px;
     border-radius: 0px;
@@ -209,15 +209,15 @@ body {
     margin-right: 33px;
 }
 
-.frm-we-block .icon img {
+.frm-ws-block .icon img {
     margin: 8px;
 }
 
-.frm-we-block .icon .plus {
+.frm-ws-block .icon .plus {
     margin: 12px !important;
 }
 
-.frm-we-block {
+.frm-ws-block {
     width: 520px;
     height: 88px;
 
@@ -228,11 +228,11 @@ body {
     cursor: pointer;
 }
 
-.frm-we-carousel-wrapper h4 {
+.frm-ws-carousel-wrapper h4 {
     margin-top: 64px;
 }
 
-.frm-we-carousel-wrapper h4 {
+.frm-ws-carousel-wrapper h4 {
     width: 180px;
     height: 24px;
 
@@ -246,7 +246,7 @@ body {
     margin-left: 3px;
 }
 
-.frm-we-carousel-wrapper .col-4 {
+.frm-ws-carousel-wrapper .col-4 {
     width: 250px;
     height: 240px;
     background: #FFFFFF;
@@ -256,18 +256,18 @@ body {
     padding-left: 16px;
 }
 
-.frm-we-carousel-wrapper .icon {
+.frm-ws-carousel-wrapper .icon {
     height: 48px;
     width: 48px;
     background: rgba(41, 131, 251, 0.15);
     border-radius: 10px;
 }
 
-.frm-we-carousel-wrapper .icon img {
+.frm-ws-carousel-wrapper .icon img {
     margin: 9px;
 }
 
-.frm-we-carousel-wrapper h3 {
+.frm-ws-carousel-wrapper h3 {
     width: 195px;
     height: 19px;
 
@@ -281,7 +281,7 @@ body {
     color: rgba(40, 47, 54, 0.85);
 }
 
-.frm-we-carousel-wrapper p {
+.frm-ws-carousel-wrapper p {
     width: 201px;
     height: 54px;
 
@@ -294,7 +294,7 @@ body {
     color: rgba(40, 47, 54, 0.6);
 }
 
-.frm-we-carousel-wrapper a {
+.frm-ws-carousel-wrapper a {
     font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
@@ -314,7 +314,7 @@ body {
     margin: 10px 0px;
 }
 
-.frm-we-carousel-wrapper .btn {
+.frm-ws-carousel-wrapper .btn {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -329,7 +329,7 @@ body {
     cursor: pointer;
 }
 
-.frm-we-carousel-wrapper .btn span {
+.frm-ws-carousel-wrapper .btn span {
     font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
@@ -349,17 +349,17 @@ body {
     margin: 10px 0px;
 }
 
-.frm-we-carousel-wrapper .arrows {
+.frm-ws-carousel-wrapper .arrows {
     float: right;
     margin-top: -40px;
     margin-right: 35px;
 }
 
-.frm-we-carousel-wrapper .arrows span {
+.frm-ws-carousel-wrapper .arrows span {
     cursor: pointer;
 }
 
-.frm-we-carousel-wrapper .arrows .right-arrow {
+.frm-ws-carousel-wrapper .arrows .right-arrow {
     margin-left: 34px;
 }
 
