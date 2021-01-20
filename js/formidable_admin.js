@@ -76,7 +76,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 			});
 
 			jQuery( document ).on( 'click', '.frm-ws-wrapper [data-location]', function() {
-				window.location = $( this ).data( 'location' );
+				window.location = this.getAttribute( 'data-location' );
 			});
 		},
 
