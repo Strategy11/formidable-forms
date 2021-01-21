@@ -3756,7 +3756,7 @@ function frmAdminBuildJS() {
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
 
-			jQuery( '.frm_feature_label' ).html( this.getAttribute( 'data-upgrade' ) );
+			jQuery( '.frm_feature_label' ).text( this.getAttribute( 'data-upgrade' ) );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 
 			$info.dialog( 'open' );
