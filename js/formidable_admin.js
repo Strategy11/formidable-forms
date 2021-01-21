@@ -378,22 +378,22 @@ function frmAdminBuildJS() {
 		var caution, verify, $confirmMessage, frmCaution, i, dataAtts,
 			$info = initModal( '#frm_confirm_modal', '400px' ),
 			continueButton = document.getElementById( 'frm-confirmed-click' );
-	
+
 		if ( $info === false ) {
 			return false;
 		}
-	
+
 		caution = link.getAttribute( 'data-frmcaution' );
 		verify = link.getAttribute( 'data-frmverify' );
 		$confirmMessage = jQuery( '.frm-confirm-msg' );
-	
+
 		if ( caution ) {
 			frmCaution = document.createElement( 'span' );
 			frmCaution.classList.add( 'frm-caution' );
 			frmCaution.appendChild( document.createTextNode( caution ) );
 			$confirmMessage.append( frmCaution );
 		}
-		
+
 		if ( verify ) {
 			$confirmMessage.append( document.createTextNode( verify ) );
 		}
