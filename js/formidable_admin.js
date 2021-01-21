@@ -375,18 +375,28 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmModal( link ) {
-		var i, dataAtts,
+		var caution, verify, $confirmMessage, frmCaution, i, dataAtts,
 			$info = initModal( '#frm_confirm_modal', '400px' ),
 			continueButton = document.getElementById( 'frm-confirmed-click' );
-
+	
 		if ( $info === false ) {
 			return false;
 		}
-
-		var caution = link.getAttribute( 'data-frmcaution' );
-		var cautionHtml = caution ? '<span class="frm-caution">' + caution + '</span> ' : '';
-
-		jQuery( '.frm-confirm-msg' ).html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
+	
+		caution = link.getAttribute( 'data-frmcaution' );
+		verify = link.getAttribute( 'data-frmverify' );
+		$confirmMessage = jQuery( '.frm-confirm-msg' );
+	
+		if ( caution ) {
+			frmCaution = document.createElement( 'span' );
+			frmCaution.classList.add( 'frm-caution' );
+			frmCaution.appendChild( document.createTextNode( caution ) );
+			$confirmMessage.append( frmCaution );
+		}
+		
+		if ( verify ) {
+			$confirmMessage.append( document.createTextNode( verify ) );
+		}
 
 		removeAtts = continueButton.dataset;
 		for ( i in dataAtts ) {
