@@ -3751,7 +3751,7 @@ function frmAdminBuildJS() {
 			if ( typeof requires === 'undefined' || requires === null || requires === '' ) {
 				requires = 'Pro';
 			}
-			jQuery( '.license-level' ).html( requires );
+			jQuery( '.license-level' ).text( requires );
 
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
