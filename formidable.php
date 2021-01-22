@@ -96,7 +96,9 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	}
 }
 
-add_action( 'activate_formidable/formidable.php', 'frm_maybe_install' );
+add_action( 'activate_formidable-forms/formidable.php', 'frm_maybe_install' );
 function frm_maybe_install() {
-	set_transient( 'frm_activation_redirect', 'formidable-welcome-screen', 60 );
+	if ( get_transient( 'frm_activation_redirect' ) !== 'no' ) {
+		set_transient( 'frm_activation_redirect', 'formidable-welcome-screen', 60 );
+	}
 }
