@@ -31,18 +31,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm-row">
 			<div class="frm-column">
 				<div class="frm-ws-block frm-create-form">
-					<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_plus_icon' ); ?></div>
+					<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?></div>
 					<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
-					<div class="frm-right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_arrow_right_icon' ); ?></div>
+					<div class="frm-right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon' ); ?></div>
 				</div>
 			</div>
 			<div class="frm-column">
 				<div class="frm-ws-block frm-trigger-new-form-modal">
-					<div class="frm-icon icon-briefcase"><?php FrmAppHelper::icon_by_class( 'frmfont frm_briefcase_icon' ); ?></div>
+					<div class="frm-icon frm-icon-briefcase"><?php FrmAppHelper::icon_by_class( 'frmfont frm_briefcase_icon' ); ?></div>
 					<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
 					<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>
-					<div class="frm-right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_arrow_right_icon' ); ?></div>
+					<div class="frm-right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon' ); ?></div>
 				</div>
 			</div>
 		</div>
@@ -51,8 +51,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-ws-carousel-wrapper">
 		<h4><?php esc_html_e( 'Unlimit your possibilities', 'formidable' ); ?></h4>
 		<div class="frm-arrows">
-			<span><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/arrow-left.svg' ); ?>"></span>
-			<span class="frm-right-arrow"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/arrow-right.svg' ); ?>"></span>
+			<span><?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_left_icon' ); ?></span>
+			<span class="frm-right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon' ); ?></span>
 		</div>
 		<div class="frm-row">
 			<div class="frm-column frm-col-4">

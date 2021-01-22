@@ -156,12 +156,14 @@ body {
     margin-right: 33px;
 }
 
-.frm-ws-block .frm-right-arrow .frmsvg {
-    height: 15px;
+.frm-ws-block .frm-right-arrow svg {
+    width: 26px !important;
+    height: 26px !important;
 }
 
 .frm-ws-block .frm-icon svg {
     margin: 11px;
+    color: #FFFFFF;
 }
 
 .frm-ws-block .frm-icon-briefcase svg {
@@ -258,7 +260,7 @@ body {
 
 .frm-ws-carousel-wrapper .frm-arrows {
     float: right;
-    margin-top: -40px;
+    margin-top: -50px;
     margin-right: 35px;
 }
 
@@ -268,6 +270,11 @@ body {
 
 .frm-ws-carousel-wrapper .frm-arrows .frm-right-arrow {
     margin-left: 34px;
+}
+
+.frm-ws-carousel-wrapper .frm-arrows svg {
+    width: 28px !important;
+    height: 38px !important;
 }
 
 .second-section {
