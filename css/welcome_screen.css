@@ -45,28 +45,14 @@ body {
 }
 
 .frm-ws-block-1 h1 {
-    width: 451px;
-    height: 41px;
-
-    font-style: normal;
-    font-weight: 600;
     font-size: 30px;
     line-height: 41px;
-
     color: #282F36;
 }
 
 .frm-ws-block-1 p {
-    width: 538px;
-    height: 51px;
-
-    font-style: normal;
-    font-weight: normal;
     font-size: 14px;
     line-height: 25px;
-    /* or 182% */
-
-
     color: rgba(40, 47, 54, 0.8);
 }
 
@@ -100,27 +86,16 @@ body {
 }
 
 .frm-ws-block-1 .bg-blue span {
-    font-style: normal;
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
-
     text-align: center;
-
     color: #FFFFFF;
-
-    /* Inside Auto Layout */
-
     flex: none;
     order: 0;
     flex-grow: 0;
     margin: 0px 10px;
-
-    height: 19px;
     width: 175px;
-    left: 24px;
-    top: 12px;
     border-radius: nullpx;
 }
 
@@ -129,20 +104,11 @@ body {
 }
 
 .frm-ws-block-1 .bg-transparent span {
-    font-style: normal;
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
-
     text-align: center;
-
     color: #4199FD;
-
-    height: 19px;
-    width: 153px;
-    left: 35px;
-    top: 12px;
     border-radius: nullpx;
 }
 
@@ -166,31 +132,18 @@ body {
 }
 
 .frm-ws-block h3 {
-    width: 188px;
-    height: 19px;
     margin-top: -64px;
     margin-left: 81px;
-    font-style: normal;
-    font-weight: 600;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
-
     color: rgba(40, 47, 54, 0.85);
 }
 
 .frm-ws-block p {
-    width: 262px;
-    height: 18px;
     margin-left: 81px;
     margin-top: -10px;
-    font-style: normal;
-    font-weight: normal;
     font-size: 13px;
     line-height: 18px;
-    /* identical to box height */
-
-
     color: rgba(40, 47, 54, 0.6);
 }
 
@@ -237,14 +190,8 @@ body {
 }
 
 .frm-ws-carousel-wrapper h4 {
-    width: 180px;
-    height: 24px;
-
-    font-style: normal;
-    font-weight: 600;
     font-size: 15px;
     line-height: 157.9%;
-    /* identical to box height, or 24px */
     color: rgba(40, 47, 54, 0.85);
     margin-left: 3px;
 }
@@ -273,47 +220,17 @@ body {
 }
 
 .frm-ws-carousel-wrapper h3 {
-    width: 195px;
-    height: 19px;
-
-    font-style: normal;
-    font-weight: 600;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
-
     color: rgba(40, 47, 54, 0.85);
 }
 
 .frm-ws-carousel-wrapper p {
     width: 201px;
     height: 54px;
-
-    font-style: normal;
-    font-weight: normal;
     font-size: 13px;
     line-height: 18px;
-
     color: rgba(40, 47, 54, 0.6);
-}
-
-.frm-ws-carousel-wrapper a {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 19px;
-    /* identical to box height */
-
-    text-align: center;
-
-    color: #4199FD;
-
-    /* Inside Auto Layout */
-
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    margin: 10px 0px;
 }
 
 .frm-ws-carousel-wrapper .btn {
@@ -332,18 +249,11 @@ body {
 }
 
 .frm-ws-carousel-wrapper .btn span {
-    font-style: normal;
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
-
     text-align: center;
-
     color: #4199FD;
-
-    /* Inside Auto Layout */
-
     flex: none;
     order: 0;
     flex-grow: 0;
