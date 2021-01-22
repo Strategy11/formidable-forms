@@ -109,6 +109,6 @@ class FrmWelcomeScreenController {
 	 * @return string
 	 */
 	public static function settings_link() {
-		return admin_url( 'admin.php?page=' . self::$menu_slug );
+		return esc_url( admin_url( 'admin.php?page=' . self::$menu_slug ) );
 	}
 }
