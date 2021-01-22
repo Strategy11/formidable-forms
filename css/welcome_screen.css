@@ -23,11 +23,6 @@ body {
     margin: 62px auto 0;
 }
 
-.frm-ws-logo img {
-    width: 69px;
-    height: 68.76px;
-}
-
 .frm-ws-buttons {
     display: flex;
     flex-direction: row;

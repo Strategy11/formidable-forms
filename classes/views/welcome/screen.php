@@ -7,7 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-row">
 		<div class="frm-column">
 			<div class="frm-ws-block-1">
-				<div class="frm-ws-logo"><img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/logo.svg' ); ?>" alt="Logo"></div>
+				<div class="frm-ws-logo"><?php
+				FrmAppHelper::show_logo(
+					array(
+						'height' => 68.76,
+						'width'  => 69,
+					)
+				);
+				?></div>
 				<h1><?php esc_html_e( 'Welcome to Formidable Forms!', 'formidable' ); ?></h1>
 				<p><?php esc_html_e( 'Thanks for choosing Formidable Froms - The most powerful and vesatile form builder for Wordpress', 'formidable' ); ?></p>
 				<div class="frm-ws-buttons">
