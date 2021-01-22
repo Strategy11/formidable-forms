@@ -1,5 +1,3 @@
-@import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap);
-
 body {
     background: #F6F7FB;
 }
@@ -50,7 +48,6 @@ body {
     width: 451px;
     height: 41px;
 
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 30px;
@@ -63,7 +60,6 @@ body {
     width: 538px;
     height: 51px;
 
-    font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
@@ -104,7 +100,6 @@ body {
 }
 
 .frm-ws-block-1 .bg-blue span {
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -134,7 +129,6 @@ body {
 }
 
 .frm-ws-block-1 .bg-transparent span {
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -176,7 +170,6 @@ body {
     height: 19px;
     margin-top: -64px;
     margin-left: 81px;
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -191,7 +184,6 @@ body {
     height: 18px;
     margin-left: 81px;
     margin-top: -10px;
-    font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
     font-size: 13px;
@@ -248,7 +240,6 @@ body {
     width: 180px;
     height: 24px;
 
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 15px;
@@ -285,7 +276,6 @@ body {
     width: 195px;
     height: 19px;
 
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -299,7 +289,6 @@ body {
     width: 201px;
     height: 54px;
 
-    font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
     font-size: 13px;
@@ -309,7 +298,6 @@ body {
 }
 
 .frm-ws-carousel-wrapper a {
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
@@ -344,7 +332,6 @@ body {
 }
 
 .frm-ws-carousel-wrapper .btn span {
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
