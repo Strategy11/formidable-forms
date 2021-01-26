@@ -111,4 +111,14 @@ class FrmWelcomeScreenController {
 	public static function settings_link() {
 		return esc_url( admin_url( 'admin.php?page=' . self::$menu_slug ) );
 	}
+
+	public static function upgrade_to_pro_button() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			?>
+				<div class="frm-btn" data-location="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>">
+					<span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span>
+				</div>
+			<?php
+		}
+	}
 }

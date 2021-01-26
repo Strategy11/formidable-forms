@@ -70,19 +70,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_ws_calculator_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Calculators', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Give instant online estimates and calculate advanced product options.', 'formidable' ); ?></p>
-				<div class="frm-btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
+				<?php FrmWelcomeScreenController::upgrade_to_pro_button(); ?>
 			</div>
 			<div class="frm-column frm-col-4">
 				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_chat_bubbles_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Survey and Polls', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Collect customer feedback & data like a pro - no coding required.', 'formidable' ); ?></p>
-				<div class="frm-btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
+				<?php FrmWelcomeScreenController::upgrade_to_pro_button(); ?>
 			</div>
 			<div class="frm-column frm-col-4">
 				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_paperclip_icon' ); ?></div>
 				<h3><?php esc_html_e( 'File uploads', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Easily upload documents, files, photos, and music for user avatars, featured images, or email attachments.', 'formidable' ); ?></p>
-				<div class="frm-btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
+				<?php FrmWelcomeScreenController::upgrade_to_pro_button(); ?>
 			</div>
 			<div class="frm-column frm-col-4">
 				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_listings_icon' ); ?></div>
