@@ -91,7 +91,6 @@ body {
     flex-grow: 0;
     margin: 0px 10px;
     width: 175px;
-    border-radius: nullpx;
 }
 
 .frm-ws-block-1 .frm-bg-transparent {
@@ -104,7 +103,6 @@ body {
     line-height: 19px;
     text-align: center;
     color: #4199FD;
-    border-radius: nullpx;
 }
 
 .frm-player {
@@ -275,3 +273,11 @@ body {
 .second-section {
     margin-top: 111px;
 }
+
+@media screen and (max-width:800px) {
+  /*body {
+        background: red;
+    }*/
+
+}
+
