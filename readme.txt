@@ -436,6 +436,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 4.09.05 =
+* Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
 * Fix: Important security update that adds better escaping when text is used from attribute data.
 
 = 4.09.04 =
