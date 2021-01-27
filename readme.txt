@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 4.09.04
+Stable tag: 4.09.05
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,15 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.05 =
+* Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
+* Fix: Repeater fields were occasionally filling in with the wrong value.
+* Fix: Dates were not properly localizing on newer versions of jQuery UI.
+* Fix: Protected file images were not properly loading at full size from a gallery.
+* Fix: Calculated total fields were occasionally causing the page to break in some configurations.
+* Fix: Important security update to further help prevent cross site scripting attacks.
+* Fix: New multisite installs were occasionally seeing an error about a missing form copies table if migrations had not run yet.
+
 = 4.09.04 =
 * Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
 * New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
