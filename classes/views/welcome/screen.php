@@ -84,11 +84,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<p><?php esc_html_e( 'Easily upload documents, files, photos, and music for user avatars, featured images, or email attachments.', 'formidable' ); ?></p>
 				<?php FrmWelcomeScreenController::upgrade_to_pro_button(); ?>
 			</div>
-			<div class="frm-column frm-col-4">
+			<div class="frm-column frm-col-4 frm-views-addon">
 				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_listings_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Display form data with views', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Now you can display form data in custom Views without any PHP.', 'formidable' ); ?></p>
-				<div class="frm-btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div>
+				<!-- <div class="frm-btn" data-location="https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=activecampaign-wordpress-plugin"><span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span></div> -->
+				<?php FrmAddonsController::conditional_action_button( 'views', 'views-info' ); ?>
 			</div>
 		</div>
 	</div>

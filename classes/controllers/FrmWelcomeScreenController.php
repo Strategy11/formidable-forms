@@ -116,7 +116,7 @@ class FrmWelcomeScreenController {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			?>
 				<div class="frm-btn" data-location="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>">
-					<span><?php esc_html_e( 'Upgrade', 'formidable' ); ?></span>
+					<span><?php esc_html_e( 'Upgrade Now', 'formidable' ); ?></span>
 				</div>
 			<?php
 		}

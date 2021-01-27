@@ -234,7 +234,7 @@ body {
     border-radius: 48px;
     position: relative;
     height: 31px;
-    width: 90px;
+    width: 125px;
     top: 20px;
     cursor: pointer;
 }
@@ -245,6 +245,30 @@ body {
     line-height: 19px;
     text-align: center;
     color: #4199FD;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    margin: 10px 0px;
+}
+
+.frm-views-addon a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 16px;
+    border: 1px solid #4199FD;
+    box-sizing: border-box;
+    border-radius: 48px;
+    position: relative;
+    height: 31px;
+    width: 125px;
+    top: 20px;
+
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    text-align: center;
+    color: #4199FD !important;
     flex: none;
     order: 0;
     flex-grow: 0;
