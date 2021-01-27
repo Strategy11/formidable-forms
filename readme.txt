@@ -442,7 +442,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Protected file images were not properly loading at full size from a gallery.
 * Fix: Calculated total fields were occasionally causing the page to break in some configurations.
 * Fix: Important security update to further help prevent cross site scripting attacks.
-* Fix: New multisite installs were occasionally seeing an error about a missing form copies table if migrations had not run yet.
 
 = 4.09.04 =
 * Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
