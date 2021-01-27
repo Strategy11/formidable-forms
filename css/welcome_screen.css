@@ -8,7 +8,6 @@ body {
 
 .frm-ws-wrapper .frm-column {
   float: left;
-  width: 50%;
 }
 
 /* Clear floats after the columns */
@@ -69,7 +68,7 @@ body {
     margin: 16px 0px;
 
     height: 43px;
-    width: 223px;
+    width: 210px;
     left: 0px;
     top: 0px;
     padding: 12px, 24px, 12px, 24px;
@@ -80,11 +79,15 @@ body {
     background: #4199FD;
 }
 
-.frm-ws-block-1 .frm-bg-blue span {
+.frm-ws-block-1 .frm-ws-btn span {
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
     text-align: center;
+    color: #4199FD;
+}
+
+.frm-ws-block-1 .frm-bg-blue span {
     color: #FFFFFF;
     flex: none;
     order: 0;
@@ -98,15 +101,10 @@ body {
 }
 
 .frm-ws-block-1 .frm-bg-transparent span {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 19px;
-    text-align: center;
     color: #4199FD;
 }
 
 .frm-player {
-    width: 480px;
     height: 240px;
     border-radius: 10px;
     overflow: hidden;
@@ -166,9 +164,7 @@ body {
 }
 
 .frm-ws-block {
-    width: 520px;
     height: 88px;
-
     background: #FFFFFF;
     border: 0.725101px solid #E3E8EB;
     box-sizing: border-box;
@@ -188,7 +184,6 @@ body {
 }
 
 .frm-ws-carousel-wrapper .frm-col-4 {
-    width: 250px;
     height: 240px;
     background: #FFFFFF;
     border-radius: 10px;
@@ -298,3 +293,166 @@ body {
     margin-top: 111px;
 }
 
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .frm-ws-wrapper .frm-column {
+        float: none;
+        width: 890px;
+    }
+
+    .frm-ws-block {
+        width: 38%;
+        margin-bottom: 10px;
+    }
+
+    .frm-ws-block p {
+        width: 74%;
+    }
+
+    .frm-ws-carousel-wrapper .frm-col-4 {
+        width: 93%;
+        margin-bottom: 10px;
+    }
+
+    .frm-player {
+        margin-left: 0;
+        width: 340px;
+    }
+
+    .frm-player iframe {
+        width: 340px;
+    }
+
+    .frm-ws-carousel-wrapper p {
+        width: 90%;
+    }
+
+    .frm-ws-block-1 {
+        width: 43%;
+    }
+
+    .frm-ws-block-1 .frm-ws-btn {
+        width: 162px;
+    }
+
+    .frm-ws-block-1 .frm-ws-btn span {
+        font-size: 11px;
+    }
+
+    .frm-ws-wrapper {
+        max-width: 360px;
+        overflow-x: hidden;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .frm-ws-wrapper .frm-column {
+        float: none;
+        width: 100%;
+    }
+
+    .frm-ws-block {
+        width: 50%;
+        margin-bottom: 10px;
+    }
+
+    .frm-ws-carousel-wrapper .frm-col-4 {
+        width: 50%;
+        margin-bottom: 10px;
+    }
+
+    .frm-player {
+        margin-left: 0;
+    }
+
+    .frm-ws-carousel-wrapper p {
+        width: 90%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .frm-ws-wrapper .frm-column {
+        width: 50%;
+        float: left;
+    }
+
+    .frm-ws-block {
+        width: 367px;
+    }
+
+    .frm-ws-block p {
+        width: 74%;
+    }
+
+    .frm-ws-block .frm-right-arrow svg {
+        margin-left: 14px;
+    }
+
+    .frm-ws-carousel-wrapper .frm-col-4 {
+        width: 351px;
+    }
+
+    .frm-ws-wrapper {
+        max-width: 745px;
+        overflow-x: hidden;
+    }
+
+    .frm-player {
+        margin-left: 29px;
+        width: 340px;
+    }
+
+    .frm-player iframe {
+        width: 340px;
+    }
+
+    .frm-ws-block-1 {
+        width: 100%;
+    }
+
+    .frm-ws-block-1 .frm-ws-btn {
+        width: 188px;
+    }
+
+    .frm-ws-block-1 .frm-ws-btn span {
+        font-size: 14px;
+    }
+}
+
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .frm-ws-wrapper .frm-column {
+        width: 50%;
+        float: left;
+    }
+
+    .frm-ws-block {
+        width: 520px;
+    }
+
+    .frm-ws-carousel-wrapper .frm-col-4 {
+        width: 250px;
+    }
+
+    .frm-player {
+        margin-left: 34px;
+        width: 480px;
+    }
+
+    .frm-player iframe {
+        width: 480px;
+    }
+
+    .frm-ws-wrapper {
+        max-width: 1092px;
+        overflow-x: hidden;
+    }
+
+    .frm-ws-block .frm-right-arrow svg {
+        margin-left: 0;
+    }
+}
