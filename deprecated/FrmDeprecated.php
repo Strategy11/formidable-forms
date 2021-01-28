@@ -167,16 +167,6 @@ class FrmDeprecated {
 	}
 
 	/**
-	 * @since 3.04.02
-	 * @deprecated 4.09.01
-	 */
-	public static function ajax_install_addon() {
-		_deprecated_function( __FUNCTION__, '4.09.01', 'FrmProAddonsController::' . __METHOD__ );
-		echo json_encode( __( 'Your plugin has been not been installed. Please update Formidable Pro to get downloads.', 'formidable' ) );
-		wp_die();
-	}
-
-	/**
 	 * @since 4.06.02
 	 * @deprecated 4.09.01
 	 * @codeCoverageIgnore

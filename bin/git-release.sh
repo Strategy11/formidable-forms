@@ -46,7 +46,7 @@ github-release upload \
 	--owner Strategy11 \
 	--repo $repo \
 	--tag "v$version" \
-	--name "v$version" \
+	--release-name "v$version" \
 	--body "${GIT_RELEASE_NOTES}" \
 		$attachments
 echo "New version created."
