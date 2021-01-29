@@ -90,7 +90,7 @@ class FrmWelcomeScreenController {
 	 */
 	public static function enqueue_styles() {
 		$version = FrmAppHelper::plugin_version();
-		wp_enqueue_style( 'frm_welcome-screen', FrmAppHelper::plugin_url() . '/css/welcome_screen.css', array(), $version );
+		wp_enqueue_style( 'frm-welcome-screen', FrmAppHelper::plugin_url() . '/css/welcome_screen.css', array( 'formidable-admin' ), $version );
 	}
 
 	/**

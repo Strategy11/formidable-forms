@@ -1,5 +1,5 @@
 body {
-    background: #F6F7FB;
+    background: var(--sidebar-color);
 }
 
 * {
@@ -72,7 +72,7 @@ body {
 }
 
 .frm-ws-block-1 .frm-bg-transparent span {
-    color: #4199FD;
+    color: var(--primary-color);
 }
 
 .frm-player {
@@ -89,7 +89,7 @@ body {
     height: 40px;
     margin: 24px;
 
-    background: #4199FD;
+    background: var(--primary-color);
     border-radius: 4px;
 }
 
@@ -166,7 +166,7 @@ body {
 .frm-ws-carousel-wrapper .frm-icon {
     height: 48px;
     width: 48px;
-    background: rgba(227, 230, 243, 0.64);
+    background: var(--light-blue);
     border-radius: 10px;
 }
 
@@ -195,7 +195,7 @@ body {
     flex-direction: row;
     align-items: center;
     padding: 6px 16px;
-    border: 1px solid #4199FD;
+    border: 1px solid var(--primary-color);
     box-sizing: border-box;
     border-radius: 48px;
     position: relative;
@@ -210,7 +210,7 @@ body {
     font-size: 14px;
     line-height: 19px;
     text-align: center;
-    color: #4199FD;
+    color: var(--primary-color);
     flex: none;
     order: 0;
     flex-grow: 0;
@@ -222,7 +222,7 @@ body {
     flex-direction: row;
     align-items: center;
     padding: 6px 16px;
-    border: 1px solid #4199FD;
+    border: 1px solid var(--primary-color);
     box-sizing: border-box;
     border-radius: 48px;
     position: relative;
@@ -234,7 +234,7 @@ body {
     font-size: 14px;
     line-height: 19px;
     text-align: center;
-    color: #4199FD !important;
+    color: var(--primary-color) !important;
     flex: none;
     order: 0;
     flex-grow: 0;
