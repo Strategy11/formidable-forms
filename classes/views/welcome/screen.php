@@ -7,28 +7,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm-row">
 		<div class="frm-column">
 			<div class="frm-ws-block-1">
-				<div class="frm-ws-logo"><?php
-				FrmAppHelper::show_logo(
-					array(
-						'height' => 68.76,
-						'width'  => 69,
-					)
-				);
-				?></div>
+				<div class="frm-ws-logo">
+					<?php
+					FrmAppHelper::show_logo(
+						array(
+							'height' => 68.76,
+							'width'  => 69,
+						)
+					);
+					?>
+				</div>
 				<h1><?php esc_html_e( 'Welcome to Formidable Forms!', 'formidable' ); ?></h1>
 				<p><?php esc_html_e( 'Thanks for choosing Formidable Froms - The most powerful and vesatile form builder for Wordpress', 'formidable' ); ?></p>
-				<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
-					<p><?php esc_html_e( "You're using Formidable Forms Premium. Enjoy!", 'formidable' ); ?> 🙂</p>
-				<?php else : ?>
-					<div class="frm-ws-buttons">
-						<div class="frm-ws-btn frm-bg-blue" data-location="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>">
-							<span><?php esc_html_e( 'Connect an Account', 'formidable' ); ?></span>
-						</div>
-						<div class="frm-ws-btn frm-bg-transparent" data-location="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>">
-							<span><?php esc_html_e( 'Get Formidable Now', 'formidable' ); ?></span>
-						</div>
-					</div>
-				<?php endif; ?>
+				<?php FrmSettingsController::license_box(); ?>
+
 			</div>
 		</div>
 		<div class="frm-column">
@@ -60,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-ws-carousel-wrapper">
-		<h4><?php esc_html_e( 'Unlimit your possibilities', 'formidable' ); ?></h4>
+		<h4><?php esc_html_e( 'Get limitless possibilities', 'formidable' ); ?></h4>
 		<div class="frm-arrows">
 			<span><?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_left_icon' ); ?></span>
 			<span class="frm-right-arrow"><?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon' ); ?></span>

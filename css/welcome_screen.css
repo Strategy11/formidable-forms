@@ -50,50 +50,21 @@ body {
     color: rgba(40, 47, 54, 0.8);
 }
 
-.frm-ws-block-1 .frm-ws-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 12px 24px;
-
-    border: 1px solid #4199FD;
-    box-sizing: border-box;
+#frm-connect-btns a {
     border-radius: 39px;
-
-    /* Inside Auto Layout */
-
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    margin: 16px 0px;
-
-    height: 43px;
-    width: 210px;
-    left: 0px;
-    top: 0px;
-    padding: 12px, 24px, 12px, 24px;
-    cursor: pointer;
+    margin: 16px 0;
+    padding: 12px 24px;
+	height: auto;
+    font-size: 15px;
+	line-height: 1;
 }
 
-.frm-ws-block-1 .frm-bg-blue {
-    background: #4199FD;
+#frm-connect-btns {
+	color: transparent; /* Hide the "or" */
 }
 
-.frm-ws-block-1 .frm-ws-btn span {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 19px;
-    text-align: center;
-    color: #4199FD;
-}
-
-.frm-ws-block-1 .frm-bg-blue span {
-    color: #FFFFFF;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    margin: 0px 10px;
-    width: 175px;
+#frm-using-lite {
+	display: none;
 }
 
 .frm-ws-block-1 .frm-bg-transparent {
@@ -195,7 +166,7 @@ body {
 .frm-ws-carousel-wrapper .frm-icon {
     height: 48px;
     width: 48px;
-    background: rgba(41, 131, 251, 0.15);
+    background: rgba(227, 230, 243, 0.64);
     border-radius: 10px;
 }
 
