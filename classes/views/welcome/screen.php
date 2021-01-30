@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm_wrap">
-	<div class="frm_grid_container">
+	<div class="frm_grid_container frm_no_grid_750">
 		<div class="frm6">
 			<div class="frm-ws-block-1">
 				<div class="frm-ws-logo">

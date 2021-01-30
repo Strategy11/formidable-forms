@@ -10,15 +10,11 @@ body {
 .frm_wrap {
 	max-width: 1092px;
 	margin: 62px auto 0;
+	padding-right: 20px;
 }
 
 .frm-button-secondary:hover {
 	background: transparent !important;
-}
-
-.frm-ws-block-1 {
-    width: 521px;
-    height: 280px;
 }
 
 .frm-ws-block-1 h1 {
@@ -176,4 +172,19 @@ body {
 
 .second-section {
     margin-top: 111px;
+}
+
+@media only screen and (max-width: 850px) {
+	.frm-ws-carousel-wrapper .frm3 {
+		grid-column:span 6 / span 6;
+		margin-bottom: 15px;
+	}
+}
+
+@media only screen and (max-width: 750px) {
+	.frm-player,
+	.frm-ws-block-1 {
+		text-align: center;
+		margin-left: 0;
+	}
 }
