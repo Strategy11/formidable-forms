@@ -74,10 +74,6 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					$icons.hide();
 				}
 			});
-
-			jQuery( document ).on( 'click', '.frm-ws-wrapper [data-location]', function() {
-				window.location = this.getAttribute( 'data-location' );
-			});
 		},
 
 		/**
