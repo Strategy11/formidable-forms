@@ -30,24 +30,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<div class="second-section">
-		<div class="frm_grid_container">
-			<div class="frm6 frm-ws-block frm-create-form">
-				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?></div>
-				<div class="frm-fill">
-					<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
-				</div>
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon frm-right-arrow' ); ?>
+	<div class="frm_grid_container frm-top-spacing">
+		<div class="frm6 frm-ws-block frm-create-form">
+			<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?></div>
+			<div class="frm-fill">
+				<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>
+				<p><?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?></p>
 			</div>
-			<div class="frm6 frm-ws-block frm-trigger-new-form-modal">
-				<div class="frm-icon frm-icon-briefcase"><?php FrmAppHelper::icon_by_class( 'frmfont frm_briefcase_icon' ); ?></div>
-				<div class="frm-fill">
-					<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>
-				</div>
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon frm-right-arrow' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon frm-right-arrow' ); ?>
+		</div>
+		<div class="frm6 frm-ws-block frm-trigger-new-form-modal">
+			<div class="frm-icon frm-icon-briefcase"><?php FrmAppHelper::icon_by_class( 'frmfont frm_briefcase_icon' ); ?></div>
+			<div class="frm-fill">
+				<h3><?php esc_html_e( 'New Form From a Template', 'formidable' ); ?></h3>
+				<p><?php esc_html_e( 'Check out our powerful pre-built templates', 'formidable' ); ?></p>
 			</div>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon frm-right-arrow' ); ?>
 		</div>
 	</div>
 
