@@ -47,7 +47,7 @@ class FrmWelcomeScreenController {
 			return;
 		}
 
-		set_transient( 'frm_activation_redirect', 'no', 60 );
+		set_transient( self::$option_name, 'no', 60 );
 
 		// Initial install.
 		wp_safe_redirect( self::settings_link() );
