@@ -22,7 +22,6 @@ class FrmWelcomeScreenController {
 		add_action( 'admin_menu', __CLASS__ . '::screen_page' );
 		add_action( 'admin_head', __CLASS__ . '::remove_menu' );
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_styles' );
-		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 	}
 
 	/**
