@@ -22,6 +22,7 @@ class FrmWelcomeScreenController {
 		add_action( 'admin_menu', __CLASS__ . '::screen_page' );
 		add_action( 'admin_head', __CLASS__ . '::remove_menu' );
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_styles' );
+		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 	}
 
 	/**
@@ -119,6 +120,12 @@ class FrmWelcomeScreenController {
 					<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 				</a>
 			<?php
+		}
+	}
+
+	public static function maybe_show_license_box() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			FrmSettingsController::license_box();
 		}
 	}
 }

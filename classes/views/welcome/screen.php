@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<h1><?php esc_html_e( 'Welcome to Formidable Forms!', 'formidable' ); ?></h1>
 				<p><?php esc_html_e( 'Thanks for choosing Formidable Froms - The most powerful and vesatile form builder for Wordpress', 'formidable' ); ?></p>
-				<?php FrmSettingsController::license_box(); ?>
+				<?php FrmWelcomeScreenController::maybe_show_license_box(); ?>
 
 			</div>
 		</div>
