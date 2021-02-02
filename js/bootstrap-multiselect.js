@@ -708,7 +708,7 @@
                     this.lastToggledInput = $target;
                 }
 
-                $target.blur();
+                $target.trigger( 'blur' );
             }, this));
 
             // Keyboard support.
@@ -742,7 +742,7 @@
                     }
 
                     var $current = $items.eq(index);
-                    $current.focus();
+                    $current.trigger( 'focus' );
 
                     if (event.keyCode === 32 || event.keyCode === 13) {
                         var $checkbox = $current.find('input');

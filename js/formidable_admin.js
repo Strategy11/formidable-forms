@@ -6041,7 +6041,7 @@ function frmAdminBuildJS() {
 				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
 			}
 		})
-		.focus( function() {
+		.on( 'focus', function() {
 			// Show options on click to make it work more like a dropdown.
 			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
 				jQuery( this ).autocomplete( 'search', this.value );
@@ -6598,7 +6598,7 @@ function frmAdminBuildJS() {
 			});
 
 			jQuery( '.frm_form_builder form' ).first().on( 'submit', function() {
-				jQuery( '.inplace_field' ).blur();
+				jQuery( '.inplace_field' ).trigger( 'blur' );
 			});
 
 			initiateMultiselect();
@@ -7043,7 +7043,7 @@ function frmAdminBuildJS() {
 					target.parent().addClass( 'tabs' );
 
 					// select the search bar
-					jQuery( '.quick-search', wrapper ).focus();
+					jQuery( '.quick-search', wrapper ).trigger( 'focus' );
 
 					e.preventDefault();
 				}

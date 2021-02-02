@@ -987,13 +987,13 @@ function frmFrontFormJS() {
 
 			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
 				if ( jQuery( this ).val() === '' ) {
-					jQuery( this ).blur();
+					jQuery( this ).trigger( 'blur' );
 				}
 			});
 
 			jQuery( document ).on( 'focus', '.frm_toggle_default', clearDefault );
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
-			jQuery( '.frm_toggle_default' ).blur();
+			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
 
 			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 
@@ -1202,7 +1202,7 @@ function frmFrontFormJS() {
 				scrollObj = id;
 			}
 
-			scrollObj.focus();
+			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
 			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;
