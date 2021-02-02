@@ -50,7 +50,7 @@ class FrmWelcomeScreenController {
 		set_transient( self::$option_name, 'no', 60 );
 
 		// Initial install.
-		wp_safe_redirect( self::settings_link() );
+		wp_safe_redirect( esc_url( self::settings_link() ) );
 		exit;
 	}
 
@@ -109,7 +109,7 @@ class FrmWelcomeScreenController {
 	 * @return string
 	 */
 	public static function settings_link() {
-		return esc_url( admin_url( 'admin.php?page=' . self::$menu_slug ) );
+		return admin_url( 'admin.php?page=' . self::$menu_slug );
 	}
 
 	public static function upgrade_to_pro_button() {
