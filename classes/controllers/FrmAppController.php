@@ -586,7 +586,7 @@ class FrmAppController {
 		if ( ! class_exists( 'WP_Site_Health' ) ) {
 			$wp_site_health_path = ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
 			if ( file_exists( $wp_site_health_path ) ) {
-				require_once ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+				require_once $wp_site_health_path;
 			}
 		}
 	}
