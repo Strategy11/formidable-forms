@@ -5806,7 +5806,7 @@ function frmAdminBuildJS() {
 			}
 
 			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
-			$hiddenEmailField = $hiddenForm.find( '[type="email"]' );
+			$hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
 			if ( ! $hiddenEmailField.length ) {
 				return;
 			}
