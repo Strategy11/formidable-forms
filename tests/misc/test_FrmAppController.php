@@ -183,4 +183,12 @@ class test_FrmAppController extends FrmUnitTest {
 		$new_db = get_option( 'frm_db_version' );
 		$this->assertSame( $current_db, $new_db, 'The DB did not update correctly' );
 	}
+
+	/**
+	 * @covers FrmAppController::network_upgrade_site
+	 */
+	public function test_network_upgrade_site() {
+		FrmAppController::network_upgrade_site();
+		$this->addToAssertionCount( 1 );
+	}
 }
