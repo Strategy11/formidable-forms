@@ -3,10 +3,6 @@ body {
 	color: var(--darkest-grey);
 }
 
-* {
-	box-sizing: border-box;
-}
-
 .frm_wrap {
 	max-width: 1092px;
 	margin: 62px auto 0;
