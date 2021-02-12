@@ -4,8 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmWelcomeScreenController {
-	private static $menu_slug   = 'formidable-welcome';
-	private static $option_name = 'frm_activation_redirect';
+	public static $menu_slug   = 'formidable-welcome';
+	public static $option_name = 'frm_activation_redirect';
 
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
