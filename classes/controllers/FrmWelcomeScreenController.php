@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmWelcomeScreenController {
-	private static $menu_slug   = 'formidable-welcome-screen';
+	private static $menu_slug   = 'formidable-welcome';
 	private static $option_name = 'frm_activation_redirect';
 
 	/**
@@ -70,7 +70,7 @@ class FrmWelcomeScreenController {
 	 */
 	public static function screen_content() {
 		FrmAppHelper::include_svg();
-		include( FrmAppHelper::plugin_path() . '/classes/views/welcome/screen.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/welcome/show.php';
 	}
 
 	/**

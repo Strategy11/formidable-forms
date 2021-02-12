@@ -5678,7 +5678,7 @@ function frmAdminBuildJS() {
 			transitionToAddDetails( $modal, name, link, action );
 		});
 
-		jQuery( document ).on( 'click', '.frm-create-form', function( event ) {
+		jQuery( document ).on( 'click', '.frm-create-blank-form', function( event ) {
 			event.preventDefault();
 			jQuery( '.frm-trigger-new-form-modal' ).trigger( 'click' );
 			transitionToAddDetails( $modal, '', '', 'frm_install_form' );
