@@ -56,7 +56,7 @@ class FrmSMTPController {
 
 		add_filter( 'wp_mail_smtp_core_get_upgrade_link', array( $self, 'link' ) );
 		add_action( 'admin_menu', array( $self, 'menu' ), 999 );
-		add_action( 'wp_mail_smtp_core_recommendations_plugins', 'FrmAppController::remove_wpforms_nag' );
+		add_action( 'wp_mail_smtp_core_recommendations_plugins', 'FrmSMTPController::remove_wpforms_nag' );
 
 		// Only load if we are actually on the SMTP page.
 		if ( ! FrmAppHelper::is_admin_page( $self->slug ) ) {

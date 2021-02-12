@@ -1101,7 +1101,7 @@ h2 .frm-button-primary {
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .frm_wrap .preview > .button:hover {
 	border-color: var(--primary-hover) !important;
-	background: var(--primary-hover);
+	background: var(--primary-hover) !important;
 	color: #fff;
 	box-shadow: none;
 }
@@ -6878,6 +6878,7 @@ li.frm_noallow.button.frm_show_upgrade {
 	border-radius: 10px;
 	border: 1px solid var(--grey);
 	background-color: #fff;
+	max-width: 100% !important;
 }
 
 .frm-dialog .postbox {
@@ -6918,7 +6919,7 @@ h2 .frm-sub-label {
 
 .frm-white-body .ui-widget-overlay,
 .toplevel_page_formidable .ui-widget-overlay,
-.formidable_page_formidable-welcome-screen .ui-widget-overlay {
+.formidable_page_formidable-welcome .ui-widget-overlay {
 	position: fixed;
 	width: 100%;
 	height: 100%;

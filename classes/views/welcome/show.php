@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm_grid_container frm-top-spacing">
-		<div class="frm6 frm-ws-block frm-create-form">
+		<div class="frm6 frm-ws-block frm-create-blank-form">
 			<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?></div>
 			<div class="frm-fill">
 				<h3><?php esc_html_e( 'New Blank Form', 'formidable' ); ?></h3>

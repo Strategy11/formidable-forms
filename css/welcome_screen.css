@@ -1,4 +1,4 @@
-body {
+body.frm-admin-page-welcome {
 	background: var(--sidebar-color);
 	color: var(--darkest-grey);
 }
@@ -6,7 +6,7 @@ body {
 .frm_wrap {
 	max-width: 1092px;
 	margin: 62px auto 0;
-	padding-right: 20px;
+	padding: 0 20px;
 }
 
 .frm-button-secondary:hover {
@@ -116,7 +116,7 @@ body {
 }
 
 .frm-ws-carousel-wrapper h4 {
-	margin: 64px 0 3px;
+	margin: 64px 0 20px;
 	font-size: 15px;
 	line-height: 157.9%;
 	color: rgba(40, 47, 54, 0.85);
@@ -160,14 +160,14 @@ body {
 	font-size: 14px !important;
 	line-height: 19px;
 	text-align: center;
-	margin: 10px 0px;
+	margin: 10px 0 0 !important;
 }
 
 .frm-top-spacing {
-	margin-top: 111px;
+	margin-top: 100px;
 }
 
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 900px) {
 	.frm-ws-carousel-wrapper .frm3 {
 		grid-column:span 6 / span 6;
 		margin-bottom: 15px;
