@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="frm-icon"><?php FrmAppHelper::icon_by_class( 'frmfont frm_listings_icon' ); ?></div>
 				<h3><?php esc_html_e( 'Display form data with views', 'formidable' ); ?></h3>
 				<p><?php esc_html_e( 'Now you can display form data in custom Views without any PHP.', 'formidable' ); ?></p>
-				<?php FrmAddonsController::conditional_action_button( 'views', 'views-info' ); ?>
+				<?php FrmWelcomeScreenController::maybe_show_conditional_action_button( 'views', 'views-info' ); ?>
 			</div>
 		</div>
 	</div>

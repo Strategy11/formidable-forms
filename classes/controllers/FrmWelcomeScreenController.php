@@ -127,4 +127,10 @@ class FrmWelcomeScreenController {
 			FrmSettingsController::license_box();
 		}
 	}
+
+	public static function maybe_show_conditional_action_button( $plugin, $upgrade_link_args ) {
+		if ( ! ( is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed() ) ) {
+			FrmAddonsController::conditional_action_button( $plugin, $upgrade_link_args );
+		}
+	}
 }
