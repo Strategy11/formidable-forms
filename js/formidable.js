@@ -968,6 +968,18 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Check for -webkit-box-shadow css value for input:-webkit-autofill selector.
+	 * If this is a match, the User is autofilling the input on a Webkit browser.
+	 * We want to delete the Honeypot field, otherwise it will get triggered as spam on autocomplete.
+	 */
+	function onHoneypotFieldChange() {
+		var css = jQuery( this ).css( 'box-shadow' );
+		if ( css.match( /inset/ ) ) {
+			this.parentNode.removeChild( this );
+		}
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -975,18 +987,20 @@ function frmFrontFormJS() {
 
 			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
 				if ( jQuery( this ).val() === '' ) {
-					jQuery( this ).blur();
+					jQuery( this ).trigger( 'blur' );
 				}
 			});
 
 			jQuery( document ).on( 'focus', '.frm_toggle_default', clearDefault );
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
-			jQuery( '.frm_toggle_default' ).blur();
+			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
 
 			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
+
+			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
@@ -1188,7 +1202,7 @@ function frmFrontFormJS() {
 				scrollObj = id;
 			}
 
-			scrollObj.focus();
+			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
 			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;

@@ -375,7 +375,7 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmModal( link ) {
-		var i, dataAtts,
+		var caution, verify, $confirmMessage, frmCaution, i, dataAtts,
 			$info = initModal( '#frm_confirm_modal', '400px' ),
 			continueButton = document.getElementById( 'frm-confirmed-click' );
 
@@ -383,10 +383,20 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		var caution = link.getAttribute( 'data-frmcaution' );
-		var cautionHtml = caution ? '<span class="frm-caution">' + caution + '</span> ' : '';
+		caution = link.getAttribute( 'data-frmcaution' );
+		verify = link.getAttribute( 'data-frmverify' );
+		$confirmMessage = jQuery( '.frm-confirm-msg' );
 
-		jQuery( '.frm-confirm-msg' ).html( cautionHtml + link.getAttribute( 'data-frmverify' ) );
+		if ( caution ) {
+			frmCaution = document.createElement( 'span' );
+			frmCaution.classList.add( 'frm-caution' );
+			frmCaution.appendChild( document.createTextNode( caution ) );
+			$confirmMessage.append( frmCaution );
+		}
+
+		if ( verify ) {
+			$confirmMessage.append( document.createTextNode( verify ) );
+		}
 
 		removeAtts = continueButton.dataset;
 		for ( i in dataAtts ) {
@@ -3741,12 +3751,12 @@ function frmAdminBuildJS() {
 			if ( typeof requires === 'undefined' || requires === null || requires === '' ) {
 				requires = 'Pro';
 			}
-			jQuery( '.license-level' ).html( requires );
+			jQuery( '.license-level' ).text( requires );
 
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
 
-			jQuery( '.frm_feature_label' ).html( this.getAttribute( 'data-upgrade' ) );
+			jQuery( '.frm_feature_label' ).text( this.getAttribute( 'data-upgrade' ) );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 
 			$info.dialog( 'open' );
@@ -5802,7 +5812,7 @@ function frmAdminBuildJS() {
 			}
 
 			$hiddenForm = jQuery( '#frmapi-email-form' ).find( 'form' );
-			$hiddenEmailField = $hiddenForm.find( '[type="email"]' );
+			$hiddenEmailField = $hiddenForm.find( '[type="email"]' ).not( '.frm_verify' );
 			if ( ! $hiddenEmailField.length ) {
 				return;
 			}
@@ -6037,7 +6047,7 @@ function frmAdminBuildJS() {
 				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
 			}
 		})
-		.focus( function() {
+		.on( 'focus', function() {
 			// Show options on click to make it work more like a dropdown.
 			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
 				jQuery( this ).autocomplete( 'search', this.value );
@@ -6594,7 +6604,7 @@ function frmAdminBuildJS() {
 			});
 
 			jQuery( '.frm_form_builder form' ).first().on( 'submit', function() {
-				jQuery( '.inplace_field' ).blur();
+				jQuery( '.inplace_field' ).trigger( 'blur' );
 			});
 
 			initiateMultiselect();
@@ -7039,7 +7049,7 @@ function frmAdminBuildJS() {
 					target.parent().addClass( 'tabs' );
 
 					// select the search bar
-					jQuery( '.quick-search', wrapper ).focus();
+					jQuery( '.quick-search', wrapper ).trigger( 'focus' );
 
 					e.preventDefault();
 				}

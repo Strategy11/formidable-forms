@@ -45,6 +45,17 @@ class FrmAddonsController {
 			$license_type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : '';
 			unset( $addons['error'] );
 		}
+
+		$pro = array(
+			'pro' => array(
+				'title'    => 'Formidable Forms Pro',
+				'slug'     => 'formidable-pro',
+				'released' => '2011-02-05',
+				'docs'     => 'knowledgebase/',
+				'excerpt'  => 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.',
+			),
+		);
+		$addons = $pro + $addons;
 		self::prepare_addons( $addons );
 
 		$pricing = FrmAppHelper::admin_upgrade_link( 'addons' );
@@ -91,7 +102,7 @@ class FrmAddonsController {
 	protected static function fallback_plugin_list() {
 		$list = array(
 			'formidable-pro' => array(
-				'title'   => 'Formidable Forms',
+				'title'   => 'Formidable Forms Pro',
 				'link'    => 'pricing/',
 				'docs'    => '',
 				'excerpt' => 'Enhance your basic Formidable forms with a plethora of Pro field types and features. Create advanced forms and data-driven applications in minutes.',
@@ -1122,10 +1133,15 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.02
-	 * @deprecated 4.09.01
 	 */
 	public static function ajax_install_addon() {
-		FrmDeprecated::ajax_install_addon();
+		self::install_addon_permissions();
+
+		self::download_and_activate();
+
+		// Send back a response.
+		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
+		wp_die();
 	}
 
 	/**
