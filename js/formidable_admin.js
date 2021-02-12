@@ -5678,9 +5678,9 @@ function frmAdminBuildJS() {
 			transitionToAddDetails( $modal, name, link, action );
 		});
 
-		jQuery( document ).on( 'click', '.frm-ws-wrapper .frm-create-form', function( event ) {
+		jQuery( document ).on( 'click', '.frm-create-form', function( event ) {
 			event.preventDefault();
-			jQuery( '.frm-ws-wrapper .frm-trigger-new-form-modal' ).trigger( 'click' );
+			jQuery( '.frm-trigger-new-form-modal' ).trigger( 'click' );
 			transitionToAddDetails( $modal, '', '', 'frm_install_form' );
 		});
 
