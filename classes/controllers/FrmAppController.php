@@ -562,6 +562,8 @@ class FrmAppController {
 		set_transient( 'frm_updating_api', true, MINUTE_IN_SECONDS );
 		$request = new WP_REST_Request( 'GET', '/frm-admin/v1/install' );
 
+		self::maybe_add_wp_site_health();
+
 		if ( $blog_id ) {
 			switch_to_blog( $blog_id );
 			$response = rest_do_request( $request );
@@ -573,6 +575,19 @@ class FrmAppController {
 		if ( $response->is_error() ) {
 			// if the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
+		}
+	}
+
+	/**
+	 * Make sure WP_Site_Health has been included because it is required when calling rest_do_request.
+	 * Check first that the file exists because WP_Site_Health was only introduced in WordPress 5.2.
+	 */
+	private static function maybe_add_wp_site_health() {
+		if ( ! class_exists( 'WP_Site_Health' ) ) {
+			$wp_site_health_path = ABSPATH . 'wp-admin/includes/class-wp-site-health.php';
+			if ( file_exists( $wp_site_health_path ) ) {
+				require_once $wp_site_health_path;
+			}
 		}
 	}
 
