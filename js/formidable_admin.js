@@ -5688,10 +5688,16 @@ function frmAdminBuildJS() {
 			transitionToAddDetails( $modal, name, link, action );
 		});
 
+		// Welcome page modals.
 		jQuery( document ).on( 'click', '.frm-create-blank-form', function( event ) {
 			event.preventDefault();
 			jQuery( '.frm-trigger-new-form-modal' ).trigger( 'click' );
 			transitionToAddDetails( $modal, '', '', 'frm_install_form' );
+
+			// Close the modal with the cancel button.
+			jQuery( '.frm-modal-cancel.frm-back-to-all-templates' ).on( 'click', function() {
+				jQuery( '.ui-widget-overlay' ).trigger( 'click' );
+			});
 		});
 
 		jQuery( document ).on( 'click', '.frm-featured-forms.frm-templates-list li [role="button"]:not(a), .frm-templates-list .accordion-section.open li [role="button"]:not(a)', function( event ) {

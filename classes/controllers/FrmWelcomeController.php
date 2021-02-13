@@ -3,9 +3,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmWelcomeScreenController {
+class FrmWelcomeController {
+
 	public static $menu_slug   = 'formidable-welcome';
+
 	public static $option_name = 'frm_activation_redirect';
+
+	private static $last_redirect = 'frm_welcome_redirect';
 
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
@@ -49,9 +53,27 @@ class FrmWelcomeScreenController {
 
 		set_transient( self::$option_name, 'no', 60 );
 
+		// Prevent redirect with every activation.
+		if ( self::already_redirected() ) {
+			return;
+		}
+
 		// Initial install.
 		wp_safe_redirect( esc_url( self::settings_link() ) );
 		exit;
+	}
+
+	/**
+	 * Don't redirect every time the plugin is activated.
+	 */
+	private static function already_redirected() {
+		$last_redirect = get_option( self::$last_redirect );
+		if ( $last_redirect ) {
+			return true;
+		}
+
+		update_option( self::$last_redirect, FrmAppHelper::plugin_version(), 'no' );
+		return false;
 	}
 
 	/**
