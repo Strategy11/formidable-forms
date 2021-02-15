@@ -49,16 +49,31 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function set_messages() {
 		$this->messages = get_option( $this->option );
-		if ( empty( $this->messages ) ) {
+		if ( ! empty( $this->messages ) ) {
+			foreach ( $this->messages as $key => $message ) {
+				if ( ! $this->validate_message_data( $message ) ) {
+					unset( $this->messages[ $key ] );
+				}
+			}
+		} else {
 			$this->messages = array();
 		}
-
 		$this->add_api_messages();
 
 		/**
 		 * Messages are in an array.
 		 */
 		$this->messages = apply_filters( 'frm_inbox', $this->messages );
+	}
+
+	/**
+	 * Check that message data is not missing required information.
+	 *
+	 * @param array $message
+	 * @return bool true if the messages contains the required keys to display a message properly.
+	 */
+	private function validate_message_data( $message ) {
+		return isset( $message['subject'] ) && isset( $message['message'] ) && isset( $message['cta'] ) && ! empty( $message['created'] );
 	}
 
 	/**
