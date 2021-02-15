@@ -109,6 +109,11 @@ class FrmInbox extends FrmFormApi {
 		}
 
 		$this->fill_message( $message );
+
+		if ( ! $this->validate_message_data( $message ) ) {
+			return;
+		}
+
 		$this->messages[ $message['key'] ] = $message;
 
 		$this->update_list();
