@@ -140,7 +140,7 @@ class FrmInbox extends FrmFormApi {
 		$user_id = get_current_user_id();
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
-			if ( $this->is_expired( $message ) || $dismissed ) {
+			if ( empty( $k ) || $this->is_expired( $message ) || $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
@@ -176,7 +176,7 @@ class FrmInbox extends FrmFormApi {
 	 * @param string $key
 	 */
 	public function mark_read( $key ) {
-		if ( ! isset( $this->messages[ $key ] ) ) {
+		if ( ! $key || ! isset( $this->messages[ $key ] ) ) {
 			return;
 		}
 
