@@ -386,6 +386,7 @@ function frmAdminBuildJS() {
 		caution = link.getAttribute( 'data-frmcaution' );
 		verify = link.getAttribute( 'data-frmverify' );
 		$confirmMessage = jQuery( '.frm-confirm-msg' );
+		$confirmMessage.empty();
 
 		if ( caution ) {
 			frmCaution = document.createElement( 'span' );
