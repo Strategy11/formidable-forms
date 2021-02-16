@@ -95,3 +95,10 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		require( $filepath );
 	}
 }
+
+add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'frm_maybe_install' );
+function frm_maybe_install() {
+	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
+		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
+	}
+}

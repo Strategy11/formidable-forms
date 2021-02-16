@@ -94,6 +94,7 @@ class FrmAppController {
 			'formidable-styles',
 			'formidable-styles2',
 			'formidable-inbox',
+			'formidable-welcome',
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
@@ -267,7 +268,7 @@ class FrmAppController {
 		include $shared_path . 'upgrade_overlay.php';
 		include $shared_path . 'confirm-overlay.php';
 
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list', 'trash' ), true ) ) {
+		if ( ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-welcome' ) ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list', 'trash' ), true ) ) {
 			self::new_form_overlay_html();
 		}
 	}
