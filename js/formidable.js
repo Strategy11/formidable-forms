@@ -125,7 +125,7 @@ function frmFrontFormJS() {
 	 * @param {object} $form
      */
 	function enableSubmitButton( $form ) {
-		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).removeAttr( 'disabled' );
+		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
 	}
 
 	/**
@@ -618,7 +618,7 @@ function frmFrontFormJS() {
 				}
 			},
 			error: function() {
-				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).removeAttr( 'disabled' );
+				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).prop( 'disabled', false );
 				object.submit();
 			}
 		});
