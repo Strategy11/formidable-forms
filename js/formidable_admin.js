@@ -2236,7 +2236,7 @@ function frmAdminBuildJS() {
 		if ( $self.is( ':checked' ) ) {
 			uncheck = function() {
 				setTimeout( function() {
-					$self.removeAttr( 'checked' );
+					$self.prop( 'checked', false );
 				}, 0 );
 			};
 			unbind = function() {
@@ -5374,10 +5374,10 @@ function frmAdminBuildJS() {
 		var exportField = jQuery( 'input[name="frm_export_forms[]"]' );
 		if ( c === 'single' ) {
 			exportField.prop( 'multiple', false );
-			exportField.removeAttr( 'checked' );
+			exportField.prop( 'checked', false );
 		} else {
 			exportField.prop( 'multiple', true );
-			exportField.removeAttr( 'disabled' );
+			exportField.prop( 'disabled', false );
 		}
 	}
 
@@ -5390,13 +5390,13 @@ function frmAdminBuildJS() {
 		if ( count === 'single' ) {
 			// Disable all other fields to prevent multiple selections.
 			if ( this.checked ) {
-				exportField.attr( 'disabled', true );
+				exportField.prop( 'disabled', true );
 				this.removeAttribute( 'disabled' );
 			} else {
-				exportField.removeAttr( 'disabled' );
+				exportField.prop( 'disabled', false );
 			}
 		} else {
-			exportField.removeAttr( 'disabled' );
+			exportField.prop( 'disabled', false );
 		}
 	}
 
@@ -7224,20 +7224,12 @@ function frm_show_div( div, value, showIf, classId ) { // eslint-disable-line ca
 }
 
 function frmCheckAll( checked, n ) {
-	if ( checked ) {
-		jQuery( 'input[name^="' + n + '"]' ).attr( 'checked', 'checked' );
-	} else {
-		jQuery( 'input[name^="' + n + '"]' ).removeAttr( 'checked' );
-	}
+	jQuery( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
 }
 
 function frmCheckAllLevel( checked, n, level ) {
 	var $kids = jQuery( '.frm_catlevel_' + level ).children( '.frm_checkbox' ).children( 'label' );
-	if ( checked ) {
-		$kids.children( 'input[name^="' + n + '"]' ).attr( 'checked', 'checked' );
-	} else {
-		$kids.children( 'input[name^="' + n + '"]' ).removeAttr( 'checked' );
-	}
+	$kids.children( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
 }
 
 function frm_add_logic_row( id, formId ) { // eslint-disable-line camelcase
