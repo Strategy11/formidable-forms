@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.09.06 =
+* New: Added a new welcome screen to introduce new users to Formidable.
+* Fix: Make sure that Site Health exists when upgrading.
+* Fix: Invalid message data was occasionally appearing in the Inbox.
+* Fix: Excluded checkbox options were not properly toggling for Action Taxonomies.
+* Fix: Some pop ups were occasionally including outdated text.
+
 = 4.09.05 =
 * Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
 * Fix: Important security update that adds better escaping when text is used from attribute data.

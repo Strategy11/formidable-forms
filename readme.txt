@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form, custom form
 Requires at least: 4.7
-Tested up to: 5.6
+Tested up to: 5.6.1
 Requires PHP: 5.6
-Stable tag: 4.09.05
+Stable tag: 4.09.06
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.06 =
+* New: Added a new welcome screen to introduce new users to Formidable.
+* Fix: Make sure that Site Health exists when upgrading.
+* Fix: Invalid message data was occasionally appearing in the Inbox.
+* Fix: Excluded checkbox options were not properly toggling for Action Taxonomies.
+* Fix: Some pop ups were occasionally including outdated text.
+
 = 4.09.05 =
 * Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
 * Fix: Important security update that adds better escaping when text is used from attribute data.
