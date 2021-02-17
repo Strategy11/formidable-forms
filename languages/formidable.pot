@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.09.05\n"
+"Project-Id-Version: Formidable Forms 4.09.06\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-27T21:28:48+00:00\n"
+"POT-Creation-Date: 2021-02-17T13:31:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -136,58 +136,59 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:58
+#: classes/controllers/FrmAddonsController.php:69
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:580
+#: classes/controllers/FrmAddonsController.php:591
 msgid "Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:585
+#: classes/controllers/FrmAddonsController.php:596
 #: classes/helpers/FrmAppHelper.php:2459
 msgid "Active"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:590
+#: classes/controllers/FrmAddonsController.php:601
 msgid "Not Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:877
+#: classes/controllers/FrmAddonsController.php:888
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:933
+#: classes/controllers/FrmAddonsController.php:944
 msgid "Your plugin has been activated. Please reload the page to see more options."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1032
+#: classes/controllers/FrmAddonsController.php:1043
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1117
-#: classes/controllers/FrmAddonsController.php:1118
+#: classes/controllers/FrmAddonsController.php:1128
+#: classes/controllers/FrmAddonsController.php:1129
+#: classes/controllers/FrmWelcomeController.php:141
 #: classes/views/frm-forms/new-form-overlay.php:112
 #: classes/views/shared/reports-info.php:24
 msgid "Upgrade Now"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1132
+#: classes/controllers/FrmAddonsController.php:1143
 msgid "Your plugin has been installed. Please reload the page to see more options."
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:150
+#: classes/controllers/FrmAppController.php:151
 msgid "Build"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:157
+#: classes/controllers/FrmAppController.php:158
 #: classes/helpers/FrmFormsListHelper.php:302
 #: classes/views/frm-forms/settings.php:13
 #: classes/views/frm-settings/form.php:14
 msgid "Settings"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:164
+#: classes/controllers/FrmAppController.php:165
 #: classes/controllers/FrmEntriesController.php:11
 #: classes/controllers/FrmEntriesController.php:100
 #: classes/controllers/FrmFormsController.php:735
@@ -196,18 +197,18 @@ msgstr ""
 msgid "Entries"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:176
+#: classes/controllers/FrmAppController.php:177
 #: classes/controllers/FrmEntriesController.php:15
 #: classes/views/shared/views-info.php:11
 msgid "Views"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:190
+#: classes/controllers/FrmAppController.php:191
 #: classes/views/shared/reports-info.php:11
 msgid "Reports"
 msgstr ""
 
-#: classes/controllers/FrmAppController.php:210
+#: classes/controllers/FrmAppController.php:211
 msgid "Build a Form"
 msgstr ""
 
@@ -944,6 +945,10 @@ msgstr ""
 
 #: classes/controllers/FrmUsageController.php:43
 msgid "Once Weekly"
+msgstr ""
+
+#: classes/controllers/FrmWelcomeController.php:85
+msgid "Welcome Screen"
 msgstr ""
 
 #: classes/controllers/FrmXMLController.php:9
@@ -4002,7 +4007,7 @@ msgstr ""
 msgid "Default Form"
 msgstr ""
 
-#: classes/models/FrmMigrate.php:562
+#: classes/models/FrmMigrate.php:564
 msgid "Sending"
 msgstr ""
 
@@ -5055,6 +5060,7 @@ msgid "Formidable Views"
 msgstr ""
 
 #: classes/views/frm-forms/new-form-overlay/upgrade-body.php:21
+#: classes/views/welcome/show.php:78
 msgid "File uploads"
 msgstr ""
 
@@ -5950,6 +5956,62 @@ msgstr ""
 #: classes/views/styles/_sample_form.php:84
 #: classes/views/styles/_sample_form.php:89
 msgid "SAMPLE:"
+msgstr ""
+
+#: classes/views/welcome/show.php:20
+msgid "Welcome to Formidable Forms!"
+msgstr ""
+
+#: classes/views/welcome/show.php:21
+msgid "Thanks for choosing Formidable Froms - The most powerful and vesatile form builder for Wordpress"
+msgstr ""
+
+#: classes/views/welcome/show.php:37
+msgid "New Blank Form"
+msgstr ""
+
+#: classes/views/welcome/show.php:38
+msgid "Create a new view from scratch"
+msgstr ""
+
+#: classes/views/welcome/show.php:47
+msgid "New Form From a Template"
+msgstr ""
+
+#: classes/views/welcome/show.php:48
+msgid "Check out our powerful pre-built templates"
+msgstr ""
+
+#: classes/views/welcome/show.php:55
+msgid "Get limitless possibilities"
+msgstr ""
+
+#: classes/views/welcome/show.php:62
+msgid "Calculators"
+msgstr ""
+
+#: classes/views/welcome/show.php:63
+msgid "Give instant online estimates and calculate advanced product options."
+msgstr ""
+
+#: classes/views/welcome/show.php:70
+msgid "Survey and Polls"
+msgstr ""
+
+#: classes/views/welcome/show.php:71
+msgid "Collect customer feedback & data like a pro - no coding required."
+msgstr ""
+
+#: classes/views/welcome/show.php:79
+msgid "Easily upload documents, files, photos, and music for user avatars, featured images, or email attachments."
+msgstr ""
+
+#: classes/views/welcome/show.php:86
+msgid "Display form data with views"
+msgstr ""
+
+#: classes/views/welcome/show.php:87
+msgid "Now you can display form data in custom Views without any PHP."
 msgstr ""
 
 #: classes/views/xml/import_form.php:18
