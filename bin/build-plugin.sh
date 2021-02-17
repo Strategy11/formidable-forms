@@ -72,11 +72,7 @@ npm run minimize
 # to avoid writing to that file at the same time.
 status "Updating version in PHP..."
 version="$2"
-if [ "$plugin" == "formidable-pro" ]; then
-	npm run set-version $version
-else
-	npm run set-version -- $version
-fi
+npm run set-version -- $version
 
 status "Preparing POT file..."
 npm run makepot
@@ -84,3 +80,12 @@ npm run makepot
 # Generate the plugin zip file.
 status "Creating archive..."
 npm run zip -- $version
+
+warning "Commit changes and create a release?"
+echo -n "[y]es/[n]o: "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ]; then
+	npm run git-release -- $version
+else
+	echo "Changes not commited."
+fi
