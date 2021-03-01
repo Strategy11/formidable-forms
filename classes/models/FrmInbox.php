@@ -76,9 +76,14 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @param array $message
+	 * @param array|string $message
 	 */
 	public function add_message( $message ) {
+		if ( ! is_array( $message ) ) {
+			// if the API response is invalid, $message may not be an array.
+			return;
+		}
+
 		if ( isset( $this->messages[ $message['key'] ] ) && ! isset( $message['force'] ) ) {
 			// Don't replace messages unless required.
 			return;
