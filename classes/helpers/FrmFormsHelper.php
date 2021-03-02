@@ -864,7 +864,7 @@ BEFORE_HTML;
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;
-		if ( empty( $form ) || 'default' == 'form' ) {
+		if ( empty( $form ) || 'default' === $form ) {
 			return $style;
 		} elseif ( is_object( $form ) && $form->parent_form_id ) {
 			// get the parent form if this is a child
