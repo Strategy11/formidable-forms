@@ -436,6 +436,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertTrue( strpos( $output, $substring ) === false, $message );
 	}
 
+	/**
+	 * @covers FrmAppHelper::get_unique_key
+	 */
 	public function test_get_unique_key() {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'frm_fields';
