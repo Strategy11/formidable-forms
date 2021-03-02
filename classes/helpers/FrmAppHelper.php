@@ -1559,7 +1559,7 @@ class FrmAppHelper {
 			$key = sanitize_key( $name );
 		}
 
-		if ( empty( $key ) ) {
+		if ( empty( $key ) || strlen( $key ) >= 100 ) {
 			$max_slug_value = pow( 36, $num_chars );
 			$min_slug_value = 37; // we want to have at least 2 characters in the slug
 			$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
@@ -1575,7 +1575,7 @@ class FrmAppHelper {
 			'evenodd',
 		);
 
-		if ( is_numeric( $key ) || in_array( $key, $not_allowed ) ) {
+		if ( is_numeric( $key ) || in_array( $key, $not_allowed, true ) ) {
 			$key = $key . 'a';
 		}
 
