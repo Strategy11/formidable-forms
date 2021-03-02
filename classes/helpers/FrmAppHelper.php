@@ -1559,7 +1559,11 @@ class FrmAppHelper {
 			$key = sanitize_key( $name );
 		}
 
-		if ( empty( $key ) || strlen( $key ) >= 100 ) {
+		if ( 'field_key' === $column && strlen( $key ) >= 100 ) {
+			$key = '';
+		}
+
+		if ( empty( $key ) ) {
 			$max_slug_value = pow( 36, $num_chars );
 			$min_slug_value = 37; // we want to have at least 2 characters in the slug
 			$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
