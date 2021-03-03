@@ -1555,18 +1555,14 @@ class FrmAppHelper {
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
 
-		if ( ! empty( $name ) ) {
+		if ( $name ) {
 			$key = sanitize_key( $name );
 		}
 
-		if ( 'field_key' === $column && strlen( $key ) >= 100 ) {
-			$key = '';
-		}
+		$key = self::maybe_clear_long_key( $key, $column );
 
-		if ( empty( $key ) ) {
-			$max_slug_value = pow( 36, $num_chars );
-			$min_slug_value = 37; // we want to have at least 2 characters in the slug
-			$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+		if ( ! $key ) {
+			$key = self::generate_new_key( $num_chars );
 		}
 
 		$not_allowed = array(
@@ -1598,6 +1594,30 @@ class FrmAppHelper {
 		}
 
 		return $key;
+	}
+
+	/**
+	 * Possibly reset a key to avoid conflicts with column size limits.
+	 *
+	 * @param string $key
+	 * @param string $column
+	 * @return string either the original key value, or an empty string if the key was too long.
+	 */
+	private static function maybe_clear_long_key( $key, $column ) {
+		if ( 'field_key' === $column && strlen( $key ) >= 70 ) {
+			$key = '';
+		}
+		return $key;
+	}
+
+	/**
+	 * @param int $num_chars
+	 * @return string
+	 */
+	private static function generate_new_key( $num_chars ) {
+		$max_slug_value = pow( 36, $num_chars );
+		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
 	}
 
 	/**
