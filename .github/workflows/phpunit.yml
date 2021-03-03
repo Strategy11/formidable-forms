@@ -11,7 +11,7 @@ on:
 name: PHPUnit
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     strategy:
       matrix:
         include:
