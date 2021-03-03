@@ -1554,30 +1554,16 @@ class FrmAppHelper {
 	 */
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
-
-		if ( ! empty( $name ) ) {
+		if ( $name ) {
 			$key = sanitize_key( $name );
+			$key = self::maybe_clear_long_key( $key, $column );
 		}
 
-		if ( empty( $key ) ) {
-			$max_slug_value = pow( 36, $num_chars );
-			$min_slug_value = 37; // we want to have at least 2 characters in the slug
-			$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+		if ( ! $key ) {
+			$key = self::generate_new_key( $num_chars );
 		}
 
-		$not_allowed = array(
-			'id',
-			'key',
-			'created-at',
-			'detaillink',
-			'editlink',
-			'siteurl',
-			'evenodd',
-		);
-
-		if ( is_numeric( $key ) || in_array( $key, $not_allowed ) ) {
-			$key = $key . 'a';
-		}
+		$key = self::prevent_numeric_and_reserved_keys( $key );
 
 		$key_check = FrmDb::get_var(
 			$table_name,
@@ -1593,6 +1579,54 @@ class FrmAppHelper {
 			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
+		return $key;
+	}
+
+	/**
+	 * Possibly reset a key to avoid conflicts with column size limits.
+	 *
+	 * @param string $key
+	 * @param string $column
+	 * @return string either the original key value, or an empty string if the key was too long.
+	 */
+	private static function maybe_clear_long_key( $key, $column ) {
+		if ( 'field_key' === $column && strlen( $key ) >= 70 ) {
+			$key = '';
+		}
+		return $key;
+	}
+
+	/**
+	 * @param int $num_chars
+	 * @return string
+	 */
+	private static function generate_new_key( $num_chars ) {
+		$max_slug_value = pow( 36, $num_chars );
+		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+	}
+
+	/**
+	 * @param string $key
+	 * @return string
+	 */
+	private static function prevent_numeric_and_reserved_keys( $key ) {
+		if ( is_numeric( $key ) ) {
+			$key .= 'a';
+		} else {
+			$not_allowed = array(
+				'id',
+				'key',
+				'created-at',
+				'detaillink',
+				'editlink',
+				'siteurl',
+				'evenodd',
+			);
+			if ( in_array( $key, $not_allowed, true ) ) {
+				$key .= 'a';
+			}
+		}
 		return $key;
 	}
 
