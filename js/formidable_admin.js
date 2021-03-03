@@ -6558,7 +6558,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
-				autoSearch.keyup();
+				autoSearch.trigger( 'keyup' );
 			}
 
 			// Initialize Formidable Connection.
