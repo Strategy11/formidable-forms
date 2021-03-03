@@ -1554,30 +1554,16 @@ class FrmAppHelper {
 	 */
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
-
 		if ( $name ) {
 			$key = sanitize_key( $name );
+			$key = self::maybe_clear_long_key( $key, $column );
 		}
-
-		$key = self::maybe_clear_long_key( $key, $column );
 
 		if ( ! $key ) {
 			$key = self::generate_new_key( $num_chars );
 		}
 
-		$not_allowed = array(
-			'id',
-			'key',
-			'created-at',
-			'detaillink',
-			'editlink',
-			'siteurl',
-			'evenodd',
-		);
-
-		if ( is_numeric( $key ) || in_array( $key, $not_allowed, true ) ) {
-			$key = $key . 'a';
-		}
+		$key = self::prevent_numeric_and_reserved_keys( $key );
 
 		$key_check = FrmDb::get_var(
 			$table_name,
@@ -1618,6 +1604,30 @@ class FrmAppHelper {
 		$max_slug_value = pow( 36, $num_chars );
 		$min_slug_value = 37; // we want to have at least 2 characters in the slug
 		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+	}
+
+	/**
+	 * @param string $key
+	 * @return string
+	 */
+	private static function prevent_numeric_and_reserved_keys( $key ) {
+		if ( is_numeric( $key ) ) {
+			$key .= 'a';
+		} else {
+			$not_allowed = array(
+				'id',
+				'key',
+				'created-at',
+				'detaillink',
+				'editlink',
+				'siteurl',
+				'evenodd',
+			);
+			if ( in_array( $key, $not_allowed, true ) ) {
+				$key .= 'a';
+			}
+		}
+		return $key;
 	}
 
 	/**

@@ -451,5 +451,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$name = 'key';
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertTrue( 'key' !== $key, 'key is a reserved key so get_unique_key should never return it.' );
+
+		$name = 123;
+		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertFalse( is_numeric( $key ), 'key should never be numeric.' );
 	}
 }
