@@ -435,6 +435,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.07 =
+* Fix: Duplicated form fields would occasionally generate long field keys that were preventing fields from being created.
+* Fix: Fields for controlling radio options in the form builder were not using unique id attribute values.
+
 = 4.09.06 =
 * New: Added a new welcome screen to introduce new users to Formidable.
 * Fix: Make sure that Site Health exists when upgrading.
