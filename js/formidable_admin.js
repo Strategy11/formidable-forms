@@ -628,6 +628,7 @@ function frmAdminBuildJS() {
 		var $fadeEle = jQuery( document.getElementById( id ) );
 		$fadeEle.fadeOut( 400, function() {
 			$fadeEle.remove();
+			fieldUpdated();
 
 			if ( hide !== '' ) {
 				jQuery( hide ).hide();
@@ -5159,6 +5160,7 @@ function frmAdminBuildJS() {
 				success: function( msg ) {
 					jQuery( '.frm_uninstall' ).fadeOut( 'slow' );
 					window.location = msg;
+					fieldsUpdated = 1;
 				}
 			});
 		}
