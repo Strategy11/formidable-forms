@@ -3940,6 +3940,8 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
+				fieldUpdated();
+
 				// Close any open actions first.
 				jQuery( '.frm_form_action_settings.open' ).removeClass( 'open' );
 
@@ -5160,7 +5162,6 @@ function frmAdminBuildJS() {
 				success: function( msg ) {
 					jQuery( '.frm_uninstall' ).fadeOut( 'slow' );
 					window.location = msg;
-					fieldsUpdated = 1;
 				}
 			});
 		}
