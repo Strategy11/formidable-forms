@@ -628,6 +628,7 @@ function frmAdminBuildJS() {
 		var $fadeEle = jQuery( document.getElementById( id ) );
 		$fadeEle.fadeOut( 400, function() {
 			$fadeEle.remove();
+			fieldUpdated();
 
 			if ( hide !== '' ) {
 				jQuery( hide ).hide();
@@ -3939,6 +3940,8 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( html ) {
+				fieldUpdated();
+
 				// Close any open actions first.
 				jQuery( '.frm_form_action_settings.open' ).removeClass( 'open' );
 
