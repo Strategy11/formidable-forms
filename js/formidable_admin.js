@@ -2470,9 +2470,12 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextBlur() {
-		var originalValue,
-			oldValue = this.getAttribute( 'data-value-on-focus' ),
-			newValue = this.value,
+		var textContentInput,
+			valueInput,
+			originalValue,
+			oldValue,
+			newValue,
+			textContent,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -2487,16 +2490,27 @@ function frmAdminBuildJS() {
 			optionMatches,
 			option;
 
+		textContentInput = jQuery( this ).closest( '.frm_single_option' ).find( 'input.frm_with_key' ).get( 0 );
+		valueInput = jQuery( this ).closest( '.frm_single_option' ).find( 'input[type="text"]' ).not( '.frm_with_key' ).get( 0 );
+
+		if ( null === textContentInput ) {
+			valueInput = textContentInput;
+		}
+
+		oldValue = valueInput.getAttribute( 'data-value-on-focus' );
+		newValue = valueInput.value;
+
 		if ( oldValue === newValue ) {
+			// TODO it should still update label if there is no value change.
 			return;
 		}
 
 		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
-		originalValue = this.getAttribute( 'data-value-on-load' );
+		originalValue = valueInput.getAttribute( 'data-value-on-load' );
 
 		// check if the newValue is already mapped to another option
 		// if it is, mark as duplicate and return
-		if ( optionTextAlreadyExists( this ) ) {
+		if ( optionTextAlreadyExists( valueInput ) ) {
 			this.setAttribute( 'data-duplicate', 'true' );
 
 			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
@@ -2544,8 +2558,16 @@ function frmAdminBuildJS() {
 				option = optionMatches[ optionMatches.length - 1 ];
 			}
 
+			if ( null !== textContentInput ) {
+				textContent = textContentInput.value;
+			} else {
+				textContent = newValue;
+			}
+
+			console.log({ newValue, textContent, oldValue });
+
 			option.setAttribute( 'value', newValue );
-			option.textContent = newValue;
+			option.textContent = textContent;
 
 			if ( fieldIds.indexOf( logicId ) === -1 ) {
 				fieldIds.push( logicId );
