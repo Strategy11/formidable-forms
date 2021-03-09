@@ -2434,24 +2434,29 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextFocus() {
-		var input,
+		var valueInput,
+			input,
 			fieldId;
 
 		if ( this.getAttribute( 'data-value-on-load' ) === null ) {
 			this.setAttribute( 'data-value-on-load', this.value );
 
 			fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
-			input = document.createElement( 'input' );
-			input.value = this.value;
-			input.setAttribute( 'type', 'hidden' );
-			input.setAttribute( 'name', 'optionmap[' + fieldId + '][' + this.value + ']' );
-			this.parentNode.appendChild( input );
+			valueInput = jQuery( this ).closest( '.frm_single_option' ).find( 'input[type="text"]' ).not( '.frm_with_key' ).get( 0 );
 
-			if ( typeof optionMap[ fieldId ] === 'undefined' ) {
-				optionMap[ fieldId ] = {};
+			if ( jQuery( this ).is( valueInput ) ) {
+				input = document.createElement( 'input' );
+				input.value = this.value;
+				input.setAttribute( 'type', 'hidden' );
+				input.setAttribute( 'name', 'optionmap[' + fieldId + '][' + this.value + ']' );
+				this.parentNode.appendChild( input );
+
+				if ( typeof optionMap[ fieldId ] === 'undefined' ) {
+					optionMap[ fieldId ] = {};
+				}
+
+				optionMap[ fieldId ][ this.value ] = input;
 			}
-
-			optionMap[ fieldId ][ this.value ] = input;
 		}
 
 		if ( this.getAttribute( 'data-duplicate' ) === 'true' ) {
@@ -2470,12 +2475,12 @@ function frmAdminBuildJS() {
 	}
 
 	function onOptionTextBlur() {
-		var textContentInput,
+		var $closestSingleOption,
+			textContentInput,
 			valueInput,
-			originalValue,
+			isUpdatingValueField,
 			oldValue,
 			newValue,
-			textContent,
 			fieldId,
 			fieldIndex,
 			logicId,
@@ -2490,39 +2495,25 @@ function frmAdminBuildJS() {
 			optionMatches,
 			option;
 
-		textContentInput = jQuery( this ).closest( '.frm_single_option' ).find( 'input.frm_with_key' ).get( 0 );
-		valueInput = jQuery( this ).closest( '.frm_single_option' ).find( 'input[type="text"]' ).not( '.frm_with_key' ).get( 0 );
-
-		if ( null === textContentInput ) {
-			valueInput = textContentInput;
+		if ( this.value === this.getAttribute( 'data-value-on-focus' ) ) {
+			return;
 		}
 
+		$closestSingleOption = jQuery( this ).closest( '.frm_single_option' );
+		textContentInput = $closestSingleOption.find( 'input.frm_with_key' ).get( 0 );
+		valueInput = $closestSingleOption.find( 'input[type="text"]' ).not( '.frm_with_key' ).get( 0 );
+
+		if ( 'undefined' === typeof textContentInput ) {
+			textContentInput = valueInput;
+		}
+
+		isUpdatingValueField = jQuery( this ).is( valueInput );
 		oldValue = valueInput.getAttribute( 'data-value-on-focus' );
 		newValue = valueInput.value;
-
-		if ( oldValue === newValue ) {
-			// TODO it should still update label if there is no value change.
-			return;
-		}
-
 		fieldId = jQuery( this ).closest( '.frm-single-settings' ).attr( 'data-fid' );
-		originalValue = valueInput.getAttribute( 'data-value-on-load' );
 
-		// check if the newValue is already mapped to another option
-		// if it is, mark as duplicate and return
-		if ( optionTextAlreadyExists( valueInput ) ) {
-			this.setAttribute( 'data-duplicate', 'true' );
-
-			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
-				// unmap any other change that may have happened before instead of changing it to something unused
-				optionMap[ fieldId ][ originalValue ].value = originalValue;
-			}
-
-			return;
-		}
-
-		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
-			optionMap[ fieldId ][ originalValue ].value = newValue;
+		if ( isUpdatingValueField ) {
+			updateOptionMap( valueInput, fieldId, newValue );
 		}
 
 		fieldIds = [];
@@ -2558,16 +2549,8 @@ function frmAdminBuildJS() {
 				option = optionMatches[ optionMatches.length - 1 ];
 			}
 
-			if ( null !== textContentInput ) {
-				textContent = textContentInput.value;
-			} else {
-				textContent = newValue;
-			}
-
-			console.log({ newValue, textContent, oldValue });
-
 			option.setAttribute( 'value', newValue );
-			option.textContent = textContent;
+			option.textContent = textContentInput.value;
 
 			if ( fieldIds.indexOf( logicId ) === -1 ) {
 				fieldIds.push( logicId );
@@ -2578,6 +2561,27 @@ function frmAdminBuildJS() {
 			settingId = fieldIds[ fieldIndex ];
 			setting = document.getElementById( 'frm-single-settings-' + settingId );
 			moveFieldSettings( setting );
+		}
+	}
+
+	function updateOptionMap( valueInput, fieldId, newValue ) {
+		var originalValue = valueInput.getAttribute( 'data-value-on-load' );
+
+		// check if the newValue is already mapped to another option
+		// if it is, mark as duplicate and return
+		if ( optionTextAlreadyExists( valueInput ) ) {
+			valueInput.setAttribute( 'data-duplicate', 'true' );
+
+			if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+				// unmap any other change that may have happened before instead of changing it to something unused
+				optionMap[ fieldId ][ originalValue ].value = originalValue;
+			}
+
+			return;
+		}
+
+		if ( typeof optionMap[ fieldId ] !== 'undefined' && typeof optionMap[ fieldId ][ originalValue ] !== 'undefined' ) {
+			optionMap[ fieldId ][ originalValue ].value = newValue;
 		}
 	}
 
