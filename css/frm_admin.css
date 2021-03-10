@@ -8007,3 +8007,7 @@ Responsive Design
 		width: 100%;
 	}
 }
+
+.frm-admin-page-styles #frm-publishing #save_menu_header {
+	display: inline-block;
+}
