@@ -129,7 +129,7 @@ class FrmEntry {
 	private static function convert_values_to_their_saved_value( $filter_vals, $entry_id ) {
 		$reduced = array();
 		foreach ( $filter_vals as $field_id => $value ) {
-			$field                = FrmFieldFactory::get_field_object( FrmField::getOne( $field_id ) );
+			$field                = FrmFieldFactory::get_field_object( $field_id );
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
 			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
 				unset( $reduced[ $field_id ] );
