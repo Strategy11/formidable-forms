@@ -588,7 +588,7 @@ class FrmFieldsController {
 		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ) );
 
 		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
-		if ( empty( $placeholder ) && $is_placeholder_field && ! $is_combo_field ) {
+		if ( empty( $placeholder ) && '0' !== $placeholder && $is_placeholder_field && ! $is_combo_field ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
