@@ -1931,7 +1931,10 @@ class FrmFormsController {
 		$description = $args['description'];
 
 		if ( empty( $args['fields'] ) ) {
-			$values = array();
+			$frm_settings = FrmAppHelper::get_settings();
+			$values       = array(
+				'custom_style' => FrmAppHelper::custom_style_value( array() ),
+			);
 		} else {
 			$values = FrmEntriesHelper::setup_new_vars( $args['fields'], $form, $args['reset'] );
 		}
@@ -1947,7 +1950,7 @@ class FrmFormsController {
 
 		$message_placement = self::message_placement( $form, $message );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php';
 	}
 
 	/**
