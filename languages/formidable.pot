@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.09.07\n"
+"Project-Id-Version: Formidable Forms 4.09.08\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-03-04T14:51:13+00:00\n"
+"POT-Creation-Date: 2021-03-10T19:16:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -5963,7 +5963,7 @@ msgid "Welcome to Formidable Forms!"
 msgstr ""
 
 #: classes/views/welcome/show.php:21
-msgid "Thanks for choosing Formidable Froms - The most powerful and vesatile form builder for Wordpress"
+msgid "Thanks for choosing Formidable Forms - The most powerful and versatile form builder for WordPress"
 msgstr ""
 
 #: classes/views/welcome/show.php:37
