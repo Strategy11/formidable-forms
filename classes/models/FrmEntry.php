@@ -79,9 +79,11 @@ class FrmEntry {
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 
-			// If prev entry is empty and current entry is not, they are not duplicates
 			$filtered_vals = array_filter( $values['item_meta'] );
+			$filtered_vals = self::convert_values_to_their_saved_value( $filtered_vals, $entry_exist );
 			$field_metas   = array_filter( $field_metas );
+
+			// If prev entry is empty and current entry is not, they are not duplicates
 			if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
 				return false;
 			}
@@ -114,6 +116,26 @@ class FrmEntry {
 		}
 
 		return $is_duplicate;
+	}
+
+	/**
+	 * Convert form data to the actual value that would be saved into the database.
+	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}' (a signature value) is actually an empty string and does not get saved.
+	 *
+	 * @param array $filter_vals
+	 * @param int   $entry_id
+	 * @return array
+	 */
+	private static function convert_values_to_their_saved_value( $filter_vals, $entry_id ) {
+		$reduced = array();
+		foreach ( $filter_vals as $field_id => $value ) {
+			$field                = FrmFieldFactory::get_field_object( FrmField::getOne( $field_id ) );
+			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
+			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
+				unset( $reduced[ $field_id ] );
+			}
+		}
+		return $reduced;
 	}
 
 	/**
