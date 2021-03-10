@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 4.09.07
+Stable tag: 4.09.08
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.09.08 =
+* New: If you add or remove an action from a form and try to leave the page without saving, there will be a warning.
+* Fix: The style editor save button was hidden in WordPress 5.7.
+* Fix: There were a couple of words misspelled on the welcome page.
+
 = 4.09.07 =
 * Fix: Duplicated form fields would occasionally generate long field keys that were preventing fields from being created.
 * Fix: Fields for controlling radio options in the form builder were not using unique id attribute values.
@@ -464,8 +469,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 4.09.02 =
 * Show a warning when leaving the settings page with unsaved changes.
 * Make the process for using free templates more clear.
-
-= 4.09.01 =
-* Don't include a link in the entries list to the form page when the user doesn't have permission to see anything there.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

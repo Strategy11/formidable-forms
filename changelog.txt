@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.09.08 =
+* New: If you add or remove an action from a form and try to leave the page without saving, there will be a warning.
+* Fix: The style editor save button was hidden in WordPress 5.7.
+* Fix: There were a couple of words misspelled on the welcome page.
+
 = 4.09.07 =
 * Fix: Duplicated form fields would occasionally generate long field keys that were preventing fields from being created.
 * Fix: Fields for controlling radio options in the form builder were not using unique id attribute values.
