@@ -583,12 +583,17 @@ class FrmFieldsController {
 		}
 	}
 
+	/**
+	 * @param array $field
+	 * @return string
+	 */
 	private static function prepare_placeholder( $field ) {
+		$placeholder          = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$placeholder_is_blank = empty( $placeholder ) && '0' !== $placeholder;
 		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
-		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ) );
+		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ), true );
 
-		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
-		if ( empty( $placeholder ) && '0' !== $placeholder && $is_placeholder_field && ! $is_combo_field ) {
+		if ( $placeholder_is_blank && $is_placeholder_field && ! $is_combo_field ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
