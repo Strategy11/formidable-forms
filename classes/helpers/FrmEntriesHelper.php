@@ -48,10 +48,8 @@ class FrmEntriesHelper {
 			$values = array_merge( $values, $form->options );
 		}
 
-		$form_defaults = FrmFormsHelper::get_default_opts();
-		$frm_settings  = FrmAppHelper::get_settings();
-
-		$form_defaults['custom_style'] = ( $frm_settings->load_style != 'none' );
+		$form_defaults                 = FrmFormsHelper::get_default_opts();
+		$form_defaults['custom_style'] = FrmAppHelper::custom_style_value( array() );
 
 		$values = array_merge( $form_defaults, $values );
 
