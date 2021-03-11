@@ -392,9 +392,11 @@ class FrmFieldsHelper {
 	 * Check if this field type allows placeholders
 	 *
 	 * @since 2.05
+	 * @param string $type
+	 * @return bool
 	 */
 	public static function is_placeholder_field_type( $type ) {
-		return ! in_array( $type, array( 'radio', 'checkbox', 'hidden', 'file' ) );
+		return ! in_array( $type, array( 'radio', 'checkbox', 'hidden', 'file' ), true );
 	}
 
 	public static function get_checkbox_id( $field, $opt_key, $type = 'checkbox' ) {
