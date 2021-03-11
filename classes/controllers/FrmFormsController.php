@@ -1931,7 +1931,7 @@ class FrmFormsController {
 		$description = $args['description'];
 
 		if ( empty( $args['fields'] ) ) {
-			$values       = array(
+			$values = array(
 				'custom_style' => FrmAppHelper::custom_style_value( array() ),
 			);
 		} else {
