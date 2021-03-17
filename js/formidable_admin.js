@@ -5974,8 +5974,8 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_template_name' ).value = name;
 		document.getElementById( 'frm_link' ).value = link;
 		document.getElementById( 'frm_action_type' ).value = action;
-		nameLabel.innerHTML = nameLabel.getAttribute( 'data-' + type );
-		descLabel.innerHTML = descLabel.getAttribute( 'data-' + type );
+		nameLabel.textContent = nameLabel.getAttribute( 'data-' + type );
+		descLabel.textContent = descLabel.getAttribute( 'data-' + type );
 
 		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
 
