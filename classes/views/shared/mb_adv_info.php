@@ -62,10 +62,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				FrmFormsHelper::insert_opt_html(
 					array(
-						'id'   => $f->id,
-						'key'  => $f->field_key,
-						'name' => $f->name,
-						'type' => $f->type,
+						'id'    => $f->id,
+						'key'   => $f->field_key,
+						'name'  => do_shortcode( $f->name ),
+						'type'  => $f->type,
 						'class' => 'frm-customize-list',
 					)
 				);
