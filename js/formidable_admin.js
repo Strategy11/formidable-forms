@@ -5969,17 +5969,22 @@ function frmAdminBuildJS() {
 	function transitionToAddDetails( $modal, name, link, action ) {
 		var nameLabel = document.getElementById( 'frm_new_name' ),
 			descLabel = document.getElementById( 'frm_new_desc' ),
-			type = [ 'frm_install_template', 'frm_install_form' ].indexOf( action ) >= 0 ? 'form' : 'template';
+			type = [ 'frm_install_template', 'frm_install_form' ].indexOf( action ) >= 0 ? 'form' : 'template',
+			templateNameInput = document.getElementById( 'frm_template_name' );
 
-		document.getElementById( 'frm_template_name' ).value = name;
+		templateNameInput.value = name;
 		document.getElementById( 'frm_link' ).value = link;
 		document.getElementById( 'frm_action_type' ).value = action;
-		nameLabel.innerHTML = nameLabel.getAttribute( 'data-' + type );
-		descLabel.innerHTML = descLabel.getAttribute( 'data-' + type );
+		nameLabel.textContent = nameLabel.getAttribute( 'data-' + type );
+		descLabel.textContent = descLabel.getAttribute( 'data-' + type );
 
 		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
 
 		$modal.attr( 'frm-page', 'details' );
+
+		if ( '' === name ) {
+			templateNameInput.focus();
+		}
 	}
 
 	function getStrippedTemplateName( $li ) {
