@@ -208,15 +208,15 @@ class FrmAppController {
 
 	// Adds a settings link to the plugins page
 	public static function settings_link( $links ) {
-		$settings = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
-		array_unshift( $links, $settings );
+		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$settings = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b>' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
-			array_unshift( $links, $settings );
+			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b>' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
 		}
 
-		return $links;
+		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
+
+		return array_merge( $settings, $links );
 	}
 
 	public static function pro_get_started_headline() {
