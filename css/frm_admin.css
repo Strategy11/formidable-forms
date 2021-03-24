@@ -5367,6 +5367,10 @@ span.howto {
 	color: #333 !important;
 }
 
+.frm_green {
+	color: var(--green) !important;
+}
+
 #frm_form_editor_container .ui-state-default a.frm_orange, .frm-right-panel a.frm_orange, #postbox-container-1 a.frm_orange {
 	color: #D54E21;
 }
