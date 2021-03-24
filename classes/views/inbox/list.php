@@ -115,7 +115,7 @@ if ( $has_messages ) {
 			<div class="_clear-element"></div>
 		</div>
 		<div class="_form-thank-you" style="display:none;"></div>
-		<div style="margin:20px"><?php do_action( 'frm_page_footer', array( 'table' => 'inbox' ) ); ?></div>
+		<?php do_action( 'frm_page_footer', array( 'table' => 'inbox' ) ); ?>
 	</form>
 </div>
 
