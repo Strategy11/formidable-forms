@@ -58,6 +58,11 @@ foreach ( $messages as $key => $message ) {
 	</section>
 	<?php
 }
+if ( $has_messages ) {
+	?>
+	<div style="margin:20px"><?php do_action( 'frm_page_footer', array( 'table' => 'inbox' ) ); ?></div>
+	<?php
+}
 ?>
 </div>
 
@@ -110,6 +115,7 @@ foreach ( $messages as $key => $message ) {
 			<div class="_clear-element"></div>
 		</div>
 		<div class="_form-thank-you" style="display:none;"></div>
+		<?php do_action( 'frm_page_footer', array( 'table' => 'inbox' ) ); ?>
 	</form>
 </div>
 

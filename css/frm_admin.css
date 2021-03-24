@@ -226,6 +226,18 @@ td.column-title .frm_actions_dropdown {
 	padding: 0 15px !important;
 }
 
+.frm-upgrade-bar {
+	text-align: center;
+	background: var(--sidebar-color);
+	border-bottom: 1px solid var(--sidebar-hover);
+	padding: 3px 0;
+	font-size: 95%;
+}
+
+.frm-upgrade-bar span {
+	opacity: .5;
+}
+
 a h1 .frmsvg {
 	color: var(--medium-grey);
 	vertical-align: baseline;
@@ -1548,6 +1560,7 @@ div.frm_updated_message {
 	color: #973937;
 	border-color: #F2DEDE;
 	background-color: #F2DEDE;
+	clear: both;
 }
 
 .frm_error_style a {
@@ -5353,6 +5366,10 @@ span.howto {
 
 #frm_form_editor_container .ui-state-default {
 	color: #333 !important;
+}
+
+.frm_green {
+	color: var(--green) !important;
 }
 
 #frm_form_editor_container .ui-state-default a.frm_orange, .frm-right-panel a.frm_orange, #postbox-container-1 a.frm_orange {
