@@ -1560,6 +1560,7 @@ div.frm_updated_message {
 	color: #973937;
 	border-color: #F2DEDE;
 	background-color: #F2DEDE;
+	clear: both;
 }
 
 .frm_error_style a {
