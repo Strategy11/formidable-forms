@@ -212,7 +212,7 @@ class FrmAppController {
 		array_unshift( $links, $settings );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$settings = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '"><b>' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
+			$settings = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b>' . esc_html__( 'Upgrade to Pro', 'formidable' ) . '</b></a>';
 			array_unshift( $links, $settings );
 		}
 

@@ -226,6 +226,18 @@ td.column-title .frm_actions_dropdown {
 	padding: 0 15px !important;
 }
 
+.frm-upgrade-bar {
+	text-align: center;
+	background: var(--sidebar-color);
+	border-bottom: 1px solid var(--sidebar-hover);
+	padding: 3px 0;
+	font-size: 95%;
+}
+
+.frm-upgrade-bar span {
+	opacity: .5;
+}
+
 a h1 .frmsvg {
 	color: var(--medium-grey);
 	vertical-align: baseline;
