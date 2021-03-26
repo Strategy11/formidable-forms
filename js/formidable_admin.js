@@ -1170,7 +1170,6 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				$newFields.append( msg );
-
 				afterAddField( msg, true );
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
