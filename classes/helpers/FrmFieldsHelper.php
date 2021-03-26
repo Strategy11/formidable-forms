@@ -1725,14 +1725,15 @@ class FrmFieldsHelper {
 		$field_label .= ' <span>' . $field_name . '</span>';
 
 		// If the individual field isn't allowed, disable it.
-		$run_filter      = true;
-		$single_no_allow = ' ';
-		$install_data    = '';
-		$requires        = '';
-		$link            = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		$show_upgrade    = strpos( $field_type['icon'], ' frm_show_upgrade' );
+		$run_filter             = true;
+		$single_no_allow        = ' ';
+		$install_data           = '';
+		$requires               = '';
+		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
+		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
+		$show_upgrade           = ! FrmAppHelper::pro_is_installed() || $has_show_upgrade_class;
 
-		if ( $show_upgrade ) {
+		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
 			$field_type['icon'] = str_replace( ' frm_show_upgrade', '', $field_type['icon'] );
 			$run_filter         = false;
