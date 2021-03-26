@@ -4251,6 +4251,17 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function togglePostTime() {
+		/*jshint validthis:true*/
+		var v = jQuery( this ).val();
+		if ( '' === v ) {
+			jQuery( '.frm_post_time_opt' ).val( '' );
+			jQuery( '.frm_post_time_field' ).hide();
+		} else {
+			jQuery( '.frm_post_time_field' ).show();
+		}
+	}
+
 	function fillDyncontent() {
 		/*jshint validthis:true */
 		var v = jQuery( this ).val();
@@ -6719,6 +6730,7 @@ function frmAdminBuildJS() {
 			$formActions.on( 'change', '.frm_tax_selector', changePosttaxRow );
 			$formActions.on( 'change', 'select.frm_single_post_field', checkDupPost );
 			$formActions.on( 'change', 'select.frm_toggle_post_content', togglePostContent );
+			$formActions.on( 'change', 'select.frm_post_date_opt', togglePostTime );
 			$formActions.on( 'change', 'select.frm_dyncontent_opt', fillDyncontent );
 			$formActions.on( 'change', '.frm_post_type', switchPostType );
 			$formActions.on( 'click', '.frm_add_postmeta_row', addPostmetaRow );
