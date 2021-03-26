@@ -324,6 +324,7 @@ function frmAdminBuildJS() {
 		copyHelper = false,
 		fieldsUpdated = 0,
 		thisFormId = 0,
+		autoId = 0,
 		optionMap = {};
 
 	if ( thisForm !== null ) {
@@ -994,23 +995,25 @@ function frmAdminBuildJS() {
 	 * @param {object} opts
 	 */
 	function insertNewFieldByDragging( selectedItem, fieldButton ) {
-		var fieldType = fieldButton.attr( 'id' );
+		var fieldType, addBtn, currentItem, section, formId, sectionId, loadingID, hasBreak;
+
+		fieldType = fieldButton.attr( 'id' );
 
 		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
 		if ( 'summary' === fieldType ) {
-			var addBtn = fieldButton.children( '.frm_add_field' );
+			addBtn = fieldButton.children( '.frm_add_field' );
 			disableSummaryBtnBeforeAJAX( addBtn, fieldButton );
 		}
 
-		var currentItem = jQuery( selectedItem ).data().uiSortable.currentItem;
-		var section = getSectionForFieldPlacement( currentItem );
-		var formId = getFormIdForFieldPlacement( section );
-		var sectionId = getSectionIdForFieldPlacement( section );
+		currentItem = jQuery( selectedItem ).data().uiSortable.currentItem;
+		section = getSectionForFieldPlacement( currentItem );
+		formId = getFormIdForFieldPlacement( section );
+		sectionId = getSectionIdForFieldPlacement( section );
 
-		var loadingID = fieldType.replace( '|', '-' );
+		loadingID = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		currentItem.replaceWith( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
 
-		var hasBreak = 0;
+		hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
 			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]' ).length ? 1 : 0;
@@ -1037,6 +1040,17 @@ function frmAdminBuildJS() {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
 			}
 		});
+	}
+
+	/**
+	 * Get a unique id that automatically increments with every function call.
+	 * Can be used for any UI that requires a unique id.
+	 * Not to be used in data.
+	 *
+	 * @returns {integer}
+	 */
+	function getAutoId() {
+		return ++autoId;
 	}
 
 	// don't allow page break, embed form, captcha, summary, or section inside section field
