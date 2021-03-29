@@ -4251,14 +4251,15 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function togglePostTime() {
+	function togglePostTime( ev ) {
 		/*jshint validthis:true*/
-		var v = jQuery( this ).val();
+		const v = ev.target.value;
+
 		if ( '' === v ) {
-			jQuery( '.frm_post_time_opt' ).val( '' );
-			jQuery( '.frm_post_time_field' ).hide();
+			document.querySelector( '.frm_post_time_opt' ).value = '';
+			document.querySelector( '.frm_post_time_field' ).style.display = 'none';
 		} else {
-			jQuery( '.frm_post_time_field' ).show();
+			document.querySelector( '.frm_post_time_field' ).style.display = 'block';
 		}
 	}
 
