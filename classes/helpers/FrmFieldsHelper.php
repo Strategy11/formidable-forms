@@ -1715,25 +1715,25 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 4.04
+	 * @param array $args
 	 */
 	public static function show_add_field_buttons( $args ) {
-		$field_key      = $args['field_key'];
-		$field_type     = $args['field_type'];
-		$field_label    = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
-		$field_name     = FrmFormsHelper::get_field_link_name( $field_type );
-		$field_label   .= ' <span>' . $field_name . '</span>';
-
-		/* translators: %s: Field name */
-		$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
+		$field_key    = $args['field_key'];
+		$field_type   = $args['field_type'];
+		$field_label  = FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ), array( 'echo' => false ) );
+		$field_name   = FrmFormsHelper::get_field_link_name( $field_type );
+		$field_label .= ' <span>' . $field_name . '</span>';
 
 		// If the individual field isn't allowed, disable it.
-		$run_filter      = true;
-		$single_no_allow = ' ';
-		$install_data    = '';
-		$requires        = '';
-		$upgrade_message = '';
-		$link            = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		if ( strpos( $field_type['icon'], ' frm_show_upgrade' ) ) {
+		$run_filter             = true;
+		$single_no_allow        = ' ';
+		$install_data           = '';
+		$requires               = '';
+		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
+		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
+		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
+
+		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
 			$field_type['icon'] = str_replace( ' frm_show_upgrade', '', $field_type['icon'] );
 			$run_filter         = false;
@@ -1748,8 +1748,15 @@ class FrmFieldsHelper {
 			}
 		}
 
-		if ( isset( $field_type['message'] ) ) {
-			$upgrade_message = FrmAppHelper::kses( $field_type['message'], array( 'a', 'img' ) );
+		$upgrade_label   = '';
+		$upgrade_message = '';
+		if ( $show_upgrade ) {
+			/* translators: %s: Field name */
+			$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
+
+			if ( isset( $field_type['message'] ) ) {
+				$upgrade_message = FrmAppHelper::kses( $field_type['message'], array( 'a', 'img' ) );
+			}
 		}
 
 		?>

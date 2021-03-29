@@ -3759,11 +3759,20 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery( document ).on( 'click', '[data-upgrade]', function( event ) {
+			var upgradeLabel, requires, button, link, content;
+
 			event.preventDefault();
+			upgradeLabel = this.getAttribute( 'data-upgrade' );
+
+			if ( '' === upgradeLabel ) {
+				// if the upgrade level is empty, it's because this upgrade is already active.
+				return;
+			}
+
 			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
 			jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_icon' );
 
-			var requires = this.getAttribute( 'data-requires' );
+			requires = this.getAttribute( 'data-requires' );
 			if ( typeof requires === 'undefined' || requires === null || requires === '' ) {
 				requires = 'Pro';
 			}
@@ -3772,15 +3781,15 @@ function frmAdminBuildJS() {
 			// If one click upgrade, hide other content
 			addOneClickModal( this );
 
-			jQuery( '.frm_feature_label' ).text( this.getAttribute( 'data-upgrade' ) );
+			jQuery( '.frm_feature_label' ).text( upgradeLabel );
 			jQuery( '#frm_upgrade_modal h2' ).show();
 
 			$info.dialog( 'open' );
 
 			// set the utm medium
-			var button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
-			var link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
-			var content = this.getAttribute( 'data-content' );
+			button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
+			link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
+			content = this.getAttribute( 'data-content' );
 			if ( content === undefined ) {
 				content = '';
 			}
