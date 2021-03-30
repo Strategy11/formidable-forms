@@ -6048,39 +6048,50 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		jQuery( '.frm-' + type + '-search' ).autocomplete({
-			delay: 100,
-			minLength: 0,
-			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
-			change: autoCompleteSelectBlank,
-			select: autoCompleteSelectFromResults,
-			focus: autoCompleteFocus,
-			position: {
-				my: 'left top',
-				at: 'left bottom',
-				collision: 'flip'
-			},
-			response: function( event, ui ) {
-				if ( ! ui.content.length ) {
-					var noResult = { value: '', label: frm_admin_js.no_items_found };
-					ui.content.push( noResult );
-				}
-			},
-			create: function() {
-				var $container = jQuery( this ).parent();
+		const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
+		const elements = jQuery( '.frm-' + type + '-search' );
+		elements.each( function() {
+			let urlParams = basedUrlParams;
+			const element = jQuery( this );
 
-				if ( $container.length === 0 ) {
-					$container = 'body';
-				}
+			// Check if a custom post type is specific.
+			if ( element.attr( 'data-post-type' ) ) {
+				urlParams += '&post_type=' + element.attr( 'data-post-type' );
+			}
+			element.autocomplete({
+				delay: 100,
+				minLength: 0,
+				source: ajaxurl + urlParams,
+				change: autoCompleteSelectBlank,
+				select: autoCompleteSelectFromResults,
+				focus: autoCompleteFocus,
+				position: {
+					my: 'left top',
+					at: 'left bottom',
+					collision: 'flip'
+				},
+				response: function( event, ui ) {
+					if ( ! ui.content.length ) {
+						var noResult = { value: '', label: frm_admin_js.no_items_found };
+						ui.content.push( noResult );
+					}
+				},
+				create: function() {
+					var $container = jQuery( this ).parent();
 
-				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
-			}
-		})
-		.on( 'focus', function() {
-			// Show options on click to make it work more like a dropdown.
-			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
-				jQuery( this ).autocomplete( 'search', this.value );
-			}
+					if ( $container.length === 0 ) {
+						$container = 'body';
+					}
+
+					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+				}
+			})
+			.on( 'focus', function() {
+				// Show options on click to make it work more like a dropdown.
+				if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+					jQuery( this ).autocomplete( 'search', this.value );
+				}
+			});
 		});
 	}
 

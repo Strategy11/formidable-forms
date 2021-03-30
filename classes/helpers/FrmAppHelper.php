@@ -1014,9 +1014,17 @@ class FrmAppHelper {
 		return ( true === $value || 1 == $value || 'true' == $value || 'yes' == $value );
 	}
 
-	public static function get_pages() {
+	/**
+	 * Gets all post from a specific post type.
+	 *
+	 * @since 4.10.01 Add `$post_type` argument.
+	 *
+	 * @param string $post_type Post type to query. Default is `page`.
+	 * @return WP_Post[]
+	 */
+	public static function get_pages( $post_type = 'page' ) {
 		$query = array(
-			'post_type'   => 'page',
+			'post_type'   => $post_type,
 			'post_status' => array( 'publish', 'private' ),
 			'numberposts' => - 1,
 			'orderby'     => 'title',
@@ -1031,11 +1039,14 @@ class FrmAppHelper {
 	 * the total page count
 	 *
 	 * @since 4.03.06
+	 * @since 4.10.01 Added `post_type` and `autocomplete_placeholder` to the arguments array.
+	 *
+	 * @param array $args Selection arguments.
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
 		$args = self::preformat_selection_args( $args );
 
-		$pages_count = wp_count_posts( 'page' );
+		$pages_count = wp_count_posts( $args['post_type'] );
 
 		if ( $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
@@ -1053,7 +1064,8 @@ class FrmAppHelper {
 
 		?>
 		<input type="text" class="frm-page-search"
-			placeholder="<?php esc_html_e( 'Select a Page', 'formidable' ); ?>"
+			data-post-type="<?php echo esc_attr( $args['post_type'] ); ?>"
+			placeholder="<?php echo esc_html( $args['autocomplete_placeholder'] ); ?>"
 			value="<?php echo esc_attr( $title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
 			value="<?php echo esc_attr( $selected ); ?>" />
@@ -1068,7 +1080,7 @@ class FrmAppHelper {
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
 
-		$pages    = self::get_pages();
+		$pages    = self::get_pages( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
 
 		?>
@@ -1105,6 +1117,7 @@ class FrmAppHelper {
 	 * Filter to format args for page dropdown or autocomplete
 	 *
 	 * @since 4.03.06
+	 * @since 4.10.01 Added `post_type` and `autocomplete_placeholder` to the arguments array.
 	 */
 	private static function preformat_selection_args( $args ) {
 		$defaults = array(
@@ -1112,6 +1125,8 @@ class FrmAppHelper {
 			'placeholder' => ' ',
 			'field_name'  => '',
 			'page_id'     => '',
+			'post_type'   => 'page',
+			'autocomplete_placeholder' => __( 'Select a Page', 'formidable' ),
 		);
 
 		return array_merge( $defaults, $args );
