@@ -702,6 +702,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
+						initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 					}
 				});
@@ -4289,6 +4290,7 @@ function frmAdminBuildJS() {
 		// update all rows of categories/taxonomies
 		var curSelect, newSelect,
 			catRows = document.getElementById( 'frm_posttax_rows' ).childNodes,
+			postParentField = document.querySelector( '.frm_post_parent_field' ),
 			postType = this.value;
 
 		// Get new category/taxonomy options
@@ -4323,6 +4325,40 @@ function frmAdminBuildJS() {
 				}
 			}
 		});
+
+		// Get new post parent option.
+		if ( postParentField ) {
+			const postParentOpt     = postParentField.querySelector( '.frm_autocomplete_value_input' ) || postParentField.querySelector( 'select' );
+			const postParentOptName = postParentOpt.getAttribute( 'name' );
+
+			jQuery.ajax( {
+				url: ajaxurl,
+				method: 'POST',
+				data: {
+					action: 'frm_get_post_parent_option',
+					post_type: postType,
+					_wpnonce: frmGlobal.nonce
+				},
+				success: response => {
+					if ( 'string' !== typeof response ) {
+						console.error( response );
+						return;
+					}
+
+					// Post type is not hierarchical.
+					if ( '0' === response ) {
+						postParentField.classList.add( 'frm_hidden' );
+						postParentOpt.value = '';
+						return;
+					}
+
+					postParentField.classList.remove( 'frm_hidden' );
+					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postParentOptName );
+					initAutocomplete( 'page', postParentField );
+				},
+				error: response => console.error( response )
+			});
+		}
 	}
 
 	function addPosttaxRow() {

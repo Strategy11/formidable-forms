@@ -1068,6 +1068,7 @@ class FrmAppHelper {
 			placeholder="<?php echo esc_html( $args['autocomplete_placeholder'] ); ?>"
 			value="<?php echo esc_attr( $title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
+			class="frm_autocomplete_value_input"
 			value="<?php echo esc_attr( $selected ); ?>" />
 		<?php
 	}
