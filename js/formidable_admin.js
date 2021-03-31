@@ -3537,11 +3537,17 @@ function frmAdminBuildJS() {
 		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' ).replace( ' frm_alignright ', ' ' );
 
 		classes = field.className.split( ' frmstart ' )[1].split( ' frmend ' )[0];
+
+		if ( 0 === classes.indexOf( 'frmend' ) ) {
+			classes = classes.split( 'frmend ' )[0].trim();
+			console.log({ classes });
+		}
+
 		if ( classes.trim() === '' ) {
 			replace = ' frmstart  frmend ';
 			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
 		} else {
-			replace = classes.trim().replace( 'ui-state-default', '' ); // make sure that we don't remove the ui-state-default class from input to keep event listeners.
+			replace = classes.trim();
 			replaceWith = replaceWith.trim();
 		}
 		field.className = field.className.replace( replace, replaceWith );
