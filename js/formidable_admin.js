@@ -3550,7 +3550,9 @@ function frmAdminBuildJS() {
 		// Allow for the column number dropdown.
 		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' ).replace( ' frm_alignright ', ' ' );
 
-		classes = field.className.split( ' frmstart ' )[1].split( ' frmend ' )[0];
+		classes = field.className.split( ' frmstart ' )[1];
+		classes = 0 === classes.indexOf( 'frmend ' ) ? '' : classes.split( ' frmend ' )[0];
+
 		if ( classes.trim() === '' ) {
 			replace = ' frmstart  frmend ';
 			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
