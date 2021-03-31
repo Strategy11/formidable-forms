@@ -3540,7 +3540,6 @@ function frmAdminBuildJS() {
 
 		if ( 0 === classes.indexOf( 'frmend' ) ) {
 			classes = classes.split( 'frmend ' )[0].trim();
-			console.log({ classes });
 		}
 
 		if ( classes.trim() === '' ) {
