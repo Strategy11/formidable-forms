@@ -3538,7 +3538,7 @@ function frmAdminBuildJS() {
 
 		classes = field.className.split( ' frmstart ' )[1].split( ' frmend ' )[0];
 
-		if ( 0 === classes.indexOf( 'frmend' ) ) {
+		if ( 0 === classes.indexOf( 'frmend ' ) ) {
 			classes = classes.split( 'frmend ' )[0].trim();
 		}
 
