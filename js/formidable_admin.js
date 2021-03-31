@@ -6043,13 +6043,18 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function initAutocomplete( type ) {
-		if ( jQuery( '.frm-' + type + '-search' ).length < 1 ) {
-			return;
-		}
-
+	/**
+	 * Init autocomplete.
+	 *
+	 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
+	 *
+	 * @param {String} type Type of data. Accepts `page` or `user`.
+	 * @param {String|Object} container Container class or element. Default is null.
+	 */
+	function initAutocomplete( type, container ) {
 		const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
-		const elements = jQuery( '.frm-' + type + '-search' );
+		const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
+
 		elements.each( function() {
 			let urlParams = basedUrlParams;
 			const element = jQuery( this );
