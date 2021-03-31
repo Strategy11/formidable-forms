@@ -3541,7 +3541,7 @@ function frmAdminBuildJS() {
 			replace = ' frmstart  frmend ';
 			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
 		} else {
-			replace = classes.trim();
+			replace = classes.trim().replace( 'ui-state-default', '' ); // make sure that we don't remove the ui-state-default class from input to keep event listeners.
 			replaceWith = replaceWith.trim();
 		}
 		field.className = field.className.replace( replace, replaceWith );
