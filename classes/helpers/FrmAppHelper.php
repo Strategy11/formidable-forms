@@ -1065,7 +1065,7 @@ class FrmAppHelper {
 		?>
 		<input type="text" class="frm-page-search"
 			data-post-type="<?php echo esc_attr( $args['post_type'] ); ?>"
-			placeholder="<?php echo esc_html( $args['autocomplete_placeholder'] ); ?>"
+			placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
 			value="<?php echo esc_attr( $title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
 			class="frm_autocomplete_value_input"
