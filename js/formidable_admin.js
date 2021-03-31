@@ -4331,7 +4331,7 @@ function frmAdminBuildJS() {
 			const postParentOpt     = postParentField.querySelector( '.frm_autocomplete_value_input' ) || postParentField.querySelector( 'select' );
 			const postParentOptName = postParentOpt.getAttribute( 'name' );
 
-			jQuery.ajax( {
+			jQuery.ajax({
 				url: ajaxurl,
 				method: 'POST',
 				data: {
