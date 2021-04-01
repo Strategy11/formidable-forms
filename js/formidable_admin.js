@@ -4353,6 +4353,7 @@ function frmAdminBuildJS() {
 					}
 
 					postParentField.classList.remove( 'frm_hidden' );
+					// The replaced string is declared in FrmProFormActionController::ajax_get_post_parent_option() in the pro version.
 					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postParentOptName );
 					initAutocomplete( 'page', postParentField );
 				},
