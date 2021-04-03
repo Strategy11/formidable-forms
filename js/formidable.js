@@ -1399,3 +1399,125 @@ function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
 		}
 	});
 }
+
+
+
+// 
+// Set msg on 'data-reqmsg' input attribute
+// -------------------------------------------------
+jQuery(document).ready(function($){'use strict';
+  	var inputs = document.getElementsByTagName('input'),
+  		textarea = document.getElementsByTagName('textarea'),
+  		select = document.getElementsByTagName('select'),
+		inputsLen = inputs.length,
+		textareaLen = textarea.length,
+		selectLen = select.length,
+		input,
+		inputMsg,
+		inputValidationMsg,
+		label,
+		button = document.getElementsByTagName('button')[0],
+		form = document.getElementsByTagName('form')[0];
+
+	form.addEventListener('invalid', function (e) {
+		e.preventDefault();
+	}, true);
+
+	// Validate form on submit - display tooltip if input has no value
+	button.onclick = function () {
+		inputsLen = inputs.length;
+		while (inputsLen--) {
+			if (inputs[inputsLen].value.length > 0) {
+				return true;
+			}     
+			next(inputs[inputsLen]).nextSibling.style.display = 'block'; 
+		}
+
+		while (textareaLen--) {
+			if (textarea[textareaLen].value.length > 0) {
+				return true;
+			}     
+			next(textarea[textareaLen]).nextSibling.style.display = 'block'; 
+		}
+
+		while (selectLen--) {
+			if (select[selectLen].value.length > 0) {
+				return true;
+			}     
+			next(select[selectLen]).nextSibling.style.display = 'block'; 
+		}
+	}
+
+	// Input
+	while (inputsLen--) {
+		input = inputs[inputsLen];
+		label = next(input);
+		$(".frm_error").hide();
+		if (input.hasAttribute('data-reqmsg')) {   
+			inputValidationMsg = input.getAttribute('data-reqmsg');
+			inputMsg = document.createElement('span');
+			inputMsg.innerHTML = inputValidationMsg;
+
+			label.parentNode.insertBefore(inputMsg, label.nextSibling);
+			input.onblur = function (e) {
+				$(".frm_required_field").removeClass("frm_blank_field");
+
+				e.target.classList.add('blur');
+				next(e.target).nextSibling.style.display = (!this.value || this.validity.valid === false) ? 'block' : 'none';
+			}
+		}
+	}
+
+	// Textarea.
+	while (textareaLen--) {
+		textarea = textarea[textareaLen];
+		label = next(textarea);
+		$(".frm_error").hide();
+
+		if (textarea.hasAttribute('data-reqmsg')) {   
+			// Create span element for our validation msg
+			inputValidationMsg = textarea.getAttribute('data-reqmsg');
+			inputMsg = document.createElement('span');
+			inputMsg.innerHTML = inputValidationMsg;
+
+			// Add our own validation msg element so we can style it
+			label.parentNode.insertBefore(inputMsg, label.nextSibling);
+			textarea.onblur = function (e) {
+				$(".frm_required_field").removeClass("frm_blank_field");
+				e.target.classList.add('blur');
+				next(e.target).nextSibling.style.display = (!this.value || this.validity.valid === false) ? 'block' : 'none';
+			}
+		}
+	}
+
+	// Select.
+	while (selectLen--) {
+		select = select[selectLen];
+		label = next(select);
+		$(".frm_error").hide();
+		if (select.hasAttribute('data-reqmsg')) {   
+			// Create span element for our validation msg
+			inputValidationMsg = select.getAttribute('data-reqmsg');
+			inputMsg = document.createElement('span');
+			inputMsg.innerHTML = inputValidationMsg;
+
+			// Add our own validation msg element so we can style it
+			label.parentNode.insertBefore(inputMsg, label.nextSibling);
+			select.onblur = function (e) {
+				$(".frm_required_field").removeClass("frm_blank_field");
+				e.target.classList.add('blur');
+				next(e.target).nextSibling.style.display = (!this.value || this.validity.valid === false) ? 'block' : 'none';
+			}
+		}
+	}
+
+});
+  
+// Call back function.
+function next(value) {
+	do {
+		value = value.nextSibling;
+	}while (value && value.nodeType !== 1);
+
+	return value;        
+}
