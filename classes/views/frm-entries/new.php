@@ -27,6 +27,21 @@ if ( $message_placement === 'after' ) {
 if ( ! isset( $include_form_tag ) || $include_form_tag ) {
 	?>
 </form>
+<style type="text/css">
+	.frm_required_field span {
+	    font-size: 12px;
+	    color: #B94A48;
+	    padding: 0;
+	    font-weight: normal;
+	    text-align: left;
+	    font-style: normal;
+	    max-width: 100%;
+	    display: block;
+	}
+	.frm_required_field .frm_required {
+		display: initial;
+	}
+</style>
 <?php } else { ?>
 </div>
 <?php } ?>
