@@ -3039,7 +3039,8 @@ function frmAdminBuildJS() {
 					optionMatch.textContent = expectedOption;
 				}
 
-				valueSelect.prepend( optionMatch );
+				// valueSelect.prepend( optionMatch );
+				valueSelect.prepend( expectedOption );
 			}
 
 			optionMatch = valueSelect.querySelector( 'option[value=""]' );
