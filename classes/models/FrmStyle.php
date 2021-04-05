@@ -416,6 +416,7 @@ class FrmStyle {
 			'collapse_icon'        => '6',
 			'collapse_pos'         => 'after',
 			'repeat_icon'          => '1',
+			'repeat_icon_color'    => 'ffffff',
 
 			'submit_style'               => false,
 			'submit_font_size'           => '15px',

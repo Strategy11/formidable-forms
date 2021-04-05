@@ -444,4 +444,8 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	padding:0<?php echo esc_html( $important ); ?>;
 }
 
+.frm_repeat_sec .frm_icon_font::before {
+	color: <?php echo esc_html( $repeat_icon_color ); ?> !important;
+}
+
 <?php do_action( 'frm_output_single_style', $settings ); ?>

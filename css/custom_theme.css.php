@@ -1428,6 +1428,10 @@ select.frm_loading_lookup{
 	display:block;
 }
 
+.frm_repeat_sec .frm_icon_font::before {
+    color: <?php echo esc_html( $defaults['repeat_icon_color'] ); ?> !important;
+}
+
 /* Fonts */
 <?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
