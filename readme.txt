@@ -436,6 +436,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 4.10.01 =
+* New: Include the full email header when an email is sent using the mail function.
 * Fix: After opening the popup to add a layout class to a field, the field would no longer be selectable.
 * Fix: Prevent the url from getting too large when repeatedly bulk deleting or searching entries.
 
