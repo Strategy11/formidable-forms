@@ -1,4 +1,8 @@
 == Changelog ==
+= 4.10.01 =
+* Fix: After opening the popup to add a layout class to a field, the field would no longer be selectable.
+* Fix: Prevent the url from getting too large when repeatedly bulk deleting or searching entries.
+
 = 4.10 =
 * Fix: Some fields, including signatures, were not properly detecting duplicate entries.
 * Fix: Zeros were not appearing when used as a placeholder value.

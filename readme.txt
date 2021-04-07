@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 4.10
+Stable tag: 4.10.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.10.01 =
+* Fix: After opening the popup to add a layout class to a field, the field would no longer be selectable.
+* Fix: Prevent the url from getting too large when repeatedly bulk deleting or searching entries.
+
 = 4.10 =
 * Fix: Some fields, including signatures, were not properly detecting duplicate entries.
 * Fix: Zeros were not appearing when used as a placeholder value.
@@ -463,12 +467,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 4.09.04 =
 * Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
 * New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
-
-= 4.09.03 =
-* New: Added frm_run_honeypot hook to turn off honeypot. Return false to disable or 'limit' to hide from screenreader.
-* Moved honeypot back to front of form to catch more spam.
-* Fix: dropdown fields were cut off in the admin area in WordPress 5.6.
-* Fix: Update a few deprecated jQuery functions.
-* Fix: Prevent some duplicate database queries on the back end.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
