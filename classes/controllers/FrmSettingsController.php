@@ -318,10 +318,11 @@ class FrmSettingsController {
 		global $wpdb;
 
 		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
 		$where = array(
 			'post_status'     => 'publish',
-			'post_type'       => 'page',
+			'post_type'       => $post_type,
 			'post_title LIKE' => $term,
 		);
 

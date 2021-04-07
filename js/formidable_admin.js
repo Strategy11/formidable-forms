@@ -701,6 +701,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
+						initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 					}
 				});
@@ -4311,6 +4312,7 @@ function frmAdminBuildJS() {
 		// update all rows of categories/taxonomies
 		var curSelect, newSelect,
 			catRows = document.getElementById( 'frm_posttax_rows' ).childNodes,
+			postParentField = document.querySelector( '.frm_post_parent_field' ),
 			postType = this.value;
 
 		// Get new category/taxonomy options
@@ -4345,6 +4347,41 @@ function frmAdminBuildJS() {
 				}
 			}
 		});
+
+		// Get new post parent option.
+		if ( postParentField ) {
+			const postParentOpt     = postParentField.querySelector( '.frm_autocomplete_value_input' ) || postParentField.querySelector( 'select' );
+			const postParentOptName = postParentOpt.getAttribute( 'name' );
+
+			jQuery.ajax({
+				url: ajaxurl,
+				method: 'POST',
+				data: {
+					action: 'frm_get_post_parent_option',
+					post_type: postType,
+					_wpnonce: frmGlobal.nonce
+				},
+				success: response => {
+					if ( 'string' !== typeof response ) {
+						console.error( response );
+						return;
+					}
+
+					// Post type is not hierarchical.
+					if ( '0' === response ) {
+						postParentField.classList.add( 'frm_hidden' );
+						postParentOpt.value = '';
+						return;
+					}
+
+					postParentField.classList.remove( 'frm_hidden' );
+					// The replaced string is declared in FrmProFormActionController::ajax_get_post_parent_option() in the pro version.
+					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postParentOptName );
+					initAutocomplete( 'page', postParentField );
+				},
+				error: response => console.error( response )
+			});
+		}
 	}
 
 	function addPosttaxRow() {
@@ -6065,44 +6102,60 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function initAutocomplete( type ) {
-		if ( jQuery( '.frm-' + type + '-search' ).length < 1 ) {
-			return;
-		}
+	/**
+	 * Init autocomplete.
+	 *
+	 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
+	 *
+	 * @param {String} type Type of data. Accepts `page` or `user`.
+	 * @param {String|Object} container Container class or element. Default is null.
+	 */
+	function initAutocomplete( type, container ) {
+		const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
+		const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
 
-		jQuery( '.frm-' + type + '-search' ).autocomplete({
-			delay: 100,
-			minLength: 0,
-			source: ajaxurl + '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce,
-			change: autoCompleteSelectBlank,
-			select: autoCompleteSelectFromResults,
-			focus: autoCompleteFocus,
-			position: {
-				my: 'left top',
-				at: 'left bottom',
-				collision: 'flip'
-			},
-			response: function( event, ui ) {
-				if ( ! ui.content.length ) {
-					var noResult = { value: '', label: frm_admin_js.no_items_found };
-					ui.content.push( noResult );
-				}
-			},
-			create: function() {
-				var $container = jQuery( this ).parent();
+		elements.each( function() {
+			let urlParams = basedUrlParams;
+			const element = jQuery( this );
 
-				if ( $container.length === 0 ) {
-					$container = 'body';
-				}
-
-				jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+			// Check if a custom post type is specific.
+			if ( element.attr( 'data-post-type' ) ) {
+				urlParams += '&post_type=' + element.attr( 'data-post-type' );
 			}
-		})
-		.on( 'focus', function() {
-			// Show options on click to make it work more like a dropdown.
-			if ( this.value === '' || this.nextElementSibling.value < 1 ) {
-				jQuery( this ).autocomplete( 'search', this.value );
-			}
+			element.autocomplete({
+				delay: 100,
+				minLength: 0,
+				source: ajaxurl + urlParams,
+				change: autoCompleteSelectBlank,
+				select: autoCompleteSelectFromResults,
+				focus: autoCompleteFocus,
+				position: {
+					my: 'left top',
+					at: 'left bottom',
+					collision: 'flip'
+				},
+				response: function( event, ui ) {
+					if ( ! ui.content.length ) {
+						var noResult = { value: '', label: frm_admin_js.no_items_found };
+						ui.content.push( noResult );
+					}
+				},
+				create: function() {
+					var $container = jQuery( this ).parent();
+
+					if ( $container.length === 0 ) {
+						$container = 'body';
+					}
+
+					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+				}
+			})
+			.on( 'focus', function() {
+				// Show options on click to make it work more like a dropdown.
+				if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+					jQuery( this ).autocomplete( 'search', this.value );
+				}
+			});
 		});
 	}
 

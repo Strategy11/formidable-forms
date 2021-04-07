@@ -1317,6 +1317,7 @@ class FrmXMLHelper {
 			'post_status',
 			'post_custom_fields',
 			'post_password',
+			'post_parent',
 		);
 
 		foreach ( $post_settings as $post_setting ) {
@@ -1337,6 +1338,7 @@ class FrmXMLHelper {
 				'post_password',
 				'post_date',
 				'post_status',
+				'post_parent',
 			);
 
 			// Fields with arrays saved.
