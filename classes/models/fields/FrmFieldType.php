@@ -173,7 +173,7 @@ abstract class FrmFieldType {
 		$default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
     <$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
-        <span class="frm_required">[required_label]</span>
+        <span class="frm_required" aria-hidden="true">[required_label]</span>
     </$label>
     $input
     [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
