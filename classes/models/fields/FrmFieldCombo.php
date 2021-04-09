@@ -146,6 +146,24 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		return $this->get_sub_fields();
 	}
 
+	/**
+	 * Shows field in the frontend.
+	 *
+	 * @param array $args           Arguments.
+	 * @param array $shortcode_atts Shortcode attributes.
+	 * @return string
+	 */
+	public function front_field_input( $args, $shortcode_atts ) {
+		$field      = $this->field;
+		$sub_fields = $this->get_processed_sub_fields();
+
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php';
+		$input_html = ob_get_clean();
+
+		return $input_html;
+	}
+
 	protected function add_atts_to_input( $atts ) {
 		return;
 		$placeholder   = isset( $atts['field']['placeholder'] ) ? $atts['field']['placeholder'] : '';
@@ -173,5 +191,63 @@ abstract class FrmFieldCombo extends FrmFieldType {
 				echo ' ' . esc_attr( $att_name ) . '="' . esc_attr( $att_value ) . '"';
 			}
 		}
+	}
+
+	/**
+	 * Gets attributes of sub field input.
+	 *
+	 * @param array $args Arguments. Include `sub_field`, `field`.
+	 */
+	protected function get_sub_field_input_atts( array $args ) {
+		ob_start();
+		$placeholder   = isset( $args['field']['placeholder'] ) ? $args['field']['placeholder'] : '';
+		$default_value = $args['field']['default_value'];
+
+		$field_obj   = FrmFieldFactory::get_field_type( $args['field']['type'], $args['field'] );
+
+		// TODO: check this.
+		if ( $args['field']['type'] === 'address' ) {
+			$placeholder = $field_obj->address_string_to_array( $placeholder );
+			$default_value = $field_obj->address_string_to_array( $default_value );
+		}
+
+		self::include_placeholder( $placeholder, $args['key'], $args['field'] );
+		$args['field']['placeholder'] = '';
+
+		if ( isset( $default_value[ $args['key'] ] ) ) {
+			$args['field']['default_value'] = $default_value[ $args['key'] ];
+		} else {
+			$args['field']['default_value'] = '';
+		}
+
+		if ( isset( $args['sub_field']['optional'] ) && $args['sub_field']['optional'] ) {
+			add_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20, 2 );
+			do_action( 'frm_field_input_html', $args['field'] );
+			remove_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20 );
+		} else {
+			do_action( 'frm_field_input_html', $args['field'] );
+		}
+
+		if ( isset( $args['sub_field']['atts'] ) ) {
+			foreach ( $args['sub_field']['atts'] as $att_name => $att_value ) {
+				echo ' ' . esc_attr( $att_name ) . '="' . esc_attr( $att_value ) . '"';
+			}
+		}
+
+		$atts = ob_get_clean();
+
+		return $atts;
+	}
+
+	/**
+	 * Adds optional class.
+	 *
+	 * @param string $classes CSS classes.
+	 * @param string $field   Field data.
+	 * @return string
+	 */
+	public function add_optional_class( $classes, $field ) {
+		$classes .= ' frm_optional';
+		return $classes;
 	}
 }

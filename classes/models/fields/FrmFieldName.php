@@ -55,7 +55,8 @@ class FrmFieldName extends FrmFieldCombo {
 
 	protected function get_processed_sub_fields() {
 		$sub_fields  = $this->get_sub_fields();
-		$name_layout = isset( $this->field->field_options['name_layout'] ) ? $this->field->field_options['name_layout'] : 'first_last';
+
+		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
 
 		if ( 'last_first' === $name_layout ) {
 			$sub_fields['first']['classes'] .= ' frm6';
