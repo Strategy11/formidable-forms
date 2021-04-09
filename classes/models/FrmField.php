@@ -62,6 +62,10 @@ class FrmField {
 				'name' => __( 'reCAPTCHA', 'formidable' ),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
+			'name'     => array(
+				'name' => __( 'Name', 'formidable' ),
+				'icon' => 'frm_icon_font frm_user_icon',
+			),
 		);
 
 		return apply_filters( 'frm_available_fields', $fields );
