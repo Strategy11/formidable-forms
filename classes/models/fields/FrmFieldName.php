@@ -115,4 +115,44 @@ class FrmFieldName extends FrmFieldCombo {
 
 		parent::show_primary_options( $args );
 	}
+
+	/**
+	 * @since 3.0
+	 *
+	 * @param array|string $value
+	 * @param array $atts
+	 *
+	 * @return array|string
+	 */
+	protected function prepare_display_value( $value, $atts ) {
+		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
+
+		if ( ! empty( $atts['show'] ) ) {
+			return isset( $value[ $atts['show'] ] ) ? $value[ $atts['show'] ] : '';
+		}
+
+		$value = wp_parse_args(
+			$value,
+			array(
+				'first'  => '',
+				'middle' => '',
+				'last'   => '',
+			)
+		);
+
+		switch ( $name_layout ) {
+			case 'last_first':
+				$value = $value['last'] . ' ' . $value['first'];
+				break;
+
+			case 'first_middle_last':
+				$value = $value['first'] . ' ' . $value['middle'] . ' ' . $value['last'];
+				break;
+
+			default:
+				$value = $value['first'] . ' ' . $value['last'];
+		}
+
+		return trim( $value);
+	}
 }
