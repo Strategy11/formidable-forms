@@ -220,7 +220,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 			$args['field']['default_value'] = '';
 		}
 
-		if ( isset( $args['sub_field']['optional'] ) && $args['sub_field']['optional'] ) {
+		if ( ! empty( $args['sub_field']['optional'] ) ) {
 			add_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20, 2 );
 			do_action( 'frm_field_input_html', $args['field'] );
 			remove_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20 );
@@ -249,5 +249,27 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	public function add_optional_class( $classes, $field ) {
 		$classes .= ' frm_optional';
 		return $classes;
+	}
+
+	/**
+	 * Validate field.
+	 *
+	 * @param array $args Arguments. Includes `errors`, `value`.
+	 * @return array Errors array.
+	 */
+	public function validate( $args ) {
+		$errors    = isset( $args['errors'] ) ? $args['errors'] : array();
+		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
+
+		$sub_fields = $this->get_processed_sub_fields();
+
+		foreach ( $sub_fields as $name => $sub_field ) {
+			if ( empty( $sub_field['optional'] ) && empty( $args['value'][ $name ] ) ) {
+				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
+				$errors[ 'field' . $args['id'] ] = $blank_msg;
+			}
+		}
+
+		return $errors;
 	}
 }
