@@ -36,43 +36,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 				id="frm_field_<?php echo esc_attr( $field['id'] . '-' . $name ); ?>_container"
 				class="<?php echo esc_attr( $sub_field_class ); ?>"
 			>
-				<label for="<?php echo esc_attr( $args['html_id'] . '_' . $name ) ?>" class="frm_screen_reader frm_hidden">
+				<label for="<?php echo esc_attr( $args['html_id'] . '_' . $name ); ?>" class="frm_screen_reader frm_hidden">
 					<?php echo esc_html( isset( $field[ $name . '_desc' ] ) && ! empty( $field[ $name . '_desc' ] ) ? $field[ $name . '_desc' ] : $field['name'] ); ?>
 				</label>
 
 				<?php
 				switch ( $sub_field['type'] ) {
-					case 'select':
-						// TODO: change type select for sub field.
-						?>
-						<select name="<?php echo esc_attr( $args['field_name'] ); ?>[<?php echo esc_attr( $name ) ?>]" id="<?php echo esc_attr( $args['html_id'] . '_' . $name ); ?>" <?php FrmProComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'name' ) ); ?>>
-							<option value="">
-								<?php echo esc_html( FrmProComboFieldsController::get_dropdown_label( compact( 'field', 'name', 'sub_field' ) ) ); ?>
-							</option>
-							<?php foreach ( $sub_field['options'] as $option ) { ?>
-								<option value="<?php echo esc_attr( $option ) ?>" <?php selected( $field['value'][ $name ], $option ) ?>>
-									<?php echo esc_html( $option ) ?>
-								</option>
-							<?php } ?>
-						</select>
-						<?php
-						break;
-
 					default:
 						?>
 						<input
-							type="<?php echo esc_attr( $sub_field['type'] ) ?>"
-							id="<?php echo esc_attr( $args['html_id'] . '_' . $name ) ?>"
-							value="<?php echo esc_attr( $field['value'][ $name ] ) ?>"
+							type="<?php echo esc_attr( $sub_field['type'] ); ?>"
+							id="<?php echo esc_attr( $args['html_id'] . '_' . $name ); ?>"
+							value="<?php echo esc_attr( $field['value'][ $name ] ); ?>"
 							<?php
 							if ( ! isset( $remove_names ) || ! $remove_names ) {
 								echo 'name="' . esc_attr( $args['field_name'] ) . '[' . esc_attr( $name ) . ']" ';
 							}
 
-							if ( ! empty( $field['field_options'][ $name . '_placeholder' ] ) ) {
-								echo 'placeholder="' . esc_attr( $field['field_options'][ $name . '_placeholder' ] ) . '" ';
-							}
-//							FrmProComboFieldsController::add_atts_to_input( compact( 'field', 'sub_field', 'name' ) );
+							$this->print_input_atts( compact( 'field', 'sub_field' ) );
 							?>
 						/>
 						<?php
@@ -82,10 +63,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 					echo '<div class="frm_description">' . wp_kses_post( $field[ $name . '_desc' ] ) . '</div>';
 				}
 
-				// Don't show individual field errors when there is a combo field error
+				// Don't show individual field errors when there is a combo field error.
 				if ( ! empty( $errors ) && isset( $errors[ 'field' . $field['id'] . '-' . $name ] ) && ! isset( $errors[ 'field' . $field['id'] ] ) ) {
 					?>
-					<div class="frm_error"><?php echo esc_html( $errors[ 'field' . $field['id'] . '-' . $name ] ) ?></div>
+					<div class="frm_error"><?php echo esc_html( $errors[ 'field' . $field['id'] . '-' . $name ] ); ?></div>
 				<?php } ?>
 			</div>
 		<?php } ?>

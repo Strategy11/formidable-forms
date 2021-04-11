@@ -21,34 +21,40 @@ class FrmFieldName extends FrmFieldCombo {
 		// TODO: Implement get_sub_fields() method.
 		return array(
 			'first'  => array(
-				'type'    => 'text',
-				'label'   => __( 'First', 'formidable' ),
-				'classes' => '',
-				'options' => array(
+				'type'     => 'text',
+				'label'    => __( 'First', 'formidable' ),
+				'classes'  => '',
+				'options'  => array(
 					'default_value',
 					'placeholder',
 					'desc',
 				),
+				'optional' => false,
+				'atts'     => array(),
 			),
 			'middle' => array(
-				'type'    => 'text',
-				'label'   => __( 'Middle', 'formidable' ),
-				'classes' => '',
-				'options' => array(
+				'type'     => 'text',
+				'label'    => __( 'Middle', 'formidable' ),
+				'classes'  => '',
+				'options'  => array(
 					'default_value',
 					'placeholder',
 					'desc',
 				),
+				'optional' => false,
+				'atts'     => array(),
 			),
 			'last'   => array(
-				'type'    => 'text',
-				'label'   => __( 'Last', 'formidable' ),
-				'classes' => '',
-				'options' => array(
+				'type'     => 'text',
+				'label'    => __( 'Last', 'formidable' ),
+				'classes'  => '',
+				'options'  => array(
 					'default_value',
 					'placeholder',
 					'desc',
 				),
+				'optional' => false,
+				'atts'     => array(),
 			),
 		);
 	}
@@ -153,7 +159,7 @@ class FrmFieldName extends FrmFieldCombo {
 				$value = $value['first'] . ' ' . $value['last'];
 		}
 
-		return trim( $value);
+		return trim( $value );
 	}
 
 	/**

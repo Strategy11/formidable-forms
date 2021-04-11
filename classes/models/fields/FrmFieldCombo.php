@@ -127,9 +127,6 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	public function show_on_form_builder( $name = '' ) {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 
-//		$defaults = $this->empty_value_array();
-//		$this->fill_values( $field['default_value'], $defaults );
-
 		$field['default_value'] = $this->get_default_value();
 		$field['value']         = $field['default_value'];
 
@@ -138,7 +135,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 
 	/**
 	 * Gets processed sub fields.
-	 * You need to change this if field contains an option to sort sub fields.
+	 * You need to change this if field contains an option to sort or show/hide sub fields.
 	 *
 	 * @return array
 	 */
@@ -164,79 +161,33 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		return $input_html;
 	}
 
-	protected function add_atts_to_input( $atts ) {
-		return;
-		$placeholder   = isset( $atts['field']['placeholder'] ) ? $atts['field']['placeholder'] : '';
-		$default_value = $atts['field']['default_value'];
-
-//		self::include_placeholder( $placeholder, $atts['key'], $atts['field'] );
-		$atts['field']['placeholder'] = '';
-
-		if ( isset( $default_value[ $atts['key'] ] ) ) {
-			$atts['field']['default_value'] = $default_value[ $atts['key'] ];
-		} else {
-			$atts['field']['default_value'] = '';
-		}
-
-		if ( isset( $atts['sub_field']['optional'] ) && $atts['sub_field']['optional'] ) {
-			add_filter( 'frm_field_classes', 'FrmProAddressesController::add_optional_class', 20, 2 );
-			do_action( 'frm_field_input_html', $atts['field'] );
-			remove_filter( 'frm_field_classes', 'FrmProAddressesController::add_optional_class', 20 );
-		} else {
-			do_action( 'frm_field_input_html', $atts['field'] );
-		}
-
-		if ( isset( $atts['sub_field']['atts'] ) ) {
-			foreach ( $atts['sub_field']['atts'] as $att_name => $att_value ) {
-				echo ' ' . esc_attr( $att_name ) . '="' . esc_attr( $att_value ) . '"';
-			}
-		}
-	}
 
 	/**
-	 * Gets attributes of sub field input.
+	 * Prints sub field input atts.
 	 *
-	 * @param array $args Arguments. Include `sub_field`, `field`.
+	 * @param array $args Arguments. Includes `field`, `sub_field`.
 	 */
-	protected function get_sub_field_input_atts( array $args ) {
-		ob_start();
-		$placeholder   = isset( $args['field']['placeholder'] ) ? $args['field']['placeholder'] : '';
-		$default_value = $args['field']['default_value'];
+	protected function print_input_atts( $args ) {
+		$field     = $args['field'];
+		$sub_field = $args['sub_field'];
 
-		$field_obj   = FrmFieldFactory::get_field_type( $args['field']['type'], $args['field'] );
-
-		// TODO: check this.
-		if ( $args['field']['type'] === 'address' ) {
-			$placeholder = $field_obj->address_string_to_array( $placeholder );
-			$default_value = $field_obj->address_string_to_array( $default_value );
+		if ( ! empty( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) ) {
+			echo 'placeholder="' . esc_attr( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) . '" ';
 		}
 
-		self::include_placeholder( $placeholder, $args['key'], $args['field'] );
-		$args['field']['placeholder'] = '';
-
-		if ( isset( $default_value[ $args['key'] ] ) ) {
-			$args['field']['default_value'] = $default_value[ $args['key'] ];
-		} else {
-			$args['field']['default_value'] = '';
-		}
-
-		if ( ! empty( $args['sub_field']['optional'] ) ) {
+		if ( isset( $sub_field['optional'] ) && $sub_field['optional'] ) {
 			add_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20, 2 );
-			do_action( 'frm_field_input_html', $args['field'] );
+			do_action( 'frm_field_input_html', $field );
 			remove_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20 );
 		} else {
-			do_action( 'frm_field_input_html', $args['field'] );
+			do_action( 'frm_field_input_html', $field );
 		}
 
-		if ( isset( $args['sub_field']['atts'] ) ) {
-			foreach ( $args['sub_field']['atts'] as $att_name => $att_value ) {
+		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
+			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
 				echo ' ' . esc_attr( $att_name ) . '="' . esc_attr( $att_value ) . '"';
 			}
 		}
-
-		$atts = ob_get_clean();
-
-		return $atts;
 	}
 
 	/**
