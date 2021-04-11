@@ -56,6 +56,7 @@ foreach ( $sub_field['options'] as $option ) {
 			<?php
 			break;
 
+		// All simple text options can go here.
 		case 'placeholder':
 		case 'desc':
 			$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field['id'] );

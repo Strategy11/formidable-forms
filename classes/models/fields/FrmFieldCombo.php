@@ -17,7 +17,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	protected $has_for_label = false;
 
 	/**
-	 * Gets sub fields.
+	 * Gets ALL sub fields.
 	 *
 	 * @return array
 	 */
@@ -31,6 +31,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	protected function extra_field_opts() {
 		$extra_options = parent::extra_field_opts();
 
+		// Register for sub field options.
 		$sub_fields = $this->get_sub_fields();
 		foreach ( $sub_fields as $key => $sub_field ) {
 			if ( empty( $sub_field['options'] ) || ! is_array( $sub_field['options'] ) ) {
@@ -69,7 +70,8 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	}
 
 	/**
-	 * Gets default value.
+	 * Gets default value of field.
+	 * This should return an array of default value of sub fields.
 	 *
 	 * @return array
 	 */
@@ -88,11 +90,11 @@ abstract class FrmFieldCombo extends FrmFieldType {
 			return array();
 		}
 
-		return json_decode( $default_value, true );
+		return json_decode( $default_value, true ); // We store default value as JSON string in db.
 	}
 
 	/**
-	 * Gets built-in option labels.
+	 * Gets labels for built-in options of fields or sub fields.
 	 *
 	 * @return array
 	 */
@@ -135,7 +137,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 
 	/**
 	 * Gets processed sub fields.
-	 * You need to change this if field contains an option to sort or show/hide sub fields.
+	 * This should return the list of sub fields after sorting or show/hide based of some options.
 	 *
 	 * @return array
 	 */
@@ -171,10 +173,12 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		$field     = $args['field'];
 		$sub_field = $args['sub_field'];
 
+		// Placeholder.
 		if ( ! empty( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) ) {
 			echo 'placeholder="' . esc_attr( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) . '" ';
 		}
 
+		// Add optional class.
 		if ( isset( $sub_field['optional'] ) && $sub_field['optional'] ) {
 			add_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20, 2 );
 			do_action( 'frm_field_input_html', $field );
@@ -183,6 +187,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 			do_action( 'frm_field_input_html', $field );
 		}
 
+		// Print custom attributes declared in get_sub_fields() method.
 		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
 			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
 				echo ' ' . esc_attr( $att_name ) . '="' . esc_attr( $att_value ) . '"';
@@ -214,6 +219,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 
 		$sub_fields = $this->get_processed_sub_fields();
 
+		// Validate not empty.
 		foreach ( $sub_fields as $name => $sub_field ) {
 			if ( empty( $sub_field['optional'] ) && empty( $args['value'][ $name ] ) ) {
 				$errors[ 'field' . $args['id'] . '-' . $name ] = '';

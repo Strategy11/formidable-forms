@@ -23,7 +23,10 @@ $html_id    = $this->html_id();
 	foreach ( $sub_fields as $name => $sub_field ) {
 		$sub_field['name'] = $name;
 		?>
-		<div id="frm_field_<?php echo esc_attr( $field['id'] . '-' . $name ); ?>_container" class="frm_form_field form-field <?php echo esc_attr( $sub_field['classes'] ); ?>">
+		<div
+			id="frm_field_<?php echo esc_attr( $field['id'] . '-' . $name ); ?>_container"
+			class="frm_form_field form-field <?php echo esc_attr( $sub_field['classes'] ); ?>"
+		>
 			<?php
 			switch ( $sub_field['type'] ) {
 				default:

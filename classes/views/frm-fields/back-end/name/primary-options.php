@@ -13,6 +13,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+// Options here need to be declared in FrmFieldName::extra_field_opts().
 ?>
 <p>
 	<label for="name_layout_<?php echo esc_attr( $field['id'] ); ?>">

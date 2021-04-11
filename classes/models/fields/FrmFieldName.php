@@ -16,18 +16,22 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected $type = 'name';
 
-
+	/**
+	 * Gets ALL sub fields.
+	 *
+	 * @return array
+	 */
 	public function get_sub_fields() {
-		// TODO: Implement get_sub_fields() method.
 		return array(
 			'first'  => array(
-				'type'     => 'text',
+				'type'     => 'text', // See supported types in classes/views/frm-fields/back-end/combo-field/show-on-form-builder.php.
 				'label'    => __( 'First', 'formidable' ),
 				'classes'  => '',
 				'options'  => array(
 					'default_value',
 					'placeholder',
 					'desc',
+					// Maybe support array of field data in the future. See classes/views/frm-fields/back-end/combo-field/sub-field-options.php
 				),
 				'optional' => false,
 				'atts'     => array(),
@@ -59,6 +63,12 @@ class FrmFieldName extends FrmFieldCombo {
 		);
 	}
 
+	/**
+	 * Gets processed sub fields.
+	 * This should return the list of sub fields after sorting or show/hide based of some options.
+	 *
+	 * @return array
+	 */
 	protected function get_processed_sub_fields() {
 		$sub_fields  = $this->get_sub_fields();
 
@@ -123,12 +133,12 @@ class FrmFieldName extends FrmFieldCombo {
 	}
 
 	/**
-	 * @since 3.0
+	 * Prepares the display value.
+	 * This also handles the shortcode output. Support [id], [id show=first], [id show=last], [id show=middle].
 	 *
-	 * @param array|string $value
-	 * @param array $atts
-	 *
-	 * @return array|string
+	 * @param mixed $value Field value before processing.
+	 * @param array $atts  Shortcode attributes.
+	 * @return string      Most of cases, this will return string.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
@@ -167,6 +177,5 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
-		error_log( print_r( $value, true ) );
 	}
 }
