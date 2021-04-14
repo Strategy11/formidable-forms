@@ -60,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 
 				if ( $sub_field['label'] && ! empty( $field[ $name . '_desc' ] ) ) {
-					echo '<div class="frm_description">' . wp_kses_post( $field[ $name . '_desc' ] ) . '</div>';
+					echo '<div class="frm_description">' . FrmAppHelper::kses( $field[ $name . '_desc' ] ) . '</div>';
 				}
 
 				// Don't show individual field errors when there is a combo field error.
