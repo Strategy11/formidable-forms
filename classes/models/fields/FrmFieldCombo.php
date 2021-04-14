@@ -21,7 +21,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @return array
 	 */
-	abstract public function get_sub_fields();
+	abstract protected function get_sub_fields();
 
 	/**
 	 * Registers extra options for saving.
@@ -87,7 +87,14 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		}
 
 		if ( ! $default_value ) {
-			return array();
+			$default_value = array();
+			$sub_fields    = $this->get_sub_fields();
+
+			foreach ( $sub_fields as $name => $sub_field ) {
+				$default_value[ $name ] = '';
+			}
+
+			return $default_value;
 		}
 
 		return json_decode( $default_value, true ); // We store default value as JSON string in db.
