@@ -46,6 +46,7 @@ class FrmInboxController {
 	public static function inbox() {
 		FrmAppHelper::include_svg();
 		self::add_tracking_request();
+		self::add_free_template_message();
 
 		$inbox    = new FrmInbox();
 		$messages = $inbox->get_messages( 'filter' );
@@ -95,6 +96,31 @@ class FrmInboxController {
 				'message' => 'Gathering usage data allows us to improve Formidable. Your forms will be considered as we evaluate new features, judge the quality of an update, or determine if an improvement makes sense. You can always visit the <a href="' . esc_url( $link ) . '">Global Settings</a> and choose to stop sharing data. <a href="https://formidableforms.com/knowledgebase/global-settings-overview/#kb-usage-tracking" target="_blank" rel="noopener noreferrer">Read more about what data we collect</a>.',
 				'subject' => __( 'Help Formidable improve with usage tracking', 'formidable' ),
 				'cta'     => '<a href="#" class="button-secondary frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>',
+				'type'    => 'feedback',
+			)
+		);
+	}
+
+	/**
+	 * Adds free template design.
+	 *
+	 * @since 4.10.02
+	 */
+	private static function add_free_template_message() {
+		$api = new FrmFormTemplateApi();
+		if ( $api->has_free_access() ) {
+			return;
+		}
+
+		$link = admin_url( 'admin.php?page=formidable&triggerNewFormModal=1&free-templates=1' );
+
+		$message = new FrmInbox();
+		$message->add_message(
+			array(
+				'key'     => 'free_templates',
+				'message' => 'Just add your email address and you \'ll get a code for 10+ free form templates.',
+				'subject' => 'Get 10+ Free Form Templates',
+				'cta'     => '<a href="#" class="button-secondary frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
 				'type'    => 'feedback',
 			)
 		);
