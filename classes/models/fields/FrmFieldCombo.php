@@ -163,6 +163,11 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		$field      = $this->field;
 		$sub_fields = $this->get_processed_sub_fields();
 
+		$field['default_value'] = $this->get_default_value();
+		if ( empty( $field['value'] ) ) {
+			$field['value'] = $field['default_value'];
+		}
+
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php';
 		$input_html = ob_get_clean();
