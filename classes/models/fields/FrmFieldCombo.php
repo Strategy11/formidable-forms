@@ -39,6 +39,10 @@ abstract class FrmFieldCombo extends FrmFieldType {
 			}
 
 			foreach ( $sub_field['options'] as $option ) {
+				if ( 'default_value' === $option ) { // We parse default value from field column.
+					continue;
+				}
+
 				if ( is_string( $option ) ) {
 					$extra_options[ $key . '_' . $option ] = '';
 				} elseif ( ! empty( $option['name'] ) ) {
