@@ -231,6 +231,11 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function validate( $args ) {
 		$errors    = isset( $args['errors'] ) ? $args['errors'] : array();
+
+		if ( ! $this->field->required ) {
+			return $errors;
+		}
+
 		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 
 		$sub_fields = $this->get_processed_sub_fields();
