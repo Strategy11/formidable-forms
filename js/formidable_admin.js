@@ -5823,7 +5823,7 @@ function frmAdminBuildJS() {
 			$modal.attr( 'frm-page', 'email' );
 			$modal.attr( 'frm-this-form', $el.attr( 'data-key' ) );
 			$el.append( installFormTrigger );
-		}
+		};
 
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
 			var $li,
