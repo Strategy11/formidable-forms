@@ -193,38 +193,35 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		$field     = $args['field'];
 		$sub_field = $args['sub_field'];
 
+		$atts = array();
+
 		// Placeholder.
 		if ( ! empty( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) ) {
-			echo 'placeholder="' . esc_attr( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) . '" ';
+			$atts[] = 'placeholder="' . esc_attr( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) . '"';
 		}
 
 		// Add optional class.
-		if ( isset( $sub_field['optional'] ) && $sub_field['optional'] ) {
-			add_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20, 2 );
-			do_action( 'frm_field_input_html', $field );
-			remove_filter( 'frm_field_classes', array( $this, 'add_optional_class' ), 20 );
-		} else {
-			do_action( 'frm_field_input_html', $field );
+		$classes = isset( $sub_field['classes'] ) ? $sub_field['classes'] : '';
+		if ( is_array( $classes ) ) {
+			$classes = implode( ' ', $classes );
+		}
+
+		if ( ! empty( $sub_field['optional'] ) ) {
+			$classes .= ' frm_optional';
+		}
+
+		if ( $classes ) {
+			$atts[] = 'class="' . esc_attr( $classes ) . '"';
 		}
 
 		// Print custom attributes declared in get_sub_fields() method.
 		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
 			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
-				echo ' ' . esc_attr( $att_name ) . '="' . esc_attr( $att_value ) . '"';
+				$atts[] = esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '"';
 			}
 		}
-	}
 
-	/**
-	 * Adds optional class.
-	 *
-	 * @param string $classes CSS classes.
-	 * @param string $field   Field data.
-	 * @return string
-	 */
-	public function add_optional_class( $classes, $field ) {
-		$classes .= ' frm_optional';
-		return $classes;
+		echo implode( ' ', $atts );
 	}
 
 	/**

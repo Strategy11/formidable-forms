@@ -38,6 +38,81 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			[ 'name' => '', 'email' => '', 'dob' => '' ]
 		);
 	}
+
+	public function test_print_input_atts() {
+		$test_combo = $this->getMockForAbstractClass( FrmFieldCombo::class );
+
+		$this->assertTrue( $test_combo instanceof FrmFieldCombo );
+
+		$field = (array) $this->factory->field->create_and_get(
+			[
+				'type'    => 'text',
+				'form_id' => 1,
+			]
+		);
+
+		$field['field_options']['first_placeholder']  = 'First placeholder';
+		$field['field_options']['second_placeholder'] = 'Second placeholder';
+		$field['field_options']['third_placeholder']  = 'Third placeholder';
+
+
+		$sub_field = [
+			'name'    => 'first',
+			'label'   => 'First',
+			'type'    => 'text',
+			'atts'    => [
+				'maxlength' => 10,
+				'data-attr' => 'custom-attr',
+			],
+			'classes' => 'frm-custom-class',
+		];
+
+		ob_start();
+		$this->run_private_method(
+			[ $test_combo, 'print_input_atts' ],
+			[ 'args' => compact( 'field', 'sub_field' ) ]
+		);
+		$atts = ob_get_clean();
+
+		$this->assertEquals( $atts, 'placeholder="First placeholder" class="frm-custom-class" maxlength="10" data-attr="custom-attr"' );
+
+
+		$sub_field = [
+			'name'    => 'second',
+			'label'   => 'Second',
+			'type'    => 'text',
+			'classes' => [
+				'frm-class1',
+				'frm-class2',
+			],
+			'optional' => true,
+		];
+
+		ob_start();
+		$this->run_private_method(
+			[ $test_combo, 'print_input_atts' ],
+			[ 'args' => compact( 'field', 'sub_field' ) ]
+		);
+		$atts = ob_get_clean();
+
+		$this->assertEquals( $atts, 'placeholder="Second placeholder" class="frm-class1 frm-class2 frm_optional"' );
+
+
+		$sub_field = [
+			'name'    => 'forth',
+			'label'   => 'Forth',
+			'type'    => 'text',
+		];
+
+		ob_start();
+		$this->run_private_method(
+			[ $test_combo, 'print_input_atts' ],
+			[ 'args' => compact( 'field', 'sub_field' ) ]
+		);
+		$atts = ob_get_clean();
+
+		$this->assertEquals( $atts, '' );
+	}
 }
 
 class TestFrmFieldComboWithoutSubFieldOptions extends FrmFieldCombo {
