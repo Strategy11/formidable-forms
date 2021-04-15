@@ -221,7 +221,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 			}
 		}
 
-		echo implode( ' ', $atts );
+		echo implode( ' ', $atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

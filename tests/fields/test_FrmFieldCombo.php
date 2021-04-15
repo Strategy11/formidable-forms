@@ -8,18 +8,18 @@ class test_FrmFieldCombo extends FrmUnitTest {
 	public function test_extra_field_opts() {
 		$test_combo = new TestFrmFieldComboWithoutSubFieldOptions();
 
-		$this->assertEquals( $this->run_private_method( [ $test_combo, 'extra_field_opts' ] ), [] );
+		$this->assertEquals( $this->run_private_method( array( $test_combo, 'extra_field_opts' ) ), array() );
 
 		$test_combo = new TestFrmFieldComboWithSubFieldOptions();
 
 		$this->assertEquals(
-			$this->run_private_method( [ $test_combo, 'extra_field_opts' ] ),
-			[
+			$this->run_private_method( array( $test_combo, 'extra_field_opts' ) ),
+			array(
 				'name_desc'         => '',
 				'email_placeholder' => '',
 				'dob_desc'          => '',
 				'dob_custom_opt'    => '',
-			]
+			)
 		);
 	}
 
@@ -27,15 +27,24 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$test_combo = new TestFrmFieldComboWithoutSubFieldOptions();
 
 		$this->assertEquals(
-			$this->run_private_method( [ $test_combo, 'get_default_value' ] ),
-			[ 'first_child' => '', 'second_child' => '', 'third_child' => '', 'forth_child' => '' ]
+			$this->run_private_method( array( $test_combo, 'get_default_value' ) ),
+			array(
+				'first_child'  => '',
+				'second_child' => '',
+				'third_child'  => '',
+				'forth_child'  => '',
+			)
 		);
 
 		$test_combo = new TestFrmFieldComboWithSubFieldOptions();
 
 		$this->assertEquals(
-			$this->run_private_method( [ $test_combo, 'get_default_value' ] ),
-			[ 'name' => '', 'email' => '', 'dob' => '' ]
+			$this->run_private_method( array( $test_combo, 'get_default_value' ) ),
+			array(
+				'name'  => '',
+				'email' => '',
+				'dob'   => '',
+			)
 		);
 	}
 
@@ -45,69 +54,66 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertTrue( $test_combo instanceof FrmFieldCombo );
 
 		$field = (array) $this->factory->field->create_and_get(
-			[
+			array(
 				'type'    => 'text',
 				'form_id' => 1,
-			]
+			)
 		);
 
 		$field['field_options']['first_placeholder']  = 'First placeholder';
 		$field['field_options']['second_placeholder'] = 'Second placeholder';
 		$field['field_options']['third_placeholder']  = 'Third placeholder';
 
-
-		$sub_field = [
+		$sub_field = array(
 			'name'    => 'first',
 			'label'   => 'First',
 			'type'    => 'text',
-			'atts'    => [
+			'atts'    => array(
 				'maxlength' => 10,
 				'data-attr' => 'custom-attr',
-			],
+			),
 			'classes' => 'frm-custom-class',
-		];
+		);
 
 		ob_start();
 		$this->run_private_method(
-			[ $test_combo, 'print_input_atts' ],
-			[ 'args' => compact( 'field', 'sub_field' ) ]
+			array( $test_combo, 'print_input_atts' ),
+			array( 'args' => compact( 'field', 'sub_field' ) )
 		);
 		$atts = ob_get_clean();
 
 		$this->assertEquals( $atts, 'placeholder="First placeholder" class="frm-custom-class" maxlength="10" data-attr="custom-attr"' );
 
-
-		$sub_field = [
+		$sub_field = array(
 			'name'    => 'second',
 			'label'   => 'Second',
 			'type'    => 'text',
-			'classes' => [
+			'classes' => array(
 				'frm-class1',
 				'frm-class2',
-			],
+			),
 			'optional' => true,
-		];
+		);
 
 		ob_start();
 		$this->run_private_method(
-			[ $test_combo, 'print_input_atts' ],
-			[ 'args' => compact( 'field', 'sub_field' ) ]
+			array( $test_combo, 'print_input_atts' ),
+			array( 'args' => compact( 'field', 'sub_field' ) )
 		);
 		$atts = ob_get_clean();
 
 		$this->assertEquals( $atts, 'placeholder="Second placeholder" class="frm-class1 frm-class2 frm_optional"' );
 
-
-		$sub_field = [
+		$sub_field = array(
 			'name'    => 'forth',
 			'label'   => 'Forth',
 			'type'    => 'text',
-		];
+		);
 
 		ob_start();
 		$this->run_private_method(
-			[ $test_combo, 'print_input_atts' ],
-			[ 'args' => compact( 'field', 'sub_field' ) ]
+			array( $test_combo, 'print_input_atts' ),
+			array( 'args' => compact( 'field', 'sub_field' ) )
 		);
 		$atts = ob_get_clean();
 
@@ -118,58 +124,58 @@ class test_FrmFieldCombo extends FrmUnitTest {
 class TestFrmFieldComboWithoutSubFieldOptions extends FrmFieldCombo {
 
 	protected function get_sub_fields() {
-		return [
-			'first_child'  => [
+		return array(
+			'first_child'  => array(
 				'type'     => 'text',
 				'label'    => 'First child',
-			],
-			'second_child' => [
+			),
+			'second_child' => array(
 				'type'  => 'text',
 				'label' => 'Second child',
-			],
-			'third_child'  => [
+			),
+			'third_child'  => array(
 				'type'  => 'text',
-				'label' => 'Third child'
-			],
-			'forth_child'  => [
+				'label' => 'Third child',
+			),
+			'forth_child'  => array(
 				'type'  => 'text',
 				'label' => 'Forth child',
-			],
-		];
+			),
+		);
 	}
 }
 
 class TestFrmFieldComboWithSubFieldOptions extends FrmFieldCombo {
 
 	protected function get_sub_fields() {
-		return [
-			'name' => [
+		return array(
+			'name' => array(
 				'type' => 'text',
 				'label' => 'Name',
-				'options' => [
+				'options' => array(
 					'desc',
-				],
-			],
-			'email' => [
+				),
+			),
+			'email' => array(
 				'type' => 'email',
 				'label' => 'Email',
-				'options' => [
+				'options' => array(
 					'placeholder',
 					'default_value',
-				],
-			],
-			'dob' => [
+				),
+			),
+			'dob' => array(
 				'type' => 'date',
 				'label' => 'Date of Birth',
-				'options' => [
+				'options' => array(
 					'default_value',
 					'desc',
-					[
+					array(
 						'name' => 'custom_opt',
 						'type' => 'text',
-					],
-				],
-			],
-		];
+					),
+				),
+			),
+		);
 	}
 }
