@@ -81,7 +81,7 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$result = array();
 
-		foreach ( $names => $name ) {
+		foreach ( $names as $name ) {
 			if ( empty( $sub_fields[ $name ] ) ) {
 				continue;
 			}
