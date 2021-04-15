@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-abstract class FrmFieldCombo extends FrmFieldType {
+class FrmFieldCombo extends FrmFieldType {
 
 	/**
 	 * Does the html for this field label need to include "for"?
@@ -21,11 +21,63 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	protected $has_for_label = false;
 
 	/**
-	 * Gets ALL sub fields.
+	 * Sub fields.
+	 *
+	 * @var array
+	 */
+	protected $sub_fields = array();
+
+	/**
+	 * Registers sub fields.
+	 *
+	 * @param array $sub_fields Sub fields. Accepts array or array or array of string.
+	 */
+	protected function register_sub_fields( array $sub_fields ) {
+		$defaults = $this->get_default_sub_field();
+
+		foreach ( $sub_fields as $name => $sub_field ) {
+			if ( empty( $sub_field ) ) {
+				continue;
+			}
+
+			if ( is_array( $sub_field ) ) {
+				$sub_field                 = wp_parse_args( $sub_field, $defaults );
+				$sub_field['name']         = $name;
+				$this->sub_fields[ $name ] = $sub_field;
+				continue;
+			}
+
+			if ( is_string( $sub_field ) ) {
+				$this->sub_fields[ $name ] = wp_parse_args(
+					array(
+						'name'  => $name,
+						'label' => $sub_field,
+					),
+					$defaults
+				);
+			}
+		}
+	}
+
+	/**
+	 * Gets default sub field.
 	 *
 	 * @return array
 	 */
-	abstract protected function get_sub_fields();
+	protected function get_default_sub_field() {
+		return array(
+			'type'     => 'text',
+			'label'    => '',
+			'classes'  => '',
+			'options'  => array(
+				'default_value',
+				'placeholder',
+				'desc',
+			),
+			'optional' => false,
+			'atts'     => array(),
+		);
+	}
 
 	/**
 	 * Registers extra options for saving.
@@ -36,8 +88,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		$extra_options = parent::extra_field_opts();
 
 		// Register for sub field options.
-		$sub_fields = $this->get_sub_fields();
-		foreach ( $sub_fields as $key => $sub_field ) {
+		foreach ( $this->sub_fields as $key => $sub_field ) {
 			if ( empty( $sub_field['options'] ) || ! is_array( $sub_field['options'] ) ) {
 				continue;
 			}
@@ -67,10 +118,9 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function show_after_default( $args ) {
 		$field         = $args['field'];
-		$sub_fields    = $this->get_sub_fields();
 		$default_value = $this->get_default_value();
 
-		foreach ( $sub_fields as $name => $sub_field ) {
+		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/combo-field/sub-field-options.php';
@@ -96,9 +146,8 @@ abstract class FrmFieldCombo extends FrmFieldType {
 
 		if ( ! $default_value ) {
 			$default_value = array();
-			$sub_fields    = $this->get_sub_fields();
 
-			foreach ( $sub_fields as $name => $sub_field ) {
+			foreach ( $this->sub_fields as $name => $sub_field ) {
 				$default_value[ $name ] = '';
 			}
 
@@ -157,7 +206,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 	 * @return array
 	 */
 	protected function get_processed_sub_fields() {
-		return $this->get_sub_fields();
+		return $this->sub_fields;
 	}
 
 	/**
@@ -196,7 +245,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 		$atts = array();
 
 		// Placeholder.
-		if ( ! empty( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) ) {
+		if ( false !== array_search( 'placeholder', $sub_field['options'] ) && ! empty( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) ) {
 			$atts[] = 'placeholder="' . esc_attr( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) . '"';
 		}
 
@@ -214,7 +263,7 @@ abstract class FrmFieldCombo extends FrmFieldType {
 			$atts[] = 'class="' . esc_attr( $classes ) . '"';
 		}
 
-		// Print custom attributes declared in get_sub_fields() method.
+		// Print custom attributes
 		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
 			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
 				$atts[] = esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '"';

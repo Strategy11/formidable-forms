@@ -20,50 +20,15 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected $type = 'name';
 
-	/**
-	 * Gets ALL sub fields.
-	 *
-	 * @return array
-	 */
-	protected function get_sub_fields() {
-		return array(
-			'first'  => array(
-				'type'     => 'text', // See supported types in classes/views/frm-fields/back-end/combo-field/show-on-form-builder.php.
-				'label'    => __( 'First', 'formidable' ),
-				'classes'  => '',
-				'options'  => array(
-					'default_value',
-					'placeholder',
-					'desc',
-					// Maybe support array of field data in the future. See classes/views/frm-fields/back-end/combo-field/sub-field-options.php
-				),
-				'optional' => false,
-				'atts'     => array(),
-			),
-			'middle' => array(
-				'type'     => 'text',
-				'label'    => __( 'Middle', 'formidable' ),
-				'classes'  => '',
-				'options'  => array(
-					'default_value',
-					'placeholder',
-					'desc',
-				),
-				'optional' => false,
-				'atts'     => array(),
-			),
-			'last'   => array(
-				'type'     => 'text',
-				'label'    => __( 'Last', 'formidable' ),
-				'classes'  => '',
-				'options'  => array(
-					'default_value',
-					'placeholder',
-					'desc',
-				),
-				'optional' => false,
-				'atts'     => array(),
-			),
+	public function __construct( $field = '', $type = '' ) {
+		parent::__construct( $field, $type );
+
+		$this->register_sub_fields(
+			array(
+				'first'  => __( 'First', 'formidable' ),
+				'middle' => __( 'Middle', 'formidable' ),
+				'last'   => __( 'Last', 'formidable' ),
+			)
 		);
 	}
 
@@ -74,7 +39,6 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_processed_sub_fields() {
-		$sub_fields  = $this->get_sub_fields();
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
 		$names       = explode( '_', $name_layout );
 		$col_class   = 'frm' . intval( 12 / count( $names ) );
@@ -82,19 +46,19 @@ class FrmFieldName extends FrmFieldCombo {
 		$result = array();
 
 		foreach ( $names as $name ) {
-			if ( empty( $sub_fields[ $name ] ) ) {
+			if ( empty( $this->sub_fields[ $name ] ) ) {
 				continue;
 			}
 
-			if ( ! isset( $sub_fields[ $name ]['classes'] ) ) {
-				$sub_fields[ $name ]['classes'] = $col_class;
-			} elseif ( is_array( $sub_fields[ $name ]['classes'] ) ) {
-				$sub_fields[ $name ]['classes'] = implode( ' ', $sub_fields[ $name ]['classes'] ) . ' ' . $col_class;
+			if ( ! isset( $this->sub_fields[ $name ]['classes'] ) ) {
+				$this->sub_fields[ $name ]['classes'] = $col_class;
+			} elseif ( is_array( $this->sub_fields[ $name ]['classes'] ) ) {
+				$this->sub_fields[ $name ]['classes'] = implode( ' ', $this->sub_fields[ $name ]['classes'] ) . ' ' . $col_class;
 			} else {
-				$sub_fields[ $name ]['classes'] .= ' ' . $col_class;
+				$this->sub_fields[ $name ]['classes'] .= ' ' . $col_class;
 			}
 
-			$result[ $name ] = $sub_fields[ $name ];
+			$result[ $name ] = $this->sub_fields[ $name ];
 		}
 
 		return $result;
