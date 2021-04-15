@@ -25,7 +25,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 *
 	 * @return array
 	 */
-	public function get_sub_fields() {
+	protected function get_sub_fields() {
 		return array(
 			'first'  => array(
 				'type'     => 'text', // See supported types in classes/views/frm-fields/back-end/combo-field/show-on-form-builder.php.
@@ -75,38 +75,29 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_processed_sub_fields() {
 		$sub_fields  = $this->get_sub_fields();
-
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
+		$names       = explode( '_', $name_layout );
+		$col_class   = 'frm' . intval( 12 / count( $names ) );
 
-		if ( 'last_first' === $name_layout ) {
-			$sub_fields['first']['classes'] .= ' frm6';
-			$sub_fields['last']['classes']  .= ' frm6';
+		$result = array();
 
-			return array(
-				'last'  => $sub_fields['last'],
-				'first' => $sub_fields['first'],
-			);
+		foreach ( $names => $name ) {
+			if ( empty( $sub_fields[ $name ] ) ) {
+				continue;
+			}
+
+			if ( ! isset( $sub_fields[ $name ]['classes'] ) ) {
+				$sub_fields[ $name ]['classes'] = $col_class;
+			} elseif ( is_array( $sub_fields[ $name ]['classes'] ) ) {
+				$sub_fields[ $name ]['classes'] = implode( ' ', $sub_fields[ $name ]['classes'] ) . ' ' . $col_class;
+			} else {
+				$sub_fields[ $name ]['classes'] .= ' ' . $col_class;
+			}
+
+			$result[ $name ] = $sub_fields[ $name ];
 		}
 
-		if ( 'first_middle_last' === $name_layout ) {
-			$sub_fields['first']['classes']  .= ' frm4';
-			$sub_fields['middle']['classes'] .= ' frm4';
-			$sub_fields['last']['classes']   .= ' frm4';
-
-			return array(
-				'first'  => $sub_fields['first'],
-				'middle' => $sub_fields['middle'],
-				'last'   => $sub_fields['last'],
-			);
-		}
-
-		$sub_fields['first']['classes'] .= ' frm6';
-		$sub_fields['last']['classes']  .= ' frm6';
-
-		return array(
-			'first' => $sub_fields['first'],
-			'last'  => $sub_fields['last'],
-		);
+		return $result;
 	}
 
 	/**
