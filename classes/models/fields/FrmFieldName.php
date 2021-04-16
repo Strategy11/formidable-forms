@@ -100,6 +100,10 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return string      Most of cases, this will return string.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
+		if ( ! is_array( $value ) ) {
+			return $value;
+		}
+
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
 
 		if ( ! empty( $atts['show'] ) ) {

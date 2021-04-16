@@ -91,7 +91,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 				array(
 					'first'  => 'first label',
 					'second' => 'second label',
-				)
+				),
 			)
 		);
 
