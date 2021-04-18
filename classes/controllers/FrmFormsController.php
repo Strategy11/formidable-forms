@@ -2108,7 +2108,7 @@ class FrmFormsController {
 
 		FrmStylesController::enqueue_css();
 
-		if ( ! FrmAppHelper::is_admin() && $location != 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
+		if ( ! FrmAppHelper::is_admin() && $location != 'header' && ( ! empty( $frm_vars['forms_loaded'] ) || ! empty( $frm_vars['api_forms_loaded'] ) ) ) {
 			// load formidable js
 			wp_enqueue_script( 'formidable' );
 		}
