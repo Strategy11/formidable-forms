@@ -196,7 +196,9 @@ class FrmFieldCombo extends FrmFieldType {
 		$field['default_value'] = $this->get_default_value();
 		$field['value']         = $field['default_value'];
 
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/combo-field/show-on-form-builder.php';
+		$field_name = $this->html_name( $name );
+
+		$this->load_field_output( compact( 'field', 'field_name' ) );
 	}
 
 	/**
@@ -217,21 +219,68 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$field      = $this->field;
-		$sub_fields = $this->get_processed_sub_fields();
+		$field = (array) $this->field;
 
 		$field['default_value'] = $this->get_default_value();
 		if ( empty( $field['value'] ) ) {
 			$field['value'] = $field['default_value'];
 		}
 
+		$args['field']          = $field;
+		$args['shortcode_atts'] = $shortcode_atts;
+
 		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php';
+		$this->load_field_output( $args );
 		$input_html = ob_get_clean();
 
 		return $input_html;
 	}
 
+	/**
+	 * Loads field output.
+	 *
+	 * @param array $args {
+	 *     Arguments.
+	 *
+	 *     @type array  $field          Field array.
+	 *     @type string $html_id        HTML ID.
+	 *     @type string $field_name     Field name attribute.
+	 *     @type array  $shortcode_atts Shortcode attributes.
+	 *     @type array  $errors         Field errors.
+	 *     @type bool   $remove_names   Remove name attribute or not.
+	 * }
+	 */
+	protected function load_field_output( $args ) {
+		if ( empty( $args['field'] ) ) {
+			return;
+		}
+
+		$args['field'] = (array) $args['field'];
+
+		if ( ! isset( $args['html_id'] ) ) {
+			$args['html_id'] = $this->html_id();
+		}
+
+		if ( ! isset( $args['field_name'] ) ) {
+			$args['field_name'] = $this->html_name( $args['field']['name'] );
+		}
+
+		$args['sub_fields'] = $this->get_processed_sub_fields();
+
+		if ( ! isset( $args['shortcode_atts'] ) ) {
+			$args['shortcode_atts'] = array();
+		}
+
+		if ( ! isset( $args['errors'] ) ) {
+			$args['errors'] = array();
+		}
+
+		if ( file_exists( FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php" ) ) {
+			include FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php";
+		} else {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php';
+		}
+	}
 
 	/**
 	 * Prints sub field input atts.
@@ -245,8 +294,8 @@ class FrmFieldCombo extends FrmFieldType {
 		$atts = array();
 
 		// Placeholder.
-		if ( false !== array_search( 'placeholder', $sub_field['options'] ) && ! empty( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) ) {
-			$atts[] = 'placeholder="' . esc_attr( $field['field_options'][ $sub_field['name'] . '_placeholder' ] ) . '"';
+		if ( in_array( 'placeholder', $sub_field['options'] ) && ! empty( $field[ $sub_field['name'] . '_placeholder' ] ) ) {
+			$atts[] = 'placeholder="' . esc_attr( $field[ $sub_field['name'] . '_placeholder' ] ) . '"';
 		}
 
 		// Add optional class.

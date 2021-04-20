@@ -5,10 +5,13 @@
  * @package Formidable
  * @since 4.10.02
  *
- * @var array         $args           Passed args.
+ * @var array         $args           Data passed to this view. See FrmFieldCombo::load_field_output().
  * @var array         $shortcode_atts Shortcode attributes.
- * @var array         $field          Field data.
  * @var array         $sub_fields     Sub fields array.
+ * @var string        $html_id        HTML ID.
+ * @var string        $field_name     Field Name.
+ * @var array         $errors         Field errors.
+ * @var bool          $remove_names   Remove field name or not.
  * @var FrmFieldCombo $this           Field type object.
  */
 
@@ -16,8 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+$field      = $args['field'];
+$sub_fields = $args['sub_fields'];
+$html_id    = $args['html_id'];
+$field_name = $args['field_name'];
+$errors     = $args['errors'];
 ?>
-<fieldset aria-labelledby="<?php echo esc_attr( $args['html_id'] ); ?>_label">
+<fieldset aria-labelledby="<?php echo esc_attr( $html_id ); ?>_label">
 	<legend class="frm_screen_reader frm_hidden">
 		<?php echo esc_html( $field['name'] ); ?>
 	</legend>
@@ -28,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$sub_field['name'] = $name;
 			$sub_field_class   = 'frm_form_field form-field ' . $sub_field['classes'];
 
-			if ( isset( $args['errors'][ 'field' . $field['id'] . '-' . $name ] ) ) {
+			if ( isset( $errors[ 'field' . $field['id'] . '-' . $name ] ) ) {
 				$sub_field_class .= ' frm_blank_field';
 			}
 			?>
@@ -36,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				id="frm_field_<?php echo esc_attr( $field['id'] . '-' . $name ); ?>_container"
 				class="<?php echo esc_attr( $sub_field_class ); ?>"
 			>
-				<label for="<?php echo esc_attr( $args['html_id'] . '_' . $name ); ?>" class="frm_screen_reader frm_hidden">
+				<label for="<?php echo esc_attr( $html_id . '_' . $name ); ?>" class="frm_screen_reader frm_hidden">
 					<?php echo esc_html( isset( $field[ $name . '_desc' ] ) && ! empty( $field[ $name . '_desc' ] ) ? $field[ $name . '_desc' ] : $field['name'] ); ?>
 				</label>
 
@@ -46,11 +54,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 						<input
 							type="<?php echo esc_attr( $sub_field['type'] ); ?>"
-							id="<?php echo esc_attr( $args['html_id'] . '_' . $name ); ?>"
+							id="<?php echo esc_attr( $html_id . '_' . $name ); ?>"
 							value="<?php echo esc_attr( $field['value'][ $name ] ); ?>"
 							<?php
-							if ( ! isset( $remove_names ) || ! $remove_names ) {
-								echo 'name="' . esc_attr( $args['field_name'] ) . '[' . esc_attr( $name ) . ']" ';
+							if ( empty( $args['remove_names'] ) ) {
+								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
 							}
 
 							$this->print_input_atts( compact( 'field', 'sub_field' ) );
