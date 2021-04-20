@@ -28,6 +28,22 @@ class FrmFieldCombo extends FrmFieldType {
 	protected $sub_fields = array();
 
 	/**
+	 * This is used to check if field is combo field.
+	 *
+	 * @var bool
+	 */
+	public $is_combo_field = true;
+
+	/**
+	 * Gets ALL subfields.
+	 *
+	 * @return array
+	 */
+	public function get_sub_fields() {
+		return $this->sub_fields;
+	}
+
+	/**
 	 * Registers sub fields.
 	 *
 	 * @param array $sub_fields Sub fields. Accepts array or array or array of string.

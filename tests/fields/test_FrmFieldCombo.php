@@ -226,9 +226,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$field['field_options']['first_placeholder']  = 'First placeholder';
-		$field['field_options']['second_placeholder'] = 'Second placeholder';
-		$field['field_options']['third_placeholder']  = 'Third placeholder';
+		$field['first_placeholder']  = 'First placeholder';
+		$field['second_placeholder'] = 'Second placeholder';
+		$field['third_placeholder']  = 'Third placeholder';
 
 		$sub_field = array(
 			'name'    => 'first',
