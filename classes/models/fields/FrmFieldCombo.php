@@ -306,12 +306,14 @@ class FrmFieldCombo extends FrmFieldType {
 	protected function print_input_atts( $args ) {
 		$field     = $args['field'];
 		$sub_field = $args['sub_field'];
-
-		$atts = array();
+		$atts      = array();
 
 		// Placeholder.
-		if ( in_array( 'placeholder', $sub_field['options'] ) && ! empty( $field[ $sub_field['name'] . '_placeholder' ] ) ) {
-			$atts[] = 'placeholder="' . esc_attr( $field[ $sub_field['name'] . '_placeholder' ] ) . '"';
+		if ( in_array( 'placeholder', $sub_field['options'] ) ) {
+			$placeholder = FrmField::get_option( $field, $sub_field['name'] . '_placeholder' );
+			if ( $placeholder ) {
+				$atts[] = 'placeholder="' . esc_attr( $placeholder ) . '"';
+			}
 		}
 
 		// Add optional class.

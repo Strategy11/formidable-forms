@@ -15,8 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$uniq_str = $sub_field['name'] . '_' . $field['id'];
-$labels   = $this->get_built_in_option_labels();
+$field_id  = FrmField::get_option( $field, 'id' );
+$field_key = FrmField::get_option( $field, 'field_key' );
+$uniq_str  = $sub_field['name'] . '_' . $field_id;
+$labels    = $this->get_built_in_option_labels();
 ?>
 <label id="<?php echo esc_attr( $uniq_str ); ?>" class="frm_primary_label">
 	<?php echo esc_html( $sub_field['label'] ); ?>
@@ -27,7 +29,7 @@ $labels   = $this->get_built_in_option_labels();
 foreach ( $sub_field['options'] as $option ) {
 	switch ( $option ) {
 		case 'default_value':
-			$input_name = sprintf( '%1$s_%2$s[%3$s]', $option, $field['id'], $sub_field['name'] );
+			$input_name = sprintf( '%1$s_%2$s[%3$s]', $option, $field_id, $sub_field['name'] );
 			$input_id   = $option . '_' . $uniq_str;
 			?>
 			<p class="frm6 frm_form_field">
@@ -45,7 +47,7 @@ foreach ( $sub_field['options'] as $option ) {
 						name="<?php echo esc_attr( $input_name ); ?>"
 						id="<?php echo esc_attr( $input_id ); ?>"
 						value="<?php echo esc_attr( isset( $default_value[ $sub_field['name'] ] ) ? $default_value[ $sub_field['name'] ] : '' ); ?>"
-						data-changeme="field_<?php echo esc_attr( $field['field_key'] . '_' . $sub_field['name'] ); ?>"
+						data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 						data-changeatt="value"
 					/>
 				</span>
@@ -59,9 +61,9 @@ foreach ( $sub_field['options'] as $option ) {
 		// All simple text options can go here.
 		case 'placeholder':
 		case 'desc':
-			$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field['id'] );
+			$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field_id );
 			$input_id    = 'field_options_' . $option . '_' . $uniq_str;
-			$input_value = isset( $field[ $sub_field['name'] . '_' . $option ] ) ? $field[ $sub_field['name'] . '_' . $option ] : '';
+			$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
 			?>
 			<p class="frm6 frm_form_field">
 				<input
@@ -69,7 +71,7 @@ foreach ( $sub_field['options'] as $option ) {
 					name="<?php echo esc_attr( $input_name ); ?>"
 					id="<?php echo esc_attr( $input_id ); ?>"
 					value="<?php echo esc_attr( $input_value ); ?>"
-					data-changeme="field_<?php echo esc_attr( $field['field_key'] . '_' . $sub_field['name'] ); ?>"
+					data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 					data-changeatt="<?php echo esc_attr( $option ); ?>"
 				/>
 				<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">

@@ -19,15 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field      = $args['field'];
-$sub_fields = $args['sub_fields'];
-$html_id    = $args['html_id'];
-$field_name = $args['field_name'];
-$errors     = $args['errors'];
+$field       = $args['field'];
+$field_id    = FrmField::get_option( $field, 'id' );
+$field_label = FrmField::get_option( $field, 'name' );
+$field_value = FrmField::get_option( $field, 'value' );
+$sub_fields  = $args['sub_fields'];
+$html_id     = $args['html_id'];
+$field_name  = $args['field_name'];
+$errors      = $args['errors'];
 ?>
 <fieldset aria-labelledby="<?php echo esc_attr( $html_id ); ?>_label">
 	<legend class="frm_screen_reader frm_hidden">
-		<?php echo esc_html( $field['name'] ); ?>
+		<?php echo esc_html( $field_label ); ?>
 	</legend>
 
 	<div class="frm_combo_inputs_container">
@@ -35,17 +38,18 @@ $errors     = $args['errors'];
 		foreach ( $sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
 			$sub_field_class   = 'frm_form_field form-field ' . $sub_field['classes'];
+			$sub_field_desc    = FrmField::get_option( $field, $name . '_desc' );
 
-			if ( isset( $errors[ 'field' . $field['id'] . '-' . $name ] ) ) {
+			if ( isset( $errors[ 'field' . $field_id . '-' . $name ] ) ) {
 				$sub_field_class .= ' frm_blank_field';
 			}
 			?>
 			<div
-				id="frm_field_<?php echo esc_attr( $field['id'] . '-' . $name ); ?>_container"
+				id="frm_field_<?php echo esc_attr( $field_id . '-' . $name ); ?>_container"
 				class="<?php echo esc_attr( $sub_field_class ); ?>"
 			>
 				<label for="<?php echo esc_attr( $html_id . '_' . $name ); ?>" class="frm_screen_reader frm_hidden">
-					<?php echo esc_html( isset( $field[ $name . '_desc' ] ) && ! empty( $field[ $name . '_desc' ] ) ? $field[ $name . '_desc' ] : $field['name'] ); ?>
+					<?php echo esc_html( $sub_field_desc ? $sub_field_desc : $field_label ); ?>
 				</label>
 
 				<?php
@@ -55,7 +59,7 @@ $errors     = $args['errors'];
 						<input
 							type="<?php echo esc_attr( $sub_field['type'] ); ?>"
 							id="<?php echo esc_attr( $html_id . '_' . $name ); ?>"
-							value="<?php echo esc_attr( $field['value'][ $name ] ); ?>"
+							value="<?php echo esc_attr( $field_value[ $name ] ); ?>"
 							<?php
 							if ( empty( $args['remove_names'] ) ) {
 								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
@@ -67,14 +71,14 @@ $errors     = $args['errors'];
 						<?php
 				}
 
-				if ( $sub_field['label'] && ! empty( $field[ $name . '_desc' ] ) ) {
-					echo '<div class="frm_description">' . FrmAppHelper::kses( $field[ $name . '_desc' ] ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				if ( $sub_field['label'] && $sub_field_desc ) {
+					echo '<div class="frm_description">' . FrmAppHelper::kses( $sub_field_desc ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 
 				// Don't show individual field errors when there is a combo field error.
-				if ( ! empty( $errors ) && isset( $errors[ 'field' . $field['id'] . '-' . $name ] ) && ! isset( $errors[ 'field' . $field['id'] ] ) ) {
+				if ( ! empty( $errors ) && isset( $errors[ 'field' . $field_id . '-' . $name ] ) && ! isset( $errors[ 'field' . $field_id ] ) ) {
 					?>
-					<div class="frm_error"><?php echo esc_html( $errors[ 'field' . $field['id'] . '-' . $name ] ); ?></div>
+					<div class="frm_error"><?php echo esc_html( $errors[ 'field' . $field_id . '-' . $name ] ); ?></div>
 				<?php } ?>
 			</div>
 		<?php } ?>
