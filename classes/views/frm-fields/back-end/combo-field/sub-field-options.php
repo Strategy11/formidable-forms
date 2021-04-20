@@ -58,9 +58,8 @@ foreach ( $sub_field['options'] as $option ) {
 			<?php
 			break;
 
-		// All simple text options can go here.
+		// All simple text options with live update the form output can go here.
 		case 'placeholder':
-		case 'desc':
 			$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field_id );
 			$input_id    = 'field_options_' . $option . '_' . $uniq_str;
 			$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
@@ -73,6 +72,26 @@ foreach ( $sub_field['options'] as $option ) {
 					value="<?php echo esc_attr( $input_value ); ?>"
 					data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 					data-changeatt="<?php echo esc_attr( $option ); ?>"
+				/>
+				<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
+					<?php echo esc_html( $labels[ $option ] ); ?>
+				</label>
+			</p>
+			<?php
+			break;
+
+		// All simple text options without live update the form output can go here.
+		case 'desc':
+			$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field_id );
+			$input_id    = 'field_options_' . $option . '_' . $uniq_str;
+			$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
+			?>
+			<p class="frm6 frm_form_field">
+				<input
+					type="text"
+					name="<?php echo esc_attr( $input_name ); ?>"
+					id="<?php echo esc_attr( $input_id ); ?>"
+					value="<?php echo esc_attr( $input_value ); ?>"
 				/>
 				<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
 					<?php echo esc_html( $labels[ $option ] ); ?>
