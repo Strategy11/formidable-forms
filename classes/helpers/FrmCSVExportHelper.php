@@ -160,11 +160,7 @@ class FrmCSVExportHelper {
 
 			$field_type_obj = FrmFieldFactory::get_field_factory( $col );
 			if ( ! empty( $field_type_obj->is_combo_field ) ) { // This is combo field.
-				$sub_fields = $field_type_obj->get_sub_fields();
-
-				foreach ( $sub_fields as $name => $sub_field ) {
-					$headings[ $col->id . '_' . $name ] = $col->name . ' - ' . $sub_field['label'];
-				}
+				$headings += $field_type_obj->get_export_headings();
 
 				continue;
 			}

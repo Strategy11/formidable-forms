@@ -290,4 +290,29 @@ class test_FrmFieldCombo extends FrmUnitTest {
 
 		$this->assertEquals( $atts, '' );
 	}
+
+	public function test_get_export_headings() {
+		$combo_field = $this->get_combo_field_without_sub_field_options();
+		$field       = (array) $this->factory->field->create_and_get(
+			array(
+				'type'    => 'name',
+				'form_id' => 1,
+			)
+		);
+
+		$field_id   = FrmField::get_option( $field, 'id' );
+		$field_name = FrmField::get_option( $field, 'name' );
+
+		$this->set_private_property( $combo_field, 'field', $field );
+
+		$this->assertEquals(
+			array(
+				$field_id . '_first_child'  => $field_name . ' - First child',
+				$field_id . '_second_child' => $field_name . ' - Second child',
+				$field_id . '_third_child'  => $field_name . ' - Third child',
+				$field_id . '_forth_child'  => $field_name . ' - Forth child',
+			),
+			$combo_field->get_export_headings()
+		);
+	}
 }

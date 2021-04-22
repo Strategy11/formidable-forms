@@ -367,4 +367,20 @@ class FrmFieldCombo extends FrmFieldType {
 
 		return $errors;
 	}
+
+	/**
+	 * Gets export headings.
+	 *
+	 * @return array
+	 */
+	public function get_export_headings() {
+		$headings   = array();
+		$field_id   = FrmField::get_option( $this->field, 'id' );
+		$field_name = FrmField::get_option( $this->field, 'name' );
+		foreach ( $this->sub_fields as $name => $sub_field ) {
+			$headings[ $field_id . '_' . $name ] = $field_name . ' - ' . $sub_field['label'];
+		}
+
+		return $headings;
+	}
 }
