@@ -327,7 +327,9 @@ class FrmFormsController {
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
 		if ( have_posts() ) {
 			the_post();
+			get_header( '' );
 			the_content();
+			get_footer();
 		}
 	}
 
