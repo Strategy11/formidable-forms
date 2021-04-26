@@ -314,7 +314,21 @@ class FrmFormsController {
 		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
 		add_filter( 'is_active_sidebar', '__return_false' );
 		FrmStylesController::enqueue_css( 'enqueue', true );
-		get_template_part( 'page' );
+
+		if ( false === get_template_part( 'page' ) ) {
+			self::fallback_when_page_template_part_is_not_supported_by_theme();
+		}
+	}
+
+	/**
+	 * Not every theme supports get_template_part( 'page' ).
+	 * When this is not supported, false is returned, and we can handle a fallback.
+	 */
+	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
+		if ( have_posts() ) {
+			the_post();
+			the_content();
+		}
 	}
 
 	/**
