@@ -291,10 +291,16 @@ class FrmFieldCombo extends FrmFieldType {
 			$args['errors'] = array();
 		}
 
-		if ( file_exists( FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php" ) ) {
-			include FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php";
-		} else {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php';
+		$include_paths = array(
+			FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php",
+			FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php',
+		);
+
+		foreach ( $include_paths as $include_path ) {
+			if ( file_exists( $include_path ) ) {
+				include $include_path;
+				return;
+			}
 		}
 	}
 
@@ -309,7 +315,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$atts      = array();
 
 		// Placeholder.
-		if ( in_array( 'placeholder', $sub_field['options'] ) ) {
+		if ( in_array( 'placeholder', $sub_field['options'], true ) ) {
 			$placeholder = FrmField::get_option( $field, $sub_field['name'] . '_placeholder' );
 			if ( $placeholder ) {
 				$atts[] = 'placeholder="' . esc_attr( $placeholder ) . '"';
