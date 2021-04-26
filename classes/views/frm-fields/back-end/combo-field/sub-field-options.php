@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field_id  = FrmField::get_option( $field, 'id' );
-$field_key = FrmField::get_option( $field, 'field_key' );
+$field_id  = $field['id'];
+$field_key = $field['field_key'];
 $uniq_str  = $sub_field['name'] . '_' . $field_id;
 $labels    = $this->get_built_in_option_labels();
 ?>

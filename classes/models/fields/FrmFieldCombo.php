@@ -133,7 +133,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @param array $args Includes 'field', 'display'.
 	 */
 	public function show_after_default( $args ) {
-		$field         = $args['field'];
+		$field         = (array) $args['field'];
 		$default_value = $this->get_default_value();
 
 		foreach ( $this->sub_fields as $name => $sub_field ) {
@@ -336,7 +336,7 @@ class FrmFieldCombo extends FrmFieldType {
 			$atts[] = 'class="' . esc_attr( $classes ) . '"';
 		}
 
-		// Print custom attributes
+		// Print custom attributes.
 		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
 			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
 				$atts[] = esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '"';
@@ -353,7 +353,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
-		$errors    = isset( $args['errors'] ) ? $args['errors'] : array();
+		$errors = isset( $args['errors'] ) ? $args['errors'] : array();
 
 		if ( ! $this->field->required ) {
 			return $errors;
@@ -367,7 +367,7 @@ class FrmFieldCombo extends FrmFieldType {
 		foreach ( $sub_fields as $name => $sub_field ) {
 			if ( empty( $sub_field['optional'] ) && empty( $args['value'][ $name ] ) ) {
 				$errors[ 'field' . $args['id'] . '-' . $name ] = '';
-				$errors[ 'field' . $args['id'] ] = $blank_msg;
+				$errors[ 'field' . $args['id'] ]               = $blank_msg;
 			}
 		}
 
@@ -381,8 +381,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function get_export_headings() {
 		$headings   = array();
-		$field_id   = FrmField::get_option( $this->field, 'id' );
-		$field_name = FrmField::get_option( $this->field, 'name' );
+		$field_id   = isset( $this->field->id ) ? $this->field->id : $this->field['id'];
+		$field_name = isset( $this->field->name ) ? $this->field->name : $this->field['name'];
 		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$headings[ $field_id . '_' . $name ] = $field_name . ' - ' . $sub_field['label'];
 		}

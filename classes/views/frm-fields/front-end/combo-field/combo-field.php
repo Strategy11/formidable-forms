@@ -20,9 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $field       = $args['field'];
-$field_id    = FrmField::get_option( $field, 'id' );
-$field_label = FrmField::get_option( $field, 'name' );
-$field_value = FrmField::get_option( $field, 'value' );
+$field_id    = $field['id'];
+$field_label = $field['name'];
+$field_value = $field['value'];
 $sub_fields  = $args['sub_fields'];
 $html_id     = $args['html_id'];
 $field_name  = $args['field_name'];

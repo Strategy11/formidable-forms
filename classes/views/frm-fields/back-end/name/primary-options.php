@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Options here need to be declared in FrmFieldName::extra_field_opts().
-$field_id    = FrmField::get_option( $field, 'id' );
+$field_id    = $field['id'];
 $name_layout = FrmField::get_option( $field, 'name_layout' );
 ?>
 <p>

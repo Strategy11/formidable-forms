@@ -85,7 +85,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_primary_options( $args ) {
-		$field = $args['field'];
+		$field = (array) $args['field'];
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/name/primary-options.php';
 
 		parent::show_primary_options( $args );
