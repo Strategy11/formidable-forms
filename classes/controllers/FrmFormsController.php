@@ -328,7 +328,12 @@ class FrmFormsController {
 		if ( have_posts() ) {
 			the_post();
 			get_header( '' );
+			// add some generic class names to the container to add some natural padding to the content.
+			// .entry-content catches the WordPress TwentyTwenty theme.
+			// .container catches Customizr content.
+			echo '<div class="container entry-content">';
 			the_content();
+			echo '</div>';
 			get_footer();
 		}
 	}
