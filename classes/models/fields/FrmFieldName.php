@@ -141,15 +141,4 @@ class FrmFieldName extends FrmFieldCombo {
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
 	}
-
-	/**
-	 * @return array
-	 */
-	public function translatable_strings() {
-		$strings   = parent::translatable_strings();
-		$strings[] = 'first_desc';
-		$strings[] = 'middle_desc';
-		$strings[] = 'last_desc';
-		return $strings;
-	}
 }

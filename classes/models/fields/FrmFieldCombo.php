@@ -390,4 +390,25 @@ class FrmFieldCombo extends FrmFieldType {
 
 		return $headings;
 	}
+
+	/**
+	 *
+	 * Get a list of all field settings that should be translated
+	 * on a multilingual site.
+	 *
+	 * @since 3.06.01
+	 *
+	 * @return array
+	 */
+	public function translatable_strings() {
+		$strings = parent::translatable_strings();
+
+		foreach ( $this->sub_fields as $name => $sub_field ) {
+			if ( in_array( 'desc', $sub_field['options'], true ) ) {
+				$strings[] = $name . '_desc';
+			}
+		}
+
+		return $strings;
+	}
 }
