@@ -316,9 +316,9 @@ class FrmFieldCombo extends FrmFieldType {
 
 		// Placeholder.
 		if ( in_array( 'placeholder', $sub_field['options'], true ) ) {
-			$placeholder = FrmField::get_option( $field, $sub_field['name'] . '_placeholder' );
-			if ( $placeholder ) {
-				$atts[] = 'placeholder="' . esc_attr( $placeholder ) . '"';
+			$placeholders = FrmField::get_option( $field, 'placeholder' );
+			if ( ! empty( $placeholders[ $sub_field['name'] ] ) ) {
+				$atts[] = 'placeholder="' . esc_attr( $placeholders[ $sub_field['name'] ] ) . '"';
 			}
 		}
 

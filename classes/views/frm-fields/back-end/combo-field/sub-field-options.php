@@ -60,16 +60,16 @@ foreach ( $sub_field['options'] as $option ) {
 
 		// All simple text options with live update the form output can go here.
 		case 'placeholder':
-			$input_name  = sprintf( 'field_options[%1$s_%2$s_%3$s]', $sub_field['name'], $option, $field_id );
+			$input_name  = sprintf( 'field_options[%1$s_%2$s][%3$s]', $option, $field_id, $sub_field['name'] );
 			$input_id    = 'field_options_' . $option . '_' . $uniq_str;
-			$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
+			$input_value = FrmField::get_option( $field, $option );
 			?>
 			<p class="frm6 frm_form_field">
 				<input
 					type="text"
 					name="<?php echo esc_attr( $input_name ); ?>"
 					id="<?php echo esc_attr( $input_id ); ?>"
-					value="<?php echo esc_attr( $input_value ); ?>"
+					value="<?php echo esc_attr( isset( $input_value[ $sub_field['name'] ] ) ? $input_value[ $sub_field['name'] ] : '' ); ?>"
 					data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 					data-changeatt="<?php echo esc_attr( $option ); ?>"
 				/>
