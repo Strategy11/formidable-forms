@@ -135,8 +135,9 @@ class FrmFieldCombo extends FrmFieldType {
 	public function show_after_default( $args ) {
 		$field         = (array) $args['field'];
 		$default_value = $this->get_default_value();
+		$sub_fields    = $this->get_processed_sub_fields();
 
-		foreach ( $this->sub_fields as $name => $sub_field ) {
+		foreach ( $sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/combo-field/sub-field-options.php';

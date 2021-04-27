@@ -59,7 +59,7 @@ $errors      = $args['errors'];
 						<input
 							type="<?php echo esc_attr( $sub_field['type'] ); ?>"
 							id="<?php echo esc_attr( $html_id . '_' . $name ); ?>"
-							value="<?php echo esc_attr( $field_value[ $name ] ); ?>"
+							value="<?php echo esc_attr( isset( $field_value[ $name ] ) ? $field_value[ $name ] : '' ); ?>"
 							<?php
 							if ( empty( $args['remove_names'] ) ) {
 								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
