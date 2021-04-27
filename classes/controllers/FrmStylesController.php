@@ -457,7 +457,7 @@ class FrmStylesController {
 
 		// Replace ../ with absolute URL.
 		$plugin_url = FrmAppHelper::plugin_url();
-		echo str_replace(
+		echo str_replace( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			array(
 				'url(../',
 				"url('../",
