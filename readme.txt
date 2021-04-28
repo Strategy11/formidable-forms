@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator form, calculator, price calculator, quote form, contact button, form manager, forms creator, Akismet, web form, payment form, survey form, donation form, email submit form, message form, email subscription, contact form widget, user registration form, registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form, custom form
 Requires at least: 4.7
-Tested up to: 5.7
+Tested up to: 5.7.1
 Requires PHP: 5.6
-Stable tag: 4.10.01
+Stable tag: 4.10.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -435,6 +435,9 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.10.02 =
+* New: Added support for in-theme previews for more themes including Twenty Twenty and Customizr.
+
 = 4.10.01 =
 * New: Include the full email header when an email is sent using the mail function.
 * Fix: After opening the popup to add a layout class to a field, the field would no longer be selectable.
@@ -464,9 +467,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 4.09.05 =
 * Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
 * Fix: Important security update that adds better escaping when text is used from attribute data.
-
-= 4.09.04 =
-* Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
-* New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
