@@ -1,6 +1,6 @@
 == Changelog ==
 = 4.10.02 =
-* Fix: Previewing a form "In Theme" would result in a blank white page for several incompatible themes.
+* New: Previewing a form "In Theme" should now work in some previously incompatible themes that would result in a blank white page.
 
 = 4.10.01 =
 * New: Include the full email header when an email is sent using the mail function.
