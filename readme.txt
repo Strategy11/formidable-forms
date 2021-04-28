@@ -468,8 +468,4 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
 * Fix: Important security update that adds better escaping when text is used from attribute data.
 
-= 4.09.04 =
-* Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
-* New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
-
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
