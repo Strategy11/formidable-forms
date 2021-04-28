@@ -1,6 +1,6 @@
 == Changelog ==
 = 4.10.02 =
-* New: Previewing a form "In Theme" should now work in some previously incompatible themes that would result in a blank white page.
+* New: Added support for in-theme previews for more themes including Twenty Twenty and Customizr.
 
 = 4.10.01 =
 * New: Include the full email header when an email is sent using the mail function.
