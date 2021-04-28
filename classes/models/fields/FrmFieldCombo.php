@@ -384,7 +384,8 @@ class FrmFieldCombo extends FrmFieldType {
 		$headings   = array();
 		$field_id   = isset( $this->field->id ) ? $this->field->id : $this->field['id'];
 		$field_name = isset( $this->field->name ) ? $this->field->name : $this->field['name'];
-		foreach ( $this->sub_fields as $name => $sub_field ) {
+		$sub_fields = $this->get_processed_sub_fields();
+		foreach ( $sub_fields as $name => $sub_field ) {
 			$headings[ $field_id . '_' . $name ] = $field_name . ' - ' . $sub_field['label'];
 		}
 
