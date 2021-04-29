@@ -72,8 +72,8 @@ $errors      = $args['errors'];
 						<?php
 				}
 
-				if ( $sub_field['label'] && $sub_field_desc ) {
-					echo '<div class="frm_description">' . FrmAppHelper::kses( $sub_field_desc ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				if ( $sub_field['label'] && ( $sub_field_desc || FrmAppHelper::is_form_builder_page() ) ) {
+					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">' . FrmAppHelper::kses( $sub_field_desc ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 
 				// Don't show individual field errors when there is a combo field error.

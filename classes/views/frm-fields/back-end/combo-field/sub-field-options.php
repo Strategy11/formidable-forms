@@ -97,6 +97,7 @@ $labels    = $this->get_built_in_option_labels();
 						name="<?php echo esc_attr( $input_name ); ?>"
 						id="<?php echo esc_attr( $input_id ); ?>"
 						value="<?php echo esc_attr( $input_value ); ?>"
+						data-changeme="frm_field_<?php echo esc_attr( $field_id . '_' . $sub_field['name'] ); ?>_desc"
 					/>
 					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $labels[ $option ] ); ?>
