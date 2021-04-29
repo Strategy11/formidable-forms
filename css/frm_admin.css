@@ -3093,7 +3093,8 @@ input[type="checkbox"] {
 }
 
 #new_fields .frm_primary_label + p,
-#new_fields .frm_primary_label + .frm6 + .frm6 {
+#new_fields .frm_primary_label + .frm6 + .frm6,
+#new_fields .frm_primary_label + .frm6 + .frm-inline-modal + .frm6 {
 	margin-top: 0;
 }
 
