@@ -50,12 +50,12 @@ class FrmFieldName extends FrmFieldCombo {
 				continue;
 			}
 
-			if ( ! isset( $this->sub_fields[ $name ]['classes'] ) ) {
-				$this->sub_fields[ $name ]['classes'] = $col_class;
-			} elseif ( is_array( $this->sub_fields[ $name ]['classes'] ) ) {
-				$this->sub_fields[ $name ]['classes'] = implode( ' ', $this->sub_fields[ $name ]['classes'] ) . ' ' . $col_class;
+			if ( ! isset( $this->sub_fields[ $name ]['wrapper_classes'] ) ) {
+				$this->sub_fields[ $name ]['wrapper_classes'] = $col_class;
+			} elseif ( is_array( $this->sub_fields[ $name ]['wrapper_classes'] ) ) {
+				$this->sub_fields[ $name ]['wrapper_classes'] = implode( ' ', $this->sub_fields[ $name ]['wrapper_classes'] ) . ' ' . $col_class;
 			} else {
-				$this->sub_fields[ $name ]['classes'] .= ' ' . $col_class;
+				$this->sub_fields[ $name ]['wrapper_classes'] .= ' ' . $col_class;
 			}
 
 			$result[ $name ] = $this->sub_fields[ $name ];
@@ -140,5 +140,33 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
+	}
+
+	/**
+	 * Loads processed args for field output.
+	 *
+	 * @param array $args {
+	 *     Arguments.
+	 *
+	 *     @type array  $field          Field array.
+	 *     @type string $html_id        HTML ID.
+	 *     @type string $field_name     Field name attribute.
+	 *     @type array  $shortcode_atts Shortcode attributes.
+	 *     @type array  $errors         Field errors.
+	 *     @type bool   $remove_names   Remove name attribute or not.
+	 * }
+	 */
+	protected function process_args_for_field_output( &$args ) {
+		parent::process_args_for_field_output( $args );
+
+		// Show all subfields in form builder then use JS to show or hide them.
+		if ( FrmAppHelper::is_form_builder_page() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
+			$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
+			$args['sub_fields'] = $this->sub_fields;
+
+			foreach ( $hidden_fields as $name => $hidden_field ) {
+				$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
+			}
+		}
 	}
 }

@@ -23,7 +23,12 @@ $name_layout = FrmField::get_option( $field, 'name_layout' );
 		<?php esc_html_e( 'Name layout', 'formidable' ); ?>
 	</label>
 
-	<select name="field_options[name_layout_<?php echo esc_attr( $field_id ); ?>]" id="name_layout_<?php echo esc_attr( $field_id ); ?>">
+	<select
+		name="field_options[name_layout_<?php echo esc_attr( $field_id ); ?>]"
+		id="name_layout_<?php echo esc_attr( $field_id ); ?>"
+		class="frm_name_layout_dropdown"
+		data-field-id="<?php echo intval( $field_id ); ?>"
+	>
 		<option value="first_last" <?php selected( $name_layout, 'first_last' ); ?>>
 			<?php esc_html_e( 'First Last', 'formidable' ); ?>
 		</option>

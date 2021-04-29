@@ -37,7 +37,7 @@ $errors      = $args['errors'];
 		<?php
 		foreach ( $sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
-			$sub_field_class   = 'frm_form_field form-field ' . $sub_field['classes'];
+			$sub_field_class   = "frm_form_field form-field frm_form_subfield-{$name} {$sub_field['wrapper_classes']}";
 			$sub_field_desc    = FrmField::get_option( $field, $name . '_desc' );
 
 			if ( isset( $errors[ 'field' . $field_id . '-' . $name ] ) ) {
@@ -47,6 +47,7 @@ $errors      = $args['errors'];
 			<div
 				id="frm_field_<?php echo esc_attr( $field_id . '-' . $name ); ?>_container"
 				class="<?php echo esc_attr( $sub_field_class ); ?>"
+				data-sub-field-name="<?php echo esc_attr( $name ); ?>"
 			>
 				<label for="<?php echo esc_attr( $html_id . '_' . $name ); ?>" class="frm_screen_reader frm_hidden">
 					<?php echo esc_html( $sub_field_desc ? $sub_field_desc : $field_label ); ?>

@@ -82,16 +82,17 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	protected function get_default_sub_field() {
 		return array(
-			'type'     => 'text',
-			'label'    => '',
-			'classes'  => '',
-			'options'  => array(
+			'type'            => 'text',
+			'label'           => '',
+			'classes'         => '',
+			'wrapper_classes' => '',
+			'options'         => array(
 				'default_value',
 				'placeholder',
 				'desc',
 			),
-			'optional' => false,
-			'atts'     => array(),
+			'optional'        => false,
+			'atts'            => array(),
 		);
 	}
 
@@ -272,6 +273,36 @@ class FrmFieldCombo extends FrmFieldType {
 			return;
 		}
 
+		$this->process_args_for_field_output( $args );
+
+		$include_paths = array(
+			FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php",
+			FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php',
+		);
+
+		foreach ( $include_paths as $include_path ) {
+			if ( file_exists( $include_path ) ) {
+				include $include_path;
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Loads processed args for field output.
+	 *
+	 * @param array $args {
+	 *     Arguments.
+	 *
+	 *     @type array  $field          Field array.
+	 *     @type string $html_id        HTML ID.
+	 *     @type string $field_name     Field name attribute.
+	 *     @type array  $shortcode_atts Shortcode attributes.
+	 *     @type array  $errors         Field errors.
+	 *     @type bool   $remove_names   Remove name attribute or not.
+	 * }
+	 */
+	protected function process_args_for_field_output( &$args ) {
 		$args['field'] = (array) $args['field'];
 
 		if ( ! isset( $args['html_id'] ) ) {
@@ -290,18 +321,6 @@ class FrmFieldCombo extends FrmFieldType {
 
 		if ( ! isset( $args['errors'] ) ) {
 			$args['errors'] = array();
-		}
-
-		$include_paths = array(
-			FrmAppHelper::plugin_path() . "/classes/views/frm-fields/front-end/{$args['field']['type']}-field/{$args['field']['type']}-field.php",
-			FrmAppHelper::plugin_path() . '/classes/views/frm-fields/front-end/combo-field/combo-field.php',
-		);
-
-		foreach ( $include_paths as $include_path ) {
-			if ( file_exists( $include_path ) ) {
-				include $include_path;
-				return;
-			}
 		}
 	}
 
