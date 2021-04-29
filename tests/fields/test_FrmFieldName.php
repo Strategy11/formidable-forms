@@ -20,8 +20,8 @@ class test_FrmFieldName extends FrmUnitTest {
 		$processed_sub_fields = $this->run_private_method( array( $name_field, 'get_processed_sub_fields' ) );
 
 		$this->assertEquals( array( 'first', 'middle', 'last' ), array_keys( $processed_sub_fields ) );
-		$this->assertNotFalse( strpos( $processed_sub_fields['first']['classes'], 'frm4' ) );
-		$this->assertNotFalse( strpos( $processed_sub_fields['middle']['classes'], 'frm4' ) );
-		$this->assertNotFalse( strpos( $processed_sub_fields['last']['classes'], 'frm4' ) );
+		$this->assertNotFalse( strpos( $processed_sub_fields['first']['wrapper_classes'], 'frm4' ) );
+		$this->assertNotFalse( strpos( $processed_sub_fields['middle']['wrapper_classes'], 'frm4' ) );
+		$this->assertNotFalse( strpos( $processed_sub_fields['last']['wrapper_classes'], 'frm4' ) );
 	}
 }

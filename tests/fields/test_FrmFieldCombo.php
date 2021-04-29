@@ -99,30 +99,32 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->get_private_property( $combo_field, 'sub_fields' ),
 			array(
 				'first'  => array(
-					'name'     => 'first',
-					'label'    => 'first label',
-					'type'     => 'text',
-					'classes'  => '',
-					'optional' => false,
-					'options'  => array(
+					'name'          => 'first',
+					'label'         => 'first label',
+					'type'          => 'text',
+					'classes'       => '',
+					'wrapper_class' => '',
+					'optional'      => false,
+					'options'       => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'     => array(),
+					'atts'          => array(),
 				),
 				'second' => array(
-					'name'     => 'second',
-					'label'    => 'second label',
-					'type'     => 'text',
-					'classes'  => '',
-					'optional' => false,
-					'options'  => array(
+					'name'          => 'second',
+					'label'         => 'second label',
+					'type'          => 'text',
+					'classes'       => '',
+					'wrapper_class' => '',
+					'optional'      => false,
+					'options'       => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'     => array(),
+					'atts'          => array(),
 				),
 			)
 		);
@@ -136,7 +138,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 					'first'  => array(),
 					'second' => 'second label',
 					'third'  => array(
-						'name' => 'another name',
+						'name'    => 'another name',
 						'options' => array(),
 					),
 					'forth'  => true,
@@ -148,26 +150,28 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->get_private_property( $combo_field, 'sub_fields' ),
 			array(
 				'second' => array(
-					'name'     => 'second',
-					'label'    => 'second label',
-					'type'     => 'text',
-					'classes'  => '',
-					'optional' => false,
-					'options'  => array(
+					'name'          => 'second',
+					'label'         => 'second label',
+					'type'          => 'text',
+					'classes'       => '',
+					'wrapper_class' => '',
+					'optional'      => false,
+					'options'       => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'     => array(),
+					'atts'          => array(),
 				),
 				'third'  => array(
-					'name'     => 'third',
-					'label'    => '',
-					'type'     => 'text',
-					'classes'  => '',
-					'optional' => false,
-					'options'  => array(),
-					'atts'     => array(),
+					'name'          => 'third',
+					'label'         => '',
+					'type'          => 'text',
+					'classes'       => '',
+					'wrapper_class' => '',
+					'optional'      => false,
+					'options'       => array(),
+					'atts'          => array(),
 				),
 			)
 		);
