@@ -6555,27 +6555,27 @@ function frmAdminBuildJS() {
 		/**
 		 * Gets subfield element from cache.
 		 *
-		 * @param {String} fieldId      Field ID.
-		 * @param {String} subFieldName Subfield Name.
+		 * @param {String} fieldId Field ID.
+		 * @param {String} key     Cache key.
 		 * @returns {HTMLElement|undefined} Return the element from cache or undefined if not found.
 		 */
-		const getSubFieldElFromCache = ( fieldId, subFieldName ) => {
+		const getSubFieldElFromCache = ( fieldId, key ) => {
 			window.frmCachedSubFields            = window.frmCachedSubFields || {};
 			window.frmCachedSubFields[ fieldId ] = window.frmCachedSubFields[ fieldId ] || {};
-			return window.frmCachedSubFields[ fieldId ][ subFieldName ];
+			return window.frmCachedSubFields[ fieldId ][ key ];
 		};
 
 		/**
 		 * Sets subfield element to cache.
 		 *
-		 * @param {String}      fieldId      Field ID.
-		 * @param {String}      subFieldName Subfield name.
-		 * @param {HTMLElement} el           Element.
+		 * @param {String}      fieldId Field ID.
+		 * @param {String}      key     Cache key.
+		 * @param {HTMLElement} el      Element.
 		 */
-		const setSubFieldElToCache = ( fieldId, subFieldName, el ) => {
+		const setSubFieldElToCache = ( fieldId, key, el ) => {
 			window.frmCachedSubFields                    = window.frmCachedSubFields || {};
 			window.frmCachedSubFields[ fieldId ]         = window.frmCachedSubFields[ fieldId ] || {};
-			window.frmCachedSubFields[ fieldId ][ subFieldName ] = el;
+			window.frmCachedSubFields[ fieldId ][ key ] = el;
 		};
 
 		/**
@@ -6585,7 +6585,8 @@ function frmAdminBuildJS() {
 		 * @returns {string}
 		 */
 		const getColClass = colCount => 'frm' + parseInt( 12 / colCount );
-		const colClasses  = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ].map( num => 'frm' + num );
+
+		const colClasses = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ].map( num => 'frm' + num );
 
 		const allSubFieldNames = [ 'first', 'middle', 'last' ];
 
@@ -6598,8 +6599,12 @@ function frmAdminBuildJS() {
 			const value         = event.target.value;
 			const subFieldNames = value.split( '_' );
 			const fieldId       = event.target.dataset.fieldId;
-			const container     = document.querySelector( '#field_' + fieldId + '_inner_container .frm_combo_inputs_container' );
-			const newColClass   = getColClass( subFieldNames.length );
+
+			/*
+			 * Live update form on the form builder.
+			 */
+			const container   = document.querySelector( '#field_' + fieldId + '_inner_container .frm_combo_inputs_container' );
+			const newColClass = getColClass( subFieldNames.length );
 
 			// Set all sub field elements to cache and hide all of them first.
 			allSubFieldNames.forEach( name => {
@@ -6621,6 +6626,26 @@ function frmAdminBuildJS() {
 				subFieldEl.classList.add( newColClass );
 
 				container.append( subFieldEl );
+			});
+
+			/*
+			 * Live update subfield options.
+			 */
+			// Hide all subfield options.
+			allSubFieldNames.forEach( name => {
+				const optionsEl = document.querySelector( '.frm_sub_field_options-' + name + '[data-field-id="' + fieldId + '"]' );
+				if ( optionsEl ) {
+					optionsEl.classList.add( 'frm_hidden' );
+					setSubFieldElToCache( fieldId, name + '_options', optionsEl );
+				}
+			});
+
+			subFieldNames.forEach( subFieldName => {
+				const optionsEl = getSubFieldElFromCache( fieldId, subFieldName + '_options' );
+				if ( ! optionsEl ) {
+					return;
+				}
+				optionsEl.classList.remove( 'frm_hidden' );
 			});
 		};
 
