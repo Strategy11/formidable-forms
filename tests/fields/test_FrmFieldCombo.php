@@ -99,32 +99,32 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->get_private_property( $combo_field, 'sub_fields' ),
 			array(
 				'first'  => array(
-					'name'          => 'first',
-					'label'         => 'first label',
-					'type'          => 'text',
-					'classes'       => '',
-					'wrapper_class' => '',
-					'optional'      => false,
-					'options'       => array(
+					'name'            => 'first',
+					'label'           => 'first label',
+					'type'            => 'text',
+					'classes'         => '',
+					'wrapper_classes' => '',
+					'optional'        => false,
+					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'          => array(),
+					'atts'            => array(),
 				),
 				'second' => array(
-					'name'          => 'second',
-					'label'         => 'second label',
-					'type'          => 'text',
-					'classes'       => '',
-					'wrapper_class' => '',
-					'optional'      => false,
-					'options'       => array(
+					'name'            => 'second',
+					'label'           => 'second label',
+					'type'            => 'text',
+					'classes'         => '',
+					'wrapper_classes' => '',
+					'optional'        => false,
+					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'          => array(),
+					'atts'            => array(),
 				),
 			)
 		);
@@ -150,28 +150,28 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			$this->get_private_property( $combo_field, 'sub_fields' ),
 			array(
 				'second' => array(
-					'name'          => 'second',
-					'label'         => 'second label',
-					'type'          => 'text',
-					'classes'       => '',
-					'wrapper_class' => '',
-					'optional'      => false,
-					'options'       => array(
+					'name'            => 'second',
+					'label'           => 'second label',
+					'type'            => 'text',
+					'classes'         => '',
+					'wrapper_classes' => '',
+					'optional'        => false,
+					'options'         => array(
 						'default_value',
 						'placeholder',
 						'desc',
 					),
-					'atts'          => array(),
+					'atts'            => array(),
 				),
 				'third'  => array(
-					'name'          => 'third',
-					'label'         => '',
-					'type'          => 'text',
-					'classes'       => '',
-					'wrapper_class' => '',
-					'optional'      => false,
-					'options'       => array(),
-					'atts'          => array(),
+					'name'            => 'third',
+					'label'           => '',
+					'type'            => 'text',
+					'classes'         => '',
+					'wrapper_classes' => '',
+					'optional'        => false,
+					'options'         => array(),
+					'atts'            => array(),
 				),
 			)
 		);
@@ -260,10 +260,10 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		$this->assertEquals( $atts, 'placeholder="First placeholder" class="frm-custom-class" maxlength="10" data-attr="custom-attr"' );
 
 		$sub_field = array(
-			'name'    => 'second',
-			'label'   => 'Second',
-			'type'    => 'text',
-			'classes' => array(
+			'name'     => 'second',
+			'label'    => 'Second',
+			'type'     => 'text',
+			'classes'  => array(
 				'frm-class1',
 				'frm-class2',
 			),
@@ -284,7 +284,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			'name'    => 'forth',
 			'label'   => 'Forth',
 			'type'    => 'text',
-			'options'  => array(),
+			'options' => array(),
 		);
 
 		ob_start();
