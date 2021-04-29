@@ -6659,7 +6659,7 @@ function frmAdminBuildJS() {
 
 		// Trigger dropdown change on load.
 		document.querySelectorAll( dropdownSelector ).forEach( el => {
-			el.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			el.dispatchEvent( new Event( 'change', { bubbles: true }) );
 		});
 	}
 
