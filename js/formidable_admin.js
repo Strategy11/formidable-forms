@@ -325,7 +325,8 @@ function frmAdminBuildJS() {
 		fieldsUpdated = 0,
 		thisFormId = 0,
 		autoId = 0,
-		optionMap = {};
+		optionMap = {},
+		lastNewActionIdReturned = 0;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -3951,9 +3952,9 @@ function frmAdminBuildJS() {
 
 	function addFormAction() {
 		/*jshint validthis:true */
-		var actionId = getNewActionId();
-		var type = jQuery( this ).data( 'actiontype' );
-		var formId = thisFormId;
+		var actionId = getNewActionId(),
+			type = jQuery( this ).data( 'actiontype' ),
+			formId = thisFormId;
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -4014,6 +4015,10 @@ function frmAdminBuildJS() {
 		if ( typeof document.getElementById( 'frm_form_action_' + len ) !== 'undefined' ) {
 			len = len + 100;
 		}
+		if ( lastNewActionIdReturned >= len ) {
+			len = lastNewActionIdReturned + 1;
+		}
+		lastNewActionIdReturned = len;
 		return len;
 	}
 
