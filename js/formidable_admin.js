@@ -3951,6 +3951,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addFormAction() {
+		/*jshint validthis:true */
 		var actionId = getNewActionId(),
 			type = jQuery( this ).data( 'actiontype' ),
 			formId = thisFormId;
