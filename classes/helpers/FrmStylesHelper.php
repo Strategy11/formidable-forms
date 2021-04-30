@@ -379,6 +379,10 @@ class FrmStylesHelper {
 		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
 		$settings['box_shadow']   = ( isset( $settings['remove_box_shadow'] ) && $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
 
+		if ( ! isset( $settings['repeat_icon'] ) ) {
+			$settings['repeat_icon'] = 1;
+		}
+
 		return $settings;
 	}
 
