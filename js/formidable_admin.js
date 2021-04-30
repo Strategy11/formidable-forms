@@ -6534,6 +6534,17 @@ function frmAdminBuildJS() {
 		return object;
 	}
 
+	function debounce( func, wait = 100 ) {
+		let timeout;
+		return function( ...args ) {
+			clearTimeout( timeout );
+			timeout = setTimeout(
+				() => func.apply( this, args ),
+				wait
+			);
+		};
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -7105,8 +7116,7 @@ function frmAdminBuildJS() {
 				return oldText === 'Select Color' ? 'Select' : oldText;
 			});
 
-			// update styling on change
-			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', function() {
+			function changeStyling() {
 				var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
 				locStr = JSON.stringify( locStr );
 				jQuery.ajax({
@@ -7120,7 +7130,10 @@ function frmAdminBuildJS() {
 						document.getElementById( 'this_css' ).innerHTML = css;
 					}
 				});
-			});
+			}
+
+			// update styling on change
+			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debounce( changeStyling, 100 ) );			
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
