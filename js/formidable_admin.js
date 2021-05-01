@@ -7079,10 +7079,14 @@ function frmAdminBuildJS() {
 		},
 
 		inboxInit: function() {
-			jQuery( '.frm_inbox_dismiss' ).on( 'click', function( e ) {
+			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
 				var message = this.parentNode.parentNode,
 					key = message.getAttribute( 'data-message' ),
 					href = this.getAttribute( 'href' );
+
+				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss') ) {
+					return;
+				}
 
 				e.preventDefault();
 
