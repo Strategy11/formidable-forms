@@ -107,6 +107,10 @@ class FrmInboxController {
 	 * @since 4.10.02
 	 */
 	private static function add_free_template_message() {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return;
+		}
+
 		$api = new FrmFormTemplateApi();
 		if ( $api->has_free_access() ) {
 			return;
