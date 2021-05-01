@@ -7084,7 +7084,7 @@ function frmAdminBuildJS() {
 					key = message.getAttribute( 'data-message' ),
 					href = this.getAttribute( 'href' );
 
-				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss') ) {
+				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss' ) ) {
 					return;
 				}
 
