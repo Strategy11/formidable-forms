@@ -139,13 +139,20 @@ class FrmSimpleBlocksController {
 		unset( $params['formId'] );
 
 		$form = FrmFormsController::get_form_shortcode( $params );
+		return self::maybe_remove_fade_on_load_for_block_preview( $form );
+	}
 
+	/**
+	 * Remove fade on load when /wp-json/wp/v2/block-renderer/formidable/simple-form is called.
+	 * With the class set, the form never appears in the form block preview.
+	 *
+	 * @param string $form
+	 * @return string
+	 */
+	private static function maybe_remove_fade_on_load_for_block_preview( $form ) {
 		if ( wp_is_json_request() ) {
-			// remove fade on load when /wp-json/wp/v2/block-renderer/formidable/simple-form is called.
-			// with the class set, the form never appears in the form block preview.
 			$form = str_replace( ' frm_logic_form ', ' ', $form );
 		}
-
 		return $form;
 	}
 }
