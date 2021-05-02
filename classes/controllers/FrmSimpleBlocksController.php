@@ -140,6 +140,12 @@ class FrmSimpleBlocksController {
 
 		$form = FrmFormsController::get_form_shortcode( $params );
 
-		return str_replace( ' frm_logic_form ', ' ', $form ); // prevent the form from hiding
+		if ( wp_is_json_request() ) {
+			// remove fade on load when /wp-json/wp/v2/block-renderer/formidable/simple-form is called.
+			// with the class set, the form never appears in the form block preview.
+			$form = str_replace( ' frm_logic_form ', ' ', $form );
+		}
+
+		return $form;
 	}
 }
