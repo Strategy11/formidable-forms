@@ -150,7 +150,7 @@ class FrmSimpleBlocksController {
 	 * @return string
 	 */
 	private static function maybe_remove_fade_on_load_for_block_preview( $form ) {
-		if ( wp_is_json_request() ) {
+		if ( is_callable( 'wp_is_json_request' ) && wp_is_json_request() ) {
 			$form = str_replace( ' frm_logic_form ', ' ', $form );
 		}
 		return $form;
