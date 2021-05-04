@@ -6581,7 +6581,7 @@ function frmAdminBuildJS() {
 
 		const colClasses = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ].map( num => 'frm' + num );
 
-		const allSubFieldNames = ['first', 'middle', 'last' ];
+		const allSubFieldNames = [ 'first', 'middle', 'last' ];
 
 		/**
 		 * Handles name layout change.
@@ -6652,7 +6652,7 @@ function frmAdminBuildJS() {
 
 		// Trigger dropdown change on load.
 		document.querySelectorAll( dropdownSelector ).forEach( el => {
-			el.dispatchEvent( new Event('change', { bubbles: true }) );
+			el.dispatchEvent( new Event( 'change', { bubbles: true }) );
 		});
 	}
 
