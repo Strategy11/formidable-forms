@@ -64,7 +64,7 @@ class FrmField {
 			),
 			'name'     => array(
 				'name' => __( 'Name', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_icon',
+				'icon' => 'frm_icon_font frm_user_name_icon',
 			),
 		);
 
