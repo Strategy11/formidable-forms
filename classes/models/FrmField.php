@@ -42,6 +42,10 @@ class FrmField {
 				'name' => __( 'Number', 'formidable' ),
 				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
+			'name'     => array(
+				'name' => __( 'Name', 'formidable' ),
+				'icon' => 'frm_icon_font frm_user_name_icon',
+			),
 			'phone'    => array(
 				'name' => __( 'Phone', 'formidable' ),
 				'icon' => 'frm_icon_font frm_phone_icon',
@@ -61,10 +65,6 @@ class FrmField {
 			'captcha'  => array(
 				'name' => __( 'reCAPTCHA', 'formidable' ),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
-			),
-			'name'     => array(
-				'name' => __( 'Name', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_name_icon',
 			),
 		);
 
