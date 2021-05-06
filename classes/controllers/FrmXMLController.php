@@ -10,13 +10,13 @@ class FrmXMLController {
 	}
 
 	public static function add_default_templates() {
-		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			// XML import is not enabled on your server
 			return;
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader  = libxml_disable_entity_loader( true );
+		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
 
 		$files = apply_filters( 'frm_default_templates_files', array() );
 
@@ -28,7 +28,7 @@ class FrmXMLController {
 		unset( $files );
 
 		libxml_use_internal_errors( $set_err );
-		libxml_disable_entity_loader( $loader );
+		FrmXMLHelper::maybe_libxml_disable_entity_loader( $loader );
 	}
 
 	/**
@@ -330,7 +330,7 @@ class FrmXMLController {
 		}
 		unset( $file_type );
 
-		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			$errors[] = __( 'XML import is not enabled on your server with the libxml_disable_entity_loader function.', 'formidable' );
 			self::form( $errors );
 
@@ -338,7 +338,7 @@ class FrmXMLController {
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader  = libxml_disable_entity_loader( true );
+		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
 
 		$result = FrmXMLHelper::import_xml( $file );
 		FrmXMLHelper::parse_message( $result, $message, $errors );
@@ -346,7 +346,7 @@ class FrmXMLController {
 		unset( $file );
 
 		libxml_use_internal_errors( $set_err );
-		libxml_disable_entity_loader( $loader );
+		FrmXMLHelper::maybe_libxml_disable_entity_loader( $loader );
 
 		self::form( $errors, $message );
 	}

@@ -226,6 +226,18 @@ td.column-title .frm_actions_dropdown {
 	padding: 0 15px !important;
 }
 
+.frm-upgrade-bar {
+	text-align: center;
+	background: var(--sidebar-color);
+	border-bottom: 1px solid var(--sidebar-hover);
+	padding: 3px 0;
+	font-size: 95%;
+}
+
+.frm-upgrade-bar span {
+	opacity: .5;
+}
+
 a h1 .frmsvg {
 	color: var(--medium-grey);
 	vertical-align: baseline;
@@ -1101,7 +1113,7 @@ h2 .frm-button-primary {
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .frm_wrap .preview > .button:hover {
 	border-color: var(--primary-hover) !important;
-	background: var(--primary-hover);
+	background: var(--primary-hover) !important;
 	color: #fff;
 	box-shadow: none;
 }
@@ -1548,6 +1560,7 @@ div.frm_updated_message {
 	color: #973937;
 	border-color: #F2DEDE;
 	background-color: #F2DEDE;
+	clear: both;
 }
 
 .frm_error_style a {
@@ -5355,6 +5368,10 @@ span.howto {
 	color: #333 !important;
 }
 
+.frm_green {
+	color: var(--green) !important;
+}
+
 #frm_form_editor_container .ui-state-default a.frm_orange, .frm-right-panel a.frm_orange, #postbox-container-1 a.frm_orange {
 	color: #D54E21;
 }
@@ -5876,7 +5893,7 @@ tr.frm_options_heading td {
 	float: left;
 }
 
-#new_fields .frm_product_price_wrapper input:last-child {
+#new_fields .frm_product_price_wrapper input:nth-child(2) {
 	width: 37%;
 	float: right;
 }
@@ -6878,6 +6895,7 @@ li.frm_noallow.button.frm_show_upgrade {
 	border-radius: 10px;
 	border: 1px solid var(--grey);
 	background-color: #fff;
+	max-width: 100% !important;
 }
 
 .frm-dialog .postbox {
@@ -7330,16 +7348,9 @@ button.frm_choose_image_box,
 	width: 100%;
 }
 
-/** TODO: After 5.5, remove the branch clases **/
-.branch-5-5 #postbox-container-2 select,
-.branch-5-5.wp-admin .frm_wrap select,
-.branch-5-5 .frm_wrap .frm_form_builder select,
-.branch-5-4 #postbox-container-2 select,
-.branch-5-4.wp-admin .frm_wrap select,
-.branch-5-4 .frm_wrap .frm_form_builder select,
-.branch-5-3 #postbox-container-2 select,
-.branch-5-3.wp-admin .frm_wrap select,
-.branch-5-3 .frm_wrap .frm_form_builder select {
+#postbox-container-2 select,
+.wp-admin .frm_wrap select,
+.frm_wrap .frm_form_builder select {
 	height: auto;
 	padding: 0 24px 0 12px;
 }
@@ -8012,4 +8023,8 @@ Responsive Design
 		display: block;
 		width: 100%;
 	}
+}
+
+.frm-admin-page-styles #frm-publishing #save_menu_header {
+	display: inline-block;
 }

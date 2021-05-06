@@ -125,7 +125,7 @@ function frmFrontFormJS() {
 	 * @param {object} $form
      */
 	function enableSubmitButton( $form ) {
-		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).removeAttr( 'disabled' );
+		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
 	}
 
 	/**
@@ -501,7 +501,7 @@ function frmFrontFormJS() {
 
 				response = response.replace( /^\s+|\s+$/g, '' );
 				if ( response.indexOf( '{' ) === 0 ) {
-					response = jQuery.parseJSON( response );
+					response = JSON.parse( response );
 				} else {
 					response = defaultResponse;
 				}
@@ -575,7 +575,7 @@ function frmFrontFormJS() {
 										// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 										frmTrigger = frmTrigger.prev( '.frm_trigger' );
 									}
-									frmTrigger.click();
+									frmTrigger.trigger( 'click' );
 								}
 							}
 
@@ -618,7 +618,7 @@ function frmFrontFormJS() {
 				}
 			},
 			error: function() {
-				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).removeAttr( 'disabled' );
+				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).prop( 'disabled', false );
 				object.submit();
 			}
 		});
@@ -739,7 +739,7 @@ function frmFrontFormJS() {
 	}
 
 	function scrollToFirstField( object ) {
-		var field = jQuery( object ).find( '.frm_blank_field:first' );
+		var field = jQuery( object ).find( '.frm_blank_field' ).first();
 		if ( field.length ) {
 			frmFrontForm.scrollMsg( field, object, true );
 		}
@@ -968,6 +968,18 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Check for -webkit-box-shadow css value for input:-webkit-autofill selector.
+	 * If this is a match, the User is autofilling the input on a Webkit browser.
+	 * We want to delete the Honeypot field, otherwise it will get triggered as spam on autocomplete.
+	 */
+	function onHoneypotFieldChange() {
+		var css = jQuery( this ).css( 'box-shadow' );
+		if ( css.match( /inset/ ) ) {
+			this.parentNode.removeChild( this );
+		}
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -975,21 +987,23 @@ function frmFrontFormJS() {
 
 			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
 				if ( jQuery( this ).val() === '' ) {
-					jQuery( this ).blur();
+					jQuery( this ).trigger( 'blur' );
 				}
 			});
 
 			jQuery( document ).on( 'focus', '.frm_toggle_default', clearDefault );
 			jQuery( document ).on( 'blur', '.frm_toggle_default', replaceDefault );
-			jQuery( '.frm_toggle_default' ).blur();
+			jQuery( '.frm_toggle_default' ).trigger( 'blur' );
 
-			jQuery( document.getElementById( 'frm_resend_email' ) ).click( resendEmail );
+			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
 
+			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
+
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
-			jQuery( 'a[data-frmtoggle]' ).click( toggleDiv );
+			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
@@ -1188,7 +1202,7 @@ function frmFrontFormJS() {
 				scrollObj = id;
 			}
 
-			scrollObj.focus();
+			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
 			if ( ! newPos || frm_js.offset === '-1' ) {
 				return;

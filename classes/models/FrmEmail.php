@@ -435,7 +435,9 @@ class FrmEmail {
 		$sent = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
 
 		if ( ! $sent ) {
-			$header    = 'From: ' . $this->from . "\r\n";
+			if ( is_array( $header ) ) {
+				$header = implode( "\r\n", $header );
+			}
 			$recipient = implode( ',', (array) $recipient );
 			$sent      = mail( $recipient, $subject, $this->message, $header );
 		}

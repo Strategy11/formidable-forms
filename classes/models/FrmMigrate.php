@@ -173,19 +173,19 @@ class FrmMigrate {
 	 * @since 3.06
 	 */
 	private function add_default_template() {
-		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			// XML import is not enabled on your server.
 			return;
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader  = libxml_disable_entity_loader( true );
+		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
 
 		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
 		FrmXMLHelper::import_xml( $file );
 
 		libxml_use_internal_errors( $set_err );
-		libxml_disable_entity_loader( $loader );
+		FrmXMLHelper::maybe_libxml_disable_entity_loader( $loader );
 	}
 
 	/**
@@ -234,6 +234,7 @@ class FrmMigrate {
 		delete_option( 'frm-usage-uuid' );
 		delete_option( 'frm_inbox' );
 		delete_option( 'frmpro_css' );
+		delete_option( 'frm_welcome_redirect' );
 
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();
@@ -264,6 +265,7 @@ class FrmMigrate {
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
+		delete_transient( 'frm_activation_redirect' );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 

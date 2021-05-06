@@ -314,7 +314,28 @@ class FrmFormsController {
 		add_action( 'loop_no_results', 'FrmFormsController::show_page_preview' );
 		add_filter( 'is_active_sidebar', '__return_false' );
 		FrmStylesController::enqueue_css( 'enqueue', true );
-		get_template_part( 'page' );
+
+		if ( false === get_template_part( 'page' ) ) {
+			self::fallback_when_page_template_part_is_not_supported_by_theme();
+		}
+	}
+
+	/**
+	 * Not every theme supports get_template_part( 'page' ).
+	 * When this is not supported, false is returned, and we can handle a fallback.
+	 */
+	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
+		if ( have_posts() ) {
+			the_post();
+			get_header( '' );
+			// add some generic class names to the container to add some natural padding to the content.
+			// .entry-content catches the WordPress TwentyTwenty theme.
+			// .container catches Customizr content.
+			echo '<div class="container entry-content">';
+			the_content();
+			echo '</div>';
+			get_footer();
+		}
 	}
 
 	/**
@@ -1931,7 +1952,9 @@ class FrmFormsController {
 		$description = $args['description'];
 
 		if ( empty( $args['fields'] ) ) {
-			$values = array();
+			$values = array(
+				'custom_style' => FrmAppHelper::custom_style_value( array() ),
+			);
 		} else {
 			$values = FrmEntriesHelper::setup_new_vars( $args['fields'], $form, $args['reset'] );
 		}
@@ -1947,7 +1970,7 @@ class FrmFormsController {
 
 		$message_placement = self::message_placement( $form, $message );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/new.php';
 	}
 
 	/**

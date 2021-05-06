@@ -1,4 +1,48 @@
 == Changelog ==
+= 4.10.02 =
+* New: Added support for in-theme previews for more themes including Twenty Twenty and Customizr.
+
+= 4.10.01 =
+* New: Include the full email header when an email is sent using the mail function.
+* Fix: After opening the popup to add a layout class to a field, the field would no longer be selectable.
+* Fix: Prevent the url from getting too large when repeatedly bulk deleting or searching entries.
+
+= 4.10 =
+* Fix: Some fields, including signatures, were not properly detecting duplicate entries.
+* Fix: Zeros were not appearing when used as a placeholder value.
+* Fix: Prevent a warning when previewing a form with no fields.
+
+= 4.09.08 =
+* New: If you add or remove an action from a form and try to leave the page without saving, there will be a warning.
+* Fix: The style editor save button was hidden in WordPress 5.7.
+* Fix: There were a couple of words misspelled on the welcome page.
+
+= 4.09.07 =
+* Fix: Duplicated form fields would occasionally generate long field keys that were preventing fields from being created.
+* Fix: Fields for controlling radio options in the form builder were not using unique id attribute values.
+
+= 4.09.06 =
+* New: Added a new welcome screen to introduce new users to Formidable.
+* Fix: Make sure that Site Health exists when upgrading.
+* Fix: Invalid message data was occasionally appearing in the Inbox.
+* Fix: Excluded checkbox options were not properly toggling for Action Taxonomies.
+* Fix: Some pop ups were occasionally including outdated text.
+
+= 4.09.05 =
+* Fix: Autofill was flagging form submissions as spam with Honeypot in some browsers.
+* Fix: Important security update that adds better escaping when text is used from attribute data.
+
+= 4.09.04 =
+* Fix: The form builder page wasn't always loading all fields correctly when loaded with ajax.
+* New: frm_global_switch_fields and frm_maybe_switch_field_ids hooks for changing field ids in a form action when a form is duplicated.
+
+= 4.09.03 =
+* New: Added frm_run_honeypot hook to turn off honeypot. Return false to disable or 'limit' to hide from screenreader.
+* Moved honeypot back to front of form to catch more spam.
+* Fix: dropdown fields were cut off in the admin area in WordPress 5.6.
+* Fix: Update a few deprecated jQuery functions.
+* Fix: Prevent some duplicate database queries on the back end.
+
 = 4.09.02 =
 * Show a warning when leaving the form settings page with unsaved changes.
 * Make the process for using free form templates more clear.

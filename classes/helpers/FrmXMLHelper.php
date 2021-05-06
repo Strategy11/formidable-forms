@@ -1317,6 +1317,7 @@ class FrmXMLHelper {
 			'post_status',
 			'post_custom_fields',
 			'post_password',
+			'post_parent',
 		);
 
 		foreach ( $post_settings as $post_setting ) {
@@ -1337,6 +1338,7 @@ class FrmXMLHelper {
 				'post_password',
 				'post_date',
 				'post_status',
+				'post_parent',
 			);
 
 			// Fields with arrays saved.
@@ -1666,6 +1668,25 @@ class FrmXMLHelper {
 			$notifications[] = $new_notification2;
 			unset( $new_notification2 );
 		}
+	}
+
+	/**
+	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
+	 *
+	 * @param  boolean $disable
+	 *
+	 * @return boolean
+	 */
+	public static function maybe_libxml_disable_entity_loader( $loader ) {
+		if ( version_compare( phpversion(), '8.0', '<' ) && function_exists( 'libxml_disable_entity_loader' ) ) {
+			$loader = libxml_disable_entity_loader( $loader ); // phpcs:disable Generic.PHP.DeprecatedFunctions.Deprecated
+		}
+
+		return $loader;
+	}
+
+	public static function check_if_libxml_disable_entity_loader_exists() {
+		return version_compare( phpversion(), '8.0', '<' ) && ! function_exists( 'libxml_disable_entity_loader' );
 	}
 }
 

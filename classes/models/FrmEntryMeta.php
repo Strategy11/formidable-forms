@@ -8,7 +8,7 @@ class FrmEntryMeta {
 	/**
 	 * @param string $meta_key
 	 */
-	public static function add_entry_meta( $entry_id, $field_id, $meta_key = null, $meta_value ) {
+	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
@@ -47,7 +47,7 @@ class FrmEntryMeta {
 	 *
 	 * @return bool|false|int
 	 */
-	public static function update_entry_meta( $entry_id, $field_id, $meta_key = null, $meta_value ) {
+	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		if ( ! $field_id ) {
 			return false;
 		}
@@ -423,7 +423,7 @@ class FrmEntryMeta {
 		$query[] = FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 	}
 
-	public static function search_entry_metas( $search, $field_id = '', $operator ) {
+	public static function search_entry_metas( $search, $field_id, $operator ) {
 		$cache_key = 'search_' . FrmAppHelper::maybe_json_encode( $search ) . $field_id . $operator;
 		$results   = wp_cache_get( $cache_key, 'frm_entry' );
 		if ( false !== $results ) {

@@ -435,4 +435,25 @@ class test_FrmAppHelper extends FrmUnitTest {
 	private function assert_output_not_contains( $output, $substring, $message = '' ) {
 		$this->assertTrue( strpos( $output, $substring ) === false, $message );
 	}
+
+	/**
+	 * @covers FrmAppHelper::get_unique_key
+	 */
+	public function test_get_unique_key() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'frm_fields';
+		$column     = 'field_key';
+
+		$name = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
+		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertTrue( strlen( $key ) < 100, 'field key length should never be over 100' );
+
+		$name = 'key';
+		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertTrue( 'key' !== $key, 'key is a reserved key so get_unique_key should never return it.' );
+
+		$name = 123;
+		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertFalse( is_numeric( $key ), 'key should never be numeric.' );
+	}
 }

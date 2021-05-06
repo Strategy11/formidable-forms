@@ -130,6 +130,21 @@ class FrmFormAction {
 	}
 
 	/**
+	 * Help to switch old field id by new field id for duplicate form
+	 *
+	 * @param  string $action id of the field that needs to be switched
+	 *
+	 * @return string
+	 */
+	public function maybe_switch_field_ids( $action ) {
+		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
+		if ( $updated_action === $action ) {
+			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
+		}
+		return $updated_action;
+	}
+
+	/**
 	 * @since 4.0
 	 */
 	protected function get_group( $action_options ) {
@@ -270,6 +285,7 @@ class FrmFormAction {
 
 		$action->menu_order = $form_id;
 		$switch             = $this->get_global_switch_fields();
+
 		foreach ( (array) $action->post_content as $key => $val ) {
 			if ( is_numeric( $val ) && isset( $frm_duplicate_ids[ $val ] ) ) {
 				$action->post_content[ $key ] = $frm_duplicate_ids[ $val ];
@@ -313,7 +329,7 @@ class FrmFormAction {
 				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
 				} elseif ( $ck == $subkey ) {
-					$action[ $ck ] = FrmFieldsHelper::switch_field_ids( $action[ $ck ] );
+					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
 		}
@@ -666,6 +682,8 @@ class FrmFormAction {
 	public function get_global_switch_fields() {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
+
+		$switch = apply_filters( 'frm_global_switch_fields', $switch );
 
 		return $switch;
 	}

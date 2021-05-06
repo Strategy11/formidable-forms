@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.09.02';
+	public static $plug_version = '4.10.02';
 
 	/**
 	 * @since 1.07.02
@@ -1014,9 +1014,17 @@ class FrmAppHelper {
 		return ( true === $value || 1 == $value || 'true' == $value || 'yes' == $value );
 	}
 
-	public static function get_pages() {
+	/**
+	 * Gets all post from a specific post type.
+	 *
+	 * @since 4.10.01 Add `$post_type` argument.
+	 *
+	 * @param string $post_type Post type to query. Default is `page`.
+	 * @return WP_Post[]
+	 */
+	public static function get_pages( $post_type = 'page' ) {
 		$query = array(
-			'post_type'   => 'page',
+			'post_type'   => $post_type,
 			'post_status' => array( 'publish', 'private' ),
 			'numberposts' => - 1,
 			'orderby'     => 'title',
@@ -1031,11 +1039,14 @@ class FrmAppHelper {
 	 * the total page count
 	 *
 	 * @since 4.03.06
+	 * @since 4.10.01 Added `post_type` and `autocomplete_placeholder` to the arguments array.
+	 *
+	 * @param array $args Selection arguments.
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
 		$args = self::preformat_selection_args( $args );
 
-		$pages_count = wp_count_posts( 'page' );
+		$pages_count = wp_count_posts( $args['post_type'] );
 
 		if ( $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
@@ -1053,9 +1064,11 @@ class FrmAppHelper {
 
 		?>
 		<input type="text" class="frm-page-search"
-			placeholder="<?php esc_html_e( 'Select a Page', 'formidable' ); ?>"
+			data-post-type="<?php echo esc_attr( $args['post_type'] ); ?>"
+			placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
 			value="<?php echo esc_attr( $title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $args['field_name'] ); ?>"
+			class="frm_autocomplete_value_input"
 			value="<?php echo esc_attr( $selected ); ?>" />
 		<?php
 	}
@@ -1068,7 +1081,7 @@ class FrmAppHelper {
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
 
-		$pages    = self::get_pages();
+		$pages    = self::get_pages( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
 
 		?>
@@ -1105,6 +1118,7 @@ class FrmAppHelper {
 	 * Filter to format args for page dropdown or autocomplete
 	 *
 	 * @since 4.03.06
+	 * @since 4.10.01 Added `post_type` and `autocomplete_placeholder` to the arguments array.
 	 */
 	private static function preformat_selection_args( $args ) {
 		$defaults = array(
@@ -1112,6 +1126,8 @@ class FrmAppHelper {
 			'placeholder' => ' ',
 			'field_name'  => '',
 			'page_id'     => '',
+			'post_type'   => 'page',
+			'autocomplete_placeholder' => __( 'Select a Page', 'formidable' ),
 		);
 
 		return array_merge( $defaults, $args );
@@ -1546,37 +1562,24 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param string $name
 	 * @param string $table_name
 	 * @param string $column
 	 * @param int $id
 	 * @param int $num_chars
 	 */
-	public static function get_unique_key( $name = '', $table_name, $column, $id = 0, $num_chars = 5 ) {
+	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
-
-		if ( ! empty( $name ) ) {
+		if ( $name ) {
 			$key = sanitize_key( $name );
+			$key = self::maybe_clear_long_key( $key, $column );
 		}
 
-		if ( empty( $key ) ) {
-			$max_slug_value = pow( 36, $num_chars );
-			$min_slug_value = 37; // we want to have at least 2 characters in the slug
-			$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+		if ( ! $key ) {
+			$key = self::generate_new_key( $num_chars );
 		}
 
-		$not_allowed = array(
-			'id',
-			'key',
-			'created-at',
-			'detaillink',
-			'editlink',
-			'siteurl',
-			'evenodd',
-		);
-
-		if ( is_numeric( $key ) || in_array( $key, $not_allowed ) ) {
-			$key = $key . 'a';
-		}
+		$key = self::prevent_numeric_and_reserved_keys( $key );
 
 		$key_check = FrmDb::get_var(
 			$table_name,
@@ -1592,6 +1595,54 @@ class FrmAppHelper {
 			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
+		return $key;
+	}
+
+	/**
+	 * Possibly reset a key to avoid conflicts with column size limits.
+	 *
+	 * @param string $key
+	 * @param string $column
+	 * @return string either the original key value, or an empty string if the key was too long.
+	 */
+	private static function maybe_clear_long_key( $key, $column ) {
+		if ( 'field_key' === $column && strlen( $key ) >= 70 ) {
+			$key = '';
+		}
+		return $key;
+	}
+
+	/**
+	 * @param int $num_chars
+	 * @return string
+	 */
+	private static function generate_new_key( $num_chars ) {
+		$max_slug_value = pow( 36, $num_chars );
+		$min_slug_value = 37; // we want to have at least 2 characters in the slug
+		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+	}
+
+	/**
+	 * @param string $key
+	 * @return string
+	 */
+	private static function prevent_numeric_and_reserved_keys( $key ) {
+		if ( is_numeric( $key ) ) {
+			$key .= 'a';
+		} else {
+			$not_allowed = array(
+				'id',
+				'key',
+				'created-at',
+				'detaillink',
+				'editlink',
+				'siteurl',
+				'evenodd',
+			);
+			if ( in_array( $key, $not_allowed, true ) ) {
+				$key .= 'a';
+			}
+		}
 		return $key;
 	}
 
@@ -2208,7 +2259,9 @@ class FrmAppHelper {
 		// Loop through array to strip slashes and add only the needed ones.
 		foreach ( $post_content as $key => $val ) {
 			// Replace problematic characters (like &quot;)
-			$val = str_replace( '&quot;', '"', $val );
+			if ( is_string( $val ) ) {
+				$val = str_replace( '&quot;', '"', $val );
+			}
 
 			self::prepare_action_slashes( $val, $key, $post_content );
 			unset( $key, $val );

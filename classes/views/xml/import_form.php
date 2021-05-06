@@ -180,5 +180,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 		</form>
 
+		<?php do_action( 'frm_page_footer', array( 'table' => 'export' ) ); ?>
 	</div>
 </div>
