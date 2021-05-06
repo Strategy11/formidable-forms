@@ -6037,7 +6037,7 @@ function frmAdminBuildJS() {
 			triggerNewFormModal();
 
 			if ( isShowFreeTemplatesFormFirst ) {
-				firstLockedTemplate = jQuery( 'li.frm-locked-template.frm-free-template:eq(0)' );
+				firstLockedTemplate = jQuery( 'li.frm-locked-template.frm-free-template' ).eq( 0 );
 
 				if ( firstLockedTemplate.length ) {
 					showFreeTemplatesForm( firstLockedTemplate );
