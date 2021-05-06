@@ -252,20 +252,6 @@ class FrmEntryValidate {
 		return ( $honeypot_value !== '' );
 	}
 
-	private static function is_spam() {
-		$token = FrmAppHelper::get_param( 'token', '', 'get', 'sanitize_text_field' );
-		$antispam = $token->validate( $this->form_data, $this->fields, $entry );
-
-		// If spam - return early.
-		// For antispam, we want to make sure that we have a value, we are not using AMP, and the value is an error string.
-		if ( $antispam && ! wpforms_is_amp() && is_string( $antispam ) ) {
-
-			$this->errors[ $form_id ]['header'] = $antispam;
-
-			return;
-		}
-	}
-
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
 
