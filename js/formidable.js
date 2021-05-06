@@ -1100,7 +1100,7 @@ function frmFrontFormJS() {
 			var hasFileFields, antispamInput,
 				classList = object.className.trim().split( /\s+/gi );
 
-			if ( object.hasAttribute( 'data-token' ) && null === object.querySelector( '[name=antispam_token]' ) ) {
+			if ( object.hasAttribute( 'data-token' ) && null === object.querySelector( '[name="antispam_token"]' ) ) {
 				// include the antispam token on form submit.
 				antispamInput = document.createElement( 'input' );
 				antispamInput.type = 'hidden';
