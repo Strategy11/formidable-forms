@@ -1097,8 +1097,18 @@ function frmFrontFormJS() {
 		},
 
 		submitFormNow: function( object ) {
-			var hasFileFields,
+			var hasFileFields, antispamInput,
 				classList = object.className.trim().split( /\s+/gi );
+
+			if ( object.hasAttribute( 'data-token' ) && null === object.querySelector( '[name=antispam_token]' ) ) {
+				// include the antispam token on form submit.
+				antispamInput = document.createElement( 'input' );
+				antispamInput.type = 'hidden';
+				antispamInput.name = 'antispam_token';
+				antispamInput.value = object.getAttribute( 'data-token' );
+				object.appendChild( antispamInput );
+			}
+
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
 					return !! this.value;

@@ -15,7 +15,7 @@ class FrmAntiSpam {
 	 * @since xx.xx
 	 */
 	public function init() {
-		add_filter( 'frm_entry_form', array( $this, 'add_token_to_form' ), 10, 3 );
+		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
 	}
 
 	/**
@@ -145,10 +145,13 @@ class FrmAntiSpam {
 	 * @param string $form_action
 	 * @param array  $errors
 	 */
-	public function add_token_to_form( $form, $form_action, $errors ) {
-		?>
-		<input type="hidden" name="antispam_token" value="<?php echo esc_attr( $this->get() ); ?>" />
-		<?php
+	public function add_token_to_form( $attributes, $form ) {
+		$run_antispam = true;
+		if ( ! apply_filters( 'frm_run_antispam', $run_antispam ) ) {
+			return $attributes;
+		}
+		$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
+		return $attributes;
 	}
 
 	/**
