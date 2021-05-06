@@ -175,6 +175,10 @@ class FrmAntiSpam {
 
 		// If the antispam setting is enabled and we don't have a token, bail.
 		if ( ! $token ) {
+			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+				// add an exception for the entries page.
+				return true;
+			}
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 
