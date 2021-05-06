@@ -13,12 +13,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam {
 
 	/**
+	 * @var int $form_id the form id that is being validated for spam.
+	 */
+	private $form_id;
+
+	public function __construct( $form_id ) {
+		$this->form_id = $form_id;
+	}
+
+	/**
 	 * Initialise the actions for the Anti-spam.
 	 *
 	 * @since xx.xx
 	 */
 	public function init() {
-		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 2 );
+		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
 	}
 
 	/**
@@ -30,8 +39,7 @@ class FrmAntiSpam {
 	 *
 	 * @return string Token.
 	 */
-	public function get( $current = true ) {
-
+	private function get( $current = true ) {
 		// If $current was not passed, or it is true, we use the current timestamp.
 		// If $current was passed in as a string, we'll use that passed in timestamp.
 		if ( $current !== true ) {
@@ -78,8 +86,7 @@ class FrmAntiSpam {
 	 *
 	 * @return array Array of all valid tokens to check against.
 	 */
-	public function get_valid_tokens() {
-
+	private function get_valid_tokens() {
 		$current_date = time();
 
 		// Create our array of times to check before today. A user with a longer
@@ -133,8 +140,7 @@ class FrmAntiSpam {
 	 *
 	 * @return bool Whether the token is valid or not.
 	 */
-	public function verify( $token ) {
-
+	private function verify( $token ) {
 		// Check to see if our token is inside of the valid tokens.
 		return in_array( $token, $this->get_valid_tokens(), true );
 	}
@@ -148,13 +154,18 @@ class FrmAntiSpam {
 	 * @param string $form_action
 	 * @param array  $errors
 	 */
-	public function add_token_to_form( $attributes, $form ) {
-		$run_antispam = true;
-		if ( ! apply_filters( 'frm_run_antispam', $run_antispam ) ) {
-			return $attributes;
+	public function add_token_to_form( $attributes ) {
+		if ( $this->run_antispam() ) {
+			$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
 		}
-		$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
 		return $attributes;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function run_antispam() {
+		return apply_filters( 'frm_run_antispam', true, $this->form_id );
 	}
 
 	/**
@@ -165,9 +176,7 @@ class FrmAntiSpam {
 	 * @return bool|string True or a string with the error.
 	 */
 	public function validate() {
-
-		$run_antispam = true;
-		if ( ! apply_filters( 'frm_run_antispam', $run_antispam ) ) {
+		if ( ! $this->run_antispam() ) {
 			return;
 		}
 
@@ -233,7 +242,6 @@ class FrmAntiSpam {
 	 * @return string Support text if super admin, empty string if not.
 	 */
 	private function maybe_get_support_text() {
-
 		// If user isn't a super admin, don't return any text.
 		if ( ! is_super_admin() ) {
 			return '';

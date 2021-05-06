@@ -229,7 +229,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		$antispam_check = self::is_antispam_check();
+		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} if ( self::is_honeypot_spam() || self::is_spam_bot() ) {
@@ -241,8 +241,11 @@ class FrmEntryValidate {
 		}
 	}
 
-	private static function is_antispam_check() {
-		$aspm = new FrmAntiSpam();
+	/**
+	 * @param int $form_id
+	 */
+	private static function is_antispam_check( $form_id ) {
+		$aspm = new FrmAntiSpam( $form_id );
 		return $aspm->validate();
 	}
 

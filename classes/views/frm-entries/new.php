@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$aspm = new FrmAntiSpam();
+$aspm = new FrmAntiSpam( $form->id );
 $aspm->init();
 ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $values ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container" <?php echo wp_strip_all_tags( apply_filters( 'frm_form_div_attributes', '', $form ) ); // WPCS: XSS ok. ?>>
