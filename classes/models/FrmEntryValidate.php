@@ -229,19 +229,21 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( self::is_honeypot_spam() || self::is_spam_bot() ) {
+		$antispam_check = self::is_antispam_check();
+		if ( is_string( $antispam_check ) ) {
+			$errors['spam'] = $antispam_check;
+		} if ( self::is_honeypot_spam() || self::is_spam_bot() ) {
+			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		} elseif ( self::blacklist_check( $values ) ) {
+			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
+		} elseif ( self::is_akismet_spam( $values ) && self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
+	}
 
-		if ( self::blacklist_check( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		}
-
-		if ( self::is_akismet_spam( $values ) ) {
-			if ( self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
-				$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-			}
-		}
+	private static function is_antispam_check() {
+		$aspm = new FrmAntiSpam();
+		return $aspm->validate();
 	}
 
 	private static function is_honeypot_spam() {

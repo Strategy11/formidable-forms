@@ -70,6 +70,9 @@ if ( FrmAppHelper::is_admin() ) {
 	}
 }
 
+$aspm = new FrmAntiSpam();
+$aspm->init();
+
 do_action( 'frm_entry_form', $form, $form_action, $errors );
 
 global $frm_vars;

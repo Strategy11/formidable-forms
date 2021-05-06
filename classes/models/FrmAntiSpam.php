@@ -1,28 +1,27 @@
 <?php
 
 /**
- * Class Token.
+ * Class FrmAntiSpam.
  *
  * This token class generates tokens that are used in our Anti-Spam checking.
  *
- * @since 4.09.03
+ * @since xx.xx
  */
 class FrmAntiSpam {
 
 	/**
 	 * Initialise the actions for the Anti-spam.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 */
 	public function init() {
-
-		add_filter( 'wpforms_frontend_form_atts', [ $this, 'add_token_to_form_atts' ] );
+		add_filter( 'frm_entry_form', array( $this, 'add_token_to_form' ), 10, 3 );
 	}
 
 	/**
 	 * Return a valid token.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @param mixed $current True to use current time, otherwise a timestamp string.
 	 *
@@ -44,9 +43,24 @@ class FrmAntiSpam {
 		$token_date = gmdate( 'dmYzW', $time );
 
 		// Combine our token date and our token salt, and md5 it.
-		$form_token_string = md5( $token_date . \WPForms\Helpers\Crypto::get_secret_key() );
+		$form_token_string = md5( $token_date . $this->get_antispam_secret_key() );
 
 		return $form_token_string;
+	}
+
+	private function get_antispam_secret_key() {
+		$secret_key = get_option( 'frm_antispam_secret_key' );
+
+		// If we already have the secret, send it back.
+		if ( false !== $secret_key ) {
+			return base64_decode( $secret_key ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+		}
+
+		// We don't have a secret, so let's generate one.
+		$secret_key = sodium_crypto_secretbox_keygen();
+		add_option( 'frm_antispam_secret_key', base64_encode( $secret_key ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+
+		return $secret_key;
 	}
 
 	/**
@@ -54,10 +68,10 @@ class FrmAntiSpam {
 	 * before the current date to account for long cache times.
 	 *
 	 * These two filters are available if a user wants to extend the times.
-	 * 'wpforms_form_token_check_before_today'
-	 * 'wpforms_form_token_check_after_today'
+	 * 'frm_form_token_check_before_today'
+	 * 'frm_form_token_check_after_today'
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @return array Array of all valid tokens to check against.
 	 */
@@ -68,24 +82,24 @@ class FrmAntiSpam {
 		// Create our array of times to check before today. A user with a longer
 		// cache time can extend this. A user with a shorter cache time can remove times.
 		$valid_token_times_before = apply_filters(
-			'wpforms_form_token_check_before_today',
-			[
+			'frm_form_token_check_before_today',
+			array(
 				( 2 * DAY_IN_SECONDS ), // Two days ago.
 				( 1 * DAY_IN_SECONDS ), // One day ago.
-			]
+			)
 		);
 
 		// Mostly to catch edge cases like the form page loading and submitting on two different days.
 		// This probably won't be filtered by users too much, but they could extend it.
 		$valid_token_times_after = apply_filters(
-			'wpforms_form_token_check_after_today',
-			[
+			'frm_form_token_check_after_today',
+			array(
 				( 45 * MINUTE_IN_SECONDS ), // Add in 45 minutes past today to catch some midnight edge cases.
-			]
+			)
 		);
 
 		// Built up our valid tokens.
-		$valid_tokens = [];
+		$valid_tokens = array();
 
 		// Add in all the previous times we check.
 		foreach ( $valid_token_times_before as $time ) {
@@ -106,11 +120,11 @@ class FrmAntiSpam {
 	/**
 	 * Check if the given token is valid or not.
 	 *
-	 * Tokens are valid for some period of time (see wpforms_token_validity_in_hours
-	 * and wpforms_token_validity_in_days to extend the validation period).
+	 * Tokens are valid for some period of time (see frm_token_validity_in_hours
+	 * and frm_token_validity_in_days to extend the validation period).
 	 * By default tokens are valid for day.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @param string $token Token to validate.
 	 *
@@ -123,87 +137,66 @@ class FrmAntiSpam {
 	}
 
 	/**
-	 * Add the token to the form attributes.
+	 * Add the token field to the form.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
-	 * @param array $attrs Form attributes.
-	 *
-	 * @return array Form attributes.
+	 * @param object $form
+	 * @param string $form_action
+	 * @param array  $errors
 	 */
-	public function add_token_to_form_atts( array $attrs ) {
-
-		$attrs['atts']['data-token'] = $this->get();
-
-		return $attrs;
+	public function add_token_to_form( $form, $form_action, $errors ) {
+		?>
+		<input type="hidden" name="antispam_token" value="<?php echo esc_attr( $this->get() ); ?>" />
+		<?php
 	}
 
 	/**
 	 * Validate Anti-spam if enabled.
 	 *
-	 * @since 4.09.03
-	 *
-	 * @param array $form_data Form data.
-	 * @param array $fields    Fields.
-	 * @param array $entry     Form entry.
+	 * @since xx.xx
 	 *
 	 * @return bool|string True or a string with the error.
 	 */
-	public function validate( array $form_data, array $fields, array $entry ) {
+	public function validate() {
 
-		// Bail out if we don't have the antispam setting.
-		if ( empty( $form_data['settings']['antispam'] ) ) {
-			return true;
+		$run_antispam = true;
+		if ( ! apply_filters( 'frm_run_antispam', $run_antispam ) ) {
+			return;
 		}
+
+		$token = FrmAppHelper::get_param( 'antispam_token', '', 'post', 'sanitize_text_field' );
 
 		// If the antispam setting is enabled and we don't have a token, bail.
-		if ( ! isset( $entry['token'] ) ) {
-			return $this->process_antispam_filter( $this->get_missing_token_message(), compact( 'fields' ) );
+		if ( ! $token ) {
+			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 
 		// Verify the token.
-		if ( ! $this->verify( $entry['token'] ) ) {
-			return $this->process_antispam_filter( $this->get_invalid_token_message(), compact( 'fields' ) );
+		if ( ! $this->verify( $token ) ) {
+			return $this->process_antispam_filter( $this->get_invalid_token_message() );
 		}
 
-		return $this->process_antispam_filter( true, compact( 'fields' ) );
-	}
-
-	/**
-	 * @return bool|string
-	 */
-	private function is_valid() {
-		$token = FrmAppHelper::get_param( 'token', '', 'get', 'sanitize_text_field' );
-		if ( ! isset( $entry['token'] ) ) {
-			return $this->process_antispam_filter( $this->get_missing_token_message(), compact( 'fields' ) );
-		}
-
-		// Verify the token.
-		if ( ! $this->verify( $entry['token'] ) ) {
-			return $this->process_antispam_filter( $this->get_invalid_token_message(), compact( 'fields' ) );
-		}
-
-		return $this->process_antispam_filter( true, compact( 'fields' ) );
+		return $this->process_antispam_filter( true );
 	}
 
 	/**
 	 * Helper to run our filter on all the responses for the antispam checks.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @param bool|string $is_valid Is valid entry or not.
-	 * @param array       $vars     Includes fields.
 	 *
 	 * @return bool|string Is valid or message.
 	 */
-	private function process_antispam_filter( $is_valid, $vars ) {
-		return apply_filters( 'frm_process_antispam', $is_valid, $vars );
+	private function process_antispam_filter( $is_valid ) {
+		return apply_filters( 'frm_process_antispam', $is_valid );
 	}
 
 	/**
 	 * Helper to get the missing token message.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @return string missing token message.
 	 */
@@ -214,7 +207,7 @@ class FrmAntiSpam {
 	/**
 	 * Helper to get the invalid token message.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @return string Invalid token message.
 	 */
@@ -225,7 +218,7 @@ class FrmAntiSpam {
 	/**
 	 * If a user is a super admin, add a support link to the message.
 	 *
-	 * @since 4.09.03
+	 * @since xx.xx
 	 *
 	 * @return string Support text if super admin, empty string if not.
 	 */
@@ -241,7 +234,7 @@ class FrmAntiSpam {
 		// text to avoid it being removed.
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.
-			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'wpforms-lite' ),
+			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'formidable' ),
 			'<a href="https://formidableforms.com/knowledgebase/">',
 			'</a>'
 		);
