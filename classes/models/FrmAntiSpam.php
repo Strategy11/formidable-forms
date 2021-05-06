@@ -188,6 +188,11 @@ class FrmAntiSpam {
 				// add an exception for the entries page.
 				return true;
 			}
+			if ( $this->is_saving_a_draft() ) {
+				// add an exception for saving a draft.
+				// since drafts are only for logged in users and a spam check was made to create the entry, we can trust the entry.
+				return true;
+			}
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 
@@ -197,6 +202,22 @@ class FrmAntiSpam {
 		}
 
 		return $this->process_antispam_filter( true );
+	}
+
+	/**
+	 * @return bool True if saving a draft.
+	 */
+	private function is_saving_a_draft() {
+		global $frm_vars;
+		if ( empty( $frm_vars['form_params'] ) ) {
+			return false;
+		}
+		$form_params = $frm_vars['form_params'];
+		if ( ! isset( $form_params[ $this->form_id ] ) ) {
+			return false;
+		}
+		$this_form_params = $form_params[ $this->form_id ];
+		return ! empty( $this_form_params['action'] ) && 'update' === $this_form_params['action'];
 	}
 
 	/**
