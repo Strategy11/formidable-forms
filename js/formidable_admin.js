@@ -5808,7 +5808,7 @@ function frmAdminBuildJS() {
 		});
 
 		showFreeTemplatesForm = function( $el ) {
-			formContainer = document.getElementById( 'frmapi-email-form' );
+			var formContainer = document.getElementById( 'frmapi-email-form' );
 			jQuery.ajax({
 				dataType: 'json',
 				url: formContainer.getAttribute( 'data-url' ),
