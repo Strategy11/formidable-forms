@@ -150,9 +150,9 @@ class FrmAntiSpam {
 	 *
 	 * @since xx.xx
 	 *
-	 * @param object $form
-	 * @param string $form_action
-	 * @param array  $errors
+	 * @param string $attributes
+	 *
+	 * @return string
 	 */
 	public function add_token_to_form( $attributes ) {
 		if ( $this->run_antispam() ) {
