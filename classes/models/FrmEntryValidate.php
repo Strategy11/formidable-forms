@@ -243,24 +243,35 @@ class FrmEntryValidate {
 
 	/**
 	 * @param int $form_id
+	 * @return boolean
 	 */
 	private static function is_antispam_check( $form_id ) {
 		$aspm = new FrmAntiSpam( $form_id );
 		return $aspm->validate();
 	}
 
+	/**
+	 * @return boolean
+	 */
 	private static function is_honeypot_spam() {
 		$honeypot_value = FrmAppHelper::get_param( 'frm_verify', '', 'get', 'sanitize_text_field' );
 
 		return ( $honeypot_value !== '' );
 	}
 
+	/**
+	 * @return boolean
+	 */
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
 
 		return empty( $ip );
 	}
 
+	/**
+	 * @param array $values
+	 * @return boolean
+	 */
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
 
