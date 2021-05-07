@@ -5677,7 +5677,16 @@ function frmAdminBuildJS() {
 			handleError,
 			handleEmailAddressError,
 			handleConfirmEmailAddressError,
+			showFreeTemplatesForm,
+			firstLockedTemplate,
+			isShowFreeTemplatesFormFirst,
+			url,
 			urlParams;
+
+		url       = new URL( window.location.href );
+		urlParams = url.searchParams;
+
+		isShowFreeTemplatesFormFirst = urlParams.get( 'free-templates' );
 
 		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
 		$modal = initModal( '#frm_new_form_modal', '600px' );
@@ -5803,32 +5812,38 @@ function frmAdminBuildJS() {
 			setTemplateCount( $li.closest( '.accordion-section' ).get( 0 ) );
 		});
 
+		showFreeTemplatesForm = function( $el ) {
+			var formContainer = document.getElementById( 'frmapi-email-form' );
+			jQuery.ajax({
+				dataType: 'json',
+				url: formContainer.getAttribute( 'data-url' ),
+				success: function( json ) {
+					var form = json.renderedHtml;
+					form = form.replace( /<script\b[^<]*(community.formidableforms.com\/wp-includes\/js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
+					form = form.replace( /<link\b[^>]*(formidableforms.css)[^>]*>/gi, '' );
+					formContainer.innerHTML = form;
+				}
+			});
+
+			$modal.attr( 'frm-page', 'email' );
+			$modal.attr( 'frm-this-form', $el.attr( 'data-key' ) );
+			$el.append( installFormTrigger );
+		};
+
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
 			var $li,
-				activePage,
-				formContainer;
+				activePage;
 
 			event.preventDefault();
 
 			$li = jQuery( this ).closest( '.frm-locked-template' );
 
 			if ( $li.hasClass( 'frm-free-template' ) ) {
-				formContainer = document.getElementById( 'frmapi-email-form' );
-				jQuery.ajax({
-					dataType: 'json',
-					url: formContainer.getAttribute( 'data-url' ),
-					success: function( json ) {
-						var form = json.renderedHtml;
-						form = form.replace( /<script\b[^<]*(community.formidableforms.com\/wp-includes\/js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
-						form = form.replace( /<link\b[^>]*(formidableforms.css)[^>]*>/gi, '' );
-						formContainer.innerHTML = form;
-					}
-				});
+				showFreeTemplatesForm( $li );
+				return;
+			}
 
-				activePage = 'email';
-				$modal.attr( 'frm-this-form', $li.attr( 'data-key' ) );
-				$li.append( installFormTrigger );
-			} else if ( $modal.hasClass( 'frm-expired' ) ) {
+			if ( $modal.hasClass( 'frm-expired' ) ) {
 				activePage = 'renew';
 			} else {
 				activePage = 'upgrade';
@@ -5934,6 +5949,15 @@ function frmAdminBuildJS() {
 				},
 				success: function( response ) {
 					if ( response.success ) {
+						if ( isShowFreeTemplatesFormFirst ) {
+							// Remove free-templates param from URL then reload page.
+							urlParams.delete( 'free-templates' );
+							url.search = urlParams.toString();
+							window.location.href = url.toString();
+
+							return;
+						}
+
 						if ( typeof response.data !== 'undefined' && typeof response.data.url !== 'undefined' ) {
 							installFormTrigger.setAttribute( 'rel', response.data.url );
 							installFormTrigger.click();
@@ -6014,9 +6038,16 @@ function frmAdminBuildJS() {
 			}
 		});
 
-		urlParams = new URLSearchParams( window.location.search );
 		if ( urlParams.get( 'triggerNewFormModal' ) ) {
 			triggerNewFormModal();
+
+			if ( isShowFreeTemplatesFormFirst ) {
+				firstLockedTemplate = jQuery( 'li.frm-locked-template.frm-free-template' ).eq( 0 );
+
+				if ( firstLockedTemplate.length ) {
+					showFreeTemplatesForm( firstLockedTemplate );
+				}
+			}
 		}
 	}
 
@@ -7068,6 +7099,10 @@ function frmAdminBuildJS() {
 				var message = this.parentNode.parentNode,
 					key = message.getAttribute( 'data-message' ),
 					href = this.getAttribute( 'href' );
+
+				if ( 'free_templates' === key && ! this.classList.contains( 'frm_inbox_dismiss' ) ) {
+					return;
+				}
 
 				e.preventDefault();
 
