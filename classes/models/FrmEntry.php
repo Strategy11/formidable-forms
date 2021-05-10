@@ -131,6 +131,7 @@ class FrmEntry {
 		foreach ( $filter_vals as $field_id => $value ) {
 			$field                = FrmFieldFactory::get_field_object( $field_id );
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
+			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
 			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
 				unset( $reduced[ $field_id ] );
 			}
