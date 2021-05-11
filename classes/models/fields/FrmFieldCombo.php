@@ -402,9 +402,10 @@ class FrmFieldCombo extends FrmFieldType {
 		$headings   = array();
 		$field_id   = isset( $this->field->id ) ? $this->field->id : $this->field['id'];
 		$field_name = isset( $this->field->name ) ? $this->field->name : $this->field['name'];
+		$field_key  = isset( $this->field->field_key ) ? $this->field->field_key : $this->field['field_key'];
 		$sub_fields = $this->get_processed_sub_fields();
 		foreach ( $sub_fields as $name => $sub_field ) {
-			$headings[ $field_id . '_' . $name ] = $field_name . ' - ' . $sub_field['label'];
+			$headings[ $field_id . '_' . $name ] = $field_name . ' (' . $field_key . ') - ' . $sub_field['label'];
 		}
 
 		return $headings;

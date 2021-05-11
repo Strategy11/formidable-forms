@@ -39,7 +39,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_processed_sub_fields() {
-		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
+		$name_layout = $this->get_name_layout();
 		$names       = explode( '_', $name_layout );
 		$col_class   = 'frm' . intval( 12 / count( $names ) );
 
@@ -62,6 +62,19 @@ class FrmFieldName extends FrmFieldCombo {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Gets name layout option value.
+	 *
+	 * @return string
+	 */
+	protected function get_name_layout() {
+		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
+		if ( ! $name_layout ) {
+			$name_layout = 'first_last';
+		}
+		return $name_layout;
 	}
 
 	/**
@@ -104,7 +117,7 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value;
 		}
 
-		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
+		$name_layout = $this->get_name_layout();
 
 		if ( ! empty( $atts['show'] ) ) {
 			return isset( $value[ $atts['show'] ] ) ? $value[ $atts['show'] ] : '';
