@@ -306,17 +306,18 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			)
 		);
 
-		$field_id   = FrmField::get_option( $field, 'id' );
-		$field_name = FrmField::get_option( $field, 'name' );
+		$field_id   = $field['id'];
+		$field_name = $field['name'];
+		$field_key  = $field['field_key'];
 
 		$this->set_private_property( $combo_field, 'field', $field );
 
 		$this->assertEquals(
 			array(
-				$field_id . '_first_child'  => $field_name . ' - First child',
-				$field_id . '_second_child' => $field_name . ' - Second child',
-				$field_id . '_third_child'  => $field_name . ' - Third child',
-				$field_id . '_forth_child'  => $field_name . ' - Forth child',
+				$field_id . '_first_child'  => $field_name . ' (' . $field_key . ') - First child',
+				$field_id . '_second_child' => $field_name . ' (' . $field_key . ') - Second child',
+				$field_id . '_third_child'  => $field_name . ' (' . $field_key . ') - Third child',
+				$field_id . '_forth_child'  => $field_name . ' (' . $field_key . ') - Forth child',
 			),
 			$combo_field->get_export_headings()
 		);
