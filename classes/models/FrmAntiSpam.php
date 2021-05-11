@@ -274,7 +274,7 @@ class FrmAntiSpam {
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.
 			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'formidable' ),
-			'<a href="https://formidableforms.com/knowledgebase/">',
+			'<a href="https://formidableforms.com/knowledgebase/add-spam-protection/">',
 			'</a>'
 		);
 	}

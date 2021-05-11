@@ -232,7 +232,7 @@ class FrmEntryValidate {
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
-		} if ( self::is_honeypot_spam() || self::is_spam_bot() ) {
+		} elseif ( self::is_honeypot_spam() || self::is_spam_bot() ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		} elseif ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
