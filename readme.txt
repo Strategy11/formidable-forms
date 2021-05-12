@@ -472,8 +472,4 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Excluded checkbox options were not properly toggling for Action Taxonomies.
 * Fix: Some pop ups were occasionally including outdated text.
 
-= 4.09.05 =
-* Fix: Autofill was flagging submissions as spam with Honeypot in some browsers.
-* Fix: Important security update that adds better escaping when text is used from attribute data.
-
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
