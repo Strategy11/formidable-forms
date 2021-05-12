@@ -89,7 +89,7 @@ if ( ! function_exists( 'load_frm_autoresponder' ) ) {
 	}
 	?>
 	<h3>
-		<a href="javascript:void(0)" class="frm_show_upgrade<?php echo esc_attr( $class ); ?>" data-upgrade="<?php esc_attr_e( 'Form action automations', 'formidable' ); ?>" data-medium="action-automation" data-oneclick="<?php echo esc_attr( $install_data ); ?>">
+		<a href="javascript:void(0)" class="frm_show_upgrade<?php echo esc_attr( $class ); ?>" data-upgrade="<?php esc_attr_e( 'Form action automations', 'formidable' ); ?>" data-requires="Elite" data-medium="action-automation" data-oneclick="<?php echo esc_attr( $install_data ); ?>">
 			<?php esc_html_e( 'Setup Automation', 'formidable' ); ?>
 		</a>
 	</h3>
