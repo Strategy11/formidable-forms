@@ -7066,6 +7066,7 @@ function frmAdminBuildJS() {
 
 			// Show loading indicator.
 			jQuery( '#publish' ).on( 'mousedown', function() {
+				fieldsUpdated = 0;
 				this.classList.add( 'frm_loading_button' );
 			});
 
