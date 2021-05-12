@@ -104,7 +104,7 @@ class FrmInboxController {
 	/**
 	 * Adds free template design.
 	 *
-	 * @since 4.10.02
+	 * @since 4.10.03
 	 */
 	private static function add_free_template_message() {
 		if ( FrmAppHelper::pro_is_installed() ) {
