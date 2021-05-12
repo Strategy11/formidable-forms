@@ -58,8 +58,8 @@ zip -r $zipname $destination \
 	-x "*/vendor/*" \
 	-x "formidable-pro/views/*" \
 	-x "formidable-views/js/dom.js" \
-    -x "formidable-views/js/editor.js" \
-    -x "formidable-views/js/index.js" \
+	-x "formidable-views/js/editor.js" \
+	-x "formidable-views/js/index.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
 
