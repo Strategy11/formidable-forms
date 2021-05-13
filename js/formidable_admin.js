@@ -3555,9 +3555,8 @@ function frmAdminBuildJS() {
 		classes = 0 === classes.indexOf( 'frmend ' ) ? '' : classes.split( ' frmend ' )[0];
 
 		if ( classes.trim() === '' ) {
-			if ( -1 !== field.className.indexOf( ' frmstart  frmend ' ) ) {
-				replace = ' frmstart  frmend ';
-			} else {
+			replace = ' frmstart  frmend ';
+			if ( -1 === field.className.indexOf( replace ) ) {
 				replace = ' frmstart frmend ';
 			}
 			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
