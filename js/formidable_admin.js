@@ -3556,11 +3556,15 @@ function frmAdminBuildJS() {
 
 		if ( classes.trim() === '' ) {
 			replace = ' frmstart  frmend ';
+			if ( -1 === field.className.indexOf( replace ) ) {
+				replace = ' frmstart frmend ';
+			}
 			replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
 		} else {
 			replace = classes.trim();
 			replaceWith = replaceWith.trim();
 		}
+
 		field.className = field.className.replace( replace, replaceWith );
 	}
 
