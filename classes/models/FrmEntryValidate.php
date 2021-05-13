@@ -229,7 +229,8 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( self::is_honeypot_spam( $values['form_id'] ) || self::is_spam_bot() ) {
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		if ( ! $honeypot->validate() || self::is_spam_bot() ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 
@@ -244,26 +245,6 @@ class FrmEntryValidate {
 		}
 	}
 
-	/**
-	 * @param int $form_id
-	 * @return boolean
-	 */
-	private static function is_honeypot_spam( $form_id ) {
-		$form     = FrmForm::getOne( $form_id );
-		$atts     = compact( 'form' );
-		$honeypot = apply_filters( 'frm_run_honeypot', true, $atts );
-
-		if ( ! $honeypot ) {
-			// never flag as honeypot spam if disabled.
-			return false;
-		}
-
-		$honeypot_value   = FrmAppHelper::get_param( 'frm_verify', '', 'get', 'sanitize_text_field' );
-		$is_honeypot_spam = $honeypot_value !== '';
-
-		return apply_filters( 'frm_process_honeypot', $is_honeypot_spam, $atts );
-	}
-
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
 
@@ -276,10 +257,14 @@ class FrmEntryValidate {
 		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
 	}
 
+	/**
+	 * @param int $form_id
+	 * @return bool
+	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		return ( isset( $form->options['akismet'] ) && ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] != 'logged' || ! is_user_logged_in() ) );
+		return ( isset( $form->options['akismet'] ) && ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
 	public static function blacklist_check( $values ) {

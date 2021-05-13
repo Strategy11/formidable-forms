@@ -215,6 +215,7 @@ class FrmUsage {
 		$settings    = array(
 			'form_class',
 			'akismet',
+			'honeypot',
 			'custom_style',
 			'success_action',
 			'show_form',

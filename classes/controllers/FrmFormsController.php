@@ -1116,7 +1116,17 @@ class FrmFormsController {
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php';
+	}
+
+	private static function maybe_render_akismet_settings( $values ) {
+		if ( function_exists( 'akismet_http_post' ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
+		}
+	}
+
+	private static function maybe_render_honeypot_settings( $values ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
 	}
 
 	/**
