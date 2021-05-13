@@ -6729,6 +6729,83 @@ function frmAdminBuildJS() {
 		};
 	}
 
+	function handleSurveysRadioField() {
+		const hideElement = element => element.classList.add( 'frm_hidden' );
+		const showElement = element => {
+			element.classList.remove( 'frm_hidden' );
+			if ( 'none' === element.style.display ) {
+				element.style.display = 'block';
+			}
+		};
+
+		const onChangeDisplayFormat = event => {
+			const displayFormat = event.target.value;
+			const fieldId       = event.target.getAttribute( 'data-fid' );
+
+			const useImagesInButtonsEl = document.getElementById( 'frm_use_images_in_buttons_' + fieldId + '_container' );
+			const hideOptionTextEl     = document.getElementById( 'frm_hide_option_text_' + fieldId + '_container' );
+			const imageSizeEl          = document.getElementById( 'frm_image_size_' + fieldId + '_container' );
+
+			console.log( useImagesInButtonsEl, hideOptionTextEl, imageSizeEl );
+
+			if ( '1' === displayFormat ) {
+				// Use images.
+				hideElement( useImagesInButtonsEl );
+				showElement( hideOptionTextEl );
+				showElement( imageSizeEl );
+			} else if ( 'buttons' === displayFormat ) {
+				// Use buttons.
+				showElement( useImagesInButtonsEl );
+				showElement( hideOptionTextEl );
+
+				if ( document.getElementById( 'frm_use_images_in_buttons_' + fieldId ).checked ) {
+					showElement( imageSizeEl );
+				} else {
+					hideElement( imageSizeEl );
+				}
+			} else {
+				hideElement( useImagesInButtonsEl );
+				hideElement( hideOptionTextEl );
+				hideElement( imageSizeEl );
+			}
+		};
+
+		const onChangeUseImagesInOptions = event => {
+			if ( event.target.closest( '.frm_form_field' ).classList.contains( 'frm_hidden' ) ) {
+				return; // Do not handle if this field is hidden.
+			}
+			const fieldId = event.target.getAttribute( 'data-fid' );
+
+			const imageSizeEl = document.getElementById( 'frm_image_size_' + fieldId + '_container' );
+
+			if ( event.target.checked ) {
+				showElement( imageSizeEl );
+			} else {
+				hideElement( imageSizeEl );
+			}
+		};
+
+		const onChangeHideOptionText = event => {
+
+		};
+
+		document.addEventListener( 'change', event => {
+			if ( event.target.matches( '.frm_radio_display_format' ) ) {
+				onChangeDisplayFormat( event );
+				return;
+			}
+
+			if ( event.target.matches( '.frm_use_images_in_button' ) ) {
+				onChangeUseImagesInOptions( event );
+				return;
+			}
+
+			if ( event.target.matches( '.frm_hide_option_text' ) ) {
+				onChangeHideOptionText( event );
+			}
+		}, false );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -6974,6 +7051,8 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
+
+			handleSurveysRadioField();
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
