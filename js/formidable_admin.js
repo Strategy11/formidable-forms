@@ -2159,11 +2159,14 @@ function frmAdminBuildJS() {
 		wp.media.model.settings.post.id = postID;
 
 		fileFrame = wp.media.frames.file_frame = wp.media({
-			multiple: false
+			multiple: false,
+			library: {
+				type: [ 'image' ]
+			}
 		});
 
 		fileFrame.on( 'select', function() {
-			attachment = fileFrame.state().get( 'selection' ).first().toJSON();
+			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
 			$imagePreview.find( 'img' ).attr( 'src', attachment.url );
 			$imagePreview.find( '.frm_image_preview_frame' ).show();
 			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
