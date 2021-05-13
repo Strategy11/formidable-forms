@@ -4784,11 +4784,39 @@ function frmAdminBuildJS() {
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
 
 			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+
 			var s = e + variable.length;
+
+			console.log({ s });
+			if ( obj.classList.contains( 'frm_classes' ) && isALayoutClass( variable ) ) {
+				var removeClasses = obj.value.split( ' ' ).filter( isALayoutClass );
+				if ( removeClasses.length ) {
+					obj.value = maybeRemoveClasses( obj.value, removeClasses, variable.trim() );
+					// TODO what about "s"?
+				}
+			}
+
 			obj.focus();
 			obj.setSelectionRange( s, s );
 		}
 		triggerChange( contentBox );
+	}
+
+	function isALayoutClass( className ) {
+		var layoutClasses = [ 'frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm10', 'frm12' ];
+		return -1 !== layoutClasses.indexOf( className.trim() );
+	}
+
+	function maybeRemoveClasses( beforeValue, removeClasses, variable ) {
+		var currentClasses = beforeValue.split( ' ' ).filter(
+			currentClass => {
+				return currentClass.length && -1 === removeClasses.indexOf( currentClass );
+			}
+		);
+		if ( -1 === currentClasses.indexOf( variable ) ) {
+			currentClasses.push( variable );
+		}
+		return currentClasses.join( ' ' );
 	}
 
 	function maybeFormatInsertedContent( input, textToInsert, selectionStart, selectionEnd ) {
