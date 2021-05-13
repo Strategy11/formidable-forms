@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<ul id="frm-show-fields" class="frm_sorting inside">
+	<ul id="frm-show-fields" class="frm_sorting inside frm_grid_container">
 		<?php
 		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
 			$values['count'] = 0;
