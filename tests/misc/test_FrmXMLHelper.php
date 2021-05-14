@@ -17,6 +17,10 @@ class test_FrmXMLHelper extends FrmUnitTest {
 			'y' => 'Y',
 			'z' => 'Z',
 			'b' => 'B',
+			'arr2' => array(
+				'x' => 'X',
+				'z' => 'Z',
+			),
 		);
 
 		$saved = array(
