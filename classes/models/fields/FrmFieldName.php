@@ -156,6 +156,21 @@ class FrmFieldName extends FrmFieldCombo {
 	}
 
 	/**
+	 * Validate field.
+	 *
+	 * @param array $args Arguments. Includes `errors`, `value`.
+	 * @return array Errors array.
+	 */
+	public function validate( $args ) {
+		/**
+		 * If users fill just HTML tag, it passes the validation but value is empty in the database because of the
+		 * sanitization. So we need to sanitize the value before validating.
+		 */
+		$this->sanitize_value( $args['value'] );
+		return parent::validate( $args );
+	}
+
+	/**
 	 * Loads processed args for field output.
 	 *
 	 * @param array $args {
