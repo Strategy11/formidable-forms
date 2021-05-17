@@ -229,8 +229,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		$honeypot = new FrmHoneypot( $values['form_id'] );
-		if ( ! $honeypot->validate() || self::is_spam_bot() ) {
+		if ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 
@@ -255,6 +254,11 @@ class FrmEntryValidate {
 		global $wpcom_api_key;
 
 		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
+	}
+
+	private static function is_honeypot_spam( $values ) {
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		return ! $honeypot->validate();
 	}
 
 	/**
