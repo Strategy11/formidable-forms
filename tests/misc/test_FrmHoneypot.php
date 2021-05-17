@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @group mike
- */
 class test_FrmHoneypot extends FrmUnitTest {
 
 	private $form_id;
