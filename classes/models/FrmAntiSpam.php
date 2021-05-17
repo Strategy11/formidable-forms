@@ -137,6 +137,14 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
+	 * @return bool
+	 */
+	private function antispam_option_is_on() {
+		$form = $this->get_form();
+		return ! empty( $form->options['antispam'] );
+	}
+
+	/**
 	 * Add the token field to the form.
 	 *
 	 * @since xx.xx
@@ -167,7 +175,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return bool|string True or a string with the error.
 	 */
 	public function validate() {
-		if ( ! $this->run_antispam() ) {
+		if ( ! $this->run_antispam() || ! $this->antispam_option_is_on() ) {
 			return;
 		}
 

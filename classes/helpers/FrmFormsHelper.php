@@ -366,6 +366,7 @@ class FrmFormsHelper {
 			'show_form'      => 0,
 			'akismet'        => '',
 			'honeypot'       => 1,
+			'antispam'       => 0,
 			'no_save'        => 0,
 			'ajax_load'      => 0,
 			'js_validate'    => 0,

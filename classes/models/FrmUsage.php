@@ -216,6 +216,7 @@ class FrmUsage {
 			'form_class',
 			'akismet',
 			'honeypot',
+			'antispam',
 			'custom_style',
 			'success_action',
 			'show_form',
