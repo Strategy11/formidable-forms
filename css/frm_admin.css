@@ -3093,7 +3093,8 @@ input[type="checkbox"] {
 }
 
 #new_fields .frm_primary_label + p,
-#new_fields .frm_primary_label + .frm6 + .frm6 {
+#new_fields .frm_primary_label + .frm6 + .frm6,
+#new_fields .frm_primary_label + .frm6 + .frm-inline-modal + .frm6 {
 	margin-top: 0;
 }
 
@@ -6791,6 +6792,13 @@ input[disabled],
 	padding-right: 15px;
 	text-align: left;
 	font-size: 18px;
+}
+
+/* Icon for Name field is larger */
+.field_type_list li.frm_tname.frmbutton .frmsvg {
+	width: 24px;
+	height: 24px;
+	padding-right: 11px;
 }
 
 .frm_code_list a .frmsvg,
