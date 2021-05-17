@@ -3273,7 +3273,7 @@ function frmAdminBuildJS() {
 	 * Is the box checked to use images as options?
 	 */
 	function imagesAsOptions( fieldId ) {
-		if ( document.querySelector( '.frm_radio_display_format' ) ) { // Surveys add-on is active.
+		if ( document.getElementById( 'frm_display_format_' + fieldId + '_container' ) ) { // Surveys add-on is active.
 			const displayFormatDropdown = document.getElementById( 'frm_image_options_' + fieldId );
 			if ( '1' === displayFormatDropdown.value ) {
 				return true;
