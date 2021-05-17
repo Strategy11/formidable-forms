@@ -10,16 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since xx.xx
  */
-class FrmAntiSpam {
-
-	/**
-	 * @var int $form_id the form id that is being validated for spam.
-	 */
-	private $form_id;
-
-	public function __construct( $form_id ) {
-		$this->form_id = $form_id;
-	}
+class FrmAntiSpam extends FrmValidate {
 
 	/**
 	 * Initialise the actions for the Anti-spam.
