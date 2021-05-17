@@ -50,15 +50,16 @@ if ( $values['fields'] ) {
 $frm_settings = FrmAppHelper::get_settings();
 if ( FrmAppHelper::is_admin() ) {
 	?>
-<div class="frm_form_field form-field">
-<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
-<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
-</div>
-<?php } else { ?>
-<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	<div class="frm_form_field form-field">
+	<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
+	<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	</div>
 	<?php
-	$honeypot = new FrmHoneypot( $form->id );
-	$honeypot->maybe_render_field();
+} else {
+	?>
+	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	<?php
+	FrmHoneypot::maybe_render_field( $form->id );
 }
 
 do_action( 'frm_entry_form', $form, $form_action, $errors );

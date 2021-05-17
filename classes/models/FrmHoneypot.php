@@ -3,29 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmHoneypot {
+class FrmHoneypot extends FrmValidate {
 
 	/**
-	 * @var int $form_id
+	 * @return bool
 	 */
-	private $form_id;
-
-	/**
-	 * @var object $form
-	 */
-	private $form;
-
-	public function __construct( $form_id ) {
-		$this->form_id = $form_id;
-	}
-
-	private function get_form() {
-		if ( ! isset( $this->form ) ) {
-			$this->form = FrmForm::getOne( $this->form_id );
-		}
-		return $this->form;
-	}
-
 	public function validate() {
 		if ( ! $this->honeypot_option_is_on() || ! $this->check_honeypot_filter() ) {
 			// never flag as honeypot spam if disabled.
@@ -50,7 +32,7 @@ class FrmHoneypot {
 	 */
 	public function honeypot_option_is_on() {
 		$form = $this->get_form();
-		return empty( $form->options['no_honeypot'] );
+		return ! empty( $form->options['honeypot'] );
 	}
 
 	/**
@@ -61,17 +43,26 @@ class FrmHoneypot {
 		return apply_filters( 'frm_run_honeypot', true, compact( 'form' ) );
 	}
 
-	public function maybe_render_field() {
-		if ( ! $this->honeypot_option_is_on() ) {
-			return;
+	/**
+	 * @param int $form_id
+	 */
+	public static function maybe_render_field( $form_id ) {
+		$honeypot = new self( $form_id );
+		if ( $honeypot->should_render_field() ) {
+			$honeypot->render_field();
 		}
+	}
 
+	/**
+	 * @return bool
+	 */
+	public function should_render_field() {
+		return $this->honeypot_option_is_on() && $this->check_honeypot_filter();
+	}
+
+	public function render_field() {
 		$honeypot = $this->check_honeypot_filter();
-		if ( ! $honeypot ) {
-			return;
-		}
-
-		$form = $this->get_form();
+		$form     = $this->get_form();
 		?>
 			<div class="frm_verify" <?php echo in_array( $honeypot, array( true, 'strict' ), true ) ? '' : 'aria-hidden="true"'; ?>>
 				<label for="frm_email_<?php echo esc_attr( $form->id ); ?>">
