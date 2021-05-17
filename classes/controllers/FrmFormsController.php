@@ -1119,13 +1119,13 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php';
 	}
 
-	private static function maybe_render_akismet_settings( $values ) {
+	/**
+	 * @param array $values
+	 */
+	private static function render_spam_settings( $values ) {
 		if ( function_exists( 'akismet_http_post' ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
 		}
-	}
-
-	private static function maybe_render_honeypot_settings( $values ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
 	}
 

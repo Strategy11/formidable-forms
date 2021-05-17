@@ -118,10 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 		</td>
 	</tr>
-	<?php
-	is_callable( 'self::maybe_render_akismet_settings' ) && self::maybe_render_akismet_settings( $values );
-	is_callable( 'self::maybe_render_honeypot_settings' ) && self::maybe_render_honeypot_settings( $values );
-	?>
+	<?php is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values ); ?>
 </table>
 
 <!--AJAX Section-->
