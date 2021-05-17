@@ -6,10 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmHoneypot extends FrmValidate {
 
 	/**
+	 * @return string
+	 */
+	protected function get_option_key() {
+		return 'honeypot';
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function validate() {
-		if ( ! $this->honeypot_option_is_on() || ! $this->check_honeypot_filter() ) {
+		if ( ! $this->is_option_on() || ! $this->check_honeypot_filter() ) {
 			// never flag as honeypot spam if disabled.
 			return true;
 		}
@@ -25,14 +32,6 @@ class FrmHoneypot extends FrmValidate {
 		$form             = $this->get_form();
 		$atts             = compact( 'form' );
 		return apply_filters( 'frm_process_honeypot', $is_honeypot_spam, $atts );
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function honeypot_option_is_on() {
-		$form = $this->get_form();
-		return ! empty( $form->options['honeypot'] );
 	}
 
 	/**
@@ -57,7 +56,7 @@ class FrmHoneypot extends FrmValidate {
 	 * @return bool
 	 */
 	public function should_render_field() {
-		return $this->honeypot_option_is_on() && $this->check_honeypot_filter();
+		return $this->is_option_on() && $this->check_honeypot_filter();
 	}
 
 	public function render_field() {

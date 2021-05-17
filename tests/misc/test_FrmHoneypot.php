@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group spam
+ */
 class test_FrmHoneypot extends FrmUnitTest {
 
 	private $form_id;
@@ -39,10 +42,10 @@ class test_FrmHoneypot extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmHoneypot::honeypot_option_is_on
+	 * @covers FrmHoneypot::is_option_on
 	 */
-	public function test_honeypot_option_is_on() {
-		$this->assertTrue( $this->honeypot_option_is_on(), 'Honeypot should be on by default' );
+	public function test_is_option_on() {
+		$this->assertTrue( $this->is_option_on(), 'Honeypot should be on by default' );
 
 		$this->form_id  = $this->factory->form->create(
 			array(
@@ -52,10 +55,10 @@ class test_FrmHoneypot extends FrmUnitTest {
 			)
 		);
 		$this->honeypot = new FrmHoneypot( $this->form_id );
-		$this->assertFalse( $this->honeypot_option_is_on() );
+		$this->assertFalse( $this->is_option_on() );
 	}
 
-	private function honeypot_option_is_on() {
-		return $this->run_private_method( array( $this->honeypot, 'honeypot_option_is_on' ) );
+	private function is_option_on() {
+		return $this->run_private_method( array( $this->honeypot, 'is_option_on' ) );
 	}
 }

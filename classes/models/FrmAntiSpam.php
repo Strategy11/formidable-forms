@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmAntiSpam extends FrmValidate {
 
 	/**
+	 * @return string
+	 */
+	protected function get_option_key() {
+		return 'antispam';
+	}
+
+	/**
 	 * Initialise the actions for the Anti-spam.
 	 *
 	 * @since xx.xx
@@ -137,14 +144,6 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
-	 * @return bool
-	 */
-	private function antispam_option_is_on() {
-		$form = $this->get_form();
-		return ! empty( $form->options['antispam'] );
-	}
-
-	/**
 	 * Add the token field to the form.
 	 *
 	 * @since xx.xx
@@ -175,7 +174,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return bool|string True or a string with the error.
 	 */
 	public function validate() {
-		if ( ! $this->run_antispam() || ! $this->antispam_option_is_on() ) {
+		if ( ! $this->run_antispam() || ! $this->is_option_on() ) {
 			return;
 		}
 

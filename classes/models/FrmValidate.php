@@ -35,5 +35,21 @@ abstract class FrmValidate {
 	/**
 	 * @return bool
 	 */
+	protected function is_option_on() {
+		$form = $this->get_form();
+		$key  = $this->get_option_key();
+		return ! empty( $form->options[ $key ] );
+	}
+
+	/**
+	 * @return bool
+	 */
 	abstract public function validate();
+
+	/**
+	 * Track the form option key used for is_option_on function.
+	 *
+	 * @return string
+	 */
+	abstract protected function get_option_key();
 }

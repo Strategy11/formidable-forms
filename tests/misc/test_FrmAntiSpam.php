@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @group spam
+ */
 class test_FrmAntiSpam extends FrmUnitTest {
 
 	private $antispam;
