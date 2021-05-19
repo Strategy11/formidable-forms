@@ -2703,6 +2703,88 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Shows the images dropdown.
+	 *
+	 * @since 4.11.01
+	 *
+	 * @param array $args {
+	 *     Arguments.
+	 *
+	 *     @type string  $selected    Selected value.
+	 *     @type array[] $options     Array of options with keys are option values and values are array contain `text` and `svg`.
+	 *     @type string  $classes     Custom CSS classes for the wrapper element.
+	 *     @type array   $input_attrs Attributes of value input.
+	 * }
+	 */
+	public static function images_dropdown( $args ) {
+		$defaults        = array(
+			'selected'    => '',
+			'options'     => array(),
+			'classes'     => '',
+			'input_attrs' => array(),
+		);
+		$args            = wp_parse_args( $args, $defaults );
+		$args['options'] = (array) $args['options'];
+		$selected_text   = isset( $args['options'][ $args['selected'] ]['text'] ) ? $args['options'][ $args['selected'] ]['text'] : '';
+		$options_count   = count( $args['options'] );
+		$input_attrs     = (array) $args['input_attrs'];
+		if ( isset( $input_attrs['class'] ) ) {
+			$input_attrs['class'] .= ' frm_images_dropdown__value';
+		} else {
+			$input_attrs['class'] = 'frm_images_dropdown__value';
+		}
+
+		$input_attrs['type']  = 'hidden';
+		$input_attrs['value'] = $args['selected'];
+		$input_attrs_str      = '';
+		foreach ( $input_attrs as $key => $input_attr ) {
+			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
+		}
+		?>
+		<div class="frm_images_dropdown <?php echo esc_attr( $args['classes'] ); ?>">
+			<input<?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+
+			<button type="button" class="frm_images_dropdown__toggle"><?php echo esc_html( $selected_text ); ?></button>
+
+			<div class="frm_images_dropdown__options frm_hidden frm_images_dropdown__options--<?php echo intval( $options_count ); ?>-col">
+				<?php
+				foreach ( $args['options'] as $key => $option ) {
+					if ( ! empty( $option['svg'] ) ) {
+						$image = self::icon_by_class(
+							'frmfont ' . $option['svg'],
+							array(
+								'echo'   => false,
+								'width'  => 102,
+								'height' => 89,
+							)
+						);
+					} else {
+						$image = '';
+					}
+
+					$classes = 'frm_images_dropdown__option';
+					if ( $args['selected'] === $key ) {
+						$classes .= ' frm_images_dropdown__option--selected';
+					}
+					?>
+					<button type="button" class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $key ); ?>">
+						<?php if ( $image ) : ?>
+							<span class="frm_images_dropdown__image"><?php echo self::kses( $image, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+						<?php endif; ?>
+
+						<?php if ( ! empty( $option['text'] ) ) : ?>
+							<span class="frm_images_dropdown__text"><?php echo esc_html( $option['text'] ); ?></span>
+						<?php endif; ?>
+					</button>
+					<?php
+				}
+				?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */

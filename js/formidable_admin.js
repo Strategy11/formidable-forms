@@ -3174,6 +3174,8 @@ function frmAdminBuildJS() {
 				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
+			// TODO: Add button check here.
+
 			checked = getChecked( optVals[ i ].id  );
 
 			optObj = {
@@ -6740,6 +6742,48 @@ function frmAdminBuildJS() {
 		};
 	}
 
+	function initImagesDropdown() {
+		const onClickToggle = event => {
+			// Toggle dropdown.
+			const dropdown = event.target.nextElementSibling;
+			if ( dropdown.classList.contains( 'frm_hidden' ) ) {
+				dropdown.classList.remove( 'frm_hidden' );
+			} else {
+				dropdown.classList.add( 'frm_hidden' );
+			}
+		};
+
+		const onClickOption = event => {
+			const selectedClass = 'frm_images_dropdown__option--selected';
+			const optionEl      = event.target.matches( '.frm_images_dropdown__option' ) ? event.target : event.target.closest( '.frm_images_dropdown__option' );
+			const valueEl       = optionEl.closest( '.frm_images_dropdown' ).querySelector( '.frm_images_dropdown__value' );
+
+			valueEl.value = optionEl.getAttribute( 'data-value' );
+			valueEl.dispatchEvent( new Event( 'change', { bubbles: true }) );
+
+			optionEl.parentElement.querySelectorAll( '.frm_images_dropdown__option' ).forEach( optionEl => {
+				optionEl.classList.remove( selectedClass );
+			});
+
+			optionEl.classList.add( selectedClass );
+		};
+
+		document.addEventListener( 'click', event => {
+			if ( event.target.matches( '.frm_images_dropdown__toggle' ) ) {
+				onClickToggle( event );
+				return;
+			}
+
+			if ( event.target.closest( '.frm_images_dropdown__option' ) ) {
+				onClickOption( event );
+			}
+
+			if ( ! event.target.closest( '.frm_images_dropdown' ) ) {
+				document.querySelectorAll( '.frm_images_dropdown__options' ).forEach( el => el.classList.add( 'frm_hidden' ) );
+			}
+		}, false );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -6861,6 +6905,8 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
+
+			initImagesDropdown();
 		},
 
 		buildInit: function() {

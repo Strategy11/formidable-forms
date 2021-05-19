@@ -8052,3 +8052,155 @@ Responsive Design
 	max-width: 843px;
 	border-radius: 10px;
 }
+/********** Images dropdown **********/
+.frm_images_dropdown {
+	position: relative;
+}
+
+.frm_images_dropdown * {
+	box-sizing: border-box;
+}
+
+/* Make this look like .wp-core-ui select */
+.frm_images_dropdown__toggle {
+	/*font-size: 14px;*/
+	/*line-height: 2; !* 28px *!*/
+	/*color: #2c3338;*/
+	/*border-color: #8c8f94;*/
+	box-shadow: none !important;
+	/*border-radius: 3px;*/
+	/*padding: 0 24px 0 8px;*/
+	min-height: 30px !important;
+	-webkit-appearance: none !important;
+	/* The SVG is arrow-down-alt2 from Dashicons. */
+	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+	background-size: 16px 16px;
+	cursor: pointer;
+	/*vertical-align: middle;*/
+
+	box-sizing: border-box;
+	outline: 0;
+	border-radius: var(--small-radius) !important;
+	border-width: 1px;
+	border-color: var(--grey-border) !important;
+	color: var(--dark-grey) !important;
+	font-size: 15px !important;
+	margin: 0 !important;
+	line-height: 32px !important;
+	vertical-align: top !important;
+	height: auto !important;
+	padding: 0 24px 0 12px !important;
+	width: 100%;
+	text-align: left !important;
+}
+
+.frm_images_dropdown__toggle:hover {
+	color: #2271b1 !important;
+}
+
+.frm_images_dropdown__toggle:focus {
+	border-color: #2271b1 !important;
+	color: #0a4b78 !important;
+	box-shadow: 0 0 0 1px #2271b1 !important;
+}
+
+.frm_images_dropdown__toggle:active {
+	border-color: #8c8f94 !important;
+	box-shadow: none !important;
+}
+
+/*.frm_images_dropdown__toggle.disabled,
+.frm_images_dropdown__toggle:disabled {
+	color: #a7aaad;
+	border-color: #dcdcde;
+	background-color: #f6f7f7;
+	!* The SVG is arrow-down-alt2 from Dashicons. *!
+	background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23a0a5aa%22%2F%3E%3C%2Fsvg%3E');
+	box-shadow: none;
+	text-shadow: 0 1px 0 #fff;
+	cursor: default;
+	transform: none;
+}*/
+
+/* Reset Firefox inner outline that appears on :focus. */
+/* This ruleset overrides the color change on :focus thus needs to be after select:focus. */
+.frm_images_dropdown__toggle:-moz-focusring {
+	color: transparent;
+	text-shadow: 0 0 0 #0a4b78;
+}
+
+/* Remove background focus style from IE11 while keeping focus style available on option elements. */
+.frm_images_dropdown__toggle::-ms-value {
+	background: transparent;
+	color: #50575e;
+}
+
+.frm_images_dropdown__toggle::-ms-value {
+	color: #2271b1;
+}
+
+.frm_images_dropdown__toggle::-ms-value {
+	color: #0a4b78;
+}
+
+.frm_images_dropdown__toggle.disabled::-ms-value,
+.frm_images_dropdown__toggle:disabled::-ms-value {
+	color: #a7aaad;
+}
+
+/* Dropdown styling */
+.frm_images_dropdown__options {
+	display: grid;
+	grid-gap: 11px;
+	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	align-items: baseline;
+	padding: 10px 15px;
+	border: 1px solid #BCE0FD;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.149);
+	border-radius: 4px;
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	background-color: #fff;
+}
+
+.frm_images_dropdown__option {
+	font-size: 13px !important;
+	line-height: 18px !important;
+	padding: 0!important;
+	height: auto !important;
+	background-color: #fff !important;
+	color: #545F6E !important;
+	border-radius: 4px !important;
+	border: 0 !important;
+	outline: 0 !important;
+	box-shadow: none !important;
+	cursor: pointer;
+}
+
+.frm_images_dropdown__image {
+	display: block;
+}
+
+.frm_images_dropdown__image .frmsvg {
+	width: 100%;
+	height: auto;
+	max-width: 102px;
+	box-sizing: content-box;
+	fill: none;
+}
+
+.frm_images_dropdown__image .frmsvg * {
+	box-sizing: content-box;
+}
+
+.frm_images_dropdown__option--selected {
+	background: #F6F7FB !important;
+}
+
+.frm_images_dropdown__text {
+	display: block;
+	padding: 0 7px 14px;
+}
+
+/********** End of images dropdown styling **********/
