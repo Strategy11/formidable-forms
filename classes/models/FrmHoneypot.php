@@ -35,11 +35,20 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
-	 * @return mixed either 'strict', true, or false.
+	 * @return mixed either true, or false.
 	 */
 	private function check_honeypot_filter() {
 		$form = $this->get_form();
 		return apply_filters( 'frm_run_honeypot', true, compact( 'form' ) );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function check_honeypot_setting() {
+		$form = $this->get_form();
+		$key  = $this->get_option_key();
+		return $form->options[ $key ];
 	}
 
 	/**
@@ -60,7 +69,7 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	public function render_field() {
-		$honeypot = $this->check_honeypot_filter();
+		$honeypot = $this->check_honeypot_setting();
 		$form     = $this->get_form();
 		?>
 			<div class="frm_verify" <?php echo in_array( $honeypot, array( true, 'strict' ), true ) ? '' : 'aria-hidden="true"'; ?>>

@@ -50,7 +50,7 @@ class test_FrmHoneypot extends FrmUnitTest {
 		$this->form_id  = $this->factory->form->create(
 			array(
 				'options' => array(
-					'honeypot' => 0,
+					'honeypot' => 'off',
 				),
 			)
 		);

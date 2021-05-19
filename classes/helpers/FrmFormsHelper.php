@@ -365,7 +365,7 @@ class FrmFormsHelper {
 			'success_msg'    => $frm_settings->success_msg,
 			'show_form'      => 0,
 			'akismet'        => '',
-			'honeypot'       => 1,
+			'honeypot'       => 'basic',
 			'antispam'       => 0,
 			'no_save'        => 0,
 			'ajax_load'      => 0,

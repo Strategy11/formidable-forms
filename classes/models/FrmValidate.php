@@ -38,7 +38,7 @@ abstract class FrmValidate {
 	protected function is_option_on() {
 		$form = $this->get_form();
 		$key  = $this->get_option_key();
-		return ! empty( $form->options[ $key ] );
+		return ! empty( $form->options[ $key ] ) && 'off' !== $form->options[ $key ];
 	}
 
 	/**

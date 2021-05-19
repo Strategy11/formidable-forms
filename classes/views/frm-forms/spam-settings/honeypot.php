@@ -5,7 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <tr>
 	<td colspan="2">
-		<input id="honeypot" type="checkbox" name="options[honeypot]" <?php checked( $values['honeypot'], 1 ); ?> value="1" />
 		<label for="honeypot"><?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?></label>
+		<select id="honeypot" name="options[honeypot]">
+			<option value="off" <?php selected( $values['honeypot'], 'off' ); ?>><?php esc_html_e( 'Off', 'formidable' ); ?></option>
+			<option value="basic" <?php selected( ! empty( $values['honeypot'] ) && 'strict' !== $values['honeypot'], true ); ?>><?php esc_html_e( 'Basic', 'formidable' ); ?></option>
+			<option value="strict" <?php selected( $values['honeypot'], 'strict' ); ?>><?php esc_html_e( 'Strict', 'formidable' ); ?></option>
+		</select>
 	</td>
 </tr>
