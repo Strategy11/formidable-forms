@@ -188,7 +188,7 @@ class FrmFieldName extends FrmFieldCombo {
 		parent::process_args_for_field_output( $args );
 
 		// Show all subfields in form builder then use JS to show or hide them.
-		if ( FrmAppHelper::is_form_builder_page() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
+		if ( $this->should_print_hidden_sub_fields() && count( $args['sub_fields'] ) !== count( $this->sub_fields ) ) {
 			$hidden_fields      = array_diff_key( $this->sub_fields, $args['sub_fields'] );
 			$args['sub_fields'] = $this->sub_fields;
 
@@ -196,5 +196,14 @@ class FrmFieldName extends FrmFieldCombo {
 				$args['sub_fields'][ $name ]['wrapper_classes'] .= ' frm_hidden';
 			}
 		}
+	}
+
+	/**
+	 * Checks if should print hidden subfields and hide them. This is useful to use js to show or hide sub fields.
+	 *
+	 * @return bool
+	 */
+	protected function should_print_hidden_sub_fields() {
+		return FrmAppHelper::is_form_builder_page() || FrmAppHelper::doing_ajax() && isset( $_POST['action'] ) && 'frm_insert_field' === $_POST['action'];
 	}
 }

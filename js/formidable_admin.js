@@ -6593,8 +6593,6 @@ function frmAdminBuildJS() {
 			const subFieldNames = value.split( '_' );
 			const fieldId = event.target.dataset.fieldId;
 
-			console.log( subFieldNames );
-
 			/*
 			 * Live update form on the form builder.
 			 */

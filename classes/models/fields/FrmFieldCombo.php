@@ -437,4 +437,13 @@ class FrmFieldCombo extends FrmFieldType {
 
 		return $strings;
 	}
+
+	/**
+	 * Checks if should print hidden subfields and hide them. This is useful to use js to show or hide sub fields.
+	 *
+	 * @return bool
+	 */
+	protected function should_print_hidden_sub_fields() {
+		return false;
+	}
 }
