@@ -3275,18 +3275,7 @@ function frmAdminBuildJS() {
 	 * Is the box checked to use images as options?
 	 */
 	function imagesAsOptions( fieldId ) {
-		if ( document.getElementById( 'frm_display_format_' + fieldId + '_container' ) ) { // Surveys add-on is active.
-			const displayFormatDropdown = document.getElementById( 'frm_image_options_' + fieldId );
-			if ( '1' === displayFormatDropdown.value ) {
-				return true;
-			}
-
-			const useImagesInButtonsCheckbox = document.getElementById( 'frm_use_images_in_buttons_' + fieldId );
-			if ( 'buttons' === displayFormatDropdown.value && useImagesInButtonsCheckbox.checked ) {
-				return true;
-			}
-		}
-		return isChecked( 'image_options_' + fieldId );
+		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', isChecked( 'image_options_' + fieldId ), fieldId );
 	}
 
 	function showingLabelWithImage( fieldId ) {
@@ -7558,6 +7547,15 @@ function frmAdminBuildJS() {
 				url = url + '&is_template=' + isTemplate;
 			}
 			location.href = url;
+		},
+
+		hooks: {
+			applyFilters: function( hookName, ...args ) {
+				return wp.hooks.applyFilters( hookName, ...args );
+			},
+			addFilter: function( hookName, callback, priority ) {
+				return wp.hooks.addFilter( hookName, 'formidable', callback, priority );
+			}
 		}
 	};
 }
