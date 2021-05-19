@@ -1202,15 +1202,11 @@ class FrmXMLHelper {
 	 * @since 3.06
 	 */
 	private static function remove_defaults( $defaults, &$saved ) {
-		$array_defaults = array_filter( $defaults, 'is_array' );
-		foreach ( $array_defaults as $d => $default ) {
-			// compare array defaults
-			if ( $default == $saved[ $d ] ) {
-				unset( $saved[ $d ] );
+		foreach ( $saved as $key => $value ) {
+			if ( isset( $defaults[ $key ] ) && $defaults[ $key ] === $value ) {
+				unset( $saved[ $key ] );
 			}
-			unset( $defaults[ $d ] );
 		}
-		$saved = array_diff_assoc( (array) $saved, $defaults );
 	}
 
 	/**
