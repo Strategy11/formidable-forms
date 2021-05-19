@@ -5,10 +5,11 @@
  * @package Formidable
  * @since 4.10.02
  *
- * @var FrmFieldCombo $this          Field type object.
- * @var array         $field         Field array.
- * @var array         $sub_field     Sub field array.
- * @var array         $default_value Default value of all sub fields.
+ * @var FrmFieldCombo $this            Field type object.
+ * @var array         $field           Field array.
+ * @var array         $sub_field       Sub field array.
+ * @var array         $default_value   Default value of all sub fields.
+ * @var array         $wrapper_classes CSS classes of wrapper element of subfield options.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +22,7 @@ $uniq_str  = $sub_field['name'] . '_' . $field_id;
 $labels    = $this->get_built_in_option_labels();
 ?>
 <div
-	class="frm_grid_container frm_sub_field_options frm_sub_field_options-<?php echo esc_attr( $sub_field['name'] ); ?>"
+	class="<?php echo esc_attr( $wrapper_classes ); ?>"
 	data-sub-field-name="<?php echo esc_attr( $sub_field['name'] ); ?>"
 	data-field-id="<?php echo intval( $field_id ); ?>"
 >

@@ -72,7 +72,7 @@ $errors      = $args['errors'];
 						<?php
 				}
 
-				if ( $sub_field['label'] && ( $sub_field_desc || FrmAppHelper::is_form_builder_page() ) ) {
+				if ( $sub_field['label'] && ( $sub_field_desc || $this->should_print_hidden_sub_fields() ) ) {
 					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">' . FrmAppHelper::kses( $sub_field_desc ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 

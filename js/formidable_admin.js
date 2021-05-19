@@ -6680,18 +6680,11 @@ function frmAdminBuildJS() {
 			});
 		};
 
-		const dropdownSelector = '.frm_name_layout_dropdown';
-
 		document.addEventListener( 'change', event => {
-			if ( event.target.matches( dropdownSelector ) ) {
+			if ( event.target.matches( '.frm_name_layout_dropdown' ) ) {
 				onChangeLayout( event );
 			}
 		}, false );
-
-		// Trigger dropdown change on load.
-		document.querySelectorAll( dropdownSelector ).forEach( el => {
-			el.dispatchEvent( new Event( 'change', { bubbles: true }) );
-		});
 	}
 
 	function debounce( func, wait = 100 ) {
