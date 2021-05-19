@@ -134,11 +134,17 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @param array $args Includes 'field', 'display'.
 	 */
 	public function show_after_default( $args ) {
-		$field         = (array) $args['field'];
-		$default_value = $this->get_default_value();
+		$field                = (array) $args['field'];
+		$default_value        = $this->get_default_value();
+		$processed_sub_fields = $this->get_processed_sub_fields();
 
 		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
+			$wrapper_classes   = 'frm_grid_container frm_sub_field_options frm_sub_field_options-' . $sub_field['name'];
+			if ( ! isset( $processed_sub_fields[ $name ] ) ) {
+				// Options for this subfield should be hidden.
+				$wrapper_classes .= ' frm_hidden';
+			}
 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/combo-field/sub-field-options.php';
 		}
