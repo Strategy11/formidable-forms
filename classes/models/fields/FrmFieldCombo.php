@@ -203,6 +203,7 @@ class FrmFieldCombo extends FrmFieldType {
 			'description'    => false,
 			'default'        => false,
 			'clear_on_focus' => false, // Don't use the regular placeholder option.
+			'logic'          => true,
 		);
 
 		return $settings;
@@ -381,6 +382,10 @@ class FrmFieldCombo extends FrmFieldType {
 		$errors = isset( $args['errors'] ) ? $args['errors'] : array();
 
 		if ( ! $this->field->required ) {
+			return $errors;
+		}
+
+		if ( FrmProEntryMeta::skip_required_validation( $this->field ) ) {
 			return $errors;
 		}
 
