@@ -297,6 +297,7 @@ class FrmAntiSpam extends FrmValidate {
 	public static function clear_caches() {
 		self::clear_wp_fastest_cache();
 		self::clear_wp_super_cache();
+		self::clear_wp_optimize();
 	}
 
 	private static function clear_wp_fastest_cache() {
@@ -307,6 +308,12 @@ class FrmAntiSpam extends FrmValidate {
 		if ( function_exists( 'wp_cache_clean_cache' ) ) {
 			global $file_prefix;
 			wp_cache_clean_cache( $file_prefix, true );
+		}
+	}
+
+	private static function clear_wp_optimize() {
+		if ( class_exists( 'WP_Optimize' ) ) {
+			WP_Optimize()->get_page_cache()->purge();
 		}
 	}
 }
