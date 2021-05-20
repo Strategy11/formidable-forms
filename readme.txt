@@ -21,7 +21,7 @@ Before we explore the features of the powerful Formidable form builder plugin, y
 Plus, we have optimized Formidable for speed and maximum server performance. We can confidently say that Formidable is one of the FASTEST WordPress form builders on the market.
 
 > <strong>Formidable Forms Pro</strong><br />
-> This form builder plugin is the free version of Formidable that comes with all the features you will ever need. Build an advanced email subscription form, multi-page form, file upload form, quiz, or a smart form with conditional logic. Stack on repeater fields, payment integrations, form templates, form relationships, cascading dropdown fields. Don't forget the calculated fields, front-end form editing, and powerful Formidable Views to display data in web applications.
+> This form builder plugin is the free version of Formidable that comes with all the features you will ever need. Build an advanced email subscription form, multi-page form, file upload form, quiz, or a smart form with conditional logic. Stack on repeater fields, payment integrations, form templates, form relationships, cascading dropdown fields. Don't forget the calculated fields, front-end form editing, and powerful WordPress Views to display data in web applications.
 > With Formidable, you get far more than just a contact form.
 > <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion" rel="friend" title="Formidable">Click here to purchase the most advanced premium WordPress form builder plugin now!</a>
 
@@ -53,7 +53,7 @@ On top of that, you can easily customize the success message after a contact for
 
 With our built-in styler, you can instantly customize the look and feel of your contact form. With just a few clicks, your email form can be transformed to match your website design.
 
-By default, Formidable applies a single styling template to your WordPress forms. If you want a custom form style for each footer and sidebar form, check out the premium version of Formidable.
+By default, a single styling template is added to your WordPress forms. If you want a custom form style for each footer and sidebar form, check out the premium version of Formidable.
 
 == Build Smart Surveys with Beautiful Reports ==
 
@@ -63,7 +63,7 @@ Our graphs and reports will help you analyze and showcase data. We believe that 
 
 You can even showcase data on the front-end of your website. Just embed graphs in your WordPress posts or pages.
 
-The best part is that you can do this all within Formidable without any third-party tools.
+The best part is that you can do this all without any third-party tools.
 
 == Quickly Create an Advanced WordPress Registration Form for Any Use Case ==
 
@@ -73,11 +73,11 @@ Then, our marketing integrations and APIs can send the data anywhere you want.
 
 == Accept Credit Cards and Easily Collect Payments ==
 
-By now, you probably already realize the theme that Formidable is more than just a WordPress contact form plugin. You can use Formidable to create a payment form to accept credit card payments right from your website.
+By now, you probably already realize the theme that Formidable is more than just a WordPress contact form plugin. You can use it to create a payment form to accept credit card payments right from your website.
 
 We offer seamless integration with PayPal, Stripe, and Authorize.net, so you can create an order form, donation form, or purchase form with our drag & drop form builder. 
 
-You can even use Formidable to create a WooCommerce form with custom fields.
+You can even use the plugin to create a WooCommerce form with custom fields.
 
 == Make Data-Driven Web Applications with a Formidable View ==
 
@@ -97,7 +97,7 @@ You can add a WooCommerce product configurator with custom calculation fields. T
 
 == Make Powerful Quiz Forms & Calculators ==
 
-In addition to a simple order form, you can also use Formidable to create quizzes or web calculators.
+In addition to a simple order form, you can also create quizzes or web calculators.
 
 More on quizzes later, but here are some example online calculators that you can quickly add to your WordPress site:
 
@@ -140,9 +140,9 @@ Our goal is to help you build complex websites with low overhead. That's why we 
 
 A Formidable View allows you to display form data anywhere, so you can quickly create data-driven web applications.
 
-On top of that, our hooks and filters allow you to extend Formidable to meet your needs. We even include hundreds of code examples in our docs to give you the confidence to get started.
+On top of that, our hooks and filters allow you to extend Formidable to meet your most advanced needs. We even include hundreds of code examples in our docs to give you the confidence to get started.
 
-== Full Formidable Feature List ==
+== Full Feature List ==
 
 Since Formidable is not your average WordPress form plugin, this feature list is going to be very long. Read through it, or just install the most powerful WordPress form maker. Your choice :)
 
@@ -219,7 +219,7 @@ Give Formidable Forms a try.
 Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to our Premium forms</a> to get all the features for smart forms and full web applications.
 
 == Credits ==
-This online form builder plugin is created by Steve and Steph Wells and the amazing Formidable Team.
+This online form builder plugin is created by Steve and Steph Wells and the amazing Strategy11 Team.
 
 Formidable is part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> fund with <a href="https://syedbalkhi.com/">Syed Balkhi</a> as an Advisor to our company.
 
@@ -262,7 +262,7 @@ When you do not receive emails, try the following steps:
 
 <a href="https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Read more about WordPress emails not sending</a> in our blog.
 
-= What types of WordPress forms can I build with Formidable? =
+= What types of WordPress forms can I build? =
 The Formidable drag & drop form builder combined with our add-ons is the most powerful form maker on the market. Here are some types of WordPress forms you can create:
 
 * Custom Contact Form
@@ -386,11 +386,11 @@ Additionally, our Payment fields will help you create an order form, donation fo
 
 = Can I import and export? =
 
-Yes, Formidable makes it easy to import and export your WordPress forms. This is incredibly useful for developers and agencies who are building websites for clients. You can also create custom form templates to use on client websites.
+Yes, it's easy to import and export your WordPress forms. This is incredibly useful for developers and agencies who are building websites for clients. You can also create custom form templates to use on client websites.
 
-Formidable also allows you to import from other WordPress contact form plugins such as <a href="https://wordpress.org/plugins/formidable-gravity-forms-importer/">Gravity Forms</a> and Pirate Forms.
+You can also import from other WordPress contact form plugins such as <a href="https://wordpress.org/plugins/formidable-gravity-forms-importer/">Gravity Forms</a> and Pirate Forms.
 
-= Can I integrate Formidable with my CRM or email marketing service? =
+= Can I integrate with my CRM or email marketing service? =
 
 Yes! We know that marketing is the key to grow your business. That's why Formidable allows you to connect your WP form, or payment form, with the marketing platform of your choice. You can easily send data from your WordPress forms to your favorite CRM, email newsletter, and other marketing platforms.
 
@@ -437,9 +437,9 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 4.11 =
-* New: Added a Name combo field.
-* New: Added a Check entries for spam using JavaScript option to form settings.
-* New: Added Honeypot options to form settings and changed the default Honeypot behaviour to avoid false positives.
+* New: Added a quick and easy Name field with options for First, Middle, and Last names.
+* New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings for each form.
+* New: Added Honeypot options to form settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
 * New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
 * Fix: A warning was getting logged when exporting a form as XML.
 
