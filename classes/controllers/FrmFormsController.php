@@ -155,7 +155,7 @@ class FrmFormsController {
 	 * @return bool
 	 */
 	private static function antispam_was_on( $form_id ) {
-		$form = FrmForm::getOne( $id );
+		$form = FrmForm::getOne( $form_id );
 		return ! empty( $form->options['antispam'] );
 	}
 

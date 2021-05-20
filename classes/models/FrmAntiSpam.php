@@ -296,9 +296,17 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public static function clear_caches() {
 		self::clear_wp_fastest_cache();
+		self::clear_wp_super_cache();
 	}
 
 	private static function clear_wp_fastest_cache() {
 		do_action( 'wpfc_clear_all_cache' );
+	}
+
+	private static function clear_wp_super_cache() {
+		if ( function_exists( 'wp_cache_clean_cache' ) ) {
+			global $file_prefix;
+			wp_cache_clean_cache( $file_prefix, true );
+		}
 	}
 }
