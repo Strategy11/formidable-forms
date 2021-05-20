@@ -203,6 +203,7 @@ class FrmFieldCombo extends FrmFieldType {
 			'description'    => false,
 			'default'        => false,
 			'clear_on_focus' => false, // Don't use the regular placeholder option.
+			'logic'          => true,
 		);
 
 		return $settings;
