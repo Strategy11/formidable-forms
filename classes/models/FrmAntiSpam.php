@@ -163,7 +163,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return bool
 	 */
 	private function run_antispam() {
-		return apply_filters( 'frm_run_antispam', true, $this->form_id );
+		return $this->is_option_on() && apply_filters( 'frm_run_antispam', true, $this->form_id );
 	}
 
 	/**
@@ -174,7 +174,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return bool|string True or a string with the error.
 	 */
 	public function validate() {
-		if ( ! $this->run_antispam() || ! $this->is_option_on() ) {
+		if ( ! $this->run_antispam() ) {
 			return;
 		}
 
