@@ -295,9 +295,16 @@ class FrmAntiSpam extends FrmValidate {
 	 * Clear third party cache plugins to avoid data-tokens missing or appearing when the antispam setting is changed.
 	 */
 	public static function clear_caches() {
+		self::clear_w3_total_cache();
 		self::clear_wp_fastest_cache();
 		self::clear_wp_super_cache();
 		self::clear_wp_optimize();
+	}
+
+	private static function clear_w3_total_cache() {
+		if ( is_callable( 'w3tc_flush_all' ) ) {
+			w3tc_flush_all();
+		}
 	}
 
 	private static function clear_wp_fastest_cache() {
