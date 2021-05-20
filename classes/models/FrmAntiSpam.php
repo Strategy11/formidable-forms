@@ -20,6 +20,16 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
+	 * @param int $form_id
+	 */
+	public static function maybe_init( $form_id ) {
+		$antispam = new self( $form_id );
+		if ( $antispam->run_antispam() ) {
+			$antispam->init();
+		}
+	}
+
+	/**
 	 * Initialise the actions for the Anti-spam.
 	 *
 	 * @since xx.xx
@@ -154,9 +164,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return string
 	 */
 	public function add_token_to_form( $attributes ) {
-		if ( $this->run_antispam() ) {
-			$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
-		}
+		$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
 		return $attributes;
 	}
 
