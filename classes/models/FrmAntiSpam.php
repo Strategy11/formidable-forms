@@ -175,7 +175,7 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public function validate() {
 		if ( ! $this->run_antispam() ) {
-			return;
+			return true;
 		}
 
 		$token = FrmAppHelper::get_param( 'antispam_token', '', 'post', 'sanitize_text_field' );
