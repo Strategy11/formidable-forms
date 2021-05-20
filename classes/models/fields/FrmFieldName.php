@@ -87,6 +87,11 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$extra_options['name_layout'] = 'first_last';
 
+		// Default desc.
+		foreach ( $this->sub_fields as $name => $sub_field ) {
+			$extra_options[ $name . '_desc' ] = $sub_field['label'];
+		}
+
 		return $extra_options;
 	}
 
