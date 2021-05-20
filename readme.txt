@@ -437,9 +437,9 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 4.11 =
-* New: Added a Name combo field.
-* New: Added a Check entries for spam using JavaScript option to form settings.
-* New: Added Honeypot options to form settings and changed the default Honeypot behaviour to avoid false positives.
+* New: Added a quick and easy Name field with options for First, Middle, and Last names.
+* New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings for each form.
+* New: Added Honeypot options to form settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
 * New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
 * Fix: A warning was getting logged when exporting a form as XML.
 
