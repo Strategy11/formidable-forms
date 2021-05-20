@@ -136,11 +136,27 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
+		$antispam_was_on = self::antispam_was_on( $id );
+
 		FrmForm::update( $id, $_POST );
+
+		$antispam_is_on = ! empty( $_POST['options']['antispam'] );
+		if ( $antispam_is_on !== $antispam_was_on ) {
+			FrmAntiSpam::clear_caches();
+		}
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		return self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
+	}
+
+	/**
+	 * @param int $form_id
+	 * @return bool
+	 */
+	private static function antispam_was_on( $form_id ) {
+		$form = FrmForm::getOne( $id );
+		return ! empty( $form->options['antispam'] );
 	}
 
 	public static function update( $values = array() ) {
