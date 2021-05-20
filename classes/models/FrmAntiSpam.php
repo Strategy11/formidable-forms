@@ -26,6 +26,7 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public function init() {
 		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
+		add_filter( 'frm_form_div_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
 	}
 
 	/**
@@ -160,9 +161,19 @@ class FrmAntiSpam extends FrmValidate {
 	}
 
 	/**
+	 * @param int $form_id
+	 */
+	public static function maybe_echo_token( $form_id ) {
+		$antispam = new self( $form_id );
+		if ( $antispam->run_antispam() ) {
+			echo 'data-token="' . esc_attr( $antispam->get() ) . '"';
+		}
+	}
+
+	/**
 	 * @return bool
 	 */
-	private function run_antispam() {
+	public function run_antispam() {
 		return $this->is_option_on() && apply_filters( 'frm_run_antispam', true, $this->form_id );
 	}
 
@@ -184,11 +195,6 @@ class FrmAntiSpam extends FrmValidate {
 		if ( ! $token ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				// add an exception for the entries page.
-				return true;
-			}
-			if ( $this->is_saving_a_draft() ) {
-				// add an exception for saving a draft.
-				// since drafts are only for logged in users and a spam check was made to create the entry, we can trust the entry.
 				return true;
 			}
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
