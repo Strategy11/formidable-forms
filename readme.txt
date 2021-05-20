@@ -472,11 +472,4 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Duplicated fields would occasionally generate long field keys that were preventing fields from being created.
 * Fix: Fields for controlling radio options in the form builder were not using unique id attribute values.
 
-= 4.09.06 =
-* New: Added a new welcome screen to introduce new users to Formidable.
-* Fix: Make sure that Site Health exists when upgrading.
-* Fix: Invalid message data was occasionally appearing in the Inbox.
-* Fix: Excluded checkbox options were not properly toggling for Action Taxonomies.
-* Fix: Some pop ups were occasionally including outdated text.
-
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
