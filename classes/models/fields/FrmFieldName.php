@@ -212,4 +212,16 @@ class FrmFieldName extends FrmFieldCombo {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		return FrmAppHelper::is_form_builder_page() || FrmAppHelper::doing_ajax() && isset( $_POST['action'] ) && 'frm_insert_field' === $_POST['action'];
 	}
+
+	/**
+	 * Gets inputs container attributes.
+	 *
+	 * @return array
+	 */
+	protected function get_inputs_container_attrs() {
+		$attrs = parent::get_inputs_container_attrs();
+
+		$attrs['data-name-layout'] = $this->get_name_layout();
+		return $attrs;
+	}
 }

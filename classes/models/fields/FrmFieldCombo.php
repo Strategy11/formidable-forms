@@ -451,4 +451,16 @@ class FrmFieldCombo extends FrmFieldType {
 	protected function should_print_hidden_sub_fields() {
 		return false;
 	}
+
+	/**
+	 * Gets inputs container attributes.
+	 *
+	 * @return array
+	 */
+	protected function get_inputs_container_attrs() {
+		return array(
+			'class' => 'frm_combo_inputs_container',
+			'id'    => 'frm_combo_inputs_container_' . $this->field_id,
+		);
+	}
 }
