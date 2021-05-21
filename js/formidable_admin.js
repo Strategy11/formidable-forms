@@ -6686,11 +6686,6 @@ function frmAdminBuildJS() {
 				onChangeLayout( event );
 			}
 		}, false );
-
-		// Trigger dropdown change on load.
-		document.querySelectorAll( dropdownSelector ).forEach( el => {
-			el.dispatchEvent( new Event( 'change', { bubbles: true }) );
-		});
 	}
 
 	function debounce( func, wait = 100 ) {
