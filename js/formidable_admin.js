@@ -6580,7 +6580,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Show, hide, and sort subfields of Name field on form builder.
 	 *
-	 * @since 4.10.03
+	 * @since 4.11
 	 */
 	function handleNameFieldOnFormBuilder() {
 		/**
