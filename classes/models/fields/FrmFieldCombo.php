@@ -385,7 +385,7 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( FrmProEntryMeta::skip_required_validation( $this->field ) ) {
+		if ( class_exists( 'FrmProEntryMeta' ) && FrmProEntryMeta::skip_required_validation( $this->field ) ) {
 			return $errors;
 		}
 
