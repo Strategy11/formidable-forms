@@ -136,11 +136,27 @@ class FrmFormsController {
 
 		do_action( 'frm_before_update_form_settings', $id );
 
+		$antispam_was_on = self::antispam_was_on( $id );
+
 		FrmForm::update( $id, $_POST );
+
+		$antispam_is_on = ! empty( $_POST['options']['antispam'] );
+		if ( $antispam_is_on !== $antispam_was_on ) {
+			FrmAntiSpam::clear_caches();
+		}
 
 		$message = __( 'Settings Successfully Updated', 'formidable' );
 
 		return self::get_settings_vars( $id, array(), compact( 'message', 'warnings' ) );
+	}
+
+	/**
+	 * @param int $form_id
+	 * @return bool
+	 */
+	private static function antispam_was_on( $form_id ) {
+		$form = FrmForm::getOne( $form_id );
+		return ! empty( $form->options['antispam'] );
 	}
 
 	public static function update( $values = array() ) {
@@ -1116,7 +1132,18 @@ class FrmFormsController {
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php';
+	}
+
+	/**
+	 * @param array $values
+	 */
+	private static function render_spam_settings( $values ) {
+		if ( function_exists( 'akismet_http_post' ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
+		}
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
 	}
 
 	/**
