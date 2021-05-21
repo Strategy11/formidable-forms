@@ -6577,6 +6577,122 @@ function frmAdminBuildJS() {
 		return object;
 	}
 
+	/**
+	 * Show, hide, and sort subfields of Name field on form builder.
+	 *
+	 * @since 4.10.03
+	 */
+	function handleNameFieldOnFormBuilder() {
+		/**
+		 * Gets subfield element from cache.
+		 *
+		 * @param {String} fieldId Field ID.
+		 * @param {String} key     Cache key.
+		 * @returns {HTMLElement|undefined} Return the element from cache or undefined if not found.
+		 */
+		const getSubFieldElFromCache = ( fieldId, key ) => {
+			window.frmCachedSubFields = window.frmCachedSubFields || {};
+			window.frmCachedSubFields[fieldId] = window.frmCachedSubFields[fieldId] || {};
+			return window.frmCachedSubFields[fieldId][key];
+		};
+
+		/**
+		 * Sets subfield element to cache.
+		 *
+		 * @param {String}      fieldId Field ID.
+		 * @param {String}      key     Cache key.
+		 * @param {HTMLElement} el      Element.
+		 */
+		const setSubFieldElToCache = ( fieldId, key, el ) => {
+			window.frmCachedSubFields = window.frmCachedSubFields || {};
+			window.frmCachedSubFields[fieldId] = window.frmCachedSubFields[fieldId] || {};
+			window.frmCachedSubFields[fieldId][key] = el;
+		};
+
+		/**
+		 * Gets column class from the number of columns.
+		 *
+		 * @param {Number} colCount Number of columns.
+		 * @returns {string}
+		 */
+		const getColClass = colCount => 'frm' + parseInt( 12 / colCount );
+
+		const colClasses = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ].map( num => 'frm' + num );
+
+		const allSubFieldNames = [ 'first', 'middle', 'last' ];
+
+		/**
+		 * Handles name layout change.
+		 *
+		 * @param {Event} event Event object.
+		 */
+		const onChangeLayout = event => {
+			const value = event.target.value;
+			const subFieldNames = value.split( '_' );
+			const fieldId = event.target.dataset.fieldId;
+
+			/*
+			 * Live update form on the form builder.
+			 */
+			const container = document.querySelector( '#field_' + fieldId + '_inner_container .frm_combo_inputs_container' );
+			const newColClass = getColClass( subFieldNames.length );
+
+			// Set all sub field elements to cache and hide all of them first.
+			allSubFieldNames.forEach( name => {
+				const subFieldEl = container.querySelector( '[data-sub-field-name="' + name + '"]' );
+				if ( subFieldEl ) {
+					subFieldEl.classList.add( 'frm_hidden' );
+					subFieldEl.classList.remove( ...colClasses );
+					setSubFieldElToCache( fieldId, name, subFieldEl );
+				}
+			});
+
+			subFieldNames.forEach( subFieldName => {
+				const subFieldEl = getSubFieldElFromCache( fieldId, subFieldName );
+				if ( ! subFieldEl ) {
+					return;
+				}
+
+				subFieldEl.classList.remove( 'frm_hidden' );
+				subFieldEl.classList.add( newColClass );
+
+				container.append( subFieldEl );
+			});
+
+			/*
+			 * Live update subfield options.
+			 */
+			// Hide all subfield options.
+			allSubFieldNames.forEach( name => {
+				const optionsEl = document.querySelector( '.frm_sub_field_options-' + name + '[data-field-id="' + fieldId + '"]' );
+				if ( optionsEl ) {
+					optionsEl.classList.add( 'frm_hidden' );
+					setSubFieldElToCache( fieldId, name + '_options', optionsEl );
+				}
+			});
+
+			subFieldNames.forEach( subFieldName => {
+				const optionsEl = getSubFieldElFromCache( fieldId, subFieldName + '_options' );
+				if ( ! optionsEl ) {
+					return;
+				}
+				optionsEl.classList.remove( 'frm_hidden' );
+			});
+		};
+
+		const dropdownSelector = '.frm_name_layout_dropdown';
+		document.addEventListener( 'change', event => {
+			if ( event.target.matches( dropdownSelector ) ) {
+				onChangeLayout( event );
+			}
+		}, false );
+
+		// Trigger dropdown change on load.
+		document.querySelectorAll( dropdownSelector ).forEach( el => {
+			el.dispatchEvent( new Event( 'change', { bubbles: true }) );
+		});
+	}
+
 	function debounce( func, wait = 100 ) {
 		let timeout;
 		return function( ...args ) {
@@ -6838,6 +6954,7 @@ function frmAdminBuildJS() {
 			hideEmptyEle();
 			maybeDisableAddSummaryBtn();
 			maybeHideQuantityProductFieldOption();
+			handleNameFieldOnFormBuilder();
 		},
 
 		settingsInit: function() {

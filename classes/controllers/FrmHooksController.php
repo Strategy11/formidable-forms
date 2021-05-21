@@ -84,6 +84,12 @@ class FrmHooksController {
 
 		add_filter( 'cron_schedules', 'FrmUsageController::add_schedules' );
 		add_action( 'formidable_send_usage', 'FrmUsageController::send_snapshot' );
+
+		/**
+		 * Make name field work with View.
+		 * FrmProContent::replace_single_shortcode() applies this filter like 'frm_keep_' . $field->type . '_value_array'
+		 */
+		add_filter( 'frm_keep_name_value_array', '__return_true' );
 	}
 
 	public static function load_admin_hooks() {
