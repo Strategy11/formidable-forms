@@ -3174,7 +3174,7 @@ function frmAdminBuildJS() {
 				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
-			// TODO: Add button check here.
+			label = frmAdminBuild.hooks.applyFilters( 'frm_choice_field_label', label, fieldId, optVals[ i ], hasImageOptions );
 
 			checked = getChecked( optVals[ i ].id  );
 
@@ -6745,10 +6745,14 @@ function frmAdminBuildJS() {
 		const onClickOption = event => {
 			const selectedClass = 'frm_images_dropdown__option--selected';
 			const optionEl      = event.target.matches( '.frm_images_dropdown__option' ) ? event.target : event.target.closest( '.frm_images_dropdown__option' );
-			const valueEl       = optionEl.closest( '.frm_images_dropdown' ).querySelector( '.frm_images_dropdown__value' );
+			const wrapperEl     = optionEl.closest( '.frm_images_dropdown' );
+			const valueEl       = wrapperEl.querySelector( '.frm_images_dropdown__value' );
+			const toggleEl      = wrapperEl.querySelector( '.frm_images_dropdown__toggle' );
 
 			valueEl.value = optionEl.getAttribute( 'data-value' );
 			valueEl.dispatchEvent( new Event( 'change', { bubbles: true }) );
+
+			toggleEl.innerHTML = optionEl.querySelector( '.frm_images_dropdown__text' ).innerHTML;
 
 			optionEl.parentElement.querySelectorAll( '.frm_images_dropdown__option' ).forEach( optionEl => {
 				optionEl.classList.remove( selectedClass );

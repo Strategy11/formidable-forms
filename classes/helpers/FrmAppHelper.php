@@ -2763,7 +2763,7 @@ class FrmAppHelper {
 					}
 
 					$classes = 'frm_images_dropdown__option';
-					if ( $args['selected'] === $key ) {
+					if ( $args['selected'] == $key ) {
 						$classes .= ' frm_images_dropdown__option--selected';
 					}
 					?>
