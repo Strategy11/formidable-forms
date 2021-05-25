@@ -204,6 +204,7 @@ class FrmFieldCombo extends FrmFieldType {
 			'default'        => false,
 			'clear_on_focus' => false, // Don't use the regular placeholder option.
 			'logic'          => true,
+			'visibility'     => true,
 		);
 
 		return $settings;
@@ -386,6 +387,10 @@ class FrmFieldCombo extends FrmFieldType {
 		}
 
 		if ( class_exists( 'FrmProEntryMeta' ) && FrmProEntryMeta::skip_required_validation( $this->field ) ) {
+			return $errors;
+		}
+
+		if ( class_exists( 'FrmProFieldsHelper' ) && ! FrmProFieldsHelper::is_field_visible_to_user( $this->field ) ) {
 			return $errors;
 		}
 
