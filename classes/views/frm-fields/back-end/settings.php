@@ -105,11 +105,12 @@ if ( $display['clear_on_focus'] ) {
  *
  * @since 4.11.01 Added `$display` and `$values`.
  *
- * @param array $field   Field data.
- * @param array $display Display data.
- * @param array $values  Field values.
+ * @param array        $field     Field data.
+ * @param FrmFieldType $field_obj Field type object.
+ * @param array        $display   Display data.
+ * @param array        $values    Field values.
  */
-do_action( 'frm_before_field_options', $field, $display, $values );
+do_action( 'frm_before_field_options', $field, $field_obj, $display, $values );
 
 ?>
 
