@@ -1323,6 +1323,7 @@ a.frm_hidden,
 
 .post-type-frm_display .wrap > #posts-filter,
 .post-type-frm_display .wrap > .subsubsub,
+.post-type-frm_display .wrap > .icl_subsubsub,
 .frm_form_settings > p {
 	margin: 6px 40px;
 	padding: 0;
