@@ -8041,3 +8041,13 @@ Responsive Design
 .edit_form_item .frm_combo_inputs_container[data-name-layout="last_first"] .frm_form_subfield-first {
 	order: 2;
 }
+
+.frm-video-wrapper {
+	padding: 0 20px;
+}
+
+.frm-video-wrapper iframe {
+	width: 100%;
+	max-width: 843px;
+	border-radius: 10px;
+}
