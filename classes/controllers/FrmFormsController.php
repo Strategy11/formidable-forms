@@ -975,9 +975,18 @@ class FrmFormsController {
 
 		unset( $end_section_values, $last_order, $open, $reset_fields );
 
-		$args             = array( 'parent_form_id' => $form->id );
-		$values           = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
-		$values['fields'] = $fields;
+		$args   = array( 'parent_form_id' => $form->id );
+		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
+
+		/**
+		 * Allows modifying the list of fields in the form builder.
+		 *
+		 * @since 4.11.01
+		 *
+		 * @param object[] $fields Array of fields.
+		 * @param object   $form   Form object.
+		 */
+		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, $form );
 
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 		if ( $form->is_template && $message == $edit_message ) {

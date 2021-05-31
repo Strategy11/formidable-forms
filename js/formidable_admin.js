@@ -594,6 +594,10 @@ function frmAdminBuildJS() {
 			deleteButton = jQuery( this ),
 			continueRemove = confirmLinkClick( this );
 
+		if ( parseInt( this.getAttribute( 'data-skip-frm-js' ) ) ) {
+			return;
+		}
+
 		if ( continueRemove === false ) {
 			return;
 		} else {
@@ -1330,6 +1334,13 @@ function frmAdminBuildJS() {
 
 		deselectFields();
 		initiateMultiselect();
+
+		const addedEvent      = new Event( 'frm_added_field', { bubbles: false });
+		addedEvent.frmField   = field;
+		addedEvent.frmSection = section;
+		addedEvent.frmType    = type;
+		addedEvent.frmToggles = toggled;
+		document.dispatchEvent( addedEvent );
 	}
 
 	function clearSettingsBox() {
