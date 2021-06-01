@@ -87,7 +87,6 @@ class FrmAppHelper {
 		}
 
 		$anchor = '';
-		$plan   = '';
 		if ( is_array( $args ) ) {
 			$medium = $args['medium'];
 			if ( isset( $args['content'] ) ) {
@@ -95,9 +94,6 @@ class FrmAppHelper {
 			}
 			if ( isset( $args['anchor'] ) ) {
 				$anchor = '#' . $args['anchor'];
-			}
-			if ( isset( $args['plan'] ) ) {
-				$plan = 'view';
 			}
 		} else {
 			$medium = $args;
@@ -117,8 +113,8 @@ class FrmAppHelper {
 			$query_args['f'] = $args['param'];
 		}
 
-		if ( $plan ) {
-			$query_args['plan'] = $plan;
+		if ( is_array( $args ) && ! empty( $args['plan'] ) ) {
+			$query_args['plan'] = $args['plan'];
 		}
 
 		$link = add_query_arg( $query_args, $page ) . $anchor;
