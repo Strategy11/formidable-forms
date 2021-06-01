@@ -54,12 +54,13 @@ class FrmEntry {
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
 
-		unset( $check_val['created_at'], $check_val['updated_at'] );
-		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
+		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
 		}
+
+		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
 
 		global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
