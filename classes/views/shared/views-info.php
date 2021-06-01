@@ -8,9 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'label'       => __( 'Views', 'formidable' ),
-				'form'        => $form,
-				'close'       => $form ? admin_url( 'admin.php?page=formidable&frm_action=views&form=' . $form->id ) : '',
+				'label' => __( 'Views', 'formidable' ),
+				'form'  => $form,
+				'close' => $form ? admin_url( 'admin.php?page=formidable&frm_action=views&form=' . $form->id ) : '',
 			)
 		);
 		?>
@@ -22,7 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p style="max-width:400px;margin:20px auto">
 				<?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?>
 			</p>
-			<?php FrmAddonsController::conditional_action_button( 'views', 'views-info' ); ?>
+			<?php
+			$upgrade_link_args = array(
+				'medium' => 'views-info',
+				'plan'   => 'view',
+			);
+			FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
+			?>
 		</div>
 	</div>
 </div>
