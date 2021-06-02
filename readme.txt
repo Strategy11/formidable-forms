@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 4.7
 Tested up to: 5.7.2
 Requires PHP: 5.6
-Stable tag: 4.11
+Stable tag: 4.11.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -436,6 +436,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.11.01 =
+* New: Added a new frm_duplicate_check_val filter for customizing the duplicate entry check. This can be used to remove IP to help prevent duplicate entries for longer periods of time when using frm_time_to_check_duplicates filter. For an example see https://formidableforms.com/knowledgebase/frm_duplicate_check_val/.
+* New: Added visibility option to the Name field.
+* Fix: The honeypot setting would still appear as on after it was turned off.
+
 = 4.11 =
 * New: Added a quick and easy Name field with options for First, Middle, and Last names.
 * New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings for each form.
@@ -467,9 +472,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: If you add or remove an action and try to leave the page without saving, there will be a warning.
 * Fix: The style editor save button was hidden in WordPress 5.7.
 * Fix: There were a couple of words misspelled on the welcome page.
-
-= 4.09.07 =
-* Fix: Duplicated fields would occasionally generate long field keys that were preventing fields from being created.
-* Fix: Fields for controlling radio options in the form builder were not using unique id attribute values.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
