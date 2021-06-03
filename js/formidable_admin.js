@@ -3959,12 +3959,26 @@ function frmAdminBuildJS() {
 
 	function addFormAction() {
 		/*jshint validthis:true */
-		var actionId = getNewActionId(),
-			type = jQuery( this ).data( 'actiontype' ),
-			formId = thisFormId;
+		var type, actionId, formId, placeholderSetting, actionsList;
+
+		type = jQuery( this ).data( 'actiontype' );
+
+		if ( isAtLimitForActionType( type ) ) {
+			return;
+		}
+
+		actionId = getNewActionId();
+		formId = thisFormId;
+
+		placeholderSetting = document.createElement( 'div' );
+		placeholderSetting.classList.add( 'frm_single_' + type + '_settings' );
+
+		actionsList = document.getElementById( 'frm_notification_settings' );
+		actionsList.appendChild( placeholderSetting );
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_add_form_action',
 				type: type,
@@ -3974,11 +3988,12 @@ function frmAdminBuildJS() {
 			},
 			success: function( html ) {
 				fieldUpdated();
+				placeholderSetting.remove();
 
 				// Close any open actions first.
 				jQuery( '.frm_form_action_settings.open' ).removeClass( 'open' );
 
-				jQuery( '#frm_notification_settings' ).append( html );
+				jQuery( actionsList ).append( html );
 				jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
 
 				var newAction = document.getElementById( 'frm_form_action_' + actionId );
@@ -4123,16 +4138,31 @@ function frmAdminBuildJS() {
 	}
 
 	function checkActiveAction( type ) {
-		var limit = parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ), 10 );
-		var len = jQuery( '.frm_single_' + type + '_settings' ).length;
-		var limitClass;
-		if ( len >= limit ) {
+		var $actionTriggers, limitClass;
+
+		$actionTriggers = jQuery( '.frm_' + type + '_action' );
+
+		if ( isAtLimitForActionType( type ) ) {
 			limitClass = 'frm_inactive_action';
-			limitClass += ( limit > 0 ) ? ' frm_already_used' : '';
-			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_active_action' ).addClass( limitClass );
+			if ( getLimitForActionType( type ) > 0 ) {
+				limitClass += ' frm_already_used';
+			}
+			$actionTriggers.removeClass( 'frm_active_action' ).addClass( limitClass );
 		} else {
-			jQuery( '.frm_' + type + '_action' ).removeClass( 'frm_inactive_action frm_already_used' ).addClass( 'frm_active_action' );
+			$actionTriggers.removeClass( 'frm_inactive_action frm_already_used' ).addClass( 'frm_active_action' );
 		}
+	}
+
+	function isAtLimitForActionType( type ) {
+		return getNumberOfActionsForType( type ) >= getLimitForActionType( type );
+	}
+
+	function getLimitForActionType( type ) {
+		return parseInt( jQuery( '.frm_' + type + '_action' ).data( 'limit' ), 10 );
+	}
+
+	function getNumberOfActionsForType( type ) {
+		return jQuery( '.frm_single_' + type + '_settings' ).length;
 	}
 
 	function onlyOneActionMessage() {
