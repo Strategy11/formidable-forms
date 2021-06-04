@@ -3631,11 +3631,11 @@ label input[type="checkbox"], label input[type="radio"] {
 .frm_single_option.ui-sortable-placeholder,
 li.sortable-placeholder {
 	width: calc(100% - 5px) !important;
-	height: 0 !important;
 	border: none;
-	box-shadow: 2px -10px 0 1px var(--primary-color);
 	margin: 0;
 	visibility: visible !important;
+	background-color: rgba(65, 153, 253, 0.07);
+	min-height: 62px;
 }
 
 .edit_field_type_divider + li.sortable-placeholder {
