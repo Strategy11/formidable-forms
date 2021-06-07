@@ -360,7 +360,7 @@ class FrmAddon {
 		// if there is no download url, this license does not apply to the addon
 		if ( isset( $addon['package'] ) ) {
 			$this->is_parent_licence = true;
-		} elseif ( isset( $addons['error'] ) ) {
+		} elseif ( isset( $addon['error'] ) ) {
 			// if the license is expired, we must assume all add-ons were packaged
 			$this->is_parent_licence = true;
 			$this->is_expired_addon  = true;
