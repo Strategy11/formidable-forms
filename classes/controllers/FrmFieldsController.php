@@ -195,8 +195,11 @@ class FrmFieldsController {
 		$li_classes = $field_info->form_builder_classes( $display['type'] );
 		$classes    = isset( $field['classes'] ) ? $field['classes'] : '';
 
+		// TODO check before this is called so that we can include a wrapper on this element and nest the list.
+		// TODO check $classes for layout classes and try to determine size of field.
+
 		// Exclude alignright for now since we aren't using widths.
-		$classes    = str_replace( ' frm_alignright ', ' ', $classes );
+		$classes = str_replace( ' frm_alignright ', ' ', $classes );
 		if ( trim( $classes ) === 'frm_alignright' ) {
 			$classes = '';
 		}
