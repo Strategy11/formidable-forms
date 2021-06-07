@@ -405,7 +405,7 @@ class FrmEntry {
 			}
 
 			// include sub entries in an array
-			if ( ! isset( $entry_metas[ $meta_val->field_id ] ) ) {
+			if ( ! isset( $entry->metas[ $meta_val->field_id ] ) ) {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 
