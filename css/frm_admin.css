@@ -3634,8 +3634,13 @@ li.sortable-placeholder {
 	border: none;
 	margin: 0;
 	visibility: visible !important;
-	background-color: rgba(65, 153, 253, 0.07);
-	min-height: 62px;
+}
+
+.frm_single_option.ui-sortable-placeholder,
+li.sortable-placeholder {
+	height: 0 !important;
+	box-shadow: 2px -10px 0 1px var(--primary-color);
+	/* TODO: I am not going to want this for side-by-side placement, only inserting a new row. */
 }
 
 .edit_field_type_divider + li.sortable-placeholder {
