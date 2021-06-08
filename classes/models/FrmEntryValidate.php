@@ -34,7 +34,7 @@ class FrmEntryValidate {
 			self::spam_check( $exclude, $values, $errors );
 		}
 
-		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude' ) );
+		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude', 'posted_fields' ) );
 
 		return $errors;
 	}
