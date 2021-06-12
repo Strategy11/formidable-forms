@@ -1745,20 +1745,9 @@ class FrmFormsController {
 	}
 
 	public static function get_form_contents( $form, $title, $description, $atts ) {
-		$params = FrmForm::get_params( $form );
-		$errors = self::get_saved_errors( $form, $params );
-		$fields = FrmFieldsHelper::get_form_fields( $form->id, $errors );
-
-		/**
-		 * Allows modifying the list of fields in the form.
-		 *
-		 * @since 4.12
-		 *
-		 * @param array  $fields Array of fields.
-		 * @param object $form   Form object.
-		 */
-		$fields = apply_filters( 'frm_fields_in_form_new', $fields, $form );
-
+		$params    = FrmForm::get_params( $form );
+		$errors    = self::get_saved_errors( $form, $params );
+		$fields    = FrmFieldsHelper::get_form_fields( $form->id, $errors );
 		$reset     = false;
 		$pass_args = compact( 'form', 'fields', 'errors', 'title', 'description', 'reset' );
 
