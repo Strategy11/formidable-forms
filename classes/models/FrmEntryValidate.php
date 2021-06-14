@@ -229,43 +229,63 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( self::is_honeypot_spam() || self::is_spam_bot() ) {
+		$antispam_check = self::is_antispam_check( $values['form_id'] );
+		if ( is_string( $antispam_check ) ) {
+			$errors['spam'] = $antispam_check;
+		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
+			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		} elseif ( self::blacklist_check( $values ) ) {
+			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
+		} elseif ( self::is_akismet_spam( $values ) && self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
-
-		if ( self::blacklist_check( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		}
-
-		if ( self::is_akismet_spam( $values ) ) {
-			if ( self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
-				$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-			}
-		}
 	}
 
-	private static function is_honeypot_spam() {
-		$honeypot_value = FrmAppHelper::get_param( 'frm_verify', '', 'get', 'sanitize_text_field' );
-
-		return ( $honeypot_value !== '' );
+	/**
+	 * @param int $form_id
+	 * @return boolean
+	 */
+	private static function is_antispam_check( $form_id ) {
+		$aspm = new FrmAntiSpam( $form_id );
+		return $aspm->validate();
 	}
 
+	/**
+	 * @param array $values
+	 * @return boolean
+	 */
+	private static function is_honeypot_spam( $values ) {
+		$honeypot = new FrmHoneypot( $values['form_id'] );
+		return ! $honeypot->validate();
+	}
+
+	/**
+	 * @return boolean
+	 */
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
 
 		return empty( $ip );
 	}
 
+	/**
+	 * @param array $values
+	 * @return boolean
+	 */
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
 
 		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
 	}
 
+	/**
+	 * @param int $form_id
+	 * @return bool
+	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		return ( isset( $form->options['akismet'] ) && ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] != 'logged' || ! is_user_logged_in() ) );
+		return ( isset( $form->options['akismet'] ) && ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
 	public static function blacklist_check( $values ) {

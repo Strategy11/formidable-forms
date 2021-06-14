@@ -37,6 +37,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 
+		// The JavaScript antispam check doesn't work with unit tests so turn it off.
+		add_filter( 'frm_run_antispam', '__return_false' );
+
 		$this->is_pro_active = get_option( 'frmpro-authorized' );
 		if ( is_multisite() && ! $this->is_pro_active ) {
 			// WP unit testing bootstrap doesn't bother hooking into `pre_site_option` so we need to get_option() instead.

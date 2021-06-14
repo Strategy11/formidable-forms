@@ -1031,7 +1031,7 @@ class FrmListHelper {
 	 */
 	protected function display_tablenav( $which ) {
 		if ( 'top' == $which ) {
-			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+			wp_nonce_field( 'bulk-' . $this->_args['plural'], '_wpnonce', false );
 			if ( ! $this->has_min_items( 1 ) ) {
 				// Don't show bulk actions if no items.
 				return;

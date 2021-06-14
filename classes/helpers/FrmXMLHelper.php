@@ -752,6 +752,7 @@ class FrmXMLHelper {
 				'post_date_gmt'  => (string) $item->post_date_gmt,
 				'ping_status'    => (string) $item->ping_status,
 				'postmeta'       => array(),
+				'layout'         => array(),
 				'tax_input'      => array(),
 			);
 
@@ -786,6 +787,7 @@ class FrmXMLHelper {
 			}
 
 			self::update_postmeta( $post, $post_id );
+			self::update_layout( $post, $post_id );
 
 			$this_type = 'posts';
 			if ( isset( $post_types[ $post['post_type'] ] ) ) {
@@ -828,6 +830,11 @@ class FrmXMLHelper {
 		foreach ( $item->postmeta as $meta ) {
 			self::populate_postmeta( $post, $meta, $imported );
 			unset( $meta );
+		}
+
+		foreach ( $item->layout as $layout ) {
+			self::populate_layout( $post, $layout );
+			unset( $layout );
 		}
 
 		self::populate_taxonomies( $post, $item );
@@ -891,6 +898,10 @@ class FrmXMLHelper {
 		}
 
 		$post['postmeta'][ (string) $meta->meta_key ] = $m['value'];
+	}
+
+	private static function populate_layout( &$post, $layout ) {
+		$post['layout'][ (string) $layout->type ] = (string) $layout->data;
 	}
 
 	/**
@@ -964,6 +975,20 @@ class FrmXMLHelper {
 			update_post_meta( $post_id, $k, $v );
 
 			unset( $k, $v );
+		}
+	}
+
+	/**
+	 * @param array $post
+	 * @param int   $post_id
+	 */
+	private static function update_layout( &$post, $post_id ) {
+		if ( is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {
+			$listing_layout = ! empty( $post['layout']['listing'] ) ? json_decode( $post['layout']['listing'], true ) : array();
+			$detail_layout  = ! empty( $post['layout']['detail'] ) ? json_decode( $post['layout']['detail'], true ) : array();
+			if ( $listing_layout || $detail_layout ) {
+				FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
+			}
 		}
 	}
 
@@ -1202,15 +1227,11 @@ class FrmXMLHelper {
 	 * @since 3.06
 	 */
 	private static function remove_defaults( $defaults, &$saved ) {
-		$array_defaults = array_filter( $defaults, 'is_array' );
-		foreach ( $array_defaults as $d => $default ) {
-			// compare array defaults
-			if ( $default == $saved[ $d ] ) {
-				unset( $saved[ $d ] );
+		foreach ( $saved as $key => $value ) {
+			if ( isset( $defaults[ $key ] ) && $defaults[ $key ] === $value ) {
+				unset( $saved[ $key ] );
 			}
-			unset( $defaults[ $d ] );
 		}
-		$saved = array_diff_assoc( (array) $saved, $defaults );
 	}
 
 	/**
@@ -1241,7 +1262,11 @@ class FrmXMLHelper {
 	public static function cdata( $str ) {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
-			$str = json_encode( $str );
+			if ( isset( $str[0] ) && isset( $str[0]['box'] ) ) {
+				$str = maybe_serialize( $str );
+			} else {
+				$str = json_encode( $str );
+			}
 		} elseif ( seems_utf8( $str ) == false ) {
 			$str = utf8_encode( $str );
 		}
@@ -1317,6 +1342,7 @@ class FrmXMLHelper {
 			'post_status',
 			'post_custom_fields',
 			'post_password',
+			'post_parent',
 		);
 
 		foreach ( $post_settings as $post_setting ) {
@@ -1337,6 +1363,7 @@ class FrmXMLHelper {
 				'post_password',
 				'post_date',
 				'post_status',
+				'post_parent',
 			);
 
 			// Fields with arrays saved.
