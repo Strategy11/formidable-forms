@@ -1428,8 +1428,9 @@ select.frm_loading_lookup{
 	display:block;
 }
 
-.frm_repeat_sec .frm_form_field i.frm_icon_font::before {
-	color: <?php echo esc_html( $defaults['repeat_icon_color'] ); ?> !important;
+.with_frm_style .frm_repeat_sec .frm_form_field i.frm_icon_font::before {
+	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
+	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
 
 /* Fonts */
