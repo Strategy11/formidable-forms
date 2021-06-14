@@ -62,8 +62,9 @@ input:-webkit-autofill {
 	margin-bottom:<?php echo esc_html( $defaults['form_desc_margin_bottom'] . $important ); ?>;
 	margin-bottom:var(--form-desc-margin-bottom)<?php echo esc_html( $important ); ?>;
 <?php } ?>
-<?php if ( ! empty( $defaults['form_desc_padding'] ) ) { ?>
+<?php if ( isset( $defaults['form_desc_padding'] ) ) { ?>
 	padding:<?php echo esc_html( $defaults['form_desc_padding'] . $important ); ?>;
+	padding:var(--form-desc-padding)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
 
