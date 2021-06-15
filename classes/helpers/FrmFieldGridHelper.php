@@ -44,17 +44,17 @@ class FrmFieldGridHelper {
 		$this->field                  = $field;
 		$this->field_layout_class     = $this->get_field_layout_class();
 		$this->active_field_size      = $this->get_size_of_class( $this->field_layout_class );
-		$this->has_field_layout_class = false !== $this->field_layout_class;
+		$this->has_field_layout_class = ! ! $this->field_layout_class;
 	}
 
 	/**
-	 * @return string|false
+	 * @return string
 	 */
 	public function get_field_layout_class() {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 
 		if ( empty( $field['classes'] ) ) {
-			return false;
+			return '';
 		}
 
 		$split   = explode( ' ', $field['classes'] );
@@ -119,6 +119,9 @@ class FrmFieldGridHelper {
 	public function sync_list_size() {
 		if ( false !== $this->parent_li ) {
 			$this->current_list_size += $this->active_field_size;
+			if ( 12 === $this->current_list_size ) {
+				$this->close_field_wrapper();
+			}
 		}
 	}
 
