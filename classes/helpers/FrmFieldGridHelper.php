@@ -84,7 +84,7 @@ class FrmFieldGridHelper {
 	}
 
 	private function begin_field_wrapper() {
-		echo '<li><ul class="frm_grid_container">';
+		echo '<li><ul class="frm_grid_container frm_sorting">';
 		$this->parent_li         = true;
 		$this->current_list_size = 0;
 	}
