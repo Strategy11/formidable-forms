@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				$grid_helper->set_field( $field );
 				$grid_helper->maybe_begin_field_wrapper();
 				FrmFieldsController::load_single_field( $field, $values );
-				$grid_helper->maybe_close_field_wrapper();
+				$grid_helper->sync_list_size();
 				unset( $field );
 			}
 			$grid_helper->force_close_field_wrapper();

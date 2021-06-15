@@ -23,12 +23,18 @@ class FrmFieldGridHelper {
 	private $has_field_layout_class;
 
 	/**
+	 * @var int
+	 */
+	private $active_field_size;
+
+	/**
 	 * @var stdClass
 	 */
 	private $field;
 
 	public function __construct() {
-		$this->parent_li = false;
+		$this->parent_li         = false;
+		$this->current_list_size = 0;
 	}
 
 	/**
@@ -37,6 +43,7 @@ class FrmFieldGridHelper {
 	public function set_field( $field ) {
 		$this->field                  = $field;
 		$this->field_layout_class     = $this->get_field_layout_class();
+		$this->active_field_size      = $this->get_size_of_class( $this->field_layout_class );
 		$this->has_field_layout_class = false !== $this->field_layout_class;
 	}
 
@@ -63,12 +70,23 @@ class FrmFieldGridHelper {
 	}
 
 	public function maybe_begin_field_wrapper() {
-		if ( $this->has_field_layout_class && false === $this->parent_li ) {
-			// TODO make sure we're not filling past 12 columns here. if we hit 12, we want to break and open a new parent again.
-			echo '<li><ul class="frm_grid_container">';
-			$this->parent_li         = true;
-			$this->current_list_size = $this->get_size_of_class( $this->field_layout_class );
+		if ( ! $this->has_field_layout_class ) {
+			return;
 		}
+
+		if ( false !== $this->parent_li && ! $this->can_support_current_layout() ) {
+			$this->close_field_wrapper();
+		}
+
+		if ( false === $this->parent_li ) {
+			$this->begin_field_wrapper();
+		}
+	}
+
+	private function begin_field_wrapper() {
+		echo '<li><ul class="frm_grid_container">';
+		$this->parent_li         = true;
+		$this->current_list_size = 0;
 	}
 
 	/**
@@ -94,19 +112,13 @@ class FrmFieldGridHelper {
 			case 'frm12':
 				return 12;
 		}
-		return 0;
+		// Anything missing a layout class should be a full width row.
+		return 12;
 	}
 
-	private function get_size_of_current_class() {
-		return self::get_size_of_class( $this->field_layout_class );
-	}
-
-	public function maybe_close_field_wrapper() {
+	public function sync_list_size() {
 		if ( false !== $this->parent_li ) {
-			$this->current_list_size += $this->get_size_of_class( $this->field_layout_class );
-			if ( ! $this->can_support_current_layout() ) {
-				$this->close_field_wrapper();
-			}
+			$this->current_list_size += $this->active_field_size;
 		}
 	}
 
@@ -122,7 +134,8 @@ class FrmFieldGridHelper {
 
 	private function close_field_wrapper() {
 		echo '</ul></li>';
-		$this->parent_li = false;
+		$this->parent_li         = false;
+		$this->current_list_size = 0;
 	}
 
 	private function can_support_current_layout() {
