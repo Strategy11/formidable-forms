@@ -70,10 +70,6 @@ class FrmFieldGridHelper {
 	}
 
 	public function maybe_begin_field_wrapper() {
-		if ( ! $this->has_field_layout_class ) {
-			return;
-		}
-
 		if ( false !== $this->parent_li && ! $this->can_support_current_layout() ) {
 			$this->close_field_wrapper();
 		}

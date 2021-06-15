@@ -796,7 +796,7 @@ function frmAdminBuildJS() {
 
 		var opts = {
 			connectWith: 'ul.frm_sorting',
-			items: '> li.frm_field_box',
+			items: 'li.frm_field_box',
 			placeholder: 'sortable-placeholder',
 			axis: 'y',
 			cancel: '.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_sortable_field_opts,.frm_noallow',
@@ -858,7 +858,7 @@ function frmAdminBuildJS() {
 					toggleCollapsePage( jQuery( previous ) );
 				}
 			},
-			stop: function() {
+			stop: function( event, ui ) {
 				var moving = jQuery( this );
 				copyHelper && copyHelper.remove();
 				if ( cancelSort ) {
@@ -867,6 +867,7 @@ function frmAdminBuildJS() {
 					updateFieldOrder();
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
+				syncLayoutClasses( ui.item );
 			},
 			sort: function( event ) {
 				container.scrollTop( function( i, v ) {
@@ -893,6 +894,27 @@ function frmAdminBuildJS() {
 		jQuery( sort ).sortable( opts );
 
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+	}
+
+	function syncLayoutClasses( $item ) {
+		var $row, classToAdd;
+		$row = $item.parent();
+		classToAdd = getClassToAdd( $row.children().length );
+		$row.children().removeClass( 'frm12 frm_half frm_third frm_fourth frm_sixth frm_two_thirds frm_three_fourths frm10' ).addClass( classToAdd );
+	}
+
+	function getClassToAdd( count ) {
+		// TODO do we just limit to no more than 4? This doesn't really gracefully go to 5. But something like 1/3 1/6 1/6 1/6 1/6 would work.
+		switch ( count ) {
+			case 1:
+				return 'frm12';
+			case 2:
+				return 'frm_half';
+			case 3:
+				return 'frm_third';
+			case 4:
+				return 'frm_fourth';
+		}
 	}
 
 	function setupFieldOptionSorting( sort ) {
