@@ -348,6 +348,7 @@ class FrmStyle {
 			'form_desc_color'         => '666666',
 			'form_desc_margin_top'    => '10px',
 			'form_desc_margin_bottom' => '25px',
+			'form_desc_padding'       => '0',
 
 			'font'            => '"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif',
 			'font_size'       => '15px',
@@ -416,6 +417,7 @@ class FrmStyle {
 			'collapse_icon'        => '6',
 			'collapse_pos'         => 'after',
 			'repeat_icon'          => '1',
+			'repeat_icon_color'    => 'ffffff',
 
 			'submit_style'               => false,
 			'submit_font_size'           => '15px',

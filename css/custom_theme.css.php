@@ -62,6 +62,10 @@ input:-webkit-autofill {
 	margin-bottom:<?php echo esc_html( $defaults['form_desc_margin_bottom'] . $important ); ?>;
 	margin-bottom:var(--form-desc-margin-bottom)<?php echo esc_html( $important ); ?>;
 <?php } ?>
+<?php if ( isset( $defaults['form_desc_padding'] ) ) { ?>
+	padding:<?php echo esc_html( $defaults['form_desc_padding'] . $important ); ?>;
+	padding:var(--form-desc-padding)<?php echo esc_html( $important ); ?>;
+<?php } ?>
 }
 
 form input.frm_verify{
@@ -1426,6 +1430,11 @@ select.frm_loading_lookup{
 
 .frm_clearfix{
 	display:block;
+}
+
+.with_frm_style .frm_repeat_sec .frm_form_field .frm_icon_font::before {
+	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
+	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
 
 /* Fonts */
