@@ -1,4 +1,7 @@
 == Changelog ==
+= 4.11.02 =
+* New: The padding for form descriptions can now be customized when editing styles.
+
 = 4.11.01 =
 * New: Added a new frm_duplicate_check_val filter for customizing the duplicate entry check. This can be used to remove IP to help prevent duplicate entries for longer periods of time when using frm_time_to_check_duplicates filter. For an example see https://formidableforms.com/knowledgebase/frm_duplicate_check_val/.
 * New: Added visibility option to the Name field.
