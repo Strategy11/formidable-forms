@@ -471,9 +471,4 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Zeros were not appearing when used as a placeholder value.
 * Fix: Prevent a warning when previewing a contact form with no fields.
 
-= 4.09.08 =
-* New: If you add or remove an action and try to leave the page without saving, there will be a warning.
-* Fix: The style editor save button was hidden in WordPress 5.7.
-* Fix: There were a couple of words misspelled on the welcome page.
-
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
