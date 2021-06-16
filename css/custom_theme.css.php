@@ -1432,6 +1432,11 @@ select.frm_loading_lookup{
 	display:block;
 }
 
+.with_frm_style .frm_repeat_sec .frm_form_field .frm_icon_font::before {
+	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
+	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
+}
+
 /* Fonts */
 <?php readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' ); ?>
 <?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
