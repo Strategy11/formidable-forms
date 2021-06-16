@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.11.01\n"
+"Project-Id-Version: Formidable Forms 4.11.02\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-06-02T14:16:07+00:00\n"
+"POT-Creation-Date: 2021-06-16T14:35:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -1269,6 +1269,7 @@ msgid "Confirm Email"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2490
+#: classes/views/shared/mb_adv_info.php:166
 msgid "Conditional content here"
 msgstr ""
 
@@ -4223,12 +4224,12 @@ msgstr ""
 msgid "Formidable Style"
 msgstr ""
 
-#: classes/models/FrmStyle.php:477
+#: classes/models/FrmStyle.php:479
 #: classes/views/styles/_field-description.php:22
 msgid "normal"
 msgstr ""
 
-#: classes/models/FrmStyle.php:480
+#: classes/models/FrmStyle.php:482
 msgid "bold"
 msgstr ""
 
@@ -4690,6 +4691,10 @@ msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:21
 msgid "Duplicate"
+msgstr ""
+
+#: classes/views/frm-form-actions/form_action.php:25
+msgid "Delete this form action?"
 msgstr ""
 
 #: classes/views/frm-form-actions/settings.php:7
@@ -5792,6 +5797,7 @@ msgstr ""
 #: classes/views/styles/_buttons.php:79
 #: classes/views/styles/_field-labels.php:50
 #: classes/views/styles/_field-sizes.php:27
+#: classes/views/styles/_form-description.php:24
 #: classes/views/styles/_general.php:56
 msgid "Padding"
 msgstr ""
