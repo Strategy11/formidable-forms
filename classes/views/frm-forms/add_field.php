@@ -29,10 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<li class="frm_dropdown_li frm_select_field">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_settings_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
 				</li>
-				<li class="frm_dropdown_li frm_delete_field">
+				<li class="frm_dropdown_li frm_delete_field" href="#">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?> <?php esc_html_e( 'Delete', 'formidable' ); ?>
 				</li>
-				<li class="frm_dropdown_li frm_clone_field">
+				<li class="frm_dropdown_li frm_clone_field" href="#">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?> <?php esc_html_e( 'Duplicate', 'formidable' ); ?>
 				</li>
 			</ul>

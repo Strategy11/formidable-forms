@@ -1264,7 +1264,7 @@ function frmAdminBuildJS() {
 
 	function duplicateField() {
 		/*jshint validthis:true */
-		var thisField = jQuery( this ).closest( 'li' );
+		var thisField = jQuery( this ).closest( 'li.form-field' );
 		var fieldId = thisField.data( 'fid' );
 		var children = fieldsInSection( fieldId );
 
@@ -2311,9 +2311,9 @@ function frmAdminBuildJS() {
 	function clickDeleteField() {
 		/*jshint validthis:true */
 		var confirmMsg = frm_admin_js.conf_delete,
-			maybeDivider = this.parentNode.parentNode.parentNode,
+			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
-			field = jQuery( this ).closest( 'li' ),
+			field = jQuery( this ).closest( 'li.form-field' ),
 			fieldId = field.data( 'fid' );
 
 		if ( li.classList.contains( 'frm-section-collapsed' ) || li.classList.contains( 'frm-page-collapsed' ) ) {
