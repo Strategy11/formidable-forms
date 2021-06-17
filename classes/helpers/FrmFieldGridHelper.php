@@ -132,9 +132,17 @@ class FrmFieldGridHelper {
 	}
 
 	private function close_field_wrapper() {
+		$this->echo_field_group_controls();
 		echo '</ul></li>';
 		$this->parent_li         = false;
 		$this->current_list_size = 0;
+	}
+
+	private function echo_field_group_controls() {
+		echo '<div class="frm-field-group-controls">';
+		FrmAppHelper::icon_by_class( 'frm_icon_font frm_field_group_layout_icon' );
+		FrmAppHelper::icon_by_class( 'frm_icon_font frm_move_icon' );
+		echo '</div>';
 	}
 
 	private function can_support_current_layout() {

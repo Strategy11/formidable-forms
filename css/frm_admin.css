@@ -5440,10 +5440,32 @@ span.howto {
 	min-height: 350px;
 	padding: 10px 0 35px;
 	margin: 0;
+	position: relative;
 }
 
 .frm-has-fields #frm-show-fields {
 	min-height: 50px;
+}
+
+#frm-show-fields .frm-field-group-controls {
+	display: none;
+	position: absolute;
+	top: 0;
+	right: -25px;
+	width: 25px;
+	background: rgba(65, 153, 253, 0.07);
+	padding: 5px;
+	border-radius: 4px;
+	text-align: right;
+	box-sizing: border-box;
+}
+
+#frm-show-fields ul:hover .frm-field-group-controls {
+	display: block;
+}
+
+#frm-show-fields ul:hover {
+	background: rgba(65, 153, 253, 0.07);
 }
 
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
