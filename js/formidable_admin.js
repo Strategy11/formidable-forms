@@ -2333,6 +2333,10 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	function clickSelectField() {
+		this.closest( '.form-field' ).click();
+	}
+
 	function deleteFieldConfirmed() {
 		/*jshint validthis:true */
 		deleteFields( this.getAttribute( 'data-deletefield' ) );
@@ -6965,6 +6969,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'mousedown', 'input, textarea, select', stopFieldFocus );
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
+			$newFields.on( 'click', '.frm_select_field', clickSelectField );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
