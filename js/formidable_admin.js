@@ -2364,6 +2364,25 @@ function frmAdminBuildJS() {
 		this.closest( '.form-field' ).click();
 	}
 
+	function clickFieldGroupLayout() {
+		// TODO this will trigger a little pop up.
+		// the pop up includes the row layout options
+		// depending on what the current number of rows is, this will need to be dynamic.
+		// this pop up also needs the custom layout option
+		// and the break into different rows option.
+
+		// TODO exclude the group layout controls if there is only one field in a group
+
+		// show 4 options
+		// if there are 3 fields in a group, the options are 1/3,1/3,1/3      1/4,1/2,/1,4     1/2,1/4,1/4      1/4,1/4,1/2
+
+		// how can this be calculated?
+		// option 1: equals
+		// option 2: bigger in the middle
+		// option 3: bigger to the left
+		// option 4: bigger to the right
+	}
+
 	function deleteFieldConfirmed() {
 		/*jshint validthis:true */
 		deleteFields( this.getAttribute( 'data-deletefield' ) );
@@ -6997,6 +7016,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
+			$newFields.on( 'click', '.frm-field-group-controls > svg:first-child', clickFieldGroupLayout );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
