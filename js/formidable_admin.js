@@ -897,14 +897,41 @@ function frmAdminBuildJS() {
 	}
 
 	function syncLayoutClasses( $item ) {
-		var $row, classToAdd;
-		$row = $item.parent();
-		classToAdd = getClassToAdd( $row.children().length );
-		$row.children().removeClass( 'frm12 frm_half frm_third frm_fourth frm_sixth frm_two_thirds frm_three_fourths frm10' ).addClass( classToAdd );
+		var $fields = $item.parent().children();
+		$fields.each( getSyncLayoutClass( getLayoutClasses(), getClassToAdd( $fields.length ) ) );
+	}
 
-		// TODO it might need to load the settings first since the fields might not be updated yet.
-		// TODO get all of these fields ids, update their classes input value.
-		// #frm_classes_24523 or name="field_options[classes_24523]"
+	function getSyncLayoutClass( layoutClasses, classToAdd ) {
+		var length, index;
+		length = layoutClasses.length;
+		return function() {
+			var activeLayoutClass = false,
+				fieldId = this.dataset.fid,
+				layoutClassesInput;
+
+			for ( index = 0; index < length; ++index ) {
+				if ( this.classList.contains( layoutClasses[ index ] ) ) {
+					activeLayoutClass = layoutClasses[ index ];
+					break;
+				}
+			}
+
+			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+			layoutClassesInput = document.getElementById( 'frm_classes_' + fieldId );
+
+			if ( false === activeLayoutClass ) {
+				layoutClassesInput.value = layoutClassesInput.value.concat( ' ' + classToAdd );
+			} else {
+				this.classList.remove( activeLayoutClass );
+				layoutClassesInput.value = layoutClassesInput.value.replace( activeLayoutClass, classToAdd );
+			}
+
+			jQuery( layoutClassesInput ).trigger( 'change' );		
+		}
+	}
+
+	function getLayoutClasses() {
+		return [ 'frm12', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm10' ];
 	}
 
 	function getClassToAdd( count ) {
