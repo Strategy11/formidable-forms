@@ -5200,6 +5200,9 @@ a.frm_action_icon:hover {
 
 .frm-field-action-icons {
 	text-align: right;
+	position: absolute;
+	top: 2px;
+	right: 2px;
 }
 
 .frm-field-action-icons a {
@@ -6641,6 +6644,16 @@ ul .frm_col_two {
 	color: var(--dark-grey);
 	padding: 3px 25px;
 	font-size: 15px;
+}
+
+.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li {
+	padding: 5px 10px;
+	color: rgba(40, 47, 54, 0.85);
+	cursor: pointer;
+}
+
+.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li:hover {
+	background: #F6F7FB;
 }
 
 .frm_code_list.frm-full-hover a span {

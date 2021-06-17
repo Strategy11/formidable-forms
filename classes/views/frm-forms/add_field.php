@@ -28,9 +28,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<ul class="frm-dropdown-menu" role="menu">
 				<?php // TODO fix up styling of dropdown options. There needs to be a clickable pointer, padding updates. ?>
 				<li class="frm_dropdown_li">
-					<?php /* TODO gear icon. */ ?>
 					<?php /* TODO trigger this should actually trigger the field settings. */ ?>
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_settings_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
 				</li>
 				<li class="frm_dropdown_li frm_delete_field">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?> <?php esc_html_e( 'Delete', 'formidable' ); ?>

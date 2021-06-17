@@ -901,6 +901,10 @@ function frmAdminBuildJS() {
 		$row = $item.parent();
 		classToAdd = getClassToAdd( $row.children().length );
 		$row.children().removeClass( 'frm12 frm_half frm_third frm_fourth frm_sixth frm_two_thirds frm_three_fourths frm10' ).addClass( classToAdd );
+
+		// TODO it might need to load the settings first since the fields might not be updated yet.
+		// TODO get all of these fields ids, update their classes input value.
+		// #frm_classes_24523 or name="field_options[classes_24523]"
 	}
 
 	function getClassToAdd( count ) {
