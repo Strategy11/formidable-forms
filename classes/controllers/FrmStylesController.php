@@ -455,9 +455,22 @@ class FrmStylesController {
 		include( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' );
 		$output = ob_get_clean();
 
-		// Replace ../ with absolute URL.
+		echo self::replace_relative_url( $output );
+
+		wp_die();
+	}
+
+	/**
+	 * Replaces relative URL with absolute URL.
+	 *
+	 * @since 4.11.03
+	 *
+	 * @param string $css CSS content.
+	 * @return string
+	 */
+	public static function replace_relative_url( $css ) {
 		$plugin_url = FrmAppHelper::plugin_url();
-		echo str_replace( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return str_replace( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			array(
 				'url(../',
 				"url('../",
@@ -468,9 +481,8 @@ class FrmStylesController {
 				"url('" . $plugin_url,
 				'url("' . $plugin_url,
 			),
-			$output
+			$css
 		);
-		wp_die();
 	}
 
 	/**
