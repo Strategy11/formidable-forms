@@ -20,17 +20,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_move_icon' ); ?>
 		</a>
-		<a href="#" class="frm_bstooltip frm-hover-icon frm_delete_field" title="<?php esc_attr_e( 'Delete Field', 'formidable' ); ?>">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
-		</a>
 
-		<a href="#" class="frm_bstooltip frm-hover-icon frm_clone_field" title="<?php ( $field['type'] === 'divider' ) ? esc_attr_e( 'Duplicate Section', 'formidable' ) : esc_attr_e( 'Duplicate Field', 'formidable' ); ?>">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?>
-		</a>
+		<div class="dropdown">
+			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_more_vert_icon' ); ?>
+			</a>
+			<ul class="frm-dropdown-menu" role="menu">
+				<?php // TODO fix up styling of dropdown options. There needs to be a clickable pointer, padding updates. ?>
+				<li class="frm_dropdown_li">
+					<?php /* TODO gear icon. */ ?>
+					<?php /* TODO trigger this should actually trigger the field settings. */ ?>
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
+				</li>
+				<li class="frm_dropdown_li frm_delete_field">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?> <?php esc_html_e( 'Delete', 'formidable' ); ?>
+				</li>
+				<li class="frm_dropdown_li frm_clone_field">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?> <?php esc_html_e( 'Duplicate', 'formidable' ); ?>
+				</li>
+			</ul>
+		</div>
 
+		<?php
+		/*
+		// TODO do we actually just hide field id?
 		<div class="frm-sub-label alignright">
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
+		*/
+		?>
 	</div>
 
 	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">

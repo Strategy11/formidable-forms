@@ -2809,7 +2809,7 @@ function frmAdminBuildJS() {
 	function clickVis( e ) {
 		/*jshint validthis:true */
 		var currentClass = e.target.classList;
-		if ( currentClass.contains( 'frm-collapse-page' ) || currentClass.contains( 'frm-sub-label' ) ) {
+		if ( currentClass.contains( 'frm-collapse-page' ) || currentClass.contains( 'frm-sub-label' ) || e.target.closest( '.dropdown' ) !== null ) {
 			return;
 		}
 

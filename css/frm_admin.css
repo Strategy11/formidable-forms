@@ -5198,11 +5198,21 @@ a.frm_action_icon:hover {
 	content: '\e606';
 }
 
+.frm-field-action-icons {
+	text-align: right;
+}
+
 .frm-field-action-icons a {
-	margin-left: 15px;
-	float: right;
 	font-size: 16px;
 	width: 17px;
+}
+
+.frm-field-action-icons a:hover {
+	text-decoration: none;
+}
+
+.frm-field-action-icons .dropdown {
+	display: inline-block;
 }
 
 .frm-field-action-icons a .frmsvg {
@@ -7493,10 +7503,8 @@ button.frm_choose_image_box,
 	margin-right: 46%;
 }
 
-.rtl .frm-field-action-icons a {
-	float: left;
-	margin-right: 15px;
-	margin-left: 0;
+.rtl .frm-field-action-icons {
+	text-align: left;
 }
 
 .rtl #frm_upgrade_modal .dismiss i,
