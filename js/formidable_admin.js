@@ -896,9 +896,27 @@ function frmAdminBuildJS() {
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
-	function syncLayoutClasses( $item ) {
-		var $fields = $item.parent().children();
-		$fields.each( getSyncLayoutClass( getLayoutClasses(), getClassToAdd( $fields.length ) ) );
+	function syncLayoutClasses( $item, type ) {
+		var $fields, size;
+
+		if ( 'undefined' === typeof type ) {
+			type = 'even';
+		}
+
+		$fields = $item.parent().children( 'li.form-field' );
+		size = $fields.length;
+
+		if ( 'even' === type ) {
+			$fields.each( getSyncLayoutClass( getLayoutClasses(), getEvenClassForSize( size ) ) );
+		} else {
+			var layoutClasses = getLayoutClasses();
+			$fields.each(
+				function( index ) {
+					var classToAdd = getClassForBlock( size, type, index );
+					jQuery( this ).each( getSyncLayoutClass( layoutClasses, classToAdd ) );
+				}
+			);
+		}
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
@@ -932,20 +950,6 @@ function frmAdminBuildJS() {
 
 	function getLayoutClasses() {
 		return [ 'frm12', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm10' ];
-	}
-
-	function getClassToAdd( count ) {
-		// TODO do we just limit to no more than 4? This doesn't really gracefully go to 5. But something like 1/3 1/6 1/6 1/6 1/6 would work.
-		switch ( count ) {
-			case 1:
-				return 'frm12';
-			case 2:
-				return 'frm_half';
-			case 3:
-				return 'frm_third';
-			case 4:
-				return 'frm_fourth';
-		}
 	}
 
 	function setupFieldOptionSorting( sort ) {
@@ -2361,28 +2365,13 @@ function frmAdminBuildJS() {
 	}
 
 	function clickSelectField() {
-		this.closest( '.form-field' ).click();
+		this.closest( 'li.form-field' ).click();
 	}
 
 	function clickFieldGroupLayout() {
 		var sizeOfFieldGroup, popupWrapper;
 
-		// TODO this will trigger a little pop up.
-		// the pop up includes the row layout options
-		// depending on what the current number of rows is, this will need to be dynamic.
-		// this pop up also needs the custom layout option
-		// and the break into different rows option.
-
 		// TODO exclude the group layout controls if there is only one field in a group
-
-		// show 4 options
-		// if there are 3 fields in a group, the options are 1/3,1/3,1/3      1/4,1/2,/1,4     1/2,1/4,1/4      1/4,1/4,1/2
-
-		// how can this be calculated?
-		// option 1: equals
-		// option 2: bigger in the middle
-		// option 3: bigger to the left
-		// option 4: bigger to the right
 
 		sizeOfFieldGroup = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ).length;
 
@@ -2430,6 +2419,7 @@ function frmAdminBuildJS() {
 		// as the style isn't really stored anywhere, we would need to look at the row's current classes and derive it from that. Should be simple.
 		option.classList.add( 'frm-row-layout-option' );
 		option.classList.add( size % 2 === 1 ? 'frm_fourth' : 'frm_third' );
+		option.setAttribute( 'layout-type', type );
 
 		option.appendChild( getRowForSizeAndType( size, type ) );
 		return option;
@@ -2470,7 +2460,7 @@ function frmAdminBuildJS() {
 		} else if ( 'right' === type ) {
 			return index === size - 1 ? getLargeClassForSize( size ) : getSmallClassForSize( size );
 		}
-		return '';
+		return 'frm12';
 	}
 
 	function getEvenClassForSize( size ) {
@@ -2482,6 +2472,7 @@ function frmAdminBuildJS() {
 			case 4:
 				return 'frm_fourth';
 		}
+		return 'frm12';
 	}
 
 	function getSmallClassForSize( size ) {
@@ -2491,6 +2482,7 @@ function frmAdminBuildJS() {
 			case 4:
 				return 'frm_sixth';
 		}
+		return 'frm12';
 	}
 
 	function getLargeClassForSize( size ) {
@@ -2500,6 +2492,7 @@ function frmAdminBuildJS() {
 			case 3: case 4:
 				return 'frm_half';
 		}
+		return 'frm12';
 	}
 
 	function getEmptyGridContainer() {
@@ -2511,6 +2504,16 @@ function frmAdminBuildJS() {
 	function div() {
 		var element = document.createElement( 'div' );
 		return element;
+	}
+
+	function handleFieldGroupLayoutOptionClick() {
+		var type, row;
+
+		type = this.getAttribute( 'layout-type' );
+		row = this.closest( 'ul' );
+		size = jQuery( row ).children( 'li.form-field' ).length;
+
+		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
 	}
 
 	function deleteFieldConfirmed() {
@@ -7147,6 +7150,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
 			$newFields.on( 'click', '.frm-field-group-controls > svg:first-child', clickFieldGroupLayout );
+			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
