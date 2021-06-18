@@ -2365,6 +2365,8 @@ function frmAdminBuildJS() {
 	}
 
 	function clickFieldGroupLayout() {
+		var sizeOfFieldGroup, popupWrapper;
+
 		// TODO this will trigger a little pop up.
 		// the pop up includes the row layout options
 		// depending on what the current number of rows is, this will need to be dynamic.
@@ -2381,6 +2383,134 @@ function frmAdminBuildJS() {
 		// option 2: bigger in the middle
 		// option 3: bigger to the left
 		// option 4: bigger to the right
+
+		sizeOfFieldGroup = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ).length;
+
+		popupWrapper = div();
+		popupWrapper.style.position = 'relative';
+		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup ) );
+		this.parentNode.appendChild( popupWrapper );
+	}
+
+	function getFieldGroupPopup( sizeOfFieldGroup ) {
+		var popup = div();
+		popup.classList.add( 'frm-field-group-popup' );
+		popup.appendChild( getRowLayoutTitle() );
+		popup.appendChild( getRowLayoutOptions( sizeOfFieldGroup ) );
+		// TODO separator
+		// TODO custom layout option
+		// TODO break into different rows option
+		return popup;
+	}
+
+	function getRowLayoutTitle() {
+		var rowLayoutTitle = div();
+		rowLayoutTitle.classList.add( 'frm-row-layout-title' );
+		rowLayoutTitle.textContent = 'Row Layout'; // TODO translations. Add __ function from wp i18n.
+		return rowLayoutTitle;
+	}
+
+	function getRowLayoutOptions( size ) {
+		var wrapper = getEmptyGridContainer();
+		wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
+		if ( size % 2 === 1 ) {
+			// only include the middle option for odd numbers because even doesn't make a lot of sense.
+			wrapper.appendChild( getRowLayoutOption( size, 'middle' ) );
+		}
+		wrapper.appendChild( getRowLayoutOption( size, 'left' ) );
+		wrapper.appendChild( getRowLayoutOption( size, 'right' ) );
+		return wrapper;
+	}
+
+	function getRowLayoutOption( size, type ) {
+		var option, size;
+
+		option = div();
+		// TODO include a blue outline on hover/or on currently active style.
+		// as the style isn't really stored anywhere, we would need to look at the row's current classes and derive it from that. Should be simple.
+		option.classList.add( 'frm-row-layout-option' );
+		option.classList.add( size % 2 === 1 ? 'frm_fourth' : 'frm_third' );
+
+		option.appendChild( getRowForSizeAndType( size, type ) );
+		return option;
+	}
+
+	function getRowForSizeAndType( size, type ) {
+		var row, index, block;
+
+		row = getEmptyGridContainer();
+		for ( index = 0; index < size; ++index ) {
+			block = div();
+			block.classList.add( getClassForBlock( size, type, index ) );
+			block.style.height = '16px';
+			block.style.background = '#9EA9B8';
+			block.style.borderRadius = '1px';
+			row.appendChild( block );
+		}
+
+		return row;
+	}
+
+	/**
+	 * 
+	 * @param {int} size 2-4.
+	 * @param {string} type even, middle, left, or right.
+	 * @param {int} index 0-3.
+	 * @returns string
+	 */
+	function getClassForBlock( size, type, index ) {
+		if ( 'even' === type ) {
+			return getEvenClassForSize( size );
+		} else if ( 'middle' === type ) {
+			if ( 3 === size ) {
+				return 1 === index ? 'frm_half' : 'frm_fourth';
+			}
+		} else if ( 'left' === type ) {
+			return 0 === index ? getLargeClassForSize( size ) : getSmallClassForSize( size );
+		} else if ( 'right' === type ) {
+			return index === size - 1 ? getLargeClassForSize( size ) : getSmallClassForSize( size );
+		}
+		return '';
+	}
+
+	function getEvenClassForSize( size ) {
+		switch ( size ) {
+			case 2:
+				return 'frm_half';
+			case 3:
+				return 'frm_third';
+			case 4:
+				return 'frm_fourth';
+		}
+	}
+
+	function getSmallClassForSize( size ) {
+		switch ( size ) {
+			case 2: case 3:
+				return 'frm_fourth';
+			case 4:
+				return 'frm_sixth';
+		}
+	}
+
+	function getLargeClassForSize( size ) {
+		switch ( size ) {
+			case 2:
+				return 'frm_three_fourths';
+			case 3: case 4:
+				return 'frm_half';
+		}
+	}
+
+	function getEmptyGridContainer() {
+		var wrapper = div();
+		wrapper.classList.add( 'frm_grid_container' );
+		return wrapper;
+	}
+
+	function div() {
+		var element = document.createElement( 'div' );
+		return element;
 	}
 
 	function deleteFieldConfirmed() {

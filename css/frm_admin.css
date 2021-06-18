@@ -8110,3 +8110,34 @@ Responsive Design
 	max-width: 843px;
 	border-radius: 10px;
 }
+
+.frm-field-group-popup {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 366px;
+	height: 231px;
+	border-radius: 8px;
+	background: #FFFFFF;
+	box-shadow: 0px 20px 48px rgba(40, 47, 54, 0.15);
+	z-index: 1;
+	box-sizing: border-box;
+	padding: 24px;
+	text-align: left;
+}
+
+.frm-row-layout-title {
+	font-weight: 600;
+	font-size: 11px;
+	line-height: 15px;
+	text-transform: uppercase;
+	color: rgba(40, 47, 54, 0.45);
+	margin-bottom: 40px;
+}
+
+.frm-row-layout-option {
+	background: #F6F7FB;
+	box-sizing: border-box;
+	border-radius: 2px;
+	padding: 18px 11px;
+}
