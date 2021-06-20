@@ -8122,7 +8122,7 @@ Responsive Design
 	box-shadow: 0px 20px 48px rgba(40, 47, 54, 0.15);
 	z-index: 1;
 	box-sizing: border-box;
-	padding: 24px;
+	padding: 24px 0;
 	text-align: left;
 }
 
@@ -8140,4 +8140,10 @@ Responsive Design
 	box-sizing: border-box;
 	border-radius: 2px;
 	padding: 18px 11px;
+}
+
+.frm-custom-field-group-layout,
+.frm-break-field-group {
+	padding: 5px 15px;
+	cursor: pointer;
 }

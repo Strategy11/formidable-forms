@@ -897,7 +897,7 @@ function frmAdminBuildJS() {
 	}
 
 	function syncLayoutClasses( $item, type ) {
-		var $fields, size;
+		var $fields, size, layoutClasses;
 
 		if ( 'undefined' === typeof type ) {
 			type = 'even';
@@ -909,7 +909,7 @@ function frmAdminBuildJS() {
 		if ( 'even' === type ) {
 			$fields.each( getSyncLayoutClass( getLayoutClasses(), getEvenClassForSize( size ) ) );
 		} else {
-			var layoutClasses = getLayoutClasses();
+			layoutClasses = getLayoutClasses();
 			$fields.each(
 				function( index ) {
 					var classToAdd = getClassForBlock( size, type, index );
@@ -949,7 +949,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getLayoutClasses() {
-		return [ 'frm12', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm10' ];
+		return [ 'frm_full', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm1', 'frm2', 'frm3', 'frm4', 'frm5', 'frm6', 'frm7', 'frm8', 'frm9', 'frm10', 'frm11', 'frm12' ];
 	}
 
 	function setupFieldOptionSorting( sort ) {
@@ -2382,14 +2382,42 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldGroupPopup( sizeOfFieldGroup ) {
-		var popup = div();
+		var popup, wrapper;
+
+		popup = div();
 		popup.classList.add( 'frm-field-group-popup' );
-		popup.appendChild( getRowLayoutTitle() );
-		popup.appendChild( getRowLayoutOptions( sizeOfFieldGroup ) );
-		// TODO separator
-		// TODO custom layout option
-		// TODO break into different rows option
+
+		wrapper = div();
+		wrapper.style.padding = '0 24px 12px';
+		wrapper.appendChild( getRowLayoutTitle() );
+		wrapper.appendChild( getRowLayoutOptions( sizeOfFieldGroup ) );
+
+		popup.appendChild( wrapper );
+		popup.appendChild( separator() );
+
+		popup.appendChild( getCustomLayoutOption() );
+		popup.appendChild( getBreakIntoDifferentRowsOption() );
+
 		return popup;
+	}
+
+	function separator() {
+		var hr = document.createElement( 'hr' );
+		return hr;
+	}
+
+	function getCustomLayoutOption() {
+		var option = div();
+		option.textContent = 'Custom layout'; // TODO __
+		option.classList.add( 'frm-custom-field-group-layout' );
+		return option;
+	}
+
+	function getBreakIntoDifferentRowsOption() {
+		var option = div();
+		option.textContent = 'Break into rows'; // TODO __
+		option.classList.add( 'frm-break-field-group' );
+		return option;
 	}
 
 	function getRowLayoutTitle() {
@@ -2453,7 +2481,7 @@ function frmAdminBuildJS() {
 			return getEvenClassForSize( size );
 		} else if ( 'middle' === type ) {
 			if ( 3 === size ) {
-				return 1 === index ? 'frm_half' : 'frm_fourth';
+				return 1 === index ? 'frm6' : 'frm3';
 			}
 		} else if ( 'left' === type ) {
 			return 0 === index ? getLargeClassForSize( size ) : getSmallClassForSize( size );
@@ -2464,13 +2492,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getEvenClassForSize( size ) {
-		switch ( size ) {
-			case 2:
-				return 'frm_half';
-			case 3:
-				return 'frm_third';
-			case 4:
-				return 'frm_fourth';
+		if ( size >= 2 && size <= 4 ) {
+			return 'frm' + ( 12 / size );
 		}
 		return 'frm12';
 	}
@@ -2478,9 +2501,9 @@ function frmAdminBuildJS() {
 	function getSmallClassForSize( size ) {
 		switch ( size ) {
 			case 2: case 3:
-				return 'frm_fourth';
+				return 'frm3';
 			case 4:
-				return 'frm_sixth';
+				return 'frm2';
 		}
 		return 'frm12';
 	}
@@ -2488,9 +2511,9 @@ function frmAdminBuildJS() {
 	function getLargeClassForSize( size ) {
 		switch ( size ) {
 			case 2:
-				return 'frm_three_fourths';
+				return 'frm9';
 			case 3: case 4:
-				return 'frm_half';
+				return 'frm6';
 		}
 		return 'frm12';
 	}
@@ -2514,6 +2537,80 @@ function frmAdminBuildJS() {
 		size = jQuery( row ).children( 'li.form-field' ).length;
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
+	}
+
+	function customFieldGroupLayoutClick() {
+		// TODO replace the content of pop up with "size" number of inputs. Plus some descriptions. And a save/cancel button.
+		// Cancel would revert to the previous pop up so make it easy to revert.
+		// Save would should probably trigger an autosave.
+		// Save also has to resync the layouts to the new custom setting.
+		var $fields = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ),
+			size = $fields.length,
+			popup = this.closest( '.frm-field-group-popup' );
+
+		popup.innerHTML = '';
+
+		var layoutClass = getEvenClassForSize( size );
+
+		var inputRow = div();
+		inputRow.style.padding = '20px';
+		inputRow.classList.add( 'frm_grid_container' );
+
+		for ( var index = 0; index < size; ++index ) {
+			// TODO these are disabled at the moment, likely do to some rule that prevents the rest of the inputs from being selectable.
+			var inputField = document.createElement( 'input' );
+			inputField.type = 'text';
+			inputField.classList.add( layoutClass );
+			inputField.value = getSizeOfLayoutClass( getLayoutClassName( $fields.get( index ).classList ) );
+			inputRow.appendChild( inputField );
+		}
+
+		popup.appendChild( inputRow );
+	}
+
+	function getSizeOfLayoutClass( className ) {
+		switch ( className ) {
+			case 'frm_half':
+				return 6;
+			case 'frm_third':
+				return 4;
+			case 'frm_two_thirds':
+				return 8;
+			case 'frm_fourth':
+				return 3;
+			case 'frm_three_fourths':
+				return 9;
+			case 'frm_sixth':
+				return 2;
+		}
+
+		if ( 0 === className.indexOf( 'frm' ) ) {
+			return parseInt( className.substr( 3 ) );
+		}
+
+		// Anything missing a layout class should be a full width row.
+		return 12;
+	}
+
+	function getLayoutClassName( classList ) {
+		var classes = getLayoutClasses();
+
+		for ( var index = 0; index < classes.length; ++index ) {
+			if ( classList.contains( classes[ index ] ) ) {
+				return classes[ index ];
+			}
+		}
+
+		return '';
+	}
+
+	function getLayoutClassForSize( size ) {
+		return 'frm' + size;
+	}
+
+	function breakFieldGroupClick() {
+		// TODO
+		alert( 'break' );
 	}
 
 	function deleteFieldConfirmed() {
@@ -7151,6 +7248,8 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
 			$newFields.on( 'click', '.frm-field-group-controls > svg:first-child', clickFieldGroupLayout );
 			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
+			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
+			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );

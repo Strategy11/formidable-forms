@@ -103,11 +103,12 @@ class FrmFieldGridHelper {
 				return 9;
 			case 'frm_sixth':
 				return 2;
-			case 'frm10':
-				return 10;
-			case 'frm12':
-				return 12;
 		}
+
+		if ( 0 === strpos( $class, 'frm' ) ) {
+			return (int) substr( $class, 3 );
+		}
+
 		// Anything missing a layout class should be a full width row.
 		return 12;
 	}
@@ -163,13 +164,24 @@ class FrmFieldGridHelper {
 	 */
 	private static function get_grid_classes() {
 		return array(
+			'frm_full',
 			'frm_half',
 			'frm_third',
 			'frm_two_thirds',
 			'frm_fourth',
 			'frm_three_fourths',
 			'frm_sixth',
+			'frm1',
+			'frm2',
+			'frm3',
+			'frm4',
+			'frm5',
+			'frm6',
+			'frm7',
+			'frm8',
+			'frm9',
 			'frm10',
+			'frm11',
 			'frm12',
 		);
 	}
