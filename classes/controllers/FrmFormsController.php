@@ -973,7 +973,7 @@ class FrmFormsController {
 			$fields = FrmField::get_all_for_form( $form->id, '', 'exclude' );
 		}
 
-		unset( $end_section_values, $last_order, $open, $reset_fields );
+		unset( $reset_fields );
 
 		$args   = array( 'parent_form_id' => $form->id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );

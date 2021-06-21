@@ -212,7 +212,7 @@ class FrmEntriesHelper {
 			// Fet the value for this field -- check for post values as well.
 			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
-			if ( $entry_val ) {
+			if ( $entry_val || '0' === $entry_val ) {
 				// foreach entry get display_value.
 				$field_value[] = self::display_value( $entry_val, $field, $atts );
 			}

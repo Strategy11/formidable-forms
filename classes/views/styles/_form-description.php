@@ -20,3 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label><?php esc_html_e( 'Margin Bottom', 'formidable' ); ?></label>
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'form_desc_margin_bottom' ) ); ?>" id="frm_form_desc_margin_bottom" value="<?php echo esc_attr( $style->post_content['form_desc_margin_bottom'] ); ?>" size="4" />
 </p>
+<p class="frm6 frm_first frm_form_field">
+	<label><?php esc_html_e( 'Padding', 'formidable' ); ?></label>
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'form_desc_padding' ) ); ?>" id="frm_form_desc_padding" value="<?php echo esc_attr( $style->post_content['form_desc_padding'] ); ?>" />
+</p>
