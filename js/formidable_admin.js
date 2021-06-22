@@ -2711,6 +2711,15 @@ function frmAdminBuildJS() {
 		// anything less or more is sort of odd, but it should probably still be allowed.
 	}
 
+	function fieldGroupClick() {
+		// TODO only trigger if we're clicking the outside container. Ignore clicks on inner li elements.
+		// TODO a field group is also selected if one specific field is selected.
+		// TODO if ctrl or shift is being held down at this given moment, we want to have multiple groups selected.
+		// TODO once multiple groups are selected, we need to unselect any active fields from the sidebar.
+		// TODO once multiple are selected, we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
+		// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
+	}
+
 	function deleteFieldConfirmed() {
 		/*jshint validthis:true */
 		deleteFields( this.getAttribute( 'data-deletefield' ) );
@@ -7351,6 +7360,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-field-group-popup .frm_grid_container input', focusFieldGroupInputOnClick );
 			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
 			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
+			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
