@@ -8156,3 +8156,14 @@ Responsive Design
 .frm-selected-field-group {
 	background: rgba(65, 153, 253, 0.07);
 }
+
+.frm-field-multiselect-popup {
+	background: white;
+	width: 200px;
+	height: 48px;
+	position: absolute;
+	top: -48px;
+	right: 0;
+	border-radius: 4px;
+	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
+}

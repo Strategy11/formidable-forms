@@ -2712,38 +2712,104 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldGroupClick( e ) {
-		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, selectedFieldGroups;
+		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups;
 
 		if ( 'UL' !== e.originalEvent.originalTarget.nodeName ) {
 			// TODO the removeClass( 'frm-selected-field-group' ) logic still needs to happen here sometimes.
+			// TODO I think clicking outside of any field group at all should also remove the selected classes.
+			// TODO IF I am holding ctrl or shift, I should still consider this an intentional click on the group instead (and the field should remain unselected).
 			// only continue if the group itself was clicked / ignore when a field is clicked.
 			return;
 		}
 
 		ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		shiftKeyIsDown = e.shiftKey;
-		selectedFieldGroups = getSelectedFieldGroups();
+		// TODO a field group is also selected if one specific field is selected.
+		groupIsActive = this.classList.contains( 'frm-selected-field-group' );
+		selectedFieldGroups = jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' );
+		numberOfSelectedGroups = selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
-			// TODO once multiple groups are selected, we need to unselect any active fields from the sidebar.
-			// TODO once multiple are selected, we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
-			// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
-			// TODO IF shift key is down, select everything in between what is already selected and what was clicked.
+
+			if ( ctrlOrCmdKeyIsDown ) {
+				if ( groupIsActive ) {
+					// unselect if holding ctrl or cmd and the group was already active.
+					--numberOfSelectedGroups;
+					this.classList.remove( 'frm-selected-field-group' );
+					return;
+				} else {
+					++numberOfSelectedGroups;
+				}
+			} else if ( shiftKeyIsDown && ! groupIsActive ) {
+				// this number doesn't have to be accurate. We just need to determine if there are >= 2.
+				++numberOfSelectedGroups;
+			}
+
+			if ( numberOfSelectedGroups >= 2 ) {
+				// TODO we need to unselect any active fields from the sidebar.
+				// TODO we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
+				// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
+
+				addFieldMultiselectPopup();
+			}
 		} else {
-			jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
+			selectedFieldGroups.removeClass( 'frm-selected-field-group' );
 			// not multi-selecting
 			// TODO if groups are currently selected, unselect them.
 			// TODO if a field is selected and not a part of this group we're clicking, unselect it.
 		}
 
+		// TODO don't do this if we're unselecting.
 		this.classList.add( 'frm-selected-field-group' );
 	}
 
-	function getSelectedFieldGroups() {
-		// TODO a field group is also selected if one specific field is selected.
-		// TODO
-		return [];
+	function addFieldMultiselectPopup() {
+		var popup = getFieldMultiselectPopup();
+		// TODO add this above the top selected group.
+		// TODO only add this if there isn't one already.
+
+		jQuery( document.querySelector( '.frm-selected-field-group' ) )
+			.css( 'position', 'relative' )
+			.prepend( popup );
+	}
+
+	function getFieldMultiselectPopup() {
+		var popup, mergeOption, deleteOption;
+
+		popup = div();
+		popup.classList.add( 'frm-field-multiselect-popup' );
+
+		mergeOption = div();
+		mergeOption.classList.add( 'frm-merge-fields-into-row' );
+		mergeOption.textContent = 'Merge into row'; // TODO __
+		popup.appendChild( mergeOption );
+		// TODO vertical separator
+
+		deleteOption = div(); // TODO trash icon
+		popup.appendChild( deleteOption );
+
+		return popup;
+	}
+
+	function mergeFieldsIntoRowClick() {
+		// TODO gather the selected fields, put them all into the top ul, resync classes.
+		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' );
+		var $firstGroupUl = $selectedFieldGroups.first();
+		$selectedFieldGroups.removeClass( 'frm-selected-field-group' );
+		$selectedFieldGroups.each(
+			function( index ) {
+				if ( 0 !== index ) {
+					jQuery( this ).children().each( function() {
+						$firstGroupUl.find( 'li.form-field' ).last().after( this );
+					});
+					this.remove();
+				}
+			}
+		);
+		// TODO it looks like these are syncing but they don't appear oo be syncing visually until after saving and reloading.
+		syncLayoutClasses( $firstGroupUl.children().first() );
+		this.closest( '.frm-field-multiselect-popup' ).remove();
 	}
 
 	function deleteFieldConfirmed() {
@@ -7387,6 +7453,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
 			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
 			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );
+			$newFields.on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
