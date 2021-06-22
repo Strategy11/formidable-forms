@@ -897,7 +897,7 @@ function frmAdminBuildJS() {
 	}
 
 	function syncLayoutClasses( $item, type ) {
-		var $fields, size, layoutClasses;
+		var $fields, size, layoutClasses, classToAddFunction;
 
 		if ( 'undefined' === typeof type ) {
 			type = 'even';
@@ -909,17 +909,20 @@ function frmAdminBuildJS() {
 
 		if ( 'even' === type ) {
 			$fields.each( getSyncLayoutClass( layoutClasses, getEvenClassForSize( size ) ) );
-		} else if ( -1 !== [ 'left', 'right', 'middle' ].indexOf( type ) ) {
-			$fields.each(
-				function( index ) {
-					var classToAdd = getClassForBlock( size, type, index );
-					jQuery( this ).each( getSyncLayoutClass( layoutClasses, classToAdd ) );
-				}
-			);
 		} else {
+			if ( -1 !== [ 'left', 'right', 'middle' ].indexOf( type ) ) {
+				classToAddFunction = function( index ) {
+					return getClassForBlock( size, type, index );
+				};
+			} else {
+				classToAddFunction = function( index ) {
+					return 'frm' + type[ index ];
+				};
+			}
+
 			$fields.each(
 				function( index ) {
-					var classToAdd = 'frm' + type[ index ];
+					var classToAdd = classToAddFunction( index );
 					jQuery( this ).each( getSyncLayoutClass( layoutClasses, classToAdd ) );
 				}
 			);
@@ -2553,6 +2556,7 @@ function frmAdminBuildJS() {
 		size = jQuery( row ).children( 'li.form-field' ).length;
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
+		destroyFieldGroupPopup( this );
 	}
 
 	function customFieldGroupLayoutClick() {
@@ -2660,8 +2664,11 @@ function frmAdminBuildJS() {
 		);
 	}
 
+	function destroyFieldGroupPopup( triggerElement ) {
+		triggerElement.closest( '.frm-field-group-popup' ).parentNode.remove();
+	}
+
 	function saveCustomFieldGroupClick() {
-		// TODO Save also has to resync the layouts to the new custom setting.
 		var syncDetails = [];
 
 		jQuery( this.closest( '.frm-field-group-popup' ).querySelectorAll( '.frm_grid_container input' ) )
@@ -2672,12 +2679,11 @@ function frmAdminBuildJS() {
 			);
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), syncDetails );
+		destroyFieldGroupPopup( this );
 
 		// TODO Save would should probably trigger an autosave.
 		// TODO it would make sense to validate for the inputs adding up to 12 and show a warning.
 		// anything less or more is sort of odd, but it should probably still be allowed.
-
-		revertToFieldGroupPopupFirstPage( this );
 	}
 
 	function deleteFieldConfirmed() {
