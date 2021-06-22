@@ -2597,7 +2597,6 @@ function frmAdminBuildJS() {
 
 		popup.appendChild( inputRow );
 
-		// TODO Cancel would revert to the previous pop up so make it easy to revert.
 		cancelButton = div(); // TODO button styling (secondary, white with blue text)
 		cancelButton.textContent = 'Cancel'; // TODO __
 		cancelButton.classList.add( 'frm-cancel-custom-field-group-layout' );
@@ -2737,7 +2736,7 @@ function frmAdminBuildJS() {
 					// unselect if holding ctrl or cmd and the group was already active.
 					--numberOfSelectedGroups;
 					this.classList.remove( 'frm-selected-field-group' );
-					return;
+					return; // exit early to avoid adding back frm-selected-field-group
 				} else {
 					++numberOfSelectedGroups;
 				}
@@ -2748,25 +2747,19 @@ function frmAdminBuildJS() {
 
 			if ( numberOfSelectedGroups >= 2 ) {
 				// TODO we need to unselect any active fields from the sidebar.
-				// TODO we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
-				// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
-
 				addFieldMultiselectPopup();
 			}
 		} else {
 			selectedFieldGroups.removeClass( 'frm-selected-field-group' );
 			// not multi-selecting
-			// TODO if groups are currently selected, unselect them.
 			// TODO if a field is selected and not a part of this group we're clicking, unselect it.
 		}
 
-		// TODO don't do this if we're unselecting.
 		this.classList.add( 'frm-selected-field-group' );
 	}
 
 	function addFieldMultiselectPopup() {
 		var popup = getFieldMultiselectPopup();
-		// TODO add this above the top selected group.
 		// TODO only add this if there isn't one already.
 
 		jQuery( document.querySelector( '.frm-selected-field-group' ) )
@@ -2793,7 +2786,6 @@ function frmAdminBuildJS() {
 	}
 
 	function mergeFieldsIntoRowClick() {
-		// TODO gather the selected fields, put them all into the top ul, resync classes.
 		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' );
 		var $firstGroupUl = $selectedFieldGroups.first();
 		$selectedFieldGroups.removeClass( 'frm-selected-field-group' );
@@ -2807,7 +2799,7 @@ function frmAdminBuildJS() {
 				}
 			}
 		);
-		// TODO it looks like these are syncing but they don't appear oo be syncing visually until after saving and reloading.
+		// TODO it looks like these are syncing but they don't appear to be syncing visually until after saving and reloading.
 		syncLayoutClasses( $firstGroupUl.children().first() );
 		this.closest( '.frm-field-multiselect-popup' ).remove();
 	}
