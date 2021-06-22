@@ -2711,13 +2711,34 @@ function frmAdminBuildJS() {
 		// anything less or more is sort of odd, but it should probably still be allowed.
 	}
 
-	function fieldGroupClick() {
-		// TODO only trigger if we're clicking the outside container. Ignore clicks on inner li elements.
+	function fieldGroupClick( e ) {
+		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, selectedFieldGroups;
+
+		if ( 'ul' !== e.originalEvent.originalTarget.nodeName ) {
+			// only continue if the group itself was clicked / ignore when a field is clicked.
+			return;
+		}
+
+		ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
+		shiftKeyIsDown = e.shiftKey;
+		selectedFieldGroups = getSelectedFieldGroups();
+
+		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
+			// multi-selecting
+			// TODO once multiple groups are selected, we need to unselect any active fields from the sidebar.
+			// TODO once multiple are selected, we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
+			// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
+		} else {
+			// not multi-selecting
+			// TODO if groups are currently selected, unselect them.
+			// TODO if a field is selected and not a part of this group we're clicking, unselect it.
+		}
+	}
+
+	function getSelectedFieldGroups() {
 		// TODO a field group is also selected if one specific field is selected.
-		// TODO if ctrl or shift is being held down at this given moment, we want to have multiple groups selected.
-		// TODO once multiple groups are selected, we need to unselect any active fields from the sidebar.
-		// TODO once multiple are selected, we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
-		// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
+		// TODO
+		return [];
 	}
 
 	function deleteFieldConfirmed() {
