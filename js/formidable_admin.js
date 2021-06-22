@@ -2714,7 +2714,8 @@ function frmAdminBuildJS() {
 	function fieldGroupClick( e ) {
 		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, selectedFieldGroups;
 
-		if ( 'ul' !== e.originalEvent.originalTarget.nodeName ) {
+		if ( 'UL' !== e.originalEvent.originalTarget.nodeName ) {
+			// TODO the removeClass( 'frm-selected-field-group' ) logic still needs to happen here sometimes.
 			// only continue if the group itself was clicked / ignore when a field is clicked.
 			return;
 		}
@@ -2728,11 +2729,15 @@ function frmAdminBuildJS() {
 			// TODO once multiple groups are selected, we need to unselect any active fields from the sidebar.
 			// TODO once multiple are selected, we want to display a little "Merge into row"/"Delete" multi-action popup (over the first field in the group).
 			// TODO once "Merge into row" is clicked, use the standard field group pop up (but omit the break into rows option since we're currently in separate rows).
+			// TODO IF shift key is down, select everything in between what is already selected and what was clicked.
 		} else {
+			jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
 			// not multi-selecting
 			// TODO if groups are currently selected, unselect them.
 			// TODO if a field is selected and not a part of this group we're clicking, unselect it.
 		}
+
+		this.classList.add( 'frm-selected-field-group' );
 	}
 
 	function getSelectedFieldGroups() {

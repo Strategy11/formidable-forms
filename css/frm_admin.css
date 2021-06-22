@@ -8152,3 +8152,7 @@ Responsive Design
 	padding: 5px 15px;
 	cursor: pointer;
 }
+
+.frm-selected-field-group {
+	background: rgba(65, 153, 253, 0.07);
+}
