@@ -905,14 +905,21 @@ function frmAdminBuildJS() {
 
 		$fields = $item.parent().children( 'li.form-field' );
 		size = $fields.length;
+		layoutClasses = getLayoutClasses();
 
 		if ( 'even' === type ) {
-			$fields.each( getSyncLayoutClass( getLayoutClasses(), getEvenClassForSize( size ) ) );
-		} else {
-			layoutClasses = getLayoutClasses();
+			$fields.each( getSyncLayoutClass( layoutClasses, getEvenClassForSize( size ) ) );
+		} else if ( -1 !== [ 'left', 'right', 'middle' ].indexOf( type ) ) {
 			$fields.each(
 				function( index ) {
 					var classToAdd = getClassForBlock( size, type, index );
+					jQuery( this ).each( getSyncLayoutClass( layoutClasses, classToAdd ) );
+				}
+			);
+		} else {
+			$fields.each(
+				function( index ) {
+					var classToAdd = 'frm' + type[ index ];
 					jQuery( this ).each( getSyncLayoutClass( layoutClasses, classToAdd ) );
 				}
 			);
@@ -2373,12 +2380,21 @@ function frmAdminBuildJS() {
 
 		// TODO exclude the group layout controls if there is only one field in a group
 
-		sizeOfFieldGroup = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ).length;
+		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( this );
+
+		if ( null !== this.parentNode.querySelector( '.frm-field-group-popup' ) ) {
+			// avoid ever having multiple in a field group.
+			return;
+		}
 
 		popupWrapper = div();
 		popupWrapper.style.position = 'relative';
 		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup ) );
 		this.parentNode.appendChild( popupWrapper );
+	}
+
+	function getSizeOfFieldGroupFromChildElement( element ) {
+		return jQuery( element ).closest( 'ul' ).children( 'li.form-field' ).length;
 	}
 
 	function getFieldGroupPopup( sizeOfFieldGroup ) {
@@ -2540,32 +2556,49 @@ function frmAdminBuildJS() {
 	}
 
 	function customFieldGroupLayoutClick() {
-		// TODO replace the content of pop up with "size" number of inputs. Plus some descriptions. And a save/cancel button.
-		// Cancel would revert to the previous pop up so make it easy to revert.
-		// Save would should probably trigger an autosave.
-		// Save also has to resync the layouts to the new custom setting.
 		var $fields = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ),
 			size = $fields.length,
-			popup = this.closest( '.frm-field-group-popup' );
+			popup = this.closest( '.frm-field-group-popup' ),
+			layoutClass, inputRow, index, inputField, heading, label, cancelButton, saveButton;
 
 		popup.innerHTML = '';
 
-		var layoutClass = getEvenClassForSize( size );
+		layoutClass = getEvenClassForSize( size );
 
-		var inputRow = div();
+		inputRow = div();
 		inputRow.style.padding = '20px';
 		inputRow.classList.add( 'frm_grid_container' );
 
-		for ( var index = 0; index < size; ++index ) {
-			// TODO these are disabled at the moment, likely do to some rule that prevents the rest of the inputs from being selectable.
-			var inputField = document.createElement( 'input' );
+		for ( index = 0; index < size; ++index ) {
+			inputField = document.createElement( 'input' );
 			inputField.type = 'text';
 			inputField.classList.add( layoutClass );
 			inputField.value = getSizeOfLayoutClass( getLayoutClassName( $fields.get( index ).classList ) );
 			inputRow.appendChild( inputField );
 		}
 
+		heading = div(); // TODO styling
+		heading.textContent = 'Enter number of columns for each field'; // TODO __
+
+		label = div(); // TODO styling
+		label.textContent = 'Layouts are based on a 12-column grid system'; // TODO __
+
+		popup.appendChild( heading );
+		popup.appendChild( label );
+
 		popup.appendChild( inputRow );
+
+		// TODO Cancel would revert to the previous pop up so make it easy to revert.
+		cancelButton = div(); // TODO button styling (secondary, white with blue text)
+		cancelButton.textContent = 'Cancel'; // TODO __
+		cancelButton.classList.add( 'frm-cancel-custom-field-group-layout' );
+
+		saveButton = div(); // TODO button styling (primary, blue with white text)
+		saveButton.textContent = 'Save'; // TODO __
+		saveButton.classList.add( 'frm-save-custom-field-group-layout' );
+
+		popup.appendChild( cancelButton );
+		popup.appendChild( saveButton );
 	}
 
 	function getSizeOfLayoutClass( className ) {
@@ -2611,6 +2644,40 @@ function frmAdminBuildJS() {
 	function breakFieldGroupClick() {
 		// TODO
 		alert( 'break' );
+	}
+
+	function focusFieldGroupInputOnClick() {
+		this.focus();
+	}
+
+	function cancelCustomFieldGroupClick() {
+		revertToFieldGroupPopupFirstPage( this );
+	}
+
+	function revertToFieldGroupPopupFirstPage( triggerElement ) {
+		triggerElement.closest( '.frm-field-group-popup' ).replaceWith(
+			getFieldGroupPopup( getSizeOfFieldGroupFromChildElement( triggerElement ) )
+		);
+	}
+
+	function saveCustomFieldGroupClick() {
+		// TODO Save also has to resync the layouts to the new custom setting.
+		var syncDetails = [];
+
+		jQuery( this.closest( '.frm-field-group-popup' ).querySelectorAll( '.frm_grid_container input' ) )
+			.each(
+				function() {
+					syncDetails.push( parseInt( this.value ) );
+				}
+			);
+
+		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), syncDetails );
+
+		// TODO Save would should probably trigger an autosave.
+		// TODO it would make sense to validate for the inputs adding up to 12 and show a warning.
+		// anything less or more is sort of odd, but it should probably still be allowed.
+
+		revertToFieldGroupPopupFirstPage( this );
 	}
 
 	function deleteFieldConfirmed() {
@@ -7250,6 +7317,9 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
 			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
+			$newFields.on( 'click', '.frm-field-group-popup .frm_grid_container input', focusFieldGroupInputOnClick );
+			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
+			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
