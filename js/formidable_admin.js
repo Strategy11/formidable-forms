@@ -909,6 +909,8 @@ function frmAdminBuildJS() {
 
 		if ( 'even' === type ) {
 			$fields.each( getSyncLayoutClass( layoutClasses, getEvenClassForSize( size ) ) );
+		} else if ( 'clear' === type ) {
+			$fields.each( getSyncLayoutClass( layoutClasses, '' ) );
 		} else {
 			if ( -1 !== [ 'left', 'right', 'middle' ].indexOf( type ) ) {
 				classToAddFunction = function( index ) {
@@ -916,7 +918,8 @@ function frmAdminBuildJS() {
 				};
 			} else {
 				classToAddFunction = function( index ) {
-					return 'frm' + type[ index ];
+					var size = type[ index ];
+					return getLayoutClassForSize( size );
 				};
 			}
 
@@ -948,7 +951,9 @@ function frmAdminBuildJS() {
 			layoutClassesInput = document.getElementById( 'frm_classes_' + fieldId );
 
 			if ( false === activeLayoutClass ) {
-				layoutClassesInput.value = layoutClassesInput.value.concat( ' ' + classToAdd );
+				if ( '' !== classToAdd ) {
+					layoutClassesInput.value = layoutClassesInput.value.concat( ' ' + classToAdd );
+				}
 			} else {
 				this.classList.remove( activeLayoutClass );
 				layoutClassesInput.value = layoutClassesInput.value.replace( activeLayoutClass, classToAdd );
@@ -2512,7 +2517,7 @@ function frmAdminBuildJS() {
 
 	function getEvenClassForSize( size ) {
 		if ( size >= 2 && size <= 4 ) {
-			return 'frm' + ( 12 / size );
+			return getLayoutClassForSize( 12 / size );
 		}
 		return 'frm12';
 	}
@@ -2646,8 +2651,28 @@ function frmAdminBuildJS() {
 	}
 
 	function breakFieldGroupClick() {
-		// TODO
-		alert( 'break' );
+		var row = this.closest( 'ul' );
+		breakRow( row );
+	}
+
+	function breakRow( row ) {
+		var newWrapper;
+		var $fields = jQuery( row ).children( 'li.form-field' );
+		$fields.each(
+			function( index ) {
+				if ( 0 !== index ) {
+					newWrapper = document.createElement( 'ul' );
+					newWrapper.classList.add( 'frm_grid_container', 'frm_sorting' );
+					jQuery( this.parentNode ).after( newWrapper );
+					newWrapper.appendChild( this );
+				}
+				stripLayoutFromFields( jQuery( this ) );
+			}
+		);
+	}
+
+	function stripLayoutFromFields( field ) {
+		syncLayoutClasses( field, 'clear' );
 	}
 
 	function focusFieldGroupInputOnClick() {
