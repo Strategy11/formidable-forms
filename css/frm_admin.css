@@ -1631,6 +1631,11 @@ div.frm_updated_message {
 	size: 11px;
 }
 
+.plugin-card-top .frm_ribbon {
+	right: -33px;
+	top: -28px;
+}
+
 .frm_ribbon span {
 	position: absolute;
 	left: 25px;
