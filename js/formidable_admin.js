@@ -2713,6 +2713,7 @@ function frmAdminBuildJS() {
 	function fieldGroupClick( e ) {
 		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups;
 
+		// TODO this can trigger a "Uncaught Error: Permission denied to access property "nodeName""
 		if ( 'UL' !== e.originalEvent.originalTarget.nodeName ) {
 			// TODO the removeClass( 'frm-selected-field-group' ) logic still needs to happen here sometimes.
 			// TODO I think clicking outside of any field group at all should also remove the selected classes.
@@ -2815,9 +2816,12 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
-		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' );
+		jQuery( '.frm-selected-field-group > li.form-field' ).each(
+			function() {
+				deleteField( this.dataset.fid );
+			}
+		);
 		$selectedFieldGroups.remove();
-		// TODO this doesn't actually delete them. How does field deleting usually work?
 	}
 
 	function deleteFieldConfirmed() {
