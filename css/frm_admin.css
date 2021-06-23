@@ -5465,7 +5465,7 @@ span.howto {
 	box-sizing: border-box;
 }
 
-#frm-show-fields ul:hover .frm-field-group-controls {
+#frm-show-fields ul:hover .frm-field-group-controls:not([number-of-fields="1"]) {
 	display: block;
 }
 

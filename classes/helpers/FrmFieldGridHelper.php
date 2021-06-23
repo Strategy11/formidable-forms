@@ -13,6 +13,11 @@ class FrmFieldGridHelper {
 	private $current_list_size;
 
 	/**
+	 * @var int
+	 */
+	private $current_field_count;
+
+	/**
 	 * @var string
 	 */
 	private $field_layout_class;
@@ -33,8 +38,9 @@ class FrmFieldGridHelper {
 	private $field;
 
 	public function __construct() {
-		$this->parent_li         = false;
-		$this->current_list_size = 0;
+		$this->parent_li           = false;
+		$this->current_list_size   = 0;
+		$this->current_field_count = 0;
 	}
 
 	/**
@@ -81,8 +87,9 @@ class FrmFieldGridHelper {
 
 	private function begin_field_wrapper() {
 		echo '<li><ul class="frm_grid_container frm_sorting">';
-		$this->parent_li         = true;
-		$this->current_list_size = 0;
+		$this->parent_li           = true;
+		$this->current_list_size   = 0;
+		$this->current_field_count = 0;
 	}
 
 	/**
@@ -115,6 +122,7 @@ class FrmFieldGridHelper {
 
 	public function sync_list_size() {
 		if ( false !== $this->parent_li ) {
+			$this->current_field_count ++;
 			$this->current_list_size += $this->active_field_size;
 			if ( 12 === $this->current_list_size ) {
 				$this->close_field_wrapper();
@@ -135,12 +143,13 @@ class FrmFieldGridHelper {
 	private function close_field_wrapper() {
 		$this->echo_field_group_controls();
 		echo '</ul></li>';
-		$this->parent_li         = false;
-		$this->current_list_size = 0;
+		$this->parent_li           = false;
+		$this->current_list_size   = 0;
+		$this->current_field_count = 0;
 	}
 
 	private function echo_field_group_controls() {
-		echo '<div class="frm-field-group-controls">';
+		echo '<div class="frm-field-group-controls" number-of-fields="' . esc_attr( $this->current_field_count ) . '">';
 		FrmAppHelper::icon_by_class( 'frm_icon_font frm_field_group_layout_icon' );
 		FrmAppHelper::icon_by_class( 'frm_icon_font frm_move_icon' );
 		echo '</div>';

@@ -934,6 +934,8 @@ function frmAdminBuildJS() {
 				}
 			);
 		}
+
+		$item.parent().find( '.frm-field-group-controls' ).attr( 'number-of-fields', $fields.length );
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
