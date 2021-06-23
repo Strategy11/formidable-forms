@@ -911,12 +911,12 @@ function frmAdminBuildJS() {
 		size = $fields.length;
 		layoutClasses = getLayoutClasses();
 
-		if ( 'even' === type ) {
+		if ( 'even' === type && 5 !== size ) {
 			$fields.each( getSyncLayoutClass( layoutClasses, getEvenClassForSize( size ) ) );
 		} else if ( 'clear' === type ) {
 			$fields.each( getSyncLayoutClass( layoutClasses, '' ) );
 		} else {
-			if ( -1 !== [ 'left', 'right', 'middle' ].indexOf( type ) ) {
+			if ( -1 !== [ 'left', 'right', 'middle', 'even' ].indexOf( type ) ) {
 				classToAddFunction = function( index ) {
 					return getClassForBlock( size, type, index );
 				};
@@ -2528,7 +2528,7 @@ function frmAdminBuildJS() {
 	 */
 	function getClassForBlock( size, type, index ) {
 		if ( 'even' === type ) {
-			return getEvenClassForSize( size );
+			return getEvenClassForSize( size, index );
 		} else if ( 'middle' === type ) {
 			if ( 3 === size ) {
 				return 1 === index ? 'frm6' : 'frm3';
@@ -2541,9 +2541,12 @@ function frmAdminBuildJS() {
 		return 'frm12';
 	}
 
-	function getEvenClassForSize( size ) {
-		if ( size >= 2 && size <= 4 ) {
+	function getEvenClassForSize( size, index ) {
+		if ( -1 !== [ 2, 3, 4, 6 ].indexOf( size ) ) {
 			return getLayoutClassForSize( 12 / size );
+		}
+		if ( 5 === size && 'undefined' !== typeof index ) {
+			return 0 === index ? 'frm4' : 'frm2';
 		}
 		return 'frm12';
 	}
@@ -2598,6 +2601,7 @@ function frmAdminBuildJS() {
 
 		popup.innerHTML = '';
 
+		// TODO do we want to do something better looking than just putting each input in a separate row for sizes >5?
 		layoutClass = getEvenClassForSize( size );
 
 		inputRow = div();
