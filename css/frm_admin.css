@@ -8155,6 +8155,7 @@ Responsive Design
 
 .frm-selected-field-group {
 	background: rgba(65, 153, 253, 0.07);
+	position: relative;
 }
 
 #frm_field_multiselect_popup {

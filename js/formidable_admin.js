@@ -1072,7 +1072,7 @@ function frmAdminBuildJS() {
 	 * @param {object} opts
 	 */
 	function insertNewFieldByDragging( selectedItem, fieldButton ) {
-		var fieldType, addBtn, currentItem, section, formId, sectionId, loadingID, hasBreak;
+		var fieldType, addBtn, currentItem, section, formId, sectionId, loadingID, hasBreak, $placeholder;
 
 		fieldType = fieldButton.attr( 'id' );
 
@@ -1088,7 +1088,8 @@ function frmAdminBuildJS() {
 		sectionId = getSectionIdForFieldPlacement( section );
 
 		loadingID = fieldType.replace( '|', '-' ) + '_' + getAutoId();
-		currentItem.replaceWith( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
+		$placeholder = jQuery( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
+		currentItem.replaceWith( $placeholder );
 
 		hasBreak = 0;
 		if ( 'summary' === fieldType ) {
@@ -1107,11 +1108,15 @@ function frmAdminBuildJS() {
 				has_break: hasBreak
 			},
 			success: function( msg ) {
+				var $siblings;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				jQuery( '.frmbutton_loadingnow#' + loadingID ).replaceWith( msg );
+				$siblings = $placeholder.siblings( 'li.form-field' );
+				$placeholder.replaceWith( msg );
 				updateFieldOrder();
-
 				afterAddField( msg, false );
+				if ( $siblings.length ) {
+					syncLayoutClasses( $siblings.first() );
+				}
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
@@ -2795,12 +2800,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addFieldMultiselectPopup() {
-		var popup = getFieldMultiselectPopup();
-		// TODO only add this if there isn't one already.
-
-		jQuery( document.querySelector( '.frm-selected-field-group' ) )
-			.css( 'position', 'relative' )
-			.prepend( popup );
+		jQuery( document.querySelector( '.frm-selected-field-group' ) ).prepend( getFieldMultiselectPopup() );
 	}
 
 	function getFieldMultiselectPopup() {
