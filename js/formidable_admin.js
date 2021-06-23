@@ -2788,14 +2788,17 @@ function frmAdminBuildJS() {
 			// TODO if a field is selected and not a part of this group we're clicking, unselect it.
 		}
 
+		clearSettingsBox(); // unselect any fields if one is selected.
+
 		this.classList.add( 'frm-selected-field-group' );
 
 		jQuery( document ).on( 'click', unselectFieldGroups );
 	}
 
-	function unselectFieldGroups( e ) {
+	// TODO call this for everything that unselects the field groups / removes the multiselect popup.
+	function unselectFieldGroups( event ) {
 		var popup;
-		if ( null !== e.originalEvent.target.closest( '#frm-show-fields' ) ) {
+		if ( 'undefined' !== typeof event && null !== event.originalEvent.target.closest( '#frm-show-fields' ) ) {
 			return;
 		}
 		jQuery( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
@@ -4622,7 +4625,7 @@ function frmAdminBuildJS() {
 
 		deselectFields();
 		$thisobj.addClass( 'selected' );
-
+		unselectFieldGroups();
 		showFieldOptions( obj );
 	}
 
