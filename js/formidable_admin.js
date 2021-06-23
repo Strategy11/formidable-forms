@@ -4,6 +4,8 @@ var frmAdminBuild;
 
 var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
+	// TODO this requires WordPress 5.0. Do we need to support father back? We still advertise as supporting 4.7.
+	// 5.0 has been around since December 6, 2018. I use this in views and as far as I know this isn't an issue for anyone so I assume no one is < 5.0 at this point.
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
 	var el = {
@@ -326,7 +328,8 @@ function frmAdminBuildJS() {
 		thisFormId = 0,
 		autoId = 0,
 		optionMap = {},
-		lastNewActionIdReturned = 0;
+		lastNewActionIdReturned = 0,
+		__ = wp.i18n.__;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -2439,14 +2442,14 @@ function frmAdminBuildJS() {
 
 	function getCustomLayoutOption() {
 		var option = div();
-		option.textContent = 'Custom layout'; // TODO __
+		option.textContent = __( 'Custom layout', 'formidable' );
 		option.classList.add( 'frm-custom-field-group-layout' );
 		return option;
 	}
 
 	function getBreakIntoDifferentRowsOption() {
 		var option = div();
-		option.textContent = 'Break into rows'; // TODO __
+		option.textContent = __( 'Break into rows', 'formidable' );
 		option.classList.add( 'frm-break-field-group' );
 		return option;
 	}
@@ -2594,10 +2597,10 @@ function frmAdminBuildJS() {
 		}
 
 		heading = div(); // TODO styling
-		heading.textContent = 'Enter number of columns for each field'; // TODO __
+		heading.textContent = __( 'Enter number of columns for each field', 'formidable' );
 
 		label = div(); // TODO styling
-		label.textContent = 'Layouts are based on a 12-column grid system'; // TODO __
+		label.textContent = __( 'Layouts are based on a 12-column grid system', 'formidable' );
 
 		popup.appendChild( heading );
 		popup.appendChild( label );
@@ -2605,11 +2608,11 @@ function frmAdminBuildJS() {
 		popup.appendChild( inputRow );
 
 		cancelButton = div(); // TODO button styling (secondary, white with blue text)
-		cancelButton.textContent = 'Cancel'; // TODO __
+		cancelButton.textContent = __( 'Cancel', 'formidable' );
 		cancelButton.classList.add( 'frm-cancel-custom-field-group-layout' );
 
 		saveButton = div(); // TODO button styling (primary, blue with white text)
-		saveButton.textContent = 'Save'; // TODO __
+		saveButton.textContent = __( 'Save', 'formidable' );
 		saveButton.classList.add( 'frm-save-custom-field-group-layout' );
 
 		popup.appendChild( cancelButton );
@@ -2789,7 +2792,7 @@ function frmAdminBuildJS() {
 
 		mergeOption = div();
 		mergeOption.classList.add( 'frm-merge-fields-into-row' );
-		mergeOption.textContent = 'Merge into row'; // TODO __
+		mergeOption.textContent = __( 'Merge into row', 'formidable' );
 		popup.appendChild( mergeOption );
 
 		// TODO vertical separator
