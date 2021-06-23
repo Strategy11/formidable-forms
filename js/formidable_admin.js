@@ -2816,12 +2816,14 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
-		jQuery( '.frm-selected-field-group > li.form-field' ).each(
-			function() {
-				deleteField( this.dataset.fid );
-			}
-		);
-		$selectedFieldGroups.remove();
+		jQuery( '.frm-selected-field-group > li.form-field' )
+			.each(
+				function() {
+					deleteField( this.dataset.fid );
+				}
+			)
+			.remove();
+		this.closest( '#frm_field_multiselect_popup' ).remove();
 	}
 
 	function deleteFieldConfirmed() {
