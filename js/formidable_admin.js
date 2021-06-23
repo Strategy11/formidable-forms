@@ -1242,6 +1242,13 @@ function frmAdminBuildJS() {
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+				// TODO I need to do something on drag as well (two separate code paths for handling frm_insert_field).
+				// TODO use more vanilla js, too much jQuery.
+				// TODO I have similar code in a few places. Ideally we would store the classes for this ul in only one place in code.
+				msg = jQuery( '<li>' )
+					.html(
+						jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( msg )
+					);
 				$newFields.append( msg );
 				afterAddField( msg, true );
 			},
