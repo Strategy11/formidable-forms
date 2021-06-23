@@ -2770,24 +2770,34 @@ function frmAdminBuildJS() {
 	function getFieldMultiselectPopup() {
 		var popup, mergeOption, deleteOption;
 
+		popup = document.getElementById( 'frm_field_multiselect_popup' );
+
+		if ( null !== popup ) {
+			return popup;
+		}
+
 		popup = div();
-		popup.classList.add( 'frm-field-multiselect-popup' );
+		popup.id = 'frm_field_multiselect_popup';
 
 		mergeOption = div();
 		mergeOption.classList.add( 'frm-merge-fields-into-row' );
 		mergeOption.textContent = 'Merge into row'; // TODO __
 		popup.appendChild( mergeOption );
+
 		// TODO vertical separator
 
-		deleteOption = div(); // TODO trash icon
+		deleteOption = div();
+		deleteOption.classList.add( 'frm-delete-field-groups' );
+		deleteOption.textContent = 'Delete'; // TODO trash icon
 		popup.appendChild( deleteOption );
 
 		return popup;
 	}
 
 	function mergeFieldsIntoRowClick() {
-		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' );
-		var $firstGroupUl = $selectedFieldGroups.first();
+		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
+			$firstGroupUl = $selectedFieldGroups.first();
+
 		$selectedFieldGroups.removeClass( 'frm-selected-field-group' );
 		$selectedFieldGroups.each(
 			function( index ) {
@@ -2801,7 +2811,13 @@ function frmAdminBuildJS() {
 		);
 		// TODO it looks like these are syncing but they don't appear to be syncing visually until after saving and reloading.
 		syncLayoutClasses( $firstGroupUl.children().first() );
-		this.closest( '.frm-field-multiselect-popup' ).remove();
+		this.closest( '#frm_field_multiselect_popup' ).remove();
+	}
+
+	function deleteFieldGroupsClick() {
+		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' );
+		$selectedFieldGroups.remove();
+		// TODO this doesn't actually delete them. How does field deleting usually work?
 	}
 
 	function deleteFieldConfirmed() {
@@ -7446,6 +7462,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
 			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );
 			$newFields.on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
+			$newFields.on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
