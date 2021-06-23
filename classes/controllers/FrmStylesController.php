@@ -455,7 +455,7 @@ class FrmStylesController {
 		include( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' );
 		$output = ob_get_clean();
 
-		echo self::replace_relative_url( $output );
+		echo self::replace_relative_url( $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		wp_die();
 	}
