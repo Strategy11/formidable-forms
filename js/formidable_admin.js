@@ -2475,13 +2475,15 @@ function frmAdminBuildJS() {
 	function getRowLayoutTitle() {
 		var rowLayoutTitle = div();
 		rowLayoutTitle.classList.add( 'frm-row-layout-title' );
-		rowLayoutTitle.textContent = 'Row Layout'; // TODO translations. Add __ function from wp i18n.
+		rowLayoutTitle.textContent = __( 'Row Layout', 'formidable' );
 		return rowLayoutTitle;
 	}
 
 	function getRowLayoutOptions( size ) {
 		var wrapper = getEmptyGridContainer();
-		wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
+		if ( 5 !== size ) {
+			wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
+		}
 		if ( size % 2 === 1 ) {
 			// only include the middle option for odd numbers because even doesn't make a lot of sense.
 			wrapper.appendChild( getRowLayoutOption( size, 'middle' ) );
@@ -2498,7 +2500,7 @@ function frmAdminBuildJS() {
 		// TODO include a blue outline on hover/or on currently active style.
 		// as the style isn't really stored anywhere, we would need to look at the row's current classes and derive it from that. Should be simple.
 		option.classList.add( 'frm-row-layout-option' );
-		option.classList.add( size % 2 === 1 ? 'frm_fourth' : 'frm_third' );
+		option.classList.add( size % 2 === 1 && 5 !== size ? 'frm_fourth' : 'frm_third' );
 		option.setAttribute( 'layout-type', type );
 
 		option.appendChild( getRowForSizeAndType( size, type ) );
@@ -2535,6 +2537,9 @@ function frmAdminBuildJS() {
 			if ( 3 === size ) {
 				return 1 === index ? 'frm6' : 'frm3';
 			}
+			if ( 5 === size ) {
+				return 2 === index ? 'frm4' : 'frm2';
+			}
 		} else if ( 'left' === type ) {
 			return 0 === index ? getLargeClassForSize( size ) : getSmallClassForSize( size );
 		} else if ( 'right' === type ) {
@@ -2559,6 +2564,10 @@ function frmAdminBuildJS() {
 				return 'frm3';
 			case 4:
 				return 'frm2';
+			case 5:
+				return 'frm2';
+			case 6:
+				return 'frm1';
 		}
 		return 'frm12';
 	}
@@ -2569,6 +2578,10 @@ function frmAdminBuildJS() {
 				return 'frm9';
 			case 3: case 4:
 				return 'frm6';
+			case 5:
+				return 'frm4';
+			case 6:
+				return 'frm7';
 		}
 		return 'frm12';
 	}
