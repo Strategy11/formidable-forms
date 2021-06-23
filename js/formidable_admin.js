@@ -1248,11 +1248,7 @@ function frmAdminBuildJS() {
 				// TODO I need to do something on drag as well (two separate code paths for handling frm_insert_field).
 				// TODO use more vanilla js, too much jQuery.
 				// TODO I have similar code in a few places. Ideally we would store the classes for this ul in only one place in code.
-				msg = jQuery( '<li>' )
-					.html(
-						jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( msg )
-					);
-				$newFields.append( msg );
+				$newFields.append( wrapFieldLi( msg ) );
 				afterAddField( msg, true );
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
@@ -1319,14 +1315,16 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateField() {
-		/*jshint validthis:true */
-		var thisField = jQuery( this ).closest( 'li.form-field' );
-		var fieldId = thisField.data( 'fid' );
-		var children = fieldsInSection( fieldId );
+		var $field, fieldId, children;
 
-		if ( thisField.hasClass( 'frm-section-collapsed' ) || thisField.hasClass( 'frm-page-collapsed' ) ) {
+		$field = jQuery( this ).closest( 'li.form-field' );
+
+		if ( $field.hasClass( 'frm-section-collapsed' ) || $field.hasClass( 'frm-page-collapsed' ) ) {
 			return false;
 		}
+
+		fieldId = $field.data( 'fid' );
+		children = fieldsInSection( fieldId );
 
 		jQuery.ajax({
 			type: 'POST',
@@ -1339,12 +1337,24 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( msg ) {
-				thisField.after( msg );
+				if ( $field.siblings( 'li.form-field' ).length ) {
+					$field.after( msg );
+					syncLayoutClasses( $field );
+				} else {
+					$field.parent().parent().after( wrapFieldLi( msg ) );
+				}
 				updateFieldOrder();
 				afterAddField( msg, false );
 			}
 		});
 		return false;
+	}
+
+	function wrapFieldLi( li ) {
+		return jQuery( '<li>' )
+			.html(
+				jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
+			);
 	}
 
 	function afterAddField( msg, addFocus ) {
@@ -2723,8 +2733,7 @@ function frmAdminBuildJS() {
 	function fieldGroupClick( e ) {
 		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups;
 
-		// TODO this can trigger a "Uncaught Error: Permission denied to access property "nodeName""
-		if ( 'UL' !== e.originalEvent.originalTarget.nodeName ) {
+		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
 			// TODO the removeClass( 'frm-selected-field-group' ) logic still needs to happen here sometimes.
 			// TODO I think clicking outside of any field group at all should also remove the selected classes.
 			// TODO IF I am holding ctrl or shift, I should still consider this an intentional click on the group instead (and the field should remain unselected).
@@ -2879,7 +2888,8 @@ function frmAdminBuildJS() {
 
 				$thisField.fadeOut( 'slow', function() {
 					var $section = $thisField.closest( '.start_divider' ),
-						type = $thisField.data( 'type' );
+						type = $thisField.data( 'type' ),
+						$adjacentFields = $thisField.siblings( 'li.form-field' );
 					$thisField.remove();
 					if ( type === 'break' ) {
 						renumberPageBreaks();
@@ -2896,6 +2906,9 @@ function frmAdminBuildJS() {
 						document.getElementById( 'frm_form_editor_container' ).classList.remove( 'frm-has-fields' );
 					} else if ( $section.length ) {
 						toggleOneSectionHolder( $section );
+					}
+					if ( $adjacentFields.length ) {
+						syncLayoutClasses( $adjacentFields.first() );
 					}
 				});
 			}
