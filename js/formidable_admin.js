@@ -868,9 +868,10 @@ function frmAdminBuildJS() {
 					moving.sortable( 'cancel' );
 				} else {
 					updateFieldOrder();
+					// TODO here, detect the original row this is from, sync that too.
+					syncLayoutClasses( ui.item );
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
-				syncLayoutClasses( ui.item );
 			},
 			sort: function( event ) {
 				container.scrollTop( function( i, v ) {
@@ -2776,6 +2777,21 @@ function frmAdminBuildJS() {
 		}
 
 		this.classList.add( 'frm-selected-field-group' );
+
+		jQuery( document ).on( 'click', unselectFieldGroups );
+	}
+
+	function unselectFieldGroups( e ) {
+		var popup;
+		if ( null !== e.originalEvent.target.closest( '#frm-show-fields' ) ) {
+			return;
+		}
+		jQuery( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
+		jQuery( document ).off( 'click', unselectFieldGroups );
+		popup = document.getElementById( 'frm_field_multiselect_popup' );
+		if ( null !== popup ) {
+			popup.remove();
+		}
 	}
 
 	function addFieldMultiselectPopup() {
