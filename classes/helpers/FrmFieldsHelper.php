@@ -571,25 +571,33 @@ class FrmFieldsHelper {
 		}
 
 		$m = false;
-		if ( $cond == '==' ) {
+		if ( $cond === '==' ) {
 			$m = $observed_value == $hide_opt;
-		} elseif ( $cond == '!=' ) {
+		} elseif ( $cond === '!=' ) {
 			$m = $observed_value != $hide_opt;
-		} elseif ( $cond == '>' ) {
+		} elseif ( $cond === '>' ) {
 			$m = $observed_value > $hide_opt;
-		} elseif ( $cond == '>=' ) {
+		} elseif ( $cond === '>=' ) {
 			$m = $observed_value >= $hide_opt;
-		} elseif ( $cond == '<' ) {
+		} elseif ( $cond === '<' ) {
 			$m = $observed_value < $hide_opt;
-		} elseif ( $cond == '<=' ) {
+		} elseif ( $cond === '<=' ) {
 			$m = $observed_value <= $hide_opt;
-		} elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
-			if ( $cond == 'not LIKE' ) {
+			if ( $cond === 'not LIKE' ) {
 				$m = ( $m === false ) ? true : false;
 			} else {
 				$m = ( $m === false ) ? false : true;
 			}
+		} elseif ( $cond === '%LIKE' ) {
+			$length = strlen( $hide_opt );
+			$substr = substr( $observed_value, strlen( $observed_value ) - $length );
+			$m      = 0 === strcasecmp( $substr, $hide_opt );
+		} elseif ( 'LIKE%' === $cond ) {
+			$length = strlen( $hide_opt );
+			$substr = substr( $observed_value, 0, $length );
+			$m      = 0 === strcasecmp( $substr, $hide_opt );
 		}
 
 		return $m;
