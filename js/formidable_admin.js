@@ -2823,6 +2823,7 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
+		// TODO this should probably support a bulk delete as one action instead of one-per-field.
 		jQuery( '.frm-selected-field-group > li.form-field' )
 			.each(
 				function() {
