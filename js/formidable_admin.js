@@ -2877,7 +2877,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldMultiselectPopup() {
-		var popup, mergeOption, deleteOption;
+		var popup, mergeOption, verticalSeparator, deleteOption;
 
 		popup = document.getElementById( 'frm_field_multiselect_popup' );
 
@@ -2893,11 +2893,9 @@ function frmAdminBuildJS() {
 		mergeOption.textContent = __( 'Merge into row', 'formidable' );
 		popup.appendChild( mergeOption );
 
-		var verticalSeparator = div();
+		verticalSeparator = div();
 		verticalSeparator.classList.add( 'frm-multiselect-popup-separator' );
 		popup.appendChild( verticalSeparator );
-
-		// TODO vertical separator
 
 		deleteOption = div();
 		deleteOption.classList.add( 'frm-delete-field-groups' );
