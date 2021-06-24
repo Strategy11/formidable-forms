@@ -2625,19 +2625,25 @@ function frmAdminBuildJS() {
 		var $fields = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ),
 			size = $fields.length,
 			popup = this.closest( '.frm-field-group-popup' ),
-			wrapper, layoutClass, inputRow, index, inputField, heading, label, cancelButton, saveButton;
+			wrapper, layoutClass, inputRow, paddingElement, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
 
 		popup.innerHTML = '';
 
 		wrapper = div();
 		wrapper.style.padding = '24px';
 
-		// TODO do we want to do something better looking than just putting each input in a separate row for sizes >5?
-		layoutClass = getEvenClassForSize( size );
+		layoutClass = getEvenClassForSize( 5 === size ? 6 : size );
 
 		inputRow = div();
 		inputRow.style.padding = '20px 0';
 		inputRow.classList.add( 'frm_grid_container' );
+
+		if ( 5 === size ) {
+			// add a span to pad the inputs by 1 column, to account for the missing 2 columns.
+			paddingElement = document.createElement( 'span' );
+			paddingElement.classList.add( 'frm1' );
+			inputRow.appendChild( paddingElement );
+		}
 
 		for ( index = 0; index < size; ++index ) {
 			inputField = document.createElement( 'input' );
@@ -2661,7 +2667,7 @@ function frmAdminBuildJS() {
 
 		wrapper.appendChild( inputRow );
 
-		var buttonsWrapper = div();
+		buttonsWrapper = div();
 		buttonsWrapper.style.textAlign = 'right';
 
 		cancelButton = getSecondaryButton();
