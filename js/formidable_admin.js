@@ -1258,9 +1258,6 @@ function frmAdminBuildJS() {
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				// TODO I need to do something on drag as well (two separate code paths for handling frm_insert_field).
-				// TODO use more vanilla js, too much jQuery.
-				// TODO I have similar code in a few places. Ideally we would store the classes for this ul in only one place in code.
 				$newFields.append( wrapFieldLi( msg ) );
 				afterAddField( msg, true );
 			},
@@ -2419,8 +2416,6 @@ function frmAdminBuildJS() {
 	function clickFieldGroupLayout() {
 		var sizeOfFieldGroup, popupWrapper;
 
-		// TODO exclude the group layout controls if there is only one field in a group
-
 		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( this );
 
 		if ( null !== this.parentNode.querySelector( '.frm-field-group-popup' ) ) {
@@ -2801,7 +2796,7 @@ function frmAdminBuildJS() {
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), syncDetails );
 		destroyFieldGroupPopup( this );
 
-		// TODO Save would should probably trigger an autosave.
+		// TODO Save should probably trigger an autosave.
 		// TODO it would make sense to validate for the inputs adding up to 12 and show a warning.
 		// anything less or more is sort of odd, but it should probably still be allowed.
 	}
@@ -2842,13 +2837,11 @@ function frmAdminBuildJS() {
 			}
 
 			if ( numberOfSelectedGroups >= 2 ) {
-				// TODO we need to unselect any active fields from the sidebar.
 				addFieldMultiselectPopup();
 			}
 		} else {
-			selectedFieldGroups.removeClass( 'frm-selected-field-group' );
 			// not multi-selecting
-			// TODO if a field is selected and not a part of this group we're clicking, unselect it.
+			selectedFieldGroups.removeClass( 'frm-selected-field-group' );
 		}
 
 		clearSettingsBox(); // unselect any fields if one is selected.
@@ -2920,7 +2913,6 @@ function frmAdminBuildJS() {
 				}
 			}
 		);
-		// TODO it looks like these are syncing but they don't appear to be syncing visually until after saving and reloading.
 		syncLayoutClasses( $firstGroupUl.children().first() );
 		this.closest( '#frm_field_multiselect_popup' ).remove();
 	}
