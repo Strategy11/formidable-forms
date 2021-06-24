@@ -8173,13 +8173,29 @@ Responsive Design
 
 #frm_field_multiselect_popup {
 	background: white;
-	width: 200px;
 	height: 48px;
 	position: absolute;
 	top: -48px;
 	right: 0;
 	border-radius: 4px;
 	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
+	color: rgba(40, 47, 54, 0.85);
+	font-size: 13px;
+}
+
+#frm_field_multiselect_popup > div {
+	display: inline-block;
+	line-height: 48px;
+	vertical-align: top;
+}
+
+#frm_field_multiselect_popup > div:not(.frm-multiselect-popup-separator) {
+	padding: 0 20px;
+	cursor: pointer;
+}
+
+#frm_field_multiselect_popup > div:not(.frm-multiselect-popup-separator):hover {
+	background: #f5f5f5f5;
 }
 
 .frm-builder-popup-heading {
@@ -8194,4 +8210,12 @@ Responsive Design
 	font-size: 12px;
 	line-height: 16px;
 	color: rgba(40, 47, 54, 0.45);
+}
+
+.frm-multiselect-popup-separator {
+	height: 36px;
+	width: 1px;
+	position: relative;
+	top: 6px;
+	background: #C4C4C4;
 }

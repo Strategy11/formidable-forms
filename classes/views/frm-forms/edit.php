@@ -46,4 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<svg id="frm_gear_svg" class="frmsvg">
 		<use xlink:href="#frm_gear_icon"></use>
 	</svg>
+	<svg id="frm_trash_svg" class="frmsvg">
+		<use xlink:href="#frm_trash_icon"></use>
+	</svg>
 </div>

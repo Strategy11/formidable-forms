@@ -2893,11 +2893,15 @@ function frmAdminBuildJS() {
 		mergeOption.textContent = __( 'Merge into row', 'formidable' );
 		popup.appendChild( mergeOption );
 
+		var verticalSeparator = div();
+		verticalSeparator.classList.add( 'frm-multiselect-popup-separator' );
+		popup.appendChild( verticalSeparator );
+
 		// TODO vertical separator
 
 		deleteOption = div();
 		deleteOption.classList.add( 'frm-delete-field-groups' );
-		deleteOption.textContent = 'Delete'; // TODO trash icon
+		deleteOption.appendChild( getIconClone( 'frm_trash_svg' ) );
 		popup.appendChild( deleteOption );
 
 		return popup;
