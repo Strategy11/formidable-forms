@@ -8151,6 +8151,19 @@ Responsive Design
 .frm-break-field-group {
 	padding: 5px 15px;
 	cursor: pointer;
+	font-size: 14px;
+	line-height: 19px;
+	color: rgba(40, 47, 54, 0.85);
+}
+
+.frm-custom-field-group-layout:hover,
+.frm-break-field-group:hover {
+	background-color: #f5f5f5f5;
+}
+
+.frm-custom-field-group-layout svg,
+.frm-break-field-group svg {
+	margin-right: 5px;
 }
 
 .frm-selected-field-group {
@@ -8167,4 +8180,18 @@ Responsive Design
 	right: 0;
 	border-radius: 4px;
 	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
+}
+
+.frm-builder-popup-heading {
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 15px;
+	text-transform: uppercase;
+	color: rgba(40, 47, 54, 0.45);
+}
+
+.frm-builder-popup-subheading {
+	font-size: 12px;
+	line-height: 16px;
+	color: rgba(40, 47, 54, 0.45);
 }

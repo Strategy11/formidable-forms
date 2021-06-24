@@ -2466,13 +2466,21 @@ function frmAdminBuildJS() {
 	function getCustomLayoutOption() {
 		var option = div();
 		option.textContent = __( 'Custom layout', 'formidable' );
+		jQuery( option ).prepend( getIconClone( 'frm_gear_svg' ) );
 		option.classList.add( 'frm-custom-field-group-layout' );
 		return option;
+	}
+
+	function getIconClone( iconId ) {
+		var clone = document.getElementById( iconId ).cloneNode( true );
+		clone.id = '';
+		return clone;
 	}
 
 	function getBreakIntoDifferentRowsOption() {
 		var option = div();
 		option.textContent = __( 'Break into rows', 'formidable' );
+		jQuery( option ).prepend( getIconClone( 'frm_break_field_group_svg' ) );
 		option.classList.add( 'frm-break-field-group' );
 		return option;
 	}
@@ -2617,15 +2625,18 @@ function frmAdminBuildJS() {
 		var $fields = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ),
 			size = $fields.length,
 			popup = this.closest( '.frm-field-group-popup' ),
-			layoutClass, inputRow, index, inputField, heading, label, cancelButton, saveButton;
+			wrapper, layoutClass, inputRow, index, inputField, heading, label, cancelButton, saveButton;
 
 		popup.innerHTML = '';
+
+		wrapper = div();
+		wrapper.style.padding = '24px';
 
 		// TODO do we want to do something better looking than just putting each input in a separate row for sizes >5?
 		layoutClass = getEvenClassForSize( size );
 
 		inputRow = div();
-		inputRow.style.padding = '20px';
+		inputRow.style.padding = '20px 0';
 		inputRow.classList.add( 'frm_grid_container' );
 
 		for ( index = 0; index < size; ++index ) {
@@ -2637,27 +2648,48 @@ function frmAdminBuildJS() {
 			inputRow.appendChild( inputField );
 		}
 
-		heading = div(); // TODO styling
+		heading = div();
+		heading.classList.add( 'frm-builder-popup-heading' );
 		heading.textContent = __( 'Enter number of columns for each field', 'formidable' );
 
-		label = div(); // TODO styling
+		label = div();
+		label.classList.add( 'frm-builder-popup-subheading' );
 		label.textContent = __( 'Layouts are based on a 12-column grid system', 'formidable' );
 
-		popup.appendChild( heading );
-		popup.appendChild( label );
+		wrapper.appendChild( heading );
+		wrapper.appendChild( label );
 
-		popup.appendChild( inputRow );
+		wrapper.appendChild( inputRow );
 
-		cancelButton = div(); // TODO button styling (secondary, white with blue text)
+		var buttonsWrapper = div();
+		buttonsWrapper.style.textAlign = 'right';
+
+		cancelButton = getButton(); // TODO button styling (secondary, white with blue text)
 		cancelButton.textContent = __( 'Cancel', 'formidable' );
+		cancelButton.classList.add( 'button-secondary', 'frm-button-secondary' );
 		cancelButton.classList.add( 'frm-cancel-custom-field-group-layout' );
+		cancelButton.style.textDecoration = 'none';
+		cancelButton.style.marginRight = '10px';
 
-		saveButton = div(); // TODO button styling (primary, blue with white text)
+		saveButton = getButton(); // TODO button styling (primary, blue with white text)
+		saveButton.classList.add( 'button-primary', 'frm-button-primary' );
 		saveButton.textContent = __( 'Save', 'formidable' );
 		saveButton.classList.add( 'frm-save-custom-field-group-layout' );
+		saveButton.style.textDecoration = 'none';
 
-		popup.appendChild( cancelButton );
-		popup.appendChild( saveButton );
+		buttonsWrapper.appendChild( cancelButton );
+		buttonsWrapper.appendChild( saveButton );
+
+		wrapper.appendChild( buttonsWrapper );
+
+		popup.appendChild( wrapper );
+	}
+
+	function getButton() {
+		var button = document.createElement( 'a' );
+		button.setAttribute( 'href', '#' );
+		button.classList.add( 'button' );
+		return button;
 	}
 
 	function getSizeOfLayoutClass( className ) {

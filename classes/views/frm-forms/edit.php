@@ -39,3 +39,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	</div>
 </div>
+<div class="frm_hidden">
+	<svg id="frm_break_field_group_svg" class="frmsvg">
+		<use xlink:href="#frm_break_field_group_icon"></use>
+	</svg>
+	<svg id="frm_gear_svg" class="frmsvg">
+		<use xlink:href="#frm_gear_icon"></use>
+	</svg>
+</div>
