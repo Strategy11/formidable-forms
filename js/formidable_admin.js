@@ -2664,18 +2664,14 @@ function frmAdminBuildJS() {
 		var buttonsWrapper = div();
 		buttonsWrapper.style.textAlign = 'right';
 
-		cancelButton = getButton(); // TODO button styling (secondary, white with blue text)
+		cancelButton = getSecondaryButton();
 		cancelButton.textContent = __( 'Cancel', 'formidable' );
-		cancelButton.classList.add( 'button-secondary', 'frm-button-secondary' );
 		cancelButton.classList.add( 'frm-cancel-custom-field-group-layout' );
-		cancelButton.style.textDecoration = 'none';
 		cancelButton.style.marginRight = '10px';
 
-		saveButton = getButton(); // TODO button styling (primary, blue with white text)
-		saveButton.classList.add( 'button-primary', 'frm-button-primary' );
+		saveButton = getPrimaryButton();
 		saveButton.textContent = __( 'Save', 'formidable' );
 		saveButton.classList.add( 'frm-save-custom-field-group-layout' );
-		saveButton.style.textDecoration = 'none';
 
 		buttonsWrapper.appendChild( cancelButton );
 		buttonsWrapper.appendChild( saveButton );
@@ -2685,10 +2681,23 @@ function frmAdminBuildJS() {
 		popup.appendChild( wrapper );
 	}
 
+	function getPrimaryButton() {
+		var button = getButton();
+		button.classList.add( 'button-primary', 'frm-button-primary' );
+		return button;
+	}
+
+	function getSecondaryButton() {
+		var button = getButton();
+		button.classList.add( 'button-secondary', 'frm-button-secondary' );
+		return button;
+	}
+
 	function getButton() {
 		var button = document.createElement( 'a' );
 		button.setAttribute( 'href', '#' );
 		button.classList.add( 'button' );
+		button.style.textDecoration = 'none';
 		return button;
 	}
 
