@@ -797,6 +797,8 @@ function frmAdminBuildJS() {
 		var startSort = false,
 			container = jQuery( '#post-body-content' );
 
+		var $previousFieldContainer;
+
 		var opts = {
 			connectWith: 'ul.frm_sorting',
 			items: 'li.frm_field_box',
@@ -849,6 +851,7 @@ function frmAdminBuildJS() {
 					// If a page if collapsed, expand it before dragging since only the page break will move.
 					toggleCollapsePage( jQuery( ui.item[0]) );
 				}
+				$previousFieldContainer = ui.item.closest( 'ul.frm_sorting' );
 			},
 			helper: function( e, li ) {
 				copyHelper = li.clone().insertAfter( li );
@@ -868,7 +871,9 @@ function frmAdminBuildJS() {
 					moving.sortable( 'cancel' );
 				} else {
 					updateFieldOrder();
-					// TODO here, detect the original row this is from, sync that too.
+					if ( $previousFieldContainer.length ) {
+						syncLayoutClasses( $previousFieldContainer.children().first() );
+					}
 					syncLayoutClasses( ui.item );
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
