@@ -205,7 +205,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -272,6 +272,15 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Clear frmpro_css transient.
+	 *
+	 * @since 4.10.02
+	 */
+	private function migrate_to_98() {
+		delete_transient( 'frmpro_css' );
 	}
 
 	/**
