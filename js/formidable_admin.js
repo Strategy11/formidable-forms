@@ -2755,15 +2755,11 @@ function frmAdminBuildJS() {
 	}
 
 	function breakRow( row ) {
-		var newWrapper;
 		var $fields = jQuery( row ).children( 'li.form-field' );
 		$fields.each(
 			function( index ) {
 				if ( 0 !== index ) {
-					newWrapper = document.createElement( 'ul' );
-					newWrapper.classList.add( 'frm_grid_container', 'frm_sorting' );
-					jQuery( this.parentNode ).after( newWrapper );
-					newWrapper.appendChild( this );
+					jQuery( row ).closest( 'li' ).after( wrapFieldLi( this ) );
 				}
 				stripLayoutFromFields( jQuery( this ) );
 			}
