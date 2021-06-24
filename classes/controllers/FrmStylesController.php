@@ -451,8 +451,38 @@ class FrmStylesController {
 	public static function load_saved_css() {
 		$css = get_transient( 'frmpro_css' );
 
+		ob_start();
 		include( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' );
+		$output = ob_get_clean();
+
+		echo self::replace_relative_url( $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 		wp_die();
+	}
+
+	/**
+	 * Replaces relative URL with absolute URL.
+	 *
+	 * @since 4.11.03
+	 *
+	 * @param string $css CSS content.
+	 * @return string
+	 */
+	public static function replace_relative_url( $css ) {
+		$plugin_url = FrmAppHelper::plugin_url();
+		return str_replace(
+			array(
+				'url(../',
+				"url('../",
+				'url("../',
+			),
+			array(
+				'url(' . $plugin_url,
+				"url('" . $plugin_url,
+				'url("' . $plugin_url,
+			),
+			$css
+		);
 	}
 
 	/**
