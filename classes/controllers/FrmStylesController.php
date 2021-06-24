@@ -470,7 +470,7 @@ class FrmStylesController {
 	 */
 	public static function replace_relative_url( $css ) {
 		$plugin_url = FrmAppHelper::plugin_url();
-		return str_replace( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return str_replace(
 			array(
 				'url(../',
 				"url('../",
