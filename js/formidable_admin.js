@@ -2698,6 +2698,8 @@ function frmAdminBuildJS() {
 	function breakFieldGroupClick() {
 		var row = this.closest( 'ul' );
 		breakRow( row );
+		this.closest( '.frm-field-group-controls' ).setAttribute( 'number-of-fields', 1 );
+		this.closest( '.frm-field-group-popup' ).remove();
 	}
 
 	function breakRow( row ) {
