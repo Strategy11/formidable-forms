@@ -42,6 +42,10 @@ class FrmField {
 				'name' => __( 'Number', 'formidable' ),
 				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
+			'name'     => array(
+				'name' => __( 'Name', 'formidable' ),
+				'icon' => 'frm_icon_font frm_user_name_icon',
+			),
 			'phone'    => array(
 				'name' => __( 'Phone', 'formidable' ),
 				'icon' => 'frm_icon_font frm_phone_icon',
@@ -1068,5 +1072,19 @@ class FrmField {
 		 * @since 4.04
 		 */
 		return apply_filters( 'frm_is_field_type', $is_field_type, compact( 'field', 'is_type' ) );
+	}
+
+	/**
+	 * Checks if the given field array is a combo field.
+	 *
+	 * @since 4.10.02
+	 *
+	 * @param array $field Field array.
+	 * @return bool
+	 */
+	public static function is_combo_field( $field ) {
+		$field_type_obj = FrmFieldFactory::get_field_factory( $field );
+
+		return ! empty( $field_type_obj->is_combo_field );
 	}
 }

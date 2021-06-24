@@ -980,6 +980,31 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Focus on the first sub field when clicking to the primary label of combo field.
+	 *
+	 * @since 4.10.02
+	 */
+	function changeFocusWhenClickComboFieldLabel() {
+		let label;
+
+		const comboInputsContainer = document.querySelectorAll( '.frm_combo_inputs_container' );
+		comboInputsContainer.forEach( function( inputsContainer ) {
+			if ( ! inputsContainer.closest( '.frm_form_field' ) ) {
+				return;
+			}
+
+			label = inputsContainer.closest( '.frm_form_field' ).querySelector( '.frm_primary_label' );
+			if ( ! label ) {
+				return;
+			}
+
+			label.addEventListener( 'click', function( e ) {
+				inputsContainer.querySelector( '.frm_form_field:first-child input, .frm_form_field:first-child select, .frm_form_field:first-child textarea' ).focus();
+			});
+		});
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1004,6 +1029,9 @@ function frmFrontFormJS() {
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
+
+			// Focus on the first sub field when clicking to the primary label of combo field.
+			changeFocusWhenClickComboFieldLabel();
 
 			// Add fallbacks for the beloved IE8
 			addIndexOfFallbackForIE8();
@@ -1097,8 +1125,18 @@ function frmFrontFormJS() {
 		},
 
 		submitFormNow: function( object ) {
-			var hasFileFields,
+			var hasFileFields, antispamInput,
 				classList = object.className.trim().split( /\s+/gi );
+
+			if ( object.hasAttribute( 'data-token' ) && null === object.querySelector( '[name="antispam_token"]' ) ) {
+				// include the antispam token on form submit.
+				antispamInput = document.createElement( 'input' );
+				antispamInput.type = 'hidden';
+				antispamInput.name = 'antispam_token';
+				antispamInput.value = object.getAttribute( 'data-token' );
+				object.appendChild( antispamInput );
+			}
+
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
 					return !! this.value;

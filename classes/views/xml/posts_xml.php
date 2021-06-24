@@ -72,6 +72,18 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 <?php
 			}
 		}
+
+		if ( is_callable( 'FrmViewsLayout::get_layouts_for_view' ) ) {
+			$layouts = FrmViewsLayout::get_layouts_for_view( $post->ID );
+			foreach ( $layouts as $layout ) {
+				?>
+		<layout>
+			<type><?php echo esc_html( $layout->type ); ?></type>
+			<data><?php echo FrmXMLHelper::cdata( $layout->data ); // WPCS: XSS ok. ?></data>
+		</layout>
+<?php
+			}
+		}
 		?>
 	</view>
 <?php

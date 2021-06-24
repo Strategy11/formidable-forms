@@ -54,12 +54,13 @@ class FrmEntry {
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
 
-		unset( $check_val['created_at'], $check_val['updated_at'] );
-		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
+		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
 		}
+
+		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
 
 		global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
@@ -131,6 +132,7 @@ class FrmEntry {
 		foreach ( $filter_vals as $field_id => $value ) {
 			$field                = FrmFieldFactory::get_field_object( $field_id );
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
+			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
 			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
 				unset( $reduced[ $field_id ] );
 			}
@@ -403,7 +405,7 @@ class FrmEntry {
 			}
 
 			// include sub entries in an array
-			if ( ! isset( $entry_metas[ $meta_val->field_id ] ) ) {
+			if ( ! isset( $entry->metas[ $meta_val->field_id ] ) ) {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 

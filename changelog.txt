@@ -1,4 +1,29 @@
 == Changelog ==
+= 4.11.02 =
+* New: The padding for form descriptions can now be customized when editing styles.
+
+= 4.11.01 =
+* New: Added a new frm_duplicate_check_val filter for customizing the duplicate entry check. This can be used to remove IP to help prevent duplicate entries for longer periods of time when using frm_time_to_check_duplicates filter. For an example see https://formidableforms.com/knowledgebase/frm_duplicate_check_val/.
+* New: Added visibility option to the Name field.
+* Fix: The honeypot setting would still appear as on after it was turned off.
+
+= 4.11 =
+* New: Added a quick and easy Name field with options for First, Middle, and Last names.
+* New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings for each form.
+* New: Added Honeypot options to form settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
+* New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
+* Fix: A warning was getting logged when exporting a form as XML.
+
+= 4.10.03 =
+* New: Improved the performance of the style editor preview.
+* New: You can now sign up for free form templates directly from your inbox.
+* Fix: Date fields were not properly detecting duplicate entries.
+* Fix: Conditional forms were not properly fading in when the form block was added to a page.
+* Fix: Actions would occasionally conflict if multiple were added too quickly.
+
+= 4.10.02 =
+* New: Added support for in-theme previews for more themes including Twenty Twenty and Customizr.
+
 = 4.10.01 =
 * New: Include the full email header when an email is sent using the mail function.
 * Fix: After opening the popup to add a layout class to a field, the field would no longer be selectable.

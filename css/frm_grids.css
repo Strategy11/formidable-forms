@@ -347,8 +347,8 @@
 }
 
 @media only screen and (max-width: 750px) {
-	.frm_grid_container.frm_no_grid_750{
-		display:block;
+	.frm_grid_container.frm_no_grid_750 > div{
+		grid-column: span 12/span 12;
 	}
 }
 

@@ -1323,6 +1323,7 @@ a.frm_hidden,
 
 .post-type-frm_display .wrap > #posts-filter,
 .post-type-frm_display .wrap > .subsubsub,
+.post-type-frm_display .wrap > .icl_subsubsub,
 .frm_form_settings > p {
 	margin: 6px 40px;
 	padding: 0;
@@ -1628,6 +1629,11 @@ div.frm_updated_message {
 	color: white;
 	font-family: sans-serif;
 	size: 11px;
+}
+
+.plugin-card-top .frm_ribbon {
+	right: -33px;
+	top: -28px;
 }
 
 .frm_ribbon span {
@@ -3093,7 +3099,8 @@ input[type="checkbox"] {
 }
 
 #new_fields .frm_primary_label + p,
-#new_fields .frm_primary_label + .frm6 + .frm6 {
+#new_fields .frm_primary_label + .frm6 + .frm6,
+#new_fields .frm_primary_label + .frm6 + .frm-inline-modal + .frm6 {
 	margin-top: 0;
 }
 
@@ -6793,6 +6800,13 @@ input[disabled],
 	font-size: 18px;
 }
 
+/* Icon for Name field is larger */
+.field_type_list li.frm_tname.frmbutton .frmsvg {
+	width: 24px;
+	height: 24px;
+	padding-right: 11px;
+}
+
 .frm_code_list a .frmsvg,
 .frm_code_list a i {
 	margin: 0 5px 0 0;
@@ -8027,4 +8041,19 @@ Responsive Design
 
 .frm-admin-page-styles #frm-publishing #save_menu_header {
 	display: inline-block;
+}
+
+/* Change the order of subfields of the Name field in the backend */
+.edit_form_item .frm_combo_inputs_container[data-name-layout="last_first"] .frm_form_subfield-first {
+	order: 2;
+}
+
+.frm-video-wrapper {
+	padding: 0 20px;
+}
+
+.frm-video-wrapper iframe {
+	width: 100%;
+	max-width: 843px;
+	border-radius: 10px;
 }

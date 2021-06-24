@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.10.01';
+	public static $plug_version = '4.11.02';
 
 	/**
 	 * @since 1.07.02
@@ -88,8 +88,10 @@ class FrmAppHelper {
 
 		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium  = $args['medium'];
-			$content = $args['content'];
+			$medium = $args['medium'];
+			if ( isset( $args['content'] ) ) {
+				$content = $args['content'];
+			}
 			if ( isset( $args['anchor'] ) ) {
 				$anchor = '#' . $args['anchor'];
 			}
@@ -109,6 +111,10 @@ class FrmAppHelper {
 
 		if ( is_array( $args ) && isset( $args['param'] ) ) {
 			$query_args['f'] = $args['param'];
+		}
+
+		if ( is_array( $args ) && ! empty( $args['plan'] ) ) {
+			$query_args['plan'] = $args['plan'];
 		}
 
 		$link = add_query_arg( $query_args, $page ) . $anchor;

@@ -50,24 +50,16 @@ if ( $values['fields'] ) {
 $frm_settings = FrmAppHelper::get_settings();
 if ( FrmAppHelper::is_admin() ) {
 	?>
-<div class="frm_form_field form-field">
-<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
-<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
-</div>
-<?php } else { ?>
-<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	<div class="frm_form_field form-field">
+	<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>
+	<input type="text" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	</div>
 	<?php
-	$honeypot = apply_filters( 'frm_run_honeypot', true, compact( 'form' ) );
-	if ( $honeypot ) {
-		?>
-<div class="frm_verify" <?php echo ( $honeypot === true ) ? '' : 'aria-hidden="true"'; ?>>
-	<label for="frm_email_<?php echo esc_attr( $form->id ); ?>">
-		<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
-	</label>
-	<input type="email" class="frm_verify" id="frm_email_<?php echo esc_attr( $form->id ); ?>" name="frm_verify" value="<?php echo esc_attr( FrmAppHelper::get_param( 'frm_verify', '', 'get', 'wp_kses_post' ) ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?> />
-</div>
-		<?php
-	}
+} else {
+	?>
+	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
+	<?php
+	FrmHoneypot::maybe_render_field( $form->id );
 }
 
 do_action( 'frm_entry_form', $form, $form_action, $errors );
