@@ -2522,7 +2522,9 @@ function frmAdminBuildJS() {
 	}
 
 	function getRowLayoutOptions( size ) {
-		var wrapper = getEmptyGridContainer();
+		var wrapper, padding;
+
+		wrapper = getEmptyGridContainer();
 		if ( 5 !== size ) {
 			wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
 		}
@@ -2530,19 +2532,39 @@ function frmAdminBuildJS() {
 			// only include the middle option for odd numbers because even doesn't make a lot of sense.
 			wrapper.appendChild( getRowLayoutOption( size, 'middle' ) );
 		}
-		wrapper.appendChild( getRowLayoutOption( size, 'left' ) );
-		wrapper.appendChild( getRowLayoutOption( size, 'right' ) );
+		if ( size < 6 ) {
+			wrapper.appendChild( getRowLayoutOption( size, 'left' ) );
+			wrapper.appendChild( getRowLayoutOption( size, 'right' ) );
+		} else {
+			padding = div();
+			padding.classList.add( 'frm_fourth' );
+			wrapper.prepend( padding );
+		}
+
 		return wrapper;
 	}
 
 	function getRowLayoutOption( size, type ) {
-		var option, size;
+		var option, useClass;
 
 		option = div();
 		// TODO include a blue outline on hover/or on currently active style.
 		// as the style isn't really stored anywhere, we would need to look at the row's current classes and derive it from that. Should be simple.
 		option.classList.add( 'frm-row-layout-option' );
-		option.classList.add( size % 2 === 1 && 5 !== size ? 'frm_fourth' : 'frm_third' );
+
+		switch ( size ) {
+			case 6:
+				useClass = 'frm_half';
+				break;
+			case 5:
+				useClass = 'frm_third';
+				break;
+			default:
+				useClass = size % 2 === 1 ? 'frm_fourth' : 'frm_third';
+				break;
+		}
+
+		option.classList.add( useClass );
 		option.setAttribute( 'layout-type', type );
 
 		option.appendChild( getRowForSizeAndType( size, type ) );

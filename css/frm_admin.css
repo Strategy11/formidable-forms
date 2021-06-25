@@ -8153,6 +8153,11 @@ Responsive Design
 	padding: 18px 11px;
 }
 
+#frm_field_group_popup .frm-row-layout-option .frm_grid_container {
+	grid-gap: 0 5%;
+	grid-template-columns: repeat(12, auto);
+}
+
 .frm-custom-field-group-layout,
 .frm-break-field-group {
 	padding: 5px 15px;
