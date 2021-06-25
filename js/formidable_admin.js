@@ -2833,7 +2833,7 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldGroupClick( e ) {
-		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups;
+		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups, $firstGroup, $range;
 
 		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
 			// TODO the removeClass( 'frm-selected-field-group' ) logic still needs to happen here sometimes.
@@ -2845,7 +2845,6 @@ function frmAdminBuildJS() {
 
 		ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		shiftKeyIsDown = e.shiftKey;
-		// TODO a field group is also selected if one specific field is selected.
 		groupIsActive = this.classList.contains( 'frm-selected-field-group' );
 		selectedFieldGroups = jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' );
 		numberOfSelectedGroups = selectedFieldGroups.length;
@@ -2863,8 +2862,26 @@ function frmAdminBuildJS() {
 					++numberOfSelectedGroups;
 				}
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
-				// this number doesn't have to be accurate. We just need to determine if there are >= 2.
-				++numberOfSelectedGroups;
+				$firstGroup = selectedFieldGroups.first();
+
+				if ( $firstGroup.parent().index() < jQuery( this.parentNode ).index() ) {
+					$range = $firstGroup.parent().nextUntil( this.parentNode );
+				} else {
+					$range = $firstGroup.parent().prevUntil( this.parentNode );
+				}
+
+				$range.each(
+					function() {
+						var $fieldGroup = jQuery( this ).closest( 'li' ).find( 'ul.frm_sorting' );
+						if ( ! $fieldGroup.hasClass( 'frm-selected-field-group' ) ) {
+							++numberOfSelectedGroups;
+							$fieldGroup.addClass( 'frm-selected-field-group' );
+						}
+					}
+				);
+
+				// when holding shift and clicking, text gets selected. unselect it.
+				document.getSelection().removeAllRanges();
 			}
 
 			if ( numberOfSelectedGroups >= 2 ) {
