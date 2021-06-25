@@ -2418,15 +2418,23 @@ function frmAdminBuildJS() {
 
 		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( this );
 
-		if ( null !== this.parentNode.querySelector( '.frm-field-group-popup' ) ) {
-			// avoid ever having multiple in a field group.
-			return;
+		if ( null !== document.getElementById( 'frm_field_group_popup' ) ) {
+			destroyFieldGroupPopup();
 		}
+
+		this.closest( 'ul.frm_sorting' ).classList.add( 'frm-has-open-field-group-popup' );
+		jQuery( document ).on( 'click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick );
 
 		popupWrapper = div();
 		popupWrapper.style.position = 'relative';
 		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup ) );
 		this.parentNode.appendChild( popupWrapper );
+	}
+
+	function destroyFieldGroupPopupOnOutsideClick( event ) {
+		if ( ! jQuery( event.target ).closest( '.frm-field-group-controls' ).length ) {
+			destroyFieldGroupPopup();
+		}
 	}
 
 	function getSizeOfFieldGroupFromChildElement( element ) {
@@ -2437,7 +2445,7 @@ function frmAdminBuildJS() {
 		var popup, wrapper;
 
 		popup = div();
-		popup.classList.add( 'frm-field-group-popup' );
+		popup.id = 'frm_field_group_popup';
 
 		wrapper = div();
 		wrapper.style.padding = '0 24px 12px';
@@ -2532,10 +2540,9 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * 
-	 * @param {int} size 2-4.
+	 * @param {int} size 2-6.
 	 * @param {string} type even, middle, left, or right.
-	 * @param {int} index 0-3.
+	 * @param {int} index 0-5.
 	 * @returns string
 	 */
 	function getClassForBlock( size, type, index ) {
@@ -2613,13 +2620,13 @@ function frmAdminBuildJS() {
 		size = jQuery( row ).children( 'li.form-field' ).length;
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
-		destroyFieldGroupPopup( this );
+		destroyFieldGroupPopup();
 	}
 
 	function customFieldGroupLayoutClick() {
 		var $fields = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ),
 			size = $fields.length,
-			popup = this.closest( '.frm-field-group-popup' ),
+			popup = this.closest( '#frm_field_group_popup' ),
 			wrapper, layoutClass, inputRow, paddingElement, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
 
 		popup.innerHTML = '';
@@ -2746,7 +2753,7 @@ function frmAdminBuildJS() {
 		var row = this.closest( 'ul' );
 		breakRow( row );
 		this.closest( '.frm-field-group-controls' ).setAttribute( 'number-of-fields', 1 );
-		this.closest( '.frm-field-group-popup' ).remove();
+		destroyFieldGroupPopup();
 	}
 
 	function breakRow( row ) {
@@ -2774,19 +2781,22 @@ function frmAdminBuildJS() {
 	}
 
 	function revertToFieldGroupPopupFirstPage( triggerElement ) {
-		triggerElement.closest( '.frm-field-group-popup' ).replaceWith(
+		triggerElement.closest( '#frm_field_group_popup' ).replaceWith(
 			getFieldGroupPopup( getSizeOfFieldGroupFromChildElement( triggerElement ) )
 		);
 	}
 
-	function destroyFieldGroupPopup( triggerElement ) {
-		triggerElement.closest( '.frm-field-group-popup' ).parentNode.remove();
+	function destroyFieldGroupPopup() {
+		var popup = document.getElementById( 'frm_field_group_popup' );
+		popup.closest( '.frm-has-open-field-group-popup' ).classList.remove( 'frm-has-open-field-group-popup' );
+		popup.parentNode.remove();
+		jQuery( document ).off( 'click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick );
 	}
 
 	function saveCustomFieldGroupClick() {
 		var syncDetails = [];
 
-		jQuery( this.closest( '.frm-field-group-popup' ).querySelectorAll( '.frm_grid_container input' ) )
+		jQuery( this.closest( '#frm_field_group_popup' ).querySelectorAll( '.frm_grid_container input' ) )
 			.each(
 				function() {
 					syncDetails.push( parseInt( this.value ) );
@@ -2794,7 +2804,7 @@ function frmAdminBuildJS() {
 			);
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), syncDetails );
-		destroyFieldGroupPopup( this );
+		destroyFieldGroupPopup();
 
 		// TODO Save should probably trigger an autosave.
 		// TODO it would make sense to validate for the inputs adding up to 12 and show a warning.
@@ -7570,7 +7580,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
 			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
-			$newFields.on( 'click', '.frm-field-group-popup .frm_grid_container input', focusFieldGroupInputOnClick );
+			$newFields.on( 'click', '#frm_field_group_popup .frm_grid_container input', focusFieldGroupInputOnClick );
 			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
 			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
 			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );

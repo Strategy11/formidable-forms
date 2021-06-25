@@ -5465,11 +5465,13 @@ span.howto {
 	box-sizing: border-box;
 }
 
-#frm-show-fields ul.frm_sorting:hover .frm-field-group-controls:not([number-of-fields="1"]) {
+#frm-show-fields ul.frm_sorting:hover .frm-field-group-controls:not([number-of-fields="1"]),
+#frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup .frm-field-group-controls {
 	display: block;
 }
 
-#frm-show-fields ul.frm_sorting:hover {
+#frm-show-fields ul.frm_sorting:hover,
+#frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup {
 	background: rgba(65, 153, 253, 0.07);
 }
 
@@ -8116,7 +8118,7 @@ Responsive Design
 	border-radius: 10px;
 }
 
-.frm-field-group-popup {
+#frm_field_group_popup {
 	position: absolute;
 	top: 0;
 	right: 0;
