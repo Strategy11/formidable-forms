@@ -1379,6 +1379,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function checkForMultiselectKeysOnMouseMove( event ) {
+		var keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
+		jQuery( document.getElementById( 'frm_builder_page' ) ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
+	}
+
 	function wrapFieldLi( li ) {
 		return jQuery( '<li>' )
 			.html(
@@ -7628,6 +7633,7 @@ function frmAdminBuildJS() {
 				this.closest( 'li.form-field' ).classList.add( 'frm-field-settings-open' );
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
 			});
+			$newFields.on( 'mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );

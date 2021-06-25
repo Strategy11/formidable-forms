@@ -8225,3 +8225,7 @@ Responsive Design
 	top: 6px;
 	background: #C4C4C4;
 }
+
+.frm-multiselect-key-is-down li.form-field {
+	pointer-events: none;
+}
