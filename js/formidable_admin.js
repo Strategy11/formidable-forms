@@ -1333,6 +1333,8 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
+		closeOpenFieldDropdowns();
+
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
 
@@ -1358,6 +1360,23 @@ function frmAdminBuildJS() {
 			}
 		});
 		return false;
+	}
+
+	function closeOpenFieldDropdowns() {
+		var openSettings = document.querySelector( '.frm-field-settings-open' );
+		if ( null !== openSettings ) {
+			openSettings.classList.remove( 'frm-field-settings-open' );
+			jQuery( document ).off( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
+
+			jQuery( '.frm-field-action-icons .dropdown.open' ).removeClass( 'open' );
+		}
+	}
+
+	function handleClickOutsideOfFieldSettings( event ) {
+		// TODO clicking duplicate is not killing the pop up.
+		if ( ! jQuery( event.originalEvent.target ).closest( '.frm-field-action-icons' ).length ) {
+			document.querySelector( '.frm-field-settings-open' ).classList.remove( 'frm-field-settings-open' );
+		}
 	}
 
 	function wrapFieldLi( li ) {
@@ -2404,6 +2423,8 @@ function frmAdminBuildJS() {
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
 		this.setAttribute( 'data-deletefield', fieldId );
+
+		closeOpenFieldDropdowns();
 
 		confirmLinkClick( this );
 		return false;
@@ -7586,6 +7607,10 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );
 			$newFields.on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
 			$newFields.on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
+			$newFields.on( 'click', '.frm-field-action-icons [data-toggle="dropdown"]', function() {
+				this.closest( 'li.form-field' ).classList.add( 'frm-field-settings-open' );
+				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
+			});
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );

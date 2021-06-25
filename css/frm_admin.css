@@ -3712,6 +3712,10 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	transition: opacity .15s ease-in-out;
 }
 
+.frm-field-settings-open .frm-show-hover {
+	opacity: 1;
+}
+
 .frm_sortable_field_opts {
 	margin-top: 5px;
 }
