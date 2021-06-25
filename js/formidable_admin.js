@@ -1986,7 +1986,14 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( '#frm-update-bulk-opts' ).on( 'click', function() {
-			var fieldId = document.getElementById( 'bulk-field-id' ).value;
+			var fieldId    = document.getElementById( 'bulk-field-id' ).value;
+			var optionType = document.getElementById( 'bulk-option-type' ).value;
+
+			if ( optionType ) {
+				// Use custom handler for custom option type.
+				return;
+			}
+
 			this.classList.add( 'frm_loading_button' );
 			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
 		});
@@ -6500,6 +6507,11 @@ function frmAdminBuildJS() {
 			close: function() {
 				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
+
+				const optionType = document.getElementById( 'bulk-option-type' );
+				if ( optionType ) {
+					optionType.value = '';
+				}
 			}
 		});
 

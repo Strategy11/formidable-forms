@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 			<textarea name="frm_bulk_options" id="frm_bulk_options"></textarea>
 			<input type="hidden" value="" id="bulk-field-id" />
-				
+			<input type="hidden" value="" id="bulk-option-type" />
+
 			<button class="button-primary frm-button-primary" id="frm-update-bulk-opts">
 				<?php esc_attr_e( 'Update Options', 'formidable' ); ?>
 			</button>
