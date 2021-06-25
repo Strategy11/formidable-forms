@@ -1367,15 +1367,13 @@ function frmAdminBuildJS() {
 		if ( null !== openSettings ) {
 			openSettings.classList.remove( 'frm-field-settings-open' );
 			jQuery( document ).off( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
-
 			jQuery( '.frm-field-action-icons .dropdown.open' ).removeClass( 'open' );
 		}
 	}
 
 	function handleClickOutsideOfFieldSettings( event ) {
-		// TODO clicking duplicate is not killing the pop up.
 		if ( ! jQuery( event.originalEvent.target ).closest( '.frm-field-action-icons' ).length ) {
-			document.querySelector( '.frm-field-settings-open' ).classList.remove( 'frm-field-settings-open' );
+			closeOpenFieldDropdowns();
 		}
 	}
 
