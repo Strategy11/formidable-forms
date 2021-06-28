@@ -14,6 +14,21 @@ class FrmInboxController {
 	public static function menu() {
 		$unread = self::get_notice_count();
 
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->old_css ) {
+			$inbox = new FrmInbox();
+			$inbox->add_message(
+				array(
+					'key'     => 'old_css',
+					'subject' => 'The option to not use CSS Grids for form layouts is being removed.',
+					'message' => 'New formidable features will require the CSS Grid. We recommend enabling the CSS Grid in Global Settings and testing that your forms still look good with updated layouts.',
+					'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '" class="button-primary frm-button-primary">' . esc_html__( 'Go to Global Settings', 'formidable' ) . '</a>',
+					'icon'    => 'frm_report_problem_icon',
+					'type'    => 'news',
+				)
+			);
+		}
+
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Inbox', 'formidable' ), __( 'Inbox', 'formidable' ) . $unread, 'frm_change_settings', 'formidable-inbox', 'FrmInboxController::inbox' );
 	}
 
