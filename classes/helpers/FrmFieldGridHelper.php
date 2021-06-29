@@ -113,7 +113,10 @@ class FrmFieldGridHelper {
 		}
 
 		if ( 0 === strpos( $class, 'frm' ) ) {
-			return (int) substr( $class, 3 );
+			$substr = substr( $class, 3 );
+			if ( is_numeric( $substr ) ) {
+				return (int) $substr;
+			}
 		}
 
 		// Anything missing a layout class should be a full width row.
