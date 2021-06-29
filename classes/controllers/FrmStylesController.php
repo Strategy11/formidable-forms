@@ -469,7 +469,7 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function replace_relative_url( $css ) {
-		$plugin_url = FrmAppHelper::plugin_url();
+		$plugin_url = trailingslashit( FrmAppHelper::plugin_url() );
 		return str_replace(
 			array(
 				'url(../',
