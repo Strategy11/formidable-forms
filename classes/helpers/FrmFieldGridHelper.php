@@ -86,7 +86,7 @@ class FrmFieldGridHelper {
 	}
 
 	private function begin_field_wrapper() {
-		echo '<li><ul class="frm_grid_container frm_sorting">';
+		echo '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting">';
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;

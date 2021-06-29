@@ -1384,6 +1384,7 @@ function frmAdminBuildJS() {
 
 	function wrapFieldLi( li ) {
 		return jQuery( '<li>' )
+			.addClass( 'frm_field_box' )
 			.html(
 				jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
 			);
