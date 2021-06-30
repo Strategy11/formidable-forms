@@ -1,6 +1,6 @@
 == Changelog ==
 = 4.11.03 =
-* New: Name fields now work in the To and From setting for email actions.
+* New: Name fields now work in the To and From settings for email actions.
 * Fix: Images were not properly loading when styles were loading via an AJAX request.
 * Fix: Zeros were not appearing in the entries list for repeaters.
 
