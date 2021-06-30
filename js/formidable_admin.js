@@ -4381,15 +4381,24 @@ function frmAdminBuildJS() {
 
 		// Get new post parent option.
 		if ( postParentField ) {
-			getActionOption( postParentField, postType, 'frm_get_post_parent_option', 'frm_post_parent_opt_wrapper' );
+			getActionOption(
+				postParentField,
+				postType,
+				'frm_get_post_parent_option',
+				function( response, optName ) {
+					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
+					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
+					initAutocomplete( 'page', postParentField );
+				}
+			);
 		}
 
 		if ( postMenuOrderField ) {
-			getActionOption( postMenuOrderField, postType, 'frm_get_post_menu_order_option', 'frm_post_menu_order_opt_wrapper' );
+			getActionOption( postMenuOrderField, postType, 'frm_get_post_menu_order_option' );
 		}
 	}
 
-	function getActionOption( field, postType, action, wrapperClass ) {
+	function getActionOption( field, postType, action, successHandler ) {
 		const opt = field.querySelector( '.frm_autocomplete_value_input' ) || field.querySelector( 'select' ),
 			optName = opt.getAttribute( 'name' );
 
@@ -4399,8 +4408,7 @@ function frmAdminBuildJS() {
 			data: {
 				action: action,
 				post_type: postType,
-				_wpnonce: frmGlobal.nonce,
-				form_id: thisFormId
+				_wpnonce: frmGlobal.nonce
 			},
 			success: response => {
 				if ( 'string' !== typeof response ) {
@@ -4416,9 +4424,10 @@ function frmAdminBuildJS() {
 				}
 
 				field.classList.remove( 'frm_hidden' );
-				// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
-				field.querySelector( '.' + wrapperClass ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
-				initAutocomplete( 'page', field );
+
+				if ( 'function' === typeof successHandler ) {
+					successHandler( response, optName );
+				}
 			},
 			error: response => console.error( response )
 		});
