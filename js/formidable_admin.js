@@ -4394,7 +4394,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( postMenuOrderField ) {
-			getActionOption( postMenuOrderField, postType, 'frm_get_post_menu_order_option' );
+			getActionOption( postMenuOrderField, postType, 'frm_should_use_post_menu_order_option' );
 		}
 	}
 
@@ -4416,8 +4416,8 @@ function frmAdminBuildJS() {
 					return;
 				}
 
-				// Post type is not a page.
 				if ( '0' === response ) {
+					// This post type does not support this field.
 					field.classList.add( 'frm_hidden' );
 					field.value = '';
 					return;
