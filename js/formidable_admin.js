@@ -878,7 +878,7 @@ function frmAdminBuildJS() {
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
 			},
-			sort: function( event ) {
+			sort: function( event, ui ) {
 				container.scrollTop( function( i, v ) {
 					if ( startSort === false ) {
 						startSort = event.clientY;
@@ -897,6 +897,25 @@ function frmAdminBuildJS() {
 						return v - Math.abs( y * 0.1 );
 					}
 				});
+
+				// TODO always 0 or the far right if there is only one field.
+				// TODO the left value would be calculated differently.
+
+				var betweenElements = event.clientX > ui.placeholder.next().offset().left - ui.placeholder.next().width();
+				var useFarRight = event.clientX > ui.placeholder.next().offset().left;
+				var left, right;
+				var placeholderElement = ui.placeholder.get( 0 );
+
+				if ( useFarRight ) {
+					left = 'unset';
+					right = 0;
+				} else {
+					left = betweenElements ? ( ui.placeholder.next().offset().left - ui.placeholder.next().width() - 126 ) + 'px' : 0;
+					right = 'unset';
+				}
+
+				placeholderElement.style.left = left;
+				placeholderElement.style.right = right;
 			}
 		};
 
