@@ -4343,6 +4343,7 @@ function frmAdminBuildJS() {
 		var curSelect, newSelect,
 			catRows = document.getElementById( 'frm_posttax_rows' ).childNodes,
 			postParentField = document.querySelector( '.frm_post_parent_field' ),
+			postMenuOrderField = document.querySelector( '.frm_post_menu_order_field' ),
 			postType = this.value;
 
 		// Get new category/taxonomy options
@@ -4408,6 +4409,41 @@ function frmAdminBuildJS() {
 					// The replaced string is declared in FrmProFormActionController::ajax_get_post_parent_option() in the pro version.
 					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postParentOptName );
 					initAutocomplete( 'page', postParentField );
+				},
+				error: response => console.error( response )
+			});
+		}
+
+		if ( postMenuOrderField ) {
+			const postMenuOrderOpt     = postMenuOrderField.querySelector( '.frm_autocomplete_value_input' ) || postMenuOrderField.querySelector( 'select' );
+			const postMenuOrderOptName = postMenuOrderOpt.getAttribute( 'name' );
+
+			jQuery.ajax({
+				url: ajaxurl,
+				method: 'POST',
+				data: {
+					action: 'frm_get_post_menu_order_option',
+					post_type: postType,
+					_wpnonce: frmGlobal.nonce,
+					form_id: thisFormId
+				},
+				success: response => {
+					if ( 'string' !== typeof response ) {
+						console.error( response );
+						return;
+					}
+
+					// Post type is not a page.
+					if ( '0' === response ) {
+						postMenuOrderField.classList.add( 'frm_hidden' );
+						postMenuOrderField.value = '';
+						return;
+					}
+
+					postMenuOrderField.classList.remove( 'frm_hidden' );
+					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
+					postMenuOrderField.querySelector( '.frm_post_menu_order_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postMenuOrderOptName );
+					initAutocomplete( 'page', postMenuOrderField );
 				},
 				error: response => console.error( response )
 			});
