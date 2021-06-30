@@ -4381,73 +4381,47 @@ function frmAdminBuildJS() {
 
 		// Get new post parent option.
 		if ( postParentField ) {
-			const postParentOpt     = postParentField.querySelector( '.frm_autocomplete_value_input' ) || postParentField.querySelector( 'select' );
-			const postParentOptName = postParentOpt.getAttribute( 'name' );
-
-			jQuery.ajax({
-				url: ajaxurl,
-				method: 'POST',
-				data: {
-					action: 'frm_get_post_parent_option',
-					post_type: postType,
-					_wpnonce: frmGlobal.nonce
-				},
-				success: response => {
-					if ( 'string' !== typeof response ) {
-						console.error( response );
-						return;
-					}
-
-					// Post type is not hierarchical.
-					if ( '0' === response ) {
-						postParentField.classList.add( 'frm_hidden' );
-						postParentOpt.value = '';
-						return;
-					}
-
-					postParentField.classList.remove( 'frm_hidden' );
-					// The replaced string is declared in FrmProFormActionController::ajax_get_post_parent_option() in the pro version.
-					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postParentOptName );
-					initAutocomplete( 'page', postParentField );
-				},
-				error: response => console.error( response )
-			});
+			getActionOption( postParentField, postType, 'frm_get_post_parent_option', 'frm_post_parent_opt_wrapper' );
 		}
 
 		if ( postMenuOrderField ) {
-			const postMenuOrderOpt     = postMenuOrderField.querySelector( '.frm_autocomplete_value_input' ) || postMenuOrderField.querySelector( 'select' );
-			const postMenuOrderOptName = postMenuOrderOpt.getAttribute( 'name' );
-
-			jQuery.ajax({
-				url: ajaxurl,
-				method: 'POST',
-				data: {
-					action: 'frm_get_post_menu_order_option',
-					post_type: postType,
-					_wpnonce: frmGlobal.nonce,
-					form_id: thisFormId
-				},
-				success: response => {
-					if ( 'string' !== typeof response ) {
-						console.error( response );
-						return;
-					}
-
-					// Post type is not a page.
-					if ( '0' === response ) {
-						postMenuOrderField.classList.add( 'frm_hidden' );
-						postMenuOrderField.value = '';
-						return;
-					}
-
-					postMenuOrderField.classList.remove( 'frm_hidden' );
-					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
-					postMenuOrderField.querySelector( '.frm_post_menu_order_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postMenuOrderOptName );
-					initAutocomplete( 'page', postMenuOrderField );
-				},
-				error: response => console.error( response )
-			});
+			getActionOption( postMenuOrderField, postType, 'frm_get_post_menu_order_option', 'frm_post_menu_order_opt_wrapper' );
 		}
+	}
+
+	function getActionOption( field, postType, action, wrapperClass ) {
+		const opt = field.querySelector( '.frm_autocomplete_value_input' ) || field.querySelector( 'select' ),
+			optName = opt.getAttribute( 'name' );
+
+		jQuery.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			data: {
+				action: action,
+				post_type: postType,
+				_wpnonce: frmGlobal.nonce,
+				form_id: thisFormId
+			},
+			success: response => {
+				if ( 'string' !== typeof response ) {
+					console.error( response );
+					return;
+				}
+
+				// Post type is not a page.
+				if ( '0' === response ) {
+					field.classList.add( 'frm_hidden' );
+					field.value = '';
+					return;
+				}
+
+				field.classList.remove( 'frm_hidden' );
+				// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
+				field.querySelector( '.' + wrapperClass ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
+				initAutocomplete( 'page', field );
+			},
+			error: response => console.error( response )
+		});
 	}
 
 	function addPosttaxRow() {
