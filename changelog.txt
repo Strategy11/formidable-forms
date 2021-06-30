@@ -1,4 +1,9 @@
 == Changelog ==
+= 4.11.03 =
+* New: Name fields now work in the To and From setting for email actions.
+* Fix: Images were not properly loading when styles were loading via an AJAX request.
+* Fix: Zeros were not appearing in the entries list for repeaters.
+
 = 4.11.02 =
 * New: The padding for form descriptions can now be customized when editing styles.
 
