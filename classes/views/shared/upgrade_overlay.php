@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						esc_html__( '%s are not installed', 'formidable' ),
 						'<span class="frm_feature_label"></span>'
 					);
-					?> 
+					?>
 				</h2>
 				<div class="cta-inside">
 
