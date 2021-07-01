@@ -13,8 +13,9 @@ class FrmInboxController {
 	 */
 	public static function menu() {
 		$unread = self::get_notice_count();
-
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Inbox', 'formidable' ), __( 'Inbox', 'formidable' ) . $unread, 'frm_change_settings', 'formidable-inbox', 'FrmInboxController::inbox' );
+
+		self::maybe_add_old_css_message();
 	}
 
 	/**
@@ -23,8 +24,25 @@ class FrmInboxController {
 	private static function get_notice_count() {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
 
-		$inbox  = new FrmInbox();
+		$inbox = new FrmInbox();
 		return $inbox->unread_html();
+	}
+
+	private static function maybe_add_old_css_message() {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->old_css ) {
+			$inbox = new FrmInbox();
+			$inbox->add_message(
+				array(
+					'key'     => 'old_css',
+					'subject' => 'The option to disable CSS Grids for form layouts is being removed.',
+					'message' => 'We\'ve got some awesome form layout features coming soon. These new layouts will require CSS grids, and will not be supported in Internet Explorer. If a visitor views your forms in IE, a single field will show in each row.<br><br>We recommend enabling CSS Grids in Global Settings and then checking your form layouts.',
+					'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '" class="button-primary frm-button-primary">' . esc_html__( 'Go to Global Settings', 'formidable' ) . '</a>',
+					'icon'    => 'frm_report_problem_icon',
+					'type'    => 'news',
+				)
+			);
+		}
 	}
 
 	/**
