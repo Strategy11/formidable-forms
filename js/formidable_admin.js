@@ -4343,6 +4343,7 @@ function frmAdminBuildJS() {
 		var curSelect, newSelect,
 			catRows = document.getElementById( 'frm_posttax_rows' ).childNodes,
 			postParentField = document.querySelector( '.frm_post_parent_field' ),
+			postMenuOrderField = document.querySelector( '.frm_post_menu_order_field' ),
 			postType = this.value;
 
 		// Get new category/taxonomy options
@@ -4380,38 +4381,56 @@ function frmAdminBuildJS() {
 
 		// Get new post parent option.
 		if ( postParentField ) {
-			const postParentOpt     = postParentField.querySelector( '.frm_autocomplete_value_input' ) || postParentField.querySelector( 'select' );
-			const postParentOptName = postParentOpt.getAttribute( 'name' );
-
-			jQuery.ajax({
-				url: ajaxurl,
-				method: 'POST',
-				data: {
-					action: 'frm_get_post_parent_option',
-					post_type: postType,
-					_wpnonce: frmGlobal.nonce
-				},
-				success: response => {
-					if ( 'string' !== typeof response ) {
-						console.error( response );
-						return;
-					}
-
-					// Post type is not hierarchical.
-					if ( '0' === response ) {
-						postParentField.classList.add( 'frm_hidden' );
-						postParentOpt.value = '';
-						return;
-					}
-
-					postParentField.classList.remove( 'frm_hidden' );
-					// The replaced string is declared in FrmProFormActionController::ajax_get_post_parent_option() in the pro version.
-					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', postParentOptName );
+			getActionOption(
+				postParentField,
+				postType,
+				'frm_get_post_parent_option',
+				function( response, optName ) {
+					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
+					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
 					initAutocomplete( 'page', postParentField );
-				},
-				error: response => console.error( response )
-			});
+				}
+			);
 		}
+
+		if ( postMenuOrderField ) {
+			getActionOption( postMenuOrderField, postType, 'frm_should_use_post_menu_order_option' );
+		}
+	}
+
+	function getActionOption( field, postType, action, successHandler ) {
+		const opt = field.querySelector( '.frm_autocomplete_value_input' ) || field.querySelector( 'select' ),
+			optName = opt.getAttribute( 'name' );
+
+		jQuery.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			data: {
+				action: action,
+				post_type: postType,
+				_wpnonce: frmGlobal.nonce
+			},
+			success: response => {
+				if ( 'string' !== typeof response ) {
+					console.error( response );
+					return;
+				}
+
+				if ( '0' === response ) {
+					// This post type does not support this field.
+					field.classList.add( 'frm_hidden' );
+					field.value = '';
+					return;
+				}
+
+				field.classList.remove( 'frm_hidden' );
+
+				if ( 'function' === typeof successHandler ) {
+					successHandler( response, optName );
+				}
+			},
+			error: response => console.error( response )
+		});
 	}
 
 	function addPosttaxRow() {
