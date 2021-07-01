@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.11.02\n"
+"Project-Id-Version: Formidable Forms 4.11.03\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-06-16T14:35:45+00:00\n"
+"POT-Creation-Date: 2021-07-01T13:47:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -649,17 +649,21 @@ msgstr ""
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:17
+#: classes/controllers/FrmInboxController.php:16
 #: classes/controllers/FrmSettingsController.php:70
 #: classes/views/inbox/list.php:11
 msgid "Inbox"
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:39
+#: classes/controllers/FrmInboxController.php:40
+msgid "Go to Global Settings"
+msgstr ""
+
+#: classes/controllers/FrmInboxController.php:57
 msgid "Dismiss All"
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:97
+#: classes/controllers/FrmInboxController.php:115
 msgid "Help Formidable improve with usage tracking"
 msgstr ""
 
@@ -3102,7 +3106,7 @@ msgid "If you have many checkbox or radio button options, you may add this class
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1161
-#: classes/models/fields/FrmFieldName.php:28
+#: classes/models/fields/FrmFieldName.php:36
 msgid "First"
 msgstr ""
 
@@ -3687,11 +3691,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: classes/models/fields/FrmFieldName.php:29
+#: classes/models/fields/FrmFieldName.php:37
 msgid "Middle"
 msgstr ""
 
-#: classes/models/fields/FrmFieldName.php:30
+#: classes/models/fields/FrmFieldName.php:38
 msgid "Last"
 msgstr ""
 
@@ -4056,7 +4060,7 @@ msgstr ""
 msgid "If you are human, leave this field blank."
 msgstr ""
 
-#: classes/models/FrmMigrate.php:564
+#: classes/models/FrmMigrate.php:573
 msgid "Sending"
 msgstr ""
 
@@ -5352,23 +5356,27 @@ msgstr ""
 msgid "Don't use form styling on any page"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:37
+#: classes/views/frm-settings/general.php:38
 msgid "Do not use CSS Grids for form layouts"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:38
+#: classes/views/frm-settings/general.php:39
 msgid "Form layouts built using CSS grids that are not fully supported by older browsers like Internet Explorer. Leave this box unchecked for your layouts to look best in current browsers, but show in a single column in older browsers."
 msgstr ""
 
-#: classes/views/frm-settings/general.php:45
+#: classes/views/frm-settings/general.php:43
+msgid "Warning: This setting is deprecated. It will be removed when it is turned off."
+msgstr ""
+
+#: classes/views/frm-settings/general.php:52
 msgid "Other"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:58
+#: classes/views/frm-settings/general.php:65
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
 msgstr ""
 
-#: classes/views/frm-settings/general.php:65
+#: classes/views/frm-settings/general.php:72
 msgid "Do not include Formidable in the admin bar."
 msgstr ""
 
