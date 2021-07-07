@@ -879,6 +879,8 @@ function frmAdminBuildJS() {
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
 			},
 			sort: function( event, ui ) {
+				var $row, $children, $lastChild, currentIndex, left;
+
 				container.scrollTop( function( i, v ) {
 					if ( startSort === false ) {
 						startSort = event.clientY;
@@ -898,30 +900,50 @@ function frmAdminBuildJS() {
 					}
 				});
 
-				// TODO always 0 or the far right if there is only one field.
-				// TODO the left value would be calculated differently.
+				$row = ui.placeholder.parent();
+				$children = $row.children( 'li.form-field' );
+				currentIndex = determineIndexBasedOffOfMousePositionInRow( $row, event.clientX );
 
-				var betweenElements = event.clientX > ui.placeholder.next().offset().left - ui.placeholder.next().width();
-				var useFarRight = event.clientX > ui.placeholder.next().offset().left;
-				var left, right;
-				var placeholderElement = ui.placeholder.get( 0 );
-
-				if ( useFarRight ) {
-					left = 'unset';
-					right = 0;
-				} else {
-					left = betweenElements ? ( ui.placeholder.next().offset().left - ui.placeholder.next().width() - 126 ) + 'px' : 0;
-					right = 'unset';
+				if ( ! $children.length ) {
+					return;
 				}
 
-				placeholderElement.style.left = left;
-				placeholderElement.style.right = right;
+				if ( currentIndex === $children.length ) {
+					$lastChild = jQuery( $children.get( currentIndex - 1 ) );
+					left = $lastChild.offset().left - ui.placeholder.parent().offset().left + $lastChild.outerWidth();
+				} else {
+					// TODO this is off by one for the active row, but good to other rows.
+					left = jQuery( $children.get( currentIndex ) ).offset().left - $row.offset().left;
+				}
+
+				ui.placeholder.get( 0 ).style.left = left + 'px';
 			}
 		};
 
 		jQuery( sort ).sortable( opts );
 
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+	}
+
+	function determineIndexBasedOffOfMousePositionInRow( $row, x ) {
+		var $inputs = $row.children( 'li.form-field' ),
+			length = $inputs.length,
+			index, input, inputLeft, returnIndex;
+
+		returnIndex = 0;
+		for ( index = length - 1; index >= 0; --index ) {
+			input = $inputs.get( index );
+			inputLeft = jQuery( input ).offset().left;
+			if ( x > inputLeft ) {
+				returnIndex = index;
+				if ( x > inputLeft + ( jQuery( input ).outerWidth() / 2 ) ) {
+					returnIndex = index + 1;
+				}
+				break;
+			}
+		}
+
+		return returnIndex;
 	}
 
 	function syncLayoutClasses( $item, type ) {
