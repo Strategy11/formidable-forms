@@ -87,18 +87,39 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * @param $entry
+	 *
+	 * @return mixed|null
+	 */
+	public static function get_entry_recaptcha_score( $entry ) {
+		foreach ( $entry->metas as $field_id => $value ) {
+			$field_obj = FrmFieldFactory::get_field_object( $field_id );
+			if ( 'captcha' == $field_obj->type ) {
+				return $value;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @since 3.0
 	 */
 	private static function get_value_to_save( $atts, &$value ) {
 		if ( is_object( $atts['field'] ) ) {
 			$field_obj = FrmFieldFactory::get_field_object( $atts['field'] );
-			$value     = $field_obj->get_value_to_save(
-				$value,
-				array(
-					'entry_id' => $atts['entry_id'],
-					'field_id' => $atts['field_id'],
-				)
-			);
+
+			if ( 'captcha' == $field_obj->type ) {
+				global $frm_vars;
+				$value = $frm_vars['recaptcha_score'];
+			} else {
+				$value = $field_obj->get_value_to_save(
+					$value,
+					array(
+						'entry_id' => $atts['entry_id'],
+						'field_id' => $atts['field_id'],
+					)
+				);
+			}
 		}
 
 		$value = apply_filters( 'frm_prepare_data_before_db', $value, $atts['field_id'], $atts['entry_id'], array( 'field' => $atts['field'] ) );

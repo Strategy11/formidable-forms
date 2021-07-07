@@ -58,6 +58,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<b><?php echo esc_html( $entry->item_key ); ?></b>
 		</div>
 
+		<?php if ( FrmEntryMeta::get_entry_recaptcha_score( $entry ) ) { ?>
+			<div class="misc-pub-section">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) ); ?>
+				<?php esc_html_e( 'reCaptcha Score', 'formidable' ); ?>:
+				<b><?php echo esc_html( FrmEntryMeta::get_entry_recaptcha_score( $entry ) ); ?></b>
+			</div>
+		<?php } ?>
+
 		<?php if ( $entry->parent_item_id ) { ?>
 			<div class="misc-pub-section">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_sitemap_icon', array( 'aria-hidden' => 'true' ) ); ?>

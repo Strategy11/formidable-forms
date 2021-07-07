@@ -145,6 +145,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$resp         = $this->send_api_check( $frm_settings );
 		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
+		if ( $response['score'] ) {
+			global $frm_vars;
+			$frm_vars['recaptcha_score'] = $response['score'];
+		}
+
 		if ( isset( $response['success'] ) && ! $response['success'] ) {
 			// What happens when the CAPTCHA was entered incorrectly
 			$invalid_message                 = FrmField::get_option( $this->field, 'invalid' );
