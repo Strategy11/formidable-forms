@@ -1423,6 +1423,24 @@ function frmAdminBuildJS() {
 		jQuery( document.getElementById( 'frm_builder_page' ) ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
 	}
 
+	function onFieldActionDropdownShow() {
+		setTimeout(
+			function() {
+				var ul, $ul;
+				ul = document.querySelector( '.dropdown.open ul' );
+				if ( null === ul ) {
+					return;
+				}
+				$ul = jQuery( ul );
+				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
+					ul.style.position = 'relative';
+					ul.style.right = $ul.outerWidth() + 'px';
+				}
+			},
+			0
+		);
+	}
+
 	function wrapFieldLi( li ) {
 		return jQuery( '<li>' )
 			.addClass( 'frm_field_box' )
@@ -7719,6 +7737,7 @@ function frmAdminBuildJS() {
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
 			});
 			$newFields.on( 'mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove );
+			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', onFieldActionDropdownShow );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
