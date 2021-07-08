@@ -67,13 +67,14 @@ class FrmFieldGridHelper {
 		}
 
 		if ( in_array( $field->type, array( 'divider', 'end_divider' ), true ) ) {
+			$field_size              = $this->active_field_size;
 			$this->active_field_size = 0;
 
 			if ( 'divider' === $field->type ) {
 				$this->parent_list_size  = $this->current_list_size;
 				$this->current_list_size = 0;
 			} elseif ( 'end_divider' === $field->type ) {
-				$this->current_list_size = $this->parent_list_size;
+				$this->current_list_size = $field_size + $this->parent_list_size;
 			}
 		}
 	}
