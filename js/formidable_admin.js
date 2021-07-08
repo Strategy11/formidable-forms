@@ -1159,6 +1159,10 @@ function frmAdminBuildJS() {
 				var $siblings;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				$siblings = $placeholder.siblings( 'li.form-field' );
+				if ( ! $siblings.length ) {
+					// if dragging into a new row, we need to wrap the li first.
+					msg = wrapFieldLi( msg );
+				}
 				$placeholder.replaceWith( msg );
 				updateFieldOrder();
 				afterAddField( msg, false );
