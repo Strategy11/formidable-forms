@@ -6346,7 +6346,7 @@ select[name="m"] {
 
 .frm-grid {
 	border-collapse: collapse;
-	border: 1px solid black;
+	border: none;
 	margin-right: 10px;
 }
 
