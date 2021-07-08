@@ -179,10 +179,8 @@ class FrmFieldGridHelper {
 	}
 
 	private function echo_field_group_controls() {
-		echo '<div class="frm-field-group-controls" number-of-fields="' . esc_attr( $this->current_field_count ) . '">';
-		FrmAppHelper::icon_by_class( 'frm_icon_font frm_field_group_layout_icon' );
-		FrmAppHelper::icon_by_class( 'frm_icon_font frm_move_icon' );
-		echo '</div>';
+		// TODO current_field_count doesn't seem to be totally accurate. I'm seeing 2 when my number is 5. I think sections need to track this.
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-group-controls.php';
 	}
 
 	private function can_support_current_layout() {

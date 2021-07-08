@@ -5469,8 +5469,8 @@ span.howto {
 	box-sizing: border-box;
 }
 
-#frm-show-fields ul.frm_sorting:hover .frm-field-group-controls:not([number-of-fields="1"]),
-#frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup .frm-field-group-controls {
+#frm-show-fields ul.frm_sorting:hover > .frm-field-group-controls:not([number-of-fields="1"]),
+#frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup > .frm-field-group-controls {
 	display: block;
 }
 
