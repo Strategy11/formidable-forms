@@ -1433,8 +1433,7 @@ function frmAdminBuildJS() {
 				}
 				$ul = jQuery( ul );
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
-					ul.style.position = 'relative';
-					ul.style.right = $ul.outerWidth() + 'px';
+					ul.style.left = ( -$ul.outerWidth() ) + 'px';
 				}
 			},
 			0
