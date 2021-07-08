@@ -2914,19 +2914,12 @@ function frmAdminBuildJS() {
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), syncDetails );
 		destroyFieldGroupPopup();
-
-		// TODO Save should probably trigger an autosave.
-		// TODO it would make sense to validate for the inputs adding up to 12 and show a warning.
-		// anything less or more is sort of odd, but it should probably still be allowed.
 	}
 
 	function fieldGroupClick( e ) {
 		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups, $firstGroup, $range;
 
 		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
-			// TODO the removeClass( 'frm-selected-field-group' ) logic still needs to happen here sometimes.
-			// TODO I think clicking outside of any field group at all should also remove the selected classes.
-			// TODO IF I am holding ctrl or shift, I should still consider this an intentional click on the group instead (and the field should remain unselected).
 			// only continue if the group itself was clicked / ignore when a field is clicked.
 			return;
 		}
