@@ -33,6 +33,16 @@ class FrmFieldGridHelper {
 	private $active_field_size;
 
 	/**
+	 * @var int used to track the previous current_list_size value when looping inside of sections.
+	 */
+	private $parent_list_size;
+
+	/**
+	 * @var bool $is_frm_first flagged while calling get_field_layout_class, true if classes contain frm_first class.
+	 */
+	private $is_frm_first;
+
+	/**
 	 * @var stdClass
 	 */
 	private $field;
@@ -51,6 +61,21 @@ class FrmFieldGridHelper {
 		$this->field_layout_class     = $this->get_field_layout_class();
 		$this->active_field_size      = $this->get_size_of_class( $this->field_layout_class );
 		$this->has_field_layout_class = ! ! $this->field_layout_class;
+
+		if ( $this->is_frm_first ) {
+			$this->force_close_field_wrapper();
+		}
+
+		if ( in_array( $field->type, array( 'divider', 'end_divider' ), true ) ) {
+			$this->active_field_size = 0;
+
+			if ( 'divider' === $field->type ) {
+				$this->parent_list_size  = $this->current_list_size;
+				$this->current_list_size = 0;
+			} elseif ( 'end_divider' === $field->type ) {
+				$this->current_list_size = $this->parent_list_size;
+			}
+		}
 	}
 
 	/**
@@ -63,8 +88,9 @@ class FrmFieldGridHelper {
 			return '';
 		}
 
-		$split   = explode( ' ', $field['classes'] );
-		$classes = self::get_grid_classes();
+		$split              = explode( ' ', $field['classes'] );
+		$this->is_frm_first = in_array( 'frm_first', $split, true );
+		$classes            = self::get_grid_classes();
 
 		foreach ( $classes as $class ) {
 			if ( in_array( $class, $split, true ) ) {
