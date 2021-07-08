@@ -93,7 +93,7 @@ if ( 'divider' === $field['type'] ) {
 	<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus2_icon frm-large-plus', array( 'aria-hidden' => 'true' ) ); ?>
 	<p class="howto"><?php esc_html_e( 'Your section has no fields. Drag fields here to add them to this section.', 'formidable' ); ?></p>
 </div>
-<ul class="start_divider frm_sorting">
+<ul class="start_divider frm_sorting frm_grid_container">
 	<?php
 } elseif ( 'end_divider' === $field['type'] ) {
 	?>
