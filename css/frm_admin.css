@@ -5456,6 +5456,11 @@ span.howto {
 	min-height: 50px;
 }
 
+#frm-show-fields .frm-field-settings-open.frm6 .frm-dropdown-menu {
+    max-width: unset;
+    min-width: 160px;
+}
+
 #frm-show-fields .frm-field-group-controls {
 	display: none;
 	position: absolute;
