@@ -1138,6 +1138,7 @@ function frmAdminBuildJS() {
 			disableSummaryBtnBeforeAJAX( addBtn, fieldButton );
 		}
 
+		// TODO I think currentItem should be based off of the index of my marker, not sortable data.
 		currentItem = jQuery( selectedItem ).data().uiSortable.currentItem;
 		section = getSectionForFieldPlacement( currentItem );
 		formId = getFormIdForFieldPlacement( section );
@@ -3106,8 +3107,7 @@ function frmAdminBuildJS() {
 				function() {
 					deleteField( this.dataset.fid );
 				}
-			)
-			.remove();
+			);
 		this.closest( '#frm_field_multiselect_popup' ).remove();
 	}
 
@@ -3154,7 +3154,13 @@ function frmAdminBuildJS() {
 				$thisField.fadeOut( 'slow', function() {
 					var $section = $thisField.closest( '.start_divider' ),
 						type = $thisField.data( 'type' ),
-						$adjacentFields = $thisField.siblings( 'li.form-field' );
+						$adjacentFields = $thisField.siblings( 'li.form-field' ),
+						$liWrapper;
+
+					if ( ! $adjacentFields.length ) {
+						$liWrapper = $thisField.closest( 'ul.frm_sorting' ).parent();
+					}
+
 					$thisField.remove();
 					if ( type === 'break' ) {
 						renumberPageBreaks();
@@ -3174,6 +3180,8 @@ function frmAdminBuildJS() {
 					}
 					if ( $adjacentFields.length ) {
 						syncLayoutClasses( $adjacentFields.first() );
+					} else {
+						$liWrapper.remove();
 					}
 				});
 			}
