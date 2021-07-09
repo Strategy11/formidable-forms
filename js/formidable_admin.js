@@ -943,7 +943,6 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		console.log({ returnIndex });
 		return returnIndex;
 	}
 
@@ -954,7 +953,7 @@ function frmAdminBuildJS() {
 			type = 'even';
 		}
 
-		$fields = $item.parent().children( 'li.form-field' );
+		$fields = $item.parent().children( 'li.form-field, li.frmbutton_loadingnow' );
 		size = $fields.length;
 		layoutClasses = getLayoutClasses();
 
@@ -986,7 +985,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
-		var length, index;
+		var length, index, currentClass;
 		length = layoutClasses.length;
 		return function() {
 			var activeLayoutClass = false,
@@ -994,14 +993,22 @@ function frmAdminBuildJS() {
 				layoutClassesInput;
 
 			for ( index = 0; index < length; ++index ) {
-				if ( this.classList.contains( layoutClasses[ index ] ) ) {
-					activeLayoutClass = layoutClasses[ index ];
+				currentClass = layoutClasses[ index ];
+				if ( this.classList.contains( currentClass ) ) {
+					activeLayoutClass = currentClass;
 					break;
 				}
 			}
 
-			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+			if ( 'undefined' === typeof fieldId ) {
+				// we are syncing the drag/drop placeholder before the actual field has loaded.
+				// this will get called again afterward and the input will exist then.
+				this.classList.add( classToAdd );
+				return;
+			}
+
 			layoutClassesInput = document.getElementById( 'frm_classes_' + fieldId );
+			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
 
 			if ( false === activeLayoutClass ) {
 				if ( '' !== classToAdd ) {
@@ -1012,7 +1019,7 @@ function frmAdminBuildJS() {
 				layoutClassesInput.value = layoutClassesInput.value.replace( activeLayoutClass, classToAdd );
 			}
 
-			jQuery( layoutClassesInput ).trigger( 'change' );		
+			jQuery( layoutClassesInput ).trigger( 'change' );
 		}
 	}
 
@@ -1139,6 +1146,8 @@ function frmAdminBuildJS() {
 		loadingID = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		$placeholder = jQuery( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
 		currentItem.replaceWith( $placeholder );
+
+		syncLayoutClasses( $placeholder );
 
 		hasBreak = 0;
 		if ( 'summary' === fieldType ) {
