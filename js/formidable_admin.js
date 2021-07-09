@@ -874,7 +874,12 @@ function frmAdminBuildJS() {
 					if ( $previousFieldContainer.length ) {
 						syncLayoutClasses( $previousFieldContainer.children().first() );
 					}
-					syncLayoutClasses( ui.item );
+					if ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) && ui.item.hasClass( 'form-field' ) ) {
+						jQuery( ui.item ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
+						syncLayoutClasses( ui.item );
+					} else {
+						syncLayoutClasses( ui.item );
+					}
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
 			},
