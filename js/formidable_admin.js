@@ -911,9 +911,11 @@ function frmAdminBuildJS() {
 				if ( currentIndex === $children.length ) {
 					$lastChild = jQuery( $children.get( currentIndex - 1 ) );
 					left = $lastChild.offset().left - ui.placeholder.parent().offset().left + $lastChild.outerWidth();
+					$row.append( ui.placeholder );
 				} else {
 					// TODO this is off by one for the active row, but good to other rows.
 					left = jQuery( $children.get( currentIndex ) ).offset().left - $row.offset().left;
+					jQuery( $children.get( currentIndex ) ).before( ui.placeholder );
 				}
 
 				ui.placeholder.get( 0 ).style.left = left + 'px';
@@ -1007,8 +1009,13 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			layoutClassesInput = document.getElementById( 'frm_classes_' + fieldId );
 			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+			layoutClassesInput = document.getElementById( 'frm_classes_' + fieldId );
+
+			if ( null === layoutClassesInput ) {
+				// not every field type has a layout class input.
+				return;
+			}
 
 			if ( false === activeLayoutClass ) {
 				if ( '' !== classToAdd ) {
@@ -1128,7 +1135,7 @@ function frmAdminBuildJS() {
 	 * @param {object} opts
 	 */
 	function insertNewFieldByDragging( selectedItem, fieldButton ) {
-		var fieldType, addBtn, currentItem, section, formId, sectionId, loadingID, hasBreak, $placeholder;
+		var fieldType, addBtn, sortableData, currentItem, insertAtIndex, section, formId, sectionId, loadingID, hasBreak, $placeholder;
 
 		fieldType = fieldButton.attr( 'id' );
 
@@ -1138,8 +1145,10 @@ function frmAdminBuildJS() {
 			disableSummaryBtnBeforeAJAX( addBtn, fieldButton );
 		}
 
-		// TODO I think currentItem should be based off of the index of my marker, not sortable data.
-		currentItem = jQuery( selectedItem ).data().uiSortable.currentItem;
+		sortableData = jQuery( selectedItem ).data().uiSortable;
+		currentItem = sortableData.currentItem;
+		insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), sortableData.positionAbs.left );
+		jQuery( currentItem.parent().children( 'li.form-field' ).get( insertAtIndex ) ).before( currentItem );
 		section = getSectionForFieldPlacement( currentItem );
 		formId = getFormIdForFieldPlacement( section );
 		sectionId = getSectionIdForFieldPlacement( section );
