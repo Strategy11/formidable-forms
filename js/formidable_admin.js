@@ -1200,22 +1200,63 @@ function frmAdminBuildJS() {
 	}
 
 	// don't allow page break, embed form, captcha, summary, or section inside section field
+	// don't allow page breaks inside of field groups.
+	// don't allow field groups with sections inside of sections.
 	function allowDrop( ui ) {
-		if ( ! ui.placeholder.parent().hasClass( 'start_divider' ) ) {
+		var insideFieldGroup, insideSection, isNewField, isPageBreak;
+
+		insideFieldGroup = ui.placeholder.siblings( 'li.form-field' ).length > 0;
+
+		if ( insideFieldGroup ) {
+			insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;
+		} else {
+			insideSection = ui.placeholder.parent().hasClass( 'start_divider' );
+		}
+
+		if ( ! insideSection && ! insideFieldGroup ) {
 			return true;
 		}
 
-		// new field
-		if ( ui.item.hasClass( 'frmbutton' ) ) {
-			if ( ui.item.hasClass( 'frm_tbreak' ) || ui.item.hasClass( 'frm_tform' ) || ui.item.hasClass( 'frm_tdivider' ) || ui.item.hasClass( 'frm_tdivider-repeat' ) ) {
+		if ( insideFieldGroup && ui.placeholder.siblings( '.edit_field_type_break' ).length ) {
+			// never allow any field beside a page break.
+			return false;
+		}
+
+		isNewField = ui.item.hasClass( 'frmbutton' );
+
+		if ( isNewField ) {
+			isPageBreak = ui.item.hasClass( 'frm_tbreak' );
+
+			if ( isPageBreak ) {
+				// do not allow page break in both sections and field groups.
 				return false;
 			}
+
+			if ( ! insideSection ) {
+				return true;
+			}
+
+			return ! ui.item.hasClass( 'frm_tform' ) && ! ui.item.hasClass( 'frm_tdivider' ) && ! ui.item.hasClass( 'frm_tdivider-repeat' );
+		}
+
+		isPageBreak = ui.item.hasClass( 'edit_field_type_break' );
+
+		if ( isPageBreak ) {
+			// do not allow page break in both sections and field groups.
+			return false;
+		}
+
+		if ( ! insideSection ) {
 			return true;
+		}
+
+		if ( ui.item.find( '.edit_field_type_divider' ).length ) {
+			// if we are dragging a field group with a section, do not allow it in section.
+			return false;
 		}
 
 		// moving an existing field
-		return ! ( ui.item.hasClass( 'edit_field_type_break' ) || ui.item.hasClass( 'edit_field_type_form' ) ||
-			ui.item.hasClass( 'edit_field_type_divider' ) );
+		return ! ui.item.hasClass( 'edit_field_type_form' ) && ! ui.item.hasClass( 'edit_field_type_divider' );
 	}
 
 	function loadFields( fieldId ) {
