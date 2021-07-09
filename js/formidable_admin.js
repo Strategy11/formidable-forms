@@ -794,12 +794,12 @@ function frmAdminBuildJS() {
 
 	/* Form Builder */
 	function setupSortable( sort ) {
-		var startSort = false,
-			container = jQuery( '#post-body-content' );
+		var startSort, container, $previousFieldContainer, opts;
 
-		var $previousFieldContainer;
+		startSort = false;
+		container = jQuery( '#post-body-content' );
 
-		var opts = {
+		opts = {
 			connectWith: 'ul.frm_sorting',
 			items: 'li.frm_field_box',
 			placeholder: 'sortable-placeholder',
@@ -865,14 +865,21 @@ function frmAdminBuildJS() {
 				}
 			},
 			stop: function( event, ui ) {
-				var moving = jQuery( this );
+				var moving, $previousContainerFields;
+
+				moving = jQuery( this );
 				copyHelper && copyHelper.remove();
 				if ( cancelSort ) {
 					moving.sortable( 'cancel' );
 				} else {
 					updateFieldOrder();
 					if ( $previousFieldContainer.length ) {
-						syncLayoutClasses( $previousFieldContainer.children().first() );
+						$previousContainerFields = getFieldsInRow( $previousFieldContainer );
+						if ( ! $previousContainerFields.length ) {
+							$previousFieldContainer.closest( 'li.frm_field_box' ).remove();
+						} else {
+							syncLayoutClasses( $previousContainerFields.first() );
+						}
 					}
 					if ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) && ui.item.hasClass( 'form-field' ) ) {
 						jQuery( ui.item ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
