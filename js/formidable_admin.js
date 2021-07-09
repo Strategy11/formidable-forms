@@ -901,7 +901,7 @@ function frmAdminBuildJS() {
 				});
 
 				$row = ui.placeholder.parent();
-				$children = $row.children( 'li.form-field' );
+				$children = getFieldsInRow( $row );
 				currentIndex = determineIndexBasedOffOfMousePositionInRow( $row, event.clientX );
 
 				if ( ! $children.length ) {
@@ -927,8 +927,16 @@ function frmAdminBuildJS() {
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
+	function getFieldsInRow( $row ) {
+		return $row.children( 'li.form-field' ).not( '.ui-sortable-helper' ).filter(
+			function() {
+				return 'none' !== this.style.display;
+			}
+		);
+	}
+
 	function determineIndexBasedOffOfMousePositionInRow( $row, x ) {
-		var $inputs = $row.children( 'li.form-field' ),
+		var $inputs = getFieldsInRow( $row ),
 			length = $inputs.length,
 			index, input, inputLeft, returnIndex;
 
@@ -1148,7 +1156,8 @@ function frmAdminBuildJS() {
 		sortableData = jQuery( selectedItem ).data().uiSortable;
 		currentItem = sortableData.currentItem;
 		insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), sortableData.positionAbs.left );
-		jQuery( currentItem.parent().children( 'li.form-field' ).get( insertAtIndex ) ).before( currentItem );
+		// TODO looks like this can still be off by one.
+		jQuery( getFieldsInRow( currentItem.parent() ).get( insertAtIndex ) ).before( currentItem );
 		section = getSectionForFieldPlacement( currentItem );
 		formId = getFormIdForFieldPlacement( section );
 		sectionId = getSectionIdForFieldPlacement( section );
@@ -2588,7 +2597,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getSizeOfFieldGroupFromChildElement( element ) {
-		return jQuery( element ).closest( 'ul' ).children( 'li.form-field' ).length;
+		return getFieldsInRow( jQuery( element ).closest( 'ul' ) ).length;
 	}
 
 	function getFieldGroupPopup( sizeOfFieldGroup ) {
@@ -2789,14 +2798,14 @@ function frmAdminBuildJS() {
 
 		type = this.getAttribute( 'layout-type' );
 		row = this.closest( 'ul' );
-		size = jQuery( row ).children( 'li.form-field' ).length;
+		size = getFieldsInRow( jQuery( row ) ).length;
 
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
 		destroyFieldGroupPopup();
 	}
 
 	function customFieldGroupLayoutClick() {
-		var $fields = jQuery( this ).closest( 'ul' ).children( 'li.form-field' ),
+		var $fields = getFieldsInRow( jQuery( this ).closest( 'ul' ) ),
 			size = $fields.length,
 			popup = this.closest( '#frm_field_group_popup' ),
 			wrapper, layoutClass, inputRow, paddingElement, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
@@ -2929,8 +2938,7 @@ function frmAdminBuildJS() {
 	}
 
 	function breakRow( row ) {
-		var $fields = jQuery( row ).children( 'li.form-field' );
-		$fields.each(
+		getFieldsInRow( jQuery( row ) ).each(
 			function( index ) {
 				if ( 0 !== index ) {
 					jQuery( row ).closest( 'li' ).after( wrapFieldLi( this ) );
@@ -3099,7 +3107,7 @@ function frmAdminBuildJS() {
 			function( index ) {
 				if ( 0 !== index ) {
 					jQuery( this ).children().each( function() {
-						$firstGroupUl.find( 'li.form-field' ).last().after( this );
+						$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
 					});
 					this.remove();
 				}
@@ -3112,6 +3120,7 @@ function frmAdminBuildJS() {
 	function deleteFieldGroupsClick() {
 		// TODO this should probably support a bulk delete as one action instead of one-per-field.
 		jQuery( '.frm-selected-field-group > li.form-field' )
+			.not( '.ui-sortable-helper' )
 			.each(
 				function() {
 					deleteField( this.dataset.fid );
