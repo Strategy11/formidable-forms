@@ -943,6 +943,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		console.log({ returnIndex });
 		return returnIndex;
 	}
 
@@ -1156,14 +1157,16 @@ function frmAdminBuildJS() {
 				has_break: hasBreak
 			},
 			success: function( msg ) {
-				var $siblings;
+				var $siblings, replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				$siblings = $placeholder.siblings( 'li.form-field' );
 				if ( ! $siblings.length ) {
 					// if dragging into a new row, we need to wrap the li first.
-					msg = wrapFieldLi( msg );
+					replaceWith = wrapFieldLi( msg );
+				} else {
+					replaceWith = msg;
 				}
-				$placeholder.replaceWith( msg );
+				$placeholder.replaceWith( replaceWith );
 				updateFieldOrder();
 				afterAddField( msg, false );
 				if ( $siblings.length ) {
