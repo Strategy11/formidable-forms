@@ -550,8 +550,8 @@ class test_FrmEmail extends FrmUnitTest {
 		$entry_id                                    = $this->factory->entry->create( $entry_data );
 		$entry                                       = FrmEntry::getOne( $entry_id, true );
 		$action                                      = $this->email_action;
-		$action->post_content[ 'from' ]              = 'fromemail@example.com';
-		$action->post_content[ 'reply_to' ]          = '[free-email-field]';
+		$action->post_content['from']                = 'fromemail@example.com';
+		$action->post_content['reply_to']            = '[free-email-field]';
 		$email                                       = new FrmEmail( $action, $entry, $this->contact_form );
 		$actual                                      = $this->get_private_property( $email, 'reply_to' );
 		$this->assertEquals( 'fromemail@example.com', $actual );
