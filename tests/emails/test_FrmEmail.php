@@ -534,15 +534,27 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	public function test_set_reply_to() {
 		$default_email = get_option( 'admin_email' );
-
-		$reply_to = array(
-			'admin2.[admin_email]' => 'admin2.' . $default_email,
-			''                     => $default_email,
-			'Reply Name'           => 'Reply Name <' . $default_email . '>',
+		$reply_to      = array(
+			'admin2.[admin_email]'          => 'admin2.' . $default_email,
+			''                              => $default_email,
+			'Reply Name'                    => 'Reply Name <' . $default_email . '>',
 			'Reply To <tester@example.com>' => 'Reply To <tester@example.com>',
 		);
-
 		$this->check_private_properties( $reply_to, 'reply_to' );
+
+		// create an entry with no email and then try to use its shortcode to get a reply_to value.
+		// the default should use the from email, not the admin "default email".
+		$entry_data                                  = $this->factory->field->generate_entry_array( $this->contact_form );
+		$email_field                                 = FrmField::getOne( 'free-email-field' );
+		$entry_data['item_meta'][ $email_field->id ] = '';
+		$entry_id                                    = $this->factory->entry->create( $entry_data );
+		$entry                                       = FrmEntry::getOne( $entry_id, true );
+		$action                                      = $this->email_action;
+		$action->post_content['from']                = 'fromemail@example.com';
+		$action->post_content['reply_to']            = '[free-email-field]';
+		$email                                       = new FrmEmail( $action, $entry, $this->contact_form );
+		$actual                                      = $this->get_private_property( $email, 'reply_to' );
+		$this->assertEquals( 'fromemail@example.com', $actual );
 	}
 
 	/**
