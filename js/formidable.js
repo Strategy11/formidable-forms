@@ -1007,7 +1007,7 @@ function frmFrontFormJS() {
 	}
 
 	function checkForErrorsAndMaybeSetFocus() {
-		var errors, element;
+		var errors, element, timeoutCallback;
 
 		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
 		if ( ! errors.length ) {
@@ -1021,17 +1021,25 @@ function frmFrontFormJS() {
 				element.focus();
 				break;
 			}
-			if ( 'undefined' !== typeof element.classList && element.classList.contains( 'html-active' ) ) {
-				setTimeout(
-					function() {
+
+			if ( 'undefined' !== typeof element.classList ) {
+				if ( element.classList.contains( 'html-active' ) ) {
+					timeoutCallback = function() {
 						var textarea = element.querySelector( 'textarea' );
 						if ( null !== textarea ) {
 							textarea.focus();
 						}
-					},
-					0
-				);
-				break;
+					};
+				} else if ( element.classList.contains( 'tmce-active' ) ) {
+					timeoutCallback = function() {
+						tinyMCE.activeEditor.focus();
+					};
+				}
+
+				if ( 'function' === typeof timeoutCallback ) {
+					setTimeout( timeoutCallback, 0 );
+					break;
+				}
 			}
 		} while ( element.previousSibling );
 	}
