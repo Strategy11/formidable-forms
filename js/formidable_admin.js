@@ -3127,14 +3127,16 @@ function frmAdminBuildJS() {
 		$selectedFieldGroups.each(
 			function( index ) {
 				if ( 0 !== index ) {
-					jQuery( this ).children().each( function() {
-						var previousParent = this.parentNode;
-						$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
-						if ( ! previousParent.children.length ) {
-							// clean up the previous field group if we've removed all of its fields.
-							previousParent.closest( 'li.frm_field_box' ).remove();
+					jQuery( this ).children( 'li.form-field' ).each(
+						function() {
+							var previousParent = this.parentNode;
+							$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
+							if ( ! jQuery( previousParent ).children( 'li.form-field' ).length ) {
+								// clean up the previous field group if we've removed all of its fields.
+								previousParent.closest( 'li.frm_field_box' ).remove();
+							}
 						}
-					});
+					);
 				}
 			}
 		);
