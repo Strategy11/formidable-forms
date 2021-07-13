@@ -1017,7 +1017,7 @@ function frmFrontFormJS() {
 		element = errors[0];
 		do {
 			element = element.previousSibling;
-			if ( 'input' === element.nodeName.toLowerCase() ) {
+			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
 				element.focus();
 				break;
 			}
