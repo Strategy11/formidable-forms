@@ -975,7 +975,7 @@ function frmAdminBuildJS() {
 			type = 'even';
 		}
 
-		$fields = $item.parent().children( 'li.form-field, li.frmbutton_loadingnow' );
+		$fields = $item.parent().children( 'li.form-field, li.frmbutton_loadingnow' ).not( '.edit_field_type_end_divider' );
 		size = $fields.length;
 		layoutClasses = getLayoutClasses();
 
