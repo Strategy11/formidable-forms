@@ -8190,13 +8190,13 @@ Responsive Design
 #frm_field_multiselect_popup {
 	background: white;
 	height: 48px;
-	position: absolute;
-	top: -48px;
-	right: 0;
+	position: fixed;
 	border-radius: 4px;
 	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
 	color: rgba(40, 47, 54, 0.85);
 	font-size: 13px;
+	right: 30px;
+	bottom: 10px;
 }
 
 #frm_field_multiselect_popup > div {

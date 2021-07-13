@@ -3078,7 +3078,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addFieldMultiselectPopup() {
-		jQuery( document.querySelector( '.frm-selected-field-group' ) ).prepend( getFieldMultiselectPopup() );
+		getFieldMultiselectPopup();
 	}
 
 	function getFieldMultiselectPopup() {
@@ -3106,6 +3106,10 @@ function frmAdminBuildJS() {
 		deleteOption.classList.add( 'frm-delete-field-groups' );
 		deleteOption.appendChild( getIconClone( 'frm_trash_svg' ) );
 		popup.appendChild( deleteOption );
+
+		document.getElementById( 'post-body-content' ).appendChild( popup );
+
+		jQuery( popup ).hide().fadeIn();
 
 		return popup;
 	}
@@ -7817,8 +7821,8 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
 			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
 			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );
-			$newFields.on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
-			$newFields.on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
+			jQuery( document ).on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
+			jQuery( document ).on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
 			$newFields.on( 'click', '.frm-field-action-icons [data-toggle="dropdown"]', function() {
 				this.closest( 'li.form-field' ).classList.add( 'frm-field-settings-open' );
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
