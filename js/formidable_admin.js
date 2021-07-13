@@ -3060,17 +3060,17 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			// not multi-selecting
-			selectedFieldGroups.removeClass( 'frm-selected-field-group' );
+			unselectFieldGroups();
 		}
 
 		clearSettingsBox(); // unselect any fields if one is selected.
 
 		this.classList.add( 'frm-selected-field-group' );
 
+		jQuery( document ).off( 'click', unselectFieldGroups );
 		jQuery( document ).on( 'click', unselectFieldGroups );
 	}
 
-	// TODO call this for everything that unselects the field groups / removes the multiselect popup.
 	function unselectFieldGroups( event ) {
 		var popup;
 		if ( 'undefined' !== typeof event && null !== event.originalEvent.target.closest( '#frm-show-fields' ) ) {
@@ -3124,20 +3124,21 @@ function frmAdminBuildJS() {
 	function mergeFieldsIntoRowClick() {
 		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
 			$firstGroupUl = $selectedFieldGroups.first();
-
-		$selectedFieldGroups.removeClass( 'frm-selected-field-group' );
 		$selectedFieldGroups.each(
 			function( index ) {
 				if ( 0 !== index ) {
 					jQuery( this ).children().each( function() {
+						var previousParent = this.parentNode;
 						$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
+						if ( ! previousParent.children.length ) {
+							// clean up the previous field group if we've removed all of its fields.
+							previousParent.closest( 'li.frm_field_box' ).remove();
+						}
 					});
-					this.remove();
 				}
 			}
 		);
 		syncLayoutClasses( $firstGroupUl.children().first() );
-		this.closest( '#frm_field_multiselect_popup' ).remove();
 	}
 
 	function deleteFieldGroupsClick() {
