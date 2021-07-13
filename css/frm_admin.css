@@ -8163,6 +8163,15 @@ Responsive Design
 	grid-template-columns: repeat(12, auto);
 }
 
+#frm_field_group_popup .frm-row-layout-option {
+	cursor: pointer;
+}
+
+#frm_field_group_popup .frm-row-layout-option.frm-active-row-layout,
+#frm_field_group_popup .frm-row-layout-option:hover {
+	outline: 1px solid #4199FD;
+}
+
 .frm-custom-field-group-layout,
 .frm-break-field-group {
 	padding: 5px 15px;

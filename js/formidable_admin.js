@@ -2619,7 +2619,7 @@ function frmAdminBuildJS() {
 
 		popupWrapper = div();
 		popupWrapper.style.position = 'relative';
-		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup ) );
+		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup , this) );
 		this.parentNode.appendChild( popupWrapper );
 	}
 
@@ -2633,8 +2633,8 @@ function frmAdminBuildJS() {
 		return getFieldsInRow( jQuery( element ).closest( 'ul' ) ).length;
 	}
 
-	function getFieldGroupPopup( sizeOfFieldGroup ) {
-		var popup, wrapper;
+	function getFieldGroupPopup( sizeOfFieldGroup, childElement ) {
+		var popup, wrapper, rowLayoutOptions;
 
 		popup = div();
 		popup.id = 'frm_field_group_popup';
@@ -2642,7 +2642,10 @@ function frmAdminBuildJS() {
 		wrapper = div();
 		wrapper.style.padding = '0 24px 12px';
 		wrapper.appendChild( getRowLayoutTitle() );
-		wrapper.appendChild( getRowLayoutOptions( sizeOfFieldGroup ) );
+
+		rowLayoutOptions = getRowLayoutOptions( sizeOfFieldGroup );
+		maybeMarkRowLayoutAsActive( childElement.closest( 'ul.frm_sorting' ), rowLayoutOptions );
+		wrapper.appendChild( rowLayoutOptions );
 
 		popup.appendChild( wrapper );
 		popup.appendChild( separator() );
@@ -2651,6 +2654,19 @@ function frmAdminBuildJS() {
 		popup.appendChild( getBreakIntoDifferentRowsOption() );
 
 		return popup;
+	}
+
+	function maybeMarkRowLayoutAsActive( activeRow, options ) {
+		var length, index, currentRow;
+
+		length = options.children.length;
+		for ( index = 0; index < length; ++index ) {
+			currentRow = options.children[ index ];
+			if ( rowLayoutsMatch( currentRow, activeRow ) ) {
+				currentRow.classList.add( 'frm-active-row-layout' );
+				return;
+			}
+		}
 	}
 
 	function separator() {
@@ -2714,8 +2730,6 @@ function frmAdminBuildJS() {
 		var option, useClass;
 
 		option = div();
-		// TODO include a blue outline on hover/or on currently active style.
-		// as the style isn't really stored anywhere, we would need to look at the row's current classes and derive it from that. Should be simple.
 		option.classList.add( 'frm-row-layout-option' );
 
 		switch ( size ) {
@@ -2735,6 +2749,26 @@ function frmAdminBuildJS() {
 
 		option.appendChild( getRowForSizeAndType( size, type ) );
 		return option;
+	}
+
+	function rowLayoutsMatch( row1, row2 ) {
+		return getRowLayoutAsKey( row1 ) === getRowLayoutAsKey( row2 );
+	}
+
+	function getRowLayoutAsKey( row ) {
+		var $fields, sizes;
+		if ( row.classList.contains( 'frm-row-layout-option' ) ) {
+			$fields = jQuery( row ).find( '.frm_grid_container' ).children();
+		} else {
+			$fields = getFieldsInRow( jQuery( row ) );
+		}
+		sizes = [];
+		$fields.each(
+			function() {
+				sizes.push( getSizeOfLayoutClass( getLayoutClassName( this.classList ) ) );
+			}
+		);
+		return sizes.join( '-' );
 	}
 
 	function getRowForSizeAndType( size, type ) {
@@ -2995,7 +3029,7 @@ function frmAdminBuildJS() {
 
 	function revertToFieldGroupPopupFirstPage( triggerElement ) {
 		triggerElement.closest( '#frm_field_group_popup' ).replaceWith(
-			getFieldGroupPopup( getSizeOfFieldGroupFromChildElement( triggerElement ) )
+			getFieldGroupPopup( getSizeOfFieldGroupFromChildElement( triggerElement ), triggerElement )
 		);
 	}
 
