@@ -1021,6 +1021,18 @@ function frmFrontFormJS() {
 				element.focus();
 				break;
 			}
+			if ( 'undefined' !== typeof element.classList && element.classList.contains( 'html-active' ) ) {
+				setTimeout(
+					function() {
+						var textarea = element.querySelector( 'textarea' );
+						if ( null !== textarea ) {
+							textarea.focus();
+						}
+					},
+					0
+				);
+				break;
+			}
 		} while ( element.previousSibling );
 	}
 
