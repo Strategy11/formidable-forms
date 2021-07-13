@@ -1003,7 +1003,21 @@ function frmAdminBuildJS() {
 			);
 		}
 
-		$item.parent().find( '.frm-field-group-controls' ).attr( 'number-of-fields', $fields.length );
+		updateFieldGroupControlsCount( $item.parent(), $fields.length );
+	}
+
+	function updateFieldGroupControlsCount( $row, count ) {
+		var $controls = $row.find( '.frm-field-group-controls' );
+		if ( ! $controls.length ) {
+			$controls = jQuery( '<div>' )
+				.addClass( 'frm-field-group-controls' )
+				.html(
+					'<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>' +
+					'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_move_icon"></use></svg></span>'
+				);
+			$row.append( $controls );
+		}
+		$controls.attr( 'number-of-fields', count );
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
