@@ -1013,7 +1013,7 @@ function frmAdminBuildJS() {
 				.addClass( 'frm-field-group-controls' )
 				.html(
 					'<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>' +
-					'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_move_icon"></use></svg></span>'
+					'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
 				);
 			$row.append( $controls );
 		}

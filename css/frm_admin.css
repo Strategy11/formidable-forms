@@ -5228,7 +5228,7 @@ a.frm_action_icon:hover {
 }
 
 .frm-field-action-icons a .frmsvg {
-	color: var(--primary-hover) !important;
+	color: #9EA9B8 !important;
 	font-size: 17px;
 	width: 17px;
 	height: 17px;

@@ -18,12 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php } ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_move_icon' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_move_icon' ); ?>
 		</a>
 
 		<div class="dropdown">
 			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_more_vert_icon' ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 			</a>
 			<ul class="frm-dropdown-menu" role="menu">
 				<li class="frm_dropdown_li frm_select_field">
