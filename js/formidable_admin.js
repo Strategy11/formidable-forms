@@ -1233,8 +1233,9 @@ function frmAdminBuildJS() {
 	// don't allow page break, embed form, captcha, summary, or section inside section field
 	// don't allow page breaks inside of field groups.
 	// don't allow field groups with sections inside of sections.
+	// TODO don't allow field groups in field groups.
 	function allowDrop( ui ) {
-		var insideFieldGroup, insideSection, isNewField, isPageBreak;
+		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup;
 
 		insideFieldGroup = ui.placeholder.siblings( 'li.form-field' ).length > 0;
 
@@ -1274,6 +1275,12 @@ function frmAdminBuildJS() {
 
 		if ( isPageBreak ) {
 			// do not allow page break in both sections and field groups.
+			return false;
+		}
+
+		isFieldGroup = ui.item.find( 'ul.frm_sorting' ).length > 0;
+
+		if ( isFieldGroup && insideFieldGroup ) {
 			return false;
 		}
 
