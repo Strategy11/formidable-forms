@@ -894,15 +894,17 @@ function frmAdminBuildJS() {
 				var $row, $children, $lastChild, currentIndex, left;
 
 				container.scrollTop( function( i, v ) {
+					var moved, h, relativePos, y;
+
 					if ( startSort === false ) {
 						startSort = event.clientY;
 						return v;
 					}
 
-					var moved = event.clientY - startSort;
-					var h = this.offsetHeight;
-					var relativePos = event.clientY - this.offsetTop;
-					var y = relativePos - h / 2;
+					moved = event.clientY - startSort;
+					h = this.offsetHeight;
+					relativePos = event.clientY - this.offsetTop;
+					y = relativePos - h / 2;
 					if ( relativePos > ( h - 50 ) && moved > 5 ) {
 						// scrolling down
 						return v + y * 0.1;
@@ -925,7 +927,6 @@ function frmAdminBuildJS() {
 					left = $lastChild.offset().left - ui.placeholder.parent().offset().left + $lastChild.outerWidth();
 					$row.append( ui.placeholder );
 				} else {
-					// TODO this is off by one for the active row, but good to other rows.
 					left = jQuery( $children.get( currentIndex ) ).offset().left - $row.offset().left;
 					jQuery( $children.get( currentIndex ) ).before( ui.placeholder );
 				}
@@ -940,7 +941,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldsInRow( $row ) {
-		return $row.children( 'li.form-field' ).not( '.ui-sortable-helper' ).filter(
+		return $row.children( 'li.form-field' ).not( '.ui-sortable-helper' ).not( '.edit_field_type_end_divider' ).filter(
 			function() {
 				return 'none' !== this.style.display;
 			}

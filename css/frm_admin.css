@@ -3652,7 +3652,8 @@ li.sortable-placeholder {
 }
 
 #frm_form_editor_container > ul > li > ul > .frm_single_option.ui-sortable-placeholder,
-#frm_form_editor_container > ul > li > ul > li.sortable-placeholder {
+#frm_form_editor_container > ul > li > ul > li.sortable-placeholder,
+#frm_form_editor_container ul.start_divider > li.sortable-placeholder {
 	position: absolute;
 	top: 20px;
 	bottom: 0;
@@ -3712,7 +3713,7 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	transition: opacity .15s ease-in-out;
 }
 
-.frm-field-settings-open .frm-show-hover {
+#frm-show-fields .frm-field-settings-open .frm-show-hover {
 	opacity: 1;
 }
 
@@ -5456,7 +5457,7 @@ span.howto {
 	min-height: 50px;
 }
 
-#frm-show-fields .frm-field-settings-open.frm6 .frm-dropdown-menu {
+#frm-show-fields .frm6 .frm-dropdown-menu {
     max-width: unset;
     min-width: 160px;
 }
