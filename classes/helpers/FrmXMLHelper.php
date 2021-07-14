@@ -733,18 +733,25 @@ class FrmXMLHelper {
 		);
 
 		foreach ( $views as $item ) {
-			$unserialized_content = maybe_unserialize( (string) $item->content );
+			$post_content         = (string) $item->content;
+			$unserialized_content = maybe_unserialize( $post_content );
 			if ( is_array( $unserialized_content ) && isset( $unserialized_content[0] ) && isset( $unserialized_content[0]['box'] ) ) {
+				$updated_box_content = false;
 				// grid views and the new table views use this format.
 				foreach ( $unserialized_content as $box_index => $box ) {
 					if ( ! empty( $box['content'] ) ) {
 						$unserialized_content[ $box_index ]['content'] = FrmFieldsHelper::switch_field_ids( $box['content'] );
+						if ( $unserialized_content[ $box_index ]['content'] !== $box['content'] ) {
+							$updated_box_content = true;
+						}
 					}
 				}
-				unset( $box_index, $box );
-				$post_content = serialize( $unserialized_content );
+				if ( $updated_box_content ) {
+					$post_content = maybe_serialize( $unserialized_content );
+				}
+				unset( $updated_box_content );
 			} else {
-				$post_content = FrmFieldsHelper::switch_field_ids( (string) $item->content );
+				$post_content = FrmFieldsHelper::switch_field_ids( $post_content );
 			}
 			unset( $unserialized_content );
 			$post = array(
