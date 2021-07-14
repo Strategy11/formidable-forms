@@ -733,7 +733,7 @@ class FrmXMLHelper {
 		);
 
 		foreach ( $views as $item ) {
-			$unserialized_content = maybe_unserialize( $item->content );
+			$unserialized_content = maybe_unserialize( (string) $item->content );
 			if ( is_array( $unserialized_content ) && isset( $unserialized_content[0] ) && isset( $unserialized_content[0]['box'] ) ) {
 				// grid views and the new table views use this format.
 				foreach ( $unserialized_content as $box_index => $box ) {
