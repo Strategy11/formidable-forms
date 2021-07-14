@@ -733,6 +733,20 @@ class FrmXMLHelper {
 		);
 
 		foreach ( $views as $item ) {
+			$unserialized_content = maybe_unserialize( $item->content );
+			if ( is_array( $unserialized_content ) && isset( $unserialized_content[0] ) && isset( $unserialized_content[0]['box'] ) ) {
+				// grid views and the new table views use this format.
+				foreach ( $unserialized_content as $box_index => $box ) {
+					if ( ! empty( $box['content'] ) ) {
+						$unserialized_content[ $box_index ]['content'] = FrmFieldsHelper::switch_field_ids( $box['content'] );
+					}
+				}
+				unset( $box_index, $box );
+				$post_content = serialize( $unserialized_content );
+			} else {
+				$post_content = FrmFieldsHelper::switch_field_ids( (string) $item->content );
+			}
+			unset( $unserialized_content );
 			$post = array(
 				'post_title'     => (string) $item->title,
 				'post_name'      => (string) $item->post_name,
@@ -744,7 +758,7 @@ class FrmXMLHelper {
 				'post_id'        => (int) $item->post_id,
 				'post_parent'    => (int) $item->post_parent,
 				'menu_order'     => (int) $item->menu_order,
-				'post_content'   => FrmFieldsHelper::switch_field_ids( (string) $item->content ),
+				'post_content'   => $post_content,
 				'post_excerpt'   => FrmFieldsHelper::switch_field_ids( (string) $item->excerpt ),
 				'is_sticky'      => (string) $item->is_sticky,
 				'comment_status' => (string) $item->comment_status,
@@ -755,6 +769,8 @@ class FrmXMLHelper {
 				'layout'         => array(),
 				'tax_input'      => array(),
 			);
+
+			unset( $post_content );
 
 			$old_id = $post['post_id'];
 			self::populate_post( $post, $item, $imported );
