@@ -733,27 +733,6 @@ class FrmXMLHelper {
 		);
 
 		foreach ( $views as $item ) {
-			$post_content         = (string) $item->content;
-			$unserialized_content = maybe_unserialize( $post_content );
-			if ( is_array( $unserialized_content ) && isset( $unserialized_content[0] ) && isset( $unserialized_content[0]['box'] ) ) {
-				$updated_box_content = false;
-				// grid views and the new table views use this format.
-				foreach ( $unserialized_content as $box_index => $box ) {
-					if ( ! empty( $box['content'] ) ) {
-						$unserialized_content[ $box_index ]['content'] = FrmFieldsHelper::switch_field_ids( $box['content'] );
-						if ( $unserialized_content[ $box_index ]['content'] !== $box['content'] ) {
-							$updated_box_content = true;
-						}
-					}
-				}
-				if ( $updated_box_content ) {
-					$post_content = maybe_serialize( $unserialized_content );
-				}
-				unset( $updated_box_content );
-			} else {
-				$post_content = FrmFieldsHelper::switch_field_ids( $post_content );
-			}
-			unset( $unserialized_content );
 			$post = array(
 				'post_title'     => (string) $item->title,
 				'post_name'      => (string) $item->post_name,
@@ -765,7 +744,7 @@ class FrmXMLHelper {
 				'post_id'        => (int) $item->post_id,
 				'post_parent'    => (int) $item->post_parent,
 				'menu_order'     => (int) $item->menu_order,
-				'post_content'   => $post_content,
+				'post_content'   => self::prepare_views_post_content( (string) $item->content ),
 				'post_excerpt'   => FrmFieldsHelper::switch_field_ids( (string) $item->excerpt ),
 				'is_sticky'      => (string) $item->is_sticky,
 				'comment_status' => (string) $item->comment_status,
@@ -776,8 +755,6 @@ class FrmXMLHelper {
 				'layout'         => array(),
 				'tax_input'      => array(),
 			);
-
-			unset( $post_content );
 
 			$old_id = $post['post_id'];
 			self::populate_post( $post, $item, $imported );
@@ -833,6 +810,32 @@ class FrmXMLHelper {
 		self::maybe_update_stylesheet( $imported );
 
 		return $imported;
+	}
+
+	/**
+	 * @param string $post_content
+	 * @return string
+	 */
+	private static function prepare_views_post_content( $post_content ) {
+		$unserialized_content = maybe_unserialize( $post_content );
+		if ( is_array( $unserialized_content ) && isset( $unserialized_content[0] ) && isset( $unserialized_content[0]['box'] ) ) {
+			$updated_box_content = false;
+			// grid views and the new table views use this format.
+			foreach ( $unserialized_content as $box_index => $box ) {
+				if ( ! empty( $box['content'] ) ) {
+					$unserialized_content[ $box_index ]['content'] = FrmFieldsHelper::switch_field_ids( $box['content'] );
+					if ( $unserialized_content[ $box_index ]['content'] !== $box['content'] ) {
+						$updated_box_content = true;
+					}
+				}
+			}
+			if ( $updated_box_content ) {
+				$post_content = maybe_serialize( $unserialized_content );
+			}
+		} else {
+			$post_content = FrmFieldsHelper::switch_field_ids( $post_content );
+		}
+		return $post_content;
 	}
 
 	private static function populate_post( &$post, $item, $imported ) {
