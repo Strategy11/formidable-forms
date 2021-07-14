@@ -1,4 +1,11 @@
 == Changelog ==
+= 4.11.04 =
+* New: The first field with an error will now automatically focus when a form is submitted.
+* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
+* Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
+* Fix: Improved support for importing grid views, fixing an issue where content would sometimes stay serialized.
+* Fix: The autocomplete page dropdown was not consistent with other styles.
+
 = 4.11.03 =
 * New: Name fields now work in the To and From settings for email actions.
 * Fix: Images were not properly loading when styles were loading via an AJAX request.
