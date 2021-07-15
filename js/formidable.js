@@ -608,6 +608,7 @@ function frmFrontFormJS() {
 						object.submit();
 					} else {
 						jQuery( object ).prepend( response.error_message );
+						checkForErrorsAndMaybeSetFocus();
 					}
 				} else {
 					// there may have been a plugin conflict, or the form is not set to submit with ajax
@@ -1005,6 +1006,44 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function checkForErrorsAndMaybeSetFocus() {
+		var errors, element, timeoutCallback;
+
+		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
+		if ( ! errors.length ) {
+			return;
+		}
+
+		element = errors[0];
+		do {
+			element = element.previousSibling;
+			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
+				element.focus();
+				break;
+			}
+
+			if ( 'undefined' !== typeof element.classList ) {
+				if ( element.classList.contains( 'html-active' ) ) {
+					timeoutCallback = function() {
+						var textarea = element.querySelector( 'textarea' );
+						if ( null !== textarea ) {
+							textarea.focus();
+						}
+					};
+				} else if ( element.classList.contains( 'tmce-active' ) ) {
+					timeoutCallback = function() {
+						tinyMCE.activeEditor.focus();
+					};
+				}
+
+				if ( 'function' === typeof timeoutCallback ) {
+					setTimeout( timeoutCallback, 0 );
+					break;
+				}
+			}
+		} while ( element.previousSibling );
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1029,6 +1068,8 @@ function frmFrontFormJS() {
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
+
+			checkForErrorsAndMaybeSetFocus();
 
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
@@ -1203,6 +1244,7 @@ function frmFrontFormJS() {
 			}
 
 			scrollToFirstField( object );
+			checkForErrorsAndMaybeSetFocus();
 		},
 
 		checkFormErrors: function( object, action ) {
