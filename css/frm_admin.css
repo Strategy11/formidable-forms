@@ -8162,6 +8162,7 @@ Responsive Design
 	top: 100%;
 	width: 100%;
 	background-color: #fff;
+	z-index: 50;
 }
 
 .frm_images_dropdown__option {

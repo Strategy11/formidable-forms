@@ -2762,12 +2762,19 @@ class FrmAppHelper {
 						$image = '';
 					}
 
-					$classes = 'frm_images_dropdown__option';
+					$custom_attrs = '';
+					$classes      = 'frm_images_dropdown__option';
 					if ( $args['selected'] === $key || is_numeric( $args['selected'] ) && is_numeric( $key ) && $args['selected'] == $key ) {
 						$classes .= ' frm_images_dropdown__option--selected';
 					}
+					if ( ! empty( $args['show_upgrade'] ) ) {
+						$classes      .= ' frm_noallow frm_show_upgrade';
+						$custom_attrs .= ' data-upgrade="' . esc_attr__( 'Image Options', 'formidable' ) . '"';
+						$custom_attrs .= ' data-message="' . esc_attr( __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . self::plugin_url() . '/images/image-options.png" />' ) . '"';
+						$custom_attrs .= ' data-medium="builder" data-content="image-options"';
+					}
 					?>
-					<button type="button" class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $key ); ?>">
+					<button type="button" class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $key ); ?>"<?php echo $custom_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 						<?php if ( $image ) : ?>
 							<span class="frm_images_dropdown__image"><?php echo self::kses( $image, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						<?php endif; ?>
