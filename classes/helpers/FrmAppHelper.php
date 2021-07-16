@@ -2767,11 +2767,31 @@ class FrmAppHelper {
 					if ( $args['selected'] === $key || is_numeric( $args['selected'] ) && is_numeric( $key ) && $args['selected'] == $key ) {
 						$classes .= ' frm_images_dropdown__option--selected';
 					}
-					if ( ! empty( $args['show_upgrade'] ) ) {
+					if ( ! empty( $args['show_upgrade'] ) || ! empty( $option['show_upgrade'] ) ) {
 						$classes      .= ' frm_noallow frm_show_upgrade';
 						$custom_attrs .= ' data-upgrade="' . esc_attr__( 'Image Options', 'formidable' ) . '"';
 						$custom_attrs .= ' data-message="' . esc_attr( __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . self::plugin_url() . '/images/image-options.png" />' ) . '"';
 						$custom_attrs .= ' data-medium="builder" data-content="image-options"';
+					} elseif ( ! empty( $option['addon'] ) ) {
+						$classes      .= ' frm_noallow frm_show_upgrade';
+
+						$upgrade_label   = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
+						$upgrade_message = '';
+						$upgrade_link    = '';
+						$upgrading       = FrmAddonsController::install_link( $option['addon'] );
+						if ( isset( $upgrading['url'] ) ) {
+							$install_data = wp_json_encode( $upgrading );
+						} else {
+							$install_data = '';
+						}
+						$requires = FrmFormsHelper::get_plan_required( $upgrading );
+
+						$custom_attrs .= ' data-upgrade="' . esc_attr( $upgrade_label ) . '"';
+						$custom_attrs .= ' data-message="' . esc_attr( $upgrade_message ) . '"';
+						$custom_attrs .= ' data-link="' . esc_attr( $upgrade_link ) . '"';
+						$custom_attrs .= ' data-medium="builder"';
+						$custom_attrs .= ' data-oneclick="' . esc_attr( $install_data ) . '"';
+						$custom_attrs .= ' data-requires="' . esc_attr( $requires ) . '"';
 					}
 					?>
 					<button type="button" class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $key ); ?>"<?php echo $custom_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>

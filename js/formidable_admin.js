@@ -6776,6 +6776,17 @@ function frmAdminBuildJS() {
 			const valueEl   = wrapperEl.querySelector( '.frm_images_dropdown__value' );
 			const toggleEl  = wrapperEl.querySelector( '.frm_images_dropdown__toggle' );
 
+			const imageOptionsToggle = wrapperEl.parentNode.querySelector( '.frm_toggle_image_options' );
+			if ( imageOptionsToggle ) {
+				if ( '1' === optionEl.getAttribute( 'data-value' ) ) {
+					imageOptionsToggle.checked = true;
+				} else {
+					imageOptionsToggle.checked = false;
+				}
+
+				imageOptionsToggle.dispatchEvent( new Event( 'click', { bubbles: true }) );
+			}
+
 			valueEl.value = optionEl.getAttribute( 'data-value' );
 			valueEl.dispatchEvent( new Event( 'change', { bubbles: true }) );
 
