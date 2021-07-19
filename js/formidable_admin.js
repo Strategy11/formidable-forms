@@ -2646,8 +2646,7 @@ function frmAdminBuildJS() {
 		if ( $ul.length ) {
 			return getFieldsInRow( $ul ).length;
 		}
-		// TODO get the actual size here, not just one per row.
-		return document.querySelectorAll( '.frm-selected-field-group' ).length;
+		return getSelectedFieldCount();
 	}
 
 	function getFieldGroupPopup( sizeOfFieldGroup, childElement ) {
@@ -3101,14 +3100,13 @@ function frmAdminBuildJS() {
 	}
 
 	function destroyFieldGroupPopup() {
-		var popup = document.getElementById( 'frm_field_group_popup' );
-
-		var wrapper = popup.closest( '.frm-has-open-field-group-popup' );
+		var popup, wrapper;
+		popup = document.getElementById( 'frm_field_group_popup' );
+		wrapper = popup.closest( '.frm-has-open-field-group-popup' );
 		if ( null !== wrapper ) {
 			wrapper.classList.remove( 'frm-has-open-field-group-popup' );
 			popup.parentNode.remove();
 		}
-
 		jQuery( document ).off( 'click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick );
 	}
 
@@ -3274,7 +3272,7 @@ function frmAdminBuildJS() {
 	}
 
 	function mergeFieldsIntoRowClick( event ) {
-		var selectedFieldGroups, size, popup;
+		var size, popup;
 
 		if ( null !== event.originalEvent.target.closest( '#frm_field_group_popup' ) ) {
 			// prevent clicks within the popup from triggering the button again.
@@ -3286,13 +3284,19 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
-
-		// TODO each group could have multiple fields. this needs a more accurate count.
-		size = selectedFieldGroups.length;
-
-		popup = getFieldGroupPopup( size, selectedFieldGroups[0].firstChild );
+		size = getSelectedFieldCount();
+		popup = getFieldGroupPopup( size, document.querySelector( '.frm-selected-field-group' ).firstChild );
 		this.appendChild( popup );
+	}
+
+	function getSelectedFieldCount() {
+		var count = 0;
+		jQuery( document.querySelectorAll( '.frm-selected-field-group' ) ).each(
+			function() {
+				count += getFieldsInRow( jQuery( this ) ).length;
+			}
+		);
+		return count;
 	}
 
 	function deleteFieldGroupsClick() {
