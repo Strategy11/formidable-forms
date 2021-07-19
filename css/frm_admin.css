@@ -8153,6 +8153,22 @@ Responsive Design
 	text-align: left;
 }
 
+.frm-merge-fields-into-row #frm_field_group_popup {
+	top: unset;
+	bottom: 50px;
+	height: 196px;
+}
+
+.frm-merge-fields-into-row #frm_field_group_popup .frm-break-field-group {
+	display: none;
+}
+
+.frm-merge-fields-into-row > a {
+	color: rgba(40, 47, 54, 0.85);
+	position: relative;
+	top: 2px;
+}
+
 .frm-row-layout-title {
 	font-weight: 600;
 	font-size: 11px;

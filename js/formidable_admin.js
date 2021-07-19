@@ -1072,8 +1072,9 @@ function frmAdminBuildJS() {
 			}
 
 			if ( 0 === itemIndex ) {
-				this.classList.add( 'frm_first' );
-				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
+				// TODO it seems that on merge this is applied to both items.
+//				this.classList.add( 'frm_first' );
+//				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
 			jQuery( layoutClassesInput ).trigger( 'change' );
@@ -2886,6 +2887,39 @@ function frmAdminBuildJS() {
 		destroyFieldGroupPopup();
 	}
 
+	function handleFieldGroupLayoutOptionInsideMergeClick() {
+		var $ul = mergeSelectedFieldGroups();
+		// TODO apply layout on the new row.
+
+		var type = this.getAttribute( 'layout-type' );
+
+		syncLayoutClasses( $ul.children().first(), type );
+		unselectFieldGroups();
+	}
+
+	function mergeSelectedFieldGroups() {
+		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
+			$firstGroupUl = $selectedFieldGroups.first();
+		$selectedFieldGroups.each(
+			function( index ) {
+				if ( 0 !== index ) {
+					jQuery( this ).children( 'li.form-field' ).each(
+						function() {
+							var previousParent = this.parentNode;
+							$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
+							if ( ! jQuery( previousParent ).children( 'li.form-field' ).length ) {
+								// clean up the previous field group if we've removed all of its fields.
+								previousParent.closest( 'li.frm_field_box' ).remove();
+							}
+						}
+					);
+				}
+			}
+		);
+		syncLayoutClasses( $firstGroupUl.children().first() );
+		return $firstGroupUl;
+	}
+
 	function customFieldGroupLayoutClick() {
 		var $fields = getFieldsInRow( jQuery( this ).closest( 'ul' ) ),
 			size = $fields.length,
@@ -3137,8 +3171,17 @@ function frmAdminBuildJS() {
 
 	function unselectFieldGroups( event ) {
 		var popup;
-		if ( 'undefined' !== typeof event && null !== event.originalEvent.target.closest( '#frm-show-fields' ) ) {
-			return;
+		if ( 'undefined' !== typeof event ) {
+			if ( null !== event.originalEvent.target.closest( '#frm-show-fields' ) ) {
+				return;
+			}
+			if ( event.originalEvent.target.classList.contains( 'frm-merge-fields-into-row' ) ) {
+				return;
+			}
+			if ( null !== event.originalEvent.target.closest( '.frm-merge-fields-into-row' ) ) {
+				return;
+			}
+			console.log( event.originalEvent.target );
 		}
 		jQuery( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
 		jQuery( document ).off( 'click', unselectFieldGroups );
@@ -3153,7 +3196,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldMultiselectPopup() {
-		var popup, mergeOption, verticalSeparator, deleteOption;
+		var popup, mergeOption, caret, verticalSeparator, deleteOption;
 
 		popup = document.getElementById( 'frm_field_multiselect_popup' );
 
@@ -3167,6 +3210,13 @@ function frmAdminBuildJS() {
 		mergeOption = div();
 		mergeOption.classList.add( 'frm-merge-fields-into-row' );
 		mergeOption.textContent = __( 'Merge into row', 'formidable' );
+
+		caret = document.createElement( 'a' );
+		caret.style.marginLeft = '5px';
+		caret.classList.add( 'frm_icon_font', 'frm_arrowdown6_icon' );
+		caret.setAttribute( 'href', '#' );
+		mergeOption.appendChild( caret );
+
 		popup.appendChild( mergeOption );
 
 		verticalSeparator = div();
@@ -3185,26 +3235,21 @@ function frmAdminBuildJS() {
 		return popup;
 	}
 
-	function mergeFieldsIntoRowClick() {
-		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
-			$firstGroupUl = $selectedFieldGroups.first();
-		$selectedFieldGroups.each(
-			function( index ) {
-				if ( 0 !== index ) {
-					jQuery( this ).children( 'li.form-field' ).each(
-						function() {
-							var previousParent = this.parentNode;
-							$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
-							if ( ! jQuery( previousParent ).children( 'li.form-field' ).length ) {
-								// clean up the previous field group if we've removed all of its fields.
-								previousParent.closest( 'li.frm_field_box' ).remove();
-							}
-						}
-					);
-				}
-			}
-		);
-		syncLayoutClasses( $firstGroupUl.children().first() );
+	function mergeFieldsIntoRowClick( event ) {
+		var selectedFieldGroups, size, popup;
+
+		if ( null !== event.originalEvent.target.closest( '#frm_field_group_popup' ) ) {
+			// prevent clicks within the popup from triggering the button again.
+			return;
+		}
+
+		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
+
+		// TODO each group could have multiple fields. this needs a more accurate count.
+		size = selectedFieldGroups.length;
+
+		popup = getFieldGroupPopup( size, selectedFieldGroups[0].firstChild );
+		this.appendChild( popup );
 	}
 
 	function deleteFieldGroupsClick() {
@@ -7889,6 +7934,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
 			$newFields.on( 'click', '.frm-field-group-controls > svg:first-child', clickFieldGroupLayout );
 			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
+			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
 			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
 			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
 			$newFields.on( 'click', '#frm_field_group_popup .frm_grid_container input', focusFieldGroupInputOnClick );
