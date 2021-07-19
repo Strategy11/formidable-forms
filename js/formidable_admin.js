@@ -2626,10 +2626,6 @@ function frmAdminBuildJS() {
 
 		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( this );
 
-		if ( null !== document.getElementById( 'frm_field_group_popup' ) ) {
-			destroyFieldGroupPopup();
-		}
-
 		this.closest( 'ul.frm_sorting' ).classList.add( 'frm-has-open-field-group-popup' );
 		jQuery( document ).on( 'click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick );
 
@@ -2652,7 +2648,13 @@ function frmAdminBuildJS() {
 	function getFieldGroupPopup( sizeOfFieldGroup, childElement ) {
 		var popup, wrapper, rowLayoutOptions;
 
-		popup = div();
+		popup = document.getElementById( 'frm_field_group_popup' );
+		if ( null === popup ) {
+			popup = div();
+		} else {
+			popup.innerHTML = '';
+		}
+
 		popup.id = 'frm_field_group_popup';
 
 		wrapper = div();
@@ -2878,21 +2880,17 @@ function frmAdminBuildJS() {
 
 	function handleFieldGroupLayoutOptionClick() {
 		var type, row;
-
 		type = this.getAttribute( 'layout-type' );
 		row = this.closest( 'ul' );
 		size = getFieldsInRow( jQuery( row ) ).length;
-
 		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
 		destroyFieldGroupPopup();
 	}
 
 	function handleFieldGroupLayoutOptionInsideMergeClick() {
-		var $ul = mergeSelectedFieldGroups();
-		// TODO apply layout on the new row.
-
-		var type = this.getAttribute( 'layout-type' );
-
+		var $ul, type;
+		$ul = mergeSelectedFieldGroups();
+		type = this.getAttribute( 'layout-type' );
 		syncLayoutClasses( $ul.children().first(), type );
 		unselectFieldGroups();
 	}
@@ -2921,11 +2919,16 @@ function frmAdminBuildJS() {
 	}
 
 	function customFieldGroupLayoutClick() {
-		var $fields = getFieldsInRow( jQuery( this ).closest( 'ul' ) ),
-			size = $fields.length,
-			popup = this.closest( '#frm_field_group_popup' ),
-			wrapper, layoutClass, inputRow, paddingElement, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
+		var $fields = getFieldsInRow( jQuery( this ).closest( 'ul' ) );
+		setupCustomLayoutOptions( $fields );
+	}
 
+	function setupCustomLayoutOptions( $fields ) {
+		var size, popup, wrapper, layoutClass, inputRow, paddingElement, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
+
+		size = $fields.length;
+
+		popup = document.getElementById( 'frm_field_group_popup' );
 		popup.innerHTML = '';
 
 		wrapper = div();
@@ -2984,6 +2987,11 @@ function frmAdminBuildJS() {
 		wrapper.appendChild( buttonsWrapper );
 
 		popup.appendChild( wrapper );
+	}
+
+	function customFieldGroupLayoutInsideMergeClick() {
+		$fields = jQuery( '.frm-selected-field-group li.form-field' );
+		setupCustomLayoutOptions( $fields );
 	}
 
 	function getPrimaryButton() {
@@ -3073,26 +3081,33 @@ function frmAdminBuildJS() {
 	}
 
 	function cancelCustomFieldGroupClick() {
+		// TODO this doesn't work in the multiselect popup
 		revertToFieldGroupPopupFirstPage( this );
 	}
 
 	function revertToFieldGroupPopupFirstPage( triggerElement ) {
-		triggerElement.closest( '#frm_field_group_popup' ).replaceWith(
+		jQuery( document.getElementById( 'frm_field_group_popup' ) ).replaceWith(
 			getFieldGroupPopup( getSizeOfFieldGroupFromChildElement( triggerElement ), triggerElement )
 		);
 	}
 
 	function destroyFieldGroupPopup() {
 		var popup = document.getElementById( 'frm_field_group_popup' );
-		popup.closest( '.frm-has-open-field-group-popup' ).classList.remove( 'frm-has-open-field-group-popup' );
-		popup.parentNode.remove();
+
+		var wrapper = popup.closest( '.frm-has-open-field-group-popup' );
+		if ( null !== wrapper ) {
+			wrapper.classList.remove( 'frm-has-open-field-group-popup' );
+			popup.parentNode.remove();
+		}
+
 		jQuery( document ).off( 'click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick );
 	}
 
 	function saveCustomFieldGroupClick() {
+		// TODO this doesn't work in the multiselect popup
 		var syncDetails = [];
 
-		jQuery( this.closest( '#frm_field_group_popup' ).querySelectorAll( '.frm_grid_container input' ) )
+		jQuery( document.getElementById( 'frm_field_group_popup' ).querySelectorAll( '.frm_grid_container input' ) )
 			.each(
 				function() {
 					syncDetails.push( parseInt( this.value ) );
@@ -3181,7 +3196,9 @@ function frmAdminBuildJS() {
 			if ( null !== event.originalEvent.target.closest( '.frm-merge-fields-into-row' ) ) {
 				return;
 			}
-			console.log( event.originalEvent.target );
+			if ( event.originalEvent.target.classList.contains( 'frm-custom-field-group-layout' ) ) {
+				return;
+			}
 		}
 		jQuery( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
 		jQuery( document ).off( 'click', unselectFieldGroups );
@@ -3240,6 +3257,11 @@ function frmAdminBuildJS() {
 
 		if ( null !== event.originalEvent.target.closest( '#frm_field_group_popup' ) ) {
 			// prevent clicks within the popup from triggering the button again.
+			return;
+		}
+
+		if ( event.originalEvent.target.classList.contains( 'frm-custom-field-group-layout' ) ) {
+			// avoid switching back to the first page when clicking the custom option nested inside of the merge option.
 			return;
 		}
 
@@ -7936,6 +7958,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
 			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
+			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-custom-field-group-layout', customFieldGroupLayoutInsideMergeClick );
 			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
 			$newFields.on( 'click', '#frm_field_group_popup .frm_grid_container input', focusFieldGroupInputOnClick );
 			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
