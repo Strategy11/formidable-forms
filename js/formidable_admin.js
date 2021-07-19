@@ -882,8 +882,12 @@ function frmAdminBuildJS() {
 						}
 					}
 					if ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) && ui.item.hasClass( 'form-field' ) ) {
+						// dragging an item into a new row.
 						jQuery( ui.item ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
-						syncLayoutClasses( ui.item );
+						if ( $previousFieldContainer.length && getFieldsInRow( $previousFieldContainer ).length ) {
+							// only if the previous container had other sibling fields, remove the previous layout class.
+							syncLayoutClasses( ui.item );
+						}
 					} else {
 						syncLayoutClasses( ui.item );
 					}
