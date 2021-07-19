@@ -3091,7 +3091,6 @@ function frmAdminBuildJS() {
 	}
 
 	function cancelCustomFieldGroupClick() {
-		// TODO this doesn't work in the multiselect popup
 		revertToFieldGroupPopupFirstPage( this );
 	}
 
@@ -3114,8 +3113,9 @@ function frmAdminBuildJS() {
 	}
 
 	function saveCustomFieldGroupClick() {
-		// TODO this doesn't work in the multiselect popup
-		var syncDetails = [];
+		var syncDetails, $controls, $ul;
+
+		syncDetails = [];
 
 		jQuery( document.getElementById( 'frm_field_group_popup' ).querySelectorAll( '.frm_grid_container input' ) )
 			.each(
@@ -3124,7 +3124,15 @@ function frmAdminBuildJS() {
 				}
 			);
 
-		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), syncDetails );
+		$controls = jQuery( this ).closest( '.frm-field-group-controls' );
+
+		if ( $controls.length ) {
+			syncLayoutClasses( $controls.prev(), syncDetails );
+		} else {
+			$ul = mergeSelectedFieldGroups();
+			syncLayoutClasses( $ul.children().first(), syncDetails );
+		}
+
 		destroyFieldGroupPopup();
 	}
 
