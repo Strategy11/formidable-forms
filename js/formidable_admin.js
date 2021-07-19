@@ -1001,12 +1001,7 @@ function frmAdminBuildJS() {
 				};
 			}
 
-			$fields.each(
-				function( index ) {
-					var classToAdd = classToAddFunction( index );
-					jQuery( this ).each( getSyncLayoutClass( layoutClasses, classToAdd ) );
-				}
-			);
+			$fields.each( getSyncLayoutClass( layoutClasses, classToAddFunction ) );
 		}
 
 		updateFieldGroupControlsCount( $item.parent(), $fields.length );
@@ -1028,12 +1023,13 @@ function frmAdminBuildJS() {
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
 		return function( itemIndex ) {
-			var length, index, currentClass, activeLayoutClass, fieldId, layoutClassesInput;
+			var currentClassToAdd, length, layoutClassIndex, currentClass, activeLayoutClass, fieldId, layoutClassesInput;
 
+			currentClassToAdd = 'function' === typeof classToAdd ? classToAdd( itemIndex ) : classToAdd;
 			length = layoutClasses.length;
 			activeLayoutClass = false;
-			for ( index = 0; index < length; ++index ) {
-				currentClass = layoutClasses[ index ];
+			for ( layoutClassIndex = 0; layoutClassIndex < length; ++layoutClassIndex ) {
+				currentClass = layoutClasses[ layoutClassIndex ];
 				if ( this.classList.contains( currentClass ) ) {
 					activeLayoutClass = currentClass;
 					break;
@@ -1045,7 +1041,7 @@ function frmAdminBuildJS() {
 			if ( 'undefined' === typeof fieldId ) {
 				// we are syncing the drag/drop placeholder before the actual field has loaded.
 				// this will get called again afterward and the input will exist then.
-				this.classList.add( classToAdd );
+				this.classList.add( currentClassToAdd );
 				return;
 			}
 
@@ -1058,12 +1054,12 @@ function frmAdminBuildJS() {
 			}
 
 			if ( false === activeLayoutClass ) {
-				if ( '' !== classToAdd ) {
-					layoutClassesInput.value = layoutClassesInput.value.concat( ' ' + classToAdd );
+				if ( '' !== currentClassToAdd ) {
+					layoutClassesInput.value = layoutClassesInput.value.concat( ' ' + currentClassToAdd );
 				}
 			} else {
 				this.classList.remove( activeLayoutClass );
-				layoutClassesInput.value = layoutClassesInput.value.replace( activeLayoutClass, classToAdd );
+				layoutClassesInput.value = layoutClassesInput.value.replace( activeLayoutClass, currentClassToAdd );
 			}
 
 			if ( this.classList.contains( 'frm_first' ) ) {
@@ -1072,9 +1068,8 @@ function frmAdminBuildJS() {
 			}
 
 			if ( 0 === itemIndex ) {
-				// TODO it seems that on merge this is applied to both items.
-//				this.classList.add( 'frm_first' );
-//				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
+				this.classList.add( 'frm_first' );
+				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
 			jQuery( layoutClassesInput ).trigger( 'change' );
@@ -2907,23 +2902,21 @@ function frmAdminBuildJS() {
 	function mergeSelectedFieldGroups() {
 		var $selectedFieldGroups = jQuery( '.frm-selected-field-group' ),
 			$firstGroupUl = $selectedFieldGroups.first();
-		$selectedFieldGroups.each(
-			function( index ) {
-				if ( 0 !== index ) {
-					jQuery( this ).children( 'li.form-field' ).each(
-						function() {
-							var previousParent = this.parentNode;
-							$firstGroupUl.find( 'li.form-field' ).not( '.ui-sortable-helper' ).last().after( this );
-							if ( ! jQuery( previousParent ).children( 'li.form-field' ).length ) {
-								// clean up the previous field group if we've removed all of its fields.
-								previousParent.closest( 'li.frm_field_box' ).remove();
-							}
+		$selectedFieldGroups.not( $firstGroupUl ).each(
+			function() {
+				getFieldsInRow( jQuery( this ) ).each(
+					function() {
+						var previousParent = this.parentNode;
+						getFieldsInRow( $firstGroupUl ).last().after( this );
+						if ( ! jQuery( previousParent ).children( 'li.form-field' ).length ) {
+							// clean up the previous field group if we've removed all of its fields.
+							previousParent.closest( 'li.frm_field_box' ).remove();
 						}
-					);
-				}
+					}
+				);
 			}
 		);
-		syncLayoutClasses( $firstGroupUl.children().first() );
+		syncLayoutClasses( getFieldsInRow( $firstGroupUl ).first() );
 		return $firstGroupUl;
 	}
 
