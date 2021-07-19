@@ -5916,7 +5916,6 @@ tr.frm_options_heading td {
 	padding: 20px 0 0;
 	width: calc( 100% - 20px );
 	height: 121px;
-	border-color: var(--grey-border);
 	transition: all 0.4s linear;
 }
 
