@@ -2895,7 +2895,7 @@ function frmAdminBuildJS() {
 		var $ul, type;
 		$ul = mergeSelectedFieldGroups();
 		type = this.getAttribute( 'layout-type' );
-		syncLayoutClasses( $ul.children().first(), type );
+		syncLayoutClasses( getFieldsInRow( $ul ).first(), type );
 		unselectFieldGroups();
 	}
 
@@ -2926,7 +2926,7 @@ function frmAdminBuildJS() {
 	}
 
 	function setupCustomLayoutOptions( $fields ) {
-		var size, popup, wrapper, layoutClass, inputRow, paddingElement, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
+		var size, popup, wrapper, layoutClass, inputRow, paddingElement, inputValueOverride, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
 
 		size = $fields.length;
 
@@ -2949,12 +2949,17 @@ function frmAdminBuildJS() {
 			inputRow.appendChild( paddingElement );
 		}
 
+		inputValueOverride = getSelectedFieldCount() > 0 ? getSizeOfLayoutClass( getEvenClassForSize( size ) ) : false;
+		if ( false !== inputValueOverride && inputValueOverride >= 12 ) {
+			inputValueOverride = Math.floor( 12 / size );
+		}
+
 		for ( index = 0; index < size; ++index ) {
 			inputField = document.createElement( 'input' );
 			inputField.type = 'text';
 			inputField.classList.add( layoutClass );
 			inputField.classList.add( 'frm-custom-grid-size-input' );
-			inputField.value = getSizeOfLayoutClass( getLayoutClassName( $fields.get( index ).classList ) );
+			inputField.value = false !== inputValueOverride ? inputValueOverride : getSizeOfLayoutClass( getLayoutClassName( $fields.get( index ).classList ) );
 			inputRow.appendChild( inputField );
 		}
 
@@ -3095,6 +3100,9 @@ function frmAdminBuildJS() {
 	function destroyFieldGroupPopup() {
 		var popup, wrapper;
 		popup = document.getElementById( 'frm_field_group_popup' );
+		if ( popup === null ) {
+			return;
+		}
 		wrapper = popup.closest( '.frm-has-open-field-group-popup' );
 		if ( null !== wrapper ) {
 			wrapper.classList.remove( 'frm-has-open-field-group-popup' );
@@ -3121,7 +3129,8 @@ function frmAdminBuildJS() {
 			syncLayoutClasses( $controls.prev(), syncDetails );
 		} else {
 			$ul = mergeSelectedFieldGroups();
-			syncLayoutClasses( $ul.children().first(), syncDetails );
+			syncLayoutClasses( getFieldsInRow( $ul ).first(), syncDetails );
+			unselectFieldGroups();
 		}
 
 		destroyFieldGroupPopup();
