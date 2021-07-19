@@ -3073,6 +3073,8 @@ function frmAdminBuildJS() {
 		selectedFieldGroups = jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' );
 		numberOfSelectedGroups = selectedFieldGroups.length;
 
+		console.log({ initialCount: numberOfSelectedGroups });
+
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
 
@@ -3086,6 +3088,7 @@ function frmAdminBuildJS() {
 					++numberOfSelectedGroups;
 				}
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
+				++numberOfSelectedGroups; // include the one we're selecting right now.
 				$firstGroup = selectedFieldGroups.first();
 
 				if ( $firstGroup.parent().index() < jQuery( this.parentNode ).index() ) {
