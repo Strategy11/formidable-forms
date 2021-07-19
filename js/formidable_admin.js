@@ -1027,13 +1027,11 @@ function frmAdminBuildJS() {
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
-		var length, index, currentClass;
-		length = layoutClasses.length;
-		return function() {
-			var activeLayoutClass = false,
-				fieldId = this.dataset.fid,
-				layoutClassesInput;
+		return function( itemIndex ) {
+			var length, index, currentClass, activeLayoutClass, fieldId, layoutClassesInput;
 
+			length = layoutClasses.length;
+			activeLayoutClass = false;
 			for ( index = 0; index < length; ++index ) {
 				currentClass = layoutClasses[ index ];
 				if ( this.classList.contains( currentClass ) ) {
@@ -1041,6 +1039,8 @@ function frmAdminBuildJS() {
 					break;
 				}
 			}
+
+			fieldId = this.dataset.fid;
 
 			if ( 'undefined' === typeof fieldId ) {
 				// we are syncing the drag/drop placeholder before the actual field has loaded.
@@ -1064,6 +1064,16 @@ function frmAdminBuildJS() {
 			} else {
 				this.classList.remove( activeLayoutClass );
 				layoutClassesInput.value = layoutClassesInput.value.replace( activeLayoutClass, classToAdd );
+			}
+
+			if ( this.classList.contains( 'frm_first' ) ) {
+				this.classList.remove( 'frm_first' );
+				layoutClassesInput.value = layoutClassesInput.value.replace( 'frm_first', '' ).trim();
+			}
+
+			if ( 0 === itemIndex ) {
+				this.classList.add( 'frm_first' );
+				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
 			jQuery( layoutClassesInput ).trigger( 'change' );
