@@ -1187,8 +1187,7 @@ function frmAdminBuildJS() {
 
 		sortableData = jQuery( selectedItem ).data().uiSortable;
 		currentItem = sortableData.currentItem;
-		insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), sortableData.positionAbs.left );
-		// TODO looks like this can still be off by one.
+		insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), currentItem.offset().left );
 		jQuery( getFieldsInRow( currentItem.parent() ).get( insertAtIndex ) ).before( currentItem );
 		section = getSectionForFieldPlacement( currentItem );
 		formId = getFormIdForFieldPlacement( section );
