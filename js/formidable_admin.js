@@ -1067,7 +1067,7 @@ function frmAdminBuildJS() {
 			}
 
 			jQuery( layoutClassesInput ).trigger( 'change' );
-		}
+		};
 	}
 
 	function getLayoutClasses() {
@@ -2624,7 +2624,7 @@ function frmAdminBuildJS() {
 
 		popupWrapper = div();
 		popupWrapper.style.position = 'relative';
-		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup , this) );
+		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup, this ) );
 		this.parentNode.appendChild( popupWrapper );
 	}
 
@@ -2987,14 +2987,14 @@ function frmAdminBuildJS() {
 	}
 
 	function getLayoutClassName( classList ) {
-		var classes = getLayoutClasses();
-
-		for ( var index = 0; index < classes.length; ++index ) {
-			if ( classList.contains( classes[ index ] ) ) {
-				return classes[ index ];
+		var classes, index, currentClass;
+		classes = getLayoutClasses();
+		for ( index = 0; index < classes.length; ++index ) {
+			currentClass = classes[ index ];
+			if ( classList.contains( currentClass ) ) {
+				return currentClass;
 			}
 		}
-
 		return '';
 	}
 
@@ -3072,8 +3072,6 @@ function frmAdminBuildJS() {
 		groupIsActive = this.classList.contains( 'frm-selected-field-group' );
 		selectedFieldGroups = jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' );
 		numberOfSelectedGroups = selectedFieldGroups.length;
-
-		console.log({ initialCount: numberOfSelectedGroups });
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
