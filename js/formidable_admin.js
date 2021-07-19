@@ -1263,7 +1263,7 @@ function frmAdminBuildJS() {
 	// don't allow page break, embed form, captcha, summary, or section inside section field
 	// don't allow page breaks inside of field groups.
 	// don't allow field groups with sections inside of sections.
-	// TODO don't allow field groups in field groups.
+	// don't allow field groups in field groups.
 	function allowDrop( ui ) {
 		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup;
 
@@ -2642,11 +2642,16 @@ function frmAdminBuildJS() {
 	}
 
 	function getSizeOfFieldGroupFromChildElement( element ) {
-		return getFieldsInRow( jQuery( element ).closest( 'ul' ) ).length;
+		var $ul = jQuery( element ).closest( 'ul' );
+		if ( $ul.length ) {
+			return getFieldsInRow( $ul ).length;
+		}
+		// TODO get the actual size here, not just one per row.
+		return document.querySelectorAll( '.frm-selected-field-group' ).length;
 	}
 
 	function getFieldGroupPopup( sizeOfFieldGroup, childElement ) {
-		var popup, wrapper, rowLayoutOptions;
+		var popup, wrapper, rowLayoutOptions, ul;
 
 		popup = document.getElementById( 'frm_field_group_popup' );
 		if ( null === popup ) {
@@ -2662,7 +2667,12 @@ function frmAdminBuildJS() {
 		wrapper.appendChild( getRowLayoutTitle() );
 
 		rowLayoutOptions = getRowLayoutOptions( sizeOfFieldGroup );
-		maybeMarkRowLayoutAsActive( childElement.closest( 'ul.frm_sorting' ), rowLayoutOptions );
+
+		ul = childElement.closest( 'ul.frm_sorting' );
+		if ( null !== ul ) {
+			maybeMarkRowLayoutAsActive( ul, rowLayoutOptions );
+		}
+
 		wrapper.appendChild( rowLayoutOptions );
 
 		popup.appendChild( wrapper );
@@ -3197,6 +3207,9 @@ function frmAdminBuildJS() {
 				return;
 			}
 			if ( event.originalEvent.target.classList.contains( 'frm-custom-field-group-layout' ) ) {
+				return;
+			}
+			if ( event.originalEvent.target.classList.contains( 'frm-cancel-custom-field-group-layout' ) ) {
 				return;
 			}
 		}
@@ -7961,8 +7974,8 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-custom-field-group-layout', customFieldGroupLayoutInsideMergeClick );
 			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
 			$newFields.on( 'click', '#frm_field_group_popup .frm_grid_container input', focusFieldGroupInputOnClick );
-			$newFields.on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
-			$newFields.on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
+			jQuery( document ).on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
+			jQuery( document ).on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
 			$newFields.on( 'click', 'ul.frm_sorting', fieldGroupClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
 			jQuery( document ).on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
