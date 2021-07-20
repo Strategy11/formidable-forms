@@ -3366,7 +3366,11 @@ function frmAdminBuildJS() {
 						$liWrapper;
 
 					if ( ! $adjacentFields.length ) {
-						$liWrapper = $thisField.closest( 'ul.frm_sorting' ).parent();
+						if ( $thisField.is( '.edit_field_type_end_divider' ) ) {
+							$adjacentFields.length = $thisField.closest( 'li.form-field' ).siblings();
+						} else {
+							$liWrapper = $thisField.closest( 'ul.frm_sorting' ).parent();
+						}
 					}
 
 					$thisField.remove();
