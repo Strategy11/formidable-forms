@@ -865,7 +865,7 @@ function frmAdminBuildJS() {
 				}
 			},
 			stop: function( event, ui ) {
-				var moving, $previousContainerFields;
+				var moving, $previousContainerFields, $closestFieldBox;
 
 				moving = jQuery( this );
 				copyHelper && copyHelper.remove();
@@ -877,7 +877,13 @@ function frmAdminBuildJS() {
 					$previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
 					if ( $previousFieldContainer.length ) {
 						if ( ! $previousContainerFields.length ) {
-							$previousFieldContainer.closest( 'li.frm_field_box' ).remove();
+							$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
+							if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
+								// remove an empty field group, but don't remove an empty section.
+								$closestFieldBox.remove();
+							} else {
+								// TODO I think we actually need to put stuff back in here to allow for the drop again into an empty section.
+							}
 						} else {
 							syncLayoutClasses( $previousContainerFields.first() );
 						}

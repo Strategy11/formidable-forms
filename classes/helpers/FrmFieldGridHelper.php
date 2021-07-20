@@ -52,6 +52,8 @@ class FrmFieldGridHelper {
 	 */
 	private $section_size;
 
+	private $delay_begin_field_wrapper = false;
+
 	public function __construct( $nested = false ) {
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
@@ -85,7 +87,8 @@ class FrmFieldGridHelper {
 		}
 
 		if ( $this->is_frm_first ) {
-			$this->force_close_field_wrapper();
+			// TODO this messes up things in sections.
+			// $this->force_close_field_wrapper();
 		}
 
 		if ( 'divider' === $field->type && empty( $this->nested ) ) {
@@ -130,16 +133,15 @@ class FrmFieldGridHelper {
 			$this->close_field_wrapper();
 		}
 
-		if ( false === $this->parent_li && empty( $this->nested ) ) {
+		$this->delay_begin_field_wrapper = ! empty( $this->section_helper );
+		if ( false === $this->parent_li ) {
 			$this->begin_field_wrapper();
-		}
-
-		if ( ! empty( $this->section_helper ) ) {
-			$this->section_helper->maybe_begin_field_wrapper();
 		}
 	}
 
 	private function begin_field_wrapper() {
+		error_log( 'opening' );
+
 		echo '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting">';
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
@@ -178,12 +180,16 @@ class FrmFieldGridHelper {
 	}
 
 	public function sync_list_size() {
-		if ( ! empty( $this->section_helper ) ) {
-			if ( 'divider' === $this->field->type ) {
-				$this->begin_field_wrapper();
-				return;
-			}
+		if ( $this->delay_begin_field_wrapper && ! empty( $this->section_helper ) ) {
+			$this->section_helper->maybe_begin_field_wrapper();
+			$this->delay_begin_field_wrapper = false;
+		}
 
+		if ( 'divider' === $this->field->type ) {
+			return;
+		}
+
+		if ( ! empty( $this->section_helper ) ) {
 			$this->section_helper->sync_list_size();
 
 			if ( 'end_divider' !== $this->field->type ) {
@@ -215,6 +221,8 @@ class FrmFieldGridHelper {
 	private function close_field_wrapper() {
 		$this->maybe_close_section_helper();
 		$this->echo_field_group_controls();
+
+		error_log( 'closing' );
 
 		echo '</ul></li>';
 		$this->parent_li           = false;
