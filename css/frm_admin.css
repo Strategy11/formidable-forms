@@ -3200,6 +3200,18 @@ input[type="checkbox"] {
 	clear: both;
 }
 
+.frm_inner_field_container > label {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.frm_field_box:not(.edit_field_type_divider):hover > .frm_inner_field_container > label,
+.frm_field_box .divider_section_only:hover > .frm_inner_field_container > label,
+li.ui-state-default.selected > .frm_inner_field_container > label {
+	max-width: calc(100% - 40px);
+}
+
 .frm_form_settings #op-popup, /* 1Password */
 .frm_form_settings com-1password-op-button,
 .frm_conf_below .frm_conf_field_container .frm_primary_label,
@@ -8146,7 +8158,7 @@ Responsive Design
 	width: 366px;
 	height: 231px;
 	border-radius: 8px;
-	background: #FFFFFF;
+	background: #fff;
 	box-shadow: 0px 20px 48px rgba(40, 47, 54, 0.15);
 	z-index: 1;
 	box-sizing: border-box;
