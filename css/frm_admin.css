@@ -7566,7 +7566,8 @@ button.frm_choose_image_box,
 }
 
 .rtl .frm-field-action-icons {
-	text-align: left;
+	right: unset;
+	left: 2px;
 }
 
 .rtl #frm_upgrade_modal .dismiss i,
@@ -8151,6 +8152,10 @@ Responsive Design
 	box-sizing: border-box;
 	padding: 24px 0;
 	text-align: left;
+}
+
+.rtl #frm_field_group_popup {
+	text-align: right;
 }
 
 .frm-merge-fields-into-row #frm_field_group_popup {
