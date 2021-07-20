@@ -73,6 +73,7 @@ class FrmFieldGridHelper {
 		if ( 'end_divider' === $field->type ) {
 			$this->field_layout_class = '';
 			$this->active_field_size  = $this->section_size;
+			$this->maybe_close_section_helper();
 		} else {
 			$this->field_layout_class = $this->get_field_layout_class();
 			$this->active_field_size  = $this->get_size_of_class( $this->field_layout_class );
@@ -91,6 +92,14 @@ class FrmFieldGridHelper {
 			$this->section_helper = new self( true );
 			$this->section_helper->set_field( $field );
 		}
+	}
+
+	private function maybe_close_section_helper() {
+		if ( empty( $this->section_helper ) ) {
+			return;
+		}
+		$this->section_helper->force_close_field_wrapper();
+		$this->section_helper = null;
 	}
 
 	/**
@@ -121,7 +130,7 @@ class FrmFieldGridHelper {
 			$this->close_field_wrapper();
 		}
 
-		if ( false === $this->parent_li ) {
+		if ( false === $this->parent_li && empty( $this->nested ) ) {
 			$this->begin_field_wrapper();
 		}
 
@@ -131,11 +140,7 @@ class FrmFieldGridHelper {
 	}
 
 	private function begin_field_wrapper() {
-		if ( ! empty( $this->nested ) ) {
-			echo '';
-		} else {
-			echo '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting">';
-		}
+		echo '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting">';
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;
@@ -174,13 +179,18 @@ class FrmFieldGridHelper {
 
 	public function sync_list_size() {
 		if ( ! empty( $this->section_helper ) ) {
-			if ( 'end_divider' !== $this->field->type ) {
-				$this->section_helper->sync_list_size();
+			if ( 'divider' === $this->field->type ) {
+				$this->begin_field_wrapper();
 				return;
 			}
 
-			$this->section_helper->force_close_field_wrapper();
-			$this->section_helper = null;
+			$this->section_helper->sync_list_size();
+
+			if ( 'end_divider' !== $this->field->type ) {
+				return;
+			}
+
+			$this->maybe_close_section_helper();
 		}
 
 		if ( false !== $this->parent_li ) {
@@ -203,17 +213,10 @@ class FrmFieldGridHelper {
 	}
 
 	private function close_field_wrapper() {
-		if ( ! empty( $this->section_helper ) ) {
-			$this->section_helper->force_close_field_wrapper();
-			$this->section_helper = null;
-		}
-
+		$this->maybe_close_section_helper();
 		$this->echo_field_group_controls();
 
-		if ( empty( $this->nested ) ) {
-			echo '</ul></li>';
-		}
-
+		echo '</ul></li>';
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;
