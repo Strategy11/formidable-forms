@@ -1014,7 +1014,7 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldGroupControlsCount( $row, count ) {
-		var $controls = $row.find( '.frm-field-group-controls' );
+		var $controls = $row.children( '.frm-field-group-controls' );
 		if ( ! $controls.length ) {
 			$controls = jQuery( '<div>' )
 				.addClass( 'frm-field-group-controls' )
