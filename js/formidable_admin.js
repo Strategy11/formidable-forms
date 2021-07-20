@@ -7900,18 +7900,22 @@ function frmAdminBuildJS() {
 		},
 
 		buildInit: function() {
+			var loadFieldId, frmSorting, currentSection, $currentSection, $builderForm, builderArea;
+
 			if ( jQuery( '.frm_field_loading' ).length ) {
-				var loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
+				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
 				loadFields( loadFieldId );
 			}
 
 			setupSortable( 'ul.frm_sorting' );
 
 			// Show message if section has no fields inside
-			var frmSorting = jQuery( '.start_divider.frm_sorting' );
+			frmSorting = jQuery( '.start_divider.frm_sorting' );
 			for ( i = 0; i < frmSorting.length; i++ ) {
-				if ( frmSorting[i].children.length < 2 ) {
-					jQuery( frmSorting[i]).parent().children( '.frm_no_section_fields' ).addClass( 'frm_block' );
+				currentSection = frmSorting[i];
+				$currentSection = jQuery( currentSection );
+				if ( ! getFieldsInRow( $currentSection.find( 'li.frm_field_box ul.frm_sorting' ) ).length ) {
+					$currentSection.parent().find( '.frm_no_section_fields' ).addClass( 'frm_block' );
 				}
 			}
 
@@ -7944,8 +7948,8 @@ function frmAdminBuildJS() {
 			initiateMultiselect();
 			renumberPageBreaks();
 
-			var $builderForm = jQuery( builderForm );
-			var builderArea = document.getElementById( 'frm_form_editor_container' );
+			$builderForm = jQuery( builderForm );
+			builderArea = document.getElementById( 'frm_form_editor_container' );
 			$builderForm.on( 'click', '.frm_add_logic_row', addFieldLogicRow );
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
