@@ -3209,7 +3209,7 @@ input[type="checkbox"] {
 .frm_field_box:not(.edit_field_type_divider):hover > .frm_inner_field_container > label,
 .frm_field_box .divider_section_only:hover > .frm_inner_field_container > label,
 li.ui-state-default.selected > .frm_inner_field_container > label {
-	max-width: calc(100% - 40px);
+	max-width: calc(100% - 100px);
 }
 
 .frm_form_settings #op-popup, /* 1Password */
@@ -5236,6 +5236,18 @@ a.frm_action_icon:hover {
 	position: absolute;
 	top: 2px;
 	right: 2px;
+	max-width: 100%;
+}
+
+.frm-field-action-icons .frm-field-id {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 65px;
+	max-width: calc( 100% - 50px );
+	position: relative;
+	top: 2px;
 }
 
 .frm-field-action-icons a {

@@ -13,6 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_field_container">
 	<div class="frm-field-action-icons frm-show-hover">
 
+		<div class="frm-sub-label frm-field-id">
+			(ID <?php echo esc_html( $field['id'] ); ?>)
+		</div>
+
 		<?php if ( $field['type'] === 'divider' ) { ?>
 			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
 		<?php } ?>
@@ -38,14 +42,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</ul>
 		</div>
 
-		<?php
-		/*
-		// TODO do we actually just hide field id?
-		<div class="frm-sub-label alignright">
-			(ID <?php echo esc_html( $field['id'] ); ?>)
-		</div>
-		*/
-		?>
 	</div>
 
 	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
