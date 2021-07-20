@@ -140,8 +140,6 @@ class FrmFieldGridHelper {
 	}
 
 	private function begin_field_wrapper() {
-		error_log( 'opening' );
-
 		echo '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting">';
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
@@ -221,9 +219,6 @@ class FrmFieldGridHelper {
 	private function close_field_wrapper() {
 		$this->maybe_close_section_helper();
 		$this->echo_field_group_controls();
-
-		error_log( 'closing' );
-
 		echo '</ul></li>';
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
