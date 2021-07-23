@@ -1262,12 +1262,8 @@ class FrmXMLHelper {
 	public static function cdata( $str ) {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
-			if ( isset( $str[0] ) && isset( $str[0]['box'] ) ) {
-				$str = maybe_serialize( $str );
-			} else {
-				$str = json_encode( $str );
-			}
-		} elseif ( seems_utf8( $str ) == false ) {
+			$str = json_encode( $str );
+		} elseif ( seems_utf8( $str ) === false ) {
 			$str = utf8_encode( $str );
 		}
 
