@@ -925,6 +925,8 @@ function frmAdminBuildJS() {
 					}
 				});
 
+				maybeFixPlaceholderParent( ui, event );
+
 				$row = ui.placeholder.parent();
 				$children = getFieldsInRow( $row );
 				currentIndex = determineIndexBasedOffOfMousePositionInRow( $row, event.clientX );
@@ -949,6 +951,15 @@ function frmAdminBuildJS() {
 		jQuery( sort ).sortable( opts );
 
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+	}
+
+	function maybeFixPlaceholderParent( ui, event ) {
+		var elementFromPoint, wrapper;
+		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
+		wrapper = elementFromPoint.closest( '.frm_sorting' );
+		if ( null !== wrapper && 'frm-show-fields' !== wrapper.id ) {
+			ui.placeholder.appendTo( wrapper );
+		}
 	}
 
 	function getFieldsInRow( $row ) {
