@@ -980,6 +980,10 @@ class FrmXMLHelper {
 				$v         = $field_obj->get_file_id( $v );
 			}
 
+			if ( 'frm_dyncontent' === $k && is_array( $v ) ) {
+				$v = json_encode( $v );
+			}
+
 			update_post_meta( $post_id, $k, $v );
 
 			unset( $k, $v );
