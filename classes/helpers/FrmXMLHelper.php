@@ -778,6 +778,10 @@ class FrmXMLHelper {
 				$post_id = wp_insert_post( $post );
 				self::maybe_update_custom_css( $custom_css );
 			} else {
+				if ( $post['post_type'] === 'frm_display' ) {
+					$post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
+					$post['post_content'] = FrmAppHelper::prepare_and_encode( $post['post_content'] );
+				}
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
 			}
@@ -859,6 +863,10 @@ class FrmXMLHelper {
 			if ( ! empty( $frm_duplicate_ids ) ) {
 
 				if ( $m['key'] == 'frm_dyncontent' ) {
+					if ( 'frm_dyncontent' === $m['key'] ) {
+						$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
+						$m['value'] = FrmAppHelper::prepare_and_encode( $m['value'] );
+					}
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
 				} elseif ( $m['key'] == 'frm_options' ) {
 
