@@ -110,7 +110,7 @@ if ( $display['clear_on_focus'] ) {
  * @param array        $display   Display data.
  * @param array        $values    Field values.
  */
-do_action( 'frm_before_field_options', $field, $field_obj, $display, $values );
+do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 'values' ) );
 
 ?>
 
