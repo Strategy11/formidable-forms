@@ -7928,7 +7928,7 @@ function frmAdminBuildJS() {
 		},
 
 		buildInit: function() {
-			var loadFieldId, frmSorting, currentSection, $currentSection, $builderForm, builderArea;
+			var loadFieldId, $builderForm, builderArea;
 
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
