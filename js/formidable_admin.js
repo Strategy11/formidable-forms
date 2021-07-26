@@ -1241,7 +1241,7 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				var $siblings, replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				$siblings = $placeholder.siblings( 'li.form-field' );
+				$siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
 				if ( ! $siblings.length ) {
 					// if dragging into a new row, we need to wrap the li first.
 					replaceWith = wrapFieldLi( msg );
@@ -1254,6 +1254,7 @@ function frmAdminBuildJS() {
 				if ( $siblings.length ) {
 					syncLayoutClasses( $siblings.first() );
 				}
+				toggleSectionHolder();
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
 				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
@@ -4506,7 +4507,11 @@ function frmAdminBuildJS() {
 		}
 
 		var sectionFields = $section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' );
-		if ( $section.children( 'li' ).length < 2 ) {
+		console.log({
+			sectionFields,
+			fields: getFieldsInRow( $section.find( 'ul.frm_sorting' ) )
+		});
+		if ( ! getFieldsInRow( $section.find( 'ul.frm_sorting' ) ).length ) {
 			sectionFields.addClass( 'frm_block' );
 		} else {
 			sectionFields.removeClass( 'frm_block' );
