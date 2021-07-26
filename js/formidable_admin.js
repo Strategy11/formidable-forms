@@ -956,6 +956,9 @@ function frmAdminBuildJS() {
 	function maybeFixPlaceholderParent( ui, event ) {
 		var elementFromPoint, wrapper;
 		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
+		if ( null === elementFromPoint ) {
+			return;
+		}
 		wrapper = elementFromPoint.closest( '.frm_sorting' );
 		if ( null !== wrapper && 'frm-show-fields' !== wrapper.id ) {
 			ui.placeholder.appendTo( wrapper );
@@ -1593,7 +1596,8 @@ function frmAdminBuildJS() {
 			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
 			$thisSection = jQuery( section ),
 			type = field.getAttribute( 'data-type' ),
-			toggled = false;
+			toggled = false,
+			$parentSection;
 
 		setupSortable( section );
 
@@ -1611,7 +1615,7 @@ function frmAdminBuildJS() {
 		if ( $thisSection.length ) {
 			$thisSection.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).addClass( 'frm_block' );
 		} else {
-			var $parentSection = jQuery( field ).closest( 'ul.frm_sorting' );
+			$parentSection = jQuery( field ).closest( 'ul.frm_sorting.start_divider' );
 			if ( $parentSection.length ) {
 				toggleOneSectionHolder( $parentSection );
 				toggled = true;
@@ -4502,20 +4506,24 @@ function frmAdminBuildJS() {
 	}
 
 	function toggleOneSectionHolder( $section ) {
+		var noSectionFields, $rows, length, index, sectionHasFields;
+
 		if ( $section.length === 0 ) {
 			return;
 		}
 
-		var sectionFields = $section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' );
-		console.log({
-			sectionFields,
-			fields: getFieldsInRow( $section.find( 'ul.frm_sorting' ) )
-		});
-		if ( ! getFieldsInRow( $section.find( 'ul.frm_sorting' ) ).length ) {
-			sectionFields.addClass( 'frm_block' );
-		} else {
-			sectionFields.removeClass( 'frm_block' );
+		$rows = $section.find( 'ul.frm_sorting' );
+		sectionHasFields = false;
+		length = $rows.length;
+		for ( index = 0; index < length; ++index ) {
+			if ( 0 !== getFieldsInRow( jQuery( $rows.get( index ) ) ).length ) {
+				sectionHasFields = true;
+				break;
+			}
 		}
+
+		noSectionFields = $section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).get( 0 );
+		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
 	}
 
 	function slideDown() {
@@ -7929,16 +7937,6 @@ function frmAdminBuildJS() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			// Show message if section has no fields inside
-			frmSorting = jQuery( '.start_divider.frm_sorting' );
-			for ( i = 0; i < frmSorting.length; i++ ) {
-				currentSection = frmSorting[i];
-				$currentSection = jQuery( currentSection );
-				if ( ! getFieldsInRow( $currentSection.find( 'li.frm_field_box ul.frm_sorting' ) ).length ) {
-					$currentSection.parent().find( '.frm_no_section_fields' ).addClass( 'frm_block' );
-				}
-			}
-
 			jQuery( '.field_type_list > li:not(.frm_noallow)' ).draggable({
 				connectToSortable: '#frm-show-fields',
 				helper: 'clone',
@@ -8070,6 +8068,7 @@ function frmAdminBuildJS() {
 			maybeDisableAddSummaryBtn();
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
+			toggleSectionHolder();
 		},
 
 		settingsInit: function() {
