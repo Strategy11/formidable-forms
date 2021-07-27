@@ -5514,13 +5514,13 @@ span.howto {
 	box-sizing: border-box;
 }
 
-#frm-show-fields ul.frm_sorting:hover > .frm-field-group-controls:not([number-of-fields="1"]),
+.frm-field-group-hover-target > .frm-field-group-controls:not([number-of-fields="1"]),
 #frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup > .frm-field-group-controls {
 	display: block;
 }
 
-#frm-show-fields ul.frm_sorting:hover,
-#frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup {
+.frm-field-group-hover-target:hover,
+.frm-field-group-hover-target.frm-has-open-field-group-popup {
 	background: rgba(65, 153, 253, 0.07);
 }
 
@@ -8305,6 +8305,6 @@ Responsive Design
 	background: #C4C4C4;
 }
 
-.frm-multiselect-key-is-down li.form-field {
+.frm-multiselect-key-is-down li.form-field:not(.edit_field_type_divider) {
 	pointer-events: none;
 }

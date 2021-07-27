@@ -961,6 +961,7 @@ function frmAdminBuildJS() {
 		}
 		wrapper = elementFromPoint.closest( '.frm_sorting' );
 		if ( null !== wrapper && 'frm-show-fields' !== wrapper.id ) {
+			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
 			ui.placeholder.appendTo( wrapper );
 		}
 	}
@@ -1562,6 +1563,26 @@ function frmAdminBuildJS() {
 	function checkForMultiselectKeysOnMouseMove( event ) {
 		var keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
 		jQuery( document.getElementById( 'frm_builder_page' ) ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
+		checkForActiveHoverTarget( event, keyIsDown );
+	}
+
+	function checkForActiveHoverTarget( event, keyIsDown ) {
+		var previousHoverTarget, elementFromPoint, list;
+
+		// TODO if we are holding down a key, we want to make sure that we're ignoring wrappers for any of our selected fields.
+
+		previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		if ( null !== previousHoverTarget ) {
+			previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
+		}
+
+		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
+		if ( null !== elementFromPoint ) {
+			list = elementFromPoint.closest( 'ul.frm_sorting' );
+			if ( null !== list ) {
+				list.classList.add( 'frm-field-group-hover-target' );
+			}
+		}
 	}
 
 	function onFieldActionDropdownShow() {
@@ -1665,6 +1686,7 @@ function frmAdminBuildJS() {
 
 	function deselectFields() {
 		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
+		unselectFieldGroups();
 	}
 
 	function scrollToField( field ) {
@@ -3159,18 +3181,23 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldGroupClick( e ) {
-		var ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, selectedFieldGroups, numberOfSelectedGroups, $firstGroup, $range;
+		var hoverTarget, ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, $selectedFieldGroups, numberOfSelectedGroups, $firstGroup, $range;
 
 		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
 			// only continue if the group itself was clicked / ignore when a field is clicked.
 			return;
 		}
 
+		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		if ( hoverTarget === null ) {
+			return;
+		}
+
 		ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
 		shiftKeyIsDown = e.shiftKey;
-		groupIsActive = this.classList.contains( 'frm-selected-field-group' );
-		selectedFieldGroups = jQuery( this.parentNode ).siblings().find( '.frm-selected-field-group' );
-		numberOfSelectedGroups = selectedFieldGroups.length;
+		groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		$selectedFieldGroups = jQuery( '.frm-selected-field-group' );
+		numberOfSelectedGroups = $selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
@@ -3179,19 +3206,19 @@ function frmAdminBuildJS() {
 				if ( groupIsActive ) {
 					// unselect if holding ctrl or cmd and the group was already active.
 					--numberOfSelectedGroups;
-					this.classList.remove( 'frm-selected-field-group' );
+					hoverTarget.classList.remove( 'frm-selected-field-group' );
 					return; // exit early to avoid adding back frm-selected-field-group
 				} else {
 					++numberOfSelectedGroups;
 				}
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
-				$firstGroup = selectedFieldGroups.first();
+				$firstGroup = $selectedFieldGroups.first();
 
-				if ( $firstGroup.parent().index() < jQuery( this.parentNode ).index() ) {
-					$range = $firstGroup.parent().nextUntil( this.parentNode );
+				if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
+					$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
 				} else {
-					$range = $firstGroup.parent().prevUntil( this.parentNode );
+					$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
 				}
 
 				$range.each(
@@ -3218,7 +3245,7 @@ function frmAdminBuildJS() {
 
 		clearSettingsBox(); // unselect any fields if one is selected.
 
-		this.classList.add( 'frm-selected-field-group' );
+		hoverTarget.classList.add( 'frm-selected-field-group' );
 
 		jQuery( document ).off( 'click', unselectFieldGroups );
 		jQuery( document ).on( 'click', unselectFieldGroups );
@@ -5110,9 +5137,10 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		// TODO selecting multiple groups within a section is removed here. We should exit early.
+
 		deselectFields();
 		$thisobj.addClass( 'selected' );
-		unselectFieldGroups();
 		showFieldOptions( obj );
 	}
 
