@@ -890,7 +890,7 @@ function frmAdminBuildJS() {
 					}
 					if ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) && ui.item.hasClass( 'form-field' ) ) {
 						// dragging an item into a new row.
-						jQuery( ui.item ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
+						wrapFieldLiInPlace( ui.item );
 						if ( $previousContainerFields.length ) {
 							// only if the previous container had other sibling fields, remove the previous layout class.
 							syncLayoutClasses( ui.item );
@@ -954,6 +954,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeFixPlaceholderParent( ui, event ) {
+		// TODO it looks like this is causing issues with anything that is a child of frm-show-fields not working at all.
 		var elementFromPoint, wrapper;
 		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
 		if ( null === elementFromPoint ) {
@@ -1168,10 +1169,16 @@ function frmAdminBuildJS() {
 	 * @param {object} currentItem
 	 */
 	function updateFieldAfterMovingBetweenSections( currentItem ) {
-		var fieldId = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
-		var section = getSectionForFieldPlacement( currentItem );
-		var formId = getFormIdForFieldPlacement( section );
-		var sectionId = getSectionIdForFieldPlacement( section );
+		var fieldId, section, formId, sectionId;
+
+		fieldId = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
+		section = getSectionForFieldPlacement( currentItem );
+		formId = getFormIdForFieldPlacement( section );
+		sectionId = getSectionIdForFieldPlacement( section );
+
+		if ( currentItem.parent().hasClass( 'start_divider' ) ) {
+			wrapFieldLiInPlace( currentItem );
+		}
 
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
@@ -1608,6 +1615,10 @@ function frmAdminBuildJS() {
 			.html(
 				jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
 			);
+	}
+
+	function wrapFieldLiInPlace( li ) {
+		jQuery( li ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
 	}
 
 	function afterAddField( msg, addFocus ) {
