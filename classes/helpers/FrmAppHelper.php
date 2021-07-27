@@ -2286,7 +2286,7 @@ class FrmAppHelper {
 	}
 
 	private static function prepare_action_slashes( $val, $key, &$post_content ) {
-		if ( ! isset( $post_content[ $key ] ) ) {
+		if ( ! isset( $post_content[ $key ] ) || is_numeric( $val ) ) {
 			return;
 		}
 
