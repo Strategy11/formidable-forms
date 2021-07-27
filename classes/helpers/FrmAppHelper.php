@@ -2742,7 +2742,7 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm_images_dropdown <?php echo esc_attr( $args['classes'] ); ?>">
-			<input<?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<input<?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 
 			<button type="button" class="frm_images_dropdown__toggle"><?php echo esc_html( $selected_text ); ?></button>
 
