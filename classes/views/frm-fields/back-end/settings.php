@@ -101,7 +101,7 @@ if ( $display['clear_on_focus'] ) {
 }
 
 /**
- * Fires after printed the field primary options collapsed section.
+ * Fires after printing the primary options section of field.
  *
  * @since 4.11.01 Added `$display` and `$values`.
  *

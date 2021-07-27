@@ -45,7 +45,7 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <?php
 if ( $values['fields'] ) {
 	/**
-	 * Allows modifying the list of fields in the form.
+	 * Allows modifying the list of fields in the frontend form.
 	 *
 	 * @since 4.12
 	 *
