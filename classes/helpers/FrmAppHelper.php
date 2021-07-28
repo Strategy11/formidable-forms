@@ -2816,7 +2816,7 @@ class FrmAppHelper {
 		 * @param string $output The output.
 		 * @param array  $args   Passed arguments.
 		 */
-		echo apply_filters( 'frm_images_dropdown_output', $output, $args );
+		echo apply_filters( 'frm_images_dropdown_output', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -2870,6 +2870,7 @@ class FrmAppHelper {
 					$args['options'][ $key ]['custom_attrs']['data-medium']  = 'builder';
 					$args['options'][ $key ]['custom_attrs']['data-content'] = 'image-options';
 				} else {
+					// translators: Add-on name.
 					$upgrade_label   = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
 					$upgrade_message = '';
 					$upgrade_link    = '';
