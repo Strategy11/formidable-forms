@@ -857,6 +857,11 @@ class FrmXMLHelper {
 		self::maybe_editing_post( $post );
 	}
 
+	/**
+	 * @param array    $post
+	 * @param stdClass $meta
+	 * @param array    $imported
+	 */
 	private static function populate_postmeta( &$post, $meta, $imported ) {
 		global $frm_duplicate_ids;
 
@@ -866,17 +871,16 @@ class FrmXMLHelper {
 		);
 
 		//switch old form and field ids to new ones
-		if ( $m['key'] == 'frm_form_id' && isset( $imported['forms'][ (int) $m['value'] ] ) ) {
+		if ( 'frm_form_id' === $m['key'] && isset( $imported['forms'][ (int) $m['value'] ] ) ) {
 			$m['value'] = $imported['forms'][ (int) $m['value'] ];
 		} else {
 			$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
 
 			if ( ! empty( $frm_duplicate_ids ) ) {
-
 				if ( 'frm_dyncontent' === $m['key'] ) {
 					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
-				} elseif ( $m['key'] === 'frm_options' ) {
+				} elseif ( 'frm_options' === $m['key'] ) {
 
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
 						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
