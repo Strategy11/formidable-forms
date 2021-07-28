@@ -873,10 +873,8 @@ class FrmXMLHelper {
 
 			if ( ! empty( $frm_duplicate_ids ) ) {
 
-				if ( $m['key'] === 'frm_dyncontent' ) {
-					if ( 'frm_dyncontent' === $m['key'] ) {
-						$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
-					}
+				if ( 'frm_dyncontent' === $m['key'] ) {
+					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
 				} elseif ( $m['key'] === 'frm_options' ) {
 
