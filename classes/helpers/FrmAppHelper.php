@@ -2711,7 +2711,8 @@ class FrmAppHelper {
 	 *     Arguments.
 	 *
 	 *     @type string  $selected    Selected value.
-	 *     @type array[] $options     Array of options with keys are option values and values are array contain `text` and `svg`.
+	 *     @type array[] $options     Array of options with keys are option values and values are array.
+	 *                                The option array contains `text`, `svg` and `custom_atts`.
 	 *     @type string  $classes     Custom CSS classes for the wrapper element.
 	 *     @type array   $input_attrs Attributes of value input.
 	 * }
@@ -2740,6 +2741,8 @@ class FrmAppHelper {
 		foreach ( $input_attrs as $key => $input_attr ) {
 			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
 		}
+
+		ob_start();
 		?>
 		<div class="frm_images_dropdown <?php echo esc_attr( $args['classes'] ); ?>">
 			<input<?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
@@ -2762,36 +2765,30 @@ class FrmAppHelper {
 						$image = '';
 					}
 
-					$custom_attrs = '';
-					$classes      = 'frm_images_dropdown__option';
+					// Handle custom classes.
+					$classes = 'frm_images_dropdown__option';
 					if ( $args['selected'] === $key || is_numeric( $args['selected'] ) && is_numeric( $key ) && $args['selected'] == $key ) {
 						$classes .= ' frm_images_dropdown__option--selected';
 					}
-					if ( ! empty( $args['show_upgrade'] ) || ! empty( $option['show_upgrade'] ) ) {
-						$classes      .= ' frm_noallow frm_show_upgrade';
-						$custom_attrs .= ' data-upgrade="' . esc_attr__( 'Image Options', 'formidable' ) . '"';
-						$custom_attrs .= ' data-message="' . esc_attr( __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . self::plugin_url() . '/images/image-options.png" />' ) . '"';
-						$custom_attrs .= ' data-medium="builder" data-content="image-options"';
-					} elseif ( ! empty( $option['addon'] ) ) {
-						$classes      .= ' frm_noallow frm_show_upgrade';
 
-						$upgrade_label   = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
-						$upgrade_message = '';
-						$upgrade_link    = '';
-						$upgrading       = FrmAddonsController::install_link( $option['addon'] );
-						if ( isset( $upgrading['url'] ) ) {
-							$install_data = wp_json_encode( $upgrading );
-						} else {
-							$install_data = '';
+					if ( ! empty( $option['custom_attrs']['class'] ) ) {
+						$classes .= ' ' . $option['custom_attrs']['class'];
+					}
+
+					// Handle custom attributes.
+					$custom_attrs = '';
+					if ( ! empty( $option['custom_attrs'] ) && is_array( $option['custom_attrs'] ) ) {
+						$custom_attrs_arr = array();
+
+						foreach ( $option['custom_attrs'] as $key => $value ) {
+							if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
+								continue;
+							}
+
+							$custom_attrs_arr[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
 						}
-						$requires = FrmFormsHelper::get_plan_required( $upgrading );
 
-						$custom_attrs .= ' data-upgrade="' . esc_attr( $upgrade_label ) . '"';
-						$custom_attrs .= ' data-message="' . esc_attr( $upgrade_message ) . '"';
-						$custom_attrs .= ' data-link="' . esc_attr( $upgrade_link ) . '"';
-						$custom_attrs .= ' data-medium="builder"';
-						$custom_attrs .= ' data-oneclick="' . esc_attr( $install_data ) . '"';
-						$custom_attrs .= ' data-requires="' . esc_attr( $requires ) . '"';
+						$custom_attrs = implode( ' ', $custom_attrs_arr );
 					}
 					?>
 					<button type="button" class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $key ); ?>"<?php echo $custom_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
@@ -2808,6 +2805,108 @@ class FrmAppHelper {
 				?>
 			</div>
 		</div>
+		<?php
+		$output = ob_get_clean();
+
+		/**
+		 * Allows modifying the output of FrmAppHelper::images_dropdown() method.
+		 *
+		 * @since 4.12
+		 *
+		 * @param string $output The output.
+		 * @param array  $args   Passed arguments.
+		 */
+		echo apply_filters( 'frm_images_dropdown_output', $output, $args );
+	}
+
+	/**
+	 * Shows Display format setting of Radio field.
+	 *
+	 * @since 4.12
+	 *
+	 * @param array $field Field data.
+	 */
+	public static function show_radio_display_format( $field ) {
+		$args = array(
+			'selected' => '0',
+			'options'  => array(),
+		);
+
+		$options = array(
+			'0'       => array(
+				'text' => __( 'Simple radio button', 'formidable' ),
+				'svg'  => 'frm_simple_radio',
+			),
+			'1'       => array(
+				'text'  => __( 'Use images for radio button', 'formidable' ),
+				'svg'   => 'frm_image_as_option',
+				'addon' => 'pro',
+			),
+			'buttons' => array(
+				'text'  => __( 'Display options as buttons', 'formidable' ),
+				'svg'   => 'frm_button_as_option',
+				'addon' => 'pro',
+			),
+		);
+
+		/**
+		 * Allows modifying the options of Display format setting of Radio field.
+		 *
+		 * @since 4.12
+		 *
+		 * @param array $options Options.
+		 */
+		$options = apply_filters( 'frm_radio_display_format_options', $options );
+
+		foreach ( $options as $key => $option ) {
+			$args['options'][ $key ] = $option;
+
+			if ( ! empty( $option['addon'] ) ) {
+				$args['options'][ $key ]['custom_attrs'] = array( 'class' => 'frm_noallow frm_show_upgrade' );
+
+				if ( 'pro' === $option['addon'] ) {
+					$args['options'][ $key ]['custom_attrs']['data-upgrade'] = __( 'Image Options', 'formidable' );
+					$args['options'][ $key ]['custom_attrs']['data-message'] = __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . self::plugin_url() . '/images/image-options.png" />';
+					$args['options'][ $key ]['custom_attrs']['data-medium']  = 'builder';
+					$args['options'][ $key ]['custom_attrs']['data-content'] = 'image-options';
+				} else {
+					$upgrade_label   = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
+					$upgrade_message = '';
+					$upgrade_link    = '';
+					$upgrading       = FrmAddonsController::install_link( $option['addon'] );
+					if ( isset( $upgrading['url'] ) ) {
+						$install_data = wp_json_encode( $upgrading );
+					} else {
+						$install_data = '';
+					}
+					$requires = FrmFormsHelper::get_plan_required( $upgrading );
+
+					$args['options'][ $key ]['custom_attrs']['data-upgrade']  = $upgrade_label;
+					$args['options'][ $key ]['custom_attrs']['data-message']  = $upgrade_message;
+					$args['options'][ $key ]['custom_attrs']['data-link']     = $upgrade_link;
+					$args['options'][ $key ]['custom_attrs']['data-medium']   = 'builder';
+					$args['options'][ $key ]['custom_attrs']['data-oneclick'] = $install_data;
+					$args['options'][ $key ]['custom_attrs']['data-requires'] = $requires;
+				}
+
+				unset( $args['options'][ $key ]['addon'] );
+			}
+		}
+
+		/**
+		 * Allows modifying the arguments of Display format setting of Radio field.
+		 *
+		 * @since 4.12
+		 *
+		 * @param array $args  Arguments.
+		 * @param array $field Field data.
+		 */
+		$args = apply_filters( 'frm_radio_display_format_args', $args, $field );
+		?>
+		<p id="frm_display_format_<?php echo intval( $field['id'] ); ?>_container" class="frm_form_field">
+			<label for="frm_image_options_<?php echo intval( $field['id'] ); ?>"><?php esc_html_e( 'Display format', 'formidable' ); ?></label>
+			<?php self::images_dropdown( $args ); ?>
+		</p>
 		<?php
 	}
 
