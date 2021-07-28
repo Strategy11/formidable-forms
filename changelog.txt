@@ -1,4 +1,8 @@
 == Changelog ==
+= 4.11.05 =
+* New: Improved support for importing grid and table view content.
+* Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
+
 = 4.11.04 =
 * New: The first field with an error will now automatically get focus when a form is submitted for better accessibility and improved user experience.
 * Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.

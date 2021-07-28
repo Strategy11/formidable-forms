@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 4.7
-Tested up to: 5.7.2
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 4.11.04
+Stable tag: 4.11.05
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 4.11.05 =
+* New: Improved support for importing grid and table view content.
+* Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
+
 = 4.11.04 =
 * New: The first field with an error will now automatically get focus when a form is submitted for better accessibility and improved user experience.
 * Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
@@ -472,8 +476,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Date fields were not properly detecting duplicate entries.
 * Fix: Conditionals were not properly fading in when the form block was added to a page.
 * Fix: Actions would occasionally conflict if multiple were added too quickly.
-
-= 4.10.02 =
-* New: Added support for in-theme previews for more themes including Twenty Twenty, Customizr, and more.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
