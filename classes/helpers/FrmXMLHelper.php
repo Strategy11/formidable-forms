@@ -779,8 +779,7 @@ class FrmXMLHelper {
 				self::maybe_update_custom_css( $custom_css );
 			} else {
 				if ( $post['post_type'] === 'frm_display' ) {
-					$post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
-					$post['post_content'] = FrmAppHelper::prepare_and_encode( $post['post_content'] );
+					$post['post_content'] = self::maybe_prepare_json_view_content( $post['post_content'] );
 				}
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
@@ -814,6 +813,18 @@ class FrmXMLHelper {
 		self::maybe_update_stylesheet( $imported );
 
 		return $imported;
+	}
+
+	/**
+	 * @param string $content
+	 * @return string
+	 */
+	private static function maybe_prepare_json_view_content( $content ) {
+		$maybe_decoded = FrmAppHelper::maybe_json_decode( $content );
+		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0] ) && isset( $maybe_decoded[0]['box'] ) ) {
+			return FrmAppHelper::prepare_and_encode( $maybe_decoded );
+		}
+		return $content;
 	}
 
 	private static function populate_post( &$post, $item, $imported ) {
@@ -862,13 +873,12 @@ class FrmXMLHelper {
 
 			if ( ! empty( $frm_duplicate_ids ) ) {
 
-				if ( $m['key'] == 'frm_dyncontent' ) {
+				if ( $m['key'] === 'frm_dyncontent' ) {
 					if ( 'frm_dyncontent' === $m['key'] ) {
-						$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
-						$m['value'] = FrmAppHelper::prepare_and_encode( $m['value'] );
+						$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					}
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
-				} elseif ( $m['key'] == 'frm_options' ) {
+				} elseif ( $m['key'] === 'frm_options' ) {
 
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
 						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
