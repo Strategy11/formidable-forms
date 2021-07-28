@@ -82,4 +82,41 @@ class test_FrmXMLHelper extends FrmUnitTest {
 			$saved
 		);
 	}
+
+	/**
+	 * @covers FrmXMLHelper::populate_postmeta
+	 */
+	public function test_populate_postmeta() {
+		$post             = array();
+		$meta             = new stdClass();
+		$meta->meta_key   = 'frm_dyncontent';
+		$meta->meta_value = '[{"box":1,"content":"<div id=\"box_1\">Box 1 Content<\/div>"},{"box":2,"content":"Box 2 Content\nBox 2 Line 2"}]';
+		$imported         = array(
+			'forms' => array(),
+		);
+
+		$this->populate_postmeta( $post, $meta, $imported );
+
+		$this->assertTrue( array_key_exists( 'postmeta', $post ) );
+		$this->assertTrue( ! empty( $post['postmeta'] ) );
+		$this->assertTrue( array_key_exists( 'frm_dyncontent', $post['postmeta'] ) );
+		$this->assertTrue( is_array( $post['postmeta']['frm_dyncontent'] ) );
+		$this->assertEquals(
+			array(
+				array(
+					'box'     => 1,
+					'content' => '<div id=\"box_1\">Box 1 Content<\/div>',
+				),
+				array(
+					'box'     => 2,
+					'content' => 'Box 2 Content\nBox 2 Line 2',
+				),
+			),
+			$post['postmeta']['frm_dyncontent']
+		);
+	}
+
+	private function populate_postmeta( &$post, $meta, $imported ) {
+		$this->run_private_method( array( 'FrmXMLHelper', 'populate_postmeta' ), array( &$post, $meta, $imported ) );
+	}
 }
