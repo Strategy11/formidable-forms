@@ -19,6 +19,14 @@ jQuery( document ).ready( function() {
     if ( typeof tb_remove === 'function' ) { // eslint-disable-line camelcase
         frmAdminPopup.init();
     }
+
+	var submenu_item = document.querySelector( '.frm-upgrade-submenu' );
+	if ( null !== submenu_item ) {
+		var li = submenu_item.parentNode.parentNode;
+		if ( li ) {
+			li.classList.add( 'frm-submenu-highlight' );
+		}
+	}
 });
 
 function frm_install_now() { // eslint-disable-line camelcase
