@@ -5520,8 +5520,12 @@ span.howto {
 	display: block;
 }
 
-.frm-field-group-hover-target:hover,
-.frm-field-group-hover-target.frm-has-open-field-group-popup {
+#frm-show-fields .frm-field-group-controls svg {
+	pointer-events: none;
+}
+
+.frm-field-group-hover-target,
+.frm-has-open-field-group-popup {
 	background: rgba(65, 153, 253, 0.07);
 }
 

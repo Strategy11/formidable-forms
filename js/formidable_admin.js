@@ -1035,7 +1035,7 @@ function frmAdminBuildJS() {
 			$controls = jQuery( '<div>' )
 				.addClass( 'frm-field-group-controls' )
 				.html(
-					'<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>' +
+					'<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>' +
 					'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
 				);
 			$row.append( $controls );
@@ -1574,21 +1574,35 @@ function frmAdminBuildJS() {
 	}
 
 	function checkForActiveHoverTarget( event, keyIsDown ) {
-		var previousHoverTarget, elementFromPoint, list;
+		var elementFromPoint, list;
 
 		// TODO if we are holding down a key, we want to make sure that we're ignoring wrappers for any of our selected fields.
 
-		previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
+		if ( null !== elementFromPoint && ! elementFromPoint.classList.contains( 'edit_field_type_divider' ) ) {
+
+			list = elementFromPoint.closest( 'ul.frm_sorting' );
+
+			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
+				maybeRemoveGroupHoverTarget();
+				list.classList.add( 'frm-field-group-hover-target' );
+				jQuery( '#wpbody-content' ).on( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
+			}
+		}
+	}
+
+	function maybeRemoveGroupHoverTarget(  ) {
+		var previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 		if ( null !== previousHoverTarget ) {
+			jQuery( '#wpbody-content' ).off( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 			previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
 		}
+	}
 
-		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
-		if ( null !== elementFromPoint ) {
-			list = elementFromPoint.closest( 'ul.frm_sorting' );
-			if ( null !== list ) {
-				list.classList.add( 'frm-field-group-hover-target' );
-			}
+	function maybeRemoveHoverTargetOnMouseMove( event ) {
+		var elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
+		if ( null !== elementFromPoint && null !== elementFromPoint.closest( '#frm-show-fields' ) ) {
+			return;
 		}
 	}
 
@@ -8048,7 +8062,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
-			$newFields.on( 'click', '.frm-field-group-controls > svg:first-child', clickFieldGroupLayout );
+			$newFields.on( 'click', '.frm-field-group-controls > span:first-child', clickFieldGroupLayout );
 			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
 			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
