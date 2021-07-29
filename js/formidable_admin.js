@@ -391,7 +391,7 @@ function frmAdminBuildJS() {
 		$confirmMessage.empty();
 
 		if ( caution ) {
-			frmCaution = document.createElement( 'span' );
+			frmCaution = document.createElement( 'div' );
 			frmCaution.classList.add( 'frm-caution' );
 			frmCaution.appendChild( document.createTextNode( caution ) );
 			$confirmMessage.append( frmCaution );
@@ -2609,19 +2609,23 @@ function frmAdminBuildJS() {
 		var link, lookupBlock,
 			fieldID = this.name.replace( 'field_options[data_type_', '' ).replace( ']', '' );
 
+		link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID ).parentNode;
+
 		if ( this.value === 'text' ) {
 			lookupBlock = document.getElementById( 'frm_watch_lookup_block_' + fieldID );
 			if ( lookupBlock !== null ) {
-				// Clear the Watch Fields option
+				// Clear and hide the Watch Fields option
 				lookupBlock.innerHTML = '';
+				link.classList.add( 'frm_hidden' );
 
 				// Hide the Watch Fields row
-				link = document.getElementById( 'frm_add_watch_lookup_link_' + fieldID ).parentNode;
-				link.style.display = 'none';
 				link.previousElementSibling.style.display = 'none';
 				link.previousElementSibling.previousElementSibling.style.display = 'none';
 				link.previousElementSibling.previousElementSibling.previousElementSibling.style.display = 'none';
 			}
+		} else {
+			// Show the Watch Fields option
+			link.classList.remove( 'frm_hidden' );
 		}
 
 		toggleMultiSelect( fieldID, this.value );
