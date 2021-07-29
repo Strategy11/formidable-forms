@@ -1703,15 +1703,17 @@ function frmAdminBuildJS() {
 		initiateMultiselect();
 	}
 
-	function clearSettingsBox() {
+	function clearSettingsBox( preventFieldGroups ) {
 		jQuery( '#new_fields .frm-single-settings' ).addClass( 'frm_hidden' );
 		jQuery( '#frm-options-panel > .frm-single-settings' ).removeClass( 'frm_hidden' );
-		deselectFields();
+		deselectFields( preventFieldGroups );
 	}
 
-	function deselectFields() {
+	function deselectFields( preventFieldGroups ) {
 		jQuery( 'li.ui-state-default.selected' ).removeClass( 'selected' );
-		unselectFieldGroups();
+		if ( ! preventFieldGroups ) {
+			unselectFieldGroups();
+		}
 	}
 
 	function scrollToField( field ) {
@@ -3268,7 +3270,7 @@ function frmAdminBuildJS() {
 			unselectFieldGroups();
 		}
 
-		clearSettingsBox(); // unselect any fields if one is selected.
+		clearSettingsBox( true ); // unselect any fields if one is selected.
 
 		hoverTarget.classList.add( 'frm-selected-field-group' );
 
