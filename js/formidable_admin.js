@@ -3888,7 +3888,10 @@ function frmAdminBuildJS() {
 
 	function clickVis( e ) {
 		/*jshint validthis:true */
-		var currentClass = e.target.classList;
+		var currentClass, originalList;
+
+		currentClass = e.target.classList;
+
 		if ( currentClass.contains( 'frm-collapse-page' ) || currentClass.contains( 'frm-sub-label' ) || e.target.closest( '.dropdown' ) !== null ) {
 			return;
 		}
@@ -3897,9 +3900,12 @@ function frmAdminBuildJS() {
 			e.stopPropagation();
 		}
 
-		if ( this.classList.contains( 'edit_field_type_divider' ) && ! e.originalEvent.target.closest( 'ul.frm_sorting' ).classList.contains( 'edit_field_type_divider' ) ) {
-			// prevent section click if clicking a field group within a section.
-			return;
+		if ( this.classList.contains( 'edit_field_type_divider' ) ) {
+			originalList = e.originalEvent.target.closest( 'ul.frm_sorting' );
+			if ( originalList.classList.contains( 'edit_field_type_divider' ) ) {
+				// prevent section click if clicking a field group within a section.
+				return;
+			}
 		}
 
 		clickAction( this );
