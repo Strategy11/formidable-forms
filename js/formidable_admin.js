@@ -3896,6 +3896,12 @@ function frmAdminBuildJS() {
 		if ( this.closest( '.start_divider' ) !== null ) {
 			e.stopPropagation();
 		}
+
+		if ( this.classList.contains( 'edit_field_type_divider' ) && ! e.originalEvent.target.closest( 'ul.frm_sorting' ).classList.contains( 'edit_field_type_divider' ) ) {
+			// prevent section click if clicking a field group within a section.
+			return;
+		}
+
 		clickAction( this );
 	}
 
