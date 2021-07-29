@@ -1530,7 +1530,7 @@ class FrmAppHelper {
 	}
 
 	public static function get_user_id_param( $user_id ) {
-		if ( ! $user_id || empty( $user_id ) || is_numeric( $user_id ) ) {
+		if ( ! $user_id || is_numeric( $user_id ) ) {
 			return $user_id;
 		}
 
