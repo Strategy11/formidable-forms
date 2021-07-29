@@ -394,7 +394,7 @@ function frmAdminBuildJS() {
 		$confirmMessage.empty();
 
 		if ( caution ) {
-			frmCaution = document.createElement( 'span' );
+			frmCaution = document.createElement( 'div' );
 			frmCaution.classList.add( 'frm-caution' );
 			frmCaution.appendChild( document.createTextNode( caution ) );
 			$confirmMessage.append( frmCaution );

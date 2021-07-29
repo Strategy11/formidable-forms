@@ -430,7 +430,8 @@ ul.frm_form_nav > li {
 #frm-publishing {
 	float: right;
 	margin-top: 15px;
-	width: 225px;
+	min-width: 225px;
+	max-width: 325px;
 	min-height: 10px;
 }
 

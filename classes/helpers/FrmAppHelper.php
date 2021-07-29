@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.11.04';
+	public static $plug_version = '4.11.05';
 
 	/**
 	 * @since 1.07.02
@@ -2286,7 +2286,7 @@ class FrmAppHelper {
 	}
 
 	private static function prepare_action_slashes( $val, $key, &$post_content ) {
-		if ( ! isset( $post_content[ $key ] ) ) {
+		if ( ! isset( $post_content[ $key ] ) || is_numeric( $val ) ) {
 			return;
 		}
 
