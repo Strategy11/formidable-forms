@@ -1030,7 +1030,9 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldGroupControls( $row, count ) {
-		var controls = document.getElementById( 'frm_field_group_controls' );
+		var controls, rowOffset;
+
+		controls = document.getElementById( 'frm_field_group_controls' );
 		if ( null === controls ) {
 			controls = div();
 			controls.id = 'frm_field_group_controls';
@@ -1041,8 +1043,14 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
 
-		controls.style.left = ( $row.offset().left + $row.outerWidth() - jQuery( controls.parentNode ).offset().left ) + 'px';
-		controls.style.top = ( $row.offset().top - jQuery( controls.parentNode ).offset().top ) + 'px';
+		rowOffset = $row.offset();
+
+		if ( 'undefined' === typeof rowOffset ) {
+			return;
+		}
+
+		controls.style.left = ( rowOffset.left + $row.outerWidth() - jQuery( controls.parentNode ).offset().left ) + 'px';
+		controls.style.top = ( rowOffset.top - jQuery( controls.parentNode ).offset().top ) + 'px';
 		controls.style.display = count >= 2 ? 'block' : 'none';
 	}
 
