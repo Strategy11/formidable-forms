@@ -1030,17 +1030,18 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldGroupControlsCount( $row, count ) {
-		var $controls = $row.children( '.frm-field-group-controls' );
-		if ( ! $controls.length ) {
-			$controls = jQuery( '<div>' )
-				.addClass( 'frm-field-group-controls' )
-				.html(
-					'<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>' +
-					'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
-				);
-			$row.append( $controls );
+		var controls = document.getElementById( 'frm_field_group_controls' );
+		if ( null === controls ) {
+			controls = div();
+			controls.id = 'frm_field_group_controls';
+			controls.classList.add( 'frm-field-group-controls' );
+			controls.innerHTML = ''.concat(
+				'<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>',
+				'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
+			);
 		}
-		$controls.attr( 'number-of-fields', count );
+		$row.append( controls );
+		controls.setAttribute( 'number-of-fields', count );
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
@@ -1585,6 +1586,7 @@ function frmAdminBuildJS() {
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
 				maybeRemoveGroupHoverTarget();
+				updateFieldGroupControlsCount( jQuery( list ), getFieldsInRow( jQuery( list ) ).length );
 				list.classList.add( 'frm-field-group-hover-target' );
 				jQuery( '#wpbody-content' ).on( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 			}
@@ -3902,7 +3904,7 @@ function frmAdminBuildJS() {
 
 		if ( this.classList.contains( 'edit_field_type_divider' ) ) {
 			originalList = e.originalEvent.target.closest( 'ul.frm_sorting' );
-			if ( originalList.classList.contains( 'edit_field_type_divider' ) ) {
+			if ( null !== originalList && originalList.classList.contains( 'edit_field_type_divider' ) ) {
 				// prevent section click if clicking a field group within a section.
 				return;
 			}

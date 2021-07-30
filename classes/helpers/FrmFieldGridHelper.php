@@ -225,16 +225,10 @@ class FrmFieldGridHelper {
 
 	private function close_field_wrapper() {
 		$this->maybe_close_section_helper();
-		$this->echo_field_group_controls();
 		echo '</ul></li>';
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;
-	}
-
-	private function echo_field_group_controls() {
-		// TODO current_field_count doesn't seem to be totally accurate. I'm seeing 2 when my number is 5. I think sections need to track this.
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-group-controls.php';
 	}
 
 	private function can_support_current_layout() {
