@@ -89,10 +89,10 @@ class FrmFieldGridHelper {
 			}
 		}
 
-		// TODO this needs to happen as well for nested sections, but it doesn't work here.
-		if ( $this->is_frm_first && empty( $this->nested ) ) {
-			$this->force_close_field_wrapper();
-		}
+		// TODO this is broken even if I prevent it for nested.
+		//if ( $this->is_frm_first ) {
+		//	$this->force_close_field_wrapper();
+		//}
 
 		if ( 'divider' === $field->type && empty( $this->nested ) ) {
 			$this->section_helper = new self( true );
