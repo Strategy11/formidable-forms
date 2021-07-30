@@ -5502,11 +5502,8 @@ span.howto {
     min-width: 160px;
 }
 
-#frm-show-fields .frm-field-group-controls {
-	display: none;
+#frm_builder_page #frm_field_group_controls {
 	position: absolute;
-	top: 0;
-	right: -25px;
 	width: 25px;
 	background: rgba(65, 153, 253, 0.07);
 	padding: 5px;
@@ -5515,12 +5512,7 @@ span.howto {
 	box-sizing: border-box;
 }
 
-#frm-show-fields .frm-field-group-hover-target > .frm-field-group-controls:not([number-of-fields="1"]),
-#frm-show-fields ul.frm_sorting.frm-has-open-field-group-popup > .frm-field-group-controls {
-	display: block;
-}
-
-#frm-show-fields .frm-field-group-controls svg {
+#frm_builder_page #frm_field_group_controls svg {
 	pointer-events: none;
 }
 

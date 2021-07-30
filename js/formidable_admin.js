@@ -1026,22 +1026,24 @@ function frmAdminBuildJS() {
 			$fields.each( getSyncLayoutClass( layoutClasses, classToAddFunction ) );
 		}
 
-		updateFieldGroupControlsCount( $item.parent(), $fields.length );
+		updateFieldGroupControls( $item.parent(), $fields.length );
 	}
 
-	function updateFieldGroupControlsCount( $row, count ) {
+	function updateFieldGroupControls( $row, count ) {
 		var controls = document.getElementById( 'frm_field_group_controls' );
 		if ( null === controls ) {
 			controls = div();
 			controls.id = 'frm_field_group_controls';
-			controls.classList.add( 'frm-field-group-controls' );
 			controls.innerHTML = ''.concat(
 				'<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>',
 				'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
 			);
+			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
-		$row.append( controls );
-		controls.setAttribute( 'number-of-fields', count );
+
+		controls.style.left = ( $row.offset().left + $row.outerWidth() - jQuery( controls.parentNode ).offset().left ) + 'px';
+		controls.style.top = ( $row.offset().top - jQuery( controls.parentNode ).offset().top ) + 'px';
+		controls.style.display = count >= 2 ? 'block' : 'none';
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
@@ -1575,7 +1577,7 @@ function frmAdminBuildJS() {
 	}
 
 	function checkForActiveHoverTarget( event, keyIsDown ) {
-		var elementFromPoint, list;
+		var elementFromPoint, list, previousHoverTarget;
 
 		// TODO if we are holding down a key, we want to make sure that we're ignoring wrappers for any of our selected fields.
 
@@ -1585,20 +1587,25 @@ function frmAdminBuildJS() {
 			list = elementFromPoint.closest( 'ul.frm_sorting' );
 
 			if ( null !== list && ! list.classList.contains( 'start_divider' ) && 'frm-show-fields' !== list.id ) {
-				maybeRemoveGroupHoverTarget();
-				updateFieldGroupControlsCount( jQuery( list ), getFieldsInRow( jQuery( list ) ).length );
+				previousHoverTarget = maybeRemoveGroupHoverTarget();
+				if ( false !== previousHoverTarget && ! jQuery( previousHoverTarget ).is( list ) ) {
+					destroyFieldGroupPopup();
+				}
+				updateFieldGroupControls( jQuery( list ), getFieldsInRow( jQuery( list ) ).length );
 				list.classList.add( 'frm-field-group-hover-target' );
 				jQuery( '#wpbody-content' ).on( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 			}
 		}
 	}
 
-	function maybeRemoveGroupHoverTarget(  ) {
+	function maybeRemoveGroupHoverTarget() {
 		var previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 		if ( null !== previousHoverTarget ) {
 			jQuery( '#wpbody-content' ).off( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 			previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
+			return previousHoverTarget;
 		}
+		return false;
 	}
 
 	function maybeRemoveHoverTargetOnMouseMove( event ) {
@@ -2690,11 +2697,17 @@ function frmAdminBuildJS() {
 	}
 
 	function clickFieldGroupLayout() {
-		var sizeOfFieldGroup, popupWrapper;
+		var hoverTarget, sizeOfFieldGroup, popupWrapper;
 
-		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( this );
+		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 
-		this.closest( 'ul.frm_sorting' ).classList.add( 'frm-has-open-field-group-popup' );
+		if ( null === hoverTarget ) {
+			return;
+		}
+
+		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( hoverTarget.querySelector( 'li.form-field' ) );
+
+		hoverTarget.classList.add( 'frm-has-open-field-group-popup' );
 		jQuery( document ).on( 'click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick );
 
 		popupWrapper = div();
@@ -2704,7 +2717,10 @@ function frmAdminBuildJS() {
 	}
 
 	function destroyFieldGroupPopupOnOutsideClick( event ) {
-		if ( ! jQuery( event.target ).closest( '.frm-field-group-controls' ).length ) {
+		if ( event.target.classList.contains( 'frm-custom-field-group-layout' ) ) {
+			return;
+		}
+		if ( ! jQuery( event.target ).closest( '#frm_field_group_controls' ).length && ! jQuery( event.target ).closest( '#frm_field_group_popup' ).length ) {
 			destroyFieldGroupPopup();
 		}
 	}
@@ -2958,9 +2974,9 @@ function frmAdminBuildJS() {
 	function handleFieldGroupLayoutOptionClick() {
 		var type, row;
 		type = this.getAttribute( 'layout-type' );
-		row = this.closest( 'ul' );
+		row = document.querySelector( '.frm-field-group-hover-target' );
 		size = getFieldsInRow( jQuery( row ) ).length;
-		syncLayoutClasses( jQuery( this ).closest( '.frm-field-group-controls' ).prev(), type );
+		syncLayoutClasses( getFieldsInRow( jQuery( row ) ).first(), type );
 		destroyFieldGroupPopup();
 	}
 
@@ -2994,7 +3010,11 @@ function frmAdminBuildJS() {
 	}
 
 	function customFieldGroupLayoutClick() {
-		var $fields = getFieldsInRow( jQuery( this ).closest( 'ul' ) );
+		var $fields;
+		if ( null !== this.closest( '.frm-merge-fields-into-row' ) ) {
+			return;
+		}
+		$fields = getFieldsInRow( jQuery( '.frm-field-group-hover-target' ) );
 		setupCustomLayoutOptions( $fields );
 	}
 
@@ -3135,9 +3155,8 @@ function frmAdminBuildJS() {
 	}
 
 	function breakFieldGroupClick() {
-		var row = this.closest( 'ul' );
+		var row = document.querySelector( '.frm-field-group-hover-target' );
 		breakRow( row );
-		this.closest( '.frm-field-group-controls' ).setAttribute( 'number-of-fields', 1 );
 		destroyFieldGroupPopup();
 	}
 
@@ -3176,7 +3195,7 @@ function frmAdminBuildJS() {
 		if ( popup === null ) {
 			return;
 		}
-		wrapper = popup.closest( '.frm-has-open-field-group-popup' );
+		wrapper = document.querySelector( '.frm-has-open-field-group-popup' );
 		if ( null !== wrapper ) {
 			wrapper.classList.remove( 'frm-has-open-field-group-popup' );
 			popup.parentNode.remove();
@@ -3196,10 +3215,10 @@ function frmAdminBuildJS() {
 				}
 			);
 
-		$controls = jQuery( this ).closest( '.frm-field-group-controls' );
+		$controls = jQuery( document.getElementById( 'frm_field_group_controls' ) );
 
 		if ( $controls.length ) {
-			syncLayoutClasses( $controls.prev(), syncDetails );
+			syncLayoutClasses( getFieldsInRow( jQuery( document.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
 		} else {
 			$ul = mergeSelectedFieldGroups();
 			syncLayoutClasses( getFieldsInRow( $ul ).first(), syncDetails );
@@ -8078,12 +8097,12 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
-			$newFields.on( 'click', '.frm-field-group-controls > span:first-child', clickFieldGroupLayout );
-			$newFields.on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
+			jQuery( document ).on( 'click', '#frm_field_group_controls > span:first-child', clickFieldGroupLayout );
+			jQuery( document ).on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
-			$newFields.on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
+			jQuery( document ).on( 'click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-custom-field-group-layout', customFieldGroupLayoutInsideMergeClick );
-			$newFields.on( 'click', '.frm-break-field-group', breakFieldGroupClick );
+			jQuery( document ).on( 'click', '.frm-break-field-group', breakFieldGroupClick );
 			$newFields.on( 'click', '#frm_field_group_popup .frm_grid_container input', focusFieldGroupInputOnClick );
 			jQuery( document ).on( 'click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick );
 			jQuery( document ).on( 'click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick );
