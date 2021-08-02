@@ -5,6 +5,10 @@
  */
 class test_FrmFieldGridHelper extends FrmUnitTest {
 
+	private $form_id;
+
+	private $helper;
+
 	/**
 	 * @covers FrmFieldGridHelper::get_size_of_class
 	 */
@@ -23,5 +27,90 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 
 	private function get_size_of_class( $class ) {
 		return $this->run_private_method( array( 'FrmFieldGridHelper', 'get_size_of_class' ), array( $class ) );
+	}
+
+	public function test_basic_grouping() {
+		$this->form_id       = $this->factory->form->create();
+		$half_width_field    = $this->create_field_with_classes( 'text', 'frm_half' );
+		$quarter_width_field = $this->create_field_with_classes( 'text', 'frm_fourth' );
+
+		// prevent any html from rendering during the unit test (the grid helper adds wrappers around fields).
+		ob_start();
+
+		$this->helper = new FrmFieldGridHelper();
+		$this->helper->set_field( $half_width_field );
+
+		$this->sync_current_field_once( 6 );
+		$this->sync_current_field_once( 0, 'The list should automatically close once two frm_half elements are added together.' );
+
+		$this->helper->set_field( $quarter_width_field );
+		$this->sync_current_field_once( 3 );
+
+		$this->helper->set_field( $half_width_field );
+		$this->sync_current_field_once( 9 );
+
+		$this->helper->set_field( $quarter_width_field );
+		$this->sync_current_field_once( 0 );
+
+		ob_end_clean();
+	}
+
+	private function sync_current_field_once( $assert_size = false, $assert_message = '' ) {
+		$this->helper->maybe_begin_field_wrapper();
+		$this->helper->sync_list_size();
+		if ( false !== $assert_size ) {
+			$this->assert_current_list_size( $assert_size, $assert_message );
+		}
+	}
+
+	private function assert_current_list_size( $expected, $message = '' ) {
+		$this->assertEquals( $expected, $this->get_private_property( $this->helper, 'current_list_size' ), $message );
+	}
+
+	private function create_field_with_classes( $type, $classes = '' ) {
+		return $this->factory->field->create_and_get(
+			array(
+				'form_id'       => $this->form_id,
+				'type'          => $type,
+				'field_options' => array(
+					'classes' => $classes,
+				),
+			)
+		);
+	}
+
+	public function test_with_sections() {
+		$this->form_id         = $this->factory->form->create();
+		$half_width_field      = $this->create_field_with_classes( 'text', 'frm_half' );
+		$quarter_width_field   = $this->create_field_with_classes( 'text', 'frm_fourth' );
+		$half_width_section    = $this->create_field_with_classes( 'divider', 'frm_half' );
+		$quarter_width_section = $this->create_field_with_classes( 'divider', 'frm_fourth' );
+		$end_divider           = $this->create_field_with_classes( 'end_divider' );
+
+		// prevent any html from rendering during the unit test (the grid helper adds wrappers around fields).
+		ob_start();
+
+		$this->helper = new FrmFieldGridHelper();
+		$this->helper->set_field( $half_width_section );
+
+		$this->sync_current_field_once( 0 );
+		$section_helper = $this->get_private_property( $this->helper, 'section_helper' );
+		$this->assertTrue( $section_helper instanceof FrmFieldGridHelper );
+		$section_size = $this->get_private_property( $section_helper, 'current_list_size' );
+		$this->assertEquals( 0, $section_size );
+
+		$this->helper->set_field( $half_width_field );
+		$this->sync_current_field_once();
+		$section_size = $this->get_private_property( $section_helper, 'current_list_size' );
+		$this->assertEquals( 6, $section_size );
+
+		$this->sync_current_field_once();
+		$section_size = $this->get_private_property( $section_helper, 'current_list_size' );
+		$this->assertEquals( 0, $section_size );
+
+		$this->helper->set_field( $end_divider );
+		$this->sync_current_field_once( 6 );
+
+		ob_end_clean();
 	}
 }
