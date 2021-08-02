@@ -31,6 +31,9 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmFieldGridHelper', 'get_size_of_class' ), array( $class ) );
 	}
 
+	/**
+	 * @group mike
+	 */
 	public function test_basic_grouping() {
 		$this->form_id       = $this->factory->form->create();
 		$half_width_field    = $this->create_field_with_classes( 'text', 'frm_half' );
@@ -81,6 +84,9 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @group mike
+	 */
 	public function test_with_sections() {
 		$this->form_id         = $this->factory->form->create();
 		$half_width_field      = $this->create_field_with_classes( 'text', 'frm_half' );
@@ -89,7 +95,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$quarter_width_section = $this->create_field_with_classes( 'divider', 'frm_fourth' );
 		$end_divider           = $this->create_field_with_classes( 'end_divider' );
 
-		// prevent any html from rendering during the unit test (the grid helper adds wrappers around fields).
 		ob_start();
 
 		$this->helper = new FrmFieldGridHelper();
@@ -131,5 +136,19 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 
 	private function assert_section_helper_size( $expected ) {
 		$this->assertEquals( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
+	}
+
+	public function test_frm_first() {
+		$this->form_id              = $this->factory->form->create();
+		$half_width_frm_first_field = $this->create_field_with_classes( 'text', 'frm_half frm_first' );
+
+		ob_start();
+
+		$this->helper = new FrmFieldGridHelper();
+		$this->helper->set_field( $half_width_frm_first_field );
+		$this->sync_current_field_once( 6 );
+		$this->sync_current_field_once( 6 );
+
+		ob_end_clean();
 	}
 }

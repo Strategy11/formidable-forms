@@ -89,11 +89,6 @@ class FrmFieldGridHelper {
 			}
 		}
 
-		// TODO this is broken even if I prevent it for nested.
-		//if ( $this->is_frm_first ) {
-		//	$this->force_close_field_wrapper();
-		//}
-
 		if ( 'divider' === $field->type && empty( $this->nested ) ) {
 			$this->section_helper = new self( true );
 			$this->section_helper->set_field( $field );
@@ -143,6 +138,11 @@ class FrmFieldGridHelper {
 
 		if ( ! empty( $this->section_helper ) && $this->section_is_open ) {
 			$this->section_helper->maybe_begin_field_wrapper();
+		}
+
+		if ( $this->is_frm_first && empty( $this->section_helper ) && 0 !== $this->current_list_size ) {
+			$this->force_close_field_wrapper();
+			$this->begin_field_wrapper();
 		}
 	}
 
