@@ -9,6 +9,8 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 
 	private $helper;
 
+	private $section_helper;
+
 	/**
 	 * @covers FrmFieldGridHelper::get_size_of_class
 	 */
@@ -94,23 +96,40 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->helper->set_field( $half_width_section );
 
 		$this->sync_current_field_once( 0 );
-		$section_helper = $this->get_private_property( $this->helper, 'section_helper' );
-		$this->assertTrue( $section_helper instanceof FrmFieldGridHelper );
-		$section_size = $this->get_private_property( $section_helper, 'current_list_size' );
-		$this->assertEquals( 0, $section_size );
+		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
+		$this->assertTrue( $this->section_helper instanceof FrmFieldGridHelper );
+		$this->assert_section_helper_size( 0 );
 
 		$this->helper->set_field( $half_width_field );
 		$this->sync_current_field_once();
-		$section_size = $this->get_private_property( $section_helper, 'current_list_size' );
-		$this->assertEquals( 6, $section_size );
+		$this->assert_section_helper_size( 6 );
 
 		$this->sync_current_field_once();
-		$section_size = $this->get_private_property( $section_helper, 'current_list_size' );
-		$this->assertEquals( 0, $section_size );
+		$this->assert_section_helper_size( 0 );
 
 		$this->helper->set_field( $end_divider );
 		$this->sync_current_field_once( 6 );
 
+		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
+		$this->assertTrue( empty( $this->section_helper ) );
+
+		$this->helper->set_field( $quarter_width_section );
+		$this->sync_current_field_once( 6 );
+		$this->section_helper = $this->get_private_property( $this->helper, 'section_helper' );
+		$this->assertTrue( $this->section_helper instanceof FrmFieldGridHelper );
+		$this->assert_section_helper_size( 0 );
+
+		$this->helper->set_field( $half_width_field );
+		$this->sync_current_field_once();
+		$this->assert_section_helper_size( 6 );
+
+		$this->helper->set_field( $end_divider );
+		$this->sync_current_field_once( 9 );
+
 		ob_end_clean();
+	}
+
+	private function assert_section_helper_size( $expected ) {
+		$this->assertEquals( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
 	}
 }
