@@ -3970,9 +3970,11 @@ function frmAdminBuildJS() {
 
 		if ( this.classList.contains( 'edit_field_type_divider' ) ) {
 			originalList = e.originalEvent.target.closest( 'ul.frm_sorting' );
-			if ( null !== originalList && originalList.classList.contains( 'edit_field_type_divider' ) ) {
+			if ( null !== originalList ) {
 				// prevent section click if clicking a field group within a section.
-				return;
+				if ( originalList.classList.contains( 'edit_field_type_divider' ) || originalList.parentNode.parentNode.classList.contains( 'start_divider' ) ) {
+					return;
+				}
 			}
 		}
 
@@ -5245,7 +5247,6 @@ function frmAdminBuildJS() {
 		}
 
 		// TODO selecting multiple groups within a section is removed here. We should exit early.
-
 		deselectFields();
 		$thisobj.addClass( 'selected' );
 		showFieldOptions( obj );
