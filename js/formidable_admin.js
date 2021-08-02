@@ -844,6 +844,8 @@ function frmAdminBuildJS() {
 				}
 			},
 			start: function( event, ui ) {
+				maybeRemoveGroupHoverTarget();
+				container.get( 0 ).classList.add( 'frm-dragging-field' );
 				if ( ui.item[0].offsetHeight > 120 ) {
 					jQuery( sort ).sortable( 'refreshPositions' );
 				}
@@ -866,6 +868,8 @@ function frmAdminBuildJS() {
 			},
 			stop: function( event, ui ) {
 				var moving, $previousContainerFields, $closestFieldBox;
+
+				container.get( 0 ).classList.remove( 'frm-dragging-field' );
 
 				moving = jQuery( this );
 				copyHelper && copyHelper.remove();
@@ -953,18 +957,31 @@ function frmAdminBuildJS() {
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
+	/**
+	 * sortable struggles to put the field into the proper section if there are multiple in a field group. This helps fix some of those issues.
+	 */
 	function maybeFixPlaceholderParent( ui, event ) {
-		// TODO it looks like this is causing issues with anything that is a child of frm-show-fields not working at all.
 		var elementFromPoint, wrapper;
 		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
 		if ( null === elementFromPoint ) {
 			return;
 		}
 		wrapper = elementFromPoint.closest( '.frm_sorting' );
-		if ( null !== wrapper && 'frm-show-fields' !== wrapper.id ) {
+		if ( null !== wrapper && ( wrapper.classList.contains( 'start_divider' ) || null !== wrapper.closest( '.start_divider' ) ) ) {
 			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
 			ui.placeholder.appendTo( wrapper );
 		}
+	}
+
+	/**
+	 * @returns {bool} true if the placeholder parent should be fixed.
+	 */
+	function shouldTryFixingPlaceholderParent( $placeholder ) {
+		var closestSection = $placeholder.closest( '.start_divider' );
+		if ( null === closestSection ) {
+			return false;
+		}
+		return jQuery( closestSection ).siblings( 'li.start_divider' ).length >= 1;
 	}
 
 	function getFieldsInRow( $row ) {
@@ -1585,7 +1602,12 @@ function frmAdminBuildJS() {
 	}
 
 	function checkForActiveHoverTarget( event, keyIsDown ) {
-		var elementFromPoint, list, previousHoverTarget;
+		var container, elementFromPoint, list, previousHoverTarget;
+
+		container = document.getElementById( 'post-body-content' );
+		if ( container.classList.contains( 'frm-dragging-field' ) ) {
+			return;
+		}
 
 		// TODO if we are holding down a key, we want to make sure that we're ignoring wrappers for any of our selected fields.
 
@@ -1607,13 +1629,21 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeRemoveGroupHoverTarget() {
-		var previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
-		if ( null !== previousHoverTarget ) {
-			jQuery( '#wpbody-content' ).off( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
-			previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
-			return previousHoverTarget;
+		var previousHoverTarget, controls;
+
+		previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		if ( null === previousHoverTarget ) {
+			return false;
 		}
-		return false;
+
+		jQuery( '#wpbody-content' ).off( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
+		previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
+		controls = document.getElementById( 'frm_field_group_controls' );
+		if ( null !== controls ) {
+			controls.style.display = 'none';
+		}
+
+		return previousHoverTarget;
 	}
 
 	function maybeRemoveHoverTargetOnMouseMove( event ) {
