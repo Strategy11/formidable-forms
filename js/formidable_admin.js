@@ -1345,7 +1345,8 @@ function frmAdminBuildJS() {
 		isFieldGroup = ui.item.find( 'ul.frm_sorting' ).length > 0;
 
 		if ( isFieldGroup && insideFieldGroup ) {
-			return false;
+			// allow a field group inside of a field group if it is being placed within a section above/below another field group.
+			return insideSection && ui.placeholder.siblings( 'li.edit_field_type_end_divider' ).length > 0;
 		}
 
 		if ( ! insideSection ) {
