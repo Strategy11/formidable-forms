@@ -958,16 +958,25 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * sortable struggles to put the field into the proper section if there are multiple in a field group. This helps fix some of those issues.
+	 * Sortable struggles to put the field into the proper section if there are multiple in a field group. This helps fix some of those issues.
 	 */
 	function maybeFixPlaceholderParent( ui, event ) {
-		var elementFromPoint, wrapper;
+		var elementFromPoint, wrapper, shouldAppend;
 		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
 		if ( null === elementFromPoint ) {
 			return;
 		}
 		wrapper = elementFromPoint.closest( '.frm_sorting' );
-		if ( null !== wrapper && ( wrapper.classList.contains( 'start_divider' ) || null !== wrapper.closest( '.start_divider' ) ) ) {
+		if ( null === wrapper ) {
+			return;
+		}
+		shouldAppend = false;
+		if ( wrapper.classList.contains( 'start_divider' ) ) {
+			shouldAppend = jQuery( wrapper ).parent().parent().find( '.start_divider' ).length >= 2;
+		} else if ( null !== wrapper.closest( '.start_divider' ) ) {
+			shouldAppend = jQuery( wrapper ).closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length >= 2;
+		}
+		if ( shouldAppend ) {
 			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
 			ui.placeholder.appendTo( wrapper );
 		}
