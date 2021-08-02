@@ -1638,7 +1638,12 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeRemoveGroupHoverTarget() {
-		var previousHoverTarget, controls;
+		var controls, previousHoverTarget;
+
+		controls = document.getElementById( 'frm_field_group_controls' );
+		if ( null !== controls ) {
+			controls.style.display = 'none';
+		}
 
 		previousHoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 		if ( null === previousHoverTarget ) {
@@ -1647,11 +1652,6 @@ function frmAdminBuildJS() {
 
 		jQuery( '#wpbody-content' ).off( 'mousemove', maybeRemoveHoverTargetOnMouseMove );
 		previousHoverTarget.classList.remove( 'frm-field-group-hover-target' );
-		controls = document.getElementById( 'frm_field_group_controls' );
-		if ( null !== controls ) {
-			controls.style.display = 'none';
-		}
-
 		return previousHoverTarget;
 	}
 
@@ -3264,7 +3264,7 @@ function frmAdminBuildJS() {
 
 		$controls = jQuery( document.getElementById( 'frm_field_group_controls' ) );
 
-		if ( $controls.length ) {
+		if ( $controls.length && 'none' !== $controls.get( 0 ).style.display ) {
 			syncLayoutClasses( getFieldsInRow( jQuery( document.querySelector( '.frm-field-group-hover-target' ) ) ).first(), syncDetails );
 		} else {
 			$ul = mergeSelectedFieldGroups();
@@ -3341,6 +3341,7 @@ function frmAdminBuildJS() {
 		clearSettingsBox( true ); // unselect any fields if one is selected.
 
 		hoverTarget.classList.add( 'frm-selected-field-group' );
+		maybeRemoveGroupHoverTarget();
 
 		jQuery( document ).off( 'click', unselectFieldGroups );
 		jQuery( document ).on( 'click', unselectFieldGroups );
