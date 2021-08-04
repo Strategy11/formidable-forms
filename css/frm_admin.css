@@ -8063,20 +8063,13 @@ Responsive Design
 
 /* Make this look like .wp-core-ui select */
 .frm_images_dropdown__toggle {
-	/*font-size: 14px;*/
-	/*line-height: 2; !* 28px *!*/
-	/*color: #2c3338;*/
-	/*border-color: #8c8f94;*/
 	box-shadow: none !important;
-	/*border-radius: 3px;*/
-	/*padding: 0 24px 0 8px;*/
 	min-height: 30px !important;
 	-webkit-appearance: none !important;
 	/* The SVG is arrow-down-alt2 from Dashicons. */
 	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 	background-size: 16px 16px;
 	cursor: pointer;
-	/*vertical-align: middle;*/
 
 	box-sizing: border-box;
 	outline: 0;
@@ -8108,19 +8101,6 @@ Responsive Design
 	border-color: #8c8f94 !important;
 	box-shadow: none !important;
 }
-
-/*.frm_images_dropdown__toggle.disabled,
-.frm_images_dropdown__toggle:disabled {
-	color: #a7aaad;
-	border-color: #dcdcde;
-	background-color: #f6f7f7;
-	!* The SVG is arrow-down-alt2 from Dashicons. *!
-	background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23a0a5aa%22%2F%3E%3C%2Fsvg%3E');
-	box-shadow: none;
-	text-shadow: 0 1px 0 #fff;
-	cursor: default;
-	transform: none;
-}*/
 
 /* Reset Firefox inner outline that appears on :focus. */
 /* This ruleset overrides the color change on :focus thus needs to be after select:focus. */
