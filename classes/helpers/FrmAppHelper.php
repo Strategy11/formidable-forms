@@ -2752,18 +2752,14 @@ class FrmAppHelper {
 			<div class="frm_images_dropdown__options frm_hidden frm_images_dropdown__options--<?php echo intval( $options_count ); ?>-col">
 				<?php
 				foreach ( $args['options'] as $key => $option ) {
-					if ( ! empty( $option['svg'] ) ) {
-						$image = self::icon_by_class(
-							'frmfont ' . $option['svg'],
-							array(
-								'echo'   => false,
-								'width'  => 102,
-								'height' => 89,
-							)
-						);
-					} else {
-						$image = '';
-					}
+					$image = self::icon_by_class(
+						'frmfont ' . $option['svg'],
+						array(
+							'echo'   => false,
+							'width'  => 102,
+							'height' => 89,
+						)
+					);
 
 					// Handle custom classes.
 					$classes = 'frm_images_dropdown__option';
