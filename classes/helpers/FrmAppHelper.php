@@ -2763,7 +2763,9 @@ class FrmAppHelper {
 
 					// Handle custom classes.
 					$classes = 'frm_images_dropdown__option';
-					if ( $args['selected'] === $key || is_numeric( $args['selected'] ) && is_numeric( $key ) && $args['selected'] == $key ) {
+
+					// The second condition is used when comparing a numeric string and a number.
+					if ( $args['selected'] === $key || ( is_numeric( $args['selected'] ) && is_numeric( $key ) && $args['selected'] == $key ) ) {
 						$classes .= ' frm_images_dropdown__option--selected';
 					}
 
