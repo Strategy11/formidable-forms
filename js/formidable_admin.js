@@ -1324,6 +1324,7 @@ function frmAdminBuildJS() {
 	// don't allow page breaks inside of field groups.
 	// don't allow field groups with sections inside of sections.
 	// don't allow field groups in field groups.
+	// don't allow hidden fields inside of field groups.
 	function allowDrop( ui ) {
 		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup;
 
@@ -1339,8 +1340,8 @@ function frmAdminBuildJS() {
 			return true;
 		}
 
-		if ( insideFieldGroup && ui.placeholder.siblings( '.edit_field_type_break' ).length ) {
-			// never allow any field beside a page break.
+		if ( insideFieldGroup && ui.placeholder.siblings( '.edit_field_type_break, .edit_field_type_hidden' ).length ) {
+			// never allow any field beside a page break or a hidden field.
 			return false;
 		}
 
@@ -1351,6 +1352,11 @@ function frmAdminBuildJS() {
 
 			if ( isPageBreak ) {
 				// do not allow page break in both sections and field groups.
+				return false;
+			}
+
+			if ( ui.item.hasClass( 'frm_thidden' ) && insideFieldGroup ) {
+				// do not allow a hidden field in a field group.
 				return false;
 			}
 
@@ -1373,6 +1379,11 @@ function frmAdminBuildJS() {
 		if ( isFieldGroup && insideFieldGroup ) {
 			// allow a field group inside of a field group if it is being placed within a section above/below another field group.
 			return insideSection && ui.placeholder.siblings( 'li.edit_field_type_end_divider' ).length > 0;
+		}
+
+		if ( insideFieldGroup && ui.item.hasClass( 'edit_field_type_hidden' ) ) {
+			// do not allow a hidden field inside of a field group.
+			return false;
 		}
 
 		if ( ! insideSection ) {
