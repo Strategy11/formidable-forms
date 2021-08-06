@@ -904,7 +904,7 @@ function frmAdminBuildJS() {
 						syncLayoutClasses( ui.item );
 					}
 				}
-				moving.children( '.edit_field_type_end_divider' ).appendTo( this );
+				moving.children( '.edit_field_type_end_divider' ).appendTo( this.closest( 'ul.start_divider' ) );
 			},
 			sort: function( event, ui ) {
 				var $row, $children, $lastChild, currentIndex, left;
