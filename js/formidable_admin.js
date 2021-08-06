@@ -905,6 +905,7 @@ function frmAdminBuildJS() {
 					}
 				}
 				moving.children( '.edit_field_type_end_divider' ).appendTo( this.closest( 'ul.start_divider' ) );
+				fixUnwrappedListItems();
 			},
 			sort: function( event, ui ) {
 				var $row, $children, $lastChild, currentIndex, left;
@@ -988,6 +989,19 @@ function frmAdminBuildJS() {
 		if ( shouldAppend ) {
 			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
 			ui.placeholder.appendTo( wrapper );
+		}
+	}
+
+	function fixUnwrappedListItems() {
+		var fixed = false;
+		document.querySelectorAll( 'ul.start_divider > li.form-field:not(.edit_field_type_end_divider)' ).forEach(
+			function( field ) {
+				fixed = true;
+				wrapFieldLiInPlace( field );
+			}
+		);
+		if ( fixed ) {
+			toggleSectionHolder();
 		}
 	}
 
