@@ -2832,16 +2832,16 @@ class FrmAppHelper {
 
 		$options = array(
 			'0'       => array(
-				'text' => __( 'Simple radio button', 'formidable' ),
+				'text' => __( 'Simple', 'formidable' ),
 				'svg'  => 'frm_simple_radio',
 			),
 			'1'       => array(
-				'text'  => __( 'Use images for radio button', 'formidable' ),
+				'text'  => __( 'Images', 'formidable' ),
 				'svg'   => 'frm_image_as_option',
 				'addon' => 'pro',
 			),
 			'buttons' => array(
-				'text'  => __( 'Display options as buttons', 'formidable' ),
+				'text'  => __( 'Buttons', 'formidable' ),
 				'svg'   => 'frm_button_as_option',
 				'addon' => 'pro',
 			),
