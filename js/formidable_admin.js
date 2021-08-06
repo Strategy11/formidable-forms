@@ -844,6 +844,7 @@ function frmAdminBuildJS() {
 				}
 			},
 			start: function( event, ui ) {
+				deleteEmptyDividerWrappers();
 				maybeRemoveGroupHoverTarget();
 				container.get( 0 ).classList.add( 'frm-dragging-field' );
 				if ( ui.item[0].offsetHeight > 120 ) {
@@ -988,6 +989,27 @@ function frmAdminBuildJS() {
 			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
 			ui.placeholder.appendTo( wrapper );
 		}
+	}
+
+	function deleteEmptyDividerWrappers() {
+		var dividers = document.querySelectorAll( 'ul.start_divider' );
+		if ( ! dividers.length ) {
+			return;
+		}
+		dividers.forEach(
+			function( divider ) {
+				var children = [].slice.call( divider.children );
+				children.forEach(
+					function( child ) {
+						if ( 0 === child.children.length ) {
+							child.remove();
+						} else if ( 1 === child.children.length && 'ul' === child.firstElementChild.nodeName.toLowerCase() && 0 === child.firstElementChild.children.length ) {
+							child.remove();
+						}
+					}
+				);
+			}
+		);
 	}
 
 	/**
