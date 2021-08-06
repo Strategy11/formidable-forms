@@ -857,7 +857,7 @@ function frmAdminBuildJS() {
 			},
 			helper: function( e, li ) {
 				copyHelper = li.clone().insertAfter( li );
-				return li.clone();
+				return li.clone().addClass( 'frm-sortable-helper' );
 			},
 			beforeStop: function( event, ui ) {
 				// If this was dropped at the beginning of a collpased page, open it.
@@ -970,11 +970,19 @@ function frmAdminBuildJS() {
 		if ( null === wrapper ) {
 			return;
 		}
+		if ( ui.placeholder.closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length < 2 ) {
+			// placeholder is not in a problematic position that needs to be fixed so leave it.
+			return;
+		}
 		shouldAppend = false;
 		if ( wrapper.classList.contains( 'start_divider' ) ) {
 			shouldAppend = jQuery( wrapper ).parent().parent().find( '.start_divider' ).length >= 2;
 		} else if ( null !== wrapper.closest( '.start_divider' ) ) {
 			shouldAppend = jQuery( wrapper ).closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length >= 2;
+		}
+		if ( null !== wrapper.closest( '.frm-sortable-helper' ) ) {
+			// avoid ever appending to the sortable helper.
+			return;
 		}
 		if ( shouldAppend ) {
 			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
