@@ -2718,30 +2718,10 @@ class FrmAppHelper {
 	 * }
 	 */
 	public static function images_dropdown( $args ) {
-		$defaults        = array(
-			'selected'    => '',
-			'options'     => array(),
-			'classes'     => '',
-			'input_attrs' => array(),
-		);
-		$args            = wp_parse_args( $args, $defaults );
-		$args['options'] = (array) $args['options'];
+		$args = self::fill_default_images_dropdown_args( $args );
+
 		$selected_text   = isset( $args['options'][ $args['selected'] ]['text'] ) ? $args['options'][ $args['selected'] ]['text'] : '';
-		$options_count   = count( $args['options'] );
-		$input_attrs     = (array) $args['input_attrs'];
-		if ( isset( $input_attrs['class'] ) ) {
-			$input_attrs['class'] .= ' frm_images_dropdown__value';
-		} else {
-			$input_attrs['class'] = 'frm_images_dropdown__value';
-		}
-
-		$input_attrs['type']  = 'hidden';
-		$input_attrs['value'] = $args['selected'];
-		$input_attrs_str      = '';
-		foreach ( $input_attrs as $key => $input_attr ) {
-			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
-		}
-
+		$input_attrs_str = self::get_images_dropdown_input_attrs( $args );
 		ob_start();
 		?>
 		<div class="frm_images_dropdown <?php echo esc_attr( $args['classes'] ); ?>">
@@ -2749,56 +2729,16 @@ class FrmAppHelper {
 
 			<button type="button" class="frm_images_dropdown__toggle"><?php echo esc_html( $selected_text ); ?></button>
 
-			<div class="frm_images_dropdown__options frm_hidden frm_images_dropdown__options--<?php echo intval( $options_count ); ?>-col">
+			<div class="frm_images_dropdown__options frm_hidden frm_images_dropdown__options--<?php echo intval( count( $args['options'] ) ); ?>-col">
 				<?php
 				foreach ( $args['options'] as $key => $option ) {
-					$image = self::icon_by_class(
-						'frmfont ' . $option['svg'],
-						array(
-							'echo'   => false,
-							'width'  => 102,
-							'height' => 89,
-						)
-					);
+					$option['key'] = $key;
 
-					// Handle custom classes.
-					$classes = 'frm_images_dropdown__option';
+					$image        = self::get_images_dropdown_option_image( $option, $args );
+					$classes      = self::get_images_dropdown_option_classes( $option, $args );
+					$custom_attrs = self::get_images_dropdown_option_custom_attrs( $option, $args );
 
-					// The second condition is used when comparing a numeric string and a number.
-					if ( $args['selected'] === $key || ( is_numeric( $args['selected'] ) && is_numeric( $key ) && $args['selected'] == $key ) ) {
-						$classes .= ' frm_images_dropdown__option--selected';
-					}
-
-					if ( ! empty( $option['custom_attrs']['class'] ) ) {
-						$classes .= ' ' . $option['custom_attrs']['class'];
-					}
-
-					// Handle custom attributes.
-					$custom_attrs = '';
-					if ( ! empty( $option['custom_attrs'] ) && is_array( $option['custom_attrs'] ) ) {
-						$custom_attrs_arr = array();
-
-						foreach ( $option['custom_attrs'] as $key => $value ) {
-							if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
-								continue;
-							}
-
-							$custom_attrs_arr[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
-						}
-
-						$custom_attrs = implode( ' ', $custom_attrs_arr );
-					}
-					?>
-					<button type="button" class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $key ); ?>"<?php echo $custom_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-						<?php if ( $image ) : ?>
-							<span class="frm_images_dropdown__image"><?php echo self::kses( $image, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-						<?php endif; ?>
-
-						<?php if ( ! empty( $option['text'] ) ) : ?>
-							<span class="frm_images_dropdown__text"><?php echo esc_html( $option['text'] ); ?></span>
-						<?php endif; ?>
-					</button>
-					<?php
+					include self::plugin_path() . '/classes/views/shared/images-dropdown-option.php';
 				}
 				?>
 			</div>
@@ -2815,6 +2755,172 @@ class FrmAppHelper {
 		 * @param array  $args   Passed arguments.
 		 */
 		echo apply_filters( 'frm_images_dropdown_output', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * Fills the default images_dropdown() arguments.
+	 *
+	 * @since 4.12.0
+	 *
+	 * @param array $args The arguments.
+	 * @return array
+	 */
+	private static function fill_default_images_dropdown_args( $args ) {
+		$defaults = array(
+			'selected'    => '',
+			'options'     => array(),
+			'classes'     => '',
+			'input_attrs' => array(),
+		);
+		$new_args = wp_parse_args( $args, $defaults );
+
+		$new_args['options']     = (array) $new_args['options'];
+		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
+
+		/**
+		 * Allows modifying the arguments of images_dropdown() method.
+		 *
+		 * @since 4.12.0
+		 *
+		 * @param array $new_args Arguments after filling the defaults.
+		 * @param array $args     Arguments passed to the method, before filling the defaults.
+		 */
+		return apply_filters( 'frm_images_dropdown_args', $new_args, $args );
+	}
+
+	/**
+	 * Gets HTML attributes of the input in images_dropdown() method.
+	 *
+	 * @since 4.12.0
+	 *
+	 * @param array $args The arguments.
+	 * @return string
+	 */
+	private static function get_images_dropdown_input_attrs( $args ) {
+		$input_attrs = $args['input_attrs'];
+		if ( isset( $input_attrs['class'] ) ) {
+			$input_attrs['class'] .= ' frm_images_dropdown__value';
+		} else {
+			$input_attrs['class'] = 'frm_images_dropdown__value';
+		}
+
+		$input_attrs['type']  = 'hidden';
+		$input_attrs['value'] = $args['selected'];
+		$input_attrs_str      = '';
+		foreach ( $input_attrs as $key => $input_attr ) {
+			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
+		}
+
+		/**
+		 * Allows modifying the HTML attributes of the input in images_dropdown() method.
+		 *
+		 * @since 4.12.0
+		 *
+		 * @param string $input_attrs_str HTML attributes string.
+		 * @param array  $args            The arguments of images_dropdown() method.
+		 */
+		return apply_filters( 'frm_images_dropdown_input_attrs', $input_attrs_str, $args );
+	}
+
+	/**
+	 * Gets the image of each option in images_dropdown() method.
+	 *
+	 * @since 4.12
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 * @return string
+	 */
+	private static function get_images_dropdown_option_image( $option, $args ) {
+		$image = self::icon_by_class(
+			'frmfont ' . $option['svg'],
+			array(
+				'echo'   => false,
+				'width'  => 102,
+				'height' => 89,
+			)
+		);
+
+		/**
+		 * Allows modifying the image of each option in images_dropdown() method.
+		 *
+		 * @since 4.12.0
+		 *
+		 * @param string $image  The image HTML.
+		 * @param array  $option The option array. The key of option is needed to be included.
+		 * @param array  $args   The arguments of images_dropdown() method.
+		 */
+		return apply_filters( 'frm_images_dropdown_option_classes', $image, $option, $args );
+	}
+
+	/**
+	 * Gets the HTML classes of each option in images_dropdown() method.
+	 *
+	 * @since 4.12
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 * @return string
+	 */
+	private static function get_images_dropdown_option_classes( $option, $args ) {
+		$classes = 'frm_images_dropdown__option';
+
+		// The second condition is used when comparing a numeric string and a number.
+		if ( $args['selected'] === $option['key'] || ( is_numeric( $args['selected'] ) && is_numeric( $option['key'] ) && $args['selected'] == $option['key'] ) ) {
+			$classes .= ' frm_images_dropdown__option--selected';
+		}
+
+		if ( ! empty( $option['custom_attrs']['class'] ) ) {
+			$classes .= ' ' . $option['custom_attrs']['class'];
+		}
+
+		/**
+		 * Allows modifying the CSS classes of each option in images_dropdown() method.
+		 *
+		 * @since 4.12.0
+		 *
+		 * @param string $classes CSS classes.
+		 * @param array  $option  The option array. The key of option is needed to be included.
+		 * @param array  $args    The arguments of images_dropdown() method.
+		 */
+		return apply_filters( 'frm_images_dropdown_option_classes', $classes, $option, $args );
+	}
+
+	/**
+	 * Gets the custom HTML attributes of each option in images_dropdown() method.
+	 *
+	 * @since 4.12
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 * @return string
+	 */
+	private static function get_images_dropdown_option_custom_attrs( $option, $args ) {
+		$custom_attrs = '';
+		if ( ! empty( $option['custom_attrs'] ) && is_array( $option['custom_attrs'] ) ) {
+			$custom_attrs_arr = array();
+
+			foreach ( $option['custom_attrs'] as $key => $value ) {
+				if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
+					continue;
+				}
+
+				$custom_attrs_arr[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
+			}
+
+			$custom_attrs = implode( ' ', $custom_attrs_arr );
+		}
+
+		/**
+		 * Allows modifying the custom HTML attributes of each option in images_dropdown() method.
+		 *
+		 * @since 4.12.0
+		 *
+		 * @param string $custom_attrs The attributes string.
+		 * @param array  $option       The option array. The key of option is needed to be included.
+		 * @param array  $args         The arguments of images_dropdown() method.
+		 */
+		return apply_filters( 'frm_images_dropdown_option_classes', $custom_attrs, $option, $args );
 	}
 
 	/**
