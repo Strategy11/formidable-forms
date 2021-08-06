@@ -385,7 +385,7 @@ class FrmEntriesHelper {
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
-		if ( ! $value || empty( $value ) || ! FrmAppHelper::pro_is_installed() ) {
+		if ( ! $value || ! FrmAppHelper::pro_is_installed() ) {
 			return;
 		}
 
