@@ -5511,6 +5511,7 @@ span.howto {
 	box-sizing: border-box;
 	right: 0;
 	top: -28px;
+	height: 28px;
 	z-index: 3; /* section dividers use z-index: 2; position above that to avoid it taking over hover control. */
 }
 
