@@ -18,4 +18,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
-<?php FrmAppHelper::show_radio_display_format( $args['field'] ); ?>
+<?php FrmFieldsHelper::show_radio_display_format( $args['field'] ); ?>

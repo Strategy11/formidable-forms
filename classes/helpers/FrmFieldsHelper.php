@@ -1772,6 +1772,108 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Shows Display format option.
+	 *
+	 * @since 4.12
+	 *
+	 * @param array $field Field data.
+	 */
+	public static function show_radio_display_format( $field ) {
+		$options = array(
+			'0'       => array(
+				'text' => __( 'Simple', 'formidable' ),
+				'svg'  => 'frm_simple_radio',
+			),
+			'1'       => array(
+				'text'  => __( 'Images', 'formidable' ),
+				'svg'   => 'frm_image_as_option',
+				'addon' => 'pro',
+			),
+			'buttons' => array(
+				'text'  => __( 'Buttons', 'formidable' ),
+				'svg'   => 'frm_button_as_option',
+				'addon' => 'pro',
+			),
+		);
+
+		/**
+		 * Allows modifying the options of Display format setting of Radio field.
+		 *
+		 * @since 4.12
+		 *
+		 * @param array $options Options.
+		 */
+		$options = apply_filters( 'frm_radio_display_format_options', $options );
+
+		$args = self::get_display_format_args( $field, $options );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
+	}
+
+	/**
+	 * Gets display format arguments to pass to the images_dropdown() method.
+	 *
+	 * @since 4.12.0
+	 *
+	 * @param array $field   Field data.
+	 * @param array $options Options array.
+	 * @return array
+	 */
+	private static function get_display_format_args( $field, $options ) {
+		$args = array(
+			'selected' => '0',
+			'options'  => array(),
+		);
+
+		foreach ( $options as $key => $option ) {
+			$args['options'][ $key ] = $option;
+
+			if ( ! empty( $option['addon'] ) ) {
+				$args['options'][ $key ]['custom_attrs'] = array( 'class' => 'frm_noallow frm_show_upgrade' );
+
+				if ( 'pro' === $option['addon'] ) {
+					$args['options'][ $key ]['custom_attrs']['data-upgrade'] = __( 'Image Options', 'formidable' );
+					$args['options'][ $key ]['custom_attrs']['data-message'] = __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . FrmAppHelper::plugin_url() . '/images/image-options.png" />';
+					$args['options'][ $key ]['custom_attrs']['data-medium']  = 'builder';
+					$args['options'][ $key ]['custom_attrs']['data-content'] = 'image-options';
+				} else {
+					// translators: Add-on name.
+					$upgrade_label   = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
+					$upgrade_message = '';
+					$upgrade_link    = '';
+					$upgrading       = FrmAddonsController::install_link( $option['addon'] );
+					if ( isset( $upgrading['url'] ) ) {
+						$install_data = wp_json_encode( $upgrading );
+					} else {
+						$install_data = '';
+					}
+					$requires = FrmFormsHelper::get_plan_required( $upgrading );
+
+					$args['options'][ $key ]['custom_attrs']['data-upgrade']  = $upgrade_label;
+					$args['options'][ $key ]['custom_attrs']['data-message']  = $upgrade_message;
+					$args['options'][ $key ]['custom_attrs']['data-link']     = $upgrade_link;
+					$args['options'][ $key ]['custom_attrs']['data-medium']   = 'builder';
+					$args['options'][ $key ]['custom_attrs']['data-oneclick'] = $install_data;
+					$args['options'][ $key ]['custom_attrs']['data-requires'] = $requires;
+				}
+
+				unset( $args['options'][ $key ]['addon'] );
+			}
+		}
+
+		/**
+		 * Allows modifying the arguments of Display format setting of Radio field.
+		 *
+		 * @since 4.12
+		 *
+		 * @param array $args    Arguments.
+		 * @param array $field   Field data.
+		 * @param array $options Options array.
+		 */
+		return apply_filters( 'frm_radio_display_format_args', $args, $field, $options );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function show_icon_link_js( $atts ) {
