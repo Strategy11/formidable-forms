@@ -1081,6 +1081,17 @@ class FrmFormsController {
 				'function' => 'buttons_settings',
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
+			// TODO this says you should upgrade to pro, but if you are pro it should try to download the plugin instead.
+			'landing'     => array(
+				'name'       => __( 'Form Landing Page', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_file_text_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => array(
+					'medium'  => 'permissions',
+					'upgrade' => __( 'Form Landing Pages', 'formidable' ),
+					'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
+				),
+			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
@@ -1158,6 +1169,13 @@ class FrmFormsController {
 		$no_global_style = $frm_settings->load_style === 'none';
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-buttons.php' );
+	}
+
+	/**
+	 * @param array $values
+	 */
+	public static function landing_settings( $values ) {
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-landing.php' );
 	}
 
 	/**
