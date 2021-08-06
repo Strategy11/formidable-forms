@@ -1172,13 +1172,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param array $values
-	 */
-	public static function landing_settings( $values ) {
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-landing.php' );
-	}
-
-	/**
 	 * @since 4.0
 	 *
 	 * @param array $values
