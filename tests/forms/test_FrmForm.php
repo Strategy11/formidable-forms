@@ -136,6 +136,11 @@ class test_FrmForm extends FrmUnitTest {
 		$value          = $original_value;
 		$this->sanitize_field_opt( $opt, $value );
 		$this->assertEquals( $original_value, $value, 'comparisons should not be detected as unsafe html tags' );
+
+		$original_value = '50<100 ? 1 : 0';
+		$value          = $original_value;
+		$this->sanitize_field_opt( $opt, $value );
+		$this->assertEquals( '50 < 100 ? 1 : 0', $value, 'unspaced comparisons will be padded by a space to avoid strip_tags issues.' );
 	}
 
 	private function sanitize_field_opt( $opt, &$value ) {
