@@ -145,6 +145,10 @@ class test_FrmForm extends FrmUnitTest {
 
 		$original_value = '50 >100 ? 1 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$safe_less_than_equals_comparison = '50 <= 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_equals_comparison, $safe_less_than_equals_comparison );
+		$this->assert_sanitize_field_opt_calc( '50 <= 100 ? 1 : 0', '50<=100 ? 1 : 0' );
 	}
 
 	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {

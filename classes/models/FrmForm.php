@@ -280,14 +280,12 @@ class FrmForm {
 	 * @return string
 	 */
 	private static function sanitize_calc( $value ) {
+		if ( false !== strpos( $value, '<' ) ) {
+			$value = preg_replace( '/(\d)( ){0,1}<(=){0,1}( ){0,1}(\d)/', '$1 <$3 $5', $value );
+		}
 		$allow = array( '<= ', ' >=' ); // Allow <= and >=
 		$temp  = array( '< = ', ' > =' );
 		$value = str_replace( $allow, $temp, $value );
-
-		if ( false !== strpos( $value, '<' ) ) {
-			$value = preg_replace( '/(\d)( ){0,1}<( ){0,1}(\d)/', '$1 < $4', $value );
-		}
-
 		$value = strip_tags( $value );
 		$value = str_replace( $temp, $allow, $value );
 		return $value;
