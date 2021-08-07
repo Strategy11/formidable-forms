@@ -285,7 +285,7 @@ class FrmForm {
 		$value = str_replace( $allow, $temp, $value );
 
 		if ( false !== strpos( $value, '<' ) ) {
-			$value = preg_replace( '/(\d)<(\d)/', '$1 < $2', $value );
+			$value = preg_replace( '/(\d)( ){0,1}<( ){0,1}(\d)/', '$1 < $4', $value );
 		}
 
 		$value = strip_tags( $value );
