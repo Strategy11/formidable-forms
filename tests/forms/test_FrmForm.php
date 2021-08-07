@@ -134,16 +134,17 @@ class test_FrmForm extends FrmUnitTest {
 		$original_value = '[189] > 1 && [189] < 5 ? 20 : [189] > 5 && [189] < 8 ? 21 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'comparisons should not be detected as unsafe html tags' );
 
-		$this->assert_sanitize_field_opt_calc( '50 < 100 ? 1 : 0', '50<100 ? 1 : 0', 'unspaced comparisons will be padded by a space to avoid strip_tags issues.' );
-		$this->assert_sanitize_field_opt_calc( '50 < 100 ? 1 : 0', '50 <100 ? 1 : 0' );
-		$this->assert_sanitize_field_opt_calc( '50 < 100 ? 1 : 0', '50< 100 ? 1 : 0' );
+		$safe_less_than_comparison = '50 < 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, $safe_less_than_comparison );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50<100 ? 1 : 0', 'unspaced comparisons will be padded by a space to avoid strip_tags issues.' );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50 <100 ? 1 : 0' );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50< 100 ? 1 : 0' );
 
 		$original_value = '50>100 ? 1 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' );
 
 		$original_value = '50 >100 ? 1 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
-
 	}
 
 	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
