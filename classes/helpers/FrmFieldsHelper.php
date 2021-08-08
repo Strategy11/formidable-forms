@@ -1823,6 +1823,11 @@ class FrmFieldsHelper {
 		$args = array(
 			'selected' => '0',
 			'options'  => array(),
+			'name'     => 'field_options[image_options_' . $field['id'] . ']',
+		);
+
+		$args['input_attrs'] = array(
+			'class' => 'frm_toggle_image_options',
 		);
 
 		foreach ( $options as $key => $option ) {

@@ -2720,30 +2720,9 @@ class FrmAppHelper {
 	public static function images_dropdown( $args ) {
 		$args = self::fill_default_images_dropdown_args( $args );
 
-		$selected_text   = isset( $args['options'][ $args['selected'] ]['text'] ) ? $args['options'][ $args['selected'] ]['text'] : '';
 		$input_attrs_str = self::get_images_dropdown_input_attrs( $args );
 		ob_start();
-		?>
-		<div class="frm_images_dropdown <?php echo esc_attr( $args['classes'] ); ?>">
-			<input<?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
-
-			<button type="button" class="frm_images_dropdown__toggle"><?php echo esc_html( $selected_text ); ?></button>
-
-			<div class="frm_images_dropdown__options frm_hidden frm_images_dropdown__options--<?php echo intval( count( $args['options'] ) ); ?>-col">
-				<?php
-				foreach ( $args['options'] as $key => $option ) {
-					$option['key'] = $key;
-
-					$image        = self::get_images_dropdown_option_image( $option, $args );
-					$classes      = self::get_images_dropdown_option_classes( $option, $args );
-					$custom_attrs = self::get_images_dropdown_option_custom_attrs( $option, $args );
-
-					include self::plugin_path() . '/classes/views/shared/images-dropdown-option.php';
-				}
-				?>
-			</div>
-		</div>
-		<?php
+		include self::plugin_path() . '/classes/views/shared/images-dropdown-option.php';
 		$output = ob_get_clean();
 
 		/**
@@ -2777,6 +2756,12 @@ class FrmAppHelper {
 		$new_args['options']     = (array) $new_args['options'];
 		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
 
+		// Set the number of columns.
+		$new_args['col_class'] = ceil( 12 / count( $new_args['options'] ) );
+		if ( $new_args['col_class'] > 6 ) {
+			$new_args['col_class'] = ceil( $new_args['col_class'] / 2 );
+		}
+
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.
 		 *
@@ -2798,14 +2783,9 @@ class FrmAppHelper {
 	 */
 	private static function get_images_dropdown_input_attrs( $args ) {
 		$input_attrs = $args['input_attrs'];
-		if ( isset( $input_attrs['class'] ) ) {
-			$input_attrs['class'] .= ' frm_images_dropdown__value';
-		} else {
-			$input_attrs['class'] = 'frm_images_dropdown__value';
-		}
+		$input_attrs['type']  = 'radio';
+		$input_attrs['name']  = $args['name'];
 
-		$input_attrs['type']  = 'hidden';
-		$input_attrs['value'] = $args['selected'];
 		$input_attrs_str      = '';
 		foreach ( $input_attrs as $key => $input_attr ) {
 			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
@@ -2836,8 +2816,6 @@ class FrmAppHelper {
 			'frmfont ' . $option['svg'],
 			array(
 				'echo'   => false,
-				'width'  => 102,
-				'height' => 89,
 			)
 		);
 
@@ -2863,12 +2841,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	private static function get_images_dropdown_option_classes( $option, $args ) {
-		$classes = 'frm_images_dropdown__option';
-
-		// The second condition is used when comparing a numeric string and a number.
-		if ( $args['selected'] === $option['key'] || ( is_numeric( $args['selected'] ) && is_numeric( $option['key'] ) && $args['selected'] == $option['key'] ) ) {
-			$classes .= ' frm_images_dropdown__option--selected';
-		}
+		$classes = '';
 
 		if ( ! empty( $option['custom_attrs']['class'] ) ) {
 			$classes .= ' ' . $option['custom_attrs']['class'];

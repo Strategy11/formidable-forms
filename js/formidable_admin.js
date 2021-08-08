@@ -3293,7 +3293,15 @@ function frmAdminBuildJS() {
 	 * Is the box checked to use images as options?
 	 */
 	function imagesAsOptions( fieldId ) {
-		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', isChecked( 'image_options_' + fieldId ), fieldId );
+		var checked = false,
+			field = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
+
+		for (var i=0; i < field.length; i++) {
+			if (field[i].checked) {
+				checked = field[i].value !== '0';
+			}
+		}
+		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', checked, fieldId );
 	}
 
 	function showingLabelWithImage( fieldId ) {
@@ -6754,67 +6762,6 @@ function frmAdminBuildJS() {
 		};
 	}
 
-	function initImagesDropdown() {
-		const onClickToggle = event => {
-			// Toggle dropdown.
-			const dropdown = event.target.nextElementSibling;
-			if ( dropdown.classList.contains( 'frm_hidden' ) ) {
-				dropdown.classList.remove( 'frm_hidden' );
-			} else {
-				dropdown.classList.add( 'frm_hidden' );
-			}
-		};
-
-		const onClickOption = event => {
-			const selectedClass = 'frm_images_dropdown__option--selected';
-			const optionEl      = event.target.matches( '.frm_images_dropdown__option' ) ? event.target : event.target.closest( '.frm_images_dropdown__option' );
-			if ( optionEl.getAttribute( 'data-upgrade' ) ) {
-				return;
-			}
-
-			const wrapperEl = optionEl.closest( '.frm_images_dropdown' );
-			const valueEl   = wrapperEl.querySelector( '.frm_images_dropdown__value' );
-			const toggleEl  = wrapperEl.querySelector( '.frm_images_dropdown__toggle' );
-
-			const imageOptionsToggle = wrapperEl.parentNode.querySelector( '.frm_toggle_image_options' );
-			if ( imageOptionsToggle ) {
-				if ( '1' === optionEl.getAttribute( 'data-value' ) ) {
-					imageOptionsToggle.checked = true;
-				} else {
-					imageOptionsToggle.checked = false;
-				}
-
-				imageOptionsToggle.dispatchEvent( new Event( 'click', { bubbles: true }) );
-			}
-
-			valueEl.value = optionEl.getAttribute( 'data-value' );
-			valueEl.dispatchEvent( new Event( 'change', { bubbles: true }) );
-
-			toggleEl.innerHTML = optionEl.querySelector( '.frm_images_dropdown__text' ).innerHTML;
-
-			optionEl.parentElement.querySelectorAll( '.frm_images_dropdown__option' ).forEach( optionEl => {
-				optionEl.classList.remove( selectedClass );
-			});
-
-			optionEl.classList.add( selectedClass );
-		};
-
-		document.addEventListener( 'click', event => {
-			if ( event.target.matches( '.frm_images_dropdown__toggle' ) ) {
-				onClickToggle( event );
-				return;
-			}
-
-			if ( event.target.closest( '.frm_images_dropdown__option' ) ) {
-				onClickOption( event );
-			}
-
-			if ( ! event.target.closest( '.frm_images_dropdown' ) ) {
-				document.querySelectorAll( '.frm_images_dropdown__options' ).forEach( el => el.classList.add( 'frm_hidden' ) );
-			}
-		}, false );
-	}
-
 	return {
 		init: function() {
 			s = {};
@@ -6936,8 +6883,6 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
-
-			initImagesDropdown();
 		},
 
 		buildInit: function() {
