@@ -4744,6 +4744,7 @@ function frmAdminBuildJS() {
 					singleField = document.getElementById( 'frm-single-settings-' + fieldId );
 
 					moveFieldSettings( singleField );
+					fieldUpdated();
 				}
 			}
 		});
