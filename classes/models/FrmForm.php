@@ -292,7 +292,8 @@ class FrmForm {
 	}
 
 	/**
-	 * Format a comparison like 5<10 to 5 < 10. Also works on 5< 10, 5 <10 variations.
+	 * Format a comparison like 5<10 to 5 < 10. Also works on 5< 10, 5 <10, 5<=10 variations.
+	 * This is to avoid an issue with unspaced calculations being recognized as HTML that gets removed when strip_tags is called.
 	 *
 	 * @param string $calc
 	 * @return string
