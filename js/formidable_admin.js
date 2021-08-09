@@ -4,8 +4,6 @@ var frmAdminBuild;
 
 var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
-	// TODO this requires WordPress 5.0. Do we need to support father back? We still advertise as supporting 4.7.
-	// 5.0 has been around since December 6, 2018. I use this in views and as far as I know this isn't an issue for anyone so I assume no one is < 5.0 at this point.
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
 	var el = {
@@ -887,8 +885,6 @@ function frmAdminBuildJS() {
 						if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
 							// remove an empty field group, but don't remove an empty section.
 							$closestFieldBox.remove();
-						} else {
-							// TODO I think we actually need to put stuff back in here to allow for the drop again into an empty section.
 						}
 					} else {
 						syncLayoutClasses( $previousContainerFields.first() );
@@ -3568,7 +3564,6 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
-		// TODO this should probably support a bulk delete as one action instead of one-per-field.
 		deleteFieldIds.forEach(
 			function( fieldId ) {
 				deleteField( fieldId );
@@ -5367,7 +5362,6 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		// TODO selecting multiple groups within a section is removed here. We should exit early.
 		deselectFields();
 		$thisobj.addClass( 'selected' );
 		showFieldOptions( obj );
