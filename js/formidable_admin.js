@@ -3502,15 +3502,46 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
-		// TODO this should probably support a bulk delete as one action instead of one-per-field.
+		var deleteOnConfirm;
+
+		deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( getSelectedFieldIds() );
+		document.getElementById( 'frm_field_multiselect_popup' ).remove();
+
+		this.setAttribute( 'data-frmverify', __( 'Delete every selected field group?', 'formidable' ) );
+		confirmLinkClick( this );
+
+		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
+		jQuery( '#frm_confirm_modal' ).one( 'dialogclose', function() {
+			jQuery( '#frm-confirmed-click' ).off( 'click', deleteOnConfirm );
+		});
+	}
+
+	function getSelectedFieldIds() {
+		var deleteFieldIds = [];
 		jQuery( '.frm-selected-field-group > li.form-field' )
 			.not( '.ui-sortable-helper' )
 			.each(
 				function() {
-					deleteField( this.dataset.fid );
+					deleteFieldIds.push( this.dataset.fid );
 				}
 			);
-		this.closest( '#frm_field_multiselect_popup' ).remove();
+		return deleteFieldIds;
+	}
+
+	function getDeleteSelectedFieldGroupsOnConfirmFunction( deleteFieldIds ) {
+		return function( event ) {
+			event.preventDefault();
+			deleteAllSelectedFieldGroups( deleteFieldIds );
+		};
+	}
+
+	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
+		// TODO this should probably support a bulk delete as one action instead of one-per-field.
+		deleteFieldIds.forEach(
+			function( fieldId ) {
+				deleteField( fieldId );
+			}
+		);
 	}
 
 	function deleteFieldConfirmed() {
