@@ -3502,12 +3502,14 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
-		var deleteOnConfirm;
+		var fieldIdsToDelete, deleteOnConfirm;
 
-		deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( getSelectedFieldIds() );
+		fieldIdsToDelete = getSelectedFieldIds();
+		deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( fieldIdsToDelete );
 		document.getElementById( 'frm_field_multiselect_popup' ).remove();
 
-		this.setAttribute( 'data-frmverify', __( 'Delete every selected field group?', 'formidable' ) );
+		this.setAttribute( 'data-frmcaution', __( 'Heads up', 'formidable' ) );
+		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
 		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
