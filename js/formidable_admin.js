@@ -1393,7 +1393,7 @@ function frmAdminBuildJS() {
 	// don't allow field groups in field groups.
 	// don't allow hidden fields inside of field groups.
 	function allowDrop( ui ) {
-		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup;
+		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
 
 		insideFieldGroup = ui.placeholder.siblings( 'li.form-field' ).length > 0;
 
@@ -1442,6 +1442,12 @@ function frmAdminBuildJS() {
 		}
 
 		isFieldGroup = ui.item.find( 'ul.frm_sorting' ).length > 0;
+		isSection = ui.item.hasClass( 'edit_field_type_divider' );
+
+		if ( insideSection && isSection ) {
+			// but do not allow a section inside of a section.
+			return false;
+		}
 
 		if ( isFieldGroup && insideFieldGroup ) {
 			// allow a field group inside of a field group if it is being placed within a section above/below another field group.
@@ -1463,7 +1469,7 @@ function frmAdminBuildJS() {
 		}
 
 		// moving an existing field
-		return ! ui.item.hasClass( 'edit_field_type_form' ) && ! ui.item.hasClass( 'edit_field_type_divider' );
+		return ! ui.item.hasClass( 'edit_field_type_form' ) && ! isSection;
 	}
 
 	function loadFields( fieldId ) {
