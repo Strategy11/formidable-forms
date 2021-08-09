@@ -1685,10 +1685,10 @@ function frmAdminBuildJS() {
 	function checkForMultiselectKeysOnMouseMove( event ) {
 		var keyIsDown = ! ! ( event.ctrlKey || event.metaKey || event.shiftKey );
 		jQuery( document.getElementById( 'frm_builder_page' ) ).toggleClass( 'frm-multiselect-key-is-down', keyIsDown );
-		checkForActiveHoverTarget( event, keyIsDown );
+		checkForActiveHoverTarget( event );
 	}
 
-	function checkForActiveHoverTarget( event, keyIsDown ) {
+	function checkForActiveHoverTarget( event ) {
 		var container, elementFromPoint, list, previousHoverTarget;
 
 		container = document.getElementById( 'post-body-content' );
@@ -1696,7 +1696,10 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		// TODO if we are holding down a key, we want to make sure that we're ignoring wrappers for any of our selected fields.
+		if ( null !== document.querySelector( '.frm-field-group-hover-target .frm-field-settings-open' ) ) {
+			// do not set a hover target if a dropdown is open for the current hover target.
+			return;
+		}
 
 		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
 		if ( null !== elementFromPoint && ! elementFromPoint.classList.contains( 'edit_field_type_divider' ) ) {
