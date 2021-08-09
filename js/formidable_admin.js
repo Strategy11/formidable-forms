@@ -908,6 +908,7 @@ function frmAdminBuildJS() {
 
 				maybeFixEndDividers();
 				fixUnwrappedListItems();
+				toggleSectionHolder();
 				updateFieldOrder();
 			},
 			sort: function( event, ui ) {
@@ -1016,16 +1017,11 @@ function frmAdminBuildJS() {
 	}
 
 	function fixUnwrappedListItems() {
-		var fixed = false;
 		document.querySelectorAll( 'ul.start_divider > li.form-field:not(.edit_field_type_end_divider)' ).forEach(
 			function( field ) {
-				fixed = true;
 				wrapFieldLiInPlace( field );
 			}
 		);
-		if ( fixed ) {
-			toggleSectionHolder();
-		}
 	}
 
 	function deleteEmptyDividerWrappers() {
@@ -4759,9 +4755,11 @@ function frmAdminBuildJS() {
 	}
 
 	function toggleSectionHolder() {
-		jQuery( '.start_divider' ).each( function() {
-			toggleOneSectionHolder( jQuery( this ) );
-		});
+		document.querySelectorAll( '.start_divider' ).forEach(
+			function( divider ) {
+				toggleOneSectionHolder( jQuery( divider ) );
+			}
+		);
 	}
 
 	function toggleOneSectionHolder( $section ) {
@@ -4781,7 +4779,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		noSectionFields = $section.parent( '.frm_field_box' ).children( '.frm_no_section_fields' ).get( 0 );
+		noSectionFields = $section.parent().children( '.frm_no_section_fields' ).get( 0 );
 		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
 	}
 
