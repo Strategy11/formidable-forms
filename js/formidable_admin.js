@@ -871,15 +871,13 @@ function frmAdminBuildJS() {
 				var moving, $previousContainerFields, $closestFieldBox;
 
 				container.get( 0 ).classList.remove( 'frm-dragging-field' );
-
 				moving = jQuery( this );
 				copyHelper && copyHelper.remove();
+
 				if ( cancelSort ) {
 					moving.sortable( 'cancel' );
 					return;
 				}
-
-				updateFieldOrder();
 
 				$previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
 				if ( $previousFieldContainer.length ) {
@@ -896,7 +894,6 @@ function frmAdminBuildJS() {
 					}
 				}
 
-				// TODO do I check for a section here too?
 				if ( ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) || ui.item.parent().hasClass( 'start_divider' ) ) && ui.item.hasClass( 'form-field' ) ) {
 					// dragging an item into a new row.
 					wrapFieldLiInPlace( ui.item );
@@ -910,6 +907,7 @@ function frmAdminBuildJS() {
 
 				maybeFixEndDividers();
 				fixUnwrappedListItems();
+				updateFieldOrder();
 			},
 			sort: function( event, ui ) {
 				var $row, $children, $lastChild, currentIndex, left;

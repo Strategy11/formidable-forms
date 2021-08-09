@@ -5523,6 +5523,14 @@ span.howto {
 	pointer-events: none;
 }
 
+#frm_field_group_controls {
+	visibility: hidden;
+}
+
+.frm-field-group-hover-target #frm_field_group_controls {
+	visibility: visible;
+}
+
 .frm-field-group-hover-target,
 .frm-has-open-field-group-popup {
 	background: rgba(65, 153, 253, 0.07);
