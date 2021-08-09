@@ -21,12 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
 		<?php } ?>
 
-		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
+		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>" data-container="body">
 			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_move_icon' ); ?>
 		</a>
 
 		<div class="dropdown">
-			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown">
+			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 			</a>
 			<ul class="frm-dropdown-menu" role="menu">
