@@ -131,6 +131,8 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::sanitize_field_opt
 	 */
 	public function test_sanitize_field_opt() {
+		$this->assert_sanitize_field_opt_calc( '', '<div></div>', 'HTML should be stripped from calculations' );
+
 		$original_value = '[189] > 1 && [189] < 5 ? 20 : [189] > 5 && [189] < 8 ? 21 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'comparisons should not be detected as unsafe html tags' );
 
