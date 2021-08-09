@@ -876,35 +876,39 @@ function frmAdminBuildJS() {
 				copyHelper && copyHelper.remove();
 				if ( cancelSort ) {
 					moving.sortable( 'cancel' );
-				} else {
-					updateFieldOrder();
+					return;
+				}
 
-					$previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
-					if ( $previousFieldContainer.length ) {
-						if ( ! $previousContainerFields.length ) {
-							$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
-							if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
-								// remove an empty field group, but don't remove an empty section.
-								$closestFieldBox.remove();
-							} else {
-								// TODO I think we actually need to put stuff back in here to allow for the drop again into an empty section.
-							}
+				updateFieldOrder();
+
+				$previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
+				if ( $previousFieldContainer.length ) {
+					if ( ! $previousContainerFields.length ) {
+						$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
+						if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
+							// remove an empty field group, but don't remove an empty section.
+							$closestFieldBox.remove();
 						} else {
-							syncLayoutClasses( $previousContainerFields.first() );
-						}
-					}
-					if ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) && ui.item.hasClass( 'form-field' ) ) {
-						// dragging an item into a new row.
-						wrapFieldLiInPlace( ui.item );
-						if ( $previousContainerFields.length ) {
-							// only if the previous container had other sibling fields, remove the previous layout class.
-							syncLayoutClasses( ui.item );
+							// TODO I think we actually need to put stuff back in here to allow for the drop again into an empty section.
 						}
 					} else {
-						syncLayoutClasses( ui.item );
+						syncLayoutClasses( $previousContainerFields.first() );
 					}
 				}
-				moving.children( '.edit_field_type_end_divider' ).appendTo( this.closest( 'ul.start_divider' ) );
+
+				// TODO do I check for a section here too?
+				if ( ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) || ui.item.parent().hasClass( 'start_divider' ) ) && ui.item.hasClass( 'form-field' ) ) {
+					// dragging an item into a new row.
+					wrapFieldLiInPlace( ui.item );
+					if ( $previousContainerFields.length ) {
+						// only if the previous container had other sibling fields, remove the previous layout class.
+						syncLayoutClasses( ui.item );
+					}
+				} else {
+					syncLayoutClasses( ui.item );
+				}
+
+				maybeFixEndDividers();
 				fixUnwrappedListItems();
 			},
 			sort: function( event, ui ) {
@@ -957,6 +961,26 @@ function frmAdminBuildJS() {
 		jQuery( sort ).sortable( opts );
 
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+	}
+
+	/**
+	 * Make sure the end dividers are always a child of a start divider, at the bottom at the list.
+	 */
+	function maybeFixEndDividers() {
+		var endDividers = document.querySelectorAll( '.edit_field_type_end_divider' );
+		if ( ! endDividers.length ) {
+			return;
+		}
+		endDividers.forEach(
+			function( endDivider ) {
+				if ( endDivider.parentNode.classList.contains( 'start_divider' ) ) {
+					// avoid having to call closest, but still append it as it might not be the last child.
+					endDivider.parentNode.appendChild( endDivider );
+					return;
+				}
+				endDivider.closest( '.start_divider' ).appendChild( endDivider );
+			}
+		);
 	}
 
 	/**
