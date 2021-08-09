@@ -2830,7 +2830,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		unselectFieldGroups();
+		deselectFields();
 
 		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( hoverTarget.querySelector( 'li.form-field' ) );
 
