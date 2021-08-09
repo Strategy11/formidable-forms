@@ -129,6 +129,7 @@ class test_FrmForm extends FrmUnitTest {
 
 	/**
 	 * @covers FrmForm::sanitize_field_opt
+	 * @group mike
 	 */
 	public function test_sanitize_field_opt() {
 		$this->assert_sanitize_field_opt_calc( '', '<div></div>', 'HTML should be stripped from calculations' );
@@ -173,5 +174,24 @@ class test_FrmForm extends FrmUnitTest {
 			array( 'FrmForm', 'sanitize_field_opt' ),
 			array( $opt, &$value )
 		);
+	}
+
+	/**
+	 * @covers FrmForm::normalize_calc_spaces
+	 * @group mike
+	 */
+	public function test_normalize_calc_spaces() {
+		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
+		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
+		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
+		$this->assertEquals( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
+		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
+		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
+		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
+		$this->assertEquals( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
+	}
+
+	private function normalize_calc_spaces( $calc ) {
+		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}
 }
