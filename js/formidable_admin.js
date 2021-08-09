@@ -844,6 +844,7 @@ function frmAdminBuildJS() {
 				}
 			},
 			start: function( event, ui ) {
+				unselectFieldGroups();
 				deleteEmptyDividerWrappers();
 				maybeRemoveGroupHoverTarget();
 				container.get( 0 ).classList.add( 'frm-dragging-field' );
