@@ -2830,6 +2830,8 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		unselectFieldGroups();
+
 		sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement( hoverTarget.querySelector( 'li.form-field' ) );
 
 		hoverTarget.classList.add( 'frm-has-open-field-group-popup' );
