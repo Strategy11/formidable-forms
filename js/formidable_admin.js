@@ -4729,15 +4729,15 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldOrder() {
-
+		var fields, fieldId, field, currentOrder, newOrder;
 		renumberPageBreaks();
 		jQuery( '#frm-show-fields' ).each( function( i ) {
-			var fields = jQuery( 'li.frm_field_box', this );
+			fields = jQuery( 'li.frm_field_box', this );
 			for ( i = 0; i < fields.length; i++ ) {
-				var fieldId = fields[ i ].getAttribute( 'data-fid' ),
-					field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' ),
-					currentOrder = field.val(),
-					newOrder = ( i + 1 );
+				fieldId = fields[ i ].getAttribute( 'data-fid' );
+				field = jQuery( 'input[name="field_options[field_order_' + fieldId + ']"]' );
+				currentOrder = field.val();
+				newOrder = i + 1;
 
 				if ( currentOrder != newOrder ) {
 					field.val( newOrder );
