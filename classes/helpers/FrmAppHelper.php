@@ -2722,7 +2722,7 @@ class FrmAppHelper {
 
 		$input_attrs_str = self::get_images_dropdown_input_attrs( $args );
 		ob_start();
-		include self::plugin_path() . '/classes/views/shared/images-dropdown-option.php';
+		include self::plugin_path() . '/classes/views/shared/images-dropdown.php';
 		$output = ob_get_clean();
 
 		/**
