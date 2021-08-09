@@ -1391,11 +1391,11 @@ function frmAdminBuildJS() {
 	// don't allow page breaks inside of field groups.
 	// don't allow field groups with sections inside of sections.
 	// don't allow field groups in field groups.
-	// don't allow hidden fields inside of field groups.
+	// don't allow hidden fields inside of field groups but allow them in sections.
 	function allowDrop( ui ) {
 		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
 
-		insideFieldGroup = ui.placeholder.siblings( 'li.form-field' ).length > 0;
+		insideFieldGroup = getFieldsInRow( ui.placeholder.parent() ).length > 0;
 
 		if ( insideFieldGroup ) {
 			insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;

@@ -5571,10 +5571,6 @@ span.howto {
 	font-style: normal;
 }
 
-.repeat_section .start_divider li:only-child {
-	margin-top: 50px;
-}
-
 .show_repeat_sec {
 	display: none;
 }
