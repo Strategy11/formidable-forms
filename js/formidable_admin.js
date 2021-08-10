@@ -3531,9 +3531,9 @@ function frmAdminBuildJS() {
 				return false;
 			}
 			totalFieldCount += getFieldsInRow( jQuery( selectedFieldGroups[ index ] ) ).length;
-		}
-		if ( totalFieldCount > 6 ) {
-			return false;
+			if ( totalFieldCount > 6 ) {
+				return false;
+			}
 		}
 		return true;
 	}
