@@ -3522,13 +3522,18 @@ function frmAdminBuildJS() {
 	}
 
 	function selectedFieldsAreMergable() {
-		var selectedFieldGroups, length, index;
+		var selectedFieldGroups, totalFieldCount, length, index;
 		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
 		length = selectedFieldGroups.length;
+		totalFieldCount = 0;
 		for ( index = 0; index < length; ++index ) {
 			if ( null !== selectedFieldGroups[ index ].querySelector( '.edit_field_type_break, .edit_field_type_hidden' ) ) {
 				return false;
 			}
+			totalFieldCount += getFieldsInRow( jQuery( selectedFieldGroups[ index ] ) ).length;
+		}
+		if ( totalFieldCount > 6 ) {
+			return false;
 		}
 		return true;
 	}
