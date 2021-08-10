@@ -875,6 +875,7 @@ function frmAdminBuildJS() {
 
 				if ( cancelSort ) {
 					moving.sortable( 'cancel' );
+					syncAfterDragAndDrop();
 					return;
 				}
 
@@ -902,10 +903,7 @@ function frmAdminBuildJS() {
 					syncLayoutClasses( ui.item );
 				}
 
-				maybeFixEndDividers();
-				fixUnwrappedListItems();
-				toggleSectionHolder();
-				updateFieldOrder();
+				syncAfterDragAndDrop();
 			},
 			sort: function( event, ui ) {
 				var $row, $children, $lastChild, currentIndex, left;
@@ -957,6 +955,24 @@ function frmAdminBuildJS() {
 		jQuery( sort ).sortable( opts );
 
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
+	}
+
+	function syncAfterDragAndDrop() {
+		maybeCleanUpCancelledButtons();
+		maybeFixEndDividers();
+		fixUnwrappedListItems();
+		toggleSectionHolder();
+		updateFieldOrder();
+	}
+
+	function maybeCleanUpCancelledButtons() {
+		Array.from( document.getElementById( 'frm-show-fields' ).children ).forEach(
+			function( fieldBox ) {
+				if ( fieldBox.classList.contains( 'frmbutton' ) && fieldBox.classList.contains( 'ui-draggable' ) ) {
+					fieldBox.remove();
+				}
+			}
+		);
 	}
 
 	/**
