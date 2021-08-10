@@ -23,6 +23,16 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
+		/**
+		 * Allows changing the HTML of option label in choice field (radio, checkbox,...).
+		 *
+		 * @since 5.0
+		 *
+		 * @param string $label Label HTML.
+		 * @param array  $args  The arguments. Contains `field`.
+		 */
+		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field' ) );
+
 		$checked = ''; // init
 		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 			// Let the checked state of 'Other' fields be determined solely by FrmFieldsHelper::prepare_other_input as below.
@@ -48,7 +58,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		?> /><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
+			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // WPCS: XSS ok.
 		}
 
 		$other_args = array(

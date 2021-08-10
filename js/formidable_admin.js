@@ -3192,6 +3192,9 @@ function frmAdminBuildJS() {
 				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
+			/**
+			 * @since 5.0
+			 */
 			label = frmAdminBuild.hooks.applyFilters( 'frm_choice_field_label', label, fieldId, optVals[ i ], hasImageOptions );
 
 			checked = getChecked( optVals[ i ].id  );
@@ -3301,11 +3304,20 @@ function frmAdminBuildJS() {
 				checked = '0' !== field[ i ].value;
 			}
 		}
+
+		/**
+		 * @since 5.0
+		 */
 		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', checked, fieldId );
 	}
 
 	function showingLabelWithImage( fieldId ) {
-		return ! isChecked( 'hide_image_text_' + fieldId );
+		const isShowing = ! isChecked( 'hide_image_text_' + fieldId );
+
+		/**
+		 * @since 5.0
+		 */
+		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_showing_label_with_image', isShowing, fieldId );
 	}
 
 	function isChecked( id ) {
@@ -7536,6 +7548,9 @@ function frmAdminBuildJS() {
 			location.href = url;
 		},
 
+		/**
+		 * @since 5.0
+		 */
 		hooks: {
 			applyFilters: function( hookName, ...args ) {
 				return wp.hooks.applyFilters( hookName, ...args );
