@@ -1783,7 +1783,7 @@ function frmAdminBuildJS() {
 		var regex = /id="(\S+)"/,
 			match = regex.exec( msg ),
 			field = document.getElementById( match[1]),
-			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting',
+			section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting.start_divider',
 			$thisSection = jQuery( section ),
 			type = field.getAttribute( 'data-type' ),
 			toggled = false,
@@ -4771,7 +4771,7 @@ function frmAdminBuildJS() {
 	function toggleOneSectionHolder( $section ) {
 		var noSectionFields, $rows, length, index, sectionHasFields;
 
-		if ( $section.length === 0 ) {
+		if ( ! $section.length ) {
 			return;
 		}
 

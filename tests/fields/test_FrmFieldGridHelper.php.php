@@ -31,9 +31,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		return $this->run_private_method( array( 'FrmFieldGridHelper', 'get_size_of_class' ), array( $class ) );
 	}
 
-	/**
-	 * @group mike
-	 */
 	public function test_basic_grouping() {
 		$this->form_id       = $this->factory->form->create();
 		$half_width_field    = $this->create_field_with_classes( 'text', 'frm_half' );
@@ -84,9 +81,6 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		);
 	}
 
-	/**
-	 * @group mike
-	 */
 	public function test_with_sections() {
 		$this->form_id         = $this->factory->form->create();
 		$half_width_field      = $this->create_field_with_classes( 'text', 'frm_half' );
