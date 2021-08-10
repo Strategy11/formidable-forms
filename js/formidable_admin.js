@@ -1399,7 +1399,7 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		if ( insideSection && ui.placeholder.prev().hasClass( 'edit_field_type_end_divider' ) ) {
+		if ( insideSection && ui.placeholder.siblings().length > 1 && ui.placeholder.prev().hasClass( 'edit_field_type_end_divider' ) ) {
 			return false;
 		}
 
