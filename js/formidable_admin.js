@@ -1417,9 +1417,15 @@ function frmAdminBuildJS() {
 	// don't allow field groups in field groups.
 	// don't allow hidden fields inside of field groups but allow them in sections.
 	function allowDrop( ui ) {
-		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
+		var fieldsInRow, insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
 
-		insideFieldGroup = getFieldsInRow( ui.placeholder.parent() ).length > 0;
+		fieldsInRow = getFieldsInRow( ui.placeholder.parent() );
+
+		if ( ! groupCanFitAnotherField( fieldsInRow, ui.item ) ) {
+			return false;
+		}
+
+		insideFieldGroup = fieldsInRow.length > 0;
 		insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;
 
 		if ( ! insideSection && ! insideFieldGroup ) {
@@ -1493,6 +1499,19 @@ function frmAdminBuildJS() {
 
 		// moving an existing field
 		return ! ui.item.hasClass( 'edit_field_type_form' ) && ! isSection;
+	}
+
+	function groupCanFitAnotherField( fieldsInRow, $field ) {
+		var fieldId;
+		if ( fieldsInRow.length < 6 ) {
+			return true;
+		}
+		if ( fieldsInRow.length > 6 ) {
+			return false;
+		}
+		fieldId = $field.attr( 'data-fid' );
+		// allow 6 if we're not changing field groups.
+		return 1 === jQuery( fieldsInRow ).filter( '[data-fid="' + fieldId + '"]' ).length;
 	}
 
 	function loadFields( fieldId ) {
