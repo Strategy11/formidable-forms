@@ -1388,12 +1388,7 @@ function frmAdminBuildJS() {
 		var insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
 
 		insideFieldGroup = getFieldsInRow( ui.placeholder.parent() ).length > 0;
-
-		if ( insideFieldGroup ) {
-			insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;
-		} else {
-			insideSection = ui.placeholder.parent().hasClass( 'start_divider' );
-		}
+		insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;
 
 		if ( ! insideSection && ! insideFieldGroup ) {
 			return true;
@@ -3139,6 +3134,7 @@ function frmAdminBuildJS() {
 				);
 			}
 		);
+		updateFieldOrder();
 		syncLayoutClasses( getFieldsInRow( $firstGroupUl ).first() );
 		return $firstGroupUl;
 	}
