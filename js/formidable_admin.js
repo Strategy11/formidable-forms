@@ -1738,6 +1738,7 @@ function frmAdminBuildJS() {
 		if ( null !== elementFromPoint && null !== elementFromPoint.closest( '#frm-show-fields' ) ) {
 			return;
 		}
+		maybeRemoveGroupHoverTarget();
 	}
 
 	function onFieldActionDropdownShow() {
