@@ -3296,9 +3296,9 @@ function frmAdminBuildJS() {
 		var checked = false,
 			field = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
 
-		for (var i=0; i < field.length; i++) {
-			if (field[i].checked) {
-				checked = field[i].value !== '0';
+		for ( var i = 0; i < field.length; i++ ) {
+			if ( field[ i ].checked ) {
+				checked = '0' !== field[ i ].value;
 			}
 		}
 		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', checked, fieldId );
