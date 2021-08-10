@@ -1115,7 +1115,7 @@ function frmAdminBuildJS() {
 	}
 
 	function updateFieldGroupControls( $row, count ) {
-		var rowOffset, controls;
+		var rowOffset, shouldShowControls, controls;
 
 		rowOffset = $row.offset();
 
@@ -1123,8 +1123,15 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		shouldShowControls = count >= 2;
+
 		controls = document.getElementById( 'frm_field_group_controls' );
 		if ( null === controls ) {
+			if ( ! shouldShowControls ) {
+				// exit early. if we do not need controls and they do not exist, do nothing.
+				return;
+			}
+
 			controls = div();
 			controls.id = 'frm_field_group_controls';
 			controls.innerHTML = ''.concat(
@@ -1135,7 +1142,7 @@ function frmAdminBuildJS() {
 		}
 
 		$row.append( controls );
-		controls.style.display = count >= 2 ? 'block' : 'none';
+		controls.style.display = shouldShowControls ? 'block' : 'none';
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
