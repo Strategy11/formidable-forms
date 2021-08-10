@@ -958,19 +958,28 @@ function frmAdminBuildJS() {
 	}
 
 	function syncAfterDragAndDrop() {
-		maybeCleanUpCancelledButtons();
+		maybeRemoveNewCancelledFields();
+		maybeUncancelFields();
 		maybeFixEndDividers();
 		fixUnwrappedListItems();
 		toggleSectionHolder();
 		updateFieldOrder();
 	}
 
-	function maybeCleanUpCancelledButtons() {
+	function maybeRemoveNewCancelledFields() {
 		Array.from( document.getElementById( 'frm-show-fields' ).children ).forEach(
 			function( fieldBox ) {
 				if ( fieldBox.classList.contains( 'frmbutton' ) && fieldBox.classList.contains( 'ui-draggable' ) ) {
 					fieldBox.remove();
 				}
+			}
+		);
+	}
+
+	function maybeUncancelFields() {
+		document.querySelectorAll( '.frm_cancel_sort' ).forEach(
+			function( field ) {
+				field.classList.remove( 'frm_cancel_sort' );
 			}
 		);
 	}
