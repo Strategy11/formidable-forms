@@ -1379,7 +1379,7 @@ function frmAdminBuildJS() {
 		return ++autoId;
 	}
 
-	// don't allow page break, embed form, captcha, summary, or section inside section field
+	// don't allow page break, embed form, or section inside section field
 	// don't allow page breaks inside of field groups.
 	// don't allow field groups with sections inside of sections.
 	// don't allow field groups in field groups.
