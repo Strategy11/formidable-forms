@@ -125,7 +125,7 @@ class FrmFieldGridHelper {
 			$this->close_field_wrapper();
 		}
 
-		if ( false === $this->parent_li ) {
+		if ( false === $this->parent_li && 'end_divider' !== $this->field->type ) {
 			$this->begin_field_wrapper();
 		}
 
@@ -139,6 +139,9 @@ class FrmFieldGridHelper {
 	 */
 	private function should_first_close_the_active_field_wrapper() {
 		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
+			return false;
+		}
+		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
 		return ! $this->can_support_current_layout() || $this->is_frm_first;
