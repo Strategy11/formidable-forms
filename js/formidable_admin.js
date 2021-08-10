@@ -1404,6 +1404,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
+		if ( insideSection && ui.placeholder.prev().hasClass( 'edit_field_type_end_divider' ) ) {
+			return false;
+		}
+
 		isNewField = ui.item.hasClass( 'frmbutton' );
 
 		if ( isNewField ) {
@@ -1742,6 +1746,8 @@ function frmAdminBuildJS() {
 	}
 
 	function onFieldActionDropdownShow() {
+		unselectFieldGroups();
+		// maybe offset the dropdown if it goes off of the right of the screen.
 		setTimeout(
 			function() {
 				var ul, $ul;
