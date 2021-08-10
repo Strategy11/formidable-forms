@@ -2845,7 +2845,7 @@ function frmAdminBuildJS() {
 	}
 
 	function destroyFieldGroupPopupOnOutsideClick( event ) {
-		if ( event.target.classList.contains( 'frm-custom-field-group-layout' ) ) {
+		if ( event.target.classList.contains( 'frm-custom-field-group-layout' ) || event.target.classList.contains( 'frm-cancel-custom-field-group-layout' ) ) {
 			return;
 		}
 		if ( ! jQuery( event.target ).closest( '#frm_field_group_controls' ).length && ! jQuery( event.target ).closest( '#frm_field_group_popup' ).length ) {
@@ -3304,7 +3304,7 @@ function frmAdminBuildJS() {
 	}
 
 	function focusFieldGroupInputOnClick() {
-		this.focus();
+		this.select();
 	}
 
 	function cancelCustomFieldGroupClick() {
