@@ -3393,6 +3393,7 @@ function frmAdminBuildJS() {
 					// unselect if holding ctrl or cmd and the group was already active.
 					--numberOfSelectedGroups;
 					hoverTarget.classList.remove( 'frm-selected-field-group' );
+					syncAfterMultiSelect( numberOfSelectedGroups );
 					return; // exit early to avoid adding back frm-selected-field-group
 				} else {
 					++numberOfSelectedGroups;
@@ -3420,26 +3421,29 @@ function frmAdminBuildJS() {
 				// when holding shift and clicking, text gets selected. unselect it.
 				document.getSelection().removeAllRanges();
 			}
-
-			if ( numberOfSelectedGroups >= 2 ) {
-				addFieldMultiselectPopup();
-			}
 		} else {
 			// not multi-selecting
 			unselectFieldGroups();
 		}
 
-		clearSettingsBox( true ); // unselect any fields if one is selected.
-
 		hoverTarget.classList.add( 'frm-selected-field-group' );
-		maybeRemoveGroupHoverTarget();
+		syncAfterMultiSelect( numberOfSelectedGroups );
 
 		jQuery( document ).off( 'click', unselectFieldGroups );
 		jQuery( document ).on( 'click', unselectFieldGroups );
 	}
 
+	function syncAfterMultiSelect( numberOfSelectedGroups ) {
+		clearSettingsBox( true ); // unselect any fields if one is selected.
+		if ( numberOfSelectedGroups >= 2 ) {
+			addFieldMultiselectPopup();
+		} else {
+			maybeRemoveMultiselectPopup();
+		}
+		maybeRemoveGroupHoverTarget();
+	}
+
 	function unselectFieldGroups( event ) {
-		var popup;
 		if ( 'undefined' !== typeof event ) {
 			if ( null !== event.originalEvent.target.closest( '#frm-show-fields' ) ) {
 				return;
@@ -3459,7 +3463,11 @@ function frmAdminBuildJS() {
 		}
 		jQuery( '.frm-selected-field-group' ).removeClass( 'frm-selected-field-group' );
 		jQuery( document ).off( 'click', unselectFieldGroups );
-		popup = document.getElementById( 'frm_field_multiselect_popup' );
+		maybeRemoveMultiselectPopup();
+	}
+
+	function maybeRemoveMultiselectPopup() {
+		var popup = document.getElementById( 'frm_field_multiselect_popup' );
 		if ( null !== popup ) {
 			popup.remove();
 		}
@@ -3475,11 +3483,15 @@ function frmAdminBuildJS() {
 		popup = document.getElementById( 'frm_field_multiselect_popup' );
 
 		if ( null !== popup ) {
+			popup.classList.toggle( 'frm-unmergable', ! selectedFieldsAreMergable() );
 			return popup;
 		}
 
 		popup = div();
 		popup.id = 'frm_field_multiselect_popup';
+		if ( ! selectedFieldsAreMergable() ) {
+			popup.classList.add( 'frm-unmergable' );
+		}
 
 		mergeOption = div();
 		mergeOption.classList.add( 'frm-merge-fields-into-row' );
@@ -3507,6 +3519,10 @@ function frmAdminBuildJS() {
 		jQuery( popup ).hide().fadeIn();
 
 		return popup;
+	}
+
+	function selectedFieldsAreMergable() {
+		return null === document.querySelector( '.frm-selected-field-group > .edit_field_type_break' );
 	}
 
 	function mergeFieldsIntoRowClick( event ) {

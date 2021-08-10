@@ -8282,6 +8282,11 @@ Responsive Design
 	vertical-align: top;
 }
 
+#frm_field_multiselect_popup.frm-unmergable > .frm-merge-fields-into-row,
+#frm_field_multiselect_popup.frm-unmergable > .frm-multiselect-popup-separator {
+	display: none;
+}
+
 #frm_field_multiselect_popup > div:not(.frm-multiselect-popup-separator) {
 	padding: 0 20px;
 	cursor: pointer;
