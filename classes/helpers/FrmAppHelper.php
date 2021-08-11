@@ -1224,6 +1224,14 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Gets the list of capabilities.
+	 *
+	 * @since 5.0 Parameter `$type` supports `pro_only` value.
+	 *
+	 * @param string $type Supports `auto`, `pro`, or `pro_only`.
+	 * @return array
+	 */
 	public static function frm_capabilities( $type = 'auto' ) {
 		$cap = array(
 			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
@@ -1234,16 +1242,22 @@ class FrmAppHelper {
 			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
 		);
 
-		if ( ! self::pro_is_installed() && 'pro' != $type ) {
+		if ( ! self::pro_is_installed() && 'pro' !== $type && 'pro_only' !== $type ) {
 			return $cap;
 		}
 
-		$cap['frm_create_entries'] = __( 'Add Entries from Admin Area', 'formidable' );
-		$cap['frm_edit_entries']   = __( 'Edit Entries from Admin Area', 'formidable' );
-		$cap['frm_view_reports']   = __( 'View Reports', 'formidable' );
-		$cap['frm_edit_displays']  = __( 'Add/Edit Views', 'formidable' );
+		$pro_cap = array(
+			'frm_create_entries' => __( 'Add Entries from Admin Area', 'formidable' ),
+			'frm_edit_entries'   => __( 'Edit Entries from Admin Area', 'formidable' ),
+			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
+			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
+		);
 
-		return $cap;
+		if ( 'pro_only' === $type ) {
+			return $pro_cap;
+		}
+
+		return $cap + $pro_cap;
 	}
 
 	/**
