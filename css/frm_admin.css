@@ -6942,6 +6942,10 @@ input[disabled],
 	color: var(--dark-grey);
 }
 
+.frmbutton.ui-draggable-dragging {
+	width: auto !important;
+}
+
 /* Icon while dragging */
 .frmbutton.ui-draggable-dragging,
 .frmbutton.ui-draggable-dragging a {
