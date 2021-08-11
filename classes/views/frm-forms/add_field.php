@@ -30,15 +30,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 			</a>
 			<ul class="frm-dropdown-menu" role="menu">
-				<li class="frm_dropdown_li frm_select_field">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_settings_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
+				<li class="frm_dropdown_li frm_delete_field" href="#">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?> <?php esc_html_e( 'Delete', 'formidable' ); ?>
 				</li>
 				<li class="frm_dropdown_li frm_clone_field" href="#">
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?> <?php esc_html_e( 'Duplicate', 'formidable' ); ?>
 				</li>
 				<hr>
-				<li class="frm_dropdown_li frm_delete_field" href="#">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?> <?php esc_html_e( 'Delete', 'formidable' ); ?>
+				<li class="frm_dropdown_li frm_select_field">
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_settings_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
 				</li>
 			</ul>
 		</div>
