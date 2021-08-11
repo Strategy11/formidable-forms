@@ -6957,12 +6957,13 @@ input[disabled],
 .frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
 	height: 25px !important;
-	max-width: 180px;
+	width: 180px;
 	text-align: center;
 	display: block !important;
 	background-color: var(--primary-hover) !important;
-	border-radius: var(--border-radius) !important;
+	border-radius: 35px !important;
 	padding: 5px 20px !important;
+	color: #fff !important;
 }
 
 .frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) a {
@@ -6978,11 +6979,13 @@ input[disabled],
 
 #frm-show-fields .frmbutton.ui-sortable-helper i,
 .frmbutton.ui-sortable-helper span,
-.frmbutton.ui-draggable-dragging i {
+.frmbutton.ui-draggable-dragging i,
+.frmbutton.ui-draggable-dragging .frmsvg {
 	color: #fff !important;
 }
 
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) i {
+.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) i,
+.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) .frmsvg {
 	color: var(--dark-grey) !important;
 }
 
