@@ -12,6 +12,9 @@
  * @var string $custom_attrs The custom HTML attributes.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 ?>
 <div class="frm_images_dropdown frm_grid_container <?php echo esc_attr( $args['classes'] ); ?>">
 	<?php
