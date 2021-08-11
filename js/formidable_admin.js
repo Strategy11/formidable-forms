@@ -3412,7 +3412,7 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldGroupClick( e ) {
-		var hoverTarget, ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, $selectedFieldGroups, numberOfSelectedGroups, $firstGroup, $range;
+		var hoverTarget, ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, $selectedFieldGroups, numberOfSelectedGroups, selectedField, $firstGroup, $range;
 
 		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
 			// only continue if the group itself was clicked / ignore when a field is clicked.
@@ -3432,6 +3432,13 @@ function frmAdminBuildJS() {
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
+
+			selectedField = document.querySelector( 'li.form-field.selected' );
+			if ( null !== selectedField && ! jQuery( selectedField ).siblings( 'li.form-field' ).length ) {
+				// count a selected field on its own as a selected field group when multiselecting.
+				selectedField.parentNode.classList.add( 'frm-selected-field-group' );
+				++numberOfSelectedGroups;
+			}
 
 			if ( ctrlOrCmdKeyIsDown ) {
 				if ( groupIsActive ) {
