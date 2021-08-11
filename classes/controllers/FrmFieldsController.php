@@ -196,13 +196,22 @@ class FrmFieldsController {
 		$classes    = isset( $field['classes'] ) ? $field['classes'] : '';
 
 		// Exclude alignright for now since we aren't using widths.
-		$classes    = str_replace( ' frm_alignright ', ' ', $classes );
-		if ( trim( $classes ) === 'frm_alignright' ) {
+		$classes = str_replace( ' frm_alignright ', ' ', $classes );
+		$classes = trim( $classes );
+
+		if ( 'frm_alignright' === $classes ) {
 			$classes = '';
 		}
 
-		$li_classes .= ' frm_form_field frmstart ' . $classes . ' frmend';
-		if ( ! empty( $field ) ) {
+		$li_classes .= ' frm_form_field frmstart ';
+
+		if ( $classes ) {
+			$li_classes .= $classes . ' ';
+		}
+
+		$li_classes .= 'frmend';
+
+		if ( $field ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
 
