@@ -3627,6 +3627,7 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_field_multiselect_popup' ).remove();
 
 		this.setAttribute( 'data-frmcaution', __( 'Heads up', 'formidable' ) );
+		/* translators: %1$s: Number of fields that are selected to be deleted. */
 		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
