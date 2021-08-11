@@ -441,6 +441,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 5.0 =
+* Increased WP version requirement to 5.0.
 * New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
 * New: Added the option to quickly set layouts for a full row of fields at once.
 * New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
