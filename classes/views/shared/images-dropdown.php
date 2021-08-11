@@ -20,7 +20,7 @@
 
 		$image        = self::get_images_dropdown_option_image( $option, $args );
 		$classes      = self::get_images_dropdown_option_classes( $option, $args );
-		$custom_attrs = self::get_images_dropdown_option_custom_attrs( $option, $args );
+		$custom_attrs = self::get_images_dropdown_option_html_attrs( $option, $args );
 		?>
 		<div class="frm_radio frm_image_option frm<?php echo esc_attr( $args['col_class'] ); ?>">
 			<label class="<?php echo esc_attr( $classes ); ?>" data-value="<?php echo esc_attr( $option['key'] ); ?>"<?php echo $custom_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
