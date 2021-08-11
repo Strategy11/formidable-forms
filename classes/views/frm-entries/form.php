@@ -47,12 +47,12 @@ if ( $values['fields'] ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
 	 *
-	 * @since 4.12
+	 * @since 5.0
 	 *
-	 * @param array  $fields Array of fields.
-	 * @param object $form   Form object.
+	 * @param array $fields Array of fields.
+	 * @param array $args   The arguments. Contains `form`.
 	 */
-	$fields_to_show = apply_filters( 'frm_fields_in_form', $values['fields'], $form );
+	$fields_to_show = apply_filters( 'frm_fields_in_form', $values['fields'], compact( 'form' ) );
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }
 

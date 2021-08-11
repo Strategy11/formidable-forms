@@ -113,12 +113,12 @@ class FrmEntriesController {
 		/**
 		 * Allows changing fields in the Entries list table heading.
 		 *
-		 * @since 4.12
+		 * @since 5.0
 		 *
 		 * @param array $fields  Array of fields.
-		 * @param int   $form_id Form ID.
+		 * @param array $args    The arguments. Contains `form_id`.
 		 */
-		$form_cols = apply_filters( 'frm_fields_in_entries_list_table', $form_cols, $form_id );
+		$form_cols = apply_filters( 'frm_fields_in_entries_list_table', $form_cols, compact( 'form_id' ) );
 
 		foreach ( $form_cols as $form_col ) {
 			if ( FrmField::is_no_save_field( $form_col->type ) ) {

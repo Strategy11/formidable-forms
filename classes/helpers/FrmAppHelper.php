@@ -2677,7 +2677,7 @@ class FrmAppHelper {
 			'ta'     => __( 'Tamil', 'formidable' ),
 			'th'     => __( 'Thai', 'formidable' ),
 			'tr'     => __( 'Turkish', 'formidable' ),
-			'uk'     => __( 'Ukranian', 'formidable' ),
+			'uk'     => __( 'Ukrainian', 'formidable' ),
 			'vi'     => __( 'Vietnamese', 'formidable' ),
 		);
 
@@ -2705,7 +2705,7 @@ class FrmAppHelper {
 	/**
 	 * Shows the images dropdown.
 	 *
-	 * @since 4.11.01
+	 * @since 5.0
 	 *
 	 * @param array $args {
 	 *     Arguments.
@@ -2728,7 +2728,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the output of FrmAppHelper::images_dropdown() method.
 		 *
-		 * @since 4.12
+		 * @since 5.0
 		 *
 		 * @param string $output The output.
 		 * @param array  $args   Passed arguments.
@@ -2739,7 +2739,7 @@ class FrmAppHelper {
 	/**
 	 * Fills the default images_dropdown() arguments.
 	 *
-	 * @since 4.12.0
+	 * @since 5.0
 	 *
 	 * @param array $args The arguments.
 	 * @return array
@@ -2765,7 +2765,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.
 		 *
-		 * @since 4.12.0
+		 * @since 5.0
 		 *
 		 * @param array $new_args Arguments after filling the defaults.
 		 * @param array $args     Arguments passed to the method, before filling the defaults.
@@ -2776,17 +2776,17 @@ class FrmAppHelper {
 	/**
 	 * Gets HTML attributes of the input in images_dropdown() method.
 	 *
-	 * @since 4.12.0
+	 * @since 5.0
 	 *
 	 * @param array $args The arguments.
 	 * @return string
 	 */
 	private static function get_images_dropdown_input_attrs( $args ) {
-		$input_attrs = $args['input_attrs'];
-		$input_attrs['type']  = 'radio';
-		$input_attrs['name']  = $args['name'];
+		$input_attrs         = $args['input_attrs'];
+		$input_attrs['type'] = 'radio';
+		$input_attrs['name'] = $args['name'];
 
-		$input_attrs_str      = '';
+		$input_attrs_str = '';
 		foreach ( $input_attrs as $key => $input_attr ) {
 			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
 		}
@@ -2794,7 +2794,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the HTML attributes of the input in images_dropdown() method.
 		 *
-		 * @since 4.12.0
+		 * @since 5.0
 		 *
 		 * @param string $input_attrs_str HTML attributes string.
 		 * @param array  $args            The arguments of images_dropdown() method.
@@ -2805,7 +2805,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the image of each option in images_dropdown() method.
 	 *
-	 * @since 4.12
+	 * @since 5.0
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
@@ -2819,16 +2819,17 @@ class FrmAppHelper {
 			)
 		);
 
+		$args['option'] = $option;
+
 		/**
 		 * Allows modifying the image of each option in images_dropdown() method.
 		 *
-		 * @since 4.12.0
+		 * @since 5.0
 		 *
-		 * @param string $image  The image HTML.
-		 * @param array  $option The option array. The key of option is needed to be included.
-		 * @param array  $args   The arguments of images_dropdown() method.
+		 * @param string $image The image HTML.
+		 * @param array  $args  The arguments of images_dropdown() method, with `option` array is added.
 		 */
-		return apply_filters( 'frm_images_dropdown_option_classes', $image, $option, $args );
+		return apply_filters( 'frm_images_dropdown_option_image', $image, $args );
 	}
 
 	/**
@@ -2847,53 +2848,55 @@ class FrmAppHelper {
 			$classes .= ' ' . $option['custom_attrs']['class'];
 		}
 
+		$args['option'] = $option;
+
 		/**
 		 * Allows modifying the CSS classes of each option in images_dropdown() method.
 		 *
-		 * @since 4.12.0
+		 * @since 5.0
 		 *
 		 * @param string $classes CSS classes.
-		 * @param array  $option  The option array. The key of option is needed to be included.
-		 * @param array  $args    The arguments of images_dropdown() method.
+		 * @param array  $args    The arguments of images_dropdown() method, with `option` array is added.
 		 */
-		return apply_filters( 'frm_images_dropdown_option_classes', $classes, $option, $args );
+		return apply_filters( 'frm_images_dropdown_option_classes', $classes, $args );
 	}
 
 	/**
 	 * Gets the custom HTML attributes of each option in images_dropdown() method.
 	 *
-	 * @since 4.12
+	 * @since 5.0
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
 	 * @return string
 	 */
-	private static function get_images_dropdown_option_custom_attrs( $option, $args ) {
-		$custom_attrs = '';
+	private static function get_images_dropdown_option_html_attrs( $option, $args ) {
+		$html_attrs = '';
 		if ( ! empty( $option['custom_attrs'] ) && is_array( $option['custom_attrs'] ) ) {
-			$custom_attrs_arr = array();
+			$html_attrs_arr = array();
 
 			foreach ( $option['custom_attrs'] as $key => $value ) {
 				if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
 					continue;
 				}
 
-				$custom_attrs_arr[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
+				$html_attrs_arr[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
 			}
 
-			$custom_attrs = implode( ' ', $custom_attrs_arr );
+			$html_attrs = implode( ' ', $html_attrs_arr );
 		}
+
+		$args['option'] = $option;
 
 		/**
 		 * Allows modifying the custom HTML attributes of each option in images_dropdown() method.
 		 *
 		 * @since 4.12.0
 		 *
-		 * @param string $custom_attrs The attributes string.
-		 * @param array  $option       The option array. The key of option is needed to be included.
-		 * @param array  $args         The arguments of images_dropdown() method.
+		 * @param string $html_attrs The HTML attributes string.
+		 * @param array  $args       The arguments of images_dropdown() method, with `option` array is added.
 		 */
-		return apply_filters( 'frm_images_dropdown_option_classes', $custom_attrs, $option, $args );
+		return apply_filters( 'frm_images_dropdown_option_html_attrs', $html_attrs, $args );
 	}
 
 	/**

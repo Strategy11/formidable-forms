@@ -2,7 +2,7 @@
 /**
  * Images dropdown option view
  *
- * @since 4.12.0
+ * @since 5.0
  * @package Formidable
  *
  * @var array  $args         The arguments of images_dropdown() method.

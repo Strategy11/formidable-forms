@@ -103,7 +103,7 @@ if ( $display['clear_on_focus'] ) {
 /**
  * Fires after printing the primary options section of field.
  *
- * @since 4.11.01 Added `$display` and `$values`.
+ * @since 5.0 Added `$display` and `$values`.
  *
  * @param array        $field     Field data.
  * @param FrmFieldType $field_obj Field type object.

@@ -1774,7 +1774,7 @@ class FrmFieldsHelper {
 	/**
 	 * Shows Display format option.
 	 *
-	 * @since 4.12
+	 * @since 5.0
 	 *
 	 * @param array $field Field data.
 	 */
@@ -1805,7 +1805,7 @@ class FrmFieldsHelper {
 		/**
 		 * Allows modifying the options of Display format setting of Radio field.
 		 *
-		 * @since 4.12
+		 * @since 5.0
 		 *
 		 * @param array $options Options.
 		 */
@@ -1819,7 +1819,7 @@ class FrmFieldsHelper {
 	/**
 	 * Gets display format arguments to pass to the images_dropdown() method.
 	 *
-	 * @since 4.12.0
+	 * @since 5.0
 	 *
 	 * @param array $field   Field data.
 	 * @param array $options Options array.
@@ -1840,17 +1840,16 @@ class FrmFieldsHelper {
 		/**
 		 * Allows modifying the arguments of Display format setting of Radio field.
 		 *
-		 * @since 4.12
+		 * @since 5.0
 		 *
-		 * @param array $args    Arguments.
-		 * @param array $field   Field data.
-		 * @param array $options Options array.
+		 * @param array $args        Arguments.
+		 * @param array $method_args The arguments from the method. Contains `field`, `options`.
 		 */
-		return apply_filters( 'frm_radio_display_format_args', $args, $field, $options );
+		return apply_filters( 'frm_radio_display_format_args', $args, compact( 'field', 'options' ) );
 	}
 
 	/**
-	 * @since x.x
+	 * @since 5.0
 	 */
 	private static function fill_image_setting_options( $options, &$args ) {
 		foreach ( $options as $key => $option ) {
@@ -1869,7 +1868,7 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 5.0
 	 *
 	 * @return array
 	 */

@@ -981,12 +981,12 @@ class FrmFormsController {
 		/**
 		 * Allows modifying the list of fields in the form builder.
 		 *
-		 * @since 4.11.01
+		 * @since 5.0
 		 *
 		 * @param object[] $fields Array of fields.
-		 * @param object   $form   Form object.
+		 * @param array    $args   The arguments. Contains `form`.
 		 */
-		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, $form );
+		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
 
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 		if ( $form->is_template && $message == $edit_message ) {
