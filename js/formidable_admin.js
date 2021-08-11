@@ -845,6 +845,7 @@ function frmAdminBuildJS() {
 				unselectFieldGroups();
 				deleteEmptyDividerWrappers();
 				maybeRemoveGroupHoverTarget();
+				closeOpenFieldDropdowns();
 				container.get( 0 ).classList.add( 'frm-dragging-field' );
 				if ( ui.item[0].offsetHeight > 120 ) {
 					jQuery( sort ).sortable( 'refreshPositions' );
