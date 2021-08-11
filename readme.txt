@@ -2,10 +2,10 @@
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for WordPress
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
-Requires at least: 4.7
+Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 4.11.05
+Stable tag: 5.0
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,16 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0 =
+* New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
+* New: Added the option to quickly set layouts for a full row of fields at once.
+* New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
+* New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
+* New: Permissions are now updated right away when a formidable license is activated to avoid issues with certain pro features not being available right away.
+* Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
+* Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
+* Fix: Updated styling for new fields that are about to be dropped into a form.
+
 = 4.11.05 =
 * New: Improved support for importing grid and table view content.
 * Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
@@ -469,12 +479,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added Honeypot options to settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
 * New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
 * Fix: A warning was getting logged when exporting as XML.
-
-= 4.10.03 =
-* New: Improved the performance of the style editor preview.
-* New: You can now sign up for free templates directly from your inbox.
-* Fix: Date fields were not properly detecting duplicate entries.
-* Fix: Conditionals were not properly fading in when the form block was added to a page.
-* Fix: Actions would occasionally conflict if multiple were added too quickly.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
