@@ -2835,7 +2835,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the HTML classes of each option in images_dropdown() method.
 	 *
-	 * @since 4.12
+	 * @since 5.0
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
@@ -2891,7 +2891,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the custom HTML attributes of each option in images_dropdown() method.
 		 *
-		 * @since 4.12.0
+		 * @since 5.0
 		 *
 		 * @param string $html_attrs The HTML attributes string.
 		 * @param array  $args       The arguments of images_dropdown() method, with `option` array is added.
