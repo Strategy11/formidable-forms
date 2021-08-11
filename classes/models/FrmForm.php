@@ -267,16 +267,45 @@ class FrmForm {
 	private static function sanitize_field_opt( $opt, &$value ) {
 		if ( is_string( $value ) ) {
 			if ( $opt === 'calc' ) {
-				$allow = array( '<= ', ' >=' ); // Allow <= and >=
-				$temp  = array( '< = ', ' > =' );
-				$value = str_replace( $allow, $temp, $value );
-				$value = strip_tags( $value );
-				$value = str_replace( $temp, $allow, $value );
+				$value = self::sanitize_calc( $value );
 			} else {
 				$value = FrmAppHelper::kses( $value, 'all' );
 			}
 			$value = trim( $value );
 		}
+	}
+
+	/**
+	 * @param string $value
+	 * @return string
+	 */
+	private static function sanitize_calc( $value ) {
+		if ( false !== strpos( $value, '<' ) ) {
+			$value = self::normalize_calc_spaces( $value );
+		}
+		$allow = array( '<= ', ' >=' ); // Allow <= and >=
+		$temp  = array( '< = ', ' > =' );
+		$value = str_replace( $allow, $temp, $value );
+		$value = strip_tags( $value );
+		$value = str_replace( $temp, $allow, $value );
+		return $value;
+	}
+
+	/**
+	 * Format a comparison like 5<10 to 5 < 10. Also works on 5< 10, 5 <10, 5<=10 variations.
+	 * This is to avoid an issue with unspaced calculations being recognized as HTML that gets removed when strip_tags is called.
+	 *
+	 * @param string $calc
+	 * @return string
+	 */
+	private static function normalize_calc_spaces( $calc ) {
+		// Check for a pattern with 5 parts
+		// $1 \d the first comparison digit.
+		// $2 a space (optional).
+		// $3 an equals sign (optional) that follows the < operator for <= comparisons.
+		// $4 another space (optional).
+		// $5 \d the second comparison digit.
+		return preg_replace( '/(\d)( ){0,1}<(=){0,1}( ){0,1}(\d)/', '$1 <$3 $5', $calc );
 	}
 
 	/**

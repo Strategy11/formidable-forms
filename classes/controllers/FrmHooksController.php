@@ -157,6 +157,7 @@ class FrmHooksController {
 
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
+		new FrmPluginSearch();
 	}
 
 	public static function load_ajax_hooks() {
