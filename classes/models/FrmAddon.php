@@ -244,7 +244,7 @@ class FrmAddon {
 	/**
 	 * Updates roles capabilities after pro license is active.
 	 *
-	 * @since 4.11.03
+	 * @since 5.0
 	 */
 	protected function update_pro_capabilities() {
 		global $wp_roles;

@@ -1227,7 +1227,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the list of capabilities.
 	 *
-	 * @since 4.11.03 Parameter `$type` supports `pro_only` value.
+	 * @since 5.0 Parameter `$type` supports `pro_only` value.
 	 *
 	 * @param string $type Supports `auto`, `pro`, or `pro_only`.
 	 * @return array
