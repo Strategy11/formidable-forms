@@ -5,7 +5,7 @@
 var frmWidgets, frmAdminPopup;
 
 jQuery( document ).ready( function() {
-    var deauthLink,
+    var deauthLink, submenuItem, li,
 		installLink = document.getElementById( 'frm_install_link' );
     if ( installLink !== null ) {
         jQuery( installLink ).on( 'click', frmInstallPro );
@@ -19,6 +19,14 @@ jQuery( document ).ready( function() {
     if ( typeof tb_remove === 'function' ) { // eslint-disable-line camelcase
         frmAdminPopup.init();
     }
+
+	submenuItem = document.querySelector( '.frm-upgrade-submenu' );
+	if ( null !== submenuItem ) {
+		li = submenuItem.parentNode.parentNode;
+		if ( li ) {
+			li.classList.add( 'frm-submenu-highlight' );
+		}
+	}
 });
 
 function frm_install_now() { // eslint-disable-line camelcase
