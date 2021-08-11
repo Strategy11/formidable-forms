@@ -1,4 +1,15 @@
 == Changelog ==
+= 5.0 =
+* Increased WP version requirement to 5.0.
+* New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
+* New: Added the option to quickly set layouts for a full row of fields at once.
+* New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
+* New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
+* New: Permissions are now updated right away when a formidable license is activated to avoid issues with certain pro features not being available right away.
+* Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
+* Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
+* Fix: Updated styling for new fields that are about to be dropped into a form.
+
 = 4.11.05 =
 * New: Improved support for importing grid and table view content.
 * Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
