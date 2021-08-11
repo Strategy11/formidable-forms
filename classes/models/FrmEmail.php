@@ -180,11 +180,14 @@ class FrmEmail {
 	private function set_reply_to( $user_id_args ) {
 		$this->reply_to = trim( $this->settings['reply_to'] );
 
-		if ( empty( $this->reply_to ) ) {
-			$this->reply_to = $this->get_email_from_name( $this->from );
-		} else {
+		if ( $this->reply_to ) {
 			$this->reply_to = $this->prepare_email_setting( $this->settings['reply_to'], $user_id_args );
 		}
+
+		if ( ! $this->reply_to ) {
+			$this->reply_to = $this->get_email_from_name( $this->from );
+		}
+
 		$this->reply_to = $this->format_reply_to( $this->reply_to );
 	}
 

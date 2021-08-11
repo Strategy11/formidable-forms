@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 4.11.02\n"
+"Project-Id-Version: Formidable Forms 4.11.05\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-06-16T14:35:45+00:00\n"
+"POT-Creation-Date: 2021-07-28T14:47:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -649,17 +649,21 @@ msgstr ""
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:17
+#: classes/controllers/FrmInboxController.php:16
 #: classes/controllers/FrmSettingsController.php:70
 #: classes/views/inbox/list.php:11
 msgid "Inbox"
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:39
+#: classes/controllers/FrmInboxController.php:40
+msgid "Go to Global Settings"
+msgstr ""
+
+#: classes/controllers/FrmInboxController.php:57
 msgid "Dismiss All"
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:97
+#: classes/controllers/FrmInboxController.php:115
 msgid "Help Formidable improve with usage tracking"
 msgstr ""
 
@@ -1752,7 +1756,7 @@ msgstr ""
 #. translators: %s: The field name.
 #: classes/helpers/FrmFieldsHelper.php:167
 #: classes/helpers/FrmFieldsHelper.php:296
-#: classes/helpers/FrmXMLHelper.php:1204
+#: classes/helpers/FrmXMLHelper.php:1228
 #: classes/models/fields/FrmFieldType.php:583
 msgid "%s is invalid"
 msgstr ""
@@ -3102,7 +3106,7 @@ msgid "If you have many checkbox or radio button options, you may add this class
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1161
-#: classes/models/fields/FrmFieldName.php:28
+#: classes/models/fields/FrmFieldName.php:36
 msgid "First"
 msgstr ""
 
@@ -3566,21 +3570,21 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1043
+#: classes/helpers/FrmXMLHelper.php:1067
 #: classes/views/solutions/_import.php:51
 msgid "Imported"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1044
+#: classes/helpers/FrmXMLHelper.php:1068
 msgid "Updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1069
+#: classes/helpers/FrmXMLHelper.php:1093
 msgid "Nothing was imported or updated"
 msgstr ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1084
+#: classes/helpers/FrmXMLHelper.php:1108
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
@@ -3588,7 +3592,7 @@ msgstr[1] ""
 
 #. translators: %1$s: Number of items
 #. translators: %1$s - field type
-#: classes/helpers/FrmXMLHelper.php:1086
+#: classes/helpers/FrmXMLHelper.php:1110
 #: classes/models/FrmFormMigrator.php:584
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -3596,56 +3600,56 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1088
+#: classes/helpers/FrmXMLHelper.php:1112
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1090
+#: classes/helpers/FrmXMLHelper.php:1114
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1092
+#: classes/helpers/FrmXMLHelper.php:1116
 msgid "%1$s Post"
 msgid_plural "%1$s Posts"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1094
+#: classes/helpers/FrmXMLHelper.php:1118
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1096
+#: classes/helpers/FrmXMLHelper.php:1120
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1098
+#: classes/helpers/FrmXMLHelper.php:1122
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:1122
+#: classes/helpers/FrmXMLHelper.php:1146
 msgid "Go to imported form"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1327
+#: classes/helpers/FrmXMLHelper.php:1347
 msgid "Create Posts"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1456
+#: classes/helpers/FrmXMLHelper.php:1476
 msgid "Email Notification"
 msgstr ""
 
@@ -3687,11 +3691,11 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: classes/models/fields/FrmFieldName.php:29
+#: classes/models/fields/FrmFieldName.php:37
 msgid "Middle"
 msgstr ""
 
-#: classes/models/fields/FrmFieldName.php:30
+#: classes/models/fields/FrmFieldName.php:38
 msgid "Last"
 msgstr ""
 
@@ -3809,26 +3813,26 @@ msgid "Use the query in an array format so it can be properly prepared."
 msgstr ""
 
 #. translators: %1$s: Form name, %2$s: Site name
-#: classes/models/FrmEmail.php:265
+#: classes/models/FrmEmail.php:268
 msgid "%1$s Form submitted on %2$s"
 msgstr ""
 
-#: classes/models/FrmEmail.php:305
+#: classes/models/FrmEmail.php:308
 #: classes/views/frm-entries/sidebar-shared.php:72
 msgid "User Information"
 msgstr ""
 
-#: classes/models/FrmEmail.php:307
+#: classes/models/FrmEmail.php:310
 #: classes/models/FrmEntryValues.php:214
 msgid "User-Agent (Browser/OS)"
 msgstr ""
 
-#: classes/models/FrmEmail.php:308
+#: classes/models/FrmEmail.php:311
 #: classes/models/FrmEntryValues.php:219
 msgid "Referrer"
 msgstr ""
 
-#: classes/models/FrmEmail.php:324
+#: classes/models/FrmEmail.php:327
 #: classes/models/FrmEntryValues.php:209
 msgid "IP Address"
 msgstr ""
@@ -4056,7 +4060,7 @@ msgstr ""
 msgid "If you are human, leave this field blank."
 msgstr ""
 
-#: classes/models/FrmMigrate.php:564
+#: classes/models/FrmMigrate.php:573
 msgid "Sending"
 msgstr ""
 
@@ -5352,23 +5356,27 @@ msgstr ""
 msgid "Don't use form styling on any page"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:37
+#: classes/views/frm-settings/general.php:38
 msgid "Do not use CSS Grids for form layouts"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:38
+#: classes/views/frm-settings/general.php:39
 msgid "Form layouts built using CSS grids that are not fully supported by older browsers like Internet Explorer. Leave this box unchecked for your layouts to look best in current browsers, but show in a single column in older browsers."
 msgstr ""
 
-#: classes/views/frm-settings/general.php:45
+#: classes/views/frm-settings/general.php:43
+msgid "Warning: This setting is deprecated. It will be removed when it is turned off."
+msgstr ""
+
+#: classes/views/frm-settings/general.php:52
 msgid "Other"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:58
+#: classes/views/frm-settings/general.php:65
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
 msgstr ""
 
-#: classes/views/frm-settings/general.php:65
+#: classes/views/frm-settings/general.php:72
 msgid "Do not include Formidable in the admin bar."
 msgstr ""
 

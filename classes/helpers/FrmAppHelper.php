@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 97; //version of the database we are moving to
+	public static $db_version = 98; // Version of the database we are moving to.
 	public static $pro_db_version = 37; //deprecated
 	public static $font_version = 7;
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.11.02';
+	public static $plug_version = '4.11.05';
 
 	/**
 	 * @since 1.07.02
@@ -1530,7 +1530,7 @@ class FrmAppHelper {
 	}
 
 	public static function get_user_id_param( $user_id ) {
-		if ( ! $user_id || empty( $user_id ) || is_numeric( $user_id ) ) {
+		if ( ! $user_id || is_numeric( $user_id ) ) {
 			return $user_id;
 		}
 
@@ -2286,7 +2286,7 @@ class FrmAppHelper {
 	}
 
 	private static function prepare_action_slashes( $val, $key, &$post_content ) {
-		if ( ! isset( $post_content[ $key ] ) ) {
+		if ( ! isset( $post_content[ $key ] ) || is_numeric( $val ) ) {
 			return;
 		}
 

@@ -75,7 +75,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @param string|object $selected - The label for the placeholder, or the form object.
+	 * @param string|object|false $selected - The label for the placeholder, or the form object.
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -751,7 +751,7 @@ BEFORE_HTML;
 	}
 
 	public static function submit_button_label( $submit ) {
-		if ( ! $submit || empty( $submit ) ) {
+		if ( ! $submit ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			$submit       = $frm_settings->submit_value;
 		}
