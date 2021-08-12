@@ -1585,8 +1585,8 @@ class FrmAppHelper {
 	 * @param string $name
 	 * @param string $table_name
 	 * @param string $column
-	 * @param int $id
-	 * @param int $num_chars
+	 * @param int    $id
+	 * @param int    $num_chars
 	 */
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
@@ -1611,10 +1611,29 @@ class FrmAppHelper {
 		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
+			$key = self::maybe_truncate_key_before_appending( $column, $key );
 			// Create a unique field id if it has already been used.
 			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
+		return $key;
+	}
+
+	/**
+	 * Avoid trying to append to a really long key,
+	 * The database limit is 100 for form and field keys so we want to avoid getting too close.
+	 *
+	 * @param string $column
+	 * @param string $key
+	 * @return string
+	 */
+	private static function maybe_truncate_key_before_appending( $column, $key ) {
+		if ( in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
+			$max_key_length_before_truncating = 60;
+			if ( strlen( $key ) > $max_key_length_before_truncating ) {
+				$key = substr( $key, 0, $max_key_length_before_truncating );
+			}
+		}
 		return $key;
 	}
 
