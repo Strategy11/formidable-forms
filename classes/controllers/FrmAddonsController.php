@@ -11,16 +11,15 @@ class FrmAddonsController {
 		}
 
 		$label = __( 'Add-Ons', 'formidable' );
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$label = '<span style="color:#fe5a1d">' . $label . '</span>';
-		}
+		$label = '<span style="color:#fe5a1d">' . $label . '</span>';
+
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade', 'formidable' ),
-				'<span style="color:#fe5a1d">' . __( 'Upgrade', 'formidable' ) . '</span>',
+				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'

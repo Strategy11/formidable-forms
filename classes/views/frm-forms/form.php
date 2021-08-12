@@ -26,13 +26,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<ul id="frm-show-fields" class="frm_sorting inside">
 		<?php
-		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
+		if ( ! empty( $values['fields'] ) ) {
+			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
 			foreach ( $values['fields'] as $field ) {
 				$values['count']++;
+				$grid_helper->set_field( $field );
+				$grid_helper->maybe_begin_field_wrapper();
 				FrmFieldsController::load_single_field( $field, $values );
+				$grid_helper->sync_list_size();
 				unset( $field );
 			}
+			$grid_helper->force_close_field_wrapper();
+			unset( $grid_helper );
 		}
 		?>
 	</ul>

@@ -11,18 +11,15 @@ on:
 name: PHPUnit
 jobs:
   build-test:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
         include:
           - php: 7.4
-            wordpress: master
+            wordpress: 5.8
             phpunit: 6.5.14
           - php: 7.3
-            wordpress: master
-            phpunit: 6.5.14
-          - php: 7.1
-            wordpress: master
+            wordpress: 5.8
             phpunit: 6.5.14
           - php: 7.0.33
             wordpress: 4.9

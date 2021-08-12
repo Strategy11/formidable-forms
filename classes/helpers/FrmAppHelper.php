@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.11.05';
+	public static $plug_version = '5.0';
 
 	/**
 	 * @since 1.07.02
@@ -1224,6 +1224,14 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Gets the list of capabilities.
+	 *
+	 * @since 5.0 Parameter `$type` supports `pro_only` value.
+	 *
+	 * @param string $type Supports `auto`, `pro`, or `pro_only`.
+	 * @return array
+	 */
 	public static function frm_capabilities( $type = 'auto' ) {
 		$cap = array(
 			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
@@ -1234,16 +1242,22 @@ class FrmAppHelper {
 			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
 		);
 
-		if ( ! self::pro_is_installed() && 'pro' != $type ) {
+		if ( ! self::pro_is_installed() && 'pro' !== $type && 'pro_only' !== $type ) {
 			return $cap;
 		}
 
-		$cap['frm_create_entries'] = __( 'Add Entries from Admin Area', 'formidable' );
-		$cap['frm_edit_entries']   = __( 'Edit Entries from Admin Area', 'formidable' );
-		$cap['frm_view_reports']   = __( 'View Reports', 'formidable' );
-		$cap['frm_edit_displays']  = __( 'Add/Edit Views', 'formidable' );
+		$pro_cap = array(
+			'frm_create_entries' => __( 'Add Entries from Admin Area', 'formidable' ),
+			'frm_edit_entries'   => __( 'Edit Entries from Admin Area', 'formidable' ),
+			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
+			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
+		);
 
-		return $cap;
+		if ( 'pro_only' === $type ) {
+			return $pro_cap;
+		}
+
+		return $cap + $pro_cap;
 	}
 
 	/**
@@ -1571,8 +1585,8 @@ class FrmAppHelper {
 	 * @param string $name
 	 * @param string $table_name
 	 * @param string $column
-	 * @param int $id
-	 * @param int $num_chars
+	 * @param int    $id
+	 * @param int    $num_chars
 	 */
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
@@ -1597,10 +1611,29 @@ class FrmAppHelper {
 		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
+			$key = self::maybe_truncate_key_before_appending( $column, $key );
 			// Create a unique field id if it has already been used.
 			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
+		return $key;
+	}
+
+	/**
+	 * Avoid trying to append to a really long key,
+	 * The database limit is 100 for form and field keys so we want to avoid getting too close.
+	 *
+	 * @param string $column
+	 * @param string $key
+	 * @return string
+	 */
+	private static function maybe_truncate_key_before_appending( $column, $key ) {
+		if ( in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
+			$max_key_length_before_truncating = 60;
+			if ( strlen( $key ) > $max_key_length_before_truncating ) {
+				$key = substr( $key, 0, $max_key_length_before_truncating );
+			}
+		}
 		return $key;
 	}
 
