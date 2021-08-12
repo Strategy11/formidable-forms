@@ -4060,6 +4060,11 @@ function frmAdminBuildJS() {
 		var $fieldsForPage, currentWrapper;
 
 		$fieldsForPage = jQuery();
+
+		if ( null === firstWrapper ) {
+			return $fieldsForPage;
+		}
+
 		currentWrapper = firstWrapper;
 
 		do {
