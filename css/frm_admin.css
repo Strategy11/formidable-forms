@@ -5527,11 +5527,6 @@ span.howto {
 	z-index: 3; /* section dividers use z-index: 2; position above that to avoid it taking over hover control. */
 }
 
-#frm_builder_page #frm_field_group_controls,
-.frm-selected-field-group {
-	background: rgba(246, 247, 251, 0.7);
-}
-
 .frm-selected-field-group {
 	position: relative;
 }
@@ -5552,9 +5547,8 @@ span.howto {
 	visibility: visible;
 }
 
-.frm-field-group-hover-target,
 .frm-has-open-field-group-popup {
-	background: rgba(246, 247, 251, 0.5);
+	background: rgba(65, 153, 253, 0.07);
 }
 
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
