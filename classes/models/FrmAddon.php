@@ -238,6 +238,36 @@ class FrmAddon {
 		update_option( $this->option_name . 'active', $is_active );
 		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
+		$this->update_pro_capabilities();
+	}
+
+	/**
+	 * Updates roles capabilities after pro license is active.
+	 *
+	 * @since 5.0
+	 */
+	protected function update_pro_capabilities() {
+		global $wp_roles;
+
+		$caps     = FrmAppHelper::frm_capabilities( 'pro_only' );
+		$roles    = get_editable_roles();
+		$settings = new FrmSettings();
+		foreach ( $caps as $cap => $cap_desc ) {
+			$cap_roles = (array) ( isset( $settings->$cap ) ? $settings->$cap : 'administrator' );
+
+			// Make sure administrators always have permissions.
+			if ( ! in_array( 'administrator', $cap_roles ) ) {
+				array_push( $cap_roles, 'administrator' );
+			}
+
+			foreach ( $roles as $role => $details ) {
+				if ( in_array( $role, $cap_roles ) ) {
+					$wp_roles->add_cap( $role, $cap );
+				} else {
+					$wp_roles->remove_cap( $role, $cap );
+				}
+			}
+		}
 	}
 
 	/**
