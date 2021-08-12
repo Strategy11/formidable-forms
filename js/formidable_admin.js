@@ -4039,14 +4039,15 @@ function frmAdminBuildJS() {
 
 	// Find all fields in a page and hide/show them
 	function toggleCollapsePage( field ) {
-		var toCollapse = field.nextUntil( '.frm_field_box[data-ftype=break]' );
+		var toCollapse = getAllFieldsForPage( field.parent().closest( 'li.frm_field_box' ).next() );
 		togglePage( field, toCollapse );
 	}
 
 	function toggleCollapseFakePage() {
 		var topLevel = document.getElementById( 'frm-fake-page' ),
 			firstField = document.getElementById( 'frm-show-fields' ).firstElementChild,
-			toCollapse = jQuery( firstField ).add( jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ) );
+			// TODO nextUntil here too, same issue.
+			toCollapse = getAllFieldsForPage( jQuery( firstField ) );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
 			// Don't collapse if the first field is a page break.
@@ -4054,6 +4055,23 @@ function frmAdminBuildJS() {
 		}
 
 		togglePage( jQuery( topLevel ), toCollapse );
+	}
+
+	function getAllFieldsForPage( $firstWrapper ) {
+		var $fieldsForPage, $currentWrapper;
+
+		$fieldsForPage = jQuery();
+		$currentWrapper = $firstWrapper;
+
+		do {
+			if ( $currentWrapper.find( '.edit_field_type_break' ).length ) {
+				break;
+			}
+			$fieldsForPage = $fieldsForPage.add( $currentWrapper );
+			$currentWrapper = $currentWrapper.next();
+		} while ( $currentWrapper.length );
+
+		return $fieldsForPage;
 	}
 
 	function togglePage( field, toCollapse ) {
