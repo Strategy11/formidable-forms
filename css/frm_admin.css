@@ -2980,8 +2980,10 @@ a.frm_option_icon:hover::before {
 
 .frm-embed-field-placeholder {
 	text-align: center;
-	position: relative;
 	height: 145px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .frm-fake-field {
@@ -3000,9 +3002,11 @@ a.frm_option_icon:hover::before {
 	color: var(--dark-grey);
 	padding: 37px 0;
 	font-size: 18px;
-	width: 50%;
-	top: 23px;
-	left: 25%
+	max-width: 200px;
+	min-width: 50%;
+	margin: 0 25px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .frm-summary-message {
