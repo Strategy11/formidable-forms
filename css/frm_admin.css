@@ -5528,6 +5528,10 @@ span.howto {
 	background: rgba(65, 153, 253, 0.05);
 }
 
+.frm-selected-field-group {
+	position: relative;
+}
+
 #frm_builder_page #frm_field_group_controls > span:first-child {
 	margin-right: 5px;
 }
@@ -6706,10 +6710,6 @@ ul .frm_col_two {
 	text-transform: uppercase;
 	font-weight: bold;
 	color: var(--dark-grey);
-}
-
-.field_type_list > li {
-	
 }
 
 .frm_no_p_margin > p {
@@ -8276,10 +8276,6 @@ Responsive Design
 .frm-custom-field-group-layout svg,
 .frm-break-field-group svg {
 	margin-right: 5px;
-}
-
-.frm-selected-field-group {
-	position: relative;
 }
 
 #frm_field_multiselect_popup {
