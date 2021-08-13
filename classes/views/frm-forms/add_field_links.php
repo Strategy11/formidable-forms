@@ -20,12 +20,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</ul>
 
 		<div id="frm-insert-fields" class="tabs-panel">
-			<ul class="field_type_list">
+			<?php
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'field-list',
+					'placeholder' => __( 'Search Fields', 'formidable' ),
+					'tosearch'    => 'frmbutton',
+				)
+			);
+			?>
+			<ul class="field_type_list frm_grid_container">
 				<?php
 				foreach ( $frm_field_selection as $field_key => $field_type ) {
 					$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 					?>
-					<li class="frmbutton <?php echo esc_attr( ' frm_t' . $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
+					<li class="frmbutton frm6 <?php echo esc_attr( ' frm_t' . $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
 						<a href="#" class="frm_add_field frm_animate_bg" title="<?php echo esc_html( $field_label ); ?>">
 							<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 							<span><?php echo esc_html( $field_label ); ?></span>
@@ -41,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<h3 class="frm-with-line">
 				<span><?php esc_html_e( 'Advanced Fields', 'formidable' ); ?></span>
 			</h3>
-			<ul class="field_type_list">
+			<ul class="field_type_list frm_grid_container">
 <?php
 
 $no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
@@ -70,7 +79,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 		$field_label = $field_type['name'];
 
 		?>
-				<li class="frmbutton <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
+				<li class="frmbutton frm6 <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
 					<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_html( $field_label ); ?>">
 						<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 						<span><?php echo esc_html( $field_label ); ?> <b class="caret"></b></span>
@@ -102,7 +111,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 				<h3 class="frm-with-line">
 					<span><?php esc_html_e( 'Pricing Fields', 'formidable' ); ?></span>
 				</h3>
-				<ul class="field_type_list">
+				<ul class="field_type_list frm_grid_container">
 					<?php
 					foreach ( $section_fields as $field_key => $field_type ) {
 						FrmFieldsHelper::show_add_field_buttons( compact( 'field_key', 'field_type', 'id', 'no_allow_class' ) );
