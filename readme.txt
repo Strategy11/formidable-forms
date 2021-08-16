@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 5.0
+Stable tag: 5.0.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.01 =
+* New: Updated styling and icons in the back end form builder.
+* New: Added search to form fields in the builder to make finding a specific field easier.
+* Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
+
 = 5.0 =
 * Increased WP version requirement to 5.0.
 * New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
