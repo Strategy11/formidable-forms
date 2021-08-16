@@ -441,7 +441,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 5.0.01 =
-* New: Updated styling and icons in the back end form builder.
+* New: Updated styling and icons in the back end builder.
 * New: Added search to form fields in the builder to make finding a specific field easier.
 * Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
 
@@ -478,12 +478,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added a new frm_duplicate_check_val filter for customizing the duplicate entry check. This can be used to remove IP to help prevent duplicate entries for longer periods of time when using frm_time_to_check_duplicates filter. For an example see https://formidableforms.com/knowledgebase/frm_duplicate_check_val/.
 * New: Added visibility option to the Name field.
 * Fix: The honeypot setting would still appear as on after it was turned off.
-
-= 4.11 =
-* New: Added a quick and easy Name field with options for First, Middle, and Last names.
-* New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings.
-* New: Added Honeypot options to settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
-* New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
-* Fix: A warning was getting logged when exporting as XML.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
