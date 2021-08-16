@@ -3,6 +3,7 @@
 * New: Updated styling and icons in the back end builder.
 * New: Added search to form fields in the builder to make finding a specific field easier.
 * Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
+* Fix: Added truncation to long form keys during duplication to avoid issues with duplicating when the generated key was too long.
 
 = 5.0 =
 * Increased WP version requirement to 5.0.
