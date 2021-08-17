@@ -333,6 +333,12 @@ ul.frm_form_nav > li {
 	box-shadow: none;
 }
 
+.frm_form_nav > li > a {
+	font-size: 13px;
+	text-transform: uppercase;
+	opacity: .8;
+}
+
 .frm_form_nav > li > a:hover {
 	border-color: var(--primary-hover);
 }
@@ -347,6 +353,7 @@ ul.frm_form_nav > li {
 	color: var(--primary-color);
 	border-color: var(--primary-color);
 	background: transparent;
+	opacity: 1;
 }
 
 .frm-full-close {
@@ -796,7 +803,7 @@ p.frm_has_shortcodes {
 
 #frm-bulk-modal h2,
 .frm-nav-tabs a {
-	color: var(--grey);
+	color: var(--dark-grey);
 	padding: 10px 1px;
 	margin: 0 9px;
 	border-bottom: 2px solid transparent;
@@ -808,6 +815,7 @@ p.frm_has_shortcodes {
 
 .frm-nav-tabs a {
 	display: block;
+	opacity: .9;
 }
 
 #frm_adv_info .frm-nav-tabs a {
@@ -2972,8 +2980,10 @@ a.frm_option_icon:hover::before {
 
 .frm-embed-field-placeholder {
 	text-align: center;
-	position: relative;
 	height: 145px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .frm-fake-field {
@@ -2992,9 +3002,11 @@ a.frm_option_icon:hover::before {
 	color: var(--dark-grey);
 	padding: 37px 0;
 	font-size: 18px;
-	width: 50%;
-	top: 23px;
-	left: 25%
+	max-width: 200px;
+	min-width: 50%;
+	margin: 0 25px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .frm-summary-message {
@@ -5250,7 +5262,7 @@ a.frm_action_icon:hover {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 65px;
+	width: 80px;
 	max-width: calc( 100% - 50px );
 	position: relative;
 	top: 2px;
@@ -5505,7 +5517,6 @@ span.howto {
 
 #frm_builder_page #frm_field_group_controls {
 	position: absolute;
-	background: rgba(65, 153, 253, 0.07);
 	padding: 5px;
 	border-radius: 4px 4px 0 0;
 	text-align: right;
@@ -5514,6 +5525,17 @@ span.howto {
 	top: -28px;
 	height: 28px;
 	z-index: 3; /* section dividers use z-index: 2; position above that to avoid it taking over hover control. */
+}
+
+.frm-field-group-hover-target,
+.frm-has-open-field-group-popup,
+#frm_builder_page #frm_field_group_controls,
+.frm-selected-field-group {
+	background: rgba(65, 153, 253, 0.04);
+}
+
+.frm-selected-field-group {
+	position: relative;
 }
 
 #frm_builder_page #frm_field_group_controls > span:first-child {
@@ -5532,11 +5554,6 @@ span.howto {
 	visibility: visible;
 }
 
-.frm-field-group-hover-target,
-.frm-has-open-field-group-popup {
-	background: rgba(65, 153, 253, 0.07);
-}
-
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
 	display: none !important;
 }
@@ -5545,8 +5562,7 @@ span.howto {
 #postbox-container-1 .ui-state-default,
 .frm_sorting > li.ui-state-default,
 .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover {
-	border: 2px solid transparent;
-	border-radius: 4px;
+	border: 1px solid transparent;
 	font-weight: normal !important;
 	background-color: transparent;
 	background-image: none;
@@ -6158,6 +6174,7 @@ ul.frm-category-tabs {
 	box-shadow: none;
 }
 
+.frm-selected-field-group li.ui-state-default,
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected,
 .start_divider.frm_sorting li.ui-state-default.frm_not_divider:hover,
 .frm_sorting li.ui-state-default.frm_not_divider:hover,
@@ -6696,10 +6713,6 @@ ul .frm_col_two {
 	color: var(--dark-grey);
 }
 
-.field_type_list > li {
-	width: 50%;
-}
-
 .frm_no_p_margin > p {
 	margin: 0;
 }
@@ -6810,13 +6823,12 @@ ul .frm_col_two {
 .field_type_list li {
 	margin: 0 0 10px;
 	padding: 0;
-	clear: both;
-	float: left;
 }
 
-.field_type_list li:nth-child(2n) {
-	float: right;
-	clear: none;
+#frm-insert-fields .frm-search {
+	float: none;
+	margin: 15px 20px;
+	width: auto;
 }
 
 #frm-insert-fields li,
@@ -8310,11 +8322,6 @@ Responsive Design
 .frm-custom-field-group-layout svg,
 .frm-break-field-group svg {
 	margin-right: 5px;
-}
-
-.frm-selected-field-group {
-	background: rgba(65, 153, 253, 0.07);
-	position: relative;
 }
 
 #frm_field_multiselect_popup {

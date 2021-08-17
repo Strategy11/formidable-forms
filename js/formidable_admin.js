@@ -4057,14 +4057,14 @@ function frmAdminBuildJS() {
 
 	// Find all fields in a page and hide/show them
 	function toggleCollapsePage( field ) {
-		var toCollapse = field.nextUntil( '.frm_field_box[data-ftype=break]' );
+		var toCollapse = getAllFieldsForPage( field.get( 0 ).parentNode.closest( 'li.frm_field_box' ).nextElementSibling );
 		togglePage( field, toCollapse );
 	}
 
 	function toggleCollapseFakePage() {
 		var topLevel = document.getElementById( 'frm-fake-page' ),
 			firstField = document.getElementById( 'frm-show-fields' ).firstElementChild,
-			toCollapse = jQuery( firstField ).add( jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ) );
+			toCollapse = getAllFieldsForPage( firstField );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
 			// Don't collapse if the first field is a page break.
@@ -4072,6 +4072,28 @@ function frmAdminBuildJS() {
 		}
 
 		togglePage( jQuery( topLevel ), toCollapse );
+	}
+
+	function getAllFieldsForPage( firstWrapper ) {
+		var $fieldsForPage, currentWrapper;
+
+		$fieldsForPage = jQuery();
+
+		if ( null === firstWrapper ) {
+			return $fieldsForPage;
+		}
+
+		currentWrapper = firstWrapper;
+
+		do {
+			if ( null !== currentWrapper.querySelector( '.edit_field_type_break' ) ) {
+				break;
+			}
+			$fieldsForPage = $fieldsForPage.add( jQuery( currentWrapper ) );
+			currentWrapper = currentWrapper.nextElementSibling;
+		} while ( null !== currentWrapper );
+
+		return $fieldsForPage;
 	}
 
 	function togglePage( field, toCollapse ) {
