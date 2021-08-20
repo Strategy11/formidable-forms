@@ -1027,6 +1027,16 @@ class FrmFormsController {
 		$fields = FrmField::get_all_for_form( $id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
 
+		/**
+		 * Allows changing fields in the form settings.
+		 *
+		 * @since 5.0
+		 *
+		 * @param array $fields Array of fields.
+		 * @param array $args   The arguments. Contains `form`.
+		 */
+		$values['fields'] = apply_filters( 'frm_fields_in_settings', $values['fields'], compact( 'form' ) );
+
 		self::clean_submit_html( $values );
 
 		$sections = self::get_settings_tabs( $values );
