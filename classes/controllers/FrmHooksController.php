@@ -35,7 +35,9 @@ class FrmHooksController {
 		// Instansiate Controllers.
 		foreach ( $controllers as $c ) {
 			foreach ( $hooks as $hook ) {
-				call_user_func( array( $c, $hook ) );
+				if ( is_callable( array( $c, $hook ) ) ) {
+					call_user_func( array( $c, $hook ) );
+				}
 				unset( $hook );
 			}
 			unset( $c );
