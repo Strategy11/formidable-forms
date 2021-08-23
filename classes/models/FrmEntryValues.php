@@ -119,6 +119,16 @@ class FrmEntryValues {
 		}
 
 		$this->include_fields = $this->prepare_array_property( 'include_fields', $atts );
+
+		/**
+		 * Allows modifying the IDs of include_fields used in the entry values.
+		 *
+		 * @since 5.0
+		 *
+		 * @param array $field_ids The list of field IDs.
+		 * @param array $atts      The arguments. See {@see FrmEntriesController::show_entry_shortcode()}.
+		 */
+		$this->include_fields = apply_filters( 'frm_entry_values_include_fields', $this->include_fields, $atts );
 	}
 
 	/**
@@ -130,6 +140,16 @@ class FrmEntryValues {
 	 */
 	protected function init_exclude_fields( $atts ) {
 		$this->exclude_fields = $this->prepare_array_property( 'exclude_fields', $atts );
+
+		/**
+		 * Allows modifying the IDs of exclude_fields used in the entry values.
+		 *
+		 * @since 5.0
+		 *
+		 * @param array $field_ids The list of field IDs.
+		 * @param array $atts      The arguments. See {@see FrmEntriesController::show_entry_shortcode()}.
+		 */
+		$this->exclude_fields = apply_filters( 'frm_entry_values_exclude_fields', $this->exclude_fields, $atts );
 	}
 
 	/**
@@ -164,6 +184,22 @@ class FrmEntryValues {
 	 */
 	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
+
+		/**
+		 * Allows modifying the list of all field in the form that is used in the entry values.
+		 *
+		 * @since 5.0
+		 *
+		 * @param array $fields The list of fields.
+		 * @param array $args   The arguments. Contains `form_id`.
+		 */
+		$this->fields = apply_filters(
+			'frm_entry_values_fields',
+			$this->fields,
+			array(
+				'form_id' => $this->form_id,
+			)
+		);
 	}
 
 	/**
