@@ -1161,9 +1161,16 @@ function frmAdminBuildJS() {
 			controls = div();
 			controls.id = 'frm_field_group_controls';
 			controls.innerHTML = ''.concat(
-				'<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>',
-				'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
-			);
+                '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>',
+                '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>',
+                // TODO escape this. it shouldn't be a one liner thing.
+                '<span class="dropdown">',
+                    '<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="', __( 'More Options', 'formidable' ), '" data-toggle="dropdown" data-container="body">',
+                        '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>',
+                    '</a>',
+                    '<ul class="frm-dropdown-menu" role="menu"></ul>',
+                '</span>'
+            );
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
 
@@ -1793,7 +1800,7 @@ function frmAdminBuildJS() {
 		maybeRemoveGroupHoverTarget();
 	}
 
-	function onFieldActionDropdownShow() {
+	function onFieldActionDropdownShow( isFieldGroup ) {
 		unselectFieldGroups();
 		// maybe offset the dropdown if it goes off of the right of the screen.
 		setTimeout(
@@ -1803,6 +1810,9 @@ function frmAdminBuildJS() {
 				if ( null === ul ) {
 					return;
 				}
+				if ( 0 === ul.children.length ) {
+                    fillFieldActionDropdown( ul, true === isFieldGroup );
+                }
 				$ul = jQuery( ul );
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
@@ -1811,6 +1821,38 @@ function frmAdminBuildJS() {
 			0
 		);
 	}
+
+	function onFieldGroupActionDropdownShow() {
+        onFieldActionDropdownShow( true );
+    }
+
+    function fillFieldActionDropdown( ul, isFieldGroup ) {
+        var classSuffix, options;
+        classSuffix = isFieldGroup ? '_field_group' : '_field';
+        options = [
+            { class: 'frm_delete', icon: 'frm_delete_icon', label: __( 'Delete', 'formidable' ) },
+            { class: 'frm_clone', icon: 'frm_clone_icon', label: __( 'Duplicate', 'formidable' ) }
+        ];
+        if ( ! isFieldGroup ) {
+            options.push(
+                { class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
+            );
+        }
+        options.forEach(
+            function( option ) {
+                var li, span;
+                li = document.createElement( 'li' );
+                li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
+                li.setAttribute( 'href', '#' );
+                span = document.createElement( 'span' );
+                span.textContent = option.label;
+                li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+                li.appendChild( document.createTextNode( ' ' ) );
+                li.appendChild( span );
+                ul.appendChild( li );
+            }
+        );
+    }
 
 	function wrapFieldLi( li ) {
 		return jQuery( '<li>' )
@@ -2875,6 +2917,16 @@ function frmAdminBuildJS() {
 	function clickSelectField() {
 		this.closest( 'li.form-field' ).click();
 	}
+
+    function clickDeleteFieldGroup() {
+        // TODO
+        alert( 'delete' );
+    }
+
+    function duplicateFieldGroup() {
+        // TODO
+        alert( 'duplicate' );
+    }
 
 	function clickFieldGroupLayout() {
 		var hoverTarget, sizeOfFieldGroup, popupWrapper;
@@ -8376,6 +8428,8 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
+			jQuery( document ).on( 'click', '.frm_delete_field_group', clickDeleteFieldGroup );
+            jQuery( document ).on( 'click', '.frm_clone_field_group', duplicateFieldGroup );
 			jQuery( document ).on( 'click', '#frm_field_group_controls > span:first-child', clickFieldGroupLayout );
 			jQuery( document ).on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
@@ -8389,11 +8443,13 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
 			jQuery( document ).on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
 			$newFields.on( 'click', '.frm-field-action-icons [data-toggle="dropdown"]', function() {
+				// TODO can I move this into the show listener?
 				this.closest( 'li.form-field' ).classList.add( 'frm-field-settings-open' );
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
 			});
 			$newFields.on( 'mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove );
 			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', onFieldActionDropdownShow );
+			jQuery( document ).on( 'show.bs.dropdown', '#frm_field_group_controls', onFieldGroupActionDropdownShow );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );

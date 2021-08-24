@@ -3,8 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' == $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>">
-<?php if ( $field['type'] == 'divider' ) { ?>
+<li id="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" class="<?php echo esc_attr( $li_classes ); ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-formid="<?php echo esc_attr( 'divider' === $field['type'] ? $field['form_select'] : $field['form_id'] ); ?>" data-ftype="<?php echo esc_attr( $display['type'] ); ?>" data-type="<?php echo esc_attr( $field['type'] ); ?>">
+<?php if ( $field['type'] === 'divider' ) { ?>
 <div class="divider_section_only">
 <?php } ?>
 
@@ -29,18 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 			</a>
-			<ul class="frm-dropdown-menu" role="menu">
-				<li class="frm_dropdown_li frm_delete_field" href="#">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?> <?php esc_html_e( 'Delete', 'formidable' ); ?>
-				</li>
-				<li class="frm_dropdown_li frm_clone_field" href="#">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?> <?php esc_html_e( 'Duplicate', 'formidable' ); ?>
-				</li>
-				<hr>
-				<li class="frm_dropdown_li frm_select_field">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_settings_icon' ); ?> <?php esc_html_e( 'Field settings', 'formidable' ); ?>
-				</li>
-			</ul>
+			<ul class="frm-dropdown-menu" role="menu"></ul>
 		</div>
 
 	</div>
@@ -59,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php $field_obj->show_on_form_builder(); ?>
 		<div class="clear"></div>
 	</div>
-	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ) ) ) { ?>
+	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ), true ) ) { ?>
 		<div class="frm_description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
 		</div>
