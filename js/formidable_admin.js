@@ -2997,6 +2997,7 @@ function frmAdminBuildJS() {
 		$newRow = wrapFieldLi( '' );
 		$newRowUl = $newRow.find( 'ul' );
 		$newRowUl.attr( 'id', newRowId );
+		$newRow.addClass( 'frm_hidden' );
 		jQuery( hoverTarget ).closest( 'li.frm_field_box' ).after( $newRow );
 
 		$fields = getFieldsInRow( jQuery( hoverTarget ) );
@@ -3039,6 +3040,7 @@ function frmAdminBuildJS() {
 					}
 
 					syncLayoutClasses( getFieldsInRow( $newRowUl ).first(), syncDetails );
+					$newRow.removeClass( 'frm_hidden' );
 					updateFieldOrder();
 				}
 			},
