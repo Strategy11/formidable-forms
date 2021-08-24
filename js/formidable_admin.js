@@ -1160,22 +1160,40 @@ function frmAdminBuildJS() {
 
 			controls = div();
 			controls.id = 'frm_field_group_controls';
-			controls.innerHTML = ''.concat(
-                '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>',
-                '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>',
-                // TODO escape this. it shouldn't be a one liner thing.
-                '<span class="dropdown">',
-                    '<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="', __( 'More Options', 'formidable' ), '" data-toggle="dropdown" data-container="body">',
-                        '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>',
-                    '</a>',
-                    '<ul class="frm-dropdown-menu" role="menu"></ul>',
-                '</span>'
-            );
+			setFieldControlsHtml( controls );
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
 
 		$row.append( controls );
 		controls.style.display = shouldShowControls ? 'block' : 'none';
+	}
+
+	function setFieldControlsHtml( controls ) {
+		controls.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>';
+		controls.innerHTML += '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>';
+		controls.appendChild( getFieldControlsDropdown() );
+	}
+
+	function getFieldControlsDropdown() {
+		var dropdown, trigger, ul;
+
+		dropdown = document.createElement( 'span' );
+		dropdown.classList.add( 'dropdown' );
+
+		trigger = document.createElement( 'a' );
+		trigger.classList.add( 'frm_bstooltip', 'frm-hover-icon', 'frm-dropdown-toggle', 'dropdown-toggle' );
+		trigger.setAttribute( 'title', __( 'More Options', 'formidable' ) );
+		trigger.setAttribute( 'data-toggle', 'dropdown' );
+		trigger.setAttribute( 'data-container', 'body' );
+		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
+		dropdown.appendChild( trigger );
+
+		ul = document.createElement( 'ul' );
+		ul.classList.add( 'frm-dropdown-menu' );
+		ul.setAttribute( 'role', 'menu' );
+		dropdown.appendChild( ul );
+
+		return dropdown;
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
@@ -1829,10 +1847,7 @@ function frmAdminBuildJS() {
     function fillFieldActionDropdown( ul, isFieldGroup ) {
         var classSuffix, options;
         classSuffix = isFieldGroup ? '_field_group' : '_field';
-        options = [
-            { class: 'frm_delete', icon: 'frm_delete_icon', label: __( 'Delete', 'formidable' ) },
-            { class: 'frm_clone', icon: 'frm_clone_icon', label: __( 'Duplicate', 'formidable' ) }
-        ];
+        options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
         if ( ! isFieldGroup ) {
             options.push(
                 { class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
@@ -1853,6 +1868,18 @@ function frmAdminBuildJS() {
             }
         );
     }
+
+	function getDeleteActionOption( isFieldGroup ) {
+		var option = { class: 'frm_delete', icon: 'frm_delete_icon' };
+		option.label = isFieldGroup ? __( 'Delete Group', 'formidable' ) : __( 'Delete', 'formidable' );
+		return option;
+	}
+
+	function getDuplicateActionOption( isFieldGroup ) {
+		var option = { class: 'frm_clone', icon: 'frm_clone_icon' };
+		option.label = isFieldGroup ? __( 'Duplicate Group', 'formidable' ) : __( 'Duplicate', 'formidable' );
+		return option;
+	}
 
 	function wrapFieldLi( li ) {
 		return jQuery( '<li>' )
@@ -2919,13 +2946,24 @@ function frmAdminBuildJS() {
 	}
 
     function clickDeleteFieldGroup() {
-        // TODO
-        alert( 'delete' );
+        var hoverTarget, decoy;
+
+		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		if ( null === hoverTarget ) {
+			return;
+		}
+
+		hoverTarget.classList.add( 'frm-selected-field-group' );
+
+		decoy = document.createElement( 'div' );
+		decoy.classList.add( 'frm-delete-field-groups', 'frm_hidden' );
+		document.body.appendChild( decoy );
+		decoy.click();
     }
 
     function duplicateFieldGroup() {
-        // TODO
-        alert( 'duplicate' );
+		// TODO go through every field, trigger each duplicate action individually, and then sync back the layout.
+		
     }
 
 	function clickFieldGroupLayout() {
@@ -3672,11 +3710,15 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
-		var fieldIdsToDelete, deleteOnConfirm;
+		var fieldIdsToDelete, deleteOnConfirm, multiselectPopup;
 
 		fieldIdsToDelete = getSelectedFieldIds();
 		deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( fieldIdsToDelete );
-		document.getElementById( 'frm_field_multiselect_popup' ).remove();
+
+		multiselectPopup = document.getElementById( 'frm_field_multiselect_popup' );
+		if ( null !== multiselectPopup ) {
+			multiselectPopup.remove();
+		}
 
 		this.setAttribute( 'data-frmcaution', __( 'Heads up', 'formidable' ) );
 		/* translators: %1$s: Number of fields that are selected to be deleted. */
