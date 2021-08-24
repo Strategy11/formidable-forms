@@ -1202,7 +1202,17 @@ class FrmFormsController {
 	}
 
 	public static function mb_tags_box( $form_id, $class = '' ) {
-		$fields       = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+
+		/**
+		 * Allows modifying the list of fields in the tags box.
+		 *
+		 * @since 5.0
+		 *
+		 * @param array $fields The list of fields.
+		 * @param array $args   The arguments. Contains `form_id`.
+		 */
+		$fields       = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
 		$linked_forms = array();
 		$col          = 'one';
 		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' ) ? true : false;
