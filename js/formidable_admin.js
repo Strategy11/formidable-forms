@@ -8565,7 +8565,6 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick );
 			jQuery( document ).on( 'click', '.frm-delete-field-groups', deleteFieldGroupsClick );
 			$newFields.on( 'click', '.frm-field-action-icons [data-toggle="dropdown"]', function() {
-				// TODO can I move this into the show listener?
 				this.closest( 'li.form-field' ).classList.add( 'frm-field-settings-open' );
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
 			});
