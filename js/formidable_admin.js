@@ -1861,36 +1861,36 @@ function frmAdminBuildJS() {
 	}
 
 	function onFieldGroupActionDropdownShow() {
-        onFieldActionDropdownShow( true );
-    }
+		onFieldActionDropdownShow( true );
+	}
 
-    function fillFieldActionDropdown( ul, isFieldGroup ) {
-        var classSuffix, options;
-        classSuffix = isFieldGroup ? '_field_group' : '_field';
-        options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
-        if ( ! isFieldGroup ) {
-            options.push(
-                { class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
-            );
-        }
-        options.forEach(
-            function( option ) {
-                var li, span;
-                li = document.createElement( 'li' );
-                li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
+	function fillFieldActionDropdown( ul, isFieldGroup ) {
+		var classSuffix, options;
+		classSuffix = isFieldGroup ? '_field_group' : '_field';
+		options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
+		if ( ! isFieldGroup ) {
+			options.push(
+				{ class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
+			);
+		}
+		options.forEach(
+			function( option ) {
+				var li, span;
+				li = document.createElement( 'li' );
+				li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
 				if ( 'frm_delete' === option.class ) {
 					// delete using a confirmation that will cause a redirect if href isn't set to #.
 					li.setAttribute( 'href', '#' );
 				}
-                span = document.createElement( 'span' );
-                span.textContent = option.label;
-                li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
-                li.appendChild( document.createTextNode( ' ' ) );
-                li.appendChild( span );
-                ul.appendChild( li );
-            }
-        );
-    }
+				span = document.createElement( 'span' );
+				span.textContent = option.label;
+				li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+				li.appendChild( document.createTextNode( ' ' ) );
+				li.appendChild( span );
+				ul.appendChild( li );
+			}
+		);
+	}
 
 	function getDeleteActionOption( isFieldGroup ) {
 		var option = { class: 'frm_delete', icon: 'frm_delete_icon' };
