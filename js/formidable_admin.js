@@ -1704,7 +1704,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateField() {
-		var $field, fieldId, children;
+		var $field, fieldId, children, newRowId, fieldOrder;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
@@ -1716,6 +1716,11 @@ function frmAdminBuildJS() {
 
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
+		newRowId = this.getAttribute( 'frm-target-row-id' );
+
+		if ( null !== newRowId ) {
+			fieldOrder = this.getAttribute( 'frm-field-order' );
+		}
 
 		jQuery.ajax({
 			type: 'POST',
@@ -1728,12 +1733,27 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( msg ) {
+				var newRow;
+
+				if ( null !== newRowId ) {
+					newRow = document.getElementById( newRowId );
+					if ( null !== newRow ) {
+						jQuery( newRow ).append( msg );
+						if ( null !== fieldOrder ) {
+							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
+						}
+						afterAddField( msg, false );
+						return;
+					}
+				}
+
 				if ( $field.siblings( 'li.form-field' ).length ) {
 					$field.after( msg );
 					syncLayoutClasses( $field );
 				} else {
 					$field.parent().parent().after( wrapFieldLi( msg ) );
 				}
+
 				updateFieldOrder();
 				afterAddField( msg, false );
 			}
@@ -1858,7 +1878,10 @@ function frmAdminBuildJS() {
                 var li, span;
                 li = document.createElement( 'li' );
                 li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
-                li.setAttribute( 'href', '#' );
+				if ( 'frm_delete' === option.class ) {
+					// delete using a confirmation that will cause a redirect if href isn't set to #.
+					li.setAttribute( 'href', '#' );
+				}
                 span = document.createElement( 'span' );
                 span.textContent = option.label;
                 li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
@@ -2962,8 +2985,65 @@ function frmAdminBuildJS() {
     }
 
     function duplicateFieldGroup() {
-		// TODO go through every field, trigger each duplicate action individually, and then sync back the layout.
-		
+		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, interval, injectedCloneOptions;
+
+		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+
+		if ( null === hoverTarget ) {
+			return;
+		}
+
+		newRowId = 'frm_field_group_' + getAutoId();
+		$newRow = wrapFieldLi( '' );
+		$newRowUl = $newRow.find( 'ul' );
+		$newRowUl.attr( 'id', newRowId );
+		jQuery( hoverTarget ).closest( 'li.frm_field_box' ).after( $newRow );
+
+		$fields = getFieldsInRow( jQuery( hoverTarget ) );
+		syncDetails = [];
+		injectedCloneOptions = [];
+
+		$fields.each(
+			function( index ) {
+				var cloneOption;
+				cloneOption = document.createElement( 'li' );
+				cloneOption.classList.add( 'frm_clone_field' );
+				cloneOption.setAttribute( 'frm-target-row-id', newRowId );
+				cloneOption.setAttribute( 'frm-field-order', index );
+				this.appendChild( cloneOption );
+				cloneOption.click();
+				injectedCloneOptions.push( cloneOption );
+				syncDetails.push( getSizeOfLayoutClass( getLayoutClassName( this.classList ) ) );
+			}
+		);
+
+		expectedLength = $fields.length;
+		interval = setInterval(
+			function() {
+				var $duplicatedFields, index;
+
+				$duplicatedFields = getFieldsInRow( $newRowUl );
+
+				if ( expectedLength === $duplicatedFields.length ) {
+					clearInterval( interval );
+					injectedCloneOptions.forEach(
+						function( cloneOption ) {
+							cloneOption.remove();
+						}
+					);
+
+					for ( index = 0; index < expectedLength; ++index ) {
+						$newRowUl.append(
+							$newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' )
+						);
+					}
+
+					syncLayoutClasses( getFieldsInRow( $newRowUl ).first(), syncDetails );
+					updateFieldOrder();
+				}
+			},
+			50
+		);
     }
 
 	function clickFieldGroupLayout() {
