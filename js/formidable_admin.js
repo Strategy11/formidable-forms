@@ -1742,6 +1742,7 @@ function frmAdminBuildJS() {
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
+						jQuery( newRow ).trigger( 'frm_added_duplicated_field_to_row' );
 						afterAddField( msg, false );
 						return;
 					}
@@ -2985,7 +2986,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateFieldGroup() {
-		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, interval, injectedCloneOptions;
+		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, injectedCloneOptions;
 
 		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 
@@ -3004,6 +3005,38 @@ function frmAdminBuildJS() {
 		syncDetails = [];
 		injectedCloneOptions = [];
 
+		expectedLength = $fields.length;
+		duplicatedCount = 0;
+
+		$newRow.on(
+			'frm_added_duplicated_field_to_row',
+			function() {
+				var $duplicatedFields, index;
+
+				if ( expectedLength > ++duplicatedCount ) {
+					return;
+				}
+
+				$duplicatedFields = getFieldsInRow( $newRowUl );
+
+				injectedCloneOptions.forEach(
+					function( cloneOption ) {
+						cloneOption.remove();
+					}
+				);
+
+				for ( index = 0; index < expectedLength; ++index ) {
+					$newRowUl.append(
+						$newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' )
+					);
+				}
+
+				syncLayoutClasses( getFieldsInRow( $newRowUl ).first(), syncDetails );
+				$newRow.removeClass( 'frm_hidden' );
+				updateFieldOrder();
+			}
+		);
+
 		$fields.each(
 			function( index ) {
 				var cloneOption;
@@ -3016,35 +3049,6 @@ function frmAdminBuildJS() {
 				injectedCloneOptions.push( cloneOption );
 				syncDetails.push( getSizeOfLayoutClass( getLayoutClassName( this.classList ) ) );
 			}
-		);
-
-		expectedLength = $fields.length;
-		interval = setInterval(
-			function() {
-				var $duplicatedFields, index;
-
-				$duplicatedFields = getFieldsInRow( $newRowUl );
-
-				if ( expectedLength === $duplicatedFields.length ) {
-					clearInterval( interval );
-					injectedCloneOptions.forEach(
-						function( cloneOption ) {
-							cloneOption.remove();
-						}
-					);
-
-					for ( index = 0; index < expectedLength; ++index ) {
-						$newRowUl.append(
-							$newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' )
-						);
-					}
-
-					syncLayoutClasses( getFieldsInRow( $newRowUl ).first(), syncDetails );
-					$newRow.removeClass( 'frm_hidden' );
-					updateFieldOrder();
-				}
-			},
-			50
 		);
 	}
 
