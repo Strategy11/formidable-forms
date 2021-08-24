@@ -1849,8 +1849,8 @@ function frmAdminBuildJS() {
 					return;
 				}
 				if ( 0 === ul.children.length ) {
-                    fillFieldActionDropdown( ul, true === isFieldGroup );
-                }
+					fillFieldActionDropdown( ul, true === isFieldGroup );
+				}
 				$ul = jQuery( ul );
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
@@ -2968,8 +2968,8 @@ function frmAdminBuildJS() {
 		this.closest( 'li.form-field' ).click();
 	}
 
-    function clickDeleteFieldGroup() {
-        var hoverTarget, decoy;
+	function clickDeleteFieldGroup() {
+		var hoverTarget, decoy;
 
 		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 		if ( null === hoverTarget ) {
@@ -2982,9 +2982,9 @@ function frmAdminBuildJS() {
 		decoy.classList.add( 'frm-delete-field-groups', 'frm_hidden' );
 		document.body.appendChild( decoy );
 		decoy.click();
-    }
+	}
 
-    function duplicateFieldGroup() {
+	function duplicateFieldGroup() {
 		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, interval, injectedCloneOptions;
 
 		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
@@ -3044,7 +3044,7 @@ function frmAdminBuildJS() {
 			},
 			50
 		);
-    }
+	}
 
 	function clickFieldGroupLayout() {
 		var hoverTarget, sizeOfFieldGroup, popupWrapper;
@@ -8551,7 +8551,7 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
 			jQuery( document ).on( 'click', '.frm_delete_field_group', clickDeleteFieldGroup );
-            jQuery( document ).on( 'click', '.frm_clone_field_group', duplicateFieldGroup );
+			jQuery( document ).on( 'click', '.frm_clone_field_group', duplicateFieldGroup );
 			jQuery( document ).on( 'click', '#frm_field_group_controls > span:first-child', clickFieldGroupLayout );
 			jQuery( document ).on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
