@@ -3031,7 +3031,7 @@ function frmAdminBuildJS() {
 					);
 				}
 
-				syncLayoutClasses( getFieldsInRow( $newRowUl ).first(), syncDetails );
+				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
 				$newRow.removeClass( 'frm_hidden' );
 				updateFieldOrder();
 			}
