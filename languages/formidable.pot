@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.0.01\n"
+"Project-Id-Version: Formidable Forms 5.0.02\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-08-16T15:48:39+00:00\n"
+"POT-Creation-Date: 2021-08-25T17:01:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -1215,7 +1215,7 @@ msgstr ""
 #: classes/views/frm-forms/new-form-overlay.php:139
 #: classes/views/shared/admin-header.php:63
 #: classes/views/shared/confirm-overlay.php:19
-#: js/formidable_admin.js:3259
+#: js/formidable_admin.js:3435
 msgid "Cancel"
 msgstr ""
 
@@ -1242,7 +1242,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2514
 #: classes/helpers/FrmListHelper.php:405
-#: js/formidable_admin.js:3629
+#: js/formidable_admin.js:3817
 msgid "Heads up"
 msgstr ""
 
@@ -1750,7 +1750,7 @@ msgstr ""
 #: classes/helpers/FrmFormsHelper.php:1134
 #: classes/helpers/FrmFormsListHelper.php:133
 #: classes/views/frm-form-actions/form_action.php:25
-#: classes/views/frm-forms/add_field.php:34
+#: js/formidable_admin.js:1898
 msgid "Delete"
 msgstr ""
 
@@ -4722,7 +4722,7 @@ msgid "Conditional emails"
 msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:21
-#: classes/views/frm-forms/add_field.php:37
+#: js/formidable_admin.js:1904
 msgid "Duplicate"
 msgstr ""
 
@@ -4847,18 +4847,15 @@ msgid "Move Field"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:29
+#: js/formidable_admin.js:1185
 msgid "More Options"
 msgstr ""
 
-#: classes/views/frm-forms/add_field.php:41
-msgid "Field settings"
-msgstr ""
-
-#: classes/views/frm-forms/add_field.php:54
+#: classes/views/frm-forms/add_field.php:43
 msgid "(Collapsed)"
 msgstr ""
 
-#: classes/views/frm-forms/add_field.php:90
+#: classes/views/frm-forms/add_field.php:79
 #: classes/views/frm-forms/form.php:55
 msgid "Add Fields Here"
 msgstr ""
@@ -6220,35 +6217,47 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: js/formidable_admin.js:2972
+#: js/formidable_admin.js:1874
+msgid "Field settings"
+msgstr ""
+
+#: js/formidable_admin.js:1898
+msgid "Delete Group"
+msgstr ""
+
+#: js/formidable_admin.js:1904
+msgid "Duplicate Group"
+msgstr ""
+
+#: js/formidable_admin.js:3148
 msgid "Custom layout"
 msgstr ""
 
-#: js/formidable_admin.js:2986
+#: js/formidable_admin.js:3162
 msgid "Break into rows"
 msgstr ""
 
-#: js/formidable_admin.js:2995
+#: js/formidable_admin.js:3171
 msgid "Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:3244
+#: js/formidable_admin.js:3420
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/formidable_admin.js:3248
+#: js/formidable_admin.js:3424
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/formidable_admin.js:3264
+#: js/formidable_admin.js:3440
 msgid "Save"
 msgstr ""
 
-#: js/formidable_admin.js:3550
+#: js/formidable_admin.js:3731
 msgid "Merge into row"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:3631
+#: js/formidable_admin.js:3819
 msgid "Are you sure you want to delete these %1$s selected fields?"
 msgstr ""
