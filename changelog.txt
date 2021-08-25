@@ -1,4 +1,7 @@
 == Changelog ==
+= 5.0.02 =
+* New: Field groups can now be duplicated and deleted.
+
 = 5.0.01 =
 * New: Updated styling and icons in the back end builder.
 * New: Added search to form fields in the builder to make finding a specific field easier.
