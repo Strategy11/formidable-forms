@@ -3652,6 +3652,7 @@ function frmAdminBuildJS() {
 		} else {
 			// not multi-selecting
 			unselectFieldGroups();
+			numberOfSelectedGroups = 1;
 		}
 
 		hoverTarget.classList.add( 'frm-selected-field-group' );
@@ -3663,12 +3664,16 @@ function frmAdminBuildJS() {
 
 	function syncAfterMultiSelect( numberOfSelectedGroups ) {
 		clearSettingsBox( true ); // unselect any fields if one is selected.
-		if ( numberOfSelectedGroups >= 2 ) {
+		if ( numberOfSelectedGroups >= 2 || ( 1 === numberOfSelectedGroups && selectedGroupHasMultipleFields() ) ) {
 			addFieldMultiselectPopup();
 		} else {
 			maybeRemoveMultiselectPopup();
 		}
 		maybeRemoveGroupHoverTarget();
+	}
+
+	function selectedGroupHasMultipleFields() {
+		return getFieldsInRow( jQuery( document.querySelector( '.frm-selected-field-group' ) ) ).length > 1;
 	}
 
 	function unselectFieldGroups( event ) {
@@ -3753,6 +3758,9 @@ function frmAdminBuildJS() {
 		var selectedFieldGroups, totalFieldCount, length, index, fieldGroup;
 		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
 		length = selectedFieldGroups.length;
+		if ( 1 === length ) {
+			return false;
+		}
 		totalFieldCount = 0;
 		for ( index = 0; index < length; ++index ) {
 			fieldGroup = selectedFieldGroups[ index ];
