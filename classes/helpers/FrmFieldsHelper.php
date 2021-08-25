@@ -1654,29 +1654,29 @@ class FrmFieldsHelper {
 		);
 
 		$prepop[ __( 'Satisfaction', 'formidable' ) ] = array(
-			__( 'Very Satisfied', 'formidable' ),
-			__( 'Satisfied', 'formidable' ),
-			__( 'Neutral', 'formidable' ),
-			__( 'Unsatisfied', 'formidable' ),
 			__( 'Very Unsatisfied', 'formidable' ),
+			__( 'Unsatisfied', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Satisfied', 'formidable' ),
+			__( 'Very Satisfied', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
 
 		$prepop[ __( 'Importance', 'formidable' ) ] = array(
-			__( 'Very Important', 'formidable' ),
-			__( 'Important', 'formidable' ),
-			__( 'Neutral', 'formidable' ),
-			__( 'Somewhat Important', 'formidable' ),
 			__( 'Not at all Important', 'formidable' ),
+			__( 'Somewhat Important', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Important', 'formidable' ),
+			__( 'Very Important', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
 
 		$prepop[ __( 'Agreement', 'formidable' ) ] = array(
-			__( 'Strongly Agree', 'formidable' ),
-			__( 'Agree', 'formidable' ),
-			__( 'Neutral', 'formidable' ),
-			__( 'Disagree', 'formidable' ),
 			__( 'Strongly Disagree', 'formidable' ),
+			__( 'Disagree', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Agree', 'formidable' ),
+			__( 'Strongly Agree', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
 
