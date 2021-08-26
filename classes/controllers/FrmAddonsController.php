@@ -533,8 +533,11 @@ class FrmAddonsController {
 			}
 
 			$addon['installed'] = self::is_installed( $file_name );
-			if ( 'formidable-views/formidable-views.php' === $file_name && 'views' === $slug && self::is_plugin_active( $file_name, 'visual-views' ) ) {
-				$addon['installed'] = false;
+			if ( $addon['installed'] && 'formidable-views/formidable-views.php' === $file_name ) {
+				$active_views_version = self::get_active_views_version();
+				if ( false !== $active_views_version && $slug !== $active_views_version ) {
+					$addon['installed'] = false;
+				}
 			}
 
 			$addon['activate_url'] = '';
