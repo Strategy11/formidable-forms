@@ -2191,6 +2191,13 @@ class FrmFormsController {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
 	}
 
+	public static function landing_page_preview_option() {
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/landing-page-preview-option.php';
+		$html = apply_filters( 'frm_landing_page_preview_option', ob_get_clean() );
+		echo FrmAppHelper::kses( $html, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
 	/**
 	 * @deprecated 4.0
 	 */

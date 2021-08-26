@@ -32,6 +32,9 @@ if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) 
 									<?php esc_html_e( 'In Theme', 'formidable' ); ?>
 								</a>
 							</li>
+							<li>
+								<?php FrmFormsController::landing_page_preview_option(); ?>
+							</li>
 						</ul>
 					</div>
 				<?php } ?>
