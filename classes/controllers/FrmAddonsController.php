@@ -578,14 +578,8 @@ class FrmAddonsController {
 		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
 			return false;
 		}
-
 		$plugin_version = FrmViewsAppHelper::plugin_version();
-
-		if ( version_compare( $plugin_version, '5.0', '>=' ) ) {
-			return 'visual-views';
-		}
-
-		return 'views';
+		return version_compare( $plugin_version, '5.0', '>=' ) ? 'visual-views' : 'views';
 	}
 
 	/**
