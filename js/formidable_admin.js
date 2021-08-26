@@ -2607,11 +2607,18 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 			var i, key, label,
 				content = '',
+				optList,
+				opts,
 				fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' ),
 				separate = usingSeparateValues( fieldId ),
-				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
-				opts = optList.getElementsByTagName( 'li' ),
 				product = isProductField( fieldId );
+
+			optList = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+			if ( ! optList ) {
+				return;
+			}
+
+			opts = optList.getElementsByTagName( 'li' );
 
 			document.getElementById( 'bulk-field-id' ).value = fieldId;
 
@@ -8170,6 +8177,7 @@ function frmAdminBuildJS() {
 				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
+				this.removeAttribute( 'data-option-type' );
 				const optionType = document.getElementById( 'bulk-option-type' );
 				if ( optionType ) {
 					optionType.value = '';
