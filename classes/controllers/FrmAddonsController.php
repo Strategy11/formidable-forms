@@ -565,23 +565,27 @@ class FrmAddonsController {
 	}
 
 	private static function is_plugin_active( $file_name, $slug ) {
-		if ( 'formidable-views/formidable-views.php' !== $file_name ) {
-			return is_plugin_active( $file_name );
+		if ( 'formidable-views/formidable-views.php' === $file_name ) {
+			return self::get_active_views_version() === $slug;
 		}
+		return is_plugin_active( $file_name );
+	}
 
+	/**
+	 * @return string|false either 'visual-views' or 'views', false if one is not found.
+	 */
+	private static function get_active_views_version() {
 		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
 			return false;
 		}
 
-		$is_active      = false;
 		$plugin_version = FrmViewsAppHelper::plugin_version();
 
-		if ( 'visual-views' === $slug ) {
-			$is_active = version_compare( $plugin_version, '5.0', '>=' );
-		} elseif ( 'views' === $slug ) {
-			$is_active = version_compare( $plugin_version, '5.0', '<' );
+		if ( version_compare( $plugin_version, '5.0', '>=' ) ) {
+			return 'visual-views';
 		}
-		return $is_active;
+
+		return 'views';
 	}
 
 	/**
