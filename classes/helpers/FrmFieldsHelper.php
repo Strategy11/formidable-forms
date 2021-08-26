@@ -1307,7 +1307,7 @@ class FrmFieldsHelper {
 	 */
 	public static function bulk_options_overlay() {
 		$prepop = array();
-		self::get_bulk_prefilled_opts( $prepop );
+		self::get_bulk_prefilled_opts( $prepop, true );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/bulk-options-overlay.php' );
 	}
@@ -1629,20 +1629,45 @@ class FrmFieldsHelper {
 		return apply_filters( 'frm_countries', $countries );
 	}
 
-	public static function get_bulk_prefilled_opts( array &$prepop ) {
-		$prepop[ __( 'Countries', 'formidable' ) ] = self::get_countries();
+	/**
+	 * Gets bulk prefilled options.
+	 *
+	 * @since 5.0 Add `$include_class` param.
+	 *
+	 * @param array $prepop        Bulk options.
+	 * @param array $include_class Include the class in the bulk options.
+	 */
+	public static function get_bulk_prefilled_opts( array &$prepop, $include_class = false ) {
+		// Countries.
+		$countries = self::get_countries();
+		if ( $include_class ) {
+			$countries['class'] = 'frm-countries-opts';
+		}
 
+		$prepop[ __( 'Countries', 'formidable' ) ] = $countries;
+
+		// State abv.
 		$states    = self::get_us_states();
 		$state_abv = array_keys( $states );
 		sort( $state_abv );
+		if ( $include_class ) {
+			$state_abv['class'] = 'frm-state-abv-opts';
+		}
+
 		$prepop[ __( 'U.S. State Abbreviations', 'formidable' ) ] = $state_abv;
 
+		// States.
 		$states = array_values( $states );
 		sort( $states );
+		if ( $include_class ) {
+			$states['class'] = 'frm-states-opts';
+		}
+
 		$prepop[ __( 'U.S. States', 'formidable' ) ] = $states;
 		unset( $state_abv, $states );
 
-		$prepop[ __( 'Age', 'formidable' ) ] = array(
+		// Age.
+		$ages = array(
 			__( 'Under 18', 'formidable' ),
 			__( '18-24', 'formidable' ),
 			__( '25-34', 'formidable' ),
@@ -1652,8 +1677,14 @@ class FrmFieldsHelper {
 			__( '65 or Above', 'formidable' ),
 			__( 'Prefer Not to Answer', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$ages['class'] = 'frm-age-opts';
+		}
 
-		$prepop[ __( 'Satisfaction', 'formidable' ) ] = array(
+		$prepop[ __( 'Age', 'formidable' ) ] = $ages;
+
+		// Satisfaction.
+		$satisfaction = array(
 			__( 'Very Unsatisfied', 'formidable' ),
 			__( 'Unsatisfied', 'formidable' ),
 			__( 'Neutral', 'formidable' ),
@@ -1661,8 +1692,14 @@ class FrmFieldsHelper {
 			__( 'Very Satisfied', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$satisfaction['class'] = 'frm-satisfaction-opts';
+		}
 
-		$prepop[ __( 'Importance', 'formidable' ) ] = array(
+		$prepop[ __( 'Satisfaction', 'formidable' ) ] = $satisfaction;
+
+		// Importance.
+		$importance = array(
 			__( 'Not at all Important', 'formidable' ),
 			__( 'Somewhat Important', 'formidable' ),
 			__( 'Neutral', 'formidable' ),
@@ -1670,8 +1707,14 @@ class FrmFieldsHelper {
 			__( 'Very Important', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$importance['class'] = 'frm-importance-opts';
+		}
 
-		$prepop[ __( 'Agreement', 'formidable' ) ] = array(
+		$prepop[ __( 'Importance', 'formidable' ) ] = $importance;
+
+		// Agreement.
+		$agreement = array(
 			__( 'Strongly Disagree', 'formidable' ),
 			__( 'Disagree', 'formidable' ),
 			__( 'Neutral', 'formidable' ),
@@ -1679,6 +1722,11 @@ class FrmFieldsHelper {
 			__( 'Strongly Agree', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$agreement['class'] = 'frm-agreement-opts';
+		}
+
+		$prepop[ __( 'Agreement', 'formidable' ) ] = $agreement;
 
 		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
 	}
