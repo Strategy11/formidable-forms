@@ -1728,6 +1728,21 @@ class FrmFieldsHelper {
 
 		$prepop[ __( 'Agreement', 'formidable' ) ] = $agreement;
 
+		// Likely.
+		$likely = array(
+			__( 'Extremely Unlikely', 'formidable' ),
+			__( 'Unlikely', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Likely', 'formidable' ),
+			__( 'Extremely Likely', 'formidable' ),
+			__( 'N/A', 'formidable' ),
+		);
+		if ( $include_class ) {
+			$likely['class'] = 'frm-likely-opts';
+		}
+
+		$prepop[ __( 'Likely', 'formidable' ) ] = $likely;
+
 		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
 	}
 
