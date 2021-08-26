@@ -62,35 +62,6 @@ class FrmAddonsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
 	}
 
-	/**
-	 * @param array $addon
-	 * @return array
-	 */
-	private static function get_addon_status( $addon ) {
-		$status = $addon['status'];
-
-		if ( ! in_array( $status['type'], array( 'active', 'installed' ) ) || ! in_array( $addon['slug'], array( 'visual-views', 'views' ), true ) ) {
-			return $status;
-		}
-
-		if ( is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
-			$is_active      = false;
-			$plugin_version = FrmViewsAppHelper::plugin_version();
-
-			if ( 'visual-views' === $addon['slug'] ) {
-				$is_active = version_compare( $plugin_version, '5.0', '>=' );
-			} elseif ( 'views' === $addon['slug'] ) {
-				$is_active = version_compare( $plugin_version, '5.0', '<' );
-			}
-
-			if ( $is_active ) {
-				return self::active_status();
-			}
-		}
-
-		return self::not_installed_status();
-	}
-
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $plugins ) ) {
@@ -561,10 +532,14 @@ class FrmAddonsController {
 				}
 			}
 
-			$addon['installed']    = self::is_installed( $file_name );
+			$addon['installed'] = self::is_installed( $file_name );
+			if ( 'formidable-views/formidable-views.php' === $file_name && 'views' === $slug && self::is_plugin_active( $file_name, 'visual-views' ) ) {
+				$addon['installed'] = false;
+			}
+
 			$addon['activate_url'] = '';
 
-			if ( $addon['installed'] && ! empty( $activate_url ) && ! is_plugin_active( $file_name ) ) {
+			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
@@ -587,6 +562,26 @@ class FrmAddonsController {
 			self::set_addon_status( $addon );
 			$addons[ $id ] = $addon;
 		}
+	}
+
+	private static function is_plugin_active( $file_name, $slug ) {
+		if ( 'formidable-views/formidable-views.php' !== $file_name ) {
+			return is_plugin_active( $file_name );
+		}
+
+		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
+			return false;
+		}
+
+		$is_active      = false;
+		$plugin_version = FrmViewsAppHelper::plugin_version();
+
+		if ( 'visual-views' === $slug ) {
+			$is_active = version_compare( $plugin_version, '5.0', '>=' );
+		} elseif ( 'views' === $slug ) {
+			$is_active = version_compare( $plugin_version, '5.0', '<' );
+		}
+		return $is_active;
 	}
 
 	/**
@@ -614,42 +609,21 @@ class FrmAddonsController {
 	 */
 	protected static function set_addon_status( &$addon ) {
 		if ( ! empty( $addon['activate_url'] ) ) {
-			$addon['status'] = self::installed_status();
+			$addon['status'] = array(
+				'type'  => 'installed',
+				'label' => __( 'Installed', 'formidable' ),
+			);
 		} elseif ( $addon['installed'] ) {
-			$addon['status'] = self::active_status();
+			$addon['status'] = array(
+				'type'  => 'active',
+				'label' => __( 'Active', 'formidable' ),
+			);
 		} else {
-			$addon['status'] = self::not_installed_status();
+			$addon['status'] = array(
+				'type'  => 'not-installed',
+				'label' => __( 'Not Installed', 'formidable' ),
+			);
 		}
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function installed_status() {
-		return array(
-			'type'  => 'installed',
-			'label' => __( 'Installed', 'formidable' ),
-		);
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function active_status() {
-		return array(
-			'type'  => 'active',
-			'label' => __( 'Active', 'formidable' ),
-		);
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function not_installed_status() {
-		return array(
-			'type'  => 'not-installed',
-			'label' => __( 'Not Installed', 'formidable' ),
-		);
 	}
 
 	public static function upgrade_to_pro() {
