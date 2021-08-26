@@ -62,6 +62,35 @@ class FrmAddonsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
 	}
 
+	/**
+	 * @param array $addon
+	 * @return array
+	 */
+	private static function get_addon_status( $addon ) {
+		$status = $addon['status'];
+
+		if ( ! in_array( $status['type'], array( 'active', 'installed' ) ) || ! in_array( $addon['slug'], array( 'visual-views', 'views' ), true ) ) {
+			return $status;
+		}
+
+		if ( is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
+			$is_active      = false;
+			$plugin_version = FrmViewsAppHelper::plugin_version();
+
+			if ( 'visual-views' === $addon['slug'] ) {
+				$is_active = version_compare( $plugin_version, '5.0', '>=' );
+			} elseif ( 'views' === $addon['slug'] ) {
+				$is_active = version_compare( $plugin_version, '5.0', '<' );
+			}
+
+			if ( $is_active ) {
+				return self::active_status();
+			}
+		}
+
+		return self::not_installed_status();
+	}
+
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $plugins ) ) {
@@ -585,21 +614,42 @@ class FrmAddonsController {
 	 */
 	protected static function set_addon_status( &$addon ) {
 		if ( ! empty( $addon['activate_url'] ) ) {
-			$addon['status'] = array(
-				'type'  => 'installed',
-				'label' => __( 'Installed', 'formidable' ),
-			);
+			$addon['status'] = self::installed_status();
 		} elseif ( $addon['installed'] ) {
-			$addon['status'] = array(
-				'type'  => 'active',
-				'label' => __( 'Active', 'formidable' ),
-			);
+			$addon['status'] = self::active_status();
 		} else {
-			$addon['status'] = array(
-				'type'  => 'not-installed',
-				'label' => __( 'Not Installed', 'formidable' ),
-			);
+			$addon['status'] = self::not_installed_status();
 		}
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function installed_status() {
+		return array(
+			'type'  => 'installed',
+			'label' => __( 'Installed', 'formidable' ),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function active_status() {
+		return array(
+			'type'  => 'active',
+			'label' => __( 'Active', 'formidable' ),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function not_installed_status() {
+		return array(
+			'type'  => 'not-installed',
+			'label' => __( 'Not Installed', 'formidable' ),
+		);
 	}
 
 	public static function upgrade_to_pro() {

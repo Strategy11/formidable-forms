@@ -41,7 +41,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div id="the-list" class="frm-addons">
 		<?php foreach ( $addons as $slug => $addon ) { ?>
-			<div class="frm-card plugin-card-<?php echo esc_attr( $slug ); ?> frm-no-thumb frm-addon-<?php echo esc_attr( $addon['status']['type'] ); ?>">
+			<?php $status = self::get_addon_status( $addon ); ?>
+
+			<div class="frm-card plugin-card-<?php echo esc_attr( $slug ); ?> frm-no-thumb frm-addon-<?php echo esc_attr( $status['type'] ); ?>">
 				<div class="plugin-card-top">
 					<?php if ( strtotime( $addon['released'] ) > strtotime( '-90 days' ) ) { ?>
 						<div class="frm_ribbon">
@@ -73,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						printf(
 							/* translators: %s: Status name */
 							esc_html__( 'Status: %s', 'formidable' ),
-							'<span class="addon-status-label">' . esc_html( $addon['status']['label'] ) . '</span>'
+							'<span class="addon-status-label">' . esc_html( $status['label'] ) . '</span>'
 						);
 						?>
 					</span>
