@@ -1160,15 +1160,40 @@ function frmAdminBuildJS() {
 
 			controls = div();
 			controls.id = 'frm_field_group_controls';
-			controls.innerHTML = ''.concat(
-				'<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>',
-				'<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>'
-			);
+			setFieldControlsHtml( controls );
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
 
 		$row.append( controls );
 		controls.style.display = shouldShowControls ? 'block' : 'none';
+	}
+
+	function setFieldControlsHtml( controls ) {
+		controls.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>';
+		controls.innerHTML += '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>';
+		controls.appendChild( getFieldControlsDropdown() );
+	}
+
+	function getFieldControlsDropdown() {
+		var dropdown, trigger, ul;
+
+		dropdown = document.createElement( 'span' );
+		dropdown.classList.add( 'dropdown' );
+
+		trigger = document.createElement( 'a' );
+		trigger.classList.add( 'frm_bstooltip', 'frm-hover-icon', 'frm-dropdown-toggle', 'dropdown-toggle' );
+		trigger.setAttribute( 'title', __( 'More Options', 'formidable' ) );
+		trigger.setAttribute( 'data-toggle', 'dropdown' );
+		trigger.setAttribute( 'data-container', 'body' );
+		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
+		dropdown.appendChild( trigger );
+
+		ul = document.createElement( 'ul' );
+		ul.classList.add( 'frm-dropdown-menu' );
+		ul.setAttribute( 'role', 'menu' );
+		dropdown.appendChild( ul );
+
+		return dropdown;
 	}
 
 	function getSyncLayoutClass( layoutClasses, classToAdd ) {
@@ -1679,7 +1704,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateField() {
-		var $field, fieldId, children;
+		var $field, fieldId, children, newRowId, fieldOrder;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
@@ -1691,6 +1716,11 @@ function frmAdminBuildJS() {
 
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
+		newRowId = this.getAttribute( 'frm-target-row-id' );
+
+		if ( null !== newRowId ) {
+			fieldOrder = this.getAttribute( 'frm-field-order' );
+		}
 
 		jQuery.ajax({
 			type: 'POST',
@@ -1703,12 +1733,28 @@ function frmAdminBuildJS() {
 				nonce: frmGlobal.nonce
 			},
 			success: function( msg ) {
+				var newRow;
+
+				if ( null !== newRowId ) {
+					newRow = document.getElementById( newRowId );
+					if ( null !== newRow ) {
+						jQuery( newRow ).append( msg );
+						if ( null !== fieldOrder ) {
+							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
+						}
+						jQuery( newRow ).trigger( 'frm_added_duplicated_field_to_row' );
+						afterAddField( msg, false );
+						return;
+					}
+				}
+
 				if ( $field.siblings( 'li.form-field' ).length ) {
 					$field.after( msg );
 					syncLayoutClasses( $field );
 				} else {
 					$field.parent().parent().after( wrapFieldLi( msg ) );
 				}
+
 				updateFieldOrder();
 				afterAddField( msg, false );
 			}
@@ -1793,7 +1839,7 @@ function frmAdminBuildJS() {
 		maybeRemoveGroupHoverTarget();
 	}
 
-	function onFieldActionDropdownShow() {
+	function onFieldActionDropdownShow( isFieldGroup ) {
 		unselectFieldGroups();
 		// maybe offset the dropdown if it goes off of the right of the screen.
 		setTimeout(
@@ -1803,6 +1849,9 @@ function frmAdminBuildJS() {
 				if ( null === ul ) {
 					return;
 				}
+				if ( 0 === ul.children.length ) {
+					fillFieldActionDropdown( ul, true === isFieldGroup );
+				}
 				$ul = jQuery( ul );
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
@@ -1810,6 +1859,50 @@ function frmAdminBuildJS() {
 			},
 			0
 		);
+	}
+
+	function onFieldGroupActionDropdownShow() {
+		onFieldActionDropdownShow( true );
+	}
+
+	function fillFieldActionDropdown( ul, isFieldGroup ) {
+		var classSuffix, options;
+		classSuffix = isFieldGroup ? '_field_group' : '_field';
+		options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
+		if ( ! isFieldGroup ) {
+			options.push(
+				{ class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
+			);
+		}
+		options.forEach(
+			function( option ) {
+				var li, span;
+				li = document.createElement( 'li' );
+				li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
+				if ( 'frm_delete' === option.class ) {
+					// delete using a confirmation that will cause a redirect if href isn't set to #.
+					li.setAttribute( 'href', '#' );
+				}
+				span = document.createElement( 'span' );
+				span.textContent = option.label;
+				li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+				li.appendChild( document.createTextNode( ' ' ) );
+				li.appendChild( span );
+				ul.appendChild( li );
+			}
+		);
+	}
+
+	function getDeleteActionOption( isFieldGroup ) {
+		var option = { class: 'frm_delete', icon: 'frm_delete_icon' };
+		option.label = isFieldGroup ? __( 'Delete Group', 'formidable' ) : __( 'Delete', 'formidable' );
+		return option;
+	}
+
+	function getDuplicateActionOption( isFieldGroup ) {
+		var option = { class: 'frm_clone', icon: 'frm_clone_icon' };
+		option.label = isFieldGroup ? __( 'Duplicate Group', 'formidable' ) : __( 'Duplicate', 'formidable' );
+		return option;
 	}
 
 	function wrapFieldLi( li ) {
@@ -2876,6 +2969,89 @@ function frmAdminBuildJS() {
 		this.closest( 'li.form-field' ).click();
 	}
 
+	function clickDeleteFieldGroup() {
+		var hoverTarget, decoy;
+
+		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		if ( null === hoverTarget ) {
+			return;
+		}
+
+		hoverTarget.classList.add( 'frm-selected-field-group' );
+
+		decoy = document.createElement( 'div' );
+		decoy.classList.add( 'frm-delete-field-groups', 'frm_hidden' );
+		document.body.appendChild( decoy );
+		decoy.click();
+	}
+
+	function duplicateFieldGroup() {
+		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, injectedCloneOptions;
+
+		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+
+		if ( null === hoverTarget ) {
+			return;
+		}
+
+		newRowId = 'frm_field_group_' + getAutoId();
+		$newRow = wrapFieldLi( '' );
+		$newRowUl = $newRow.find( 'ul' );
+		$newRowUl.attr( 'id', newRowId );
+		$newRow.addClass( 'frm_hidden' );
+		jQuery( hoverTarget ).closest( 'li.frm_field_box' ).after( $newRow );
+
+		$fields = getFieldsInRow( jQuery( hoverTarget ) );
+		syncDetails = [];
+		injectedCloneOptions = [];
+
+		expectedLength = $fields.length;
+		duplicatedCount = 0;
+
+		$newRow.on(
+			'frm_added_duplicated_field_to_row',
+			function() {
+				var $duplicatedFields, index;
+
+				if ( expectedLength > ++duplicatedCount ) {
+					return;
+				}
+
+				$duplicatedFields = getFieldsInRow( $newRowUl );
+
+				injectedCloneOptions.forEach(
+					function( cloneOption ) {
+						cloneOption.remove();
+					}
+				);
+
+				for ( index = 0; index < expectedLength; ++index ) {
+					$newRowUl.append(
+						$newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' )
+					);
+				}
+
+				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
+				$newRow.removeClass( 'frm_hidden' );
+				updateFieldOrder();
+			}
+		);
+
+		$fields.each(
+			function( index ) {
+				var cloneOption;
+				cloneOption = document.createElement( 'li' );
+				cloneOption.classList.add( 'frm_clone_field' );
+				cloneOption.setAttribute( 'frm-target-row-id', newRowId );
+				cloneOption.setAttribute( 'frm-field-order', index );
+				this.appendChild( cloneOption );
+				cloneOption.click();
+				injectedCloneOptions.push( cloneOption );
+				syncDetails.push( getSizeOfLayoutClass( getLayoutClassName( this.classList ) ) );
+			}
+		);
+	}
+
 	function clickFieldGroupLayout() {
 		var hoverTarget, sizeOfFieldGroup, popupWrapper;
 
@@ -3476,6 +3652,7 @@ function frmAdminBuildJS() {
 		} else {
 			// not multi-selecting
 			unselectFieldGroups();
+			numberOfSelectedGroups = 1;
 		}
 
 		hoverTarget.classList.add( 'frm-selected-field-group' );
@@ -3487,12 +3664,16 @@ function frmAdminBuildJS() {
 
 	function syncAfterMultiSelect( numberOfSelectedGroups ) {
 		clearSettingsBox( true ); // unselect any fields if one is selected.
-		if ( numberOfSelectedGroups >= 2 ) {
+		if ( numberOfSelectedGroups >= 2 || ( 1 === numberOfSelectedGroups && selectedGroupHasMultipleFields() ) ) {
 			addFieldMultiselectPopup();
 		} else {
 			maybeRemoveMultiselectPopup();
 		}
 		maybeRemoveGroupHoverTarget();
+	}
+
+	function selectedGroupHasMultipleFields() {
+		return getFieldsInRow( jQuery( document.querySelector( '.frm-selected-field-group' ) ) ).length > 1;
 	}
 
 	function unselectFieldGroups( event ) {
@@ -3577,6 +3758,9 @@ function frmAdminBuildJS() {
 		var selectedFieldGroups, totalFieldCount, length, index, fieldGroup;
 		selectedFieldGroups = document.querySelectorAll( '.frm-selected-field-group' );
 		length = selectedFieldGroups.length;
+		if ( 1 === length ) {
+			return false;
+		}
 		totalFieldCount = 0;
 		for ( index = 0; index < length; ++index ) {
 			fieldGroup = selectedFieldGroups[ index ];
@@ -3620,11 +3804,15 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteFieldGroupsClick() {
-		var fieldIdsToDelete, deleteOnConfirm;
+		var fieldIdsToDelete, deleteOnConfirm, multiselectPopup;
 
 		fieldIdsToDelete = getSelectedFieldIds();
 		deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction( fieldIdsToDelete );
-		document.getElementById( 'frm_field_multiselect_popup' ).remove();
+
+		multiselectPopup = document.getElementById( 'frm_field_multiselect_popup' );
+		if ( null !== multiselectPopup ) {
+			multiselectPopup.remove();
+		}
 
 		this.setAttribute( 'data-frmcaution', __( 'Heads up', 'formidable' ) );
 		/* translators: %1$s: Number of fields that are selected to be deleted. */
@@ -4039,14 +4227,14 @@ function frmAdminBuildJS() {
 
 	// Find all fields in a page and hide/show them
 	function toggleCollapsePage( field ) {
-		var toCollapse = field.nextUntil( '.frm_field_box[data-ftype=break]' );
+		var toCollapse = getAllFieldsForPage( field.get( 0 ).parentNode.closest( 'li.frm_field_box' ).nextElementSibling );
 		togglePage( field, toCollapse );
 	}
 
 	function toggleCollapseFakePage() {
 		var topLevel = document.getElementById( 'frm-fake-page' ),
 			firstField = document.getElementById( 'frm-show-fields' ).firstElementChild,
-			toCollapse = jQuery( firstField ).add( jQuery( firstField ).nextUntil( '.frm_field_box[data-ftype=break]' ) );
+			toCollapse = getAllFieldsForPage( firstField );
 
 		if ( firstField.getAttribute( 'data-ftype' ) === 'break' ) {
 			// Don't collapse if the first field is a page break.
@@ -4054,6 +4242,28 @@ function frmAdminBuildJS() {
 		}
 
 		togglePage( jQuery( topLevel ), toCollapse );
+	}
+
+	function getAllFieldsForPage( firstWrapper ) {
+		var $fieldsForPage, currentWrapper;
+
+		$fieldsForPage = jQuery();
+
+		if ( null === firstWrapper ) {
+			return $fieldsForPage;
+		}
+
+		currentWrapper = firstWrapper;
+
+		do {
+			if ( null !== currentWrapper.querySelector( '.edit_field_type_break' ) ) {
+				break;
+			}
+			$fieldsForPage = $fieldsForPage.add( jQuery( currentWrapper ) );
+			currentWrapper = currentWrapper.nextElementSibling;
+		} while ( null !== currentWrapper );
+
+		return $fieldsForPage;
 	}
 
 	function togglePage( field, toCollapse ) {
@@ -8354,6 +8564,8 @@ function frmAdminBuildJS() {
 			$newFields.on( 'click', 'input[type=radio], input[type=checkbox]', stopFieldFocus );
 			$newFields.on( 'click', '.frm_delete_field', clickDeleteField );
 			$newFields.on( 'click', '.frm_select_field', clickSelectField );
+			jQuery( document ).on( 'click', '.frm_delete_field_group', clickDeleteFieldGroup );
+			jQuery( document ).on( 'click', '.frm_clone_field_group', duplicateFieldGroup );
 			jQuery( document ).on( 'click', '#frm_field_group_controls > span:first-child', clickFieldGroupLayout );
 			jQuery( document ).on( 'click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick );
 			jQuery( document ).on( 'click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick );
@@ -8372,6 +8584,7 @@ function frmAdminBuildJS() {
 			});
 			$newFields.on( 'mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove );
 			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', onFieldActionDropdownShow );
+			jQuery( document ).on( 'show.bs.dropdown', '#frm_field_group_controls', onFieldGroupActionDropdownShow );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );

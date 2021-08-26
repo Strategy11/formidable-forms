@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 5.0
+Stable tag: 5.0.02
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,15 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.02 =
+* New: Field groups can now be duplicated and deleted.
+
+= 5.0.01 =
+* New: Updated styling and icons in the back end builder.
+* New: Added search to form fields in the builder to make finding a specific field easier.
+* Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
+* Fix: Added truncation to long form keys during duplication to avoid issues with duplicating when the generated key was too long.
+
 = 5.0 =
 * Increased WP version requirement to 5.0.
 * New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
@@ -468,17 +477,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 = 4.11.02 =
 * New: The padding for descriptions can now be customized when editing styles.
-
-= 4.11.01 =
-* New: Added a new frm_duplicate_check_val filter for customizing the duplicate entry check. This can be used to remove IP to help prevent duplicate entries for longer periods of time when using frm_time_to_check_duplicates filter. For an example see https://formidableforms.com/knowledgebase/frm_duplicate_check_val/.
-* New: Added visibility option to the Name field.
-* Fix: The honeypot setting would still appear as on after it was turned off.
-
-= 4.11 =
-* New: Added a quick and easy Name field with options for First, Middle, and Last names.
-* New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings.
-* New: Added Honeypot options to settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
-* New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
-* Fix: A warning was getting logged when exporting as XML.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

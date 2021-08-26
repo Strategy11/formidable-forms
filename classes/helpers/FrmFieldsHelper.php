@@ -1760,7 +1760,7 @@ class FrmFieldsHelper {
 		}
 
 		?>
-		<li class="frmbutton <?php echo esc_attr( $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-message="<?php echo esc_attr( $upgrade_message ); ?>" data-link="<?php echo esc_attr( $link ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
+		<li class="frmbutton frm6 <?php echo esc_attr( $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-message="<?php echo esc_attr( $upgrade_message ); ?>" data-link="<?php echo esc_attr( $link ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
 		<?php
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
