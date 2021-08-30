@@ -3104,7 +3104,7 @@ function frmAdminBuildJS() {
 		$newRow.on(
 			'frm_added_duplicated_field_to_row',
 			function( event, args ) {
-				var $duplicatedFields, index, $injectTarget;
+				var $duplicatedFields, index;
 
 				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
 
@@ -3121,8 +3121,7 @@ function frmAdminBuildJS() {
 				);
 
 				for ( index = 0; index < expectedLength; ++index ) {
-					$injectTarget = $newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' );
-					$newRowUl.append( $injectTarget );
+					$newRowUl.append( $newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' ) );
 				}
 
 				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
