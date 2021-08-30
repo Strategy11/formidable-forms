@@ -1742,7 +1742,13 @@ function frmAdminBuildJS() {
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
-						jQuery( newRow ).trigger( 'frm_added_duplicated_field_to_row' );
+						jQuery( newRow ).trigger(
+							'frm_added_duplicated_field_to_row',
+							{
+								duplicatedFieldHtml: msg,
+								originalFieldId: fieldId
+							}
+						);
 						afterAddField( msg, false );
 						return;
 					}
@@ -3072,7 +3078,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateFieldGroup() {
-		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, injectedCloneOptions;
+		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, originalFieldIdByDuplicatedFieldId, injectedCloneOptions;
 
 		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 
@@ -3093,11 +3099,14 @@ function frmAdminBuildJS() {
 
 		expectedLength = $fields.length;
 		duplicatedCount = 0;
+		originalFieldIdByDuplicatedFieldId = {};
 
 		$newRow.on(
 			'frm_added_duplicated_field_to_row',
-			function() {
-				var $duplicatedFields, index;
+			function( event, args ) {
+				var $duplicatedFields, index, $injectTarget;
+
+				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
 
 				if ( expectedLength > ++duplicatedCount ) {
 					return;
@@ -3112,14 +3121,19 @@ function frmAdminBuildJS() {
 				);
 
 				for ( index = 0; index < expectedLength; ++index ) {
-					$newRowUl.append(
-						$newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' )
-					);
+					$injectTarget = $newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' );
+					$newRowUl.append( $injectTarget );
 				}
 
 				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
 				$newRow.removeClass( 'frm_hidden' );
 				updateFieldOrder();
+
+				getFieldsInRow( $newRowUl ).each(
+					function() {
+						maybeDuplicateUnsavedSettings( originalFieldIdByDuplicatedFieldId[ this.getAttribute( 'data-fid' ) ], jQuery( this ).prop( 'outerHTML' ) );
+					}
+				);
 			}
 		);
 
