@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 /*
 TODO
-- trigger the option to get the landing page plugin. If pro, we want to download it. If free, we want to upgrade to pro.
+- Change the link here to upgrade to pro.
 - Add a "New" marker on it.
 */
 ?>
