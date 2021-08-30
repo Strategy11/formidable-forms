@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 if ( class_exists( '\Elementor\Widget_Base' ) ) {
 	class FrmElementorWidget extends \Elementor\Widget_Base {
