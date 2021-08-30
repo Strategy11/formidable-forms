@@ -191,13 +191,14 @@ class FrmEntryValues {
 		 * @since 5.0
 		 *
 		 * @param array $fields The list of fields.
-		 * @param array $args   The arguments. Contains `form_id`.
+		 * @param array $args   The arguments. Contains `form_id`, `entry`.
 		 */
 		$this->fields = apply_filters(
 			'frm_entry_values_fields',
 			$this->fields,
 			array(
 				'form_id' => $this->form_id,
+				'entry'   => $this->entry,
 			)
 		);
 	}
