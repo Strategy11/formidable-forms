@@ -1757,9 +1757,95 @@ function frmAdminBuildJS() {
 
 				updateFieldOrder();
 				afterAddField( msg, false );
+				maybeDuplicateUnsavedSettings( fieldId, msg );
 			}
 		});
 		return false;
+	}
+
+	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
+		var originalSettings, newFieldId, copySettings, fieldOptionKeys, originalDefault, copyDefault;
+
+		originalSettings = document.getElementById( 'frm-single-settings-' + originalFieldId );
+		if ( null === originalSettings ) {
+			return;
+		}
+
+		newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
+		if ( 'undefined' === typeof newFieldId ) {
+			return;
+		}
+
+		copySettings = document.getElementById( 'frm-single-settings-' + newFieldId );
+		if ( null === copySettings ) {
+			return;
+		}
+
+		fieldOptionKeys = [
+			'name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'
+		];
+
+		originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ).forEach(
+			function( originalSetting ) {
+				var key, tagType, copySetting;
+
+				key = getKeyFromSettingInput( originalSetting );
+
+				if ( 'options' === key ) {
+					copyOption( originalSetting, copySettings, originalFieldId, newFieldId );
+					return;
+				}
+
+				if ( -1 === fieldOptionKeys.indexOf( key ) ) {
+					return;
+				}
+
+				tagType = originalSetting.matches( 'input' ) ? 'input' : 'textarea';
+				copySetting = copySettings.querySelector( tagType + '[name="field_options[' + key + '_' + newFieldId + ']"]' );
+				if ( null === copySetting ) {
+					return;
+				}
+
+				if ( 'checkbox' === originalSetting.type ) {
+					if ( originalSetting.checked !== copySetting.checked ) {
+						jQuery( copySetting ).trigger( 'click' );
+					}
+				} else if ( 'text' === originalSetting.type || 'textarea' === tagType ) {
+					if ( originalSetting.value !== copySetting.value ) {
+						copySetting.value = originalSetting.value;
+						jQuery( copySetting ).trigger( 'change' );
+					}
+				}
+			}
+		);
+
+		originalDefault = originalSettings.querySelector( 'input[name="default_value_' + originalFieldId + '"]' );
+		if ( null !== originalDefault ) {
+			copyDefault = copySettings.querySelector( 'input[name="default_value_' + newFieldId + '"]' );
+			if ( null !== copyDefault && originalDefault.value !== copyDefault.value ) {
+				copyDefault.value = originalDefault.value;
+				jQuery( copyDefault ).trigger( 'change' );
+			}
+		}
+	}
+
+	function copyOption( originalSetting, copySettings, originalFieldId, newFieldId ) {
+		var remainingKeyDetails, copyKey, copySetting;
+		remainingKeyDetails = originalSetting.name.substr( 23 + ( '' + originalFieldId ).length );
+		copyKey = 'field_options[options_' + newFieldId + ']' + remainingKeyDetails;
+		copySetting = copySettings.querySelector( 'input[name="' + copyKey + '"]' );
+		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
+			copySetting.value = originalSetting.value;
+			jQuery( copySetting ).trigger( 'change' );
+		}
+	}
+
+	function getKeyFromSettingInput( input ) {
+		var nameWithoutPrefix, nameSplit;
+		nameWithoutPrefix = input.name.substr( 14 );
+		nameSplit = nameWithoutPrefix.split( '_' );
+		nameSplit.pop();
+		return nameSplit.join( '_' );
 	}
 
 	function closeOpenFieldDropdowns() {
