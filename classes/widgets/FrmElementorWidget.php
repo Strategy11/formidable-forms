@@ -6,10 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( class_exists( '\Elementor\Widget_Base' ) ) {
 	class FrmElementorWidget extends \Elementor\Widget_Base {
 
-		public function __construct( $data = array(), $args = null ) {
-			parent::__construct( $data, $args );
-		}
-
 		public function get_name() {
 			return 'formidable';
 		}
@@ -36,7 +32,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			);
 
 			$this->add_control(
-				'form_dropdown',
+				'form_id',
 				array(
 					'label'   => __( 'Form', 'formidable' ),
 					'type'    => \Elementor\Controls_Manager::SELECT,
@@ -97,7 +93,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 
 		protected function render() {
 			$settings    = $this->get_settings_for_display();
-			$form_id     = isset( $settings['form_dropdown'] ) ? absint( $settings['form_dropdown'] ) : 0;
+			$form_id     = isset( $settings['form_id'] ) ? absint( $settings['form_id'] ) : 0;
 			$title       = isset( $settings['title'] ) && 'yes' === $settings['title'] ? 1 : 0;
 			$description = isset( $settings['description'] ) && 'yes' === $settings['description'] ? 1 : 0;
 			$minimize    = isset( $settings['minimize'] ) && 'yes' === $settings['minimize'] ? 1 : 0;
