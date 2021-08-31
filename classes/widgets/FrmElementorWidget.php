@@ -50,31 +50,25 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 				)
 			);
 
-			$this->add_control(
-				'title',
-				array(
-					'label' => __( 'Show Form Title', 'formidable' ),
-					'type'  => \Elementor\Controls_Manager::SWITCHER,
-				)
-			);
-
-			$this->add_control(
-				'description',
-				array(
-					'label' => __( 'Show Form Description', 'formidable' ),
-					'type'  => \Elementor\Controls_Manager::SWITCHER,
-				)
-			);
-
-			$this->add_control(
-				'minimize',
-				array(
-					'label' => __( 'Minimize HTML', 'formidable' ),
-					'type'  => \Elementor\Controls_Manager::SWITCHER,
-				)
-			);
+			$this->add_basic_show_hide_switcher_control( 'title', __( 'Show Form Title', 'formidable' ) );
+			$this->add_basic_show_hide_switcher_control( 'description', __( 'Show Form Description', 'formidable' ) );
+			$this->add_basic_show_hide_switcher_control( 'minimize', __( 'Minimize HTML', 'formidable' ) );
 
 			$this->end_controls_section();
+		}
+
+		private function add_basic_show_hide_switcher_control( $key, $title ) {
+			$this->add_control(
+				$key,
+				array(
+					'label'        => $title,
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => __( 'Show', 'formidable' ),
+					'label_off'    => __( 'Hide', 'formidable' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
+			);
 		}
 
 		private function get_form_options() {
