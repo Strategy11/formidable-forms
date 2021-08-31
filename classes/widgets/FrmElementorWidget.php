@@ -50,14 +50,14 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 				)
 			);
 
-			$this->add_basic_show_hide_switcher_control( 'title', __( 'Show Form Title', 'formidable' ) );
-			$this->add_basic_show_hide_switcher_control( 'description', __( 'Show Form Description', 'formidable' ) );
-			$this->add_basic_show_hide_switcher_control( 'minimize', __( 'Minimize HTML', 'formidable' ) );
+			$this->add_basic_switcher_control( 'title', __( 'Show Form Title', 'formidable' ) );
+			$this->add_basic_switcher_control( 'description', __( 'Show Form Description', 'formidable' ) );
+			$this->add_basic_switcher_control( 'minimize', __( 'Minimize HTML', 'formidable' ) );
 
 			$this->end_controls_section();
 		}
 
-		private function add_basic_show_hide_switcher_control( $key, $title ) {
+		private function add_basic_switcher_control( $key, $title ) {
 			$this->add_control(
 				$key,
 				array(
