@@ -5052,20 +5052,20 @@ function frmAdminBuildJS() {
 
 	function updateAddRemoveLabelInPreview() {
 		const type = -1 === this.name.indexOf( 'remove' ) ? 'add' : 'remove';
-		const button = getElementFromFieldInPreview( getFieldIdFromSettingsFile( this ), '.frm_' + type + '_form_row' );
+		const button = getElementFromFieldInPreview( getFieldIdFromSettingsField( this ), '.frm_' + type + '_form_row' );
 		if ( null !== button ) {
 			button.querySelector( '.frm_repeat_label' ).textContent = this.value;
 		}
 	}
 
 	function updateNextButtonInPreview() {
-		const button = getElementFromFieldInPreview( getFieldIdFromSettingsFile( this ), '.frm_button_submit' );
+		const button = getElementFromFieldInPreview( getFieldIdFromSettingsField( this ), '.frm_button_submit' );
 		if ( null !== button ) {
 			button.textContent = this.value;
 		}
 	}
 
-	function getFieldIdFromSettingsFile( field ) {
+	function getFieldIdFromSettingsField( field ) {
 		return parseInt( field.closest( '.frm-single-settings' ).getAttribute( 'data-fid' ) );
 	}
 
