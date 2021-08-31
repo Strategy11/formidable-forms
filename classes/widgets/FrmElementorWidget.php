@@ -35,7 +35,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 				'form_id',
 				array(
 					'label'   => __( 'Form', 'formidable' ),
-					'type'    => \Elementor\Controls_Manager::SELECT,
+					'type'    => \Elementor\Controls_Manager::SELECT2,
 					'options' => $this->get_form_options(),
 				)
 			);
