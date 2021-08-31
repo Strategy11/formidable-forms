@@ -61,12 +61,8 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			$this->add_control(
 				$key,
 				array(
-					'label'        => $title,
-					'type'         => \Elementor\Controls_Manager::SWITCHER,
-					'label_on'     => __( 'Show', 'formidable' ),
-					'label_off'    => __( 'Hide', 'formidable' ),
-					'return_value' => 'yes',
-					'default'      => 'yes',
+					'label' => $title,
+					'type'  => \Elementor\Controls_Manager::SWITCHER,
 				)
 			);
 		}
