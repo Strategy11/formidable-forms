@@ -84,9 +84,9 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 		protected function render() {
 			$settings    = $this->get_settings_for_display();
 			$form_id     = isset( $settings['form_id'] ) ? absint( $settings['form_id'] ) : 0;
-			$title       = isset( $settings['title'] ) && 'yes' === $settings['title'] ? 1 : 0;
-			$description = isset( $settings['description'] ) && 'yes' === $settings['description'] ? 1 : 0;
-			$minimize    = isset( $settings['minimize'] ) && 'yes' === $settings['minimize'] ? 1 : 0;
+			$title       = isset( $settings['title'] ) && 'yes' === $settings['title'];
+			$description = isset( $settings['description'] ) && 'yes' === $settings['description'];
+			$minimize    = isset( $settings['minimize'] ) && 'yes' === $settings['minimize'];
 
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo FrmFormsController::get_form_shortcode(
