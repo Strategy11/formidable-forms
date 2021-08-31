@@ -5050,6 +5050,29 @@ function frmAdminBuildJS() {
 		container.append( '<div class="clear"></div>' );
 	}
 
+	function updateAddRemoveLabelInPreview() {
+		const type = -1 === this.name.indexOf( 'remove' ) ? 'add' : 'remove';
+		const button = getElementFromFieldInPreview( getFieldIdFromSettingsFile( this ), '.frm_' + type + '_form_row' );
+		if ( null !== button ) {
+			button.querySelector( '.frm_repeat_label' ).textContent = this.value;
+		}
+	}
+
+	function updateNextButtonInPreview() {
+		const button = getElementFromFieldInPreview( getFieldIdFromSettingsFile( this ), '.frm_button_submit' );
+		if ( null !== button ) {
+			button.textContent = this.value;
+		}
+	}
+
+	function getFieldIdFromSettingsFile( field ) {
+		return parseInt( field.closest( '.frm-single-settings' ).getAttribute( 'data-fid' ) );
+	}
+
+	function getElementFromFieldInPreview( fieldId, selector ) {
+		return document.getElementById( 'frm_field_id_' + fieldId ).querySelector( selector );
+	}
+
 	function getFieldValues() {
 		/*jshint validthis:true */
 		var isTaxonomy,
@@ -8628,6 +8651,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
+			$builderForm.on( 'change', 'input[name^="field_options[add_label_"],input[name^="field_options[remove_label_"]', updateAddRemoveLabelInPreview );
+			$builderForm.on( 'change', '.frm-single-settings.frm-type-break input[name^="field_options[name_"]', updateNextButtonInPreview );
 			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
