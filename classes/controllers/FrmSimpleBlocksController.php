@@ -21,7 +21,7 @@ class FrmSimpleBlocksController {
 
 		$icon = apply_filters( 'frm_icon', 'svg' );
 		if ( 0 === strpos( $icon, 'data:image/svg+xml;base64,' ) ) {
-			$icon = ' ' . FrmAppHelper::get_icon_class();
+			$icon = ' ' . FrmAppHelper::get_menu_icon_class();
 		} else {
 			$icon = str_replace( 'dashicons-', '', $icon );
 		}
