@@ -2554,6 +2554,9 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			changes.innerHTML = newValue;
+			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
+				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
+			}
 		}
 	}
 
@@ -5051,21 +5054,6 @@ function frmAdminBuildJS() {
 			container.append( '<div class="frm_scale"><label><input type="hidden" name="field_options[options_' + fieldID + '][' + i + ']" value="' + i + '"> <input type="radio" name="item_meta[' + fieldID + ']" value="' + i + '"> ' + i + ' </label></div>' );
 		}
 		container.append( '<div class="clear"></div>' );
-	}
-
-	function updateNextButtonInPreview() {
-		const button = getElementFromFieldInPreview( getFieldIdFromSettingsField( this ), '.frm_button_submit' );
-		if ( null !== button ) {
-			button.textContent = this.value;
-		}
-	}
-
-	function getFieldIdFromSettingsField( field ) {
-		return parseInt( field.closest( '.frm-single-settings' ).getAttribute( 'data-fid' ) );
-	}
-
-	function getElementFromFieldInPreview( fieldId, selector ) {
-		return document.getElementById( 'frm_field_id_' + fieldId ).querySelector( selector );
 	}
 
 	function getFieldValues() {
@@ -8646,7 +8634,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
 			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
-			$builderForm.on( 'change', '.frm-single-settings.frm-type-break input[name^="field_options[name_"]', updateNextButtonInPreview );
 			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
