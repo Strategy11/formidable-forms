@@ -15,7 +15,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 		}
 
 		public function get_icon() {
-			return FrmAppHelper::get_icon_class();
+			return FrmAppHelper::get_menu_icon_class();
 		}
 
 		public function get_categories() {

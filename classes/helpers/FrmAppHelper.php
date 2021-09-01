@@ -2735,7 +2735,7 @@ class FrmAppHelper {
 		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
 	}
 
-	public static function get_icon_class() {
+	public static function get_menu_icon_class() {
 		if ( is_callable( 'FrmProAppHelper::get_settings' ) ) {
 			$settings = FrmProAppHelper::get_settings();
 			if ( is_object( $settings ) && ! empty( $settings->menu_icon ) ) {
