@@ -2735,6 +2735,16 @@ class FrmAppHelper {
 		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
 	}
 
+	public static function get_icon_class() {
+		if ( is_callable( 'FrmProAppHelper::get_settings' ) ) {
+			$settings = FrmProAppHelper::get_settings();
+			if ( is_object( $settings ) && ! empty( $settings->menu_icon ) ) {
+				return $settings->menu_icon;
+			}
+		}
+		return 'frmfont frm_logo_icon';
+	}
+
 	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
