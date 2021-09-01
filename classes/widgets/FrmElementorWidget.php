@@ -11,10 +11,16 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 		}
 
 		public function get_title() {
-			return __( 'Formidable Forms', 'formidable' );
+			return FrmAppHelper::get_menu_name() . ' ' . __( 'Forms', 'formidable' );
 		}
 
 		public function get_icon() {
+			if ( is_callable( 'FrmProAppHelper::get_settings' ) ) {
+				$settings = FrmProAppHelper::get_settings();
+				if ( is_object( $settings ) && ! empty( $settings->menu_icon ) ) {
+					return $settings->menu_icon;
+				}
+			}
 			return 'frmfont frm_logo_icon';
 		}
 
