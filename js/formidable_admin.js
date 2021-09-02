@@ -2542,11 +2542,25 @@ function frmAdminBuildJS() {
 				}
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
-			} else {
-				changes.setAttribute( att, newValue );
-				if ( 'value' === att && 'range' === changes.type && changes.parentNode.classList.contains( 'frm_range_container' ) ) {
+			} else if ( isSliderField( changes ) ) {
+				if ( 'value' === att ) {
+					if ( '' === newValue ) {
+						newValue = getSliderMidpoint( changes );
+					}
+					changes.value = newValue;
+				} else {
+					changes.setAttribute( att, newValue );
+				}
+
+				if ( -1 !== [ 'value', 'min', 'max' ].indexOf( att ) ) {
+					if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( changes.id ) ) {
+						changes.value = getSliderMidpoint( changes );
+					}
+
 					changes.parentNode.querySelector( '.frm_range_value' ).textContent = changes.value;
 				}
+			} else {
+				changes.setAttribute( att, newValue );
 			}
 		} else if ( changes.id.indexOf( 'setup-message' ) === 0 ) {
 			if ( newValue !== '' ) {
@@ -2558,6 +2572,18 @@ function frmAdminBuildJS() {
 				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
 			}
 		}
+	}
+
+	function getSliderDefaultValueInput( previewInputId ) {
+		return document.querySelector( 'input[data-changeme="' + previewInputId + '"][data-changeatt="value"]' ).value;
+	}
+
+	function getSliderMidpoint( sliderInput ) {
+		return ( parseFloat( sliderInput.getAttribute( 'max' ) ) - parseFloat( sliderInput.getAttribute( 'min' ) ) ) / 2;
+	}
+
+	function isSliderField( previewInput ) {
+		return 'range' === previewInput.type && previewInput.parentNode.classList.contains( 'frm_range_container' );
 	}
 
 	function toggleInvalidMsg() {
