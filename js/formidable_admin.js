@@ -2545,7 +2545,7 @@ function frmAdminBuildJS() {
 			} else {
 				changes.setAttribute( att, newValue );
 				if ( 'value' === att && 'range' === changes.type && changes.parentNode.classList.contains( 'frm_range_container' ) ) {
-					changes.parentNode.querySelector( '.frm_range_value' ).textContent = newValue;
+					changes.parentNode.querySelector( '.frm_range_value' ).textContent = changes.value;
 				}
 			}
 		} else if ( changes.id.indexOf( 'setup-message' ) === 0 ) {
