@@ -2569,13 +2569,15 @@ function frmAdminBuildJS() {
 			field.setAttribute( att, newValue );
 		}
 
-		if ( -1 !== [ 'value', 'min', 'max' ].indexOf( att ) ) {
-			if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( field.id ) ) {
-				field.value = getSliderMidpoint( field );
-			}
-
-			field.parentNode.querySelector( '.frm_range_value' ).textContent = field.value;
+		if ( -1 === [ 'value', 'min', 'max' ].indexOf( att ) ) {
+			return;
 		}
+
+		if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( field.id ) ) {
+			field.value = getSliderMidpoint( field );
+		}
+
+		field.parentNode.querySelector( '.frm_range_value' ).textContent = field.value;
 	}
 
 	function getSliderDefaultValueInput( previewInputId ) {
