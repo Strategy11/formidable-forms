@@ -2543,22 +2543,7 @@ function frmAdminBuildJS() {
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
 			} else if ( isSliderField( changes ) ) {
-				if ( 'value' === att ) {
-					if ( '' === newValue ) {
-						newValue = getSliderMidpoint( changes );
-					}
-					changes.value = newValue;
-				} else {
-					changes.setAttribute( att, newValue );
-				}
-
-				if ( -1 !== [ 'value', 'min', 'max' ].indexOf( att ) ) {
-					if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( changes.id ) ) {
-						changes.value = getSliderMidpoint( changes );
-					}
-
-					changes.parentNode.querySelector( '.frm_range_value' ).textContent = changes.value;
-				}
+				updateSliderFieldPreview( changes, att, newValue );
 			} else {
 				changes.setAttribute( att, newValue );
 			}
@@ -2571,6 +2556,25 @@ function frmAdminBuildJS() {
 			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
 				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
 			}
+		}
+	}
+
+	function updateSliderFieldPreview( field, att, newValue ) {
+		if ( 'value' === att ) {
+			if ( '' === newValue ) {
+				newValue = getSliderMidpoint( field );
+			}
+			field.value = newValue;
+		} else {
+			field.setAttribute( att, newValue );
+		}
+
+		if ( -1 !== [ 'value', 'min', 'max' ].indexOf( att ) ) {
+			if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( field.id ) ) {
+				field.value = getSliderMidpoint( field );
+			}
+
+			field.parentNode.querySelector( '.frm_range_value' ).textContent = field.value;
 		}
 	}
 
