@@ -2585,7 +2585,9 @@ function frmAdminBuildJS() {
 	}
 
 	function getSliderMidpoint( sliderInput ) {
-		return ( parseFloat( sliderInput.getAttribute( 'max' ) ) - parseFloat( sliderInput.getAttribute( 'min' ) ) ) / 2;
+		const max = parseFloat( sliderInput.getAttribute( 'max' ) );
+		const min = parseFloat( sliderInput.getAttribute( 'min' ) );
+		return ( max - min ) / 2 + min;
 	}
 
 	function isSliderField( previewInput ) {
