@@ -5344,7 +5344,7 @@ span.howto {
 	line-height: 200%;
 }
 
-.formidable_page_formidable-entries .no-items {
+#form_entries_page #the-list .no-items {
 	height: 240px; /* Equals to the max height of search dropdown */
 }
 
