@@ -695,6 +695,50 @@ class FrmFieldsController {
 			$invalid_message         = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
+
+		if ( ! empty( $add_html['data-reqmsg'] ) || ! empty( $add_html['data-invmsg'] ) ) {
+			self::maybe_add_error_html_for_js_validation( $field, $add_html );
+		}
+	}
+
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 */
+	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
+		if ( ! array_key_exists( 'custom_html', $field ) ) {
+			return;
+		}
+
+		$custom_html = $field['custom_html'];
+		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, array(), FrmForm::getOne( $field['form_id'] ) );
+		$start       = strpos( $custom_html, '[if error]' );
+
+		if ( false === $start ) {
+			return;
+		}
+
+		$form = FrmForm::getOne( $field['form_id'] );
+		if ( empty( $form->options['js_validate'] ) ) {
+			// this is only necessary for JS validation so exit early if it is turned off.
+			return;
+		}
+		unset( $form );
+
+		$end = strpos( $custom_html, '[/if error]' );
+
+		if ( false === $end || $end < $start ) {
+			return;
+		}
+
+		$error_body = substr( $custom_html, $start + 10, $end - $start - 10 );
+		if ( '<div class="frm_error" id="frm_error_field_[key]">[error]</div>' === $error_body ) {
+			// do not set the default value to avoid adding more HTML than necessary.
+			return;
+		}
+
+		$error_body                  = urlencode( $error_body );
+		$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
 	}
 
 	/**

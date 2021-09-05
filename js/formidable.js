@@ -463,10 +463,20 @@ function frmFrontFormJS() {
 	}
 
 	function getFieldValidationMessage( field, messageType ) {
-		var msg = field.getAttribute( messageType );
-		if ( msg === null ) {
+		var msg, errorHtml;
+
+		msg = field.getAttribute( messageType );
+		if ( null === msg ) {
 			msg = '';
 		}
+
+		errorHtml = field.getAttribute( 'data-error-html' );
+		if ( null !== errorHtml ) {
+			errorHtml = errorHtml.replace( /\+/g, '%20' );
+			msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
+			msg = msg.replace( '[key]', getFieldId( field, false ) );
+		}
+
 		return msg;
 	}
 
@@ -702,7 +712,13 @@ function frmFrontFormJS() {
 			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 				frmThemeOverride_frmPlaceError( key, jsErrors );
 			} else {
-				$fieldCont.append( '<div class="frm_error" id="' + id + '">' + jsErrors[key] + '</div>' );
+				if ( -1 !== jsErrors[key].indexOf( '<div' ) ) {
+					$fieldCont.append(
+						jsErrors[key]
+					);
+				} else {
+					$fieldCont.append( '<div class="frm_error" id="' + id + '">' + jsErrors[key] + '</div>' );
+				}
 
 				if ( typeof describedBy === 'undefined' ) {
 					describedBy = id;
