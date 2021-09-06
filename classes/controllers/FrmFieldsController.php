@@ -721,16 +721,17 @@ class FrmFieldsController {
 
 	/**
 	 * @param stdClass $form
-	 * @param array $field
+	 * @param array    $field
+	 * @param array    $errors
 	 * @return string|false
 	 */
-	public static function pull_custom_error_body_from_custom_html( $form, $field ) {
+	public static function pull_custom_error_body_from_custom_html( $form, $field, $errors = array() ) {
 		if ( empty( $field['custom_html'] ) ) {
 			return false;
 		}
 
 		$custom_html = $field['custom_html'];
-		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, array(), $form );
+		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, $errors, $form );
 
 		$start = strpos( $custom_html, '[if error]' );
 		if ( false === $start ) {
