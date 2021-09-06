@@ -706,39 +706,48 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
-		if ( ! array_key_exists( 'custom_html', $field ) ) {
+		$form = FrmForm::getOne( $field['form_id'] );
+		if ( empty( $form->options['js_validate'] ) ) {
 			return;
+		}
+
+		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
+		if ( false !== $error_body ) {
+			$error_body                  = urlencode( $error_body );
+			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
+		}
+	}
+
+	/**
+	 * @param stdClass $form
+	 * @param array $field
+	 * @return string|false
+	 */
+	public static function pull_custom_error_body_from_custom_html( $form, $field ) {
+		if ( empty( $field['custom_html'] ) ) {
+			return false;
 		}
 
 		$custom_html = $field['custom_html'];
-		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, array(), FrmForm::getOne( $field['form_id'] ) );
-		$start       = strpos( $custom_html, '[if error]' );
+		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, array(), $form );
 
+		$start = strpos( $custom_html, '[if error]' );
 		if ( false === $start ) {
-			return;
+			return false;
 		}
-
-		$form = FrmForm::getOne( $field['form_id'] );
-		if ( empty( $form->options['js_validate'] ) ) {
-			// this is only necessary for JS validation so exit early if it is turned off.
-			return;
-		}
-		unset( $form );
 
 		$end = strpos( $custom_html, '[/if error]' );
-
 		if ( false === $end || $end < $start ) {
-			return;
+			return false;
 		}
 
 		$error_body = substr( $custom_html, $start + 10, $end - $start - 10 );
 		if ( '<div class="frm_error" id="frm_error_field_[key]">[error]</div>' === $error_body ) {
-			// do not set the default value to avoid adding more HTML than necessary.
-			return;
+			// no custom HTML if the default is detected, so do nothing special.
+			return false;
 		}
 
-		$error_body                  = urlencode( $error_body );
-		$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
+		return $error_body;
 	}
 
 	/**
