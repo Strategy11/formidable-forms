@@ -470,11 +470,13 @@ function frmFrontFormJS() {
 			msg = '';
 		}
 
-		errorHtml = field.getAttribute( 'data-error-html' );
-		if ( null !== errorHtml ) {
-			errorHtml = errorHtml.replace( /\+/g, '%20' );
-			msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
-			msg = msg.replace( '[key]', getFieldId( field, false ) );
+		if ( '' !== msg ) {
+			errorHtml = field.getAttribute( 'data-error-html' );
+			if ( null !== errorHtml ) {
+				errorHtml = errorHtml.replace( /\+/g, '%20' );
+				msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
+				msg = msg.replace( '[key]', getFieldId( field, false ) );
+			}
 		}
 
 		return msg;
