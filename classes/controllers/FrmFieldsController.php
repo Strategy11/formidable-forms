@@ -706,11 +706,12 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
-		$form = FrmForm::getOne( $field['form_id'] );
-		if ( empty( $form->options['js_validate'] ) ) {
+		global $frm_vars;
+		if ( empty( $frm_vars['js_validate_forms'] ) || ! isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
 			return;
 		}
 
+		$form       = $frm_vars['js_validate_forms'][ $field['form_id'] ];
 		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
 		if ( false !== $error_body ) {
 			$error_body                  = urlencode( $error_body );

@@ -1325,8 +1325,14 @@ class FrmFormsController {
 			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
 		}
 
-		if ( isset( $form->options['js_validate'] ) && $form->options['js_validate'] ) {
+		if ( ! empty( $form->options['js_validate'] ) ) {
 			echo ' frm_js_validate ';
+
+			global $frm_vars;
+			if ( ! isset( $frm_vars['js_validate_forms'] ) ) {
+				$frm_vars['js_validate_forms'] = array();
+			}
+			$frm_vars['js_validate_forms'][ $form->id ] = $form;
 		}
 	}
 
