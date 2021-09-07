@@ -1327,13 +1327,21 @@ class FrmFormsController {
 
 		if ( ! empty( $form->options['js_validate'] ) ) {
 			echo ' frm_js_validate ';
-
-			global $frm_vars;
-			if ( ! isset( $frm_vars['js_validate_forms'] ) ) {
-				$frm_vars['js_validate_forms'] = array();
-			}
-			$frm_vars['js_validate_forms'][ $form->id ] = $form;
+			self::add_js_validate_form_to_global_vars( $form );
 		}
+	}
+
+	/**
+	 * @since 5.0.03
+	 *
+	 * @param stdClass $form
+	 */
+	public static function add_js_validate_form_to_global_vars( $form ) {
+		global $frm_vars;
+		if ( ! isset( $frm_vars['js_validate_forms'] ) ) {
+			$frm_vars['js_validate_forms'] = array();
+		}
+		$frm_vars['js_validate_forms'][ $form->id ] = $form;
 	}
 
 	public static function get_email_html() {
