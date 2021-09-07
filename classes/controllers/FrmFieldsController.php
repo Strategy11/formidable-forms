@@ -702,21 +702,41 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * @since 5.0.03
+	 *
 	 * @param array $field
 	 * @param array $add_html
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
-		global $frm_vars;
-		if ( empty( $frm_vars['js_validate_forms'] ) || ! isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
+		$form = self::get_form_for_js_validation( $field );
+		if ( false === $form ) {
 			return;
 		}
 
-		$form       = $frm_vars['js_validate_forms'][ $field['form_id'] ];
 		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
 		if ( false !== $error_body ) {
 			$error_body                  = urlencode( $error_body );
 			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
 		}
+	}
+
+	/**
+	 * @since 5.0.03
+	 *
+	 * @param array $field
+	 * @return stdClass|false false if there is no form object found with JS validation active.
+	 */
+	private static function get_form_for_js_validation( $field ) {
+		global $frm_vars;
+		if ( ! empty( $frm_vars['js_validate_forms'] ) ) {
+			if ( isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
+				return $frm_vars['js_validate_forms'][ $field['form_id'] ];
+			}
+			if ( ! empty( $field['parent_form_id'] ) && isset( $frm_vars['js_validate_forms'][ $field['parent_form_id'] ] ) ) {
+				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
+			}
+		}
+		return false;
 	}
 
 	/**
