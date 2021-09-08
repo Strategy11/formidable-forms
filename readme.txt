@@ -440,7 +440,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
-
+= 5.0.03 =
+* New: Added an Elementor widget.
+* New: When duplicating fields, most unsaved changes will now duplicate as well.
+* New: Next button label and slider field label previews will now update as soon as the setting is changed in the form builder.
+* New: Slider field previews will now update when the min and max values are updated in the form builder.
+* Fix: The search dropdown was getting cut off on pages with no search results.
+* Fix: When legacy views or visual views are active, both versions were appearing active on the add ons page.
 
 = 5.0.02 =
 * New: Field groups can now be duplicated and deleted.
