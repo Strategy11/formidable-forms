@@ -2402,7 +2402,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	height: 50px;
 }
 
-.frm-right-panel .inside a.frm_pro_tip,
+.frm-right-panel .accordion-section-content .inside a.frm_pro_tip,
 a.frm_pro_tip {
 	font-size: 14px;
 	border: 1px solid var(--orange);
@@ -2432,6 +2432,7 @@ a.frm_pro_tip:hover .frmsvg {
 	background: #fff;
 }
 
+.frm-right-panel .inside a.frm_pro_tip .frmsvg,
 a.frm_pro_tip .frmsvg,
 a.frm_pro_tip i {
 	color: var(--orange);

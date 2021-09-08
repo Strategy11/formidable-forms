@@ -42,7 +42,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" />
 </p>
 
-<?php do_action( 'frm_style_settings_general_section_after_background', compact( 'frm_style', 'style' ) ); ?>
+<?php
+if ( FrmAppHelper::pro_is_installed() ) {
+	do_action( 'frm_style_settings_general_section_after_background', compact( 'frm_style', 'style' ) );
+} else {
+	FrmTipsHelper::pro_tip( 'get_bg_image_style_settings_tip' );
+}
+?>
 
 <p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Border', 'formidable' ); ?></label>

@@ -325,6 +325,20 @@ class FrmTipsHelper {
 		return $tip;
 	}
 
+	public static function get_bg_image_style_settings_tip() {
+		$tips = array(
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'bg-image-style-settings',
+				),
+				'tip'  => __( 'Want to add a background image?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
+		);
+		return $tips;
+	}
+
 	public static function get_random_tip( $tips ) {
 		$random = rand( 0, count( $tips ) - 1 );
 
