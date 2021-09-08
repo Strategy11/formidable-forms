@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.0.02\n"
+"Project-Id-Version: Formidable Forms 5.0.03\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-08-25T17:01:50+00:00\n"
+"POT-Creation-Date: 2021-09-08T17:52:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -73,6 +73,7 @@ msgid "forms"
 msgstr ""
 
 #: js/src/form/inspector.js:43
+#: classes/widgets/FrmElementorWidget.php:29
 #: languages/formidable-js-strings.php:39
 msgid "Select Form"
 msgstr ""
@@ -84,21 +85,25 @@ msgstr ""
 
 #: js/src/form/inspector.js:62
 #: classes/views/frm-forms/shortcode_opts.php:16
+#: classes/widgets/FrmElementorWidget.php:48
 #: languages/formidable-js-strings.php:45
 msgid "Options"
 msgstr ""
 
 #: js/src/form/inspector.js:66
+#: classes/widgets/FrmElementorWidget.php:53
 #: languages/formidable-js-strings.php:48
 msgid "Show Form Title"
 msgstr ""
 
 #: js/src/form/inspector.js:73
+#: classes/widgets/FrmElementorWidget.php:54
 #: languages/formidable-js-strings.php:51
 msgid "Show Form Description"
 msgstr ""
 
 #: js/src/form/inspector.js:80
+#: classes/widgets/FrmElementorWidget.php:55
 #: languages/formidable-js-strings.php:54
 msgid "Minimize HTML"
 msgstr ""
@@ -142,40 +147,40 @@ msgstr ""
 msgid "There are no plugins on your site that require a license"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:590
+#: classes/controllers/FrmAddonsController.php:615
 msgid "Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:595
+#: classes/controllers/FrmAddonsController.php:620
 #: classes/helpers/FrmAppHelper.php:2548
 msgid "Active"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:600
+#: classes/controllers/FrmAddonsController.php:625
 msgid "Not Installed"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:887
+#: classes/controllers/FrmAddonsController.php:912
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:943
+#: classes/controllers/FrmAddonsController.php:968
 msgid "Your plugin has been activated. Please reload the page to see more options."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1042
+#: classes/controllers/FrmAddonsController.php:1067
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1127
-#: classes/controllers/FrmAddonsController.php:1128
+#: classes/controllers/FrmAddonsController.php:1152
+#: classes/controllers/FrmAddonsController.php:1153
 #: classes/controllers/FrmWelcomeController.php:141
 #: classes/views/frm-forms/new-form-overlay.php:112
 #: classes/views/shared/reports-info.php:24
 msgid "Upgrade Now"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1142
+#: classes/controllers/FrmAddonsController.php:1167
 msgid "Your plugin has been installed. Please reload the page to see more options."
 msgstr ""
 
@@ -228,6 +233,7 @@ msgstr ""
 #: classes/controllers/FrmEntriesController.php:84
 #: classes/controllers/FrmFormsController.php:673
 #: classes/views/xml/import_form.php:152
+#: classes/widgets/FrmElementorWidget.php:37
 #: classes/widgets/FrmShowForm.php:59
 msgid "Form"
 msgstr ""
@@ -320,6 +326,7 @@ msgstr ""
 #: classes/controllers/FrmStylesController.php:51
 #: classes/controllers/FrmXMLController.php:258
 #: classes/views/frm-forms/list.php:10
+#: classes/widgets/FrmElementorWidget.php:14
 msgid "Forms"
 msgstr ""
 
@@ -634,6 +641,7 @@ msgstr ""
 #: classes/views/frm-forms/create-template-from-an-existing-form.php:25
 #: classes/views/styles/manage.php:59
 #: classes/views/xml/import_form.php:133
+#: classes/widgets/FrmElementorWidget.php:77
 msgid "(no title)"
 msgstr ""
 
@@ -1215,7 +1223,7 @@ msgstr ""
 #: classes/views/frm-forms/new-form-overlay.php:139
 #: classes/views/shared/admin-header.php:63
 #: classes/views/shared/confirm-overlay.php:19
-#: js/formidable_admin.js:3435
+#: js/formidable_admin.js:3581
 msgid "Cancel"
 msgstr ""
 
@@ -1242,7 +1250,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2514
 #: classes/helpers/FrmListHelper.php:405
-#: js/formidable_admin.js:3817
+#: js/formidable_admin.js:3963
 msgid "Heads up"
 msgstr ""
 
@@ -1624,11 +1632,11 @@ msgstr ""
 msgid "Vietnamese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:2756
+#: classes/helpers/FrmAppHelper.php:2766
 msgid "Your account has expired"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:2759
+#: classes/helpers/FrmAppHelper.php:2769
 msgid "Renew Now"
 msgstr ""
 
@@ -1750,7 +1758,7 @@ msgstr ""
 #: classes/helpers/FrmFormsHelper.php:1134
 #: classes/helpers/FrmFormsListHelper.php:133
 #: classes/views/frm-form-actions/form_action.php:25
-#: js/formidable_admin.js:1898
+#: js/formidable_admin.js:1997
 msgid "Delete"
 msgstr ""
 
@@ -4722,7 +4730,7 @@ msgid "Conditional emails"
 msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:21
-#: js/formidable_admin.js:1904
+#: js/formidable_admin.js:2003
 msgid "Duplicate"
 msgstr ""
 
@@ -4847,7 +4855,7 @@ msgid "Move Field"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:29
-#: js/formidable_admin.js:1185
+#: js/formidable_admin.js:1192
 msgid "More Options"
 msgstr ""
 
@@ -5501,36 +5509,31 @@ msgstr ""
 msgid "Site Key"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:24
-#: classes/views/frm-settings/recaptcha.php:33
-msgid "Optional"
-msgstr ""
-
-#: classes/views/frm-settings/recaptcha.php:29
+#: classes/views/frm-settings/recaptcha.php:27
 msgid "Secret Key"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:38
+#: classes/views/frm-settings/recaptcha.php:34
 msgid "reCAPTCHA Type"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:42
+#: classes/views/frm-settings/recaptcha.php:38
 msgid "Checkbox (V2)"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:45
+#: classes/views/frm-settings/recaptcha.php:41
 msgid "Invisible"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:52
+#: classes/views/frm-settings/recaptcha.php:48
 msgid "reCAPTCHA Language"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:56
+#: classes/views/frm-settings/recaptcha.php:52
 msgid "Browser Default"
 msgstr ""
 
-#: classes/views/frm-settings/recaptcha.php:70
+#: classes/views/frm-settings/recaptcha.php:66
 msgid "Allow multiple reCaptchas to be used on a single page"
 msgstr ""
 
@@ -6217,47 +6220,47 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: js/formidable_admin.js:1874
+#: js/formidable_admin.js:1973
 msgid "Field settings"
 msgstr ""
 
-#: js/formidable_admin.js:1898
+#: js/formidable_admin.js:1997
 msgid "Delete Group"
 msgstr ""
 
-#: js/formidable_admin.js:1904
+#: js/formidable_admin.js:2003
 msgid "Duplicate Group"
 msgstr ""
 
-#: js/formidable_admin.js:3148
+#: js/formidable_admin.js:3294
 msgid "Custom layout"
 msgstr ""
 
-#: js/formidable_admin.js:3162
+#: js/formidable_admin.js:3308
 msgid "Break into rows"
 msgstr ""
 
-#: js/formidable_admin.js:3171
+#: js/formidable_admin.js:3317
 msgid "Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:3420
+#: js/formidable_admin.js:3566
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/formidable_admin.js:3424
+#: js/formidable_admin.js:3570
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/formidable_admin.js:3440
+#: js/formidable_admin.js:3586
 msgid "Save"
 msgstr ""
 
-#: js/formidable_admin.js:3731
+#: js/formidable_admin.js:3877
 msgid "Merge into row"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:3819
+#: js/formidable_admin.js:3965
 msgid "Are you sure you want to delete these %1$s selected fields?"
 msgstr ""
