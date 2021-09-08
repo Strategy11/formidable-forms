@@ -2944,9 +2944,7 @@ function frmAdminBuildJS() {
 	function addImageToOption( event ) {
 		var fileFrame,
 			$this = jQuery( this ),
-			$field = $this.closest( '.frm-single-settings' ),
 			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
-			fieldId = $field.data( 'fid' ),
 			postID = 0;
 
 		event.preventDefault();
@@ -2962,7 +2960,7 @@ function frmAdminBuildJS() {
 
 		fileFrame.on( 'select', function() {
 			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
-			$imagePreview.find( 'img' ).attr( 'src', attachment.url );
+			$imagePreview.find( 'img' ).attr( 'src', attachment.url ).removeClass( 'frm_hidden' );
 			$imagePreview.find( '.frm_image_preview_frame' ).show();
 			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
@@ -2976,8 +2974,6 @@ function frmAdminBuildJS() {
 
 	function removeImageFromOption( event ) {
 		var $this = jQuery( this ),
-			$field = $this.closest( '.frm-single-settings' ),
-			fieldId = $field.data( 'fid' ),
 			previewWrapper = $this.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
@@ -9201,6 +9197,9 @@ function frmAdminBuildJS() {
 				document.getElementById( 'frm_theme_css' ).value = themeVal;
 				return false;
 			}).trigger( 'change' );
+
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
 		},
 
 		customCSSInit: function() {
