@@ -829,6 +829,13 @@ function frmAdminBuildJS() {
 						// A new field was dragged into the form
 						insertNewFieldByDragging( this, ui.item, opts );
 					}
+				} else if ( ui.item.hasClass( 'frm_field_box' ) ) {
+					// dragging a group.
+					getFieldsInRow( ui.item.children( 'ul' ) ).each(
+						function() {
+							updateFieldAfterMovingBetweenSections( jQuery( this ) );
+						}
+					);
 				}
 			},
 			change: function( event, ui ) {
