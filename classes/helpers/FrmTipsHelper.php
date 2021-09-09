@@ -124,13 +124,6 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
-					'content' => 'ajax',
-				),
-				'tip'  => __( 'Want to submit forms without reloading the page?', 'formidable' ),
-				'call' => __( 'Get ajax form submit.', 'formidable' ),
-			),
-			array(
-				'link' => array(
 					'content' => 'form-scheduling',
 					'param'   => 'schedule-forms-wordpress',
 				),
@@ -139,6 +132,19 @@ class FrmTipsHelper {
 			),
 		);
 
+		return $tips;
+	}
+
+	public static function get_ajax_submit_tip() {
+		$tips = array(
+			array(
+				'link' => array(
+					'content' => 'ajax',
+				),
+				'tip'  => __( 'Want to submit forms without reloading the page?', 'formidable' ),
+				'call' => __( 'Get ajax form submit.', 'formidable' ),
+			),
+		);
 		return $tips;
 	}
 

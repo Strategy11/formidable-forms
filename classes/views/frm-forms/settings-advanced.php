@@ -121,11 +121,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values ); ?>
 </table>
 
+<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
+
 <!--AJAX Section-->
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
 	<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ); ?>" ></span>
 </h3>
-<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
+
 <table class="form-table">
 	<tr>
 		<td>
@@ -136,6 +138,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>
+	<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
+		<tr>
+			<td>
+				<label class="frm-grey-color">
+					<input type="checkbox" disabled="disabled" />
+					<?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Submit the form without refreshing the page.', 'formidable' ); ?>"></span>
+					<div class="frm-ib frm-ml10"><?php FrmTipsHelper::pro_tip( 'get_ajax_submit_tip', 'p' ); ?></div>
+				</label>
+			</td>
+		</tr>
+	<?php } ?>
 	<tr>
 		<td>
 			<label for="js_validate" class="frm_inline_block">

@@ -108,6 +108,18 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	color: var(--grey);
 }
 
+.frm-grey-color {
+	color: var(--grey) !important;
+}
+
+.frm-ib {
+	display: inline-block;
+}
+
+.frm-ml10 {
+	margin-left: 10px;
+}
+
 .frm-white-body .columns-2 {
 	border-bottom: 1px solid var(--grey-border);
 }
