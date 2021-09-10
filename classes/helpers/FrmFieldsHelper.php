@@ -591,10 +591,12 @@ class FrmFieldsHelper {
 				$m = ( $m === false ) ? false : true;
 			}
 		} elseif ( $cond === '%LIKE' ) {
+			// ends with
 			$length = strlen( $hide_opt );
 			$substr = substr( $observed_value, strlen( $observed_value ) - $length );
 			$m      = 0 === strcasecmp( $substr, $hide_opt );
 		} elseif ( 'LIKE%' === $cond ) {
+			// starts with
 			$length = strlen( $hide_opt );
 			$substr = substr( $observed_value, 0, $length );
 			$m      = 0 === strcasecmp( $substr, $hide_opt );
@@ -621,22 +623,22 @@ class FrmFieldsHelper {
 
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
 		$m = false;
-		if ( $cond == '==' ) {
+		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
 				$m = empty( $m ) ? false : true;
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
-		} elseif ( $cond == '!=' ) {
+		} elseif ( $cond === '!=' ) {
 			$m = ! in_array( $hide_opt, $observed_value );
-		} elseif ( $cond == '>' ) {
+		} elseif ( $cond === '>' ) {
 			$min = min( $observed_value );
 			$m   = $min > $hide_opt;
-		} elseif ( $cond == '<' ) {
+		} elseif ( $cond === '<' ) {
 			$max = max( $observed_value );
 			$m   = $max < $hide_opt;
-		} elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			foreach ( $observed_value as $ob ) {
 				$m = strpos( $ob, $hide_opt );
 				if ( $m !== false ) {
@@ -645,8 +647,24 @@ class FrmFieldsHelper {
 				}
 			}
 
-			if ( $cond == 'not LIKE' ) {
+			if ( $cond === 'not LIKE' ) {
 				$m = ( $m === false ) ? true : false;
+			}
+		} elseif ( $cond === '%LIKE' ) {
+			// ends with
+			foreach ( $observed_value as $ob ) {
+				if ( $hide_opt === substr( $ob, strlen( $ob ) - strlen( $hide_opt ) ) ) {
+					$m = true;
+					break;
+				}
+			}
+		} elseif ( $cond === 'LIKE%' ) {
+			// starts with
+			foreach ( $observed_value as $ob ) {
+				if ( $hide_opt === substr( $ob, 0, strlen( $hide_opt ) ) ) {
+					$m = true;
+					break;
+				}
 			}
 		}
 
