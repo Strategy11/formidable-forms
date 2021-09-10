@@ -440,6 +440,7 @@ class FrmAppController {
 			'jquery-ui-sortable',
 			'bootstrap_tooltip',
 			'bootstrap-multiselect',
+			'wp-i18n',
 		);
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) || FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {

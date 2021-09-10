@@ -65,7 +65,7 @@ class FrmEntry {
 		global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-		if ( ! $entry_exists || empty( $entry_exists ) || ! isset( $values['item_meta'] ) ) {
+		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
 			return false;
 		}
 

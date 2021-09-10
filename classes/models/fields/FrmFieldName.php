@@ -20,6 +20,14 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected $type = 'name';
 
+	/**
+	 * Could this field hold email values?
+	 *
+	 * @var bool
+	 * @since 3.0
+	 */
+	protected $holds_email_values = true;
+
 	public function __construct( $field = '', $type = '' ) {
 		parent::__construct( $field, $type );
 

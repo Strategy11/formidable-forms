@@ -90,6 +90,8 @@ class FrmHooksController {
 		 * FrmProContent::replace_single_shortcode() applies this filter like 'frm_keep_' . $field->type . '_value_array'
 		 */
 		add_filter( 'frm_keep_name_value_array', '__return_true' );
+
+		add_action( 'elementor/widgets/widgets_registered', 'FrmHooksController::register_elementor_hooks' );
 	}
 
 	public static function load_admin_hooks() {
@@ -157,6 +159,7 @@ class FrmHooksController {
 
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
+		new FrmPluginSearch();
 	}
 
 	public static function load_ajax_hooks() {
@@ -241,5 +244,19 @@ class FrmHooksController {
 
 		// Drop tables when mu site is deleted.
 		add_filter( 'wpmu_drop_tables', 'FrmAppController::drop_tables' );
+	}
+
+	public static function register_elementor_hooks() {
+		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmElementorWidget.php';
+		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \FrmElementorWidget() );
+
+		if ( is_admin() ) {
+			add_action(
+				'elementor/editor/after_enqueue_styles',
+				function() {
+					wp_enqueue_style( 'font_icons', FrmAppHelper::plugin_url() . '/css/font_icons.css', array(), FrmAppHelper::plugin_version() );
+				}
+			);
+		}
 	}
 }

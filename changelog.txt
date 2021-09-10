@@ -1,4 +1,47 @@
 == Changelog ==
+= 5.0.03 =
+* New: Added an Elementor widget.
+* New: When duplicating fields, most unsaved changes will now duplicate as well.
+* New: Next button label and slider field label previews will now update as soon as the setting is changed in the form builder.
+* New: Slider field previews will now update when the min and max values are updated in the form builder.
+* Fix: The search dropdown was getting cut off on pages with no search results.
+* Fix: When legacy views or visual views are active, both versions were appearing active on the add ons page.
+
+= 5.0.02 =
+* New: Field groups can now be duplicated and deleted.
+
+= 5.0.01 =
+* New: Updated styling and icons in the back end builder.
+* New: Added search to form fields in the builder to make finding a specific field easier.
+* Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
+* Fix: Added truncation to long form keys during duplication to avoid issues with duplicating when the generated key was too long.
+
+= 5.0 =
+* Increased WP version requirement to 5.0.
+* New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
+* New: Added the option to quickly set layouts for a full row of fields at once.
+* New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
+* New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
+* New: Permissions are now updated right away when a formidable license is activated to avoid issues with certain pro features not being available right away.
+* Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
+* Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
+* Fix: Updated styling for new fields that are about to be dropped into a form.
+
+= 4.11.05 =
+* New: Improved support for importing grid and table view content.
+* Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
+
+= 4.11.04 =
+* New: The first field with an error will now automatically get focus when a form is submitted for better accessibility and improved user experience.
+* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
+* Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
+* Fix: The autocomplete page dropdown was not consistent with other styles.
+
+= 4.11.03 =
+* New: Name fields now work in the To and From settings for email actions.
+* Fix: Images were not properly loading when styles were loading via an AJAX request.
+* Fix: Zeros were not appearing in the entries list for repeaters.
+
 = 4.11.02 =
 * New: The padding for form descriptions can now be customized when editing styles.
 
