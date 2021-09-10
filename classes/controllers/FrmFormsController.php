@@ -2192,10 +2192,20 @@ class FrmFormsController {
 	}
 
 	public static function landing_page_preview_option() {
-		ob_start();
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/landing-page-preview-option.php';
-		$html = apply_filters( 'frm_landing_page_preview_option', ob_get_clean() );
+		$html = apply_filters( 'frm_landing_page_preview_option', false );
+		if ( false === $html ) {
+			ob_start();
+			include self::get_form_views_path() . 'landing-page-preview-option.php';
+			$html = apply_filters( 'frm_landing_page_preview_option', ob_get_clean() );
+		}
 		echo FrmAppHelper::kses( $html, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function get_form_views_path() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
 	}
 
 	/**
