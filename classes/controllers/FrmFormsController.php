@@ -2196,7 +2196,7 @@ class FrmFormsController {
 		if ( false === $html ) {
 			ob_start();
 			include self::get_form_views_path() . 'landing-page-preview-option.php';
-			$html = apply_filters( 'frm_landing_page_preview_option', ob_get_clean() );
+			$html = ob_get_clean();
 		}
 		echo FrmAppHelper::kses( $html, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
