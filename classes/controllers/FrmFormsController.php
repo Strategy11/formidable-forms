@@ -1081,13 +1081,12 @@ class FrmFormsController {
 				'function' => 'buttons_settings',
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
-			// TODO this says you should upgrade to pro, but if you are pro it should try to download the plugin instead.
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_file_text_icon',
 				'html_class' => 'frm_show_upgrade frm_noallow',
 				'data'       => array(
-					'medium'  => 'permissions',
+					'medium'  => 'landing',
 					'upgrade' => __( 'Form Landing Pages', 'formidable' ),
 					'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 				),
@@ -2192,13 +2191,11 @@ class FrmFormsController {
 	}
 
 	public static function landing_page_preview_option() {
-		$html = apply_filters( 'frm_landing_page_preview_option', false );
-		if ( false === $html ) {
-			ob_start();
-			include self::get_form_views_path() . 'landing-page-preview-option.php';
-			$html = ob_get_clean();
+		$path = apply_filters( 'frm_landing_page_preview_option', false );
+		if ( false === $path || ! file_exists( $path ) || 'landing-page-preview-option.php' !== basename( $path ) ) {
+			$path = self::get_form_views_path() . 'landing-page-preview-option.php';
 		}
-		echo FrmAppHelper::kses( $html, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		include $path;
 	}
 
 	/**
