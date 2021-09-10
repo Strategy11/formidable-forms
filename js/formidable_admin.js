@@ -829,6 +829,13 @@ function frmAdminBuildJS() {
 						// A new field was dragged into the form
 						insertNewFieldByDragging( this, ui.item, opts );
 					}
+				} else if ( ui.item.hasClass( 'frm_field_box' ) ) {
+					// dragging a group.
+					getFieldsInRow( ui.item.children( 'ul' ) ).each(
+						function() {
+							updateFieldAfterMovingBetweenSections( jQuery( this ) );
+						}
+					);
 				}
 			},
 			change: function( event, ui ) {
@@ -2542,6 +2549,8 @@ function frmAdminBuildJS() {
 				}
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
+			} else if ( isSliderField( changes ) ) {
+				updateSliderFieldPreview( changes, att, newValue );
 			} else {
 				changes.setAttribute( att, newValue );
 			}
@@ -2551,7 +2560,45 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			changes.innerHTML = newValue;
+			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
+				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
+			}
 		}
+	}
+
+	function updateSliderFieldPreview( field, att, newValue ) {
+		if ( 'value' === att ) {
+			if ( '' === newValue ) {
+				newValue = getSliderMidpoint( field );
+			}
+			field.value = newValue;
+		} else {
+			field.setAttribute( att, newValue );
+		}
+
+		if ( -1 === [ 'value', 'min', 'max' ].indexOf( att ) ) {
+			return;
+		}
+
+		if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( field.id ) ) {
+			field.value = getSliderMidpoint( field );
+		}
+
+		field.parentNode.querySelector( '.frm_range_value' ).textContent = field.value;
+	}
+
+	function getSliderDefaultValueInput( previewInputId ) {
+		return document.querySelector( 'input[data-changeme="' + previewInputId + '"][data-changeatt="value"]' ).value;
+	}
+
+	function getSliderMidpoint( sliderInput ) {
+		const max = parseFloat( sliderInput.getAttribute( 'max' ) );
+		const min = parseFloat( sliderInput.getAttribute( 'min' ) );
+		return ( max - min ) / 2 + min;
+	}
+
+	function isSliderField( previewInput ) {
+		return 'range' === previewInput.type && previewInput.parentNode.classList.contains( 'frm_range_container' );
 	}
 
 	function toggleInvalidMsg() {
