@@ -2191,11 +2191,11 @@ class FrmFormsController {
 	}
 
 	public static function landing_page_preview_option() {
-		$path = apply_filters( 'frm_landing_page_preview_option', false );
-		if ( false === $path || ! file_exists( $path ) || 'landing-page-preview-option.php' !== basename( $path ) ) {
-			$path = self::get_form_views_path() . 'landing-page-preview-option.php';
+		$dir = apply_filters( 'frm_landing_page_preview_option', false );
+		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
+			$dir = self::get_form_views_path();
 		}
-		include $path;
+		include $dir . 'landing-page-preview-option.php';
 	}
 
 	/**
