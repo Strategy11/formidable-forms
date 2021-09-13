@@ -964,9 +964,30 @@ class FrmAddonsController {
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		self::maybe_activate_addon( $plugin );
 
-		// Send back a response.
-		echo json_encode( __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' ) );
+		echo json_encode( self::get_addon_activation_response() );
 		wp_die();
+	}
+
+	/**
+	 * @return array|string
+	 */
+	private static function get_addon_activation_response() {
+		if ( self::activating_from_settings_page() ) {
+			$response = array(
+				'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
+				'saveAndReload' => 'settings',
+			);
+		} else {
+			$response = __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' );
+		}
+		return $response;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function activating_from_settings_page() {
+		return false !== strpos( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'frm_action=settings' );
 	}
 
 	/**
@@ -1163,8 +1184,7 @@ class FrmAddonsController {
 
 		self::download_and_activate();
 
-		// Send back a response.
-		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
+		echo json_encode( self::get_addon_activation_response() );
 		wp_die();
 	}
 

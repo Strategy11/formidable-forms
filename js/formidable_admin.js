@@ -3470,8 +3470,13 @@ function frmAdminBuildJS() {
 		return wrapper;
 	}
 
-	function div() {
+	function div( atts ) {
 		var element = document.createElement( 'div' );
+		if ( 'object' === typeof atts ) {
+			if ( 'undefined' !== typeof atts.id ) {
+				element.id = atts.id;
+			}
+		}
 		return element;
 	}
 
@@ -6749,6 +6754,17 @@ function frmAdminBuildJS() {
 		fieldsUpdated = 0;
 	}
 
+	function saveAndReloadSettings() {
+		var page, form;
+		page = document.getElementById( 'form_settings_page' );
+		if ( null !== page ) {
+			form = page.querySelector( 'form.frm_form_settings' );
+			if ( null !== form ) {
+				form.submit();
+			}
+		}
+	}
+
 	function confirmExit( event ) {
 		if ( fieldsUpdated ) {
 			event.preventDefault();
@@ -6757,9 +6773,11 @@ function frmAdminBuildJS() {
 	}
 
 	function bindClickForDialogClose( $modal ) {
-		jQuery( '.ui-widget-overlay, a.dismiss' ).on( 'click', function() {
+		const closeModal = function() {
 			$modal.dialog( 'close' );
-		});
+		};
+		jQuery( '.ui-widget-overlay' ).on( 'click', closeModal );
+		$modal.on( 'click', 'a.dismiss', closeModal );
 	}
 
 	function triggerNewFormModal( event ) {
@@ -7344,12 +7362,14 @@ function frmAdminBuildJS() {
 	}
 
 	function installOrActivate( clicked, action ) {
+		var button, plugin, el, message;
+
 		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 		jQuery( '.frm-addon-error' ).remove();
-		var button = jQuery( clicked );
-		var plugin = button.attr( 'rel' );
-		var el = button.parent();
-		var message = el.parent().find( '.addon-status-label' );
+		button = jQuery( clicked );
+		plugin = button.attr( 'rel' );
+		el = button.parent();
+		message = el.parent().find( '.addon-status-label' );
 
 		button.addClass( 'frm_loading_button' );
 
@@ -7366,14 +7386,23 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
-				var error = extractErrorFromAddOnResponse( response );
+				var saveAndReload, error;
+
+				if ( 'string' !== typeof response && 'string' === typeof response.message ) {
+					if ( 'undefined' !== typeof response.saveAndReload ) {
+						saveAndReload = response.saveAndReload;
+					}
+					response = response.message;
+				}
+
+				error = extractErrorFromAddOnResponse( response );
 
 				if ( error ) {
 					addonError( error, el, button );
 					return;
 				}
 
-				afterAddonInstall( response, button, message, el );
+				afterAddonInstall( response, button, message, el, saveAndReload );
 			},
 			error: function() {
 				button.removeClass( 'frm_loading_button' );
@@ -7422,12 +7451,15 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	function afterAddonInstall( response, button, message, el ) {
+	function afterAddonInstall( response, button, message, el, saveAndReload ) {
+		var $addonStatus, refreshPage;
+
+		$addonStatus = jQuery( document.getElementById( 'frm-addon-status' ) );
 		// The Ajax request was successful, so let's update the output.
-		button.css({ 'opacity': '0' });
+		button.css({ opacity: '0' });
 		message.text( frm_admin_js.active );
 		jQuery( '#frm-oneclick' ).hide();
-		jQuery( '#frm-addon-status' ).text( response ).show();
+		$addonStatus.text( response ).show();
 		jQuery( '#frm_upgrade_modal h2' ).hide();
 		jQuery( '#frm_upgrade_modal .frm_lock_icon' ).addClass( 'frm_lock_open_icon' );
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
@@ -7437,15 +7469,38 @@ function frmAdminBuildJS() {
 		button.removeClass( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
-		var refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
+		refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
+		} else if ( 'settings' === saveAndReload ) {
+			$addonStatus.append( getSaveAndReloadSettingsOptions() );
 		}
 	}
 
-	function extractErrorFromAddOnResponse( response ) {
-		var $message, text;
+	function getSaveAndReloadSettingsOptions() {
+		var wrapper = div({ id: 'frm_save_and_reload_options' });
+		wrapper.appendChild( saveAndReloadSettingsButton() );
+		wrapper.appendChild( closePopupButton() );
+		return wrapper;
+	}
 
+	function saveAndReloadSettingsButton() {
+		var button = document.createElement( 'button' );
+		button.id = 'frm_save_and_reloading_settings';
+		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
+		button.textContent = __( 'Save and Reload', 'formidable' );
+		return button;
+	}
+
+	function closePopupButton() {
+		var a = document.createElement( 'a' );
+		a.setAttribute( 'href', '#' );
+		a.classList.add( 'button', 'button-secondary', 'frm-button-secondary', 'dismiss' );
+		a.textContent = __( 'Close', 'formidable' );
+		return a;
+	}
+
+	function extractErrorFromAddOnResponse( response ) {
 		if ( typeof response !== 'string' ) {
 			if ( typeof response.success !== 'undefined' && response.success ) {
 				return false;
@@ -8922,6 +8977,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'submit', '.frm_form_settings', settingsSubmitted );
 			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
+			jQuery( document ).on( 'click', '#frm_save_and_reloading_settings', saveAndReloadSettings );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
