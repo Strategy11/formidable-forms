@@ -141,11 +141,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 		<tr>
 			<td>
-				<label>
+				<label data-upgrade="<?php esc_attr_e( 'AJAX Form Submissions', 'formidable' ); ?>" data-medium="ajax" data-message="<?php esc_attr_e( 'Want to submit forms without reloading the page?', 'formidable' ); ?>">
 					<input type="checkbox" disabled="disabled" />
 					<span class="frm_noallow"><?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?></span>
 					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Submit the form without refreshing the page.', 'formidable' ); ?>"></span>
-					<div class="frm-ib frm-ml10"><?php FrmTipsHelper::pro_tip( 'get_ajax_submit_tip', 'p' ); ?></div>
 				</label>
 			</td>
 		</tr>
