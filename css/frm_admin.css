@@ -1797,6 +1797,15 @@ h2.frm-h2 + .howto {
 	visibility: hidden;
 }
 
+#frm_save_and_reload_options {
+	margin-top: 10px;
+	font-size: 13px;
+}
+
+#frm_save_and_reloading_settings, #frm_save_and_reloading_settings + .frm-button-secondary {
+	visibility: visible;
+}
+
 .addon-status-label {
 	opacity: .7;
 }
