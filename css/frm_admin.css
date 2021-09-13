@@ -8344,3 +8344,24 @@ Responsive Design
 .frm-multiselect-key-is-down li.form-field:not(.edit_field_type_divider) {
 	pointer-events: none;
 }
+
+#frm_banner {
+	width: 100%;
+	color: #fff;
+	background: #4199FD;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+
+.frm-banner-emoji {
+	margin-right: 5px;
+}
+
+.frm-banner-title {
+	font-weight: bold;
+}
+
+.frm-banner-cta a {
+	text-decoration: underline !important;
+}

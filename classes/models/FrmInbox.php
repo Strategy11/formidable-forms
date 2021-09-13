@@ -71,6 +71,8 @@ class FrmInbox extends FrmFormApi {
 		}
 
 		foreach ( $api as $message ) {
+			$message['emoji']  = '🥳';
+			$message['banner'] = 'Fake message'; // TODO remove this.
 			$this->add_message( $message );
 		}
 	}
@@ -287,5 +289,27 @@ class FrmInbox extends FrmFormApi {
 
 	private function update_list() {
 		update_option( $this->option, $this->messages, 'no' );
+	}
+
+	public static function maybe_show_banner() {
+		$banner_messages = self::get_banner_messages();
+		if ( ! $banner_messages ) {
+			return;
+		}
+		$message = reset( $banner_messages );
+		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_banner_messages() {
+		$inbox = new self();
+		return array_filter(
+			$inbox->get_messages(),
+			function( $message ) {
+				return ! empty( $message['banner'] );
+			}
+		);
 	}
 }
