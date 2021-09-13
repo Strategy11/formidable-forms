@@ -8354,9 +8354,14 @@ Responsive Design
 	text-align: center;
 }
 
+.frm-banner-emoji {
+	font-size: 15px;
+}
+
 .frm-banner-emoji,
 .frm-banner-title {
 	margin-right: 5px;
+	vertical-align: top;
 }
 
 .frm-banner-cta a {

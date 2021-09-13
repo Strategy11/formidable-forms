@@ -318,7 +318,7 @@ class FrmInbox extends FrmFormApi {
 	private static function get_banner_messages() {
 		$inbox = new self();
 		return array_filter(
-			$inbox->get_messages(),
+			$inbox->get_messages( 'filter' ),
 			function( $message ) {
 				return ! empty( $message['banner'] );
 			}
