@@ -169,7 +169,7 @@ class FrmInbox extends FrmFormApi {
 			return true;
 		}
 		$who = (array) $message['who'];
-		if ( in_array( 'everyone', $who, true ) ) {
+		if ( in_array( 'all', $who, true ) ) {
 			return true;
 		}
 		return in_array( $this->get_user_type(), $who, true );
