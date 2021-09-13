@@ -7486,7 +7486,7 @@ function frmAdminBuildJS() {
 
 	function saveAndReloadSettingsButton() {
 		var button = document.createElement( 'button' );
-		button.id = 'frm_save_and_reloading_settings';
+		button.id = 'frm_save_and_reload_settings';
 		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
 		return button;
@@ -8977,7 +8977,7 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'submit', '.frm_form_settings', settingsSubmitted );
 			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
-			jQuery( document ).on( 'click', '#frm_save_and_reloading_settings', saveAndReloadSettings );
+			jQuery( document ).on( 'click', '#frm_save_and_reload_settings', saveAndReloadSettings );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
