@@ -14,6 +14,11 @@ class FrmInbox extends FrmFormApi {
 
 	private $messages = false;
 
+	/**
+	 * @param array
+	 */
+	private static $banner_messages;
+
 	public function __construct( $for_parent = null ) {
 		$this->set_cache_key();
 		$this->set_messages();
@@ -292,12 +297,19 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	public static function maybe_show_banner() {
-		$banner_messages = self::get_banner_messages();
-		if ( ! $banner_messages ) {
+		if ( empty( self::$banner_messages ) ) {
 			return;
 		}
-		$message = reset( $banner_messages );
+		$message = reset( self::$banner_messages );
 		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
+	}
+
+	public static function maybe_disable_screen_options() {
+		self::$banner_messages = self::get_banner_messages();
+		if ( self::$banner_messages ) {
+			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
+			add_filter( 'screen_options_show_screen', '__return_false' );
+		}
 	}
 
 	/**
