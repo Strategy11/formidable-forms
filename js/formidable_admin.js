@@ -833,6 +833,13 @@ function frmAdminBuildJS() {
 						// A new field was dragged into the form
 						insertNewFieldByDragging( this, ui.item, opts );
 					}
+				} else if ( ui.item.hasClass( 'frm_field_box' ) ) {
+					// dragging a group.
+					getFieldsInRow( ui.item.children( 'ul' ) ).each(
+						function() {
+							updateFieldAfterMovingBetweenSections( jQuery( this ) );
+						}
+					);
 				}
 			},
 			change: function( event, ui ) {
@@ -1746,7 +1753,13 @@ function frmAdminBuildJS() {
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
-						jQuery( newRow ).trigger( 'frm_added_duplicated_field_to_row' );
+						jQuery( newRow ).trigger(
+							'frm_added_duplicated_field_to_row',
+							{
+								duplicatedFieldHtml: msg,
+								originalFieldId: fieldId
+							}
+						);
 						afterAddField( msg, false );
 						return;
 					}
@@ -1761,9 +1774,95 @@ function frmAdminBuildJS() {
 
 				updateFieldOrder();
 				afterAddField( msg, false );
+				maybeDuplicateUnsavedSettings( fieldId, msg );
 			}
 		});
 		return false;
+	}
+
+	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
+		var originalSettings, newFieldId, copySettings, fieldOptionKeys, originalDefault, copyDefault;
+
+		originalSettings = document.getElementById( 'frm-single-settings-' + originalFieldId );
+		if ( null === originalSettings ) {
+			return;
+		}
+
+		newFieldId = jQuery( newFieldHtml ).attr( 'data-fid' );
+		if ( 'undefined' === typeof newFieldId ) {
+			return;
+		}
+
+		copySettings = document.getElementById( 'frm-single-settings-' + newFieldId );
+		if ( null === copySettings ) {
+			return;
+		}
+
+		fieldOptionKeys = [
+			'name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'
+		];
+
+		originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ).forEach(
+			function( originalSetting ) {
+				var key, tagType, copySetting;
+
+				key = getKeyFromSettingInput( originalSetting );
+
+				if ( 'options' === key ) {
+					copyOption( originalSetting, copySettings, originalFieldId, newFieldId );
+					return;
+				}
+
+				if ( -1 === fieldOptionKeys.indexOf( key ) ) {
+					return;
+				}
+
+				tagType = originalSetting.matches( 'input' ) ? 'input' : 'textarea';
+				copySetting = copySettings.querySelector( tagType + '[name="field_options[' + key + '_' + newFieldId + ']"]' );
+				if ( null === copySetting ) {
+					return;
+				}
+
+				if ( 'checkbox' === originalSetting.type ) {
+					if ( originalSetting.checked !== copySetting.checked ) {
+						jQuery( copySetting ).trigger( 'click' );
+					}
+				} else if ( 'text' === originalSetting.type || 'textarea' === tagType ) {
+					if ( originalSetting.value !== copySetting.value ) {
+						copySetting.value = originalSetting.value;
+						jQuery( copySetting ).trigger( 'change' );
+					}
+				}
+			}
+		);
+
+		originalDefault = originalSettings.querySelector( 'input[name="default_value_' + originalFieldId + '"]' );
+		if ( null !== originalDefault ) {
+			copyDefault = copySettings.querySelector( 'input[name="default_value_' + newFieldId + '"]' );
+			if ( null !== copyDefault && originalDefault.value !== copyDefault.value ) {
+				copyDefault.value = originalDefault.value;
+				jQuery( copyDefault ).trigger( 'change' );
+			}
+		}
+	}
+
+	function copyOption( originalSetting, copySettings, originalFieldId, newFieldId ) {
+		var remainingKeyDetails, copyKey, copySetting;
+		remainingKeyDetails = originalSetting.name.substr( 23 + ( '' + originalFieldId ).length );
+		copyKey = 'field_options[options_' + newFieldId + ']' + remainingKeyDetails;
+		copySetting = copySettings.querySelector( 'input[name="' + copyKey + '"]' );
+		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
+			copySetting.value = originalSetting.value;
+			jQuery( copySetting ).trigger( 'change' );
+		}
+	}
+
+	function getKeyFromSettingInput( input ) {
+		var nameWithoutPrefix, nameSplit;
+		nameWithoutPrefix = input.name.substr( 14 );
+		nameSplit = nameWithoutPrefix.split( '_' );
+		nameSplit.pop();
+		return nameSplit.join( '_' );
 	}
 
 	function closeOpenFieldDropdowns() {
@@ -2461,6 +2560,8 @@ function frmAdminBuildJS() {
 				}
 			} else if ( att === 'class' ) {
 				changeFieldClass( changes, this );
+			} else if ( isSliderField( changes ) ) {
+				updateSliderFieldPreview( changes, att, newValue );
 			} else {
 				changes.setAttribute( att, newValue );
 			}
@@ -2470,7 +2571,45 @@ function frmAdminBuildJS() {
 			}
 		} else {
 			changes.innerHTML = newValue;
+			if ( changes.classList.contains( 'frm_primary_label' ) && 'break' === changes.nextElementSibling.getAttribute( 'data-ftype' ) ) {
+				changes.nextElementSibling.querySelector( '.frm_button_submit' ).textContent = newValue;
+			}
 		}
+	}
+
+	function updateSliderFieldPreview( field, att, newValue ) {
+		if ( 'value' === att ) {
+			if ( '' === newValue ) {
+				newValue = getSliderMidpoint( field );
+			}
+			field.value = newValue;
+		} else {
+			field.setAttribute( att, newValue );
+		}
+
+		if ( -1 === [ 'value', 'min', 'max' ].indexOf( att ) ) {
+			return;
+		}
+
+		if ( ( 'max' === att || 'min' === att ) && '' === getSliderDefaultValueInput( field.id ) ) {
+			field.value = getSliderMidpoint( field );
+		}
+
+		field.parentNode.querySelector( '.frm_range_value' ).textContent = field.value;
+	}
+
+	function getSliderDefaultValueInput( previewInputId ) {
+		return document.querySelector( 'input[data-changeme="' + previewInputId + '"][data-changeatt="value"]' ).value;
+	}
+
+	function getSliderMidpoint( sliderInput ) {
+		const max = parseFloat( sliderInput.getAttribute( 'max' ) );
+		const min = parseFloat( sliderInput.getAttribute( 'min' ) );
+		return ( max - min ) / 2 + min;
+	}
+
+	function isSliderField( previewInput ) {
+		return 'range' === previewInput.type && previewInput.parentNode.classList.contains( 'frm_range_container' );
 	}
 
 	function toggleInvalidMsg() {
@@ -3011,7 +3150,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateFieldGroup() {
-		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, injectedCloneOptions;
+		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, originalFieldIdByDuplicatedFieldId, injectedCloneOptions;
 
 		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 
@@ -3032,11 +3171,14 @@ function frmAdminBuildJS() {
 
 		expectedLength = $fields.length;
 		duplicatedCount = 0;
+		originalFieldIdByDuplicatedFieldId = {};
 
 		$newRow.on(
 			'frm_added_duplicated_field_to_row',
-			function() {
+			function( event, args ) {
 				var $duplicatedFields, index;
+
+				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
 
 				if ( expectedLength > ++duplicatedCount ) {
 					return;
@@ -3051,14 +3193,18 @@ function frmAdminBuildJS() {
 				);
 
 				for ( index = 0; index < expectedLength; ++index ) {
-					$newRowUl.append(
-						$newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' )
-					);
+					$newRowUl.append( $newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' ) );
 				}
 
 				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
 				$newRow.removeClass( 'frm_hidden' );
 				updateFieldOrder();
+
+				getFieldsInRow( $newRowUl ).each(
+					function() {
+						maybeDuplicateUnsavedSettings( originalFieldIdByDuplicatedFieldId[ this.getAttribute( 'data-fid' ) ], jQuery( this ).prop( 'outerHTML' ) );
+					}
+				);
 			}
 		);
 

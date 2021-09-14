@@ -286,13 +286,24 @@ class FrmEntriesController {
 		);
 
 		foreach ( $fields as $field ) {
-			if ( $field->type != 'checkbox' && ( ! isset( $field->field_options['post_field'] ) || $field->field_options['post_field'] == '' ) ) {
-				// Can't sort on checkboxes because they are stored serialized, or post fields
+			if ( self::field_supports_sorting( $field ) ) {
 				$columns[ $form_id . '_' . $field->field_key ] = 'meta_' . $field->id;
 			}
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Can't sort on checkboxes because they are sorted serialized.
+	 * Some post content can be sorted but not everything.
+	 *
+	 * @param stdClass $field
+	 * @return bool
+	 */
+	private static function field_supports_sorting( $field ) {
+		$is_sortable = 'checkbox' !== $field->type && empty( $field->field_options['post_field'] );
+		return apply_filters( 'frm_field_column_is_sortable', $is_sortable, $field );
 	}
 
 	public static function hidden_columns( $result ) {
