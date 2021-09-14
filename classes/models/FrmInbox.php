@@ -160,13 +160,19 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * Show different messages for different accounts.
+	 *
+	 * @param array $message
+	 * @return bool
 	 */
 	private function is_for_user( $message ) {
 		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
 			return true;
 		}
-
-		return in_array( $this->get_user_type(), (array) $message['who'] );
+		$who = (array) $message['who'];
+		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
+			return true;
+		}
+		return in_array( $this->get_user_type(), $who, true );
 	}
 
 	private function get_user_type() {
