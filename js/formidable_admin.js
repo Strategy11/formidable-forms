@@ -6760,6 +6760,7 @@ function frmAdminBuildJS() {
 		if ( null !== page ) {
 			form = page.querySelector( 'form.frm_form_settings' );
 			if ( null !== form ) {
+				fieldsUpdated = 0;
 				form.submit();
 			}
 		}
