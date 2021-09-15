@@ -8272,7 +8272,7 @@ Responsive Design
 
 #frm_field_group_popup .frm-row-layout-option.frm-active-row-layout,
 #frm_field_group_popup .frm-row-layout-option:hover {
-	outline: 1px solid #4199FD;
+	outline: 1px solid var(--primary-color);
 }
 
 .frm-custom-field-group-layout,
@@ -8357,7 +8357,7 @@ Responsive Design
 #frm_banner {
 	width: 100%;
 	color: #fff;
-	background: #4199FD;
+	background: var(--primary-color);
 	height: 40px;
 	line-height: 40px;
 	text-align: center;
