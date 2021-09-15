@@ -8578,6 +8578,8 @@ function frmAdminBuildJS() {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
+			frmAdminBuild.inboxBannerInit();
+
 			if ( $newFields.length > 0 ) {
 				// only load this on the form builder page
 				frmAdminBuild.buildInit();
@@ -8609,7 +8611,6 @@ function frmAdminBuildJS() {
 				// New form selection page
 				initNewFormModal();
 				initSelectionAutocomplete();
-				frmAdminBuild.inboxBannerInit();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
 					window.print();

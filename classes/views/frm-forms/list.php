@@ -2,7 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-FrmInbox::maybe_show_banner();
 ?>
 <div class="frm_wrap">
 	<?php
