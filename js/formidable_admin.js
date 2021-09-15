@@ -1484,8 +1484,8 @@ function frmAdminBuildJS() {
 				return false;
 			}
 
-			if ( ui.item.hasClass( 'frm_thidden' ) && insideFieldGroup ) {
-				// do not allow a hidden field in a field group.
+			if ( insideFieldGroup && ( ui.item.hasClass( 'frm_thidden' ) || ui.item.hasClass( 'frm_tsummary' ) ) ) {
+				// do not allow a hidden field or summary field in a field group.
 				return false;
 			}
 
