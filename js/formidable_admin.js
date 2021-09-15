@@ -8609,6 +8609,7 @@ function frmAdminBuildJS() {
 				// New form selection page
 				initNewFormModal();
 				initSelectionAutocomplete();
+				frmAdminBuild.inboxBannerInit();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
 					window.print();
@@ -9312,6 +9313,40 @@ function frmAdminBuildJS() {
 				});
 				this.parentElement.remove();
 			});
+		},
+
+		inboxBannerInit: function() {
+			const banner = document.getElementById( 'frm_banner' );
+			if ( ! banner ) {
+				return;
+			}
+
+			const dismissButton = banner.querySelector( '.frm-banner-dismiss' );
+			document.addEventListener(
+				'click',
+				function( event ) {
+					if ( event.target !== dismissButton ) {
+						return;
+					}
+
+					const data = {
+						action: 'frm_inbox_dismiss',
+						key: banner.dataset.key,
+						nonce: frmGlobal.nonce
+					};
+					postAjax(
+						data,
+						function() {
+							jQuery( banner ).fadeOut(
+								400,
+								function() {
+									banner.remove();
+								}
+							);
+						}
+					);
+				}
+			);
 		},
 
 		updateOpts: function( fieldId, opts, modal ) {

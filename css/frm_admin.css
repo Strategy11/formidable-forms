@@ -8361,6 +8361,7 @@ Responsive Design
 	height: 40px;
 	line-height: 40px;
 	text-align: center;
+	position: relative;
 }
 
 .frm-banner-emoji {
@@ -8375,4 +8376,16 @@ Responsive Design
 
 .frm-banner-cta a {
 	text-decoration: underline !important;
+}
+
+.frm-banner-dismiss {
+	cursor: pointer;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY( -50% );
+}
+
+.frm-banner-dismiss .frmsvg {
+	vertical-align: top;
 }

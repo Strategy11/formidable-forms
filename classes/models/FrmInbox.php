@@ -76,8 +76,6 @@ class FrmInbox extends FrmFormApi {
 		}
 
 		foreach ( $api as $message ) {
-			$message['emoji']  = '🥳';
-			$message['banner'] = 'Fake message'; // TODO remove this.
 			$this->add_message( $message );
 		}
 	}
