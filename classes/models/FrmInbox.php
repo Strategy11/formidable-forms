@@ -76,6 +76,7 @@ class FrmInbox extends FrmFormApi {
 		}
 
 		foreach ( $api as $message ) {
+			$message['banner'] = 'here';
 			$this->add_message( $message );
 		}
 	}
@@ -298,7 +299,7 @@ class FrmInbox extends FrmFormApi {
 		if ( empty( self::$banner_messages ) ) {
 			return;
 		}
-		$message = reset( self::$banner_messages );
+		$message = end( self::$banner_messages );
 		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
 	}
 
