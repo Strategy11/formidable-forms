@@ -976,6 +976,9 @@ function frmAdminBuildJS() {
 		fixUnwrappedListItems();
 		toggleSectionHolder();
 		updateFieldOrder();
+
+		const event = new Event( 'frm_sync_after_drag_and_drop', { bubbles: false });
+		document.dispatchEvent( event );
 	}
 
 	function maybeRemoveNewCancelledFields() {
