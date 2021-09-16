@@ -127,6 +127,23 @@ class FrmFieldsController {
 		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 
 		$field_id = FrmField::create( $values );
+
+		/**
+		 * Fires after duplicating a field.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $args {
+		 *     The arguments.
+		 *
+		 *     @type int    $field_id   New field ID.
+		 *     @type array  $values     Values before inserting.
+		 *     @type object $copy_field Copy field data.
+		 *     @type int    $form_id    Form ID.
+		 * }
+		 */
+		do_action( 'frm_after_duplicate_field', compact( 'field_id', 'values', 'copy_field', 'form_id' ) );
+
 		if ( $field_id ) {
 			self::load_single_field( $field_id, $values );
 		}
