@@ -2,7 +2,7 @@
 = 5.0.04 =
 * New: Custom HTML for errors is now also applied when validating with JavaScript.
 * New: Added a button to quickly save and reload after activiating a new plugin from the settings page.
-* New: Added several new filters including frm_fields_in_entries_list_table, frm_fields_in_form_builder, frm_fields_in_settings, frm_fields_in_tags_box, frm_images_dropdown_output, frm_images_dropdown_args, frm_images_dropdown_input_attrs, frm_images_dropdown_option_image, frm_images_dropdown_option_classes, frm_images_dropdown_option_html_attrs, frm_switch_field_types, frm_radio_display_format_options, frm_radio_display_format_args, frm_entry_values_include_fields, frm_entry_values_exclude_fields, frm_entry_values_fields, frm_fields_in_form, frm_choice_field_option_label, and frm_choice_field_option_label.
+* New: Added several new filters required to support the new new Formidable surveys add on.
 
 = 5.0.03 =
 * New: Added an Elementor widget.
@@ -27,7 +27,7 @@
 * New: Added the option to quickly set layouts for a full row of fields at once.
 * New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
 * New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
-* New: Permissions are now updated right away when a formidable license is activated to avoid issues with certain pro features not being available right away.
+* New: Permissions are now updated right away when a Formidable license is activated to avoid issues with certain pro features not being available right away.
 * Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
 * Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
 * Fix: Updated styling for new fields that are about to be dropped into a form.
