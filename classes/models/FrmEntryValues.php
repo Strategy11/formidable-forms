@@ -123,7 +123,7 @@ class FrmEntryValues {
 		/**
 		 * Allows modifying the IDs of include_fields used in the entry values.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $field_ids The list of field IDs.
 		 * @param array $atts      The arguments. See {@see FrmEntriesController::show_entry_shortcode()}.
@@ -144,7 +144,7 @@ class FrmEntryValues {
 		/**
 		 * Allows modifying the IDs of exclude_fields used in the entry values.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $field_ids The list of field IDs.
 		 * @param array $atts      The arguments. See {@see FrmEntriesController::show_entry_shortcode()}.
@@ -188,7 +188,7 @@ class FrmEntryValues {
 		/**
 		 * Allows modifying the list of all field in the form that is used in the entry values.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $fields The list of fields.
 		 * @param array $args   The arguments. Contains `form_id`, `entry`.

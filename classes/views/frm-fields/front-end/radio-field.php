@@ -26,7 +26,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		/**
 		 * Allows changing the HTML of option label in choice field (radio, checkbox,...).
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param string $label Label HTML.
 		 * @param array  $args  The arguments. Contains `field`.

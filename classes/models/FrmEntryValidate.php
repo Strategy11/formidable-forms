@@ -37,7 +37,7 @@ class FrmEntryValidate {
 		/**
 		 * Allows modifying the validation errors after validating all fields.
 		 *
-		 * @since 5.0 Added `posted_fields` to the third param.
+		 * @since 5.0.04 Added `posted_fields` to the third param.
 		 *
 		 * @param array $errors Errors data.
 		 * @param array $values Value data of the form.

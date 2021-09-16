@@ -113,7 +113,7 @@ class FrmEntriesController {
 		/**
 		 * Allows changing fields in the Entries list table heading.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $fields  Array of fields.
 		 * @param array $args    The arguments. Contains `form_id`.

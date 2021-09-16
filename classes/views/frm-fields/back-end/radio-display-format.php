@@ -2,7 +2,7 @@
 /**
  * Display format option
  *
- * @since 5.0
+ * @since 5.0.04
  * @package Formidable
  *
  * @var array $field   Field data.

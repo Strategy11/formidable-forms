@@ -2748,7 +2748,7 @@ class FrmAppHelper {
 	/**
 	 * Shows the images dropdown.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $args {
 	 *     Arguments.
@@ -2771,7 +2771,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the output of FrmAppHelper::images_dropdown() method.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param string $output The output.
 		 * @param array  $args   Passed arguments.
@@ -2782,7 +2782,7 @@ class FrmAppHelper {
 	/**
 	 * Fills the default images_dropdown() arguments.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $args The arguments.
 	 * @return array
@@ -2808,7 +2808,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $new_args Arguments after filling the defaults.
 		 * @param array $args     Arguments passed to the method, before filling the defaults.
@@ -2819,7 +2819,7 @@ class FrmAppHelper {
 	/**
 	 * Gets HTML attributes of the input in images_dropdown() method.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $args The arguments.
 	 * @return string
@@ -2837,7 +2837,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the HTML attributes of the input in images_dropdown() method.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param string $input_attrs_str HTML attributes string.
 		 * @param array  $args            The arguments of images_dropdown() method.
@@ -2848,7 +2848,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the image of each option in images_dropdown() method.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
@@ -2867,7 +2867,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the image of each option in images_dropdown() method.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param string $image The image HTML.
 		 * @param array  $args  The arguments of images_dropdown() method, with `option` array is added.
@@ -2878,7 +2878,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the HTML classes of each option in images_dropdown() method.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
@@ -2896,7 +2896,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the CSS classes of each option in images_dropdown() method.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param string $classes CSS classes.
 		 * @param array  $args    The arguments of images_dropdown() method, with `option` array is added.
@@ -2907,7 +2907,7 @@ class FrmAppHelper {
 	/**
 	 * Gets the custom HTML attributes of each option in images_dropdown() method.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
@@ -2934,7 +2934,7 @@ class FrmAppHelper {
 		/**
 		 * Allows modifying the custom HTML attributes of each option in images_dropdown() method.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param string $html_attrs The HTML attributes string.
 		 * @param array  $args       The arguments of images_dropdown() method, with `option` array is added.

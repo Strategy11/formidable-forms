@@ -4962,7 +4962,7 @@ function frmAdminBuildJS() {
 			}
 
 			/**
-			 * @since 5.0
+			 * @since 5.0.04
 			 */
 			label = frmAdminBuild.hooks.applyFilters( 'frm_choice_field_label', label, fieldId, optVals[ i ], hasImageOptions );
 
@@ -5075,7 +5075,7 @@ function frmAdminBuildJS() {
 		}
 
 		/**
-		 * @since 5.0
+		 * @since 5.0.04
 		 */
 		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', checked, fieldId );
 	}
@@ -5084,7 +5084,7 @@ function frmAdminBuildJS() {
 		const isShowing = ! isChecked( 'hide_image_text_' + fieldId );
 
 		/**
-		 * @since 5.0
+		 * @since 5.0.04
 		 */
 		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_showing_label_with_image', isShowing, fieldId );
 	}
@@ -9365,7 +9365,7 @@ function frmAdminBuildJS() {
 		},
 
 		/**
-		 * @since 5.0
+		 * @since 5.0.04
 		 */
 		hooks: {
 			applyFilters: function( hookName, ...args ) {

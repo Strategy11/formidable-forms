@@ -981,7 +981,7 @@ class FrmFormsController {
 		/**
 		 * Allows modifying the list of fields in the form builder.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param object[] $fields Array of fields.
 		 * @param array    $args   The arguments. Contains `form`.
@@ -1030,7 +1030,7 @@ class FrmFormsController {
 		/**
 		 * Allows changing fields in the form settings.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $fields Array of fields.
 		 * @param array $args   The arguments. Contains `form`.
@@ -1207,7 +1207,7 @@ class FrmFormsController {
 		/**
 		 * Allows modifying the list of fields in the tags box.
 		 *
-		 * @since 5.0
+		 * @since 5.0.04
 		 *
 		 * @param array $fields The list of fields.
 		 * @param array $args   The arguments. Contains `form_id`.

@@ -47,7 +47,7 @@ if ( $values['fields'] ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
 	 *
-	 * @since 5.0
+	 * @since 5.0.04
 	 *
 	 * @param array $fields Array of fields.
 	 * @param array $args   The arguments. Contains `form`.
