@@ -133,12 +133,16 @@ class FrmFieldsController {
 		 *
 		 * @since 5.0.04
 		 *
-		 * @param int    $field_id   New field ID.
-		 * @param array  $values     Values before inserting.
-		 * @param object $copy_field Copy field data.
-		 * @param int    $form_id    Form ID.
+		 * @param array $args {
+		 *     The arguments.
+		 *
+		 *     @type int    $field_id   New field ID.
+		 *     @type array  $values     Values before inserting.
+		 *     @type object $copy_field Copy field data.
+		 *     @type int    $form_id    Form ID.
+		 * }
 		 */
-		do_action( 'frm_after_duplicate_field', $field_id, $values, $copy_field, $form_id );
+		do_action( 'frm_after_duplicate_field', compact( 'field_id', 'values', 'copy_field', 'form_id' ) );
 
 		if ( $field_id ) {
 			self::load_single_field( $field_id, $values );
