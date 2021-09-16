@@ -112,40 +112,10 @@ class FrmFieldsController {
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		$copy_field = FrmField::getOne( $field_id );
-		if ( ! $copy_field ) {
-			wp_die();
-		}
+		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
-		do_action( 'frm_duplicate_field', $copy_field, $form_id );
-		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
-
-		$values = array(
-			'id' => $copy_field->id,
-		);
-		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
-		$field_id = FrmField::create( $values );
-
-		/**
-		 * Fires after duplicating a field.
-		 *
-		 * @since 5.0.04
-		 *
-		 * @param array $args {
-		 *     The arguments.
-		 *
-		 *     @type int    $field_id   New field ID.
-		 *     @type array  $values     Values before inserting.
-		 *     @type object $copy_field Copy field data.
-		 *     @type int    $form_id    Form ID.
-		 * }
-		 */
-		do_action( 'frm_after_duplicate_field', compact( 'field_id', 'values', 'copy_field', 'form_id' ) );
-
-		if ( $field_id ) {
-			self::load_single_field( $field_id, $values );
+		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
+			self::load_single_field( $new_field['field_id'], $new_field['values'] );
 		}
 
 		wp_die();
