@@ -76,7 +76,6 @@ class FrmInbox extends FrmFormApi {
 		}
 
 		foreach ( $api as $message ) {
-			$message['banner'] = 'here';
 			$this->add_message( $message );
 		}
 	}
