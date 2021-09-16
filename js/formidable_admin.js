@@ -1293,10 +1293,9 @@ function frmAdminBuildJS() {
 	// Get the section where a field is dropped
 	function getSectionForFieldPlacement( currentItem ) {
 		var section = '';
-		if ( typeof currentItem !== 'undefined' ) {
+		if ( typeof currentItem !== 'undefined' && ! currentItem.hasClass( 'edit_field_type_divider' ) ) {
 			section = currentItem.closest( '.edit_field_type_divider' );
 		}
-
 		return section;
 	}
 
