@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.03
+Stable tag: 5.0.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.04 =
+* New: Custom HTML for errors is now also applied when validating with JavaScript.
+* New: Added a button to quickly save and reload after activiating a new plugin from the settings page.
+* New: Added several new filters including frm_fields_in_entries_list_table, frm_fields_in_form_builder, frm_fields_in_settings, frm_fields_in_tags_box, frm_images_dropdown_output, frm_images_dropdown_args, frm_images_dropdown_input_attrs, frm_images_dropdown_option_image, frm_images_dropdown_option_classes, frm_images_dropdown_option_html_attrs, frm_switch_field_types, frm_radio_display_format_options, frm_radio_display_format_args, frm_entry_values_include_fields, frm_entry_values_exclude_fields, frm_entry_values_fields, frm_fields_in_form, frm_choice_field_option_label, and frm_choice_field_option_label.
+
 = 5.0.03 =
 * New: Added an Elementor widget.
 * New: When duplicating fields, most unsaved changes will now duplicate as well.
@@ -477,10 +482,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
 * Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
 * Fix: The autocomplete page dropdown was not consistent with other styles.
-
-= 4.11.03 =
-* New: Name fields now work in the To and From settings for email actions.
-* Fix: Images were not properly loading when styles were loading via an AJAX request.
-* Fix: Zeros were not appearing in the entries list for repeaters.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
