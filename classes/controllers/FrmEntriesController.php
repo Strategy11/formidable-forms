@@ -110,6 +110,16 @@ class FrmEntriesController {
 	private static function get_columns_for_form( $form_id, &$columns ) {
 		$form_cols = FrmField::get_all_for_form( $form_id, '', 'include' );
 
+		/**
+		 * Allows changing fields in the Entries list table heading.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields  Array of fields.
+		 * @param array $args    The arguments. Contains `form_id`.
+		 */
+		$form_cols = apply_filters( 'frm_fields_in_entries_list_table', $form_cols, compact( 'form_id' ) );
+
 		foreach ( $form_cols as $form_col ) {
 			if ( FrmField::is_no_save_field( $form_col->type ) ) {
 				continue;

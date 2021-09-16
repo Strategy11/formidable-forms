@@ -27,7 +27,7 @@ Plus, we have optimized Formidable for speed and maximum server performance. We 
 
 You can start with our pre-built templates or create totally custom forms from scratch. All with an easy-to-use drag & drop form maker interface.
 
-https://www.youtube.com/watch?v=d2IPmicn2x8&rel=0
+https://www.youtube.com/watch?v=-eGuL_OWHw4&rel=0
 
 Let’s take a look at all the powerful features for making an amazing lead form, survey form, poll, subscription form, request a quote form, donation form, user registration form, or payment form.
 

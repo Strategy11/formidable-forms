@@ -44,7 +44,16 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 <?php } ?>
 <?php
 if ( $values['fields'] ) {
-	FrmFieldsHelper::show_fields( $values['fields'], $errors, $form, $form_action );
+	/**
+	 * Allows modifying the list of fields in the frontend form.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $fields Array of fields.
+	 * @param array $args   The arguments. Contains `form`.
+	 */
+	$fields_to_show = apply_filters( 'frm_fields_in_form', $values['fields'], compact( 'form' ) );
+	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }
 
 $frm_settings = FrmAppHelper::get_settings();

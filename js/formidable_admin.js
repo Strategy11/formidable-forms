@@ -595,6 +595,10 @@ function frmAdminBuildJS() {
 			deleteButton = jQuery( this ),
 			continueRemove = confirmLinkClick( this );
 
+		if ( parseInt( this.getAttribute( 'data-skip-frm-js' ) ) ) {
+			return;
+		}
+
 		if ( continueRemove === false ) {
 			return;
 		} else {
@@ -972,6 +976,9 @@ function frmAdminBuildJS() {
 		fixUnwrappedListItems();
 		toggleSectionHolder();
 		updateFieldOrder();
+
+		const event = new Event( 'frm_sync_after_drag_and_drop', { bubbles: false });
+		document.dispatchEvent( event );
 	}
 
 	function maybeRemoveNewCancelledFields() {
@@ -2082,6 +2089,13 @@ function frmAdminBuildJS() {
 
 		deselectFields();
 		initiateMultiselect();
+
+		const addedEvent      = new Event( 'frm_added_field', { bubbles: false });
+		addedEvent.frmField   = field;
+		addedEvent.frmSection = section;
+		addedEvent.frmType    = type;
+		addedEvent.frmToggles = toggled;
+		document.dispatchEvent( addedEvent );
 	}
 
 	function clearSettingsBox( preventFieldGroups ) {
@@ -2735,11 +2749,18 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 			var i, key, label,
 				content = '',
+				optList,
+				opts,
 				fieldId = jQuery( this ).closest( '[data-fid]' ).data( 'fid' ),
 				separate = usingSeparateValues( fieldId ),
-				optList = document.getElementById( 'frm_field_' + fieldId + '_opts' ),
-				opts = optList.getElementsByTagName( 'li' ),
 				product = isProductField( fieldId );
+
+			optList = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+			if ( ! optList ) {
+				return;
+			}
+
+			opts = optList.getElementsByTagName( 'li' );
 
 			document.getElementById( 'bulk-field-id' ).value = fieldId;
 
@@ -2770,7 +2791,14 @@ function frmAdminBuildJS() {
 		});
 
 		jQuery( '#frm-update-bulk-opts' ).on( 'click', function() {
-			var fieldId = document.getElementById( 'bulk-field-id' ).value;
+			var fieldId    = document.getElementById( 'bulk-field-id' ).value;
+			var optionType = document.getElementById( 'bulk-option-type' ).value;
+
+			if ( optionType ) {
+				// Use custom handler for custom option type.
+				return;
+			}
+
 			this.classList.add( 'frm_loading_button' );
 			frmAdminBuild.updateOpts( fieldId, document.getElementById( 'frm_bulk_options' ).value, $info );
 		});
@@ -4622,16 +4650,28 @@ function frmAdminBuildJS() {
 
 	function resetOptOnChange() {
 		/*jshint validthis:true */
-		var field = getFieldKeyFromOpt( this ),
-			thisOpt = jQuery( this ).closest( '.frm_single_option' );
+		var field, thisOpt;
+
+		field = getFieldKeyFromOpt( this );
+		if ( ! field ) {
+			return;
+		}
+
+		thisOpt = jQuery( this ).closest( '.frm_single_option' );
 
 		resetSingleOpt( field.fieldId, field.fieldKey, thisOpt );
 	}
 
 	function getFieldKeyFromOpt( object ) {
-		var allOpts = jQuery( object ).closest( '.frm_sortable_field_opts' ),
-			fieldId = allOpts.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_opts', '' ),
-			fieldKey = allOpts.data( 'key' );
+		var allOpts, fieldId, fieldKey;
+
+		allOpts = jQuery( object ).closest( '.frm_sortable_field_opts' );
+		if ( ! allOpts.length ) {
+			return false;
+		}
+
+		fieldId  = allOpts.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_opts', '' );
+		fieldKey = allOpts.data( 'key' );
 
 		return {
 			fieldId: fieldId,
@@ -4926,6 +4966,11 @@ function frmAdminBuildJS() {
 				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
+			/**
+			 * @since 5.0.04
+			 */
+			label = frmAdminBuild.hooks.applyFilters( 'frm_choice_field_label', label, fieldId, optVals[ i ], hasImageOptions );
+
 			checked = getChecked( optVals[ i ].id  );
 
 			optObj = {
@@ -5025,11 +5070,28 @@ function frmAdminBuildJS() {
 	 * Is the box checked to use images as options?
 	 */
 	function imagesAsOptions( fieldId ) {
-		return isChecked( 'image_options_' + fieldId );
+		var checked = false,
+			field = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
+
+		for ( var i = 0; i < field.length; i++ ) {
+			if ( field[ i ].checked ) {
+				checked = '0' !== field[ i ].value;
+			}
+		}
+
+		/**
+		 * @since 5.0.04
+		 */
+		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_images_as_options', checked, fieldId );
 	}
 
 	function showingLabelWithImage( fieldId ) {
-		return ! isChecked( 'hide_image_text_' + fieldId );
+		const isShowing = ! isChecked( 'hide_image_text_' + fieldId );
+
+		/**
+		 * @since 5.0.04
+		 */
+		return frmAdminBuild.hooks.applyFilters( 'frm_choice_field_showing_label_with_image', isShowing, fieldId );
 	}
 
 	function isChecked( id ) {
@@ -8319,6 +8381,12 @@ function frmAdminBuildJS() {
 			close: function() {
 				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
+
+				this.removeAttribute( 'data-option-type' );
+				const optionType = document.getElementById( 'bulk-option-type' );
+				if ( optionType ) {
+					optionType.value = '';
+				}
 			}
 		});
 
@@ -9387,6 +9455,18 @@ function frmAdminBuildJS() {
 				url = url + '&is_template=' + isTemplate;
 			}
 			location.href = url;
+		},
+
+		/**
+		 * @since 5.0.04
+		 */
+		hooks: {
+			applyFilters: function( hookName, ...args ) {
+				return wp.hooks.applyFilters( hookName, ...args );
+			},
+			addFilter: function( hookName, callback, priority ) {
+				return wp.hooks.addFilter( hookName, 'formidable', callback, priority );
+			}
 		}
 	};
 }

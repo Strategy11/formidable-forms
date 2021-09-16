@@ -139,6 +139,16 @@ class FrmField {
 				'name' => __( 'Embed Form', 'formidable' ),
 				'icon' => 'frm_icon_font frm_file_text_icon',
 			),
+			'likert'         => array(
+				'name'  => __( 'Likert Scale', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'addon' => 'surveys',
+			),
+			'nps'            => array(
+				'name'  => __( 'NPS', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
+				'addon' => 'surveys',
+			),
 			'password'       => array(
 				'name' => __( 'Password', 'formidable' ),
 				'icon' => 'frm_icon_font frm_lock_open_icon',

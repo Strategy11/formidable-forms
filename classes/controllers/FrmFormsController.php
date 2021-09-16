@@ -975,9 +975,18 @@ class FrmFormsController {
 
 		unset( $reset_fields );
 
-		$args             = array( 'parent_form_id' => $form->id );
-		$values           = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
-		$values['fields'] = $fields;
+		$args   = array( 'parent_form_id' => $form->id );
+		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
+
+		/**
+		 * Allows modifying the list of fields in the form builder.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param object[] $fields Array of fields.
+		 * @param array    $args   The arguments. Contains `form`.
+		 */
+		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
 
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 		if ( $form->is_template && $message == $edit_message ) {
@@ -1017,6 +1026,16 @@ class FrmFormsController {
 		$form   = FrmForm::getOne( $id );
 		$fields = FrmField::get_all_for_form( $id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
+
+		/**
+		 * Allows changing fields in the form settings.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields Array of fields.
+		 * @param array $args   The arguments. Contains `form`.
+		 */
+		$values['fields'] = apply_filters( 'frm_fields_in_settings', $values['fields'], compact( 'form' ) );
 
 		self::clean_submit_html( $values );
 
@@ -1183,7 +1202,17 @@ class FrmFormsController {
 	}
 
 	public static function mb_tags_box( $form_id, $class = '' ) {
-		$fields       = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+
+		/**
+		 * Allows modifying the list of fields in the tags box.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields The list of fields.
+		 * @param array $args   The arguments. Contains `form_id`.
+		 */
+		$fields       = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
 		$linked_forms = array();
 		$col          = 'one';
 		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' ) ? true : false;

@@ -100,7 +100,17 @@ if ( $display['clear_on_focus'] ) {
 	do_action( 'frm_extra_field_display_options', $field );
 }
 
-do_action( 'frm_before_field_options', $field );
+/**
+ * Fires after printing the primary options section of field.
+ *
+ * @since 5.0.04 Added `$display` and `$values`.
+ *
+ * @param array        $field     Field data.
+ * @param FrmFieldType $field_obj Field type object.
+ * @param array        $display   Display data.
+ * @param array        $values    Field values.
+ */
+do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 'values' ) );
 
 ?>
 
@@ -304,7 +314,7 @@ do_action( 'frm_before_field_options', $field );
 				<select name="field_options[type_<?php echo esc_attr( $field['id'] ); ?>]" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php foreach ( $field_types as $fkey => $ftype ) { ?>
 						<option value="<?php echo esc_attr( $fkey ); ?>" <?php echo ( $fkey === $field['type'] ) ? ' selected="selected"' : ''; ?> <?php echo array_key_exists( $fkey, $disabled_fields ) ? 'disabled="disabled"' : ''; ?>>
-							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?> 
+							<?php echo esc_html( is_array( $ftype ) ? $ftype['name'] : $ftype ); ?>
 						</option>
 						<?php
 						unset( $fkey, $ftype );
