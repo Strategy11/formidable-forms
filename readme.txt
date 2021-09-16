@@ -442,7 +442,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 == Changelog ==
 = 5.0.04 =
 * New: Custom HTML for errors is now also applied when validating with JavaScript.
-* New: Added a button to quickly save and reload after activiating a new plugin from the settings page.
+* New: Added a button to quickly save and reload after activating a new plugin from the settings page.
 * New: Added several new filters required to support the new new Formidable surveys add on.
 
 = 5.0.03 =
