@@ -8579,6 +8579,8 @@ function frmAdminBuildJS() {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
+			frmAdminBuild.inboxBannerInit();
+
 			if ( $newFields.length > 0 ) {
 				// only load this on the form builder page
 				frmAdminBuild.buildInit();
@@ -9313,6 +9315,40 @@ function frmAdminBuildJS() {
 				});
 				this.parentElement.remove();
 			});
+		},
+
+		inboxBannerInit: function() {
+			const banner = document.getElementById( 'frm_banner' );
+			if ( ! banner ) {
+				return;
+			}
+
+			const dismissButton = banner.querySelector( '.frm-banner-dismiss' );
+			document.addEventListener(
+				'click',
+				function( event ) {
+					if ( event.target !== dismissButton ) {
+						return;
+					}
+
+					const data = {
+						action: 'frm_inbox_dismiss',
+						key: banner.dataset.key,
+						nonce: frmGlobal.nonce
+					};
+					postAjax(
+						data,
+						function() {
+							jQuery( banner ).fadeOut(
+								400,
+								function() {
+									banner.remove();
+								}
+							);
+						}
+					);
+				}
+			);
 		},
 
 		updateOpts: function( fieldId, opts, modal ) {

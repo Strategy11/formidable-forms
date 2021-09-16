@@ -422,9 +422,15 @@ class FrmAppController {
 			self::admin_js();
 		}
 
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( 'add_new', 'list_templates' ), true ) ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=formidable&triggerNewFormModal=1' ) );
-			exit;
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			$action = FrmAppHelper::get_param( 'frm_action' );
+
+			if ( in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=formidable&triggerNewFormModal=1' ) );
+				exit;
+			}
+
+			FrmInbox::maybe_disable_screen_options();
 		}
 	}
 

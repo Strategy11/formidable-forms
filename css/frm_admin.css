@@ -8272,7 +8272,7 @@ Responsive Design
 
 #frm_field_group_popup .frm-row-layout-option.frm-active-row-layout,
 #frm_field_group_popup .frm-row-layout-option:hover {
-	outline: 1px solid #4199FD;
+	outline: 1px solid var(--primary-color);
 }
 
 .frm-custom-field-group-layout,
@@ -8352,4 +8352,40 @@ Responsive Design
 .frm-sortable-helper,
 .frm-multiselect-key-is-down li.form-field:not(.edit_field_type_divider) {
 	pointer-events: none;
+}
+
+#frm_banner {
+	width: 100%;
+	color: #fff;
+	background: var(--primary-color);
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	position: relative;
+}
+
+.frm-banner-emoji {
+	font-size: 19px;
+}
+
+.frm-banner-emoji,
+.frm-banner-title {
+	margin-right: 5px;
+	vertical-align: top;
+}
+
+.frm-banner-cta a {
+	text-decoration: underline !important;
+}
+
+.frm-banner-dismiss {
+	cursor: pointer;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY( -50% );
+}
+
+.frm-banner-dismiss .frmsvg {
+	vertical-align: top;
 }
