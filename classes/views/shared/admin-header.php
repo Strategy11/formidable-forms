@@ -11,6 +11,7 @@ if ( current_user_can( 'administrator' ) && ! FrmAppHelper::pro_is_installed() &
 	</div>
 	<?php
 }
+FrmInbox::maybe_show_banner();
 ?>
 <div id="frm_top_bar">
 	<?php if ( FrmAppHelper::is_full_screen() ) { ?>

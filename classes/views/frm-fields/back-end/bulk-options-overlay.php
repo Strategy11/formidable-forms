@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 			<textarea name="frm_bulk_options" id="frm_bulk_options"></textarea>
 			<input type="hidden" value="" id="bulk-field-id" />
-				
+			<input type="hidden" value="" id="bulk-option-type" />
+
 			<button class="button-primary frm-button-primary" id="frm-update-bulk-opts">
 				<?php esc_attr_e( 'Update Options', 'formidable' ); ?>
 			</button>
@@ -27,8 +28,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php esc_html_e( 'Insert Presets', 'formidable' ); ?>
 			</h3>
 			<ul class="frm_prepop">
-				<?php foreach ( $prepop as $label => $pop ) { ?>
-					<li>
+				<?php
+				foreach ( $prepop as $label => $pop ) {
+					if ( isset( $pop['class'] ) ) {
+						$class = $pop['class'];
+						unset( $pop['class'] );
+					} else {
+						$class = '';
+					}
+					?>
+					<li class="<?php echo esc_attr( $class ); ?>">
 						<a href="#" class="frm-insert-preset" data-opts="<?php echo esc_attr( json_encode( $pop ) ); ?>">
 							<?php echo esc_html( $label ); ?>
 						</a>

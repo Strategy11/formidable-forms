@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.03
+Stable tag: 5.0.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -27,7 +27,7 @@ Plus, we have optimized Formidable for speed and maximum server performance. We 
 
 You can start with our pre-built templates or create totally custom forms from scratch. All with an easy-to-use drag & drop form maker interface.
 
-https://www.youtube.com/watch?v=d2IPmicn2x8&rel=0
+https://www.youtube.com/watch?v=-eGuL_OWHw4&rel=0
 
 Let’s take a look at all the powerful features for making an amazing lead form, survey form, poll, subscription form, request a quote form, donation form, user registration form, or payment form.
 
@@ -440,6 +440,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.04 =
+* New: Custom HTML for errors is now also applied when validating with JavaScript.
+* New: Added a button to quickly save and reload after activating a new plugin from the settings page.
+* New: Added several new filters required to support the new new Formidable surveys add on.
+
 = 5.0.03 =
 * New: Added an Elementor widget.
 * New: When duplicating fields, most unsaved changes will now duplicate as well.
@@ -463,7 +468,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added the option to quickly set layouts for a full row of fields at once.
 * New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
 * New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
-* New: Permissions are now updated right away when a formidable license is activated to avoid issues with certain pro features not being available right away.
+* New: Permissions are now updated right away when a Formidable license is activated to avoid issues with certain pro features not being available right away.
 * Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
 * Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
 * Fix: Updated styling for new fields that are about to be dropped into a form.
@@ -477,10 +482,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
 * Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
 * Fix: The autocomplete page dropdown was not consistent with other styles.
-
-= 4.11.03 =
-* New: Name fields now work in the To and From settings for email actions.
-* Fix: Images were not properly loading when styles were loading via an AJAX request.
-* Fix: Zeros were not appearing in the entries list for repeaters.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

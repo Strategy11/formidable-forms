@@ -34,7 +34,16 @@ class FrmEntryValidate {
 			self::spam_check( $exclude, $values, $errors );
 		}
 
-		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude' ) );
+		/**
+		 * Allows modifying the validation errors after validating all fields.
+		 *
+		 * @since 5.0.04 Added `posted_fields` to the third param.
+		 *
+		 * @param array $errors Errors data.
+		 * @param array $values Value data of the form.
+		 * @param array $args   Custom arguments. Contains `exclude` and `posted_fields`.
+		 */
+		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude', 'posted_fields' ) );
 
 		return $errors;
 	}

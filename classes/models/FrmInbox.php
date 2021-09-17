@@ -14,6 +14,11 @@ class FrmInbox extends FrmFormApi {
 
 	private $messages = false;
 
+	/**
+	 * @param array
+	 */
+	private static $banner_messages;
+
 	public function __construct( $for_parent = null ) {
 		$this->set_cache_key();
 		$this->set_messages();
@@ -160,13 +165,19 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * Show different messages for different accounts.
+	 *
+	 * @param array $message
+	 * @return bool
 	 */
 	private function is_for_user( $message ) {
 		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
 			return true;
 		}
-
-		return in_array( $this->get_user_type(), (array) $message['who'] );
+		$who = (array) $message['who'];
+		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
+			return true;
+		}
+		return in_array( $this->get_user_type(), $who, true );
 	}
 
 	private function get_user_type() {
@@ -281,5 +292,34 @@ class FrmInbox extends FrmFormApi {
 
 	private function update_list() {
 		update_option( $this->option, $this->messages, 'no' );
+	}
+
+	public static function maybe_show_banner() {
+		if ( empty( self::$banner_messages ) ) {
+			return;
+		}
+		$message = end( self::$banner_messages );
+		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
+	}
+
+	public static function maybe_disable_screen_options() {
+		self::$banner_messages = self::get_banner_messages();
+		if ( self::$banner_messages ) {
+			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
+			add_filter( 'screen_options_show_screen', '__return_false' );
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_banner_messages() {
+		$inbox = new self();
+		return array_filter(
+			$inbox->get_messages( 'filter' ),
+			function( $message ) {
+				return ! empty( $message['banner'] );
+			}
+		);
 	}
 }
