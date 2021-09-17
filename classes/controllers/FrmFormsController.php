@@ -1110,6 +1110,16 @@ class FrmFormsController {
 					'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 				),
 			),
+			'chat'        => array(
+				'name'       => __( 'Chat Forms', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_chat_forms_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => array(
+					'medium'  => 'chat',
+					'upgrade' => __( 'Chat Forms', 'formidable' ),
+					'message' => __( 'Show questions one at a time in a more user friendly format.', 'formidable' ),
+				),
+			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
