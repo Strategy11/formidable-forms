@@ -8398,6 +8398,15 @@ Responsive Design
 	pointer-events: none;
 }
 
+.frm-new-pill {
+	background: #F47449;
+	border-radius: 13px;
+	padding: 2px 6px;
+	color: #fff;
+	margin-left: 5px;
+	font-size: 9px;
+}
+
 #frm_banner {
 	width: 100%;
 	color: #fff;
@@ -8432,13 +8441,4 @@ Responsive Design
 
 .frm-banner-dismiss .frmsvg {
 	vertical-align: top;
-}
-
-.frm-new-pill {
-	background: #F47449;
-	border-radius: 13px;
-	padding: 2px 6px;
-	color: #fff;
-	margin-left: 5px;
-	font-size: 9px;
 }
