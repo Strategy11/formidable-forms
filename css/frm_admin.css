@@ -8393,7 +8393,6 @@ Responsive Design
 	background: #C4C4C4;
 }
 
-
 .frm-sortable-helper,
 .frm-multiselect-key-is-down li.form-field:not(.edit_field_type_divider) {
 	pointer-events: none;
@@ -8433,4 +8432,13 @@ Responsive Design
 
 .frm-banner-dismiss .frmsvg {
 	vertical-align: top;
+}
+
+.frm-new-pill {
+	background: #F47449;
+	border-radius: 13px;
+	padding: 2px 6px;
+	color: #fff;
+	margin-left: 5px;
+	font-size: 9px;
 }

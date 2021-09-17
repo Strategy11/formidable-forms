@@ -1100,6 +1100,16 @@ class FrmFormsController {
 				'function' => 'buttons_settings',
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
+			'landing'     => array(
+				'name'       => __( 'Form Landing Page', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_file_text_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => array(
+					'medium'  => 'landing',
+					'upgrade' => __( 'Form Landing Pages', 'formidable' ),
+					'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
+				),
+			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
@@ -2221,6 +2231,21 @@ class FrmFormsController {
 	 */
 	private static function is_minification_on( $atts ) {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
+	}
+
+	public static function landing_page_preview_option() {
+		$dir = apply_filters( 'frm_landing_page_preview_option', false );
+		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
+			$dir = self::get_form_views_path();
+		}
+		include $dir . 'landing-page-preview-option.php';
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function get_form_views_path() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
 	}
 
 	/**
