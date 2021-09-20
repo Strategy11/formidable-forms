@@ -251,21 +251,9 @@ class FrmSettings {
 		$this->re_lang    = $params['frm_re_lang'];
 		$this->load_style = $params['frm_load_style'];
 
-		$previous_old_css_setting = $this->old_css;
-
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking', 'admin_bar' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
-		}
-
-		$this->maybe_remove_old_css_inbox_message( $previous_old_css_setting, $this->old_css );
-	}
-
-	private function maybe_remove_old_css_inbox_message( $previous_setting, $new_setting ) {
-		$enabled_css_grid = $previous_setting && ! $new_setting;
-		if ( $enabled_css_grid ) {
-			$inbox = new FrmInbox();
-			$inbox->remove( 'old_css' );
 		}
 	}
 

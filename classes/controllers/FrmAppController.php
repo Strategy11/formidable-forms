@@ -478,10 +478,7 @@ class FrmAppController {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_style( 'formidable-dropzone' );
 			} else {
-				$settings = FrmAppHelper::get_settings();
-				if ( empty( $settings->old_css ) ) {
-					wp_enqueue_style( 'formidable-grids' );
-				}
+				wp_enqueue_style( 'formidable-grids' );
 			}
 
 			if ( 'formidable-entries' === $page ) {
