@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.04
+Stable tag: 5.0.05
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.05 =
+* Deprecated the option to disable CSS Grids in form layouts.
+* Fix: JavaScript validation was failing for many fields with custom patterns to validate because extra conflicting HTML was sometimes being added to the check.
+* Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
+* Fix: Updating form padding so forms with custom padding don't appear small in the back end.
+
 = 5.0.04 =
 * New: Custom HTML for errors is now also applied when validating with JavaScript.
 * New: Added a button to quickly save and reload after activating a new plugin from the settings page.
@@ -476,11 +482,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 4.11.05 =
 * New: Improved support for importing grid and table view content.
 * Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
-
-= 4.11.04 =
-* New: The first field with an error will now automatically get focus when a form is submitted for better accessibility and improved user experience.
-* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
-* Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
-* Fix: The autocomplete page dropdown was not consistent with other styles.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
