@@ -6769,6 +6769,14 @@ ul .frm_col_two {
 	cursor: pointer;
 }
 
+.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li .frmsvg {
+	color: rgba(40, 47, 54, 0.85) !important;
+}
+
+.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li a {
+	padding: 3px 0;
+}
+
 #frm_field_group_controls .frm-dropdown-menu .frm_dropdown_li:hover,
 .frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li:hover {
 	background: #F6F7FB;

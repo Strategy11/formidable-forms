@@ -1954,6 +1954,9 @@ function frmAdminBuildJS() {
 				if ( null === ul ) {
 					return;
 				}
+				if ( null === ul.getAttribute( 'aria-label' ) ) {
+					ul.setAttribute( 'aria-label', __( 'More Options', 'formidable' ) );
+				}
 				if ( 0 === ul.children.length ) {
 					fillFieldActionDropdown( ul, true === isFieldGroup );
 				}
@@ -1981,18 +1984,21 @@ function frmAdminBuildJS() {
 		}
 		options.forEach(
 			function( option ) {
-				var li, span;
+				var li, anchor, span;
 				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
-				if ( 'frm_delete' === option.class ) {
-					// delete using a confirmation that will cause a redirect if href isn't set to #.
-					li.setAttribute( 'href', '#' );
-				}
+				li.classList.add( 'frm_dropdown_li' );
+
+				anchor = document.createElement( 'a' );
+				anchor.classList.add( option.class + classSuffix );
+				anchor.setAttribute( 'href', '#' );
+
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
-				li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
-				li.appendChild( document.createTextNode( ' ' ) );
-				li.appendChild( span );
+				anchor.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+				anchor.appendChild( document.createTextNode( ' ' ) );
+				anchor.appendChild( span );
+
+				li.appendChild( anchor );
 				ul.appendChild( li );
 			}
 		);
