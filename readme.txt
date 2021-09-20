@@ -444,7 +444,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Deprecated the option to disable CSS Grids in form layouts.
 * Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
 * Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
-* Fix: Updating form padding so forms with custom padding don't appear small in the back end.
+* Fix: Updated form padding on admin page so forms with custom padding don't appear small in the back end.
 
 = 5.0.04 =
 * New: Custom HTML for errors is now also applied when validating with JavaScript.
