@@ -124,7 +124,6 @@ class FrmUsage {
 		$pass_settings = array(
 			'load_style',
 			'use_html',
-			'old_css',
 			'fade_form',
 			'jquery_css',
 			're_type',
