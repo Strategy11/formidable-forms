@@ -750,9 +750,13 @@ class FrmFieldsController {
 			return false;
 		}
 
-		$error_body = substr( $custom_html, $start + 10, $end - $start - 10 );
-		if ( '<div class="frm_error" id="frm_error_field_[key]">[error]</div>' === $error_body ) {
-			// no custom HTML if the default is detected, so do nothing special.
+		$error_body   = substr( $custom_html, $start + 10, $end - $start - 10 );
+		$default_html = array(
+			'<div class="frm_error" id="frm_error_field_[key]">[error]</div>',
+			'<div class="frm_error">[error]</div>',
+		);
+
+		if ( in_array( $error_body, $default_html, true ) ) {
 			return false;
 		}
 
