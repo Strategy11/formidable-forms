@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.0.04\n"
+"Project-Id-Version: Formidable Forms 5.0.05\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-09-16T18:03:50+00:00\n"
+"POT-Creation-Date: 2021-09-20T16:50:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -137,7 +137,7 @@ msgstr ""
 
 #: classes/controllers/FrmAddonsController.php:21
 #: classes/controllers/FrmAddonsController.php:22
-#: classes/helpers/FrmFormsHelper.php:1328
+#: classes/helpers/FrmFormsHelper.php:1311
 #: classes/views/frm-fields/back-end/smart-values.php:16
 #: classes/views/shared/admin-header.php:33
 msgid "Upgrade"
@@ -272,23 +272,23 @@ msgstr ""
 msgid "Entry was Successfully Deleted"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:370
+#: classes/controllers/FrmFieldsController.php:340
 msgid "Default Value (Text)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:377
+#: classes/controllers/FrmFieldsController.php:347
 msgid "Default Value (Calculation)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:381
+#: classes/controllers/FrmFieldsController.php:351
 msgid "Calculator forms"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:386
+#: classes/controllers/FrmFieldsController.php:356
 msgid "Default Value (Lookup)"
 msgstr ""
 
-#: classes/controllers/FrmFieldsController.php:390
+#: classes/controllers/FrmFieldsController.php:360
 msgid "Lookup fields"
 msgstr ""
 
@@ -465,7 +465,7 @@ msgid "Date"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:897
-#: classes/helpers/FrmFormsHelper.php:1271
+#: classes/helpers/FrmFormsHelper.php:1254
 msgid "My Templates"
 msgstr ""
 
@@ -665,15 +665,11 @@ msgstr ""
 msgid "Inbox"
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:40
-msgid "Go to Global Settings"
-msgstr ""
-
-#: classes/controllers/FrmInboxController.php:57
+#: classes/controllers/FrmInboxController.php:38
 msgid "Dismiss All"
 msgstr ""
 
-#: classes/controllers/FrmInboxController.php:115
+#: classes/controllers/FrmInboxController.php:96
 msgid "Help Formidable improve with usage tracking"
 msgstr ""
 
@@ -1224,7 +1220,7 @@ msgstr ""
 #: classes/views/frm-forms/new-form-overlay.php:139
 #: classes/views/shared/admin-header.php:64
 #: classes/views/shared/confirm-overlay.php:19
-#: js/formidable_admin.js:3613
+#: js/formidable_admin.js:3619
 msgid "Cancel"
 msgstr ""
 
@@ -1251,7 +1247,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2514
 #: classes/helpers/FrmListHelper.php:405
-#: js/formidable_admin.js:3995
+#: js/formidable_admin.js:4001
 msgid "Heads up"
 msgstr ""
 
@@ -1352,7 +1348,7 @@ msgid "The parameter \"%s\" is reserved by WordPress. This may cause problems wh
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2544
-#: classes/helpers/FrmFormsHelper.php:1502
+#: classes/helpers/FrmFormsHelper.php:1485
 msgid "See the list of reserved words in WordPress."
 msgstr ""
 
@@ -1670,7 +1666,7 @@ msgid "Updated By"
 msgstr ""
 
 #: classes/helpers/FrmCSVExportHelper.php:227
-#: classes/helpers/FrmFormsHelper.php:1229
+#: classes/helpers/FrmFormsHelper.php:1212
 #: classes/helpers/FrmFormsListHelper.php:342
 msgid "Draft"
 msgstr ""
@@ -1759,7 +1755,7 @@ msgstr ""
 #: classes/helpers/FrmFormsHelper.php:1134
 #: classes/helpers/FrmFormsListHelper.php:133
 #: classes/views/frm-form-actions/form_action.php:25
-#: js/formidable_admin.js:2003
+#: js/formidable_admin.js:2009
 msgid "Delete"
 msgstr ""
 
@@ -3121,7 +3117,7 @@ msgid "Move Form to Trash"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1127
-#: classes/helpers/FrmFormsHelper.php:1230
+#: classes/helpers/FrmFormsHelper.php:1213
 #: classes/helpers/FrmFormsListHelper.php:158
 msgid "Trash"
 msgstr ""
@@ -3210,33 +3206,33 @@ msgstr ""
 msgid "Automatically capitalize the first letter in each word."
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1231
+#: classes/helpers/FrmFormsHelper.php:1214
 msgid "Published"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1315
+#: classes/helpers/FrmFormsHelper.php:1298
 msgid "Create Form"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1323
+#: classes/helpers/FrmFormsHelper.php:1306
 msgid "Renew"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1387
+#: classes/helpers/FrmFormsHelper.php:1370
 msgid "License plan required:"
 msgstr ""
 
-#: classes/helpers/FrmFormsHelper.php:1501
+#: classes/helpers/FrmFormsHelper.php:1484
 msgid "Is this intentional?"
 msgstr ""
 
 #. translators: %s: the name of a single parameter in the redirect URL
-#: classes/helpers/FrmFormsHelper.php:1511
+#: classes/helpers/FrmFormsHelper.php:1494
 msgid "The redirect URL is using the parameter \"%s\", which is reserved by WordPress. "
 msgstr ""
 
 #. translators: %s: the names of two or more parameters in the redirect URL, separated by commas
-#: classes/helpers/FrmFormsHelper.php:1517
+#: classes/helpers/FrmFormsHelper.php:1500
 msgid "The redirect URL is using the parameters \"%s\", which are reserved by WordPress. "
 msgstr ""
 
@@ -4488,7 +4484,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:19
-#: js/formidable_admin.js:7561
+#: js/formidable_admin.js:7567
 msgid "Close"
 msgstr ""
 
@@ -4772,7 +4768,7 @@ msgid "Conditional emails"
 msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:21
-#: js/formidable_admin.js:2009
+#: js/formidable_admin.js:2015
 msgid "Duplicate"
 msgstr ""
 
@@ -4898,6 +4894,7 @@ msgstr ""
 
 #: classes/views/frm-forms/add_field.php:29
 #: js/formidable_admin.js:1199
+#: js/formidable_admin.js:1958
 msgid "More Options"
 msgstr ""
 
@@ -5445,27 +5442,15 @@ msgstr ""
 msgid "Don't use form styling on any page"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:38
-msgid "Do not use CSS Grids for form layouts"
-msgstr ""
-
-#: classes/views/frm-settings/general.php:39
-msgid "Form layouts built using CSS grids that are not fully supported by older browsers like Internet Explorer. Leave this box unchecked for your layouts to look best in current browsers, but show in a single column in older browsers."
-msgstr ""
-
-#: classes/views/frm-settings/general.php:43
-msgid "Warning: This setting is deprecated. It will be removed when it is turned off."
-msgstr ""
-
-#: classes/views/frm-settings/general.php:52
+#: classes/views/frm-settings/general.php:37
 msgid "Other"
 msgstr ""
 
-#: classes/views/frm-settings/general.php:65
+#: classes/views/frm-settings/general.php:50
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
 msgstr ""
 
-#: classes/views/frm-settings/general.php:72
+#: classes/views/frm-settings/general.php:57
 msgid "Do not include Formidable in the admin bar."
 msgstr ""
 
@@ -6278,51 +6263,51 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: js/formidable_admin.js:1979
+#: js/formidable_admin.js:1982
 msgid "Field settings"
 msgstr ""
 
-#: js/formidable_admin.js:2003
+#: js/formidable_admin.js:2009
 msgid "Delete Group"
 msgstr ""
 
-#: js/formidable_admin.js:2009
+#: js/formidable_admin.js:2015
 msgid "Duplicate Group"
 msgstr ""
 
-#: js/formidable_admin.js:3321
+#: js/formidable_admin.js:3327
 msgid "Custom layout"
 msgstr ""
 
-#: js/formidable_admin.js:3335
+#: js/formidable_admin.js:3341
 msgid "Break into rows"
 msgstr ""
 
-#: js/formidable_admin.js:3344
+#: js/formidable_admin.js:3350
 msgid "Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:3598
+#: js/formidable_admin.js:3604
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/formidable_admin.js:3602
+#: js/formidable_admin.js:3608
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/formidable_admin.js:3618
+#: js/formidable_admin.js:3624
 msgid "Save"
 msgstr ""
 
-#: js/formidable_admin.js:3909
+#: js/formidable_admin.js:3915
 msgid "Merge into row"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:3997
+#: js/formidable_admin.js:4003
 msgid "Are you sure you want to delete these %1$s selected fields?"
 msgstr ""
 
-#: js/formidable_admin.js:7553
+#: js/formidable_admin.js:7559
 msgid "Save and Reload"
 msgstr ""
