@@ -128,7 +128,7 @@ class FrmCSVExportHelper {
 
 		$field_headings  = array();
 		$separate_values = array( 'user_id', 'file', 'data', 'date' );
-		if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, $separate_values, true ) ) {
+		if ( ! empty( $col->field_options['separate_value'] ) && ! in_array( $col->type, $separate_values, true ) ) {
 			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 		}
 
@@ -404,7 +404,12 @@ class FrmCSVExportHelper {
 					)
 				);
 
-				$row[ $col->id . '_label' ] = $sep_value;
+				if ( self::is_the_child_of_a_repeater( $col ) ) {
+					$row[ $col->id . '_label' ] = explode( self::$separator, $sep_value );
+				} else {
+					$row[ $col->id . '_label' ] = $sep_value;
+				}
+
 				unset( $sep_value );
 			}
 
