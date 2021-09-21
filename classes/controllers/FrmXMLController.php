@@ -571,6 +571,9 @@ class FrmXMLController {
 
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
 
+		// TODO reduce form cols if a subset of field ids is provided.
+		$form_cols = self::reduce_fields_for_csv_export( $form_cols );
+
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 		if ( ! empty( $item_id ) ) {
 			$item_id = explode( ',', $item_id );
@@ -602,6 +605,34 @@ class FrmXMLController {
 		}
 
 		wp_die();
+	}
+
+	private static function reduce_fields_for_csv_export( $form_cols ) {
+		if ( ! FrmCSVExportHelper::exporting_specific_columns_only() ) {
+			return $form_cols;
+		}
+
+		$ids = array_reduce(
+			FrmCSVExportHelper::get_custom_columns(),
+			function( $total, $id ) {
+				$id = absint( $id );
+				if ( $id ) {
+					$total[] = $id;
+				}
+				return $total;
+			},
+			array()
+		);
+		return array_reduce(
+			$form_cols,
+			function( $total, $form_col ) use ( $ids ) {
+				if ( in_array( (int) $form_col->id, $ids, true ) ) {
+					$total[] = $form_col;
+				}
+				return $total;
+			},
+			array()
+		);
 	}
 
 	/**

@@ -220,17 +220,70 @@ class FrmCSVExportHelper {
 			unset( $i );
 		}
 
-		$headings['created_at'] = __( 'Timestamp', 'formidable' );
-		$headings['updated_at'] = __( 'Last Updated', 'formidable' );
-		$headings['user_id']    = __( 'Created By', 'formidable' );
-		$headings['updated_by'] = __( 'Updated By', 'formidable' );
-		$headings['is_draft']   = __( 'Draft', 'formidable' );
-		$headings['ip']         = __( 'IP', 'formidable' );
-		$headings['id']         = __( 'ID', 'formidable' );
-		$headings['item_key']   = __( 'Key', 'formidable' );
-		if ( self::has_parent_id() ) {
-			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
+		if ( self::exporting_specific_columns_only() ) {
+			$keys = array_reduce(
+				self::get_custom_columns(),
+				function( $total, $id ) {
+					if ( ! is_numeric( $id ) ) {
+						$total[] = $id;
+					}
+					return $total;
+				},
+				array()
+			);
+		} else {
+			$keys = false;
 		}
+
+		$headings += self::get_headings( $keys );
+	}
+
+	public static function exporting_specific_columns_only() {
+		return isset( $_GET['columns'] );
+	}
+
+	public static function get_custom_columns() {
+		$ids_csv = FrmAppHelper::simple_get( 'columns', 'sanitize_text_field' );
+		return explode( ',', $ids_csv );
+	}
+
+	private static function get_headings( $keys = false ) {
+		$all_headings = array( 'created_at', 'updated_at', 'user_id', 'updated_by', 'is_draft', 'ip', 'id', 'item_key' );
+		if ( self::has_parent_id() ) {
+			$all_headings[] = 'parent_id';
+		}
+
+		$filtered_headings = array();
+		foreach ( $all_headings as $heading ) {
+			if ( false !== $keys && ! in_array( $heading, $keys, true ) ) {
+				continue;
+			}
+			$filtered_headings[ $heading ] = self::get_heading_label( $heading );
+		}
+
+		return $filtered_headings;
+	}
+
+	private static function get_heading_label( $heading ) {
+		switch ( $heading ) {
+			case 'created_at':
+				return __( 'Timestamp', 'formidable' );
+			case 'updated_at':
+				return __( 'Last Updated', 'formidable' );
+			case 'user_id':
+				return __( 'Created By', 'formidable' );
+			case 'updated_by':
+				return __( 'Updated By', 'formidable' );
+			case 'ip':
+				return __( 'IP', 'formidable' );
+			case 'id':
+				return __( 'ID', 'formidable' );
+			case 'item_key':
+				return __( 'Key', 'formidable' );
+			case 'parent_id':
+				return __( 'Parent ID', 'formidable' );
+		}
+		return '';
 	}
 
 	/**
