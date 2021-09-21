@@ -26,7 +26,7 @@
 	--biggest-sidebar: 450px;
 }
 
-.with_frm_style .frm_form_fields > fieldset {
+body:not(.frm-admin-page-styles) .with_frm_style .frm_form_fields > fieldset {
 	--fieldset-padding: 15px 0;
 }
 
