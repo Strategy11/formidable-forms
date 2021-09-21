@@ -211,15 +211,6 @@ class FrmCSVExportHelper {
 			unset( $flat );
 		}
 
-		if ( self::$comment_count ) {
-			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
-				$headings[ 'comment' . $i ]            = __( 'Comment', 'formidable' );
-				$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
-				$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
-			}
-			unset( $i );
-		}
-
 		if ( self::exporting_specific_columns_only() ) {
 			$keys = array_reduce(
 				self::get_custom_columns(),
@@ -233,6 +224,21 @@ class FrmCSVExportHelper {
 			);
 		} else {
 			$keys = false;
+		}
+
+		if ( self::$comment_count ) {
+			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
+				if ( false === $keys || in_array( 'comment', $keys, true ) ) {
+					$headings[ 'comment' . $i ] = __( 'Comment', 'formidable' );
+				}
+				if ( false === $keys || in_array( 'comment_user_id', $keys, true ) ) {
+					$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
+				}
+				if ( false === $keys || in_array( 'comment_created_at', $keys, true ) ) {
+					$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
+				}
+			}
+			unset( $i );
 		}
 
 		$headings += self::get_headings( $keys );
