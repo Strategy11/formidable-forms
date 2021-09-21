@@ -606,7 +606,7 @@ class FrmXMLController {
 	}
 
 	/**
-	 * if $_REQUEST['columns'] is passed, limit the export to only specific fields.
+	 * If $_REQUEST['columns'] is passed, limit the export to only specific fields.
 	 */
 	private static function maybe_reduce_fields_for_csv_export( $form_cols ) {
 		if ( ! FrmCSVExportHelper::exporting_specific_columns_only() ) {
