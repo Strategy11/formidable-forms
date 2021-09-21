@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a>
 
 		<div class="dropdown">
-			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body">
+			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" aria-expanded="false">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 			</a>
 			<ul class="frm-dropdown-menu" role="menu"></ul>

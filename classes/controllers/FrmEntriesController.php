@@ -110,6 +110,16 @@ class FrmEntriesController {
 	private static function get_columns_for_form( $form_id, &$columns ) {
 		$form_cols = FrmField::get_all_for_form( $form_id, '', 'include' );
 
+		/**
+		 * Allows changing fields in the Entries list table heading.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields  Array of fields.
+		 * @param array $args    The arguments. Contains `form_id`.
+		 */
+		$form_cols = apply_filters( 'frm_fields_in_entries_list_table', $form_cols, compact( 'form_id' ) );
+
 		foreach ( $form_cols as $form_col ) {
 			if ( FrmField::is_no_save_field( $form_col->type ) ) {
 				continue;
@@ -276,13 +286,24 @@ class FrmEntriesController {
 		);
 
 		foreach ( $fields as $field ) {
-			if ( $field->type != 'checkbox' && ( ! isset( $field->field_options['post_field'] ) || $field->field_options['post_field'] == '' ) ) {
-				// Can't sort on checkboxes because they are stored serialized, or post fields
+			if ( self::field_supports_sorting( $field ) ) {
 				$columns[ $form_id . '_' . $field->field_key ] = 'meta_' . $field->id;
 			}
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Can't sort on checkboxes because they are sorted serialized.
+	 * Some post content can be sorted but not everything.
+	 *
+	 * @param stdClass $field
+	 * @return bool
+	 */
+	private static function field_supports_sorting( $field ) {
+		$is_sortable = 'checkbox' !== $field->type && empty( $field->field_options['post_field'] );
+		return apply_filters( 'frm_field_column_is_sortable', $is_sortable, $field );
 	}
 
 	public static function hidden_columns( $result ) {

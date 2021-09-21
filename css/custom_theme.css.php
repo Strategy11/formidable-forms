@@ -1496,9 +1496,4 @@ select.frm_loading_lookup{
 }
 <?php
 
-$frm_settings = FrmAppHelper::get_settings();
-if ( $frm_settings->old_css ) {
-	readfile( dirname( __FILE__ ) . '/frm_old_grids.css' );
-}
-
 echo strip_tags( $defaults['custom_css'] ); // WPCS: XSS ok.

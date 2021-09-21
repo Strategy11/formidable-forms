@@ -139,6 +139,16 @@ class FrmField {
 				'name' => __( 'Embed Form', 'formidable' ),
 				'icon' => 'frm_icon_font frm_file_text_icon',
 			),
+			'likert'         => array(
+				'name'  => __( 'Likert Scale', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'addon' => 'surveys',
+			),
+			'nps'            => array(
+				'name'  => __( 'NPS', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
+				'addon' => 'surveys',
+			),
 			'password'       => array(
 				'name' => __( 'Password', 'formidable' ),
 				'icon' => 'frm_icon_font frm_lock_open_icon',
@@ -273,6 +283,47 @@ class FrmField {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Process the field duplication.
+	 *
+	 * @since 5.0.05
+	 */
+	public static function duplicate_single_field( $field_id, $form_id ) {
+		$copy_field = self::getOne( $field_id );
+		if ( ! $copy_field ) {
+			return false;
+		}
+
+		do_action( 'frm_duplicate_field', $copy_field, $form_id );
+		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
+
+		$values = array(
+			'id' => $copy_field->id,
+		);
+		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
+
+		$field_id = self::create( $values );
+
+		/**
+		 * Fires after duplicating a field.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $args {
+		 *     The arguments.
+		 *
+		 *     @type int    $field_id   New field ID.
+		 *     @type array  $values     Values before inserting.
+		 *     @type object $copy_field Copy field data.
+		 *     @type int    $form_id    Form ID.
+		 * }
+		 */
+		do_action( 'frm_after_duplicate_field', compact( 'field_id', 'values', 'copy_field', 'form_id' ) );
+
+		return compact( 'field_id', 'values' );
 	}
 
 	public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
