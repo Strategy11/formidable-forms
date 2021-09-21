@@ -238,15 +238,31 @@ class FrmCSVExportHelper {
 		$headings += self::get_headings( $keys );
 	}
 
+	/**
+	 * @since 5.0.06
+	 *
+	 * @return bool
+	 */
 	public static function exporting_specific_columns_only() {
 		return isset( $_GET['columns'] );
 	}
 
+	/**
+	 * @since 5.0.06
+	 *
+	 * @return array
+	 */
 	public static function get_custom_columns() {
 		$ids_csv = FrmAppHelper::get_param( 'columns', '', 'get', 'sanitize_text_field' );
 		return explode( ',', $ids_csv );
 	}
 
+	/**
+	 * @since 5.0.06
+	 *
+	 * @param array|false $keys
+	 * @return array
+	 */
 	private static function get_headings( $keys = false ) {
 		$all_headings = array( 'created_at', 'updated_at', 'user_id', 'updated_by', 'is_draft', 'ip', 'id', 'item_key' );
 		if ( self::has_parent_id() ) {
@@ -264,6 +280,12 @@ class FrmCSVExportHelper {
 		return $filtered_headings;
 	}
 
+	/**
+	 * @since 5.0.06
+	 *
+	 * @param string $heading
+	 * @return string
+	 */
 	private static function get_heading_label( $heading ) {
 		switch ( $heading ) {
 			case 'created_at':
