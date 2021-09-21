@@ -227,14 +227,17 @@ class FrmCSVExportHelper {
 		}
 
 		if ( self::$comment_count ) {
+			$include_comments           = false === $keys || in_array( 'comment', $keys, true );
+			$include_comment_user_id    = false === $keys || in_array( 'comment', $keys, true );
+			$include_comment_created_at = false === $keys || in_array( 'comment', $keys, true );
 			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
-				if ( false === $keys || in_array( 'comment', $keys, true ) ) {
+				if ( $include_comments ) {
 					$headings[ 'comment' . $i ] = __( 'Comment', 'formidable' );
 				}
-				if ( false === $keys || in_array( 'comment_user_id', $keys, true ) ) {
-					$headings[ 'comment_user_id' . $i ]    = __( 'Comment User', 'formidable' );
+				if ( $include_comment_user_id ) {
+					$headings[ 'comment_user_id' . $i ] = __( 'Comment User', 'formidable' );
 				}
-				if ( false === $keys || in_array( 'comment_created_at', $keys, true ) ) {
+				if ( $include_comment_created_at ) {
 					$headings[ 'comment_created_at' . $i ] = __( 'Comment Date', 'formidable' );
 				}
 			}
