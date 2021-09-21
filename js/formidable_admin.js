@@ -3018,13 +3018,6 @@ function frmAdminBuildJS() {
 		previewWrapper.find( 'input.frm_image_id' ).val( 0 ).trigger( 'change' );
 	}
 
-	function toggleBackgroundImageSettings() {
-		var $additionalSettings = jQuery( this ).closest( '.frm_image_preview_wrapper' ).next( '.frm_bg_image_additional_settings' );
-		if ( $additionalSettings.length ) {
-			$additionalSettings.toggleClass( 'frm_hidden', 0 === parseInt( this.value ) );
-		}
-	}
-
 	function toggleMultiselect() {
 		/*jshint validthis:true */
 		var dropdown = jQuery( this ).closest( 'li' ).find( '.frm_form_fields select' );
@@ -9339,7 +9332,6 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
-			jQuery( '.frm_image_preview_wrapper' ).on( 'change', 'input.frm_image_id', toggleBackgroundImageSettings );
 		},
 
 		customCSSInit: function() {
