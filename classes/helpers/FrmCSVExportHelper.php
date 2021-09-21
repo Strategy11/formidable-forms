@@ -228,8 +228,8 @@ class FrmCSVExportHelper {
 
 		if ( self::$comment_count ) {
 			$include_comments           = false === $keys || in_array( 'comment', $keys, true );
-			$include_comment_user_id    = false === $keys || in_array( 'comment', $keys, true );
-			$include_comment_created_at = false === $keys || in_array( 'comment', $keys, true );
+			$include_comment_user_id    = false === $keys || in_array( 'comment_user_id', $keys, true );
+			$include_comment_created_at = false === $keys || in_array( 'comment_created_at', $keys, true );
 			for ( $i = 0; $i < self::$comment_count; $i ++ ) {
 				if ( $include_comments ) {
 					$headings[ 'comment' . $i ] = __( 'Comment', 'formidable' );
