@@ -243,7 +243,7 @@ class FrmCSVExportHelper {
 	}
 
 	public static function get_custom_columns() {
-		$ids_csv = FrmAppHelper::simple_get( 'columns', 'sanitize_text_field' );
+		$ids_csv = FrmAppHelper::get_param( 'columns', '', 'get', 'sanitize_text_field' );
 		return explode( ',', $ids_csv );
 	}
 

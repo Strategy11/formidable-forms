@@ -570,9 +570,7 @@ class FrmXMLController {
 		$form_id = $form->id;
 
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
-
-		// TODO reduce form cols if a subset of field ids is provided.
-		$form_cols = self::reduce_fields_for_csv_export( $form_cols );
+		$form_cols = self::maybe_reduce_fields_for_csv_export( $form_cols );
 
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 		if ( ! empty( $item_id ) ) {
@@ -607,7 +605,10 @@ class FrmXMLController {
 		wp_die();
 	}
 
-	private static function reduce_fields_for_csv_export( $form_cols ) {
+	/**
+	 * if $_REQUEST['columns'] is passed, limit the export to only specific fields.
+	 */
+	private static function maybe_reduce_fields_for_csv_export( $form_cols ) {
 		if ( ! FrmCSVExportHelper::exporting_specific_columns_only() ) {
 			return $form_cols;
 		}
