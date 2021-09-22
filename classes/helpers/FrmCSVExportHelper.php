@@ -128,7 +128,7 @@ class FrmCSVExportHelper {
 
 		$field_headings  = array();
 		$separate_values = array( 'user_id', 'file', 'data', 'date' );
-		if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, $separate_values, true ) ) {
+		if ( ! empty( $col->field_options['separate_value'] ) && ! in_array( $col->type, $separate_values, true ) ) {
 			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 		}
 
@@ -391,27 +391,44 @@ class FrmCSVExportHelper {
 			);
 
 			if ( ! empty( $col->field_options['separate_value'] ) ) {
-				$sep_value = FrmEntriesHelper::display_value(
-					$field_value,
-					$col,
-					array(
-						'type'              => $col->type,
-						'post_id'           => self::$entry->post_id,
-						'show_icon'         => false,
-						'entry_id'          => self::$entry->id,
-						'sep'               => self::$separator,
-						'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
-					)
-				);
-
-				$row[ $col->id . '_label' ] = $sep_value;
-				unset( $sep_value );
+				$label_key = $col->id . '_label';
+				if ( self::is_the_child_of_a_repeater( $col ) ) {
+					$row[ $label_key ] = array();
+					foreach ( $field_value as $value ) {
+						$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
+					}
+				} else {
+					$row[ $label_key ] = self::get_separate_value_label( $field_value, $col );
+				}
+				unset( $label_key );
 			}
 
 			$row[ $col->id ] = $field_value;
 
 			unset( $col, $field_value );
 		}
+	}
+
+	/**
+	 * @since 5.0.06
+	 *
+	 * @param mixed    $field_value
+	 * @param stdClass $field
+	 * @return string
+	 */
+	private static function get_separate_value_label( $field_value, $field ) {
+		return FrmEntriesHelper::display_value(
+			$field_value,
+			$field,
+			array(
+				'type'              => $field->type,
+				'post_id'           => self::$entry->post_id,
+				'show_icon'         => false,
+				'entry_id'          => self::$entry->id,
+				'sep'               => self::$separator,
+				'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+			)
+		);
 	}
 
 	/**
