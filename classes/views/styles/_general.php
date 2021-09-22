@@ -43,11 +43,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <?php
-if ( FrmAppHelper::pro_is_installed() ) {
-	do_action( 'frm_style_settings_general_section_after_background', compact( 'frm_style', 'style' ) );
-} else {
-	FrmTipsHelper::pro_tip( 'get_bg_image_style_settings_tip' );
-}
+do_action( 'frm_style_settings_general_section_after_background', compact( 'frm_style', 'style' ) );
+FrmTipsHelper::pro_tip( 'get_bg_image_style_settings_tip' );
 ?>
 
 <p class="frm4 frm_first frm_form_field">
