@@ -391,16 +391,16 @@ class FrmCSVExportHelper {
 			);
 
 			if ( ! empty( $col->field_options['separate_value'] ) ) {
+				$label_key = $col->id . '_label';
 				if ( self::is_the_child_of_a_repeater( $col ) ) {
-					$label_key         = $col->id . '_label';
 					$row[ $label_key ] = array();
 					foreach ( $field_value as $value ) {
 						$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
 					}
-					unset( $label_key );
 				} else {
-					$row[ $col->id . '_label' ] = self::get_separate_value_label( $field_value, $col );
+					$row[ $label_key ] = self::get_separate_value_label( $field_value, $col );
 				}
+				unset( $label_key );
 			}
 
 			$row[ $col->id ] = $field_value;
