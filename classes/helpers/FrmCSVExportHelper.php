@@ -231,6 +231,8 @@ class FrmCSVExportHelper {
 		if ( self::has_parent_id() ) {
 			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
 		}
+
+		$headings = apply_filters( 'frm_export_csv_headings', $headings );
 	}
 
 	/**
