@@ -357,15 +357,13 @@ class FrmFieldCombo extends FrmFieldType {
 
 		if ( ! empty( $sub_field['optional'] ) ) {
 			$classes .= ' frm_optional';
+		} else {
+			$field['default_value'] = ''; // fake it to avoid printing frm-val attribute.
+			do_action( 'frm_field_input_html', $field );
 		}
 
 		if ( $classes ) {
 			$atts[] = 'class="' . esc_attr( $classes ) . '"';
-		}
-
-		// Required.
-		if ( FrmField::get_option( $field, 'required' ) ) {
-			$atts[] = 'aria-required="true"';
 		}
 
 		// Print custom attributes.
