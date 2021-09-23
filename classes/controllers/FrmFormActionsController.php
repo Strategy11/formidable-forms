@@ -224,6 +224,11 @@ class FrmFormActionsController {
 			if ( isset( $upgrading['url'] ) ) {
 				$data['data-oneclick'] = json_encode( $upgrading );
 			}
+
+			$requires = self::action_requires( $upgrading );
+			if ( $requires ) {
+				$data['data-requires'] = $requires;
+			}
 		}
 
 		// HTML to include on the icon.
@@ -234,7 +239,24 @@ class FrmFormActionsController {
 			);
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
+	}
+
+	/**
+	 * @param array $upgrading
+	 * @return string|false
+	 */
+	private static function action_requires( $upgrading ) {
+		if ( ! isset( $upgrading['categories'] ) || ! is_array( $upgrading['categories'] ) ) {
+			return false;
+		}
+		$plans = array( 'Business', 'Elite' );
+		foreach ( $upgrading['categories'] as $category ) {
+			if ( in_array( $category, $plans, true ) ) {
+				return $category;
+			}
+		}
+		return false;
 	}
 
 	public static function get_form_actions( $action = 'all' ) {
