@@ -588,6 +588,14 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function deleteTooltips() {
+		document.querySelectorAll( '.tooltip' ).forEach(
+			function( tooltip ) {
+				tooltip.remove();
+			}
+		);
+	}
+
 	function removeThisTag() {
 		/*jshint validthis:true */
 		var show, hide, removeMore,
@@ -1964,6 +1972,10 @@ function frmAdminBuildJS() {
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
 				}
+				const firstAnchor = ul.firstElementChild.querySelector( 'a' );
+				if ( firstAnchor ) {
+					firstAnchor.focus();
+				}
 			},
 			0
 		);
@@ -1986,11 +1998,12 @@ function frmAdminBuildJS() {
 			function( option ) {
 				var li, anchor, span;
 				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li' );
+				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li' );
 
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );
 				anchor.setAttribute( 'href', '#' );
+				anchor.setAttribute( 'tabindex', 1 );
 
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
@@ -4112,6 +4125,9 @@ function frmAdminBuildJS() {
 					} else {
 						$liWrapper.remove();
 					}
+
+					// prevent "More Options" tooltips from staying around after their target field is deleted.
+					deleteTooltips();
 				});
 			}
 		});

@@ -6762,23 +6762,35 @@ ul .frm_col_two {
 	font-size: 15px;
 }
 
-#frm_field_group_controls .frm-dropdown-menu .frm_dropdown_li,
-.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li {
-	padding: 5px 10px;
-	color: rgba(40, 47, 54, 0.85);
-	cursor: pointer;
+#frm_field_group_controls .frm-dropdown-menu,
+.frm-field-action-icons .frm-dropdown-menu {
+	padding: 0;
+	margin: 0;
 }
 
-.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li .frmsvg {
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li  {
+	padding: 0;
+	color: rgba(40, 47, 54, 0.85);
+	cursor: pointer;
+	position: relative;
+	height: 32px;
+}
+
+#frm_builder_page  .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li .frmsvg {
 	color: rgba(40, 47, 54, 0.85) !important;
 }
 
-.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li a {
-	padding: 3px 0;
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li  a {
+	padding: 6px 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	box-sizing: border-box;
 }
 
-#frm_field_group_controls .frm-dropdown-menu .frm_dropdown_li:hover,
-.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li:hover {
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li:hover {
 	background: #F6F7FB;
 }
 
