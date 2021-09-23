@@ -243,6 +243,8 @@ class FrmFormActionsController {
 	}
 
 	/**
+	 * @since 5.0.06
+	 *
 	 * @param array $upgrading
 	 * @return string|false
 	 */
