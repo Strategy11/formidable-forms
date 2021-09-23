@@ -357,10 +357,10 @@ class FrmFieldCombo extends FrmFieldType {
 
 		if ( ! empty( $sub_field['optional'] ) ) {
 			$classes .= ' frm_optional';
-		} else {
-			$field['default_value'] = ''; // fake it to avoid printing frm-val attribute.
-			do_action( 'frm_field_input_html', $field );
 		}
+
+		$field['default_value'] = ''; // fake it to avoid printing frm-val attribute.
+		do_action( 'frm_field_input_html', $field );
 
 		if ( $classes ) {
 			$atts[] = 'class="' . esc_attr( $classes ) . '"';
