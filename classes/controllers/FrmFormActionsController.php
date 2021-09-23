@@ -252,10 +252,13 @@ class FrmFormActionsController {
 		if ( ! isset( $upgrading['categories'] ) || ! is_array( $upgrading['categories'] ) ) {
 			return false;
 		}
-		$plans = array( 'Business', 'Elite' );
+		$plans = array( 'Business', 'Elite', 'Personal' );
 		foreach ( $upgrading['categories'] as $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				return $category;
+			}
+			if ( 'Creator' === $category ) {
+				return 'Personal';
 			}
 		}
 		return false;
