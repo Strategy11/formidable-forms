@@ -38,6 +38,7 @@ zip -r $zipname $destination \
 	-x "*/.github/*" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
+	-x "*/css/*.css.map" \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
 	-x "*/composer.lock" \
