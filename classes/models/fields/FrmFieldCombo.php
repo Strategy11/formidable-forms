@@ -363,6 +363,11 @@ class FrmFieldCombo extends FrmFieldType {
 			$atts[] = 'class="' . esc_attr( $classes ) . '"';
 		}
 
+		// Required.
+		if ( FrmField::get_option( $field, 'required' ) ) {
+			$atts[] = 'aria-required="true"';
+		}
+
 		// Print custom attributes.
 		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
 			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
