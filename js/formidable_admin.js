@@ -1191,8 +1191,19 @@ function frmAdminBuildJS() {
 	}
 
 	function setFieldControlsHtml( controls ) {
-		controls.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>';
-		controls.innerHTML += '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>';
+		var layoutOption, moveOption;
+
+		layoutOption = document.createElement( 'span' );
+		layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
+		makeTabbable( layoutOption, __( 'Set Row Layout', 'formidable' ) );
+
+		moveOption = document.createElement( 'span' );
+		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		makeTabbable( moveOption, __( 'Move Field Group', 'formidable' ) );
+
+		controls.innerHTML = '';
+		controls.appendChild( layoutOption );
+		controls.appendChild( moveOption );
 		controls.appendChild( getFieldControlsDropdown() );
 	}
 
@@ -1207,6 +1218,7 @@ function frmAdminBuildJS() {
 		trigger.setAttribute( 'title', __( 'More Options', 'formidable' ) );
 		trigger.setAttribute( 'data-toggle', 'dropdown' );
 		trigger.setAttribute( 'data-container', 'body' );
+		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
 		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
@@ -2003,7 +2015,7 @@ function frmAdminBuildJS() {
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );
 				anchor.setAttribute( 'href', '#' );
-				anchor.setAttribute( 'tabindex', 1 );
+				makeTabbable( anchor );
 
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
@@ -3264,6 +3276,11 @@ function frmAdminBuildJS() {
 		popupWrapper.style.position = 'relative';
 		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup, this ) );
 		this.parentNode.appendChild( popupWrapper );
+
+		const firstLayoutOption = popupWrapper.querySelector( '.frm-row-layout-option' );
+		if ( firstLayoutOption ) {
+			firstLayoutOption.focus();
+		}
 	}
 
 	function destroyFieldGroupPopupOnOutsideClick( event ) {
@@ -3340,7 +3357,16 @@ function frmAdminBuildJS() {
 		option.textContent = __( 'Custom layout', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_gear_svg' ) );
 		option.classList.add( 'frm-custom-field-group-layout' );
+		makeTabbable( option );
 		return option;
+	}
+
+	function makeTabbable( element, ariaLabel ) {
+		element.setAttribute( 'tabindex', 1 );
+		element.setAttribute( 'role', 'button' );
+		if ( 'undefined' !== typeof ariaLabel ) {
+			element.setAttribute( 'aria-label', ariaLabel );
+		}
 	}
 
 	function getIconClone( iconId ) {
@@ -3354,6 +3380,7 @@ function frmAdminBuildJS() {
 		option.textContent = __( 'Break into rows', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_break_field_group_svg' ) );
 		option.classList.add( 'frm-break-field-group' );
+		makeTabbable( option );
 		return option;
 	}
 
@@ -3392,6 +3419,7 @@ function frmAdminBuildJS() {
 
 		option = div();
 		option.classList.add( 'frm-row-layout-option' );
+		makeTabbable( option, type );
 
 		switch ( size ) {
 			case 6:
@@ -3643,6 +3671,16 @@ function frmAdminBuildJS() {
 		wrapper.appendChild( buttonsWrapper );
 
 		popup.appendChild( wrapper );
+
+		setTimeout(
+			function() {
+				const firstInput = popup.querySelector( 'input.frm-custom-grid-size-input' ).focus();
+				if ( firstInput ) {
+					firstInput.focus();
+				}
+			},
+			0
+		);
 	}
 
 	function customFieldGroupLayoutInsideMergeClick() {
