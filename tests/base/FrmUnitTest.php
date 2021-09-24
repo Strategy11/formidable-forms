@@ -198,7 +198,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 				$filename = basename( $val );
 				$path     = $uploads_dir . $filename;
 				if ( file_exists( $path ) ) {
-					error_log( '-- found a repeat file, saved a call to CDN. --' );
 					if ( ! is_array( $media_ids ) ) {
 						$media_ids = array();
 					}
