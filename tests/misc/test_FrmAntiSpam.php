@@ -7,7 +7,7 @@ class test_FrmAntiSpam extends FrmUnitTest {
 
 	private $antispam;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$form_id        = $this->factory->form->create();
 		$this->antispam = new FrmAntiSpam( $form_id );

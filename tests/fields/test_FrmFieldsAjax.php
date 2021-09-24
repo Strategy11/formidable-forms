@@ -10,7 +10,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	protected $user_id = 0;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		// Set a user so the $post has 'post_author'

@@ -39,7 +39,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::empty_tables();
 	}
 
-	public function setUp() {
+	public function setUp(): void {
 		self::$instance = $this;
 		parent::setUp();
 

@@ -36,7 +36,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	protected $entry = null;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->contact_form = $this->factory->form->get_object_by_id( $this->email_form_key );
