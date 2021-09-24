@@ -73,7 +73,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		$returned = ob_get_contents();
 		ob_end_clean();
 
-		$this->assertContains( 'Your styling settings have been saved.', $returned );
+		$this->assertNotFalse( strpos( $returned, 'Your styling settings have been saved.' ) );
 		$frm_style = new FrmStyle( $style->ID );
 		$updated_style = $frm_style->get_one();
 		$this->assertEquals( $style->post_title . ' Updated', $updated_style->post_title );

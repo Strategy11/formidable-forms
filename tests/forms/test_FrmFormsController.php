@@ -178,7 +178,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
-		$this->assertContains( "window.location='http://example.com'", $response );
+		$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
 	}
 
 	/**
@@ -220,9 +220,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
 
 		if ( $show_form ) {
-			$this->assertContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+			$this->assertNotFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
 		} else {
-			$this->assertNotContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+			$this->assertFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
 		}
 	}
 
