@@ -486,7 +486,7 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function check_content_type( $expected, $mock_email ) {
-		$this->assertFalse( strpos( $mock_email['header'], $expected['content_type'] ), 'Content type does not match expected.' );
+		$this->assertNotFalse( strpos( $mock_email['header'], $expected['content_type'] ), 'Content type does not match expected.' );
 	}
 
 	protected function check_no_cc_included( $mock_email ) {
@@ -494,7 +494,7 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function check_no_bcc_included( $mock_email ) {
-		$this->assertFalse( strpos( $mock_email['header'] ,'Bcc:' ), 'BCC is included when it should not be.' );
+		$this->assertFalse( strpos( $mock_email['header'], 'Bcc:' ), 'BCC is included when it should not be.' );
 	}
 
 	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
