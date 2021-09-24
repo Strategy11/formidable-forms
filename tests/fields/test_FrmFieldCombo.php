@@ -280,7 +280,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 		$atts = ob_get_clean();
 
-		$this->assertEquals( $atts, 'class="frm-class1 frm-class2 frm_optional"' );
+		$this->assertEquals( $atts, ' class="frm-class1 frm-class2 frm_optional"  ' );
 
 		$sub_field = array(
 			'name'    => 'forth',
