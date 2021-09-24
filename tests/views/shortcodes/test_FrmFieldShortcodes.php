@@ -10,7 +10,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 	protected $test_form;
 	protected $test_entry;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->test_form = $this->get_form_for_test();
