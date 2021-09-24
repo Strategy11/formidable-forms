@@ -24,9 +24,6 @@ jobs:
           - php: 7.0.33
             wordpress: 4.9
             phpunit: 6.5.14
-          - php: 5.6.20
-            wordpress: 4.7
-            phpunit: 5.7.27
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
