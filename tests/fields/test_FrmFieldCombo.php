@@ -250,6 +250,8 @@ class test_FrmFieldCombo extends FrmUnitTest {
 			),
 		);
 
+		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
+
 		ob_start();
 		$this->run_private_method(
 			array( $combo_field, 'print_input_atts' ),
