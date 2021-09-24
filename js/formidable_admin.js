@@ -1182,6 +1182,8 @@ function frmAdminBuildJS() {
 
 			controls = div();
 			controls.id = 'frm_field_group_controls';
+			controls.setAttribute( 'role', 'group' );
+			controls.setAttribute( 'tabindex', 0 );
 			setFieldControlsHtml( controls );
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
@@ -1195,16 +1197,34 @@ function frmAdminBuildJS() {
 
 		layoutOption = document.createElement( 'span' );
 		layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
-		makeTabbable( layoutOption, __( 'Set Row Layout', 'formidable' ) );
+		const layoutOptionLabel = __( 'Set Row Layout', 'formidable' );
+		addTooltip( layoutOption, layoutOptionLabel );
+		makeTabbable( layoutOption, layoutOptionLabel );
 
 		moveOption = document.createElement( 'span' );
 		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
-		makeTabbable( moveOption, __( 'Move Field Group', 'formidable' ) );
+		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
+		addTooltip( moveOption, moveOptionLabel );
+		makeTabbable( moveOption, moveOptionLabel );
 
 		controls.innerHTML = '';
 		controls.appendChild( layoutOption );
 		controls.appendChild( moveOption );
 		controls.appendChild( getFieldControlsDropdown() );
+	}
+
+	function addTooltip( element, title ) {
+		element.setAttribute( 'data-toggle', 'tooltip' );
+		element.setAttribute( 'data-container', 'body' );
+		element.setAttribute( 'title', title );
+		element.addEventListener(
+			'mouseover',
+			function() {
+				if ( null === element.getAttribute( 'data-original-title' ) ) {
+					jQuery( element ).tooltip();
+				}
+			}
+		);
 	}
 
 	function getFieldControlsDropdown() {
@@ -3362,7 +3382,7 @@ function frmAdminBuildJS() {
 	}
 
 	function makeTabbable( element, ariaLabel ) {
-		element.setAttribute( 'tabindex', 1 );
+		element.setAttribute( 'tabindex', 0 );
 		element.setAttribute( 'role', 'button' );
 		if ( 'undefined' !== typeof ariaLabel ) {
 			element.setAttribute( 'aria-label', ariaLabel );
