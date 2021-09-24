@@ -296,7 +296,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 		$atts = ob_get_clean();
 
-		$this->assertEquals( $atts, '' );
+		$this->assertEquals( $atts, '   ' );
 	}
 
 	public function test_get_export_headings() {
