@@ -23,16 +23,16 @@ class test_FrmStylesController extends FrmUnitTest {
 		ob_end_clean();
 		$this->assertNotEmpty( $styles );
 
-		$frm_settings = FrmAppHelper::get_settings();
+		$frm_settings    = FrmAppHelper::get_settings();
 		$stylesheet_urls = $this->get_custom_stylesheet();
-		$css_html = "<link rel='stylesheet' id='formidable-css'";
+		$css_html        = "<link rel='stylesheet' id='formidable-css'";
 
-		if ( $frm_settings->load_style == 'all' ) {
-			$this->assertContains( $css_html, $styles, 'The formidablepro stylesheet is missing' );
+		if ( $frm_settings->load_style === 'all' ) {
+			$this->assertNotFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
 			//$this->assertContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is missing' );
 		} else {
-			$this->assertNotContains( $css_html, $styles, 'The formidablepro stylesheet is missing' );
-			$this->assertNotContains( $stylesheet_urls['formidable'], $styles, 'The formidablepro stylesheet is included when it should not be' );
+			$this->assertFalse( strpos( $styles, $css_html ), 'The formidablepro stylesheet is missing' );
+			$this->assertFalse( strpos( $styles, $stylesheet_urls['formidable'] ), 'The formidablepro stylesheet is included when it should not be' );
 		}
 	}
 

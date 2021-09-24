@@ -171,7 +171,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		if ( headers_sent() ) {
 			// since headers are sent by phpunit, we will get the js redirect
-			$this->assertContains( "window.location='http://example.com'", $response );
+			$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
 		}
 
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
@@ -216,8 +216,8 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertContains( '<div class="frm_message" role="status"><p>Done!</p>', $response );
-		$this->assertContains( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
+		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
+		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
 
 		if ( $show_form ) {
 			$this->assertContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
