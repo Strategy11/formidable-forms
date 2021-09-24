@@ -21,7 +21,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 		FrmUnitTest::wpTearDownAfterClass();
 	}
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		FrmHooksController::trigger_load_hook( 'load_ajax_hooks' );
