@@ -432,6 +432,9 @@ BEFORE_HTML;
 			return;
 		}
 
+		/**
+		 * @since 5.0.06
+		 */
 		$button       = apply_filters( 'frm_submit_button_html', $button );
 		$button_parts = explode( '[button_action]', $button );
 
