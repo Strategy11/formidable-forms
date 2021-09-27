@@ -442,13 +442,13 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 == Changelog ==
 = 5.0.06 =
 - New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
-- New: When clicking an inactive action that requires pro, the required pro version will be properly shown in the popup.
+- New: When clicking an inactive action that requires pro, the required pro license will be properly shown in the popup.
 - New: Added new frm_fields_to_validate and frm_fields_for_csv_export filters.
 - Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
 - Fix: The caret icon on the dropdown was not positioned properly for the Formidable Gutenberg block.
-- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing.
+- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing as empty with no content.
 - Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
-- Fix: Required name fields were not showing error message when JavaScript validation was enabled.
+- Fix: Required name fields were not showing error messages when JavaScript validation was enabled.
 
 = 5.0.05 =
 * Deprecated the option to disable CSS Grids in form layouts.
