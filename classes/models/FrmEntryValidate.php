@@ -67,7 +67,17 @@ class FrmEntryValidate {
 			$where['fi.type not'] = $exclude;
 		}
 
-		return FrmField::getAll( $where, 'field_order' );
+		$fields = FrmField::getAll( $where, 'field_order' );
+
+		/**
+		 * Allows modifying fields to validate.
+		 *
+		 * @since 5.0.06
+		 *
+		 * @param array $fields List of fields.
+		 * @param array $args   Includes `values`, `exclude`, `where`.
+		 */
+		return apply_filters( 'frm_fields_to_validate', $fields, compact( 'values', 'exclude', 'where' ) );
 	}
 
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
