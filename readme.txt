@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.05
+Stable tag: 5.0.06
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,16 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.06 =
+- New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
+- New: When clicking an inactive action that requires pro, the required pro version will be properly shown in the popup.
+- New: Added new frm_fields_to_validate and frm_fields_for_csv_export filters.
+- Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
+- Fix: The caret icon on the dropdown was positioned funny for the Formidable Gutenberg block.
+- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing.
+- Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
+- Fix: Required name fields were not showing error message when JavaScript validation was enabled.
+
 = 5.0.05 =
 * Deprecated the option to disable CSS Grids in form layouts.
 * Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
@@ -478,9 +488,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
 * Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
 * Fix: Updated styling for new fields that are about to be dropped into a form.
-
-= 4.11.05 =
-* New: Improved support for importing grid and table view content.
-* Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
