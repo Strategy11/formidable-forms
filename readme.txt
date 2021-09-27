@@ -445,7 +445,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - New: When clicking an inactive action that requires pro, the required pro version will be properly shown in the popup.
 - New: Added new frm_fields_to_validate and frm_fields_for_csv_export filters.
 - Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
-- Fix: The caret icon on the dropdown was positioned funny for the Formidable Gutenberg block.
+- Fix: The caret icon on the dropdown was not positioned properly for the Formidable Gutenberg block.
 - Fix: When clicking the Formidable media button in Elementor, the pop up was appearing.
 - Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
 - Fix: Required name fields were not showing error message when JavaScript validation was enabled.
