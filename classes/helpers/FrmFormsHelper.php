@@ -432,6 +432,7 @@ BEFORE_HTML;
 			return;
 		}
 
+		$button       = apply_filters( 'frm_submit_button_html', $button );
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
