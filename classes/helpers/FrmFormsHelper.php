@@ -432,6 +432,7 @@ BEFORE_HTML;
 			return;
 		}
 
+		$button       = apply_filters( 'frm_submit_button_html', $button );
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
@@ -444,8 +445,6 @@ BEFORE_HTML;
 				$button_parts[0] .= ' class="' . esc_attr( $classes ) . '"';
 			}
 		}
-
-		$button_parts = apply_filters( 'frm_submit_button_parts', $button_parts );
 
 		echo $button_parts[0]; // WPCS: XSS ok.
 		do_action( 'frm_submit_button_action', $form, $form_action );
