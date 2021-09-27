@@ -12,18 +12,19 @@ name: PHPUnit
 jobs:
   build-test:
     runs-on: ubuntu-18.04
+     env:
+      WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
       matrix:
         include:
-          - php: 7.4
-            wordpress: master
-            phpunit: 6.5.14
           - php: 7.3
             wordpress: master
-            phpunit: 6.5.14
-          - php: 7.0.33
-            wordpress: 5.8
-            phpunit: 6.5.14
+            phpunit: 7.5.20
+            multisite: 0
+          - php: 7.2
+            wordpress: master
+            phpunit: 7.5.20
+            multisite: 1
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
