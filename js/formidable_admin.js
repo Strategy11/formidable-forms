@@ -588,6 +588,14 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function deleteTooltips() {
+		document.querySelectorAll( '.tooltip' ).forEach(
+			function( tooltip ) {
+				tooltip.remove();
+			}
+		);
+	}
+
 	function removeThisTag() {
 		/*jshint validthis:true */
 		var show, hide, removeMore,
@@ -1174,6 +1182,8 @@ function frmAdminBuildJS() {
 
 			controls = div();
 			controls.id = 'frm_field_group_controls';
+			controls.setAttribute( 'role', 'group' );
+			controls.setAttribute( 'tabindex', 0 );
 			setFieldControlsHtml( controls );
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
@@ -1183,9 +1193,38 @@ function frmAdminBuildJS() {
 	}
 
 	function setFieldControlsHtml( controls ) {
-		controls.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>';
-		controls.innerHTML += '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>';
+		var layoutOption, moveOption;
+
+		layoutOption = document.createElement( 'span' );
+		layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
+		const layoutOptionLabel = __( 'Set Row Layout', 'formidable' );
+		addTooltip( layoutOption, layoutOptionLabel );
+		makeTabbable( layoutOption, layoutOptionLabel );
+
+		moveOption = document.createElement( 'span' );
+		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
+		addTooltip( moveOption, moveOptionLabel );
+		makeTabbable( moveOption, moveOptionLabel );
+
+		controls.innerHTML = '';
+		controls.appendChild( layoutOption );
+		controls.appendChild( moveOption );
 		controls.appendChild( getFieldControlsDropdown() );
+	}
+
+	function addTooltip( element, title ) {
+		element.setAttribute( 'data-toggle', 'tooltip' );
+		element.setAttribute( 'data-container', 'body' );
+		element.setAttribute( 'title', title );
+		element.addEventListener(
+			'mouseover',
+			function() {
+				if ( null === element.getAttribute( 'data-original-title' ) ) {
+					jQuery( element ).tooltip();
+				}
+			}
+		);
 	}
 
 	function getFieldControlsDropdown() {
@@ -1199,6 +1238,7 @@ function frmAdminBuildJS() {
 		trigger.setAttribute( 'title', __( 'More Options', 'formidable' ) );
 		trigger.setAttribute( 'data-toggle', 'dropdown' );
 		trigger.setAttribute( 'data-container', 'body' );
+		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
 		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
@@ -1964,6 +2004,10 @@ function frmAdminBuildJS() {
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
 				}
+				const firstAnchor = ul.firstElementChild.querySelector( 'a' );
+				if ( firstAnchor ) {
+					firstAnchor.focus();
+				}
 			},
 			0
 		);
@@ -1986,11 +2030,12 @@ function frmAdminBuildJS() {
 			function( option ) {
 				var li, anchor, span;
 				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li' );
+				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li' );
 
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );
 				anchor.setAttribute( 'href', '#' );
+				makeTabbable( anchor );
 
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
@@ -3251,6 +3296,11 @@ function frmAdminBuildJS() {
 		popupWrapper.style.position = 'relative';
 		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup, this ) );
 		this.parentNode.appendChild( popupWrapper );
+
+		const firstLayoutOption = popupWrapper.querySelector( '.frm-row-layout-option' );
+		if ( firstLayoutOption ) {
+			firstLayoutOption.focus();
+		}
 	}
 
 	function destroyFieldGroupPopupOnOutsideClick( event ) {
@@ -3327,7 +3377,16 @@ function frmAdminBuildJS() {
 		option.textContent = __( 'Custom layout', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_gear_svg' ) );
 		option.classList.add( 'frm-custom-field-group-layout' );
+		makeTabbable( option );
 		return option;
+	}
+
+	function makeTabbable( element, ariaLabel ) {
+		element.setAttribute( 'tabindex', 0 );
+		element.setAttribute( 'role', 'button' );
+		if ( 'undefined' !== typeof ariaLabel ) {
+			element.setAttribute( 'aria-label', ariaLabel );
+		}
 	}
 
 	function getIconClone( iconId ) {
@@ -3341,6 +3400,7 @@ function frmAdminBuildJS() {
 		option.textContent = __( 'Break into rows', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_break_field_group_svg' ) );
 		option.classList.add( 'frm-break-field-group' );
+		makeTabbable( option );
 		return option;
 	}
 
@@ -3379,6 +3439,7 @@ function frmAdminBuildJS() {
 
 		option = div();
 		option.classList.add( 'frm-row-layout-option' );
+		makeTabbable( option, type );
 
 		switch ( size ) {
 			case 6:
@@ -3630,6 +3691,16 @@ function frmAdminBuildJS() {
 		wrapper.appendChild( buttonsWrapper );
 
 		popup.appendChild( wrapper );
+
+		setTimeout(
+			function() {
+				const firstInput = popup.querySelector( 'input.frm-custom-grid-size-input' ).focus();
+				if ( firstInput ) {
+					firstInput.focus();
+				}
+			},
+			0
+		);
 	}
 
 	function customFieldGroupLayoutInsideMergeClick() {
@@ -4112,6 +4183,9 @@ function frmAdminBuildJS() {
 					} else {
 						$liWrapper.remove();
 					}
+
+					// prevent "More Options" tooltips from staying around after their target field is deleted.
+					deleteTooltips();
 				});
 			}
 		});
