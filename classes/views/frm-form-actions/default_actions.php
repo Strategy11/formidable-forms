@@ -117,10 +117,10 @@ class FrmDefHubspotAction extends FrmFormAction {
 
 		$action_ops['message'] = '';
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$action_ops['message'] .= __( 'The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?', 'formidable' );
+			$action_ops['message'] .= __( 'The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?', 'formidable' ) . '<br/><br/>';
 		}
 		$link                   = FrmAppHelper::admin_upgrade_link( 'add-action', 'go/hubspot-signup/' );
-		$action_ops['message'] .= '<br/><br/><a href="' . esc_url( $link ) .'" target="_blank" rel="noopener" class="button button-secondary frm-button-secondary">Get Free HubSpot Account</a>';
+		$action_ops['message'] .= '<a href="' . esc_url( $link ) .'" target="_blank" rel="noopener" class="button button-secondary frm-button-secondary">Get Free HubSpot Account</a>';
 		parent::__construct( 'hubspot', 'Hubspot', $action_ops );
 	}
 }
