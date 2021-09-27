@@ -445,6 +445,8 @@ BEFORE_HTML;
 			}
 		}
 
+		$button_parts = apply_filters( 'frm_submit_button_parts', $button_parts );
+
 		echo $button_parts[0]; // WPCS: XSS ok.
 		do_action( 'frm_submit_button_action', $form, $form_action );
 		echo $button_parts[1]; // WPCS: XSS ok.
