@@ -12,7 +12,7 @@ name: PHPUnit
 jobs:
   build-test:
     runs-on: ubuntu-18.04
-     env:
+    env:
       WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
       matrix:
