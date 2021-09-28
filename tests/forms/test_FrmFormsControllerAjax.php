@@ -5,7 +5,7 @@
  */
 class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );

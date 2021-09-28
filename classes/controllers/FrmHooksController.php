@@ -93,7 +93,8 @@ class FrmHooksController {
 		 */
 		add_filter( 'frm_keep_name_value_array', '__return_true' );
 
-		add_action( 'elementor/widgets/widgets_registered', 'FrmHooksController::register_elementor_hooks' );
+		// Elementor.
+		add_action( 'elementor/widgets/widgets_registered', 'FrmElementorController::register_elementor_hooks' );
 	}
 
 	public static function load_admin_hooks() {
@@ -131,6 +132,10 @@ class FrmHooksController {
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
+
+		// Elementor.
+		add_action( 'elementor/editor/footer', 'FrmElementorController::admin_init' );
+
 		add_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 		add_action( 'et_pb_admin_excluded_shortcodes', 'FrmFormsController::prevent_divi_conflict' );
 
@@ -248,17 +253,11 @@ class FrmHooksController {
 		add_filter( 'wpmu_drop_tables', 'FrmAppController::drop_tables' );
 	}
 
+	/**
+	 * @deprecated 5.0.06 use FrmElementorController::register_elementor_hooks directly.
+	 */
 	public static function register_elementor_hooks() {
-		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmElementorWidget.php';
-		\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new \FrmElementorWidget() );
-
-		if ( is_admin() ) {
-			add_action(
-				'elementor/editor/after_enqueue_styles',
-				function() {
-					wp_enqueue_style( 'font_icons', FrmAppHelper::plugin_url() . '/css/font_icons.css', array(), FrmAppHelper::plugin_version() );
-				}
-			);
-		}
+		_deprecated_function( __FUNCTION__, '5.0.06', 'FrmElementorController::register_elementor_hooks' );
+		FrmElementorController::register_elementor_hooks();
 	}
 }

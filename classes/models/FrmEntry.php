@@ -69,6 +69,9 @@ class FrmEntry {
 			return false;
 		}
 
+		global $frm_vars;
+		$frm_vars['checking_duplicates'] = true;
+
 		$is_duplicate = false;
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
@@ -115,6 +118,8 @@ class FrmEntry {
 				break;
 			}
 		}
+
+		$frm_vars['checking_duplicates'] = false;
 
 		return $is_duplicate;
 	}

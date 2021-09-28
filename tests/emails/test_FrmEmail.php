@@ -36,7 +36,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 */
 	protected $entry = null;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->contact_form = $this->factory->form->get_object_by_id( $this->email_form_key );
@@ -467,8 +467,8 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function check_senders( $expected, $mock_email ) {
-		$this->assertContains( 'From: ' . $expected['from'], $mock_email['header'], 'From does not match expected.' );
-		$this->assertContains( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'], 'Reply-to does not match expected.' );
+		$this->assertNotFalse( strpos( $mock_email['header'], 'From: ' . $expected['from'] ), 'From does not match expected.' );
+		$this->assertNotFalse( strpos( $mock_email['header'], 'Reply-To: ' . $expected['reply_to'] ), 'Reply-to does not match expected.' );
 	}
 
 	protected function check_subject( $expected, $mock_email ) {
@@ -486,15 +486,15 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function check_content_type( $expected, $mock_email ) {
-		$this->assertContains( $expected['content_type'], $mock_email['header'], 'Content type does not match expected.' );
+		$this->assertNotFalse( strpos( $mock_email['header'], $expected['content_type'] ), 'Content type does not match expected.' );
 	}
 
 	protected function check_no_cc_included( $mock_email ) {
-		$this->assertNotContains( 'Cc:', $mock_email['header'], 'CC is included when it should not be.' );
+		$this->assertFalse( strpos( $mock_email['header'], 'Cc:' ), 'CC is included when it should not be.' );
 	}
 
 	protected function check_no_bcc_included( $mock_email ) {
-		$this->assertNotContains( 'Bcc:', $mock_email['header'], 'BCC is included when it should not be.' );
+		$this->assertFalse( strpos( $mock_email['header'], 'Bcc:' ), 'BCC is included when it should not be.' );
 	}
 
 	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
@@ -656,10 +656,10 @@ class test_FrmEmail extends FrmUnitTest {
 			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual = $this->get_private_property( $email, 'message' );
 
-			if ( $setting['compare'] == 'Contains' ) {
-				$this->assertContains( 'Referrer:', $actual );
+			if ( $setting['compare'] === 'Contains' ) {
+				$this->assertNotFalse( strpos( $actual, 'Referrer:' ) );
 			} else {
-				$this->assertNotContains( 'Referrer:', $actual );
+				$this->assertFalse( strpos( $actual, 'Referrer:' ) );
 			}
 		}
 	}
@@ -668,7 +668,7 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmEmail::set_message
 	 */
 	public function test_plain_text_message() {
-		$action = $this->email_action;
+		$action                                = $this->email_action;
 		$action->post_content['email_message'] = 'Value <br/>with HTML';
 
 		$settings = array(
@@ -678,9 +678,9 @@ class test_FrmEmail extends FrmUnitTest {
 
 		foreach ( $settings as $setting => $expected ) {
 			$action->post_content['plain_text'] = $setting;
-			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
-			$actual = $this->get_private_property( $email, 'message' );
-			$this->assertContains( $expected, $actual );
+			$email                              = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$actual                             = $this->get_private_property( $email, 'message' );
+			$this->assertNotFalse( strpos( $actual, $expected ) );
 		}
 	}
 
@@ -693,8 +693,8 @@ class test_FrmEmail extends FrmUnitTest {
 
 		foreach ( $settings as $setting => $expected ) {
 			$action->post_content[ $setting_name ] = $setting;
-			$email = new FrmEmail( $action, $this->entry, $this->contact_form );
-			$actual = $this->get_private_property( $email, $property );
+			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$actual                                = $this->get_private_property( $email, $property );
 			$this->assertEquals( $expected, $actual );
 		}
 	}
