@@ -232,6 +232,14 @@ class FrmTipsHelper {
 				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
 			),
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'bg-image-style-settings',
+				),
+				'tip'  => __( 'Want to add a background image?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
 		);
 
 		return $tips;
@@ -316,20 +324,6 @@ class FrmTipsHelper {
 		$tip['num'] = $random;
 
 		return $tip;
-	}
-
-	public static function get_bg_image_style_settings_tip() {
-		$tips = array(
-			array(
-				'link' => array(
-					'content' => 'style',
-					'param'   => 'bg-image-style-settings',
-				),
-				'tip'  => __( 'Want to add a background image?', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
-			),
-		);
-		return $tips;
 	}
 
 	public static function get_random_tip( $tips ) {

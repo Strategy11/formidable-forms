@@ -5700,7 +5700,7 @@ function frmAdminBuildJS() {
 			button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
 			link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
 			content = this.getAttribute( 'data-content' );
-			if ( content === undefined ) {
+			if ( content === null ) {
 				content = '';
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
