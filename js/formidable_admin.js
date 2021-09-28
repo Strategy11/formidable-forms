@@ -5725,10 +5725,14 @@ function frmAdminBuildJS() {
 			newMessage = link.getAttribute( 'data-message' ),
 			button = document.getElementById( 'frm-oneclick-button' ),
 			showIt = 'block',
+			showMsg = 'block',
 			hideIt = 'none';
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
+			if ( newMessage === null ) {
+				showMsg = 'none';
+			}
 			showIt = 'none';
 			hideIt = 'block';
 			oneclick = JSON.parse( oneclick );
@@ -5753,7 +5757,7 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm-addon-status' ).style.display = 'none';
 		oneclickMessage.style.display = hideIt;
 		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
-		upgradeMessage.style.display = showIt;
+		upgradeMessage.style.display = showMsg;
 		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
 	}
 

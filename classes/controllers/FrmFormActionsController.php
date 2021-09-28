@@ -204,7 +204,7 @@ class FrmFormActionsController {
 		/* translators: %s: Name of form action */
 		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
 
-		$default_shown    = array( 'wppost', 'register', 'paypal', 'payment', 'mailchimp' );
+		$default_shown    = array( 'wppost', 'register', 'paypal', 'payment', 'hubspot' );
 		$default_shown    = array_values( array_diff( $default_shown, $allowed ) );
 		$default_position = array_search( $action_control->id_base, $default_shown );
 		$allowed_count    = count( $allowed );
@@ -223,6 +223,10 @@ class FrmFormActionsController {
 			$upgrading = FrmAddonsController::install_link( $action_control->action_options['plugin'] );
 			if ( isset( $upgrading['url'] ) ) {
 				$data['data-oneclick'] = json_encode( $upgrading );
+			}
+
+			if ( isset( $action_control->action_options['message'] ) ) {
+				$data['data-message'] = $action_control->action_options['message'];
 			}
 
 			$requires = self::action_requires( $upgrading );
