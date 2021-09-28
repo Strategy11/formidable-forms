@@ -69,6 +69,8 @@ class FrmStylesController {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
 
+		wp_enqueue_script( 'wp-color-picker-alpha', FrmAppHelper::plugin_url() . '/js/wp-color-picker-alpha.js', array( 'wp-color-picker' ), $version, true );
+
 		$style = apply_filters( 'frm_style_head', false );
 		if ( $style ) {
 			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) . '&' . http_build_query( $style->post_content ), array(), $version );

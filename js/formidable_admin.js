@@ -9285,6 +9285,8 @@ function frmAdminBuildJS() {
 		},
 
 		styleInit: function() {
+			const debouncedPreviewUpdate = debounce( changeStyling, 100 );
+
 			collapseAllSections();
 
 			document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
@@ -9293,8 +9295,13 @@ function frmAdminBuildJS() {
 
 			jQuery( 'input.hex' ).wpColorPicker({
 				change: function( event ) {
-					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
-					jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+					if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+						debouncedPreviewUpdate();
+						return;
+					} else {
+						const hexcolor = jQuery( this ).wpColorPicker( 'color' );
+						jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+					}
 				}
 			});
 			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
@@ -9318,7 +9325,7 @@ function frmAdminBuildJS() {
 			}
 
 			// update styling on change
-			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debounce( changeStyling, 100 ) );
+			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).on( 'click', function( e ) {

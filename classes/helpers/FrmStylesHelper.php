@@ -432,7 +432,10 @@ class FrmStylesHelper {
 		$color = trim( $color );
 		if ( empty( $color ) ) {
 			$color = $default;
-		} elseif ( strpos( $color, '#' ) === false ) {
+		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
+			$color = str_replace( 'rgb(', 'rgba(', $color );
+			$color = str_replace( ')', ',1)', $color );
+		} elseif ( strpos( $color, '#' ) === false && false === strpos( $color, 'rgba(' ) ) {
 			$color = '#' . $color;
 		}
 	}
