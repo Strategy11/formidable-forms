@@ -327,7 +327,10 @@ function frmAdminBuildJS() {
 		autoId = 0,
 		optionMap = {},
 		lastNewActionIdReturned = 0,
-		__ = wp.i18n.__;
+		__ = wp.i18n.__,
+		moveModeState = {
+			active: false
+		};
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -1274,7 +1277,7 @@ function frmAdminBuildJS() {
 				return;
 			}
 
-			moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+			moveFieldSettingForField( fieldId );
 			layoutClassesInput = document.getElementById( 'frm_classes_' + fieldId );
 
 			if ( null === layoutClassesInput ) {
@@ -1303,6 +1306,11 @@ function frmAdminBuildJS() {
 
 			jQuery( layoutClassesInput ).trigger( 'change' );
 		};
+	}
+
+	function moveFieldSettingForField( fieldId ) {
+		const setting = document.getElementById( 'frm-single-settings-' + fieldId );
+		moveFieldSettings( setting );
 	}
 
 	function getLayoutClasses() {
@@ -2576,7 +2584,7 @@ function frmAdminBuildJS() {
 		popProductFields( productFieldOpt );
 		// in order to move its settings to that LHS panel where
 		// the update form resides, else it'll lose this setting
-		moveFieldSettings( document.getElementById( 'frm-single-settings-' + fieldId ) );
+		moveFieldSettingForField( fieldId );
 	}
 
 	/**
@@ -4320,8 +4328,6 @@ function frmAdminBuildJS() {
 			valueSelect,
 			opts,
 			fieldIds,
-			settingId,
-			setting,
 			optionMatches,
 			option;
 
@@ -4391,10 +4397,43 @@ function frmAdminBuildJS() {
 		}
 
 		for ( fieldIndex in fieldIds ) {
-			settingId = fieldIds[ fieldIndex ];
-			setting = document.getElementById( 'frm-single-settings-' + settingId );
-			moveFieldSettings( setting );
+			moveFieldSettingForField(
+				fieldIds[ fieldIndex ]
+			);
 		}
+	}
+
+	function handleMoveClick() {
+		// TODO target could be a field or a field group.
+		const isMovingFieldGroup = null !== this.closest( '#frm_field_group_controls' );
+		const rowWrapper = this.closest( 'ul' ).parentNode;
+		initiateMoveMode( rowWrapper );
+	}
+
+	function initiateMoveMode( wrapper ) {
+		moveModeState.active = true;
+		moveModeState.wrapper = wrapper;
+		document.addEventListener( 'keyup', moveModeAction );
+	}
+
+	function moveModeAction( event ) {
+		event = event || window.event;
+
+		if ( 38 !== event.keyCode && 40 !== event.keyCode ) {
+			return;
+		}
+
+		const wrapper = moveModeState.wrapper;
+		const up = 38 === event.keyCode;
+		if ( up ) {
+			wrapper.parentNode.insertBefore( wrapper, wrapper.previousElementSibling );
+		} else { // down
+			if ( wrapper.nextElementSibling && wrapper.nextElementSibling.nextElementSibling ) {
+				wrapper.parentNode.insertBefore( wrapper, wrapper.nextElementSibling.nextElementSibling );
+			}
+		}
+
+		updateFieldOrder();
 	}
 
 	function updateGetValueFieldSelection() {
@@ -5336,9 +5375,7 @@ function frmAdminBuildJS() {
 
 				if ( currentOrder != newOrder ) {
 					field.val( newOrder );
-					singleField = document.getElementById( 'frm-single-settings-' + fieldId );
-
-					moveFieldSettings( singleField );
+					moveFieldSettingForField( fieldId );
 					fieldUpdated();
 				}
 			}
@@ -8971,6 +9008,8 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus );
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
+
+			$newFields.on( 'click', '.frm-move', handleMoveClick );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
