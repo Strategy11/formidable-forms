@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm4 frm_form_field frm_end">
 	<label><?php esc_html_e( 'Background', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" <?php do_action( 'frm_fieldset_bg_color_atts' ); ?> value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', 'fieldset_bg_color' ); ?> />
 </p>
 
 <?php
@@ -63,7 +63,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 
 <p class="frm4 frm_form_field">
 	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_color' ) ); ?>" id="frm_fieldset_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_color' ) ); ?>" id="frm_fieldset_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'fieldset_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">
