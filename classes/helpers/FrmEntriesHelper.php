@@ -293,7 +293,7 @@ class FrmEntriesHelper {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
 
-		if ( self::should_truncate( $atts ) ) {
+		if ( $atts['truncate'] && $atts['type'] != 'url' ) {
 			$value = FrmAppHelper::truncate( $value, 50 );
 		}
 
@@ -302,17 +302,6 @@ class FrmEntriesHelper {
 		}
 
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
-	}
-
-	/**
-	 * @param array $atts
-	 * @return bool
-	 */
-	private static function should_truncate( $atts ) {
-		if ( empty( $atts['truncate'] ) || 'url' === $atts['type'] ) {
-			return false;
-		}
-		return ! is_numeric( $atts['truncate'] ) || 1 === (int) $atts['truncate'];
 	}
 
 	public static function set_posted_value( $field, $value, $args ) {
