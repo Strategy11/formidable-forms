@@ -3773,6 +3773,14 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: calc(100% - 73px);
 }
 
+.frm-right-panel.styling_settings .frm_image_preview_wrapper {
+	width: 100%;
+}
+
+.frm-right-panel.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
+	margin-left: 0;
+}
+
 .frm-right-panel .frm_single_option a.frm_remove_tag,
 .frm_single_option a {
 	padding-left: 7px;
