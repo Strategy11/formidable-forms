@@ -409,7 +409,7 @@ class FrmField {
 		// serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
-				$values[ $opt ] = FrmAppHelper::maybe_filter_array( $values, array( 'custom_html' ) );
+				$values[ $opt ] = FrmAppHelper::maybe_filter_array( $values[ $opt ], array( 'custom_html' ) );
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
