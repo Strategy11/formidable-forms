@@ -2958,7 +2958,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function maybe_filter_array( $values, $keys ) {
-		$allow_unfiltered_html = FrmAppHelper::allow_unfiltered_html();
+		$allow_unfiltered_html = self::allow_unfiltered_html();
 
 		if ( $allow_unfiltered_html ) {
 			return $values;
