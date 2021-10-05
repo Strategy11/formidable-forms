@@ -2943,6 +2943,8 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 5.0.07
+	 *
 	 * @return bool true if the current user is allowed to save unfiltered HTML.
 	 */
 	public static function allow_unfiltered_html() {
@@ -2953,6 +2955,8 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 5.0.07
+	 *
 	 * @param array $values
 	 * @param array $keys
 	 * @return array
