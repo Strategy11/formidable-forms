@@ -651,7 +651,7 @@ class FrmAppHelper {
 	private static function allowed_html( $allowed ) {
 		$html         = self::safe_html();
 		$allowed_html = array();
-		if ( $allowed == 'all' ) {
+		if ( $allowed === 'all' ) {
 			$allowed_html = $html;
 		} elseif ( ! empty( $allowed ) ) {
 			foreach ( (array) $allowed as $a ) {
@@ -754,10 +754,11 @@ class FrmAppHelper {
 			),
 			'section'    => $allow_class,
 			'span'       => array(
-				'class' => true,
-				'id'    => true,
-				'title' => true,
-				'style' => true,
+				'class'       => true,
+				'id'          => true,
+				'title'       => true,
+				'style'       => true,
+				'aria-hidden' => true,
 			),
 			'strike'     => array(),
 			'strong'     => array(),
@@ -781,6 +782,18 @@ class FrmAppHelper {
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
+			'label'      => array(
+				'for'    => true,
+				'class' => true,
+				'id'    => true,
+			),
+			'button'     => array(
+				'class' => true,
+				'type'  => true,
+			),
+			'legend'     => array(
+				'class' => true,
+			),
 		);
 	}
 
@@ -2940,6 +2953,41 @@ class FrmAppHelper {
 		 * @param array  $args       The arguments of images_dropdown() method, with `option` array is added.
 		 */
 		return apply_filters( 'frm_images_dropdown_option_html_attrs', $html_attrs, $args );
+	}
+
+	/**
+	 * @since 5.0.07
+	 *
+	 * @return bool true if the current user is allowed to save unfiltered HTML.
+	 */
+	public static function allow_unfiltered_html() {
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			return false;
+		}
+		return current_user_can( 'unfiltered_html' );
+	}
+
+	/**
+	 * @since 5.0.07
+	 *
+	 * @param array $values
+	 * @param array $keys
+	 * @return array
+	 */
+	public static function maybe_filter_array( $values, $keys ) {
+		$allow_unfiltered_html = self::allow_unfiltered_html();
+
+		if ( $allow_unfiltered_html ) {
+			return $values;
+		}
+
+		foreach ( $keys as $key ) {
+			if ( isset( $values[ $key ] ) ) {
+				$values[ $key ] = self::kses( $values[ $key ], 'all' );
+			}
+		}
+
+		return $values;
 	}
 
 	/**

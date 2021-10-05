@@ -126,6 +126,8 @@ class FrmForm {
 	public static function update( $id, $values, $create_link = false ) {
 		global $wpdb;
 
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
+
 		if ( ! isset( $values['status'] ) && ( $create_link || isset( $values['options'] ) || isset( $values['item_meta'] ) || isset( $values['field_options'] ) ) ) {
 			$values['status'] = 'published';
 		}
@@ -183,6 +185,7 @@ class FrmForm {
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
 		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		$options               = FrmAppHelper::maybe_filter_array( $options, array( 'submit_value', 'success_msg', 'before_html', 'after_html', 'submit_html' ) );
 		$new_values['options'] = serialize( $options );
 
 		return $new_values;

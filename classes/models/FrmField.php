@@ -384,7 +384,8 @@ class FrmField {
 	public static function update( $id, $values ) {
 		global $wpdb;
 
-		$id = absint( $id );
+		$id     = absint( $id );
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		if ( isset( $values['field_key'] ) ) {
 			$values['field_key'] = FrmAppHelper::get_unique_key( $values['field_key'], $wpdb->prefix . 'frm_fields', 'field_key', $id );
@@ -399,7 +400,7 @@ class FrmField {
 		if ( isset( $values['type'] ) ) {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
 
-			if ( $values['type'] == 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
 				// don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
@@ -408,6 +409,7 @@ class FrmField {
 		// serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
+				$values[ $opt ] = FrmAppHelper::maybe_filter_array( $values[ $opt ], array( 'custom_html' ) );
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
