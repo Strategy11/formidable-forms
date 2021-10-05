@@ -240,6 +240,14 @@ class FrmTipsHelper {
 				'tip'  => __( 'Want to add a background image?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'bg-image-style-settings',
+				),
+				'tip'  => __( 'Want to set a color with an alpha slider?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
 		);
 
 		return $tips;
