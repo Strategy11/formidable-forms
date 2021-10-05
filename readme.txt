@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.06
+Stable tag: 5.0.07
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.07 =
+- Security: Unsafe HTML will now be stripped from field labels, descriptions, and custom HTML, as well as form titles, descriptions, custom submit text, custom submit HTML, before HTML, after HTML, and success message if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- New: Added new frm_akismet_values filter to help improve Akismet integration.
+- Fix: The Akismet API was getting called is Akismet was set up even if the form had Akismet turned off.
+- Fix: Updated the styling when a field option is being dragged and dropped.
+
 = 5.0.06 =
 - New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
 - New: When clicking an inactive action that requires pro, the required pro license will be properly shown in the popup.
@@ -477,16 +483,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added search to form fields in the builder to make finding a specific field easier.
 * Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
 * Fix: Added truncation to long form keys during duplication to avoid issues with duplicating when the generated key was too long.
-
-= 5.0 =
-* Increased WP version requirement to 5.0.
-* New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
-* New: Added the option to quickly set layouts for a full row of fields at once.
-* New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
-* New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
-* New: Permissions are now updated right away when a Formidable license is activated to avoid issues with certain pro features not being available right away.
-* Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
-* Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
-* Fix: Updated styling for new fields that are about to be dropped into a form.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
