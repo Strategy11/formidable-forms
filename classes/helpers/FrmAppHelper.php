@@ -651,7 +651,7 @@ class FrmAppHelper {
 	private static function allowed_html( $allowed ) {
 		$html         = self::safe_html();
 		$allowed_html = array();
-		if ( $allowed == 'all' ) {
+		if ( $allowed === 'all' ) {
 			$allowed_html = $html;
 		} elseif ( ! empty( $allowed ) ) {
 			foreach ( (array) $allowed as $a ) {
@@ -754,10 +754,11 @@ class FrmAppHelper {
 			),
 			'section'    => $allow_class,
 			'span'       => array(
-				'class' => true,
-				'id'    => true,
-				'title' => true,
-				'style' => true,
+				'class'       => true,
+				'id'          => true,
+				'title'       => true,
+				'style'       => true,
+				'aria-hidden' => true,
 			),
 			'strike'     => array(),
 			'strong'     => array(),
@@ -781,6 +782,18 @@ class FrmAppHelper {
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
+			'label' => array(
+				'for'   => true,
+				'class' => true,
+				'id'    => true,
+			),
+			'button' => array(
+				'class' => true,
+				'type'  => true,
+			),
+			'legend' => array(
+				'class' => true,
+			)
 		);
 	}
 
@@ -2962,7 +2975,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function maybe_filter_array( $values, $keys ) {
-		$allow_unfiltered_html = self::allow_unfiltered_html();
+		$allow_unfiltered_html = false;//self::allow_unfiltered_html();
 
 		if ( $allow_unfiltered_html ) {
 			return $values;
