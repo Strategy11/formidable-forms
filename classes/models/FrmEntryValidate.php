@@ -255,7 +255,7 @@ class FrmEntryValidate {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		} elseif ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		} elseif ( self::is_akismet_spam( $values ) && self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
+		} elseif ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 	}
@@ -304,7 +304,7 @@ class FrmEntryValidate {
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		return ( isset( $form->options['akismet'] ) && ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
+		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
 	public static function blacklist_check( $values ) {
