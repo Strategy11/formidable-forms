@@ -384,20 +384,8 @@ class FrmField {
 	public static function update( $id, $values ) {
 		global $wpdb;
 
-		$id = absint( $id );
-
-		$allow_unfiltered_html = FrmAppHelper::allow_unfiltered_html();
-		$filter_all_html       = ! $allow_unfiltered_html;
-
-		$filter_keys = array();
-		if ( $filter_all_html ) {
-			$filter_keys = array( 'name', 'description' );
-		}
-		foreach ( $filter_keys as $key ) {
-			if ( isset( $values[ $key ] ) ) {
-				$values[ $key ] = FrmAppHelper::kses( $values[ $key ], 'all' );
-			}
-		}
+		$id     = absint( $id );
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		if ( isset( $values['field_key'] ) ) {
 			$values['field_key'] = FrmAppHelper::get_unique_key( $values['field_key'], $wpdb->prefix . 'frm_fields', 'field_key', $id );
@@ -421,6 +409,7 @@ class FrmField {
 		// serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
+				$values[ $opt ] = FrmAppHelper::maybe_filter_array( $values, array( 'custom_html' ) );
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}

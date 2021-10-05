@@ -2953,6 +2953,27 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param array $values
+	 * @param array $keys
+	 * @return array
+	 */
+	public static function maybe_filter_array( $values, $keys ) {
+		$allow_unfiltered_html = FrmAppHelper::allow_unfiltered_html();
+
+		if ( $allow_unfiltered_html ) {
+			return $values;
+		}
+
+		foreach ( $keys as $key ) {
+			if ( isset( $values[ $key ] ) ) {
+				$values[ $key ] = self::kses( $values[ $key ], 'all' );
+			}
+		}
+
+		return $values;
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */
