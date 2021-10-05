@@ -2943,6 +2943,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @return bool true if the current user is allowed to save unfiltered HTML.
+	 */
+	public static function allow_unfiltered_html() {
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			return false;
+		}
+		return current_user_can( 'unfiltered_html' );
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */
