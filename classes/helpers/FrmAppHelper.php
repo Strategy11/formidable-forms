@@ -782,18 +782,18 @@ class FrmAppHelper {
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
-			'label' => array(
-				'for'   => true,
+			'label'      => array(
+				'for'    => true,
 				'class' => true,
 				'id'    => true,
 			),
-			'button' => array(
+			'button'     => array(
 				'class' => true,
 				'type'  => true,
 			),
-			'legend' => array(
+			'legend'     => array(
 				'class' => true,
-			)
+			),
 		);
 	}
 
