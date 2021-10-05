@@ -373,6 +373,15 @@ class FrmEntryValidate {
 		);
 		self::parse_akismet_array( $datas, $values );
 
+		/**
+		 * Allows modifying the values sent to Akismet.
+		 *
+		 * @since 5.0.07
+		 *
+		 * @param array $datas The array of values being sent to Akismet.
+		 */
+		$datas = apply_filters( 'frm_akismet_values', $datas );
+
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
