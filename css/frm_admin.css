@@ -3707,7 +3707,7 @@ li.sortable-placeholder {
 }
 
 .frm_single_option.ui-sortable-placeholder {
-	box-shadow: 20px -3px 0 1px var(--primary-color);
+	box-shadow: 0 0 1px 1px var(--primary-color);
 }
 
 .frm-is-collapsed + .sortable-placeholder {
