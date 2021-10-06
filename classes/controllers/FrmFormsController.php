@@ -1903,12 +1903,12 @@ class FrmFormsController {
 
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
 
-		$opt = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
+		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
-		if ( $args['conf_method'] == 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
+		if ( $args['conf_method'] === 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
-		} elseif ( $args['conf_method'] == 'redirect' ) {
+		} elseif ( $args['conf_method'] === 'redirect' ) {
 			self::redirect_after_submit( $args );
 		} else {
 			self::show_message_after_save( $args );

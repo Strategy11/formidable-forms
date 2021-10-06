@@ -230,12 +230,13 @@ class FrmField {
 		$key                     = isset( $values['field_key'] ) ? $values['field_key'] : $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
+
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
 			$new_values[ $col ] = $values[ $col ];
 		}
 
-		$new_values['options'] = $values['options'];
-
+		$new_values['options']       = self::maybe_filter_options( $values['options'] );
 		$new_values['field_order']   = isset( $values['field_order'] ) ? (int) $values['field_order'] : null;
 		$new_values['required']      = isset( $values['required'] ) ? (int) $values['required'] : 0;
 		$new_values['form_id']       = isset( $values['form_id'] ) ? (int) $values['form_id'] : null;
@@ -260,9 +261,6 @@ class FrmField {
 			unset( $k, $v );
 		}
 
-		//if(isset($values['id']) and is_numeric($values['id']))
-		//    $new_values['id'] = $values['id'];
-
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
 		$new_id        = 0;
 		if ( $query_results ) {
@@ -283,6 +281,16 @@ class FrmField {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * @since 5.0.08
+	 *
+	 * @param array $options
+	 * @return array
+	 */
+	private static function maybe_filter_options( $options ) {
+		return FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
 	}
 
 	/**
@@ -409,7 +417,9 @@ class FrmField {
 		// serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
-				$values[ $opt ] = FrmAppHelper::maybe_filter_array( $values[ $opt ], array( 'custom_html' ) );
+				if ( 'field_options' === $opt ) {
+					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
+				}
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
