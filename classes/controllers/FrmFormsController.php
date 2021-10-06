@@ -273,8 +273,6 @@ class FrmFormsController {
 		global $frm_vars;
 		$frm_vars['preview'] = true;
 
-		self::load_wp();
-
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
 			self::set_preview_query();
@@ -284,19 +282,6 @@ class FrmFormsController {
 		}
 
 		wp_die();
-	}
-
-	/**
-	 * @since 3.0
-	 */
-	private static function load_wp() {
-		if ( ! defined( 'ABSPATH' ) && ! defined( 'XMLRPC_REQUEST' ) ) {
-			global $wp;
-			$root = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
-			include_once( $root . '/wp-config.php' );
-			$wp->init();
-			$wp->register_globals();
-		}
 	}
 
 	private static function set_preview_query() {
