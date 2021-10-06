@@ -44,7 +44,10 @@ class FrmFormsController {
 	 * @since 4.06.03
 	 */
 	public static function logic_tip() {
-		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr__( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' ) . esc_attr( ' <img src="https://cdn.formidableforms.com/wp-content/themes/fp2015git/images/survey/survey-logic.png" srcset="https://cdn.formidableforms.com/wp-content/themes/fp2015git/images/survey/survey-logic@2x.png 2x" alt="Conditional Logic options"/>' ) . '" data-medium="builder" data-content="logic">';
+		$images_url    = FrmAppHelper::plugin_url() . '/images/';
+		$data_message  = __( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' );
+		$data_message .= ' <img src="' . esc_attr( $images_url ) . '/survey-logic.png" srcset="' . esc_attr( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
+		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
 		FrmAppHelper::icon_by_class( 'frmfont frm_swap_icon' );
 		esc_html_e( 'Add Conditional Logic', 'formidable' );
 		echo '</a>';
@@ -273,8 +276,6 @@ class FrmFormsController {
 		global $frm_vars;
 		$frm_vars['preview'] = true;
 
-		self::load_wp();
-
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
 			self::set_preview_query();
@@ -284,19 +285,6 @@ class FrmFormsController {
 		}
 
 		wp_die();
-	}
-
-	/**
-	 * @since 3.0
-	 */
-	private static function load_wp() {
-		if ( ! defined( 'ABSPATH' ) && ! defined( 'XMLRPC_REQUEST' ) ) {
-			global $wp;
-			$root = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
-			include_once( $root . '/wp-config.php' );
-			$wp->init();
-			$wp->register_globals();
-		}
 	}
 
 	private static function set_preview_query() {
