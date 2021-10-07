@@ -176,7 +176,7 @@ class FrmListHelper {
 	/**
 	 * @since 3.0
 	 */
-	protected function get_param( $args ) {
+	protected static function get_param( $args ) {
 		return FrmAppHelper::get_simple_request(
 			array(
 				'param'    => $args['param'],

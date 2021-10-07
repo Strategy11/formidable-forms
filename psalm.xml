@@ -1,70 +1,73 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="8"
-    resolveFromConfigFile="true"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+	errorLevel="8"
+	resolveFromConfigFile="true"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="https://getpsalm.org/schema/config"
+	xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
-    <projectFiles>
-        <file name="formidable.php" />
-        <directory name="classes" />
-        <ignoreFiles>
-            <directory name="vendor" />
-            <directory name="classes/views/" />
-        </ignoreFiles>
-    </projectFiles>
-    <stubs>
-        <file name="/Users/Wiggles3D/.composer/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
-        <file name="psalm.stubs.php" />
-    </stubs>
-    <issueHandlers>
-        <UndefinedClass>
-            <errorLevel type="suppress">
-                <referencedClass name="FrmProDisplaysController" />
-                <referencedClass name="FrmProAppHelper" />
-                <referencedClass name="FrmProEntryMetaHelper" />
-                <referencedClass name="FrmProFormActionsController" />
-                <referencedClass name="FrmProFieldValue" />
-                <referencedClass name="FrmViewsLayout" />
-                <referencedClass name="FrmProDisplaysHelper" />
-                <referencedClass name="FrmProAddonsController" />
-                <referencedClass name="FrmProDb" />
-                <referencedClass name="FrmProSettings" />
-                <referencedClass name="FrmProEntryShortcodeFormatter" />
-                <referencedClass name="FrmProStylesController" />
-                <referencedClass name="FrmDeprecated" />
-                <referencedClass name="FrmProEntriesController" />
-                <referencedClass name="FrmProFormsHelper" />
-                <referencedClass name="FrmProEntry" />
-                <referencedClass name="WPMailSMTP\Options" />
-                <referencedClass name="Akismet" />
-                <referencedClass name="PHPMailer" />
-                <referencedClass name="FrmProEntryFormatter" />
-                <referencedClass name="FrmProEntriesHelper" />
-                <referencedClass name="FrmProFormsController" />
-             <referencedClass name="FrmFormDeprecated" />
-            </errorLevel>
-        </UndefinedClass>
-        <InvalidGlobal>
-            <errorLevel type="suppress">
-                <directory name="classes" />
-            </errorLevel>
-        </InvalidGlobal>
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress">
-                <directory name="classes" />
-            </errorLevel>
-        </UndefinedDocblockClass>
-        <UndefinedFunction>
-             <errorLevel type="suppress">
-                <referencedFunction name="WP_Optimize" />
-                <referencedFunction name="bp_core_email_from_address_filter" />
-                <referencedFunction name="bp_core_email_from_name_filter" />
-                <referencedFunction name="wp_mail_smtp" />
-                <referencedFunction name="__autoload" />
-                <referencedFunction name="akismet_test_mode" />
-            </errorLevel>
-        </UndefinedFunction>
-    </issueHandlers>
+	<projectFiles>
+		<file name="formidable.php" />
+		<directory name="classes" />
+		<ignoreFiles>
+			<directory name="vendor" />
+			<directory name="classes/views/" />
+		</ignoreFiles>
+	</projectFiles>
+	<stubs>
+		<file name="/Users/Wiggles3D/.composer/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
+		<file name="psalm.stubs.php" />
+	</stubs>
+	<issueHandlers>
+		<UndefinedClass>
+			<errorLevel type="suppress">
+				<referencedClass name="FrmProDisplaysController" />
+				<referencedClass name="FrmProAppHelper" />
+				<referencedClass name="FrmProEntryMetaHelper" />
+				<referencedClass name="FrmProFormActionsController" />
+				<referencedClass name="FrmProFieldValue" />
+				<referencedClass name="FrmViewsLayout" />
+				<referencedClass name="FrmProDisplaysHelper" />
+				<referencedClass name="FrmProAddonsController" />
+				<referencedClass name="FrmProDb" />
+				<referencedClass name="FrmProSettings" />
+				<referencedClass name="FrmProEntryShortcodeFormatter" />
+				<referencedClass name="FrmProStylesController" />
+				<referencedClass name="FrmDeprecated" />
+				<referencedClass name="FrmProEntriesController" />
+				<referencedClass name="FrmProFormsHelper" />
+				<referencedClass name="FrmProEntry" />
+				<referencedClass name="WPMailSMTP\Options" />
+				<referencedClass name="Akismet" />
+				<referencedClass name="PHPMailer" />
+				<referencedClass name="FrmProEntryFormatter" />
+				<referencedClass name="FrmProEntriesHelper" />
+				<referencedClass name="FrmProFormsController" />
+				<referencedClass name="FrmViewsAppHelper" />
+				<referencedClass name="Elementor\Plugin" />
+				<referencedClass name="FrmElementorWidget" />
+				<referencedClass name="FrmFormDeprecated" />
+			</errorLevel>
+		</UndefinedClass>
+		<InvalidGlobal>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+			</errorLevel>
+		</InvalidGlobal>
+		<UndefinedDocblockClass>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+			</errorLevel>
+		</UndefinedDocblockClass>
+		<UndefinedFunction>
+			 <errorLevel type="suppress">
+				<referencedFunction name="WP_Optimize" />
+				<referencedFunction name="bp_core_email_from_address_filter" />
+				<referencedFunction name="bp_core_email_from_name_filter" />
+				<referencedFunction name="wp_mail_smtp" />
+				<referencedFunction name="__autoload" />
+				<referencedFunction name="akismet_test_mode" />
+			</errorLevel>
+		</UndefinedFunction>
+	</issueHandlers>
 </psalm>
