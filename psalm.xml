@@ -15,7 +15,7 @@
 		</ignoreFiles>
 	</projectFiles>
 	<stubs>
-		<file name="/Users/Wiggles3D/.composer/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
+		<file name="vendor/php-stubs/wordpress-stubs/wordpress-stubs.php" />
 		<file name="psalm.stubs.php" />
 	</stubs>
 	<issueHandlers>
