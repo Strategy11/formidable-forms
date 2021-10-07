@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.07
+Stable tag: 5.0.08
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,10 +440,16 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.08 =
+- Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
+- Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing forms and fields with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- Updated Bootstrap used in back end to version 3.4.1.
+- A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
+
 = 5.0.07 =
 - Security: Unsafe HTML will now be stripped from field labels, descriptions, and custom HTML, as well as form titles, descriptions, custom submit text, custom submit HTML, before HTML, after HTML, and success message if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
 - New: Added new frm_akismet_values filter to help improve Akismet integration.
-- Fix: The Akismet API was getting called is Akismet was set up even if the form had Akismet turned off.
+- Fix: The Akismet API was getting called if Akismet was set up even if the form had Akismet turned off.
 - Fix: Updated the styling when a field option is being dragged and dropped.
 
 = 5.0.06 =
@@ -477,11 +483,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 = 5.0.02 =
 * New: Field groups can now be duplicated and deleted.
-
-= 5.0.01 =
-* New: Updated styling and icons in the back end builder.
-* New: Added search to form fields in the builder to make finding a specific field easier.
-* Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
-* Fix: Added truncation to long form keys during duplication to avoid issues with duplicating when the generated key was too long.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
