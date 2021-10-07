@@ -144,8 +144,21 @@ class FrmSettings {
 		}
 	}
 
+	/**
+	 * @param array $params
+	 */
 	public function fill_with_defaults( $params = array() ) {
-		$settings = $this->default_options();
+		$settings    = $this->default_options();
+		$filter_html = ! FrmAppHelper::allow_unfiltered_html();
+
+		if ( $filter_html ) {
+			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+			if ( ! empty( $params['additional_filter_keys'] ) ) {
+				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
+			}
+		} else {
+			$filter_keys = array();
+		}
 
 		foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $setting ] ) ) {
@@ -154,8 +167,12 @@ class FrmSettings {
 				$this->{$setting} = $default;
 			}
 
-			if ( $setting == 'menu' && empty( $this->{$setting} ) ) {
+			if ( $setting === 'menu' && empty( $this->{$setting} ) ) {
 				$this->{$setting} = $default;
+			}
+
+			if ( $filter_html && in_array( $setting, $filter_keys, true ) ) {
+				$this->{$setting} = FrmAppHelper::kses( $this->{$setting}, 'all' );
 			}
 
 			unset( $setting, $default );
