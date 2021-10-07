@@ -3022,9 +3022,7 @@ function frmAdminBuildJS() {
 	function addImageToOption( event ) {
 		var fileFrame,
 			$this = jQuery( this ),
-			$field = $this.closest( '.frm-single-settings' ),
 			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
-			fieldId = $field.data( 'fid' ),
 			postID = 0;
 
 		event.preventDefault();
@@ -3040,7 +3038,7 @@ function frmAdminBuildJS() {
 
 		fileFrame.on( 'select', function() {
 			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
-			$imagePreview.find( 'img' ).attr( 'src', attachment.url );
+			$imagePreview.find( 'img' ).attr( 'src', attachment.url ).removeClass( 'frm_hidden' );
 			$imagePreview.find( '.frm_image_preview_frame' ).show();
 			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
@@ -3054,8 +3052,6 @@ function frmAdminBuildJS() {
 
 	function removeImageFromOption( event ) {
 		var $this = jQuery( this ),
-			$field = $this.closest( '.frm-single-settings' ),
-			fieldId = $field.data( 'fid' ),
 			previewWrapper = $this.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
@@ -5704,7 +5700,7 @@ function frmAdminBuildJS() {
 			button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
 			link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
 			content = this.getAttribute( 'data-content' );
-			if ( content === undefined ) {
+			if ( content === null ) {
 				content = '';
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
@@ -9293,6 +9289,8 @@ function frmAdminBuildJS() {
 		},
 
 		styleInit: function() {
+			const debouncedPreviewUpdate = debounce( changeStyling, 100 );
+
 			collapseAllSections();
 
 			document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
@@ -9301,8 +9299,13 @@ function frmAdminBuildJS() {
 
 			jQuery( 'input.hex' ).wpColorPicker({
 				change: function( event ) {
-					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
-					jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+					if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+						debouncedPreviewUpdate();
+						return;
+					} else {
+						const hexcolor = jQuery( this ).wpColorPicker( 'color' );
+						jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+					}
 				}
 			});
 			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
@@ -9326,7 +9329,7 @@ function frmAdminBuildJS() {
 			}
 
 			// update styling on change
-			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debounce( changeStyling, 100 ) );
+			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
@@ -9411,6 +9414,9 @@ function frmAdminBuildJS() {
 				document.getElementById( 'frm_theme_css' ).value = themeVal;
 				return false;
 			}).trigger( 'change' );
+
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
 		},
 
 		customCSSInit: function() {

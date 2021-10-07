@@ -26,7 +26,7 @@
 	--biggest-sidebar: 450px;
 }
 
-.with_frm_style .frm_form_fields > fieldset {
+body:not(.frm-admin-page-styles) .with_frm_style .frm_form_fields > fieldset {
 	--fieldset-padding: 15px 0;
 }
 
@@ -3771,6 +3771,14 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
 	width: calc(100% - 73px);
+}
+
+.frm-right-panel.styling_settings .frm_image_preview_wrapper {
+	width: 100%;
+}
+
+.frm-right-panel.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
+	margin-left: 0;
 }
 
 .frm-right-panel .frm_single_option a.frm_remove_tag,
