@@ -1012,7 +1012,6 @@ class FrmAppHelper {
 		$new_file  = new FrmCreateFile( $file_atts );
 
 		$files = array(
-			self::plugin_path() . '/js/jquery/jquery.placeholder.min.js',
 			self::plugin_path() . '/js/formidable.min.js',
 		);
 		$files = apply_filters( 'frm_combined_js_files', $files );
