@@ -10,7 +10,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	 */
 	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();
-		$field = $this->factory->field->create_and_get(
+		$field   = $this->factory->field->create_and_get(
 			array(
 				'type'    => 'number',
 				'form_id' => $form_id,
@@ -28,9 +28,9 @@ class test_FrmFieldType extends FrmUnitTest {
 				'id' => $form_id,
 			)
 		);
-		$this->assertContains( ' min="10"', $form );
-		$this->assertContains( ' max="999"', $form );
-		$this->assertContains( ' step="any"', $form );
+		$this->assertNotFalse( strpos( $form, ' min="10"' ) );
+		$this->assertNotFalse( strpos( $form, ' max="999"' ) );
+		$this->assertNotFalse( strpos( $form, ' step="any"' ) );
 	}
 
 	/**

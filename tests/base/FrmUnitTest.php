@@ -16,6 +16,11 @@ class FrmUnitTest extends WP_UnitTestCase {
 	protected $is_pro_active = false;
 
 	/**
+	 * @var FrmUnitTest $instance
+	 */
+	protected static $instance;
+
+	/**
 	 * Ensure that the plugin has been installed and activated.
 	 */
 	public static function wpSetUpBeforeClass() {
@@ -34,7 +39,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 		self::empty_tables();
 	}
 
-	public function setUp() {
+	public function setUp(): void {
+		self::$instance = $this;
 		parent::setUp();
 
 		// The JavaScript antispam check doesn't work with unit tests so turn it off.
@@ -183,8 +189,29 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 
 		$_REQUEST['csv_files'] = 1;
+		$uploads_dir           = wp_upload_dir()['basedir'] . '/formidable/';
+		$test                  = new FrmUnitTest();
 		foreach ( $file_urls as $values ) {
-			$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
+			$vals      = (array) $values['val'];
+			$media_ids = false;
+			foreach ( $vals as $val ) {
+				$filename = basename( $val );
+				$path     = $uploads_dir . $filename;
+				if ( file_exists( $path ) ) {
+					if ( ! is_array( $media_ids ) ) {
+						$media_ids = array();
+					}
+					$id          = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
+					$media_ids[] = $id;
+				}
+			}
+			if ( is_array( $media_ids ) ) {
+				$media_ids = implode( ',', $media_ids );
+			}
+
+			if ( false === $media_ids ) {
+				$media_ids = FrmProFileImport::import_attachment( $values['val'], $values['field'] );
+			}
 
 			if ( is_array( $values['val'] ) ) {
 				$media_ids = explode( ',', $media_ids );

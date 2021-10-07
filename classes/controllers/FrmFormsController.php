@@ -44,7 +44,10 @@ class FrmFormsController {
 	 * @since 4.06.03
 	 */
 	public static function logic_tip() {
-		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr__( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' ) . esc_attr( ' <img src="https://cdn.formidableforms.com/wp-content/themes/fp2015git/images/survey/survey-logic.png" srcset="https://cdn.formidableforms.com/wp-content/themes/fp2015git/images/survey/survey-logic@2x.png 2x" alt="Conditional Logic options"/>' ) . '" data-medium="builder" data-content="logic">';
+		$images_url    = FrmAppHelper::plugin_url() . '/images/';
+		$data_message  = __( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' );
+		$data_message .= ' <img src="' . esc_attr( $images_url ) . '/survey-logic.png" srcset="' . esc_attr( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
+		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
 		FrmAppHelper::icon_by_class( 'frmfont frm_swap_icon' );
 		esc_html_e( 'Add Conditional Logic', 'formidable' );
 		echo '</a>';
@@ -273,8 +276,6 @@ class FrmFormsController {
 		global $frm_vars;
 		$frm_vars['preview'] = true;
 
-		self::load_wp();
-
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
 			self::set_preview_query();
@@ -284,19 +285,6 @@ class FrmFormsController {
 		}
 
 		wp_die();
-	}
-
-	/**
-	 * @since 3.0
-	 */
-	private static function load_wp() {
-		if ( ! defined( 'ABSPATH' ) && ! defined( 'XMLRPC_REQUEST' ) ) {
-			global $wp;
-			$root = dirname( dirname( dirname( dirname( __FILE__ ) ) ) );
-			include_once( $root . '/wp-config.php' );
-			$wp->init();
-			$wp->register_globals();
-		}
 	}
 
 	private static function set_preview_query() {
@@ -975,9 +963,18 @@ class FrmFormsController {
 
 		unset( $reset_fields );
 
-		$args             = array( 'parent_form_id' => $form->id );
-		$values           = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
-		$values['fields'] = $fields;
+		$args   = array( 'parent_form_id' => $form->id );
+		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', '', true, array(), $args );
+
+		/**
+		 * Allows modifying the list of fields in the form builder.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param object[] $fields Array of fields.
+		 * @param array    $args   The arguments. Contains `form`.
+		 */
+		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
 
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 		if ( $form->is_template && $message == $edit_message ) {
@@ -1017,6 +1014,16 @@ class FrmFormsController {
 		$form   = FrmForm::getOne( $id );
 		$fields = FrmField::get_all_for_form( $id );
 		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
+
+		/**
+		 * Allows changing fields in the form settings.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields Array of fields.
+		 * @param array $args   The arguments. Contains `form`.
+		 */
+		$values['fields'] = apply_filters( 'frm_fields_in_settings', $values['fields'], compact( 'form' ) );
 
 		self::clean_submit_html( $values );
 
@@ -1183,7 +1190,17 @@ class FrmFormsController {
 	}
 
 	public static function mb_tags_box( $form_id, $class = '' ) {
-		$fields       = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+
+		/**
+		 * Allows modifying the list of fields in the tags box.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields The list of fields.
+		 * @param array $args   The arguments. Contains `form_id`.
+		 */
+		$fields       = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
 		$linked_forms = array();
 		$col          = 'one';
 		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' ) ? true : false;
@@ -1325,9 +1342,23 @@ class FrmFormsController {
 			echo esc_attr( sanitize_text_field( $form->options['form_class'] ) );
 		}
 
-		if ( isset( $form->options['js_validate'] ) && $form->options['js_validate'] ) {
+		if ( ! empty( $form->options['js_validate'] ) ) {
 			echo ' frm_js_validate ';
+			self::add_js_validate_form_to_global_vars( $form );
 		}
+	}
+
+	/**
+	 * @since 5.0.03
+	 *
+	 * @param stdClass $form
+	 */
+	public static function add_js_validate_form_to_global_vars( $form ) {
+		global $frm_vars;
+		if ( ! isset( $frm_vars['js_validate_forms'] ) ) {
+			$frm_vars['js_validate_forms'] = array();
+		}
+		$frm_vars['js_validate_forms'][ $form->id ] = $form;
 	}
 
 	public static function get_email_html() {
@@ -1860,12 +1891,12 @@ class FrmFormsController {
 
 		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
 
-		$opt = ( ! isset( $args['action'] ) || $args['action'] == 'create' ) ? 'success' : 'edit';
+		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
-		if ( $args['conf_method'] == 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
+		if ( $args['conf_method'] === 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
-		} elseif ( $args['conf_method'] == 'redirect' ) {
+		} elseif ( $args['conf_method'] === 'redirect' ) {
 			self::redirect_after_submit( $args );
 		} else {
 			self::show_message_after_save( $args );

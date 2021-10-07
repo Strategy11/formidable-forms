@@ -112,23 +112,10 @@ class FrmFieldsController {
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		$copy_field = FrmField::getOne( $field_id );
-		if ( ! $copy_field ) {
-			wp_die();
-		}
+		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
-		do_action( 'frm_duplicate_field', $copy_field, $form_id );
-		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
-
-		$values = array(
-			'id' => $copy_field->id,
-		);
-		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
-		$field_id = FrmField::create( $values );
-		if ( $field_id ) {
-			self::load_single_field( $field_id, $values );
+		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
+			self::load_single_field( $new_field['field_id'], $new_field['values'] );
 		}
 
 		wp_die();
@@ -196,13 +183,22 @@ class FrmFieldsController {
 		$classes    = isset( $field['classes'] ) ? $field['classes'] : '';
 
 		// Exclude alignright for now since we aren't using widths.
-		$classes    = str_replace( ' frm_alignright ', ' ', $classes );
-		if ( trim( $classes ) === 'frm_alignright' ) {
+		$classes = str_replace( ' frm_alignright ', ' ', $classes );
+		$classes = trim( $classes );
+
+		if ( 'frm_alignright' === $classes ) {
 			$classes = '';
 		}
 
-		$li_classes .= ' frm_form_field frmstart ' . $classes . ' frmend';
-		if ( ! empty( $field ) ) {
+		$li_classes .= ' frm_form_field frmstart ';
+
+		if ( $classes ) {
+			$li_classes .= $classes . ' ';
+		}
+
+		$li_classes .= 'frmend';
+
+		if ( $field ) {
 			$li_classes = apply_filters( 'frm_build_field_class', $li_classes, $field );
 		}
 
@@ -686,10 +682,89 @@ class FrmFieldsController {
 			$invalid_message         = FrmFieldsHelper::get_error_msg( $field, 'invalid' );
 			$add_html['data-invmsg'] = 'data-invmsg="' . esc_attr( $invalid_message ) . '"';
 		}
+
+		if ( ! empty( $add_html['data-reqmsg'] ) || ! empty( $add_html['data-invmsg'] ) ) {
+			self::maybe_add_error_html_for_js_validation( $field, $add_html );
+		}
 	}
 
 	/**
-	 * If 'required' is added to a conditionall hidden field, the form won't
+	 * @since 5.0.03
+	 *
+	 * @param array $field
+	 * @param array $add_html
+	 */
+	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
+		$form = self::get_form_for_js_validation( $field );
+		if ( false === $form ) {
+			return;
+		}
+
+		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
+		if ( false !== $error_body ) {
+			$error_body                  = urlencode( $error_body );
+			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
+		}
+	}
+
+	/**
+	 * @since 5.0.03
+	 *
+	 * @param array $field
+	 * @return stdClass|false false if there is no form object found with JS validation active.
+	 */
+	private static function get_form_for_js_validation( $field ) {
+		global $frm_vars;
+		if ( ! empty( $frm_vars['js_validate_forms'] ) ) {
+			if ( isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
+				return $frm_vars['js_validate_forms'][ $field['form_id'] ];
+			}
+			if ( ! empty( $field['parent_form_id'] ) && isset( $frm_vars['js_validate_forms'][ $field['parent_form_id'] ] ) ) {
+				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param stdClass $form
+	 * @param array    $field
+	 * @param array    $errors
+	 * @return string|false
+	 */
+	public static function pull_custom_error_body_from_custom_html( $form, $field, $errors = array() ) {
+		if ( empty( $field['custom_html'] ) ) {
+			return false;
+		}
+
+		$custom_html = $field['custom_html'];
+		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, $errors, $form );
+
+		$start = strpos( $custom_html, '[if error]' );
+		if ( false === $start ) {
+			return false;
+		}
+
+		$end = strpos( $custom_html, '[/if error]' );
+		if ( false === $end || $end < $start ) {
+			return false;
+		}
+
+		$error_body   = substr( $custom_html, $start + 10, $end - $start - 10 );
+		$default_html = array(
+			'<div class="frm_error" id="frm_error_field_[key]">[error]</div>',
+			'<div class="frm_error">[error]</div>',
+		);
+
+		if ( in_array( $error_body, $default_html, true ) ) {
+			return false;
+		}
+
+		return $error_body;
+	}
+
+	/**
+	 * If 'required' is added to a conditionally hidden field, the form won't
 	 * submit in many browsers. Check to make sure the javascript to conditionally
 	 * remove it is present if needed.
 	 *
@@ -698,7 +773,7 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
-		if ( in_array( $field['type'], array( 'radio', 'checkbox', 'file', 'data', 'lookup' ) ) ) {
+		if ( in_array( $field['type'], array( 'file', 'data', 'lookup' ), true ) ) {
 			return;
 		}
 

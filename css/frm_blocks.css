@@ -28,6 +28,10 @@
 	color: #4d4d4d;
 }
 
+.frm-block-intro-content select + span svg {
+    margin: unset;
+}
+
 .editor-styles-wrapper h2.frm-block-title {
 	color: #4d4d4d;
 	font-weight: 500;

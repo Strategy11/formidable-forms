@@ -11,16 +11,15 @@ class FrmAddonsController {
 		}
 
 		$label = __( 'Add-Ons', 'formidable' );
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$label = '<span style="color:#fe5a1d">' . $label . '</span>';
-		}
+		$label = '<span style="color:#fe5a1d">' . $label . '</span>';
+
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade', 'formidable' ),
-				'<span style="color:#fe5a1d">' . __( 'Upgrade', 'formidable' ) . '</span>',
+				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				'FrmAddonsController::upgrade_to_pro'
@@ -533,10 +532,17 @@ class FrmAddonsController {
 				}
 			}
 
-			$addon['installed']    = self::is_installed( $file_name );
+			$addon['installed'] = self::is_installed( $file_name );
+			if ( $addon['installed'] && 'formidable-views/formidable-views.php' === $file_name ) {
+				$active_views_version = self::get_active_views_version();
+				if ( false !== $active_views_version && $slug !== $active_views_version ) {
+					$addon['installed'] = false;
+				}
+			}
+
 			$addon['activate_url'] = '';
 
-			if ( $addon['installed'] && ! empty( $activate_url ) && ! is_plugin_active( $file_name ) ) {
+			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
@@ -559,6 +565,24 @@ class FrmAddonsController {
 			self::set_addon_status( $addon );
 			$addons[ $id ] = $addon;
 		}
+	}
+
+	private static function is_plugin_active( $file_name, $slug ) {
+		if ( 'formidable-views/formidable-views.php' === $file_name ) {
+			return self::get_active_views_version() === $slug;
+		}
+		return is_plugin_active( $file_name );
+	}
+
+	/**
+	 * @return string|false either 'visual-views' or 'views', false if one is not found.
+	 */
+	private static function get_active_views_version() {
+		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
+			return false;
+		}
+		$plugin_version = FrmViewsAppHelper::plugin_version();
+		return version_compare( $plugin_version, '5.0', '>=' ) ? 'visual-views' : 'views';
 	}
 
 	/**
@@ -940,9 +964,30 @@ class FrmAddonsController {
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		self::maybe_activate_addon( $plugin );
 
-		// Send back a response.
-		echo json_encode( __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' ) );
+		echo json_encode( self::get_addon_activation_response() );
 		wp_die();
+	}
+
+	/**
+	 * @return array|string
+	 */
+	private static function get_addon_activation_response() {
+		if ( self::activating_from_settings_page() ) {
+			$response = array(
+				'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
+				'saveAndReload' => 'settings',
+			);
+		} else {
+			$response = __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' );
+		}
+		return $response;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function activating_from_settings_page() {
+		return false !== strpos( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'frm_action=settings' );
 	}
 
 	/**
@@ -1139,8 +1184,7 @@ class FrmAddonsController {
 
 		self::download_and_activate();
 
-		// Send back a response.
-		echo json_encode( __( 'Your plugin has been installed. Please reload the page to see more options.', 'formidable' ) );
+		echo json_encode( self::get_addon_activation_response() );
 		wp_die();
 	}
 

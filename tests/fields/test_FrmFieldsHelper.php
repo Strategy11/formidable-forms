@@ -135,11 +135,62 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 				'hide_opt'       => 'happy',
 				'expected'       => false,
 			),
+			// starts_with
+			array(
+				'observed_value' => 'happy camper',
+				'condition'      => 'LIKE%',
+				'hide_opt'       => 'happy',
+				'expected'       => true,
+			),
+			array(
+				'observed_value' => 'happy camper',
+				'condition'      => 'LIKE%',
+				'hide_opt'       => 'camper',
+				'expected'       => false,
+			),
+			array(
+				'observed_value' => array( 'indifferent farmer', 'happy blacksmith' ),
+				'condition'      => 'LIKE%',
+				'hide_opt'       => 'happy',
+				'expected'       => true,
+			),
+			array(
+				'observed_value' => array( 'happy farmer', 'happy blacksmith' ),
+				'condition'      => 'LIKE%',
+				'hide_opt'       => 'farmer',
+				'expected'       => false,
+			),
+			// ends_with
+			array(
+				'observed_value' => 'happy camper',
+				'condition'      => '%LIKE',
+				'hide_opt'       => 'happy',
+				'expected'       => false,
+			),
+			array(
+				'observed_value' => 'happy camper',
+				'condition'      => '%LIKE',
+				'hide_opt'       => 'camper',
+				'expected'       => true,
+			),
+			array(
+				'observed_value' => array( 'happy tourist', 'happy walker', 'happy camper' ),
+				'condition'      => '%LIKE',
+				'hide_opt'       => 'camper',
+				'expected'       => true,
+			),
+			array(
+				'observed_value' => array( 'happy tourist', 'happy walker', 'camper tourist' ),
+				'condition'      => '%LIKE',
+				'hide_opt'       => 'camper',
+				'expected'       => false,
+			),
 		);
 
 		foreach ( $tests as $test ) {
-			$result = FrmFieldsHelper::value_meets_condition( $test['observed_value'], $test['condition'], $test['hide_opt'] );
-			$this->assertEquals( $test['expected'], $result, $test['observed_value'] . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
+			$result         = FrmFieldsHelper::value_meets_condition( $test['observed_value'], $test['condition'], $test['hide_opt'] );
+			$observed_value = is_array( $test['observed_value'] ) ? implode( ',', $test['observed_value'] ) : $test['observed_value'];
+			$this->assertEquals( $test['expected'], $result, $observed_value . ' ' . $test['condition'] . ' ' . $test['hide_opt'] . ' failed' );
 		}
 	}
 }

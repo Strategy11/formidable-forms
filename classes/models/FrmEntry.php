@@ -65,9 +65,12 @@ class FrmEntry {
 		global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-		if ( ! $entry_exists || empty( $entry_exists ) || ! isset( $values['item_meta'] ) ) {
+		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
 			return false;
 		}
+
+		global $frm_vars;
+		$frm_vars['checking_duplicates'] = true;
 
 		$is_duplicate = false;
 		foreach ( $entry_exists as $entry_exist ) {
@@ -115,6 +118,8 @@ class FrmEntry {
 				break;
 			}
 		}
+
+		$frm_vars['checking_duplicates'] = false;
 
 		return $is_duplicate;
 	}
@@ -461,10 +466,8 @@ class FrmEntry {
 			}
 
 			if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {
-				// sort by a requested field
-				$field_id = (int) $order_matches[1];
-				$fields   .= ', (SELECT meta_value FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id = ' . $field_id . ' AND item_id = it.id) as meta_' . $field_id;
-				unset( $order_matches, $field_id );
+				$fields .= self::sort_by_field( $order_matches[1] );
+				unset( $order_matches );
 			}
 
 			// prepare the query
@@ -525,6 +528,26 @@ class FrmEntry {
 
 		self::prepare_entries( $entries );
 		return $entries;
+	}
+
+	/**
+	 * @param int $field_id
+	 * @return string
+	 */
+	private static function sort_by_field( $field_id ) {
+		global $wpdb;
+		$field_id = (int) $field_id;
+
+		$field_options = FrmDb::get_var( 'frm_fields', array( 'id' => $field_id ), 'field_options' );
+		FrmAppHelper::unserialize_or_decode( $field_options );
+
+		if ( empty( $field_options['post_field'] ) ) {
+			$sort = ', (SELECT meta_value FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id = ' . $field_id . ' AND item_id = it.id) as meta_' . $field_id;
+		} else {
+			$sort = '';
+		}
+
+		return apply_filters( 'frm_handle_field_column_sort', $sort, $field_id, $field_options );
 	}
 
 	// Pagination Methods

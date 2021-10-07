@@ -571,25 +571,35 @@ class FrmFieldsHelper {
 		}
 
 		$m = false;
-		if ( $cond == '==' ) {
+		if ( $cond === '==' ) {
 			$m = $observed_value == $hide_opt;
-		} elseif ( $cond == '!=' ) {
+		} elseif ( $cond === '!=' ) {
 			$m = $observed_value != $hide_opt;
-		} elseif ( $cond == '>' ) {
+		} elseif ( $cond === '>' ) {
 			$m = $observed_value > $hide_opt;
-		} elseif ( $cond == '>=' ) {
+		} elseif ( $cond === '>=' ) {
 			$m = $observed_value >= $hide_opt;
-		} elseif ( $cond == '<' ) {
+		} elseif ( $cond === '<' ) {
 			$m = $observed_value < $hide_opt;
-		} elseif ( $cond == '<=' ) {
+		} elseif ( $cond === '<=' ) {
 			$m = $observed_value <= $hide_opt;
-		} elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
-			if ( $cond == 'not LIKE' ) {
+			if ( $cond === 'not LIKE' ) {
 				$m = ( $m === false ) ? true : false;
 			} else {
 				$m = ( $m === false ) ? false : true;
 			}
+		} elseif ( $cond === '%LIKE' ) {
+			// ends with
+			$length = strlen( $hide_opt );
+			$substr = substr( $observed_value, strlen( $observed_value ) - $length );
+			$m      = 0 === strcasecmp( $substr, $hide_opt );
+		} elseif ( 'LIKE%' === $cond ) {
+			// starts with
+			$length = strlen( $hide_opt );
+			$substr = substr( $observed_value, 0, $length );
+			$m      = 0 === strcasecmp( $substr, $hide_opt );
 		}
 
 		return $m;
@@ -613,22 +623,22 @@ class FrmFieldsHelper {
 
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
 		$m = false;
-		if ( $cond == '==' ) {
+		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
 				$m = empty( $m ) ? false : true;
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
-		} elseif ( $cond == '!=' ) {
+		} elseif ( $cond === '!=' ) {
 			$m = ! in_array( $hide_opt, $observed_value );
-		} elseif ( $cond == '>' ) {
+		} elseif ( $cond === '>' ) {
 			$min = min( $observed_value );
 			$m   = $min > $hide_opt;
-		} elseif ( $cond == '<' ) {
+		} elseif ( $cond === '<' ) {
 			$max = max( $observed_value );
 			$m   = $max < $hide_opt;
-		} elseif ( $cond == 'LIKE' || $cond == 'not LIKE' ) {
+		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			foreach ( $observed_value as $ob ) {
 				$m = strpos( $ob, $hide_opt );
 				if ( $m !== false ) {
@@ -637,8 +647,24 @@ class FrmFieldsHelper {
 				}
 			}
 
-			if ( $cond == 'not LIKE' ) {
+			if ( $cond === 'not LIKE' ) {
 				$m = ( $m === false ) ? true : false;
+			}
+		} elseif ( $cond === '%LIKE' ) {
+			// ends with
+			foreach ( $observed_value as $ob ) {
+				if ( $hide_opt === substr( $ob, strlen( $ob ) - strlen( $hide_opt ) ) ) {
+					$m = true;
+					break;
+				}
+			}
+		} elseif ( $cond === 'LIKE%' ) {
+			// starts with
+			foreach ( $observed_value as $ob ) {
+				if ( $hide_opt === substr( $ob, 0, strlen( $hide_opt ) ) ) {
+					$m = true;
+					break;
+				}
 			}
 		}
 
@@ -982,7 +1008,7 @@ class FrmFieldsHelper {
 			$field_types[ $type ] = $field_selection[ $type ];
 		}
 
-		$field_types = apply_filters( 'frm_switch_field_types', $field_types, compact( 'type' ) );
+		$field_types = apply_filters( 'frm_switch_field_types', $field_types, compact( 'type', 'field_selection' ) );
 
 		return $field_types;
 	}
@@ -1307,7 +1333,7 @@ class FrmFieldsHelper {
 	 */
 	public static function bulk_options_overlay() {
 		$prepop = array();
-		self::get_bulk_prefilled_opts( $prepop );
+		self::get_bulk_prefilled_opts( $prepop, true );
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/bulk-options-overlay.php' );
 	}
@@ -1629,20 +1655,45 @@ class FrmFieldsHelper {
 		return apply_filters( 'frm_countries', $countries );
 	}
 
-	public static function get_bulk_prefilled_opts( array &$prepop ) {
-		$prepop[ __( 'Countries', 'formidable' ) ] = self::get_countries();
+	/**
+	 * Gets bulk prefilled options.
+	 *
+	 * @since 5.0.04 Add `$include_class` param.
+	 *
+	 * @param array $prepop        Bulk options.
+	 * @param array $include_class Include the class in the bulk options.
+	 */
+	public static function get_bulk_prefilled_opts( array &$prepop, $include_class = false ) {
+		// Countries.
+		$countries = self::get_countries();
+		if ( $include_class ) {
+			$countries['class'] = 'frm-countries-opts';
+		}
 
+		$prepop[ __( 'Countries', 'formidable' ) ] = $countries;
+
+		// State abv.
 		$states    = self::get_us_states();
 		$state_abv = array_keys( $states );
 		sort( $state_abv );
+		if ( $include_class ) {
+			$state_abv['class'] = 'frm-state-abv-opts';
+		}
+
 		$prepop[ __( 'U.S. State Abbreviations', 'formidable' ) ] = $state_abv;
 
+		// States.
 		$states = array_values( $states );
 		sort( $states );
+		if ( $include_class ) {
+			$states['class'] = 'frm-states-opts';
+		}
+
 		$prepop[ __( 'U.S. States', 'formidable' ) ] = $states;
 		unset( $state_abv, $states );
 
-		$prepop[ __( 'Age', 'formidable' ) ] = array(
+		// Age.
+		$ages = array(
 			__( 'Under 18', 'formidable' ),
 			__( '18-24', 'formidable' ),
 			__( '25-34', 'formidable' ),
@@ -1652,33 +1703,71 @@ class FrmFieldsHelper {
 			__( '65 or Above', 'formidable' ),
 			__( 'Prefer Not to Answer', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$ages['class'] = 'frm-age-opts';
+		}
 
-		$prepop[ __( 'Satisfaction', 'formidable' ) ] = array(
-			__( 'Very Satisfied', 'formidable' ),
-			__( 'Satisfied', 'formidable' ),
-			__( 'Neutral', 'formidable' ),
-			__( 'Unsatisfied', 'formidable' ),
+		$prepop[ __( 'Age', 'formidable' ) ] = $ages;
+
+		// Satisfaction.
+		$satisfaction = array(
 			__( 'Very Unsatisfied', 'formidable' ),
+			__( 'Unsatisfied', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Satisfied', 'formidable' ),
+			__( 'Very Satisfied', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$satisfaction['class'] = 'frm-satisfaction-opts';
+		}
 
-		$prepop[ __( 'Importance', 'formidable' ) ] = array(
-			__( 'Very Important', 'formidable' ),
-			__( 'Important', 'formidable' ),
-			__( 'Neutral', 'formidable' ),
-			__( 'Somewhat Important', 'formidable' ),
+		$prepop[ __( 'Satisfaction', 'formidable' ) ] = $satisfaction;
+
+		// Importance.
+		$importance = array(
 			__( 'Not at all Important', 'formidable' ),
-			__( 'N/A', 'formidable' ),
-		);
-
-		$prepop[ __( 'Agreement', 'formidable' ) ] = array(
-			__( 'Strongly Agree', 'formidable' ),
-			__( 'Agree', 'formidable' ),
+			__( 'Somewhat Important', 'formidable' ),
 			__( 'Neutral', 'formidable' ),
-			__( 'Disagree', 'formidable' ),
-			__( 'Strongly Disagree', 'formidable' ),
+			__( 'Important', 'formidable' ),
+			__( 'Very Important', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+		if ( $include_class ) {
+			$importance['class'] = 'frm-importance-opts';
+		}
+
+		$prepop[ __( 'Importance', 'formidable' ) ] = $importance;
+
+		// Agreement.
+		$agreement = array(
+			__( 'Strongly Disagree', 'formidable' ),
+			__( 'Disagree', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Agree', 'formidable' ),
+			__( 'Strongly Agree', 'formidable' ),
+			__( 'N/A', 'formidable' ),
+		);
+		if ( $include_class ) {
+			$agreement['class'] = 'frm-agreement-opts';
+		}
+
+		$prepop[ __( 'Agreement', 'formidable' ) ] = $agreement;
+
+		// Likely.
+		$likely = array(
+			__( 'Extremely Unlikely', 'formidable' ),
+			__( 'Unlikely', 'formidable' ),
+			__( 'Neutral', 'formidable' ),
+			__( 'Likely', 'formidable' ),
+			__( 'Extremely Likely', 'formidable' ),
+			__( 'N/A', 'formidable' ),
+		);
+		if ( $include_class ) {
+			$likely['class'] = 'frm-likely-opts';
+		}
+
+		$prepop[ __( 'Likely', 'formidable' ) ] = $likely;
 
 		$prepop = apply_filters( 'frm_bulk_field_choices', $prepop );
 	}
@@ -1760,7 +1849,7 @@ class FrmFieldsHelper {
 		}
 
 		?>
-		<li class="frmbutton <?php echo esc_attr( $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-message="<?php echo esc_attr( $upgrade_message ); ?>" data-link="<?php echo esc_attr( $link ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
+		<li class="frmbutton frm6 <?php echo esc_attr( $args['no_allow_class'] . $single_no_allow . ' frm_t' . str_replace( '|', '-', $field_key ) ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-upgrade="<?php echo esc_attr( $upgrade_label ); ?>" data-message="<?php echo esc_attr( $upgrade_message ); ?>" data-link="<?php echo esc_attr( $link ); ?>" data-medium="builder" data-oneclick="<?php echo esc_attr( $install_data ); ?>" data-content="<?php echo esc_attr( $field_key ); ?>" data-requires="<?php echo esc_attr( $requires ); ?>">
 		<?php
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
@@ -1769,6 +1858,140 @@ class FrmFieldsHelper {
 		?>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Shows Display format option.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $field Field data.
+	 */
+	public static function show_radio_display_format( $field ) {
+		$options = array(
+			'0'       => array(
+				'text'   => __( 'Simple', 'formidable' ),
+				'svg'    => 'frm_simple_radio',
+			),
+			'1'       => array(
+				'text'    => __( 'Images', 'formidable' ),
+				'svg'     => 'frm_image_as_option',
+				'addon'   => 'pro',
+				'upgrade' => __( 'Image Options', 'formidable' ),
+				'message' => __( 'Show images instead of radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ) . '<img src="' . esc_url( FrmAppHelper::plugin_url() ) . '/images/image-options.png" />',
+				'content' => 'image-options',
+			),
+			'buttons' => array(
+				'text'    => __( 'Buttons', 'formidable' ),
+				'svg'     => 'frm_button_as_option',
+				'addon'   => 'surveys',
+				'upgrade' => __( 'Button Options', 'formidable' ),
+				'message' => __( 'Show buttons for radio buttons or check boxes. This is ideal for polls, surveys, segmenting questionnaires and more.', 'formidable' ),
+				'content' => 'button-options',
+			),
+		);
+
+		/**
+		 * Allows modifying the options of Display format setting of Radio field.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $options Options.
+		 */
+		$options = apply_filters( 'frm_radio_display_format_options', $options );
+
+		$args = self::get_display_format_args( $field, $options );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
+	}
+
+	/**
+	 * Gets display format arguments to pass to the images_dropdown() method.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $field   Field data.
+	 * @param array $options Options array.
+	 * @return array
+	 */
+	private static function get_display_format_args( $field, $options ) {
+		$args = array(
+			'selected'    => '0',
+			'options'     => array(),
+			'name'        => 'field_options[image_options_' . $field['id'] . ']',
+			'input_attrs' => array(
+				'class' => 'frm_toggle_image_options',
+			),
+		);
+
+		self::fill_image_setting_options( $options, $args );
+
+		/**
+		 * Allows modifying the arguments of Display format setting of Radio field.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $args        Arguments.
+		 * @param array $method_args The arguments from the method. Contains `field`, `options`.
+		 */
+		return apply_filters( 'frm_radio_display_format_args', $args, compact( 'field', 'options' ) );
+	}
+
+	/**
+	 * @since 5.0.04
+	 */
+	private static function fill_image_setting_options( $options, &$args ) {
+		foreach ( $options as $key => $option ) {
+			$args['options'][ $key ] = $option;
+
+			if ( ! empty( $option['addon'] ) ) {
+				$args['options'][ $key ]['custom_attrs'] = self::fill_image_setting_addon_link( $option );
+			}
+
+			unset( $args['options'][ $key ]['addon'] );
+			$fill = array( 'upgrade', 'message', 'content' );
+			foreach ( $fill as $f ) {
+				unset( $args['options'][ $key ][ $f ], $f );
+			}
+		}
+	}
+
+	/**
+	 * @since 5.0.04
+	 *
+	 * @return array
+	 */
+	private static function fill_image_setting_addon_link( $option ) {
+		$custom_attrs = array(
+			'class'       => 'frm_noallow frm_show_upgrade',
+			'data-medium' => 'builder',
+		);
+
+		// translators: Add-on name.
+		$custom_attrs['data-upgrade'] = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
+
+		$fill = array( 'upgrade', 'message', 'content' );
+		foreach ( $fill as $f ) {
+			if ( isset( $option[ $f ] ) ) {
+				$custom_attrs[ 'data-' . $f ] = $option[ $f ];
+			}
+		}
+
+		if ( 'pro' === $option['addon'] ) {
+			return $custom_attrs;
+		}
+
+		$upgrading = FrmAddonsController::install_link( $option['addon'] );
+		if ( isset( $upgrading['url'] ) ) {
+			$install_data = wp_json_encode( $upgrading );
+		} else {
+			$install_data = '';
+		}
+
+		$custom_attrs['data-oneclick'] = $install_data;
+		$custom_attrs['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
+
+		return $custom_attrs;
 	}
 
 	/**

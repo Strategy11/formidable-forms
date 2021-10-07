@@ -1432,7 +1432,7 @@ select.frm_loading_lookup{
 	display:block;
 }
 
-.with_frm_style .frm_repeat_sec .frm_form_field .frm_icon_font::before {
+.with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frm_icon_font::before {
 	color:<?php echo esc_html( $defaults['repeat_icon_color'] . $important ); ?>;
 	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
@@ -1495,10 +1495,5 @@ select.frm_loading_lookup{
 	}
 }
 <?php
-
-$frm_settings = FrmAppHelper::get_settings();
-if ( $frm_settings->old_css ) {
-	readfile( dirname( __FILE__ ) . '/frm_old_grids.css' );
-}
 
 echo strip_tags( $defaults['custom_css'] ); // WPCS: XSS ok.

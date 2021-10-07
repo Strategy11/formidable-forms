@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '4.11.05';
+	public static $plug_version = '5.0.08';
 
 	/**
 	 * @since 1.07.02
@@ -651,7 +651,7 @@ class FrmAppHelper {
 	private static function allowed_html( $allowed ) {
 		$html         = self::safe_html();
 		$allowed_html = array();
-		if ( $allowed == 'all' ) {
+		if ( $allowed === 'all' ) {
 			$allowed_html = $html;
 		} elseif ( ! empty( $allowed ) ) {
 			foreach ( (array) $allowed as $a ) {
@@ -754,10 +754,11 @@ class FrmAppHelper {
 			),
 			'section'    => $allow_class,
 			'span'       => array(
-				'class' => true,
-				'id'    => true,
-				'title' => true,
-				'style' => true,
+				'class'       => true,
+				'id'          => true,
+				'title'       => true,
+				'style'       => true,
+				'aria-hidden' => true,
 			),
 			'strike'     => array(),
 			'strong'     => array(),
@@ -781,6 +782,18 @@ class FrmAppHelper {
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
+			'label'      => array(
+				'for'    => true,
+				'class' => true,
+				'id'    => true,
+			),
+			'button'     => array(
+				'class' => true,
+				'type'  => true,
+			),
+			'legend'     => array(
+				'class' => true,
+			),
 		);
 	}
 
@@ -999,7 +1012,6 @@ class FrmAppHelper {
 		$new_file  = new FrmCreateFile( $file_atts );
 
 		$files = array(
-			self::plugin_path() . '/js/jquery/jquery.placeholder.min.js',
 			self::plugin_path() . '/js/formidable.min.js',
 		);
 		$files = apply_filters( 'frm_combined_js_files', $files );
@@ -1224,6 +1236,14 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Gets the list of capabilities.
+	 *
+	 * @since 5.0 Parameter `$type` supports `pro_only` value.
+	 *
+	 * @param string $type Supports `auto`, `pro`, or `pro_only`.
+	 * @return array
+	 */
 	public static function frm_capabilities( $type = 'auto' ) {
 		$cap = array(
 			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
@@ -1234,16 +1254,22 @@ class FrmAppHelper {
 			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
 		);
 
-		if ( ! self::pro_is_installed() && 'pro' != $type ) {
+		if ( ! self::pro_is_installed() && 'pro' !== $type && 'pro_only' !== $type ) {
 			return $cap;
 		}
 
-		$cap['frm_create_entries'] = __( 'Add Entries from Admin Area', 'formidable' );
-		$cap['frm_edit_entries']   = __( 'Edit Entries from Admin Area', 'formidable' );
-		$cap['frm_view_reports']   = __( 'View Reports', 'formidable' );
-		$cap['frm_edit_displays']  = __( 'Add/Edit Views', 'formidable' );
+		$pro_cap = array(
+			'frm_create_entries' => __( 'Add Entries from Admin Area', 'formidable' ),
+			'frm_edit_entries'   => __( 'Edit Entries from Admin Area', 'formidable' ),
+			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
+			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
+		);
 
-		return $cap;
+		if ( 'pro_only' === $type ) {
+			return $pro_cap;
+		}
+
+		return $cap + $pro_cap;
 	}
 
 	/**
@@ -1530,7 +1556,7 @@ class FrmAppHelper {
 	}
 
 	public static function get_user_id_param( $user_id ) {
-		if ( ! $user_id || empty( $user_id ) || is_numeric( $user_id ) ) {
+		if ( ! $user_id || is_numeric( $user_id ) ) {
 			return $user_id;
 		}
 
@@ -1571,8 +1597,8 @@ class FrmAppHelper {
 	 * @param string $name
 	 * @param string $table_name
 	 * @param string $column
-	 * @param int $id
-	 * @param int $num_chars
+	 * @param int    $id
+	 * @param int    $num_chars
 	 */
 	public static function get_unique_key( $name, $table_name, $column, $id = 0, $num_chars = 5 ) {
 		$key = '';
@@ -1597,10 +1623,29 @@ class FrmAppHelper {
 		);
 
 		if ( $key_check || is_numeric( $key_check ) ) {
+			$key = self::maybe_truncate_key_before_appending( $column, $key );
 			// Create a unique field id if it has already been used.
 			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
+		return $key;
+	}
+
+	/**
+	 * Avoid trying to append to a really long key,
+	 * The database limit is 100 for form and field keys so we want to avoid getting too close.
+	 *
+	 * @param string $column
+	 * @param string $key
+	 * @return string
+	 */
+	private static function maybe_truncate_key_before_appending( $column, $key ) {
+		if ( in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
+			$max_key_length_before_truncating = 60;
+			if ( strlen( $key ) > $max_key_length_before_truncating ) {
+				$key = substr( $key, 0, $max_key_length_before_truncating );
+			}
+		}
 		return $key;
 	}
 
@@ -2677,7 +2722,7 @@ class FrmAppHelper {
 			'ta'     => __( 'Tamil', 'formidable' ),
 			'th'     => __( 'Thai', 'formidable' ),
 			'tr'     => __( 'Turkish', 'formidable' ),
-			'uk'     => __( 'Ukranian', 'formidable' ),
+			'uk'     => __( 'Ukrainian', 'formidable' ),
 			'vi'     => __( 'Vietnamese', 'formidable' ),
 		);
 
@@ -2700,6 +2745,248 @@ class FrmAppHelper {
 	 */
 	public static function multiselect_accessibility() {
 		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
+	}
+
+	public static function get_menu_icon_class() {
+		if ( is_callable( 'FrmProAppHelper::get_settings' ) ) {
+			$settings = FrmProAppHelper::get_settings();
+			if ( is_object( $settings ) && ! empty( $settings->menu_icon ) ) {
+				return $settings->menu_icon;
+			}
+		}
+		return 'frmfont frm_logo_icon';
+	}
+
+	/**
+	 * Shows the images dropdown.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $args {
+	 *     Arguments.
+	 *
+	 *     @type string  $selected    Selected value.
+	 *     @type array[] $options     Array of options with keys are option values and values are array.
+	 *                                The option array contains `text`, `svg` and `custom_atts`.
+	 *     @type string  $classes     Custom CSS classes for the wrapper element.
+	 *     @type array   $input_attrs Attributes of value input.
+	 * }
+	 */
+	public static function images_dropdown( $args ) {
+		$args = self::fill_default_images_dropdown_args( $args );
+
+		$input_attrs_str = self::get_images_dropdown_input_attrs( $args );
+		ob_start();
+		include self::plugin_path() . '/classes/views/shared/images-dropdown.php';
+		$output = ob_get_clean();
+
+		/**
+		 * Allows modifying the output of FrmAppHelper::images_dropdown() method.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param string $output The output.
+		 * @param array  $args   Passed arguments.
+		 */
+		echo apply_filters( 'frm_images_dropdown_output', $output, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * Fills the default images_dropdown() arguments.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $args The arguments.
+	 * @return array
+	 */
+	private static function fill_default_images_dropdown_args( $args ) {
+		$defaults = array(
+			'selected'    => '',
+			'options'     => array(),
+			'classes'     => '',
+			'input_attrs' => array(),
+		);
+		$new_args = wp_parse_args( $args, $defaults );
+
+		$new_args['options']     = (array) $new_args['options'];
+		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
+
+		// Set the number of columns.
+		$new_args['col_class'] = ceil( 12 / count( $new_args['options'] ) );
+		if ( $new_args['col_class'] > 6 ) {
+			$new_args['col_class'] = ceil( $new_args['col_class'] / 2 );
+		}
+
+		/**
+		 * Allows modifying the arguments of images_dropdown() method.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $new_args Arguments after filling the defaults.
+		 * @param array $args     Arguments passed to the method, before filling the defaults.
+		 */
+		return apply_filters( 'frm_images_dropdown_args', $new_args, $args );
+	}
+
+	/**
+	 * Gets HTML attributes of the input in images_dropdown() method.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $args The arguments.
+	 * @return string
+	 */
+	private static function get_images_dropdown_input_attrs( $args ) {
+		$input_attrs         = $args['input_attrs'];
+		$input_attrs['type'] = 'radio';
+		$input_attrs['name'] = $args['name'];
+
+		$input_attrs_str = '';
+		foreach ( $input_attrs as $key => $input_attr ) {
+			$input_attrs_str .= ' ' . sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $input_attr ) );
+		}
+
+		/**
+		 * Allows modifying the HTML attributes of the input in images_dropdown() method.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param string $input_attrs_str HTML attributes string.
+		 * @param array  $args            The arguments of images_dropdown() method.
+		 */
+		return apply_filters( 'frm_images_dropdown_input_attrs', $input_attrs_str, $args );
+	}
+
+	/**
+	 * Gets the image of each option in images_dropdown() method.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 * @return string
+	 */
+	private static function get_images_dropdown_option_image( $option, $args ) {
+		$image = self::icon_by_class(
+			'frmfont ' . $option['svg'],
+			array(
+				'echo'   => false,
+			)
+		);
+
+		$args['option'] = $option;
+
+		/**
+		 * Allows modifying the image of each option in images_dropdown() method.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param string $image The image HTML.
+		 * @param array  $args  The arguments of images_dropdown() method, with `option` array is added.
+		 */
+		return apply_filters( 'frm_images_dropdown_option_image', $image, $args );
+	}
+
+	/**
+	 * Gets the HTML classes of each option in images_dropdown() method.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 * @return string
+	 */
+	private static function get_images_dropdown_option_classes( $option, $args ) {
+		$classes = '';
+
+		if ( ! empty( $option['custom_attrs']['class'] ) ) {
+			$classes .= ' ' . $option['custom_attrs']['class'];
+		}
+
+		$args['option'] = $option;
+
+		/**
+		 * Allows modifying the CSS classes of each option in images_dropdown() method.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param string $classes CSS classes.
+		 * @param array  $args    The arguments of images_dropdown() method, with `option` array is added.
+		 */
+		return apply_filters( 'frm_images_dropdown_option_classes', $classes, $args );
+	}
+
+	/**
+	 * Gets the custom HTML attributes of each option in images_dropdown() method.
+	 *
+	 * @since 5.0.04
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 * @return string
+	 */
+	private static function get_images_dropdown_option_html_attrs( $option, $args ) {
+		$html_attrs = '';
+		if ( ! empty( $option['custom_attrs'] ) && is_array( $option['custom_attrs'] ) ) {
+			$html_attrs_arr = array();
+
+			foreach ( $option['custom_attrs'] as $key => $value ) {
+				if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
+					continue;
+				}
+
+				$html_attrs_arr[] = sprintf( '%s="%s"', esc_attr( $key ), esc_attr( $value ) );
+			}
+
+			$html_attrs = implode( ' ', $html_attrs_arr );
+		}
+
+		$args['option'] = $option;
+
+		/**
+		 * Allows modifying the custom HTML attributes of each option in images_dropdown() method.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param string $html_attrs The HTML attributes string.
+		 * @param array  $args       The arguments of images_dropdown() method, with `option` array is added.
+		 */
+		return apply_filters( 'frm_images_dropdown_option_html_attrs', $html_attrs, $args );
+	}
+
+	/**
+	 * @since 5.0.07
+	 *
+	 * @return bool true if the current user is allowed to save unfiltered HTML.
+	 */
+	public static function allow_unfiltered_html() {
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			return false;
+		}
+		return current_user_can( 'unfiltered_html' );
+	}
+
+	/**
+	 * @since 5.0.07
+	 *
+	 * @param array $values
+	 * @param array $keys
+	 * @return array
+	 */
+	public static function maybe_filter_array( $values, $keys ) {
+		$allow_unfiltered_html = self::allow_unfiltered_html();
+
+		if ( $allow_unfiltered_html ) {
+			return $values;
+		}
+
+		foreach ( $keys as $key ) {
+			if ( isset( $values[ $key ] ) ) {
+				$values[ $key ] = self::kses( $values[ $key ], 'all' );
+			}
+		}
+
+		return $values;
 	}
 
 	/**

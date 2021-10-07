@@ -2,10 +2,10 @@
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for WordPress
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
-Requires at least: 4.7
-Tested up to: 5.8
+Requires at least: 5.0
+Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 4.11.05
+Stable tag: 5.0.08
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -27,7 +27,7 @@ Plus, we have optimized Formidable for speed and maximum server performance. We 
 
 You can start with our pre-built templates or create totally custom forms from scratch. All with an easy-to-use drag & drop form maker interface.
 
-https://www.youtube.com/watch?v=d2IPmicn2x8&rel=0
+https://www.youtube.com/watch?v=-eGuL_OWHw4&rel=0
 
 Let’s take a look at all the powerful features for making an amazing lead form, survey form, poll, subscription form, request a quote form, donation form, user registration form, or payment form.
 
@@ -440,41 +440,48 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
-= 4.11.05 =
-* New: Improved support for importing grid and table view content.
-* Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
+= 5.0.08 =
+- Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
+- Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing forms and fields with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- Updated Bootstrap used in back end to version 3.4.1.
+- A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
 
-= 4.11.04 =
-* New: The first field with an error will now automatically get focus when a form is submitted for better accessibility and improved user experience.
-* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
-* Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
-* Fix: The autocomplete page dropdown was not consistent with other styles.
+= 5.0.07 =
+- Security: Unsafe HTML will now be stripped from field labels, descriptions, and custom HTML, as well as form titles, descriptions, custom submit text, custom submit HTML, before HTML, after HTML, and success message if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- New: Added new frm_akismet_values filter to help improve Akismet integration.
+- Fix: The Akismet API was getting called if Akismet was set up even if the form had Akismet turned off.
+- Fix: Updated the styling when a field option is being dragged and dropped.
 
-= 4.11.03 =
-* New: Name fields now work in the To and From settings for email actions.
-* Fix: Images were not properly loading when styles were loading via an AJAX request.
-* Fix: Zeros were not appearing in the entries list for repeaters.
+= 5.0.06 =
+- New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
+- New: When clicking an inactive action that requires pro, the required pro license will be properly shown in the popup.
+- New: Added new frm_fields_to_validate, frm_submit_button_html, and frm_fields_for_csv_export filters.
+- Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
+- Fix: The caret icon on the dropdown was not positioned properly for the Formidable Gutenberg block.
+- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing as empty with no content.
+- Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
+- Fix: Required name fields were not showing error messages when JavaScript validation was enabled.
 
-= 4.11.02 =
-* New: The padding for descriptions can now be customized when editing styles.
+= 5.0.05 =
+* Deprecated the option to disable CSS Grids in form layouts.
+* Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
+* Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
+* Fix: Updated form padding on admin page so forms with custom padding don't appear small in the back end.
 
-= 4.11.01 =
-* New: Added a new frm_duplicate_check_val filter for customizing the duplicate entry check. This can be used to remove IP to help prevent duplicate entries for longer periods of time when using frm_time_to_check_duplicates filter. For an example see https://formidableforms.com/knowledgebase/frm_duplicate_check_val/.
-* New: Added visibility option to the Name field.
-* Fix: The honeypot setting would still appear as on after it was turned off.
+= 5.0.04 =
+* New: Custom HTML for errors is now also applied when validating with JavaScript.
+* New: Added a button to quickly save and reload after activating a new plugin from the settings page.
+* New: Added several new filters required to support the new new Formidable surveys add on.
 
-= 4.11 =
-* New: Added a quick and easy Name field with options for First, Middle, and Last names.
-* New: Added a more powerful spam protection using JavaScript. This can be turned on in the settings.
-* New: Added Honeypot options to settings and changed the default Honeypot behaviour to avoid the false positives some people are seeing on mobile devices.
-* New: Added a frm_process_honeypot filter for gracefully handling honeypot spam.
-* Fix: A warning was getting logged when exporting as XML.
+= 5.0.03 =
+* New: Added an Elementor widget.
+* New: When duplicating fields, most unsaved changes will now duplicate as well.
+* New: Next button label and slider field label previews will now update as soon as the setting is changed in the form builder.
+* New: Slider field previews will now update when the min and max values are updated in the form builder.
+* Fix: The search dropdown was getting cut off on pages with no search results.
+* Fix: When legacy views or visual views are active, both versions were appearing active on the add ons page.
 
-= 4.10.03 =
-* New: Improved the performance of the style editor preview.
-* New: You can now sign up for free templates directly from your inbox.
-* Fix: Date fields were not properly detecting duplicate entries.
-* Fix: Conditionals were not properly fading in when the form block was added to a page.
-* Fix: Actions would occasionally conflict if multiple were added too quickly.
+= 5.0.02 =
+* New: Field groups can now be duplicated and deleted.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

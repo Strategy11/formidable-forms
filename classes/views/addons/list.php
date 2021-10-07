@@ -52,8 +52,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php echo esc_html( $addon['title'] ); ?>
 					</h2>
 					<p>
-						<?php echo esc_html( $addon['excerpt'] ); ?>
-						<?php $show_docs = isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed']; ?>
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo FrmAppHelper::kses( $addon['excerpt'], array( 'a' ) );
+
+						$show_docs = isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'];
+						?>
 						<?php if ( $show_docs ) { ?>
 							<br/><a href="<?php echo esc_url( $addon['docs'] ); ?>" target="_blank" aria-label="<?php esc_attr_e( 'View Docs', 'formidable' ); ?>">
 								<?php esc_html_e( 'View Docs', 'formidable' ); ?>

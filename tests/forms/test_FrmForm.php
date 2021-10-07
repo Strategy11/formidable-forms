@@ -131,11 +131,41 @@ class test_FrmForm extends FrmUnitTest {
 	 * @covers FrmForm::sanitize_field_opt
 	 */
 	public function test_sanitize_field_opt() {
-		$opt            = 'calc';
+		$this->assert_sanitize_field_opt_calc( '', '<div></div>', 'HTML should be stripped from calculations' );
+
 		$original_value = '[189] > 1 && [189] < 5 ? 20 : [189] > 5 && [189] < 8 ? 21 : 0';
-		$value          = $original_value;
-		$this->sanitize_field_opt( $opt, $value );
-		$this->assertEquals( $original_value, $value, 'comparisons should not be detected as unsafe html tags' );
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'comparisons should not be detected as unsafe html tags' );
+
+		$safe_less_than_comparison = '50 < 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, $safe_less_than_comparison );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50<100 ? 1 : 0', 'unspaced comparisons will be padded by a space to avoid strip_tags issues.' );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50 <100 ? 1 : 0' );
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50< 100 ? 1 : 0' );
+
+		$original_value = '50>100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' );
+
+		$original_value = '50 >100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$safe_less_than_equals_comparison = '50 <= 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $safe_less_than_equals_comparison, $safe_less_than_equals_comparison );
+		$this->assert_sanitize_field_opt_calc( '50 <= 100 ? 1 : 0', '50<=100 ? 1 : 0' );
+
+		$original_value = '50 >=100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$original_value = '50>= 100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+
+		$original_value = '50>=100 ? 1 : 0';
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
+	}
+
+	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
+		$value = $original_value;
+		$this->sanitize_field_opt( 'calc', $value );
+		$this->assertEquals( $expected, $value, $message );
 	}
 
 	private function sanitize_field_opt( $opt, &$value ) {
@@ -143,5 +173,23 @@ class test_FrmForm extends FrmUnitTest {
 			array( 'FrmForm', 'sanitize_field_opt' ),
 			array( $opt, &$value )
 		);
+	}
+
+	/**
+	 * @covers FrmForm::normalize_calc_spaces
+	 */
+	public function test_normalize_calc_spaces() {
+		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5<10' ) );
+		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5 <10' ) );
+		$this->assertEquals( '5 < 10', $this->normalize_calc_spaces( '5< 10' ) );
+		$this->assertEquals( '1 < 2 && 3 < 4 && 5 < 6', $this->normalize_calc_spaces( '1<2 && 3<4 && 5<6' ) );
+		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<=10' ) );
+		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5 <=10' ) );
+		$this->assertEquals( '5 <= 10', $this->normalize_calc_spaces( '5<= 10' ) );
+		$this->assertEquals( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
+	}
+
+	private function normalize_calc_spaces( $calc ) {
+		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}
 }

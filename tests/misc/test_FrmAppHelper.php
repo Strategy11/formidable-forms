@@ -455,5 +455,15 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$name = 123;
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertFalse( is_numeric( $key ), 'key should never be numeric.' );
+
+		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
+		// reserve the form key so one has to be generated with this as the base.
+		$this->factory->form->create(
+			array( 'form_key' => $super_long_form_key )
+		);
+
+		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, 'frm_forms', 'form_key' );
+		$this->assertTrue( strlen( $unique_key ) <= 70 );
+		$this->assertNotEquals( $super_long_form_key, $unique_key );
 	}
 }

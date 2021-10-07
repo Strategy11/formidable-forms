@@ -35,7 +35,9 @@ class FrmHooksController {
 		// Instansiate Controllers.
 		foreach ( $controllers as $c ) {
 			foreach ( $hooks as $hook ) {
-				call_user_func( array( $c, $hook ) );
+				if ( is_callable( array( $c, $hook ) ) ) {
+					call_user_func( array( $c, $hook ) );
+				}
 				unset( $hook );
 			}
 			unset( $c );
@@ -90,6 +92,9 @@ class FrmHooksController {
 		 * FrmProContent::replace_single_shortcode() applies this filter like 'frm_keep_' . $field->type . '_value_array'
 		 */
 		add_filter( 'frm_keep_name_value_array', '__return_true' );
+
+		// Elementor.
+		add_action( 'elementor/widgets/widgets_registered', 'FrmElementorController::register_elementor_hooks' );
 	}
 
 	public static function load_admin_hooks() {
@@ -127,6 +132,10 @@ class FrmHooksController {
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
+
+		// Elementor.
+		add_action( 'elementor/editor/footer', 'FrmElementorController::admin_init' );
+
 		add_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 		add_action( 'et_pb_admin_excluded_shortcodes', 'FrmFormsController::prevent_divi_conflict' );
 
@@ -157,6 +166,7 @@ class FrmHooksController {
 
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
+		new FrmPluginSearch();
 	}
 
 	public static function load_ajax_hooks() {
@@ -241,5 +251,13 @@ class FrmHooksController {
 
 		// Drop tables when mu site is deleted.
 		add_filter( 'wpmu_drop_tables', 'FrmAppController::drop_tables' );
+	}
+
+	/**
+	 * @deprecated 5.0.06 use FrmElementorController::register_elementor_hooks directly.
+	 */
+	public static function register_elementor_hooks() {
+		_deprecated_function( __FUNCTION__, '5.0.06', 'FrmElementorController::register_elementor_hooks' );
+		FrmElementorController::register_elementor_hooks();
 	}
 }

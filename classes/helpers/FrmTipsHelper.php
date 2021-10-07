@@ -124,13 +124,6 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
-					'content' => 'ajax',
-				),
-				'tip'  => __( 'Want to submit forms without reloading the page?', 'formidable' ),
-				'call' => __( 'Get ajax form submit.', 'formidable' ),
-			),
-			array(
-				'link' => array(
 					'content' => 'form-scheduling',
 					'param'   => 'schedule-forms-wordpress',
 				),
@@ -238,6 +231,22 @@ class FrmTipsHelper {
 				),
 				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
 				'call' => __( 'Use multiple style templates.', 'formidable' ),
+			),
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'bg-image-style-settings',
+				),
+				'tip'  => __( 'Want to add a background image?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
+			array(
+				'link' => array(
+					'content' => 'style',
+					'param'   => 'bg-image-style-settings',
+				),
+				'tip'  => __( 'Want to set a color with an alpha slider?', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 		);
 

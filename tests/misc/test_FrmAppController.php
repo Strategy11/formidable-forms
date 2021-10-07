@@ -121,16 +121,16 @@ class test_FrmAppController extends FrmUnitTest {
 			),
 			array(
 				'version'  => '5.0',
-				'db'       => 50,
+				'db'       => 98,
 				'expected' => true,
 			),
 			array(
-				'version'  => '5.0',
+				'version'  => '6.0',
 				'db'       => FrmAppHelper::$db_version + 1,
 				'expected' => false,
 			),
 			array(
-				'version'  => '5.01.10',
+				'version'  => '6.01.10',
 				'db'       => 900,
 				'expected' => false,
 			),
