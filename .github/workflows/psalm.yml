@@ -11,3 +11,5 @@ jobs:
 
       - name: Psalm
         uses: docker://vimeo/psalm-github-actions
+        with:
+          composer_reqiure_dev: true
