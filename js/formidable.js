@@ -470,7 +470,7 @@ function frmFrontFormJS() {
 			msg = '';
 		}
 
-		if ( '' !== msg ) {
+		if ( '' !== msg && shouldWrapErrorHtmlAroundMessageType( messageType ) ) {
 			errorHtml = field.getAttribute( 'data-error-html' );
 			if ( null !== errorHtml ) {
 				errorHtml = errorHtml.replace( /\+/g, '%20' );
@@ -480,6 +480,10 @@ function frmFrontFormJS() {
 		}
 
 		return msg;
+	}
+
+	function shouldWrapErrorHtmlAroundMessageType( type ) {
+		return 'pattern' !== type;
 	}
 
 	function shouldJSValidate( object ) {

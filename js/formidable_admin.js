@@ -588,6 +588,14 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function deleteTooltips() {
+		document.querySelectorAll( '.tooltip' ).forEach(
+			function( tooltip ) {
+				tooltip.remove();
+			}
+		);
+	}
+
 	function removeThisTag() {
 		/*jshint validthis:true */
 		var show, hide, removeMore,
@@ -1174,6 +1182,8 @@ function frmAdminBuildJS() {
 
 			controls = div();
 			controls.id = 'frm_field_group_controls';
+			controls.setAttribute( 'role', 'group' );
+			controls.setAttribute( 'tabindex', 0 );
 			setFieldControlsHtml( controls );
 			document.getElementById( 'frm_builder_page' ).appendChild( controls );
 		}
@@ -1183,9 +1193,38 @@ function frmAdminBuildJS() {
 	}
 
 	function setFieldControlsHtml( controls ) {
-		controls.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg></span>';
-		controls.innerHTML += '<span class="frm-move"><svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg></span>';
+		var layoutOption, moveOption;
+
+		layoutOption = document.createElement( 'span' );
+		layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
+		const layoutOptionLabel = __( 'Set Row Layout', 'formidable' );
+		addTooltip( layoutOption, layoutOptionLabel );
+		makeTabbable( layoutOption, layoutOptionLabel );
+
+		moveOption = document.createElement( 'span' );
+		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
+		addTooltip( moveOption, moveOptionLabel );
+		makeTabbable( moveOption, moveOptionLabel );
+
+		controls.innerHTML = '';
+		controls.appendChild( layoutOption );
+		controls.appendChild( moveOption );
 		controls.appendChild( getFieldControlsDropdown() );
+	}
+
+	function addTooltip( element, title ) {
+		element.setAttribute( 'data-toggle', 'tooltip' );
+		element.setAttribute( 'data-container', 'body' );
+		element.setAttribute( 'title', title );
+		element.addEventListener(
+			'mouseover',
+			function() {
+				if ( null === element.getAttribute( 'data-original-title' ) ) {
+					jQuery( element ).tooltip();
+				}
+			}
+		);
 	}
 
 	function getFieldControlsDropdown() {
@@ -1199,6 +1238,7 @@ function frmAdminBuildJS() {
 		trigger.setAttribute( 'title', __( 'More Options', 'formidable' ) );
 		trigger.setAttribute( 'data-toggle', 'dropdown' );
 		trigger.setAttribute( 'data-container', 'body' );
+		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
 		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
@@ -1954,12 +1994,19 @@ function frmAdminBuildJS() {
 				if ( null === ul ) {
 					return;
 				}
+				if ( null === ul.getAttribute( 'aria-label' ) ) {
+					ul.setAttribute( 'aria-label', __( 'More Options', 'formidable' ) );
+				}
 				if ( 0 === ul.children.length ) {
 					fillFieldActionDropdown( ul, true === isFieldGroup );
 				}
 				$ul = jQuery( ul );
 				if ( $ul.offset().left > jQuery( window ).width() - $ul.outerWidth() ) {
 					ul.style.left = ( -$ul.outerWidth() ) + 'px';
+				}
+				const firstAnchor = ul.firstElementChild.querySelector( 'a' );
+				if ( firstAnchor ) {
+					firstAnchor.focus();
 				}
 			},
 			0
@@ -1981,18 +2028,22 @@ function frmAdminBuildJS() {
 		}
 		options.forEach(
 			function( option ) {
-				var li, span;
+				var li, anchor, span;
 				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li', option.class + classSuffix );
-				if ( 'frm_delete' === option.class ) {
-					// delete using a confirmation that will cause a redirect if href isn't set to #.
-					li.setAttribute( 'href', '#' );
-				}
+				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li' );
+
+				anchor = document.createElement( 'a' );
+				anchor.classList.add( option.class + classSuffix );
+				anchor.setAttribute( 'href', '#' );
+				makeTabbable( anchor );
+
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
-				li.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
-				li.appendChild( document.createTextNode( ' ' ) );
-				li.appendChild( span );
+				anchor.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+				anchor.appendChild( document.createTextNode( ' ' ) );
+				anchor.appendChild( span );
+
+				li.appendChild( anchor );
 				ul.appendChild( li );
 			}
 		);
@@ -2971,9 +3022,7 @@ function frmAdminBuildJS() {
 	function addImageToOption( event ) {
 		var fileFrame,
 			$this = jQuery( this ),
-			$field = $this.closest( '.frm-single-settings' ),
 			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
-			fieldId = $field.data( 'fid' ),
 			postID = 0;
 
 		event.preventDefault();
@@ -2989,7 +3038,7 @@ function frmAdminBuildJS() {
 
 		fileFrame.on( 'select', function() {
 			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
-			$imagePreview.find( 'img' ).attr( 'src', attachment.url );
+			$imagePreview.find( 'img' ).attr( 'src', attachment.url ).removeClass( 'frm_hidden' );
 			$imagePreview.find( '.frm_image_preview_frame' ).show();
 			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
@@ -3003,8 +3052,6 @@ function frmAdminBuildJS() {
 
 	function removeImageFromOption( event ) {
 		var $this = jQuery( this ),
-			$field = $this.closest( '.frm-single-settings' ),
-			fieldId = $field.data( 'fid' ),
 			previewWrapper = $this.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
@@ -3245,6 +3292,11 @@ function frmAdminBuildJS() {
 		popupWrapper.style.position = 'relative';
 		popupWrapper.appendChild( getFieldGroupPopup( sizeOfFieldGroup, this ) );
 		this.parentNode.appendChild( popupWrapper );
+
+		const firstLayoutOption = popupWrapper.querySelector( '.frm-row-layout-option' );
+		if ( firstLayoutOption ) {
+			firstLayoutOption.focus();
+		}
 	}
 
 	function destroyFieldGroupPopupOnOutsideClick( event ) {
@@ -3321,7 +3373,16 @@ function frmAdminBuildJS() {
 		option.textContent = __( 'Custom layout', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_gear_svg' ) );
 		option.classList.add( 'frm-custom-field-group-layout' );
+		makeTabbable( option );
 		return option;
+	}
+
+	function makeTabbable( element, ariaLabel ) {
+		element.setAttribute( 'tabindex', 0 );
+		element.setAttribute( 'role', 'button' );
+		if ( 'undefined' !== typeof ariaLabel ) {
+			element.setAttribute( 'aria-label', ariaLabel );
+		}
 	}
 
 	function getIconClone( iconId ) {
@@ -3335,6 +3396,7 @@ function frmAdminBuildJS() {
 		option.textContent = __( 'Break into rows', 'formidable' );
 		jQuery( option ).prepend( getIconClone( 'frm_break_field_group_svg' ) );
 		option.classList.add( 'frm-break-field-group' );
+		makeTabbable( option );
 		return option;
 	}
 
@@ -3373,6 +3435,7 @@ function frmAdminBuildJS() {
 
 		option = div();
 		option.classList.add( 'frm-row-layout-option' );
+		makeTabbable( option, type );
 
 		switch ( size ) {
 			case 6:
@@ -3624,6 +3687,16 @@ function frmAdminBuildJS() {
 		wrapper.appendChild( buttonsWrapper );
 
 		popup.appendChild( wrapper );
+
+		setTimeout(
+			function() {
+				const firstInput = popup.querySelector( 'input.frm-custom-grid-size-input' ).focus();
+				if ( firstInput ) {
+					firstInput.focus();
+				}
+			},
+			0
+		);
 	}
 
 	function customFieldGroupLayoutInsideMergeClick() {
@@ -4106,6 +4179,9 @@ function frmAdminBuildJS() {
 					} else {
 						$liWrapper.remove();
 					}
+
+					// prevent "More Options" tooltips from staying around after their target field is deleted.
+					deleteTooltips();
 				});
 			}
 		});
@@ -5624,7 +5700,7 @@ function frmAdminBuildJS() {
 			button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
 			link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
 			content = this.getAttribute( 'data-content' );
-			if ( content === undefined ) {
+			if ( content === null ) {
 				content = '';
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
@@ -5645,10 +5721,14 @@ function frmAdminBuildJS() {
 			newMessage = link.getAttribute( 'data-message' ),
 			button = document.getElementById( 'frm-oneclick-button' ),
 			showIt = 'block',
+			showMsg = 'block',
 			hideIt = 'none';
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
+			if ( newMessage === null ) {
+				showMsg = 'none';
+			}
 			showIt = 'none';
 			hideIt = 'block';
 			oneclick = JSON.parse( oneclick );
@@ -5673,7 +5753,7 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm-addon-status' ).style.display = 'none';
 		oneclickMessage.style.display = hideIt;
 		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
-		upgradeMessage.style.display = showIt;
+		upgradeMessage.style.display = showMsg;
 		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
 	}
 
@@ -9209,6 +9289,8 @@ function frmAdminBuildJS() {
 		},
 
 		styleInit: function() {
+			const debouncedPreviewUpdate = debounce( changeStyling, 100 );
+
 			collapseAllSections();
 
 			document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
@@ -9217,8 +9299,13 @@ function frmAdminBuildJS() {
 
 			jQuery( 'input.hex' ).wpColorPicker({
 				change: function( event ) {
-					var hexcolor = jQuery( this ).wpColorPicker( 'color' );
-					jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+					if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+						debouncedPreviewUpdate();
+						return;
+					} else {
+						const hexcolor = jQuery( this ).wpColorPicker( 'color' );
+						jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+					}
 				}
 			});
 			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
@@ -9242,7 +9329,7 @@ function frmAdminBuildJS() {
 			}
 
 			// update styling on change
-			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debounce( changeStyling, 100 ) );
+			jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
 			// menu tabs
 			jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
@@ -9327,6 +9414,9 @@ function frmAdminBuildJS() {
 				document.getElementById( 'frm_theme_css' ).value = themeVal;
 				return false;
 			}).trigger( 'change' );
+
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
 		},
 
 		customCSSInit: function() {

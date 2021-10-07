@@ -6,10 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmForm {
 
 	/**
+	 * @param array $values
 	 * @return int|boolean id on success or false on failure
 	 */
 	public static function create( $values ) {
 		global $wpdb;
+
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		$new_values = array(
 			'form_key'       => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
@@ -31,10 +34,8 @@ class FrmForm {
 		$options['submit_html'] = isset( $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
 		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		$options               = self::maybe_filter_form_options( $options );
 		$new_values['options'] = serialize( $options );
-
-		//if(isset($values['id']) && is_numeric($values['id']))
-		//    $new_values['id'] = $values['id'];
 
 		$wpdb->insert( $wpdb->prefix . 'frm_forms', $new_values );
 
@@ -44,6 +45,16 @@ class FrmForm {
 		self::clear_form_cache();
 
 		return $id;
+	}
+
+	/**
+	 * @since 5.0.08
+	 *
+	 * @param array $options
+	 * @return array
+	 */
+	private static function maybe_filter_form_options( $options ) {
+		return FrmAppHelper::maybe_filter_array( $options, array( 'submit_value', 'success_msg', 'before_html', 'after_html', 'submit_html' ) );
 	}
 
 	/**
@@ -126,6 +137,8 @@ class FrmForm {
 	public static function update( $id, $values, $create_link = false ) {
 		global $wpdb;
 
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
+
 		if ( ! isset( $values['status'] ) && ( $create_link || isset( $values['options'] ) || isset( $values['item_meta'] ) || isset( $values['field_options'] ) ) ) {
 			$values['status'] = 'published';
 		}
@@ -183,6 +196,7 @@ class FrmForm {
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
 		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		$options               = self::maybe_filter_form_options( $options );
 		$new_values['options'] = serialize( $options );
 
 		return $new_values;

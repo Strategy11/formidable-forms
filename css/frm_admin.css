@@ -26,6 +26,10 @@
 	--biggest-sidebar: 450px;
 }
 
+body:not(.frm-admin-page-styles) .with_frm_style .frm_form_fields > fieldset {
+	--fieldset-padding: 15px 0;
+}
+
 a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	cursor: pointer;
 	text-decoration: none;
@@ -3703,7 +3707,7 @@ li.sortable-placeholder {
 }
 
 .frm_single_option.ui-sortable-placeholder {
-	box-shadow: 20px -3px 0 1px var(--primary-color);
+	box-shadow: 0 0 1px 1px var(--primary-color);
 }
 
 .frm-is-collapsed + .sortable-placeholder {
@@ -3767,6 +3771,14 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type=text] {
 	width: calc(100% - 73px);
+}
+
+.frm-right-panel.styling_settings .frm_image_preview_wrapper {
+	width: 100%;
+}
+
+.frm-right-panel.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
+	margin-left: 0;
 }
 
 .frm-right-panel .frm_single_option a.frm_remove_tag,
@@ -6758,15 +6770,35 @@ ul .frm_col_two {
 	font-size: 15px;
 }
 
-#frm_field_group_controls .frm-dropdown-menu .frm_dropdown_li,
-.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li {
-	padding: 5px 10px;
-	color: rgba(40, 47, 54, 0.85);
-	cursor: pointer;
+#frm_field_group_controls .frm-dropdown-menu,
+.frm-field-action-icons .frm-dropdown-menu {
+	padding: 0;
+	margin: 0;
 }
 
-#frm_field_group_controls .frm-dropdown-menu .frm_dropdown_li:hover,
-.frm-field-action-icons .frm-dropdown-menu .frm_dropdown_li:hover {
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li  {
+	padding: 0;
+	color: rgba(40, 47, 54, 0.85);
+	cursor: pointer;
+	position: relative;
+	height: 32px;
+}
+
+#frm_builder_page  .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li .frmsvg {
+	color: rgba(40, 47, 54, 0.85) !important;
+}
+
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li  a {
+	padding: 6px 10px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li:hover {
 	background: #F6F7FB;
 }
 

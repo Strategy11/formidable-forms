@@ -67,7 +67,17 @@ class FrmEntryValidate {
 			$where['fi.type not'] = $exclude;
 		}
 
-		return FrmField::getAll( $where, 'field_order' );
+		$fields = FrmField::getAll( $where, 'field_order' );
+
+		/**
+		 * Allows modifying fields to validate.
+		 *
+		 * @since 5.0.06
+		 *
+		 * @param array $fields List of fields.
+		 * @param array $args   Includes `values`, `exclude`, `where`.
+		 */
+		return apply_filters( 'frm_fields_to_validate', $fields, compact( 'values', 'exclude', 'where' ) );
 	}
 
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
@@ -245,7 +255,7 @@ class FrmEntryValidate {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		} elseif ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		} elseif ( self::is_akismet_spam( $values ) && self::is_akismet_enabled_for_user( $values['form_id'] ) ) {
+		} elseif ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 	}
@@ -294,7 +304,7 @@ class FrmEntryValidate {
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		return ( isset( $form->options['akismet'] ) && ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
+		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
 	public static function blacklist_check( $values ) {
@@ -362,6 +372,15 @@ class FrmEntryValidate {
 			'comment_content' => $content,
 		);
 		self::parse_akismet_array( $datas, $values );
+
+		/**
+		 * Allows modifying the values sent to Akismet.
+		 *
+		 * @since 5.0.07
+		 *
+		 * @param array $datas The array of values being sent to Akismet.
+		 */
+		$datas = apply_filters( 'frm_akismet_values', $datas );
 
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
