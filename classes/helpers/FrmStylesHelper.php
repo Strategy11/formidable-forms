@@ -185,10 +185,10 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.0
-	 * @return The class for this icon
+	 * @return string The class for this icon.
 	 */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
-		if ( 'arrow' == $type && is_numeric( $key ) ) {
+		if ( 'arrow' === $type && is_numeric( $key ) ) {
 			//frm_arrowup6_icon
 			$arrow = array(
 				'-' => 'down',
