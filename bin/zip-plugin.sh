@@ -54,6 +54,7 @@ zip -r $zipname $destination \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
+	-x "*/psalm.stubs.php" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
