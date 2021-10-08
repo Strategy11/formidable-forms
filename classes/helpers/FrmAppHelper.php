@@ -860,7 +860,7 @@ class FrmAppHelper {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
-			$icon  = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
 				<use xlink:href="#' . esc_attr( $icon ) . '" />
 			</svg>';
 		}

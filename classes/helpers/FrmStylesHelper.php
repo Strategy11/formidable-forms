@@ -338,14 +338,14 @@ class FrmStylesHelper {
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
-					$settings = $posted['frm_style_setting']['post_content'];
+					$settings   = $posted['frm_style_setting']['post_content'];
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
-					$settings = $posted['post_content'];
+					$settings   = $posted['post_content'];
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
-				$settings = $_GET;
+				$settings   = $_GET;
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
@@ -360,7 +360,7 @@ class FrmStylesHelper {
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
 		}
 
-		$settings['style_class']   .= 'with_frm_style';
+		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
 		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
 

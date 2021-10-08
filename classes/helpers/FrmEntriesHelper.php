@@ -322,16 +322,13 @@ class FrmEntriesHelper {
 	 * @since 4.01
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
-		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			 is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				 ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 		} else {
 			// All of the section was probably removed.
-			$_POST['item_meta'][ $args['parent_field_id'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$_POST['item_meta'][ $args['parent_field_id'] ]                         = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -342,10 +339,10 @@ class FrmEntriesHelper {
 		if ( is_array( $field ) ) {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
-		} else if ( is_object( $field ) ) {
+		} elseif ( is_object( $field ) ) {
 			$field_id  = $field->id;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
-		} else if ( is_numeric( $field ) ) {
+		} elseif ( is_numeric( $field ) ) {
 			$field_id  = $field;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 		} else {

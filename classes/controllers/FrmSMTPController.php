@@ -228,7 +228,7 @@ class FrmSMTPController {
 			esc_attr( $step['button_class'] ),
 			esc_attr( $step['button_action'] ),
 			esc_html( $step['button_text'] )
-		); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		);
 	}
 
 	/**
@@ -272,7 +272,7 @@ class FrmSMTPController {
 			esc_url( admin_url( $this->config['smtp_settings'] ) ),
 			esc_attr( $step['button_class'] ),
 			esc_html( $step['button_text'] )
-		); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		);
 	}
 
 	/**
