@@ -332,10 +332,9 @@ class FrmStylesHelper {
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
 
-			if ( isset( $_POST['frm_style_setting'] ) ) {
+			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// Sanitizing is done later.
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$posted = wp_unslash( $_POST['frm_style_setting'] );
+				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
@@ -464,7 +463,7 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}

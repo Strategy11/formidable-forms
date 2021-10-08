@@ -16,6 +16,7 @@
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.PHP.YodaConditions" />
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -25,23 +26,6 @@
 		</properties>
 	</rule>
 	<rule ref="Squiz.Scope.StaticThisUsage" />
-
-	<!-- HIGH PRIORITY ITEMS TO FIX -->
-	<rule ref="WordPress.Security.NonceVerification.Missing">
-		<exclude-pattern>classes/models/fields/FrmFieldCaptcha.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmFormAction.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmStyle.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmStylesController.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmEntriesController.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmStylesHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmEntriesHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmCSVExportHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmAppHelper.php</exclude-pattern>
-		<exclude-pattern>tests/*</exclude-pattern>
-	</rule>
 
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
@@ -59,14 +43,10 @@
 		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
 	</rule>
 
-	<!-- LOW PRIORITY ITEMS TO FIX -->
-	<rule ref="WordPress.PHP.YodaConditions">
-		<exclude-pattern>classes/*</exclude-pattern>
-		<exclude-pattern>tests/*</exclude-pattern>
-		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
-	</rule>
-
 	<!-- Exclude specific rules for unit tests (fix when possible) -->
+	<rule ref="WordPress.Security.NonceVerification.Missing">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>

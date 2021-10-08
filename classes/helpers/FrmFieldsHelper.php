@@ -124,7 +124,7 @@ class FrmFieldsHelper {
 	 * @param array $values
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
-		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] );
+		$check_post = FrmAppHelper::is_admin_page() && $_POST && isset( $_POST['field_options'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$defaults = self::get_default_field_options_from_field( $field, $values );
 		if ( ! $check_post ) {
@@ -180,20 +180,18 @@ class FrmFieldsHelper {
 	 * @param mixed $value
 	 */
 	private static function get_posted_field_setting( $setting, &$value ) {
-		if ( ! isset( $_POST['field_options'][ $setting ] ) ) {
+		if ( ! isset( $_POST['field_options'][ $setting ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
 		if ( strpos( $setting, 'html' ) !== false ) {
 			// Strip slashes from HTML but not regex or script tags.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$value = wp_unslash( $_POST['field_options'][ $setting ] );
+			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
-			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		} else {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$value = wp_unslash( $_POST['field_options'][ $setting ] );
+			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
 		}
 	}
@@ -1086,29 +1084,31 @@ class FrmFieldsHelper {
 
 		// Check posted vals before checking saved values
 		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
-		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) {
+		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ) : '';
 			} else {
-				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) );
+				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 
 			return $other_val;
 
-		} elseif ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) {
+		} elseif ( isset( $field['id'] ) && isset( $_POST['item_meta']['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// For normal fields
 
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$other_val = isset( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( wp_unslash( $_POST['item_meta']['other'][ $field['id'] ][ $opt_key ] ) ) : '';
 			} else {
-				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta']['other'][ $field['id'] ] ) );
+				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta']['other'][ $field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 
 			return $other_val;
 		}
 
 		// For checkboxes
-		if ( $field['type'] == 'checkbox' && is_array( $field['value'] ) ) {
+		if ( $field['type'] === 'checkbox' && is_array( $field['value'] ) ) {
 			// Check if there is an "other" val in saved value and make sure the
 			// "other" val is not equal to the Other checkbox option
 			if ( isset( $field['value'][ $opt_key ] ) && $field['options'][ $opt_key ] != $field['value'][ $opt_key ] ) {

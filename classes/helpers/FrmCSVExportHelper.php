@@ -71,7 +71,7 @@ class FrmCSVExportHelper {
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator;
+		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep );
 	}

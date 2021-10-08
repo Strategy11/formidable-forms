@@ -130,8 +130,8 @@ class FrmFormsController {
 
 		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 
-		$errors = FrmForm::validate( $_POST );
-		$warnings = FrmFormsHelper::check_for_warnings( $_POST );
+		$errors = FrmForm::validate( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$warnings = FrmFormsHelper::check_for_warnings( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( count( $errors ) > 0 ) {
 			return self::get_settings_vars( $id, $errors, compact( 'warnings' ) );
@@ -141,9 +141,9 @@ class FrmFormsController {
 
 		$antispam_was_on = self::antispam_was_on( $id );
 
-		FrmForm::update( $id, $_POST );
+		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		$antispam_is_on = ! empty( $_POST['options']['antispam'] );
+		$antispam_is_on = ! empty( $_POST['options']['antispam'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( $antispam_is_on !== $antispam_was_on ) {
 			FrmAntiSpam::clear_caches();
 		}
@@ -164,7 +164,7 @@ class FrmFormsController {
 
 	public static function update( $values = array() ) {
 		if ( empty( $values ) ) {
-			$values = $_POST;
+			$values = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		// Set radio button and checkbox meta equal to "other" value.
@@ -1462,11 +1462,11 @@ class FrmFormsController {
 		$vars   = array();
 		FrmAppHelper::include_svg();
 
-		if ( isset( $_POST['frm_compact_fields'] ) ) {
+		if ( isset( $_POST['frm_compact_fields'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 			// Javascript needs to be allowed in some field settings.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', wp_unslash( $_POST['frm_compact_fields'] ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
 			if ( empty( $json_vars ) ) {
@@ -1480,9 +1480,9 @@ class FrmFormsController {
 			} else {
 				$vars   = FrmAppHelper::json_to_array( $json_vars );
 				$action = $vars[ $action ];
-				unset( $_REQUEST['frm_compact_fields'], $_POST['frm_compact_fields'] );
-				$_REQUEST = array_merge( $_REQUEST, $vars );
-				$_POST    = array_merge( $_POST, $_REQUEST );
+				unset( $_REQUEST['frm_compact_fields'], $_POST['frm_compact_fields'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$_REQUEST = array_merge( $_REQUEST, $vars ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$_POST    = array_merge( $_POST, $_REQUEST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 		} else {
 			$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
@@ -1743,7 +1743,7 @@ class FrmFormsController {
 	}
 
 	private static function is_viewable_draft_form( $form ) {
-		return $form->status == 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
+		return $form->status === 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
 	}
 
 	public static function get_form( $form, $title, $description, $atts = array() ) {
@@ -1773,7 +1773,7 @@ class FrmFormsController {
 		$reset     = false;
 		$pass_args = compact( 'form', 'fields', 'errors', 'title', 'description', 'reset' );
 
-		$handle_process_here = $params['action'] == 'create' && $params['posted_form_id'] == $form->id && $_POST;
+		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $handle_process_here ) {
 			do_action( 'frm_display_form_action', $params, $fields, $form, $title, $description );
@@ -1814,7 +1814,7 @@ class FrmFormsController {
 	private static function get_saved_errors( $form, $params ) {
 		global $frm_vars;
 
-		if ( $params['posted_form_id'] == $form->id && $_POST && isset( $frm_vars['created_entries'][ $form->id ] ) ) {
+		if ( $params['posted_form_id'] == $form->id && $_POST && isset( $frm_vars['created_entries'][ $form->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$errors = $frm_vars['created_entries'][ $form->id ]['errors'];
 		} else {
 			$errors = array();
