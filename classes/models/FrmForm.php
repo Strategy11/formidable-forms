@@ -518,7 +518,7 @@ class FrmForm {
 		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, options' );
 
 		if ( ! $trash_forms ) {
-			return;
+			return 0;
 		}
 
 		if ( empty( $delete_timestamp ) ) {
