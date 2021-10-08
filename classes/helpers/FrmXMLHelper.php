@@ -18,7 +18,7 @@ class FrmXMLHelper {
 				echo '</' . esc_html( $tag ) . '>';
 			}
 		} else {
-			echo self::cdata( $opt ); // WPCS: XSS ok.
+			echo self::cdata( $opt ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 

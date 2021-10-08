@@ -169,7 +169,7 @@ class FrmAppHelper {
 	 * @since 4.0
 	 */
 	public static function show_logo( $atts = array() ) {
-		echo self::kses( self::svg_logo( $atts ), 'all' ); // WPCS: XSS ok.
+		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -192,7 +192,7 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
-		echo self::kses( $icon, 'all' ); // WPCS: XSS ok.
+		echo self::kses( $icon, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -867,7 +867,7 @@ class FrmAppHelper {
 		}
 
 		if ( $echo ) {
-			echo $icon; // WPCS: XSS ok.
+			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}

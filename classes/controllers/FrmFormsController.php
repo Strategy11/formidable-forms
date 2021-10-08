@@ -196,7 +196,7 @@ class FrmFormsController {
 			}
 
 			if ( defined( 'DOING_AJAX' ) ) {
-				wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // WPCS: XSS ok.
+				wp_die( FrmAppHelper::kses( $message, array( 'a' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 
 			return self::get_edit_vars( $id, array(), $message );
@@ -267,7 +267,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 */
 	public static function show_page_preview() {
-		echo self::page_preview(); // WPCS: XSS ok.
+		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	public static function preview() {
@@ -643,8 +643,8 @@ class FrmFormsController {
 			$menu_name = FrmAppHelper::get_menu_name();
 			$icon      = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
 			echo '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' .
-				FrmAppHelper::kses( $icon, 'all' ) .
-				' ' . esc_html( $menu_name ) . '</a>'; // WPCS: XSS ok.
+				FrmAppHelper::kses( $icon, 'all' ) . // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				' ' . esc_html( $menu_name ) . '</a>';
 		}
 	}
 
@@ -1365,7 +1365,7 @@ class FrmFormsController {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		echo FrmEntriesController::show_entry_shortcode( // WPCS: XSS ok.
+		echo FrmEntriesController::show_entry_shortcode( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			array(
 				'form_id'       => FrmAppHelper::get_post_param( 'form_id', '', 'absint' ),
 				'default_email' => true,
@@ -1914,7 +1914,7 @@ class FrmFormsController {
 			$old_post = $post;
 			$post     = $page;
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
-			echo apply_filters( 'the_content', $content ); // WPCS: XSS ok.
+			echo apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			$post = $old_post;
 		}
 	}
@@ -1953,7 +1953,7 @@ class FrmFormsController {
 		} else {
 			add_filter( 'frm_use_wpautop', '__return_true' );
 
-			echo $redirect_msg; // WPCS: XSS ok.
+			echo $redirect_msg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 8000);}</script>";
 		}
 	}

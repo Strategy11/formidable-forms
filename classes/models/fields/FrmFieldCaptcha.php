@@ -185,7 +185,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function should_validate() {
-		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // WPCS: CSRF ok.
+		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
 			return false;
 		}

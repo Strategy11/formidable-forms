@@ -50,10 +50,10 @@ foreach ( $messages as $key => $message ) {
 			</span>
 		</header>
 		<div class="frm_inbox_body">
-			<p><?php echo FrmAppHelper::kses( $message['message'], array( 'a', 'p', 'div', 'span', 'br' ) ); // WPCS: XSS ok. ?></p>
+			<p><?php echo FrmAppHelper::kses( $message['message'], array( 'a', 'p', 'div', 'span', 'br' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 		</div>
 		<footer>
-			<?php echo FrmAppHelper::kses( $message['cta'], array( 'a' ) ); // WPCS: XSS ok. ?>
+			<?php echo FrmAppHelper::kses( $message['cta'], array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</footer>
 	</section>
 	<?php

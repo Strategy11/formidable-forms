@@ -8,12 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		data-limit="<?php echo esc_attr( $action_control->action_options['limit'] ); ?>"
 		data-actiontype="<?php echo esc_attr( $action_control->id_base ); ?>"
 		<?php
-		echo FrmAppHelper::array_to_html_params( $data ); // WPCS: XSS ok.
+		echo FrmAppHelper::array_to_html_params( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 		>
 		<span class="frm-outer-circle">
 			<span class="frm-inner-circle<?php echo esc_attr( strpos( $action_control->action_options['classes'], 'frm-inverse' ) === false ? '' : ' frm-inverse' ); ?>" <?php
-				echo FrmAppHelper::array_to_html_params( $icon_atts ); // WPCS: XSS ok.
+				echo FrmAppHelper::array_to_html_params( $icon_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>>
 				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>
 			</span>

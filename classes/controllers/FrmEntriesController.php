@@ -406,7 +406,7 @@ class FrmEntriesController {
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
 			if ( headers_sent() ) {
-				echo FrmAppHelper::js_redirect( $url ); // WPCS: XSS ok.
+				echo FrmAppHelper::js_redirect( $url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			} else {
 				wp_redirect( esc_url_raw( $url ) );
 			}

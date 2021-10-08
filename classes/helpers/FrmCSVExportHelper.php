@@ -505,7 +505,7 @@ class FrmCSVExportHelper {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 
-			echo $sep . '"' . $val . '"'; // WPCS: XSS ok.
+			echo $sep . '"' . $val . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			$sep = self::$column_separator;
 
 			unset( $k, $row );

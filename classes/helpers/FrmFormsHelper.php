@@ -48,7 +48,7 @@ class FrmFormsHelper {
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
-			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // WPCS: XSS ok. ?>>
+			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
 				<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 			<?php } ?>
@@ -427,7 +427,7 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
-			echo $button; // WPCS: XSS ok.
+			echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			return;
 		}
@@ -449,9 +449,9 @@ BEFORE_HTML;
 			}
 		}
 
-		echo $button_parts[0]; // WPCS: XSS ok.
+		echo $button_parts[0]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'frm_submit_button_action', $form, $form_action );
-		echo $button_parts[1]; // WPCS: XSS ok.
+		echo $button_parts[1]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

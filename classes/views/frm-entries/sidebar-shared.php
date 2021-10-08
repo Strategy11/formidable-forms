@@ -79,8 +79,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				printf(
 					/* translators: %1$s: User display name. */
 					esc_html__( 'Created by: %1$s', 'formidable' ),
-					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ), array( 'a' ) )
-				); // WPCS: XSS ok.
+					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ), array( 'a' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
 				?>
 			</div>
 		<?php } ?>
@@ -93,8 +93,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				printf(
 					/* translators: %1$s: User display name. */
 					esc_html__( 'Updated by: %1$s', 'formidable' ),
-					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ), array( 'a' ) )
-				); // WPCS: XSS ok.
+					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ), array( 'a' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
 				?>
 			</div>
 		<?php } ?>

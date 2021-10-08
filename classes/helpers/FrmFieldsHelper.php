@@ -190,7 +190,7 @@ class FrmFieldsHelper {
 			$value = wp_unslash( $_POST['field_options'][ $setting ] );
 		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
 			// TODO: Remove stripslashes on output, and use on input only.
-			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // WPCS: sanitization ok.
+			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		} else {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = wp_unslash( $_POST['field_options'][ $setting ] );
@@ -1854,7 +1854,7 @@ class FrmFieldsHelper {
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
 		}
-		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 		</li>
 		<?php

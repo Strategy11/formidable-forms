@@ -454,7 +454,7 @@ class FrmFieldsController {
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
 		if ( $echo ) {
-			echo $add_html; // WPCS: XSS ok.
+			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		return $add_html;
