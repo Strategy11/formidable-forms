@@ -95,7 +95,7 @@ class FrmFormsController {
 	 *
 	 * @since 2.02.11
 	 *
-	 * @param object $form
+	 * @param object|int $form
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
@@ -429,7 +429,7 @@ class FrmFormsController {
 	/**
 	 * @param string $status
 	 *
-	 * @return int The number of forms changed
+	 * @return void
 	 */
 	public static function change_form_status( $status ) {
 		$available_status = array(

@@ -6,7 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryMeta {
 
 	/**
-	 * @param string $meta_key
+	 * @param int    $entry_id
+	 * @param int    $field_id
+	 * @param string $meta_key usually set to '' as this parameter is no longer used.
+	 * @param mixed  $meta_value
 	 */
 	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		global $wpdb;
@@ -164,7 +167,7 @@ class FrmEntryMeta {
 	public static function duplicate_entry_metas( $old_id, $new_id ) {
 		$metas = self::get_entry_meta_info( $old_id );
 		foreach ( $metas as $meta ) {
-			self::add_entry_meta( $new_id, $meta->field_id, null, $meta->meta_value );
+			self::add_entry_meta( $new_id, $meta->field_id, '', $meta->meta_value );
 			unset( $meta );
 		}
 		self::clear_cache();

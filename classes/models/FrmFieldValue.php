@@ -182,7 +182,7 @@ class FrmFieldValue {
 	 *
 	 * @param array $atts
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	protected function generate_displayed_value_for_field_type( $atts ) {
 		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
