@@ -1034,6 +1034,7 @@ class FrmAppHelper {
 
 	/**
 	 * Gets all post from a specific post type.
+	 * This gets the entire WP_Post object so it can require a lot of memory. When only id and title are needed, consider using FrmAppHelper::get_post_ids_and_titles instead.
 	 *
 	 * @since 4.10.01 Add `$post_type` argument.
 	 *
@@ -1050,6 +1051,28 @@ class FrmAppHelper {
 		);
 
 		return get_posts( $query );
+	}
+
+	/**
+	 * Gets post ids and titles for a specific post type.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param string $post_type Post type to query. Default is `page`.
+	 * @return array
+	 */
+	public static function get_post_ids_and_titles( $post_type = 'page' ) {
+		return FrmDb::get_results(
+			'posts',
+			array(
+				'post_type'   => $post_type,
+				'post_status' => array( 'publish', 'private' ),
+			),
+			'ID, post_title',
+			array(
+				'order_by' => 'post_title ASC',
+			)
+		);
 	}
 
 	/**
@@ -1099,7 +1122,7 @@ class FrmAppHelper {
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
 
-		$pages    = self::get_pages( $args['post_type'] );
+		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
 
 		?>
