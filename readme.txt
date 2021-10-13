@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.04
+Stable tag: 5.0.08
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,34 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.08 =
+- Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
+- Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing forms and fields with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- Updated Bootstrap used in back end to version 3.4.1.
+- A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
+
+= 5.0.07 =
+- Security: Unsafe HTML will now be stripped from field labels, descriptions, and custom HTML, as well as form titles, descriptions, custom submit text, custom submit HTML, before HTML, after HTML, and success message if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- New: Added new frm_akismet_values filter to help improve Akismet integration.
+- Fix: The Akismet API was getting called if Akismet was set up even if the form had Akismet turned off.
+- Fix: Updated the styling when a field option is being dragged and dropped.
+
+= 5.0.06 =
+- New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
+- New: When clicking an inactive action that requires pro, the required pro license will be properly shown in the popup.
+- New: Added new frm_fields_to_validate, frm_submit_button_html, and frm_fields_for_csv_export filters.
+- Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
+- Fix: The caret icon on the dropdown was not positioned properly for the Formidable Gutenberg block.
+- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing as empty with no content.
+- Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
+- Fix: Required name fields were not showing error messages when JavaScript validation was enabled.
+
+= 5.0.05 =
+* Deprecated the option to disable CSS Grids in form layouts.
+* Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
+* Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
+* Fix: Updated form padding on admin page so forms with custom padding don't appear small in the back end.
+
 = 5.0.04 =
 * New: Custom HTML for errors is now also applied when validating with JavaScript.
 * New: Added a button to quickly save and reload after activating a new plugin from the settings page.
@@ -455,32 +483,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 = 5.0.02 =
 * New: Field groups can now be duplicated and deleted.
-
-= 5.0.01 =
-* New: Updated styling and icons in the back end builder.
-* New: Added search to form fields in the builder to make finding a specific field easier.
-* Fix: Toggling a page to collapse was not working properly, causing the first page break to collapse the whole page and the other page break fields to do nothing.
-* Fix: Added truncation to long form keys during duplication to avoid issues with duplicating when the generated key was too long.
-
-= 5.0 =
-* Increased WP version requirement to 5.0.
-* New: Fields can now be dragged beside each other and grid layouts will be automatically applied.
-* New: Added the option to quickly set layouts for a full row of fields at once.
-* New: Fields can now be multiselected using the command, control, and shift keys. Selected field groups can be merged into rows and deleted in batches.
-* New: Added additional formatting to calculations to avoid issues with comparisons getting stripped when spaces are left out.
-* New: Permissions are now updated right away when a Formidable license is activated to avoid issues with certain pro features not being available right away.
-* Fix: Updated styling rules for repeater button icons to avoid issues with file upload icons getting styled as well.
-* Fix: The confirmation pop up title was displaying as inline when trying to delete a section.
-* Fix: Updated styling for new fields that are about to be dropped into a form.
-
-= 4.11.05 =
-* New: Improved support for importing grid and table view content.
-* Fix: The update and preview buttons in the form builder would wrap to two lines for some longer translations including German and Dutch.
-
-= 4.11.04 =
-* New: The first field with an error will now automatically get focus when a form is submitted for better accessibility and improved user experience.
-* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
-* Fix: When switching between the dropdown and text lookup types, the watch lookup option not properly toggle back on.
-* Fix: The autocomplete page dropdown was not consistent with other styles.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

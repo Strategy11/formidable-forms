@@ -37,6 +37,8 @@ zip -r $zipname $destination \
 	-x "*/.git/*" \
 	-x "*/.github/*" \
 	-x "*/bin/*" \
+	-x "*/scss/*" \
+	-x "*/css/*.css.map" \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
 	-x "*/composer.lock" \
@@ -52,10 +54,13 @@ zip -r $zipname $destination \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
+	-x "*/psalm.stubs.php" \
+	-x "*/psalm.xml" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
 	-x "*/vendor/*" \
+	-x "*/temp.xml" \
 	-x "formidable-pro/views/*" \
 	-x "formidable-views/js/dom.js" \
 	-x "formidable-views/js/editor.js" \

@@ -623,7 +623,7 @@ class FrmXMLController {
 			}
 		}
 
-		return $csv_fields;
+		return apply_filters( 'frm_fields_for_csv_export', $csv_fields, compact( 'form' ) );
 	}
 
 	public static function allow_mime( $mimes ) {

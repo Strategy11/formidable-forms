@@ -112,40 +112,10 @@ class FrmFieldsController {
 		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
 		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 
-		$copy_field = FrmField::getOne( $field_id );
-		if ( ! $copy_field ) {
-			wp_die();
-		}
+		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
-		do_action( 'frm_duplicate_field', $copy_field, $form_id );
-		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
-
-		$values = array(
-			'id' => $copy_field->id,
-		);
-		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
-		$field_id = FrmField::create( $values );
-
-		/**
-		 * Fires after duplicating a field.
-		 *
-		 * @since 5.0.04
-		 *
-		 * @param array $args {
-		 *     The arguments.
-		 *
-		 *     @type int    $field_id   New field ID.
-		 *     @type array  $values     Values before inserting.
-		 *     @type object $copy_field Copy field data.
-		 *     @type int    $form_id    Form ID.
-		 * }
-		 */
-		do_action( 'frm_after_duplicate_field', compact( 'field_id', 'values', 'copy_field', 'form_id' ) );
-
-		if ( $field_id ) {
-			self::load_single_field( $field_id, $values );
+		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
+			self::load_single_field( $new_field['field_id'], $new_field['values'] );
 		}
 
 		wp_die();
@@ -780,9 +750,13 @@ class FrmFieldsController {
 			return false;
 		}
 
-		$error_body = substr( $custom_html, $start + 10, $end - $start - 10 );
-		if ( '<div class="frm_error" id="frm_error_field_[key]">[error]</div>' === $error_body ) {
-			// no custom HTML if the default is detected, so do nothing special.
+		$error_body   = substr( $custom_html, $start + 10, $end - $start - 10 );
+		$default_html = array(
+			'<div class="frm_error" id="frm_error_field_[key]">[error]</div>',
+			'<div class="frm_error">[error]</div>',
+		);
+
+		if ( in_array( $error_body, $default_html, true ) ) {
 			return false;
 		}
 
@@ -790,7 +764,7 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * If 'required' is added to a conditionall hidden field, the form won't
+	 * If 'required' is added to a conditionally hidden field, the form won't
 	 * submit in many browsers. Check to make sure the javascript to conditionally
 	 * remove it is present if needed.
 	 *
@@ -799,7 +773,7 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
-		if ( in_array( $field['type'], array( 'radio', 'checkbox', 'file', 'data', 'lookup' ) ) ) {
+		if ( in_array( $field['type'], array( 'file', 'data', 'lookup' ), true ) ) {
 			return;
 		}
 

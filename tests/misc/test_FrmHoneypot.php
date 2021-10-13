@@ -9,7 +9,7 @@ class test_FrmHoneypot extends FrmUnitTest {
 
 	private $honeypot;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->form_id  = $this->factory->form->create();
 		$this->honeypot = new FrmHoneypot( $this->form_id );

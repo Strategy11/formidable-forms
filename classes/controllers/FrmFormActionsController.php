@@ -204,7 +204,7 @@ class FrmFormActionsController {
 		/* translators: %s: Name of form action */
 		$upgrade_label = sprintf( esc_html__( '%s form actions', 'formidable' ), $action_control->action_options['tooltip'] );
 
-		$default_shown    = array( 'wppost', 'register', 'paypal', 'payment', 'mailchimp' );
+		$default_shown    = array( 'wppost', 'register', 'paypal', 'payment', 'hubspot' );
 		$default_shown    = array_values( array_diff( $default_shown, $allowed ) );
 		$default_position = array_search( $action_control->id_base, $default_shown );
 		$allowed_count    = count( $allowed );
@@ -224,6 +224,15 @@ class FrmFormActionsController {
 			if ( isset( $upgrading['url'] ) ) {
 				$data['data-oneclick'] = json_encode( $upgrading );
 			}
+
+			if ( isset( $action_control->action_options['message'] ) ) {
+				$data['data-message'] = $action_control->action_options['message'];
+			}
+
+			$requires = self::action_requires( $upgrading );
+			if ( $requires ) {
+				$data['data-requires'] = $requires;
+			}
 		}
 
 		// HTML to include on the icon.
@@ -234,7 +243,30 @@ class FrmFormActionsController {
 			);
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
+	}
+
+	/**
+	 * @since 5.0.06
+	 *
+	 * @param array $upgrading
+	 * @return string|false
+	 */
+	private static function action_requires( $upgrading ) {
+		if ( ! isset( $upgrading['categories'] ) || ! is_array( $upgrading['categories'] ) ) {
+			return false;
+		}
+		$plans      = array( 'Business', 'Elite', 'Basic' );
+		$plus_plans = array( 'Creator', 'Personal', 'Plus' );
+		foreach ( $upgrading['categories'] as $category ) {
+			if ( in_array( $category, $plans, true ) ) {
+				return $category;
+			}
+			if ( in_array( $category, $plus_plans, true ) ) {
+				return 'Plus';
+			}
+		}
+		return false;
 	}
 
 	public static function get_form_actions( $action = 'all' ) {

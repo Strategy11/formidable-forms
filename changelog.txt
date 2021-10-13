@@ -1,4 +1,32 @@
 == Changelog ==
+= 5.0.08 =
+- Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
+- Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing forms and fields with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- Updated Bootstrap used in back end to version 3.4.1.
+- A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
+
+= 5.0.07 =
+- Security: Unsafe HTML will now be stripped from field labels, descriptions, and custom HTML, as well as form titles, descriptions, custom submit text, custom submit HTML, before HTML, after HTML, and success message if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
+- New: Added new frm_akismet_values filter to help improve Akismet integration.
+- Fix: The Akismet API was getting called if Akismet was set up even if the form had Akismet turned off.
+- Fix: Updated the styling when a field option is being dragged and dropped.
+
+= 5.0.06 =
+- New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
+- New: When clicking an inactive action that requires pro, the required pro license will be properly shown in the popup.
+- New: Added new frm_fields_to_validate, frm_submit_button_html, and frm_fields_for_csv_export filters.
+- Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
+- Fix: The caret icon on the dropdown was not positioned properly for the Formidable Gutenberg block.
+- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing as empty with no content.
+- Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
+- Fix: Required name fields were not showing error messages when JavaScript validation was enabled.
+
+= 5.0.05 =
+* Deprecated the option to disable CSS Grids in form layouts.
+* Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
+* Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
+* Fix: Updated form padding on admin page so forms with custom padding don't appear small in the back end.
+
 = 5.0.04 =
 * New: Custom HTML for errors is now also applied when validating with JavaScript.
 * New: Added a button to quickly save and reload after activating a new plugin from the settings page.

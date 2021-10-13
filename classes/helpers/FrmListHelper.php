@@ -438,9 +438,9 @@ class FrmListHelper {
 		return $action;
 	}
 
-	private static function get_bulk_action( $action_name ) {
+	private function get_bulk_action( $action_name ) {
 		$action       = false;
-		$action_param = self::get_param(
+		$action_param = $this->get_param(
 			array(
 				'param'    => $action_name,
 				'sanitize' => 'sanitize_text_field',

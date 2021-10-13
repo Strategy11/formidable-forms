@@ -144,8 +144,21 @@ class FrmSettings {
 		}
 	}
 
+	/**
+	 * @param array $params
+	 */
 	public function fill_with_defaults( $params = array() ) {
-		$settings = $this->default_options();
+		$settings    = $this->default_options();
+		$filter_html = ! FrmAppHelper::allow_unfiltered_html();
+
+		if ( $filter_html ) {
+			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+			if ( ! empty( $params['additional_filter_keys'] ) ) {
+				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
+			}
+		} else {
+			$filter_keys = array();
+		}
 
 		foreach ( $settings as $setting => $default ) {
 			if ( isset( $params[ 'frm_' . $setting ] ) ) {
@@ -154,8 +167,12 @@ class FrmSettings {
 				$this->{$setting} = $default;
 			}
 
-			if ( $setting == 'menu' && empty( $this->{$setting} ) ) {
+			if ( $setting === 'menu' && empty( $this->{$setting} ) ) {
 				$this->{$setting} = $default;
+			}
+
+			if ( $filter_html && in_array( $setting, $filter_keys, true ) ) {
+				$this->{$setting} = FrmAppHelper::kses( $this->{$setting}, 'all' );
 			}
 
 			unset( $setting, $default );
@@ -251,21 +268,9 @@ class FrmSettings {
 		$this->re_lang    = $params['frm_re_lang'];
 		$this->load_style = $params['frm_load_style'];
 
-		$previous_old_css_setting = $this->old_css;
-
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking', 'admin_bar' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
-		}
-
-		$this->maybe_remove_old_css_inbox_message( $previous_old_css_setting, $this->old_css );
-	}
-
-	private function maybe_remove_old_css_inbox_message( $previous_setting, $new_setting ) {
-		$enabled_css_grid = $previous_setting && ! $new_setting;
-		if ( $enabled_css_grid ) {
-			$inbox = new FrmInbox();
-			$inbox->remove( 'old_css' );
 		}
 	}
 

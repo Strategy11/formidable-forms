@@ -1660,8 +1660,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since 5.0.04 Add `$include_class` param.
 	 *
-	 * @param array $prepop        Bulk options.
-	 * @param array $include_class Include the class in the bulk options.
+	 * @param array       $prepop        Bulk options.
+	 * @param array|false $include_class Include the class in the bulk options.
 	 */
 	public static function get_bulk_prefilled_opts( array &$prepop, $include_class = false ) {
 		// Countries.
@@ -2055,11 +2055,11 @@ class FrmFieldsHelper {
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 *
-	 * @param string $html
-	 * @param array $field
-	 * @param array $errors
-	 * @param object $form
-	 * @param array $args
+	 * @param string       $html
+	 * @param array        $field
+	 * @param array        $errors
+	 * @param object|false $form
+	 * @param array        $args
 	 *
 	 * @return string
 	 */

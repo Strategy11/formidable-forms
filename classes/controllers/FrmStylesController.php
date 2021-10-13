@@ -59,7 +59,7 @@ class FrmStylesController {
 		self::load_pro_hooks();
 
 		$style_tab = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
-		if ( $style_tab == 'manage' || $style_tab == 'custom_css' ) {
+		if ( $style_tab === 'manage' || $style_tab === 'custom_css' ) {
 			// we only need to load these styles/scripts on the styler page
 			return;
 		}
