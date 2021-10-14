@@ -62,6 +62,16 @@ class FrmFieldValue {
 	}
 
 	/**
+	 * Gets entry property.
+	 *
+	 * @since 5.0-quizzes
+	 * @return stdClass
+	 */
+	public function get_entry() {
+		return $this->entry;
+	}
+
+	/**
 	 * Initialize the saved_value property
 	 *
 	 * @since 2.04
