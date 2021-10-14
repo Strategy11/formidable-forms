@@ -47,11 +47,12 @@ class FrmShortcodeHelper {
 			$args,
 			array(
 				'conditional'       => false,
+				'else'              => false,
 				'conditional_check' => false,
 				'foreach'           => false,
 			)
 		);
-		if ( ( $args['conditional'] || $args['foreach'] ) && ! $args['conditional_check'] ) {
+		if ( ( $args['conditional'] || $args['foreach'] || $args['else'] ) && ! $args['conditional_check'] ) {
 			$args['conditional_check'] = true;
 		}
 
@@ -61,6 +62,8 @@ class FrmShortcodeHelper {
 				$prefix = 'if ';
 			} elseif ( $args['foreach'] ) {
 				$prefix = 'foreach ';
+			} elseif( $args['else'] ) {
+				$prefix = 'else ';
 			}
 		}
 
