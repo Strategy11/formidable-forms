@@ -362,14 +362,12 @@ class FrmEntryValidate {
 	 * @return boolean true if is spam
 	 */
 	public static function akismet( $values ) {
-		$content = FrmEntriesHelper::entry_array_to_string( $values );
-		if ( empty( $content ) ) {
+		if ( empty( $values['item_meta'] ) ) {
 			return false;
 		}
 
 		$datas = array(
-			'comment_type'    => 'formidable',
-			'comment_content' => $content,
+			'comment_type' => 'formidable',
 		);
 		self::parse_akismet_array( $datas, $values );
 
@@ -395,6 +393,7 @@ class FrmEntryValidate {
 		self::add_site_info_to_akismet( $datas );
 		self::add_user_info_to_akismet( $datas, $values );
 		self::add_server_values_to_akismet( $datas );
+		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
 	private static function add_site_info_to_akismet( &$datas ) {
@@ -440,14 +439,19 @@ class FrmEntryValidate {
 			}
 
 			$values = array_filter( $values );
-			foreach ( $values as $value ) {
+
+			$datas['frm_duplicated'] = array();
+			foreach ( $values as $index => $value ) {
 				if ( ! is_array( $value ) ) {
 					if ( $datas['comment_author_email'] == '' && strpos( $value, '@' ) && is_email( $value ) ) {
 						$datas['comment_author_email'] = $value;
+						$datas['frm_duplicated'][] = $index;
 					} elseif ( $datas['comment_author_url'] == '' && strpos( $value, 'http' ) === 0 ) {
 						$datas['comment_author_url'] = $value;
+						$datas['frm_duplicated'][] = $index;
 					} elseif ( $datas['comment_author'] == '' && ! is_numeric( $value ) && strlen( $value ) < 200 ) {
 						$datas['comment_author'] = $value;
+						$datas['frm_duplicated'][] = $index;
 					}
 				}
 			}
@@ -466,6 +470,29 @@ class FrmEntryValidate {
 			}
 			unset( $key, $value );
 		}
+	}
+
+	/**
+	 * Adds comment content to Akismet data.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $datas  The array of values being sent to Akismet.
+	 * @param array $values Entry values.
+	 */
+	private static function add_comment_content_to_akismet( &$datas, $values ) {
+		if ( isset( $datas['frm_duplicated'] ) ) {
+			foreach ( $datas['frm_duplicated'] as $index ) {
+				if ( isset( $values['item_meta'][ $index ] ) ) {
+					unset( $values['item_meta'][ $index ] );
+				} else {
+					unset( $values[ $index ] );
+				}
+			}
+			unset( $datas['frm_duplicated'] );
+		}
+
+		$datas['comment_content'] = FrmEntriesHelper::entry_array_to_string( $values );
 	}
 
 	/**
