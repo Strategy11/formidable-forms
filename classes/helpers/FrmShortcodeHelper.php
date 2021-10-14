@@ -62,7 +62,7 @@ class FrmShortcodeHelper {
 				$prefix = 'if ';
 			} elseif ( $args['foreach'] ) {
 				$prefix = 'foreach ';
-			} elseif( $args['else'] ) {
+			} elseif ( $args['else'] ) {
 				$prefix = 'else ';
 			}
 		}
