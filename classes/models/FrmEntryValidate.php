@@ -492,7 +492,35 @@ class FrmEntryValidate {
 			unset( $datas['frm_duplicated'] );
 		}
 
+		self::skip_adding_values_to_akismet( $values );
+
 		$datas['comment_content'] = FrmEntriesHelper::entry_array_to_string( $values );
+	}
+
+	/**
+	 * Skips adding field values to Akismet.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $values Entry values.
+	 */
+	private static function skip_adding_values_to_akismet( &$values ) {
+		$non_customizable_types = array( 'select', 'hidden', 'user_id', 'captcha', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'break', 'likert', 'nps', 'summary' );
+		foreach ( $values['item_meta'] as $field_id => $value ) {
+			$field_type = FrmField::get_type( $field_id );
+			if ( in_array( $field_type, $non_customizable_types, true ) ) {
+				unset( $values['item_meta'][ $field_id ] );
+				continue;
+			}
+
+			// Check if radio of checkbox field has Other option.
+			if ( in_array( $field_type, array( 'radio', 'checkbox' ), true ) ) {
+				$field = FrmField::getOne( $field_id );
+				if ( empty( FrmField::get_option( $field, 'other' ) ) ) {
+					unset( $values['item_meta'][ $field_id ] );
+				}
+			}
+		}
 	}
 
 	/**
