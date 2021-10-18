@@ -536,8 +536,8 @@ class FrmEntryValidate {
 					),
 					'or'   => 1,
 					'type' => $skipped_types,
-				)
-			)
+				),
+			),
 		);
 
 		return FrmDb::get_col( 'frm_fields', $where );
