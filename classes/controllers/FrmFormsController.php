@@ -570,6 +570,9 @@ class FrmFormsController {
 
 		$new_values             = self::get_modal_values();
 		$new_values['form_key'] = $new_values['name'];
+		$new_values['options']  = array(
+			'antispam' => 1,
+		);
 
 		$form_id = FrmForm::create( $new_values );
 
