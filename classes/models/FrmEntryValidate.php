@@ -440,7 +440,20 @@ class FrmEntryValidate {
 			}
 
 			$values = array_filter( $values );
-			foreach ( $values as $value ) {
+			foreach ( $values as $field_id => $value ) {
+				// If is a name array, convert to string.
+				if ( is_array( $value ) ) {
+					if ( ! is_numeric( $field_id ) ) {
+						continue;
+					}
+
+					if ( 'name' !== FrmField::get_type( $field_id ) ) {
+						continue;
+					}
+
+					$value = implode( ' ', $value );
+				}
+
 				if ( ! is_array( $value ) ) {
 					if ( $datas['comment_author_email'] == '' && strpos( $value, '@' ) && is_email( $value ) ) {
 						$datas['comment_author_email'] = $value;
