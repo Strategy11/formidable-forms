@@ -505,22 +505,87 @@ class FrmEntryValidate {
 	 * @param array $values Entry values.
 	 */
 	private static function skip_adding_values_to_akismet( &$values ) {
-		$non_customizable_types = array( 'select', 'hidden', 'user_id', 'captcha', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'break', 'likert', 'nps', 'summary' );
-		foreach ( $values['item_meta'] as $field_id => $value ) {
-			$field_type = FrmField::get_type( $field_id );
-			if ( in_array( $field_type, $non_customizable_types, true ) ) {
+		$skipped_field_ids = self::get_akismet_skipped_field_ids( $values );
+		foreach ( $skipped_field_ids as $field_id ) {
+			if ( isset( $values['item_meta'][ $field_id ] ) ) {
 				unset( $values['item_meta'][ $field_id ] );
+			}
+		}
+	}
+
+	/**
+	 * Gets field IDs that are skipped from sending to Akismet spam check.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $values Entry values.
+	 * @return array
+	 */
+	private static function get_akismet_skipped_field_ids( $values ) {
+		$form_ids        = self::get_all_form_ids_and_flatten_meta( $values );
+		$skipped_types   = array( 'divider|repeat', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
+		$has_other_types = array( 'radio', 'checkbox', 'select' );
+
+		$where = array(
+			array(
+				'form_id' => $form_ids,
+				array(
+					array(
+						'field_options not like' => ';s:5:"other";s:1:"1"',
+						'type'                   => $has_other_types,
+					),
+					'or'   => 1,
+					'type' => $skipped_types,
+				)
+			)
+		);
+
+		return FrmDb::get_col( 'frm_fields', $where );
+	}
+
+	/**
+	 * Gets all form IDs (include child form IDs) and flatten item_meta array. Used for skipping values sent to Akismet.
+	 * This also removes some unused data from the item_meta.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $values Entry values.
+	 * @return array Form IDs.
+	 */
+	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+		$form_ids = array( $values['form_id'] );
+		foreach ( $values['item_meta'] as $field_id => $value ) {
+			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
 				continue;
 			}
 
-			// Check if radio of checkbox field has Other option.
-			if ( in_array( $field_type, array( 'radio', 'checkbox' ), true ) ) {
-				$field = FrmField::getOne( $field_id );
-				if ( empty( FrmField::get_option( $field, 'other' ) ) ) {
-					unset( $values['item_meta'][ $field_id ] );
+			if ( ! is_array( $value ) || empty( $value['form'] ) ) {
+				continue;
+			}
+
+			$form_ids[] = $value['form'];
+
+			foreach ( $value as $subindex => $subvalue ) {
+				if ( ! is_numeric( $subindex ) || ! is_array( $subvalue ) ) {
+					continue;
+				}
+
+				foreach ( $subvalue as $subsubindex => $subsubvalue ) {
+					if ( ! $subsubvalue ) {
+						continue;
+					}
+
+					if ( ! isset( $values['item_meta'][ $subsubindex ] ) ) {
+						$values['item_meta'][ $subsubindex ] = array();
+					}
+					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
 				}
 			}
+
+			unset( $values['item_meta'][ $field_id ] );
 		}
+
+		return $form_ids;
 	}
 
 	/**
