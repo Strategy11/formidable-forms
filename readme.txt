@@ -57,9 +57,9 @@ By default, a single styling template is created. If you want a custom form styl
 
 == Build Smart Surveys with Beautiful Reports ==
 
-Formidable comes with a built-in survey feature, so you can quickly create powerful surveys and see beautiful reports.
+Formidable comes with a built-in survey feature (like Survey Monkey, but without the high costs), so you can quickly create powerful surveys with Net Promoter Scores (NPS), Likert fields, star ratings, image radio buttons, and more.
 
-Our graphs and reports will help you analyze and showcase data. We believe that data alone does no good if you can't analyze it. That’s why we make it easy to analyze data from a survey, quiz, or price calculator.
+Beautiful reports will be waiting, or create your own customized graphs. Our graphs and reports will help you analyze and showcase data. We believe that data alone does no good if you can't analyze it. That’s why we make it easy to analyze data from a survey, quiz, or price calculator.
 
 You can even showcase data on the front-end of your website. Just embed graphs in your WordPress posts or pages.
 
