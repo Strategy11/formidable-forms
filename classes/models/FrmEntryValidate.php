@@ -523,7 +523,7 @@ class FrmEntryValidate {
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
 		$form_ids        = self::get_all_form_ids_and_flatten_meta( $values );
-		$skipped_types   = array( 'divider|repeat', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
+		$skipped_types   = array( 'divider', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
 		$has_other_types = array( 'radio', 'checkbox', 'select' );
 
 		$where = array(
@@ -563,7 +563,7 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			$form_ids[] = $value['form'];
+			$form_ids[] = absint( $value['form'] );
 
 			foreach ( $value as $subindex => $subvalue ) {
 				if ( ! is_numeric( $subindex ) || ! is_array( $subvalue ) ) {
