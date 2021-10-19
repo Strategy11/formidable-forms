@@ -391,8 +391,12 @@ class FrmEntryValidate {
 	 */
 	private static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );
-		self::add_user_info_to_akismet( $datas, $values );
 		self::add_server_values_to_akismet( $datas );
+
+		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
+		$values['form_ids'] = $form_ids;
+
+		self::add_user_info_to_akismet( $datas, $values );
 		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
@@ -441,31 +445,64 @@ class FrmEntryValidate {
 			$values = array_filter( $values );
 
 			$datas['frm_duplicated'] = array();
+
+			// Get comment author email.
 			foreach ( $values as $index => $value ) {
-				// If is a name array, convert to string.
 				if ( is_array( $value ) ) {
-					if ( ! is_numeric( $index ) ) {
-						continue;
+					foreach ( $value as $sub_value ) {
+						if ( strpos( $sub_value, '@' ) && is_email( $sub_value ) ) {
+							$datas['comment_author_email'] = $sub_value;
+							$datas['frm_duplicated'][]     = $index;
+							break 2;
+						}
 					}
-
-					if ( 'name' !== FrmField::get_type( $index ) ) {
-						continue;
-					}
-
-					$value = implode( ' ', $value );
+					continue;
 				}
 
-				if ( ! is_array( $value ) ) {
-					if ( $datas['comment_author_email'] == '' && strpos( $value, '@' ) && is_email( $value ) ) {
-						$datas['comment_author_email'] = $value;
-						$datas['frm_duplicated'][] = $index;
-					} elseif ( $datas['comment_author_url'] == '' && strpos( $value, 'http' ) === 0 ) {
-						$datas['comment_author_url'] = $value;
-						$datas['frm_duplicated'][] = $index;
-					} elseif ( $datas['comment_author'] == '' && ! is_numeric( $value ) && strlen( $value ) < 200 ) {
-						$datas['comment_author'] = $value;
-						$datas['frm_duplicated'][] = $index;
+				if ( strpos( $value, '@' ) && is_email( $value ) ) {
+					$datas['comment_author_email'] = $value;
+					$datas['frm_duplicated'][]     = $index;
+					break;
+				}
+			}
+
+			// Get comment author URL.
+			foreach ( $values as $index => $value ) {
+				if ( is_array( $value ) ) {
+					foreach ( $value as $sub_value ) {
+						if ( strpos( $sub_value, 'http' ) === 0 ) {
+							$datas['comment_author_url'] = $sub_value;
+							$datas['frm_duplicated'][]   = $index;
+							break 2;
+						}
 					}
+					continue;
+				}
+
+				if ( strpos( $value, 'http' ) === 0 ) {
+					$datas['comment_author_url'] = $value;
+					$datas['frm_duplicated'][]   = $index;
+					break;
+				}
+			}
+
+			// Get comment author name.
+			foreach ( $values as $index => $value ) {
+				if ( is_array( $value ) ) {
+					foreach ( $value as $sub_value ) {
+						if ( ! is_numeric( $sub_value ) && strlen( $sub_value ) < 200 ) {
+							$datas['comment_author']   = $sub_value;
+							$datas['frm_duplicated'][] = $index;
+							break 2;
+						}
+					}
+					continue;
+				}
+
+				if ( ! is_numeric( $value ) && strlen( $value ) < 200 ) {
+					$datas['comment_author']   = $value;
+					$datas['frm_duplicated'][] = $index;
+					break;
 				}
 			}
 		}
@@ -535,13 +572,12 @@ class FrmEntryValidate {
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
-		$form_ids        = self::get_all_form_ids_and_flatten_meta( $values );
 		$skipped_types   = array( 'divider', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
 		$has_other_types = array( 'radio', 'checkbox', 'select' );
 
 		$where = array(
 			array(
-				'form_id' => $form_ids,
+				'form_id' => $values['form_ids'],
 				array(
 					array(
 						'field_options not like' => ';s:5:"other";s:1:"1"',
@@ -572,6 +608,12 @@ class FrmEntryValidate {
 				continue;
 			}
 
+			// Convert name array to string.
+			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
+				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
+				continue;
+			}
+
 			if ( ! is_array( $value ) || empty( $value['form'] ) ) {
 				continue;
 			}
@@ -591,6 +633,12 @@ class FrmEntryValidate {
 					if ( ! isset( $values['item_meta'][ $subsubindex ] ) ) {
 						$values['item_meta'][ $subsubindex ] = array();
 					}
+
+					// Convert name array to string.
+					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
+						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
+					}
+
 					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
 				}
 			}

@@ -33,6 +33,25 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertEquals( $test_email, $check['comment_author_email'] );
 		$this->assertEquals( $test_url, $check['comment_author_url'] );
 
+		// Test with repeater/embedded field.
+		$values['item_meta'][ $made_up_name_field_id ] = array(
+			'John Doe',
+			'Some Guy',
+		);
+		$values['item_meta'][ $made_up_email_field_id ] = array(
+			'johndoe@gmail.com',
+			'someguy@gmail.com',
+		);
+		$values['item_meta'][ $made_up_url_field_id ] = array(
+			'https://johndoe.com',
+			'https://someguy.com',
+		);
+
+		$check = $this->get_spam_check_user_info( $values );
+		$this->assertEquals( 'John Doe', $check['comment_author'] );
+		$this->assertEquals( 'johndoe@gmail.com', $check['comment_author_email'] );
+		$this->assertEquals( 'https://johndoe.com', $check['comment_author_url'] );
+
 		wp_set_current_user( 1 );
 		$user  = wp_get_current_user();
 		$check = $this->get_spam_check_user_info( $values );
@@ -58,7 +77,10 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			'form_key'           => 'contact-form',
 			'item_meta'          => array(
 				0       => null,
-				1       => 'John',
+				1       => array(
+					'first' => 'John',
+					'last'  => 'Doe',
+				),
 				2       => 'Doe',
 				3       => 'johndoe@gmail.com',
 				4       => 'Test',
@@ -110,15 +132,8 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		$this->assertFalse( isset( $test_values['item_meta'][163] ) );
 		$this->assertFalse( isset( $test_values['item_meta'][165] ) );
 		$this->assertEquals( $test_values['item_meta'][162], array( 'Option 2', 'Option 1' ) );
-		$this->assertEquals(
-			$test_values['item_meta'][118],
-			array(
-				array(
-					'first' => 'John',
-					'last'  => 'Doe',
-				),
-			)
-		);
+		$this->assertEquals( $test_values['item_meta'][118], array( 'John Doe' ) );
+		$this->assertEquals( $test_values['item_meta'][1], 'John Doe' );
 	}
 
 	public function test_skip_adding_values_to_akismet() {
@@ -138,6 +153,11 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		FrmField::update( $fields['checkbox']->id, array( 'field_options' => $fields['checkbox']->field_options ) );
 
 		$values = $this->factory->field->generate_entry_array( $form );
+
+		$values['form_ids'] = $this->run_private_method(
+			array( 'FrmEntryValidate', 'get_all_form_ids_and_flatten_meta' ),
+			array( &$values )
+		);
 
 		$this->run_private_method(
 			array( 'FrmEntryValidate', 'skip_adding_values_to_akismet' ),
