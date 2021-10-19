@@ -362,14 +362,12 @@ class FrmEntryValidate {
 	 * @return boolean true if is spam
 	 */
 	public static function akismet( $values ) {
-		$content = FrmEntriesHelper::entry_array_to_string( $values );
-		if ( empty( $content ) ) {
+		if ( empty( $values['item_meta'] ) ) {
 			return false;
 		}
 
 		$datas = array(
-			'comment_type'    => 'formidable',
-			'comment_content' => $content,
+			'comment_type' => 'formidable',
 		);
 		self::parse_akismet_array( $datas, $values );
 
@@ -395,6 +393,7 @@ class FrmEntryValidate {
 		self::add_site_info_to_akismet( $datas );
 		self::add_user_info_to_akismet( $datas, $values );
 		self::add_server_values_to_akismet( $datas );
+		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
 	private static function add_site_info_to_akismet( &$datas ) {
@@ -440,14 +439,16 @@ class FrmEntryValidate {
 			}
 
 			$values = array_filter( $values );
-			foreach ( $values as $field_id => $value ) {
+
+			$datas['frm_duplicated'] = array();
+			foreach ( $values as $index => $value ) {
 				// If is a name array, convert to string.
 				if ( is_array( $value ) ) {
-					if ( ! is_numeric( $field_id ) ) {
+					if ( ! is_numeric( $index ) ) {
 						continue;
 					}
 
-					if ( 'name' !== FrmField::get_type( $field_id ) ) {
+					if ( 'name' !== FrmField::get_type( $index ) ) {
 						continue;
 					}
 
@@ -457,10 +458,13 @@ class FrmEntryValidate {
 				if ( ! is_array( $value ) ) {
 					if ( $datas['comment_author_email'] == '' && strpos( $value, '@' ) && is_email( $value ) ) {
 						$datas['comment_author_email'] = $value;
+						$datas['frm_duplicated'][] = $index;
 					} elseif ( $datas['comment_author_url'] == '' && strpos( $value, 'http' ) === 0 ) {
 						$datas['comment_author_url'] = $value;
+						$datas['frm_duplicated'][] = $index;
 					} elseif ( $datas['comment_author'] == '' && ! is_numeric( $value ) && strlen( $value ) < 200 ) {
 						$datas['comment_author'] = $value;
+						$datas['frm_duplicated'][] = $index;
 					}
 				}
 			}
@@ -479,6 +483,122 @@ class FrmEntryValidate {
 			}
 			unset( $key, $value );
 		}
+	}
+
+	/**
+	 * Adds comment content to Akismet data.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $datas  The array of values being sent to Akismet.
+	 * @param array $values Entry values.
+	 */
+	private static function add_comment_content_to_akismet( &$datas, $values ) {
+		if ( isset( $datas['frm_duplicated'] ) ) {
+			foreach ( $datas['frm_duplicated'] as $index ) {
+				if ( isset( $values['item_meta'][ $index ] ) ) {
+					unset( $values['item_meta'][ $index ] );
+				} else {
+					unset( $values[ $index ] );
+				}
+			}
+			unset( $datas['frm_duplicated'] );
+		}
+
+		self::skip_adding_values_to_akismet( $values );
+
+		$datas['comment_content'] = FrmEntriesHelper::entry_array_to_string( $values );
+	}
+
+	/**
+	 * Skips adding field values to Akismet.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $values Entry values.
+	 */
+	private static function skip_adding_values_to_akismet( &$values ) {
+		$skipped_field_ids = self::get_akismet_skipped_field_ids( $values );
+		foreach ( $skipped_field_ids as $field_id ) {
+			if ( isset( $values['item_meta'][ $field_id ] ) ) {
+				unset( $values['item_meta'][ $field_id ] );
+			}
+		}
+	}
+
+	/**
+	 * Gets field IDs that are skipped from sending to Akismet spam check.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $values Entry values.
+	 * @return array
+	 */
+	private static function get_akismet_skipped_field_ids( $values ) {
+		$form_ids        = self::get_all_form_ids_and_flatten_meta( $values );
+		$skipped_types   = array( 'divider', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
+		$has_other_types = array( 'radio', 'checkbox', 'select' );
+
+		$where = array(
+			array(
+				'form_id' => $form_ids,
+				array(
+					array(
+						'field_options not like' => ';s:5:"other";s:1:"1"',
+						'type'                   => $has_other_types,
+					),
+					'or'   => 1,
+					'type' => $skipped_types,
+				),
+			),
+		);
+
+		return FrmDb::get_col( 'frm_fields', $where );
+	}
+
+	/**
+	 * Gets all form IDs (include child form IDs) and flatten item_meta array. Used for skipping values sent to Akismet.
+	 * This also removes some unused data from the item_meta.
+	 *
+	 * @since 5.0.09
+	 *
+	 * @param array $values Entry values.
+	 * @return array Form IDs.
+	 */
+	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+		$form_ids = array( absint( $values['form_id'] ) );
+		foreach ( $values['item_meta'] as $field_id => $value ) {
+			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
+				continue;
+			}
+
+			if ( ! is_array( $value ) || empty( $value['form'] ) ) {
+				continue;
+			}
+
+			$form_ids[] = absint( $value['form'] );
+
+			foreach ( $value as $subindex => $subvalue ) {
+				if ( ! is_numeric( $subindex ) || ! is_array( $subvalue ) ) {
+					continue;
+				}
+
+				foreach ( $subvalue as $subsubindex => $subsubvalue ) {
+					if ( ! $subsubvalue ) {
+						continue;
+					}
+
+					if ( ! isset( $values['item_meta'][ $subsubindex ] ) ) {
+						$values['item_meta'][ $subsubindex ] = array();
+					}
+					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
+				}
+			}
+
+			unset( $values['item_meta'][ $field_id ] );
+		}
+
+		return $form_ids;
 	}
 
 	/**
