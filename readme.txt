@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.08
+Stable tag: 5.0.09
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.09 =
+- The option to check entries for spam using JavaScript is now on by default for all new forms. We recommend turning this on for older forms that may be receiving spam entries, especially forms that include file uploads. After turning this feature on, make sure to also clear any caching plugins to avoid issues with cached pages with missing tokens.
+- New: Pre-determined option data will no longer be sent to Akismet to help reduce the number of false positive results.
+- Fix: Significantly reduced the amount of memory required to load form settings for websites with fewer than 50 pages with a lot of data.
+- Fix: Author email, url, or name are no longer included in comment info when sending data to Akismet so that duplicate information is not sent.
+- Fix: Field groups could not be moved because of a missing class on the drag handle.
+
 = 5.0.08 =
 - Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
 - Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing forms and fields with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
@@ -480,8 +487,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Slider field previews will now update when the min and max values are updated in the form builder.
 * Fix: The search dropdown was getting cut off on pages with no search results.
 * Fix: When legacy views or visual views are active, both versions were appearing active on the add ons page.
-
-= 5.0.02 =
-* New: Field groups can now be duplicated and deleted.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
