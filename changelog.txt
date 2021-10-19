@@ -4,6 +4,7 @@
 - New: Pre-determined option data will no longer be sent to Akismet to help reduce the number of false positive results.
 - Fix: Significantly reduced the amount of memory required to load form settings for websites with fewer than 50 pages with a lot of data.
 - Fix: Author email, url, or name are no longer included in comment info when sending data to Akismet so that duplicate information is not sent.
+- Fix: Field groups could not be moved because of a missing class on the drag handle.
 
 = 5.0.08 =
 - Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
