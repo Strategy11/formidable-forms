@@ -553,7 +553,7 @@ class FrmEntryValidate {
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
-		$form_ids = array( $values['form_id'] );
+		$form_ids = array( absint( $values['form_id'] ) );
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
 				continue;
