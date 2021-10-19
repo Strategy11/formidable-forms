@@ -422,6 +422,14 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * Gets user info for Akismet spam check.
+	 *
+	 * @since 5.0.10 Separate code for email, name and URL. Handle value of embedded|repeater.
+	 *
+	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
+	 * @return array
+	 */
 	private static function get_spam_check_user_info( $values ) {
 		$datas = array();
 
@@ -567,8 +575,9 @@ class FrmEntryValidate {
 	 * Gets field IDs that are skipped from sending to Akismet spam check.
 	 *
 	 * @since 5.0.09
+	 * @since 5.0.10 Move out get_all_form_ids_and_flatten_meta() call and get `form_ids` from `$values`.
 	 *
-	 * @param array $values Entry values.
+	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
@@ -597,6 +606,7 @@ class FrmEntryValidate {
 	 * This also removes some unused data from the item_meta.
 	 *
 	 * @since 5.0.09
+	 * @since 5.0.10 Convert name field value to string.
 	 *
 	 * @param array $values Entry values.
 	 * @return array Form IDs.
