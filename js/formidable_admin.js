@@ -1203,6 +1203,7 @@ function frmAdminBuildJS() {
 
 		moveOption = document.createElement( 'span' );
 		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		moveOption.classList.add( 'frm-move' );
 		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
 		addTooltip( moveOption, moveOptionLabel );
 		makeTabbable( moveOption, moveOptionLabel );
