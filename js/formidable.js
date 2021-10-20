@@ -160,7 +160,7 @@ function frmFrontFormJS() {
 		).filter( ':not(.frm_optional)' );
 		if ( requiredFields.length ) {
 			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( fieldHasClass( requiredFields[r], 'ed_button' ) ) {
+				if ( hasClass( requiredFields[r], 'ed_button' ) ) {
 					// skip rich text field buttons.
 					continue;
 				}
@@ -199,12 +199,12 @@ function frmFrontFormJS() {
 	/**
 	 * @since 5.0.10
 	 *
-	 * @param {object} field
+	 * @param {object} element
 	 * @param {string} targetClass
 	 * @returns bool
 	 */
-	function fieldHasClass( field, targetClass ) {
-		var className = ' ' + field.className + ' ';
+	function hasClass( element, targetClass ) {
+		var className = ' ' + element.className + ' ';
 		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
 	}
 
@@ -282,7 +282,7 @@ function frmFrontFormJS() {
 			}
 			fieldID = fileID;
 		} else {
-			if ( fieldHasClass( field, 'frm_pos_none' ) ) {
+			if ( hasClass( field, 'frm_pos_none' ) ) {
 				// skip hidden other fields
 				return errors;
 			}
@@ -300,7 +300,7 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( fieldHasClass( field, 'frm_other_input' ) ) {
+			if ( hasClass( field, 'frm_other_input' ) ) {
 				fieldID = getFieldId( field, false );
 
 				if ( val === '' ) {
@@ -310,7 +310,7 @@ function frmFrontFormJS() {
 				fieldID = getFieldId( field, true );
 			}
 
-			if ( fieldHasClass( field, 'frm_time_select' ) ) {
+			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
 			}
