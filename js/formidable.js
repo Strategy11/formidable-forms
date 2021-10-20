@@ -289,6 +289,10 @@ function frmFrontFormJS() {
 				fieldID = getFieldId( field, true );
 			} else {
 				fieldID = getFieldId( field, false );
+
+				if ( val === '' ) {
+					field = document.getElementById( field.id.replace( '-otext', '' ) );
+				}
 			}
 
 			if ( fieldClasses.indexOf( 'frm_time_select' ) !== -1 ) {
