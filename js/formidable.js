@@ -301,13 +301,13 @@ function frmFrontFormJS() {
 			}
 
 			if ( fieldHasClass( field, 'frm_other_input' ) ) {
-				fieldID = getFieldId( field, true );
-			} else {
 				fieldID = getFieldId( field, false );
 
 				if ( val === '' ) {
 					field = document.getElementById( field.id.replace( '-otext', '' ) );
 				}
+			} else {
+				fieldID = getFieldId( field, true );
 			}
 
 			if ( fieldHasClass( field, 'frm_time_select' ) ) {
