@@ -201,7 +201,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {object} element
 	 * @param {string} targetClass
-	 * @returns bool
+	 * @returns {boolean}
 	 */
 	function hasClass( element, targetClass ) {
 		var className = ' ' + element.className + ' ';
