@@ -431,91 +431,139 @@ class FrmEntryValidate {
 	 * @return array
 	 */
 	private static function get_spam_check_user_info( $values ) {
-		$datas = array();
+		if ( ! is_user_logged_in() ) {
+			return self::get_spam_check_user_info_for_guest( $values );
+		}
 
-		if ( is_user_logged_in() ) {
-			$user = wp_get_current_user();
+		$user = wp_get_current_user();
 
-			$datas['user_ID']              = $user->ID;
-			$datas['user_id']              = $user->ID;
-			$datas['comment_author']       = $user->display_name;
-			$datas['comment_author_email'] = $user->user_email;
-			$datas['comment_author_url']   = $user->user_url;
-		} else {
-			$datas['comment_author']       = '';
-			$datas['comment_author_email'] = '';
-			$datas['comment_author_url']   = '';
+		return array(
+			'user_ID'              => $user->ID,
+			'user_id'              => $user->ID,
+			'comment_author'       => $user->display_name,
+			'comment_author_email' => $user->user_email,
+			'comment_author_url'   => $user->user_url,
+		);
+	}
 
-			if ( isset( $values['item_meta'] ) ) {
-				$values = $values['item_meta'];
+	/**
+	 * Gets user info for Akismet spam check for guest.
+	 *
+	 * @since 5.0.10
+	 *
+	 * @param array $values Entry values after flattened.
+	 * @return array
+	 */
+	private static function get_spam_check_user_info_for_guest( $values ) {
+		$datas = array(
+			'comment_author'       => '',
+			'comment_author_email' => '',
+			'comment_author_url'   => '',
+		);
+
+		if ( isset( $values['item_meta'] ) ) {
+			$values = $values['item_meta'];
+		}
+
+		$values = array_filter( $values );
+
+		$datas['frm_duplicated'] = array();
+
+		foreach ( $values as $index => $value ) {
+			// Found all commenter data, break the loop.
+			if ( $datas['comment_author'] && $datas['comment_author_email'] && $datas['comment_author_url'] ) {
+				break;
 			}
 
-			$values = array_filter( $values );
-
-			$datas['frm_duplicated'] = array();
-
-			// Get comment author email.
-			foreach ( $values as $index => $value ) {
-				if ( is_array( $value ) ) {
-					foreach ( $value as $sub_value ) {
-						if ( strpos( $sub_value, '@' ) && is_email( $sub_value ) ) {
+			if ( is_array( $value ) ) {
+				foreach ( $value as $sub_value ) {
+					if ( self::maybe_comment_author_email( $sub_value ) ) {
+						if ( ! $datas['comment_author_email'] ) {
 							$datas['comment_author_email'] = $sub_value;
 							$datas['frm_duplicated'][]     = $index;
-							break 2;
 						}
+						continue;
 					}
-					continue;
-				}
 
-				if ( strpos( $value, '@' ) && is_email( $value ) ) {
-					$datas['comment_author_email'] = $value;
-					$datas['frm_duplicated'][]     = $index;
-					break;
-				}
-			}
-
-			// Get comment author URL.
-			foreach ( $values as $index => $value ) {
-				if ( is_array( $value ) ) {
-					foreach ( $value as $sub_value ) {
-						if ( strpos( $sub_value, 'http' ) === 0 ) {
+					if ( self::maybe_comment_author_url( $sub_value ) ) {
+						if ( ! $datas['comment_author_url'] ) {
 							$datas['comment_author_url'] = $sub_value;
 							$datas['frm_duplicated'][]   = $index;
-							break 2;
 						}
+						continue;
 					}
-					continue;
-				}
 
-				if ( strpos( $value, 'http' ) === 0 ) {
+					if ( ! $datas['comment_author'] && self::maybe_comment_author_name( $sub_value ) ) {
+						$datas['comment_author']   = $sub_value;
+						$datas['frm_duplicated'][] = $index;
+					}
+
+					unset( $sub_value );
+				}
+				continue;
+			}
+
+			if ( self::maybe_comment_author_email( $value ) ) {
+				if ( ! $datas['comment_author_email'] ) {
+					$datas['comment_author_email'] = $value;
+					$datas['frm_duplicated'][]     = $index;
+				}
+				continue;
+			}
+
+			if ( self::maybe_comment_author_url( $value ) ) {
+				if ( ! $datas['comment_author_url'] ) {
 					$datas['comment_author_url'] = $value;
 					$datas['frm_duplicated'][]   = $index;
-					break;
 				}
+				continue;
 			}
 
-			// Get comment author name.
-			foreach ( $values as $index => $value ) {
-				if ( is_array( $value ) ) {
-					foreach ( $value as $sub_value ) {
-						if ( ! is_numeric( $sub_value ) && strlen( $sub_value ) < 200 ) {
-							$datas['comment_author']   = $sub_value;
-							$datas['frm_duplicated'][] = $index;
-							break 2;
-						}
-					}
-					continue;
-				}
-
-				if ( ! is_numeric( $value ) && strlen( $value ) < 200 ) {
-					$datas['comment_author']   = $value;
-					$datas['frm_duplicated'][] = $index;
-					break;
-				}
+			if ( ! $datas['comment_author'] && self::maybe_comment_author_name( $value ) ) {
+				$datas['comment_author']   = $value;
+				$datas['frm_duplicated'][] = $index;
 			}
+
+			unset( $value );
 		}
 
 		return $datas;
+	}
+
+	/**
+	 * Checks if the given value might be comment author email.
+	 *
+	 * @since 5.0.10
+	 *
+	 * @param string $value Value to check.
+	 * @return bool
+	 */
+	private static function maybe_comment_author_email( $value ) {
+		return strpos( $value, '@' ) && is_email( $value );
+	}
+
+	/**
+	 * Checks if the given value might be comment author URL.
+	 *
+	 * @since 5.0.10
+	 *
+	 * @param string $value Value to check.
+	 * @return bool
+	 */
+	private static function maybe_comment_author_url( $value ) {
+		return 0 === strpos( $value, 'http' );
+	}
+
+	/**
+	 * Checks if the given value might be comment author name.
+	 *
+	 * @since 5.0.10
+	 *
+	 * @param string $value Value to check.
+	 * @return bool
+	 */
+	private static function maybe_comment_author_name( $value ) {
+		return ! is_numeric( $value ) && strlen( $value ) < 200;
 	}
 
 	private static function add_server_values_to_akismet( &$datas ) {
