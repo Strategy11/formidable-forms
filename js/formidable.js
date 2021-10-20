@@ -208,7 +208,7 @@ function frmFrontFormJS() {
 		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
 	}
 
-	function maybeValidateChange( fieldId, field ) {
+	function maybeValidateChange( field ) {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
@@ -1367,7 +1367,7 @@ function frmFrontFormJS() {
 			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ]);
 
 			if ( e.selfTriggered !== true ) {
-				maybeValidateChange( fieldId, this );
+				maybeValidateChange( this );
 			}
 		},
 
