@@ -318,11 +318,6 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
-	function fieldHasClass( field, targetClass ) {
-		var className = ' ' + field.className + ' ';
-		return -1 !== className.indexOf( targetClass );
-	}
-
 	function getFileVals( fileID ) {
 		var val = '',
 			fileFields = jQuery( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
