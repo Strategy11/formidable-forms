@@ -160,7 +160,7 @@ function frmFrontFormJS() {
 		).filter( ':not(.frm_optional)' );
 		if ( requiredFields.length ) {
 			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
-				if ( requiredFields[r].classList.contains( 'ed_button' ) ) {
+				if ( fieldHasClass( requiredFields[r], 'ed_button' ) ) {
 					// skip rich text field buttons.
 					continue;
 				}
@@ -194,6 +194,11 @@ function frmFrontFormJS() {
 		errors = validateRecaptcha( object, errors );
 
 		return errors;
+	}
+
+	function fieldHasClass( field, targetClass ) {
+		var className = ' ' + field.className + ' ';
+		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
 	}
 
 	function maybeValidateChange( fieldId, field ) {
@@ -245,7 +250,7 @@ function frmFrontFormJS() {
 	}
 
 	function checkRequiredField( field, errors ) {
-		var checkGroup, fieldClasses, tempVal, i, placeholder,
+		var checkGroup, tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
@@ -270,8 +275,7 @@ function frmFrontFormJS() {
 			}
 			fieldID = fileID;
 		} else {
-			fieldClasses = field.className;
-			if ( fieldClasses.indexOf( 'frm_pos_none' ) !== -1 ) {
+			if ( fieldHasClass( field, 'frm_pos_none' ) ) {
 				// skip hidden other fields
 				return errors;
 			}
@@ -289,13 +293,13 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( fieldClasses.indexOf( 'frm_other_input' ) === -1 ) {
+			if ( fieldHasClass( field, 'frm_other_input' ) ) {
 				fieldID = getFieldId( field, true );
 			} else {
 				fieldID = getFieldId( field, false );
 			}
 
-			if ( fieldClasses.indexOf( 'frm_time_select' ) !== -1 ) {
+			if ( fieldHasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
 			}
