@@ -289,6 +289,10 @@ function frmFrontFormJS() {
 				fieldID = getFieldId( field, true );
 			} else {
 				fieldID = getFieldId( field, false );
+
+				if ( val === '' ) {
+					field = document.getElementById( field.id.replace( '-otext', '' ) );
+				}
 			}
 
 			if ( fieldClasses.indexOf( 'frm_time_select' ) !== -1 ) {
@@ -312,6 +316,11 @@ function frmFrontFormJS() {
 		}
 
 		return errors;
+	}
+
+	function fieldHasClass( field, targetClass ) {
+		var className = ' ' + field.className + ' ';
+		return -1 !== className.indexOf( targetClass );
 	}
 
 	function getFileVals( fileID ) {
