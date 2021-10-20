@@ -196,6 +196,13 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
+	/**
+	 * @since 5.0.10
+	 *
+	 * @param {object} field
+	 * @param {string} targetClass
+	 * @returns bool
+	 */
 	function fieldHasClass( field, targetClass ) {
 		var className = ' ' + field.className + ' ';
 		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
