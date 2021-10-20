@@ -160,6 +160,10 @@ function frmFrontFormJS() {
 		).filter( ':not(.frm_optional)' );
 		if ( requiredFields.length ) {
 			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
+				if ( requiredFields[r].classList.contains( 'ed_button' ) ) {
+					// skip rich text field buttons.
+					continue;
+				}
 				errors = checkRequiredField( requiredFields[r], errors );
 			}
 		}
@@ -197,7 +201,7 @@ function frmFrontFormJS() {
 			maybeAddHttpToUrl( field );
 		}
 		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
-			validateField( fieldId, field );
+			validateField( field );
 		}
 	}
 
@@ -209,11 +213,11 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function validateField( fieldId, field ) {
+	function validateField( field ) {
 		var key,
-			errors = [];
+			errors = [],
+			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
 
-		var $fieldCont = jQuery( field ).closest( '.frm_form_field' );
 		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
@@ -376,7 +380,7 @@ function frmFrontFormJS() {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
 			}
 		} else {
-			validateField( 'conf_' + strippedFieldID, confirmField );
+			validateField( confirmField );
 		}
 	}
 
