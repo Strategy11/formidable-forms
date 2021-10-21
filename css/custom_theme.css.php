@@ -16,10 +16,10 @@ if ( ! isset( $frm_style ) ) {
 	$frm_style = new FrmStyle();
 }
 
-$styles = $frm_style->get_all();
+$styles        = $frm_style->get_all();
 $default_style = $frm_style->get_default_style( $styles );
-$defaults = FrmStylesHelper::get_settings_for_output( $default_style );
-$important = empty( $defaults['important_style'] ) ? '' : ' !important';
+$defaults      = FrmStylesHelper::get_settings_for_output( $default_style );
+$important     = empty( $defaults['important_style'] ) ? '' : ' !important';
 
 ?>
 .with_frm_style{
