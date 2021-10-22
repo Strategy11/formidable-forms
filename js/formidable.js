@@ -313,6 +313,8 @@ function frmFrontFormJS() {
 			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
+			} else if ( '[typed]' === field.getAttribute( 'name' ).substr( -7 ) ) {
+				fieldID = fieldID.replace( '-typed', '' );
 			}
 
 			placeholder = field.getAttribute( 'data-frmplaceholder' );
