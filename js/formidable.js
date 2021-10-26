@@ -262,7 +262,7 @@ function frmFrontFormJS() {
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
-		if ( field.type === 'hidden' && fileID === null ) {
+		if ( field.type === 'hidden' && fileID === null && ! hasClass( field, 'ssa_appointment_form_field_appointment_id' ) ) {
 			return errors;
 		}
 
