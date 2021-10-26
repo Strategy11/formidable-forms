@@ -315,7 +315,7 @@ function frmFrontFormJS() {
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
 			} else if ( '[typed]' === field.getAttribute( 'name' ).substr( -7 ) ) {
 				if ( val === '' ) {
-					val = jQuery( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ).val();
+					val = jQuery( field ).closest( '.frm_form_field' ).find( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ).val();
 				}
 				fieldID = fieldID.replace( '-typed', '' );
 			}
