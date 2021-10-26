@@ -84,8 +84,9 @@ class FrmInbox extends FrmFormApi {
 	 * @param array|string $message
 	 */
 	public function add_message( $message ) {
-		if ( ! is_array( $message ) ) {
+		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
 			// if the API response is invalid, $message may not be an array.
+			// if there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
