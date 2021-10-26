@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.09
+Stable tag: 5.0.10
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.10 =
+- Security: Improved how data is sanitized when previewing in the style manager.
+- Fix: Prevent a warning when trying to get inbox messages from the API when no messages are being returned.
+- Fix: The frm_alignright class was being stripped in the form builder, preventing the right alignment from appearing in the back end.
+- Fix: The frm_alignright class was causing fields to shift to the wrong row. The style definition has been updated so it will stay in the same row as other fields.
+- Fix: Required messages were not properly appearing for empty radio buttons when an other option was selected but left empty and JavaScript validation was on.
+
 = 5.0.09 =
 - The option to check entries for spam using JavaScript is now on by default for all new forms. We recommend turning this on for older forms that may be receiving spam entries, especially forms that include file uploads. After turning this feature on, make sure to also clear any caching plugins to avoid issues with cached pages with missing tokens.
 - New: Pre-determined option data will no longer be sent to Akismet to help reduce the number of false positive results.
