@@ -262,7 +262,7 @@ function frmFrontFormJS() {
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
-		if ( field.type === 'hidden' && fileID === null ) {
+		if ( field.type === 'hidden' && fileID === null && ! hasClass( field, 'ssa_appointment_form_field_appointment_id' ) ) {
 			return errors;
 		}
 
@@ -1248,9 +1248,10 @@ function frmFrontFormJS() {
 
 			if ( shouldJSValidate( object ) ) {
 				frmFrontForm.getAjaxFormErrors( object );
+				removeAllErrors();
 
 				if ( Object.keys( jsErrors ).length ) {
-					frmFrontForm.addAjaxFormErrors( object );
+					frmFrontForm.addAjaxFormErrors( object, true );
 				}
 			}
 
@@ -1274,9 +1275,11 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
-		addAjaxFormErrors: function( object ) {
+		addAjaxFormErrors: function( object, alreadyRemovedErrors ) {
 			var key, $fieldCont;
-			removeAllErrors();
+			if ( 'undefined' === typeof alreadyRemovedErrors || ! alreadyRemovedErrors ) {
+				removeAllErrors();
+			}
 
 			for ( key in jsErrors ) {
 				$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
