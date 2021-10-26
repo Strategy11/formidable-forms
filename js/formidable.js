@@ -313,6 +313,11 @@ function frmFrontFormJS() {
 			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
+			} else if ( '[typed]' === field.getAttribute( 'name' ).substr( -7 ) ) {
+				if ( val === '' ) {
+					val = jQuery( field ).closest( '.frm_form_field' ).find( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ).val();
+				}
+				fieldID = fieldID.replace( '-typed', '' );
 			}
 
 			placeholder = field.getAttribute( 'data-frmplaceholder' );
