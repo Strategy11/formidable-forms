@@ -328,6 +328,9 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param WP_Post $style
+	 * @return array
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
@@ -339,14 +342,14 @@ class FrmStylesHelper {
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
-					$settings = $posted['frm_style_setting']['post_content'];
+					$settings   = self::sanitize_settings( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
-					$settings = $posted['post_content'];
+					$settings   = self::sanitize_settings( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
-				$settings = $_GET;
+				$settings   = self::sanitize_settings( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
@@ -361,7 +364,7 @@ class FrmStylesHelper {
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
 		}
 
-		$settings['style_class']   .= 'with_frm_style';
+		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
 		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
 
@@ -384,6 +387,27 @@ class FrmStylesHelper {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * @since 5.0.10
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	private static function sanitize_settings( $settings ) {
+		$style              = new FrmStyle();
+		$defaults           = $style->get_defaults();
+		$valid_keys         = array_keys( $defaults );
+		$sanitized_settings = array();
+		foreach ( $valid_keys as $key ) {
+			if ( isset( $settings[ $key ] ) ) {
+				$sanitized_settings[ $key ] = sanitize_text_field( $settings[ $key ] );
+			} else {
+				$sanitized_settings[ $key ] = $defaults[ $key ];
+			}
+		}
+		return $sanitized_settings;
 	}
 
 	/**
