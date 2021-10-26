@@ -1248,10 +1248,9 @@ function frmFrontFormJS() {
 
 			if ( shouldJSValidate( object ) ) {
 				frmFrontForm.getAjaxFormErrors( object );
-				removeAllErrors();
 
 				if ( Object.keys( jsErrors ).length ) {
-					frmFrontForm.addAjaxFormErrors( object, true );
+					frmFrontForm.addAjaxFormErrors( object );
 				}
 			}
 
@@ -1275,11 +1274,9 @@ function frmFrontFormJS() {
 			return jsErrors;
 		},
 
-		addAjaxFormErrors: function( object, alreadyRemovedErrors ) {
+		addAjaxFormErrors: function( object ) {
 			var key, $fieldCont;
-			if ( 'undefined' === typeof alreadyRemovedErrors || ! alreadyRemovedErrors ) {
-				removeAllErrors();
-			}
+			removeAllErrors();
 
 			for ( key in jsErrors ) {
 				$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
