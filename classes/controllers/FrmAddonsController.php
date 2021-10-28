@@ -1040,7 +1040,7 @@ class FrmAddonsController {
 	protected static function install_addon_permissions() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		if ( ! current_user_can( 'activate_plugins' ) || ! isset( $_POST['plugin'] ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) || ! self::get_current_plugin() ) {
 			echo json_encode( true );
 			wp_die();
 		}
