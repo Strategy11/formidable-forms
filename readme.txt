@@ -442,7 +442,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 == Changelog ==
 = 5.0.11 =
 - Fix: Required credit cards were causing an issue with JavaScript validation.
-- Fix: Improved how inbox messages are cached to improve performance when there are no new messages.
 
 = 5.0.10 =
 - Security: Improved how data is sanitized when previewing in the style manager.
