@@ -442,6 +442,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 == Changelog ==
 = 5.0.11 =
 - Fix: Required credit cards were causing an issue with JavaScript validation.
+- Fix: Empty required appointment fields were not properly validating with JavaScript.
 
 = 5.0.10 =
 - Security: Improved how data is sanitized when previewing in the style manager.
