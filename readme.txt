@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, form maker, form creator, paypa
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.10
+Stable tag: 5.0.11
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.11 =
+- Fix: Required credit cards were causing an issue with JavaScript validation.
+- Fix: Improved how inbox messages are cached to improve performance when there are no new messages.
+
 = 5.0.10 =
 - Security: Improved how data is sanitized when previewing in the style manager.
 - Fix: Prevent a warning when trying to get inbox messages from the API when no messages are being returned.
@@ -481,18 +485,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
 * Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
 * Fix: Updated form padding on admin page so forms with custom padding don't appear small in the back end.
-
-= 5.0.04 =
-* New: Custom HTML for errors is now also applied when validating with JavaScript.
-* New: Added a button to quickly save and reload after activating a new plugin from the settings page.
-* New: Added several new filters required to support the new new Formidable surveys add on.
-
-= 5.0.03 =
-* New: Added an Elementor widget.
-* New: When duplicating fields, most unsaved changes will now duplicate as well.
-* New: Next button label and slider field label previews will now update as soon as the setting is changed in the form builder.
-* New: Slider field previews will now update when the min and max values are updated in the form builder.
-* Fix: The search dropdown was getting cut off on pages with no search results.
-* Fix: When legacy views or visual views are active, both versions were appearing active on the add ons page.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
