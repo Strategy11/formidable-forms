@@ -146,7 +146,7 @@ On top of that, our hooks and filters allow you to extend Formidable to meet you
 
 Since Formidable is not your average WordPress form plugin, this feature list is going to be very long. Read through it, or just install the most powerful WordPress form maker. Your choice :)
 
-* <a href="https://formidableforms.com/features/drag-drop-form-builder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Online drag and drop form builder</a>. Build everything from an email form to a price calculator or complex online form. Make awesome quiz forms, and online forms the easy way with a simple WordPress drag and drop form maker. You don't have to be a code ninja.
+* <a href="https://formidableforms.com/features/drag-drop-form-builder/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Online drag and drop form builder</a>. Build everything from an email form to a price calculator or complex online form. Make awesome quiz forms and online forms the easy way with a simple WordPress drag and drop form maker. You don't have to be a code ninja to get fields in a row.
 * <a href="https://formidableforms.com/features/display-form-data-views/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Display data with Views</a>. Other WordPress form builder plugins only let you collect data. Formidable lets you format, filter, and display submissions in Formidable Views to create solutions. Think job boards, event calendars, business directories, ratings systems, management solutions, and pretty much anything else you can come up with.
 * <a href="https://formidableforms.com/features/dynamically-add-form-fields/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Repeating field groups (repeaters)</a>. This is great for a registration form, application, or email form.
 * <a href="https://formidableforms.com/features/wordpress-multiple-file-upload-form/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Drag and drop multiple file upload forms</a>. Easily upload documents, files, photos, and music, with any number of files. This is great for a job application form (resumes), WordPress User Profile Form (avatars), or get a quote form.
@@ -176,7 +176,7 @@ Since Formidable is not your average WordPress form plugin, this feature list is
 * Conditionally redirect after a custom search form, payment form, feedback form, support ticket form, quiz, or other online form is submitted. Help clients find the answers they need and show a tailored result based on their selections or calculated fields.
 * We give you access to <a href="https://formidableforms.com/features/customize-form-html-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">customize the HTML</a> (like Contact Form 7). But you keep the ease and speed of a drag & drop form builder plugin. Our team labors for simplicity without sacrificing flexibility.
 * <a href="https://formidableforms.com/features/importing-exporting-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Import and export submissions, styles, and views</a>. Quickly move your work and entries to another site. Need to export leads to another service? Done.
-* <a href="https://formidableforms.com/features/wordpress-form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Form templates for instant form building</a>. Get started quickly with the most advanced form creator that includes form templates and style templates. Our WordPress form generator makes it FAST to build job application forms, calculator forms, and other types of online forms.
+* Form templates for instant form building. Get started quickly with the most advanced form creator that includes form templates and style templates. Our WordPress form generator makes it FAST to build job application forms, calculator forms, and other types of online forms.
 * Import our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">pre-built form templates</a> as a shortcut to a final product. Our growing form template library includes payment forms, a WooCommerce product creator, and more.
 * WCAG accessible forms with A11Y and ADA compliance. Ensure your survey, lead capture form, quizzes, and other online forms are compliant and available to everyone. Allow those using screenreaders to successfully use your WordPress site.
 * <a href="https://formidableforms.com/features/invisible-spam-protection/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Invisible SPAM protection</a>. Don't waste time sorting through SPAM. Get instant and powerful anti-spam features from honeypot, invisible Google reCAPTCHA, Akismet, and the WordPress comment blacklist.
@@ -198,8 +198,8 @@ In addition to all the features listed above, power up your email forms, surveys
 * <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use calculations in your WooCommerce form for variable pricing and upload files with orders.
 * <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Forms</a>. Add and update leads in a MailChimp email marketing list from a lead form, online order, or email form.
 * Constant Contact. Create leads automatically in Constant Contact with a newsletter signup form.
-* <a href="https://formidableforms.com/features/form-entries-to-getresponse/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">GetResponse</a>. Collect leads and add them to GetResponse, and trigger GetResponse marketing automations.
-* AWeber. Subscribe users to an AWeber mailing list when a newsletter signup form is submitted.
+* <a href="https://formidableforms.com/features/form-entries-to-getresponse/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">GetResponse Forms</a>. Collect leads and add them to GetResponse, and trigger GetResponse marketing automations.
+* AWeber Forms. Subscribe users to an AWeber mailing list when a newsletter signup form is submitted.
 * <a href="https://formidableforms.com/features/mailpoet-newsletters-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailPoet Newsletters</a>. Fill your email marketing lists from newsletter signup forms. Then send WordPress newsletters from your own site using MailPoet.
 * Highrise. Add leads to your Highrise CRM account any time a WordPress form is submitted.
 * Salesforce Forms. Create leads and any other Salesforce objects automatically.
@@ -246,9 +246,7 @@ The fastest way to build a form is to use the template we built for you. After y
 
 Go to the Formidable page and click "add new". Choose the Contact Us form template or another free template and click "Create".
 
-Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads.
-
-Learn more about <a href="https://formidableforms.com/wordpress-contact-form-template-to-unique/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">using the contact form template</a>.
+Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads. The contact form template will get you up and running fast.
 
 = Why isn't WordPress sending emails? =
 When you do not receive emails, try the following steps:
@@ -327,7 +325,7 @@ The Formidable drag & drop form builder combined with our add-ons is the most po
 * Cosmos Style Quiz
 * Create Your Own Adventure Quiz
 
-To see more, visit our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin">Form Template Gallery</a> which has almost 100 pre-made templates.
+To see more, visit our <a href="https://formidableforms.com/form-templates/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin">Form Template Gallery</a> which has over 150 pre-made templates.
 
 = How can I get access to all advanced features? =
 To get access to more features, integrations, and support, <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">upgrade to Formidable Pro</a>. A Pro license gives you access to the full version of Formidable for more advanced options, Formidable Views, graphs and stats, priority support, and Formidable Add-ons!
@@ -463,27 +461,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
 - Updated Bootstrap used in back end to version 3.4.1.
 - A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
-
-= 5.0.07 =
-- Security: Unsafe HTML will now be stripped from field labels, descriptions, and custom HTML, as well as titles, descriptions, custom submit text, custom submit HTML, before HTML, after HTML, and success message if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
-- New: Added new frm_akismet_values filter to help improve Akismet integration.
-- Fix: The Akismet API was getting called if Akismet was set up even if Akismet was turned off.
-- Fix: Updated the styling when a field option is being dragged and dropped.
-
-= 5.0.06 =
-- New: Added new frm_export_csv_headings filter to make it easier to add and remove exported CSV headings.
-- New: When clicking an inactive action that requires pro, the required pro license will be properly shown in the popup.
-- New: Added new frm_fields_to_validate, frm_submit_button_html, and frm_fields_for_csv_export filters.
-- Fix: Improved the accessibility of field group dropdowns and field group row layout pop ups.
-- Fix: The caret icon on the dropdown was not positioned properly for the Formidable Gutenberg block.
-- Fix: When clicking the Formidable media button in Elementor, the pop up was appearing as empty with no content.
-- Fix: Required radio, checkbox, and name fields were not including the aria-required="true" attribute or the aria-invalid attribute when JavaScript validation was enabled.
-- Fix: Required name fields were not showing error messages when JavaScript validation was enabled.
-
-= 5.0.05 =
-* Deprecated the option to disable CSS Grids in layouts.
-* Fix: JavaScript validation was failing to validate for many fields with custom patterns because extra conflicting HTML was sometimes being added to the check.
-* Fix: Field dropdowns are now more accessible and it should be easier to delete and duplicate fields with a screen reader.
-* Fix: Updated padding on admin page so custom padding won't appear small in the back end.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
