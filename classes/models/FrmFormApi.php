@@ -81,6 +81,7 @@ class FrmFormApi {
 				'user-agent' => $agent . '; ' . get_bloginfo( 'url' ),
 			)
 		);
+
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 			$addons = $response['body'] ? json_decode( $response['body'], true ) : array();
 
@@ -97,13 +98,13 @@ class FrmFormApi {
 					unset( $addons[ $k ] );
 				}
 			}
-
-			$this->set_cached( $addons );
 		}
 
 		if ( empty( $addons ) ) {
-			return array();
+			$addons = array();
 		}
+
+		$this->set_cached( $addons );
 
 		return $addons;
 	}
