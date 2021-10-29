@@ -19,7 +19,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .frm_forms.<?php echo esc_html( $style_class ); ?>{
 	max-width:<?php echo esc_html( $form_width . $important ); ?>;
 	direction:<?php echo esc_html( $direction . $important ); ?>;
-	<?php if ( 'rtl' == $direction ) { ?>
+	<?php if ( 'rtl' === $direction ) { ?>
 	unicode-bidi:embed;
 	<?php } ?>
 	<?php if ( $center_form ) { ?>

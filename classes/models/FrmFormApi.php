@@ -64,7 +64,7 @@ class FrmFormApi {
 		}
 
 		$addons = $this->get_cached();
-		if ( ! empty( $addons ) ) {
+		if ( is_array( $addons ) ) {
 			return $addons;
 		}
 
@@ -82,22 +82,23 @@ class FrmFormApi {
 			)
 		);
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-			$addons = $response['body'];
-			if ( ! empty( $addons ) ) {
-				$addons = json_decode( $addons, true );
+			$addons = $response['body'] ? json_decode( $response['body'], true ) : array();
 
-				foreach ( $addons as $k => $addon ) {
-					if ( ! isset( $addon['categories'] ) ) {
-						continue;
-					}
-					$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
-					if ( ! empty( $cats ) ) {
-						unset( $addons[ $k ] );
-					}
-				}
-
-				$this->set_cached( $addons );
+			if ( ! is_array( $addons ) ) {
+				$addons = array();
 			}
+
+			foreach ( $addons as $k => $addon ) {
+				if ( ! isset( $addon['categories'] ) ) {
+					continue;
+				}
+				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
+				if ( ! empty( $cats ) ) {
+					unset( $addons[ $k ] );
+				}
+			}
+
+			$this->set_cached( $addons );
 		}
 
 		if ( empty( $addons ) ) {

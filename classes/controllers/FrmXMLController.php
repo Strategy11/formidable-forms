@@ -59,8 +59,8 @@ class FrmXMLController {
 
 		self::set_new_form_name( $xml );
 
-		$imported = FrmXMLHelper::import_xml_now( $xml );
-		if ( isset( $imported['form_status'] ) && ! empty( $imported['form_status'] ) ) {
+		$imported = FrmXMLHelper::import_xml_now( $xml, true );
+		if ( ! empty( $imported['form_status'] ) ) {
 			// Get the last form id in case there are child forms.
 			end( $imported['form_status'] );
 			$form_id  = key( $imported['form_status'] );

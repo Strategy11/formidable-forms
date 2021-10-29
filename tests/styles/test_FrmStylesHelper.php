@@ -23,14 +23,14 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	 */
 	public function test_get_settings_for_output() {
 		$frm_style = new FrmStyle( 'default' );
-		$style = $frm_style->get_one();
-		$settings = FrmStylesHelper::get_settings_for_output( $style );
-		$expected = 'frm_style_' . $style->post_name . '.with_frm_style';
+		$style     = $frm_style->get_one();
+		$settings  = FrmStylesHelper::get_settings_for_output( $style );
+		$expected  = 'frm_style_' . $style->post_name . '.with_frm_style';
 		$this->assertEquals( $expected, $settings['style_class'] );
 
 		$_POST = array(
-			'action'     => 'frm_change_styling',
-			'style_name' => 'frm_style_test',
+			'action'            => 'frm_change_styling',
+			'style_name'        => 'frm_style_test',
 			'frm_style_setting' => array(
 				'post_content'  => $frm_style->get_defaults(),
 			),
@@ -49,9 +49,9 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$compiled_css = get_transient( 'frmpro_css' );
 		$this->assertNotEmpty( $compiled_css, 'Generated CSS file is empty' );
 
-		$frm_style = new FrmStyle( 'default' );
-		$style = $frm_style->get_one();
-		$settings = FrmStylesHelper::get_settings_for_output( $style );
+		$frm_style    = new FrmStyle( 'default' );
+		$style        = $frm_style->get_one();
+		$settings     = FrmStylesHelper::get_settings_for_output( $style );
 		$css_contains = substr_count( $compiled_css, '}.frm_forms.' . $settings['style_class'] . '{' );
 		$this->assertEquals( 1, $css_contains, 'Multiple or no occurances of style found' );
 	}

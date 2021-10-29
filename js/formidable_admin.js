@@ -1203,6 +1203,7 @@ function frmAdminBuildJS() {
 
 		moveOption = document.createElement( 'span' );
 		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		moveOption.classList.add( 'frm-move' );
 		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
 		addTooltip( moveOption, moveOptionLabel );
 		makeTabbable( moveOption, moveOptionLabel );
@@ -5452,7 +5453,7 @@ function frmAdminBuildJS() {
 		replaceWith += ' ';
 
 		// Allow for the column number dropdown.
-		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' ).replace( ' frm_alignright ', ' ' );
+		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' );
 
 		classes = field.className.split( ' frmstart ' )[1];
 		classes = 0 === classes.indexOf( 'frmend ' ) ? '' : classes.split( ' frmend ' )[0];

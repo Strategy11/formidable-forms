@@ -5,6 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmAddonsController {
 
+	/**
+	 * @var string $plugin
+	 */
+	protected static $plugin;
+
 	public static function menu() {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
@@ -843,7 +848,7 @@ class FrmAddonsController {
 		FrmAppHelper::permission_check( 'install_plugins' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$url = FrmAppHelper::get_post_param( 'plugin', '', 'sanitize_text_field' );
+		$url = self::get_current_plugin();
 		if ( FrmAppHelper::pro_is_installed() || empty( $url ) ) {
 			wp_die();
 		}
@@ -862,6 +867,18 @@ class FrmAddonsController {
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 5.0.10
+	 *
+	 * @return string
+	 */
+	protected static function get_current_plugin() {
+		if ( ! isset( self::$plugin ) ) {
+			self::$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
+		}
+		return self::$plugin;
 	}
 
 	/**
@@ -929,9 +946,9 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 */
 	protected static function install_addon() {
-		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
-		$download_url = FrmAppHelper::get_param( 'plugin', '', 'post', 'esc_url_raw' );
+		$download_url = self::get_current_plugin();
 
 		// Create the plugin upgrader with our custom skin.
 		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );
@@ -941,7 +958,7 @@ class FrmAddonsController {
 		wp_cache_flush();
 
 		$plugin = $installer->plugin_info();
-		if ( empty( $plugin ) ) {
+		if ( ! $plugin ) {
 			return array(
 				'message' => 'Plugin was not installed. ' . $installer->result,
 				'success' => false,
@@ -1023,7 +1040,7 @@ class FrmAddonsController {
 	protected static function install_addon_permissions() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		if ( ! current_user_can( 'activate_plugins' ) || ! isset( $_POST['plugin'] ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) || ! self::get_current_plugin() ) {
 			echo json_encode( true );
 			wp_die();
 		}
@@ -1081,9 +1098,7 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	public static function install_addon_api() {
-		// Sanitize when it's used to prevent double sanitizing.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-		$_POST['plugin'] = isset( $_REQUEST['file_url'] ) ? $_REQUEST['file_url'] : ''; // Set for later use
+		self::$plugin = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
 
 		$error = esc_html__( 'Could not install an upgrade. Please download from formidableforms.com and install manually.', 'formidable' );
 
@@ -1104,7 +1119,7 @@ class FrmAddonsController {
 		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
 			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
-			if ( empty( $license ) ) {
+			if ( ! $license ) {
 				return array(
 					'success' => false,
 					'error'   => 'That site does not have a valid license key.',
