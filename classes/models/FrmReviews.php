@@ -117,7 +117,7 @@ class FrmReviews {
 	}
 
 	private function add_to_inbox( $title, $name, $asked ) {
-		$message = new FrmInbox();
+		$message = FrmInbox::get_instance();
 		$requests = $message->get_messages();
 		$key      = $this->inbox_key . ( $asked ? $asked : '' );
 
@@ -176,7 +176,7 @@ class FrmReviews {
 	 * @since 4.05.01
 	 */
 	private function set_inbox_dismissed() {
-		$message = new FrmInbox();
+		$message = FrmInbox::get_instance();
 		foreach ( $this->inbox_keys() as $key ) {
 			$message->dismiss( $key );
 		}
@@ -186,7 +186,7 @@ class FrmReviews {
 	 * @since 4.05.01
 	 */
 	private function set_inbox_read() {
-		$message = new FrmInbox();
+		$message = FrmInbox::get_instance();
 		foreach ( $this->inbox_keys() as $key ) {
 			$message->mark_read( $key );
 		}

@@ -9,6 +9,14 @@ class FrmFormApi {
 	protected $cache_key = '';
 	protected $cache_timeout = '+6 hours';
 
+	private static $instances = array();
+
+	/*
+	 * Track which requests are sending to prevent duplicates
+	 * on the same page load.
+	 */
+	protected $has_run = array();
+
 	/**
 	 * @since 3.06
 	 */
@@ -28,6 +36,22 @@ class FrmFormApi {
 			}
 		}
 		$this->license = $license;
+	}
+
+	/**
+	 * Use an instance to track the requests that are sent each page load.
+	 *
+	 * @since x.x
+	 */
+	public static function get_instance( $license = null ) {
+		$class = get_called_class();
+		$key   = $class . $license;
+
+		if ( ! isset( self::$instances[ $key ] ) ) {
+			self::$instances[ $key ] = new $class( $license );
+		}
+
+		return self::$instances[ $key ];
 	}
 
 	/**
@@ -68,11 +92,18 @@ class FrmFormApi {
 			return $addons;
 		}
 
+		// Don't run the request again if it has already run and got no response.
+		if ( isset( $this->has_run[ $url ] ) ) {
+			return array();
+		}
+
 		// We need to know the version number to allow different downloads.
 		$agent = 'formidable/' . FrmAppHelper::plugin_version();
 		if ( class_exists( 'FrmProDb' ) ) {
 			$agent = 'formidable-pro/' . FrmProDb::$plug_version;
 		}
+
+		$this->has_run[ $url ] = true;
 
 		$response = wp_remote_get(
 			$url,

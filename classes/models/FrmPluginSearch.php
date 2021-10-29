@@ -136,7 +136,7 @@ class FrmPluginSearch {
 	 * @return array
 	 */
 	private function get_addons() {
-		$api    = new FrmFormApi();
+		$api    = FrmFormApi::get_instance();
 		return $api->get_api_info();
 	}
 

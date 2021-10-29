@@ -464,7 +464,7 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
-		$api    = new FrmFormApi();
+		$api    = FrmFormApi::get_instance();
 		$addons = $api->get_api_info();
 
 		$id = $this->download_id();

@@ -44,7 +44,7 @@ class FrmAddonsController {
 		$errors = array();
 
 		if ( isset( $addons['error'] ) ) {
-			$api    = new FrmFormApi();
+			$api    = FrmFormApi::get_instance();
 			$errors = $api->get_error_from_response( $addons );
 			$license_type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : '';
 			unset( $addons['error'] );
@@ -81,7 +81,7 @@ class FrmAddonsController {
 	}
 
 	protected static function get_api_addons() {
-		$api    = new FrmFormApi();
+		$api    = FrmFormApi::get_instance();
 		$addons = $api->get_api_info();
 
 		if ( empty( $addons ) ) {
@@ -198,7 +198,7 @@ class FrmAddonsController {
 	 */
 	public static function get_pro_download_url() {
 		$license   = self::get_pro_license();
-		$api       = new FrmFormApi( $license );
+		$api       = FrmFormApi::get_instance( $license );
 		$downloads = $api->get_api_info();
 		$pro       = self::get_pro_from_addons( $downloads );
 
@@ -394,7 +394,7 @@ class FrmAddonsController {
 
 			$checked_licenses[] = $new_license;
 
-			$api = new FrmFormApi( $new_license );
+			$api = FrmFormApi::get_instance( $new_license );
 			if ( empty( $version_info ) ) {
 				$version_info = $api->get_api_info();
 				continue;

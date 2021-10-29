@@ -34,7 +34,7 @@ class FrmFormMigratorsHelper {
 	 * @since 4.05
 	 */
 	public static function maybe_add_to_inbox() {
-		$inbox = new FrmInbox();
+		$inbox = FrmInbox::get_instance();
 		$forms = self::import_links();
 
 		foreach ( $forms as $form ) {

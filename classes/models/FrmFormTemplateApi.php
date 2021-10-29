@@ -127,7 +127,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$key  = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_key' );
 
 		// Remove message from Inbox page.
-		$message = new FrmInbox();
+		$message = FrmInbox::get_instance();
 		$message->remove( 'free_templates' );
 
 		if ( $key ) {

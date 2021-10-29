@@ -162,7 +162,7 @@ class FrmDeprecated {
 	 */
 	public static function get_pro_updater() {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_pro_updater' );
-		$api = new FrmFormApi();
+		$api = FrmFormApi::get_instance();
 		return $api->get_pro_updater();
 	}
 
@@ -185,7 +185,7 @@ class FrmDeprecated {
 	 */
 	public static function error_for_license( $license ) {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::error_for_license' );
-		$api = new FrmFormApi( $license );
+		$api = FrmFormApi::get_instance( $license );
 		return $api->error_for_license();
 	}
 
@@ -195,7 +195,7 @@ class FrmDeprecated {
 	 */
 	public static function reset_cached_addons( $license = '' ) {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::reset_cached' );
-		$api = new FrmFormApi( $license );
+		$api = FrmFormApi::get_instance( $license );
 		$api->reset_cached();
 	}
 
@@ -206,7 +206,7 @@ class FrmDeprecated {
 	 */
 	public static function get_cache_key( $license ) {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_cache_key' );
-		$api = new FrmFormApi( $license );
+		$api = FrmFormApi::get_instance( $license );
 		return $api->get_cache_key();
 	}
 
@@ -218,7 +218,7 @@ class FrmDeprecated {
 	 */
 	public static function get_addon_info( $license = '' ) {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_api_info' );
-		$api = new FrmFormApi( $license );
+		$api = FrmFormApi::get_instance( $license );
 		return $api->get_api_info();
 	}
 

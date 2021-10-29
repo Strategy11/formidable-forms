@@ -22,7 +22,7 @@ class FrmInboxController {
 	private static function get_notice_count() {
 		FrmFormMigratorsHelper::maybe_add_to_inbox();
 
-		$inbox = new FrmInbox();
+		$inbox = FrmInbox::get_instance();
 		return $inbox->unread_html();
 	}
 
@@ -47,7 +47,7 @@ class FrmInboxController {
 		self::add_tracking_request();
 		self::add_free_template_message();
 
-		$inbox    = new FrmInbox();
+		$inbox    = FrmInbox::get_instance();
 		$messages = $inbox->get_messages( 'filter' );
 		$messages = array_reverse( $messages );
 		$user     = wp_get_current_user();
@@ -66,7 +66,7 @@ class FrmInboxController {
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
 		if ( ! empty( $key ) ) {
-			$message = new FrmInbox();
+			$message = FrmInbox::get_instance();
 			$message->dismiss( $key );
 			if ( $key === 'review' ) {
 				$reviews = new FrmReviews();
@@ -88,7 +88,7 @@ class FrmInboxController {
 
 		$link = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
 
-		$message = new FrmInbox();
+		$message = FrmInbox::get_instance();
 		$message->add_message(
 			array(
 				'key'     => 'usage',
@@ -117,7 +117,7 @@ class FrmInboxController {
 
 		$link = admin_url( 'admin.php?page=formidable&triggerNewFormModal=1&free-templates=1' );
 
-		$message = new FrmInbox();
+		$message = FrmInbox::get_instance();
 		$message->add_message(
 			array(
 				'key'     => 'free_templates',
