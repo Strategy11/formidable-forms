@@ -29,8 +29,9 @@ class FrmTableHTMLGenerator {
 	/**
 	 * @var string
 	 * @since 2.04
+	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
 	 */
-	private $direction = 'ltr';
+	protected $direction = 'ltr';
 
 	/**
 	 * @var bool
@@ -41,14 +42,16 @@ class FrmTableHTMLGenerator {
 	/**
 	 * @var string
 	 * @since 2.04
+	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
 	 */
-	private $table_style = '';
+	protected $table_style = '';
 
 	/**
 	 * @var string
 	 * @since 2.04
+	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
 	 */
-	private $td_style = '';
+	protected $td_style = '';
 
 	/**
 	 * FrmTableHTMLGenerator constructor.
@@ -205,10 +208,11 @@ class FrmTableHTMLGenerator {
 	 * Get the table row style
 	 *
 	 * @since 2.04
+	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
 	 *
 	 * @return string
 	 */
-	private function tr_style() {
+	protected function tr_style() {
 
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
@@ -225,8 +229,9 @@ class FrmTableHTMLGenerator {
 	 * Switch the odd property from true to false or false to true
 	 *
 	 * @since 2.04
+	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
 	 */
-	private function switch_odd() {
+	protected function switch_odd() {
 		if ( $this->type !== 'shortcode' ) {
 			$this->odd = ! $this->odd;
 		}
@@ -259,8 +264,8 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.04
 	 *
-	 * @param string $label
-	 * @param string $value
+	 * @param string $label The label.
+	 * @param string $value The value.
 	 *
 	 * @return string
 	 */
