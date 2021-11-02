@@ -81,29 +81,26 @@ class FrmFormApi {
 				'user-agent' => $agent . '; ' . get_bloginfo( 'url' ),
 			)
 		);
+
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 			$addons = $response['body'] ? json_decode( $response['body'], true ) : array();
-
-			if ( ! is_array( $addons ) ) {
-				$addons = array();
-			}
-
-			foreach ( $addons as $k => $addon ) {
-				if ( ! isset( $addon['categories'] ) ) {
-					continue;
-				}
-				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
-				if ( ! empty( $cats ) ) {
-					unset( $addons[ $k ] );
-				}
-			}
-
-			$this->set_cached( $addons );
 		}
 
-		if ( empty( $addons ) ) {
-			return array();
+		if ( ! is_array( $addons ) ) {
+			$addons = array();
 		}
+
+		foreach ( $addons as $k => $addon ) {
+			if ( ! isset( $addon['categories'] ) ) {
+				continue;
+			}
+			$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
+			if ( ! empty( $cats ) ) {
+				unset( $addons[ $k ] );
+			}
+		}
+
+		$this->set_cached( $addons );
 
 		return $addons;
 	}
