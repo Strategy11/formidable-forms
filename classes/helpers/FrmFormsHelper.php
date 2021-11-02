@@ -795,7 +795,13 @@ BEFORE_HTML;
 			$form = $form->options;
 		}
 
-		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
+		if ( ! empty( $form['submit_align'] ) ) {
+			$submit_align = $form['submit_align'];
+		} elseif ( self::form_should_be_inline_and_missing_class( $form ) ) {
+			$submit_align = 'inline';
+		} else {
+			$submit_align = '';
+		}
 
 		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
@@ -807,6 +813,22 @@ BEFORE_HTML;
 		$class = apply_filters( 'frm_add_form_style_class', $class, $style );
 
 		return $class;
+	}
+
+	/**
+	 * In order for frm_inline_submit to inline the submit button the form must also have the frm_inline_form that adds the grid-column style rules required for it to work.
+	 *
+	 * @since 5.0.12
+	 *
+	 * @param array $form
+	 * @return bool
+	 */
+	private static function form_should_be_inline_and_missing_class( $form ) {
+		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
+			// not missing class, avoid adding it twice.
+			return false;
+		}
+		return ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' );
 	}
 
 	/**
