@@ -795,7 +795,11 @@ BEFORE_HTML;
 			$form = $form->options;
 		}
 
-		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
+		if ( ! empty( $form['submit_align'] ) ) {
+			$submit_align = $form['submit_align'];
+		} else {
+			$submit_align = ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' ) ? 'inline' : '';
+		}
 
 		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
