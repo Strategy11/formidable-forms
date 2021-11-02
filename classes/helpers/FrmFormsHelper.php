@@ -824,7 +824,7 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
-		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', 'frm_inline_form' ) ) {
+		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
 			// not missing class, avoid adding it twice.
 			return false;
 		}
