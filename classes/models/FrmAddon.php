@@ -90,8 +90,9 @@ class FrmAddon {
 			return $_data;
 		}
 
-		$slug = basename( $this->plugin_file, '.php' );
-		if ( ! isset( $_args->slug ) || $_args->slug != $slug ) {
+		$slug  = basename( $this->plugin_file, '.php' );
+		$slug2 = str_replace( '/' . $slug . '.php', '', $this->plugin_folder );
+		if ( empty( $_args->slug ) || ( $_args->slug != $slug && $_args->slug !== $slug2 ) ) {
 			return $_data;
 		}
 
