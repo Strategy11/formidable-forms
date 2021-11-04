@@ -566,9 +566,14 @@ class FrmXMLController {
 
 		global $wpdb;
 
-		$form    = FrmForm::getOne( $form_id );
-		$form_id = $form->id;
+		$form = FrmForm::getOne( $form_id );
 
+		if ( ! $form ) {
+			esc_html_e( 'Form not found.', 'formidable' );
+			wp_die();
+		}
+
+		$form_id   = $form->id;
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
 
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
