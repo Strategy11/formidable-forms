@@ -114,7 +114,7 @@ class FrmStyle {
 	/**
 	 * @since 5.0.13
 	 *
-	 * @param array $style
+	 * @param array $settings
 	 * @return array
 	 */
 	public function sanitize_post_content( $settings ) {
