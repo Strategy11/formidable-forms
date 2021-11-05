@@ -3031,7 +3031,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
-		if ( true ) {//self::should_never_allow_unfiltered_html() ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
 			$value = self::kses( $value, $allowed );
 		}
 		return $value;
