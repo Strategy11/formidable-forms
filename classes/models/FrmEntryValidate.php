@@ -470,32 +470,18 @@ class FrmEntryValidate {
 		$datas['frm_duplicated'] = array();
 
 		foreach ( $values as $index => $value ) {
-			// Found all commenter data, break the loop.
-			if ( $datas['comment_author'] && $datas['comment_author_email'] && $datas['comment_author_url'] ) {
-				break;
-			}
-
 			if ( is_array( $value ) ) {
 				foreach ( $value as $sub_value ) {
-					if ( self::maybe_comment_author_email( $sub_value ) ) {
-						if ( ! $datas['comment_author_email'] ) {
-							$datas['comment_author_email'] = $sub_value;
-							$datas['frm_duplicated'][]     = $index;
-						}
-						continue;
+					if ( self::found_akismet_spam_check_value( 'comment_author_email', $datas, $sub_value, $index, $values ) ) {
+						break 2;
 					}
 
-					if ( self::maybe_comment_author_url( $sub_value ) ) {
-						if ( ! $datas['comment_author_url'] ) {
-							$datas['comment_author_url'] = $sub_value;
-							$datas['frm_duplicated'][]   = $index;
-						}
-						continue;
+					if ( self::found_akismet_spam_check_value( 'comment_author_url', $datas, $sub_value, $index, $values ) ) {
+						break 2;
 					}
 
-					if ( ! $datas['comment_author'] && self::maybe_comment_author_name( $sub_value ) ) {
-						$datas['comment_author']   = $sub_value;
-						$datas['frm_duplicated'][] = $index;
+					if ( self::found_akismet_spam_check_value( 'comment_author', $datas, $sub_value, $index, $values ) ) {
+						break 2;
 					}
 
 					unset( $sub_value );
@@ -503,31 +489,63 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			if ( self::maybe_comment_author_email( $value ) ) {
-				if ( ! $datas['comment_author_email'] ) {
-					$datas['comment_author_email'] = $value;
-					$datas['frm_duplicated'][]     = $index;
-				}
-				continue;
+			if ( self::found_akismet_spam_check_value( 'comment_author_email', $datas, $value, $index, $values ) ) {
+				break;
 			}
 
-			if ( self::maybe_comment_author_url( $value ) ) {
-				if ( ! $datas['comment_author_url'] ) {
-					$datas['comment_author_url'] = $value;
-					$datas['frm_duplicated'][]   = $index;
-				}
-				continue;
+			if ( self::found_akismet_spam_check_value( 'comment_author_url', $datas, $value, $index, $values ) ) {
+				break;
 			}
 
-			if ( ! $datas['comment_author'] && self::maybe_comment_author_name( $value ) ) {
-				$datas['comment_author']   = $value;
-				$datas['frm_duplicated'][] = $index;
+			if ( self::found_akismet_spam_check_value( 'comment_author', $datas, $value, $index, $values ) ) {
+				break;
 			}
 
 			unset( $value );
 		}
 
 		return $datas;
+	}
+
+	/**
+	 * Checks value to find the akismet spam check.
+	 *
+	 * @since 5.0.10
+	 *
+	 * @param string $name     Data name.
+	 * @param array  $datas    The datas array.
+	 * @param string $value    Value to check.
+	 * @param int    $field_id Field ID.
+	 * @param array  $values   The values array.
+	 * @return bool Return `true` if email, url and name are found.
+	 */
+	private static function found_akismet_spam_check_value( $name, &$datas, $value, $field_id, $values ) {
+		switch ( $name ) {
+			case 'comment_author_email':
+				if ( strpos( $value, '@' ) && is_email( $value ) ) {
+					$datas[ $name ]            = $value;
+					$datas['frm_duplicated'][] = $field_id;
+				}
+				break;
+
+			case 'comment_author_url':
+				if ( 0 === strpos( $value, 'http' ) ) {
+					$datas[ $name ]            = $value;
+					$datas['frm_duplicated'][] = $field_id;
+				}
+				break;
+
+			case 'comment_author':
+				if ( isset( $values['name_field_ids'] ) && in_array( $field_id, $values['name_field_ids'], true ) ||
+				     ! is_numeric( $value ) && strlen( $value ) < 200
+				) {
+					$datas[ $name ]            = $value;
+					$datas['frm_duplicated'][] = $field_id;
+				}
+				break;
+		}
+
+		return ! empty( $datas['comment_author_email'] ) && ! empty( $datas['comment_author_url'] ) && ! empty( $datas['comment_author'] );
 	}
 
 	/**
@@ -660,6 +678,8 @@ class FrmEntryValidate {
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+		$values['name_field_ids'] = array();
+
 		$form_ids = array( absint( $values['form_id'] ) );
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
@@ -669,6 +689,7 @@ class FrmEntryValidate {
 			// Convert name array to string.
 			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
 				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
+				$values['name_field_ids'][]       = $field_id;
 				continue;
 			}
 
@@ -695,6 +716,8 @@ class FrmEntryValidate {
 					// Convert name array to string.
 					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
 						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
+
+						$values['name_field_ids'][] = $subsubindex;
 					}
 
 					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
