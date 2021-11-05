@@ -221,14 +221,14 @@ class FrmSMTPController {
 					<span><a rel="%4$s" class="button button-primary frm-button-primary %5$s" aria-label="%6$s">%7$s</a></span>
 				</div>		
 			</section>',
-			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // WPCS: XSS ok.
+			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html( $label ),
 			esc_html__( 'Install WP Mail SMTP from the WordPress.org plugin repository.', 'formidable' ),
 			esc_attr( $step['plugin'] ),
 			esc_attr( $step['button_class'] ),
 			esc_attr( $step['button_action'] ),
 			esc_html( $step['button_text'] )
-		); // WPCS: XSS ok.
+		);
 	}
 
 	/**
@@ -266,13 +266,13 @@ class FrmSMTPController {
 				</div>		
 			</section>',
 			esc_attr( $step['section_class'] ),
-			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // WPCS: XSS ok.
+			FrmAppHelper::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			esc_html__( 'Set Up WP Mail SMTP', 'formidable' ),
 			esc_html__( 'Select and configure your mailer.', 'formidable' ),
 			esc_url( admin_url( $this->config['smtp_settings'] ) ),
 			esc_attr( $step['button_class'] ),
 			esc_html( $step['button_text'] )
-		); // WPCS: XSS ok.
+		);
 	}
 
 	/**

@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span class="frm-outer-circle">
 								<span class="frm-inner-circle" <?php
-									echo FrmAppHelper::array_to_html_params( $icon_atts ); // WPCS: XSS ok.
+									echo FrmAppHelper::array_to_html_params( $icon_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>>
 								<?php
 								$icon_atts = array();

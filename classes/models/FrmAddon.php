@@ -320,7 +320,7 @@ class FrmAddon {
 		$id            = sanitize_title( $plugin['Name'] ) . '-next';
 
 		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
-		echo FrmAppHelper::kses( $message, 'a' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $message, 'a' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
 		echo '</p></div></td></tr>';
 	}
@@ -455,7 +455,7 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
-		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // WPCS: CSRF ok.
+		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 

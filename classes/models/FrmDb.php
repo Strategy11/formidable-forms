@@ -438,7 +438,7 @@ class FrmDb {
 		if ( is_array( $where ) || empty( $where ) ) {
 			self::get_where_clause_and_values( $where );
 			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // WPCS: unprepared SQL ok.
+			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			/**
 			 * Allow the $where to be prepared before we recieve it here.
@@ -577,7 +577,7 @@ class FrmDb {
 		if ( is_array( $where ) ) {
 			global $wpdb;
 			self::get_where_clause_and_values( $where, $starts_with );
-			$where = $wpdb->prepare( $where['where'], $where['values'] ); // WPCS: unprepared SQL ok.
+			$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$where = $starts_with . $where;
 		}
@@ -657,7 +657,7 @@ class FrmDb {
 			$results = get_posts( $query );
 		} elseif ( 'get_associative_results' == $type ) {
 			global $wpdb;
-			$results = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL ok.
+			$results = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			global $wpdb;
 			$results = $wpdb->{$type}( $query );

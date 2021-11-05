@@ -169,7 +169,7 @@ class FrmAppHelper {
 	 * @since 4.0
 	 */
 	public static function show_logo( $atts = array() ) {
-		echo self::kses( self::svg_logo( $atts ), 'all' ); // WPCS: XSS ok.
+		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -192,7 +192,7 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
-		echo self::kses( $icon, 'all' ); // WPCS: XSS ok.
+		echo self::kses( $icon, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -410,10 +410,9 @@ class FrmAppHelper {
 			$param  = $params[0];
 		}
 
-		if ( $src == 'get' ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default );
-			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
+		if ( $src === 'get' ) {
+			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = htmlspecialchars_decode( wp_unslash( $_GET[ $param ] ) );
 			}
@@ -497,19 +496,19 @@ class FrmAppHelper {
 		$value = $args['default'];
 		if ( $args['type'] == 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_GET[ $args['param'] ] );
 			}
 		} elseif ( $args['type'] == 'post' ) {
-			if ( isset( $_POST[ $args['param'] ] ) ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( isset( $_POST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_POST[ $args['param'] ] );
 				if ( $args['serialized'] === true && is_serialized_string( $value ) && is_serialized( $value ) ) {
 					self::unserialize_or_decode( $value );
 				}
 			}
 		} else {
-			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
+			if ( isset( $_REQUEST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = wp_unslash( $_REQUEST[ $args['param'] ] );
 			}
@@ -861,13 +860,13 @@ class FrmAppHelper {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
-			$icon  = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
 				<use xlink:href="#' . esc_attr( $icon ) . '" />
 			</svg>';
 		}
 
 		if ( $echo ) {
-			echo $icon; // WPCS: XSS ok.
+			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}
@@ -1733,7 +1732,7 @@ class FrmAppHelper {
 		}
 
 		if ( empty( $post_values ) ) {
-			$post_values = wp_unslash( $_POST );
+			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$values = array(
@@ -1753,9 +1752,9 @@ class FrmAppHelper {
 
 		self::prepare_field_arrays( $fields, $record, $values, array_merge( $args, compact( 'default', 'post_values' ) ) );
 
-		if ( $table == 'entries' ) {
+		if ( $table === 'entries' ) {
 			$values = FrmEntriesHelper::setup_edit_vars( $values, $record );
-		} elseif ( $table == 'forms' ) {
+		} elseif ( $table === 'forms' ) {
 			$values = FrmFormsHelper::setup_edit_vars( $values, $record, $post_values );
 		}
 

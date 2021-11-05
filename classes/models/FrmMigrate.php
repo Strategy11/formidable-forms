@@ -154,7 +154,7 @@ class FrmMigrate {
 				dbDelta( $q . $charset_collate . ';' );
 			} else {
 				global $wpdb;
-				$wpdb->query( $q . $charset_collate ); // WPCS: unprepared SQL ok.
+				$wpdb->query( $q . $charset_collate ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
 			unset( $q );
 		}
@@ -222,10 +222,10 @@ class FrmMigrate {
 
 		global $wpdb, $wp_roles;
 
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // WPCS: unprepared SQL ok.
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // WPCS: unprepared SQL ok.
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // WPCS: unprepared SQL ok.
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
@@ -462,9 +462,9 @@ class FrmMigrate {
 	 */
 	private function migrate_to_23() {
 		global $wpdb;
-		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // WPCS: unprepared SQL ok.
+		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( empty( $exists ) ) {
-			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // WPCS: unprepared SQL ok.
+			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 	}
 

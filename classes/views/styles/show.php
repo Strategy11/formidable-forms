@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 			<input type="hidden" name="frm_action" value="save" />
-			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
+			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 			<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
 			<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
 
