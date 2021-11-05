@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.0
 Tested up to: 5.8.1
 Requires PHP: 5.6
-Stable tag: 5.0.11
+Stable tag: 5.0.12
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,14 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.12 =
+- Fix: Many formidable addons were not properly displaying update details from the plugins page.
+- Fix: Fewer API requests will be sent to formidable when a request results in an error.
+- Fix: Fewer API requests will be made for inbox notices when cached results expire.
+- Fix: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
+- Fix: Added additional validation to CSV export so it fails more gracefully when the form does not exist.
+- Fix: The style setting for Margin under Field Settings as been renamed to Bottom Margin to avoid confusion as it only updates one margin value.
+
 = 5.0.11 =
 - Fix: Required credit cards were causing an issue with JavaScript validation.
 - Fix: Empty required appointment fields were not properly validating with JavaScript.
@@ -455,11 +463,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - Fix: Significantly reduced the amount of memory required to load settings for websites with fewer than 50 pages with a lot of data.
 - Fix: Author email, url, or name are no longer included in comment info when sending data to Akismet so that duplicate information is not sent.
 - Fix: Field groups could not be moved because of a missing class on the drag handle.
-
-= 5.0.08 =
-- Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
-- Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
-- Updated Bootstrap used in back end to version 3.4.1.
-- A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
