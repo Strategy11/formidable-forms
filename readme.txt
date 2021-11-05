@@ -439,10 +439,10 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 5.0.12 =
+- New: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
 - Fix: Many Formidable addons were not properly displaying update details from the plugins page.
 - Fix: Fewer API requests will be sent to Formidable when a request results in an error.
 - Fix: Fewer API requests will be made for inbox notices when cached results expire.
-- Fix: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
 - Fix: Added additional validation to CSV export so it fails more gracefully when the form does not exist.
 - Fix: The style setting for Margin under Field Settings as been renamed to Bottom Margin to avoid confusion as it only updates one margin value.
 
