@@ -448,9 +448,9 @@ BEFORE_HTML;
 			}
 		}
 
-		echo FrmAppHelper::maybe_kses( $button_parts[0] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $button_parts[0]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'frm_submit_button_action', $form, $form_action );
-		echo FrmAppHelper::maybe_kses( $button_parts[1] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $button_parts[1]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

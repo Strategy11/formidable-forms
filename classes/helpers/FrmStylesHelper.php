@@ -336,19 +336,21 @@ class FrmStylesHelper {
 		if ( self::previewing_style() ) {
 
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$style = new FrmStyle();
+
 				// Sanitizing is done later.
 				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
-					$settings   = self::sanitize_settings( $posted['frm_style_setting']['post_content'] );
+					$settings   = $style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
-					$settings   = self::sanitize_settings( $posted['post_content'] );
+					$settings   = $style->sanitize_post_content( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
-				$settings   = self::sanitize_settings( wp_unslash( $_GET ) );
+				$settings   = $style->sanitize_post_content( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
@@ -386,17 +388,6 @@ class FrmStylesHelper {
 		}
 
 		return $settings;
-	}
-
-	/**
-	 * @since 5.0.10
-	 *
-	 * @param array $settings
-	 * @return array
-	 */
-	private static function sanitize_settings( $settings ) {
-		$style = new FrmStyle();
-		return $style->sanitize_settings( $settings );
 	}
 
 	/**

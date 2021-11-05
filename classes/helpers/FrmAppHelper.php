@@ -2989,7 +2989,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 5.0.12
+	 * @since 5.0.13
 	 *
 	 * @return bool
 	 */
@@ -3024,14 +3024,14 @@ class FrmAppHelper {
 	 * Some back end fields allow privleged users to add scripts.
 	 * A site that uses the DISALLOW_UNFILTERED_HTML always remove scripts on echo.
 	 *
-	 * @since 5.0.12
+	 * @since 5.0.13
 	 *
 	 * @param string       $value
 	 * @param array|string $allowed 'all' for everything included as defaults
 	 * @return string
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
-		if ( self::should_never_allow_unfiltered_html() ) {
+		if ( true ) {//self::should_never_allow_unfiltered_html() ) {
 			$value = self::kses( $value, $allowed );
 		}
 		return $value;

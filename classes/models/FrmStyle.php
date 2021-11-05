@@ -73,7 +73,7 @@ class FrmStyle {
 			$new_instance['post_title']   = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 			// Don't wp_unslash yet since it removes backslashes.
-			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_style_settings( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
 			$new_instance['menu_order']   = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -112,10 +112,12 @@ class FrmStyle {
 	}
 
 	/**
+	 * @since 5.0.13
+	 *
 	 * @param array $style
 	 * @return array
 	 */
-	public function sanitize_style_settings( $settings ) {
+	public function sanitize_post_content( $settings ) {
 		$defaults           = $this->get_defaults();
 		$valid_keys         = array_keys( $defaults );
 		$sanitized_settings = array();
