@@ -9,7 +9,7 @@ if ( isset( $message ) && '' !== $message ) {
 		echo FrmAppHelper::kses( $message, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</div>';
 	} else {
-		echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 

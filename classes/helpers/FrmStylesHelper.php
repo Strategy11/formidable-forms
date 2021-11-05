@@ -395,18 +395,8 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	private static function sanitize_settings( $settings ) {
-		$style              = new FrmStyle();
-		$defaults           = $style->get_defaults();
-		$valid_keys         = array_keys( $defaults );
-		$sanitized_settings = array();
-		foreach ( $valid_keys as $key ) {
-			if ( isset( $settings[ $key ] ) ) {
-				$sanitized_settings[ $key ] = sanitize_text_field( $settings[ $key ] );
-			} else {
-				$sanitized_settings[ $key ] = $defaults[ $key ];
-			}
-		}
-		return $sanitized_settings;
+		$style = new FrmStyle();
+		return $style->sanitize_settings( $settings );
 	}
 
 	/**

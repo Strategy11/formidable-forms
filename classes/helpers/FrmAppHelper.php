@@ -2982,10 +2982,19 @@ class FrmAppHelper {
 	 * @return bool true if the current user is allowed to save unfiltered HTML.
 	 */
 	public static function allow_unfiltered_html() {
-		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
 			return false;
 		}
 		return current_user_can( 'unfiltered_html' );
+	}
+
+	/**
+	 * @since 5.0.12
+	 *
+	 * @return bool
+	 */
+	private static function should_never_allow_unfiltered_html() {
+		return defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML;
 	}
 
 	/**
@@ -3009,6 +3018,23 @@ class FrmAppHelper {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Some back end fields allow privleged users to add scripts.
+	 * A site that uses the DISALLOW_UNFILTERED_HTML always remove scripts on echo.
+	 *
+	 * @since 5.0.12
+	 *
+	 * @param string       $value
+	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @return string
+	 */
+	public static function maybe_kses( $value, $allowed = 'all' ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
+			$value = self::kses( $value, $allowed );
+		}
+		return $value;
 	}
 
 	/**

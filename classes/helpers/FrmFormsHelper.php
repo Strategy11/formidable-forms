@@ -427,8 +427,7 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
-			echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
+			echo FrmAppHelper::maybe_kses( $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
 		}
 
@@ -449,9 +448,9 @@ BEFORE_HTML;
 			}
 		}
 
-		echo $button_parts[0]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo FrmAppHelper::maybe_kses( $button_parts[0] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'frm_submit_button_action', $form, $form_action );
-		echo $button_parts[1]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo FrmAppHelper::maybe_kses( $button_parts[1] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

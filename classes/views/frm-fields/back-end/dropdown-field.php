@@ -19,10 +19,10 @@ if ( isset( $field['post_field'] ) && 'post_category' === $field['post_field'] &
 		<?php
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
-			$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
-			$selected = ( $field['default_value'] === $field_val || FrmFieldsHelper::get_other_val( array( 'opt_key', 'field' ) ) ) ? ' selected="selected"' : '';
+			$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+			$selected  = $field['default_value'] === $field_val || FrmFieldsHelper::get_other_val( array( 'opt_key', 'field' ) );
 			?>
-			<option value="<?php echo esc_attr( $field_val ); ?>"<?php echo $selected; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo esc_html( $opt ); ?> </option>
+			<option value="<?php echo esc_attr( $field_val ); ?>"<?php selected( $selected ); ?>><?php echo esc_html( $opt ); ?> </option>
 		<?php } ?>
 	</select>
 <?php } ?>
