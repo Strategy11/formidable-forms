@@ -701,7 +701,7 @@ DEFAULT_HTML;
 	public function prepare_field_html( $args ) {
 		$args = $this->fill_display_field_values( $args );
 		if ( $this->has_html ) {
-			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmField::get_option( $this->field, 'custom_html' ) );
+			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
 			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
 			$args['field_obj'] = $this;
 
