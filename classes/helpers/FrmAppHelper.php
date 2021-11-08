@@ -767,14 +767,19 @@ class FrmAppHelper {
 				'viewbox' => true,
 			),
 			'svg'        => array(
-				'class'   => true,
-				'id'      => true,
-				'xmlns'   => true,
-				'viewbox' => true,
-				'width'   => true,
-				'height'  => true,
-				'style'   => true,
-				'fill'    => true,
+				'class'       => true,
+				'id'          => true,
+				'xmlns'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'height'      => true,
+				'style'       => true,
+				'fill'        => true,
+				'aria-label'  => true,
+				'aria-hidden' => true,
+				'data-open'   => true,
+				'title'       => true,
+				'style'       => true,
 			),
 			'use'        => array(
 				'href'   => true,
@@ -866,7 +871,7 @@ class FrmAppHelper {
 		}
 
 		if ( $echo ) {
-			echo self::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}
