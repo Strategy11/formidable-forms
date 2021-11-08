@@ -866,7 +866,7 @@ class FrmAppHelper {
 		}
 
 		if ( $echo ) {
-			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::kses( $icon, array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}

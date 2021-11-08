@@ -376,7 +376,7 @@ class FrmDeprecated {
 
 		do_action( 'frm_after_update_field_' . $field, compact( 'id', 'value' ) );
 
-		echo stripslashes( wp_kses_post( $value ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo stripslashes( wp_kses_post( $value ) );
 		wp_die();
 	}
 

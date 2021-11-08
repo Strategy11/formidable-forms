@@ -840,9 +840,9 @@ class FrmFieldsHelper {
 			return null;
 		}
 
-		if ( isset( $atts['show'] ) && $atts['show'] == 'field_label' ) {
+		if ( isset( $atts['show'] ) && $atts['show'] === 'field_label' ) {
 			$replace_with = $field->name;
-		} elseif ( isset( $atts['show'] ) && $atts['show'] == 'description' ) {
+		} elseif ( isset( $atts['show'] ) && $atts['show'] === 'description' ) {
 			$replace_with = $field->description;
 		} else {
 			$replace_with = FrmEntryMeta::get_meta_value( $atts['entry'], $field->id );

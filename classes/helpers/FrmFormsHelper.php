@@ -710,11 +710,11 @@ BEFORE_HTML;
 			'entry_key'        => true,
 		);
 		foreach ( $codes as $code => $show ) {
-			if ( $code == 'form_name' ) {
+			if ( $code === 'form_name' ) {
 				$replace_with = $form->name;
-			} elseif ( $code == 'form_description' ) {
+			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
-			} elseif ( $code == 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
+			} elseif ( $code === 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
 				$replace_with = FrmAppHelper::simple_get( 'entry' );
 			} else {
 				$replace_with = '';
