@@ -1541,17 +1541,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 2.0
-	 * @return string The base Google APIS url for the current version of jQuery UI
-	 */
-	public static function jquery_ui_base_url() {
-		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version( 'jquery-ui-core', '1.11.4' );
-		$url = apply_filters( 'frm_jquery_ui_base_url', $url );
-
-		return $url;
-	}
-
-	/**
 	 * @param string $handle
 	 */
 	public static function script_version( $handle, $default = 0 ) {
@@ -2563,7 +2552,7 @@ class FrmAppHelper {
 				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
 				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
 				'private_label'     => __( 'Private', 'formidable' ),
-				'jquery_ui_url'     => self::jquery_ui_base_url(),
+				'jquery_ui_url'     => '',
 				'pro_url'           => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
 				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
@@ -3236,5 +3225,16 @@ class FrmAppHelper {
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		return FrmDeprecated::prepend_and_or_where( $starts_with, $where );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 5.0.13
+	 *
+	 * @return string The base Google APIS url for the current version of jQuery UI
+	 */
+	public static function jquery_ui_base_url() {
+		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
+		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
 	}
 }

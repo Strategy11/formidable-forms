@@ -7113,25 +7113,6 @@ function frmAdminBuildJS() {
 	}
 
 	/* Styling */
-
-	//function to append a new theme stylesheet with the new style changes
-	function updateUICSS( locStr ) {
-		var $cssLink, $link;
-
-		if ( locStr == -1 ) {
-			jQuery( 'link.ui-theme' ).remove();
-			return false;
-		}
-
-		$cssLink = jQuery( '<link href="' + locStr + '" type="text/css" rel="Stylesheet" class="ui-theme" />' );
-		jQuery( 'head' ).append( $cssLink );
-
-		$link = jQuery( 'link.ui-theme' );
-		if ( $link.length > 1 ) {
-			$link.first().remove();
-		}
-	}
-
 	function setPosClass() {
 		/*jshint validthis:true */
 		var value = this.value;
@@ -9397,24 +9378,6 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 
 			jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
-
-			jQuery( 'select[name$="[theme_selector]"]' ).on( 'change', function() {
-				var themeVal = jQuery( this ).val();
-				var css = themeVal;
-				if ( themeVal !== -1 ) {
-					if ( themeVal === 'ui-lightness' && frm_admin_js.pro_url !== '' ) {
-						css = frm_admin_js.pro_url + '/css/ui-lightness/jquery-ui.css';
-						jQuery( '.frm_date_color' ).show();
-					} else {
-						css = frm_admin_js.jquery_ui_url + '/themes/' + themeVal + '/jquery-ui.css';
-						jQuery( '.frm_date_color' ).hide();
-					}
-				}
-
-				updateUICSS( css );
-				document.getElementById( 'frm_theme_css' ).value = themeVal;
-				return false;
-			}).trigger( 'change' );
 
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
