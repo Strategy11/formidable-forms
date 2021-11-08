@@ -2984,7 +2984,18 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	private static function should_never_allow_unfiltered_html() {
-		return defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML;
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			return true;
+		}
+
+		/**
+		 * Formidable will check DISALLOW_UNFILTERED_HTML to determine if some form HTML should be filtered or not.
+		 * In many cases, scripts are added intentionally to forms and will not be stripped if DISALLOW_UNFILTERED_HTML is not set.
+		 * It is also possible to filter Formidable without defining DISALLOW_UNFILTERED_HTML, with add_filter( 'frm_disallow_unfiltered_html', '__return_true' );
+		 *
+		 * @since 5.0.13
+		 */
+		return apply_filters( 'frm_disallow_unfiltered_html', false );
 	}
 
 	/**
