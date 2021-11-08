@@ -1304,16 +1304,18 @@ class FrmFieldsHelper {
 			$replace_with[] = '[if ' . $new . ' ';
 			$replace[]      = '[/if ' . $old . ']';
 			$replace_with[] = '[/if ' . $new . ']';
+			$replace[]      = '[\/if ' . $old . ']';
+			$replace_with[] = '[\/if ' . $new . ']';
 			$replace[]      = '[foreach ' . $old . ']';
 			$replace_with[] = '[foreach ' . $new . ']';
 			$replace[]      = '[/foreach ' . $old . ']';
 			$replace_with[] = '[/foreach ' . $new . ']';
+			$replace[]      = '[\/foreach ' . $old . ']';
+			$replace_with[] = '[\/foreach ' . $new . ']';
 			$replace[]      = '[' . $old . ']';
 			$replace_with[] = '[' . $new . ']';
 			$replace[]      = '[' . $old . ' ';
 			$replace_with[] = '[' . $new . ' ';
-			$replace[]      = '[\/if ' . $old . ']';
-			$replace_with[] = '[\/if ' . $new . ']';
 			unset( $old, $new );
 		}
 		if ( is_array( $val ) ) {
