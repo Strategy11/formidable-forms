@@ -703,6 +703,7 @@ class FrmAppHelper {
 				'id'    => true,
 				'title' => true,
 				'style' => true,
+				'role'  => true,
 			),
 			'dl'         => array(),
 			'dt'         => array(),
