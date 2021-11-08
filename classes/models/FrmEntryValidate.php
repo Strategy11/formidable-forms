@@ -425,7 +425,7 @@ class FrmEntryValidate {
 	/**
 	 * Gets user info for Akismet spam check.
 	 *
-	 * @since 5.0.10 Separate code for email, name and URL. Handle value of embedded|repeater.
+	 * @since 5.0.13 Separate code for guess. Handle value of embedded|repeater.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
 	 * @return array
@@ -449,7 +449,7 @@ class FrmEntryValidate {
 	/**
 	 * Gets user info for Akismet spam check for guest.
 	 *
-	 * @since 5.0.10
+	 * @since 5.0.13
 	 *
 	 * @param array $values Entry values after flattened.
 	 * @return array
@@ -459,6 +459,7 @@ class FrmEntryValidate {
 			'comment_author'       => '',
 			'comment_author_email' => '',
 			'comment_author_url'   => '',
+			'name_field_ids'       => $values['name_field_ids'],
 		);
 
 		if ( isset( $values['item_meta'] ) ) {
@@ -469,119 +470,75 @@ class FrmEntryValidate {
 
 		$datas['frm_duplicated'] = array();
 
-		foreach ( $values as $index => $value ) {
-			if ( is_array( $value ) ) {
-				foreach ( $value as $sub_value ) {
-					if ( self::found_akismet_spam_check_value( 'comment_author_email', $datas, $sub_value, $index, $values ) ) {
-						break 2;
-					}
-
-					if ( self::found_akismet_spam_check_value( 'comment_author_url', $datas, $sub_value, $index, $values ) ) {
-						break 2;
-					}
-
-					if ( self::found_akismet_spam_check_value( 'comment_author', $datas, $sub_value, $index, $values ) ) {
-						break 2;
-					}
-
-					unset( $sub_value );
-				}
-				continue;
-			}
-
-			if ( self::found_akismet_spam_check_value( 'comment_author_email', $datas, $value, $index, $values ) ) {
-				break;
-			}
-
-			if ( self::found_akismet_spam_check_value( 'comment_author_url', $datas, $value, $index, $values ) ) {
-				break;
-			}
-
-			if ( self::found_akismet_spam_check_value( 'comment_author', $datas, $value, $index, $values ) ) {
-				break;
-			}
-
-			unset( $value );
-		}
+		self::recursive_add_akismet_guess_info( $datas, $values );
+		unset( $datas['name_field_ids'] );
 
 		return $datas;
 	}
 
 	/**
-	 * Checks value to find the akismet spam check.
+	 * Recursive adds akismet guess info.
 	 *
-	 * @since 5.0.10
+	 * @since 5.0.13
 	 *
-	 * @param string $name     Data name.
-	 * @param array  $datas    The datas array.
-	 * @param string $value    Value to check.
-	 * @param int    $field_id Field ID.
-	 * @param array  $values   The values array.
-	 * @return bool Return `true` if email, url and name are found.
+	 * @param array    $datas        Guess data.
+	 * @param array    $values       The values.
+	 * @param int|null $custom_index Custom index (or field ID).
 	 */
-	private static function found_akismet_spam_check_value( $name, &$datas, $value, $field_id, $values ) {
-		switch ( $name ) {
-			case 'comment_author_email':
-				if ( strpos( $value, '@' ) && is_email( $value ) ) {
-					$datas[ $name ]            = $value;
-					$datas['frm_duplicated'][] = $field_id;
-				}
-				break;
+	private static function recursive_add_akismet_guess_info( &$datas, $values, $custom_index = null ) {
+		foreach ( $values as $index => $value ) {
+			if ( $datas['comment_author_email'] && $datas['comment_author_url'] && $datas['comment_author'] ) {
+				return; // Found all info.
+			}
 
-			case 'comment_author_url':
-				if ( 0 === strpos( $value, 'http' ) ) {
-					$datas[ $name ]            = $value;
-					$datas['frm_duplicated'][] = $field_id;
-				}
-				break;
+			if ( is_array( $value ) ) {
+				self::recursive_add_akismet_guess_info( $datas, $value, $index );
+				continue;
+			}
 
-			case 'comment_author':
-				if ( isset( $values['name_field_ids'] ) && in_array( $field_id, $values['name_field_ids'], true ) ||
-				     ! is_numeric( $value ) && strlen( $value ) < 200
-				) {
-					$datas[ $name ]            = $value;
+			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+			foreach ( array( 'comment_author_email', 'comment_author_url', 'comment_author' ) as $key ) {
+				if ( $datas[ $key ] ) {
+					continue;
+				}
+
+				$found = self::is_akismet_guess_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
+				if ( $found ) {
+					$datas[ $key ]             = $value;
 					$datas['frm_duplicated'][] = $field_id;
 				}
-				break;
+			}
+		}
+	}
+
+	/**
+	 * Checks if given value is an akismet guess info.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $key            Guess info key.
+	 * @param string $value          Value to check.
+	 * @param int    $field_id       Field ID.
+	 * @param array  $name_field_ids Name field IDs.
+	 * @return bool
+	 */
+	private static function is_akismet_guess_info_value( $key, $value, $field_id, $name_field_ids ) {
+		if ( ! $value ) {
+			return false;
 		}
 
-		return ! empty( $datas['comment_author_email'] ) && ! empty( $datas['comment_author_url'] ) && ! empty( $datas['comment_author'] );
-	}
+		switch ( $key ) {
+			case 'comment_author_email':
+				return strpos( $value, '@' ) && is_email( $value );
 
-	/**
-	 * Checks if the given value might be comment author email.
-	 *
-	 * @since 5.0.10
-	 *
-	 * @param string $value Value to check.
-	 * @return bool
-	 */
-	private static function maybe_comment_author_email( $value ) {
-		return strpos( $value, '@' ) && is_email( $value );
-	}
+			case 'comment_author_url':
+				return 0 === strpos( $value, 'http' );
 
-	/**
-	 * Checks if the given value might be comment author URL.
-	 *
-	 * @since 5.0.10
-	 *
-	 * @param string $value Value to check.
-	 * @return bool
-	 */
-	private static function maybe_comment_author_url( $value ) {
-		return 0 === strpos( $value, 'http' );
-	}
+			case 'comment_author':
+				return in_array( $field_id, $name_field_ids, true ) || ! is_numeric( $value ) && strlen( $value ) < 200;
+		}
 
-	/**
-	 * Checks if the given value might be comment author name.
-	 *
-	 * @since 5.0.10
-	 *
-	 * @param string $value Value to check.
-	 * @return bool
-	 */
-	private static function maybe_comment_author_name( $value ) {
-		return ! is_numeric( $value ) && strlen( $value ) < 200;
+		return false;
 	}
 
 	private static function add_server_values_to_akismet( &$datas ) {
@@ -641,7 +598,7 @@ class FrmEntryValidate {
 	 * Gets field IDs that are skipped from sending to Akismet spam check.
 	 *
 	 * @since 5.0.09
-	 * @since 5.0.10 Move out get_all_form_ids_and_flatten_meta() call and get `form_ids` from `$values`.
+	 * @since 5.0.13 Move out get_all_form_ids_and_flatten_meta() call and get `form_ids` from `$values`.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
 	 * @return array
@@ -672,7 +629,7 @@ class FrmEntryValidate {
 	 * This also removes some unused data from the item_meta.
 	 *
 	 * @since 5.0.09
-	 * @since 5.0.10 Convert name field value to string.
+	 * @since 5.0.13 Convert name field value to string.
 	 *
 	 * @param array $values Entry values.
 	 * @return array Form IDs.
