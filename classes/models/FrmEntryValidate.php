@@ -251,11 +251,22 @@ class FrmEntryValidate {
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
-		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
+			return;
+		}
+		if ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-		} elseif ( self::blacklist_check( $values ) ) {
+			return;
+		}
+		if ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		} elseif ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
+			return;
+		}
+
+		if ( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) ) {
+			return; // Only check Akismet spam if form is submitted in multi-page form.
+		}
+
+		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
 	}
