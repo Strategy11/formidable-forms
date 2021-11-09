@@ -535,7 +535,11 @@ class FrmEntryValidate {
 				return 0 === strpos( $value, 'http' );
 
 			case 'comment_author':
-				return in_array( $field_id, $name_field_ids, true ) || ! is_numeric( $value ) && strlen( $value ) < 200;
+				if ( $name_field_ids ) {
+					// If there is name field in the form, we should always use it as author name.
+					return in_array( $field_id, $name_field_ids, true );
+				}
+				return ! is_numeric( $value ) && strlen( $value ) < 200;
 		}
 
 		return false;
