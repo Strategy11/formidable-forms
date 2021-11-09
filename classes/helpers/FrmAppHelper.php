@@ -645,6 +645,31 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * The regular kses function strips [button_action] from submit button HTML.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $html
+	 * @return string
+	 */
+	public static function kses_submit_button( $html ) {
+		$previously_included_button_action = false !== strpos( $html, '[button_action]' );
+		$previously_included_back_hook     = false !== strpos( $html, '[back_hook]' );
+		$previously_included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		$html                              = self::kses( $html, 'all' );
+		if ( $previously_included_button_action ) {
+			$html = str_replace( 'class="frm_button_submit" type="submit"', 'class="frm_button_submit" type="submit" [button_action]', $html );
+		}
+		if ( $previously_included_back_hook ) {
+			$html = str_replace( 'class="frm_prev_page"', 'class="frm_prev_page" [back_hook]', $html );
+		}
+		if ( $previously_included_draft_hook ) {
+			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
+		}
+		return $html;
+	}
+
+	/**
 	 * @since 2.05.03
 	 */
 	private static function allowed_html( $allowed ) {
@@ -671,13 +696,14 @@ class FrmAppHelper {
 		);
 
 		return array(
-			'a'          => array(
-				'class'  => true,
-				'href'   => true,
-				'id'     => true,
-				'rel'    => true,
-				'target' => true,
-				'title'  => true,
+			'a'            => array(
+				'class'    => true,
+				'href'     => true,
+				'id'       => true,
+				'rel'      => true,
+				'target'   => true,
+				'title'    => true,
+				'tabindex' => true,
 			),
 			'abbr'       => array(
 				'title' => true,
@@ -778,7 +804,7 @@ class FrmAppHelper {
 				'fill'    => true,
 			),
 			'use'        => array(
-				'href'   => true,
+				'href'       => true,
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
@@ -788,8 +814,10 @@ class FrmAppHelper {
 				'id'    => true,
 			),
 			'button'     => array(
-				'class' => true,
-				'type'  => true,
+				'class'          => true,
+				'type'           => true,
+				'name'           => true,
+				'formnovalidate' => true,
 			),
 			'legend'     => array(
 				'class' => true,
@@ -2983,7 +3011,7 @@ class FrmAppHelper {
 	 *
 	 * @return bool
 	 */
-	private static function should_never_allow_unfiltered_html() {
+	public static function should_never_allow_unfiltered_html() {
 		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
 			return true;
 		}
