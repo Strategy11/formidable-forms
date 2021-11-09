@@ -23,6 +23,7 @@ class test_FrmEntryValidate extends FrmUnitTest {
 				$made_up_email_field_id => $test_email,
 				$made_up_url_field_id   => $test_url,
 			),
+			'name_field_ids' => array(),
 		);
 
 		wp_set_current_user( null );
