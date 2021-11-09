@@ -406,7 +406,7 @@ class FrmEntriesController {
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
 			if ( headers_sent() ) {
-				echo FrmAppHelper::js_redirect( $url ); // WPCS: XSS ok.
+				echo FrmAppHelper::js_redirect( $url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			} else {
 				wp_redirect( esc_url_raw( $url ) );
 			}
@@ -491,7 +491,7 @@ class FrmEntriesController {
 
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
-		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) {
+		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -514,7 +514,7 @@ class FrmEntriesController {
 		}
 
 		if ( $errors == '' && ! $ajax ) {
-			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) );
+			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		/**
@@ -530,9 +530,9 @@ class FrmEntriesController {
 		if ( empty( $errors ) ) {
 			$_POST['frm_skip_cookie'] = 1;
 			$do_success               = false;
-			if ( $params['action'] == 'create' ) {
+			if ( $params['action'] === 'create' ) {
 				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
-					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST );
+					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
 					$do_success   = true;
@@ -543,7 +543,7 @@ class FrmEntriesController {
 			if ( $do_success ) {
 				FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
 			}
-			unset( $_POST['frm_skip_cookie'] );
+			unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 	}
 

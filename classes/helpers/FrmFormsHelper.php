@@ -48,7 +48,7 @@ class FrmFormsHelper {
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
-			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // WPCS: XSS ok. ?>>
+			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
 				<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 			<?php } ?>
@@ -268,7 +268,7 @@ class FrmFormsHelper {
 			$post_values = $values;
 		} else {
 			$values      = array();
-			$post_values = isset( $_POST ) ? $_POST : array();
+			$post_values = isset( $_POST ) ? $_POST : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$defaults = array(
@@ -313,7 +313,7 @@ class FrmFormsHelper {
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
 		if ( empty( $post_values ) ) {
-			$post_values = wp_unslash( $_POST );
+			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$values['form_key']    = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;
@@ -427,7 +427,7 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
-			echo $button; // WPCS: XSS ok.
+			echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			return;
 		}
@@ -449,9 +449,9 @@ BEFORE_HTML;
 			}
 		}
 
-		echo $button_parts[0]; // WPCS: XSS ok.
+		echo $button_parts[0]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'frm_submit_button_action', $form, $form_action );
-		echo $button_parts[1]; // WPCS: XSS ok.
+		echo $button_parts[1]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -795,7 +795,13 @@ BEFORE_HTML;
 			$form = $form->options;
 		}
 
-		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
+		if ( ! empty( $form['submit_align'] ) ) {
+			$submit_align = $form['submit_align'];
+		} elseif ( self::form_should_be_inline_and_missing_class( $form ) ) {
+			$submit_align = 'inline';
+		} else {
+			$submit_align = '';
+		}
 
 		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
@@ -807,6 +813,22 @@ BEFORE_HTML;
 		$class = apply_filters( 'frm_add_form_style_class', $class, $style );
 
 		return $class;
+	}
+
+	/**
+	 * In order for frm_inline_submit to inline the submit button the form must also have the frm_inline_form that adds the grid-column style rules required for it to work.
+	 *
+	 * @since 5.0.12
+	 *
+	 * @param array $form
+	 * @return bool
+	 */
+	private static function form_should_be_inline_and_missing_class( $form ) {
+		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
+			// not missing class, avoid adding it twice.
+			return false;
+		}
+		return ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' );
 	}
 
 	/**

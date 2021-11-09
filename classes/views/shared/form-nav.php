@@ -17,7 +17,7 @@ foreach ( $nav_items as $nav_item ) {
 				<?php FrmAppHelper::select_current_page( $nav_item['page'], $current_page, $nav_item['current'] ); ?>
 				<?php
 				if ( isset( $nav_item['atts'] ) ) {
-					echo FrmAppHelper::array_to_html_params( $nav_item['atts'] ); // WPCS: XSS ok.
+					echo FrmAppHelper::array_to_html_params( $nav_item['atts'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 				?>>
 				<?php echo esc_html( $nav_item['label'] ); ?>

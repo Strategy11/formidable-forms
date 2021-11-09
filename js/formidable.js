@@ -262,7 +262,7 @@ function frmFrontFormJS() {
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
-		if ( field.type === 'hidden' && fileID === null ) {
+		if ( field.type === 'hidden' && fileID === null && ! hasClass( field, 'ssa_appointment_form_field_appointment_id' ) ) {
 			return errors;
 		}
 
@@ -313,7 +313,7 @@ function frmFrontFormJS() {
 			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
-			} else if ( '[typed]' === field.getAttribute( 'name' ).substr( -7 ) ) {
+			} else if ( isSignatureField( field ) ) {
 				if ( val === '' ) {
 					val = jQuery( field ).closest( '.frm_form_field' ).find( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ).val();
 				}
@@ -336,6 +336,11 @@ function frmFrontFormJS() {
 		}
 
 		return errors;
+	}
+
+	function isSignatureField( field ) {
+		var name = field.getAttribute( 'name' );
+		return 'string' === typeof name && '[typed]' === name.substr( -7 );
 	}
 
 	function getFileVals( fileID ) {

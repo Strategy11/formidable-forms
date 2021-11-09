@@ -70,7 +70,7 @@ FrmInbox::maybe_show_banner();
 	}
 
 	if ( isset( $atts['nav'] ) ) {
-		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	?>
 	<div style="clear:right;"></div>

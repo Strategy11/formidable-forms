@@ -160,7 +160,7 @@ class FrmEntryMeta {
 		FrmDb::get_where_clause_and_values( $where );
 
 		// Delete any leftovers
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // WPCS: unprepared SQL ok.
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		self::clear_cache();
 	}
 
@@ -451,7 +451,7 @@ class FrmEntryMeta {
 					case 'day':
 						$value = '%' . $value . '%';
 				}
-				$where .= $wpdb->prepare( ' meta_value ' . $operator . ' %s and', $value ); // WPCS: unprepared SQL ok.
+				$where .= $wpdb->prepare( ' meta_value ' . $operator . ' %s and', $value ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
 			$where .= $wpdb->prepare( ' field_id=%d', $field_id );
 			$query = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
@@ -459,10 +459,10 @@ class FrmEntryMeta {
 			if ( $operator == 'LIKE' ) {
 				$search = '%' . $search . '%';
 			}
-			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // WPCS: unprepared SQL ok.
+			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}
 
-		$results = $wpdb->get_col( $query, 0 ); // WPCS: unprepared SQL ok.
+		$results = $wpdb->get_col( $query, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		FrmDb::set_cache( $cache_key, $results, 'frm_entry' );
 
 		return $results;

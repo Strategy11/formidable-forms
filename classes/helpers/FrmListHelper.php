@@ -156,7 +156,7 @@ class FrmListHelper {
 
 	public function display_rows() {
 		foreach ( $this->items as $item ) {
-			echo "\n\t", $this->single_row( $item ); // WPCS: XSS ok.
+			echo "\n\t", $this->single_row( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -331,7 +331,7 @@ class FrmListHelper {
 		foreach ( $views as $class => $view ) {
 			$views[ $class ] = "\t" . '<li class="' . esc_attr( $class ) . '">' . $view;
 		}
-		echo implode( " |</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
+		echo implode( " |</li>\n", $views ) . "</li>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</ul>';
 	}
 
@@ -393,7 +393,7 @@ class FrmListHelper {
 		foreach ( $this->_actions as $name => $title ) {
 			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
 
-			echo "\t<option value='" . esc_attr( $name ) . "'$class>" . esc_html( $title ) . "</option>\n"; // WPCS: XSS ok.
+			echo "\t<option value='" . esc_attr( $name ) . "'$class>" . esc_html( $title ) . "</option>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		echo "</select>\n";
@@ -665,7 +665,7 @@ class FrmListHelper {
 		}
 		$this->_pagination = "<div class='tablenav-pages" . esc_attr( $page_class ) . "'>$output</div>";
 
-		echo $this->_pagination; // WPCS: XSS ok.
+		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	private function disabled_pages( $total_pages ) {
@@ -969,7 +969,7 @@ class FrmListHelper {
 				// Hide the labels but show the border.
 				$column_display_name = '';
 			}
-			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // WPCS: XSS ok.
+			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -993,7 +993,7 @@ class FrmListHelper {
 			</thead>
 			<?php } ?>
 
-			<tbody id="the-list"<?php echo( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); // WPCS: XSS ok. ?>>
+			<tbody id="the-list"<?php echo( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
@@ -1137,7 +1137,7 @@ class FrmListHelper {
 			if ( 'cb' == $column_name ) {
 				echo '<th scope="row" class="check-column"></th>';
 			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
-				echo call_user_func( // WPCS: XSS ok.
+				echo call_user_func( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array( $this, '_column_' . $column_name ),
 					$item,
 					$classes,
@@ -1145,13 +1145,13 @@ class FrmListHelper {
 					$primary
 				);
 			} elseif ( method_exists( $this, 'column_' . $column_name ) ) {
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo "<td $attributes>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			} else {
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo "<td $attributes>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			}
 		}

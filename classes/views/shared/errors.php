@@ -6,10 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
 		echo '<div class="frm_updated_message">';
-		echo FrmAppHelper::kses( $message, 'all' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $message, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</div>';
 	} else {
-		echo $message; // WPCS: XSS ok.
+		echo $message; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 
@@ -23,7 +23,7 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 		<ul id="frm_messages">
 			<?php
 			foreach ( $show_messages as $m ) {
-				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br', 'span', 'p' ) ) . '</li>'; // WPCS: XSS ok.
+				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br', 'span', 'p' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			?>
 		</ul>
@@ -38,7 +38,7 @@ if ( isset( $warnings ) && is_array( $warnings ) && count( $warnings ) > 0 ) {
 		<ul id="frm_warnings">
 			<?php
 			foreach ( $warnings as $warning ) {
-				echo '<li>' . FrmAppHelper::kses( $warning, array( 'a', 'br' ) ) . '</li>'; // WPCS: XSS ok.
+				echo '<li>' . FrmAppHelper::kses( $warning, array( 'a', 'br' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			?>
 		</ul>
@@ -52,7 +52,7 @@ if ( isset( $errors ) && is_array( $errors ) && count( $errors ) > 0 ) {
 		<ul id="frm_errors">
 			<?php
 			foreach ( $errors as $error ) {
-				echo '<li>' . FrmAppHelper::kses( $error, array( 'a', 'br' ) ) . '</li>'; // WPCS: XSS ok.
+				echo '<li>' . FrmAppHelper::kses( $error, array( 'a', 'br' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 			?>
 		</ul>

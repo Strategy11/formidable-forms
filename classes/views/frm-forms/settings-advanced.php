@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<label for="frm_form_description">
 			<?php esc_html_e( 'Form Description', 'formidable' ); ?>
 		</label>
-		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // WPCS: XSS ok. ?></textarea>
+		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</p>
 
 
@@ -172,7 +172,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<tr class="success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] === 'message' ? '' : ' frm_hidden' ); ?>">
 		<td class="frm_has_shortcodes frm_has_textarea">
 			<label for="success_msg"><?php esc_html_e( 'On Submit', 'formidable' ); ?></label>
-			<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // WPCS: XSS ok. ?></textarea>
+			<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_msg_options', $values ); ?>

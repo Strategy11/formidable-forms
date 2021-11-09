@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.0.10';
+	public static $plug_version = '5.0.12';
 
 	/**
 	 * @since 1.07.02
@@ -169,7 +169,7 @@ class FrmAppHelper {
 	 * @since 4.0
 	 */
 	public static function show_logo( $atts = array() ) {
-		echo self::kses( self::svg_logo( $atts ), 'all' ); // WPCS: XSS ok.
+		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -192,7 +192,7 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
-		echo self::kses( $icon, 'all' ); // WPCS: XSS ok.
+		echo self::kses( $icon, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -410,10 +410,9 @@ class FrmAppHelper {
 			$param  = $params[0];
 		}
 
-		if ( $src == 'get' ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default );
-			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) {
+		if ( $src === 'get' ) {
+			$value = isset( $_POST[ $param ] ) ? wp_unslash( $_POST[ $param ] ) : ( isset( $_GET[ $param ] ) ? wp_unslash( $_GET[ $param ] ) : $default ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( ! isset( $_POST[ $param ] ) && isset( $_GET[ $param ] ) && ! is_array( $value ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = htmlspecialchars_decode( wp_unslash( $_GET[ $param ] ) );
 			}
@@ -497,19 +496,19 @@ class FrmAppHelper {
 		$value = $args['default'];
 		if ( $args['type'] == 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_GET[ $args['param'] ] );
 			}
 		} elseif ( $args['type'] == 'post' ) {
-			if ( isset( $_POST[ $args['param'] ] ) ) {
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			if ( isset( $_POST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				$value = wp_unslash( $_POST[ $args['param'] ] );
 				if ( $args['serialized'] === true && is_serialized_string( $value ) && is_serialized( $value ) ) {
 					self::unserialize_or_decode( $value );
 				}
 			}
 		} else {
-			if ( isset( $_REQUEST[ $args['param'] ] ) ) {
+			if ( isset( $_REQUEST[ $args['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$value = wp_unslash( $_REQUEST[ $args['param'] ] );
 			}
@@ -861,13 +860,13 @@ class FrmAppHelper {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
-			$icon  = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '>
 				<use xlink:href="#' . esc_attr( $icon ) . '" />
 			</svg>';
 		}
 
 		if ( $echo ) {
-			echo $icon; // WPCS: XSS ok.
+			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}
@@ -1542,17 +1541,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 2.0
-	 * @return string The base Google APIS url for the current version of jQuery UI
-	 */
-	public static function jquery_ui_base_url() {
-		$url = 'http' . ( is_ssl() ? 's' : '' ) . '://ajax.googleapis.com/ajax/libs/jqueryui/' . self::script_version( 'jquery-ui-core', '1.11.4' );
-		$url = apply_filters( 'frm_jquery_ui_base_url', $url );
-
-		return $url;
-	}
-
-	/**
 	 * @param string $handle
 	 */
 	public static function script_version( $handle, $default = 0 ) {
@@ -1733,7 +1721,7 @@ class FrmAppHelper {
 		}
 
 		if ( empty( $post_values ) ) {
-			$post_values = wp_unslash( $_POST );
+			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$values = array(
@@ -1753,9 +1741,9 @@ class FrmAppHelper {
 
 		self::prepare_field_arrays( $fields, $record, $values, array_merge( $args, compact( 'default', 'post_values' ) ) );
 
-		if ( $table == 'entries' ) {
+		if ( $table === 'entries' ) {
 			$values = FrmEntriesHelper::setup_edit_vars( $values, $record );
-		} elseif ( $table == 'forms' ) {
+		} elseif ( $table === 'forms' ) {
 			$values = FrmFormsHelper::setup_edit_vars( $values, $record, $post_values );
 		}
 
@@ -2564,7 +2552,7 @@ class FrmAppHelper {
 				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
 				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
 				'private_label'     => __( 'Private', 'formidable' ),
-				'jquery_ui_url'     => self::jquery_ui_base_url(),
+				'jquery_ui_url'     => '',
 				'pro_url'           => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
 				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
 				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
@@ -3237,5 +3225,16 @@ class FrmAppHelper {
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		return FrmDeprecated::prepend_and_or_where( $starts_with, $where );
+	}
+
+	/**
+	 * @since 2.0
+	 * @deprecated 5.0.13
+	 *
+	 * @return string The base Google APIS url for the current version of jQuery UI
+	 */
+	public static function jquery_ui_base_url() {
+		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
+		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
 	}
 }
