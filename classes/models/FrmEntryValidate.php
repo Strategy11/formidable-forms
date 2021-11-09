@@ -460,6 +460,8 @@ class FrmEntryValidate {
 			'comment_author_email' => '',
 			'comment_author_url'   => '',
 			'name_field_ids'       => $values['name_field_ids'],
+			'missing_keys'         => array( 'comment_author_email', 'comment_author_url', 'comment_author' ),
+			'frm_duplicated'       => array(),
 		);
 
 		if ( isset( $values['item_meta'] ) ) {
@@ -468,10 +470,9 @@ class FrmEntryValidate {
 
 		$values = array_filter( $values );
 
-		$datas['frm_duplicated'] = array();
-
 		self::recursive_add_akismet_guess_info( $datas, $values );
 		unset( $datas['name_field_ids'] );
+		unset( $datas['missing_keys'] );
 
 		return $datas;
 	}
@@ -487,7 +488,7 @@ class FrmEntryValidate {
 	 */
 	private static function recursive_add_akismet_guess_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {
-			if ( $datas['comment_author_email'] && $datas['comment_author_url'] && $datas['comment_author'] ) {
+			if ( ! $datas['missing_keys'] ) {
 				return; // Found all info.
 			}
 
@@ -497,15 +498,12 @@ class FrmEntryValidate {
 			}
 
 			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
-			foreach ( array( 'comment_author_email', 'comment_author_url', 'comment_author' ) as $key ) {
-				if ( $datas[ $key ] ) {
-					continue;
-				}
-
+			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guess_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
 				if ( $found ) {
 					$datas[ $key ]             = $value;
 					$datas['frm_duplicated'][] = $field_id;
+					unset( $datas['missing_keys'][ $key_index ] );
 				}
 			}
 		}
