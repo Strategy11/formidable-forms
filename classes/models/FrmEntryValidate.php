@@ -425,7 +425,7 @@ class FrmEntryValidate {
 	/**
 	 * Gets user info for Akismet spam check.
 	 *
-	 * @since 5.0.13 Separate code for guess. Handle value of embedded|repeater.
+	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
 	 * @return array
@@ -470,7 +470,7 @@ class FrmEntryValidate {
 
 		$values = array_filter( $values );
 
-		self::recursive_add_akismet_guess_info( $datas, $values );
+		self::recursive_add_akismet_guest_info( $datas, $values );
 		unset( $datas['name_field_ids'] );
 		unset( $datas['missing_keys'] );
 
@@ -478,28 +478,28 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Recursive adds akismet guess info.
+	 * Recursive adds akismet guest info.
 	 *
 	 * @since 5.0.13
 	 *
-	 * @param array    $datas        Guess data.
+	 * @param array    $datas        Guest data.
 	 * @param array    $values       The values.
 	 * @param int|null $custom_index Custom index (or field ID).
 	 */
-	private static function recursive_add_akismet_guess_info( &$datas, $values, $custom_index = null ) {
+	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {
 			if ( ! $datas['missing_keys'] ) {
 				return; // Found all info.
 			}
 
 			if ( is_array( $value ) ) {
-				self::recursive_add_akismet_guess_info( $datas, $value, $index );
+				self::recursive_add_akismet_guest_info( $datas, $value, $index );
 				continue;
 			}
 
 			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
-				$found = self::is_akismet_guess_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
+				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
 				if ( $found ) {
 					$datas[ $key ]             = $value;
 					$datas['frm_duplicated'][] = $field_id;
@@ -510,17 +510,17 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Checks if given value is an akismet guess info.
+	 * Checks if given value is an akismet guest info.
 	 *
 	 * @since 5.0.13
 	 *
-	 * @param string $key            Guess info key.
+	 * @param string $key            Guest info key.
 	 * @param string $value          Value to check.
 	 * @param int    $field_id       Field ID.
 	 * @param array  $name_field_ids Name field IDs.
 	 * @return bool
 	 */
-	private static function is_akismet_guess_info_value( $key, $value, $field_id, $name_field_ids ) {
+	private static function is_akismet_guest_info_value( $key, $value, $field_id, $name_field_ids ) {
 		if ( ! $value ) {
 			return false;
 		}
