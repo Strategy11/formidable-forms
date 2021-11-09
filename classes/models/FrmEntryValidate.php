@@ -521,7 +521,7 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function is_akismet_guest_info_value( $key, $value, $field_id, $name_field_ids ) {
-		if ( ! $value ) {
+		if ( ! $value || is_numeric( $value ) ) {
 			return false;
 		}
 
@@ -537,7 +537,7 @@ class FrmEntryValidate {
 					// If there is name field in the form, we should always use it as author name.
 					return in_array( $field_id, $name_field_ids, true );
 				}
-				return ! is_numeric( $value ) && strlen( $value ) < 200;
+				return strlen( $value ) < 200;
 		}
 
 		return false;
