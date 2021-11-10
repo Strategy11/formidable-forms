@@ -320,6 +320,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 			$default_submit_button_html,
 			FrmAppHelper::kses_submit_button( $default_submit_button_html )
 		);
+
+		$with_custom_class = '<div class="frm_submit">
+[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+<button class="frm_button_submit frm_inline_submit" type="submit" [button_action]>[button_label]</button>
+[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
+</div>';
+		$this->assertEquals(
+			$with_custom_class,
+			FrmAppHelper::kses_submit_button( $with_custom_class )
+		);
 	}
 
 	/**

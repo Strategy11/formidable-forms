@@ -658,7 +658,8 @@ class FrmAppHelper {
 		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
 		$html                   = self::kses( $html, 'all' );
 		if ( $included_button_action ) {
-			$html = str_replace( 'class="frm_button_submit" type="submit"', 'class="frm_button_submit" type="submit" [button_action]', $html );
+			$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
+			$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
 		}
 		if ( $included_back_hook ) {
 			$html = str_replace( 'class="frm_prev_page"', 'class="frm_prev_page" [back_hook]', $html );
