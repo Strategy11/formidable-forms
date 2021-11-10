@@ -257,14 +257,27 @@ class FrmEntryValidate {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
 		}
 
-		// Don't do Akismet check if form has break fields and current request is not a form submission (final page).
-		if ( isset( $errors['spam'] ) || FrmAppHelper::pro_is_installed() && isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) && FrmField::get_all_types_in_form( $values['form_id'], 'break' ) ) {
+		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
 			return;
 		}
 
 		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
+	}
+
+	/**
+	 * Checks if form is in progress.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param array $values The values.
+	 * @return bool
+	 */
+	private static function form_is_in_progress( $values ) {
+		return FrmAppHelper::pro_is_installed() &&
+			isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) &&
+			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
 	}
 
 	/**
