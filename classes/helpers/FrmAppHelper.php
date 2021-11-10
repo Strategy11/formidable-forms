@@ -653,17 +653,17 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function kses_submit_button( $html ) {
-		$previously_included_button_action = false !== strpos( $html, '[button_action]' );
-		$previously_included_back_hook     = false !== strpos( $html, '[back_hook]' );
-		$previously_included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
-		$html                              = self::kses( $html, 'all' );
-		if ( $previously_included_button_action ) {
+		$included_button_action = false !== strpos( $html, '[button_action]' );
+		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
+		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		$html                   = self::kses( $html, 'all' );
+		if ( $included_button_action ) {
 			$html = str_replace( 'class="frm_button_submit" type="submit"', 'class="frm_button_submit" type="submit" [button_action]', $html );
 		}
-		if ( $previously_included_back_hook ) {
+		if ( $included_back_hook ) {
 			$html = str_replace( 'class="frm_prev_page"', 'class="frm_prev_page" [back_hook]', $html );
 		}
-		if ( $previously_included_draft_hook ) {
+		if ( $included_draft_hook ) {
 			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
 		return $html;
