@@ -767,14 +767,16 @@ class FrmAppHelper {
 				'viewbox' => true,
 			),
 			'svg'        => array(
-				'class'   => true,
-				'id'      => true,
-				'xmlns'   => true,
-				'viewbox' => true,
-				'width'   => true,
-				'height'  => true,
-				'style'   => true,
-				'fill'    => true,
+				'class'       => true,
+				'id'          => true,
+				'xmlns'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'height'      => true,
+				'style'       => true,
+				'fill'        => true,
+				'aria-label'  => true,
+				'aria-hidden' => true,
 			),
 			'use'        => array(
 				'href'   => true,
@@ -866,10 +868,70 @@ class FrmAppHelper {
 		}
 
 		if ( $echo ) {
-			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}
+	}
+
+	/**
+	 * Run kses for icons. It needs to add a few filters first in order to preserve some custom style values.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $icon
+	 * @return string
+	 */
+	public static function kses_icon( $icon ) {
+		add_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
+		add_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style', 10, 2 );
+		$icon = self::kses( $icon, 'all' );
+		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
+		remove_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style' );
+		return $icon;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_attr
+	 * @return array
+	 */
+	public static function allow_vars_in_styles( $allowed_attr ) {
+		$allowed_attr[] = '--primary-hover';
+		return $allowed_attr;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param bool   $allow_css
+	 * @param string $css_string
+	 */
+	public static function allow_style( $allow_css, $css_string ) {
+		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-hover:' ) ) {
+			$split     = explode( ':', $css_string, 2 );
+			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+		}
+		return $allow_css;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param string $value
+	 * @return bool
+	 */
+	private static function is_a_valid_color( $value ) {
+		$match = 0;
+		if ( 0 === strpos( $value, 'rgba(' ) ) {
+			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
+		} elseif ( 0 === strpos( $value, 'rgb(' ) ) {
+			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
+		} elseif ( 0 === strpos( $value, '#' ) ) {
+			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
+		}
+		return (bool) $match;
 	}
 
 	/**
