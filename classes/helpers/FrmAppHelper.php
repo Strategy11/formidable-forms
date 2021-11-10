@@ -923,36 +923,15 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	private static function is_a_valid_color( $value ) {
-		if ( 0 === strpos( $value, 'rgb' ) ) {
-			if ( 0 === strpos( $value, 'rgba(' ) ) {
-				$replace        = 'rgba(';
-				$expected_count = 4;
-			} elseif ( 0 === strpos( $value, 'rgb(' ) ) {
-				$replace        = 'rgb(';
-				$expected_count = 3;
-			} else {
-				return false;
-			}
-
-			$value = str_replace( $replace, '', $value );
-			if ( ! $value || ')' !== $value[ strlen( $value ) - 1 ] ) {
-				return false;
-			}
-
-			$value = substr( $value, 0, strlen( $value ) - 1 );
-			$split = array_map( 'trim', explode( ',', $value ) );
-			if ( $expected_count !== count( $split ) || $expected_count !== count( array_filter( $split, 'is_numeric' ) ) ) {
-				return false;
-			}
-
-			return true;
+		$match = 0;
+		if ( 0 === strpos( $value, 'rgba(' ) ) {
+			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
+		} elseif ( 0 === strpos( $value, 'rgb(' ) ) {
+			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
+		} elseif ( 0 === strpos( $value, '#' ) ) {
+			$match = preg_match( '/#([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?\b/', $value );
 		}
-
-		if ( 0 === strpos( $value, '#' ) ) {
-			return (bool) preg_match( '/#([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?\b/', $value );
-		}
-
-		return false;
+		return (bool) $match;
 	}
 
 	/**
