@@ -257,8 +257,8 @@ class FrmEntryValidate {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
 		}
 
-		// Not check Akismet spam if other checks detect spam or clicking next/prev page.
-		if ( isset( $errors['spam'] ) || FrmAppHelper::pro_is_installed() && isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) ) {
+		// Don't do Akismet check if form has break fields and current request is not a form submission (final page).
+		if ( isset( $errors['spam'] ) || FrmAppHelper::pro_is_installed() && isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) && FrmField::get_all_types_in_form( $values['form_id'], 'break' ) ) {
 			return;
 		}
 
