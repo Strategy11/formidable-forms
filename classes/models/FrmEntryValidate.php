@@ -258,7 +258,7 @@ class FrmEntryValidate {
 		}
 
 		// Not check Akismet spam if other checks detect spam or clicking next/prev page.
-		if ( isset( $errors['spam'] ) || isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) ) {
+		if ( isset( $errors['spam'] ) || FrmAppHelper::pro_is_installed() && isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) ) {
 			return;
 		}
 
