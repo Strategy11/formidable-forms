@@ -885,7 +885,7 @@ class FrmAppHelper {
 	public static function kses_icon( $icon ) {
 		add_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
 		add_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style', 10, 2 );
-		$icon = FrmAppHelper::kses( $icon, 'all' );
+		$icon = self::kses( $icon, 'all' );
 		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
 		remove_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style' );
 		return $icon;
