@@ -656,10 +656,17 @@ class FrmAppHelper {
 		$included_button_action = false !== strpos( $html, '[button_action]' );
 		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
 		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		add_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
 		$html                   = self::kses( $html, 'all' );
+		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
 		if ( $included_button_action ) {
-			$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
-			$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
+			if ( false !== strpos( $html, '<input type="submit"' ) ) {
+				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
+				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
+			} else {
+				$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
+				$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
+			}
 		}
 		if ( $included_back_hook ) {
 			$html = str_replace( 'class="frm_prev_page"', 'class="frm_prev_page" [back_hook]', $html );
@@ -668,6 +675,17 @@ class FrmAppHelper {
 			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
 		return $html;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_attr
+	 * @return array
+	 */
+	public static function allow_visibility_style( $allowed_attr ) {
+		$allowed_attr[] = 'visibility';
+		return $allowed_attr;
 	}
 
 	/**
@@ -754,6 +772,7 @@ class FrmAppHelper {
 				'id'     => true,
 				'src'    => true,
 				'width'  => true,
+				'style'  => true,
 			),
 			'li'         => $allow_class,
 			'ol'         => $allow_class,
@@ -822,6 +841,13 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'input'      => array(
+				'type'           => true,
+				'value'          => true,
+				'formnovalidate' => true,
+				'name'           => true,
+				'class'          => true,
 			),
 		);
 	}
