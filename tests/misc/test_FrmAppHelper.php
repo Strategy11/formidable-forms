@@ -308,6 +308,30 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmAppHelper::kses_icon
+	 */
+	public function test_kses_icon() {
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:var(--purple)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
+	}
+
+	/**
+	 * @covers FrmAppHelper::is_a_valid_color
+	 */
+	public function test_is_a_valid_color() {
+		$this->assertTrue( $this->is_a_valid_color( 'rgb(49, 119, 199)' ) );
+		$this->assertTrue( $this->is_a_valid_color( 'rgba(49, 119, 199, .5)' ) );
+		$this->assertTrue( $this->is_a_valid_color( '#fff' ) );
+		$this->assertTrue( $this->is_a_valid_color( '#efefef' ) );
+
+		$this->assertFalse( $this->is_a_valid_color( 'Not a color' ) );
+	}
+
+	private function is_a_valid_color( $value ) {
+		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
+	}
+
+	/**
 	 * @covers FrmAppHelper::remove_get_action
 	 */
 	public function test_remove_get_action() {
