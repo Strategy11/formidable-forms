@@ -1015,17 +1015,31 @@ class FrmAppHelper {
 	 * Convert an associative array to HTML values.
 	 *
 	 * @since 4.0.02
+	 * @since 5.0.13 added $echo parameter.
+	 *
 	 * @param array $atts
-	 * @return string
+	 * @param bool  $echo
+	 * @return string|void
 	 */
-	public static function array_to_html_params( $atts ) {
-		$html = '';
-		if ( ! empty( $atts ) ) {
+	public static function array_to_html_params( $atts, $echo = false ) {
+		if ( ! $atts ) {
+			if ( ! $echo ) {
+				return '';
+			}
+			return;
+		}
+
+		if ( ! $echo ) {
+			$html = '';
 			foreach ( $atts as $key => $value ) {
 				$html .= ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 			}
+			return $html;
 		}
-		return $html;
+
+		foreach ( $atts as $key => $value ) {
+			echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+		}
 	}
 
 	/**
@@ -1692,8 +1706,20 @@ class FrmAppHelper {
 		return $ver;
 	}
 
-	public static function js_redirect( $url ) {
-		return '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
+	/**
+	 * @since 5.0.13 added $echo param.
+	 *
+	 * @param string $url
+	 * @param bool   $echo
+	 * @return string|void
+	 */
+	public static function js_redirect( $url, $echo = false ) {
+		if ( ! $echo ) {
+			return '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
+		}
+		?>
+		<script type="text/javascript">window.location="<?php echo esc_url_raw( $url ); ?>"</script>
+		<?php
 	}
 
 	public static function get_user_id_param( $user_id ) {

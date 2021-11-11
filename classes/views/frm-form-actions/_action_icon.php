@@ -7,13 +7,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<a href="javascript:void(0)" class="<?php echo esc_attr( $classes ); ?>"
 		data-limit="<?php echo esc_attr( $action_control->action_options['limit'] ); ?>"
 		data-actiontype="<?php echo esc_attr( $action_control->id_base ); ?>"
-		<?php
-		echo FrmAppHelper::array_to_html_params( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		?>
+		<?php FrmAppHelper::array_to_html_params( $data, true ); ?>
 		>
 		<span class="frm-outer-circle">
 			<span class="frm-inner-circle<?php echo esc_attr( strpos( $action_control->action_options['classes'], 'frm-inverse' ) === false ? '' : ' frm-inverse' ); ?>" <?php
-				echo FrmAppHelper::array_to_html_params( $icon_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::array_to_html_params( $icon_atts, true );
 			?>>
 				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>
 			</span>
