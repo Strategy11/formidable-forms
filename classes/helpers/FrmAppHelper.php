@@ -657,8 +657,10 @@ class FrmAppHelper {
 		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
 		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
 		add_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
-		$html                   = self::kses( $html, 'all' );
+		add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
+		$html = self::kses( $html, 'all' );
 		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
+		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 		if ( $included_button_action ) {
 			if ( false !== strpos( $html, '<input type="submit"' ) ) {
 				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
@@ -686,6 +688,26 @@ class FrmAppHelper {
 	public static function allow_visibility_style( $allowed_attr ) {
 		$allowed_attr[] = 'visibility';
 		return $allowed_attr;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_html
+	 * @return array
+	 */
+	public static function add_allowed_submit_button_tags( $allowed_html ) {
+		$allowed_html['input']                    = array(
+			'type'           => true,
+			'value'          => true,
+			'formnovalidate' => true,
+			'name'           => true,
+			'class'          => true,
+		);
+		$allowed_html['button']['formnovalidate'] = true;
+		$allowed_html['button']['name']           = true;
+		$allowed_html['img']['style']             = true;
+		return $allowed_html;
 	}
 
 	/**
@@ -772,7 +794,6 @@ class FrmAppHelper {
 				'id'     => true,
 				'src'    => true,
 				'width'  => true,
-				'style'  => true,
 			),
 			'li'         => $allow_class,
 			'ol'         => $allow_class,
@@ -836,20 +857,11 @@ class FrmAppHelper {
 				'id'    => true,
 			),
 			'button'     => array(
-				'class'          => true,
-				'type'           => true,
-				'name'           => true,
-				'formnovalidate' => true,
+				'class' => true,
+				'type'  => true,
 			),
 			'legend'     => array(
 				'class' => true,
-			),
-			'input'      => array(
-				'type'           => true,
-				'value'          => true,
-				'formnovalidate' => true,
-				'name'           => true,
-				'class'          => true,
 			),
 		);
 	}
