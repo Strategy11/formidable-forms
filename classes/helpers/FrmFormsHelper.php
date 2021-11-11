@@ -427,15 +427,17 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
-			echo $button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-
+			echo FrmAppHelper::maybe_kses( $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
 		}
 
 		/**
 		 * @since 5.0.06
 		 */
-		$button       = apply_filters( 'frm_submit_button_html', $button, compact( 'form' ) );
+		$button = apply_filters( 'frm_submit_button_html', $button, compact( 'form' ) );
+		if ( FrmAppHelper::should_never_allow_unfiltered_html() ) {
+			$button = FrmAppHelper::kses_submit_button( $button );
+		}
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
@@ -711,11 +713,11 @@ BEFORE_HTML;
 			'entry_key'        => true,
 		);
 		foreach ( $codes as $code => $show ) {
-			if ( $code == 'form_name' ) {
+			if ( $code === 'form_name' ) {
 				$replace_with = $form->name;
-			} elseif ( $code == 'form_description' ) {
+			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
-			} elseif ( $code == 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
+			} elseif ( $code === 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
 				$replace_with = FrmAppHelper::simple_get( 'entry' );
 			} else {
 				$replace_with = '';

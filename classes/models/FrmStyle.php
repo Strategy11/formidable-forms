@@ -71,10 +71,7 @@ class FrmStyle {
 			}
 
 			$new_instance['post_title']   = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-
-			// Don't wp_unslash yet since it removes backslashes.
-			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $_POST['frm_style_setting']['post_content'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
-			FrmAppHelper::sanitize_value( 'sanitize_textarea_field', $new_instance['post_content'] );
+			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( $this->unslash_post_content( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
 			$new_instance['menu_order']   = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -110,6 +107,41 @@ class FrmStyle {
 		$this->save_settings();
 
 		return $action_ids;
+	}
+
+	/**
+	 * Unslash everything in post_content but custom_css
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	private function unslash_post_content( $settings ) {
+		$custom_css             = isset( $settings['custom_css'] ) ? $settings['custom_css'] : '';
+		$settings               = wp_unslash( $settings );
+		$settings['custom_css'] = $custom_css;
+		return $settings;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	public function sanitize_post_content( $settings ) {
+		$defaults           = $this->get_defaults();
+		$valid_keys         = array_keys( $defaults );
+		$sanitized_settings = array();
+		foreach ( $valid_keys as $key ) {
+			if ( isset( $settings[ $key ] ) ) {
+				$sanitized_settings[ $key ] = sanitize_textarea_field( $settings[ $key ] );
+			} else {
+				$sanitized_settings[ $key ] = $defaults[ $key ];
+			}
+		}
+		return $sanitized_settings;
 	}
 
 	/**

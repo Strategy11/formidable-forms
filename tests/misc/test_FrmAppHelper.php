@@ -296,8 +296,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::kses
 	 */
 	public function test_kses() {
-		$start_value = '<script><script>';
-		$safe_value = 'Hello, <a href="/test">click here</a>';
+		$start_value  = '<script><script>';
+		$safe_value   = 'Hello, <a href="/test">click here</a>';
 		$start_value .= $safe_value;
 
 		$stripped_value = FrmAppHelper::kses( $start_value );
@@ -305,6 +305,42 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$stripped_value = FrmAppHelper::kses( $start_value, array( 'a' ) );
 		$this->assertEquals( $stripped_value, $safe_value );
+	}
+
+	/**
+	 * @covers FrmAppHelper::kses_submit_button
+	 */
+	public function test_kses_submit_button() {
+		$default_submit_button_html = '<div class="frm_submit">
+[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+<button class="frm_button_submit" type="submit" [button_action]>[button_label]</button>
+[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
+</div>';
+		$this->assertEquals(
+			$default_submit_button_html,
+			FrmAppHelper::kses_submit_button( $default_submit_button_html )
+		);
+
+		$with_custom_class = '<div class="frm_submit">
+[if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
+<button class="frm_button_submit frm_inline_submit" type="submit" [button_action]>[button_label]</button>
+[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
+</div>';
+		$this->assertEquals(
+			$with_custom_class,
+			FrmAppHelper::kses_submit_button( $with_custom_class )
+		);
+
+		$previous_default_html = '<div class="frm_submit">
+[if back_button]<input type="button" value="[back_label]" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook] />[/if back_button]
+<input type="submit" value="[button_label]" [button_action] />
+<img class="frm_ajax_loading" src="[frmurl]/images/ajax_loader.gif" alt="Sending" style="visibility:hidden" />
+[if save_draft]<a class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]
+</div>';
+		$this->assertEquals(
+			$previous_default_html,
+			FrmAppHelper::kses_submit_button( $previous_default_html )
+		);
 	}
 
 	/**

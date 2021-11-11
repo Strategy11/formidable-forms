@@ -645,6 +645,72 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * The regular kses function strips [button_action] from submit button HTML.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $html
+	 * @return string
+	 */
+	public static function kses_submit_button( $html ) {
+		$included_button_action = false !== strpos( $html, '[button_action]' );
+		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
+		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		add_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
+		add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
+		$html = self::kses( $html, 'all' );
+		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
+		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
+		if ( $included_button_action ) {
+			if ( false !== strpos( $html, '<input type="submit"' ) ) {
+				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
+				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
+			} else {
+				$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
+				$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
+			}
+		}
+		if ( $included_back_hook ) {
+			$html = str_replace( 'class="frm_prev_page"', 'class="frm_prev_page" [back_hook]', $html );
+		}
+		if ( $included_draft_hook ) {
+			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
+		}
+		return $html;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_attr
+	 * @return array
+	 */
+	public static function allow_visibility_style( $allowed_attr ) {
+		$allowed_attr[] = 'visibility';
+		return $allowed_attr;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_html
+	 * @return array
+	 */
+	public static function add_allowed_submit_button_tags( $allowed_html ) {
+		$allowed_html['input']                    = array(
+			'type'           => true,
+			'value'          => true,
+			'formnovalidate' => true,
+			'name'           => true,
+			'class'          => true,
+		);
+		$allowed_html['button']['formnovalidate'] = true;
+		$allowed_html['button']['name']           = true;
+		$allowed_html['img']['style']             = true;
+		return $allowed_html;
+	}
+
+	/**
 	 * @since 2.05.03
 	 */
 	private static function allowed_html( $allowed ) {
@@ -671,13 +737,14 @@ class FrmAppHelper {
 		);
 
 		return array(
-			'a'          => array(
-				'class'  => true,
-				'href'   => true,
-				'id'     => true,
-				'rel'    => true,
-				'target' => true,
-				'title'  => true,
+			'a'            => array(
+				'class'    => true,
+				'href'     => true,
+				'id'       => true,
+				'rel'      => true,
+				'target'   => true,
+				'title'    => true,
+				'tabindex' => true,
 			),
 			'abbr'       => array(
 				'title' => true,
@@ -703,6 +770,7 @@ class FrmAppHelper {
 				'id'    => true,
 				'title' => true,
 				'style' => true,
+				'role'  => true,
 			),
 			'dl'         => array(),
 			'dt'         => array(),
@@ -779,7 +847,7 @@ class FrmAppHelper {
 				'aria-hidden' => true,
 			),
 			'use'        => array(
-				'href'   => true,
+				'href'       => true,
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
@@ -3033,10 +3101,30 @@ class FrmAppHelper {
 	 * @return bool true if the current user is allowed to save unfiltered HTML.
 	 */
 	public static function allow_unfiltered_html() {
-		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
 			return false;
 		}
 		return current_user_can( 'unfiltered_html' );
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @return bool
+	 */
+	public static function should_never_allow_unfiltered_html() {
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			return true;
+		}
+
+		/**
+		 * Formidable will check DISALLOW_UNFILTERED_HTML to determine if some form HTML should be filtered or not.
+		 * In many cases, scripts are added intentionally to forms and will not be stripped if DISALLOW_UNFILTERED_HTML is not set.
+		 * It is also possible to filter Formidable without defining DISALLOW_UNFILTERED_HTML, with add_filter( 'frm_disallow_unfiltered_html', '__return_true' );
+		 *
+		 * @since 5.0.13
+		 */
+		return apply_filters( 'frm_disallow_unfiltered_html', false );
 	}
 
 	/**
@@ -3060,6 +3148,23 @@ class FrmAppHelper {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Some back end fields allow privleged users to add scripts.
+	 * A site that uses the DISALLOW_UNFILTERED_HTML always remove scripts on echo.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string       $value
+	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @return string
+	 */
+	public static function maybe_kses( $value, $allowed = 'all' ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
+			$value = self::kses( $value, $allowed );
+		}
+		return $value;
 	}
 
 	/**

@@ -1955,8 +1955,7 @@ class FrmFormsController {
 			die(); // do not use wp_die or redirect fails
 		} else {
 			add_filter( 'frm_use_wpautop', '__return_true' );
-
-			echo $redirect_msg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 8000);}</script>";
 		}
 	}
