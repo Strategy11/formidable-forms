@@ -1022,23 +1022,36 @@ class FrmAppHelper {
 	 * @return string|void
 	 */
 	public static function array_to_html_params( $atts, $echo = false ) {
-		if ( ! $atts ) {
-			if ( ! $echo ) {
-				return '';
+		$callback = function() use ( $atts ) {
+			if ( $atts ) {
+				foreach ( $atts as $key => $value ) {
+					echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+				}
 			}
-			return;
+		};
+		return self::clip( $callback, $echo );
+	}
+
+	/**
+	 * Call an echo function and either echo it or return the result as a string.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param Closure $echo_function
+	 * @param bool    $echo
+	 * @return string|void
+	 */
+	public static function clip( $echo_function, $echo = false ) {
+		if ( ! $echo ) {
+			ob_start();
 		}
+
+		$echo_function();
 
 		if ( ! $echo ) {
-			$html = '';
-			foreach ( $atts as $key => $value ) {
-				$html .= ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
-			}
-			return $html;
-		}
-
-		foreach ( $atts as $key => $value ) {
-			echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+			$return = ob_get_contents();
+			ob_end_clean();
+			return $return;
 		}
 	}
 
@@ -1714,12 +1727,10 @@ class FrmAppHelper {
 	 * @return string|void
 	 */
 	public static function js_redirect( $url, $echo = false ) {
-		if ( ! $echo ) {
-			return '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
-		}
-		?>
-		<script type="text/javascript">window.location="<?php echo esc_url_raw( $url ); ?>"</script>
-		<?php
+		$callback = function() use ( $url ) {
+			echo '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
+		};
+		return FrmAppHelper::clip( $callback, $echo );
 	}
 
 	public static function get_user_id_param( $user_id ) {
