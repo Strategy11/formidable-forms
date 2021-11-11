@@ -406,7 +406,7 @@ class FrmEntriesController {
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
 			if ( headers_sent() ) {
-				FrmAppHelper::js_redirect( $url );
+				FrmAppHelper::js_redirect( $url, true );
 			} else {
 				wp_redirect( esc_url_raw( $url ) );
 			}
