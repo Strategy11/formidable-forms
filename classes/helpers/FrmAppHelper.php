@@ -1730,7 +1730,7 @@ class FrmAppHelper {
 		$callback = function() use ( $url ) {
 			echo '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
 		};
-		return FrmAppHelper::clip( $callback, $echo );
+		return self::clip( $callback, $echo );
 	}
 
 	public static function get_user_id_param( $user_id ) {
