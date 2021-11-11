@@ -276,7 +276,7 @@ class FrmEntryValidate {
 	 */
 	private static function form_is_in_progress( $values ) {
 		return FrmAppHelper::pro_is_installed() &&
-			isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) &&
+			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || ! empty( $_POST['frm_next_page'] ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
 	}
 
