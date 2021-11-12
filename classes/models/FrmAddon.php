@@ -697,6 +697,12 @@ class FrmAddon {
 	}
 
 	public function manually_queue_update() {
-		set_site_transient( 'update_plugins', null );
+		$updates               = new stdClass();
+		$updates->last_checked = 0;
+		$updates->response     = array();
+		$updates->translations = array();
+		$updates->no_update    = array();
+		$updates->checked      = array();
+		set_site_transient( 'update_plugins', $updates );
 	}
 }
