@@ -645,6 +645,72 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * The regular kses function strips [button_action] from submit button HTML.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $html
+	 * @return string
+	 */
+	public static function kses_submit_button( $html ) {
+		$included_button_action = false !== strpos( $html, '[button_action]' );
+		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
+		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		add_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
+		add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
+		$html = self::kses( $html, 'all' );
+		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
+		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
+		if ( $included_button_action ) {
+			if ( false !== strpos( $html, '<input type="submit"' ) ) {
+				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
+				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
+			} else {
+				$pattern = '/(<button)(.*)(class=")(.*)(frm_button_submit)(.*)(")(.*)([^>]+)(>)/';
+				$html    = preg_replace( $pattern, '$1$2$3$4$5$6$7 [button_action]$8$9$10', $html, 1 );
+			}
+		}
+		if ( $included_back_hook ) {
+			$html = str_replace( 'class="frm_prev_page"', 'class="frm_prev_page" [back_hook]', $html );
+		}
+		if ( $included_draft_hook ) {
+			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
+		}
+		return $html;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_attr
+	 * @return array
+	 */
+	public static function allow_visibility_style( $allowed_attr ) {
+		$allowed_attr[] = 'visibility';
+		return $allowed_attr;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_html
+	 * @return array
+	 */
+	public static function add_allowed_submit_button_tags( $allowed_html ) {
+		$allowed_html['input']                    = array(
+			'type'           => true,
+			'value'          => true,
+			'formnovalidate' => true,
+			'name'           => true,
+			'class'          => true,
+		);
+		$allowed_html['button']['formnovalidate'] = true;
+		$allowed_html['button']['name']           = true;
+		$allowed_html['img']['style']             = true;
+		return $allowed_html;
+	}
+
+	/**
 	 * @since 2.05.03
 	 */
 	private static function allowed_html( $allowed ) {
@@ -671,13 +737,14 @@ class FrmAppHelper {
 		);
 
 		return array(
-			'a'          => array(
-				'class'  => true,
-				'href'   => true,
-				'id'     => true,
-				'rel'    => true,
-				'target' => true,
-				'title'  => true,
+			'a'            => array(
+				'class'    => true,
+				'href'     => true,
+				'id'       => true,
+				'rel'      => true,
+				'target'   => true,
+				'title'    => true,
+				'tabindex' => true,
 			),
 			'abbr'       => array(
 				'title' => true,
@@ -703,6 +770,7 @@ class FrmAppHelper {
 				'id'    => true,
 				'title' => true,
 				'style' => true,
+				'role'  => true,
 			),
 			'dl'         => array(),
 			'dt'         => array(),
@@ -767,17 +835,19 @@ class FrmAppHelper {
 				'viewbox' => true,
 			),
 			'svg'        => array(
-				'class'   => true,
-				'id'      => true,
-				'xmlns'   => true,
-				'viewbox' => true,
-				'width'   => true,
-				'height'  => true,
-				'style'   => true,
-				'fill'    => true,
+				'class'       => true,
+				'id'          => true,
+				'xmlns'       => true,
+				'viewbox'     => true,
+				'width'       => true,
+				'height'      => true,
+				'style'       => true,
+				'fill'        => true,
+				'aria-label'  => true,
+				'aria-hidden' => true,
 			),
 			'use'        => array(
-				'href'   => true,
+				'href'       => true,
 				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
@@ -866,10 +936,70 @@ class FrmAppHelper {
 		}
 
 		if ( $echo ) {
-			echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $icon;
 		}
+	}
+
+	/**
+	 * Run kses for icons. It needs to add a few filters first in order to preserve some custom style values.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $icon
+	 * @return string
+	 */
+	public static function kses_icon( $icon ) {
+		add_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
+		add_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style', 10, 2 );
+		$icon = self::kses( $icon, 'all' );
+		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
+		remove_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style' );
+		return $icon;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param array $allowed_attr
+	 * @return array
+	 */
+	public static function allow_vars_in_styles( $allowed_attr ) {
+		$allowed_attr[] = '--primary-hover';
+		return $allowed_attr;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param bool   $allow_css
+	 * @param string $css_string
+	 */
+	public static function allow_style( $allow_css, $css_string ) {
+		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-hover:' ) ) {
+			$split     = explode( ':', $css_string, 2 );
+			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
+		}
+		return $allow_css;
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @param string $value
+	 * @return bool
+	 */
+	private static function is_a_valid_color( $value ) {
+		$match = 0;
+		if ( 0 === strpos( $value, 'rgba(' ) ) {
+			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
+		} elseif ( 0 === strpos( $value, 'rgb(' ) ) {
+			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
+		} elseif ( 0 === strpos( $value, '#' ) ) {
+			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
+		}
+		return (bool) $match;
 	}
 
 	/**
@@ -885,17 +1015,44 @@ class FrmAppHelper {
 	 * Convert an associative array to HTML values.
 	 *
 	 * @since 4.0.02
+	 * @since 5.0.13 added $echo parameter.
+	 *
 	 * @param array $atts
-	 * @return string
+	 * @param bool  $echo
+	 * @return string|void
 	 */
-	public static function array_to_html_params( $atts ) {
-		$html = '';
-		if ( ! empty( $atts ) ) {
-			foreach ( $atts as $key => $value ) {
-				$html .= ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+	public static function array_to_html_params( $atts, $echo = false ) {
+		$callback = function() use ( $atts ) {
+			if ( $atts ) {
+				foreach ( $atts as $key => $value ) {
+					echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+				}
 			}
+		};
+		return self::clip( $callback, $echo );
+	}
+
+	/**
+	 * Call an echo function and either echo it or return the result as a string.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param Closure $echo_function
+	 * @param bool    $echo
+	 * @return string|void
+	 */
+	public static function clip( $echo_function, $echo = false ) {
+		if ( ! $echo ) {
+			ob_start();
 		}
-		return $html;
+
+		$echo_function();
+
+		if ( ! $echo ) {
+			$return = ob_get_contents();
+			ob_end_clean();
+			return $return;
+		}
 	}
 
 	/**
@@ -1562,8 +1719,18 @@ class FrmAppHelper {
 		return $ver;
 	}
 
-	public static function js_redirect( $url ) {
-		return '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
+	/**
+	 * @since 5.0.13 added $echo param.
+	 *
+	 * @param string $url
+	 * @param bool   $echo
+	 * @return string|void
+	 */
+	public static function js_redirect( $url, $echo = false ) {
+		$callback = function() use ( $url ) {
+			echo '<script type="text/javascript">window.location="' . esc_url_raw( $url ) . '"</script>';
+		};
+		return self::clip( $callback, $echo );
 	}
 
 	public static function get_user_id_param( $user_id ) {
@@ -2971,10 +3138,30 @@ class FrmAppHelper {
 	 * @return bool true if the current user is allowed to save unfiltered HTML.
 	 */
 	public static function allow_unfiltered_html() {
-		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
 			return false;
 		}
 		return current_user_can( 'unfiltered_html' );
+	}
+
+	/**
+	 * @since 5.0.13
+	 *
+	 * @return bool
+	 */
+	public static function should_never_allow_unfiltered_html() {
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			return true;
+		}
+
+		/**
+		 * Formidable will check DISALLOW_UNFILTERED_HTML to determine if some form HTML should be filtered or not.
+		 * In many cases, scripts are added intentionally to forms and will not be stripped if DISALLOW_UNFILTERED_HTML is not set.
+		 * It is also possible to filter Formidable without defining DISALLOW_UNFILTERED_HTML, with add_filter( 'frm_disallow_unfiltered_html', '__return_true' );
+		 *
+		 * @since 5.0.13
+		 */
+		return apply_filters( 'frm_disallow_unfiltered_html', false );
 	}
 
 	/**
@@ -2998,6 +3185,23 @@ class FrmAppHelper {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Some back end fields allow privleged users to add scripts.
+	 * A site that uses the DISALLOW_UNFILTERED_HTML always remove scripts on echo.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string       $value
+	 * @param array|string $allowed 'all' for everything included as defaults
+	 * @return string
+	 */
+	public static function maybe_kses( $value, $allowed = 'all' ) {
+		if ( self::should_never_allow_unfiltered_html() ) {
+			$value = self::kses( $value, $allowed );
+		}
+		return $value;
 	}
 
 	/**

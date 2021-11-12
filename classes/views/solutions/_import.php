@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							}
 
 							if ( $importing === 'form' && $disabled ) {
-								echo FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo FrmAppHelper::kses( FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] ), array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							} else {
 								echo esc_html( $info['name'] );
 							}

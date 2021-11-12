@@ -406,7 +406,7 @@ class FrmEntriesController {
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
 			if ( headers_sent() ) {
-				echo FrmAppHelper::js_redirect( $url ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::js_redirect( $url, true );
 			} else {
 				wp_redirect( esc_url_raw( $url ) );
 			}
@@ -417,7 +417,7 @@ class FrmEntriesController {
 			$message = __( 'Your import is complete', 'formidable' );
 		}
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php';
 	}
 
 	private static function get_delete_form_time( $form, &$errors ) {

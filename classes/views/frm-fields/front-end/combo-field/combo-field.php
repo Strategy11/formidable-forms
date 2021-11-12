@@ -19,27 +19,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field       = $args['field'];
-$field_id    = $field['id'];
-$field_label = $field['name'];
-$field_value = $field['value'];
-$sub_fields  = $args['sub_fields'];
-$html_id     = $args['html_id'];
-$field_name  = $args['field_name'];
-$errors      = $args['errors'];
-
-$inputs_attrs     = $this->get_inputs_container_attrs();
-$inputs_attrs_str = '';
-foreach ( $inputs_attrs as $key => $inputs_attr ) {
-	$inputs_attrs_str .= sprintf( ' %s="%s"', esc_attr( $key ), esc_attr( $inputs_attr ) );
-}
+$field        = $args['field'];
+$field_id     = $field['id'];
+$field_label  = $field['name'];
+$field_value  = $field['value'];
+$sub_fields   = $args['sub_fields'];
+$html_id      = $args['html_id'];
+$field_name   = $args['field_name'];
+$errors       = $args['errors'];
+$inputs_attrs = $this->get_inputs_container_attrs();
 ?>
 <fieldset aria-labelledby="<?php echo esc_attr( $html_id ); ?>_label">
 	<legend class="frm_screen_reader frm_hidden">
 		<?php echo esc_html( $field_label ); ?>
 	</legend>
 
-	<div<?php echo $inputs_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<div <?php FrmAppHelper::array_to_html_params( $inputs_attrs, true ); ?>>
 		<?php
 		foreach ( $sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;

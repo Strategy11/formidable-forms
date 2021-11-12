@@ -255,9 +255,29 @@ class FrmEntryValidate {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		} elseif ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		} elseif ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
+		}
+
+		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
+			return;
+		}
+
+		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
 		}
+	}
+
+	/**
+	 * Checks if form is in progress.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param array $values The values.
+	 * @return bool
+	 */
+	private static function form_is_in_progress( $values ) {
+		return FrmAppHelper::pro_is_installed() &&
+			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
+			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
 	}
 
 	/**
@@ -391,8 +411,12 @@ class FrmEntryValidate {
 	 */
 	private static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );
-		self::add_user_info_to_akismet( $datas, $values );
 		self::add_server_values_to_akismet( $datas );
+
+		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
+		$values['form_ids'] = $form_ids;
+
+		self::add_user_info_to_akismet( $datas, $values );
 		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
@@ -418,46 +442,125 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * Gets user info for Akismet spam check.
+	 *
+	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
+	 *
+	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
+	 * @return array
+	 */
 	private static function get_spam_check_user_info( $values ) {
-		$datas = array();
+		if ( ! is_user_logged_in() ) {
+			return self::get_spam_check_user_info_for_guest( $values );
+		}
 
-		if ( is_user_logged_in() ) {
-			$user = wp_get_current_user();
+		$user = wp_get_current_user();
 
-			$datas['user_ID']              = $user->ID;
-			$datas['user_id']              = $user->ID;
-			$datas['comment_author']       = $user->display_name;
-			$datas['comment_author_email'] = $user->user_email;
-			$datas['comment_author_url']   = $user->user_url;
-		} else {
-			$datas['comment_author']       = '';
-			$datas['comment_author_email'] = '';
-			$datas['comment_author_url']   = '';
+		return array(
+			'user_ID'              => $user->ID,
+			'user_id'              => $user->ID,
+			'comment_author'       => $user->display_name,
+			'comment_author_email' => $user->user_email,
+			'comment_author_url'   => $user->user_url,
+		);
+	}
 
-			if ( isset( $values['item_meta'] ) ) {
-				$values = $values['item_meta'];
+	/**
+	 * Gets user info for Akismet spam check for guest.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param array $values Entry values after flattened.
+	 * @return array
+	 */
+	private static function get_spam_check_user_info_for_guest( $values ) {
+		$datas = array(
+			'comment_author'       => '',
+			'comment_author_email' => '',
+			'comment_author_url'   => '',
+			'name_field_ids'       => $values['name_field_ids'],
+			'missing_keys'         => array( 'comment_author_email', 'comment_author_url', 'comment_author' ),
+			'frm_duplicated'       => array(),
+		);
+
+		if ( isset( $values['item_meta'] ) ) {
+			$values = $values['item_meta'];
+		}
+
+		$values = array_filter( $values );
+
+		self::recursive_add_akismet_guest_info( $datas, $values );
+		unset( $datas['name_field_ids'] );
+		unset( $datas['missing_keys'] );
+
+		return $datas;
+	}
+
+	/**
+	 * Recursive adds akismet guest info.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param array    $datas        Guest data.
+	 * @param array    $values       The values.
+	 * @param int|null $custom_index Custom index (or field ID).
+	 */
+	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
+		foreach ( $values as $index => $value ) {
+			if ( ! $datas['missing_keys'] ) {
+				return; // Found all info.
 			}
 
-			$values = array_filter( $values );
+			if ( is_array( $value ) ) {
+				self::recursive_add_akismet_guest_info( $datas, $value, $index );
+				continue;
+			}
 
-			$datas['frm_duplicated'] = array();
-			foreach ( $values as $index => $value ) {
-				if ( ! is_array( $value ) ) {
-					if ( $datas['comment_author_email'] == '' && strpos( $value, '@' ) && is_email( $value ) ) {
-						$datas['comment_author_email'] = $value;
-						$datas['frm_duplicated'][] = $index;
-					} elseif ( $datas['comment_author_url'] == '' && strpos( $value, 'http' ) === 0 ) {
-						$datas['comment_author_url'] = $value;
-						$datas['frm_duplicated'][] = $index;
-					} elseif ( $datas['comment_author'] == '' && ! is_numeric( $value ) && strlen( $value ) < 200 ) {
-						$datas['comment_author'] = $value;
-						$datas['frm_duplicated'][] = $index;
-					}
+			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+			foreach ( $datas['missing_keys'] as $key_index => $key ) {
+				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'] );
+				if ( $found ) {
+					$datas[ $key ]             = $value;
+					$datas['frm_duplicated'][] = $field_id;
+					unset( $datas['missing_keys'][ $key_index ] );
 				}
 			}
 		}
+	}
 
-		return $datas;
+	/**
+	 * Checks if given value is an akismet guest info.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param string $key            Guest info key.
+	 * @param string $value          Value to check.
+	 * @param int    $field_id       Field ID.
+	 * @param array  $name_field_ids Name field IDs.
+	 * @return bool
+	 */
+	private static function is_akismet_guest_info_value( $key, $value, $field_id, $name_field_ids ) {
+		if ( ! $value || is_numeric( $value ) ) {
+			return false;
+		}
+
+		switch ( $key ) {
+			case 'comment_author_email':
+				return strpos( $value, '@' ) && is_email( $value );
+
+			case 'comment_author_url':
+				return 0 === strpos( $value, 'http' );
+
+			case 'comment_author':
+				if ( $name_field_ids ) {
+					// If there is name field in the form, we should always use it as author name.
+					return in_array( $field_id, $name_field_ids, true );
+				}
+				return strlen( $value ) < 200;
+		}
+
+		return false;
 	}
 
 	private static function add_server_values_to_akismet( &$datas ) {
@@ -517,18 +620,18 @@ class FrmEntryValidate {
 	 * Gets field IDs that are skipped from sending to Akismet spam check.
 	 *
 	 * @since 5.0.09
+	 * @since 5.0.13 Move out get_all_form_ids_and_flatten_meta() call and get `form_ids` from `$values`.
 	 *
-	 * @param array $values Entry values.
+	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
-		$form_ids        = self::get_all_form_ids_and_flatten_meta( $values );
 		$skipped_types   = array( 'divider', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
 		$has_other_types = array( 'radio', 'checkbox', 'select' );
 
 		$where = array(
 			array(
-				'form_id' => $form_ids,
+				'form_id' => $values['form_ids'],
 				array(
 					array(
 						'field_options not like' => ';s:5:"other";s:1:"1"',
@@ -548,14 +651,24 @@ class FrmEntryValidate {
 	 * This also removes some unused data from the item_meta.
 	 *
 	 * @since 5.0.09
+	 * @since 5.0.13 Convert name field value to string.
 	 *
 	 * @param array $values Entry values.
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+		$values['name_field_ids'] = array();
+
 		$form_ids = array( absint( $values['form_id'] ) );
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
+				continue;
+			}
+
+			// Convert name array to string.
+			if ( isset( $value['first'] ) && isset( $value['last'] ) ) {
+				$values['item_meta'][ $field_id ] = trim( implode( ' ', $value ) );
+				$values['name_field_ids'][]       = $field_id;
 				continue;
 			}
 
@@ -578,6 +691,14 @@ class FrmEntryValidate {
 					if ( ! isset( $values['item_meta'][ $subsubindex ] ) ) {
 						$values['item_meta'][ $subsubindex ] = array();
 					}
+
+					// Convert name array to string.
+					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
+						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
+
+						$values['name_field_ids'][] = $subsubindex;
+					}
+
 					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
 				}
 			}
