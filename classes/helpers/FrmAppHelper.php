@@ -953,10 +953,23 @@ class FrmAppHelper {
 	public static function kses_icon( $icon ) {
 		add_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
 		add_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style', 10, 2 );
+		add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_icon_tags' );
 		$icon = self::kses( $icon, 'all' );
 		remove_filter( 'safe_style_css', 'FrmAppHelper::allow_vars_in_styles' );
 		remove_filter( 'safecss_filter_attr_allow_css', 'FrmAppHelper::allow_style' );
+		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_icon_tags' );
 		return $icon;
+	}
+
+	/**
+	 * @since 5.0.14
+	 *
+	 * @param array $allowed_html
+	 * @return array
+	 */
+	public static function add_allowed_icon_tags( $allowed_html ) {
+		$allowed_html['svg']['data-open'] = true;
+		return $allowed_html;
 	}
 
 	/**
