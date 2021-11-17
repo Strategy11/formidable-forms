@@ -342,6 +342,7 @@ class FrmEntryValidate {
 			return false;
 		}
 
+		self::prepare_values_for_spam_check( $values );
 		$ip         = FrmAppHelper::get_ip_address();
 		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
 		$user_info  = self::get_spam_check_user_info( $values );
@@ -413,8 +414,7 @@ class FrmEntryValidate {
 		self::add_site_info_to_akismet( $datas );
 		self::add_server_values_to_akismet( $datas );
 
-		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
-		$values['form_ids'] = $form_ids;
+		self::prepare_values_for_spam_check( $values );
 
 		self::add_user_info_to_akismet( $datas, $values );
 		self::add_comment_content_to_akismet( $datas, $values );
@@ -447,7 +447,7 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
 	 *
-	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
+	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
 	 */
 	private static function get_spam_check_user_info( $values ) {
@@ -622,7 +622,7 @@ class FrmEntryValidate {
 	 * @since 5.0.09
 	 * @since 5.0.13 Move out get_all_form_ids_and_flatten_meta() call and get `form_ids` from `$values`.
 	 *
-	 * @param array $values Entry values after running through {@see FrmEntryValidate::get_all_form_ids_and_flatten_meta()}.
+	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
@@ -644,6 +644,18 @@ class FrmEntryValidate {
 		);
 
 		return FrmDb::get_col( 'frm_fields', $where );
+	}
+
+	/**
+	 * Prepares values array for spam check.
+	 *
+	 * @since 5.0.13
+	 *
+	 * @param array $values Entry values.
+	 */
+	private static function prepare_values_for_spam_check( &$values ) {
+		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
+		$values['form_ids'] = $form_ids;
 	}
 
 	/**
