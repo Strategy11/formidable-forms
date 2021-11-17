@@ -372,6 +372,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				'37' => array( 'value1', 'value2' ),
 			),
 			'name_field_ids' => array(),
+			'form_id'        => 1,
 		);
 
 		update_option( $this->get_disallowed_option_name(), '' );
