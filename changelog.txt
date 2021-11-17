@@ -4,7 +4,7 @@
 - Security: Back end form settings will now always filter on render when the DISALLOW_UNFILTERED_HTML constant is on.
 - Security: Added additional sanitizing when saving a custom style, added additional filtering to icons, and improved how some content is escaped.
 - New: Added a new frm_disallow_unfiltered_html filter that will always filter back form settings without having to set the DISALLOW_UNFILTERED_HTML constant.
-- New: A name field will always be used when sending comment author information to Aksimet if one is set to avoid false positives that could cause another field value to possibly get sent instead.
+- New: A name field will always be used when sending comment author information to Akismet if one is set to avoid false positives that could cause another field value to possibly get sent instead.
 - Fix: When importing a grid or table view, [/if x] and [/foreach x] shortcodes were not properly being replaced.
 - Fix: Too much was being stripped from custom submit button HTML for underpriveleged users or when disallowing unfiltered html.
 - Fix: Too many calls were being made to Akismet for forms with multiple pages.
