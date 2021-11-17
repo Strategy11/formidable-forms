@@ -626,6 +626,10 @@ class FrmEntryValidate {
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
+		if ( empty( $values['form_ids'] ) ) {
+			return array();
+		}
+
 		$skipped_types   = array( 'divider', 'form', 'hidden', 'user_id', 'file', 'date', 'time', 'scale', 'star', 'range', 'toggle', 'data', 'lookup', 'likert', 'nps' );
 		$has_other_types = array( 'radio', 'checkbox', 'select' );
 
@@ -671,7 +675,8 @@ class FrmEntryValidate {
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
 		$values['name_field_ids'] = array();
 
-		$form_ids = array( absint( $values['form_id'] ) );
+		// Blacklist check for File field in the old version doesn't contain `form_id`.
+		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) { // Maybe `other`.
 				continue;
