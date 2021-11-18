@@ -1,4 +1,7 @@
 == Changelog ==
+= 5.0.13.1 =
+- Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
+
 = 5.0.13 =
 - FrmAppHelper::jquery_ui_base_url and an unused dropdown view file have been deprecated.
 - Security: Back end form settings will now always filter on render when the DISALLOW_UNFILTERED_HTML constant is on.

@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.0
 Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 5.0.13
+Stable tag: 5.0.13.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,9 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.13.1 =
+- Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
+
 = 5.0.13 =
 - FrmAppHelper::jquery_ui_base_url and an unused dropdown view file have been deprecated.
 - Security: Back end form settings will now always filter on render when the DISALLOW_UNFILTERED_HTML constant is on.
@@ -460,12 +463,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.0.11 =
 - Fix: Required credit cards were causing an issue with JavaScript validation.
 - Fix: Empty required appointment fields were not properly validating with JavaScript.
-
-= 5.0.10 =
-- Security: Improved how data is sanitized when previewing in the style manager.
-- Fix: Prevent a warning when trying to get inbox messages from the API when no messages are being returned.
-- Fix: The frm_alignright class was being stripped in the form builder, preventing the right alignment from appearing in the back end.
-- Fix: The frm_alignright class was causing fields to shift to the wrong row. The style definition has been updated so it will stay in the same row as other fields.
-- Fix: Required messages were not properly appearing for empty radio buttons when an other option was selected but left empty and JavaScript validation was on.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
