@@ -335,8 +335,8 @@ class FrmStylesHelper {
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
 
+			$frm_style = new FrmStyle();
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				$frm_style = new FrmStyle();
 
 				// Sanitizing is done later.
 				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
