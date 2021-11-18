@@ -962,13 +962,14 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 5.0.14
+	 * @since 5.0.13.1
 	 *
 	 * @param array $allowed_html
 	 * @return array
 	 */
 	public static function add_allowed_icon_tags( $allowed_html ) {
 		$allowed_html['svg']['data-open'] = true;
+		$allowed_html['svg']['title']     = true;
 		return $allowed_html;
 	}
 
