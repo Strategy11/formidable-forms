@@ -34,7 +34,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: phpunit:${{ matrix.phpunit }}, yoast/phpunit-polyfills
+          tools: phpunit:${{ matrix.phpunit }}, phpunit-polyfills
 
       - name: Installing WordPress
         run: |
