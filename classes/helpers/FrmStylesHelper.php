@@ -336,21 +336,21 @@ class FrmStylesHelper {
 		if ( self::previewing_style() ) {
 
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				$style = new FrmStyle();
+				$frm_style = new FrmStyle();
 
 				// Sanitizing is done later.
 				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
-					$settings   = $style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
+					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
-					$settings   = $style->sanitize_post_content( $posted['post_content'] );
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
-				$settings   = $style->sanitize_post_content( wp_unslash( $_GET ) );
+				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
