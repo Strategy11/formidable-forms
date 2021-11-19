@@ -860,7 +860,23 @@ class FrmEntryFormatter {
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
+			/**
+			 * Allow modification of the separator when imploding an array value.
+			 *
+			 * @since 5.0.14
+			 *
+			 * @param string $separator. Default ', '.
+			 * @param array  $args including array value as well as stdClass entry.
+			 */
+			$separator = apply_filters(
+				'frm_entry_array_separator',
+				', ',
+				array(
+					'value' => $value,
+					'entry' => $this->entry,
+				)
+			);
+			$value     = implode( $separator, $value );
 		}
 
 		return $value;
