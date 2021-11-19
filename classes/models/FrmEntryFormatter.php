@@ -874,6 +874,8 @@ class FrmEntryFormatter {
 
 	/**
 	 * @since 5.0.14
+	 *
+	 * @return string
 	 */
 	private function get_array_separator() {
 		if ( ! isset( $this->array_separator ) ) {
