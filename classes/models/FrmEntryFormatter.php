@@ -884,8 +884,8 @@ class FrmEntryFormatter {
 			 *
 			 * @since 5.0.14
 			 *
-			 * @param string $separator. Default ', '.
-			 * @param array  $args including array value as well as stdClass entry.
+			 * @param string   $separator. Default ', '.
+			 * @param stdClass $entry
 			 */
 			$this->array_separator = apply_filters( 'frm_entry_array_separator', ', ', $this->entry );
 		}
