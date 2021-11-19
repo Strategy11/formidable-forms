@@ -56,6 +56,6 @@ jobs:
           pwd
           phpunit --coverage-clover=coverage.xml
       - name: Send code coverage report to Codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           files: /tmp/wordpress/src/wp-content/plugins/formidable/coverage.xml
