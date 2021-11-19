@@ -87,6 +87,12 @@ class FrmEntryFormatter {
 	protected $atts = array();
 
 	/**
+	 * @var string delimeter used when combining array values (like checkboxes).
+	 * @since 5.0.14
+	 */
+	private $array_separator;
+
+	/**
 	 * FrmEntryFormat constructor
 	 *
 	 * @since 2.04
@@ -860,6 +866,17 @@ class FrmEntryFormatter {
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
+			$value = implode( $this->get_array_separator(), $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @since 5.0.14
+	 */
+	private function get_array_separator() {
+		if ( ! isset( $this->array_separator ) ) {
 			/**
 			 * Allow modification of the separator when imploding an array value.
 			 *
@@ -868,18 +885,9 @@ class FrmEntryFormatter {
 			 * @param string $separator. Default ', '.
 			 * @param array  $args including array value as well as stdClass entry.
 			 */
-			$separator = apply_filters(
-				'frm_entry_array_separator',
-				', ',
-				array(
-					'value' => $value,
-					'entry' => $this->entry,
-				)
-			);
-			$value     = implode( $separator, $value );
+			$this->array_separator = apply_filters( 'frm_entry_array_separator', ', ', $this->entry );
 		}
-
-		return $value;
+		return $this->array_separator;
 	}
 
 	/**

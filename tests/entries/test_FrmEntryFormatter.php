@@ -11,8 +11,7 @@ class test_FrmEntryFormatter extends FrmUnitTest {
 	 * @covers FrmEntryFormatter::flatten_array
 	 */
 	public function test_flatten_array() {
-		$atts            = array();
-		$this->formatter = new FrmEntryFormatter( $atts );
+		$this->formatter = new FrmEntryFormatter( array() );
 		$values          = array( 'Option 1', 'Option 2', 'Option 3' );
 
 		$this->assertEquals( 'Option 1, Option 2, Option 3', $this->flatten_array( $values ) );
@@ -21,6 +20,7 @@ class test_FrmEntryFormatter extends FrmUnitTest {
 			return '<br/>';
 		};
 		add_filter( 'frm_entry_array_separator', $change_separators );
+		$this->formatter = new FrmEntryFormatter( array() );
 
 		$this->assertEquals( 'Option 1<br/>Option 2<br/>Option 3', $this->flatten_array( $values ) );
 
