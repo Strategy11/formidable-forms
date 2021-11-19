@@ -18,10 +18,10 @@ jobs:
       matrix:
         include:
           - php: 7.3
-            wordpress: master
+            wordpress: trunk
             multisite: 0
           - php: 7.2
-            wordpress: master
+            wordpress: trunk
             multisite: 1
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
