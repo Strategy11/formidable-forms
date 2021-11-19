@@ -877,7 +877,7 @@ class FrmEntryFormatter {
 	 *
 	 * @return string
 	 */
-	private function get_array_separator() {
+	protected function get_array_separator() {
 		if ( ! isset( $this->array_separator ) ) {
 			/**
 			 * Allow modification of the separator when imploding an array value.
