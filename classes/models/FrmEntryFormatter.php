@@ -866,30 +866,10 @@ class FrmEntryFormatter {
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
-			$value = implode( $this->get_array_separator(), $value );
+			$value = implode( $this->atts['array_separator'], $value );
 		}
 
 		return $value;
-	}
-
-	/**
-	 * @since 5.0.14
-	 *
-	 * @return string
-	 */
-	protected function get_array_separator() {
-		if ( ! isset( $this->array_separator ) ) {
-			/**
-			 * Allow modification of the separator when imploding an array value.
-			 *
-			 * @since 5.0.14
-			 *
-			 * @param string   $separator. Default ', '.
-			 * @param stdClass $entry
-			 */
-			$this->array_separator = apply_filters( 'frm_entry_array_separator', ', ', $this->entry );
-		}
-		return $this->array_separator;
 	}
 
 	/**
