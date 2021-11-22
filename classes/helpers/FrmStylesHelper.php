@@ -273,6 +273,15 @@ class FrmStylesHelper {
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
 
+		if ( 0 === strpos( $hex, 'rgba(' ) ) {
+			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
+			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
+			$r                      = max( 0, min( 255, $r + $steps ) );
+			$g                      = max( 0, min( 255, $g + $steps ) );
+			$b                      = max( 0, min( 255, $b + $steps ) );
+			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . ')';
+		}
+
 		// Normalize into a six character long hex string
 		$hex = str_replace( '#', '', $hex );
 		if ( strlen( $hex ) == 3 ) {

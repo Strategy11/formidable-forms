@@ -86,6 +86,11 @@ class test_FrmStylesHelper extends FrmUnitTest {
 				'steps' => -20,
 				'end'   => '#858585',
 			),
+			array(
+				'start' => 'rgba(32,14,237,1)',
+				'steps' => 45,
+				'end'   => 'rgba(77,59,255,1)',
+			),
 		);
 
 		foreach ( $colors as $color ) {
