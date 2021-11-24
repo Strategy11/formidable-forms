@@ -218,7 +218,7 @@ DEFAULT_HTML;
 		if ( ! empty( $include_file ) ) {
 			$this->include_on_form_builder( $name, $field );
 		} elseif ( $this->has_input ) {
-			echo $this->builder_text_field( $name ); // WPCS: XSS ok.
+			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -681,7 +681,7 @@ DEFAULT_HTML;
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
-			echo $this->prepare_field_html( $args ); // WPCS: XSS ok.
+			echo $this->prepare_field_html( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			do_action( 'frm_show_other_field_type', $this->field, $args['form'], array( 'action' => $args['form_action'] ) );
 		}
@@ -701,7 +701,7 @@ DEFAULT_HTML;
 	public function prepare_field_html( $args ) {
 		$args = $this->fill_display_field_values( $args );
 		if ( $this->has_html ) {
-			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmField::get_option( $this->field, 'custom_html' ) );
+			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
 			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
 			$args['field_obj'] = $this;
 

@@ -220,6 +220,9 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @covers FrmFieldCombo::print_input_atts
+	 */
 	public function test_print_input_atts() {
 		$combo_field = new FrmFieldCombo();
 
@@ -259,7 +262,7 @@ class test_FrmFieldCombo extends FrmUnitTest {
 		);
 		$atts = ob_get_clean();
 
-		$this->assertEquals( $atts, ' class="frm-custom-class"  placeholder="First placeholder" maxlength="10" data-attr="custom-attr"' );
+		$this->assertEquals( $atts, ' placeholder="First placeholder" class="frm-custom-class"  maxlength="10" data-attr="custom-attr" ' );
 
 		$sub_field = array(
 			'name'     => 'second',

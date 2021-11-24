@@ -1,4 +1,26 @@
 == Changelog ==
+= 5.0.13.1 =
+- Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
+
+= 5.0.13 =
+- FrmAppHelper::jquery_ui_base_url and an unused dropdown view file have been deprecated.
+- Security: Back end form settings will now always filter on render when the DISALLOW_UNFILTERED_HTML constant is on.
+- Security: Added additional sanitizing when saving a custom style, added additional filtering to icons, and improved how some content is escaped.
+- New: Added a new frm_disallow_unfiltered_html filter that will always filter back form settings without having to set the DISALLOW_UNFILTERED_HTML constant.
+- New: A name field will always be used when sending comment author information to Akismet if one is set to avoid false positives that could cause another field value to possibly get sent instead.
+- Fix: When importing a grid or table view, [/if x] and [/foreach x] shortcodes were not properly being replaced.
+- Fix: Too much was being stripped from custom submit button HTML for underpriveleged users or when disallowing unfiltered html.
+- Fix: Too many calls were being made to Akismet for forms with multiple pages.
+- Fix: A conflict with WooCommerce was sometimes triggering an error when checking for addon updates.
+- Fix: The comment author information sent to Akismet was not getting set if the author information was set in a name field.
+
+= 5.0.12 =
+- New: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
+- Fix: Many Formidable addons were not properly displaying update details from the plugins page.
+- Fix: Fewer API requests will be sent to Formidable when inbox notice cached results expire and when a request results in an error.
+- Fix: Added additional validation to CSV export so it fails more gracefully when the form does not exist.
+- Fix: The style setting for Margin under Field Settings as been renamed to Bottom Margin to avoid confusion as it only updates one margin value.
+
 = 5.0.11 =
 - Fix: Required credit cards were causing an issue with JavaScript validation.
 - Fix: Empty required appointment fields were not properly validating with JavaScript.

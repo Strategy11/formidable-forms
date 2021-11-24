@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' && FrmAppHelper::pro_is_installed() ) {
-	echo FrmProPost::get_category_dropdown( // WPCS: XSS ok.
+	echo FrmProPost::get_category_dropdown( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$field,
 		array(
 			'location' => 'front',

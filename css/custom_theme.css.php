@@ -6,8 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! isset( $saving ) ) {
 	header( 'Content-type: text/css' );
 
-	if ( isset( $css ) && $css ) {
-		echo strip_tags( $css, 'all' ); // WPCS: XSS ok.
+	if ( ! empty( $css ) ) {
+		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		die();
 	}
 }
@@ -135,7 +135,7 @@ legend.frm_hidden{
 	color:var(--title-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['title_margin_top'] ) ) { ?>
@@ -151,7 +151,7 @@ legend.frm_hidden{
 .with_frm_style .frm_form_field.frm_html_container,
 .with_frm_style .frm_form_field .frm_show_it{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['form_desc_color'] ) ) { ?>
@@ -359,7 +359,7 @@ legend.frm_hidden{
 .with_frm_style .frm_primary_label{
 	max-width:100%;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 <?php if ( ! empty( $defaults['font_size'] ) ) { ?>
@@ -503,7 +503,7 @@ legend.frm_hidden{
 	font-size:var(--submit-font-size)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] . $important ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 <?php if ( ! empty( $defaults['submit_weight'] ) ) { ?>
@@ -674,7 +674,7 @@ a.frm_save_draft{
 
 .with_frm_style a.frm_save_draft{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 	font-size:<?php echo esc_html( $defaults['submit_font_size'] ); ?>;
@@ -743,7 +743,7 @@ a.frm_save_draft{
 .with_frm_style .frm_radio label,
 .with_frm_style .frm_checkbox label{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
-	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // WPCS: XSS ok. ?>;
+	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
 <?php } ?>
 	font-size:<?php echo esc_html( $defaults['check_font_size'] . $important ); ?>;
@@ -1496,4 +1496,4 @@ select.frm_loading_lookup{
 }
 <?php
 
-echo strip_tags( $defaults['custom_css'] ); // WPCS: XSS ok.
+echo strip_tags( $defaults['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

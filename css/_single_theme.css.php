@@ -89,7 +89,7 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 	<?php } ?>
 	padding:0;
 	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	<?php } ?>
 	<?php if ( ! empty( $description_font_size ) ) { ?>
 		font-size:<?php echo esc_html( $description_font_size . $important ); ?>;
@@ -164,7 +164,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 		font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
 	<?php } ?>
 	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // WPCS: XSS ok. ?>;
+		font-family:<?php echo FrmAppHelper::kses( $font . $important ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	<?php } ?>
 	<?php if ( ! empty( $check_font_size ) ) { ?>
 		font-size:<?php echo esc_html( $check_font_size . $important ); ?>;
@@ -238,7 +238,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn {
 	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
 	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+		font-family:<?php echo FrmAppHelper::kses( $font ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	<?php } ?>
 	font-size:<?php echo esc_html( $submit_font_size . $important ); ?>;
 	height:<?php echo esc_html( $submit_height . $important ); ?>;
@@ -345,7 +345,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_submit.frm_inline_submit::before {
 	content:"before";
 	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+		font-family:<?php echo FrmAppHelper::kses( $font ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	<?php } ?>
 	font-size:<?php echo esc_html( $font_size . $important ); ?>;
 	color:<?php echo esc_html( $label_color . $important ); ?>;
@@ -366,7 +366,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> #frm_field_cptch_number_container{
 	<?php if ( ! empty( $font ) ) { ?>
-		font-family:<?php echo FrmAppHelper::kses( $font ); // WPCS: XSS ok. ?>;
+		font-family:<?php echo FrmAppHelper::kses( $font ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	<?php } ?>
 	font-size:<?php echo esc_html( $font_size . $important ); ?>;
 	color:<?php echo esc_html( $label_color . $important ); ?>;

@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.0
-Tested up to: 5.8.1
+Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 5.0.11
+Stable tag: 5.0.13.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -27,7 +27,7 @@ Plus, we have optimized Formidable for speed and maximum server performance. We 
 
 You can start with our pre-built templates or create totally custom forms from scratch. All with an easy-to-use drag & drop form maker interface.
 
-https://www.youtube.com/watch?v=-eGuL_OWHw4&rel=0
+https://youtu.be/7X2BqhRsXcg
 
 Let’s take a look at all the powerful features for making an amazing lead form, survey form, poll, subscription form, request a quote form, donation form, user registration form, or payment form.
 
@@ -438,28 +438,30 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.13.1 =
+- Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
+
+= 5.0.13 =
+- FrmAppHelper::jquery_ui_base_url and an unused dropdown view file have been deprecated.
+- Security: Back end form settings will now always filter on render when the DISALLOW_UNFILTERED_HTML constant is on.
+- Security: Added additional sanitizing when saving a custom style, added additional filtering to icons, and improved how some content is escaped.
+- New: Added a new frm_disallow_unfiltered_html filter that will always filter back form settings without having to set the DISALLOW_UNFILTERED_HTML constant.
+- New: A name field will always be used when sending comment author information to Akismet if one is set to avoid false positives that could cause another field value to possibly get sent instead.
+- Fix: When importing a grid or table view, [/if x] and [/foreach x] shortcodes were not properly being replaced.
+- Fix: Too much was being stripped from custom submit button HTML for underpriveleged users or when disallowing unfiltered html.
+- Fix: Too many calls were being made to Akismet for forms with multiple pages.
+- Fix: A conflict with WooCommerce was sometimes triggering an error when checking for addon updates.
+- Fix: The comment author information sent to Akismet was not getting set if the author information was set in a name field.
+
+= 5.0.12 =
+- New: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
+- Fix: Many Formidable addons were not properly displaying update details from the plugins page.
+- Fix: Fewer API requests will be sent to Formidable when inbox notice cached results expire and when a request results in an error.
+- Fix: Added additional validation to CSV export so it fails more gracefully when the form does not exist.
+- Fix: The style setting for Margin under Field Settings as been renamed to Bottom Margin to avoid confusion as it only updates one margin value.
+
 = 5.0.11 =
 - Fix: Required credit cards were causing an issue with JavaScript validation.
 - Fix: Empty required appointment fields were not properly validating with JavaScript.
-
-= 5.0.10 =
-- Security: Improved how data is sanitized when previewing in the style manager.
-- Fix: Prevent a warning when trying to get inbox messages from the API when no messages are being returned.
-- Fix: The frm_alignright class was being stripped in the form builder, preventing the right alignment from appearing in the back end.
-- Fix: The frm_alignright class was causing fields to shift to the wrong row. The style definition has been updated so it will stay in the same row as other fields.
-- Fix: Required messages were not properly appearing for empty radio buttons when an other option was selected but left empty and JavaScript validation was on.
-
-= 5.0.09 =
-- The option to check entries for spam using JavaScript is now on by default for all new forms. We recommend turning this on for older forms that may be receiving spam entries, especially forms that include file uploads. After turning this feature on, make sure to also clear any caching plugins to avoid issues with cached pages with missing tokens.
-- New: Pre-determined option data will no longer be sent to Akismet to help reduce the number of false positive results.
-- Fix: Significantly reduced the amount of memory required to load settings for websites with fewer than 50 pages with a lot of data.
-- Fix: Author email, url, or name are no longer included in comment info when sending data to Akismet so that duplicate information is not sent.
-- Fix: Field groups could not be moved because of a missing class on the drag handle.
-
-= 5.0.08 =
-- Deprecated: Calls to FrmFormsController::preview will no longer try to load WordPress if it is not already initialized. This could cause issues for users that still use old preview links (see https://formidableforms.com/knowledgebase/php-examples/#kb-use-the-old-preview-links for an example).
-- Security: Unsafe HTML will now be stripped from global message defaults, whitelabel settings, and when importing with XML if the user saving HTML does not have the unfiltered_html permission or if the DISALLOW_UNFILTERED_HTML constant is set.
-- Updated Bootstrap used in back end to version 3.4.1.
-- A few images that were being loaded from S3 and CDN urls are now included in the plugin instead.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

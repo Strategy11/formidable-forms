@@ -339,13 +339,12 @@ class FrmFieldCombo extends FrmFieldType {
 	protected function print_input_atts( $args ) {
 		$field     = $args['field'];
 		$sub_field = $args['sub_field'];
-		$atts      = array();
 
 		// Placeholder.
 		if ( in_array( 'placeholder', $sub_field['options'], true ) ) {
 			$placeholders = FrmField::get_option( $field, 'placeholder' );
 			if ( ! empty( $placeholders[ $sub_field['name'] ] ) ) {
-				$atts[] = 'placeholder="' . esc_attr( $placeholders[ $sub_field['name'] ] ) . '"';
+				$field['placeholder'] = $placeholders[ $sub_field['name'] ];
 			}
 		}
 
@@ -370,11 +369,9 @@ class FrmFieldCombo extends FrmFieldType {
 		// Print custom attributes.
 		if ( ! empty( $sub_field['atts'] ) && is_array( $sub_field['atts'] ) ) {
 			foreach ( $sub_field['atts'] as $att_name => $att_value ) {
-				$atts[] = esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '"';
+				echo esc_attr( trim( $att_name ) ) . '="' . esc_attr( trim( $att_value ) ) . '" ';
 			}
 		}
-
-		echo implode( ' ', $atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
