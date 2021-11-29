@@ -52,7 +52,7 @@ class FrmShortcodeHelper {
 				'foreach'           => false,
 			)
 		);
-		if ( ( $args['conditional'] || $args['foreach'] || $args['else'] ) && ! $args['conditional_check'] ) {
+		if ( ! $args['conditional_check'] && ( $args['conditional'] || $args['foreach'] || $args['else'] ) ) {
 			$args['conditional_check'] = true;
 		}
 
