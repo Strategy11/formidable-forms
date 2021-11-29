@@ -179,21 +179,11 @@ class FrmFieldsController {
 	 * @since 3.0
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
-		$li_classes = $field_info->form_builder_classes( $display['type'] );
-		$classes    = isset( $field['classes'] ) ? $field['classes'] : '';
-
-		// Exclude alignright for now since we aren't using widths.
-		$classes = str_replace( ' frm_alignright ', ' ', $classes );
-		$classes = trim( $classes );
-
-		if ( 'frm_alignright' === $classes ) {
-			$classes = '';
-		}
-
+		$li_classes  = $field_info->form_builder_classes( $display['type'] );
 		$li_classes .= ' frm_form_field frmstart ';
 
-		if ( $classes ) {
-			$li_classes .= $classes . ' ';
+		if ( isset( $field['classes'] ) ) {
+			$li_classes .= trim( $field['classes'] ) . ' ';
 		}
 
 		$li_classes .= 'frmend';
@@ -454,7 +444,7 @@ class FrmFieldsController {
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
 		if ( $echo ) {
-			echo $add_html; // WPCS: XSS ok.
+			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		return $add_html;

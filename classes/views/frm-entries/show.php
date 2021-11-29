@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</span>
 					</h3>
 					<?php
-					echo FrmEntriesController::show_entry_shortcode( // WPCS: XSS ok.
+					echo FrmEntriesController::show_entry_shortcode( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						array(
 							'id'             => $entry->id,
 							'entry'          => $entry,

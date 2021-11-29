@@ -5,6 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmXMLHelper {
 
+	/**
+	 * @var bool $installing_template true if importing an XML from API, false if importing an XML file manually.
+	 */
+	private static $installing_template = false;
+
 	public static function get_xml_values( $opt, $padding ) {
 		if ( is_array( $opt ) ) {
 			foreach ( $opt as $ok => $ov ) {
@@ -18,7 +23,7 @@ class FrmXMLHelper {
 				echo '</' . esc_html( $tag ) . '>';
 			}
 		} else {
-			echo self::cdata( $opt ); // WPCS: XSS ok.
+			echo self::cdata( $opt ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -56,14 +61,18 @@ class FrmXMLHelper {
 	 * Add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
 	 *
 	 * @since 3.06
+	 *
+	 * @param object $xml
+	 * @param bool   $installing_template
 	 * @return array The number of items imported
 	 */
-	public static function import_xml_now( $xml ) {
+	public static function import_xml_now( $xml, $installing_template = false ) {
 		if ( ! defined( 'WP_IMPORTING' ) ) {
 			define( 'WP_IMPORTING', true );
 		}
 
-		$imported = self::pre_import_data();
+		self::$installing_template = $installing_template;
+		$imported                  = self::pre_import_data();
 
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
 			// Grab cats, tags, and terms, or forms or posts.
@@ -235,6 +244,11 @@ class FrmXMLHelper {
 		}
 
 		$form['options'] = FrmAppHelper::maybe_json_decode( $form['options'] );
+
+		if ( self::$installing_template ) {
+			// Templates don't necessarily have antispam on, but we want our templates to all have antispam on by default.
+			$form['options']['antispam'] = 1;
+		}
 
 		return $form;
 	}

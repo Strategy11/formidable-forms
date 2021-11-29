@@ -16,7 +16,7 @@ if ( isset( $message ) && $message != '' ) {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
 
 		// we need to allow scripts here for javascript in the success message
-		echo $message; // WPCS: XSS ok.
+		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 

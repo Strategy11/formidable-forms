@@ -267,6 +267,7 @@ class FrmStylesController {
 
 	private static function manage_styles() {
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_manage_style', '', 'sanitize_text_field' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! $_POST || ! isset( $_POST['style'] ) || ! wp_verify_nonce( $style_nonce, 'frm_manage_style_nonce' ) ) {
 			return self::manage();
 		}
