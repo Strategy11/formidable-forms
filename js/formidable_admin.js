@@ -5986,6 +5986,61 @@ function frmAdminBuildJS() {
 
 		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
+
+		resetTinyMce();
+	}
+
+	function resetTinyMce() {
+		jQuery( '.frm-single-settings .wp-editor-area' ).each( function() {
+			var isVisible = 'undefined' !== typeof tinyMCE.editors[ this.id ] && ! tinyMCE.editors[ this.id ].isHidden();
+			if ( isVisible ) {
+				removeRichText( this.id );
+				initRichText( this.id );
+			}
+		});
+	}
+
+	function removeRichText( id ) {
+		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, id );
+	}
+
+	function initRichText( id ) {
+		var key = Object.keys( tinyMCEPreInit.mceInit )[0],
+			orgSettings = tinyMCEPreInit.mceInit[ key ],
+			newValues = {
+				selector: '#' + id,
+				body_class: orgSettings.body_class.replace( key, id ),
+				setup: setupTinyMceEventHandlers
+			},
+			newSettings = Object.assign(
+				{}, orgSettings, newValues
+			);
+		tinymce.init( newSettings );
+	}
+
+	function setupTinyMceEventHandlers( editor ) {
+		editor.on( 'Change', function() {
+			handleTinyMceChange( editor );
+		});
+	}
+
+	function handleTinyMceChange( editor ) {
+		if ( isTinyMceActive() && ! tinyMCE.activeEditor.isHidden() ) {
+			editor.targetElm.value = editor.getContent();
+			jQuery( editor.targetElm ).trigger( 'change' );
+		}
+	}
+
+	function isTinyMceActive() {
+		var activeSettings, wrapper;
+
+		activeSettings = document.querySelector( '.frm-single-settings:not(.frm_hidden)' );
+		if ( ! activeSettings ) {
+			return false;
+		}
+
+		wrapper = activeSettings.querySelector( '.wp-editor-wrap' );
+		return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
 	}
 
 	/**

@@ -651,9 +651,11 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function insert_form_popup() {
-		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
-		if ( ! in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ) ) ) {
+		if ( ! self::should_insert_form_popup() ) {
 			return;
 		}
 
@@ -665,10 +667,20 @@ class FrmFormsController {
 				'label' => __( 'Insert a Form', 'formidable' ),
 			),
 		);
-
 		$shortcodes = apply_filters( 'frm_popup_shortcodes', $shortcodes );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php';
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function should_insert_form_popup() {
+		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
+		if ( 'admin.php' === $page && FrmAppHelper::is_formidable_admin( 'edit' ) ) {
+			return true;
+		}
+		return in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ), true );
 	}
 
 	public static function get_shortcode_opts() {
