@@ -673,6 +673,10 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Check the page being loaded, determine if this is a page that should include the form popup.
+	 *
+	 * @since x.x
+	 *
 	 * @return bool
 	 */
 	private static function should_insert_form_popup() {
