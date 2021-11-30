@@ -6015,6 +6015,10 @@ function frmAdminBuildJS() {
 			newSettings = Object.assign(
 				{}, orgSettings, newValues
 			);
+		if ( 'undefined' !== typeof newSettings.toolbar1 ) {
+			// the link option does not work in the modal, so exclude it.
+			newSettings.toolbar1 = newSettings.toolbar1.replace( ',wp_more', '' );
+		}
 		tinymce.init( newSettings );
 	}
 
