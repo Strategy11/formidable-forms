@@ -670,6 +670,16 @@ class FrmFormsController {
 		$shortcodes = apply_filters( 'frm_popup_shortcodes', $shortcodes );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php';
+
+		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
+			// initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
+			require ABSPATH . WPINC . '/class-wp-editor.php';
+			?>
+			<div class="frm_hidden">
+				<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
+			</div>
+			<?php
+		}
 	}
 
 	/**
@@ -680,10 +690,10 @@ class FrmFormsController {
 	 * @return bool
 	 */
 	private static function should_insert_form_popup() {
-		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
-		if ( 'admin.php' === $page && FrmAppHelper::is_formidable_admin( 'edit' ) ) {
+		if ( FrmAppHelper::is_form_builder_page() ) {
 			return true;
 		}
+		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
 		return in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ), true );
 	}
 
