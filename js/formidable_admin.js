@@ -6018,12 +6018,14 @@ function frmAdminBuildJS() {
 			.on(
 				'click',
 				function() {
+					var wrap;
+
 					if ( ! hasResetTinyMce ) {
 						resetTinyMce();
 						hasResetTinyMce = true;
 					}
 
-					var wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
+					wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
 					wrap.classList.add( 'tmce-active' );
 					wrap.classList.remove( 'html-active' );
 				}
