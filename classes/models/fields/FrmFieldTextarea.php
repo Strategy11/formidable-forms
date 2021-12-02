@@ -34,14 +34,13 @@ class FrmFieldTextarea extends FrmFieldType {
 		$size = FrmField::get_option( $this->field, 'size' );
 		$max  = FrmField::get_option( $this->field, 'max' );
 
-		if ( is_numeric( $size ) ) {
-			$size .= 'px';
-		}
-
-		$style = $size ? 'width:' . $size . ';' : false;
-
 		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" rows="' . esc_attr( $max ) . '" id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value"';
-		if ( false !== $style ) {
+
+		if ( $size ) {
+			if ( is_numeric( $size ) ) {
+				$size .= 'px';
+			}
+			$style = 'width:' . $size . ';';
 			echo ' style="' . esc_attr( $style ) . '"';
 		}
 
