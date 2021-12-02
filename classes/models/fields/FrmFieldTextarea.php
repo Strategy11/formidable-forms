@@ -31,18 +31,23 @@ class FrmFieldTextarea extends FrmFieldType {
 	 * @param string $name
 	 */
 	public function show_on_form_builder( $name = '' ) {
-		$size      = FrmField::get_option( $this->field, 'size' );
-		$size_html = $size ? ' style="width:' . esc_attr( $size . ( is_numeric( $size ) ? 'px' : '' ) ) . '";' : '';
+		$size = FrmField::get_option( $this->field, 'size' );
+		$max  = FrmField::get_option( $this->field, 'max' );
 
-		$max           = FrmField::get_option( $this->field, 'max' );
-		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) );
+		if ( is_numeric( $size ) ) {
+			$size .= 'px';
+		}
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" ' . // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			$size_html // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			. ' rows="' . esc_attr( $max ) . '" ' .
-			'id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value">' .
-			$default_value // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			. '</textarea>';
+		$style = $size ? 'width:' . $size . ';' : false;
+
+		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" rows="' . esc_attr( $max ) . '" id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value"';
+		if ( false !== $style ) {
+			echo ' style="' . esc_attr( $style ) . '"';
+		}
+
+		echo '>';
+		echo FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</textarea>';
 	}
 
 	protected function prepare_display_value( $value, $atts ) {
