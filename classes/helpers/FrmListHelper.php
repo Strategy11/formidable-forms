@@ -391,8 +391,6 @@ class FrmListHelper {
 		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
-			echo "\t<option ";
-
 			$params = array(
 				'value' => $name,
 			);
@@ -400,6 +398,7 @@ class FrmListHelper {
 				$params['class'] = 'hide-if-no-js';
 			}
 
+			echo "\t<option ";
 			FrmAppHelper::array_to_html_params( $params, true );
 			echo '>' . esc_html( $title ) . '</option>' . "\n";
 		}
