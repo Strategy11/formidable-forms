@@ -191,7 +191,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		parent::pagination( $which );
 
-		if ( 'top' == $which ) {
+		if ( 'top' === $which ) {
 			$this->view_switcher( $mode );
 		}
 	}
