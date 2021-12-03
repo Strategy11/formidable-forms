@@ -391,9 +391,17 @@ class FrmListHelper {
 		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
-			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
+			echo "\t<option ";
 
-			echo "\t<option value='" . esc_attr( $name ) . "'$class>" . esc_html( $title ) . "</option>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			$params = array(
+				'value' => $name,
+			);
+			if ( 'edit' === $name ) {
+				$params['class'] = 'hide-if-no-js';
+			}
+
+			FrmAppHelper::array_to_html_params( $params, true );
+			echo '>' . esc_html( $title ) . '</option>' . "\n";
 		}
 
 		echo "</select>\n";
@@ -980,7 +988,11 @@ class FrmListHelper {
 	 * @access public
 	 */
 	public function display() {
-		$singular = $this->_args['singular'];
+		$singular     = $this->_args['singular'];
+		$tbody_params = array();
+		if ( $singular ) {
+			$tbody_params['data-wp-lists'] = 'list:' . $singular;
+		}
 
 		$this->display_tablenav( 'top' );
 		?>
@@ -993,7 +1005,7 @@ class FrmListHelper {
 			</thead>
 			<?php } ?>
 
-			<tbody id="the-list"<?php echo( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<tbody id="the-list"<?php FrmAppHelper::array_to_html_params( $tbody_params, true ); ?>>
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
@@ -1128,13 +1140,14 @@ class FrmListHelper {
 				$classes .= ' hidden';
 			}
 
-			// Comments column uses HTML in the display name with screen reader text.
-			// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
-			$data = 'data-colname="' . esc_attr( $column_display_name ) . '"';
+			$params = array(
+				'class'        => $classes,
+				// Comments column uses HTML in the display name with screen reader text.
+				// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
+				'data-colname' => $column_display_name,
+			);
 
-			$attributes = 'class="' . esc_attr( $classes ) . '" ' . $data;
-
-			if ( 'cb' == $column_name ) {
+			if ( 'cb' === $column_name ) {
 				echo '<th scope="row" class="check-column"></th>';
 			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
 				echo call_user_func( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1144,13 +1157,15 @@ class FrmListHelper {
 					$data,
 					$primary
 				);
-			} elseif ( method_exists( $this, 'column_' . $column_name ) ) {
-				echo "<td $attributes>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo '</td>';
 			} else {
-				echo "<td $attributes>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<td ';
+				FrmAppHelper::array_to_html_params( $params, true );
+				echo '>';
+
+				if ( method_exists( $this, 'column_' . $column_name ) ) {
+					echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+
 				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			}
