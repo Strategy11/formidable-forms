@@ -109,19 +109,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
-<table class="form-table">
-	<tr>
-		<td colspan="2">
-			<label for="no_save" class="frm_inline_block">
-				<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
-				<?php esc_html_e( 'Do not store entries submitted from this form', 'formidable' ); ?>
-			</label>
-		</td>
-	</tr>
-	<?php is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values ); ?>
-</table>
+<p class="frm8 frm_form_field">
+	<label for="no_save" class="frm_inline_block">
+		<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
+		<?php esc_html_e( 'Do not store entries submitted from this form', 'formidable' ); ?>
+	</label>
+</p>
 
-<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
+<?php
+is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values );
+FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
+?>
 
 <!--AJAX Section-->
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
@@ -154,7 +152,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label for="js_validate" class="frm_inline_block">
 				<input type="checkbox" name="options[js_validate]" id="js_validate" value="1" <?php checked( $values['js_validate'], 1 ); ?> />
 				<?php esc_html_e( 'Validate this form with javascript', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ); ?>"></span>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ); ?>" data-container="body"></span>
 			</label>
 		</td>
 	</tr>
