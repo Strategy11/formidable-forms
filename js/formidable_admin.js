@@ -5999,19 +5999,25 @@ function frmAdminBuildJS() {
 
 	function setUpTinyMceVisualButtonListener( fieldSettings ) {
 		var editor = fieldSettings.querySelector( '.wp-editor-area' );
-		jQuery( document ).on(
-			'click', '#' + editor.id + '-html',
-			function() {
-				editor.style.visibility = 'visible';
-				initQuickTagsButtons( fieldSettings );
-			}
-		);
+		if ( editor ) {
+			jQuery( document ).on(
+				'click', '#' + editor.id + '-html',
+				function() {
+					editor.style.visibility = 'visible';
+					initQuickTagsButtons( fieldSettings );
+				}
+			);
+		}
 	}
 
 	function setUpTinyMceHtmlButtonListener( fieldSettings ) {
 		var editor, hasResetTinyMce;
 
 		editor = fieldSettings.querySelector( '.wp-editor-area' );
+		if ( ! editor ) {
+			return;
+		}
+
 		hasResetTinyMce = false;
 
 		jQuery( '#' + editor.id + '-tmce' )
@@ -6037,7 +6043,7 @@ function frmAdminBuildJS() {
 
 		editor = fieldSettings.querySelector( '.wp-editor-area' );
 
-		if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+		if ( ! editor || 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
 			return;
 		}
 
