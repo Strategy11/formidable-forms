@@ -18,6 +18,8 @@ class FrmCSVExportHelper {
 	protected static $entry;
 	protected static $has_parent_id;
 	protected static $fields_by_repeater_id;
+	protected static $mode;
+	protected static $fp;
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
@@ -26,6 +28,10 @@ class FrmCSVExportHelper {
 		return $formats;
 	}
 
+	/**
+	 * @param array $atts
+	 * @return string||false|void returns a string file path or false if $atts['mode'] is set to 'file'.
+	 */
 	public static function generate_csv( $atts ) {
 		global $frm_vars;
 		$frm_vars['prevent_caching'] = true;
@@ -35,10 +41,21 @@ class FrmCSVExportHelper {
 		self::set_class_paramters();
 		self::set_has_parent_id( $atts['form'] );
 
+		self::$mode = ! empty( $atts['mode'] ) && 'file' === $atts['mode'] ? 'file' : 'echo';
+
 		$filename = apply_filters( 'frm_csv_filename', gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
 		unset( $atts['form'], $atts['form_cols'] );
 
-		self::print_file_headers( $filename );
+		if ( 'file' === self::$mode ) {
+			$filepath = get_temp_dir() . $filename;
+			self::$fp = @fopen( $filepath, 'w' );
+			if ( ! self::$fp ) {
+				return false;
+			}
+		} elseif ( 'echo' === self::$mode ) {
+			self::print_file_headers( $filename );
+		}
+
 		unset( $filename );
 
 		$comment_count       = FrmDb::get_count(
@@ -61,6 +78,11 @@ class FrmCSVExportHelper {
 		// fetch 20 posts at a time rather than loading the entire table into memory
 		while ( $next_set = array_splice( $atts['entry_ids'], 0, 20 ) ) {
 			self::prepare_next_csv_rows( $next_set );
+		}
+
+		if ( 'file' === self::$mode ) {
+			fclose( self::$fp );
+			return $filepath;
 		}
 	}
 
@@ -474,7 +496,8 @@ class FrmCSVExportHelper {
 	}
 
 	private static function print_csv_row( $rows ) {
-		$sep = '';
+		$sep  = '';
+		$echo = 'echo' === self::$mode;
 
 		foreach ( self::$headings as $k => $heading ) {
 			if ( isset( $rows[ $k ] ) ) {
@@ -505,12 +528,20 @@ class FrmCSVExportHelper {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 
-			echo $sep . '"' . $val . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			if ( $echo ) {
+				echo $sep . '"' . $val . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			} else {
+				fwrite( self::$fp, $sep . '"' . $val . '"' );
+			}
 			$sep = self::$column_separator;
 
 			unset( $k, $row );
 		}
-		echo "\n";
+		if ( $echo ) {
+			echo "\n";
+		} else {
+			fwrite( self::$fp, "\n" );
+		}
 	}
 
 	public static function encode_value( $line ) {
