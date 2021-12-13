@@ -694,4 +694,28 @@ class FrmEntriesHelper {
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
 	}
+
+	/**
+	 * @since 5.0.15
+	 *
+	 * @param string|int $entry_id
+	 * @return void
+	 */
+	public static function maybe_render_captcha_score( $entry_id ) {
+		$query                 = array(
+			'item_id'  => (int) $entry_id,
+			'field_id' => 0,
+		);
+		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
+		foreach ( $metas_without_a_field as $meta ) {
+			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
+				echo '<div class="misc-pub-section">';
+				FrmAppHelper::icon_by_class( 'frm_icon_font frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+				echo ' ' . esc_html__( 'reCaptcha Score', 'formidable' ) . ': ';
+				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
+				echo '</div>';
+				return;
+			}
+		}
+	}
 }
