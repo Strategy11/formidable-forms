@@ -711,7 +711,7 @@ class FrmEntriesHelper {
 			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
 				echo '<div class="misc-pub-section">';
 				FrmAppHelper::icon_by_class( 'frm_icon_font frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
-				echo ' ' . esc_html__( 'reCaptcha Score', 'formidable' ) . ': ';
+				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
 				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
 				echo '</div>';
 				return;
