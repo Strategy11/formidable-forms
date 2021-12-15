@@ -8438,6 +8438,13 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function handleCaptchaTypeChange( e ) {
+		const thresholdContainer = document.getElementById( 'frm_captcha_threshold_container' );
+		if ( thresholdContainer ) {
+			thresholdContainer.classList.toggle( 'frm_hidden', 'v3' !== e.target.value );
+		}
+	}
+
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
 		var id = this.getAttribute( 'data-id' );
@@ -9152,6 +9159,9 @@ function frmAdminBuildJS() {
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
 				e.stopPropagation();
@@ -9563,6 +9573,11 @@ function frmAdminBuildJS() {
 				});
 				jQuery( '.settings-lite-cta' ).remove();
 			});
+
+			const captchaType = document.getElementById( 'frm_re_type' );
+			if ( captchaType ) {
+				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
+			}
 		},
 
 		exportInit: function() {
