@@ -613,7 +613,7 @@ class FrmXMLController {
 	 * Get the fields that should be included in the CSV export
 	 *
 	 * @since 2.0.19
-	 * @since x.x function went from private to public.
+	 * @since 5.0.16 function went from private to public.
 	 *
 	 * @param int $form_id
 	 * @param object $form
