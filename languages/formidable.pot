@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-12-15T14:27:46+00:00\n"
+"POT-Creation-Date: 2021-12-15T14:35:50+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -5619,14 +5619,6 @@ msgstr ""
 
 #: classes/views/frm-settings/recaptcha.php:68
 msgid "A score of 0 is likely to be a bot and a score of 1 is likely not a bot. Setting a lower threshold will allow more bots, but it will also stop fewer real users."
-msgstr ""
-
-#: classes/views/frm-settings/recaptcha.php:70
-msgid "0"
-msgstr ""
-
-#: classes/views/frm-settings/recaptcha.php:72
-msgid "1"
 msgstr ""
 
 #: classes/views/frm-settings/recaptcha.php:79
