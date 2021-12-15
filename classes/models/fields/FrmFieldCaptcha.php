@@ -126,12 +126,16 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $frm_settings->re_multi;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function captcha_size() {
-		// for reverse compatibility
 		$frm_settings = FrmAppHelper::get_settings();
-		$captcha_size = ( $this->field['captcha_size'] == 'default' ) ? 'normal' : $this->field['captcha_size'];
-
-		return ( $frm_settings->re_type == 'invisible' ) ? 'invisible' : $captcha_size;
+		if ( in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
+			return 'invisible';
+		}
+		// for reverse compatibility
+		return $this->field['captcha_size'] === 'default' ? 'normal' : $this->field['captcha_size'];
 	}
 
 	/**
@@ -145,17 +149,50 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$resp         = $this->send_api_check( $frm_settings );
 		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
+		if ( is_wp_error( $resp ) ) {
+			$error_string                     = $resp->get_error_message();
+			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your recaptcha', 'formidable' );
+			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
+			return $errors;
+		}
+
+		if ( ! is_array( $response ) ) {
+			return $errors;
+		}
+
+		if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
+			$threshold = floatval( $frm_settings->re_threshold );
+			$score     = floatval( $response['score'] );
+
+			$this->set_score( $score );
+
+			if ( $score < $threshold ) {
+				$response['success'] = false;
+			}
+		}
+
 		if ( isset( $response['success'] ) && ! $response['success'] ) {
 			// What happens when the CAPTCHA was entered incorrectly
 			$invalid_message                 = FrmField::get_option( $this->field, 'invalid' );
 			$errors[ 'field' . $args['id'] ] = ( $invalid_message == '' ? $frm_settings->re_msg : $invalid_message );
-		} elseif ( is_wp_error( $resp ) ) {
-			$error_string                     = $resp->get_error_message();
-			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your recaptcha', 'formidable' );
-			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * @param float $score
+	 * @return void
+	 */
+	private function set_score( $score ) {
+		global $frm_vars;
+		if ( ! isset( $frm_vars['captcha_scores'] ) ) {
+			$frm_vars['captcha_scores'] = array();
+		}
+		$form_id = is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'];
+		if ( ! isset( $frm_vars['captcha_scores'][ $form_id ] ) ) {
+			$frm_vars['captcha_scores'][ $form_id ] = $score;
+		}
 	}
 
 	/**
@@ -167,6 +204,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return array();
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
 			// There was no captcha submitted.
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
@@ -185,7 +223,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function should_validate() {
-		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // WPCS: CSRF ok.
+		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
 			return false;
 		}

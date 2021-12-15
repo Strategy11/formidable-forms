@@ -16,9 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 			)
 		);
+		$e_args  = array(
+			'textarea_name' => 'field_options[description_' . absint( $field['id'] ) . ']',
+			'textarea_rows' => 8,
+		);
+		$html_id = 'frm_description_' . absint( $field['id'] );
+		wp_editor( $field['description'], $html_id, $e_args );
 		?>
-		<textarea name="field_options[description_<?php echo absint( $field['id'] ); ?>]" id="frm_description_<?php echo esc_attr( $field['id'] ); ?>" rows="8"><?php
-		echo FrmAppHelper::esc_textarea( $field['description'] ); // WPCS: XSS ok.
-		?></textarea>
 	</span>
 </p>

@@ -54,7 +54,7 @@ class FrmSettingsController {
 			'recaptcha' => array(
 				'class'    => __CLASS__,
 				'function' => 'recaptcha_settings',
-				'name'     => __( 'reCaptcha', 'formidable' ),
+				'name'     => __( 'reCAPTCHA', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'white_label' => array(

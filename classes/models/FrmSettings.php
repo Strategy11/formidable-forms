@@ -206,6 +206,10 @@ class FrmSettings {
 		if ( ! isset( $this->re_type ) ) {
 			$this->re_type = '';
 		}
+
+		if ( ! isset( $this->re_threshold ) ) {
+			$this->re_threshold = .5;
+		}
 	}
 
 	/**
@@ -262,11 +266,12 @@ class FrmSettings {
 	}
 
 	private function update_settings( $params ) {
-		$this->pubkey     = trim( $params['frm_pubkey'] );
-		$this->privkey    = $params['frm_privkey'];
-		$this->re_type    = $params['frm_re_type'];
-		$this->re_lang    = $params['frm_re_lang'];
-		$this->load_style = $params['frm_load_style'];
+		$this->pubkey       = trim( $params['frm_pubkey'] );
+		$this->privkey      = $params['frm_privkey'];
+		$this->re_type      = $params['frm_re_type'];
+		$this->re_lang      = $params['frm_re_lang'];
+		$this->re_threshold = floatval( $params['frm_re_threshold'] );
+		$this->load_style   = $params['frm_load_style'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {

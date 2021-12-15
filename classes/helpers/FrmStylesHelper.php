@@ -273,6 +273,15 @@ class FrmStylesHelper {
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
 
+		if ( 0 === strpos( $hex, 'rgba(' ) ) {
+			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
+			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
+			$r                      = max( 0, min( 255, $r + $steps ) );
+			$g                      = max( 0, min( 255, $g + $steps ) );
+			$b                      = max( 0, min( 255, $b + $steps ) );
+			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . ')';
+		}
+
 		// Normalize into a six character long hex string
 		$hex = str_replace( '#', '', $hex );
 		if ( strlen( $hex ) == 3 ) {
@@ -321,32 +330,36 @@ class FrmStylesHelper {
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show ) {
-				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // WPCS: XSS ok.
+				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 	}
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param WP_Post $style
+	 * @return array
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
 
-			if ( isset( $_POST['frm_style_setting'] ) ) {
+			$frm_style = new FrmStyle();
+			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 				// Sanitizing is done later.
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$posted = wp_unslash( $_POST['frm_style_setting'] );
+				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
-					$settings = $posted['frm_style_setting']['post_content'];
+					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
-					$settings = $posted['post_content'];
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
-				$settings = $_GET;
+				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
@@ -361,7 +374,7 @@ class FrmStylesHelper {
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
 		}
 
-		$settings['style_class']   .= 'with_frm_style';
+		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
 		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
 
@@ -464,7 +477,7 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}

@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // WPCS: XSS ok. ?>
+		<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 			<?php echo esc_html( $field['required_indicator'] ); ?>
 		</span>
@@ -50,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ), true ) ) { ?>
 		<div class="frm_description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // WPCS: XSS ok. ?>
+			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 	<?php } ?>
 </div>
@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ); ?>]" placeholder="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
 		</div>
 		<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
-			echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // WPCS: XSS ok.
+			echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?></div>
 </div>
 </div>

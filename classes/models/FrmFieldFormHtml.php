@@ -153,7 +153,7 @@ class FrmFieldFormHtml {
 		$this->html = str_replace( '[key]', $this->field_obj->get_field_column( 'field_key' ), $this->html );
 
 		//replace [field_name]
-		$this->html = str_replace( '[field_name]', $this->field_obj->get_field_column( 'name' ), $this->html );
+		$this->html = str_replace( '[field_name]', FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'name' ) ), $this->html );
 	}
 
 	/**
@@ -183,7 +183,7 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_description_shortcode() {
 		$this->maybe_add_description_id();
-		$description = $this->field_obj->get_field_column( 'description' );
+		$description = FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'description' ) );
 		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
 	}
 

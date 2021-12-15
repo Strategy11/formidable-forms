@@ -56,9 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span class="frm-outer-circle">
-								<span class="frm-inner-circle" <?php
-									echo FrmAppHelper::array_to_html_params( $icon_atts ); // WPCS: XSS ok.
-								?>>
+								<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
 								<?php
 								$icon_atts = array();
 								if ( isset( $group['color'] ) ) {

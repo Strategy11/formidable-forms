@@ -12,7 +12,7 @@ class FrmInbox extends FrmFormApi {
 
 	private $option = 'frm_inbox';
 
-	private $messages = false;
+	private static $messages = false;
 
 	/**
 	 * @param array
@@ -21,7 +21,10 @@ class FrmInbox extends FrmFormApi {
 
 	public function __construct( $for_parent = null ) {
 		$this->set_cache_key();
-		$this->set_messages();
+
+		if ( false === self::$messages ) {
+			$this->set_messages();
+		}
 	}
 
 	/**
@@ -42,7 +45,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05
 	 */
 	public function get_messages( $filter = false ) {
-		$messages = $this->messages;
+		$messages = self::$messages;
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
@@ -53,9 +56,9 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05
 	 */
 	public function set_messages() {
-		$this->messages = get_option( $this->option );
-		if ( empty( $this->messages ) ) {
-			$this->messages = array();
+		self::$messages = get_option( $this->option );
+		if ( ! is_array( self::$messages ) ) {
+			self::$messages = array();
 		}
 
 		$this->add_api_messages();
@@ -63,7 +66,7 @@ class FrmInbox extends FrmFormApi {
 		/**
 		 * Messages are in an array.
 		 */
-		$this->messages = apply_filters( 'frm_inbox', $this->messages );
+		self::$messages = apply_filters( 'frm_inbox', self::$messages );
 	}
 
 	/**
@@ -84,12 +87,13 @@ class FrmInbox extends FrmFormApi {
 	 * @param array|string $message
 	 */
 	public function add_message( $message ) {
-		if ( ! is_array( $message ) ) {
+		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
 			// if the API response is invalid, $message may not be an array.
+			// if there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
-		if ( isset( $this->messages[ $message['key'] ] ) && ! isset( $message['force'] ) ) {
+		if ( isset( self::$messages[ $message['key'] ] ) && ! isset( $message['force'] ) ) {
 			// Don't replace messages unless required.
 			return;
 		}
@@ -98,13 +102,13 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
-		if ( isset( $this->messages[ $message['key'] ] ) ) {
+		if ( isset( self::$messages[ $message['key'] ] ) ) {
 			// Move up and mark as new.
-			unset( $this->messages[ $message['key'] ] );
+			unset( self::$messages[ $message['key'] ] );
 		}
 
 		$this->fill_message( $message );
-		$this->messages[ $message['key'] ] = $message;
+		self::$messages[ $message['key'] ] = $message;
 
 		$this->update_list();
 
@@ -130,13 +134,13 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	private function clean_messages() {
-		$removed  = false;
-		foreach ( $this->messages as $t => $message ) {
-			$read    = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
+		$removed = false;
+		foreach ( self::$messages as $t => $message ) {
+			$read      = isset( $message['read'] ) && ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = isset( $message['dismissed'] ) && ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
-			$expired = $this->is_expired( $message );
+			$expired   = $this->is_expired( $message );
 			if ( $read || $expired || $dismissed ) {
-				unset( $this->messages[ $t ] );
+				unset( self::$messages[ $t ] );
 				$removed = true;
 			}
 		}
@@ -192,14 +196,14 @@ class FrmInbox extends FrmFormApi {
 	 * @param string $key
 	 */
 	public function mark_read( $key ) {
-		if ( ! $key || ! isset( $this->messages[ $key ] ) ) {
+		if ( ! $key || ! isset( self::$messages[ $key ] ) ) {
 			return;
 		}
 
-		if ( ! isset( $this->messages[ $key ]['read'] ) ) {
-			$this->messages[ $key ]['read'] = array();
+		if ( ! isset( self::$messages[ $key ]['read'] ) ) {
+			self::$messages[ $key ]['read'] = array();
 		}
-		$this->messages[ $key ]['read'][ get_current_user_id() ] = time();
+		self::$messages[ $key ]['read'][ get_current_user_id() ] = time();
 
 		$this->update_list();
 	}
@@ -210,9 +214,9 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05.02
 	 */
 	public function mark_unread( $key ) {
-		$is_read = isset( $this->messages[ $key ] ) && isset( $this->messages[ $key ]['read'] ) && isset( $this->messages[ $key ]['read'][ get_current_user_id() ] );
+		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
 		if ( $is_read ) {
-			unset( $this->messages[ $key ]['read'][ get_current_user_id() ] );
+			unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
 			$this->update_list();
 		}
 	}
@@ -226,14 +230,14 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
-		if ( ! isset( $this->messages[ $key ] ) ) {
+		if ( ! isset( self::$messages[ $key ] ) ) {
 			return;
 		}
 
-		if ( ! isset( $this->messages[ $key ]['dismissed'] ) ) {
-			$this->messages[ $key ]['dismissed'] = array();
+		if ( ! isset( self::$messages[ $key ]['dismissed'] ) ) {
+			self::$messages[ $key ]['dismissed'] = array();
 		}
-		$this->messages[ $key ]['dismissed'][ get_current_user_id() ] = time();
+		self::$messages[ $key ]['dismissed'][ get_current_user_id() ] = time();
 
 		$this->update_list();
 	}
@@ -243,13 +247,13 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function dismiss_all() {
 		$user_id = get_current_user_id();
-		foreach ( $this->messages as $key => $message ) {
+		foreach ( self::$messages as $key => $message ) {
 			if ( ! isset( $message['dismissed'] ) ) {
-				$this->messages[ $key ]['dismissed'] = array();
+				self::$messages[ $key ]['dismissed'] = array();
 			}
 
 			if ( ! isset( $message['dismissed'][ $user_id ] ) ) {
-				$this->messages[ $key ]['dismissed'][ $user_id ] = time();
+				self::$messages[ $key ]['dismissed'][ $user_id ] = time();
 			}
 		}
 		$this->update_list();
@@ -284,14 +288,14 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05.02
 	 */
 	public function remove( $key ) {
-		if ( isset( $this->messages[ $key ] ) ) {
-			unset( $this->messages[ $key ] );
+		if ( isset( self::$messages[ $key ] ) ) {
+			unset( self::$messages[ $key ] );
 			$this->update_list();
 		}
 	}
 
 	private function update_list() {
-		update_option( $this->option, $this->messages, 'no' );
+		update_option( $this->option, self::$messages, 'no' );
 	}
 
 	public static function maybe_show_banner() {

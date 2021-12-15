@@ -334,7 +334,7 @@ class FrmEntry {
 
 		$query      .= is_numeric( $id ) ? 'it.id=%d' : 'it.item_key=%s';
 		$query_args = array( $id );
-		$query      = $wpdb->prepare( $query, $query_args ); // WPCS: unprepared SQL ok.
+		$query      = $wpdb->prepare( $query, $query_args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
@@ -348,7 +348,7 @@ class FrmEntry {
 			return $entry;
 		}
 
-		$entry = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
+		$entry = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$entry = self::get_meta( $entry );
 		self::prepare_entry( $entry );
 
@@ -473,7 +473,7 @@ class FrmEntry {
 			// prepare the query
 			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
-			$entries = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL ok.
+			$entries = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			unset( $query );
 
 			FrmDb::set_cache( $cache_key, $entries, 'frm_entry' );
@@ -855,10 +855,27 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 * @param int $entry_id
+	 * @return void
 	 */
 	private static function maybe_add_entry_metas( $values, $entry_id ) {
 		if ( isset( $values['item_meta'] ) ) {
 			FrmEntryMeta::update_entry_metas( $entry_id, $values['item_meta'] );
+		}
+		self::maybe_add_captcha_meta( (int) $values['form_id'], (int) $entry_id );
+	}
+
+	/**
+	 * @since 5.0.15
+	 *
+	 * @param int $form_id
+	 * @param int $entry_id
+	 * @return void
+	 */
+	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
+		global $frm_vars;
+		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
+			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
+			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
 		}
 	}
 

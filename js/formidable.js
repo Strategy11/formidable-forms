@@ -160,6 +160,10 @@ function frmFrontFormJS() {
 		).filter( ':not(.frm_optional)' );
 		if ( requiredFields.length ) {
 			for ( r = 0, rl = requiredFields.length; r < rl; r++ ) {
+				if ( hasClass( requiredFields[r], 'ed_button' ) ) {
+					// skip rich text field buttons.
+					continue;
+				}
 				errors = checkRequiredField( requiredFields[r], errors );
 			}
 		}
@@ -192,12 +196,24 @@ function frmFrontFormJS() {
 		return errors;
 	}
 
-	function maybeValidateChange( fieldId, field ) {
+	/**
+	 * @since 5.0.10
+	 *
+	 * @param {object} element
+	 * @param {string} targetClass
+	 * @returns {boolean}
+	 */
+	function hasClass( element, targetClass ) {
+		var className = ' ' + element.className + ' ';
+		return -1 !== className.indexOf( ' ' + targetClass + ' ' );
+	}
+
+	function maybeValidateChange( field ) {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
 		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
-			validateField( fieldId, field );
+			validateField( field );
 		}
 	}
 
@@ -209,11 +225,11 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function validateField( fieldId, field ) {
+	function validateField( field ) {
 		var key,
-			errors = [];
+			errors = [],
+			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
 
-		var $fieldCont = jQuery( field ).closest( '.frm_form_field' );
 		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
@@ -241,12 +257,12 @@ function frmFrontFormJS() {
 	}
 
 	function checkRequiredField( field, errors ) {
-		var checkGroup, fieldClasses, tempVal, i, placeholder,
+		var checkGroup, tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
-		if ( field.type === 'hidden' && fileID === null ) {
+		if ( field.type === 'hidden' && fileID === null && ! hasClass( field, 'ssa_appointment_form_field_appointment_id' ) ) {
 			return errors;
 		}
 
@@ -266,8 +282,7 @@ function frmFrontFormJS() {
 			}
 			fieldID = fileID;
 		} else {
-			fieldClasses = field.className;
-			if ( fieldClasses.indexOf( 'frm_pos_none' ) !== -1 ) {
+			if ( hasClass( field, 'frm_pos_none' ) ) {
 				// skip hidden other fields
 				return errors;
 			}
@@ -285,15 +300,24 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( fieldClasses.indexOf( 'frm_other_input' ) === -1 ) {
-				fieldID = getFieldId( field, true );
-			} else {
+			if ( hasClass( field, 'frm_other_input' ) ) {
 				fieldID = getFieldId( field, false );
+
+				if ( val === '' ) {
+					field = document.getElementById( field.id.replace( '-otext', '' ) );
+				}
+			} else {
+				fieldID = getFieldId( field, true );
 			}
 
-			if ( fieldClasses.indexOf( 'frm_time_select' ) !== -1 ) {
+			if ( hasClass( field, 'frm_time_select' ) ) {
 				// set id for time field
 				fieldID = fieldID.replace( '-H', '' ).replace( '-m', '' );
+			} else if ( isSignatureField( field ) ) {
+				if ( val === '' ) {
+					val = jQuery( field ).closest( '.frm_form_field' ).find( '[name="' + field.getAttribute( 'name' ).replace( '[typed]', '[output]' ) + '"]' ).val();
+				}
+				fieldID = fieldID.replace( '-typed', '' );
 			}
 
 			placeholder = field.getAttribute( 'data-frmplaceholder' );
@@ -312,6 +336,11 @@ function frmFrontFormJS() {
 		}
 
 		return errors;
+	}
+
+	function isSignatureField( field ) {
+		var name = field.getAttribute( 'name' );
+		return 'string' === typeof name && '[typed]' === name.substr( -7 );
 	}
 
 	function getFileVals( fileID ) {
@@ -376,7 +405,7 @@ function frmFrontFormJS() {
 				errors[ 'conf_' + strippedFieldID ] = getFieldValidationMessage( confirmField, 'data-confmsg' );
 			}
 		} else {
-			validateField( 'conf_' + strippedFieldID, confirmField );
+			validateField( confirmField );
 		}
 	}
 
@@ -1348,7 +1377,7 @@ function frmFrontFormJS() {
 			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ]);
 
 			if ( e.selfTriggered !== true ) {
-				maybeValidateChange( fieldId, this );
+				maybeValidateChange( this );
 			}
 		},
 

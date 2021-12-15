@@ -860,7 +860,8 @@ class FrmEntryFormatter {
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
+			$separator = isset( $this->atts['array_separator'] ) ? $this->atts['array_separator'] : ', ';
+			$value     = implode( $separator, $value );
 		}
 
 		return $value;

@@ -156,7 +156,7 @@ class FrmListHelper {
 
 	public function display_rows() {
 		foreach ( $this->items as $item ) {
-			echo "\n\t", $this->single_row( $item ); // WPCS: XSS ok.
+			echo "\n\t", $this->single_row( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -331,7 +331,7 @@ class FrmListHelper {
 		foreach ( $views as $class => $view ) {
 			$views[ $class ] = "\t" . '<li class="' . esc_attr( $class ) . '">' . $view;
 		}
-		echo implode( " |</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
+		echo implode( " |</li>\n", $views ) . "</li>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</ul>';
 	}
 
@@ -391,9 +391,16 @@ class FrmListHelper {
 		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
-			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
+			$params = array(
+				'value' => $name,
+			);
+			if ( 'edit' === $name ) {
+				$params['class'] = 'hide-if-no-js';
+			}
 
-			echo "\t<option value='" . esc_attr( $name ) . "'$class>" . esc_html( $title ) . "</option>\n"; // WPCS: XSS ok.
+			echo "\t<option ";
+			FrmAppHelper::array_to_html_params( $params, true );
+			echo '>' . esc_html( $title ) . '</option>' . "\n";
 		}
 
 		echo "</select>\n";
@@ -665,7 +672,7 @@ class FrmListHelper {
 		}
 		$this->_pagination = "<div class='tablenav-pages" . esc_attr( $page_class ) . "'>$output</div>";
 
-		echo $this->_pagination; // WPCS: XSS ok.
+		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	private function disabled_pages( $total_pages ) {
@@ -969,7 +976,7 @@ class FrmListHelper {
 				// Hide the labels but show the border.
 				$column_display_name = '';
 			}
-			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // WPCS: XSS ok.
+			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -980,7 +987,11 @@ class FrmListHelper {
 	 * @access public
 	 */
 	public function display() {
-		$singular = $this->_args['singular'];
+		$singular     = $this->_args['singular'];
+		$tbody_params = array();
+		if ( $singular ) {
+			$tbody_params['data-wp-lists'] = 'list:' . $singular;
+		}
 
 		$this->display_tablenav( 'top' );
 		?>
@@ -993,7 +1004,7 @@ class FrmListHelper {
 			</thead>
 			<?php } ?>
 
-			<tbody id="the-list"<?php echo( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); // WPCS: XSS ok. ?>>
+			<tbody id="the-list"<?php FrmAppHelper::array_to_html_params( $tbody_params, true ); ?>>
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
@@ -1030,7 +1041,7 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function display_tablenav( $which ) {
-		if ( 'top' == $which ) {
+		if ( 'top' === $which ) {
 			wp_nonce_field( 'bulk-' . $this->_args['plural'], '_wpnonce', false );
 			if ( ! $this->has_min_items( 1 ) ) {
 				// Don't show bulk actions if no items.
@@ -1128,30 +1139,33 @@ class FrmListHelper {
 				$classes .= ' hidden';
 			}
 
-			// Comments column uses HTML in the display name with screen reader text.
-			// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
-			$data = 'data-colname="' . esc_attr( $column_display_name ) . '"';
+			$params = array(
+				'class'        => $classes,
+				// Comments column uses HTML in the display name with screen reader text.
+				// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
+				'data-colname' => $column_display_name,
+			);
 
-			$attributes = 'class="' . esc_attr( $classes ) . '" ' . $data;
-
-			if ( 'cb' == $column_name ) {
+			if ( 'cb' === $column_name ) {
 				echo '<th scope="row" class="check-column"></th>';
 			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
-				echo call_user_func( // WPCS: XSS ok.
+				echo call_user_func( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array( $this, '_column_' . $column_name ),
 					$item,
 					$classes,
 					$data,
 					$primary
 				);
-			} elseif ( method_exists( $this, 'column_' . $column_name ) ) {
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
-				echo '</td>';
 			} else {
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo '<td ';
+				FrmAppHelper::array_to_html_params( $params, true );
+				echo '>';
+
+				if ( method_exists( $this, 'column_' . $column_name ) ) {
+					echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			}
 		}

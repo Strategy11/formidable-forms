@@ -36,6 +36,7 @@ zip -r $zipname $destination \
 	-x "*/.*" \
 	-x "*/.git/*" \
 	-x "*/.github/*" \
+	-x "*/.phpunit.result.cache" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -65,6 +66,7 @@ zip -r $zipname $destination \
 	-x "formidable-views/js/dom.js" \
 	-x "formidable-views/js/editor.js" \
 	-x "formidable-views/js/index.js" \
+	-x "formidable-chat/js/chat.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
 
