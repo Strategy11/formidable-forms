@@ -85,6 +85,11 @@ class FrmCSVExportHelper {
 	 */
 	protected static $context = 'default';
 
+	/**
+	 * @var array $meta
+	 */
+	protected static $meta = array();
+
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
 		$formats = apply_filters( 'frm_csv_format_options', $formats );
@@ -104,6 +109,7 @@ class FrmCSVExportHelper {
 		self::$form_id = $atts['form']->id;
 		self::$mode    = ! empty( $atts['mode'] ) && 'file' === $atts['mode'] ? 'file' : 'echo';
 		self::$context = ! empty( $atts['context'] ) ? $atts['context'] : 'default';
+		self::$meta    = ! empty( $atts['meta'] ) ? $atts['meta'] : array();
 
 		self::set_class_parameters();
 		self::set_has_parent_id( $atts['form'] );
@@ -158,21 +164,33 @@ class FrmCSVExportHelper {
 	 * @return string
 	 */
 	private static function generate_csv_filename( $form ) {
-		$filename = gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv';
-		$args     = array( 'context' => self::$context );
-		return apply_filters( 'frm_csv_filename', $filename, $form, $args );
+		$filename = gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $form->name ) . '_formidable_entries.csv';
+		return apply_filters( 'frm_csv_filename', $filename, $form, self::get_standard_filter_args() );
+	}
+
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return array
+	 */
+	private static function get_standard_filter_args() {
+		return array(
+			'context' => self::$context,
+			'meta'    => self::$meta,
+		);
 	}
 
 	private static function set_class_parameters() {
-		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator, array( 'context' => self::$context ) );
-		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break, array( 'context' => self::$context ) );
-		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format, array( 'context' => self::$context ) );
+		$args                 = self::get_standard_filter_args();
+		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator, $args );
+		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break, $args );
+		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format, $args );
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, array( 'context' => self::$context ) );
+		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}
 
 	private static function set_has_parent_id( $form ) {
@@ -199,7 +217,7 @@ class FrmCSVExportHelper {
 
 	public static function get_csv_format() {
 		$csv_format        = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
-		$csv_format        = apply_filters( 'frm_csv_format', $csv_format, array( 'context' => self::$context ) );
+		$csv_format        = apply_filters( 'frm_csv_format', $csv_format, self::get_standard_filter_args() );
 		self::$to_encoding = $csv_format;
 	}
 
@@ -210,9 +228,9 @@ class FrmCSVExportHelper {
 			'frm_csv_columns',
 			$headings,
 			self::$form_id,
-			array(
-				'fields'  => self::$fields,
-				'context' => self::$context,
+			array_merge(
+				self::get_standard_filter_args(),
+				array( 'fields' => self::$fields )
 			)
 		);
 		self::$headings = $headings;
@@ -236,9 +254,9 @@ class FrmCSVExportHelper {
 		$field_headings             = apply_filters(
 			'frm_csv_field_columns',
 			$field_headings,
-			array(
-				'field'   => $col,
-				'context' => self::$context,
+			array_merge(
+				self::get_standard_filter_args(),
+				array( 'field' => $col )
 			)
 		);
 
