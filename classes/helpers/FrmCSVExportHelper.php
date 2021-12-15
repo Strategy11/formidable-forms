@@ -5,21 +5,85 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCSVExportHelper {
 
-	protected static $separator        = ', ';
+	/**
+	 * @var string $separator
+	 */
+	protected static $separator = ', ';
+
+	/**
+	 * @var string $column_separator
+	 */
 	protected static $column_separator = ',';
-	protected static $line_break       = 'return';
-	protected static $charset          = 'UTF-8';
-	protected static $to_encoding      = 'UTF-8';
-	protected static $wp_date_format   = 'Y-m-d H:i:s';
-	protected static $comment_count    = 0;
-	protected static $form_id          = 0;
-	protected static $headings         = array();
-	protected static $fields           = array();
+
+	/**
+	 * @var string $line_break
+	 */
+	protected static $line_break = 'return';
+
+	/**
+	 * @var string $charset
+	 */
+	protected static $charset = 'UTF-8';
+
+	/**
+	 * @var string $to_encoding
+	 */
+	protected static $to_encoding = 'UTF-8';
+
+	/**
+	 * @var string $wp_date_format
+	 */
+	protected static $wp_date_format = 'Y-m-d H:i:s';
+
+	/**
+	 * @var int $comment_count
+	 */
+	protected static $comment_count = 0;
+
+	/**
+	 * @var int $form_id
+	 */
+	protected static $form_id = 0;
+
+	/**
+	 * @var array $headings
+	 */
+	protected static $headings = array();
+
+	/**
+	 * @var array $fields
+	 */
+	protected static $fields = array();
+
+	/**
+	 * @var stdClass|null $entry
+	 */
 	protected static $entry;
+
+	/**
+	 * @var bool|null $has_parent_id
+	 */
 	protected static $has_parent_id;
+
+	/**
+	 * @var array|null $fields_by_repeater_id
+	 */
 	protected static $fields_by_repeater_id;
-	protected static $mode;
+
+	/**
+	 * @var string $mode either 'echo' or 'file' are supported.
+	 */
+	protected static $mode = 'echo';
+
+	/**
+	 * @var resource|null $fp used to write a CSV file in file mode.
+	 */
 	protected static $fp;
+
+	/**
+	 * @var string $context the context of the CSV being generated. Possible values include 'email' when used as an email attachment, or 'default'.
+	 */
+	protected static $context = 'default';
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
@@ -38,12 +102,13 @@ class FrmCSVExportHelper {
 
 		self::$fields  = $atts['form_cols'];
 		self::$form_id = $atts['form']->id;
-		self::set_class_paramters();
+		self::$mode    = ! empty( $atts['mode'] ) && 'file' === $atts['mode'] ? 'file' : 'echo';
+		self::$context = ! empty( $atts['context'] ) ? $atts['context'] : 'default';
+
+		self::set_class_parameters();
 		self::set_has_parent_id( $atts['form'] );
 
-		self::$mode = ! empty( $atts['mode'] ) && 'file' === $atts['mode'] ? 'file' : 'echo';
-
-		$filename = apply_filters( 'frm_csv_filename', gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
+		$filename = self::generate_csv_filename( $atts['form'] );
 		unset( $atts['form'], $atts['form_cols'] );
 
 		if ( 'file' === self::$mode ) {
@@ -86,16 +151,28 @@ class FrmCSVExportHelper {
 		}
 	}
 
-	private static function set_class_paramters() {
-		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator );
-		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break );
-		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format );
+	/**
+	 * @since 5.0.16
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	private static function generate_csv_filename( $form ) {
+		$filename = gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv';
+		$args     = array( 'context' => self::$context );
+		return apply_filters( 'frm_csv_filename', $filename, $form, $args );
+	}
+
+	private static function set_class_parameters() {
+		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator, array( 'context' => self::$context ) );
+		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break, array( 'context' => self::$context ) );
+		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format, array( 'context' => self::$context ) );
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
 		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep );
+		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, array( 'context' => self::$context ) );
 	}
 
 	private static function set_has_parent_id( $form ) {
@@ -122,7 +199,7 @@ class FrmCSVExportHelper {
 
 	public static function get_csv_format() {
 		$csv_format        = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
-		$csv_format        = apply_filters( 'frm_csv_format', $csv_format );
+		$csv_format        = apply_filters( 'frm_csv_format', $csv_format, array( 'context' => self::$context ) );
 		self::$to_encoding = $csv_format;
 	}
 
@@ -134,7 +211,8 @@ class FrmCSVExportHelper {
 			$headings,
 			self::$form_id,
 			array(
-				'fields' => self::$fields,
+				'fields'  => self::$fields,
+				'context' => self::$context,
 			)
 		);
 		self::$headings = $headings;
@@ -159,7 +237,8 @@ class FrmCSVExportHelper {
 			'frm_csv_field_columns',
 			$field_headings,
 			array(
-				'field' => $col,
+				'field'   => $col,
+				'context' => self::$context,
 			)
 		);
 
@@ -312,6 +391,7 @@ class FrmCSVExportHelper {
 				'entry'         => self::$entry,
 				'date_format'   => self::$wp_date_format,
 				'comment_count' => self::$comment_count,
+				'context'       => self::$context,
 			)
 		);
 		self::print_csv_row( $row );
@@ -411,6 +491,7 @@ class FrmCSVExportHelper {
 					'field'     => $col,
 					'entry'     => self::$entry,
 					'separator' => self::$separator,
+					'context'   => self::$context,
 				)
 			);
 
