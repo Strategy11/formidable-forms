@@ -613,13 +613,14 @@ class FrmXMLController {
 	 * Get the fields that should be included in the CSV export
 	 *
 	 * @since 2.0.19
+	 * @since 5.0.16 function went from private to public.
 	 *
 	 * @param int $form_id
 	 * @param object $form
 	 *
 	 * @return array $csv_fields
 	 */
-	private static function get_fields_for_csv_export( $form_id, $form ) {
+	public static function get_fields_for_csv_export( $form_id, $form ) {
 		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
 		$no_export_fields = FrmField::no_save_fields();
 		foreach ( $csv_fields as $k => $f ) {

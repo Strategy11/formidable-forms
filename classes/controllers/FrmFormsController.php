@@ -651,9 +651,11 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function insert_form_popup() {
-		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
-		if ( ! in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ) ) ) {
+		if ( ! self::should_insert_form_popup() ) {
 			return;
 		}
 
@@ -665,10 +667,34 @@ class FrmFormsController {
 				'label' => __( 'Insert a Form', 'formidable' ),
 			),
 		);
-
 		$shortcodes = apply_filters( 'frm_popup_shortcodes', $shortcodes );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php';
+
+		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
+			// initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
+			require ABSPATH . WPINC . '/class-wp-editor.php';
+			?>
+			<div class="frm_hidden">
+				<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Check the page being loaded, determine if this is a page that should include the form popup.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_insert_form_popup() {
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			return true;
+		}
+		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
+		return in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ), true );
 	}
 
 	public static function get_shortcode_opts() {

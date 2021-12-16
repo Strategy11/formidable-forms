@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.0
 Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 5.0.13.1
+Stable tag: 5.0.15
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,15 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.15 =
+- New: Added a v3 reCAPTCHA type option and reCAPTCHA threshold slider to global reCAPTCHA settings. When using v3 the score will be compared to the threshold and marked as spam if it is lower than the threshold. The default value is 0.5. For more information on setting a score, see https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
+
+= 5.0.14 =
+- New: HTML field descriptions now use a rich text editor instead of a plain textarea.
+- New: Added a new array_separator option to entry shortcodes. This can be used with the [default-message] like [default-message array_separator="<br/>"] shortcode to change the separator used for multiple checkbox or dropdown values. It also works with the [frm-show-entry] shortcode in pro.
+- New: Added tooltips to honeypot and JavaScript token spam settings.
+- Fix: The adjusted color used for .frm-alt-table stripes was not calculating properly when the border color was set as an RGBA value in the style manager.
+
 = 5.0.13.1 =
 - Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
 
@@ -452,16 +461,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - Fix: Too many calls were being made to Akismet for forms with multiple pages.
 - Fix: A conflict with WooCommerce was sometimes triggering an error when checking for addon updates.
 - Fix: The comment author information sent to Akismet was not getting set if the author information was set in a name field.
-
-= 5.0.12 =
-- New: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
-- Fix: Many Formidable addons were not properly displaying update details from the plugins page.
-- Fix: Fewer API requests will be sent to Formidable when inbox notice cached results expire and when a request results in an error.
-- Fix: Added additional validation to CSV export so it fails more gracefully when the form does not exist.
-- Fix: The style setting for Margin under Field Settings as been renamed to Bottom Margin to avoid confusion as it only updates one margin value.
-
-= 5.0.11 =
-- Fix: Required credit cards were causing an issue with JavaScript validation.
-- Fix: Empty required appointment fields were not properly validating with JavaScript.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

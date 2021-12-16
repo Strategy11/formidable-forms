@@ -53,8 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</h2>
 					<p>
 						<?php
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo FrmAppHelper::kses( $addon['excerpt'], array( 'a' ) );
+						echo FrmAppHelper::kses( $addon['excerpt'], array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 						$show_docs = isset( $addon['docs'] ) && ! empty( $addon['docs'] ) && $addon['installed'];
 						?>

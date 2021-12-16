@@ -5986,6 +5986,153 @@ function frmAdminBuildJS() {
 
 		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
+
+		setUpTinyMceVisualButtonListener( singleField );
+		setUpTinyMceHtmlButtonListener( singleField );
+
+		if ( isTinyMceActive() ) {
+			setTimeout( resetTinyMce, 0 );
+		} else {
+			initQuickTagsButtons( singleField );
+		}
+	}
+
+	function setUpTinyMceVisualButtonListener( fieldSettings ) {
+		var editor = fieldSettings.querySelector( '.wp-editor-area' );
+		if ( editor ) {
+			jQuery( document ).on(
+				'click', '#' + editor.id + '-html',
+				function() {
+					editor.style.visibility = 'visible';
+					initQuickTagsButtons( fieldSettings );
+				}
+			);
+		}
+	}
+
+	function setUpTinyMceHtmlButtonListener( fieldSettings ) {
+		var editor, hasResetTinyMce;
+
+		editor = fieldSettings.querySelector( '.wp-editor-area' );
+		if ( ! editor ) {
+			return;
+		}
+
+		hasResetTinyMce = false;
+
+		jQuery( '#' + editor.id + '-tmce' )
+			.on(
+				'click',
+				function() {
+					var wrap;
+
+					if ( ! hasResetTinyMce ) {
+						resetTinyMce();
+						hasResetTinyMce = true;
+					}
+
+					wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
+					wrap.classList.add( 'tmce-active' );
+					wrap.classList.remove( 'html-active' );
+				}
+			);
+	}
+
+	function initQuickTagsButtons( fieldSettings ) {
+		var editor, settings;
+
+		editor = fieldSettings.querySelector( '.wp-editor-area' );
+
+		if ( ! editor || 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+			return;
+		}
+
+		settings = {
+			name: 'qt_' + editor.id,
+			id: editor.id,
+			canvas: editor,
+			settings: {
+				buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,more,close',
+				id: editor.id
+			},
+			toolbar: document.getElementById( 'qt_' + editor.id + '_toolbar' ),
+			theButtons: {}
+		};
+		window.quicktags( settings );
+	}
+
+	function resetTinyMce() {
+		document.querySelectorAll( '.frm-single-settings:not(.frm_hidden) .wp-editor-area' ).forEach(
+			function( editor ) {
+				var isInitialized, isVisible;
+
+				isInitialized = 'undefined' !== typeof tinyMCE.editors[ editor.id ];
+				isVisible = isInitialized && ! tinyMCE.editors[ editor.id ].isHidden();
+
+				if ( isVisible ) {
+					removeRichText( editor.id );
+				}
+
+				if ( isVisible || ! isInitialized ) {
+					initRichText( editor.id );
+				}
+			}
+		);
+	}
+
+	function removeRichText( id ) {
+		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, id );
+		tinymce.remove( id );
+	}
+
+	function initRichText( id ) {
+		var defaultSettings = getDefaultTinyMceSettings(),
+			newValues = {
+				selector: '#' + id,
+				body_class: defaultSettings.body_class.replace( getDefaultSettingsKey(), id ),
+				setup: setupTinyMceEventHandlers
+			},
+			newSettings = Object.assign(
+				{}, defaultSettings, newValues
+			);
+		if ( 'undefined' !== typeof newSettings.toolbar1 ) {
+			// the link option does not work in the modal, so exclude it.
+			newSettings.toolbar1 = newSettings.toolbar1.replace( ',wp_more', '' );
+		}
+		tinymce.init( newSettings );
+	}
+
+	function getDefaultSettingsKey() {
+		return Object.keys( tinyMCEPreInit.mceInit )[0];
+	}
+
+	function getDefaultTinyMceSettings() {
+		return tinyMCEPreInit.mceInit[ getDefaultSettingsKey() ];
+	}
+
+	function setupTinyMceEventHandlers( editor ) {
+		editor.on( 'Change', function() {
+			handleTinyMceChange( editor );
+		});
+	}
+
+	function handleTinyMceChange( editor ) {
+		if ( isTinyMceActive() && ! tinyMCE.activeEditor.isHidden() ) {
+			editor.targetElm.value = editor.getContent();
+			jQuery( editor.targetElm ).trigger( 'change' );
+		}
+	}
+
+	function isTinyMceActive() {
+		var activeSettings, wrapper;
+
+		activeSettings = document.querySelector( '.frm-single-settings:not(.frm_hidden)' );
+		if ( ! activeSettings ) {
+			return false;
+		}
+
+		wrapper = activeSettings.querySelector( '.wp-editor-wrap' );
+		return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
 	}
 
 	/**
@@ -8291,6 +8438,13 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function handleCaptchaTypeChange( e ) {
+		const thresholdContainer = document.getElementById( 'frm_captcha_threshold_container' );
+		if ( thresholdContainer ) {
+			thresholdContainer.classList.toggle( 'frm_hidden', 'v3' !== e.target.value );
+		}
+	}
+
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
 		var id = this.getAttribute( 'data-id' );
@@ -9005,6 +9159,9 @@ function frmAdminBuildJS() {
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
 				e.stopPropagation();
@@ -9416,6 +9573,11 @@ function frmAdminBuildJS() {
 				});
 				jQuery( '.settings-lite-cta' ).remove();
 			});
+
+			const captchaType = document.getElementById( 'frm_re_type' );
+			if ( captchaType ) {
+				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
+			}
 		},
 
 		exportInit: function() {

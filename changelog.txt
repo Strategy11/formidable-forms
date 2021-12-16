@@ -1,4 +1,13 @@
 == Changelog ==
+= 5.0.15 =
+- New: Added a v3 reCAPTCHA type option and reCAPTCHA threshold slider to global reCAPTCHA settings. When using v3 the score will be compared to the threshold and marked as spam if it is lower than the threshold. The default value is 0.5. For more information on setting a score, see https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
+
+= 5.0.14 =
+- New: HTML field descriptions now use a rich text editor instead of a plain textarea.
+- New: Added a new array_separator option to entry shortcodes. This can be used with the [default-message] like [default-message array_separator="<br/>"] shortcode to change the separator used for multiple checkbox or dropdown values. It also works with the [frm-show-entry] shortcode in pro.
+- New: Added tooltips to honeypot and JavaScript token spam settings.
+- Fix: The adjusted color used for .frm-alt-table stripes was not calculating properly when the border color was set as an RGBA value in the style manager.
+
 = 5.0.13.1 =
 - Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
 
