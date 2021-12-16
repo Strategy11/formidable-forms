@@ -5,19 +5,90 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCSVExportHelper {
 
-	protected static $separator        = ', ';
+	/**
+	 * @var string $separator
+	 */
+	protected static $separator = ', ';
+
+	/**
+	 * @var string $column_separator
+	 */
 	protected static $column_separator = ',';
-	protected static $line_break       = 'return';
-	protected static $charset          = 'UTF-8';
-	protected static $to_encoding      = 'UTF-8';
-	protected static $wp_date_format   = 'Y-m-d H:i:s';
-	protected static $comment_count    = 0;
-	protected static $form_id          = 0;
-	protected static $headings         = array();
-	protected static $fields           = array();
+
+	/**
+	 * @var string $line_break
+	 */
+	protected static $line_break = 'return';
+
+	/**
+	 * @var string $charset
+	 */
+	protected static $charset = 'UTF-8';
+
+	/**
+	 * @var string $to_encoding
+	 */
+	protected static $to_encoding = 'UTF-8';
+
+	/**
+	 * @var string $wp_date_format
+	 */
+	protected static $wp_date_format = 'Y-m-d H:i:s';
+
+	/**
+	 * @var int $comment_count
+	 */
+	protected static $comment_count = 0;
+
+	/**
+	 * @var int $form_id
+	 */
+	protected static $form_id = 0;
+
+	/**
+	 * @var array $headings
+	 */
+	protected static $headings = array();
+
+	/**
+	 * @var array $fields
+	 */
+	protected static $fields = array();
+
+	/**
+	 * @var stdClass|null $entry
+	 */
 	protected static $entry;
+
+	/**
+	 * @var bool|null $has_parent_id
+	 */
 	protected static $has_parent_id;
+
+	/**
+	 * @var array|null $fields_by_repeater_id
+	 */
 	protected static $fields_by_repeater_id;
+
+	/**
+	 * @var string $mode either 'echo' or 'file' are supported.
+	 */
+	protected static $mode = 'echo';
+
+	/**
+	 * @var resource|null $fp used to write a CSV file in file mode.
+	 */
+	protected static $fp;
+
+	/**
+	 * @var string $context the context of the CSV being generated. Possible values include 'email' when used as an email attachment, or 'default'.
+	 */
+	protected static $context = 'default';
+
+	/**
+	 * @var array $meta
+	 */
+	protected static $meta = array();
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
@@ -26,19 +97,36 @@ class FrmCSVExportHelper {
 		return $formats;
 	}
 
+	/**
+	 * @param array $atts
+	 * @return string|false|void returns a string file path or false if $atts['mode'] is set to 'file'.
+	 */
 	public static function generate_csv( $atts ) {
 		global $frm_vars;
 		$frm_vars['prevent_caching'] = true;
 
 		self::$fields  = $atts['form_cols'];
 		self::$form_id = $atts['form']->id;
-		self::set_class_paramters();
+		self::$mode    = ! empty( $atts['mode'] ) && 'file' === $atts['mode'] ? 'file' : 'echo';
+		self::$context = ! empty( $atts['context'] ) ? $atts['context'] : 'default';
+		self::$meta    = ! empty( $atts['meta'] ) ? $atts['meta'] : array();
+
+		self::set_class_parameters();
 		self::set_has_parent_id( $atts['form'] );
 
-		$filename = apply_filters( 'frm_csv_filename', gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
+		$filename = self::generate_csv_filename( $atts['form'] );
 		unset( $atts['form'], $atts['form_cols'] );
 
-		self::print_file_headers( $filename );
+		if ( 'file' === self::$mode ) {
+			$filepath = get_temp_dir() . $filename;
+			self::$fp = @fopen( $filepath, 'w' );
+			if ( ! self::$fp ) {
+				return false;
+			}
+		} elseif ( 'echo' === self::$mode ) {
+			self::print_file_headers( $filename );
+		}
+
 		unset( $filename );
 
 		$comment_count       = FrmDb::get_count(
@@ -62,18 +150,47 @@ class FrmCSVExportHelper {
 		while ( $next_set = array_splice( $atts['entry_ids'], 0, 20 ) ) {
 			self::prepare_next_csv_rows( $next_set );
 		}
+
+		if ( 'file' === self::$mode ) {
+			fclose( self::$fp );
+			return $filepath;
+		}
 	}
 
-	private static function set_class_paramters() {
-		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator );
-		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break );
-		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format );
+	/**
+	 * @since 5.0.16
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	private static function generate_csv_filename( $form ) {
+		$filename = gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $form->name ) . '_formidable_entries.csv';
+		return apply_filters( 'frm_csv_filename', $filename, $form, self::get_standard_filter_args() );
+	}
+
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return array
+	 */
+	private static function get_standard_filter_args() {
+		return array(
+			'context' => self::$context,
+			'meta'    => self::$meta,
+		);
+	}
+
+	private static function set_class_parameters() {
+		$args                 = self::get_standard_filter_args();
+		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator, $args );
+		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break, $args );
+		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format, $args );
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep );
+		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}
 
 	private static function set_has_parent_id( $form ) {
@@ -100,7 +217,7 @@ class FrmCSVExportHelper {
 
 	public static function get_csv_format() {
 		$csv_format        = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
-		$csv_format        = apply_filters( 'frm_csv_format', $csv_format );
+		$csv_format        = apply_filters( 'frm_csv_format', $csv_format, self::get_standard_filter_args() );
 		self::$to_encoding = $csv_format;
 	}
 
@@ -111,8 +228,9 @@ class FrmCSVExportHelper {
 			'frm_csv_columns',
 			$headings,
 			self::$form_id,
-			array(
-				'fields' => self::$fields,
+			array_merge(
+				self::get_standard_filter_args(),
+				array( 'fields' => self::$fields )
 			)
 		);
 		self::$headings = $headings;
@@ -136,8 +254,9 @@ class FrmCSVExportHelper {
 		$field_headings             = apply_filters(
 			'frm_csv_field_columns',
 			$field_headings,
-			array(
-				'field' => $col,
+			array_merge(
+				self::get_standard_filter_args(),
+				array( 'field' => $col )
 			)
 		);
 
@@ -290,6 +409,7 @@ class FrmCSVExportHelper {
 				'entry'         => self::$entry,
 				'date_format'   => self::$wp_date_format,
 				'comment_count' => self::$comment_count,
+				'context'       => self::$context,
 			)
 		);
 		self::print_csv_row( $row );
@@ -389,6 +509,7 @@ class FrmCSVExportHelper {
 					'field'     => $col,
 					'entry'     => self::$entry,
 					'separator' => self::$separator,
+					'context'   => self::$context,
 				)
 			);
 
@@ -474,7 +595,8 @@ class FrmCSVExportHelper {
 	}
 
 	private static function print_csv_row( $rows ) {
-		$sep = '';
+		$sep  = '';
+		$echo = 'echo' === self::$mode;
 
 		foreach ( self::$headings as $k => $heading ) {
 			if ( isset( $rows[ $k ] ) ) {
@@ -505,12 +627,20 @@ class FrmCSVExportHelper {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 
-			echo $sep . '"' . $val . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			if ( $echo ) {
+				echo $sep . '"' . $val . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			} else {
+				fwrite( self::$fp, $sep . '"' . $val . '"' );
+			}
 			$sep = self::$column_separator;
 
 			unset( $k, $row );
 		}
-		echo "\n";
+		if ( $echo ) {
+			echo "\n";
+		} else {
+			fwrite( self::$fp, "\n" );
+		}
 	}
 
 	public static function encode_value( $line ) {

@@ -140,4 +140,41 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		);
 		return $headings;
 	}
+
+	/**
+	 * @covers FrmCSVExportHelper::generate_csv
+	 */
+	public function test_generate_csv() {
+		$form_id       = $this->factory->form->create();
+		$text_field_id = $this->factory->field->create(
+			array(
+				'form_id' => $form_id,
+				'name'    => 'Text Field Name',
+				'type'    => 'text',
+			)
+		);
+		$form          = FrmForm::getOne( $form_id );
+		$entry_data    = $this->factory->field->generate_entry_array( $form );
+		$entry_data['item_meta'] = array(
+			$text_field_id => 'Test Value',
+		);
+		$entry         = $this->factory->entry->create_and_get( $entry_data );
+		$csv_path      = FrmCSVExportHelper::generate_csv(
+			array(
+				'mode'      => 'file',
+				'form'      => $form,
+				'entry_ids' => array( $entry->id ),
+				'form_cols' => FrmField::get_all_for_form( $form->id, '', 'include' ),
+			)
+		);
+		$this->assertTrue( is_string( $csv_path ) && ! empty( $csv_path ) && file_exists( $csv_path ) );
+		$csv_content = file_get_contents( $csv_path );
+		unlink( $csv_path );
+
+		$this->assertStringContainsString( ',"Text Field Name",', $csv_content );
+		$this->assertStringContainsString( ',"Timestamp",', $csv_content );
+		$this->assertStringContainsString( ',"ID",', $csv_content );
+		$this->assertStringContainsString( ',"Test Value",', $csv_content );
+		$this->assertStringContainsString( ',"' . $entry->id . '",', $csv_content );
+	}
 }
