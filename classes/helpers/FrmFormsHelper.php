@@ -1635,6 +1635,11 @@ BEFORE_HTML;
 		foreach ( $shortcodes[0] as $key => $shortcode ) {
 			$options = trim( $shortcodes[3][ $key ] );
 
+			if ( in_array( $shortcodes[1][ $key ], array( 'if ' ), true ) ) {
+				// Skip if shortcodes.
+				continue;
+			}
+
 			if ( false !== strpos( $options, 'sanitize_url=' ) ) {
 				// A sanitize option is already set so leave it alone.
 				continue;
