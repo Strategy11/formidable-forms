@@ -425,11 +425,16 @@ class FrmStylesHelper {
 			'fieldset_color',
 			'fieldset_bg_color',
 			'bg_color',
+			'bg_color_active',
+			'bg_color_disabled',
 			'section_bg_color',
 			'error_bg',
 			'success_bg_color',
 			'progress_bg_color',
 			'progress_active_bg_color',
+			'submit_hover_bg_color',
+			'submit_active_bg_color',
+			'success_bg_color',
 		);
 
 		return array(
