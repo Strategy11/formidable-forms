@@ -1610,4 +1610,45 @@ BEFORE_HTML;
 			0
 		);
 	}
+
+	/**
+	 * Make sure the field shortcodes in a url always add the sanitize_url=1 option if nothing is defined.
+	 * This is to prevent some field characters like ', @, and | from being stripped from the redirect URL.
+	 *
+	 * @since 5.0.16
+	 *
+	 * @param string $url
+	 * @param int    $form_id
+	 * @return string
+	 */
+	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
+		if ( false === strpos( $url, '[' ) ) {
+			// Do nothing if no shortcodes are detected.
+			return $url;
+		}
+
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $url, $form_id );
+		if ( empty( $shortcodes[0] ) ) {
+			return $url;
+		}
+
+		foreach ( $shortcodes[0] as $key => $shortcode ) {
+			$options = trim( $shortcodes[3][ $key ] );
+
+			if ( false !== strpos( $options, 'sanitize_url=' ) ) {
+				// A sanitize option is already set so leave it alone.
+				continue;
+			}
+
+			$new_shortcode = '[' . $shortcodes[2][ $key ];
+			if ( $options ) {
+				$new_shortcode .= ' ' . $options;
+			}
+			$new_shortcode .= ' sanitize_url=1]';
+
+			$url = str_replace( $shortcode, $new_shortcode, $url );
+		}
+
+		return $url;
+	}
 }
