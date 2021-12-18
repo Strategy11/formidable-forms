@@ -58,6 +58,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
+			if ( $display['auto_height'] ) {
+				?>
+				<label for="frm_auto_height_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Auto Height: Automatically expand the height of the field when the text reaches the maximum rows', 'formidable' ); ?>" >
+					<input type="checkbox" id="frm_auto_height_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[auto_height_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['auto_height'], 1 ); ?>/>
+					<?php esc_html_e( 'Auto Height', 'formidable' ); ?>
+				</label>
+				<?php
+			}
 			do_action( 'frm_field_options_form_top', $field, $display, $values );
 			?>
 		</p>
