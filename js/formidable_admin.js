@@ -6887,6 +6887,11 @@ function frmAdminBuildJS() {
 		}
 
 		element = element[0];
+		if ( ! element.closest( '#frm-insert-fields-box' ) ) {
+			// Only add sanitize_url=1 to field shortcodes.
+			return variable;
+		}
+
 		if ( ! element.parentNode.classList.contains( 'frm_insert_url' ) ) {
 			variable = variable.replace( ']', ' sanitize_url=1]' );
 		}

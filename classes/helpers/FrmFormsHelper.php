@@ -1654,7 +1654,7 @@ BEFORE_HTML;
 				continue;
 			}
 
-			if ( false !== strpos( $options, 'sanitize_url=' ) ) {
+			if ( false !== strpos( $options, 'sanitize_url=' ) || false !== strpos( $options, 'sanitize=' ) ) {
 				// A sanitize option is already set so leave it alone.
 				continue;
 			}
