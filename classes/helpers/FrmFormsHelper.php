@@ -561,6 +561,10 @@ BEFORE_HTML;
 		if ( $possible_email_field ) {
 			$class .= ' show_frm_not_email_to';
 		}
+
+		if ( 'url' === $args['type'] ) {
+			$class .= ' frm_insert_url';
+		}
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
