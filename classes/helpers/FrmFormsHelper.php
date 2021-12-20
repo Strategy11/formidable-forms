@@ -1627,8 +1627,18 @@ BEFORE_HTML;
 			return $url;
 		}
 
-		$shortcodes = FrmFieldsHelper::get_shortcodes( $url, $form_id );
+		$parsed = wp_parse_url( $url );
+		if ( empty( $parsed['query'] ) ) {
+			// Do nothing if no query can be detected in the url string.
+			return $url;
+		}
+
+		$original_query = $parsed['query'];
+		$query          = $parsed['query'];
+
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
 		if ( empty( $shortcodes[0] ) ) {
+			// No shortcodes found, do nothing.
 			return $url;
 		}
 
@@ -1651,9 +1661,13 @@ BEFORE_HTML;
 			}
 			$new_shortcode .= ' sanitize_url=1]';
 
-			$url = str_replace( $shortcode, $new_shortcode, $url );
+			$query = str_replace( $shortcode, $new_shortcode, $query );
 		}
 
-		return $url;
+		if ( $query === $original_query ) {
+			return $url;
+		}
+
+		return str_replace( $original_query, $query, $url );
 	}
 }

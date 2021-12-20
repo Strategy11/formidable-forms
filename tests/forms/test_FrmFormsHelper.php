@@ -6,32 +6,65 @@
 class test_FrmFormsHelper extends FrmUnitTest {
 
 	/**
+	 * @var stdClass|null $form
+	 */
+	private $form;
+
+	/**
 	 * @covers FrmFormsHelper::maybe_add_sanitize_url_attr
 	 */
 	public function test_maybe_add_sanitize_url_attr() {
-		$form  = $this->factory->form->create_and_get();
-		$field = $this->factory->field->create_and_get(
+		$this->form = $this->factory->form->create_and_get();
+		$field_id   = $this->factory->field->create(
 			array(
-				'form_id' => $form->id,
+				'form_id' => $this->form->id,
 				'type'    => 'text',
 			)
 		);
 
-		// Test that the sanitize_url option gets added.
-		$url           = 'https://example.org/?param=[' . $field->id . ']';
-		$sanitized_url = FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $form->id );
-		$this->assertNotEquals( $url, $sanitized_url );
-		$this->assertEquals( 'https://example.org/?param=[' . $field->id . ' sanitize_url=1]', $sanitized_url );
+		$this->assert_maybe_add_sanitize_url_attr(
+			'https://example.org/?param=[' . $field_id . ' sanitize_url=1]',
+			'https://example.org/?param=[' . $field_id . ']',
+			'The sanitize_url=1 option should get added if it is missing.'
+		);
 
-		// Test that a setting does not get overwritten.
-		$url           = 'https://example.org/?param=[' . $field->id . ' sanitize_url=0]';
-		$sanitized_url = FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $form->id );
-		$this->assertEquals( $url, $sanitized_url );
+		$this->assert_maybe_add_sanitize_url_attr(
+			'https://example.org/?param=[' . $field_id . ' sanitize_url=0]',
+			'https://example.org/?param=[' . $field_id . ' sanitize_url=0]',
+			'Nothing should change if the setting already exists.'
+		);
 
-		// Test that other options are preserved.
-		$url           = 'https://example.org/?param=[' . $field->id . ' show="field_label"]';
-		$sanitized_url = FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $form->id );
-		$this->assertNotEquals( $url, $sanitized_url );
-		$this->assertEquals( 'https://example.org/?param=[' . $field->id . ' show="field_label" sanitize_url=1]', $sanitized_url );
+		$this->assert_maybe_add_sanitize_url_attr(
+			'https://example.org/?param=[' . $field_id . ' show="field_label" sanitize_url=1]',
+			'https://example.org/?param=[' . $field_id . ' show="field_label"]',
+			'Other shortcodes options need to stay when the sanitize_url=1 option is added.'
+		);
+
+		$this->assert_maybe_add_sanitize_url_attr(
+			'https://example.org/?param=[if ' . $field_id . ' equals="value"][' . $field_id . ' sanitize_url=1][else]redirect2[/if ' . $field_id . ']',
+			'https://example.org/?param=[if ' . $field_id . ' equals="value"][' . $field_id . '][else]redirect2[/if ' . $field_id . ']',
+			'An if conditional and else shortcode should not be modified by a call to maybe_add_sanitize_url_attr.'
+		);
+
+		$this->assert_maybe_add_sanitize_url_attr(
+			'[' . $field_id . ']',
+			'[' . $field_id . ']',
+			'The sanitize_url=1 option should only be automatically applied to URL parameters.'
+		);
+
+		$url_field_id = $this->factory->field->create(
+			array(
+				'form_id' => $this->form->id,
+				'type'    => 'url',
+			)
+		);
+		$this->assert_maybe_add_sanitize_url_attr(
+			'[' . $url_field_id . ']?param=[' . $field_id . ' sanitize_url=1]',
+			'[' . $url_field_id . ']?param=[' . $field_id . ']'
+		);
+	}
+
+	private function assert_maybe_add_sanitize_url_attr( $expected, $url, $message = '' ) {
+		$this->assertEquals( $expected, FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $this->form->id ), $message );
 	}
 }
