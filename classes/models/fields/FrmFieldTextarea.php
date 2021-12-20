@@ -65,10 +65,9 @@ class FrmFieldTextarea extends FrmFieldType {
 		$input_html = $this->get_field_input_html_hook( $this->field );
 		$this->add_aria_description( $args, $input_html );
 		$rows = ( $this->field['max'] ) ? 'rows="' . esc_attr( $this->field['max'] ) . '" ' : '';
-		$auto_height = ( $this->field['auto_height'] ) ? 'data-auto-height="' . esc_attr( $this->field['auto_height'] ) . '" ' : '';
 
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
-			$rows . $input_html . $auto_height . '>' .
+			$rows . $input_html . '>' .
 			FrmAppHelper::esc_textarea( $this->field['value'] ) .
 			'</textarea>';
 	}
