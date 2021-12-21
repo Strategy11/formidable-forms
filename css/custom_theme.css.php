@@ -268,6 +268,7 @@ legend.frm_hidden{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
+	float: none;
 }
 
 .with_frm_style input[type=text],
