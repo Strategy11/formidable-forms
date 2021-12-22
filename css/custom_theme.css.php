@@ -75,6 +75,7 @@ form input.frm_verify{
 
 .with_frm_style fieldset{
 	min-width:0;
+	display: block; /* Override 2021 theme */
 }
 
 .with_frm_style fieldset fieldset{

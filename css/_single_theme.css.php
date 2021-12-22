@@ -313,6 +313,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background: <?php echo esc_html( $submit_active_bg_color . $important ); ?>;
 	border-color: <?php echo esc_html( $submit_active_border_color . $important ); ?>;
 	color: <?php echo esc_html( $submit_active_color . $important ); ?>;
+	outline: none;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
