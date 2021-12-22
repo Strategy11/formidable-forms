@@ -270,6 +270,12 @@ legend.frm_hidden{
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
 	float: none;
+	height: auto;
+}
+
+.with_frm_style input[type=radio]:after,
+.with_frm_style input[type=checkbox]:after {
+	display: none; /* 2021 conflict */
 }
 
 .with_frm_style input[type=text],
