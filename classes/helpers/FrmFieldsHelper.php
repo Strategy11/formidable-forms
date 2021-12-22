@@ -746,6 +746,7 @@ class FrmFieldsHelper {
 			$replace_with  = self::get_value_for_shortcode( $atts );
 
 			if ( $replace_with !== null ) {
+				$replace_with = self::trigger_shortcode_atts( $replace_with, $atts );
 				self::sanitize_embedded_shortcodes( compact( 'entry' ), $replace_with );
 				$content = str_replace( $shortcodes[0][ $short_key ], $replace_with, $content );
 			}
@@ -754,6 +755,36 @@ class FrmFieldsHelper {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * @param string $replace_with
+	 * @param array  $atts
+	 */
+	private static function trigger_shortcode_atts( $replace_with, $atts ) {
+		$supported_atts = array( 'sanitize', 'sanitize_url' );
+		$included_atts  = array_intersect( $supported_atts, array_keys( $atts ) );
+		foreach ( $included_atts as $included_att ) {
+			$function     = 'atts_' . $included_att;
+			$replace_with = self::$function( $replace_with, $atts );
+		}
+		return $replace_with;
+	}
+
+	/**
+	 * @param string $replace_with
+	 * @return string
+	 */
+	private static function atts_sanitize( $replace_with ) {
+		return sanitize_title_with_dashes( $replace_with );
+	}
+
+	/**
+	 * @param string $replace_with
+	 * @return string
+	 */
+	private static function atts_sanitize_url( $replace_with ) {
+		return urlencode( $replace_with );
 	}
 
 	/**

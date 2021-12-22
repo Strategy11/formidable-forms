@@ -6875,9 +6875,28 @@ function frmAdminBuildJS() {
 				}
 			});
 		} else {
+			variable = maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox );
 			insertContent( contentBox, variable );
 		}
 		return false;
+	}
+
+	function maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox ) {
+		if ( 'object' !== typeof element || ! ( element instanceof jQuery ) || 'success_url' !== contentBox[0].id ) {
+			return variable;
+		}
+
+		element = element[0];
+		if ( ! element.closest( '#frm-insert-fields-box' ) ) {
+			// Only add sanitize_url=1 to field shortcodes.
+			return variable;
+		}
+
+		if ( ! element.parentNode.classList.contains( 'frm_insert_url' ) ) {
+			variable = variable.replace( ']', ' sanitize_url=1]' );
+		}
+
+		return variable;
 	}
 
 	function insertContent( contentBox, variable ) {

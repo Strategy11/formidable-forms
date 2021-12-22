@@ -561,6 +561,10 @@ BEFORE_HTML;
 		if ( $possible_email_field ) {
 			$class .= ' show_frm_not_email_to';
 		}
+
+		if ( 'url' === $args['type'] ) {
+			$class .= ' frm_insert_url';
+		}
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
@@ -1609,5 +1613,65 @@ BEFORE_HTML;
 			},
 			0
 		);
+	}
+
+	/**
+	 * Make sure the field shortcodes in a url always add the sanitize_url=1 option if nothing is defined.
+	 * This is to prevent some field characters like ', @, and | from being stripped from the redirect URL.
+	 *
+	 * @since 5.0.16
+	 *
+	 * @param string $url
+	 * @param int    $form_id
+	 * @return string
+	 */
+	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
+		if ( false === strpos( $url, '[' ) ) {
+			// Do nothing if no shortcodes are detected.
+			return $url;
+		}
+
+		$parsed = wp_parse_url( $url );
+		if ( empty( $parsed['query'] ) ) {
+			// Do nothing if no query can be detected in the url string.
+			return $url;
+		}
+
+		$original_query = $parsed['query'];
+		$query          = $parsed['query'];
+
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
+		if ( empty( $shortcodes[0] ) ) {
+			// No shortcodes found, do nothing.
+			return $url;
+		}
+
+		foreach ( $shortcodes[0] as $key => $shortcode ) {
+			$options = trim( $shortcodes[3][ $key ] );
+
+			if ( in_array( $shortcodes[1][ $key ], array( 'if ' ), true ) ) {
+				// Skip if shortcodes.
+				continue;
+			}
+
+			if ( false !== strpos( $options, 'sanitize_url=' ) || false !== strpos( $options, 'sanitize=' ) ) {
+				// A sanitize option is already set so leave it alone.
+				continue;
+			}
+
+			$new_shortcode = '[' . $shortcodes[2][ $key ];
+			if ( $options ) {
+				$new_shortcode .= ' ' . $options;
+			}
+			$new_shortcode .= ' sanitize_url=1]';
+
+			$query = str_replace( $shortcode, $new_shortcode, $query );
+		}
+
+		if ( $query === $original_query ) {
+			return $url;
+		}
+
+		return str_replace( $original_query, $query, $url );
 	}
 }
