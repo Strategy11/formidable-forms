@@ -6,6 +6,7 @@
 - New: Extended the FrmCSVExportHelper::generate_csv function so it has the option to generate a CSV file in a temporary directory, and pass along an array of meta information to most CSV filter hooks.
 - New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by email action ID.
 - New: Added new frm_entry_formatter_class, frm_prepend_and_or_where, frm_entry_formatter_format, frm_formatted_entry_values_content, and frm_entries_show_args filter hooks.
+- New: Allow more colors in the styler to be transparent including background colors and border colors for active, hovered, and disabled inputs.
 - Fix: Selected radio buttons were appearing incorrectly when using the Twenty Twenty One theme in Chrome or Safari.
 - Fix: Radio buttons and checkboxes were appearing overlapped with labels when using the H-Code theme.
 - Fix: Field pop ups were displaying upgrade messages even for licenses that had access to the add on.
