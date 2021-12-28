@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					/**
 					 * Allows modifying the arguments when showing entry in the Entries page.
 					 *
-					 * @since 5.0-quizzes
+					 * @since 5.0.16
 					 *
 					 * @param array $show_args The arguments.
 					 * @param array $args      Includes `form`.
