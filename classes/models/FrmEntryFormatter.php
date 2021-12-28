@@ -200,7 +200,7 @@ class FrmEntryFormatter {
 		/**
 		 * Allows modifying the format property of FrmEntryFormatter object.
 		 *
-		 * @since 5.0-quizzes
+		 * @since 5.0.16
 		 *
 		 * @param string $format The format.
 		 * @param array  $args   Includes `atts`, `entry`.
@@ -403,7 +403,7 @@ class FrmEntryFormatter {
 		/**
 		 * Allows modifying the formatted entry values content.
 		 *
-		 * @since 5.0-quizzes
+		 * @since 5.0.16
 		 *
 		 * @param string $content The formatted entry values content.
 		 * @param array  $args    Includes `entry`, `atts`, `format`, `entry_values`.

@@ -84,7 +84,7 @@ class FrmEntryValues {
 	/**
 	 * Gets entry property.
 	 *
-	 * @since 5.0-quizzes
+	 * @since 5.0.16
 	 * @return stdClass
 	 */
 	public function get_entry() {

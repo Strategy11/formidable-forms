@@ -29,7 +29,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * @var string
 	 * @since 2.04
-	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
+	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
 	protected $direction = 'ltr';
 
@@ -42,14 +42,14 @@ class FrmTableHTMLGenerator {
 	/**
 	 * @var string
 	 * @since 2.04
-	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
+	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
 	protected $table_style = '';
 
 	/**
 	 * @var string
 	 * @since 2.04
-	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
+	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
 	protected $td_style = '';
 
@@ -208,7 +208,7 @@ class FrmTableHTMLGenerator {
 	 * Get the table row style
 	 *
 	 * @since 2.04
-	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
+	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 *
 	 * @return string
 	 */
@@ -229,7 +229,7 @@ class FrmTableHTMLGenerator {
 	 * Switch the odd property from true to false or false to true
 	 *
 	 * @since 2.04
-	 * @since 5.0-quizzes Changed scope from `private` to `protected`.
+	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
 	protected function switch_odd() {
 		if ( $this->type !== 'shortcode' ) {

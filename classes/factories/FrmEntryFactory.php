@@ -27,7 +27,7 @@ class FrmEntryFactory {
 		/**
 		 * Allows changing entry formatter class name.
 		 *
-		 * @since 5.0-quizzes
+		 * @since 5.0.16
 		 *
 		 * @param string $formatter_class Entry formatter class name.
 		 * @param array  $atts            See {@see FrmEntriesController::show_entry_shortcode()}.
