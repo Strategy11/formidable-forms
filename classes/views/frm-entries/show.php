@@ -38,21 +38,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</span>
 					</h3>
 					<?php
-					echo FrmEntriesController::show_entry_shortcode( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						array(
-							'id'             => $entry->id,
-							'entry'          => $entry,
-							'fields'         => $fields,
-							'include_blank'  => true,
-							'include_extras' => 'page, section, password',
-							'inline_style'   => 0,
-							'class'          => 'frm-alt-table',
-							'show_filename'  => true,
-							'show_image'     => true,
-							'size'           => 'thumbnail',
-							'add_link'       => true,
-						)
+					$show_args = array(
+						'id'             => $entry->id,
+						'entry'          => $entry,
+						'fields'         => $fields,
+						'include_blank'  => true,
+						'include_extras' => 'page, section, password',
+						'inline_style'   => 0,
+						'class'          => 'frm-alt-table',
+						'show_filename'  => true,
+						'show_image'     => true,
+						'size'           => 'thumbnail',
+						'add_link'       => true,
 					);
+
+					/**
+					 * Allows modifying the arguments when showing entry in the Entries page.
+					 *
+					 * @since 5.0.16
+					 *
+					 * @param array $show_args The arguments.
+					 * @param array $args      Includes `form`.
+					 */
+					$show_args = apply_filters( 'frm_entries_show_args', $show_args, compact( 'form' ) );
+
+					echo FrmEntriesController::show_entry_shortcode( $show_args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 
 					<?php do_action( 'frm_show_entry', $entry ); ?>
