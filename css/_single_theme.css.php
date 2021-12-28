@@ -225,6 +225,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	color: var(--text-color);
 	<?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
 	box-shadow:none;
+	outline: none;
 	<?php } else { ?>
 	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
 	<?php } ?>
@@ -312,6 +313,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background: <?php echo esc_html( $submit_active_bg_color . $important ); ?>;
 	border-color: <?php echo esc_html( $submit_active_border_color . $important ); ?>;
 	color: <?php echo esc_html( $submit_active_color . $important ); ?>;
+	outline: none;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
