@@ -348,7 +348,7 @@ function frmFrontFormJS() {
 	}
 
 	function isInlineDatepickerField( field ) {
-		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
+		return 'hidden' === field.type && 'string' === typeof field.id && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
 	}
 
 	function getFileVals( fileID ) {
