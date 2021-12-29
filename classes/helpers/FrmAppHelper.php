@@ -3242,7 +3242,8 @@ class FrmAppHelper {
 		if ( $link && ! empty( $link['url'] ) ) {
 			$params['oneclick'] = json_encode( $link );
 		} else {
-			$params['message'] = __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' );
+			$params['requires'] = 'Plus';
+			$params['message']  = __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' );
 		}
 		return $params;
 	}
