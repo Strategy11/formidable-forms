@@ -2249,6 +2249,11 @@ class FrmFormsController {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
 	}
 
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return void
+	 */
 	public static function landing_page_preview_option() {
 		$dir = apply_filters( 'frm_landing_page_preview_option', false );
 		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
