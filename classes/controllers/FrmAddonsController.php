@@ -454,6 +454,11 @@ class FrmAddonsController {
 			if ( ! empty( $link ) ) {
 				$link['status'] = $addon['status']['type'];
 			}
+		} elseif ( current_user_can( 'activate_plugins' ) && self::is_installed( 'formidable-' . $plugin . '/formidable-' . $plugin . '.php' ) ) {
+			$link = array(
+				'url'   => 'formidable-' . $plugin . '/formidable-' . $plugin . '.php',
+				'class' => 'frm-activate-addon',
+			);
 		}
 
 		return $link;

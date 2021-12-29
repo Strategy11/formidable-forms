@@ -1135,6 +1135,10 @@ class FrmFormsController {
 			),
 		);
 
+		if ( ! FrmAppHelper::show_landing_pages() ) {
+			unset( $sections['landing'] );
+		}
+
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
 		if ( FrmAppHelper::pro_is_installed() && ! FrmAppHelper::meets_min_pro_version( '4.0' ) ) {

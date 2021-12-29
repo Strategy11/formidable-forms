@@ -3219,6 +3219,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 5.0.16
+	 *
+	 * @return bool
+	 */
+	public static function show_landing_pages() {
+		$link = FrmAddonsController::install_link( 'landing' );
+		return array_key_exists( 'class', $link );
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */
