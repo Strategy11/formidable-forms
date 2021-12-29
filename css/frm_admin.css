@@ -8474,3 +8474,9 @@ Responsive Design
 .frm-banner-dismiss .frmsvg {
 	vertical-align: top;
 }
+
+.frm_form_field.frm_auto_grow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
