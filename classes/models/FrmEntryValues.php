@@ -82,6 +82,16 @@ class FrmEntryValues {
 	}
 
 	/**
+	 * Gets entry property.
+	 *
+	 * @since 5.0.16
+	 * @return stdClass
+	 */
+	public function get_entry() {
+		return $this->entry;
+	}
+
+	/**
 	 * Set the form_id property
 	 *
 	 * @since 2.04

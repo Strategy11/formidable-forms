@@ -262,7 +262,7 @@ function frmFrontFormJS() {
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
-		if ( field.type === 'hidden' && fileID === null && ! hasClass( field, 'ssa_appointment_form_field_appointment_id' ) ) {
+		if ( field.type === 'hidden' && fileID === null && ! isAppointmentField( field ) && ! isInlineDatepickerField( field ) ) {
 			return errors;
 		}
 
@@ -341,6 +341,14 @@ function frmFrontFormJS() {
 	function isSignatureField( field ) {
 		var name = field.getAttribute( 'name' );
 		return 'string' === typeof name && '[typed]' === name.substr( -7 );
+	}
+
+	function isAppointmentField( field ) {
+		return hasClass( field, 'ssa_appointment_form_field_appointment_id' );
+	}
+
+	function isInlineDatepickerField( field ) {
+		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
 	}
 
 	function getFileVals( fileID ) {

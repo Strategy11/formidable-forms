@@ -571,18 +571,26 @@ class FrmDb {
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		if ( empty( $where ) ) {
-			return '';
-		}
-
-		if ( is_array( $where ) ) {
-			global $wpdb;
-			self::get_where_clause_and_values( $where, $starts_with );
-			$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$where = '';
 		} else {
-			$where = $starts_with . $where;
+			if ( is_array( $where ) ) {
+				global $wpdb;
+				self::get_where_clause_and_values( $where, $starts_with );
+				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			} else {
+				$where = $starts_with . $where;
+			}
 		}
 
-		return $where;
+		/**
+		 * Allows modifying where clause when using FrmDb::prepend_and_or_where() method.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $where       Where string.
+		 * @param string $starts_with The start of where string.
+		 */
+		return apply_filters( 'frm_prepend_and_or_where', $where, $starts_with );
 	}
 
 	/**

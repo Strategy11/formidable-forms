@@ -67,9 +67,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'reCAPTCHA Threshold', 'formidable' ); ?>
 		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'A score of 0 is likely to be a bot and a score of 1 is likely not a bot. Setting a lower threshold will allow more bots, but it will also stop fewer real users.', 'formidable' ); ?>"></span>
 	</label>
-	<span style="vertical-align:top;"><?php esc_html_e( '0', 'formidable' ); ?></span>
+	<span style="vertical-align:top;">0</span>
 	<input name="frm_re_threshold" id="frm_re_threshold" type="range" step="0.1" max="1" min="0" value="<?php echo esc_attr( $frm_settings->re_threshold ); ?>" />
-	<span style="vertical-align:top;"><?php esc_html_e( '1', 'formidable' ); ?></span>
+	<span style="vertical-align:top;">1</span>
 </p>
 
 <p>
