@@ -3240,7 +3240,7 @@ class FrmAppHelper {
 			'upgrade' => __( 'Form Landing Pages', 'formidable' ),
 		);
 		if ( $link && ! empty( $link['url'] ) ) {
-			$params['oneclick'] = '{"url":"' . $link['url'] . '","class":"frm-activate-addon","status":"installed"}';
+			$params['oneclick'] = json_encode( $link );
 		} else {
 			$params['message'] = __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' );
 		}
