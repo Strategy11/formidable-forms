@@ -1117,6 +1117,12 @@ class FrmFormsController {
 				'function' => 'buttons_settings',
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
+			'landing'     => array(
+				'name'       => __( 'Form Landing Page', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_file_text_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
+			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => __CLASS__,
@@ -1124,6 +1130,10 @@ class FrmFormsController {
 				'icon'     => 'frm_icon_font frm_code_icon',
 			),
 		);
+
+		if ( ! FrmAppHelper::show_landing_pages() ) {
+			unset( $sections['landing'] );
+		}
 
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
@@ -2237,6 +2247,28 @@ class FrmFormsController {
 	 */
 	private static function is_minification_on( $atts ) {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
+	}
+
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return void
+	 */
+	public static function landing_page_preview_option() {
+		$dir = apply_filters( 'frm_landing_page_preview_option', false );
+		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
+			$dir = self::get_form_views_path();
+		}
+		include $dir . 'landing-page-preview-option.php';
+	}
+
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return string
+	 */
+	private static function get_form_views_path() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
 	}
 
 	/**

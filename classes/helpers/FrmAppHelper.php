@@ -3219,6 +3219,36 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 5.0.16
+	 *
+	 * @return bool
+	 */
+	public static function show_landing_pages() {
+		$link = FrmAddonsController::install_link( 'landing' );
+		return array_key_exists( 'class', $link );
+	}
+
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return array
+	 */
+	public static function get_landing_page_upgrade_data_params() {
+		$link   = self::pro_is_installed() ? FrmAddonsController::install_link( 'landing' ) : array();
+		$params = array(
+			'medium'  => 'landing-preview',
+			'upgrade' => __( 'Form Landing Pages', 'formidable' ),
+		);
+		if ( $link && ! empty( $link['url'] ) ) {
+			$params['oneclick'] = json_encode( $link );
+		} else {
+			$params['requires'] = 'Plus';
+			$params['message']  = __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' );
+		}
+		return $params;
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */
