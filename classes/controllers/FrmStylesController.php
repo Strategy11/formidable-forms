@@ -293,6 +293,11 @@ class FrmStylesController {
 		return self::manage( $message, $forms );
 	}
 
+	/**
+	 * @param string        $message
+	 * @param FrmStyle|null $style
+	 * @return void
+	 */
 	public static function custom_css( $message = '', $style = null ) {
 		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
 			$id       = 'frm_codemirror_box';
@@ -305,14 +310,10 @@ class FrmStylesController {
 					),
 				)
 			);
-		} else {
-			_deprecated_function( 'Codemirror v4.7', 'WordPress 4.9', 'Update WordPress' );
-			$id         = 'frm_custom_css_box';
-			$settings   = array();
-			$codemirror = '4.7';
-			wp_enqueue_style( 'codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css', array(), $codemirror );
-			wp_enqueue_script( 'codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), $codemirror );
-			wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), $codemirror );
+		}
+
+		if ( empty( $settings ) ) {
+			return;
 		}
 
 		if ( ! isset( $style ) ) {
@@ -320,7 +321,7 @@ class FrmStylesController {
 			$style     = $frm_style->get_default_style();
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
 	public static function save_css() {

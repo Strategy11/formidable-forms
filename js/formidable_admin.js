@@ -8892,9 +8892,6 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_styling_form' ) !== null ) {
 				// load styling settings js
 				frmAdminBuild.styleInit();
-			} else if ( document.getElementById( 'frm_custom_css_box' ) !== null ) {
-				// load styling settings js
-				frmAdminBuild.customCSSInit();
 			} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 				// global settings page
 				frmAdminBuild.globalSettingsInit();
@@ -9557,16 +9554,6 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
-		},
-
-		customCSSInit: function() {
-			/* deprecated since WP 4.9 */
-			var customCSS = document.getElementById( 'frm_custom_css_box' );
-			if ( customCSS !== null ) {
-				CodeMirror.fromTextArea( customCSS, {
-					lineNumbers: true
-				});
-			}
 		},
 
 		globalSettingsInit: function() {
