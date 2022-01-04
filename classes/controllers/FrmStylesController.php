@@ -314,6 +314,10 @@ class FrmStylesController {
 			$settings = false;
 		}
 
+		if ( empty( $settings ) ) {
+			$id = 'frm_custom_css_box';
+		}
+
 		if ( ! isset( $style ) ) {
 			$frm_style = new FrmStyle();
 			$style     = $frm_style->get_default_style();
