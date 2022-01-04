@@ -801,6 +801,7 @@ a.frm_save_draft{
 	border-color: var(--border-color);
 	vertical-align: middle;
 	position: initial; /* override Bootstrap */
+	padding: 0;
 }
 
 .with_frm_style .frm_radio input[type=radio]:before,
