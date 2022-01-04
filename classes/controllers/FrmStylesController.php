@@ -310,10 +310,8 @@ class FrmStylesController {
 					),
 				)
 			);
-		}
-
-		if ( empty( $settings ) ) {
-			return;
+		} else {
+			$settings = false;
 		}
 
 		if ( ! isset( $style ) ) {

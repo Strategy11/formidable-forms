@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Custom CSS', 'formidable' ),
-			'hide_title'  => false,
-			'publish'     => array( 'FrmStylesHelper::save_button', array() ),
-			'nav'         => FrmStylesHelper::get_style_menu( 'custom_css' ),
+			'label'      => __( 'Custom CSS', 'formidable' ),
+			'hide_title' => false,
+			'publish'    => array( 'FrmStylesHelper::save_button', array() ),
+			'nav'        => FrmStylesHelper::get_style_menu( 'custom_css' ),
 		)
 	);
 	?>
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded.', 'formidable' ); ?>
 	</p>
 
-	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+	<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" value="<?php echo esc_attr( $style->menu_order ); ?>" />
@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		foreach ( $style->post_content as $k => $v ) {
-			if ( $k == 'custom_css' ) {
+			if ( $k === 'custom_css' ) {
 				continue;
 			}
 			?>
