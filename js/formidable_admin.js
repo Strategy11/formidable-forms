@@ -9556,6 +9556,10 @@ function frmAdminBuildJS() {
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
 		},
 
+		customCSSInit: function() {
+			console.warn( 'Calling frmAdminBuild.customCSSInit is deprecated.' );
+		},
+
 		globalSettingsInit: function() {
 			var licenseTab;
 
