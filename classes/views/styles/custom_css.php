@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="hidden" name="frm_action" value="save_css" />
 		<?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( 'false' === wp_get_current_user()->syntax_highlighting ? '' : 'hide-if-js' ); ?>"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="<?php echo empty( $settings ) ? '' : 'hide-if-js'; ?>"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 
 		<?php
 		if ( ! empty( $settings ) ) {
