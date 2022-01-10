@@ -3259,7 +3259,7 @@ class FrmAppHelper {
 	 */
 	public static function show_new_feature( $feature ) {
 		$link = FrmAddonsController::install_link( $feature );
-		return array_key_exists( 'class', $link );
+		return array_key_exists( 'status', $link );
 	}
 
 	/**

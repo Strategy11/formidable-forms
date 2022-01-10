@@ -253,6 +253,7 @@ class FrmFormActionsController {
 	 * @return string|false
 	 */
 	private static function action_requires( $upgrading ) {
+		// TODO refactor this to use FrmFormsHelper::get_plan_required but if "free" does get picked up, return false.
 		if ( ! isset( $upgrading['categories'] ) || ! is_array( $upgrading['categories'] ) ) {
 			return false;
 		}
