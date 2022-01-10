@@ -229,8 +229,8 @@ class FrmFormActionsController {
 				$data['data-message'] = $action_control->action_options['message'];
 			}
 
-			$requires = self::action_requires( $upgrading );
-			if ( $requires ) {
+			$requires = FrmFormsHelper::get_plan_required( $upgrading );
+			if ( $requires && 'free' !== $requires ) {
 				$data['data-requires'] = $requires;
 			}
 		}
@@ -244,30 +244,6 @@ class FrmFormActionsController {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_icon.php';
-	}
-
-	/**
-	 * @since 5.0.06
-	 *
-	 * @param array $upgrading
-	 * @return string|false
-	 */
-	private static function action_requires( $upgrading ) {
-		// TODO refactor this to use FrmFormsHelper::get_plan_required but if "free" does get picked up, return false.
-		if ( ! isset( $upgrading['categories'] ) || ! is_array( $upgrading['categories'] ) ) {
-			return false;
-		}
-		$plans      = array( 'Business', 'Elite', 'Basic' );
-		$plus_plans = array( 'Creator', 'Personal', 'Plus' );
-		foreach ( $upgrading['categories'] as $category ) {
-			if ( in_array( $category, $plans, true ) ) {
-				return $category;
-			}
-			if ( in_array( $category, $plus_plans, true ) ) {
-				return 'Plus';
-			}
-		}
-		return false;
 	}
 
 	public static function get_form_actions( $action = 'all' ) {
