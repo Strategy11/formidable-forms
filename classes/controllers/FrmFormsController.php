@@ -1131,7 +1131,6 @@ class FrmFormsController {
 					'chat',
 					array(
 						'upgrade'  => __( 'Conversational Forms', 'formidable' ),
-						'requires' => 'Plus',
 						'message'  => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
 					)
 				),

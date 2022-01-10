@@ -3234,12 +3234,21 @@ class FrmAppHelper {
 	 */
 	public static function get_landing_page_upgrade_data_params( $medium = 'landing' ) {
 		$params = array(
-			'medium'   => $medium,
-			'upgrade'  => __( 'Form Landing Pages', 'formidable' ),
-			'requires' => 'Plus',
-			'message'  => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
+			'medium'  => $medium,
+			'upgrade' => __( 'Form Landing Pages', 'formidable' ),
+			'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 		);
 		return self::get_upgrade_data_params( 'landing', $params );
+	}
+
+	/**
+	 * @since 5.0.17
+	 *
+	 * @param string $plugin
+	 * @return string|false
+	 */
+	private static function get_plan_required( $plugin ) {
+		return FrmFormsHelper::get_plan_required( FrmAddonsController::install_link( $plugin ) );
 	}
 
 	/**
@@ -3262,13 +3271,20 @@ class FrmAppHelper {
 	 */
 	public static function get_upgrade_data_params( $plugin, $params ) {
 		$link = self::pro_is_installed() ? FrmAddonsController::install_link( $plugin ) : array();
-		if ( $link && ! empty( $link['url'] ) ) {
+		if ( ! $link ) {
+			return $params;
+		}
+
+		if ( ! empty( $link['url'] ) ) {
 			$params['oneclick'] = json_encode( $link );
-			unset( $params['requires'], $params['message'] );
+			unset( $params['message'] );
 			if ( ! isset( $params['medium'] ) ) {
 				$params['medium'] = $plugin;
 			}
+		} else {
+			$params['requires'] = FrmFormsHelper::get_plan_required( $link, false );
 		}
+
 		return $params;
 	}
 

@@ -1409,9 +1409,12 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $item
+	 * @return string|false
 	 */
 	public static function get_plan_required( &$item ) {
-		if ( ! isset( $item['categories'] ) || ! empty( $item['url'] ) ) {
+		if ( ! isset( $item['categories'] ) || ! is_array( $item['categories'] ) || ! empty( $item['url'] ) ) {
 			return false;
 		}
 

@@ -80,20 +80,28 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 
 // Show Form Action Automation indicator.
 if ( ! function_exists( 'load_frm_autoresponder' ) ) {
-	$install_data = '';
-	$class        = ' frm_noallow';
-	$upgrading    = FrmAddonsController::install_link( 'autoresponder' );
+	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
+	$params    = array(
+		'href'         => 'javascript:void(0)',
+		'class'        => 'frm_show_upgrade',
+		'data-upgrade' => __( 'Form action automations', 'formidable' ),
+		'data-medium'  => 'action-automation',
+	);
+
 	if ( isset( $upgrading['url'] ) ) {
-		$install_data = json_encode( $upgrading );
-		$class        = '';
+		$params['data-oneclick'] = json_encode( $upgrading );
+	} else {
+		$params['class']        .= ' frm_noallow';
+		$params['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 	}
 	?>
 	<h3>
-		<a href="javascript:void(0)" class="frm_show_upgrade<?php echo esc_attr( $class ); ?>" data-upgrade="<?php esc_attr_e( 'Form action automations', 'formidable' ); ?>" data-requires="Elite" data-medium="action-automation" data-oneclick="<?php echo esc_attr( $install_data ); ?>">
+		<a <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 			<?php esc_html_e( 'Setup Automation', 'formidable' ); ?>
 		</a>
 	</h3>
 	<?php
+	unset( $params );
 }
 
 // Show link to install logs.
