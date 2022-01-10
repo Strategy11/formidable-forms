@@ -2051,13 +2051,13 @@ function frmAdminBuildJS() {
 	}
 
 	function getDeleteActionOption( isFieldGroup ) {
-		var option = { class: 'frm_delete', icon: 'frm_delete_icon' };
+		var option = { class: 'frm_delete', icon: 'frm_trash_icon' };
 		option.label = isFieldGroup ? __( 'Delete Group', 'formidable' ) : __( 'Delete', 'formidable' );
 		return option;
 	}
 
 	function getDuplicateActionOption( isFieldGroup ) {
-		var option = { class: 'frm_clone', icon: 'frm_clone_icon' };
+		var option = { class: 'frm_clone', icon: 'frm_thin_copy_icon' };
 		option.label = isFieldGroup ? __( 'Duplicate Group', 'formidable' ) : __( 'Duplicate', 'formidable' );
 		return option;
 	}

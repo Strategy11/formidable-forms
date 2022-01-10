@@ -8335,7 +8335,7 @@ Responsive Design
 	background: #F6F7FB;
 	box-sizing: border-box;
 	border-radius: 2px;
-	padding: 18px 11px;
+	padding: 14px 11px;
 }
 
 #frm_field_group_popup .frm-row-layout-option .frm_grid_container {
@@ -8356,7 +8356,7 @@ Responsive Design
 .frm-break-field-group,
 #frm_field_group_controls .frm-dropdown-menu > li > a,
 .frm-field-action-icons .frm-dropdown-menu > li > a {
-	padding: 5px 15px;
+	padding: 8px 18px;
 	cursor: pointer;
 	font-size: 14px;
 	line-height: 19px;
