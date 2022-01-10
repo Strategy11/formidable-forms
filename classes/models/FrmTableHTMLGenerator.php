@@ -185,8 +185,8 @@ class FrmTableHTMLGenerator {
 	private function get_color_markup( $color_markup ) {
 		$color_markup = trim( $color_markup );
 
-		//check if each character in string is valid hex digit
-		if ( ctype_xdigit( $color_markup ) ) {
+		// Check if each character in string is valid hex digit
+		if ( FrmAppHelper::ctype_xdigit( $color_markup ) ) {
 			$color_markup = '#' . $color_markup;
 		}
 

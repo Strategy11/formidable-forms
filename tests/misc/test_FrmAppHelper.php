@@ -538,4 +538,16 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertTrue( strlen( $unique_key ) <= 70 );
 		$this->assertNotEquals( $super_long_form_key, $unique_key );
 	}
+
+	/**
+	 * @covers FrmAppHelper::ctype_xdigit
+	 */
+	public function test_ctype_xdigit() {
+		$this->assertTrue( FrmAppHelper::ctype_xdigit( 'fff' ) );
+		$this->assertTrue( FrmAppHelper::ctype_xdigit( 'a1a1a1' ) );
+		$this->assertTrue( FrmAppHelper::ctype_xdigit( 'FFF' ) );
+		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'fgf' ) );
+		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'z1z1z1' ) );
+		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'FGF' ) );
+	}
 }

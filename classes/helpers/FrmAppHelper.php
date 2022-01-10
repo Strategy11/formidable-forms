@@ -3249,6 +3249,22 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Returns true if every character in text is a hexadecimal 'digit', that is a decimal digit or a character from [A-Fa-f], false otherwise.
+	 * Not every server installs the ctype extension, so use a fallback if the function does not exist.
+	 *
+	 * @since 5.0.17
+	 *
+	 * @param string $text
+	 * @return bool
+	 */
+	public static function ctype_xdigit( $text ) {
+		if ( function_exists( 'ctype_xdigit' ) ) {
+			return ctype_xdigit( $text );
+		}
+		return is_string( $text ) && '' !== $text && ! preg_match( '/[^A-Fa-f0-9]/', $text );
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */
