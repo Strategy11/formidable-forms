@@ -3270,12 +3270,12 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function get_upgrade_data_params( $plugin, $params ) {
-		$link = self::pro_is_installed() ? FrmAddonsController::install_link( $plugin ) : array();
+		$link = FrmAddonsController::install_link( $plugin );
 		if ( ! $link ) {
 			return $params;
 		}
 
-		if ( ! empty( $link['url'] ) ) {
+		if ( ! empty( $link['url'] ) && self::pro_is_installed() ) {
 			$params['oneclick'] = json_encode( $link );
 			unset( $params['message'] );
 			if ( ! isset( $params['medium'] ) ) {
