@@ -3247,8 +3247,9 @@ class FrmAppHelper {
 	 * @param string $plugin
 	 * @return string|false
 	 */
-	private static function get_plan_required( $plugin ) {
-		return FrmFormsHelper::get_plan_required( FrmAddonsController::install_link( $plugin ) );
+	public static function get_plan_required( $plugin ) {
+		$link = FrmAddonsController::install_link( $plugin );
+		return FrmFormsHelper::get_plan_required( $link );
 	}
 
 	/**
