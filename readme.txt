@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.0
-Tested up to: 5.8.2
+Tested up to: 5.8.3
 Requires PHP: 5.6
-Stable tag: 5.0.16
+Stable tag: 5.0.17
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.17 =
+- The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
+- New: The ctype PHP extension is no longer a requirement.
+- Fix: The custom CSS page would appear without any textarea on some configurations where CodeMirror may be disabled.
+- Fix: Removed padding styles from radio buttons because of a conflict with the Sensational theme.
+
 = 5.0.16 =
 - New: Field shortcodes now support sanitize_url=1 and sanitize=1 options which were previously only processed in Pro. For more information on how these options work, see https://formidableforms.com/knowledgebase/advanced/#kb-sanitize-url
 - New: The sanitize_url=1 option will now be inserted automatically when inserting most field shortcodes to a redirect url. This is to avoid issues with redirects stripping characters like ' and @ which may cause a redirect to fail in some cases.
@@ -458,8 +464,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - New: Added a new array_separator option to entry shortcodes. This can be used with the [default-message] like [default-message array_separator="<br/>"] shortcode to change the separator used for multiple checkbox or dropdown values. It also works with the [frm-show-entry] shortcode in pro.
 - New: Added tooltips to honeypot and JavaScript token spam settings.
 - Fix: The adjusted color used for .frm-alt-table stripes was not calculating properly when the border color was set as an RGBA value in the style manager.
-
-= 5.0.13.1 =
-- Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
