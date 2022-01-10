@@ -67,4 +67,19 @@ class test_FrmFormsHelper extends FrmUnitTest {
 	private function assert_maybe_add_sanitize_url_attr( $expected, $url, $message = '' ) {
 		$this->assertEquals( $expected, FrmFormsHelper::maybe_add_sanitize_url_attr( $url, (int) $this->form->id ), $message );
 	}
+
+	/**
+	 * @covers FrmFormsHelper::get_plan_required
+	 */
+	public function test_get_plan_required() {
+		$this->assert_get_plan_required( 'free', array( 'Category1', 'free' ) );
+		$this->assert_get_plan_required( 'Elite', array( 'Category1', 'Elite', 'Category2' ) );
+		$this->assert_get_plan_required( 'Plus', array( 'Category1', 'Creator' ) );
+		$this->assert_get_plan_required( 'Plus', array( 'Plus', 'Category2' ) );
+	}
+
+	private function assert_get_plan_required( $expected, $categories ) {
+		$link = compact( 'categories' );
+		$this->assertEquals( $expected, FrmFormsHelper::get_plan_required( $link ) );
+	}
 }

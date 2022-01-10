@@ -3224,8 +3224,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function show_landing_pages() {
-		$link = FrmAddonsController::install_link( 'landing' );
-		return array_key_exists( 'class', $link );
+		return self::show_new_feature( 'landing' );
 	}
 
 	/**
@@ -3233,18 +3232,60 @@ class FrmAppHelper {
 	 *
 	 * @return array
 	 */
-	public static function get_landing_page_upgrade_data_params() {
-		$link   = self::pro_is_installed() ? FrmAddonsController::install_link( 'landing' ) : array();
+	public static function get_landing_page_upgrade_data_params( $medium = 'landing' ) {
 		$params = array(
-			'medium'  => 'landing-preview',
+			'medium'  => $medium,
 			'upgrade' => __( 'Form Landing Pages', 'formidable' ),
+			'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 		);
-		if ( $link && ! empty( $link['url'] ) ) {
-			$params['oneclick'] = json_encode( $link );
-		} else {
-			$params['requires'] = 'Plus';
-			$params['message']  = __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' );
+		return self::get_upgrade_data_params( 'landing', $params );
+	}
+
+	/**
+	 * @since 5.0.17
+	 *
+	 * @param string $plugin
+	 * @return string|false
+	 */
+	private static function get_plan_required( $plugin ) {
+		$link = FrmAddonsController::install_link( $plugin );
+		return FrmFormsHelper::get_plan_required( $link );
+	}
+
+	/**
+	 * @since 5.0.17
+	 *
+	 * @param string
+	 * @return bool
+	 */
+	public static function show_new_feature( $feature ) {
+		$link = FrmAddonsController::install_link( $feature );
+		return array_key_exists( 'status', $link ) || array_key_exists( 'class', $link );
+	}
+
+	/**
+	 * @since 5.0.17
+	 *
+	 * @param string $plugin
+	 * @param array  $params
+	 * @return array
+	 */
+	public static function get_upgrade_data_params( $plugin, $params ) {
+		$link = FrmAddonsController::install_link( $plugin );
+		if ( ! $link ) {
+			return $params;
 		}
+
+		if ( ! empty( $link['url'] ) && self::pro_is_installed() ) {
+			$params['oneclick'] = json_encode( $link );
+			unset( $params['message'] );
+			if ( ! isset( $params['medium'] ) ) {
+				$params['medium'] = $plugin;
+			}
+		} else {
+			$params['requires'] = FrmFormsHelper::get_plan_required( $link, false );
+		}
+
 		return $params;
 	}
 

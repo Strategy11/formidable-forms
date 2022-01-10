@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-$data      = FrmAppHelper::get_landing_page_upgrade_data_params();
+$data      = FrmAppHelper::get_landing_page_upgrade_data_params( 'landing-preview' );
 $data_keys = array_keys( $data );
 $params    = array();
 foreach ( $data_keys as $key ) {

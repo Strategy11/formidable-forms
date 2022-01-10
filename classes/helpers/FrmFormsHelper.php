@@ -1409,19 +1409,22 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $item
+	 * @return string|false
 	 */
 	public static function get_plan_required( &$item ) {
-		if ( ! isset( $item['categories'] ) || ! empty( $item['url'] ) ) {
+		if ( ! isset( $item['categories'] ) || ! is_array( $item['categories'] ) || ! empty( $item['url'] ) ) {
 			return false;
 		}
 
-		$plans = array( 'free', 'Basic', 'Personal', 'Business', 'Elite' );
+		$plans = array( 'free', 'Basic', 'Personal', 'Plus', 'Creator', 'Business', 'Elite' );
 
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				if ( $category === 'Personal' ) {
+				if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
 					// Show the current package name.
 					$category = 'Plus';
 				}
