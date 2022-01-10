@@ -1124,13 +1124,16 @@ class FrmFormsController {
 				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
 			),
 			'chat'        => array(
-				'name'       => __( 'Chat Forms', 'formidable' ),
+				'name'       => __( 'Conversational Forms', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_chat_forms_icon',
 				'html_class' => 'frm_show_upgrade frm_noallow',
-				'data'       => array(
-					'medium'  => 'chat',
-					'upgrade' => __( 'Chat Forms', 'formidable' ),
-					'message' => __( 'Show questions one at a time in a more user friendly format.', 'formidable' ),
+				'data'       => FrmAppHelper::get_upgrade_data_params(
+					'chat',
+					array(
+						'upgrade'  => __( 'Conversational Forms', 'formidable' ),
+						'requires' => 'Plus',
+						'message'  => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
+					)
 				),
 			),
 			'html'        => array(
@@ -1141,8 +1144,10 @@ class FrmFormsController {
 			),
 		);
 
-		if ( ! FrmAppHelper::show_landing_pages() ) {
-			unset( $sections['landing'] );
+		foreach ( array( 'landing', 'chat' ) as $feature ) {
+			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
+				unset( $sections[ $feature ] );
+			}
 		}
 
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
