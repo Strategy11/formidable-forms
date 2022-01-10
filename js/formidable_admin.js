@@ -3628,7 +3628,7 @@ function frmAdminBuildJS() {
 		popup.innerHTML = '';
 
 		wrapper = div();
-		wrapper.style.padding = '24px';
+		wrapper.style.padding = '12px 24px';
 
 		layoutClass = getEvenClassForSize( 5 === size ? 6 : size );
 

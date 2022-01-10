@@ -6788,7 +6788,7 @@ ul .frm_col_two {
 	color: rgba(40, 47, 54, 0.85) !important;
 }
 
-#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li  a {
+#frm_builder_page .frm-dropdown-menu .frm_dropdown_li.frm_more_options_li a {
 	padding: 6px 10px;
 	position: absolute;
 	top: 0;
@@ -8292,7 +8292,7 @@ Responsive Design
 	top: 0;
 	right: 0;
 	width: 366px;
-	height: 231px;
+	height: 200px;
 	border-radius: 8px;
 	background: #fff;
 	box-shadow: 0px 20px 48px rgba(40, 47, 54, 0.15);
@@ -8328,7 +8328,7 @@ Responsive Design
 	line-height: 15px;
 	text-transform: uppercase;
 	color: rgba(40, 47, 54, 0.45);
-	margin-bottom: 40px;
+	margin-bottom: 14px;
 }
 
 .frm-row-layout-option {
@@ -8353,12 +8353,15 @@ Responsive Design
 }
 
 .frm-custom-field-group-layout,
-.frm-break-field-group {
+.frm-break-field-group,
+#frm_field_group_controls .frm-dropdown-menu > li > a,
+.frm-field-action-icons .frm-dropdown-menu > li > a {
 	padding: 5px 15px;
 	cursor: pointer;
 	font-size: 14px;
 	line-height: 19px;
 	color: rgba(40, 47, 54, 0.85);
+	text-decoration: none;
 }
 
 .frm-custom-field-group-layout:hover,
@@ -8367,8 +8370,10 @@ Responsive Design
 }
 
 .frm-custom-field-group-layout svg,
-.frm-break-field-group svg {
-	margin-right: 5px;
+.frm-break-field-group svg,
+#frm_field_group_controls .frm-dropdown-menu svg,
+.frm-field-action-icons .frm-dropdown-menu svg {
+	margin-right: 8px;
 }
 
 #frm_field_multiselect_popup {
