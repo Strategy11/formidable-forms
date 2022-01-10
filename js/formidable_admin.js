@@ -2024,7 +2024,7 @@ function frmAdminBuildJS() {
 		options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
 		if ( ! isFieldGroup ) {
 			options.push(
-				{ class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
+				{ class: 'frm_select', icon: 'frm_gear_icon', label: __( 'Field settings', 'formidable' ) }
 			);
 		}
 		options.forEach(
