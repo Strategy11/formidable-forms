@@ -1121,11 +1121,7 @@ class FrmFormsController {
 				'name'       => __( 'Form Landing Page', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_file_text_icon',
 				'html_class' => 'frm_show_upgrade frm_noallow',
-				'data'       => array(
-					'medium'  => 'landing',
-					'upgrade' => __( 'Form Landing Pages', 'formidable' ),
-					'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
-				),
+				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
 			),
 			'chat'        => array(
 				'name'       => __( 'Chat Forms', 'formidable' ),
@@ -1144,6 +1140,10 @@ class FrmFormsController {
 				'icon'     => 'frm_icon_font frm_code_icon',
 			),
 		);
+
+		if ( ! FrmAppHelper::show_landing_pages() ) {
+			unset( $sections['landing'] );
+		}
 
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
@@ -2259,6 +2259,11 @@ class FrmFormsController {
 		return isset( $atts['minimize'] ) && ! empty( $atts['minimize'] );
 	}
 
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return void
+	 */
 	public static function landing_page_preview_option() {
 		$dir = apply_filters( 'frm_landing_page_preview_option', false );
 		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
@@ -2268,6 +2273,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since 5.0.16
+	 *
 	 * @return string
 	 */
 	private static function get_form_views_path() {

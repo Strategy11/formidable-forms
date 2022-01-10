@@ -65,6 +65,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<b><?php echo esc_html( $entry->parent_item_id ); ?></b>
 			</div>
 		<?php } ?>
+
+		<?php FrmEntriesHelper::maybe_render_captcha_score( $entry->id ); ?>
 	</div>
 </div>
 

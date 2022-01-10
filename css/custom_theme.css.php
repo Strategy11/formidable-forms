@@ -75,6 +75,7 @@ form input.frm_verify{
 
 .with_frm_style fieldset{
 	min-width:0;
+	display: block; /* Override 2021 theme */
 }
 
 .with_frm_style fieldset fieldset{
@@ -268,6 +269,12 @@ legend.frm_hidden{
 	border-color:<?php echo esc_html( $defaults['border_color'] . $important ); ?>;
 	border-color:var(--border-color)<?php echo esc_html( $important ); ?>;
 	box-shadow:var(--box-shadow)<?php echo esc_html( $important ); ?>;
+	float: none;
+}
+
+.with_frm_style input[type=radio]:after,
+.with_frm_style input[type=checkbox]:after {
+	display: none; /* 2021 conflict */
 }
 
 .with_frm_style input[type=text],
@@ -752,6 +759,7 @@ a.frm_save_draft{
 	color:var(--check-label-color)<?php echo esc_html( $important ); ?>;
 	font-weight:<?php echo esc_html( $defaults['check_weight'] . $important ); ?>;
 	font-weight:var(--check-weight)<?php echo esc_html( $important ); ?>;
+	line-height: 1.3;
 }
 
 .with_frm_style .frm_radio input[type=radio],
@@ -770,24 +778,53 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_radio input[type=radio]{
-	-webkit-appearance:radio;
 	border-radius:50%;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]{
-	-webkit-appearance:checkbox;
 	border-radius:0;
 }
 
 .with_frm_style .frm_radio input[type=radio],
 .with_frm_style .frm_checkbox input[type=checkbox]{
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: var(--bg-color);
 	flex: none;
 	display:inline-block;
-	margin:4px 5px 0 0;
-	width:auto;
-	border:none;
-	vertical-align:baseline;
+	margin: 0 5px 0 0;
+	color: var(--border-color);
+	width: 18px;
+	min-width: 18px;
+	height: 18px;
+	border: 1px solid currentColor;
+	border-color: var(--border-color);
+	vertical-align: middle;
 	position: initial; /* override Bootstrap */
+	padding: 0;
+}
+
+.with_frm_style .frm_radio input[type=radio]:before,
+.with_frm_style .frm_checkbox input[type=checkbox]:before {
+	content: '';
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	transform: scale(0);
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 10px 10px var(--text-color);
+	display: block;
+	margin: 2px 0 0 2px;
+}
+
+.with_frm_style .frm_checkbox input[type=checkbox]:before{
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+	border-radius: 0;
+}
+
+.with_frm_style .frm_radio input[type=radio]:checked:before,
+.with_frm_style .frm_checkbox input[type=checkbox]:checked:before {
+	transform: scale(1);
 }
 
 .with_frm_style :invalid,

@@ -152,7 +152,7 @@ class FrmForm {
 
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
 
-		$new_values = self::set_update_options( array(), $values );
+		$new_values = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields ) ) {
@@ -183,9 +183,12 @@ class FrmForm {
 	}
 
 	/**
+	 * @param array $new_values
+	 * @param array $values
+	 * @param array $args
 	 * @return array
 	 */
-	public static function set_update_options( $new_values, $values ) {
+	public static function set_update_options( $new_values, $values, $args = array() ) {
 		if ( ! isset( $values['options'] ) ) {
 			return $new_values;
 		}
@@ -197,6 +200,11 @@ class FrmForm {
 		$options['before_html']  = isset( $values['options']['before_html'] ) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html( 'before' );
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
+
+		if ( ! empty( $options['success_url'] ) && ! empty( $args['form_id'] ) ) {
+			$options['success_url']           = FrmFormsHelper::maybe_add_sanitize_url_attr( $options['success_url'], (int) $args['form_id'] );
+			$values['options']['success_url'] = $options['success_url'];
+		}
 
 		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
 		$options               = self::maybe_filter_form_options( $options );

@@ -5999,19 +5999,25 @@ function frmAdminBuildJS() {
 
 	function setUpTinyMceVisualButtonListener( fieldSettings ) {
 		var editor = fieldSettings.querySelector( '.wp-editor-area' );
-		jQuery( document ).on(
-			'click', '#' + editor.id + '-html',
-			function() {
-				editor.style.visibility = 'visible';
-				initQuickTagsButtons( fieldSettings );
-			}
-		);
+		if ( editor ) {
+			jQuery( document ).on(
+				'click', '#' + editor.id + '-html',
+				function() {
+					editor.style.visibility = 'visible';
+					initQuickTagsButtons( fieldSettings );
+				}
+			);
+		}
 	}
 
 	function setUpTinyMceHtmlButtonListener( fieldSettings ) {
 		var editor, hasResetTinyMce;
 
 		editor = fieldSettings.querySelector( '.wp-editor-area' );
+		if ( ! editor ) {
+			return;
+		}
+
 		hasResetTinyMce = false;
 
 		jQuery( '#' + editor.id + '-tmce' )
@@ -6037,7 +6043,7 @@ function frmAdminBuildJS() {
 
 		editor = fieldSettings.querySelector( '.wp-editor-area' );
 
-		if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+		if ( ! editor || 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
 			return;
 		}
 
@@ -6869,9 +6875,28 @@ function frmAdminBuildJS() {
 				}
 			});
 		} else {
+			variable = maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox );
 			insertContent( contentBox, variable );
 		}
 		return false;
+	}
+
+	function maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox ) {
+		if ( 'object' !== typeof element || ! ( element instanceof jQuery ) || 'success_url' !== contentBox[0].id ) {
+			return variable;
+		}
+
+		element = element[0];
+		if ( ! element.closest( '#frm-insert-fields-box' ) ) {
+			// Only add sanitize_url=1 to field shortcodes.
+			return variable;
+		}
+
+		if ( ! element.parentNode.classList.contains( 'frm_insert_url' ) ) {
+			variable = variable.replace( ']', ' sanitize_url=1]' );
+		}
+
+		return variable;
 	}
 
 	function insertContent( contentBox, variable ) {
@@ -8432,6 +8457,13 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function handleCaptchaTypeChange( e ) {
+		const thresholdContainer = document.getElementById( 'frm_captcha_threshold_container' );
+		if ( thresholdContainer ) {
+			thresholdContainer.classList.toggle( 'frm_hidden', 'v3' !== e.target.value );
+		}
+	}
+
 	function trashTemplate( e ) {
 		/*jshint validthis:true */
 		var id = this.getAttribute( 'data-id' );
@@ -8860,9 +8892,6 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_styling_form' ) !== null ) {
 				// load styling settings js
 				frmAdminBuild.styleInit();
-			} else if ( document.getElementById( 'frm_custom_css_box' ) !== null ) {
-				// load styling settings js
-				frmAdminBuild.customCSSInit();
 			} else if ( document.getElementById( 'form_global_settings' ) !== null ) {
 				// global settings page
 				frmAdminBuild.globalSettingsInit();
@@ -9145,6 +9174,9 @@ function frmAdminBuildJS() {
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
+
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
+			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
 
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
@@ -9525,13 +9557,7 @@ function frmAdminBuildJS() {
 		},
 
 		customCSSInit: function() {
-			/* deprecated since WP 4.9 */
-			var customCSS = document.getElementById( 'frm_custom_css_box' );
-			if ( customCSS !== null ) {
-				CodeMirror.fromTextArea( customCSS, {
-					lineNumbers: true
-				});
-			}
+			console.warn( 'Calling frmAdminBuild.customCSSInit is deprecated.' );
 		},
 
 		globalSettingsInit: function() {
@@ -9557,6 +9583,11 @@ function frmAdminBuildJS() {
 				});
 				jQuery( '.settings-lite-cta' ).remove();
 			});
+
+			const captchaType = document.getElementById( 'frm_re_type' );
+			if ( captchaType ) {
+				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
+			}
 		},
 
 		exportInit: function() {

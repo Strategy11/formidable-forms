@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.0
 Tested up to: 5.8.2
 Requires PHP: 5.6
-Stable tag: 5.0.14
+Stable tag: 5.0.16
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,21 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.0.16 =
+- New: Field shortcodes now support sanitize_url=1 and sanitize=1 options which were previously only processed in Pro. For more information on how these options work, see https://formidableforms.com/knowledgebase/advanced/#kb-sanitize-url
+- New: The sanitize_url=1 option will now be inserted automatically when inserting most field shortcodes to a redirect url. This is to avoid issues with redirects stripping characters like ' and @ which may cause a redirect to fail in some cases.
+- New: Updated styling for radio buttons and checkboxes, with improvements to appearance on mobile devices as well.
+- New: Extended the FrmCSVExportHelper::generate_csv function so it has the option to generate a CSV file in a temporary directory, and pass along an array of meta information to most CSV filter hooks.
+- New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by email action ID.
+- New: Added new frm_entry_formatter_class, frm_prepend_and_or_where, frm_entry_formatter_format, frm_formatted_entry_values_content, and frm_entries_show_args filter hooks.
+- New: Allow more colors in the styler to be transparent including background colors and border colors for active, hovered, and disabled inputs.
+- Fix: Selected radio buttons were appearing incorrectly when using the Twenty Twenty One theme in Chrome or Safari.
+- Fix: Radio buttons and checkboxes were appearing overlapped with labels when using the H-Code theme.
+- Fix: Field pop ups were displaying upgrade messages even for licenses that had access to the add on.
+
+= 5.0.15 =
+- New: Added a v3 reCAPTCHA type option and reCAPTCHA threshold slider to global reCAPTCHA settings. When using v3 the score will be compared to the threshold and marked as spam if it is lower than the threshold. The default value is 0.5. For more information on setting a score, see https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
+
 = 5.0.14 =
 - New: HTML field descriptions now use a rich text editor instead of a plain textarea.
 - New: Added a new array_separator option to entry shortcodes. This can be used with the [default-message] like [default-message array_separator="<br/>"] shortcode to change the separator used for multiple checkbox or dropdown values. It also works with the [frm-show-entry] shortcode in pro.
@@ -446,24 +461,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 = 5.0.13.1 =
 - Fix: Too much HTML was being stripped from filtered icons preventing the ellipses icon from opening the pop up to add layout classes.
-
-= 5.0.13 =
-- FrmAppHelper::jquery_ui_base_url and an unused dropdown view file have been deprecated.
-- Security: Back end form settings will now always filter on render when the DISALLOW_UNFILTERED_HTML constant is on.
-- Security: Added additional sanitizing when saving a custom style, added additional filtering to icons, and improved how some content is escaped.
-- New: Added a new frm_disallow_unfiltered_html filter that will always filter back form settings without having to set the DISALLOW_UNFILTERED_HTML constant.
-- New: A name field will always be used when sending comment author information to Akismet if one is set to avoid false positives that could cause another field value to possibly get sent instead.
-- Fix: When importing a grid or table view, [/if x] and [/foreach x] shortcodes were not properly being replaced.
-- Fix: Too much was being stripped from custom submit button HTML for underpriveleged users or when disallowing unfiltered html.
-- Fix: Too many calls were being made to Akismet for forms with multiple pages.
-- Fix: A conflict with WooCommerce was sometimes triggering an error when checking for addon updates.
-- Fix: The comment author information sent to Akismet was not getting set if the author information was set in a name field.
-
-= 5.0.12 =
-- New: When the frm_inline_submit class is added to custom Submit Button HTML if frm_inline_form is missing from the form it will now be automatically added to allow for the submit button to become inline.
-- Fix: Many Formidable addons were not properly displaying update details from the plugins page.
-- Fix: Fewer API requests will be sent to Formidable when inbox notice cached results expire and when a request results in an error.
-- Fix: Added additional validation to CSV export so it fails more gracefully when the form does not exist.
-- Fix: The style setting for Margin under Field Settings as been renamed to Bottom Margin to avoid confusion as it only updates one margin value.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

@@ -222,8 +222,10 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices{
 	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
 	border-color:<?php echo esc_html( $border_color_active . $important ); ?>;
+	color: var(--text-color);
 	<?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
 	box-shadow:none;
+	outline: none;
 	<?php } else { ?>
 	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $border_color_active ) ); ?>, 0.6);
 	<?php } ?>
@@ -311,6 +313,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background: <?php echo esc_html( $submit_active_bg_color . $important ); ?>;
 	border-color: <?php echo esc_html( $submit_active_border_color . $important ); ?>;
 	color: <?php echo esc_html( $submit_active_color . $important ); ?>;
+	outline: none;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
@@ -382,7 +385,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=email],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field textarea,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .mce-edit-area iframe,
-.<?php echo esc_html( $style_class ); ?> .frm_blank_field select,
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field select:not(.ui-datepicker-month):not(.ui-datepicker-year),
 .frm_form_fields_error_style,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-g-recaptcha iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .g-recaptcha iframe,
