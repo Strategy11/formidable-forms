@@ -816,7 +816,7 @@ BEFORE_HTML;
 			$class .= ' frm_center_submit';
 		}
 
-		$class = apply_filters( 'frm_add_form_style_class', $class, $style );
+		$class = apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
 
 		return $class;
 	}
