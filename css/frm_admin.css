@@ -2883,68 +2883,34 @@ a.frm_option_icon:hover::before {
 	font-family: "s11-fp" !important;
 }
 
-.multiselect-container.frm-dropdown-menu input[type=radio] {
-	display: none;
-}
-
 .multiselect-container {
 	position: absolute;
 	list-style-type: none;
 	margin: 0;
-	padding: 0
-}
-
-.multiselect-container .input-group {
-	margin: 5px
-}
-
-.multiselect-container > li {
 	padding: 0;
-	margin: 0;
+	width: 100%;
 }
 
-.multiselect-container > li > a.multiselect-all label {
-	font-weight: 700
-}
-
-.multiselect-container > li > label.multiselect-group {
-	margin: 0;
-	padding: 3px 20px;
-	height: 100%;
-	font-weight: 700
-}
-
-.frm-dropdown-menu.multiselect-container > li > a {
-	padding: 0
-}
-
-.multiselect-container > li > a > label {
-	margin: 0;
-	padding: 3px 25px;
-	height: 100%;
-	cursor: pointer;
-	font-weight: 400;
+.multiselect-container button.multiselect-option {
 	display: block;
+	width: 100%;
+	text-align: left;
+	background: none;
+	border: none;
+	padding: 5px 0 5px 15px;
 }
 
-.accordion-container .multiselect-container > li > a > label {
+.multiselect-container button.multiselect-option label {
+	margin-left: 5px;
+}
+
+.accordion-container .multiselect-container label {
 	padding: 3px 19px 3px 7px;
 }
 
 .frm-btn-group.btn-group > .btn-group:nth-child(2) > .multiselect.btn {
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px
-}
-
-.form-inline .multiselect-container label.checkbox,
-.form-inline .multiselect-container label.radio {
-	padding: 3px 20px;
-}
-
-.form-inline .multiselect-container li a label.checkbox input[type=checkbox],
-.form-inline .multiselect-container li a label.radio input[type=radio] {
-	margin-left: -20px;
-	margin-right: 0;
 }
 
 .frm-btn-group.btn-group, .frm-btn-group.btn-group-vertical {
