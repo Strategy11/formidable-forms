@@ -5401,7 +5401,7 @@ function frmAdminBuildJS() {
 
 	function onEveryoneOptionSelected( $select ) {
 		$select.val( '' );
-		$select.next( '.btn-group' ).find( '.multiselect-container li input[value!=""]' ).prop( 'checked', false );
+		$select.next( '.btn-group' ).find( '.multiselect-container input[value!=""]' ).prop( 'checked', false );
 	}
 
 	function unselectEveryoneOptionIfSelected( $select ) {
@@ -5409,7 +5409,7 @@ function frmAdminBuildJS() {
 			index;
 
 		if ( selectedValues === null ) {
-			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', true );
+			$select.next( '.btn-group' ).find( '.multiselect-container input[value=""]' ).prop( 'checked', true );
 			onEveryoneOptionSelected( $select );
 			return;
 		}
@@ -5418,7 +5418,7 @@ function frmAdminBuildJS() {
 		if ( index >= 0 ) {
 			selectedValues.splice( index, 1 );
 			$select.val( selectedValues );
-			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', false );
+			$select.next( '.btn-group' ).find( '.multiselect-container input[value=""]' ).prop( 'checked', false );
 		}
 	}
 
