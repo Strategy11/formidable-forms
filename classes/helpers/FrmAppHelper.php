@@ -2934,9 +2934,11 @@ class FrmAppHelper {
 
 	/**
 	 * Output HTML containing reference text for accessibility
+	 *
+	 * @deprecated x.x
 	 */
 	public static function multiselect_accessibility() {
-		include_once self::plugin_path() . '/classes/views/frm-forms/multiselect-accessibility.php';
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 
 	public static function get_menu_icon_class() {

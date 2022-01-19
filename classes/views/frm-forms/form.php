@@ -64,4 +64,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <?php
 FrmFieldsHelper::bulk_options_overlay();
-FrmAppHelper::multiselect_accessibility();

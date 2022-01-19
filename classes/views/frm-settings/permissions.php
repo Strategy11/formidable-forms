@@ -14,12 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 		<tr>
 			<td class="frm_left_label">
-				<label id="for_<?php echo esc_attr( str_replace( '[]', '', $role_field_name ) ); ?>"><?php echo esc_html( $frm_role_description ); ?></label>
+				<label id="for_<?php echo esc_attr( str_replace( '[]', '', $role_field_name ) ); ?>" for="<?php echo esc_attr( $role_field_name ); ?>"><?php echo esc_html( $frm_role_description ); ?></label>
 			</td>
 			<td><?php FrmAppHelper::wp_roles_dropdown( $role_field_name, $frm_settings->$frm_role, 'multiple' ); ?></td>
 		</tr>
 	<?php } ?>
 </table>
-
-<?php
-FrmAppHelper::multiselect_accessibility();

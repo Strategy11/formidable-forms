@@ -8653,6 +8653,33 @@ function frmAdminBuildJS() {
 		w.off( 'beforeunload.edit-post' );
 	}
 
+	function addMultiselectLabelListener() {
+		const clickListener = ( e ) => {
+			if ( 'LABEL' !== e.target.nodeName ) {
+				return;
+			}
+
+			const labelFor = e.target.getAttribute( 'for' );
+			if ( ! labelFor ) {
+				return;
+			}
+
+			const input = document.getElementById( labelFor );
+			if ( ! input || ! input.nextElementSibling ) {
+				return;
+			}
+
+			const buttonToggle = input.nextElementSibling.querySelector( 'button.dropdown-toggle.multiselect' );
+			if ( ! buttonToggle ) {
+				return;
+			}
+
+			const triggerMultiselectClick = () => buttonToggle.click();
+			setTimeout( triggerMultiselectClick, 0 );
+		};
+		document.addEventListener( 'click', clickListener );
+	}
+
 	function maybeChangeEmbedFormMsg() {
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		var fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
@@ -8983,6 +9010,8 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
+
+			addMultiselectLabelListener();
 		},
 
 		buildInit: function() {
