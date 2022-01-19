@@ -2889,6 +2889,7 @@ a.frm_option_icon:hover::before {
 	margin: 0;
 	padding: 0;
 	width: 100%;
+	max-width: 250px;
 }
 
 .multiselect-container button.multiselect-option {
