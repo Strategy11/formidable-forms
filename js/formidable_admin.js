@@ -5401,7 +5401,7 @@ function frmAdminBuildJS() {
 
 	function onEveryoneOptionSelected( $select ) {
 		$select.val( '' );
-		$select.next( '.btn-group' ).find( '.multiselect-container li input[value!=""]' ).prop( 'checked', false );
+		$select.next( '.btn-group' ).find( '.multiselect-container input[value!=""]' ).prop( 'checked', false );
 	}
 
 	function unselectEveryoneOptionIfSelected( $select ) {
@@ -5409,7 +5409,7 @@ function frmAdminBuildJS() {
 			index;
 
 		if ( selectedValues === null ) {
-			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', true );
+			$select.next( '.btn-group' ).find( '.multiselect-container input[value=""]' ).prop( 'checked', true );
 			onEveryoneOptionSelected( $select );
 			return;
 		}
@@ -5418,7 +5418,7 @@ function frmAdminBuildJS() {
 		if ( index >= 0 ) {
 			selectedValues.splice( index, 1 );
 			$select.val( selectedValues );
-			$select.next( '.btn-group' ).find( '.multiselect-container li input[value=""]' ).prop( 'checked', false );
+			$select.next( '.btn-group' ).find( '.multiselect-container input[value=""]' ).prop( 'checked', false );
 		}
 	}
 
@@ -7609,9 +7609,9 @@ function frmAdminBuildJS() {
 			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 			$select.multiselect({
 				templates: {
-					ul: '<ul class="multiselect-container frm-dropdown-menu"></ul>',
-					li: '<li><a tabindex="0"><label></label></a></li>',
-					button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown" aria-describedby="frm_multiselect_button" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
+					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
+					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" aria-describedby="frm_multiselect_button" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 				nonSelectedText: '',
@@ -8653,6 +8653,33 @@ function frmAdminBuildJS() {
 		w.off( 'beforeunload.edit-post' );
 	}
 
+	function addMultiselectLabelListener() {
+		const clickListener = ( e ) => {
+			if ( 'LABEL' !== e.target.nodeName ) {
+				return;
+			}
+
+			const labelFor = e.target.getAttribute( 'for' );
+			if ( ! labelFor ) {
+				return;
+			}
+
+			const input = document.getElementById( labelFor );
+			if ( ! input || ! input.nextElementSibling ) {
+				return;
+			}
+
+			const buttonToggle = input.nextElementSibling.querySelector( 'button.dropdown-toggle.multiselect' );
+			if ( ! buttonToggle ) {
+				return;
+			}
+
+			const triggerMultiselectClick = () => buttonToggle.click();
+			setTimeout( triggerMultiselectClick, 0 );
+		};
+		document.addEventListener( 'click', clickListener );
+	}
+
 	function maybeChangeEmbedFormMsg() {
 		var fieldId = jQuery( this ).closest( '.frm-single-settings' ).data( 'fid' );
 		var fieldItem = document.getElementById( 'frm_field_id_' + fieldId );
@@ -8983,6 +9010,8 @@ function frmAdminBuildJS() {
 
 			// prevent annoying confirmation message from WordPress
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
+
+			addMultiselectLabelListener();
 		},
 
 		buildInit: function() {

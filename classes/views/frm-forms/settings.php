@@ -64,6 +64,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	</form>
 </div>
-
-<?php
-FrmAppHelper::multiselect_accessibility();
