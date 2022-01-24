@@ -291,6 +291,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 				if ( $val === false ) {
 					$this->get_column_value( $item, $val );
 				}
+
+				/**
+				 * Allows changing entries list column value.
+				 *
+				 * @since 5.0.18
+				 *
+				 * @param mixed $val Column value.
+				 * @param array $args Contains `item` and `col_name`.
+				 */
+				$val = apply_filters( 'frm_entries_column_value', $val, compact( 'item', 'col_name' ) );
 		}
 
 		return $val;
