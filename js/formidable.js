@@ -1103,6 +1103,24 @@ function frmFrontFormJS() {
 		} while ( element.previousSibling );
 	}
 
+	/**
+	 * @since x.x
+	 */
+	function triggerEvent( element, eventType ) {
+		var event;
+
+		if ( typeof window.CustomEvent === 'function' ) {
+			event = new CustomEvent( eventType );
+		} else if ( document.createEvent ) {
+			event = document.createEvent( 'HTMLEvents' );
+			event.initEvent( eventType, false, true );
+		} else {
+			return;
+		}
+
+		element.dispatchEvent( event );
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1163,6 +1181,10 @@ function frmFrontFormJS() {
 				jQuery( captcha ).closest( '.frm_form_field .frm_primary_label' ).hide();
 				params.callback = function( token ) {
 					frmFrontForm.afterRecaptcha( token, formID );
+				};
+			} else {
+				params.callback = function() {
+					triggerEvent( document, 'frmCheckboxCaptcha' );
 				};
 			}
 
