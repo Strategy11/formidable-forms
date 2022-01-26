@@ -1,4 +1,7 @@
 == Changelog ==
+= 5.1 =
+- Updated Bootstrap Multiselect to version 1.1.1, fixing issues with the accessibility of backend multiselect dropdowns for blind users.
+
 = 5.0.17 =
 - The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
 - New: The ctype PHP extension is no longer a requirement.
