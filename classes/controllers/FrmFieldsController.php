@@ -743,6 +743,7 @@ class FrmFieldsController {
 		$error_body   = substr( $custom_html, $start + 10, $end - $start - 10 );
 		$default_html = array(
 			'<div class="frm_error" id="frm_error_field_[key]">[error]</div>',
+			'<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>',
 			'<div class="frm_error">[error]</div>',
 			'<div class="frm_error" role="alert">[error]</div>',
 		);
