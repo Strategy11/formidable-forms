@@ -177,7 +177,7 @@ abstract class FrmFieldType {
     </$label>
     $input
     [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
-    [if error]<div class="frm_error" id="frm_error_field_[key]">[error]</div>[/if error]
+    [if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
 

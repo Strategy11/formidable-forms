@@ -230,7 +230,37 @@ class FrmFieldFormHtml {
 	private function replace_error_shortcode() {
 		$this->maybe_add_error_id();
 		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
+
+		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) ) {
+			$error_body = self::get_error_body( $this->html );
+			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
+				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
+				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
+			}
+		}
+
 		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+	}
+
+	/**
+	 * Pull the HTML between [if error] and [/if error] shortcodes.
+	 *
+	 * @param string $html
+	 * @return string|false
+	 */
+	private static function get_error_body( $html ) {
+		$start = strpos( $html, '[if error]' );
+		if ( false === $start ) {
+			return false;
+		}
+
+		$end = strpos( $html, '[/if error]', $start );
+		if ( false === $end ) {
+			return false;
+		}
+
+		$error_body = substr( $html, $start + 10, $end - $start - 10 );
+		return $error_body;
 	}
 
 	/**
