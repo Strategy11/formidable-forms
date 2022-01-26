@@ -460,7 +460,7 @@ class FrmAppController {
 
 		// load multselect js
 		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
-		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '0.9.8', true );
+		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '1.1.1', true );
 
 		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );

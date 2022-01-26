@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.0
-Tested up to: 5.8.3
+Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 5.0.17
+Stable tag: 5.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.1 =
+- Updated Bootstrap Multiselect to version 1.1.1, fixing issues with the accessibility of backend multiselect dropdowns for blind users.
+- New: Inputs with errors will now add the aria-describedby attribute during JavaScript validation for more accessible errors.
+- New: Form errors will now always include the role="alert" attribute for more accessible errors. New fields will now also include role="alert" in custom field HTML.
+- New: Added a new frm_entries_column_value filter hook.
+
 = 5.0.17 =
 - The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
 - New: The ctype PHP extension is no longer a requirement.
@@ -455,14 +461,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - Fix: Selected radio buttons were appearing incorrectly when using the Twenty Twenty One theme in Chrome or Safari.
 - Fix: Radio buttons and checkboxes were appearing overlapped with labels when using the H-Code theme.
 - Fix: Field pop ups were displaying upgrade messages even for licenses that had access to the add on.
-
-= 5.0.15 =
-- New: Added a v3 reCAPTCHA type option and reCAPTCHA threshold slider to global reCAPTCHA settings. When using v3 the score will be compared to the threshold and marked as spam if it is lower than the threshold. The default value is 0.5. For more information on setting a score, see https://developers.google.com/recaptcha/docs/v3#interpreting_the_score
-
-= 5.0.14 =
-- New: HTML field descriptions now use a rich text editor instead of a plain textarea.
-- New: Added a new array_separator option to entry shortcodes. This can be used with the [default-message] like [default-message array_separator="<br/>"] shortcode to change the separator used for multiple checkbox or dropdown values. It also works with the [frm-show-entry] shortcode in pro.
-- New: Added tooltips to honeypot and JavaScript token spam settings.
-- Fix: The adjusted color used for .frm-alt-table stripes was not calculating properly when the border color was set as an RGBA value in the style manager.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
