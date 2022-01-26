@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * This token class generates tokens that are used in our Anti-Spam checking.
  *
- * @since xx.xx
+ * @since 4.11
  */
 class FrmAntiSpam extends FrmValidate {
 
@@ -32,7 +32,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Initialise the actions for the Anti-spam.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 */
 	public function init() {
 		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
@@ -42,7 +42,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Return a valid token.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @param mixed $current True to use current time, otherwise a timestamp string.
 	 *
@@ -91,7 +91,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * 'frm_form_token_check_before_today'
 	 * 'frm_form_token_check_after_today'
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @return array Array of all valid tokens to check against.
 	 */
@@ -143,7 +143,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * and frm_token_validity_in_days to extend the validation period).
 	 * By default tokens are valid for day.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @param string $token Token to validate.
 	 *
@@ -157,7 +157,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Add the token field to the form.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @param string $attributes
 	 *
@@ -188,7 +188,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Validate Anti-spam if enabled.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @return bool|string True or a string with the error.
 	 */
@@ -235,7 +235,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Helper to run our filter on all the responses for the antispam checks.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @param bool|string $is_valid Is valid entry or not.
 	 *
@@ -248,7 +248,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Helper to get the missing token message.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @return string missing token message.
 	 */
@@ -259,7 +259,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * Helper to get the invalid token message.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @return string Invalid token message.
 	 */
@@ -270,7 +270,7 @@ class FrmAntiSpam extends FrmValidate {
 	/**
 	 * If a user is a super admin, add a support link to the message.
 	 *
-	 * @since xx.xx
+	 * @since 4.11
 	 *
 	 * @return string Support text if super admin, empty string if not.
 	 */
