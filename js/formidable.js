@@ -771,6 +771,7 @@ function frmFrontFormJS() {
 				input.attr( 'aria-describedby', describedBy );
 			}
 			input.attr( 'aria-invalid', true );
+			input.attr( 'aria-describedby', id );
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
@@ -785,6 +786,7 @@ function frmFrontFormJS() {
 		$fieldCont.removeClass( 'frm_blank_field has-error' );
 		errorMessage.remove();
 		input.attr( 'aria-invalid', false );
+		input.removeAttr( 'aria-describedby' );
 
 		if ( typeof describedBy !== 'undefined' ) {
 			describedBy = describedBy.replace( errorId, '' );
