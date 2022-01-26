@@ -254,8 +254,8 @@ class FrmFieldFormHtml {
 			return false;
 		}
 
-		$end = strpos( $html, '[/if error]' );
-		if ( false === $end || $end < $start ) {
+		$end = strpos( $html, '[/if error]', $start );
+		if ( false === $end ) {
 			return false;
 		}
 
