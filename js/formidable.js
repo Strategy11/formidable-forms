@@ -760,7 +760,7 @@ function frmFrontFormJS() {
 						jsErrors[key]
 					);
 				} else {
-					$fieldCont.append( '<div class="frm_error" id="' + id + '">' + jsErrors[key] + '</div>' );
+					$fieldCont.append( '<div class="frm_error" role="alert" id="' + id + '">' + jsErrors[key] + '</div>' );
 				}
 
 				if ( typeof describedBy === 'undefined' ) {
