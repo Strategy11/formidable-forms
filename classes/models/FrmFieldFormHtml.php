@@ -230,6 +230,11 @@ class FrmFieldFormHtml {
 	private function replace_error_shortcode() {
 		$this->maybe_add_error_id();
 		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
+
+		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) ) {
+			$this->html = str_replace( 'class="frm_error', 'role="alert" class="frm_error', $this->html );
+		}
+
 		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
 	}
 
