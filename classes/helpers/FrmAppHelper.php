@@ -2935,10 +2935,10 @@ class FrmAppHelper {
 	/**
 	 * Output HTML containing reference text for accessibility
 	 *
-	 * @deprecated x.x
+	 * @deprecated 5.1
 	 */
 	public static function multiselect_accessibility() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '5.1' );
 	}
 
 	public static function get_menu_icon_class() {

@@ -295,7 +295,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				/**
 				 * Allows changing entries list column value.
 				 *
-				 * @since 5.0.18
+				 * @since 5.1
 				 *
 				 * @param mixed $val Column value.
 				 * @param array $args Contains `item` and `col_name`.
