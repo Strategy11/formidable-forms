@@ -533,7 +533,7 @@ function frmFrontFormJS() {
 	}
 
 	function getFormErrors( object, action ) {
-		var fieldset;
+		var fieldset, data, success, error;
 
 		if ( typeof action === 'undefined' ) {
 			jQuery( object ).find( 'input[name="frm_action"]' ).val();
@@ -541,141 +541,161 @@ function frmFrontFormJS() {
 
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
-		jQuery.ajax({
-			type: 'POST', url: frm_js.ajax_url,
-			data: jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce,
-			success: function( response ) {
-				var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-					$fieldCont, key, inCollapsedSection, frmTrigger,
-					defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
-				if ( response === null ) {
-					response = defaultResponse;
+
+		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+
+		success = function( response ) {
+			var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
+				$fieldCont, key, inCollapsedSection, frmTrigger,
+				defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
+			if ( response === null ) {
+				response = defaultResponse;
+			}
+
+			response = response.replace( /^\s+|\s+$/g, '' );
+			if ( response.indexOf( '{' ) === 0 ) {
+				response = JSON.parse( response );
+			} else {
+				response = defaultResponse;
+			}
+
+			if ( typeof response.redirect !== 'undefined' ) {
+				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
+				window.location = response.redirect;
+			} else if ( response.content !== '' ) {
+				// the form or success message was returned
+
+				removeSubmitLoading( jQuery( object ) );
+				if ( frm_js.offset != -1 ) {
+					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
+				formID = jQuery( object ).find( 'input[name="form_id"]' ).val();
+				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
+				replaceContent = jQuery( object ).closest( '.frm_forms' );
+				removeAddedScripts( replaceContent, formID );
+				delay = maybeSlideOut( replaceContent, response.content );
 
-				response = response.replace( /^\s+|\s+$/g, '' );
-				if ( response.indexOf( '{' ) === 0 ) {
-					response = JSON.parse( response );
-				} else {
-					response = defaultResponse;
-				}
+				setTimeout(
+					function() {
+						var container, input, previousInput;
 
-				if ( typeof response.redirect !== 'undefined' ) {
-					jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-					window.location = response.redirect;
-				} else if ( response.content !== '' ) {
-					// the form or success message was returned
+						replaceContent.replaceWith( response.content );
 
-					removeSubmitLoading( jQuery( object ) );
-					if ( frm_js.offset != -1 ) {
-						frmFrontForm.scrollMsg( jQuery( object ), false );
-					}
-					formID = jQuery( object ).find( 'input[name="form_id"]' ).val();
-					response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
-					replaceContent = jQuery( object ).closest( '.frm_forms' );
-					removeAddedScripts( replaceContent, formID );
-					delay = maybeSlideOut( replaceContent, response.content );
+						addUrlParam( response );
 
-					setTimeout(
-						function() {
-							var container, input, previousInput;
-
-							replaceContent.replaceWith( response.content );
-
-							addUrlParam( response );
-
-							if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
-								pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
-								formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
-								frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
-							}
-
-							if ( typeof response.recaptcha !== 'undefined' ) {
-								container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
-								input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
-								previousInput = container.find( 'input[name="recaptcha_checked"]' );
-
-								if ( previousInput.length ) {
-									previousInput.replaceWith( input );
-								} else {
-									container.append( input );
-								}
-							}
-
-							afterFormSubmitted( object, response );
-						},
-						delay
-					);
-				} else if ( Object.keys( response.errors ).length ) {
-					// errors were returned
-
-					removeSubmitLoading( jQuery( object ), 'enable' );
-
-					//show errors
-					contSubmit = true;
-					removeAllErrors();
-
-					$fieldCont = null;
-
-					for ( key in response.errors ) {
-						$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
-
-						if ( $fieldCont.length ) {
-							if ( ! $fieldCont.is( ':visible' ) ) {
-								inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' );
-								if ( inCollapsedSection.length ) {
-									frmTrigger = inCollapsedSection.prev();
-									if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
-										// If the frmTrigger object is the section description, check to see if the previous element is the trigger
-										frmTrigger = frmTrigger.prev( '.frm_trigger' );
-									}
-									frmTrigger.trigger( 'click' );
-								}
-							}
-
-							if ( $fieldCont.is( ':visible' ) ) {
-								addFieldError( $fieldCont, key, response.errors );
-								contSubmit = false;
-							}
+						if ( typeof frmThemeOverride_frmAfterSubmit === 'function' ) { // eslint-disable-line camelcase
+							pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
+							formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
+							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
-					}
 
-					jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha' ).each( function() {
-						var $recaptcha  = jQuery( this ),
-							recaptchaID = $recaptcha.data( 'rid' );
+						if ( typeof response.recaptcha !== 'undefined' ) {
+							container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
+							input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
+							previousInput = container.find( 'input[name="recaptcha_checked"]' );
 
-						if ( typeof grecaptcha !== 'undefined' && grecaptcha ) {
-							if ( recaptchaID ) {
-								grecaptcha.reset( recaptchaID );
+							if ( previousInput.length ) {
+								previousInput.replaceWith( input );
 							} else {
-								grecaptcha.reset();
+								container.append( input );
 							}
 						}
-					});
 
-					jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
+						afterFormSubmitted( object, response );
+					},
+					delay
+				);
+			} else if ( Object.keys( response.errors ).length ) {
+				// errors were returned
 
-					fieldset.removeClass( 'frm_doing_ajax' );
-					scrollToFirstField( object );
+				removeSubmitLoading( jQuery( object ), 'enable' );
 
-					if ( contSubmit ) {
-						object.submit();
-					} else {
-						jQuery( object ).prepend( response.error_message );
-						checkForErrorsAndMaybeSetFocus();
+				//show errors
+				contSubmit = true;
+				removeAllErrors();
+
+				$fieldCont = null;
+
+				for ( key in response.errors ) {
+					$fieldCont = jQuery( object ).find( '#frm_field_' + key + '_container' );
+
+					if ( $fieldCont.length ) {
+						if ( ! $fieldCont.is( ':visible' ) ) {
+							inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' );
+							if ( inCollapsedSection.length ) {
+								frmTrigger = inCollapsedSection.prev();
+								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
+									// If the frmTrigger object is the section description, check to see if the previous element is the trigger
+									frmTrigger = frmTrigger.prev( '.frm_trigger' );
+								}
+								frmTrigger.trigger( 'click' );
+							}
+						}
+
+						if ( $fieldCont.is( ':visible' ) ) {
+							addFieldError( $fieldCont, key, response.errors );
+							contSubmit = false;
+						}
 					}
-				} else {
-					// there may have been a plugin conflict, or the form is not set to submit with ajax
-
-					showFileLoading( object );
-
-					object.submit();
 				}
-			},
-			error: function() {
-				jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).prop( 'disabled', false );
+
+				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha' ).each( function() {
+					var $recaptcha  = jQuery( this ),
+						recaptchaID = $recaptcha.data( 'rid' );
+
+					if ( typeof grecaptcha !== 'undefined' && grecaptcha ) {
+						if ( recaptchaID ) {
+							grecaptcha.reset( recaptchaID );
+						} else {
+							grecaptcha.reset();
+						}
+					}
+				});
+
+				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
+
+				fieldset.removeClass( 'frm_doing_ajax' );
+				scrollToFirstField( object );
+
+				if ( contSubmit ) {
+					object.submit();
+				} else {
+					jQuery( object ).prepend( response.error_message );
+					checkForErrorsAndMaybeSetFocus();
+				}
+			} else {
+				// there may have been a plugin conflict, or the form is not set to submit with ajax
+
+				showFileLoading( object );
+
 				object.submit();
 			}
-		});
+		};
+
+		error = function() {
+			jQuery( object ).find( 'input[type="submit"], input[type="button"]' ).prop( 'disabled', false );
+			object.submit();
+		};
+
+		postToAjaxUrl( data, success, error );
+	}
+
+	function postToAjaxUrl( data, success, error ) {
+		var ajaxUrl, ajaxParams;
+
+		ajaxUrl = frm_js.ajax_url; // TODO do not use this url.
+		ajaxParams = {
+			type: 'POST',
+			url: ajaxUrl,
+			data: data,
+			success: success
+		};
+
+		if ( 'function' === typeof error ) {
+			ajaxParams.error = error;
+		}
+
+		jQuery.ajax( ajaxParams );
 	}
 
 	function afterFormSubmitted( object, response ) {
@@ -901,16 +921,14 @@ function frmFrontFormJS() {
 		}
 		label.append( '<span class="frm-wait"></span>' );
 
-		jQuery.ajax({
-			type: 'POST',
-			url: frm_js.ajax_url,
-			data: {
+		postToAjaxUrl(
+			{
 				action: 'frm_entries_send_email',
 				entry_id: entryId,
 				form_id: formId,
 				nonce: frm_js.nonce
 			},
-			success: function( msg ) {
+			function( msg ) {
 				var admin = document.getElementById( 'wpbody' );
 				if ( admin === null ) {
 					label.html( msg );
@@ -919,7 +937,7 @@ function frmFrontFormJS() {
 					$link.after( msg );
 				}
 			}
-		});
+		);
 		return false;
 	}
 
@@ -1476,24 +1494,22 @@ function frmAfterRecaptcha( token ) {
 
 function frmUpdateField( entryId, fieldId, value, message, num ) {
 	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
-	jQuery.ajax({
-		type: 'POST',
-		url: frm_js.ajax_url,
-		data: {
+	postToAjaxUrl(
+		{
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
 			field_id: fieldId,
 			value: value,
 			nonce: frm_js.nonce
 		},
-		success: function() {
+		function() {
 			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
 			} else {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
 			}
 		}
-	});
+	);
 }
 
 function frmDeleteEntry( entryId, prefix ) {
