@@ -677,13 +677,21 @@ function frmFrontFormJS() {
 			object.submit();
 		};
 
-		postToAjaxUrl( data, success, error );
+		postToAjaxUrl( object, data, success, error );
 	}
 
-	function postToAjaxUrl( data, success, error ) {
-		var ajaxUrl, ajaxParams;
+	function postToAjaxUrl( form, data, success, error ) {
+		var ajaxUrl, action, ajaxParams;
 
-		ajaxUrl = frm_js.ajax_url; // TODO do not use this url.
+		ajaxUrl = frm_js.ajax_url;
+
+		if ( form.getAttribute( 'action' ) ) {
+			action = form.getAttribute( 'action' );
+			if ( action && 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
+				ajaxUrl = action.split( '?action=frm_forms_preview' )[0];
+			}
+		}
+
 		ajaxParams = {
 			type: 'POST',
 			url: ajaxUrl,
@@ -921,7 +929,9 @@ function frmFrontFormJS() {
 		}
 		label.append( '<span class="frm-wait"></span>' );
 
+		form = document.getElementById( 'frm_form_' + formId + '_container' ).querySelector( 'form' );
 		postToAjaxUrl(
+			form,
 			{
 				action: 'frm_entries_send_email',
 				entry_id: entryId,
@@ -1493,8 +1503,11 @@ function frmAfterRecaptcha( token ) {
 }
 
 function frmUpdateField( entryId, fieldId, value, message, num ) {
+	var form;
 	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
+	form = jQuery( document.getElementById( 'frm_field_' + fieldId + '_container' ) ).closest( 'form' ).get( 0 );
 	postToAjaxUrl(
+		form,
 		{
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
