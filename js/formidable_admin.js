@@ -8346,7 +8346,9 @@ function frmAdminBuildJS() {
 			);
 		}
 
-		modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' ).appendChild( getEmbedFormModalContent( formId, formKey ) );
+		let content = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' );
+		content.innerHTML = '';
+		content.appendChild( getEmbedFormModalContent( formId, formKey ) );
 
 		let $modal = jQuery( modal );
 
@@ -8372,6 +8374,7 @@ function frmAdminBuildJS() {
 			});
 		}
 
+		scrollToTop();
 		$modal.dialog( 'open' );
 	}
 
@@ -8382,6 +8385,13 @@ function frmAdminBuildJS() {
 		modal.appendChild( metaboxHolder );
 		document.body.appendChild( modal );
 		return modal;
+	}
+
+	function scrollToTop() {
+		if ( 'scrollRestoration' in history ) {
+			history.scrollRestoration = 'manual';
+		}
+		window.scrollTo( 0, 0 );
 	}
 
 	function getEmbedFormModalContent( formId, formKey ) {
