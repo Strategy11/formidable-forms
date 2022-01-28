@@ -1867,25 +1867,29 @@ h2.frm-h2 + .howto {
 	overflow: hidden;
 }
 
-#frm_new_form_modal .postbox > div:first-child {
+#frm_new_form_modal .postbox > div:first-child,
+#frm_form_embed_modal .postbox > div:first-child {
 	padding: 30px 20px;
 	position: relative;
 	border-bottom: 1px solid var(--grey-border);
 }
 
-#frm_new_form_modal .postbox > div:first-child > div:first-child {
+#frm_new_form_modal .postbox > div:first-child > div:first-child,
+#frm_form_embed_modal .postbox > div:first-child > div:first-child  {
 	display: inline-block;
 	font-size: 24px;
 	color: #282F36;
 }
 
-#frm_new_form_modal .postbox > div:first-child > div:last-child {
+#frm_new_form_modal .postbox > div:first-child > div:last-child,
+#frm_form_embed_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
 	right: 20px;
 	top: 37px;
 }
 
-#frm_new_form_modal .postbox > div:first-child > div:last-child a {
+#frm_new_form_modal .postbox > div:first-child > div:last-child a,
+#frm_form_embed_modal .postbox > div:first-child > div:last-child {
 	color: var(--grey);
 }
 
@@ -2357,6 +2361,35 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	display: inline-block;
 	width: 1em;
 	margin-left: -1em;
+}
+
+/* Embed Form Modal */
+
+#frm_form_embed_modal label {
+	font-size: 14px;
+	line-height: 25px;
+	color: rgba(40, 47, 54, 0.8);
+}
+
+.frm_embed_form_content {
+	padding: 20px;
+}
+
+#frm_form_embed_modal .frm_embed_example {
+	background: #F6F7FB;
+	border: 0.725101px solid #E3E8EB;
+	border-radius: 6px;
+	color: rgba(40, 47, 54, 0.85);
+	font-size: 14px;
+	padding: 10px;
+	width: 100%;
+	margin-bottom: 15px;
+	height: auto !important;
+	resize: none;
+}
+
+#frm_form_embed_modal textarea.frm_embed_example {
+	padding-bottom: 0;
 }
 
 /* Bulk Options */

@@ -3564,8 +3564,16 @@ function frmAdminBuildJS() {
 	function div( atts ) {
 		var element = document.createElement( 'div' );
 		if ( 'object' === typeof atts ) {
-			if ( 'undefined' !== typeof atts.id ) {
+			if ( 'string' === typeof atts.id ) {
 				element.id = atts.id;
+			}
+			if ( 'string' === typeof atts.class ) {
+				element.className = atts.class;
+			}
+			if ( 'object' === typeof atts.child ) {
+				element.appendChild( atts.child );
+			} else if ( 'undefined' !== typeof atts.children ) {
+				atts.children.forEach( child => element.appendChild( child ) );
 			}
 		}
 		return element;
@@ -8277,6 +8285,177 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function initEmbedFormModal() {
+		document.addEventListener( 'click', listenForFormEmbedClick );
+	}
+
+	function listenForFormEmbedClick( event ) {
+		var clicked = false;
+
+		const element = event.target;
+		const tag = element.tagName.toLowerCase();
+
+		switch ( tag ) {
+			case 'a':
+				clicked = element.classList.contains( 'frm-embed-form' );
+				break;
+
+			case 'svg':
+				clicked = element.parentNode.classList.contains( 'frm-embed-form' );
+				break;
+		}
+
+		if ( clicked ) {
+			const row = element.closest( 'tr' );
+			const formId = parseInt( row.querySelector( '.column-id' ).textContent );
+			const formKey = row.querySelector( '.column-form_key' ).textContent;
+			openFormEmbedModal( formId, formKey );
+		}
+	}
+
+	function openFormEmbedModal( formId, formKey ) {
+		const modalId = 'frm_form_embed_modal';
+
+		let modal = document.getElementById( modalId );
+
+		if ( ! modal ) {
+			modal = createEmptyModal( modalId );
+
+			let title = div({ child: document.createTextNode( __( 'Embed form', 'formidable' ) ), class: 'frm-modal-title' });
+
+			let a = document.createElement( 'a' );
+			a.textContent = __( 'Cancel', 'formidable' );
+			a.className = 'dismiss';
+
+			const postbox = modal.querySelector( '.postbox' );
+
+			postbox.appendChild(
+				div({
+					class: 'frm_modal_top',
+					children: [
+						title,
+						div({ child: a })
+					]
+				})
+			);
+			postbox.appendChild(
+				div({ class: 'frm_modal_content' })
+			);
+			postbox.appendChild(
+				div({ class: 'frm_modal_footer' })
+			);
+		}
+
+		modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' ).appendChild( getEmbedFormModalContent( formId, formKey ) );
+
+		let $modal = jQuery( modal );
+
+		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
+			$modal.dialog({
+				dialogClass: 'frm-dialog',
+				modal: true,
+				autoOpen: false,
+				closeOnEscape: true,
+				width: '550px',
+				resizable: false,
+				draggable: false,
+				open: function() {
+					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
+					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
+					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
+					$modal.removeClass( 'ui-dialog-content ui-widget-content' );
+					jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( event ) {
+						event.preventDefault();
+						$modal.dialog( 'close' );
+					});
+				}
+			});
+		}
+
+		$modal.dialog( 'open' );
+	}
+
+	function createEmptyModal( id ) {
+		let modal = div({ id: id, class: 'frm-modal' });
+		const postbox = div({ class: 'postbox' });
+		const metaboxHolder = div({ class: 'metabox-holder', child: postbox });
+		modal.appendChild( metaboxHolder );
+		document.body.appendChild( modal );
+		return modal;
+	}
+
+	function getEmbedFormModalContent( formId, formKey ) {
+		let content = div({ class: 'frm_embed_form_content' });
+
+		content.appendChild(
+			getEmbedExample(
+				__( 'WordPress shortcode', 'formidable' ),
+				'[formidable id=' + formId + ' title=true description=true]'
+			)
+		);
+
+		content.appendChild(
+			getEmbedExample(
+				false,
+				'[formidable key=' + formKey + ' title=true description=true]'
+			)
+		);
+
+		content.appendChild(
+			getEmbedExample(
+				__( 'Use PHP code', 'formidable' ),
+				'<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => false, \'description\' => false ) ); ?>'
+			)
+		);
+
+		content.appendChild(
+			getEmbedExample(
+				__( 'API Form shortcode', 'formidable' ),
+				'[frm-api id=' + formId + ' title=true description=true]'
+			)
+		);
+
+		const baseUrl = frmGlobal.url.split( '/wp-content/' )[0];
+		content.appendChild(
+			getEmbedExample(
+				__( 'API Form script', 'formidable' ),
+				// TODO replace example.com
+				'<script type="text/javascript" src="' + baseUrl + '/frm_embed/' + formKey + '"></script>'
+			)
+		);
+
+		return content;
+	}
+
+	// TODO support link to education.
+	function getEmbedExample( label, example ) {
+		let element = div();
+
+		if ( false !== label ) {
+			let labelElement = document.createElement( 'label' );
+			labelElement.textContent = label;
+			element.appendChild( labelElement );
+		}
+
+		let exampleElement;
+
+		if ( example.length > 60 ) {
+			exampleElement = document.createElement( 'textarea' );
+		} else {
+			exampleElement = document.createElement( 'input' );
+			exampleElement.type = 'text';
+		}
+
+		exampleElement.className = 'frm_embed_example';
+		exampleElement.value = example;
+		exampleElement.readOnly = true;
+
+		element.appendChild( exampleElement );
+
+		// TODO add copy icon.
+		return element;
+	}
+
 	function initSelectionAutocomplete() {
 		if ( jQuery.fn.autocomplete ) {
 			initAutocomplete( 'page' );
@@ -8938,6 +9117,7 @@ function frmAdminBuildJS() {
 				// New form selection page
 				initNewFormModal();
 				initSelectionAutocomplete();
+				initEmbedFormModal();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
 					window.print();
