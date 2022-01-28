@@ -686,10 +686,8 @@ function frmFrontFormJS() {
 		ajaxUrl = frm_js.ajax_url;
 		action = form.getAttribute( 'action' );
 
-		if ( action ) {			
-			if ( action && 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
-				ajaxUrl = action.split( '?action=frm_forms_preview' )[0];
-			}
+		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
+			ajaxUrl = action.split( '?action=frm_forms_preview' )[0];
 		}
 
 		ajaxParams = {
