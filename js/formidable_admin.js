@@ -8418,14 +8418,16 @@ function frmAdminBuildJS() {
 			)
 		);
 
+		const baseUrl = frmGlobal.url.split( '/wp-content/' )[0];
+
+		// TODO how do I only show these when the API add on is active? I can probably use a new JavaScript action hook and write JavaScript in the API plugin. I think Surveys does something similar.
 		content.appendChild(
 			getEmbedExample(
 				__( 'API Form shortcode', 'formidable' ),
-				'[frm-api id=' + formId + ' title=true description=true]'
+				'[frm-api type="form" id=' + formId + ' url="' + baseUrl + '"]'
 			)
 		);
 
-		const baseUrl = frmGlobal.url.split( '/wp-content/' )[0];
 		content.appendChild(
 			getEmbedExample(
 				__( 'API Form script', 'formidable' ),
@@ -8438,6 +8440,7 @@ function frmAdminBuildJS() {
 	}
 
 	// TODO support link to education.
+	// TODO add id/for attributes for better accessibility.
 	function getEmbedExample( label, example ) {
 		let element = div();
 
