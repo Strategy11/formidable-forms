@@ -8397,43 +8397,26 @@ function frmAdminBuildJS() {
 	function getEmbedFormModalContent( formId, formKey ) {
 		let content = div({ class: 'frm_embed_form_content' });
 
-		content.appendChild(
-			getEmbedExample(
-				__( 'WordPress shortcode', 'formidable' ),
-				'[formidable id=' + formId + ' title=true description=true]'
-			)
-		);
+		let examples = [
+			{
+				label: __( 'WordPress shortcode', 'formidable' ),
+				example: '[formidable id=' + formId + ' title=true description=true]'
+			},
+			{
+				label: false,
+				example: '[formidable key=' + formKey + ' title=true description=true]'
+			},
+			{
+				label: __( 'Use PHP code', 'formidable' ),
+				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => false, \'description\' => false ) ); ?>'
+			}
+		];
 
-		content.appendChild(
-			getEmbedExample(
-				false,
-				'[formidable key=' + formKey + ' title=true description=true]'
-			)
-		);
+		const filterArgs = { formId, formKey };
+		examples = frmAdminBuild.hooks.applyFilters( 'frmEmbedFormExamples', examples, filterArgs );
 
-		content.appendChild(
-			getEmbedExample(
-				__( 'Use PHP code', 'formidable' ),
-				'<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => false, \'description\' => false ) ); ?>'
-			)
-		);
-
-		const baseUrl = frmGlobal.url.split( '/wp-content/' )[0];
-
-		// TODO how do I only show these when the API add on is active? I can probably use a new JavaScript action hook and write JavaScript in the API plugin. I think Surveys does something similar.
-		content.appendChild(
-			getEmbedExample(
-				__( 'API Form shortcode', 'formidable' ),
-				'[frm-api type="form" id=' + formId + ' url="' + baseUrl + '"]'
-			)
-		);
-
-		content.appendChild(
-			getEmbedExample(
-				__( 'API Form script', 'formidable' ),
-				// TODO replace example.com
-				'<script type="text/javascript" src="' + baseUrl + '/frm_embed/' + formKey + '"></script>'
-			)
+		examples.forEach(
+			example => content.appendChild( getEmbedExample( example ) )
 		);
 
 		return content;
@@ -8441,7 +8424,7 @@ function frmAdminBuildJS() {
 
 	// TODO support link to education.
 	// TODO add id/for attributes for better accessibility.
-	function getEmbedExample( label, example ) {
+	function getEmbedExample({ label, example }) {
 		let element = div();
 
 		if ( false !== label ) {
