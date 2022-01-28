@@ -8447,9 +8447,36 @@ function frmAdminBuildJS() {
 		exampleElement.readOnly = true;
 
 		element.appendChild( exampleElement );
+		element.appendChild( getCopyIcon() );
 
-		// TODO add copy icon.
 		return element;
+	}
+
+	function getCopyIcon() {
+		const icon = document.getElementById( 'frm_copy_embed_form_icon' );
+		let clone = icon.cloneNode( true );
+		clone.id = 'frm_copy_embed_' + getAutoId();
+		clone.addEventListener(
+			'click',
+			() => copyExampleToClipboard( clone.parentNode.querySelector( '.frm_embed_example' ) )
+		);
+		return clone;
+	}
+
+	function copyExampleToClipboard( example ) {
+		var copySuccess;
+
+		example.focus();
+		example.select();
+		example.setSelectionRange( 0, 99999 );
+
+		try {
+			copySuccess = document.execCommand( 'copy' );
+		} catch ( error ) {
+			copySuccess = false;
+		}
+
+		return copySuccess;
 	}
 
 	function initSelectionAutocomplete() {

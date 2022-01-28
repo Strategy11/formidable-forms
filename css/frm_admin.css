@@ -2392,6 +2392,17 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	padding-bottom: 0;
 }
 
+.frm_embed_form_content > div {
+	position: relative;
+}
+
+.frm_embed_form_content svg[id^="frm_copy_embed_"] {
+	position: absolute;
+	bottom: 25px;
+	right: 10px;
+	cursor: pointer;
+}
+
 /* Bulk Options */
 #frm-bulk-modal .frm_grid_container {
 	border-top: 1px solid var(--grey-border);

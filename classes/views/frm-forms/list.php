@@ -46,3 +46,12 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 <?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 </div>
 </div>
+
+<div class="frm_hidden">
+	<?php
+	FrmAppHelper::icon_by_class( 'frmfont frm_copy_embed_icon' );
+	?>
+	<svg id="frm_copy_embed_form_icon" class="frmsvg">
+		<use xlink:href="#frm_copy_code_icon"></use>
+	</svg>
+</div>
