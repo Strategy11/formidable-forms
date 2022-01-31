@@ -1862,34 +1862,30 @@ h2.frm-h2 + .howto {
 	padding: 10px 20px;
 }
 
-#frm_new_form_modal .postbox {
+#wpwrap ~ .frm-dialog .frm_common_modal .postbox {
 	max-height: 600px;
 	overflow: hidden;
 }
 
-#frm_new_form_modal .postbox > div:first-child,
-#frm_form_embed_modal .postbox > div:first-child {
+#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child {
 	padding: 30px 20px;
 	position: relative;
 	border-bottom: 1px solid var(--grey-border);
 }
 
-#frm_new_form_modal .postbox > div:first-child > div:first-child,
-#frm_form_embed_modal .postbox > div:first-child > div:first-child  {
+#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
 	display: inline-block;
 	font-size: 24px;
 	color: #282F36;
 }
 
-#frm_new_form_modal .postbox > div:first-child > div:last-child,
-#frm_form_embed_modal .postbox > div:first-child > div:last-child {
+#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
 	right: 20px;
 	top: 37px;
 }
 
-#frm_new_form_modal .postbox > div:first-child > div:last-child a,
-#frm_form_embed_modal .postbox > div:first-child > div:last-child {
+#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child a {
 	color: var(--grey);
 }
 
