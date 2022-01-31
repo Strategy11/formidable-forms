@@ -8403,10 +8403,6 @@ function frmAdminBuildJS() {
 				example: '[formidable id=' + formId + ' title=true description=true]'
 			},
 			{
-				label: false,
-				example: '[formidable key=' + formKey + ' title=true description=true]'
-			},
-			{
 				label: __( 'Use PHP code', 'formidable' ),
 				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => false, \'description\' => false ) ); ?>'
 			}
@@ -8422,18 +8418,17 @@ function frmAdminBuildJS() {
 		return content;
 	}
 
-	// TODO support link to education.
-	// TODO add id/for attributes for better accessibility.
+	// TODO support link to education
 	function getEmbedExample({ label, example }) {
-		let element = div();
+		let unique, element, labelElement, exampleElement;
 
-		if ( false !== label ) {
-			let labelElement = document.createElement( 'label' );
-			labelElement.textContent = label;
-			element.appendChild( labelElement );
-		}
+		unique = getAutoId();
+		element = div();
 
-		let exampleElement;
+		labelElement = document.createElement( 'label' );
+		labelElement.id = 'frm_embed_example_label_' + unique;
+		labelElement.textContent = label;
+		element.appendChild( labelElement );
 
 		if ( example.length > 80 ) {
 			exampleElement = document.createElement( 'textarea' );
@@ -8442,20 +8437,26 @@ function frmAdminBuildJS() {
 			exampleElement.type = 'text';
 		}
 
+		exampleElement.id = 'frm_embed_example_' + unique;
 		exampleElement.className = 'frm_embed_example';
 		exampleElement.value = example;
 		exampleElement.readOnly = true;
+		exampleElement.setAttribute( 'tabindex', -1 );
 
 		element.appendChild( exampleElement );
-		element.appendChild( getCopyIcon() );
+		element.appendChild( getCopyIcon( label ) );
 
 		return element;
 	}
 
-	function getCopyIcon() {
+	function getCopyIcon( label ) {
 		const icon = document.getElementById( 'frm_copy_embed_form_icon' );
 		let clone = icon.cloneNode( true );
 		clone.id = 'frm_copy_embed_' + getAutoId();
+		clone.setAttribute( 'tabindex', 0 );
+		clone.setAttribute( 'role', 'button' );
+		/* translators: %s: Example type (ie. WordPress shortcode, API Form script) */
+		clone.setAttribute( 'aria-label', __( 'Copy %s', 'formidable' ).replace( '%s', label ) );
 		clone.addEventListener(
 			'click',
 			() => copyExampleToClipboard( clone.parentNode.querySelector( '.frm_embed_example' ) )
@@ -8476,7 +8477,31 @@ function frmAdminBuildJS() {
 			copySuccess = false;
 		}
 
+		if ( copySuccess ) {
+			speak( __( 'Successfully copied embed example', 'formidable' ) );
+		}
+
 		return copySuccess;
+	}
+
+	function speak( message ) {
+		var element, id;
+
+		element = document.createElement( 'div' );
+		id = 'speak-' + Date.now();
+
+		element.setAttribute( 'aria-live', 'assertive' );
+		element.setAttribute( 'id', id );
+		element.className = 'frm_screen_reader frm_hidden';
+		element.textContent = message;
+		document.body.appendChild( element );
+
+		setTimeout(
+			function() {
+				document.body.removeChild( element );
+			},
+			1000
+		);
 	}
 
 	function initSelectionAutocomplete() {
