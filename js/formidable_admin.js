@@ -8322,6 +8322,7 @@ function frmAdminBuildJS() {
 
 		if ( ! modal ) {
 			modal = createEmptyModal( modalId );
+			modal.classList.add( 'frm_common_modal' );
 
 			const title = div({ child: document.createTextNode( __( 'Embed form', 'formidable' ) ), class: 'frm-modal-title' });
 
