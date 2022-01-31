@@ -8321,9 +8321,9 @@ function frmAdminBuildJS() {
 		if ( ! modal ) {
 			modal = createEmptyModal( modalId );
 
-			let title = div({ child: document.createTextNode( __( 'Embed form', 'formidable' ) ), class: 'frm-modal-title' });
+			const title = div({ child: document.createTextNode( __( 'Embed form', 'formidable' ) ), class: 'frm-modal-title' });
 
-			let a = document.createElement( 'a' );
+			const a = document.createElement( 'a' );
 			a.textContent = __( 'Cancel', 'formidable' );
 			a.className = 'dismiss';
 
@@ -8346,11 +8346,11 @@ function frmAdminBuildJS() {
 			);
 		}
 
-		let content = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' );
+		const content = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' );
 		content.innerHTML = '';
 		content.appendChild( getEmbedFormModalContent( formId, formKey ) );
 
-		let $modal = jQuery( modal );
+		const $modal = jQuery( modal );
 
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
 			$modal.dialog({
@@ -8379,7 +8379,7 @@ function frmAdminBuildJS() {
 	}
 
 	function createEmptyModal( id ) {
-		let modal = div({ id: id, class: 'frm-modal' });
+		const modal = div({ id: id, class: 'frm-modal' });
 		const postbox = div({ class: 'postbox' });
 		const metaboxHolder = div({ class: 'metabox-holder', child: postbox });
 		modal.appendChild( metaboxHolder );
@@ -8395,7 +8395,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getEmbedFormModalContent( formId, formKey ) {
-		let content = div({ class: 'frm_embed_form_content' });
+		const content = div({ class: 'frm_embed_form_content' });
 
 		let examples = [
 			{
@@ -8465,7 +8465,7 @@ function frmAdminBuildJS() {
 	}
 
 	function copyExampleToClipboard( example ) {
-		var copySuccess;
+		let copySuccess;
 
 		example.focus();
 		example.select();
@@ -8485,7 +8485,7 @@ function frmAdminBuildJS() {
 	}
 
 	function speak( message ) {
-		var element, id;
+		let element, id;
 
 		element = document.createElement( 'div' );
 		id = 'speak-' + Date.now();
