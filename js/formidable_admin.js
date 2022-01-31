@@ -8306,6 +8306,8 @@ function frmAdminBuildJS() {
 		}
 
 		if ( clicked ) {
+			event.preventDefault();
+
 			const row = element.closest( 'tr' );
 			const formId = parseInt( row.querySelector( '.column-id' ).textContent );
 			const formKey = row.querySelector( '.column-form_key' ).textContent;
