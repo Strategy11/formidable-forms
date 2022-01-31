@@ -8435,7 +8435,7 @@ function frmAdminBuildJS() {
 
 		let exampleElement;
 
-		if ( example.length > 60 ) {
+		if ( example.length > 80 ) {
 			exampleElement = document.createElement( 'textarea' );
 		} else {
 			exampleElement = document.createElement( 'input' );
