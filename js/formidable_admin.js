@@ -8350,6 +8350,15 @@ function frmAdminBuildJS() {
 		content.innerHTML = '';
 		content.appendChild( getEmbedFormModalContent( formId, formKey ) );
 
+		const footer = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_footer' );
+		if ( ! footer.querySelector( 'a' ) ) {
+			const doneButton = document.createElement( 'a' );
+			doneButton.textContent = __( 'Done', 'formidable' );
+			doneButton.className = 'button button-primary frm-button-primary dismiss';
+			doneButton.href = '#';
+			footer.appendChild( doneButton );
+		}
+
 		const $modal = jQuery( modal );
 
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
