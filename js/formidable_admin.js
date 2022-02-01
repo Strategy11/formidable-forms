@@ -7108,6 +7108,7 @@ function frmAdminBuildJS() {
 		dismiss.setAttribute( 'tabindex', -1 );
 
 		$modal = initModal( '#frm_new_form_modal', '600px' );
+		offsetModalY( $modal, '50px' );
 		$modal.attr( 'frm-page', 'create' );
 		$modal.find( '#template-search-input' ).val( '' ).trigger( 'change' );
 		$modal.dialog( 'open' );
@@ -8363,28 +8364,11 @@ function frmAdminBuildJS() {
 		}
 
 		const $modal = jQuery( modal );
-
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
-			$modal.dialog({
-				dialogClass: 'frm-dialog',
-				modal: true,
-				autoOpen: false,
-				closeOnEscape: true,
-				width: '550px',
-				resizable: false,
-				draggable: false,
-				open: function() {
-					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
-					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
-					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
-					$modal.removeClass( 'ui-dialog-content ui-widget-content' );
-					jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( event ) {
-						event.preventDefault();
-						$modal.dialog( 'close' );
-					});
-				}
-			});
+			initModal( $modal );
 		}
+
+		offsetModalY( $modal, '50px' );
 
 		scrollToTop();
 		$modal.dialog( 'open' );
@@ -8404,6 +8388,15 @@ function frmAdminBuildJS() {
 			history.scrollRestoration = 'manual';
 		}
 		window.scrollTo( 0, 0 );
+	}
+
+	function offsetModalY( $modal, amount ) {
+		const position = {
+			my: 'top',
+			at: 'top+' + amount,
+			of: window
+		};
+		$modal.dialog( 'option', 'position', position );
 	}
 
 	function getEmbedFormModalContent( formId, formKey ) {
@@ -8827,8 +8820,8 @@ function frmAdminBuildJS() {
 	}
 
 	function initModal( id, width ) {
-		var $info = jQuery( id );
-		if ( $info.length < 1 ) {
+		const $info = jQuery( id );
+		if ( ! $info.length ) {
 			return false;
 		}
 
@@ -8836,7 +8829,7 @@ function frmAdminBuildJS() {
 			width = '550px';
 		}
 
-		$info.dialog({
+		const dialogArgs = {
 			dialogClass: 'frm-dialog',
 			modal: true,
 			autoOpen: false,
@@ -8861,7 +8854,9 @@ function frmAdminBuildJS() {
 					optionType.value = '';
 				}
 			}
-		});
+		};
+
+		$info.dialog( dialogArgs );
 
 		return $info;
 	}
