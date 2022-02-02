@@ -2416,6 +2416,14 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	margin-top: 10px;
 }
 
+#frm_form_embed_modal .frm-modal-cancel {
+	display: none;
+}
+
+#frm_form_embed_modal.frm-insert-manually .frm-modal-cancel {
+	display: inline;
+}
+
 /* Bulk Options */
 #frm-bulk-modal .frm_grid_container {
 	border-top: 1px solid var(--grey-border);

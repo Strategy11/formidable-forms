@@ -8350,11 +8350,12 @@ function frmAdminBuildJS() {
 			postbox.appendChild(
 				div({ class: 'frm_modal_footer' })
 			);
+		} else {
+			modal.classList.remove( 'frm-insert-manually' );
 		}
 
 		const content = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' );
 		content.innerHTML = '';
-//		content.appendChild( getEmbedFormManualInsertOptions() );
 		content.appendChild( getEmbedFormModalOptions( formId, formKey ) );
 
 		const footer = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_footer' );
@@ -8364,6 +8365,19 @@ function frmAdminBuildJS() {
 			doneButton.className = 'button button-primary frm-button-primary dismiss';
 			doneButton.href = '#';
 			footer.appendChild( doneButton );
+
+			const cancelButton = document.createElement( 'a' );
+			cancelButton.href = '#';
+			cancelButton.className = 'button button-secondary frm-modal-cancel';
+			cancelButton.textContent = __( 'Cancel', 'formidable' );
+			cancelButton.addEventListener(
+				'click',
+				function( event ) {
+					event.preventDefault();
+					openFormEmbedModal( formId, formKey );
+				}
+			);
+			footer.appendChild( cancelButton );
 		}
 
 		const $modal = jQuery( modal );
@@ -8434,6 +8448,7 @@ function frmAdminBuildJS() {
 				callback: function() {
 					content.innerHTML = '';
 					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
+					document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-insert-manually' );
 				}
 			}
 		];
