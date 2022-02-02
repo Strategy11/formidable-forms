@@ -8466,8 +8466,6 @@ function frmAdminBuildJS() {
 							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
 						}
 					);
-
-					modal.classList.add( 'frm-on-page-2' );
 				}
 			},
 			{
@@ -8511,8 +8509,6 @@ function frmAdminBuildJS() {
 							});
 						}
 					);
-
-					modal.classList.add( 'frm-on-page-2' );
 				}
 			},
 			{
@@ -8521,7 +8517,6 @@ function frmAdminBuildJS() {
 				callback: function() {
 					content.innerHTML = '';
 					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
-					document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-on-page-2' );
 				}
 			}
 		];
@@ -8538,7 +8533,13 @@ function frmAdminBuildJS() {
 		output.className = 'frm-embed-modal-option';
 		output.appendChild( getLabel( label ) );
 		output.appendChild( div({ text: description }) );
-		output.addEventListener( 'click', callback );
+		output.addEventListener(
+			'click',
+			function() {
+				document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-on-page-2' );
+				callback();
+			}
+		);
 		return output;
 	}
 
