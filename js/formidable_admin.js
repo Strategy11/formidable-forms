@@ -8425,7 +8425,6 @@ function frmAdminBuildJS() {
 		return content;
 	}
 
-	// TODO support link to education
 	function getEmbedExample({ label, example, link, linkLabel }) {
 		let unique, element, labelElement, exampleElement, linkElement;
 
