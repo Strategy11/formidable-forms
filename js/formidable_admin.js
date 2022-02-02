@@ -8381,7 +8381,7 @@ function frmAdminBuildJS() {
 		} else {
 			const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 			doneButton.textContent = __( 'Done', 'formidable' );
-			doneButton.removeEventListener( 'click' );
+			doneButton.parentNode.replaceChild( doneButton.cloneNode( true ), doneButton );
 		}
 
 		const $modal = jQuery( modal );
@@ -8425,6 +8425,49 @@ function frmAdminBuildJS() {
 		const content = div({ class: 'frm_embed_form_content' });
 
 		const options = [
+			{
+				label: __( 'Select existing page', 'formidable' ),
+				description: __( 'Embed your form into an existing page.', 'formidable' ),
+				callback: function() {
+					content.innerHTML = '';
+
+					const title = document.createElement( 'h3' );
+					title.textContent = __( 'Select the page you want to embed your form into.', 'formidable' );
+					content.appendChild( title );
+
+					let editPageUrl;
+
+					jQuery.ajax({
+						type: 'POST',
+						url: ajaxurl,
+						data: {
+							action: 'get_page_dropdown',
+							nonce: frmGlobal.nonce
+						},
+						dataType: 'json',
+						success: function( response ) {
+							if ( 'object' === typeof response && 'string' === typeof response.html ) {
+								const dropdownWrapper = div();
+								dropdownWrapper.innerHTML = response.html;
+								content.appendChild( dropdownWrapper );
+								editPageUrl = response.edit_page_url;
+							}
+						}
+					});
+
+					const modal = document.getElementById( 'frm_form_embed_modal' );
+					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+					doneButton.textContent = __( 'Insert Form', 'formidable' );
+					doneButton.addEventListener(
+						'click',
+						function( event ) {
+							event.preventDefault();
+							const pageId = document.getElementById( 'frm_page_dropdown' ).value;
+							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
+						}
+					);
+				}
+			},
 			{
 				label: __( 'Create new page', 'formidable' ),
 				description: __( 'Put your form on a newly created page.', 'formidable' ),

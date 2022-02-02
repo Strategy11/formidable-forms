@@ -2324,6 +2324,27 @@ class FrmFormsController {
 		);
 	}
 
+	public static function get_page_dropdown() {
+		$html = FrmAppHelper::clip(
+			function() {
+				FrmAppHelper::maybe_autocomplete_pages_options(
+					array(
+						'field_name'  => 'frm_page_dropdown',
+						'page_id'     => '',
+						'placeholder' => __( 'Select a Page', 'formidable' ),
+					)
+				);
+			}
+		);
+		$post_type_object = get_post_type_object( 'page' );
+		wp_send_json(
+			array(
+				'html'          => $html,
+				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
+			)
+		);
+	}
+
 	/**
 	 * @deprecated 4.0
 	 */
