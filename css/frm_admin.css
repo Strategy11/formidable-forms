@@ -2388,6 +2388,12 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	padding-bottom: 0;
 }
 
+.frm_embed_form_content > div a {
+	position: absolute;
+	right: 0;
+	top: 8px;
+}
+
 .frm_embed_form_content > div {
 	position: relative;
 }

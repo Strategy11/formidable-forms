@@ -8405,11 +8405,13 @@ function frmAdminBuildJS() {
 		let examples = [
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
-				example: '[formidable id=' + formId + ' title=true description=true]'
+				example: '[formidable id=' + formId + ' title=true description=true]',
+				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
+				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
 			},
 			{
 				label: __( 'Use PHP code', 'formidable' ),
-				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => false, \'description\' => false ) ); ?>'
+				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => true, \'description\' => true ) ); ?>'
 			}
 		];
 
@@ -8424,8 +8426,8 @@ function frmAdminBuildJS() {
 	}
 
 	// TODO support link to education
-	function getEmbedExample({ label, example }) {
-		let unique, element, labelElement, exampleElement;
+	function getEmbedExample({ label, example, link, linkLabel }) {
+		let unique, element, labelElement, exampleElement, linkElement;
 
 		unique = getAutoId();
 		element = div();
@@ -8447,6 +8449,13 @@ function frmAdminBuildJS() {
 		exampleElement.value = example;
 		exampleElement.readOnly = true;
 		exampleElement.setAttribute( 'tabindex', -1 );
+
+		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
+			linkElement = document.createElement( 'a' );
+			linkElement.href = link;
+			linkElement.textContent = linkLabel;
+			element.appendChild( linkElement );
+		}
 
 		element.appendChild( exampleElement );
 		element.appendChild( getCopyIcon( label ) );
