@@ -2332,6 +2332,12 @@ class FrmFormsController {
 	 * @return never
 	 */
 	public static function get_page_dropdown() {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			die( 0 );
+		}
+
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
 		$html             = FrmAppHelper::clip(
 			function() {
 				FrmAppHelper::maybe_autocomplete_pages_options(
