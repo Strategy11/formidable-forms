@@ -2304,7 +2304,7 @@ class FrmFormsController {
 
 		$postarr = array(
 			'post_type'    => 'page',
-			'post_content' => '<!-- wp:shortcode -->[formidable id=' . $form_id . ']<!-- /wp:shortcode -->',
+			'post_content' => '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} --><div>[formidable id="' . $form_id . '"]</div><!-- /wp:formidable/simple-form -->',
 		);
 
 		$success = wp_insert_post( $postarr );
