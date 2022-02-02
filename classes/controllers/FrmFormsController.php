@@ -2286,9 +2286,11 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Create a page with an embedded formidable Gutenberg block.
+	 *
 	 * @since 5.1.01
 	 *
-	 * @return void
+	 * @return never
 	 */
 	public static function create_page_with_shortcode() {
 		if ( ! current_user_can( 'publish_posts' ) ) {
@@ -2324,8 +2326,13 @@ class FrmFormsController {
 		);
 	}
 
+	/**
+	 * Get page dropdown for AJAX request for embedding form in an existing page.
+	 *
+	 * @return never
+	 */
 	public static function get_page_dropdown() {
-		$html = FrmAppHelper::clip(
+		$html             = FrmAppHelper::clip(
 			function() {
 				FrmAppHelper::maybe_autocomplete_pages_options(
 					array(
