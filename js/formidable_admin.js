@@ -8369,7 +8369,7 @@ function frmAdminBuildJS() {
 			const cancelButton = document.createElement( 'a' );
 			cancelButton.href = '#';
 			cancelButton.className = 'button button-secondary frm-modal-cancel';
-			cancelButton.textContent = __( 'Cancel', 'formidable' );
+			cancelButton.textContent = __( 'Back', 'formidable' );
 			cancelButton.addEventListener(
 				'click',
 				function( event ) {
