@@ -8351,7 +8351,7 @@ function frmAdminBuildJS() {
 				div({ class: 'frm_modal_footer' })
 			);
 		} else {
-			modal.classList.remove( 'frm-insert-manually' );
+			modal.classList.remove( 'frm-on-page-2' );
 		}
 
 		const content = modal.querySelector( '.frm_modal_content' );
@@ -8466,6 +8466,8 @@ function frmAdminBuildJS() {
 							});
 						}
 					);
+
+					modal.classList.add( 'frm-on-page-2' );
 				}
 			},
 			{
@@ -8474,7 +8476,7 @@ function frmAdminBuildJS() {
 				callback: function() {
 					content.innerHTML = '';
 					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
-					document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-insert-manually' );
+					document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-on-page-2' );
 				}
 			}
 		];

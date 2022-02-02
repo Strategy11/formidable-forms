@@ -2420,7 +2420,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	display: none;
 }
 
-#frm_form_embed_modal.frm-insert-manually .frm-modal-cancel {
+#frm_form_embed_modal.frm-on-page-2 .frm-modal-cancel {
 	display: inline;
 }
 
