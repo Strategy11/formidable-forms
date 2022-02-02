@@ -2373,7 +2373,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 
 #frm_form_embed_modal .frm_embed_example {
 	background: #F6F7FB;
-	border: 0.725101px solid #E3E8EB;
+	border: 1px solid #E3E8EB;
 	border-radius: 6px;
 	color: rgba(40, 47, 54, 0.85);
 	font-size: 14px;
