@@ -927,16 +927,16 @@ function frmFrontFormJS() {
 		}
 		label.append( '<span class="frm-wait"></span>' );
 
-		form = document.getElementById( 'frm_form_' + formId + '_container' ).querySelector( 'form' );
-		postToAjaxUrl(
-			form,
-			{
+		jQuery.ajax({
+			type: 'POST',
+			url: frm_js.ajax_url,
+			data: {
 				action: 'frm_entries_send_email',
 				entry_id: entryId,
 				form_id: formId,
 				nonce: frm_js.nonce
 			},
-			function( msg ) {
+			success: function( msg ) {
 				var admin = document.getElementById( 'wpbody' );
 				if ( admin === null ) {
 					label.html( msg );
@@ -945,7 +945,7 @@ function frmFrontFormJS() {
 					$link.after( msg );
 				}
 			}
-		);
+		});
 		return false;
 	}
 
@@ -1501,26 +1501,25 @@ function frmAfterRecaptcha( token ) {
 }
 
 function frmUpdateField( entryId, fieldId, value, message, num ) {
-	var form;
 	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
-	form = jQuery( document.getElementById( 'frm_field_' + fieldId + '_container' ) ).closest( 'form' ).get( 0 );
-	postToAjaxUrl(
-		form,
-		{
+	jQuery.ajax({
+		type: 'POST',
+		url: frm_js.ajax_url,
+		data: {
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
 			field_id: fieldId,
 			value: value,
 			nonce: frm_js.nonce
 		},
-		function() {
+		success: function() {
 			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
 			} else {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).replaceWith( message );
 			}
 		}
-	);
+	});
 }
 
 function frmDeleteEntry( entryId, prefix ) {
