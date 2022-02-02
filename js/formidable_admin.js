@@ -8433,7 +8433,7 @@ function frmAdminBuildJS() {
 				description: __( 'Use WP shortcodes or PHP code to put the form in any place.', 'formidable' ),
 				callback: function() {
 					content.innerHTML = '';
-					content.appendChild( getEmbedFormManualInsertOptions( formId, formKey ) );
+					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
 				}
 			}
 		];
@@ -8454,9 +8454,7 @@ function frmAdminBuildJS() {
 		return output;
 	}
 
-	function getEmbedFormManualInsertOptions( formId, formKey ) {
-		const content = div({ class: 'frm_embed_form_content' });
-
+	function getEmbedFormManualExamples( formId, formKey ) {
 		let examples = [
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
@@ -8473,11 +8471,7 @@ function frmAdminBuildJS() {
 		const filterArgs = { formId, formKey };
 		examples = frmAdminBuild.hooks.applyFilters( 'frmEmbedFormExamples', examples, filterArgs );
 
-		examples.forEach(
-			example => content.appendChild( getEmbedExample( example ) )
-		);
-
-		return content;
+		return examples;
 	}
 
 	function getEmbedExample({ label, example, link, linkLabel }) {
