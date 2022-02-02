@@ -8466,6 +8466,8 @@ function frmAdminBuildJS() {
 							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
 						}
 					);
+
+					modal.classList.add( 'frm-on-page-2' );
 				}
 			},
 			{
