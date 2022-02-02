@@ -2286,6 +2286,40 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since 5.1.01
+	 *
+	 * @return void
+	 */
+	public static function create_page_with_shortcode() {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			die( 0 );
+		}
+
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		if ( ! $form_id ) {
+			die( 0 );
+		}
+
+		$postarr = array(
+			'post_type'    => 'page',
+			'post_content' => '<!-- wp:shortcode -->[formidable id=' . $form_id . ']<!-- /wp:shortcode -->',
+		);
+
+		$success = wp_insert_post( $postarr );
+		if ( ! is_numeric( $success ) || ! $success ) {
+			die( 0 );
+		}
+
+		wp_send_json(
+			array(
+				'redirect' => get_edit_post_link( $success, 'redirect' ),
+			)
+		);
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function new_form( $values = array() ) {

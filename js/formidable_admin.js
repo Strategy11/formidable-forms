@@ -3574,6 +3574,8 @@ function frmAdminBuildJS() {
 				element.appendChild( atts.child );
 			} else if ( 'undefined' !== typeof atts.children ) {
 				atts.children.forEach( child => element.appendChild( child ) );
+			} else if ( 'undefined' !== typeof atts.text ) {
+				element.appendChild( document.createTextNode( atts.text ) );
 			}
 		}
 		return element;
@@ -8352,7 +8354,8 @@ function frmAdminBuildJS() {
 
 		const content = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' );
 		content.innerHTML = '';
-		content.appendChild( getEmbedFormModalContent( formId, formKey ) );
+//		content.appendChild( getEmbedFormManualInsertOptions() );
+		content.appendChild( getEmbedFormModalOptions( formId, formKey ) );
 
 		const footer = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_footer' );
 		if ( ! footer.querySelector( 'a' ) ) {
@@ -8399,7 +8402,59 @@ function frmAdminBuildJS() {
 		$modal.dialog( 'option', 'position', position );
 	}
 
-	function getEmbedFormModalContent( formId, formKey ) {
+	// TODO icons
+	function getEmbedFormModalOptions( formId, formKey ) {
+		const content = div({ class: 'frm_embed_form_content' });
+
+		const options = [
+			{
+				label: __( 'Create new page', 'formidable' ),
+				description: __( 'Put your form on a newly created page.', 'formidable' ),
+				callback: function() {
+					jQuery.ajax({
+						type: 'POST',
+						url: ajaxurl,
+						data: {
+							action: 'frm_create_page_with_shortcode',
+							form_id: formId,
+							nonce: frmGlobal.nonce
+						},
+						dataType: 'json',
+						success: function( response ) {
+							if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
+								window.location.href = response.redirect;
+							}
+						}
+					});
+				}
+			},
+			{
+				label: __( 'Insert manually', 'formidable' ),
+				description: __( 'Use WP shortcodes or PHP code to put the form in any place.', 'formidable' ),
+				callback: function() {
+					content.innerHTML = '';
+					content.appendChild( getEmbedFormManualInsertOptions( formId, formKey ) );
+				}
+			}
+		];
+
+		options.forEach(
+			option => content.appendChild( getEmbedFormModalOption( option ) )
+		);
+
+		return content;
+	}
+
+	function getEmbedFormModalOption({ label, description, callback }) {
+		const output = div();
+		output.className = 'frm-embed-modal-option';
+		output.appendChild( getLabel( label ) );
+		output.appendChild( div({ text: description }) );
+		output.addEventListener( 'click', callback );
+		return output;
+	}
+
+	function getEmbedFormManualInsertOptions( formId, formKey ) {
 		const content = div({ class: 'frm_embed_form_content' });
 
 		let examples = [
@@ -8431,9 +8486,8 @@ function frmAdminBuildJS() {
 		unique = getAutoId();
 		element = div();
 
-		labelElement = document.createElement( 'label' );
+		labelElement = getLabel( label );
 		labelElement.id = 'frm_embed_example_label_' + unique;
-		labelElement.textContent = label;
 		element.appendChild( labelElement );
 
 		if ( example.length > 80 ) {
@@ -8460,6 +8514,12 @@ function frmAdminBuildJS() {
 		element.appendChild( getCopyIcon( label ) );
 
 		return element;
+	}
+
+	function getLabel( text ) {
+		const label = document.createElement( 'label' );
+		label.textContent = text;
+		return label;
 	}
 
 	function getCopyIcon( label ) {

@@ -2405,6 +2405,17 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	cursor: pointer;
 }
 
+.frm-embed-modal-option {
+	border-radius: 6px;
+	border: 1px solid #E3E8EB;
+	padding: 20px;
+	cursor: pointer;
+}
+
+.frm-embed-modal-option + .frm-embed-modal-option {
+	margin-top: 10px;
+}
+
 /* Bulk Options */
 #frm-bulk-modal .frm_grid_container {
 	border-top: 1px solid var(--grey-border);
