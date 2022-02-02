@@ -2307,6 +2307,11 @@ class FrmFormsController {
 			'post_content' => '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} --><div>[formidable id="' . $form_id . '"]</div><!-- /wp:formidable/simple-form -->',
 		);
 
+		$name = FrmAppHelper::get_post_param( 'name', '', 'sanitize_text_field' );
+		if ( $name ) {
+			$postarr['post_title'] = $name;
+		}
+
 		$success = wp_insert_post( $postarr );
 		if ( ! is_numeric( $success ) || ! $success ) {
 			die( 0 );

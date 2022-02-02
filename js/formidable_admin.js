@@ -8354,11 +8354,11 @@ function frmAdminBuildJS() {
 			modal.classList.remove( 'frm-insert-manually' );
 		}
 
-		const content = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_content' );
+		const content = modal.querySelector( '.frm_modal_content' );
 		content.innerHTML = '';
 		content.appendChild( getEmbedFormModalOptions( formId, formKey ) );
 
-		const footer = modal.querySelector( '.postbox' ).querySelector( '.frm_modal_footer' );
+		const footer = modal.querySelector( '.frm_modal_footer' );
 		if ( ! footer.querySelector( 'a' ) ) {
 			const doneButton = document.createElement( 'a' );
 			doneButton.textContent = __( 'Done', 'formidable' );
@@ -8378,6 +8378,10 @@ function frmAdminBuildJS() {
 				}
 			);
 			footer.appendChild( cancelButton );
+		} else {
+			const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+			doneButton.textContent = __( 'Done', 'formidable' );
+			doneButton.removeEventListener( 'click' );
 		}
 
 		const $modal = jQuery( modal );
@@ -8425,21 +8429,43 @@ function frmAdminBuildJS() {
 				label: __( 'Create new page', 'formidable' ),
 				description: __( 'Put your form on a newly created page.', 'formidable' ),
 				callback: function() {
-					jQuery.ajax({
-						type: 'POST',
-						url: ajaxurl,
-						data: {
-							action: 'frm_create_page_with_shortcode',
-							form_id: formId,
-							nonce: frmGlobal.nonce
-						},
-						dataType: 'json',
-						success: function( response ) {
-							if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
-								window.location.href = response.redirect;
-							}
+					content.innerHTML = '';
+
+					const title = document.createElement( 'h3' );
+					title.textContent = __( 'What will you call the new page?', 'formidable' );
+					content.appendChild( title );
+
+					const input = document.createElement( 'input' );
+					input.placeholder = __( 'Name your page', 'formidable' );
+					content.appendChild( input );
+					input.type = 'text';
+					input.focus();
+
+					const modal = document.getElementById( 'frm_form_embed_modal' );
+					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+					doneButton.textContent = __( 'Create page', 'formidable' );
+					doneButton.addEventListener(
+						'click',
+						function( event ) {
+							event.preventDefault();
+							jQuery.ajax({
+								type: 'POST',
+								url: ajaxurl,
+								data: {
+									action: 'frm_create_page_with_shortcode',
+									form_id: formId,
+									name: input.value,
+									nonce: frmGlobal.nonce
+								},
+								dataType: 'json',
+								success: function( response ) {
+									if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
+										window.location.href = response.redirect;
+									}
+								}
+							});
 						}
-					});
+					);
 				}
 			},
 			{
