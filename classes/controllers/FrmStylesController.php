@@ -448,19 +448,31 @@ class FrmStylesController {
 		$defaults  = $frm_style->get_defaults();
 		$style     = '';
 
-		include( FrmAppHelper::plugin_path() . '/css/_single_theme.css.php' );
+		include FrmAppHelper::plugin_path() . '/css/_single_theme.css.php';
 		wp_die();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_saved_css() {
 		$css = get_transient( 'frmpro_css' );
 
 		ob_start();
-		include( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' );
+		include FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
 		$output = ob_get_clean();
+		$output = self::replace_relative_url( $output );
 
-		echo self::replace_relative_url( $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		/**
+		 * The API needs to load font icons through a custom URL.
+		 *
+		 * @since 5.1.01
+		 *
+		 * @param string $output
+		 */
+		$output = apply_filters( 'frm_saved_css', $output );
 
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		wp_die();
 	}
 
