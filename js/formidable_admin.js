@@ -8554,6 +8554,8 @@ function frmAdminBuildJS() {
 		const output = div();
 		output.appendChild( wrapEmbedFormModalOptionIcon( icon ) );
 		output.className = 'frm-embed-modal-option';
+		output.setAttribute( 'tabindex', 0 );
+		output.setAttribute( 'role', 'button' );
 
 		const textWrapper = div();
 		textWrapper.appendChild( getLabel( label ) );
