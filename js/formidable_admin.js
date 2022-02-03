@@ -8463,12 +8463,26 @@ function frmAdminBuildJS() {
 
 								const modal = document.getElementById( 'frm_form_embed_modal' );
 								doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+								doneButton.classList.remove( 'dismiss' );
 								doneButton.textContent = __( 'Insert Form', 'formidable' );
 								doneButton.addEventListener(
 									'click',
 									function( event ) {
 										event.preventDefault();
-										const pageId = document.getElementById( 'frm_page_dropdown' ).value;
+
+										const pageDropdown = document.getElementById( 'frm_page_dropdown' );
+										pageDropdown.parentNode.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
+
+										const pageId = pageDropdown.value;
+
+										if ( '' === pageId ) {
+											const error = div({ class: 'frm_error_style' });
+											error.setAttribute( 'role', 'alert' );
+											error.textContent = __( 'Please select a page', 'formidable' );
+											pageDropdown.parentNode.insertBefore( error, pageDropdown );
+											return;
+										}
+
 										window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
 									}
 								);
