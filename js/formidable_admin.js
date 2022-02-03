@@ -8420,7 +8420,6 @@ function frmAdminBuildJS() {
 		$modal.dialog( 'option', 'position', position );
 	}
 
-	// TODO icons
 	function getEmbedFormModalOptions( formId, formKey ) {
 		const content = div({ class: 'frm_embed_form_content' });
 
@@ -8432,11 +8431,16 @@ function frmAdminBuildJS() {
 				callback: function() {
 					content.innerHTML = '';
 
-					const title = document.createElement( 'h3' );
-					title.textContent = __( 'Select the page you want to embed your form into.', 'formidable' );
-					content.appendChild( title );
+					const spinner = document.createElement( 'span' );
+					spinner.className = 'frm-wait frm_spinner';
+					spinner.style.visibility = 'visible';
+					content.appendChild( spinner );
 
-					let editPageUrl;
+					const gap = div();
+					gap.style.height = '20px';
+					content.appendChild( gap );
+
+					content.classList.add( 'frm-loading-page-options' );
 
 					jQuery.ajax({
 						type: 'POST',
@@ -8448,6 +8452,27 @@ function frmAdminBuildJS() {
 						dataType: 'json',
 						success: function( response ) {
 							if ( 'object' === typeof response && 'string' === typeof response.html ) {
+								content.classList.remove( 'frm-loading-page-options' );
+								content.innerHTML = '';
+
+								const title = getLabel( __( 'Select the page you want to embed your form into.', 'formidable' ) );
+								title.setAttribute( 'for', 'frm_page_dropdown' );
+								content.appendChild( title );
+
+								let editPageUrl;
+
+								const modal = document.getElementById( 'frm_form_embed_modal' );
+								doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+								doneButton.textContent = __( 'Insert Form', 'formidable' );
+								doneButton.addEventListener(
+									'click',
+									function( event ) {
+										event.preventDefault();
+										const pageId = document.getElementById( 'frm_page_dropdown' ).value;
+										window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
+									}
+								);
+
 								const dropdownWrapper = div();
 								dropdownWrapper.innerHTML = response.html;
 								content.appendChild( dropdownWrapper );
@@ -8455,18 +8480,6 @@ function frmAdminBuildJS() {
 							}
 						}
 					});
-
-					const modal = document.getElementById( 'frm_form_embed_modal' );
-					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
-					doneButton.textContent = __( 'Insert Form', 'formidable' );
-					doneButton.addEventListener(
-						'click',
-						function( event ) {
-							event.preventDefault();
-							const pageId = document.getElementById( 'frm_page_dropdown' ).value;
-							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
-						}
-					);
 				}
 			},
 			{
@@ -8476,13 +8489,19 @@ function frmAdminBuildJS() {
 				callback: function() {
 					content.innerHTML = '';
 
-					const title = document.createElement( 'h3' );
-					title.textContent = __( 'What will you call the new page?', 'formidable' );
-					content.appendChild( title );
+					const wrapper = div({ class: 'field-group' });
+
+					const title = getLabel( __( 'What will you call the new page?', 'formidable' ) );
+					title.setAttribute( 'for', 'frm_name_your_page' );
+					wrapper.appendChild( title );
 
 					const input = document.createElement( 'input' );
+					input.id = 'frm_name_your_page';
 					input.placeholder = __( 'Name your page', 'formidable' );
-					content.appendChild( input );
+					wrapper.appendChild( input );
+	
+					content.appendChild( wrapper );
+
 					input.type = 'text';
 					input.focus();
 

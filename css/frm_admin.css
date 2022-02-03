@@ -2372,6 +2372,11 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	padding: 20px;
 }
 
+.frm_embed_form_content.frm-loading-page-options {
+	display: flex;
+	justify-content: center;
+}
+
 #frm_form_embed_modal .frm_embed_example {
 	background: #F6F7FB;
 	border: 1px solid #E3E8EB;
