@@ -8499,7 +8499,7 @@ function frmAdminBuildJS() {
 					input.id = 'frm_name_your_page';
 					input.placeholder = __( 'Name your page', 'formidable' );
 					wrapper.appendChild( input );
-	
+
 					content.appendChild( wrapper );
 
 					input.type = 'text';
