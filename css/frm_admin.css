@@ -2365,6 +2365,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	font-size: 14px;
 	line-height: 25px;
 	color: rgba(40, 47, 54, 0.8);
+	font-weight: 600;
 }
 
 .frm_embed_form_content {
@@ -2423,6 +2424,31 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 
 #frm_form_embed_modal.frm-on-page-2 .frm-modal-cancel {
 	display: inline;
+}
+
+.frm-embed-form-icon-wrapper {
+	background: var(--primary-color);
+	border-radius: 4px;
+	padding: 10px;
+	color: #fff;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.frm-embed-form-icon-wrapper + div {
+	display: inline-block;
+	padding-left: 13px;
+	transform: translateY(-4px);
+}
+
+.frm-embed-modal-option:after {
+	content: "\e913" !important;
+	font-family: "s11-fp" !important;
+	font-size: 18px;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 /* Bulk Options */

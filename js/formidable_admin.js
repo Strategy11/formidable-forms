@@ -8426,6 +8426,7 @@ function frmAdminBuildJS() {
 
 		const options = [
 			{
+				icon: 'frm_select_existing_page_icon',
 				label: __( 'Select existing page', 'formidable' ),
 				description: __( 'Embed your form into an existing page.', 'formidable' ),
 				callback: function() {
@@ -8469,6 +8470,7 @@ function frmAdminBuildJS() {
 				}
 			},
 			{
+				icon: 'frm_create_new_page_icon',
 				label: __( 'Create new page', 'formidable' ),
 				description: __( 'Put your form on a newly created page.', 'formidable' ),
 				callback: function() {
@@ -8512,6 +8514,7 @@ function frmAdminBuildJS() {
 				}
 			},
 			{
+				icon: 'frm_insert_manually_icon',
 				label: __( 'Insert manually', 'formidable' ),
 				description: __( 'Use WP shortcodes or PHP code to put the form in any place.', 'formidable' ),
 				callback: function() {
@@ -8528,11 +8531,16 @@ function frmAdminBuildJS() {
 		return content;
 	}
 
-	function getEmbedFormModalOption({ label, description, callback }) {
+	function getEmbedFormModalOption({ icon, label, description, callback }) {
 		const output = div();
+		output.appendChild( wrapEmbedFormModalOptionIcon( icon ) );
 		output.className = 'frm-embed-modal-option';
-		output.appendChild( getLabel( label ) );
-		output.appendChild( div({ text: description }) );
+
+		const textWrapper = div();
+		textWrapper.appendChild( getLabel( label ) );
+		textWrapper.appendChild( div({ text: description }) );
+		output.appendChild( textWrapper );
+
 		output.addEventListener(
 			'click',
 			function() {
@@ -8541,6 +8549,13 @@ function frmAdminBuildJS() {
 			}
 		);
 		return output;
+	}
+
+	function wrapEmbedFormModalOptionIcon( sourceIconId ) {
+		const clone = document.getElementById( sourceIconId ).cloneNode( true );
+		const wrapper = div({ child: clone });
+		wrapper.className = 'frm-embed-form-icon-wrapper';
+		return wrapper;
 	}
 
 	function getEmbedFormManualExamples( formId, formKey ) {
