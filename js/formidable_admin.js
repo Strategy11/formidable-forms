@@ -8447,7 +8447,7 @@ function frmAdminBuildJS() {
 				icon: 'frm_select_existing_page_icon',
 				label: __( 'Select existing page', 'formidable' ),
 				description: __( 'Embed your form into an existing page.', 'formidable' ),
-				callback: function() {
+				callback: () => {
 					content.innerHTML = '';
 
 					const spinner = document.createElement( 'span' );
@@ -8520,20 +8520,51 @@ function frmAdminBuildJS() {
 				icon: 'frm_create_new_page_icon',
 				label: __( 'Create new page', 'formidable' ),
 				description: __( 'Put your form on a newly created page.', 'formidable' ),
-				callback: function() {
+				callback: () => {
 					content.innerHTML = '';
 
 					const wrapper = div({ class: 'field-group' });
+					const form = document.createElement( 'form' );
+
+					const createPageWithShortcode = () => {
+						jQuery.ajax({
+							type: 'POST',
+							url: ajaxurl,
+							data: {
+								action: 'frm_create_page_with_shortcode',
+								form_id: formId,
+								name: input.value,
+								nonce: frmGlobal.nonce
+							},
+							dataType: 'json',
+							success: function( response ) {
+								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
+									window.location.href = response.redirect;
+								}
+							}
+						});
+					};
+
+					form.addEventListener(
+						'submit',
+						function( event ) {
+							event.preventDefault();
+							createPageWithShortcode();
+							return false;
+						},
+						true
+					);
 
 					const title = getLabel( __( 'What will you call the new page?', 'formidable' ) );
 					title.setAttribute( 'for', 'frm_name_your_page' );
-					wrapper.appendChild( title );
+					form.appendChild( title );
 
 					const input = document.createElement( 'input' );
 					input.id = 'frm_name_your_page';
 					input.placeholder = __( 'Name your page', 'formidable' );
-					wrapper.appendChild( input );
+					form.appendChild( input );
 
+					wrapper.appendChild( form );
 					content.appendChild( wrapper );
 
 					input.type = 'text';
@@ -8546,22 +8577,7 @@ function frmAdminBuildJS() {
 						'click',
 						function( event ) {
 							event.preventDefault();
-							jQuery.ajax({
-								type: 'POST',
-								url: ajaxurl,
-								data: {
-									action: 'frm_create_page_with_shortcode',
-									form_id: formId,
-									name: input.value,
-									nonce: frmGlobal.nonce
-								},
-								dataType: 'json',
-								success: function( response ) {
-									if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
-										window.location.href = response.redirect;
-									}
-								}
-							});
+							createPageWithShortcode();
 						}
 					);
 				}
@@ -8570,7 +8586,7 @@ function frmAdminBuildJS() {
 				icon: 'frm_insert_manually_icon',
 				label: __( 'Insert manually', 'formidable' ),
 				description: __( 'Use WP shortcodes or PHP code to put the form in any place.', 'formidable' ),
-				callback: function() {
+				callback: () => {
 					content.innerHTML = '';
 					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
 				}
