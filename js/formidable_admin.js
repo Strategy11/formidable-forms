@@ -8300,7 +8300,7 @@ function frmAdminBuildJS() {
 
 		switch ( tag ) {
 			case 'a':
-				clicked = element.classList.contains( 'frm-embed-form' );
+				clicked = 'frm-embed-action' === element.id || element.classList.contains( 'frm-embed-form' );
 				break;
 
 			case 'svg':
@@ -8312,8 +8312,25 @@ function frmAdminBuildJS() {
 			event.preventDefault();
 
 			const row = element.closest( 'tr' );
-			const formId = parseInt( row.querySelector( '.column-id' ).textContent );
-			const formKey = row.querySelector( '.column-form_key' ).textContent;
+			let formId, formKey;
+
+			if ( row ) {
+				formId = parseInt( row.querySelector( '.column-id' ).textContent );
+				formKey = row.querySelector( '.column-form_key' ).textContent;
+			} else {
+				formId = document.getElementById( 'form_id' ).value;
+
+				const formKeyInput = document.getElementById( 'frm_form_key' );
+				if ( formKeyInput ) {
+					formKey = formKeyInput.value;
+				} else {
+					const previewDrop = document.getElementById( 'frm-previewDrop' );
+					if ( previewDrop ) {
+						formKey = previewDrop.nextElementSibling.querySelector( 'li a' ).getAttribute( 'href' ).split( 'form=' )[1];
+					}
+				}
+			}
+	
 			openFormEmbedModal( formId, formKey );
 		}
 	}
@@ -8393,6 +8410,8 @@ function frmAdminBuildJS() {
 
 		scrollToTop();
 		$modal.dialog( 'open' );
+
+		$modal.parent().addClass( 'frm-embed-form-modal-wrapper' );
 	}
 
 	function createEmptyModal( id ) {
@@ -9375,7 +9394,6 @@ function frmAdminBuildJS() {
 				// New form selection page
 				initNewFormModal();
 				initSelectionAutocomplete();
-				initEmbedFormModal();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
 					window.print();
@@ -9390,6 +9408,7 @@ function frmAdminBuildJS() {
 			}
 
 			loadTooltips();
+			initEmbedFormModal();
 			initUpgradeModal();
 
 			// used on build, form settings, and view settings

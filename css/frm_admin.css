@@ -451,7 +451,8 @@ ul.frm_form_nav > li {
 #frm-preview-action,
 #frm-publishing > input[type=submit],
 #frm-publishing > .button,
-#frm-publishing > button {
+#frm-publishing > button,
+#frm-embed-action {
 	float: right;
 	margin: 0 10px 0 0;
 }
@@ -2459,6 +2460,10 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 .frm_embed_form_content ul {
 	max-height: 300px;
 	overflow-y: scroll;
+}
+
+.frm-embed-form-modal-wrapper.frm-dialog {
+	overflow: visible;
 }
 
 /* Bulk Options */

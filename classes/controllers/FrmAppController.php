@@ -689,6 +689,17 @@ class FrmAppController {
 	}
 
 	/**
+	 * Include icons on page for Embed Form modal.
+	 *
+	 * @since 5.1.01
+	 *
+	 * @return void
+	 */
+	public static function include_embed_form_icons() {
+		require_once FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_embed_form_icons.php';
+	}
+
+	/**
 	 * @deprecated 1.07.05
 	 * @codeCoverageIgnore
 	 */

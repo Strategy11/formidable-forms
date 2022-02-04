@@ -29,26 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</p>
 
-
 <?php if ( ! $values['is_template'] ) { ?>
-	<p class="frm6 frm_form_field">
-		<label>
-			<?php esc_html_e( 'Embed Shortcode', 'formidable' ); ?>
-		</label>
-		<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?>]" />
-	</p>
-	<p class="frm6 frm_form_field">
-		<label>&nbsp;</label>
-		<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?> title=true description=true]" />
-	</p>
-
-	<a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php esc_html_e( 'Insert with PHP', 'formidable' ); ?></a>
-	<p id="frm_shortcodediv" class="hide-if-js">
-		<label>
-			<?php esc_html_e( 'Embed in Template', 'formidable' ); ?>
-		</label>
-			<input type="text" readonly="readonly" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode( array( 'id' => <?php echo absint( $values['id'] ); ?>, 'title' => false, 'description' => false ) ); ?&gt;" />
-	</p>
 	<?php $first_h3 = ''; ?>
 
 	<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
