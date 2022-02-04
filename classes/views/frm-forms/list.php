@@ -62,6 +62,6 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 		<use xlink:href="#frm_plus_icon"></use>
 	</svg>
 	<svg id="frm_insert_manually_icon" class="frmsvg">
-		<use xlink:href="#frm_embed_icon"></use>
+		<use xlink:href="#frm_code_icon"></use>
 	</svg>
 </div>
