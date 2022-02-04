@@ -434,6 +434,9 @@ class FrmAppController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function admin_js() {
 		$version = FrmAppHelper::plugin_version();
 		FrmAppHelper::load_admin_wide_js();
@@ -458,6 +461,13 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.4.1' );
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
 
+		$action        = FrmAppHelper::get_param( 'frm_action', '', 'sanitize_title' );
+		$is_form_index = $action && in_array( $action, array( 'list', 'trash' ), true );
+		if ( $is_form_index ) {
+			// For the existing page dropdown in the Form embed modal.
+			wp_enqueue_script( 'jquery-ui-autocomplete' );
+		}
+
 		// load multselect js
 		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
 		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '1.1.1', true );
@@ -466,7 +476,7 @@ class FrmAppController {
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;
-		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
+		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
 
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
@@ -502,7 +512,7 @@ class FrmAppController {
 				return;
 			}
 
-			if ( $post_type == 'frm_display' ) {
+			if ( $post_type === 'frm_display' ) {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_script( 'jquery-ui-draggable' );
 				wp_enqueue_script( 'formidable_admin' );

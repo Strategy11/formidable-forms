@@ -8470,16 +8470,16 @@ function frmAdminBuildJS() {
 									function( event ) {
 										event.preventDefault();
 
-										const pageDropdown = document.getElementById( 'frm_page_dropdown' );
-										pageDropdown.parentNode.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
+										const pageDropdown = modal.querySelector( '[name="frm_page_dropdown"]' );
+										modal.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
 
 										const pageId = pageDropdown.value;
 
-										if ( '' === pageId ) {
+										if ( '0' === pageId || '' === pageId ) {
 											const error = div({ class: 'frm_error_style' });
 											error.setAttribute( 'role', 'alert' );
 											error.textContent = __( 'Please select a page', 'formidable' );
-											pageDropdown.parentNode.insertBefore( error, pageDropdown );
+											content.insertBefore( error, title.nextElementSibling );
 											return;
 										}
 
@@ -8491,6 +8491,7 @@ function frmAdminBuildJS() {
 								dropdownWrapper.innerHTML = response.html;
 								content.appendChild( dropdownWrapper );
 								editPageUrl = response.edit_page_url;
+								initSelectionAutocomplete();
 							}
 						}
 					});
@@ -8640,6 +8641,7 @@ function frmAdminBuildJS() {
 			linkElement = document.createElement( 'a' );
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;
+			linkElement.setAttribute( 'target', '_blank' );
 			element.appendChild( linkElement );
 		}
 

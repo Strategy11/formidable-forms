@@ -1862,7 +1862,7 @@ h2.frm-h2 + .howto {
 	padding: 10px 20px;
 }
 
-#wpwrap ~ .frm-dialog .frm_common_modal .postbox {
+#frm_new_form_modal .postbox {
 	max-height: 600px;
 	overflow: hidden;
 }
@@ -2383,7 +2383,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	border-radius: 6px;
 	color: rgba(40, 47, 54, 0.85);
 	font-size: 14px;
-	padding: 10px;
+	padding: 10px 30px 10px 10px;
 	width: 100%;
 	margin-bottom: 15px;
 	height: auto !important;
@@ -2406,7 +2406,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 
 .frm_embed_form_content svg[id^="frm_copy_embed_"] {
 	position: absolute;
-	bottom: 25px;
+	top: 35px;
 	right: 10px;
 	cursor: pointer;
 	opacity: 0.5;
@@ -2454,6 +2454,11 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	right: 10px;
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+.frm_embed_form_content ul {
+	max-height: 300px;
+	overflow-y: scroll;
 }
 
 /* Bulk Options */
