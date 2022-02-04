@@ -788,7 +788,7 @@ class FrmFormsController {
 			$columns['name']      = __( 'Form Title', 'formidable' );
 			$columns['entries']   = __( 'Entries', 'formidable' );
 			$columns['form_key']  = __( 'Key', 'formidable' );
-			$columns['shortcode'] = __( 'Embed', 'formidable' );
+			$columns['shortcode'] = __( 'Actions', 'formidable' );
 		}
 
 		$columns['created_at'] = __( 'Date', 'formidable' );

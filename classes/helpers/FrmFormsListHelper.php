@@ -249,7 +249,8 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
-					$val = '<a href="#" class="frm-embed-form">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+					$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+					$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $item ) );
 					break;
 				case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
