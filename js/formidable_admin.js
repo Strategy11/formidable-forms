@@ -8330,7 +8330,7 @@ function frmAdminBuildJS() {
 					}
 				}
 			}
-	
+
 			openFormEmbedModal( formId, formKey );
 		}
 	}
@@ -8440,7 +8440,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getEmbedFormModalOptions( formId, formKey ) {
-		const content = div({ class: 'frm_embed_form_content' });
+		const content = div({ class: 'frm_embed_form_content frm_wrap' });
 
 		const options = [
 			{
