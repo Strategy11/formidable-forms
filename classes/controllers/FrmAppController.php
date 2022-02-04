@@ -461,11 +461,13 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.4.1' );
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
 
-		$action        = FrmAppHelper::get_param( 'frm_action', '', 'sanitize_title' );
-		$is_form_index = $action && in_array( $action, array( 'list', 'trash' ), true );
-		if ( $is_form_index ) {
-			// For the existing page dropdown in the Form embed modal.
-			wp_enqueue_script( 'jquery-ui-autocomplete' );
+		if ( 'formidable' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+			$action        = FrmAppHelper::get_param( 'frm_action', '', 'sanitize_title' );
+			$is_form_index = ! $action || in_array( $action, array( 'list', 'trash' ), true );
+			if ( $is_form_index ) {
+				// For the existing page dropdown in the Form embed modal.
+				wp_enqueue_script( 'jquery-ui-autocomplete' );
+			}
 		}
 
 		// load multselect js
