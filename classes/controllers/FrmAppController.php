@@ -523,6 +523,64 @@ class FrmAppController {
 				self::include_info_overlay();
 			}
 		}
+
+		self::maybe_force_formidable_block_on_gutenberg_page();
+	}
+
+	/**
+	 * Automatically insert a Formidable block when loading Gutenberg with a $_GET['frmForm'] value set.
+	 *
+	 * @since 5.1.01
+	 *
+	 * @return void
+	 */
+	private static function maybe_force_formidable_block_on_gutenberg_page() {
+		global $pagenow;
+		if ( 'post.php' !== $pagenow ) {
+			return;
+		}
+
+		$form_id = FrmAppHelper::simple_get( 'frmForm', 'absint' );
+		if ( ! $form_id ) {
+			return;
+		}
+
+		?>
+		<script>
+			( function() {
+				const handleDomReady = () => {
+					const closeListener = wp.data.subscribe(
+						() => {
+							const editor = wp.data.select( 'core/editor' );
+
+							if ( 'function' !== typeof editor.__unstableIsEditorReady ) {
+								closeListener();
+								return;
+							}
+
+							const isReady = editor.__unstableIsEditorReady();
+							if ( isReady ) {
+								closeListener();
+								requestAnimationFrame( () => injectFormidableBlock() );
+							}
+						}
+					);
+				}
+
+				document.addEventListener( 'DOMContentLoaded', handleDomReady );
+
+				const injectFormidableBlock = () => {
+					insertedBlock = wp.blocks.createBlock(
+						'formidable/simple-form',
+						{
+							formId: <?php echo absint( $form_id ); ?>
+						}
+					);
+					wp.data.dispatch( 'core/block-editor' ).insertBlocks( insertedBlock );
+				};
+			}() );
+		</script>
+		<?php
 	}
 
 	public static function load_lang() {

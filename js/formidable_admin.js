@@ -8509,7 +8509,7 @@ function frmAdminBuildJS() {
 								const dropdownWrapper = div();
 								dropdownWrapper.innerHTML = response.html;
 								content.appendChild( dropdownWrapper );
-								editPageUrl = response.edit_page_url;
+								editPageUrl = response.edit_page_url + '&frmForm=' + formId;
 								initSelectionAutocomplete();
 							}
 						}
