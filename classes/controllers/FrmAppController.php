@@ -549,6 +549,10 @@ class FrmAppController {
 		<script>
 			( function() {
 				const handleDomReady = () => {
+					if ( 'undefined' === typeof wp || 'undefined' === typeof wp.data || 'function' !== typeof wp.data.subscribe ) {
+						return;
+					}
+
 					const closeListener = wp.data.subscribe(
 						() => {
 							const editor = wp.data.select( 'core/editor' );
