@@ -590,14 +590,16 @@ class FrmAppController {
 							if ( currentBlocks !== blockList ) {
 								closeListener();
 								const block = currentBlocks[ currentBlocks.length - 1 ];
-								setTimeout(
+								const interval = setInterval(
 									() => {
 										const scrollTarget = document.getElementById( 'block-' + block.clientId );
-										if ( scrollTarget ) {
+										const form = scrollTarget.querySelector( 'form' );
+										if ( form ) {
 											scrollTarget.scrollIntoView({ behavior: 'smooth' });
+											clearInterval( interval );
 										}
 									},
-									100
+									50
 								);
 							}							
 						}
