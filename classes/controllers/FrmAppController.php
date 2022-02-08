@@ -580,6 +580,29 @@ class FrmAppController {
 							formId: '<?php echo absint( $form_id ); ?>'
 						}
 					);
+
+					const getBlocks = () => wp.data.select( 'core/editor' ).getBlocks();
+					const blockList = getBlocks();
+
+					const closeListener = wp.data.subscribe(
+						() => {
+							const currentBlocks = getBlocks();
+							if ( currentBlocks !== blockList ) {
+								closeListener();
+								const block = currentBlocks[ currentBlocks.length - 1 ];
+								setTimeout(
+									() => {
+										const scrollTarget = document.getElementById( 'block-' + block.clientId );
+										if ( scrollTarget ) {
+											scrollTarget.scrollIntoView({ behavior: 'smooth' });
+										}
+									},
+									100
+								);
+							}							
+						}
+					);
+
 					wp.data.dispatch( 'core/block-editor' ).insertBlocks( insertedBlock );
 				};
 			}() );
