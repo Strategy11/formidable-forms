@@ -577,7 +577,7 @@ class FrmAppController {
 					insertedBlock = wp.blocks.createBlock(
 						'formidable/simple-form',
 						{
-							formId: <?php echo absint( $form_id ); ?>
+							formId: '<?php echo absint( $form_id ); ?>'
 						}
 					);
 					wp.data.dispatch( 'core/block-editor' ).insertBlocks( insertedBlock );
