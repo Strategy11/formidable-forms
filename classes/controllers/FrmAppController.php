@@ -587,21 +587,23 @@ class FrmAppController {
 					const closeListener = wp.data.subscribe(
 						() => {
 							const currentBlocks = getBlocks();
-							if ( currentBlocks !== blockList ) {
-								closeListener();
-								const block = currentBlocks[ currentBlocks.length - 1 ];
-								const interval = setInterval(
-									() => {
-										const scrollTarget = document.getElementById( 'block-' + block.clientId );
-										const form = scrollTarget.querySelector( 'form' );
-										if ( form ) {
-											scrollTarget.scrollIntoView({ behavior: 'smooth' });
-											clearInterval( interval );
-										}
-									},
-									50
-								);
-							}							
+							if ( currentBlocks === blockList ) {
+								return;
+							}
+
+							closeListener();
+							const block = currentBlocks[ currentBlocks.length - 1 ];
+							const interval = setInterval(
+								() => {
+									const scrollTarget = document.getElementById( 'block-' + block.clientId );
+									const form = scrollTarget.querySelector( 'form' );
+									if ( form ) {
+										scrollTarget.scrollIntoView({ behavior: 'smooth' });
+										clearInterval( interval );
+									}
+								},
+								50
+							);
 						}
 					);
 
