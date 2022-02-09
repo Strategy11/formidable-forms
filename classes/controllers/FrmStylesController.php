@@ -466,7 +466,7 @@ class FrmStylesController {
 		/**
 		 * The API needs to load font icons through a custom URL.
 		 *
-		 * @since 5.1.01
+		 * @since 5.2
 		 *
 		 * @param string $output
 		 */

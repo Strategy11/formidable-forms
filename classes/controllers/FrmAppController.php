@@ -530,7 +530,7 @@ class FrmAppController {
 	/**
 	 * Automatically insert a Formidable block when loading Gutenberg with a $_GET['frmForm'] value set.
 	 *
-	 * @since 5.1.01
+	 * @since 5.2
 	 *
 	 * @return void
 	 */
@@ -782,7 +782,7 @@ class FrmAppController {
 	/**
 	 * Include icons on page for Embed Form modal.
 	 *
-	 * @since 5.1.01
+	 * @since 5.2
 	 *
 	 * @return void
 	 */

@@ -2288,7 +2288,7 @@ class FrmFormsController {
 	/**
 	 * Create a page with an embedded formidable Gutenberg block.
 	 *
-	 * @since 5.1.01
+	 * @since 5.2
 	 *
 	 * @return never
 	 */
