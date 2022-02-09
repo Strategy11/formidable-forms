@@ -14,7 +14,7 @@ class FrmSimpleBlocksController {
 		wp_register_script(
 			'formidable-form-selector',
 			FrmAppHelper::plugin_url() . '/js/formidable_blocks.js',
-			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
+			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-block-editor' ),
 			$version,
 			true
 		);
