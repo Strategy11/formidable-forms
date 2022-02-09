@@ -1,4 +1,11 @@
 == Changelog ==
+= 5.1.01 =
+- New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
+- Fix: A Notice was being logged that wp_enqueue_script() was called incorrectly when loading the new Widgets editor since WordPress 5.8.
+- Fix: An unexpected array value in form data would cause some text fields to break in PHP8.
+- Fix: Some AJAX calls for API loaded forms were occasionally targeting the wrong site, causing unwanted redirects.
+- Fix: Dropdown field options were including redundant class="" HTML that has been removed.
+
 = 5.1 =
 - Updated Bootstrap Multiselect to version 1.1.1, fixing issues with the accessibility of backend multiselect dropdowns for blind users.
 - New: Inputs with errors will now add the aria-describedby attribute during JavaScript validation for more accessible errors.
