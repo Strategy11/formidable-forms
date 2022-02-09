@@ -439,22 +439,23 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 5.2 =
-- New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
-- Fix: A Notice was being logged that wp_enqueue_script() was called incorrectly when loading the new Widgets editor since WordPress 5.8.
-- Fix: An unexpected array value in form data would cause some text fields to break in PHP8.
-- Fix: Some AJAX calls for API loaded forms were occasionally targeting the wrong site, causing unwanted redirects.
-- Fix: Dropdown field options were including redundant class="" HTML that has been removed.
+* Increased WP version requirement to 5.2.
+* New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
+* Fix: A Notice was being logged that wp_enqueue_script() was called incorrectly when loading the new Widgets editor since WordPress 5.8.
+* Fix: An unexpected array value in form data would cause some text fields to break in PHP8.
+* Fix: Some AJAX calls for API loaded forms were occasionally targeting the wrong site, causing unwanted redirects.
+* Fix: Dropdown field options were including redundant class="" HTML that has been removed.
 
 = 5.1 =
-- Updated Bootstrap Multiselect to version 1.1.1, fixing issues with the accessibility of backend multiselect dropdowns for blind users.
-- New: Inputs with errors will now add the aria-describedby attribute during JavaScript validation for more accessible errors.
-- New: Form errors will now always include the role="alert" attribute for more accessible errors. New fields will now also include role="alert" in custom field HTML.
-- New: Added a new frm_entries_column_value filter hook.
+* Updated Bootstrap Multiselect to version 1.1.1, fixing issues with the accessibility of backend multiselect dropdowns for blind users.
+* New: Inputs with errors will now add the aria-describedby attribute during JavaScript validation for more accessible errors.
+* New: Form errors will now always include the role="alert" attribute for more accessible errors. New fields will now also include role="alert" in custom field HTML.
+* New: Added a new frm_entries_column_value filter hook.
 
 = 5.0.17 =
-- The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
-- New: The ctype PHP extension is no longer a requirement.
-- Fix: The custom CSS page would appear without any textarea on some configurations where CodeMirror may be disabled.
-- Fix: Removed padding styles from radio buttons because of a conflict with the Sensational theme.
+* The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
+* New: The ctype PHP extension is no longer a requirement.
+* Fix: The custom CSS page would appear without any textarea on some configurations where CodeMirror may be disabled.
+* Fix: Removed padding styles from radio buttons because of a conflict with the Sensational theme.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
