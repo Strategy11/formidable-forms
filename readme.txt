@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.0
 Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 5.1
+Stable tag: 5.1.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.1.01 =
+- New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
+- Fix: A Notice was being logged that wp_enqueue_script() was called incorrectly when loading the new Widgets editor since WordPress 5.8.
+- Fix: An unexpected array value in form data would cause some text fields to break in PHP8.
+- Fix: Some AJAX calls for API loaded forms were occasionally targeting the wrong site, causing unwanted redirects.
+- Fix: Dropdown field options were including redundant class="" HTML that has been removed.
+
 = 5.1 =
 - Updated Bootstrap Multiselect to version 1.1.1, fixing issues with the accessibility of backend multiselect dropdowns for blind users.
 - New: Inputs with errors will now add the aria-describedby attribute during JavaScript validation for more accessible errors.
@@ -449,17 +456,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 - New: The ctype PHP extension is no longer a requirement.
 - Fix: The custom CSS page would appear without any textarea on some configurations where CodeMirror may be disabled.
 - Fix: Removed padding styles from radio buttons because of a conflict with the Sensational theme.
-
-= 5.0.16 =
-- New: Field shortcodes now support sanitize_url=1 and sanitize=1 options which were previously only processed in Pro. For more information on how these options work, see https://formidableforms.com/knowledgebase/advanced/#kb-sanitize-url
-- New: The sanitize_url=1 option will now be inserted automatically when inserting most field shortcodes to a redirect url. This is to avoid issues with redirects stripping characters like ' and @ which may cause a redirect to fail in some cases.
-- New: Updated styling for radio buttons and checkboxes, with improvements to appearance on mobile devices as well.
-- New: Extended the FrmCSVExportHelper::generate_csv function so it has the option to generate a CSV file in a temporary directory, and pass along an array of meta information to most CSV filter hooks.
-- New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by email action ID.
-- New: Added new frm_entry_formatter_class, frm_prepend_and_or_where, frm_entry_formatter_format, frm_formatted_entry_values_content, and frm_entries_show_args filter hooks.
-- New: Allow more colors in the styler to be transparent including background colors and border colors for active, hovered, and disabled inputs.
-- Fix: Selected radio buttons were appearing incorrectly when using the Twenty Twenty One theme in Chrome or Safari.
-- Fix: Radio buttons and checkboxes were appearing overlapped with labels when using the H-Code theme.
-- Fix: Field pop ups were displaying upgrade messages even for licenses that had access to the add on.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
