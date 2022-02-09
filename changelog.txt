@@ -1,5 +1,5 @@
 == Changelog ==
-= 5.1.01 =
+= 5.2 =
 - New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
 - Fix: A Notice was being logged that wp_enqueue_script() was called incorrectly when loading the new Widgets editor since WordPress 5.8.
 - Fix: An unexpected array value in form data would cause some text fields to break in PHP8.
