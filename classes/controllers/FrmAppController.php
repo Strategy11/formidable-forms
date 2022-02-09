@@ -434,6 +434,9 @@ class FrmAppController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function admin_js() {
 		$version = FrmAppHelper::plugin_version();
 		FrmAppHelper::load_admin_wide_js();
@@ -458,6 +461,15 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.4.1' );
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
 
+		if ( 'formidable' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+			$action        = FrmAppHelper::get_param( 'frm_action', '', 'sanitize_title' );
+			$is_form_index = ! $action || in_array( $action, array( 'list', 'trash' ), true );
+			if ( $is_form_index ) {
+				// For the existing page dropdown in the Form embed modal.
+				wp_enqueue_script( 'jquery-ui-autocomplete' );
+			}
+		}
+
 		// load multselect js
 		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
 		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '1.1.1', true );
@@ -466,7 +478,7 @@ class FrmAppController {
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;
-		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow == 'edit.php' && $post_type == 'frm_display' ) ) {
+		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
 
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
@@ -502,7 +514,7 @@ class FrmAppController {
 				return;
 			}
 
-			if ( $post_type == 'frm_display' ) {
+			if ( $post_type === 'frm_display' ) {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_script( 'jquery-ui-draggable' );
 				wp_enqueue_script( 'formidable_admin' );
@@ -511,6 +523,95 @@ class FrmAppController {
 				self::include_info_overlay();
 			}
 		}
+
+		self::maybe_force_formidable_block_on_gutenberg_page();
+	}
+
+	/**
+	 * Automatically insert a Formidable block when loading Gutenberg with a $_GET['frmForm'] value set.
+	 *
+	 * @since 5.1.01
+	 *
+	 * @return void
+	 */
+	private static function maybe_force_formidable_block_on_gutenberg_page() {
+		global $pagenow;
+		if ( 'post.php' !== $pagenow ) {
+			return;
+		}
+
+		$form_id = FrmAppHelper::simple_get( 'frmForm', 'absint' );
+		if ( ! $form_id ) {
+			return;
+		}
+
+		?>
+		<script>
+			( function() {
+				const handleDomReady = () => {
+					if ( 'undefined' === typeof wp || 'undefined' === typeof wp.data || 'function' !== typeof wp.data.subscribe ) {
+						return;
+					}
+
+					const closeListener = wp.data.subscribe(
+						() => {
+							const editor = wp.data.select( 'core/editor' );
+
+							if ( 'function' !== typeof editor.__unstableIsEditorReady ) {
+								closeListener();
+								return;
+							}
+
+							const isReady = editor.__unstableIsEditorReady();
+							if ( isReady ) {
+								closeListener();
+								requestAnimationFrame( () => injectFormidableBlock() );
+							}
+						}
+					);
+				}
+
+				document.addEventListener( 'DOMContentLoaded', handleDomReady );
+
+				const injectFormidableBlock = () => {
+					insertedBlock = wp.blocks.createBlock(
+						'formidable/simple-form',
+						{
+							formId: '<?php echo absint( $form_id ); ?>'
+						}
+					);
+
+					const getBlocks = () => wp.data.select( 'core/editor' ).getBlocks();
+					const blockList = getBlocks();
+
+					const closeListener = wp.data.subscribe(
+						() => {
+							const currentBlocks = getBlocks();
+							if ( currentBlocks === blockList ) {
+								return;
+							}
+
+							closeListener();
+							const block = currentBlocks[ currentBlocks.length - 1 ];
+							const interval = setInterval(
+								() => {
+									const scrollTarget = document.getElementById( 'block-' + block.clientId );
+									const form = scrollTarget.querySelector( 'form' );
+									if ( form ) {
+										scrollTarget.scrollIntoView({ behavior: 'smooth' });
+										clearInterval( interval );
+									}
+								},
+								50
+							);
+						}
+					);
+
+					wp.data.dispatch( 'core/block-editor' ).insertBlocks( insertedBlock );
+				};
+			}() );
+		</script>
+		<?php
 	}
 
 	public static function load_lang() {
@@ -676,6 +777,17 @@ class FrmAppController {
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Include icons on page for Embed Form modal.
+	 *
+	 * @since 5.1.01
+	 *
+	 * @return void
+	 */
+	public static function include_embed_form_icons() {
+		require_once FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_embed_form_icons.php';
 	}
 
 	/**

@@ -788,7 +788,7 @@ class FrmFormsController {
 			$columns['name']      = __( 'Form Title', 'formidable' );
 			$columns['entries']   = __( 'Entries', 'formidable' );
 			$columns['form_key']  = __( 'Key', 'formidable' );
-			$columns['shortcode'] = __( 'Shortcodes', 'formidable' );
+			$columns['shortcode'] = __( 'Actions', 'formidable' );
 		}
 
 		$columns['created_at'] = __( 'Date', 'formidable' );
@@ -2283,6 +2283,79 @@ class FrmFormsController {
 	 */
 	private static function get_form_views_path() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-forms/';
+	}
+
+	/**
+	 * Create a page with an embedded formidable Gutenberg block.
+	 *
+	 * @since 5.1.01
+	 *
+	 * @return never
+	 */
+	public static function create_page_with_shortcode() {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			die( 0 );
+		}
+
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
+		if ( ! $form_id ) {
+			die( 0 );
+		}
+
+		$postarr = array(
+			'post_type'    => 'page',
+			'post_content' => '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} --><div>[formidable id="' . $form_id . '"]</div><!-- /wp:formidable/simple-form -->',
+		);
+
+		$name = FrmAppHelper::get_post_param( 'name', '', 'sanitize_text_field' );
+		if ( $name ) {
+			$postarr['post_title'] = $name;
+		}
+
+		$success = wp_insert_post( $postarr );
+		if ( ! is_numeric( $success ) || ! $success ) {
+			die( 0 );
+		}
+
+		wp_send_json(
+			array(
+				'redirect' => get_edit_post_link( $success, 'redirect' ),
+			)
+		);
+	}
+
+	/**
+	 * Get page dropdown for AJAX request for embedding form in an existing page.
+	 *
+	 * @return never
+	 */
+	public static function get_page_dropdown() {
+		if ( ! current_user_can( 'publish_posts' ) ) {
+			die( 0 );
+		}
+
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$html             = FrmAppHelper::clip(
+			function() {
+				FrmAppHelper::maybe_autocomplete_pages_options(
+					array(
+						'field_name'  => 'frm_page_dropdown',
+						'page_id'     => '',
+						'placeholder' => __( 'Select a Page', 'formidable' ),
+					)
+				);
+			}
+		);
+		$post_type_object = get_post_type_object( 'page' );
+		wp_send_json(
+			array(
+				'html'          => $html,
+				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
+			)
+		);
 	}
 
 	/**

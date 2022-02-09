@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'import_link'            => true,
 		)
 	);
+	FrmAppController::include_embed_form_icons();
 	?>
 	<div class="wrap">
 <?php
@@ -46,3 +47,4 @@ if ( $wp_list_table->total_items === 1 && empty( $_REQUEST['s'] ) && $wp_list_ta
 <?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 </div>
 </div>
+

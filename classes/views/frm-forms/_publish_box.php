@@ -3,7 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
+FrmAppController::include_embed_form_icons();
+
+if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) {
 	$class = 'frm_submit_settings_btn';
 } else {
 	$class = 'frm_submit_' . ( ( isset( $values['ajax_load'] ) && $values['ajax_load'] ) ? '' : 'no_' ) . 'ajax';
@@ -41,5 +43,9 @@ if ( 'settings' == FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) ) 
 					</div>
 				<?php } ?>
 			</div>
+
+			<a id="frm-embed-action" href="#" role="button" class="frm_submit_form button-secondary frm-button-secondary frm_button_submit">
+				<?php esc_html_e( 'Embed', 'formidable' ); ?>
+			</a>
 
 <div class="clear"></div>

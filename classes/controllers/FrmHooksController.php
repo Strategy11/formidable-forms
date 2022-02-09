@@ -201,6 +201,8 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_forms_trash', 'FrmFormsController::ajax_trash' );
 		add_action( 'wp_ajax_frm_install_form', 'FrmFormsController::build_new_form' );
 		add_action( 'wp_ajax_frm_build_template', 'FrmFormsController::build_template' );
+		add_action( 'wp_ajax_frm_create_page_with_shortcode', 'FrmFormsController::create_page_with_shortcode' );
+		add_action( 'wp_ajax_get_page_dropdown', 'FrmFormsController::get_page_dropdown' );
 
 		add_action( 'wp_ajax_frm_dismiss_migrator', 'FrmFormMigratorsHelper::dismiss_migrator' );
 

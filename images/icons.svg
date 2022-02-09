@@ -359,9 +359,9 @@
 </symbol>
 <symbol id="frm_calendar_icon" viewBox="0 0 18 18"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.4.8c.4 0 .7.3.7.7v.8H11v-.8a.8.8 0 011.5 0v.8h3.3c.9 0 1.6.6 1.6 1.5v12c0 .8-.7 1.4-1.6 1.4H2.3c-.9 0-1.5-.6-1.5-1.4v-12c0-.9.6-1.5 1.4-1.5h3.4v-.8c0-.4.4-.8.8-.8zm-.8 3H2.3v3h13.4v-3h-3.3v.7a.8.8 0 01-1.5 0v-.8H7v.8a.8.8 0 01-1.5 0v-.8zm10.2 4.5h-3.4v3h3.3v-3zm0 4.4h-3.4v3h3.3v-3zm-5 3v-3H7.2v3H11zm-5.2 0v-3H2.3v3h3.3zm-3.3-4.4h3.3v-3H2.3v3zm4.8-3v3H11v-3H7z"/>
 </symbol>
-<symbol id="frm_code_icon" viewBox="0 0 23 20">
+<symbol id="frm_code_icon" viewBox="0 0 20 20" fill="none">
 <title>code</title>
-<path d="M9.2 18l-1.5-.4c-.2 0-.3-.1-.3-.3L13 2.2l.4-.2 1.5.4c.2 0 .3.1.3.3L9.6 17.8c0 .2-.3.2-.4.2zm-3.3-2.7L7 14c.2-.1.2-.3 0-.4L3 10l4-3.7c.2 0 .2-.3 0-.4L6 4.7a.3.3 0 0 0-.4 0L0 9.7v.5l5.4 5c.1.2.3.2.4 0zm11.1 0l5.4-5v-.5l-5.4-5a.3.3 0 0 0-.4 0l-1 1c-.2.2-.2.4 0 .5l4 3.7-4 3.7c-.2 0-.2.3 0 .4l1 1.2h.4z"/>
+<path d="M13.3335 15L18.3335 10L13.3335 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6665 5L1.6665 10L6.6665 15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
 </symbol>
 <symbol id="frm_tag_icon" viewBox="0 0 20 20">
 <title>tag</title>
