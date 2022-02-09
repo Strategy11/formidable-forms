@@ -15,8 +15,11 @@ class FrmAppController {
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 	}
 
+	/**
+	 * @return int
+	 */
 	private static function get_menu_position() {
-		return apply_filters( 'frm_menu_position', '29.3' );
+		return (int) apply_filters( 'frm_menu_position', 29 );
 	}
 
 	/**
