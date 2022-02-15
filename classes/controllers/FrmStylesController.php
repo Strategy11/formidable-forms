@@ -326,6 +326,9 @@ class FrmStylesController {
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function save_css() {
 		$frm_style = new FrmStyle();
 
@@ -337,7 +340,7 @@ class FrmStylesController {
 			$message = __( 'Your styling settings have been saved.', 'formidable' );
 		}
 
-		return self::custom_css( $message );
+		self::custom_css( $message );
 	}
 
 	public static function route() {
