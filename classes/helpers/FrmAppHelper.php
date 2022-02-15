@@ -3289,7 +3289,7 @@ class FrmAppHelper {
 				$params['medium'] = $plugin;
 			}
 		} else {
-			$params['requires'] = FrmFormsHelper::get_plan_required( $link, false );
+			$params['requires'] = FrmFormsHelper::get_plan_required( $link );
 		}
 
 		return $params;
