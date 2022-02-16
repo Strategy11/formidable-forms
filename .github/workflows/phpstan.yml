@@ -28,5 +28,4 @@ jobs:
           composer global require phpstan/extension-installer
 
       - name: "🧪 Test"
-        continue-on-error: true
         run: phpstan analyze ./ --level=max
