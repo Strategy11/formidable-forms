@@ -26,6 +26,7 @@ package.json export-ignore
 phpcs.xml export-ignore
 phpunit.xml export-ignore
 psalm.stubs.php export-ignore
+phpstan.stubs.php export-ignore
 psalm.xml export-ignore
 readme.md export-ignore
 tests export-ignore
