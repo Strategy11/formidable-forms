@@ -701,7 +701,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param FrmProFieldValue $field_value
+	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
 	protected function add_standard_row( $field_value, &$content ) {

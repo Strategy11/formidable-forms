@@ -57,6 +57,8 @@ zip -r $zipname $destination \
 	-x "*/phpunit.xml" \
 	-x "*/psalm.stubs.php" \
 	-x "*/psalm.xml" \
+	-x "*/phpstan.stubs.php" \
+	-x "*/phpstan.neon" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \

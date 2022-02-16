@@ -1148,14 +1148,6 @@ class FrmListHelper {
 
 			if ( 'cb' === $column_name ) {
 				echo '<th scope="row" class="check-column"></th>';
-			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
-				echo call_user_func( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					array( $this, '_column_' . $column_name ),
-					$item,
-					$classes,
-					$data,
-					$primary
-				);
 			} else {
 				echo '<td ';
 				FrmAppHelper::array_to_html_params( $params, true );
