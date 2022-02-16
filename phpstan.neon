@@ -56,3 +56,11 @@ parameters:
 		- '#Part \$class#'
 		- '#has no return type specified#'
 		- '#with no type specified#'
+		- '#is not nullable.#'
+		- '#in isset() does not exist.#'
+		- '#has no type specified.#'
+		- '#has invalid return type#'
+		- '#is unused.#'
+		- '#is never read, only written#'
+		- '#in empty\(\) is not falsy.#'
+		- '#always exists and is always null.#
