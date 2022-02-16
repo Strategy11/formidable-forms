@@ -55,3 +55,4 @@ parameters:
 		- '#array_map expects#'
 		- '#Part \$class#'
 		- '#has no return type specified#'
+		- '#with no type specified#'
