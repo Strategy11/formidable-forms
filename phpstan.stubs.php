@@ -1,6 +1,7 @@
 <?php
 
 namespace {
+	define( 'ABSPATH', realpath( __FILE__ . '/../../../../' ) );
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
 	class FrmProSettings extends FrmSettings {
