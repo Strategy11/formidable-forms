@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Checkout"
+      - name: "📥 Fetching Repository Contents"
         uses: actions/checkout@v2
 
       - name: "💽  Installing PHP, Composer, CS2PR"
@@ -27,13 +27,6 @@ jobs:
           composer global require szepeviktor/phpstan-wordpress
           composer global require phpstan/extension-installer
 
-      - name: "⚡  Setup PHPStan File"
-        run: |
-          echo "parameters:
-                    level: 8
-                    paths:
-                        - a.php
-          " > $GITHUB_WORKSPACE/phpstan.neon
       - name: "🧪 Test"
         continue-on-error: true
         run: phpstan analyze ./ --level=max
