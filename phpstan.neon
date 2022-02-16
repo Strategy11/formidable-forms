@@ -64,3 +64,6 @@ parameters:
 		- '#is never read, only written#'
 		- '#in empty\(\) is not falsy.#'
 		- '#always exists and is always null.#'
+		- '#Cannot access an offset on mixed.#'
+		- '#Cannot use array destructuring on#'
+		- '#always exists and is not falsy.#'
