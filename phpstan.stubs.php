@@ -11,9 +11,9 @@ namespace Elementor {
 
 	abstract class Widget_Base {
 
-		public function start_controls_section( $section_id, array $args = [] ) {
+		public function start_controls_section( $section_id, array $args = array() ) {
 		}
-		public function add_control( $id, array $args, $options = [] ) {
+		public function add_control( $id, array $args, $options = array() ) {
 		}
 		public function end_controls_section() {
 		}
