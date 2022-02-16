@@ -8,10 +8,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: "Checkout"
-      uses: actions/checkout@v2
+      - name: "Checkout"
+        uses: actions/checkout@v2
 
-    - name: PHPStan
-      uses: docker://oskarstark/phpstan-ga
-      with:
-        args: analyse ./ --level=max
+      - name: "💽  Installing PHP, Composer, CS2PR"
+        uses: shivammathur/setup-php@2.10.0
+        with:
+          php-version: '7.4'
+          coverage: none
+          ini-values: display_errors = on, error_reporting = E_ALL
+          tools: phpstan, composer
+
+      - name: "💽  Installing Composer Packages"
+        run: composer install
+
+      - name: "💽  Installing PHPStan Package"
+        run: |
+          composer global require szepeviktor/phpstan-wordpress
+          composer global require phpstan/extension-installer
+
+      - name: "⚡  Setup PHPStan File"
+        run: |
+          echo "parameters:
+                    level: 8
+                    paths:
+                        - a.php
+          " > $GITHUB_WORKSPACE/phpstan.neon
+      - name: "🧪 Test"
+        continue-on-error: true
+        run: phpstan analyze ./ --level=max
