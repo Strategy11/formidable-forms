@@ -54,3 +54,4 @@ parameters:
 		- '#PHPDoc tag @param (references unknown parameter:|has invalid valu)+#'
 		- '#array_map expects#'
 		- '#Part \$class#'
+		- '#has no return type specified#'
