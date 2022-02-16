@@ -2,10 +2,6 @@ parameters:
 	reportUnmatchedIgnoredErrors: false
 	bootstrapFiles:
 		- phpstan.stubs.php
-	scanFiles:
-		- formidable.php
-	scanDirectories:
-		- classes
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -15,6 +11,7 @@ parameters:
 		- */languages/*
 		- */js/*
 		- */vendor/*
+		- */fonts/*
 	ignoreErrors:
 		- '#@return has invalid value#'
 		- '#Access to an undefined property#'
