@@ -403,7 +403,7 @@ class FrmFormAction {
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
 			$instance['post_content'] = apply_filters( 'frm_before_save_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
-			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $new_instance['post_content'], $instance, $new_instance, $old_instance, $this );
+			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
 
 			if ( false !== $instance ) {
 				$all_instances[ $number ] = $instance;
