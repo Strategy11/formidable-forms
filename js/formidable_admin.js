@@ -7849,6 +7849,8 @@ function frmAdminBuildJS() {
 			showFreeTemplatesForm,
 			firstLockedTemplate,
 			isShowFreeTemplatesFormFirst,
+			changeUpgradeOverlayContent,
+			overlayStringElementMapping,
 			url,
 			urlParams;
 
@@ -7999,9 +8001,70 @@ function frmAdminBuildJS() {
 			$el.append( installFormTrigger );
 		};
 
+		changeUpgradeOverlayContent = function( addon ) {
+			var innerTexts = [ 'overlay_heading', 'content_heading', 'install_button', 'cancel_button' ],
+				strings = {};
+			if ( ! frm_admin_js.addon_install.hasOwnProperty( addon ) ) {
+				return;
+			}
+
+			if ( ! overlayStringElementMapping ) {
+				overlayStringElementMapping = {
+					overlay_heading: document.querySelector( '#frm-upgrade-title' ),
+					content_heading: document.querySelector( '#frm-upgrade-block .frmcenter h3' ),
+					content_desc: document.querySelector( '#frm-upgrade-body-list-wrapper' ),
+					install_button: document.querySelector( '#frm-upgrade-footer .frm-button-primary' ),
+					install_url: document.querySelector( '#frm-upgrade-footer .frm-button-primary' ),
+					cancel_button: document.querySelector( '#frm-upgrade-footer .frm-modal-cancel' ),
+					image: document.querySelector( '#frm-upgrade-block .frmcenter img' ),
+				};
+			}
+
+			if ( ! frm_admin_js.addon_install.hasOwnProperty( 'upgrade' ) ) {
+				// Store upgrade strings to add it back later.
+				innerTexts.forEach( function( str ) {
+					strings[ str ] = overlayStringElementMapping[ str ].innerText;
+				});
+
+				strings.install_url = overlayStringElementMapping.install_url.getAttribute( 'href' );
+				strings.content_desc = overlayStringElementMapping.content_desc.innerHTML;
+				strings.image = overlayStringElementMapping.image.getAttribute( 'src' );
+
+				frm_admin_js.addon_install.upgrade = strings;
+			}
+
+			// Replace strings on overlay.
+			strings = frm_admin_js.addon_install[ addon ];
+			Object.keys( overlayStringElementMapping ).forEach( function( str ) {
+				var p;
+
+				if ( strings[ str ] ) {
+					if ( innerTexts.includes( str ) ) {
+						overlayStringElementMapping[ str ].innerText = strings[ str ];
+					} else if ( 'install_url' === str ) {
+						overlayStringElementMapping[ str ].setAttribute( 'href', strings[ str ] );
+					} else if ( 'content_desc' === str ) {
+						p = document.createElement( 'p' );
+						p.classList.add( 'frmcenter' );
+						p.innerText = strings[ str ];
+						p.style.padding = '0 100px';
+
+						overlayStringElementMapping[ str ].innerText = '';
+						overlayStringElementMapping[ str ].appendChild( p );
+					} else if ( 'image' === str ) {
+						overlayStringElementMapping[ str ].setAttribute( 'src', strings[ str ] );
+					}
+					overlayStringElementMapping[ str ].classList.remove( 'frm_hidden' );
+				} else {
+					overlayStringElementMapping[ str ].classList.add( 'frm_hidden' );
+				}
+			});
+		};
+
 		jQuery( document ).on( 'click', 'li.frm-locked-template .frm-hover-icons .frm-unlock-form', function( event ) {
 			var $li,
-				activePage;
+				activePage,
+				addon;
 
 			event.preventDefault();
 
@@ -8016,6 +8079,13 @@ function frmAdminBuildJS() {
 				activePage = 'renew';
 			} else {
 				activePage = 'upgrade';
+
+				addon = $li.attr( 'data-addon' );
+				if ( addon ) {
+					changeUpgradeOverlayContent( addon );
+				} else {
+					changeUpgradeOverlayContent( 'upgrade' );
+				}
 			}
 
 			$modal.attr( 'frm-page', activePage );

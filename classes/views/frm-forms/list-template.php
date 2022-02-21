@@ -3,7 +3,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$plan_required          = FrmFormsHelper::get_plan_required( $template );
+$plan_required = FrmFormsHelper::get_plan_required( $template );
+
+// Check if addon required.
+if ( ! $plan_required && ! empty( $template['addon'] ) ) {
+	$plan_required = 'addon';
+}
+
 $args['plan_required']  = $plan_required;
 $stripped_template_name = preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 
@@ -20,6 +26,8 @@ if ( ! empty( $template['custom'] ) ) {
 	<?php
 	if ( 'free' === $plan_required ) {
 		echo 'data-key="' . esc_attr( $template['key'] ) . '" ';
+	} elseif ( 'addon' === $plan_required ) {
+		echo 'data-addon="' . esc_attr( $template['addon'] ) . '" ';
 	} elseif ( ! empty( $template['custom'] ) ) {
 		echo 'data-formid="' . absint( $template['id'] ) . '" ';
 		echo 'data-custom="1" ';
