@@ -940,7 +940,6 @@ class FrmFormsController {
 		// TODO: Remove this.
 		$templates[20872734]['categories'][] = 'Quizzes';
 
-
 		$mapping = array(
 			'Quizzes' => 'quiz_maker',
 		);
@@ -974,12 +973,12 @@ class FrmFormsController {
 		return array(
 			'quiz_maker' => array(
 				'slug'            => 'quiz_maker',
-				'overlay_heading' => __( 'Install Quizzes form action', 'formidable-quizzes' ),
-				'content_heading' => __( 'Quizzes action is not installed', 'formidable-quizzes' ),
-				'content_desc'    => __( 'In order to set weights to answers, create different outcomes, randomize questions and options, install Quizzes form action', 'formidable-quizzes' ),
-				'install_button'  => __( 'Install and activate it now', 'formidable-quizzes' ),
+				'overlay_heading' => __( 'Install Quizzes form action', 'formidable' ),
+				'content_heading' => __( 'Quizzes action is not installed', 'formidable' ),
+				'content_desc'    => __( 'In order to set weights to answers, create different outcomes, randomize questions and options, install Quizzes form action', 'formidable' ),
+				'install_button'  => __( 'Install and activate it now', 'formidable' ),
 				'install_url'     => 'https://formidableforms.com', // TODO: change this.
-				'cancel_button'   => __( 'Install it later on the Form Actions page', 'formidable-quizzes' ),
+				'cancel_button'   => __( 'Install it later on the Form Actions page', 'formidable' ),
 				'image'           => FrmAppHelper::plugin_url() . '/images/quizzes.png',
 			),
 		);
