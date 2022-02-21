@@ -1763,7 +1763,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since 5.2.1
+	 * @since 5.2.01
 	 *
 	 * @param string|int|false $id
 	 * @param string|false     $key
