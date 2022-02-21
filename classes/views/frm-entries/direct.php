@@ -2,6 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+$show_title       = ! empty( $form->options['show_title'] );
+$show_description = ! empty( $form->options['show_description'] );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -13,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php FrmFormsController::maybe_load_css( $form, 1, false ); ?>
 </head>
 <body class="frm_preview_page">
-	<?php echo FrmFormsController::show_form( $form->id, '', true, true ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+	<?php echo FrmFormsController::show_form( $form->id, '', $show_title, $show_description ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php wp_footer(); ?>
 </body>
 </html>
