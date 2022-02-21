@@ -8016,7 +8016,7 @@ function frmAdminBuildJS() {
 					install_button: document.querySelector( '#frm-upgrade-footer .frm-button-primary' ),
 					install_url: document.querySelector( '#frm-upgrade-footer .frm-button-primary' ),
 					cancel_button: document.querySelector( '#frm-upgrade-footer .frm-modal-cancel' ),
-					image: document.querySelector( '#frm-upgrade-block .frmcenter img' ),
+					image: document.querySelector( '#frm-upgrade-block .frmcenter img' )
 				};
 			}
 
@@ -8038,11 +8038,11 @@ function frmAdminBuildJS() {
 			Object.keys( overlayStringElementMapping ).forEach( function( str ) {
 				var p;
 
-				if ( strings[ str ] ) {
+				if ( strings[ str ]) {
 					if ( innerTexts.includes( str ) ) {
 						overlayStringElementMapping[ str ].innerText = strings[ str ];
 					} else if ( 'install_url' === str ) {
-						overlayStringElementMapping[ str ].setAttribute( 'href', strings[ str ] );
+						overlayStringElementMapping[ str ].setAttribute( 'href', strings[ str ]);
 					} else if ( 'content_desc' === str ) {
 						p = document.createElement( 'p' );
 						p.classList.add( 'frmcenter' );
@@ -8052,7 +8052,7 @@ function frmAdminBuildJS() {
 						overlayStringElementMapping[ str ].innerText = '';
 						overlayStringElementMapping[ str ].appendChild( p );
 					} else if ( 'image' === str ) {
-						overlayStringElementMapping[ str ].setAttribute( 'src', strings[ str ] );
+						overlayStringElementMapping[ str ].setAttribute( 'src', strings[ str ]);
 					}
 					overlayStringElementMapping[ str ].classList.remove( 'frm_hidden' );
 				} else {
