@@ -13,18 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 			if ( empty( $forms ) ) {
 				?>
-				<li class="frm_dropdown_li">
+				<div class="dropdown-item frm_dropdown_li">
 					<?php esc_html_e( 'You have not created any forms yet.', 'formidable' ); ?>
-				</li>
+				</div>
 				<?php
 			} else {
 				foreach ( $forms as $form ) {
 					?>
-					<li>
+					<div class="dropdown-item">
 						<a href="#" data-formid="<?php echo esc_attr( $form->id ); ?>" class="frm-build-template" data-fullname="<?php echo esc_attr( $form->name ); ?>" tabindex="-1">
 							<?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?>
 						</a>
-					</li>
+					</div>
 					<?php
 					unset( $form );
 				}
