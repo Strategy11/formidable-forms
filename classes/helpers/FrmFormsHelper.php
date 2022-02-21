@@ -134,7 +134,7 @@ class FrmFormsHelper {
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
-			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
+			<ul class="dropdown-menu frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
 				<?php if ( count( $forms ) > 8 ) { ?>
 				<li class="frm-with-search">
 					<?php

@@ -1243,8 +1243,9 @@ function frmAdminBuildJS() {
 		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
-		ul = document.createElement( 'ul' );
+		ul = document.createElement( 'div' );
 		ul.classList.add( 'frm-dropdown-menu' );
+		ul.classList.add( 'dropdown-menu' );
 		ul.setAttribute( 'role', 'menu' );
 		dropdown.appendChild( ul );
 
@@ -1991,7 +1992,7 @@ function frmAdminBuildJS() {
 		setTimeout(
 			function() {
 				var ul, $ul;
-				ul = document.querySelector( '.dropdown.open ul' );
+				ul = document.querySelector( '.dropdown.show .dropdown-menu' );
 				if ( null === ul ) {
 					return;
 				}
@@ -2030,8 +2031,8 @@ function frmAdminBuildJS() {
 		options.forEach(
 			function( option ) {
 				var li, anchor, span;
-				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li' );
+				li = document.createElement( 'div' );
+				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li', 'dropdown-item' );
 
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );
@@ -7620,7 +7621,7 @@ function frmAdminBuildJS() {
 			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 			$select.multiselect({
 				templates: {
-					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
+					popupContainer: '<div class="multiselect-container dropdown-menu frm-dropdown-menu"></div>',
 					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
 					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
