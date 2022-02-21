@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm_actions_dropdown dropdown <?php echo esc_attr( is_rtl() ? 'pull-right' : 'pull-left' ); ?>">
 	<a href="#" id="frm-actionsDrop" class="frm-dropdown-toggle frm_icon_font frm_option_icon" data-toggle="dropdown" title="<?php esc_attr_e( 'Show options', 'formidable' ); ?>"></a>
-	<ul class="dropdown-menu frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-actionsDrop">
+	<div class="dropdown-menu frm-dropdown-menu frm-on-top" role="menu" aria-labelledby="frm-actionsDrop">
 		<?php foreach ( $links as $link ) { ?>
-		<li>
+		<div class="dropdown-item">
 			<a href="<?php echo esc_url( $link['url'] ); ?>" tabindex="-1" <?php
 			if ( isset( $link['data'] ) ) {
 				foreach ( $link['data'] as $data => $value ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span class="<?php echo esc_attr( $link['icon'] ); ?>"></span>
 				<span class="frm_link_label"><?php echo esc_html( $link['label'] ); ?></span>
 			</a>
-		</li>
+		</div>
 		<?php } ?>
-	</ul>
+	</div>
 </div>

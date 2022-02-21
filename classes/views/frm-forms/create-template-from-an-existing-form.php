@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Select form for new template', 'formidable' ); ?>
 			<b class="caret"></b>
 		</button>
-		<ul class="dropdown-menu frm-dropdown-menu" role="menu" aria-labelledby="frm-template-drop">
+		<div class="dropdown-menu frm-dropdown-menu" role="menu" aria-labelledby="frm-template-drop">
 			<?php
 			if ( empty( $forms ) ) {
 				?>
@@ -30,6 +30,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 			}
 			?>
-		</ul>
+		</div>
 	</div>
 </li><?php
