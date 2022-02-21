@@ -1770,11 +1770,10 @@ class FrmFormsController {
 	 * @return stdClass|false
 	 */
 	private static function maybe_get_form_by_id_or_key( $id, $key ) {
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			$id = $key;
 		}
-
-		$form = self::maybe_get_form_to_show( $id );
+		return self::maybe_get_form_to_show( $id );
 	}
 
 	/**
@@ -1788,11 +1787,6 @@ class FrmFormsController {
 	public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
 		$form = self::maybe_get_form_by_id_or_key( $id, $key );
 
-		if ( empty( $id ) ) {
-			$id = $key;
-		}
-
-		$form = self::maybe_get_form_to_show( $id );
 		if ( ! $form ) {
 			return __( 'Please select a valid form', 'formidable' );
 		}
