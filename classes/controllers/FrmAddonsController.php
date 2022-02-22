@@ -890,7 +890,6 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	protected static function download_and_activate() {
-		// Set the current screen to avoid undefined notices.
 		if ( is_admin() ) {
 			FrmAppHelper::set_current_screen_and_hook_suffix();
 		}
