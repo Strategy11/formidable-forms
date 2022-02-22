@@ -439,7 +439,6 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 5.2.01 =
-* Updated Bootstrap used in back end to version 4.6.1.
 * New: Added new checkboxes to toggle form title and description visibility. The form preview page will no longer always show title and description by default, and will use these checkboxes instead.
 * Fix: In-Theme Previews trigger a fatal error in WordPress 5.9.1.
 * Fix: Checkbox fields were appearing as broken vertical lines when using the Enfold theme.
