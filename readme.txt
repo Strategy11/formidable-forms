@@ -230,7 +230,7 @@ Formidable is part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> f
 4. Activate Formidable through the 'Plugins' menu
 5. Go to the newly added 'Formidable' menu
 6. Click the 'Add New' button to go to the form generator page and create a new email form
-7. Insert your newly created user registration form, quiz, or survey form on a page or post using the Embed Form pop up. Or insert it manually or into a widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add it in a page template
+7. Insert your newly created user registration form, quiz, or survey form on a page or post using the Embed Form pop up. Or insert it manually or into a widget using a shortcode [formidable id=x]. Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add it in a page template
 
 == Screenshots ==
 1. Build professional WP forms without any code.
