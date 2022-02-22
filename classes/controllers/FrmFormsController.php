@@ -275,7 +275,7 @@ class FrmFormsController {
 	 */
 	public static function preview() {
 		do_action( 'frm_wp' );
-		set_current_screen();
+		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		global $frm_vars;
 		$frm_vars['preview'] = true;

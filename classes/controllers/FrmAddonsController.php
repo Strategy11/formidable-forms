@@ -892,8 +892,7 @@ class FrmAddonsController {
 	protected static function download_and_activate() {
 		// Set the current screen to avoid undefined notices.
 		if ( is_admin() ) {
-			global $hook_suffix;
-			set_current_screen();
+			FrmAppHelper::set_current_screen_and_hook_suffix();
 		}
 
 		self::maybe_show_cred_form();
@@ -979,9 +978,7 @@ class FrmAddonsController {
 
 		self::install_addon_permissions();
 
-		// Set the current screen to avoid undefined notices.
-		global $hook_suffix;
-		set_current_screen();
+		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		self::maybe_activate_addon( $plugin );
