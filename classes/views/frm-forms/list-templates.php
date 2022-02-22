@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</li><?php
 	$render_icon = true;
-	foreach ( array( 20872734, 20874748, 20882522, 20874739 ) as $template ) {
+	foreach ( array( 28109851, 20872734, 20874748, 20882522, 20874739 ) as $template ) {
 		if ( isset( $templates[ $template ] ) ) {
 			$template = $templates[ $template ];
 			require $view_path . 'list-template.php';

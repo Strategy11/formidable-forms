@@ -177,6 +177,11 @@ class FrmAddonsController {
 				'title'   => 'Formidable Views',
 				'excerpt' => 'Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.',
 			),
+			'quiz_maker'     => array(
+				'title'   => 'Quiz Maker',
+				'link'    => 'downloads/quiz-maker/',
+				'excerpt' => 'Make quizzes, automatically score them and show user scores.',
+			),
 		);
 
 		$defaults = array(
