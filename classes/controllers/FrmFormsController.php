@@ -262,9 +262,7 @@ class FrmFormsController {
 
 		$form = FrmForm::getOne( $params['form'] );
 		if ( $form ) {
-			$show_title       = ! empty( $form->options['show_title'] );
-			$show_description = ! empty( $form->options['show_description'] );
-			return self::show_form( $form->id, '', $show_title, $show_description );
+			return self::show_form( $form->id, '', 'auto', 'auto' );
 		}
 	}
 
