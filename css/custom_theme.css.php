@@ -791,7 +791,7 @@ a.frm_save_draft{
 	appearance: none;
 	background-color: var(--bg-color);
 	flex: none;
-	display:inline-block;
+	display:inline-block !important;
 	margin: 0 5px 0 0;
 	color: var(--border-color);
 	width: 18px;

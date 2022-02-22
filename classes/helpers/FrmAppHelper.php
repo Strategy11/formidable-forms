@@ -3312,6 +3312,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Set the current screen to avoid undefined notices.
+	 *
+	 * @since 5.2.01
+	 */
+	public static function set_current_screen_and_hook_suffix() {
+		global $hook_suffix;
+		set_current_screen();
+	}
+
+	/**
 	 * @since 4.07
 	 * @deprecated 4.09.01
 	 */
