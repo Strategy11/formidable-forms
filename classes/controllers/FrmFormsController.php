@@ -1737,8 +1737,8 @@ class FrmFormsController {
 			array(
 				'id'             => '',
 				'key'            => '',
-				'title'          => false,
-				'description'    => false,
+				'title'          => 'auto',
+				'description'    => 'auto',
 				'readonly'       => false,
 				'entry_id'       => false,
 				'fields'         => array(),
@@ -1749,21 +1749,7 @@ class FrmFormsController {
 		);
 		do_action( 'formidable_shortcode_atts', $shortcode_atts, $atts );
 
-		if ( ! isset( $atts['title'] ) || ! isset( $atts['description'] ) ) {
-			$form             = self::maybe_get_form_by_id_or_key( $shortcode_atts['id'], $shortcode_atts['key'] );
-			$show_title       = $form && ! empty( $form->options['show_title'] );
-			$show_description = $form && ! empty( $form->options['show_description'] );
-		}
-
-		if ( isset( $atts['title'] ) ) {
-			$show_title = $atts['title'];
-		}
-
-		if ( isset( $atts['description'] ) ) {
-			$show_description = $atts['description'];
-		}
-
-		return self::show_form( $shortcode_atts['id'], $shortcode_atts['key'], $show_title, $show_description, $atts );
+		return self::show_form( $shortcode_atts['id'], $shortcode_atts['key'], $shortcode_atts['title'], $shortcode_atts['description'], $atts );
 	}
 
 	/**
@@ -1783,8 +1769,8 @@ class FrmFormsController {
 	/**
 	 * @param string|int|false $id
 	 * @param string|false     $key
-	 * @param string|int|bool  $title may be true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
-	 * @param string|int|bool  $description  may be true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param string|int|bool  $title may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param string|int|bool  $description may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
 	 * @param array            $atts
 	 * @return string
 	 */
@@ -1793,6 +1779,14 @@ class FrmFormsController {
 
 		if ( ! $form ) {
 			return __( 'Please select a valid form', 'formidable' );
+		}
+
+		if ( 'auto' === $title ) {
+			$title = ! empty( $form->options['show_title'] );
+		}
+
+		if ( 'auto' === $description ) {
+			$description = ! empty( $form->options['show_description'] );
 		}
 
 		FrmAppController::maybe_update_styles();
