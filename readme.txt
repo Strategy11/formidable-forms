@@ -459,10 +459,4 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Form errors will now always include the role="alert" attribute for more accessible errors. New fields will now also include role="alert" in custom field HTML.
 * New: Added a new frm_entries_column_value filter hook.
 
-= 5.0.17 =
-* The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
-* New: The ctype PHP extension is no longer a requirement.
-* Fix: The custom CSS page would appear without any textarea on some configurations where CodeMirror may be disabled.
-* Fix: Removed padding styles from radio buttons because of a conflict with the Sensational theme.
-
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
