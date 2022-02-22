@@ -1783,8 +1783,8 @@ class FrmFormsController {
 	/**
 	 * @param string|int|false $id
 	 * @param string|false     $key
-	 * @param bool             $title
-	 * @param bool             $description
+	 * @param string|int|bool  $title may be true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param string|int|bool  $description  may be true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
 	 * @param array            $atts
 	 * @return string
 	 */
