@@ -3,7 +3,7 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.2
-Tested up to: 5.9
+Tested up to: 5.9.1
 Requires PHP: 5.6
 Stable tag: 5.2
 
@@ -438,6 +438,13 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.01 =
+* Updated Bootstrap used in back end to version 4.6.1.
+* New: Added new checkboxes to toggle form title and description visibility. The form preview page will no longer always show title and description by default, and will use these checkboxes instead.
+* Fix: In-Theme Previews trigger a fatal error in WordPress 5.9.1.
+* Fix: Checkbox fields were appearing as broken vertical lines when using the Enfold theme.
+* Fix: A deprecation message was occasionally logged in PHP8 when trying to decode null values.
+
 = 5.2 =
 * Increased WP version requirement to 5.2.
 * New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
