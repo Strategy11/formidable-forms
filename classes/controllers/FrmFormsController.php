@@ -270,8 +270,12 @@ class FrmFormsController {
 		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function preview() {
 		do_action( 'frm_wp' );
+		set_current_screen();
 
 		global $frm_vars;
 		$frm_vars['preview'] = true;
