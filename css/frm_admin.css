@@ -2037,7 +2037,7 @@ h2.frm-h2 + .howto {
 
 #frm_new_form_modal .frm-search {
 	width: calc( 100% - 20px );
-	margin: 40px 10px 30px;
+	margin: 15px 10px 30px;
 }
 
 #frm_leave_email,
