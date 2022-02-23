@@ -46,6 +46,7 @@ class FrmFormActionsController {
 			'register'  => 'FrmDefRegAction',
 			'paypal'    => 'FrmDefPayPalAction',
 			'payment'   => 'FrmDefHrsAction',
+			'quiz'      => 'FrmDefQuizAction',
 			'mailchimp' => 'FrmDefMlcmpAction',
 			'api'       => 'FrmDefApiAction',
 
