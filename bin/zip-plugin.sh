@@ -70,6 +70,7 @@ zip -r $zipname $destination \
 	-x "formidable-views/js/index.js" \
 	-x "formidable-chat/js/chat.js" \
 	-x "formidable-api/js/embed.js" \
+	-x "formidable-api/js/iframe-embed.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
 
