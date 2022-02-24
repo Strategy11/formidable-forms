@@ -2,10 +2,6 @@
 	padding-left: 0;
 }
 
-#frm_applications_container {
-	
-}
-
 .frm-applications-index-content {
 	margin: 40px 40px 0;
 }
@@ -20,6 +16,15 @@
 /* Card title */
 .frm-application-card > div:first-child {
 	font-weight: 600;
+	position: relative;
+}
+
+/* Use template anchor */
+.frm-application-card > div:first-child > a {
+	font-weight: 400;
+	font-size: 10px;
+	position: absolute;
+	right: 10px;
 }
 
 .frm-application-card > div {

@@ -57,7 +57,7 @@
 
 		function getCardHeader() {
 			const header = div({
-				children: [ document.createTextNode( data.name ) ]
+				children: [ document.createTextNode( data.name ), getUseThisTemplateControl( data ) ]
 			});
 			return header;
 		}
@@ -72,6 +72,33 @@
 		}
 
 		return card;
+	}
+
+	function getUseThisTemplateControl( data ) {
+		const control = document.createElement( 'a' );
+		// TODO __ i18n.
+		control.setAttribute( 'href', '#' );
+		control.setAttribute( 'role', 'button' );
+		control.textContent = 'Use this template';
+
+		onClickPreventDefault(
+			control,
+			() => {
+
+			}
+		);
+
+		return control;
+	}
+
+	function onClickPreventDefault( element, callback ) {
+		element.addEventListener(
+			'click',
+			function( event ) {
+				event.preventDefault();
+				callback( event );
+			}
+		);
 	}
 
 	function div({ className, children } = {}) {

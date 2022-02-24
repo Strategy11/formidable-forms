@@ -46,24 +46,27 @@ class FrmApplicationsController {
 		return array_reduce(
 			$applications,
 			function( $total, $current ) use ( $keys ) {
-				if ( is_array( $current ) ) {
-					$application = array();
-					foreach ( $keys as $key ) {
-						$value = $current[ $key ];
-
-						if ( 'icon' === $key ) {
-							// Icon is an array. The first array item is the image URL.
-							$application[ $key ] = reset( $value );
-						} else {
-							if ( 'name' === $key && ' Template' === substr( $value, strlen( $value ) - 9 ) ) {
-								// Strip off the " Template" text at the end of the name as it takes up space.
-								$value = substr( $value, 0, -9 );
-							}
-							$application[ $key ] = $value;
-						}
-					}
-					$total[] = $application;
+				if ( ! is_array( $current ) ) {
+					return $total;
 				}
+
+				$application = array();
+				foreach ( $keys as $key ) {
+					$value = $current[ $key ];
+
+					if ( 'icon' === $key ) {
+						// Icon is an array. The first array item is the image URL.
+						$application[ $key ] = reset( $value );
+					} else {
+						if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
+							// Strip off the " Template" text at the end of the name as it takes up space.
+							$value = substr( $value, 0, -9 );
+						}
+						$application[ $key ] = $value;
+					}
+				}
+				$total[] = $application;
+
 				return $total;
 			},
 			array()
