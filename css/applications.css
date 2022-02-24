@@ -11,20 +11,33 @@
 	background: #FFFFFF;
 	grid-column: span 3/span 3; /* treat as frm3 */
 	padding: 10px 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.frm-application-card > div:first-child {
+	position: relative;
 }
 
 /* Card title */
-.frm-application-card > div:first-child {
+.frm-application-card > div:first-child > span {
 	font-weight: 600;
-	position: relative;
 }
 
 /* Use template anchor */
 .frm-application-card > div:first-child > a {
-	font-weight: 400;
 	font-size: 10px;
 	position: absolute;
 	right: 10px;
+}
+
+/* Card description */
+.frm-application-card > div:first-child > div {
+	font-size: 12px;
+}
+
+.frm-application-card hr {
+	width: 100%;
 }
 
 .frm-application-card > div {
@@ -33,4 +46,8 @@
 
 .frm-application-card img {
 	max-width: 100%;
+}
+
+.frm-flex {
+	flex: 1;
 }

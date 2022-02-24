@@ -52,12 +52,23 @@
 	function createApplicationCard( data ) {
 		const card = div({
 			className: 'frm-application-card',
-			children: [ getCardHeader(), document.createElement( 'hr' ), getCardContent() ]
+			children: [
+				getCardHeader(),
+				div({ className: 'frm-flex' }),
+				document.createElement( 'hr' ),
+				getCardContent()
+			]
 		});
 
 		function getCardHeader() {
+			const title = document.createElement( 'span' );
+			title.textContent = data.name;
 			const header = div({
-				children: [ document.createTextNode( data.name ), getUseThisTemplateControl( data ) ]
+				children: [
+					title,
+					getUseThisTemplateControl( data ),
+					div({ text: data.description })
+				]
 			});
 			return header;
 		}
@@ -101,13 +112,15 @@
 		);
 	}
 
-	function div({ className, children } = {}) {
+	function div({ className, children, text } = {}) {
 		const output = document.createElement( 'div' );
 		if ( className ) {
 			output.className = className;
 		}
 		if ( children ) {
 			children.forEach( child => output.appendChild( child ) );
+		} else if ( text ) {
+			output.textContent = text;
 		}
 		return output;
 	}
