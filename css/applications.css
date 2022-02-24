@@ -17,6 +17,11 @@
 	padding: 10px 0;
 }
 
+/* Card title */
+.frm-application-card > div:first-child {
+	font-weight: 600;
+}
+
 .frm-application-card > div {
 	padding: 0 10px;
 }

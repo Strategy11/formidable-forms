@@ -49,11 +49,17 @@ class FrmApplicationsController {
 				if ( is_array( $current ) ) {
 					$application = array();
 					foreach ( $keys as $key ) {
+						$value = $current[ $key ];
+
 						if ( 'icon' === $key ) {
 							// Icon is an array. The first array item is the image URL.
-							$application[ $key ] = reset( $current[ $key ] );
+							$application[ $key ] = reset( $value );
 						} else {
-							$application[ $key ] = $current[ $key ];
+							if ( 'name' === $key && ' Template' === substr( $value, strlen( $value ) - 9 ) ) {
+								// Strip off the " Template" text at the end of the name as it takes up space.
+								$value = substr( $value, 0, -9 );
+							}
+							$application[ $key ] = $value;
 						}
 					}
 					$total[] = $application;
