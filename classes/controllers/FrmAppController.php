@@ -441,10 +441,21 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function admin_js() {
-		$version = FrmAppHelper::plugin_version();
-		FrmAppHelper::load_admin_wide_js();
+		$plugin_url = FrmAppHelper::plugin_url();
+		$version    = FrmAppHelper::plugin_version();
 
-		$dependecies = array(
+		FrmAppHelper::load_admin_wide_js();
+		wp_register_style( 'formidable-admin', $plugin_url . '/css/frm_admin.css', array(), $version );
+		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
+
+		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+
+		if ( 'formidable-applications' === $page ) {
+			FrmApplicationsController::load_assets();
+			return;
+		}
+
+		$dependencies = array(
 			'formidable_admin_global',
 			'jquery',
 			'jquery-ui-core',
@@ -456,15 +467,14 @@ class FrmAppController {
 		);
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) || FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
-			$dependecies[] = 'wp-color-picker';
+			$dependencies[] = 'wp-color-picker';
 		}
 
-		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', $dependecies, $version, true );
-		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), $version );
-		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.4.1' );
-		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
+		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
 
-		if ( 'formidable' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery' ), '3.4.1' );
+
+		if ( 'formidable' === $page ) {
 			$action        = FrmAppHelper::get_param( 'frm_action', '', 'sanitize_title' );
 			$is_form_index = ! $action || in_array( $action, array( 'list', 'trash' ), true );
 			if ( $is_form_index ) {
@@ -475,9 +485,8 @@ class FrmAppController {
 
 		// load multselect js
 		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
-		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '1.1.1', true );
+		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', $depends_on, '1.1.1', true );
 
-		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
 
 		global $pagenow;

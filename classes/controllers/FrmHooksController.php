@@ -112,6 +112,11 @@ class FrmHooksController {
 		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
 		add_action( 'frm_page_footer', 'FrmAppHelper::renewal_message' );
 
+		// Applications Controller.
+		add_action( 'admin_menu', 'FrmApplicationsController::menu', 100 );
+		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
+		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
+
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );

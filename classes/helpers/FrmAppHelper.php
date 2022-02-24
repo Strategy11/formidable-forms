@@ -1360,13 +1360,15 @@ class FrmAppHelper {
 	 * Hide the WordPress menus on some pages.
 	 *
 	 * @since 4.0
+	 *
+	 * @return bool
 	 */
 	public static function is_full_screen() {
-		$full_builder = self::is_form_builder_page();
-		$styler       = self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
-		$full_entries = self::simple_get( 'frm-full', 'absint' );
-
-		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
+		return self::is_form_builder_page() ||
+			self::is_admin_page( 'formidable-styles' ) ||
+			self::is_admin_page( 'formidable-styles2' ) ||
+			self::simple_get( 'frm-full', 'absint' ) ||
+			self::is_view_builder_page();
 	}
 
 	/**

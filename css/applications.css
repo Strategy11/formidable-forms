@@ -1,0 +1,18 @@
+.formidable_page_formidable-applications #wpcontent {
+	padding-left: 0;
+}
+
+#frm_applications_container {
+	
+}
+
+.frm-applications-index-content {
+	margin: 40px 40px 0;
+}
+
+.frm-application-card {
+	border-radius: 4px;
+	background: #FFFFFF;
+	grid-column: span 3/span 3; /* treat as frm3 */
+	padding: 10px;
+}
