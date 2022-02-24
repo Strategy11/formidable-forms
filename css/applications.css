@@ -14,5 +14,13 @@
 	border-radius: 4px;
 	background: #FFFFFF;
 	grid-column: span 3/span 3; /* treat as frm3 */
-	padding: 10px;
+	padding: 10px 0;
+}
+
+.frm-application-card > div {
+	padding: 0 10px;
+}
+
+.frm-application-card img {
+	max-width: 100%;
 }

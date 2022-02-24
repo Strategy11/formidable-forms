@@ -33,7 +33,7 @@
 
 		const contentWrapper = div({
 			className: 'frm-applications-index-content',
-			children: [ templatesNav, templatesGrid ] 
+			children: [ templatesNav, templatesGrid ]
 		});
 
 		container.innerHTML = '';
@@ -52,7 +52,7 @@
 	function createApplicationCard( data ) {
 		const card = div({
 			className: 'frm-application-card',
-			children: [ getCardHeader(), getCardContent() ]
+			children: [ getCardHeader(), document.createElement( 'hr' ), getCardContent() ]
 		});
 
 		function getCardHeader() {
@@ -63,8 +63,10 @@
 		}
 
 		function getCardContent() {
+			const image = document.createElement( 'img' );
+			image.setAttribute( 'src', data.icon );
 			const content = div({
-				children: []
+				children: [ image ]
 			});
 			return content;
 		}

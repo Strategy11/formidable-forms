@@ -49,7 +49,12 @@ class FrmApplicationsController {
 				if ( is_array( $current ) ) {
 					$application = array();
 					foreach ( $keys as $key ) {
-						$application[ $key ] = $current[ $key ];
+						if ( 'icon' === $key ) {
+							// Icon is an array. The first array item is the image URL.
+							$application[ $key ] = reset( $current[ $key ] );
+						} else {
+							$application[ $key ] = $current[ $key ];
+						}
 					}
 					$total[] = $application;
 				}
