@@ -73,10 +73,6 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> .form-field{
 	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
 }
-
-.<?php echo esc_html( $style_class ); ?> .frm_combo_inputs_container > .form-field{
-	margin-bottom:0;
-}
 <?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> .form-field.frm_section_heading{
