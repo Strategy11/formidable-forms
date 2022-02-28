@@ -44,10 +44,15 @@
 	padding: 0 10px;
 }
 
-.frm-application-card img {
+.frm-application-card img,
+#frm_view_application_modal img {
 	max-width: 100%;
 }
 
 .frm-flex {
 	flex: 1;
+}
+
+#frm_view_application_modal .frm_modal_content {
+	padding: 0 15px 10px;
 }

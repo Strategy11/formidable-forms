@@ -1,9 +1,11 @@
 ( function() {
-	/** globals ajaxurl */
+	/** globals ajaxurl, wp */
 
-	if ( 'undefined' === typeof ajaxurl ) {
+	if ( 'undefined' === typeof ajaxurl || 'undefined' === typeof wp ) {
 		return;
 	}
+
+	const __ = wp.i18n.__;
 
 	const container = document.getElementById( 'frm_applications_container' );
 	if ( ! container ) {
@@ -94,12 +96,74 @@
 
 		onClickPreventDefault(
 			control,
-			() => {
-
-			}
+			() => openViewApplicationModal( data )
 		);
 
 		return control;
+	}
+
+	function openViewApplicationModal( data ) {
+		const modal = maybeCreateModal( 'frm_view_application_modal' );
+
+		const title = modal.querySelector( '.frm-modal-title' );
+		title.textContent = data.name;
+
+		const content = modal.querySelector( '.frm_modal_content' );
+		content.innerHTML = '';
+		content.appendChild( getViewApplicationModalContent( data ) );
+
+		const $modal = jQuery( modal );
+		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
+			initModal( $modal );
+		}
+
+		$modal.dialog( 'open' );
+	}
+
+	function initModal( $modal ) {
+		$modal.dialog(
+			{
+				dialogClass: 'frm-dialog',
+				modal: true,
+				autoOpen: false,
+				closeOnEscape: true,
+				width: '550px',
+				resizable: false,
+				draggable: false,
+				open: function() {
+					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
+					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
+					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
+					$modal.removeClass( 'ui-dialog-content ui-widget-content' );
+					bindClickForDialogClose( $modal );
+				},
+				close: function() {
+					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
+					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
+				}
+			}
+		);
+	}
+
+	function bindClickForDialogClose( $modal ) {
+		const closeModal = function() {
+			$modal.dialog( 'close' );
+		};
+		jQuery( '.ui-widget-overlay' ).on( 'click', closeModal );
+		$modal.on( 'click', 'a.dismiss', closeModal );
+	}
+
+	function getViewApplicationModalContent( data ) {
+		const img = document.createElement( 'img' );
+		img.src = data.icon;
+		return div({
+			children: [
+				img,
+				div({
+					text: data.description
+				})
+			]
+		});
 	}
 
 	function onClickPreventDefault( element, callback ) {
@@ -112,20 +176,63 @@
 		);
 	}
 
-	function div({ className, children, text } = {}) {
+	function div({ id, className, children, child, text } = {}) {
 		const output = document.createElement( 'div' );
+		if ( id ) {
+			output.id = id;
+		}
 		if ( className ) {
 			output.className = className;
 		}
 		if ( children ) {
 			children.forEach( child => output.appendChild( child ) );
+		} else if ( child ) {
+			output.appendChild( child );
 		} else if ( text ) {
 			output.textContent = text;
 		}
 		return output;
 	}
 
-	function text( content ) {
-		return document.createTextNode( content );
+	function maybeCreateModal( id ) {
+		let modal = document.getElementById( id );
+		if ( ! modal ) {
+			modal = createEmptyModal( id );
+			modal.classList.add( 'frm_common_modal' );
+
+			const title = div({ className: 'frm-modal-title' });
+
+			const a = document.createElement( 'a' );
+			a.textContent = __( 'Cancel', 'formidable' );
+			a.className = 'dismiss';
+
+			const postbox = modal.querySelector( '.postbox' );
+
+			postbox.appendChild(
+				div({
+					className: 'frm_modal_top',
+					children: [
+						title,
+						div({ child: a })
+					]
+				})
+			);
+			postbox.appendChild(
+				div({ className: 'frm_modal_content' })
+			);
+			postbox.appendChild(
+				div({ className: 'frm_modal_footer' })
+			);
+		}
+		return modal;
+	}
+
+	function createEmptyModal( id ) {
+		const modal = div({ id: id, className: 'frm-modal' });
+		const postbox = div({ className: 'postbox' });
+		const metaboxHolder = div({ className: 'metabox-holder', child: postbox });
+		modal.appendChild( metaboxHolder );
+		document.body.appendChild( modal );
+		return modal;
 	}
 }() );
