@@ -158,9 +158,21 @@
 		img.src = data.icon;
 		return div({
 			children: [
-				img,
 				div({
-					text: data.description
+					className: 'frm-application-image-wrapper',
+					child: img
+				}),
+				div({
+					className: 'frm-application-modal-details',
+					children: [
+						div({
+							className: 'frm-application-modal-label',
+							text: __( 'Description', 'formidable' )
+						}),
+						div({
+							text: data.description
+						})
+					]
 				})
 			]
 		});
