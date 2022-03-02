@@ -112,8 +112,8 @@ class FrmEntryValidate {
 
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
-		} elseif ( $posted_field->type === 'text' && ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$_POST['item_name'] = $value;
+		} elseif ( ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			self::maybe_add_item_name( $value, $posted_field );
 		}
 
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
@@ -130,6 +130,42 @@ class FrmEntryValidate {
 
 		$errors = apply_filters( 'frm_validate_' . $posted_field->type . '_field_entry', $errors, $posted_field, $value, $args );
 		$errors = apply_filters( 'frm_validate_field_entry', $errors, $posted_field, $value, $args );
+	}
+
+	/**
+	 * Maybe add item_name to $_POST to save it in items table.
+	 *
+	 * @since 5.2.02
+	 *
+	 * @param object $field Field object.
+	 */
+	private static function maybe_add_item_name( $value, $field ) {
+		$item_name = false;
+		if ( 'name' === $field->type ) {
+			$field_obj = FrmFieldFactory::get_field_object( $field );
+			$item_name = $field_obj->get_display_value( $value );
+		} elseif ( 'text' === $field->type ) {
+			$item_name = $value;
+		}
+
+		/**
+		 * Allows modifying the item name before it's saved to database.
+		 *
+		 * @since 5.2.02
+		 *
+		 * @param string|false $item_name The item name.
+		 * @param array        $args      {
+		 *     The arguments.
+		 *
+		 *     @type object $field The current processing field.
+		 *     @type mixed  $value The value of current processing field.
+		 * }
+		 */
+		$item_name = apply_filters( 'frm_item_name', $item_name, compact( 'value', 'field' ) );
+
+		if ( false !== $item_name ) {
+			$_POST['item_name'] = $item_name;
+		}
 	}
 
 	/**
