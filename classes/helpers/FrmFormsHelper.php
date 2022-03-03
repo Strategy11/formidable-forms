@@ -1285,6 +1285,7 @@ BEFORE_HTML;
 			'Contact Form'        => array( 'email' ),
 			'Survey'              => array( 'comment', 'var(--primary-color)' ),
 			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
+			'Quiz'                => array( 'percent' ),
 			''                    => array( 'align_right' ),
 		);
 

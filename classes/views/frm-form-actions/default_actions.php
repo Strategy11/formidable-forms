@@ -33,6 +33,15 @@ class FrmDefPayPalAction extends FrmFormAction {
 	}
 }
 
+// add quiz action
+class FrmDefQuizAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = FrmFormAction::default_action_opts( 'frm_percent_icon frm_quiz_icon frm_show_upgrade' );
+		$action_ops['plugin']  = 'quizzes';
+		parent::__construct( 'quiz', __( 'Quiz', 'formidable' ), $action_ops );
+	}
+}
+
 // add aweber action
 class FrmDefAweberAction extends FrmFormAction {
 	public function __construct() {
