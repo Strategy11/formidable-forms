@@ -1426,6 +1426,10 @@ form .frm_primary_label input {
 	margin-bottom: 20px;
 }
 
+.with_frm_style form .frm_combo_inputs_container > .form-field {
+	margin-bottom: 0;
+}
+
 .frm_description,
 .with_frm_style form div.description,
 .frm_error,
@@ -2037,7 +2041,7 @@ h2.frm-h2 + .howto {
 
 #frm_new_form_modal .frm-search {
 	width: calc( 100% - 20px );
-	margin: 40px 10px 30px;
+	margin: 15px 10px 30px;
 }
 
 #frm_leave_email,

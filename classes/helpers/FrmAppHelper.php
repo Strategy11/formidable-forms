@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.2';
+	public static $plug_version = '5.2.01';
 
 	/**
 	 * @since 1.07.02
@@ -3309,6 +3309,16 @@ class FrmAppHelper {
 			return ctype_xdigit( $text );
 		}
 		return is_string( $text ) && '' !== $text && ! preg_match( '/[^A-Fa-f0-9]/', $text );
+	}
+
+	/**
+	 * Set the current screen to avoid undefined notices.
+	 *
+	 * @since 5.2.01
+	 */
+	public static function set_current_screen_and_hook_suffix() {
+		global $hook_suffix;
+		set_current_screen();
 	}
 
 	/**

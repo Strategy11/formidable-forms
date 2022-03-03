@@ -251,6 +251,9 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function page_preview() {
 		$params = FrmForm::list_page_params();
 		if ( ! $params['form'] ) {
@@ -259,7 +262,7 @@ class FrmFormsController {
 
 		$form = FrmForm::getOne( $params['form'] );
 		if ( $form ) {
-			return self::show_form( $form->id, '', true, true );
+			return self::show_form( $form->id, '', 'auto', 'auto' );
 		}
 	}
 
@@ -270,8 +273,12 @@ class FrmFormsController {
 		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function preview() {
 		do_action( 'frm_wp' );
+		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		global $frm_vars;
 		$frm_vars['preview'] = true;
@@ -1714,6 +1721,7 @@ class FrmFormsController {
 	 * The formidable shortcode
 	 *
 	 * @param array $atts The params from the shortcode.
+	 * @return string
 	 */
 	public static function get_form_shortcode( $atts ) {
 		global $frm_vars;
@@ -1727,8 +1735,8 @@ class FrmFormsController {
 			array(
 				'id'             => '',
 				'key'            => '',
-				'title'          => false,
-				'description'    => false,
+				'title'          => 'auto',
+				'description'    => 'auto',
 				'readonly'       => false,
 				'entry_id'       => false,
 				'fields'         => array(),
@@ -1742,14 +1750,41 @@ class FrmFormsController {
 		return self::show_form( $shortcode_atts['id'], $shortcode_atts['key'], $shortcode_atts['title'], $shortcode_atts['description'], $atts );
 	}
 
-	public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
-		if ( empty( $id ) ) {
+	/**
+	 * @since 5.2.01
+	 *
+	 * @param string|int|false $id
+	 * @param string|false     $key
+	 * @return stdClass|false
+	 */
+	private static function maybe_get_form_by_id_or_key( $id, $key ) {
+		if ( ! $id ) {
 			$id = $key;
 		}
+		return self::maybe_get_form_to_show( $id );
+	}
 
-		$form = self::maybe_get_form_to_show( $id );
+	/**
+	 * @param string|int|false $id
+	 * @param string|false     $key
+	 * @param string|int|bool  $title may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param string|int|bool  $description may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
+	 * @param array            $atts
+	 * @return string
+	 */
+	public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
+		$form = self::maybe_get_form_by_id_or_key( $id, $key );
+
 		if ( ! $form ) {
 			return __( 'Please select a valid form', 'formidable' );
+		}
+
+		if ( 'auto' === $title ) {
+			$title = ! empty( $form->options['show_title'] );
+		}
+
+		if ( 'auto' === $description ) {
+			$description = ! empty( $form->options['show_description'] );
 		}
 
 		FrmAppController::maybe_update_styles();
@@ -1782,12 +1817,16 @@ class FrmFormsController {
 		return $form;
 	}
 
+	/**
+	 * @param string|int|false $id
+	 * @return stdClass|false
+	 */
 	private static function maybe_get_form_to_show( $id ) {
 		$form = false;
 
-		if ( ! empty( $id ) ) { // no form id or key set
+		if ( ! empty( $id ) ) { // form id or key is set
 			$form = FrmForm::getOne( $id );
-			if ( ! $form || $form->parent_form_id || $form->status == 'trash' ) {
+			if ( ! $form || $form->parent_form_id || $form->status === 'trash' ) {
 				$form = false;
 			}
 		}

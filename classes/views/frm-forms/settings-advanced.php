@@ -29,6 +29,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</p>
 
+	<p class="frm8 frm_form_field">
+		<label for="show_title" class="frm_inline_block">
+			<input type="checkbox" name="options[show_title]" id="show_title" value="1" <?php checked( $values['show_title'], 1 ); ?> />
+			<?php esc_html_e( 'Show the form title', 'formidable' ); ?>
+		</label>
+	</p>
+
+	<p class="frm8 frm_form_field">
+		<label for="show_description" class="frm_inline_block">
+			<input type="checkbox" name="options[show_description]" id="show_description" value="1" <?php checked( $values['show_description'], 1 ); ?> />
+			<?php esc_html_e( 'Show the form description', 'formidable' ); ?>
+		</label>
+	</p>
+
 <?php if ( ! $values['is_template'] ) { ?>
 	<?php $first_h3 = ''; ?>
 

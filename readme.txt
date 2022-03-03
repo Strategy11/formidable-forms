@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.2
-Tested up to: 5.9
+Tested up to: 5.9.1
 Requires PHP: 5.6
-Stable tag: 5.2
+Stable tag: 5.2.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -230,7 +230,7 @@ Formidable is part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> f
 4. Activate Formidable through the 'Plugins' menu
 5. Go to the newly added 'Formidable' menu
 6. Click the 'Add New' button to go to the form generator page and create a new email form
-7. Insert your newly created user registration form, quiz, or survey form on a page, post, or widget using a shortcode [formidable id=x], Alternatively use `<?php echo FrmFormsController::show_form(2, $key = '', $title=true, $description=true); ?>` to add it in a page template
+7. Insert your newly created user registration form, quiz, or survey form on a page or post using the Embed Form pop up. Or insert it manually or into a widget using a shortcode [formidable id=x]. Alternatively use `<?php echo FrmFormsController::show_form(2); ?>` to add it in a page template.
 
 == Screenshots ==
 1. Build professional WP forms without any code.
@@ -438,6 +438,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.01 =
+* New: Added new checkboxes to toggle form title and description visibility. The form preview page will no longer always show title and description by default, and will use these checkboxes instead.
+* Fix: In-Theme Previews trigger a fatal error in WordPress 5.9.1.
+* Fix: Checkbox fields were appearing as broken vertical lines when using the Enfold theme.
+* Fix: A deprecation message was occasionally logged in PHP8 when trying to decode null values.
+
 = 5.2 =
 * Increased WP version requirement to 5.2.
 * New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
@@ -451,11 +457,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Inputs with errors will now add the aria-describedby attribute during JavaScript validation for more accessible errors.
 * New: Form errors will now always include the role="alert" attribute for more accessible errors. New fields will now also include role="alert" in custom field HTML.
 * New: Added a new frm_entries_column_value filter hook.
-
-= 5.0.17 =
-* The embedded CodeMirror code for compatibility with versions of WordPress before 4.9 has been removed.
-* New: The ctype PHP extension is no longer a requirement.
-* Fix: The custom CSS page would appear without any textarea on some configurations where CodeMirror may be disabled.
-* Fix: Removed padding styles from radio buttons because of a conflict with the Sensational theme.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

@@ -356,25 +356,30 @@ class FrmFormsHelper {
 		return $values;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_default_opts() {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		return array(
-			'submit_value'   => $frm_settings->submit_value,
-			'success_action' => 'message',
-			'success_msg'    => $frm_settings->success_msg,
-			'show_form'      => 0,
-			'akismet'        => '',
-			'honeypot'       => 'basic',
-			'antispam'       => 0,
-			'no_save'        => 0,
-			'ajax_load'      => 0,
-			'js_validate'    => 0,
-			'form_class'     => '',
-			'custom_style'   => 1,
-			'before_html'    => self::get_default_html( 'before' ),
-			'after_html'     => '',
-			'submit_html'    => self::get_default_html( 'submit' ),
+			'submit_value'     => $frm_settings->submit_value,
+			'success_action'   => 'message',
+			'success_msg'      => $frm_settings->success_msg,
+			'show_form'        => 0,
+			'akismet'          => '',
+			'honeypot'         => 'basic',
+			'antispam'         => 0,
+			'no_save'          => 0,
+			'ajax_load'        => 0,
+			'js_validate'      => 0,
+			'form_class'       => '',
+			'custom_style'     => 1,
+			'before_html'      => self::get_default_html( 'before' ),
+			'after_html'       => '',
+			'submit_html'      => self::get_default_html( 'submit' ),
+			'show_title'       => 0,
+			'show_description' => 0,
 		);
 	}
 
@@ -1280,6 +1285,7 @@ BEFORE_HTML;
 			'Contact Form'        => array( 'email' ),
 			'Survey'              => array( 'comment', 'var(--primary-color)' ),
 			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
+			'Quiz'                => array( 'percent' ),
 			''                    => array( 'align_right' ),
 		);
 

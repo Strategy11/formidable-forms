@@ -177,6 +177,11 @@ class FrmAddonsController {
 				'title'   => 'Formidable Views',
 				'excerpt' => 'Add the power of views to your Formidable Forms to display your form submissions in listings, tables, calendars, and more.',
 			),
+			'quiz_maker'     => array(
+				'title'   => 'Quiz Maker',
+				'link'    => 'downloads/quiz-maker/',
+				'excerpt' => 'Make quizzes, automatically score them and show user scores.',
+			),
 		);
 
 		$defaults = array(
@@ -890,10 +895,8 @@ class FrmAddonsController {
 	 * @since 4.08
 	 */
 	protected static function download_and_activate() {
-		// Set the current screen to avoid undefined notices.
 		if ( is_admin() ) {
-			global $hook_suffix;
-			set_current_screen();
+			FrmAppHelper::set_current_screen_and_hook_suffix();
 		}
 
 		self::maybe_show_cred_form();
@@ -979,9 +982,7 @@ class FrmAddonsController {
 
 		self::install_addon_permissions();
 
-		// Set the current screen to avoid undefined notices.
-		global $hook_suffix;
-		set_current_screen();
+		FrmAppHelper::set_current_screen_and_hook_suffix();
 
 		$plugin = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		self::maybe_activate_addon( $plugin );
