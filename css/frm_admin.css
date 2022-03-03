@@ -7357,33 +7357,33 @@ iframe#dyncontent_ifr {
 
 .frm-dropdown-menu {
 	/* Copied from .dropdown-menu rules from Bootstrap */
-	position: absolute !important;
-	top: 100% !important;
-	left: 0 !important;
-	z-index: 1000 !important;
-	display: none !important;
-	float: left !important;
-	padding: 0.5rem 0 !important;
-	margin: 0 !important;
-	text-align: left !important;
-	list-style: none !important;
-	background-color: #fff !important;
-	background-clip: padding-box !important;
-	border: 1px solid rgba(0, 0, 0, 0.15) !important;
-	border-radius: 0.25rem !important;
+	position: absolute;
+	top: 100%;
+	left: 0 ;
+	z-index: 1000;
+	display: none;
+	float: left;
+	padding: 0.5rem 0;
+	margin: 0 ;
+	text-align: left;
+	list-style: none;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 0.25rem;
 
 	/* Custom rules */
-	max-height: 200px !important;
-	overflow-y: auto !important;
-    overflow-x: hidden !important;
-	font-size: 0.9rem !important;
-	width: auto !important;
+	max-height: 200px;
+	overflow-y: auto;
+    overflow-x: hidden;
+	font-size: 0.9rem;
+	width: auto;
 	min-width: 14rem !important;
-	transform: translateY(0) !important;
+	transform: translateY(0);
 }
 
 .frm-dropdown-menu.show {
-	display: block !important;
+	display: block;
 }
 
 /* End Bootstrap */

@@ -7620,7 +7620,7 @@ function frmAdminBuildJS() {
 			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 			$select.multiselect({
 				templates: {
-					popupContainer: '<div class="multiselect-container dropdown-menu frm-dropdown-menu"></div>',
+					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
 					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
 					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
@@ -10202,6 +10202,37 @@ frmAdminBuild = frmAdminBuildJS();
 
 jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
+
+	if ( ! bootstrap || ! bootstrap.Dropdown ) {
+		return;
+	}
+
+	bootstrap.Dropdown._getParentFromElement = _getParentFromElement;
+	bootstrap.Dropdown.prototype._getParentFromElement = _getParentFromElement;
+	function _getParentFromElement( element ) {
+		let parent;
+		const selector = bootstrap.Util.getSelectorFromElement( element );
+
+		if ( selector ) {
+			parent = document.querySelector( selector );
+		}
+
+		const result = parent || element.parentNode;
+		const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
+
+		if ( frmDropdownMenu ) {
+			// Temporarily add dropdown-menu class so bootstrap can initialize.
+			frmDropdownMenu.classList.add( 'dropdown-menu' );
+			setTimeout(
+				function() {
+					frmDropdownMenu.classList.remove( 'dropdown-menu' );
+				},
+				0
+			);
+		}
+
+		return result;
+	}
 });
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase

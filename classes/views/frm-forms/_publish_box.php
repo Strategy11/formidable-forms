@@ -22,7 +22,7 @@ if ( 'settings' === FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) )
 							<?php esc_html_e( 'Preview', 'formidable' ); ?>
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 						</a>
-						<div class="dropdown-menu frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
+						<div class="frm-dropdown-menu <?php echo esc_attr( is_rtl() ? 'pull-left' : 'pull-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
 							<div class="dropdown-item">
 								<a href="<?php echo esc_url( FrmFormsHelper::get_direct_link( $values['form_key'] ) ); ?>" target="_blank">
 									<?php esc_html_e( 'On Blank Page', 'formidable' ); ?>

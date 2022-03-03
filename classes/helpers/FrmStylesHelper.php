@@ -226,7 +226,7 @@ class FrmStylesHelper {
 				<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $style->post_content[ $name ], '-', $type ) ); ?>
 				<b class="caret"></b>
 			</button>
-			<ul class="multiselect-container dropdown-menu frm-dropdown-menu">
+			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
 					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
