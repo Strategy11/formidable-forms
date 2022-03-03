@@ -542,7 +542,6 @@ class FrmAppController {
 		}
 
 		self::maybe_force_formidable_block_on_gutenberg_page();
-
 	}
 
 	/**

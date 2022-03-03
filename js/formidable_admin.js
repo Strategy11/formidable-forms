@@ -8361,7 +8361,6 @@ function frmAdminBuildJS() {
 
 		const $modal = jQuery( modal );
 		offsetModalY( $modal, '50px' );
-
 		$modal.parent().addClass( 'frm-embed-form-modal-wrapper' );
 	}
 
