@@ -1976,7 +1976,7 @@ h2.frm-h2 + .howto {
 	vertical-align: top;
 }
 
-.frm-templates-list li > div > div:last-child {
+.frm-templates-list li > div > div:last-child:not(.frm-dropdown-menu) {
 	/* the content container to the right of the icon in Create new form modal */
 	display: inline-block;
 	width: calc( 100% - 40px );

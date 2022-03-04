@@ -8027,7 +8027,7 @@ function frmAdminBuildJS() {
 				.closest( '.accordion-section' ).css( 'z-index', 1 );
 		});
 
-		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + ul .frm-build-template', function() {
+		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + .frm-dropdown-menu .frm-build-template', function() {
 			var name = this.getAttribute( 'data-fullname' ),
 				link = this.getAttribute( 'data-formid' ),
 				action = 'frm_build_template';
