@@ -148,21 +148,6 @@ class FrmEntryValidate {
 			$item_name = $value;
 		}
 
-		/**
-		 * Allows modifying the item name before it's saved to database.
-		 *
-		 * @since 5.2.02
-		 *
-		 * @param string|false $item_name The item name.
-		 * @param array        $args      {
-		 *     The arguments.
-		 *
-		 *     @type object $field The current processing field.
-		 *     @type mixed  $value The value of current processing field.
-		 * }
-		 */
-		$item_name = apply_filters( 'frm_item_name', $item_name, compact( 'value', 'field' ) );
-
 		if ( false !== $item_name ) {
 			$_POST['item_name'] = $item_name;
 		}
