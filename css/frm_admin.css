@@ -7374,7 +7374,7 @@ iframe#dyncontent_ifr {
 	/* Custom rules */
 	max-height: 200px;
 	overflow-y: auto;
-    overflow-x: hidden;
+	overflow-x: hidden;
 	font-size: 0.9rem;
 	width: auto;
 	min-width: 14rem !important;
