@@ -81,16 +81,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Load the scripts before a modal can be triggered.
-	 *
-	 * @since 4.0
-	 */
-	private static function init_modal() {
-		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_style( 'jquery-ui-dialog' );
-	}
-
-	/**
 	 * Create the default email action
 	 *
 	 * @since 2.02.11
