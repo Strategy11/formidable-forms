@@ -2660,21 +2660,22 @@ h1 .fa-caret-down {
 	max-width: 400px;
 }
 
-.preview .frm-dropdown-menu {
-	min-width: 230px !important;
-}
-
 .field_type_list .frm-dropdown-menu {
 	min-width: 150px !important;
-}
-
-.multiselect-container.frm-dropdown-menu {
-	min-width: 200px !important;
 }
 
 #frm_field_group_controls .frm-dropdown-menu,
 .frm-field-action-icons .frm-dropdown-menu {
 	min-width: 160px !important;
+}
+
+.multiselect-container.frm-dropdown-menu,
+#search-submit .frm-dropdown-menu {
+	min-width: 200px !important;
+}
+
+.preview .frm-dropdown-menu {
+	min-width: 230px !important;
 }
 
 .frm-dropdown-menu.pull-right {
