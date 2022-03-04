@@ -2661,15 +2661,20 @@ h1 .fa-caret-down {
 }
 
 .preview .frm-dropdown-menu {
-	min-width: 230px;
+	min-width: 230px !important;
 }
 
 .field_type_list .frm-dropdown-menu {
-	min-width: 150px;
+	min-width: 150px !important;
 }
 
 .multiselect-container.frm-dropdown-menu {
-	min-width: 200px;
+	min-width: 200px !important;
+}
+
+#frm_field_group_controls .frm-dropdown-menu,
+.frm-field-action-icons .frm-dropdown-menu {
+	min-width: 160px !important;
 }
 
 .frm-dropdown-menu.pull-right {
