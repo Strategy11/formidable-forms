@@ -134,9 +134,9 @@ class FrmFormsHelper {
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
-			<div class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
+			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
 				<?php if ( count( $forms ) > 8 ) { ?>
-				<div class="dropdown-item frm-with-search">
+				<li class="frm-with-search">
 					<?php
 					FrmAppHelper::show_search_box(
 						array(
@@ -146,7 +146,7 @@ class FrmFormsHelper {
 						)
 					);
 					?>
-				</div>
+				</li>
 				<?php } ?>
 				<?php
 				foreach ( $forms as $form ) {
@@ -165,7 +165,7 @@ class FrmFormsHelper {
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
 					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name;
 					?>
-					<div class="dropdown-item frm-dropdown-form">
+					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1">
 							<span class="frm-sub-label">
 							<?php
@@ -179,12 +179,12 @@ class FrmFormsHelper {
 							<?php echo esc_html( $form_name ); ?>
 							<span class="frm_hidden"><?php echo esc_html( $form->form_key ); ?></span>
 						</a>
-					</div>
+					</li>
 					<?php
 					unset( $form );
 				}
 				?>
-			</div>
+			</ul>
 		</div>
 		<?php
 	}

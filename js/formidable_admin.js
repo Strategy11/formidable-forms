@@ -10203,35 +10203,58 @@ frmAdminBuild = frmAdminBuildJS();
 jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
 
-	if ( ! bootstrap || ! bootstrap.Dropdown ) {
-		return;
-	}
-
-	bootstrap.Dropdown._getParentFromElement = _getParentFromElement;
-	bootstrap.Dropdown.prototype._getParentFromElement = _getParentFromElement;
-	function _getParentFromElement( element ) {
-		let parent;
-		const selector = bootstrap.Util.getSelectorFromElement( element );
-
-		if ( selector ) {
-			parent = document.querySelector( selector );
+	updateDropdownsForBootstrap4();
+	function updateDropdownsForBootstrap4() {
+		if ( ! bootstrap || ! bootstrap.Dropdown ) {
+			return;
 		}
 
-		const result = parent || element.parentNode;
-		const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
+		bootstrap.Dropdown._getParentFromElement = getParentFromElement;
+		bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
 
-		if ( frmDropdownMenu ) {
+		function getParentFromElement( element ) {
+			let parent;
+			const selector = bootstrap.Util.getSelectorFromElement( element );
+
+			if ( selector ) {
+				parent = document.querySelector( selector );
+			}
+
+			const result = parent || element.parentNode;
+			const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
+
+			if ( ! frmDropdownMenu ) {
+				// Not a formidable dropdown, treat like Bootstrap does normally.
+				return result;
+			}
+
 			// Temporarily add dropdown-menu class so bootstrap can initialize.
 			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
+			// Convert <li> and <ul> tags.
+			if ( 'UL' === frmDropdownMenu.tagName ) {
+				convertBootstrapUl( frmDropdownMenu );
+			}
+
 			setTimeout(
 				function() {
 					frmDropdownMenu.classList.remove( 'dropdown-menu' );
 				},
 				0
 			);
+
+			return result;
 		}
 
-		return result;
+		function convertBootstrapUl( ul ) {
+			let html = ul.outerHTML;
+			html = html.replace( '<ul ', '<div ' );
+			html = html.replace( '</ul>', '</div>' );
+			html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
+			html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
+			html = html.replaceAll( '</li>', '</div>' );
+			ul.outerHTML = html;
+		}
 	}
 });
 

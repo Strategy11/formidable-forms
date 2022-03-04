@@ -9,27 +9,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Select form for new template', 'formidable' ); ?>
 			<b class="caret"></b>
 		</button>
-		<div class="frm-dropdown-menu" role="menu" aria-labelledby="frm-template-drop">
+		<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-template-drop">
 			<?php
 			if ( empty( $forms ) ) {
 				?>
-				<div class="dropdown-item frm_dropdown_li">
+				<li class="frm_dropdown_li">
 					<?php esc_html_e( 'You have not created any forms yet.', 'formidable' ); ?>
 				</div>
 				<?php
 			} else {
 				foreach ( $forms as $form ) {
 					?>
-					<div class="dropdown-item">
+					<li>
 						<a href="#" data-formid="<?php echo esc_attr( $form->id ); ?>" class="frm-build-template" data-fullname="<?php echo esc_attr( $form->name ); ?>" tabindex="-1">
 							<?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 33 ) ); ?>
 						</a>
-					</div>
+					</li>
 					<?php
 					unset( $form );
 				}
 			}
 			?>
-		</div>
+		</ul>
 	</div>
 </li><?php
