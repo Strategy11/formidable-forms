@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<li class="frm_dropdown_li">
 					<?php esc_html_e( 'You have not created any forms yet.', 'formidable' ); ?>
-				</div>
+				</li>
 				<?php
 			} else {
 				foreach ( $forms as $form ) {
