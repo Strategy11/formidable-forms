@@ -3318,6 +3318,10 @@ class FrmAppHelper {
 	 */
 	public static function set_current_screen_and_hook_suffix() {
 		global $hook_suffix;
+		if ( is_null( $hook_suffix ) ) {
+			// $hook_suffix gets used in substr so make sure it's not null. PHP8 deprecates null in substr.
+			$hook_suffix = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
 		set_current_screen();
 	}
 
