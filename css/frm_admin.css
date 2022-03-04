@@ -2621,6 +2621,32 @@ h1 .fa-caret-down {
 	outline: 0;
 }
 
+.frm-dropdown-menu {
+	/* Copied from .dropdown-menu rules from Bootstrap */
+	position: absolute;
+	top: 100%;
+	left: 0 ;
+	z-index: 1000;
+	display: none;
+	float: left;
+	padding: 0.5rem 0;
+	margin: 0 ;
+	text-align: left;
+	list-style: none;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 0.25rem;
+
+	/* Custom rules */
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	font-size: 0.9rem;
+	width: auto;
+	min-width: 160px;
+}
+
 .frm6 .frm-dropdown-menu {
 	min-width: 100px;
 	max-width: 99%;
@@ -5596,11 +5622,6 @@ span.howto {
 	min-height: 50px;
 }
 
-#frm-show-fields .frm6 .frm-dropdown-menu {
-    max-width: unset;
-    min-width: 160px;
-}
-
 #frm_builder_page #frm_field_group_controls {
 	position: absolute;
 	padding: 5px;
@@ -7368,32 +7389,6 @@ iframe#dyncontent_ifr {
 	text-align: center;
 	background-color: #000;
 	border-radius: 0.25rem;
-}
-
-.frm-dropdown-menu {
-	/* Copied from .dropdown-menu rules from Bootstrap */
-	position: absolute;
-	top: 100%;
-	left: 0 ;
-	z-index: 1000;
-	display: none;
-	float: left;
-	padding: 0.5rem 0;
-	margin: 0 ;
-	text-align: left;
-	list-style: none;
-	background-color: #fff;
-	background-clip: padding-box;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	border-radius: 0.25rem;
-
-	/* Custom rules */
-	max-height: 200px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	font-size: 0.9rem;
-	width: auto;
-	min-width: 160px;
 }
 
 .frm-dropdown-menu.show {
