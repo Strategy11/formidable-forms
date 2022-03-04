@@ -461,7 +461,8 @@ class FrmAppController {
 
 		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', $dependecies, $version, true );
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), $version );
-		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery' ), '3.4.1' );
+		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
+		wp_register_script( 'bootstrap_tooltip', FrmAppHelper::plugin_url() . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 		wp_register_style( 'formidable-grids', FrmAppHelper::plugin_url() . '/css/frm_grids.css', array(), $version );
 
 		if ( 'formidable' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
@@ -473,9 +474,7 @@ class FrmAppController {
 			}
 		}
 
-		// load multselect js
-		$depends_on = array( 'jquery', 'bootstrap_tooltip' );
-		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', $depends_on, '1.1.1', true );
+		wp_register_script( 'bootstrap-multiselect', FrmAppHelper::plugin_url() . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
 
 		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title' );
