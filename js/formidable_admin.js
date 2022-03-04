@@ -1991,7 +1991,7 @@ function frmAdminBuildJS() {
 		setTimeout(
 			function() {
 				var ul, $ul;
-				ul = document.querySelector( '.dropdown.show .dropdown-menu' );
+				ul = document.querySelector( '.dropdown.show .frm-dropdown-menu' );
 				if ( null === ul ) {
 					return;
 				}
