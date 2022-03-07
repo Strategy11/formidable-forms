@@ -395,11 +395,16 @@ class FrmFormActionsController {
 		return $form;
 	}
 
+	/**
+	 * @param int $form_id
+	 * @return void
+	 */
 	public static function update_settings( $form_id ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
-			wp_die( esc_html__( 'You do not have permission to do that', 'formidable' ) );
+			$frm_settings = FrmAppHelper::get_settings();
+			wp_die( esc_html( $frm_settings->admin_permission ) );
 		}
 
 		global $wpdb;
