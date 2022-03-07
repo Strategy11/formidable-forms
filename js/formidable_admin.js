@@ -10000,17 +10000,24 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			// TODO this is not working.
-			jQuery( '.multiselect-container.frm-dropdown-menu li a' ).on( 'click', function() {
-				var radio = this.children[0].children[0];
-				var btnGrp = jQuery( this ).closest( '.btn-group' );
-				var btnId = btnGrp.attr( 'id' );
-				document.getElementById( btnId.replace( '_select', '' ) ).value = radio.value;
-				btnGrp.children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
+				const radio = this;
+				const btnGrp = this.closest( '.btn-group' );
+				const btnId = btnGrp.getAttribute( 'id' );
 
-				// set active class
-				btnGrp.find( 'li.active' ).removeClass( 'active' );
-				jQuery( this ).closest( 'li' ).addClass( 'active' );
+				const select = document.getElementById( btnId.replace( '_select', '' ) );
+				if ( select ) {
+					select.value = radio.value;
+				}
+
+				jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+
+				const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
+				if ( activeItem ) {
+					activeItem.classList.remove( 'active' );
+				}
+
+				this.closest( '.dropdown-item' ).classList.add( 'active' );
 			});
 
 			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
