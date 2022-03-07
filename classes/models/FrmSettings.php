@@ -152,7 +152,7 @@ class FrmSettings {
 		$filter_html = ! FrmAppHelper::allow_unfiltered_html();
 
 		if ( $filter_html ) {
-			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
 			if ( ! empty( $params['additional_filter_keys'] ) ) {
 				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
 			}
@@ -220,6 +220,7 @@ class FrmSettings {
 	public function translatable_strings() {
 		return array(
 			'invalid_msg',
+			'admin_permission',
 			'failed_msg',
 			'login_msg',
 		);
