@@ -67,3 +67,5 @@ parameters:
 		- '#Cannot access an offset on mixed.#'
 		- '#Cannot use array destructuring on#'
 		- '#always exists and is not falsy.#'
+		- '#\@param tag must not be named \$this#'
+		- '#Expected 2 \@param tags, found 4\.#'
