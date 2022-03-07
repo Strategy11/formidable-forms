@@ -1,4 +1,12 @@
 == Changelog ==
+= 5.2.02 =
+* Updated Boostrap to version 4.6.1.
+* New: Name fields will be automatically used to define entry names if available.
+* New: Added setting to update privileged access message.
+* Fix: Section icon dropdown toggles were not displaying updated changes.
+* Fix: Prevent a PHP 8.1 deprecation message where null was being passed to substr.
+* Fix: Name fields with no descriptions were still displaying bottom margins.
+
 = 5.2.01 =
 * New: Added new checkboxes to toggle form title and description visibility. The form preview page will no longer always show title and description by default, and will use these checkboxes instead.
 * Fix: In-Theme Previews trigger a fatal error in WordPress 5.9.1.
