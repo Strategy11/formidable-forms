@@ -15,7 +15,8 @@ class FrmEntryValidate {
 		}
 
 		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) {
-			$errors['form'] = __( 'You do not have permission to do that', 'formidable' );
+			$frm_settings   = FrmAppHelper::get_settings();
+			$errors['form'] = $frm_settings->admin_permission;
 		}
 
 		self::set_item_key( $values );
