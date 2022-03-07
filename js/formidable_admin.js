@@ -1243,8 +1243,8 @@ function frmAdminBuildJS() {
 		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
-		ul = document.createElement( 'ul' );
-		ul.classList.add( 'frm-dropdown-menu' );
+		ul = document.createElement( 'div' );
+		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu' );
 		ul.setAttribute( 'role', 'menu' );
 		dropdown.appendChild( ul );
 
@@ -1991,7 +1991,7 @@ function frmAdminBuildJS() {
 		setTimeout(
 			function() {
 				var ul, $ul;
-				ul = document.querySelector( '.dropdown.open ul' );
+				ul = document.querySelector( '.dropdown.show .frm-dropdown-menu' );
 				if ( null === ul ) {
 					return;
 				}
@@ -2030,8 +2030,8 @@ function frmAdminBuildJS() {
 		options.forEach(
 			function( option ) {
 				var li, anchor, span;
-				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li' );
+				li = document.createElement( 'div' );
+				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li', 'dropdown-item' );
 
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );
@@ -8027,7 +8027,7 @@ function frmAdminBuildJS() {
 				.closest( '.accordion-section' ).css( 'z-index', 1 );
 		});
 
-		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + ul .frm-build-template', function() {
+		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + .frm-dropdown-menu .frm-build-template', function() {
 			var name = this.getAttribute( 'data-fullname' ),
 				link = this.getAttribute( 'data-formid' ),
 				action = 'frm_build_template';
@@ -10202,6 +10202,60 @@ frmAdminBuild = frmAdminBuildJS();
 
 jQuery( document ).ready( function( $ ) {
 	frmAdminBuild.init();
+
+	updateDropdownsForBootstrap4();
+	function updateDropdownsForBootstrap4() {
+		if ( ! bootstrap || ! bootstrap.Dropdown ) {
+			return;
+		}
+
+		bootstrap.Dropdown._getParentFromElement = getParentFromElement;
+		bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
+
+		function getParentFromElement( element ) {
+			let parent;
+			const selector = bootstrap.Util.getSelectorFromElement( element );
+
+			if ( selector ) {
+				parent = document.querySelector( selector );
+			}
+
+			const result = parent || element.parentNode;
+			const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
+
+			if ( ! frmDropdownMenu ) {
+				// Not a formidable dropdown, treat like Bootstrap does normally.
+				return result;
+			}
+
+			// Temporarily add dropdown-menu class so bootstrap can initialize.
+			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
+			// Convert <li> and <ul> tags.
+			if ( 'UL' === frmDropdownMenu.tagName ) {
+				convertBootstrapUl( frmDropdownMenu );
+			}
+
+			setTimeout(
+				function() {
+					frmDropdownMenu.classList.remove( 'dropdown-menu' );
+				},
+				0
+			);
+
+			return result;
+		}
+
+		function convertBootstrapUl( ul ) {
+			let html = ul.outerHTML;
+			html = html.replace( '<ul ', '<div ' );
+			html = html.replace( '</ul>', '</div>' );
+			html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
+			html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
+			html = html.replaceAll( '</li>', '</div>' );
+			ul.outerHTML = html;
+		}
+	}
 });
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase

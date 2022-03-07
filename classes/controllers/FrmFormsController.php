@@ -1292,6 +1292,7 @@ class FrmFormsController {
 		 *
 		 * @since 3.04.01
 		 *
+		 * @param array $advanced_helpers
 		 * @param array $atts - Includes fields and form_id
 		 */
 		return apply_filters( 'frm_advanced_helpers', $advanced_helpers, $atts );
