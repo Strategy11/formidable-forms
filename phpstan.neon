@@ -1,7 +1,8 @@
 parameters:
 	reportUnmatchedIgnoredErrors: false
 	bootstrapFiles:
-		- phpstan.stubs.php
+		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+		- stubs.php
 	excludePaths:
 		- */node_modules/*
 		- */tests/*
@@ -67,3 +68,6 @@ parameters:
 		- '#Cannot access an offset on mixed.#'
 		- '#Cannot use array destructuring on#'
 		- '#always exists and is not falsy.#'
+		- '#\@param tag must not be named \$this#'
+		- '#Expected 2 \@param tags, found 4\.#'
+		- '#should always throw an exception or terminate script execution but#'
