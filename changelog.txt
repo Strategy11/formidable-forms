@@ -1,6 +1,6 @@
 == Changelog ==
 = 5.2.02 =
-* Updated Boostrap to version 4.6.1.
+* Updated Bootstrap to version 4.6.1.
 * New: Name fields will be automatically used to define entry names if available.
 * New: Added setting to update privileged access message.
 * Fix: Section icon dropdown toggles were not displaying updated changes.
