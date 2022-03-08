@@ -7602,16 +7602,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function multiselectAccessibility() {
-		jQuery( '.multiselect-container' ).find( 'input[type="checkbox"]' ).each( function() {
-			var checkbox = jQuery( this );
-			checkbox.closest( 'a' ).attr(
-				'aria-describedby',
-				checkbox.is( ':checked' ) ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
-			);
-		});
-	}
-
 	function initiateMultiselect() {
 		jQuery( '.frm_multiselect' ).hide().each( function() {
 			var $select = jQuery( this ),
@@ -7635,11 +7625,8 @@ function frmAdminBuildJS() {
 							}
 						});
 					}
-
-					multiselectAccessibility();
 				},
 				onChange: function( element, option ) {
-					multiselectAccessibility();
 					$select.trigger( 'frm-multiselect-changed', element, option );
 				}
 			});
@@ -9456,7 +9443,7 @@ function frmAdminBuildJS() {
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
-			jQuery( '#frm-fid-search-menu a' ).on( 'click', function() {
+			jQuery( document ).on( 'click', '#frm-fid-search-menu a', function() {
 				var val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );
 				triggerSubmit( document.getElementById( 'posts-filter' ) );
@@ -10013,16 +10000,24 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			jQuery( '.multiselect-container.frm-dropdown-menu li a' ).on( 'click', function() {
-				var radio = this.children[0].children[0];
-				var btnGrp = jQuery( this ).closest( '.btn-group' );
-				var btnId = btnGrp.attr( 'id' );
-				document.getElementById( btnId.replace( '_select', '' ) ).value = radio.value;
-				btnGrp.children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
+				const radio = this;
+				const btnGrp = this.closest( '.btn-group' );
+				const btnId = btnGrp.getAttribute( 'id' );
 
-				// set active class
-				btnGrp.find( 'li.active' ).removeClass( 'active' );
-				jQuery( this ).closest( 'li' ).addClass( 'active' );
+				const select = document.getElementById( btnId.replace( '_select', '' ) );
+				if ( select ) {
+					select.value = radio.value;
+				}
+
+				jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+
+				const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
+				if ( activeItem ) {
+					activeItem.classList.remove( 'active' );
+				}
+
+				this.closest( '.dropdown-item' ).classList.add( 'active' );
 			});
 
 			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
@@ -10200,7 +10195,7 @@ function frmAdminBuildJS() {
 
 frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function( $ ) {
+jQuery( document ).ready( function() {
 	frmAdminBuild.init();
 
 	updateDropdownsForBootstrap4();
@@ -10230,6 +10225,16 @@ jQuery( document ).ready( function( $ ) {
 
 			// Temporarily add dropdown-menu class so bootstrap can initialize.
 			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
+			const toggle = result.querySelector( '.frm-dropdown-toggle' );
+			if ( toggle ) {
+				if ( ! toggle.hasAttribute( 'role' ) ) {
+					toggle.setAttribute( 'role', 'button' );
+				}
+				if ( ! toggle.hasAttribute( 'tabindex' ) ) {
+					toggle.setAttribute( 'tabindex', 0 );
+				}
+			}
 
 			// Convert <li> and <ul> tags.
 			if ( 'UL' === frmDropdownMenu.tagName ) {
