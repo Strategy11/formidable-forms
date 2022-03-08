@@ -8326,7 +8326,7 @@ function frmAdminBuildJS() {
 				} else {
 					const previewDrop = document.getElementById( 'frm-previewDrop' );
 					if ( previewDrop ) {
-						formKey = previewDrop.nextElementSibling.querySelector( 'li a' ).getAttribute( 'href' ).split( 'form=' )[1];
+						formKey = previewDrop.nextElementSibling.querySelector( '.dropdown-item a' ).getAttribute( 'href' ).split( 'form=' )[1];
 					}
 				}
 			}
