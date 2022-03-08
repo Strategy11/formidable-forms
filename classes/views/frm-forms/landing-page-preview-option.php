@@ -12,5 +12,8 @@ $params['class'] = 'frm_show_upgrade frm_noallow';
 $params['href']  = '#';
 ?>
 <a <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
-	<?php esc_html_e( 'Generate Form Page', 'formidable' ); ?><span class="frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
+	<?php
+	esc_html_e( 'Generate Form Page', 'formidable' );
+	FrmAppHelper::show_pill_text();
+	?>
 </a>

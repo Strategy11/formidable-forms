@@ -3354,6 +3354,20 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Shows pill text.
+	 *
+	 * @since 5.2.02
+	 *
+	 * @param string $text Text in the pill. Default is NEW.
+	 */
+	public static function show_pill_text( $text = null ) {
+		if ( null === $text ) {
+			$text = __( 'NEW', 'formidable' );
+		}
+		echo '<span class="frm-new-pill">' . esc_html( $text ) . '</span>';
+	}
+
+	/**
 	 * @since 4.08
 	 * @deprecated 4.09.01
 	 */
