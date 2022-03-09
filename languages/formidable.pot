@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.2.02\n"
+"Project-Id-Version: Formidable Forms 5.2.02.01\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-03-08T18:48:17+00:00\n"
+"POT-Creation-Date: 2022-03-09T18:11:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -199,7 +199,7 @@ msgstr ""
 #: classes/controllers/FrmEntriesController.php:11
 #: classes/controllers/FrmEntriesController.php:100
 #: classes/controllers/FrmFormsController.php:786
-#: classes/controllers/FrmXMLController.php:259
+#: classes/controllers/FrmXMLController.php:260
 #: classes/views/xml/import_form.php:121
 msgid "Entries"
 msgstr ""
@@ -318,7 +318,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:9
 #: classes/controllers/FrmFormsController.php:796
 #: classes/controllers/FrmStylesController.php:51
-#: classes/controllers/FrmXMLController.php:258
+#: classes/controllers/FrmXMLController.php:259
 #: classes/views/frm-forms/list.php:10
 #: classes/widgets/FrmElementorWidget.php:14
 msgid "Forms"
@@ -995,27 +995,27 @@ msgstr ""
 msgid "There was an error importing form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:294
+#: classes/controllers/FrmXMLController.php:295
 msgid "Oops, you didn't select a file."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:305
+#: classes/controllers/FrmXMLController.php:306
 msgid "The file does not exist, please try again."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:334
+#: classes/controllers/FrmXMLController.php:335
 msgid "XML import is not enabled on your server with the libxml_disable_entity_loader function."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:542
+#: classes/controllers/FrmXMLController.php:543
 msgid "Please select a form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:572
+#: classes/controllers/FrmXMLController.php:573
 msgid "Form not found."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:604
+#: classes/controllers/FrmXMLController.php:605
 msgid "There are no entries for that form."
 msgstr ""
 
