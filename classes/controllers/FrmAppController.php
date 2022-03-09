@@ -534,7 +534,7 @@ class FrmAppController {
 	/**
 	 * Fix a Duplicator Pro conflict because it uses Popper 2. See issue #3459.
 	 *
-	 * @since 5.2.03
+	 * @since 5.2.02.01
 	 *
 	 * @return void
 	 */
