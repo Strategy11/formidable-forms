@@ -45,9 +45,12 @@
 
 	function getTemplatesNav() {
 		const nav = div({ className: 'frm-application-templates-nav' });
-		const title = document.createElement( 'h3' );
-		title.textContent = __( 'Formidable templates', 'formidable' );
-		nav.appendChild( title );
+		nav.appendChild(
+			tag(
+				'h3',
+				{ text: __( 'Formidable templates', 'formidable' ) }
+			)
+		);
 		nav.appendChild( getTemplateSearch() );
 		return nav;
 	}
@@ -112,14 +115,16 @@
 			children: [
 				getCardHeader(),
 				div({ className: 'frm-flex' }),
-				document.createElement( 'hr' ),
+				tag( 'hr' ),
 				getCardContent()
 			]
 		});
 
 		function getCardHeader() {
-			const title = document.createElement( 'span' );
-			title.textContent = data.name;
+			const title = tag(
+				'span',
+				{ text: data.name }
+			);
 			const header = div({
 				children: [
 					title,
@@ -131,7 +136,7 @@
 		}
 
 		function getCardContent() {
-			const image = document.createElement( 'img' );
+			const image = tag( 'img' );
 
 			const iconSplit = data.icon.split( '.' );
 			const ext = iconSplit.pop();
@@ -149,7 +154,7 @@
 	}
 
 	function getUseThisTemplateControl( data ) {
-		const control = document.createElement( 'a' );
+		const control = tag( 'a' );
 		control.setAttribute( 'href', '#' );
 		control.setAttribute( 'role', 'button' );
 		control.textContent = __( 'Use this template', 'formidable' );
@@ -163,19 +168,18 @@
 	}
 
 	function openViewApplicationModal( data ) {
-		const modalId = 'frm_view_application_modal';
 		const modal = frmDom.modal.maybeCreateModal(
-			modalId,
+			'frm_view_application_modal',
 			{
-				title: data.name,
 				content: getViewApplicationModalContent( data )
 			}
 		);
+		modal.querySelector( '.frm-modal-title' ).textContent = data.name;
 		modal.classList.add( 'frm_common_modal' );
 	}
 
 	function getViewApplicationModalContent( data ) {
-		const img = document.createElement( 'img' );
+		const img = tag( 'img' );
 		img.src = data.icon;
 		return div({
 			children: [
