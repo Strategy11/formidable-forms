@@ -132,7 +132,13 @@
 
 		function getCardContent() {
 			const image = document.createElement( 'img' );
-			image.setAttribute( 'src', data.icon );
+
+			const iconSplit = data.icon.split( '.' );
+			const ext = iconSplit.pop();
+			const filename = iconSplit.pop();
+			iconSplit.push( filename + '-400x200', ext );
+			image.setAttribute( 'src', iconSplit.join( '.' ) );
+
 			const content = div({
 				children: [ image ]
 			});
