@@ -459,6 +459,8 @@ class FrmAppController {
 			$dependecies[] = 'wp-color-picker';
 		}
 
+		self::maybe_deregister_popper2();
+
 		wp_register_script( 'formidable_admin', FrmAppHelper::plugin_url() . '/js/formidable_admin.js', $dependecies, $version, true );
 		wp_register_style( 'formidable-admin', FrmAppHelper::plugin_url() . '/css/frm_admin.css', array(), $version );
 		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
@@ -527,6 +529,26 @@ class FrmAppController {
 		}
 
 		self::maybe_force_formidable_block_on_gutenberg_page();
+	}
+
+	/**
+	 * Fix a Duplicator Pro conflict because it uses Popper 2. See issue #3459.
+	 *
+	 * @since 5.2.03
+	 *
+	 * @return void
+	 */
+	private static function maybe_deregister_popper2() {
+		global $wp_scripts;
+
+		if ( ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
+			return;
+		}
+
+		$popper = $wp_scripts->registered['popper'];
+		if ( version_compare( $popper->ver, '2.0', '>=' ) ) {
+			wp_deregister_script( 'popper' );
+		}
 	}
 
 	/**
