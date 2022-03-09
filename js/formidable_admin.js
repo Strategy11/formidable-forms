@@ -2024,7 +2024,7 @@ function frmAdminBuildJS() {
 		options = [ getDeleteActionOption( isFieldGroup ), getDuplicateActionOption( isFieldGroup ) ];
 		if ( ! isFieldGroup ) {
 			options.push(
-				{ class: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
+				{ className: 'frm_select', icon: 'frm_settings_icon', label: __( 'Field settings', 'formidable' ) }
 			);
 		}
 		options.forEach(
@@ -3562,23 +3562,7 @@ function frmAdminBuildJS() {
 	}
 
 	function div( atts ) {
-		var element = document.createElement( 'div' );
-		if ( 'object' === typeof atts ) {
-			if ( 'string' === typeof atts.id ) {
-				element.id = atts.id;
-			}
-			if ( 'string' === typeof atts.class ) {
-				element.className = atts.class;
-			}
-			if ( 'object' === typeof atts.child ) {
-				element.appendChild( atts.child );
-			} else if ( 'undefined' !== typeof atts.children ) {
-				atts.children.forEach( child => element.appendChild( child ) );
-			} else if ( 'undefined' !== typeof atts.text ) {
-				element.appendChild( document.createTextNode( atts.text ) );
-			}
-		}
-		return element;
+		return frmDom.div( atts );
 	}
 
 	function handleFieldGroupLayoutOptionClick() {
@@ -8325,42 +8309,16 @@ function frmAdminBuildJS() {
 	function openFormEmbedModal( formId, formKey ) {
 		const modalId = 'frm_form_embed_modal';
 
-		let modal = document.getElementById( modalId );
+		let modal = frmDom.modal.maybeCreateModal(
+			modalId,
+			{
+				title: __( 'Embed form', 'formidable' ),
+				content: getEmbedFormModalOptions( formId, formKey )
+			}
+		);
 
-		if ( ! modal ) {
-			modal = createEmptyModal( modalId );
-			modal.classList.add( 'frm_common_modal' );
-
-			const title = div({ child: document.createTextNode( __( 'Embed form', 'formidable' ) ), class: 'frm-modal-title' });
-
-			const a = document.createElement( 'a' );
-			a.textContent = __( 'Cancel', 'formidable' );
-			a.className = 'dismiss';
-
-			const postbox = modal.querySelector( '.postbox' );
-
-			postbox.appendChild(
-				div({
-					class: 'frm_modal_top',
-					children: [
-						title,
-						div({ child: a })
-					]
-				})
-			);
-			postbox.appendChild(
-				div({ class: 'frm_modal_content' })
-			);
-			postbox.appendChild(
-				div({ class: 'frm_modal_footer' })
-			);
-		} else {
-			modal.classList.remove( 'frm-on-page-2' );
-		}
-
-		const content = modal.querySelector( '.frm_modal_content' );
-		content.innerHTML = '';
-		content.appendChild( getEmbedFormModalOptions( formId, formKey ) );
+		modal.classList.add( 'frm_common_modal' );
+		modal.classList.remove( 'frm-on-page-2' );
 
 		const footer = modal.querySelector( '.frm_modal_footer' );
 		if ( ! footer.querySelector( 'a' ) ) {
@@ -8389,32 +8347,8 @@ function frmAdminBuildJS() {
 		}
 
 		const $modal = jQuery( modal );
-		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
-			initModal( $modal );
-		}
-
 		offsetModalY( $modal, '50px' );
-
-		scrollToTop();
-		$modal.dialog( 'open' );
-
 		$modal.parent().addClass( 'frm-embed-form-modal-wrapper' );
-	}
-
-	function createEmptyModal( id ) {
-		const modal = div({ id: id, class: 'frm-modal' });
-		const postbox = div({ class: 'postbox' });
-		const metaboxHolder = div({ class: 'metabox-holder', child: postbox });
-		modal.appendChild( metaboxHolder );
-		document.body.appendChild( modal );
-		return modal;
-	}
-
-	function scrollToTop() {
-		if ( 'scrollRestoration' in history ) {
-			history.scrollRestoration = 'manual';
-		}
-		window.scrollTo( 0, 0 );
 	}
 
 	function offsetModalY( $modal, amount ) {
@@ -8427,7 +8361,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getEmbedFormModalOptions( formId, formKey ) {
-		const content = div({ class: 'frm_embed_form_content frm_wrap' });
+		const content = div({ className: 'frm_embed_form_content frm_wrap' });
 
 		const options = [
 			{
@@ -8482,7 +8416,7 @@ function frmAdminBuildJS() {
 										const pageId = pageDropdown.value;
 
 										if ( '0' === pageId || '' === pageId ) {
-											const error = div({ class: 'frm_error_style' });
+											const error = div({ className: 'frm_error_style' });
 											error.setAttribute( 'role', 'alert' );
 											error.textContent = __( 'Please select a page', 'formidable' );
 											content.insertBefore( error, title.nextElementSibling );
@@ -8510,7 +8444,7 @@ function frmAdminBuildJS() {
 				callback: () => {
 					content.innerHTML = '';
 
-					const wrapper = div({ class: 'field-group' });
+					const wrapper = div({ className: 'field-group' });
 					const form = document.createElement( 'form' );
 
 					const createPageWithShortcode = () => {
