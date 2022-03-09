@@ -8242,7 +8242,7 @@ function frmAdminBuildJS() {
 
 	function getStrippedTemplateName( $li ) {
 		var $clone = $li.find( 'h3' ).clone();
-		$clone.find( 'svg, .frm-plan-required-tag' ).remove();
+		$clone.find( 'svg, .frm-plan-required-tag, .frm-new-pill' ).remove();
 		return $clone.html().trim();
 	}
 
