@@ -83,10 +83,14 @@ class FrmApplicationsController {
 		wp_enqueue_style( 'formidable-admin' );
 		wp_enqueue_style( 'formidable-grids' );
 
-		wp_register_script( 'formidable_applications', $plugin_url . '/js/applications.js', array( 'wp-i18n', 'jquery', 'jquery-ui-dialog' ), $version, true );
-		wp_enqueue_script( 'formidable_applications' );
-
+		$js_dependencies = array(
+			'wp-i18n',
+			'formidable_dom',
+		);
+		wp_register_script( 'formidable_applications', $plugin_url . '/js/applications.js', $js_dependencies, $version, true );
 		wp_register_style( 'formidable_applications', $plugin_url . '/css/applications.css', array(), $version );
+
+		wp_enqueue_script( 'formidable_applications' );
 		wp_enqueue_style( 'formidable_applications' );
 	}
 

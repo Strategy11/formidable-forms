@@ -1,7 +1,7 @@
 ( function() {
-	/** globals ajaxurl, wp */
+	/** globals ajaxurl, wp, frmDom */
 
-	if ( 'undefined' === typeof ajaxurl || 'undefined' === typeof wp ) {
+	if ( 'undefined' === typeof ajaxurl || 'undefined' === typeof wp || 'undefined' === typeof frmDom ) {
 		return;
 	}
 
@@ -44,9 +44,8 @@
 
 	function getTemplatesNav() {
 		const nav = div({ className: 'frm-application-templates-nav' });
-		// TODO __ i18n.
 		const title = document.createElement( 'h3' );
-		title.textContent = 'Formidable templates';
+		title.textContent = __( 'Formidable templates', 'formidable' );
 		nav.appendChild( title );
 		return nav;
 	}
@@ -89,10 +88,9 @@
 
 	function getUseThisTemplateControl( data ) {
 		const control = document.createElement( 'a' );
-		// TODO __ i18n.
 		control.setAttribute( 'href', '#' );
 		control.setAttribute( 'role', 'button' );
-		control.textContent = 'Use this template';
+		control.textContent = __( 'Use this template', 'formidable' );
 
 		onClickPreventDefault(
 			control,
@@ -103,54 +101,15 @@
 	}
 
 	function openViewApplicationModal( data ) {
-		const modal = maybeCreateModal( 'frm_view_application_modal' );
-
-		const title = modal.querySelector( '.frm-modal-title' );
-		title.textContent = data.name;
-
-		const content = modal.querySelector( '.frm_modal_content' );
-		content.innerHTML = '';
-		content.appendChild( getViewApplicationModalContent( data ) );
-
-		const $modal = jQuery( modal );
-		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
-			initModal( $modal );
-		}
-
-		$modal.dialog( 'open' );
-	}
-
-	function initModal( $modal ) {
-		$modal.dialog(
+		const modalId = 'frm_view_application_modal';
+		const modal = frmDom.modal.maybeCreateModal(
+			modalId,
 			{
-				dialogClass: 'frm-dialog',
-				modal: true,
-				autoOpen: false,
-				closeOnEscape: true,
-				width: '550px',
-				resizable: false,
-				draggable: false,
-				open: function() {
-					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
-					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
-					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
-					$modal.removeClass( 'ui-dialog-content ui-widget-content' );
-					bindClickForDialogClose( $modal );
-				},
-				close: function() {
-					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
-					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
-				}
+				title: data.name,
+				content: getViewApplicationModalContent( data )
 			}
 		);
-	}
-
-	function bindClickForDialogClose( $modal ) {
-		const closeModal = function() {
-			$modal.dialog( 'close' );
-		};
-		jQuery( '.ui-widget-overlay' ).on( 'click', closeModal );
-		$modal.on( 'click', 'a.dismiss', closeModal );
+		modal.classList.add( 'frm_common_modal' );
 	}
 
 	function getViewApplicationModalContent( data ) {
@@ -188,63 +147,7 @@
 		);
 	}
 
-	function div({ id, className, children, child, text } = {}) {
-		const output = document.createElement( 'div' );
-		if ( id ) {
-			output.id = id;
-		}
-		if ( className ) {
-			output.className = className;
-		}
-		if ( children ) {
-			children.forEach( child => output.appendChild( child ) );
-		} else if ( child ) {
-			output.appendChild( child );
-		} else if ( text ) {
-			output.textContent = text;
-		}
-		return output;
-	}
-
-	function maybeCreateModal( id ) {
-		let modal = document.getElementById( id );
-		if ( ! modal ) {
-			modal = createEmptyModal( id );
-			modal.classList.add( 'frm_common_modal' );
-
-			const title = div({ className: 'frm-modal-title' });
-
-			const a = document.createElement( 'a' );
-			a.textContent = __( 'Cancel', 'formidable' );
-			a.className = 'dismiss';
-
-			const postbox = modal.querySelector( '.postbox' );
-
-			postbox.appendChild(
-				div({
-					className: 'frm_modal_top',
-					children: [
-						title,
-						div({ child: a })
-					]
-				})
-			);
-			postbox.appendChild(
-				div({ className: 'frm_modal_content' })
-			);
-			postbox.appendChild(
-				div({ className: 'frm_modal_footer' })
-			);
-		}
-		return modal;
-	}
-
-	function createEmptyModal( id ) {
-		const modal = div({ id: id, className: 'frm-modal' });
-		const postbox = div({ className: 'postbox' });
-		const metaboxHolder = div({ className: 'metabox-holder', child: postbox });
-		modal.appendChild( metaboxHolder );
-		document.body.appendChild( modal );
-		return modal;
+	function div( atts ) {
+		return frmDom.div( atts );
 	}
 }() );
