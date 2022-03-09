@@ -6,6 +6,16 @@
 	margin: 40px 40px 0;
 }
 
+.frm-applications-index-content h3 {
+	display: inline-block;
+}
+
+.frm-application-templates-grid,
+#frm-application-search,
+.frm-application-card hr {
+	width: 100%;
+}
+
 .frm-application-card {
 	border-radius: 4px;
 	background: #FFFFFF;
@@ -34,10 +44,6 @@
 /* Card description */
 .frm-application-card > div:first-child > div {
 	font-size: 12px;
-}
-
-.frm-application-card hr {
-	width: 100%;
 }
 
 .frm-application-card > div {

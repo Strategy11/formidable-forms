@@ -6,6 +6,7 @@
 	}
 
 	const __ = wp.i18n.__;
+	const { div, tag } = frmDom;
 
 	const container = document.getElementById( 'frm_applications_container' );
 	if ( ! container ) {
@@ -47,7 +48,62 @@
 		const title = document.createElement( 'h3' );
 		title.textContent = __( 'Formidable templates', 'formidable' );
 		nav.appendChild( title );
+		nav.appendChild( getTemplateSearch() );
 		return nav;
+	}
+
+	function getTemplateSearch() {
+		const label = tag(
+			'label',
+			{
+				className: 'screen-reader-text',
+				text: __( 'Search applications', 'formidable' )
+			}
+		);
+		label.setAttribute( 'for', 'frm-application-search' );
+
+		const searchInput = tag(
+			'input',
+			{
+				id: 'frm-application-search',
+				className: 'frm-search-input'
+			}
+		);
+		searchInput.setAttribute( 'type', 'search' );
+
+		const listener = function( event ) {
+			const search = event.target.value.toLowerCase();
+			const cards = document.querySelectorAll( '.frm-application-card' );
+			cards.forEach(
+				card => {
+					const isHidden = -1 === card.textContent.toLowerCase().indexOf( search );
+					card.classList.toggle( 'frm_hidden', isHidden );
+				}
+			);
+		};
+
+		searchInput.addEventListener( 'input', listener );
+		searchInput.addEventListener( 'search', listener );
+		searchInput.addEventListener( 'change', listener );
+
+		const search = tag(
+			'p',
+			{
+				className: 'frm-search',
+				children: [
+					label,
+					tag(
+						'span',
+						{
+							className: 'frmfont frm_search_icon'
+						}
+					),
+					searchInput
+				]
+			}
+		);
+
+		return search;
 	}
 
 	function createApplicationCard( data ) {
@@ -145,9 +201,5 @@
 				callback( event );
 			}
 		);
-	}
-
-	function div( atts ) {
-		return frmDom.div( atts );
 	}
 }() );
