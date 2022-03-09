@@ -37,6 +37,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		value="<?php echo esc_attr( $frm_settings->invalid_msg ); ?>"/>
 </p>
 
+<p>
+	<label class="frm_left_label"><?php esc_html_e( 'Requires Privileged Access', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon"
+			title="<?php esc_attr_e( 'The message shown to users who do not have access to a resource.', 'formidable' ); ?>"></span>
+	</label>
+	<input type="text" id="frm_admin_permission" name="frm_admin_permission"
+		class="frm_with_left_label"
+		value="<?php echo esc_attr( $frm_settings->admin_permission ); ?>"/>
+</p>
+
 <?php if ( FrmAppHelper::pro_is_installed() ) { ?>
 	<p>
 		<label class="frm_left_label"><?php esc_html_e( 'Unique Value', 'formidable' ); ?>
@@ -68,11 +78,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>
 	<label class="frm_left_label"><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?>
 		<span class="frm_help frm_icon_font frm_tooltip_icon"
-			 title="<?php esc_attr_e( 'The default label for the submit button.', 'formidable' ); ?>"></span>
+			title="<?php esc_attr_e( 'The default label for the submit button.', 'formidable' ); ?>"></span>
 	</label>
 	<input type="text"
 		value="<?php echo esc_attr( $frm_settings->submit_value ); ?>"
 		id="frm_submit_value" name="frm_submit_value"
 		class="frm_with_left_label"/>
 </p>
-

@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.2.01';
+	public static $plug_version = '5.2.02';
 
 	/**
 	 * @since 1.07.02
@@ -3320,6 +3320,10 @@ class FrmAppHelper {
 	 */
 	public static function set_current_screen_and_hook_suffix() {
 		global $hook_suffix;
+		if ( is_null( $hook_suffix ) ) {
+			// $hook_suffix gets used in substr so make sure it's not null. PHP 8.1 deprecates null in substr.
+			$hook_suffix = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		}
 		set_current_screen();
 	}
 
@@ -3349,6 +3353,20 @@ class FrmAppHelper {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Shows pill text.
+	 *
+	 * @since 5.2.02
+	 *
+	 * @param string $text Text in the pill. Default is NEW.
+	 */
+	public static function show_pill_text( $text = null ) {
+		if ( null === $text ) {
+			$text = __( 'NEW', 'formidable' );
+		}
+		echo '<span class="frm-new-pill">' . esc_html( $text ) . '</span>';
 	}
 
 	/**
