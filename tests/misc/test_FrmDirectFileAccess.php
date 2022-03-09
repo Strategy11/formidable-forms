@@ -18,7 +18,7 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 		foreach ( $files as $key => $value ) {
 			$path = realpath( $dir . DIRECTORY_SEPARATOR . $value );
 			if ( ! is_dir( $path ) ) {
-				if ( substr( $value, strlen( $value ) - 4 ) === '.php' && ! in_array( $value, array( 'set-php-version.php', 'psalm.stubs.php', 'phpstan.stubs.php' ), true ) ) {
+				if ( substr( $value, strlen( $value ) - 4 ) === '.php' && ! in_array( $value, array( 'set-php-version.php', 'stubs.php' ), true ) ) {
 					$results[] = $path;
 				}
 			} elseif ( $value !== '.' && $value !== '..' ) {

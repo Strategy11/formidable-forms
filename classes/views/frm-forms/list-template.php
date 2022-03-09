@@ -46,6 +46,12 @@ if ( ! empty( $template['custom'] ) ) {
 					</svg>
 				<?php } ?>
 				<?php echo esc_html( $stripped_template_name ); ?>
+				<?php
+				$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
+				if ( $template_is_new && empty( $template['custom'] ) ) {
+					FrmAppHelper::show_pill_text();
+				}
+				?>
 				<?php if ( $plan_required ) { ?>
 					<span class="frm-plan-required-tag">
 						<?php
@@ -58,14 +64,6 @@ if ( ! empty( $template['custom'] ) ) {
 				<?php } ?>
 			</h3>
 			<p role="button"><?php echo $template['description'] ? esc_html( $template['description'] ) : '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>'; ?></p>
-			<?php
-			$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
-			if ( $template_is_new && empty( $template['custom'] ) ) {
-				?><div class="frm_ribbon">
-					<span>New</span>
-				</div><?php
-			}
-			?>
 		</div>
 	</div>
 </li><?php

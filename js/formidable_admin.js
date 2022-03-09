@@ -1243,8 +1243,8 @@ function frmAdminBuildJS() {
 		trigger.innerHTML = '<span><svg class="frmsvg"><use xlink:href="#frm_thick_more_vert_icon"></use></svg></span>';
 		dropdown.appendChild( trigger );
 
-		ul = document.createElement( 'ul' );
-		ul.classList.add( 'frm-dropdown-menu' );
+		ul = document.createElement( 'div' );
+		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu' );
 		ul.setAttribute( 'role', 'menu' );
 		dropdown.appendChild( ul );
 
@@ -1991,7 +1991,7 @@ function frmAdminBuildJS() {
 		setTimeout(
 			function() {
 				var ul, $ul;
-				ul = document.querySelector( '.dropdown.open ul' );
+				ul = document.querySelector( '.dropdown.show .frm-dropdown-menu' );
 				if ( null === ul ) {
 					return;
 				}
@@ -2030,8 +2030,8 @@ function frmAdminBuildJS() {
 		options.forEach(
 			function( option ) {
 				var li, anchor, span;
-				li = document.createElement( 'li' );
-				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li' );
+				li = document.createElement( 'div' );
+				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li', 'dropdown-item' );
 
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );
@@ -7586,16 +7586,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function multiselectAccessibility() {
-		jQuery( '.multiselect-container' ).find( 'input[type="checkbox"]' ).each( function() {
-			var checkbox = jQuery( this );
-			checkbox.closest( 'a' ).attr(
-				'aria-describedby',
-				checkbox.is( ':checked' ) ? 'frm_press_space_checked' : 'frm_press_space_unchecked'
-			);
-		});
-	}
-
 	function initiateMultiselect() {
 		jQuery( '.frm_multiselect' ).hide().each( function() {
 			var $select = jQuery( this ),
@@ -7619,11 +7609,8 @@ function frmAdminBuildJS() {
 							}
 						});
 					}
-
-					multiselectAccessibility();
 				},
 				onChange: function( element, option ) {
-					multiselectAccessibility();
 					$select.trigger( 'frm-multiselect-changed', element, option );
 				}
 			});
@@ -8011,7 +7998,7 @@ function frmAdminBuildJS() {
 				.closest( '.accordion-section' ).css( 'z-index', 1 );
 		});
 
-		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + ul .frm-build-template', function() {
+		jQuery( document ).on( 'click', '#frm_new_form_modal #frm-template-drop + .frm-dropdown-menu .frm-build-template', function() {
 			var name = this.getAttribute( 'data-fullname' ),
 				link = this.getAttribute( 'data-formid' ),
 				action = 'frm_build_template';
@@ -8310,7 +8297,7 @@ function frmAdminBuildJS() {
 				} else {
 					const previewDrop = document.getElementById( 'frm-previewDrop' );
 					if ( previewDrop ) {
-						formKey = previewDrop.nextElementSibling.querySelector( 'li a' ).getAttribute( 'href' ).split( 'form=' )[1];
+						formKey = previewDrop.nextElementSibling.querySelector( '.dropdown-item a' ).getAttribute( 'href' ).split( 'form=' )[1];
 					}
 				}
 			}
@@ -9390,7 +9377,7 @@ function frmAdminBuildJS() {
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
 			// submit the search form with dropdown
-			jQuery( '#frm-fid-search-menu a' ).on( 'click', function() {
+			jQuery( document ).on( 'click', '#frm-fid-search-menu a', function() {
 				var val = this.id.replace( 'fid-', '' );
 				jQuery( 'select[name="fid"]' ).val( val );
 				triggerSubmit( document.getElementById( 'posts-filter' ) );
@@ -9947,16 +9934,24 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			jQuery( '.multiselect-container.frm-dropdown-menu li a' ).on( 'click', function() {
-				var radio = this.children[0].children[0];
-				var btnGrp = jQuery( this ).closest( '.btn-group' );
-				var btnId = btnGrp.attr( 'id' );
-				document.getElementById( btnId.replace( '_select', '' ) ).value = radio.value;
-				btnGrp.children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+			jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
+				const radio = this;
+				const btnGrp = this.closest( '.btn-group' );
+				const btnId = btnGrp.getAttribute( 'id' );
 
-				// set active class
-				btnGrp.find( 'li.active' ).removeClass( 'active' );
-				jQuery( this ).closest( 'li' ).addClass( 'active' );
+				const select = document.getElementById( btnId.replace( '_select', '' ) );
+				if ( select ) {
+					select.value = radio.value;
+				}
+
+				jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+
+				const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
+				if ( activeItem ) {
+					activeItem.classList.remove( 'active' );
+				}
+
+				this.closest( '.dropdown-item' ).classList.add( 'active' );
 			});
 
 			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
@@ -10134,8 +10129,72 @@ function frmAdminBuildJS() {
 
 frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function( $ ) {
+jQuery( document ).ready( function() {
 	frmAdminBuild.init();
+
+	updateDropdownsForBootstrap4();
+	function updateDropdownsForBootstrap4() {
+		if ( ! bootstrap || ! bootstrap.Dropdown ) {
+			return;
+		}
+
+		bootstrap.Dropdown._getParentFromElement = getParentFromElement;
+		bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
+
+		function getParentFromElement( element ) {
+			let parent;
+			const selector = bootstrap.Util.getSelectorFromElement( element );
+
+			if ( selector ) {
+				parent = document.querySelector( selector );
+			}
+
+			const result = parent || element.parentNode;
+			const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
+
+			if ( ! frmDropdownMenu ) {
+				// Not a formidable dropdown, treat like Bootstrap does normally.
+				return result;
+			}
+
+			// Temporarily add dropdown-menu class so bootstrap can initialize.
+			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
+			const toggle = result.querySelector( '.frm-dropdown-toggle' );
+			if ( toggle ) {
+				if ( ! toggle.hasAttribute( 'role' ) ) {
+					toggle.setAttribute( 'role', 'button' );
+				}
+				if ( ! toggle.hasAttribute( 'tabindex' ) ) {
+					toggle.setAttribute( 'tabindex', 0 );
+				}
+			}
+
+			// Convert <li> and <ul> tags.
+			if ( 'UL' === frmDropdownMenu.tagName ) {
+				convertBootstrapUl( frmDropdownMenu );
+			}
+
+			setTimeout(
+				function() {
+					frmDropdownMenu.classList.remove( 'dropdown-menu' );
+				},
+				0
+			);
+
+			return result;
+		}
+
+		function convertBootstrapUl( ul ) {
+			let html = ul.outerHTML;
+			html = html.replace( '<ul ', '<div ' );
+			html = html.replace( '</ul>', '</div>' );
+			html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
+			html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
+			html = html.replaceAll( '</li>', '</div>' );
+			ul.outerHTML = html;
+		}
+	}
 });
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
