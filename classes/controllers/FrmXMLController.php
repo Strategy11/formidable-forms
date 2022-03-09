@@ -201,6 +201,7 @@ class FrmXMLController {
 	 * @since 3.06
 	 *
 	 * @param object $xml The values included in the XML.
+	 * @return void
 	 */
 	private static function set_new_form_name( &$xml ) {
 		if ( ! isset( $xml->form ) ) {
@@ -209,28 +210,28 @@ class FrmXMLController {
 
 		$name        = FrmAppHelper::get_param( 'name', '', 'post', 'sanitize_text_field' );
 		$description = FrmAppHelper::get_param( 'desc', '', 'post', 'sanitize_textarea_field' );
-		if ( empty( $name ) && empty( $description ) ) {
+		if ( ! $name && ! $description ) {
 			return;
 		}
 
 		// Get the main form ID.
 		$set_name = 0;
 		foreach ( $xml->form as $form ) {
-			if ( ! isset( $form->parent_form_id ) || empty( $form->parent_form_id ) ) {
-				$set_name = $form->id;
+			if ( empty( $form->parent_form_id ) ) {
+				$set_name = (int) $form->id;
 			}
 		}
 
 		foreach ( $xml->form as $form ) {
 			// Maybe set the form name if this isn't a child form.
-			if ( $set_name == $form->id ) {
+			if ( $set_name === (int) $form->id ) {
 				$form->name        = $name;
 				$form->description = $description;
 			}
 
 			// Use a unique key to prevent editing existing form.
-			$name           = sanitize_title( $form->name );
-			$form->form_key = FrmAppHelper::get_unique_key( $name, 'frm_forms', 'form_key' );
+			$sanitized_form_name = sanitize_title( $form->name );
+			$form->form_key      = FrmAppHelper::get_unique_key( $sanitized_form_name, 'frm_forms', 'form_key' );
 		}
 	}
 

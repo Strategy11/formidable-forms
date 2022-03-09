@@ -1474,7 +1474,9 @@ select.frm_loading_lookup{
 	color:var(--repeat-icon-color)<?php echo esc_html( $important ); ?>;
 }
 
-.with_frm_style .frm_combo_inputs_container > .form-field {
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-first,
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-middle,
+.with_frm_style .frm_combo_inputs_container > .frm_form_subfield-last {
 	margin-bottom: 0 !important;
 }
 
