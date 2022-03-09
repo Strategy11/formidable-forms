@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 5.9.1
 Requires PHP: 5.6
-Stable tag: 5.2.02
+Stable tag: 5.2.02.01
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.02.01 =
+* Fix: Fixed a conflict with Duplicator Pro that was causing dropdowns to break after updating to Bootstrap 4.
+* Fix: Bottom margins were removed from credit card and address fields with last release and have been added back.
+* Fix: Imported templates with multiple forms were getting imported with the wrong name.
+* Fix: Clicking to install a quiz template was copying the NEW html into the form name input.
+
 = 5.2.02 =
 * Updated Bootstrap to version 4.6.1.
 * New: Name fields will be automatically used to define entry names if available.
@@ -451,13 +457,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: In-Theme Previews trigger a fatal error in WordPress 5.9.1.
 * Fix: Checkbox fields were appearing as broken vertical lines when using the Enfold theme.
 * Fix: A deprecation message was occasionally logged in PHP8 when trying to decode null values.
-
-= 5.2 =
-* Increased WP version requirement to 5.2.
-* New: Added a new Embed Form modal and a new Embed button that appears in the form builder and form settings pages beside Preview and Update. Now a form can be embedded into a new page or an existing page with just a few clicks.
-* Fix: A Notice was being logged that wp_enqueue_script() was called incorrectly when loading the new Widgets editor since WordPress 5.8.
-* Fix: An unexpected array value in form data would cause some text fields to break in PHP8.
-* Fix: Some AJAX calls for API loaded forms were occasionally targeting the wrong site, causing unwanted redirects.
-* Fix: Dropdown field options were including redundant class="" HTML that has been removed.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
