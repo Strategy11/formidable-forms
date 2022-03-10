@@ -173,7 +173,8 @@
 		const modal = frmDom.modal.maybeCreateModal(
 			'frm_view_application_modal',
 			{
-				content: getViewApplicationModalContent( data )
+				content: getViewApplicationModalContent( data ),
+				footer: getViewApplicationModalFooter( data )
 			}
 		);
 		modal.querySelector( '.frm-modal-title' ).textContent = data.name;
@@ -204,6 +205,10 @@
 				})
 			]
 		});
+	}
+
+	function getViewApplicationModalFooter( data ) {
+		return div();
 	}
 
 	function onClickPreventDefault( element, callback ) {
