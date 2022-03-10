@@ -68,6 +68,22 @@ let frmDom;
 
 			makeModalIntoADialogAndOpen( modal );
 			return modal;
+		},
+		footerButton: args => {
+			const output = tag( 'a', args );
+			output.href = '#';
+			if ( args.buttonType ) {
+				output.classList.add( 'button' );
+				switch ( args.buttonType ) {
+					case 'primary':
+						output.classList.add( 'button-primary', 'frm-button-primary', 'dismiss' );
+						break;
+					case 'cancel':
+						output.classList.add( 'button-secondary', 'frm-modal-cancel' );
+						break;
+				}
+			}
+			return output;
 		}
 	};
 
@@ -110,11 +126,24 @@ let frmDom;
 					jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
 					jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
 					jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
-					$modal.removeClass( 'ui-dialog-content ui-widget-content' );
-					jQuery( '.ui-widget-overlay, a.dismiss' ).bind( 'click', function( event ) {
+
+					modal.classList.remove( 'ui-dialog-content', 'ui-widget-content' );
+
+					$modal.on( 'click', 'a.dismiss', function( event ) {
 						event.preventDefault();
 						$modal.dialog( 'close' );
 					});
+
+					const overlay = document.querySelector( '.ui-widget-overlay' );
+					if ( overlay ) {
+						overlay.addEventListener(
+							'click',
+							function( event ) {
+								event.preventDefault();
+								$modal.dialog( 'close' );
+							}
+						);
+					}
 				},
 				close: function() {
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );

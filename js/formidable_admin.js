@@ -8324,20 +8324,14 @@ function frmAdminBuildJS() {
 	}
 
 	function getFormEmbedFooter( formId, formKey ) {
-		const footerButton = args => {
-			const output = frmDom.tag( 'a', args );
-			output.href = '#';
-			return output;
-		};
-
-		const doneButton = footerButton({
+		const doneButton = frmDom.modal.footerButton({
 			text: __( 'Done', 'formidable' ),
-			className: 'button button-primary frm-button-primary dismiss'
+			buttonType: 'primary'
 		});
 
-		const cancelButton = footerButton({
+		const cancelButton = frmDom.modal.footerButton({
 			text: __( 'Back', 'formidable' ),
-			className: 'button button-secondary frm-modal-cancel'
+			buttonType: 'cancel'
 		});
 		cancelButton.addEventListener(
 			'click',
