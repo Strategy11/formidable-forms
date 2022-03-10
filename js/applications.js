@@ -208,7 +208,27 @@
 	}
 
 	function getViewApplicationModalFooter( data ) {
-		return div();
+		const footerButton = args => {
+			const output = frmDom.tag( 'a', args );
+			output.href = '#';
+			return output;
+		};
+
+		const viewDemoSiteButton = footerButton({
+			text: __( 'View demo site', 'formidable' )
+		});
+
+		const buttons = [
+			
+		];
+
+		buttons.push( viewDemoSiteButton, upgradeNowButton );
+
+		// TODO add upgrade now button, but make it filterable.
+
+		return div({
+			children: [ viewDemoSiteButton, primaryActionButton ]
+		});
 	}
 
 	function onClickPreventDefault( element, callback ) {
