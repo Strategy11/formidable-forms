@@ -74,20 +74,20 @@
 		);
 		searchInput.setAttribute( 'type', 'search' );
 
-		const listener = function( event ) {
-			const search = event.target.value.toLowerCase();
+		const searchListener = function( event ) {
+			const searchValue = event.target.value.toLowerCase();
 			const cards = document.querySelectorAll( '.frm-application-card' );
 			cards.forEach(
 				card => {
-					const isHidden = -1 === card.textContent.toLowerCase().indexOf( search );
+					const isHidden = -1 === card.textContent.toLowerCase().indexOf( searchValue );
 					card.classList.toggle( 'frm_hidden', isHidden );
 				}
 			);
 		};
 
-		searchInput.addEventListener( 'input', listener );
-		searchInput.addEventListener( 'search', listener );
-		searchInput.addEventListener( 'change', listener );
+		searchInput.addEventListener( 'input', searchListener );
+		searchInput.addEventListener( 'search', searchListener );
+		searchInput.addEventListener( 'change', searchListener );
 
 		const search = tag(
 			'p',
@@ -137,20 +137,22 @@
 
 		function getCardContent() {
 			const image = tag( 'img' );
+			image.setAttribute( 'src', getThumbnailUrl( data.icon ) );
 
-			const iconSplit = data.icon.split( '.' );
-			const ext = iconSplit.pop();
-			const filename = iconSplit.pop();
-			iconSplit.push( filename + '-400x200', ext );
-			image.setAttribute( 'src', iconSplit.join( '.' ) );
-
-			const content = div({
+			return div({
 				children: [ image ]
 			});
-			return content;
 		}
 
 		return card;
+	}
+
+	function getThumbnailUrl( url ) {
+		const iconSplit = url.split( '.' );
+		const ext = iconSplit.pop();
+		const filename = iconSplit.pop();
+		iconSplit.push( filename + '-400x200', ext );
+		return iconSplit.join( '.' );
 	}
 
 	function getUseThisTemplateControl( data ) {
@@ -181,6 +183,7 @@
 	function getViewApplicationModalContent( data ) {
 		const img = tag( 'img' );
 		img.src = data.icon;
+
 		return div({
 			children: [
 				div({
