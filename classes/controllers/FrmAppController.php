@@ -483,7 +483,6 @@ class FrmAppController {
 
 		self::register_popper1();
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
-		wp_register_script( 'popper', $plugin_url . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 
 		if ( 'formidable' === $page ) {
