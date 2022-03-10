@@ -7,6 +7,7 @@
 
 	const __ = wp.i18n.__;
 	const { div, tag } = frmDom;
+	const { maybeCreateModal, footerButton } = frmDom.modal;
 
 	const container = document.getElementById( 'frm_applications_container' );
 	if ( ! container ) {
@@ -170,7 +171,7 @@
 	}
 
 	function openViewApplicationModal( data ) {
-		const modal = frmDom.modal.maybeCreateModal(
+		const modal = maybeCreateModal(
 			'frm_view_application_modal',
 			{
 				content: getViewApplicationModalContent( data ),
@@ -208,23 +209,18 @@
 	}
 
 	function getViewApplicationModalFooter( data ) {
-		const footerButton = args => {
-			const output = frmDom.tag( 'a', args );
-			output.href = '#';
-			return output;
-		};
-
 		const viewDemoSiteButton = footerButton({
-			text: __( 'View demo site', 'formidable' )
+			text: __( 'View demo site', 'formidable' ),
+			buttonType: 'secondary'
 		});
 
-		const buttons = [
-			
-		];
+		let primaryActionButton = footerButton({
+			text: 'Upgrade Now',
+			buttonType: 'primary'
+		});
 
-		buttons.push( viewDemoSiteButton, upgradeNowButton );
-
-		// TODO add upgrade now button, but make it filterable.
+		const hookName = 'frm_view_application_modal_primary_action_button';
+		primaryActionButton = wp.hooks.applyFilters( hookName, primaryActionButton );
 
 		return div({
 			children: [ viewDemoSiteButton, primaryActionButton ]

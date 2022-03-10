@@ -78,6 +78,10 @@ let frmDom;
 					case 'primary':
 						output.classList.add( 'button-primary', 'frm-button-primary', 'dismiss' );
 						break;
+					case 'secondary':
+						output.classList.add( 'button-secondary', 'frm-button-secondary' );
+						output.style.marginRight = '10px';
+						break;
 					case 'cancel':
 						output.classList.add( 'button-secondary', 'frm-modal-cancel' );
 						break;
