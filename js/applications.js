@@ -210,7 +210,8 @@
 		});
 
 		const hookName = 'frm_view_application_modal_primary_action_button';
-		primaryActionButton = wp.hooks.applyFilters( hookName, primaryActionButton );
+		const args     = { data };
+		primaryActionButton = wp.hooks.applyFilters( hookName, primaryActionButton, args );
 
 		return div({
 			children: [ viewDemoSiteButton, primaryActionButton ]
