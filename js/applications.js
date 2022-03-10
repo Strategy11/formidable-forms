@@ -145,12 +145,16 @@
 		const control = tag( 'a' );
 		control.setAttribute( 'href', '#' );
 		control.setAttribute( 'role', 'button' );
-		control.textContent = __( 'Use this template', 'formidable' );
+		control.textContent = __( 'Upgrade Now', 'formidable' );
 
 		onClickPreventDefault(
 			control,
 			() => openViewApplicationModal( data )
 		);
+
+		const hookName = 'frm_application_card_control';
+		const args = { data };
+		wp.hooks.doAction( hookName, control, args );
 
 		return control;
 	}
