@@ -8307,48 +8307,49 @@ function frmAdminBuildJS() {
 	}
 
 	function openFormEmbedModal( formId, formKey ) {
-		const modalId = 'frm_form_embed_modal';
-
-		let modal = frmDom.modal.maybeCreateModal(
-			modalId,
+		const modal = frmDom.modal.maybeCreateModal(
+			'frm_form_embed_modal',
 			{
 				title: __( 'Embed form', 'formidable' ),
-				content: getEmbedFormModalOptions( formId, formKey )
+				content: getEmbedFormModalOptions( formId, formKey ),
+				footer: getFormEmbedFooter( formId, formKey )
 			}
 		);
-
 		modal.classList.add( 'frm_common_modal' );
 		modal.classList.remove( 'frm-on-page-2' );
-
-		const footer = modal.querySelector( '.frm_modal_footer' );
-		if ( ! footer.querySelector( 'a' ) ) {
-			const doneButton = document.createElement( 'a' );
-			doneButton.textContent = __( 'Done', 'formidable' );
-			doneButton.className = 'button button-primary frm-button-primary dismiss';
-			doneButton.href = '#';
-			footer.appendChild( doneButton );
-
-			const cancelButton = document.createElement( 'a' );
-			cancelButton.href = '#';
-			cancelButton.className = 'button button-secondary frm-modal-cancel';
-			cancelButton.textContent = __( 'Back', 'formidable' );
-			cancelButton.addEventListener(
-				'click',
-				function( event ) {
-					event.preventDefault();
-					openFormEmbedModal( formId, formKey );
-				}
-			);
-			footer.appendChild( cancelButton );
-		} else {
-			const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
-			doneButton.textContent = __( 'Done', 'formidable' );
-			doneButton.parentNode.replaceChild( doneButton.cloneNode( true ), doneButton );
-		}
 
 		const $modal = jQuery( modal );
 		offsetModalY( $modal, '50px' );
 		$modal.parent().addClass( 'frm-embed-form-modal-wrapper' );
+	}
+
+	function getFormEmbedFooter( formId, formKey ) {
+		const footerButton = args => {
+			const output = frmDom.tag( 'a', args );
+			output.href = '#';
+			return output;
+		};
+
+		const doneButton = footerButton({
+			text: __( 'Done', 'formidable' ),
+			className: 'button button-primary frm-button-primary dismiss'
+		});
+
+		const cancelButton = footerButton({
+			text: __( 'Back', 'formidable' ),
+			className: 'button button-secondary frm-modal-cancel'
+		});
+		cancelButton.addEventListener(
+			'click',
+			function( event ) {
+				event.preventDefault();
+				openFormEmbedModal( formId, formKey );
+			}
+		);
+
+		return div({
+			children: [ doneButton, cancelButton ]
+		});
 	}
 
 	function offsetModalY( $modal, amount ) {
