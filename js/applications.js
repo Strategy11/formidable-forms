@@ -115,9 +115,7 @@
 			className: 'frm-application-card',
 			children: [
 				getCardHeader(),
-				div({ className: 'frm-flex' }),
-				tag( 'hr' ),
-				getCardContent()
+				div({ className: 'frm-flex' })
 			]
 		});
 
@@ -136,24 +134,11 @@
 			return header;
 		}
 
-		function getCardContent() {
-			const image = tag( 'img' );
-			image.setAttribute( 'src', getThumbnailUrl( data.icon ) );
-
-			return div({
-				children: [ image ]
-			});
-		}
+		const hookName = 'frm_application_index_card';
+		const args     = { data };
+		wp.hooks.doAction( hookName, card, args );
 
 		return card;
-	}
-
-	function getThumbnailUrl( url ) {
-		const iconSplit = url.split( '.' );
-		const ext = iconSplit.pop();
-		const filename = iconSplit.pop();
-		iconSplit.push( filename + '-400x200', ext );
-		return iconSplit.join( '.' );
 	}
 
 	function getUseThisTemplateControl( data ) {

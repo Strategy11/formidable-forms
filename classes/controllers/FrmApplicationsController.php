@@ -42,7 +42,7 @@ class FrmApplicationsController {
 	private static function get_prepared_application_data() {
 		$api          = new FrmApplicationApi();
 		$applications = $api->get_api_info();
-		$keys         = array( 'name', 'description', 'icon', 'link' );
+		$keys         = apply_filters( 'frm_application_data_keys', array( 'name', 'description', 'link' ) );
 		return array_reduce(
 			$applications,
 			function( $total, $current ) use ( $keys ) {
@@ -92,6 +92,8 @@ class FrmApplicationsController {
 
 		wp_enqueue_script( 'formidable_applications' );
 		wp_enqueue_style( 'formidable_applications' );
+
+		do_action( 'frm_applications_assets' );
 	}
 
 	/**
