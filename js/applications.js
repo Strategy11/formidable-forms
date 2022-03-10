@@ -213,6 +213,8 @@
 			text: __( 'View demo site', 'formidable' ),
 			buttonType: 'secondary'
 		});
+		viewDemoSiteButton.href = data.link;
+		viewDemoSiteButton.target = '_blank';
 
 		let primaryActionButton = footerButton({
 			text: 'Upgrade Now',
