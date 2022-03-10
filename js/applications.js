@@ -168,15 +168,8 @@
 	}
 
 	function getViewApplicationModalContent( data ) {
-		const img = tag( 'img' );
-		img.src = data.icon;
-
-		return div({
+		const output = div({
 			children: [
-				div({
-					className: 'frm-application-image-wrapper',
-					child: img
-				}),
 				div({
 					className: 'frm-application-modal-details',
 					children: [
@@ -191,6 +184,12 @@
 				})
 			]
 		});
+
+		const hookName = 'frm_view_application_modal_content';
+		const args     = { data };
+		wp.hooks.doAction( hookName, output, args );
+
+		return output;
 	}
 
 	function getViewApplicationModalFooter( data ) {
