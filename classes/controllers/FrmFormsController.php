@@ -1903,7 +1903,15 @@ class FrmFormsController {
 			$errors = array();
 		}
 
-		return $errors;
+		/**
+		 * Allows modifying the generated errors if the form was processed earlier.
+		 *
+		 * @since 5.2.03
+		 *
+		 * @param array $errors Errors data. Is empty array if no errors found.
+		 * @param array $params Form params. See {@see FrmForm::get_params()}.
+		 */
+		return apply_filters( 'frm_saved_errors', $errors, $params );
 	}
 
 	/**
