@@ -1816,8 +1816,19 @@ class FrmAppHelper {
 
 		if ( $key_check || is_numeric( $key_check ) ) {
 			$key = self::maybe_truncate_key_before_appending( $column, $key );
+
+			/**
+			 * Allow for a custom separator between the attempted key and the generated suffix.
+			 *
+			 * @since 5.2.03
+			 *
+			 * @param string $separator. Default empty.
+			 * @param string $key the key without the added suffix.
+			 */
+			$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
+
 			// Create a unique field id if it has already been used.
-			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
+			$key = $key . $separator . substr( md5( microtime() . rand() ), 0, 10 );
 		}
 
 		return $key;
