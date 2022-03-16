@@ -1805,15 +1805,24 @@ class FrmAppHelper {
 
 		$key = self::prevent_numeric_and_reserved_keys( $key );
 
-		$key_check = FrmDb::get_var(
+		$similar_keys = FrmDb::get_col(
 			$table_name,
 			array(
-				$column => $key,
-				'ID !'  => $id,
+				$column . ' like%' => $key,
+				'ID !'             => $id,
 			),
 			$column
 		);
 
+		$key_check = false;
+		foreach ( $similar_keys as $similar_key ) {
+			if ( $key === $similar_key  ) {
+				$key_check = $similar_key;
+				break;
+			}
+		}
+
+		// Create a unique field id if it has already been used.
 		if ( $key_check || is_numeric( $key_check ) ) {
 			$key = self::maybe_truncate_key_before_appending( $column, $key );
 
@@ -1827,8 +1836,12 @@ class FrmAppHelper {
 			 */
 			$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
 
-			// Create a unique field id if it has already been used.
-			$key = $key . $separator . substr( md5( microtime() . rand() ), 0, 10 );
+			do {
+				$suffix    = substr( md5( microtime() . rand() ), 0, 5 );
+				$key_check = $key . $separator . $suffix;
+			} while ( in_array( $key_check, $similar_keys, true ) );
+
+			$key = $key_check;
 		}
 
 		return $key;
