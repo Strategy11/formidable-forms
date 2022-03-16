@@ -1814,12 +1814,9 @@ class FrmAppHelper {
 			$column
 		);
 
-		$key_check = false;
-		foreach ( $similar_keys as $similar_key ) {
-			if ( $key === $similar_key  ) {
-				$key_check = $similar_key;
-				break;
-			}
+		$key_check = array_search( $key, $similar_keys, true );
+		if ( false !== $key_check ) {
+			$key_check = $key;
 		}
 
 		// Create a unique field id if it has already been used.
