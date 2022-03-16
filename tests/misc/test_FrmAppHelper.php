@@ -538,23 +538,23 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$name    = 'examplefieldkey';
 		$form_id = $this->factory->form->create();
-		$this->factory->field->create(
-			array(
-				'type'      => 'text',
-				'field_key' => $name,
-				'form_id'   => $form_id,
-			)
-		);
+		$this->add_field_to_form( $form_id, $name );
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
-		$this->assertEquals( strlen( $name ) + 5, strlen( $key ), 'Field key should be the previous key + 5 random characters' );
+		$this->assertEquals( strlen( $name ) + 1, strlen( $key ), 'Field key should be the previous key + "2" incremented counter value' );
+		$this->assertEquals( $name . 2, $key, 'Key value should increment' );
+
+		$this->add_field_to_form( $form_id, $key );
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertEquals( $name . 3, $key, 'Key value should increment' );
 
 		add_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
 
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
 		$this->assertStringContainsString( '___', $key, 'Field key should contain custom separator' );
-		$this->assertEquals( strlen( $name ) + 8, strlen( $key ), 'Field key should be the previous key + 3 character separator + 5 random characters' );
+		$this->assertEquals( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
+		$this->assertEquals( $name . '___2', $key );
 
 		remove_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
 
@@ -564,6 +564,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
 		$this->assertTrue( strlen( $unique_key ) <= 70 );
 		$this->assertNotEquals( $super_long_form_key, $unique_key );
+	}
+
+	private function add_field_to_form( $form_id, $field_key ) {
+		$type = 'text';
+		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
 	}
 
 	public static function underscore_key_separator() {

@@ -1828,9 +1828,10 @@ class FrmAppHelper {
 			 */
 			$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
 
+			$suffix = 2;
 			do {
-				$suffix    = substr( md5( microtime() . rand() ), 0, 5 );
 				$key_check = $key . $separator . $suffix;
+				++$suffix;
 			} while ( in_array( $key_check, $similar_keys, true ) );
 
 			$key = $key_check;
