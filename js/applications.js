@@ -14,8 +14,21 @@
 		return;
 	}
 
+	wp.hooks.addFilter( 'frm_application_card', 'formidable', handleCardHook );
+
 	doJsonFetch( 'get_applications_data' ).then(
-		data => renderApplications( data.applications )
+		data => {
+			const contentWrapper = div({ className: 'frm-applications-index-content' });
+
+			container.innerHTML = '';
+			container.appendChild( contentWrapper );
+
+			renderFormidableTemplates( contentWrapper, data.templates );
+
+			const hookName = 'frm_application_render_templates';
+			const args = { data };
+			wp.hooks.doAction( hookName, contentWrapper, args );
+		}
 	);
 
 	async function doJsonFetch( action ) {
@@ -27,21 +40,14 @@
 		return Promise.resolve( json.data );
 	}
 
-	function renderApplications( applications ) {
-		const templatesNav = getTemplatesNav();
-
+	function renderFormidableTemplates( contentWrapper, templates ) {
 		const templatesGrid = div({ className: 'frm_grid_container frm-application-templates-grid' });
-		applications.forEach(
+		templates.forEach(
 			application => templatesGrid.appendChild( createApplicationCard( application ) )
 		);
 
-		const contentWrapper = div({
-			className: 'frm-applications-index-content',
-			children: [ templatesNav, templatesGrid ]
-		});
-
-		container.innerHTML = '';
-		container.appendChild( contentWrapper );
+		contentWrapper.appendChild( getTemplatesNav() );
+		contentWrapper.appendChild( templatesGrid );
 	}
 
 	function getTemplatesNav() {
@@ -110,6 +116,10 @@
 		return search;
 	}
 
+	function handleCardHook( card, args ) {
+		return createApplicationCard( args.data );
+	}
+
 	function createApplicationCard( data ) {
 		const card = div({
 			className: 'frm-application-card',
@@ -147,9 +157,14 @@
 		control.setAttribute( 'role', 'button' );
 		control.textContent = __( 'Upgrade Now', 'formidable' );
 
-		onClickPreventDefault(
-			control,
-			() => openViewApplicationModal( data )
+		control.addEventListener(
+			'click',
+			event => {
+				if ( '#' === control.getAttribute( 'href' ) ) {
+					event.preventDefault();
+					openViewApplicationModal( data );
+				}
+			}
 		);
 
 		const hookName = 'frm_application_card_control';

@@ -31,15 +31,16 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
-		$applications = self::get_prepared_application_data();
-		$data         = compact( 'applications' );
+		$templates = self::get_prepared_template_data();
+		$data      = compact( 'templates' );
+		$data      = apply_filters( 'frm_applications_data', $data );
 		wp_send_json_success( $data );
 	}
 
 	/**
 	 * @return array
 	 */
-	private static function get_prepared_application_data() {
+	private static function get_prepared_template_data() {
 		$api          = new FrmApplicationApi();
 		$applications = $api->get_api_info();
 		$keys         = apply_filters( 'frm_application_data_keys', array( 'name', 'description', 'link' ) );
