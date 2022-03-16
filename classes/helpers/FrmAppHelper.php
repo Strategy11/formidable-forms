@@ -1814,13 +1814,8 @@ class FrmAppHelper {
 			$column
 		);
 
-		$key_check = array_search( $key, $similar_keys, true );
-		if ( false !== $key_check ) {
-			$key_check = $key;
-		}
-
 		// Create a unique field id if it has already been used.
-		if ( $key_check || is_numeric( $key_check ) ) {
+		if ( in_array( $key, $similar_keys, true ) ) {
 			$key = self::maybe_truncate_key_before_appending( $column, $key );
 
 			/**
