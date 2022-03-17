@@ -1807,19 +1807,36 @@ class FrmAppHelper {
 
 		$key = self::prevent_numeric_and_reserved_keys( $key );
 
-		$key_check = FrmDb::get_var(
+		$similar_keys = FrmDb::get_col(
 			$table_name,
 			array(
-				$column => $key,
-				'ID !'  => $id,
+				$column . ' like%' => $key,
+				'ID !'             => $id,
 			),
 			$column
 		);
 
-		if ( $key_check || is_numeric( $key_check ) ) {
+		// Create a unique field id if it has already been used.
+		if ( in_array( $key, $similar_keys, true ) ) {
 			$key = self::maybe_truncate_key_before_appending( $column, $key );
-			// Create a unique field id if it has already been used.
-			$key = $key . substr( md5( microtime() . rand() ), 0, 10 );
+
+			/**
+			 * Allow for a custom separator between the attempted key and the generated suffix.
+			 *
+			 * @since 5.2.03
+			 *
+			 * @param string $separator. Default empty.
+			 * @param string $key the key without the added suffix.
+			 */
+			$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
+
+			$suffix = 2;
+			do {
+				$key_check = $key . $separator . $suffix;
+				++$suffix;
+			} while ( in_array( $key_check, $similar_keys, true ) );
+
+			$key = $key_check;
 		}
 
 		return $key;
@@ -1838,6 +1855,9 @@ class FrmAppHelper {
 			$max_key_length_before_truncating = 60;
 			if ( strlen( $key ) > $max_key_length_before_truncating ) {
 				$key = substr( $key, 0, $max_key_length_before_truncating );
+				if ( is_numeric( $key ) ) {
+					$key .= 'a';
+				}
 			}
 		}
 		return $key;
