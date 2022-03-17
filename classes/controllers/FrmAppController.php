@@ -488,7 +488,7 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 
 		if ( 'formidable' === $page ) {
-			$action        = FrmAppHelper::get_param( 'frm_action', '', 'sanitize_title' );
+			$action        = FrmAppHelper::get_param( 'frm_action' );
 			$is_form_index = ! $action || in_array( $action, array( 'list', 'trash' ), true );
 			if ( $is_form_index ) {
 				// For the existing page dropdown in the Form embed modal.
