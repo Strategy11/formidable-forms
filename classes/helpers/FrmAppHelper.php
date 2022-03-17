@@ -1853,6 +1853,9 @@ class FrmAppHelper {
 			$max_key_length_before_truncating = 60;
 			if ( strlen( $key ) > $max_key_length_before_truncating ) {
 				$key = substr( $key, 0, $max_key_length_before_truncating );
+				if ( is_numeric( $key ) ) {
+					$key .= 'a';
+				}
 			}
 		}
 		return $key;
