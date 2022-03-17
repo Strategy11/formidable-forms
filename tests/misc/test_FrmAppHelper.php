@@ -513,7 +513,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_get_unique_key() {
 		global $wpdb;
-		$table_name = $wpdb->prefix . 'frm_fields';
+
+		// Test field keys
+		$table_name = 'frm_fields';
 		$column     = 'field_key';
 
 		$name = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
@@ -534,9 +536,43 @@ class test_FrmAppHelper extends FrmUnitTest {
 			array( 'form_key' => $super_long_form_key )
 		);
 
-		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, 'frm_forms', 'form_key' );
+		$name    = 'examplefieldkey';
+		$form_id = $this->factory->form->create();
+		$this->add_field_to_form( $form_id, $name );
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
+		$this->assertEquals( strlen( $name ) + 1, strlen( $key ), 'Field key should be the previous key + "2" incremented counter value' );
+		$this->assertEquals( $name . 2, $key, 'Key value should increment' );
+
+		$this->add_field_to_form( $form_id, $key );
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertEquals( $name . 3, $key, 'Key value should increment' );
+
+		add_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+
+		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
+		$this->assertStringContainsString( '___', $key, 'Field key should contain custom separator' );
+		$this->assertEquals( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
+		$this->assertEquals( $name . '___2', $key );
+
+		remove_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+
+		// Test form keys
+		$table_name = 'frm_forms';
+		$column     = 'form_key';
+		$unique_key = FrmAppHelper::get_unique_key( $super_long_form_key, $table_name, $column );
 		$this->assertTrue( strlen( $unique_key ) <= 70 );
 		$this->assertNotEquals( $super_long_form_key, $unique_key );
+	}
+
+	private function add_field_to_form( $form_id, $field_key ) {
+		$type = 'text';
+		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
+	}
+
+	public static function underscore_key_separator() {
+		return '___';
 	}
 
 	/**
