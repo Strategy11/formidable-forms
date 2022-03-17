@@ -108,6 +108,8 @@ class FrmAppController {
 			$is_white_page = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
 		}
 
+		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
+
 		return $is_white_page;
 	}
 

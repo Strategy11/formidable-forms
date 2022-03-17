@@ -22,9 +22,7 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function landing_page() {
-		?>
-		<div id="frm_applications_container"></div>
-		<?php
+		require FrmAppHelper::plugin_path() . '/classes/views/applications/index.php';
 	}
 
 	/**
@@ -102,5 +100,14 @@ class FrmApplicationsController {
 	 */
 	public static function dequeue_scripts() {
 		wp_dequeue_script( 'frm-surveys-admin' );
+	}
+
+	/**
+	 * @param string $title
+	 * @param string $context values include 'index' and 'edit'.
+	 * @return void
+	 */
+	public static function render_applications_header( $title, $context ) {
+		require FrmAppHelper::plugin_path() . '/classes/views/applications/header.php';
 	}
 }
