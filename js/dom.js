@@ -1,6 +1,8 @@
 let frmDom;
 
 ( function() {
+	/** globals frmGlobal */
+
 	let __;
 
 	if ( 'undefined' === typeof wp || 'undefined' === typeof wp.i18n || 'function' !== typeof wp.i18n.__ ) {
@@ -88,6 +90,30 @@ let frmDom;
 				}
 			}
 			return output;
+		}
+	};
+
+	const ajax = {
+		doJsonFetch: async function( action ) {
+			const response = await fetch( ajaxurl + '?action=frm_' + action );
+			const json = await response.json();
+			if ( ! json.success ) {
+				return Promise.reject( 'JSON result is not successful' );
+			}
+			return Promise.resolve( json.data );
+		},
+		doJsonPost: async function( action, formData ) {
+			formData.append( 'nonce', frmGlobal.nonce );
+			const init = {
+				method: 'POST',
+				body: formData
+			};
+			const response = await fetch( ajaxurl + '?action=frm_' + action, init );
+			const json = await response.json();
+			if ( ! json.success ) {
+				return Promise.reject( 'JSON result is not successful' );
+			}
+			return Promise.resolve( json.data );
 		}
 	};
 
@@ -194,5 +220,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { div, tag, modal };
+	frmDom = { div, tag, modal, ajax };
 }() );

@@ -8,6 +8,7 @@
 	const __ = wp.i18n.__;
 	const { div, tag } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
+	const { doJsonFetch } = frmDom.ajax;
 
 	const container = document.getElementById( 'frm_applications_container' );
 	if ( ! container ) {
@@ -30,15 +31,6 @@
 			wp.hooks.doAction( hookName, contentWrapper, args );
 		}
 	);
-
-	async function doJsonFetch( action ) {
-		const response = await fetch( ajaxurl + '?action=frm_' + action );
-		const json = await response.json();
-		if ( ! json.success ) {
-			return Promise.reject( 'JSON result is not successful' );
-		}
-		return Promise.resolve( json.data );
-	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
 		const templatesGrid = div({ className: 'frm_grid_container frm-application-templates-grid' });
@@ -231,15 +223,5 @@
 		return div({
 			children: [ viewDemoSiteButton, primaryActionButton ]
 		});
-	}
-
-	function onClickPreventDefault( element, callback ) {
-		element.addEventListener(
-			'click',
-			function( event ) {
-				event.preventDefault();
-				callback( event );
-			}
-		);
 	}
 }() );
