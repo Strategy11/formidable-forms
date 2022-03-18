@@ -8102,6 +8102,10 @@ function frmAdminBuildJS() {
 							installFormTrigger.setAttribute( 'rel', response.data.url );
 							installFormTrigger.click();
 							$modal.attr( 'frm-page', 'details' );
+
+							const hookName = 'frm_new_form_modal_form';
+							wp.hooks.doAction( hookName, $modal );
+
 							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
 
 							if ( typeof response.data.urlByKey !== 'undefined' ) {
@@ -8218,6 +8222,9 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
 
 		$modal.attr( 'frm-page', 'details' );
+
+		const hookName = 'frm_new_form_modal_form';
+		wp.hooks.doAction( hookName, $modal );
 
 		if ( '' === name ) {
 			templateNameInput.focus();
