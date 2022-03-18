@@ -29,6 +29,8 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+
 		$view = FrmAppHelper::simple_get( 'view' );
 		$data = array();
 		if ( ! $view || 'index' === $view ) {
