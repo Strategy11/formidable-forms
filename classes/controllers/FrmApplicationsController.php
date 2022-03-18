@@ -36,7 +36,12 @@ class FrmApplicationsController {
 		if ( ! $view || 'index' === $view ) {
 			$data['templates'] = self::get_prepared_template_data();
 		}
+
+		/**
+		 * @param array $data
+		 */
 		$data = apply_filters( 'frm_applications_data', $data );
+
 		wp_send_json_success( $data );
 	}
 
