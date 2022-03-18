@@ -29,9 +29,12 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
-		$templates = self::get_prepared_template_data();
-		$data      = compact( 'templates' );
-		$data      = apply_filters( 'frm_applications_data', $data );
+		$view = FrmAppHelper::simple_get( 'view' );
+		$data = array();
+		if ( ! $view || 'index' === $view ) {
+			$data['templates'] = self::get_prepared_template_data();
+		}
+		$data = apply_filters( 'frm_applications_data', $data );
 		wp_send_json_success( $data );
 	}
 
