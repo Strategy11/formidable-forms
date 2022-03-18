@@ -51,14 +51,12 @@ class FrmApplicationsController {
 	private static function get_prepared_template_data() {
 		$api          = new FrmApplicationApi();
 		$applications = $api->get_api_info();
+		$applications = array_filter( $applications, 'is_array' );
+		$applications = self::sort_templates( $applications );
 		$keys         = apply_filters( 'frm_application_data_keys', array( 'name', 'description', 'link' ) );
 		return array_reduce(
 			$applications,
 			function( $total, $current ) use ( $keys ) {
-				if ( ! is_array( $current ) ) {
-					return $total;
-				}
-
 				$application = array();
 				foreach ( $keys as $key ) {
 					$value = $current[ $key ];
@@ -80,6 +78,22 @@ class FrmApplicationsController {
 			},
 			array()
 		);
+	}
+
+	/**
+	 * Sort applications alphabetically.
+	 *
+	 * @param array<array> $applications
+	 * @return array<array>
+	 */
+	private static function sort_templates( $applications ) {
+		usort(
+			$applications,
+			function( $a, $b ) {
+				return strcmp( $a['name'], $b['name'] );
+			}
+		);
+		return $applications;
 	}
 
 	/**
