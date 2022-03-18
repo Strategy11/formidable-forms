@@ -98,16 +98,24 @@ class FrmAppController {
 			'formidable-styles2',
 			'formidable-inbox',
 			'formidable-welcome',
+			'formidable-applications',
 		);
 
 		$get_page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$is_white_page = in_array( $get_page, $white_pages );
+		$is_white_page = in_array( $get_page, $white_pages, true );
 
 		if ( ! $is_white_page ) {
 			$screen        = get_current_screen();
 			$is_white_page = ( $screen && strpos( $screen->id, 'frm_display' ) !== false );
 		}
 
+		/**
+		 * Allow another add on to style a page as a Formidable "white page", which adds a white background color.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $is_white_page
+		 */
 		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
 
 		return $is_white_page;
