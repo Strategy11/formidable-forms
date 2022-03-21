@@ -572,6 +572,12 @@ class FrmFormsController {
 		);
 
 		$form_id = FrmForm::create( $new_values );
+		/**
+		 * @since x.x
+		 *
+		 * @param int $form_id
+		 */
+		do_action( 'frm_build_new_form', $form_id );
 
 		self::create_default_email_action( $form_id );
 
