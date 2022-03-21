@@ -8805,13 +8805,12 @@ function frmAdminBuildJS() {
 	}
 
 	function installNewForm( form, action, button ) {
-		var data, redirect, href, showError,
-			formData = formToData( form ),
-			formName = formData.template_name,
-			formDesc = formData.template_desc,
-			link = form.elements.link.value;
+		const formData = formToData( form );
+		const formName = formData.template_name;
+		const formDesc = formData.template_desc;
+		const link = form.elements.link.value;
 
-		data = {
+		let data = {
 			action: action,
 			xml: link,
 			name: formName,
@@ -8819,13 +8818,18 @@ function frmAdminBuildJS() {
 			form: JSON.stringify( formData ),
 			nonce: frmGlobal.nonce
 		};
+
+		const hookName = 'frm_before_install_new_form';
+		const filterArgs = { formData };
+		data = wp.hooks.applyFilters( hookName, data, filterArgs );
+
 		postAjax( data, function( response ) {
-			redirect = response.redirect;
-			if ( typeof redirect !== 'undefined' ) {
+			if ( typeof response.redirect !== 'undefined' ) {
+				const redirect = response.redirect;
 				if ( typeof form.elements.redirect === 'undefined' ) {
 					window.location = redirect;
 				} else {
-					href = document.getElementById( 'frm-redirect-link' );
+					const href = document.getElementById( 'frm-redirect-link' );
 					if ( typeof link !== 'undefined' && href !== null ) {
 						// Show the next installation step.
 						href.setAttribute( 'href', redirect );
@@ -8839,7 +8843,7 @@ function frmAdminBuildJS() {
 
 				// Show response.message
 				if ( response.message && typeof form.elements.show_response !== 'undefined' ) {
-					showError = document.getElementById( form.elements.show_response.value );
+					const showError = document.getElementById( form.elements.show_response.value );
 					if ( showError !== null ) {
 						showError.innerHTML = response.message;
 						showError.classList.remove( 'frm_hidden' );
@@ -8940,10 +8944,10 @@ function frmAdminBuildJS() {
 	}
 
 	function postAjax( data, success ) {
-		var response, params,
-			xmlHttp = new XMLHttpRequest();
+		let response;
 
-		params = typeof data === 'string' ? data : Object.keys( data ).map(
+		const xmlHttp = new XMLHttpRequest();
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k]);
 			}
