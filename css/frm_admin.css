@@ -3042,7 +3042,10 @@ a.frm_option_icon:hover::before {
 
 .frm-btn-group.btn-group, .frm-btn-group.btn-group-vertical {
 	display: block;
-	vertical-align: middle;
+}
+
+.frm-btn-group.btn-group button {
+	box-sizing: border-box;
 }
 
 .frm_scale {
