@@ -3048,10 +3048,6 @@ a.frm_option_icon:hover::before {
 	display: block;
 }
 
-.frm-btn-group.btn-group button {
-	box-sizing: border-box;
-}
-
 .frm_scale {
 	text-align: center;
 	float: left;
