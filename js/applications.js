@@ -144,7 +144,7 @@
 	}
 
 	function getUseThisTemplateControl( data ) {
-		const control = tag( 'a' );
+		let control = tag( 'a' );
 		control.setAttribute( 'href', '#' );
 		control.setAttribute( 'role', 'button' );
 		control.textContent = __( 'Upgrade Now', 'formidable' );
@@ -161,7 +161,7 @@
 
 		const hookName = 'frm_application_card_control';
 		const args = { data };
-		wp.hooks.doAction( hookName, control, args );
+		control = wp.hooks.applyFilters( hookName, control, args );
 
 		return control;
 	}

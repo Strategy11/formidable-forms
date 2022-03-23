@@ -467,6 +467,8 @@ class FrmAppController {
 		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
+		self::register_popper1();
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
@@ -491,9 +493,7 @@ class FrmAppController {
 			$dependencies[] = 'wp-color-picker';
 		}
 
-		self::register_popper1();
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
-		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 
 		if ( 'formidable' === $page ) {
 			$action        = FrmAppHelper::get_param( 'frm_action' );
