@@ -3,7 +3,7 @@
 * New: Updated how unique field and form keys are generated for shorter unique keys.
 * New: Added a new frm_unique_field_key_separator filter for unique field keys.
 * New: Added a new frm_saved_errors filter.
-* Fix: Form styling was not loading when set to "only on applicable pages" if All in One SEO was active.
+* Fix: Fixed a conflict All in One SEO causing form styling not to load when set to "only on applicable pages".
 
 = 5.2.02.01 =
 * Fix: Fixed a conflict with Duplicator Pro that was causing dropdowns to break after updating to Bootstrap 4.
