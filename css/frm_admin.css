@@ -3004,6 +3004,11 @@ a.frm_option_icon:hover::before {
 	min-width: 40px;
 }
 
+.frm-btn-group .multiselect.dropdown-toggle {
+	box-sizing: border-box;
+	min-height: unset;
+}
+
 .accordion-container .frm-dropdown-menu:before,
 .accordion-container .multiselect.dropdown-toggle:before {
 	font-family: "s11-fp" !important;
@@ -3042,7 +3047,6 @@ a.frm_option_icon:hover::before {
 
 .frm-btn-group.btn-group, .frm-btn-group.btn-group-vertical {
 	display: block;
-	vertical-align: middle;
 }
 
 .frm_scale {
