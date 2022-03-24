@@ -3004,8 +3004,9 @@ a.frm_option_icon:hover::before {
 	min-width: 40px;
 }
 
-.multiselect.dropdown-toggle {
+.frm-btn-group .multiselect.dropdown-toggle {
 	box-sizing: border-box;
+	min-height: unset;
 }
 
 .accordion-container .frm-dropdown-menu:before,
