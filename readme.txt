@@ -441,7 +441,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.2.03 =
 * New: Updated how unique field and form keys are generated for shorter unique keys.
 * New: Added a new frm_unique_field_key_separator filter for unique field keys.
-* New: Added a new frm_saved_errors filter.
+* New: Added a new frm_saved_errors filter for extending custom form validation.
 * Fix: Fixed a conflict with All in One SEO that was causing multiselect dropdowns to appear larger than expected.
 
 = 5.2.02.01 =
