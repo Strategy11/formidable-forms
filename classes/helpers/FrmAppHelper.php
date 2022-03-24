@@ -1622,12 +1622,23 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Check if current value matches.
+	 *
+	 * @param array  $values
+	 * @param string $current
+	 * @return bool
+	 */
 	public static function check_selected( $values, $current ) {
 		$values  = self::recursive_function_map( $values, 'trim' );
 		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
 		$current = htmlspecialchars_decode( trim( $current ) );
 
-		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
+		if ( is_array( $values ) ) {
+			return in_array( $current, $values ) || implode( ', ', $values ) === $current;
+		}
+
+		return $values == $current;
 	}
 
 	public static function recursive_function_map( $value, $function ) {
