@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.2
-Tested up to: 5.9.1
+Tested up to: 5.9.2
 Requires PHP: 5.6
-Stable tag: 5.2.02.01
+Stable tag: 5.2.03
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.03 =
+* New: Updated how unique field and form keys are generated for shorter unique keys.
+* New: Added a new frm_unique_field_key_separator filter for unique field keys.
+* New: Added a new frm_saved_errors filter for extending custom form validation.
+* Fix: Fixed a conflict with All in One SEO that was causing multiselect dropdowns to appear larger than expected.
+
 = 5.2.02.01 =
 * Fix: Fixed a conflict with Duplicator Pro that was causing dropdowns to break after updating to Bootstrap 4.
 * Fix: Bottom margins were removed from credit card and address fields with last release and have been added back.
@@ -451,11 +457,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Section icon dropdown toggles were not displaying updated changes.
 * Fix: Prevent a PHP 8.1 deprecation message where null was being passed to substr.
 * Fix: Name fields with no descriptions were still displaying bottom margins.
-
-= 5.2.01 =
-* New: Added new checkboxes to toggle form title and description visibility. The form preview page will no longer always show title and description by default, and will use these checkboxes instead.
-* Fix: In-Theme Previews trigger a fatal error in WordPress 5.9.1.
-* Fix: Checkbox fields were appearing as broken vertical lines when using the Enfold theme.
-* Fix: A deprecation message was occasionally logged in PHP8 when trying to decode null values.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
