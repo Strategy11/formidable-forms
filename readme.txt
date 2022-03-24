@@ -443,6 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added a new frm_unique_field_key_separator filter for unique field keys.
 * New: Added a new frm_saved_errors filter.
 * Fix: Fixed a conflict with All in One SEO that was causing form styling not to load when set to "only on applicable pages".
+* Fix: Fixed a conflict with All in One SEO that was causing multiselect dropdowns to appear larger than expected.
 
 = 5.2.02.01 =
 * Fix: Fixed a conflict with Duplicator Pro that was causing dropdowns to break after updating to Bootstrap 4.
