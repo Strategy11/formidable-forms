@@ -10139,9 +10139,9 @@ jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
 
-		fromDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
+		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
 		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
-			const toggle = result.querySelector( '.frm-dropdown-toggle' );
+			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
 				if ( ! toggle.hasAttribute( 'role' ) ) {
 					toggle.setAttribute( 'role', 'button' );
@@ -10155,6 +10155,16 @@ jQuery( document ).ready(
 			if ( 'UL' === frmDropdownMenu.tagName ) {
 				convertBootstrapUl( frmDropdownMenu );
 			}
+		}
+
+		function convertBootstrapUl( ul ) {
+			let html = ul.outerHTML;
+			html = html.replace( '<ul ', '<div ' );
+			html = html.replace( '</ul>', '</div>' );
+			html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
+			html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
+			html = html.replaceAll( '</li>', '</div>' );
+			ul.outerHTML = html;
 		}
 	}
 );
