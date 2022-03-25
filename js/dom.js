@@ -113,7 +113,7 @@ let frmDom;
 			if ( ! json.success ) {
 				return Promise.reject( 'JSON result is not successful' );
 			}
-			return Promise.resolve( json.data );
+			return Promise.resolve( 'undefined' !== typeof json.data ? json.data : json );
 		}
 	};
 
