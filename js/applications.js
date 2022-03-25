@@ -75,7 +75,7 @@
 
 		const searchListener = function( event ) {
 			const searchValue = event.target.value.toLowerCase();
-			const cards = document.querySelectorAll( '.frm-application-card' );
+			const cards = Array.from( document.getElementsByClassName( 'frm-application-template-card' ) );
 			cards.forEach(
 				card => {
 					const isHidden = -1 === card.textContent.toLowerCase().indexOf( searchValue );
@@ -120,6 +120,10 @@
 				div({ className: 'frm-flex' })
 			]
 		});
+
+		if ( data.url ) {
+			card.classList.add( 'frm-application-template-card' );
+		}
 
 		function getCardHeader() {
 			const title = tag(
