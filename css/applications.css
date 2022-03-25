@@ -105,3 +105,23 @@
 	opacity: 0.65;
 	margin-bottom: 5px;
 }
+
+@media only screen and (max-width: 1050px) {
+	.frm-application-card {
+		grid-column: span 6/span 6; /* treat as frm6 */
+	}
+
+	.frm-application-card:nth-child(2) ~ .frm-application-card {
+		margin-top: 20px;
+	}
+}
+
+@media only screen and (max-width: 782px) {
+	.frm-application-card {
+		grid-column: span 12/span 12; /* treat as frm12 */
+	}
+
+	.frm-application-card:nth-child(1) ~ .frm-application-card {
+		margin-top: 20px;
+	}
+}
