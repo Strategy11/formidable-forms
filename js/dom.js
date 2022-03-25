@@ -117,6 +117,49 @@ let frmDom;
 		}
 	};
 
+	const bootstrap = {
+		setupBootstrapDropdowns( callback ) {
+			if ( ! window.bootstrap || ! window.bootstrap.Dropdown ) {
+				return;
+			}
+
+			window.bootstrap.Dropdown._getParentFromElement = getParentFromElement;
+			window.bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
+
+			function getParentFromElement( element ) {
+				let parent;
+				const selector = window.bootstrap.Util.getSelectorFromElement( element );
+
+				if ( selector ) {
+					parent = document.querySelector( selector );
+				}
+
+				const result = parent || element.parentNode;
+				const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
+
+				if ( ! frmDropdownMenu ) {
+					// Not a formidable dropdown, treat like Bootstrap does normally.
+					return result;
+				}
+	
+				// Temporarily add dropdown-menu class so bootstrap can initialize.
+				frmDropdownMenu.classList.add( 'dropdown-menu' );
+				setTimeout(
+					function() {
+						frmDropdownMenu.classList.remove( 'dropdown-menu' );
+					},
+					0
+				);
+
+				if ( 'function' === typeof callback ) {
+					callback( frmDropdownMenu );
+				}
+
+				return result;
+			}
+		}
+	};
+
 	function getModalHelper( modal, appendTo ) {
 		return function( child, uniqueClassName ) {
 			let element = modal.querySelector( '.' + uniqueClassName );
@@ -220,5 +263,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { div, tag, modal, ajax };
+	frmDom = { div, tag, modal, ajax, bootstrap };
 }() );

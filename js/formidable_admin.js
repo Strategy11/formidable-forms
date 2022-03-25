@@ -10135,37 +10135,12 @@ function frmAdminBuildJS() {
 
 frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function() {
-	frmAdminBuild.init();
+jQuery( document ).ready(
+	() => {
+		frmAdminBuild.init();
 
-	updateDropdownsForBootstrap4();
-	function updateDropdownsForBootstrap4() {
-		if ( ! bootstrap || ! bootstrap.Dropdown ) {
-			return;
-		}
-
-		bootstrap.Dropdown._getParentFromElement = getParentFromElement;
-		bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
-
-		function getParentFromElement( element ) {
-			let parent;
-			const selector = bootstrap.Util.getSelectorFromElement( element );
-
-			if ( selector ) {
-				parent = document.querySelector( selector );
-			}
-
-			const result = parent || element.parentNode;
-			const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
-
-			if ( ! frmDropdownMenu ) {
-				// Not a formidable dropdown, treat like Bootstrap does normally.
-				return result;
-			}
-
-			// Temporarily add dropdown-menu class so bootstrap can initialize.
-			frmDropdownMenu.classList.add( 'dropdown-menu' );
-
+		fromDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
+		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
 			const toggle = result.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
 				if ( ! toggle.hasAttribute( 'role' ) ) {
@@ -10180,28 +10155,9 @@ jQuery( document ).ready( function() {
 			if ( 'UL' === frmDropdownMenu.tagName ) {
 				convertBootstrapUl( frmDropdownMenu );
 			}
-
-			setTimeout(
-				function() {
-					frmDropdownMenu.classList.remove( 'dropdown-menu' );
-				},
-				0
-			);
-
-			return result;
-		}
-
-		function convertBootstrapUl( ul ) {
-			let html = ul.outerHTML;
-			html = html.replace( '<ul ', '<div ' );
-			html = html.replace( '</ul>', '</div>' );
-			html = html.replaceAll( '<li>', '<div class="dropdown-item">' );
-			html = html.replaceAll( '<li class="', '<div class="dropdown-item ' );
-			html = html.replaceAll( '</li>', '</div>' );
-			ul.outerHTML = html;
 		}
 	}
-});
+);
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
