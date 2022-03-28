@@ -177,11 +177,6 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
 				'addon' => 'signature',
 			),
-			'quiz_score' => array(
-				'name'  => __( 'Quiz Score', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_percent_icon frm_show_upgrade',
-				'addon' => 'quizzes',
-			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
