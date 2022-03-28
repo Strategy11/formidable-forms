@@ -660,8 +660,8 @@ class FrmEntryValidate {
 		}
 
 		FrmAppHelper::unserialize_or_decode( $field_data->options );
-		if ( ! $field_data->options ) { // Check if an error happens when unserializing.
-			return false;
+		if ( ! $field_data->options ) { // Check if an error happens when unserializing, or empty options.
+			return true;
 		}
 
 		$last_key = array_key_last( $field_data->options );

@@ -169,6 +169,6 @@ class test_FrmEntryValidate extends FrmUnitTest {
 		foreach ( array( 'radio', 'select', 'scale', 'star', 'range', 'toggle' ) as $field_type ) {
 			$this->assertFalse( isset( $values['item_meta'][ $fields[ $field_type ]->id ] ) );
 		}
-		$this->assertTrue( isset( $values['item_meta'][ $fields['checkbox']->id ] ) );
+		$this->assertFalse( isset( $values['item_meta'][ $fields['checkbox']->id ] ) );
 	}
 }
