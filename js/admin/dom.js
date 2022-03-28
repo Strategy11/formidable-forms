@@ -135,7 +135,7 @@ let frmDom;
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 				nonSelectedText: '',
 				onDropdownShown: function( event ) {
-					var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
+					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
 					if ( action.length ) {
 						jQuery( '#wpcontent' ).on( 'click', function() {
 							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
@@ -222,13 +222,14 @@ let frmDom;
 				if ( element.attr( 'data-post-type' ) ) {
 					urlParams += '&post_type=' + element.attr( 'data-post-type' );
 				}
+
 				element.autocomplete({
 					delay: 100,
 					minLength: 0,
 					source: ajaxurl + urlParams,
-					change: autocomplete.autoCompleteSelectBlank,
-					select: autocomplete.autoCompleteSelectFromResults,
-					focus: autocomplete.autoCompleteFocus,
+					change: autocomplete.selectBlank,
+					select: autocomplete.completeSelectFromResults,
+					focus: () => false,
 					position: {
 						my: 'left top',
 						at: 'left bottom',
@@ -236,12 +237,15 @@ let frmDom;
 					},
 					response: function( event, ui ) {
 						if ( ! ui.content.length ) {
-							var noResult = { value: '', label: frm_admin_js.no_items_found };
+							const noResult = {
+								value: '',
+								label: frm_admin_js.no_items_found
+							};
 							ui.content.push( noResult );
 						}
 					},
 					create: function() {
-						var $container = jQuery( this ).parent();
+						const $container = jQuery( this ).parent();
 
 						if ( $container.length === 0 ) {
 							$container = 'body';
@@ -259,17 +263,13 @@ let frmDom;
 			});
 		},
 
-		autoCompleteFocus: function() {
-			return false;
-		},
-
-		autoCompleteSelectBlank: function( e, ui ) {
+		selectBlank: function( e, ui ) {
 			if ( ui.item === null ) {
 				this.nextElementSibling.value = '';
 			}
 		},
 
-		autoCompleteSelectFromResults: function( e, ui ) {
+		completeSelectFromResults: function( e, ui ) {
 			e.preventDefault();
 
 			if ( ui.item.value === '' ) {
