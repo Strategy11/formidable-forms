@@ -165,7 +165,7 @@
 								dropdownWrapper.innerHTML = response.html;
 								content.appendChild( dropdownWrapper );
 								editPageUrl = response.edit_page_url + '&frmForm=' + formId;
-								initSelectionAutocomplete();
+								frmDom.autocomplete.initSelectionAutocomplete();
 							}
 						}
 					});
@@ -393,12 +393,7 @@
 		element.textContent = message;
 		document.body.appendChild( element );
 
-		setTimeout(
-			function() {
-				document.body.removeChild( element );
-			},
-			1000
-		);
+		setTimeout( () => document.body.removeChild( element ), 1000 );
 	}
 
 	/**
