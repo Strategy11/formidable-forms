@@ -8904,6 +8904,35 @@ function frmAdminBuildJS() {
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
 
 			addMultiselectLabelListener();
+
+			frmAdminBuild.hooks.addFilter(
+				'frmBeforeEmbedFormModal',
+				( meta, element ) => {
+					let formId, formKey;
+					const row = element.closest( 'tr' );
+
+					if ( row ) {
+						// Embed icon on form index.
+						formId = parseInt( row.querySelector( '.column-id' ).textContent );
+						formKey = row.querySelector( '.column-form_key' ).textContent;
+					} else {
+						// Embed button in form builder / form settings.
+						formId = document.getElementById( 'form_id' ).value;
+		
+						const formKeyInput = document.getElementById( 'frm_form_key' );
+						if ( formKeyInput ) {
+							formKey = formKeyInput.value;
+						} else {
+							const previewDrop = document.getElementById( 'frm-previewDrop' );
+							if ( previewDrop ) {
+								formKey = previewDrop.nextElementSibling.querySelector( '.dropdown-item a' ).getAttribute( 'href' ).split( 'form=' )[1];
+							}
+						}
+					}
+
+					return [ formId, formKey ];
+				}
+			);
 		},
 
 		buildInit: function() {

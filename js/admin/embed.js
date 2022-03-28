@@ -18,7 +18,7 @@
 	}
 
 	function listenForFormEmbedClick( event ) {
-		var clicked = false;
+		let clicked = false;
 
 		const element = event.target;
 		const tag = element.tagName.toLowerCase();
@@ -36,24 +36,9 @@
 		if ( clicked ) {
 			event.preventDefault();
 
-			const row = element.closest( 'tr' );
-			let formId, formKey;
-
-			if ( row ) {
-				formId = parseInt( row.querySelector( '.column-id' ).textContent );
-				formKey = row.querySelector( '.column-form_key' ).textContent;
-			} else {
-				formId = document.getElementById( 'form_id' ).value;
-
-				const formKeyInput = document.getElementById( 'frm_form_key' );
-				if ( formKeyInput ) {
-					formKey = formKeyInput.value;
-				} else {
-					const previewDrop = document.getElementById( 'frm-previewDrop' );
-					if ( previewDrop ) {
-						formKey = previewDrop.nextElementSibling.querySelector( '.dropdown-item a' ).getAttribute( 'href' ).split( 'form=' )[1];
-					}
-				}
+			const [ formId, formKey ] = wp.hooks.applyFilters( 'frmBeforeEmbedFormModal', [ 0, 0 ], element );
+			if ( ! formId || ! formKey ) {
+				return;
 			}
 
 			openFormEmbedModal( formId, formKey );
@@ -314,7 +299,7 @@
 		];
 
 		const filterArgs = { formId, formKey };
-		examples = frmAdminBuild.hooks.applyFilters( 'frmEmbedFormExamples', examples, filterArgs );
+		examples = wp.hooks.applyFilters( 'frmEmbedFormExamples', examples, filterArgs );
 
 		return examples;
 	}
@@ -399,10 +384,8 @@
 	}
 
 	function speak( message ) {
-		let element, id;
-
-		element = document.createElement( 'div' );
-		id = 'speak-' + Date.now();
+		const element = document.createElement( 'div' );
+		const id = 'speak-' + getAutoId();
 
 		element.setAttribute( 'aria-live', 'assertive' );
 		element.setAttribute( 'id', id );

@@ -198,8 +198,8 @@ let frmDom;
 	const autocomplete = {
 		initSelectionAutocomplete: function() {
 			if ( jQuery.fn.autocomplete ) {
-				initAutocomplete( 'page' );
-				initAutocomplete( 'user' );
+				frmDom.autocomplete.initAutocomplete( 'page' );
+				frmDom.autocomplete.initAutocomplete( 'user' );
 			}
 		},
 		/**
