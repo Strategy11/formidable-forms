@@ -195,6 +195,93 @@ let frmDom;
 		multiselect
 	};
 
+	const autocomplete = {
+		initSelectionAutocomplete: function() {
+			if ( jQuery.fn.autocomplete ) {
+				initAutocomplete( 'page' );
+				initAutocomplete( 'user' );
+			}
+		},
+		/**
+		 * Init autocomplete.
+		 *
+		 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
+		 *
+		 * @param {String} type Type of data. Accepts `page` or `user`.
+		 * @param {String|Object} container Container class or element. Default is null.
+		 */
+		initAutocomplete: function( type, container ) {
+			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
+			const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
+
+			elements.each( function() {
+				let urlParams = basedUrlParams;
+				const element = jQuery( this );
+
+				// Check if a custom post type is specific.
+				if ( element.attr( 'data-post-type' ) ) {
+					urlParams += '&post_type=' + element.attr( 'data-post-type' );
+				}
+				element.autocomplete({
+					delay: 100,
+					minLength: 0,
+					source: ajaxurl + urlParams,
+					change: autocomplete.autoCompleteSelectBlank,
+					select: autocomplete.autoCompleteSelectFromResults,
+					focus: autocomplete.autoCompleteFocus,
+					position: {
+						my: 'left top',
+						at: 'left bottom',
+						collision: 'flip'
+					},
+					response: function( event, ui ) {
+						if ( ! ui.content.length ) {
+							var noResult = { value: '', label: frm_admin_js.no_items_found };
+							ui.content.push( noResult );
+						}
+					},
+					create: function() {
+						var $container = jQuery( this ).parent();
+
+						if ( $container.length === 0 ) {
+							$container = 'body';
+						}
+
+						jQuery( this ).autocomplete( 'option', 'appendTo', $container );
+					}
+				})
+				.on( 'focus', function() {
+					// Show options on click to make it work more like a dropdown.
+					if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+						jQuery( this ).autocomplete( 'search', this.value );
+					}
+				});
+			});
+		},
+
+		autoCompleteFocus: function() {
+			return false;
+		},
+
+		autoCompleteSelectBlank: function( e, ui ) {
+			if ( ui.item === null ) {
+				this.nextElementSibling.value = '';
+			}
+		},
+
+		autoCompleteSelectFromResults: function( e, ui ) {
+			e.preventDefault();
+
+			if ( ui.item.value === '' ) {
+				this.value = '';
+			} else {
+				this.value = ui.item.label;
+			}
+
+			this.nextElementSibling.value = ui.item.value;
+		}
+	};
+
 	function getModalHelper( modal, appendTo ) {
 		return function( child, uniqueClassName ) {
 			let element = modal.querySelector( '.' + uniqueClassName );
@@ -298,5 +385,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { div, tag, modal, ajax, bootstrap };
+	frmDom = { div, tag, modal, ajax, bootstrap, autocomplete };
 }() );
