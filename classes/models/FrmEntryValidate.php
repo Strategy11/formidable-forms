@@ -630,12 +630,61 @@ class FrmEntryValidate {
 	 * @param array $values Entry values.
 	 */
 	private static function skip_adding_values_to_akismet( &$values ) {
-		$skipped_field_ids = self::get_akismet_skipped_field_ids( $values );
-		foreach ( $skipped_field_ids as $field_id ) {
-			if ( isset( $values['item_meta'][ $field_id ] ) ) {
-				unset( $values['item_meta'][ $field_id ] );
+		$skipped_fields = self::get_akismet_skipped_field_ids( $values );
+		foreach ( $skipped_fields as $skipped_field ) {
+			if ( ! isset( $values['item_meta'][ $skipped_field->id ] ) ) {
+				continue;
+			}
+
+			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
+				unset( $values['item_meta'][ $skipped_field->id ] );
+				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
+					unset( $values['item_meta']['other'][ $skipped_field->id ] );
+				}
 			}
 		}
+	}
+
+	/**
+	 * Checks if a skip field should be really skipped.
+	 *
+	 * @since 5.02.04
+	 *
+	 * @param object $field_data Object contains `id` and `options`.
+	 * @param array  $values     Entry values.
+	 * @return bool
+	 */
+	private static function should_really_skip_field( $field_data, $values ) {
+		if ( empty( $field_data->options ) ) { // This is skipped field types.
+			return true;
+		}
+
+		FrmAppHelper::unserialize_or_decode( $field_data->options );
+		if ( ! $field_data->options ) { // Check if an error happens when unserializing, or empty options.
+			return true;
+		}
+
+		$last_key = array_key_last( $field_data->options );
+
+		// If a choice field has no Other option.
+		if ( is_numeric( $last_key ) || 0 !== strpos( $last_key, 'other_' ) ) {
+			return true;
+		}
+
+		// If a choice field has Other option, but Other is not selected.
+		if ( empty( $values['item_meta']['other'][ $field_data->id ] ) ) {
+			return true;
+		}
+
+		// Check if submitted value is same as one of field option.
+		foreach ( $field_data->options as $option ) {
+			$option_value = ! is_array( $option ) ? $option : ( isset( $option['value'] ) ? $option['value'] : '' );
+			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -643,6 +692,7 @@ class FrmEntryValidate {
 	 *
 	 * @since 5.0.09
 	 * @since 5.0.13 Move out get_all_form_ids_and_flatten_meta() call and get `form_ids` from `$values`.
+	 * @since 5.2.04 This method returns array of object contains `id` and `options` instead of array of `id` only.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
@@ -658,18 +708,11 @@ class FrmEntryValidate {
 		$where = array(
 			array(
 				'form_id' => $values['form_ids'],
-				array(
-					array(
-						'field_options not like' => ';s:5:"other";s:1:"1"',
-						'type'                   => $has_other_types,
-					),
-					'or'   => 1,
-					'type' => $skipped_types,
-				),
+				'type'    => array_merge( $skipped_types, $has_other_types ),
 			),
 		);
 
-		return FrmDb::get_col( 'frm_fields', $where );
+		return FrmDb::get_results( 'frm_fields', $where, 'id,options' );
 	}
 
 	/**
