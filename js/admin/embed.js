@@ -10,14 +10,21 @@
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 
 	let autoId = 0;
+	let modal;
 
-	initEmbedFormModal();
+	const state = {
+		type: 'form',
+		objectId: 0,
+		objectKey: ''
+	};
 
-	function initEmbedFormModal() {
-		document.addEventListener( 'click', listenForFormEmbedClick );
+	initEmbedModal();
+
+	function initEmbedModal() {
+		document.addEventListener( 'click', listenForEmbedClick );
 	}
 
-	function listenForFormEmbedClick( event ) {
+	function listenForEmbedClick( event ) {
 		let clicked = false;
 
 		const element = event.target;
@@ -26,32 +33,54 @@
 		switch ( tag ) {
 			case 'a':
 				clicked = 'frm-embed-action' === element.id || element.classList.contains( 'frm-embed-form' );
+
+				if ( clicked ) {
+					state.type = 'form';
+				} else {
+					clicked = element.classList.contains( 'frm-embed-view' );
+					if ( clicked ) {
+						state.type = 'view';
+					}
+				}
 				break;
 
 			case 'svg':
 				clicked = element.parentNode.classList.contains( 'frm-embed-form' );
+				if ( clicked ) {
+					state.type = 'form';
+				}
 				break;
 		}
 
 		if ( clicked ) {
 			event.preventDefault();
 
-			const [ formId, formKey ] = wp.hooks.applyFilters( 'frmBeforeEmbedFormModal', [ 0, 0 ], element );
-			if ( ! formId || ! formKey ) {
-				return;
-			}
+			const hookName = 'frmBeforeEmbedModal';
+			const initialIds = [ 0, 0 ];
+			const hookArgs = {
+				element,
+				type: state.type
+			};
+			const [ objectId, objectKey ] = wp.hooks.applyFilters( hookName, initialIds, hookArgs );
 
-			openFormEmbedModal( formId, formKey );
+			if ( objectId && objectKey ) {
+				state.objectId = objectId;
+				state.objectKey = objectKey;
+				openEmbedModal();
+			}
 		}
 	}
 
-	function openFormEmbedModal( formId, formKey ) {
-		const modal = maybeCreateModal(
-			'frm_form_embed_modal',
+	function openEmbedModal() {
+		/* translators: %s type: ie form, view. */
+		const title = __( 'Embed %s', 'formidable' ).replace( '%s', getTypeDescription() );
+
+		modal = maybeCreateModal(
+			'frm_embed_modal',
 			{
-				title: __( 'Embed form', 'formidable' ),
-				content: getEmbedFormModalOptions( formId, formKey ),
-				footer: getFormEmbedFooter( formId, formKey )
+				title,
+				content: getModalOptions(),
+				footer: getModalFooter()
 			}
 		);
 		modal.classList.add( 'frm_common_modal' );
@@ -59,10 +88,10 @@
 
 		const $modal = jQuery( modal );
 		offsetModalY( $modal, '50px' );
-		$modal.parent().addClass( 'frm-embed-form-modal-wrapper' );
+		$modal.parent().addClass( 'frm-embed-modal-wrapper' );
 	}
 
-	function getFormEmbedFooter( formId, formKey ) {
+	function getModalFooter() {
 		const doneButton = footerButton({
 			text: __( 'Done', 'formidable' ),
 			buttonType: 'primary'
@@ -76,7 +105,7 @@
 			'click',
 			function( event ) {
 				event.preventDefault();
-				openFormEmbedModal( formId, formKey );
+				openEmbedModal();
 			}
 		);
 
@@ -94,14 +123,24 @@
 		$modal.dialog( 'option', 'position', position );
 	}
 
-	function getEmbedFormModalOptions( formId, formKey ) {
-		const content = div({ className: 'frm_embed_form_content frm_wrap' });
+	function getModalOptions() {
+		const content = div({ className: 'frm_embed_modal_content frm_wrap' });
+		const typeDescription = getTypeDescription();
+
+		/* translators: %s type: ie form, view. */
+		const existingPageDescription = __( 'Embed your %s into an existing page.', 'formidable' ).replace( '%s', typeDescription );
+
+		/* translators: %s type: ie form, view. */
+		const newPageDescription = __( 'Put your %s on a newly created page.', 'formidable' ).replace( '%s', typeDescription );
+
+		/* translators: %s type: ie form, view. */
+		const insertManuallyDescription = __( 'Use WP shortcodes or PHP code to put the %s in any place.', 'formidable' ).replace( '%s', typeDescription );
 
 		const options = [
 			{
 				icon: 'frm_select_existing_page_icon',
 				label: __( 'Select existing page', 'formidable' ),
-				description: __( 'Embed your form into an existing page.', 'formidable' ),
+				description: existingPageDescription,
 				callback: () => {
 					content.innerHTML = '';
 
@@ -124,57 +163,71 @@
 							nonce: frmGlobal.nonce
 						},
 						dataType: 'json',
-						success: function( response ) {
-							if ( 'object' === typeof response && 'string' === typeof response.html ) {
-								content.classList.remove( 'frm-loading-page-options' );
-								content.innerHTML = '';
-
-								const title = getLabel( __( 'Select the page you want to embed your form into.', 'formidable' ) );
-								title.setAttribute( 'for', 'frm_page_dropdown' );
-								content.appendChild( title );
-
-								let editPageUrl;
-
-								const modal = document.getElementById( 'frm_form_embed_modal' );
-								doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
-								doneButton.classList.remove( 'dismiss' );
-								doneButton.textContent = __( 'Insert Form', 'formidable' );
-								doneButton.addEventListener(
-									'click',
-									function( event ) {
-										event.preventDefault();
-
-										const pageDropdown = modal.querySelector( '[name="frm_page_dropdown"]' );
-										modal.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
-
-										const pageId = pageDropdown.value;
-
-										if ( '0' === pageId || '' === pageId ) {
-											const error = div({ className: 'frm_error_style' });
-											error.setAttribute( 'role', 'alert' );
-											error.textContent = __( 'Please select a page', 'formidable' );
-											content.insertBefore( error, title.nextElementSibling );
-											return;
-										}
-
-										window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
-									}
-								);
-
-								const dropdownWrapper = div();
-								dropdownWrapper.innerHTML = response.html;
-								content.appendChild( dropdownWrapper );
-								editPageUrl = response.edit_page_url + '&frmForm=' + formId;
-								frmDom.autocomplete.initSelectionAutocomplete();
-							}
-						}
+						success: addExistingPageDropdown
 					});
+
+					function addExistingPageDropdown( response ) {
+						if ( 'object' !== typeof response || 'string' !== typeof response.html ) {
+							return;
+						}
+
+						content.classList.remove( 'frm-loading-page-options' );
+						content.innerHTML = '';
+
+						const typeDescription = getTypeDescription();
+
+						/* translators: %s: type (ie. view, form). */
+						const titleText = __( 'Select the page you want to embed your %s into.', 'formidable' ).replace( '%s', typeDescription );
+
+						const title = getLabel( titleText );
+						title.setAttribute( 'for', 'frm_page_dropdown' );
+						content.appendChild( title );
+
+						let editPageUrl;
+
+						doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+						doneButton.classList.remove( 'dismiss' );
+						/* translators: %s: type (ie. view, form). */
+						doneButton.textContent = __( 'Insert %s', 'formidable' ).replace( '%s', typeDescription );
+						doneButton.addEventListener( 'click', redirectToExistingPageWithInjectedShortcode );
+
+						const dropdownWrapper = div();
+						dropdownWrapper.innerHTML = response.html;
+						content.appendChild( dropdownWrapper );
+
+						if ( 'form' === state.type ) {
+							editPageUrl = response.edit_page_url + '&frmForm=' + state.objectId;
+						} else {
+							editPageUrl = response.edit_page_url; // TODO
+						}
+
+						frmDom.autocomplete.initSelectionAutocomplete();
+
+						function redirectToExistingPageWithInjectedShortcode( event ) {
+							event.preventDefault();
+
+							const pageDropdown = modal.querySelector( '[name="frm_page_dropdown"]' );
+							modal.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
+
+							const pageId = pageDropdown.value;
+
+							if ( '0' === pageId || '' === pageId ) {
+								const error = div({ className: 'frm_error_style' });
+								error.setAttribute( 'role', 'alert' );
+								error.textContent = __( 'Please select a page', 'formidable' );
+								content.insertBefore( error, title.nextElementSibling );
+								return;
+							}
+
+							window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
+						}
+					}
 				}
 			},
 			{
 				icon: 'frm_create_new_page_icon',
 				label: __( 'Create new page', 'formidable' ),
-				description: __( 'Put your form on a newly created page.', 'formidable' ),
+				description: newPageDescription,
 				callback: () => {
 					content.innerHTML = '';
 
@@ -187,7 +240,8 @@
 							url: ajaxurl,
 							data: {
 								action: 'frm_create_page_with_shortcode',
-								form_id: formId,
+								object_id: state.objectId,
+								type: state.type,
 								name: input.value,
 								nonce: frmGlobal.nonce
 							},
@@ -225,7 +279,6 @@
 					input.type = 'text';
 					input.focus();
 
-					const modal = document.getElementById( 'frm_form_embed_modal' );
 					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 					doneButton.textContent = __( 'Create page', 'formidable' );
 					doneButton.addEventListener(
@@ -240,24 +293,47 @@
 			{
 				icon: 'frm_insert_manually_icon',
 				label: __( 'Insert manually', 'formidable' ),
-				description: __( 'Use WP shortcodes or PHP code to put the form in any place.', 'formidable' ),
+				description: insertManuallyDescription,
 				callback: () => {
 					content.innerHTML = '';
-					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
+
+					if ( 'form' === state.type ) {
+						getEmbedFormManualExamples().forEach( example => content.appendChild( getEmbedExample( example ) ) );
+					} else {
+						const hookName = 'frmEmbedExamples';
+						const hookArgs = {
+							type: state.type,
+							objectId: state.objectId,
+							objectKey: state.objectKey
+						};
+						wp.hooks.applyFilters( hookName, [], hookArgs ).forEach(
+							example => content.appendChild( getEmbedExample( example ) )
+						);
+					}
 				}
 			}
 		];
 
 		options.forEach(
-			option => content.appendChild( getEmbedFormModalOption( option ) )
+			option => content.appendChild( getModalOption( option ) )
 		);
 
 		return content;
 	}
 
-	function getEmbedFormModalOption({ icon, label, description, callback }) {
+	function getTypeDescription() {
+		switch ( state.type ) {
+			case 'view':
+				return __( 'view', 'formidable' );
+			case 'form':
+			default:
+				return __( 'form', 'formidable' );
+		}
+	}
+
+	function getModalOption({ icon, label, description, callback }) {
 		const output = div();
-		output.appendChild( wrapEmbedFormModalOptionIcon( icon ) );
+		output.appendChild( wrapModalOptionIcon( icon ) );
 		output.className = 'frm-embed-modal-option';
 		output.setAttribute( 'tabindex', 0 );
 		output.setAttribute( 'role', 'button' );
@@ -270,21 +346,24 @@
 		output.addEventListener(
 			'click',
 			function() {
-				document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-on-page-2' );
+				modal.classList.add( 'frm-on-page-2' );
 				callback();
 			}
 		);
 		return output;
 	}
 
-	function wrapEmbedFormModalOptionIcon( sourceIconId ) {
+	function wrapModalOptionIcon( sourceIconId ) {
 		const clone = document.getElementById( sourceIconId ).cloneNode( true );
 		const wrapper = div({ child: clone });
-		wrapper.className = 'frm-embed-form-icon-wrapper';
+		wrapper.className = 'frm-embed-modal-icon-wrapper';
 		return wrapper;
 	}
 
-	function getEmbedFormManualExamples( formId, formKey ) {
+	function getEmbedFormManualExamples() {
+		const formId = state.objectId;
+		const formKey = state.objectKey;
+
 		let examples = [
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
@@ -341,7 +420,6 @@
 		return element;
 	}
 
-
 	function getLabel( text ) {
 		const label = document.createElement( 'label' );
 		label.textContent = text;
@@ -349,7 +427,7 @@
 	}
 
 	function getCopyIcon( label ) {
-		const icon = document.getElementById( 'frm_copy_embed_form_icon' );
+		const icon = document.getElementById( 'frm_copy_embed_icon' );
 		let clone = icon.cloneNode( true );
 		clone.id = 'frm_copy_embed_' + getAutoId();
 		clone.setAttribute( 'tabindex', 0 );
@@ -364,6 +442,11 @@
 	}
 
 	function copyExampleToClipboard( example ) {
+		if ( navigator.clipboard ) {
+			navigator.clipboard.writeText( example.value ).then( handleCopySuccess );
+			return;
+		}
+
 		let copySuccess;
 
 		example.focus();
@@ -377,10 +460,14 @@
 		}
 
 		if ( copySuccess ) {
-			speak( __( 'Successfully copied embed example', 'formidable' ) );
+			handleCopySuccess();
 		}
 
 		return copySuccess;
+	}
+
+	function handleCopySuccess() {
+		speak( __( 'Successfully copied embed example', 'formidable' ) );
 	}
 
 	function speak( message ) {

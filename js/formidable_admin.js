@@ -8906,8 +8906,12 @@ function frmAdminBuildJS() {
 			addMultiselectLabelListener();
 
 			frmAdminBuild.hooks.addFilter(
-				'frmBeforeEmbedFormModal',
-				( meta, element ) => {
+				'frmBeforeEmbedModal',
+				( meta, { element, type }) => {
+					if ( 'form' !== type ) {
+						return;
+					}
+
 					let formId, formKey;
 					const row = element.closest( 'tr' );
 

@@ -2343,15 +2343,26 @@ class FrmFormsController {
 
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
-		if ( ! $form_id ) {
+		$type = FrmAppHelper::get_post_param( 'type', '', 'sanitize_text_field' );
+		if ( ! $type || ! in_array( $type, array( 'form', 'view' ), true ) ) {
 			die( 0 );
 		}
 
-		$postarr = array(
-			'post_type'    => 'page',
-			'post_content' => '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} --><div>[formidable id="' . $form_id . '"]</div><!-- /wp:formidable/simple-form -->',
-		);
+		$object_id = FrmAppHelper::get_post_param( 'object_id', '', 'absint' );
+		if ( ! $object_id ) {
+			die( 0 );
+		}
+
+		$postarr = array( 'post_type' => 'page' );
+
+		if ( 'form' === $type ) {
+			$form_id                 = $object_id;
+			$postarr['post_content'] = '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} --><div>[formidable id="' . $form_id . '"]</div><!-- /wp:formidable/simple-form -->';
+		} else {
+			// TODO this should probably get set with a filter.
+			$view_id                 = $object_id;
+			$postarr['post_content'] = '<!-- wp:formidable/simple-view {"viewId":"' . $view_id . '","useDefaultLimit":true} --><div>[display-frm-data id="' . $view_id . '" filter="limited"]</div><!-- /wp:formidable/simple-view -->';
+		}
 
 		$name = FrmAppHelper::get_post_param( 'name', '', 'sanitize_text_field' );
 		if ( $name ) {

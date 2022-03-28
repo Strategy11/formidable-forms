@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_clone_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_file_icon' );
 	?>
-	<svg id="frm_copy_embed_form_icon" class="frmsvg">
+	<svg id="frm_copy_embed_icon" class="frmsvg">
 		<use xlink:href="#frm_clone_icon"></use>
 	</svg>
 	<svg id="frm_select_existing_page_icon" class="frmsvg">

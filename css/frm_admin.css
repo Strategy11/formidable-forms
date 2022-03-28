@@ -2370,23 +2370,23 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 
 /* Embed Form Modal */
 
-#frm_form_embed_modal label {
+#frm_embed_modal label {
 	font-size: 14px;
 	line-height: 25px;
 	color: rgba(40, 47, 54, 0.8);
 	font-weight: 600;
 }
 
-.frm_embed_form_content {
+.frm_embed_modal_content {
 	padding: 20px;
 }
 
-.frm_embed_form_content.frm-loading-page-options {
+.frm_embed_modal_content.frm-loading-page-options {
 	display: flex;
 	justify-content: center;
 }
 
-#frm_form_embed_modal .frm_embed_example {
+#frm_embed_modal .frm_embed_example {
 	background: #F6F7FB;
 	border: 1px solid #E3E8EB;
 	border-radius: 6px;
@@ -2399,21 +2399,21 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	resize: none;
 }
 
-#frm_form_embed_modal textarea.frm_embed_example {
+#frm_embed_modal textarea.frm_embed_example {
 	padding-bottom: 0;
 }
 
-.frm_embed_form_content > div a {
+.frm_embed_modal_content > div a {
 	position: absolute;
 	right: 0;
 	top: 8px;
 }
 
-.frm_embed_form_content > div {
+.frm_embed_modal_content > div {
 	position: relative;
 }
 
-.frm_embed_form_content svg[id^="frm_copy_embed_"] {
+.frm_embed_modal_content svg[id^="frm_copy_embed_"] {
 	position: absolute;
 	top: 35px;
 	right: 10px;
@@ -2432,15 +2432,15 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	margin-top: 10px;
 }
 
-#frm_form_embed_modal .frm-modal-cancel {
+#frm_embed_modal .frm-modal-cancel {
 	display: none;
 }
 
-#frm_form_embed_modal.frm-on-page-2 .frm-modal-cancel {
+#frm_embed_modal.frm-on-page-2 .frm-modal-cancel {
 	display: inline;
 }
 
-.frm-embed-form-icon-wrapper {
+.frm-embed-modal-icon-wrapper {
 	background: var(--primary-color);
 	border-radius: 4px;
 	padding: 10px;
@@ -2449,7 +2449,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	vertical-align: top;
 }
 
-.frm-embed-form-icon-wrapper + div {
+.frm-embed-modal-icon-wrapper + div {
 	display: inline-block;
 	padding-left: 13px;
 	transform: translateY(-4px);
@@ -2465,12 +2465,12 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	transform: translateY(-50%);
 }
 
-.frm_embed_form_content ul {
+.frm_embed_modal_content ul {
 	max-height: 300px;
 	overflow-y: scroll;
 }
 
-.frm-embed-form-modal-wrapper.frm-dialog {
+.frm-embed-modal-wrapper.frm-dialog {
 	overflow: visible;
 }
 
