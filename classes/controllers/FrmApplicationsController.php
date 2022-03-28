@@ -31,7 +31,7 @@ class FrmApplicationsController {
 	public static function get_applications_data() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
-		$view = FrmAppHelper::simple_get( 'view' );
+		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
 		if ( ! $view || 'index' === $view ) {
 			$data['templates'] = self::get_prepared_template_data();

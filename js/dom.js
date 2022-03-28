@@ -117,6 +117,40 @@ let frmDom;
 		}
 	};
 
+	const multiselect = {
+		init: function() {
+			let $select, id, labelledBy;
+
+			$select = jQuery( this );
+			id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
+			labelledBy = id ? jQuery( '#for_' + id ) : false;
+			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+
+			$select.multiselect({
+				templates: {
+					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
+					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
+					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+				},
+				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
+				nonSelectedText: '',
+				onDropdownShown: function( event ) {
+					var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
+					if ( action.length ) {
+						jQuery( '#wpcontent' ).on( 'click', function() {
+							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
+								jQuery( event.currentTarget ).removeClass( 'open' );
+							}
+						});
+					}
+				},
+				onChange: function( element, option ) {
+					$select.trigger( 'frm-multiselect-changed', element, option );
+				}
+			});
+		}
+	};
+
 	const bootstrap = {
 		setupBootstrapDropdowns( callback ) {
 			if ( ! window.bootstrap || ! window.bootstrap.Dropdown ) {
@@ -141,7 +175,7 @@ let frmDom;
 					// Not a formidable dropdown, treat like Bootstrap does normally.
 					return result;
 				}
-	
+
 				// Temporarily add dropdown-menu class so bootstrap can initialize.
 				frmDropdownMenu.classList.add( 'dropdown-menu' );
 				setTimeout(
@@ -157,7 +191,8 @@ let frmDom;
 
 				return result;
 			}
-		}
+		},
+		multiselect
 	};
 
 	function getModalHelper( modal, appendTo ) {
