@@ -48,6 +48,9 @@ let frmDom;
 				postbox.appendChild(
 					div({ className: 'frm_modal_footer' })
 				);
+			} else if ( 'string' === typeof title ) {
+				const titleElement = modal.querySelector( '.frm-modal-title' );
+				titleElement.textContent = title;
 			}
 
 			if ( ! content && ! footer ) {
