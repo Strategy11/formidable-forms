@@ -365,6 +365,10 @@ let frmDom;
 		return tag( 'div', args );
 	}
 
+	function span( args ) {
+		return tag( 'span', args );
+	}
+
 	function a( args = {}) {
 		const anchor = tag( 'a', args );
 		anchor.setAttribute( 'href', 'string' === typeof args.href ? args.href : '#' );
@@ -392,10 +396,16 @@ let frmDom;
 		return output;
 	}
 
+	function setAttributes( element, attrs ) {
+		Object.entries( attrs ).forEach(
+			([ key, value ]) => element.setAttribute( key, value )
+		);
+	}
+
 	function redraw( element, child ) {
 		element.innerHTML = '';
 		element.appendChild( child );
 	}
 
-	frmDom = { tag, div, a, modal, ajax, bootstrap, autocomplete };
+	frmDom = { tag, div, span, a, setAttributes, modal, ajax, bootstrap, autocomplete };
 }() );
