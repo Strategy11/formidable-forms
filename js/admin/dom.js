@@ -365,6 +365,15 @@ let frmDom;
 		return tag( 'div', args );
 	}
 
+	function a( args = {}) {
+		const anchor = tag( 'a', args );
+		anchor.setAttribute( 'href', 'string' === typeof args.href ? args.href : '#' );
+		if ( 'string' === typeof args.target ) {
+			anchor.target = args.target;
+		}
+		return anchor;
+	}
+
 	function tag( type, { id, className, children, child, text } = {}) {
 		const output = document.createElement( type );
 		if ( id ) {
@@ -388,5 +397,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { div, tag, modal, ajax, bootstrap, autocomplete };
+	frmDom = { tag, div, a, modal, ajax, bootstrap, autocomplete };
 }() );
