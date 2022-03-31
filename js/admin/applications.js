@@ -55,15 +55,6 @@
 	}
 
 	function getTemplateSearch() {
-		const label = tag(
-			'label',
-			{
-				className: 'screen-reader-text',
-				text: __( 'Search applications', 'formidable' )
-			}
-		);
-		label.setAttribute( 'for', 'frm-application-search' );
-
 		const searchInput = tag(
 			'input',
 			{
@@ -71,41 +62,13 @@
 				className: 'frm-search-input'
 			}
 		);
+		const placeholder = __( 'Search applications', 'formidable' );
+		searchInput.setAttribute( 'placeholder', placeholder );
 		searchInput.setAttribute( 'type', 'search' );
 
-		const searchListener = function( event ) {
-			const searchValue = event.target.value.toLowerCase();
-			const cards = Array.from( document.getElementsByClassName( 'frm-application-template-card' ) );
-			cards.forEach(
-				card => {
-					const isHidden = -1 === card.textContent.toLowerCase().indexOf( searchValue );
-					card.classList.toggle( 'frm_hidden', isHidden );
-				}
-			);
-		};
-
-		searchInput.addEventListener( 'input', searchListener );
-		searchInput.addEventListener( 'search', searchListener );
-		searchInput.addEventListener( 'change', searchListener );
-
-		const search = tag(
-			'p',
-			{
-				className: 'frm-search',
-				children: [
-					label,
-					tag(
-						'span',
-						{
-							className: 'frmfont frm_search_icon'
-						}
-					),
-					searchInput
-				]
-			}
-		);
-
-		return search;
+		const { init, wrapInput } = frmDom.search;
+		init( searchInput, 'frm-application-template-card' );
+		return wrapInput( searchInput, placeholder );
 	}
 
 	function handleCardHook( card, args ) {
@@ -117,7 +80,7 @@
 			className: 'frm-application-card',
 			children: [
 				getCardHeader(),
-				div({ className: 'frm-flex' })
+				div({ className: 'frm-flex1' })
 			]
 		});
 

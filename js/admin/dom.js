@@ -286,6 +286,30 @@ let frmDom;
 	};
 
 	const search = {
+		wrapInput: ( searchInput, labelText ) => {
+			const label = tag(
+				'label',
+				{
+					className: 'screen-reader-text',
+					text: labelText
+				}
+			);
+			label.setAttribute( 'for', searchInput.id );
+			return tag(
+				'p',
+				{
+					className: 'frm-search',
+					children: [
+						label,
+						tag(
+							'span',
+							{ className: 'frmfont frm_search_icon' }
+						),
+						searchInput
+					]
+				}
+			);
+		},
 		init: ( input, targetClassName ) => {
 			input.addEventListener( 'input', handleSearch );
 			input.addEventListener( 'search', handleSearch );
@@ -298,9 +322,16 @@ let frmDom;
 				items.forEach( toggleSearchClassesForItem );
 
 				function toggleSearchClassesForItem( item ) {
-					const innerText = item.innerText.toLowerCase();
+					let itemText;
 
-					const hide = searchText !== '' && -1 === innerText.indexOf( searchText );
+					if ( item.hasAttribute( 'frm-search-text' ) ) {
+						itemText = item.getAttribute( 'frm-search-text' );
+					} else {
+						itemText = item.innerText.toLowerCase();
+						item.setAttribute( 'frm-search-text', itemText );
+					}
+
+					const hide = searchText !== '' && -1 === itemText.indexOf( searchText );
 					item.classList.toggle( 'frm_hidden', hide );
 
 					const isSearchResult = ! hide && searchText !== '';
