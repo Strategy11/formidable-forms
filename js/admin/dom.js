@@ -285,6 +285,31 @@ let frmDom;
 		}
 	};
 
+	const search = {
+		init: ( input, targetClassName ) => {
+			input.addEventListener( 'input', handleSearch );
+			input.addEventListener( 'search', handleSearch );
+			input.addEventListener( 'change', handleSearch );
+
+			function handleSearch() {
+				const searchText = input.value.toLowerCase();
+				const items = Array.from( document.getElementsByClassName( targetClassName ) );
+
+				items.forEach( toggleSearchClassesForItem );
+
+				function toggleSearchClassesForItem( item ) {
+					const innerText = item.innerText.toLowerCase();
+
+					const hide = searchText !== '' && -1 === innerText.indexOf( searchText );
+					item.classList.toggle( 'frm_hidden', hide );
+
+					const isSearchResult = ! hide && searchText !== '';
+					item.classList.toggle( 'frm-search-result', isSearchResult );
+				}
+			}
+		}
+	};
+
 	const util = {
 		debounce: ( func, wait = 100 ) => {
 			let timeout;
@@ -420,5 +445,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { tag, div, span, a, setAttributes, modal, ajax, bootstrap, autocomplete, util };
+	frmDom = { tag, div, span, a, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
 }() );
