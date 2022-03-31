@@ -7,11 +7,11 @@
 	background: var(--sidebar-color);
 }
 
-.frm-application-templates-grid {
+.frm-application-cards-grid {
 	padding-bottom: 50px;
 }
 
-.frm-application-templates-grid:last-child {
+.frm-application-cards-grid:last-child {
 	padding-bottom: 100px;
 }
 
@@ -23,7 +23,7 @@
 	display: inline-block;
 }
 
-.frm-application-templates-grid,
+.frm-application-cards-grid,
 #frm-application-search,
 .frm-application-card hr {
 	width: 100%;

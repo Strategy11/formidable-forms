@@ -295,19 +295,16 @@ let frmDom;
 					className: 'frm-search',
 					children: [
 						label,
-						tag(
-							'span',
-							{ className: 'frmfont frm_search_icon' }
-						),
+						span({ className: 'frmfont frm_search_icon' }),
 						searchInput
 					]
 				}
 			);
 		},
-		newSearchInput: ( id, placeholder, targetClassName ) => {
+		newSearchInput: ( id, placeholder, targetClassName, args = {}) => {
 			const input = getAutoSearchInput( id, placeholder );
 			const wrappedSearch = search.wrapInput( input, placeholder );
-			search.init( input, targetClassName );
+			search.init( input, targetClassName, args );
 
 			function getAutoSearchInput( id, placeholder ) {
 				const className = 'frm-search-input frm-auto-search';
@@ -319,7 +316,7 @@ let frmDom;
 
 			return wrappedSearch;
 		},
-		init: ( input, targetClassName ) => {
+		init: ( input, targetClassName, { handleSearchResult } = {}) => {
 			input.setAttribute( 'type', 'search' );
 			input.setAttribute( 'autocomplete', 'off' );
 
@@ -329,9 +326,14 @@ let frmDom;
 
 			function handleSearch() {
 				const searchText = input.value.toLowerCase();
+				const notEmptySearchText = searchText !== '';
 				const items = Array.from( document.getElementsByClassName( targetClassName ) );
 
+				let foundSomething = false;
 				items.forEach( toggleSearchClassesForItem );
+				if ( 'function' === typeof handleSearchResult ) {
+					handleSearchResult({ foundSomething, notEmptySearchText });
+				}
 
 				function toggleSearchClassesForItem( item ) {
 					let itemText;
@@ -343,10 +345,13 @@ let frmDom;
 						item.setAttribute( 'frm-search-text', itemText );
 					}
 
-					const hide = searchText !== '' && -1 === itemText.indexOf( searchText );
+					const hide = notEmptySearchText && -1 === itemText.indexOf( searchText );
 					item.classList.toggle( 'frm_hidden', hide );
 
-					const isSearchResult = ! hide && searchText !== '';
+					const isSearchResult = ! hide && notEmptySearchText;
+					if ( isSearchResult ) {
+						foundSomething = true;
+					}
 					item.classList.toggle( 'frm-search-result', isSearchResult );
 				}
 			}

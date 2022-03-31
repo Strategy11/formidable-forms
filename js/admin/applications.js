@@ -15,6 +15,10 @@
 		return;
 	}
 
+	const elements = {
+		noTemplateSearchResultsPlaceholder: false
+	};
+
 	wp.hooks.addFilter( 'frm_application_card', 'formidable', handleCardHook );
 
 	doJsonFetch( 'get_applications_data' ).then(
@@ -33,7 +37,10 @@
 	);
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
-		const templatesGrid = div({ className: 'frm_grid_container frm-application-templates-grid' });
+		const templatesGrid = div({
+			id: 'frm_application_templates_grid',
+			className: 'frm_grid_container frm-application-cards-grid'
+		});
 		templates.forEach(
 			application => templatesGrid.appendChild( createApplicationCard( application ) )
 		);
@@ -58,7 +65,23 @@
 		const id = 'frm-application-search';
 		const placeholder = __( 'Search templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
-		return frmDom.search.newSearchInput( id, placeholder, targetClassName );
+		const args = { handleSearchResult: handleTemplateSearch };
+		const wrappedInput = frmDom.search.newSearchInput( id, placeholder, targetClassName, args );
+		return wrappedInput;
+	}
+
+	function handleTemplateSearch({ foundSomething, notEmptySearchText }) {
+		if ( false === elements.noTemplateSearchResultsPlaceholder ) {
+			elements.noTemplateSearchResultsPlaceholder = getNoResultsPlaceholder();
+			document.getElementById( 'frm_application_templates_grid' ).appendChild( elements.noTemplateSearchResultsPlaceholder );
+		}
+		elements.noTemplateSearchResultsPlaceholder.classList.toggle( 'frm_hidden', ! notEmptySearchText || foundSomething );
+	}
+
+	function getNoResultsPlaceholder() {
+		return div({
+			text: __( 'No application templates match your search query.', 'formidable' )
+		});
 	}
 
 	function handleCardHook( card, args ) {
