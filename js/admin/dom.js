@@ -285,6 +285,19 @@ let frmDom;
 		}
 	};
 
+	const util = {
+		debounce: ( func, wait = 100 ) => {
+			let timeout;
+			return function( ...args ) {
+				clearTimeout( timeout );
+				timeout = setTimeout(
+					() => func.apply( this, args ),
+					wait
+				);
+			};
+		}
+	};
+
 	function getModalHelper( modal, appendTo ) {
 		return function( child, uniqueClassName ) {
 			let element = modal.querySelector( '.' + uniqueClassName );
@@ -407,5 +420,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { tag, div, span, a, setAttributes, modal, ajax, bootstrap, autocomplete };
+	frmDom = { tag, div, span, a, setAttributes, modal, ajax, bootstrap, autocomplete, util };
 }() );
