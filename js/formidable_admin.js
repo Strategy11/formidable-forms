@@ -8772,7 +8772,7 @@ function frmAdminBuildJS() {
 	}
 
 	function debounce( func, wait = 100 ) {
-		return frmDom.debounce( func, wait );
+		return frmDom.util.debounce( func, wait );
 	}
 
 	return {
