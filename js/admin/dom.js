@@ -274,13 +274,7 @@ let frmDom;
 
 		completeSelectFromResults: function( e, ui ) {
 			e.preventDefault();
-
-			if ( ui.item.value === '' ) {
-				this.value = '';
-			} else {
-				this.value = ui.item.label;
-			}
-
+			this.value = ui.item.value === '' ? '' : ui.item.label;
 			this.nextElementSibling.value = ui.item.value;
 		}
 	};
