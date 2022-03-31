@@ -8,6 +8,7 @@
 	const __ = wp.i18n.__;
 	const { div, tag } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
+	const { newSearchInput } = frmDom.search;
 	const { doJsonFetch } = frmDom.ajax;
 
 	const container = document.getElementById( 'frm_applications_container' );
@@ -66,7 +67,7 @@
 		const placeholder = __( 'Search templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
-		const wrappedInput = frmDom.search.newSearchInput( id, placeholder, targetClassName, args );
+		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
 		return wrappedInput;
 	}
 
