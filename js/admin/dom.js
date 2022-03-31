@@ -201,8 +201,8 @@ let frmDom;
 	const autocomplete = {
 		initSelectionAutocomplete: function() {
 			if ( jQuery.fn.autocomplete ) {
-				frmDom.autocomplete.initAutocomplete( 'page' );
-				frmDom.autocomplete.initAutocomplete( 'user' );
+				autocomplete.initAutocomplete( 'page' );
+				autocomplete.initAutocomplete( 'user' );
 			}
 		},
 		/**
@@ -310,7 +310,25 @@ let frmDom;
 				}
 			);
 		},
+		newSearchInput: ( id, placeholder, targetClassName ) => {
+			const input = getAutoSearchInput( id, placeholder );
+			const wrappedSearch = search.wrapInput( input, placeholder );
+			search.init( input, targetClassName );
+
+			function getAutoSearchInput( id, placeholder ) {
+				const className = 'frm-search-input frm-auto-search';
+				const inputArgs = { id, className };
+				const input = tag( 'input', inputArgs );
+				input.setAttribute( 'placeholder', placeholder );
+				return input;
+			}
+
+			return wrappedSearch;
+		},
 		init: ( input, targetClassName ) => {
+			input.setAttribute( 'type', 'search' );
+			input.setAttribute( 'autocomplete', 'off' );
+
 			input.addEventListener( 'input', handleSearch );
 			input.addEventListener( 'search', handleSearch );
 			input.addEventListener( 'change', handleSearch );

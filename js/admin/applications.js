@@ -55,20 +55,10 @@
 	}
 
 	function getTemplateSearch() {
-		const searchInput = tag(
-			'input',
-			{
-				id: 'frm-application-search',
-				className: 'frm-search-input'
-			}
-		);
-		const placeholder = __( 'Search applications', 'formidable' );
-		searchInput.setAttribute( 'placeholder', placeholder );
-		searchInput.setAttribute( 'type', 'search' );
-
-		const { init, wrapInput } = frmDom.search;
-		init( searchInput, 'frm-application-template-card' );
-		return wrapInput( searchInput, placeholder );
+		const id = 'frm-application-search';
+		const placeholder = __( 'Search templates', 'formidable' );
+		const targetClassName = 'frm-application-template-card';
+		return frmDom.search.newSearchInput( id, placeholder, targetClassName );
 	}
 
 	function handleCardHook( card, args ) {

@@ -128,7 +128,7 @@ class FrmApplicationsController {
 
 	/**
 	 * @param string $title
-	 * @param string $context values include 'index' and 'edit'.
+	 * @param string $context values include 'index', 'list', and 'edit'.
 	 * @return void
 	 */
 	public static function render_applications_header( $title, $context ) {
