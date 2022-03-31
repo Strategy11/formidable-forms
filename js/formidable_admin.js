@@ -7101,6 +7101,40 @@ function frmAdminBuildJS() {
 
 		dismiss.removeAttribute( 'tabindex' );
 		bindClickForDialogClose( $modal );
+
+		addApplicationsToNewFormModal( $modal.get( 0 ) );
+	}
+
+	function addApplicationsToNewFormModal( modal ) {
+		frmDom.ajax.doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
+
+		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
+
+		function addTemplatesOnFetchSuccess( data ) {
+			data.templates.forEach( addTemplateToCategoryList );
+		}
+
+		function addTemplateToCategoryList( template ) {
+			categoryList.insertBefore( getReadyMadeSolution( template ), categoryList.firstChild );
+		}
+
+		function getReadyMadeSolution( template ) {
+			// TODO have pro hook into this and add an image.
+			return frmDom.tag(
+				'li',
+				{
+					className: 'frm-searchable-template frm-ready-made-solution',
+					children: [
+						frmDom.span({ text: __( 'Ready Made Solution', 'formidable' ) }),
+						frmDom.tag( 'h3', { text: template.name }),
+						frmDom.a({
+							text: __( 'Check all applications', 'formidable' ),
+							href: '/wp-admin/admin.php?page=formidable-applications' // TODO don't hard code this.
+						})
+					]
+				}
+			);
+		}
 	}
 
 	function offsetModalY( $modal, amount ) {
@@ -8130,6 +8164,10 @@ function frmAdminBuildJS() {
 				}
 
 				category = categories[ categoryIndex ];
+				if ( ! category.classList.contains( 'accordion-section' ) ) {
+					continue;
+				}
+
 				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
 				count = searchableTemplates.length;
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );

@@ -33,7 +33,7 @@ class FrmApplicationsController {
 
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
-		if ( ! $view || 'index' === $view ) {
+		if ( 'applications' !== $view ) {
 			$data['templates'] = self::get_prepared_template_data();
 		}
 

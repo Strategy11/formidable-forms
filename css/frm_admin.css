@@ -8577,3 +8577,26 @@ Responsive Design
 .frm-banner-dismiss .frmsvg {
 	vertical-align: top;
 }
+
+.frm-ready-made-solution:not(.frm-search-result) {
+	display: none !important;
+}
+
+.frm-ready-made-solution {
+	padding: 20px 5px;
+}
+
+.frm-ready-made-solution > span {
+	background-color: #fde6de;
+	color: #f25a24;
+	padding: 10px;
+	text-transform: uppercase;
+	font-size: 11px;
+	margin-bottom: 10px;
+	display: inline-block;
+	border-radius: 4px;
+}
+
+.frm-ready-made-solution a {
+	color: var(--primary-color);
+}
