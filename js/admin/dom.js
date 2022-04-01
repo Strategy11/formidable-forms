@@ -81,7 +81,10 @@ let frmDom;
 				output.classList.add( 'button' );
 				switch ( args.buttonType ) {
 					case 'primary':
-						output.classList.add( 'button-primary', 'frm-button-primary', 'dismiss' );
+						output.classList.add( 'button-primary', 'frm-button-primary' );
+						if ( ! args.noDismiss ) {
+							output.classList.add( 'dismiss' );
+						}
 						break;
 					case 'secondary':
 						output.classList.add( 'button-secondary', 'frm-button-secondary' );
@@ -464,8 +467,17 @@ let frmDom;
 		return anchor;
 	}
 
-	function tag( type, { id, className, children, child, text } = {}) {
+	function tag( type, args = {}) {
 		const output = document.createElement( type );
+
+		if ( 'string' === typeof args ) {
+			// Support passing just a string to a tag for simple text elements.
+			output.textContent = args;
+			return output;
+		}
+
+		const { id, className, children, child, text } = args;
+
 		if ( id ) {
 			output.id = id;
 		}

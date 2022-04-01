@@ -421,9 +421,8 @@
 	}
 
 	function getLabel( text ) {
-		const label = document.createElement( 'label' );
-		label.textContent = text;
-		return label;
+		const args = { text };
+		return tag( 'label', args );
 	}
 
 	function getCopyIcon( label ) {
