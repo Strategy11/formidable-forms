@@ -72,11 +72,17 @@
 	max-width: 100%;
 }
 
+.frm-application-card-image-wrapper {
+	min-height: 130px;
+	display: flex;
+	align-items: center;
+}
+
 #frm_view_application_modal img {
 	height: 245px;
 }
 
-.frm-flex {
+.frm-flex1 {
 	flex: 1;
 }
 

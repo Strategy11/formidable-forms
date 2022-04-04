@@ -6,7 +6,7 @@
 	}
 
 	const __ = wp.i18n.__;
-	const { div, tag } = frmDom;
+	const { tag, div, span } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
 	const { doJsonFetch } = frmDom.ajax;
@@ -98,28 +98,41 @@
 			]
 		});
 
-		if ( data.url ) {
-			card.classList.add( 'frm-application-template-card' );
+		if ( ! data.termId ) {
+			card.appendChild( tag( 'hr' ) );
+			card.appendChild( getCardContent() );
 		}
 
-		function getCardHeader() {
-			const title = tag(
-				'span',
-				{ text: data.name }
-			);
-			const header = div({
-				children: [
-					title,
-					getUseThisTemplateControl( data ),
-					div({ text: data.description })
-				]
-			});
-			return header;
+		if ( data.url ) {
+			card.classList.add( 'frm-application-template-card' );
 		}
 
 		const hookName = 'frm_application_index_card';
 		const args     = { data };
 		wp.hooks.doAction( hookName, card, args );
+
+		function getCardHeader() {
+			const title = span( data.name );
+			const header = div({
+				children: [
+					title,
+					getUseThisTemplateControl( data ),
+					div( data.description )
+				]
+			});
+			return header;
+		}
+
+		function getCardContent() {
+			const thumbnailFolderUrl = frmGlobal.url + '/images/application-thumbnails/';
+			const filenameToUse = data.hasLiteThumbnail ? data.key + '.png' : 'placeholder.svg';
+			const image = tag( 'img' );
+			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
+			return div({
+				className: 'frm-application-card-image-wrapper',
+				child: image
+			});
+		}
 
 		return card;
 	}
