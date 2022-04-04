@@ -2150,7 +2150,8 @@ h2.frm-h2 + .howto {
 	margin-right: 5px;
 }
 
-.frm-hover-icons > .frm-create-form {
+.frm-hover-icons > .frm-create-form,
+.frm-ready-made-solution .frm-hover-icons a {
 	background-color: var(--primary-color);
 }
 
@@ -2178,16 +2179,19 @@ h2.frm-h2 + .howto {
 	transform: translateY(-2px);
 }
 
-.frm-hover-icons > .frm-create-form .frmsvg {
+.frm-hover-icons > .frm-create-form .frmsvg,
+.frm-ready-made-solution .frmsvg {
 	width: 14px;
 	height: 14px;
 }
 
-.frm-hover-icons .frm-create-form svg {
+.frm-hover-icons .frm-create-form svg,
+.frm-ready-made-solution .frm-hover-icons svg {
 	color: #fff;
 }
 
 .frm-hover-icons .frm-create-form:hover,
+.frm-ready-made-solution .frm-hover-icons a:hover,
 .frm-hover-icons > .frm-unlock-form:hover,
 .frm-hover-icons > .frm-unlock-form:hover .frmsvg
 {
@@ -8587,6 +8591,11 @@ Responsive Design
 	display: flex;
 }
 
+.frm-ready-made-solution .frm-hover-icons {
+	padding: 5px;
+	position: static;
+}
+
 #frm_new_form_modal .frm-ready-made-solution > div:first-child {
 	width: 300px;
 }
@@ -8602,7 +8611,7 @@ Responsive Design
 	border-radius: 4px;
 }
 
-.frm-ready-made-solution a {
+.frm-ready-made-solution h3 ~ a {
 	color: var(--primary-color);
 }
 

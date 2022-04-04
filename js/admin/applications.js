@@ -22,20 +22,47 @@
 
 	wp.hooks.addFilter( 'frm_application_card', 'formidable', handleCardHook );
 
-	doJsonFetch( 'get_applications_data' ).then(
-		data => {
-			const contentWrapper = div({ className: 'frm-applications-index-content' });
+	initialize();
 
-			container.innerHTML = '';
-			container.appendChild( contentWrapper );
+	function initialize() {
+		wp.hooks.addAction( 'frm_application_render_templates', 'formidable', getUrlParamsAndMaybeOpenTemplateModal );
+		getApplicationDataAndLoadPage();
+	}
 
-			renderFormidableTemplates( contentWrapper, data.templates );
-
-			const hookName = 'frm_application_render_templates';
-			const args = { data };
-			wp.hooks.doAction( hookName, contentWrapper, args );
+	function getUrlParamsAndMaybeOpenTemplateModal( _, { data } = {}) {
+		const url       = new URL( window.location.href );
+		const urlParams = url.searchParams;
+		if ( ! urlParams.get( 'triggerViewApplicationModal' ) ) {
+			return;
 		}
-	);
+
+		const templateKey = urlParams.get( 'template' );
+		if ( ! templateKey ) {
+			return;
+		}
+
+		const template = data.templates.find( template => templateKey === template.key );
+		if ( template ) {
+			openViewApplicationModal( template );
+		}
+	}
+
+	function getApplicationDataAndLoadPage() {
+		doJsonFetch( 'get_applications_data' ).then( handleApplicationsDataResponse );
+	}
+
+	function handleApplicationsDataResponse( data ) {
+		const contentWrapper = div({ className: 'frm-applications-index-content' });
+
+		container.innerHTML = '';
+		container.appendChild( contentWrapper );
+
+		renderFormidableTemplates( contentWrapper, data.templates );
+
+		const hookName = 'frm_application_render_templates';
+		const args = { data };
+		wp.hooks.doAction( hookName, contentWrapper, args );
+	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
 		const templatesGrid = div({
@@ -85,7 +112,7 @@
 		});
 	}
 
-	function handleCardHook( card, args ) {
+	function handleCardHook( _, args ) {
 		return createApplicationCard( args.data );
 	}
 

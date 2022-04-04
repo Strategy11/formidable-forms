@@ -7128,6 +7128,11 @@ function frmAdminBuildJS() {
 			const imageWrapper = div({ child: image });
 			imageWrapper.style.textAlign = 'center';
 
+			const svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
+			svg.classList.add( 'frmsvg' );
+			const use = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
+			use.setAttribute( 'href', '#frm_plus_icon' );
+			svg.appendChild( use );
 			return tag(
 				'li',
 				{
@@ -7143,6 +7148,14 @@ function frmAdminBuildJS() {
 									href: '/wp-admin/admin.php?page=formidable-applications' // TODO don't hard code this.
 								})
 							]
+						}),
+						div({
+							className: 'frm-hover-icons',
+							child: a({
+								child: svg,
+								// TODO this is hard coded.
+								href: '/wp-admin/admin.php?page=formidable-applications&triggerViewApplicationModal=1&template=' + template.key
+							})
 						})
 					]
 				}
