@@ -46,17 +46,26 @@ class FrmApplicationsController {
 	}
 
 	/**
-	 * @return array
+	 * Retrieve API data and return a reduced set back with some restructuring applied to make it easier to read.
+	 *
+	 * @return array<array>
 	 */
 	private static function get_prepared_template_data() {
-		$api          = new FrmApplicationApi();
-		$applications = $api->get_api_info();
-		$applications = array_filter( $applications, 'is_array' );
-		$applications = self::sort_templates( $applications );
-		$keys         = apply_filters( 'frm_application_data_keys', array( 'name', 'description', 'link' ) );
+		$api              = new FrmApplicationApi();
+		$applications     = $api->get_api_info();
+		$applications     = array_filter( $applications, 'is_array' );
+		$applications     = self::sort_templates( $applications );
+		$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link' ) );
+		$keys_with_images = self::get_template_keys_with_local_images();
+
 		return array_reduce(
 			$applications,
-			function( $total, $current ) use ( $keys ) {
+			/**
+			 * @param array $total the accumulated array of reduced application data.
+			 * @param array $current data for the current template from the API.
+			 * @return array<array>
+			 */
+			function( $total, $current ) use ( $keys, $keys_with_images ) {
 				$application = array();
 				foreach ( $keys as $key ) {
 					$value = $current[ $key ];
@@ -72,12 +81,24 @@ class FrmApplicationsController {
 						$application[ $key ] = $value;
 					}
 				}
+
+				$application['hasLiteThumbnail'] = in_array( $application['key'], $keys_with_images, true );
+
 				$total[] = $application;
 
 				return $total;
 			},
 			array()
 		);
+	}
+
+	/**
+	 * Return the template keys that have embedded images. Otherwise, we want to avoid trying to load the URL and use the placeholder instead.
+	 *
+	 * @return array<string>
+	 */
+	private static function get_template_keys_with_local_images() {
+		return array( 'business-hours', 'faq-template-wordpress', 'restaurant-menu', 'team-directory' );
 	}
 
 	/**

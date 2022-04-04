@@ -315,7 +315,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 function frmAdminBuildJS() {
 	//'use strict';
 
-	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
+	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
+
+	const { tag, div, span, a } = frmDom;
+	const { doJsonFetch } = frmDom.ajax;
 
 	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
 		builderForm = document.getElementById( 'new_fields' ),
@@ -3559,10 +3562,6 @@ function frmAdminBuildJS() {
 		var wrapper = div();
 		wrapper.classList.add( 'frm_grid_container' );
 		return wrapper;
-	}
-
-	function div( atts ) {
-		return frmDom.div( atts );
 	}
 
 	function handleFieldGroupLayoutOptionClick() {
@@ -7106,7 +7105,7 @@ function frmAdminBuildJS() {
 	}
 
 	function addApplicationsToNewFormModal( modal ) {
-		frmDom.ajax.doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
+		doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
 
 		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
 
@@ -7119,17 +7118,31 @@ function frmAdminBuildJS() {
 		}
 
 		function getReadyMadeSolution( template ) {
-			// TODO have pro hook into this and add an image.
-			return frmDom.tag(
+			const image = tag( 'img' );
+			const thumbnailFolderUrl = frmGlobal.url + '/images/application-thumbnails/';
+
+			// TODO have pro hook into this and add an image from the API data.
+			const filenameToUse = template.hasLiteThumbnail ? template.key + '.png' : 'placeholder.svg';
+			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
+
+			const imageWrapper = div({ child: image });
+			imageWrapper.style.textAlign = 'center';
+
+			return tag(
 				'li',
 				{
 					className: 'frm-searchable-template frm-ready-made-solution',
 					children: [
-						frmDom.span({ text: __( 'Ready Made Solution', 'formidable' ) }),
-						frmDom.tag( 'h3', { text: template.name }),
-						frmDom.a({
-							text: __( 'Check all applications', 'formidable' ),
-							href: '/wp-admin/admin.php?page=formidable-applications' // TODO don't hard code this.
+						imageWrapper,
+						div({
+							children: [
+								span({ text: __( 'Ready Made Solution', 'formidable' ) }),
+								tag( 'h3', { text: template.name }),
+								a({
+									text: __( 'Check all applications', 'formidable' ),
+									href: '/wp-admin/admin.php?page=formidable-applications' // TODO don't hard code this.
+								})
+							]
 						})
 					]
 				}

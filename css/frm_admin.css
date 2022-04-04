@@ -8582,11 +8582,16 @@ Responsive Design
 	display: none !important;
 }
 
-.frm-ready-made-solution {
+#frm_new_form_modal .frm-ready-made-solution {
 	padding: 20px 5px;
+	display: flex;
 }
 
-.frm-ready-made-solution > span {
+#frm_new_form_modal .frm-ready-made-solution > div:first-child {
+	width: 300px;
+}
+
+.frm-ready-made-solution span {
 	background-color: #fde6de;
 	color: #f25a24;
 	padding: 10px;
@@ -8599,4 +8604,8 @@ Responsive Design
 
 .frm-ready-made-solution a {
 	color: var(--primary-color);
+}
+
+.frm-ready-made-solution img {
+	max-width: 100%;
 }
