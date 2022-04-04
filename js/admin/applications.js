@@ -121,7 +121,7 @@
 			className: 'frm-application-card',
 			children: [
 				getCardHeader(),
-				div({ className: 'frm-flex1' })
+				div({ className: 'frm-flex' })
 			]
 		});
 
