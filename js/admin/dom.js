@@ -494,6 +494,18 @@ let frmDom;
 		return output;
 	}
 
+	function svg({ href } = {}) {
+		const namespace = 'http://www.w3.org/2000/svg';
+		const output = document.createElementNS( namespace, 'svg' );
+		if ( href ) {
+			const use = document.createElementNS( namespace, 'use' );
+			use.setAttribute( 'href', href );
+			output.appendChild( use );
+			output.classList.add( 'frmsvg' );
+		}
+		return output;
+	}
+
 	function setAttributes( element, attrs ) {
 		Object.entries( attrs ).forEach(
 			([ key, value ]) => element.setAttribute( key, value )
@@ -505,5 +517,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { tag, div, span, a, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
+	frmDom = { tag, div, span, a, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
 }() );
