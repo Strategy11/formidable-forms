@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 5.9.2
 Requires PHP: 5.6
-Stable tag: 5.2.03
+Stable tag: 5.2.04
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.04 =
+* New: Defined field option data will no longer be sent to Akismet, to help improve accuracy with Akismet API.
+* Fix: Updated Elementor widget so it no longer uses the deprecated _register_controls method.
+
 = 5.2.03 =
 * New: Updated how unique field and form keys are generated for shorter unique keys.
 * New: Added a new frm_unique_field_key_separator filter for unique field keys.
@@ -449,13 +453,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Bottom margins were removed from credit card and address fields with last release and have been added back.
 * Fix: Imported templates with multiple forms were getting imported with the wrong name.
 * Fix: Clicking to install a quiz template was copying the NEW html into the form name input.
-
-= 5.2.02 =
-* Updated Bootstrap to version 4.6.1.
-* New: Name fields will be automatically used to define entry names if available.
-* New: Added setting to update privileged access message.
-* Fix: Section icon dropdown toggles were not displaying updated changes.
-* Fix: Prevent a PHP 8.1 deprecation message where null was being passed to substr.
-* Fix: Name fields with no descriptions were still displaying bottom margins.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
