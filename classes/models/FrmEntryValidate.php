@@ -664,7 +664,8 @@ class FrmEntryValidate {
 			return true;
 		}
 
-		$last_key = array_key_last( $field_data->options );
+		end( $field_data->options );
+		$last_key = key( $field_data->options );
 
 		// If a choice field has no Other option.
 		if ( is_numeric( $last_key ) || 0 !== strpos( $last_key, 'other_' ) ) {
