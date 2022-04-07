@@ -6,7 +6,7 @@
 	}
 
 	const __ = wp.i18n.__;
-	const { tag, div, span } = frmDom;
+	const { tag, div, span, a } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
 	const { doJsonFetch } = frmDom.ajax;
@@ -168,7 +168,7 @@
 		let control = tag( 'a' );
 		control.setAttribute( 'href', '#' );
 		control.setAttribute( 'role', 'button' );
-		control.textContent = __( 'Upgrade Now', 'formidable' );
+		control.textContent = getUpgradeNowText();
 
 		control.addEventListener(
 			'click',
@@ -187,6 +187,10 @@
 		return control;
 	}
 
+	function getUpgradeNowText() {
+		return __( 'Upgrade Now', 'formidable' );
+	}
+
 	function openViewApplicationModal( data ) {
 		const modal = maybeCreateModal(
 			'frm_view_application_modal',
@@ -202,6 +206,16 @@
 	function getViewApplicationModalContent( data ) {
 		const output = div({
 			children: [
+				div({
+					className: 'frm_warning_style',
+					children: [
+						span( __( 'Access to this application requires a license upgrade.', 'formidable' ) ),
+						a({
+							text: getUpgradeNowText(),
+							href: 'https://formidableforms.com' // TODO set a real upgrade url.
+						})
+					]
+				}),
 				div({
 					className: 'frm-application-modal-details',
 					children: [
@@ -233,7 +247,7 @@
 		viewDemoSiteButton.target = '_blank';
 
 		let primaryActionButton = footerButton({
-			text: 'Upgrade Now',
+			text: getUpgradeNowText(),
 			buttonType: 'primary'
 		});
 

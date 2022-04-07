@@ -67,8 +67,19 @@
 	padding: 0 10px;
 }
 
-.frm-application-card img,
-#frm_view_application_modal img {
+#frm_view_application_modal .frm_warning_style {
+	border: none aliceblue;
+	margin-top: 0;
+	padding: 20px;
+	border-radius: 0;
+	display: flex;
+}
+
+#frm_view_application_modal .frm_warning_style span {
+	flex: 1;
+}
+
+.frm-application-card img {
 	max-width: 100%;
 }
 
@@ -76,10 +87,6 @@
 	min-height: 130px;
 	display: flex;
 	align-items: center;
-}
-
-#frm_view_application_modal img {
-	height: 245px;
 }
 
 .frm-flex {
