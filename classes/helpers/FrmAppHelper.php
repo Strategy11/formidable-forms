@@ -2677,12 +2677,13 @@ class FrmAppHelper {
 		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
 		$global_strings = array(
-			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
-			'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
-			'url'          => self::plugin_url(),
-			'app_url'      => 'https://formidableforms.com/',
-			'loading'      => __( 'Loading&hellip;', 'formidable' ),
-			'nonce'        => wp_create_nonce( 'frm_ajax' ),
+			'updating_msg'    => __( 'Please wait while your site updates.', 'formidable' ),
+			'deauthorize'     => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
+			'url'             => self::plugin_url(),
+			'app_url'         => 'https://formidableforms.com/',
+			'applicationsUrl' => admin_url( 'admin.php?page=formidable-applications' ),
+			'loading'         => __( 'Loading&hellip;', 'formidable' ),
+			'nonce'           => wp_create_nonce( 'frm_ajax' ),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 

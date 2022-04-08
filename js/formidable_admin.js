@@ -7145,7 +7145,7 @@ function frmAdminBuildJS() {
 								tag( 'h3', { text: template.name }),
 								a({
 									text: __( 'Check all applications', 'formidable' ),
-									href: '/wp-admin/admin.php?page=formidable-applications' // TODO don't hard code this.
+									href: frmGlobal.applicationsUrl
 								})
 							]
 						}),
@@ -7153,8 +7153,7 @@ function frmAdminBuildJS() {
 							className: 'frm-hover-icons',
 							child: a({
 								child: svg,
-								// TODO this is hard coded.
-								href: '/wp-admin/admin.php?page=formidable-applications&triggerViewApplicationModal=1&template=' + template.key
+								href: frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key
 							})
 						})
 					]
