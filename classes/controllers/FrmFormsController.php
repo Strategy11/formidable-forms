@@ -2356,12 +2356,9 @@ class FrmFormsController {
 		$postarr = array( 'post_type' => 'page' );
 
 		if ( 'form' === $type ) {
-			$form_id                 = $object_id;
-			$postarr['post_content'] = '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} --><div>[formidable id="' . $form_id . '"]</div><!-- /wp:formidable/simple-form -->';
+			$postarr['post_content'] = self::get_page_shortcode_content_for_form( $object_id );
 		} else {
-			// TODO this should probably get set with a filter.
-			$view_id                 = $object_id;
-			$postarr['post_content'] = '<!-- wp:formidable/simple-view {"viewId":"' . $view_id . '","useDefaultLimit":true} --><div>[display-frm-data id="' . $view_id . '" filter="limited"]</div><!-- /wp:formidable/simple-view -->';
+			$postarr['post_content'] = apply_filters( 'frm_create_page_with_' . $type . '_shortcode_content', '', $object_id );
 		}
 
 		$name = FrmAppHelper::get_post_param( 'name', '', 'sanitize_text_field' );
@@ -2379,6 +2376,18 @@ class FrmFormsController {
 				'redirect' => get_edit_post_link( $success, 'redirect' ),
 			)
 		);
+	}
+
+	/**
+	 * @param string $content
+	 * @param int    $form_id
+	 * @return string
+	 */
+	private static function get_page_shortcode_content_for_form( $form_id ) {
+		$shortcode          = '[formidable id="' . $form_id . '"]';
+		$html_comment_start = '<!-- wp:formidable/simple-form {"formId":"' . $form_id . '"} -->';
+		$html_comment_end   = '<!-- /wp:formidable/simple-form -->';
+		return $html_comment_start . '<div>' . $shortcode . '</div>' . $html_comment_end;
 	}
 
 	/**
