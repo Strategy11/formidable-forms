@@ -2379,6 +2379,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param string $content
 	 * @param int    $form_id
 	 * @return string
