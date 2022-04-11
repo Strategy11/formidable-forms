@@ -13,11 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 			FrmAddonsController::show_conditional_action_button(
 				array(
-					'addon'        => array(
-						'slug'       => 'formidable-pro',
-						'categories' => array( 'Basic' ),
-					),
-					'license_type' => 'personal',
 					'upgrade_link' => FrmAppHelper::admin_upgrade_link(
 						array(
 							'medium'  => 'applications-header',

@@ -204,32 +204,39 @@
 	}
 
 	function getViewApplicationModalContent( data ) {
-		const output = div({
-			children: [
+		const children = [];
+
+		if ( data.upgradeUrl ) {
+			children.push(
 				div({
 					className: 'frm_warning_style',
 					children: [
 						span( __( 'Access to this application requires a license upgrade.', 'formidable' ) ),
 						a({
 							text: getUpgradeNowText(),
-							href: 'https://formidableforms.com' // TODO set a real upgrade url.
-						})
-					]
-				}),
-				div({
-					className: 'frm-application-modal-details',
-					children: [
-						div({
-							className: 'frm-application-modal-label',
-							text: __( 'Description', 'formidable' )
-						}),
-						div({
-							text: data.description
+							href: data.upgradeUrl
 						})
 					]
 				})
-			]
-		});
+			);
+		}
+
+		children.push(
+			div({
+				className: 'frm-application-modal-details',
+				children: [
+					div({
+						className: 'frm-application-modal-label',
+						text: __( 'Description', 'formidable' )
+					}),
+					div({
+						text: data.description
+					})
+				]
+			})
+		);
+
+		const output = div({ children });
 
 		const hookName = 'frm_view_application_modal_content';
 		const args     = { data };
@@ -250,6 +257,11 @@
 			text: getUpgradeNowText(),
 			buttonType: 'primary'
 		});
+
+		if ( data.upgradeUrl ) {
+			primaryActionButton.classList.remove( 'dismiss' );
+			primaryActionButton.setAttribute( 'href', data.upgradeUrl );
+		}
 
 		const hookName = 'frm_view_application_modal_primary_action_button';
 		const args     = { data };

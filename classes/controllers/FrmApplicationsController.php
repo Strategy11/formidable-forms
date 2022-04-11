@@ -65,54 +65,25 @@ class FrmApplicationsController {
 	 * @return array<array>
 	 */
 	private static function get_prepared_template_data() {
-		$api              = new FrmApplicationApi();
-		$applications     = $api->get_api_info();
-		$applications     = array_filter( $applications, 'is_array' );
-		$applications     = self::sort_templates( $applications );
-		$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link' ) );
-		$keys_with_images = self::get_template_keys_with_local_images();
+		$api          = new FrmApplicationApi();
+		$applications = $api->get_api_info();
+		$applications = array_filter( $applications, 'is_array' );
+		$applications = self::sort_templates( $applications );
 
-		return array_reduce(
-			$applications,
-			/**
-			 * @param array $total the accumulated array of reduced application data.
-			 * @param array $current data for the current template from the API.
-			 * @return array<array>
-			 */
-			function( $total, $current ) use ( $keys, $keys_with_images ) {
-				$application = array();
-				foreach ( $keys as $key ) {
-					$value = $current[ $key ];
+		FrmApplicationTemplate::init();
 
-					if ( 'icon' === $key ) {
-						// Icon is an array. The first array item is the image URL.
-						$application[ $key ] = reset( $value );
-					} else {
-						if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
-							// Strip off the " Template" text at the end of the name as it takes up space.
-							$value = substr( $value, 0, -9 );
-						}
-						$application[ $key ] = $value;
-					}
-				}
-
-				$application['hasLiteThumbnail'] = in_array( $application['key'], $keys_with_images, true );
-
-				$total[] = $application;
-
-				return $total;
-			},
-			array()
-		);
+		return array_reduce( $applications, array( __CLASS__, 'reduce_template' ), array() );
 	}
 
 	/**
-	 * Return the template keys that have embedded images. Otherwise, we want to avoid trying to load the URL and use the placeholder instead.
-	 *
-	 * @return array<string>
+	 * @param array $total the accumulated array of reduced application data.
+	 * @param array $current data for the current template from the API.
+	 * @return array<array>
 	 */
-	private static function get_template_keys_with_local_images() {
-		return array( 'business-hours', 'faq-template-wordpress', 'restaurant-menu', 'team-directory' );
+	private static function reduce_template( $total, $current ) {
+		$template = new FrmApplicationTemplate( $current );
+		$total[]  = $template->as_js_object();
+		return $total;
 	}
 
 	/**
