@@ -6,7 +6,7 @@
 	}
 
 	const __ = wp.i18n.__;
-	const { tag, div, span, a } = frmDom;
+	const { tag, div, span, a, svg } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
 	const { doJsonFetch } = frmDom.ajax;
@@ -139,10 +139,15 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
-			const title = span( data.name );
+			const titleWrapper = span({
+				children: [
+					svg({ href: '#frm_lock_simple' }),
+					tag( 'h4', data.name )
+				]
+			});
 			const header = div({
 				children: [
-					title,
+					titleWrapper,
 					getUseThisTemplateControl( data ),
 					div( data.description )
 				]

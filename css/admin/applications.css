@@ -123,6 +123,16 @@
 	vertical-align: bottom;
 }
 
+.frm-application-card h4 {
+	display: inline;
+	margin: 0;
+	opacity: 0.85;
+}
+
+.frm-application-card svg + h4 {
+	margin-left: 10px;
+}
+
 @media only screen and (max-width: 1050px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
