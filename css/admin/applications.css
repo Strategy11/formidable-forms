@@ -119,6 +119,10 @@
 	margin-bottom: 5px;
 }
 
+.formidable_page_formidable-applications #frm_bs_dropdown .install-now {
+	vertical-align: bottom;
+}
+
 @media only screen and (max-width: 1050px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
