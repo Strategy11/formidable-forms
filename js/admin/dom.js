@@ -371,6 +371,13 @@ let frmDom;
 					wait
 				);
 			};
+		},
+		onClickPreventDefault: ( element, callback ) => {
+			const listener = event => {
+				event.preventDefault();
+				callback( event );
+			};
+			element.addEventListener( 'click', listener );
 		}
 	};
 
