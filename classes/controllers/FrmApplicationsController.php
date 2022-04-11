@@ -9,23 +9,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmApplicationsController {
 
 	/**
-	 * @todo "NEW" pill beside Applications menu item.
+	 * Add Applications menu item to sidebar and define Applications index page.
 	 *
 	 * @return void
 	 */
 	public static function menu() {
-		$label = __( 'Applications', 'formidable' );
-		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label, 'frm_edit_forms', 'formidable-applications', array( __CLASS__, 'landing_page' ) );
+		$label    = __( 'Applications', 'formidable' );
+		$new_pill = '<span class="frm-new-pill">NEW</span>';
+		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label . $new_pill, 'frm_edit_forms', 'formidable-applications', array( __CLASS__, 'landing_page' ) );
 	}
 
 	/**
+	 * Render Applications index page.
+	 *
 	 * @return void
 	 */
 	public static function landing_page() {
-		require FrmAppHelper::plugin_path() . '/classes/views/applications/index.php';
+		require self::get_view_path() . 'index.php';
 	}
 
 	/**
+	 * Get path to application views.
+	 *
+	 * @return string
+	 */
+	private static function get_view_path() {
+		return FrmAppHelper::plugin_path() . '/classes/views/applications/';
+	}
+
+	/**
+	 * Get information about applications via AJAX action.
+	 *
 	 * @return void
 	 */
 	public static function get_applications_data() {
@@ -153,6 +167,6 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function render_applications_header( $title, $context ) {
-		require FrmAppHelper::plugin_path() . '/classes/views/applications/header.php';
+		require self::get_view_path() . 'header.php';
 	}
 }
