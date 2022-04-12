@@ -198,7 +198,12 @@
 						if ( 'form' === state.type ) {
 							editPageUrl = response.edit_page_url + '&frmForm=' + state.objectId;
 						} else {
-							editPageUrl = response.edit_page_url; // TODO
+							const hookName = 'frmEmbedEditPageUrl';
+							const hookArgs = {
+								objectId: state.objectId,
+								type: state.type
+							};
+							editPageUrl = wp.hooks.applyFilters( hookName, response.edit_page_url, hookArgs ); // TODO
 						}
 
 						frmDom.autocomplete.initSelectionAutocomplete();
