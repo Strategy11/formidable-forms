@@ -613,73 +613,16 @@ class FrmAppController {
 			return;
 		}
 
-		?>
-		<script>
-			( function() {
-				const handleDomReady = () => {
-					if ( 'undefined' === typeof wp || 'undefined' === typeof wp.data || 'function' !== typeof wp.data.subscribe ) {
-						return;
-					}
+		self::add_js_to_inject_gutenberg_block( 'formidable/simple-form', 'formId', $form_id );
+	}
 
-					const closeListener = wp.data.subscribe(
-						() => {
-							const editor = wp.data.select( 'core/editor' );
-
-							if ( 'function' !== typeof editor.__unstableIsEditorReady ) {
-								closeListener();
-								return;
-							}
-
-							const isReady = editor.__unstableIsEditorReady();
-							if ( isReady ) {
-								closeListener();
-								requestAnimationFrame( () => injectFormidableBlock() );
-							}
-						}
-					);
-				}
-
-				document.addEventListener( 'DOMContentLoaded', handleDomReady );
-
-				const injectFormidableBlock = () => {
-					insertedBlock = wp.blocks.createBlock(
-						'formidable/simple-form',
-						{
-							formId: '<?php echo absint( $form_id ); ?>'
-						}
-					);
-
-					const getBlocks = () => wp.data.select( 'core/editor' ).getBlocks();
-					const blockList = getBlocks();
-
-					const closeListener = wp.data.subscribe(
-						() => {
-							const currentBlocks = getBlocks();
-							if ( currentBlocks === blockList ) {
-								return;
-							}
-
-							closeListener();
-							const block = currentBlocks[ currentBlocks.length - 1 ];
-							const interval = setInterval(
-								() => {
-									const scrollTarget = document.getElementById( 'block-' + block.clientId );
-									const form = scrollTarget.querySelector( 'form' );
-									if ( form ) {
-										scrollTarget.scrollIntoView({ behavior: 'smooth' });
-										clearInterval( interval );
-									}
-								},
-								50
-							);
-						}
-					);
-
-					wp.data.dispatch( 'core/block-editor' ).insertBlocks( insertedBlock );
-				};
-			}() );
-		</script>
-		<?php
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function add_js_to_inject_gutenberg_block( $block_name, $object_key, $object_id ) {
+		require FrmAppHelper::plugin_path() . '/classes/views/shared/edit-page-js.php';
 	}
 
 	public static function load_lang() {
