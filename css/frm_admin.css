@@ -3053,6 +3053,13 @@ a.frm_option_icon:hover::before {
 	display: block;
 }
 
+.multiselect-option label {
+	max-width: calc(100% - 22px);
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 .frm_scale {
 	text-align: center;
 	float: left;
