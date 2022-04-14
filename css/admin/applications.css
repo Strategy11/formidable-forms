@@ -87,6 +87,7 @@
 	min-height: 130px;
 	display: flex;
 	align-items: center;
+	align-self: center;
 }
 
 .frm-flex {
