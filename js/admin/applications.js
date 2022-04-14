@@ -117,6 +117,7 @@
 	}
 
 	function createApplicationCard( data ) {
+		const isTemplate = ! data.termId;
 		const card = div({
 			className: 'frm-application-card',
 			children: [
@@ -125,13 +126,10 @@
 			]
 		});
 
-		if ( ! data.termId ) {
+		if ( isTemplate ) {
+			card.classList.add( 'frm-application-template-card' );
 			card.appendChild( tag( 'hr' ) );
 			card.appendChild( getCardContent() );
-		}
-
-		if ( data.url ) {
-			card.classList.add( 'frm-application-template-card' );
 		}
 
 		const hookName = 'frm_application_index_card';
