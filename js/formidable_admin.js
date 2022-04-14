@@ -8978,7 +8978,7 @@ function frmAdminBuildJS() {
 					} else {
 						// Embed button in form builder / form settings.
 						formId = document.getElementById( 'form_id' ).value;
-		
+
 						const formKeyInput = document.getElementById( 'frm_form_key' );
 						if ( formKeyInput ) {
 							formKey = formKeyInput.value;

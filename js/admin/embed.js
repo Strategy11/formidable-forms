@@ -203,7 +203,7 @@
 								objectId: state.objectId,
 								type: state.type
 							};
-							editPageUrl = wp.hooks.applyFilters( hookName, response.edit_page_url, hookArgs ); // TODO
+							editPageUrl = wp.hooks.applyFilters( hookName, response.edit_page_url, hookArgs );
 						}
 
 						frmDom.autocomplete.initSelectionAutocomplete();
