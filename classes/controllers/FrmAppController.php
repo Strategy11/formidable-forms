@@ -463,6 +463,10 @@ class FrmAppController {
 		$version    = FrmAppHelper::plugin_version();
 
 		FrmAppHelper::load_admin_wide_js();
+
+		wp_register_style( 'formidable_admin_global', $plugin_url . '/css/admin/frm_admin_global.css', array(), $version );
+		wp_enqueue_style( 'formidable_admin_global' );
+
 		wp_register_style( 'formidable-admin', $plugin_url . '/css/frm_admin.css', array(), $version );
 		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
 
