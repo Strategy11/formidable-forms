@@ -26,7 +26,7 @@ class FrmApplicationTemplate {
 	 */
 	public static function init() {
 		/**
-		 * @since x.x
+		 * @since 5.3
 		 *
 		 * @param array $keys
 		 */

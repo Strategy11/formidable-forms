@@ -573,7 +573,7 @@ class FrmFormsController {
 
 		$form_id = FrmForm::create( $new_values );
 		/**
-		 * @since x.x
+		 * @since 5.3
 		 *
 		 * @param int $form_id
 		 */
@@ -2379,7 +2379,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 5.3
 	 *
 	 * @param string $content
 	 * @param int    $form_id

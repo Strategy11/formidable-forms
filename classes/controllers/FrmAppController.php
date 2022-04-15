@@ -112,7 +112,7 @@ class FrmAppController {
 		/**
 		 * Allow another add on to style a page as a Formidable "white page", which adds a white background color.
 		 *
-		 * @since x.x
+		 * @since 5.3
 		 *
 		 * @param bool $is_white_page
 		 */
@@ -271,7 +271,7 @@ class FrmAppController {
 	/**
 	 * Enqueue scripts and styles required for modals.
 	 *
-	 * @since x.x
+	 * @since 5.3
 	 *
 	 * @return void
 	 */
@@ -621,7 +621,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 5.3
 	 *
 	 * @return void
 	 */
@@ -844,6 +844,6 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function include_embed_form_icons() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '5.3' );
 	}
 }
