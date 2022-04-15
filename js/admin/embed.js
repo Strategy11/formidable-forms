@@ -55,7 +55,7 @@
 		if ( clicked ) {
 			event.preventDefault();
 
-			const hookName = 'frmBeforeEmbedModal';
+			const hookName = 'frm_before_embed_modal';
 			const initialIds = [ 0, 0 ];
 			const hookArgs = {
 				element,
@@ -198,7 +198,7 @@
 						if ( 'form' === state.type ) {
 							editPageUrl = response.edit_page_url + '&frmForm=' + state.objectId;
 						} else {
-							const hookName = 'frmEmbedEditPageUrl';
+							const hookName = 'frm_embed_edit_page_url';
 							const hookArgs = {
 								objectId: state.objectId,
 								type: state.type
@@ -305,7 +305,7 @@
 					if ( 'form' === state.type ) {
 						getEmbedFormManualExamples().forEach( example => content.appendChild( getEmbedExample( example ) ) );
 					} else {
-						const hookName = 'frmEmbedExamples';
+						const hookName = 'frm_embed_examples';
 						const hookArgs = {
 							type: state.type,
 							objectId: state.objectId,
