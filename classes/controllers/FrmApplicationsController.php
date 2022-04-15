@@ -129,7 +129,11 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function dequeue_scripts() {
-		wp_dequeue_script( 'frm-surveys-admin' );
+		if ( 'formidable-applications' === FrmAppHelper::simple_get( 'page', 'sanitize_title' ) ) {
+			// Avoid extra scripts loading on applications index that aren't needed.
+			wp_dequeue_script( 'frm-surveys-admin' );
+			wp_dequeue_script( 'frm-quizzes-form-action' );
+		}
 	}
 
 	/**
