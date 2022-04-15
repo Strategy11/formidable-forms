@@ -6,7 +6,7 @@
 	}
 
 	const __ = wp.i18n.__;
-	const { div, tag } = frmDom;
+	const { div, tag, svg } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 
 	let autoId = 0;
@@ -138,7 +138,7 @@
 
 		const options = [
 			{
-				icon: 'frm_select_existing_page_icon',
+				icon: '#frm_file_icon',
 				label: __( 'Select existing page', 'formidable' ),
 				description: existingPageDescription,
 				callback: () => {
@@ -230,7 +230,7 @@
 				}
 			},
 			{
-				icon: 'frm_create_new_page_icon',
+				icon: '#frm_plus_icon',
 				label: __( 'Create new page', 'formidable' ),
 				description: newPageDescription,
 				callback: () => {
@@ -296,7 +296,7 @@
 				}
 			},
 			{
-				icon: 'frm_insert_manually_icon',
+				icon: '#frm_code_icon',
 				label: __( 'Insert manually', 'formidable' ),
 				description: insertManuallyDescription,
 				callback: () => {
@@ -345,7 +345,7 @@
 
 		const textWrapper = div();
 		textWrapper.appendChild( getLabel( label ) );
-		textWrapper.appendChild( div({ text: description }) );
+		textWrapper.appendChild( div( description ) );
 		output.appendChild( textWrapper );
 
 		output.addEventListener(
@@ -358,11 +358,11 @@
 		return output;
 	}
 
-	function wrapModalOptionIcon( sourceIconId ) {
-		const clone = document.getElementById( sourceIconId ).cloneNode( true );
-		const wrapper = div({ child: clone });
-		wrapper.className = 'frm-embed-modal-icon-wrapper';
-		return wrapper;
+	function wrapModalOptionIcon( iconHref ) {
+		return div({
+			className: 'frm-embed-modal-icon-wrapper',
+			child: svg({ href: iconHref })
+		});
 	}
 
 	function getEmbedFormManualExamples() {
@@ -431,18 +431,17 @@
 	}
 
 	function getCopyIcon( label ) {
-		const icon = document.getElementById( 'frm_copy_embed_icon' );
-		let clone = icon.cloneNode( true );
-		clone.id = 'frm_copy_embed_' + getAutoId();
-		clone.setAttribute( 'tabindex', 0 );
-		clone.setAttribute( 'role', 'button' );
+		const icon = svg({ href: '#frm_clone_icon' });
+		icon.id = 'frm_copy_embed_' + getAutoId();
+		icon.setAttribute( 'tabindex', 0 );
+		icon.setAttribute( 'role', 'button' );
 		/* translators: %s: Example type (ie. WordPress shortcode, API Form script) */
-		clone.setAttribute( 'aria-label', __( 'Copy %s', 'formidable' ).replace( '%s', label ) );
-		clone.addEventListener(
+		icon.setAttribute( 'aria-label', __( 'Copy %s', 'formidable' ).replace( '%s', label ) );
+		icon.addEventListener(
 			'click',
-			() => copyExampleToClipboard( clone.parentNode.querySelector( '.frm_embed_example' ) )
+			() => copyExampleToClipboard( icon.parentNode.querySelector( '.frm_embed_example' ) )
 		);
-		return clone;
+		return icon;
 	}
 
 	function copyExampleToClipboard( example ) {
