@@ -3,6 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * @since 5.3
+ */
 class FrmApplicationTemplate {
 
 	/**
