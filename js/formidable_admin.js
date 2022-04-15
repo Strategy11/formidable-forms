@@ -317,7 +317,7 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
-	const { tag, div, span, a } = frmDom;
+	const { tag, div, span, a, svg } = frmDom;
 	const { doJsonFetch } = frmDom.ajax;
 
 	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
@@ -7120,19 +7120,12 @@ function frmAdminBuildJS() {
 		function getReadyMadeSolution( template ) {
 			const image = tag( 'img' );
 			const thumbnailFolderUrl = frmGlobal.url + '/images/application-thumbnails/';
-
-			// TODO have pro hook into this and add an image from the API data.
 			const filenameToUse = template.hasLiteThumbnail ? template.key + '.png' : 'placeholder.svg';
 			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
 
 			const imageWrapper = div({ child: image });
 			imageWrapper.style.textAlign = 'center';
 
-			const svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
-			svg.classList.add( 'frmsvg' );
-			const use = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
-			use.setAttribute( 'href', '#frm_plus_icon' );
-			svg.appendChild( use );
 			return tag(
 				'li',
 				{
@@ -7152,7 +7145,7 @@ function frmAdminBuildJS() {
 						div({
 							className: 'frm-hover-icons',
 							child: a({
-								child: svg,
+								child: svg({ href: '#frm_plus_icon' }),
 								href: frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key
 							})
 						})
