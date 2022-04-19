@@ -771,7 +771,7 @@ function frmFrontFormJS() {
 	}
 
 	function addFieldError( $fieldCont, key, jsErrors ) {
-		var input, id, describedBy;
+		var input, id, describedBy, roleString;
 		if ( $fieldCont.length && $fieldCont.is( ':visible' ) ) {
 			$fieldCont.addClass( 'frm_blank_field' );
 			input = $fieldCont.find( 'input, select, textarea' );
@@ -786,7 +786,8 @@ function frmFrontFormJS() {
 						jsErrors[key]
 					);
 				} else {
-					$fieldCont.append( '<div class="frm_error" role="alert" id="' + id + '">' + jsErrors[key] + '</div>' );
+					roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+					$fieldCont.append( '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[key] + '</div>' );
 				}
 
 				if ( typeof describedBy === 'undefined' ) {
@@ -1095,6 +1096,10 @@ function frmFrontFormJS() {
 
 	function checkForErrorsAndMaybeSetFocus() {
 		var errors, element, timeoutCallback;
+
+		if ( ! frm_js.focus_first_error ) {
+			return;
+		}
 
 		errors = document.querySelectorAll( '.frm_form_field .frm_error' );
 		if ( ! errors.length ) {
