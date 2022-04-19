@@ -75,8 +75,9 @@ let frmDom;
 			return modal;
 		},
 		footerButton: args => {
-			const output = tag( 'a', args );
-			output.href = '#';
+			const output = a( args );
+			output.setAttribute( 'role', 'button' );
+			output.setAttribute( 'tabindex', 0 );
 			if ( args.buttonType ) {
 				output.classList.add( 'button' );
 				switch ( args.buttonType ) {
