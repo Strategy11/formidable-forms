@@ -2709,17 +2709,19 @@ class FrmAppHelper {
 		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
 
 		$script_strings = array(
-			'ajax_url'     => $ajax_url,
-			'images_url'   => self::plugin_url() . '/images',
-			'loading'      => __( 'Loading&hellip;', 'formidable' ),
-			'remove'       => __( 'Remove', 'formidable' ),
-			'offset'       => apply_filters( 'frm_scroll_offset', 4 ),
-			'nonce'        => wp_create_nonce( 'frm_ajax' ),
-			'id'           => __( 'ID', 'formidable' ),
-			'no_results'   => __( 'No results match', 'formidable' ),
-			'file_spam'    => __( 'That file looks like Spam.', 'formidable' ),
-			'calc_error'   => __( 'There is an error in the calculation in the field with key', 'formidable' ),
-			'empty_fields' => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
+			'ajax_url'           => $ajax_url,
+			'images_url'         => self::plugin_url() . '/images',
+			'loading'            => __( 'Loading&hellip;', 'formidable' ),
+			'remove'             => __( 'Remove', 'formidable' ),
+			'offset'             => apply_filters( 'frm_scroll_offset', 4 ),
+			'nonce'              => wp_create_nonce( 'frm_ajax' ),
+			'id'                 => __( 'ID', 'formidable' ),
+			'no_results'         => __( 'No results match', 'formidable' ),
+			'file_spam'          => __( 'That file looks like Spam.', 'formidable' ),
+			'calc_error'         => __( 'There is an error in the calculation in the field with key', 'formidable' ),
+			'empty_fields'       => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
+			'focus_first_error'  => self::should_focus_first_error(),
+			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
@@ -2787,6 +2789,28 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
+	}
+
+	/**
+	 * Returns whether or not the first errored input should be auto-focused (default true).
+	 *
+	 * @since 5.2.05
+	 *
+	 * @return bool
+	 */
+	private static function should_focus_first_error() {
+		return (bool) apply_filters( 'frm_focus_first_error', true );
+	}
+
+	/**
+	 * Returns whether or not field errors should include role="alert" (default true).
+	 *
+	 * @since 5.2.05
+	 *
+	 * @return bool
+	 */
+	public static function should_include_alert_role_on_field_errors() {
+		return (bool) apply_filters( 'frm_include_alert_role_on_field_errors', true );
 	}
 
 	/**
