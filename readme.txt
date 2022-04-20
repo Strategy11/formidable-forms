@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 5.9.3
 Requires PHP: 5.6
-Stable tag: 5.2.04
+Stable tag: 5.2.05
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,10 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.05 = 
+* New: Added a new frm_focus_first_error filter to toggle of the behavior of the auto-focus that gets triggered on the first field with an error.
+* New: Added a new frm_include_alert_role_on_field_errors filter to toggle the alert role that gets added to field errors.
+
 = 5.2.04 =
 * New: Defined field option data will no longer be sent to Akismet, to help improve accuracy with Akismet API.
 * Fix: Updated Elementor widget so it no longer uses the deprecated _register_controls method.
@@ -447,11 +451,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added a new frm_unique_field_key_separator filter for unique field keys.
 * New: Added a new frm_saved_errors filter for extending custom form validation.
 * Fix: Fixed a conflict with All in One SEO that was causing multiselect dropdowns to appear larger than expected.
-
-= 5.2.02.01 =
-* Fix: Fixed a conflict with Duplicator Pro that was causing dropdowns to break after updating to Bootstrap 4.
-* Fix: Bottom margins were removed from credit card and address fields with last release and have been added back.
-* Fix: Imported templates with multiple forms were getting imported with the wrong name.
-* Fix: Clicking to install a quiz template was copying the NEW html into the form name input.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
