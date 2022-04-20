@@ -231,7 +231,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
 
-		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) ) {
+		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
 			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
