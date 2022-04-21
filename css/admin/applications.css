@@ -1,10 +1,17 @@
+.formidable_page_formidable-applications #frm_top_bar {
+	background: #fff;
+}
+
+.formidable_page_formidable-applications #wpbody {
+	background: var(--sidebar-color);
+}
+
 .formidable_page_formidable-applications #wpcontent {
 	padding-left: 0;
 }
 
 .frm-applications-index-content {
 	padding: 40px 40px 0;
-	background: var(--sidebar-color);
 }
 
 .frm-application-cards-grid {
