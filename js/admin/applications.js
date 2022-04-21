@@ -89,6 +89,16 @@
 		templates.forEach(
 			application => elements.templatesGrid.appendChild( createApplicationCard( application ) )
 		);
+		maybeTriggerSearch();
+	}
+
+	function maybeTriggerSearch() {
+		const searchInput = document.getElementById( 'frm-application-search' );
+		if ( searchInput && '' !== searchInput.value ) {
+			const eventArgs = { bubbles: true, cancelable: true };
+			const event = new Event( 'input', eventArgs );
+			searchInput.dispatchEvent( event );
+		}
 	}
 
 	function getTemplatesNav() {
@@ -141,7 +151,10 @@
 
 	function handleCategorySelect( category ) {
 		state.filteredCategory = category;
-		elements.templatesGrid.innerHTML = '';
+
+		Array.from( elements.templatesGrid.children ).forEach(
+			child => child.classList.contains( 'frm-application-card' ) && child.remove()
+		);
 
 		if ( getAllItemsCategory() === category ) {
 			addTemplatesToGrid( state.templates );
@@ -167,7 +180,7 @@
 	function handleTemplateSearch({ foundSomething, notEmptySearchText }) {
 		if ( false === elements.noTemplateSearchResultsPlaceholder ) {
 			elements.noTemplateSearchResultsPlaceholder = getNoResultsPlaceholder();
-			document.getElementById( 'frm_application_templates_grid' ).appendChild( elements.noTemplateSearchResultsPlaceholder );
+			elements.templatesGrid.appendChild( elements.noTemplateSearchResultsPlaceholder );
 		}
 		elements.noTemplateSearchResultsPlaceholder.classList.toggle( 'frm_hidden', ! notEmptySearchText || foundSomething );
 	}
