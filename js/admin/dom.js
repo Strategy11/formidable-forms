@@ -105,7 +105,7 @@ let frmDom;
 			const response = await fetch( ajaxurl + '?action=frm_' + action );
 			const json = await response.json();
 			if ( ! json.success ) {
-				return Promise.reject( 'JSON result is not successful' );
+				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
 			return Promise.resolve( json.data );
 		},
@@ -118,7 +118,7 @@ let frmDom;
 			const response = await fetch( ajaxurl + '?action=frm_' + action, init );
 			const json = await response.json();
 			if ( ! json.success ) {
-				return Promise.reject( 'JSON result is not successful' );
+				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
 			return Promise.resolve( 'undefined' !== typeof json.data ? json.data : json );
 		}
