@@ -138,6 +138,28 @@
 	margin-left: 10px;
 }
 
+#frm_application_category_filter {
+    display: inline-block;
+    margin-left: 50px;
+}
+
+#frm_application_category_filter > a {
+    padding: 0 10px;
+}
+
+#frm_application_category_filter > a:first-child {
+	padding-left: 0;
+}
+
+#frm_application_category_filter > a:last-child {
+	padding-right: 0;
+}
+
+#frm_application_category_filter > a.frm-active-application-category {
+	color: var(--dark-grey);
+	pointer-events: none;
+}
+
 @media only screen and (max-width: 1050px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
@@ -149,6 +171,11 @@
 }
 
 @media only screen and (max-width: 782px) {
+	#frm_application_category_filter {
+		display: block;
+		margin-left: 0;
+	}
+
 	.frm-application-card {
 		grid-column: span 12/span 12; /* treat as frm12 */
 	}

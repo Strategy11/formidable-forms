@@ -48,7 +48,9 @@ class FrmApplicationsController {
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
 		if ( 'applications' !== $view ) {
-			$data['templates'] = self::get_prepared_template_data();
+			// view may be 'applications', 'templates', or empty.
+			$data['templates']  = self::get_prepared_template_data();
+			$data['categories'] = FrmApplicationTemplate::get_categories();
 		}
 
 		/**

@@ -19,7 +19,12 @@ class FrmApplicationTemplate {
 	private static $keys_with_images;
 
 	/**
-	 * @param array
+	 * @var array<string>|null $categories
+	 */
+	private static $categories;
+
+	/**
+	 * @var array $api_data
 	 */
 	private $api_data;
 
@@ -33,8 +38,9 @@ class FrmApplicationTemplate {
 		 *
 		 * @param array $keys
 		 */
-		self::$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link' ) );
+		self::$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link', 'categories' ) );
 		self::$keys_with_images = self::get_template_keys_with_local_images();
+		self::$categories       = array();
 	}
 
 	/**
@@ -52,6 +58,30 @@ class FrmApplicationTemplate {
 	 */
 	public function __construct( $api_data ) {
 		$this->api_data = $api_data;
+
+		if ( ! empty( $api_data['categories'] ) ) {
+			self::populate_category_information( $api_data['categories'] );
+		}
+	}
+
+	/**
+	 * @param array<string> $categories
+	 * @return void
+	 */
+	private static function populate_category_information( $categories ) {
+		foreach ( $categories as $category ) {
+			if ( false !== strpos( $category, '+Views' ) || in_array( $category, self::$categories, true ) ) {
+				continue;
+			}
+			self::$categories[] = $category;
+		}
+	}
+
+	/**
+	 * @return array<string>
+	 */
+	public static function get_categories() {
+		return isset( self::$categories ) ? self::$categories : array();
 	}
 
 	/**
@@ -65,6 +95,15 @@ class FrmApplicationTemplate {
 			if ( 'icon' === $key ) {
 				// Icon is an array. The first array item is the image URL.
 				$application[ $key ] = reset( $value );
+			} elseif ( 'categories' === $key ) {
+				$application[ $key ] = array_values(
+					array_filter(
+						$value,
+						function( $category ) {
+							return false === strpos( $category, '+Views' );
+						}
+					)
+				);
 			} else {
 				if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
 					// Strip off the " Template" text at the end of the name as it takes up space.
