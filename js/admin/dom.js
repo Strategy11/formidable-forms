@@ -221,7 +221,9 @@ let frmDom;
 			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
 			const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
 
-			elements.each( function() {
+			elements.each( initAutocompleteForElement );
+
+			function initAutocompleteForElement() {
 				let urlParams = basedUrlParams;
 				const element = jQuery( this );
 
@@ -267,7 +269,7 @@ let frmDom;
 						jQuery( this ).autocomplete( 'search', this.value );
 					}
 				});
-			});
+			}
 		},
 
 		selectBlank: function( e, ui ) {
