@@ -206,7 +206,7 @@
 							editPageUrl = wp.hooks.applyFilters( hookName, response.edit_page_url, hookArgs );
 						}
 
-						frmDom.autocomplete.initSelectionAutocomplete();
+						frmDom.autocomplete.initAutocomplete( 'page', dropdownWrapper );
 
 						function redirectToExistingPageWithInjectedShortcode( event ) {
 							event.preventDefault();
