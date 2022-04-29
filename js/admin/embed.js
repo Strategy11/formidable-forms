@@ -258,7 +258,7 @@
 							dataType: 'json',
 							success: function( response ) {
 								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
-								//	window.location.href = response.redirect;
+									window.location.href = response.redirect;
 								}
 							}
 						});
