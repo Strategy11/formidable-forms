@@ -98,7 +98,7 @@ class FrmFieldNumber extends FrmFieldType {
 		$value = (float) $args['value'];
 		$step  = (float) $step;
 		$div   = $value / $step;
-		if ( is_int( $div ) ) {
+		if ( floor( $div ) === $div ) {
 			return;
 		}
 
