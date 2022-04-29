@@ -104,10 +104,10 @@ class FrmFieldNumber extends FrmFieldType {
 
 		$div = floor( $div );
 		$errors[ 'field' . $args['id'] ] = sprintf(
-			// Translators: %1$f: the first nearest value; %2$f: the second nearest value.
-			__( 'Please enter a valid value. Two nearest valid values are %1$f and %2$f', 'formidable' ),
-			$div * $step,
-			( $div + 1 ) * $step
+			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
+			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
+			floatval( $div * $step ),
+			floatval( ( $div + 1 ) * $step )
 		);
 	}
 
