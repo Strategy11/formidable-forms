@@ -240,20 +240,25 @@
 					const form = tag( 'form' );
 
 					const createPageWithShortcode = () => {
-						jQuery.ajax({
-							type: 'POST',
-							url: ajaxurl,
-							data: {
+						const hookName = 'frm_create_page_with_shortcode_data';
+						const data = wp.hooks.applyFilters(
+							hookName,
+							{
 								action: 'frm_create_page_with_shortcode',
 								object_id: state.objectId,
 								type: state.type,
 								name: input.value,
 								nonce: frmGlobal.nonce
-							},
+							}
+						);
+						jQuery.ajax({
+							type: 'POST',
+							url: ajaxurl,
+							data,
 							dataType: 'json',
 							success: function( response ) {
 								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
-									window.location.href = response.redirect;
+								//	window.location.href = response.redirect;
 								}
 							}
 						});
