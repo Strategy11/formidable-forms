@@ -98,11 +98,11 @@ class FrmFieldNumber extends FrmFieldType {
 		$value = (float) $args['value'];
 		$step  = (float) $step;
 		$div   = $value / $step;
-		if ( ! $div ) {
+		if ( is_int( $div ) ) {
 			return;
 		}
 
-		$div = intval( $div );
+		$div = floor( $div );
 		$errors[ 'field' . $args['id'] ] = sprintf(
 			// Translators: %1$f: the first nearest value; %2$f: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$f and %2$f', 'formidable' ),
