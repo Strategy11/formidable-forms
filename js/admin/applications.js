@@ -113,6 +113,11 @@
 	}
 
 	function getCategoryOptions() {
+		if ( state.templates.length < 8 ) {
+			// Do not show categories filters until there are at least 8 templates.
+			return document.createTextNode( '' );
+		}
+
 		const categories = [ getAllItemsCategory() ].concat( state.categories );
 		const wrapper = div({ id: 'frm_application_category_filter' });
 
