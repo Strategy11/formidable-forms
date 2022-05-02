@@ -105,7 +105,7 @@
 		return div({
 			className: 'frm-application-templates-nav',
 			children: [
-				tag( 'h3', __( 'Formidable templates', 'formidable' ) ),
+				tag( 'h3', __( 'Formidable Applications', 'formidable' ) ),
 				getCategoryOptions(),
 				getTemplateSearch()
 			]
