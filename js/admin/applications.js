@@ -212,6 +212,11 @@
 			card.classList.add( 'frm-application-template-card' );
 			card.appendChild( tag( 'hr' ) );
 			card.appendChild( getCardContent() );
+
+			card.addEventListener(
+				'click',
+				event => 'a' !== event.target.nodeName.toLowerCase() && card.querySelector( 'a' ).click()
+			);
 		}
 
 		const hookName = 'frm_application_index_card';

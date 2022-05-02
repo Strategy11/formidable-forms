@@ -53,6 +53,14 @@
 	margin-top: 20px;
 }
 
+.frm-application-template-card {
+	cursor: pointer;
+}
+
+.frm-application-template-card:hover h4 {
+	color: var(--primary-color);
+}
+
 /* Card title */
 .frm-application-card > div:first-child > span {
 	font-weight: 600;
