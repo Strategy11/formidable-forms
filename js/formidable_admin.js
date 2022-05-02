@@ -7134,8 +7134,8 @@ function frmAdminBuildJS() {
 						imageWrapper,
 						div({
 							children: [
-								span({ text: __( 'Ready Made Solution', 'formidable' ) }),
-								tag( 'h3', { text: template.name }),
+								span( __( 'Ready Made Solution', 'formidable' ) ),
+								tag( 'h3', template.name ),
 								a({
 									text: __( 'Check all applications', 'formidable' ),
 									href: frmGlobal.applicationsUrl
@@ -8956,9 +8956,9 @@ function frmAdminBuildJS() {
 
 			frmAdminBuild.hooks.addFilter(
 				'frm_before_embed_modal',
-				( _, { element, type }) => {
+				( ids, { element, type }) => {
 					if ( 'form' !== type ) {
-						return;
+						return ids;
 					}
 
 					let formId, formKey;
