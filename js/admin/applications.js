@@ -330,7 +330,7 @@
 
 	function getViewApplicationModalFooter( data ) {
 		const viewDemoSiteButton = footerButton({
-			text: __( 'View demo site', 'formidable' ),
+			text: __( 'Learn More', 'formidable' ),
 			buttonType: 'secondary'
 		});
 		viewDemoSiteButton.href = data.link;
