@@ -124,7 +124,7 @@
 	}
 
 	function getModalOptions() {
-		const content = div({ className: 'frm_embed_modal_content frm_wrap' });
+		const content = div({ className: 'frm-embed-modal-content frm_wrap' });
 		const typeDescription = getTypeDescription();
 
 		/* translators: %s type: ie form, view. */

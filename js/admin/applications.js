@@ -186,9 +186,7 @@
 	}
 
 	function getNoResultsPlaceholder() {
-		return div({
-			text: __( 'No application templates match your search query.', 'formidable' )
-		});
+		return div( __( 'No application templates match your search query.', 'formidable' ) );
 	}
 
 	function handleCardHook( _, args ) {
@@ -311,9 +309,7 @@
 						className: 'frm-application-modal-label',
 						text: __( 'Description', 'formidable' )
 					}),
-					div({
-						text: data.description
-					})
+					div( data.description )
 				]
 			})
 		);
