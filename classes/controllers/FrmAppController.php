@@ -600,7 +600,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * Automatically insert a Formidable block when loading Gutenberg with a $_GET['frmForm'] value set.
+	 * Automatically insert a Formidable block when loading Gutenberg when $_GET['frmForm' is set.
 	 *
 	 * @since 5.2
 	 *
