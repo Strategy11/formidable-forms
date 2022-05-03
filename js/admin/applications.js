@@ -29,6 +29,7 @@
 	};
 
 	wp.hooks.addFilter( 'frm_application_card', 'formidable', handleCardHook );
+	wp.hooks.addFilter( 'frm_application_card_item_count', 'formidable', filterItemCount );
 
 	initialize();
 
@@ -239,11 +240,22 @@
 			const header = div({
 				children: [
 					titleWrapper,
-					getUseThisTemplateControl( data ),
-					div( data.description )
+					getUseThisTemplateControl( data )
 				]
 			});
+
+			const counter = getItemCounter();
+			if ( false !== counter ) {
+				header.appendChild( counter );
+			}
+
 			return header;
+		}
+
+		function getItemCounter() {
+			const hookName = 'frm_application_card_item_count';
+			const args = { data };
+			return wp.hooks.applyFilters( hookName, false, args );
 		}
 
 		function getCardContent() {
@@ -258,6 +270,43 @@
 		}
 
 		return card;
+	}
+
+	function filterItemCount( counter, { data }) {
+		const hasForms = 'undefined' !== typeof data.formCount && '0' !== data.formCount;
+		const hasViews = 'undefined' !== typeof data.viewCount && '0' !== data.viewCount;
+		const hasPages = 'undefined' !== typeof data.pageCount && '0' !== data.pageCount;
+
+		if ( ! hasForms && ! hasViews && ! hasPages ) {
+			return counter;
+		}
+
+		counter = div({ className: 'frm-application-item-count' });
+
+		if ( hasForms ) {
+			addCount( data.formCount, __( 'Forms', 'formidable-pro' ), __( 'Form', 'formidable-pro' ) );
+		}
+
+		if ( hasViews ) {
+			addCount( data.viewCount, __( 'Views', 'formidable-pro' ), __( 'View', 'formidable-pro' ) );
+		}
+
+		if ( hasPages ) {
+			addCount( data.pageCount, __( 'Pages', 'formidable-pro' ), __( 'Page', 'formidable-pro' ) );
+		}
+
+		function addCount( countValue, pluralDescriptor, singularDescriptor ) {
+			if ( counter.children.length ) {
+				counter.appendChild( document.createTextNode( ' | ' ) );
+			}
+
+			const descriptor = '1' === countValue ? singularDescriptor : pluralDescriptor;
+			counter.appendChild(
+				span({ text: countValue + ' ' + descriptor })
+			);
+		}
+
+		return counter;
 	}
 
 	function getUseThisTemplateControl( data ) {

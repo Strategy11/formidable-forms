@@ -38,7 +38,7 @@ class FrmApplicationTemplate {
 		 *
 		 * @param array $keys
 		 */
-		self::$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link', 'categories' ) );
+		self::$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' ) );
 		self::$keys_with_images = self::get_template_keys_with_local_images();
 		self::$categories       = array();
 	}
@@ -105,6 +105,12 @@ class FrmApplicationTemplate {
 					)
 				);
 			} else {
+				if ( 'views' === $key ) {
+					$key = 'viewCount';
+				} elseif ( 'forms' === $key ) {
+					$key = 'formCount';
+				}
+
 				if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
 					// Strip off the " Template" text at the end of the name as it takes up space.
 					$value = substr( $value, 0, -9 );
