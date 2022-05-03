@@ -302,7 +302,7 @@
 
 			const descriptor = '1' === countValue ? singularDescriptor : pluralDescriptor;
 			counter.appendChild(
-				span({ text: countValue + ' ' + descriptor })
+				span( countValue + ' ' + descriptor )
 			);
 		}
 
