@@ -284,15 +284,15 @@
 		counter = div({ className: 'frm-application-item-count' });
 
 		if ( hasForms ) {
-			addCount( data.formCount, __( 'Forms', 'formidable-pro' ), __( 'Form', 'formidable-pro' ) );
+			addCount( data.formCount, __( 'Forms', 'formidable' ), __( 'Form', 'formidable' ) );
 		}
 
 		if ( hasViews ) {
-			addCount( data.viewCount, __( 'Views', 'formidable-pro' ), __( 'View', 'formidable-pro' ) );
+			addCount( data.viewCount, __( 'Views', 'formidable' ), __( 'View', 'formidable' ) );
 		}
 
 		if ( hasPages ) {
-			addCount( data.pageCount, __( 'Pages', 'formidable-pro' ), __( 'Page', 'formidable-pro' ) );
+			addCount( data.pageCount, __( 'Pages', 'formidable' ), __( 'Page', 'formidable' ) );
 		}
 
 		function addCount( countValue, pluralDescriptor, singularDescriptor ) {
