@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 5.9.3
 Requires PHP: 5.6
-Stable tag: 5.2.05
+Stable tag: 5.2.06
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
