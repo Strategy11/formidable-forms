@@ -187,6 +187,10 @@ h4.frm-locked-application-template {
 	pointer-events: none;
 }
 
+.frm-admin-page-applications #frm_top_bar h1 {
+	width: auto;
+}
+
 @media only screen and (max-width: 1050px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
