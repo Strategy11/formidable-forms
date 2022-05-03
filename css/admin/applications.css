@@ -57,6 +57,10 @@
 	cursor: pointer;
 }
 
+.frm-application-template-card:hover {
+	filter: drop-shadow(0px 12px 24px rgba(72, 78, 84, 0.2));
+}
+
 .frm-application-template-card:hover h4 {
 	color: var(--primary-color);
 }
