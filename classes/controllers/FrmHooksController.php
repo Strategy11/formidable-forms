@@ -112,11 +112,6 @@ class FrmHooksController {
 		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
 		add_action( 'frm_page_footer', 'FrmAppHelper::renewal_message' );
 
-		// Applications Controller.
-		add_action( 'admin_menu', 'FrmApplicationsController::menu', 100 );
-		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
-		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
-
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
 		add_filter( 'set-screen-option', 'FrmEntriesController::save_per_page', 10, 3 );
@@ -168,6 +163,11 @@ class FrmHooksController {
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
+
+		// Applications Controller.
+		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 ); // Use the same priority as styles so Applications appear directly under Styles.
+		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
+		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
