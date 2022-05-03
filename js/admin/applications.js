@@ -227,7 +227,7 @@
 			const titleWrapper = span({
 				children: [
 					svg({ href: '#frm_lock_simple' }),
-					tag( 'h4', data.name )
+					tag( 'h4', { className: 'frm-locked-application-template', text: data.name })
 				]
 			});
 			const header = div({

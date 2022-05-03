@@ -78,6 +78,11 @@
 	font-size: 12px;
 }
 
+.frm-application-template-card > div:first-child > div {
+	/* Only add this to the template card as the custom applications show form/view counts as description instead. */
+	margin-top: 10px;
+}
+
 .frm-application-card > div {
 	padding: 0 10px;
 }
@@ -146,6 +151,9 @@
 .frm-application-card h4 {
 	display: inline;
 	margin: 0;
+}
+
+h4.frm-locked-application-template {
 	opacity: 0.85;
 }
 
