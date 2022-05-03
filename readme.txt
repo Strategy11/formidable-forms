@@ -438,6 +438,9 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.2.06 =
+* New: The step value for number fields is now validated server side on submission.
+
 = 5.2.05 = 
 * New: Added a new frm_focus_first_error filter to toggle of the behavior of the auto-focus that gets triggered on the first field with an error.
 * New: Added a new frm_include_alert_role_on_field_errors filter to toggle the alert role that gets added to field errors.
@@ -445,11 +448,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.2.04 =
 * New: Defined field option data will no longer be sent to Akismet, to help improve accuracy with Akismet API.
 * Fix: Updated Elementor widget so it no longer uses the deprecated _register_controls method.
-
-= 5.2.03 =
-* New: Updated how unique field and form keys are generated for shorter unique keys.
-* New: Added a new frm_unique_field_key_separator filter for unique field keys.
-* New: Added a new frm_saved_errors filter for extending custom form validation.
-* Fix: Fixed a conflict with All in One SEO that was causing multiselect dropdowns to appear larger than expected.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
