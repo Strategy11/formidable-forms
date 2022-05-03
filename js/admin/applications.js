@@ -103,9 +103,15 @@
 
 	function getTemplatesNav() {
 		return div({
-			className: 'frm-application-templates-nav',
+			className: 'frm-application-templates-nav wrap',
 			children: [
-				tag( 'h3', __( 'Formidable Applications', 'formidable' ) ),
+				tag(
+					'h2',
+					{
+						text: __( 'Formidable Applications', 'formidable' ),
+						className: 'frm-h2'
+					}
+				),
 				getCategoryOptions(),
 				getTemplateSearch()
 			]
