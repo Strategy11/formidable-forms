@@ -70,9 +70,45 @@ class FrmFieldNumber extends FrmFieldType {
 					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
 				}
 			}
+
+			$this->validate_step( $errors, $args );
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Validates the step setting.
+	 *
+	 * @since 5.2.06
+	 *
+	 * @param array $errors Errors array.
+	 * @param array $args   Validation args.
+	 */
+	private function validate_step( &$errors, $args ) {
+		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
+			return; // Don't need to check if value is invalid before.
+		}
+
+		$step = FrmField::get_option( $this->field, 'step' );
+		if ( ! $step || ! is_numeric( $step ) ) {
+			return;
+		}
+
+		$value = (float) $args['value'];
+		$step  = (float) $step;
+		$div   = $value / $step;
+		if ( floor( $div ) === $div ) {
+			return;
+		}
+
+		$div = floor( $div );
+		$errors[ 'field' . $args['id'] ] = sprintf(
+			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
+			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
+			floatval( $div * $step ),
+			floatval( ( $div + 1 ) * $step )
+		);
 	}
 
 	/**
