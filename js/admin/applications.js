@@ -259,7 +259,7 @@
 		}
 
 		function getCardContent() {
-			const thumbnailFolderUrl = frmGlobal.url + '/images/application-thumbnails/';
+			const thumbnailFolderUrl = frmGlobal.url + '/images/applications/thumbnails/';
 			const filenameToUse = data.hasLiteThumbnail ? data.key + '.png' : 'placeholder.svg';
 			const image = tag( 'img' );
 			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
@@ -366,7 +366,14 @@
 			);
 		}
 
+		const img = tag( 'img' );
+		img.src = frmGlobal.url + '/images/applications/placeholder.png';
+
 		children.push(
+			div({
+				className: 'frm-application-image-wrapper',
+				child: img
+			}),
 			div({
 				className: 'frm-application-modal-details',
 				children: [

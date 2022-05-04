@@ -123,7 +123,7 @@
 }
 
 .frm-application-modal-details {
-	padding: 15px;
+	padding: 25px 30px;
 }
 
 .formidable_page_formidable-applications .ui-widget-overlay {
@@ -141,6 +141,10 @@
 #frm_view_application_modal .frm-application-image-wrapper {
 	background-color: #F6F7FB;
 	padding: 20px 30px 15px;
+}
+
+.frm-application-image-wrapper img {
+	max-width: 100%;
 }
 
 .frm-application-modal-label {

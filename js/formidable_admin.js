@@ -7119,7 +7119,7 @@ function frmAdminBuildJS() {
 
 		function getReadyMadeSolution( template ) {
 			const image = tag( 'img' );
-			const thumbnailFolderUrl = frmGlobal.url + '/images/application-thumbnails/';
+			const thumbnailFolderUrl = frmGlobal.url + '/images/applications/thumbnails/';
 			const filenameToUse = template.hasLiteThumbnail ? template.key + '.png' : 'placeholder.svg';
 			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
 
