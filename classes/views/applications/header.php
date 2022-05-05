@@ -8,7 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::show_header_logo(); ?> 
 	</a>
 	<div id="frm_bs_dropdown">
-		<h1><span><?php echo esc_html( $title ); ?></span></h1>
+		<h1>
+			<span>
+				<?php echo esc_html( $title ); ?>
+			</span>
+			<?php do_action( 'frm_applications_header_inside_title_after_span', $context ); ?>
+		</h1>
 		<?php if ( 'index' === $context && ! FrmAppHelper::pro_is_installed() ) { ?>
 			<?php
 			FrmAddonsController::show_conditional_action_button(
