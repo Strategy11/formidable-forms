@@ -1112,6 +1112,11 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * @param int           $m
+	 * @param string        $type
+	 * @param array<string> $s_message
+	 */
 	public static function item_count_message( $m, $type, &$s_message ) {
 		if ( ! $m ) {
 			return;
@@ -1136,7 +1141,21 @@ class FrmXMLHelper {
 			'actions' => sprintf( _n( '%1$s Form Action', '%1$s Form Actions', $m, 'formidable' ), $m ),
 		);
 
-		$s_message[] = isset( $strings[ $type ] ) ? $strings[ $type ] : ' ' . $m . ' ' . ucfirst( $type );
+		if ( isset( $strings[ $type ] ) ) {
+			$s_message[] = $strings[ $type ];
+		} else {
+			$string = ' ' . $m . ' ' . ucfirst( $type );
+
+			/**
+			 * @since 5.3
+			 *
+			 * @param string $string Message string for imported item.
+			 * @param int    $m      Number of item that was imported.
+			 * }
+			 */
+			$string      = apply_filters( 'frm_xml_' . $type . '_count_message', $string, $m );
+			$s_message[] = $string;
+		}
 	}
 
 	/**
