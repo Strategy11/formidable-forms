@@ -1108,6 +1108,13 @@ class FrmXMLHelper {
 		} else {
 			self::add_form_link_to_message( $result, $message );
 
+			/**
+			 * @since 5.3
+			 *
+			 * @param string $message
+			 * @param array  $result
+			 */
+			$message  = apply_filters( 'frm_xml_parsed_message', $message, $result );
 			$message .= '</ul>';
 		}
 	}
