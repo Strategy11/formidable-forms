@@ -1891,11 +1891,12 @@ h2.frm-h2 + .howto {
 #wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
 	right: 20px;
-	top: 37px;
+	top: 34px;
 }
 
-#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child a {
-	color: var(--grey);
+.frm_common_modal .frm_modal_top a .frmsvg {
+	color: #282F36;
+	opacity: 0.65;
 }
 
 #frm_new_form_modal .postbox > div.inside {

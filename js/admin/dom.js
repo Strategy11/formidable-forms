@@ -29,7 +29,7 @@ let frmDom;
 				const a = tag(
 					'a',
 					{
-						text: __( 'Cancel', 'formidable' ),
+						child: svg({ href: '#frm_close_icon' }),
 						className: 'dismiss'
 					}
 				);
