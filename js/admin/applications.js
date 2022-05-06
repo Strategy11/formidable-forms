@@ -217,6 +217,7 @@
 
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
+			card.classList.add( 'frm-locked-application-template' );
 			card.appendChild( tag( 'hr' ) );
 			card.appendChild( getCardContent() );
 
@@ -234,7 +235,7 @@
 			const titleWrapper = span({
 				children: [
 					svg({ href: '#frm_lock_simple' }),
-					tag( 'h4', { className: 'frm-locked-application-template', text: data.name })
+					tag( 'h4', { text: data.name })
 				]
 			});
 			const header = div({
@@ -310,11 +311,11 @@
 	}
 
 	function getUseThisTemplateControl( data ) {
-		let control = tag( 'a' );
-		control.setAttribute( 'href', '#' );
+		let control = a({
+			className: 'button frm-button-secondary',
+			text: getUpgradeNowText()
+		});
 		control.setAttribute( 'role', 'button' );
-		control.textContent = getUpgradeNowText();
-
 		control.addEventListener(
 			'click',
 			event => {

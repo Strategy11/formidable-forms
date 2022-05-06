@@ -66,15 +66,49 @@
 }
 
 /* Card title */
-.frm-application-card > div:first-child > span {
+.frm-application-card h4 {
 	font-weight: 600;
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin: 0;
+}
+
+.frm-locked-application-template h4 {
+	opacity: 0.85;
+	max-width: calc( 100% - 30px );
+}
+
+.frm-locked-application-template > div:first-child > span > .frmsvg {
+	position: relative;
+	bottom: 5px;
+}
+
+#frm_application_templates_grid .frm-application-card .frm-button-secondary {
+	display: flex;
+	flex-direction: row;
+}
+
+.frm-application-card .frm-button-secondary .frmsvg {
+	width: 11px;
+	height: 11px;
+	position: relative;
+	right: 2px;
+	align-self: center;
 }
 
 /* Use template anchor */
-.frm-application-card > div:first-child > a {
+#frm_application_templates_grid .frm-application-card .frm-button-secondary {
 	font-size: 10px;
 	position: absolute;
 	right: 10px;
+	bottom: 2px;
+	padding: 0 6px;
+	line-height: 15px;
+	min-height: 17px;
+	height: 17px;
 }
 
 /* Card description */
@@ -89,6 +123,7 @@
 .frm-application-item-count {
 	font-size: 11px;
 	color: var(--medium-grey);
+	margin-top: 4px;
 }
 
 #frm_view_application_modal .frm_warning_style {
@@ -154,15 +189,6 @@
 
 .formidable_page_formidable-applications #frm_bs_dropdown .install-now {
 	vertical-align: bottom;
-}
-
-.frm-application-card h4 {
-	display: inline;
-	margin: 0;
-}
-
-h4.frm-locked-application-template {
-	opacity: 0.85;
 }
 
 .frm-application-card svg + h4 {
