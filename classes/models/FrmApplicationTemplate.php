@@ -49,7 +49,14 @@ class FrmApplicationTemplate {
 	 * @return array<string>
 	 */
 	private static function get_template_keys_with_local_images() {
-		return array( 'business-hours', 'faq-template-wordpress', 'restaurant-menu', 'team-directory' );
+		return array(
+			'business-hours',
+			'faq-template-wordpress',
+			'restaurant-menu',
+			'team-directory',
+			'product-review',
+			'real-estate-listings',
+		);
 	}
 
 	/**
