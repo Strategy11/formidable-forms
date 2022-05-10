@@ -586,4 +586,15 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'z1z1z1' ) );
 		$this->assertFalse( FrmAppHelper::ctype_xdigit( 'FGF' ) );
 	}
+
+	public function test_count_decimals() {
+		$this->assertFalse( FrmAppHelper::count_decimals( 'str' ) );
+		$this->assertFalse( FrmAppHelper::count_decimals( '1.0.0' ) );
+		$this->assertEquals( 0, FrmAppHelper::count_decimals( 13 ) );
+		$this->assertEquals( 0, FrmAppHelper::count_decimals( '13' ) );
+		$this->assertEquals( 1, FrmAppHelper::count_decimals( 13.1 ) );
+		$this->assertEquals( 1, FrmAppHelper::count_decimals( '13.1' ) );
+		$this->assertEquals( 3, FrmAppHelper::count_decimals( 13.123 ) );
+		$this->assertEquals( 3, FrmAppHelper::count_decimals( '13.123' ) );
+	}
 }

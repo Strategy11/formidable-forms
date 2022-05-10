@@ -11,7 +11,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.2.06';
+	public static $plug_version = '5.2.07';
 
 	/**
 	 * @since 1.07.02
@@ -3412,6 +3412,28 @@ class FrmAppHelper {
 			$text = __( 'NEW', 'formidable' );
 		}
 		echo '<span class="frm-new-pill">' . esc_html( $text ) . '</span>';
+	}
+
+	/**
+	 * Count the number of decimals digits.
+	 *
+	 * @since 5.2.07
+	 *
+	 * @param mixed $num Number.
+	 * @return int|false Returns `false` if the passed parameter is not number.
+	 */
+	public static function count_decimals( $num ) {
+		if ( ! is_numeric( $num ) ) {
+			return false;
+		}
+
+		$num   = (string) $num;
+		$parts = explode( '.', $num );
+		if ( 1 === count( $parts ) ) {
+			return 0;
+		}
+
+		return strlen( $parts[ count( $parts ) - 1 ] );
 	}
 
 	/**
