@@ -38,7 +38,10 @@ class FrmApplicationTemplate {
 		 *
 		 * @param array $keys
 		 */
-		self::$keys             = apply_filters( 'frm_application_data_keys', array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' ) );
+		self::$keys             = apply_filters(
+			'frm_application_data_keys',
+			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' )
+		);
 		self::$keys_with_images = self::get_template_keys_with_local_images();
 		self::$categories       = array();
 	}
@@ -129,10 +132,56 @@ class FrmApplicationTemplate {
 		$application['hasLiteThumbnail'] = in_array( $application['key'], self::$keys_with_images, true );
 
 		if ( ! array_key_exists( 'url', $application ) ) {
-			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
+			$purchase_url = $this->maybe_get_purchase_url();
+			if ( false !== $purchase_url ) {
+				$application['purchaseUrl'] = $purchase_url;
+			}
+			if ( ! array_key_exists( 'purchaseUrl', $application ) ) {
+				$application['upgradeUrl'] = $this->get_admin_upgrade_link();
+			}
 		}
 
 		return $application;
+	}
+
+	/**
+	 * @return string|false
+	 */
+	private function maybe_get_purchase_url() {
+		if ( ! array_key_exists( 'min_plan', $this->api_data ) ) {
+			return false;
+		}
+
+		$license_type = '';
+		$api          = new FrmFormApi();
+		$addons       = $api->get_api_info();
+
+		if ( ! array_key_exists( 93790, $addons ) ) {
+			return false;
+		}
+
+		$pro          = $addons[93790];
+		$license_type = strtolower( $pro['type'] );
+		$args         = array(
+			'license_type'  => $license_type,
+			'plan_required' => $this->get_required_license(),
+		);
+		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
+			return false;
+		}
+
+		return $this->get_admin_upgrade_link();
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_required_license() {
+		$required_license = strtolower( $this->api_data['min_plan'] );
+		if ( 'plus' === $required_license ) {
+			$required_license = 'personal';
+		}
+		return $required_license;
 	}
 
 	/**
@@ -143,7 +192,8 @@ class FrmApplicationTemplate {
 			array(
 				'medium'  => 'application-template-' . $this->api_data['key'],
 				'content' => 'applications',
-			)
+			),
+			'pricing-apps'
 		);
 	}
 }
