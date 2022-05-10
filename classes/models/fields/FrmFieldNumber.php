@@ -95,16 +95,16 @@ class FrmFieldNumber extends FrmFieldType {
 			return;
 		}
 
-		$div = $this->check_value_is_valid_with_step( $args['value'], $step );
-		if ( true === $div ) {
+		$result = $this->check_value_is_valid_with_step( $args['value'], $step );
+		if ( ! $result ) {
 			return;
 		}
 
 		$errors[ 'field' . $args['id'] ] = sprintf(
 			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
-			floatval( $div * $step ),
-			floatval( ( $div + 1 ) * $step )
+			floatval( $result[0] ),
+			floatval( $result[1] )
 		);
 	}
 
@@ -115,7 +115,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @param numeric $value The value.
 	 * @param numeric $step  The step.
-	 * @return true|int      Return `true` if valid. Otherwise, return the floored result of `$value / $step`.
+	 * @return int|array     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
 	private function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.
@@ -127,10 +127,11 @@ class FrmFieldNumber extends FrmFieldType {
 		$step  = intval( $pow * $step );
 		$div   = $value / $step;
 		if ( is_int( $div ) ) {
-			return true;
+			return 0;
 		}
 
-		return floor( $div );
+		$div = floor( $div );
+		return array( $div * $step / $pow, ( $div + 1 ) * $step / $pow );
 	}
 
 	/**
