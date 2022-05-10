@@ -1,4 +1,7 @@
 == Changelog ==
+= 5.2.07 =
+* Fix: Step value validation was occasionally breaking in some cases due to rounding precision issues.
+
 = 5.2.06 =
 * New: The step value for number fields is now validated server side on submission.
 
