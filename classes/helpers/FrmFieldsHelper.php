@@ -1347,6 +1347,10 @@ class FrmFieldsHelper {
 			$replace_with[] = '[' . $new . ']';
 			$replace[]      = '[' . $old . ' ';
 			$replace_with[] = '[' . $new . ' ';
+			$replace[]      = 'field_id="' . $old . '"';
+			$replace_with[] = 'field_id="' . $new . '"';
+			$replace[]      = 'field_id=\"' . $old . '\"';
+			$replace_with[] = 'field_id=\"' . $new . '\"';
 			unset( $old, $new );
 		}
 		if ( is_array( $val ) ) {
