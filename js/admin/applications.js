@@ -1,12 +1,12 @@
 ( function() {
-	/** globals ajaxurl, wp, frmDom */
+	/** globals ajaxurl, wp, frmDom, frmApplicationsVars */
 
 	if ( 'undefined' === typeof ajaxurl || 'undefined' === typeof wp || 'undefined' === typeof frmDom ) {
 		return;
 	}
 
 	const __ = wp.i18n.__;
-	const { tag, div, span, a, svg } = frmDom;
+	const { tag, div, span, a, svg, img } = frmDom;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { newSearchInput } = frmDom.search;
 	const { doJsonFetch } = frmDom.ajax;
@@ -64,16 +64,66 @@
 		state.categories = data.categories;
 		state.templates = data.templates;
 
-		const contentWrapper = div({ className: 'frm-applications-index-content' });
-
 		container.innerHTML = '';
+
+		const contentWrapper = div({ className: 'frm-applications-index-content' });
 		container.appendChild( contentWrapper );
 
+		const customTemplatesNav = getCustomTemplatesNav();
+
+		contentWrapper.appendChild( customTemplatesNav );
 		renderFormidableTemplates( contentWrapper, data.templates );
 
 		const hookName = 'frm_application_render_templates';
-		const args = { data };
+		const args = { data, customTemplatesNav };
 		wp.hooks.doAction( hookName, contentWrapper, args );
+
+		if ( ! contentWrapper.querySelector( '#frm_custom_applications_grid' ) ) {
+			addCustomApplicationsPlaceholder( customTemplatesNav );
+		}
+	}
+
+	function getCustomTemplatesNav() {
+		return div({
+			className: 'frm-application-templates-nav wrap',
+			children: [
+				tag(
+					'h2',
+					{
+						child: span( __( 'My Applications', 'formidable-pro' ) ),
+						className: 'frm-h2'
+					}
+				)
+			]
+		});
+	}
+
+	function addCustomApplicationsPlaceholder( customTemplatesNav ) {
+		const placeholder = div({
+			id: 'frm_custom_applications_placeholder',
+			child: div({
+				child: img({ src: getUrlToApplicationsImages() + 'custom-applications.svg' })
+			})
+		});
+		placeholder.appendChild(
+			div({
+				children: [
+					img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
+					tag( 'h3', __( 'Improve your workflow with Formidable applications', 'formidable' ) ),
+					div( __( 'Applications help to organize your workspace by combining forms and views into a ready made solution.', 'formidable' ) ),
+					a({
+						className: 'button button-primary frm-button-primary',
+						text: __( 'Upgrade account', 'formidable' ),
+						href: frmApplicationsVars.proUpgradeUrl
+					})
+				]
+			})
+		);
+		customTemplatesNav.parentNode.insertBefore( placeholder, customTemplatesNav.nextElementSibling );
+	}
+
+	function getUrlToApplicationsImages() {
+		return frmGlobal.url + '/images/applications/';
 	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
@@ -260,13 +310,11 @@
 		}
 
 		function getCardContent() {
-			const thumbnailFolderUrl = frmGlobal.url + '/images/applications/thumbnails/';
+			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
 			const filenameToUse = data.hasLiteThumbnail ? data.key + '.png' : 'placeholder.svg';
-			const image = tag( 'img' );
-			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
 			return div({
 				className: 'frm-application-card-image-wrapper',
-				child: image
+				child: img({ src: thumbnailFolderUrl + filenameToUse })
 			});
 		}
 
@@ -367,13 +415,10 @@
 			);
 		}
 
-		const img = tag( 'img' );
-		img.src = frmGlobal.url + '/images/applications/placeholder.png';
-
 		children.push(
 			div({
 				className: 'frm-application-image-wrapper',
-				child: img
+				child: img({ src: getUrlToApplicationsImages() + 'placeholder.png' })
 			}),
 			div({
 				className: 'frm-application-modal-details',

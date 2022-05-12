@@ -477,6 +477,14 @@ let frmDom;
 		return anchor;
 	}
 
+	function img( args = {}) {
+		const output = tag( 'img', args );
+		if ( 'string' === typeof args.src ) {
+			output.setAttribute( 'src', args.src );
+		}
+		return output;
+	}
+
 	function tag( type, args = {}) {
 		const output = document.createElement( type );
 
@@ -527,5 +535,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { tag, div, span, a, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
+	frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
 }() );

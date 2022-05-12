@@ -1,3 +1,20 @@
+.frm-application-cards-grid,
+#frm-application-search,
+.frm-application-card hr {
+	width: 100%;
+}
+
+.frm-application-card img,
+.frm-application-image-wrapper img,
+#frm_custom_applications_placeholder img {
+	max-width: 100%;
+}
+
+.frm-application-card > div:first-child,
+#frm_custom_applications_placeholder {
+	position: relative;
+}
+
 .formidable_page_formidable-applications #frm_top_bar {
 	background: #fff;
 }
@@ -30,12 +47,6 @@
 	display: inline-block;
 }
 
-.frm-application-cards-grid,
-#frm-application-search,
-.frm-application-card hr {
-	width: 100%;
-}
-
 .frm-application-card {
 	border-radius: 4px;
 	background: #FFFFFF;
@@ -43,10 +54,6 @@
 	padding: 10px 0;
 	display: flex;
 	flex-direction: column;
-}
-
-.frm-application-card > div:first-child {
-	position: relative;
 }
 
 .frm-application-card:nth-child(4) ~ .frm-application-card {
@@ -142,10 +149,6 @@
 	box-shadow: none;
 }
 
-.frm-application-card img {
-	max-width: 100%;
-}
-
 .frm-application-card-image-wrapper {
 	min-height: 130px;
 	display: flex;
@@ -176,10 +179,6 @@
 #frm_view_application_modal .frm-application-image-wrapper {
 	background-color: #F6F7FB;
 	padding: 20px 30px 15px;
-}
-
-.frm-application-image-wrapper img {
-	max-width: 100%;
 }
 
 .frm-application-modal-label {
@@ -222,6 +221,26 @@
 
 .frm-application-templates-nav .frm-search {
 	margin-top: 0;
+}
+
+.frm-application-templates-nav.wrap {
+	margin-right: 0;
+}
+
+#frm_custom_applications_placeholder > div:first-child {
+	position: absolute;
+}
+
+#frm_custom_applications_placeholder > div:last-child {
+	text-align: center;
+	max-width: 500px;
+	margin: 0 auto 20px;
+	position: relative;
+	top: 20px;
+}
+
+#frm_custom_applications_placeholder > div a {
+	margin-top: 20px;
 }
 
 @media only screen and (max-width: 1050px) {

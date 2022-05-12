@@ -121,6 +121,11 @@ class FrmApplicationsController {
 		wp_register_script( 'formidable_applications', $plugin_url . '/js/admin/applications.js', $js_dependencies, $version, true );
 		wp_register_style( 'formidable_applications', $plugin_url . '/css/admin/applications.css', array(), $version );
 
+		$js_vars = array(
+			'proUpgradeUrl' => FrmAppHelper::admin_upgrade_link( 'applications' ),
+		);
+		wp_localize_script( 'formidable_applications', 'frmApplicationsVars', $js_vars );
+
 		wp_enqueue_script( 'formidable_applications' );
 		wp_enqueue_style( 'formidable_applications' );
 
