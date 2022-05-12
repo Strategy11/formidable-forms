@@ -746,6 +746,7 @@ class FrmXMLHelper {
 			'frm_styles'      => 'styles',
 		);
 
+		$view_ids              = array();
 		$posts_with_shortcodes = array();
 
 		foreach ( $views as $item ) {
@@ -827,24 +828,19 @@ class FrmXMLHelper {
 
 			$imported['posts'][ (int) $old_id ] = $post_id;
 
+			if ( $post['post_type'] === 'frm_display' ) {
+				$view_ids[ (int) $old_id ] = $post_id;
+			}
+
 			do_action( 'frm_after_import_view', $post_id, $post );
 
 			unset( $post );
 		}
 
-		foreach ( $posts_with_shortcodes as $imported_post_id => $post ) {
-			$post_content = self::switch_view_ids( $post['post_content'], $imported['posts'] );
-			if ( $post_content !== $post['post_content'] ) {
-				wp_update_post(
-					array(
-						'ID'           => $imported_post_id,
-						'post_content' => $post_content,
-					)
-				);
-			}
-			unset( $post_content, $imported_post_id, $post );
+		if ( $posts_with_shortcodes && $view_ids ) {
+			self::maybe_switch_view_ids_after_importing_posts( $posts_with_shortcodes, $view_ids );
 		}
-		unset( $posts_with_shortcodes );
+		unset( $posts_with_shortcodes, $view_ids );
 
 		self::maybe_update_stylesheet( $imported );
 
@@ -883,6 +879,27 @@ class FrmXMLHelper {
 		}
 
 		return $string;
+	}
+
+	/**
+	 * @param array<array> $posts_with_shortcodes indexed by current post id.
+	 * @param array<int>   $view_ids new view ids indexed by old view id.
+	 * @return void
+	 */
+	private static function maybe_switch_view_ids_after_importing_posts( $posts_with_shortcodes, $view_ids ) {
+		foreach ( $posts_with_shortcodes as $imported_post_id => $post ) {
+			$post_content = self::switch_view_ids( $post['post_content'], $view_ids );
+			if ( $post_content === $post['post_content'] ) {
+				continue;
+			}
+
+			wp_update_post(
+				array(
+					'ID'           => $imported_post_id,
+					'post_content' => $post_content,
+				)
+			);
+		}
 	}
 
 	/**
