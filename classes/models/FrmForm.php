@@ -132,6 +132,64 @@ class FrmForm {
 			global $wpdb;
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $new_opts ) ), array( 'id' => $form_id ) );
 		}
+
+		self::switch_field_ids_in_fields( $form_id );
+	}
+
+	/**
+	 * Switches field ID in fields.
+	 *
+	 * @since 5.2.08
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	private static function switch_field_ids_in_fields( $form_id ) {
+		$fields = FrmField::getAll(
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			)
+		);
+
+		if ( ! $fields || ! is_array( $fields ) ) {
+			return;
+		}
+
+		foreach ( $fields as $field ) {
+			self::switch_field_ids_in_field( $field );
+		}
+	}
+
+	/**
+	 * Switches field ID in a field.
+	 *
+	 * @since 5.2.08
+	 *
+	 * @param object $field Field object.
+	 */
+	private static function switch_field_ids_in_field( $field ) {
+		$keys = array( 'default_value', 'field_options' );
+
+		$new_values = array();
+		foreach ( $keys as $key ) {
+			if ( empty( $field->$key ) ) {
+				continue;
+			}
+
+			if ( ! is_string( $field->$key ) && ! is_array( $field->$key ) ) {
+				continue;
+			}
+
+			$new_val = FrmFieldsHelper::switch_field_ids( $field->$key );
+			if ( $new_val !== $field->$key ) {
+				$new_values[ $key ] = $new_val;
+			}
+		}
+
+		if ( ! empty( $new_values ) ) {
+			FrmField::update( $field->id, $new_values );
+		}
 	}
 
 	/**
