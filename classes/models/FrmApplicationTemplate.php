@@ -160,7 +160,11 @@ class FrmApplicationTemplate {
 			return false;
 		}
 
-		$pro          = $addons[93790];
+		$pro = $addons[93790];
+		if ( ! array_key_exists( 'type', $pro ) ) {
+			return false;
+		}
+
 		$license_type = strtolower( $pro['type'] );
 		$args         = array(
 			'license_type'  => $license_type,
