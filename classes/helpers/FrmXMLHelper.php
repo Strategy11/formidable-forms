@@ -1139,7 +1139,7 @@ class FrmXMLHelper {
 			/* translators: %1$s: Number of items */
 			'views'   => sprintf( _n( '%1$s View', '%1$s Views', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
-			'posts'   => sprintf( _n( '%1$s Post', '%1$s Posts', $m, 'formidable' ), $m ),
+			'posts'   => sprintf( _n( '%1$s Page/Post', '%1$s Pages/Posts', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
 			'styles'  => sprintf( _n( '%1$s Style', '%1$s Styles', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
