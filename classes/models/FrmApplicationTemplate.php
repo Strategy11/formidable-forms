@@ -192,7 +192,8 @@ class FrmApplicationTemplate {
 	private function get_admin_upgrade_link() {
 		return FrmAppHelper::admin_upgrade_link(
 			array(
-				'content' => 'applications',
+				'content' => 'upgrade',
+				'medium'  => 'applications',
 			),
 			'/view-templates/' . $this->api_data['key']
 		);
