@@ -109,11 +109,11 @@
 			div({
 				children: [
 					img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
-					tag( 'h3', __( 'Improve your workflow with Formidable applications', 'formidable' ) ),
-					div( __( 'Applications help to organize your workspace by combining forms and views into a ready made solution.', 'formidable' ) ),
+					tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
+					div( __( 'Applications help to organize your workspace by combining forms, views, and pages into a full solution.', 'formidable' ) ),
 					a({
 						className: 'button button-primary frm-button-primary',
-						text: __( 'Upgrade account', 'formidable' ),
+						text: __( 'Upgrade to Pro', 'formidable' ),
 						href: frmApplicationsVars.proUpgradeUrl
 					})
 				]
@@ -361,7 +361,7 @@
 	function getUseThisTemplateControl( data ) {
 		let control = a({
 			className: 'button frm-button-secondary',
-			text: getUpgradeNowText()
+			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );
 		control.addEventListener(

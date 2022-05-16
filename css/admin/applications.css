@@ -108,14 +108,12 @@
 
 /* Use template anchor */
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
-	font-size: 10px;
 	position: absolute;
 	right: 10px;
-	bottom: 2px;
-	padding: 0 6px;
-	line-height: 15px;
+	bottom: 0;
+	line-height: 17px;
 	min-height: 17px;
-	height: 17px;
+	height: 20px;
 }
 
 /* Card description */
