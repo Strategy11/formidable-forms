@@ -11,6 +11,9 @@ the_generator( 'export' );
 	<pubDate><?php echo esc_html( gmdate( 'D, d M Y H:i:s +0000' ) ); ?></pubDate>
 
 <?php
+/**
+ * @since 5.3
+ */
 do_action( 'frm_xml_export_before_types_loop' );
 
 foreach ( $type as $tb_type ) {
@@ -38,6 +41,9 @@ foreach ( $type as $tb_type ) {
 	unset( $item_ids, $records[ $tb_type ], $tb_type );
 }
 
+/**
+ * @since 5.3
+ */
 do_action( 'frm_xml_export_after_types_loop' );
 ?>
 </channel>
