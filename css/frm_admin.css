@@ -6824,6 +6824,12 @@ ul .frm_col_two {
 	font-size: 17px !important;
 }
 
+.frm_placeholder_block h3 {
+	font-size: 22px;
+	font-weight: 400;
+	color: var(--medium-grey);
+}
+
 .frm-green-icons .frmsvg {
 	color: var(--green);
 }

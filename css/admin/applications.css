@@ -15,12 +15,6 @@
 	position: relative;
 }
 
-.frm_placeholder_block h3 {
-	font-size: 22px;
-	font-weight: 400;
-	color: var(--medium-grey);
-}
-
 .formidable_page_formidable-applications #frm_top_bar {
 	background: #fff;
 }
