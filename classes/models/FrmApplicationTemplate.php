@@ -132,22 +132,20 @@ class FrmApplicationTemplate {
 		$application['hasLiteThumbnail'] = in_array( $application['key'], self::$keys_with_images, true );
 
 		if ( ! array_key_exists( 'url', $application ) ) {
-			$purchase_url = $this->maybe_get_purchase_url();
+			$purchase_url = $this->is_available_for_purchase();
 			if ( false !== $purchase_url ) {
-				$application['purchaseUrl'] = $purchase_url;
+				$application['forPurchase'] = true;
 			}
-			if ( ! array_key_exists( 'purchaseUrl', $application ) ) {
-				$application['upgradeUrl'] = $this->get_admin_upgrade_link();
-			}
+			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
 		}
 
 		return $application;
 	}
 
 	/**
-	 * @return string|false
+	 * @return bool
 	 */
-	private function maybe_get_purchase_url() {
+	private function is_available_for_purchase() {
 		if ( ! array_key_exists( 'min_plan', $this->api_data ) ) {
 			return false;
 		}
@@ -174,7 +172,7 @@ class FrmApplicationTemplate {
 			return false;
 		}
 
-		return $this->get_admin_upgrade_link();
+		return true;
 	}
 
 	/**
@@ -194,10 +192,9 @@ class FrmApplicationTemplate {
 	private function get_admin_upgrade_link() {
 		return FrmAppHelper::admin_upgrade_link(
 			array(
-				'medium'  => 'application-template-' . $this->api_data['key'],
 				'content' => 'applications',
 			),
-			'pricing-apps'
+			'/view-templates/' . $this->api_data['key'],
 		);
 	}
 }
