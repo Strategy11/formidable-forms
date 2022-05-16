@@ -78,9 +78,10 @@
 		const args = { data, customTemplatesNav };
 		wp.hooks.doAction( hookName, contentWrapper, args );
 
-		if ( ! contentWrapper.querySelector( '#frm_custom_applications_grid' ) ) {
-			addCustomApplicationsPlaceholder( customTemplatesNav );
-		}
+		setTimeout(
+			() => ! contentWrapper.querySelector( '#frm_custom_applications_grid' ) && addCustomApplicationsPlaceholder( customTemplatesNav ),
+			0
+		);
 	}
 
 	function getCustomTemplatesNav() {
