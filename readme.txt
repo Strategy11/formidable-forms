@@ -441,6 +441,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.3 =
 * New: Added a new applications page for displaying available Formidable application templates.
 * New: Imported views and pages with [formidable] and [display-frm-data] shortcodes will now replace old form and view ids with the new imported ids.
+* New: Imported forms will now replace the old field ids with new field ids when the id is used in a field_id shortcode option.
 
 = 5.2.07 =
 * Fix: Step value validation was occasionally breaking in some cases due to rounding precision issues.
