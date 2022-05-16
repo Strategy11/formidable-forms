@@ -15,6 +15,12 @@
 	position: relative;
 }
 
+.frm_placeholder_block h3 {
+	font-size: 22px;
+	font-weight: 400;
+	color: var(--medium-grey);
+}
+
 .formidable_page_formidable-applications #frm_top_bar {
 	background: #fff;
 }
@@ -41,10 +47,6 @@
 
 .formidable_page_formidable-applications #wpbody-content {
 	padding-bottom: 0;
-}
-
-.frm-applications-index-content h3 {
-	display: inline-block;
 }
 
 .frm-application-card {
@@ -91,6 +93,8 @@
 .frm-locked-application-template > div:first-child > span > .frmsvg {
 	position: relative;
 	bottom: 5px;
+	width: 14px;
+	height: 14px;
 }
 
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {

@@ -101,6 +101,7 @@
 	function addCustomApplicationsPlaceholder( customTemplatesNav ) {
 		const placeholder = div({
 			id: 'frm_custom_applications_placeholder',
+			className: 'frm_placeholder_block',
 			child: div({
 				child: img({ src: getUrlToApplicationsImages() + 'custom-applications.svg' })
 			})
@@ -110,7 +111,7 @@
 				children: [
 					img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
 					tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
-					div( __( 'Applications help to organize your workspace by combining forms, views, and pages into a full solution.', 'formidable' ) ),
+					div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
 					a({
 						className: 'button button-primary frm-button-primary',
 						text: __( 'Upgrade to Pro', 'formidable' ),
