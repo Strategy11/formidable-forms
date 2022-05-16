@@ -194,7 +194,7 @@ class FrmApplicationTemplate {
 			array(
 				'content' => 'applications',
 			),
-			'/view-templates/' . $this->api_data['key'],
+			'/view-templates/' . $this->api_data['key']
 		);
 	}
 }
