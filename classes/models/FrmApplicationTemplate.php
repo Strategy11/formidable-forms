@@ -137,6 +137,7 @@ class FrmApplicationTemplate {
 				$application['forPurchase'] = true;
 			}
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
+			$application['link']       = $application['upgradeUrl'];
 		}
 
 		return $application;
@@ -195,7 +196,7 @@ class FrmApplicationTemplate {
 				'content' => 'upgrade',
 				'medium'  => 'applications',
 			),
-			'/view-templates/' . $this->api_data['key']
+			'/view-templates/' . $this->api_data['slug']
 		);
 	}
 }
