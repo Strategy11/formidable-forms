@@ -443,21 +443,16 @@ let frmDom;
 					}
 				},
 				close: function() {
+					document.body.style.overflowY = 'initial';
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				}
 			});
 		}
-		scrollToTop();
+
+		document.body.style.overflowY = 'hidden';
 		$modal.dialog( 'open' );
 		return $modal;
-	}
-
-	function scrollToTop() {
-		if ( 'scrollRestoration' in history ) {
-			history.scrollRestoration = 'manual';
-		}
-		window.scrollTo( 0, 0 );
 	}
 
 	function div( args ) {
