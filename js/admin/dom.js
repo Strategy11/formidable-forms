@@ -254,7 +254,7 @@ let frmDom;
 						}
 					},
 					create: function() {
-						const $container = jQuery( this ).parent();
+						let $container = jQuery( this ).parent();
 
 						if ( $container.length === 0 ) {
 							$container = 'body';
