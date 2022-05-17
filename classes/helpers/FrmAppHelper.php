@@ -1085,29 +1085,37 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Render a button for a new item (Form, Application, etc).
+	 *
 	 * @since 3.0
-	 * @param array $atts
+	 * @param array $atts {
+	 *     @type array  $link_hook Custom link hook, calls do_action and exits early.
+	 *     @type string $new_link  Href value, default #.
+	 *     @type string $class     Custom class names, space separated.
+	 *     @type string $label     Button label. Default "Add New".
+	 * }
+	 * @return void
 	 */
 	public static function add_new_item_link( $atts ) {
-		if ( ! empty( $atts['new_link'] ) ) {
-			?>
-			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm-with-plus">
-				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
-				<?php esc_html_e( 'Add New', 'formidable' ); ?>
-			</a>
-			<?php
-		} elseif ( ! empty( $atts['trigger_new_form_modal'] ) ) {
-			?>
-			<a href="#" class="button button-primary frm-button-primary frm-with-plus frm-trigger-new-form-modal">
-				<?php
-				self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' );
-				esc_html_e( 'Add New', 'formidable' );
-				?>
-			</a>
-			<?php
-		} elseif ( isset( $atts['link_hook'] ) ) {
+		if ( isset( $atts['link_hook'] ) ) {
 			do_action( $atts['link_hook']['hook'], $atts['link_hook']['param'] );
+			return;
 		}
+
+		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
+		$class = 'button button-primary frm-button-primary frm-with-plus';
+
+		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
+			$class .= ' frm-trigger-new-form-modal';
+		}
+
+		if ( ! empty( $atts['class'] ) ) {
+			$class .= ' ' . $atts['class'];
+		}
+
+		$label = ! empty( $atts['label'] ) ? $atts['label'] : __( 'Add New', 'formidable' );
+
+		require self::plugin_path() . '/classes/views/shared/add-button.php';
 	}
 
 	/**
