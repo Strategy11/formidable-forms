@@ -1089,10 +1089,10 @@ class FrmAppHelper {
 	 *
 	 * @since 3.0
 	 * @param array $atts {
-	 *     @type array  $link_hook Custom link hook, calls do_action and exits early.
-	 *     @type string $new_link  Href value, default #.
-	 *     @type string $class     Custom class names, space separated.
-	 *     @type string $label     Button label. Default "Add New".
+	 *     @type array  $link_hook    Custom link hook, calls do_action and exits early.
+	 *     @type string $new_link     Href value, default #.
+	 *     @type string $class        Custom class names, space separated.
+	 *     @type string $button_text  Button text. Default "Add New".
 	 * }
 	 * @return void
 	 */
@@ -1113,7 +1113,7 @@ class FrmAppHelper {
 			$class .= ' ' . $atts['class'];
 		}
 
-		$label = ! empty( $atts['label'] ) ? $atts['label'] : __( 'Add New', 'formidable' );
+		$button_text = ! empty( $atts['button_text'] ) ? $atts['button_text'] : __( 'Add New', 'formidable' );
 
 		require self::plugin_path() . '/classes/views/shared/add-button.php';
 	}
