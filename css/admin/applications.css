@@ -10,6 +10,12 @@
 	max-width: 100%;
 }
 
+.frm-application-image-wrapper img {
+	background: url(../../images/applications/toolbar.png) no-repeat top center;
+	background-size: contain;
+	padding-top: 19px;
+}
+
 .frm-application-card > div:first-child,
 #frm_custom_applications_placeholder {
 	position: relative;

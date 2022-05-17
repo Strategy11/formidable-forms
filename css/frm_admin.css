@@ -7220,6 +7220,7 @@ li.frm_noallow.button.frm_show_upgrade {
 	background: transparent;
 	box-shadow: none;
 	border: none;
+	line-height: 1.4em;
 }
 
 .frm-dialog .frm-sub-label,
