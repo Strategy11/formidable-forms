@@ -366,6 +366,9 @@
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );
+		/* translators: %s: Application Template Name */
+		const ariaDescription = __( '%s Template' ).replace( '%s', data.name );
+		control.setAttribute( 'aria-description', ariaDescription );
 		control.addEventListener(
 			'click',
 			event => {
