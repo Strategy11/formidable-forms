@@ -145,6 +145,10 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	margin-bottom: 10px;
 }
 
+.wp-admin .frm_wrap .tablenav select {
+	margin-right: 6px;
+}
+
 .tablenav .actions .button {
 	margin-top: 1px;
 }
@@ -2055,7 +2059,6 @@ h2.frm-h2 + .howto {
 #frm_new_form_modal #frm_leave_email,
 #frm_new_form_modal #frm_code_from_email
 {
-	border: 2px solid var(--grey-border);
 	border-radius: 4px !important;
 }
 
