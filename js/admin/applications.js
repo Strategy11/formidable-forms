@@ -25,7 +25,8 @@
 	const elements = {
 		noTemplateSearchResultsPlaceholder: false,
 		templatesGrid: false,
-		activeCategoryAnchor: false
+		activeCategoryAnchor: false,
+		viewApplicationModal: false
 	};
 
 	wp.hooks.addFilter( 'frm_application_card', 'formidable', handleCardHook );
@@ -387,15 +388,15 @@
 	}
 
 	function openViewApplicationModal( data ) {
-		const modal = maybeCreateModal(
+		elements.viewApplicationModal = maybeCreateModal(
 			'frm_view_application_modal',
 			{
 				content: getViewApplicationModalContent( data ),
 				footer: getViewApplicationModalFooter( data )
 			}
 		);
-		modal.querySelector( '.frm-modal-title' ).textContent = data.name;
-		modal.classList.add( 'frm_common_modal' );
+		elements.viewApplicationModal.querySelector( '.frm-modal-title' ).textContent = data.name;
+		elements.viewApplicationModal.classList.add( 'frm_common_modal' );
 	}
 
 	function getViewApplicationModalContent( data ) {
@@ -416,10 +417,17 @@
 			);
 		}
 
+		const placeholderImage = img({ src: getUrlToApplicationsImages() + 'placeholder.png' });
+		if ( placeholderImage.complete ) {
+			setTimeout( maybeCenterViewApplicationModal, 0 );
+		} else {
+			placeholderImage.addEventListener( 'load', maybeCenterViewApplicationModal );
+		}
+
 		children.push(
 			div({
 				className: 'frm-application-image-wrapper',
-				child: img({ src: getUrlToApplicationsImages() + 'placeholder.png' })
+				child: placeholderImage
 			}),
 			div({
 				className: 'frm-application-modal-details',
@@ -440,6 +448,21 @@
 		wp.hooks.doAction( hookName, output, args );
 
 		return output;
+	}
+
+	function maybeCenterViewApplicationModal() {
+		if ( false !== elements.viewApplicationModal ) {
+			centerModal( elements.viewApplicationModal );
+		}
+	}
+
+	function centerModal( modal ) {
+		const position = {
+			my: 'center',
+			at: 'center',
+			of: window
+		};
+		jQuery( modal ).dialog({ position });
 	}
 
 	function getViewApplicationModalFooter( data ) {
