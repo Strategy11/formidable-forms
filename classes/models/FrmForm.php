@@ -33,7 +33,16 @@ class FrmForm {
 		$options['after_html']  = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html'] = isset( $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		/**
+		 * Allows modifying form options before updating or creating.
+		 *
+		 * @since 5.2.08 Add the third param.
+		 *
+		 * @param array $options Form options.
+		 * @param array $values  Form data.
+		 * @param bool  $update  Is form updating or creating. It's `true` if is updating.
+		 */
+		$options               = apply_filters( 'frm_form_options_before_update', $options, $values, false );
 		$options               = self::maybe_filter_form_options( $options );
 		$new_values['options'] = serialize( $options );
 
@@ -206,7 +215,16 @@ class FrmForm {
 			$values['options']['success_url'] = $options['success_url'];
 		}
 
-		$options               = apply_filters( 'frm_form_options_before_update', $options, $values );
+		/**
+		 * Allows modifying form options before updating or creating.
+		 *
+		 * @since 5.2.08 Added the third param.
+		 *
+		 * @param array $options Form options.
+		 * @param array $values  Form data.
+		 * @param bool  $update  Is form updating or creating. It's `true` if is updating.
+		 */
+		$options               = apply_filters( 'frm_form_options_before_update', $options, $values, true );
 		$options               = self::maybe_filter_form_options( $options );
 		$new_values['options'] = serialize( $options );
 
