@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmSettings {
 	public $option_name = 'frm_options';
@@ -9,6 +12,7 @@ class FrmSettings {
 	public $accordion_js;
 	public $fade_form;
 	public $old_css;
+	public $admin_bar;
 
 	public $success_msg;
 	public $blank_msg;
@@ -91,7 +95,8 @@ class FrmSettings {
 			'jquery_css'   => false,
 			'accordion_js' => false,
 			'fade_form'    => false,
-			'old_css'      => true,
+			'old_css'      => false,
+			'admin_bar'    => false,
 
 			're_multi' => 1,
 
@@ -139,13 +144,20 @@ class FrmSettings {
 		}
 	}
 
+	/**
+	 * @param array $params
+	 */
 	public function fill_with_defaults( $params = array() ) {
-		$settings = $this->default_options();
+		$settings    = $this->default_options();
+		$filter_html = ! FrmAppHelper::allow_unfiltered_html();
 
-		// Use grids and fade in as default for new installs.
-		if ( isset( $params['frm_currency'] ) ) {
-			$settings['old_css']   = false;
-			$settings['fade_form'] = true;
+		if ( $filter_html ) {
+			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+			if ( ! empty( $params['additional_filter_keys'] ) ) {
+				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
+			}
+		} else {
+			$filter_keys = array();
 		}
 
 		foreach ( $settings as $setting => $default ) {
@@ -155,8 +167,12 @@ class FrmSettings {
 				$this->{$setting} = $default;
 			}
 
-			if ( $setting == 'menu' && empty( $this->{$setting} ) ) {
+			if ( $setting === 'menu' && empty( $this->{$setting} ) ) {
 				$this->{$setting} = $default;
+			}
+
+			if ( $filter_html && in_array( $setting, $filter_keys, true ) ) {
+				$this->{$setting} = FrmAppHelper::kses( $this->{$setting}, 'all' );
 			}
 
 			unset( $setting, $default );
@@ -190,6 +206,10 @@ class FrmSettings {
 		if ( ! isset( $this->re_type ) ) {
 			$this->re_type = '';
 		}
+
+		if ( ! isset( $this->re_threshold ) ) {
+			$this->re_threshold = .5;
+		}
 	}
 
 	/**
@@ -200,6 +220,7 @@ class FrmSettings {
 	public function translatable_strings() {
 		return array(
 			'invalid_msg',
+			'admin_permission',
 			'failed_msg',
 			'login_msg',
 		);
@@ -246,14 +267,14 @@ class FrmSettings {
 	}
 
 	private function update_settings( $params ) {
-		$this->pubkey   = trim( $params['frm_pubkey'] );
-		$this->privkey  = $params['frm_privkey'];
-		$this->re_type  = $params['frm_re_type'];
-		$this->re_lang  = $params['frm_re_lang'];
+		$this->pubkey       = trim( $params['frm_pubkey'] );
+		$this->privkey      = $params['frm_privkey'];
+		$this->re_type      = $params['frm_re_type'];
+		$this->re_lang      = $params['frm_re_lang'];
+		$this->re_threshold = floatval( $params['frm_re_threshold'] );
+		$this->load_style   = $params['frm_load_style'];
 
-		$this->load_style = $params['frm_load_style'];
-
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'old_css', 'no_ips', 'tracking' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
 		}

@@ -36,9 +36,13 @@ zip -r $zipname $destination \
 	-x "*/.*" \
 	-x "*/.git/*" \
 	-x "*/.github/*" \
+	-x "*/.phpunit.result.cache" \
 	-x "*/bin/*" \
+	-x "*/scss/*" \
+	-x "*/css/*.css.map" \
 	-x "*/changelog.txt" \
 	-x "*/composer.json" \
+	-x "*/composer.lock" \
 	-x "*/formidableforms.css" \
 	-x "*/js/src/*" \
 	-x "*/js/frm.min.js" \
@@ -51,9 +55,22 @@ zip -r $zipname $destination \
 	-x "*/package-lock.json" \
 	-x "*/phpcs.xml" \
 	-x "*/phpunit.xml" \
+	-x "*/psalm.xml" \
+	-x "*/phpstan.neon" \
+	-x "*/*.stubs.php" \
+	-x "*/stubs.php" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
+	-x "*/vendor/*" \
+	-x "*/temp.xml" \
+	-x "formidable-pro/views/*" \
+	-x "formidable-views/js/dom.js" \
+	-x "formidable-views/js/editor.js" \
+	-x "formidable-views/js/index.js" \
+	-x "formidable-chat/js/chat.js" \
+	-x "formidable-api/js/embed.js" \
+	-x "formidable-api/js/iframe-embed.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
 

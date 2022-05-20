@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -28,18 +31,22 @@ class FrmFieldTextarea extends FrmFieldType {
 	 * @param string $name
 	 */
 	public function show_on_form_builder( $name = '' ) {
-		$size      = FrmField::get_option( $this->field, 'size' );
-		$size_html = $size ? ' style="width:' . esc_attr( $size . ( is_numeric( $size ) ? 'px' : '' ) ) . '";' : '';
+		$size = FrmField::get_option( $this->field, 'size' );
+		$max  = FrmField::get_option( $this->field, 'max' );
 
-		$max           = FrmField::get_option( $this->field, 'max' );
-		$default_value = FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) );
+		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" rows="' . esc_attr( $max ) . '" id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value"';
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" ' . // WPCS: XSS ok.
-			$size_html // WPCS: XSS ok.
-			. ' rows="' . esc_attr( $max ) . '" ' .
-			'id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value">' .
-			$default_value // WPCS: XSS ok.
-			. '</textarea>';
+		if ( $size ) {
+			if ( is_numeric( $size ) ) {
+				$size .= 'px';
+			}
+			$style = 'width:' . $size . ';';
+			echo ' style="' . esc_attr( $style ) . '"';
+		}
+
+		echo '>';
+		echo FrmAppHelper::esc_textarea( force_balance_tags( $this->get_field_column( 'default_value' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '</textarea>';
 	}
 
 	protected function prepare_display_value( $value, $atts ) {

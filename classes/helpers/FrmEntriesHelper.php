@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntriesHelper {
 
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
+		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
+
 		$values = array(
 			'name'        => '',
 			'description' => '',
@@ -46,10 +48,8 @@ class FrmEntriesHelper {
 			$values = array_merge( $values, $form->options );
 		}
 
-		$form_defaults = FrmFormsHelper::get_default_opts();
-		$frm_settings  = FrmAppHelper::get_settings();
-
-		$form_defaults['custom_style'] = ( $frm_settings->load_style != 'none' );
+		$form_defaults                 = FrmFormsHelper::get_default_opts();
+		$form_defaults['custom_style'] = FrmAppHelper::custom_style_value( array() );
 
 		$values = array_merge( $form_defaults, $values );
 
@@ -114,13 +114,13 @@ class FrmEntriesHelper {
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;
-		if ( $_POST ) {
+		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$repeating = isset( $args['repeating'] ) && $args['repeating'];
 			if ( $repeating ) {
-				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) {
+				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 					$value_is_posted = true;
 				}
-			} elseif ( isset( $_POST['item_meta'][ $field->id ] ) ) {
+			} elseif ( isset( $_POST['item_meta'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$value_is_posted = true;
 			}
 		}
@@ -129,6 +129,8 @@ class FrmEntriesHelper {
 	}
 
 	public static function setup_edit_vars( $values, $record ) {
+		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
+
 		$values['item_key'] = FrmAppHelper::get_post_param( 'item_key', $record->item_key, 'sanitize_title' );
 		$values['form_id']  = $record->form_id;
 		$values['is_draft'] = $record->is_draft;
@@ -170,7 +172,12 @@ class FrmEntriesHelper {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
+			$empty = empty( $field_value );
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
+			if ( $empty && ! empty( $field_value ) ) {
+				// We've got an entry id, so switch it to a value.
+				$atts['force_id'] = true;
+			}
 		}
 
 		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
@@ -205,7 +212,7 @@ class FrmEntriesHelper {
 			// Fet the value for this field -- check for post values as well.
 			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
-			if ( $entry_val ) {
+			if ( $entry_val || '0' === $entry_val ) {
 				// foreach entry get display_value.
 				$field_value[] = self::display_value( $entry_val, $field, $atts );
 			}
@@ -213,7 +220,11 @@ class FrmEntriesHelper {
 			unset( $child_entry );
 		}
 
-		$val = implode( ', ', (array) $field_value );
+		$sep = ', ';
+		if ( strpos( implode( ' ', (array) $field_value ), '<img' ) !== false ) {
+			$sep = '<br/>';
+		}
+		$val = implode( $sep, (array) $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );
 	}
@@ -311,30 +322,27 @@ class FrmEntriesHelper {
 	 * @since 4.01
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
-		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) &&
-			 is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) {
-
-			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ||
-				 ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) {
-				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array();
+		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 		} else {
 			// All of the section was probably removed.
-			$_POST['item_meta'][ $args['parent_field_id'] ] = array();
-			$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array();
+			$_POST['item_meta'][ $args['parent_field_id'] ]                         = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
-		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value;
+		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
 	public static function get_posted_value( $field, &$value, $args ) {
 		if ( is_array( $field ) ) {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
-		} else if ( is_object( $field ) ) {
+		} elseif ( is_object( $field ) ) {
 			$field_id  = $field->id;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
-		} else if ( is_numeric( $field ) ) {
+		} elseif ( is_numeric( $field ) ) {
 			$field_id  = $field;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 		} else {
@@ -354,11 +362,9 @@ class FrmEntriesHelper {
 	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : '';
+			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		} else {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : '';
+			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		}
 		return $value;
 	}
@@ -374,7 +380,7 @@ class FrmEntriesHelper {
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
-		if ( ! $value || empty( $value ) || ! FrmAppHelper::pro_is_installed() ) {
+		if ( ! $value || ! FrmAppHelper::pro_is_installed() ) {
 			return;
 		}
 
@@ -389,15 +395,14 @@ class FrmEntriesHelper {
 		self::set_other_repeating_vals( $field, $value, $args );
 
 		// Check if there are any posted "Other" values.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta']['other'][ $field->id ] ) ) {
+		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta']['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 			// Save original value.
 			$args['temp_value'] = $value;
 			$args['other']      = true;
 
 			// Sanitizing is done next.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] );
+			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now
@@ -420,13 +425,12 @@ class FrmEntriesHelper {
 		}
 
 		// Check if there are any other posted "other" values for this field.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) {
+		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// Save original value
 			$args['temp_value'] = $value;
 			$args['other']      = true;
 
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] );
+			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now.
@@ -689,5 +693,29 @@ class FrmEntriesHelper {
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
+	}
+
+	/**
+	 * @since 5.0.15
+	 *
+	 * @param string|int $entry_id
+	 * @return void
+	 */
+	public static function maybe_render_captcha_score( $entry_id ) {
+		$query                 = array(
+			'item_id'  => (int) $entry_id,
+			'field_id' => 0,
+		);
+		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
+		foreach ( $metas_without_a_field as $meta ) {
+			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
+				echo '<div class="misc-pub-section">';
+				FrmAppHelper::icon_by_class( 'frm_icon_font frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
+				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
+				echo '</div>';
+				return;
+			}
+		}
 	}
 }

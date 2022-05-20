@@ -10,7 +10,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 	 * @covers FrmEntriesController::_delete_entry
 	 * @covers FrmEntriesController::unlink_post
 	 */
-	function test_delete_entry_after_save() {
+	public function test_delete_entry_after_save() {
 		$save_form = $this->create_form();
 		$this->assertEmpty( $save_form->options['no_save'] );
 
@@ -35,9 +35,11 @@ class test_FrmEntriesController extends FrmUnitTest {
 	}
 
 	private function create_form( $options = array() ) {
-		return $this->factory->form->create_and_get( array(
-			'options' => $options,
-		) );
+		return $this->factory->form->create_and_get(
+			array(
+				'options' => $options,
+			)
+		);
 	}
 
 	private function create_post_entry( $form, $entry_key ) {

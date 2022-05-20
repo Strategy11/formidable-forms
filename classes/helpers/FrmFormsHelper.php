@@ -48,7 +48,7 @@ class FrmFormsHelper {
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
-			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // WPCS: XSS ok. ?>>
+			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
 				<option value=""><?php echo ( $args['blank'] == 1 ) ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
 			<?php } ?>
@@ -75,7 +75,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @param string|object $selected - The label for the placeholder, or the form object.
+	 * @param string|object|false $selected - The label for the placeholder, or the form object.
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -252,8 +252,8 @@ class FrmFormsHelper {
 
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
-		$message = FrmAppHelper::use_wpautop( do_shortcode( $message ) );
-		$message = '<div class="' . esc_attr( $atts['class'] ) . '">' . $message . '</div>';
+		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
+		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 
 		return $message;
 	}
@@ -268,7 +268,7 @@ class FrmFormsHelper {
 			$post_values = $values;
 		} else {
 			$values      = array();
-			$post_values = isset( $_POST ) ? $_POST : array();
+			$post_values = isset( $_POST ) ? $_POST : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$defaults = array(
@@ -313,7 +313,7 @@ class FrmFormsHelper {
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
 		if ( empty( $post_values ) ) {
-			$post_values = wp_unslash( $_POST );
+			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		$values['form_key']    = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;
@@ -356,23 +356,30 @@ class FrmFormsHelper {
 		return $values;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_default_opts() {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		return array(
-			'submit_value'   => $frm_settings->submit_value,
-			'success_action' => 'message',
-			'success_msg'    => $frm_settings->success_msg,
-			'show_form'      => 0,
-			'akismet'        => '',
-			'no_save'        => 0,
-			'ajax_load'      => 0,
-			'js_validate'    => 0,
-			'form_class'     => '',
-			'custom_style'   => 1,
-			'before_html'    => self::get_default_html( 'before' ),
-			'after_html'     => '',
-			'submit_html'    => self::get_default_html( 'submit' ),
+			'submit_value'     => $frm_settings->submit_value,
+			'success_action'   => 'message',
+			'success_msg'      => $frm_settings->success_msg,
+			'show_form'        => 0,
+			'akismet'          => '',
+			'honeypot'         => 'basic',
+			'antispam'         => 0,
+			'no_save'          => 0,
+			'ajax_load'        => 0,
+			'js_validate'      => 0,
+			'form_class'       => '',
+			'custom_style'     => 1,
+			'before_html'      => self::get_default_html( 'before' ),
+			'after_html'       => '',
+			'submit_html'      => self::get_default_html( 'submit' ),
+			'show_title'       => 0,
+			'show_description' => 0,
 		);
 	}
 
@@ -425,11 +432,17 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
-			echo $button; // WPCS: XSS ok.
-
+			echo FrmAppHelper::maybe_kses( $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
 		}
 
+		/**
+		 * @since 5.0.06
+		 */
+		$button = apply_filters( 'frm_submit_button_html', $button, compact( 'form' ) );
+		if ( FrmAppHelper::should_never_allow_unfiltered_html() ) {
+			$button = FrmAppHelper::kses_submit_button( $button );
+		}
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
@@ -443,9 +456,9 @@ BEFORE_HTML;
 			}
 		}
 
-		echo $button_parts[0]; // WPCS: XSS ok.
+		echo $button_parts[0]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'frm_submit_button_action', $form, $form_action );
-		echo $button_parts[1]; // WPCS: XSS ok.
+		echo $button_parts[1]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -552,6 +565,10 @@ BEFORE_HTML;
 		$possible_email_field = FrmFieldFactory::field_has_property( $args['type'], 'holds_email_values' );
 		if ( $possible_email_field ) {
 			$class .= ' show_frm_not_email_to';
+		}
+
+		if ( 'url' === $args['type'] ) {
+			$class .= ' frm_insert_url';
 		}
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
@@ -705,11 +722,11 @@ BEFORE_HTML;
 			'entry_key'        => true,
 		);
 		foreach ( $codes as $code => $show ) {
-			if ( $code == 'form_name' ) {
+			if ( $code === 'form_name' ) {
 				$replace_with = $form->name;
-			} elseif ( $code == 'form_description' ) {
+			} elseif ( $code === 'form_description' ) {
 				$replace_with = FrmAppHelper::use_wpautop( $form->description );
-			} elseif ( $code == 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
+			} elseif ( $code === 'entry_key' && isset( $_GET ) && isset( $_GET['entry'] ) ) {
 				$replace_with = FrmAppHelper::simple_get( 'entry' );
 			} else {
 				$replace_with = '';
@@ -749,7 +766,7 @@ BEFORE_HTML;
 	}
 
 	public static function submit_button_label( $submit ) {
-		if ( ! $submit || empty( $submit ) ) {
+		if ( ! $submit ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			$submit       = $frm_settings->submit_value;
 		}
@@ -789,7 +806,13 @@ BEFORE_HTML;
 			$form = $form->options;
 		}
 
-		$submit_align = isset( $form['submit_align'] ) ? $form['submit_align'] : '';
+		if ( ! empty( $form['submit_align'] ) ) {
+			$submit_align = $form['submit_align'];
+		} elseif ( self::form_should_be_inline_and_missing_class( $form ) ) {
+			$submit_align = 'inline';
+		} else {
+			$submit_align = '';
+		}
 
 		if ( 'inline' === $submit_align ) {
 			$class .= ' frm_inline_form';
@@ -798,9 +821,25 @@ BEFORE_HTML;
 			$class .= ' frm_center_submit';
 		}
 
-		$class = apply_filters( 'frm_add_form_style_class', $class, $style );
+		$class = apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
 
 		return $class;
+	}
+
+	/**
+	 * In order for frm_inline_submit to inline the submit button the form must also have the frm_inline_form that adds the grid-column style rules required for it to work.
+	 *
+	 * @since 5.0.12
+	 *
+	 * @param array $form
+	 * @return bool
+	 */
+	private static function form_should_be_inline_and_missing_class( $form ) {
+		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
+			// not missing class, avoid adding it twice.
+			return false;
+		}
+		return ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' );
 	}
 
 	/**
@@ -864,7 +903,7 @@ BEFORE_HTML;
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;
-		if ( empty( $form ) || 'default' == 'form' ) {
+		if ( empty( $form ) || 'default' === $form ) {
 			return $style;
 		} elseif ( is_object( $form ) && $form->parent_form_id ) {
 			// get the parent form if this is a child
@@ -1006,22 +1045,51 @@ BEFORE_HTML;
 		return $actions;
 	}
 
-	public static function edit_form_link( $form_id ) {
-		if ( is_object( $form_id ) ) {
-			$form    = $form_id;
-			$name    = $form->name;
-			$form_id = $form->id;
-		} else {
-			$name = FrmForm::getName( $form_id );
+	public static function edit_form_link( $data ) {
+		$form_id = self::get_form_id_from_data( $data );
+
+		if ( ! $form_id ) {
+			return '';
 		}
 
-		if ( $form_id ) {
-			$val = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . ( '' == $name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $name, 40 ) ) . '</a>';
-		} else {
-			$val = '';
-		}
+		$label = self::edit_form_link_label( $data );
+		$link  = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html( $label ) . '</a>';
+		return $link;
+	}
 
-		return $val;
+	public static function edit_form_link_label( $data ) {
+		$name = self::get_form_name_from_data( $data );
+		if ( ! $name ) {
+			return __( '(no title)', 'formidable' );
+		}
+		return FrmAppHelper::truncate( $name, 40 );
+	}
+
+	/**
+	 * @param mixed data
+	 * @return int
+	 */
+	private static function get_form_id_from_data( $data ) {
+		if ( is_object( $data ) ) {
+			$form_id = $data->id;
+		} else {
+			$form_id = $data;
+		}
+		return $form_id;
+	}
+
+	/**
+	 * @param mixed $data
+	 * @return string
+	 */
+	private static function get_form_name_from_data( $data ) {
+		if ( is_object( $data ) ) {
+			$form_name = $data->name;
+		} else {
+			$form_id   = $data;
+			$form_name = FrmForm::getName( $form_id );
+		}
+		return $form_name;
 	}
 
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
@@ -1118,6 +1186,10 @@ BEFORE_HTML;
 				'label' => __( 'Total', 'formidable' ),
 				'title' => __( 'Add this to a read-only field to display the text in bold without a border or background.', 'formidable' ),
 			),
+			'frm_total_big'  => array(
+				'label' => __( 'Big Total', 'formidable' ),
+				'title' => __( 'Add this to a read-only field to display the text in large, bold text without a border or background.', 'formidable' ),
+			),
 			'frm_scroll_box' => array(
 				'label' => __( 'Scroll Box', 'formidable' ),
 				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
@@ -1130,6 +1202,10 @@ BEFORE_HTML;
 			'frm_grid_first' => __( 'First Grid Row', 'formidable' ),
 			'frm_grid'       => __( 'Even Grid Row', 'formidable' ),
 			'frm_grid_odd'   => __( 'Odd Grid Row', 'formidable' ),
+			'frm_color_block' => array(
+				'label' => __( 'Color Block', 'formidable' ),
+				'title' => __( 'Add a background color to the field or section.', 'formidable' ),
+			),
 			'frm_capitalize' => array(
 				'label' => __( 'Capitalize', 'formidable' ),
 				'title' => __( 'Automatically capitalize the first letter in each word.', 'formidable' ),
@@ -1140,33 +1216,16 @@ BEFORE_HTML;
 	}
 
 	public static function grid_classes() {
-		$base = array(
-			'frm_half' => '1/2',
-
-			'frm_third'      => '1/3',
-			'frm_two_thirds' => '2/3',
-
+		return array(
+			'frm_half'          => '1/2',
+			'frm_third'         => '1/3',
+			'frm_two_thirds'    => '2/3',
 			'frm_fourth'        => '1/4',
 			'frm_three_fourths' => '3/4',
+			'frm_sixth'         => '1/6',
+			'frm10'             => '5/6',
+			'frm12'             => '100%',
 		);
-
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->old_css ) {
-			$classes = array(
-				'frm_sixth' => '1/6',
-				'frm10'     => '5/6',
-
-				'frm_full' => '100%',
-			);
-		} else {
-			$classes = array(
-				'frm_sixth' => '1/6',
-				'frm10'     => '5/6',
-				'frm12' => '100%',
-			);
-		}
-
-		return array_merge( $base, $classes );
 	}
 
 	/**
@@ -1206,18 +1265,31 @@ BEFORE_HTML;
 		$categories = array_diff( $categories, $ignore );
 
 		$icons = array(
-			'WooCommerce'       => array( 'woocommerce', 'var(--purple)' ),
-			'Post'              => array( 'wordpress', 'rgb(0,160,210)' ),
-			'User Registration' => array( 'register', 'var(--pink)' ),
-			'PayPal'            => array( 'paypal' ),
-			'Stripe'            => array( 'credit_card', 'var(--green)' ),
-			'Twilio'            => array( 'sms', 'rgb(0,160,210)' ),
-			'Calculator'        => array( 'calculator', 'var(--orange)' ),
-			'Contact Form'      => array( 'address_card' ),
-			'Survey'            => array( 'align_right', 'var(--pink)' ),
-			'Application Form'  => array( 'align_right', 'rgb(0,160,210)' ),
-			''                  => array( 'align_right' ),
+			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
+			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
+			'User Registration'   => array( 'register', 'var(--pink)' ),
+			'PayPal'              => array( 'paypal' ),
+			'Stripe'              => array( 'credit_card', 'var(--green)' ),
+			'Twilio'              => array( 'sms', 'rgb(0,160,210)' ),
+			'Payment'             => array( 'credit_card', 'var(--green)' ),
+			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
+			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
+			'Real Estate'         => array( 'house', 'var(--purple)' ),
+			'Calculator'          => array( 'calculator', 'var(--purple)' ),
+			'Registrations'       => array( 'address_card' ),
+			'Customer Service'    => array( 'users_solid', 'var(--pink)' ),
+			'Education'           => array( 'pencil', 'var(--primary-color)' ),
+			'Marketing'           => array( 'eye', 'rgb(0,160,210)' ),
+			'Feedback'            => array( 'smile', 'var(--green)' ),
+			'Business Operations' => array( 'case' ),
+			'Contact Form'        => array( 'email' ),
+			'Survey'              => array( 'comment', 'var(--primary-color)' ),
+			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
+			'Quiz'                => array( 'percent' ),
+			''                    => array( 'align_right' ),
 		);
+
+		$icons[ __( 'My Templates', 'formidable' ) ] = array( 'user', 'var(--orange)' );
 
 		$icon = $icons[''];
 
@@ -1258,7 +1330,7 @@ BEFORE_HTML;
 			'atts'  => true,
 		);
 
-		if ( isset( $template['url'] ) && ! empty( $template['url'] ) ) {
+		if ( ! empty( $template['url'] ) ) {
 			$link = array(
 				'url'   => $template['url'],
 				'label' => __( 'Create Form', 'formidable' ),
@@ -1290,7 +1362,7 @@ BEFORE_HTML;
 	 *
 	 * @return bool
 	 */
-	private static function plan_is_allowed( $args ) {
+	public static function plan_is_allowed( $args ) {
 		if ( empty( $args['license_type'] ) ) {
 			return false;
 		}
@@ -1298,7 +1370,7 @@ BEFORE_HTML;
 		$included = $args['license_type'] === strtolower( $args['plan_required'] );
 
 		$plans = array( 'free', 'personal', 'business', 'elite' );
-		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans ) ) {
+		if ( $included || ! in_array( strtolower( $args['plan_required'] ), $plans, true ) ) {
 			return $included;
 		}
 
@@ -1343,17 +1415,26 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $item
+	 * @return string|false
 	 */
 	public static function get_plan_required( &$item ) {
-		if ( ! isset( $item['categories'] ) || ( isset( $item['url'] ) && ! empty( $item['url'] ) ) ) {
+		if ( ! isset( $item['categories'] ) || ! is_array( $item['categories'] ) || ! empty( $item['url'] ) ) {
 			return false;
 		}
 
-		$plans = array( 'free', 'Personal', 'Business', 'Elite' );
+		$plans = array( 'free', 'Basic', 'Personal', 'Plus', 'Creator', 'Business', 'Elite' );
 
 		foreach ( $item['categories'] as $k => $category ) {
-			if ( in_array( $category, $plans ) ) {
+			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
+
+				if ( in_array( $category, array( 'Creator', 'Personal' ), true ) ) {
+					// Show the current package name.
+					$category = 'Plus';
+				}
+
 				return $category;
 			}
 		}
@@ -1515,5 +1596,91 @@ BEFORE_HTML;
 			'w',
 			'year',
 		);
+	}
+
+	/**
+	 * Check an array of templates, determine how many the logged in user can use
+	 *
+	 * @param array $templates
+	 * @param array $args
+	 * @return int
+	 */
+	public static function available_count( $templates, $args ) {
+		return array_reduce(
+			$templates,
+			function( $total, $template ) use ( $args ) {
+				if ( ! empty( $template['url'] ) ) {
+					return $total + 1;
+				}
+
+				$args['plan_required'] = self::get_plan_required( $template );
+				if ( self::plan_is_allowed( $args ) ) {
+					return $total + 1;
+				}
+
+				return $total;
+			},
+			0
+		);
+	}
+
+	/**
+	 * Make sure the field shortcodes in a url always add the sanitize_url=1 option if nothing is defined.
+	 * This is to prevent some field characters like ', @, and | from being stripped from the redirect URL.
+	 *
+	 * @since 5.0.16
+	 *
+	 * @param string $url
+	 * @param int    $form_id
+	 * @return string
+	 */
+	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
+		if ( false === strpos( $url, '[' ) ) {
+			// Do nothing if no shortcodes are detected.
+			return $url;
+		}
+
+		$parsed = wp_parse_url( $url );
+		if ( empty( $parsed['query'] ) ) {
+			// Do nothing if no query can be detected in the url string.
+			return $url;
+		}
+
+		$original_query = $parsed['query'];
+		$query          = $parsed['query'];
+
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
+		if ( empty( $shortcodes[0] ) ) {
+			// No shortcodes found, do nothing.
+			return $url;
+		}
+
+		foreach ( $shortcodes[0] as $key => $shortcode ) {
+			$options = trim( $shortcodes[3][ $key ] );
+
+			if ( in_array( $shortcodes[1][ $key ], array( 'if ' ), true ) ) {
+				// Skip if shortcodes.
+				continue;
+			}
+
+			if ( false !== strpos( $options, 'sanitize_url=' ) || false !== strpos( $options, 'sanitize=' ) ) {
+				// A sanitize option is already set so leave it alone.
+				continue;
+			}
+
+			$new_shortcode = '[' . $shortcodes[2][ $key ];
+			if ( $options ) {
+				$new_shortcode .= ' ' . $options;
+			}
+			$new_shortcode .= ' sanitize_url=1]';
+
+			$query = str_replace( $shortcode, $new_shortcode, $query );
+		}
+
+		if ( $query === $original_query ) {
+			return $url;
+		}
+
+		return str_replace( $original_query, $query, $url );
 	}
 }

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -31,9 +34,9 @@ class FrmFieldDefault extends FrmFieldType {
 		ob_end_clean();
 
 		if ( empty( $input_html ) ) {
-			echo $this->builder_text_field( $name ); // WPCS: XSS ok.
+			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
-			echo $input_html; // WPCS: XSS ok.
+			echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 

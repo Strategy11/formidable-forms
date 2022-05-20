@@ -1,6 +1,11 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'label_color' ) ); ?>" id="frm_label_color" class="hex" value="<?php echo esc_attr( $style->post_content['label_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'label_color' ) ); ?>" id="frm_label_color" class="hex" value="<?php echo esc_attr( $style->post_content['label_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'label_color' ); ?> />
 </p>
 <p class="frm4 frm_form_field">
 	<label><?php esc_html_e( 'Weight', 'formidable' ); ?></label>
@@ -51,7 +56,7 @@
 </h4>
 <p class="frm4 frm_first frm_form_field">
 	<label class="background"><?php esc_html_e( 'Color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'required_color' ) ); ?>" id="frm_required_color" class="hex" value="<?php echo esc_attr( $style->post_content['required_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'required_color' ) ); ?>" id="frm_required_color" class="hex" value="<?php echo esc_attr( $style->post_content['required_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'required_color' ); ?> />
 </p>
 <p class="frm4 frm_form_field">
 	<label><?php esc_html_e( 'Weight', 'formidable' ); ?></label>

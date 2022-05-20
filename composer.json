@@ -17,7 +17,6 @@
 	"type": "wordpress-plugin",
 	"require": {
 		"composer/installers": "~1.0",
-		"xrstf/composer-php52": "^1.0.19",
 		"phpmailer/phpmailer": ">=5.2.25"
 	},
 	"autoload": {
@@ -30,15 +29,8 @@
             "classes/views/"
 		]
 	},
-	"scripts": {
-		"post-install-cmd": [
-			"xrstf\\Composer52\\Generator::onPostInstallCmd"
-		],
-		"post-update-cmd": [
-			"xrstf\\Composer52\\Generator::onPostInstallCmd"
-		],
-		"post-autoload-dump": [
-			"xrstf\\Composer52\\Generator::onPostInstallCmd"
-		]
-	}
+    "require-dev": {
+		"yoast/phpunit-polyfills": "^1.0",
+		"php-stubs/wordpress-stubs": "^5.7.0"
+    }
 }

@@ -15,6 +15,11 @@
 	display:initial;
 }
 
+.frm_verify{
+	position:absolute;
+	left:-3000px;
+}
+
 .frm_clear_none{
     clear:none;
 }
@@ -185,7 +190,7 @@
 .frm12,
 .frm_full,
 .frm_full .wp-editor-wrap,
-.frm_full input:not([type='checkbox']):not([type='radio']):not([type='button']),
+.frm_full > input:not([type='checkbox']):not([type='radio']):not([type='button']),
 .frm_full select,
 .frm_full textarea{
     width:100% !important;
@@ -221,7 +226,6 @@
 .frm_form_field.frm_last,
 .frm_form_field.frm_alignright{
 	grid-column-end:-1;
-	grid-row-start: span 100;
 	justify-content: end;
 }
 
@@ -341,6 +345,12 @@
    100% {opacity: 1;}
 }
 
+@media only screen and (max-width: 750px) {
+	.frm_grid_container.frm_no_grid_750 > div{
+		grid-column: span 12/span 12;
+	}
+}
+
 @media only screen and (max-width: 600px) {
 	.frm_section_heading > .frm_form_field,
 	.frm_fields_container > .frm_submit,
@@ -349,6 +359,7 @@
 		grid-column: 1 / span 12 !important;
 	}
 
+	.frm_grid_container.frm_no_grid_600,
 	.frm_form_field.frm_inline_container,
 	.frm_form_field.frm_right_container,
 	.frm_form_field.frm_left_container{

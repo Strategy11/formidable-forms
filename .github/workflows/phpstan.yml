@@ -1,0 +1,26 @@
+on: [push]
+
+name: PHPStan Code Analysis
+jobs:
+  phpstan:
+    name: PHPStan
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Fetching Repository Contents"
+        uses: actions/checkout@v2
+
+      - name: "💽  Installing PHP, Composer, CS2PR"
+        uses: shivammathur/setup-php@2.10.0
+        with:
+          php-version: '7.4'
+          coverage: none
+          ini-values: display_errors = on, error_reporting = E_ALL
+          tools: phpstan, composer
+
+      - name: "💽  Installing Composer Packages"
+        run: composer install
+
+      - name: "🧪 Test"
+        run: phpstan analyze ./ --level=max

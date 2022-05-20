@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmStylesController {
 	public static $post_type = 'frm_styles';
@@ -45,17 +48,18 @@ class FrmStylesController {
 
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
+		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles2', 'FrmStylesController::route' );
 	}
 
 	public static function admin_init() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-styles' ) && ! FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
 			return;
 		}
 
 		self::load_pro_hooks();
 
 		$style_tab = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
-		if ( $style_tab == 'manage' || $style_tab == 'custom_css' ) {
+		if ( $style_tab === 'manage' || $style_tab === 'custom_css' ) {
 			// we only need to load these styles/scripts on the styler page
 			return;
 		}
@@ -263,6 +267,7 @@ class FrmStylesController {
 
 	private static function manage_styles() {
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_manage_style', '', 'sanitize_text_field' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! $_POST || ! isset( $_POST['style'] ) || ! wp_verify_nonce( $style_nonce, 'frm_manage_style_nonce' ) ) {
 			return self::manage();
 		}
@@ -288,6 +293,11 @@ class FrmStylesController {
 		return self::manage( $message, $forms );
 	}
 
+	/**
+	 * @param string        $message
+	 * @param FrmStyle|null $style
+	 * @return void
+	 */
 	public static function custom_css( $message = '', $style = null ) {
 		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
 			$id       = 'frm_codemirror_box';
@@ -301,13 +311,11 @@ class FrmStylesController {
 				)
 			);
 		} else {
-			_deprecated_function( 'Codemirror v4.7', 'WordPress 4.9', 'Update WordPress' );
-			$id         = 'frm_custom_css_box';
-			$settings   = array();
-			$codemirror = '4.7';
-			wp_enqueue_style( 'codemirror', FrmAppHelper::plugin_url() . '/css/codemirror.css', array(), $codemirror );
-			wp_enqueue_script( 'codemirror', FrmAppHelper::plugin_url() . '/js/codemirror/codemirror.js', array(), $codemirror );
-			wp_enqueue_script( 'codemirror-css', FrmAppHelper::plugin_url() . '/js/codemirror/css.js', array( 'codemirror' ), $codemirror );
+			$settings = false;
+		}
+
+		if ( empty( $settings ) ) {
+			$id = 'frm_custom_css_box';
 		}
 
 		if ( ! isset( $style ) ) {
@@ -315,9 +323,12 @@ class FrmStylesController {
 			$style     = $frm_style->get_default_style();
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function save_css() {
 		$frm_style = new FrmStyle();
 
@@ -329,7 +340,7 @@ class FrmStylesController {
 			$message = __( 'Your styling settings have been saved.', 'formidable' );
 		}
 
-		return self::custom_css( $message );
+		self::custom_css( $message );
 	}
 
 	public static function route() {
@@ -412,7 +423,7 @@ class FrmStylesController {
 	}
 
 	public static function include_style_section( $atts, $sec ) {
-		extract( $atts );
+		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		$style = $atts['style'];
 		FrmStylesHelper::prepare_color_output( $style->post_content, false );
 
@@ -440,15 +451,57 @@ class FrmStylesController {
 		$defaults  = $frm_style->get_defaults();
 		$style     = '';
 
-		include( FrmAppHelper::plugin_path() . '/css/_single_theme.css.php' );
+		include FrmAppHelper::plugin_path() . '/css/_single_theme.css.php';
 		wp_die();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_saved_css() {
 		$css = get_transient( 'frmpro_css' );
 
-		include( FrmAppHelper::plugin_path() . '/css/custom_theme.css.php' );
+		ob_start();
+		include FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
+		$output = ob_get_clean();
+		$output = self::replace_relative_url( $output );
+
+		/**
+		 * The API needs to load font icons through a custom URL.
+		 *
+		 * @since 5.2
+		 *
+		 * @param string $output
+		 */
+		$output = apply_filters( 'frm_saved_css', $output );
+
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		wp_die();
+	}
+
+	/**
+	 * Replaces relative URL with absolute URL.
+	 *
+	 * @since 4.11.03
+	 *
+	 * @param string $css CSS content.
+	 * @return string
+	 */
+	public static function replace_relative_url( $css ) {
+		$plugin_url = trailingslashit( FrmAppHelper::plugin_url() );
+		return str_replace(
+			array(
+				'url(../',
+				"url('../",
+				'url("../',
+			),
+			array(
+				'url(' . $plugin_url,
+				"url('" . $plugin_url,
+				'url("' . $plugin_url,
+			),
+			$css
+		);
 	}
 
 	/**

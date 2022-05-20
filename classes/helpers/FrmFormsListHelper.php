@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormsListHelper extends FrmListHelper {
 	public $status = '';
 
+	public $total_items = 0;
+
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 
@@ -88,6 +90,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$this->items = FrmForm::getAll( $s_query, $orderby . ' ' . $order, $start . ',' . $per_page );
 		$total_items = FrmDb::get_count( 'frm_forms', $s_query );
+		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
 			array(
@@ -98,24 +101,19 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	public function no_items() {
-		echo '<p>';
 		if ( $this->status === 'trash' ) {
+			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
 			</a>
 			<?php
+			echo '</p>';
 		} else {
-
-			esc_html_e( 'No Forms Found.', 'formidable' );
-			?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=add_new' ) ); ?>">
-				<?php esc_html_e( 'Add New', 'formidable' ); ?>
-			</a>
-			<?php
+			$title = __( 'No Forms Found', 'formidable' );
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/_no_forms.php';
 		}
-		echo '</p>';
 	}
 
 	public function get_bulk_actions() {
@@ -193,7 +191,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		parent::pagination( $which );
 
-		if ( 'top' == $which ) {
+		if ( 'top' === $which ) {
 			$this->view_switcher( $mode );
 		}
 	}
@@ -251,10 +249,8 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'shortcode':
-					$val = '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable id=' . $item->id . ']' ) . '" /><br/>';
-					if ( 'excerpt' == $mode ) {
-						$val .= '<input type="text" readonly="readonly" class="frm_select_box" value="' . esc_attr( '[formidable key=' . $item->form_key . ']' ) . '" />';
-					}
+					$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+					$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $item ) );
 					break;
 				case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
@@ -353,5 +349,12 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( 'excerpt' == $mode ) {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function confirm_bulk_delete() {
+		return __( 'ALL selected forms and their entries will be permanently deleted. Want to proceed?', 'formidable' );
 	}
 }

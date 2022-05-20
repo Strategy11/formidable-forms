@@ -54,19 +54,23 @@ class FrmEntry {
 		$check_val                 = $new_values;
 		$check_val['created_at >'] = gmdate( 'Y-m-d H:i:s', ( strtotime( $new_values['created_at'] ) - absint( $duplicate_entry_time ) ) );
 
-		unset( $check_val['created_at'], $check_val['updated_at'] );
-		unset( $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
+		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
 		}
 
+		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
+
 		global $wpdb;
 		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-		if ( ! $entry_exists || empty( $entry_exists ) || ! isset( $values['item_meta'] ) ) {
+		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
 			return false;
 		}
+
+		global $frm_vars;
+		$frm_vars['checking_duplicates'] = true;
 
 		$is_duplicate = false;
 		foreach ( $entry_exists as $entry_exist ) {
@@ -79,9 +83,11 @@ class FrmEntry {
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 
-			// If prev entry is empty and current entry is not, they are not duplicates
 			$filtered_vals = array_filter( $values['item_meta'] );
+			$filtered_vals = self::convert_values_to_their_saved_value( $filtered_vals, $entry_exist );
 			$field_metas   = array_filter( $field_metas );
+
+			// If prev entry is empty and current entry is not, they are not duplicates
 			if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
 				return false;
 			}
@@ -113,7 +119,30 @@ class FrmEntry {
 			}
 		}
 
+		$frm_vars['checking_duplicates'] = false;
+
 		return $is_duplicate;
+	}
+
+	/**
+	 * Convert form data to the actual value that would be saved into the database.
+	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}' (a signature value) is actually an empty string and does not get saved.
+	 *
+	 * @param array $filter_vals
+	 * @param int   $entry_id
+	 * @return array
+	 */
+	private static function convert_values_to_their_saved_value( $filter_vals, $entry_id ) {
+		$reduced = array();
+		foreach ( $filter_vals as $field_id => $value ) {
+			$field                = FrmFieldFactory::get_field_object( $field_id );
+			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
+			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
+			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
+				unset( $reduced[ $field_id ] );
+			}
+		}
+		return $reduced;
 	}
 
 	/**
@@ -292,7 +321,7 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
-		} elseif ( empty( $entry ) ) {
+		} elseif ( empty( $entry ) || 'false' === $entry ) {
 			$entry = false;
 		}
 	}
@@ -305,7 +334,7 @@ class FrmEntry {
 
 		$query      .= is_numeric( $id ) ? 'it.id=%d' : 'it.item_key=%s';
 		$query_args = array( $id );
-		$query      = $wpdb->prepare( $query, $query_args ); // WPCS: unprepared SQL ok.
+		$query      = $wpdb->prepare( $query, $query_args ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		if ( ! $meta ) {
 			$entry = FrmDb::check_cache( $id . '_nometa', 'frm_entry', $query, 'get_row' );
@@ -319,7 +348,7 @@ class FrmEntry {
 			return $entry;
 		}
 
-		$entry = $wpdb->get_row( $query ); // WPCS: unprepared SQL ok.
+		$entry = $wpdb->get_row( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$entry = self::get_meta( $entry );
 		self::prepare_entry( $entry );
 
@@ -381,7 +410,7 @@ class FrmEntry {
 			}
 
 			// include sub entries in an array
-			if ( ! isset( $entry_metas[ $meta_val->field_id ] ) ) {
+			if ( ! isset( $entry->metas[ $meta_val->field_id ] ) ) {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 
@@ -437,16 +466,14 @@ class FrmEntry {
 			}
 
 			if ( preg_match( '/ meta_([0-9]+)/', $order_by, $order_matches ) ) {
-				// sort by a requested field
-				$field_id = (int) $order_matches[1];
-				$fields   .= ', (SELECT meta_value FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id = ' . $field_id . ' AND item_id = it.id) as meta_' . $field_id;
-				unset( $order_matches, $field_id );
+				$fields .= self::sort_by_field( $order_matches[1] );
+				unset( $order_matches );
 			}
 
 			// prepare the query
 			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
-			$entries = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL ok.
+			$entries = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			unset( $query );
 
 			FrmDb::set_cache( $cache_key, $entries, 'frm_entry' );
@@ -501,6 +528,26 @@ class FrmEntry {
 
 		self::prepare_entries( $entries );
 		return $entries;
+	}
+
+	/**
+	 * @param int $field_id
+	 * @return string
+	 */
+	private static function sort_by_field( $field_id ) {
+		global $wpdb;
+		$field_id = (int) $field_id;
+
+		$field_options = FrmDb::get_var( 'frm_fields', array( 'id' => $field_id ), 'field_options' );
+		FrmAppHelper::unserialize_or_decode( $field_options );
+
+		if ( empty( $field_options['post_field'] ) ) {
+			$sort = ', (SELECT meta_value FROM ' . $wpdb->prefix . 'frm_item_metas WHERE field_id = ' . $field_id . ' AND item_id = it.id) as meta_' . $field_id;
+		} else {
+			$sort = '';
+		}
+
+		return apply_filters( 'frm_handle_field_column_sort', $sort, $field_id, $field_options );
 	}
 
 	// Pagination Methods
@@ -808,10 +855,27 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 * @param int $entry_id
+	 * @return void
 	 */
 	private static function maybe_add_entry_metas( $values, $entry_id ) {
 		if ( isset( $values['item_meta'] ) ) {
 			FrmEntryMeta::update_entry_metas( $entry_id, $values['item_meta'] );
+		}
+		self::maybe_add_captcha_meta( (int) $values['form_id'], (int) $entry_id );
+	}
+
+	/**
+	 * @since 5.0.15
+	 *
+	 * @param int $form_id
+	 * @param int $entry_id
+	 * @return void
+	 */
+	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
+		global $frm_vars;
+		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
+			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
+			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
 		}
 	}
 

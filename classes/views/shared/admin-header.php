@@ -1,13 +1,35 @@
-<div id="frm_top_bar" <?php if ( $has_nav ) {
-	?> class="frm-has-nav"
-	<?php } ?> >
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+if ( current_user_can( 'administrator' ) && ! FrmAppHelper::pro_is_installed() && ! $has_nav && empty( $atts['switcher'] ) ) {
+	?>
+	<div class="frm-upgrade-bar">
+		<span>You're using Formidable Forms Lite. To unlock more features consider</span>
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
+	</div>
+	<?php
+}
+FrmInbox::maybe_show_banner();
+?>
+<div id="frm_top_bar" class="<?php echo esc_attr( $has_nav ? 'frm-has-nav' : '' ); ?>">
 	<div id="frm-publishing">
 	<?php
 	if ( isset( $atts['publish'] ) ) {
+		echo '<div id="frm-publishing">';
 		call_user_func( $atts['publish'][0], $atts['publish'][1] );
+		echo '</div>';
+	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
+		?>
+		<div id="frm-publishing">
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
+				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
+			</a>
+		</div>
+		<?php
 	}
 	?>
-	</div>
 
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 		<?php FrmAppHelper::show_header_logo(); ?>
@@ -22,7 +44,6 @@
 	} else {
 		// Used when no form is currently selected.
 		?>
-
 	<div class="frm_top_left <?php echo esc_attr( $atts['import_link'] ? 'frm_top_wide' : '' ); ?>">
 		<h1>
 			<?php echo esc_html( $atts['label'] ); ?>
@@ -43,7 +64,7 @@
 	}
 
 	if ( isset( $atts['nav'] ) ) {
-		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	?>
 	<div style="clear:right;"></div>

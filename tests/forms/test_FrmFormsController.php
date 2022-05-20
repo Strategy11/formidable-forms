@@ -5,12 +5,12 @@
  */
 class test_FrmFormsController extends FrmUnitTest {
 
-	function test_register_widgets() {
+	public function test_register_widgets() {
 		global $wp_widget_factory;
 		$this->assertTrue( isset( $wp_widget_factory->widgets['FrmShowForm'] ) );
 	}
 
-	function test_head() {
+	public function test_head() {
 		$this->set_front_end();
 		$edit_in_place = wp_script_is( 'formidable-editinplace', 'enqueued' );
 		$this->assertFalse( $edit_in_place, 'The edit-in-place script should not be enqueued' );
@@ -28,7 +28,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		*/
 	}
 
-	function test_get_form_shortcode() {
+	public function test_get_form_shortcode() {
 		$form = FrmFormsController::get_form_shortcode( array( 'id' => $this->contact_form_key ) );
 		$this->assertNotEmpty( strpos( $form, '<form ' ), 'The form is missing' );
 	}
@@ -37,7 +37,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	* @covers FrmFormsController::update
 	* without ajax
 	*/
-	function test_form_update_no_ajax() {
+	public function test_form_update_no_ajax() {
 		if ( FrmAppHelper::doing_ajax() ) {
 			$this->markTestSkipped( 'Run with --filter test_form_update_no_ajax' );
 		}
@@ -55,7 +55,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		self::_check_updated_values( $form_id );
 	}
 
-	function _setup_post_values( $form_id ){
+	private function _setup_post_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		$form = FrmForm::getOne( $form_id );
@@ -72,7 +72,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			'name' => $form->name,
 			'frm_fields_submitted' => array(),
 			'item_meta' => array(),
-			'field_options' => array()
+			'field_options' => array(),
 		);
 
 		foreach ( $fields as $field ) {
@@ -105,7 +105,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	// Make sure DOING_AJAX is false
-	function _check_doing_ajax() {
+	private function _check_doing_ajax() {
 		if ( defined( 'DOING_AJAX' ) ) {
 			$doing_ajax = true;
 		} else {
@@ -115,7 +115,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertFalse( $doing_ajax, 'DOING_AJAX must be false for this test to work. Maybe run this test individually to make sure DOING_AJAX is false.' );
 	}
 
-	function _check_updated_values( $form_id ) {
+	private function _check_updated_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		// Compare to posted values
@@ -130,7 +130,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	/**
 	 * @covers FrmFormsController::front_head
 	 */
-	function test_front_head() {
+	public function test_front_head() {
 		$this->assertTrue( FrmFormsController::has_combo_js_file(), 'The combo file was not created' );
 
 		FrmFormsController::front_head();
@@ -152,15 +152,18 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	/**
 	 * Test redirect after create
+	 *
 	 * @covers FrmFormsController::redirect_after_submit
 	 */
-	function test_redirect_after_create() {
-		$form = $this->factory->form->create_and_get( array(
-			'options' => array(
-				'success_action' => 'redirect',
-				'success_url'    => 'http://example.com',
-			),
-		) );
+	public function test_redirect_after_create() {
+		$form = $this->factory->form->create_and_get(
+			array(
+				'options' => array(
+					'success_action' => 'redirect',
+					'success_url'    => 'http://example.com',
+				),
+			)
+		);
 		$this->assertEquals( $form->options['success_action'], 'redirect' );
 
 		$entry_key = 'submit-redirect';
@@ -168,38 +171,40 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		if ( headers_sent() ) {
 			// since headers are sent by phpunit, we will get the js redirect
-			$this->assertContains( "window.location='http://example.com'", $response );
+			$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
 		}
 
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
-		$this->assertContains( "window.location='http://example.com'", $response );
+		$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
 	}
 
 	/**
 	 * @covers FrmFormsController::show_message_after_save
 	 */
-	function test_message_after_create() {
+	public function test_message_after_create() {
 		$this->run_message_after_create( 0 );
 	}
 
 	/**
 	 * @covers FrmFormsController::show_message_after_save
 	 */
-	function test_message_with_form_after_create() {
+	public function test_message_with_form_after_create() {
 		$this->run_message_after_create( 1 );
 	}
 
-	function run_message_after_create( $show_form = 0 ) {
-		$form = $this->factory->form->create_and_get( array(
-			'options' => array(
-				'success_action' => 'message',
-				'success_msg'    => 'Done!',
-				'show_form'      => $show_form,
-			),
-		) );
+	public function run_message_after_create( $show_form = 0 ) {
+		$form = $this->factory->form->create_and_get(
+			array(
+				'options' => array(
+					'success_action' => 'message',
+					'success_msg'    => 'Done!',
+					'show_form'      => $show_form,
+				),
+			)
+		);
 		$this->assertEquals( $form->options['success_action'], 'message' );
 
 		$entry_key = 'submit-message';
@@ -211,13 +216,13 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertContains( '<div class="frm_message"><p>Done!</p>', $response );
-		$this->assertContains( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
+		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
+		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
 
 		if ( $show_form ) {
-			$this->assertContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+			$this->assertNotFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
 		} else {
-			$this->assertNotContains( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
+			$this->assertFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
 		}
 	}
 

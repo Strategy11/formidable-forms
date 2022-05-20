@@ -1,13 +1,18 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_wrap">
 	<form method="post">
 	<div class="frm_page_container">
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'       => __( 'Custom CSS', 'formidable' ),
-			'hide_title'  => false,
-			'publish'     => array( 'FrmStylesHelper::save_button', array() ),
-			'nav'         => FrmStylesHelper::get_style_menu( 'custom_css' ),
+			'label'      => __( 'Custom CSS', 'formidable' ),
+			'hide_title' => false,
+			'publish'    => array( 'FrmStylesHelper::save_button', array() ),
+			'nav'        => FrmStylesHelper::get_style_menu( 'custom_css' ),
 		)
 	);
 	?>
@@ -24,7 +29,7 @@
 		<?php esc_html_e( 'You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded.', 'formidable' ); ?>
 	</p>
 
-	<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+	<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" value="<?php echo esc_attr( $style->menu_order ); ?>" />
@@ -32,10 +37,10 @@
 		<input type="hidden" name="frm_action" value="save_css" />
 		<?php wp_nonce_field( 'frm_custom_css_nonce', 'frm_custom_css' ); ?>
 
-		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( 'false' === wp_get_current_user()->syntax_highlighting ? '' : 'hide-if-js' ); ?>"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
+		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" id="<?php echo esc_attr( $id ); ?>" class="<?php echo empty( $settings ) ? '' : 'hide-if-js'; ?>"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 
 		<?php
-		if ( ! empty( $settings ) && $id == 'frm_codemirror_box' ) {
+		if ( ! empty( $settings ) ) {
 			wp_add_inline_script(
 				'code-editor',
 				sprintf(
@@ -46,7 +51,7 @@
 		}
 
 		foreach ( $style->post_content as $k => $v ) {
-			if ( $k == 'custom_css' ) {
+			if ( $k === 'custom_css' ) {
 				continue;
 			}
 			?>

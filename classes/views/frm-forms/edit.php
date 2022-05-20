@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_builder_page" class="frm_wrap">
 	<div class="frm_page_container">
 
@@ -33,4 +38,15 @@
 
 	</div>
 	</div>
+</div>
+<div class="frm_hidden">
+	<svg id="frm_break_field_group_svg" class="frmsvg">
+		<use xlink:href="#frm_break_field_group_icon"></use>
+	</svg>
+	<svg id="frm_gear_svg" class="frmsvg">
+		<use xlink:href="#frm_gear_icon"></use>
+	</svg>
+	<svg id="frm_trash_svg" class="frmsvg">
+		<use xlink:href="#frm_trash_icon"></use>
+	</svg>
 </div>

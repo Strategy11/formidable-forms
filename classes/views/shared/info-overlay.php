@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_info_modal" class="frm_hidden frm-inline-modal frm-info-modal">
 	<div class="metabox-holder">
 		<div class="postbox">

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmStylesHelper {
 
@@ -182,10 +185,10 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.0
-	 * @return The class for this icon
+	 * @return string The class for this icon.
 	 */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
-		if ( 'arrow' == $type && is_numeric( $key ) ) {
+		if ( 'arrow' === $type && is_numeric( $key ) ) {
 			//frm_arrowup6_icon
 			$arrow = array(
 				'-' => 'down',
@@ -270,6 +273,15 @@ class FrmStylesHelper {
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
 
+		if ( 0 === strpos( $hex, 'rgba(' ) ) {
+			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
+			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
+			$r                      = max( 0, min( 255, $r + $steps ) );
+			$g                      = max( 0, min( 255, $g + $steps ) );
+			$b                      = max( 0, min( 255, $b + $steps ) );
+			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . ')';
+		}
+
 		// Normalize into a six character long hex string
 		$hex = str_replace( '#', '', $hex );
 		if ( strlen( $hex ) == 3 ) {
@@ -292,26 +304,62 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 4.05.02
+	 */
+	public static function get_css_vars( $vars = array() ) {
+		$vars = apply_filters( 'frm_css_vars', $vars );
+		return array_unique( $vars );
+	}
+
+	/**
+	 * @since 4.05.02
+	 */
+	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
+		if ( empty( $vars ) ) {
+			$vars = self::get_css_vars( array_keys( $settings ) );
+		}
+		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon' );
+		$vars   = array_diff( $vars, $remove );
+
+		foreach ( $vars as $var ) {
+			if ( ! isset( $settings[ $var ] ) ) {
+				continue;
+			}
+			if ( ! isset( $defaults[ $var ] ) ) {
+				$defaults[ $var ] = '';
+			}
+			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
+			if ( $show ) {
+				echo '--' . esc_html( str_replace( '_', '-', $var ) ) . ':' . ( $var === 'font' ? FrmAppHelper::kses( $settings[ $var ] ) : esc_html( $settings[ $var ] ) ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
+	}
+
+	/**
 	 * @since 2.3
+	 *
+	 * @param WP_Post $style
+	 * @return array
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
 
-			if ( isset( $_POST['frm_style_setting'] ) ) {
+			$frm_style = new FrmStyle();
+			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 				// Sanitizing is done later.
-				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$posted = wp_unslash( $_POST['frm_style_setting'] );
+				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
-					$settings = $posted['frm_style_setting']['post_content'];
+					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
 					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
-					$settings = $posted['post_content'];
+					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
 				}
 			} else {
-				$settings = $_GET;
+				$settings   = $frm_style->sanitize_post_content( wp_unslash( $_GET ) );
 				$style_name = FrmAppHelper::get_param( 'style_name', '', 'get', 'sanitize_title' );
 			}
 
@@ -326,7 +374,7 @@ class FrmStylesHelper {
 			$settings['style_class'] = 'frm_style_' . $style->post_name . '.';
 		}
 
-		$settings['style_class']   .= 'with_frm_style';
+		$settings['style_class']  .= 'with_frm_style';
 		$settings['font']          = stripslashes( $settings['font'] );
 		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
 
@@ -338,6 +386,15 @@ class FrmStylesHelper {
 		}
 
 		self::prepare_color_output( $settings );
+
+		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
+		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
+		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
+		$settings['box_shadow']   = ( isset( $settings['remove_box_shadow'] ) && $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
+
+		if ( ! isset( $settings['repeat_icon'] ) ) {
+			$settings['repeat_icon'] = 1;
+		}
 
 		return $settings;
 	}
@@ -368,11 +425,19 @@ class FrmStylesHelper {
 			'fieldset_color',
 			'fieldset_bg_color',
 			'bg_color',
+			'bg_color_active',
+			'bg_color_disabled',
 			'section_bg_color',
 			'error_bg',
 			'success_bg_color',
 			'progress_bg_color',
 			'progress_active_bg_color',
+			'submit_border_color',
+			'submit_hover_border_color',
+			'submit_active_border_color',
+			'submit_hover_bg_color',
+			'submit_active_bg_color',
+			'success_bg_color',
 		);
 
 		return array(
@@ -388,7 +453,10 @@ class FrmStylesHelper {
 		$color = trim( $color );
 		if ( empty( $color ) ) {
 			$color = $default;
-		} elseif ( strpos( $color, '#' ) === false ) {
+		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
+			$color = str_replace( 'rgb(', 'rgba(', $color );
+			$color = str_replace( ')', ',1)', $color );
+		} elseif ( strpos( $color, '#' ) === false && false === strpos( $color, 'rgba(' ) ) {
 			$color = '#' . $color;
 		}
 	}
@@ -417,7 +485,7 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}

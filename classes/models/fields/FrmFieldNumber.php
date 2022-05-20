@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -67,9 +70,68 @@ class FrmFieldNumber extends FrmFieldType {
 					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
 				}
 			}
+
+			$this->validate_step( $errors, $args );
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Validates the step setting.
+	 *
+	 * @since 5.2.06
+	 *
+	 * @param array $errors Errors array.
+	 * @param array $args   Validation args.
+	 */
+	private function validate_step( &$errors, $args ) {
+		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
+			return; // Don't need to check if value is invalid before.
+		}
+
+		$step = FrmField::get_option( $this->field, 'step' );
+		if ( ! $step || ! is_numeric( $step ) ) {
+			return;
+		}
+
+		$result = $this->check_value_is_valid_with_step( $args['value'], $step );
+		if ( ! $result ) {
+			return;
+		}
+
+		$errors[ 'field' . $args['id'] ] = sprintf(
+			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
+			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
+			floatval( $result[0] ),
+			floatval( $result[1] )
+		);
+	}
+
+	/**
+	 * Checks if value is valid with the given step.
+	 *
+	 * @since 5.2.07
+	 *
+	 * @param numeric $value The value.
+	 * @param numeric $step  The step.
+	 * @return int|array     Return `0` if valid. Otherwise, return an array contains two nearest values.
+	 */
+	private function check_value_is_valid_with_step( $value, $step ) {
+		// Count the number of decimals.
+		$decimals = max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
+
+		// Convert value and step to int to prevent precision problem.
+		$pow   = pow( 10, $decimals );
+		$value = intval( $pow * $value );
+		$step  = intval( $pow * $step );
+		$div   = $value / $step;
+		if ( is_int( $div ) ) {
+			return 0;
+		}
+
+		$div = floor( $div );
+		return array( $div * $step / $pow, ( $div + 1 ) * $step / $pow );
 	}
 
 	/**

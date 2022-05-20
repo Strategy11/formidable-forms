@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="howto">
 	<?php esc_html_e( 'Modify the basic form settings here.', 'formidable' ); ?>
 </p>
@@ -21,29 +26,24 @@
 		<label for="frm_form_description">
 			<?php esc_html_e( 'Form Description', 'formidable' ); ?>
 		</label>
-		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // WPCS: XSS ok. ?></textarea>
+		<textarea id="frm_form_description" name="description" cols="50" rows="4"><?php echo FrmAppHelper::esc_textarea( $values['description'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</p>
 
+	<p class="frm8 frm_form_field">
+		<label for="show_title" class="frm_inline_block">
+			<input type="checkbox" name="options[show_title]" id="show_title" value="1" <?php checked( $values['show_title'], 1 ); ?> />
+			<?php esc_html_e( 'Show the form title', 'formidable' ); ?>
+		</label>
+	</p>
+
+	<p class="frm8 frm_form_field">
+		<label for="show_description" class="frm_inline_block">
+			<input type="checkbox" name="options[show_description]" id="show_description" value="1" <?php checked( $values['show_description'], 1 ); ?> />
+			<?php esc_html_e( 'Show the form description', 'formidable' ); ?>
+		</label>
+	</p>
 
 <?php if ( ! $values['is_template'] ) { ?>
-	<p class="frm6 frm_form_field">
-		<label>
-			<?php esc_html_e( 'Embed Shortcode', 'formidable' ); ?>
-		</label>
-		<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?>]" />
-	</p>
-	<p class="frm6 frm_form_field">
-		<label>&nbsp;</label>
-		<input type="text" readonly="readonly" class="frm_select_box" value="[formidable id=<?php echo esc_attr( $values['id'] ); ?> title=true description=true]" />
-	</p>
-
-	<a href="#edit_frm_shortcode" class="edit-frm_shortcode hide-if-no-js" tabindex='4'><?php esc_html_e( 'Insert with PHP', 'formidable' ); ?></a>
-	<p id="frm_shortcodediv" class="hide-if-js">
-		<label>
-			<?php esc_html_e( 'Embed in Template', 'formidable' ); ?>
-		</label>
-			<input type="text" readonly="readonly" class="frm_select_box frm_insert_in_template" value="&lt;?php echo FrmFormsController::get_form_shortcode( array( 'id' => <?php echo absint( $values['id'] ); ?>, 'title' => false, 'description' => false ) ); ?&gt;" />
-	</p>
 	<?php $first_h3 = ''; ?>
 
 	<?php if ( has_action( 'frm_settings_buttons' ) ) { ?>
@@ -104,39 +104,23 @@
 	</label>
 </p>
 
-<table class="form-table">
-	<tr>
-		<td colspan="2">
-			<label for="no_save" class="frm_inline_block">
-				<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
-				<?php esc_html_e( 'Do not store entries submitted from this form', 'formidable' ); ?>
-			</label>
-		</td>
-	</tr>
-	<?php if ( function_exists( 'akismet_http_post' ) ) { ?>
-		<tr>
-			<td colspan="2"><?php esc_html_e( 'Use Akismet to check entries for spam for', 'formidable' ); ?>
-				<select name="options[akismet]">
-					<option value="">
-						<?php esc_html_e( 'no one', 'formidable' ); ?>
-					</option>
-					<option value="1" <?php selected( $values['akismet'], 1 ); ?>>
-						<?php esc_html_e( 'everyone', 'formidable' ); ?>
-					</option>
-					<option value="logged" <?php selected( $values['akismet'], 'logged' ); ?>>
-						<?php esc_html_e( 'visitors who are not logged in', 'formidable' ); ?>
-					</option>
-				</select>
-			</td>
-		</tr>
-	<?php } ?>
-</table>
+<p class="frm8 frm_form_field">
+	<label for="no_save" class="frm_inline_block">
+		<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
+		<?php esc_html_e( 'Do not store entries submitted from this form', 'formidable' ); ?>
+	</label>
+</p>
+
+<?php
+is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values );
+FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
+?>
 
 <!--AJAX Section-->
 <h3><?php esc_html_e( 'AJAX', 'formidable' ); ?>
 	<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" title="<?php esc_attr_e( 'Make stuff happen in the background without a page refresh', 'formidable' ); ?>" ></span>
 </h3>
-<?php FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' ); ?>
+
 <table class="form-table">
 	<tr>
 		<td>
@@ -147,12 +131,23 @@
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>
+	<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
+		<tr>
+			<td>
+				<label data-upgrade="<?php esc_attr_e( 'AJAX Form Submissions', 'formidable' ); ?>" data-medium="ajax" data-message="<?php esc_attr_e( 'Want to submit forms without reloading the page?', 'formidable' ); ?>">
+					<input type="checkbox" disabled="disabled" />
+					<span class="frm_noallow"><?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?></span>
+					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Submit the form without refreshing the page.', 'formidable' ); ?>"></span>
+				</label>
+			</td>
+		</tr>
+	<?php } ?>
 	<tr>
 		<td>
 			<label for="js_validate" class="frm_inline_block">
 				<input type="checkbox" name="options[js_validate]" id="js_validate" value="1" <?php checked( $values['js_validate'], 1 ); ?> />
 				<?php esc_html_e( 'Validate this form with javascript', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ); ?>"></span>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Required fields, email format, and number format can be checked instantly in your browser. You may want to turn this option off if you have any customizations to remove validation messages on certain fields.', 'formidable' ); ?>" data-container="body"></span>
 			</label>
 		</td>
 	</tr>
@@ -170,7 +165,7 @@
 	<tr class="success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] === 'message' ? '' : ' frm_hidden' ); ?>">
 		<td class="frm_has_shortcodes frm_has_textarea">
 			<label for="success_msg"><?php esc_html_e( 'On Submit', 'formidable' ); ?></label>
-			<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // WPCS: XSS ok. ?></textarea>
+			<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_msg_options', $values ); ?>

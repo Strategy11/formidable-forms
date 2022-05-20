@@ -1,3 +1,9 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
+
 <p class="frm_has_shortcodes frm_to_row frm_email_row">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>>
 		<?php esc_html_e( 'To', 'formidable' ); ?>
@@ -40,6 +46,10 @@
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to frm_email_blur large-text <?php FrmAppHelper::maybe_add_tooltip( 'from', 'open' ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
 </p>
 
+<p class="frm_error_style frm_from_to_match_row <?php echo ( ( $form_action->post_content['from'] !== $form_action->post_content['email_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="from_to_warning">
+	<?php esc_html_e( 'Warning: If you are sending an email to the user, the To and From fields should not match.', 'formidable' ); ?>
+</p>
+
 <p class="frm_reply_to_container">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_reply_to_button <?php echo ( ! empty( $form_action->post_content['reply_to'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="reply_to">
 		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
@@ -66,7 +76,7 @@
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>">
 		<?php esc_html_e( 'Message', 'formidable' ); ?>
 	</label>
-	<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message frm_long_input" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // WPCS: XSS ok. ?></textarea>
+	<textarea name="<?php echo esc_attr( $this->get_field_name( 'email_message' ) ); ?>" class="frm_not_email_message frm_long_input" id="<?php echo esc_attr( $this->get_field_id( 'email_message' ) ); ?>" cols="50" rows="5"><?php echo FrmAppHelper::esc_textarea( $form_action->post_content['email_message'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 </p>
 
 <label for="<?php echo esc_attr( $this->get_field_id( 'inc_user_info' ) ); ?>">

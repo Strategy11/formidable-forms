@@ -13,7 +13,6 @@
 	-ms-flex-align: center;
 	align-items: center;
 	text-align: center;
-	background-color: #f3f3f4;
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
 }
 
@@ -27,6 +26,10 @@
 	margin-top: 32px;
 	margin-bottom: 12px;
 	color: #4d4d4d;
+}
+
+.frm-block-intro-content select + span svg {
+    margin: unset;
 }
 
 .editor-styles-wrapper h2.frm-block-title {

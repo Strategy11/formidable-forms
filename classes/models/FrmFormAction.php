@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmFormAction {
 
@@ -124,6 +127,21 @@ class FrmFormAction {
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		self::__construct( $id_base, $name, $action_options, $control_options );
+	}
+
+	/**
+	 * Help to switch old field id by new field id for duplicate form
+	 *
+	 * @param  string $action id of the field that needs to be switched
+	 *
+	 * @return string
+	 */
+	public function maybe_switch_field_ids( $action ) {
+		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
+		if ( $updated_action === $action ) {
+			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
+		}
+		return $updated_action;
 	}
 
 	/**
@@ -267,6 +285,7 @@ class FrmFormAction {
 
 		$action->menu_order = $form_id;
 		$switch             = $this->get_global_switch_fields();
+
 		foreach ( (array) $action->post_content as $key => $val ) {
 			if ( is_numeric( $val ) && isset( $frm_duplicate_ids[ $val ] ) ) {
 				$action->post_content[ $key ] = $frm_duplicate_ids[ $val ];
@@ -310,7 +329,7 @@ class FrmFormAction {
 				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
 				} elseif ( $ck == $subkey ) {
-					$action[ $ck ] = FrmFieldsHelper::switch_field_ids( $action[ $ck ] );
+					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
 		}
@@ -333,9 +352,10 @@ class FrmFormAction {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST[ $this->option_name ] ) && is_array( $_POST[ $this->option_name ] ) ) {
 			// Sanitizing removes scripts and <email> type of values.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
 			return;
@@ -383,7 +403,7 @@ class FrmFormAction {
 			$instance = apply_filters( 'frm_action_update_callback', $instance, $new_instance, $old_instance, $this );
 
 			$instance['post_content'] = apply_filters( 'frm_before_save_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
-			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $new_instance['post_content'], $instance, $new_instance, $old_instance, $this );
+			$instance['post_content'] = apply_filters( 'frm_before_save_' . $this->id_base . '_action', $instance['post_content'], $instance, $new_instance, $old_instance, $this );
 
 			if ( false !== $instance ) {
 				$all_instances[ $number ] = $instance;
@@ -664,6 +684,8 @@ class FrmFormAction {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
 
+		$switch = apply_filters( 'frm_global_switch_fields', $switch );
+
 		return $switch;
 	}
 
@@ -712,6 +734,11 @@ class FrmFormAction {
 	}
 
 	public static function action_conditions_met( $action, $entry ) {
+		if ( is_callable( 'FrmProFormActionsController::action_conditions_met' ) ) {
+			return FrmProFormActionsController::action_conditions_met( $action, $entry );
+		}
+
+		// This is here for reverse compatibility.
 		$notification = $action->post_content;
 		$stop         = false;
 		$met          = array();
@@ -729,7 +756,7 @@ class FrmFormAction {
 				continue;
 			}
 
-			self::prepare_logic_value( $condition['hide_opt'] );
+			self::prepare_logic_value( $condition['hide_opt'], $action, $entry );
 
 			$observed_value = self::get_value_from_entry( $entry, $condition['hide_field'] );
 
@@ -755,10 +782,11 @@ class FrmFormAction {
 	 * Prepare the logic value for comparison against the entered value
 	 *
 	 * @since 2.01.02
+	 * @deprecated 4.06.02
 	 *
 	 * @param array|string $logic_value
 	 */
-	private static function prepare_logic_value( &$logic_value ) {
+	private static function prepare_logic_value( &$logic_value, $action, $entry ) {
 		if ( is_array( $logic_value ) ) {
 			$logic_value = reset( $logic_value );
 		}
@@ -766,12 +794,20 @@ class FrmFormAction {
 		if ( $logic_value == 'current_user' ) {
 			$logic_value = get_current_user_id();
 		}
+
+		$logic_value = apply_filters( 'frm_content', $logic_value, $action->menu_order, $entry );
+
+		/**
+		 * @since 4.04.05
+		 */
+		$logic_value = apply_filters( 'frm_action_logic_value', $logic_value );
 	}
 
 	/**
 	 * Get the value from a specific field and entry
 	 *
 	 * @since 2.01.02
+	 * @deprecated 4.06.02
 	 *
 	 * @param object $entry
 	 * @param int $field_id
@@ -816,5 +852,19 @@ class FrmFormAction {
 		);
 
 		return apply_filters( 'frm_action_triggers', $triggers );
+	}
+
+	public function render_conditional_logic_call_to_action() {
+		?>
+			<h3>
+				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>">
+					<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
+				</a>
+			</h3>
+		<?php
+	}
+
+	protected function get_upgrade_text() {
+		return __( 'Conditional form actions', 'formidable' );
 	}
 }

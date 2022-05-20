@@ -7,6 +7,16 @@
 	font-style: normal;
 }
 
+.frm-submenu-highlight {
+	background: #1da867;
+}
+
+.frm-submenu-highlight a span {
+	color: #fff;
+	font-weight: 600;
+}
+
+
 .frmfont,
 .frm_icon_font,
 .frm_dashicon_font{

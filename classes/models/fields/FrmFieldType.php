@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 3.0
@@ -112,7 +115,7 @@ abstract class FrmFieldType {
 		}
 
 		if ( is_array( $this->field ) ) {
-			$this->field_id = $this->field['id'];
+			$this->field_id = isset( $this->field['id'] ) ? $this->field['id'] : 0;
 		} else if ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
 			$this->field_id = $this->field->id;
 		} elseif ( is_numeric( $this->field ) ) {
@@ -170,11 +173,11 @@ abstract class FrmFieldType {
 		$default_html = <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
     <$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
-        <span class="frm_required">[required_label]</span>
+        <span class="frm_required" aria-hidden="true">[required_label]</span>
     </$label>
     $input
     [if description]<div class="frm_description" id="frm_desc_field_[key]">[description]</div>[/if description]
-    [if error]<div class="frm_error" id="frm_error_field_[key]">[error]</div>[/if error]
+    [if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
 
@@ -215,7 +218,7 @@ DEFAULT_HTML;
 		if ( ! empty( $include_file ) ) {
 			$this->include_on_form_builder( $name, $field );
 		} elseif ( $this->has_input ) {
-			echo $this->builder_text_field( $name ); // WPCS: XSS ok.
+			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -371,6 +374,7 @@ DEFAULT_HTML;
 		$this->field_choices_heading( $args );
 
 		echo '<div class="frm_grid_container frm-collapse-me' . esc_attr( $this->extra_field_choices_class() ) . '">';
+		$this->show_priority_field_choices( $args );
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-choices.php' );
 		$this->show_extra_field_choices( $args );
 		echo '</div>';
@@ -477,6 +481,15 @@ DEFAULT_HTML;
 	 * @since 4.04
 	 */
 	protected function field_choices_heading_attrs( $args ) {
+		return;
+	}
+
+	/**
+	 * Show settings above the multiple options settings.
+	 *
+	 * @since 4.06
+	 */
+	protected function show_priority_field_choices( $args = array() ) {
 		return;
 	}
 
@@ -668,7 +681,7 @@ DEFAULT_HTML;
 	 */
 	public function show_field( $args ) {
 		if ( apply_filters( 'frm_show_normal_field_type', $this->normal_field, $this->type ) ) {
-			echo $this->prepare_field_html( $args ); // WPCS: XSS ok.
+			echo $this->prepare_field_html( $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			do_action( 'frm_show_other_field_type', $this->field, $args['form'], array( 'action' => $args['form_action'] ) );
 		}
@@ -687,9 +700,8 @@ DEFAULT_HTML;
 	 */
 	public function prepare_field_html( $args ) {
 		$args = $this->fill_display_field_values( $args );
-
 		if ( $this->has_html ) {
-			$args['html']      = $this->before_replace_html_shortcodes( $args, $this->field['custom_html'] );
+			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
 			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
 			$args['field_obj'] = $this;
 
@@ -847,9 +859,14 @@ DEFAULT_HTML;
 	 * If the value includes intentional entities, don't lose them.
 	 *
 	 * @since 4.03.01
+	 *
+	 * @return string
 	 */
 	protected function prepare_esc_value() {
 		$value = $this->field['value'];
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', $value );
+		}
 		if ( strpos( $value, '&lt;' ) !== false ) {
 			$value = htmlentities( $value );
 		}
@@ -1069,13 +1086,70 @@ DEFAULT_HTML;
 		// Override in a child class.
 	}
 
+	/**
+	 * A field is not unique if it has already been passed to this function, or if it exists in meta for this field but another entry id
+	 *
+	 * @param mixed $value
+	 * @param int $entry_id
+	 * @return bool
+	 */
 	public function is_not_unique( $value, $entry_id ) {
-		$exists = false;
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$exists = FrmProEntryMetaHelper::value_exists( $this->get_field_column( 'id' ), $value, $entry_id );
+		if ( $this->value_has_already_been_validated_as_unique( $value ) ) {
+			return true;
 		}
 
-		return $exists;
+		if ( $this->value_exists_in_meta_for_another_entry( $value, $entry_id ) ) {
+			return true;
+		}
+
+		$this->value_validated_as_unique( $value );
+		return false;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return bool
+	 */
+	private function value_has_already_been_validated_as_unique( $value ) {
+		global $frm_validated_unique_values;
+
+		if ( empty( $frm_validated_unique_values ) ) {
+			$frm_validated_unique_values = array();
+			return false;
+		}
+
+		$field_id = $this->get_field_column( 'id' );
+		if ( ! array_key_exists( $field_id, $frm_validated_unique_values ) ) {
+			$frm_validated_unique_values[ $field_id ] = array();
+			return false;
+		}
+
+		$already_validated_this_value = in_array( $value, $frm_validated_unique_values[ $field_id ], true );
+		return $already_validated_this_value;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @param int $entry_id
+	 * @return bool
+	 */
+	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
+		$field_id = $this->get_field_column( 'id' );
+		return FrmProEntryMetaHelper::value_exists( $field_id, $value, $entry_id );
+	}
+
+	/**
+	 * Track that a value has been flagged as unique so that no other iterations can be for the same value for this field
+	 *
+	 * @param mixed $value
+	 */
+	private function value_validated_as_unique( $value ) {
+		global $frm_validated_unique_values;
+		$field_id                                   = $this->get_field_column( 'id' );
+		$frm_validated_unique_values[ $field_id ][] = $value;
 	}
 
 	public function get_value_to_save( $value, $atts ) {
@@ -1191,8 +1265,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function get_multi_opts_for_import( $value ) {
-
-		if ( ! $this->field || empty( $value ) || in_array( $value, (array) $this->field->options ) ) {
+		if ( ! $this->field || ! $value || in_array( $value, (array) $this->field->options ) ) {
 			return $value;
 		}
 
@@ -1200,7 +1273,22 @@ DEFAULT_HTML;
 		FrmAppHelper::unserialize_or_decode( $checked );
 
 		if ( ! is_array( $checked ) ) {
-			$checked = explode( ',', $checked );
+			$filtered_checked   = $checked;
+			$csv_values_checked = array();
+
+			$options = (array) $this->field->options;
+			$options = array_reverse( $options );
+
+			foreach ( $options as $option ) {
+				if ( isset( $option['value'] ) && strpos( $filtered_checked, $option['value'] ) !== false ) {
+					$csv_values_checked[] = $option['value'];
+					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
+				}
+			}
+
+			$csv_values_checked = array_reverse( $csv_values_checked );
+
+			$checked = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
 		if ( ! empty( $checked ) && count( $checked ) > 1 ) {

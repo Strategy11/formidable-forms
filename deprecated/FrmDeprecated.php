@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * Class FrmDeprecated
@@ -161,6 +164,17 @@ class FrmDeprecated {
 		_deprecated_function( __FUNCTION__, '3.06', 'FrmFormApi::get_pro_updater' );
 		$api = new FrmFormApi();
 		return $api->get_pro_updater();
+	}
+
+	/**
+	 * @since 4.06.02
+	 * @deprecated 4.09.01
+	 * @codeCoverageIgnore
+	 */
+	public static function ajax_multiple_addons() {
+		_deprecated_function( __FUNCTION__, '4.09.01', 'FrmProAddonsController::' . __METHOD__ );
+		echo json_encode( __( 'Your plugin has been not been installed. Please update Formidable Pro to get downloads.', 'formidable' ) );
+		wp_die();
 	}
 
 	/**
@@ -362,7 +376,7 @@ class FrmDeprecated {
 
 		do_action( 'frm_after_update_field_' . $field, compact( 'id', 'value' ) );
 
-		echo stripslashes( wp_kses_post( $value ) ); // WPCS: XSS ok.
+		echo stripslashes( wp_kses_post( $value ) );
 		wp_die();
 	}
 
@@ -802,25 +816,11 @@ class FrmDeprecated {
 	public static function jquery_css_url( $theme_css ) {
 		_deprecated_function( __FUNCTION__, '3.02.03', 'FrmProStylesController::jquery_css_url' );
 
-        if ( $theme_css == -1 ) {
-            return;
-        }
+		if ( ! is_callable( 'FrmProStylesController::jquery_css_url' ) ) {
+			return;
+		}
 
-        if ( ! $theme_css || $theme_css == '' || $theme_css == 'ui-lightness' ) {
-            $css_file = FrmAppHelper::plugin_url() . '/css/ui-lightness/jquery-ui.css';
-		} elseif ( preg_match( '/^http.?:\/\/.*\..*$/', $theme_css ) ) {
-            $css_file = $theme_css;
-        } else {
-            $uploads = FrmStylesHelper::get_upload_base();
-			$file_path = '/formidable/css/' . $theme_css . '/jquery-ui.css';
-			if ( file_exists( $uploads['basedir'] . $file_path ) ) {
-                $css_file = $uploads['baseurl'] . $file_path;
-            } else {
-				$css_file = FrmAppHelper::jquery_ui_base_url() . '/themes/' . $theme_css . '/jquery-ui.min.css';
-            }
-        }
-
-        return $css_file;
+		return FrmProStylesController::jquery_css_url( $theme_css );
     }
 
 	/**

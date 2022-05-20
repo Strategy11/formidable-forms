@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.04
@@ -123,14 +126,14 @@ class FrmEntryFormatter {
 	 * @param array $atts
 	 */
 	protected function init_entry( $atts ) {
-		if ( is_object( $atts['entry'] ) ) {
+		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
 
 			if ( isset( $atts['entry']->metas ) ) {
 				$this->entry = $atts['entry'];
 			} else {
 				$this->entry = FrmEntry::getOne( $atts['entry']->id, true );
 			}
-		} elseif ( $atts['id'] ) {
+		} elseif ( ! empty( $atts['id'] ) ) {
 			$this->entry = FrmEntry::getOne( $atts['id'], true );
 		}
 	}
@@ -193,6 +196,23 @@ class FrmEntryFormatter {
 				$this->format = 'table';
 			}
 		}
+
+		/**
+		 * Allows modifying the format property of FrmEntryFormatter object.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $format The format.
+		 * @param array  $args   Includes `atts`, `entry`.
+		 */
+		$this->format = apply_filters(
+			'frm_entry_formatter_format',
+			$this->format,
+			array(
+				'atts'  => $atts,
+				'entry' => $this->entry,
+			)
+		);
 	}
 
 	/**
@@ -329,7 +349,7 @@ class FrmEntryFormatter {
 		$atts['wpautop']      = false;
 		$atts['return_array'] = true;
 
-		$unset = array( 'id', 'entry', 'form_id', 'format', 'plain_text' );
+		$unset = array( 'id', 'entry', 'form_id', 'format' );
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
@@ -380,7 +400,24 @@ class FrmEntryFormatter {
 			$content = '';
 		}
 
-		return $content;
+		/**
+		 * Allows modifying the formatted entry values content.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $content The formatted entry values content.
+		 * @param array  $args    Includes `entry`, `atts`, `format`, `entry_values`.
+		 */
+		return apply_filters(
+			'frm_formatted_entry_values_content',
+			$content,
+			array(
+				'entry'        => $this->entry,
+				'atts'         => $this->atts,
+				'format'       => $this->format,
+				'entry_values' => $this->entry_values,
+			)
+		);
 	}
 
 	/**
@@ -664,7 +701,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @param FrmProFieldValue $field_value
+	 * @param FrmFieldValue $field_value
 	 * @param string $content
 	 */
 	protected function add_standard_row( $field_value, &$content ) {
@@ -823,7 +860,9 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
 		$display_value = $this->flatten_array( $display_value );
-		$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
+			$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
+		}
 
 		return $display_value;
 	}
@@ -855,7 +894,8 @@ class FrmEntryFormatter {
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
+			$separator = isset( $this->atts['array_separator'] ) ? $this->atts['array_separator'] : ', ';
+			$value     = implode( $separator, $value );
 		}
 
 		return $value;

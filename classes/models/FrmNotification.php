@@ -1,12 +1,10 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
-// TODO: change class name to FrmEmailController by 08/2017 or later
 class FrmNotification {
 	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
 		self::hook_emails_to_action();
 	}
 
@@ -63,7 +61,7 @@ class FrmNotification {
 			$sent_to = array_filter( $sent_to );
 
 			$temp = str_replace( '<', '&lt;', $sent_to );
-			echo ' ' . FrmAppHelper::kses( implode( ', ', (array) $temp ) ); // WPCS: XSS ok.
+			echo ' ' . FrmAppHelper::kses( implode( ', ', (array) $temp ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 

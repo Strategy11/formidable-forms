@@ -10,7 +10,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 	protected $test_form;
 	protected $test_entry;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->test_form = $this->get_form_for_test();
@@ -59,7 +59,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 		return array(
 			FrmField::get_id_by_key( 'free-text-field' ) => 'Test Testerson',
 			FrmField::get_id_by_key( 'free-paragraph-field' ) => "Test\r\nMiddle\r\nTesterson",
-			FrmField::get_id_by_key( 'free-checkboxes' ) => array ( 'Red', 'Green' ),
+			FrmField::get_id_by_key( 'free-checkboxes' ) => array( 'Red', 'Green' ),
 			FrmField::get_id_by_key( 'free-radio-button-field' ) => 'cookies',
 			FrmField::get_id_by_key( 'free-dropdown-field' ) => 'Ace Ventura',
 			FrmField::get_id_by_key( 'free-email-field' ) => 'jamie@mail.com',
@@ -89,6 +89,6 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 	}
 
 	protected function get_actual_value( $value ) {
-		return apply_filters('frm_content', $value, $this->test_form, $this->test_entry );
+		return apply_filters( 'frm_content', $value, $this->test_form, $this->test_entry );
 	}
 }

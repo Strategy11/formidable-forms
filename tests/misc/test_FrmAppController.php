@@ -15,10 +15,10 @@ class test_FrmAppController extends FrmUnitTest {
 
 		$this->markTestIncomplete( 'Needs work' );
 
-        ob_start();
-        require( ABSPATH . 'wp-admin/menu.php' );
-        $menu = ob_get_contents();
-        ob_end_clean();
+		ob_start();
+		require( ABSPATH . 'wp-admin/menu.php' );
+		$menu = ob_get_contents();
+		ob_end_clean();
 		echo $menu;
 		$this->assertTrue( current_user_can( 'frm_view_forms' ), 'The user cannot frm_view_forms' );
 
@@ -42,7 +42,7 @@ class test_FrmAppController extends FrmUnitTest {
 
 		foreach ( $expected as $name => $value ) {
 			$menu_page = menu_page_url( $name, false );
-			if ( $allow == 'allow' ){
+			if ( $allow == 'allow' ) {
 				$this->assertEquals( $value, $menu_page );
 			} else {
 				$this->assertNotEquals( $value, $menu_page );
@@ -74,11 +74,11 @@ class test_FrmAppController extends FrmUnitTest {
 	public function test_load_wp_admin_style() {
 		$this->set_admin_screen();
 
-        ob_start();
+		ob_start();
 		do_action( 'admin_enqueue_scripts' );
-        do_action( 'admin_print_styles' );
-        $styles = ob_get_contents();
-        ob_end_clean();
+		do_action( 'admin_print_styles' );
+		$styles = ob_get_contents();
+		ob_end_clean();
 
 		$this->assertNotEmpty( $styles );
 		$this->assertTrue( strpos( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ) !== false, 'The frm_fonts stylesheet is missing' );
@@ -121,16 +121,16 @@ class test_FrmAppController extends FrmUnitTest {
 			),
 			array(
 				'version'  => '5.0',
-				'db'       => 50,
+				'db'       => 98,
 				'expected' => true,
 			),
 			array(
-				'version'  => '5.0',
+				'version'  => '6.0',
 				'db'       => FrmAppHelper::$db_version + 1,
 				'expected' => false,
 			),
 			array(
-				'version'  => '5.01.10',
+				'version'  => '6.01.10',
 				'db'       => 900,
 				'expected' => false,
 			),
@@ -157,12 +157,14 @@ class test_FrmAppController extends FrmUnitTest {
 			$option = get_option( 'frm_db_version' );
 			$this->assertSame( $current, $option );
 
-			$upgrade = FrmAppController::compare_for_update( array(
-				'option'             => 'frm_db_version',
-				'new_db_version'     => FrmAppHelper::$db_version,
-				'new_plugin_version' => FrmAppHelper::plugin_version(),
-			) );
-			$this->assertEquals( $test['expected'], $upgrade, $test['version'] .' db: '. $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
+			$upgrade = FrmAppController::compare_for_update(
+				array(
+					'option'             => 'frm_db_version',
+					'new_db_version'     => FrmAppHelper::$db_version,
+					'new_plugin_version' => FrmAppHelper::plugin_version(),
+				)
+			);
+			$this->assertEquals( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
 		}
 	}
 
@@ -180,5 +182,13 @@ class test_FrmAppController extends FrmUnitTest {
 		FrmAppController::admin_init();
 		$new_db = get_option( 'frm_db_version' );
 		$this->assertSame( $current_db, $new_db, 'The DB did not update correctly' );
+	}
+
+	/**
+	 * @covers FrmAppController::network_upgrade_site
+	 */
+	public function test_network_upgrade_site() {
+		FrmAppController::network_upgrade_site();
+		$this->addToAssertionCount( 1 );
 	}
 }

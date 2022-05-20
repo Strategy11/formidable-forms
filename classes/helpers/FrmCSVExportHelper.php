@@ -1,19 +1,94 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmCSVExportHelper {
 
+	/**
+	 * @var string $separator
+	 */
 	protected static $separator = ', ';
+
+	/**
+	 * @var string $column_separator
+	 */
 	protected static $column_separator = ',';
+
+	/**
+	 * @var string $line_break
+	 */
 	protected static $line_break = 'return';
+
+	/**
+	 * @var string $charset
+	 */
 	protected static $charset = 'UTF-8';
+
+	/**
+	 * @var string $to_encoding
+	 */
 	protected static $to_encoding = 'UTF-8';
+
+	/**
+	 * @var string $wp_date_format
+	 */
 	protected static $wp_date_format = 'Y-m-d H:i:s';
+
+	/**
+	 * @var int $comment_count
+	 */
 	protected static $comment_count = 0;
+
+	/**
+	 * @var int $form_id
+	 */
 	protected static $form_id = 0;
+
+	/**
+	 * @var array $headings
+	 */
 	protected static $headings = array();
+
+	/**
+	 * @var array $fields
+	 */
 	protected static $fields = array();
+
+	/**
+	 * @var stdClass|null $entry
+	 */
 	protected static $entry;
+
+	/**
+	 * @var bool|null $has_parent_id
+	 */
 	protected static $has_parent_id;
+
+	/**
+	 * @var array|null $fields_by_repeater_id
+	 */
+	protected static $fields_by_repeater_id;
+
+	/**
+	 * @var string $mode either 'echo' or 'file' are supported.
+	 */
+	protected static $mode = 'echo';
+
+	/**
+	 * @var resource|null $fp used to write a CSV file in file mode.
+	 */
+	protected static $fp;
+
+	/**
+	 * @var string $context the context of the CSV being generated. Possible values include 'email' when used as an email attachment, or 'default'.
+	 */
+	protected static $context = 'default';
+
+	/**
+	 * @var array $meta
+	 */
+	protected static $meta = array();
 
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
@@ -22,19 +97,36 @@ class FrmCSVExportHelper {
 		return $formats;
 	}
 
+	/**
+	 * @param array $atts
+	 * @return string|false|void returns a string file path or false if $atts['mode'] is set to 'file'.
+	 */
 	public static function generate_csv( $atts ) {
 		global $frm_vars;
 		$frm_vars['prevent_caching'] = true;
 
 		self::$fields  = $atts['form_cols'];
 		self::$form_id = $atts['form']->id;
-		self::set_class_paramters();
+		self::$mode    = ! empty( $atts['mode'] ) && 'file' === $atts['mode'] ? 'file' : 'echo';
+		self::$context = ! empty( $atts['context'] ) ? $atts['context'] : 'default';
+		self::$meta    = ! empty( $atts['meta'] ) ? $atts['meta'] : array();
+
+		self::set_class_parameters();
 		self::set_has_parent_id( $atts['form'] );
 
-		$filename = apply_filters( 'frm_csv_filename', gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $atts['form']->name ) . '_formidable_entries.csv', $atts['form'] );
+		$filename = self::generate_csv_filename( $atts['form'] );
 		unset( $atts['form'], $atts['form_cols'] );
 
-		self::print_file_headers( $filename );
+		if ( 'file' === self::$mode ) {
+			$filepath = get_temp_dir() . $filename;
+			self::$fp = @fopen( $filepath, 'w' );
+			if ( ! self::$fp ) {
+				return false;
+			}
+		} elseif ( 'echo' === self::$mode ) {
+			self::print_file_headers( $filename );
+		}
+
 		unset( $filename );
 
 		$comment_count       = FrmDb::get_count(
@@ -58,18 +150,47 @@ class FrmCSVExportHelper {
 		while ( $next_set = array_splice( $atts['entry_ids'], 0, 20 ) ) {
 			self::prepare_next_csv_rows( $next_set );
 		}
+
+		if ( 'file' === self::$mode ) {
+			fclose( self::$fp );
+			return $filepath;
+		}
 	}
 
-	private static function set_class_paramters() {
-		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator );
-		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break );
-		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format );
+	/**
+	 * @since 5.0.16
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	private static function generate_csv_filename( $form ) {
+		$filename = gmdate( 'ymdHis', time() ) . '_' . sanitize_title_with_dashes( $form->name ) . '_formidable_entries.csv';
+		return apply_filters( 'frm_csv_filename', $filename, $form, self::get_standard_filter_args() );
+	}
+
+	/**
+	 * @since 5.0.16
+	 *
+	 * @return array
+	 */
+	private static function get_standard_filter_args() {
+		return array(
+			'context' => self::$context,
+			'meta'    => self::$meta,
+		);
+	}
+
+	private static function set_class_parameters() {
+		$args                 = self::get_standard_filter_args();
+		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator, $args );
+		self::$line_break     = apply_filters( 'frm_csv_line_break', self::$line_break, $args );
+		self::$wp_date_format = apply_filters( 'frm_csv_date_format', self::$wp_date_format, $args );
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ( isset( $_POST['csv_col_sep'] ) && ! empty( $_POST['csv_col_sep'] ) ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator;
+		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep );
+		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}
 
 	private static function set_has_parent_id( $form ) {
@@ -96,7 +217,7 @@ class FrmCSVExportHelper {
 
 	public static function get_csv_format() {
 		$csv_format        = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
-		$csv_format        = apply_filters( 'frm_csv_format', $csv_format );
+		$csv_format        = apply_filters( 'frm_csv_format', $csv_format, self::get_standard_filter_args() );
 		self::$to_encoding = $csv_format;
 	}
 
@@ -107,8 +228,9 @@ class FrmCSVExportHelper {
 			'frm_csv_columns',
 			$headings,
 			self::$form_id,
-			array(
-				'fields' => self::$fields,
+			array_merge(
+				self::get_standard_filter_args(),
+				array( 'fields' => self::$fields )
 			)
 		);
 		self::$headings = $headings;
@@ -116,24 +238,96 @@ class FrmCSVExportHelper {
 		self::print_csv_row( $headings );
 	}
 
+	private static function field_headings( $col ) {
+		$field_type_obj = FrmFieldFactory::get_field_factory( $col );
+		if ( ! empty( $field_type_obj->is_combo_field ) ) { // This is combo field.
+			return $field_type_obj->get_export_headings();
+		}
+
+		$field_headings  = array();
+		$separate_values = array( 'user_id', 'file', 'data', 'date' );
+		if ( ! empty( $col->field_options['separate_value'] ) && ! in_array( $col->type, $separate_values, true ) ) {
+			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
+		}
+
+		$field_headings[ $col->id ] = strip_tags( $col->name );
+		$field_headings             = apply_filters(
+			'frm_csv_field_columns',
+			$field_headings,
+			array_merge(
+				self::get_standard_filter_args(),
+				array( 'field' => $col )
+			)
+		);
+
+		return $field_headings;
+	}
+
 	private static function csv_headings( &$headings ) {
+		$fields_by_repeater_id = array();
+		$repeater_ids          = array();
+
 		foreach ( self::$fields as $col ) {
-			$field_headings = array();
-			$separate_values = array( 'user_id', 'file', 'data', 'date' );
-			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] && ! in_array( $col->type, $separate_values, true ) ) {
-				$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
+			if ( self::is_the_child_of_a_repeater( $col ) ) {
+				$repeater_id                           = $col->field_options['in_section'];
+				$headings[ 'repeater' . $repeater_id ] = array(); // set a placeholder to maintain order for repeater fields
+
+				if ( ! isset( $fields_by_repeater_id[ $repeater_id ] ) ) {
+					$fields_by_repeater_id[ $repeater_id ] = array();
+					$repeater_ids[]                        = $repeater_id;
+				}
+
+				$fields_by_repeater_id[ $repeater_id ][] = $col;
+
+				continue;
 			}
 
-			$field_headings[ $col->id ] = strip_tags( $col->name );
-			$field_headings             = apply_filters(
-				'frm_csv_field_columns',
-				$field_headings,
-				array(
-					'field' => $col,
-				)
-			);
+			$headings += self::field_headings( $col );
+		}
+		unset( $repeater_id, $col );
 
-			$headings += $field_headings;
+		if ( $repeater_ids ) {
+			$where         = array( 'field_id' => $repeater_ids );
+			$repeater_meta = FrmDb::get_results( 'frm_item_metas', $where, 'field_id, meta_value' );
+			$max           = array_fill_keys( $repeater_ids, 0 );
+
+			foreach ( $repeater_meta as $row ) {
+				$start  = strpos( $row->meta_value, 'a:' ) + 2;
+				$end    = strpos( $row->meta_value, ':{' );
+				$length = substr( $row->meta_value, $start, $end - $start );
+
+				if ( $length > $max[ $row->field_id ] ) {
+					$max[ $row->field_id ] = $length;
+				}
+			}
+			unset( $start, $end, $length, $row, $repeater_meta, $where );
+
+			$flat = array();
+			foreach ( $headings as $key => $heading ) {
+				if ( is_array( $heading ) ) {
+					$repeater_id = str_replace( 'repeater', '', $key );
+
+					$repeater_headings = array();
+					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
+						$repeater_headings += self::field_headings( $col );
+					}
+
+					for ( $i = 0; $i < $max[ $repeater_id ]; $i ++ ) {
+						foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
+							$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
+						}
+					}
+				} else {
+					$flat[ $key ] = $heading;
+				}
+			}
+
+			self::$fields_by_repeater_id = $fields_by_repeater_id;
+
+			unset( $key, $heading, $max, $repeater_headings, $repeater_id, $fields_by_repeater_id );
+
+			$headings = $flat;
+			unset( $flat );
 		}
 
 		if ( self::$comment_count ) {
@@ -156,6 +350,27 @@ class FrmCSVExportHelper {
 		if ( self::has_parent_id() ) {
 			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
 		}
+
+		$headings = apply_filters( 'frm_export_csv_headings', $headings );
+	}
+
+	/**
+	 * @param object $field
+	 * @return bool
+	 */
+	private static function is_the_child_of_a_repeater( $field ) {
+		if ( $field->form_id === self::$form_id || empty( $field->field_options['in_section'] ) ) {
+			return false;
+		}
+
+		$section_id = $field->field_options['in_section'];
+		$section    = FrmField::getOne( $section_id );
+
+		if ( ! $section ) {
+			return false;
+		}
+
+		return FrmField::is_repeating_field( $section );
 	}
 
 	private static function has_parent_id() {
@@ -194,6 +409,7 @@ class FrmCSVExportHelper {
 				'entry'         => self::$entry,
 				'date_format'   => self::$wp_date_format,
 				'comment_count' => self::$comment_count,
+				'context'       => self::$context,
 			)
 		);
 		self::print_csv_row( $row );
@@ -209,6 +425,11 @@ class FrmCSVExportHelper {
 					continue;
 				}
 
+				if ( ! isset( $entries[ self::$entry->parent_item_id ] ) ) {
+					$entries[ self::$entry->parent_item_id ]        = new stdClass();
+					$entries[ self::$entry->parent_item_id ]->metas = array();
+				}
+
 				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
 					$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] = array();
 				} elseif ( ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $meta_id ] ) ) {
@@ -220,6 +441,8 @@ class FrmCSVExportHelper {
 				//add the repeated values
 				$entries[ self::$entry->parent_item_id ]->metas[ $meta_id ][] = $meta_value;
 			}
+
+			self::$entry->metas                              = self::fill_missing_repeater_metas( self::$entry->metas, $entries );
 			$entries[ self::$entry->parent_item_id ]->metas += self::$entry->metas;
 		}
 
@@ -228,6 +451,48 @@ class FrmCSVExportHelper {
 			$entries[ self::$entry->parent_item_id ]->embedded_fields = array();
 		}
 		$entries[ self::$entry->parent_item_id ]->embedded_fields[ self::$entry->id ] = self::$entry->form_id;
+	}
+
+	/**
+	 * When an empty field is saved, it isn't saved as a meta value
+	 * The export needs all of the meta to be filled in, so we put blank strings for every missing repeater child
+	 *
+	 * @param array $metas
+	 * @param array $entries
+	 * @return array
+	 */
+	private static function fill_missing_repeater_metas( $metas, &$entries ) {
+		$field_ids = array_keys( $metas );
+		$field_id  = end( $field_ids );
+		$field     = self::get_field( $field_id );
+
+		if ( ! $field || empty( $field->field_options['in_section'] ) ) {
+			return $metas;
+		}
+
+		$repeater_id = $field->field_options['in_section'];
+		if ( ! isset( self::$fields_by_repeater_id[ $repeater_id ] ) ) {
+			return $metas;
+		}
+
+		foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $repeater_child ) {
+			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
+				$metas[ $repeater_child->id ]                                            = '';
+				$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
+			}
+		}
+
+		return $metas;
+	}
+
+	private static function get_field( $field_id ) {
+		$field_id = (int) $field_id;
+		foreach ( self::$fields as $field ) {
+			if ( $field_id === (int) $field->id ) {
+				return $field;
+			}
+		}
+		return false;
 	}
 
 	private static function add_field_values_to_csv( &$row ) {
@@ -244,25 +509,21 @@ class FrmCSVExportHelper {
 					'field'     => $col,
 					'entry'     => self::$entry,
 					'separator' => self::$separator,
+					'context'   => self::$context,
 				)
 			);
 
-			if ( isset( $col->field_options['separate_value'] ) && $col->field_options['separate_value'] ) {
-				$sep_value = FrmEntriesHelper::display_value(
-					$field_value,
-					$col,
-					array(
-						'type'              => $col->type,
-						'post_id'           => self::$entry->post_id,
-						'show_icon'         => false,
-						'entry_id'          => self::$entry->id,
-						'sep'               => self::$separator,
-						'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
-					)
-				);
-
-				$row[ $col->id . '_label' ] = $sep_value;
-				unset( $sep_value );
+			if ( ! empty( $col->field_options['separate_value'] ) ) {
+				$label_key = $col->id . '_label';
+				if ( self::is_the_child_of_a_repeater( $col ) ) {
+					$row[ $label_key ] = array();
+					foreach ( $field_value as $value ) {
+						$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
+					}
+				} else {
+					$row[ $label_key ] = self::get_separate_value_label( $field_value, $col );
+				}
+				unset( $label_key );
 			}
 
 			$row[ $col->id ] = $field_value;
@@ -272,11 +533,45 @@ class FrmCSVExportHelper {
 	}
 
 	/**
+	 * @since 5.0.06
+	 *
+	 * @param mixed    $field_value
+	 * @param stdClass $field
+	 * @return string
+	 */
+	private static function get_separate_value_label( $field_value, $field ) {
+		return FrmEntriesHelper::display_value(
+			$field_value,
+			$field,
+			array(
+				'type'              => $field->type,
+				'post_id'           => self::$entry->post_id,
+				'show_icon'         => false,
+				'entry_id'          => self::$entry->id,
+				'sep'               => self::$separator,
+				'embedded_field_id' => ( isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+			)
+		);
+	}
+
+	/**
 	 * @since 2.0.23
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
 		if ( is_array( $atts['field_value'] ) ) {
 			foreach ( $atts['field_value'] as $key => $sub_value ) {
+				if ( is_array( $sub_value ) ) {
+					// This is combo field inside repeater. The heading key has this format: [86_first[0]].
+					foreach ( $sub_value as $sub_key => $sub_sub_value ) {
+						$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+						if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
+							$row[ $column_key ] = $sub_sub_value;
+						}
+					}
+
+					continue;
+				}
+
 				$column_key = $atts['col']->id . '_' . $key;
 				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
 					$row[ $column_key ] = $sub_value;
@@ -300,10 +595,28 @@ class FrmCSVExportHelper {
 	}
 
 	private static function print_csv_row( $rows ) {
-		$sep = '';
+		$sep  = '';
+		$echo = 'echo' === self::$mode;
 
 		foreach ( self::$headings as $k => $heading ) {
-			$row = isset( $rows[ $k ] ) ? $rows[ $k ] : '';
+			if ( isset( $rows[ $k ] ) ) {
+				$row = $rows[ $k ];
+			} else {
+				$row = '';
+				// array indexed data is not at $rows[ $k ]
+				if ( $k[ strlen( $k ) - 1 ] === ']' ) {
+					$start = strrpos( $k, '[' );
+					$key   = substr( $k, 0, $start ++ );
+					$index = substr( $k, $start, strlen( $k ) - 1 - $start );
+
+					if ( isset( $rows[ $key ] ) && isset( $rows[ $key ][ $index ] ) ) {
+						$row = $rows[ $key ][ $index ];
+					}
+
+					unset( $start, $key, $index );
+				}
+			}
+
 			if ( is_array( $row ) ) {
 				// implode the repeated field values
 				$row = implode( self::$separator, FrmAppHelper::array_flatten( $row, 'reset' ) );
@@ -314,12 +627,20 @@ class FrmCSVExportHelper {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
 
-			echo $sep . '"' . $val . '"'; // WPCS: XSS ok.
+			if ( $echo ) {
+				echo $sep . '"' . $val . '"'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			} else {
+				fwrite( self::$fp, $sep . '"' . $val . '"' );
+			}
 			$sep = self::$column_separator;
 
 			unset( $k, $row );
 		}
-		echo "\n";
+		if ( $echo ) {
+			echo "\n";
+		} else {
+			fwrite( self::$fp, "\n" );
+		}
 	}
 
 	public static function encode_value( $line ) {
@@ -355,8 +676,14 @@ class FrmCSVExportHelper {
 	 * Escape a " in a csv with another "
 	 *
 	 * @since 2.0
+	 * @param mixed $value
+	 * @return mixed
 	 */
 	public static function escape_csv( $value ) {
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+
 		if ( '=' === $value[0] ) {
 			// escape the = to prevent vulnerability
 			$value = "'" . $value;

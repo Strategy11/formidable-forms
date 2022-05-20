@@ -42,6 +42,10 @@ class FrmField {
 				'name' => __( 'Number', 'formidable' ),
 				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
+			'name'     => array(
+				'name' => __( 'Name', 'formidable' ),
+				'icon' => 'frm_icon_font frm_user_name_icon',
+			),
 			'phone'    => array(
 				'name' => __( 'Phone', 'formidable' ),
 				'icon' => 'frm_icon_font frm_phone_icon',
@@ -51,7 +55,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_code_icon',
 			),
 			'hidden'   => array(
-				'name' => __( 'Hidden Field', 'formidable' ),
+				'name' => __( 'Hidden', 'formidable' ),
 				'icon' => 'frm_icon_font frm_eye_slash_icon',
 			),
 			'user_id'  => array(
@@ -68,7 +72,8 @@ class FrmField {
 	}
 
 	public static function pro_field_selection() {
-		$fields = array(
+		$images_url = FrmAppHelper::plugin_url() . '/images/';
+		$fields     = array(
 			'file'           => array(
 				'name' => __( 'File Upload', 'formidable' ),
 				'icon' => 'frm_icon_font frm_upload_icon',
@@ -89,7 +94,7 @@ class FrmField {
 			'scale'          => array(
 				'name' => __( 'Scale', 'formidable' ),
 				'icon' => 'frm_icon_font frm_linear_scale_icon',
-				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/scale_field.png" alt="Scale Field" />',
+				'message' => 'Add a set of radio buttons with whatever range you choose. <img src="' . esc_attr( $images_url ) . 'scale_field.png" alt="Scale Field" />',
 			),
 			'star'           => array(
 				'name' => __( 'Star Rating', 'formidable' ),
@@ -111,12 +116,12 @@ class FrmField {
 			'lookup'         => array(
 				'name' => __( 'Lookup', 'formidable' ),
 				'icon' => 'frm_icon_font frm_search_icon',
-				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/look-up_year-make-model.gif" alt="cascading lookup fields" />',
+				'message' => 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more. <img src="' . esc_attr( $images_url ) . 'look-up_year-make-model.gif" alt="cascading lookup fields" />',
 			),
 			'divider|repeat' => array(
 				'name' => __( 'Repeater', 'formidable' ),
 				'icon' => 'frm_icon_font frm_repeater_icon',
-				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="https://s3.amazonaws.com/fp.strategy11.com/images/knowledgebase/repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
+				'message' => 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources. <img src="' . esc_attr( $images_url ) . 'repeatable-section_frontend.gif" alt="Dynamically Add Form Fields with repeatable sections" />',
 			),
 			'end_divider'    => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -134,6 +139,16 @@ class FrmField {
 			'form'           => array(
 				'name' => __( 'Embed Form', 'formidable' ),
 				'icon' => 'frm_icon_font frm_file_text_icon',
+			),
+			'likert'         => array(
+				'name'  => __( 'Likert Scale', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'addon' => 'surveys',
+			),
+			'nps'            => array(
+				'name'  => __( 'NPS', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
+				'addon' => 'surveys',
 			),
 			'password'       => array(
 				'name' => __( 'Password', 'formidable' ),
@@ -162,17 +177,12 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
 				'addon' => 'signature',
 			),
-			'quiz_score' => array(
-				'name'  => __( 'Quiz Score', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_percent_icon frm_show_upgrade',
-				'addon' => 'quizzes',
-			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => 'Appointment fields are an integration with <a href="https://simplyscheduleappointments.com/meet/formidable/">Simply Schedule Appointments</a>. Get started now to schedule appointments directly from your forms.
-					<img src="https://s3.amazonaws.com/fp.strategy11.com/images/appointments/appointments.png" alt="Scheduling" />',
+					<img src="' . esc_attr( $images_url ) . 'appointments.png" alt="Scheduling" />',
 				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
 			),
 			'product' => array(
@@ -216,12 +226,13 @@ class FrmField {
 		$key                     = isset( $values['field_key'] ) ? $values['field_key'] : $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
+
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
 			$new_values[ $col ] = $values[ $col ];
 		}
 
-		$new_values['options'] = $values['options'];
-
+		$new_values['options']       = self::maybe_filter_options( $values['options'] );
 		$new_values['field_order']   = isset( $values['field_order'] ) ? (int) $values['field_order'] : null;
 		$new_values['required']      = isset( $values['required'] ) ? (int) $values['required'] : 0;
 		$new_values['form_id']       = isset( $values['form_id'] ) ? (int) $values['form_id'] : null;
@@ -246,9 +257,6 @@ class FrmField {
 			unset( $k, $v );
 		}
 
-		//if(isset($values['id']) and is_numeric($values['id']))
-		//    $new_values['id'] = $values['id'];
-
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
 		$new_id        = 0;
 		if ( $query_results ) {
@@ -269,6 +277,57 @@ class FrmField {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * @since 5.0.08
+	 *
+	 * @param array $options
+	 * @return array
+	 */
+	private static function maybe_filter_options( $options ) {
+		return FrmAppHelper::maybe_filter_array( $options, array( 'custom_html' ) );
+	}
+
+	/**
+	 * Process the field duplication.
+	 *
+	 * @since 5.0.05
+	 */
+	public static function duplicate_single_field( $field_id, $form_id ) {
+		$copy_field = self::getOne( $field_id );
+		if ( ! $copy_field ) {
+			return false;
+		}
+
+		do_action( 'frm_duplicate_field', $copy_field, $form_id );
+		do_action( 'frm_duplicate_field_' . $copy_field->type, $copy_field, $form_id );
+
+		$values = array(
+			'id' => $copy_field->id,
+		);
+		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
+		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
+
+		$field_id = self::create( $values );
+
+		/**
+		 * Fires after duplicating a field.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $args {
+		 *     The arguments.
+		 *
+		 *     @type int    $field_id   New field ID.
+		 *     @type array  $values     Values before inserting.
+		 *     @type object $copy_field Copy field data.
+		 *     @type int    $form_id    Form ID.
+		 * }
+		 */
+		do_action( 'frm_after_duplicate_field', compact( 'field_id', 'values', 'copy_field', 'form_id' ) );
+
+		return compact( 'field_id', 'values' );
 	}
 
 	public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
@@ -329,7 +388,8 @@ class FrmField {
 	public static function update( $id, $values ) {
 		global $wpdb;
 
-		$id = absint( $id );
+		$id     = absint( $id );
+		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		if ( isset( $values['field_key'] ) ) {
 			$values['field_key'] = FrmAppHelper::get_unique_key( $values['field_key'], $wpdb->prefix . 'frm_fields', 'field_key', $id );
@@ -344,7 +404,7 @@ class FrmField {
 		if ( isset( $values['type'] ) ) {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values );
 
-			if ( $values['type'] == 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
+			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
 				// don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
@@ -353,6 +413,9 @@ class FrmField {
 		// serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
+				if ( 'field_options' === $opt ) {
+					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
+				}
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
@@ -454,7 +517,7 @@ class FrmField {
 		global $wpdb;
 
 		$where = is_numeric( $id ) ? 'id=%d' : 'field_key=%s';
-		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id ); // WPCS: unprepared SQL ok.
+		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'frm_fields WHERE ' . $where, $id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
@@ -1068,5 +1131,19 @@ class FrmField {
 		 * @since 4.04
 		 */
 		return apply_filters( 'frm_is_field_type', $is_field_type, compact( 'field', 'is_type' ) );
+	}
+
+	/**
+	 * Checks if the given field array is a combo field.
+	 *
+	 * @since 4.10.02
+	 *
+	 * @param array $field Field array.
+	 * @return bool
+	 */
+	public static function is_combo_field( $field ) {
+		$field_type_obj = FrmFieldFactory::get_field_factory( $field );
+
+		return ! empty( $field_type_obj->is_combo_field );
 	}
 }

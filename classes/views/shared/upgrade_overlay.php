@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_upgrade_modal" class="frm_hidden settings-lite-cta">
 	<div class="metabox-holder">
 		<div class="postbox">
@@ -14,7 +19,7 @@
 						esc_html__( '%s are not installed', 'formidable' ),
 						'<span class="frm_feature_label"></span>'
 					);
-					?> 
+					?>
 				</h2>
 				<div class="cta-inside">
 
@@ -38,7 +43,7 @@
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
 					<p id="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
-						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); // WPCS: XSS ok. ?>
+						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
 						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link" data-default="<?php echo esc_url( $default_link ); ?>">

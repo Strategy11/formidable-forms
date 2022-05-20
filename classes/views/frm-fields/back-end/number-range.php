@@ -1,13 +1,18 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm8 frm_first frm_form_field frm-number-range">
 	<label for="frm_format_<?php echo esc_attr( $field['field_key'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the number range the field validation should allow. Browsers that support the HTML5 number field require a number range to determine the numbers seen when clicking the arrows next to the field.', 'formidable' ); ?>">
 		<?php esc_html_e( 'Number Range', 'formidable' ); ?>
 	</label>
 	<span class="frm_grid_container">
 		<span class="frm5 frm_form_field frm-range-min">
-			<input type="text" name="field_options[minnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['minnum'] ); ?>" />
+			<input type="text" name="field_options[minnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['minnum'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="min" />
 		</span>
 		<span class="frm5 frm_last frm_form_field">
-			<input type="text" name="field_options[maxnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['maxnum'] ); ?>" />
+			<input type="text" name="field_options[maxnum_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['maxnum'] ); ?>" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="max" />
 		</span>
 	</span>
 </p>

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 /**
  * Show the radio field on the front-end.
  * Extra line breaks show as space on the front-end when
@@ -18,6 +22,16 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
+
+		/**
+		 * Allows changing the HTML of option label in choice field (radio, checkbox,...).
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param string $label Label HTML.
+		 * @param array  $args  The arguments. Contains `field`.
+		 */
+		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field' ) );
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
@@ -31,12 +45,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		?>
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
 		<?php
-		echo $checked . ' '; // WPCS: XSS ok.
+		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		do_action( 'frm_field_input_html', $field );
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $opt, 'all' ) . '</label>'; // WPCS: XSS ok.
+			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		$other_args = array(

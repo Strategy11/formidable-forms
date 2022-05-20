@@ -22,10 +22,10 @@ warning () {
 status "Time to release"
 
 # Update any submodules
-git submodule foreach git pull origin master
-if ! git diff --submodule=diff --exit-code > /dev/null; then
-	git commit -am 'Update submodule'
-fi
+# git submodule foreach git pull origin master
+# if ! git diff --submodule=diff --exit-code > /dev/null; then
+#	git commit -am 'Update submodule'
+# fi
 
 # Make sure there are no changes in the working tree. Release builds should be
 # traceable to a particular commit and reliably reproducible.

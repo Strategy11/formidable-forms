@@ -7,7 +7,6 @@
  * @group entries
  * @group show-entry-shortcode
  * @group free
- *
  */
 class test_FrmShowEntryShortcode extends FrmUnitTest {
 
@@ -18,6 +17,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected $extra_fields = array( 'html' );
 	protected $tr_style = ' style="background-color:#ffffff;"';
 	protected $td_style = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
+
+	public function __construct() {
+		parent::__construct();
+
+		$defaults = $this->get_defaults();
+		$this->td_style = str_replace( '#555555', $defaults['text_color'], $this->td_style );
+		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
+	}
 
 	/**
 	 * Tests no entry or id passed
@@ -188,7 +195,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	public function test_default_message_with_specific_field_ids_included() {
 		$entry = $this->get_test_entry( true );
 
-		$this->set_included_fields( 'id ');
+		$this->set_included_fields( 'id ' );
 
 		$atts = array(
 			'id' => $entry->id,
@@ -378,21 +385,24 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$entry = $this->get_test_entry( true );
 
 		$atts = array(
-			'id' => $entry->id,
-			'entry' => $entry,
-			'plain_text' => false,
-			'user_info' => false,
-			'font_size' => '20px',
-			'text_color' => '#00ff00',
+			'id'           => $entry->id,
+			'entry'        => $entry,
+			'plain_text'   => false,
+			'user_info'    => false,
+			'font_size'    => '20px',
+			'text_color'   => '#00ff00',
 			'border_width' => '3px',
 			'border_color' => '#FF69B4',
-			'bg_color' => '#0000ff',
+			'bg_color'     => '#0000ff',
 			'alt_bg_color' => '#0000ff',
 		);
 
 		$this->tr_style = str_replace( 'background-color:#ffffff', 'background-color:' . $atts['bg_color'], $this->tr_style );
-		$this->td_style = str_replace( '#555555', $atts['text_color'], $this->td_style );
-		$this->td_style = str_replace( '1px solid #cccccc', $atts['border_width'] . ' solid ' . $atts['border_color'], $this->td_style );
+
+		$defaults = $this->get_defaults();
+
+		$this->td_style = str_replace( 'color:' . $defaults['text_color'], 'color:' . $atts['text_color'], $this->td_style );
+		$this->td_style = str_replace( '1px solid ' . $defaults['border_color'], $atts['border_width'] . ' solid ' . $atts['border_color'], $this->td_style );
 
 		$content = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_html_content( $atts );
@@ -706,7 +716,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return array(
 			FrmField::get_id_by_key( 'free-text-field' ) => 'Test Testerson',
 			FrmField::get_id_by_key( 'free-paragraph-field' ) => "Test\r\nMiddle\r\nTesterson",
-			FrmField::get_id_by_key( 'free-checkboxes' ) => array ( 'Red', 'Green' ),
+			FrmField::get_id_by_key( 'free-checkboxes' ) => array( 'Red', 'Green' ),
 			FrmField::get_id_by_key( 'free-radio-button-field' ) => 'cookies',
 			FrmField::get_id_by_key( 'free-dropdown-field' ) => 'Ace Ventura',
 			FrmField::get_id_by_key( 'free-email-field' ) => 'jamie@mail.com',
@@ -766,13 +776,15 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			return '';
 		}
 
-		$font_size = isset( $atts['font_size'] ) ? $atts['font_size'] : '14px';
-		$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : '1px';
-		$border_color = isset( $atts['border_color'] ) ? $atts['border_color'] : '#cccccc';
-
 		$header = '<table cellspacing="0" ';
 
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
+			$defaults = $this->get_defaults();
+			$atts         = array_merge( $defaults, $atts );
+			$font_size    = $atts['font_size'];
+			$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : $atts['field_border_width'];
+			$border_color = $atts['border_color'];
+
 			$header .= ' style="font-size:' . $font_size . ';line-height:135%;';
 			$header .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
 		}
@@ -780,6 +792,13 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$header .= '><tbody>' . "\r\n";
 
 		return $header;
+	}
+
+	protected function get_defaults() {
+		$frm_style = new FrmStyle();
+		$defaults = $frm_style->get_defaults();
+		FrmStylesHelper::prepare_color_output( $defaults );
+		return $defaults;
 	}
 
 	protected function table_footer() {
@@ -842,7 +861,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( isset( $atts['direction'] ) && $atts['direction'] == 'rtl' ) {
 			$content = $field_value . ': ' . $field->name;
 		} else {
-			$content = $field->name .': ' . $field_value;
+			$content = $field->name . ': ' . $field_value;
 		}
 
 		$content .= "\r\n";
@@ -1037,7 +1056,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected function get_expected_default_shortcodes( $type, $atts ) {
 		$content = '';
 
-		$fields = FrmField::get_all_for_form( $atts[ 'form_id' ], '', 'include' );
+		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 
 		if ( $type === 'html' ) {
 			$content .= $this->table_header( $atts );
@@ -1131,7 +1150,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$expected = array(
 			'free-text-field' => 'Test Testerson',
 			'free-paragraph-field' => "Test\r\nMiddle\r\nTesterson",
-			'free-checkboxes' => array ( 'Red', 'Green' ),
+			'free-checkboxes' => array( 'Red', 'Green' ),
 			'free-radio-button-field' => 'cookies',
 			'free-dropdown-field' => 'Ace Ventura',
 			'free-email-field' => 'jamie@mail.com',

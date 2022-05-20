@@ -1,5 +1,4 @@
 <?php
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -15,6 +14,7 @@ class FrmAddon {
 	public $version;
 	public $author = 'Strategy11';
 	public $is_parent_licence = false;
+	public $needs_license = true;
 	private $is_expired_addon = false;
 	public $license;
 	protected $get_beta = false;
@@ -90,8 +90,9 @@ class FrmAddon {
 			return $_data;
 		}
 
-		$slug = basename( $this->plugin_file, '.php' );
-		if ( ! isset( $_args->slug ) || $_args->slug != $slug ) {
+		$slug  = basename( $this->plugin_file, '.php' );
+		$slug2 = str_replace( '/' . $slug . '.php', '', $this->plugin_folder );
+		if ( empty( $_args->slug ) || ( $_args->slug != $slug && $_args->slug !== $slug2 ) ) {
 			return $_data;
 		}
 
@@ -238,6 +239,36 @@ class FrmAddon {
 		update_option( $this->option_name . 'active', $is_active );
 		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
+		$this->update_pro_capabilities();
+	}
+
+	/**
+	 * Updates roles capabilities after pro license is active.
+	 *
+	 * @since 5.0
+	 */
+	protected function update_pro_capabilities() {
+		global $wp_roles;
+
+		$caps     = FrmAppHelper::frm_capabilities( 'pro_only' );
+		$roles    = get_editable_roles();
+		$settings = new FrmSettings();
+		foreach ( $caps as $cap => $cap_desc ) {
+			$cap_roles = (array) ( isset( $settings->$cap ) ? $settings->$cap : 'administrator' );
+
+			// Make sure administrators always have permissions.
+			if ( ! in_array( 'administrator', $cap_roles ) ) {
+				array_push( $cap_roles, 'administrator' );
+			}
+
+			foreach ( $roles as $role => $details ) {
+				if ( in_array( $role, $cap_roles ) ) {
+					$wp_roles->add_cap( $role, $cap );
+				} else {
+					$wp_roles->remove_cap( $role, $cap );
+				}
+			}
+		}
 	}
 
 	/**
@@ -289,7 +320,7 @@ class FrmAddon {
 		$id            = sanitize_title( $plugin['Name'] ) . '-next';
 
 		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
-		echo FrmAppHelper::kses( $message, 'a' ); // WPCS: XSS ok.
+		echo FrmAppHelper::kses( $message, 'a' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
 		echo '</p></div></td></tr>';
 	}
@@ -360,7 +391,7 @@ class FrmAddon {
 		// if there is no download url, this license does not apply to the addon
 		if ( isset( $addon['package'] ) ) {
 			$this->is_parent_licence = true;
-		} elseif ( isset( $addons['error'] ) ) {
+		} elseif ( isset( $addon['error'] ) ) {
 			// if the license is expired, we must assume all add-ons were packaged
 			$this->is_parent_licence = true;
 			$this->is_expired_addon  = true;
@@ -424,7 +455,7 @@ class FrmAddon {
 	}
 
 	private function is_license_revoked() {
-		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // WPCS: CSRF ok.
+		if ( empty( $this->license ) || empty( $this->plugin_slug ) || isset( $_POST['license'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -475,11 +506,18 @@ class FrmAddon {
 		}
 
 		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		$this_plugin = self::get_addon( $plugin_slug );
-		$response    = $this_plugin->activate_license( $license );
+		$response    = self::activate_license_for_plugin( $license, $plugin_slug );
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 4.08
+	 */
+	public static function activate_license_for_plugin( $license, $plugin_slug ) {
+		$this_plugin = self::get_addon( $plugin_slug );
+		return $this_plugin->activate_license( $license );
 	}
 
 	private function activate_license( $license ) {
@@ -659,6 +697,12 @@ class FrmAddon {
 	}
 
 	public function manually_queue_update() {
-		set_site_transient( 'update_plugins', null );
+		$updates               = new stdClass();
+		$updates->last_checked = 0;
+		$updates->response     = array();
+		$updates->translations = array();
+		$updates->no_update    = array();
+		$updates->checked      = array();
+		set_site_transient( 'update_plugins', $updates );
 	}
 }

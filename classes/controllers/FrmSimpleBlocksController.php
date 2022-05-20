@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmSimpleBlocksController {
 
@@ -11,12 +14,18 @@ class FrmSimpleBlocksController {
 		wp_register_script(
 			'formidable-form-selector',
 			FrmAppHelper::plugin_url() . '/js/formidable_blocks.js',
-			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ),
+			array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-block-editor' ),
 			$version,
 			true
 		);
 
-		$icon       = str_replace( 'dashicons-', '', apply_filters( 'frm_icon', 'svg' ) );
+		$icon = apply_filters( 'frm_icon', 'svg' );
+		if ( 0 === strpos( $icon, 'data:image/svg+xml;base64,' ) ) {
+			$icon = ' ' . FrmAppHelper::get_menu_icon_class();
+		} else {
+			$icon = str_replace( 'dashicons-', '', $icon );
+		}
+
 		$block_name = FrmAppHelper::get_menu_name();
 		if ( $block_name === 'Formidable' ) {
 			$block_name = 'Formidable Forms';
@@ -26,6 +35,8 @@ class FrmSimpleBlocksController {
 			'forms' => self::get_forms_options(),
 			'icon'  => $icon,
 			'name'  => $block_name,
+			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
+			'url'   => FrmAppHelper::plugin_url(),
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
@@ -134,7 +145,20 @@ class FrmSimpleBlocksController {
 		unset( $params['formId'] );
 
 		$form = FrmFormsController::get_form_shortcode( $params );
+		return self::maybe_remove_fade_on_load_for_block_preview( $form );
+	}
 
-		return str_replace( ' frm_logic_form ', ' ', $form ); // prevent the form from hiding
+	/**
+	 * Remove fade on load when /wp-json/wp/v2/block-renderer/formidable/simple-form is called.
+	 * With the class set, the form never appears in the form block preview.
+	 *
+	 * @param string $form
+	 * @return string
+	 */
+	private static function maybe_remove_fade_on_load_for_block_preview( $form ) {
+		if ( is_callable( 'wp_is_json_request' ) && wp_is_json_request() ) {
+			$form = str_replace( ' frm_logic_form ', ' ', $form );
+		}
+		return $form;
 	}
 }

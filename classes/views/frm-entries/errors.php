@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 if ( isset( $include_extra_container ) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<?php
@@ -6,13 +10,13 @@ if ( isset( $include_extra_container ) ) { ?>
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>
-<div id="message" class="frm_updated_message"><?php echo wp_kses_post( $message ); ?></div>
+<div id="message" class="frm_updated_message" role="status"><?php echo wp_kses_post( $message ); ?></div>
 		<?php
 	} else {
 		FrmFormsHelper::maybe_get_scroll_js( $form->id );
 
 		// we need to allow scripts here for javascript in the success message
-		echo $message; // WPCS: XSS ok.
+		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 
@@ -22,7 +26,7 @@ if ( isset( $errors ) && is_array( $errors ) && ! empty( $errors ) ) {
 		FrmFormsHelper::get_scroll_js( $form->id );
 	}
 	?>
-<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>">
+<div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert">
 	<?php
 	$img = '';
 	if ( ! FrmAppHelper::is_admin() ) {

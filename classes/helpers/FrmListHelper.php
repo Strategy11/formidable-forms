@@ -14,6 +14,11 @@ class FrmListHelper {
 	public $items;
 
 	/**
+	 * @since 4.07
+	 */
+	public $total_items = false;
+
+	/**
 	 * Various information about the current table
 	 *
 	 * @since 2.0.18
@@ -151,7 +156,7 @@ class FrmListHelper {
 
 	public function display_rows() {
 		foreach ( $this->items as $item ) {
-			echo "\n\t", $this->single_row( $item ); // WPCS: XSS ok.
+			echo "\n\t", $this->single_row( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -206,7 +211,7 @@ class FrmListHelper {
 		}
 
 		// Redirect if page number is invalid and headers are not already sent.
-		if ( ! headers_sent() && ! FrmAppHelper::wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
+		if ( ! headers_sent() && ! wp_doing_ajax() && $args['total_pages'] > 0 && $this->get_pagenum() > $args['total_pages'] ) {
 			wp_redirect( add_query_arg( 'paged', $args['total_pages'] ) );
 			exit;
 		}
@@ -326,7 +331,7 @@ class FrmListHelper {
 		foreach ( $views as $class => $view ) {
 			$views[ $class ] = "\t" . '<li class="' . esc_attr( $class ) . '">' . $view;
 		}
-		echo implode( " |</li>\n", $views ) . "</li>\n"; // WPCS: XSS ok.
+		echo implode( " |</li>\n", $views ) . "</li>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</ul>';
 	}
 
@@ -386,15 +391,37 @@ class FrmListHelper {
 		echo "<option value='-1' selected='selected'>" . esc_attr__( 'Bulk Actions', 'formidable' ) . "</option>\n";
 
 		foreach ( $this->_actions as $name => $title ) {
-			$class = 'edit' == $name ? ' class="hide-if-no-js"' : '';
+			$params = array(
+				'value' => $name,
+			);
+			if ( 'edit' === $name ) {
+				$params['class'] = 'hide-if-no-js';
+			}
 
-			echo "\t<option value='" . esc_attr( $name ) . "'$class>" . esc_html( $title ) . "</option>\n"; // WPCS: XSS ok.
+			echo "\t<option ";
+			FrmAppHelper::array_to_html_params( $params, true );
+			echo '>' . esc_html( $title ) . '</option>' . "\n";
 		}
 
 		echo "</select>\n";
 
+		if ( isset( $this->_actions['bulk_delete'] ) ) {
+			$verify = $this->confirm_bulk_delete();
+
+			if ( $verify ) {
+				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-frmcaution='" . esc_html__( 'Heads up', 'formidable' ) . "' data-frmverify='" . esc_attr( $verify ) . "'></a>";
+			}
+		}
+
 		submit_button( __( 'Apply', 'formidable' ), 'action', '', false, array( 'id' => "doaction$two" ) );
 		echo "\n";
+	}
+
+	/**
+	 * @return string if empty there will be no confirmation pop up
+	 */
+	protected function confirm_bulk_delete() {
+		return '';
 	}
 
 	/**
@@ -418,9 +445,9 @@ class FrmListHelper {
 		return $action;
 	}
 
-	private static function get_bulk_action( $action_name ) {
+	private function get_bulk_action( $action_name ) {
 		$action       = false;
-		$action_param = self::get_param(
+		$action_param = $this->get_param(
 			array(
 				'param'    => $action_name,
 				'sanitize' => 'sanitize_text_field',
@@ -645,7 +672,7 @@ class FrmListHelper {
 		}
 		$this->_pagination = "<div class='tablenav-pages" . esc_attr( $page_class ) . "'>$output</div>";
 
-		echo $this->_pagination; // WPCS: XSS ok.
+		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	private function disabled_pages( $total_pages ) {
@@ -945,7 +972,11 @@ class FrmListHelper {
 				$class = "class='" . esc_attr( join( ' ', $class ) ) . "'";
 			}
 
-			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // WPCS: XSS ok.
+			if ( ! $this->has_min_items() && ! $with_id ) {
+				// Hide the labels but show the border.
+				$column_display_name = '';
+			}
+			echo "<$tag $scope $id $class>$column_display_name</$tag>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -956,27 +987,34 @@ class FrmListHelper {
 	 * @access public
 	 */
 	public function display() {
-		$singular = $this->_args['singular'];
+		$singular     = $this->_args['singular'];
+		$tbody_params = array();
+		if ( $singular ) {
+			$tbody_params['data-wp-lists'] = 'list:' . $singular;
+		}
 
 		$this->display_tablenav( 'top' );
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
+			<?php if ( $this->has_min_items( 1 ) ) { ?>
 			<thead>
 				<tr>
 					<?php $this->print_column_headers(); ?>
 				</tr>
 			</thead>
+			<?php } ?>
 
-			<tbody id="the-list"<?php echo( $singular ? " data-wp-lists='list:" . esc_attr( $singular ) . "'" : '' ); // WPCS: XSS ok. ?>>
+			<tbody id="the-list"<?php FrmAppHelper::array_to_html_params( $tbody_params, true ); ?>>
 				<?php $this->display_rows_or_placeholder(); ?>
 			</tbody>
 
+			<?php if ( $this->has_min_items( 1 ) ) { ?>
 			<tfoot>
 				<tr>
 					<?php $this->print_column_headers( false ); ?>
 				</tr>
 			</tfoot>
-
+			<?php } ?>
 		</table>
 		<?php
 		$this->display_tablenav( 'bottom' );
@@ -1003,8 +1041,15 @@ class FrmListHelper {
 	 * @param string $which
 	 */
 	protected function display_tablenav( $which ) {
-		if ( 'top' == $which ) {
-			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+		if ( 'top' === $which ) {
+			wp_nonce_field( 'bulk-' . $this->_args['plural'], '_wpnonce', false );
+			if ( ! $this->has_min_items( 1 ) ) {
+				// Don't show bulk actions if no items.
+				return;
+			}
+		} elseif ( ! $this->has_min_items() ) {
+			// don't show the bulk actions when there aren't many rows.
+			return;
 		}
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
@@ -1020,6 +1065,16 @@ class FrmListHelper {
 			<br class="clear"/>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Use this to exclude the footer labels and bulk items.
+	 * When close together, it feels like duplicates.
+	 *
+	 * @since 4.07
+	 */
+	protected function has_min_items( $limit = 5 ) {
+		return $this->has_items() && ( $this->total_items === false || $this->total_items >= $limit );
 	}
 
 	/**
@@ -1084,30 +1139,25 @@ class FrmListHelper {
 				$classes .= ' hidden';
 			}
 
-			// Comments column uses HTML in the display name with screen reader text.
-			// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
-			$data = 'data-colname="' . esc_attr( $column_display_name ) . '"';
+			$params = array(
+				'class'        => $classes,
+				// Comments column uses HTML in the display name with screen reader text.
+				// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
+				'data-colname' => $column_display_name,
+			);
 
-			$attributes = 'class="' . esc_attr( $classes ) . '" ' . $data;
-
-			if ( 'cb' == $column_name ) {
+			if ( 'cb' === $column_name ) {
 				echo '<th scope="row" class="check-column"></th>';
-			} elseif ( method_exists( $this, '_column_' . $column_name ) ) {
-				echo call_user_func( // WPCS: XSS ok.
-					array( $this, '_column_' . $column_name ),
-					$item,
-					$classes,
-					$data,
-					$primary
-				);
-			} elseif ( method_exists( $this, 'column_' . $column_name ) ) {
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
-				echo '</td>';
 			} else {
-				echo "<td $attributes>"; // WPCS: XSS ok.
-				echo $this->handle_row_actions( $item, $column_name, $primary ); // WPCS: XSS ok.
+				echo '<td ';
+				FrmAppHelper::array_to_html_params( $params, true );
+				echo '>';
+
+				if ( method_exists( $this, 'column_' . $column_name ) ) {
+					echo call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+
+				echo $this->handle_row_actions( $item, $column_name, $primary ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '</td>';
 			}
 		}

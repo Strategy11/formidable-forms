@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="frm6 frm_first frm_form_field">
 	<label class="frm_help" title="<?php esc_attr_e( 'This will add !important to many of the lines in the Formidable styling to make sure it will be used.', 'formidable' ); ?>">
 		<input type="checkbox" name="<?php echo esc_attr( $frm_style->get_field_name( 'important_style' ) ); ?>" id="frm_important_style" value="1" <?php checked( $style->post_content['important_style'], 1 ); ?> />
@@ -34,8 +39,22 @@
 
 <p class="frm4 frm_form_field frm_end">
 	<label><?php esc_html_e( 'Background', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_bg_color' ) ); ?>" id="frm_fieldset_bg_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_bg_color'] ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', 'fieldset_bg_color' ); ?> />
 </p>
+
+<?php
+do_action( 'frm_style_settings_general_section_after_background', compact( 'frm_style', 'style' ) );
+if ( ! FrmAppHelper::pro_is_installed() ) {
+	?>
+		<div class="frm_image_preview_wrapper" data-upgrade="<?php esc_attr_e( 'Background image styles', 'formidable' ); ?>" data-medium="background-image">
+			<button type="button" class="frm_choose_image_box frm_button frm_no_style_button frm_noallow">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_upload_icon' ); ?>
+				<?php esc_attr_e( 'Upload background image', 'formidable' ); ?>
+			</button>
+		</div>
+	<?php
+}
+?>
 
 <p class="frm4 frm_first frm_form_field">
 	<label><?php esc_html_e( 'Border', 'formidable' ); ?></label>
@@ -44,7 +63,7 @@
 
 <p class="frm4 frm_form_field">
 	<label><?php esc_html_e( 'Color', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_color' ) ); ?>" id="frm_fieldset_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_color'] ); ?>" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'fieldset_color' ) ); ?>" id="frm_fieldset_color" class="hex" value="<?php echo esc_attr( $style->post_content['fieldset_color'] ); ?>" <?php do_action( 'frm_style_settings_input_atts', 'fieldset_color' ); ?> />
 </p>
 
 <p class="frm4 frm_form_field">

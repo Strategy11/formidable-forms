@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmSettingsController {
 
@@ -51,7 +54,7 @@ class FrmSettingsController {
 			'recaptcha' => array(
 				'class'    => __CLASS__,
 				'function' => 'recaptcha_settings',
-				'name'     => __( 'reCaptcha', 'formidable' ),
+				'name'     => __( 'reCAPTCHA', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'white_label' => array(
@@ -63,6 +66,15 @@ class FrmSettingsController {
 					'upgrade' => __( 'White labeling options', 'formidable' ),
 				),
 			),
+			'inbox' => array(
+				'name'       => __( 'Inbox', 'formidable' ),
+				'icon'       => 'frm_icon_font frm_email_icon',
+				'html_class' => 'frm_show_upgrade frm_noallow',
+				'data'       => array(
+					'medium'  => 'inbox-settings',
+					'upgrade' => __( 'Inbox settings', 'formidable' ),
+				),
+			),
 		);
 
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
@@ -70,7 +82,7 @@ class FrmSettingsController {
 			$show_licenses    = false;
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 			foreach ( $installed_addons as $installed_addon ) {
-				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' ) {
+				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' && $installed_addon->needs_license ) {
 					$show_licenses = true;
 					break;
 				}
@@ -306,10 +318,11 @@ class FrmSettingsController {
 		global $wpdb;
 
 		$term = FrmAppHelper::get_param( 'term', '', 'get', 'sanitize_text_field' );
+		$post_type = FrmAppHelper::get_param( 'post_type', 'page', 'get', 'sanitize_text_field' );
 
 		$where = array(
 			'post_status'     => 'publish',
-			'post_type'       => 'page',
+			'post_type'       => $post_type,
 			'post_title LIKE' => $term,
 		);
 

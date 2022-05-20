@@ -9,7 +9,7 @@ class test_FrmEntry extends FrmUnitTest {
 	 * @covers FrmEntry::create
 	 * @covers FrmEntry::is_duplicate
 	 */
-	function test_is_duplicate() {
+	public function test_is_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$this->assertNotEmpty( $form, 'Form not found with id ' . $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );
@@ -44,12 +44,12 @@ class test_FrmEntry extends FrmUnitTest {
 	/**
 	 * @covers FrmEntry::getAll
 	 */
-    function test_getAll() {
+	public function test_getAll() {
 		$form = $this->factory->form->get_object_by_id( $this->contact_form_key );
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$this->factory->entry->create_many( 10, $entry_data );
 
-        $items = FrmEntry::getAll( array( 'it.form_id' => $form->id ) );
-        $this->assertTrue( count( $items ) >= 10, 'There are no entries in form ' . $form->id );
-    }
+		$items = FrmEntry::getAll( array( 'it.form_id' => $form->id ) );
+		$this->assertTrue( count( $items ) >= 10, 'There are no entries in form ' . $form->id );
+	}
 }

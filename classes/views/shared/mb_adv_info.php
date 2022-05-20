@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="taxonomy-linkcategory" class="categorydiv <?php echo esc_attr( $class ); ?>">
 	<ul id="frm-nav-tabs" class="frm-nav-tabs <?php echo esc_attr( $settings_tab ? '' : 'frm-compact-nav' ); ?>">
 		<li class="frm-tabs">
@@ -158,7 +163,7 @@
 			</h3>
 			<ul class="frm_code_list frm-full-hover frmcenter">
 				<li>
-					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php echo esc_attr( 'Conditional content here', 'formidable' ); ?>[/if x">
+					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
 						[if x equals=""][/if x]
 					</a>
 				</li>

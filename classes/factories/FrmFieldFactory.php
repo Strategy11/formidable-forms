@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.03.05
@@ -96,6 +99,7 @@ class FrmFieldFactory {
 			'html'     => 'FrmFieldHTML',
 			'hidden'   => 'FrmFieldHidden',
 			'captcha'  => 'FrmFieldCaptcha',
+			'name'     => 'FrmFieldName',
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';

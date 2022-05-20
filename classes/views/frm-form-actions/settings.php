@@ -1,7 +1,12 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <p class="howto">
 	<?php esc_html_e( 'Add form actions to your form to perform tasks when an entry is created, updated, imported, and more.', 'formidable' ); ?>
 </p>
-				
+
 <div id="frm_email_addon_menu" class="frm-limited-actions">
 	<?php
 	FrmAppHelper::show_search_box(
@@ -51,9 +56,7 @@
 					<li class="frm-action frm-not-installed">
 						<a href="javascript:void(0)" class="frm-single-action frm_show_upgrade">
 							<span class="frm-outer-circle">
-								<span class="frm-inner-circle" <?php
-									echo FrmAppHelper::array_to_html_params( $icon_atts ); // WPCS: XSS ok.
-								?>>
+								<span class="frm-inner-circle" <?php FrmAppHelper::array_to_html_params( $icon_atts, true ); ?>>
 								<?php
 								$icon_atts = array();
 								if ( isset( $group['color'] ) ) {

@@ -7,7 +7,7 @@ class test_FrmAddon extends FrmUnitTest {
 
 	private $addon;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->check_php_version( '5.4' );
@@ -68,7 +68,7 @@ class test_FrmAddon extends FrmUnitTest {
 			array(
 				'time'     => strtotime( '-2 hours' ),
 				'expected' => false,
-			)
+			),
 		);
 
 		$this->run_private_method( array( $this->addon, 'set_auto_activate_time' ) );

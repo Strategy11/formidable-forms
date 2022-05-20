@@ -8,31 +8,35 @@ class test_FrmFieldType extends FrmUnitTest {
 	/**
 	 * @covers FrmFieldNumber::add_min_max
 	 */
-	function test_html_min_number() {
+	public function test_html_min_number() {
 		$form_id = $this->factory->form->create();
-		$field = $this->factory->field->create_and_get( array(
-			'type'    => 'number',
-			'form_id' => $form_id,
-			'field_options' => array(
-				'minnum' => 10,
-				'maxnum' => 999,
-				'step'   => 'any',
-			),
-		) );
+		$field   = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $form_id,
+				'field_options' => array(
+					'minnum' => 10,
+					'maxnum' => 999,
+					'step'   => 'any',
+				),
+			)
+		);
 		$this->assertNotEmpty( $field );
-		
-		$form = FrmFormsController::get_form_shortcode( array(
-			'id' => $form_id,
-		) );
-		$this->assertContains( ' min="10"', $form );
-		$this->assertContains( ' max="999"', $form );
-		$this->assertContains( ' step="any"', $form );
+
+		$form = FrmFormsController::get_form_shortcode(
+			array(
+				'id' => $form_id,
+			)
+		);
+		$this->assertNotFalse( strpos( $form, ' min="10"' ) );
+		$this->assertNotFalse( strpos( $form, ' max="999"' ) );
+		$this->assertNotFalse( strpos( $form, ' step="any"' ) );
 	}
 
 	/**
 	 * @covers FrmFieldType::sanitize_value
 	 */
-	function test_sanitize_value() {
+	public function test_sanitize_value() {
 		$frm_field_type = new FrmFieldDefault();
 
 		$values = array(
@@ -116,12 +120,12 @@ class test_FrmFieldType extends FrmUnitTest {
 				'value'    => array(
 					'6',
 					'2a',
-					'a1'
+					'a1',
 				),
 				'expected' => array(
 					'6',
 					'2',
-					'0'
+					'0',
 				),
 			),
 		);
@@ -130,5 +134,84 @@ class test_FrmFieldType extends FrmUnitTest {
 			$frm_field_type->sanitize_value( $value['value'] );
 			$this->assertEquals( $value['expected'], $value['value'] );
 		}
+	}
+
+	/**
+	 * @covers FrmFieldType::get_import_value
+	 */
+	public function test_get_import_value() {
+		$field = new stdClass();
+		$field->type = 'checkbox';
+		$field->options = array(
+			array(
+				'value' => 'a',
+				'label' => 'A',
+			),
+			array(
+				'value' => 'b',
+				'label' => 'B',
+			),
+			array(
+				'value' => 'c',
+				'label' => 'C',
+			),
+			array(
+				'value' => 'a,b',
+				'label' => 'A, B',
+			),
+			array(
+				'value' => 'a,b,c',
+				'label' => 'A, B, C',
+			),
+			array(
+				'value' => 'a, b, c',
+				'label' => 'A, B, C',
+			),
+		);
+
+		$checkbox = FrmFieldFactory::get_field_type( 'checkbox', $field );
+
+		$this->assertEquals( $checkbox->get_import_value( 'a,b' ), 'a,b' );
+		$this->assertEquals( $checkbox->get_import_value( 'a,c' ), array( 'a', 'c' ) );
+		$this->assertEquals( $checkbox->get_import_value( 'a,b,c' ), 'a,b,c' );
+	}
+
+	/**
+	 * @covers FrmFieldType::is_not_unique
+	 */
+	public function test_is_not_unique() {
+
+		$form_id = $this->factory->form->create();
+		$field1 = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $form_id,
+			)
+		);
+
+		$field_object1 = FrmFieldFactory::get_field_type( 'text', $field1 );
+		$entry_id     = 0;
+
+		$this->assertFalse( $field_object1->is_not_unique( 'First', $entry_id ), 'the first iteration of a new value should be flagged as okay' );
+		$this->assertTrue( $field_object1->is_not_unique( 'First', $entry_id ), 'the second iteration of a new value should should be flagged as a duplicate' );
+
+		$this->assertFalse( $field_object1->is_not_unique( 'Second', $entry_id ), 'the first iteration of a second new value should be flagged as okay' );
+		$this->assertFalse( $field_object1->is_not_unique( 'Third', $entry_id ), 'the first iteration of a third new value should be flagged as okay' );
+
+		$this->assertTrue( $field_object1->is_not_unique( 'Third', $entry_id ) );
+		$this->assertTrue( $field_object1->is_not_unique( 'Second', $entry_id ) );
+
+		$field_object2 = FrmFieldFactory::get_field_type( 'text', $field1 );
+		$this->assertTrue( $field_object2->is_not_unique( 'First', $entry_id ), 'another field object for the same field should also be flagging a duplicate' );
+
+		$field2 = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $form_id,
+			)
+		);
+		$field_object3 = FrmFieldFactory::get_field_type( 'text', $field2 );
+
+		$this->assertFalse( $field_object3->is_not_unique( 'First', $entry_id ), 'a field object for another field should not flag a duplicate' );
 	}
 }

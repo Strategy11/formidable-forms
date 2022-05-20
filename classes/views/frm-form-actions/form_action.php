@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
 $form_action = apply_filters( 'frm_form_action_settings', $form_action, $form_action->post_excerpt );
@@ -18,7 +22,7 @@ $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_actio
 					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_solid_icon' ); ?>
 				</a>
 			<?php } ?>
-			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php echo esc_attr( 'Delete this form action?', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
+			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon ' ); ?>
 			</a>
 

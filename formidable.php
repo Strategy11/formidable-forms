@@ -2,7 +2,7 @@
 /*
 Plugin Name: Formidable Forms
 Description: Quickly and easily create drag-and-drop forms
-Version: 4.04.02
+Version: 5.2.07
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
 Author: Strategy11
@@ -36,6 +36,7 @@ function load_formidable_forms() {
 		'pro_is_authorized' => false,
 	);
 
+	// For reverse compatibility. Load Pro if it's still nested.
 	$frm_path = dirname( __FILE__ );
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include( $frm_path . '/pro/formidable-pro.php' );
@@ -92,5 +93,12 @@ function frm_class_autoloader( $class_name, $filepath ) {
 
 	if ( file_exists( $filepath ) ) {
 		require( $filepath );
+	}
+}
+
+add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'frm_maybe_install' );
+function frm_maybe_install() {
+	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
+		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
 	}
 }

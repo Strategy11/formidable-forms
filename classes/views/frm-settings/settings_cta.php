@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="settings-lite-cta" id="frm-dismissable-cta">
 		<div class="postbox" style="border:none;">
 			<div class="inside">
@@ -27,6 +32,9 @@
 						<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-upgrade' ) ); ?>" target="_blank" rel="noopener noreferrer">
 							<?php esc_html_e( 'Get Formidable Forms Pro Today and Unlock all the Powerful Features »', 'formidable' ); ?>
 						</a>
+					</p>
+					<p>
+						<strong>Bonus:</strong> Formidable Forms Lite users get <a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-upgrade-bonus' ) ); ?>" target="_blank" rel="noopener noreferrer" class="frm_green">50% off regular price</a>, automatically applied at checkout.
 					</p>
 				</div>
 			</div>

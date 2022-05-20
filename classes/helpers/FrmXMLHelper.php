@@ -5,6 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmXMLHelper {
 
+	/**
+	 * @var bool $installing_template true if importing an XML from API, false if importing an XML file manually.
+	 */
+	private static $installing_template = false;
+
 	public static function get_xml_values( $opt, $padding ) {
 		if ( is_array( $opt ) ) {
 			foreach ( $opt as $ok => $ov ) {
@@ -18,7 +23,7 @@ class FrmXMLHelper {
 				echo '</' . esc_html( $tag ) . '>';
 			}
 		} else {
-			echo self::cdata( $opt ); // WPCS: XSS ok.
+			echo self::cdata( $opt ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -56,10 +61,18 @@ class FrmXMLHelper {
 	 * Add terms, forms (form and field ids), posts (post ids), and entries to db, in that order
 	 *
 	 * @since 3.06
+	 *
+	 * @param object $xml
+	 * @param bool   $installing_template
 	 * @return array The number of items imported
 	 */
-	public static function import_xml_now( $xml ) {
-		$imported = self::pre_import_data();
+	public static function import_xml_now( $xml, $installing_template = false ) {
+		if ( ! defined( 'WP_IMPORTING' ) ) {
+			define( 'WP_IMPORTING', true );
+		}
+
+		self::$installing_template = $installing_template;
+		$imported                  = self::pre_import_data();
 
 		foreach ( array( 'term', 'form', 'view' ) as $item_type ) {
 			// Grab cats, tags, and terms, or forms or posts.
@@ -70,7 +83,16 @@ class FrmXMLHelper {
 			}
 		}
 
-		return apply_filters( 'frm_importing_xml', $imported, $xml );
+		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
+
+		if ( ! isset( $imported['form_status'] ) || empty( $imported['form_status'] ) ) {
+			// Check for an error message in the XML.
+			if ( isset( $xml->Code ) && isset( $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
+				$imported['error'] = reset( $xml->Message ); // phpcs:ignore WordPress.NamingConventions
+			}
+		}
+
+		return $imported;
 	}
 
 	/**
@@ -173,8 +195,11 @@ class FrmXMLHelper {
 
 					// Keep track of whether this specific form was updated or not.
 					$imported['form_status'][ $form_id ] = 'imported';
-					self::track_imported_child_forms( (int) $form_id, $form['parent_form_id'], $child_forms );
 				}
+			}
+
+			if ( $form_id ) {
+				self::track_imported_child_forms( (int) $form_id, $form['parent_form_id'], $child_forms );
 			}
 
 			self::import_xml_fields( $item->field, $form_id, $this_form, $form_fields, $imported );
@@ -219,6 +244,11 @@ class FrmXMLHelper {
 		}
 
 		$form['options'] = FrmAppHelper::maybe_json_decode( $form['options'] );
+
+		if ( self::$installing_template ) {
+			// Templates don't necessarily have antispam on, but we want our templates to all have antispam on by default.
+			$form['options']['antispam'] = 1;
+		}
 
 		return $form;
 	}
@@ -327,12 +357,11 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_update_child_form_parent_id( $imported_forms, $child_forms ) {
 		foreach ( $child_forms as $child_form_id => $old_parent_form_id ) {
-
-			if ( isset( $imported_forms[ $old_parent_form_id ] ) && $imported_forms[ $old_parent_form_id ] != $old_parent_form_id ) {
+			if ( isset( $imported_forms[ $old_parent_form_id ] ) && (int) $imported_forms[ $old_parent_form_id ] !== (int) $old_parent_form_id ) {
 				// Update all children with this old parent_form_id
 				$new_parent_form_id = (int) $imported_forms[ $old_parent_form_id ];
-
 				FrmForm::update( $child_form_id, array( 'parent_form_id' => $new_parent_form_id ) );
+				do_action( 'frm_update_child_form_parent_id', $child_form_id, $new_parent_form_id );
 			}
 		}
 	}
@@ -345,31 +374,14 @@ class FrmXMLHelper {
 	 * TODO: Cut down on params
 	 */
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
-		$in_section = 0;
+		$in_section                = 0;
+		$keys_by_original_field_id = array();
 
 		foreach ( $xml_fields as $field ) {
 			$f = self::fill_field( $field, $form_id );
 
-			$has_default = array(
-				'text',
-				'email',
-				'url',
-				'textarea',
-				'number',
-				'phone',
-				'date',
-				'hidden',
-				'password',
-				'tag',
-			);
-			if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
-				if ( count( $f['default_value'] ) === 1 ) {
-					$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
-				} else {
-					$f['default_value'] = reset( $f['default_value'] );
-				}
-			}
-
+			self::set_default_value( $f );
+			self::maybe_add_required( $f );
 			self::maybe_update_in_section_variable( $in_section, $f );
 			self::maybe_update_form_select( $f, $imported );
 			self::maybe_update_get_values_form_setting( $imported, $f );
@@ -388,6 +400,8 @@ class FrmXMLHelper {
 						unset( $form_fields[ $f['field_key'] ] );
 					}
 				} elseif ( isset( $form_fields[ $f['field_key'] ] ) ) {
+					$keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
+
 					// check for field to edit by field key
 					unset( $f['id'] );
 
@@ -404,6 +418,10 @@ class FrmXMLHelper {
 
 				self::create_imported_field( $f, $imported );
 			}
+		}
+
+		if ( $keys_by_original_field_id ) {
+			self::maybe_update_field_ids( $form_id, $keys_by_original_field_id );
 		}
 	}
 
@@ -424,10 +442,46 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * Update the current in_section value
+	 * @since 4.06
+	 */
+	private static function set_default_value( &$f ) {
+		$has_default = array(
+			'text',
+			'email',
+			'url',
+			'textarea',
+			'number',
+			'phone',
+			'date',
+			'hidden',
+			'password',
+			'tag',
+		);
+
+		if ( is_array( $f['default_value'] ) && in_array( $f['type'], $has_default, true ) ) {
+			if ( count( $f['default_value'] ) === 1 ) {
+				$f['default_value'] = '[' . reset( $f['default_value'] ) . ']';
+			} else {
+				$f['default_value'] = reset( $f['default_value'] );
+			}
+		}
+	}
+
+	/**
+	 * Make sure the required indicator is set.
+	 *
+	 * @since 4.05
+	 */
+	private static function maybe_add_required( &$f ) {
+		if ( $f['required'] && ! isset( $f['field_options']['required_indicator'] ) ) {
+			$f['field_options']['required_indicator'] = '*';
+		}
+	}
+
+	/**
+	 * Update the current in_section value at the beginning of the field loop
 	 *
 	 * @since 2.0.25
-	 *
 	 * @param int $in_section
 	 * @param array $f
 	 */
@@ -583,6 +637,46 @@ class FrmXMLHelper {
 	}
 
 	/**
+	 * Fix field ids for fields that already exist prior to import.
+	 *
+	 * @since 4.07
+	 * @param int $form_id
+	 * @param array $keys_by_original_field_id
+	 */
+	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
+		global $frm_duplicate_ids;
+
+		$former_duplicate_ids = $frm_duplicate_ids;
+		$where                = array(
+			array(
+				'or'                => 1,
+				'fi.form_id'        => $form_id,
+				'fr.parent_form_id' => $form_id,
+			),
+		);
+		$fields               = FrmField::getAll( $where, 'field_order' );
+		$field_id_by_key      = wp_list_pluck( $fields, 'id', 'field_key' );
+
+		foreach ( $fields as $field ) {
+			$before            = (array) clone $field;
+			$field             = (array) $field;
+			$frm_duplicate_ids = $keys_by_original_field_id;
+			$after             = FrmFieldsHelper::switch_field_ids( $field );
+
+			if ( $before['field_options'] !== $after['field_options'] ) {
+				$frm_duplicate_ids = $field_id_by_key;
+				$after             = FrmFieldsHelper::switch_field_ids( $after );
+
+				if ( $before['field_options'] !== $after['field_options'] ) {
+					FrmField::update( $field['id'], array( 'field_options' => $after['field_options'] ) );
+				}
+			}
+		}
+
+		$frm_duplicate_ids = $former_duplicate_ids;
+	}
+
+	/**
 	 * Updates the custom style setting on import
 	 * Convert the post slug to an ID
 	 *
@@ -672,6 +766,7 @@ class FrmXMLHelper {
 				'post_date_gmt'  => (string) $item->post_date_gmt,
 				'ping_status'    => (string) $item->ping_status,
 				'postmeta'       => array(),
+				'layout'         => array(),
 				'tax_input'      => array(),
 			);
 
@@ -697,6 +792,9 @@ class FrmXMLHelper {
 				$post_id = wp_insert_post( $post );
 				self::maybe_update_custom_css( $custom_css );
 			} else {
+				if ( $post['post_type'] === 'frm_display' ) {
+					$post['post_content'] = self::maybe_prepare_json_view_content( $post['post_content'] );
+				}
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
 			}
@@ -706,6 +804,7 @@ class FrmXMLHelper {
 			}
 
 			self::update_postmeta( $post, $post_id );
+			self::update_layout( $post, $post_id );
 
 			$this_type = 'posts';
 			if ( isset( $post_types[ $post['post_type'] ] ) ) {
@@ -730,6 +829,18 @@ class FrmXMLHelper {
 		return $imported;
 	}
 
+	/**
+	 * @param string $content
+	 * @return string
+	 */
+	private static function maybe_prepare_json_view_content( $content ) {
+		$maybe_decoded = FrmAppHelper::maybe_json_decode( $content );
+		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0] ) && isset( $maybe_decoded[0]['box'] ) ) {
+			return FrmAppHelper::prepare_and_encode( $maybe_decoded );
+		}
+		return $content;
+	}
+
 	private static function populate_post( &$post, $item, $imported ) {
 		if ( isset( $item->attachment_url ) ) {
 			$post['attachment_url'] = (string) $item->attachment_url;
@@ -750,11 +861,21 @@ class FrmXMLHelper {
 			unset( $meta );
 		}
 
+		foreach ( $item->layout as $layout ) {
+			self::populate_layout( $post, $layout );
+			unset( $layout );
+		}
+
 		self::populate_taxonomies( $post, $item );
 
 		self::maybe_editing_post( $post );
 	}
 
+	/**
+	 * @param array    $post
+	 * @param stdClass $meta
+	 * @param array    $imported
+	 */
 	private static function populate_postmeta( &$post, $meta, $imported ) {
 		global $frm_duplicate_ids;
 
@@ -764,16 +885,16 @@ class FrmXMLHelper {
 		);
 
 		//switch old form and field ids to new ones
-		if ( $m['key'] == 'frm_form_id' && isset( $imported['forms'][ (int) $m['value'] ] ) ) {
+		if ( 'frm_form_id' === $m['key'] && isset( $imported['forms'][ (int) $m['value'] ] ) ) {
 			$m['value'] = $imported['forms'][ (int) $m['value'] ];
 		} else {
 			$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
 
 			if ( ! empty( $frm_duplicate_ids ) ) {
-
-				if ( $m['key'] == 'frm_dyncontent' ) {
+				if ( 'frm_dyncontent' === $m['key'] ) {
+					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
-				} elseif ( $m['key'] == 'frm_options' ) {
+				} elseif ( 'frm_options' === $m['key'] ) {
 
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
 						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
@@ -811,6 +932,10 @@ class FrmXMLHelper {
 		}
 
 		$post['postmeta'][ (string) $meta->meta_key ] = $m['value'];
+	}
+
+	private static function populate_layout( &$post, $layout ) {
+		$post['layout'][ (string) $layout->type ] = (string) $layout->data;
 	}
 
 	/**
@@ -881,9 +1006,27 @@ class FrmXMLHelper {
 				$v         = $field_obj->get_file_id( $v );
 			}
 
+			if ( 'frm_dyncontent' === $k && is_array( $v ) ) {
+				$v = json_encode( $v );
+			}
+
 			update_post_meta( $post_id, $k, $v );
 
 			unset( $k, $v );
+		}
+	}
+
+	/**
+	 * @param array $post
+	 * @param int   $post_id
+	 */
+	private static function update_layout( &$post, $post_id ) {
+		if ( is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {
+			$listing_layout = ! empty( $post['layout']['listing'] ) ? json_decode( $post['layout']['listing'], true ) : array();
+			$detail_layout  = ! empty( $post['layout']['detail'] ) ? json_decode( $post['layout']['detail'], true ) : array();
+			if ( $listing_layout || $detail_layout ) {
+				FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
+			}
 		}
 	}
 
@@ -1122,15 +1265,11 @@ class FrmXMLHelper {
 	 * @since 3.06
 	 */
 	private static function remove_defaults( $defaults, &$saved ) {
-		$array_defaults = array_filter( $defaults, 'is_array' );
-		foreach ( $array_defaults as $d => $default ) {
-			// compare array defaults
-			if ( $default == $saved[ $d ] ) {
-				unset( $saved[ $d ] );
+		foreach ( $saved as $key => $value ) {
+			if ( isset( $defaults[ $key ] ) && $defaults[ $key ] === $value ) {
+				unset( $saved[ $key ] );
 			}
-			unset( $defaults[ $d ] );
 		}
-		$saved = array_diff_assoc( (array) $saved, $defaults );
 	}
 
 	/**
@@ -1162,7 +1301,7 @@ class FrmXMLHelper {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
-		} elseif ( seems_utf8( $str ) == false ) {
+		} elseif ( seems_utf8( $str ) === false ) {
 			$str = utf8_encode( $str );
 		}
 
@@ -1237,6 +1376,7 @@ class FrmXMLHelper {
 			'post_status',
 			'post_custom_fields',
 			'post_password',
+			'post_parent',
 		);
 
 		foreach ( $post_settings as $post_setting ) {
@@ -1257,6 +1397,7 @@ class FrmXMLHelper {
 				'post_password',
 				'post_date',
 				'post_status',
+				'post_parent',
 			);
 
 			// Fields with arrays saved.
@@ -1586,6 +1727,25 @@ class FrmXMLHelper {
 			$notifications[] = $new_notification2;
 			unset( $new_notification2 );
 		}
+	}
+
+	/**
+	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
+	 *
+	 * @param  boolean $disable
+	 *
+	 * @return boolean
+	 */
+	public static function maybe_libxml_disable_entity_loader( $loader ) {
+		if ( version_compare( phpversion(), '8.0', '<' ) && function_exists( 'libxml_disable_entity_loader' ) ) {
+			$loader = libxml_disable_entity_loader( $loader ); // phpcs:disable Generic.PHP.DeprecatedFunctions.Deprecated
+		}
+
+		return $loader;
+	}
+
+	public static function check_if_libxml_disable_entity_loader_exists() {
+		return version_compare( phpversion(), '8.0', '<' ) && ! function_exists( 'libxml_disable_entity_loader' );
 	}
 }
 

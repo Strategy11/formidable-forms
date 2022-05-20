@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.04
@@ -53,8 +56,19 @@ class FrmFieldValue {
 
 		$this->entry    = $entry;
 		$this->entry_id = $entry->id;
+		$field = apply_filters( 'frm_field_value_object', $field );
 		$this->field    = $field;
 		$this->init_saved_value( $entry );
+	}
+
+	/**
+	 * Gets entry property.
+	 *
+	 * @since 5.0.16
+	 * @return stdClass
+	 */
+	public function get_entry() {
+		return $this->entry;
 	}
 
 	/**
@@ -85,6 +99,7 @@ class FrmFieldValue {
 	 */
 	public function prepare_displayed_value( $atts = array() ) {
 		$this->displayed_value = $this->saved_value;
+		unset( $atts['class'] ); // This class shouldn't affect values.
 		$this->generate_displayed_value_for_field_type( $atts );
 		$this->filter_displayed_value( $atts );
 	}
@@ -177,7 +192,7 @@ class FrmFieldValue {
 	 *
 	 * @param array $atts
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	protected function generate_displayed_value_for_field_type( $atts ) {
 		if ( ! FrmAppHelper::is_empty_value( $this->displayed_value, '' ) ) {
@@ -235,6 +250,8 @@ class FrmFieldValue {
 				'entry' => $this->entry,
 			)
 		);
+
+		$this->displayed_value = apply_filters( 'frm_display_value', $this->displayed_value, $this->field, $atts );
 	}
 
 	/**

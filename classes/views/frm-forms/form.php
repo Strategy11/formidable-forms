@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="frm_form_editor_container" class="<?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
 
 	<?php
@@ -21,16 +26,23 @@
 
 	<ul id="frm-show-fields" class="frm_sorting inside">
 		<?php
-		if ( isset( $values['fields'] ) && ! empty( $values['fields'] ) ) {
+		if ( ! empty( $values['fields'] ) ) {
+			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
 			foreach ( $values['fields'] as $field ) {
 				$values['count']++;
+				$grid_helper->set_field( $field );
+				$grid_helper->maybe_begin_field_wrapper();
 				FrmFieldsController::load_single_field( $field, $values );
+				$grid_helper->sync_list_size();
 				unset( $field );
 			}
+			$grid_helper->force_close_field_wrapper();
+			unset( $grid_helper );
 		}
 		?>
 	</ul>
+
 	<p id="frm-form-button">
 		<button class="frm_button_submit" disabled="disabled">
 			<?php echo esc_attr( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
@@ -47,5 +59,8 @@
 		</p>
 		<div class="clear"></div>
 	</div>
+
+	<?php do_action( 'frm_page_footer', array( 'table' => 'form-builder' ) ); ?>
 </div>
-<?php FrmFieldsHelper::bulk_options_overlay(); ?>
+<?php
+FrmFieldsHelper::bulk_options_overlay();

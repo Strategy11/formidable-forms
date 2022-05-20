@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -8,7 +13,7 @@
 	<?php FrmFormsController::maybe_load_css( $form, 1, false ); ?>
 </head>
 <body class="frm_preview_page">
-	<?php echo FrmFormsController::show_form( $form->id, '', true, true ); // WPCS: XSS ok. ?>
+	<?php echo FrmFormsController::show_form( $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php wp_footer(); ?>
 </body>
 </html>

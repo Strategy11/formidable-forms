@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 // add post action
 class FrmDefPostAction extends FrmFormAction {
 	public function __construct() {
@@ -29,6 +33,15 @@ class FrmDefPayPalAction extends FrmFormAction {
 	}
 }
 
+// add quiz action
+class FrmDefQuizAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = FrmFormAction::default_action_opts( 'frm_percent_icon frm_quiz_icon frm_show_upgrade' );
+		$action_ops['plugin']  = 'quizzes';
+		parent::__construct( 'quiz', __( 'Quiz', 'formidable' ), $action_ops );
+	}
+}
+
 // add aweber action
 class FrmDefAweberAction extends FrmFormAction {
 	public function __construct() {
@@ -45,6 +58,14 @@ class FrmDefMlcmpAction extends FrmFormAction {
 		$action_ops['color']   = 'var(--dark-grey)';
 
 		parent::__construct( 'mailchimp', 'MailChimp', $action_ops );
+	}
+}
+
+// add zapier action
+class FrmDefZapierAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops = FrmFormAction::default_action_opts( 'frm_zapier_icon frm_show_upgrade' );
+		parent::__construct( 'zapier', 'Zapier', $action_ops );
 	}
 }
 
@@ -102,6 +123,13 @@ class FrmDefHubspotAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_hubspot_icon frm_show_upgrade' );
 		$action_ops['color'] = 'var(--orange)';
+
+		$action_ops['message'] = '';
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$action_ops['message'] .= __( 'The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?', 'formidable' ) . '<br/><br/>';
+		}
+		$link                   = FrmAppHelper::admin_upgrade_link( 'add-action', 'knowledgebase/hubspot-forms/' );
+		$action_ops['message'] .= '<a href="' . esc_url( $link ) . '" target="_blank" rel="noopener" class="button button-secondary frm-button-secondary">Get Free HubSpot Account</a>';
 		parent::__construct( 'hubspot', 'Hubspot', $action_ops );
 	}
 }

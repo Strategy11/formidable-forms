@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmEntriesController {
 
@@ -7,7 +10,14 @@ class FrmEntriesController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
 
-		self::load_manage_entries_hooks();
+		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) ? FrmProAppHelper::views_is_installed() : FrmAppHelper::pro_is_installed();
+		if ( ! $views_installed ) {
+			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
+		}
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
+			self::load_manage_entries_hooks();
+		}
 	}
 
 	/**
@@ -99,6 +109,16 @@ class FrmEntriesController {
 
 	private static function get_columns_for_form( $form_id, &$columns ) {
 		$form_cols = FrmField::get_all_for_form( $form_id, '', 'include' );
+
+		/**
+		 * Allows changing fields in the Entries list table heading.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $fields  Array of fields.
+		 * @param array $args    The arguments. Contains `form_id`.
+		 */
+		$form_cols = apply_filters( 'frm_fields_in_entries_list_table', $form_cols, compact( 'form_id' ) );
 
 		foreach ( $form_cols as $form_col ) {
 			if ( FrmField::is_no_save_field( $form_col->type ) ) {
@@ -266,13 +286,24 @@ class FrmEntriesController {
 		);
 
 		foreach ( $fields as $field ) {
-			if ( $field->type != 'checkbox' && ( ! isset( $field->field_options['post_field'] ) || $field->field_options['post_field'] == '' ) ) {
-				// Can't sort on checkboxes because they are stored serialized, or post fields
+			if ( self::field_supports_sorting( $field ) ) {
 				$columns[ $form_id . '_' . $field->field_key ] = 'meta_' . $field->id;
 			}
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Can't sort on checkboxes because they are sorted serialized.
+	 * Some post content can be sorted but not everything.
+	 *
+	 * @param stdClass $field
+	 * @return bool
+	 */
+	private static function field_supports_sorting( $field ) {
+		$is_sortable = 'checkbox' !== $field->type && empty( $field->field_options['post_field'] );
+		return apply_filters( 'frm_field_column_is_sortable', $is_sortable, $field );
 	}
 
 	public static function hidden_columns( $result ) {
@@ -375,7 +406,7 @@ class FrmEntriesController {
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			$url = add_query_arg( 'paged', $total_pages );
 			if ( headers_sent() ) {
-				echo FrmAppHelper::js_redirect( $url ); // WPCS: XSS ok.
+				FrmAppHelper::js_redirect( $url, true );
 			} else {
 				wp_redirect( esc_url_raw( $url ) );
 			}
@@ -386,7 +417,7 @@ class FrmEntriesController {
 			$message = __( 'Your import is complete', 'formidable' );
 		}
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php';
 	}
 
 	private static function get_delete_form_time( $form, &$errors ) {
@@ -460,7 +491,7 @@ class FrmEntriesController {
 
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
-		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) {
+		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return;
 		}
 
@@ -483,7 +514,7 @@ class FrmEntriesController {
 		}
 
 		if ( $errors == '' && ! $ajax ) {
-			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) );
+			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		/**
@@ -499,9 +530,9 @@ class FrmEntriesController {
 		if ( empty( $errors ) ) {
 			$_POST['frm_skip_cookie'] = 1;
 			$do_success               = false;
-			if ( $params['action'] == 'create' ) {
+			if ( $params['action'] === 'create' ) {
 				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
-					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST );
+					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
 					$do_success   = true;
@@ -512,7 +543,7 @@ class FrmEntriesController {
 			if ( $do_success ) {
 				FrmFormsController::maybe_trigger_redirect( $form, $params, array( 'ajax' => $ajax ) );
 			}
-			unset( $_POST['frm_skip_cookie'] );
+			unset( $_POST['frm_skip_cookie'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 	}
 
@@ -572,30 +603,32 @@ class FrmEntriesController {
 	 */
 	public static function show_entry_shortcode( $atts ) {
 		$defaults = array(
-			'id'             => false,
-			'entry'          => false,
-			'fields'         => false,
-			'plain_text'     => false,
-			'user_info'      => false,
-			'include_blank'  => false,
-			'default_email'  => false,
-			'form_id'        => false,
-			'format'         => 'text',
-			'array_key'      => 'key',
-			'direction'      => 'ltr',
-			'font_size'      => '',
-			'text_color'     => '',
-			'border_width'   => '',
-			'border_color'   => '',
-			'bg_color'       => '',
-			'alt_bg_color'   => '',
-			'class'          => '',
-			'clickable'      => false,
-			'exclude_fields' => '',
-			'include_fields' => '',
-			'include_extras' => '',
-			'inline_style'   => 1,
-			'child_array'    => false, // return embedded fields as nested array
+			'id'              => false,
+			'entry'           => false,
+			'fields'          => false,
+			'plain_text'      => false,
+			'user_info'       => false,
+			'include_blank'   => false,
+			'default_email'   => false,
+			'form_id'         => false,
+			'format'          => 'text',
+			'array_key'       => 'key',
+			'direction'       => 'ltr',
+			'font_size'       => '',
+			'text_color'      => '',
+			'border_width'    => '',
+			'border_color'    => '',
+			'bg_color'        => '',
+			'alt_bg_color'    => '',
+			'class'           => '',
+			'clickable'       => false,
+			'exclude_fields'  => '',
+			'include_fields'  => '',
+			'include_extras'  => '',
+			'inline_style'    => 1,
+			'child_array'     => false, // return embedded fields as nested array
+			'line_breaks'     => true,
+			'array_separator' => ', ',
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
 

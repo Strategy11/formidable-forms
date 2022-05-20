@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmMigrate {
 	public $fields;
@@ -7,10 +10,6 @@ class FrmMigrate {
 	public $entry_metas;
 
 	public function __construct() {
-		if ( ! defined( 'ABSPATH' ) ) {
-			die( 'You are not allowed to call this page directly.' );
-		}
-
 		global $wpdb;
 		$this->fields      = $wpdb->prefix . 'frm_fields';
 		$this->forms       = $wpdb->prefix . 'frm_forms';
@@ -155,7 +154,7 @@ class FrmMigrate {
 				dbDelta( $q . $charset_collate . ';' );
 			} else {
 				global $wpdb;
-				$wpdb->query( $q . $charset_collate ); // WPCS: unprepared SQL ok.
+				$wpdb->query( $q . $charset_collate ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
 			unset( $q );
 		}
@@ -174,19 +173,19 @@ class FrmMigrate {
 	 * @since 3.06
 	 */
 	private function add_default_template() {
-		if ( ! function_exists( 'libxml_disable_entity_loader' ) ) {
+		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
 			// XML import is not enabled on your server.
 			return;
 		}
 
 		$set_err = libxml_use_internal_errors( true );
-		$loader  = libxml_disable_entity_loader( true );
+		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
 
 		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
 		FrmXMLHelper::import_xml( $file );
 
 		libxml_use_internal_errors( $set_err );
-		libxml_disable_entity_loader( $loader );
+		FrmXMLHelper::maybe_libxml_disable_entity_loader( $loader );
 	}
 
 	/**
@@ -206,7 +205,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -223,16 +222,19 @@ class FrmMigrate {
 
 		global $wpdb, $wp_roles;
 
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // WPCS: unprepared SQL ok.
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // WPCS: unprepared SQL ok.
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // WPCS: unprepared SQL ok.
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // WPCS: unprepared SQL ok.
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->fields ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->forms ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entries ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( 'DROP TABLE IF EXISTS ' . $this->entry_metas ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		delete_option( 'frm_options' );
 		delete_option( 'frm_db_version' );
 		delete_option( 'frm_install_running' );
 		delete_option( 'frm_lite_settings_upgrade' );
 		delete_option( 'frm-usage-uuid' );
+		delete_option( 'frm_inbox' );
+		delete_option( 'frmpro_css' );
+		delete_option( 'frm_welcome_redirect' );
 
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();
@@ -263,12 +265,22 @@ class FrmMigrate {
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
+		delete_transient( 'frm_activation_redirect' );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
 
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * Clear frmpro_css transient.
+	 *
+	 * @since 4.10.02
+	 */
+	private function migrate_to_98() {
+		delete_transient( 'frmpro_css' );
 	}
 
 	/**
@@ -450,9 +462,9 @@ class FrmMigrate {
 	 */
 	private function migrate_to_23() {
 		global $wpdb;
-		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // WPCS: unprepared SQL ok.
+		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( empty( $exists ) ) {
-			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // WPCS: unprepared SQL ok.
+			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 	}
 

@@ -1,30 +1,102 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * @since 2.03.04
  */
 class FrmEmail {
 
+	/**
+	 * @var string $email_key
+	 */
 	private $email_key = '';
+
+	/**
+	 * @var array $to
+	 */
 	private $to = array();
+
+	/**
+	 * @var array $cc
+	 */
 	private $cc = array();
+
+	/**
+	 * @var array $bcc
+	 */
 	private $bcc = array();
+
+	/**
+	 * @var string $from
+	 */
 	private $from = '';
+
+	/**
+	 * @var string $reply_to
+	 */
 	private $reply_to = '';
+
+	/**
+	 * @var string $subject
+	 */
 	private $subject = '';
+
+	/**
+	 * @var string $message
+	 */
 	private $message = '';
+
+	/**
+	 * @var array $attachments
+	 */
 	private $attachments = array();
 
+	/**
+	 * @var bool $is_plain_text
+	 */
 	private $is_plain_text = false;
+
+	/**
+	 * @var bool $is_single_recipient
+	 */
 	private $is_single_recipient = false;
+
+	/**
+	 * @var bool $include_user_info
+	 */
 	private $include_user_info = false;
 
+	/**
+	 * @var string $charset
+	 */
 	private $charset = '';
+
+	/**
+	 * @var string $content_type
+	 */
 	private $content_type = 'text/html';
 
+	/**
+	 * @var array $settings
+	 */
 	private $settings = array();
+
+	/**
+	 * @var stdClass $entry
+	 */
 	private $entry;
+
+	/**
+	 * @var stdClass $form
+	 */
 	private $form;
+
+	/**
+	 * @var int $action_id
+	 */
+	private $action_id = 0;
 
 	/**
 	 * FrmEmail constructor
@@ -35,9 +107,10 @@ class FrmEmail {
 	 */
 	public function __construct( $action, $entry, $form ) {
 		$this->set_email_key( $action );
-		$this->entry    = $entry;
-		$this->form     = $form;
-		$this->settings = $action->post_content;
+		$this->entry     = $entry;
+		$this->form      = $form;
+		$this->settings  = $action->post_content;
+		$this->action_id = (int) $action->ID;
 
 		$user_id_args = self::get_user_id_args( $form->id );
 		$this->set_to( $user_id_args );
@@ -177,11 +250,14 @@ class FrmEmail {
 	private function set_reply_to( $user_id_args ) {
 		$this->reply_to = trim( $this->settings['reply_to'] );
 
-		if ( empty( $this->reply_to ) ) {
-			$this->reply_to = $this->get_email_from_name( $this->from );
-		} else {
+		if ( $this->reply_to ) {
 			$this->reply_to = $this->prepare_email_setting( $this->settings['reply_to'], $user_id_args );
 		}
+
+		if ( ! $this->reply_to ) {
+			$this->reply_to = $this->get_email_from_name( $this->from );
+		}
+
 		$this->reply_to = $this->format_reply_to( $this->reply_to );
 	}
 
@@ -326,11 +402,16 @@ class FrmEmail {
 	 * Set the attachments for an email message
 	 *
 	 * @since 2.03.04
+	 * @since 5.0.16 added new action_id key to $args.
+	 *
+	 * @return void
 	 */
 	private function set_attachments() {
 		$args = array(
 			'entry'     => $this->entry,
 			'email_key' => $this->email_key,
+			'settings'  => $this->settings,
+			'action_id' => $this->action_id,
 		);
 
 		$this->attachments = apply_filters( 'frm_notification_attachment', array(), $this->form, $args );
@@ -431,7 +512,9 @@ class FrmEmail {
 		$sent = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
 
 		if ( ! $sent ) {
-			$header    = 'From: ' . $this->from . "\r\n";
+			if ( is_array( $header ) ) {
+				$header = implode( "\r\n", $header );
+			}
 			$recipient = implode( ',', (array) $recipient );
 			$sent      = mail( $recipient, $subject, $this->message, $header );
 		}
@@ -776,7 +859,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function encode_subject( $subject ) {
-		if ( apply_filters( 'frm_encode_subject', 1, $subject ) ) {
+		if ( apply_filters( 'frm_encode_subject', false, $subject ) ) {
 			$subject = '=?' . $this->charset . '?B?' . base64_encode( $subject ) . '?=';
 		}
 

@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="frm_wrap">
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">
 	<div class="frm_page_container frm-fields">
@@ -52,7 +57,7 @@
 
 			<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 			<input type="hidden" name="frm_action" value="save" />
-			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // WPCS: XSS ok. ?></textarea>
+			<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 			<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
 			<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); ?>
 

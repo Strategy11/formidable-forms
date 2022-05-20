@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <ul class="frm-category-tabs frm-form-setting-tabs">
 	<?php foreach ( $sections as $section ) { ?>
 		<li class="<?php echo esc_attr( $current === $section['anchor'] ? 'tabs active starttab' : '' ); ?>">
@@ -13,7 +18,7 @@
 				?>
 				>
 				<?php FrmAppHelper::icon_by_class( $section['icon'], array( 'aria-hidden' => 'true' ) ); ?>
-				<?php echo esc_html( $section['name'] ); ?>
+				<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</a>
 		</li>
 	<?php } ?>

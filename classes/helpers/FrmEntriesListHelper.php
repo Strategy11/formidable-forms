@@ -1,9 +1,17 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmEntriesListHelper extends FrmListHelper {
 	protected $column_name;
 	protected $item;
 	protected $field;
+
+	/**
+	 * @since 4.07
+	 */
+	public $total_items = 0;
 
 	public function prepare_items() {
 		global $per_page;
@@ -70,6 +78,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$limit       = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 		$total_items = FrmEntry::getRecordCount( $s_query );
+		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
 			array(
@@ -131,13 +140,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
-		if ( $which == 'top' && empty( $form_id ) ) {
+		if ( $which === 'top' && ! $form_id ) {
 			echo '<div class="alignleft actions">';
 
 			// Override the referrer to prevent it from being used for the screen options.
 			echo '<input type="hidden" name="_wp_http_referer" value="" />';
 
-			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // WPCS: XSS ok.
+			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
 		}
@@ -181,7 +190,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
 		list( $columns, $hidden, , $primary ) = $this->get_column_info();
-		$action_col = false;
+		$action_col                           = false;
+		$action_columns                       = $this->get_action_columns();
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name . ' column-' . $column_name;
@@ -190,9 +200,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$class .= ' column-primary';
 			}
 
-			if ( in_array( $column_name, $hidden ) ) {
+			if ( in_array( $column_name, $hidden, true ) ) {
 				$class .= ' frm_hidden';
-			} elseif ( ! $action_col && ! in_array( $column_name, array( 'cb', 'id', 'form_id', 'post_id' ) ) ) {
+			} elseif ( ! $action_col && ! in_array( $column_name, $action_columns, true ) ) {
 				$action_col = $column_name;
 			}
 
@@ -206,7 +216,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			if ( $this->column_name == 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
-				if ( in_array( $column_name, $hidden ) ) {
+				if ( in_array( $column_name, $hidden, true ) ) {
 					$val = '';
 				} else {
 					$val = $this->column_value( $item );
@@ -227,6 +237,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$r .= '</tr>';
 
 		return $r;
+	}
+
+	/**
+	 * Get the column names that the logged in user can action on
+	 */
+	private function get_action_columns() {
+		return array( 'cb', 'form_id', 'id', 'post_id' );
 	}
 
 	private function column_value( $item ) {
@@ -251,7 +268,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = empty( $item->is_draft ) ? esc_html__( 'No', 'formidable' ) : esc_html__( 'Yes', 'formidable' );
 				break;
 			case 'form_id':
-				$val = FrmFormsHelper::edit_form_link( $item->form_id );
+				$form_id             = $item->form_id;
+				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+				if ( $user_can_edit_forms ) {
+					$val = FrmFormsHelper::edit_form_link( $form_id );
+				} else {
+					$val = FrmFormsHelper::edit_form_link_label( $form_id );
+				}
 				break;
 			case 'post_id':
 				$val = FrmAppHelper::post_edit_link( $item->post_id );
@@ -268,6 +291,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 				if ( $val === false ) {
 					$this->get_column_value( $item, $val );
 				}
+
+				/**
+				 * Allows changing entries list column value.
+				 *
+				 * @since 5.1
+				 *
+				 * @param mixed $val Column value.
+				 * @param array $args Contains `item` and `col_name`.
+				 */
+				$val = apply_filters( 'frm_entries_column_value', $val, compact( 'item', 'col_name' ) );
 		}
 
 		return $val;
@@ -324,5 +357,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function confirm_bulk_delete() {
+		return __( 'ALL selected entries in this form will be permanently deleted. Want to proceed?', 'formidable' );
 	}
 }

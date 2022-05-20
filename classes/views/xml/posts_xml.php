@@ -5,6 +5,10 @@
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 if ( ! $item_ids ) {
 	return;
 }
@@ -24,10 +28,10 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 	<view>
 		<title><?php echo esc_html( apply_filters( 'the_title_rss', $post->post_title ) ); ?></title>
 		<link><?php the_permalink_rss(); ?></link>
-		<post_author><?php echo FrmXMLHelper::cdata( get_the_author_meta( 'login' ) ); // WPCS: XSS ok. ?></post_author>
+		<post_author><?php echo FrmXMLHelper::cdata( get_the_author_meta( 'login' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></post_author>
 		<description></description>
-		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); // WPCS: XSS ok. ?></content>
-		<excerpt><?php echo FrmXMLHelper::cdata( apply_filters( 'the_excerpt_export', $post->post_excerpt ) ); // WPCS: XSS ok. ?></excerpt>
+		<content><?php echo FrmXMLHelper::cdata( apply_filters( 'the_content_export', $post->post_content ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></content>
+		<excerpt><?php echo FrmXMLHelper::cdata( apply_filters( 'the_excerpt_export', $post->post_excerpt ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></excerpt>
 		<post_id><?php echo esc_html( $post->ID ); ?></post_id>
 		<post_date><?php echo esc_html( $post->post_date ); ?></post_date>
 		<post_date_gmt><?php echo esc_html( $post->post_date_gmt ); ?></post_date_gmt>
@@ -38,7 +42,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		<post_parent><?php echo esc_html( $post->post_parent ); ?></post_parent>
 		<menu_order><?php echo esc_html( $post->menu_order ); ?></menu_order>
 		<post_type><?php echo esc_html( $post->post_type ); ?></post_type>
-		<post_password><?php echo FrmXMLHelper::cdata( $post->post_password ); // WPCS: XSS ok. ?></post_password>
+		<post_password><?php echo FrmXMLHelper::cdata( $post->post_password ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></post_password>
 		<is_sticky><?php echo esc_html( $is_sticky ); ?></is_sticky>
 <?php	if ( 'attachment' === $post->post_type ) : ?>
 		<attachment_url><?php echo esc_url( wp_get_attachment_url( $post->ID ) ); ?></attachment_url>
@@ -53,7 +57,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 			?>
 		<postmeta>
 			<meta_key><?php echo esc_html( $meta->meta_key ); ?></meta_key>
-			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); // WPCS: XSS ok. ?></meta_value>
+			<meta_value><?php echo FrmXMLHelper::cdata( $meta->meta_value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></meta_value>
 		</postmeta>
 <?php
 		endforeach;
@@ -64,7 +68,19 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 			foreach ( (array) $terms as $term ) {
 				?>
-		<category domain="<?php echo esc_attr( $term->taxonomy ); ?>" nicename="<?php echo esc_attr( $term->slug ); ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // WPCS: XSS ok. ?></category>
+		<category domain="<?php echo esc_attr( $term->taxonomy ); ?>" nicename="<?php echo esc_attr( $term->slug ); ?>"><?php echo FrmXMLHelper::cdata( $term->name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></category>
+<?php
+			}
+		}
+
+		if ( is_callable( 'FrmViewsLayout::get_layouts_for_view' ) ) {
+			$layouts = FrmViewsLayout::get_layouts_for_view( $post->ID );
+			foreach ( $layouts as $layout ) {
+				?>
+		<layout>
+			<type><?php echo esc_html( $layout->type ); ?></type>
+			<data><?php echo FrmXMLHelper::cdata( $layout->data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></data>
+		</layout>
 <?php
 			}
 		}
@@ -93,10 +109,10 @@ foreach ( (array) $terms as $term ) {
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $term->name ) ) {
-		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // WPCS: XSS ok.
+		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	if ( ! empty( $term->description ) ) {
-		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>'; // WPCS: XSS ok.
+		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	echo '<term_slug>' . esc_html( $term->slug ) . '</term_slug>';
 	echo '</term>';

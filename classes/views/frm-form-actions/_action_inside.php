@@ -1,3 +1,9 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
+
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
@@ -59,31 +65,43 @@ do_action( 'frm_additional_action_settings', $form_action, $pass_args );
 
 // Show Conditional logic indicator.
 if ( ! FrmAppHelper::pro_is_installed() ) {
-	?>
-	<h3>
-		<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Conditional emails', 'formidable' ); ?>" data-medium="conditional-email">
-			<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
-		</a>
-	</h3>
-	<?php
+	if ( 'email' === $form_action->post_excerpt ) {
+		?>
+		<h3>
+			<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php esc_attr_e( 'Email attachments', 'formidable' ); ?>" data-medium="email-attachment">
+				<?php esc_html_e( 'Attachment', 'formidable' ); ?>
+			</a>
+		</h3>
+		<?php
+	}
+
+	$action_control->render_conditional_logic_call_to_action();
 }
 
 // Show Form Action Automation indicator.
 if ( ! function_exists( 'load_frm_autoresponder' ) ) {
-	$install_data = '';
-	$class        = ' frm_noallow';
-	$upgrading    = FrmAddonsController::install_link( 'autoresponder' );
+	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
+	$params    = array(
+		'href'         => 'javascript:void(0)',
+		'class'        => 'frm_show_upgrade',
+		'data-upgrade' => __( 'Form action automations', 'formidable' ),
+		'data-medium'  => 'action-automation',
+	);
+
 	if ( isset( $upgrading['url'] ) ) {
-		$install_data = json_encode( $upgrading );
-		$class        = '';
+		$params['data-oneclick'] = json_encode( $upgrading );
+	} else {
+		$params['class']        .= ' frm_noallow';
+		$params['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 	}
 	?>
 	<h3>
-		<a href="javascript:void(0)" class="frm_show_upgrade<?php echo esc_attr( $class ); ?>" data-upgrade="<?php esc_attr_e( 'Form action automations', 'formidable' ); ?>" data-medium="action-automation" data-oneclick="<?php echo esc_attr( $install_data ); ?>">
+		<a <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 			<?php esc_html_e( 'Setup Automation', 'formidable' ); ?>
 		</a>
 	</h3>
 	<?php
+	unset( $params );
 }
 
 // Show link to install logs.

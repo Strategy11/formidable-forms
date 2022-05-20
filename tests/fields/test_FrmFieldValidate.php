@@ -7,7 +7,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	protected $form;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->create_validation_form();
@@ -17,11 +17,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->form = $this->factory->form->create_and_get();
 		$field_types = $this->get_all_fields();
 		foreach ( $field_types as $field_type ) {
-			$this->factory->field->create( array(
-				'type'      => $field_type,
-				'form_id'   => $this->form->id,
-				'field_key' => $this->get_field_key( $field_type ),
-			) );
+			$this->factory->field->create(
+				array(
+					'type'      => $field_type,
+					'form_id'   => $this->form->id,
+					'field_key' => $this->get_field_key( $field_type ),
+				)
+			);
 		}
 	}
 
@@ -70,9 +72,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			$errors = $this->check_single_value( array( $field_id => $test_format['value'] ) );
 
 			if ( $test_format['invalid'] ) {
-				$this->assertNotEmpty( $errors, $test_format['type'] .' value ' . $test_format['value'] .' passed validation'  );
+				$this->assertNotEmpty( $errors, $test_format['type'] . ' value ' . $test_format['value'] . ' passed validation' );
 			} else {
-				$this->assertEmpty( $errors, $test_format['type'] .' value ' . $test_format['value'] .' did not pass validation'  );
+				$this->assertEmpty( $errors, $test_format['type'] . ' value ' . $test_format['value'] . ' did not pass validation' );
 			}
 		}
 	}
@@ -137,7 +139,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		if ( ! empty( $errors ) ) {
 			$error_field_ids = array_keys( $errors );
 			foreach ( $fields as $field ) {
-				if ( ! isset( $errors[ 'field'. $field->id ] ) ) {
+				if ( ! isset( $errors[ 'field' . $field->id ] ) ) {
 					$error_fields[] = $field->type;
 				}
 			}
@@ -166,6 +168,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	/**
 	 * When a url field is required, http:// should not pass
+	 *
 	 * @covers FrmFieldUrl::validate
 	 */
 	public function test_url_value() {
@@ -175,7 +178,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_field( $field );
 
 		$errors = $this->check_single_value( array( $field->id => 'http://' ) );
-		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'http:// passed required validation '. print_r($errors,1) );
+		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'http:// passed required validation ' . print_r( $errors, 1 ) );
 	}
 
 	/**
@@ -187,13 +190,13 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->set_required_field( $field );
 
 		$errors = $this->check_single_value( array( $field->id => 'notemail@' ) );
-		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Poorly formatted email passed validation '. print_r($errors,1) );
+		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Poorly formatted email passed validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => '' ) );
-		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Email email passed required validation '. print_r($errors,1) );
+		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Email email passed required validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => 'email@example.com' ) );
-		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Properly formatted email did not pass validation '. print_r($errors,1) );
+		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Properly formatted email did not pass validation ' . print_r( $errors, 1 ) );
 	}
 
 	/**
@@ -202,29 +205,31 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	public function test_number_validation() {
 		$field = $this->factory->field->get_object_by_id( $this->get_field_key( 'number' ) );
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
-		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Number failed validation '. print_r( $errors, 1 ) );
+		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed validation ' . print_r( $errors, 1 ) );
 
-		$field = $this->factory->field->create_and_get( array(
-			'type'    => 'number',
-			'form_id' => $this->form->id,
-			'field_options' => array(
-				'minnum' => 0,
-				'maxnum' => 20,
-			),
-		) );
+		$field = $this->factory->field->create_and_get(
+			array(
+				'type'    => 'number',
+				'form_id' => $this->form->id,
+				'field_options' => array(
+					'minnum' => 0,
+					'maxnum' => 20,
+				),
+			)
+		);
 		$this->assertEquals( 20, $field->field_options['maxnum'] );
 
 		$errors = $this->check_single_value( array( $field->id => '10.5' ) );
-		$this->assertFalse( isset( $errors[ 'field'. $field->id ] ), 'Number failed range validation '. print_r( $errors, 1 ) );
+		$this->assertFalse( isset( $errors[ 'field' . $field->id ] ), 'Number failed range validation ' . print_r( $errors, 1 ) );
 
 		$errors = $this->check_single_value( array( $field->id => 'not numeric' ) );
-		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Number failed numeric validation' );
+		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed numeric validation' );
 
 		$errors = $this->check_single_value( array( $field->id => '25' ) );
-		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Number failed max range validation' );
+		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed max range validation' );
 
 		$errors = $this->check_single_value( array( $field->id => '-25' ) );
-		$this->assertTrue( isset( $errors[ 'field'. $field->id ] ), 'Number failed min range validation' );
+		$this->assertTrue( isset( $errors[ 'field' . $field->id ] ), 'Number failed min range validation' );
 	}
 
 	protected function set_required_fields( $fields ) {
@@ -237,7 +242,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		global $wpdb;
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', array( 'required' => 1 ), array( 'id' => $field->id ) );
 		if ( $query_results ) {
-            wp_cache_delete( $field->id, 'frm_field' );
+			wp_cache_delete( $field->id, 'frm_field' );
 			FrmField::delete_form_transient( $this->form->id );
 
 			$field = FrmField::getOne( $field->id );
@@ -282,14 +287,16 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		);
 
 		foreach ( $check_formats as $check_it ) {
-			$field = $this->factory->field->create_and_get( array(
-				'type'      => 'phone',
-				'form_id'   => $this->form->id,
-				'field_key' => $check_it['field_key'],
-				'field_options' => array(
-					'format' => $check_it['format'],
-				),
-			) );
+			$field = $this->factory->field->create_and_get(
+				array(
+					'type'      => 'phone',
+					'form_id'   => $this->form->id,
+					'field_key' => $check_it['field_key'],
+					'field_options' => array(
+						'format' => $check_it['format'],
+					),
+				)
+			);
 			$this->assertEquals( $check_it['format'], $field->field_options['format'] );
 
 			$format = FrmEntryValidate::phone_format( $field );
@@ -323,20 +330,24 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $this->form->id ) );
 		$this->assertFalse( $enabled );
 
-		$akismet_for_everyone = $this->factory->form->create_and_get( array(
-			'options' => array(
-				'akismet' => '1',
-			),
-		) );
+		$akismet_for_everyone = $this->factory->form->create_and_get(
+			array(
+				'options' => array(
+					'akismet' => '1',
+				),
+			)
+		);
 		$this->assertNotEmpty( $akismet_for_everyone->options['akismet'] );
 		$enabled = $this->run_private_method( array( 'FrmEntryValidate', 'is_akismet_enabled_for_user' ), array( $akismet_for_everyone->id ) );
 		$this->assertTrue( $enabled );
 
-		$akismet_logged = $this->factory->form->create_and_get( array(
-			'options' => array(
-				'akismet' => 'logged',
-			),
-		) );
+		$akismet_logged = $this->factory->form->create_and_get(
+			array(
+				'options' => array(
+					'akismet' => 'logged',
+				),
+			)
+		);
 		$this->assertEquals( 'logged', $akismet_logged->options['akismet'] );
 
 		wp_set_current_user( 0 );
@@ -360,13 +371,28 @@ class test_FrmFieldValidate extends FrmUnitTest {
 				'36' => 'email@example.com',
 				'37' => array( 'value1', 'value2' ),
 			),
+			'name_field_ids' => array(),
+			'form_id'        => 1,
 		);
 
-		update_option( 'blacklist_keys', '' );
+		update_option( $this->get_disallowed_option_name(), '' );
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
-		update_option( 'blacklist_keys', "23.343.12332\r\nspamemail@example.com" );
+		$blocked = '23.343.12332';
+		$new_block = $blocked . "\nspamemail@example.com";
+		update_option( $this->get_disallowed_option_name(), $new_block );
+		$this->assertSame( $new_block, get_option( $this->get_disallowed_option_name() ) );
+
+		$wp_test = $this->run_private_method( array( 'FrmEntryValidate', 'check_disallowed_words' ), array( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) );
+		$this->assertFalse( $wp_test );
+
+		$ip = FrmAppHelper::get_ip_address();
+		$wp_test = $this->run_private_method( array( 'FrmEntryValidate', 'check_disallowed_words' ), array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) );
+		if ( ! $wp_test ) {
+			$this->markTestSkipped( 'WordPress blacklist check is failing in some cases' );
+		}
+		$this->assertTrue( $wp_test, 'WordPress missing spam for IP ' . $ip . ' agent ' . FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
 
 		$is_spam = FrmEntryValidate::blacklist_check( array( 'item_meta' => array( '', '' ) ) );
 		$this->assertFalse( $is_spam );
@@ -374,8 +400,21 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertFalse( $is_spam );
 
-		$values['item_meta']['25'] = '23.343.1233234323';
+		$values['item_meta']['25'] = $blocked;
+		$is_spam = FrmEntryValidate::blacklist_check( $values );
+		$this->assertTrue( $is_spam, 'Exact match for spam missed' );
+
+		$values['item_meta']['25'] = $blocked . '23.343.1233234323';
 		$is_spam = FrmEntryValidate::blacklist_check( $values );
 		$this->assertTrue( $is_spam );
+	}
+
+	/**
+	 * The name of the disallowed list of words was changed in WP 5.5.
+	 */
+	private function get_disallowed_option_name() {
+		$keys = get_option( 'disallowed_keys' );
+		// Fallback for WP < 5.5.
+		return false === $keys ? 'blacklist_keys' : 'disallowed_keys';
 	}
 }

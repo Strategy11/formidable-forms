@@ -124,7 +124,6 @@ class FrmUsage {
 		$pass_settings = array(
 			'load_style',
 			'use_html',
-			'old_css',
 			'fade_form',
 			'jquery_css',
 			're_type',
@@ -135,6 +134,7 @@ class FrmUsage {
 			'no_ips',
 			'btsp_css',
 			'btsp_errors',
+			'admin_bar',
 		);
 
 		foreach ( $pass_settings as $setting ) {
@@ -214,6 +214,8 @@ class FrmUsage {
 		$settings    = array(
 			'form_class',
 			'akismet',
+			'honeypot',
+			'antispam',
 			'custom_style',
 			'success_action',
 			'show_form',
@@ -233,6 +235,7 @@ class FrmUsage {
 			'draft_msg',
 			'submit_align',
 			'protect_files',
+			'protect_files_role',
 			'max_entries',
 			'open_status',
 			'closed_msg',

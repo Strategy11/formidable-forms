@@ -5,7 +5,7 @@
  */
 class test_FrmHooksController extends FrmUnitTest {
 
-	function test_trigger_load_form_hooks() {
+	public function test_trigger_load_form_hooks() {
 		FrmHooksController::trigger_load_form_hooks();
 		$expected_hooks = array(
 			'frm_field_type' => 'FrmFieldsController::change_type',
@@ -15,7 +15,7 @@ class test_FrmHooksController extends FrmUnitTest {
 
 		foreach ( $expected_hooks as $tag => $function ) {
 			$has_filter = has_filter( $tag, $function );
-			$this->assertTrue( $has_filter !== false, 'The ' . $tag .' hook is not loaded' );
+			$this->assertTrue( $has_filter !== false, 'The ' . $tag . ' hook is not loaded' );
 		}
 	}
 }

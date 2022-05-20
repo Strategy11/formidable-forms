@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="form_settings_page" class="frm_wrap">
 	<form method="post" class="frm_form_settings">
 	<div class="frm_page_container">
@@ -51,6 +56,7 @@
 					<?php do_action( 'frm_add_form_option_section', $values ); ?>
 					<div class="clear"></div>
 					<?php include( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/mb_insert_fields.php' ); ?>
+					<?php do_action( 'frm_page_footer', array( 'table' => 'form-settings' ) ); ?>
 				</div>
 			</div>
 		</div>

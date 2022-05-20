@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 class FrmDb {
 	public $fields;
@@ -188,7 +191,7 @@ class FrmDb {
 	public static function get_count( $table, $where = array(), $args = array() ) {
 		$count = self::get_var( $table, $where, 'COUNT(*)', $args );
 
-		return $count;
+		return (int) $count;
 	}
 
 	/**
@@ -435,7 +438,7 @@ class FrmDb {
 		if ( is_array( $where ) || empty( $where ) ) {
 			self::get_where_clause_and_values( $where );
 			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // WPCS: unprepared SQL ok.
+			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			/**
 			 * Allow the $where to be prepared before we recieve it here.
@@ -568,18 +571,26 @@ class FrmDb {
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
 		if ( empty( $where ) ) {
-			return '';
-		}
-
-		if ( is_array( $where ) ) {
-			global $wpdb;
-			self::get_where_clause_and_values( $where, $starts_with );
-			$where = $wpdb->prepare( $where['where'], $where['values'] ); // WPCS: unprepared SQL ok.
+			$where = '';
 		} else {
-			$where = $starts_with . $where;
+			if ( is_array( $where ) ) {
+				global $wpdb;
+				self::get_where_clause_and_values( $where, $starts_with );
+				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			} else {
+				$where = $starts_with . $where;
+			}
 		}
 
-		return $where;
+		/**
+		 * Allows modifying where clause when using FrmDb::prepend_and_or_where() method.
+		 *
+		 * @since 5.0.16
+		 *
+		 * @param string $where       Where string.
+		 * @param string $starts_with The start of where string.
+		 */
+		return apply_filters( 'frm_prepend_and_or_where', $where, $starts_with );
 	}
 
 	/**
@@ -615,7 +626,9 @@ class FrmDb {
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
-		$filters = $wp_filter['content_save_pre'];
+		if ( isset( $wp_filter['content_save_pre'] ) ) {
+			$filters = $wp_filter['content_save_pre'];
+		}
 
 		// Remove the balanceTags filter in case WordPress is trying to validate the XHTML
 		remove_all_filters( 'content_save_pre' );
@@ -623,7 +636,9 @@ class FrmDb {
 		$post = wp_insert_post( $settings );
 
 		// add the content filters back for views or posts
-		$wp_filter['content_save_pre'] = $filters;
+		if ( isset( $filters ) ) {
+			$wp_filter['content_save_pre'] = $filters;
+		}
 
 		return $post;
 	}
@@ -650,7 +665,7 @@ class FrmDb {
 			$results = get_posts( $query );
 		} elseif ( 'get_associative_results' == $type ) {
 			global $wpdb;
-			$results = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL ok.
+			$results = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			global $wpdb;
 			$results = $wpdb->{$type}( $query );
