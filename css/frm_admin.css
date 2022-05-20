@@ -1019,7 +1019,7 @@ h2 .frm-button-primary {
 	font-size: 14px !important;
 	font-weight: normal;
 	margin: 0 5px !important;
-	line-height: 23px !important;
+	line-height: 25px !important;
 	vertical-align: text-bottom !important;
 	height: auto !important;
 }
@@ -1871,31 +1871,48 @@ h2.frm-h2 + .howto {
 	padding: 10px 20px;
 }
 
+.frm-modal .postbox,
 #frm_new_form_modal .postbox {
 	max-height: 600px;
 	overflow: hidden;
+	margin-bottom: 0;
 }
 
-#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child {
-	padding: 30px 20px;
+.frm-modal .postbox .frm_modal_top,
+.frm-dialog .frm_common_modal .postbox > div:first-child {
+	padding: 30px 30px 10px;
 	position: relative;
-	border-bottom: 1px solid var(--grey-border);
 }
 
-#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
+.frm-modal .postbox .frm-modal-title,
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
 	display: inline-block;
 	font-size: 24px;
 	color: #282F36;
 }
 
-#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
+.frm-modal .postbox .frm-modal-title + div:last-child,
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
-	right: 20px;
+	right: 30px;
 	top: 37px;
 }
 
-#wpwrap ~ .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child a {
+.frm-modal .postbox .frm-modal-title + div:last-child a,
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child a {
 	color: var(--grey);
+}
+
+.frm-modal .postbox > div.inside .cta-inside {
+	overflow-y: auto;
+	height: auto;
+	padding: 0 15px;
+}
+
+.frm_modal_footer {
+	padding: 15px 30px;
+	text-align: right;
+	border-top: 1px solid var(--sidebar-hover);
 }
 
 #frm_new_form_modal .postbox > div.inside {
@@ -1909,7 +1926,7 @@ h2.frm-h2 + .howto {
 #frm_new_form_modal .postbox > div.inside .cta-inside {
 	overflow-y: auto;
 	height: auto;
-	padding: 0 15px;
+	padding: 0 20px;
 }
 
 #frm_new_form_modal .accordion-container {
@@ -2212,24 +2229,17 @@ h2.frm-h2 + .howto {
 	padding-top: 6px;
 }
 
-.frm_modal_footer {
-	background-color: #fff;
-	padding: 30px 20px 15px;
-	text-align: right;
-	border-top: 1px solid var(--grey-border);
-}
-
 #frm_new_form_modal .frm-use-this-template {
 	margin-left: 10px;
 }
 
 #frm_new_form_modal #frm-preview-block {
-	padding: 20px 40px;
+	padding: 20px 30px;
 	overflow-x: hidden;
 }
 
 #frm_new_form_modal #frm-details-block {
-	padding: 20px 40px;
+	padding: 20px 30px;
 }
 
 .frm-modal-back {
@@ -2996,8 +3006,9 @@ a.frm_option_icon:hover::before {
 	line-height: 1;
 }
 
-.control-section .accordion-section-title:after, .customize-pane-child .accordion-section-title:after {
-	top: 19px;
+.control-section .accordion-section-title:after, /** Form template list */
+.customize-pane-child .accordion-section-title:after {
+	top: 15px;
 }
 
 .accordion-container .frm-dropdown-menu {
