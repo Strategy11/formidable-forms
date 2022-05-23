@@ -89,8 +89,8 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( 'rgb' === substr( $color_val, 0, 3 ) ) {
-						substr( $color_val, -1 ) !== ')' ? $color_val .= ')' : '';
+					if ( 'rgb' === substr( $color_val, 0, 3 ) && substr( $color_val, -1 ) !== ')' ) {
+						$color_val = $color_val .= ')';
 						$new_instance['post_content'][ $setting ] = $color_val;
 					} else {
 						$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
