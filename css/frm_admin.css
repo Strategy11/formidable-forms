@@ -6093,7 +6093,7 @@ tr.frm_options_heading td {
 	color: var(--medium-grey);
 	font-size: 16px;
 	box-sizing: border-box;
-	border: 2px dashed var(--primary-color);
+	border: 1px dashed var(--grey-border);
 }
 
 .drop-me + .frm_no_fields {
