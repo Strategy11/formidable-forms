@@ -89,10 +89,10 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( $color_val !== '' && ( strpos( $color_val, '#' ) !== 0 ) ) {
+					if ( $color_val !== '' && ( ! strpos( $color_val, '#' ) !== 0 ) ) {
 						// if invalid rgba value is entered
 						if ( ! ( preg_match( '/rgba\((\s*\d+\s*,){3}[\d\.]+\)/', $color_val, $matches ) === 1 ||
-						preg_match( '/rgb\((?:\s*\d+\s*,){2}\s*[\d]+\)/', $color_val, $matches ) === 1 ) ) {
+								preg_match( '/rgb\((?:\s*\d+\s*,){2}\s*[\d]+\)/', $color_val, $matches ) === 1 ) ) {
 							$this->sanitize_rgba_value( $color_val );
 						}
 					}
@@ -129,10 +129,13 @@ class FrmStyle {
 			}
 			if ( preg_match( '/\((.*?)\)/', $color_val, $match ) === 1 ) {
 				$color_rgba = $match[1];
+			} else {
+				return;
 			}
 			$length_of_color_codes = strpos( $color_val, '(' );
 			$new_color_values      = array();
-			// replace empty values by 0.
+
+			// replace empty values by 0 or 1 (if alpha position).
 			foreach ( explode( ',', $color_rgba ) as $index => $value ) {
 				if ( '' === $value ) {
 					if ( $index === $length_of_color_codes - 1 ) {
@@ -145,7 +148,7 @@ class FrmStyle {
 				}
 			}
 
-			// add more 0s and 1 (alpha) if required.
+			// add more 0s and 1 (if alpha position) if required.
 			$missing_values = $length_of_color_codes - count( $new_color_values );
 			if ( $missing_values > 1 ) {
 				$insert_values = array_fill( 0, $missing_values - 1, 0 );
