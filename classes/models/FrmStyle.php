@@ -90,11 +90,8 @@ class FrmStyle {
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
 					if ( $color_val !== '' && ( ! strpos( $color_val, '#' ) !== 0 ) ) {
-						// if invalid rgba value is entered
-						if ( ! ( preg_match( '/rgba\((\s*\d+\s*,){3}[\d\.]+\)/', $color_val, $matches ) === 1 ||
-								preg_match( '/rgb\((?:\s*\d+\s*,){2}\s*[\d]+\)/', $color_val, $matches ) === 1 ) ) {
-							$this->sanitize_rgba_value( $color_val );
-						}
+						// maybe sanitize if invalid rgba value is entered
+						$this->maybe_sanitize_rgba_value( $color_val );
 					}
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $color_val );
 				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) )
@@ -122,7 +119,14 @@ class FrmStyle {
 	 *
 	 * @param string $color_val, The color value, by reference.
 	 */
-	private function sanitize_rgba_value( &$color_val ) {
+	private function maybe_sanitize_rgba_value( &$color_val ) {
+		$patters = array( '/rgba\((\s*\d+\s*,){3}[\d\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
+		foreach ( $patters as $pattern ) {
+			if ( preg_match( $pattern, $color_val ) === 1 ) {
+				return;
+			}
+		}
+
 		if ( 'rgb' === substr( $color_val, 0, 3 ) ) {
 			if ( substr( $color_val, -1 ) !== ')' ) {
 				$color_val = $color_val .= ')';
@@ -137,14 +141,16 @@ class FrmStyle {
 
 			// replace empty values by 0 or 1 (if alpha position).
 			foreach ( explode( ',', $color_rgba ) as $index => $value ) {
+				if ( '' !== $value ) {
+					$new_color_values[] = $value;
+					continue;
+				}
 				if ( '' === $value ) {
 					if ( $index === $length_of_color_codes - 1 ) {
-						4 === $length_of_color_codes ? $new_color_values[] = 1 : $new_color_values[] = 0;
+						$new_color_values[] = 4 === $length_of_color_codes ? 1 : 0;
 					} else {
 						$new_color_values[] = 0;
 					}
-				} else {
-					$new_color_values[] = $value;
 				}
 			}
 
@@ -156,7 +162,7 @@ class FrmStyle {
 			} elseif ( $missing_values === 1 ) {
 				$insert_values = array( 1 );
 			}
-			if ( $insert_values && count( $insert_values ) > 0 ) {
+			if ( $insert_values ) {
 				$new_color_values = array_merge( $new_color_values, $insert_values );
 			}
 
