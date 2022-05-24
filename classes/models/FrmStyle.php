@@ -162,7 +162,7 @@ class FrmStyle {
 			} elseif ( $missing_values === 1 ) {
 				$insert_values = array( 1 );
 			}
-			if ( $insert_values ) {
+			if ( ! empty( $insert_values ) ) {
 				$new_color_values = array_merge( $new_color_values, $insert_values );
 			}
 
