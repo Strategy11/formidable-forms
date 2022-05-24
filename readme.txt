@@ -216,7 +216,7 @@ After reading this feature list, you can probably imagine why Formidable is the 
 
 Give Formidable Forms a try.
 
-Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to Premium</a> to get all the features for smart forms and full web applications.
+Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to Pro</a> to get all the features for smart forms and full web applications.
 
 == Credits ==
 This online form builder plugin is created by Steve and Steph Wells and the amazing Strategy11 Team.

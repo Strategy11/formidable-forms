@@ -8255,7 +8255,9 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_link' ).value = link;
 		document.getElementById( 'frm_action_type' ).value = action;
 		nameLabel.textContent = nameLabel.getAttribute( 'data-' + type );
-		descLabel.textContent = descLabel.getAttribute( 'data-' + type );
+		if ( descLabel !== null ) {
+			descLabel.textContent = descLabel.getAttribute( 'data-' + type );
+		}
 
 		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
 
