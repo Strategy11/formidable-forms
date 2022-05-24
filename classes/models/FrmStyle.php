@@ -119,7 +119,7 @@ class FrmStyle {
 	 *
 	 * @param string $color_val, The color value, by reference.
 	 */
-	private function maybe_sanitize_rgba_value( &$color_val ) {
+	public function maybe_sanitize_rgba_value( &$color_val ) {
 		$patters = array( '/rgba\((\s*\d+\s*,){3}[\d\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patters as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
