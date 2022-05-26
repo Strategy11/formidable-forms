@@ -65,6 +65,9 @@ class FrmFormsController {
 		return $shortcodes;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function list_form() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
@@ -77,7 +80,7 @@ class FrmFormsController {
 		}
 		$errors = apply_filters( 'frm_admin_list_form_action', $errors );
 
-		return self::display_forms_list( $params, $message, $errors );
+		self::display_forms_list( $params, $message, $errors );
 	}
 
 	/**
@@ -234,11 +237,12 @@ class FrmFormsController {
 		$params  = FrmForm::list_page_params();
 		$form    = FrmForm::duplicate( $params['id'], $params['template'], true );
 		$message = $params['template'] ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
+
 		if ( $form ) {
 			return self::get_edit_vars( $form, array(), $message, true );
-		} else {
-			return self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
 		}
+
+		self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
 	}
 
 	/**
@@ -1605,7 +1609,8 @@ class FrmFormsController {
 					return self::list_form();
 				}
 
-				return self::display_forms_list();
+				self::display_forms_list();
+				return;
 		}
 	}
 
