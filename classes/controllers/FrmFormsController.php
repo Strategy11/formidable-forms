@@ -785,6 +785,10 @@ class FrmFormsController {
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
 	}
 
+	/**
+	 * @param array<string,string> $columns
+	 * @return array<string,string>
+	 */
 	public static function get_columns( $columns ) {
 		$columns['cb'] = '<input type="checkbox" />';
 		$columns['id'] = 'ID';
@@ -797,7 +801,7 @@ class FrmFormsController {
 			)
 		);
 
-		if ( 'template' == $type ) {
+		if ( 'template' === $type ) {
 			$columns['name']     = __( 'Template Name', 'formidable' );
 			$columns['type']     = __( 'Type', 'formidable' );
 			$columns['form_key'] = __( 'Key', 'formidable' );
