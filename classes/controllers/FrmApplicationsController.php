@@ -70,7 +70,17 @@ class FrmApplicationsController {
 		$api          = new FrmApplicationApi();
 		$applications = $api->get_api_info();
 		$applications = array_filter( $applications, 'is_array' );
-		$applications = self::sort_templates( $applications );
+
+		$unlocked_templates = array();
+		$locked_templates   = array();
+		foreach ( $applications as $application ) {
+			if ( ! empty( $application['url'] ) ) {
+				$unlocked_templates[] = $application;
+			} else {
+				$locked_templates[] = $application;
+			}
+		}
+		$applications = array_merge( self::sort_templates( $unlocked_templates ), self::sort_templates( $locked_templates ) );
 
 		FrmApplicationTemplate::init();
 
