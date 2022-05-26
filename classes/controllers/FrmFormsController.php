@@ -747,16 +747,30 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * Display list of forms in a table.
+	 *
+	 * @param array  $params
+	 * @param string $message
+	 * @param array  $errors
+	 * @return void
+	 */
 	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		global $wpdb, $frm_vars;
 
-		if ( empty( $params ) ) {
+		if ( ! $params ) {
 			$params = FrmForm::list_page_params();
 		}
 
-		$wp_list_table = new FrmFormsListHelper( compact( 'params' ) );
+		/**
+		 * @since x.x
+		 *
+		 * @param string $table_class Class name for List Helper.
+		 */
+		$table_class   = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
+		$wp_list_table = new $table_class( compact( 'params' ) );
 
 		$pagenum = $wp_list_table->get_pagenum();
 
@@ -768,7 +782,7 @@ class FrmFormsController {
 			die();
 		}
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
 	}
 
 	public static function get_columns( $columns ) {
