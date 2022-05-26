@@ -65,6 +65,9 @@ class FrmFormsController {
 		return $shortcodes;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function list_form() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
@@ -77,7 +80,7 @@ class FrmFormsController {
 		}
 		$errors = apply_filters( 'frm_admin_list_form_action', $errors );
 
-		return self::display_forms_list( $params, $message, $errors );
+		self::display_forms_list( $params, $message, $errors );
 	}
 
 	/**
@@ -234,11 +237,12 @@ class FrmFormsController {
 		$params  = FrmForm::list_page_params();
 		$form    = FrmForm::duplicate( $params['id'], $params['template'], true );
 		$message = $params['template'] ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
+
 		if ( $form ) {
 			return self::get_edit_vars( $form, array(), $message, true );
-		} else {
-			return self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
 		}
+
+		self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
 	}
 
 	/**
@@ -747,16 +751,30 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * Display list of forms in a table.
+	 *
+	 * @param array  $params
+	 * @param string $message
+	 * @param array  $errors
+	 * @return void
+	 */
 	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		global $wpdb, $frm_vars;
 
-		if ( empty( $params ) ) {
+		if ( ! $params ) {
 			$params = FrmForm::list_page_params();
 		}
 
-		$wp_list_table = new FrmFormsListHelper( compact( 'params' ) );
+		/**
+		 * @since x.x
+		 *
+		 * @param string $table_class Class name for List Helper.
+		 */
+		$table_class   = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
+		$wp_list_table = new $table_class( compact( 'params' ) );
 
 		$pagenum = $wp_list_table->get_pagenum();
 
@@ -768,9 +786,13 @@ class FrmFormsController {
 			die();
 		}
 
-		require( FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php' );
+		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
 	}
 
+	/**
+	 * @param array<string,string> $columns
+	 * @return array<string,string>
+	 */
 	public static function get_columns( $columns ) {
 		$columns['cb'] = '<input type="checkbox" />';
 		$columns['id'] = 'ID';
@@ -783,7 +805,7 @@ class FrmFormsController {
 			)
 		);
 
-		if ( 'template' == $type ) {
+		if ( 'template' === $type ) {
 			$columns['name']     = __( 'Template Name', 'formidable' );
 			$columns['type']     = __( 'Type', 'formidable' );
 			$columns['form_key'] = __( 'Key', 'formidable' );
@@ -1587,7 +1609,8 @@ class FrmFormsController {
 					return self::list_form();
 				}
 
-				return self::display_forms_list();
+				self::display_forms_list();
+				return;
 		}
 	}
 
