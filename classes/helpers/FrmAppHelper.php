@@ -1102,6 +1102,11 @@ class FrmAppHelper {
 			return;
 		}
 
+		if ( empty( $atts['new_link'] ) && empty( $atts['trigger_new_form_modal'] ) && empty( $atts['class'] ) ) {
+			// Do not render a button if none of these attributes are set.
+			return;
+		}
+
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
 		$class = 'button button-primary frm-button-primary frm-with-plus';
 
