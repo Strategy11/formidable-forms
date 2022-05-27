@@ -434,7 +434,7 @@ BEFORE_HTML;
 	/**
 	 * Gets start over button shortcode.
 	 *
-	 * @since 5.2.08
+	 * @since 5.3.1
 	 *
 	 * @return string
 	 */

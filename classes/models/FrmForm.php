@@ -36,7 +36,7 @@ class FrmForm {
 		/**
 		 * Allows modifying form options before updating or creating.
 		 *
-		 * @since 5.2.08 Add the third param.
+		 * @since 5.3.1 Add the third param.
 		 *
 		 * @param array $options Form options.
 		 * @param array $values  Form data.
@@ -218,7 +218,7 @@ class FrmForm {
 		/**
 		 * Allows modifying form options before updating or creating.
 		 *
-		 * @since 5.2.08 Added the third param.
+		 * @since 5.3.1 Added the third param.
 		 *
 		 * @param array $options Form options.
 		 * @param array $values  Form data.
