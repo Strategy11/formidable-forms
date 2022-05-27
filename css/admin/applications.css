@@ -217,18 +217,12 @@
 	pointer-events: none;
 }
 
-.frm-admin-page-applications #frm_top_bar {
-	position: relative;
-}
-
 .frm-admin-page-applications #frm_top_bar h1 {
 	width: auto;
 }
 
 .frm-admin-page-applications #frm_top_bar .install-now {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
+	vertical-align: bottom;
 }
 
 .frm-application-templates-nav .frm-search {
