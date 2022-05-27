@@ -24,6 +24,9 @@ namespace {
 	}
 	class FrmProSettings extends FrmSettings {
 	}
+	class FrmProApplicationsHelper {
+		public static function get_required_templates_capability() {}
+	}
 }
 
 namespace Elementor {
