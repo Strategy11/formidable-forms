@@ -920,5 +920,6 @@
 <symbol id="frm_thick_move_icon" viewBox="0 0 20 20"><path d="M4.166 7.5l-2.5 2.5 2.5 2.5M7.5 4.167l2.5-2.5 2.5 2.5M12.5 15.833l-2.5 2.5-2.5-2.5M15.834 7.5l2.5 2.5-2.5 2.5M1.666 10h16.667M10 1.667v16.667" stroke="#9EA9B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_thick_more_vert_icon" viewBox="0 0 20 20"><path d="M10 10.834a.833.833 0 100-1.667.833.833 0 000 1.667zM10 5a.833.833 0 100-1.667A.833.833 0 0010 5zM10 16.667A.833.833 0 1010 15a.833.833 0 000 1.667z" fill="#9EA9B8" stroke="#9EA9B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_chat_forms_icon" viewBox="0 0 21 21" fill="none" stroke="currentColor"><path d="M19.991 13.914a2 2 0 0 1-2 2h-12l-4 4v-16a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="frm_lightning" viewBox="0 0 20 22" fill="none"><path d="M11 1 1 13h9l-1 8L19 9h-9l1-8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs>
 </svg>

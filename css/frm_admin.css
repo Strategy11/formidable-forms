@@ -2550,15 +2550,15 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 .frm-right-panel .inside a.frm_pro_tip,
 a.frm_pro_tip {
 	font-size: 14px;
-	border: 1px solid var(--orange);
 	display: inline-block;
 	color: var(--dark-grey);
-	background: var(--light-blue);
-	border-radius: var(--border-radius);
-	text-align: center;
+	background: #FFE7DE;
+	border-radius: var(--small-radius);
 	padding: 5px 15px;
 	margin: 0 auto;
 	line-height: 1.4;
+	display: flex;
+	align-items: center;
 }
 
 a.frm_pro_tip:hover {
@@ -2574,7 +2574,8 @@ a.frm_pro_tip:hover .frmsvg {
 	margin: 10px 15px;
 	padding-left: 40px;
 	position: relative;
-	background: #fff;
+	width: calc(100% - 30px);
+    box-sizing: border-box;
 }
 
 a.frm_pro_tip .frmsvg,
@@ -2583,15 +2584,12 @@ a.frm_pro_tip i {
 	margin-right: 5px;
 }
 
-.frm_field_list a.frm_pro_tip .frmsvg {
-	position: absolute;
-	left: 15px;
-	top: calc(50% - 11px);
+a.frm_pro_tip .frmsvg {
+	margin-right: 10px;
 }
 
-.pro-tip {
-	font-weight: 500;
-	color: var(--darkest-grey);
+.frm-tip-info {
+	flex: 1;
 }
 
 .frm-tip-cta {
