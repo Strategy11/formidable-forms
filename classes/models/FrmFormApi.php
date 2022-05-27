@@ -166,6 +166,8 @@ class FrmFormApi {
 	protected function get_cached() {
 		$cache = get_option( $this->cache_key );
 
+		FrmAppHelper::filter_gmt_offset();
+
 		if ( empty( $cache ) || empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
 			return false; // Cache is expired
 		}
@@ -184,6 +186,8 @@ class FrmFormApi {
 	 * @since 3.06
 	 */
 	protected function set_cached( $addons ) {
+		FrmAppHelper::filter_gmt_offset();
+
 		$data = array(
 			'timeout' => strtotime( $this->cache_timeout, current_time( 'timestamp' ) ),
 			'value'   => json_encode( $addons ),
