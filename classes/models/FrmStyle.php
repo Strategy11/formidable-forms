@@ -160,7 +160,7 @@ class FrmStyle {
 					}
 				}
 
-				null === $new_value ? $new_color_values[] = $value : $new_color_values[] = $new_value;
+				$new_color_values[] = null === $new_value ? $value : $new_value;
 			}
 
 			// add more 0s and 1 (if alpha position) if needed.
