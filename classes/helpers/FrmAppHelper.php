@@ -3455,11 +3455,13 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Prevent a fatal error in PHP8 if gmt_offset happens to be set any empty string.
+	 * Prevent a fatal error in PHP8 if gmt_offset happens to be set an empty string.
+	 * This is a bug in WordPress. It isn't safe to call current_time( 'timestamp' ) without this with an empty string offset.
+	 * In the future this might be safe to remove. Keep an eye on the current_time function in functions.php.
 	 *
 	 * @since 5.3.1
 	 *
-	 * @return int
+	 * @return void
 	 */
 	public static function filter_gmt_offset() {
 		if ( self::$added_gmt_offset_filter ) {
