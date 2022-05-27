@@ -139,7 +139,7 @@ class FrmForm {
 	/**
 	 * Switches field ID in fields.
 	 *
-	 * @since 5.2.08
+	 * @since 5.3
 	 *
 	 * @param int $form_id Form ID.
 	 */
@@ -175,7 +175,7 @@ class FrmForm {
 	/**
 	 * Switches field ID in a field.
 	 *
-	 * @since 5.2.08
+	 * @since 5.3
 	 *
 	 * @param array $field Field array.
 	 */

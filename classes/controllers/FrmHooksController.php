@@ -164,6 +164,11 @@ class FrmHooksController {
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
+		// Applications Controller.
+		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 ); // Use the same priority as styles so Applications appear directly under Styles.
+		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
+		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
+
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();

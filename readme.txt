@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 5.9.3
 Requires PHP: 5.6
-Stable tag: 5.2.07
+Stable tag: 5.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -216,7 +216,7 @@ After reading this feature list, you can probably imagine why Formidable is the 
 
 Give Formidable Forms a try.
 
-Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to Premium</a> to get all the features for smart forms and full web applications.
+Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to Pro</a> to get all the features for smart forms and full web applications.
 
 == Credits ==
 This online form builder plugin is created by Steve and Steph Wells and the amazing Strategy11 Team.
@@ -438,6 +438,12 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.3 =
+* New: Added a new applications page for displaying available Formidable application templates.
+* New: Imported views and pages with [formidable] and [display-frm-data] shortcodes will now replace old form and view ids with the new imported ids.
+* New: Imported forms will now replace the old field ids with new field ids when the id is used in a field_id shortcode option.
+* Fix: Field id values were not always properly updating when duplicating a form depending on the order of the fields.
+
 = 5.2.07 =
 * Fix: Step value validation was occasionally breaking in some cases due to rounding precision issues.
 
