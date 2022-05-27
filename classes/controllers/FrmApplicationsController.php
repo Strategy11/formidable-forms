@@ -16,7 +16,23 @@ class FrmApplicationsController {
 	public static function menu() {
 		$label    = __( 'Applications', 'formidable' );
 		$new_pill = '<span class="frm-new-pill">NEW</span>';
-		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label . $new_pill, 'frm_edit_forms', 'formidable-applications', array( __CLASS__, 'landing_page' ) );
+		$cap      = self::get_required_capability();
+
+		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label . $new_pill, $cap, 'formidable-applications', array( __CLASS__, 'landing_page' ) );
+	}
+
+	/**
+	 * Get the required capability for accessing the Applications dashboard.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_required_capability() {
+		if ( is_callable( 'FrmProApplicationsHelper::get_required_templates_capability' ) ) {
+			return FrmProApplicationsHelper::get_required_templates_capability();
+		}
+		return 'frm_edit_forms';
 	}
 
 	/**
@@ -43,7 +59,7 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		FrmAppHelper::permission_check( self::get_required_capability() );
 
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();

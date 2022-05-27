@@ -1453,17 +1453,8 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function frm_capabilities( $type = 'auto' ) {
-		$cap = array(
-			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
-			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
-			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
-			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
-			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
-			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
-		);
-
-		if ( ! self::pro_is_installed() && 'pro' !== $type && 'pro_only' !== $type ) {
-			return $cap;
+		if ( ! self::pro_is_installed() && ! in_array( $type, array( 'pro', 'pro_only' ), true ) ) {
+			return self::get_lite_capabilities();
 		}
 
 		$pro_cap = array(
@@ -1472,12 +1463,36 @@ class FrmAppHelper {
 			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
 			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
 		);
+		/**
+		 * @since x.x
+		 *
+		 * @param array<string,string> $pro_cap
+		 */
+		$pro_cap = apply_filters( 'frm_pro_capabilities', $pro_cap );
 
 		if ( 'pro_only' === $type ) {
 			return $pro_cap;
 		}
 
-		return $cap + $pro_cap;
+		return self::get_lite_capabilities() + $pro_cap;
+	}
+
+	/**
+	 * Get the list of lite plugin capabilities.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string>
+	 */
+	private static function get_lite_capabilities() {
+		return array(
+			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
+			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
+			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
+			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
+			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
+		);
 	}
 
 	/**
