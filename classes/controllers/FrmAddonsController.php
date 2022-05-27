@@ -10,6 +10,9 @@ class FrmAddonsController {
 	 */
 	protected static $plugin;
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
