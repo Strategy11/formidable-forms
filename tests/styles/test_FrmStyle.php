@@ -21,7 +21,7 @@ class test_FrmStyle extends FrmUnitTest {
 		$patterns = array( '/rgba\((\s*\d+\s*,){3}[\d\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
-			$frm_style->maybe_sanitize_rgba_value( $color_val );
+			$this->run_private_method( array( $frm_style, 'maybe_sanitize_rgba_value' ), array( &$color_val ) );
 			$this->assertEquals( $expected_color_val, $color_val );
 		}
 	}
