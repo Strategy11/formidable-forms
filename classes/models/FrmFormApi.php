@@ -166,6 +166,8 @@ class FrmFormApi {
 	protected function get_cached() {
 		$cache = get_option( $this->cache_key );
 
+		self::filter_gmt_offset();
+
 		if ( empty( $cache ) || empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
 			return false; // Cache is expired
 		}
@@ -184,6 +186,8 @@ class FrmFormApi {
 	 * @since 3.06
 	 */
 	protected function set_cached( $addons ) {
+		self::filter_gmt_offset();
+
 		$data = array(
 			'timeout' => strtotime( $this->cache_timeout, current_time( 'timestamp' ) ),
 			'value'   => json_encode( $addons ),
@@ -191,6 +195,27 @@ class FrmFormApi {
 		);
 
 		update_option( $this->cache_key, $data, 'no' );
+	}
+
+	/**
+	 * Prevent a fatal error in PHP8 if gmt_offset happens to be set any empty string.
+	 *
+	 * @since 5.3.1
+	 *
+	 * @return int
+	 */
+	private function filter_gmt_offset() {
+		add_filter(
+			'option_gmt_offset',
+			function( $offset ) {
+				if ( ! is_string( $offset ) || is_numeric( $offset ) ) {
+					// Leave a valid value alone.
+					return $offset;
+				}
+
+				return 0;
+			}
+		);
 	}
 
 	/**
