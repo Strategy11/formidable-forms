@@ -141,17 +141,16 @@ class FrmStyle {
 
 			// replace empty values by 0 or 1 (if alpha position).
 			foreach ( explode( ',', $color_rgba ) as $index => $value ) {
-				if ( '' !== $value ) {
-					$new_color_values[] = $value;
-					continue;
-				}
-				if ( '' === $value ) {
+				if ( ctype_space( $value ) || '' === $value ) {
 					if ( $index === $length_of_color_codes - 1 ) {
 						$new_color_values[] = 4 === $length_of_color_codes ? 1 : 0;
 					} else {
 						$new_color_values[] = 0;
 					}
+					continue;
 				}
+
+				$new_color_values[] = $value;
 			}
 
 			// add more 0s and 1 (if alpha position) if required.
