@@ -4,9 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 98; // Version of the database we are moving to.
+	public static $db_version     = 98; // Version of the database we are moving to.
 	public static $pro_db_version = 37; //deprecated
-	public static $font_version = 7;
+	public static $font_version   = 7;
+
+	/**
+	 * @var bool $added_gmt_offset_filter
+	 */
+	private static $added_gmt_offset_filter = false;
 
 	/**
 	 * @since 2.0
@@ -3447,6 +3452,35 @@ class FrmAppHelper {
 		}
 
 		return strlen( $parts[ count( $parts ) - 1 ] );
+	}
+
+	/**
+	 * Prevent a fatal error in PHP8 if gmt_offset happens to be set an empty string.
+	 * This is a bug in WordPress. It isn't safe to call current_time( 'timestamp' ) without this with an empty string offset.
+	 * In the future this might be safe to remove. Keep an eye on the current_time function in functions.php.
+	 *
+	 * @since 5.3.1
+	 *
+	 * @return void
+	 */
+	public static function filter_gmt_offset() {
+		if ( self::$added_gmt_offset_filter ) {
+			// Avoid adding twice.
+			return;
+		}
+
+		add_filter(
+			'option_gmt_offset',
+			function( $offset ) {
+				if ( ! is_string( $offset ) || is_numeric( $offset ) ) {
+					// Leave a valid value alone.
+					return $offset;
+				}
+
+				return 0;
+			}
+		);
+		self::$added_gmt_offset_filter = true;
 	}
 
 	/**
