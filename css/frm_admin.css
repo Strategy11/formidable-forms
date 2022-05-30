@@ -500,6 +500,7 @@ ul.frm_form_nav > li:last-of-type {
 	flex-direction: column;
 	overflow: hidden;
 	padding-top: 0;
+    overflow: visible;
 }
 
 .frm-full-screen.frm-admin-page-entries .frm_page_container,
