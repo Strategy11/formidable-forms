@@ -96,7 +96,14 @@ class FrmApplicationsController {
 				$locked_templates[] = $application;
 			}
 		}
-		$applications = array_merge( self::sort_templates( $unlocked_templates ), self::sort_templates( $locked_templates ) );
+
+		$unlocked_templates = self::sort_templates( $unlocked_templates );
+
+		$applications = $unlocked_templates;
+		if ( current_user_can( 'administrator' ) || current_user_can( 'frm_change_settings' ) ) {
+			$locked_templates = self::sort_templates( $locked_templates );
+			$applications     = array_merge( $applications, $locked_templates );
+		}
 
 		FrmApplicationTemplate::init();
 
