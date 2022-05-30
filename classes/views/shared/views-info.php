@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm_wrap">
-	<div class="frm_page_container" style="overflow: scroll;">
+	<div class="frm_page_container" style="overflow-y: auto;">
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
