@@ -161,7 +161,7 @@
 				tag(
 					'h2',
 					{
-						text: __( 'Formidable Applications', 'formidable' ),
+						text: __( 'Application Templates', 'formidable' ),
 						className: 'frm-h2'
 					}
 				),

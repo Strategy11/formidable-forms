@@ -221,6 +221,10 @@
 	width: auto;
 }
 
+.frm-admin-page-applications #frm_top_bar .install-now {
+	vertical-align: bottom;
+}
+
 .frm-application-templates-nav .frm-search {
 	margin-top: 0;
 }
@@ -245,7 +249,17 @@
 	margin-top: 20px;
 }
 
-@media only screen and (max-width: 1050px) {
+@media only screen and (max-width: 1200px) {
+	.frm-application-card {
+		grid-column: span 4/span 4; /* treat as frm4 */
+	}
+
+	.frm-application-card:nth-child(3) ~ .frm-application-card {
+		margin-top: 20px;
+	}
+}
+
+@media only screen and (max-width: 800px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
 	}
@@ -255,7 +269,7 @@
 	}
 }
 
-@media only screen and (max-width: 782px) {
+@media only screen and (max-width: 600px) {
 	#frm_application_category_filter {
 		display: block;
 		margin-left: 0;

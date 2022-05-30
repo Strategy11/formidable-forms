@@ -1606,7 +1606,8 @@ class FrmFormsController {
 				if ( strpos( $action, 'bulk_' ) === 0 ) {
 					FrmAppHelper::remove_get_action();
 
-					return self::list_form();
+					self::list_form();
+					return;
 				}
 
 				self::display_forms_list();

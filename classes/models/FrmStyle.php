@@ -384,7 +384,7 @@ class FrmStyle {
 			'form_desc_margin_bottom' => '25px',
 			'form_desc_padding'       => '0',
 
-			'font'            => '"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif',
+			'font'            => '',
 			'font_size'       => '15px',
 			'label_color'     => '3f4b5b',
 			'weight'          => 'normal',
