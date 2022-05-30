@@ -59,14 +59,17 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
-		FrmAppHelper::permission_check( self::get_required_capability() );
-
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
+
 		if ( 'applications' !== $view ) {
+			FrmAppHelper::permission_check( self::get_required_capability() );
+
 			// view may be 'applications', 'templates', or empty.
 			$data['templates']  = self::get_prepared_template_data();
 			$data['categories'] = FrmApplicationTemplate::get_categories();
+		} else {
+			FrmAppHelper::permission_check( 'frm_edit_applications' );
 		}
 
 		/**
