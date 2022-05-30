@@ -100,7 +100,7 @@ class FrmApplicationTemplate {
 	public function as_js_object() {
 		$application = array();
 		foreach ( self::$keys as $key ) {
-			$value = $this->api_data[ $key ];
+			$value = isset( $this->api_data[ $key ] ) ? $this->api_data[ $key ] : '';
 
 			if ( 'icon' === $key ) {
 				// Icon is an array. The first array item is the image URL.
