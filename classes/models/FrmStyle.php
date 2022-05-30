@@ -89,7 +89,7 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( $color_val !== '' && ( ! strpos( $color_val, '#' ) !== 0 ) ) {
+					if ( $color_val !== '' && ( strpos( $color_val, '#' ) === false ) ) {
 						// maybe sanitize if invalid rgba value is entered
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
@@ -119,7 +119,11 @@ class FrmStyle {
 	 *
 	 * @param string $color_val, The color value, by reference.
 	 */
-	public function maybe_sanitize_rgba_value( &$color_val ) {
+	private function maybe_sanitize_rgba_value( &$color_val ) {
+		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
+			return;
+		}
+
 		$patterns = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
@@ -127,60 +131,56 @@ class FrmStyle {
 			}
 		}
 
-		if ( 'rgb' === substr( $color_val, 0, 3 ) ) {
-			if ( substr( $color_val, -1 ) !== ')' ) {
-				$color_val = $color_val .= ')';
-			}
-			if ( preg_match( '/\((.*?)\)/', $color_val, $match ) !== 1 ) {
-				return;
-			}
-			$color_rgba = $match[1];
-
-			$length_of_color_codes = strpos( $color_val, '(' );
-			$new_color_values      = array();
-
-			// replace empty values by 0 or 1 (if alpha position).
-			foreach ( explode( ',', $color_rgba ) as $index => $value ) {
-				$new_value = null;
-				if ( ctype_space( $value ) || '' === $value ) {
-					$new_value = 0;
-				}
-
-				if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
-					if ( $value < 0 ) {
-						$new_value = 0;
-					} elseif ( $value > 255 ) {
-						$new_value = 255;
-					}
-				} else {
-					if ( ctype_space( $value ) || '' === $value ) {
-						$new_value = 4 === $length_of_color_codes ? 1 : 0;
-					} elseif ( $value > 1 || $value < 0 ) {
-						$new_value = 1;
-					}
-				}
-
-				$new_color_values[] = null === $new_value ? $value : $new_value;
-			}
-
-			// add more 0s and 1 (if alpha position) if needed.
-			$missing_values = $length_of_color_codes - count( $new_color_values );
-			if ( $missing_values > 1 ) {
-				$insert_values = array_fill( 0, $missing_values - 1, 0 );
-				array_push( $insert_values, 1 );
-			} elseif ( $missing_values === 1 ) {
-				$insert_values = array( 1 );
-			}
-			if ( ! empty( $insert_values ) ) {
-				$new_color_values = array_merge( $new_color_values, $insert_values );
-			}
-
-			$new_color = implode( ',', $new_color_values );
-			$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
-			$new_color = $prefix . $new_color . ')';
-
-			$color_val = $new_color;
+		if ( substr( $color_val, -1 ) !== ')' ) {
+			$color_val = $color_val .= ')';
 		}
+
+		$color_rgba = $match[1];
+
+		$length_of_color_codes = strpos( $color_val, '(' );
+		$new_color_values      = array();
+
+		// replace empty values by 0 or 1 (if alpha position).
+		foreach ( explode( ',', $color_rgba ) as $index => $value ) {
+			$new_value = null;
+			if ( ctype_space( $value ) || '' === $value ) {
+				$new_value = 0;
+			}
+
+			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
+				if ( $value < 0 ) {
+					$new_value = 0;
+				} elseif ( $value > 255 ) {
+					$new_value = 255;
+				}
+			} else {
+				if ( ctype_space( $value ) || '' === $value ) {
+					$new_value = 4 === $length_of_color_codes ? 1 : 0;
+				} elseif ( $value > 1 || $value < 0 ) {
+					$new_value = 1;
+				}
+			}
+
+			$new_color_values[] = null === $new_value ? $value : $new_value;
+		}
+
+		// add more 0s and 1 (if alpha position) if needed.
+		$missing_values = $length_of_color_codes - count( $new_color_values );
+		if ( $missing_values > 1 ) {
+			$insert_values = array_fill( 0, $missing_values - 1, 0 );
+			4 === $length_of_color_codes ? array_push( $insert_values, 1 ) : array_push( $insert_values, 0 );
+		} elseif ( $missing_values === 1 ) {
+			$insert_values = 4 === $length_of_color_codes ? array( 1 ) : array( 0 );
+		}
+		if ( ! empty( $insert_values ) ) {
+			$new_color_values = array_merge( $new_color_values, $insert_values );
+		}
+
+		$new_color = implode( ',', $new_color_values );
+		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
+		$new_color = $prefix . $new_color . ')';
+
+		$color_val = $new_color;
 	}
 
 	/**
