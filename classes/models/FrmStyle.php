@@ -89,7 +89,8 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( $color_val !== '' && ( strpos( $color_val, '#' ) === false ) ) {
+					if ( $color_val !== '' && ( ! strpos( $color_val, '#' ) !== 0 ) ) {
+						// maybe san					if ( $color_val !== '' && ( strpos( $color_val, '#' ) === false ) ) {
 						// maybe sanitize if invalid rgba value is entered
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
@@ -123,8 +124,8 @@ class FrmStyle {
 		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
 			return;
 		}
-
-		$patterns = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
+		$color_val = trim( $color_val );
+		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
 				return;
@@ -135,15 +136,14 @@ class FrmStyle {
 			$color_val = $color_val .= ')';
 		}
 
-		$color_rgba = $match[1];
-
+		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
 		$length_of_color_codes = strpos( $color_val, '(' );
 		$new_color_values      = array();
 
 		// replace empty values by 0 or 1 (if alpha position).
 		foreach ( explode( ',', $color_rgba ) as $index => $value ) {
 			$new_value = null;
-			if ( ctype_space( $value ) || '' === $value ) {
+			if ( '' === trim( $value ) || '' === $value ) {
 				$new_value = 0;
 			}
 
@@ -154,7 +154,7 @@ class FrmStyle {
 					$new_value = 255;
 				}
 			} else {
-				if ( ctype_space( $value ) || '' === $value ) {
+				if ( '' === trim( $value ) || '' === $value ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
 				} elseif ( $value > 1 || $value < 0 ) {
 					$new_value = 1;
@@ -168,7 +168,8 @@ class FrmStyle {
 		$missing_values = $length_of_color_codes - count( $new_color_values );
 		if ( $missing_values > 1 ) {
 			$insert_values = array_fill( 0, $missing_values - 1, 0 );
-			4 === $length_of_color_codes ? array_push( $insert_values, 1 ) : array_push( $insert_values, 0 );
+			$last_value    = 4 === $length_of_color_codes ? 1 : 0;
+			array_push( $insert_values, $last_value );
 		} elseif ( $missing_values === 1 ) {
 			$insert_values = 4 === $length_of_color_codes ? array( 1 ) : array( 0 );
 		}
@@ -181,21 +182,6 @@ class FrmStyle {
 		$new_color = $prefix . $new_color . ')';
 
 		$color_val = $new_color;
-	}
-
-	/**
-	 * Unslash everything in post_content but custom_css
-	 *
-	 * @since 5.0.13
-	 *
-	 * @param array $settings
-	 * @return array
-	 */
-	private function unslash_post_content( $settings ) {
-		$custom_css             = isset( $settings['custom_css'] ) ? $settings['custom_css'] : '';
-		$settings               = wp_unslash( $settings );
-		$settings['custom_css'] = $custom_css;
-		return $settings;
 	}
 
 	/**
