@@ -3509,11 +3509,7 @@ class FrmAppHelper {
 		}
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( ! $action ) {
-			return true;
-		}
-
-		return in_array( $action, self::get_form_listing_page_actions(), true );
+		return ! $action || in_array( $action, self::get_form_listing_page_actions(), true );
 	}
 
 	/**
