@@ -7110,6 +7110,11 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		if ( ! frmGlobal.canAccessApplicationDashboard ) {
+			// User does not have privileges to see Ready Made Solutions.
+			return;
+		}
+
 		doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
 
 		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
