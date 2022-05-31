@@ -142,19 +142,21 @@ class FrmStyle {
 
 		// replace empty values by 0 or 1 (if alpha position).
 		foreach ( explode( ',', $color_rgba ) as $index => $value ) {
-			$new_value = null;
-			if ( '' === trim( $value ) || '' === $value ) {
-				$new_value = 0;
-			}
+			$new_value              = null;
+			$value_is_empty_string  = '' === trim( $value ) || '' === $value;
 
 			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
+				// insert a value for r, g, or b
 				if ( $value < 0 ) {
 					$new_value = 0;
 				} elseif ( $value > 255 ) {
 					$new_value = 255;
+				} elseif ( $value_is_empty_string ) {
+					$new_value = 0;
 				}
 			} else {
-				if ( '' === trim( $value ) || '' === $value ) {
+				// insert a value for alpha
+				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
 				} elseif ( $value > 1 || $value < 0 ) {
 					$new_value = 1;
