@@ -296,7 +296,7 @@ class FrmAppController {
 		include $shared_path . 'upgrade_overlay.php';
 		include $shared_path . 'confirm-overlay.php';
 
-		if ( ( FrmAppHelper::is_admin_page( 'formidable' ) || FrmAppHelper::is_admin_page( 'formidable-welcome' ) ) && in_array( FrmAppHelper::get_param( 'frm_action' ), array( '', 'list', 'trash' ), true ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-welcome' ) || FrmAppHelper::on_form_listing_page() ) {
 			self::new_form_overlay_html();
 		}
 	}
@@ -501,13 +501,9 @@ class FrmAppController {
 
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
 
-		if ( 'formidable' === $page ) {
-			$action        = FrmAppHelper::get_param( 'frm_action' );
-			$is_form_index = ! $action || in_array( $action, array( 'list', 'trash' ), true );
-			if ( $is_form_index ) {
-				// For the existing page dropdown in the Form embed modal.
-				wp_enqueue_script( 'jquery-ui-autocomplete' );
-			}
+		if ( FrmAppHelper::on_form_listing_page() ) {
+			// For the existing page dropdown in the Form embed modal.
+			wp_enqueue_script( 'jquery-ui-autocomplete' );
 		}
 
 		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );

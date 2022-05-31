@@ -16,8 +16,7 @@ class FrmFormsController {
 	}
 
 	public static function maybe_load_listing_hooks() {
-		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
-		if ( ! empty( $action ) && ! in_array( $action, array( 'list', 'trash', 'untrash', 'destroy' ) ) ) {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
 			return;
 		}
 
@@ -34,7 +33,7 @@ class FrmFormsController {
 	}
 
 	public static function register_widgets() {
-		require_once( FrmAppHelper::plugin_path() . '/classes/widgets/FrmShowForm.php' );
+		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmShowForm.php';
 		register_widget( 'FrmShowForm' );
 	}
 

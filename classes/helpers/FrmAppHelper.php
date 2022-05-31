@@ -3499,6 +3499,35 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function on_form_listing_page() {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			return false;
+		}
+
+		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		if ( ! $action ) {
+			return true;
+		}
+
+		return in_array( $action, self::get_form_listing_page_actions(), true );
+	}
+
+	/**
+	 * Get all actions that also display the forms list.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private static function get_form_listing_page_actions() {
+		return array( 'list', 'trash', 'untrash', 'destroy' );
+	}
+
+	/**
 	 * @since 4.08
 	 * @deprecated 4.09.01
 	 */
