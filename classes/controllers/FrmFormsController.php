@@ -2280,18 +2280,32 @@ class FrmFormsController {
 	 * to prevent a flash of unstyled form.
 	 *
 	 * @since 4.01
+	 *
+	 * @return void
 	 */
 	private static function load_late_css() {
 		$frm_settings = FrmAppHelper::get_settings();
-		$late_css = $frm_settings->load_style === 'dynamic';
-		if ( ! $late_css ) {
+		$late_css     = $frm_settings->load_style === 'dynamic';
+
+		if ( ! $late_css || ! self::should_load_late() ) {
 			return;
 		}
 
 		global $wp_styles;
-		if ( is_array( $wp_styles->queue ) && in_array( 'formidable', $wp_styles->queue ) ) {
+		if ( is_array( $wp_styles->queue ) && in_array( 'formidable', $wp_styles->queue, true ) ) {
 			wp_print_styles( 'formidable' );
 		}
+	}
+
+	/**
+	 * Avoid late load if All in One SEO is active because it prevents CSS from loading entirely.
+	 *
+	 * @since 5.2.03
+	 *
+	 * @return bool
+	 */
+	private static function should_load_late() {
+		return ! function_exists( 'aioseo' );
 	}
 
 	public static function defer_script_loading( $tag, $handle ) {
