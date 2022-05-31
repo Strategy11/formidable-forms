@@ -3505,11 +3505,11 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function on_form_listing_page() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
+		if ( ! self::is_admin_page( 'formidable' ) ) {
 			return false;
 		}
 
-		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$action = self::simple_get( 'frm_action', 'sanitize_title' );
 		return ! $action || in_array( $action, self::get_form_listing_page_actions(), true );
 	}
 
