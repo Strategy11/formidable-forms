@@ -1068,7 +1068,7 @@ DEFAULT_HTML;
 		}
 
 		if ( $aria_describedby_exists ) {
-			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', $describedby . '"', $input_html );
+			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', esc_attr( trim( $describedby ) ) . '"', $input_html );
 		} elseif ( ! empty( $describedby ) ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
