@@ -242,7 +242,6 @@ class test_FrmFieldType extends FrmUnitTest {
 
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_desc_2 frm_error_2"',
-
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {
