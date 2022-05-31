@@ -19,6 +19,8 @@ class test_FrmApplicationsController extends FrmUnitTest {
 	 * @covers FrmApplicationsController::get_prepared_template_data
 	 */
 	public function test_get_prepared_template_data() {
+		$this->set_current_user_to_1(); // Set to admin so that locked templates get included in template data.
+
 		$data = $this->get_prepared_template_data();
 		$this->assertIsArray( $data );
 		$this->assertNotEmpty( $data );
