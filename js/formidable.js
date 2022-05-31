@@ -797,6 +797,7 @@ function frmFrontFormJS() {
 				}
 				input.attr( 'aria-describedby', describedBy );
 			}
+			input.attr( 'aria-invalid', true );
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
