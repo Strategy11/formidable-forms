@@ -26,6 +26,7 @@ namespace {
 	}
 	class FrmProApplicationsHelper {
 		public static function get_required_templates_capability() {}
+		public static function get_custom_applications_capability() {}
 	}
 }
 
