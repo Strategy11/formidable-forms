@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm_wrap">
-	<div class="frm_page_container" style="overflow-y: auto;">
+	<div class="frm_page_container">
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
@@ -14,11 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			)
 		);
 		?>
-<<<<<<< HEAD
 		<div style="overflow-y: auto;">
-			<div class="frmcenter" style="margin-top:10vh">
+			<div class="frmcenter" style="margin-top:10vh; padding-bottom: 32px;">
 				<div class="frm-video-wrapper">
-					<iframe width="843" height="474" src="https://www.youtube.com/embed/3T-WMIvYadg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					<iframe width="843" height="474" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 				</div>
 				<h2><?php esc_html_e( 'Show and Edit Entries with Views', 'formidable' ); ?></h2>
 				<p style="max-width:400px;margin:20px auto">
@@ -31,11 +30,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 				FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
 				?>
-=======
-		<div class="frmcenter" style="margin-top:10vh">
-			<div class="frm-video-wrapper">
-				<iframe width="843" height="474" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
->>>>>>> 9b2e2d030ff7c69936d400b9436ab63c3303f94c
 			</div>
 		</div>
 	</div>
