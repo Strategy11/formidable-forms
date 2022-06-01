@@ -771,6 +771,10 @@ BEFORE_HTML;
 			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
 		}
 
+		if ( strpos( $html, '[if start_over]' ) ) {
+			$html = preg_replace( '/(\[if\s+start_over\])(.*?)(\[\/if\s+start_over\])/mis', '', $html );
+		}
+
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
 			$html = do_shortcode( $html );
 		}
