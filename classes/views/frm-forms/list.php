@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'import_link'            => true,
 		)
 	);
-	FrmAppController::include_embed_form_icons();
 	?>
 	<div class="wrap">
 <?php

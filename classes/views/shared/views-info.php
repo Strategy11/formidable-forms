@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			)
 		);
 		?>
+<<<<<<< HEAD
 		<div style="overflow-y: auto;">
 			<div class="frmcenter" style="margin-top:10vh">
 				<div class="frm-video-wrapper">
@@ -30,6 +31,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				);
 				FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
 				?>
+=======
+		<div class="frmcenter" style="margin-top:10vh">
+			<div class="frm-video-wrapper">
+				<iframe width="843" height="474" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+>>>>>>> 9b2e2d030ff7c69936d400b9436ab63c3303f94c
 			</div>
 		</div>
 	</div>

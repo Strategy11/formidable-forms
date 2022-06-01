@@ -73,7 +73,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 
 <p>
 	<label><?php esc_html_e( 'Font Family', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  class="frm_full_width" />
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'font' ) ); ?>" id="frm_font" value="<?php echo esc_attr( $style->post_content['font'] ); ?>"  placeholder="<?php esc_attr_e( 'Leave blank to inherit from theme', 'formidable' ); ?>" class="frm_full_width" />
 </p>
 
 <p class="frm6 frm_first frm_form_field">
