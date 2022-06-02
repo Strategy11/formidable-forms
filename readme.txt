@@ -454,11 +454,4 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.2.07 =
 * Fix: Step value validation was occasionally breaking in some cases due to rounding precision issues.
 
-= 5.2.06 =
-* New: The step value for number fields is now validated server side on submission.
-
-= 5.2.05 = 
-* New: Added a new frm_focus_first_error filter to toggle of the behavior of the auto-focus that gets triggered on the first field with an error.
-* New: Added a new frm_include_alert_role_on_field_errors filter to toggle the alert role that gets added to field errors.
-
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
