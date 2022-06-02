@@ -1056,20 +1056,16 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
-		$aria_describedby_exists = preg_match( '/aria-describedby=\"[^\"]*\"/', $input_html, $match ) === 1;
-		$describedby             = isset( $match[0] ) ? substr( $match[0], 0, -1 ) : '';
-
-		if ( $this->get_field_column( 'description' ) !== '' ) {
-			$describedby .= ' frm_desc_' . $args['html_id'];
+		$describedby = '';
+		if ( $this->get_field_column( 'description' ) != '' ) {
+			$describedby = 'frm_desc_' . $args['html_id'];
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) ) {
 			$describedby .= ' frm_error_' . $args['html_id'];
 		}
 
-		if ( $aria_describedby_exists ) {
-			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', $describedby . '"', $input_html );
-		} elseif ( ! empty( $describedby ) ) {
+		if ( ! empty( $describedby ) ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
 	}
