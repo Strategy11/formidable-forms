@@ -1,4 +1,11 @@
 == Changelog ==
+= 5.3.1 =
+* New: Unlocked application templates now appear at the top of the list of templates.
+* New: Improved the responsiveness of the cards on the Application dashboard page.
+* Fix: Prevent a conflict with All in One SEO that was preventing CSS from loading at all when the only on applicable pages setting is selected.
+* Fix: An unexpected add new button was appearing on a few pages and has been removed.
+* Fix: Prevent a fatal error in PHP8 that happens on sites with an unexpected empty string gmt_offset option set.
+
 = 5.3 =
 * New: Added a new applications page for displaying available Formidable application templates.
 * New: Imported views and pages with [formidable] and [display-frm-data] shortcodes will now replace old form and view ids with the new imported ids.
