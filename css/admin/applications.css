@@ -1,0 +1,285 @@
+.frm-application-cards-grid,
+#frm-application-search,
+.frm-application-card hr {
+	width: 100%;
+}
+
+.frm-application-card img,
+.frm-application-image-wrapper img,
+#frm_custom_applications_placeholder img {
+	max-width: 100%;
+}
+
+.frm-application-image-wrapper img {
+	background: url(../../images/applications/toolbar.png) no-repeat top center;
+	background-size: contain;
+	padding-top: 19px;
+}
+
+.frm-application-card > div:first-child,
+#frm_custom_applications_placeholder {
+	position: relative;
+}
+
+.formidable_page_formidable-applications #frm_top_bar {
+	background: #fff;
+}
+
+.formidable_page_formidable-applications #wpbody {
+	background: var(--sidebar-color);
+}
+
+.formidable_page_formidable-applications #wpcontent {
+	padding-left: 0;
+}
+
+.frm-applications-index-content {
+	padding: 40px 40px 0;
+}
+
+.frm-application-cards-grid {
+	padding-bottom: 50px;
+}
+
+.frm-application-cards-grid:last-child {
+	padding-bottom: 100px;
+}
+
+.formidable_page_formidable-applications #wpbody-content {
+	padding-bottom: 0;
+}
+
+.frm-application-card {
+	border-radius: 4px;
+	background: #FFFFFF;
+	grid-column: span 3/span 3; /* treat as frm3 */
+	padding: 10px 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.frm-application-card:nth-child(4) ~ .frm-application-card {
+	margin-top: 20px;
+}
+
+.frm-application-template-card {
+	cursor: pointer;
+}
+
+.frm-application-template-card:hover {
+	filter: drop-shadow(0px 12px 24px rgba(72, 78, 84, 0.2));
+}
+
+.frm-application-template-card:hover h4 {
+	color: var(--primary-color);
+}
+
+/* Card title */
+.frm-application-card h4 {
+	font-weight: 600;
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin: 0;
+}
+
+.frm-locked-application-template h4 {
+	opacity: 0.85;
+	max-width: calc( 100% - 30px );
+}
+
+.frm-locked-application-template > div:first-child > span > .frmsvg {
+	position: relative;
+	bottom: 5px;
+	width: 14px;
+	height: 14px;
+}
+
+#frm_application_templates_grid .frm-application-card .frm-button-secondary {
+	display: flex;
+	flex-direction: row;
+}
+
+.frm-application-card .frm-button-secondary .frmsvg {
+	width: 11px;
+	height: 11px;
+	position: relative;
+	right: 2px;
+	align-self: center;
+}
+
+/* Use template anchor */
+#frm_application_templates_grid .frm-application-card .frm-button-secondary {
+	position: absolute;
+	right: 10px;
+	bottom: 0;
+	line-height: 17px;
+	min-height: 17px;
+	height: 20px;
+}
+
+/* Card description */
+.frm-application-card > div:first-child > div {
+	font-size: 12px;
+}
+
+.frm-application-card > div {
+	padding: 0 10px;
+}
+
+.frm-application-item-count {
+	font-size: 11px;
+	color: var(--medium-grey);
+	margin-top: 4px;
+}
+
+#frm_view_application_modal .frm_warning_style {
+	border: none aliceblue;
+	margin-top: 0;
+	padding: 20px;
+	border-radius: 0;
+	display: flex;
+}
+
+#frm_view_application_modal .frm_warning_style span {
+	flex: 1;
+}
+
+#frm_view_application_modal .frm_warning_style a:focus {
+	box-shadow: none;
+}
+
+.frm-application-card-image-wrapper {
+	min-height: 130px;
+	display: flex;
+	align-items: center;
+	align-self: center;
+}
+
+.frm-flex {
+	flex: 1;
+}
+
+.frm-application-modal-details {
+	padding: 25px 30px;
+}
+
+.formidable_page_formidable-applications .ui-widget-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--grey-border);
+	z-index: 2;
+}
+
+#frm_view_application_modal .frm-application-image-wrapper {
+	background-color: #F6F7FB;
+	padding: 20px 30px 15px;
+}
+
+.frm-application-modal-label {
+	opacity: 0.65;
+	margin-bottom: 5px;
+}
+
+.formidable_page_formidable-applications #frm_bs_dropdown .install-now {
+	vertical-align: bottom;
+}
+
+.frm-application-card svg + h4 {
+	margin-left: 10px;
+}
+
+#frm_application_category_filter {
+    display: inline-block;
+}
+
+#frm_application_category_filter > a {
+    padding: 0 10px;
+}
+
+#frm_application_category_filter > a:first-child {
+	padding-left: 0;
+}
+
+#frm_application_category_filter > a:last-child {
+	padding-right: 0;
+}
+
+#frm_application_category_filter > a.frm-active-application-category {
+	color: var(--dark-grey);
+	pointer-events: none;
+}
+
+.frm-admin-page-applications #frm_top_bar h1 {
+	width: auto;
+}
+
+.frm-admin-page-applications #frm_top_bar .install-now {
+	vertical-align: bottom;
+}
+
+.frm-application-templates-nav .frm-search {
+	margin-top: 0;
+}
+
+.frm-application-templates-nav.wrap {
+	margin-right: 0;
+}
+
+#frm_custom_applications_placeholder > div:first-child {
+	position: absolute;
+}
+
+#frm_custom_applications_placeholder > div:last-child {
+	text-align: center;
+	max-width: 500px;
+	margin: 0 auto 20px;
+	position: relative;
+	top: 20px;
+}
+
+#frm_custom_applications_placeholder > div a {
+	margin-top: 20px;
+}
+
+@media only screen and (max-width: 1200px) {
+	.frm-application-card {
+		grid-column: span 4/span 4; /* treat as frm4 */
+	}
+
+	.frm-application-card:nth-child(3) ~ .frm-application-card {
+		margin-top: 20px;
+	}
+}
+
+@media only screen and (max-width: 800px) {
+	.frm-application-card {
+		grid-column: span 6/span 6; /* treat as frm6 */
+	}
+
+	.frm-application-card:nth-child(2) ~ .frm-application-card {
+		margin-top: 20px;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	#frm_application_category_filter {
+		display: block;
+		margin-left: 0;
+	}
+
+	.frm-application-card {
+		grid-column: span 12/span 12; /* treat as frm12 */
+	}
+
+	.frm-application-card:nth-child(1) ~ .frm-application-card {
+		margin-top: 20px;
+	}
+}

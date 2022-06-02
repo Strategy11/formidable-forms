@@ -18,6 +18,7 @@ namespace {
 	define( 'EP_PERMALINK', 1 );
 	define( 'COOKIEHASH', '' );
 	define( 'COOKIE_DOMAIN', false );
+	define( 'WP_IMPORTING', false );
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
