@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.3';
+	public static $plug_version = '5.3.1';
 
 	/**
 	 * @since 1.07.02
@@ -1469,7 +1469,7 @@ class FrmAppHelper {
 			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
 		);
 		/**
-		 * @since x.x
+		 * @since 5.3.1
 		 *
 		 * @param array<string,string> $pro_cap
 		 */
@@ -1485,7 +1485,7 @@ class FrmAppHelper {
 	/**
 	 * Get the list of lite plugin capabilities.
 	 *
-	 * @since x.x
+	 * @since 5.3.1
 	 *
 	 * @return array<string,string>
 	 */
@@ -3500,7 +3500,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 5.3.1
 	 *
 	 * @return bool
 	 */
@@ -3516,7 +3516,7 @@ class FrmAppHelper {
 	/**
 	 * Get all actions that also display the forms list.
 	 *
-	 * @since x.x
+	 * @since 5.3.1
 	 *
 	 * @return array<string>
 	 */

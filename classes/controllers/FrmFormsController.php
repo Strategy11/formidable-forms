@@ -768,7 +768,7 @@ class FrmFormsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 5.3.1
 		 *
 		 * @param string $table_class Class name for List Helper.
 		 */

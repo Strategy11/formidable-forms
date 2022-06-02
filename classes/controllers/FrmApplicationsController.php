@@ -38,7 +38,7 @@ class FrmApplicationsController {
 	/**
 	 * Get the required capability for accessing the Applications dashboard.
 	 *
-	 * @since x.x
+	 * @since 5.3.1
 	 *
 	 * @return string
 	 */
