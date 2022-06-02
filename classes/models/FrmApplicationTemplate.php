@@ -100,6 +100,10 @@ class FrmApplicationTemplate {
 	public function as_js_object() {
 		$application = array();
 		foreach ( self::$keys as $key ) {
+			if ( ! isset( $this->api_data[ $key ] ) ) {
+				continue;
+			}
+
 			$value = $this->api_data[ $key ];
 
 			if ( 'icon' === $key ) {

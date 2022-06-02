@@ -7105,6 +7105,16 @@ function frmAdminBuildJS() {
 	}
 
 	function addApplicationsToNewFormModal( modal ) {
+		if ( modal.querySelector( '.frm-ready-made-solution' ) ) {
+			// Avoid adding duplicates if the modal is opened multiple times.
+			return;
+		}
+
+		if ( ! frmGlobal.canAccessApplicationDashboard ) {
+			// User does not have privileges to see Ready Made Solutions.
+			return;
+		}
+
 		doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
 
 		const categoryList = modal.querySelector( 'ul.frm-categories-list' );

@@ -1458,17 +1458,8 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function frm_capabilities( $type = 'auto' ) {
-		$cap = array(
-			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
-			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
-			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
-			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
-			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
-			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
-		);
-
-		if ( ! self::pro_is_installed() && 'pro' !== $type && 'pro_only' !== $type ) {
-			return $cap;
+		if ( ! self::pro_is_installed() && ! in_array( $type, array( 'pro', 'pro_only' ), true ) ) {
+			return self::get_lite_capabilities();
 		}
 
 		$pro_cap = array(
@@ -1477,12 +1468,36 @@ class FrmAppHelper {
 			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
 			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
 		);
+		/**
+		 * @since x.x
+		 *
+		 * @param array<string,string> $pro_cap
+		 */
+		$pro_cap = apply_filters( 'frm_pro_capabilities', $pro_cap );
 
 		if ( 'pro_only' === $type ) {
 			return $pro_cap;
 		}
 
-		return $cap + $pro_cap;
+		return self::get_lite_capabilities() + $pro_cap;
+	}
+
+	/**
+	 * Get the list of lite plugin capabilities.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string,string>
+	 */
+	private static function get_lite_capabilities() {
+		return array(
+			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
+			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
+			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
+			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
+			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
+		);
 	}
 
 	/**
@@ -2695,13 +2710,14 @@ class FrmAppHelper {
 		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
 		$global_strings = array(
-			'updating_msg'    => __( 'Please wait while your site updates.', 'formidable' ),
-			'deauthorize'     => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
-			'url'             => self::plugin_url(),
-			'app_url'         => 'https://formidableforms.com/',
-			'applicationsUrl' => admin_url( 'admin.php?page=formidable-applications' ),
-			'loading'         => __( 'Loading&hellip;', 'formidable' ),
-			'nonce'           => wp_create_nonce( 'frm_ajax' ),
+			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
+			'deauthorize'                   => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
+			'url'                           => self::plugin_url(),
+			'app_url'                       => 'https://formidableforms.com/',
+			'applicationsUrl'               => admin_url( 'admin.php?page=formidable-applications' ),
+			'canAccessApplicationDashboard' => current_user_can( is_callable( 'FrmProApplicationsHelper::get_required_templates_capability' ) ? FrmProApplicationsHelper::get_required_templates_capability() : 'frm_edit_forms' ),
+			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
+			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
@@ -3481,6 +3497,31 @@ class FrmAppHelper {
 			}
 		);
 		self::$added_gmt_offset_filter = true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function on_form_listing_page() {
+		if ( ! self::is_admin_page( 'formidable' ) ) {
+			return false;
+		}
+
+		$action = self::simple_get( 'frm_action', 'sanitize_title' );
+		return ! $action || in_array( $action, self::get_form_listing_page_actions(), true );
+	}
+
+	/**
+	 * Get all actions that also display the forms list.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private static function get_form_listing_page_actions() {
+		return array( 'list', 'trash', 'untrash', 'destroy' );
 	}
 
 	/**

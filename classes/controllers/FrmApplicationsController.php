@@ -16,7 +16,37 @@ class FrmApplicationsController {
 	public static function menu() {
 		$label    = __( 'Applications', 'formidable' );
 		$new_pill = '<span class="frm-new-pill">NEW</span>';
-		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label . $new_pill, 'frm_edit_forms', 'formidable-applications', array( __CLASS__, 'landing_page' ) );
+		$cap      = self::get_required_capability();
+
+		if ( ! current_user_can( $cap ) && is_callable( 'FrmProApplicationsHelper::get_custom_applications_capability' ) ) {
+			$custom_applications_cap = FrmProApplicationsHelper::get_custom_applications_capability();
+			if ( current_user_can( $custom_applications_cap ) ) {
+				$cap      = $custom_applications_cap;
+				$slug     = 'edit-tags.php?taxonomy=frm_application';
+				$callback = '';
+			}
+		}
+
+		if ( ! isset( $slug ) ) {
+			$slug     = 'formidable-applications';
+			$callback = array( __CLASS__, 'landing_page' );
+		}
+
+		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label . $new_pill, $cap, $slug, $callback );
+	}
+
+	/**
+	 * Get the required capability for accessing the Applications dashboard.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_required_capability() {
+		if ( is_callable( 'FrmProApplicationsHelper::get_required_templates_capability' ) ) {
+			return FrmProApplicationsHelper::get_required_templates_capability();
+		}
+		return 'frm_edit_forms';
 	}
 
 	/**
@@ -43,14 +73,17 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
-		FrmAppHelper::permission_check( 'frm_edit_forms' );
-
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
+
 		if ( 'applications' !== $view ) {
+			FrmAppHelper::permission_check( self::get_required_capability() );
+
 			// view may be 'applications', 'templates', or empty.
 			$data['templates']  = self::get_prepared_template_data();
 			$data['categories'] = FrmApplicationTemplate::get_categories();
+		} else {
+			FrmAppHelper::permission_check( 'frm_edit_applications' );
 		}
 
 		/**
@@ -80,7 +113,14 @@ class FrmApplicationsController {
 				$locked_templates[] = $application;
 			}
 		}
-		$applications = array_merge( self::sort_templates( $unlocked_templates ), self::sort_templates( $locked_templates ) );
+
+		$unlocked_templates = self::sort_templates( $unlocked_templates );
+
+		$applications = $unlocked_templates;
+		if ( current_user_can( 'administrator' ) || current_user_can( 'frm_change_settings' ) ) {
+			$locked_templates = self::sort_templates( $locked_templates );
+			$applications     = array_merge( $applications, $locked_templates );
+		}
 
 		FrmApplicationTemplate::init();
 
