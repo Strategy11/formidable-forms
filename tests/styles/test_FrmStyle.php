@@ -4,8 +4,9 @@
  * @group styles
  */
 class test_FrmStyle extends FrmUnitTest {
+
 	/**
-	 * @covers maybe_sanitize_rgba_value
+	 * @covers FrmStyle::maybe_sanitize_rgba_value
 	 */
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();

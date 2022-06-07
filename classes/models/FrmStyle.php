@@ -89,8 +89,7 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( $color_val !== '' && ( ! strpos( $color_val, '#' ) !== 0 ) ) {
-						// maybe san					if ( $color_val !== '' && ( strpos( $color_val, '#' ) === false ) ) {
+					if ( $color_val !== '' && 0 === strpos( $color_val, 'rgb' ) ) {
 						// maybe sanitize if invalid rgba value is entered
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
@@ -118,12 +117,16 @@ class FrmStyle {
 	/**
 	 * Sanitize custom color values and convert it to valid one filling missing values.
 	 *
+	 * @since 5.3.2
+	 *
 	 * @param string $color_val, The color value, by reference.
+	 * @return void
 	 */
 	private function maybe_sanitize_rgba_value( &$color_val ) {
 		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
 			return;
 		}
+
 		$color_val = trim( $color_val );
 		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
@@ -133,7 +136,7 @@ class FrmStyle {
 		}
 
 		if ( substr( $color_val, -1 ) !== ')' ) {
-			$color_val = $color_val .= ')';
+			$color_val .= ')';
 		}
 
 		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
@@ -142,8 +145,8 @@ class FrmStyle {
 
 		// replace empty values by 0 or 1 (if alpha position).
 		foreach ( explode( ',', $color_rgba ) as $index => $value ) {
-			$new_value              = null;
-			$value_is_empty_string  = '' === trim( $value ) || '' === $value;
+			$new_value             = null;
+			$value_is_empty_string = '' === trim( $value ) || '' === $value;
 
 			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
 				// insert a value for r, g, or b
