@@ -3,6 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+if ( '' !== FrmAppHelper::get_param( 'message', '', 'get' ) ) {
+	$message = FrmAppHelper::get_param( 'message', '', 'get' );
+}
+
 if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
 		echo '<div class="frm_updated_message">';
