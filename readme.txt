@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 5.3.1
+Stable tag: 5.3.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,9 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.3.2 =
+* New: RGB and RGBA color values will now be fixed automatically on save if incomplete to avoid broken CSS.
+
 = 5.3.1 =
 * New: Unlocked application templates now appear at the top of the list of templates.
 * New: Improved the responsiveness of the cards on the Application dashboard page.
@@ -450,8 +453,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Imported views and pages with [formidable] and [display-frm-data] shortcodes will now replace old form and view ids with the new imported ids.
 * New: Imported forms will now replace the old field ids with new field ids when the id is used in a field_id shortcode option.
 * Fix: Field id values were not always properly updating when duplicating a form depending on the order of the fields.
-
-= 5.2.07 =
-* Fix: Step value validation was occasionally breaking in some cases due to rounding precision issues.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
