@@ -432,6 +432,10 @@ class FrmAppController {
 	 * @since 2.0.1
 	 */
 	public static function admin_init() {
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && 'duplicate' === FrmAppHelper::get_param( 'frm_action' ) ) {
+			FrmFormsController::duplicate();
+		}
+
 		new FrmPersonalData(); // register personal data hooks
 
 		if ( ! FrmAppHelper::doing_ajax() && self::needs_update() ) {

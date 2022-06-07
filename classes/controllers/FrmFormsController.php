@@ -238,9 +238,14 @@ class FrmFormsController {
 		$message = $params['template'] ? __( 'Form template was Successfully Created', 'formidable' ) : __( 'Form was Successfully Copied', 'formidable' );
 
 		if ( $form ) {
-			return self::get_edit_vars( $form, array(), $message, true );
-		}
+			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) );
 
+			if ( $message ) {
+				$url .= '&message=' . $message;
+			}
+
+			wp_safe_redirect( $url );
+		}
 		self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
 	}
 
@@ -1579,7 +1584,6 @@ class FrmFormsController {
 			case 'create':
 			case 'edit':
 			case 'update':
-			case 'duplicate':
 			case 'trash':
 			case 'untrash':
 			case 'destroy':
