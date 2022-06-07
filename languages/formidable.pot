@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.3.1\n"
+"Project-Id-Version: Formidable Forms 5.3.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-06-02T14:47:48+00:00\n"
+"POT-Creation-Date: 2022-06-07T18:34:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: formidable\n"
@@ -4351,20 +4351,20 @@ msgstr ""
 msgid "New Style"
 msgstr ""
 
-#: classes/models/FrmStyle.php:194
+#: classes/models/FrmStyle.php:274
 msgid "WARNING: Any changes made to this file will be lost when your Formidable settings are updated"
 msgstr ""
 
-#: classes/models/FrmStyle.php:274
+#: classes/models/FrmStyle.php:354
 msgid "Formidable Style"
 msgstr ""
 
-#: classes/models/FrmStyle.php:513
+#: classes/models/FrmStyle.php:593
 #: classes/views/styles/_field-description.php:22
 msgid "normal"
 msgstr ""
 
-#: classes/models/FrmStyle.php:516
+#: classes/models/FrmStyle.php:596
 msgid "bold"
 msgstr ""
 

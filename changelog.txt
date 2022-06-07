@@ -1,4 +1,7 @@
 == Changelog ==
+= 5.3.2 =
+* New: RGB and RGBA color values will now be fixed automatically on save if incomplete to avoid broken CSS.
+
 = 5.3.1 =
 * New: Unlocked application templates now appear at the top of the list of templates.
 * New: Improved the responsiveness of the cards on the Application dashboard page.
