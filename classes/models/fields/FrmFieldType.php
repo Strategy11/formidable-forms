@@ -1057,7 +1057,7 @@ DEFAULT_HTML;
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
-		if ( isset( $matches[1][0] ) ) {
+		if ( $aria_describedby_exists ) {
 			$describedby = 'aria-describedby="' . esc_attr( trim( $matches[1][0] ) );
 		} else {
 			$describedby = '';
