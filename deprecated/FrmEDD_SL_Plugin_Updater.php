@@ -49,8 +49,6 @@ class FrmEDD_SL_Plugin_Updater {
 		/**
 		 * Fires after the $frm_edd_plugin_data is setup.
 		 *
-		 * @since x.x.x
-		 *
 		 * @param array $frm_edd_plugin_data Array of EDD SL plugin data.
 		 */
 		do_action( 'post_edd_sl_plugin_updater_setup', $frm_edd_plugin_data );

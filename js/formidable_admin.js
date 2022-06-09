@@ -315,7 +315,10 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 function frmAdminBuildJS() {
 	//'use strict';
 
-	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
+	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
+
+	const { tag, div, span, a, svg } = frmDom;
+	const { doJsonFetch } = frmDom.ajax;
 
 	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
 		builderForm = document.getElementById( 'new_fields' ),
@@ -715,7 +718,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
-						initAutocomplete( 'page', inside );
+						frmDom.autocomplete.initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 					}
 				});
@@ -3559,26 +3562,6 @@ function frmAdminBuildJS() {
 		var wrapper = div();
 		wrapper.classList.add( 'frm_grid_container' );
 		return wrapper;
-	}
-
-	function div( atts ) {
-		var element = document.createElement( 'div' );
-		if ( 'object' === typeof atts ) {
-			if ( 'string' === typeof atts.id ) {
-				element.id = atts.id;
-			}
-			if ( 'string' === typeof atts.class ) {
-				element.className = atts.class;
-			}
-			if ( 'object' === typeof atts.child ) {
-				element.appendChild( atts.child );
-			} else if ( 'undefined' !== typeof atts.children ) {
-				atts.children.forEach( child => element.appendChild( child ) );
-			} else if ( 'undefined' !== typeof atts.text ) {
-				element.appendChild( document.createTextNode( atts.text ) );
-			}
-		}
-		return element;
 	}
 
 	function handleFieldGroupLayoutOptionClick() {
@@ -6449,7 +6432,7 @@ function frmAdminBuildJS() {
 				function( response, optName ) {
 					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
 					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
-					initAutocomplete( 'page', postParentField );
+					frmDom.autocomplete.initAutocomplete( 'page', postParentField );
 				}
 			);
 		}
@@ -7117,6 +7100,78 @@ function frmAdminBuildJS() {
 
 		dismiss.removeAttribute( 'tabindex' );
 		bindClickForDialogClose( $modal );
+
+		addApplicationsToNewFormModal( $modal.get( 0 ) );
+	}
+
+	function addApplicationsToNewFormModal( modal ) {
+		if ( modal.querySelector( '.frm-ready-made-solution' ) ) {
+			// Avoid adding duplicates if the modal is opened multiple times.
+			return;
+		}
+
+		if ( ! frmGlobal.canAccessApplicationDashboard ) {
+			// User does not have privileges to see Ready Made Solutions.
+			return;
+		}
+
+		doJsonFetch( 'get_applications_data&view=templates' ).then( addTemplatesOnFetchSuccess );
+
+		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
+
+		function addTemplatesOnFetchSuccess( data ) {
+			data.templates.forEach( addTemplateToCategoryList );
+		}
+
+		function addTemplateToCategoryList( template ) {
+			categoryList.insertBefore( getReadyMadeSolution( template ), categoryList.firstChild );
+		}
+
+		function getReadyMadeSolution( template ) {
+			const image = tag( 'img' );
+			const thumbnailFolderUrl = frmGlobal.url + '/images/applications/thumbnails/';
+			const filenameToUse = template.hasLiteThumbnail ? template.key + '.png' : 'placeholder.svg';
+			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
+
+			const imageWrapper = div({ child: image });
+			imageWrapper.style.textAlign = 'center';
+
+			return tag(
+				'li',
+				{
+					className: 'frm-searchable-template frm-ready-made-solution',
+					children: [
+						imageWrapper,
+						div({
+							children: [
+								span( __( 'Ready Made Solution', 'formidable' ) ),
+								tag( 'h3', template.name ),
+								a({
+									text: __( 'Check all applications', 'formidable' ),
+									href: frmGlobal.applicationsUrl
+								})
+							]
+						}),
+						div({
+							className: 'frm-hover-icons',
+							child: a({
+								child: svg({ href: '#frm_plus_icon' }),
+								href: frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key
+							})
+						})
+					]
+				}
+			);
+		}
+	}
+
+	function offsetModalY( $modal, amount ) {
+		const position = {
+			my: 'top',
+			at: 'top+' + amount,
+			of: window
+		};
+		$modal.dialog( 'option', 'position', position );
 	}
 
 	/**
@@ -7603,34 +7658,7 @@ function frmAdminBuildJS() {
 	}
 
 	function initiateMultiselect() {
-		jQuery( '.frm_multiselect' ).hide().each( function() {
-			var $select = jQuery( this ),
-				id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false,
-				labelledBy = id ? jQuery( '#for_' + id ) : false;
-			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
-			$select.multiselect({
-				templates: {
-					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
-					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
-					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
-				},
-				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
-				nonSelectedText: '',
-				onDropdownShown: function( event ) {
-					var action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
-					if ( action.length ) {
-						jQuery( '#wpcontent' ).on( 'click', function() {
-							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
-								jQuery( event.currentTarget ).removeClass( 'open' );
-							}
-						});
-					}
-				},
-				onChange: function( element, option ) {
-					$select.trigger( 'frm-multiselect-changed', element, option );
-				}
-			});
-		});
+		jQuery( '.frm_multiselect' ).hide().each( frmDom.bootstrap.multiselect.init );
 	}
 
 	/* Addons page */
@@ -8118,6 +8146,10 @@ function frmAdminBuildJS() {
 							installFormTrigger.setAttribute( 'rel', response.data.url );
 							installFormTrigger.click();
 							$modal.attr( 'frm-page', 'details' );
+
+							const hookName = 'frm_new_form_modal_form';
+							wp.hooks.doAction( hookName, $modal );
+
 							document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
 
 							if ( typeof response.data.urlByKey !== 'undefined' ) {
@@ -8160,6 +8192,10 @@ function frmAdminBuildJS() {
 				}
 
 				category = categories[ categoryIndex ];
+				if ( ! category.classList.contains( 'accordion-section' ) ) {
+					continue;
+				}
+
 				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
 				count = searchableTemplates.length;
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
@@ -8229,11 +8265,16 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_link' ).value = link;
 		document.getElementById( 'frm_action_type' ).value = action;
 		nameLabel.textContent = nameLabel.getAttribute( 'data-' + type );
-		descLabel.textContent = descLabel.getAttribute( 'data-' + type );
+		if ( descLabel !== null ) {
+			descLabel.textContent = descLabel.getAttribute( 'data-' + type );
+		}
 
 		document.getElementById( 'frm-create-title' ).setAttribute( 'frm-type', type );
 
 		$modal.attr( 'frm-page', 'details' );
+
+		const hookName = 'frm_new_form_modal_form';
+		wp.hooks.doAction( hookName, $modal );
 
 		if ( '' === name ) {
 			templateNameInput.focus();
@@ -8275,552 +8316,8 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function initEmbedFormModal() {
-		document.addEventListener( 'click', listenForFormEmbedClick );
-	}
-
-	function listenForFormEmbedClick( event ) {
-		var clicked = false;
-
-		const element = event.target;
-		const tag = element.tagName.toLowerCase();
-
-		switch ( tag ) {
-			case 'a':
-				clicked = 'frm-embed-action' === element.id || element.classList.contains( 'frm-embed-form' );
-				break;
-
-			case 'svg':
-				clicked = element.parentNode.classList.contains( 'frm-embed-form' );
-				break;
-		}
-
-		if ( clicked ) {
-			event.preventDefault();
-
-			const row = element.closest( 'tr' );
-			let formId, formKey;
-
-			if ( row ) {
-				formId = parseInt( row.querySelector( '.column-id' ).textContent );
-				formKey = row.querySelector( '.column-form_key' ).textContent;
-			} else {
-				formId = document.getElementById( 'form_id' ).value;
-
-				const formKeyInput = document.getElementById( 'frm_form_key' );
-				if ( formKeyInput ) {
-					formKey = formKeyInput.value;
-				} else {
-					const previewDrop = document.getElementById( 'frm-previewDrop' );
-					if ( previewDrop ) {
-						formKey = previewDrop.nextElementSibling.querySelector( '.dropdown-item a' ).getAttribute( 'href' ).split( 'form=' )[1];
-					}
-				}
-			}
-
-			openFormEmbedModal( formId, formKey );
-		}
-	}
-
-	function openFormEmbedModal( formId, formKey ) {
-		const modalId = 'frm_form_embed_modal';
-
-		let modal = document.getElementById( modalId );
-
-		if ( ! modal ) {
-			modal = createEmptyModal( modalId );
-			modal.classList.add( 'frm_common_modal' );
-
-			const title = div({ child: document.createTextNode( __( 'Embed form', 'formidable' ) ), class: 'frm-modal-title' });
-
-			const a = document.createElement( 'a' );
-			a.textContent = __( 'Cancel', 'formidable' );
-			a.className = 'dismiss';
-
-			const postbox = modal.querySelector( '.postbox' );
-
-			postbox.appendChild(
-				div({
-					class: 'frm_modal_top',
-					children: [
-						title,
-						div({ child: a })
-					]
-				})
-			);
-			postbox.appendChild(
-				div({ class: 'frm_modal_content' })
-			);
-			postbox.appendChild(
-				div({ class: 'frm_modal_footer' })
-			);
-		} else {
-			modal.classList.remove( 'frm-on-page-2' );
-		}
-
-		const content = modal.querySelector( '.frm_modal_content' );
-		content.innerHTML = '';
-		content.appendChild( getEmbedFormModalOptions( formId, formKey ) );
-
-		const footer = modal.querySelector( '.frm_modal_footer' );
-		if ( ! footer.querySelector( 'a' ) ) {
-			const doneButton = document.createElement( 'a' );
-			doneButton.textContent = __( 'Done', 'formidable' );
-			doneButton.className = 'button button-primary frm-button-primary dismiss';
-			doneButton.href = '#';
-			footer.appendChild( doneButton );
-
-			const cancelButton = document.createElement( 'a' );
-			cancelButton.href = '#';
-			cancelButton.className = 'button button-secondary frm-modal-cancel';
-			cancelButton.textContent = __( 'Back', 'formidable' );
-			cancelButton.addEventListener(
-				'click',
-				function( event ) {
-					event.preventDefault();
-					openFormEmbedModal( formId, formKey );
-				}
-			);
-			footer.appendChild( cancelButton );
-		} else {
-			const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
-			doneButton.textContent = __( 'Done', 'formidable' );
-			doneButton.parentNode.replaceChild( doneButton.cloneNode( true ), doneButton );
-		}
-
-		const $modal = jQuery( modal );
-		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
-			initModal( $modal );
-		}
-
-		offsetModalY( $modal, '50px' );
-
-		scrollToTop();
-		$modal.dialog( 'open' );
-
-		$modal.parent().addClass( 'frm-embed-form-modal-wrapper' );
-	}
-
-	function createEmptyModal( id ) {
-		const modal = div({ id: id, class: 'frm-modal' });
-		const postbox = div({ class: 'postbox' });
-		const metaboxHolder = div({ class: 'metabox-holder', child: postbox });
-		modal.appendChild( metaboxHolder );
-		document.body.appendChild( modal );
-		return modal;
-	}
-
-	function scrollToTop() {
-		if ( 'scrollRestoration' in history ) {
-			history.scrollRestoration = 'manual';
-		}
-		window.scrollTo( 0, 0 );
-	}
-
-	function offsetModalY( $modal, amount ) {
-		const position = {
-			my: 'top',
-			at: 'top+' + amount,
-			of: window
-		};
-		$modal.dialog( 'option', 'position', position );
-	}
-
-	function getEmbedFormModalOptions( formId, formKey ) {
-		const content = div({ class: 'frm_embed_form_content frm_wrap' });
-
-		const options = [
-			{
-				icon: 'frm_select_existing_page_icon',
-				label: __( 'Select existing page', 'formidable' ),
-				description: __( 'Embed your form into an existing page.', 'formidable' ),
-				callback: () => {
-					content.innerHTML = '';
-
-					const spinner = document.createElement( 'span' );
-					spinner.className = 'frm-wait frm_spinner';
-					spinner.style.visibility = 'visible';
-					content.appendChild( spinner );
-
-					const gap = div();
-					gap.style.height = '20px';
-					content.appendChild( gap );
-
-					content.classList.add( 'frm-loading-page-options' );
-
-					jQuery.ajax({
-						type: 'POST',
-						url: ajaxurl,
-						data: {
-							action: 'get_page_dropdown',
-							nonce: frmGlobal.nonce
-						},
-						dataType: 'json',
-						success: function( response ) {
-							if ( 'object' === typeof response && 'string' === typeof response.html ) {
-								content.classList.remove( 'frm-loading-page-options' );
-								content.innerHTML = '';
-
-								const title = getLabel( __( 'Select the page you want to embed your form into.', 'formidable' ) );
-								title.setAttribute( 'for', 'frm_page_dropdown' );
-								content.appendChild( title );
-
-								let editPageUrl;
-
-								const modal = document.getElementById( 'frm_form_embed_modal' );
-								doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
-								doneButton.classList.remove( 'dismiss' );
-								doneButton.textContent = __( 'Insert Form', 'formidable' );
-								doneButton.addEventListener(
-									'click',
-									function( event ) {
-										event.preventDefault();
-
-										const pageDropdown = modal.querySelector( '[name="frm_page_dropdown"]' );
-										modal.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
-
-										const pageId = pageDropdown.value;
-
-										if ( '0' === pageId || '' === pageId ) {
-											const error = div({ class: 'frm_error_style' });
-											error.setAttribute( 'role', 'alert' );
-											error.textContent = __( 'Please select a page', 'formidable' );
-											content.insertBefore( error, title.nextElementSibling );
-											return;
-										}
-
-										window.location.href = editPageUrl.replace( 'post=0', 'post=' + pageId );
-									}
-								);
-
-								const dropdownWrapper = div();
-								dropdownWrapper.innerHTML = response.html;
-								content.appendChild( dropdownWrapper );
-								editPageUrl = response.edit_page_url + '&frmForm=' + formId;
-								initSelectionAutocomplete();
-							}
-						}
-					});
-				}
-			},
-			{
-				icon: 'frm_create_new_page_icon',
-				label: __( 'Create new page', 'formidable' ),
-				description: __( 'Put your form on a newly created page.', 'formidable' ),
-				callback: () => {
-					content.innerHTML = '';
-
-					const wrapper = div({ class: 'field-group' });
-					const form = document.createElement( 'form' );
-
-					const createPageWithShortcode = () => {
-						jQuery.ajax({
-							type: 'POST',
-							url: ajaxurl,
-							data: {
-								action: 'frm_create_page_with_shortcode',
-								form_id: formId,
-								name: input.value,
-								nonce: frmGlobal.nonce
-							},
-							dataType: 'json',
-							success: function( response ) {
-								if ( 'object' === typeof response && 'string' === typeof response.redirect ) {
-									window.location.href = response.redirect;
-								}
-							}
-						});
-					};
-
-					form.addEventListener(
-						'submit',
-						function( event ) {
-							event.preventDefault();
-							createPageWithShortcode();
-							return false;
-						},
-						true
-					);
-
-					const title = getLabel( __( 'What will you call the new page?', 'formidable' ) );
-					title.setAttribute( 'for', 'frm_name_your_page' );
-					form.appendChild( title );
-
-					const input = document.createElement( 'input' );
-					input.id = 'frm_name_your_page';
-					input.placeholder = __( 'Name your page', 'formidable' );
-					form.appendChild( input );
-
-					wrapper.appendChild( form );
-					content.appendChild( wrapper );
-
-					input.type = 'text';
-					input.focus();
-
-					const modal = document.getElementById( 'frm_form_embed_modal' );
-					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
-					doneButton.textContent = __( 'Create page', 'formidable' );
-					doneButton.addEventListener(
-						'click',
-						function( event ) {
-							event.preventDefault();
-							createPageWithShortcode();
-						}
-					);
-				}
-			},
-			{
-				icon: 'frm_insert_manually_icon',
-				label: __( 'Insert manually', 'formidable' ),
-				description: __( 'Use WP shortcodes or PHP code to put the form in any place.', 'formidable' ),
-				callback: () => {
-					content.innerHTML = '';
-					getEmbedFormManualExamples( formId, formKey ).forEach( example => content.appendChild( getEmbedExample( example ) ) );
-				}
-			}
-		];
-
-		options.forEach(
-			option => content.appendChild( getEmbedFormModalOption( option ) )
-		);
-
-		return content;
-	}
-
-	function getEmbedFormModalOption({ icon, label, description, callback }) {
-		const output = div();
-		output.appendChild( wrapEmbedFormModalOptionIcon( icon ) );
-		output.className = 'frm-embed-modal-option';
-		output.setAttribute( 'tabindex', 0 );
-		output.setAttribute( 'role', 'button' );
-
-		const textWrapper = div();
-		textWrapper.appendChild( getLabel( label ) );
-		textWrapper.appendChild( div({ text: description }) );
-		output.appendChild( textWrapper );
-
-		output.addEventListener(
-			'click',
-			function() {
-				document.getElementById( 'frm_form_embed_modal' ).classList.add( 'frm-on-page-2' );
-				callback();
-			}
-		);
-		return output;
-	}
-
-	function wrapEmbedFormModalOptionIcon( sourceIconId ) {
-		const clone = document.getElementById( sourceIconId ).cloneNode( true );
-		const wrapper = div({ child: clone });
-		wrapper.className = 'frm-embed-form-icon-wrapper';
-		return wrapper;
-	}
-
-	function getEmbedFormManualExamples( formId, formKey ) {
-		let examples = [
-			{
-				label: __( 'WordPress shortcode', 'formidable' ),
-				example: '[formidable id=' + formId + ' title=true description=true]',
-				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
-				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
-			},
-			{
-				label: __( 'Use PHP code', 'formidable' ),
-				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => true, \'description\' => true ) ); ?>'
-			}
-		];
-
-		const filterArgs = { formId, formKey };
-		examples = frmAdminBuild.hooks.applyFilters( 'frmEmbedFormExamples', examples, filterArgs );
-
-		return examples;
-	}
-
-	function getEmbedExample({ label, example, link, linkLabel }) {
-		let unique, element, labelElement, exampleElement, linkElement;
-
-		unique = getAutoId();
-		element = div();
-
-		labelElement = getLabel( label );
-		labelElement.id = 'frm_embed_example_label_' + unique;
-		element.appendChild( labelElement );
-
-		if ( example.length > 80 ) {
-			exampleElement = document.createElement( 'textarea' );
-		} else {
-			exampleElement = document.createElement( 'input' );
-			exampleElement.type = 'text';
-		}
-
-		exampleElement.id = 'frm_embed_example_' + unique;
-		exampleElement.className = 'frm_embed_example';
-		exampleElement.value = example;
-		exampleElement.readOnly = true;
-		exampleElement.setAttribute( 'tabindex', -1 );
-
-		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
-			linkElement = document.createElement( 'a' );
-			linkElement.href = link;
-			linkElement.textContent = linkLabel;
-			linkElement.setAttribute( 'target', '_blank' );
-			element.appendChild( linkElement );
-		}
-
-		element.appendChild( exampleElement );
-		element.appendChild( getCopyIcon( label ) );
-
-		return element;
-	}
-
-	function getLabel( text ) {
-		const label = document.createElement( 'label' );
-		label.textContent = text;
-		return label;
-	}
-
-	function getCopyIcon( label ) {
-		const icon = document.getElementById( 'frm_copy_embed_form_icon' );
-		let clone = icon.cloneNode( true );
-		clone.id = 'frm_copy_embed_' + getAutoId();
-		clone.setAttribute( 'tabindex', 0 );
-		clone.setAttribute( 'role', 'button' );
-		/* translators: %s: Example type (ie. WordPress shortcode, API Form script) */
-		clone.setAttribute( 'aria-label', __( 'Copy %s', 'formidable' ).replace( '%s', label ) );
-		clone.addEventListener(
-			'click',
-			() => copyExampleToClipboard( clone.parentNode.querySelector( '.frm_embed_example' ) )
-		);
-		return clone;
-	}
-
-	function copyExampleToClipboard( example ) {
-		let copySuccess;
-
-		example.focus();
-		example.select();
-		example.setSelectionRange( 0, 99999 );
-
-		try {
-			copySuccess = document.execCommand( 'copy' );
-		} catch ( error ) {
-			copySuccess = false;
-		}
-
-		if ( copySuccess ) {
-			speak( __( 'Successfully copied embed example', 'formidable' ) );
-		}
-
-		return copySuccess;
-	}
-
-	function speak( message ) {
-		let element, id;
-
-		element = document.createElement( 'div' );
-		id = 'speak-' + Date.now();
-
-		element.setAttribute( 'aria-live', 'assertive' );
-		element.setAttribute( 'id', id );
-		element.className = 'frm_screen_reader frm_hidden';
-		element.textContent = message;
-		document.body.appendChild( element );
-
-		setTimeout(
-			function() {
-				document.body.removeChild( element );
-			},
-			1000
-		);
-	}
-
 	function initSelectionAutocomplete() {
-		if ( jQuery.fn.autocomplete ) {
-			initAutocomplete( 'page' );
-			initAutocomplete( 'user' );
-		}
-	}
-
-	/**
-	 * Init autocomplete.
-	 *
-	 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
-	 *
-	 * @param {String} type Type of data. Accepts `page` or `user`.
-	 * @param {String|Object} container Container class or element. Default is null.
-	 */
-	function initAutocomplete( type, container ) {
-		const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
-		const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
-
-		elements.each( function() {
-			let urlParams = basedUrlParams;
-			const element = jQuery( this );
-
-			// Check if a custom post type is specific.
-			if ( element.attr( 'data-post-type' ) ) {
-				urlParams += '&post_type=' + element.attr( 'data-post-type' );
-			}
-			element.autocomplete({
-				delay: 100,
-				minLength: 0,
-				source: ajaxurl + urlParams,
-				change: autoCompleteSelectBlank,
-				select: autoCompleteSelectFromResults,
-				focus: autoCompleteFocus,
-				position: {
-					my: 'left top',
-					at: 'left bottom',
-					collision: 'flip'
-				},
-				response: function( event, ui ) {
-					if ( ! ui.content.length ) {
-						var noResult = { value: '', label: frm_admin_js.no_items_found };
-						ui.content.push( noResult );
-					}
-				},
-				create: function() {
-					var $container = jQuery( this ).parent();
-
-					if ( $container.length === 0 ) {
-						$container = 'body';
-					}
-
-					jQuery( this ).autocomplete( 'option', 'appendTo', $container );
-				}
-			})
-			.on( 'focus', function() {
-				// Show options on click to make it work more like a dropdown.
-				if ( this.value === '' || this.nextElementSibling.value < 1 ) {
-					jQuery( this ).autocomplete( 'search', this.value );
-				}
-			});
-		});
-	}
-
-	/**
-	 * Prevent the value from changing when using keyboard to scroll.
-	 */
-	function autoCompleteFocus() {
-		return false;
-	}
-
-	function autoCompleteSelectBlank( e, ui ) {
-		if ( ui.item === null ) {
-			this.nextElementSibling.value = '';
-		}
-	}
-
-	function autoCompleteSelectFromResults( e, ui ) {
-		e.preventDefault();
-
-		if ( ui.item.value === '' ) {
-			this.value = '';
-		} else {
-			this.value = ui.item.label;
-		}
-
-		this.nextElementSibling.value = ui.item.value;
+		frmDom.autocomplete.initSelectionAutocomplete();
 	}
 
 	function nextInstallStep( thisStep ) {
@@ -8869,13 +8366,12 @@ function frmAdminBuildJS() {
 	}
 
 	function installNewForm( form, action, button ) {
-		var data, redirect, href, showError,
-			formData = formToData( form ),
-			formName = formData.template_name,
-			formDesc = formData.template_desc,
-			link = form.elements.link.value;
+		const formData = formToData( form );
+		const formName = formData.template_name;
+		const formDesc = formData.template_desc;
+		const link = form.elements.link.value;
 
-		data = {
+		let data = {
 			action: action,
 			xml: link,
 			name: formName,
@@ -8883,13 +8379,18 @@ function frmAdminBuildJS() {
 			form: JSON.stringify( formData ),
 			nonce: frmGlobal.nonce
 		};
+
+		const hookName = 'frm_before_install_new_form';
+		const filterArgs = { formData };
+		data = wp.hooks.applyFilters( hookName, data, filterArgs );
+
 		postAjax( data, function( response ) {
-			redirect = response.redirect;
-			if ( typeof redirect !== 'undefined' ) {
+			if ( typeof response.redirect !== 'undefined' ) {
+				const redirect = response.redirect;
 				if ( typeof form.elements.redirect === 'undefined' ) {
 					window.location = redirect;
 				} else {
-					href = document.getElementById( 'frm-redirect-link' );
+					const href = document.getElementById( 'frm-redirect-link' );
 					if ( typeof link !== 'undefined' && href !== null ) {
 						// Show the next installation step.
 						href.setAttribute( 'href', redirect );
@@ -8903,7 +8404,7 @@ function frmAdminBuildJS() {
 
 				// Show response.message
 				if ( response.message && typeof form.elements.show_response !== 'undefined' ) {
-					showError = document.getElementById( form.elements.show_response.value );
+					const showError = document.getElementById( form.elements.show_response.value );
 					if ( showError !== null ) {
 						showError.innerHTML = response.message;
 						showError.classList.remove( 'frm_hidden' );
@@ -9004,10 +8505,10 @@ function frmAdminBuildJS() {
 	}
 
 	function postAjax( data, success ) {
-		var response, params,
-			xmlHttp = new XMLHttpRequest();
+		let response;
 
-		params = typeof data === 'string' ? data : Object.keys( data ).map(
+		const xmlHttp = new XMLHttpRequest();
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[k]);
 			}
@@ -9339,14 +8840,7 @@ function frmAdminBuildJS() {
 	}
 
 	function debounce( func, wait = 100 ) {
-		let timeout;
-		return function( ...args ) {
-			clearTimeout( timeout );
-			timeout = setTimeout(
-				() => func.apply( this, args ),
-				wait
-			);
-		};
+		return frmDom.util.debounce( func, wait );
 	}
 
 	return {
@@ -9411,7 +8905,6 @@ function frmAdminBuildJS() {
 			}
 
 			loadTooltips();
-			initEmbedFormModal();
 			initUpgradeModal();
 
 			// used on build, form settings, and view settings
@@ -9472,6 +8965,39 @@ function frmAdminBuildJS() {
 			jQuery( 'button, input[type=submit]' ).on( 'click', removeWPUnload );
 
 			addMultiselectLabelListener();
+
+			frmAdminBuild.hooks.addFilter(
+				'frm_before_embed_modal',
+				( ids, { element, type }) => {
+					if ( 'form' !== type ) {
+						return ids;
+					}
+
+					let formId, formKey;
+					const row = element.closest( 'tr' );
+
+					if ( row ) {
+						// Embed icon on form index.
+						formId = parseInt( row.querySelector( '.column-id' ).textContent );
+						formKey = row.querySelector( '.column-form_key' ).textContent;
+					} else {
+						// Embed button in form builder / form settings.
+						formId = document.getElementById( 'form_id' ).value;
+
+						const formKeyInput = document.getElementById( 'frm_form_key' );
+						if ( formKeyInput ) {
+							formKey = formKeyInput.value;
+						} else {
+							const previewDrop = document.getElementById( 'frm-previewDrop' );
+							if ( previewDrop ) {
+								formKey = previewDrop.nextElementSibling.querySelector( '.dropdown-item a' ).getAttribute( 'href' ).split( 'form=' )[1];
+							}
+						}
+					}
+
+					return [ formId, formKey ];
+				}
+			);
 		},
 
 		buildInit: function() {
@@ -10195,38 +9721,13 @@ function frmAdminBuildJS() {
 
 frmAdminBuild = frmAdminBuildJS();
 
-jQuery( document ).ready( function() {
-	frmAdminBuild.init();
+jQuery( document ).ready(
+	() => {
+		frmAdminBuild.init();
 
-	updateDropdownsForBootstrap4();
-	function updateDropdownsForBootstrap4() {
-		if ( ! bootstrap || ! bootstrap.Dropdown ) {
-			return;
-		}
-
-		bootstrap.Dropdown._getParentFromElement = getParentFromElement;
-		bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
-
-		function getParentFromElement( element ) {
-			let parent;
-			const selector = bootstrap.Util.getSelectorFromElement( element );
-
-			if ( selector ) {
-				parent = document.querySelector( selector );
-			}
-
-			const result = parent || element.parentNode;
-			const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
-
-			if ( ! frmDropdownMenu ) {
-				// Not a formidable dropdown, treat like Bootstrap does normally.
-				return result;
-			}
-
-			// Temporarily add dropdown-menu class so bootstrap can initialize.
-			frmDropdownMenu.classList.add( 'dropdown-menu' );
-
-			const toggle = result.querySelector( '.frm-dropdown-toggle' );
+		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
+		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
+			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
 				if ( ! toggle.hasAttribute( 'role' ) ) {
 					toggle.setAttribute( 'role', 'button' );
@@ -10240,15 +9741,6 @@ jQuery( document ).ready( function() {
 			if ( 'UL' === frmDropdownMenu.tagName ) {
 				convertBootstrapUl( frmDropdownMenu );
 			}
-
-			setTimeout(
-				function() {
-					frmDropdownMenu.classList.remove( 'dropdown-menu' );
-				},
-				0
-			);
-
-			return result;
 		}
 
 		function convertBootstrapUl( ul ) {
@@ -10261,7 +9753,7 @@ jQuery( document ).ready( function() {
 			ul.outerHTML = html;
 		}
 	}
-});
+);
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
@@ -10343,20 +9835,4 @@ function frmImportCsv( formID ) {
 			}
 		}
 	});
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
-if ( ! String.prototype.trim ) {
-  String.prototype.trim = function() {
-    return this.replace( /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '' );
-  };
-}
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
-if ( ! String.prototype.startsWith ) {
-    Object.defineProperty( String.prototype, 'startsWith', {
-        value: function( search, pos ) {
-            pos = ! pos || pos < 0 ? 0 : +pos;
-            return this.substring( pos, pos + search.length ) === search;
-        }
-    });
 }

@@ -88,7 +88,12 @@ class FrmStyle {
 				}
 
 				if ( $this->is_color( $setting ) ) {
-					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $new_instance['post_content'][ $setting ] );
+					$color_val = $new_instance['post_content'][ $setting ];
+					if ( $color_val !== '' && 0 === strpos( $color_val, 'rgb' ) ) {
+						// maybe sanitize if invalid rgba value is entered
+						$this->maybe_sanitize_rgba_value( $color_val );
+					}
+					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $color_val );
 				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) )
 					&& ! isset( $new_instance['post_content'][ $setting ] )
 					) {
@@ -107,6 +112,81 @@ class FrmStyle {
 		$this->save_settings();
 
 		return $action_ids;
+	}
+
+	/**
+	 * Sanitize custom color values and convert it to valid one filling missing values.
+	 *
+	 * @since 5.3.2
+	 *
+	 * @param string $color_val, The color value, by reference.
+	 * @return void
+	 */
+	private function maybe_sanitize_rgba_value( &$color_val ) {
+		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
+			return;
+		}
+
+		$color_val = trim( $color_val );
+		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $color_val ) === 1 ) {
+				return;
+			}
+		}
+
+		if ( substr( $color_val, -1 ) !== ')' ) {
+			$color_val .= ')';
+		}
+
+		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
+		$length_of_color_codes = strpos( $color_val, '(' );
+		$new_color_values      = array();
+
+		// replace empty values by 0 or 1 (if alpha position).
+		foreach ( explode( ',', $color_rgba ) as $index => $value ) {
+			$new_value             = null;
+			$value_is_empty_string = '' === trim( $value ) || '' === $value;
+
+			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
+				// insert a value for r, g, or b
+				if ( $value < 0 ) {
+					$new_value = 0;
+				} elseif ( $value > 255 ) {
+					$new_value = 255;
+				} elseif ( $value_is_empty_string ) {
+					$new_value = 0;
+				}
+			} else {
+				// insert a value for alpha
+				if ( $value_is_empty_string ) {
+					$new_value = 4 === $length_of_color_codes ? 1 : 0;
+				} elseif ( $value > 1 || $value < 0 ) {
+					$new_value = 1;
+				}
+			}
+
+			$new_color_values[] = null === $new_value ? $value : $new_value;
+		}
+
+		// add more 0s and 1 (if alpha position) if needed.
+		$missing_values = $length_of_color_codes - count( $new_color_values );
+		if ( $missing_values > 1 ) {
+			$insert_values = array_fill( 0, $missing_values - 1, 0 );
+			$last_value    = 4 === $length_of_color_codes ? 1 : 0;
+			array_push( $insert_values, $last_value );
+		} elseif ( $missing_values === 1 ) {
+			$insert_values = 4 === $length_of_color_codes ? array( 1 ) : array( 0 );
+		}
+		if ( ! empty( $insert_values ) ) {
+			$new_color_values = array_merge( $new_color_values, $insert_values );
+		}
+
+		$new_color = implode( ',', $new_color_values );
+		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
+		$new_color = $prefix . $new_color . ')';
+
+		$color_val = $new_color;
 	}
 
 	/**
@@ -384,7 +464,7 @@ class FrmStyle {
 			'form_desc_margin_bottom' => '25px',
 			'form_desc_padding'       => '0',
 
-			'font'            => '"Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif',
+			'font'            => '',
 			'font_size'       => '15px',
 			'label_color'     => '3f4b5b',
 			'weight'          => 'normal',

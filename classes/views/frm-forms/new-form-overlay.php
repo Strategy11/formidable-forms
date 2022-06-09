@@ -3,11 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_new_form_modal" class="frm_hidden frm_common_modal <?php echo esc_attr( $modal_class ); ?>" frm-page="create">
+<div id="frm_new_form_modal" class="frm_hidden frm-modal frm_common_modal <?php echo esc_attr( $modal_class ); ?>" frm-page="create">
 	<div class="metabox-holder">
 		<div class="postbox">
-			<div>
-				<div>
+			<div class="frm_modal_top">
+				<div class="frm-modal-title">
 					<span role="button" class="frm-modal-back" title="<?php esc_html_e( 'Back', 'formidable' ); ?>">
 						<svg class="frmsvg">
 							<use xlink:href="#frm_back"></use>
@@ -49,14 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
 					</p>
 
-					<p>
-						<label for="frm_template_desc" id="frm_new_desc" data-template="<?php esc_attr_e( 'Template Description', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Description', 'formidable' ); ?>">
-							<?php esc_html_e( 'Form Description', 'formidable' ); ?>
-						</label>
-						<span class="frm-sub-label"><?php esc_html_e( '(optional)', 'formidable' ); ?></span>
-						<br/>
-						<textarea name="template_desc" id="frm_template_desc" class="frm_long_input"></textarea>
-					</p>
+					<input type="hidden" name="template_desc" id="frm_template_desc" />
 					<input type="hidden" name="link" id="frm_link" value="" />
 					<input type="hidden" name="type" id="frm_action_type" value="frm_install_template" />
 

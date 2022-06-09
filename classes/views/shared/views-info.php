@@ -14,21 +14,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 			)
 		);
 		?>
-		<div class="frmcenter" style="margin-top:10vh">
-			<div class="frm-video-wrapper">
-				<iframe width="843" height="474" src="https://www.youtube.com/embed/3T-WMIvYadg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<div style="overflow-y: auto;">
+			<div class="frmcenter" style="margin-top:10vh; padding-bottom: 32px;">
+				<div class="frm-video-wrapper">
+					<iframe width="843" height="474" src="https://www.youtube.com/embed/pmYbQ79wonQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+				<h2><?php esc_html_e( 'Show and Edit Entries with Views', 'formidable' ); ?></h2>
+				<p style="max-width:400px;margin:20px auto">
+					<?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?>
+				</p>
+				<?php
+				$upgrade_link_args = array(
+					'medium' => 'views-info',
+					'plan'   => 'view',
+				);
+				FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
+				?>
 			</div>
-			<h2><?php esc_html_e( 'Show and Edit Entries with Views', 'formidable' ); ?></h2>
-			<p style="max-width:400px;margin:20px auto">
-				<?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?>
-			</p>
-			<?php
-			$upgrade_link_args = array(
-				'medium' => 'views-info',
-				'plan'   => 'view',
-			);
-			FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
-			?>
 		</div>
 	</div>
 </div>

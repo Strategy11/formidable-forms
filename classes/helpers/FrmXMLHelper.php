@@ -88,7 +88,7 @@ class FrmXMLHelper {
 		if ( ! isset( $imported['form_status'] ) || empty( $imported['form_status'] ) ) {
 			// Check for an error message in the XML.
 			if ( isset( $xml->Code ) && isset( $xml->Message ) ) { // phpcs:ignore WordPress.NamingConventions
-				$imported['error'] = reset( $xml->Message ); // phpcs:ignore WordPress.NamingConventions
+				$imported['error'] = (string) $xml->Message; // phpcs:ignore WordPress.NamingConventions
 			}
 		}
 
@@ -746,6 +746,9 @@ class FrmXMLHelper {
 			'frm_styles'      => 'styles',
 		);
 
+		$view_ids              = array();
+		$posts_with_shortcodes = array();
+
 		foreach ( $views as $item ) {
 			$post = array(
 				'post_title'     => (string) $item->title,
@@ -770,19 +773,21 @@ class FrmXMLHelper {
 				'tax_input'      => array(),
 			);
 
+			$post['post_content'] = self::switch_form_ids( $post['post_content'], $imported['forms'] );
+
 			$old_id = $post['post_id'];
 			self::populate_post( $post, $item, $imported );
 
 			unset( $item );
 
 			$post_id = false;
-			if ( $post['post_type'] == $form_action_type ) {
+			if ( $post['post_type'] === $form_action_type ) {
 				$action_control = FrmFormActionsController::get_form_actions( $post['post_excerpt'] );
 				if ( $action_control && is_object( $action_control ) ) {
 					$post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
 				}
 				unset( $action_control );
-			} elseif ( $post['post_type'] == 'frm_styles' ) {
+			} elseif ( $post['post_type'] === 'frm_styles' ) {
 				// Properly encode post content before inserting the post
 				$post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
 				$custom_css           = isset( $post['post_content']['custom_css'] ) ? $post['post_content']['custom_css'] : '';
@@ -803,6 +808,10 @@ class FrmXMLHelper {
 				continue;
 			}
 
+			if ( false !== strpos( $post['post_content'], '[frm-display-data' ) || false !== strpos( $post['post_content'], '[formidable' ) ) {
+				$posts_with_shortcodes[ $post_id ] = $post;
+			}
+
 			self::update_postmeta( $post, $post_id );
 			self::update_layout( $post, $post_id );
 
@@ -819,14 +828,113 @@ class FrmXMLHelper {
 
 			$imported['posts'][ (int) $old_id ] = $post_id;
 
+			if ( $post['post_type'] === 'frm_display' ) {
+				$view_ids[ (int) $old_id ] = $post_id;
+			}
+
 			do_action( 'frm_after_import_view', $post_id, $post );
 
 			unset( $post );
 		}
 
+		if ( $posts_with_shortcodes && $view_ids ) {
+			self::maybe_switch_view_ids_after_importing_posts( $posts_with_shortcodes, $view_ids );
+		}
+		unset( $posts_with_shortcodes, $view_ids );
+
 		self::maybe_update_stylesheet( $imported );
 
 		return $imported;
+	}
+
+	/**
+	 * Replace old form ids with new ones in a string.
+	 *
+	 * @param string     $string
+	 * @param array<int> $form_ids new form ids indexed by old form id.
+	 * @return string
+	 */
+	private static function switch_form_ids( $string, $form_ids ) {
+		if ( false === strpos( $string, '[formidable' ) ) {
+			// Skip string replacing if there are no form shortcodes in string.
+			return $string;
+		}
+
+		foreach ( $form_ids as $old_id => $new_id ) {
+			$string = str_replace(
+				array(
+					'[formidable id="' . $old_id . '"',
+					'[formidable id=' . $old_id . ']',
+					'[formidable id=' . $old_id . ' ',
+					'"formId":"' . $old_id . '"',
+				),
+				array(
+					'[formidable id="' . $new_id . '"',
+					'[formidable id=' . $new_id . ']',
+					'[formidable id=' . $new_id . ' ',
+					'"formId":"' . $new_id . '"',
+				),
+				$string
+			);
+		}
+
+		return $string;
+	}
+
+	/**
+	 * @param array<array> $posts_with_shortcodes indexed by current post id.
+	 * @param array<int>   $view_ids new view ids indexed by old view id.
+	 * @return void
+	 */
+	private static function maybe_switch_view_ids_after_importing_posts( $posts_with_shortcodes, $view_ids ) {
+		foreach ( $posts_with_shortcodes as $imported_post_id => $post ) {
+			$post_content = self::switch_view_ids( $post['post_content'], $view_ids );
+			if ( $post_content === $post['post_content'] ) {
+				continue;
+			}
+
+			wp_update_post(
+				array(
+					'ID'           => $imported_post_id,
+					'post_content' => $post_content,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Replace old view ids with new ones in a string.
+	 *
+	 * @param string     $string
+	 * @param array<int> $view_ids new view ids indexed by old view id.
+	 * @return string
+	 */
+	private static function switch_view_ids( $string, $view_ids ) {
+		if ( false === strpos( $string, '[display-frm-data' ) ) {
+			// Skip string replacing if there are no view shortcodes in string.
+			return $string;
+		}
+
+		foreach ( $view_ids as $old_id => $new_id ) {
+			$string = str_replace(
+				array(
+					'[display-frm-data id="' . $old_id . '"',
+					'[display-frm-data id=' . $old_id . ']',
+					'[display-frm-data id=' . $old_id . ' ',
+					'"viewId":"' . $old_id . '"',
+				),
+				array(
+					'[display-frm-data id="' . $new_id . '"',
+					'[display-frm-data id=' . $new_id . ']',
+					'[display-frm-data id=' . $new_id . ' ',
+					'"viewId":"' . $new_id . '"',
+				),
+				$string
+			);
+			unset( $old_id, $new_id );
+		}
+
+		return $string;
 	}
 
 	/**
@@ -1108,10 +1216,22 @@ class FrmXMLHelper {
 		} else {
 			self::add_form_link_to_message( $result, $message );
 
+			/**
+			 * @since 5.3
+			 *
+			 * @param string $message
+			 * @param array  $result
+			 */
+			$message  = apply_filters( 'frm_xml_parsed_message', $message, $result );
 			$message .= '</ul>';
 		}
 	}
 
+	/**
+	 * @param int           $m
+	 * @param string        $type
+	 * @param array<string> $s_message
+	 */
 	public static function item_count_message( $m, $type, &$s_message ) {
 		if ( ! $m ) {
 			return;
@@ -1127,7 +1247,7 @@ class FrmXMLHelper {
 			/* translators: %1$s: Number of items */
 			'views'   => sprintf( _n( '%1$s View', '%1$s Views', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
-			'posts'   => sprintf( _n( '%1$s Post', '%1$s Posts', $m, 'formidable' ), $m ),
+			'posts'   => sprintf( _n( '%1$s Page/Post', '%1$s Pages/Posts', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
 			'styles'  => sprintf( _n( '%1$s Style', '%1$s Styles', $m, 'formidable' ), $m ),
 			/* translators: %1$s: Number of items */
@@ -1136,7 +1256,21 @@ class FrmXMLHelper {
 			'actions' => sprintf( _n( '%1$s Form Action', '%1$s Form Actions', $m, 'formidable' ), $m ),
 		);
 
-		$s_message[] = isset( $strings[ $type ] ) ? $strings[ $type ] : ' ' . $m . ' ' . ucfirst( $type );
+		if ( isset( $strings[ $type ] ) ) {
+			$s_message[] = $strings[ $type ];
+		} else {
+			$string = ' ' . $m . ' ' . ucfirst( $type );
+
+			/**
+			 * @since 5.3
+			 *
+			 * @param string $string Message string for imported item.
+			 * @param int    $m      Number of item that was imported.
+			 * }
+			 */
+			$string      = apply_filters( 'frm_xml_' . $type . '_count_message', $string, $m );
+			$s_message[] = $string;
+		}
 	}
 
 	/**

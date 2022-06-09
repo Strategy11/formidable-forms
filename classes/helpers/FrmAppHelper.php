@@ -4,14 +4,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
-	public static $db_version = 98; // Version of the database we are moving to.
+	public static $db_version     = 98; // Version of the database we are moving to.
 	public static $pro_db_version = 37; //deprecated
-	public static $font_version = 7;
+	public static $font_version   = 7;
+
+	/**
+	 * @var bool $added_gmt_offset_filter
+	 */
+	private static $added_gmt_offset_filter = false;
 
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.2.07';
+	public static $plug_version = '5.3.2';
 
 	/**
 	 * @since 1.07.02
@@ -1022,7 +1027,7 @@ class FrmAppHelper {
 	 * @since 4.0.02
 	 */
 	public static function include_svg() {
-		include_once( self::plugin_path() . '/images/icons.svg' );
+		include_once self::plugin_path() . '/images/icons.svg';
 	}
 
 	/**
@@ -1085,29 +1090,42 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Render a button for a new item (Form, Application, etc).
+	 *
 	 * @since 3.0
-	 * @param array $atts
+	 * @param array $atts {
+	 *     @type array  $link_hook    Custom link hook, calls do_action and exits early.
+	 *     @type string $new_link     Href value, default #.
+	 *     @type string $class        Custom class names, space separated.
+	 *     @type string $button_text  Button text. Default "Add New".
+	 * }
+	 * @return void
 	 */
 	public static function add_new_item_link( $atts ) {
-		if ( ! empty( $atts['new_link'] ) ) {
-			?>
-			<a href="<?php echo esc_url( $atts['new_link'] ); ?>" class="button button-primary frm-button-primary frm-with-plus">
-				<?php self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' ); ?>
-				<?php esc_html_e( 'Add New', 'formidable' ); ?>
-			</a>
-			<?php
-		} elseif ( ! empty( $atts['trigger_new_form_modal'] ) ) {
-			?>
-			<a href="#" class="button button-primary frm-button-primary frm-with-plus frm-trigger-new-form-modal">
-				<?php
-				self::icon_by_class( 'frmfont frm_plus_icon frm_svg15' );
-				esc_html_e( 'Add New', 'formidable' );
-				?>
-			</a>
-			<?php
-		} elseif ( isset( $atts['link_hook'] ) ) {
+		if ( isset( $atts['link_hook'] ) ) {
 			do_action( $atts['link_hook']['hook'], $atts['link_hook']['param'] );
+			return;
 		}
+
+		if ( empty( $atts['new_link'] ) && empty( $atts['trigger_new_form_modal'] ) && empty( $atts['class'] ) ) {
+			// Do not render a button if none of these attributes are set.
+			return;
+		}
+
+		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
+		$class = 'button button-primary frm-button-primary frm-with-plus';
+
+		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
+			$class .= ' frm-trigger-new-form-modal';
+		}
+
+		if ( ! empty( $atts['class'] ) ) {
+			$class .= ' ' . $atts['class'];
+		}
+
+		$button_text = ! empty( $atts['button_text'] ) ? $atts['button_text'] : __( 'Add New', 'formidable' );
+
+		require self::plugin_path() . '/classes/views/shared/add-button.php';
 	}
 
 	/**
@@ -1360,13 +1378,15 @@ class FrmAppHelper {
 	 * Hide the WordPress menus on some pages.
 	 *
 	 * @since 4.0
+	 *
+	 * @return bool
 	 */
 	public static function is_full_screen() {
-		$full_builder = self::is_form_builder_page();
-		$styler       = self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
-		$full_entries = self::simple_get( 'frm-full', 'absint' );
-
-		return $full_builder || $full_entries || $styler || self::is_view_builder_page();
+		return self::is_form_builder_page() ||
+			self::is_admin_page( 'formidable-styles' ) ||
+			self::is_admin_page( 'formidable-styles2' ) ||
+			self::simple_get( 'frm-full', 'absint' ) ||
+			self::is_view_builder_page();
 	}
 
 	/**
@@ -1438,17 +1458,8 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function frm_capabilities( $type = 'auto' ) {
-		$cap = array(
-			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
-			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
-			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
-			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
-			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
-			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
-		);
-
-		if ( ! self::pro_is_installed() && 'pro' !== $type && 'pro_only' !== $type ) {
-			return $cap;
+		if ( ! self::pro_is_installed() && ! in_array( $type, array( 'pro', 'pro_only' ), true ) ) {
+			return self::get_lite_capabilities();
 		}
 
 		$pro_cap = array(
@@ -1457,12 +1468,36 @@ class FrmAppHelper {
 			'frm_view_reports'   => __( 'View Reports', 'formidable' ),
 			'frm_edit_displays'  => __( 'Add/Edit Views', 'formidable' ),
 		);
+		/**
+		 * @since 5.3.1
+		 *
+		 * @param array<string,string> $pro_cap
+		 */
+		$pro_cap = apply_filters( 'frm_pro_capabilities', $pro_cap );
 
 		if ( 'pro_only' === $type ) {
 			return $pro_cap;
 		}
 
-		return $cap + $pro_cap;
+		return self::get_lite_capabilities() + $pro_cap;
+	}
+
+	/**
+	 * Get the list of lite plugin capabilities.
+	 *
+	 * @since 5.3.1
+	 *
+	 * @return array<string,string>
+	 */
+	private static function get_lite_capabilities() {
+		return array(
+			'frm_view_forms'      => __( 'View Forms', 'formidable' ),
+			'frm_edit_forms'      => __( 'Add and Edit Forms', 'formidable' ),
+			'frm_delete_forms'    => __( 'Delete Forms', 'formidable' ),
+			'frm_change_settings' => __( 'Access this Settings Page', 'formidable' ),
+			'frm_view_entries'    => __( 'View Entries from Admin Area', 'formidable' ),
+			'frm_delete_entries'  => __( 'Delete Entries from Admin Area', 'formidable' ),
+		);
 	}
 
 	/**
@@ -2675,12 +2710,14 @@ class FrmAppHelper {
 		wp_register_script( 'formidable_admin_global', self::plugin_url() . '/js/formidable_admin_global.js', array( 'jquery' ), $version );
 
 		$global_strings = array(
-			'updating_msg' => __( 'Please wait while your site updates.', 'formidable' ),
-			'deauthorize'  => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
-			'url'          => self::plugin_url(),
-			'app_url'      => 'https://formidableforms.com/',
-			'loading'      => __( 'Loading&hellip;', 'formidable' ),
-			'nonce'        => wp_create_nonce( 'frm_ajax' ),
+			'updating_msg'                  => __( 'Please wait while your site updates.', 'formidable' ),
+			'deauthorize'                   => __( 'Are you sure you want to deauthorize Formidable Forms on this site?', 'formidable' ),
+			'url'                           => self::plugin_url(),
+			'app_url'                       => 'https://formidableforms.com/',
+			'applicationsUrl'               => admin_url( 'admin.php?page=formidable-applications' ),
+			'canAccessApplicationDashboard' => current_user_can( is_callable( 'FrmProApplicationsHelper::get_required_templates_capability' ) ? FrmProApplicationsHelper::get_required_templates_capability() : 'frm_edit_forms' ),
+			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
+			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
@@ -3431,6 +3468,60 @@ class FrmAppHelper {
 		}
 
 		return strlen( $parts[ count( $parts ) - 1 ] );
+	}
+
+	/**
+	 * Prevent a fatal error in PHP8 if gmt_offset happens to be set an empty string.
+	 * This is a bug in WordPress. It isn't safe to call current_time( 'timestamp' ) without this with an empty string offset.
+	 * In the future this might be safe to remove. Keep an eye on the current_time function in functions.php.
+	 *
+	 * @since 5.3.1
+	 *
+	 * @return void
+	 */
+	public static function filter_gmt_offset() {
+		if ( self::$added_gmt_offset_filter ) {
+			// Avoid adding twice.
+			return;
+		}
+
+		add_filter(
+			'option_gmt_offset',
+			function( $offset ) {
+				if ( ! is_string( $offset ) || is_numeric( $offset ) ) {
+					// Leave a valid value alone.
+					return $offset;
+				}
+
+				return 0;
+			}
+		);
+		self::$added_gmt_offset_filter = true;
+	}
+
+	/**
+	 * @since 5.3.1
+	 *
+	 * @return bool
+	 */
+	public static function on_form_listing_page() {
+		if ( ! self::is_admin_page( 'formidable' ) ) {
+			return false;
+		}
+
+		$action = self::simple_get( 'frm_action', 'sanitize_title' );
+		return ! $action || in_array( $action, self::get_form_listing_page_actions(), true );
+	}
+
+	/**
+	 * Get all actions that also display the forms list.
+	 *
+	 * @since 5.3.1
+	 *
+	 * @return array<string>
+	 */
+	private static function get_form_listing_page_actions() {
+		return array( 'list', 'trash', 'untrash', 'destroy' );
 	}
 
 	/**
