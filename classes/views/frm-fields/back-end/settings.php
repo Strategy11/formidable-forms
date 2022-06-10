@@ -295,6 +295,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							<?php esc_html_e( 'Center', 'formidable' ); ?>
 						</option>
 					<?php } ?>
+
+					<?php
+					/**
+					 * Allows printing custom label positions.
+					 *
+					 * @since 5.4
+					 *
+					 * @param array $args {
+					 *     Arguments.
+					 *
+					 *     @type array $field Field array.
+					 * }
+					 */
+					do_action( 'frm_label_position_options', compact( 'field' ) );
+					?>
 				</select>
 			</p>
 		<?php } ?>
