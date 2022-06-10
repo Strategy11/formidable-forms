@@ -798,7 +798,6 @@ function frmFrontFormJS() {
 				input.attr( 'aria-describedby', describedBy );
 			}
 			input.attr( 'aria-invalid', true );
-			input.attr( 'aria-describedby', id );
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
 		}
