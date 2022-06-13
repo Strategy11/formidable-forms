@@ -574,6 +574,15 @@ class FrmFormsController {
 			'antispam' => 1,
 		);
 
+		/**
+		 * Allows changing form values before creating from the modal.
+		 *
+		 * @since 5.3.1
+		 *
+		 * @param array $values Form values.
+		 */
+		$new_values = apply_filters( 'frm_new_form_values', $new_values );
+
 		$form_id = FrmForm::create( $new_values );
 		/**
 		 * @since 5.3

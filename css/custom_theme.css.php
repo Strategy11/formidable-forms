@@ -679,7 +679,8 @@ a.frm_save_draft{
 	cursor:pointer;
 }
 
-.with_frm_style a.frm_save_draft{
+.with_frm_style a.frm_save_draft,
+.with_frm_style a.frm_start_over{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family:<?php echo FrmAppHelper::kses( $defaults['font'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 	font-family:var(--font);
