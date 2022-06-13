@@ -190,7 +190,15 @@ class FrmForm {
 				continue;
 			}
 
-			$new_val = FrmFieldsHelper::switch_field_ids( $value );
+			if ( 'field_options' === $key ) {
+				// Need to loop through field_options to prevent breaking serialized string when length changed.
+				FrmAppHelper::unserialize_or_decode( $field[ $key ] );
+				$new_val = FrmFieldsHelper::switch_field_ids( $field[ $key ] );
+				$new_val = serialize( $new_val );
+			} else {
+				$new_val = FrmFieldsHelper::switch_field_ids( $value );
+			}
+
 			if ( $new_val !== $value ) {
 				$new_values[ $key ] = $new_val;
 			}
