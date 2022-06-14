@@ -1656,6 +1656,10 @@ function frmAdminBuildJS() {
 				initiateMultiselect();
 				renumberPageBreaks();
 				maybeHideQuantityProductFieldOption();
+
+				const loadedEvent     = new Event( 'frm_ajax_loaded_field', { bubbles: false });
+				loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
+				document.dispatchEvent( loadedEvent );
 			}
 		});
 	}
