@@ -192,8 +192,8 @@ class FrmForm {
 
 			if ( 'field_options' === $key ) {
 				// Need to loop through field_options to prevent breaking serialized string when length changed.
-				FrmAppHelper::unserialize_or_decode( $field[ $key ] );
-				$new_val = FrmFieldsHelper::switch_field_ids( $field[ $key ] );
+				FrmAppHelper::unserialize_or_decode( $value );
+				$new_val = FrmFieldsHelper::switch_field_ids( $value );
 				$new_val = serialize( $new_val );
 			} else {
 				$new_val = FrmFieldsHelper::switch_field_ids( $value );
