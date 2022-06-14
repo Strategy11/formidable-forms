@@ -235,24 +235,24 @@ class FrmFormsController {
 
 		$params  = FrmForm::list_page_params();
 		$form    = FrmForm::duplicate( $params['id'], $params['template'], true );
-		$message = $params['template'] ? 'form_created' : 'form_duplicated';
+		$message = 'form_duplicated';
+		$nonce   = FrmAppHelper::simple_get( '_wpnonce' );
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( ! wp_verify_nonce( $nonce ) ) {
+			wp_die( esc_html( $frm_settings->admin_permission ) );
+		}
 
 		if ( $form ) {
 			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) );
 			$url .= '&message=' . $message;
 
 			wp_safe_redirect( $url );
+			exit();
 		}
 		self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
 	}
 
-	public static function add_message_to_message_list( $show_messages ) {
-		if ( is_array( $show_messages ) ) {
-			array_push( $show_messages, $message );
-		} else {
-			$show_messages = array( $message );
-		}
-	}
 	/**
 	 * @return string
 	 */
@@ -1058,8 +1058,6 @@ class FrmFormsController {
 	public static function maybe_update_form_builder_message( &$message ) {
 		if ( 'form_duplicated' === FrmAppHelper::simple_get( 'message' ) ) {
 			$message = __( 'Form was Successfully Copied', 'formidable' );
-		} elseif ( 'form_created' === FrmAppHelper::simple_get( 'message' ) ) {
-			$message = __( 'Form template was Successfully Created', 'formidable' );
 		}
 	}
 
