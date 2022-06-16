@@ -68,6 +68,7 @@ zip -r $zipname $destination \
 	-x "formidable-views/js/dom.js" \
 	-x "formidable-views/js/editor.js" \
 	-x "formidable-views/js/index.js" \
+	-x "formidable-views/js/pagination.js" \
 	-x "formidable-chat/js/chat.js" \
 	-x "formidable-api/js/embed.js" \
 	-x "formidable-api/js/iframe-embed.js" \
