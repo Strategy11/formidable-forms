@@ -1178,16 +1178,48 @@ function frmFrontFormJS() {
 	}
 
 	function initFloatingLabels() {
-		var checkFloatLabel, checkPlaceholderIE, selector;
+		var checkFloatLabel, checkDropdownLabel, checkPlaceholderIE, runOnLoad, selector, floatClass;
 
-		selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		floatClass = 'frm_label_float_top';
 
 		checkFloatLabel = function( event ) {
-			event.target.closest( '.frm_inside_container' ).classList.toggle( 'frm_label_float_top', event.target.value || document.activeElement === event.target );
-			if ( isIE() ) {
+			var container, shouldFloatTop, firstOpt;
+
+			container      = event.target.closest( '.frm_inside_container' );
+			shouldFloatTop = event.target.value || document.activeElement === event.target;
+
+			container.classList.toggle( floatClass, shouldFloatTop );
+
+			if ( 'SELECT' === event.target.tagName ) {
+				firstOpt = event.target.querySelector( 'option:first-child' );
+
+				if ( shouldFloatTop ) {
+					if ( firstOpt.getAttribute( 'data-label' ) ) {
+						firstOpt.text = firstOpt.getAttribute( 'data-label' );
+						firstOpt.removeAttribute( 'data-label' );
+					}
+				} else {
+					if ( firstOpt.text ) {
+						firstOpt.setAttribute( 'data-label', firstOpt.text );
+						firstOpt.text = '';
+					}
+				}
+			} else if ( isIE() ) {
 				checkPlaceholderIE( event.target );
 			}
 		};
+
+		checkDropdownLabel = function() {
+			document.querySelectorAll( '.frm-show-form .frm_inside_container:not(.' + floatClass + ') select' ).forEach( function( input ) {
+				var firstOpt = input.querySelector( 'option:first-child' );
+
+				if ( firstOpt.text ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.text );
+					firstOpt.text = '';
+				}
+			});
+		}
 
 		checkPlaceholderIE = function( input ) {
 			if ( input.value ) {
@@ -1212,13 +1244,21 @@ function frmFrontFormJS() {
 			documentOn( eventName, selector, checkFloatLabel, true );
 		});
 
-		if ( isIE() ) {
-			document.querySelectorAll( selector ).forEach( function( input ) {
-				checkPlaceholderIE( input );
-			});
+		runOnLoad = function() {
+			checkDropdownLabel();
 
-			// TODO: Check field load via AJAX.
-		}
+			if ( isIE() ) {
+				document.querySelectorAll( selector ).forEach( function( input ) {
+					checkPlaceholderIE( input );
+				});
+			}
+		};
+
+		runOnLoad();
+
+		jQuery( document ).on( 'frmPageChanged', function( event ) {
+			runOnLoad();
+		});
 	}
 
 	return {
