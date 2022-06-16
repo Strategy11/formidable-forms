@@ -479,6 +479,9 @@ legend.frm_hidden{
 	font-size: var(--field-font-size);
 	font-weight: normal;
 	font-weight: var(--field-weight);
+
+	-ms-pointer-events: none;
+	pointer-events: none;
 }
 
 .with_frm_style .frm_inside_container.frm_label_float_top > label {
