@@ -435,17 +435,9 @@ legend.frm_hidden{
 	white-space:nowrap;
 }
 
-/*.with_frm_style .frm_inside_container .frm_primary_label{
-	opacity:0;
-	transition: opacity 0.1s linear;
-}/*
-
-/*.with_frm_style .frm_inside_container label.frm_visible,*/
 .frm_visible{
 	opacity:1;
 }
-
-
 
 /* Floating labels */
 .with_frm_style .frm_inside_container {
@@ -461,7 +453,6 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_inside_container > input::placeholder,
-.with_frm_style .frm_inside_container > select::placeholder,
 .with_frm_style .frm_inside_container > textarea::placeholder {
 	opacity: 0;
 	transition: opacity 0.3s ease-in;
@@ -498,13 +489,10 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
-.with_frm_style .frm_inside_container.frm_label_float_top > select::placeholder,
 .with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
 }
-
-
 
 .with_frm_style .frm_description{
 	clear:both;
