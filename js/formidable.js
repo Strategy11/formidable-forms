@@ -1219,7 +1219,7 @@ function frmFrontFormJS() {
 					firstOpt.text = '';
 				}
 			});
-		}
+		};
 
 		checkPlaceholderIE = function( input ) {
 			if ( input.value ) {
