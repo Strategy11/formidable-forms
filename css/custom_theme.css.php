@@ -484,6 +484,10 @@ legend.frm_hidden{
 	pointer-events: none;
 }
 
+.with_frm_style.frm_style_lines-no-boxes .frm_inside_container > label {
+	line-height: 1;
+}
+
 .with_frm_style .frm_inside_container.frm_label_float_top > label {
 	top: 0;
 	left: 0;
