@@ -588,23 +588,14 @@ class FrmFieldsController {
 	 * get the label to use as the placeholder
 	 *
 	 * @since 2.05
+	 * @since 5.4 Remove the logic code for "inside" label position.
 	 *
 	 * @param array $field
 	 *
 	 * @return string
 	 */
 	public static function get_default_value_from_name( $field ) {
-		$position = FrmField::get_option( $field, 'label' );
-		if ( $position == 'inside' ) {
-			$default_value = $field['name'];
-			if ( FrmField::is_required( $field ) ) {
-				$default_value .= ' ' . $field['required_indicator'];
-			}
-		} else {
-			$default_value = '';
-		}
-
-		return $default_value;
+		return '';
 	}
 
 	/**
