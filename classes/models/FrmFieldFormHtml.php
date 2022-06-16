@@ -130,7 +130,6 @@ class FrmFieldFormHtml {
 		$this->replace_required_class();
 		$this->maybe_replace_description_shortcode( false );
 		$this->replace_error_shortcode();
-		$this->add_class_to_label();
 		$this->add_field_div_classes();
 
 		$this->replace_entry_key();
