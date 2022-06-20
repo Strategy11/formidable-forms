@@ -1,4 +1,13 @@
 == Changelog ==
+= 5.4 =
+* New: Added a new frm_new_form_values filter for customizing the default values of new forms.
+* New: Added a new frm_ajax_loaded_field event for listening for loaded fields loaded via AJAX on long forms in the form builder.
+* Fix: Custom aria-describedby attribute values were not properly merging with the aria-describedby values added by field descriptions and errors.
+* Fix: Imported field data would occasionally break if the new field ids had a different number of digits than the previously imported values.
+* Fix: Placeholder text was appearing more transparent in Firefox than in other browsers and has been updated for consistency.
+* Fix: Prevent a conflict that was causing the new Form modal to appear on some websites as a blank box without any content.
+* Updated the icon for Constant Contact.
+
 = 5.3.2 =
 * New: RGB and RGBA color values will now be fixed automatically on save if incomplete to avoid broken CSS.
 
