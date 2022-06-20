@@ -1266,6 +1266,7 @@ function frmFrontFormJS() {
 		});
 
 		runOnLoad = function() {
+			console.log( 'onload' );
 			checkDropdownLabel();
 
 			if ( isIE() ) {
