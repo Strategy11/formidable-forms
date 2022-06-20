@@ -11,22 +11,6 @@ function frmFrontFormJS() {
 	var action = '';
 	var jsErrors = [];
 
-	/**
-	 * @deprecated 5.4
-	 */
-	function maybeShowLabel() {
-		/*jshint validthis:true */
-		var $field = jQuery( this ),
-			$label = $field.closest( '.frm_inside_container' ).find( '.frm_primary_label' ),
-			val = $field.val();
-
-		if ( val !== null && val.length > 0 ) {
-			$label.addClass( 'frm_visible' );
-		} else {
-			$label.removeClass( 'frm_visible' );
-		}
-	}
-
 	/* Get the ID of the field that changed*/
 	function getFieldId( field, fullID ) {
 		var nameParts, fieldId,
