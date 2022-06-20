@@ -7879,6 +7879,13 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 
+		setTimeout(
+			function() {
+				$modal.get( 0 ).querySelector( '.postbox' ).style.display = 'block'; // Fixes pro issue #3508, prevent a conflict that hides the postbox in modal.
+			},
+			0
+		);
+
 		installFormTrigger = document.createElement( 'a' );
 		installFormTrigger.classList.add( 'frm-install-template', 'frm_hidden' );
 		document.body.appendChild( installFormTrigger );
