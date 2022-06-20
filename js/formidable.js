@@ -11,6 +11,43 @@ function frmFrontFormJS() {
 	var action = '';
 	var jsErrors = [];
 
+	/**
+	 * Maybe add polyfills.
+	 *
+	 * @since 5.4
+	 */
+	function maybeAddPolyfills() {
+		if ( ! Element.prototype.matches ) {
+			// IE9 supports matches but as msMatchesSelector instead.
+			Element.prototype.matches = Element.prototype.msMatchesSelector;
+		}
+
+		if ( ! Element.prototype.closest ) {
+			Element.prototype.closest = function( s ) {
+				var el = this;
+
+				do {
+					if ( el.matches( s ) ) {
+						return el;
+					}
+					el = el.parentElement || el.parentNode;
+				} while ( el !== null && el.nodeType === 1 );
+
+				return null;
+			};
+		}
+
+		// NodeList.forEach().
+		if ( window.NodeList && ! NodeList.prototype.forEach ) {
+			NodeList.prototype.forEach = function( callback, thisArg ) {
+				thisArg = thisArg || window;
+				for ( var i = 0; i < this.length; i++ ) {
+					callback.call( thisArg, this[ i ], i, this );
+				}
+			};
+		}
+	}
+
 	/* Get the ID of the field that changed*/
 	function getFieldId( field, fullID ) {
 		var nameParts, fieldId,
@@ -1247,6 +1284,8 @@ function frmFrontFormJS() {
 
 	return {
 		init: function() {
+			maybeAddPolyfills();
+
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
