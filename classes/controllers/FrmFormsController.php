@@ -577,7 +577,7 @@ class FrmFormsController {
 		/**
 		 * Allows changing form values before creating from the modal.
 		 *
-		 * @since 5.3.1
+		 * @since 5.4
 		 *
 		 * @param array $values Form values.
 		 */

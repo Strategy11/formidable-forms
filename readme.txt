@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 5.3.2
+Stable tag: 5.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,15 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.4 =
+* New: Added a new frm_new_form_values filter for customizing the default values of new forms.
+* New: Added a new frm_ajax_loaded_field event for listening for loaded fields loaded via AJAX on long forms in the form builder.
+* Fix: Custom aria-describedby attribute values were not properly merging with the aria-describedby values added by field descriptions and errors.
+* Fix: Imported field data would occasionally break if the new field ids had a different number of digits than the previously imported values.
+* Fix: Placeholder text was appearing more transparent in Firefox than in other browsers and has been updated for consistency.
+* Fix: Prevent a conflict that was causing the new Form modal to appear on some websites as a blank box without any content.
+* Updated the icon for Constant Contact.
+
 = 5.3.2 =
 * New: RGB and RGBA color values will now be fixed automatically on save if incomplete to avoid broken CSS.
 
@@ -447,11 +456,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Prevent a conflict with All in One SEO that was preventing CSS from loading at all when the only on applicable pages setting is selected.
 * Fix: An unexpected add new button was appearing on a few pages and has been removed.
 * Fix: Prevent a fatal error in PHP8 that happens on sites with an unexpected empty string gmt_offset option set.
-
-= 5.3 =
-* New: Added a new applications page for displaying available Formidable application templates.
-* New: Imported views and pages with [formidable] and [display-frm-data] shortcodes will now replace old form and view ids with the new imported ids.
-* New: Imported forms will now replace the old field ids with new field ids when the id is used in a field_id shortcode option.
-* Fix: Field id values were not always properly updating when duplicating a form depending on the order of the fields.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
