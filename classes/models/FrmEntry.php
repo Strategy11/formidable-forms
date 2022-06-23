@@ -251,6 +251,12 @@ class FrmEntry {
 		return $query_results;
 	}
 
+	/**
+	 * Delete an entry.
+	 *
+	 * @param string|int $id
+	 * @return bool True on success, false if nothing was deleted.
+	 */
 	public static function destroy( $id ) {
 		global $wpdb;
 		$id = (int) $id;
@@ -258,16 +264,32 @@ class FrmEntry {
 		$entry = self::getOne( $id );
 		if ( ! $entry ) {
 			$result = false;
-
 			return $result;
 		}
 
+		/**
+		 * Trigger an action to run custom logic before the entry is deleted.
+		 *
+		 * @param int      $id    The id of the entry that was destroyed.
+		 * @param stdClass $entry The entry object.
+		 */
 		do_action( 'frm_before_destroy_entry', $id, $entry );
 
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas WHERE item_id=%d', $id ) );
 		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $id ) );
 
 		self::clear_cache();
+
+		/**
+		 * Trigger an action to run custom logic after the entry is deleted.
+		 * Use this hook if you need to update caching after an entry is deleted.
+		 *
+		 * @since 5.4.1
+		 *
+		 * @param int      $id    The id of the entry that was destroyed.
+		 * @param stdClass $entry The entry object.
+		 */
+		do_action( 'frm_after_destroy_entry', $id, $entry );
 
 		return $result;
 	}
