@@ -7879,6 +7879,10 @@ function frmAdminBuildJS() {
 		jQuery( document ).on( 'click', '.frm-trigger-new-form-modal', triggerNewFormModal );
 		$modal = initModal( '#frm_new_form_modal', '600px' );
 
+		if ( false === $modal ) {
+			return;
+		}
+
 		setTimeout(
 			function() {
 				$modal.get( 0 ).querySelector( '.postbox' ).style.display = 'block'; // Fixes pro issue #3508, prevent a conflict that hides the postbox in modal.
