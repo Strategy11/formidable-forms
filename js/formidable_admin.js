@@ -5670,6 +5670,13 @@ function frmAdminBuildJS() {
 			var upgradeLabel, requires, button, link, content;
 
 			event.preventDefault();
+
+			if ( this.classList.contains( 'frm_show_expired_modal' ) ) {
+				const hookName = 'frm_show_expired_modal';
+				wp.hooks.doAction( hookName, this );
+				return;
+			}
+
 			upgradeLabel = this.getAttribute( 'data-upgrade' );
 
 			if ( '' === upgradeLabel ) {
