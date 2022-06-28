@@ -1090,6 +1090,29 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Print applicable admin banner.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool $should_show_lite_upgrade
+	 * @return void
+	 */
+	public static function print_admin_banner( $should_show_lite_upgrade ) {
+		if ( $should_show_lite_upgrade && current_user_can( 'administrator' ) && ! self::pro_is_installed() ) {
+			?>
+			<div class="frm-upgrade-bar">
+				<span>You're using Formidable Forms Lite. To unlock more features consider</span>
+				<a href="<?php echo esc_url( self::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
+			</div>
+			<?php
+		}
+
+		FrmInbox::maybe_show_banner();
+
+		do_action( 'frm_admin_banner' );
+	}
+
+	/**
 	 * Render a button for a new item (Form, Application, etc).
 	 *
 	 * @since 3.0
@@ -2872,6 +2895,8 @@ class FrmAppHelper {
 	 * If Pro is far outdated, show a message.
 	 *
 	 * @since 4.0.01
+	 *
+	 * @return void
 	 */
 	public static function min_pro_version_notice( $min_version ) {
 		if ( ! self::is_formidable_admin() ) {

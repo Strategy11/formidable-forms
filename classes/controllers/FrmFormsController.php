@@ -882,6 +882,8 @@ class FrmFormsController {
 
 	/**
 	 * Get data from api before rendering it so that we can flag the modal as expired
+	 *
+	 * @return void
 	 */
 	public static function before_list_templates() {
 		global $frm_templates;
@@ -904,6 +906,9 @@ class FrmFormsController {
 		$frm_license_type = $license_type;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function list_templates() {
 		global $frm_templates;
 		global $frm_license_type;
