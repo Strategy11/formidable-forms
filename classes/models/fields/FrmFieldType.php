@@ -1064,11 +1064,15 @@ DEFAULT_HTML;
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' ) {
-			$describedby .= ' frm_desc_' . $args['html_id'];
+			if ( ! in_array( 'frm_desc_' . $args['html_id'],  explode( ' ', $matches[1][0] ) ) ) {
+				$describedby .= ' frm_desc_' . $args['html_id'];
+			}
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) ) {
-			$describedby .= ' frm_error_' . $args['html_id'];
+			if ( ! in_array( 'frm_error_' . $args['html_id'],  explode( ' ', $matches[1][0] ) ) ) {
+				$describedby .= ' frm_error_' . $args['html_id'];
+			}
 		}
 
 		if ( $aria_describedby_exists ) {

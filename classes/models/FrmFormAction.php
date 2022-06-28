@@ -384,7 +384,6 @@ class FrmFormAction {
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
 			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
-
 			$instance = $this->update( $new_instance, $old_instance );
 
 			/**
