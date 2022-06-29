@@ -235,10 +235,9 @@ td.column-title .frm_actions_dropdown {
 }
 
 .frm-upgrade-bar {
-	text-align: center;
 	background: var(--sidebar-color);
 	border-bottom: 1px solid var(--sidebar-hover);
-	padding: 3px 0;
+	padding: 3px 0 3px 60px;
 	font-size: 95%;
 }
 
@@ -1567,6 +1566,13 @@ div.frm_updated_message {
 	font-size: 14px;
 	margin: 5px 0 15px;
 	text-align: center;
+}
+
+.frm-banner-alert {
+	text-align: left;
+	margin: 0;
+	border-radius: 0;
+	padding: 10px 0 10px 50px;
 }
 
 #frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {
