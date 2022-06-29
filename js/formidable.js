@@ -1265,6 +1265,10 @@ function frmFrontFormJS() {
 			documentOn( eventName, selector, checkFloatLabel, true );
 		});
 
+		jQuery( document ).on( 'change', selector, function( event ) {
+			checkFloatLabel( event );
+		});
+
 		runOnLoad = function() {
 			checkDropdownLabel();
 
@@ -1278,6 +1282,10 @@ function frmFrontFormJS() {
 		runOnLoad();
 
 		jQuery( document ).on( 'frmPageChanged', function( event ) {
+			runOnLoad();
+		});
+
+		document.addEventListener( 'frm_after_start_over', function( event ) {
 			runOnLoad();
 		});
 	}
