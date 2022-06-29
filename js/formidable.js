@@ -1204,16 +1204,16 @@ function frmFrontFormJS() {
 		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
 		floatClass = 'frm_label_float_top';
 
-		checkFloatLabel = function( event ) {
+		checkFloatLabel = function( input ) {
 			var container, shouldFloatTop, firstOpt;
 
-			container      = event.target.closest( '.frm_inside_container' );
-			shouldFloatTop = event.target.value || document.activeElement === event.target;
+			container      = input.closest( '.frm_inside_container' );
+			shouldFloatTop = input.value || document.activeElement === input;
 
 			container.classList.toggle( floatClass, shouldFloatTop );
 
-			if ( 'SELECT' === event.target.tagName ) {
-				firstOpt = event.target.querySelector( 'option:first-child' );
+			if ( 'SELECT' === input.tagName ) {
+				firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( shouldFloatTop ) {
 					if ( firstOpt.getAttribute( 'data-label' ) ) {
@@ -1227,7 +1227,7 @@ function frmFrontFormJS() {
 					}
 				}
 			} else if ( isIE() ) {
-				checkPlaceholderIE( event.target );
+				checkPlaceholderIE( input );
 			}
 		};
 
@@ -1262,14 +1262,25 @@ function frmFrontFormJS() {
 		};
 
 		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
-			documentOn( eventName, selector, checkFloatLabel, true );
+			documentOn(
+				eventName,
+				selector,
+				function( event ) {
+					checkFloatLabel( event.target );
+				},
+				true
+			);
 		});
 
 		jQuery( document ).on( 'change', selector, function( event ) {
-			checkFloatLabel( event );
+			checkFloatLabel( event.target );
 		});
 
-		runOnLoad = function() {
+		runOnLoad = function( firstLoad ) {
+			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
+				checkFloatLabel( document.activeElement );
+			}
+
 			checkDropdownLabel();
 
 			if ( isIE() ) {
@@ -1279,7 +1290,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		runOnLoad();
+		runOnLoad( true );
 
 		jQuery( document ).on( 'frmPageChanged', function( event ) {
 			runOnLoad();
