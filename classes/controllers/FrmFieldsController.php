@@ -842,6 +842,18 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Sort aria-describedby values.
+	 *
+	 * @param array $aria_describedby_values The list of aria-describedby values.
+	 *
+	 * @return string
+	 */
+	public static function sort_aria_describedby_values( $aria_describedby_values ) {
+		rsort( $aria_describedby_values );
+		return implode( ' ', $aria_describedby_values );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function update_ajax_option() {

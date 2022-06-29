@@ -1058,25 +1058,40 @@ DEFAULT_HTML;
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 		if ( $aria_describedby_exists ) {
-			$describedby = 'aria-describedby="' . esc_attr( trim( $matches[1][0] ) );
+			$describedby = esc_attr( trim( $matches[1][0] ) );
 		} else {
 			$describedby = '';
 		}
+		$custom_describedby = array();
 
-		if ( $this->get_field_column( 'description' ) !== '' ) {
-			if ( ! in_array( 'frm_desc_' . $args['html_id'],  explode( ' ', $matches[1][0] ) ) ) {
-				$describedby .= ' frm_desc_' . $args['html_id'];
-			}
+		if ( isset( $matches[1][0] ) ) {
+			$custom_describedby = preg_split( '/\s+/', $matches[1][0] );
 		}
 
-		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) ) {
-			if ( ! in_array( 'frm_error_' . $args['html_id'],  explode( ' ', $matches[1][0] ) ) ) {
+		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ( strpos( $describedby, 'frm_error_' ) === false ) ) {
+			if ( ! in_array( 'frm_error_' . $args['html_id'], $custom_describedby, true ) ) {
 				$describedby .= ' frm_error_' . $args['html_id'];
 			}
 		}
 
+		if ( $this->get_field_column( 'description' ) !== '' ) {
+			if ( ! in_array( 'frm_desc_' . $args['html_id'], $custom_describedby, true ) ) {
+				$describedby .= ' frm_desc_' . $args['html_id'];
+			}
+		}
+
+		/**
+		 * Update aria-describedby ids.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $describedby list of ids.
+		 */
+		$describedby = preg_split( '/\s+/', $describedby );
+		$describedby = apply_filters( 'frm_aria_describedby_values', $describedby );
+
 		if ( $aria_describedby_exists ) {
-			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', $describedby . '"', $input_html );
+			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', 'aria-describedby="' . $describedby . '"', $input_html );
 		} elseif ( ! empty( $describedby ) ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
