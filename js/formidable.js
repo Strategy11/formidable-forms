@@ -1279,6 +1279,15 @@ function frmFrontFormJS() {
 		runOnLoad = function( firstLoad ) {
 			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
+			} else if ( firstLoad ) {
+				Array.from( document.getElementsByClassName( 'frm_inside_container' ) ).forEach(
+					function( container ) {
+						var input = container.querySelector( 'input, select, textarea' );
+						if ( input && '' !== input.value ) {
+							checkFloatLabel( input );
+						}
+					}
+				);
 			}
 
 			checkDropdownLabel();
