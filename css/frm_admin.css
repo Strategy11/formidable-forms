@@ -1620,6 +1620,12 @@ div.frm_updated_message {
 	padding: 10px 0 10px 50px;
 }
 
+.frm-banner-alert a {
+	color: var(--primary-color);
+	font-weight: 400;
+	text-decoration: none;
+}
+
 .frm_updated_message ul,
 .frm_updated_message li,
 .frm_warning_style ul,
