@@ -110,7 +110,6 @@ class FrmHooksController {
 		// Addons Controller.
 		add_action( 'admin_menu', 'FrmAddonsController::menu', 100 );
 		add_filter( 'pre_set_site_transient_update_plugins', 'FrmAddonsController::check_update' );
-		add_action( 'frm_page_footer', 'FrmAppHelper::renewal_message' );
 
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );

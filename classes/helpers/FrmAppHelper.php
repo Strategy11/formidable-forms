@@ -1098,18 +1098,31 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function print_admin_banner( $should_show_lite_upgrade ) {
-		if ( $should_show_lite_upgrade && current_user_can( 'administrator' ) && ! self::pro_is_installed() ) {
-			?>
-			<div class="frm-upgrade-bar">
-				<span>You're using Formidable Forms Lite. To unlock more features consider</span>
-				<a href="<?php echo esc_url( self::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
-			</div>
-			<?php
+		if ( ! current_user_can( 'administrator' ) ) {
+			FrmInbox::maybe_show_banner();
+			return;
 		}
 
-		FrmInbox::maybe_show_banner();
+		if ( self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
+			// Print license warning or inbox banner and exit if either prints.
+			// And exit before printing the upgrade bar if it shouldn't be shown.
+			return;
+		}
+		?>
+		<div class="frm-upgrade-bar">
+			<span>You're using Formidable Forms Lite. To unlock more features consider</span>
+			<a href="<?php echo esc_url( self::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
+		</div>
+		<?php
+	}
 
-		do_action( 'frm_admin_banner' );
+	/**
+	 * @since x.x
+	 *
+	 * @return bool True if a banner is available and shown.
+	 */
+	private static function maybe_show_license_warning() {
+		return is_callable( 'FrmProAddonsController::admin_banner' ) && FrmProAddonsController::admin_banner();
 	}
 
 	/**
@@ -3432,34 +3445,6 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 4.07
-	 * @deprecated 4.09.01
-	 */
-	public static function renewal_message() {
-		if ( is_callable( 'FrmProAddonsController::renewal_message' ) ) {
-			FrmProAddonsController::renewal_message();
-			return;
-		}
-
-		if ( ! FrmAddonsController::is_license_expired() ) {
-			return;
-		}
-
-		?>
-		<div class="frm_error_style" style="text-align:left">
-			<?php self::icon_by_class( 'frmfont frm_alert_icon' ); ?>
-			&nbsp;
-			<?php esc_html_e( 'Your account has expired', 'formidable' ); ?>
-			<div style="float:right">
-				<a href="<?php echo esc_url( self::admin_upgrade_link( 'form-expired', 'account/downloads/' ) ); ?>">
-					<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
-				</a>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Shows pill text.
 	 *
 	 * @since 5.2.02
@@ -3757,5 +3742,13 @@ class FrmAppHelper {
 	public static function jquery_ui_base_url() {
 		_deprecated_function( __FUNCTION__, '5.0.13', 'FrmProAppHelper::jquery_ui_base_url' );
 		return is_callable( 'FrmProAppHelper::jquery_ui_base_url' ) ? FrmProAppHelper::jquery_ui_base_url() : '';
+	}
+
+	/**
+	 * @since 4.07
+	 * @deprecated x.x
+	 */
+	public static function renewal_message() {
+		_deprecated_function( __METHOD__, 'x.x', 'FrmProAddonsController::renewal_message' );
 	}
 }
