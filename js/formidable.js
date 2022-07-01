@@ -11,16 +11,40 @@ function frmFrontFormJS() {
 	var action = '';
 	var jsErrors = [];
 
-	function maybeShowLabel() {
-		/*jshint validthis:true */
-		var $field = jQuery( this ),
-			$label = $field.closest( '.frm_inside_container' ).find( '.frm_primary_label' ),
-			val = $field.val();
+	/**
+	 * Maybe add polyfills.
+	 *
+	 * @since 5.4
+	 */
+	function maybeAddPolyfills() {
+		if ( ! Element.prototype.matches ) {
+			// IE9 supports matches but as msMatchesSelector instead.
+			Element.prototype.matches = Element.prototype.msMatchesSelector;
+		}
 
-		if ( val !== null && val.length > 0 ) {
-			$label.addClass( 'frm_visible' );
-		} else {
-			$label.removeClass( 'frm_visible' );
+		if ( ! Element.prototype.closest ) {
+			Element.prototype.closest = function( s ) {
+				var el = this;
+
+				do {
+					if ( el.matches( s ) ) {
+						return el;
+					}
+					el = el.parentElement || el.parentNode;
+				} while ( el !== null && el.nodeType === 1 );
+
+				return null;
+			};
+		}
+
+		// NodeList.forEach().
+		if ( window.NodeList && ! NodeList.prototype.forEach ) {
+			NodeList.prototype.forEach = function( callback, thisArg ) {
+				thisArg = thisArg || window;
+				for ( var i = 0; i < this.length; i++ ) {
+					callback.call( thisArg, this[ i ], i, this );
+				}
+			};
 		}
 	}
 
@@ -1135,8 +1159,161 @@ function frmFrontFormJS() {
 		} while ( element.previousSibling );
 	}
 
+	/**
+	 * Checks if is on IE browser.
+	 *
+	 * @since 5.4
+	 *
+	 * @return {Boolean}
+	 */
+	function isIE() {
+		return navigator.userAgent.indexOf( 'MSIE' ) > -1 || navigator.userAgent.indexOf( 'Trident' ) > -1;
+	}
+
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+	}
+
+	function initFloatingLabels() {
+		var checkFloatLabel, checkDropdownLabel, checkPlaceholderIE, runOnLoad, selector, floatClass;
+
+		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		floatClass = 'frm_label_float_top';
+
+		checkFloatLabel = function( input ) {
+			var container, shouldFloatTop, firstOpt;
+
+			container      = input.closest( '.frm_inside_container' );
+			shouldFloatTop = input.value || document.activeElement === input;
+
+			container.classList.toggle( floatClass, shouldFloatTop );
+
+			if ( 'SELECT' === input.tagName ) {
+				firstOpt = input.querySelector( 'option:first-child' );
+
+				if ( shouldFloatTop ) {
+					if ( firstOpt.getAttribute( 'data-label' ) ) {
+						firstOpt.text = firstOpt.getAttribute( 'data-label' );
+						firstOpt.removeAttribute( 'data-label' );
+					}
+				} else {
+					if ( firstOpt.text ) {
+						firstOpt.setAttribute( 'data-label', firstOpt.text );
+						firstOpt.text = '';
+					}
+				}
+			} else if ( isIE() ) {
+				checkPlaceholderIE( input );
+			}
+		};
+
+		checkDropdownLabel = function() {
+			document.querySelectorAll( '.frm-show-form .frm_inside_container:not(.' + floatClass + ') select' ).forEach( function( input ) {
+				var firstOpt = input.querySelector( 'option:first-child' );
+
+				if ( firstOpt.text ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.text );
+					firstOpt.text = '';
+				}
+			});
+		};
+
+		checkPlaceholderIE = function( input ) {
+			if ( input.value ) {
+				// Don't need to handle this case because placeholder isn't shown.
+				return;
+			}
+
+			if ( document.activeElement === input ) {
+				if ( input.getAttribute( 'data-placeholder' ) ) {
+					input.placeholder = input.getAttribute( 'data-placeholder' );
+					input.removeAttribute( 'data-placeholder' );
+				}
+			} else {
+				if ( input.placeholder ) {
+					input.setAttribute( 'data-placeholder', input.placeholder );
+					input.placeholder = '';
+				}
+			}
+		};
+
+		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
+			documentOn(
+				eventName,
+				selector,
+				function( event ) {
+					checkFloatLabel( event.target );
+				},
+				true
+			);
+		});
+
+		jQuery( document ).on( 'change', selector, function( event ) {
+			checkFloatLabel( event.target );
+		});
+
+		runOnLoad = function( firstLoad ) {
+			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
+				checkFloatLabel( document.activeElement );
+			} else if ( firstLoad ) {
+				document.querySelectorAll( '.frm_inside_container' ).forEach(
+					function( container ) {
+						var input = container.querySelector( 'input, select, textarea' );
+						if ( input && '' !== input.value ) {
+							checkFloatLabel( input );
+						}
+					}
+				);
+			}
+
+			checkDropdownLabel();
+
+			if ( isIE() ) {
+				document.querySelectorAll( selector ).forEach( function( input ) {
+					checkPlaceholderIE( input );
+				});
+			}
+		};
+
+		runOnLoad( true );
+
+		jQuery( document ).on( 'frmPageChanged', function( event ) {
+			runOnLoad();
+		});
+
+		document.addEventListener( 'frm_after_start_over', function( event ) {
+			runOnLoad();
+		});
+	}
+
 	return {
 		init: function() {
+			maybeAddPolyfills();
+
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
@@ -1153,7 +1330,6 @@ function frmFrontFormJS() {
 			jQuery( document.getElementById( 'frm_resend_email' ) ).on( 'click', resendEmail );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
-			jQuery( document ).on( 'change keyup', '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea', maybeShowLabel );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
 
@@ -1170,6 +1346,8 @@ function frmFrontFormJS() {
 			addTrimFallbackForIE8();
 			addFilterFallbackForIE8();
 			addKeysFallbackForIE8();
+
+			initFloatingLabels();
 		},
 
 		getFieldId: function( field, fullID ) {

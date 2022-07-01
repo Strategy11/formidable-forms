@@ -435,14 +435,96 @@ legend.frm_hidden{
 	white-space:nowrap;
 }
 
-.with_frm_style .frm_inside_container .frm_primary_label{
-	opacity:0;
-	transition: opacity 0.1s linear;
-}
-
-.with_frm_style .frm_inside_container label.frm_visible,
 .frm_visible{
 	opacity:1;
+}
+
+/* Floating labels */
+.with_frm_style .frm_inside_container {
+	position: relative;
+	padding-top: 27px;
+	padding-top: calc(0.85 * var(--field-height));
+}
+
+.with_frm_style .frm_inside_container > input,
+.with_frm_style .frm_inside_container > select,
+.with_frm_style .frm_inside_container > textarea {
+	display: block;
+}
+
+/* These do not work if they are combined */
+.with_frm_style .frm_inside_container > input::-moz-placeholder,
+.with_frm_style .frm_inside_container > textarea::-moz-placeholder {
+	opacity: 0 !important;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container > textarea:-ms-input-placeholder {
+	opacity: 0;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > input::placeholder,
+.with_frm_style .frm_inside_container > textarea::placeholder {
+	opacity: 0;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container > label {
+	transition: all 0.3s ease-in;
+
+	position: absolute;
+	top: 28px;
+	top: calc(1px + 0.85 * var(--field-height));
+	left: 3px;
+	width: 100%;
+
+	line-height: 1.3;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+
+	padding: 6px 10px;
+	padding: var(--field-pad);
+
+	font-size: 14px;
+	font-size: var(--field-font-size);
+	font-weight: normal;
+	font-weight: var(--field-weight);
+
+	-ms-pointer-events: none;
+	pointer-events: none;
+}
+
+.with_frm_style.frm_style_lines-no-boxes .frm_inside_container > label {
+	line-height: 1;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > label {
+	top: 0;
+	left: 0;
+	font-size: 12px;
+	font-size: calc(0.85 * var(--field-font-size));
+}
+
+/* These do not work if they are combined */
+.with_frm_style .frm_inside_container.frm_label_float_top > input::-moz-placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea::-moz-placeholder {
+	opacity: 1 !important;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea:-ms-input-placeholder {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
+}
+
+.with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
+.with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
+	opacity: 1;
+	transition: opacity 0.3s ease-in;
 }
 
 .with_frm_style .frm_description{

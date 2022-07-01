@@ -130,7 +130,6 @@ class FrmFieldFormHtml {
 		$this->replace_required_class();
 		$this->maybe_replace_description_shortcode( false );
 		$this->replace_error_shortcode();
-		$this->add_class_to_label();
 		$this->add_field_div_classes();
 
 		$this->replace_entry_key();
@@ -453,7 +452,13 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
-			$classes .= ' frm_' . $this->field_obj->get_field_column( 'label' ) . '_container';
+			$label_position = $this->field_obj->get_field_column( 'label' );
+			$classes .= ' frm_' . $label_position . '_container';
+
+			// Add class if field has value, to be used for floating label styling.
+			if ( 'inside' === $label_position && $this->field_obj->get_field_column( 'value' ) ) {
+				$classes .= ' frm_label_float_top';
+			}
 		}
 
 		// Add CSS layout classes
