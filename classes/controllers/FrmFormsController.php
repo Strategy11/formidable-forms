@@ -232,17 +232,16 @@ class FrmFormsController {
 
 	public static function duplicate() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		$nonce = FrmAppHelper::simple_get( '_wpnonce' );
 
-		$params  = FrmForm::list_page_params();
-		$form    = FrmForm::duplicate( $params['id'], $params['template'], true );
-		$nonce   = FrmAppHelper::simple_get( '_wpnonce' );
-
-		$frm_settings = FrmAppHelper::get_settings();
 		if ( ! wp_verify_nonce( $nonce ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
 			wp_die( esc_html( $frm_settings->admin_permission ) );
 		}
 
-		$url = admin_url( 'admin.php?page=formidable' );
+		$params  = FrmForm::list_page_params();
+		$form    = FrmForm::duplicate( $params['id'], $params['template'], true );
+		$url     = admin_url( 'admin.php?page=formidable' );
 		$message = 'form_duplicate_error';
 
 		if ( $form ) {
