@@ -5662,6 +5662,9 @@ function frmAdminBuildJS() {
 
 	function initUpgradeModal() {
 		const $info = initModal( '#frm_upgrade_modal' );
+		if ( $info === false ) {
+			return;
+		}
 
 		document.addEventListener( 'click', handleUpgradeClick );
 
@@ -5669,23 +5672,13 @@ function frmAdminBuildJS() {
 			let requires, link, content;
 
 			const element = event.target;
-			const upgradeLabel = element.getAttribute( 'data-upgrade' );
+			const upgradeLabel = element.dataset.upgrade;
 
-			if ( ! upgradeLabel ) {
+			if ( ! upgradeLabel || element.classList.contains( 'frm_show_upgrade_tab' ) ) {
 				return;
 			}
 
 			event.preventDefault();
-
-			if ( $info === false ) {
-				// TODO still handle non-modal upgrade.
-				return;
-			}
-
-			if ( '' === upgradeLabel ) {
-				// if the upgrade level is empty, it's because this upgrade is already active.
-				return;
-			}
 
 			const modal = $info.get( 0 );
 			const lockIcon = modal.querySelector( '.frm_lock_icon' );
@@ -5723,6 +5716,28 @@ function frmAdminBuildJS() {
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.setAttribute( 'href', link );
 		}
+	}
+
+	function populateUpgradeTab( element ) {
+		const title = element.dataset.upgrade;
+		let message = element.dataset.message;
+
+		if ( ! message ) {
+			message = document.getElementById( 'frm-upgrade-message' ).dataset.default;
+			message = message.replace( '<span class="frm_feature_label"></span>', title );
+		}
+
+		const container = document.querySelector( '.frm_' + element.getAttribute( 'href' ).replace( '#', '' ) );
+		if ( ! container ) {
+			return;
+		}
+
+		container.innerHTML = '';
+		container.appendChild( tag( 'h3', title ) );
+		container.appendChild( tag( 'p', message ) );
+
+		// TODO add calls to action.
+		// TODO add an image screenshot.
 	}
 
 	/**
@@ -8961,10 +8976,17 @@ function frmAdminBuildJS() {
 			// tabs
 			jQuery( document ).on( 'click', '#frm-nav-tabs a', clickNewTab );
 			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a' ).on( 'click', function() {
-				if ( ! this.classList.contains( 'frm_noallow' ) ) {
-					clickTab( this );
-					return false;
+				const showUpgradeTab = this.classList.contains( 'frm_show_upgrade_tab' );
+				if ( this.classList.contains( 'frm_noallow' ) && ! showUpgradeTab ) {
+					return;
 				}
+
+				if ( showUpgradeTab ) {
+					populateUpgradeTab( this );
+				}
+
+				clickTab( this );
+				return false;
 			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 
