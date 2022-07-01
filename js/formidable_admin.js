@@ -5661,50 +5661,68 @@ function frmAdminBuildJS() {
 	}
 
 	function initUpgradeModal() {
-		var $info = initModal( '#frm_upgrade_modal' );
-		if ( $info === false ) {
-			return;
-		}
+		const $info = initModal( '#frm_upgrade_modal' );
 
-		jQuery( document ).on( 'click', '[data-upgrade]', function( event ) {
-			var upgradeLabel, requires, button, link, content;
+		document.addEventListener( 'click', handleUpgradeClick );
+
+		function handleUpgradeClick( event ) {
+			let requires, link, content;
+
+			const element = event.target;
+			const upgradeLabel = element.getAttribute( 'data-upgrade' );
+
+			if ( ! upgradeLabel ) {
+				return;
+			}
 
 			event.preventDefault();
-			upgradeLabel = this.getAttribute( 'data-upgrade' );
+
+			if ( $info === false ) {
+				// TODO still handle non-modal upgrade.
+				return;
+			}
 
 			if ( '' === upgradeLabel ) {
 				// if the upgrade level is empty, it's because this upgrade is already active.
 				return;
 			}
 
-			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
-			jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_icon' );
+			const modal = $info.get( 0 );
+			const lockIcon = modal.querySelector( '.frm_lock_icon' );
 
-			requires = this.getAttribute( 'data-requires' );
-			if ( typeof requires === 'undefined' || requires === null || requires === '' ) {
+			if ( lockIcon ) {
+				lockIcon.classList.remove( 'frm_lock_open_icon' );
+				lockIcon.querySelector( 'use' ).setAttribute( 'href', '#frm_lock_icon' );
+			}
+
+			requires = element.getAttribute( 'data-requires' );
+			if ( ! requires ) {
 				requires = 'Pro';
 			}
-			jQuery( '.license-level' ).text( requires );
+
+			const level = modal.querySelector( '.license-level' );
+			if ( level ) {
+				level.textContent = requires;
+			}
 
 			// If one click upgrade, hide other content
-			addOneClickModal( this );
+			addOneClickModal( element );
 
-			jQuery( '.frm_feature_label' ).text( upgradeLabel );
-			jQuery( '#frm_upgrade_modal h2' ).show();
+			modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
+			modal.querySelector( 'h2' ).style.display = 'block';
 
 			$info.dialog( 'open' );
 
 			// set the utm medium
-			button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
-			link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
-			content = this.getAttribute( 'data-content' );
+			const button = modal.querySelector( '.button-primary:not(#frm-oneclick-button)' );
+			link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
+			content = element.getAttribute( 'data-content' );
 			if ( content === null ) {
 				content = '';
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
-			button.attr( 'href', link );
-			return false;
-		});
+			button.setAttribute( 'href', link );
+		}
 	}
 
 	/**
