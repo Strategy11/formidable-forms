@@ -5671,8 +5671,18 @@ function frmAdminBuildJS() {
 		function handleUpgradeClick( event ) {
 			let requires, link, content;
 
-			const element = event.target;
-			const upgradeLabel = element.dataset.upgrade;
+			let element = event.target;
+			let upgradeLabel = element.dataset.upgrade;
+
+			if ( ! upgradeLabel ) {
+				const parent = element.closest( '[data-upgrade]' );
+				if ( ! parent ) {
+					return;
+				}
+
+				element = parent;
+				upgradeLabel = parent.dataset.upgrade;
+			}
 
 			if ( ! upgradeLabel || element.classList.contains( 'frm_show_upgrade_tab' ) ) {
 				return;
