@@ -7225,6 +7225,47 @@ li.frm_noallow.button.frm_show_upgrade {
 	margin-top: 20px;
 }
 
+.frm-settings-screenshot-toolbar {
+	min-height: 39px;
+	display: flex;
+}
+
+.frm-settings-screenshot-toolbar .frm-minmax-icon {
+	height: 8px;
+	width: 8px;
+	border-radius: 50%;
+	align-self: center;
+	margin-left: 10px;
+}
+
+.frm-settings-screenshot-toolbar .frm-minmax-icon:first-of-type {
+	margin-left: 20px;
+}
+
+.frm-settings-screenshot-toolbar img {
+	object-fit: contain;
+	align-self: flex-end;
+	margin-left: 25px;
+}
+
+.frm-settings-screenshot-toolbar + div {
+	background: #fff;
+	padding-top: 25px;
+	border-radius: 0 0 16px 16px;
+}
+
+.frm-settings-screenshot-toolbar + div img {
+	max-width: calc( 100% - 40px );
+}
+
+.frm-settings-screenshot-wrapper {
+	max-width: 700px;
+	margin: 50px auto 0;
+	box-shadow: 0px 4px 4px rgba(189, 196, 205, 0.25), 0px 12px 56px rgba(42, 57, 75, 0.25);
+	border-radius: 16px;
+	background: #EBECF1;
+}
+
 .frm-dialog {
 	z-index: 100;
 	padding: 0 !important;

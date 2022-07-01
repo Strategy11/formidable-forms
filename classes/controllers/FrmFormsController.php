@@ -1130,9 +1130,10 @@ class FrmFormsController {
 				'icon'       => 'frm_icon_font frm_lock_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
-					'medium'  => 'permissions',
-					'upgrade' => __( 'Form Permissions', 'formidable' ),
-					'message' => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
+					'medium'     => 'permissions',
+					'upgrade'    => __( 'Form Permissions', 'formidable' ),
+					'message'    => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
+					'screenshot' => 'permissions.png',
 				),
 			),
 			'scheduling' => array(
@@ -1140,8 +1141,9 @@ class FrmFormsController {
 				'icon'       => 'frm_icon_font frm_calendar_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
-					'medium'  => 'scheduling',
-					'upgrade' => __( 'Form scheduling settings', 'formidable' ),
+					'medium'     => 'scheduling',
+					'upgrade'    => __( 'Form scheduling settings', 'formidable' ),
+					'screenshot' => 'scheduling.png',
 				),
 			),
 			'buttons'     => array(
@@ -1163,8 +1165,9 @@ class FrmFormsController {
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'chat',
 					array(
-						'upgrade'  => __( 'Conversational Forms', 'formidable' ),
-						'message'  => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
+						'upgrade'    => __( 'Conversational Forms', 'formidable' ),
+						'message'    => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
+						'screenshot' => 'chat.png',
 					)
 				),
 			),

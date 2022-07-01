@@ -317,7 +317,7 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
-	const { tag, div, span, a, svg } = frmDom;
+	const { tag, div, span, a, svg, img } = frmDom;
 	const { doJsonFetch } = frmDom.ajax;
 
 	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
@@ -5669,10 +5669,10 @@ function frmAdminBuildJS() {
 		document.addEventListener( 'click', handleUpgradeClick );
 
 		function handleUpgradeClick( event ) {
-			let requires, link, content;
+			let element, upgradeLabel, link, content;
 
-			let element = event.target;
-			let upgradeLabel = element.dataset.upgrade;
+			element = event.target;
+			upgradeLabel = element.dataset.upgrade;
 
 			if ( ! upgradeLabel ) {
 				const parent = element.closest( '[data-upgrade]' );
@@ -5698,14 +5698,9 @@ function frmAdminBuildJS() {
 				lockIcon.querySelector( 'use' ).setAttribute( 'href', '#frm_lock_icon' );
 			}
 
-			requires = element.getAttribute( 'data-requires' );
-			if ( ! requires ) {
-				requires = 'Pro';
-			}
-
 			const level = modal.querySelector( '.license-level' );
 			if ( level ) {
-				level.textContent = requires;
+				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
 
 			// If one click upgrade, hide other content
@@ -5728,6 +5723,13 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function getRequiredLicenseFromTrigger( element ) {
+		if ( element.dataset.requires ) {
+			return element.dataset.requires;
+		}
+		return 'Pro';
+	}
+
 	function populateUpgradeTab( element ) {
 		const title = element.dataset.upgrade;
 		let message = element.dataset.message;
@@ -5742,27 +5744,84 @@ function frmAdminBuildJS() {
 			return;
 		}
 
+		if ( container.querySelector( '.frm-tab-message' ) ) {
+			// Tab has already been populated.
+			return;
+		}
+
 		const h2 = container.querySelector( 'h2' );
-		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
 		h2.style.borderBottom = 'none';
 
-		container.classList.add( 'frmcenter' );
+		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
+		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
 
-		if ( ! container.querySelector( '.frm-tab-message' ) ) {
-			container.appendChild(
-				tag(
-					'p',
-					{
-						className: 'frm-tab-message',
-						text: message
-					}
-				)
+		container.classList.add( 'frmcenter' );
+		container.appendChild(
+			tag(
+				'p',
+				{
+					className: 'frm-tab-message',
+					text: message
+				}
+			)
+		);
+
+		const upgradeModalLink = document.getElementById( 'frm-upgrade-modal-link' );
+
+		// Borrow the call to action from the Upgrade modal which should exist on the settings page (it is still used for other upgrades including Actions).
+		if ( upgradeModalLink ) {
+			const button = upgradeModalLink.cloneNode( true );
+			const level = button.querySelector( '.license-level' );
+
+			button.style.marginTop = '20px';
+			if ( level ) {
+				level.textContent = getRequiredLicenseFromTrigger( element );
+			}
+
+			container.appendChild( button );
+
+			// Maybe append the secondary "Already purchased?" link from the modal as well.
+			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
+				container.appendChild( upgradeModalLink.nextElementSibling.cloneNode( true ) );
+			}
+		}
+
+		// TODO wrap the screenshot in a fake browser window image.
+		if ( element.dataset.screenshot ) {
+			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
+		}
+	}
+
+	function getScreenshotWrapper( screenshot ) {
+		const folderUrl = frmGlobal.url + '/images/form-settings/';
+		const wrapper = div({
+			className: 'frm-settings-screenshot-wrapper',
+			children: [
+				getToolbar(),
+				div({ child: img({ src: folderUrl + screenshot }) })
+			]
+		});
+
+		function getToolbar() {
+			const children = getColorIcons();
+			children.push( img({ src: frmGlobal.url + '/images/form-settings/tab.svg' }) );
+			return div({
+				className: 'frm-settings-screenshot-toolbar',
+				children
+			});
+		}
+
+		function getColorIcons() {
+			return [ '#ED8181', '#EDE06A', '#80BE30' ].map(
+				color => {
+					const circle = div({ className: 'frm-minmax-icon' });
+					circle.style.backgroundColor = color;
+					return circle;
+				}
 			);
 		}
 
-		// TODO add calls to action.
-		// TODO add an image screenshot.
+		return wrapper;
 	}
 
 	/**
