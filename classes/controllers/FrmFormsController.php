@@ -1134,7 +1134,6 @@ class FrmFormsController {
 					'upgrade' => __( 'Form Permissions', 'formidable' ),
 					'message' => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
 				),
-				'function'   => array( __CLASS__, 'placeholder_tab' ),
 			),
 			'scheduling' => array(
 				'name'       => __( 'Form Scheduling', 'formidable' ),
@@ -1144,7 +1143,6 @@ class FrmFormsController {
 					'medium'  => 'scheduling',
 					'upgrade' => __( 'Form scheduling settings', 'formidable' ),
 				),
-				'function'   => array( __CLASS__, 'placeholder_tab' ),
 			),
 			'buttons'     => array(
 				'name'     => __( 'Styling & Buttons', 'formidable' ),
@@ -1157,7 +1155,6 @@ class FrmFormsController {
 				'icon'       => 'frm_icon_font frm_file_text_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
-				'function'   => array( __CLASS__, 'placeholder_tab' ),
 			),
 			'chat'        => array(
 				'name'       => __( 'Conversational Forms', 'formidable' ),
@@ -1170,7 +1167,6 @@ class FrmFormsController {
 						'message'  => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
 					)
 				),
-				'function'   => array( __CLASS__, 'placeholder_tab' ),
 			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
@@ -2472,15 +2468,6 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
-	}
-
-	/**
-	 * Print up-sell tab for form settings.
-	 *
-	 * @return void
-	 */
-	public static function placeholder_tab() {
-		echo '<div></div>';
 	}
 
 	/**

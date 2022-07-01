@@ -7218,6 +7218,13 @@ li.frm_noallow.button.frm_show_upgrade {
 	color: inherit;
 }
 
+.frm-tab-message {
+	max-width: 600px;
+	margin: 0 auto;
+	color: rgba(63, 75, 91, 0.8);
+	margin-top: 20px;
+}
+
 .frm-dialog {
 	z-index: 100;
 	padding: 0 !important;

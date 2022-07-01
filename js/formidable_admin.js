@@ -5732,9 +5732,24 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		container.innerHTML = '';
-		container.appendChild( tag( 'h3', title ) );
-		container.appendChild( tag( 'p', message ) );
+		const h2 = container.querySelector( 'h2' );
+		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
+		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
+		h2.style.borderBottom = 'none';
+
+		container.classList.add( 'frmcenter' );
+
+		if ( ! container.querySelector( '.frm-tab-message' ) ) {
+			container.appendChild(
+				tag(
+					'p',
+					{
+						className: 'frm-tab-message',
+						text: message
+					}
+				)
+			);
+		}
 
 		// TODO add calls to action.
 		// TODO add an image screenshot.
