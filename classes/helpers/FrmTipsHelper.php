@@ -221,6 +221,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_styling_tip() {
 		$tips = array(
 			array(
@@ -242,9 +245,9 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'style',
-					'param'   => 'bg-image-style-settings',
+					'param'   => 'duplicate-style',
 				),
-				'tip'  => __( 'Want to set a color with an alpha slider?', 'formidable' ),
+				'tip'  => __( 'Want to duplicate a style?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 		);

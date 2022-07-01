@@ -7218,6 +7218,10 @@ li.frm_noallow.button.frm_show_upgrade {
 	color: inherit;
 }
 
+#frm_upgrade_modal_image {
+	max-width: 200px;
+}
+
 .frm-tab-message {
 	max-width: 600px;
 	margin: 0 auto;
