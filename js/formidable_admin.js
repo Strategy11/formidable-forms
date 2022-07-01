@@ -5786,7 +5786,6 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		// TODO wrap the screenshot in a fake browser window image.
 		if ( element.dataset.screenshot ) {
 			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
 		}
