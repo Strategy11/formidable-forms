@@ -235,7 +235,7 @@ class FrmFormsController {
 
 		$params  = FrmForm::list_page_params();
 		$form    = FrmForm::duplicate( $params['id'], $params['template'], true );
-		$message = 'form_duplicated';
+		$message = 'form_duplicate_error';
 		$nonce   = FrmAppHelper::simple_get( '_wpnonce' );
 
 		$frm_settings = FrmAppHelper::get_settings();
@@ -244,13 +244,15 @@ class FrmFormsController {
 		}
 
 		if ( $form ) {
+			$message = 'form_duplicated';
 			$url = admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . absint( $form ) );
-			$url .= '&message=' . $message;
-
-			wp_safe_redirect( $url );
-			exit();
+		} else {
+			$url = admin_url( 'admin.php?page=formidable' );
 		}
-		self::display_forms_list( $params, __( 'There was a problem creating the new template.', 'formidable' ) );
+		$url .= '&message=' . $message;
+
+		wp_safe_redirect( $url );
+		exit();
 	}
 
 	/**
@@ -1625,7 +1627,14 @@ class FrmFormsController {
 					return;
 				}
 
+				$message = FrmAppHelper::get_param( 'message' );
+				if ( 'form_duplicate_error' === $message ) {
+					self::display_forms_list( array(), __( 'There was a problem duplicating the form', 'formidable' ) );
+					return;
+				}
+
 				self::display_forms_list();
+
 				return;
 		}
 	}
