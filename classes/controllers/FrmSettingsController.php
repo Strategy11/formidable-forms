@@ -206,14 +206,6 @@ class FrmSettingsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
 	}
 
-	public static function white_labeling_settings() {
-
-	}
-
-	public static function inbox_settings() {
-
-	}
-
 	public static function process_form( $stop_load = false ) {
 		global $frm_vars;
 
