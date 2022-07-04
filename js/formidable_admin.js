@@ -5792,7 +5792,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getScreenshotWrapper( screenshot ) {
-		const folderUrl = frmGlobal.url + '/images/form-settings/';
+		const folderUrl = frmGlobal.url + '/images/screenshots/';
 		const wrapper = div({
 			className: 'frm-settings-screenshot-wrapper',
 			children: [
@@ -5803,7 +5803,7 @@ function frmAdminBuildJS() {
 
 		function getToolbar() {
 			const children = getColorIcons();
-			children.push( img({ src: frmGlobal.url + '/images/form-settings/tab.svg' }) );
+			children.push( img({ src: frmGlobal.url + '/images/tab.svg' }) );
 			return div({
 				className: 'frm-settings-screenshot-toolbar',
 				children

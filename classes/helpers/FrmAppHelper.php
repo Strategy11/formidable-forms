@@ -2539,6 +2539,10 @@ class FrmAppHelper {
 		}
 
 		$frm_action = self::simple_get( 'frm_action', 'sanitize_title' );
+		if ( 'lite-reports' === $frm_action ) {
+			$frm_action = 'reports';
+		}
+
 		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action ) ) ) {
 			echo ' class="current_page"';
 		}
