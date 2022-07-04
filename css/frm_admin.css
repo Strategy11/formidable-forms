@@ -348,7 +348,10 @@ ul.frm_form_nav > li:last-of-type {
 .frm_form_nav > li > a {
 	font-size: 13px;
 	text-transform: uppercase;
-	opacity: .8;
+}
+
+.frm_form_nav > li > a:not(.frm_noallow) {
+	opacity: 0.8;
 }
 
 .frm_form_nav > li > a:hover {
