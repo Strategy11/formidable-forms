@@ -5739,7 +5739,9 @@ function frmAdminBuildJS() {
 			message = message.replace( '<span class="frm_feature_label"></span>', title );
 		}
 
-		const container = document.querySelector( '.frm_' + element.getAttribute( 'href' ).replace( '#', '' ) );
+		const tab = element.getAttribute( 'href' ).replace( '#', '' );
+		const container = document.querySelector( '.frm_' + tab ) || document.querySelector( '.' + tab );
+
 		if ( ! container ) {
 			return;
 		}
