@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm-minmax-icon" style="background-color: #ED8181"></div>
 					<div class="frm-minmax-icon" style="background-color: #EDE06A"></div>
 					<div class="frm-minmax-icon" style="background-color: #80BE30"></div>
-					<img src="<?php echo FrmAppHelper::plugin_url() . '/images/tab.svg' ?>" />
+					<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/tab.svg' ); ?>" />
 				</div>
 				<div>
 					<img src="<?php echo esc_attr( FrmAppHelper::plugin_url() . '/images/screenshots/reports.png' ); ?>" alt="<?php esc_attr_e( 'View reports', 'formidable' ); ?>" height="243" />
