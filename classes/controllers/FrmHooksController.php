@@ -95,8 +95,6 @@ class FrmHooksController {
 
 		// Elementor.
 		add_action( 'elementor/widgets/widgets_registered', 'FrmElementorController::register_elementor_hooks' );
-
-		add_filter( 'frm_aria_describedby_values', 'FrmFieldsController::sort_aria_describedby_values' );
 	}
 
 	public static function load_admin_hooks() {
