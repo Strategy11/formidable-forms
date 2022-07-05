@@ -1075,7 +1075,11 @@ DEFAULT_HTML;
 		}
 
 		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
-			array_push( $describedby, 'frm_error_' . $args['html_id'] );
+			if ( $error_comes_first ) {
+				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
+			} else {
+				array_push( $describedby, 'frm_error_' . $args['html_id'] );
+			}
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' ) {
