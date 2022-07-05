@@ -347,7 +347,10 @@ ul.frm_form_nav > li:last-of-type {
 .frm_form_nav > li > a {
 	font-size: 13px;
 	text-transform: uppercase;
-	opacity: .8;
+}
+
+.frm_form_nav > li > a:not(.frm_noallow) {
+	opacity: 0.8;
 }
 
 .frm_form_nav > li > a:hover {
@@ -7228,6 +7231,53 @@ li.frm_noallow.button.frm_show_upgrade {
 
 .frm_noallow a {
 	color: inherit;
+}
+
+.frm-tab-message {
+	max-width: 600px;
+	margin: 20px auto;
+	color: rgba(63, 75, 91, 0.8);
+}
+
+.frm-settings-screenshot-toolbar {
+	min-height: 39px;
+	display: flex;
+}
+
+.frm-settings-screenshot-toolbar .frm-minmax-icon {
+	height: 8px;
+	width: 8px;
+	border-radius: 50%;
+	align-self: center;
+	margin-left: 10px;
+}
+
+.frm-settings-screenshot-toolbar .frm-minmax-icon:first-of-type {
+	margin-left: 20px;
+}
+
+.frm-settings-screenshot-toolbar img {
+	object-fit: contain;
+	align-self: flex-end;
+	margin-left: 25px;
+}
+
+.frm-settings-screenshot-toolbar + div {
+	background: #fff;
+	padding-top: 25px;
+	border-radius: 0 0 16px 16px;
+}
+
+.frm-settings-screenshot-toolbar + div img {
+	max-width: calc( 100% - 40px );
+}
+
+.frm-settings-screenshot-wrapper {
+	max-width: 700px;
+	margin: 50px auto 0;
+	box-shadow: 0px 4px 4px rgba(189, 196, 205, 0.25), 0px 12px 56px rgba(42, 57, 75, 0.25);
+	border-radius: 16px;
+	background: #EBECF1;
 }
 
 .frm-dialog {

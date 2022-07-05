@@ -317,7 +317,7 @@ function frmAdminBuildJS() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
-	const { tag, div, span, a, svg } = frmDom;
+	const { tag, div, span, a, svg, img } = frmDom;
 	const { doJsonFetch } = frmDom.ajax;
 
 	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
@@ -5661,73 +5661,201 @@ function frmAdminBuildJS() {
 	}
 
 	function initUpgradeModal() {
-		var $info = initModal( '#frm_upgrade_modal' );
+		const $info = initModal( '#frm_upgrade_modal' );
 		if ( $info === false ) {
 			return;
 		}
 
-		jQuery( document ).on( 'click', '[data-upgrade]', function( event ) {
-			var upgradeLabel, requires, button, link, content;
+		document.addEventListener( 'click', handleUpgradeClick );
+
+		function handleUpgradeClick( event ) {
+			let element, upgradeLabel, link, content;
+
+			element = event.target;
+			upgradeLabel = element.dataset.upgrade;
+
+			if ( ! upgradeLabel ) {
+				const parent = element.closest( '[data-upgrade]' );
+				if ( ! parent ) {
+					return;
+				}
+
+				element = parent;
+				upgradeLabel = parent.dataset.upgrade;
+			}
+
+			if ( element.classList.contains( 'frm_show_expired_modal' ) ) {
+				const hookName = 'frm_show_expired_modal';
+				wp.hooks.doAction( hookName, element );
+				return;
+			}
+
+			if ( ! upgradeLabel || element.classList.contains( 'frm_show_upgrade_tab' ) ) {
+				return;
+			}
 
 			event.preventDefault();
 
-			if ( this.classList.contains( 'frm_show_expired_modal' ) ) {
-				const hookName = 'frm_show_expired_modal';
-				wp.hooks.doAction( hookName, this );
-				return;
+			const modal = $info.get( 0 );
+			const lockIcon = modal.querySelector( '.frm_lock_icon' );
+
+			if ( lockIcon ) {
+				lockIcon.classList.remove( 'frm_lock_open_icon' );
+				lockIcon.querySelector( 'use' ).setAttribute( 'href', '#frm_lock_icon' );
 			}
 
-			upgradeLabel = this.getAttribute( 'data-upgrade' );
-
-			if ( '' === upgradeLabel ) {
-				// if the upgrade level is empty, it's because this upgrade is already active.
-				return;
+			const level = modal.querySelector( '.license-level' );
+			if ( level ) {
+				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
-
-			jQuery( '#frm_upgrade_modal .frm_lock_icon' ).removeClass( 'frm_lock_open_icon' );
-			jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_icon' );
-
-			requires = this.getAttribute( 'data-requires' );
-			if ( typeof requires === 'undefined' || requires === null || requires === '' ) {
-				requires = 'Pro';
-			}
-			jQuery( '.license-level' ).text( requires );
 
 			// If one click upgrade, hide other content
-			addOneClickModal( this );
+			addOneClickModal( element );
 
-			jQuery( '.frm_feature_label' ).text( upgradeLabel );
-			jQuery( '#frm_upgrade_modal h2' ).show();
+			modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
+			modal.querySelector( 'h2' ).style.display = 'block';
 
 			$info.dialog( 'open' );
 
 			// set the utm medium
-			button = $info.find( '.button-primary:not(#frm-oneclick-button)' );
-			link = button.attr( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + this.getAttribute( 'data-medium' ) );
-			content = this.getAttribute( 'data-content' );
+			const button = modal.querySelector( '.button-primary:not(#frm-oneclick-button)' );
+			link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
+			content = element.getAttribute( 'data-content' );
 			if ( content === null ) {
 				content = '';
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
-			button.attr( 'href', link );
-			return false;
+			button.setAttribute( 'href', link );
+		}
+	}
+
+	function getRequiredLicenseFromTrigger( element ) {
+		if ( element.dataset.requires ) {
+			return element.dataset.requires;
+		}
+		return 'Pro';
+	}
+
+	function populateUpgradeTab( element ) {
+		const title = element.dataset.upgrade;
+		let message = element.dataset.message;
+
+		if ( ! message ) {
+			message = document.getElementById( 'frm-upgrade-message' ).dataset.default;
+			message = message.replace( '<span class="frm_feature_label"></span>', title );
+		}
+
+		const tab = element.getAttribute( 'href' ).replace( '#', '' );
+		const container = document.querySelector( '.frm_' + tab ) || document.querySelector( '.' + tab );
+
+		if ( ! container ) {
+			return;
+		}
+
+		if ( container.querySelector( '.frm-tab-message' ) ) {
+			// Tab has already been populated.
+			return;
+		}
+
+		const h2 = container.querySelector( 'h2' );
+		h2.style.borderBottom = 'none';
+
+		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
+		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
+
+		container.classList.add( 'frmcenter' );
+		container.appendChild(
+			tag(
+				'p',
+				{
+					className: 'frm-tab-message',
+					text: message
+				}
+			)
+		);
+
+		const upgradeModalLink = document.getElementById( 'frm-upgrade-modal-link' );
+
+		// Borrow the call to action from the Upgrade modal which should exist on the settings page (it is still used for other upgrades including Actions).
+		if ( upgradeModalLink ) {
+			const upgradeButton = upgradeModalLink.cloneNode( true );
+			upgradeButton.id = 'frm_upgrade_link_' + getAutoId();
+
+			const level = upgradeButton.querySelector( '.license-level' );
+
+			if ( level ) {
+				level.textContent = getRequiredLicenseFromTrigger( element );
+			}
+
+			container.appendChild( upgradeButton );
+
+			// Maybe append the secondary "Already purchased?" link from the modal as well.
+			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
+				container.appendChild( upgradeModalLink.nextElementSibling.cloneNode( true ) );
+			}
+
+			const oneClickButton = document.getElementById( 'frm-oneclick-button' ).cloneNode( true );
+			oneClickButton.id = 'frm_one_click_' + getAutoId();
+			container.appendChild( oneClickButton );
+			addOneClickModal( element, oneClickButton, upgradeButton );
+		}
+
+		if ( element.dataset.screenshot ) {
+			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
+		}
+	}
+
+	function getScreenshotWrapper( screenshot ) {
+		const folderUrl = frmGlobal.url + '/images/screenshots/';
+		const wrapper = div({
+			className: 'frm-settings-screenshot-wrapper',
+			children: [
+				getToolbar(),
+				div({ child: img({ src: folderUrl + screenshot }) })
+			]
 		});
+
+		function getToolbar() {
+			const children = getColorIcons();
+			children.push( img({ src: frmGlobal.url + '/images/tab.svg' }) );
+			return div({
+				className: 'frm-settings-screenshot-toolbar',
+				children
+			});
+		}
+
+		function getColorIcons() {
+			return [ '#ED8181', '#EDE06A', '#80BE30' ].map(
+				color => {
+					const circle = div({ className: 'frm-minmax-icon' });
+					circle.style.backgroundColor = color;
+					return circle;
+				}
+			);
+		}
+
+		return wrapper;
 	}
 
 	/**
 	 * Allow addons to be installed from the upgrade modal.
 	 */
-	function addOneClickModal( link ) {
+	function addOneClickModal( link, button, showLink ) {
 		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
 			oneclick = link.getAttribute( 'data-oneclick' ),
 			customLink = link.getAttribute( 'data-link' ),
-			showLink = document.getElementById( 'frm-upgrade-modal-link' ),
 			upgradeMessage = document.getElementById( 'frm-upgrade-message' ),
 			newMessage = link.getAttribute( 'data-message' ),
-			button = document.getElementById( 'frm-oneclick-button' ),
 			showIt = 'block',
 			showMsg = 'block',
 			hideIt = 'none';
+
+		if ( undefined === button ) {
+			button = document.getElementById( 'frm-oneclick-button' );
+		}
+		if ( undefined === showLink ) {
+			showLink = document.getElementById( 'frm-upgrade-modal-link' );
+		}
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
@@ -8950,10 +9078,17 @@ function frmAdminBuildJS() {
 			// tabs
 			jQuery( document ).on( 'click', '#frm-nav-tabs a', clickNewTab );
 			jQuery( '.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a' ).on( 'click', function() {
-				if ( ! this.classList.contains( 'frm_noallow' ) ) {
-					clickTab( this );
-					return false;
+				const showUpgradeTab = this.classList.contains( 'frm_show_upgrade_tab' );
+				if ( this.classList.contains( 'frm_noallow' ) && ! showUpgradeTab ) {
+					return;
 				}
+
+				if ( showUpgradeTab ) {
+					populateUpgradeTab( this );
+				}
+
+				clickTab( this );
+				return false;
 			});
 			clickTab( jQuery( '.starttab a' ), 'auto' );
 

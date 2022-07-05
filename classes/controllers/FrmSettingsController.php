@@ -60,19 +60,21 @@ class FrmSettingsController {
 			'white_label' => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_ghost_icon',
-				'html_class' => 'frm_show_upgrade frm_noallow',
+				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
-					'medium'  => 'white-label',
-					'upgrade' => __( 'White labeling options', 'formidable' ),
+					'medium'     => 'white-label',
+					'upgrade'    => __( 'White labeling options', 'formidable' ),
+					'screenshot' => 'white-label.png',
 				),
 			),
 			'inbox' => array(
 				'name'       => __( 'Inbox', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_email_icon',
-				'html_class' => 'frm_show_upgrade frm_noallow',
+				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
-					'medium'  => 'inbox-settings',
-					'upgrade' => __( 'Inbox settings', 'formidable' ),
+					'medium'     => 'inbox-settings',
+					'upgrade'    => __( 'Inbox settings', 'formidable' ),
+					'screenshot' => 'inbox.png',
 				),
 			),
 		);

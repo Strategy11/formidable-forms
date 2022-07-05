@@ -2575,6 +2575,10 @@ class FrmAppHelper {
 		}
 
 		$frm_action = self::simple_get( 'frm_action', 'sanitize_title' );
+		if ( 'lite-reports' === $frm_action ) {
+			$frm_action = 'reports';
+		}
+
 		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action ) ) ) {
 			echo ' class="current_page"';
 		}
@@ -3359,9 +3363,10 @@ class FrmAppHelper {
 	 */
 	public static function get_landing_page_upgrade_data_params( $medium = 'landing' ) {
 		$params = array(
-			'medium'  => $medium,
-			'upgrade' => __( 'Form Landing Pages', 'formidable' ),
-			'message' => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
+			'medium'     => $medium,
+			'upgrade'    => __( 'Form Landing Pages', 'formidable' ),
+			'message'    => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
+			'screenshot' => 'landing.png',
 		);
 		return self::get_upgrade_data_params( 'landing', $params );
 	}
