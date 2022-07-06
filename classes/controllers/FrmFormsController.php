@@ -1629,7 +1629,7 @@ class FrmFormsController {
 
 				$message = FrmAppHelper::get_param( 'message' );
 				if ( 'form_duplicate_error' === $message ) {
-					self::display_forms_list( array(), __( 'There was a problem duplicating the form', 'formidable' ) );
+					self::display_forms_list( array(), '', array( __( 'There was a problem duplicating the form', 'formidable' ) ) );
 					return;
 				}
 
