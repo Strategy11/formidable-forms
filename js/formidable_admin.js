@@ -5754,7 +5754,9 @@ function frmAdminBuildJS() {
 			message = message.replace( '<span class="frm_feature_label"></span>', title );
 		}
 
-		const container = document.querySelector( '.frm_' + element.getAttribute( 'href' ).replace( '#', '' ) );
+		const tab = element.getAttribute( 'href' ).replace( '#', '' );
+		const container = document.querySelector( '.frm_' + tab ) || document.querySelector( '.' + tab );
+
 		if ( ! container ) {
 			return;
 		}
@@ -5785,20 +5787,26 @@ function frmAdminBuildJS() {
 
 		// Borrow the call to action from the Upgrade modal which should exist on the settings page (it is still used for other upgrades including Actions).
 		if ( upgradeModalLink ) {
-			const button = upgradeModalLink.cloneNode( true );
-			const level = button.querySelector( '.license-level' );
+			const upgradeButton = upgradeModalLink.cloneNode( true );
+			upgradeButton.id = 'frm_upgrade_link_' + getAutoId();
 
-			button.style.marginTop = '20px';
+			const level = upgradeButton.querySelector( '.license-level' );
+
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
 
-			container.appendChild( button );
+			container.appendChild( upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the modal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
 				container.appendChild( upgradeModalLink.nextElementSibling.cloneNode( true ) );
 			}
+
+			const oneClickButton = document.getElementById( 'frm-oneclick-button' ).cloneNode( true );
+			oneClickButton.id = 'frm_one_click_' + getAutoId();
+			container.appendChild( oneClickButton );
+			addOneClickModal( element, oneClickButton, upgradeButton );
 		}
 
 		if ( element.dataset.screenshot ) {
@@ -5807,7 +5815,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getScreenshotWrapper( screenshot ) {
-		const folderUrl = frmGlobal.url + '/images/form-settings/';
+		const folderUrl = frmGlobal.url + '/images/screenshots/';
 		const wrapper = div({
 			className: 'frm-settings-screenshot-wrapper',
 			children: [
@@ -5818,7 +5826,7 @@ function frmAdminBuildJS() {
 
 		function getToolbar() {
 			const children = getColorIcons();
-			children.push( img({ src: frmGlobal.url + '/images/form-settings/tab.svg' }) );
+			children.push( img({ src: frmGlobal.url + '/images/tab.svg' }) );
 			return div({
 				className: 'frm-settings-screenshot-toolbar',
 				children
@@ -5841,17 +5849,22 @@ function frmAdminBuildJS() {
 	/**
 	 * Allow addons to be installed from the upgrade modal.
 	 */
-	function addOneClickModal( link ) {
+	function addOneClickModal( link, button, showLink ) {
 		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
 			oneclick = link.getAttribute( 'data-oneclick' ),
 			customLink = link.getAttribute( 'data-link' ),
-			showLink = document.getElementById( 'frm-upgrade-modal-link' ),
 			upgradeMessage = document.getElementById( 'frm-upgrade-message' ),
 			newMessage = link.getAttribute( 'data-message' ),
-			button = document.getElementById( 'frm-oneclick-button' ),
 			showIt = 'block',
 			showMsg = 'block',
 			hideIt = 'none';
+
+		if ( undefined === button ) {
+			button = document.getElementById( 'frm-oneclick-button' );
+		}
+		if ( undefined === showLink ) {
+			showLink = document.getElementById( 'frm-upgrade-modal-link' );
+		}
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {

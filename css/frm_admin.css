@@ -348,7 +348,10 @@ ul.frm_form_nav > li:last-of-type {
 .frm_form_nav > li > a {
 	font-size: 13px;
 	text-transform: uppercase;
-	opacity: .8;
+}
+
+.frm_form_nav > li > a:not(.frm_noallow) {
+	opacity: 0.8;
 }
 
 .frm_form_nav > li > a:hover {
@@ -7224,9 +7227,8 @@ li.frm_noallow.button.frm_show_upgrade {
 
 .frm-tab-message {
 	max-width: 600px;
-	margin: 0 auto;
+	margin: 20px auto;
 	color: rgba(63, 75, 91, 0.8);
-	margin-top: 20px;
 }
 
 .frm-settings-screenshot-toolbar {

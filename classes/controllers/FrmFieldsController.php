@@ -570,18 +570,15 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
+	 * Prepares field placeholder.
+	 *
+	 * @since 5.4 This doesn't call `FrmFieldsController::get_default_value_from_name()` anymore.
+	 *
+	 * @param array $field Field array.
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder          = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
-		$placeholder_is_blank = empty( $placeholder ) && '0' !== $placeholder;
-		$is_placeholder_field = FrmFieldsHelper::is_placeholder_field_type( $field['type'] );
-		$is_combo_field       = in_array( $field['type'], array( 'address', 'credit_card' ), true );
-
-		if ( $placeholder_is_blank && $is_placeholder_field && ! $is_combo_field ) {
-			$placeholder = self::get_default_value_from_name( $field );
-		}
+		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
 
 		return $placeholder;
 	}
@@ -591,23 +588,14 @@ class FrmFieldsController {
 	 * get the label to use as the placeholder
 	 *
 	 * @since 2.05
+	 * @since 5.4 Remove the logic code for "inside" label position.
 	 *
 	 * @param array $field
 	 *
 	 * @return string
 	 */
 	public static function get_default_value_from_name( $field ) {
-		$position = FrmField::get_option( $field, 'label' );
-		if ( $position == 'inside' ) {
-			$default_value = $field['name'];
-			if ( FrmField::is_required( $field ) ) {
-				$default_value .= ' ' . $field['required_indicator'];
-			}
-		} else {
-			$default_value = '';
-		}
-
-		return $default_value;
+		return '';
 	}
 
 	/**
