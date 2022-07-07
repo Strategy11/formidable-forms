@@ -15,9 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<h2>
 					<?php
 					printf(
-						/* translators: %s: Feature name */
-						esc_html__( '%s are not installed', 'formidable' ),
-						'<span class="frm_feature_label"></span>'
+						/* translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag. */
+						esc_html__( '%1$s %2$sare not installed%3$s', 'formidable' ),
+						'<span class="frm_feature_label"></span>',
+						'<span class="frm_are_not_installed">',
+						'</span>'
 					);
 					?>
 				</h2>

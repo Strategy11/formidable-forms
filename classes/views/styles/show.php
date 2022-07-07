@@ -44,7 +44,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php esc_html_e( 'Make this the default style', 'formidable' ); ?></span>
 				</label>
 			</p>
-			<?php do_action( 'frm_style_settings_top', $style ); ?>
+
+			<?php
+			if ( ! class_exists( 'FrmProStylesController' ) ) {
+				require dirname( __FILE__ ) . '/_upsell-multiple-styles.php';
+			}
+
+			/**
+			 * @param WP_Post $style
+			 */
+			do_action( 'frm_style_settings_top', $style );
+			?>
 		</div>
 		<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
 	</div>

@@ -5700,8 +5700,22 @@ function frmAdminBuildJS() {
 			const lockIcon = modal.querySelector( '.frm_lock_icon' );
 
 			if ( lockIcon ) {
+				lockIcon.style.display = 'block';
 				lockIcon.classList.remove( 'frm_lock_open_icon' );
 				lockIcon.querySelector( 'use' ).setAttribute( 'href', '#frm_lock_icon' );
+			}
+
+			const upgradeImageId = 'frm_upgrade_modal_image';
+			const oldImage = document.getElementById( upgradeImageId );
+			if ( oldImage ) {
+				oldImage.remove();
+			}
+
+			if ( element.dataset.image ) {
+				if ( lockIcon ) {
+					lockIcon.style.display = 'none';
+				}
+				lockIcon.parentNode.insertBefore( img({ id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image }), lockIcon );
 			}
 
 			const level = modal.querySelector( '.license-level' );
@@ -5712,6 +5726,7 @@ function frmAdminBuildJS() {
 			// If one click upgrade, hide other content
 			addOneClickModal( element );
 
+			modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'block';
 			modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
 			modal.querySelector( 'h2' ).style.display = 'block';
 
