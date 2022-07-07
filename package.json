@@ -24,6 +24,7 @@
 		"@wordpress/components": "^6.0.1",
 		"@wordpress/data": "^3.1.2",
 		"@wordpress/element": "^2.16.0",
+		"@wordpress/eslint-plugin": "^12.6.0",
 		"@wordpress/i18n": "^3.14.0",
 		"@wordpress/url": "^2.17.0",
 		"classnames": "^2.2.6",
