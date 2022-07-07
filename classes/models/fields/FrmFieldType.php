@@ -1097,6 +1097,10 @@ DEFAULT_HTML;
 		} elseif ( ! empty( $describedby ) ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
+
+		if ( ! $error_comes_first ) {
+			$input_html .= ' data-error-first = "0" ';
+		}
 	}
 
 	/**

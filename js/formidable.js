@@ -792,9 +792,14 @@ function frmFrontFormJS() {
 
 				if ( typeof describedBy === 'undefined' ) {
 					describedBy = id;
-				} else if ( describedBy.indexOf( id ) === -1 ) {
-					describedBy = describedBy + ' ' + id;
+				} else if ( describedBy.indexOf( id ) === -1 && describedBy.indexOf( 'frm_error_field_') === -1 ) {
+					if ( input.data( 'error-first ') == 0 ) {
+						describedBy = describedBy + ' ' + id;
+					} else {
+						describedBy = id + ' ' + describedBy;
+					}
 				}
+
 				input.attr( 'aria-describedby', describedBy );
 			}
 			input.attr( 'aria-invalid', true );
