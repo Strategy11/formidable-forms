@@ -1,4 +1,9 @@
 == Changelog ==
+= 5.4.1 =
+* New: Fields using the "Placeholder inside the field" Label Position setting will now use an animated label that moves to the top of the field when focused.
+* New: Added a new frm_after_destroy_entry filter that can be used to update caching after a Formidable entry is deleted.
+* Fix: An unexpected empty broken application template was appearing for expired licenses.
+
 = 5.4 =
 * New: Added a new frm_new_form_values filter for customizing the default values of new forms.
 * New: Added a new frm_ajax_loaded_field event for listening for loaded fields loaded via AJAX on long forms in the form builder.
