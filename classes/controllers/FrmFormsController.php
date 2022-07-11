@@ -628,7 +628,7 @@ class FrmFormsController {
 			}
 
 			$response = array(
-				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ),
+				'redirect' => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . $new_form_id ) . '&_wpnonce=' . wp_create_nonce(),
 			);
 		}
 
@@ -991,7 +991,7 @@ class FrmFormsController {
 				'name'        => $template->name,
 				'key'         => $template->form_key,
 				'description' => $template->description,
-				'url'         => admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ),
+				'url'         => wp_nonce_url( admin_url( 'admin.php?page=formidable&frm_action=duplicate&id=' . absint( $template->id ) ) ),
 				'released'    => $template->created_at,
 				'installed'   => 1,
 			);
