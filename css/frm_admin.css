@@ -92,8 +92,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	display: none;
 }
 
-.formidable_page_formidable-entries.frm-full-screen #screen-meta-links .screen-meta-toggle,
-.post-type-frm_display #screen-meta-links .screen-meta-toggle {
+.frm-full-screen #screen-meta-links .screen-meta-toggle {
 	position: absolute;
 	right: 80px;
 	box-shadow: none;
