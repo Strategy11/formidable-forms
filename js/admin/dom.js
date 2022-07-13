@@ -268,7 +268,13 @@ let frmDom;
 					if ( this.value === '' || this.nextElementSibling.value < 1 ) {
 						jQuery( this ).autocomplete( 'search', this.value );
 					}
-				});
+				})
+				.data('ui-autocomplete')._renderItem = function( ul, item ) {
+					return jQuery( '<li>' )
+					.attr( 'aria-label', item.label )
+					.append( jQuery( '<div>' ).text( item.label ) )
+					.appendTo( ul );
+				};
 			}
 		},
 
