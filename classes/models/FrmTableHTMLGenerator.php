@@ -54,6 +54,14 @@ class FrmTableHTMLGenerator {
 	protected $td_style = '';
 
 	/**
+	 * Used to add a class in tables. Set in Pro.
+	 *
+	 * @var bool
+	 * @since x.x
+	 */
+	public $is_child = false;
+
+	/**
 	 * FrmTableHTMLGenerator constructor.
 	 *
 	 * @param string $type
@@ -271,9 +279,7 @@ class FrmTableHTMLGenerator {
 	 */
 	public function generate_two_cell_table_row( $label, $value ) {
 		$row = '<tr' . $this->tr_style();
-		if ( $value === '' ) {
-			$row .= ' class="frm-empty-row"';
-		}
+		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
 		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
@@ -304,12 +310,35 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_single_cell_table_row( $value ) {
-		$row = '<tr' . $this->tr_style() . '>';
+		$row = '<tr' . $this->tr_style();
+		$row .= $this->add_row_class();
+		$row .= '>';
 		$row .= '<td colspan="2"' . $this->td_style . '>' . $value . '</td>';
 		$row .= '</tr>' . "\r\n";
 
 		$this->switch_odd();
 
 		return $row;
+	}
+
+	/**
+	 * Add classes to the tr.
+	 *
+	 * @since x.x
+	 * @param bool $empty If the value in the row is blank.
+	 */
+	protected function add_row_class( $empty = false ) {
+		$class = '';
+		if ( $empty ) {
+			// Only add this class on two cell rows.
+			$class .= ' frm-empty-row';
+		}
+		if ( $this->is_child ) {
+			$class .= ' frm-child-row';
+		}
+		if ( $class ) {
+			$class = ' class="' . $class . '"';
+		}
+		return $class;
 	}
 }

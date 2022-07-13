@@ -492,6 +492,10 @@ ul.frm_form_nav > li:last-of-type {
 	display: none;
 }
 
+.frm-child-row {
+	box-shadow: 5px 0px 0px 0px inset var(--grey-border);
+}
+
 .frm_animate_bg {
 	transition: background 200ms linear, color 200ms linear;
 }
