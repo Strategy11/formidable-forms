@@ -493,7 +493,7 @@ ul.frm_form_nav > li:last-of-type {
 }
 
 .frm-child-row {
-	box-shadow: 5px 0px 0px 0px inset var(--grey-border);
+	box-shadow: 5px 0px 0px 0px inset var(--sidebar-hover);
 }
 
 .frm_animate_bg {
