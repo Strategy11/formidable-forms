@@ -59,7 +59,7 @@ class FrmTableHTMLGenerator {
 	 * @var bool
 	 * @since x.x
 	 */
-	public $is_child = false;
+	//public $is_child = false;
 
 	/**
 	 * FrmTableHTMLGenerator constructor.
@@ -337,7 +337,7 @@ class FrmTableHTMLGenerator {
 			$class .= ' frm-child-row';
 		}
 		if ( $class ) {
-			$class = ' class="' . $class . '"';
+			$class = ' class="' . trim( $class ) . '"';
 		}
 		return $class;
 	}
