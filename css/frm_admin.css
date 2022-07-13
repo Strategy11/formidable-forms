@@ -3698,6 +3698,10 @@ label input[type="checkbox"], label input[type="radio"] {
 	background-color: var(--sidebar-color);
 }
 
+.frm-alt-table h3 {
+	margin-bottom: 0;
+}
+
 .form-field .frm_cb_button {
 	height: 22px;
 	line-height: 20px;
