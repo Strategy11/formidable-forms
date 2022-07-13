@@ -440,38 +440,38 @@ legend.frm_hidden{
 }
 
 /* Floating labels */
-.with_frm_style .frm_inside_container {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) {
 	position: relative;
 	padding-top: 27px;
 	padding-top: calc(0.85 * var(--field-height));
 }
 
-.with_frm_style .frm_inside_container > input,
-.with_frm_style .frm_inside_container > select,
-.with_frm_style .frm_inside_container > textarea {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > input,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > select,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > textarea {
 	display: block;
 }
 
 /* These do not work if they are combined */
-.with_frm_style .frm_inside_container > input::-moz-placeholder,
-.with_frm_style .frm_inside_container > textarea::-moz-placeholder {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > input::-moz-placeholder,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > textarea::-moz-placeholder {
 	opacity: 0 !important;
 	transition: opacity 0.3s ease-in;
 }
 
-.with_frm_style .frm_inside_container > input:-ms-input-placeholder,
-.with_frm_style .frm_inside_container > textarea:-ms-input-placeholder {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > textarea:-ms-input-placeholder {
 	opacity: 0;
 	transition: opacity 0.3s ease-in;
 }
 
-.with_frm_style .frm_inside_container > input::placeholder,
-.with_frm_style .frm_inside_container > textarea::placeholder {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > input::placeholder,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > textarea::placeholder {
 	opacity: 0;
 	transition: opacity 0.3s ease-in;
 }
 
-.with_frm_style .frm_inside_container > label {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container) > label {
 	transition: all 0.3s ease-in;
 
 	position: absolute;
@@ -497,11 +497,11 @@ legend.frm_hidden{
 	pointer-events: none;
 }
 
-.with_frm_style.frm_style_lines-no-boxes .frm_inside_container > label {
+.with_frm_style.frm_style_lines-no-boxes .frm_inside_container:not(.frm_not_inside_container) > label {
 	line-height: 1;
 }
 
-.with_frm_style .frm_inside_container.frm_label_float_top > label {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > label {
 	top: 0;
 	left: 0;
 	font-size: 12px;
@@ -509,23 +509,24 @@ legend.frm_hidden{
 }
 
 /* These do not work if they are combined */
-.with_frm_style .frm_inside_container.frm_label_float_top > input::-moz-placeholder,
-.with_frm_style .frm_inside_container.frm_label_float_top > textarea::-moz-placeholder {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > input::-moz-placeholder,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > textarea::-moz-placeholder {
 	opacity: 1 !important;
 	transition: opacity 0.3s ease-in;
 }
 
-.with_frm_style .frm_inside_container.frm_label_float_top > input:-ms-input-placeholder,
-.with_frm_style .frm_inside_container.frm_label_float_top > textarea:-ms-input-placeholder {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > input:-ms-input-placeholder,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > textarea:-ms-input-placeholder {
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
 }
 
-.with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
-.with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > input::placeholder,
+.with_frm_style .frm_inside_container:not(.frm_not_inside_container).frm_label_float_top > textarea::placeholder {
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
 }
+/* End floating labels */
 
 .with_frm_style .frm_description{
 	clear:both;

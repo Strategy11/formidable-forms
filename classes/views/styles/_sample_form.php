@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm_description"><?php esc_html_e( 'Another field with a description', 'formidable' ); ?></div>
 </div>
 
-<div class="frm_form_field form-field frm_fourth <?php echo esc_attr( $pos_class ); ?> frm_lite_style">
+<div class="frm_form_field form-field frm_fourth <?php echo esc_attr( $pos_class ); ?> frm_lite_style frm_not_inside_container">
 	<label class="frm_primary_label"><?php esc_html_e( 'Radio Buttons', 'formidable' ); ?></label>
 	<div class="frm_opt_container">
 		<div class="frm_radio"><label><input type="radio" /><?php esc_html_e( 'Option 1', 'formidable' ); ?></label></div>
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 
-<div class="frm_form_field form-field frm_fourth <?php echo esc_attr( $pos_class ); ?> frm_lite_style">
+<div class="frm_form_field form-field frm_fourth <?php echo esc_attr( $pos_class ); ?> frm_lite_style frm_not_inside_container">
 	<label class="frm_primary_label"><?php esc_html_e( 'Check Boxes', 'formidable' ); ?></label>
 	<div class="frm_opt_container">
 		<div class="frm_checkbox"><label><input type="checkbox" /><?php esc_html_e( 'Option 1', 'formidable' ); ?></label></div>
