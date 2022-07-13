@@ -130,6 +130,7 @@ class FrmFieldFormHtml {
 		$this->replace_required_class();
 		$this->maybe_replace_description_shortcode( false );
 		$this->replace_error_shortcode();
+		$this->add_class_to_label();
 		$this->add_field_div_classes();
 
 		$this->replace_entry_key();
@@ -408,9 +409,6 @@ class FrmFieldFormHtml {
 	private function add_class_to_label() {
 		$label_class = $this->field_obj->get_label_class();
 		$this->html  = str_replace( '[label_position]', $label_class, $this->html );
-		if ( $this->field_obj->get_field_column( 'label' ) == 'inside' && $this->field_obj->get_field_column( 'value' ) != '' ) {
-			$this->html = str_replace( 'frm_primary_label', 'frm_primary_label frm_visible', $this->html );
-		}
 	}
 
 	/**
