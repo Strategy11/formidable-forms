@@ -492,6 +492,10 @@ ul.frm_form_nav > li:last-of-type {
 	display: none;
 }
 
+.frm-child-row {
+	box-shadow: 5px 0px 0px 0px inset var(--sidebar-hover);
+}
+
 .frm_animate_bg {
 	transition: background 200ms linear, color 200ms linear;
 }
@@ -3692,6 +3696,10 @@ label input[type="checkbox"], label input[type="radio"] {
 
 .frm-alt-table tr:nth-child(even) {
 	background-color: var(--sidebar-color);
+}
+
+.frm-alt-table h3 {
+	margin-bottom: 0;
 }
 
 .form-field .frm_cb_button {
