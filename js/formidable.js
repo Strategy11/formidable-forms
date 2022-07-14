@@ -1201,7 +1201,9 @@ function frmFrontFormJS() {
 	function initFloatingLabels() {
 		var checkFloatLabel, checkDropdownLabel, checkPlaceholderIE, runOnLoad, selector, floatClass;
 
-		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		selector = '.frm-show-form .frm_inside_container:not(.frm_not_inside_container) input, ' +
+			'.frm-show-form .frm_inside_container:not(.frm_not_inside_container) select, ' +
+			'.frm-show-form .frm_inside_container:not(.frm_not_inside_container) textarea';
 		floatClass = 'frm_label_float_top';
 
 		checkFloatLabel = function( input ) {

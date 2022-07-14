@@ -9002,6 +9002,34 @@ function frmAdminBuildJS() {
 		return frmDom.util.debounce( func, wait );
 	}
 
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -9627,6 +9655,55 @@ function frmAdminBuildJS() {
 		styleInit: function() {
 			const debouncedPreviewUpdate = debounce( changeStyling, 100 );
 
+			/*
+			 * Floating labels.
+			 */
+			const floatingLabelSelector = '.frm-show-form .frm_inside_container:not(.frm_not_inside_container) input,' +
+				'.frm-show-form .frm_inside_container:not(.frm_not_inside_container) select,' +
+				'.frm-show-form .frm_inside_container:not(.frm_not_inside_container) textarea';
+			const floatingClass = 'frm_label_float_top';
+
+			const checkFloatLabel = input => {
+				let firstOpt;
+
+				const container      = input.closest( '.frm_inside_container' );
+				const shouldFloatTop = input.value || document.activeElement === input;
+
+				container.classList.toggle( floatingClass, shouldFloatTop );
+
+				if ( 'SELECT' === input.tagName ) {
+					firstOpt = input.querySelector( 'option:first-child' );
+
+					if ( shouldFloatTop ) {
+						if ( firstOpt.getAttribute( 'data-label' ) ) {
+							firstOpt.text = firstOpt.getAttribute( 'data-label' );
+							firstOpt.removeAttribute( 'data-label' );
+						}
+					} else {
+						if ( firstOpt.text ) {
+							firstOpt.setAttribute( 'data-label', firstOpt.text );
+							firstOpt.text = '';
+						}
+					}
+				}
+			};
+
+			const initFloatingLabels = () => {
+				[ 'focus', 'blur' ].forEach( eventName => {
+					documentOn(
+						eventName,
+						floatingLabelSelector,
+						event => {
+							checkFloatLabel( event.target );
+						},
+						true
+					);
+				});
+			};
+
+			initFloatingLabels();
+			// End floating labels.
+
 			collapseAllSections();
 
 			document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
@@ -9660,6 +9737,7 @@ function frmAdminBuildJS() {
 					},
 					success: function( css ) {
 						document.getElementById( 'this_css' ).innerHTML = css;
+						document.querySelectorAll( floatingLabelSelector ).forEach( input => checkFloatLabel( input ) );
 					}
 				});
 			}

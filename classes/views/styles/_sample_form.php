@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm_description"><p><?php esc_html_e( 'This is an example form description for styling purposes.', 'formidable' ); ?></p></div>
 
 <div class="frm_fields_container">
-<div class="frm_form_field frm_half frm_first form-field <?php echo esc_attr( $pos_class ); ?>">
+<div class="frm_form_field frm_half frm_first form-field <?php echo esc_attr( $pos_class ); ?> frm_label_float_top">
 <label class="frm_primary_label"><?php esc_html_e( 'Text field', 'formidable' ); ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ); ?>"/>
 <div class="frm_description"><?php esc_html_e( 'A field with a description', 'formidable' ); ?></div>
@@ -31,22 +31,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<select name="item_meta[1028]" id="field_wq7w5e" >
 		<option value=""> </option>
-		<option value=""><?php esc_html_e( 'Option 1', 'formidable' ); ?></option>
+		<option value="option-1"><?php esc_html_e( 'Option 1', 'formidable' ); ?></option>
 	</select>
 </div>
 
-<div class="frm_form_field form-field frm_third frm_first frm_blank_field <?php echo esc_attr( $pos_class ); ?>">
+<div class="frm_form_field form-field frm_third frm_first frm_blank_field <?php echo esc_attr( $pos_class ); ?> frm_label_float_top">
 <label class="frm_primary_label"><?php esc_html_e( 'Text field with error', 'formidable' ); ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ); ?>"/>
 <div class="frm_error"><?php echo esc_html( $frm_settings->blank_msg ); ?></div>
 </div>
 
-<div class="frm_form_field frm_third form-field frm_focus_field <?php echo esc_attr( $pos_class ); ?>">
+<div class="frm_form_field frm_third form-field frm_focus_field <?php echo esc_attr( $pos_class ); ?> frm_label_float_top">
 <label class="frm_primary_label"><?php esc_html_e( 'Text field in active state', 'formidable' ); ?> <span class="frm_required">*</span></label>
 <input type="text" value="<?php esc_attr_e( 'Active state will be seen when the field is clicked', 'formidable' ); ?>" />
 </div>
 
-<div class="frm_form_field frm_third form-field <?php echo esc_attr( $pos_class ); ?>">
+<div class="frm_form_field frm_third form-field <?php echo esc_attr( $pos_class ); ?> frm_label_float_top">
 <label class="frm_primary_label"><?php esc_html_e( 'Read-only field', 'formidable' ); ?></label>
 <input type="text" value="<?php esc_attr_e( 'This field is not editable', 'formidable' ); ?>" disabled="disabled" />
 </div>
