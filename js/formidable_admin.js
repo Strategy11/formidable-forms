@@ -8162,8 +8162,7 @@ function frmAdminBuildJS() {
 				url: formContainer.getAttribute( 'data-url' ),
 				success: function( json ) {
 					var form = json.renderedHtml;
-					form = form.replace( /<script\b[^<]*(community.formidableforms.com\/wp-includes\/js\/jquery\/jquery)[^<]*><\/script>/gi, '' );
-					form = form.replace( /<link\b[^>]*(formidableforms.css)[^>]*>/gi, '' );
+					form = form.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
 					formContainer.innerHTML = form;
 				}
 			});
