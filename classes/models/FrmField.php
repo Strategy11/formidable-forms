@@ -1146,4 +1146,23 @@ class FrmField {
 
 		return ! empty( $field_type_obj->is_combo_field );
 	}
+
+	/**
+	 * Get a list of all field settings that should be translated
+	 * on a multilingual site.
+	 *
+	 * @since x.xx
+	 * @param object $field - The field object
+	 */
+	public static function translatable_strings( $field ) {
+		$strings = array(
+			'name',
+			'description',
+			'blank',
+			'conf_msg',
+			'invalid',
+		);
+
+		return apply_filters( 'frm_field_strings', $strings, $field );
+	}
 }
