@@ -1058,23 +1058,48 @@ DEFAULT_HTML;
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 		if ( $aria_describedby_exists ) {
-			$describedby = 'aria-describedby="' . esc_attr( trim( $matches[1][0] ) );
+			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );
 		} else {
-			$describedby = '';
+			$describedby = array();
+		}
+
+		$error_comes_first = true;
+
+		$custom_error_fields = preg_grep( '/frm_error_field_*/', $describedby );
+		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
+
+		if ( $custom_desc_fields && $custom_error_fields ) {
+			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+				$error_comes_first = false;
+			}
+		}
+
+		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) && ! $custom_error_fields ) {
+			if ( $error_comes_first ) {
+				array_unshift( $describedby, 'frm_error_' . $args['html_id'] );
+			} else {
+				array_push( $describedby, 'frm_error_' . $args['html_id'] );
+			}
 		}
 
 		if ( $this->get_field_column( 'description' ) !== '' ) {
-			$describedby .= ' frm_desc_' . $args['html_id'];
+			if ( ! $error_comes_first ) {
+				array_unshift( $describedby, 'frm_desc_' . $args['html_id'] );
+			} else {
+				array_push( $describedby, 'frm_desc_' . $args['html_id'] );
+			}
 		}
 
-		if ( isset( $args['errors'][ 'field' . $args['field_id'] ] ) ) {
-			$describedby .= ' frm_error_' . $args['html_id'];
-		}
+		$describedby = implode( ' ', $describedby );
 
 		if ( $aria_describedby_exists ) {
-			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', $describedby . '"', $input_html );
+			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', 'aria-describedby="' . $describedby . '"', $input_html );
 		} elseif ( ! empty( $describedby ) ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
+		}
+
+		if ( ! $error_comes_first ) {
+			$input_html .= ' data-error-first="0"';
 		}
 	}
 
