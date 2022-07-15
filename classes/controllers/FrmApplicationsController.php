@@ -204,6 +204,7 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function render_applications_header( $title, $context ) {
+		FrmAppHelper::print_admin_banner( true );
 		require self::get_view_path() . 'header.php';
 	}
 }

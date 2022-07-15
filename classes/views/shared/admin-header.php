@@ -3,15 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( current_user_can( 'administrator' ) && ! FrmAppHelper::pro_is_installed() && ! $has_nav && empty( $atts['switcher'] ) ) {
-	?>
-	<div class="frm-upgrade-bar">
-		<span>You're using Formidable Forms Lite. To unlock more features consider</span>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'top-bar' ) ); ?>" target="_blank" rel="noopener">upgrading to Pro</a>.
-	</div>
-	<?php
-}
-FrmInbox::maybe_show_banner();
+FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 ?>
 <div id="frm_top_bar">
 	<?php if ( FrmAppHelper::is_full_screen() ) { ?>

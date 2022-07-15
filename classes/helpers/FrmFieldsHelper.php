@@ -1843,7 +1843,9 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 4.04
+	 *
 	 * @param array $args
+	 * @return void
 	 */
 	public static function show_add_field_buttons( $args ) {
 		$field_key    = $args['field_key'];

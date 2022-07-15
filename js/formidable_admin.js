@@ -5684,6 +5684,12 @@ function frmAdminBuildJS() {
 				upgradeLabel = parent.dataset.upgrade;
 			}
 
+			if ( element.classList.contains( 'frm_show_expired_modal' ) ) {
+				const hookName = 'frm_show_expired_modal';
+				wp.hooks.doAction( hookName, element );
+				return;
+			}
+
 			if ( ! upgradeLabel || element.classList.contains( 'frm_show_upgrade_tab' ) ) {
 				return;
 			}
