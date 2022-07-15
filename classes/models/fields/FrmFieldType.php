@@ -1099,7 +1099,7 @@ DEFAULT_HTML;
 		}
 
 		if ( ! $error_comes_first ) {
-			$input_html .= ' data-error-first = "0" ';
+			$input_html .= ' data-error-first="0"';
 		}
 	}
 
