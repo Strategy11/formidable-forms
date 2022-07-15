@@ -23,7 +23,7 @@ if ( ! empty( $template['custom'] ) ) {
 	} elseif ( ! empty( $template['custom'] ) ) {
 		echo 'data-formid="' . absint( $template['id'] ) . '" ';
 		echo 'data-custom="1" ';
-		echo 'data-href="' . esc_url( admin_url( '?page=formidable&frm_action=duplicate&id=' . $template['id'] ) ) . '" ';
+		echo 'data-href="' . esc_url( $template['url'] ) . '" ';
 	} elseif ( ! $plan_required ) {
 		$link = FrmFormsHelper::get_template_install_link( $template, $args );
 		echo 'data-rel="' . esc_url( $link['url'] ) . '" ';

@@ -4,22 +4,29 @@
  * @group styles
  */
 class test_FrmStyle extends FrmUnitTest {
+
 	/**
-	 * @covers maybe_sanitize_rgba_value
+	 * @covers FrmStyle::maybe_sanitize_rgba_value
 	 */
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();
-		$invalid_color_values = array( 'rgba(45, 45, 45,', 'rgba(,,,1)', 'rgba(45, 45', 'rgba(45,,,0.5)', 'rgb(45,,45)', 'rgb(,,)' );
-		$patters              = array( '/rgba\((\s*\d+\s*,){3}[\d\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
+		$invalid_color_values = array(
+			'rgba(45, 45, 45,' => 'rgba(45, 45, 45,1)',
+			'rgba(, , ,1)'     => 'rgba(0,0,0,1)',
+			'rgba(45,45'       => 'rgba(45,45,0,1)',
+			'rgba(355,,,0.5)'  => 'rgba(255,0,0,0.5)',
+			'rgba(255,0,0,11)' => 'rgba(255,0,0,1)',
+			'rgba(99,99,99,1)' => 'rgba(99,99,99,1)',
+			'rgb(45, ,45)'     => 'rgb(45,0,45)',
+			'rgb( , , )'       => 'rgb(0,0,0)',
+			'rgb(300,0,-1)'    => 'rgb(255,0,0)',
+			'rgb('             => 'rgb(0,0,0)',
+			'rgb(255,255,255)' => 'rgb(255,255,255)',
+		);
 
-		foreach ( $invalid_color_values as $color_val ) {
-			$frm_style->maybe_sanitize_rgba_value( $color_val );
-
-			if ( strpos( $color_val, '(' ) === 4 ) {
-				$this->assertEquals( 1, preg_match( $patters[0], $color_val ) );
-			} elseif ( strpos( $color_val, '(' ) === 3 ) {
-				$this->assertEquals( 1, preg_match( $patters[1], $color_val ) );
-			}
+		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {
+			$this->run_private_method( array( $frm_style, 'maybe_sanitize_rgba_value' ), array( &$color_val ) );
+			$this->assertEquals( $expected_color_val, $color_val );
 		}
 	}
 }

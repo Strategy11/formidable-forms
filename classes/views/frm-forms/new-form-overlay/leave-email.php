@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frmcenter">
-	<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="https://community.formidableforms.com/wp-json/frm/v2/forms/freetemplates?return=html">
+	<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css">
 		<span class="frm-wait"></span>
 	</div>
 	<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/leave-email.svg' ); ?>" />

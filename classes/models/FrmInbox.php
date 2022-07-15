@@ -298,12 +298,18 @@ class FrmInbox extends FrmFormApi {
 		update_option( $this->option, self::$messages, 'no' );
 	}
 
+	/**
+	 * Show a banner message if one is available.
+	 *
+	 * @return bool True if a banner is available and shown.
+	 */
 	public static function maybe_show_banner() {
 		if ( empty( self::$banner_messages ) ) {
-			return;
+			return false;
 		}
 		$message = end( self::$banner_messages );
 		require FrmAppHelper::plugin_path() . '/classes/views/inbox/banner.php';
+		return true;
 	}
 
 	public static function maybe_disable_screen_options() {

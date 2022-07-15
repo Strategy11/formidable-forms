@@ -18,10 +18,15 @@ namespace {
 	define( 'EP_PERMALINK', 1 );
 	define( 'COOKIEHASH', '' );
 	define( 'COOKIE_DOMAIN', false );
+	define( 'WP_IMPORTING', false );
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
 	class FrmProSettings extends FrmSettings {
+	}
+	class FrmProApplicationsHelper {
+		public static function get_required_templates_capability() {}
+		public static function get_custom_applications_capability() {}
 	}
 }
 

@@ -18,7 +18,9 @@ class test_FrmFieldsController extends FrmUnitTest {
 			'required'    => 0,
 		);
 		$placeholder = $this->prepare_placeholder( $field );
-		$this->assertEquals( $name, $placeholder, 'an empty string should be replaced by the label inside of an input.' );
+
+		// Since Floating labels, placeholder is not replaced by field name anymore.
+		$this->assertEquals( '', $placeholder );
 
 		$field['placeholder'] = '0';
 		$placeholder          = $this->prepare_placeholder( $field );

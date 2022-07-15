@@ -27,13 +27,12 @@ class FrmTipsHelper {
 		$link = FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_star_full_icon', array( 'aria-hidden' => 'true' ) ); ?>
-			<span class="pro-tip">
-				<?php esc_html_e( 'Pro Tip:', 'formidable' ); ?>
-			</span>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
-				<?php echo esc_html( $tip['tip'] ); ?>
+				<span class="frm-tip-info">
+					<?php echo esc_html( $tip['tip'] ); ?>
+				</span>
 				<span class="frm-tip-cta">
 					<?php echo esc_html( $tip['call'] ); ?>
 				</span>
@@ -222,6 +221,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_styling_tip() {
 		$tips = array(
 			array(
@@ -243,9 +245,9 @@ class FrmTipsHelper {
 			array(
 				'link' => array(
 					'content' => 'style',
-					'param'   => 'bg-image-style-settings',
+					'param'   => 'duplicate-style',
 				),
-				'tip'  => __( 'Want to set a color with an alpha slider?', 'formidable' ),
+				'tip'  => __( 'Want to duplicate a style?', 'formidable' ),
 				'call' => __( 'Upgrade to Pro.', 'formidable' ),
 			),
 		);

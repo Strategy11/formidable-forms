@@ -486,7 +486,7 @@ class FrmXMLController {
 		header( 'Content-Type: text/xml; charset=' . get_option( 'blog_charset' ), true );
 
 		echo '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
-		include( FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
 	}
 
 	private static function prepare_types_array( &$type ) {
@@ -508,6 +508,8 @@ class FrmXMLController {
 	 *
 	 * @since 3.06
 	 *
+	 * @param array $type
+	 * @param array $records
 	 * @return string
 	 */
 	private static function get_file_name( $args, $type, $records ) {
@@ -534,7 +536,12 @@ class FrmXMLController {
 			$filename = $sitename . 'formidable.' . gmdate( 'Y-m-d' ) . '.xml';
 		}
 
-		return $filename;
+		/**
+		 * @since 5.3
+		 *
+		 * @param string $filename
+		 */
+		return apply_filters( 'frm_xml_filename', $filename );
 	}
 
 	public static function generate_csv( $atts ) {

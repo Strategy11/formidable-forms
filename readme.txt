@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Forms Plugin for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, contact form, form builder, survey, free, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, getresponse form, calculator, price calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, contact form widget, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, mailchimp form
 Requires at least: 5.2
-Tested up to: 5.9.3
+Tested up to: 6.0
 Requires PHP: 5.6
-Stable tag: 5.2.07
+Stable tag: 5.4.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -216,7 +216,7 @@ After reading this feature list, you can probably imagine why Formidable is the 
 
 Give Formidable Forms a try.
 
-Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to Premium</a> to get all the features for smart forms and full web applications.
+Want to unlock the full power? <a href="https://formidableforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Upgrade to Pro</a> to get all the features for smart forms and full web applications.
 
 == Credits ==
 This online form builder plugin is created by Steve and Steph Wells and the amazing Strategy11 Team.
@@ -438,14 +438,21 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
-= 5.2.07 =
-* Fix: Step value validation was occasionally breaking in some cases due to rounding precision issues.
+= 5.4.1 =
+* New: Fields using the "Placeholder inside the field" Label Position setting will now use an animated label that moves to the top of the field when focused.
+* New: Added a new frm_after_destroy_entry filter that can be used to update caching after a Formidable entry is deleted.
+* Fix: An unexpected empty broken application template was appearing for expired licenses.
 
-= 5.2.06 =
-* New: The step value for number fields is now validated server side on submission.
+= 5.4 =
+* New: Added a new frm_new_form_values filter for customizing the default values of new forms.
+* New: Added a new frm_ajax_loaded_field event for listening for loaded fields loaded via AJAX on long forms in the form builder.
+* Fix: Custom aria-describedby attribute values were not properly merging with the aria-describedby values added by field descriptions and errors.
+* Fix: Imported field data would occasionally break if the new field ids had a different number of digits than the previously imported values.
+* Fix: Placeholder text was appearing more transparent in Firefox than in other browsers and has been updated for consistency.
+* Fix: Prevent a conflict that was causing the new Form modal to appear on some websites as a blank box without any content.
+* Updated the icon for Constant Contact.
 
-= 5.2.05 = 
-* New: Added a new frm_focus_first_error filter to toggle of the behavior of the auto-focus that gets triggered on the first field with an error.
-* New: Added a new frm_include_alert_role_on_field_errors filter to toggle the alert role that gets added to field errors.
+= 5.3.2 =
+* New: RGB and RGBA color values will now be fixed automatically on save if incomplete to avoid broken CSS.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>

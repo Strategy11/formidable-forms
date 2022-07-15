@@ -403,11 +403,13 @@ class FrmFormsHelper {
 	public static function get_default_html( $loc ) {
 		if ( $loc == 'submit' ) {
 			$draft_link   = self::get_draft_link();
+			$start_over   = self::get_start_over_shortcode();
 			$default_html = <<<SUBMIT_HTML
 <div class="frm_submit">
 [if back_button]<button type="submit" name="frm_prev_page" formnovalidate="formnovalidate" class="frm_prev_page" [back_hook]>[back_label]</button>[/if back_button]
 <button class="frm_button_submit" type="submit"  [button_action]>[button_label]</button>
 $draft_link
+$start_over
 </div>
 SUBMIT_HTML;
 		} elseif ( $loc == 'before' ) {
@@ -427,6 +429,17 @@ BEFORE_HTML;
 		$link = '[if save_draft]<a href="#" tabindex="0" class="frm_save_draft" [draft_hook]>[draft_label]</a>[/if save_draft]';
 
 		return $link;
+	}
+
+	/**
+	 * Gets start over button shortcode.
+	 *
+	 * @since 5.4
+	 *
+	 * @return string
+	 */
+	public static function get_start_over_shortcode() {
+		return '[if start_over]<a href="#" tabindex="0" class="frm_start_over" [start_over_hook]>[start_over_label]</a>[/if start_over]';
 	}
 
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
@@ -756,6 +769,10 @@ BEFORE_HTML;
 
 		if ( strpos( $html, '[if save_draft]' ) ) {
 			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
+		}
+
+		if ( strpos( $html, '[if start_over]' ) ) {
+			$html = preg_replace( '/(\[if\s+start_over\])(.*?)(\[\/if\s+start_over\])/mis', '', $html );
 		}
 
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {

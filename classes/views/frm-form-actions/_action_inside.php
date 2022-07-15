@@ -79,7 +79,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 }
 
 // Show Form Action Automation indicator.
-if ( ! function_exists( 'load_frm_autoresponder' ) ) {
+if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->post_excerpt, apply_filters( 'frm_autoresponder_allowed_actions', array( 'email', 'twilio', 'api', 'register' ) ), true ) ) {
 	$upgrading = FrmAddonsController::install_link( 'autoresponder' );
 	$params    = array(
 		'href'         => 'javascript:void(0)',
