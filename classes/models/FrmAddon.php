@@ -3,6 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/** @phpstan-consistent-constructor */
 class FrmAddon {
 	public $store_url = 'https://formidableforms.com';
 	public $download_id;
