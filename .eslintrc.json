@@ -51,6 +51,6 @@
 		"react/prop-types": "off",
 		"vars-on-top": "warn",
 		"yoda": "off",
-        "linebreak-style": "off"
+		"linebreak-style": "off"
 	}
 }
