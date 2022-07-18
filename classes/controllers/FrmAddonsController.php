@@ -998,13 +998,12 @@ class FrmAddonsController {
 	 * @return array|string
 	 */
 	private static function get_addon_activation_response() {
+		$response = array(
+			'message' => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
+			'saveAndReload' => 'form_builder',
+		);
 		if ( self::activating_from_settings_page() ) {
-			$response = array(
-				'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
-				'saveAndReload' => 'settings',
-			);
-		} else {
-			$response = __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' );
+			$response['saveAndReload'] = 'settings';
 		}
 		return $response;
 	}

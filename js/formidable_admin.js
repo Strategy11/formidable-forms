@@ -7221,6 +7221,10 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function saveAndReloadFormBuilder() {
+		document.getElementById( 'frm_submit_side_top' ).click();
+	}
+
 	function confirmExit( event ) {
 		if ( fieldsUpdated ) {
 			event.preventDefault();
@@ -7942,23 +7946,30 @@ function frmAdminBuildJS() {
 		refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
-		} else if ( 'settings' === saveAndReload ) {
-			$addonStatus.append( getSaveAndReloadSettingsOptions() );
+		} else if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
+			$addonStatus.append( getSaveAndReloadSettingsOptions( saveAndReload ) );
 		}
 	}
 
-	function getSaveAndReloadSettingsOptions() {
+	function getSaveAndReloadSettingsOptions( saveAndReload ) {
 		var wrapper = div({ id: 'frm_save_and_reload_options' });
-		wrapper.appendChild( saveAndReloadSettingsButton() );
+		wrapper.appendChild( saveAndReloadSettingsButton( saveAndReload ) );
 		wrapper.appendChild( closePopupButton() );
 		return wrapper;
 	}
 
-	function saveAndReloadSettingsButton() {
+	function saveAndReloadSettingsButton( saveAndReload ) {
 		var button = document.createElement( 'button' );
-		button.id = 'frm_save_and_reload_settings';
+		button.id = 'settings' === saveAndReload ? 'frm_save_and_reload_settings' : 'frm_save_and_reload_form_builder';
 		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
+		button.addEventListener( 'click', () => {
+			if ( button.id === 'frm_save_and_reload_form_builder' ) {
+				saveAndReloadFormBuilder();
+			} else if ( button.id === 'frm_save_and_reload_settings' ) {
+				saveAndReloadSettings();
+			}
+		});
 		return button;
 	}
 
@@ -9468,7 +9479,6 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'submit', '.frm_form_settings', settingsSubmitted );
 			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
-			jQuery( document ).on( 'click', '#frm_save_and_reload_settings', saveAndReloadSettings );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
