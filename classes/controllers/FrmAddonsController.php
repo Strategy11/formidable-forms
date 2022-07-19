@@ -1015,9 +1015,12 @@ class FrmAddonsController {
 	 * @return string
 	 */
 	private static function get_activating_page() {
-		if ( false !== strpos( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'frm_action=settings' ) ) {
+		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		if ( false !== strpos( $referer, 'frm_action=settings' ) ) {
 			return 'settings';
-		} elseif ( false !== strpos( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'frm_action=edit' ) ) {
+		}
+
+		if ( false !== strpos( $referer, 'frm_action=edit' ) ) {
 			return 'form_builder';
 		}
 

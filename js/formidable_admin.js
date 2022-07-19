@@ -7960,13 +7960,13 @@ function frmAdminBuildJS() {
 
 	function saveAndReloadSettingsButton( saveAndReload ) {
 		var button = document.createElement( 'button' );
-		button.id = 'settings' === saveAndReload ? 'frm_save_and_reload_settings' : 'frm_save_and_reload_form_builder';
+		button.id = 'frm_save_and_reload';
 		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
 		button.addEventListener( 'click', () => {
-			if ( button.id === 'frm_save_and_reload_form_builder' ) {
+			if ( saveAndReload === 'form_builder' ) {
 				saveAndReloadFormBuilder();
-			} else if ( button.id === 'frm_save_and_reload_settings' ) {
+			} else if ( saveAndReload === 'settings' ) {
 				saveAndReloadSettings();
 			}
 		});
