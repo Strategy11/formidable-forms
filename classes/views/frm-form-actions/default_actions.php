@@ -65,6 +65,7 @@ class FrmDefMlcmpAction extends FrmFormAction {
 class FrmDefZapierAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops = FrmFormAction::default_action_opts( 'frm_zapier_icon frm_show_upgrade' );
+		$action_ops['color'] = 'var(--orange)';
 		parent::__construct( 'zapier', 'Zapier', $action_ops );
 	}
 }
