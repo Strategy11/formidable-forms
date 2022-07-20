@@ -443,6 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: A redirect will now happen after a form is duplicated to avoid issues with multiple duplicate actions on page refresh.
 * Fix: A few issues with label position settings were introduced with last update that are now fixed. Labels were appearing when the "none" label position setting was set.
 * Fix: Automation settings were appearing for action types that don't support automation when the Form Action Automation add on wasn't active.
+* Fix: Fixed a caching conflict that would cause back end pages to break on some servers with an frmDom is not defined console error.
 * Updated the icon for Zapier.
 
 = 5.4.1 =
