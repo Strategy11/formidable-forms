@@ -18,6 +18,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected $tr_style = ' style="background-color:#ffffff;"';
 	protected $td_style = ' style="text-align:left;color:#555555;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
+	protected $is_repeater_child = false;
+
 	public function __construct() {
 		parent::__construct();
 
@@ -817,7 +819,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
-		$html = '<tr' . $this->tr_style . '>';
+		$html = '<tr' . $this->tr_style;
+		if ( $this->is_repeater_child ) {
+			$html .= ' class="frm-child-row"';
+		}
+		$html .= '>';
 
 		$label = '<th' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$field_value = '<td' . $this->td_style . '>' . wp_kses_post( $field_value ) . '</td>';
