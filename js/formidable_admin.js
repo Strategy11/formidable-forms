@@ -9833,8 +9833,10 @@ function frmAdminBuildJS() {
 				);
 			});
 
-			// Check floating label on load.
-			document.querySelectorAll( floatingLabelSelector ).forEach( input => checkFloatingLabelsForStyles( input ) );
+			// Trigger label position option on load.
+			const changeEvent = document.createEvent( 'HTMLEvents' );
+			changeEvent.initEvent( 'change', true, false );
+			document.getElementById( 'frm_position' ).dispatchEvent( changeEvent );
 		},
 
 		customCSSInit: function() {
