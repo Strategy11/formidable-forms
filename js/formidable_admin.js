@@ -7540,14 +7540,14 @@ function frmAdminBuildJS() {
 			const firstOpt = input.querySelector( 'option:first-child' );
 
 			if ( shouldFloatTop ) {
-				if ( firstOpt.getAttribute( 'data-label' ) ) {
-					firstOpt.text = firstOpt.getAttribute( 'data-label' );
+				if ( firstOpt.hasAttribute( 'data-label' ) ) {
+					firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
 					firstOpt.removeAttribute( 'data-label' );
 				}
 			} else {
-				if ( firstOpt.text ) {
-					firstOpt.setAttribute( 'data-label', firstOpt.text );
-					firstOpt.text = '';
+				if ( firstOpt.textContent ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+					firstOpt.textContent = '';
 				}
 			}
 		}
