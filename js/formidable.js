@@ -1221,7 +1221,7 @@ function frmFrontFormJS() {
 				firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( shouldFloatTop ) {
-					if ( firstOpt.getAttribute( 'data-label' ) ) {
+					if ( firstOpt.hasAttribute( 'data-label' ) ) {
 						firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
 						firstOpt.removeAttribute( 'data-label' );
 					}
@@ -1254,7 +1254,7 @@ function frmFrontFormJS() {
 			}
 
 			if ( document.activeElement === input ) {
-				if ( input.getAttribute( 'data-placeholder' ) ) {
+				if ( input.hasAttribute( 'data-placeholder' ) ) {
 					input.placeholder = input.getAttribute( 'data-placeholder' );
 					input.removeAttribute( 'data-placeholder' );
 				}

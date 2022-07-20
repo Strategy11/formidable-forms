@@ -7508,23 +7508,21 @@ function frmAdminBuildJS() {
 			value = 'none';
 		}
 
-		if ( 'inside' === value ) {
-			document.querySelectorAll( '.frm_pos_container' ).forEach( container => {
-				const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
+		document.querySelectorAll( '.frm_pos_container' ).forEach( container => {
+			// Fields that support floating label should have a directly child input/textarea/select.
+			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
 
-				// Check fields that support floating label.
-				if ( input ) {
-					container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container' );
-					container.classList.add( 'frm_inside_container' );
-					checkFloatingLabelsForStyles( input, container );
-				} else {
-					container.classList.remove( 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-					container.classList.add( 'frm_top_container' );
-				}
-			});
-		} else {
-			jQuery( '.frm_pos_container' ).removeClass( 'frm_top_container frm_left_container frm_right_container frm_none_container frm_inside_container' ).addClass( 'frm_' + value + '_container' );
-		}
+			if ( 'inside' === value && ! input ) {
+				value = 'top';
+			}
+
+			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
+			container.classList.add( 'frm_' + value + '_container' );
+
+			if ( 'inside' === value ) {
+				checkFloatingLabelsForStyles( input, container );
+			}
+		});
 	}
 
 	function checkFloatingLabelsForStyles( input, container ) {
