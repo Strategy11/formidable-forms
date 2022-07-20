@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-07-20T16:58:13+00:00\n"
+"POT-Creation-Date: 2022-07-20T17:34:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: formidable\n"
@@ -4518,7 +4518,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:11
-#: js/formidable_admin.js:8023
+#: js/formidable_admin.js:8021
 msgid "Close"
 msgstr ""
 
@@ -6536,6 +6536,6 @@ msgstr ""
 msgid "Check all applications"
 msgstr ""
 
-#: js/formidable_admin.js:8008
+#: js/formidable_admin.js:8006
 msgid "Save and Reload"
 msgstr ""

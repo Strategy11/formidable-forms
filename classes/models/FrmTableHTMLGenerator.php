@@ -57,7 +57,7 @@ class FrmTableHTMLGenerator {
 	 * Used to add a class in tables. Set in Pro.
 	 *
 	 * @var bool
-	 * @since x.x
+	 * @since 5.4.2
 	 */
 	public $is_child = false;
 
@@ -324,7 +324,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Add classes to the tr.
 	 *
-	 * @since x.x
+	 * @since 5.4.2
 	 * @param bool $empty If the value in the row is blank.
 	 */
 	protected function add_row_class( $empty = false ) {
