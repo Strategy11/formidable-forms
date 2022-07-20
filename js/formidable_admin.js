@@ -7507,7 +7507,50 @@ function frmAdminBuildJS() {
 		} else if ( value === 'no_label' ) {
 			value = 'none';
 		}
-		jQuery( '.frm_pos_container' ).removeClass( 'frm_top_container frm_left_container frm_right_container frm_none_container frm_inside_container' ).addClass( 'frm_' + value + '_container' );
+
+		if ( 'inside' === value ) {
+			document.querySelectorAll( '.frm_pos_container' ).forEach( container => {
+				const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
+
+				// Check fields that support floating label.
+				if ( input ) {
+					container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container' );
+					container.classList.add( 'frm_inside_container' );
+					checkFloatingLabelsForStyles( input, container );
+				} else {
+					container.classList.remove( 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
+					container.classList.add( 'frm_top_container' );
+				}
+			});
+		} else {
+			jQuery( '.frm_pos_container' ).removeClass( 'frm_top_container frm_left_container frm_right_container frm_none_container frm_inside_container' ).addClass( 'frm_' + value + '_container' );
+		}
+	}
+
+	function checkFloatingLabelsForStyles( input, container ) {
+		if ( ! container ) {
+			container = input.closest( '.frm_inside_container' );
+		}
+
+		const shouldFloatTop = input.value || document.activeElement === input;
+
+		container.classList.toggle( 'frm_label_float_top', shouldFloatTop );
+
+		if ( 'SELECT' === input.tagName ) {
+			const firstOpt = input.querySelector( 'option:first-child' );
+
+			if ( shouldFloatTop ) {
+				if ( firstOpt.getAttribute( 'data-label' ) ) {
+					firstOpt.text = firstOpt.getAttribute( 'data-label' );
+					firstOpt.removeAttribute( 'data-label' );
+				}
+			} else {
+				if ( firstOpt.text ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.text );
+					firstOpt.text = '';
+				}
+			}
+		}
 	}
 
 	function collapseAllSections() {
@@ -9007,6 +9050,34 @@ function frmAdminBuildJS() {
 		return frmDom.util.debounce( func, wait );
 	}
 
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -9748,6 +9819,22 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+
+			// Check floating label when focus or blur fields.
+			const floatingLabelSelector = '.frm_inside_container > input, .frm_inside_container > textarea, .frm_inside_container > select';
+			[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
+				documentOn(
+					eventName,
+					floatingLabelSelector,
+					function( event ) {
+						checkFloatingLabelsForStyles( event.target );
+					},
+					true
+				);
+			});
+
+			// Check floating label on load.
+			document.querySelectorAll( floatingLabelSelector ).forEach( input => checkFloatingLabelsForStyles( input ) );
 		},
 
 		customCSSInit: function() {
