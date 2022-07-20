@@ -3,6 +3,7 @@
 * New: Autocomplete dropdowns in the back end will now include an aria-label on the options to avoid accessibility issues with screen readers only reading ID values.
 * New: A redirect will now happen after a form is duplicated to avoid issues with multiple duplicate actions on page refresh.
 * New: Added additional styling for repeaters in tables shown in email actions to show indentation for the repeated data.
+* New: Added a Save and Reload button that appears after installing a required add on when clicking a field with missing requirements from the form builder.
 * Fix: A few issues with label position settings were introduced with last update that are now fixed. Labels were appearing when the "none" label position setting was set.
 * Fix: Automation settings were appearing for action types that don't support automation when the Form Action Automation add on wasn't active.
 * Fix: Fixed a caching conflict that would cause back end pages to break on some servers with an frmDom is not defined console error.
