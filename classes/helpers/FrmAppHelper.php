@@ -1092,7 +1092,7 @@ class FrmAppHelper {
 	/**
 	 * Print applicable admin banner.
 	 *
-	 * @since x.x
+	 * @since 5.4.2
 	 *
 	 * @param bool $should_show_lite_upgrade
 	 * @return void
@@ -1117,7 +1117,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 5.4.2
 	 *
 	 * @return bool True if a banner is available and shown.
 	 */
