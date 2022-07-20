@@ -1838,7 +1838,7 @@ h2.frm-h2 + .howto {
 	font-size: 13px;
 }
 
-#frm_save_and_reload_settings, #frm_save_and_reload_settings + .frm-button-secondary {
+#frm_save_and_reload, #frm_save_and_reload + .frm-button-secondary {
 	visibility: visible;
 }
 

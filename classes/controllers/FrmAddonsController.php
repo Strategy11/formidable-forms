@@ -998,22 +998,33 @@ class FrmAddonsController {
 	 * @return array|string
 	 */
 	private static function get_addon_activation_response() {
-		if ( self::activating_from_settings_page() ) {
-			$response = array(
-				'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
-				'saveAndReload' => 'settings',
-			);
-		} else {
-			$response = __( 'Your plugin has been activated. Please reload the page to see more options.', 'formidable' );
-		}
+		$activating_page = self::get_activating_page();
+
+		$response = array(
+			'message'       => __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ),
+			'saveAndReload' => $activating_page,
+		);
+
 		return $response;
 	}
 
 	/**
-	 * @return bool
+	 * Return a string that reflects the page from which the addon is being activated on,
+	 * if it is from settings or form builder, otherwise return empty string.
+	 *
+	 * @return string
 	 */
-	private static function activating_from_settings_page() {
-		return false !== strpos( FrmAppHelper::get_server_value( 'HTTP_REFERER' ), 'frm_action=settings' );
+	private static function get_activating_page() {
+		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		if ( false !== strpos( $referer, 'frm_action=settings' ) ) {
+			return 'settings';
+		}
+
+		if ( false !== strpos( $referer, 'frm_action=edit' ) ) {
+			return 'form_builder';
+		}
+
+		return '';
 	}
 
 	/**
