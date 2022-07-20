@@ -59,6 +59,7 @@ zip -r $zipname $destination \
 	-x "*/phpstan.neon" \
 	-x "*/*.stubs.php" \
 	-x "*/stubs.php" \
+	-x "*/stubs" \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
