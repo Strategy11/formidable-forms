@@ -605,7 +605,6 @@ p.frm_has_shortcodes {
 }
 
 .frm-inline-modal.postbox {
-    border-color: var(--blue-border);
 	background: #fff;
 }
 
@@ -1859,12 +1858,18 @@ h2.frm-h2 + .howto {
 	color: #282F36;
 }
 
+.frm-inline-modal > a.dismiss,
 .frm-modal .postbox > a.dismiss,
 .frm-modal .postbox .frm-modal-title + div:last-child,
 .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
 	right: 30px;
 	top: 25px;
+}
+
+.frm-inline-modal > a.dismiss {
+	right: 13px;
+	top: 13px;
 }
 
 .frm-modal .postbox .frm-modal-title + div:last-child a,
