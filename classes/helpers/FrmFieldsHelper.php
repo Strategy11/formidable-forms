@@ -418,6 +418,7 @@ class FrmFieldsHelper {
 
 		$default_type = self::get_default_value_type( $field );
 
+		$is_first_option = true;
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
 			$opt       = self::get_label_from_array( $opt, $opt_key, $field );
@@ -436,6 +437,7 @@ class FrmFieldsHelper {
 			}
 
 			unset( $checked );
+			$is_first_option = false;
 		}
 	}
 

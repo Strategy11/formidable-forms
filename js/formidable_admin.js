@@ -10007,3 +10007,30 @@ function frmImportCsv( formID ) {
 		}
 	});
 }
+
+document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
+	el.addEventListener( 'click', function() {
+		let fieldId     = this.querySelector( 'li' ).dataset.fid;
+		let firstOption = document.querySelector( `#frm_delete_field_${fieldId}-0_container` );
+
+		if ( ! firstOption ) {
+			return;
+		}
+		let [ dragIcon, saveIcon ]       = firstOption.querySelectorAll( 'svg' );
+
+		let lis = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
+		firstOption = true;
+		lis.forEach( ( li, _key ) => {
+			if ( ! firstOption ) {
+				if ( ! ( li.childNodes[0] instanceof SVGElement ) ) {
+					li.prepend( dragIcon.cloneNode( true ) );
+				}
+
+				if ( ! ( li.querySelector( `[id^=field_key_${fieldId}-]` ).nextSibling instanceof SVGElement ) ) {
+					li.querySelector( `[id^=field_key_${fieldId}-]` ).after( saveIcon.cloneNode( true ) );
+				}
+			}
+			firstOption = false;
+		});
+	});
+});
