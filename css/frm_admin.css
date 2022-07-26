@@ -105,6 +105,10 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	right: 55px;
 }
 
+.frm-white-body.frm-lite #screen-meta-links .screen-meta-toggle {
+	right: 125px; /* Don't cover the lite upgrade button */
+}
+
 .frm-white-body #screen-meta {
 	margin: 0;
 }
