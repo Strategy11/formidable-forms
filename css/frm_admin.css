@@ -1865,8 +1865,10 @@ h2.frm-h2 + .howto {
 	position: absolute;
 	right: 30px;
 	top: 25px;
+	z-index: 2;
 }
 
+.frm-info-modal .postbox > a.dismiss,
 .frm-inline-modal > a.dismiss {
 	right: 13px;
 	top: 13px;
