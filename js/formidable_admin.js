@@ -9923,8 +9923,33 @@ jQuery( document ).ready(
 			html = html.replaceAll( '</li>', '</div>' );
 			ul.outerHTML = html;
 		}
+
+		// fetchIcon( 'drag', 'frmfont frm_drag_icon frm-drag' );
+		// fetchIcon( 'save', 'frmfont frm_save_icon' );
 	}
 );
+
+function fetchIcon( iconName, classes ) {
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
+		data: {
+			action: 'frm_get_icons_by_class',
+			class: classes,
+			nonce: frmGlobal.nonce
+		},
+		success: function( icon ) {
+			const parser = new DOMParser();;
+			iconEl = parser.parseFromString(icon, "text/html").body.childNodes[0];
+			console.log(iconEl)
+			if ( ! frmGlobal.hasOwnProperty( 'icons' ) ) {
+				frmGlobal.icons = {}
+			}
+			frmGlobal.icons[iconName] = iconEl;
+		}
+	});
+}
+
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
@@ -10016,7 +10041,11 @@ document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 		if ( ! firstOption ) {
 			return;
 		}
-		let [ dragIcon, saveIcon ]       = firstOption.querySelectorAll( 'svg' );
+		console.log('FRMGLOBAL', frmGlobal.icons)
+		// let [ dragIcon, saveIcon ]       = firstOption.querySelectorAll( 'svg' );
+		// let [ dragIcon, saveIcon ] = {...frmGlobal.icons};
+		let dragIcon = frmGlobal.icons['drag'];
+		let saveIcon = frmGlobal.icons['save'];
 
 		let lis = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
 		firstOption = true;
@@ -10034,3 +10063,4 @@ document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 		});
 	});
 });
+

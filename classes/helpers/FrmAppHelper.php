@@ -947,6 +947,18 @@ class FrmAppHelper {
 		}
 	}
 
+	public static function get_icons_by_class( $class ) {
+		self::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+		if ( ! is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {
+			return;
+		}
+
+		$classes = self::get_param( 'class', '', 'get', '' );
+		$icon  = self::icon_by_class( $classes, array( 'echo' => false ) );
+		echo( $icon );
+		wp_die();
+	}
 	/**
 	 * Run kses for icons. It needs to add a few filters first in order to preserve some custom style values.
 	 *
