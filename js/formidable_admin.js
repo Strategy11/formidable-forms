@@ -5746,7 +5746,7 @@ function frmAdminBuildJS() {
 
 	// Move the top banner above the screen options to prevent overlap.
 	function moveTopBanner() {
-		const $banner = document.querySelector( '.frm-banner-alert' );
+		const $banner = document.querySelector( '.frm-banner-alert' ) || document.querySelector( '.frm-upgrade-bar' );
 		if ( ! $banner ) {
 			return;
 		}
