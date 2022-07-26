@@ -2911,6 +2911,11 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '-' + oldKey + '"', 'g' ), '-' + optKey + '"' );
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
+			newOption = jQuery.parseHTML( newOption );
+			console.log( typeof newOption )
+
+			addIconsToOption( fieldId, newOption );
+			console.log( newOption instanceof jQuery);
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
 			resetDisplayedOpts( fieldId );
 		}
@@ -10033,6 +10038,20 @@ function frmImportCsv( formID ) {
 	});
 }
 
+function addIconsToOption( fieldId, li ) {
+	if ( li.constructor.name !== 'HTMLLIElement' ) {
+		li = li[0];
+	}
+
+	if ( ! ( li.childNodes[0] instanceof SVGElement ) ) {
+		li.prepend( frmGlobal.icons.drag.cloneNode( true ) );
+	}
+
+	if ( ! ( li.querySelector( `[id^=field_key_${fieldId}-]` ).nextSibling instanceof SVGElement ) ) {
+		li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
+	}
+}
+
 document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 	el.addEventListener( 'click', function() {
 		let fieldId     = this.querySelector( 'li' ).dataset.fid;
@@ -10044,22 +10063,23 @@ document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 		console.log('FRMGLOBAL', frmGlobal.icons)
 		// let [ dragIcon, saveIcon ]       = firstOption.querySelectorAll( 'svg' );
 		// let [ dragIcon, saveIcon ] = {...frmGlobal.icons};
-		let dragIcon = frmGlobal.icons['drag'];
-		let saveIcon = frmGlobal.icons['save'];
+		// let dragIcon = frmGlobal.icons['drag'];
+		// let saveIcon = frmGlobal.icons['save'];
+		const parser = new DOMParser();
 
-		let lis = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
-		firstOption = true;
-		lis.forEach( ( li, _key ) => {
-			if ( ! firstOption ) {
-				if ( ! ( li.childNodes[0] instanceof SVGElement ) ) {
-					li.prepend( dragIcon.cloneNode( true ) );
-				}
+		let saveIcon = '<svg class="frmsvg"><use xlink:href="#frm_save_icon"></use></svg>';
+		saveIcon = parser.parseFromString( saveIcon, 'text/html' ).body.childNodes[0];
 
-				if ( ! ( li.querySelector( `[id^=field_key_${fieldId}-]` ).nextSibling instanceof SVGElement ) ) {
-					li.querySelector( `[id^=field_key_${fieldId}-]` ).after( saveIcon.cloneNode( true ) );
-				}
-			}
-			firstOption = false;
+		let dragIcon = '<svg class="frmsvg frm_drag_icon frm-drag"><use xlink:href="#frm_drag_icon"></use></svg>';
+		dragIcon = parser.parseFromString( dragIcon, 'text/html' ).body.childNodes[0];
+		frmGlobal.icons = {
+			save: saveIcon,
+			drag: dragIcon
+		};
+
+		let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 2 );
+		options.forEach( ( li, _key ) => {
+			addIconsToOption( fieldId, li );
 		});
 	});
 });
