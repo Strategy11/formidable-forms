@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <li id="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-optkey="<?php echo esc_attr( $opt_key ); ?>" class="frm_single_option <?php echo $opt_key === '000' ? 'frm_hidden frm_option_template' : ''; ?>">
 	<?php
-	if ( ! empty( $is_first_option ) ) {
+	if ( ( ! empty( $include_icons ) && $include_icons ) || empty( $include_icons ) ) {
 		FrmAppHelper::icon_by_class( 'frmfont frm_drag_icon frm-drag' );
 	}
 	?>
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="<?php echo esc_attr( $default_type ); ?>" class="frm_invisible" />
 		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][value]" id="field_key_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>" placeholder="<?php esc_attr_e( 'Saved Value', 'formidable' ); ?>" data-frmchange="trim,updateDefault" />
 		<?php
-		if ( ! empty( $is_first_option ) ) {
+		if ( ( ! empty( $include_icons ) && $include_icons ) || empty( $include_icons ) ) {
 			FrmAppHelper::icon_by_class( 'frmfont frm_save_icon' );
 		}
 		?>

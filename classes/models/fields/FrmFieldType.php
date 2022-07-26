@@ -421,8 +421,8 @@ DEFAULT_HTML;
 	/**
 	 * @since 4.04
 	 */
-	protected function show_single_option( $args ) {
-		FrmFieldsHelper::show_single_option( $args['field'] );
+	protected function show_single_option( $args, $include_icons = true ) {
+		FrmFieldsHelper::show_single_option( $args['field'], $include_icons );
 	}
 
 	/**

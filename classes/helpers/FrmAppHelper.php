@@ -947,7 +947,7 @@ class FrmAppHelper {
 		}
 	}
 
-	public static function get_icons_by_class( $class ) {
+	public static function get_icons_by_class() {
 		self::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		if ( ! is_admin() || ! current_user_can( 'frm_edit_forms' ) ) {

@@ -2912,9 +2912,7 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = jQuery.parseHTML( newOption );
-			console.log( typeof newOption )
-
-			addIconsToOption( fieldId, newOption );
+			addSaveAndDragIconsToOption( fieldId, newOption );
 			console.log( newOption instanceof jQuery);
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
 			resetDisplayedOpts( fieldId );
@@ -10038,33 +10036,53 @@ function frmImportCsv( formID ) {
 	});
 }
 
-function addIconsToOption( fieldId, li ) {
+function addSaveAndDragIconsToOption( fieldId, li ) {
 	if ( li.constructor.name !== 'HTMLLIElement' ) {
 		li = li[0];
 	}
 
-	if ( ! ( li.childNodes[0] instanceof SVGElement ) ) {
+	dragClassList = frmGlobal.icons.drag.classList;
+	saveClassList = frmGlobal.icons.save.classList;
+
+	const icons = li.querySelectorAll( 'svg' );
+	let hasDragIcon = false;
+	let hasSaveIcon = false;
+	icons.forEach( ( svg, key) => {
+		useTag = svg.getElementsByTagNameNS('http://www.w3.org/2000/svg', 'use')[0];
+		useTagHref = useTag.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+
+		if ( useTagHref === '#frm_drag_icon' ) {
+			hasDragIcon = true;
+		}
+
+		if ( useTagHref === '#frm_save_icon' ) {
+			hasSaveIcon = true;
+		}
+	});
+
+	if ( ! hasDragIcon ) {
+		console.log('prepending')
 		li.prepend( frmGlobal.icons.drag.cloneNode( true ) );
 	}
 
-	if ( ! ( li.querySelector( `[id^=field_key_${fieldId}-]` ).nextSibling instanceof SVGElement ) ) {
-		li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
+	if ( li.querySelector( `[id^=field_key_${fieldId}-]` ) ) {
+		if ( ! hasSaveIcon ) {
+			console.log('appending')
+			li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
+		}
 	}
+
 }
 
 document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 	el.addEventListener( 'click', function() {
 		let fieldId     = this.querySelector( 'li' ).dataset.fid;
-		let firstOption = document.querySelector( `#frm_delete_field_${fieldId}-0_container` );
 
-		if ( ! firstOption ) {
+		// return if there are no options.
+		if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]`).length < 2 ) {
 			return;
 		}
-		console.log('FRMGLOBAL', frmGlobal.icons)
-		// let [ dragIcon, saveIcon ]       = firstOption.querySelectorAll( 'svg' );
-		// let [ dragIcon, saveIcon ] = {...frmGlobal.icons};
-		// let dragIcon = frmGlobal.icons['drag'];
-		// let saveIcon = frmGlobal.icons['save'];
+
 		const parser = new DOMParser();
 
 		let saveIcon = '<svg class="frmsvg"><use xlink:href="#frm_save_icon"></use></svg>';
@@ -10077,9 +10095,12 @@ document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 			drag: dragIcon
 		};
 
-		let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 2 );
+		let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
 		options.forEach( ( li, _key ) => {
-			addIconsToOption( fieldId, li );
+			if ( li.classList.contains( 'frm_other_option' ) ) {
+				return;
+			}
+			addSaveAndDragIconsToOption( fieldId, li );
 		});
 	});
 });
