@@ -2758,6 +2758,7 @@ class FrmAppHelper {
 			'canAccessApplicationDashboard' => current_user_can( is_callable( 'FrmProApplicationsHelper::get_required_templates_capability' ) ? FrmProApplicationsHelper::get_required_templates_capability() : 'frm_edit_forms' ),
 			'loading'                       => __( 'Loading&hellip;', 'formidable' ),
 			'nonce'                         => wp_create_nonce( 'frm_ajax' ),
+			'proIncludesSliderJs'           => is_callable( 'FrmProFormsHelper::prepare_custom_currency' ),
 		);
 		wp_localize_script( 'formidable_admin_global', 'frmGlobal', $global_strings );
 
