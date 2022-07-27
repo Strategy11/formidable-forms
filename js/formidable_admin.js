@@ -5203,7 +5203,7 @@ function frmAdminBuildJS() {
 		const length = inputs.length;
 		for ( let index = 0; index < length; ++index ) {
 			if ( inputs[ index ].value === targetInput.value ) {
-				infoModal( __( 'Duplicate dropdown item value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+				infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
 				break;
 			}
 		}
