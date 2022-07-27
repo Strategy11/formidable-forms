@@ -5184,17 +5184,28 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/* TODO: Is this still used? */
-	function checkUniqueOpt( id, text ) {
-		if ( id.indexOf( 'field_key_' ) === 0 ) {
-			var a = id.split( '-' );
-			jQuery.each( jQuery( 'label[id^="' + a[0] + '"]' ), function( k, v ) {
-				var c = false;
-				if ( ! c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
-					c = true;
-					infoModal( 'Saved values cannot be identical.' );
-				}
-			});
+	function checkUniqueOpt( event ) {
+		const targetInput = event.target;
+		const settingsContainer = targetInput.closest( '.frm-single-settings' );
+
+		const fieldId = settingsContainer.getAttribute( 'data-fid' );
+		const areValuesSeparate = settingsContainer.querySelector( '[name="field_options[separate_value_' + fieldId + ']"]' ).checked;
+
+		if ( areValuesSeparate && ! targetInput.name.endsWith( '[value]' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+		const inputs = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+			input => input !== targetInput && areValuesSeparate === input.name.endsWith( '[value]' )
+		);
+
+		const length = inputs.length;
+		for ( let index = 0; index < length; ++index ) {
+			if ( inputs[ index ].value === targetInput.value ) {
+				infoModal( __( 'Duplicate dropdown item value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+				break;
+			}
 		}
 	}
 
@@ -9390,6 +9401,9 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
 			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
+
+			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
+			jQuery( document ).on( 'change', '#frm_builder_page .frm_single_option input', checkUniqueOpt );
 
 			popAllProductFields();
 
