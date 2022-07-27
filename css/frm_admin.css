@@ -86,22 +86,27 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow: hidden;
 }
 
+.frm-white-body #wpbody-content {
+	position: relative; /* For screen meta links */
+}
+
 .post-new-php.post-type-frm_display #screen-meta-links,
 .post-php.post-type-frm_display #screen-meta-links,
 .frm-full-screen #wpfooter {
 	display: none;
 }
 
-.frm-full-screen #screen-meta-links .screen-meta-toggle {
+.frm-white-body #screen-meta-links {
 	position: absolute;
-	right: 80px;
-	box-shadow: none;
-	border-bottom-left-radius: var(--small-radius);
-	border-bottom-right-radius: var(--small-radius);
+    right: 20px;
 }
 
-.frm-white-body #screen-meta-links .show-settings {
-	box-shadow: none;
+.frm-full-screen #screen-meta-links .screen-meta-toggle {
+	right: 55px;
+}
+
+.frm-white-body.frm-lite #screen-meta-links .screen-meta-toggle {
+	right: 125px; /* Don't cover the lite upgrade button */
 }
 
 .frm-white-body #screen-meta {
@@ -8037,6 +8042,18 @@ Responsive Design
 
 	.frm-full-close .frmsvg {
 		padding: 0;
+	}
+
+	.frm-full-screen .frm_top_left {
+		padding-top: 10px
+	}
+
+	.frm-full-screen .frm_top_left h1 {
+		padding-top: 0 !important;
+	}
+
+	.frm-full-screen .frm-header-logo {
+		margin-top: 6px !important;
 	}
 }
 
