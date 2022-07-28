@@ -177,7 +177,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
 		add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
 		add_action( 'wp_ajax_frm_deauthorize', 'FrmAppController::deauthorize' );
-		add_action( 'wp_ajax_frm_get_icons_by_class', 'FrmAppHelper::get_icons_by_class' );
 
 		// Addons.
 		add_action( 'wp_ajax_frm_addon_activate', 'FrmAddon::activate' );

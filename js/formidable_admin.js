@@ -2913,7 +2913,6 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = jQuery.parseHTML( newOption );
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			console.log( newOption instanceof jQuery);
 			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
 			resetDisplayedOpts( fieldId );
 		}
@@ -9927,32 +9926,21 @@ jQuery( document ).ready(
 			ul.outerHTML = html;
 		}
 
-		// fetchIcon( 'drag', 'frmfont frm_drag_icon frm-drag' );
-		// fetchIcon( 'save', 'frmfont frm_save_icon' );
+		let saveIcon = '<svg class="frmsvg"><use xlink:href="#frm_save_icon"></use></svg>';
+		let dragIcon = '<svg class="frmsvg frm_drag_icon frm-drag"><use xlink:href="#frm_drag_icon"></use></svg>';
+
+		frmGlobal.icons = {
+			save: createSVGElement( saveIcon ),
+			drag: createSVGElement( dragIcon )
+		};
 	}
 );
 
-function fetchIcon( iconName, classes ) {
-	jQuery.ajax({
-		type: 'POST',
-		url: ajaxurl,
-		data: {
-			action: 'frm_get_icons_by_class',
-			class: classes,
-			nonce: frmGlobal.nonce
-		},
-		success: function( icon ) {
-			const parser = new DOMParser();;
-			iconEl = parser.parseFromString(icon, "text/html").body.childNodes[0];
-			console.log(iconEl)
-			if ( ! frmGlobal.hasOwnProperty( 'icons' ) ) {
-				frmGlobal.icons = {}
-			}
-			frmGlobal.icons[iconName] = iconEl;
-		}
-	});
-}
+function createSVGElement( htmlString ) {
+	const parser = new DOMParser();
 
+	return parser.parseFromString( htmlString, 'text/html' ).body.childNodes[0];
+}
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
@@ -10038,18 +10026,16 @@ function frmImportCsv( formID ) {
 
 function addSaveAndDragIconsToOption( fieldId, li ) {
 	if ( li.constructor.name !== 'HTMLLIElement' ) {
+		// if it is jQuery object
 		li = li[0];
 	}
-
-	dragClassList = frmGlobal.icons.drag.classList;
-	saveClassList = frmGlobal.icons.save.classList;
 
 	const icons = li.querySelectorAll( 'svg' );
 	let hasDragIcon = false;
 	let hasSaveIcon = false;
-	icons.forEach( ( svg, key) => {
-		useTag = svg.getElementsByTagNameNS('http://www.w3.org/2000/svg', 'use')[0];
-		useTagHref = useTag.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+	icons.forEach( ( svg, key ) => {
+		useTag     = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[0];
+		useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
 
 		if ( useTagHref === '#frm_drag_icon' ) {
 			hasDragIcon = true;
@@ -10061,17 +10047,12 @@ function addSaveAndDragIconsToOption( fieldId, li ) {
 	});
 
 	if ( ! hasDragIcon ) {
-		console.log('prepending')
 		li.prepend( frmGlobal.icons.drag.cloneNode( true ) );
 	}
 
-	if ( li.querySelector( `[id^=field_key_${fieldId}-]` ) ) {
-		if ( ! hasSaveIcon ) {
-			console.log('appending')
-			li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
-		}
+	if ( li.querySelector( `[id^=field_key_${fieldId}-]` && ! hasSaveIcon ) ) {
+		li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
 	}
-
 }
 
 document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
@@ -10079,21 +10060,9 @@ document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 		let fieldId     = this.querySelector( 'li' ).dataset.fid;
 
 		// return if there are no options.
-		if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]`).length < 2 ) {
+		if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ).length < 2 ) {
 			return;
 		}
-
-		const parser = new DOMParser();
-
-		let saveIcon = '<svg class="frmsvg"><use xlink:href="#frm_save_icon"></use></svg>';
-		saveIcon = parser.parseFromString( saveIcon, 'text/html' ).body.childNodes[0];
-
-		let dragIcon = '<svg class="frmsvg frm_drag_icon frm-drag"><use xlink:href="#frm_drag_icon"></use></svg>';
-		dragIcon = parser.parseFromString( dragIcon, 'text/html' ).body.childNodes[0];
-		frmGlobal.icons = {
-			save: saveIcon,
-			drag: dragIcon
-		};
 
 		let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
 		options.forEach( ( li, _key ) => {
