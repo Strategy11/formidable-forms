@@ -2154,6 +2154,10 @@ function frmAdminBuildJS() {
 		addedEvent.frmType    = type;
 		addedEvent.frmToggles = toggled;
 		document.dispatchEvent( addedEvent );
+
+		field.addEventListener( 'click', () => {
+			addClickCallback( field.dataset.fid );
+		});
 	}
 
 	function clearSettingsBox( preventFieldGroups ) {
@@ -10050,7 +10054,7 @@ function addSaveAndDragIconsToOption( fieldId, li ) {
 		li.prepend( frmGlobal.icons.drag.cloneNode( true ) );
 	}
 
-	if ( li.querySelector( `[id^=field_key_${fieldId}-]` && ! hasSaveIcon ) ) {
+	if ( li.querySelector( `[id^=field_key_${fieldId}-]` ) && ! hasSaveIcon ) {
 		li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
 	}
 }
@@ -10058,19 +10062,21 @@ function addSaveAndDragIconsToOption( fieldId, li ) {
 document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 	el.addEventListener( 'click', function() {
 		let fieldId     = this.querySelector( 'li' ).dataset.fid;
-
-		// return if there are no options.
-		if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ).length < 2 ) {
-			return;
-		}
-
-		let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
-		options.forEach( ( li, _key ) => {
-			if ( li.classList.contains( 'frm_other_option' ) ) {
-				return;
-			}
-			addSaveAndDragIconsToOption( fieldId, li );
-		});
+		addClickCallback( fieldId );
 	});
 });
 
+function addClickCallback( fieldId ) {
+	// return if there are no options.
+	if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ).length < 2 ) {
+		return;
+	}
+
+	let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
+	options.forEach( ( li, _key ) => {
+		if ( li.classList.contains( 'frm_other_option' ) ) {
+			return;
+		}
+		addSaveAndDragIconsToOption( fieldId, li );
+	});
+}

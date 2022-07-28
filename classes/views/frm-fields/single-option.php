@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	if ( $show_icons ) {
 		FrmAppHelper::icon_by_class( 'frmfont frm_drag_icon frm-drag' );
 	}
+
 	?>
 	<input type="<?php echo esc_attr( $default_type ); ?>" name="<?php echo esc_attr( $field_name ); ?>" <?php echo ( isset( $checked ) && $checked ? 'checked="checked"' : '' ); ?> value="<?php echo esc_attr( $field_val ); ?>"/>
 
