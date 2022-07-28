@@ -5184,10 +5184,8 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function checkUniqueOpt( event ) {
-		const targetInput = event.target;
+	function checkUniqueOpt( targetInput ) {
 		const settingsContainer = targetInput.closest( '.frm-single-settings' );
-
 		const fieldId = settingsContainer.getAttribute( 'data-fid' );
 		const areValuesSeparate = settingsContainer.querySelector( '[name="field_options[separate_value_' + fieldId + ']"]' ).checked;
 
@@ -5540,6 +5538,8 @@ function frmAdminBuildJS() {
 				changeHiddenSeparateValue( this );
 			} else if ( action[i] === 'updateDefault' ) {
 				changeDefaultRadioValue( this );
+			} else if ( action[i] === 'checkUniqueOpt' ) {
+				checkUniqueOpt( this );
 			} else {
 				this.value = this.value[ action[i] ]();
 			}
@@ -9418,9 +9418,6 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
 			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
-
-			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
-			jQuery( document ).on( 'change', '#frm_builder_page .frm_single_option input', checkUniqueOpt );
 
 			popAllProductFields();
 
