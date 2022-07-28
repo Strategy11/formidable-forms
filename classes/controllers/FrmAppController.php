@@ -63,6 +63,10 @@ class FrmAppController {
 			$classes .= apply_filters( 'frm_admin_full_screen_class', ' frm-full-screen folded' );
 		}
 
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$classes .= ' frm-lite ';
+		}
+
 		return $classes;
 	}
 
