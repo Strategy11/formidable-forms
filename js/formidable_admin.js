@@ -10067,12 +10067,13 @@ document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 });
 
 function maybeAddSaveAndDragIcons( fieldId ) {
+	fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` );
 	// return if there are no options.
-	if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ).length < 2 ) {
+	if ( fieldOptions.length < 2 ) {
 		return;
 	}
 
-	let options = [ ...document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ) ].slice( 1 );
+	let options = [ ...fieldOptions ].slice( 1 );
 	options.forEach( ( li, _key ) => {
 		if ( li.classList.contains( 'frm_other_option' ) ) {
 			return;
