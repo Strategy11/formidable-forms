@@ -2156,7 +2156,7 @@ function frmAdminBuildJS() {
 		document.dispatchEvent( addedEvent );
 
 		field.addEventListener( 'click', () => {
-			addClickCallback( field.dataset.fid );
+			maybeAddSaveAndDragIcons( field.dataset.fid );
 		});
 	}
 
@@ -10062,11 +10062,11 @@ function addSaveAndDragIconsToOption( fieldId, li ) {
 document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 	el.addEventListener( 'click', function() {
 		let fieldId     = this.querySelector( 'li' ).dataset.fid;
-		addClickCallback( fieldId );
+		maybeAddSaveAndDragIcons( fieldId );
 	});
 });
 
-function addClickCallback( fieldId ) {
+function maybeAddSaveAndDragIcons( fieldId ) {
 	// return if there are no options.
 	if ( document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` ).length < 2 ) {
 		return;
