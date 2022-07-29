@@ -3,15 +3,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm-bulk-modal" class="frm_hidden settings-lite-cta">
-	<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
-		<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => __( 'Close', 'formidable' ) ) ); ?>
-	</a>
-	<h2>
-		<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
-	</h2>
+<div id="frm-bulk-modal" class="frm_hidden frm-modal frm_common_modal">
+	<div class="postbox">
+	<div class="frm_modal_top">
+		<div class="frm-modal-title">
+			<?php esc_html_e( 'Bulk Edit Options', 'formidable' ); ?>
+		</div>
+		<div>
+			<a class="dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => __( 'Close', 'formidable' ) ) ); ?>
+			</a>
+		</div>
+	</div>
 	<div class="frm_grid_container">
-		<div class="frm8 frm_form_field">
+		<div class="frm8">
 			<p class="howto">
 				<?php esc_html_e( 'Edit or add field options (one per line)', 'formidable' ); ?>
 			</p>
@@ -19,11 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input type="hidden" value="" id="bulk-field-id" />
 			<input type="hidden" value="" id="bulk-option-type" />
 
-			<button class="button-primary frm-button-primary" id="frm-update-bulk-opts">
-				<?php esc_attr_e( 'Update Options', 'formidable' ); ?>
-			</button>
 		</div>
-		<div class="frm4 frm_form_field">
+		<div class="frm4">
 			<h3>
 				<?php esc_html_e( 'Insert Presets', 'formidable' ); ?>
 			</h3>
@@ -45,5 +47,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php } ?>
 			</ul>
 		</div>
+	</div>
+	<div class="frm_modal_footer">
+		<button class="button-primary frm-button-primary" id="frm-update-bulk-opts">
+			<?php esc_attr_e( 'Update Options', 'formidable' ); ?>
+		</button>
+	</div>
 	</div>
 </div>

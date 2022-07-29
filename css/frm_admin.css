@@ -610,17 +610,10 @@ p.frm_has_shortcodes {
 }
 
 .frm-inline-modal.postbox {
-    border-color: var(--blue-border);
 	background: #fff;
 }
 
-#frm_upgrade_modal .dismiss .frmsvg,
-.frm-inline-modal .frmsvg,
-#frm-bulk-modal .frmsvg,
 .frm_has_shortcodes > .frmsvg,
-#frm_upgrade_modal .dismiss i,
-.frm-inline-modal i,
-#frm-bulk-modal i,
 .frm_has_shortcodes > i {
 	top: 37px;
 	right: 5px;
@@ -633,13 +626,7 @@ p.frm_has_shortcodes {
 	font-weight: bold;
 }
 
-#frm_upgrade_modal .dismiss .frmsvg,
-.frm-inline-modal .frmsvg,
-#frm-bulk-modal .frmsvg,
 .frm_has_shortcodes .frmsvg,
-#frm_upgrade_modal .dismiss i,
-.frm-inline-modal i,
-#frm-bulk-modal i,
 .frm_has_shortcodes i {
 	position: absolute;
 	color: var(--primary-color);
@@ -647,49 +634,6 @@ p.frm_has_shortcodes {
 	border: 1px solid transparent;
 	z-index: 100;
 	text-align: center;
-}
-
-#frm_info_modal .dismiss .frmsvg,
-#frm_confirm_modal .dismiss .frmsvg,
-#frm_upgrade_modal .dismiss .frmsvg,
-#frm_info_modal .dismiss i,
-#frm_confirm_modal .dismiss i,
-#frm_upgrade_modal .dismiss i {
-	top: 7px;
-	right: 7px;
-}
-
-#frm-bulk-modal .frmsvg,
-#frm-bulk-modal i {
-	top: 15px;
-	right: 7px;
-}
-
-.frm-inline-modal .frmsvg,
-.frm-inline-modal i {
-	top: 18px;
-	right: 7px;
-	font-size: 11px;
-	height: 11px;
-	width: 11px;
-}
-
-#frm_upgrade_modal .dismiss:hover .frmsvg,
-.frm-inline-modal .dismiss:hover .frmsvg,
-#frm-bulk-modal .dismiss:hover .frmsvg,
-#frm_upgrade_modal .dismiss i:hover,
-.frm-inline-modal i:hover,
-#frm-bulk-modal i:hover {
-	background: var(--sidebar-color);
-}
-
-#frm_upgrade_modal .dismiss .frmsvg,
-.frm-inline-modal .dismiss .frmsvg,
-#frm-bulk-modal .dismiss .frmsvg,
-#frm_upgrade_modal .dismiss .frm_close_icon,
-.frm-inline-modal .frm_close_icon,
-#frm-bulk-modal .frm_close_icon {
-	border-color: var(--primary-color);
 }
 
 .frm_has_shortcodes input,
@@ -790,8 +734,7 @@ p.frm_has_shortcodes {
 	padding: 0;
 }
 
-.frm-nav-tabs,
-#frm-bulk-modal h2 {
+.frm-nav-tabs {
 	margin: 10px 0 20px;
 	padding: 0 15px;
 	display: block;
@@ -818,14 +761,12 @@ p.frm_has_shortcodes {
 	padding-left: 20px;
 }
 
-#frm-bulk-modal h2,
 .frm-nav-tabs li {
 	display: inline-block;
 	font-size: 15px;
 	margin: 0;
 }
 
-#frm-bulk-modal h2,
 .frm-nav-tabs a {
 	color: var(--dark-grey);
 	padding: 10px 1px;
@@ -846,23 +787,22 @@ p.frm_has_shortcodes {
 	color: var(--dark-grey);
 }
 
-#frm-bulk-modal h2,
 .frm-nav-tabs a:hover,
 .frm-nav-tabs .frm-tabs a {
 	color: var(--primary-color) !important;
 	border-color: var(--primary-color);
 }
 
-#frm-bulk-modal h3,
-#frm-bulk-modal h2 {
-	font-size: 16px;
-	margin-left: 20px;
+#frm-bulk-modal .howto,
+#frm-bulk-modal h3 {
+	font-size: 14px;
 	font-weight: 400;
+	margin: 5px 0 10px;
+	color: var(--grey);
 }
 
 #frm-bulk-modal h3 {
-	margin: 5px 20px 10px;
-	color: var(--grey);
+	margin-left: 20px;
 }
 
 .frm-right-panel h3 {
@@ -1912,6 +1852,10 @@ h2.frm-h2 + .howto {
 	position: relative;
 }
 
+.frm-modal .postbox .frm_modal_top {
+	border-bottom: 1px solid var(--sidebar-hover);
+}
+
 .frm-modal .postbox .frm-modal-title,
 .frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
 	display: inline-block;
@@ -1919,17 +1863,34 @@ h2.frm-h2 + .howto {
 	color: #282F36;
 }
 
+.frm-inline-modal > a.dismiss,
+.frm-modal .postbox > a.dismiss,
 .frm-modal .postbox .frm-modal-title + div:last-child,
 .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
 	position: absolute;
 	right: 30px;
-	top: 37px;
+	top: 25px;
+	z-index: 2;
+}
+
+.frm-info-modal .postbox > a.dismiss,
+.frm-inline-modal > a.dismiss {
+	right: 13px;
+	top: 13px;
 }
 
 .frm-modal .postbox .frm-modal-title + div:last-child a,
+.frm-modal a.dismiss .frmsvg,
 .frm_common_modal .frm_modal_top a .frmsvg {
 	color: var(--grey);
 }
+
+.frm-modal .frm_modal_content > div.inside,
+.frm_common_modal .frm_modal_content > div.inside {
+	padding: 10px 30px;
+	margin: 0;
+}
+
 
 .frm-modal .postbox > div.inside .cta-inside {
 	overflow-y: auto;
@@ -2517,18 +2478,20 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 
 /* Bulk Options */
 #frm-bulk-modal .frm_grid_container {
-	border-top: 1px solid var(--grey-border);
 	grid-template-columns: repeat(12, 8.33%);
 	grid-gap: 0;
 }
 
 #frm-bulk-modal .frm8 {
 	border-right: 1px solid var(--grey-border);
-	padding: 0 20px 20px;
+	padding: 10px 20px 10px 30px;
 }
 
-.frm-inline-modal .howto,
-#frm-bulk-modal .howto {
+#frm-bulk-modal .frm4 {
+	padding: 10px 0;
+}
+
+.frm-inline-modal .howto {
 	margin: 5px 0 10px;
 	color: var(--grey);
 }
@@ -6876,6 +6839,7 @@ ul .frm_col_two {
 .frm-info-modal .postbox .inside,
 .settings-lite-cta .postbox .inside {
 	padding: 20px 40px;
+	margin: 0;
 }
 
 .cta-inside a {
@@ -7929,9 +7893,6 @@ button.frm_choose_image_box,
 	left: 2px;
 }
 
-.rtl #frm_upgrade_modal .dismiss i,
-.rtl .frm-inline-modal i,
-.rtl #frm-bulk-modal i,
 .rtl .frm_has_shortcodes > i {
 	right: auto;
 	left: 5px;
