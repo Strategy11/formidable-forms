@@ -1891,6 +1891,10 @@ h2.frm-h2 + .howto {
 	margin: 0;
 }
 
+.frm_common_modal .postbox {
+	display: flex;
+	flex-direction: column;
+}
 
 .frm-modal .postbox > div.inside .cta-inside {
 	overflow-y: auto;
