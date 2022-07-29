@@ -2639,6 +2639,14 @@ function frmAdminBuildJS() {
 	}
 
 	function updateSliderFieldPreview( field, att, newValue ) {
+		if ( frmGlobal.proIncludesSliderJs ) {
+			const hookName = 'frm_update_slider_field_preview';
+			const hookArgs = { field, att, newValue };
+			wp.hooks.doAction( hookName, hookArgs );
+			return;
+		}
+
+		// This functionality has been moved to pro since v5.4.3. This code should be removed eventually.
 		if ( 'value' === att ) {
 			if ( '' === newValue ) {
 				newValue = getSliderMidpoint( field );
