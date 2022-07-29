@@ -1071,6 +1071,13 @@ class FrmFormsController {
 		}
 	}
 
+	public static function update_form_builder_fields( $fields, $form ) {
+		foreach ( $fields as $field ) {
+			$field->include_icons = false;
+		}
+		return $fields;
+	}
+
 	public static function maybe_update_form_builder_message( &$message ) {
 		if ( 'form_duplicated' === FrmAppHelper::simple_get( 'message' ) ) {
 			$message = __( 'Form was Successfully Copied', 'formidable' );

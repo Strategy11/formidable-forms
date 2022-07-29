@@ -5,13 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <li id="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-optkey="<?php echo esc_attr( $opt_key ); ?>" class="frm_single_option <?php echo $opt_key === '000' ? 'frm_hidden frm_option_template' : ''; ?>">
 	<?php
-	$show_icons = false;
-	if ( isset( $include_icons ) ) {
-		if ( $include_icons ) {
-			$show_icons = true;
-		}
-	} else {
-		$show_icons = true;
+	$show_icons = true;
+	if ( isset( $field['include_icons'] ) ) {
+		$show_icons = false;
 	}
 
 	if ( $show_icons ) {

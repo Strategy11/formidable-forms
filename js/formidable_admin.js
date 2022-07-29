@@ -2154,10 +2154,6 @@ function frmAdminBuildJS() {
 		addedEvent.frmType    = type;
 		addedEvent.frmToggles = toggled;
 		document.dispatchEvent( addedEvent );
-
-		field.addEventListener( 'click', () => {
-			maybeAddSaveAndDragIcons( field.dataset.fid );
-		});
 	}
 
 	function clearSettingsBox( preventFieldGroups ) {

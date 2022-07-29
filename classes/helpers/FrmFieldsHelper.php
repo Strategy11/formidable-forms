@@ -406,7 +406,7 @@ class FrmFieldsHelper {
 		return 'frm_' . $type . '_' . $id . '-' . $opt_key;
 	}
 
-	public static function show_single_option( $field, $include_icons = true ) {
+	public static function show_single_option( $field ) {
 		self::hidden_field_option( $field );
 
 		if ( ! is_array( $field['options'] ) ) {
