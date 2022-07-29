@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <li id="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-optkey="<?php echo esc_attr( $opt_key ); ?>" class="frm_single_option <?php echo $opt_key === '000' ? 'frm_hidden frm_option_template' : ''; ?>">
 	<?php
 	$show_icons = true;
-	if ( isset( $field['include_icons'] ) ) {
+	if ( isset( $field['do_not_include_icons'] ) ) {
 		$show_icons = false;
 	}
 

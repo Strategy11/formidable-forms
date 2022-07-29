@@ -1073,7 +1073,7 @@ class FrmFormsController {
 
 	public static function update_form_builder_fields( $fields, $form ) {
 		foreach ( $fields as $field ) {
-			$field->include_icons = false;
+			$field->do_not_include_icons = '';
 		}
 		return $fields;
 	}
