@@ -10035,6 +10035,9 @@ function addSaveAndDragIconsToOption( fieldId, li ) {
 	let hasSaveIcon = false;
 	icons.forEach( ( svg, key ) => {
 		useTag     = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[0];
+		if ( ! useTag ) {
+			return;
+		}
 		useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
 
 		if ( useTagHref === '#frm_drag_icon' ) {
