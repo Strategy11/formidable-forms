@@ -1851,7 +1851,7 @@ function frmAdminBuildJS() {
 		fieldOptionKeys = [
 			'name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'
 		];
-
+		// console.log( originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ) );
 		originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ).forEach(
 			function( originalSetting ) {
 				var key, tagType, copySetting;
@@ -1859,6 +1859,7 @@ function frmAdminBuildJS() {
 				key = getKeyFromSettingInput( originalSetting );
 
 				if ( 'options' === key ) {
+					console.log( key, originalSetting );
 					copyOption( originalSetting, copySettings, originalFieldId, newFieldId );
 					return;
 				}
@@ -1902,8 +1903,11 @@ function frmAdminBuildJS() {
 		copyKey = 'field_options[options_' + newFieldId + ']' + remainingKeyDetails;
 		copySetting = copySettings.querySelector( 'input[name="' + copyKey + '"]' );
 		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
+			console.log('copying', copySetting)
 			copySetting.value = originalSetting.value;
 			jQuery( copySetting ).trigger( 'change' );
+		} else {
+			copySettings.append()
 		}
 	}
 
@@ -2911,9 +2915,9 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( new RegExp( '-' + oldKey + '"', 'g' ), '-' + optKey + '"' );
 			newOption = newOption.replace( new RegExp( '\\[' + oldKey + '\\]', 'g' ), '[' + optKey + ']' );
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
-			newOption = jQuery.parseHTML( newOption );
+			newOption = { newOption };
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption );
+			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption.newOption );
 			resetDisplayedOpts( fieldId );
 		}
 	}
@@ -10024,10 +10028,14 @@ function frmImportCsv( formID ) {
 	});
 }
 
-function addSaveAndDragIconsToOption( fieldId, li ) {
-	if ( li.constructor.name !== 'HTMLLIElement' ) {
-		// if it is jQuery object
-		li = li[0];
+function addSaveAndDragIconsToOption( fieldId, liObject ) {
+	if ( liObject.newOption ) {
+		if ( liObject.newOption.constructor.name !== 'HTMLLIElement' ) {
+			const parser = new DOMParser();
+			li = parser.parseFromString( liObject.newOption, 'text/html' ).body.childNodes[0];
+		}
+	} else {
+		li = liObject;
 	}
 
 	const icons = li.querySelectorAll( 'svg' );
@@ -10055,6 +10063,12 @@ function addSaveAndDragIconsToOption( fieldId, li ) {
 
 	if ( li.querySelector( `[id^=field_key_${fieldId}-]` ) && ! hasSaveIcon ) {
 		li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
+	}
+
+	if ( liObject.newOption ) {
+		if ( liObject.newOption.constructor.name !== 'HTMLLIElement' ) {
+			liObject.newOption = li;
+		}
 	}
 }
 
