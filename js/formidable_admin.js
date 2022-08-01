@@ -9930,21 +9930,12 @@ jQuery( document ).ready(
 			ul.outerHTML = html;
 		}
 
-		let saveIcon = '<svg class="frmsvg"><use xlink:href="#frm_save_icon"></use></svg>';
-		let dragIcon = '<svg class="frmsvg frm_drag_icon frm-drag"><use xlink:href="#frm_drag_icon"></use></svg>';
-
 		frmGlobal.icons = {
-			save: createSVGElement( saveIcon ),
-			drag: createSVGElement( dragIcon )
+			save: frmDom.svg({ href: '#frm_save_icon' }),
+			drag: frmDom.svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
 		};
 	}
 );
-
-function createSVGElement( htmlString ) {
-	const parser = new DOMParser();
-
-	return parser.parseFromString( htmlString, 'text/html' ).body.childNodes[0];
-}
 
 function frm_remove_tag( htmlTag ) { // eslint-disable-line camelcase
 	console.warn( 'DEPRECATED: function frm_remove_tag in v2.0' );
@@ -10030,10 +10021,8 @@ function frmImportCsv( formID ) {
 
 function addSaveAndDragIconsToOption( fieldId, liObject ) {
 	if ( liObject.newOption ) {
-		if ( liObject.newOption.constructor.name !== 'HTMLLIElement' ) {
-			const parser = new DOMParser();
-			li = parser.parseFromString( liObject.newOption, 'text/html' ).body.childNodes[0];
-		}
+		const parser = new DOMParser();
+		li = parser.parseFromString( liObject.newOption, 'text/html' ).body.childNodes[0];
 	} else {
 		li = liObject;
 	}
@@ -10066,9 +10055,7 @@ function addSaveAndDragIconsToOption( fieldId, liObject ) {
 	}
 
 	if ( liObject.newOption ) {
-		if ( liObject.newOption.constructor.name !== 'HTMLLIElement' ) {
-			liObject.newOption = li;
-		}
+		liObject.newOption = li;
 	}
 }
 

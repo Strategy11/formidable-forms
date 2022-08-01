@@ -513,9 +513,13 @@ let frmDom;
 		return output;
 	}
 
-	function svg({ href } = {}) {
+	function svg({ href, classList } = {}) {
 		const namespace = 'http://www.w3.org/2000/svg';
 		const output = document.createElementNS( namespace, 'svg' );
+		if ( classList ) {
+			output.classList.add( ...classList );
+		}
+
 		if ( href ) {
 			const use = document.createElementNS( namespace, 'use' );
 			use.setAttribute( 'href', href );
