@@ -319,6 +319,10 @@ function frmAdminBuildJS() {
 
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { doJsonFetch } = frmDom.ajax;
+	const icons = {
+		save: svg({ href: '#frm_save_icon' }),
+		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
+	};
 
 	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
 		builderForm = document.getElementById( 'new_fields' ),
@@ -1851,7 +1855,7 @@ function frmAdminBuildJS() {
 		fieldOptionKeys = [
 			'name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'
 		];
-		// console.log( originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ) );
+
 		originalSettings.querySelectorAll( 'input[name^="field_options["], textarea[name^="field_options["]' ).forEach(
 			function( originalSetting ) {
 				var key, tagType, copySetting;
@@ -1859,7 +1863,6 @@ function frmAdminBuildJS() {
 				key = getKeyFromSettingInput( originalSetting );
 
 				if ( 'options' === key ) {
-					console.log( key, originalSetting );
 					copyOption( originalSetting, copySettings, originalFieldId, newFieldId );
 					return;
 				}
@@ -1903,11 +1906,8 @@ function frmAdminBuildJS() {
 		copyKey = 'field_options[options_' + newFieldId + ']' + remainingKeyDetails;
 		copySetting = copySettings.querySelector( 'input[name="' + copyKey + '"]' );
 		if ( null !== copySetting && copySetting.value !== originalSetting.value ) {
-			console.log('copying', copySetting)
 			copySetting.value = originalSetting.value;
 			jQuery( copySetting ).trigger( 'change' );
-		} else {
-			copySettings.append()
 		}
 	}
 
@@ -9013,6 +9013,66 @@ function frmAdminBuildJS() {
 		return frmDom.util.debounce( func, wait );
 	}
 
+	function addSaveAndDragIconsToOption( fieldId, liObject ) {
+		let li;
+		let hasDragIcon = false;
+		let hasSaveIcon = false;
+		let useTag, useTagHref;
+
+		if ( liObject.newOption ) {
+			const parser = new DOMParser();
+			li = parser.parseFromString( liObject.newOption, 'text/html' ).body.childNodes[0];
+		} else {
+			li = liObject;
+		}
+
+		const liIcons = li.querySelectorAll( 'svg' );
+
+		liIcons.forEach( ( svg, key ) => {
+			useTag     = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[0];
+			if ( ! useTag ) {
+				return;
+			}
+			useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
+
+			if ( useTagHref === '#frm_drag_icon' ) {
+				hasDragIcon = true;
+			}
+
+			if ( useTagHref === '#frm_save_icon' ) {
+				hasSaveIcon = true;
+			}
+		});
+
+		if ( ! hasDragIcon ) {
+			li.prepend( icons.drag.cloneNode( true ) );
+		}
+
+		if ( li.querySelector( `[id^=field_key_${fieldId}-]` ) && ! hasSaveIcon ) {
+			li.querySelector( `[id^=field_key_${fieldId}-]` ).after( icons.save.cloneNode( true ) );
+		}
+
+		if ( liObject.newOption ) {
+			liObject.newOption = li;
+		}
+	}
+
+	function maybeAddSaveAndDragIcons( fieldId ) {
+		fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` );
+		// return if there are no options.
+		if ( fieldOptions.length < 2 ) {
+			return;
+		}
+
+		let options = [ ...fieldOptions ].slice( 1 );
+		options.forEach( ( li, _key ) => {
+			if ( li.classList.contains( 'frm_other_option' ) ) {
+				return;
+			}
+			addSaveAndDragIconsToOption( fieldId, li );
+		});
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -9175,6 +9235,13 @@ function frmAdminBuildJS() {
 					return [ formId, formKey ];
 				}
 			);
+
+			document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
+				el.addEventListener( 'click', function() {
+					let fieldId     = this.querySelector( 'li' ).dataset.fid;
+					maybeAddSaveAndDragIcons( fieldId );
+				});
+			});
 		},
 
 		buildInit: function() {
@@ -9929,11 +9996,6 @@ jQuery( document ).ready(
 			html = html.replaceAll( '</li>', '</div>' );
 			ul.outerHTML = html;
 		}
-
-		frmGlobal.icons = {
-			save: frmDom.svg({ href: '#frm_save_icon' }),
-			drag: frmDom.svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
-		};
 	}
 );
 
@@ -10016,68 +10078,5 @@ function frmImportCsv( formID ) {
 				}, 2000 );
 			}
 		}
-	});
-}
-
-function addSaveAndDragIconsToOption( fieldId, liObject ) {
-	if ( liObject.newOption ) {
-		const parser = new DOMParser();
-		li = parser.parseFromString( liObject.newOption, 'text/html' ).body.childNodes[0];
-	} else {
-		li = liObject;
-	}
-
-	const icons = li.querySelectorAll( 'svg' );
-	let hasDragIcon = false;
-	let hasSaveIcon = false;
-	icons.forEach( ( svg, key ) => {
-		useTag     = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[0];
-		if ( ! useTag ) {
-			return;
-		}
-		useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
-
-		if ( useTagHref === '#frm_drag_icon' ) {
-			hasDragIcon = true;
-		}
-
-		if ( useTagHref === '#frm_save_icon' ) {
-			hasSaveIcon = true;
-		}
-	});
-
-	if ( ! hasDragIcon ) {
-		li.prepend( frmGlobal.icons.drag.cloneNode( true ) );
-	}
-
-	if ( li.querySelector( `[id^=field_key_${fieldId}-]` ) && ! hasSaveIcon ) {
-		li.querySelector( `[id^=field_key_${fieldId}-]` ).after( frmGlobal.icons.save.cloneNode( true ) );
-	}
-
-	if ( liObject.newOption ) {
-		liObject.newOption = li;
-	}
-}
-
-document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
-	el.addEventListener( 'click', function() {
-		let fieldId     = this.querySelector( 'li' ).dataset.fid;
-		maybeAddSaveAndDragIcons( fieldId );
-	});
-});
-
-function maybeAddSaveAndDragIcons( fieldId ) {
-	fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${fieldId}-]` );
-	// return if there are no options.
-	if ( fieldOptions.length < 2 ) {
-		return;
-	}
-
-	let options = [ ...fieldOptions ].slice( 1 );
-	options.forEach( ( li, _key ) => {
-		if ( li.classList.contains( 'frm_other_option' ) ) {
-			return;
-		}
-		addSaveAndDragIconsToOption( fieldId, li );
 	});
 }

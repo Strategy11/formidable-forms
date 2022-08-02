@@ -7,7 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	$show_icons = true;
 	if ( isset( $field['do_not_include_icons'] ) ) {
-		$show_icons = false;
+		if ( $field['do_not_include_icons'] ) {
+			$show_icons = false;
+		}
 	}
 
 	if ( $show_icons ) {
