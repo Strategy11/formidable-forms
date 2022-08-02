@@ -9100,7 +9100,6 @@ function frmAdminBuildJS() {
 		return frmDom.util.debounce( func, wait );
 	}
 
-<<<<<<< HEAD
 	function addSaveAndDragIconsToOption( fieldId, liObject ) {
 		let li, useTag, useTagHref;
 		let hasDragIcon = false;
@@ -9120,7 +9119,7 @@ function frmAdminBuildJS() {
 			if ( ! useTag ) {
 				return;
 			}
-			useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
+			useTagHref = useTag.getAttribute( 'href' );
 
 			if ( useTagHref === '#frm_drag_icon' ) {
 				hasDragIcon = true;
@@ -9158,7 +9157,8 @@ function frmAdminBuildJS() {
 			}
 			addSaveAndDragIconsToOption( fieldId, li );
 		});
-=======
+	}
+
 	/**
 	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
 	 *
@@ -9185,7 +9185,6 @@ function frmAdminBuildJS() {
 				}
 			}
 		}, options );
->>>>>>> master
 	}
 
 	return {

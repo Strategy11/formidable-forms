@@ -50,7 +50,6 @@
 		"react/no-find-dom-node": "warn",
 		"react/prop-types": "off",
 		"vars-on-top": "warn",
-		"yoda": "off",
-		"linebreak-style": "off"
+		"yoda": "off"
 	}
 }
