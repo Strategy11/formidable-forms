@@ -6046,21 +6046,19 @@ function frmAdminBuildJS() {
 
 	function addFormAction() {
 		/*jshint validthis:true */
-		var type, actionId, formId, placeholderSetting, actionsList;
-
-		type = jQuery( this ).data( 'actiontype' );
+		const type = jQuery( this ).data( 'actiontype' );
 
 		if ( isAtLimitForActionType( type ) ) {
 			return;
 		}
 
-		actionId = getNewActionId();
-		formId = thisFormId;
+		const actionId = getNewActionId();
+		const formId = thisFormId;
 
-		placeholderSetting = document.createElement( 'div' );
+		const placeholderSetting = document.createElement( 'div' );
 		placeholderSetting.classList.add( 'frm_single_' + type + '_settings' );
 
-		actionsList = document.getElementById( 'frm_notification_settings' );
+		const actionsList = document.getElementById( 'frm_notification_settings' );
 		actionsList.appendChild( placeholderSetting );
 
 		jQuery.ajax({
@@ -6083,7 +6081,7 @@ function frmAdminBuildJS() {
 				jQuery( actionsList ).append( html );
 				jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
 
-				var newAction = document.getElementById( 'frm_form_action_' + actionId );
+				const newAction = document.getElementById( 'frm_form_action_' + actionId );
 
 				newAction.classList.add( 'open' );
 				document.getElementById( 'post-body-content' ).scroll({
@@ -6096,6 +6094,11 @@ function frmAdminBuildJS() {
 				checkActiveAction( type );
 				initiateMultiselect();
 				showInputIcon( '#frm_form_action_' + actionId );
+
+				const widgetTop = placeholderSetting.querySelector( '.widget-top' );
+				if ( widgetTop ) {
+					jQuery( widgetTop ).trigger( 'frm-action-loaded' );
+				}
 			}
 		});
 	}
