@@ -9115,11 +9115,11 @@ function frmAdminBuildJS() {
 		const liIcons = li.querySelectorAll( 'svg' );
 
 		liIcons.forEach( ( svg, key ) => {
-			useTag     = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[0];
+			useTag = svg.getElementsByTagNameNS( 'http://www.w3.org/2000/svg', 'use' )[0];
 			if ( ! useTag ) {
 				return;
 			}
-			useTagHref = useTag.getAttribute( 'href' );
+			useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) || useTag.getAttribute( 'href' );
 
 			if ( useTagHref === '#frm_drag_icon' ) {
 				hasDragIcon = true;
