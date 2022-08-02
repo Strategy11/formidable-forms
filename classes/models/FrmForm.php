@@ -483,6 +483,10 @@ class FrmForm {
 			'submit_value',
 			'submit_msg',
 			'success_msg',
+			'invalid_msg',
+			'failed_msg',
+			'login_msg',
+			'admin_permission',
 		);
 
 		return apply_filters( 'frm_form_strings', $strings, $form );
