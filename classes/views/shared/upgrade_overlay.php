@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_upgrade_modal" class="frm_hidden settings-lite-cta">
+<div id="frm_upgrade_modal" class="frm_hidden frm-modal settings-lite-cta">
 	<div class="metabox-holder">
 		<div class="postbox">
 			<a href="#" class="dismiss alignright" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">

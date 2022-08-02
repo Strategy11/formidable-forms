@@ -1069,7 +1069,9 @@ DEFAULT_HTML;
 		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
-			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+			reset( $custom_error_fields );
+			reset( $custom_desc_fields );
+			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
 		}
@@ -1094,7 +1096,7 @@ DEFAULT_HTML;
 
 		if ( $aria_describedby_exists ) {
 			$input_html = preg_replace( '/aria-describedby=\"[^\"]*\"/', 'aria-describedby="' . $describedby . '"', $input_html );
-		} elseif ( ! empty( $describedby ) ) {
+		} elseif ( $describedby ) {
 			$input_html .= ' aria-describedby="' . esc_attr( trim( $describedby ) ) . '"';
 		}
 

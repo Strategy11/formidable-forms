@@ -238,10 +238,13 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$input_html_actual_expected = array(
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby frm_desc_2 frm_error_2" aria-invalid="true" ',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_2 my_custom_aria_describedby frm_desc_2" aria-invalid="true" ',
 
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_desc_2 frm_error_2"',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_2 frm_desc_2"',
+
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' =>
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_2 frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {

@@ -1221,14 +1221,14 @@ function frmFrontFormJS() {
 				firstOpt = input.querySelector( 'option:first-child' );
 
 				if ( shouldFloatTop ) {
-					if ( firstOpt.getAttribute( 'data-label' ) ) {
-						firstOpt.text = firstOpt.getAttribute( 'data-label' );
+					if ( firstOpt.hasAttribute( 'data-label' ) ) {
+						firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
 						firstOpt.removeAttribute( 'data-label' );
 					}
 				} else {
-					if ( firstOpt.text ) {
-						firstOpt.setAttribute( 'data-label', firstOpt.text );
-						firstOpt.text = '';
+					if ( firstOpt.textContent ) {
+						firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+						firstOpt.textContent = '';
 					}
 				}
 			} else if ( isIE() ) {
@@ -1240,9 +1240,9 @@ function frmFrontFormJS() {
 			document.querySelectorAll( '.frm-show-form .frm_inside_container:not(.' + floatClass + ') select' ).forEach( function( input ) {
 				var firstOpt = input.querySelector( 'option:first-child' );
 
-				if ( firstOpt.text ) {
-					firstOpt.setAttribute( 'data-label', firstOpt.text );
-					firstOpt.text = '';
+				if ( firstOpt.textContent ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+					firstOpt.textContent = '';
 				}
 			});
 		};
@@ -1254,7 +1254,7 @@ function frmFrontFormJS() {
 			}
 
 			if ( document.activeElement === input ) {
-				if ( input.getAttribute( 'data-placeholder' ) ) {
+				if ( input.hasAttribute( 'data-placeholder' ) ) {
 					input.placeholder = input.getAttribute( 'data-placeholder' );
 					input.removeAttribute( 'data-placeholder' );
 				}

@@ -2643,6 +2643,14 @@ function frmAdminBuildJS() {
 	}
 
 	function updateSliderFieldPreview( field, att, newValue ) {
+		if ( frmGlobal.proIncludesSliderJs ) {
+			const hookName = 'frm_update_slider_field_preview';
+			const hookArgs = { field, att, newValue };
+			wp.hooks.doAction( hookName, hookArgs );
+			return;
+		}
+
+		// This functionality has been moved to pro since v5.4.3. This code should be removed eventually.
 		if ( 'value' === att ) {
 			if ( '' === newValue ) {
 				newValue = getSliderMidpoint( field );
@@ -5182,17 +5190,26 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/* TODO: Is this still used? */
-	function checkUniqueOpt( id, text ) {
-		if ( id.indexOf( 'field_key_' ) === 0 ) {
-			var a = id.split( '-' );
-			jQuery.each( jQuery( 'label[id^="' + a[0] + '"]' ), function( k, v ) {
-				var c = false;
-				if ( ! c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
-					c = true;
-					infoModal( 'Saved values cannot be identical.' );
-				}
-			});
+	function checkUniqueOpt( targetInput ) {
+		const settingsContainer = targetInput.closest( '.frm-single-settings' );
+		const fieldId = settingsContainer.getAttribute( 'data-fid' );
+		const areValuesSeparate = settingsContainer.querySelector( '[name="field_options[separate_value_' + fieldId + ']"]' ).checked;
+
+		if ( areValuesSeparate && ! targetInput.name.endsWith( '[value]' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+		const inputs = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+			input => input !== targetInput && areValuesSeparate === input.name.endsWith( '[value]' )
+		);
+
+		const length = inputs.length;
+		for ( let index = 0; index < length; ++index ) {
+			if ( inputs[ index ].value === targetInput.value ) {
+				infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+				break;
+			}
 		}
 	}
 
@@ -5527,6 +5544,8 @@ function frmAdminBuildJS() {
 				changeHiddenSeparateValue( this );
 			} else if ( action[i] === 'updateDefault' ) {
 				changeDefaultRadioValue( this );
+			} else if ( action[i] === 'checkUniqueOpt' ) {
+				checkUniqueOpt( this );
 			} else {
 				this.value = this.value[ action[i] ]();
 			}
@@ -5748,6 +5767,22 @@ function frmAdminBuildJS() {
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.setAttribute( 'href', link );
 		}
+	}
+
+	// Move the top banner above the screen options to prevent overlap.
+	function moveTopBanner() {
+		const $banner = document.querySelector( '.frm-banner-alert' ) || document.querySelector( '.frm-upgrade-bar' );
+		if ( ! $banner ) {
+			return;
+		}
+
+		const $screenMeta = document.getElementById( 'screen-meta' );
+		if ( ! $screenMeta ) {
+			return;
+		}
+
+		const $parentDiv = document.getElementById( 'wpbody-content' );
+		$parentDiv.insertBefore( $banner, $screenMeta );
 	}
 
 	function getRequiredLicenseFromTrigger( element ) {
@@ -7227,6 +7262,10 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function saveAndReloadFormBuilder() {
+		document.getElementById( 'frm_submit_side_top' ).click();
+	}
+
 	function confirmExit( event ) {
 		if ( fieldsUpdated ) {
 			event.preventDefault();
@@ -7513,7 +7552,48 @@ function frmAdminBuildJS() {
 		} else if ( value === 'no_label' ) {
 			value = 'none';
 		}
-		jQuery( '.frm_pos_container' ).removeClass( 'frm_top_container frm_left_container frm_right_container frm_none_container frm_inside_container' ).addClass( 'frm_' + value + '_container' );
+
+		document.querySelectorAll( '.frm_pos_container' ).forEach( container => {
+			// Fields that support floating label should have a directly child input/textarea/select.
+			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
+
+			if ( 'inside' === value && ! input ) {
+				value = 'top';
+			}
+
+			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
+			container.classList.add( 'frm_' + value + '_container' );
+
+			if ( 'inside' === value ) {
+				checkFloatingLabelsForStyles( input, container );
+			}
+		});
+	}
+
+	function checkFloatingLabelsForStyles( input, container ) {
+		if ( ! container ) {
+			container = input.closest( '.frm_inside_container' );
+		}
+
+		const shouldFloatTop = input.value || document.activeElement === input;
+
+		container.classList.toggle( 'frm_label_float_top', shouldFloatTop );
+
+		if ( 'SELECT' === input.tagName ) {
+			const firstOpt = input.querySelector( 'option:first-child' );
+
+			if ( shouldFloatTop ) {
+				if ( firstOpt.hasAttribute( 'data-label' ) ) {
+					firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
+					firstOpt.removeAttribute( 'data-label' );
+				}
+			} else {
+				if ( firstOpt.textContent ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+					firstOpt.textContent = '';
+				}
+			}
+		}
 	}
 
 	function collapseAllSections() {
@@ -7948,23 +8028,30 @@ function frmAdminBuildJS() {
 		refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
-		} else if ( 'settings' === saveAndReload ) {
-			$addonStatus.append( getSaveAndReloadSettingsOptions() );
+		} else if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
+			$addonStatus.append( getSaveAndReloadSettingsOptions( saveAndReload ) );
 		}
 	}
 
-	function getSaveAndReloadSettingsOptions() {
+	function getSaveAndReloadSettingsOptions( saveAndReload ) {
 		var wrapper = div({ id: 'frm_save_and_reload_options' });
-		wrapper.appendChild( saveAndReloadSettingsButton() );
+		wrapper.appendChild( saveAndReloadSettingsButton( saveAndReload ) );
 		wrapper.appendChild( closePopupButton() );
 		return wrapper;
 	}
 
-	function saveAndReloadSettingsButton() {
+	function saveAndReloadSettingsButton( saveAndReload ) {
 		var button = document.createElement( 'button' );
-		button.id = 'frm_save_and_reload_settings';
+		button.id = 'frm_save_and_reload';
 		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
+		button.addEventListener( 'click', () => {
+			if ( saveAndReload === 'form_builder' ) {
+				saveAndReloadFormBuilder();
+			} else if ( saveAndReload === 'settings' ) {
+				saveAndReloadSettings();
+			}
+		});
 		return button;
 	}
 
@@ -9013,6 +9100,7 @@ function frmAdminBuildJS() {
 		return frmDom.util.debounce( func, wait );
 	}
 
+<<<<<<< HEAD
 	function addSaveAndDragIconsToOption( fieldId, liObject ) {
 		let li, useTag, useTagHref;
 		let hasDragIcon = false;
@@ -9070,6 +9158,34 @@ function frmAdminBuildJS() {
 			}
 			addSaveAndDragIconsToOption( fieldId, li );
 		});
+=======
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+>>>>>>> master
 	}
 
 	return {
@@ -9135,6 +9251,7 @@ function frmAdminBuildJS() {
 
 			loadTooltips();
 			initUpgradeModal();
+			moveTopBanner();
 
 			// used on build, form settings, and view settings
 			var $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
@@ -9540,7 +9657,6 @@ function frmAdminBuildJS() {
 
 			jQuery( document ).on( 'submit', '.frm_form_settings', settingsSubmitted );
 			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
-			jQuery( document ).on( 'click', '#frm_save_and_reload_settings', saveAndReloadSettings );
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
@@ -9820,6 +9936,24 @@ function frmAdminBuildJS() {
 
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
 			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+
+			// Check floating label when focus or blur fields.
+			const floatingLabelSelector = '.frm_inside_container > input, .frm_inside_container > textarea, .frm_inside_container > select';
+			[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
+				documentOn(
+					eventName,
+					floatingLabelSelector,
+					function( event ) {
+						checkFloatingLabelsForStyles( event.target );
+					},
+					true
+				);
+			});
+
+			// Trigger label position option on load.
+			const changeEvent = document.createEvent( 'HTMLEvents' );
+			changeEvent.initEvent( 'change', true, false );
+			document.getElementById( 'frm_position' ).dispatchEvent( changeEvent );
 		},
 
 		customCSSInit: function() {

@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<select name="item_meta[1028]" id="field_wq7w5e" >
 		<option value=""> </option>
-		<option value=""><?php esc_html_e( 'Option 1', 'formidable' ); ?></option>
+		<option value="option-1"><?php esc_html_e( 'Option 1', 'formidable' ); ?></option>
 	</select>
 </div>
 

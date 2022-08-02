@@ -1,5 +1,3 @@
-let frmDom;
-
 ( function() {
 	/** globals frmGlobal */
 
@@ -540,5 +538,5 @@ let frmDom;
 		element.appendChild( child );
 	}
 
-	frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
+	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
 }() );
