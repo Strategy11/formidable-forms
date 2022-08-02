@@ -5184,17 +5184,26 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/* TODO: Is this still used? */
-	function checkUniqueOpt( id, text ) {
-		if ( id.indexOf( 'field_key_' ) === 0 ) {
-			var a = id.split( '-' );
-			jQuery.each( jQuery( 'label[id^="' + a[0] + '"]' ), function( k, v ) {
-				var c = false;
-				if ( ! c && jQuery( v ).attr( 'id' ) != id && jQuery( v ).html() == text ) {
-					c = true;
-					infoModal( 'Saved values cannot be identical.' );
-				}
-			});
+	function checkUniqueOpt( targetInput ) {
+		const settingsContainer = targetInput.closest( '.frm-single-settings' );
+		const fieldId = settingsContainer.getAttribute( 'data-fid' );
+		const areValuesSeparate = settingsContainer.querySelector( '[name="field_options[separate_value_' + fieldId + ']"]' ).checked;
+
+		if ( areValuesSeparate && ! targetInput.name.endsWith( '[value]' ) ) {
+			return;
+		}
+
+		const container = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+		const inputs = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+			input => input !== targetInput && areValuesSeparate === input.name.endsWith( '[value]' )
+		);
+
+		const length = inputs.length;
+		for ( let index = 0; index < length; ++index ) {
+			if ( inputs[ index ].value === targetInput.value ) {
+				infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+				break;
+			}
 		}
 	}
 
@@ -5529,6 +5538,8 @@ function frmAdminBuildJS() {
 				changeHiddenSeparateValue( this );
 			} else if ( action[i] === 'updateDefault' ) {
 				changeDefaultRadioValue( this );
+			} else if ( action[i] === 'checkUniqueOpt' ) {
+				checkUniqueOpt( this );
 			} else {
 				this.value = this.value[ action[i] ]();
 			}
