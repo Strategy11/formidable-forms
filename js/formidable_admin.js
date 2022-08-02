@@ -1394,6 +1394,10 @@ function frmAdminBuildJS() {
 			wrapFieldLiInPlace( currentItem );
 		}
 
+		currentItem[0].addEventListener( 'click', function() {
+			maybeAddSaveAndDragIcons( this.dataset.fid );
+		});
+
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
 			data: {
@@ -9354,7 +9358,7 @@ function frmAdminBuildJS() {
 			document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 				el.addEventListener( 'click', function() {
 					let fieldId     = this.querySelector( 'li' ).dataset.fid;
-					maybeAddSaveAndDragIcons( fieldId );
+					maybeAddSaveAndDragIcons( this.dataset.fid );
 				});
 			});
 		},
