@@ -9358,7 +9358,7 @@ function frmAdminBuildJS() {
 			document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
 				el.addEventListener( 'click', function() {
 					let fieldId     = this.querySelector( 'li' ).dataset.fid;
-					maybeAddSaveAndDragIcons( this.dataset.fid );
+					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
 		},
