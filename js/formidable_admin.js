@@ -9014,10 +9014,9 @@ function frmAdminBuildJS() {
 	}
 
 	function addSaveAndDragIconsToOption( fieldId, liObject ) {
-		let li;
+		let li, useTag, useTagHref;
 		let hasDragIcon = false;
 		let hasSaveIcon = false;
-		let useTag, useTagHref;
 
 		if ( liObject.newOption ) {
 			const parser = new DOMParser();

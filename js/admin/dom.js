@@ -269,7 +269,7 @@ let frmDom;
 						jQuery( this ).autocomplete( 'search', this.value );
 					}
 				})
-				.data('ui-autocomplete')._renderItem = function( ul, item ) {
+				.data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
 					return jQuery( '<li>' )
 					.attr( 'aria-label', item.label )
 					.append( jQuery( '<div>' ).text( item.label ) )
