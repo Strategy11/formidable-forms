@@ -9355,9 +9355,9 @@ function frmAdminBuildJS() {
 				}
 			);
 
-			document.querySelectorAll( '#frm-show-fields > li' ).forEach( ( el, _key ) => {
+			document.querySelectorAll( '#frm-show-fields > li, .frm_grid_container li' ).forEach( ( el, _key ) => {
 				el.addEventListener( 'click', function() {
-					let fieldId     = this.querySelector( 'li' ).dataset.fid;
+					let fieldId     = this.querySelector( 'li' )?.dataset.fid || this.dataset.fid;
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
