@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 6.0.1
 Requires PHP: 5.6
-Stable tag: 5.4.2
+Stable tag: 5.4.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,11 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.4.3 =
+* New: A pop up will trigger when a duplicate option value is added to the list of options to help avoid issues with accidental duplicate option values getting added to a field.
+* Fix: Prevent a null JavaScript error on some forms related to floating labels.
+* Updated pop up styling for a more consistent design.
+
 = 5.4.2 =
 * New: Autocomplete dropdowns in the back end will now include an aria-label on the options to avoid accessibility issues with screen readers only reading ID values.
 * New: A redirect will now happen after a form is duplicated to avoid issues with multiple duplicate actions on page refresh.
@@ -454,14 +459,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Fields using the "Placeholder inside the field" Label Position setting will now use an animated label that moves to the top of the field when focused.
 * New: Added a new frm_after_destroy_entry filter that can be used to update caching after a Formidable entry is deleted.
 * Fix: An unexpected empty broken application template was appearing for expired licenses.
-
-= 5.4 =
-* New: Added a new frm_new_form_values filter for customizing the default values of new forms.
-* New: Added a new frm_ajax_loaded_field event for listening for loaded fields loaded via AJAX on long forms in the form builder.
-* Fix: Custom aria-describedby attribute values were not properly merging with the aria-describedby values added by field descriptions and errors.
-* Fix: Imported field data would occasionally break if the new field ids had a different number of digits than the previously imported values.
-* Fix: Placeholder text was appearing more transparent in Firefox than in other browsers and has been updated for consistency.
-* Fix: Prevent a conflict that was causing the new Form modal to appear on some websites as a blank box without any content.
-* Updated the icon for Constant Contact.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
