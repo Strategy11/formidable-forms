@@ -1,7 +1,7 @@
 == Changelog ==
 = 5.4.3 =
-* New: Icons for dragging and moving options will now be generated client side when required as a performance optimization. Forms with radio button, checkbox, and dropdown fields with a lot of options will now require less HTML to load which will help prevent the browser from being unresponsive.
 * New: A pop up will trigger when a duplicate option value is added to the list of options to help avoid issues with accidental duplicate option values getting added to a field.
+* Fix: Prevent a null JavaScript error on some forms related to floating labels.
 * Updated pop up styling for a more consistent design.
 
 = 5.4.2 =
