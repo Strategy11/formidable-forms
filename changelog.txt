@@ -1,4 +1,9 @@
 == Changelog ==
+= 5.4.3 =
+* New: A pop up will trigger when a duplicate option value is added to the list of options to help avoid issues with accidental duplicate option values getting added to a field.
+* Fix: Prevent a null JavaScript error on some forms related to floating labels.
+* Updated pop up styling for a more consistent design.
+
 = 5.4.2 =
 * New: Autocomplete dropdowns in the back end will now include an aria-label on the options to avoid accessibility issues with screen readers only reading ID values.
 * New: A redirect will now happen after a form is duplicated to avoid issues with multiple duplicate actions on page refresh.
