@@ -5205,8 +5205,7 @@ function frmAdminBuildJS() {
 
 		const container = document.getElementById( 'frm_field_' + fieldId + '_opts' );
 		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
-			input => input !== targetInput
-				&& input.id !== targetInput.id
+			input => input.id !== targetInput.id
 				&& areValuesSeparate === input.name.endsWith( '[value]' )
 				&& input.value === targetInput.value
 		);
