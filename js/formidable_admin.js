@@ -5204,16 +5204,13 @@ function frmAdminBuildJS() {
 		}
 
 		const container = document.getElementById( 'frm_field_' + fieldId + '_opts' );
-		const inputs = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
-			input => input !== targetInput && areValuesSeparate === input.name.endsWith( '[value]' )
+		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+			input => input.id !== targetInput.id &&
+				areValuesSeparate === input.name.endsWith( '[value]' ) &&
+				input.value === targetInput.value
 		);
-
-		const length = inputs.length;
-		for ( let index = 0; index < length; ++index ) {
-			if ( inputs[ index ].value === targetInput.value ) {
-				infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
-				break;
-			}
+		if ( conflicts.length ) {
+			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
 		}
 	}
 
