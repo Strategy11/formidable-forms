@@ -6081,36 +6081,48 @@ function frmAdminBuildJS() {
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
-				fieldUpdated();
-				placeholderSetting.remove();
-
-				// Close any open actions first.
-				jQuery( '.frm_form_action_settings.open' ).removeClass( 'open' );
-
-				jQuery( actionsList ).append( html );
-				jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
-
-				const newAction = document.getElementById( 'frm_form_action_' + actionId );
-
-				newAction.classList.add( 'open' );
-				document.getElementById( 'post-body-content' ).scroll({
-					top: newAction.offsetTop + 10,
-					left: 0,
-					behavior: 'smooth'
-				});
-
-				//check if icon should be active
-				checkActiveAction( type );
-				initiateMultiselect();
-				showInputIcon( '#frm_form_action_' + actionId );
-
-				const widgetTop = placeholderSetting.querySelector( '.widget-top' );
-				if ( widgetTop ) {
-					jQuery( widgetTop ).trigger( 'frm-action-loaded' );
-				}
-			}
+			success: handleAddFormActionSuccess
 		});
+
+		function handleAddFormActionSuccess( html ) {
+			fieldUpdated();
+			placeholderSetting.remove();
+
+			closeOpenActions();
+
+			const newActionContainer = div();
+			newActionContainer.innerHTML = html;
+
+			const widgetTop = newActionContainer.querySelector( '.widget-top' );
+			Array.from( newActionContainer.children ).forEach( child => actionsList.appendChild( child ) );
+
+			jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
+
+			const newAction = document.getElementById( 'frm_form_action_' + actionId );
+
+			newAction.classList.add( 'open' );
+			document.getElementById( 'post-body-content' ).scroll({
+				top: newAction.offsetTop + 10,
+				left: 0,
+				behavior: 'smooth'
+			});
+
+			// Check if icon should be active
+			checkActiveAction( type );
+			showInputIcon( '#frm_form_action_' + actionId );
+
+			initiateMultiselect();
+
+			if ( widgetTop ) {
+				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
+			}
+		}
+	}
+
+	function closeOpenActions() {
+		document.querySelectorAll( '.frm_form_action_settings.open' ).forEach(
+			setting => setting.classList.remove( 'open' )
+		);
 	}
 
 	function toggleActionGroups() {
