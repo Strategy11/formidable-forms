@@ -389,7 +389,7 @@
 	};
 
 	const wysiwyg = {
-		init( editor ) {
+		init( editor, { setupCallback } = {}) {
 			if ( isTinyMceActive() ) {
 				setTimeout( resetTinyMce, 0 );
 			} else {
@@ -418,33 +418,38 @@
 			function initRichText() {
 				const key = Object.keys( tinyMCEPreInit.mceInit )[0];
 				const orgSettings = tinyMCEPreInit.mceInit[ key ];
-				tinymce.init(
-					Object.assign(
-						{},
-						orgSettings,
-						{
-							selector: '#' + editor.id,
-							body_class: orgSettings.body_class.replace( key, editor.id )
-						}
-					)
+
+				const settings = Object.assign(
+					{},
+					orgSettings,
+					{
+						selector: '#' + editor.id,
+						body_class: orgSettings.body_class.replace( key, editor.id )
+					}
 				);
+
+				if ( setupCallback ) {
+					settings.setup = setupCallback;
+				}
+
+				tinymce.init( settings );
 			}
-	
+
 			function removeRichText() {
 				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, editor.id );
 			}
-	
+
 			function resetTinyMce() {
 				removeRichText();
 				initRichText();
 			}
-		
+
 			function isTinyMceActive() {
 				const id = editor.id;
 				const wrapper = document.getElementById( 'wp-' + id + '-wrap' );
 				return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
 			}
-		
+
 			function setUpTinyMceVisualButtonListener() {
 				jQuery( document ).on(
 					'click', '#' + editor.id + '-html',
