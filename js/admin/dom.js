@@ -388,6 +388,91 @@
 		}
 	};
 
+	const wysiwyg = {
+		init( editor ) {
+			if ( isTinyMceActive() ) {
+				setTimeout( resetTinyMce, 0 );
+			} else {
+				initQuickTagsButtons();
+			}
+
+			setUpTinyMceVisualButtonListener();
+			setUpTinyMceHtmlButtonListener();
+
+			function initQuickTagsButtons() {
+				if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+					return;
+				}
+
+				const id = editor.id;
+				window.quicktags({
+					name: 'qt_' + id,
+					id: id,
+					canvas: editor,
+					settings: { id },
+					toolbar: document.getElementById( 'qt_' + id + '_toolbar' ),
+					theButtons: {}
+				});
+			}
+
+			function initRichText() {
+				const key = Object.keys( tinyMCEPreInit.mceInit )[0];
+				const orgSettings = tinyMCEPreInit.mceInit[ key ];
+				tinymce.init(
+					Object.assign(
+						{},
+						orgSettings,
+						{
+							selector: '#' + editor.id,
+							body_class: orgSettings.body_class.replace( key, editor.id )
+						}
+					)
+				);
+			}
+	
+			function removeRichText() {
+				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, editor.id );
+			}
+	
+			function resetTinyMce() {
+				removeRichText();
+				initRichText();
+			}
+		
+			function isTinyMceActive() {
+				const id = editor.id;
+				const wrapper = document.getElementById( 'wp-' + id + '-wrap' );
+				return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
+			}
+		
+			function setUpTinyMceVisualButtonListener() {
+				jQuery( document ).on(
+					'click', '#' + editor.id + '-html',
+					function() {
+						editor.style.visibility = 'visible';
+						initQuickTagsButtons( editor );
+					}
+				);
+			}
+
+			function setUpTinyMceHtmlButtonListener() {
+				jQuery( '#' + editor.id + '-tmce' ).on( 'click', handleTinyMceHtmlButtonClick );
+			}
+
+			function handleTinyMceHtmlButtonClick() {
+				if ( isTinyMceActive() ) {
+					resetTinyMce();
+				} else {
+					initRichText();
+				}
+
+				const wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
+				wrap.classList.add( 'tmce-active' );
+				wrap.classList.remove( 'html-active' );
+			}
+		}
+	};
+
 	function getModalHelper( modal, appendTo ) {
 		return function( child, uniqueClassName ) {
 			let element = modal.querySelector( '.' + uniqueClassName );
@@ -538,5 +623,5 @@
 		element.appendChild( child );
 	}
 
-	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
+	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
 }() );
