@@ -5732,9 +5732,9 @@ function frmAdminBuildJS() {
 			}
 
 			// If one click upgrade, hide other content
-			addOneClickModal( element );
+			addOneClickModal( element, undefined, undefined, upgradeLabel );
 
-			modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'block';
+			modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'inline-block';
 			modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
 			modal.querySelector( 'h2' ).style.display = 'block';
 
@@ -5879,7 +5879,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Allow addons to be installed from the upgrade modal.
 	 */
-	function addOneClickModal( link, button, showLink ) {
+	function addOneClickModal( link, button, showLink, upgradeLabel ) {
 		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
 			oneclick = link.getAttribute( 'data-oneclick' ),
 			customLink = link.getAttribute( 'data-link' ),
@@ -5913,6 +5913,9 @@ function frmAdminBuildJS() {
 		// Use a custom message in the modal.
 		if ( newMessage === null || typeof newMessage === 'undefined' || newMessage === '' ) {
 			newMessage = upgradeMessage.getAttribute( 'data-default' );
+			if ( undefined !== upgradeLabel ) {
+				newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
+			}
 		}
 		upgradeMessage.innerHTML = newMessage;
 

@@ -2581,6 +2581,7 @@ a.frm_pro_tip .frmsvg {
 
 .frm-tip-info {
 	flex: 1;
+	text-align: left;
 }
 
 .frm-tip-cta {
