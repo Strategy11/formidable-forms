@@ -121,7 +121,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="misc-pub-section frm_force_wrap">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
-				<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
+				<?php
+				if ( is_string( $data['referrer'] ) ) {
+					echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );
+				} else {
+					foreach ( $data['referrer'] as $referrer ) {
+						if ( is_array( $referrer ) ) {
+							foreach ( $referrer as $date_key=> $page_by_date ) {
+								if ( ! is_array( $page_by_date ) ) {
+									return;
+								}
+								echo '<br><b>' . $date_key . '</b>';
+								foreach ( $page_by_date as $page ) {
+									if ( is_array( $page ) ) {
+										echo '<br>' . gmdate( 'H:i', $page['timestamp'] ) . "\t" . $page['url'] . '<br>';
+									}
+								}
+							}
+						}
+					}
+				}
+				?>
 			</div>
 		<?php } ?>
 
