@@ -605,29 +605,26 @@ function frmAdminBuildJS() {
 
 	function removeThisTag() {
 		/*jshint validthis:true */
-		var show, hide, removeMore,
-			id = '',
-			deleteButton = jQuery( this ),
-			continueRemove = confirmLinkClick( this );
+		let show, hide, removeMore;
 
-		if ( parseInt( this.getAttribute( 'data-skip-frm-js' ) ) ) {
+		if ( parseInt( this.getAttribute( 'data-skip-frm-js' ) ) || confirmLinkClick( this ) === false ) {
 			return;
 		}
 
-		if ( continueRemove === false ) {
-			return;
-		} else {
-			id = deleteButton.attr( 'data-removeid' );
-			show = deleteButton.attr( 'data-showlast' );
-			removeMore = deleteButton.attr( 'data-removemore' );
-			if ( typeof show === 'undefined' ) {
-				show = '';
-			}
-			hide = deleteButton.attr( 'data-hidelast' );
-			if ( typeof hide === 'undefined' ) {
-				hide = '';
-			}
+		const deleteButton = jQuery( this );
+		const id = deleteButton.attr( 'data-removeid' );
+
+		show = deleteButton.attr( 'data-showlast' );
+		if ( typeof show === 'undefined' ) {
+			show = '';
 		}
+
+		hide = deleteButton.attr( 'data-hidelast' );
+		if ( typeof hide === 'undefined' ) {
+			hide = '';
+		}
+
+		removeMore = deleteButton.attr( 'data-removemore' );
 
 		if ( show !== '' ) {
 			if ( deleteButton.closest( '.frm_add_remove' ).find( '.frm_remove_tag:visible' ).length > 1 ) {
@@ -646,7 +643,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		var $fadeEle = jQuery( document.getElementById( id ) );
+		const $fadeEle = jQuery( document.getElementById( id ) );
 		$fadeEle.fadeOut( 400, function() {
 			$fadeEle.remove();
 			fieldUpdated();
@@ -659,10 +656,9 @@ function frmAdminBuildJS() {
 				jQuery( show + ' a,' + show ).removeClass( 'frm_hidden' ).fadeIn( 'slow' );
 			}
 
-			var action = jQuery( this ).closest( '.frm_form_action_settings' );
-			if ( typeof action !== 'undefined' ) {
-				var type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
-				checkActiveAction( type );
+			if ( this.closest( '.frm_form_action_settings' ) ) {
+				const type = this.closest( '.frm_form_action_settings' ).querySelector( '.frm_action_name' ).value;
+				afterActionRemoved( type );
 			}
 		});
 
@@ -678,6 +674,14 @@ function frmAdminBuildJS() {
 		}
 
 		return false;
+	}
+
+	function afterActionRemoved( type ) {
+		checkActiveAction( type );
+
+		const hookName = 'frm_after_action_removed';
+		const hookArgs = { type };
+		wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	function clickWidget( event, b ) {
@@ -6396,23 +6400,46 @@ function frmAdminBuildJS() {
 	}
 
 	function checkActiveAction( type ) {
-		var $actionTriggers, limitClass;
-
-		$actionTriggers = jQuery( '.frm_' + type + '_action' );
+		const actionTriggers = document.querySelectorAll( '.frm_' + type + '_action' );
 
 		if ( isAtLimitForActionType( type ) ) {
-			limitClass = 'frm_inactive_action';
-			if ( getLimitForActionType( type ) > 0 ) {
-				limitClass += ' frm_already_used';
-			}
-			$actionTriggers.removeClass( 'frm_active_action' ).addClass( limitClass );
-		} else {
-			$actionTriggers.removeClass( 'frm_inactive_action frm_already_used' ).addClass( 'frm_active_action' );
+			const addAlreadyUsedClass = getLimitForActionType( type ) > 0;
+			markActionTriggersInactive( actionTriggers, addAlreadyUsedClass  );
+			return;
 		}
+
+		markActionTriggersActive( actionTriggers );
+	}
+
+	function markActionTriggersActive( triggers ) {
+		triggers.forEach(
+			trigger => {
+				trigger.classList.remove( 'frm_inactive_action', 'frm_already_used' );
+				trigger.classList.add( 'frm_active_action' );
+			}
+		);
+	}
+
+	function markActionTriggersInactive( triggers, addAlreadyUsedClass ) {
+		triggers.forEach(
+			trigger => {
+				trigger.classList.remove( 'frm_active_action' );
+				trigger.classList.add( 'frm_inactive_action' );
+				if ( addAlreadyUsedClass ) {
+					trigger.classList.add( 'frm_already_used' );
+				}
+			}
+		);
 	}
 
 	function isAtLimitForActionType( type ) {
-		return getNumberOfActionsForType( type ) >= getLimitForActionType( type );
+		let atLimit = getNumberOfActionsForType( type ) >= getLimitForActionType( type );
+
+		const hookName = 'frm_action_at_limit';
+		const hookArgs = { type };
+		atLimit = wp.hooks.applyFilters( hookName, atLimit, hookArgs );
+
+		return atLimit;
 	}
 
 	function getLimitForActionType( type ) {
