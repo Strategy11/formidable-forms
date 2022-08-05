@@ -360,9 +360,6 @@ class FrmEntryValidate {
 		}
 
 		$content = FrmEntriesHelper::entry_array_to_string( $values );
-		if ( empty( $content ) ) {
-			return false;
-		}
 
 		self::prepare_values_for_spam_check( $values );
 		$ip         = FrmAppHelper::get_ip_address();

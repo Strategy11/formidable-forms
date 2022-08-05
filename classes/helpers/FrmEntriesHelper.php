@@ -502,6 +502,7 @@ class FrmEntriesHelper {
 	 * Add submitted values to a string for spam checking.
 	 *
 	 * @param array $values
+	 * @return string
 	 */
 	public static function entry_array_to_string( $values ) {
 		$content = '';
