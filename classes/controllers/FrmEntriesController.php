@@ -672,6 +672,25 @@ class FrmEntriesController {
 	}
 
 	/**
+	 * If a field default value matches [auto_id] patterns, evaluate the shortcode again and assign it to the new field entry meta.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $meta The field entry meta
+	 */
+	public static function autoincrement_on_duplicate( &$meta ) {
+		$field = FrmField::getOne( $meta->field_id );
+		if ( ! preg_match( '/\[auto_id[^\]]*\]/', $field->default_value ) ) {
+			return;
+		}
+
+		$value = $field->default_value;
+
+		FrmProFieldsHelper::replace_non_standard_formidable_shortcodes( array( 'field' => $field ), $value );
+		$meta->meta_value = $value;
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function contextual_help( $help, $screen_id, $screen ) {
