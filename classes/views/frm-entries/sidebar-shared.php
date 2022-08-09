@@ -119,28 +119,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php if ( isset( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
-				<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				<?php
 				if ( is_string( $data['referrer'] ) ) {
+					FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) );
 					esc_html_e( 'Referrer:', 'formidable' );
 					echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );
 				} else {
-					foreach ( $data['referrer'] as $key => $referrer ) {
-						echo $key;
-						if ( is_array( $referrer ) ) {
-							foreach ( $referrer as $date_key=> $page_by_date ) {
-								if ( ! is_array( $page_by_date ) ) {
-									return;
-								}
-								echo '<br><b>' . $date_key . '</b>';
-								foreach ( $page_by_date as $page ) {
-									if ( is_array( $page ) ) {
-										echo '<br>' . gmdate( 'H:i', $page['timestamp'] ) . "\t" . $page['url'] . '<br>';
-									}
-								}
+					?>
+				<table>
+					<?php
+					foreach ( $data['referrer'] as $key => $value ) {
+						if ( $key === 'keywords' ) {
+							return;
+						}
+						?>
+						<tr><b> <?php echo esc_html( $key ); ?> </b></tr>;
+						<?php
+						foreach ( $value as $page ) {
+							if ( is_array( $page ) ) {
+								?>
+							<tr>
+								<td><?php echo gmdate( 'H:i', esc_html( $page['timestamp'] ) ); ?><td>
+								<td><?php echo esc_html( $page['title'] ) . ' &middot ' . esc_html( $page['relative_url'] ); ?> </td>
+								<td><?php echo esc_html( isset( $page['duration'] ) ? $page['duration'] : '' ); ?> </td>
+							</tr>
+								<?php
 							}
 						}
 					}
+					?>
+				</table>
+					<?php
 				}
 				?>
 			</div>
