@@ -9553,9 +9553,11 @@ function frmAdminBuildJS() {
 		},
 
 		settingsInit: function() {
-			var formSettings, $loggedIn, $cookieExp, $editable,
-				$formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
-			//BCC, CC, and Reply To button functionality
+			const $formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
+
+			let formSettings, $loggedIn, $cookieExp, $editable;
+
+			// BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
 			$formActions.on( 'click', '.frm_remove_field', hideEmailRow );
 			$formActions.on( 'change', '.frm_to_row, .frm_from_row', showEmailWarning );
@@ -9578,7 +9580,7 @@ function frmAdminBuildJS() {
 				checkActiveAction( jQuery( this ).children( 'a' ).data( 'actiontype' ) );
 
 				// If the icon is a background image, don't add BG color.
-				var icon = jQuery( this ).find( 'i' );
+				const icon = jQuery( this ).find( 'i' );
 				if ( icon.css( 'background-image' ) !== 'none' ) {
 					icon.addClass( 'frm-inverse' );
 				}
@@ -9595,23 +9597,45 @@ function frmAdminBuildJS() {
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
-			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
-			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+			document.addEventListener(
+				'click',
+				function handleImageUploadClickEvents( event ) {
+					const { target } = event;
+	
+					if ( ! target.closest( '.frm_image_preview_wrapper' ) ) {
+						return;
+					}
+	
+					if ( target.closest( '.frm_choose_image_box' ) ) {
+						addImageToOption.bind( target )( event );
+						return;
+					}
+	
+					if ( target.closest( '.frm_remove_image_option' ) ) {
+						removeImageFromOption.bind( target )( event );
+					}
+				}
+			);
 
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
 				e.stopPropagation();
+
 				if ( e.target.classList.contains( 'frm-show-box' ) ) {
 					return;
 				}
-				var sidebar = document.getElementById( 'frm_adv_info' ),
-					isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+
+				const sidebar = document.getElementById( 'frm_adv_info' );
+				if ( ! sidebar ) {
+					return;
+				}
 
 				if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
 					return;
 				}
 
-				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
+				const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+				if ( ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
 			});
