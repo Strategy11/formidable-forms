@@ -133,14 +133,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 							return;
 						}
 						?>
-						<tr><b> <?php echo esc_html( $key ); ?> </b></tr>;
+						<tr><b> <?php echo esc_html( $key ); ?> </b></tr>
 						<?php
 						foreach ( $value as $page ) {
 							if ( is_array( $page ) ) {
 								?>
 							<tr>
-								<td><?php echo gmdate( 'H:i', esc_html( $page['timestamp'] ) ); ?><td>
-								<td><?php echo esc_html( $page['title'] ) . ' &middot ' . esc_html( $page['relative_url'] ); ?> </td>
+								<td><?php echo gmdate( 'h:i a', esc_html( $page['timestamp'] ) ); ?><td>
+								<td><?php echo esc_html( $page['title'] ) . ' &middot'; ?>
+									<a target="_blank" href="<?php echo esc_attr( $page['url'] ); ?>" >
+									<?php
+									echo '/' . esc_html( $page['relative_url'] ) . '/';
+									FrmAppHelper::icon_by_class( 'frmfont frm_external_link_icon' );
+									?>
+									</a>
+								</td>
 								<td><?php echo esc_html( isset( $page['duration'] ) ? $page['duration'] : '' ); ?> </td>
 							</tr>
 								<?php
