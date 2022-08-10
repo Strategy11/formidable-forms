@@ -844,6 +844,8 @@ class FrmXMLHelper {
 
 		self::maybe_update_stylesheet( $imported );
 
+		flush_rewrite_rules();
+
 		return $imported;
 	}
 
@@ -1104,22 +1106,38 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * @param array $post
+	 * @param int   $post_id
+	 * @return void
+	 */
 	private static function update_postmeta( &$post, $post_id ) {
 		foreach ( $post['postmeta'] as $k => $v ) {
-			if ( '_edit_last' == $k ) {
-				$v = FrmAppHelper::get_user_id_param( $v );
-			} elseif ( '_thumbnail_id' == $k && FrmAppHelper::pro_is_installed() ) {
-				// Change the attachment ID.
-				$field_obj = FrmFieldFactory::get_field_type( 'file' );
-				$v         = $field_obj->get_file_id( $v );
-			}
+			switch ( $k ) {
+				case '_edit_last':
+					$v = FrmAppHelper::get_user_id_param( $v );
+					break;
 
-			if ( 'frm_dyncontent' === $k && is_array( $v ) ) {
-				$v = json_encode( $v );
+				case '_thumbnail_id':
+					if ( FrmAppHelper::pro_is_installed() ) {
+						// Change the attachment ID.
+						$field_obj = FrmFieldFactory::get_field_type( 'file' );
+						$v         = $field_obj->get_file_id( $v );
+					}
+					break;
+
+				case 'frm_dyncontent':
+					if ( is_array( $v ) ) {
+						$v = json_encode( $v );
+					}
+					break;
+
+				case 'frm_param':
+					add_rewrite_endpoint( $v, EP_PERMALINK | EP_PAGES );
+					break;
 			}
 
 			update_post_meta( $post_id, $k, $v );
-
 			unset( $k, $v );
 		}
 	}
