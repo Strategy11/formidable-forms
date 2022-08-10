@@ -2581,6 +2581,7 @@ a.frm_pro_tip .frmsvg {
 
 .frm-tip-info {
 	flex: 1;
+	text-align: left;
 }
 
 .frm-tip-cta {
@@ -4012,8 +4013,8 @@ li.frm_field_box > ul.frm_grid_container {
 	object-fit: cover;
 }
 
-.frm_list_entry_page .frm_file_link img {
-	max-width: 75px;
+.frm_list_entry_page img {
+	max-width: 100%;
 	height: auto;
 }
 

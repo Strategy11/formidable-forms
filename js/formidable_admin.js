@@ -5208,16 +5208,13 @@ function frmAdminBuildJS() {
 		}
 
 		const container = document.getElementById( 'frm_field_' + fieldId + '_opts' );
-		const inputs = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
-			input => input !== targetInput && areValuesSeparate === input.name.endsWith( '[value]' )
+		const conflicts = Array.from( container.querySelectorAll( 'input[type="text"]' ) ).filter(
+			input => input.id !== targetInput.id &&
+				areValuesSeparate === input.name.endsWith( '[value]' ) &&
+				input.value === targetInput.value
 		);
-
-		const length = inputs.length;
-		for ( let index = 0; index < length; ++index ) {
-			if ( inputs[ index ].value === targetInput.value ) {
-				infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
-				break;
-			}
+		if ( conflicts.length ) {
+			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
 		}
 	}
 
@@ -5757,9 +5754,9 @@ function frmAdminBuildJS() {
 			}
 
 			// If one click upgrade, hide other content
-			addOneClickModal( element );
+			addOneClickModal( element, undefined, undefined, upgradeLabel );
 
-			modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'block';
+			modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'inline-block';
 			modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
 			modal.querySelector( 'h2' ).style.display = 'block';
 
@@ -5904,7 +5901,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Allow addons to be installed from the upgrade modal.
 	 */
-	function addOneClickModal( link, button, showLink ) {
+	function addOneClickModal( link, button, showLink, upgradeLabel ) {
 		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
 			oneclick = link.getAttribute( 'data-oneclick' ),
 			customLink = link.getAttribute( 'data-link' ),
@@ -5938,6 +5935,9 @@ function frmAdminBuildJS() {
 		// Use a custom message in the modal.
 		if ( newMessage === null || typeof newMessage === 'undefined' || newMessage === '' ) {
 			newMessage = upgradeMessage.getAttribute( 'data-default' );
+			if ( undefined !== upgradeLabel ) {
+				newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
+			}
 		}
 		upgradeMessage.innerHTML = newMessage;
 
@@ -9570,7 +9570,7 @@ function frmAdminBuildJS() {
 			$formActions.on( 'click', '.frm_add_posttax_row', addPosttaxRow );
 			$formActions.on( 'click', '.frm_toggle_cf_opts', toggleCfOpts );
 			$formActions.on( 'click', '.frm_duplicate_form_action', copyFormAction );
-			jQuery( 'select[data-toggleclass], input[data-toggleclass]' ).on( 'change', toggleFormOpts );
+			jQuery( document ).on( 'change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts );
 			jQuery( '.frm_actions_list' ).on( 'click', '.frm_active_action', addFormAction );
 			jQuery( '#frm-show-groups, #frm-hide-groups' ).on( 'click', toggleActionGroups );
 			initiateMultiselect();
