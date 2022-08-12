@@ -120,7 +120,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( isset( $data['referrer'] ) ) { ?>
 			<div class="misc-pub-section frm_force_wrap">
 				<?php
-				if ( is_string( $data['referrer'] ) ) {
+				if ( is_string( $data['referrer'] ) && ! isset( $data['user_journey'] ) ) {
 					FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) );
 					esc_html_e( 'Referrer:', 'formidable' );
 					echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );
@@ -128,7 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				<table>
 					<?php
-					foreach ( $data['referrer'] as $key => $value ) {
+					foreach ( $data['user_journey'] as $key => $value ) {
 						if ( $key === 'keywords' ) {
 							return;
 						}
@@ -139,20 +139,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 							if ( is_array( $page ) ) {
 								?>
 							<tr>
-								<td><?php echo gmdate( 'h:i a', esc_html( $page['timestamp'] ) ); ?><td>
-								<td><?php echo esc_html( $page['title'] ) . ' &middot'; ?>
-									<a target="_blank" href="<?php echo esc_attr( $page['url'] ); ?>" >
+								<td>
+									<?php echo gmdate( 'h:i a', esc_html( $page['timestamp'] ) ); ?>
+								<td>
+								<td>
+								<?php
+								if ( $page['referrer'] ) {
+									$title = 'Referrer';
+								} else {
+									$title = $page['title'];
+								}
+								echo esc_html( $title ) . ' &middot';
+								if ( $page['referrer'] ) {
+									$url = $page['referrer'];
+								} else {
+									$url = $page['relative_url'];
+								}
+								if ( substr( $page['relative_url'], 0, 5 ) === 'User ' ) {
+										echo ' ' . esc_html( $page['relative_url'] );
+								} else {
+									?>
+									<a target="_blank" href="<?php echo $page['referrer'] ? $url : esc_attr( $page['url'] ); ?>" >
 									<?php
-									echo '/' . esc_html( $page['relative_url'] ) . '/';
-									FrmAppHelper::icon_by_class( 'frmfont frm_external_link_icon' );
+										echo '/' . esc_html( $url ) . '/';
+										FrmAppHelper::icon_by_class( 'frmfont frm_external_link_icon' );
 									?>
 									</a>
+									<?php
+								}
+								?>
 								</td>
 								<td><?php echo esc_html( isset( $page['duration'] ) ? $page['duration'] : '' ); ?> </td>
 							</tr>
 								<?php
 							}
 						}
+						?>
+						<tr>
+
+						</tr>
+						<?php
 					}
 					?>
 				</table>
@@ -164,7 +190,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer' ) ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey' ) ) ) {
 				continue;
 			}
 			?>
