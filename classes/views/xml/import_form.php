@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 	?>
 	<div class="wrap">
-		<?php include( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+		<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ); ?></p>
@@ -32,16 +32,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input type="file" name="frm_import_file" size="25" />
 			</p>
 
-			<?php do_action( 'frm_csv_opts', $forms ); ?>
+			<?php
+			/**
+			 * @param array<stdClass> $forms
+			 */
+			do_action( 'frm_csv_opts', $forms );
+			?>
 
 			<p class="submit">
 				<input type="submit" value="<?php esc_attr_e( 'Upload file and import', 'formidable' ); ?>" class="button-primary frm-button-primary" />
 			</p>
 		</form>
-		<?php FrmFormMigratorsHelper::maybe_show_download_link(); ?>
-		<?php FrmTipsHelper::pro_tip( 'get_import_tip' ); ?>
 
-		<?php do_action( 'frm_import_settings' ); ?>
+		<?php
+		FrmFormMigratorsHelper::maybe_show_download_link();
+		FrmTipsHelper::pro_tip( 'get_import_tip' );
+		do_action( 'frm_import_settings' );
+		?>
+
 		<br/><br/>
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">
@@ -174,6 +182,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</table>
 			</div>
 			</div>
+
+			<?php
+			/**
+			 * Allow for additional XML inputs in import Form.
+			 * Used in Pro to display the option to import files.
+			 *
+			 * @since 5.4.4
+			 */
+			do_action( 'frm_xml_opts' );
+			?>
 
 			<p class="submit">
 				<input type="submit" value="<?php esc_attr_e( 'Export Selection', 'formidable' ); ?>" class="button-primary frm-button-primary" />
