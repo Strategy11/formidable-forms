@@ -5816,12 +5816,12 @@ function frmAdminBuildJS() {
 
 		container.classList.add( 'frmcenter' );
 
-		const modal = document.getElementById( 'frm_upgrade_modal' );
-		container.appendChild( modal.querySelector( '.frm-oneclick' ).cloneNode( true ) );
-		container.appendChild( modal.querySelector( '.frm-addon-status' ).cloneNode( true ) );
+		const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+		cloneUpgradeModalElementAndAppendToContainer( 'frm-oneclick' );
+		cloneUpgradeModalElementAndAppendToContainer( 'frm-addon-status' );
 
-		// Borrow the call to action from the Upgrade modal which should exist on the settings page (it is still used for other upgrades including Actions).
-		const upgradeModalLink = modal.querySelector( '.frm-upgrade-link' );
+		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
+		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
 		if ( upgradeModalLink ) {
 			const upgradeButton = upgradeModalLink.cloneNode( true );
 			const level         = upgradeButton.querySelector( '.license-level' );
@@ -5832,21 +5832,23 @@ function frmAdminBuildJS() {
 
 			container.appendChild( upgradeButton );
 
-			// Maybe append the secondary "Already purchased?" link from the modal as well.
+			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
 				container.appendChild( upgradeModalLink.nextElementSibling.cloneNode( true ) );
 			}
 
-			const oneClickButton = document.getElementById( 'frm_upgrade_modal' ).querySelector( '.frm-oneclick-button' ).cloneNode( true );
-			oneClickButton.id = 'frm_one_click_' + getAutoId();
-			container.appendChild( oneClickButton );
+			cloneUpgradeModalElementAndAppendToContainer( 'frm-oneclick-button' );
 		}
 
-		container.appendChild( modal.querySelector( '.frm-upgrade-message' ).cloneNode( true ) );
+		cloneUpgradeModalElementAndAppendToContainer( 'frm-upgrade-message' );
 		addOneClick( element, 'tab', element.dataset.message );
 
 		if ( element.dataset.screenshot ) {
 			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
+		}
+
+		function cloneUpgradeModalElementAndAppendToContainer( className ) {
+			container.appendChild( upgradeModal.querySelector( '.' + className ).cloneNode( true ) );
 		}
 	}
 
@@ -8059,15 +8061,14 @@ function frmAdminBuildJS() {
 
 	function getSaveAndReloadSettingsOptions( saveAndReload ) {
 		return div({
-			id: 'frm_save_and_reload_options',
+			className: 'frm-save-and-reload-options',
 			children: [ saveAndReloadSettingsButton( saveAndReload ), closePopupButton() ]
 		});
 	}
 
 	function saveAndReloadSettingsButton( saveAndReload ) {
 		var button = document.createElement( 'button' );
-		button.id = 'frm_save_and_reload';
-		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
+		button.classList.add( 'frm-save-and-reload', 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
 		button.addEventListener( 'click', () => {
 			if ( saveAndReload === 'form_builder' ) {
