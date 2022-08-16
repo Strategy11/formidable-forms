@@ -5817,8 +5817,8 @@ function frmAdminBuildJS() {
 		container.classList.add( 'frmcenter' );
 
 		const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
-		cloneUpgradeModalElementAndAppendToContainer( 'frm-oneclick' );
-		cloneUpgradeModalElementAndAppendToContainer( 'frm-addon-status' );
+		appendClonedModalElementToContainer( 'frm-oneclick' );
+		appendClonedModalElementToContainer( 'frm-addon-status' );
 
 		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
 		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
@@ -5837,17 +5837,17 @@ function frmAdminBuildJS() {
 				container.appendChild( upgradeModalLink.nextElementSibling.cloneNode( true ) );
 			}
 
-			cloneUpgradeModalElementAndAppendToContainer( 'frm-oneclick-button' );
+			appendClonedModalElementToContainer( 'frm-oneclick-button' );
 		}
 
-		cloneUpgradeModalElementAndAppendToContainer( 'frm-upgrade-message' );
+		appendClonedModalElementToContainer( 'frm-upgrade-message' );
 		addOneClick( element, 'tab', element.dataset.message );
 
 		if ( element.dataset.screenshot ) {
 			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
 		}
 
-		function cloneUpgradeModalElementAndAppendToContainer( className ) {
+		function appendClonedModalElementToContainer( className ) {
 			container.appendChild( upgradeModal.querySelector( '.' + className ).cloneNode( true ) );
 		}
 	}
