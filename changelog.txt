@@ -2,6 +2,7 @@
 = 5.4.4 =
 * New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This signficantly improves form builder performance for fields with many options.
 * New: Added a new frm_before_duplicate_entry_values filter for customizing the data of a duplicated entry before it is saved.
+* New: Maximum character length is now validated server side on form submit.
 * Fix: The duplicate option pop up was triggering incorrectly when dragging new options in Chrome.
 * Fix: Prevent a "Trying to get property 'post_status' of non-object" PHP Notice that happens in some cases when updating form actions.
 * Fix: Imported view detail page URLs were returning 404 errors. New imported views will now update permalinks to avoid this issue.
