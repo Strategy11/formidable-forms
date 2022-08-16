@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 6.0.1
 Requires PHP: 5.6
-Stable tag: 5.4.3
+Stable tag: 5.4.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,14 @@ Using our Zapier integration, you can easily connect Formidable with over 1000+ 
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.4.4 =
+* New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This signficantly improves form builder performance for fields with many options.
+* New: Added a new frm_before_duplicate_entry_values filter for customizing the data of a duplicated entry before it is saved.
+* Fix: The duplicate option pop up was triggering incorrectly when dragging new options in Chrome.
+* Fix: Prevent a "Trying to get property 'post_status' of non-object" PHP Notice that happens in some cases when updating form actions.
+* Fix: Imported view detail page URLs were returning 404 errors. New imported views will now update permalinks to avoid this issue.
+* Fix: The disallowed list check was not being applied for forms without any data sent.
+
 = 5.4.3 =
 * New: A pop up will trigger when a duplicate option value is added to the list of options to help avoid issues with accidental duplicate option values getting added to a field.
 * Fix: Prevent a null JavaScript error on some forms related to floating labels.
@@ -454,10 +462,5 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Fixed a caching conflict that would cause back end pages to break on some servers with an frmDom is not defined console error.
 * Fix: Labels were appearing overlapped over input fields when previewed from the style manager for styles with the inline label position setting.
 * Updated the icon for Zapier.
-
-= 5.4.1 =
-* New: Fields using the "Placeholder inside the field" Label Position setting will now use an animated label that moves to the top of the field when focused.
-* New: Added a new frm_after_destroy_entry filter that can be used to update caching after a Formidable entry is deleted.
-* Fix: An unexpected empty broken application template was appearing for expired licenses.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
