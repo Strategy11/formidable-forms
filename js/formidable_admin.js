@@ -8017,7 +8017,8 @@ function frmAdminBuildJS() {
 	 * TODO stop addressing oneclick stuff by ID as this may happen in a tab as well.
 	 */
 	function afterAddonInstall( response, button, message, el, saveAndReload ) {
-		document.querySelectorAll( '.frm-addon-status' ).forEach(
+		const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
+		addonStatuses.forEach(
 			addonStatus => {
 				addonStatus.textContent   = response;
 				addonStatus.style.display = 'block';
@@ -8046,16 +8047,21 @@ function frmAdminBuildJS() {
 		const refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
-		} else if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
-			$addonStatus.append( getSaveAndReloadSettingsOptions( saveAndReload ) );
+			return;
+		}
+
+		if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
+			addonStatuses.forEach(
+				addonStatus => addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload ) )
+			)
 		}
 	}
 
 	function getSaveAndReloadSettingsOptions( saveAndReload ) {
-		var wrapper = div({ id: 'frm_save_and_reload_options' });
-		wrapper.appendChild( saveAndReloadSettingsButton( saveAndReload ) );
-		wrapper.appendChild( closePopupButton() );
-		return wrapper;
+		return div({
+			id: 'frm_save_and_reload_options',
+			children: [ saveAndReloadSettingsButton( saveAndReload ), closePopupButton() ]
+		});
 	}
 
 	function saveAndReloadSettingsButton( saveAndReload ) {
