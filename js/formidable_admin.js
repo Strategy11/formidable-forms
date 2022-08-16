@@ -2692,14 +2692,23 @@ function frmAdminBuildJS() {
 	function toggleInvalidMsg() {
 		/*jshint validthis:true */
 		var typeDropdown, fieldType,
-			fieldId = this.id.replace( 'frm_format_', '' ),
-			hasValue = this.value !== '';
+			fieldId = this.getAttribute( 'data-fid' ),
+			value = '';
+
+		[ 'field_options_max_', 'frm_format_' ].forEach( function( id ) {
+			var input = document.getElementById( id + fieldId );
+			if ( ! input ) {
+				return;
+			}
+
+			value += input.value;
+		});
 
 		typeDropdown = document.getElementsByName( 'field_options[type_' + fieldId + ']' )[0];
 		fieldType = typeDropdown.options[typeDropdown.selectedIndex].value;
 
 		if ( fieldType === 'text' ) {
-			toggleValidationBox( hasValue, '.frm_invalid_msg' + fieldId );
+			toggleValidationBox( '' !== value, '.frm_invalid_msg' + fieldId );
 		}
 	}
 
@@ -9415,7 +9424,7 @@ function frmAdminBuildJS() {
 			jQuery( document.getElementById( 'frm-insert-fields' ) ).on( 'click', '.frm_add_field', addFieldClick );
 			$newFields.on( 'click', '.frm_clone_field', duplicateField );
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
-			$builderForm.on( 'change', 'input.frm_format_opt', toggleInvalidMsg );
+			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
