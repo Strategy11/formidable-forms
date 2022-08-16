@@ -8055,7 +8055,7 @@ function frmAdminBuildJS() {
 		if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
 			addonStatuses.forEach(
 				addonStatus => addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload ) )
-			)
+			);
 		}
 	}
 
