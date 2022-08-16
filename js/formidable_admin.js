@@ -9601,16 +9601,16 @@ function frmAdminBuildJS() {
 				'click',
 				function handleImageUploadClickEvents( event ) {
 					const { target } = event;
-	
+
 					if ( ! target.closest( '.frm_image_preview_wrapper' ) ) {
 						return;
 					}
-	
+
 					if ( target.closest( '.frm_choose_image_box' ) ) {
 						addImageToOption.bind( target )( event );
 						return;
 					}
-	
+
 					if ( target.closest( '.frm_remove_image_option' ) ) {
 						removeImageFromOption.bind( target )( event );
 					}
