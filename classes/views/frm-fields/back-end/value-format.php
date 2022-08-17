@@ -17,6 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			)
 		);
 		?>
-		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" />
+		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" data-fid="<?php echo intval( $field['id'] ); ?>" />
 	</span>
 </p>

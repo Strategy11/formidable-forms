@@ -106,7 +106,7 @@ class FrmFormAction {
 			$action_options['color'] = 'var(--' . reset( $colors ) . ')';
 		}
 
-		$upgrade_class = $action_options['classes'] === 'frm_show_upgrade';
+		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 		if ( $action_options['group'] === $id_base ) {
 			$upgrade_class = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
@@ -420,17 +420,23 @@ class FrmFormAction {
 	 * If the status of the action has changed, update it
 	 *
 	 * @since 3.04
+	 *
+	 * @param array          $new_instance
+	 * @param stdClass|array $old_instance
+	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
-		if ( $new_instance['post_status'] !== $old_instance->post_status ) {
-			self::clear_cache();
-			wp_update_post(
-				array(
-					'ID'          => $new_instance['ID'],
-					'post_status' => $new_instance['post_status'],
-				)
-			);
+		if ( ! is_object( $old_instance ) || $new_instance['post_status'] === $old_instance->post_status ) {
+			return;
 		}
+
+		self::clear_cache();
+		wp_update_post(
+			array(
+				'ID'          => $new_instance['ID'],
+				'post_status' => $new_instance['post_status'],
+			)
+		);
 	}
 
 	public function save_settings( $settings ) {
