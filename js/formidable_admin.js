@@ -3059,16 +3059,13 @@ function frmAdminBuildJS() {
 	}
 
 	function addImageToOption( event ) {
-		var fileFrame,
-			$this = jQuery( this ),
-			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
-			postID = 0;
+		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
 
-		wp.media.model.settings.post.id = postID;
+		wp.media.model.settings.post.id = 0;
 
-		fileFrame = wp.media.frames.file_frame = wp.media({
+		const fileFrame = wp.media.frames.file_frame = wp.media({
 			multiple: false,
 			library: {
 				type: [ 'image' ]
@@ -3077,13 +3074,21 @@ function frmAdminBuildJS() {
 
 		fileFrame.on( 'select', function() {
 			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
-			$imagePreview.find( 'img' ).attr( 'src', attachment.url ).removeClass( 'frm_hidden' );
-			$imagePreview.find( '.frm_image_preview_frame' ).show();
-			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
+			console.log( attachment );
+
+			const img = imagePreview.querySelector( 'img' );
+			img.setAttribute( 'src', attachment.url );
+			img.classList.remove( 'frm_hidden' );
+			img.removeAttribute( 'srcset' ); // Prevent the old image from sticking around.
+
+			imagePreview.querySelector( '.frm_image_preview_frame' ).style.display = 'block';
+			imagePreview.querySelector( '.frm_image_preview_title' ).textContent = attachment.filename;
+			imagePreview.querySelector( '.frm_choose_image_box' ).style.display = 'none';
+
+			const $imagePreview = jQuery( imagePreview );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
-			$imagePreview.find( '.frm_choose_image_box' ).hide();
 			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).trigger( 'change' );
-			wp.media.model.settings.post.id = postID;
+			wp.media.model.settings.post.id = 0;
 		});
 
 		fileFrame.open();
