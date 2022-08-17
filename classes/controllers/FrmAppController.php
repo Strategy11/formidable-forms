@@ -494,6 +494,7 @@ class FrmAppController {
 			'bootstrap_tooltip',
 			'bootstrap-multiselect',
 			'wp-i18n',
+			'wp-hooks', // Required in WP versions older than 5.7
 			'formidable_dom',
 			'formidable_embed',
 		);
