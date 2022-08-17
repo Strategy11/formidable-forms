@@ -5759,7 +5759,7 @@ function frmAdminBuildJS() {
 			}
 
 			// If one click upgrade, hide other content
-			addOneClickModal( element, undefined, undefined, upgradeLabel );
+			addOneClick( element, 'modal', upgradeLabel );
 
 			modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'inline-block';
 			modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
@@ -5768,7 +5768,7 @@ function frmAdminBuildJS() {
 			$info.dialog( 'open' );
 
 			// set the utm medium
-			const button = modal.querySelector( '.button-primary:not(#frm-oneclick-button)' );
+			const button = modal.querySelector( '.button-primary:not(.frm-oneclick-button)' );
 			link = button.getAttribute( 'href' ).replace( /(medium=)[a-z_-]+/ig, '$1' + element.getAttribute( 'data-medium' ) );
 			content = element.getAttribute( 'data-content' );
 			if ( content === null ) {
@@ -5804,12 +5804,6 @@ function frmAdminBuildJS() {
 
 	function populateUpgradeTab( element ) {
 		const title = element.dataset.upgrade;
-		let message = element.dataset.message;
-
-		if ( ! message ) {
-			message = document.getElementById( 'frm-upgrade-message' ).dataset.default;
-			message = message.replace( '<span class="frm_feature_label"></span>', title );
-		}
 
 		const tab = element.getAttribute( 'href' ).replace( '#', '' );
 		const container = document.querySelector( '.frm_' + tab ) || document.querySelector( '.' + tab );
@@ -5818,7 +5812,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		if ( container.querySelector( '.frm-tab-message' ) ) {
+		if ( container.querySelector( '.frm-upgrade-message' ) ) {
 			// Tab has already been populated.
 			return;
 		}
@@ -5830,24 +5824,16 @@ function frmAdminBuildJS() {
 		h2.textContent = __( '%s are not installed' ).replace( '%s', title );
 
 		container.classList.add( 'frmcenter' );
-		container.appendChild(
-			tag(
-				'p',
-				{
-					className: 'frm-tab-message',
-					text: message
-				}
-			)
-		);
 
-		const upgradeModalLink = document.getElementById( 'frm-upgrade-modal-link' );
+		const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+		appendClonedModalElementToContainer( 'frm-oneclick' );
+		appendClonedModalElementToContainer( 'frm-addon-status' );
 
-		// Borrow the call to action from the Upgrade modal which should exist on the settings page (it is still used for other upgrades including Actions).
+		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
+		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
 		if ( upgradeModalLink ) {
 			const upgradeButton = upgradeModalLink.cloneNode( true );
-			upgradeButton.id = 'frm_upgrade_link_' + getAutoId();
-
-			const level = upgradeButton.querySelector( '.license-level' );
+			const level         = upgradeButton.querySelector( '.license-level' );
 
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
@@ -5855,19 +5841,23 @@ function frmAdminBuildJS() {
 
 			container.appendChild( upgradeButton );
 
-			// Maybe append the secondary "Already purchased?" link from the modal as well.
+			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
 				container.appendChild( upgradeModalLink.nextElementSibling.cloneNode( true ) );
 			}
 
-			const oneClickButton = document.getElementById( 'frm-oneclick-button' ).cloneNode( true );
-			oneClickButton.id = 'frm_one_click_' + getAutoId();
-			container.appendChild( oneClickButton );
-			addOneClickModal( element, oneClickButton, upgradeButton );
+			appendClonedModalElementToContainer( 'frm-oneclick-button' );
 		}
+
+		appendClonedModalElementToContainer( 'frm-upgrade-message' );
+		addOneClick( element, 'tab', element.dataset.message );
 
 		if ( element.dataset.screenshot ) {
 			container.appendChild( getScreenshotWrapper( element.dataset.screenshot ) );
+		}
+
+		function appendClonedModalElementToContainer( className ) {
+			container.appendChild( upgradeModal.querySelector( '.' + className ).cloneNode( true ) );
 		}
 	}
 
@@ -5905,23 +5895,33 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Allow addons to be installed from the upgrade modal.
+	 *
+	 * @param {Element} link
+	 * @param {String} context Either 'modal' or 'tab'.
+	 * @param {String|undefined} upgradeLabel
 	 */
-	function addOneClickModal( link, button, showLink, upgradeLabel ) {
-		var oneclickMessage = document.getElementById( 'frm-oneclick' ),
-			oneclick = link.getAttribute( 'data-oneclick' ),
-			customLink = link.getAttribute( 'data-link' ),
-			upgradeMessage = document.getElementById( 'frm-upgrade-message' ),
-			newMessage = link.getAttribute( 'data-message' ),
-			showIt = 'block',
-			showMsg = 'block',
-			hideIt = 'none';
+	function addOneClick( link, context, upgradeLabel ) {
+		let container;
 
-		if ( undefined === button ) {
-			button = document.getElementById( 'frm-oneclick-button' );
+		if ( 'modal' === context ) {
+			container = document.getElementById( 'frm_upgrade_modal' );
+		} else if ( 'tab' === context ) {
+			container = document.getElementById( link.getAttribute( 'href' ).substr( 1 ) );
+		} else {
+			return;
 		}
-		if ( undefined === showLink ) {
-			showLink = document.getElementById( 'frm-upgrade-modal-link' );
-		}
+
+		const oneclickMessage = container.querySelector( '.frm-oneclick' );
+		const upgradeMessage  = container.querySelector( '.frm-upgrade-message' );
+		const showLink        = container.querySelector( '.frm-upgrade-link' );
+		const button          = container.querySelector( '.frm-oneclick-button' );
+		const addonStatus     = container.querySelector( '.frm-addon-status' );
+
+		let oneclick   = link.getAttribute( 'data-oneclick' );
+		let newMessage = link.getAttribute( 'data-message' );
+		let showIt  = 'block';
+		let showMsg = 'block';
+		let hideIt  = 'none';
 
 		// If one click upgrade, hide other content.
 		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
@@ -5932,31 +5932,38 @@ function frmAdminBuildJS() {
 			hideIt = 'block';
 			oneclick = JSON.parse( oneclick );
 
-			button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-			button.className = button.className + ' ' + oneclick.class;
+			button.className   = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
+			button.className   = button.className + ' ' + oneclick.class;
+			button.textContent = __( 'Activate', 'formidable' );
 			button.rel = oneclick.url;
 		}
 
-		// Use a custom message in the modal.
-		if ( newMessage === null || typeof newMessage === 'undefined' || newMessage === '' ) {
+		if ( ! newMessage ) {
 			newMessage = upgradeMessage.getAttribute( 'data-default' );
-			if ( undefined !== upgradeLabel ) {
-				newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
-			}
 		}
+		if ( undefined !== upgradeLabel ) {
+			newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
+		}
+
 		upgradeMessage.innerHTML = newMessage;
 
 		// Either set the link or use the default.
-		if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
-			customLink = showLink.getAttribute( 'data-default' );
-		}
-		showLink.href = customLink;
+		showLink.href = getShowLinkHrefValue( link, showLink );
 
-		document.getElementById( 'frm-addon-status' ).style.display = 'none';
+		addonStatus.style.display = 'none';
+
 		oneclickMessage.style.display = hideIt;
 		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 		upgradeMessage.style.display = showMsg;
 		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
+	}
+
+	function getShowLinkHrefValue( link, showLink ) {
+		let customLink = link.getAttribute( 'data-link' );
+		if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
+			customLink = showLink.getAttribute( 'data-default' );
+		}
+		return customLink;
 	}
 
 	/* Form settings */
@@ -7931,13 +7938,13 @@ function frmAdminBuildJS() {
 	}
 
 	function installOrActivate( clicked, action ) {
-		var button, plugin, el, message;
+		let button, plugin, el, message;
 
 		// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 		jQuery( '.frm-addon-error' ).remove();
-		button = jQuery( clicked );
-		plugin = button.attr( 'rel' );
-		el = button.parent();
+		button  = jQuery( clicked );
+		plugin  = button.attr( 'rel' );
+		el      = button.parent();
 		message = el.parent().find( '.addon-status-label' );
 
 		button.addClass( 'frm_loading_button' );
@@ -7955,7 +7962,7 @@ function frmAdminBuildJS() {
 				plugin: plugin
 			},
 			success: function( response ) {
-				var saveAndReload, error;
+				let saveAndReload;
 
 				if ( 'string' !== typeof response && 'string' === typeof response.message ) {
 					if ( 'undefined' !== typeof response.saveAndReload ) {
@@ -7964,8 +7971,7 @@ function frmAdminBuildJS() {
 					response = response.message;
 				}
 
-				error = extractErrorFromAddOnResponse( response );
-
+				const error = extractErrorFromAddOnResponse( response );
 				if ( error ) {
 					addonError( error, el, button );
 					return;
@@ -7984,9 +7990,9 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 
 		// Now let's make another Ajax request once the user has submitted their credentials.
-		var proceed = jQuery( this ),
-			el = proceed.parent().parent(),
-			plugin = proceed.attr( 'rel' );
+		const proceed = jQuery( this );
+		const el      = proceed.parent().parent();
+		const plugin  = proceed.attr( 'rel' );
 
 		proceed.addClass( 'frm_loading_button' );
 
@@ -8005,8 +8011,7 @@ function frmAdminBuildJS() {
 				password: el.find( '#password' ).val()
 			},
 			success: function( response ) {
-				var error = extractErrorFromAddOnResponse( response );
-
+				const error = extractErrorFromAddOnResponse( response );
 				if ( error ) {
 					addonError( error, el, proceed );
 					return;
@@ -8020,15 +8025,28 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	/**
+	 * TODO stop addressing oneclick stuff by ID as this may happen in a tab as well.
+	 */
 	function afterAddonInstall( response, button, message, el, saveAndReload ) {
-		var $addonStatus, refreshPage;
+		const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
+		addonStatuses.forEach(
+			addonStatus => {
+				addonStatus.textContent   = response;
+				addonStatus.style.display = 'block';
+			}
+		);
 
-		$addonStatus = jQuery( document.getElementById( 'frm-addon-status' ) );
 		// The Ajax request was successful, so let's update the output.
 		button.css({ opacity: '0' });
 		message.text( frm_admin_js.active );
-		jQuery( '#frm-oneclick' ).hide();
-		$addonStatus.text( response ).show();
+
+		document.querySelectorAll( '.frm-oneclick' ).forEach(
+			oneClick => {
+				oneClick.style.display = 'none';
+			}
+		);
+
 		jQuery( '#frm_upgrade_modal h2' ).hide();
 		jQuery( '#frm_upgrade_modal .frm_lock_icon' ).addClass( 'frm_lock_open_icon' );
 		jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
@@ -8038,25 +8056,34 @@ function frmAdminBuildJS() {
 		button.removeClass( 'frm_loading_button' );
 
 		// Maybe refresh import and SMTP pages
-		refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
+		const refreshPage = document.querySelectorAll( '.frm-admin-page-import, #frm-admin-smtp, #frm-welcome' );
 		if ( refreshPage.length > 0 ) {
 			window.location.reload();
-		} else if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
-			$addonStatus.append( getSaveAndReloadSettingsOptions( saveAndReload ) );
+			return;
+		}
+
+		if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
+			addonStatuses.forEach(
+				addonStatus => {
+					const inModal = null !== addonStatus.closest( '#frm_upgrade_modal' );
+					addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload, inModal ) );
+				}
+			);
 		}
 	}
 
-	function getSaveAndReloadSettingsOptions( saveAndReload ) {
-		var wrapper = div({ id: 'frm_save_and_reload_options' });
-		wrapper.appendChild( saveAndReloadSettingsButton( saveAndReload ) );
-		wrapper.appendChild( closePopupButton() );
-		return wrapper;
+	function getSaveAndReloadSettingsOptions( saveAndReload, inModal ) {
+		const className = 'frm-save-and-reload-options';
+		const children  = [ saveAndReloadSettingsButton( saveAndReload ) ];
+		if ( inModal ) {
+			children.push( closePopupButton() );
+		}
+		return div({ className, children });
 	}
 
 	function saveAndReloadSettingsButton( saveAndReload ) {
 		var button = document.createElement( 'button' );
-		button.id = 'frm_save_and_reload';
-		button.classList.add( 'button', 'button-primary', 'frm-button-primary' );
+		button.classList.add( 'frm-save-and-reload', 'button', 'button-primary', 'frm-button-primary' );
 		button.textContent = __( 'Save and Reload', 'formidable' );
 		button.addEventListener( 'click', () => {
 			if ( saveAndReload === 'form_builder' ) {

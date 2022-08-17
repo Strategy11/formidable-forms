@@ -1778,13 +1778,14 @@ h2.frm-h2 + .howto {
 	visibility: hidden;
 }
 
-#frm_save_and_reload_options {
+.frm-save-and-reload-options {
 	margin-top: 10px;
 	font-size: 13px;
 }
 
-#frm_save_and_reload, #frm_save_and_reload + .frm-button-secondary {
-	visibility: visible;
+.frm-save-and-reload,
+.frm-save-and-reload + .frm-button-secondary {
+	visibility: visible !important;
 }
 
 .addon-status-label {
@@ -7338,7 +7339,7 @@ h2 .frm-sub-label {
 	padding-bottom: 20px;
 }
 
-#frm-upgrade-message img {
+.frm-upgrade-message img {
 	max-width: 100%;
 }
 

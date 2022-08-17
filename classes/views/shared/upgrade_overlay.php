@@ -25,12 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</h2>
 				<div class="cta-inside">
 
-					<p id="frm-oneclick" class="frm_hidden">
+					<p class="frm-oneclick frm_hidden">
 						<?php esc_html_e( 'That add-on is not installed. Would you like to install it now?', 'formidable' ); ?>
 					</p>
-					<p id="frm-addon-status"></p>
+					<p class="frm-addon-status"></p>
 
-					<a class="button button-primary frm-button-primary frm_hidden" id="frm-oneclick-button">
+					<a class="button button-primary frm-button-primary frm_hidden frm-oneclick-button">
 						<?php esc_html_e( 'Install', 'formidable' ); ?>
 					</a>
 
@@ -44,11 +44,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
-					<p id="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
+					<p class="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
 						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
-						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary" id="frm-upgrade-modal-link" data-default="<?php echo esc_url( $default_link ); ?>">
+						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" data-default="<?php echo esc_url( $default_link ); ?>">
 							<?php
 							printf(
 								/* translators: %s: Plan name */
@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</a>
 					<?php } else { ?>
-						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer" id="frm-upgrade-modal-link" data-default="<?php echo esc_url( $default_link ); ?>">
+						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener noreferrer" data-default="<?php echo esc_url( $default_link ); ?>">
 							<?php
 							printf(
 								/* translators: %s: Plan name */
