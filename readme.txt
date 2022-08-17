@@ -446,6 +446,8 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Prevent a "Trying to get property 'post_status' of non-object" PHP Notice that happens in some cases when updating form actions.
 * Fix: Imported view detail page URLs were returning 404 errors. New imported views will now update permalinks to avoid this issue.
 * Fix: The disallowed list check was not being applied for forms without any data sent.
+* Fix: Placeholder add on pages were showing messages to upgrade for supported licenses.
+* Fix: Applications were not properly loading in WordPress 5.6.
 
 = 5.4.3 =
 * New: A pop up will trigger when a duplicate option value is added to the list of options to help avoid issues with accidental duplicate option values getting added to a field.
