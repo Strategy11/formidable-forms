@@ -3074,9 +3074,8 @@ function frmAdminBuildJS() {
 
 		fileFrame.on( 'select', function() {
 			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
-			console.log( attachment );
-
 			const img = imagePreview.querySelector( 'img' );
+
 			img.setAttribute( 'src', attachment.url );
 			img.classList.remove( 'frm_hidden' );
 			img.removeAttribute( 'srcset' ); // Prevent the old image from sticking around.
