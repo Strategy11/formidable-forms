@@ -5923,8 +5923,9 @@ function frmAdminBuildJS() {
 			hideIt = 'block';
 			oneclick = JSON.parse( oneclick );
 
-			button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-			button.className = button.className + ' ' + oneclick.class;
+			button.className   = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
+			button.className   = button.className + ' ' + oneclick.class;
+			button.textContent = __( 'Activate', 'formidable' );
 			button.rel = oneclick.url;
 		}
 
@@ -8054,16 +8055,21 @@ function frmAdminBuildJS() {
 
 		if ([ 'settings', 'form_builder' ].includes( saveAndReload ) ) {
 			addonStatuses.forEach(
-				addonStatus => addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload ) )
+				addonStatus => {
+					const inModal = null !== addonStatus.closest( '#frm_upgrade_modal' );
+					addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload, inModal ) );
+				}
 			);
 		}
 	}
 
-	function getSaveAndReloadSettingsOptions( saveAndReload ) {
-		return div({
-			className: 'frm-save-and-reload-options',
-			children: [ saveAndReloadSettingsButton( saveAndReload ), closePopupButton() ]
-		});
+	function getSaveAndReloadSettingsOptions( saveAndReload, inModal ) {
+		const className = 'frm-save-and-reload-options';
+		const children  = [ saveAndReloadSettingsButton( saveAndReload ) ];
+		if ( inModal ) {
+			children.push( closePopupButton() );
+		}
+		return div({ className, children });
 	}
 
 	function saveAndReloadSettingsButton( saveAndReload ) {
