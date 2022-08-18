@@ -6056,7 +6056,7 @@ function frmAdminBuildJS() {
 		});
 		newAction.setAttribute( 'data-actionkey', newID );
 		newAction.innerHTML = html;
-		newAction.querySelectorAll( '*' ).forEach(
+		newAction.querySelectorAll( '.wp-editor-wrap, .wp-editor-wrap *' ).forEach(
 			element => {
 				if ( 'string' === typeof element.className ) {
 					element.className = element.className.replace( currentID, newID );
