@@ -6251,7 +6251,10 @@ function frmAdminBuildJS() {
 
 		const editor = singleField.querySelector( '.wp-editor-area' );
 		if ( editor ) {
-			frmDom.wysiwyg.init( editor, { setupCallback: setupTinyMceEventHandlers } );
+			frmDom.wysiwyg.init(
+				editor,
+				{ setupCallback: setupTinyMceEventHandlers }
+			);
 		}
 	}
 
