@@ -6019,9 +6019,9 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		var action = jQuery( this ).closest( '.frm_form_action_settings' ).clone();
-		var currentID = action.attr( 'id' ).replace( 'frm_form_action_', '' );
-		var newID = newActionId( currentID );
+		const action = jQuery( this ).closest( '.frm_form_action_settings' ).clone();
+		const currentID = action.attr( 'id' ).replace( 'frm_form_action_', '' );
+		const newID = newActionId( currentID );
 		action.find( '.frm_action_id, .frm-btn-group' ).remove();
 		action.find( 'input[name$="[' + currentID + '][ID]"]' ).val( '' );
 		action.find( '.widget-inside' ).hide();
@@ -6035,16 +6035,23 @@ function frmAdminBuildJS() {
 			return this.checked;
 		});
 
-		var rename = new RegExp( '\\[' + currentID + '\\]', 'g' );
-		var reid = new RegExp( '_' + currentID + '"', 'g' );
-		var reclass = new RegExp( '-' + currentID + '"', 'g' );
-		var revalue = new RegExp( '"' + currentID + '"', 'g' ); // if a field id matches, this could cause trouble
+		const rename = new RegExp( '\\[' + currentID + '\\]', 'g' );
+		const reid = new RegExp( '_' + currentID + '"', 'g' );
+		const reclass = new RegExp( '-' + currentID + '"', 'g' );
+		const revalue = new RegExp( '"' + currentID + '"', 'g' ); // if a field id matches, this could cause trouble
 
-		var html = action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
+		let html = action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
 		html = html.replace( reclass, '-' + newID + '"' ).replace( revalue, '"' + newID + '"' );
-		var div = '<div id="frm_form_action_' + newID + '" class="widget frm_form_action_settings frm_single_email_settings" data-actionkey="' + newID + '">';
 
-		jQuery( '#frm_notification_settings' ).append( div + html + '</div>' );
+		const newAction = div({
+			id: 'frm_form_action_' + newID,
+			className: action.get( 0 ).className
+		})
+		newAction.setAttribute( 'data-actionkey', newID );
+		newAction.innerHTML = html;
+		newAction.classList.remove( 'open' );
+		document.getElementById( 'frm_notification_settings' ).appendChild( newAction );
+
 		initiateMultiselect();
 	}
 
