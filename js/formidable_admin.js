@@ -6013,46 +6013,70 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function copyFormAction() {
-		/*jshint validthis:true */
-		if ( waitForActionToLoadBeforeCopy( this ) ) {
+	function copyFormAction( event ) {
+		if ( waitForActionToLoadBeforeCopy( event.target ) ) {
 			return;
 		}
 
-		const action = jQuery( this ).closest( '.frm_form_action_settings' ).clone();
-		const currentID = action.attr( 'id' ).replace( 'frm_form_action_', '' );
-		const newID = newActionId( currentID );
-		action.find( '.frm_action_id, .frm-btn-group' ).remove();
-		action.find( 'input[name$="[' + currentID + '][ID]"]' ).val( '' );
-		action.find( '.widget-inside' ).hide();
+		const targetSettings = event.target.closest( '.frm_form_action_settings' );
+		const wysiwyg        = targetSettings.querySelector( '.wp-editor-area' );
+		if ( wysiwyg ) {
+			// Temporary remove TinyMCE before cloning to avoid TinyMCE conflicts.
+			tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, wysiwyg.id );
+		}
+
+		const $action   = jQuery( targetSettings ).clone();
+		const currentID = $action.attr( 'id' ).replace( 'frm_form_action_', '' );
+		const newID     = newActionId( currentID );
+
+		$action.find( '.frm_action_id, .frm-btn-group' ).remove();
+		$action.find( 'input[name$="[' + currentID + '][ID]"]' ).val( '' );
+		$action.find( '.widget-inside' ).hide();
 
 		// the .html() gets original values, so they need to be set
-		action.find( 'input[type=text], textarea, input[type=number]' ).prop( 'defaultValue', function() {
+		$action.find( 'input[type=text], textarea, input[type=number]' ).prop( 'defaultValue', function() {
 			return this.value;
 		});
 
-		action.find( 'input[type=checkbox], input[type=radio]' ).prop( 'defaultChecked', function() {
+		$action.find( 'input[type=checkbox], input[type=radio]' ).prop( 'defaultChecked', function() {
 			return this.checked;
 		});
 
-		const rename = new RegExp( '\\[' + currentID + '\\]', 'g' );
-		const reid = new RegExp( '_' + currentID + '"', 'g' );
+		const rename  = new RegExp( '\\[' + currentID + '\\]', 'g' );
+		const reid    = new RegExp( '_' + currentID + '"', 'g' );
 		const reclass = new RegExp( '-' + currentID + '"', 'g' );
 		const revalue = new RegExp( '"' + currentID + '"', 'g' ); // if a field id matches, this could cause trouble
 
-		let html = action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
+		let html = $action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
 		html = html.replace( reclass, '-' + newID + '"' ).replace( revalue, '"' + newID + '"' );
 
 		const newAction = div({
 			id: 'frm_form_action_' + newID,
-			className: action.get( 0 ).className
-		})
+			className: $action.get( 0 ).className
+		});
 		newAction.setAttribute( 'data-actionkey', newID );
 		newAction.innerHTML = html;
+		newAction.querySelectorAll( '*' ).forEach(
+			element => {
+				if ( 'string' === typeof element.className ) {
+					element.className = element.className.replace( currentID, newID );
+				}
+				element.id = element.id.replace( currentID, newID );
+			}
+		);
 		newAction.classList.remove( 'open' );
 		document.getElementById( 'frm_notification_settings' ).appendChild( newAction );
 
+		if ( wysiwyg ) {
+			// Re-initialize the original wysiwyg which was removed before cloning.
+			frmDom.wysiwyg.init( wysiwyg );
+		}
+		frmDom.wysiwyg.init( newAction.querySelector( '.wp-editor-area' ) );
+
 		initiateMultiselect();
+
+		const hookName = 'frm_after_duplicate_action';
+		wp.hooks.doAction( hookName, newAction );
 	}
 
 	function waitForActionToLoadBeforeCopy( element ) {
