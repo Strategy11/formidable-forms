@@ -799,6 +799,8 @@ class FrmXMLHelper {
 			} else {
 				if ( $post['post_type'] === 'frm_display' ) {
 					$post['post_content'] = self::maybe_prepare_json_view_content( $post['post_content'] );
+				} elseif ( 'page' === $post['post_type'] && isset( $imported['posts'][ $post['post_parent'] ] ) ) {
+					$post['post_parent'] = $imported['posts'][ $post['post_parent'] ];
 				}
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
