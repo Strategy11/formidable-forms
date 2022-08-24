@@ -605,29 +605,26 @@ function frmAdminBuildJS() {
 
 	function removeThisTag() {
 		/*jshint validthis:true */
-		var show, hide, removeMore,
-			id = '',
-			deleteButton = jQuery( this ),
-			continueRemove = confirmLinkClick( this );
+		let show, hide, removeMore;
 
-		if ( parseInt( this.getAttribute( 'data-skip-frm-js' ) ) ) {
+		if ( parseInt( this.getAttribute( 'data-skip-frm-js' ) ) || confirmLinkClick( this ) === false ) {
 			return;
 		}
 
-		if ( continueRemove === false ) {
-			return;
-		} else {
-			id = deleteButton.attr( 'data-removeid' );
-			show = deleteButton.attr( 'data-showlast' );
-			removeMore = deleteButton.attr( 'data-removemore' );
-			if ( typeof show === 'undefined' ) {
-				show = '';
-			}
-			hide = deleteButton.attr( 'data-hidelast' );
-			if ( typeof hide === 'undefined' ) {
-				hide = '';
-			}
+		const deleteButton = jQuery( this );
+		const id = deleteButton.attr( 'data-removeid' );
+
+		show = deleteButton.attr( 'data-showlast' );
+		if ( typeof show === 'undefined' ) {
+			show = '';
 		}
+
+		hide = deleteButton.attr( 'data-hidelast' );
+		if ( typeof hide === 'undefined' ) {
+			hide = '';
+		}
+
+		removeMore = deleteButton.attr( 'data-removemore' );
 
 		if ( show !== '' ) {
 			if ( deleteButton.closest( '.frm_add_remove' ).find( '.frm_remove_tag:visible' ).length > 1 ) {
@@ -646,7 +643,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		var $fadeEle = jQuery( document.getElementById( id ) );
+		const $fadeEle = jQuery( document.getElementById( id ) );
 		$fadeEle.fadeOut( 400, function() {
 			$fadeEle.remove();
 			fieldUpdated();
@@ -659,10 +656,9 @@ function frmAdminBuildJS() {
 				jQuery( show + ' a,' + show ).removeClass( 'frm_hidden' ).fadeIn( 'slow' );
 			}
 
-			var action = jQuery( this ).closest( '.frm_form_action_settings' );
-			if ( typeof action !== 'undefined' ) {
-				var type = jQuery( this ).closest( '.frm_form_action_settings' ).find( '.frm_action_name' ).val();
-				checkActiveAction( type );
+			if ( this.closest( '.frm_form_action_settings' ) ) {
+				const type = this.closest( '.frm_form_action_settings' ).querySelector( '.frm_action_name' ).value;
+				afterActionRemoved( type );
 			}
 		});
 
@@ -678,6 +674,14 @@ function frmAdminBuildJS() {
 		}
 
 		return false;
+	}
+
+	function afterActionRemoved( type ) {
+		checkActiveAction( type );
+
+		const hookName = 'frm_after_action_removed';
+		const hookArgs = { type };
+		wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	function clickWidget( event, b ) {
@@ -3055,16 +3059,13 @@ function frmAdminBuildJS() {
 	}
 
 	function addImageToOption( event ) {
-		var fileFrame,
-			$this = jQuery( this ),
-			$imagePreview = $this.closest( '.frm_image_preview_wrapper' ),
-			postID = 0;
+		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
 
-		wp.media.model.settings.post.id = postID;
+		wp.media.model.settings.post.id = 0;
 
-		fileFrame = wp.media.frames.file_frame = wp.media({
+		const fileFrame = wp.media.frames.file_frame = wp.media({
 			multiple: false,
 			library: {
 				type: [ 'image' ]
@@ -3073,13 +3074,20 @@ function frmAdminBuildJS() {
 
 		fileFrame.on( 'select', function() {
 			const attachment = fileFrame.state().get( 'selection' ).first().toJSON();
-			$imagePreview.find( 'img' ).attr( 'src', attachment.url ).removeClass( 'frm_hidden' );
-			$imagePreview.find( '.frm_image_preview_frame' ).show();
-			$imagePreview.find( '.frm_image_preview_title' ).text( attachment.filename );
+			const img = imagePreview.querySelector( 'img' );
+
+			img.setAttribute( 'src', attachment.url );
+			img.classList.remove( 'frm_hidden' );
+			img.removeAttribute( 'srcset' ); // Prevent the old image from sticking around.
+
+			imagePreview.querySelector( '.frm_image_preview_frame' ).style.display = 'block';
+			imagePreview.querySelector( '.frm_image_preview_title' ).textContent = attachment.filename;
+			imagePreview.querySelector( '.frm_choose_image_box' ).style.display = 'none';
+
+			const $imagePreview = jQuery( imagePreview );
 			$imagePreview.siblings( 'input[name*="[label]"]' ).data( 'frmimgurl', attachment.url );
-			$imagePreview.find( '.frm_choose_image_box' ).hide();
 			$imagePreview.find( 'input.frm_image_id' ).val( attachment.id ).trigger( 'change' );
-			wp.media.model.settings.post.id = postID;
+			wp.media.model.settings.post.id = 0;
 		});
 
 		fileFrame.open();
@@ -6005,39 +6013,70 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function copyFormAction() {
-		/*jshint validthis:true */
-		if ( waitForActionToLoadBeforeCopy( this ) ) {
+	function copyFormAction( event ) {
+		if ( waitForActionToLoadBeforeCopy( event.target ) ) {
 			return;
 		}
 
-		var action = jQuery( this ).closest( '.frm_form_action_settings' ).clone();
-		var currentID = action.attr( 'id' ).replace( 'frm_form_action_', '' );
-		var newID = newActionId( currentID );
-		action.find( '.frm_action_id, .frm-btn-group' ).remove();
-		action.find( 'input[name$="[' + currentID + '][ID]"]' ).val( '' );
-		action.find( '.widget-inside' ).hide();
+		const targetSettings = event.target.closest( '.frm_form_action_settings' );
+		const wysiwyg        = targetSettings.querySelector( '.wp-editor-area' );
+		if ( wysiwyg ) {
+			// Temporary remove TinyMCE before cloning to avoid TinyMCE conflicts.
+			tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, wysiwyg.id );
+		}
+
+		const $action   = jQuery( targetSettings ).clone();
+		const currentID = $action.attr( 'id' ).replace( 'frm_form_action_', '' );
+		const newID     = newActionId( currentID );
+
+		$action.find( '.frm_action_id, .frm-btn-group' ).remove();
+		$action.find( 'input[name$="[' + currentID + '][ID]"]' ).val( '' );
+		$action.find( '.widget-inside' ).hide();
 
 		// the .html() gets original values, so they need to be set
-		action.find( 'input[type=text], textarea, input[type=number]' ).prop( 'defaultValue', function() {
+		$action.find( 'input[type=text], textarea, input[type=number]' ).prop( 'defaultValue', function() {
 			return this.value;
 		});
 
-		action.find( 'input[type=checkbox], input[type=radio]' ).prop( 'defaultChecked', function() {
+		$action.find( 'input[type=checkbox], input[type=radio]' ).prop( 'defaultChecked', function() {
 			return this.checked;
 		});
 
-		var rename = new RegExp( '\\[' + currentID + '\\]', 'g' );
-		var reid = new RegExp( '_' + currentID + '"', 'g' );
-		var reclass = new RegExp( '-' + currentID + '"', 'g' );
-		var revalue = new RegExp( '"' + currentID + '"', 'g' ); // if a field id matches, this could cause trouble
+		const rename  = new RegExp( '\\[' + currentID + '\\]', 'g' );
+		const reid    = new RegExp( '_' + currentID + '"', 'g' );
+		const reclass = new RegExp( '-' + currentID + '"', 'g' );
+		const revalue = new RegExp( '"' + currentID + '"', 'g' ); // if a field id matches, this could cause trouble
 
-		var html = action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
+		let html = $action.html().replace( rename, '[' + newID + ']' ).replace( reid, '_' + newID + '"' );
 		html = html.replace( reclass, '-' + newID + '"' ).replace( revalue, '"' + newID + '"' );
-		var div = '<div id="frm_form_action_' + newID + '" class="widget frm_form_action_settings frm_single_email_settings" data-actionkey="' + newID + '">';
 
-		jQuery( '#frm_notification_settings' ).append( div + html + '</div>' );
+		const newAction = div({
+			id: 'frm_form_action_' + newID,
+			className: $action.get( 0 ).className
+		});
+		newAction.setAttribute( 'data-actionkey', newID );
+		newAction.innerHTML = html;
+		newAction.querySelectorAll( '.wp-editor-wrap, .wp-editor-wrap *' ).forEach(
+			element => {
+				if ( 'string' === typeof element.className ) {
+					element.className = element.className.replace( currentID, newID );
+				}
+				element.id = element.id.replace( currentID, newID );
+			}
+		);
+		newAction.classList.remove( 'open' );
+		document.getElementById( 'frm_notification_settings' ).appendChild( newAction );
+
+		if ( wysiwyg ) {
+			// Re-initialize the original wysiwyg which was removed before cloning.
+			frmDom.wysiwyg.init( wysiwyg );
+		}
+		frmDom.wysiwyg.init( newAction.querySelector( '.wp-editor-area' ) );
+
 		initiateMultiselect();
+
+		const hookName = 'frm_after_duplicate_action';
+		wp.hooks.doAction( hookName, newAction );
 	}
 
 	function waitForActionToLoadBeforeCopy( element ) {
@@ -6072,21 +6111,19 @@ function frmAdminBuildJS() {
 
 	function addFormAction() {
 		/*jshint validthis:true */
-		var type, actionId, formId, placeholderSetting, actionsList;
-
-		type = jQuery( this ).data( 'actiontype' );
+		const type = jQuery( this ).data( 'actiontype' );
 
 		if ( isAtLimitForActionType( type ) ) {
 			return;
 		}
 
-		actionId = getNewActionId();
-		formId = thisFormId;
+		const actionId = getNewActionId();
+		const formId = thisFormId;
 
-		placeholderSetting = document.createElement( 'div' );
+		const placeholderSetting = document.createElement( 'div' );
 		placeholderSetting.classList.add( 'frm_single_' + type + '_settings' );
 
-		actionsList = document.getElementById( 'frm_notification_settings' );
+		const actionsList = document.getElementById( 'frm_notification_settings' );
 		actionsList.appendChild( placeholderSetting );
 
 		jQuery.ajax({
@@ -6099,31 +6136,48 @@ function frmAdminBuildJS() {
 				form_id: formId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
-				fieldUpdated();
-				placeholderSetting.remove();
-
-				// Close any open actions first.
-				jQuery( '.frm_form_action_settings.open' ).removeClass( 'open' );
-
-				jQuery( actionsList ).append( html );
-				jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
-
-				var newAction = document.getElementById( 'frm_form_action_' + actionId );
-
-				newAction.classList.add( 'open' );
-				document.getElementById( 'post-body-content' ).scroll({
-					top: newAction.offsetTop + 10,
-					left: 0,
-					behavior: 'smooth'
-				});
-
-				//check if icon should be active
-				checkActiveAction( type );
-				initiateMultiselect();
-				showInputIcon( '#frm_form_action_' + actionId );
-			}
+			success: handleAddFormActionSuccess
 		});
+
+		function handleAddFormActionSuccess( html ) {
+			fieldUpdated();
+			placeholderSetting.remove();
+
+			closeOpenActions();
+
+			const newActionContainer = div();
+			newActionContainer.innerHTML = html;
+
+			const widgetTop = newActionContainer.querySelector( '.widget-top' );
+			Array.from( newActionContainer.children ).forEach( child => actionsList.appendChild( child ) );
+
+			jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
+
+			const newAction = document.getElementById( 'frm_form_action_' + actionId );
+
+			newAction.classList.add( 'open' );
+			document.getElementById( 'post-body-content' ).scroll({
+				top: newAction.offsetTop + 10,
+				left: 0,
+				behavior: 'smooth'
+			});
+
+			// Check if icon should be active
+			checkActiveAction( type );
+			showInputIcon( '#frm_form_action_' + actionId );
+
+			initiateMultiselect();
+
+			if ( widgetTop ) {
+				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
+			}
+		}
+	}
+
+	function closeOpenActions() {
+		document.querySelectorAll( '.frm_form_action_settings.open' ).forEach(
+			setting => setting.classList.remove( 'open' )
+		);
 	}
 
 	function toggleActionGroups() {
@@ -6195,127 +6249,13 @@ function frmAdminBuildJS() {
 		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
 
-		setUpTinyMceVisualButtonListener( singleField );
-		setUpTinyMceHtmlButtonListener( singleField );
-
-		if ( isTinyMceActive() ) {
-			setTimeout( resetTinyMce, 0 );
-		} else {
-			initQuickTagsButtons( singleField );
-		}
-	}
-
-	function setUpTinyMceVisualButtonListener( fieldSettings ) {
-		var editor = fieldSettings.querySelector( '.wp-editor-area' );
+		const editor = singleField.querySelector( '.wp-editor-area' );
 		if ( editor ) {
-			jQuery( document ).on(
-				'click', '#' + editor.id + '-html',
-				function() {
-					editor.style.visibility = 'visible';
-					initQuickTagsButtons( fieldSettings );
-				}
+			frmDom.wysiwyg.init(
+				editor,
+				{ setupCallback: setupTinyMceEventHandlers }
 			);
 		}
-	}
-
-	function setUpTinyMceHtmlButtonListener( fieldSettings ) {
-		var editor, hasResetTinyMce;
-
-		editor = fieldSettings.querySelector( '.wp-editor-area' );
-		if ( ! editor ) {
-			return;
-		}
-
-		hasResetTinyMce = false;
-
-		jQuery( '#' + editor.id + '-tmce' )
-			.on(
-				'click',
-				function() {
-					var wrap;
-
-					if ( ! hasResetTinyMce ) {
-						resetTinyMce();
-						hasResetTinyMce = true;
-					}
-
-					wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
-					wrap.classList.add( 'tmce-active' );
-					wrap.classList.remove( 'html-active' );
-				}
-			);
-	}
-
-	function initQuickTagsButtons( fieldSettings ) {
-		var editor, settings;
-
-		editor = fieldSettings.querySelector( '.wp-editor-area' );
-
-		if ( ! editor || 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
-			return;
-		}
-
-		settings = {
-			name: 'qt_' + editor.id,
-			id: editor.id,
-			canvas: editor,
-			settings: {
-				buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,more,close',
-				id: editor.id
-			},
-			toolbar: document.getElementById( 'qt_' + editor.id + '_toolbar' ),
-			theButtons: {}
-		};
-		window.quicktags( settings );
-	}
-
-	function resetTinyMce() {
-		document.querySelectorAll( '.frm-single-settings:not(.frm_hidden) .wp-editor-area' ).forEach(
-			function( editor ) {
-				var isInitialized, isVisible;
-
-				isInitialized = 'undefined' !== typeof tinyMCE.editors[ editor.id ];
-				isVisible = isInitialized && ! tinyMCE.editors[ editor.id ].isHidden();
-
-				if ( isVisible ) {
-					removeRichText( editor.id );
-				}
-
-				if ( isVisible || ! isInitialized ) {
-					initRichText( editor.id );
-				}
-			}
-		);
-	}
-
-	function removeRichText( id ) {
-		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, id );
-		tinymce.remove( id );
-	}
-
-	function initRichText( id ) {
-		var defaultSettings = getDefaultTinyMceSettings(),
-			newValues = {
-				selector: '#' + id,
-				body_class: defaultSettings.body_class.replace( getDefaultSettingsKey(), id ),
-				setup: setupTinyMceEventHandlers
-			},
-			newSettings = Object.assign(
-				{}, defaultSettings, newValues
-			);
-		if ( 'undefined' !== typeof newSettings.toolbar1 ) {
-			// the link option does not work in the modal, so exclude it.
-			newSettings.toolbar1 = newSettings.toolbar1.replace( ',wp_more', '' );
-		}
-		tinymce.init( newSettings );
-	}
-
-	function getDefaultSettingsKey() {
-		return Object.keys( tinyMCEPreInit.mceInit )[0];
-	}
-
-	function getDefaultTinyMceSettings() {
-		return tinyMCEPreInit.mceInit[ getDefaultSettingsKey() ];
 	}
 
 	function setupTinyMceEventHandlers( editor ) {
@@ -6325,10 +6265,12 @@ function frmAdminBuildJS() {
 	}
 
 	function handleTinyMceChange( editor ) {
-		if ( isTinyMceActive() && ! tinyMCE.activeEditor.isHidden() ) {
-			editor.targetElm.value = editor.getContent();
-			jQuery( editor.targetElm ).trigger( 'change' );
+		if ( ! isTinyMceActive() || tinyMCE.activeEditor.isHidden() ) {
+			return;
 		}
+
+		editor.targetElm.value = editor.getContent();
+		jQuery( editor.targetElm ).trigger( 'change' );
 	}
 
 	function isTinyMceActive() {
@@ -6397,23 +6339,46 @@ function frmAdminBuildJS() {
 	}
 
 	function checkActiveAction( type ) {
-		var $actionTriggers, limitClass;
-
-		$actionTriggers = jQuery( '.frm_' + type + '_action' );
+		const actionTriggers = document.querySelectorAll( '.frm_' + type + '_action' );
 
 		if ( isAtLimitForActionType( type ) ) {
-			limitClass = 'frm_inactive_action';
-			if ( getLimitForActionType( type ) > 0 ) {
-				limitClass += ' frm_already_used';
-			}
-			$actionTriggers.removeClass( 'frm_active_action' ).addClass( limitClass );
-		} else {
-			$actionTriggers.removeClass( 'frm_inactive_action frm_already_used' ).addClass( 'frm_active_action' );
+			const addAlreadyUsedClass = getLimitForActionType( type ) > 0;
+			markActionTriggersInactive( actionTriggers, addAlreadyUsedClass  );
+			return;
 		}
+
+		markActionTriggersActive( actionTriggers );
+	}
+
+	function markActionTriggersActive( triggers ) {
+		triggers.forEach(
+			trigger => {
+				trigger.classList.remove( 'frm_inactive_action', 'frm_already_used' );
+				trigger.classList.add( 'frm_active_action' );
+			}
+		);
+	}
+
+	function markActionTriggersInactive( triggers, addAlreadyUsedClass ) {
+		triggers.forEach(
+			trigger => {
+				trigger.classList.remove( 'frm_active_action' );
+				trigger.classList.add( 'frm_inactive_action' );
+				if ( addAlreadyUsedClass ) {
+					trigger.classList.add( 'frm_already_used' );
+				}
+			}
+		);
 	}
 
 	function isAtLimitForActionType( type ) {
-		return getNumberOfActionsForType( type ) >= getLimitForActionType( type );
+		let atLimit = getNumberOfActionsForType( type ) >= getLimitForActionType( type );
+
+		const hookName = 'frm_action_at_limit';
+		const hookArgs = { type };
+		atLimit = wp.hooks.applyFilters( hookName, atLimit, hookArgs );
+
+		return atLimit;
 	}
 
 	function getLimitForActionType( type ) {
@@ -9547,9 +9512,11 @@ function frmAdminBuildJS() {
 		},
 
 		settingsInit: function() {
-			var formSettings, $loggedIn, $cookieExp, $editable,
-				$formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
-			//BCC, CC, and Reply To button functionality
+			const $formActions = jQuery( document.getElementById( 'frm_notification_settings' ) );
+
+			let formSettings, $loggedIn, $cookieExp, $editable;
+
+			// BCC, CC, and Reply To button functionality
 			$formActions.on( 'click', '.frm_email_buttons', showEmailRow );
 			$formActions.on( 'click', '.frm_remove_field', hideEmailRow );
 			$formActions.on( 'change', '.frm_to_row, .frm_from_row', showEmailWarning );
@@ -9572,7 +9539,7 @@ function frmAdminBuildJS() {
 				checkActiveAction( jQuery( this ).children( 'a' ).data( 'actiontype' ) );
 
 				// If the icon is a background image, don't add BG color.
-				var icon = jQuery( this ).find( 'i' );
+				const icon = jQuery( this ).find( 'i' );
 				if ( icon.css( 'background-image' ) !== 'none' ) {
 					icon.addClass( 'frm-inverse' );
 				}
@@ -9589,23 +9556,45 @@ function frmAdminBuildJS() {
 			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
 			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
-			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
-			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+			document.addEventListener(
+				'click',
+				function handleImageUploadClickEvents( event ) {
+					const { target } = event;
+
+					if ( ! target.closest( '.frm_image_preview_wrapper' ) ) {
+						return;
+					}
+
+					if ( target.closest( '.frm_choose_image_box' ) ) {
+						addImageToOption.bind( target )( event );
+						return;
+					}
+
+					if ( target.closest( '.frm_remove_image_option' ) ) {
+						removeImageFromOption.bind( target )( event );
+					}
+				}
+			);
 
 			// Close shortcode modal on click.
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
 				e.stopPropagation();
+
 				if ( e.target.classList.contains( 'frm-show-box' ) ) {
 					return;
 				}
-				var sidebar = document.getElementById( 'frm_adv_info' ),
-					isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+
+				const sidebar = document.getElementById( 'frm_adv_info' );
+				if ( ! sidebar ) {
+					return;
+				}
 
 				if ( sidebar.getAttribute( 'data-fills' ) === e.target.id && typeof e.target.id !== 'undefined' ) {
 					return;
 				}
 
-				if ( sidebar !== null && ! isChild && sidebar.display !== 'none' ) {
+				const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+				if ( ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
 			});
