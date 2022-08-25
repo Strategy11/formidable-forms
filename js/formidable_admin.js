@@ -1489,8 +1489,8 @@ function frmAdminBuildJS() {
 				}
 				toggleSectionHolder();
 			},
-			error: function( jqXHR, textStatus, errorThrown ) {
-				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown );
+			error: function( jqXHR, _, errorThrown ) {
+				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown, jqXHR );
 			}
 		});
 	}
@@ -1713,8 +1713,8 @@ function frmAdminBuildJS() {
 				$newFields.append( wrapFieldLi( msg ) );
 				afterAddField( msg, true );
 			},
-			error: function( jqXHR, textStatus, errorThrown ) {
-				maybeReenableSummaryBtnAfterAJAX( fieldType, $thisObj, $button, errorThrown );
+			error: function( jqXHR, _, errorThrown ) {
+				maybeReenableSummaryBtnAfterAJAX( fieldType, $thisObj, $button, errorThrown, jqXHR );
 			}
 		});
 		return false;
@@ -1746,12 +1746,19 @@ function frmAdminBuildJS() {
 		addFieldLink.addClass( 'disabled' );
 	}
 
-	function maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown ) {
-		infoModal( errorThrown + '. Please try again.' );
+	function maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown, jqXHR ) {
+		if ( ! jqXHRAborted( jqXHR ) ) {
+			infoModal( errorThrown + '. Please try again.' );
+		}
+
 		if ( 'summary' === fieldType ) {
 			addBtn.removeClass( 'disabled' );
 			fieldButton.draggable( 'enable' );
 		}
+	}
+
+	function jqXHRAborted( jqXHR ) {
+		return jqXHR.status === 0 || jqXHR.readyState === 0;
 	}
 
 	function formHasSummaryField() {
