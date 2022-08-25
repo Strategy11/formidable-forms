@@ -7172,7 +7172,7 @@ function frmAdminBuildJS() {
 					showShortcodeBox( moreIcon, 'nofocus' );
 				}
 			} else if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
-				showShortcodeBox( moreIcon, 'nofocus' );
+				showShortcodeBox( moreIcon, 'nofocus', input.clientHeight );
 			}
 		}
 	}
@@ -7185,7 +7185,7 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
-	function showShortcodeBox( moreIcon, shouldFocus ) {
+	function showShortcodeBox( moreIcon, shouldFocus, inputHeight ) {
 		var pos = moreIcon.getBoundingClientRect(),
 			input = getInputForIcon( moreIcon ),
 			box = document.getElementById( 'frm_adv_info' ),
@@ -7202,7 +7202,7 @@ function frmAdminBuildJS() {
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			hideShortcodes( box );
 		} else {
-			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
+			box.style.top = ( pos.top - parentPos.top + inputHeight ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 257 ) + 'px';
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
