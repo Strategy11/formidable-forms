@@ -2980,15 +2980,23 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * @param string $type
+	 * @return array<string,string>
+	 */
 	public static function locales( $type = 'date' ) {
 		$locales = array(
 			'en'     => __( 'English', 'formidable' ),
 			'af'     => __( 'Afrikaans', 'formidable' ),
 			'sq'     => __( 'Albanian', 'formidable' ),
+			'ar-DZ'  => __( 'Algerian Arabic', 'formidable' ),
+			'am'     => __( 'Amharic', 'formidable' ),
 			'ar'     => __( 'Arabic', 'formidable' ),
 			'hy'     => __( 'Armenian', 'formidable' ),
 			'az'     => __( 'Azerbaijani', 'formidable' ),
 			'eu'     => __( 'Basque', 'formidable' ),
+			'be'     => __( 'Belarusian', 'formidable' ),
+			'bn'     => __( 'Bengali', 'formidable' ),
 			'bs'     => __( 'Bosnian', 'formidable' ),
 			'bg'     => __( 'Bulgarian', 'formidable' ),
 			'ca'     => __( 'Catalan', 'formidable' ),
@@ -3009,10 +3017,13 @@ class FrmAppHelper {
 			'fr'     => __( 'French', 'formidable' ),
 			'fr-CA'  => __( 'French/Canadian', 'formidable' ),
 			'fr-CH'  => __( 'French/Swiss', 'formidable' ),
+			'gl'     => __( 'Galician', 'formidable' ),
+			'ka'     => __( 'Georgian', 'formidable' ),
 			'de'     => __( 'German', 'formidable' ),
 			'de-AT'  => __( 'German/Austria', 'formidable' ),
 			'de-CH'  => __( 'German/Switzerland', 'formidable' ),
 			'el'     => __( 'Greek', 'formidable' ),
+			'gu'     => __( 'Gujarati', 'formidable' ),
 			'he'     => __( 'Hebrew', 'formidable' ),
 			'iw'     => __( 'Hebrew', 'formidable' ),
 			'hi'     => __( 'Hindi', 'formidable' ),
@@ -3021,41 +3032,71 @@ class FrmAppHelper {
 			'id'     => __( 'Indonesian', 'formidable' ),
 			'it'     => __( 'Italian', 'formidable' ),
 			'ja'     => __( 'Japanese', 'formidable' ),
+			'kn'     => __( 'Kannada', 'formidable' ),
+			'kk'     => __( 'Kazakh', 'formidable' ),
+			'km'     => __( 'Khmer', 'formidable' ),
 			'ko'     => __( 'Korean', 'formidable' ),
+			'ky'     => __( 'Kyrgyz', 'formidable' ),
+			'lo'     => __( 'Laothian', 'formidable' ),
 			'lv'     => __( 'Latvian', 'formidable' ),
 			'lt'     => __( 'Lithuanian', 'formidable' ),
+			'lb'     => __( 'Luxembourgish', 'formidable' ),
+			'mk'     => __( 'Macedonian', 'formidable' ),
+			'ml'     => __( 'Malayalam', 'formidable' ),
 			'ms'     => __( 'Malaysian', 'formidable' ),
+			'mr'     => __( 'Marathi', 'formidable' ),
 			'no'     => __( 'Norwegian', 'formidable' ),
+			'nb'     => __( 'Norwegian Bokmål', 'formidable' ),
+			'nn'     => __( 'Norwegian Nynorsk', 'formidable' ),
 			'pl'     => __( 'Polish', 'formidable' ),
 			'pt'     => __( 'Portuguese', 'formidable' ),
 			'pt-BR'  => __( 'Portuguese/Brazilian', 'formidable' ),
 			'pt-PT'  => __( 'Portuguese/Portugal', 'formidable' ),
+			'rm'     => __( 'Romansh', 'formidable' ),
 			'ro'     => __( 'Romanian', 'formidable' ),
 			'ru'     => __( 'Russian', 'formidable' ),
 			'sr'     => __( 'Serbian', 'formidable' ),
 			'sr-SR'  => __( 'Serbian', 'formidable' ),
+			'si'     => __( 'Sinhalese', 'formidable' ),
 			'sk'     => __( 'Slovak', 'formidable' ),
 			'sl'     => __( 'Slovenian', 'formidable' ),
 			'es'     => __( 'Spanish', 'formidable' ),
 			'es-419' => __( 'Spanish/Latin America', 'formidable' ),
+			'sw'     => __( 'Swahili', 'formidable' ),
 			'sv'     => __( 'Swedish', 'formidable' ),
 			'ta'     => __( 'Tamil', 'formidable' ),
+			'te'     => __( 'Telugu', 'formidable' ),
 			'th'     => __( 'Thai', 'formidable' ),
+			'tj'     => __( 'Tajiki', 'formidable' ),
 			'tr'     => __( 'Turkish', 'formidable' ),
 			'uk'     => __( 'Ukrainian', 'formidable' ),
+			'ur'     => __( 'Urdu', 'formidable' ),
 			'vi'     => __( 'Vietnamese', 'formidable' ),
+			'cy-GB'  => __( 'Welsh', 'formidable' ),
+			'zu'     => __( 'Zulu', 'formidable' ),
 		);
 
 		if ( $type === 'captcha' ) {
 			// remove the languages unavailable for the captcha
-			$unset = array( 'af', 'sq', 'hy', 'az', 'eu', 'bs', 'zh-HK', 'eo', 'et', 'fo', 'fr-CH', 'he', 'is', 'ms', 'sr-SR', 'ta' );
+			$unset = array( 'sq', 'bs', 'eo', 'fo', 'fr-CH', 'sr-SR', 'ar-DZ', 'be', 'cy-GB', 'kk', 'km', 'ky', 'lb', 'mk', 'nb', 'nn', 'rm', 'tj' );
 		} else {
 			// remove the languages unavailable for the datepicker
-			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419' );
+			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'mr', 'lo', 'kn', 'si', 'gu', 'bn', 'zu', 'ur', 'te', 'sw', 'am' );
 		}
 
 		$locales = array_diff_key( $locales, array_flip( $unset ) );
-		$locales = apply_filters( 'frm_locales', $locales );
+
+		/**
+		 * Filter available locale options.
+		 *
+		 * @since x.x Added $args parameter with type.
+		 *
+		 * @param array<string,string> $locales
+		 * @param array                $args {
+		 *     @type string $type
+		 * }
+		 */
+		$locales = apply_filters( 'frm_locales', $locales, compact( 'type' ) );
 
 		return $locales;
 	}
