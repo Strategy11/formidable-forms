@@ -7990,9 +7990,6 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	/**
-	 * TODO stop addressing oneclick stuff by ID as this may happen in a tab as well.
-	 */
 	function afterAddonInstall( response, button, message, el, saveAndReload ) {
 		const addonStatuses = document.querySelectorAll( '.frm-addon-status' );
 		addonStatuses.forEach(
