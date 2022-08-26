@@ -124,7 +124,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) );
 					esc_html_e( 'Referrer:', 'formidable' );
 					echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) );
-				} else {
+				} elseif ( isset( $data['user_journey'] ) ) {
 					?>
 				<table>
 					<?php
