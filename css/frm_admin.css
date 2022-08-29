@@ -8558,8 +8558,8 @@ Responsive Design
 }
 
 .frm-custom-field-group-layout:hover,
-.frm-break-field-group:hover, .tracking-date {
-	background-color: #f5f5f5;
+.frm-break-field-group:hover {
+	background-color: #f5f5f5f5;
 }
 
 .frm-custom-field-group-layout svg,
