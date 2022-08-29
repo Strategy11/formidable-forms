@@ -777,9 +777,13 @@ p.frm_has_shortcodes {
 
 .frm-nav-tabs a {
 	color: var(--dark-grey);
-	padding: 5px 1px;
+	padding: 10px 1px;
 	margin: 0 9px;
 	border-bottom: 2px solid transparent;
+}
+
+.frm_form_settings .frm-nav-tabs a {
+	padding-top: 5px 1px;
 }
 
 .frm-nav-tabs.frm-compact-nav a {
