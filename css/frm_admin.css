@@ -5817,7 +5817,8 @@ ul.start_divider {
 	cursor: not-allowed;
 }
 
-.edit_field_type_summary .frm_clone_field {
+/* Hide the Duplicate summary option because we are missing the logic that also adds a new page */
+.edit_field_type_summary .frm_more_options_li:nth-child(2) {
 	display: none !important;
 }
 
