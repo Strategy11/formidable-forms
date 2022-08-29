@@ -7202,7 +7202,7 @@ function frmAdminBuildJS() {
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
 			hideShortcodes( box );
 		} else {
-			box.style.top = ( pos.top - parentPos.top + inputHeight ) + 'px';
+			box.style.top = ( pos.top - parentPos.top + 30 ) + 'px';
 			box.style.left = ( pos.left - parentPos.left - 257 ) + 'px';
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );

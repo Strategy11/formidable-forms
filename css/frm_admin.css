@@ -748,10 +748,15 @@ p.frm_has_shortcodes {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
-	background-color: #fff;
+	background-color: var(--sidebar-color);
 	z-index: 98; /* must be < 99 */
 	margin-top: 0;
 	padding-top: 5px;
+}
+
+.frm_form_settings #frm_adv_info #frm-nav-tabs {
+	background-color: #fff;
+	margin-top: 0;
 }
 
 .frm-inline-modal .frm-nav-tabs,
@@ -794,6 +799,9 @@ p.frm_has_shortcodes {
 .frm-nav-tabs .frm-tabs a {
 	color: var(--primary-color) !important;
 	border-color: var(--primary-color);
+}
+
+.frm_form_settings .frm-nav-tabs .frm-tabs a {
 	font-weight: 600;
 }
 
