@@ -5,7 +5,7 @@ Description: Quickly and easily create drag-and-drop forms
 Version: 5.4.4
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
-Author: Strategy11
+Author: Strategy11 Form Builder Team
 Text Domain: formidable
 */
 
