@@ -796,7 +796,8 @@ p.frm_has_shortcodes {
 }
 
 #frm_adv_info .frm-nav-tabs a {
-	color: var(--dark-grey);}
+	color: var(--dark-grey);
+}
 
 .frm_form_settings #frm_adv_info .frm-nav-tabs a {
 	color: rgba(40, 47, 54, 0.45);
