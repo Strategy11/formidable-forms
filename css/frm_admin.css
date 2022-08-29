@@ -782,7 +782,7 @@ p.frm_has_shortcodes {
 	border-bottom: 2px solid transparent;
 }
 
-.frm_form_settings .frm-nav-tabs a {
+.frm_form_settings #frm_adv_info .frm-nav-tabs a {
 	padding-top: 5px 1px;
 }
 
@@ -809,7 +809,7 @@ p.frm_has_shortcodes {
 	border-color: var(--primary-color);
 }
 
-.frm_form_settings .frm-nav-tabs .frm-tabs a {
+.frm_form_settings #frm_adv_info .frm-nav-tabs .frm-tabs a {
 	font-weight: 600;
 }
 
