@@ -652,6 +652,9 @@ p.frm_has_shortcodes {
 	min-height: 200px;
 	overflow-y: scroll;
 	z-index: 100;
+	box-shadow: 0px 12px 24px rgb(72 78 84 / 20%);
+	border-radius: 4px;
+	border: none;
 }
 
 #form_global_settings .columns-2 .frm-right-panel,
@@ -745,7 +748,7 @@ p.frm_has_shortcodes {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
-	background-color: var(--sidebar-color);
+	background-color: #fff;
 	z-index: 98; /* must be < 99 */
 	margin-top: 0;
 	padding-top: 5px;
@@ -769,7 +772,7 @@ p.frm_has_shortcodes {
 
 .frm-nav-tabs a {
 	color: var(--dark-grey);
-	padding: 10px 1px;
+	padding: 5px 1px;
 	margin: 0 9px;
 	border-bottom: 2px solid transparent;
 }
@@ -784,13 +787,14 @@ p.frm_has_shortcodes {
 }
 
 #frm_adv_info .frm-nav-tabs a {
-	color: var(--dark-grey);
+	color: rgba(40, 47, 54, 0.45);
 }
 
 .frm-nav-tabs a:hover,
 .frm-nav-tabs .frm-tabs a {
 	color: var(--primary-color) !important;
 	border-color: var(--primary-color);
+	font-weight: 600;
 }
 
 #frm-bulk-modal .howto,
@@ -6473,6 +6477,10 @@ i.frm-show-inline-modal,
 	padding: 0 10px 0 5px;
 }
 
+.frm_form_settings .frm-with-right-icon .frmsvg{
+	bottom: -3px;
+}
+
 .frmsvg.frm-show-box,
 .frmsvg.frm-show-inline-modal,
 i.frm-show-box,
@@ -8550,8 +8558,8 @@ Responsive Design
 }
 
 .frm-custom-field-group-layout:hover,
-.frm-break-field-group:hover {
-	background-color: #f5f5f5f5;
+.frm-break-field-group:hover, .tracking-date {
+	background-color: #f5f5f5;
 }
 
 .frm-custom-field-group-layout svg,
