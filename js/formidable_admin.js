@@ -1431,31 +1431,23 @@ function frmAdminBuildJS() {
 	 * @param {object} opts
 	 */
 	function insertNewFieldByDragging( selectedItem, fieldButton ) {
-		var fieldType, addBtn, sortableData, currentItem, insertAtIndex, section, formId, sectionId, loadingID, hasBreak, $placeholder;
+		const fieldType = fieldButton.attr( 'id' );
 
-		fieldType = fieldButton.attr( 'id' );
-
-		// We'll optimistically disable the button now. We'll re-enable if AJAX fails
-		if ( 'summary' === fieldType ) {
-			addBtn = fieldButton.children( '.frm_add_field' );
-			disableSummaryBtnBeforeAJAX( addBtn, fieldButton );
-		}
-
-		sortableData = jQuery( selectedItem ).data().uiSortable;
-		currentItem = sortableData.currentItem;
-		insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), currentItem.offset().left );
+		const sortableData = jQuery( selectedItem ).data().uiSortable;
+		const currentItem = sortableData.currentItem;
+		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), currentItem.offset().left );
 		jQuery( getFieldsInRow( currentItem.parent() ).get( insertAtIndex ) ).before( currentItem );
-		section = getSectionForFieldPlacement( currentItem );
-		formId = getFormIdForFieldPlacement( section );
-		sectionId = getSectionIdForFieldPlacement( section );
+		const section = getSectionForFieldPlacement( currentItem );
+		const formId = getFormIdForFieldPlacement( section );
+		const sectionId = getSectionIdForFieldPlacement( section );
 
-		loadingID = fieldType.replace( '|', '-' ) + '_' + getAutoId();
-		$placeholder = jQuery( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
+		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
+		const $placeholder = jQuery( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
 		currentItem.replaceWith( $placeholder );
 
 		syncLayoutClasses( $placeholder );
 
-		hasBreak = 0;
+		let hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			// see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
 			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]' ).length ? 1 : 0;
@@ -1472,9 +1464,9 @@ function frmAdminBuildJS() {
 				has_break: hasBreak
 			},
 			success: function( msg ) {
-				var $siblings, replaceWith;
+				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				$siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
+				const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
 				if ( ! $siblings.length ) {
 					// if dragging into a new row, we need to wrap the li first.
 					replaceWith = wrapFieldLi( msg );
@@ -1489,10 +1481,22 @@ function frmAdminBuildJS() {
 				}
 				toggleSectionHolder();
 			},
-			error: function( jqXHR, _, errorThrown ) {
-				maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown, jqXHR );
-			}
+			error: handleInsertFieldError
 		});
+	}
+
+	function handleInsertFieldError( jqXHR, _, errorThrown ) {
+		maybeShowInsertFieldError( errorThrown, jqXHR );
+	}
+
+	function maybeShowInsertFieldError( errorThrown, jqXHR ) {
+		if ( ! jqXHRAborted( jqXHR ) ) {
+			infoModal( errorThrown + '. Please try again.' );
+		}
+	}
+
+	function jqXHRAborted( jqXHR ) {
+		return jqXHR.status === 0 || jqXHR.readyState === 0;
 	}
 
 	/**
@@ -1678,25 +1682,21 @@ function frmAdminBuildJS() {
 
 	function addFieldClick() {
 		/*jshint validthis:true */
-		var $thisObj = jQuery( this );
+		const $thisObj = jQuery( this );
 		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
 		if ( $thisObj.hasClass( 'disabled' ) ) {
 			return false;
 		}
 
-		var $button = $thisObj.closest( '.frmbutton' );
-		var fieldType = $button.attr( 'id' );
+		const $button = $thisObj.closest( '.frmbutton' );
+		const fieldType = $button.attr( 'id' );
 
-		var hasBreak = 0;
+		let hasBreak = 0;
 		if ( 'summary' === fieldType ) {
-			// We'll optimistically disable $button now. We'll re-enable if AJAX fails
-			disableSummaryBtnBeforeAJAX( $thisObj, $button );
-
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
-		var formId = thisFormId;
-
+		const formId = thisFormId;
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -1713,57 +1713,9 @@ function frmAdminBuildJS() {
 				$newFields.append( wrapFieldLi( msg ) );
 				afterAddField( msg, true );
 			},
-			error: function( jqXHR, _, errorThrown ) {
-				maybeReenableSummaryBtnAfterAJAX( fieldType, $thisObj, $button, errorThrown, jqXHR );
-			}
+			error: handleInsertFieldError
 		});
 		return false;
-	}
-
-	function disableSummaryBtnBeforeAJAX( addBtn, fieldButton ) {
-		addBtn.addClass( 'disabled' );
-		fieldButton.draggable( 'disable' );
-	}
-
-	function reenableAddSummaryBtn() {
-		var frmBtn = jQuery( 'li#summary' );
-		var addFieldLink = frmBtn.children( '.frm_add_field' );
-		frmBtn.draggable( 'enable' );
-		addFieldLink.removeClass( 'disabled' );
-	}
-
-	function maybeDisableAddSummaryBtn() {
-		var summary = document.getElementById( 'summary' );
-		if ( summary && ! summary.classList.contains( 'frm_show_upgrade' ) && formHasSummaryField() ) {
-			disableAddSummaryBtn();
-		}
-	}
-
-	function disableAddSummaryBtn() {
-		var frmBtn = jQuery( 'li#summary' );
-		var addFieldLink = frmBtn.children( '.frm_add_field' );
-		frmBtn.draggable( 'disable' );
-		addFieldLink.addClass( 'disabled' );
-	}
-
-	function maybeReenableSummaryBtnAfterAJAX( fieldType, addBtn, fieldButton, errorThrown, jqXHR ) {
-		if ( ! jqXHRAborted( jqXHR ) ) {
-			infoModal( errorThrown + '. Please try again.' );
-		}
-
-		if ( 'summary' === fieldType ) {
-			addBtn.removeClass( 'disabled' );
-			fieldButton.draggable( 'enable' );
-		}
-	}
-
-	function jqXHRAborted( jqXHR ) {
-		return jqXHR.status === 0 || jqXHR.readyState === 0;
-	}
-
-	function formHasSummaryField() {
-		// .edit_field_type_summary is a better selector here in order to also cover fields loaded by AJAX
-		return $newFields.children( 'li.edit_field_type_summary' ).length > 0;
 	}
 
 	function maybeHideQuantityProductFieldOption() {
@@ -4200,9 +4152,6 @@ function frmAdminBuildJS() {
 					$thisField.remove();
 					if ( type === 'break' ) {
 						renumberPageBreaks();
-					}
-					if ( type === 'summary' ) {
-						reenableAddSummaryBtn();
 					}
 					if ( type === 'product' ) {
 						maybeHideQuantityProductFieldOption();
@@ -9509,7 +9458,6 @@ function frmAdminBuildJS() {
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
-			maybeDisableAddSummaryBtn();
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
