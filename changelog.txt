@@ -1,10 +1,10 @@
 == Changelog ==
 = 5.4.5 =
-* New: Updated deprecated code in Elementor widget for better compatibility with new versions of Elementor.
 * New: Added support for several new language options for datepicker localization and for reCAPTCHA.
-* Fix: Updating a form while a field was still being inserted would cause an error pop up to appear with a missing message.
+* New: Updated deprecated code in Elementor widget for better compatibility with new versions of Elementor.
 * Fix: Actions that trigger when an entry is deleted were not properly working when conditional logic would check item meta values.
 * Fix: An imported application page's parent page ID was not updating to match the new imported parent page ID.
+* Fix: Clicking save while a field was still being inserted would cause an error pop up to appear with a missing message.
 * Removed a restriction that was preventing a second summary field from being added after adding the first.
 
 = 5.4.4 =
