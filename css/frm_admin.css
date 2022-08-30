@@ -652,7 +652,7 @@ p.frm_has_shortcodes {
 	min-height: 200px;
 	overflow-y: scroll;
 	z-index: 100;
-	box-shadow: 0px 12px 24px rgb(72 78 84 / 20%);
+	box-shadow: 0px 12px 24px rgba( 72, 78, 84, 0.2 );
 	border-radius: 4px;
 	border: none;
 }
