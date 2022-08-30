@@ -5,7 +5,7 @@ Tags: forms, contact form, form builder, survey, free, form maker, form creator,
 Requires at least: 5.2
 Tested up to: 6.0.1
 Requires PHP: 5.6
-Stable tag: 5.4.4
+Stable tag: 5.4.5
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag & drop form builder for surveys, quizzes, and more.
 
@@ -438,6 +438,14 @@ Using our Zapier integration, you can easily connect your website with over 1000
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.4.5 =
+* New: Updated deprecated code in Elementor widget for better compatibility with new versions of Elementor.
+* New: Added support for several new language options for datepicker localization and for reCAPTCHA.
+* Fix: Updating a form while a field was still being inserted would cause an error pop up to appear with a missing message.
+* Fix: Actions that trigger when an entry is deleted were not properly working when conditional logic would check item meta values.
+* Fix: An imported application page's parent page ID was not updating to match the new imported parent page ID.
+* Removed a restriction that was preventing a second summary field from being added after adding the first.
+
 = 5.4.4 =
 * New: Option icons are now be added dynamically when a field is selected to reduce the HTML required on load. This significantly improves performance for fields with many options.
 * New: Added a new frm_before_duplicate_entry_values filter for customizing the data of a duplicated entry before it is saved.
