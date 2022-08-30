@@ -3678,8 +3678,22 @@ label input[type="checkbox"], label input[type="radio"] {
 	padding:20px;
 }
 
-.frm-alt-table tr:nth-child(even) {
+.frm-alt-table tr:nth-child(even), .frm-usr-trk-date-row {
 	background-color: var(--sidebar-color);
+}
+
+.frm-usr-trk-page-row td{
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.frm-usr-trk-page-row td a, .frm-usr-trk-page-row td span, .frm-usr-trk-page-row td svg {
+	color: var(--grey);
+}
+
+.frm-usr-trk-page-row td svg {
+	width: 15px;
+	height: 15px;
 }
 
 .frm-alt-table h3 {
