@@ -3682,7 +3682,11 @@ label input[type="checkbox"], label input[type="radio"] {
 	background-color: var(--sidebar-color);
 }
 
-.frm-usr-trk-page-row td{
+.frm-usr-trk-date-row {
+	line-height: 2em;
+}
+
+.frm-usr-trk-page-row td, .frm-usr-trk-date-row td{
 	font-size: 15px;
 	font-weight: 600;
 }
