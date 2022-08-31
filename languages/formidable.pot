@@ -1,15 +1,15 @@
-# Copyright (C) 2022 Strategy11
+# Copyright (C) 2022 Strategy11 Form Builder Team
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.4.4\n"
+"Project-Id-Version: Formidable Forms 5.4.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-08-17T18:16:35+00:00\n"
+"POT-Creation-Date: 2022-08-31T14:03:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: formidable\n"
@@ -128,7 +128,7 @@ msgid "Quickly and easily create drag-and-drop forms"
 msgstr ""
 
 #. Author of the plugin
-msgid "Strategy11"
+msgid "Strategy11 Form Builder Team"
 msgstr ""
 
 #: classes/controllers/FrmAddonsController.php:21
@@ -884,9 +884,9 @@ msgid "Activate WP Mail SMTP"
 msgstr ""
 
 #: classes/controllers/FrmSMTPController.php:322
-#: classes/models/FrmPluginSearch.php:307
+#: classes/models/FrmPluginSearch.php:306
 #: classes/views/addons/settings.php:31
-#: js/formidable_admin.js:5937
+#: js/formidable_admin.js:5901
 msgid "Activate"
 msgstr ""
 
@@ -1234,7 +1234,7 @@ msgstr ""
 #: classes/views/frm-forms/new-form-overlay.php:132
 #: classes/views/shared/admin-header.php:56
 #: classes/views/shared/confirm-overlay.php:19
-#: js/formidable_admin.js:3701
+#: js/formidable_admin.js:3668
 msgid "Cancel"
 msgstr ""
 
@@ -1261,7 +1261,7 @@ msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2822
 #: classes/helpers/FrmListHelper.php:412
-#: js/formidable_admin.js:4093
+#: js/formidable_admin.js:4060
 msgid "Heads up"
 msgstr ""
 
@@ -1401,257 +1401,361 @@ msgstr ""
 msgid "You are using an outdated browser that is not compatible with Formidable Forms. Please update to a more current browser (we recommend Chrome)."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:2985
+#: classes/helpers/FrmAppHelper.php:2989
 msgid "English"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:2986
+#: classes/helpers/FrmAppHelper.php:2990
 msgid "Afrikaans"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:2987
+#: classes/helpers/FrmAppHelper.php:2991
 msgid "Albanian"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:2988
-msgid "Arabic"
-msgstr ""
-
-#: classes/helpers/FrmAppHelper.php:2989
-msgid "Armenian"
-msgstr ""
-
-#: classes/helpers/FrmAppHelper.php:2990
-msgid "Azerbaijani"
-msgstr ""
-
-#: classes/helpers/FrmAppHelper.php:2991
-msgid "Basque"
-msgstr ""
-
 #: classes/helpers/FrmAppHelper.php:2992
-msgid "Bosnian"
+msgid "Algerian Arabic"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2993
-msgid "Bulgarian"
+msgid "Amharic"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2994
-msgid "Catalan"
+msgid "Arabic"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2995
-msgid "Chinese Hong Kong"
+msgid "Armenian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2996
-msgid "Chinese Simplified"
+msgid "Azerbaijani"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2997
-msgid "Chinese Traditional"
+msgid "Basque"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2998
-msgid "Croatian"
+msgid "Belarusian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2999
-msgid "Czech"
+msgid "Bengali"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3000
-msgid "Danish"
+msgid "Bosnian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3001
-msgid "Dutch"
+msgid "Bulgarian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3002
-msgid "English/UK"
+msgid "Catalan"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3003
-msgid "Esperanto"
+msgid "Chinese Hong Kong"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3004
-msgid "Estonian"
+msgid "Chinese Simplified"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3005
-msgid "Faroese"
+msgid "Chinese Traditional"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3006
-msgid "Farsi/Persian"
+msgid "Croatian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3007
-msgid "Filipino"
+msgid "Czech"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3008
-msgid "Finnish"
+msgid "Danish"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3009
-msgid "French"
+msgid "Dutch"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3010
-msgid "French/Canadian"
+msgid "English/UK"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3011
-msgid "French/Swiss"
+msgid "Esperanto"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3012
-msgid "German"
+msgid "Estonian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3013
-msgid "German/Austria"
+msgid "Faroese"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3014
-msgid "German/Switzerland"
+msgid "Farsi/Persian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3015
-msgid "Greek"
+msgid "Filipino"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3016
+msgid "Finnish"
+msgstr ""
+
 #: classes/helpers/FrmAppHelper.php:3017
-msgid "Hebrew"
+msgid "French"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3018
-msgid "Hindi"
+msgid "French/Canadian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3019
-msgid "Hungarian"
+msgid "French/Swiss"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3020
-msgid "Icelandic"
+msgid "Galician"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3021
-msgid "Indonesian"
+msgid "Georgian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3022
-msgid "Italian"
+msgid "German"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3023
-msgid "Japanese"
+msgid "German/Austria"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3024
-msgid "Korean"
+msgid "German/Switzerland"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3025
-msgid "Latvian"
+msgid "Greek"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3026
-msgid "Lithuanian"
+msgid "Gujarati"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3027
-msgid "Malaysian"
-msgstr ""
-
 #: classes/helpers/FrmAppHelper.php:3028
-msgid "Norwegian"
+msgid "Hebrew"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3029
-msgid "Polish"
+msgid "Hindi"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3030
-msgid "Portuguese"
+msgid "Hungarian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3031
-msgid "Portuguese/Brazilian"
+msgid "Icelandic"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3032
-msgid "Portuguese/Portugal"
+msgid "Indonesian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3033
-msgid "Romanian"
+msgid "Italian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3034
-msgid "Russian"
+msgid "Japanese"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3035
+msgid "Kannada"
+msgstr ""
+
 #: classes/helpers/FrmAppHelper.php:3036
-msgid "Serbian"
+msgid "Kazakh"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3037
-msgid "Slovak"
+msgid "Khmer"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3038
-msgid "Slovenian"
+msgid "Korean"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3039
-msgid "Spanish"
+msgid "Kyrgyz"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3040
-msgid "Spanish/Latin America"
+msgid "Laothian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3041
-msgid "Swedish"
+msgid "Latvian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3042
-msgid "Tamil"
+msgid "Lithuanian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3043
-msgid "Thai"
+msgid "Luxembourgish"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3044
-msgid "Turkish"
+msgid "Macedonian"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3045
-msgid "Ukrainian"
+msgid "Malayalam"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:3046
+msgid "Malaysian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3047
+msgid "Marathi"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3048
+msgid "Norwegian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3049
+msgid "Norwegian Bokmål"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3050
+msgid "Norwegian Nynorsk"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3051
+msgid "Polish"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3052
+msgid "Portuguese"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3053
+msgid "Portuguese/Brazilian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3054
+msgid "Portuguese/Portugal"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3055
+msgid "Romansh"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3056
+msgid "Romanian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3057
+msgid "Russian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3058
+#: classes/helpers/FrmAppHelper.php:3059
+msgid "Serbian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3060
+msgid "Sinhalese"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3061
+msgid "Slovak"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3062
+msgid "Slovenian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3063
+msgid "Spanish"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3064
+msgid "Spanish/Latin America"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3065
+msgid "Swahili"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3066
+msgid "Swedish"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3067
+msgid "Tamil"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3068
+msgid "Telugu"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3069
+msgid "Thai"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3070
+msgid "Tajiki"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3071
+msgid "Turkish"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3072
+msgid "Ukrainian"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3073
+msgid "Urdu"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3074
 msgid "Vietnamese"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:3368
+#: classes/helpers/FrmAppHelper.php:3075
+msgid "Welsh"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3076
+msgid "Zulu"
+msgstr ""
+
+#: classes/helpers/FrmAppHelper.php:3409
 msgid "Form Landing Pages"
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:3369
+#: classes/helpers/FrmAppHelper.php:3410
 msgid "Easily manage a landing page for your form. Upgrade to get form landing pages."
 msgstr ""
 
-#: classes/helpers/FrmAppHelper.php:3462
+#: classes/helpers/FrmAppHelper.php:3503
 msgid "NEW"
 msgstr ""
 
@@ -1778,7 +1882,7 @@ msgstr ""
 #: classes/helpers/FrmFormsHelper.php:1188
 #: classes/helpers/FrmFormsListHelper.php:133
 #: classes/views/frm-form-actions/form_action.php:25
-#: js/formidable_admin.js:2070
+#: js/formidable_admin.js:2033
 msgid "Delete"
 msgstr ""
 
@@ -1790,7 +1894,7 @@ msgstr ""
 #. translators: %s: The field name.
 #: classes/helpers/FrmFieldsHelper.php:167
 #: classes/helpers/FrmFieldsHelper.php:294
-#: classes/helpers/FrmXMLHelper.php:1394
+#: classes/helpers/FrmXMLHelper.php:1396
 #: classes/models/fields/FrmFieldType.php:583
 msgid "%s is invalid"
 msgstr ""
@@ -3657,21 +3761,21 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1207
+#: classes/helpers/FrmXMLHelper.php:1209
 #: classes/views/solutions/_import.php:51
 msgid "Imported"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1208
+#: classes/helpers/FrmXMLHelper.php:1210
 msgid "Updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1233
+#: classes/helpers/FrmXMLHelper.php:1235
 msgid "Nothing was imported or updated"
 msgstr ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1260
+#: classes/helpers/FrmXMLHelper.php:1262
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
@@ -3679,7 +3783,7 @@ msgstr[1] ""
 
 #. translators: %1$s: Number of items
 #. translators: %1$s - field type
-#: classes/helpers/FrmXMLHelper.php:1262
+#: classes/helpers/FrmXMLHelper.php:1264
 #: classes/models/FrmFormMigrator.php:584
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -3687,56 +3791,56 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1264
+#: classes/helpers/FrmXMLHelper.php:1266
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1266
+#: classes/helpers/FrmXMLHelper.php:1268
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1268
+#: classes/helpers/FrmXMLHelper.php:1270
 msgid "%1$s Page/Post"
 msgid_plural "%1$s Pages/Posts"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1270
+#: classes/helpers/FrmXMLHelper.php:1272
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1272
+#: classes/helpers/FrmXMLHelper.php:1274
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1274
+#: classes/helpers/FrmXMLHelper.php:1276
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:1312
+#: classes/helpers/FrmXMLHelper.php:1314
 msgid "Go to imported form"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1513
+#: classes/helpers/FrmXMLHelper.php:1515
 msgid "Create Posts"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1642
+#: classes/helpers/FrmXMLHelper.php:1644
 msgid "Email Notification"
 msgstr ""
 
@@ -4171,19 +4275,19 @@ msgctxt "Formidable Addon Name"
 msgid "Formidable %s"
 msgstr ""
 
-#: classes/models/FrmPluginSearch.php:314
+#: classes/models/FrmPluginSearch.php:313
 msgid "Install Now"
 msgstr ""
 
-#: classes/models/FrmPluginSearch.php:323
+#: classes/models/FrmPluginSearch.php:322
 msgid "Learn more"
 msgstr ""
 
-#: classes/models/FrmPluginSearch.php:332
+#: classes/models/FrmPluginSearch.php:331
 msgid "Hide this suggestion"
 msgstr ""
 
-#: classes/models/FrmPluginSearch.php:356
+#: classes/models/FrmPluginSearch.php:355
 msgid "This suggestion was made by Formidable Forms, the form builder and application plugin already installed on your site."
 msgstr ""
 
@@ -4519,7 +4623,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:11
-#: js/formidable_admin.js:8102
+#: js/formidable_admin.js:8020
 msgid "Close"
 msgstr ""
 
@@ -4812,7 +4916,7 @@ msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:21
 #: classes/views/styles/_upsell-multiple-styles.php:15
-#: js/formidable_admin.js:2076
+#: js/formidable_admin.js:2039
 msgid "Duplicate"
 msgstr ""
 
@@ -4941,9 +5045,9 @@ msgid "Move Field"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:29
-#: js/formidable_admin.js:1246
-#: js/formidable_admin.js:1249
-#: js/formidable_admin.js:2014
+#: js/formidable_admin.js:1250
+#: js/formidable_admin.js:1253
+#: js/formidable_admin.js:1977
 msgid "More Options"
 msgstr ""
 
@@ -6480,71 +6584,71 @@ msgstr ""
 msgid "Successfully copied embed example"
 msgstr ""
 
-#: js/formidable_admin.js:1207
+#: js/formidable_admin.js:1211
 msgid "Set Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:1214
+#: js/formidable_admin.js:1218
 msgid "Move Field Group"
 msgstr ""
 
-#: js/formidable_admin.js:2042
+#: js/formidable_admin.js:2005
 msgid "Field settings"
 msgstr ""
 
-#: js/formidable_admin.js:2070
+#: js/formidable_admin.js:2033
 msgid "Delete Group"
 msgstr ""
 
-#: js/formidable_admin.js:2076
+#: js/formidable_admin.js:2039
 msgid "Duplicate Group"
 msgstr ""
 
-#: js/formidable_admin.js:3408
+#: js/formidable_admin.js:3375
 msgid "Custom layout"
 msgstr ""
 
-#: js/formidable_admin.js:3431
+#: js/formidable_admin.js:3398
 msgid "Break into rows"
 msgstr ""
 
-#: js/formidable_admin.js:3441
+#: js/formidable_admin.js:3408
 msgid "Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:3686
+#: js/formidable_admin.js:3653
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/formidable_admin.js:3690
+#: js/formidable_admin.js:3657
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/formidable_admin.js:3706
+#: js/formidable_admin.js:3673
 msgid "Save"
 msgstr ""
 
-#: js/formidable_admin.js:4007
+#: js/formidable_admin.js:3974
 msgid "Merge into row"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:4095
+#: js/formidable_admin.js:4062
 msgid "Are you sure you want to delete these %1$s selected fields?"
 msgstr ""
 
-#: js/formidable_admin.js:5222
+#: js/formidable_admin.js:5186
 msgid "Duplicate option value \"%s\" detected"
 msgstr ""
 
-#: js/formidable_admin.js:7366
+#: js/formidable_admin.js:7287
 msgid "Ready Made Solution"
 msgstr ""
 
-#: js/formidable_admin.js:7369
+#: js/formidable_admin.js:7290
 msgid "Check all applications"
 msgstr ""
 
-#: js/formidable_admin.js:8087
+#: js/formidable_admin.js:8005
 msgid "Save and Reload"
 msgstr ""
