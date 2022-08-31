@@ -769,7 +769,7 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( 'opt' === $k || ( ! empty( $field['autocomplete'] && $k === 'autocomplete' ) ) ) {
+			if ( 'opt' === $k || ( ! empty( $field['autocomplete'] ) && $k === 'autocomplete' ) ) {
 				continue;
 			}
 
