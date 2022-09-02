@@ -341,8 +341,10 @@ class FrmEmail {
 		} else {
 			$this->subject = $this->settings['email_subject'];
 			$this->subject = $this->replace_form_name_shortcode( $this->subject );
-			$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
 		}
+
+		// This also replaces [sitename] shortcode in default.
+		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
 
 		$args          = array(
 			'form'      => $this->form,
