@@ -331,6 +331,8 @@ class FrmEmail {
 	 * Set the subject
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_subject() {
 		if ( empty( $this->settings['email_subject'] ) ) {
@@ -338,9 +340,9 @@ class FrmEmail {
 			$this->subject = sprintf( __( '%1$s Form submitted on %2$s', 'formidable' ), $this->form->name, '[sitename]' );
 		} else {
 			$this->subject = $this->settings['email_subject'];
+			$this->subject = $this->replace_form_name_shortcode( $this->subject );
+			$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
 		}
-
-		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
 
 		$args          = array(
 			'form'      => $this->form,
@@ -348,7 +350,6 @@ class FrmEmail {
 			'email_key' => $this->email_key,
 		);
 		$this->subject = apply_filters( 'frm_email_subject', $this->subject, $args );
-
 		$this->subject = wp_specialchars_decode( strip_tags( stripslashes( $this->subject ) ), ENT_QUOTES );
 	}
 
@@ -358,7 +359,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_message() {
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->settings['email_message'], $this->form, $this->entry );
+		$this->message = $this->replace_form_name_shortcode( $this->settings['email_message'] );
+		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
 
 		$prev_mail_body = $this->message;
 		$pass_entry     = clone $this->entry; // make a copy to prevent changes by reference
@@ -390,6 +392,14 @@ class FrmEmail {
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
+	}
+
+	/**
+	 * @param string $string
+	 * @return string
+	 */
+	private function replace_form_name_shortcode( $string ) {
+		return str_replace( '[form_name]', $this->form->name, $string );
 	}
 
 	private function maybe_add_ip( &$mail_body ) {
