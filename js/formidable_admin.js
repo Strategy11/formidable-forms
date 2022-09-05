@@ -686,16 +686,17 @@ function frmAdminBuildJS() {
 
 	function clickWidget( event, b ) {
 		/*jshint validthis:true */
-		var target = event.target;
 		if ( typeof b === 'undefined' ) {
 			b = this;
 		}
 
 		popCalcFields( b, false );
 
-		var cont = jQuery( b ).closest( '.frm_form_action_settings' );
+		const cont   = jQuery( b ).closest( '.frm_form_action_settings' );
+		const target = event.target;
+
 		if ( cont.length && typeof target !== 'undefined' ) {
-			var className = target.parentElement.className;
+			const className = target.parentElement.className;
 			if ( 'string' === typeof className ) {
 				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 ) {
 					// clicking on delete icon shouldn't open it
@@ -705,11 +706,11 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		var inside = cont.children( '.widget-inside' );
+		let inside = cont.children( '.widget-inside' );
 
 		if ( cont.length && inside.find( 'p, div, table' ).length < 1 ) {
-			var actionId = cont.find( 'input[name$="[ID]"]' ).val();
-			var actionType = cont.find( 'input[name$="[post_excerpt]"]' ).val();
+			const actionId = cont.find( 'input[name$="[ID]"]' ).val();
+			const actionType = cont.find( 'input[name$="[post_excerpt]"]' ).val();
 			if ( actionType ) {
 				inside.html( '<span class="frm-wait frm_spinner"></span>' );
 				cont.find( '.spinner' ).fadeIn( 'slow' );
@@ -728,6 +729,11 @@ function frmAdminBuildJS() {
 						showInputIcon( '#' + cont.attr( 'id' ) );
 						frmDom.autocomplete.initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
+
+						const editor = inside.get( 0 ).querySelector( '.wp-editor-area' );
+						if ( editor ) {
+							frmDom.wysiwyg.init( editor );
+						}
 					}
 				});
 			}
