@@ -652,6 +652,9 @@ p.frm_has_shortcodes {
 	min-height: 200px;
 	overflow-y: scroll;
 	z-index: 100;
+	box-shadow: 0px 12px 24px rgb(72 78 84 / 20%);
+	border-radius: 4px;
+	border: none;
 }
 
 #form_global_settings .columns-2 .frm-right-panel,
@@ -751,6 +754,11 @@ p.frm_has_shortcodes {
 	padding-top: 5px;
 }
 
+.frm_form_settings #frm_adv_info #frm-nav-tabs {
+	background-color: #fff;
+	margin-top: 0;
+}
+
 .frm-inline-modal .frm-nav-tabs,
 #frm_adv_info .frm-nav-tabs {
 	margin: 5px 0 10px;
@@ -774,6 +782,10 @@ p.frm_has_shortcodes {
 	border-bottom: 2px solid transparent;
 }
 
+.frm_form_settings #frm_adv_info .frm-nav-tabs a {
+	padding-top: 5px 1px;
+}
+
 .frm-nav-tabs.frm-compact-nav a {
 	margin: 0 5px;
 }
@@ -787,10 +799,18 @@ p.frm_has_shortcodes {
 	color: var(--dark-grey);
 }
 
+.frm_form_settings #frm_adv_info .frm-nav-tabs a {
+	color: rgba(40, 47, 54, 0.45);
+}
+
 .frm-nav-tabs a:hover,
 .frm-nav-tabs .frm-tabs a {
 	color: var(--primary-color) !important;
 	border-color: var(--primary-color);
+}
+
+.frm_form_settings #frm_adv_info .frm-nav-tabs .frm-tabs a {
+	font-weight: 600;
 }
 
 #frm-bulk-modal .howto,
@@ -6474,6 +6494,11 @@ i.frm-show-inline-modal,
 	top: -3px;
 	left: auto;
 	padding: 0 10px 0 5px;
+}
+
+.frm_form_settings .frm-with-right-icon .frmsvg{
+	bottom: -3px;
+	margin-right: 10px;
 }
 
 .frmsvg.frm-show-box,
