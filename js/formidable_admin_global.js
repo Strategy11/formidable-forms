@@ -27,6 +27,8 @@ jQuery( document ).ready( function() {
 			li.classList.add( 'frm-submenu-highlight' );
 		}
 	}
+
+	frmDom.autocomplete.initSelectionAutocomplete();
 });
 
 function frm_install_now() { // eslint-disable-line camelcase
