@@ -229,12 +229,14 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 * @return void
 	 */
 	private function set_from( $user_id_args ) {
 		if ( empty( $this->settings['from'] ) ) {
 			$from = get_option( 'admin_email' );
 		} else {
-			$from = $this->prepare_email_setting( $this->settings['from'], $user_id_args );
+			$from = $this->replace_form_name_shortcode( $this->settings['from'] );
+			$from = $this->prepare_email_setting( $from, $user_id_args );
 		}
 
 		$this->from = $this->format_from( $from );
