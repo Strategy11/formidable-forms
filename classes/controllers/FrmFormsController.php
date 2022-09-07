@@ -1497,11 +1497,19 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * @param string                    $content
+	 * @param stdClass|string|int       $form
+	 * @param stdClass|string|int|false $entry
+	 * @return string
+	 */
 	public static function filter_content( $content, $form, $entry = false ) {
 		self::get_entry_by_param( $entry );
 		if ( ! $entry ) {
 			return $content;
 		}
+
+		$content = self::replace_form_name_shortcodes( $content, $form );
 
 		if ( is_object( $form ) ) {
 			$form = $form->id;
@@ -1513,6 +1521,31 @@ class FrmFormsController {
 		return $content;
 	}
 
+	/**
+	 * Replace any [form_name] shortcodes in a string.
+	 *
+	 * @since x.x
+	 *
+	 * @param string              $string
+	 * @param stdClass|string|int $form
+	 * @return string
+	 */
+	private static function replace_form_name_shortcodes( $string, $form ) {
+		if ( false === strpos( $string, '[form_name]' ) ) {
+			return $string;
+		}
+
+		if ( ! is_object( $form ) ) {
+			$form = FrmForm::getOne( $form );
+		}
+
+		return str_replace( '[form_name]', $form->name, $string );
+	}
+
+	/**
+	 * @param stdClass|string|int|false $entry
+	 * @return void
+	 */
 	private static function get_entry_by_param( &$entry ) {
 		if ( ! $entry || ! is_object( $entry ) ) {
 			if ( ! $entry || ! is_numeric( $entry ) ) {

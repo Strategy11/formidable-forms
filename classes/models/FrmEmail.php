@@ -235,8 +235,7 @@ class FrmEmail {
 		if ( empty( $this->settings['from'] ) ) {
 			$from = get_option( 'admin_email' );
 		} else {
-			$from = $this->replace_form_name_shortcode( $this->settings['from'] );
-			$from = $this->prepare_email_setting( $from, $user_id_args );
+			$from = $this->prepare_email_setting( $this->settings['from'], $user_id_args );
 		}
 
 		$this->from = $this->format_from( $from );
@@ -342,7 +341,6 @@ class FrmEmail {
 			$this->subject = sprintf( __( '%1$s Form submitted on %2$s', 'formidable' ), $this->form->name, '[sitename]' );
 		} else {
 			$this->subject = $this->settings['email_subject'];
-			$this->subject = $this->replace_form_name_shortcode( $this->subject );
 		}
 
 		// This also replaces [sitename] shortcode in default.
@@ -363,8 +361,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_message() {
-		$this->message = $this->replace_form_name_shortcode( $this->settings['email_message'] );
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
+		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->settings['email_message'], $this->form, $this->entry );
 
 		$prev_mail_body = $this->message;
 		$pass_entry     = clone $this->entry; // make a copy to prevent changes by reference
@@ -396,14 +393,6 @@ class FrmEmail {
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
-	}
-
-	/**
-	 * @param string $string
-	 * @return string
-	 */
-	private function replace_form_name_shortcode( $string ) {
-		return FrmFormsHelper::replace_form_name_shortcodes( $string, $this->form );
 	}
 
 	private function maybe_add_ip( &$mail_body ) {
