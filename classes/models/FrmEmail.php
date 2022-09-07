@@ -229,6 +229,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 * @return void
 	 */
 	private function set_from( $user_id_args ) {
 		if ( empty( $this->settings['from'] ) ) {
@@ -331,6 +332,8 @@ class FrmEmail {
 	 * Set the subject
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_subject() {
 		if ( empty( $this->settings['email_subject'] ) ) {
@@ -340,6 +343,7 @@ class FrmEmail {
 			$this->subject = $this->settings['email_subject'];
 		}
 
+		// This also replaces [sitename] shortcode in default.
 		$this->subject = FrmFieldsHelper::basic_replace_shortcodes( $this->subject, $this->form, $this->entry );
 
 		$args          = array(
@@ -348,7 +352,6 @@ class FrmEmail {
 			'email_key' => $this->email_key,
 		);
 		$this->subject = apply_filters( 'frm_email_subject', $this->subject, $args );
-
 		$this->subject = wp_specialchars_decode( strip_tags( stripslashes( $this->subject ) ), ENT_QUOTES );
 	}
 

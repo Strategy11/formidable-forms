@@ -1442,6 +1442,7 @@ class FrmFormsController {
 			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
 			$entry_shortcodes['default-html']    = __( 'Default HTML', 'formidable' );
 			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
+			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}
 
 		/**
@@ -1496,7 +1497,15 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * @param string                    $content
+	 * @param stdClass|string|int       $form
+	 * @param stdClass|string|int|false $entry
+	 * @return string
+	 */
 	public static function filter_content( $content, $form, $entry = false ) {
+		$content = self::replace_form_name_shortcodes( $content, $form );
+
 		self::get_entry_by_param( $entry );
 		if ( ! $entry ) {
 			return $content;
@@ -1512,6 +1521,32 @@ class FrmFormsController {
 		return $content;
 	}
 
+	/**
+	 * Replace any [form_name] shortcodes in a string.
+	 *
+	 * @since x.x
+	 *
+	 * @param string              $string
+	 * @param stdClass|string|int $form
+	 * @return string
+	 */
+	public static function replace_form_name_shortcodes( $string, $form ) {
+		if ( false === strpos( $string, '[form_name]' ) ) {
+			return $string;
+		}
+
+		if ( ! is_object( $form ) ) {
+			$form = FrmForm::getOne( $form );
+		}
+
+		$form_name = is_object( $form ) ? $form->name : '';
+		return str_replace( '[form_name]', $form_name, $string );
+	}
+
+	/**
+	 * @param stdClass|string|int|false $entry
+	 * @return void
+	 */
 	private static function get_entry_by_param( &$entry ) {
 		if ( ! $entry || ! is_object( $entry ) ) {
 			if ( ! $entry || ! is_numeric( $entry ) ) {
