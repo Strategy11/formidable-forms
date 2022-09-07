@@ -69,3 +69,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmEntriesHelper::maybe_render_captcha_score( $entry->id ); ?>
 	</div>
 </div>
+<?php
+if ( ! class_exists( 'FrmUsrTrkAppHelper' ) ) {
+	if ( isset( $data['referrer'] ) ) {
+		?>
+		<div class="misc-pub-section frm_force_wrap">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_history_icon', array( 'aria-hidden' => 'true' ) ); ?>
+			<?php esc_html_e( 'Referrer:', 'formidable' ); ?>
+			<?php echo wp_kses_post( str_replace( "\r\n", '<br/>', $data['referrer'] ) ); ?>
+		</div>
+	<?php } ?>
+<?php } ?>
