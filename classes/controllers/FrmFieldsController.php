@@ -768,8 +768,12 @@ class FrmFieldsController {
 			return;
 		}
 
+		if ( ! empty( $field['autocomplete'] ) ) {
+			unset( $field['shortcodes']['autocomplete'] );
+		}
+
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( 'opt' === $k || ( ! empty( $field['autocomplete'] ) && $k === 'autocomplete' ) ) {
+			if ( 'opt' === $k ) {
 				continue;
 			}
 
