@@ -7370,7 +7370,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
-     function getInputForIcon( moreIcon ) {
+	function getInputForIcon( moreIcon ) {
 		var input = moreIcon.nextElementSibling;
 
 		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
