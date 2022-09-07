@@ -1504,12 +1504,12 @@ class FrmFormsController {
 	 * @return string
 	 */
 	public static function filter_content( $content, $form, $entry = false ) {
+		$content = self::replace_form_name_shortcodes( $content, $form );
+
 		self::get_entry_by_param( $entry );
 		if ( ! $entry ) {
 			return $content;
 		}
-
-		$content = self::replace_form_name_shortcodes( $content, $form );
 
 		if ( is_object( $form ) ) {
 			$form = $form->id;
