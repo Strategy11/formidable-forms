@@ -3582,6 +3582,20 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Safely call get_plugins, importing the required files if they are not yet loaded.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_plugins() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		return get_plugins();
+	}
+
+	/**
 	 * @since 4.08
 	 * @deprecated 4.09.01
 	 */

@@ -333,13 +333,12 @@ class FrmPluginSearch {
 		return $links;
 	}
 
+	/**
+	 * @param string $plugin
+	 * @return bool
+	 */
 	protected function is_installed( $plugin ) {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$all_plugins = get_plugins();
-
+		$all_plugins = FrmAppHelper::get_plugins();
 		return isset( $all_plugins[ $plugin ] );
 	}
 
