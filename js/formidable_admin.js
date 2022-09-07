@@ -7385,6 +7385,7 @@ function frmAdminBuildJS() {
 	 */
 	function getIconForInput( input ) {
 		var moreIcon = input.previousElementSibling;
+
 		while ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
 			moreIcon = getIconForInput( moreIcon );
 		}
