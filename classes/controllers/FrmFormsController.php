@@ -1530,7 +1530,7 @@ class FrmFormsController {
 	 * @param stdClass|string|int $form
 	 * @return string
 	 */
-	private static function replace_form_name_shortcodes( $string, $form ) {
+	public static function replace_form_name_shortcodes( $string, $form ) {
 		if ( false === strpos( $string, '[form_name]' ) ) {
 			return $string;
 		}
