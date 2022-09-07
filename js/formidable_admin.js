@@ -7370,12 +7370,13 @@ function frmAdminBuildJS() {
 	/**
 	 * Get the input box for the selected ... icon.
 	 */
-	function getInputForIcon( moreIcon ) {
+     function getInputForIcon( moreIcon ) {
 		var input = moreIcon.nextElementSibling;
-		if ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
-			// Workaround for 1Password.
-			input = input.nextElementSibling;
+
+		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
+			input = getInputForIcon( input );
 		}
+
 		return input;
 	}
 
@@ -7384,9 +7385,10 @@ function frmAdminBuildJS() {
 	 */
 	function getIconForInput( input ) {
 		var moreIcon = input.previousElementSibling;
-		if ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
-			moreIcon = moreIcon.previousElementSibling;
+		while ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
+			moreIcon = getIconForInput( moreIcon );
 		}
+
 		return moreIcon;
 	}
 
