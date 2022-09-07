@@ -403,7 +403,7 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function replace_form_name_shortcode( $string ) {
-		return str_replace( '[form_name]', $this->form->name, $string );
+		return FrmFormsHelper::replace_form_name_shortcodes( $string, $this->form );
 	}
 
 	private function maybe_add_ip( &$mail_body ) {

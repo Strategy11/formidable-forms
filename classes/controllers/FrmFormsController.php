@@ -1442,6 +1442,7 @@ class FrmFormsController {
 			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
 			$entry_shortcodes['default-html']    = __( 'Default HTML', 'formidable' );
 			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
+			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}
 
 		/**

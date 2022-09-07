@@ -250,12 +250,35 @@ class FrmFormsHelper {
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
+	/**
+	 * @param array $atts {
+	 *     @type string   $message
+	 *     @type stdClass $form
+	 *     @type int      $entry_id
+	 *     @type string   $class
+	 * }
+	 * @return string
+	 */
 	public static function get_success_message( $atts ) {
-		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
+		$message = self::replace_form_name_shortcodes( $atts['message'], $atts['form'] );
+		$message = apply_filters( 'frm_content', $message, $atts['form'], $atts['entry_id'] );
 		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
 		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 
 		return $message;
+	}
+
+	/**
+	 * Replace any [form_name] shortcodes in a string.
+	 *
+	 * @since x.x
+	 *
+	 * @param string   $string
+	 * @param stdClass $form
+	 * @return string
+	 */
+	public static function replace_form_name_shortcodes( $string, $form ) {
+		return str_replace( '[form_name]', $form->name, $string );
 	}
 
 	/**
