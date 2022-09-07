@@ -1539,7 +1539,8 @@ class FrmFormsController {
 			$form = FrmForm::getOne( $form );
 		}
 
-		return str_replace( '[form_name]', $form->name, $string );
+		$form_name = is_object( $form ) ? $form->name : '';
+		return str_replace( '[form_name]', $form_name, $string );
 	}
 
 	/**
