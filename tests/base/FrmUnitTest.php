@@ -137,6 +137,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 			return;
 		}
 
+		add_filter( 'frm_should_import_files', '__return_true' );
+
 		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
 		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
 
@@ -193,15 +195,24 @@ class FrmUnitTest extends WP_UnitTestCase {
 			),
 		);
 
-		$_REQUEST['csv_files'] = 1;
-		$uploads_dir           = wp_upload_dir()['basedir'] . '/formidable/';
-		$test                  = new FrmUnitTest();
+		$uploads_dir = wp_upload_dir()['basedir'] . '/formidable/';
+		$test        = new FrmUnitTest();
 		foreach ( $file_urls as $values ) {
 			$vals      = (array) $values['val'];
 			$media_ids = false;
 			foreach ( $vals as $val ) {
 				$filename = basename( $val );
 				$path     = $uploads_dir . $filename;
+
+				if ( ! file_exists ( $path ) && is_object( $values['field'] ) ) {
+					// File may be in formidable folder or it may be in the form_id folder so check the form as well.
+					$form_id_path = $uploads_dir . $values['field']->form_id . '/' . $filename;
+					if ( file_exists( $form_id_path ) ) {
+						copy( $form_id_path, $path );
+					}
+					unset( $form_id_path );
+				}
+
 				if ( file_exists( $path ) ) {
 					if ( ! is_array( $media_ids ) ) {
 						$media_ids = array();
