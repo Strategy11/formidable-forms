@@ -89,11 +89,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 			FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 			FrmAppController::install();
 			self::do_tables_exist();
+			self::import_xml();
 			self::create_files();
 			self::$installed = true;
+		} else {
+			self::import_xml();
 		}
-
-		self::import_xml();		
 	}
 
 	public static function get_table_names() {
