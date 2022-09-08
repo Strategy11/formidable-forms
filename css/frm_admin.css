@@ -7834,16 +7834,6 @@ button.frm_choose_image_box,
 }
 
 /* RTL */
-.rtl .frm-default-switcher {
-	float: left;
-	position: relative;
-}
-
-.rtl .frm-with-right-icon .frmsvg {
-	right: auto;
-	left: 0;
-}
-
 .rtl h3 {
 	font-weight: inherit !important;
 }
@@ -7919,6 +7909,16 @@ button.frm_choose_image_box,
 .rtl .frm_reply_to_container,
 .rtl .frm_bcc_cc_container {
 	float: left;
+}
+
+.rtl .frm-default-switcher {
+	float: left;
+	position: relative;
+}
+
+.rtl .frm-with-right-icon .frmsvg {
+	right: auto;
+	left: 0;
 }
 
 /* ---------------------------------------------------------------
