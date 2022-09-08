@@ -85,16 +85,17 @@ class FrmUnitTest extends WP_UnitTestCase {
 			define( 'WP_IMPORTING', false );
 		}
 
-		if ( ! self::$installed ) {
-			FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
-			FrmAppController::install();
-			self::do_tables_exist();
+		if ( self::$installed ) {
 			self::import_xml();
-			self::create_files();
-			self::$installed = true;
-		} else {
-			self::import_xml();
+			return;
 		}
+
+		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+		FrmAppController::install();
+		self::do_tables_exist();
+		self::import_xml();
+		self::create_files();
+		self::$installed = true;
 	}
 
 	public static function get_table_names() {
