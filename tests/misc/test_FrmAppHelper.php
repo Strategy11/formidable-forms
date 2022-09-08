@@ -4,6 +4,11 @@
  */
 class test_FrmAppHelper extends FrmUnitTest {
 
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
 	/**
 	 * @covers FrmAppHelper::plugin_version
 	 */

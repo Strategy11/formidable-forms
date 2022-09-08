@@ -57,8 +57,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->factory->form  = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
-
-		$this->create_users();
 	}
 
 	/**
@@ -575,10 +573,12 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Create an administrator, editor, and subscriber
 	 *
 	 * @since 2.0
+	 *
+	 * @return void
 	 */
-	private function create_users() {
+	protected function create_users() {
 		$has_user = get_user_by( 'email', 'admin@mail.com' );
-		if ( ! empty( $has_user ) ) {
+		if ( $has_user ) {
 			return;
 		}
 

@@ -3,6 +3,12 @@
  * @group app
  */
 class test_FrmAppController extends FrmUnitTest {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
 	public function test_class_is_tested() {
 		$this->assertTrue( true );
 	}
