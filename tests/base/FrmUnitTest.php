@@ -2,6 +2,13 @@
 
 class FrmUnitTest extends WP_UnitTestCase {
 
+	/**
+	 * Track if an install has happened to avoid installing too often.
+	 *
+	 * @var bool
+	 */
+	protected static $installed = false;
+
 	protected $user_id = 0;
 
 	protected $contact_form_key = 'contact-with-email';
@@ -29,13 +36,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public static function wpTearDownAfterClass() {
-		global $wp_version;
-		if ( $wp_version <= 4.6 ) {
-			// Prior to WP 4.7, the Formidable tables were deleted on tearDown and not restored with setUp
-			delete_option( 'frm_options' );
-			delete_option( 'frm_db_version' );
-		}
-
 		self::empty_tables();
 	}
 
@@ -54,7 +54,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 
-		$this->factory->form = new Form_Factory( $this );
+		$this->factory->form  = new Form_Factory( $this );
 		$this->factory->field = new Field_Factory( $this );
 		$this->factory->entry = new Entry_Factory( $this );
 
@@ -85,12 +85,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 			define( 'WP_IMPORTING', false );
 		}
 
-		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
-		FrmAppController::install();
+		if ( ! self::$installed ) {
+			FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
+			FrmAppController::install();
+			self::do_tables_exist();
+			self::create_files();
+			self::$installed = true;
+		}
 
-		self::do_tables_exist();
-		self::import_xml();
-		self::create_files();
+		self::import_xml();		
 	}
 
 	public static function get_table_names() {

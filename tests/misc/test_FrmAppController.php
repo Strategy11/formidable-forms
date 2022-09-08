@@ -172,6 +172,8 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::api_install
 	 */
 	public function test_api_install() {
+		delete_option( 'frm_install_running' );
+
 		if ( FrmAppHelper::doing_ajax() ) {
 			$this->markTestSkipped( 'Run without ajax' );
 		}
