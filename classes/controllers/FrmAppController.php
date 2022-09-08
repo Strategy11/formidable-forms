@@ -471,6 +471,7 @@ class FrmAppController {
 		wp_enqueue_style( 'formidable_admin_global' );
 
 		wp_register_style( 'formidable-admin', $plugin_url . '/css/frm_admin.css', array(), $version );
+		wp_register_style( 'formidable-admin-rtl', $plugin_url . '/css/style-rtl.css', array(), $version );
 		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
@@ -525,6 +526,11 @@ class FrmAppController {
 			FrmAppHelper::localize_script( 'admin' );
 
 			wp_enqueue_style( 'formidable-admin' );
+
+			if ( is_rtl() ) {
+				wp_enqueue_style(  'formidable-admin-rtl' );
+			}
+
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 				wp_enqueue_style( 'formidable-dropzone' );
