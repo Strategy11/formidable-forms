@@ -3,6 +3,12 @@
  * @group app
  */
 class test_FrmAppController extends FrmUnitTest {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
 	public function test_class_is_tested() {
 		$this->assertTrue( true );
 	}
@@ -172,6 +178,8 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::api_install
 	 */
 	public function test_api_install() {
+		delete_option( 'frm_install_running' );
+
 		if ( FrmAppHelper::doing_ajax() ) {
 			$this->markTestSkipped( 'Run without ajax' );
 		}
