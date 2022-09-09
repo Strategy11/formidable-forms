@@ -813,99 +813,13 @@ function frmAdminBuildJS() {
 	}
 
 	/* Form Builder */
-	function setupSortable( sort ) {
-
-		/*
-		var container, $previousFieldContainer, opts;
-
-		container = jQuery( '#post-body-content' );
-
-		opts = {
-			placeholder: 'sortable-placeholder',
-			axis: 'y',
-			cancel: '.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_sortable_field_opts,.frm_noallow',
-			accepts: 'field_type_list',
-			forcePlaceholderSize: false,
-			tolerance: 'pointer',
-			over: function() {
-				this.classList.add( 'drop-me' );
-			},
-			out: function() {
-				this.classList.remove( 'drop-me' );
-			},
-			start: function( event, ui ) {
-				unselectFieldGroups();
-				deleteEmptyDividerWrappers();
-				maybeRemoveGroupHoverTarget();
-				closeOpenFieldDropdowns();
-				container.get( 0 ).classList.add( 'frm-dragging-field' );
-				if ( ui.item[0].offsetHeight > 120 ) {
-					jQuery( sort ).sortable( 'refreshPositions' );
-				}
-				if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
-					// If a page if collapsed, expand it before dragging since only the page break will move.
-					toggleCollapsePage( jQuery( ui.item[0]) );
-				}
-				$previousFieldContainer = ui.item.closest( 'ul.frm_sorting' );
-			},
-			beforeStop: function( event, ui ) {
-				// If this was dropped at the beginning of a collpased page, open it.
-				var previous = ui.item[0].previousElementSibling;
-				if ( previous !== null && previous.classList.contains( 'frm-page-collapsed' ) ) {
-					toggleCollapsePage( jQuery( previous ) );
-				}
-			},
-			stop: function( event, ui ) {
-				var moving, $previousContainerFields, $closestFieldBox;
-
-				container.get( 0 ).classList.remove( 'frm-dragging-field' );
-				moving = jQuery( this );
-				copyHelper && copyHelper.remove();
-
-				if ( cancelSort ) {
-					moving.sortable( 'cancel' );
-					syncAfterDragAndDrop();
-					return;
-				}
-
-				$previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
-				if ( $previousFieldContainer.length ) {
-					if ( ! $previousContainerFields.length ) {
-						$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
-						if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
-							// remove an empty field group, but don't remove an empty section.
-							$closestFieldBox.remove();
-						}
-					} else {
-						syncLayoutClasses( $previousContainerFields.first() );
-					}
-				}
-
-				if ( ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) || ui.item.parent().hasClass( 'start_divider' ) ) && ui.item.hasClass( 'form-field' ) ) {
-					// dragging an item into a new row.
-					wrapFieldLiInPlace( ui.item );
-					if ( $previousContainerFields.length ) {
-						// only if the previous container had other sibling fields, remove the previous layout class.
-						syncLayoutClasses( ui.item );
-					}
-				} else {
-					syncLayoutClasses( ui.item );
-				}
-
-				syncAfterDragAndDrop();
-			},
-			
-		};
-
-		*/
-
-		document.querySelectorAll( sort ).forEach(
+	function setupSortable( sortableSelector ) {
+		document.querySelectorAll( sortableSelector ).forEach(
 			list => {
 				makeDroppable( list );
 				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) )
 			}
 		);
-
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
@@ -923,11 +837,8 @@ function frmAdminBuildJS() {
 			revert: 'invalid',
 			delay: 10,
 			cancel: '.frm-dropdown-menu',
-			start: function( event, ui ) {
-				const width = jQuery( event.target ).width();
-				ui.helper.addClass( 'frm-sortable-helper' );
-				ui.helper.css( 'width', width + 'px' );
-			}
+			start: handleDragStart,
+			stop: handleDragStop
 		};
 		if ( undefined !== handle ) {
 			settings.handle = handle;
@@ -935,12 +846,124 @@ function frmAdminBuildJS() {
 		jQuery( draggable ).draggable( settings );
 	}
 
-	function handleFieldDrop( event, ui ) {
-		// TODO
+	function handleDragStart( event, ui ) {
+		const container = document.getElementById( 'post-body-content' );
+		container.classList.add( 'frm-dragging-field' );
+
+		const width = jQuery( event.target ).width();
+		ui.helper.addClass( 'frm-sortable-helper' );
+		ui.helper.css( 'width', width + 'px' );
+
+		unselectFieldGroups();
+		deleteEmptyDividerWrappers();
+		maybeRemoveGroupHoverTarget();
+		closeOpenFieldDropdowns();
+
+//		if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
+			// If a page if collapsed, expand it before dragging since only the page break will move.
+//			toggleCollapsePage( jQuery( ui.item[0]) );
+//		}
+	}
+
+	function handleDragStop( event, ui ) {
+		const container = document.getElementById( 'post-body-content' );
+		container.classList.remove( 'frm-dragging-field' );
+	}
+
+	function handleFieldDrop( _, ui ) {
+		const draggable = ui.draggable[0];
+
+		const placeholder = document.getElementById( 'frm_drag_placeholder' );
+		if ( ! placeholder ) {
+			syncAfterDragAndDrop();
+			return;
+		}
+
+		const droppable = placeholder.parentNode;
+		const $previousFieldContainer = ui.helper.parent();
+
+		placeholder.parentNode.insertBefore( draggable, placeholder );
+		placeholder.remove();
+
+		ui.helper.remove();
+		if ( $previousFieldContainer.length ) {
+			const $previousContainerFields = getFieldsInRow( $previousFieldContainer );
+			if ( ! $previousContainerFields.length ) {
+				$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
+				if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
+					// remove an empty field group, but don't remove an empty section.
+					$closestFieldBox.remove();
+				}
+			} else {
+				syncLayoutClasses( $previousContainerFields.first() );
+			}
+		}
+
+		if ( 'frm-show-fields' === droppable.id ) {
+			handleFieldDropIntoFrmListFields( draggable );
+		} else if ( droppable.classList.contains( 'start_divider' ) ) {
+			handleFieldDropIntoSection( draggable );
+		} else {
+			handleFieldDropIntoGroup( draggable, ui );
+		}
+
+		syncAfterDragAndDrop();
+	}
+
+	function handleFieldDropIntoFrmListFields( draggable ) {
+
+	}
+
+	function handleFieldDropIntoSection( draggable ) {
+
+	}
+
+	function handleFieldDropIntoGroup( draggable ) {
+		syncLayoutClasses( jQuery( draggable ) );
 	}
 
 	function handleFieldOverDroppable( event, ui ) {
-		// TODO
+		const droppable = event.target;
+
+		let placeholder = document.getElementById( 'frm_drag_placeholder' );
+		if ( ! placeholder ) {
+			placeholder = tag( 'li', {
+				id: 'frm_drag_placeholder',
+				className: 'sortable-placeholder'
+			});
+		}
+
+		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
+			// TODO
+			return;
+		}
+
+		handleDragOverFieldGroup({ droppable, event, placeholder });
+	}
+
+	function handleDragOverFieldGroup({ droppable, event, placeholder }) {
+		const $row = jQuery( droppable );
+		const $children = getFieldsInRow( $row );
+
+		if ( ! $children.length ) {
+			return;
+		}
+
+		let left;
+		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( $row, event.clientX );
+
+		if ( insertAtIndex === $children.length ) {
+			const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+			left = $lastChild.offset().left + $lastChild.outerWidth();
+			$row.append( placeholder );
+		} else {
+			left = jQuery( $children.get( insertAtIndex ) ).offset().left;
+			jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+		}
+
+		left -= $row.offset().left;
+
+		placeholder.style.left = left + 'px';
 	}
 
 	function syncAfterDragAndDrop() {
@@ -965,46 +988,8 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeUncancelFields() {
-		document.querySelectorAll( '.frm_cancel_sort' ).forEach(
-			function( field ) {
-				field.classList.remove( 'frm_cancel_sort' );
-			}
-		);
+		document.querySelectorAll( '.frm_cancel_sort' ).forEach( field => field.classList.remove( 'frm_cancel_sort' ) );
 	}
-
-	/**
-	 * Sortable struggles to put the field into the proper section if there are multiple in a field group. This helps fix some of those issues.
-	 */
-	/*
-	function maybeFixPlaceholderParent( ui, event ) {
-		var elementFromPoint, wrapper, shouldAppend;
-		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
-		if ( null === elementFromPoint ) {
-			return;
-		}
-		wrapper = elementFromPoint.closest( '.frm_sorting' );
-		if ( null === wrapper ) {
-			return;
-		}
-		if ( ui.placeholder.closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length < 2 ) {
-			// placeholder is not in a problematic position that needs to be fixed so leave it.
-			return;
-		}
-		shouldAppend = false;
-		if ( wrapper.classList.contains( 'start_divider' ) ) {
-			shouldAppend = jQuery( wrapper ).parent().parent().find( '.start_divider' ).length >= 2;
-		} else if ( null !== wrapper.closest( '.start_divider' ) ) {
-			shouldAppend = jQuery( wrapper ).closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length >= 2;
-		}
-		if ( null !== wrapper.closest( '.frm-sortable-helper' ) ) {
-			// avoid ever appending to the sortable helper.
-			return;
-		}
-		if ( shouldAppend ) {
-			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
-			ui.placeholder.appendTo( wrapper );
-		}
-	}*/
 
 	function fixUnwrappedListItems() {
 		document.querySelectorAll( 'ul.start_divider > li.form-field:not(.edit_field_type_end_divider)' ).forEach(
@@ -1015,13 +1000,13 @@ function frmAdminBuildJS() {
 	}
 
 	function deleteEmptyDividerWrappers() {
-		var dividers = document.querySelectorAll( 'ul.start_divider' );
+		const dividers = document.querySelectorAll( 'ul.start_divider' );
 		if ( ! dividers.length ) {
 			return;
 		}
 		dividers.forEach(
 			function( divider ) {
-				var children = [].slice.call( divider.children );
+				const children = [].slice.call( divider.children );
 				children.forEach(
 					function( child ) {
 						if ( 0 === child.children.length ) {
@@ -1033,17 +1018,6 @@ function frmAdminBuildJS() {
 				);
 			}
 		);
-	}
-
-	/**
-	 * @returns {bool} true if the placeholder parent should be fixed.
-	 */
-	function shouldTryFixingPlaceholderParent( $placeholder ) {
-		var closestSection = $placeholder.closest( '.start_divider' );
-		if ( null === closestSection ) {
-			return false;
-		}
-		return jQuery( closestSection ).siblings( 'li.start_divider' ).length >= 1;
 	}
 
 	function getFieldsInRow( $row ) {
