@@ -759,6 +759,10 @@ p.frm_has_shortcodes {
 	margin-top: 0;
 }
 
+.frm_form_settings span.frm-with-right-icon {
+	display: block;
+}
+
 .frm-inline-modal .frm-nav-tabs,
 #frm_adv_info .frm-nav-tabs {
 	margin: 5px 0 10px;
