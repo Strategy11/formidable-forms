@@ -812,12 +812,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/* Form Builder */
 	function setupSortable( sortableSelector ) {
 		document.querySelectorAll( sortableSelector ).forEach(
 			list => {
 				makeDroppable( list );
-				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) )
+				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
 			}
 		);
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
@@ -866,17 +865,11 @@ function frmAdminBuildJS() {
 		deleteEmptyDividerWrappers();
 		maybeRemoveGroupHoverTarget();
 		closeOpenFieldDropdowns();
-
-//		if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
-			// If a page if collapsed, expand it before dragging since only the page break will move.
-//			toggleCollapsePage( jQuery( ui.item[0]) );
-//		}
 	}
 
-	function handleDragStop( event, ui ) {
+	function handleDragStop() {
 		const container = document.getElementById( 'post-body-content' );
 		container.classList.remove( 'frm-dragging-field' );
-
 		document.body.classList.remove( 'frm-dragging' );
 	}
 
@@ -917,7 +910,6 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const droppable = placeholder.parentNode;
 		const $previousFieldContainer = ui.helper.parent();
 
 		if ( draggable.classList.contains( 'frmbutton' ) ) {
@@ -929,8 +921,6 @@ function frmAdminBuildJS() {
 
 		placeholder.remove();
 		ui.helper.remove();
-
-//		const dropType = getDropType( droppable );
 
 		if ( $previousFieldContainer.length ) {
 			const $previousContainerFields = getFieldsInRow( $previousFieldContainer );
@@ -949,17 +939,6 @@ function frmAdminBuildJS() {
 		updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
 		syncAfterDragAndDrop();
 	}
-
-	/*
-	function getDropType( droppable ) {
-		if ( 'frm-show-fields' === droppable.id ) {
-			return 'list';
-		}
-		if ( droppable.classList.contains( 'start_divider' ) ) {
-			return 'section';
-		}
-		return 'group';
-	}*/
 
 	function handleDragOverYAxis({ droppable, y, placeholder }) {
 		const $list = jQuery( droppable );
