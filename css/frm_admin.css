@@ -3833,7 +3833,6 @@ li.sortable-placeholder {
 
 .frm_sorting > li.edit_field_type_end_divider:first-child,
 .frm_sorting > .frmbutton + .sortable-placeholder, /* hide for first field */
-.no-drop-placeholder,
 .frm-show-click,
 li.ui-state-default.edit_field_type_divider .frm-show-click {
 	display: none;
