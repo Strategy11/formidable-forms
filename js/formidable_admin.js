@@ -840,7 +840,6 @@ function frmAdminBuildJS() {
 			helper: 'clone',
 			revert: 'invalid',
 			delay: 10,
-			cancel: '.frm-dropdown-menu',
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag
