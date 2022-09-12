@@ -906,6 +906,7 @@ function frmAdminBuildJS() {
 		const placeholder = document.getElementById( 'frm_drag_placeholder' );
 
 		if ( ! placeholder ) {
+			ui.helper.remove();
 			syncAfterDragAndDrop();
 			return;
 		}
@@ -922,8 +923,9 @@ function frmAdminBuildJS() {
 		placeholder.remove();
 		ui.helper.remove();
 
+		const $previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
+
 		if ( $previousFieldContainer.length ) {
-			const $previousContainerFields = getFieldsInRow( $previousFieldContainer );
 			if ( ! $previousContainerFields.length ) {
 				$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
 				if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
@@ -932,8 +934,11 @@ function frmAdminBuildJS() {
 				}
 			} else {
 				syncLayoutClasses( $previousContainerFields.first() );
-				syncLayoutClasses( jQuery( draggable ) );
 			}
+		}
+
+		if ( 0 !== $previousContainerFields.length || 1 !== getFieldsInRow( jQuery( draggable.parentNode ) ).length ) {
+			syncLayoutClasses( jQuery( draggable ) );
 		}
 
 		updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
@@ -1018,10 +1023,24 @@ function frmAdminBuildJS() {
 		maybeUncancelFields();
 		fixUnwrappedListItems();
 		toggleSectionHolder();
+		maybeFixEndDividers();
+		maybeDeleteEmptyFieldGroups();
 		updateFieldOrder();
 
 		const event = new Event( 'frm_sync_after_drag_and_drop', { bubbles: false });
 		document.dispatchEvent( event );
+	}
+
+	function maybeFixEndDividers() {
+		document.querySelectorAll( '.edit_field_type_end_divider' ).forEach(
+			endDivider => endDivider.parentNode.appendChild( endDivider )
+		);
+	}
+
+	function maybeDeleteEmptyFieldGroups() {
+		document.querySelectorAll( 'li.form_field_box:not(.form-field)' ).forEach(
+			fieldGroup => ! fieldGroup.children.length && fieldGroup.remove()
+		);
 	}
 
 	function maybeRemoveNewCancelledFields() {
@@ -1044,6 +1063,15 @@ function frmAdminBuildJS() {
 			list => {
 				list.childNodes.forEach(
 					child => {
+						if ( 'undefined' === typeof child.classList ) {
+							return;
+						}
+
+						if ( child.classList.contains( 'edit_field_type_end_divider' ) ) {
+							// Never wrap end divider in place.
+							return;
+						}
+
 						if ( 'undefined' !== typeof child.classList && child.classList.contains( 'form-field' ) ) {
 							wrapFieldLiInPlace( child );
 						}
@@ -9326,7 +9354,8 @@ function frmAdminBuildJS() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			makeDraggable( jQuery( '.field_type_list > li:not(.frm_noallow)' ) );
+			document.querySelectorAll( '.field_type_list > li' ).forEach( makeDraggable );
+
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
