@@ -89,6 +89,8 @@ if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 if ( FrmForm::show_submit( $form ) ) {
+	do_action( 'frm_before_submit_btn', compact( 'form' ) );
+
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
@@ -107,6 +109,8 @@ if ( FrmForm::show_submit( $form ) ) {
 	} else {
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 	}
+
+	do_action( 'frm_after_submit_btn', compact( 'form' ) );
 }
 ?>
 </div>
