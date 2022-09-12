@@ -914,8 +914,6 @@ function frmAdminBuildJS() {
 		const draggable = ui.draggable[0];
 		const placeholder = document.getElementById( 'frm_drag_placeholder' );
 
-		console.log( 'handle drop' );
-
 		if ( ! placeholder ) {
 			syncAfterDragAndDrop();
 			return;
@@ -927,12 +925,13 @@ function frmAdminBuildJS() {
 		if ( draggable.classList.contains( 'frmbutton' ) ) {
 			insertNewFieldByDragging( draggable.id );
 		} else {
+			// Moving a field that already exists in the form.
 			placeholder.parentNode.insertBefore( draggable, placeholder );
 		}
 
 		placeholder.remove();
-
 		ui.helper.remove();
+
 		if ( $previousFieldContainer.length ) {
 			const $previousContainerFields = getFieldsInRow( $previousFieldContainer );
 			if ( ! $previousContainerFields.length ) {
@@ -946,25 +945,23 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( 'frm-show-fields' === droppable.id ) {
-			handleFieldDropIntoFrmListFields( draggable );
-		} else if ( droppable.classList.contains( 'start_divider' ) ) {
-			handleFieldDropIntoSection( draggable );
-		} else {
+		const dropType = getDropType( droppable );
+		if ( 'group' === dropType ) {
 			handleFieldDropIntoGroup( draggable, ui );
 		}
 
 		updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
-
 		syncAfterDragAndDrop();
 	}
 
-	function handleFieldDropIntoFrmListFields( draggable ) {
-
-	}
-
-	function handleFieldDropIntoSection( draggable ) {
-
+	function getDropType( droppable ) {
+		if ( 'frm-show-fields' === droppable.id ) {
+			return 'list';
+		}
+		if ( droppable.classList.contains( 'start_divider' ) ) {
+			return 'section';
+		}
+		return 'group';
 	}
 
 	function handleFieldDropIntoGroup( draggable ) {
@@ -1415,9 +1412,9 @@ function frmAdminBuildJS() {
 	 * @param {string} fieldType
 	 */
 	function insertNewFieldByDragging( fieldType ) {
-		const placeholder = document.getElementById( 'frm_drag_placeholder' );
-		const loadingID   = fieldType.replace( '|', '-' ) + '_' + getAutoId();
-		const loading     = tag(
+		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
+		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
+		const loading      = tag(
 			'li',
 			{
 				id: loadingID,
