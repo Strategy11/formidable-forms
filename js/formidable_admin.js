@@ -924,7 +924,12 @@ function frmAdminBuildJS() {
 		const droppable = placeholder.parentNode;
 		const $previousFieldContainer = ui.helper.parent();
 
-		placeholder.parentNode.insertBefore( draggable, placeholder );
+		if ( draggable.classList.contains( 'frmbutton' ) ) {
+			insertNewFieldByDragging( jQuery( draggable ) );
+		} else {
+			placeholder.parentNode.insertBefore( draggable, placeholder );
+		}
+
 		placeholder.remove();
 
 		ui.helper.remove();
@@ -1408,24 +1413,27 @@ function frmAdminBuildJS() {
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {object} selectedItem
-	 * @param {object} fieldButton
-	 * @param {object} opts
 	 */
-	function insertNewFieldByDragging( selectedItem, fieldButton ) {
-		const fieldType = fieldButton.attr( 'id' );
+	function insertNewFieldByDragging( fieldButton ) {
+		const fieldType   = fieldButton.attr( 'id' );
+		const placeholder = document.getElementById( 'frm_drag_placeholder' );
+		const loadingID   = fieldType.replace( '|', '-' ) + '_' + getAutoId();
+		const loading     = tag( 'li', {
+			id: loadingID,
+			className: 'frm-wait frmbutton_loadingnow'
+		});
+		const $placeholder = jQuery( loading )
 
-		const sortableData = jQuery( selectedItem ).data().uiSortable;
-		const currentItem = sortableData.currentItem;
-		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), currentItem.offset().left );
-		jQuery( getFieldsInRow( currentItem.parent() ).get( insertAtIndex ) ).before( currentItem );
-		const section = getSectionForFieldPlacement( currentItem );
-		const formId = getFormIdForFieldPlacement( section );
+		placeholder.parentNode.insertBefore( $placeholder.get( 0 ), placeholder );
+
+		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( jQuery( placeholder ).parent(), jQuery( placeholder ).offset().left );
+		jQuery( getFieldsInRow( jQuery( placeholder ).parent() ).get( insertAtIndex ) ).before( placeholder );
+
+		const section   = getSectionForFieldPlacement( jQuery( placeholder ) );
+		const formId    = getFormIdForFieldPlacement( section );
 		const sectionId = getSectionIdForFieldPlacement( section );
 
-		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
-		const $placeholder = jQuery( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
-		currentItem.replaceWith( $placeholder );
-
+		placeholder.remove();
 		syncLayoutClasses( $placeholder );
 
 		let hasBreak = 0;
