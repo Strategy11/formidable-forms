@@ -898,8 +898,6 @@ function frmAdminBuildJS() {
 			});
 		}
 
-		droppable.appendChild( placeholder );
-
 		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
 			placeholder.style.left = 0;
 			handleDragOverYAxis({ droppable, y: event.clientY, placeholder });
@@ -932,6 +930,8 @@ function frmAdminBuildJS() {
 		placeholder.remove();
 		ui.helper.remove();
 
+//		const dropType = getDropType( droppable );
+
 		if ( $previousFieldContainer.length ) {
 			const $previousContainerFields = getFieldsInRow( $previousFieldContainer );
 			if ( ! $previousContainerFields.length ) {
@@ -942,18 +942,15 @@ function frmAdminBuildJS() {
 				}
 			} else {
 				syncLayoutClasses( $previousContainerFields.first() );
+				syncLayoutClasses( jQuery( draggable ) );
 			}
-		}
-
-		const dropType = getDropType( droppable );
-		if ( 'group' === dropType ) {
-			handleFieldDropIntoGroup( draggable, ui );
 		}
 
 		updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
 		syncAfterDragAndDrop();
 	}
 
+	/*
 	function getDropType( droppable ) {
 		if ( 'frm-show-fields' === droppable.id ) {
 			return 'list';
@@ -962,11 +959,7 @@ function frmAdminBuildJS() {
 			return 'section';
 		}
 		return 'group';
-	}
-
-	function handleFieldDropIntoGroup( draggable ) {
-		syncLayoutClasses( jQuery( draggable ) );
-	}
+	}*/
 
 	function handleDragOverYAxis({ droppable, y, placeholder }) {
 		const $list = jQuery( droppable );
@@ -1067,9 +1060,16 @@ function frmAdminBuildJS() {
 	}
 
 	function fixUnwrappedListItems() {
-		document.querySelectorAll( 'ul.start_divider > li.form-field:not(.edit_field_type_end_divider)' ).forEach(
-			function( field ) {
-				wrapFieldLiInPlace( field );
+		const lists = document.querySelectorAll( 'ul#frm-show-fields, ul.start_divider' );
+		lists.forEach(
+			list => {
+				list.childNodes.forEach(
+					child => {
+						if ( 'undefined' !== typeof child.classList && child.classList.contains( 'form-field' ) ) {
+							wrapFieldLiInPlace( child );
+						}
+					}
+				);
 			}
 		);
 	}
@@ -1376,10 +1376,6 @@ function frmAdminBuildJS() {
 		section = getSectionForFieldPlacement( currentItem );
 		formId = getFormIdForFieldPlacement( section );
 		sectionId = getSectionIdForFieldPlacement( section );
-
-		if ( currentItem.parent().hasClass( 'start_divider' ) ) {
-			wrapFieldLiInPlace( currentItem );
-		}
 
 		currentItem[0].addEventListener( 'click', function() {
 			maybeAddSaveAndDragIcons( this.dataset.fid );
@@ -2033,7 +2029,25 @@ function frmAdminBuildJS() {
 	}
 
 	function wrapFieldLiInPlace( li ) {
-		jQuery( li ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
+		const ul      = tag(
+			'ul',
+			{
+				className: 'frm_grid_container frm_sorting'
+			}
+		);
+		const wrapper = tag(
+			'li',
+			{
+				className: 'frm_field_box',
+				child: ul
+			}
+		);
+
+		li.replaceWith( wrapper );
+		ul.appendChild( li );
+
+		makeDroppable( ul );
+		makeDraggable( wrapper, '.frm-move' );
 	}
 
 	function afterAddField( msg, addFocus ) {
