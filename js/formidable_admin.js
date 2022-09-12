@@ -826,8 +826,13 @@ function frmAdminBuildJS() {
 	function makeDroppable( list ) {
 		jQuery( list ).droppable({
 			accept: '.frmbutton, li.frm_field_box',
-			drop: handleFieldDrop,
-			over: handleFieldOverDroppable
+			deactivate: handleFieldDrop
+		});
+		list.addEventListener( 'mouseover', function() {
+			list.classList.add( 'frm-over-droppable' );
+		});
+		list.addEventListener( 'mouseleave', function() {
+			list.classList.remove( 'frm-over-droppable' );
 		});
 	}
 
@@ -838,7 +843,8 @@ function frmAdminBuildJS() {
 			delay: 10,
 			cancel: '.frm-dropdown-menu',
 			start: handleDragStart,
-			stop: handleDragStop
+			stop: handleDragStop,
+			drag: handleDrag
 		};
 		if ( undefined !== handle ) {
 			settings.handle = handle;
@@ -849,6 +855,8 @@ function frmAdminBuildJS() {
 	function handleDragStart( event, ui ) {
 		const container = document.getElementById( 'post-body-content' );
 		container.classList.add( 'frm-dragging-field' );
+
+		document.body.classList.add( 'frm-dragging' );
 
 		const width = jQuery( event.target ).width();
 		ui.helper.addClass( 'frm-sortable-helper' );
@@ -868,12 +876,46 @@ function frmAdminBuildJS() {
 	function handleDragStop( event, ui ) {
 		const container = document.getElementById( 'post-body-content' );
 		container.classList.remove( 'frm-dragging-field' );
+
+		document.body.classList.remove( 'frm-dragging' );
+	}
+
+	function handleDrag( event ) {
+		let droppable = document.querySelector( '.frm-over-droppable' );
+		if ( droppable ) {
+			while ( droppable.querySelector( '.frm-over-droppable' ) ) {
+				droppable = droppable.querySelector( '.frm-over-droppable' );
+			}
+		} else {
+			droppable = document.getElementById( 'frm-show-fields' );
+		}
+
+		let placeholder = document.getElementById( 'frm_drag_placeholder' );
+		if ( ! placeholder ) {
+			placeholder = tag( 'li', {
+				id: 'frm_drag_placeholder',
+				className: 'sortable-placeholder'
+			});
+		}
+
+		droppable.appendChild( placeholder );
+
+		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
+			placeholder.style.left = 0;
+			handleDragOverYAxis({ droppable, y: event.clientY, placeholder });
+			return;
+		}
+
+		placeholder.style.top = 0;
+		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
 	}
 
 	function handleFieldDrop( _, ui ) {
 		const draggable = ui.draggable[0];
-
 		const placeholder = document.getElementById( 'frm_drag_placeholder' );
+
+		console.log( 'handle drop' );
+
 		if ( ! placeholder ) {
 			syncAfterDragAndDrop();
 			return;
@@ -907,6 +949,8 @@ function frmAdminBuildJS() {
 			handleFieldDropIntoGroup( draggable, ui );
 		}
 
+		updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
+
 		syncAfterDragAndDrop();
 	}
 
@@ -922,26 +966,55 @@ function frmAdminBuildJS() {
 		syncLayoutClasses( jQuery( draggable ) );
 	}
 
-	function handleFieldOverDroppable( event, ui ) {
-		const droppable = event.target;
+	function handleDragOverYAxis({ droppable, y, placeholder }) {
+		const $list = jQuery( droppable );
 
-		let placeholder = document.getElementById( 'frm_drag_placeholder' );
-		if ( ! placeholder ) {
-			placeholder = tag( 'li', {
-				id: 'frm_drag_placeholder',
-				className: 'sortable-placeholder'
-			});
+		let top;
+
+		$children = $list.children().not( '.edit_field_type_end_divider' );
+		if ( 0 === $children.length ) {
+			$list.prepend( placeholder );
+			top = 0;
+		} else {
+			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y );
+
+			if ( insertAtIndex === $children.length ) {
+				const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+				top = $lastChild.offset().top + $lastChild.outerHeight();
+				$list.append( placeholder ); // TODO do not put it after the end divider.
+			} else {
+				top = jQuery( $children.get( insertAtIndex ) ).offset().top;
+				jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+			}
 		}
 
-		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
-			// TODO
-			return;
-		}
-
-		handleDragOverFieldGroup({ droppable, event, placeholder });
+		top -= $list.offset().top;
+		placeholder.style.top = top + 'px';
 	}
 
-	function handleDragOverFieldGroup({ droppable, event, placeholder }) {
+	function determineIndexBasedOffOfMousePositionInList( $list, y ) {
+		const $items = $list.children().not( '.edit_field_type_end_divider' );
+		const length = $items.length;
+
+		let index, item, itemTop, returnIndex;
+
+		returnIndex = 0;
+		for ( index = length - 1; index >= 0; --index ) {
+			item    = $items.get( index );
+			itemTop = jQuery( item ).offset().top;
+			if ( y > itemTop ) {
+				returnIndex = index;
+				if ( y > itemTop + ( jQuery( item ).outerHeight() / 2 ) ) {
+					returnIndex = index + 1;
+				}
+				break;
+			}
+		}
+
+		return returnIndex;
+	}
+
+	function handleDragOverFieldGroup({ droppable, x, placeholder }) {
 		const $row = jQuery( droppable );
 		const $children = getFieldsInRow( $row );
 
@@ -950,7 +1023,7 @@ function frmAdminBuildJS() {
 		}
 
 		let left;
-		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( $row, event.clientX );
+		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( $row, x );
 
 		if ( insertAtIndex === $children.length ) {
 			const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );

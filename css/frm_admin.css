@@ -8693,7 +8693,3 @@ Responsive Design
 .frm-ready-made-solution img {
 	max-width: 100%;
 }
-
-.frm-dragging-field {
-	pointer-events: none;
-}
