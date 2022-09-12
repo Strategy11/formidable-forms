@@ -6106,7 +6106,7 @@ tr.frm_options_heading td {
 	border: 1px dashed var(--grey-border);
 }
 
-.drop-me + .frm_no_fields {
+.ui-droppable-active ~ .frm_no_fields {
 	border-style: solid;
 }
 
