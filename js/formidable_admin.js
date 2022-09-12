@@ -842,9 +842,9 @@ function frmAdminBuildJS() {
 			delay: 10,
 			start: handleDragStart,
 			stop: handleDragStop,
-			drag: handleDrag
+			drag: handleDrag,
 		};
-		if ( undefined !== handle ) {
+		if ( 'string' === typeof handle ) {
 			settings.handle = handle;
 		}
 		jQuery( draggable ).draggable( settings );
@@ -883,6 +883,15 @@ function frmAdminBuildJS() {
 		}
 
 		let placeholder = document.getElementById( 'frm_drag_placeholder' );
+
+		const draggable = event.target;
+		if ( ! allowDrop( draggable, droppable ) ) {
+			if ( placeholder ) {
+				placeholder.remove();
+			}
+			return;
+		}
+
 		if ( ! placeholder ) {
 			placeholder = tag( 'li', {
 				id: 'frm_drag_placeholder',
@@ -1496,67 +1505,80 @@ function frmAdminBuildJS() {
 		return ++autoId;
 	}
 
-	// don't allow page break, embed form, or section inside section field
-	// don't allow page breaks inside of field groups.
-	// don't allow field groups with sections inside of sections.
-	// don't allow field groups in field groups.
-	// don't allow hidden fields inside of field groups but allow them in sections.
-	function allowDrop( ui ) {
-		var fieldsInRow, insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
-
-		fieldsInRow = getFieldsInRow( ui.placeholder.parent() );
-
-		if ( ! groupCanFitAnotherField( fieldsInRow, ui.item ) ) {
+	// Don't allow page break, embed form, or section inside section field
+	// Don't allow page breaks inside of field groups.
+	// Don't allow field groups with sections inside of sections.
+	// Don't allow field groups in field groups.
+	// Don't allow hidden fields inside of field groups but allow them in sections.
+	function allowDrop( draggable, droppable ) {
+		const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
+		if ( ! groupCanFitAnotherField( $fieldsInRow, jQuery( draggable ) ) ) {
 			return false;
 		}
 
-		insideFieldGroup = fieldsInRow.length > 0;
-		insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;
+		const isNewField = draggable.classList.contains( 'frmbutton' );
+		if ( isNewField ) {
+			return allowNewFieldDrop( draggable, droppable );
+		}
+
+		return allowMoveField( draggable, droppable );
+	}
+
+	// Don't allow a new page break or hidden field in a field group.
+	// Don't allow a new section inside of a section.
+	// Don't allow an embedded form in a section.
+	function allowNewFieldDrop( draggable, droppable ) {
+		const newPageBreakField = draggable.classList.contains( 'frm_tbreak' );
+		const newHiddenField    = draggable.classList.contains( 'frm_thidden' );
+		const newSectionField   = draggable.classList.contains( 'frm_tdivider' );
+		const newEmbedField     = draggable.classList.contains( 'frm_tform' );
+
+		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
+		if ( fieldTypeIsAlwaysAllowed ) {
+			return true;
+		}
+
+		const newFieldWillBeAddedToASection = droppable.classList.contains( 'start_divider' ) || null !== droppable.closest( '.start_divider' );
+		if ( newFieldWillBeAddedToASection ) {
+			// Don't allow a section or an embedded form in a section.
+			return ! newEmbedField && ! newSectionField;
+		}
+
+		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
+		if ( newFieldWillBeAddedToAGroup ) {
+			return ! newHiddenField && ! newPageBreakField;
+		}
+
+		return true;
+	}
+
+	function allowMoveField( draggable, droppable ) {
+		const $fieldsInRow     = getFieldsInRow( jQuery( droppable ) );
+		const insideFieldGroup = $fieldsInRow.length > 0;
+		const insideSection    = droppable.classList.contains( 'start_divider' ) || null !== droppable.closest( '.start_divider' );
 
 		if ( ! insideSection && ! insideFieldGroup ) {
 			return true;
 		}
 
-		if ( insideFieldGroup && ui.placeholder.siblings( '.edit_field_type_break, .edit_field_type_hidden' ).length ) {
-			// never allow any field beside a page break or a hidden field.
+		if ( insideFieldGroup && jQuery( droppable ).children( '.edit_field_type_break, .edit_field_type_hidden' ).length ) {
+			// Never allow any field beside a page break or a hidden field.
 			return false;
 		}
 
-		if ( insideSection && ui.placeholder.siblings().length > 1 && ui.placeholder.prev().hasClass( 'edit_field_type_end_divider' ) ) {
+		if ( insideSection && jQuery( droppable ).children().length > 1 ) {
+			// Do not allow a section inside of a section.
 			return false;
 		}
 
-		isNewField = ui.item.hasClass( 'frmbutton' );
-
-		if ( isNewField ) {
-			isPageBreak = ui.item.hasClass( 'frm_tbreak' );
-
-			if ( isPageBreak ) {
-				// do not allow page break in both sections and field groups.
-				return false;
-			}
-
-			if ( insideFieldGroup && ( ui.item.hasClass( 'frm_thidden' ) || ui.item.hasClass( 'frm_tsummary' ) ) ) {
-				// do not allow a hidden field or summary field in a field group.
-				return false;
-			}
-
-			if ( ! insideSection ) {
-				return true;
-			}
-
-			return ! ui.item.hasClass( 'frm_tform' ) && ! ui.item.hasClass( 'frm_tdivider' ) && ! ui.item.hasClass( 'frm_tdivider-repeat' );
-		}
-
-		isPageBreak = ui.item.hasClass( 'edit_field_type_break' );
-
+		const isPageBreak = draggable.classList.contains( 'edit_field_type_break' );
 		if ( isPageBreak ) {
 			// do not allow page break in both sections and field groups.
 			return false;
 		}
 
-		isFieldGroup = ui.item.find( 'ul.frm_sorting' ).length > 0;
-		isSection = ui.item.hasClass( 'edit_field_type_divider' );
+		const isFieldGroup = null !== draggable.querySelector( 'ul.frm_sorting' );
+		const isSection    = draggable.classList.contains( 'edit_field_type_divider' );
 
 		if ( insideSection && isSection ) {
 			// but do not allow a section inside of a section.
@@ -1565,10 +1587,10 @@ function frmAdminBuildJS() {
 
 		if ( isFieldGroup && insideFieldGroup ) {
 			// allow a field group inside of a field group if it is being placed within a section above/below another field group.
-			return insideSection && ui.placeholder.siblings( 'li.edit_field_type_end_divider' ).length > 0;
+			return insideSection && jQuery( droppable ).children( 'li.edit_field_type_end_divider' ).length > 0;
 		}
 
-		if ( insideFieldGroup && ui.item.hasClass( 'edit_field_type_hidden' ) ) {
+		if ( insideFieldGroup && draggable.classList.contains( 'edit_field_type_hidden' ) ) {
 			// do not allow a hidden field inside of a field group.
 			return false;
 		}
@@ -1577,13 +1599,13 @@ function frmAdminBuildJS() {
 			return true;
 		}
 
-		if ( ui.item.find( '.edit_field_type_divider' ).length ) {
+		if ( draggable.querySelector( '.edit_field_type_divider' ).length ) {
 			// if we are dragging a field group with a section, do not allow it in section.
 			return false;
 		}
 
 		// moving an existing field
-		return ! ui.item.hasClass( 'edit_field_type_form' ) && ! isSection;
+		return ! draggable.classList.contains( 'edit_field_type_form' ) && ! isSection;
 	}
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
