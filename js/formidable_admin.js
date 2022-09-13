@@ -859,7 +859,7 @@ function frmAdminBuildJS() {
 			delay: 10,
 			start: handleDragStart,
 			stop: handleDragStop,
-			drag: handleDrag,
+			drag: handleDrag
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;
@@ -1082,7 +1082,7 @@ function frmAdminBuildJS() {
 	function fixUnwrappedListItems() {
 		const lists = document.querySelectorAll( 'ul#frm-show-fields, ul.start_divider' );
 		lists.forEach(
-			list => {				
+			list => {
 				list.childNodes.forEach(
 					child => {
 						if ( 'undefined' === typeof child.classList ) {
