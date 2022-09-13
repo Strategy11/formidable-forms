@@ -1780,8 +1780,13 @@ function frmAdminBuildJS() {
 				const replaceWith = wrapFieldLi( msg );
 				$newFields.append( replaceWith );
 				afterAddField( msg, true );
-				makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
-				makeDraggable( replaceWith.get( 0 ).querySelector( '.form-field' ), '.frm-move' );
+
+				replaceWith.each(
+					function() {
+						makeDroppable( this.querySelector( 'ul.frm_sorting' ) );
+						makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
+					}
+				);
 			},
 			error: handleInsertFieldError
 		});
@@ -2119,12 +2124,24 @@ function frmAdminBuildJS() {
 		return option;
 	}
 
-	function wrapFieldLi( li ) {
-		return jQuery( '<li>' )
-			.addClass( 'frm_field_box' )
-			.html(
-				jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
-			);
+	function wrapFieldLi( fieldHtml ) {
+		const wrapper = div();
+		wrapper.innerHTML = fieldHtml;
+
+		let result = jQuery();
+		Array.from( wrapper.children ).forEach(
+			li => {
+				result = result.add(
+					jQuery( '<li>' )
+						.addClass( 'frm_field_box' )
+						.html(
+							jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
+						)
+				);
+			}
+		);
+
+		return result;
 	}
 
 	function wrapFieldLiInPlace( li ) {
