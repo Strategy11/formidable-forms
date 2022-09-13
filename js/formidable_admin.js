@@ -953,7 +953,7 @@ function frmAdminBuildJS() {
 			syncLayoutClasses( jQuery( draggable ) );
 		}
 
-		updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
+		updateFieldAfterMovingBetweenSections( jQuery( draggable ) ); // TODO check if it actually moved between sections first.
 		syncAfterDragAndDrop();
 	}
 
@@ -1389,8 +1389,6 @@ function frmAdminBuildJS() {
 	 * @param {object} currentItem
 	 */
 	function updateFieldAfterMovingBetweenSections( currentItem ) {
-		console.log({ currentItem });
-
 		if ( ! currentItem.hasClass( 'form-field' ) ) {
 			// currentItem is a field group. Call for children recursively.
 			getFieldsInRow( jQuery( currentItem.get( 0 ).firstChild ) ).each(
@@ -1405,8 +1403,6 @@ function frmAdminBuildJS() {
 		const section   = getSectionForFieldPlacement( currentItem );
 		const formId    = getFormIdForFieldPlacement( section );
 		const sectionId = getSectionIdForFieldPlacement( section );
-
-		// TODO exit if section id does not actually change.
 
 		jQuery.ajax({
 			type: 'POST',
