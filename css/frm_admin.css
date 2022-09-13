@@ -7921,14 +7921,15 @@ button.frm_choose_image_box,
 	left: 0;
 }
 
-.rtl .frm-info-modal .postbox > a.dismiss, .frm-inline-modal > a.dismiss {
+.rtl .frm-inline-modal > a.dismiss {
 	left: 13px;
 	right: auto;
 }
 
-.rtl #postbox-container-2 select, .wp-admin .frm_wrap select, .frm_wrap .frm_form_builder select {
-	padding: 0 12px 0 24px;
+.rtl.wp-admin .frm_wrap select, .rtl .frm_wrap .frm_form_builder select {
+	padding: 0 12px 0 24px !important;
 }
+
 /* ---------------------------------------------------------------
 Clearfix
 --------------------------------------------------------------- */
