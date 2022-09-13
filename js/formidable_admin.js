@@ -1497,9 +1497,11 @@ function frmAdminBuildJS() {
 
 				if ( ! $siblings.length ) {
 					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
+				} else {
+					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 				}
 
-				makeDraggable( replaceWith.get( 0 ).querySelector( 'li' ), '.frm-move' );
 			},
 			error: handleInsertFieldError
 		});
