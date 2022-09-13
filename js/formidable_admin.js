@@ -827,7 +827,8 @@ function frmAdminBuildJS() {
 			accept: '.frmbutton, li.frm_field_box',
 			deactivate: handleFieldDrop,
 			over: onDragOverDroppable,
-			tolerance: 'touch'
+			out: onDraggableLeavesDroppable,
+			tolerance: 'pointer'
 		});
 	}
 
@@ -836,12 +837,19 @@ function frmAdminBuildJS() {
 		const draggable = ui.draggable[0];
 
 		if ( ! allowDrop( draggable, droppable ) ) {
-			list.classList.remove( 'frm-over-droppable' )
+			droppable.classList.remove( 'frm-over-droppable' );
+			jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
 			return;
 		}
 
 		document.querySelectorAll( '.frm-over-droppable' ).forEach( droppable => droppable.classList.remove( 'frm-over-droppable' ) );
 		droppable.classList.add( 'frm-over-droppable' );
+		jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
+	}
+
+	function onDraggableLeavesDroppable( event ) {
+		const droppable = event.target;
+		droppable.classList.remove( 'frm-over-droppable' );
 	}
 
 	function makeDraggable( draggable, handle ) {
@@ -873,6 +881,7 @@ function frmAdminBuildJS() {
 		deleteEmptyDividerWrappers();
 		maybeRemoveGroupHoverTarget();
 		closeOpenFieldDropdowns();
+		deleteTooltips();
 	}
 
 	function handleDragStop() {
@@ -1037,8 +1046,6 @@ function frmAdminBuildJS() {
 	}
 
 	function syncAfterDragAndDrop() {
-		maybeRemoveNewCancelledFields();
-		maybeUncancelFields();
 		fixUnwrappedListItems();
 		toggleSectionHolder();
 		maybeFixEndDividers();
@@ -1061,24 +1068,10 @@ function frmAdminBuildJS() {
 		);
 	}
 
-	function maybeRemoveNewCancelledFields() {
-		Array.from( document.getElementById( 'frm-show-fields' ).children ).forEach(
-			function( fieldBox ) {
-				if ( fieldBox.classList.contains( 'frmbutton' ) && fieldBox.classList.contains( 'ui-draggable' ) ) {
-					fieldBox.remove();
-				}
-			}
-		);
-	}
-
-	function maybeUncancelFields() {
-		document.querySelectorAll( '.frm_cancel_sort' ).forEach( field => field.classList.remove( 'frm_cancel_sort' ) );
-	}
-
 	function fixUnwrappedListItems() {
 		const lists = document.querySelectorAll( 'ul#frm-show-fields, ul.start_divider' );
 		lists.forEach(
-			list => {
+			list => {				
 				list.childNodes.forEach(
 					child => {
 						if ( 'undefined' === typeof child.classList ) {
