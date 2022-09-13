@@ -873,18 +873,14 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDrag( event ) {
-		let droppable = document.querySelector( '.frm-over-droppable' );
-		if ( droppable ) {
-			while ( droppable.querySelector( '.frm-over-droppable' ) ) {
-				droppable = droppable.querySelector( '.frm-over-droppable' );
-			}
-		} else {
-			droppable = document.getElementById( 'frm-show-fields' );
-		}
+		// Unset any frm-over-droppable classes from draggable to so an object never tries to embed into itself.
+		event.target.querySelectorAll( '.frm-over-droppable' ).forEach( element => element.classList.remove( 'frm-over-droppable' ) );
+
+		const draggable = event.target;
+		const droppable = getDroppableTarget();
 
 		let placeholder = document.getElementById( 'frm_drag_placeholder' );
 
-		const draggable = event.target;
 		if ( ! allowDrop( draggable, droppable ) ) {
 			if ( placeholder ) {
 				placeholder.remove();
@@ -907,6 +903,14 @@ function frmAdminBuildJS() {
 
 		placeholder.style.top = 0;
 		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
+	}
+
+	function getDroppableTarget() {
+		let droppable = document.getElementById( 'frm-show-fields' );
+		while ( droppable.querySelector( '.frm-over-droppable' ) ) {
+			droppable = droppable.querySelector( '.frm-over-droppable' );
+		}
+		return droppable;
 	}
 
 	function handleFieldDrop( _, ui ) {
@@ -1385,19 +1389,28 @@ function frmAdminBuildJS() {
 	 * @param {object} currentItem
 	 */
 	function updateFieldAfterMovingBetweenSections( currentItem ) {
-		var fieldId, section, formId, sectionId;
+		console.log({ currentItem });
 
-		fieldId = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
-		section = getSectionForFieldPlacement( currentItem );
-		formId = getFormIdForFieldPlacement( section );
-		sectionId = getSectionIdForFieldPlacement( section );
+		if ( ! currentItem.hasClass( 'form-field' ) ) {
+			// currentItem is a field group. Call for children recursively.
+			getFieldsInRow( jQuery( currentItem.get( 0 ).firstChild ) ).each(
+				function() {
+					updateFieldAfterMovingBetweenSections( jQuery( this ) );
+				}
+			);
+			return;
+		}
 
-		currentItem[0].addEventListener( 'click', function() {
-			maybeAddSaveAndDragIcons( this.dataset.fid );
-		});
+		const fieldId   = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
+		const section   = getSectionForFieldPlacement( currentItem );
+		const formId    = getFormIdForFieldPlacement( section );
+		const sectionId = getSectionIdForFieldPlacement( section );
+
+		// TODO exit if section id does not actually change.
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_update_field_after_move',
 				form_id: formId,
@@ -1511,6 +1524,11 @@ function frmAdminBuildJS() {
 	// Don't allow field groups in field groups.
 	// Don't allow hidden fields inside of field groups but allow them in sections.
 	function allowDrop( draggable, droppable ) {
+		if ( droppable.closest( '.frm-sortable-helper' ) ) {
+			// Do not allow drop into draggable.
+			return false;
+		}
+
 		if ( 'frm-show-fields' === droppable.id ) {
 			// Everything can be dropped into the main list of fields.
 			return true;
@@ -1562,6 +1580,11 @@ function frmAdminBuildJS() {
 	}
 
 	function allowMoveField( draggable, droppable ) {
+		const isFieldGroup = draggable.classList.contains( 'frm_field_box' ) && ! draggable.classList.contains( 'form-field' );
+		if ( isFieldGroup ) {
+			return allowMoveFieldGroup( draggable, droppable );
+		}
+
 		const isPageBreak = draggable.classList.contains( 'edit_field_type_break' );
 		if ( isPageBreak ) {
 			// Page breaks are only allowed in the main list of fields, not in sections or in field groups.
@@ -1573,6 +1596,15 @@ function frmAdminBuildJS() {
 		}
 
 		return allowMoveFieldToGroup( draggable, droppable );
+	}
+
+	// TODO I cannot drag a field group anywhere.
+	function allowMoveFieldGroup( fieldGroup, droppable ) {
+		if ( droppable.classList.contains( 'start_divider' ) && null === fieldGroup.querySelector( '.start_divider' ) ) {
+			// Allow a field group with no section inside of a section.
+			return true;
+		}
+		return false;
 	}
 
 	function allowMoveFieldToSection( draggable ) {
@@ -1591,6 +1623,7 @@ function frmAdminBuildJS() {
 		return true;
 	}
 
+	// TODO I was allowed to move an embed form into a field group in a section.
 	function allowMoveFieldToGroup( draggable, group ) {
 		const groupIncludesBreakOrHidden = null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
 		if ( groupIncludesBreakOrHidden ) {
