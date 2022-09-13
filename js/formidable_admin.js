@@ -1130,7 +1130,13 @@ function frmAdminBuildJS() {
 
 	function getFieldsInRow( $row ) {
 		let $fields = jQuery();
-		Array.from( $row.get( 0 ).children ).forEach(
+
+		const row = $row.get( 0 );
+		if ( ! row.children ) {
+			return $fields;
+		}
+
+		Array.from( row.children ).forEach(
 			child => {
 				if ( 'none' === child.style.display ) {
 					return;
@@ -1501,6 +1507,10 @@ function frmAdminBuildJS() {
 					replaceWith = wrapFieldLi( msg );
 				} else {
 					replaceWith = msgAsjQueryObject( msg );
+					if ( ! $placeholder.get( 0 ).parentNode.parentNode.classList.contains( 'ui-draggable' ) ) {
+						// If a field group wasn't draggable because it only had a single field, make it draggable.
+						makeDraggable( $placeholder.get( 0 ).parentNode.parentNode, '.frm-move' );
+					}
 				}
 				$placeholder.replaceWith( replaceWith );
 				updateFieldOrder();
