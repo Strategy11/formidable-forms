@@ -1129,11 +1129,22 @@ function frmAdminBuildJS() {
 	}
 
 	function getFieldsInRow( $row ) {
-		return $row.children( 'li.form-field' ).not( '.edit_field_type_end_divider' ).filter(
-			function() {
-				return 'none' !== this.style.display;
+		let $fields = jQuery();
+		Array.from( $row.get( 0 ).children ).forEach(
+			child => {
+				if ( 'none' === child.style.display ) {
+					return;
+				}
+
+				const classes = child.classList;
+				if ( ! classes.contains( 'form-field' ) || classes.contains( 'edit_field_type_end_divider' ) || classes.contains( 'frm-sortable-helper' ) ) {
+					return;
+				}
+
+				$fields = $fields.add( child );
 			}
 		);
+		return $fields;
 	}
 
 	function determineIndexBasedOffOfMousePositionInRow( $row, x ) {
