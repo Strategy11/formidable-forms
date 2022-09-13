@@ -2139,9 +2139,14 @@ function frmAdminBuildJS() {
 		return option;
 	}
 
-	function wrapFieldLi( fieldHtml ) {
+	function wrapFieldLi( field ) {
 		const wrapper = div();
-		wrapper.innerHTML = fieldHtml;
+
+		if ( 'string' === typeof field ) {
+			wrapper.innerHTML = field;
+		} else {
+			wrapper.appendChild( field );
+		}
 
 		let result = jQuery();
 		Array.from( wrapper.children ).forEach(
@@ -3892,12 +3897,14 @@ function frmAdminBuildJS() {
 	}
 
 	function breakRow( row ) {
-		getFieldsInRow( jQuery( row ) ).each(
+		const $row = jQuery( row );
+		getFieldsInRow( $row ).each(
 			function( index ) {
+				const field = this;
 				if ( 0 !== index ) {
-					jQuery( row ).closest( 'li' ).after( wrapFieldLi( this ) );
+					$row.parent().after( wrapFieldLi( field ) );
 				}
-				stripLayoutFromFields( jQuery( this ) );
+				stripLayoutFromFields( jQuery( field ) );
 			}
 		);
 	}
