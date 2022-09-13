@@ -940,6 +940,17 @@ function frmAdminBuildJS() {
 
 		const $previousFieldContainer = ui.helper.parent();
 
+		if ( placeholder.previousElementSibling && placeholder.previousElementSibling.classList.contains( 'frm-is-collapsed' ) ) {
+			// If a page if collapsed, expand it before dragging since only the page break will move.
+			const $pageBreakField = jQuery( placeholder ).prevUntil( '[data-type="break"]' );
+			if ( $pageBreakField.length ) {
+				const collapseButton = $pageBreakField.find( '.frm-collapse-page' ).get( 0 );
+				if ( collapseButton ) {
+					collapseButton.click();
+				}
+			}
+		}
+
 		if ( draggable.classList.contains( 'frmbutton' ) ) {
 			insertNewFieldByDragging( draggable.id );
 		} else {
