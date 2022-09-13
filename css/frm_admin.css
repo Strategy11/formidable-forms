@@ -3807,7 +3807,6 @@ li.sortable-placeholder {
 	position: relative;
 }
 
-#frm_form_editor_container > ul > li > ul > .frm_single_option.ui-sortable-placeholder,
 #frm_form_editor_container > ul > li > ul > li.sortable-placeholder,
 #frm_form_editor_container ul.start_divider > li > ul > li.sortable-placeholder {
 	position: absolute;
@@ -8693,6 +8692,3 @@ Responsive Design
 	max-width: 100%;
 }
 
-#frm_drag_placeholder {
-	transform: translateY(5px);
-}

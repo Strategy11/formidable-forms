@@ -916,7 +916,7 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		placeholder.style.top = 0;
+		placeholder.style.top = '';
 		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
 	}
 
