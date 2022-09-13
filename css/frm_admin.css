@@ -5873,8 +5873,8 @@ li.selected .divider_section_only:before {
 .frm_sorting li.ui-state-default.edit_field_type_divider {
 	overflow: visible;
 	position: relative;
-	padding: 0 0 0 20px;
-	margin: 25px 0 0 -20px;
+	padding: 0 0 0 5px;
+	margin: 25px 0 0 -5px;
 	border-left: 1px solid var(--primary-hover);
 	transition: border 0.7s ease-out;
 }
