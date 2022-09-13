@@ -7926,7 +7926,7 @@ button.frm_choose_image_box,
 	right: auto;
 }
 
-.rtl.wp-admin .frm_wrap select, .rtl .frm_wrap .frm_form_builder select {
+.rtl.wp-admin .frm_wrap select {
 	padding: 0 12px 0 24px !important;
 }
 
