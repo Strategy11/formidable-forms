@@ -1049,6 +1049,10 @@ function frmAdminBuildJS() {
 		} else {
 			left = jQuery( $children.get( insertAtIndex ) ).offset().left;
 			jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+
+			if ( 0 !== insertAtIndex ) {
+				left -= 8; // Offset the placeholder slightly so it appears between two fields.
+			}
 		}
 
 		left -= $row.offset().left;

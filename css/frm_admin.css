@@ -8692,3 +8692,7 @@ Responsive Design
 .frm-ready-made-solution img {
 	max-width: 100%;
 }
+
+#frm_drag_placeholder {
+	transform: translateY(5px);
+}
