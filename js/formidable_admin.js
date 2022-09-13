@@ -1474,9 +1474,7 @@ function frmAdminBuildJS() {
 					// if dragging into a new row, we need to wrap the li first.
 					replaceWith = wrapFieldLi( msg );
 				} else {
-					const element = div();
-					element.innerHTML = msg;
-					replaceWith = jQuery( element.firstChild );
+					replaceWith = msgAsjQueryObject( msg );
 				}
 				$placeholder.replaceWith( replaceWith );
 				updateFieldOrder();
@@ -1490,10 +1488,16 @@ function frmAdminBuildJS() {
 					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
 				}
 
-				makeDraggable( replaceWith.get( 0 ) );
+				makeDraggable( replaceWith.get( 0 ).querySelector( 'li' ), '.frm-move' );
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	function msgAsjQueryObject( msg ) {
+		const element = div();
+		element.innerHTML = msg;
+		return jQuery( element.firstChild );
 	}
 
 	function handleInsertFieldError( jqXHR, _, errorThrown ) {
@@ -1764,7 +1768,7 @@ function frmAdminBuildJS() {
 				$newFields.append( replaceWith );
 				afterAddField( msg, true );
 				makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
-				makeDraggable( replaceWith.get( 0 ) );
+				makeDraggable( replaceWith.get( 0 ).querySelector( '.form-field' ), '.frm-move' );
 			},
 			error: handleInsertFieldError
 		});
@@ -1820,10 +1824,14 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				var newRow;
 
+				let replaceWith;
+
 				if ( null !== newRowId ) {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
-						jQuery( newRow ).append( msg );
+						replaceWith = msgAsjQueryObject( msg );
+						jQuery( newRow ).append( replaceWith );
+						makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
@@ -1840,10 +1848,15 @@ function frmAdminBuildJS() {
 				}
 
 				if ( $field.siblings( 'li.form-field' ).length ) {
-					$field.after( msg );
+					replaceWith = msgAsjQueryObject( msg );
+					$field.after( replaceWith );
 					syncLayoutClasses( $field );
+					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 				} else {
-					$field.parent().parent().after( wrapFieldLi( msg ) );
+					replaceWith = wrapFieldLi( msg );
+					$field.parent().parent().after( replaceWith );
+					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
 				}
 
 				updateFieldOrder();
