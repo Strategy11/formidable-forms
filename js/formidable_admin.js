@@ -825,14 +825,23 @@ function frmAdminBuildJS() {
 	function makeDroppable( list ) {
 		jQuery( list ).droppable({
 			accept: '.frmbutton, li.frm_field_box',
-			deactivate: handleFieldDrop
+			deactivate: handleFieldDrop,
+			over: onDragOverDroppable,
+			tolerance: 'touch'
 		});
-		list.addEventListener( 'mouseover', function() {
-			list.classList.add( 'frm-over-droppable' );
-		});
-		list.addEventListener( 'mouseleave', function() {
-			list.classList.remove( 'frm-over-droppable' );
-		});
+	}
+
+	function onDragOverDroppable( event, ui ) {
+		const droppable = event.target;
+		const draggable = ui.draggable[0];
+
+		if ( ! allowDrop( draggable, droppable ) ) {
+			list.classList.remove( 'frm-over-droppable' )
+			return;
+		}
+
+		document.querySelectorAll( '.frm-over-droppable' ).forEach( droppable => droppable.classList.remove( 'frm-over-droppable' ) );
+		droppable.classList.add( 'frm-over-droppable' );
 	}
 
 	function makeDraggable( draggable, handle ) {
@@ -873,9 +882,6 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDrag( event ) {
-		// Unset any frm-over-droppable classes from draggable to so an object never tries to embed into itself.
-		event.target.querySelectorAll( '.frm-over-droppable' ).forEach( element => element.classList.remove( 'frm-over-droppable' ) );
-
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
 
@@ -1619,7 +1625,6 @@ function frmAdminBuildJS() {
 		return true;
 	}
 
-	// TODO I was allowed to move an embed form into a field group in a section.
 	function allowMoveFieldToGroup( draggable, group ) {
 		const groupIncludesBreakOrHidden = null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
 		if ( groupIncludesBreakOrHidden ) {
@@ -1634,9 +1639,10 @@ function frmAdminBuildJS() {
 		}
 
 		const draggableIncludesASection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
+		const draggableIsEmbedField     = draggable.classList.contains( 'edit_field_type_form' );
 		const groupIsInASection         = null !== group.closest( '.start_divider' );
-		if ( groupIsInASection && draggableIncludesASection ) {
-			// Do not allow a setcion inside of a section.
+		if ( groupIsInASection && ( draggableIncludesASection || draggableIsEmbedField ) ) {
+			// Do not allow a section or an embed field inside of a section.
 			return false;
 		}
 
