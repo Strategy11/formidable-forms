@@ -1474,7 +1474,9 @@ function frmAdminBuildJS() {
 					// if dragging into a new row, we need to wrap the li first.
 					replaceWith = wrapFieldLi( msg );
 				} else {
-					replaceWith = msg;
+					const element = div();
+					element.innerHTML = msg;
+					replaceWith = jQuery( element.firstChild );
 				}
 				$placeholder.replaceWith( replaceWith );
 				updateFieldOrder();
@@ -1483,6 +1485,12 @@ function frmAdminBuildJS() {
 					syncLayoutClasses( $siblings.first() );
 				}
 				toggleSectionHolder();
+
+				if ( ! $siblings.length ) {
+					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+				}
+
+				makeDraggable( replaceWith.get( 0 ) );
 			},
 			error: handleInsertFieldError
 		});
@@ -1752,8 +1760,11 @@ function frmAdminBuildJS() {
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				$newFields.append( wrapFieldLi( msg ) );
+				const replaceWith = wrapFieldLi( msg );
+				$newFields.append( replaceWith );
 				afterAddField( msg, true );
+				makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+				makeDraggable( replaceWith.get( 0 ) );
 			},
 			error: handleInsertFieldError
 		});
