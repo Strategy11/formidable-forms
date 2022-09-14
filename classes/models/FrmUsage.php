@@ -94,7 +94,7 @@ class FrmUsage {
 	 * @return array
 	 */
 	private function plugins() {
-		$plugin_list = get_plugins();
+		$plugin_list = FrmAppHelper::get_plugins();
 
 		$plugins = array();
 		foreach ( $plugin_list as $slug => $info ) {

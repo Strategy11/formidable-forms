@@ -3837,28 +3837,27 @@ function frmAdminBuildJS() {
 	}
 
 	function fieldGroupClick( e ) {
-		var hoverTarget, ctrlOrCmdKeyIsDown, shiftKeyIsDown, groupIsActive, $selectedFieldGroups, numberOfSelectedGroups, selectedField, $firstGroup, $range;
-
 		if ( 'ul' !== e.originalEvent.target.nodeName.toLowerCase() ) {
 			// only continue if the group itself was clicked / ignore when a field is clicked.
 			return;
 		}
 
-		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
-		if ( hoverTarget === null ) {
+		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
+		if ( ! hoverTarget ) {
 			return;
 		}
 
-		ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
-		shiftKeyIsDown = e.shiftKey;
-		groupIsActive = hoverTarget.classList.contains( 'frm-selected-field-group' );
-		$selectedFieldGroups = jQuery( '.frm-selected-field-group' );
-		numberOfSelectedGroups = $selectedFieldGroups.length;
+		const ctrlOrCmdKeyIsDown   = e.ctrlKey || e.metaKey;
+		const shiftKeyIsDown       = e.shiftKey;
+		const groupIsActive        = hoverTarget.classList.contains( 'frm-selected-field-group' );
+		const $selectedFieldGroups = getSelectedFieldGroups();
+
+		let numberOfSelectedGroups = $selectedFieldGroups.length;
 
 		if ( ctrlOrCmdKeyIsDown || shiftKeyIsDown ) {
 			// multi-selecting
 
-			selectedField = document.querySelector( 'li.form-field.selected' );
+			const selectedField = getSelectedField();
 			if ( null !== selectedField && ! jQuery( selectedField ).siblings( 'li.form-field' ).length ) {
 				// count a selected field on its own as a selected field group when multiselecting.
 				selectedField.parentNode.classList.add( 'frm-selected-field-group' );
@@ -3877,8 +3876,9 @@ function frmAdminBuildJS() {
 				}
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
-				$firstGroup = $selectedFieldGroups.first();
+				const $firstGroup = $selectedFieldGroups.first();
 
+				let $range;
 				if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
 					$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
 				} else {
@@ -3909,6 +3909,29 @@ function frmAdminBuildJS() {
 
 		jQuery( document ).off( 'click', unselectFieldGroups );
 		jQuery( document ).on( 'click', unselectFieldGroups );
+	}
+
+	function getSelectedField() {
+		return document.getElementById( 'frm-show-fields' ).querySelector( 'li.form-field.selected' );
+	}
+
+	function getSelectedFieldGroups() {
+		const $fieldGroups = jQuery( '.frm-selected-field-group' );
+		if ( $fieldGroups.length ) {
+			return $fieldGroups;
+		}
+
+		const selectedField = getSelectedField();
+		if ( selectedField ) {
+			// If there is only one field in a group and the field is selected, consider the field's group as selected for multi-select.
+			const selectedFieldGroup = selectedField.closest( 'ul' );
+			if ( selectedFieldGroup && 1 === getFieldsInRow( jQuery( selectedFieldGroup ) ).length ) {
+				selectedFieldGroup.classList.add( 'frm-selected-field-group' );
+				return jQuery( selectedFieldGroup );
+			}
+		}
+
+		return jQuery();
 	}
 
 	function syncAfterMultiSelect( numberOfSelectedGroups ) {

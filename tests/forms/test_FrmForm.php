@@ -4,6 +4,12 @@
  * @group forms
  */
 class test_FrmForm extends FrmUnitTest {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->create_users();
+	}
+
 	/**
 	 * @covers FrmForm::create
 	 */

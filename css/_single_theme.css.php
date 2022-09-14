@@ -83,7 +83,8 @@ $arrow_icons = FrmStylesHelper::arrow_icons();
 .<?php echo esc_html( $style_class ); ?> div.description,
 .<?php echo esc_html( $style_class ); ?> div.frm_description,
 .<?php echo esc_html( $style_class ); ?> .frm-show-form > div.frm_description,
-.<?php echo esc_html( $style_class ); ?> .frm_error{
+.<?php echo esc_html( $style_class ); ?> .frm_error,
+.<?php echo esc_html( $style_class ); ?> .frm_pro_max_limit_desc{
 	<?php if ( ! empty( $description_margin ) ) { ?>
 		margin:<?php echo esc_html( $description_margin . $important ); ?>;
 	<?php } ?>
@@ -405,12 +406,14 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	border-color:<?php echo esc_html( $border_color_error ); ?> !important;
 }
 
-.<?php echo esc_html( $style_class ); ?> .frm_error{
+.<?php echo esc_html( $style_class ); ?> .frm_error,
+.<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field label,
-.<?php echo esc_html( $style_class ); ?> .frm_error{
+.<?php echo esc_html( $style_class ); ?> .frm_error,
+.<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	color:<?php echo esc_html( $border_color_error . $important ); ?>;
 }
 
