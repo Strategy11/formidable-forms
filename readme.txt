@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.0.2
 Requires PHP: 5.6
-Stable tag: 5.4.5
+Stable tag: 5.5
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,15 @@ Using our Zapier integration, you can easily connect your website with over 1000
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5 =
+* New: Email actions and success messages now support [form_name] shortcodes.
+* Fix: Prevent a fatal error when running a weekly cron job because of an expected WordPress function was unavailable.
+* Fix: Prevent a warning when viewing an entry that was created from a post with missing information about browser and referer.
+* Fix: Arrows in dropdown fields were appearing at the top of the select field instead of being centered in Astra.
+* Fix: Fixed a couple admin side RTL styling issues.
+* Fix: Selecting multiple fields with the shift key was not properly selecting the fields in-between when the first selected item was not a group.
+* Autocomplete attributes in custom HTML will now be ignored if the field also has an autocomplete attribute set to avoid multiple attributes with the same key.
+
 = 5.4.5 =
 * New: Added support for several new language options for datepicker localization and for reCAPTCHA.
 * New: Updated deprecated code in Elementor widget for better compatibility with new versions of Elementor.
