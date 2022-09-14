@@ -202,7 +202,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 				$filename = basename( $val );
 				$path     = $uploads_dir . $filename;
 
-				if ( ! file_exists ( $path ) && is_object( $values['field'] ) ) {
+				if ( ! file_exists( $path ) && is_object( $values['field'] ) ) {
 					// File may be in formidable folder or it may be in the form_id folder so check the form as well.
 					$form_id_path = $uploads_dir . $values['field']->form_id . '/' . $filename;
 					if ( file_exists( $form_id_path ) ) {
