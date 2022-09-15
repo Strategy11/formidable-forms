@@ -958,6 +958,12 @@ function frmAdminBuildJS() {
 			placeholder.parentNode.insertBefore( draggable, placeholder );
 		}
 
+		const previousSection = ui.helper.closest( 'ul.frm_sorting' ).get( 0 );
+		const newSection      = placeholder.closest( 'ul.frm_sorting' );
+
+		const previousSectionId = previousSection.classList.contains( 'start_divider' ) ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+		const newSectionId      = newSection.classList.contains( 'start_divider' ) ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+
 		placeholder.remove();
 		ui.helper.remove();
 
@@ -979,7 +985,10 @@ function frmAdminBuildJS() {
 			syncLayoutClasses( jQuery( draggable ) );
 		}
 
-		updateFieldAfterMovingBetweenSections( jQuery( draggable ) ); // TODO check if it actually moved between sections first.
+		if ( previousSectionId !== newSectionId ) {
+			updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
+		}
+
 		syncAfterDragAndDrop();
 	}
 
@@ -1905,6 +1914,7 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
+				toggleSectionHolder();
 			}
 		});
 		return false;
