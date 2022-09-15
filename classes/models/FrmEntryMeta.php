@@ -170,7 +170,7 @@ class FrmEntryMeta {
 		/**
 		 * Allows changing entry duplicate values before save.
 		 *
-		 * @since x.x
+		 * @since 5.4.4
 		 *
 		 * @param array $metas The list of entry meta values.
 		 */

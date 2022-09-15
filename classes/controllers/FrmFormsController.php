@@ -1524,7 +1524,7 @@ class FrmFormsController {
 	/**
 	 * Replace any [form_name] shortcodes in a string.
 	 *
-	 * @since x.x
+	 * @since 5.5
 	 *
 	 * @param string              $string
 	 * @param stdClass|string|int $form

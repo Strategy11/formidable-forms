@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.4.5';
+	public static $plug_version = '5.5';
 
 	/**
 	 * @since 1.07.02
@@ -3089,7 +3089,7 @@ class FrmAppHelper {
 		/**
 		 * Filter available locale options.
 		 *
-		 * @since x.x Added $args parameter with type.
+		 * @since 5.4.5 Added $args parameter with type.
 		 *
 		 * @param array<string,string> $locales
 		 * @param array                $args {
@@ -3584,7 +3584,7 @@ class FrmAppHelper {
 	/**
 	 * Safely call get_plugins, importing the required files if they are not yet loaded.
 	 *
-	 * @since x.x
+	 * @since 5.5
 	 *
 	 * @return array
 	 */
