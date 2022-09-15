@@ -4269,7 +4269,7 @@ function frmAdminBuildJS() {
 	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
 		deleteFieldIds.forEach(
 			function( fieldId ) {
-				deleteField( fieldId );
+				deleteFields( fieldId );
 			}
 		);
 	}
