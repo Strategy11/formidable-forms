@@ -324,7 +324,7 @@ function frmAdminBuildJS() {
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
 	};
 
-	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
+	let $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
 		builderForm = document.getElementById( 'new_fields' ),
 		thisForm = document.getElementById( 'form_id' ),
 		copyHelper = false,
@@ -332,8 +332,10 @@ function frmAdminBuildJS() {
 		thisFormId = 0,
 		autoId = 0,
 		optionMap = {},
-		lastNewActionIdReturned = 0,
-		__ = wp.i18n.__;
+		lastNewActionIdReturned = 0;
+
+	const { __ } = wp.i18n;
+	let debouncedSyncAfterDragAndDrop;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -934,7 +936,7 @@ function frmAdminBuildJS() {
 
 		if ( ! placeholder ) {
 			ui.helper.remove();
-			syncAfterDragAndDrop();
+			debouncedSyncAfterDragAndDrop();
 			return;
 		}
 
@@ -951,6 +953,9 @@ function frmAdminBuildJS() {
 			}
 		}
 
+		const previousSection = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
+		const newSection      = placeholder.closest( 'ul.frm_sorting' );
+
 		if ( draggable.classList.contains( 'frmbutton' ) ) {
 			insertNewFieldByDragging( draggable.id );
 		} else {
@@ -958,10 +963,7 @@ function frmAdminBuildJS() {
 			placeholder.parentNode.insertBefore( draggable, placeholder );
 		}
 
-		const previousSection = ui.helper.closest( 'ul.frm_sorting' ).get( 0 );
-		const newSection      = placeholder.closest( 'ul.frm_sorting' );
-
-		const previousSectionId = previousSection.classList.contains( 'start_divider' ) ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+		const previousSectionId = previousSection && previousSection.classList.contains( 'start_divider' ) ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 		const newSectionId      = newSection.classList.contains( 'start_divider' ) ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 
 		placeholder.remove();
@@ -989,7 +991,7 @@ function frmAdminBuildJS() {
 			updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
 		}
 
-		syncAfterDragAndDrop();
+		debouncedSyncAfterDragAndDrop();
 	}
 
 	function handleDragOverYAxis({ droppable, y, placeholder }) {
@@ -1914,7 +1916,6 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
-				toggleSectionHolder();
 			}
 		});
 		return false;
@@ -9496,7 +9497,9 @@ function frmAdminBuildJS() {
 		},
 
 		buildInit: function() {
-			var loadFieldId, $builderForm, builderArea;
+			let loadFieldId, $builderForm, builderArea;
+
+			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
@@ -9515,7 +9518,7 @@ function frmAdminBuildJS() {
 			jQuery( 'a.edit-form-status' ).on( 'click', slideDown );
 			jQuery( '.cancel-form-status' ).on( 'click', slideUp );
 			jQuery( '.save-form-status' ).on( 'click', function() {
-				var newStatus = jQuery( document.getElementById( 'form_change_status' ) ).val();
+				const newStatus = jQuery( document.getElementById( 'form_change_status' ) ).val();
 				jQuery( 'input[name="new_status"]' ).val( newStatus );
 				jQuery( document.getElementById( 'form-status-display' ) ).html( newStatus );
 				jQuery( '.cancel-form-status' ).trigger( 'click' );
