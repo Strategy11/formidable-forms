@@ -1369,6 +1369,7 @@ class FrmXMLHelper {
 	 */
 	public static function prepare_field_for_export( &$field ) {
 		self::remove_default_field_options( $field );
+		self::add_image_src_to_image_options( $field );
 	}
 
 	/**
@@ -1399,6 +1400,39 @@ class FrmXMLHelper {
 		}
 
 		$field->field_options = serialize( $options );
+	}
+
+	/**
+	 * Add image "src" key to each image option so the image can be imported to another website.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $field
+	 * @return void
+	 */
+	private static function add_image_src_to_image_options( $field ) {
+		if ( empty( $field->options ) || false === strpos( $field->options, 'image' ) ) {
+			return;
+		}
+
+		$updated = false;
+		$options = $field->options;
+		FrmAppHelper::unserialize_or_decode( $options );
+
+		if ( ! $options || ! is_array( $options ) ) {
+			return;
+		}
+
+		foreach ( $options as $key => $option ) {
+			if ( is_array( $option ) && ! empty( $option['image'] ) ) {
+				$options[ $key ]['src'] = wp_get_attachment_url( $option['image'] );
+				$updated                = true;
+			}
+		}
+
+		if ( $updated ) {
+			$field->options = maybe_serialize( $options );
+		}
 	}
 
 	/**
