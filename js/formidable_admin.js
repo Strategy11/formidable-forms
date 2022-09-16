@@ -7521,7 +7521,7 @@ function frmAdminBuildJS() {
 	function onEmailActionLoaded( settings ) {
 		const wysiwyg = settings.querySelector( '.wp-editor-area' );
 		if ( wysiwyg ) {
-			frmDom.wysiwyg.init( wysiwyg );
+			frmDom.wysiwyg.init( wysiwyg, { height: 160 } );
 		}
 	}
 

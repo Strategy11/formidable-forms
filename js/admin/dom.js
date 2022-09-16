@@ -389,7 +389,7 @@
 	};
 
 	const wysiwyg = {
-		init( editor, { setupCallback } = {}) {
+		init( editor, { setupCallback, height } = {}) {
 			if ( isTinyMceActive() ) {
 				setTimeout( resetTinyMce, 0 );
 			} else {
@@ -430,6 +430,9 @@
 
 				if ( setupCallback ) {
 					settings.setup = setupCallback;
+				}
+				if ( height ) {
+					settings.height = height;
 				}
 
 				tinymce.init( settings );
