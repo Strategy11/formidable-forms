@@ -729,11 +729,6 @@ function frmAdminBuildJS() {
 						showInputIcon( '#' + cont.attr( 'id' ) );
 						frmDom.autocomplete.initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
-
-						const editor = inside.get( 0 ).querySelector( '.wp-editor-area' );
-						if ( editor ) {
-							frmDom.wysiwyg.init( editor );
-						}
 					}
 				});
 			}
@@ -7516,6 +7511,20 @@ function frmAdminBuildJS() {
 		jQuery( '.' + switchTo ).addClass( 'current' );
 	}
 
+	function onActionLoaded( event ) {
+		const settings = event.target.closest( '.frm_form_action_settings' );
+		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
+			onEmailActionLoaded( settings );
+		}
+	}
+
+	function onEmailActionLoaded( settings ) {
+		const wysiwyg = settings.querySelector( '.wp-editor-area' );
+		if ( wysiwyg ) {
+			frmDom.wysiwyg.init( wysiwyg );
+		}
+	}
+
 	/* Styling */
 	function setPosClass() {
 		/*jshint validthis:true */
@@ -9672,6 +9681,8 @@ function frmAdminBuildJS() {
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
+
+			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 		},
 
 		panelInit: function() {
