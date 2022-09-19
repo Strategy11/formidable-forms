@@ -69,6 +69,53 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmEntriesHelper::maybe_render_captcha_score( $entry->id ); ?>
 	</div>
 </div>
+<h3 class="hndle"><?php esc_html_e( 'User Information', 'formidable' ); ?></h3>
+<div class="inside">
+		<?php if ( $entry->user_id ) { ?>
+			<div class="misc-pub-section">
+				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) );
+
+				printf(
+					/* translators: %1$s: User display name. */
+					esc_html__( 'Created by: %1$s', 'formidable' ),
+					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->user_id, 'display_name', array( 'link' => true ) ), array( 'a' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
+				?>
+			</div>
+		<?php } ?>
+
+		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
+			<div class="misc-pub-section">
+				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_user_icon', array( 'aria-hidden' => 'true' ) );
+
+				printf(
+					/* translators: %1$s: User display name. */
+					esc_html__( 'Updated by: %1$s', 'formidable' ),
+					FrmAppHelper::kses( FrmFieldsHelper::get_user_display_name( $entry->updated_by, 'display_name', array( 'link' => true ) ), array( 'a' ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
+				?>
+			</div>
+		<?php } ?>
+
+		<?php if ( ! empty( $entry->ip ) ) { ?>
+			<div class="misc-pub-section">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_location_icon', array( 'aria-hidden' => 'true' ) ); ?>
+				<?php esc_html_e( 'IP Address:', 'formidable' ); ?>
+				<b><?php echo esc_html( $entry->ip ); ?></b>
+			</div>
+		<?php } ?>
+
+		<?php if ( isset( $browser ) ) { ?>
+			<div class="misc-pub-section">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_browser_icon', array( 'aria-hidden' => 'true' ) ); ?>
+				<?php esc_html_e( 'Browser/OS:', 'formidable' ); ?>
+				<b><?php echo wp_kses_post( $browser ); ?></b>
+			</div>
+		<?php } ?>
+</div>
+
 <?php
 if ( ! class_exists( 'FrmUsrTrkAppHelper' ) ) {
 	if ( isset( $data['referrer'] ) ) {
