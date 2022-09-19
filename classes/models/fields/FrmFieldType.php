@@ -315,10 +315,6 @@ DEFAULT_HTML;
 		);
 	}
 
-	public function autocomplete_options() {
-		return FrmProFieldsHelper::get_autocomplete_options();
-	}
-
 	/**
 	 * Get a list of all field settings that should be translated
 	 * on a multilingual site.
