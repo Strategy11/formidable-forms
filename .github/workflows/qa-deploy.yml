@@ -9,7 +9,6 @@ on:
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
-    if: contains(github.event.pull_request.labels.*.name, 'deploy')
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
