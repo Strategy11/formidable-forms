@@ -21,7 +21,7 @@ jobs:
       with:
         server: ftp.gyj.ilw.mybluehost.me
         protocol: ftps
-        server-dir: ${{ github.event.repository.name }}-${{ rootline-update }}/
+        server-dir: ${{ github.event.repository.name }}-rootline-update/
         username: ${{ secrets.FRM_FTP_USERNAME }}
         password: ${{ secrets.FRM_FTP_PASSWORD }}
         exclude: |
