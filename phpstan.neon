@@ -1,4 +1,5 @@
 parameters:
+	level: max
 	reportUnmatchedIgnoredErrors: false
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
@@ -71,3 +72,4 @@ parameters:
 		- '#\@param tag must not be named \$this#'
 		- '#Expected 2 \@param tags, found 4\.#'
 		- '#should always throw an exception or terminate script execution but#'
+		- '#spl_autoload_register expects#'
