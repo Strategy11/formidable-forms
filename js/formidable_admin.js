@@ -9576,7 +9576,7 @@ function frmAdminBuildJS() {
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
 				e.stopPropagation();
 
-				if ( e.target.classList.contains( 'frm-show-box' ) ) {
+				if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
 					return;
 				}
 
@@ -9590,6 +9590,7 @@ function frmAdminBuildJS() {
 				}
 
 				const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+
 				if ( ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
