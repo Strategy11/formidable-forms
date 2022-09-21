@@ -629,11 +629,47 @@ class FrmXMLHelper {
 		$defaults           = self::default_field_options( $f['type'] );
 		$f['field_options'] = array_merge( $defaults, $f['field_options'] );
 
+		if ( is_callable( 'FrmProFileImport::import_attachment' ) ) {
+			$f = self::maybe_import_images_for_options( $f );
+		}
+
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields'] ++;
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
+	}
+
+	/**
+	 * Import images for radio buttons and checkboxes from image src if available.
+	 *
+	 * @since 5.5.1
+	 *
+	 * @param array $field
+	 * @return array
+	 */
+	private static function maybe_import_images_for_options( $field ) {
+		if ( empty( $field['options'] ) || ! is_array( $field['options'] ) ) {
+			return $field;
+		}
+
+		foreach ( $field['options'] as $key => $option ) {
+			if ( ! is_array( $option ) || empty( $option['src'] ) ) {
+				continue;
+			}
+
+			$field_object       = (object) $field;
+			$field_object->type = 'file'; // Fake the file type as FrmProImport::import_attachment checks for file type.
+
+			$image_id = FrmProFileImport::import_attachment( $option['src'], $field_object );
+			unset( $field['options'][ $key ]['src'] ); // Remove the src from options as it isn't required after import.
+
+			if ( is_numeric( $image_id ) ) {
+				$field['options'][ $key ]['image'] = $image_id;
+			}
+		}
+
+		return $field;
 	}
 
 	/**
