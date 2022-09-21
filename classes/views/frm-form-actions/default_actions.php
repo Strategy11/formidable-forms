@@ -36,9 +36,18 @@ class FrmDefPayPalAction extends FrmFormAction {
 // add quiz action
 class FrmDefQuizAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops = FrmFormAction::default_action_opts( 'frm_percent_icon frm_quiz_icon frm_show_upgrade' );
-		$action_ops['plugin']  = 'quizzes';
-		parent::__construct( 'quiz', __( 'Quiz', 'formidable' ), $action_ops );
+		$action_ops           = FrmFormAction::default_action_opts( 'frm_percent_icon frm_quiz_icon frm_show_upgrade' );
+		$action_ops['plugin'] = 'quizzes';
+		parent::__construct( 'quiz', __( 'Scored Quiz', 'formidable' ), $action_ops );
+	}
+}
+
+// add quiz outcome action
+class FrmDefQuizOutcomeAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops           = FrmFormAction::default_action_opts( 'frm_check1_icon frm_quiz_icon frm_show_upgrade' );
+		$action_ops['plugin'] = 'quizzes';
+		parent::__construct( 'quiz_outcome', __( 'Quiz Outcome', 'formidable' ), $action_ops );
 	}
 }
 
