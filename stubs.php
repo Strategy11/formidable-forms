@@ -31,7 +31,7 @@ namespace {
 	class FrmProFileImport {
 		public static function import_attachment( $val, $field ) {
 		}
-	}	
+	}
 }
 
 namespace Elementor {
