@@ -28,7 +28,7 @@ namespace {
 		public static function get_required_templates_capability() {}
 		public static function get_custom_applications_capability() {}
 	}
-	class FrmProFileImport{ 
+	class FrmProFileImport {
 		public static function import_attachment( $val, $field ) {
 		}
 	}	
