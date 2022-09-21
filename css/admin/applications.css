@@ -183,6 +183,15 @@
 	padding: 20px 30px 15px;
 }
 
+#frm_view_application_modal img {
+	height: 245px;
+}
+
+#frm_view_application_modal .frm_modal_content {
+	flex: 1;
+	overflow-y: auto;
+}
+
 .frm-application-modal-label {
 	opacity: 0.65;
 	margin-bottom: 5px;

@@ -252,19 +252,17 @@ class FrmEntryValues {
 			);
 		}
 
-		$ip = array(
+		$ip      = array(
 			'label' => __( 'IP Address', 'formidable' ),
 			'value' => $this->entry->ip,
 		);
-
 		$browser = array(
 			'label' => __( 'User-Agent (Browser/OS)', 'formidable' ),
-			'value' => FrmEntriesHelper::get_browser( $entry_description['browser'] ),
+			'value' => isset( $entry_description['browser'] ) ? FrmEntriesHelper::get_browser( $entry_description['browser'] ) : '',
 		);
-
 		$referrer = array(
 			'label' => __( 'Referrer', 'formidable' ),
-			'value' => $entry_description['referrer'],
+			'value' => isset( $entry_description['referrer'] ) ? $entry_description['referrer'] : '',
 		);
 
 		$this->user_info = array(

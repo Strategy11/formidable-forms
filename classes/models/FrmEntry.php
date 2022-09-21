@@ -261,7 +261,7 @@ class FrmEntry {
 		global $wpdb;
 		$id = (int) $id;
 
-		$entry = self::getOne( $id );
+		$entry = self::getOne( $id, true ); // Item meta is required for conditional logic in actions with 'delete' events.
 		if ( ! $entry ) {
 			$result = false;
 			return $result;

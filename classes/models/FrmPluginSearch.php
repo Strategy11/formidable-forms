@@ -83,6 +83,10 @@ class FrmPluginSearch {
 			'version'             => $addon_list[ $matching_addon ]['version'],
 		);
 
+		if ( ! empty( $addon_list[ $matching_addon ]['external'] ) ) {
+			unset( $overrides['name'] );
+		}
+
 		// Splice in the base addon data.
 		$inject = array_merge( $inject, $addon_list[ $matching_addon ], $overrides );
 
@@ -108,20 +112,15 @@ class FrmPluginSearch {
 				continue;
 			}
 
-			/*
-			* Does the site's current plan support the feature?
-			*/
-			$is_supported_by_plan = ! empty( $addon_opts['url'] );
-
 			if ( ! isset( $addon_opts['search_terms'] ) ) {
 				$addon_opts['search_terms'] = '';
 			}
 
-			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ', ' . $addon_opts['name'] );
+			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 
 			$matches = ! empty( array_intersect( $addon_terms, $normalized_term ) );
 
-			if ( $matches && $is_supported_by_plan ) {
+			if ( $matches ) {
 				$matching_addon = $addon_id;
 				break;
 			}
@@ -137,7 +136,8 @@ class FrmPluginSearch {
 	 */
 	private function get_addons() {
 		$api    = new FrmFormApi();
-		return $api->get_api_info();
+		$addons = $api->get_api_info();
+		return apply_filters( 'frm_plugin_search', $addons );
 	}
 
 	/**
@@ -271,7 +271,7 @@ class FrmPluginSearch {
 	 */
 	private function search_to_array( $terms ) {
 		$terms = $this->sanitize_search_term( $terms );
-		return array_filter( explode( ',', $terms ) );
+		return array_filter( explode( ' ', $terms ) );
 	}
 
 	/**
@@ -291,7 +291,6 @@ class FrmPluginSearch {
 		$links = array();
 		$is_installed = $this->is_installed( $plugin['plugin'] );
 		$is_active    = is_plugin_active( $plugin['plugin'] );
-		$has_access   = ! empty( $plugin['url'] );
 
 		// Plugin installed, active, feature not enabled; prompt to enable.
 		if ( ! $is_active && $is_installed ) {
@@ -334,13 +333,12 @@ class FrmPluginSearch {
 		return $links;
 	}
 
+	/**
+	 * @param string $plugin
+	 * @return bool
+	 */
 	protected function is_installed( $plugin ) {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$all_plugins = get_plugins();
-
+		$all_plugins = FrmAppHelper::get_plugins();
 		return isset( $all_plugins[ $plugin ] );
 	}
 

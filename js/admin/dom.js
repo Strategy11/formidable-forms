@@ -267,7 +267,7 @@
 						jQuery( this ).autocomplete( 'search', this.value );
 					}
 				})
-				.data('ui-autocomplete')._renderItem = function( ul, item ) {
+				.data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
 					return jQuery( '<li>' )
 					.attr( 'aria-label', item.label )
 					.append( jQuery( '<div>' ).text( item.label ) )
@@ -385,6 +385,96 @@
 				callback( event );
 			};
 			element.addEventListener( 'click', listener );
+		}
+	};
+
+	const wysiwyg = {
+		init( editor, { setupCallback } = {}) {
+			if ( isTinyMceActive() ) {
+				setTimeout( resetTinyMce, 0 );
+			} else {
+				initQuickTagsButtons();
+			}
+
+			setUpTinyMceVisualButtonListener();
+			setUpTinyMceHtmlButtonListener();
+
+			function initQuickTagsButtons() {
+				if ( 'function' !== typeof window.quicktags || typeof window.QTags.instances[ editor.id ] !== 'undefined' ) {
+					return;
+				}
+
+				const id = editor.id;
+				window.quicktags({
+					name: 'qt_' + id,
+					id: id,
+					canvas: editor,
+					settings: { id },
+					toolbar: document.getElementById( 'qt_' + id + '_toolbar' ),
+					theButtons: {}
+				});
+			}
+
+			function initRichText() {
+				const key = Object.keys( tinyMCEPreInit.mceInit )[0];
+				const orgSettings = tinyMCEPreInit.mceInit[ key ];
+
+				const settings = Object.assign(
+					{},
+					orgSettings,
+					{
+						selector: '#' + editor.id,
+						body_class: orgSettings.body_class.replace( key, editor.id )
+					}
+				);
+
+				if ( setupCallback ) {
+					settings.setup = setupCallback;
+				}
+
+				tinymce.init( settings );
+			}
+
+			function removeRichText() {
+				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, editor.id );
+			}
+
+			function resetTinyMce() {
+				removeRichText();
+				initRichText();
+			}
+
+			function isTinyMceActive() {
+				const id = editor.id;
+				const wrapper = document.getElementById( 'wp-' + id + '-wrap' );
+				return null !== wrapper && wrapper.classList.contains( 'tmce-active' );
+			}
+
+			function setUpTinyMceVisualButtonListener() {
+				jQuery( document ).on(
+					'click', '#' + editor.id + '-html',
+					function() {
+						editor.style.visibility = 'visible';
+						initQuickTagsButtons( editor );
+					}
+				);
+			}
+
+			function setUpTinyMceHtmlButtonListener() {
+				jQuery( '#' + editor.id + '-tmce' ).on( 'click', handleTinyMceHtmlButtonClick );
+			}
+
+			function handleTinyMceHtmlButtonClick() {
+				if ( isTinyMceActive() ) {
+					resetTinyMce();
+				} else {
+					initRichText();
+				}
+
+				const wrap = document.getElementById( 'wp-' + editor.id + '-wrap' );
+				wrap.classList.add( 'tmce-active' );
+				wrap.classList.remove( 'html-active' );
+			}
 		}
 	};
 
@@ -511,9 +601,13 @@
 		return output;
 	}
 
-	function svg({ href } = {}) {
+	function svg({ href, classList } = {}) {
 		const namespace = 'http://www.w3.org/2000/svg';
 		const output = document.createElementNS( namespace, 'svg' );
+		if ( classList ) {
+			output.classList.add( ...classList );
+		}
+
 		if ( href ) {
 			const use = document.createElementNS( namespace, 'use' );
 			use.setAttribute( 'href', href );
@@ -534,5 +628,5 @@
 		element.appendChild( child );
 	}
 
-	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util };
+	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
 }() );

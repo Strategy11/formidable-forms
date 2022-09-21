@@ -150,7 +150,8 @@ class FrmEntryValidate {
 		}
 
 		if ( false !== $item_name ) {
-			$_POST['item_name'] = $item_name;
+			// Item name has a max length of 255 characters so truncate it so it doesn't fail to save in the database.
+			$_POST['item_name'] = substr( $item_name, 0, 255 );
 		}
 	}
 
@@ -360,9 +361,6 @@ class FrmEntryValidate {
 		}
 
 		$content = FrmEntriesHelper::entry_array_to_string( $values );
-		if ( empty( $content ) ) {
-			return false;
-		}
 
 		self::prepare_values_for_spam_check( $values );
 		$ip         = FrmAppHelper::get_ip_address();

@@ -1778,13 +1778,14 @@ h2.frm-h2 + .howto {
 	visibility: hidden;
 }
 
-#frm_save_and_reload_options {
+.frm-save-and-reload-options {
 	margin-top: 10px;
 	font-size: 13px;
 }
 
-#frm_save_and_reload, #frm_save_and_reload + .frm-button-secondary {
-	visibility: visible;
+.frm-save-and-reload,
+.frm-save-and-reload + .frm-button-secondary {
+	visibility: visible !important;
 }
 
 .addon-status-label {
@@ -1891,6 +1892,10 @@ h2.frm-h2 + .howto {
 	margin: 0;
 }
 
+.frm_common_modal .postbox {
+	display: flex;
+	flex-direction: column;
+}
 
 .frm-modal .postbox > div.inside .cta-inside {
 	overflow-y: auto;
@@ -2577,6 +2582,7 @@ a.frm_pro_tip .frmsvg {
 
 .frm-tip-info {
 	flex: 1;
+	text-align: left;
 }
 
 .frm-tip-cta {
@@ -4008,8 +4014,8 @@ li.frm_field_box > ul.frm_grid_container {
 	object-fit: cover;
 }
 
-.frm_list_entry_page .frm_file_link img {
-	max-width: 75px;
+.frm_list_entry_page img {
+	max-width: 100%;
 	height: auto;
 }
 
@@ -5811,7 +5817,8 @@ ul.start_divider {
 	cursor: not-allowed;
 }
 
-.edit_field_type_summary .frm_clone_field {
+/* Hide the Duplicate summary option because we are missing the logic that also adds a new page */
+.edit_field_type_summary .frm_more_options_li:nth-child(2) {
 	display: none !important;
 }
 
@@ -7333,7 +7340,7 @@ h2 .frm-sub-label {
 	padding-bottom: 20px;
 }
 
-#frm-upgrade-message img {
+.frm-upgrade-message img {
 	max-width: 100%;
 }
 
@@ -7902,6 +7909,25 @@ button.frm_choose_image_box,
 .rtl .frm_reply_to_container,
 .rtl .frm_bcc_cc_container {
 	float: left;
+}
+
+.rtl .frm-default-switcher {
+	float: left;
+	position: relative;
+}
+
+.rtl .frm-with-right-icon .frmsvg {
+	right: auto;
+	left: 0;
+}
+
+.rtl .frm-inline-modal > a.dismiss {
+	left: 13px;
+	right: auto;
+}
+
+.rtl.wp-admin .frm_wrap select {
+	padding: 0 12px 0 24px !important;
 }
 
 /* ---------------------------------------------------------------

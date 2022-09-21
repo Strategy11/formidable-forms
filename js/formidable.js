@@ -1212,7 +1212,11 @@ function frmFrontFormJS() {
 		checkFloatLabel = function( input ) {
 			var container, shouldFloatTop, firstOpt;
 
-			container      = input.closest( '.frm_inside_container' );
+			container = input.closest( '.frm_inside_container' );
+			if ( ! container ) {
+				return;
+			}
+
 			shouldFloatTop = input.value || document.activeElement === input;
 
 			container.classList.toggle( floatClass, shouldFloatTop );

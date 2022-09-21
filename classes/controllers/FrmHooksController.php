@@ -94,7 +94,8 @@ class FrmHooksController {
 		add_filter( 'frm_keep_name_value_array', '__return_true' );
 
 		// Elementor.
-		add_action( 'elementor/widgets/widgets_registered', 'FrmElementorController::register_elementor_hooks' );
+		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
+		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 	}
 
 	public static function load_admin_hooks() {
