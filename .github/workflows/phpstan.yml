@@ -23,4 +23,4 @@ jobs:
         run: composer install
 
       - name: "🧪 Test"
-        run: phpstan analyze ./ --level=max
+        run: phpstan analyze ./
