@@ -6334,9 +6334,13 @@ function frmAdminBuildJS() {
 	}
 
 	function markActionTriggersActive( triggers ) {
-		return;
 		triggers.forEach(
 			trigger => {
+				if ( trigger.querySelector( '.frm_show_upgrade' ) ) {
+					// Prevent disabled action becoming active.
+					return;
+				}
+
 				trigger.classList.remove( 'frm_inactive_action', 'frm_already_used' );
 				trigger.classList.add( 'frm_active_action' );
 			}
@@ -6344,7 +6348,6 @@ function frmAdminBuildJS() {
 	}
 
 	function markActionTriggersInactive( triggers, addAlreadyUsedClass ) {
-		return;
 		triggers.forEach(
 			trigger => {
 				trigger.classList.remove( 'frm_active_action' );
