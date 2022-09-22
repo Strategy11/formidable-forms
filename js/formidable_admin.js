@@ -7523,9 +7523,23 @@ function frmAdminBuildJS() {
 		if ( wysiwyg ) {
 			frmDom.wysiwyg.init(
 				wysiwyg,
-				{ height: 160 }
+				{ setupCallback: addFocusEvents, height: 160 }
 			);
 		}
+	}
+
+	function addFocusEvents( editor ) {
+		editor.on( 'focusin', function() {
+			jQuery( editor.targetElm ).trigger( 'focusin' );
+			editor.off( 'focusin', '**' );
+		});
+
+		editor.on( 'focusout', function( e ) {
+			editor.on( 'focusin', function() {
+				jQuery( editor.targetElm ).trigger( 'focusin' );
+				editor.off( 'focusin', '**' );
+			});
+		});
 	}
 
 	/* Styling */
