@@ -32,7 +32,7 @@
 		"npm": "^8.19.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
-		"styled-components": "^3.2.6"
+		"styled-components": "^5.3.5"
 	},
 	"devDependencies": {
 		"@svgr/webpack": "^5.4.0",
