@@ -5691,27 +5691,31 @@ function frmAdminBuildJS() {
 		document.addEventListener( 'click', handleUpgradeClick );
 
 		function handleUpgradeClick( event ) {
-			let element, upgradeLabel, link, content;
+			let element, link, content;
 
 			element = event.target;
-			upgradeLabel = element.dataset.upgrade;
 
-			if ( ! upgradeLabel ) {
+			if ( ! element.classList ) {
+				return;
+			}
+
+			const showExpiredModal = element.classList.contains( 'frm_show_expired_modal' ) || null !== element.querySelector( '.frm_show_expired_modal' ) || element.closest( '.frm_show_expired_modal' );
+
+			if ( ! element.dataset.upgrade ) {
 				const parent = element.closest( '[data-upgrade]' );
 				if ( ! parent ) {
 					return;
 				}
-
 				element = parent;
-				upgradeLabel = parent.dataset.upgrade;
 			}
 
-			if ( element.classList.contains( 'frm_show_expired_modal' ) ) {
+			if ( showExpiredModal ) {
 				const hookName = 'frm_show_expired_modal';
 				wp.hooks.doAction( hookName, element );
 				return;
 			}
 
+			const upgradeLabel = element.dataset.upgrade;
 			if ( ! upgradeLabel || element.classList.contains( 'frm_show_upgrade_tab' ) ) {
 				return;
 			}
@@ -6330,6 +6334,7 @@ function frmAdminBuildJS() {
 	}
 
 	function markActionTriggersActive( triggers ) {
+		return;
 		triggers.forEach(
 			trigger => {
 				trigger.classList.remove( 'frm_inactive_action', 'frm_already_used' );
@@ -6339,6 +6344,7 @@ function frmAdminBuildJS() {
 	}
 
 	function markActionTriggersInactive( triggers, addAlreadyUsedClass ) {
+		return;
 		triggers.forEach(
 			trigger => {
 				trigger.classList.remove( 'frm_active_action' );
