@@ -1888,8 +1888,9 @@ h2.frm-h2 + .howto {
 
 .frm-modal .frm_modal_content > div.inside,
 .frm_common_modal .frm_modal_content > div.inside {
-	padding: 10px 30px;
+	padding: 20px 30px;
 	margin: 0;
+	font-size: 14px;
 }
 
 .frm_common_modal .postbox {
@@ -1904,7 +1905,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm_modal_footer {
-	padding: 15px 30px;
+	padding: 20px 30px;
 	text-align: right;
 	border-top: 1px solid var(--sidebar-hover);
 }
