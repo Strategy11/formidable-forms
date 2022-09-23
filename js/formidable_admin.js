@@ -7529,16 +7529,15 @@ function frmAdminBuildJS() {
 	}
 
 	function addFocusEvents( editor ) {
-		editor.on( 'focusin', function() {
+		function focusInCallback() {
 			jQuery( editor.targetElm ).trigger( 'focusin' );
 			editor.off( 'focusin', '**' );
-		});
+		}
 
-		editor.on( 'focusout', function( e ) {
-			editor.on( 'focusin', function() {
-				jQuery( editor.targetElm ).trigger( 'focusin' );
-				editor.off( 'focusin', '**' );
-			});
+		editor.on( 'focusin', focusInCallback );
+
+		editor.on( 'focusout', function() {
+			editor.on( 'focusin', focusInCallback );
 		});
 	}
 
