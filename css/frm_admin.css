@@ -1849,7 +1849,7 @@ h2.frm-h2 + .howto {
 
 .frm-modal .postbox .frm_modal_top,
 .frm-dialog .frm_common_modal .postbox > div:first-child {
-	padding: 30px 30px 10px;
+	padding: 25px 30px 20px;
 	position: relative;
 }
 
@@ -1861,7 +1861,7 @@ h2.frm-h2 + .howto {
 .frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child  {
 	display: inline-block;
 	font-size: 24px;
-	color: #282F36;
+	color: var(--darkest-grey);
 }
 
 .frm-inline-modal > a.dismiss,
@@ -1883,7 +1883,7 @@ h2.frm-h2 + .howto {
 .frm-modal .postbox .frm-modal-title + div:last-child a,
 .frm-modal a.dismiss .frmsvg,
 .frm_common_modal .frm_modal_top a .frmsvg {
-	color: var(--grey);
+	color: var(--darkest-grey);
 }
 
 .frm-modal .frm_modal_content > div.inside,
@@ -1891,6 +1891,7 @@ h2.frm-h2 + .howto {
 	padding: 20px 30px;
 	margin: 0;
 	font-size: 14px;
+	color: var(--dark-grey);
 }
 
 .frm_common_modal .postbox {
@@ -1905,7 +1906,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm_modal_footer {
-	padding: 15px 30px;
+	padding: 17px 30px 20px;
 	text-align: right;
 	border-top: 1px solid var(--sidebar-hover);
 }
