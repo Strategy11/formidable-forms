@@ -1888,7 +1888,7 @@ h2.frm-h2 + .howto {
 
 .frm-modal .frm_modal_content > div.inside,
 .frm_common_modal .frm_modal_content > div.inside {
-	padding: 20px 30px;
+	padding: 24px 30px;
 	margin: 0;
 	font-size: 14px;
 	color: var(--dark-grey);
@@ -1906,7 +1906,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm_modal_footer {
-	padding: 17px 30px 20px;
+	padding: 18px 30px 20px;
 	text-align: right;
 	border-top: 1px solid var(--sidebar-hover);
 }
@@ -7325,7 +7325,7 @@ h2 .frm-sub-label {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--grey-border);
+	background: var(--grey);
 	z-index: 2;
 }
 
