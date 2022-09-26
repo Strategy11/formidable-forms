@@ -1570,7 +1570,7 @@ select.frm_loading_lookup{
 
 <?php
 if ( FrmAppHelper::pro_is_installed() && class_exists( 'FrmProDb', false ) ) {
-	$pro_version_that_includes_font_icons_css = '5.5.2';
+	$pro_version_that_includes_font_icons_css = '5.5.1';
 	if ( version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '<' ) ) {
 		// Include font icons in Lite for backward compatibility with older version of Pro.
 		// This isn't required for the Lite add on.
