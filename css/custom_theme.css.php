@@ -1568,7 +1568,25 @@ select.frm_loading_lookup{
 	margin-bottom: 0 !important;
 }
 
-<?php do_action( 'frm_include_front_css', compact( 'defaults' ) ); ?>
+<?php
+if ( FrmAppHelper::pro_is_installed() && class_exists( 'FrmProDb', false ) ) {
+	$pro_version_that_includes_font_icons_css = '5.5.2';
+	if ( version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '<' ) ) {
+		// Include font icons in Lite for backward compatibility with older version of Pro.
+		// This isn't required for the Lite add on.
+		readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' );
+	}
+}
+
+/**
+ * Call action so other plugins can add additional CSS.
+ *
+ * @param array $args {
+ *     @type array $defaults
+ * }
+ */
+do_action( 'frm_include_front_css', compact( 'defaults' ) );
+?>
 
 /* Responsive */
 
