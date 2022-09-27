@@ -491,6 +491,38 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 5.5.1
+	 * @return void
+	 */
+	public static function maybe_include_font_icon_css() {
+		$signature_add_on_is_active = class_exists( 'FrmSigAppHelper', false );
+
+		if ( ! FrmAppHelper::pro_is_installed() && ! $signature_add_on_is_active ) {
+			// If Pro and Signatures are both not active, there is no need to include the font icon CSS in lite.
+			return;
+		}
+
+		$pro_version_will_handle_loading = false;
+
+		if ( class_exists( 'FrmProDb', false ) ) {
+			$pro_version_that_includes_font_icons_css = '5.5.1';
+
+			// Include font icons in Lite for backward compatibility with older version of Pro.
+			$pro_version_will_handle_loading = version_compare( FrmProDb::$plug_version, $pro_version_that_includes_font_icons_css, '>=' );
+		}
+
+		$load_it_here = false;
+		if ( ! $pro_version_will_handle_loading ) {
+			// If Pro is not handling it, we still need to include it for the Signature add on.
+			$load_it_here = $signature_add_on_is_active;
+		}
+
+		if ( $load_it_here ) {
+			readfile( FrmAppHelper::plugin_path() . '/css/font_icons.css' );
+		}
+	}
+
+	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
