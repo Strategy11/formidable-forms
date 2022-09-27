@@ -7193,7 +7193,11 @@ function frmAdminBuildJS() {
 			}
 
 			if ( shouldFocus !== 'nofocus' ) {
-				input.focus();
+				if ( 'none' !== input.style.display ) {
+					input.focus();
+				} else {
+					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
+				}
 			}
 		}
 	}
