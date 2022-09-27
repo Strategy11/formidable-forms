@@ -1,4 +1,14 @@
 == Changelog ==
+= 5.5.1 =
+* New: Email actions now use a rich text editor.
+* New: Added new frm_before_title, frm_before_submit_btn, and frm_after_submit_btn actions.
+* Fix: Prevent a bug that would sometimes cause a form to repeat 10 times when previewing in-theme.
+* Fix: Shortcode popup will now appear below textareas to avoid visibility issues with overlapping over content.
+* Fix: Prevent a fatal error in PHP8 where a field's field options data is in an unsupported format.
+* Fix: An entry with a name longer than 255 characters long would throw an error and never submit. It will now be truncated to a maximum of 255 characters instead.
+* Removed icon fonts from front end CSS when only Lite is loaded to significantly reduce CSS size where it is not required.
+* Updated styles for back end modals.
+
 = 5.5 =
 * New: Email actions and success messages now support [form_name] shortcodes.
 * Fix: Prevent a fatal error when running a weekly cron job because of an expected WordPress function was unavailable.
