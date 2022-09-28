@@ -268,7 +268,7 @@ class FrmEntryValues {
 		/**
 		 * Allow the referrer to be modified.
 		 *
-		 * @since x.x
+		 * @since 5.5.1
 		 *
 		 * @param array $referrer
 		 * @param array @entry_description

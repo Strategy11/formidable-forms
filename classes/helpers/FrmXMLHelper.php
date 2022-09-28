@@ -1441,7 +1441,7 @@ class FrmXMLHelper {
 	/**
 	 * Add image "src" key to each image option so the image can be imported to another website.
 	 *
-	 * @since x.x
+	 * @since 5.5.1
 	 *
 	 * @param stdClass $field
 	 * @return void
