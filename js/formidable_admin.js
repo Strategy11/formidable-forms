@@ -686,16 +686,17 @@ function frmAdminBuildJS() {
 
 	function clickWidget( event, b ) {
 		/*jshint validthis:true */
-		var target = event.target;
 		if ( typeof b === 'undefined' ) {
 			b = this;
 		}
 
 		popCalcFields( b, false );
 
-		var cont = jQuery( b ).closest( '.frm_form_action_settings' );
+		const cont   = jQuery( b ).closest( '.frm_form_action_settings' );
+		const target = event.target;
+
 		if ( cont.length && typeof target !== 'undefined' ) {
-			var className = target.parentElement.className;
+			const className = target.parentElement.className;
 			if ( 'string' === typeof className ) {
 				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 ) {
 					// clicking on delete icon shouldn't open it
@@ -705,11 +706,11 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		var inside = cont.children( '.widget-inside' );
+		let inside = cont.children( '.widget-inside' );
 
 		if ( cont.length && inside.find( 'p, div, table' ).length < 1 ) {
-			var actionId = cont.find( 'input[name$="[ID]"]' ).val();
-			var actionType = cont.find( 'input[name$="[post_excerpt]"]' ).val();
+			const actionId = cont.find( 'input[name$="[ID]"]' ).val();
+			const actionType = cont.find( 'input[name$="[post_excerpt]"]' ).val();
 			if ( actionType ) {
 				inside.html( '<span class="frm-wait frm_spinner"></span>' );
 				cont.find( '.spinner' ).fadeIn( 'slow' );
@@ -7201,7 +7202,11 @@ function frmAdminBuildJS() {
 			}
 
 			if ( shouldFocus !== 'nofocus' ) {
-				input.focus();
+				if ( 'none' !== input.style.display ) {
+					input.focus();
+				} else {
+					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
+				}
 			}
 		}
 	}
@@ -7351,10 +7356,11 @@ function frmAdminBuildJS() {
 	 */
 	function getInputForIcon( moreIcon ) {
 		var input = moreIcon.nextElementSibling;
-		if ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
-			// Workaround for 1Password.
-			input = input.nextElementSibling;
+
+		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
+			input = getInputForIcon( input );
 		}
+
 		return input;
 	}
 
@@ -7363,9 +7369,11 @@ function frmAdminBuildJS() {
 	 */
 	function getIconForInput( input ) {
 		var moreIcon = input.previousElementSibling;
-		if ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
-			moreIcon = moreIcon.previousElementSibling;
+
+		while ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
+			moreIcon = getIconForInput( moreIcon );
 		}
+
 		return moreIcon;
 	}
 
@@ -7514,6 +7522,36 @@ function frmAdminBuildJS() {
 		jQuery( '.frm_code_list .' + switchTo ).removeClass( 'frm_hidden' );
 		jQuery( '.frmids, .frmkeys' ).removeClass( 'current' );
 		jQuery( '.' + switchTo ).addClass( 'current' );
+	}
+
+	function onActionLoaded( event ) {
+		const settings = event.target.closest( '.frm_form_action_settings' );
+		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
+			onEmailActionLoaded( settings );
+		}
+	}
+
+	function onEmailActionLoaded( settings ) {
+		const wysiwyg = settings.querySelector( '.wp-editor-area' );
+		if ( wysiwyg ) {
+			frmDom.wysiwyg.init(
+				wysiwyg,
+				{ setupCallback: addFocusEvents, height: 160 }
+			);
+		}
+	}
+
+	function addFocusEvents( editor ) {
+		function focusInCallback() {
+			jQuery( editor.targetElm ).trigger( 'focusin' );
+			editor.off( 'focusin', '**' );
+		}
+
+		editor.on( 'focusin', focusInCallback );
+
+		editor.on( 'focusout', function() {
+			editor.on( 'focusin', focusInCallback );
+		});
 	}
 
 	/* Styling */
@@ -9564,7 +9602,7 @@ function frmAdminBuildJS() {
 			formSettings.on( 'mouseup', '*:not(.frm-show-box)', function( e ) {
 				e.stopPropagation();
 
-				if ( e.target.classList.contains( 'frm-show-box' ) ) {
+				if ( e.target.classList.contains( 'frm-show-box' )  || e.target.parentElement.classList.contains( 'frm-show-box' ) ) {
 					return;
 				}
 
@@ -9578,6 +9616,7 @@ function frmAdminBuildJS() {
 				}
 
 				const isChild = jQuery( e.target ).closest( '#frm_adv_info' ).length > 0;
+
 				if ( ! isChild && sidebar.display !== 'none' ) {
 					hideShortcodes( sidebar );
 				}
@@ -9672,6 +9711,8 @@ function frmAdminBuildJS() {
 
             // Page Selection Autocomplete
 			initSelectionAutocomplete();
+
+			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 		},
 
 		panelInit: function() {
