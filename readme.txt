@@ -443,6 +443,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.5.1 =
 * New: Email actions now use a rich text editor.
 * New: Added new frm_before_title, frm_before_submit_btn, and frm_after_submit_btn actions.
+* New: Image URLs used in options for radio and checkbox fields will now be included in XML exports, and used on import when the option to import files is on.
 * Fix: Prevent a bug that would sometimes cause a form to repeat 10 times when previewing in-theme.
 * Fix: Shortcode popup will now appear below textareas to avoid visibility issues with overlapping over content.
 * Fix: Prevent a fatal error in PHP8 where a field's field options data is in an unsupported format.
