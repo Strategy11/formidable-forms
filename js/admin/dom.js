@@ -389,7 +389,7 @@
 	};
 
 	const wysiwyg = {
-		init( editor, { setupCallback, height } = {}) {
+		init( editor, { setupCallback, height, addFocusEvents } = {}) {
 			if ( isTinyMceActive() ) {
 				setTimeout( resetTinyMce, 0 );
 			} else {
@@ -428,9 +428,24 @@
 					}
 				);
 
-				if ( setupCallback ) {
-					settings.setup = setupCallback;
-				}
+				settings.setup = editor => {
+					if ( addFocusEvents ) {
+						function focusInCallback() {
+							jQuery( editor.targetElm ).trigger( 'focusin' );
+							editor.off( 'focusin', '**' );
+						}
+				
+						editor.on( 'focusin', focusInCallback );
+				
+						editor.on( 'focusout', function() {
+							editor.on( 'focusin', focusInCallback );
+						});
+					}
+					if ( setupCallback ) {
+						setupCallback( editor );
+					}
+				};
+
 				if ( height ) {
 					settings.height = height;
 				}
