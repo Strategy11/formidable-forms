@@ -7535,23 +7535,9 @@ function frmAdminBuildJS() {
 		const wysiwyg = settings.querySelector( '.wp-editor-area' );
 		if ( wysiwyg ) {
 			frmDom.wysiwyg.init(
-				wysiwyg,
-				{ setupCallback: addFocusEvents, height: 160 }
+				wysiwyg, { height: 160, addFocusEvents: true }
 			);
 		}
-	}
-
-	function addFocusEvents( editor ) {
-		function focusInCallback() {
-			jQuery( editor.targetElm ).trigger( 'focusin' );
-			editor.off( 'focusin', '**' );
-		}
-
-		editor.on( 'focusin', focusInCallback );
-
-		editor.on( 'focusout', function() {
-			editor.on( 'focusin', focusInCallback );
-		});
 	}
 
 	/* Styling */
