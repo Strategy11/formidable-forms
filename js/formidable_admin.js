@@ -1718,20 +1718,18 @@ function frmAdminBuildJS() {
 	}
 
 	function loadFields( fieldId ) {
-		var addHtmlToField, nextElement,
-			thisField = document.getElementById( fieldId ),
-			$thisField = jQuery( thisField ),
-			field = [];
-
-		addHtmlToField = function( element ) {
-			var frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
+		const thisField      = document.getElementById( fieldId );
+		const $thisField     = jQuery( thisField );		
+		const field          = [];
+		const addHtmlToField = element => {
+			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
 			element.classList.add( 'frm_load_now' );
 			if ( frmHiddenFdata !== null ) {
 				field.push( frmHiddenFdata.innerHTML );
 			}
 		};
 
-		nextElement = thisField;
+		let nextElement = thisField;
 		addHtmlToField( nextElement );
 		while ( nextElement.nextElementSibling && field.length < 15 ) {
 			addHtmlToField( nextElement.nextElementSibling );
@@ -1739,49 +1737,52 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_load_field',
 				field: field,
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
-				var key, $nextSet;
-
-				html = html.replace( /^\s+|\s+$/g, '' );
-				if ( html.indexOf( '{' ) !== 0 ) {
-					jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
-					return;
-				}
-
-				html = JSON.parse( html );
-
-				for ( key in html ) {
-					jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
-					setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
-				}
-
-				$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
-				if ( $nextSet.length ) {
-					loadFields( $nextSet.attr( 'id' ) );
-				} else {
-					// go up a level
-					$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
-					if ( $nextSet.length ) {
-						loadFields( $nextSet.attr( 'id' ) );
-					}
-				}
-
-				initiateMultiselect();
-				renumberPageBreaks();
-				maybeHideQuantityProductFieldOption();
-
-				const loadedEvent     = new Event( 'frm_ajax_loaded_field', { bubbles: false });
-				loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
-				document.dispatchEvent( loadedEvent );
-			}
+			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
 		});
+	}
+
+	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
+		let key, $nextSet;
+
+		html = html.replace( /^\s+|\s+$/g, '' );
+		if ( html.indexOf( '{' ) !== 0 ) {
+			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
+			return;
+		}
+
+		html = JSON.parse( html );
+		for ( key in html ) {
+			jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
+			setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
+			makeDraggable( document.getElementById( 'frm_field_id_' + key ) );
+		}
+
+		$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
+		if ( $nextSet.length ) {
+			loadFields( $nextSet.attr( 'id' ) );
+		} else {
+			// go up a level
+			$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
+			if ( $nextSet.length ) {
+				loadFields( $nextSet.attr( 'id' ) );
+			}
+		}
+
+		initiateMultiselect();
+		renumberPageBreaks();
+		maybeHideQuantityProductFieldOption();
+
+		const loadedEvent     = new Event( 'frm_ajax_loaded_field', { bubbles: false });
+		loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
+		document.dispatchEvent( loadedEvent );
 	}
 
 	function addFieldClick() {
