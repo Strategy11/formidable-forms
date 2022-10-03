@@ -1010,7 +1010,13 @@ function frmAdminBuildJS() {
 			if ( insertAtIndex === $children.length ) {
 				const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
 				top = $lastChild.offset().top + $lastChild.outerHeight();
-				$list.append( placeholder ); // TODO do not put it after the end divider.
+				$list.append( placeholder );
+
+				// Make sure nothing gets inserted after the end divider.
+				const $endDivider = $list.children( '.edit_field_type_end_divider' );
+				if ( $endDivider.length ) {
+					$list.append( $endDivider );
+				}
 			} else {
 				top = jQuery( $children.get( insertAtIndex ) ).offset().top;
 				jQuery( $children.get( insertAtIndex ) ).before( placeholder );
@@ -1655,7 +1661,6 @@ function frmAdminBuildJS() {
 		return allowMoveFieldToGroup( draggable, droppable );
 	}
 
-	// TODO I cannot drag a field group anywhere.
 	function allowMoveFieldGroup( fieldGroup, droppable ) {
 		if ( droppable.classList.contains( 'start_divider' ) && null === fieldGroup.querySelector( '.start_divider' ) ) {
 			// Allow a field group with no section inside of a section.
