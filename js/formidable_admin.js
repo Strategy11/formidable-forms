@@ -943,16 +943,7 @@ function frmAdminBuildJS() {
 
 		const $previousFieldContainer = ui.helper.parent();
 
-		if ( placeholder.previousElementSibling && placeholder.previousElementSibling.classList.contains( 'frm-is-collapsed' ) ) {
-			// If a page if collapsed, expand it before dragging since only the page break will move.
-			const $pageBreakField = jQuery( placeholder ).prevUntil( '[data-type="break"]' );
-			if ( $pageBreakField.length ) {
-				const collapseButton = $pageBreakField.find( '.frm-collapse-page' ).get( 0 );
-				if ( collapseButton ) {
-					collapseButton.click();
-				}
-			}
-		}
+		maybeOpenCollapsedPage( placeholder );
 
 		const previousSection = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
 		const newSection      = placeholder.closest( 'ul.frm_sorting' );
@@ -993,6 +984,28 @@ function frmAdminBuildJS() {
 		}
 
 		debouncedSyncAfterDragAndDrop();
+	}
+
+	/**
+	 * If a page if collapsed, expand it before dragging since only the page break will move.
+	 *
+	 * @param {Element} placeholder
+	 * @returns {void}
+	 */
+	function maybeOpenCollapsedPage( placeholder ) {
+		if ( ! placeholder.previousElementSibling || ! placeholder.previousElementSibling.classList.contains( 'frm-is-collapsed' ) ) {
+			return;
+		}
+
+		const $pageBreakField = jQuery( placeholder ).prevUntil( '[data-type="break"]' );
+		if ( ! $pageBreakField.length ) {
+			return;
+		}
+
+		const collapseButton = $pageBreakField.find( '.frm-collapse-page' ).get( 0 );
+		if ( collapseButton ) {
+			collapseButton.click();
+		}
 	}
 
 	function handleDragOverYAxis({ droppable, y, placeholder }) {
