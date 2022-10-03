@@ -998,7 +998,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( $previousContainerFields.length ) {
-			syncLayoutClasses( $previousContainerFields.first() );		
+			syncLayoutClasses( $previousContainerFields.first() );
 		} else {
 			maybeDeleteAnEmptyFieldGroup( $previousFieldContainer.get( 0 ) );
 		}
@@ -1013,7 +1013,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Remove an empty field group, but don't remove an empty section.
 	 *
-	 * @param {Element} previousFieldContainer 
+	 * @param {Element} previousFieldContainer
 	 * @returns {void}
 	 */
 	function maybeDeleteAnEmptyFieldGroup( previousFieldContainer ) {
@@ -1756,7 +1756,7 @@ function frmAdminBuildJS() {
 
 	function loadFields( fieldId ) {
 		const thisField      = document.getElementById( fieldId );
-		const $thisField     = jQuery( thisField );		
+		const $thisField     = jQuery( thisField );
 		const field          = [];
 		const addHtmlToField = element => {
 			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
