@@ -298,25 +298,38 @@ class FrmFormsController {
 		wp_die();
 	}
 
+	/**
+	 * Set the page global to any available page (except for the Blog Page).
+	 *
+	 * @return void
+	 */
 	private static function set_preview_query() {
-		$random_page = get_posts(
-			array(
-				'numberposts' => 1,
-				'orderby'     => 'date',
-				'order'       => 'ASC',
-				'post_type'   => 'page',
-			)
+		$page_query = array(
+			'numberposts' => 1,
+			'orderby'     => 'date',
+			'order'       => 'ASC',
+			'post_type'   => 'page',
 		);
 
-		if ( ! empty( $random_page ) ) {
-			$random_page = reset( $random_page );
-			query_posts(
-				array(
-					'post_type' => 'page',
-					'page_id'   => $random_page->ID,
-				)
-			);
+		$page_for_posts = get_option( 'page_for_posts' );
+		if ( is_numeric( $page_for_posts ) ) {
+			// Avoid querying for the "Posts Page" or "Blog Page" so we don't display 10 forms.
+			$page_query['post__not_in'] = array( $page_for_posts );
 		}
+
+		$random_page = get_posts( $page_query );
+
+		if ( ! $random_page ) {
+			return;
+		}
+
+		$random_page = reset( $random_page );
+		query_posts(
+			array(
+				'post_type' => 'page',
+				'page_id'   => $random_page->ID,
+			)
+		);
 	}
 
 	/**

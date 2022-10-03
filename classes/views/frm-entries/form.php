@@ -30,7 +30,13 @@ $frm_hide_fields = FrmAppHelper::get_post_param( 'frm_hide_fields_' . $form->id,
 ?>
 <div class="frm_form_fields <?php echo esc_attr( apply_filters( 'frm_form_fields_class', '', $values ) ); ?>">
 <fieldset>
-<?php echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+<?php
+/**
+ * @since 5.5.1
+ */
+do_action( 'frm_before_title', compact( 'form' ) );
+echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['before_html'], $form, $title, $description ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+?>
 <div <?php echo wp_strip_all_tags( apply_filters( 'frm_fields_container_class', 'class="frm_fields_container"' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 <?php do_action( 'frm_after_title', compact( 'form' ) ); ?>
 <input type="hidden" name="frm_action" value="<?php echo esc_attr( $form_action ); ?>" />
@@ -89,6 +95,11 @@ if ( isset( $frm_vars['collapse_div'] ) && $frm_vars['collapse_div'] ) {
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 if ( FrmForm::show_submit( $form ) ) {
+	/**
+	 * @since 5.5.1
+	 */
+	do_action( 'frm_before_submit_btn', compact( 'form' ) );
+
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
@@ -107,6 +118,11 @@ if ( FrmForm::show_submit( $form ) ) {
 	} else {
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );
 	}
+
+	/**
+	 * @since 5.5.1
+	 */
+	do_action( 'frm_after_submit_btn', compact( 'form' ) );
 }
 ?>
 </div>

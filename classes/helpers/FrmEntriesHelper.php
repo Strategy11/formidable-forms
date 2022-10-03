@@ -34,6 +34,10 @@ class FrmEntriesHelper {
 
 			FrmFieldsHelper::prepare_new_front_field( $field_array, $field, $args );
 
+			if ( ! is_array( $field->field_options ) ) {
+				$field->field_options = array();
+			}
+
 			$field_array = array_merge( $field->field_options, $field_array );
 
 			$values['fields'][] = $field_array;

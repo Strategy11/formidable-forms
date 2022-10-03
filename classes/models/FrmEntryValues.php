@@ -265,6 +265,16 @@ class FrmEntryValues {
 			'value' => isset( $entry_description['referrer'] ) ? $entry_description['referrer'] : '',
 		);
 
+		/**
+		 * Allow the referrer to be modified.
+		 *
+		 * @since 5.5.1
+		 *
+		 * @param array $referrer
+		 * @param array @entry_description
+		 */
+		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description );
+
 		$this->user_info = array(
 			'ip'       => $ip,
 			'browser'  => $browser,

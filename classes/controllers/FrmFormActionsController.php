@@ -39,17 +39,20 @@ class FrmFormActionsController {
 		do_action( 'frm_form_actions_init' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function register_actions() {
 		$action_classes = array(
-			'email'     => 'FrmEmailAction',
-			'wppost'    => 'FrmDefPostAction',
-			'register'  => 'FrmDefRegAction',
-			'paypal'    => 'FrmDefPayPalAction',
-			'payment'   => 'FrmDefHrsAction',
-			'quiz'      => 'FrmDefQuizAction',
-			'mailchimp' => 'FrmDefMlcmpAction',
-			'api'       => 'FrmDefApiAction',
-
+			'email'           => 'FrmEmailAction',
+			'wppost'          => 'FrmDefPostAction',
+			'register'        => 'FrmDefRegAction',
+			'paypal'          => 'FrmDefPayPalAction',
+			'payment'         => 'FrmDefHrsAction',
+			'quiz'            => 'FrmDefQuizAction',
+			'quiz_outcome'    => 'FrmDefQuizOutcomeAction',
+			'mailchimp'       => 'FrmDefMlcmpAction',
+			'api'             => 'FrmDefApiAction',
 			'salesforce'      => 'FrmDefSalesforceAction',
 			'activecampaign'  => 'FrmDefActiveCampaignAction',
 			'constantcontact' => 'FrmDefConstContactAction',
@@ -136,6 +139,7 @@ class FrmFormActionsController {
 					'wppost',
 					'register',
 					'quiz',
+					'quiz_outcome',
 					'twilio',
 				),
 			),

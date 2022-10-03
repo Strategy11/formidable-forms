@@ -629,11 +629,47 @@ class FrmXMLHelper {
 		$defaults           = self::default_field_options( $f['type'] );
 		$f['field_options'] = array_merge( $defaults, $f['field_options'] );
 
+		if ( is_callable( 'FrmProFileImport::import_attachment' ) ) {
+			$f = self::maybe_import_images_for_options( $f );
+		}
+
 		$new_id = FrmField::create( $f );
 		if ( $new_id != false ) {
 			$imported['imported']['fields'] ++;
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
 		}
+	}
+
+	/**
+	 * Import images for radio buttons and checkboxes from image src if available.
+	 *
+	 * @since 5.5.1
+	 *
+	 * @param array $field
+	 * @return array
+	 */
+	private static function maybe_import_images_for_options( $field ) {
+		if ( empty( $field['options'] ) || ! is_array( $field['options'] ) ) {
+			return $field;
+		}
+
+		foreach ( $field['options'] as $key => $option ) {
+			if ( ! is_array( $option ) || empty( $option['src'] ) ) {
+				continue;
+			}
+
+			$field_object       = (object) $field;
+			$field_object->type = 'file'; // Fake the file type as FrmProImport::import_attachment checks for file type.
+
+			$image_id = FrmProFileImport::import_attachment( $option['src'], $field_object );
+			unset( $field['options'][ $key ]['src'] ); // Remove the src from options as it isn't required after import.
+
+			if ( is_numeric( $image_id ) ) {
+				$field['options'][ $key ]['image'] = $image_id;
+			}
+		}
+
+		return $field;
 	}
 
 	/**
@@ -1369,6 +1405,7 @@ class FrmXMLHelper {
 	 */
 	public static function prepare_field_for_export( &$field ) {
 		self::remove_default_field_options( $field );
+		self::add_image_src_to_image_options( $field );
 	}
 
 	/**
@@ -1399,6 +1436,39 @@ class FrmXMLHelper {
 		}
 
 		$field->field_options = serialize( $options );
+	}
+
+	/**
+	 * Add image "src" key to each image option so the image can be imported to another website.
+	 *
+	 * @since 5.5.1
+	 *
+	 * @param stdClass $field
+	 * @return void
+	 */
+	private static function add_image_src_to_image_options( $field ) {
+		if ( empty( $field->options ) || false === strpos( $field->options, 'image' ) ) {
+			return;
+		}
+
+		$updated = false;
+		$options = $field->options;
+		FrmAppHelper::unserialize_or_decode( $options );
+
+		if ( ! $options || ! is_array( $options ) ) {
+			return;
+		}
+
+		foreach ( $options as $key => $option ) {
+			if ( is_array( $option ) && ! empty( $option['image'] ) ) {
+				$options[ $key ]['src'] = wp_get_attachment_url( $option['image'] );
+				$updated                = true;
+			}
+		}
+
+		if ( $updated ) {
+			$field->options = maybe_serialize( $options );
+		}
 	}
 
 	/**
