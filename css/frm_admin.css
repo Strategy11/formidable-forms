@@ -8669,6 +8669,11 @@ Responsive Design
 	pointer-events: none;
 }
 
+.frm-sortable-helper {
+	/* Make sure the item being dragged appears above other form builder fields */
+	z-index: 99;
+}
+
 #frm_banner {
 	width: 100%;
 	color: #fff;
