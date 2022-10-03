@@ -941,18 +941,16 @@ function frmAdminBuildJS() {
 			return;
 		}
 
-		const $previousFieldContainer = ui.helper.parent();
-
 		maybeOpenCollapsedPage( placeholder );
 
-		const previousSection = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
-		const newSection      = placeholder.closest( 'ul.frm_sorting' );
+		const $previousFieldContainer = ui.helper.parent();
+		const previousSection         = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
+		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
 		if ( draggable.classList.contains( 'frmbutton' ) ) {
 			insertNewFieldByDragging( draggable.id );
 		} else {
-			// Moving a field that already exists in the form.
-			placeholder.parentNode.insertBefore( draggable, placeholder );
+			moveFieldThatAlreadyExists( draggable, placeholder );
 		}
 
 		const previousSectionId = previousSection && previousSection.classList.contains( 'start_divider' ) ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
@@ -962,22 +960,8 @@ function frmAdminBuildJS() {
 		ui.helper.remove();
 
 		const $previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
-
-		if ( $previousFieldContainer.length ) {
-			if ( ! $previousContainerFields.length ) {
-				$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
-				if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
-					// remove an empty field group, but don't remove an empty section.
-					$closestFieldBox.remove();
-				}
-			} else {
-				syncLayoutClasses( $previousContainerFields.first() );
-			}
-		}
-
-		if ( 0 !== $previousContainerFields.length || 1 !== getFieldsInRow( jQuery( draggable.parentNode ) ).length ) {
-			syncLayoutClasses( jQuery( draggable ) );
-		}
+		maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields );
+		maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields );
 
 		if ( previousSectionId !== newSectionId ) {
 			updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
@@ -1005,6 +989,37 @@ function frmAdminBuildJS() {
 		const collapseButton = $pageBreakField.find( '.frm-collapse-page' ).get( 0 );
 		if ( collapseButton ) {
 			collapseButton.click();
+		}
+	}
+
+	function maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields ) {
+		if ( ! $previousFieldContainer.length ) {
+			return;
+		}
+
+		if ( $previousContainerFields.length ) {
+			syncLayoutClasses( $previousContainerFields.first() );		
+		} else {
+			maybeDeleteAnEmptyFieldGroup( $previousFieldContainer.get( 0 ) );
+		}
+	}
+
+	function maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields ) {
+		if ( 0 !== $previousContainerFields.length || 1 !== getFieldsInRow( jQuery( draggable.parentNode ) ).length ) {
+			syncLayoutClasses( jQuery( draggable ) );
+		}
+	}
+
+	/**
+	 * Remove an empty field group, but don't remove an empty section.
+	 *
+	 * @param {Element} previousFieldContainer 
+	 * @returns {void}
+	 */
+	function maybeDeleteAnEmptyFieldGroup( previousFieldContainer ) {
+		const closestFieldBox = previousFieldContainer.closest( 'li.frm_field_box' );
+		if ( closestFieldBox && ! closestFieldBox.classList.contains( 'edit_field_type_divider' ) ) {
+			closestFieldBox.remove();
 		}
 	}
 
@@ -1561,6 +1576,10 @@ function frmAdminBuildJS() {
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	function moveFieldThatAlreadyExists( draggable, placeholder ) {
+		placeholder.parentNode.insertBefore( draggable, placeholder );
 	}
 
 	function msgAsjQueryObject( msg ) {
