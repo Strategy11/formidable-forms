@@ -318,7 +318,6 @@ class FrmFormsController {
 		}
 
 		$random_page = get_posts( $page_query );
-
 		if ( ! $random_page ) {
 			return;
 		}
@@ -330,6 +329,23 @@ class FrmFormsController {
 				'page_id'   => $random_page->ID,
 			)
 		);
+
+		// Fixes Pro issue #3004. Prevent an undefined $post object.
+		// Otherwise WordPress themes will trigger a warning "Attempt to read property "comment_count" on null".
+		self::set_post_global( $random_page );
+	}
+
+	/**
+	 * Set the WP $post global object. Used for in-theme preview when defining a page.
+	 *
+	 * @since 5.5.2
+	 *
+	 * @param WP_Post $post
+	 * @return void
+	 */
+	private static function set_post_global( $page ) {
+		global $post;
+		$post = $page; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 	}
 
 	/**
