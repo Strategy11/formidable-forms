@@ -820,6 +820,11 @@ function frmAdminBuildJS() {
 			list => {
 				makeDroppable( list );
 				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
+
+				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
+				if ( $sectionTitle.length ) {
+					makeDroppable( $sectionTitle );
+				}
 			}
 		);
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
@@ -836,7 +841,7 @@ function frmAdminBuildJS() {
 	}
 
 	function onDragOverDroppable( event, ui ) {
-		const droppable = event.target;
+		const droppable = getDroppableForOnDragOver( event.target );
 		const draggable = ui.draggable[0];
 
 		if ( ! allowDrop( draggable, droppable ) ) {
@@ -848,6 +853,20 @@ function frmAdminBuildJS() {
 		document.querySelectorAll( '.frm-over-droppable' ).forEach( droppable => droppable.classList.remove( 'frm-over-droppable' ) );
 		droppable.classList.add( 'frm-over-droppable' );
 		jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
+	}
+
+	/**
+	 * Maybe change the droppable.
+	 * Section titles are made droppable, but are not a list, so we need to change the droppable to the section's list instead.
+	 *
+	 * @param {Element} droppable 
+	 * @returns {Element}
+	 */
+	function getDroppableForOnDragOver( droppable ) {
+		if ( droppable.classList.contains( 'divider_section_only' ) ) {
+			droppable = jQuery( droppable ).nextAll( '.start_divider.frm_sorting' ).get( 0 );
+		}
+		return droppable;
 	}
 
 	function onDraggableLeavesDroppable( event ) {

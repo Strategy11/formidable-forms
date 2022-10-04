@@ -3377,6 +3377,10 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 	max-width: calc(100% - 100px);
 }
 
+.frm-dragging .divider_section_only {
+	pointer-events: none;
+}
+
 .frm_form_settings #op-popup, /* 1Password */
 .frm_form_settings com-1password-op-button,
 .frm_conf_below .frm_conf_field_container .frm_primary_label,
@@ -5898,7 +5902,7 @@ li.selected .divider_section_only:before {
 .frm_sorting li.ui-state-default.edit_field_type_divider {
 	overflow: visible;
 	position: relative;
-	padding: 0 0 0 5px;
+	padding: 0 0 0 20px;
 	margin: 25px 0 0 -5px;
 	border-left: 1px solid var(--primary-hover);
 	transition: border 0.7s ease-out;
