@@ -859,7 +859,7 @@ function frmAdminBuildJS() {
 	 * Maybe change the droppable.
 	 * Section titles are made droppable, but are not a list, so we need to change the droppable to the section's list instead.
 	 *
-	 * @param {Element} droppable 
+	 * @param {Element} droppable
 	 * @returns {Element}
 	 */
 	function getDroppableForOnDragOver( droppable ) {
