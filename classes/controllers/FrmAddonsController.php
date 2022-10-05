@@ -317,11 +317,9 @@ class FrmAddonsController {
 			return $transient;
 		}
 
-		$version_info = self::fill_update_addon_info( $installed_addons );
-
+		$version_info            = self::fill_update_addon_info( $installed_addons );
 		$transient->last_checked = time();
-
-		$wp_plugins = FrmAppHelper::get_plugins();
+		$wp_plugins              = self::get_plugins();
 
 		foreach ( $version_info as $id => $plugin ) {
 			$plugin = (object) $plugin;
@@ -357,6 +355,21 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Copy of FrmAppHelper::get_plugins.
+	 * Because this gets called on "pre_set_site_transient_update_plugins" an old version of FrmAppHelper may be loaded on plugin update.
+	 * This means that trying to access FrmAppHelper::get_plugins when upgrading from a Lite version before v5.5 results in a one-off error.
+	 *
+	 * @since 5.5.2
+	 * @return array
+	 */
+	protected static function get_plugins() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		return get_plugins();
+	}
+
+	/**
 	 * Check if a plugin is installed before showing an update for it
 	 *
 	 * @since 3.05
@@ -366,7 +379,7 @@ class FrmAddonsController {
 	 * @return bool - True if installed
 	 */
 	protected static function is_installed( $plugin ) {
-		$all_plugins = FrmAppHelper::get_plugins();
+		$all_plugins = self::get_plugins();
 		return isset( $all_plugins[ $plugin ] );
 	}
 
@@ -861,7 +874,7 @@ class FrmAddonsController {
 		$response = array();
 
 		// It's already installed and active.
-		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 		if ( is_wp_error( $active ) ) {
 			// The plugin was installed, but not active. Download it now.
 			self::ajax_install_addon();
@@ -872,6 +885,22 @@ class FrmAddonsController {
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * @since 5.5.2
+	 *
+	 * @param string $plugin
+	 * @param string $redirect
+	 * @param bool   $network_wide
+	 * @param bool   $silent
+	 * @return null|WP_Error Null on success, WP_Error on invalid file.
+	 */
+	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
+		if ( ! function_exists( 'activate_plugin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		return activate_plugin( $plugin, $redirect, $network_wide, $silent );
 	}
 
 	/**
@@ -1028,7 +1057,7 @@ class FrmAddonsController {
 			return;
 		}
 
-		$activate = activate_plugin( $installed );
+		$activate = self::activate_plugin( $installed );
 		if ( is_wp_error( $activate ) ) {
 			// Ignore the invalid header message that shows with nested plugins.
 			if ( $activate->get_error_code() !== 'no_plugin_header' ) {
@@ -1118,7 +1147,7 @@ class FrmAddonsController {
 		delete_option( 'frm_connect_token' );
 
 		// It's already installed and active.
-		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 		if ( is_wp_error( $active ) ) {
 			// Download plugin now.
 			$response = self::download_and_activate();
