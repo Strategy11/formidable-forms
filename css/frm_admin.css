@@ -7225,6 +7225,13 @@ input[disabled],
 	opacity: 0;
 }
 
+.frm-field-group-count {
+	background-color: gray;
+	padding: 5px;
+	color: #fff !important;
+	border-radius: 10px;
+}
+
 /* End dragging */
 
 .field_type_list .frm_icon_font:before {

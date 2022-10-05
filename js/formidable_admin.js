@@ -876,7 +876,7 @@ function frmAdminBuildJS() {
 
 	function makeDraggable( draggable, handle ) {
 		const settings = {
-			helper: 'clone',
+			helper: getDraggableHelper,
 			revert: 'invalid',
 			delay: 10,
 			start: handleDragStart,
@@ -889,15 +889,37 @@ function frmAdminBuildJS() {
 		jQuery( draggable ).draggable( settings );
 	}
 
-	function handleDragStart( event, ui ) {
+	function getDraggableHelper( event ) {
+		const draggable = event.delegateTarget;
+
+		let copyTarget;
+
+		if ( draggable.classList.contains( 'frmbutton' ) ) {
+			copyTarget = draggable;
+		} else if ( draggable.hasAttribute( 'data-ftype' ) ) {
+			const fieldType = draggable.getAttribute( 'data-ftype' );
+			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
+			if ( ! copyTarget ) {
+				// This may include "quiz score" when quizzes are not active as it does not appear in the list.
+			}
+		} else {
+			// Field group.
+			const newTextFieldClone = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_ttext' ).cloneNode( true );
+			const fieldCount = getFieldsInRow( jQuery( draggable ) ).length;
+			newTextFieldClone.querySelector( 'svg' ).replaceWith( tag( 'i', { className: 'frm-field-group-count', text: fieldCount.toString() }) );
+			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group' );
+			return newTextFieldClone;
+		}
+
+		return copyTarget.cloneNode( true );
+	}
+
+	function handleDragStart( _, ui ) {
 		const container = document.getElementById( 'post-body-content' );
 		container.classList.add( 'frm-dragging-field' );
 
 		document.body.classList.add( 'frm-dragging' );
-
-		const width = jQuery( event.target ).width();
 		ui.helper.addClass( 'frm-sortable-helper' );
-		ui.helper.css( 'width', width + 'px' );
 
 		unselectFieldGroups();
 		deleteEmptyDividerWrappers();
