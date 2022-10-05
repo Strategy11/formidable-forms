@@ -140,12 +140,28 @@ class FrmSimpleBlocksController {
 			return '';
 		}
 
+		self::maybe_run_shortcodes_on_page_global();
+
 		$params       = array_filter( $attributes );
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
 
 		$form = FrmFormsController::get_form_shortcode( $params );
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
+	}
+
+	/**
+	 * Fixes Pro issue #3853. [frm-set-get] shortcodes don't work if the form is in a Gutenberg block.
+	 *
+	 * @since 5.5.2
+	 *
+	 * @return void
+	 */
+	private static function maybe_run_shortcodes_on_page_global() {
+		global $post;
+		if ( is_object( $post ) && ! empty( $post->post_content ) ) {
+			do_shortcode( $post->post_content );
+		}
 	}
 
 	/**
