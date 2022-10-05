@@ -861,7 +861,7 @@ class FrmAddonsController {
 		$response = array();
 
 		// It's already installed and active.
-		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 		if ( is_wp_error( $active ) ) {
 			// The plugin was installed, but not active. Download it now.
 			self::ajax_install_addon();
@@ -873,6 +873,23 @@ class FrmAddonsController {
 		echo json_encode( $response );
 		wp_die();
 	}
+
+	/**
+	 * @since 5.5.2
+	 *
+	 * @param string $plugin
+	 * @param string $redirect
+	 * @param bool   $network_wide
+	 * @param bool   $silent
+	 * @return void
+	 */
+	private static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
+		if ( ! function_exists( 'activate_plugin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		activate_plugin( $plugin, $redirect, $network_wide, $silent );
+	}
+
 
 	/**
 	 * @since 5.0.10
@@ -1028,7 +1045,7 @@ class FrmAddonsController {
 			return;
 		}
 
-		$activate = activate_plugin( $installed );
+		$activate = self::activate_plugin( $installed );
 		if ( is_wp_error( $activate ) ) {
 			// Ignore the invalid header message that shows with nested plugins.
 			if ( $activate->get_error_code() !== 'no_plugin_header' ) {
@@ -1118,7 +1135,7 @@ class FrmAddonsController {
 		delete_option( 'frm_connect_token' );
 
 		// It's already installed and active.
-		$active = activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
+		$active = self::activate_plugin( 'formidable-pro/formidable-pro.php', false, false, true );
 		if ( is_wp_error( $active ) ) {
 			// Download plugin now.
 			$response = self::download_and_activate();
