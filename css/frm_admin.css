@@ -7164,34 +7164,22 @@ input[disabled],
 	color: var(--dark-grey);
 }
 
-.frmbutton.ui-draggable-dragging {
-	width: auto !important;
-}
-
 /* Icon while dragging */
 .frmbutton.ui-draggable-dragging,
 .frmbutton.ui-draggable-dragging a {
 	cursor: move;
 }
 
-.frmbutton.ui-sortable-helper a,
 .frmbutton.ui-draggable-dragging a:hover,
 .frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
 	height: 25px !important;
-	width: 180px;
+	width: 140px;
 	text-align: center;
 	display: block !important;
-	background-color: var(--primary-hover) !important;
+	background-color: var(--lightest-grey) !important;
 	border-radius: 35px !important;
 	padding: 5px 20px !important;
-	color: #fff !important;
-}
-
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) a {
-	/* When the new field is held outside of a dropzone */
-	cursor: not-allowed;
-	background: var(--sidebar-color) !important;
 	color: var(--dark-grey) !important;
 }
 
@@ -7211,22 +7199,14 @@ input[disabled],
 	color: var(--dark-grey) !important;
 }
 
-.frmbutton.ui-draggable-dragging .frm-dropdown-menu {
-	display: none;
-}
-
 .frm_sorting li.ui-state-default.ui-sortable-helper,
 .frmbutton.ui-sortable-helper {
 	transition: opacity .2s;
 	opacity: 1;
 }
 
-.frmbutton.ui-sortable-helper:not(.ui-draggable-dragging) {
-	opacity: 0;
-}
-
 .frm-field-group-count {
-	background-color: gray;
+	background-color: var(--sidebar-hover);
 	padding: 5px;
 	color: #fff !important;
 	border-radius: 10px;

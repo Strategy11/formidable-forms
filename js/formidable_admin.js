@@ -892,26 +892,37 @@ function frmAdminBuildJS() {
 	function getDraggableHelper( event ) {
 		const draggable = event.delegateTarget;
 
-		let copyTarget;
-
-		if ( draggable.classList.contains( 'frmbutton' ) ) {
-			copyTarget = draggable;
-		} else if ( draggable.hasAttribute( 'data-ftype' ) ) {
-			const fieldType = draggable.getAttribute( 'data-ftype' );
-			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
-			if ( ! copyTarget ) {
-				// This may include "quiz score" when quizzes are not active as it does not appear in the list.
-			}
-		} else {
-			// Field group.
+		if ( isFieldGroup( draggable ) ) {
 			const newTextFieldClone = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_ttext' ).cloneNode( true );
-			const fieldCount = getFieldsInRow( jQuery( draggable ) ).length;
-			newTextFieldClone.querySelector( 'svg' ).replaceWith( tag( 'i', { className: 'frm-field-group-count', text: fieldCount.toString() }) );
 			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group' );
+			newTextFieldClone.classList.add( 'frm_field_box' );
 			return newTextFieldClone;
 		}
 
-		return copyTarget.cloneNode( true );
+		let copyTarget;
+
+		const isNewField = draggable.classList.contains( 'frmbutton' );
+		if ( isNewField ) {
+			copyTarget = draggable;
+			draggable.classList.add( 'frm-new-field' );
+			return copyTarget.cloneNode( true );
+		}
+
+		if ( draggable.hasAttribute( 'data-ftype' ) ) {
+			const fieldType = draggable.getAttribute( 'data-ftype' );
+			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
+			copyTarget = copyTarget.cloneNode( true );
+			copyTarget.classList.add( 'form-field' );
+
+			if ( copyTarget ) {
+				return copyTarget.cloneNode( true );
+			}
+		}
+
+		// TODO fallback.
+		return div({
+			className: 'frmbutton'
+		});
 	}
 
 	function handleDragStart( _, ui ) {
@@ -988,7 +999,7 @@ function frmAdminBuildJS() {
 		const previousSection         = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
-		if ( draggable.classList.contains( 'frmbutton' ) ) {
+		if ( draggable.classList.contains( 'frm-new-field' ) ) {
 			insertNewFieldByDragging( draggable.id );
 		} else {
 			moveFieldThatAlreadyExists( draggable, placeholder );
@@ -1678,7 +1689,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		const isNewField = draggable.classList.contains( 'frmbutton' );
+		const isNewField = draggable.classList.contains( 'frm-new-field' );
 		if ( isNewField ) {
 			return allowNewFieldDrop( draggable, droppable );
 		}
@@ -1716,8 +1727,7 @@ function frmAdminBuildJS() {
 	}
 
 	function allowMoveField( draggable, droppable ) {
-		const isFieldGroup = draggable.classList.contains( 'frm_field_box' ) && ! draggable.classList.contains( 'form-field' );
-		if ( isFieldGroup ) {
+		if ( isFieldGroup( draggable ) ) {
 			return allowMoveFieldGroup( draggable, droppable );
 		}
 
@@ -1732,6 +1742,10 @@ function frmAdminBuildJS() {
 		}
 
 		return allowMoveFieldToGroup( draggable, droppable );
+	}
+
+	function isFieldGroup( draggable ) {
+		return draggable.classList.contains( 'frm_field_box' ) && ! draggable.classList.contains( 'form-field' );
 	}
 
 	function allowMoveFieldGroup( fieldGroup, droppable ) {
