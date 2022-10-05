@@ -896,16 +896,17 @@ function frmAdminBuildJS() {
 			const newTextFieldClone = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_ttext' ).cloneNode( true );
 			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group' );
 			newTextFieldClone.classList.add( 'frm_field_box' );
+			newTextFieldClone.classList.add( 'ui-sortable-helper' );
 			return newTextFieldClone;
 		}
 
 		let copyTarget;
-
 		const isNewField = draggable.classList.contains( 'frmbutton' );
 		if ( isNewField ) {
-			copyTarget = draggable;
+			copyTarget = draggable.cloneNode( true );
+			copyTarget.classList.add( 'ui-sortable-helper' );
 			draggable.classList.add( 'frm-new-field' );
-			return copyTarget.cloneNode( true );
+			return copyTarget;
 		}
 
 		if ( draggable.hasAttribute( 'data-ftype' ) ) {
@@ -913,6 +914,8 @@ function frmAdminBuildJS() {
 			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
 			copyTarget = copyTarget.cloneNode( true );
 			copyTarget.classList.add( 'form-field' );
+
+			copyTarget.classList.add( 'ui-sortable-helper' );
 
 			if ( copyTarget ) {
 				return copyTarget.cloneNode( true );

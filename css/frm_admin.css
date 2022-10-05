@@ -3861,17 +3861,9 @@ li.sortable-placeholder {
 }
 
 .frm_sorting > li.edit_field_type_end_divider:first-child,
-.frm_sorting > .frmbutton + .sortable-placeholder, /* hide for first field */
 .frm-show-click,
 li.ui-state-default.edit_field_type_divider .frm-show-click {
 	display: none;
-}
-
-.frm_form_field.ui-sortable-helper {
-	height: 30px !important;
-	background-color: #fff !important;
-	overflow: hidden !important;
-	box-sizing: border-box;
 }
 
 .frm_form_field.ui-sortable-helper .frm-field-action-icons,
@@ -7165,12 +7157,15 @@ input[disabled],
 }
 
 /* Icon while dragging */
+.frmbutton.ui-draggable-dragging {
+	pointer-events: none;
+}
+
 .frmbutton.ui-draggable-dragging,
 .frmbutton.ui-draggable-dragging a {
 	cursor: move;
 }
 
-.frmbutton.ui-draggable-dragging a:hover,
 .frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
 	height: 25px !important;
@@ -7194,8 +7189,8 @@ input[disabled],
 	color: #fff !important;
 }
 
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) i,
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) .frmsvg {
+.frmbutton.ui-draggable-dragging i,
+.frmbutton.ui-draggable-dragging .frmsvg {
 	color: var(--dark-grey) !important;
 }
 
