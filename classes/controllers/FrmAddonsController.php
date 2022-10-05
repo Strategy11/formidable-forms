@@ -894,13 +894,13 @@ class FrmAddonsController {
 	 * @param string $redirect
 	 * @param bool   $network_wide
 	 * @param bool   $silent
-	 * @return void
+	 * @return null|WP_Error Null on success, WP_Error on invalid file.
 	 */
 	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
 		if ( ! function_exists( 'activate_plugin' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		activate_plugin( $plugin, $redirect, $network_wide, $silent );
+		return activate_plugin( $plugin, $redirect, $network_wide, $silent );
 	}
 
 
