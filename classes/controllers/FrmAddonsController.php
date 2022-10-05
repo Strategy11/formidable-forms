@@ -362,7 +362,7 @@ class FrmAddonsController {
 	 * @since 5.5.2
 	 * @return array
 	 */
-	private static function get_plugins() {
+	protected static function get_plugins() {
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
@@ -896,7 +896,7 @@ class FrmAddonsController {
 	 * @param bool   $silent
 	 * @return void
 	 */
-	private static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
+	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
 		if ( ! function_exists( 'activate_plugin' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
