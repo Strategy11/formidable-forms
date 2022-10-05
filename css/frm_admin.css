@@ -7183,7 +7183,6 @@ input[disabled],
 }
 
 #frm-show-fields .frmbutton.ui-sortable-helper i,
-.frmbutton.ui-sortable-helper span,
 .frmbutton.ui-draggable-dragging i,
 .frmbutton.ui-draggable-dragging .frmsvg {
 	color: #fff !important;
