@@ -317,11 +317,9 @@ class FrmAddonsController {
 			return $transient;
 		}
 
-		$version_info = self::fill_update_addon_info( $installed_addons );
-
+		$version_info            = self::fill_update_addon_info( $installed_addons );
 		$transient->last_checked = time();
-
-		$wp_plugins = FrmAppHelper::get_plugins();
+		$wp_plugins              = self::get_plugins();
 
 		foreach ( $version_info as $id => $plugin ) {
 			$plugin = (object) $plugin;
@@ -357,6 +355,21 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Copy of FrmAppHelper::get_plugins.
+	 * Because this gets called on "pre_set_site_transient_update_plugins" an old version of FrmAppHelper may be loaded on plugin update.
+	 * This means that trying to access FrmAppHelper::get_plugins when upgrading from a Lite version before v5.5 results in a one-off error.
+	 *
+	 * @since 5.5.2
+	 * @return array
+	 */
+	private static function get_plugins() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		return get_plugins();
+	}
+
+	/**
 	 * Check if a plugin is installed before showing an update for it
 	 *
 	 * @since 3.05
@@ -366,7 +379,7 @@ class FrmAddonsController {
 	 * @return bool - True if installed
 	 */
 	protected static function is_installed( $plugin ) {
-		$all_plugins = FrmAppHelper::get_plugins();
+		$all_plugins = self::get_plugins();
 		return isset( $all_plugins[ $plugin ] );
 	}
 
