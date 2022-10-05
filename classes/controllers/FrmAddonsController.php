@@ -903,7 +903,6 @@ class FrmAddonsController {
 		return activate_plugin( $plugin, $redirect, $network_wide, $silent );
 	}
 
-
 	/**
 	 * @since 5.0.10
 	 *
