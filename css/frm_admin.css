@@ -3377,6 +3377,10 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 	max-width: calc(100% - 100px);
 }
 
+.frm-dragging * {
+	cursor: move !important;
+}
+
 .frm-dragging .divider_section_only {
 	pointer-events: none;
 }
