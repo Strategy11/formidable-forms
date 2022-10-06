@@ -35,10 +35,19 @@ class FrmXMLController {
 	 * Use the template link to install the XML template
 	 *
 	 * @since 3.06
+	 * @return void
 	 */
 	public static function install_template() {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( ! function_exists( 'simplexml_load_string' ) ) {
+			$response = array(
+				'message' => __( 'Your server is missing the Simple XML extension. This is required to install a template.', 'formidable' ),
+			);
+			echo wp_json_encode( $response );
+			wp_die();
+		}
 
 		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
 
@@ -51,7 +60,7 @@ class FrmXMLController {
 
 		if ( ! $xml ) {
 			$response = array(
-				'message' => __( 'There was an error reading the form template', 'formidable' ),
+				'message' => __( 'There was an error reading the form template.', 'formidable' ),
 			);
 			echo wp_json_encode( $response );
 			wp_die();
