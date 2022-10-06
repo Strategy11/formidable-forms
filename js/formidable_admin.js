@@ -881,7 +881,11 @@ function frmAdminBuildJS() {
 			delay: 10,
 			start: handleDragStart,
 			stop: handleDragStop,
-			drag: handleDrag
+			drag: handleDrag,
+			cursorAt: {
+				top: 0,
+				left: 0
+			}
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;
