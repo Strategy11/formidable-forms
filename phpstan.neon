@@ -73,3 +73,4 @@ parameters:
 		- '#Expected 2 \@param tags, found 4\.#'
 		- '#should always throw an exception or terminate script execution but#'
 		- '#spl_autoload_register expects#'
+		- '#always exists and is always falsy#'
