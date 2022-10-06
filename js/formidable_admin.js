@@ -883,8 +883,8 @@ function frmAdminBuildJS() {
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursorAt: {
-				top: 0,
-				left: 0
+				top: jQuery( draggable ).height() - 10,
+				left: jQuery( draggable ).width() / 2
 			}
 		};
 		if ( 'string' === typeof handle ) {
