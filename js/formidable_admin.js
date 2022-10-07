@@ -8645,16 +8645,25 @@ function frmAdminBuildJS() {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
 				// Show response.message
-				if ( response.message && typeof form.elements.show_response !== 'undefined' ) {
-					const showError = document.getElementById( form.elements.show_response.value );
-					if ( showError !== null ) {
-						showError.innerHTML = response.message;
-						showError.classList.remove( 'frm_hidden' );
-					}
+				if ( 'string' === typeof response.message ) {
+					showInstallFormErrorModal( response.message );
 				}
 			}
 			button.classList.remove( 'frm_loading_button' );
 		});
+	}
+
+	function showInstallFormErrorModal( message ) {
+		const modalContent = div( message );
+		modalContent.style.padding = '20px 40px';
+		const modal = frmDom.modal.maybeCreateModal(
+			'frmInstallFormErrorModal',
+			{
+				title: __( 'Unable to install template', 'formidable' ),
+				content: modalContent
+			}
+		);
+		modal.classList.add( 'frm_common_modal' );
 	}
 
 	function handleCaptchaTypeChange( e ) {
