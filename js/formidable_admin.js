@@ -7033,7 +7033,7 @@ function frmAdminBuildJS() {
 				elementId: elementId,
 				success: function( msg ) {
 					if ( rich ) {
-						tinymce.activeEditor.setContent(msg, {format: 'raw'});
+						send_to_editor( msg );
 					} else {
 						insertContent( contentBox, msg );
 					}
