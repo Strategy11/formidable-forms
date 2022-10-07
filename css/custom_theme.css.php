@@ -877,23 +877,20 @@ a.frm_save_draft{
 	background-color: var(--bg-color);
 	flex: none;
 	display:inline-block !important;
-	margin: 5px 0;
+	margin: 0 5px 0 0;
 	color: var(--border-color);
 	width: 18px;
-	width: 18px;
+	min-width: 18px;
 	height: 18px;
 	border: 1px solid currentColor;
 	border-color: var(--border-color);
 	vertical-align: middle;
-	position: relative; /* override Bootstrap */
+	position: initial; /* override Bootstrap */
 	padding: 0;
 }
 
 .with_frm_style .frm_radio input[type=radio]:before,
 .with_frm_style .frm_checkbox input[type=checkbox]:before {
-	position: absolute;
-	left: calc(50% - 6px);
-	top: calc(50% - 6px);
 	content: '';
 	width: 12px;
 	height: 12px;
@@ -902,7 +899,7 @@ a.frm_save_draft{
 	transition: 120ms transform ease-in-out;
 	box-shadow: inset 10px 10px var(--text-color);
 	display: block;
-	margin: 0;
+	margin: 2px 0 0 2px;
 }
 
 .with_frm_style .frm_checkbox input[type=checkbox]:before{

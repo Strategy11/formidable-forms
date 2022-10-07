@@ -3350,19 +3350,30 @@ input[type="checkbox"] {
 	margin-right: 5px;
 }
 
-.with_frm_style .frm_radio input[type=radio],
-.with_frm_style .frm_checkbox input[type=checkbox]{
+.with_frm_style .frm_radio input[type=radio] {
 	margin: 5px 0;
 	width: 18px;
 	position: relative; /* override Bootstrap */
 }
 
-.with_frm_style .frm_radio input[type=radio]:before,
-.with_frm_style .frm_checkbox input[type=checkbox]:before {
+.with_frm_style .frm_radio input[type=radio]:before {
+	position: relative !important;
+	left: calc(50% - 6px);
+	top: calc(50% - 6px);
+	margin: 0 !important;
+}
+
+.with_frm_style .frm_scale input[type=radio] {
+	position: relative;
+}
+
+.with_frm_style .frm_scale input[type=radio]:before {
 	position: absolute;
 	left: calc(50% - 6px);
 	top: calc(50% - 6px);
-	margin: 0;
+	width: 12px !important;
+	height: 12px !important;
+	margin: 0 !important;
 }
 
 .frm_inner_field_container {
@@ -8250,7 +8261,9 @@ Responsive Design
 		width: 100%;
 	}
 
-	.with_frm_style .frm_radio input[type=radio],
+	.with_frm_style .frm_radio input[type=radio] {
+		width: 18px !important;
+	}
 	.with_frm_style .frm_checkbox input[type=checkbox] {
 		width: 25px !important;
 	}
