@@ -3363,19 +3363,6 @@ input[type="checkbox"] {
 	margin: 0 !important;
 }
 
-.with_frm_style .frm_scale input[type=radio] {
-	position: relative;
-}
-
-.with_frm_style .frm_scale input[type=radio]:before {
-	position: absolute;
-	left: calc(50% - 6px);
-	top: calc(50% - 6px);
-	width: 12px !important;
-	height: 12px !important;
-	margin: 0 !important;
-}
-
 .frm_inner_field_container {
 	margin-bottom: 10px;
 }
