@@ -880,8 +880,8 @@ a.frm_save_draft{
 	margin: 5px 0;
 	color: var(--border-color);
 	width: 18px;
-	min-width: 18px;
-	min-height: 18px;
+	width: 18px;
+	height: 18px;
 	border: 1px solid currentColor;
 	border-color: var(--border-color);
 	vertical-align: middle;
