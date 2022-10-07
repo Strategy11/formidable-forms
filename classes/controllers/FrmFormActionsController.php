@@ -93,6 +93,17 @@ class FrmFormActionsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $message
+	 *
+	 * @return string
+	 */
+	public static function update_email_message( $message ) {
+		return str_replace( "\n", '<br>', $message );
+	}
+
+	/**
 	 * Add unknown actions to a group.
 	 *
 	 * @since 4.0
