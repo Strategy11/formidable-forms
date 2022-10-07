@@ -7011,8 +7011,6 @@ function frmAdminBuildJS() {
 
 		if ( rich ) {
 			wpActiveEditor = elementId;
-			send_to_editor( variable );
-			return;
 		}
 
 		if ( ! contentBox.length ) {
@@ -7032,8 +7030,13 @@ function frmAdminBuildJS() {
 					plain_text: p,
 					nonce: frmGlobal.nonce
 				},
+				elementId: elementId,
 				success: function( msg ) {
-					insertContent( contentBox, msg );
+					if ( rich ) {
+						tinymce.activeEditor.setContent(msg, {format: 'raw'});
+					} else {
+						insertContent( contentBox, msg );
+					}
 				}
 			});
 		} else {
