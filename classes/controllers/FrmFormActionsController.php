@@ -101,7 +101,7 @@ class FrmFormActionsController {
 	 */
 	public static function update_email_message( $message, $atts ) {
 		if ( ! $atts['plain_text'] ) {
-			$message = str_replace( "\n", '<br>', $message );
+			$message = wpautop( $message );
 		}
 		return $message;
 	}
