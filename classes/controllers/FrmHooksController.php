@@ -143,7 +143,7 @@ class FrmHooksController {
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
 
 		// Email Model
-		add_filter( 'frm_email_message', 'FrmFormActionsController::update_email_message' );
+		add_filter( 'frm_email_message', 'FrmFormActionsController::update_email_message', 10, 2 );
 
 		// Inbox Controller.
 		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );

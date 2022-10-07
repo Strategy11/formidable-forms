@@ -99,8 +99,11 @@ class FrmFormActionsController {
 	 *
 	 * @return string
 	 */
-	public static function update_email_message( $message ) {
-		return str_replace( "\n", '<br>', $message );
+	public static function update_email_message( $message, $atts ) {
+		if ( ! $atts['plain_text'] ) {
+			$message = str_replace( "\n", '<br>', $message );
+		}
+		return $message;
 	}
 
 	/**
