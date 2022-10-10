@@ -95,7 +95,7 @@ class FrmFormActionsController {
 	/**
 	 * Updates email message
 	 *
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
