@@ -672,7 +672,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$action->post_content['email_message'] = 'Value <br/>with HTML';
 
 		$settings = array(
-			0 => 'Value <br/>with HTML',
+			0 => '<p>Value <br/>with HTML</p>',
 			1 => 'Value with HTML',
 		);
 
