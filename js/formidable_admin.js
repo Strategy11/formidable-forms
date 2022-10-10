@@ -7035,7 +7035,7 @@ function frmAdminBuildJS() {
 					if ( rich ) {
 						let p = document.createElement( 'p' );
 						p.innerText = msg;
-						send_to_editor( p.outerHTML );
+						send_to_editor( p.innerHTML );
 					} else {
 						insertContent( contentBox, msg );
 					}
