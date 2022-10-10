@@ -7043,7 +7043,11 @@ function frmAdminBuildJS() {
 			});
 		} else {
 			variable = maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox );
-			insertContent( contentBox, variable );
+			if ( rich ) {
+				send_to_editor( variable );
+			} else {
+				insertContent( contentBox, variable );
+			}
 		}
 		return false;
 	}
