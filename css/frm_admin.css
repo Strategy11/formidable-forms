@@ -7175,7 +7175,7 @@ input[disabled],
 	height: 25px !important;
 	width: 140px;
 	text-align: center;
-	display: block !important;
+	display: inline !important;
 	background-color: var(--lightest-grey) !important;
 	border-radius: 35px !important;
 	padding: 5px 20px !important;

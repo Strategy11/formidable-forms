@@ -884,7 +884,7 @@ function frmAdminBuildJS() {
 			drag: handleDrag,
 			cursorAt: {
 				top: 0,
-				left: 0
+				left: 70
 			}
 		};
 		if ( 'string' === typeof handle ) {
