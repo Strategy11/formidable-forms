@@ -3350,6 +3350,19 @@ input[type="checkbox"] {
 	margin-right: 5px;
 }
 
+.with_frm_style .frm_radio input[type=radio] {
+	margin: 5px 0;
+	width: 18px;
+	position: relative; /* override Bootstrap */
+}
+
+.with_frm_style .frm_radio input[type=radio]:before {
+	position: relative !important;
+	left: calc(50% - 6px);
+	top: calc(50% - 6px);
+	margin: 0 !important;
+}
+
 .frm_inner_field_container {
 	margin-bottom: 10px;
 }
@@ -8235,7 +8248,9 @@ Responsive Design
 		width: 100%;
 	}
 
-	.with_frm_style .frm_radio input[type=radio],
+	.with_frm_style .frm_radio input[type=radio] {
+		width: 18px !important;
+	}
 	.with_frm_style .frm_checkbox input[type=checkbox] {
 		width: 25px !important;
 	}
