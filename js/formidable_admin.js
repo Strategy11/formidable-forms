@@ -884,7 +884,7 @@ function frmAdminBuildJS() {
 			drag: handleDrag,
 			cursorAt: {
 				top: 0,
-				left: 70
+				left: 70 // The width of draggable button is 140. 70 should center the draggable on the cursor.
 			}
 		};
 		if ( 'string' === typeof handle ) {
