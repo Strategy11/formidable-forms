@@ -196,21 +196,8 @@ function frmFrontFormJS() {
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
-				value = field.value;
-				if ( value !== '' ) {
-					if ( field.type === 'hidden' ) {
-						// don't validate
-					} else if ( field.type === 'number' ) {
-						errors = checkNumberField( field, errors );
-					} else if ( field.type === 'email' ) {
-						errors = checkEmailField( field, errors );
-					} else if ( field.type === 'password' ) {
-						errors = checkPasswordField( field, errors );
-					} else if ( field.type === 'url' ) {
-						errors = checkUrlField( field, errors );
-					} else if ( field.pattern !== null ) {
-						errors = checkPatternField( field, errors );
-					}
+				if ( '' !== field.value ) {
+					validateFieldValue( field, errors );
 				}
 			}
 		}
@@ -259,17 +246,7 @@ function frmFrontFormJS() {
 		}
 
 		if ( errors.length < 1 ) {
-			if ( field.type === 'email' ) {
-				errors = checkEmailField( field, errors );
-			} else if ( field.type === 'password' ) {
-				errors = checkPasswordField( field, errors );
-			} else if ( field.type === 'number' ) {
-				errors = checkNumberField( field, errors );
-			} else if ( field.type === 'url' ) {
-				errors = checkUrlField( field, errors );
-			} else if ( field.pattern !== null ) {
-				errors = checkPatternField( field, errors );
-			}
+			validateFieldValue( field, errors );
 		}
 
 		removeFieldError( $fieldCont );
@@ -277,6 +254,22 @@ function frmFrontFormJS() {
 			for ( key in errors ) {
 				addFieldError( $fieldCont, key, errors );
 			}
+		}
+	}
+
+	function validateFieldValue( field, errors ) {
+		if ( field.type === 'hidden' ) {
+			// don't validate
+		} else if ( field.type === 'number' ) {
+			checkNumberField( field, errors );
+		} else if ( field.type === 'email' ) {
+			checkEmailField( field, errors );
+		} else if ( field.type === 'password' ) {
+			checkPasswordField( field, errors );
+		} else if ( field.type === 'url' ) {
+			checkUrlField( field, errors );
+		} else if ( field.pattern !== null ) {
+			checkPatternField( field, errors );
 		}
 	}
 
@@ -397,7 +390,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkEmailField( field, errors ) {
@@ -410,12 +402,10 @@ function frmFrontFormJS() {
 		}
 
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function checkPasswordField( field, errors ) {
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function confirmField( field, errors ) {
@@ -451,7 +441,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkPatternField( field, errors ) {
@@ -468,7 +457,6 @@ function frmFrontFormJS() {
 				}
 			}
 		}
-		return errors;
 	}
 
 	function hasInvisibleRecaptcha( object ) {
