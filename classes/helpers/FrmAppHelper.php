@@ -2799,6 +2799,8 @@ class FrmAppHelper {
 			'include_alert_role' => self::should_include_alert_role_on_field_errors(),
 		);
 
+		self::maybe_add_password_checks_data();
+
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
 		if ( empty( $data ) ) {
 			wp_localize_script( 'formidable', 'frm_js', $script_strings );
@@ -2864,6 +2866,22 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
+	}
+
+	private static function maybe_add_password_checks_data() {
+		if ( ! class_exists( 'FrmProFieldPassword', false ) ) {
+			return;
+		}
+		$field          = new stdClass();
+		$field->name    = 'password';
+		$field->type    = 'password';
+		$password_field = new FrmProFieldPassword( $field, 'password' );
+
+		wp_localize_script(
+			'formidable',
+			'frm_password_checks',
+			$password_field->password_checks()
+		);
 	}
 
 	/**

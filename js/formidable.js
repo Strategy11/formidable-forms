@@ -136,7 +136,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function disableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).attr( 'disabled', 'disabled' );
 	}
@@ -147,7 +147,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function enableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
 	}
@@ -406,6 +406,28 @@ function frmFrontFormJS() {
 
 	function checkPasswordField( field, errors ) {
 		confirmField( field, errors );
+		checkPasswordStrength( field, errors );
+	}
+
+	function checkPasswordStrength( field, errors ) {
+		if ( 'object' !== typeof window.frm_password_checks ) {
+			return;
+		}
+
+		if ( -1 === field.className.indexOf( 'frm_strong_pass' ) || 0 === field.id.indexOf( 'field_conf_' ) ) {
+			return;
+		}
+
+		var check, regex, checks = window.frm_password_checks;
+
+		for ( check in checks ) {
+			regex = checks[ check ].regex.slice( 1, checks[ check ].regex.length - 1 )
+			regex = new RegExp( regex );
+			if ( ! regex.test( field.value ) ) {
+				errors[ field.id ] = checks[ check ].message;
+				return;
+			}
+		}
 	}
 
 	function confirmField( field, errors ) {
@@ -1529,10 +1551,10 @@ function frmFrontFormJS() {
 			removeSubmitLoading( $object, enable, processesRunning );
 		},
 
-        scrollToID: function( id ) {
-            var object = jQuery( document.getElementById( id ) );
-            frmFrontForm.scrollMsg( object, false );
-        },
+		scrollToID: function( id ) {
+			var object = jQuery( document.getElementById( id ) );
+			frmFrontForm.scrollMsg( object, false );
+		},
 
 		scrollMsg: function( id, object, animate ) {
 			var newPos, m, b, screenTop, screenBottom,
