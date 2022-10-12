@@ -172,9 +172,6 @@ class FrmHooksController {
 		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
-		// Emails
-		add_filter( 'frm_email_message', 'FrmFormActionsController::update_email_message' );
-
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();
