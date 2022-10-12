@@ -505,8 +505,7 @@ legend.frm_hidden{
 .with_frm_style .frm_inside_container.frm_label_float_top > label {
 	top: 0;
 	left: 0;
-	padding-top: 0;
-	padding-bottom: 0;
+	padding: 0;
 	font-size: 12px;
 	font-size: calc(0.85 * var(--field-font-size));
 }
