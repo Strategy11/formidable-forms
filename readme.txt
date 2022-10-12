@@ -452,6 +452,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Prevent a fatal error that was preventing add ons from installing via API.
 * Embed examples no longer include title=true and description=true.
 * License types will no longer appear as application template category options.
+* Plain text email actions will no longer use a rich text editor.
 
 = 5.5.1 =
 * New: Email actions now use a rich text editor.
