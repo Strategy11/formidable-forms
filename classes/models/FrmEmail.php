@@ -361,8 +361,10 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_message() {
+		$this->message = $this->settings['email_message'];
+
 		if ( ! $this->is_plain_text ) {
-			$this->message = html_entity_decode( $this->settings['email_message'] ); // The decode is to support [default-html] shortcodes.
+			$this->message = html_entity_decode( $this->message ); // The decode is to support [default-html] shortcodes.
 		}
 
 		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
