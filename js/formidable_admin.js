@@ -927,10 +927,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		// TODO fallback.
-		return div({
-			className: 'frmbutton'
-		});
+		return div({ className: 'frmbutton' });
 	}
 
 	function handleDragStart( event, ui ) {
