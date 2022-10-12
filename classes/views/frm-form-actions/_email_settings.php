@@ -77,16 +77,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Message', 'formidable' ); ?>
 	</label>
 	<?php
+	$rich_text_emails = empty( $form_action->post_content['plain_text'] );
+
 	/**
 	 * @since 5.5.2
 	 *
-	 * @param bool  $rich_text_emails
+	 * @param bool  $rich_text_emails True by default unless plain text is selected.
 	 * @param array $args {
 	 *     @type stdClass $form
 	 *     @type WP_Post  $form_action
 	 * }
 	 */
-	$rich_text_emails = apply_filters( 'frm_rich_text_emails', true, compact( 'form', 'form_action' ) );
+	$rich_text_emails = apply_filters( 'frm_rich_text_emails', $rich_text_emails, compact( 'form', 'form_action' ) );
 
 	if ( $rich_text_emails ) {
 		$editor_args = array(
