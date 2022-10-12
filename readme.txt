@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.0.2
 Requires PHP: 5.6
-Stable tag: 5.5.1
+Stable tag: 5.5.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,16 @@ Using our Zapier integration, you can easily connect your website with over 1000
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.2 =
+* New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar.
+* New: Improved error handling when installing form templates. A message will be shown when the simple XML extension is not installed, and errors will now be shown in a pop up when a template falls to install.
+* New: Added a new frm_before_simple_form_render action that triggers before a form block is rendered.
+* Fix: Improved how drag and drop works when dragging multiple sections in a field group.
+* Fix: Prevent a warning that would trigger when previewing a form in-theme when using Twenty Twenty One.
+* Fix: Prevent a fatal error that would only ever happen once, immediately when upgrading to version 5.5 or higher from an older version.
+* Fix: Prevent a fatal error that was preventing add ons from installing via API.
+* Embed examples no longer include title=true and description=true.
+
 = 5.5.1 =
 * New: Email actions now use a rich text editor.
 * New: Added new frm_before_title, frm_before_submit_btn, and frm_after_submit_btn actions.
