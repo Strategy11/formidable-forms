@@ -390,6 +390,9 @@ class FrmEmail {
 
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
+		} else {
+			$message = html_entity_decode( $message ); // The decode is to support [default-html] shortcodes.
+			$message = wpautop( $message, false ); // HTML emails should use autop.
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
