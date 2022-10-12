@@ -93,6 +93,18 @@ class FrmFormActionsController {
 	}
 
 	/**
+	 * Updates email message
+	 *
+	 * @param string $message
+	 *
+	 * @return string
+	 */
+	public static function update_email_message( $message ) {
+		$message = html_entity_decode( $message );
+		return $message;
+	}
+
+	/**
 	 * Add unknown actions to a group.
 	 *
 	 * @since 4.0

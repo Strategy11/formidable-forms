@@ -6982,8 +6982,6 @@ function frmAdminBuildJS() {
 
 		if ( rich ) {
 			wpActiveEditor = elementId;
-			send_to_editor( variable );
-			return;
 		}
 
 		if ( ! contentBox.length ) {
@@ -7003,13 +7001,24 @@ function frmAdminBuildJS() {
 					plain_text: p,
 					nonce: frmGlobal.nonce
 				},
+				elementId: elementId,
 				success: function( msg ) {
-					insertContent( contentBox, msg );
+					if ( rich ) {
+						let p = document.createElement( 'p' );
+						p.innerText = msg;
+						send_to_editor( p.innerHTML );
+					} else {
+						insertContent( contentBox, msg );
+					}
 				}
 			});
 		} else {
 			variable = maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox );
-			insertContent( contentBox, variable );
+			if ( rich ) {
+				send_to_editor( variable );
+			} else {
+				insertContent( contentBox, variable );
+			}
 		}
 		return false;
 	}
