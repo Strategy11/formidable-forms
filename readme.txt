@@ -451,6 +451,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Prevent a warning that would trigger when previewing a form in-theme when using Twenty Twenty One.
 * Fix: Prevent a fatal error that would only ever happen once, immediately when upgrading to version 5.5 or higher from an older version.
 * Fix: Prevent a fatal error that was preventing add ons from installing via API.
+* Fix: Updated radio button styling on the Edit Entry page to fix visual issues at mobile screen sizes.
 * Embed examples no longer include title=true and description=true.
 * License types will no longer appear as application template category options.
 * Plain text email actions will no longer use a rich text editor.
