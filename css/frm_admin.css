@@ -3381,7 +3381,12 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 	cursor: grabbing !important;
 }
 
-.frm-dragging .divider_section_only {
+.frm-drag-fade {
+	opacity: 0.5;
+}
+
+.frm-dragging .divider_section_only,
+.frm-dragging .frm_field_box {
 	pointer-events: none;
 }
 
@@ -7179,6 +7184,7 @@ input[disabled],
 	color: var(--dark-grey) !important;
 	box-sizing: border-box;
 	border: 1px solid var(--grey-border);
+	box-shadow: 0 0 8px rgba(0,0,0,.3);
 }
 
 .frmbutton.ui-draggable-dragging span {

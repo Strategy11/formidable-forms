@@ -933,12 +933,14 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	function handleDragStart( _, ui ) {
+	function handleDragStart( event, ui ) {
 		const container = document.getElementById( 'post-body-content' );
 		container.classList.add( 'frm-dragging-field' );
 
 		document.body.classList.add( 'frm-dragging' );
 		ui.helper.addClass( 'frm-sortable-helper' );
+
+		event.target.classList.add( 'frm-drag-fade' );
 
 		unselectFieldGroups();
 		deleteEmptyDividerWrappers();
@@ -951,6 +953,11 @@ function frmAdminBuildJS() {
 		const container = document.getElementById( 'post-body-content' );
 		container.classList.remove( 'frm-dragging-field' );
 		document.body.classList.remove( 'frm-dragging' );
+
+		const fade = document.querySelector( '.frm-drag-fade' );
+		if ( fade ) {
+			fade.classList.remove( 'frm-drag-fade' );
+		}
 	}
 
 	function handleDrag( event ) {
@@ -1156,9 +1163,8 @@ function frmAdminBuildJS() {
 			left = jQuery( $children.get( insertAtIndex ) ).offset().left;
 			jQuery( $children.get( insertAtIndex ) ).before( placeholder );
 
-			if ( 0 !== insertAtIndex ) {
-				left -= 8; // Offset the placeholder slightly so it appears between two fields.
-			}
+			const amountToOffsetLeftBy = 0 === insertAtIndex ? 4 : 8; // Offset by 8 in between rows, but only 4 for the first item in a group.
+			left -= amountToOffsetLeftBy; // Offset the placeholder slightly so it appears between two fields.
 		}
 
 		left -= $row.offset().left;
