@@ -443,8 +443,8 @@ legend.frm_hidden{
 /* Floating labels */
 .with_frm_style .frm_inside_container {
 	position: relative;
-	padding-top: 27px;
-	padding-top: calc(0.85 * var(--field-height));
+	padding-top: 16px;
+	padding-top: calc(0.5 * var(--field-height));
 }
 
 .with_frm_style .frm_inside_container > input,
@@ -476,8 +476,8 @@ legend.frm_hidden{
 	transition: all 0.3s ease-in;
 
 	position: absolute;
-	top: 28px;
-	top: calc(1px + 0.85 * var(--field-height));
+	top: 17px;
+	top: calc(1px + .5 * var(--field-height));
 	left: 3px;
 	width: 100%;
 
@@ -505,6 +505,7 @@ legend.frm_hidden{
 .with_frm_style .frm_inside_container.frm_label_float_top > label {
 	top: 0;
 	left: 0;
+	padding: 0;
 	font-size: 12px;
 	font-size: calc(0.85 * var(--field-font-size));
 }
@@ -527,6 +528,7 @@ legend.frm_hidden{
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
 }
+/* End floating label */
 
 .with_frm_style .frm_description,
 .with_frm_style .frm_pro_max_limit_desc{
