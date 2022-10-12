@@ -3382,7 +3382,12 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 }
 
 .frm-drag-fade {
-	opacity: 0.5;
+	background-color: var(--lightest-grey) !important;
+	border-radius: 4px;
+}
+
+.frm-drag-fade * {
+	opacity: 0;
 }
 
 .frm-dragging .divider_section_only,
