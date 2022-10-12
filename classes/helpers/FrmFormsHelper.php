@@ -1340,6 +1340,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.03.01
+	 *
+	 * @return array<string>
 	 */
 	public static function ignore_template_categories() {
 		return array( 'Business', 'Elite', 'Personal', 'Creator', 'Basic', 'free' );
