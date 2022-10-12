@@ -666,6 +666,13 @@ class FrmEntriesController {
 			if ( isset( $data['browser'] ) ) {
 				$browser = FrmEntriesHelper::get_browser( $data['browser'] );
 			}
+			/**
+			 * Add or remove information in the entry sidebar.
+			 *
+			 * @since 5.5.2
+			 * @param array $data
+			 */
+			$data = apply_filters( 'frm_sidebar_data', $data, compact( 'entry' ) );
 		}
 
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/sidebar-shared.php' );
