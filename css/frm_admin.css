@@ -3378,7 +3378,7 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 }
 
 .frm-dragging * {
-	cursor: move !important;
+	cursor: grabbing !important;
 }
 
 .frm-dragging .divider_section_only {
