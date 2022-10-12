@@ -93,14 +93,18 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * Updates email message
+	 * Update email message.
+	 *
+	 * @since 5.5.2
 	 *
 	 * @param string $message
-	 *
 	 * @return string
 	 */
-	public static function update_email_message( $message ) {
+	public static function update_email_message( $message, $atts ) {
 		$message = html_entity_decode( $message );
+		if ( ! $atts['plain_text'] ) {
+			$message = wpautop( $message, false );
+		}
 		return $message;
 	}
 

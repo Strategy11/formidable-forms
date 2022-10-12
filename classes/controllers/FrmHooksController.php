@@ -142,6 +142,9 @@ class FrmHooksController {
 		// Forms Model.
 		add_action( 'frm_after_duplicate_form', 'FrmForm::after_duplicate', 10, 2 );
 
+		// Email Model
+		add_filter( 'frm_email_message', 'FrmFormActionsController::update_email_message', 10, 2 );
+
 		// Inbox Controller.
 		add_action( 'admin_menu', 'FrmInboxController::menu', 50 );
 
@@ -168,9 +171,6 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmApplicationsController::menu', 14 ); // Use the same priority as styles so Applications appear directly under Styles.
 		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
-
-		// Emails
-		add_filter( 'frm_email_message', 'FrmFormActionsController::update_email_message' );
 
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
