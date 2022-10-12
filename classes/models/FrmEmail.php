@@ -361,7 +361,11 @@ class FrmEmail {
 	 * @since 2.03.04
 	 */
 	private function set_message() {
-		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->settings['email_message'], $this->form, $this->entry );
+		if ( ! $this->is_plain_text ) {
+			$this->message = html_entity_decode( $this->settings['email_message'] ); // The decode is to support [default-html] shortcodes.
+		}
+
+		$this->message = FrmFieldsHelper::basic_replace_shortcodes( $this->message, $this->form, $this->entry );
 
 		$prev_mail_body = $this->message;
 		$pass_entry     = clone $this->entry; // make a copy to prevent changes by reference
@@ -391,7 +395,6 @@ class FrmEmail {
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 		} else {
-			$this->message = html_entity_decode( $this->message ); // The decode is to support [default-html] shortcodes.
 			$this->message = wpautop( $this->message, false ); // HTML emails should use autop.
 		}
 
