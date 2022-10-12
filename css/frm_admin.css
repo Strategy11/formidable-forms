@@ -7165,21 +7165,19 @@ input[disabled],
 	pointer-events: none;
 }
 
-.frmbutton.ui-draggable-dragging,
-.frmbutton.ui-draggable-dragging a {
-	cursor: move;
-}
-
 .frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
-	height: 25px !important;
-	width: 140px;
-	text-align: center;
-	display: inline !important;
+	height: 40px;
+	width: 180px;
+	display: inline-flex !important;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 	background-color: var(--lightest-grey) !important;
 	border-radius: 35px !important;
-	padding: 5px 20px !important;
+	padding: 5px 10px !important;
 	color: var(--dark-grey) !important;
+	box-sizing: border-box;
 }
 
 .frmbutton.ui-draggable-dragging span {
