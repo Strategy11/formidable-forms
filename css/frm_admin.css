@@ -7178,7 +7178,7 @@ input[disabled],
 	padding: 5px 10px !important;
 	color: var(--dark-grey) !important;
 	box-sizing: border-box;
-	border: 1px solid var(--border-color);
+	border: 1px solid var(--grey-border);
 }
 
 .frmbutton.ui-draggable-dragging span {
