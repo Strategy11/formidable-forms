@@ -444,6 +444,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar.
 * New: Improved error handling when installing form templates. A message will be shown when the simple XML extension is not installed, and errors will now be shown in a pop up when a template falls to install.
 * New: Added a new frm_before_simple_form_render action that triggers before a form block is rendered.
+* New: Added a new frm_rich_text_emails filter for cases when a plain textarea may be preferred over rich text.
 * Fix: When inserting a [default-plain] or [default-html] shortcode into a rich text editor, the shortcode would insert instead of changing dynamically as expected.
 * Fix: Rich text HTML emails were not automatically using wpautop.
 * Fix: Improved how drag and drop works when dragging multiple sections in a field group.
