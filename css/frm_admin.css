@@ -3377,6 +3377,10 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 	max-width: calc(100% - 100px);
 }
 
+.frm-dragging * {
+	cursor: grabbing !important;
+}
+
 .frm-dragging .divider_section_only {
 	pointer-events: none;
 }
@@ -3824,7 +3828,7 @@ li.sortable-placeholder {
 	border: none;
 	margin: 0;
 	visibility: visible !important;
-	box-shadow: 2px -10px 0 1px var(--primary-color);
+	box-shadow: 2px -10px 0 2px var(--primary-color);
 }
 
 #frm_form_editor_container > ul > .frm_single_option.ui-sortable-placeholder,
@@ -3861,17 +3865,9 @@ li.sortable-placeholder {
 }
 
 .frm_sorting > li.edit_field_type_end_divider:first-child,
-.frm_sorting > .frmbutton + .sortable-placeholder, /* hide for first field */
 .frm-show-click,
 li.ui-state-default.edit_field_type_divider .frm-show-click {
 	display: none;
-}
-
-.frm_form_field.ui-sortable-helper {
-	height: 30px !important;
-	background-color: #fff !important;
-	overflow: hidden !important;
-	box-sizing: border-box;
 }
 
 .frm_form_field.ui-sortable-helper .frm-field-action-icons,
@@ -5459,7 +5455,7 @@ a.frm_action_icon:hover {
 }
 
 .frm-move {
-	cursor: move;
+	cursor: grab;
 }
 
 span.howto {
@@ -7164,35 +7160,25 @@ input[disabled],
 	color: var(--dark-grey);
 }
 
-.frmbutton.ui-draggable-dragging {
-	width: auto !important;
-}
-
 /* Icon while dragging */
-.frmbutton.ui-draggable-dragging,
-.frmbutton.ui-draggable-dragging a {
-	cursor: move;
+.frmbutton.ui-draggable-dragging {
+	pointer-events: none;
 }
 
-.frmbutton.ui-sortable-helper a,
-.frmbutton.ui-draggable-dragging a:hover,
 .frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
-	height: 25px !important;
+	height: 40px;
 	width: 180px;
-	text-align: center;
-	display: block !important;
-	background-color: var(--primary-hover) !important;
+	display: inline-flex !important;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--sidebar-color) !important;
 	border-radius: 35px !important;
-	padding: 5px 20px !important;
-	color: #fff !important;
-}
-
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) a {
-	/* When the new field is held outside of a dropzone */
-	cursor: not-allowed;
-	background: var(--sidebar-color) !important;
+	padding: 5px 10px !important;
 	color: var(--dark-grey) !important;
+	box-sizing: border-box;
+	border: 1px solid var(--grey-border);
 }
 
 .frmbutton.ui-draggable-dragging span {
@@ -7200,19 +7186,14 @@ input[disabled],
 }
 
 #frm-show-fields .frmbutton.ui-sortable-helper i,
-.frmbutton.ui-sortable-helper span,
 .frmbutton.ui-draggable-dragging i,
 .frmbutton.ui-draggable-dragging .frmsvg {
 	color: #fff !important;
 }
 
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) i,
-.frmbutton.ui-draggable-dragging:not(.ui-sortable-helper) .frmsvg {
+.frmbutton.ui-draggable-dragging i,
+.frmbutton.ui-draggable-dragging .frmsvg {
 	color: var(--dark-grey) !important;
-}
-
-.frmbutton.ui-draggable-dragging .frm-dropdown-menu {
-	display: none;
 }
 
 .frm_sorting li.ui-state-default.ui-sortable-helper,
@@ -7221,8 +7202,11 @@ input[disabled],
 	opacity: 1;
 }
 
-.frmbutton.ui-sortable-helper:not(.ui-draggable-dragging) {
-	opacity: 0;
+.frm-field-group-count {
+	background-color: var(--sidebar-hover);
+	padding: 5px;
+	color: #fff !important;
+	border-radius: 10px;
 }
 
 /* End dragging */
