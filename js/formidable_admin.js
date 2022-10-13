@@ -324,17 +324,18 @@ function frmAdminBuildJS() {
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
 	};
 
-	var $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
+	let $newFields = jQuery( document.getElementById( 'frm-show-fields' ) ),
 		builderForm = document.getElementById( 'new_fields' ),
 		thisForm = document.getElementById( 'form_id' ),
-		cancelSort = false,
 		copyHelper = false,
 		fieldsUpdated = 0,
 		thisFormId = 0,
 		autoId = 0,
 		optionMap = {},
-		lastNewActionIdReturned = 0,
-		__ = wp.i18n.__;
+		lastNewActionIdReturned = 0;
+
+	const { __ } = wp.i18n;
+	let debouncedSyncAfterDragAndDrop;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -814,280 +815,418 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	/* Form Builder */
-	function setupSortable( sort ) {
-		var startSort, container, $previousFieldContainer, opts;
+	function setupSortable( sortableSelector ) {
+		document.querySelectorAll( sortableSelector ).forEach(
+			list => {
+				makeDroppable( list );
+				Array.from( list.children ).forEach( child => makeDraggable( child, '.frm-move' ) );
 
-		startSort = false;
-		container = jQuery( '#post-body-content' );
-
-		opts = {
-			connectWith: 'ul.frm_sorting',
-			items: 'li.frm_field_box',
-			placeholder: 'sortable-placeholder',
-			axis: 'y',
-			cancel: '.widget,.frm_field_opts_list,input,textarea,select,.edit_field_type_end_divider,.frm_sortable_field_opts,.frm_noallow',
-			accepts: 'field_type_list',
-			forcePlaceholderSize: false,
-			tolerance: 'pointer',
-			handle: '.frm-move',
-			over: function() {
-				this.classList.add( 'drop-me' );
-			},
-			out: function() {
-				this.classList.remove( 'drop-me' );
-			},
-			receive: function( event, ui ) {
-				// Receive event occurs when an item in one sortable list is dragged into another sortable list
-
-				if ( cancelSort ) {
-					ui.item.addClass( 'frm_cancel_sort' );
-					return;
+				const $sectionTitle = jQuery( list ).children( '[data-type="divider"]' ).children( '.divider_section_only' );
+				if ( $sectionTitle.length ) {
+					makeDroppable( $sectionTitle );
 				}
-
-				if ( typeof ui.item.attr( 'id' ) !== 'undefined' ) {
-					if ( ui.item.attr( 'id' ).indexOf( 'frm_field_id' ) > -1 ) {
-						// An existing field was dragged and dropped into, out of, or between sections
-						updateFieldAfterMovingBetweenSections( ui.item );
-					} else {
-						// A new field was dragged into the form
-						insertNewFieldByDragging( this, ui.item, opts );
-					}
-				} else if ( ui.item.hasClass( 'frm_field_box' ) ) {
-					// dragging a group.
-					getFieldsInRow( ui.item.children( 'ul' ) ).each(
-						function() {
-							updateFieldAfterMovingBetweenSections( jQuery( this ) );
-						}
-					);
-				}
-			},
-			change: function( event, ui ) {
-				// don't allow some field types inside section
-				if ( allowDrop( ui ) ) {
-					ui.placeholder.addClass( 'sortable-placeholder' ).removeClass( 'no-drop-placeholder' );
-					cancelSort = false;
-				} else {
-					ui.placeholder.addClass( 'no-drop-placeholder' ).removeClass( 'sortable-placeholder' );
-					cancelSort = true;
-				}
-			},
-			start: function( event, ui ) {
-				unselectFieldGroups();
-				deleteEmptyDividerWrappers();
-				maybeRemoveGroupHoverTarget();
-				closeOpenFieldDropdowns();
-				container.get( 0 ).classList.add( 'frm-dragging-field' );
-				if ( ui.item[0].offsetHeight > 120 ) {
-					jQuery( sort ).sortable( 'refreshPositions' );
-				}
-				if ( ui.item[0].classList.contains( 'frm-page-collapsed' ) ) {
-					// If a page if collapsed, expand it before dragging since only the page break will move.
-					toggleCollapsePage( jQuery( ui.item[0]) );
-				}
-				$previousFieldContainer = ui.item.closest( 'ul.frm_sorting' );
-			},
-			helper: function( e, li ) {
-				copyHelper = li.clone().insertAfter( li );
-				return li.clone().addClass( 'frm-sortable-helper' );
-			},
-			beforeStop: function( event, ui ) {
-				// If this was dropped at the beginning of a collpased page, open it.
-				var previous = ui.item[0].previousElementSibling;
-				if ( previous !== null && previous.classList.contains( 'frm-page-collapsed' ) ) {
-					toggleCollapsePage( jQuery( previous ) );
-				}
-			},
-			stop: function( event, ui ) {
-				var moving, $previousContainerFields, $closestFieldBox;
-
-				container.get( 0 ).classList.remove( 'frm-dragging-field' );
-				moving = jQuery( this );
-				copyHelper && copyHelper.remove();
-
-				if ( cancelSort ) {
-					moving.sortable( 'cancel' );
-					syncAfterDragAndDrop();
-					return;
-				}
-
-				$previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
-				if ( $previousFieldContainer.length ) {
-					if ( ! $previousContainerFields.length ) {
-						$closestFieldBox = $previousFieldContainer.closest( 'li.frm_field_box' );
-						if ( ! $closestFieldBox.hasClass( 'edit_field_type_divider' ) ) {
-							// remove an empty field group, but don't remove an empty section.
-							$closestFieldBox.remove();
-						}
-					} else {
-						syncLayoutClasses( $previousContainerFields.first() );
-					}
-				}
-
-				if ( ( 'frm-show-fields' === ui.item.parent().attr( 'id' ) || ui.item.parent().hasClass( 'start_divider' ) ) && ui.item.hasClass( 'form-field' ) ) {
-					// dragging an item into a new row.
-					wrapFieldLiInPlace( ui.item );
-					if ( $previousContainerFields.length ) {
-						// only if the previous container had other sibling fields, remove the previous layout class.
-						syncLayoutClasses( ui.item );
-					}
-				} else {
-					syncLayoutClasses( ui.item );
-				}
-
-				syncAfterDragAndDrop();
-			},
-			sort: function( event, ui ) {
-				var $row, $children, $lastChild, currentIndex, left;
-
-				container.scrollTop( function( i, v ) {
-					var moved, h, relativePos, y;
-
-					if ( startSort === false ) {
-						startSort = event.clientY;
-						return v;
-					}
-
-					moved = event.clientY - startSort;
-					h = this.offsetHeight;
-					relativePos = event.clientY - this.offsetTop;
-					y = relativePos - h / 2;
-					if ( relativePos > ( h - 50 ) && moved > 5 ) {
-						// scrolling down
-						return v + y * 0.1;
-					} else if ( relativePos < 50 && moved < -5 ) {
-						//scrolling up
-						return v - Math.abs( y * 0.1 );
-					}
-				});
-
-				maybeFixPlaceholderParent( ui, event );
-
-				$row = ui.placeholder.parent();
-				$children = getFieldsInRow( $row );
-				currentIndex = determineIndexBasedOffOfMousePositionInRow( $row, event.clientX );
-
-				if ( ! $children.length ) {
-					return;
-				}
-
-				if ( currentIndex === $children.length ) {
-					$lastChild = jQuery( $children.get( currentIndex - 1 ) );
-					left = $lastChild.offset().left - ui.placeholder.parent().offset().left + $lastChild.outerWidth();
-					$row.append( ui.placeholder );
-				} else {
-					left = jQuery( $children.get( currentIndex ) ).offset().left - $row.offset().left;
-					jQuery( $children.get( currentIndex ) ).before( ui.placeholder );
-				}
-
-				ui.placeholder.get( 0 ).style.left = left + 'px';
 			}
-		};
-
-		jQuery( sort ).sortable( opts );
-
+		);
 		setupFieldOptionSorting( jQuery( '#frm_builder_page' ) );
 	}
 
+	function makeDroppable( list ) {
+		jQuery( list ).droppable({
+			accept: '.frmbutton, li.frm_field_box',
+			deactivate: handleFieldDrop,
+			over: onDragOverDroppable,
+			out: onDraggableLeavesDroppable,
+			tolerance: 'pointer'
+		});
+	}
+
+	function onDragOverDroppable( event, ui ) {
+		const droppable = getDroppableForOnDragOver( event.target );
+		const draggable = ui.draggable[0];
+
+		if ( ! allowDrop( draggable, droppable ) ) {
+			droppable.classList.remove( 'frm-over-droppable' );
+			jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
+			return;
+		}
+
+		document.querySelectorAll( '.frm-over-droppable' ).forEach( droppable => droppable.classList.remove( 'frm-over-droppable' ) );
+		droppable.classList.add( 'frm-over-droppable' );
+		jQuery( droppable ).parents( 'ul.frm_sorting' ).addClass( 'frm-over-droppable' );
+	}
+
+	/**
+	 * Maybe change the droppable.
+	 * Section titles are made droppable, but are not a list, so we need to change the droppable to the section's list instead.
+	 *
+	 * @param {Element} droppable
+	 * @returns {Element}
+	 */
+	function getDroppableForOnDragOver( droppable ) {
+		if ( droppable.classList.contains( 'divider_section_only' ) ) {
+			droppable = jQuery( droppable ).nextAll( '.start_divider.frm_sorting' ).get( 0 );
+		}
+		return droppable;
+	}
+
+	function onDraggableLeavesDroppable( event ) {
+		const droppable = event.target;
+		droppable.classList.remove( 'frm-over-droppable' );
+	}
+
+	function makeDraggable( draggable, handle ) {
+		const settings = {
+			helper: getDraggableHelper,
+			revert: 'invalid',
+			delay: 10,
+			start: handleDragStart,
+			stop: handleDragStop,
+			drag: handleDrag,
+			cursorAt: {
+				top: 0,
+				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
+			}
+		};
+		if ( 'string' === typeof handle ) {
+			settings.handle = handle;
+		}
+		jQuery( draggable ).draggable( settings );
+	}
+
+	function getDraggableHelper( event ) {
+		const draggable = event.delegateTarget;
+
+		if ( isFieldGroup( draggable ) ) {
+			const newTextFieldClone = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_ttext' ).cloneNode( true );
+			newTextFieldClone.querySelector( 'use' ).setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_field_group_layout_icon' );
+			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group' );
+			newTextFieldClone.classList.add( 'frm_field_box' );
+			newTextFieldClone.classList.add( 'ui-sortable-helper' );
+			return newTextFieldClone;
+		}
+
+		let copyTarget;
+		const isNewField = draggable.classList.contains( 'frmbutton' );
+		if ( isNewField ) {
+			copyTarget = draggable.cloneNode( true );
+			copyTarget.classList.add( 'ui-sortable-helper' );
+			draggable.classList.add( 'frm-new-field' );
+			return copyTarget;
+		}
+
+		if ( draggable.hasAttribute( 'data-ftype' ) ) {
+			const fieldType = draggable.getAttribute( 'data-ftype' );
+			copyTarget = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_t' + fieldType );
+			copyTarget = copyTarget.cloneNode( true );
+			copyTarget.classList.add( 'form-field' );
+
+			copyTarget.classList.add( 'ui-sortable-helper' );
+
+			if ( copyTarget ) {
+				return copyTarget.cloneNode( true );
+			}
+		}
+
+		return div({ className: 'frmbutton' });
+	}
+
+	function handleDragStart( event, ui ) {
+		const container = document.getElementById( 'post-body-content' );
+		container.classList.add( 'frm-dragging-field' );
+
+		document.body.classList.add( 'frm-dragging' );
+		ui.helper.addClass( 'frm-sortable-helper' );
+
+		event.target.classList.add( 'frm-drag-fade' );
+
+		unselectFieldGroups();
+		deleteEmptyDividerWrappers();
+		maybeRemoveGroupHoverTarget();
+		closeOpenFieldDropdowns();
+		deleteTooltips();
+	}
+
+	function handleDragStop() {
+		const container = document.getElementById( 'post-body-content' );
+		container.classList.remove( 'frm-dragging-field' );
+		document.body.classList.remove( 'frm-dragging' );
+
+		const fade = document.querySelector( '.frm-drag-fade' );
+		if ( fade ) {
+			fade.classList.remove( 'frm-drag-fade' );
+		}
+	}
+
+	function handleDrag( event ) {
+		const draggable = event.target;
+		const droppable = getDroppableTarget();
+
+		let placeholder = document.getElementById( 'frm_drag_placeholder' );
+
+		if ( ! allowDrop( draggable, droppable ) ) {
+			if ( placeholder ) {
+				placeholder.remove();
+			}
+			return;
+		}
+
+		if ( ! placeholder ) {
+			placeholder = tag( 'li', {
+				id: 'frm_drag_placeholder',
+				className: 'sortable-placeholder'
+			});
+		}
+
+		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
+			placeholder.style.left = 0;
+			handleDragOverYAxis({ droppable, y: event.clientY, placeholder });
+			return;
+		}
+
+		placeholder.style.top = '';
+		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
+	}
+
+	function getDroppableTarget() {
+		let droppable = document.getElementById( 'frm-show-fields' );
+		while ( droppable.querySelector( '.frm-over-droppable' ) ) {
+			droppable = droppable.querySelector( '.frm-over-droppable' );
+		}
+		if ( 'frm-show-fields' === droppable.id && ! droppable.classList.contains( 'frm-over-droppable' ) ) {
+			droppable = false;
+		}
+		return droppable;
+	}
+
+	function handleFieldDrop( _, ui ) {
+		const draggable = ui.draggable[0];
+		const placeholder = document.getElementById( 'frm_drag_placeholder' );
+
+		if ( ! placeholder ) {
+			ui.helper.remove();
+			debouncedSyncAfterDragAndDrop();
+			return;
+		}
+
+		maybeOpenCollapsedPage( placeholder );
+
+		const $previousFieldContainer = ui.helper.parent();
+		const previousSection         = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
+		const newSection              = placeholder.closest( 'ul.frm_sorting' );
+
+		if ( draggable.classList.contains( 'frm-new-field' ) ) {
+			insertNewFieldByDragging( draggable.id );
+		} else {
+			moveFieldThatAlreadyExists( draggable, placeholder );
+		}
+
+		const previousSectionId = previousSection && previousSection.classList.contains( 'start_divider' ) ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+		const newSectionId      = newSection.classList.contains( 'start_divider' ) ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+
+		placeholder.remove();
+		ui.helper.remove();
+
+		const $previousContainerFields = $previousFieldContainer.length ? getFieldsInRow( $previousFieldContainer ) : [];
+		maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields );
+		maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields );
+
+		if ( previousSectionId !== newSectionId ) {
+			updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
+		}
+
+		debouncedSyncAfterDragAndDrop();
+	}
+
+	/**
+	 * If a page if collapsed, expand it before dragging since only the page break will move.
+	 *
+	 * @param {Element} placeholder
+	 * @returns {void}
+	 */
+	function maybeOpenCollapsedPage( placeholder ) {
+		if ( ! placeholder.previousElementSibling || ! placeholder.previousElementSibling.classList.contains( 'frm-is-collapsed' ) ) {
+			return;
+		}
+
+		const $pageBreakField = jQuery( placeholder ).prevUntil( '[data-type="break"]' );
+		if ( ! $pageBreakField.length ) {
+			return;
+		}
+
+		const collapseButton = $pageBreakField.find( '.frm-collapse-page' ).get( 0 );
+		if ( collapseButton ) {
+			collapseButton.click();
+		}
+	}
+
+	function maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields ) {
+		if ( ! $previousFieldContainer.length ) {
+			return;
+		}
+
+		if ( $previousContainerFields.length ) {
+			syncLayoutClasses( $previousContainerFields.first() );
+		} else {
+			maybeDeleteAnEmptyFieldGroup( $previousFieldContainer.get( 0 ) );
+		}
+	}
+
+	function maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields ) {
+		if ( 0 !== $previousContainerFields.length || 1 !== getFieldsInRow( jQuery( draggable.parentNode ) ).length ) {
+			syncLayoutClasses( jQuery( draggable ) );
+		}
+	}
+
+	/**
+	 * Remove an empty field group, but don't remove an empty section.
+	 *
+	 * @param {Element} previousFieldContainer
+	 * @returns {void}
+	 */
+	function maybeDeleteAnEmptyFieldGroup( previousFieldContainer ) {
+		const closestFieldBox = previousFieldContainer.closest( 'li.frm_field_box' );
+		if ( closestFieldBox && ! closestFieldBox.classList.contains( 'edit_field_type_divider' ) ) {
+			closestFieldBox.remove();
+		}
+	}
+
+	function handleDragOverYAxis({ droppable, y, placeholder }) {
+		const $list = jQuery( droppable );
+
+		let top;
+
+		$children = $list.children().not( '.edit_field_type_end_divider' );
+		if ( 0 === $children.length ) {
+			$list.prepend( placeholder );
+			top = 0;
+		} else {
+			const insertAtIndex = determineIndexBasedOffOfMousePositionInList( $list, y );
+
+			if ( insertAtIndex === $children.length ) {
+				const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+				top = $lastChild.offset().top + $lastChild.outerHeight();
+				$list.append( placeholder );
+
+				// Make sure nothing gets inserted after the end divider.
+				const $endDivider = $list.children( '.edit_field_type_end_divider' );
+				if ( $endDivider.length ) {
+					$list.append( $endDivider );
+				}
+			} else {
+				top = jQuery( $children.get( insertAtIndex ) ).offset().top;
+				jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+			}
+		}
+
+		top -= $list.offset().top;
+		placeholder.style.top = top + 'px';
+	}
+
+	function determineIndexBasedOffOfMousePositionInList( $list, y ) {
+		const $items = $list.children().not( '.edit_field_type_end_divider' );
+		const length = $items.length;
+
+		let index, item, itemTop, returnIndex;
+
+		returnIndex = 0;
+		for ( index = length - 1; index >= 0; --index ) {
+			item    = $items.get( index );
+			itemTop = jQuery( item ).offset().top;
+			if ( y > itemTop ) {
+				returnIndex = index;
+				if ( y > itemTop + ( jQuery( item ).outerHeight() / 2 ) ) {
+					returnIndex = index + 1;
+				}
+				break;
+			}
+		}
+
+		return returnIndex;
+	}
+
+	function handleDragOverFieldGroup({ droppable, x, placeholder }) {
+		const $row = jQuery( droppable );
+		const $children = getFieldsInRow( $row );
+
+		if ( ! $children.length ) {
+			return;
+		}
+
+		let left;
+		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( $row, x );
+
+		if ( insertAtIndex === $children.length ) {
+			const $lastChild = jQuery( $children.get( insertAtIndex - 1 ) );
+			left = $lastChild.offset().left + $lastChild.outerWidth();
+			$row.append( placeholder );
+		} else {
+			left = jQuery( $children.get( insertAtIndex ) ).offset().left;
+			jQuery( $children.get( insertAtIndex ) ).before( placeholder );
+
+			const amountToOffsetLeftBy = 0 === insertAtIndex ? 4 : 8; // Offset by 8 in between rows, but only 4 for the first item in a group.
+			left -= amountToOffsetLeftBy; // Offset the placeholder slightly so it appears between two fields.
+		}
+
+		left -= $row.offset().left;
+
+		placeholder.style.left = left + 'px';
+	}
+
 	function syncAfterDragAndDrop() {
-		maybeRemoveNewCancelledFields();
-		maybeUncancelFields();
-		maybeFixEndDividers();
 		fixUnwrappedListItems();
 		toggleSectionHolder();
+		maybeFixEndDividers();
+		maybeDeleteEmptyFieldGroups();
 		updateFieldOrder();
 
 		const event = new Event( 'frm_sync_after_drag_and_drop', { bubbles: false });
 		document.dispatchEvent( event );
 	}
 
-	function maybeRemoveNewCancelledFields() {
-		Array.from( document.getElementById( 'frm-show-fields' ).children ).forEach(
-			function( fieldBox ) {
-				if ( fieldBox.classList.contains( 'frmbutton' ) && fieldBox.classList.contains( 'ui-draggable' ) ) {
-					fieldBox.remove();
-				}
-			}
-		);
-	}
-
-	function maybeUncancelFields() {
-		document.querySelectorAll( '.frm_cancel_sort' ).forEach(
-			function( field ) {
-				field.classList.remove( 'frm_cancel_sort' );
-			}
-		);
-	}
-
-	/**
-	 * Make sure the end dividers are always a child of a start divider, at the bottom at the list.
-	 */
 	function maybeFixEndDividers() {
-		var endDividers = document.querySelectorAll( '.edit_field_type_end_divider' );
-		if ( ! endDividers.length ) {
-			return;
-		}
-		endDividers.forEach(
-			function( endDivider ) {
-				if ( endDivider.parentNode.classList.contains( 'start_divider' ) ) {
-					// avoid having to call closest, but still append it as it might not be the last child.
-					endDivider.parentNode.appendChild( endDivider );
-					return;
-				}
-				endDivider.closest( '.start_divider' ).appendChild( endDivider );
-			}
+		document.querySelectorAll( '.edit_field_type_end_divider' ).forEach(
+			endDivider => endDivider.parentNode.appendChild( endDivider )
 		);
 	}
 
-	/**
-	 * Sortable struggles to put the field into the proper section if there are multiple in a field group. This helps fix some of those issues.
-	 */
-	function maybeFixPlaceholderParent( ui, event ) {
-		var elementFromPoint, wrapper, shouldAppend;
-		elementFromPoint = document.elementFromPoint( event.clientX, event.clientY );
-		if ( null === elementFromPoint ) {
-			return;
-		}
-		wrapper = elementFromPoint.closest( '.frm_sorting' );
-		if ( null === wrapper ) {
-			return;
-		}
-		if ( ui.placeholder.closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length < 2 ) {
-			// placeholder is not in a problematic position that needs to be fixed so leave it.
-			return;
-		}
-		shouldAppend = false;
-		if ( wrapper.classList.contains( 'start_divider' ) ) {
-			shouldAppend = jQuery( wrapper ).parent().parent().find( '.start_divider' ).length >= 2;
-		} else if ( null !== wrapper.closest( '.start_divider' ) ) {
-			shouldAppend = jQuery( wrapper ).closest( '.start_divider' ).parent().parent().find( '.start_divider' ).length >= 2;
-		}
-		if ( null !== wrapper.closest( '.frm-sortable-helper' ) ) {
-			// avoid ever appending to the sortable helper.
-			return;
-		}
-		if ( shouldAppend ) {
-			// TODO instead of appendTo, we might need to look for the closest item, and appear above/below it.
-			ui.placeholder.appendTo( wrapper );
-		}
+	function maybeDeleteEmptyFieldGroups() {
+		document.querySelectorAll( 'li.form_field_box:not(.form-field)' ).forEach(
+			fieldGroup => ! fieldGroup.children.length && fieldGroup.remove()
+		);
 	}
 
 	function fixUnwrappedListItems() {
-		document.querySelectorAll( 'ul.start_divider > li.form-field:not(.edit_field_type_end_divider)' ).forEach(
-			function( field ) {
-				wrapFieldLiInPlace( field );
+		const lists = document.querySelectorAll( 'ul#frm-show-fields, ul.start_divider' );
+		lists.forEach(
+			list => {
+				list.childNodes.forEach(
+					child => {
+						if ( 'undefined' === typeof child.classList ) {
+							return;
+						}
+
+						if ( child.classList.contains( 'edit_field_type_end_divider' ) ) {
+							// Never wrap end divider in place.
+							return;
+						}
+
+						if ( 'undefined' !== typeof child.classList && child.classList.contains( 'form-field' ) ) {
+							wrapFieldLiInPlace( child );
+						}
+					}
+				);
 			}
 		);
 	}
 
 	function deleteEmptyDividerWrappers() {
-		var dividers = document.querySelectorAll( 'ul.start_divider' );
+		const dividers = document.querySelectorAll( 'ul.start_divider' );
 		if ( ! dividers.length ) {
 			return;
 		}
 		dividers.forEach(
 			function( divider ) {
-				var children = [].slice.call( divider.children );
+				const children = [].slice.call( divider.children );
 				children.forEach(
 					function( child ) {
 						if ( 0 === child.children.length ) {
@@ -1101,23 +1240,29 @@ function frmAdminBuildJS() {
 		);
 	}
 
-	/**
-	 * @returns {bool} true if the placeholder parent should be fixed.
-	 */
-	function shouldTryFixingPlaceholderParent( $placeholder ) {
-		var closestSection = $placeholder.closest( '.start_divider' );
-		if ( null === closestSection ) {
-			return false;
-		}
-		return jQuery( closestSection ).siblings( 'li.start_divider' ).length >= 1;
-	}
-
 	function getFieldsInRow( $row ) {
-		return $row.children( 'li.form-field' ).not( '.ui-sortable-helper' ).not( '.edit_field_type_end_divider' ).filter(
-			function() {
-				return 'none' !== this.style.display;
+		let $fields = jQuery();
+
+		const row = $row.get( 0 );
+		if ( ! row.children ) {
+			return $fields;
+		}
+
+		Array.from( row.children ).forEach(
+			child => {
+				if ( 'none' === child.style.display ) {
+					return;
+				}
+
+				const classes = child.classList;
+				if ( ! classes.contains( 'form-field' ) || classes.contains( 'edit_field_type_end_divider' ) || classes.contains( 'frm-sortable-helper' ) ) {
+					return;
+				}
+
+				$fields = $fields.add( child );
 			}
 		);
+		return $fields;
 	}
 
 	function determineIndexBasedOffOfMousePositionInRow( $row, x ) {
@@ -1339,7 +1484,6 @@ function frmAdminBuildJS() {
 				resetDisplayedOpts( fieldId );
 			}
 		};
-
 		jQuery( sort ).sortable( opts );
 	}
 
@@ -1388,23 +1532,24 @@ function frmAdminBuildJS() {
 	 * @param {object} currentItem
 	 */
 	function updateFieldAfterMovingBetweenSections( currentItem ) {
-		var fieldId, section, formId, sectionId;
-
-		fieldId = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
-		section = getSectionForFieldPlacement( currentItem );
-		formId = getFormIdForFieldPlacement( section );
-		sectionId = getSectionIdForFieldPlacement( section );
-
-		if ( currentItem.parent().hasClass( 'start_divider' ) ) {
-			wrapFieldLiInPlace( currentItem );
+		if ( ! currentItem.hasClass( 'form-field' ) ) {
+			// currentItem is a field group. Call for children recursively.
+			getFieldsInRow( jQuery( currentItem.get( 0 ).firstChild ) ).each(
+				function() {
+					updateFieldAfterMovingBetweenSections( jQuery( this ) );
+				}
+			);
+			return;
 		}
 
-		currentItem[0].addEventListener( 'click', function() {
-			maybeAddSaveAndDragIcons( this.dataset.fid );
-		});
+		const fieldId   = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
+		const section   = getSectionForFieldPlacement( currentItem );
+		const formId    = getFormIdForFieldPlacement( section );
+		const sectionId = getSectionIdForFieldPlacement( section );
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_update_field_after_move',
 				form_id: formId,
@@ -1427,25 +1572,26 @@ function frmAdminBuildJS() {
 	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
-	 * @param {object} selectedItem
-	 * @param {object} fieldButton
-	 * @param {object} opts
+	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( selectedItem, fieldButton ) {
-		const fieldType = fieldButton.attr( 'id' );
-
-		const sortableData = jQuery( selectedItem ).data().uiSortable;
-		const currentItem = sortableData.currentItem;
-		const insertAtIndex = determineIndexBasedOffOfMousePositionInRow( currentItem.parent(), currentItem.offset().left );
-		jQuery( getFieldsInRow( currentItem.parent() ).get( insertAtIndex ) ).before( currentItem );
-		const section = getSectionForFieldPlacement( currentItem );
-		const formId = getFormIdForFieldPlacement( section );
-		const sectionId = getSectionIdForFieldPlacement( section );
-
+	function insertNewFieldByDragging( fieldType ) {
+		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
 		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
-		const $placeholder = jQuery( '<li class="frm-wait frmbutton_loadingnow" id="' + loadingID + '" ></li>' );
-		currentItem.replaceWith( $placeholder );
+		const loading      = tag(
+			'li',
+			{
+				id: loadingID,
+				className: 'frm-wait frmbutton_loadingnow'
+			}
+		);
+		const $placeholder = jQuery( loading );
+		const currentItem  = jQuery( placeholder );
+		const section      = getSectionForFieldPlacement( currentItem );
+		const formId       = getFormIdForFieldPlacement( section );
+		const sectionId    = getSectionIdForFieldPlacement( section );
 
+		placeholder.parentNode.insertBefore( loading, placeholder );
+		placeholder.remove();
 		syncLayoutClasses( $placeholder );
 
 		let hasBreak = 0;
@@ -1472,7 +1618,11 @@ function frmAdminBuildJS() {
 					// if dragging into a new row, we need to wrap the li first.
 					replaceWith = wrapFieldLi( msg );
 				} else {
-					replaceWith = msg;
+					replaceWith = msgAsjQueryObject( msg );
+					if ( ! $placeholder.get( 0 ).parentNode.parentNode.classList.contains( 'ui-draggable' ) ) {
+						// If a field group wasn't draggable because it only had a single field, make it draggable.
+						makeDraggable( $placeholder.get( 0 ).parentNode.parentNode, '.frm-move' );
+					}
 				}
 				$placeholder.replaceWith( replaceWith );
 				updateFieldOrder();
@@ -1481,9 +1631,27 @@ function frmAdminBuildJS() {
 					syncLayoutClasses( $siblings.first() );
 				}
 				toggleSectionHolder();
+
+				if ( ! $siblings.length ) {
+					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
+				} else {
+					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
+				}
+
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	function moveFieldThatAlreadyExists( draggable, placeholder ) {
+		placeholder.parentNode.insertBefore( draggable, placeholder );
+	}
+
+	function msgAsjQueryObject( msg ) {
+		const element = div();
+		element.innerHTML = msg;
+		return jQuery( element.firstChild );
 	}
 
 	function handleInsertFieldError( jqXHR, _, errorThrown ) {
@@ -1511,94 +1679,140 @@ function frmAdminBuildJS() {
 		return ++autoId;
 	}
 
-	// don't allow page break, embed form, or section inside section field
-	// don't allow page breaks inside of field groups.
-	// don't allow field groups with sections inside of sections.
-	// don't allow field groups in field groups.
-	// don't allow hidden fields inside of field groups but allow them in sections.
-	function allowDrop( ui ) {
-		var fieldsInRow, insideFieldGroup, insideSection, isNewField, isPageBreak, isFieldGroup, isSection;
-
-		fieldsInRow = getFieldsInRow( ui.placeholder.parent() );
-
-		if ( ! groupCanFitAnotherField( fieldsInRow, ui.item ) ) {
+	// Don't allow page break, embed form, or section inside section field
+	// Don't allow page breaks inside of field groups.
+	// Don't allow field groups with sections inside of sections.
+	// Don't allow field groups in field groups.
+	// Don't allow hidden fields inside of field groups but allow them in sections.
+	function allowDrop( draggable, droppable ) {
+		if ( false === droppable ) {
+			// Don't show drop placeholder if dragging somewhere off of the droppable area.
 			return false;
 		}
 
-		insideFieldGroup = fieldsInRow.length > 0;
-		insideSection = ui.placeholder.closest( '.start_divider' ).length > 0;
+		if ( droppable.closest( '.frm-sortable-helper' ) ) {
+			// Do not allow drop into draggable.
+			return false;
+		}
 
-		if ( ! insideSection && ! insideFieldGroup ) {
+		if ( 'frm-show-fields' === droppable.id ) {
+			// Everything can be dropped into the main list of fields.
 			return true;
 		}
 
-		if ( insideFieldGroup && ui.placeholder.siblings( '.edit_field_type_break, .edit_field_type_hidden' ).length ) {
-			// never allow any field beside a page break or a hidden field.
-			return false;
+		if ( ! droppable.classList.contains( 'start_divider' ) ) {
+			const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
+			if ( ! groupCanFitAnotherField( $fieldsInRow, jQuery( draggable ) ) ) {
+				// Field group is full and cannot accept another field.
+				return false;
+			}
 		}
 
-		if ( insideSection && ui.placeholder.siblings().length > 1 && ui.placeholder.prev().hasClass( 'edit_field_type_end_divider' ) ) {
-			return false;
-		}
-
-		isNewField = ui.item.hasClass( 'frmbutton' );
-
+		const isNewField = draggable.classList.contains( 'frm-new-field' );
 		if ( isNewField ) {
-			isPageBreak = ui.item.hasClass( 'frm_tbreak' );
-
-			if ( isPageBreak ) {
-				// do not allow page break in both sections and field groups.
-				return false;
-			}
-
-			if ( insideFieldGroup && ( ui.item.hasClass( 'frm_thidden' ) || ui.item.hasClass( 'frm_tsummary' ) ) ) {
-				// do not allow a hidden field or summary field in a field group.
-				return false;
-			}
-
-			if ( ! insideSection ) {
-				return true;
-			}
-
-			return ! ui.item.hasClass( 'frm_tform' ) && ! ui.item.hasClass( 'frm_tdivider' ) && ! ui.item.hasClass( 'frm_tdivider-repeat' );
+			return allowNewFieldDrop( draggable, droppable );
 		}
 
-		isPageBreak = ui.item.hasClass( 'edit_field_type_break' );
+		return allowMoveField( draggable, droppable );
+	}
 
-		if ( isPageBreak ) {
-			// do not allow page break in both sections and field groups.
-			return false;
-		}
+	// Don't allow a new page break or hidden field in a field group.
+	// Don't allow a new section inside of a section.
+	// Don't allow an embedded form in a section.
+	function allowNewFieldDrop( draggable, droppable ) {
+		const classes           = draggable.classList;
+		const newPageBreakField = classes.contains( 'frm_tbreak' );
+		const newHiddenField    = classes.contains( 'frm_thidden' );
+		const newSectionField   = classes.contains( 'frm_tdivider' );
+		const newEmbedField     = classes.contains( 'frm_tform' );
 
-		isFieldGroup = ui.item.find( 'ul.frm_sorting' ).length > 0;
-		isSection = ui.item.hasClass( 'edit_field_type_divider' );
-
-		if ( insideSection && isSection ) {
-			// but do not allow a section inside of a section.
-			return false;
-		}
-
-		if ( isFieldGroup && insideFieldGroup ) {
-			// allow a field group inside of a field group if it is being placed within a section above/below another field group.
-			return insideSection && ui.placeholder.siblings( 'li.edit_field_type_end_divider' ).length > 0;
-		}
-
-		if ( insideFieldGroup && ui.item.hasClass( 'edit_field_type_hidden' ) ) {
-			// do not allow a hidden field inside of a field group.
-			return false;
-		}
-
-		if ( ! insideSection ) {
+		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
+		if ( fieldTypeIsAlwaysAllowed ) {
 			return true;
 		}
 
-		if ( ui.item.find( '.edit_field_type_divider' ).length ) {
-			// if we are dragging a field group with a section, do not allow it in section.
+		const newFieldWillBeAddedToASection = droppable.classList.contains( 'start_divider' ) || null !== droppable.closest( '.start_divider' );
+		if ( newFieldWillBeAddedToASection ) {
+			// Don't allow a section or an embedded form in a section.
+			return ! newEmbedField && ! newSectionField;
+		}
+
+		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
+		if ( newFieldWillBeAddedToAGroup ) {
+			return ! newHiddenField && ! newPageBreakField;
+		}
+
+		return true;
+	}
+
+	function allowMoveField( draggable, droppable ) {
+		if ( isFieldGroup( draggable ) ) {
+			return allowMoveFieldGroup( draggable, droppable );
+		}
+
+		const isPageBreak = draggable.classList.contains( 'edit_field_type_break' );
+		if ( isPageBreak ) {
+			// Page breaks are only allowed in the main list of fields, not in sections or in field groups.
 			return false;
 		}
 
-		// moving an existing field
-		return ! ui.item.hasClass( 'edit_field_type_form' ) && ! isSection;
+		if ( droppable.classList.contains( 'start_divider' ) ) {
+			return allowMoveFieldToSection( draggable );
+		}
+
+		return allowMoveFieldToGroup( draggable, droppable );
+	}
+
+	function isFieldGroup( draggable ) {
+		return draggable.classList.contains( 'frm_field_box' ) && ! draggable.classList.contains( 'form-field' );
+	}
+
+	function allowMoveFieldGroup( fieldGroup, droppable ) {
+		if ( droppable.classList.contains( 'start_divider' ) && null === fieldGroup.querySelector( '.start_divider' ) ) {
+			// Allow a field group with no section inside of a section.
+			return true;
+		}
+		return false;
+	}
+
+	function allowMoveFieldToSection( draggable ) {
+		const draggableIncludeEmbedForm = draggable.classList.contains( 'edit_field_type_form' ) || draggable.querySelector( '.edit_field_type_form' );
+		if ( draggableIncludeEmbedForm ) {
+			// Do not allow an embedded form inside of a section.
+			return false;
+		}
+
+		const draggableIncludesSection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
+		if ( draggableIncludesSection ) {
+			// Do not allow a section inside of a section.
+			return false;
+		}
+
+		return true;
+	}
+
+	function allowMoveFieldToGroup( draggable, group ) {
+		const groupIncludesBreakOrHidden = null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
+		if ( groupIncludesBreakOrHidden ) {
+			// Never allow any field beside a page break or a hidden field.
+			return false;
+		}
+
+		const isFieldGroup = jQuery( draggable ).children( 'ul.frm_sorting' ).not( '.start_divider' ).length > 0;
+		if ( isFieldGroup ) {
+			// Do not allow a field group directly inside of a field group unless it's in a section.
+			return false;
+		}
+
+		const draggableIncludesASection = draggable.classList.contains( 'edit_field_type_divider' ) || draggable.querySelector( '.edit_field_type_divider' );
+		const draggableIsEmbedField     = draggable.classList.contains( 'edit_field_type_form' );
+		const groupIsInASection         = null !== group.closest( '.start_divider' );
+		if ( groupIsInASection && ( draggableIncludesASection || draggableIsEmbedField ) ) {
+			// Do not allow a section or an embed field inside of a section.
+			return false;
+		}
+
+		return true;
 	}
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
@@ -1615,20 +1829,18 @@ function frmAdminBuildJS() {
 	}
 
 	function loadFields( fieldId ) {
-		var addHtmlToField, nextElement,
-			thisField = document.getElementById( fieldId ),
-			$thisField = jQuery( thisField ),
-			field = [];
-
-		addHtmlToField = function( element ) {
-			var frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
+		const thisField      = document.getElementById( fieldId );
+		const $thisField     = jQuery( thisField );
+		const field          = [];
+		const addHtmlToField = element => {
+			const frmHiddenFdata = element.querySelector( '.frm_hidden_fdata' );
 			element.classList.add( 'frm_load_now' );
 			if ( frmHiddenFdata !== null ) {
 				field.push( frmHiddenFdata.innerHTML );
 			}
 		};
 
-		nextElement = thisField;
+		let nextElement = thisField;
 		addHtmlToField( nextElement );
 		while ( nextElement.nextElementSibling && field.length < 15 ) {
 			addHtmlToField( nextElement.nextElementSibling );
@@ -1636,49 +1848,52 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
+			type: 'POST',
+			url: ajaxurl,
 			data: {
 				action: 'frm_load_field',
 				field: field,
 				form_id: thisFormId,
 				nonce: frmGlobal.nonce
 			},
-			success: function( html ) {
-				var key, $nextSet;
-
-				html = html.replace( /^\s+|\s+$/g, '' );
-				if ( html.indexOf( '{' ) !== 0 ) {
-					jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
-					return;
-				}
-
-				html = JSON.parse( html );
-
-				for ( key in html ) {
-					jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
-					setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
-				}
-
-				$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
-				if ( $nextSet.length ) {
-					loadFields( $nextSet.attr( 'id' ) );
-				} else {
-					// go up a level
-					$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
-					if ( $nextSet.length ) {
-						loadFields( $nextSet.attr( 'id' ) );
-					}
-				}
-
-				initiateMultiselect();
-				renumberPageBreaks();
-				maybeHideQuantityProductFieldOption();
-
-				const loadedEvent     = new Event( 'frm_ajax_loaded_field', { bubbles: false });
-				loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
-				document.dispatchEvent( loadedEvent );
-			}
+			success: html => handleAjaxLoadFieldSuccess( html, $thisField, field )
 		});
+	}
+
+	function handleAjaxLoadFieldSuccess( html, $thisField, field ) {
+		let key, $nextSet;
+
+		html = html.replace( /^\s+|\s+$/g, '' );
+		if ( html.indexOf( '{' ) !== 0 ) {
+			jQuery( '.frm_load_now' ).removeClass( '.frm_load_now' ).html( 'Error' );
+			return;
+		}
+
+		html = JSON.parse( html );
+		for ( key in html ) {
+			jQuery( '#frm_field_id_' + key ).replaceWith( html[key]);
+			setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
+			makeDraggable( document.getElementById( 'frm_field_id_' + key ) );
+		}
+
+		$nextSet = $thisField.nextAll( '.frm_field_loading:not(.frm_load_now)' );
+		if ( $nextSet.length ) {
+			loadFields( $nextSet.attr( 'id' ) );
+		} else {
+			// go up a level
+			$nextSet = jQuery( document.getElementById( 'frm-show-fields' ) ).find( '.frm_field_loading:not(.frm_load_now)' );
+			if ( $nextSet.length ) {
+				loadFields( $nextSet.attr( 'id' ) );
+			}
+		}
+
+		initiateMultiselect();
+		renumberPageBreaks();
+		maybeHideQuantityProductFieldOption();
+
+		const loadedEvent     = new Event( 'frm_ajax_loaded_field', { bubbles: false });
+		loadedEvent.frmFields = field.map( f => JSON.parse( f ) );
+		document.dispatchEvent( loadedEvent );
 	}
 
 	function addFieldClick() {
@@ -1711,8 +1926,16 @@ function frmAdminBuildJS() {
 			},
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				$newFields.append( wrapFieldLi( msg ) );
+				const replaceWith = wrapFieldLi( msg );
+				$newFields.append( replaceWith );
 				afterAddField( msg, true );
+
+				replaceWith.each(
+					function() {
+						makeDroppable( this.querySelector( 'ul.frm_sorting' ) );
+						makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
+					}
+				);
 			},
 			error: handleInsertFieldError
 		});
@@ -1768,10 +1991,14 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				var newRow;
 
+				let replaceWith;
+
 				if ( null !== newRowId ) {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
-						jQuery( newRow ).append( msg );
+						replaceWith = msgAsjQueryObject( msg );
+						jQuery( newRow ).append( replaceWith );
+						makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
 						}
@@ -1788,10 +2015,15 @@ function frmAdminBuildJS() {
 				}
 
 				if ( $field.siblings( 'li.form-field' ).length ) {
-					$field.after( msg );
+					replaceWith = msgAsjQueryObject( msg );
+					$field.after( replaceWith );
 					syncLayoutClasses( $field );
+					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 				} else {
-					$field.parent().parent().after( wrapFieldLi( msg ) );
+					replaceWith = wrapFieldLi( msg );
+					$field.parent().parent().after( replaceWith );
+					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
 				}
 
 				updateFieldOrder();
@@ -2041,16 +2273,51 @@ function frmAdminBuildJS() {
 		return option;
 	}
 
-	function wrapFieldLi( li ) {
-		return jQuery( '<li>' )
-			.addClass( 'frm_field_box' )
-			.html(
-				jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
-			);
+	function wrapFieldLi( field ) {
+		const wrapper = div();
+
+		if ( 'string' === typeof field ) {
+			wrapper.innerHTML = field;
+		} else {
+			wrapper.appendChild( field );
+		}
+
+		let result = jQuery();
+		Array.from( wrapper.children ).forEach(
+			li => {
+				result = result.add(
+					jQuery( '<li>' )
+						.addClass( 'frm_field_box' )
+						.html(
+							jQuery( '<ul>' ).addClass( 'frm_grid_container frm_sorting' ).append( li )
+						)
+				);
+			}
+		);
+
+		return result;
 	}
 
 	function wrapFieldLiInPlace( li ) {
-		jQuery( li ).wrap( '<li class="frm_field_box"><ul class="frm_grid_container frm_sorting"></ul></li>' );
+		const ul      = tag(
+			'ul',
+			{
+				className: 'frm_grid_container frm_sorting'
+			}
+		);
+		const wrapper = tag(
+			'li',
+			{
+				className: 'frm_field_box',
+				child: ul
+			}
+		);
+
+		li.replaceWith( wrapper );
+		ul.appendChild( li );
+
+		makeDroppable( ul );
+		makeDraggable( wrapper, '.frm-move' );
 	}
 
 	function afterAddField( msg, addFocus ) {
@@ -3764,12 +4031,14 @@ function frmAdminBuildJS() {
 	}
 
 	function breakRow( row ) {
-		getFieldsInRow( jQuery( row ) ).each(
+		const $row = jQuery( row );
+		getFieldsInRow( $row ).each(
 			function( index ) {
+				const field = this;
 				if ( 0 !== index ) {
-					jQuery( row ).closest( 'li' ).after( wrapFieldLi( this ) );
+					$row.parent().after( wrapFieldLi( field ) );
 				}
-				stripLayoutFromFields( jQuery( this ) );
+				stripLayoutFromFields( jQuery( field ) );
 			}
 		);
 	}
@@ -4095,7 +4364,6 @@ function frmAdminBuildJS() {
 	function getSelectedFieldIds() {
 		var deleteFieldIds = [];
 		jQuery( '.frm-selected-field-group > li.form-field' )
-			.not( '.ui-sortable-helper' )
 			.each(
 				function() {
 					deleteFieldIds.push( this.dataset.fid );
@@ -4114,7 +4382,7 @@ function frmAdminBuildJS() {
 	function deleteAllSelectedFieldGroups( deleteFieldIds ) {
 		deleteFieldIds.forEach(
 			function( fieldId ) {
-				deleteField( fieldId );
+				deleteFields( fieldId );
 			}
 		);
 	}
@@ -9363,7 +9631,9 @@ function frmAdminBuildJS() {
 		},
 
 		buildInit: function() {
-			var loadFieldId, $builderForm, builderArea;
+			let loadFieldId, $builderForm, builderArea;
+
+			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
@@ -9372,13 +9642,8 @@ function frmAdminBuildJS() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			jQuery( '.field_type_list > li:not(.frm_noallow)' ).draggable({
-				connectToSortable: '#frm-show-fields',
-				helper: 'clone',
-				revert: 'invalid',
-				delay: 10,
-				cancel: '.frm-dropdown-menu'
-			});
+			document.querySelectorAll( '.field_type_list > li' ).forEach( makeDraggable );
+
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
 			jQuery( '.frm_submit_ajax' ).on( 'click', submitBuild );
@@ -9387,7 +9652,7 @@ function frmAdminBuildJS() {
 			jQuery( 'a.edit-form-status' ).on( 'click', slideDown );
 			jQuery( '.cancel-form-status' ).on( 'click', slideUp );
 			jQuery( '.save-form-status' ).on( 'click', function() {
-				var newStatus = jQuery( document.getElementById( 'form_change_status' ) ).val();
+				const newStatus = jQuery( document.getElementById( 'form_change_status' ) ).val();
 				jQuery( 'input[name="new_status"]' ).val( newStatus );
 				jQuery( document.getElementById( 'form-status-display' ) ).html( newStatus );
 				jQuery( '.cancel-form-status' ).trigger( 'click' );
