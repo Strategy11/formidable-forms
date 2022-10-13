@@ -626,6 +626,11 @@ class test_FrmEmail extends FrmUnitTest {
 			'Original message'   => 'Original message',
 			'[' . $name_id . ']' => $this->entry->metas[ $name_id ],
 		);
+
+		foreach ( $settings as $key => $expected ) {
+			$settings[ $key ] = wpautop( $expected, false );
+		}
+
 		$this->check_private_properties( $settings, 'email_message', 'message' );
 	}
 
@@ -695,10 +700,6 @@ class test_FrmEmail extends FrmUnitTest {
 			$action->post_content[ $setting_name ] = $setting;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                                = $this->get_private_property( $email, $property );
-			if ( $property === 'message' ) {
-				$expected = apply_filters( 'frm_email_message', $expected, array( 'plain_text' => 0 ) );
-			}
-
 			$this->assertEquals( $expected, $actual );
 		}
 	}
