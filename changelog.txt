@@ -1,6 +1,6 @@
 == Changelog ==
 = 5.5.2 =
-* New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar.
+* New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar, and the field that is being dragged will gray out.
 * New: Improved error handling when installing templates from XML. A message will be shown when the simple XML extension is not installed, and errors will now be shown in a pop up when a template falls to install.
 * New: Added a new frm_before_simple_form_render action that triggers before a Gutenberg block is rendered.
 * New: Added a new frm_rich_text_emails filter for cases when a plain textarea may be preferred over rich text.
