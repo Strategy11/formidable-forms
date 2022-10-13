@@ -3859,19 +3859,19 @@ li.sortable-placeholder {
 }
 
 .edit_field_type_divider + li.sortable-placeholder {
-	box-shadow: 2px 5px 0 1px var(--primary-color);
+	box-shadow: 2px 5px 0 2px var(--primary-color);
 }
 
 .start_divider li.sortable-placeholder {
-	box-shadow: 2px -5px 0 1px var(--primary-color);
+	box-shadow: 2px -5px 0 2px var(--primary-color);
+}
+
+.frm-is-collapsed + .sortable-placeholder {
+	box-shadow: 2px 15px 0 2px var(--primary-color);
 }
 
 .frm_single_option.ui-sortable-placeholder {
 	box-shadow: 0 0 1px 1px var(--primary-color);
-}
-
-.frm-is-collapsed + .sortable-placeholder {
-	box-shadow: 2px 15px 0 1px var(--primary-color);
 }
 
 .frm_sorting > li.edit_field_type_end_divider:first-child,

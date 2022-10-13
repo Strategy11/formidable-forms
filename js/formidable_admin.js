@@ -992,6 +992,9 @@ function frmAdminBuildJS() {
 		while ( droppable.querySelector( '.frm-over-droppable' ) ) {
 			droppable = droppable.querySelector( '.frm-over-droppable' );
 		}
+		if ( 'frm-show-fields' === droppable.id && ! droppable.classList.contains( 'frm-over-droppable' ) ) {
+			droppable = false;
+		}
 		return droppable;
 	}
 
@@ -1682,6 +1685,11 @@ function frmAdminBuildJS() {
 	// Don't allow field groups in field groups.
 	// Don't allow hidden fields inside of field groups but allow them in sections.
 	function allowDrop( draggable, droppable ) {
+		if ( false === droppable ) {
+			// Don't show drop placeholder if dragging somewhere off of the droppable area.
+			return false;
+		}
+
 		if ( droppable.closest( '.frm-sortable-helper' ) ) {
 			// Do not allow drop into draggable.
 			return false;
