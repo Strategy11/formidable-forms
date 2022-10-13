@@ -493,18 +493,18 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @since 2.05
 	 */
 	public function test_default_message_with_plain_text_and_include_extras() {
-		$entry = $this->get_test_entry( true );
+		$entry                = $this->get_test_entry( true );
 		$this->include_extras = array( 'divider', 'break', 'html' );
 
 		$atts = array(
-			'id' => $entry->id,
-			'entry' => $entry,
-			'plain_text' => true,
-			'user_info' => false,
+			'id'             => $entry->id,
+			'entry'          => $entry,
+			'plain_text'     => true,
+			'user_info'      => false,
 			'include_extras' => 'page,section,html',
 		);
 
-		$content = $this->get_formatted_content( $atts );
+		$content          = $this->get_formatted_content( $atts );
 		$expected_content = $this->expected_plain_text_content( $atts );
 
 		$this->assertSame( $expected_content, $content );
