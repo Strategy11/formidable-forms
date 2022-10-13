@@ -677,7 +677,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$action->post_content['email_message'] = 'Value <br/>with HTML';
 
 		$settings = array(
-			0 => '<p>Value <br/>with HTML</p>',
+			0 => "<p>Value <br/>with HTML</p>\n", // This is testing HTML, not plain text because it's indexed by 0 which is used for the plain_text setting.
 			1 => 'Value with HTML',
 		);
 
@@ -685,7 +685,7 @@ class test_FrmEmail extends FrmUnitTest {
 			$action->post_content['plain_text'] = $setting;
 			$email                              = new FrmEmail( $action, $this->entry, $this->contact_form );
 			$actual                             = $this->get_private_property( $email, 'message' );
-			$this->assertNotFalse( strpos( $actual, $expected ) );
+			$this->assertEquals( $actual, $expected );
 		}
 	}
 
