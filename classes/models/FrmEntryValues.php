@@ -273,7 +273,7 @@ class FrmEntryValues {
 		 * @param array $referrer
 		 * @param array @entry_description
 		 */
-		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description );
+		$referrer = apply_filters( 'frm_user_info_referrer', $referrer, $entry_description, $this->entry );
 
 		$this->user_info = array(
 			'ip'       => $ip,

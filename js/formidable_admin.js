@@ -5497,35 +5497,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function setScaleValues() {
-		/*jshint validthis:true */
-		var isMin = this.id.indexOf( 'minnum' ) !== -1;
-		var fieldID = this.id.replace( 'scale_maxnum_', '' ).replace( 'scale_minnum_', '' );
-		var min = this.value;
-		var max = this.value;
-		if ( isMin ) {
-			max = document.getElementById( 'scale_maxnum_' + fieldID ).value;
-		} else {
-			min = document.getElementById( 'scale_minnum_' + fieldID ).value;
-		}
-
-		updateScaleValues( parseInt( min, 10 ), parseInt( max, 10 ), fieldID );
-	}
-
-	function updateScaleValues( min, max, fieldID ) {
-		var container = jQuery( '#field_' + fieldID + '_inner_container .frm_form_fields' );
-		container.html( '' );
-
-		if ( min >= max ) {
-			max = min + 1;
-		}
-
-		for ( var i = min; i <= max; i++ ) {
-			container.append( '<div class="frm_scale"><label><input type="hidden" name="field_options[options_' + fieldID + '][' + i + ']" value="' + i + '"> <input type="radio" name="item_meta[' + fieldID + ']" value="' + i + '"> ' + i + ' </label></div>' );
-		}
-		container.append( '<div class="clear"></div>' );
-	}
-
 	function getFieldValues() {
 		/*jshint validthis:true */
 		var isTaxonomy,
@@ -7279,8 +7250,6 @@ function frmAdminBuildJS() {
 
 		if ( rich ) {
 			wpActiveEditor = elementId;
-			send_to_editor( variable );
-			return;
 		}
 
 		if ( ! contentBox.length ) {
@@ -7300,13 +7269,24 @@ function frmAdminBuildJS() {
 					plain_text: p,
 					nonce: frmGlobal.nonce
 				},
+				elementId: elementId,
 				success: function( msg ) {
-					insertContent( contentBox, msg );
+					if ( rich ) {
+						let p = document.createElement( 'p' );
+						p.innerText = msg;
+						send_to_editor( p.innerHTML );
+					} else {
+						insertContent( contentBox, msg );
+					}
 				}
 			});
 		} else {
 			variable = maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox );
-			insertContent( contentBox, variable );
+			if ( rich ) {
+				send_to_editor( variable );
+			} else {
+				insertContent( contentBox, variable );
+			}
 		}
 		return false;
 	}
@@ -8942,16 +8922,25 @@ function frmAdminBuildJS() {
 				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 
 				// Show response.message
-				if ( response.message && typeof form.elements.show_response !== 'undefined' ) {
-					const showError = document.getElementById( form.elements.show_response.value );
-					if ( showError !== null ) {
-						showError.innerHTML = response.message;
-						showError.classList.remove( 'frm_hidden' );
-					}
+				if ( 'string' === typeof response.message ) {
+					showInstallFormErrorModal( response.message );
 				}
 			}
 			button.classList.remove( 'frm_loading_button' );
 		});
+	}
+
+	function showInstallFormErrorModal( message ) {
+		const modalContent = div( message );
+		modalContent.style.padding = '20px 40px';
+		const modal = frmDom.modal.maybeCreateModal(
+			'frmInstallFormErrorModal',
+			{
+				title: __( 'Unable to install template', 'formidable' ),
+				content: modalContent
+			}
+		);
+		modal.classList.add( 'frm_common_modal' );
 	}
 
 	function handleCaptchaTypeChange( e ) {
@@ -9683,7 +9672,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm_add_watch_lookup_row', addWatchLookupRow );
 			$builderForm.on( 'change', '.frm_get_values_form', updateGetValueFieldSelection );
 			$builderForm.on( 'change', '.frm_logic_field_opts', getFieldValues );
-			$builderForm.on( 'change', '.scale_maxnum, .scale_minnum', setScaleValues );
 			$builderForm.on( 'change', '.radio_maxnum', setStarValues );
 			$builderForm.on( 'frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues );
 

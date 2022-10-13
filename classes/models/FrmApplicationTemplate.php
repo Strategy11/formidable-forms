@@ -80,11 +80,27 @@ class FrmApplicationTemplate {
 	 */
 	private static function populate_category_information( $categories ) {
 		foreach ( $categories as $category ) {
-			if ( false !== strpos( $category, '+Views' ) || in_array( $category, self::$categories, true ) ) {
+			if ( self::category_matches_a_license_type( $category ) ) {
+				continue;
+			}
+			if ( in_array( $category, self::$categories, true ) ) {
 				continue;
 			}
 			self::$categories[] = $category;
 		}
+	}
+
+	/**
+	 * @since 5.5.2
+	 *
+	 * @param string $category
+	 * @return bool
+	 */
+	private static function category_matches_a_license_type( $category ) {
+		if ( false !== strpos( $category, '+Views' ) ) {
+			return true;
+		}
+		return in_array( $category, FrmFormsHelper::ignore_template_categories(), true );
 	}
 
 	/**

@@ -377,13 +377,13 @@
 		let examples = [
 			{
 				label: __( 'WordPress shortcode', 'formidable' ),
-				example: '[formidable id=' + formId + ' title=true description=true]',
+				example: '[formidable id=' + formId + ']',
 				link: 'https://formidableforms.com/knowledgebase/publish-a-form/#kb-insert-the-shortcode-manually',
 				linkLabel: __( 'How to use shortcodes in WordPress', 'formidable' )
 			},
 			{
 				label: __( 'Use PHP code', 'formidable' ),
-				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ', \'title\' => true, \'description\' => true ) ); ?>'
+				example: '<?php echo FrmFormsController::get_form_shortcode( array( \'id\' => ' + formId + ' ) ); ?>'
 			}
 		];
 
