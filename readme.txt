@@ -447,7 +447,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added a new frm_rich_text_emails filter for cases when a plain textarea may be preferred over rich text.
 * New: Fields with floating labels now take up less space.
 * Fix: When inserting a [default-plain] or [default-html] shortcode into a rich text editor, the shortcode would insert instead of changing dynamically as expected.
-* Fix: Rich text HTML emails were not automatically using wpautop.
+* Fix: Rich text HTML emails were not automatically using wpautop so line breaks were not appearing in emails as expected.
 * Fix: Improved how drag and drop works when dragging multiple sections in a field group.
 * Fix: Prevent a warning that would trigger when previewing in-theme when using Twenty Twenty One.
 * Fix: Prevent a fatal error that would only ever happen once, immediately when upgrading to version 5.5 or higher from an older version.
