@@ -410,6 +410,8 @@ function frmFrontFormJS() {
 	}
 
 	function checkPasswordStrength( field, errors ) {
+		var check, regex, checks;
+
 		if ( 'object' !== typeof window.frm_password_checks ) {
 			return;
 		}
@@ -418,7 +420,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		var check, regex, checks = window.frm_password_checks;
+		checks = window.frm_password_checks;
 
 		for ( check in checks ) {
 			regex = checks[ check ].regex.slice( 1, checks[ check ].regex.length - 1 )
