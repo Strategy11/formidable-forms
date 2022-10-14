@@ -36,8 +36,10 @@ class FrmXMLHelper {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
 		}
 
-		$dom     = new DOMDocument();
-		$success = $dom->loadXML( file_get_contents( $file ) );
+		$dom = new DOMDocument();
+		// LIBXML_COMPACT activates small nodes allocation optimization.
+		// Use LIBXML_PARSEHUGE to avoid "parser error : internal error: Huge input lookup" for large (300MB) files.
+		$success = $dom->loadXML( file_get_contents( $file ), LIBXML_COMPACT | LIBXML_PARSEHUGE );
 		if ( ! $success ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
