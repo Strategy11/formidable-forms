@@ -335,7 +335,7 @@ function frmAdminBuildJS() {
 		lastNewActionIdReturned = 0;
 
 	const { __ } = wp.i18n;
-	let debouncedSyncAfterDragAndDrop;
+	let debouncedSyncAfterDragAndDrop, postBodyContent;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -882,6 +882,7 @@ function frmAdminBuildJS() {
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag,
+			cursor: 'grabbing',
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
@@ -931,11 +932,12 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDragStart( event, ui ) {
-		const container = document.getElementById( 'post-body-content' );
+		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
 
 		document.body.classList.add( 'frm-dragging' );
 		ui.helper.addClass( 'frm-sortable-helper' );
+		ui.helper.initialOffset = container.scrollTop;
 
 		event.target.classList.add( 'frm-drag-fade' );
 
@@ -947,7 +949,7 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDragStop() {
-		const container = document.getElementById( 'post-body-content' );
+		const container = postBodyContent;
 		container.classList.remove( 'frm-dragging-field' );
 		document.body.classList.remove( 'frm-dragging' );
 
@@ -957,7 +959,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function handleDrag( event ) {
+	function handleDrag( event, ui ) {
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
 
@@ -977,6 +979,9 @@ function frmAdminBuildJS() {
 			});
 		}
 
+		// Sync the y position of the draggable so it still follows the cursor after scrolling up and down the field list.
+		ui.helper.get( 0 ).style.transform = 'translateY(' + getDragOffset( ui.helper ) + 'px)';
+
 		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
 			placeholder.style.left = 0;
 			handleDragOverYAxis({ droppable, y: event.clientY, placeholder });
@@ -985,6 +990,10 @@ function frmAdminBuildJS() {
 
 		placeholder.style.top = '';
 		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
+	}
+
+	function getDragOffset( $helper ) {
+		return postBodyContent.scrollTop - $helper.initialOffset;
 	}
 
 	function getDroppableTarget() {
@@ -2152,7 +2161,7 @@ function frmAdminBuildJS() {
 	function checkForActiveHoverTarget( event ) {
 		var container, elementFromPoint, list, previousHoverTarget;
 
-		container = document.getElementById( 'post-body-content' );
+		container = postBodyContent;
 		if ( container.classList.contains( 'frm-dragging-field' ) ) {
 			return;
 		}
@@ -9643,6 +9652,7 @@ function frmAdminBuildJS() {
 			let loadFieldId, $builderForm, builderArea;
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
+			postBodyContent = document.getElementById( 'post-body-content' );
 
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
