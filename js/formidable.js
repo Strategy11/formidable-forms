@@ -424,7 +424,7 @@ function frmFrontFormJS() {
 			regex = checks[ check ].regex.slice( 1, checks[ check ].regex.length - 1 )
 			regex = new RegExp( regex );
 			if ( ! regex.test( field.value ) ) {
-				errors[ field.id ] = checks[ check ].message;
+				errors[ getFieldId( field ) ] = checks[ check ].message;
 				return;
 			}
 		}
