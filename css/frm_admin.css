@@ -3390,10 +3390,6 @@ li.ui-state-default.selected > .frm_inner_field_container > label {
 	max-width: calc(100% - 100px);
 }
 
-.frm-dragging * {
-	cursor: grabbing !important;
-}
-
 .frm-drag-fade {
 	background-color: var(--lightest-grey) !important;
 	border-radius: 4px;

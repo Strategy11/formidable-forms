@@ -335,7 +335,7 @@ function frmAdminBuildJS() {
 		lastNewActionIdReturned = 0;
 
 	const { __ } = wp.i18n;
-	let debouncedSyncAfterDragAndDrop;
+	let debouncedSyncAfterDragAndDrop, postBodyContent;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
@@ -882,6 +882,7 @@ function frmAdminBuildJS() {
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag,
+			cursor: 'grabbing',
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
@@ -931,11 +932,12 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDragStart( event, ui ) {
-		const container = document.getElementById( 'post-body-content' );
+		const container = postBodyContent;
 		container.classList.add( 'frm-dragging-field' );
 
 		document.body.classList.add( 'frm-dragging' );
 		ui.helper.addClass( 'frm-sortable-helper' );
+		ui.helper.initialOffset = container.scrollTop;
 
 		event.target.classList.add( 'frm-drag-fade' );
 
@@ -947,7 +949,7 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDragStop() {
-		const container = document.getElementById( 'post-body-content' );
+		const container = postBodyContent;
 		container.classList.remove( 'frm-dragging-field' );
 		document.body.classList.remove( 'frm-dragging' );
 
@@ -957,7 +959,7 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function handleDrag( event ) {
+	function handleDrag( event, ui ) {
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
 
@@ -977,6 +979,9 @@ function frmAdminBuildJS() {
 			});
 		}
 
+		// Sync the y position of the draggable so it still follows the cursor after scrolling up and down the field list.
+		ui.helper.get( 0 ).style.transform = 'translateY(' + getDragOffset( ui.helper ) + 'px)';
+
 		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
 			placeholder.style.left = 0;
 			handleDragOverYAxis({ droppable, y: event.clientY, placeholder });
@@ -985,6 +990,10 @@ function frmAdminBuildJS() {
 
 		placeholder.style.top = '';
 		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
+	}
+
+	function getDragOffset( $helper ) {
+		return postBodyContent.scrollTop - $helper.initialOffset;
 	}
 
 	function getDroppableTarget() {
@@ -1717,6 +1726,7 @@ function frmAdminBuildJS() {
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
+	// Don't allow a new field into a field group that includes a page break or hidden field.
 	// Don't allow a new section inside of a section.
 	// Don't allow an embedded form in a section.
 	function allowNewFieldDrop( draggable, droppable ) {
@@ -1725,6 +1735,16 @@ function frmAdminBuildJS() {
 		const newHiddenField    = classes.contains( 'frm_thidden' );
 		const newSectionField   = classes.contains( 'frm_tdivider' );
 		const newEmbedField     = classes.contains( 'frm_tform' );
+
+		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
+		if ( newFieldWillBeAddedToAGroup ) {
+			if ( groupIncludesBreakOrHidden( droppable ) ) {
+				// Never allow any field beside a page break or a hidden field.
+				return false;
+			}
+
+			return ! newHiddenField && ! newPageBreakField;
+		}
 
 		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
 		if ( fieldTypeIsAlwaysAllowed ) {
@@ -1735,11 +1755,6 @@ function frmAdminBuildJS() {
 		if ( newFieldWillBeAddedToASection ) {
 			// Don't allow a section or an embedded form in a section.
 			return ! newEmbedField && ! newSectionField;
-		}
-
-		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
-		if ( newFieldWillBeAddedToAGroup ) {
-			return ! newHiddenField && ! newPageBreakField;
 		}
 
 		return true;
@@ -1758,6 +1773,12 @@ function frmAdminBuildJS() {
 
 		if ( droppable.classList.contains( 'start_divider' ) ) {
 			return allowMoveFieldToSection( draggable );
+		}
+
+		const isHiddenField = draggable.classList.contains( 'edit_field_type_hidden' );
+		if ( isHiddenField ) {
+			// Hidden fields should not be added to field groups since they're not shown and don't make sense with the grid distribution.
+			return false;
 		}
 
 		return allowMoveFieldToGroup( draggable, droppable );
@@ -1792,8 +1813,7 @@ function frmAdminBuildJS() {
 	}
 
 	function allowMoveFieldToGroup( draggable, group ) {
-		const groupIncludesBreakOrHidden = null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
-		if ( groupIncludesBreakOrHidden ) {
+		if ( groupIncludesBreakOrHidden( group ) ) {
 			// Never allow any field beside a page break or a hidden field.
 			return false;
 		}
@@ -1813,6 +1833,10 @@ function frmAdminBuildJS() {
 		}
 
 		return true;
+	}
+
+	function groupIncludesBreakOrHidden( group ) {
+		return null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
 	}
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
@@ -2143,7 +2167,7 @@ function frmAdminBuildJS() {
 	function checkForActiveHoverTarget( event ) {
 		var container, elementFromPoint, list, previousHoverTarget;
 
-		container = document.getElementById( 'post-body-content' );
+		container = postBodyContent;
 		if ( container.classList.contains( 'frm-dragging-field' ) ) {
 			return;
 		}
@@ -9634,6 +9658,7 @@ function frmAdminBuildJS() {
 			let loadFieldId, $builderForm, builderArea;
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
+			postBodyContent = document.getElementById( 'post-body-content' );
 
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
