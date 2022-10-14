@@ -2868,6 +2868,11 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * Adds password checks data to JS.
+	 *
+	 * @since 5.x
+	 */
 	private static function maybe_add_password_checks_data() {
 		if ( ! class_exists( 'FrmProFieldPassword', false ) ) {
 			return;
