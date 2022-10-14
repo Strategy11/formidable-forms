@@ -364,6 +364,30 @@ legend.frm_hidden{
 	padding:25px;
 }
 
+.ui-datepicker .ui-datepicker-prev:before{
+	background-image: url(../images/arrowup.svg);
+	content: '' !important;
+}
+
+.ui-datepicker .ui-datepicker-prev:before, .ui-datepicker .ui-datepicker-next:before{
+	position: absolute;
+	top: 10px;
+	left: 6px;
+}
+
+.ui-datepicker .ui-datepicker-next:before{
+	background-image: url(../images/arrowup.svg);
+	content: '' !important;
+}
+
+.ui-datepicker .ui-datepicker-prev{
+	transform: rotate(-90deg) !important;
+}
+
+.ui-datepicker .ui-datepicker-next{
+	transform: rotate(90deg) !important;
+}
+
 .with_frm_style .frm_primary_label{
 	max-width:100%;
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
