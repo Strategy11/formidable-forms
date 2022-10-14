@@ -7432,6 +7432,7 @@ iframe#dyncontent_ifr {
 
 	/* Custom rules */
 	z-index: 9999999;
+	pointer-events: none;
 }
 
 .tooltip.show {
