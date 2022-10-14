@@ -1717,6 +1717,7 @@ function frmAdminBuildJS() {
 	}
 
 	// Don't allow a new page break or hidden field in a field group.
+	// Don't allow a new field into a field group that includes a page break or hidden field.
 	// Don't allow a new section inside of a section.
 	// Don't allow an embedded form in a section.
 	function allowNewFieldDrop( draggable, droppable ) {
@@ -1725,6 +1726,16 @@ function frmAdminBuildJS() {
 		const newHiddenField    = classes.contains( 'frm_thidden' );
 		const newSectionField   = classes.contains( 'frm_tdivider' );
 		const newEmbedField     = classes.contains( 'frm_tform' );
+
+		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
+		if ( newFieldWillBeAddedToAGroup ) {
+			if ( groupIncludesBreakOrHidden( droppable ) ) {
+				// Never allow any field beside a page break or a hidden field.
+				return false;
+			}
+
+			return ! newHiddenField && ! newPageBreakField;
+		}
 
 		const fieldTypeIsAlwaysAllowed = ! newPageBreakField && ! newHiddenField && ! newSectionField && ! newEmbedField;
 		if ( fieldTypeIsAlwaysAllowed ) {
@@ -1735,11 +1746,6 @@ function frmAdminBuildJS() {
 		if ( newFieldWillBeAddedToASection ) {
 			// Don't allow a section or an embedded form in a section.
 			return ! newEmbedField && ! newSectionField;
-		}
-
-		const newFieldWillBeAddedToAGroup = ! ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) );
-		if ( newFieldWillBeAddedToAGroup ) {
-			return ! newHiddenField && ! newPageBreakField;
 		}
 
 		return true;
@@ -1792,8 +1798,7 @@ function frmAdminBuildJS() {
 	}
 
 	function allowMoveFieldToGroup( draggable, group ) {
-		const groupIncludesBreakOrHidden = null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
-		if ( groupIncludesBreakOrHidden ) {
+		if ( groupIncludesBreakOrHidden( group ) ) {
 			// Never allow any field beside a page break or a hidden field.
 			return false;
 		}
@@ -1813,6 +1818,10 @@ function frmAdminBuildJS() {
 		}
 
 		return true;
+	}
+
+	function groupIncludesBreakOrHidden( group ) {
+		return null !== group.querySelector( '.edit_field_type_break, .edit_field_type_hidden' );
 	}
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
