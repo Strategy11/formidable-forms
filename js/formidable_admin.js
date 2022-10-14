@@ -1775,6 +1775,12 @@ function frmAdminBuildJS() {
 			return allowMoveFieldToSection( draggable );
 		}
 
+		const isHiddenField = draggable.classList.contains( 'edit_field_type_hidden' );
+		if ( isHiddenField ) {
+			// Hidden fields should not be added to field groups since they're not shown and don't make sense with the grid distribution.
+			return false;
+		}
+
 		return allowMoveFieldToGroup( draggable, droppable );
 	}
 
