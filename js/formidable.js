@@ -1098,7 +1098,7 @@ function frmFrontFormJS() {
 	}
 
 	function maybeMakeHoneypotFieldsUntabbable() {
-		document.addEventListener( 'keyup', handleKeyUp );
+		document.addEventListener( 'keydown', handleKeyUp );
 
 		function handleKeyUp( event ) {
 			var code;
@@ -1111,7 +1111,7 @@ function frmFrontFormJS() {
 
 			if ( 'Tab' === code ) {
 				makeHoneypotFieldsUntabbable();
-				document.removeEventListener( 'keyup', handleKeyUp );
+				document.removeEventListener( 'keydown', handleKeyUp );
 			}
 		}
 
