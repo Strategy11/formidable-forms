@@ -7773,6 +7773,12 @@ function frmAdminBuildJS() {
 	}
 
 	function onActionLoaded( event ) {
+		event.target.querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
+			if ( svg.nextElementSibling.type === 'text' ) {
+				svg.style.bottom = '-3px';
+			}
+		});
+
 		const settings = event.target.closest( '.frm_form_action_settings' );
 		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
 			onEmailActionLoaded( settings );
