@@ -999,34 +999,12 @@ function frmFrontFormJS() {
 		return false;
 	}
 
+
 	/**********************************************
 	 * Fallback functions
 	 *********************************************/
 
-	function addIndexOfFallbackForIE8() {
-		var len, from;
-
-		if ( ! Array.prototype.indexOf ) {
-			Array.prototype.indexOf = function( elt /*, from*/ ) {
-				len = this.length >>> 0;
-
-				from = Number( arguments[1]) || 0;
-				from = ( from < 0 ) ? Math.ceil( from ) : Math.floor( from );
-				if ( from < 0 ) {
-					from += len;
-				}
-
-				for ( ; from < len; from++ ) {
-					if ( from in this && this[from] === elt ) {
-						return from;
-					}
-				}
-				return -1;
-			};
-		}
-	}
-
-	function addTrimFallbackForIE8() {
+	function addTrimFallbackForIE() {
 		if ( typeof String.prototype.trim !== 'function' ) {
 			String.prototype.trim = function() {
 				return this.replace( /^\s+|\s+$/g, '' );
@@ -1034,7 +1012,7 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addFilterFallbackForIE8() {
+	function addFilterFallbackForIE() {
 		var t, len, res, thisp, i, val;
 
 		if ( ! Array.prototype.filter ) {
@@ -1063,24 +1041,6 @@ function frmFrontFormJS() {
 				}
 
 				return res;
-			};
-		}
-	}
-
-	function addKeysFallbackForIE8() {
-		var keys, i;
-
-		if ( ! Object.keys ) {
-			Object.keys = function( obj ) {
-				keys = [];
-
-				for ( i in obj ) {
-					if ( obj.hasOwnProperty( i ) ) {
-						keys.push( i );
-					}
-				}
-
-				return keys;
 			};
 		}
 	}
@@ -1350,11 +1310,9 @@ function frmFrontFormJS() {
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
 
-			// Add fallbacks for the beloved IE8
-			addIndexOfFallbackForIE8();
-			addTrimFallbackForIE8();
-			addFilterFallbackForIE8();
-			addKeysFallbackForIE8();
+			// Add fallbacks for IE.
+			addTrimFallbackForIE(); // Trim only works in IE10+.
+			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
 		},
