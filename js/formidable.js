@@ -48,6 +48,20 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Triggers custom JS event.
+	 *
+	 * @since 5.x
+	 *
+	 * @param {HTMLElement} el        The HTML element.
+	 * @param {String}      eventName Event name.
+	 * @param {mixed}       data      The passed data.
+	 */
+	function triggerCustom( el, eventName, data ) {
+		var event = new CustomEvent( eventName, { detail: data });
+		el.dispatchEvent( event );
+	}
+
 	/* Get the ID of the field that changed*/
 	function getFieldId( field, fullID ) {
 		var nameParts, fieldId,
@@ -271,6 +285,11 @@ function frmFrontFormJS() {
 		} else if ( field.pattern !== null ) {
 			checkPatternField( field, errors );
 		}
+
+		triggerCustom( document, 'frm_validate_field_value', {
+			field: field,
+			errors: errors
+		});
 	}
 
 	function checkRequiredField( field, errors ) {
@@ -406,30 +425,6 @@ function frmFrontFormJS() {
 
 	function checkPasswordField( field, errors ) {
 		confirmField( field, errors );
-		checkPasswordStrength( field, errors );
-	}
-
-	function checkPasswordStrength( field, errors ) {
-		var check, regex, checks;
-
-		if ( 'object' !== typeof window.frm_password_checks ) {
-			return;
-		}
-
-		if ( -1 === field.className.indexOf( 'frm_strong_pass' ) || 0 === field.id.indexOf( 'field_conf_' ) ) {
-			return;
-		}
-
-		checks = window.frm_password_checks;
-
-		for ( check in checks ) {
-			regex = checks[ check ].regex.slice( 1, checks[ check ].regex.length - 1 )
-			regex = new RegExp( regex );
-			if ( ! regex.test( field.value ) ) {
-				errors[ getFieldId( field ) ] = checks[ check ].message;
-				return;
-			}
-		}
 	}
 
 	function confirmField( field, errors ) {
