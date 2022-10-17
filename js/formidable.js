@@ -1108,7 +1108,7 @@ function frmFrontFormJS() {
 			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
 				code = 'Tab';
 			}
-	
+
 			if ( 'Tab' === code ) {
 				makeHoneypotFieldsUntabbable();
 				document.removeEventListener( 'keyup', handleKeyUp );
