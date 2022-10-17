@@ -1097,6 +1097,36 @@ function frmFrontFormJS() {
 		}
 	}
 
+	function maybeMakeHoneypotFieldsUntabbable() {
+		document.addEventListener( 'keyup', handleKeyUp );
+
+		function handleKeyUp( event ) {
+			var code;
+
+			if ( 'undefined' !== typeof event.key ) {
+				code = event.key;
+			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
+				code = 'Tab';
+			}
+	
+			if ( 'Tab' === code ) {
+				makeHoneypotFieldsUntabbable();
+				document.removeEventListener( 'keyup', handleKeyUp );
+			}
+		}
+
+		function makeHoneypotFieldsUntabbable() {
+			document.querySelectorAll( '.frm_verify' ).forEach(
+				function( wrapper ) {
+					var input = wrapper.querySelector( 'input[id^=frm_email]' );
+					if ( input ) {
+						input.setAttribute( 'tabindex', -1 );
+					}
+				}
+			);
+		}
+	}
+
 	/**
 	 * Focus on the first sub field when clicking to the primary label of combo field.
 	 *
@@ -1341,6 +1371,7 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
+			maybeMakeHoneypotFieldsUntabbable();
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
