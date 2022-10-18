@@ -29,6 +29,8 @@ class FrmSettings {
 
 	public $active_captcha;
 
+	public $hcaptcha_pubkey;
+	public $hcaptcha_privkey;
 	public $pubkey;
 	public $privkey;
 	public $re_lang;
@@ -186,8 +188,20 @@ class FrmSettings {
 			$this->active_captcha = 'recaptcha';
 		}
 
+		$hcaptcha_privkey = '';
 		$privkey = '';
 		$re_lang = '';
+
+		if ( ! isset( $this->hcaptcha_pubkey ) ) {
+			// get the options from the database
+			$hcaptcha_opt = is_multisite() ? get_site_option( 'hcaptcha' ) : get_option( 'hcaptcha' );
+			$this->hcaptcha_pubkey  = isset( $hcaptcha_opt['pubkey'] ) ? $hcaptcha_opt['pubkey'] : '';
+			$hcaptcha_privkey       = isset( $hcaptcha_opt['privkey'] ) ? $hcaptcha_opt['privkey'] : $hcaptcha_privkey;
+		}
+
+		if ( ! isset( $this->hcaptcha_privkey ) ) {
+			$this->hcaptcha_privkey = $hcaptcha_privkey;
+		}
 
 		if ( ! isset( $this->pubkey ) ) {
 			// get the options from the database
@@ -274,6 +288,8 @@ class FrmSettings {
 
 	private function update_settings( $params ) {
 		$this->active_captcha = $params['frm_active_captcha'];
+		$this->hcaptcha_pubkey       = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey      = $params['frm_hcaptcha_privkey'];
 		$this->pubkey       = trim( $params['frm_pubkey'] );
 		$this->privkey      = $params['frm_privkey'];
 		$this->re_type      = $params['frm_re_type'];
