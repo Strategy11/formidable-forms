@@ -273,6 +273,7 @@ class FrmSettings {
 	}
 
 	private function update_settings( $params ) {
+		$this->active_captcha = $params['frm_active_captcha'];
 		$this->pubkey       = trim( $params['frm_pubkey'] );
 		$this->privkey      = $params['frm_privkey'];
 		$this->re_type      = $params['frm_re_type'];

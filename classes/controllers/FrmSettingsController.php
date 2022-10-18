@@ -51,7 +51,7 @@ class FrmSettingsController {
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
-			'recaptcha' => array(
+			'captcha' => array(
 				'class'    => __CLASS__,
 				'function' => 'captcha_settings',
 				'name'     => __( 'CAPTCHA', 'formidable' ),

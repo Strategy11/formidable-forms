@@ -18,10 +18,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 			FrmAppHelper::icon_by_class( 'frmfont frm_recaptcha' );
 			?>
 		</label>
+		<input type="radio" name="frm_active_captcha" id="hcaptcha" value="hcaptcha" <?php checked( $frm_settings->active_captcha, 'hcaptcha' ); ?>>
+		<label for="hcaptcha">
+			<?php
+			FrmAppHelper::icon_by_class( 'frmfont frm_hcaptcha' );
+			?>
+		</label>
 	</div>
-
 </div>
-<div class="frm_grid_container">
+<div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $frm_settings->active_captcha === 'recaptcha' ? '' : 'frm_hidden' ); ?>">
+	<h4>reCaptcha Settings</h4>
 	<p class="frm6 frm_form_field">
 		<label class="frm_help" for="frm_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
 			<?php esc_html_e( 'Site Key', 'formidable' ); ?>
@@ -89,7 +95,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 
-<div class="frm_grid_container">
+<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $frm_settings->active_captcha === 'hcaptcha' ? '' : 'frm_hidden' ); ?>">
+	<h4>hCaptcha Settings</h4>
 	<p class="frm6 frm_form_field">
 		<label class="frm_help" for="frm_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
 			<?php esc_html_e( 'Site Key', 'formidable' ); ?>

@@ -10305,6 +10305,14 @@ function frmAdminBuildJS() {
 			if ( captchaType ) {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
+
+			document.querySelector( '.frm_active_captcha' ).addEventListener( 'change', function( e ) {
+				var selectedValue, unselectedValue;
+				selectedValue = e.target.value;
+				unselectedValue = selectedValue === 'recaptcha' ? 'hcaptcha' : 'recaptcha';
+				document.getElementById( selectedValue + '_settings' ).classList.remove( 'frm_hidden' );
+				document.getElementById( unselectedValue + '_settings' ).classList.add( 'frm_hidden' );
+			});
 		},
 
 		exportInit: function() {
