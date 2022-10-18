@@ -64,20 +64,34 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		return str_replace( ' for="field_[key]"', ' for="g-recaptcha-response"', $html );
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			$replaced_for = str_replace( ' for="field_[key]"', ' for="g-recaptcha-response"', $html );
+		} else {
+			$replaced_for = str_replace( ' for="field_[key]"', ' for="h-recaptcha-response"', $html );
+		}
+		return $replaced_for;
 	}
 
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( empty( $frm_settings->pubkey ) ) {
+		if ( ( $frm_settings->active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) ) || ( $frm_settings->active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey ) ) ) {
 			return '';
 		}
 
 		$class_prefix  = $this->class_prefix();
+		$captcha_class = $this->captcha_class();
 		$captcha_size  = $this->captcha_size();
 		$allow_mutiple = $frm_settings->re_multi;
 
-		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . 'g-recaptcha" data-sitekey="' . esc_attr( $frm_settings->pubkey ) . '" data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			$site_key          = $frm_settings->pubkey;
+			$recaptcha_options = '" data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
+		} else {
+			$site_key = $frm_settings->hcaptcha_pubkey;
+		}
+
+		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"' . $recaptcha_options;
 		if ( $captcha_size == 'invisible' && ! $allow_mutiple ) {
 			$html .= ' data-callback="frmAfterRecaptcha"';
 		}
@@ -94,30 +108,40 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function api_url() {
-		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
-
 		$frm_settings  = FrmAppHelper::get_settings();
-		$allow_mutiple = $frm_settings->re_multi;
-		if ( $allow_mutiple ) {
-			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
-		}
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
-		if ( ! empty( $lang ) ) {
-			$api_js_url .= '&hl=' . $lang;
+			$allow_mutiple = $frm_settings->re_multi;
+			if ( $allow_mutiple ) {
+				$api_js_url .= '&onload=frmRecaptcha&render=explicit';
+			}
+
+			$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
+			if ( ! empty( $lang ) ) {
+				$api_js_url .= '&hl=' . $lang;
+			}
+		} elseif ( $frm_settings->active_captcha === 'hcaptcha' ) {
+			$api_js_url = 'https://js.hcaptcha.com/1/api.js';
 		}
 
 		return apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 	}
 
 	protected function class_prefix() {
-		if ( $this->allow_multiple() ) {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $this->allow_multiple() && $frm_settings->active_captcha === 'recaptcha' ) {
 			$class_prefix = 'frm-';
 		} else {
 			$class_prefix = '';
 		}
 
 		return $class_prefix;
+	}
+
+	protected function captcha_class() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha' : 'h-captcha';
 	}
 
 	protected function allow_multiple() {
