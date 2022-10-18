@@ -243,4 +243,19 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		return wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $arg_array );
 	}
+
+	public static function replace_field_name( $values ) {
+		if ( $values['type'] === 'captcha' ) {
+			$frm_settings   = FrmAppHelper::get_settings();
+			$active_captcha = $frm_settings->active_captcha;
+			if ( $active_captcha === 'recaptcha' ) {
+				$values['name'] = 'reCAPTCHA';
+			} else {
+				$values['name'] = 'hCAPTCHA';
+			}
+		}
+
+		return $values;
+	}
 }
+
