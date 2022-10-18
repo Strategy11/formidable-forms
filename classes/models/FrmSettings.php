@@ -27,6 +27,8 @@ class FrmSettings {
 	public $load_style;
 	public $custom_style;
 
+	public $active_captcha;
+
 	public $pubkey;
 	public $privkey;
 	public $re_lang;
@@ -116,7 +118,7 @@ class FrmSettings {
 	}
 
 	private function set_default_options() {
-		$this->fill_recaptcha_settings();
+		$this->fill_captcha_settings();
 
 		if ( ! isset( $this->load_style ) ) {
 			if ( ! isset( $this->custom_style ) ) {
@@ -179,7 +181,11 @@ class FrmSettings {
 		}
 	}
 
-	private function fill_recaptcha_settings() {
+	private function fill_captcha_settings() {
+		if ( ! isset( $this->active_captcha ) ) {
+			$this->active_captcha = 'recaptcha';
+		}
+
 		$privkey = '';
 		$re_lang = '';
 

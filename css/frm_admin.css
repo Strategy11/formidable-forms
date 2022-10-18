@@ -4434,6 +4434,11 @@ label.frm-example-icon {
 	display: inline-block !important;
 }
 
+.frm_active_captcha .frmsvg {
+	width: 140px;
+	height: 38px;
+}
+
 .frm-example-icon .frmsvg,
 .frm-example-icon i {
 	height: 20px;
