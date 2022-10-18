@@ -63,7 +63,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
 			'captcha'  => array(
-				'name' => __( 'reCAPTCHA', 'formidable' ),
+				'name' => FrmAppHelper::get_settings()->active_captcha === 'recaptcha' ? __( 'reCAPTCHA', 'formidable' ) : __( 'hCAPTCHA', 'formidable' ),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
 		);
