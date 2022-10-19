@@ -1003,30 +1003,7 @@ function frmFrontFormJS() {
 	 * Fallback functions
 	 *********************************************/
 
-	function addIndexOfFallbackForIE8() {
-		var len, from;
-
-		if ( ! Array.prototype.indexOf ) {
-			Array.prototype.indexOf = function( elt /*, from*/ ) {
-				len = this.length >>> 0;
-
-				from = Number( arguments[1]) || 0;
-				from = ( from < 0 ) ? Math.ceil( from ) : Math.floor( from );
-				if ( from < 0 ) {
-					from += len;
-				}
-
-				for ( ; from < len; from++ ) {
-					if ( from in this && this[from] === elt ) {
-						return from;
-					}
-				}
-				return -1;
-			};
-		}
-	}
-
-	function addTrimFallbackForIE8() {
+	function addTrimFallbackForIE() {
 		if ( typeof String.prototype.trim !== 'function' ) {
 			String.prototype.trim = function() {
 				return this.replace( /^\s+|\s+$/g, '' );
@@ -1034,7 +1011,7 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addFilterFallbackForIE8() {
+	function addFilterFallbackForIE() {
 		var t, len, res, thisp, i, val;
 
 		if ( ! Array.prototype.filter ) {
@@ -1067,24 +1044,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addKeysFallbackForIE8() {
-		var keys, i;
-
-		if ( ! Object.keys ) {
-			Object.keys = function( obj ) {
-				keys = [];
-
-				for ( i in obj ) {
-					if ( obj.hasOwnProperty( i ) ) {
-						keys.push( i );
-					}
-				}
-
-				return keys;
-			};
-		}
-	}
-
 	/**
 	 * Check for -webkit-box-shadow css value for input:-webkit-autofill selector.
 	 * If this is a match, the User is autofilling the input on a Webkit browser.
@@ -1094,6 +1053,36 @@ function frmFrontFormJS() {
 		var css = jQuery( this ).css( 'box-shadow' );
 		if ( css.match( /inset/ ) ) {
 			this.parentNode.removeChild( this );
+		}
+	}
+
+	function maybeMakeHoneypotFieldsUntabbable() {
+		document.addEventListener( 'keydown', handleKeyUp );
+
+		function handleKeyUp( event ) {
+			var code;
+
+			if ( 'undefined' !== typeof event.key ) {
+				code = event.key;
+			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
+				code = 'Tab';
+			}
+
+			if ( 'Tab' === code ) {
+				makeHoneypotFieldsUntabbable();
+				document.removeEventListener( 'keydown', handleKeyUp );
+			}
+		}
+
+		function makeHoneypotFieldsUntabbable() {
+			document.querySelectorAll( '.frm_verify' ).forEach(
+				function( wrapper ) {
+					var input = wrapper.querySelector( 'input[id^=frm_email]' );
+					if ( input ) {
+						input.setAttribute( 'tabindex', -1 );
+					}
+				}
+			);
 		}
 	}
 
@@ -1341,6 +1330,7 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
+			maybeMakeHoneypotFieldsUntabbable();
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
@@ -1350,11 +1340,9 @@ function frmFrontFormJS() {
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
 
-			// Add fallbacks for the beloved IE8
-			addIndexOfFallbackForIE8();
-			addTrimFallbackForIE8();
-			addFilterFallbackForIE8();
-			addKeysFallbackForIE8();
+			// Add fallbacks for IE.
+			addTrimFallbackForIE(); // Trim only works in IE10+.
+			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
 		},
