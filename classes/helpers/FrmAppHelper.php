@@ -1419,7 +1419,7 @@ class FrmAppHelper {
 	 */
 	public static function is_full_screen() {
 		return self::is_form_builder_page() ||
-			self::is_on_style_editor() ||
+			self::is_style_editor_page() ||
 			self::simple_get( 'frm-full', 'absint' ) ||
 			self::is_full_screen_view_builder_page();
 	}
@@ -1433,7 +1433,7 @@ class FrmAppHelper {
 	 *
 	 * @return bool
 	 */
-	public static function is_on_style_editor() {
+	public static function is_style_editor_page() {
 		return self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
 	}
 

@@ -55,7 +55,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function admin_init() {
-		if ( ! FrmAppHelper::is_on_style_editor() ) {
+		if ( ! FrmAppHelper::is_style_editor_page() ) {
 			return;
 		}
 
