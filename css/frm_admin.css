@@ -8518,7 +8518,8 @@ Responsive Design
 	}
 }
 
-.frm-admin-page-styles #frm-publishing #save_menu_header {
+.frm-admin-page-styles #frm-publishing #save_menu_header,
+.frm-admin-page-styles2 #frm-publishing #save_menu_header {
 	display: inline-block;
 }
 
