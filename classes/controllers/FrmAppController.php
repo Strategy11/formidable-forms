@@ -499,7 +499,7 @@ class FrmAppController {
 			'formidable_embed',
 		);
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) || FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
+		if ( FrmAppHelper::is_on_style_editor() ) {
 			$dependencies[] = 'wp-color-picker';
 		}
 
