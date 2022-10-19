@@ -2856,6 +2856,7 @@ class FrmAppHelper {
 				'active'            => __( 'Active', 'formidable' ),
 				'select_a_field'    => __( 'Select a Field', 'formidable' ),
 				'no_items_found'    => __( 'No items found.', 'formidable' ),
+				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
 			);
 			$admin_script_strings = apply_filters( 'frm_admin_script_strings', $admin_script_strings );
 

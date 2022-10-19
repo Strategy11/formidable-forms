@@ -6772,7 +6772,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				infoModal( 'Oops. You have already used that field.' );
+				infoModal( frm_admin_js.field_already_used );
 				return false;
 			}
 		});
