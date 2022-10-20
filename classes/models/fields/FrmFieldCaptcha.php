@@ -91,7 +91,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$site_key = $frm_settings->hcaptcha_pubkey;
 		}
 
-		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"' . $recaptcha_options;
+		$html = '<div id="' . esc_attr( $args['html_id'] ) . '" class="' . esc_attr( $class_prefix ) . $captcha_class . '" data-sitekey="' . esc_attr( $site_key ) . '"';
+		$html .= ! empty( $recaptcha_options ) ? $recaptcha_options : '';
 		if ( $captcha_size == 'invisible' && ! $allow_mutiple ) {
 			$html .= ' data-callback="frmAfterRecaptcha"';
 		}
@@ -103,8 +104,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function load_field_scripts( $args ) {
 		$api_js_url = $this->api_url();
 
-		wp_register_script( 'recaptcha-api', $api_js_url, array( 'formidable' ), '3', true );
-		wp_enqueue_script( 'recaptcha-api' );
+		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
+		wp_enqueue_script( 'captcha-api' );
 	}
 
 	protected function api_url() {
@@ -184,14 +185,16 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
-			$threshold = floatval( $frm_settings->re_threshold );
-			$score     = floatval( $response['score'] );
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
+				$threshold = floatval( $frm_settings->re_threshold );
+				$score     = floatval( $response['score'] );
 
-			$this->set_score( $score );
+				$this->set_score( $score );
 
-			if ( $score < $threshold ) {
-				$response['success'] = false;
+				if ( $score < $threshold ) {
+					$response['success'] = false;
+				}
 			}
 		}
 
@@ -257,15 +260,26 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function send_api_check( $frm_settings ) {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			$secret      = $frm_settings->privkey;
+			$token_field = 'g-recaptcha-response';
+			$endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
+		} else {
+			$secret      = $frm_settings->hcaptcha_privkey;
+			$token_field = 'h-captcha-response';
+			$endpoint    = 'https://hcaptcha.com/siteverify';
+		}
+
 		$arg_array = array(
 			'body' => array(
-				'secret'   => $frm_settings->privkey,
-				'response' => FrmAppHelper::get_param( 'g-recaptcha-response', '', 'post', 'sanitize_text_field' ),
+				'secret'   => $secret,
+				'response' => FrmAppHelper::get_param( $token_field, '', 'post', 'sanitize_text_field' ),
 				'remoteip' => FrmAppHelper::get_ip_address(),
 			),
 		);
 
-		return wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $arg_array );
+		return wp_remote_post( $endpoint, $arg_array );
 	}
 
 	public static function replace_field_name( $values ) {
