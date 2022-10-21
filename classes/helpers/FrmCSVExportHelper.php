@@ -517,7 +517,6 @@ class FrmCSVExportHelper {
 				$label_key = $col->id . '_label';
 				if ( self::is_the_child_of_a_repeater( $col ) ) {
 					$row[ $label_key ] = array();
-
 					foreach ( $field_value as $value ) {
 						$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
 					}
