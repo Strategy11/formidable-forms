@@ -4434,6 +4434,29 @@ label.frm-example-icon {
 	display: inline-block !important;
 }
 
+.captcha_option{
+	border: 1px solid rgba(40, 47, 54, 0.2);
+	border-radius: 4px;
+	display: inline-block;
+	position: relative;
+}
+
+.captcha_option input[type=radio] {
+	border: none;
+	border-width: 0 !important;
+}
+
+.captcha_option input:before {
+	background-color: none;
+	position: absolute;
+    left: -10px;
+    top: -10px;
+	width: 20px !important;
+	height: 20px !important;
+	margin: 0 !important;
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjMyMCIgdmlld0JveD0iMCAwIDI0MCAzMjAiIGZpbGw9IiM0MTk5RkQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEyLjIiIGN5PSIxMS43IiByPSIxMCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yMy42IDEyQTExLjYgMTEuNiAwIDExLjQgMTJhMTEuNiAxMS42IDAgMDEyMy4yIDB6bS0xMyA2LjJsOC43LTguN2MuMy0uMy4zLS43IDAtMWwtMS0xYS43LjcgMCAwMC0xLjEgMGwtNyA3LTMuNC0zLjNhLjguOCAwIDAwLTEgMGwtMSAxYy0uNC4zLS40LjggMCAxbDQuOCA1Yy4zLjIuOC4yIDEgMHoiLz4KPC9zdmc+);
+}
+
 .frm_active_captcha .frmsvg {
 	width: 140px;
 	height: 38px;

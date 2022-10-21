@@ -12,18 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php esc_html_e( 'Select captcha type', 'formidable' ); ?>
 <div class="frm_active_captcha">
 	<div class="frm_radio">
-		<input type="radio" name="frm_active_captcha" id="recaptcha" value="recaptcha" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?>>
-		<label for="recaptcha">
-			<?php
-			FrmAppHelper::icon_by_class( 'frmfont frm_recaptcha' );
-			?>
-		</label>
-		<input type="radio" name="frm_active_captcha" id="hcaptcha" value="hcaptcha" <?php checked( $frm_settings->active_captcha, 'hcaptcha' ); ?>>
-		<label for="hcaptcha">
-			<?php
-			FrmAppHelper::icon_by_class( 'frmfont frm_hcaptcha' );
-			?>
-		</label>
+		<div class="captcha_option">
+			<input type="radio" name="frm_active_captcha" id="recaptcha" value="recaptcha" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?>>
+			<label for="recaptcha">
+				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_recaptcha' );
+				?>
+			</label>
+		</div>
+		<div class="captcha_option">
+			<input type="radio" name="frm_active_captcha" id="hcaptcha" value="hcaptcha" <?php checked( $frm_settings->active_captcha, 'hcaptcha' ); ?>>
+			<label for="hcaptcha">
+				<?php
+				FrmAppHelper::icon_by_class( 'frmfont frm_hcaptcha' );
+				?>
+			</label>
+		</div>
 	</div>
 </div>
 <div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $frm_settings->active_captcha === 'recaptcha' ? '' : 'frm_hidden' ); ?>">
