@@ -557,7 +557,7 @@ function frmFrontFormJS() {
 	}
 
 	function getFormErrors( object, action ) {
-		var fieldset, data, success, error;
+		var fieldset, data, success, error, shouldTriggerEvent;
 
 		if ( typeof action === 'undefined' ) {
 			jQuery( object ).find( 'input[name="frm_action"]' ).val();
@@ -566,12 +566,20 @@ function frmFrontFormJS() {
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+		shouldTriggerEvent = ! ! object.querySelector( 'input[name="frm_trigger_event"]' );
 
 		success = function( response ) {
-			var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger,
-				defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
+			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
+				$fieldCont, key, inCollapsedSection, frmTrigger;
+
+			defaultResponse = {
+				content: '',
+				errors: {},
+				pass: false,
+				doNothing: false
+			};
+
 			if ( response === null ) {
 				response = defaultResponse;
 			}
@@ -584,6 +592,11 @@ function frmFrontFormJS() {
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
+				if ( shouldTriggerEvent ) {
+					triggerEvent( object, 'frmFormEvent' );
+					return;
+				}
+
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
 				window.location = response.redirect;
 			} else if ( response.content !== '' ) {
@@ -593,6 +606,12 @@ function frmFrontFormJS() {
 				if ( frm_js.offset != -1 ) {
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
+
+				if ( shouldTriggerEvent ) {
+					triggerEvent( object, 'frmFormEvent' );
+					return;
+				}
+
 				formID = jQuery( object ).find( 'input[name="form_id"]' ).val();
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
 				replaceContent = jQuery( object ).closest( '.frm_forms' );
@@ -702,6 +721,21 @@ function frmFrontFormJS() {
 		};
 
 		postToAjaxUrl( object, data, success, error );
+	}
+
+	function triggerEvent( element, eventType ) {
+		var event;
+	
+		if ( typeof window.CustomEvent === 'function' ) {
+			event = new CustomEvent( eventType );
+		} else if ( document.createEvent ) {
+			event = document.createEvent( 'HTMLEvents' );
+			event.initEvent( eventType, false, true );
+		} else {
+			return;
+		}
+	
+		element.dispatchEvent( event );
 	}
 
 	function postToAjaxUrl( form, data, success, error ) {
