@@ -477,11 +477,8 @@ class FrmCSVExportHelper {
 
 		foreach ( self::$fields_by_repeater_id[ $repeater_id ] as $repeater_child ) {
 			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
-				$metas[ $repeater_child->id ] = '';
-
-				if ( isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) && is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) {
-					$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
-				}
+				$metas[ $repeater_child->id ]                                            = '';
+				$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
 			}
 		}
 
@@ -521,10 +518,8 @@ class FrmCSVExportHelper {
 				if ( self::is_the_child_of_a_repeater( $col ) ) {
 					$row[ $label_key ] = array();
 
-					if ( is_array( $field_value ) ) {
-						foreach ( $field_value as $value ) {
-							$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
-						}
+					foreach ( $field_value as $value ) {
+						$row[ $label_key ][] = self::get_separate_value_label( $value, $col );
 					}
 				} else {
 					$row[ $label_key ] = self::get_separate_value_label( $field_value, $col );
