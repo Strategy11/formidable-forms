@@ -601,14 +601,14 @@ function frmFrontFormJS() {
 			} else if ( response.content !== '' ) {
 				// the form or success message was returned
 
-				removeSubmitLoading( jQuery( object ) );
-				if ( frm_js.offset != -1 ) {
-					frmFrontForm.scrollMsg( jQuery( object ), false );
-				}
-
 				if ( shouldTriggerEvent ) {
 					triggerEvent( object, 'frmFormEvent' );
 					return;
+				}
+
+				removeSubmitLoading( jQuery( object ) );
+				if ( frm_js.offset != -1 ) {
+					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
 
 				formID = jQuery( object ).find( 'input[name="form_id"]' ).val();
