@@ -7776,6 +7776,7 @@ function frmAdminBuildJS() {
 		event.target.closest( '.frm_form_action_settings' ).querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
 			if ( svg.nextElementSibling.type === 'text' ) {
 				svg.style.bottom = '-3px';
+				svg.style.marginRight = '0';
 			}
 		});
 
