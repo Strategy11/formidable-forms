@@ -576,8 +576,7 @@ function frmFrontFormJS() {
 			defaultResponse = {
 				content: '',
 				errors: {},
-				pass: false,
-				doNothing: false
+				pass: false
 			};
 
 			if ( response === null ) {
