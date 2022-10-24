@@ -287,17 +287,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	public static function replace_field_label( $values ) {
 		if ( $values['type'] === 'captcha' ) {
-			$frm_settings   = FrmAppHelper::get_settings();
-			$active_captcha = $frm_settings->active_captcha;
-			$captcha_is_set = ( $active_captcha === 'recaptcha' && ! empty( $frm_settings->pubkey ) ) || ( $active_captcha === 'hcaptcha' && ! empty( $frm_settings->hcaptcha_pubkey ) );
-
-			if ( ! $captcha_is_set ) {
-				$values['name'] = 'Prove that you are not a robot';
-			} elseif ( $active_captcha === 'recaptcha' ) {
-				$values['name'] = 'reCAPTCHA';
-			} else {
-				$values['name'] = 'hCAPTCHA';
-			}
+			$values['name'] = 'Prove that you are not a robot';
 		}
 
 		return $values;
