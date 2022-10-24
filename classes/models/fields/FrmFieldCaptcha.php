@@ -282,11 +282,18 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return wp_remote_post( $endpoint, $arg_array );
 	}
 
-	public static function replace_field_name( $values ) {
+	/**
+	 * @since x.x
+	 */
+	public static function replace_field_label( $values ) {
 		if ( $values['type'] === 'captcha' ) {
 			$frm_settings   = FrmAppHelper::get_settings();
 			$active_captcha = $frm_settings->active_captcha;
-			if ( $active_captcha === 'recaptcha' ) {
+			$captcha_is_set = ( $active_captcha === 'recaptcha' && ! empty( $frm_settings->pubkey ) ) || ( $active_captcha === 'hcaptcha' && ! empty( $frm_settings->hcaptcha_pubkey ) );
+
+			if ( ! $captcha_is_set ) {
+				$values['name'] = 'Prove that you are not a robot';
+			} elseif ( $active_captcha === 'recaptcha' ) {
 				$values['name'] = 'reCAPTCHA';
 			} else {
 				$values['name'] = 'hCAPTCHA';
@@ -294,6 +301,24 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public static function before_field_settings( $field ) {
+		$frm_settings      = FrmAppHelper::get_settings();
+		$active_captcha    = $frm_settings->active_captcha;
+		$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
+		if ( $captcha_not_setup ) {
+			echo '<div class="frm_builder_captcha frm_warning_style">';
+			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
+			echo '<div><b>' . esc_html__( 'Setup a captcha', 'formidable' ) . '</b>';
+			echo '<p>';
+			/* translators: %1$s: Link HTML, %2$s: End link */
+			printf( esc_html__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+			echo '</p></div></div>';
+		}
 	}
 }
 

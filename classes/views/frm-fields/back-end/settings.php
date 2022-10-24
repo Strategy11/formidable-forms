@@ -21,6 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me">
+		<?php
+		/**
+		 * @since x.x
+		 *
+		 * @param array $field
+		 */
+		do_action( 'frm_before_field_settings', $field );
+		?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
