@@ -4444,6 +4444,24 @@ label.frm-example-icon {
 	font-size: 18px;
 	text-transform: none;
 	color: #282F36;
+	margin-bottom: 0;
+}
+
+.captcha_settings .alert {
+	display: flex;
+	margin-top: 16px;
+	padding: 12px 16px;
+	column-gap: 10px;
+	background: rgba(188, 224, 253, 0.23);
+	border-radius: 4px;
+}
+
+.captcha_settings .alert.frm_hidden {
+	display: none;
+}
+
+#form_global_settings .alert p{
+	margin: 0;
 }
 
 .frm_captchas {
