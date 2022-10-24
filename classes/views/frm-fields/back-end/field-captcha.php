@@ -4,7 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $frm_settings = FrmAppHelper::get_settings();
-if ( empty( $frm_settings->pubkey ) ) {
+$active_captcha = $frm_settings->active_captcha;
+$show_message = $active_captcha === 'recaptcha' &&  empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' &&  empty( $frm_settings->hcaptcha_pubkey );
+if ( $show_message ) {
 	?>
 <div class="howto frm_no_captcha_text"><?php
 	/* translators: %1$s: Link HTML, %2$s: End link */

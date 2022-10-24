@@ -8,11 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		esc_html_e( 'Captcha will help you to avoid gathering automatically generated responses', 'formidable' );
 	?>
 </p>
-
-<?php esc_html_e( 'Select captcha type', 'formidable' ); ?>
-<div class="frm_active_captcha">
+<?php $recaptcha_is_active = $frm_settings->active_captcha === 'recaptcha'; ?>
+<h4><?php esc_html_e( 'Select captcha type', 'formidable' ); ?></h4>
+<div class="frm_captchas">
 	<div class="frm_radio">
-		<div class="captcha_option">
+		<div class="captcha_option <?php echo esc_attr( $recaptcha_is_active ? 'active' : '' ); ?>">
 			<input type="radio" name="frm_active_captcha" id="recaptcha" value="recaptcha" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?>>
 			<label for="recaptcha">
 				<?php
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 			</label>
 		</div>
-		<div class="captcha_option">
+		<div class="captcha_option <?php echo esc_attr( $recaptcha_is_active ? '' : 'active' ); ?>">
 			<input type="radio" name="frm_active_captcha" id="hcaptcha" value="hcaptcha" <?php checked( $frm_settings->active_captcha, 'hcaptcha' ); ?>>
 			<label for="hcaptcha">
 				<?php
@@ -30,8 +30,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 </div>
-<div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $frm_settings->active_captcha === 'recaptcha' ? '' : 'frm_hidden' ); ?>">
-	<h4>reCaptcha Settings</h4>
+<div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? '' : 'frm_hidden' ); ?>">
+	<h3>reCaptcha Settings</h3>
 	<p class="frm6 frm_form_field">
 		<label class="frm_help" for="frm_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
 			<?php esc_html_e( 'Site Key', 'formidable' ); ?>
@@ -99,8 +99,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 
-<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $frm_settings->active_captcha === 'hcaptcha' ? '' : 'frm_hidden' ); ?>">
-	<h4>hCaptcha Settings</h4>
+<div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? 'frm_hidden' : '' ); ?>">
+	<h3>hCaptcha Settings</h3>
 	<p class="frm6 frm_form_field">
 		<label class="frm_help" for="frm_hcaptcha_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
 			<?php esc_html_e( 'Site Key', 'formidable' ); ?>
