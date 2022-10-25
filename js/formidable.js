@@ -611,7 +611,7 @@ function frmFrontFormJS() {
 
 			if ( typeof response.redirect !== 'undefined' ) {
 				if ( shouldTriggerEvent ) {
-					triggerEvent( object, 'frmFormEvent' );
+					triggerCustomEvent( object, 'frmFormEvent' );
 					return;
 				}
 
@@ -621,7 +621,7 @@ function frmFrontFormJS() {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
-					triggerEvent( object, 'frmFormEvent' );
+					triggerCustomEvent( object, 'frmFormEvent' );
 					return;
 				}
 
@@ -739,21 +739,6 @@ function frmFrontFormJS() {
 		};
 
 		postToAjaxUrl( object, data, success, error );
-	}
-
-	function triggerEvent( element, eventType ) {
-		var event;
-	
-		if ( typeof window.CustomEvent === 'function' ) {
-			event = new CustomEvent( eventType );
-		} else if ( document.createEvent ) {
-			event = document.createEvent( 'HTMLEvents' );
-			event.initEvent( eventType, false, true );
-		} else {
-			return;
-		}
-	
-		element.dispatchEvent( event );
 	}
 
 	function postToAjaxUrl( form, data, success, error ) {
