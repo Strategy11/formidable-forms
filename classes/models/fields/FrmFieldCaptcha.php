@@ -297,7 +297,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @since x.x
 	 */
 	public static function before_field_settings( $field ) {
-		if ( ! $field['type'] === 'captcha' ) {
+		if ( $field['type'] !== 'captcha' ) {
 			return;
 		}
 		$frm_settings      = FrmAppHelper::get_settings();
