@@ -24,7 +24,7 @@ class FrmEntriesController {
 	 * @since 2.05.07
 	 */
 	private static function load_manage_entries_hooks() {
-		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new' ) ) ) {
+		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
 			$menu_name = FrmAppHelper::get_menu_name();
 			$base      = self::base_column_key( $menu_name );
 
