@@ -57,9 +57,21 @@ function frmFrontFormJS() {
 	 * @param {String}      eventName Event name.
 	 * @param {mixed}       data      The passed data.
 	 */
-	function triggerCustom( el, eventName, data ) {
-		var event = new CustomEvent( eventName, { detail: data });
-		el.dispatchEvent( event );
+	function triggerCustomEvent( el, eventName, data ) {
+		var event;
+
+		if ( typeof window.CustomEvent === 'function' ) {
+			event = new CustomEvent( eventType );
+		} else if ( document.createEvent ) {
+			event = document.createEvent( 'HTMLEvents' );
+			event.initEvent( eventType, false, true );
+		} else {
+			return;
+		}
+
+		event.frmData = data;
+
+		element.dispatchEvent( event );
 	}
 
 	/* Get the ID of the field that changed*/
@@ -286,7 +298,7 @@ function frmFrontFormJS() {
 			checkPatternField( field, errors );
 		}
 
-		triggerCustom( document, 'frm_validate_field_value', {
+		triggerCustomEvent( document, 'frm_validate_field_value', {
 			field: field,
 			errors: errors
 		});
