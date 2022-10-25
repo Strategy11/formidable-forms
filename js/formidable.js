@@ -61,10 +61,10 @@ function frmFrontFormJS() {
 		var event;
 
 		if ( typeof window.CustomEvent === 'function' ) {
-			event = new CustomEvent( eventType );
+			event = new CustomEvent( eventName );
 		} else if ( document.createEvent ) {
 			event = document.createEvent( 'HTMLEvents' );
-			event.initEvent( eventType, false, true );
+			event.initEvent( eventName, false, true );
 		} else {
 			return;
 		}
