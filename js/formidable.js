@@ -567,7 +567,7 @@ function frmFrontFormJS() {
 		fieldset.addClass( 'frm_doing_ajax' );
 
 		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
-		shouldTriggerEvent = ! ! object.querySelector( 'input[name="frm_trigger_event"]' );
+		shouldTriggerEvent = null !== object.querySelector( 'input[name="frm_trigger_event"]' );
 
 		success = function( response ) {
 			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
