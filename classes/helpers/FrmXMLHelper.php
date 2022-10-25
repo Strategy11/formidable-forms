@@ -848,7 +848,7 @@ class FrmXMLHelper {
 				continue;
 			}
 
-			if ( false !== strpos( $post['post_content'], '[frm-display-data' ) || false !== strpos( $post['post_content'], '[formidable' ) ) {
+			if ( false !== strpos( $post['post_content'], '[display-frm-data' ) || false !== strpos( $post['post_content'], '[formidable' ) ) {
 				$posts_with_shortcodes[ $post_id ] = $post;
 			}
 
