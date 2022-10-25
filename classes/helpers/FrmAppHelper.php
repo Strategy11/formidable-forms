@@ -1449,7 +1449,7 @@ class FrmAppHelper {
 
 		// Do not treat the view listing as full screen when no form id is being filtered.
 		global $pagenow;
-		return 'edit.php' !== $pagenow || FrmAppHelper::simple_get( 'form' );
+		return 'edit.php' !== $pagenow || self::simple_get( 'form' );
 	}
 
 	/**
