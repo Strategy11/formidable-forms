@@ -48,6 +48,32 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Triggers custom JS event.
+	 *
+	 * @since 5.x
+	 *
+	 * @param {HTMLElement} el        The HTML element.
+	 * @param {String}      eventName Event name.
+	 * @param {mixed}       data      The passed data.
+	 */
+	function triggerCustomEvent( el, eventName, data ) {
+		var event;
+
+		if ( typeof window.CustomEvent === 'function' ) {
+			event = new CustomEvent( eventName );
+		} else if ( document.createEvent ) {
+			event = document.createEvent( 'HTMLEvents' );
+			event.initEvent( eventName, false, true );
+		} else {
+			return;
+		}
+
+		event.frmData = data;
+
+		el.dispatchEvent( event );
+	}
+
 	/* Get the ID of the field that changed*/
 	function getFieldId( field, fullID ) {
 		var nameParts, fieldId,
@@ -136,7 +162,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function disableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).attr( 'disabled', 'disabled' );
 	}
@@ -147,7 +173,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function enableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
 	}
@@ -196,21 +222,8 @@ function frmFrontFormJS() {
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
-				value = field.value;
-				if ( value !== '' ) {
-					if ( field.type === 'hidden' ) {
-						// don't validate
-					} else if ( field.type === 'number' ) {
-						errors = checkNumberField( field, errors );
-					} else if ( field.type === 'email' ) {
-						errors = checkEmailField( field, errors );
-					} else if ( field.type === 'password' ) {
-						errors = checkPasswordField( field, errors );
-					} else if ( field.type === 'url' ) {
-						errors = checkUrlField( field, errors );
-					} else if ( field.pattern !== null ) {
-						errors = checkPatternField( field, errors );
-					}
+				if ( '' !== field.value ) {
+					validateFieldValue( field, errors );
 				}
 			}
 		}
@@ -259,17 +272,7 @@ function frmFrontFormJS() {
 		}
 
 		if ( errors.length < 1 ) {
-			if ( field.type === 'email' ) {
-				errors = checkEmailField( field, errors );
-			} else if ( field.type === 'password' ) {
-				errors = checkPasswordField( field, errors );
-			} else if ( field.type === 'number' ) {
-				errors = checkNumberField( field, errors );
-			} else if ( field.type === 'url' ) {
-				errors = checkUrlField( field, errors );
-			} else if ( field.pattern !== null ) {
-				errors = checkPatternField( field, errors );
-			}
+			validateFieldValue( field, errors );
 		}
 
 		removeFieldError( $fieldCont );
@@ -278,6 +281,27 @@ function frmFrontFormJS() {
 				addFieldError( $fieldCont, key, errors );
 			}
 		}
+	}
+
+	function validateFieldValue( field, errors ) {
+		if ( field.type === 'hidden' ) {
+			// don't validate
+		} else if ( field.type === 'number' ) {
+			checkNumberField( field, errors );
+		} else if ( field.type === 'email' ) {
+			checkEmailField( field, errors );
+		} else if ( field.type === 'password' ) {
+			checkPasswordField( field, errors );
+		} else if ( field.type === 'url' ) {
+			checkUrlField( field, errors );
+		} else if ( field.pattern !== null ) {
+			checkPatternField( field, errors );
+		}
+
+		triggerCustomEvent( document, 'frm_validate_field_value', {
+			field: field,
+			errors: errors
+		});
 	}
 
 	function checkRequiredField( field, errors ) {
@@ -397,7 +421,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkEmailField( field, errors ) {
@@ -410,12 +433,10 @@ function frmFrontFormJS() {
 		}
 
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function checkPasswordField( field, errors ) {
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function confirmField( field, errors ) {
@@ -451,7 +472,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkPatternField( field, errors ) {
@@ -468,7 +488,6 @@ function frmFrontFormJS() {
 				}
 			}
 		}
-		return errors;
 	}
 
 	function hasInvisibleRecaptcha( object ) {
@@ -1529,10 +1548,10 @@ function frmFrontFormJS() {
 			removeSubmitLoading( $object, enable, processesRunning );
 		},
 
-        scrollToID: function( id ) {
-            var object = jQuery( document.getElementById( id ) );
-            frmFrontForm.scrollMsg( object, false );
-        },
+		scrollToID: function( id ) {
+			var object = jQuery( document.getElementById( id ) );
+			frmFrontForm.scrollMsg( object, false );
+		},
 
 		scrollMsg: function( id, object, animate ) {
 			var newPos, m, b, screenTop, screenBottom,
