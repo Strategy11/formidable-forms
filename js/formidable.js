@@ -71,7 +71,7 @@ function frmFrontFormJS() {
 
 		event.frmData = data;
 
-		element.dispatchEvent( event );
+		el.dispatchEvent( event );
 	}
 
 	/* Get the ID of the field that changed*/
