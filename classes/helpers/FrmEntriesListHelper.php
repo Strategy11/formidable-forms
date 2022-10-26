@@ -224,7 +224,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 				$r .= "<td $attributes>";
 				if ( $column_name == $action_col ) {
-					$edit_link = admin_url( '?page=formidable-entries&frm_action=edit&id=' . $item->id );
+					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r         .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
 					$r         .= $action_links;
 				} else {
