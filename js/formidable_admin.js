@@ -3521,15 +3521,13 @@ function frmAdminBuildJS() {
 		$newRow.on(
 			'frm_added_duplicated_field_to_row',
 			function( _, args ) {
-				let $duplicatedFields, index;
-
 				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
 
 				if ( expectedLength > ++duplicatedCount ) {
 					return;
 				}
 
-				$duplicatedFields = getFieldsInRow( $newRowUl );
+				const $duplicatedFields = getFieldsInRow( $newRowUl );
 
 				injectedCloneOptions.forEach(
 					function( cloneOption ) {
@@ -3537,7 +3535,7 @@ function frmAdminBuildJS() {
 					}
 				);
 
-				for ( index = 0; index < expectedLength; ++index ) {
+				for ( let index = 0; index < expectedLength; ++index ) {
 					$newRowUl.append( $newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' ) );
 				}
 
