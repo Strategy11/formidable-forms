@@ -2053,6 +2053,7 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
+				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 			}
 		});
 		return false;
