@@ -271,10 +271,6 @@ class FrmAppHelper {
 	public static function is_view_builder_page() {
 		global $pagenow;
 
-		if ( self::is_admin_page( 'formidable-views-editor' ) ) {
-			return true;
-		}
-
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' && $pagenow !== 'edit.php' ) {
 			return false;
 		}
@@ -1423,7 +1419,7 @@ class FrmAppHelper {
 	public static function is_full_screen() {
 		return self::is_form_builder_page() ||
 			self::is_style_editor_page() ||
-			self::is_view_builder_page();
+			self::is_full_screen_view_builder_page();
 	}
 
 	/**
@@ -1437,6 +1433,15 @@ class FrmAppHelper {
 	 */
 	public static function is_style_editor_page() {
 		return self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
+	}
+
+	/**
+	 * @since 5.5.3
+	 *
+	 * @return bool
+	 */
+	private static function is_full_screen_view_builder_page() {
+		return self::is_admin_page( 'formidable-views-editor' );
 	}
 
 	/**
