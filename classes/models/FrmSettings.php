@@ -189,8 +189,9 @@ class FrmSettings {
 		}
 
 		$hcaptcha_privkey = '';
-		$privkey = '';
-		$re_lang = '';
+		$privkey          = '';
+		$re_lang          = '';
+		$captcha_name     = $this->active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
 
 		if ( ! isset( $this->hcaptcha_pubkey ) ) {
 			// get the options from the database
@@ -211,9 +212,8 @@ class FrmSettings {
 			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
-		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
-			$this->re_msg = __( 'The reCAPTCHA was not entered correctly', 'formidable' );
-		}
+		/* translators: %s: Active captcha name */
+		$this->re_msg = sprintf( __( 'The %s was not entered correctly', 'formidable' ), $captcha_name );
 
 		if ( ! isset( $this->privkey ) ) {
 			$this->privkey = $privkey;
