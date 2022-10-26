@@ -1447,6 +1447,10 @@ class FrmAppHelper {
 			return false;
 		}
 
+		if ( self::is_admin_page( 'formidable-views-editor' ) ) {
+			return true;
+		}
+
 		// Do not treat the view listing as full screen when no form id is being filtered.
 		global $pagenow;
 		return 'edit.php' !== $pagenow || self::simple_get( 'form' );
