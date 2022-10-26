@@ -3493,33 +3493,35 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateFieldGroup() {
-		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, originalFieldIdByDuplicatedFieldId, injectedCloneOptions;
-
-		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
-
+		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 		if ( null === hoverTarget ) {
 			return;
 		}
 
-		newRowId = 'frm_field_group_' + getAutoId();
-		$newRow = wrapFieldLi( '' );
-		$newRowUl = $newRow.find( 'ul' );
+		const newRowId = 'frm_field_group_' + getAutoId();
+		const newRowLi = document.createTextNode( '' );
+		wrapFieldLiInPlace( newRowLi );
+
+		const $newRow   = jQuery( newRowLi ).closest( 'li' );
+		const $newRowUl = $newRow.find( 'ul' );
+
 		$newRowUl.attr( 'id', newRowId );
 		$newRow.addClass( 'frm_hidden' );
 		jQuery( hoverTarget ).closest( 'li.frm_field_box' ).after( $newRow );
 
-		$fields = getFieldsInRow( jQuery( hoverTarget ) );
-		syncDetails = [];
-		injectedCloneOptions = [];
+		const $fields              = getFieldsInRow( jQuery( hoverTarget ) );
+		const syncDetails          = [];
+		const injectedCloneOptions = [];
 
-		expectedLength = $fields.length;
-		duplicatedCount = 0;
-		originalFieldIdByDuplicatedFieldId = {};
+		const expectedLength                     = $fields.length;
+		const originalFieldIdByDuplicatedFieldId = {};
+
+		let duplicatedCount = 0;
 
 		$newRow.on(
 			'frm_added_duplicated_field_to_row',
-			function( event, args ) {
-				var $duplicatedFields, index;
+			function( _, args ) {
+				let $duplicatedFields, index;
 
 				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
 
