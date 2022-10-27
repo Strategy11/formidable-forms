@@ -68,7 +68,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$replaced_for = str_replace( ' for="field_[key]"', ' for="g-recaptcha-response"', $html );
 		} else {
-			$replaced_for = str_replace( ' for="field_[key]"', ' for="h-recaptcha-response"', $html );
+			$replaced_for = str_replace( ' for="field_[key]"', ' for="h-captcha-response"', $html );
 		}
 		return $replaced_for;
 	}
@@ -232,7 +232,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['g-recaptcha-response'] ) ) {
+		if ( ! isset( $_POST['g-recaptcha-response'] ) || ! isset( $_POST['h-captcha-response'] ) ) {
 			// There was no captcha submitted.
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
