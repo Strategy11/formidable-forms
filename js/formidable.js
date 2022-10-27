@@ -586,7 +586,7 @@ function frmFrontFormJS() {
 		fieldset.addClass( 'frm_doing_ajax' );
 
 		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
-		shouldTriggerEvent = null !== object.querySelector( 'input[name="frm_trigger_event"]' );
+		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		success = function( response ) {
 			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
@@ -611,7 +611,7 @@ function frmFrontFormJS() {
 
 			if ( typeof response.redirect !== 'undefined' ) {
 				if ( shouldTriggerEvent ) {
-					triggerCustomEvent( object, 'frmFormEvent' );
+					triggerCustomEvent( object, 'frmSubmitEvent' );
 					return;
 				}
 
@@ -621,7 +621,7 @@ function frmFrontFormJS() {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
-					triggerCustomEvent( object, 'frmFormEvent' );
+					triggerCustomEvent( object, 'frmSubmitEvent' );
 					return;
 				}
 
