@@ -213,7 +213,7 @@ class FrmSettings {
 		}
 
 		/* translators: %s: Active captcha name */
-		$this->re_msg = sprintf( __( 'The %s was not entered correctly', 'formidable' ), $captcha_name );
+		$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 
 		if ( ! isset( $this->privkey ) ) {
 			$this->privkey = $privkey;
