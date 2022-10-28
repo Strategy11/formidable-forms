@@ -398,14 +398,12 @@ class FrmEmail {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 		} else {
 			$message = $this->message;
-
 			if ( strpos( $message, '<body>' ) !== false ) {
 				$result        = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
-				$body_inside   = wpautop( $match[1] );
-				$message       = preg_replace( '/(<body[^>]*>)([\s\S]+?)(<\/body>)/', '${1}' . $body_inside . '${3}', $message );
+				$message       = preg_replace( '/(<body[^>]*>)([\s\S]+?)(<\/body>)/', '${1}' . wpautop( $match[1] ) . '${3}', $message );
 				$this->message = $message; // HTML emails should use autop.
 			} else {
-				$this->message = wpautop( $this->message ); // HTML emails should use autop.
+				$this->message = wpautop( $this->message );
 			}
 		}
 
