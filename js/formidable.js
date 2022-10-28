@@ -631,7 +631,6 @@ function frmFrontFormJS() {
 				);
 			} else if ( Object.keys( response.errors ).length ) {
 				// errors were returned
-
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
 				//show errors
@@ -663,7 +662,7 @@ function frmFrontFormJS() {
 					}
 				}
 
-				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha' ).each( function() {
+				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha, .h-captcha' ).each( function() {
 					var $recaptcha  = jQuery( this ),
 						recaptchaID = $recaptcha.data( 'rid' );
 
@@ -673,6 +672,9 @@ function frmFrontFormJS() {
 						} else {
 							grecaptcha.reset();
 						}
+					}
+					if( typeof hcaptcha !== 'undefined' && hcaptcha ) {
+						hcaptcha.reset();
 					}
 				});
 
