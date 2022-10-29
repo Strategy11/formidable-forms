@@ -31,8 +31,8 @@ class FrmSettings {
 
 	public $hcaptcha_pubkey;
 	public $hcaptcha_privkey;
-	public $pubkey;
-	public $privkey;
+	public $recaptcha_pubkey;
+	public $recaptcha_privkey;
 	public $re_lang;
 	public $re_type;
 	public $re_msg;
@@ -54,7 +54,11 @@ class FrmSettings {
 		}
 
 		foreach ( $settings as $setting_name => $setting ) {
+			if ( $setting_name === 'pubkey' || $setting_name === 'privkey' ) {
+				$setting_name = 'recaptcha_' . $setting_name;
+			}
 			$this->{$setting_name} = $setting;
+
 			unset( $setting_name, $setting );
 		}
 
@@ -188,14 +192,15 @@ class FrmSettings {
 			$this->active_captcha = 'recaptcha';
 		}
 
-		$hcaptcha_privkey = '';
-		$privkey          = '';
-		$re_lang          = '';
-		$captcha_name     = $this->active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
+		$hcaptcha_privkey  = '';
+		$recaptcha_privkey = '';
+		$re_lang           = '';
+		$captcha_name      = $this->active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
 
 		if ( ! isset( $this->hcaptcha_pubkey ) ) {
 			// get the options from the database
 			$hcaptcha_opt = is_multisite() ? get_site_option( 'hcaptcha' ) : get_option( 'hcaptcha' );
+
 			$this->hcaptcha_pubkey  = isset( $hcaptcha_opt['pubkey'] ) ? $hcaptcha_opt['pubkey'] : '';
 			$hcaptcha_privkey       = isset( $hcaptcha_opt['privkey'] ) ? $hcaptcha_opt['privkey'] : $hcaptcha_privkey;
 		}
@@ -204,19 +209,19 @@ class FrmSettings {
 			$this->hcaptcha_privkey = $hcaptcha_privkey;
 		}
 
-		if ( ! isset( $this->pubkey ) ) {
+		if ( ! isset( $this->recaptcha_pubkey ) ) {
 			// get the options from the database
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
-			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
-			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
+			$this->recaptcha_pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
+			$recaptcha_privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $recaptcha_privkey;
 			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
 		/* translators: %s: Active captcha name */
 		$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 
-		if ( ! isset( $this->privkey ) ) {
-			$this->privkey = $privkey;
+		if ( ! isset( $this->recaptcha_privkey ) ) {
+			$this->recaptcha_privkey = $recaptcha_privkey;
 		}
 
 		if ( ! isset( $this->re_lang ) ) {
@@ -290,8 +295,8 @@ class FrmSettings {
 		$this->active_captcha = $params['frm_active_captcha'];
 		$this->hcaptcha_pubkey       = trim( $params['frm_hcaptcha_pubkey'] );
 		$this->hcaptcha_privkey      = $params['frm_hcaptcha_privkey'];
-		$this->pubkey       = trim( $params['frm_pubkey'] );
-		$this->privkey      = $params['frm_privkey'];
+		$this->recaptcha_pubkey       = trim( $params['frm_pubkey'] );
+		$this->recaptcha_privkey      = $params['frm_privkey'];
 		$this->re_type      = $params['frm_re_type'];
 		$this->re_lang      = $params['frm_re_lang'];
 		$this->re_threshold = floatval( $params['frm_re_threshold'] );

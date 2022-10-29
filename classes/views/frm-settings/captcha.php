@@ -52,14 +52,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<label class="frm_help" for="frm_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
 			<?php esc_html_e( 'Site Key', 'formidable' ); ?>
 		</label>
-		<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr( $frm_settings->pubkey ); ?>" />
+		<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr( $frm_settings->recaptcha_pubkey ); ?>" />
 	</p>
 
 	<p class="frm6 frm_form_field">
 		<label for="frm_privkey">
 			<?php esc_html_e( 'Secret Key', 'formidable' ); ?>
 		</label>
-		<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr( $frm_settings->privkey ); ?>" />
+		<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr( $frm_settings->recaptcha_privkey ); ?>" />
 	</p>
 
 	<p class="frm6 frm_form_field">
