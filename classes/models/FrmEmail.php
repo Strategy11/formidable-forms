@@ -394,22 +394,29 @@ class FrmEmail {
 
 		$this->message = do_shortcode( $this->message );
 
-		if ( $this->is_plain_text ) {
-			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
-		} else {
-			$message = $this->message;
-			$result  = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
+		$this->message = $this->decode_or_autop( $this->message );
 
+		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
+	}
+
+	/**
+	 * Decode the message if it is plain text or runs it through autop for html messages.
+	 *
+	 * @param string $message
+	 */
+	private function decode_or_autop( $message ) {
+		if ( $this->is_plain_text ) {
+			$message = wp_specialchars_decode( strip_tags( $message ), ENT_QUOTES );
+		} else {
+			$result = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
 			if ( ! empty( $match[1] ) ) {
-				$result        = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
-				$message       = preg_replace( '/(<body[^>]*>)([\s\S]+?)(<\/body>)/', '${1}' . wpautop( $match[1] ) . '${3}', $message );
-				$this->message = $message; // HTML emails should use autop.
+				$message = str_replace( $match[1], wpautop( $match[1] ), $message );
 			} else {
-				$this->message = wpautop( $message );
+				$message = wpautop( $message );
 			}
 		}
 
-		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
+		return $message;
 	}
 
 	private function maybe_add_ip( &$mail_body ) {
