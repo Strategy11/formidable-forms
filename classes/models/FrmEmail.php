@@ -404,7 +404,7 @@ class FrmEmail {
 	}
 
 	/**
-	 * Runs message through autop if it contains body tag.
+	 * Runs message through autop, extracting the content inside body tag if it has <body>.
 	 */
 	private function add_autop() {
 		$message = $this->message;
