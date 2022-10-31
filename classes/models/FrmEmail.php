@@ -394,29 +394,26 @@ class FrmEmail {
 
 		$this->message = do_shortcode( $this->message );
 
-		$this->message = $this->decode_or_autop( $this->message );
+		if ( $this->is_plain_text ) {
+			$this->message = wp_specialchars_decode( strip_tags( $message ), ENT_QUOTES );
+		} else {
+			$this->add_autop();
+		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
 	}
 
 	/**
-	 * Decode the message if it is plain text or runs it through autop for html messages.
-	 *
-	 * @param string $message
+	 * Runs message through autop if it contains body tag.
 	 */
-	private function decode_or_autop( $message ) {
-		if ( $this->is_plain_text ) {
-			$message = wp_specialchars_decode( strip_tags( $message ), ENT_QUOTES );
+	private function add_autop() {
+		$message = $this->message;
+		$result  = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
+		if ( ! empty( $match[1] ) ) {
+			$this->message = str_replace( $match[1], wpautop( $match[1] ), $message );
 		} else {
-			$result = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
-			if ( ! empty( $match[1] ) ) {
-				$message = str_replace( $match[1], wpautop( $match[1] ), $message );
-			} else {
-				$message = wpautop( $message );
-			}
+			$this->message = wpautop( $message );
 		}
-
-		return $message;
 	}
 
 	private function maybe_add_ip( &$mail_body ) {
