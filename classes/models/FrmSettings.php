@@ -208,7 +208,6 @@ class FrmSettings {
 			$re_lang                = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
-		/* translators: %s: Active captcha name */
 		$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 
 		if ( ! isset( $this->recaptcha_privkey ) ) {
