@@ -170,7 +170,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
 		// CAPTCHA
-		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::replace_field_label' );
 		add_action( 'frm_before_field_settings', 'FrmFieldCaptcha::before_field_settings' );
 		add_filter( 'frm_saved_errors', 'FrmFieldCaptcha::update_captcha_field_error_message', 10, 2 );
 

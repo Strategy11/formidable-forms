@@ -289,17 +289,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * @since x.x
 	 */
-	public static function replace_field_label( $values ) {
-		if ( $values['type'] === 'captcha' ) {
-			$values['name'] = 'Prove that you are not a robot';
-		}
-
-		return $values;
-	}
-
-	/**
-	 * @since x.x
-	 */
 	public static function before_field_settings( $field ) {
 		if ( $field['type'] !== 'captcha' ) {
 			return;
