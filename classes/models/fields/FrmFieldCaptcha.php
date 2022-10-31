@@ -246,7 +246,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	private function should_show_captcha() {
 		$frm_settings = FrmAppHelper::get_settings();
-		return ! empty( $frm_settings->recaptcha_pubkey );
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			return ! empty( $frm_settings->recaptcha_pubkey );
+		} else {
+			return ! empty( $frm_settings->hcaptcha_pubkey );
+		}
 	}
 
 	protected function should_validate() {
@@ -262,7 +266,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function send_api_check( $frm_settings ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$secret      = $frm_settings->privkey;
+			$secret      = $frm_settings->recaptcha_privkey;
 			$token_field = 'g-recaptcha-response';
 			$endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
 		} else {
