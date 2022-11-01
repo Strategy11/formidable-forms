@@ -479,7 +479,7 @@ class FrmEntry {
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
 		if ( false === $entries ) {
-			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft';
+			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft, it.description';
 			$table  = $wpdb->prefix . 'frm_items it ';
 
 			if ( $inc_form ) {

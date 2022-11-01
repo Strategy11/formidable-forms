@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 ?>
-<div id="frm_top_bar">
+<div id="frm_top_bar" class="<?php echo esc_attr( $has_nav ? 'frm_nav_bar' : 'frm_no_nav_bar' ); ?>">
 	<?php if ( FrmAppHelper::is_full_screen() ) { ?>
 		<div class="frm-full-close">
 			<a href="<?php echo esc_attr( $atts['close'] ); ?>" aria-label="<?php esc_attr_e( 'Close', 'formidable' ); ?>">

@@ -2053,6 +2053,7 @@ function frmAdminBuildJS() {
 				updateFieldOrder();
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
+				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 			}
 		});
 		return false;
@@ -3493,41 +3494,43 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateFieldGroup() {
-		var hoverTarget, newRowId, $newRow, $fields, syncDetails, expectedLength, duplicatedCount, originalFieldIdByDuplicatedFieldId, injectedCloneOptions;
-
-		hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
-
+		const hoverTarget = document.querySelector( '.frm-field-group-hover-target' );
 		if ( null === hoverTarget ) {
 			return;
 		}
 
-		newRowId = 'frm_field_group_' + getAutoId();
-		$newRow = wrapFieldLi( '' );
-		$newRowUl = $newRow.find( 'ul' );
-		$newRowUl.attr( 'id', newRowId );
-		$newRow.addClass( 'frm_hidden' );
-		jQuery( hoverTarget ).closest( 'li.frm_field_box' ).after( $newRow );
+		const newRowId           = 'frm_field_group_' + getAutoId();
+		const placeholderUlChild = document.createTextNode( '' );
+		wrapFieldLiInPlace( placeholderUlChild );
 
-		$fields = getFieldsInRow( jQuery( hoverTarget ) );
-		syncDetails = [];
-		injectedCloneOptions = [];
+		const newRow = jQuery( placeholderUlChild ).closest( 'li' ).get( 0 );
+		newRow.classList.add( 'frm_hidden' );
 
-		expectedLength = $fields.length;
-		duplicatedCount = 0;
-		originalFieldIdByDuplicatedFieldId = {};
+		const newRowUl = newRow.querySelector( 'ul' );
+		newRowUl.id    = newRowId;
 
-		$newRow.on(
+		jQuery( hoverTarget.closest( 'li.frm_field_box' ) ).after( newRow );
+
+		const $fields              = getFieldsInRow( jQuery( hoverTarget ) );
+		const syncDetails          = [];
+		const injectedCloneOptions = [];
+
+		const expectedLength                     = $fields.length;
+		const originalFieldIdByDuplicatedFieldId = {};
+
+		let duplicatedCount = 0;
+
+		jQuery( newRow ).on(
 			'frm_added_duplicated_field_to_row',
-			function( event, args ) {
-				var $duplicatedFields, index;
-
+			function( _, args ) {
 				originalFieldIdByDuplicatedFieldId[ jQuery( args.duplicatedFieldHtml ).attr( 'data-fid' ) ] = args.originalFieldId;
 
 				if ( expectedLength > ++duplicatedCount ) {
 					return;
 				}
 
-				$duplicatedFields = getFieldsInRow( $newRowUl );
+				const $newRowUl         = jQuery( newRowUl );
+				const $duplicatedFields = getFieldsInRow( $newRowUl );
 
 				injectedCloneOptions.forEach(
 					function( cloneOption ) {
@@ -3535,12 +3538,12 @@ function frmAdminBuildJS() {
 					}
 				);
 
-				for ( index = 0; index < expectedLength; ++index ) {
+				for ( let index = 0; index < expectedLength; ++index ) {
 					$newRowUl.append( $newRowUl.children( 'li.form-field[frm-field-order="' + index + '"]' ) );
 				}
 
 				syncLayoutClasses( $duplicatedFields.first(), syncDetails );
-				$newRow.removeClass( 'frm_hidden' );
+				newRow.classList.remove( 'frm_hidden' );
 				updateFieldOrder();
 
 				getFieldsInRow( $newRowUl ).each(
@@ -6772,7 +6775,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				infoModal( 'Oops. You have already used that field.' );
+				infoModal( frm_admin_js.field_already_used );
 				return false;
 			}
 		});
@@ -7797,6 +7800,13 @@ function frmAdminBuildJS() {
 	}
 
 	function onActionLoaded( event ) {
+		event.target.closest( '.frm_form_action_settings' ).querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
+			if ( svg.nextElementSibling.type === 'text' ) {
+				svg.style.bottom = '-3px';
+				svg.style.marginRight = '0';
+			}
+		});
+
 		const settings = event.target.closest( '.frm_form_action_settings' );
 		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
 			onEmailActionLoaded( settings );

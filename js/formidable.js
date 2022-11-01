@@ -48,6 +48,32 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Triggers custom JS event.
+	 *
+	 * @since 5.x
+	 *
+	 * @param {HTMLElement} el        The HTML element.
+	 * @param {String}      eventName Event name.
+	 * @param {mixed}       data      The passed data.
+	 */
+	function triggerCustomEvent( el, eventName, data ) {
+		var event;
+
+		if ( typeof window.CustomEvent === 'function' ) {
+			event = new CustomEvent( eventName );
+		} else if ( document.createEvent ) {
+			event = document.createEvent( 'HTMLEvents' );
+			event.initEvent( eventName, false, true );
+		} else {
+			return;
+		}
+
+		event.frmData = data;
+
+		el.dispatchEvent( event );
+	}
+
 	/* Get the ID of the field that changed*/
 	function getFieldId( field, fullID ) {
 		var nameParts, fieldId,
@@ -136,7 +162,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function disableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).attr( 'disabled', 'disabled' );
 	}
@@ -147,7 +173,7 @@ function frmFrontFormJS() {
 	 * @since 2.03.02
 	 *
 	 * @param {object} $form
-     */
+	 */
 	function enableSubmitButton( $form ) {
 		$form.find( 'input[type="submit"], input[type="button"], button[type="submit"]' ).prop( 'disabled', false );
 	}
@@ -196,21 +222,8 @@ function frmFrontFormJS() {
 		if ( fields.length ) {
 			for ( n = 0, nl = fields.length; n < nl; n++ ) {
 				field = fields[n];
-				value = field.value;
-				if ( value !== '' ) {
-					if ( field.type === 'hidden' ) {
-						// don't validate
-					} else if ( field.type === 'number' ) {
-						errors = checkNumberField( field, errors );
-					} else if ( field.type === 'email' ) {
-						errors = checkEmailField( field, errors );
-					} else if ( field.type === 'password' ) {
-						errors = checkPasswordField( field, errors );
-					} else if ( field.type === 'url' ) {
-						errors = checkUrlField( field, errors );
-					} else if ( field.pattern !== null ) {
-						errors = checkPatternField( field, errors );
-					}
+				if ( '' !== field.value ) {
+					validateFieldValue( field, errors );
 				}
 			}
 		}
@@ -259,17 +272,7 @@ function frmFrontFormJS() {
 		}
 
 		if ( errors.length < 1 ) {
-			if ( field.type === 'email' ) {
-				errors = checkEmailField( field, errors );
-			} else if ( field.type === 'password' ) {
-				errors = checkPasswordField( field, errors );
-			} else if ( field.type === 'number' ) {
-				errors = checkNumberField( field, errors );
-			} else if ( field.type === 'url' ) {
-				errors = checkUrlField( field, errors );
-			} else if ( field.pattern !== null ) {
-				errors = checkPatternField( field, errors );
-			}
+			validateFieldValue( field, errors );
 		}
 
 		removeFieldError( $fieldCont );
@@ -278,6 +281,27 @@ function frmFrontFormJS() {
 				addFieldError( $fieldCont, key, errors );
 			}
 		}
+	}
+
+	function validateFieldValue( field, errors ) {
+		if ( field.type === 'hidden' ) {
+			// don't validate
+		} else if ( field.type === 'number' ) {
+			checkNumberField( field, errors );
+		} else if ( field.type === 'email' ) {
+			checkEmailField( field, errors );
+		} else if ( field.type === 'password' ) {
+			checkPasswordField( field, errors );
+		} else if ( field.type === 'url' ) {
+			checkUrlField( field, errors );
+		} else if ( field.pattern !== null ) {
+			checkPatternField( field, errors );
+		}
+
+		triggerCustomEvent( document, 'frm_validate_field_value', {
+			field: field,
+			errors: errors
+		});
 	}
 
 	function checkRequiredField( field, errors ) {
@@ -397,7 +421,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkEmailField( field, errors ) {
@@ -410,12 +433,10 @@ function frmFrontFormJS() {
 		}
 
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function checkPasswordField( field, errors ) {
 		confirmField( field, errors );
-		return errors;
 	}
 
 	function confirmField( field, errors ) {
@@ -451,7 +472,6 @@ function frmFrontFormJS() {
 				errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 			}
 		}
-		return errors;
 	}
 
 	function checkPatternField( field, errors ) {
@@ -468,7 +488,6 @@ function frmFrontFormJS() {
 				}
 			}
 		}
-		return errors;
 	}
 
 	function hasInvisibleRecaptcha( object ) {
@@ -557,7 +576,7 @@ function frmFrontFormJS() {
 	}
 
 	function getFormErrors( object, action ) {
-		var fieldset, data, success, error;
+		var fieldset, data, success, error, shouldTriggerEvent;
 
 		if ( typeof action === 'undefined' ) {
 			jQuery( object ).find( 'input[name="frm_action"]' ).val();
@@ -566,12 +585,19 @@ function frmFrontFormJS() {
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		success = function( response ) {
-			var formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger,
-				defaultResponse = { 'content': '', 'errors': {}, 'pass': false };
+			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
+				$fieldCont, key, inCollapsedSection, frmTrigger;
+
+			defaultResponse = {
+				content: '',
+				errors: {},
+				pass: false
+			};
+
 			if ( response === null ) {
 				response = defaultResponse;
 			}
@@ -584,15 +610,26 @@ function frmFrontFormJS() {
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
+				if ( shouldTriggerEvent ) {
+					triggerCustomEvent( object, 'frmSubmitEvent' );
+					return;
+				}
+
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
 				window.location = response.redirect;
 			} else if ( response.content !== '' ) {
 				// the form or success message was returned
 
+				if ( shouldTriggerEvent ) {
+					triggerCustomEvent( object, 'frmSubmitEvent' );
+					return;
+				}
+
 				removeSubmitLoading( jQuery( object ) );
 				if ( frm_js.offset != -1 ) {
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
+
 				formID = jQuery( object ).find( 'input[name="form_id"]' ).val();
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
 				replaceContent = jQuery( object ).closest( '.frm_forms' );
@@ -1005,30 +1042,7 @@ function frmFrontFormJS() {
 	 * Fallback functions
 	 *********************************************/
 
-	function addIndexOfFallbackForIE8() {
-		var len, from;
-
-		if ( ! Array.prototype.indexOf ) {
-			Array.prototype.indexOf = function( elt /*, from*/ ) {
-				len = this.length >>> 0;
-
-				from = Number( arguments[1]) || 0;
-				from = ( from < 0 ) ? Math.ceil( from ) : Math.floor( from );
-				if ( from < 0 ) {
-					from += len;
-				}
-
-				for ( ; from < len; from++ ) {
-					if ( from in this && this[from] === elt ) {
-						return from;
-					}
-				}
-				return -1;
-			};
-		}
-	}
-
-	function addTrimFallbackForIE8() {
+	function addTrimFallbackForIE() {
 		if ( typeof String.prototype.trim !== 'function' ) {
 			String.prototype.trim = function() {
 				return this.replace( /^\s+|\s+$/g, '' );
@@ -1036,7 +1050,7 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addFilterFallbackForIE8() {
+	function addFilterFallbackForIE() {
 		var t, len, res, thisp, i, val;
 
 		if ( ! Array.prototype.filter ) {
@@ -1069,24 +1083,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function addKeysFallbackForIE8() {
-		var keys, i;
-
-		if ( ! Object.keys ) {
-			Object.keys = function( obj ) {
-				keys = [];
-
-				for ( i in obj ) {
-					if ( obj.hasOwnProperty( i ) ) {
-						keys.push( i );
-					}
-				}
-
-				return keys;
-			};
-		}
-	}
-
 	/**
 	 * Check for -webkit-box-shadow css value for input:-webkit-autofill selector.
 	 * If this is a match, the User is autofilling the input on a Webkit browser.
@@ -1096,6 +1092,36 @@ function frmFrontFormJS() {
 		var css = jQuery( this ).css( 'box-shadow' );
 		if ( css.match( /inset/ ) ) {
 			this.parentNode.removeChild( this );
+		}
+	}
+
+	function maybeMakeHoneypotFieldsUntabbable() {
+		document.addEventListener( 'keydown', handleKeyUp );
+
+		function handleKeyUp( event ) {
+			var code;
+
+			if ( 'undefined' !== typeof event.key ) {
+				code = event.key;
+			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
+				code = 'Tab';
+			}
+
+			if ( 'Tab' === code ) {
+				makeHoneypotFieldsUntabbable();
+				document.removeEventListener( 'keydown', handleKeyUp );
+			}
+		}
+
+		function makeHoneypotFieldsUntabbable() {
+			document.querySelectorAll( '.frm_verify' ).forEach(
+				function( wrapper ) {
+					var input = wrapper.querySelector( 'input[id^=frm_email]' );
+					if ( input ) {
+						input.setAttribute( 'tabindex', -1 );
+					}
+				}
+			);
 		}
 	}
 
@@ -1343,6 +1369,7 @@ function frmFrontFormJS() {
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
+			maybeMakeHoneypotFieldsUntabbable();
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 			jQuery( 'a[data-frmtoggle]' ).on( 'click', toggleDiv );
@@ -1352,11 +1379,9 @@ function frmFrontFormJS() {
 			// Focus on the first sub field when clicking to the primary label of combo field.
 			changeFocusWhenClickComboFieldLabel();
 
-			// Add fallbacks for the beloved IE8
-			addIndexOfFallbackForIE8();
-			addTrimFallbackForIE8();
-			addFilterFallbackForIE8();
-			addKeysFallbackForIE8();
+			// Add fallbacks for IE.
+			addTrimFallbackForIE(); // Trim only works in IE10+.
+			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
 		},
@@ -1543,10 +1568,10 @@ function frmFrontFormJS() {
 			removeSubmitLoading( $object, enable, processesRunning );
 		},
 
-        scrollToID: function( id ) {
-            var object = jQuery( document.getElementById( id ) );
-            frmFrontForm.scrollMsg( object, false );
-        },
+		scrollToID: function( id ) {
+			var object = jQuery( document.getElementById( id ) );
+			frmFrontForm.scrollMsg( object, false );
+		},
 
 		scrollMsg: function( id, object, animate ) {
 			var newPos, m, b, screenTop, screenBottom,

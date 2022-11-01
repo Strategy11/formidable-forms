@@ -178,7 +178,7 @@ class FrmAppController {
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => admin_url( 'admin.php?page=formidable-entries&frm-full=1&frm_action=list&form=' . absint( $id ) ),
+				'link'       => admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $id ) ),
 				'label'      => __( 'Entries', 'formidable' ),
 				'current'    => array(),
 				'page'       => 'formidable-entries',
@@ -190,7 +190,7 @@ class FrmAppController {
 
 		if ( ! $views_installed ) {
 			$nav_items[] = array(
-				'link'    => admin_url( 'admin.php?page=formidable-views&frm-full=1&form=' . absint( $id ) ),
+				'link'    => admin_url( 'admin.php?page=formidable-views&form=' . absint( $id ) ),
 				'label'   => __( 'Views', 'formidable' ),
 				'current' => array(),
 				'page'    => 'formidable-views',
@@ -204,7 +204,7 @@ class FrmAppController {
 		// Let people know reports and views exist.
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$nav_items[] = array(
-				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&frm-full=1&form=' . absint( $id ) ),
+				'link'    => admin_url( 'admin.php?page=formidable&frm_action=lite-reports&form=' . absint( $id ) ),
 				'label'   => __( 'Reports', 'formidable' ),
 				'current' => array( 'reports' ),
 				'page'    => 'formidable',
@@ -499,7 +499,7 @@ class FrmAppController {
 			'formidable_embed',
 		);
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) || FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
+		if ( FrmAppHelper::is_style_editor_page() ) {
 			$dependencies[] = 'wp-color-picker';
 		}
 

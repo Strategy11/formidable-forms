@@ -51,8 +51,11 @@ class FrmStylesController {
 		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles2', 'FrmStylesController::route' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function admin_init() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-styles' ) && ! FrmAppHelper::is_admin_page( 'formidable-styles2' ) ) {
+		if ( ! FrmAppHelper::is_style_editor_page() ) {
 			return;
 		}
 

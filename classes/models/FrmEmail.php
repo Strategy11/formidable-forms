@@ -397,7 +397,7 @@ class FrmEmail {
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 		} else {
-			$this->message = wpautop( $this->message, false ); // HTML emails should use autop.
+			$this->message = wpautop( $this->message ); // HTML emails should use autop.
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );

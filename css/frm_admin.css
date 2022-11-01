@@ -227,8 +227,7 @@ td.column-title .frm_actions_dropdown {
 	text-align: center;
 }
 
-.post-type-frm_display:not(.edit-php) #frm_top_bar,
-.frm-full-screen.post-type-frm_display #frm_top_bar,
+.post-type-frm_display #frm_top_bar.frm_nav_bar,
 .frm_page_container #frm_top_bar {
 	border-bottom: 1px solid var(--grey-border);
 	padding: 0 20px;
@@ -286,14 +285,12 @@ a .frmsvg,
 	max-width: 100%;
 }
 
-.frm-header-logo,
-.edit-php.post-type-frm_display .frm-header-logo {
+.frm-header-logo {
 	float: left;
 	margin: 0 15px 0 0;
 }
 
-.frm-full-screen.post-type-frm_display .frm-header-logo,
-.post-type-frm_display .frm-header-logo,
+.post-type-frm_display .frm_nav_bar .frm-header-logo,
 .frm_page_container .frm-header-logo {
 	margin: 13px 0 0;
 }
@@ -400,7 +397,7 @@ ul.frm_form_nav > li:last-of-type {
 	color: var(--grey);
 }
 
-.edit-php.post-type-frm_display #frm_top_bar h1,
+.post-type-frm_display #frm_top_bar h1,
 .frm_wrap #frm_top_bar h1 {
 	font-size: 22px;
 	font-weight: 400;
@@ -411,8 +408,7 @@ ul.frm_form_nav > li:last-of-type {
 	line-height: 1.4;
 }
 
-.frm-full-screen.post-type-frm_display #frm_top_bar h1,
-.post-type-frm_display #frm_top_bar h1,
+.post-type-frm_display #frm_top_bar.frm_nav_bar h1,
 .frm_page_container #frm_top_bar h1 {
 	margin: 0 15px;
 	padding: 20px 0 0;
@@ -421,8 +417,7 @@ ul.frm_form_nav > li:last-of-type {
 	line-height: 1.16;
 }
 
-.frm-full-screen.post-type-frm_display #frm_top_bar h1 span,
-.post-type-frm_display #frm_top_bar h1 span,
+.post-type-frm_display #frm_top_bar.frm_nav_bar h1 span,
 .frm_page_container #frm_top_bar h1 span {
 	font-size: 19px;
 	max-width: 175px;
@@ -8178,7 +8173,7 @@ Responsive Design
 		margin: 5px 0;
 	}
 
-	.post-type-frm_display #frm_top_bar h1,
+	.post-type-frm_display #frm_top_bar.frm-nav-bar h1,
 	.frm_page_container #frm_top_bar h1 {
 		width: auto;
 		max-width: 200px;
@@ -8598,7 +8593,8 @@ Responsive Design
 	}
 }
 
-.frm-admin-page-styles #frm-publishing #save_menu_header {
+.frm-admin-page-styles #frm-publishing #save_menu_header,
+.frm-admin-page-styles2 #frm-publishing #save_menu_header {
 	display: inline-block;
 }
 

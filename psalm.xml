@@ -69,5 +69,10 @@
 				<referencedFunction name="akismet_test_mode" />
 			</errorLevel>
 		</UndefinedFunction>
+		<MissingFile>
+			<errorLevel type="suppress">
+				<file name="formidable.php" />
+			</errorLevel>
+		</MissingFile>
 	</issueHandlers>
 </psalm>
