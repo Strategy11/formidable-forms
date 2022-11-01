@@ -453,7 +453,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Honeypot fields should no longer gain focus when tabbing through fields in Chrome.
 * Fix: Fields wouldn't follow the cursor as expected after scrolling the page while dragging.
 * Front end polyfills for IE8 have been removed, reducing the size of the loaded script file.
-* Added additonal form builder restrictions so a hidden field and page break don't become part of a field group.
+* Added additional form builder restrictions so a hidden field and page break don't become part of a field group.
 
 = 5.5.2 =
 * New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar, and the field that is being dragged will gray out.
