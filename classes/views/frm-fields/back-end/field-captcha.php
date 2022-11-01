@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $frm_settings      = FrmAppHelper::get_settings();
 $active_captcha    = $frm_settings->active_captcha;
-$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->recaptcha_pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
+$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
 
 if ( $captcha_not_setup ) {
 	$image_name = 'captcha_not_setup';

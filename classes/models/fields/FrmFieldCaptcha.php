@@ -75,7 +75,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( ( $frm_settings->active_captcha === 'recaptcha' && empty( $frm_settings->recaptcha_pubkey ) ) || ( $frm_settings->active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey ) ) ) {
+		if ( ( $frm_settings->active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) ) || ( $frm_settings->active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey ) ) ) {
 			return '';
 		}
 
@@ -85,7 +85,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$allow_mutiple = $frm_settings->re_multi;
 
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$site_key          = $frm_settings->recaptcha_pubkey;
+			$site_key          = $frm_settings->pubkey;
 			$recaptcha_options = '" data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
 		} else {
 			$site_key = $frm_settings->hcaptcha_pubkey;
@@ -247,7 +247,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	private function should_show_captcha() {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			return ! empty( $frm_settings->recaptcha_pubkey );
+			return ! empty( $frm_settings->pubkey );
 		} else {
 			return ! empty( $frm_settings->hcaptcha_pubkey );
 		}
@@ -266,7 +266,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function send_api_check( $frm_settings ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$secret      = $frm_settings->recaptcha_privkey;
+			$secret      = $frm_settings->privkey;
 			$token_field = 'g-recaptcha-response';
 			$endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
 		} else {
@@ -295,7 +295,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 		$frm_settings      = FrmAppHelper::get_settings();
 		$active_captcha    = $frm_settings->active_captcha;
-		$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->recaptcha_pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
+		$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
 		if ( $captcha_not_setup ) {
 			echo '<div class="frm_builder_captcha frm_warning_style">';
 			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
