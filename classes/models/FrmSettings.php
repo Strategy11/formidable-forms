@@ -331,21 +331,4 @@ class FrmSettings {
 
 		do_action( 'frm_store_settings' );
 	}
-
-
-	/**
-	 * @deprecated x.x
-	 * @codeCoverageIgnore
-	 */
-	public function pubkey() {
-		return $this->recaptcha_pubkey;
-	}
-
-	/**
-	 * @deprecated x.x
-	 * @codeCoverageIgnore
-	 */
-	public function privkey() {
-		return $this->recaptcha_privkey;
-	}
 }
