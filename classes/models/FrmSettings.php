@@ -33,6 +33,8 @@ class FrmSettings {
 	public $hcaptcha_privkey;
 	public $recaptcha_pubkey;
 	public $recaptcha_privkey;
+	public $pubkey;
+	public $privkey;
 	public $re_lang;
 	public $re_type;
 	public $re_msg;
@@ -65,6 +67,9 @@ class FrmSettings {
 		$this->set_default_options();
 
 		$this->maybe_filter_for_form( $args );
+
+		$this->pubkey  = $this->recaptcha_pubkey;
+		$this->privkey = $this->recaptcha_privkey;
 	}
 
 	private function translate_settings( $settings ) {
