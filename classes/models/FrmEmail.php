@@ -410,9 +410,9 @@ class FrmEmail {
 		$message = $this->message;
 		$result  = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
 		if ( ! empty( $match[1] ) ) {
-			$this->message = str_replace( $match[1], wpautop( $match[1] ), $message );
+			$this->message = str_replace( $match[1], trim( wpautop( $match[1] ) ), $message );
 		} else {
-			$this->message = wpautop( $message );
+			$this->message = trim( wpautop( $message ) );
 		}
 	}
 

@@ -635,6 +635,26 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	/**
+	 * @covers FrmEmail::add_autop
+	 */
+	public function test_add_autop() {
+		$action                                = $this->email_action;
+		$action->post_content['plain_text'] = '0';
+		$messages = array(
+			'<html><head><style>label{font-size:14px;font-weight:bold;padding-bottom:5px;}</style></head><body>
+LINE 1<br>LINE 2<br></body></html>'
+			=>
+			'<html><head><style>label{font-size:14px;font-weight:bold;padding-bottom:5px;}</style></head><body><p>LINE 1<br />LINE 2</p></body></html>',
+		);
+		foreach ( $messages as $message => $expected ) {
+			$action->post_content['email_message'] = $message;
+			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
+			$actual                                = $this->get_private_property( $email, 'message' );
+			$this->assertEquals( $expected, $actual );
+		}
+	}
+
+	/**
 	 * @covers FrmEmail::set_message
 	 */
 	public function test_message_user_info() {
