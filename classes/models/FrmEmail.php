@@ -395,7 +395,7 @@ class FrmEmail {
 		$this->message = do_shortcode( $this->message );
 
 		if ( $this->is_plain_text ) {
-			$this->message = wp_specialchars_decode( strip_tags( $message ), ENT_QUOTES );
+			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 		} else {
 			$this->add_autop();
 		}
