@@ -171,7 +171,8 @@ class FrmDefApiAction extends FrmFormAction {
 // add google sheets
 class FrmDefGoogleSpreadsheetAction extends FrmFormAction {
 	public function __construct() {
-		$action_ops = FrmFormAction::default_action_opts( 'frm_googlesheets_icon frm_show_upgrade' );
+		$action_ops          = FrmFormAction::default_action_opts( 'frm_googlesheets_icon frm_show_upgrade' );
+		$action_ops['color'] = 'var(--green)';
 		parent::__construct( 'googlespreadsheet', __( 'Google Sheets', 'formidable' ), $action_ops );
 	}
 }
