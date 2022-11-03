@@ -10321,9 +10321,11 @@ function frmAdminBuildJS() {
 				selectedValue = e.target.value;
 				unselectedValue = selectedValue === 'recaptcha' ? 'hcaptcha' : 'recaptcha';
 				document.getElementById( selectedValue + '_settings' ).classList.remove( 'frm_hidden' );
-				document.getElementById( unselectedValue + '_settings' ).classList.add( 'frm_hidden' );
 				document.getElementById( selectedValue ).parentElement.classList.add( 'active' );
+
+				document.getElementById( unselectedValue + '_settings' ).classList.add( 'frm_hidden' );
 				document.getElementById( unselectedValue ).parentElement.classList.remove( 'active' );
+
 				document.querySelector( '.captcha_settings .alert' ).classList.toggle( 'frm_hidden' );
 			});
 		},
