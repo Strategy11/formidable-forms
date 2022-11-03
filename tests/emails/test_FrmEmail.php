@@ -628,7 +628,7 @@ class test_FrmEmail extends FrmUnitTest {
 		);
 
 		foreach ( $settings as $key => $expected ) {
-			$settings[ $key ] = wpautop( $expected, false );
+			$settings[ $key ] = trim( wpautop( $expected, false ) );
 		}
 
 		$this->check_private_properties( $settings, 'email_message', 'message' );
