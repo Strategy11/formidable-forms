@@ -23,10 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 	?>
 </p>
+<?php
+$prefix = $captcha === 'recaptcha' ? '' : 'hcaptcha_';
+?>
 <p class="frm6 frm_form_field">
-	<label class="frm_help" for="frm_<?php echo esc_attr( $active_captcha ); ?>_pubkey" title="
+	<label class="frm_help" for="frm_<?php echo esc_attr( $prefix ); ?>pubkey" title="
 	<?php
-	if ( $recaptcha_is_active ) {
+	if ( $captcha === 'recaptcha' ) {
 		esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' );
 	} else {
 		esc_attr_e( 'hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA.', 'formidable' );
@@ -34,12 +37,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>">
 		<?php esc_html_e( 'Site Key', 'formidable' ); ?>
 	</label>
-	<input type="text" name="frm_<?php echo esc_attr( $active_captcha ); ?>_pubkey" id="frm_<?php echo esc_attr( $active_captcha ); ?>_pubkey" size="42" value="<?php echo esc_attr( $frm_settings->{$active_captcha . '_pubkey'} ); ?>" />
+	<input type="text" name="frm_<?php echo esc_html( $prefix ); ?>pubkey" id="frm_<?php echo esc_html( $prefix ); ?>pubkey" size="42" value="<?php echo esc_attr( $frm_settings->{$prefix . 'pubkey'} ); ?>" />
 </p>
 
 <p class="frm6 frm_form_field">
-	<label for="frm_<?php echo esc_attr( $active_captcha ); ?>_privkey">
+	<label for="frm_<?php echo esc_attr( $prefix ); ?>privkey">
 		<?php esc_html_e( 'Secret Key', 'formidable' ); ?>
 	</label>
-	<input type="text" name="frm_<?php echo esc_attr( $active_captcha ); ?>_privkey" id="frm_<?php echo esc_attr( $active_captcha ); ?>_privkey" size="42" value="<?php echo esc_attr( $frm_settings->{$active_captcha . '_privkey'} ); ?>" />
+	<input type="text" name="frm_<?php echo esc_html( $prefix ); ?>privkey" id="frm_<?php echo esc_html( $prefix ); ?>privkey" size="42" value="<?php echo esc_attr( $frm_settings->{$prefix . 'privkey'} ); ?>" />
 </p>

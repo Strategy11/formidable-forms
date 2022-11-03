@@ -101,7 +101,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 <div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? 'frm_hidden' : '' ); ?>">
 	<h3>hCaptcha Settings</h3>
 	<?php
-	$captcha = 'recaptcha';
+	$captcha = 'hcaptcha';
 	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
 	?>
 </div>
