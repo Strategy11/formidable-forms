@@ -2,6 +2,7 @@
 = 5.5.3 =
 * New: HTML emails using wpautop will now also convert line breaks into <br /> tags.
 * New: Improved support for importing large XML files. Previously a file over 200MB would trigger a "parser error : internal error: Huge input lookup" error.
+* Fix: When an HTML email includes a body tag, only the content of the body tag will use wpautop.
 * Fix: A duplicated field group would merge into one larger field group instead of creating a second identical field group as expected.
 * Fix: The "Add Fields Here" placeholder wouldn't hide after duplicating a section until after refreshing the page.
 * Fix: The Screen Options tab was not hidden after duplicating an entry, causing it to overlap the update button.
