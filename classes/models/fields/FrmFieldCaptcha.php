@@ -307,6 +307,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * Updates error message displayed based on the captcha activated.
+	 *
+	 * @param array $errors
+	 * @param array $params
+	 *
+	 * @return array
+	 */
 	public static function update_captcha_field_error_message( $errors, $params ) {
 		$active_captcha = FrmAppHelper::get_settings()->active_captcha;
 		$field_name     = $active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
