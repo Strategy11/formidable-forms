@@ -479,9 +479,11 @@ class FrmCSVExportHelper {
 			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
 				$metas[ $repeater_child->id ] = '';
 
-				if ( isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) && is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) {
-					$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
+				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) || ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) {
+					$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] = array();
 				}
+
+				$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ][] = '';
 			}
 		}
 
