@@ -8237,7 +8237,13 @@ Responsive Design
 		width: 100%;
 	}
 
-	.frm_single_entry_page .with_frm_style .frm_radio input[type=radio], .frm_single_entry_page .with_frm_style .frm_checkbox input[type=checkbox] {
+	.with_frm_style .frm_radio input[type=radio],
+	.with_frm_style .frm_checkbox input[type=checkbox] {
+		width: 25px !important;
+	}
+
+	.frm_single_entry_page .with_frm_style .frm_radio input[type=radio],
+	.frm_single_entry_page .with_frm_style .frm_checkbox input[type=checkbox] {
 		width: 18px !important;
 	}
 
