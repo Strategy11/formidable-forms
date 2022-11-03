@@ -187,23 +187,24 @@ class FrmSettings {
 			$this->active_captcha = 'recaptcha';
 		}
 
-		$hcaptcha_privkey  = '';
-		$privkey = '';
-		$re_lang           = '';
+		$privkey          = '';
+		$re_lang          = '';
 
 		if ( ! isset( $this->hcaptcha_privkey ) ) {
-			$this->hcaptcha_privkey = $hcaptcha_privkey;
+			$this->hcaptcha_privkey = '';
 		}
 
 		if ( ! isset( $this->pubkey ) ) {
 			// get the options from the database
-			$recaptcha_opt          = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
-			$this->pubkey           = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
-			$privkey                = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
-			$re_lang                = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
+			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
+			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
+			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
+			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
 		}
 
-		$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
+		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
+			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
+		}
 
 		if ( ! isset( $this->privkey ) ) {
 			$this->privkey = $privkey;
