@@ -28,7 +28,6 @@ class FrmSettings {
 	public $custom_style;
 
 	public $active_captcha;
-
 	public $hcaptcha_pubkey;
 	public $hcaptcha_privkey;
 	public $pubkey;
