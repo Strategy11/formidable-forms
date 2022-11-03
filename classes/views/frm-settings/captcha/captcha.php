@@ -43,7 +43,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 	<h3>reCaptcha Settings</h3>
 	<?php
 	$captcha = 'recaptcha';
-	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha_keys.php';
+	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
 	?>
 
 	<p class="frm6 frm_form_field">
@@ -102,6 +102,6 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 	<h3>hCaptcha Settings</h3>
 	<?php
 	$captcha = 'recaptcha';
-	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha_keys.php';
+	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
 	?>
 </div>

@@ -184,7 +184,7 @@ class FrmSettingsController {
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha.php' );
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php' );
 	}
 
 	/**
