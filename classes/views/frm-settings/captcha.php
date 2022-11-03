@@ -8,7 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		esc_html_e( 'Captcha will help you to avoid gathering automatically generated responses', 'formidable' );
 	?>
 </p>
-<?php $recaptcha_is_active = $frm_settings->active_captcha === 'recaptcha'; ?>
+<?php
+$active_captcha = $frm_settings->active_captcha;
+$recaptcha_is_active = $active_captcha === 'recaptcha';
+?>
 <h4><?php esc_html_e( 'Select captcha type', 'formidable' ); ?></h4>
 <div class="frm_captchas">
 	<div class="frm_radio">
@@ -38,29 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? '' : 'frm_hidden' ); ?>">
 	<h3>reCaptcha Settings</h3>
-	<p class="howto">
-		<?php
-		printf(
-			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			esc_html__( 'reCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree reCAPTCHA key%2$s.', 'formidable' ),
-			'<a href="' . esc_url( 'https://www.google.com/recaptcha/' ) . '" target="_blank">',
-			'</a>'
-		);
-		?>
-	</p>
-	<p class="frm6 frm_form_field">
-		<label class="frm_help" for="frm_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
-			<?php esc_html_e( 'Site Key', 'formidable' ); ?>
-		</label>
-		<input type="text" name="frm_pubkey" id="frm_pubkey" size="42" value="<?php echo esc_attr( $frm_settings->pubkey ); ?>" />
-	</p>
-
-	<p class="frm6 frm_form_field">
-		<label for="frm_privkey">
-			<?php esc_html_e( 'Secret Key', 'formidable' ); ?>
-		</label>
-		<input type="text" name="frm_privkey" id="frm_privkey" size="42" value="<?php echo esc_attr( $frm_settings->privkey ); ?>" />
-	</p>
+	<?php
+	$captcha = 'recaptcha';
+	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha_keys.php';
+	?>
 
 	<p class="frm6 frm_form_field">
 		<label for="frm_re_type">
@@ -116,27 +100,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? 'frm_hidden' : '' ); ?>">
 	<h3>hCaptcha Settings</h3>
-	<p class="howto">
-		<?php
-		printf(
-			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			esc_html__( 'hCAPTCHA requires a Site and Private API key. Sign up for a %1$sfree hCAPTCHA key%2$s.', 'formidable' ),
-			'<a href="' . esc_url( 'https://www.hcaptcha.com/signup-interstitial' ) . '" target="_blank">',
-			'</a>'
-		);
-		?>
-	</p>
-	<p class="frm6 frm_form_field">
-		<label class="frm_help" for="frm_hcaptcha_pubkey" title="<?php esc_attr_e( 'reCAPTCHA is a free, accessible CAPTCHA service that helps to digitize books while blocking spam on your blog. reCAPTCHA asks commenters to retype two words scanned from a book to prove that they are a human. This verifies that they are not a spambot.', 'formidable' ); ?>">
-			<?php esc_html_e( 'Site Key', 'formidable' ); ?>
-		</label>
-		<input type="text" name="frm_hcaptcha_pubkey" id="frm_hcaptcha_pubkey" size="42" value="<?php echo esc_attr( $frm_settings->hcaptcha_pubkey ); ?>" />
-	</p>
-
-	<p class="frm6 frm_form_field">
-		<label for="frm_hcaptcha_privkey">
-			<?php esc_html_e( 'Secret Key', 'formidable' ); ?>
-		</label>
-		<input type="text" name="frm_hcaptcha_privkey" id="frm_hcaptcha_privkey" size="42" value="<?php echo esc_attr( $frm_settings->hcaptcha_privkey ); ?>" />
-	</p>
+	<?php
+	$captcha = 'recaptcha';
+	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha_keys.php';
+	?>
 </div>

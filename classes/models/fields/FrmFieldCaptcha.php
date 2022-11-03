@@ -187,7 +187,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		if ( is_wp_error( $resp ) ) {
 			$error_string                     = $resp->get_error_message();
-			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your recaptcha', 'formidable' );
+			$errors[ 'field' . $args['id'] ]  = __( 'There was a problem verifying your captcha', 'formidable' );
 			$errors[ 'field' . $args['id'] ] .= ' ' . $error_string;
 			return $errors;
 		}
