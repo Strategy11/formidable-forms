@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.0.2
+Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 5.5.2
+Stable tag: 5.5.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,23 @@ Using our Zapier integration, you can easily connect your website with over 1000
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.3 =
+* New: HTML emails using wpautop will now also convert line breaks into <br /> tags.
+* New: Improved support for importing large XML files. Previously a file over 200MB would trigger a "parser error : internal error: Huge input lookup" error.
+* Fix: When an HTML email includes a body tag, only the content of the body tag will use wpautop.
+* Fix: A duplicated field group would merge into one larger field group instead of creating a second identical field group as expected.
+* Fix: The "Add Fields Here" placeholder wouldn't hide after duplicating a section until after refreshing the page.
+* Fix: The Screen Options tab was not hidden after duplicating an entry, causing it to overlap the update button.
+* Fix: An imported view shortcode was not properly updating to its new ID value if the post containing it did not also include a [formidable] shortcode.
+* Fix: Tooltips that overlap the element that triggered the tooltip would cause the tooltip to flicker on and off.
+* Fix: The ellipses icon that triggers shortcode pop ups was offset incorrectly in of text fields inside of form actions.
+* Fix: The update button was missing on the alternative style editor submenu link available from the WordPress themes menu.
+* Fix: Honeypot fields should no longer gain focus when tabbing through fields in Chrome.
+* Fix: Fields wouldn't follow the cursor as expected after scrolling the page while dragging.
+* Fix: Recent styling updates were applying to radio buttons in the form builder by mistake, causing them to look incorrect.
+* Front end polyfills for IE8 have been removed, reducing the size of the loaded script file.
+* Added additional form builder restrictions so a hidden field and page break don't become part of a field group.
+
 = 5.5.2 =
 * New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar, and the field that is being dragged will gray out.
 * New: Improved error handling when installing templates from XML. A message will be shown when the simple XML extension is not installed, and errors will now be shown in a pop up when a template falls to install.
