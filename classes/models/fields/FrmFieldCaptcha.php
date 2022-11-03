@@ -287,7 +287,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * Shows warning in the captcha field settings area if it is not setup.
+	 *
 	 * @since x.x
+	 *
+	 * @param array $field
 	 */
 	public static function before_field_settings( $field ) {
 		if ( $field['type'] !== 'captcha' ) {
@@ -309,6 +313,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * Updates error message displayed based on the captcha activated.
+	 *
+	 * @since x.x
 	 *
 	 * @param array $errors
 	 * @param array $params
