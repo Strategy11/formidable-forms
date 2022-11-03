@@ -122,11 +122,22 @@ class FrmFieldCaptcha extends FrmFieldType {
 			if ( ! empty( $lang ) ) {
 				$api_js_url .= '&hl=' . $lang;
 			}
+
+			$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 		} elseif ( $frm_settings->active_captcha === 'hcaptcha' ) {
 			$api_js_url = 'https://js.hcaptcha.com/1/api.js';
+
+			/**
+			 * Allows updating hcaptcha js api url.
+			 *
+			 * @since x.x
+			 *
+			 * @param string $api_js_url
+			 */
+			$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
 		}
 
-		return apply_filters( 'frm_recaptcha_js_url', $api_js_url );
+		return $api_js_url;
 	}
 
 	protected function class_prefix() {
