@@ -452,6 +452,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: The update button was missing on the alternative style editor submenu link available from the WordPress themes menu.
 * Fix: Honeypot fields should no longer gain focus when tabbing through fields in Chrome.
 * Fix: Fields wouldn't follow the cursor as expected after scrolling the page while dragging.
+* Fix: Recent styling updates were applying to radio buttons in the form builder by mistake, causing them to look incorrect.
 * Front end polyfills for IE8 have been removed, reducing the size of the loaded script file.
 * Added additional form builder restrictions so a hidden field and page break don't become part of a field group.
 
