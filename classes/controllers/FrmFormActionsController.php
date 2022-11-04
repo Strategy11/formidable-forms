@@ -44,31 +44,32 @@ class FrmFormActionsController {
 	 */
 	public static function register_actions() {
 		$action_classes = array(
-			'email'           => 'FrmEmailAction',
-			'wppost'          => 'FrmDefPostAction',
-			'register'        => 'FrmDefRegAction',
-			'paypal'          => 'FrmDefPayPalAction',
-			'payment'         => 'FrmDefHrsAction',
-			'quiz'            => 'FrmDefQuizAction',
-			'quiz_outcome'    => 'FrmDefQuizOutcomeAction',
-			'mailchimp'       => 'FrmDefMlcmpAction',
-			'api'             => 'FrmDefApiAction',
-			'salesforce'      => 'FrmDefSalesforceAction',
-			'activecampaign'  => 'FrmDefActiveCampaignAction',
-			'constantcontact' => 'FrmDefConstContactAction',
-			'getresponse'     => 'FrmDefGetResponseAction',
-			'hubspot'         => 'FrmDefHubspotAction',
-			'zapier'          => 'FrmDefZapierAction',
-			'twilio'          => 'FrmDefTwilioAction',
-			'highrise'        => 'FrmDefHighriseAction',
-			'mailpoet'        => 'FrmDefMailpoetAction',
-			'aweber'          => 'FrmDefAweberAction',
+			'email'             => 'FrmEmailAction',
+			'wppost'            => 'FrmDefPostAction',
+			'register'          => 'FrmDefRegAction',
+			'paypal'            => 'FrmDefPayPalAction',
+			'payment'           => 'FrmDefHrsAction',
+			'quiz'              => 'FrmDefQuizAction',
+			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
+			'mailchimp'         => 'FrmDefMlcmpAction',
+			'api'               => 'FrmDefApiAction',
+			'salesforce'        => 'FrmDefSalesforceAction',
+			'activecampaign'    => 'FrmDefActiveCampaignAction',
+			'constantcontact'   => 'FrmDefConstContactAction',
+			'getresponse'       => 'FrmDefGetResponseAction',
+			'hubspot'           => 'FrmDefHubspotAction',
+			'zapier'            => 'FrmDefZapierAction',
+			'twilio'            => 'FrmDefTwilioAction',
+			'highrise'          => 'FrmDefHighriseAction',
+			'mailpoet'          => 'FrmDefMailpoetAction',
+			'aweber'            => 'FrmDefAweberAction',
+			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 
-		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php' );
-		include_once( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php' );
+		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
+		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
 
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
@@ -89,7 +90,7 @@ class FrmFormActionsController {
 
 		$allowed = self::active_actions( $action_controls );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/settings.php';
 	}
 
 	/**
@@ -131,7 +132,7 @@ class FrmFormActionsController {
 	 */
 	public static function form_action_groups() {
 		$groups = array(
-			'misc'        => array(
+			'misc'      => array(
 				'name'    => '',
 				'icon'    => 'frm_icon_font frm_shuffle_icon',
 				'actions' => array(
@@ -317,7 +318,7 @@ class FrmFormActionsController {
 
 		$use_logging = self::should_show_log_message( $form_action->post_excerpt );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 	}
 
 	public static function add_form_action() {
@@ -340,7 +341,7 @@ class FrmFormActionsController {
 		$values = array();
 		$form   = self::fields_to_values( $form_id, $values );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 		wp_die();
 	}
 
@@ -363,7 +364,7 @@ class FrmFormActionsController {
 
 		$use_logging = self::should_show_log_message( $action_type );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php';
 		wp_die();
 	}
 
@@ -467,7 +468,7 @@ class FrmFormActionsController {
 		$action_status = array(
 			'post_status' => 'publish',
 		);
-		$form_actions = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
+		$form_actions  = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
 
 		if ( empty( $form_actions ) ) {
 			return;

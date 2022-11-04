@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.5.2';
+	public static $plug_version = '5.5.3.1';
 
 	/**
 	 * @since 1.07.02
@@ -1402,7 +1402,6 @@ class FrmAppHelper {
 		$post = get_post( $post_id );
 		if ( $post ) {
 			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-			$post_url = self::maybe_full_screen_link( $post_url );
 
 			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
 		}
@@ -1420,7 +1419,6 @@ class FrmAppHelper {
 	public static function is_full_screen() {
 		return self::is_form_builder_page() ||
 			self::is_style_editor_page() ||
-			self::simple_get( 'frm-full', 'absint' ) ||
 			self::is_full_screen_view_builder_page();
 	}
 
@@ -1443,23 +1441,15 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	private static function is_full_screen_view_builder_page() {
-		if ( ! self::is_view_builder_page() ) {
-			return false;
-		}
-
-		// Do not treat the view listing as full screen when no form id is being filtered.
-		global $pagenow;
-		return 'edit.php' !== $pagenow || self::simple_get( 'form' );
+		return self::is_admin_page( 'formidable-views-editor' );
 	}
 
 	/**
 	 * @since 4.0
+	 * @deprecated 5.5.3
 	 */
 	public static function maybe_full_screen_link( $link ) {
-		$is_full = self::simple_get( 'frm-full', 'absint' );
-		if ( $is_full && ! empty( $link ) && $link !== '#' ) {
-			$link .= '&frm-full=1';
-		}
+		_deprecated_function( __METHOD__, '5.5.3' );
 		return $link;
 	}
 
