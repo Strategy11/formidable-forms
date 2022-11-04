@@ -262,14 +262,14 @@ Go to the Formidable page and click "add new". Choose the Contact Us form templa
 Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads. The contact form template will get you up and running fast.
 
 = Why isn't WordPress sending emails? =
-When you do not receive emails from your email form, try the following steps:
+When you do not receive emails, try the following steps:
 
    1. Double check the email address in your Email action on the settings page. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
-   2. Are you receiving other emails from your site (ie comment notifications, forgot password...)? If not, notification emails will not work either.
+   2. Are you receiving other emails from your site (ie comment notifications, forgot password...)? If not, notifications will not work either.
    3. Check your SPAM box.
-   4. Try a different email address in your settings.
+   4. Try a different address in your settings.
    5. Install WP Mail SMPT or another similar emailing alternative and configure the SMTP settings.
-   6. If these steps don't fix the problem and other WP emails are not going out, please reach out to your web host.
+   6. If these steps don't fix the problem and other WP signup emails are not going out, please reach out to your web host.
 
 <a href="https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Read more about WordPress emails not sending</a> in our blog.
 
@@ -471,7 +471,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Prevent a fatal error that was preventing add ons from installing via API.
 * Fix: Updated radio button styling on the Edit Entry page to fix visual issues at mobile screen sizes.
 * Embed examples no longer include title=true and description=true.
-* License types will no longer appear as application template category options.
+* License types will no longer appear as template categories.
 * Plain text email actions will no longer use a rich text editor.
 
 = 5.5.1 =
@@ -498,7 +498,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added support for several new language options for datepicker localization and for reCAPTCHA.
 * New: Updated deprecated code in Elementor widget for better compatibility with new versions of Elementor.
 * Fix: Actions that trigger when an entry is deleted were not properly working when conditional logic would check item meta values.
-* Fix: An imported application page's parent page ID was not updating to match the new imported parent page ID.
+* Fix: An imported app page's parent page ID was not updating to match the new imported parent page ID.
 * Fix: Clicking save while a field was still being inserted would cause an error pop up to appear with a missing message.
 * Removed a restriction that was preventing a second summary field from being added after adding the first.
 
@@ -521,7 +521,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.4.2 =
 * New: Autocomplete dropdowns in the back end will now include an aria-label on the options to avoid accessibility issues with screen readers only reading ID values.
 * New: A redirect will now happen after duplication to avoid issues with multiple duplicate actions on page refresh.
-* New: Added additional styling for repeaters in tables shown in email actions to show indentation for the repeated data.
+* New: Added additional styling for repeaters in tables shown in actions to show indentation for the repeated data.
 * New: Added a Save and Reload button that appears after installing a required add on when clicking a field with missing requirements.
 * Fix: The aria-describedby attribute will now be ordered intentionally so errors get first priority by default. Checks have been added to avoid duplicate ids appearing in aria-describedby attributes as well.
 * Fix: A few issues with label position settings were introduced with last update that are now fixed. Labels were appearing when the "none" label position setting was set.
@@ -623,7 +623,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: The sanitize_url=1 option will now be inserted automatically when inserting most field shortcodes to a redirect url. This is to avoid issues with redirects stripping characters like ' and @ which may cause a redirect to fail in some cases.
 * New: Updated styling for radio buttons and checkboxes, with improvements to appearance on mobile devices as well.
 * New: Extended the FrmCSVExportHelper::generate_csv function so it has the option to generate a CSV file in a temporary directory, and pass along an array of meta information to most CSV filter hooks.
-* New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by email action ID.
+* New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by action ID.
 * New: Added new frm_entry_formatter_class, frm_prepend_and_or_where, frm_entry_formatter_format, frm_formatted_entry_values_content, and frm_entries_show_args filter hooks.
 * New: Allow more colors in the styler to be transparent including background colors and border colors for active, hovered, and disabled inputs.
 * Fix: Selected radio buttons were appearing incorrectly when using the Twenty Twenty One theme in Chrome or Safari.
@@ -707,12 +707,12 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 = 4.11.04 =
 * New: The first field with an error will now automatically get focus when an entry is submitted for better accessibility and improved user experience.
-* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
+* Fix: The reply to value would default to the admin email instead of the from setting when a shortcode with an empty result was used.
 * Fix: When switching between the dropdown and text lookup types, the watch lookup option did not properly toggle back on.
 * Fix: The autocomplete page dropdown was not consistent with other styles.
 
 = 4.11.03 =
-* New: Name fields now work in the To and From settings for email actions.
+* New: Name fields now work in the To and From settings.
 * Fix: Images were not properly loading when styles were loading via an AJAX request.
 * Fix: Zeros were not appearing in the entries list for repeaters.
 
@@ -812,7 +812,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Updates to the default styling.
 * New: Added an inbox as a centralized place for notices and communication.
 * New: Added frm_color_block and frm_total_big classes for more beautiful forms.
-* Help prevent common email issues by showing a warning in the email settings when the from and to email addresses are the same.
+* Help prevent common email issues by showing a warning in the settings when the from and to email addresses are the same.
 * Fix: Forms edited after export and reimported were losing the required indicator in some cases.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
