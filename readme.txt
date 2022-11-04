@@ -138,7 +138,7 @@ You will not find any other WordPress form plugin offering a front-end editing s
 
 == All the Advanced Fields & Features You Need to Grow Your Business ==
 
-Formidable goes far above and beyond with features like multi-page forms, save and continue, cascading form fields, and powerful conditional logic. Then add partial submissions, invisible spam protection, front-end user post submission, calculated fields, user-tracking, quizzes, and so much more. Additionally, our Payment fields will help you create a donation form, booking form, credit card form, or other payment form.
+Formidable goes far above and beyond with features like multi-page forms, save and continue, cascading form fields, and powerful conditional logic. Then add partial submissions, invisible spam protection, front-end user post submission, calculated fields, user flow, quizzes, and so much more. Additionally, our Payment fields will help you create a donation form, booking form, credit card form, or other payment form.
 
 We're on a mission to offer all-in-one solution-focused forms. This way you don't have to install 5 plugins alongside your form maker to do everything you want.
 
@@ -221,6 +221,7 @@ In addition to all the features listed above, add power ups with these integrati
 * Twilio for SMS Forms. Collect feedback, votes and poll responses via SMS text or send SMS notifications when entries are submitted. Get notified instantly when a payment or order form is completed, or let your leads know you received their message.
 * WPML Multilingual Forms. Translate your WP forms into multiple languages using our integrated multilingual forms.
 * Polylang. Get the form creator with Polylang bilingual or multilingual contact forms.
+* Google Sheets. Open up a world of options and save money with a direct integration.
 * <a href="https://formidableforms.com/features/form-entry-routing-with-zapier/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Zapier</a>. Connect with thousands of services through Zapier from a lead form, quote form, and other web forms. Insert a new row in a Google docs spreadsheet, post on Twitter, or upload a Dropbox file from a feedback form.
 * <a href="https://formidableforms.com/features/bootstrap-form-styling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Form Styles</a>. Instantly add Bootstrap form styling to a survey form and payment form.
 * <a href="https://formidableforms.com/features/bootstrap-modal-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Modal Form</a>. Open login forms, Views, shortcodes, and other content in a Bootstrap modal popup.
@@ -410,9 +411,8 @@ Here is a list of our popular marketing integrations:
 * HubSpot CRM
 * Campaign Monitor
 
-Using our Zapier integration, you can easily connect your website with over 1000+ marketing apps including:
+Using our Zapier integration, you can easily connect your website with over 5,000+ marketing apps including:
 
-* Google Sheets
 * SendInBlue
 * Zoho CRM
 * Zoho Mail

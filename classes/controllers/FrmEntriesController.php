@@ -473,7 +473,7 @@ class FrmEntriesController {
 
 		$message = '';
 		if ( FrmEntry::destroy( $params['id'] ) ) {
-			$message = __( 'Entry was Successfully Deleted', 'formidable' );
+			$message = __( 'Entry was successfully deleted', 'formidable' );
 		}
 
 		self::display_list( $message );
