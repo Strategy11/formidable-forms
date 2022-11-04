@@ -710,7 +710,7 @@ function frmFrontFormJS() {
 							grecaptcha.reset();
 						}
 					}
-					if( typeof hcaptcha !== 'undefined' && hcaptcha ) {
+					if ( typeof hcaptcha !== 'undefined' && hcaptcha ) {
 						hcaptcha.reset();
 					}
 				});
