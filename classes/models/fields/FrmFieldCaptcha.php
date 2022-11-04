@@ -350,5 +350,24 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		return $errors;
 	}
-}
 
+	/**
+	 * Updates field name in page builder to the currently activated captcha if it is set to the default.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $values
+	 */
+	public static function update_field_name( $values ) {
+		if ( $values['type'] === 'captcha' ) {
+			$name = $values['name'];
+			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCAPTCHA', 'formidable' ) ), true ) ) {
+				$frm_settings   = FrmAppHelper::get_settings();
+				$values['name'] = $frm_settings->active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
+			}
+		}
+
+		return $values;
+	}
+
+}
