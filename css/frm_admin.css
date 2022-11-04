@@ -1530,6 +1530,7 @@ form .frm_blank_field label {
 .frm_message,
 #post-body-content .frm_updated_message,
 div.frm_updated_message {
+	border-radius: var(--small-radius);
 	background-color: #D5F2DC;
 	color: #1E561F;
 	padding: 12px 25px;
@@ -1548,7 +1549,7 @@ div.frm_updated_message {
 	margin: 5px 65px;
 }
 
-#form_global_settings .frm_updated_message {
+#form_global_settings #post-body-content > .frm_updated_message {
 	margin: 5px 25px;
 }
 
@@ -2561,6 +2562,7 @@ a.frm_pro_tip {
 	display: inline-block;
 	color: var(--dark-grey);
 	background: #FFE7DE;
+	border-radius: var(--small-radius);
 	padding: 5px 15px;
 	margin: 0 auto;
 	line-height: 1.4;
