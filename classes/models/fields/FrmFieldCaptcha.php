@@ -362,8 +362,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( $values['type'] === 'captcha' ) {
 			$name = $values['name'];
 			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCAPTCHA', 'formidable' ) ), true ) ) {
-				$frm_settings   = FrmAppHelper::get_settings();
-				$values['name'] = $frm_settings->active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
+				$values['name'] = __( 'CAPTCHA', 'formidable' );
 			}
 		}
 
