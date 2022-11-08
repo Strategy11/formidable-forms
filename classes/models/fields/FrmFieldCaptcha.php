@@ -71,20 +71,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $replaced_for;
 	}
 
-	/**
-	 * Returns true if a the active captcha is configured properly.
-	 *
-	 * @param object $frm_settings
-	 *
-	 * @return bool
-	 */
-	private static function active_captcha_key_is_set( $frm_settings ) {
-		return ( $frm_settings->active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) ) || ( $frm_settings->active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey ) );
-	}
-
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( self::active_captcha_key_is_set( $frm_settings ) ) {
+		if ( ! $this->should_show_captcha() ) {
 			return '';
 		}
 
