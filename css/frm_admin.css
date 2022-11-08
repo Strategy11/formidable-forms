@@ -4490,8 +4490,8 @@ label.frm-example-icon {
 	content: '';
 	background-color: none;
 	position: absolute;
-    left: -10px;
-    top: -10px;
+	left: -10px;
+	top: -10px;
 	width: 20px !important;
 	height: 20px !important;
 	margin: 0 !important;
