@@ -339,5 +339,4 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		return $values;
 	}
-
 }

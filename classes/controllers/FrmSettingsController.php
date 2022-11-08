@@ -345,4 +345,12 @@ class FrmSettingsController {
 
 		wp_send_json( $results );
 	}
+
+	/**
+	 * @deprecated x.x use FrmSettingsController::captcha_settings().
+	 */
+	public static function recaptcha_settings() {
+		_deprecated_function( __FUNCTION__, 'x.x', 'FrmSettingsController::captcha_settings()' );
+		self::captcha_settings();
+	}
 }
