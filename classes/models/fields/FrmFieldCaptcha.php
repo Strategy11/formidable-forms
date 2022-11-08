@@ -65,7 +65,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
 		$frm_settings     = FrmAppHelper::get_settings();
-		$replace_response = self::active_captcha_is_recaptcha( $frm_settings ) ? 'g-recaptcha-response' : 'h-captcha-response';
+		$replace_response = $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha-response' : 'h-captcha-response';
 		$replaced_for     = str_replace( ' for="field_[key]"', ' for="' . $replace_response . '"', $html );
 
 		return $replaced_for;
@@ -93,7 +93,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$captcha_size  = $this->captcha_size( $frm_settings );
 		$allow_mutiple = $frm_settings->re_multi;
 
-		if ( self::active_captcha_is_recaptcha( $frm_settings ) ) {
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$site_key          = $frm_settings->pubkey;
 			$recaptcha_options = '" data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
 		} else {
@@ -112,7 +112,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	protected function load_field_scripts( $args ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( self::active_captcha_is_recaptcha( $frm_settings ) ) {
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$api_js_url = $this->recaptcha_api_url( $frm_settings );
 		} else {
 			$api_js_url = $this->hcaptcha_api_url();
@@ -156,7 +156,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function class_prefix( $frm_settings ) {
-		if ( $this->allow_multiple( $frm_settings ) && self::active_captcha_is_recaptcha( $frm_settings ) ) {
+		if ( $this->allow_multiple( $frm_settings ) && $frm_settings->active_captcha === 'recaptcha' ) {
 			$class_prefix = 'frm-';
 		} else {
 			$class_prefix = '';
@@ -166,7 +166,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function captcha_class( $frm_settings ) {
-		return self::active_captcha_is_recaptcha( $frm_settings ) ? 'g-recaptcha' : 'h-captcha';
+		return $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha' : 'h-captcha';
 	}
 
 	protected function allow_multiple( $frm_settings ) {
@@ -206,7 +206,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $errors;
 		}
 
-		if ( self::active_captcha_is_recaptcha( $frm_settings ) ) {
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
 				$threshold = floatval( $frm_settings->re_threshold );
 				$score     = floatval( $response['score'] );
@@ -267,7 +267,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	private function should_show_captcha() {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( self::active_captcha_is_recaptcha( $frm_settings ) ) {
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			return ! empty( $frm_settings->pubkey );
 		}
 
@@ -284,12 +284,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $this->should_show_captcha();
 	}
 
-	private static function active_captcha_is_recaptcha( $frm_settings ) {
-		return $frm_settings->active_captcha === 'recaptcha';
-	}
-
 	protected function send_api_check( $frm_settings ) {
-		if ( self::active_captcha_is_recaptcha( $frm_settings ) ) {
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$secret      = $frm_settings->privkey;
 			$token_field = 'g-recaptcha-response';
 			$endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
