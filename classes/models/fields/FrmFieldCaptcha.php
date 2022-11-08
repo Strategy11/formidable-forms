@@ -64,12 +64,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$replaced_for = str_replace( ' for="field_[key]"', ' for="g-recaptcha-response"', $html );
-		} else {
-			$replaced_for = str_replace( ' for="field_[key]"', ' for="h-captcha-response"', $html );
-		}
+		$frm_settings     = FrmAppHelper::get_settings();
+		$replace_response = $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha-response' : 'h-captcha-response';
+		$replaced_for     = str_replace( ' for="field_[key]"', ' for="' . $replace_response . '"', $html );
+
 		return $replaced_for;
 	}
 
