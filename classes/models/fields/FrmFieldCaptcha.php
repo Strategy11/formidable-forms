@@ -100,40 +100,46 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function load_field_scripts( $args ) {
-		$api_js_url = $this->api_url();
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			$api_js_url = $this->recaptcha_api_url( $frm_settings );
+		} else {
+			$api_js_url = $this->hcaptcha_api_url();
+		}
 
 		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'captcha-api' );
 	}
 
-	protected function api_url() {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$api_js_url = 'https://www.google.com/recaptcha/api.js?';
+	protected function recaptcha_api_url( $frm_settings ) {
+		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-			$allow_mutiple = $frm_settings->re_multi;
-			if ( $allow_mutiple ) {
-				$api_js_url .= '&onload=frmRecaptcha&render=explicit';
-			}
-
-			$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
-			if ( ! empty( $lang ) ) {
-				$api_js_url .= '&hl=' . $lang;
-			}
-
-			$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
-		} elseif ( $frm_settings->active_captcha === 'hcaptcha' ) {
-			$api_js_url = 'https://js.hcaptcha.com/1/api.js';
-
-			/**
-			 * Allows updating hcaptcha js api url.
-			 *
-			 * @since x.x
-			 *
-			 * @param string $api_js_url
-			 */
-			$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
+		$allow_mutiple = $frm_settings->re_multi;
+		if ( $allow_mutiple ) {
+			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
+
+		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
+		if ( ! empty( $lang ) ) {
+			$api_js_url .= '&hl=' . $lang;
+		}
+
+		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
+
+		return $api_js_url;
+	}
+
+	protected function hcaptcha_api_url() {
+		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
+
+		/**
+		 * Allows updating hcaptcha js api url.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $api_js_url
+		 */
+		$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
 
 		return $api_js_url;
 	}
