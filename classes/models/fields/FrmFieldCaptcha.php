@@ -317,7 +317,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * Updates error message displayed based on the captcha activated.
+	 * Updates error message to the new value (CAPTCHA).
 	 *
 	 * @since x.x
 	 *
@@ -327,17 +327,15 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return array
 	 */
 	public static function update_captcha_field_error_message( $errors, $params ) {
-		$active_captcha = FrmAppHelper::get_settings()->active_captcha;
-		$field_name     = $active_captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
-		$fields         = FrmFieldsHelper::get_form_fields( $params['form_id'] );
+		$fields = FrmFieldsHelper::get_form_fields( $params['form_id'] );
 		foreach ( $fields as $field ) {
 			$field_id = 'field' . $field->id;
 			if ( ! isset( $field->field_options['original_type'] ) ) {
 				continue;
 			}
 			if ( $field->field_options['original_type'] === 'captcha' && isset( $errors[ $field_id ] ) ) {
-				if ( strpos( $errors[ $field_id ], 'was not entered correctly' ) ) {
-					$errors[ $field_id ] = sprintf( 'The %s was not entered correctly', $field_name );
+				if ( $errors[ $field_id ] === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
+					$errors[ $field_id ] = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 				}
 			}
 		}
