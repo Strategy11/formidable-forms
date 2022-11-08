@@ -16,7 +16,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 <div class="frm_captchas">
 	<div class="frm_radio">
 		<div class="captcha_option <?php echo esc_attr( $recaptcha_is_active ? 'active' : '' ); ?>">
-			<input type="radio" name="frm_active_captcha" id="recaptcha" value="recaptcha" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?>>
+			<input type="radio" name="frm_active_captcha" id="recaptcha" value="recaptcha" <?php checked( $frm_settings->active_captcha, 'recaptcha' ); ?> />
 			<label for="recaptcha">
 				<?php
 				FrmAppHelper::icon_by_class( 'frmfont frm_recaptcha' );
@@ -24,7 +24,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 			</label>
 		</div>
 		<div class="captcha_option <?php echo esc_attr( $recaptcha_is_active ? '' : 'active' ); ?>">
-			<input type="radio" name="frm_active_captcha" id="hcaptcha" value="hcaptcha" <?php checked( $frm_settings->active_captcha, 'hcaptcha' ); ?>>
+			<input type="radio" name="frm_active_captcha" id="hcaptcha" value="hcaptcha" <?php checked( $frm_settings->active_captcha, 'hcaptcha' ); ?> />
 			<label for="hcaptcha">
 				<?php
 				FrmAppHelper::icon_by_class( 'frmfont frm_hcaptcha' );
