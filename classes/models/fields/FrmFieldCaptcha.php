@@ -254,9 +254,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			return ! empty( $frm_settings->pubkey );
-		} else {
-			return ! empty( $frm_settings->hcaptcha_pubkey );
 		}
+
+		return ! empty( $frm_settings->hcaptcha_pubkey );
 	}
 
 	protected function should_validate() {
