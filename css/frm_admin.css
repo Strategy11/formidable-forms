@@ -239,9 +239,9 @@ td.column-title .frm_actions_dropdown {
 }
 
 .frm-upgrade-bar {
-	background: var(--sidebar-color);
+	background: rgba(188, 224, 253, 0.23);
 	border-bottom: 1px solid var(--sidebar-hover);
-	padding: 3px 0 3px 60px;
+	padding: 3px 0 3px 40px;
 	font-size: 95%;
 }
 
@@ -1526,17 +1526,17 @@ form .frm_blank_field label {
 
 .frm_error_style,
 .frm_warning_style,
+.frm_note_style,
 .frm_message,
 #post-body-content .frm_updated_message,
 div.frm_updated_message {
-	border-radius: var(--border-radius);
-	border: 1px solid #D6E9C6;
-	background-color: #DFF0D8;
-	color: #468847;
-	padding: 5px 25px;
+	border-radius: var(--small-radius);
+	background-color: #D5F2DC;
+	color: #1E561F;
+	padding: 12px 25px;
 	font-size: 14px;
 	margin: 5px 0 15px;
-	text-align: center;
+	text-align: left;
 }
 
 #frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {
@@ -1549,19 +1549,17 @@ div.frm_updated_message {
 	margin: 5px 65px;
 }
 
-#form_global_settings .frm_updated_message {
+#form_global_settings #post-body-content > .frm_updated_message {
 	margin: 5px 25px;
 }
 
 .frm_error_style {
 	color: #973937;
-	border-color: #F2DEDE;
-	background-color: #F2DEDE;
+	background-color: #EBCCCC;
 	clear: both;
 }
 
 .frm_error_style a {
-    color: #973937;
     text-decoration: underline;
     font-weight: 600;
 }
@@ -1571,12 +1569,8 @@ div.frm_updated_message {
 }
 
 .frm_warning_style {
-	color: #8B6E3C;
-	border-color: #FBECCD;
-	background-color: #FDF9E3;
-	border-radius: 10px;
-	text-align: left;
-	padding-top: 5px;
+	color: #7A4D05;
+	background-color: #FFF2D2;
 }
 
 .frm_warning_heading{
@@ -1584,11 +1578,16 @@ div.frm_updated_message {
 	margin-bottom:4px;
 }
 
+.frm_note_style {
+	background: rgba(188, 224, 253, 0.23);
+	color: var(--dark-grey);
+}
+
 .frm-banner-alert {
 	text-align: left;
 	margin: 0;
 	border-radius: 0;
-	padding: 10px 0 10px 50px;
+	padding: 10px 0 10px 40px;
 }
 
 .frm-banner-alert a {
@@ -1618,6 +1617,7 @@ div.frm_updated_message {
 }
 
 .frm-inline-message a {
+	text-decoration: underline;
 	font-weight: 600;
 	color: var(--primary-hover);
 }
@@ -1835,7 +1835,7 @@ h2.frm-h2 + .howto {
 	overflow: visible;
 }
 
-.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install),
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert),
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
@@ -2295,10 +2295,6 @@ h2.frm-h2 + .howto {
     padding: 15px 20px;
 }
 
-#frm-create-footer .frm_error_style {
-	border-radius: 6px;
-}
-
 #frm_code_from_email_options {
 	margin-top: 20px;
 }
@@ -2585,7 +2581,6 @@ a.frm_pro_tip:hover .frmsvg {
 
 .frm_field_list .frm_pro_tip {
 	margin: 10px 15px;
-	padding-left: 40px;
 	position: relative;
 	width: calc(100% - 30px);
     box-sizing: border-box;
