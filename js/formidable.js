@@ -620,7 +620,7 @@ function frmFrontFormJS() {
 			} else if ( response.content !== '' ) {
 				// the form or success message was returned
 
-				if ( shouldTriggerEvent ) {
+				if ( shouldTriggerEvent && -1 == response.content.indexOf( 'frm_error_style' ) ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
 					return;
 				}
