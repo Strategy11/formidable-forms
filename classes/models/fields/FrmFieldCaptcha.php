@@ -281,7 +281,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function send_api_check( $frm_settings ) {
-		$captcha_settings = new CaptchaSettings( $type );
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$secret      = $frm_settings->privkey;
 			$token_field = 'g-recaptcha-response';
