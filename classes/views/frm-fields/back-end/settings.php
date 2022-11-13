@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 			<div class="frm_builder_captcha frm_warning_style">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' ); ?>
-				<div><b><?php echo esc_html__( 'Setup a captcha', 'formidable' ); ?></b>;
+				<div><b><?php echo esc_html__( 'Setup a captcha', 'formidable' ); ?></b>
 					<p>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
