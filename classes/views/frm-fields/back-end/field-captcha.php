@@ -3,11 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$frm_settings      = FrmAppHelper::get_settings();
-$active_captcha    = $frm_settings->active_captcha;
-$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
+$frm_settings   = FrmAppHelper::get_settings();
+$active_captcha = $frm_settings->active_captcha;
 
-if ( $captcha_not_setup ) {
+if ( ! FrmFieldCaptcha::should_show_captcha() ) {
 	$image_name = 'captcha_not_setup';
 } elseif ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
 	$image_name = 'recaptcha_v3';

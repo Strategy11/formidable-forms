@@ -22,10 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="frm_grid_container frm-collapse-me">
 		<?php
-		$frm_settings      = FrmAppHelper::get_settings();
-		$active_captcha    = $frm_settings->active_captcha;
-		$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
-		if ( $field['type'] === 'captcha' && $captcha_not_setup ) {
+		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_builder_captcha frm_warning_style">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' ); ?>

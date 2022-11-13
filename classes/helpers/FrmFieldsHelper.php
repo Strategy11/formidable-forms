@@ -159,11 +159,13 @@ class FrmFieldsHelper {
 			$field_array['blank'] = $frm_settings->blank_msg;
 		}
 
-		if ( 'captcha' === $field->type ) {
-			$field_array['invalid'] = $frm_settings->re_msg;
-		} elseif ( '' == $field_array['invalid'] ) {
-			/* translators: %s: Field name */
-			$field_array['invalid'] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
+		if ( '' === $field_array['invalid'] ) {
+			if ( 'captcha' === $field->type ) {
+				$field_array['invalid'] = $frm_settings->re_msg;
+			} else {
+				/* translators: %s: Field name */
+				$field_array['invalid'] = sprintf( __( '%s is invalid', 'formidable' ), $field_array['name'] );
+			}
 		}
 
 		if ( '' == $field_array['custom_html'] ) {
