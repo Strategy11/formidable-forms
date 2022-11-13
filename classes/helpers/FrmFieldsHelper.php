@@ -159,7 +159,7 @@ class FrmFieldsHelper {
 			$field_array['blank'] = $frm_settings->blank_msg;
 		}
 
-		if ( '' === $field_array['invalid'] ) {
+		if ( '' == $field_array['invalid'] ) {
 			if ( 'captcha' === $field->type ) {
 				$field_array['invalid'] = $frm_settings->re_msg;
 			} else {
