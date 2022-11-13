@@ -100,15 +100,19 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function load_field_scripts( $args ) {
-		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$api_js_url = $this->recaptcha_api_url( $frm_settings );
-		} else {
-			$api_js_url = $this->hcaptcha_api_url();
-		}
+		$api_js_url = $this->api_url();
 
 		wp_register_script( 'captcha-api', $api_js_url, array( 'formidable' ), '3', true );
 		wp_enqueue_script( 'captcha-api' );
+	}
+
+	protected function api_url() {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( $frm_settings->active_captcha === 'recaptcha' ) {
+			return $this->recaptcha_api_url( $frm_settings );
+		}
+
+		return $this->hcaptcha_api_url( $frm_settings );
 	}
 
 	protected function recaptcha_api_url( $frm_settings ) {
