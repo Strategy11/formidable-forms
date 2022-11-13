@@ -73,7 +73,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( ! $this->should_show_captcha() ) {
+		if ( ! self::should_show_captcha() ) {
 			return '';
 		}
 
@@ -261,7 +261,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @since 4.07
 	 * @return bool
 	 */
-	private function should_show_captcha() {
+	public static function should_show_captcha() {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			return ! empty( $frm_settings->pubkey );
@@ -277,7 +277,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		// don't require the captcha if it shouldn't be shown
-		return $this->should_show_captcha();
+		return self::should_show_captcha();
 	}
 
 	protected function send_api_check( $frm_settings ) {
