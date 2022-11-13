@@ -26,15 +26,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$active_captcha    = $frm_settings->active_captcha;
 		$captcha_not_setup = $active_captcha === 'recaptcha' && empty( $frm_settings->pubkey ) || $active_captcha === 'hcaptcha' && empty( $frm_settings->hcaptcha_pubkey );
 		if ( $field['type'] === 'captcha' && $captcha_not_setup ) {
-			echo '<div class="frm_builder_captcha frm_warning_style">';
-			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
-			echo '<div><b>' . esc_html__( 'Setup a captcha', 'formidable' ) . '</b>';
-			echo '<p>';
-			/* translators: %1$s: Link HTML, %2$s: End link */
-			printf( esc_html__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
-			echo '</p></div></div>';
-		}
-		?>
+			?>
+			<div class="frm_builder_captcha frm_warning_style">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' ); ?>
+				<div><b><?php echo esc_html__( 'Setup a captcha', 'formidable' ); ?></b>;
+					<p>
+						<?php
+						/* translators: %1$s: Link HTML, %2$s: End link */
+						printf( esc_html__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+						?>
+					</p>
+				</div>
+			</div>
+		<?php } ?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
