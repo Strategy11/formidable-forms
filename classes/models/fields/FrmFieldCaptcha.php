@@ -214,7 +214,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		if ( isset( $response['success'] ) && ! $response['success'] ) {
 			// What happens when the CAPTCHA was entered incorrectly
-			$invalid_message                 = FrmField::get_option( $this->field, 'invalid' );
+			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
+				$invalid_message = __( 'The CAPTCHA was not entered correctly', 'formidable' );
+			}
 			$errors[ 'field' . $args['id'] ] = ( $invalid_message === '' ? $frm_settings->re_msg : $invalid_message );
 		}
 
@@ -278,6 +281,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function send_api_check( $frm_settings ) {
+		$captcha_settings = new CaptchaSettings( $type );
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$secret      = $frm_settings->privkey;
 			$token_field = 'g-recaptcha-response';
@@ -297,33 +301,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 		);
 
 		return wp_remote_post( $endpoint, $arg_array );
-	}
-
-	/**
-	 * Updates error message to the new value (CAPTCHA).
-	 *
-	 * @since x.x
-	 *
-	 * @param array $errors
-	 * @param array $params
-	 *
-	 * @return array
-	 */
-	public static function update_captcha_field_error_message( $errors, $params ) {
-		$fields = FrmFieldsHelper::get_form_fields( $params['form_id'] );
-		foreach ( $fields as $field ) {
-			$field_id = 'field' . $field->id;
-			if ( ! isset( $field->field_options['original_type'] ) ) {
-				continue;
-			}
-			if ( $field->field_options['original_type'] === 'captcha' && isset( $errors[ $field_id ] ) ) {
-				if ( $errors[ $field_id ] === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
-					$errors[ $field_id ] = __( 'The CAPTCHA was not entered correctly', 'formidable' );
-				}
-			}
-		}
-
-		return $errors;
 	}
 
 	/**
