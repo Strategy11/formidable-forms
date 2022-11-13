@@ -112,7 +112,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			return $this->recaptcha_api_url( $frm_settings );
 		}
 
-		return $this->hcaptcha_api_url( $frm_settings );
+		return $this->hcaptcha_api_url();
 	}
 
 	protected function recaptcha_api_url( $frm_settings ) {
