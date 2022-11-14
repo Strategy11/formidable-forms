@@ -397,10 +397,23 @@ class FrmEmail {
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 		} else {
-			$this->message = wpautop( $this->message ); // HTML emails should use autop.
+			$this->add_autop();
 		}
 
 		$this->message = apply_filters( 'frm_email_message', $this->message, $this->package_atts() );
+	}
+
+	/**
+	 * Runs message through autop, extracting the content inside body tag if it has <body>.
+	 */
+	private function add_autop() {
+		$message = $this->message;
+		$result  = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
+		if ( ! empty( $match[1] ) ) {
+			$this->message = str_replace( $match[1], trim( wpautop( $match[1] ) ), $message );
+		} else {
+			$this->message = trim( wpautop( $message ) );
+		}
 	}
 
 	private function maybe_add_ip( &$mail_body ) {

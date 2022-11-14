@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.5.2';
+	public static $plug_version = '5.5.3.1';
 
 	/**
 	 * @since 1.07.02
@@ -2950,7 +2950,7 @@ class FrmAppHelper {
 		$pro_version = FrmProDb::$plug_version;
 		$expired = FrmAddonsController::is_license_expired();
 		?>
-		<div class="error frm_previous_install">
+		<div class="frm-banner-alert frm_error_style frm_previous_install">
 			<?php
 			esc_html_e( 'You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro.', 'formidable' );
 			if ( empty( $expired ) ) {
@@ -2991,7 +2991,7 @@ class FrmAppHelper {
 
 		foreach ( $message as $m ) {
 			?>
-			<div class="error frm_previous_install">
+			<div class="frm-banner-alert frm_error_style frm_previous_install">
 				<?php echo esc_html( $m ); ?>
 			</div>
 			<?php

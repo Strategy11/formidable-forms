@@ -10432,7 +10432,9 @@ function frmAdminBuildJS() {
 			addFilter: function( hookName, callback, priority ) {
 				return wp.hooks.addFilter( hookName, 'formidable', callback, priority );
 			}
-		}
+		},
+
+		infoModal: infoModal
 	};
 }
 

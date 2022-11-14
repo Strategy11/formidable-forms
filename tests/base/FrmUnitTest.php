@@ -635,7 +635,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 	protected function get_private_property( $object, $property ) {
 		$p = $this->get_accessible_property( $object, $property );
-		return $p->getValue( $object );
+		return $p->getValue( is_object( $object ) ? $object : null );
 	}
 
 	protected function set_private_property( $object, $property, $value ) {

@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.0.2
+Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 5.5.2
+Stable tag: 5.5.3.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -138,7 +138,7 @@ You will not find any other WordPress form plugin offering a front-end editing s
 
 == All the Advanced Fields & Features You Need to Grow Your Business ==
 
-Formidable goes far above and beyond with features like multi-page forms, save and continue, cascading form fields, and powerful conditional logic. Then add partial submissions, invisible spam protection, front-end user post submission, calculated fields, user-tracking, quizzes, and so much more. Additionally, our Payment fields will help you create a donation form, booking form, credit card form, or other payment form.
+Formidable goes far above and beyond with features like multi-page forms, save and continue, cascading form fields, and powerful conditional logic. Then add partial submissions, invisible spam protection, front-end user post submission, calculated fields, user flow, quizzes, and so much more. Additionally, our Payment fields will help you create a donation form, booking form, credit card form, or other payment form.
 
 We're on a mission to offer all-in-one solution-focused forms. This way you don't have to install 5 plugins alongside your form maker to do everything you want.
 
@@ -221,6 +221,7 @@ In addition to all the features listed above, add power ups with these integrati
 * Twilio for SMS Forms. Collect feedback, votes and poll responses via SMS text or send SMS notifications when entries are submitted. Get notified instantly when a payment or order form is completed, or let your leads know you received their message.
 * WPML Multilingual Forms. Translate your WP forms into multiple languages using our integrated multilingual forms.
 * Polylang. Get the form creator with Polylang bilingual or multilingual contact forms.
+* Google Sheets. Open up a world of options and save money with a direct integration.
 * <a href="https://formidableforms.com/features/form-entry-routing-with-zapier/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Zapier</a>. Connect with thousands of services through Zapier from a lead form, quote form, and other web forms. Insert a new row in a Google docs spreadsheet, post on Twitter, or upload a Dropbox file from a feedback form.
 * <a href="https://formidableforms.com/features/bootstrap-form-styling/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Form Styles</a>. Instantly add Bootstrap form styling to a survey form and payment form.
 * <a href="https://formidableforms.com/features/bootstrap-modal-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Bootstrap Modal Form</a>. Open login forms, Views, shortcodes, and other content in a Bootstrap modal popup.
@@ -261,14 +262,14 @@ Go to the Formidable page and click "add new". Choose the Contact Us form templa
 Next, edit or create a WordPress contact page. Click the "Formidable" button to open the shortcode generator. Choose your new Stripe form, quiz, or web form and insert it into the WordPress page. Save the page for a beautiful WP contact form, ready to collect and store your leads. The contact form template will get you up and running fast.
 
 = Why isn't WordPress sending emails? =
-When you do not receive emails from your email form, try the following steps:
+When you do not receive emails, try the following steps:
 
    1. Double check the email address in your Email action on the settings page. The [admin_email] shortcode uses the email address from your WordPress Settings -> General page.
-   2. Are you receiving other emails from your site (ie comment notifications, forgot password...)? If not, notification emails will not work either.
+   2. Are you receiving other emails from your site (ie comment notifications, forgot password...)? If not, notifications will not work either.
    3. Check your SPAM box.
-   4. Try a different email address in your settings.
+   4. Try a different address in your settings.
    5. Install WP Mail SMPT or another similar emailing alternative and configure the SMTP settings.
-   6. If these steps don't fix the problem and other WP emails are not going out, please reach out to your web host.
+   6. If these steps don't fix the problem and other WP signup emails are not going out, please reach out to your web host.
 
 <a href="https://formidableforms.com/wordpress-not-sending-emails-smtp/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Read more about WordPress emails not sending</a> in our blog.
 
@@ -410,9 +411,8 @@ Here is a list of our popular marketing integrations:
 * HubSpot CRM
 * Campaign Monitor
 
-Using our Zapier integration, you can easily connect your website with over 1000+ marketing apps including:
+Using our Zapier integration, you can easily connect your website with over 5,000+ marketing apps including:
 
-* Google Sheets
 * SendInBlue
 * Zoho CRM
 * Zoho Mail
@@ -440,6 +440,23 @@ Using our Zapier integration, you can easily connect your website with over 1000
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.3 =
+* New: HTML emails using wpautop will now also convert line breaks into <br /> tags.
+* New: Improved support for importing large XML files. Previously a file over 200MB would trigger a "parser error : internal error: Huge input lookup" error.
+* Fix: When an HTML email includes a body tag, only the content of the body tag will use wpautop.
+* Fix: A duplicated field group would merge into one larger field group instead of creating a second identical field group as expected.
+* Fix: The "Add Fields Here" placeholder wouldn't hide after duplicating a section until after refreshing the page.
+* Fix: The Screen Options tab was not hidden after duplicating an entry, causing it to overlap the update button.
+* Fix: An imported view shortcode was not properly updating to its new ID value if the post containing it did not also include a [formidable] shortcode.
+* Fix: Tooltips that overlap the element that triggered the tooltip would cause the tooltip to flicker on and off.
+* Fix: The ellipses icon that triggers shortcode pop ups was offset incorrectly in of text fields inside of form actions.
+* Fix: The update button was missing on the alternative style editor submenu link available from the WordPress themes menu.
+* Fix: Honeypot fields should no longer gain focus when tabbing through fields in Chrome.
+* Fix: Fields wouldn't follow the cursor as expected after scrolling the page while dragging.
+* Fix: Recent styling updates were applying to radio buttons in the form builder by mistake, causing them to look incorrect.
+* Front end polyfills for IE8 have been removed, reducing the size of the loaded script file.
+* Added additional form builder restrictions so a hidden field and page break don't become part of a field group.
+
 = 5.5.2 =
 * New: When dragging a field or field group, a smaller drag helper will be used that is more consistent with the field type options in the sidebar, and the field that is being dragged will gray out.
 * New: Improved error handling when installing templates from XML. A message will be shown when the simple XML extension is not installed, and errors will now be shown in a pop up when a template falls to install.
@@ -454,7 +471,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Prevent a fatal error that was preventing add ons from installing via API.
 * Fix: Updated radio button styling on the Edit Entry page to fix visual issues at mobile screen sizes.
 * Embed examples no longer include title=true and description=true.
-* License types will no longer appear as application template category options.
+* License types will no longer appear as template categories.
 * Plain text email actions will no longer use a rich text editor.
 
 = 5.5.1 =
@@ -481,7 +498,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: Added support for several new language options for datepicker localization and for reCAPTCHA.
 * New: Updated deprecated code in Elementor widget for better compatibility with new versions of Elementor.
 * Fix: Actions that trigger when an entry is deleted were not properly working when conditional logic would check item meta values.
-* Fix: An imported application page's parent page ID was not updating to match the new imported parent page ID.
+* Fix: An imported app page's parent page ID was not updating to match the new imported parent page ID.
 * Fix: Clicking save while a field was still being inserted would cause an error pop up to appear with a missing message.
 * Removed a restriction that was preventing a second summary field from being added after adding the first.
 
@@ -504,7 +521,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 5.4.2 =
 * New: Autocomplete dropdowns in the back end will now include an aria-label on the options to avoid accessibility issues with screen readers only reading ID values.
 * New: A redirect will now happen after duplication to avoid issues with multiple duplicate actions on page refresh.
-* New: Added additional styling for repeaters in tables shown in email actions to show indentation for the repeated data.
+* New: Added additional styling for repeaters in tables shown in actions to show indentation for the repeated data.
 * New: Added a Save and Reload button that appears after installing a required add on when clicking a field with missing requirements.
 * Fix: The aria-describedby attribute will now be ordered intentionally so errors get first priority by default. Checks have been added to avoid duplicate ids appearing in aria-describedby attributes as well.
 * Fix: A few issues with label position settings were introduced with last update that are now fixed. Labels were appearing when the "none" label position setting was set.
@@ -606,7 +623,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * New: The sanitize_url=1 option will now be inserted automatically when inserting most field shortcodes to a redirect url. This is to avoid issues with redirects stripping characters like ' and @ which may cause a redirect to fail in some cases.
 * New: Updated styling for radio buttons and checkboxes, with improvements to appearance on mobile devices as well.
 * New: Extended the FrmCSVExportHelper::generate_csv function so it has the option to generate a CSV file in a temporary directory, and pass along an array of meta information to most CSV filter hooks.
-* New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by email action ID.
+* New: A new action_id variable has been added to the arguments passed to the frm_notification_attachment filter to make it easier to filter attachments by action ID.
 * New: Added new frm_entry_formatter_class, frm_prepend_and_or_where, frm_entry_formatter_format, frm_formatted_entry_values_content, and frm_entries_show_args filter hooks.
 * New: Allow more colors in the styler to be transparent including background colors and border colors for active, hovered, and disabled inputs.
 * Fix: Selected radio buttons were appearing incorrectly when using the Twenty Twenty One theme in Chrome or Safari.
@@ -690,12 +707,12 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 = 4.11.04 =
 * New: The first field with an error will now automatically get focus when an entry is submitted for better accessibility and improved user experience.
-* Fix: The reply to value of an email would default to the admin email instead of the from email when a shortcode with an empty result was used.
+* Fix: The reply to value would default to the admin email instead of the from setting when a shortcode with an empty result was used.
 * Fix: When switching between the dropdown and text lookup types, the watch lookup option did not properly toggle back on.
 * Fix: The autocomplete page dropdown was not consistent with other styles.
 
 = 4.11.03 =
-* New: Name fields now work in the To and From settings for email actions.
+* New: Name fields now work in the To and From settings.
 * Fix: Images were not properly loading when styles were loading via an AJAX request.
 * Fix: Zeros were not appearing in the entries list for repeaters.
 
@@ -795,7 +812,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Updates to the default styling.
 * New: Added an inbox as a centralized place for notices and communication.
 * New: Added frm_color_block and frm_total_big classes for more beautiful forms.
-* Help prevent common email issues by showing a warning in the email settings when the from and to email addresses are the same.
+* Help prevent common email issues by showing a warning in the settings when the from and to email addresses are the same.
 * Fix: Forms edited after export and reimported were losing the required indicator in some cases.
 
 <a href="https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt">See changelog for all versions</a>
