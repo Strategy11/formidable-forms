@@ -249,7 +249,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! isset( $_POST['g-recaptcha-response'] ) || ! isset( $_POST['h-captcha-response'] ) ) {
+		if ( ! ( isset( $_POST['g-recaptcha-response'] ) || isset( $_POST['h-captcha-response'] ) ) ) {
 			// There was no captcha submitted.
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
