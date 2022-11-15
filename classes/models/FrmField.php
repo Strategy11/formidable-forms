@@ -11,8 +11,7 @@ class FrmField {
 	public static function field_selection() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
-		$captcha_is_set = ( $active_captcha === 'recaptcha' && ! empty( $frm_settings->pubkey ) ) || ( $active_captcha === 'hcaptcha' && ! empty( $frm_settings->hcaptcha_pubkey ) );
-		if ( ! $captcha_is_set ) {
+		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
 			$captcha_name = 'CAPTCHA';
 		} elseif ( $active_captcha === 'recaptcha' ) {
 			$captcha_name = 'reCAPTCHA';
