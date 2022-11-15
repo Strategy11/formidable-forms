@@ -18,6 +18,17 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function include_form_builder_file() {
+		$frm_settings   = FrmAppHelper::get_settings();
+		$active_captcha = $frm_settings->active_captcha;
+
+		if ( ! self::should_show_captcha() ) {
+			$image_name = 'captcha_not_setup';
+		} elseif ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
+			$image_name = 'recaptcha_v3';
+		} else {
+			$image_name = $active_captcha;
+		}
+
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-captcha.php';
 	}
 
@@ -216,7 +227,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			// What happens when the CAPTCHA was entered incorrectly
 			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
 			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
-				$invalid_message = __( 'The CAPTCHA was not entered correctly', 'formidable' );
+				$invalid_message = '';
 			}
 			$errors[ 'field' . $args['id'] ] = ( $invalid_message === '' ? $frm_settings->re_msg : $invalid_message );
 		}
@@ -249,7 +260,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! ( isset( $_POST['g-recaptcha-response'] ) || isset( $_POST['h-captcha-response'] ) ) ) {
+		if ( ! isset( $_POST['g-recaptcha-response'] ) && ! isset( $_POST['h-captcha-response'] ) ) {
 			// There was no captcha submitted.
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
