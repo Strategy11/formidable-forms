@@ -281,25 +281,17 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	protected function send_api_check( $frm_settings ) {
-		if ( $frm_settings->active_captcha === 'recaptcha' ) {
-			$secret      = $frm_settings->privkey;
-			$token_field = 'g-recaptcha-response';
-			$endpoint    = 'https://www.google.com/recaptcha/api/siteverify';
-		} else {
-			$secret      = $frm_settings->hcaptcha_privkey;
-			$token_field = 'h-captcha-response';
-			$endpoint    = 'https://hcaptcha.com/siteverify';
-		}
+		$captcha_settings = new FrmFieldCaptchaSettings( $frm_settings );
 
 		$arg_array = array(
 			'body' => array(
-				'secret'   => $secret,
-				'response' => FrmAppHelper::get_param( $token_field, '', 'post', 'sanitize_text_field' ),
+				'secret'   => $captcha_settings->secret,
+				'response' => FrmAppHelper::get_param( $captcha_settings->token_field, '', 'post', 'sanitize_text_field' ),
 				'remoteip' => FrmAppHelper::get_ip_address(),
 			),
 		);
 
-		return wp_remote_post( $endpoint, $arg_array );
+		return wp_remote_post( $captcha_settings->endpoint, $arg_array );
 	}
 
 	/**
