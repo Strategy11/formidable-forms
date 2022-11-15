@@ -1129,9 +1129,9 @@ function frmFrontFormJS() {
 	 * @since 4.10.02
 	 */
 	function changeFocusWhenClickComboFieldLabel() {
-		let label;
+		var label;
 
-		const comboInputsContainer = document.querySelectorAll( '.frm_combo_inputs_container' );
+		var comboInputsContainer = document.querySelectorAll( '.frm_combo_inputs_container' );
 		comboInputsContainer.forEach( function( inputsContainer ) {
 			if ( ! inputsContainer.closest( '.frm_form_field' ) ) {
 				return;
