@@ -171,6 +171,13 @@ class FrmAppController {
 				'permission' => 'frm_edit_forms',
 			),
 			array(
+				'link'       => FrmStylesHelper::get_style_page_url( $id ),
+				'label'      => __( 'Style', 'formidable' ),
+				'current'    => array( 'style' ),
+				'page'       => 'formidable',
+				'permission' => 'frm_edit_forms',
+			),
+			array(
 				'link'       => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . absint( $id ) ),
 				'label'      => __( 'Settings', 'formidable' ),
 				'current'    => array( 'settings' ),

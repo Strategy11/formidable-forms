@@ -207,6 +207,17 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Render the style page for a form for assigning a style to a form, and for viewing style templates.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function style() {
+		include FrmAppHelper::plugin_path() . '/classes/views/styles/style.php';
+	}
+
+	/**
 	 * Redirect to the url for creating from a template
 	 * Also delete the current form
 	 *
@@ -1692,6 +1703,7 @@ class FrmFormsController {
 			case 'delete_all':
 			case 'settings':
 			case 'update_settings':
+			case 'style':
 				return self::$action( $vars );
 			case 'lite-reports':
 				return self::no_reports( $vars );

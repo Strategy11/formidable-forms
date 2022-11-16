@@ -523,6 +523,18 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the URL for the Style page (where you can assign styles to a form and view style templates) for a target form.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $form_id
+	 * @return string
+	 */
+	public static function get_style_page_url( $form_id ) {
+		return admin_url( 'admin.php?page=formidable&frm_action=style&id=' . absint( $form_id ) );
+	}
+
+	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
