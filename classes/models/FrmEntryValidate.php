@@ -432,6 +432,7 @@ class FrmEntryValidate {
 					'fields'  => array(
 						'form_id' => $values['form_id'],
 						'entry'   => '',
+						'code'    => $response[1],
 						'request' => $query_string,
 						'headers' => (array) $response[0],
 					),
