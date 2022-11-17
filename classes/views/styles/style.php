@@ -13,22 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		// TODO Render "My styles".
 		// TODO the design has a "New style" option here.
 		   // TODO this will trigger a new modal.
-
-		// Render "Formidable Styles".
-		$style_api = new FrmStyleApi();
-		$info      = $style_api->get_api_info();
-		foreach ( $info as $key => $style ) {
-			if ( ! is_numeric( $key ) ) {
-				// Skip active_sub/expires keys.
-				continue;
-			}
-			?>
-			<div class="frm6">
-				<img style="max-width: 100%; border-radius: 6px;" src="<?php echo esc_url( $style['icon'][0] ); ?>" />
-				<?php echo $style['name']; ?>
-			</div>
-			<?php
-		}
 		?>
 	</div>
 	<?php // Preview area. ?>
