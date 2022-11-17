@@ -67,7 +67,6 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntriesController::hidden_columns
-	 * @group mike
 	 */
 	public function test_hidden_columns() {
 		// Confirm that a string option value doesn't trigger a fatal error.
