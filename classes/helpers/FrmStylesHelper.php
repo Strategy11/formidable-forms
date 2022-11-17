@@ -535,6 +535,30 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @param WP_Post $style
+	 * @return string
+	 */
+	public static function get_style_param_for_card( $style ) {
+		$styles = array();
+
+		$styles[] = 'display: flex';
+		$styles[] = 'flex-direction: column';
+		$styles[] = 'align-content: center';
+		$styles[] = 'justify-content: center';
+		$styles[] = 'background-color: #fff';
+		$styles[] = 'border-radius: 6px';
+		$styles[] = 'padding: 10px';
+
+		/**
+		 * It really just shows a few basic styles so maybe we can just style it on the fly:
+		 *    - Text input styles (font size, color, border, background color, etc)
+		 *    - Submit button styles (color, font size, background color, border?)
+		 **/
+
+		return implode( ';', $styles );
+	}
+
+	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */

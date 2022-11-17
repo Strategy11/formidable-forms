@@ -214,7 +214,13 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function style() {
-		include FrmAppHelper::plugin_path() . '/classes/views/styles/style.php';
+		$frm_style = new FrmStyle();
+		$styles    = $frm_style->get_all();
+
+		wp_print_styles( 'formidable' );
+
+		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
+		include $style_views_path . 'style.php';
 	}
 
 	/**
