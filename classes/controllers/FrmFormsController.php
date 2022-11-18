@@ -220,6 +220,8 @@ class FrmFormsController {
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all();
 
+		$active_style    = FrmStylesController::get_form_style( $form );
+
 		$plugin_url = FrmAppHelper::plugin_url();
 		$version    = FrmAppHelper::plugin_version();
 		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', array(), $version );

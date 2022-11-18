@@ -541,27 +541,21 @@ class FrmStylesHelper {
 	public static function get_style_param_for_card( $style ) {
 		$styles = array();
 
+		// Add the background color setting for fieldsets to the card.
 		if ( ! $style->post_content['fieldset_bg_color'] ) {
 			$background_color = '#fff';
 		} else {
 			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
 		}
-
 		$styles[] = 'background-color: ' . $background_color;
 
-		// Overwrite some styles.
+		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
 		$frm_style = new FrmStyle( 'default' );
 		$default_style = $frm_style->get_one();
 		$styles[] = '--font-size: ' . $default_style->post_content['field_font_size'];
 		$styles[] = '--field-font-size: ' . $default_style->post_content['field_font_size'];
 		$styles[] = '--label-padding: ' . $default_style->post_content['label_padding'];
 		$styles[] = '--field-height: ' . $default_style->post_content['field_height'];
-
-		/**
-		 * It really just shows a few basic styles so maybe we can just style it on the fly:
-		 *    - Text input styles (font size, color, border, background color, etc)
-		 *    - Submit button styles (color, font size, background color, border?)
-		 **/
 
 		return implode( ';', $styles );
 	}

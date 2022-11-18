@@ -12,10 +12,11 @@
 		const previewArea = sidebar.nextElementSibling;
 		const form        = previewArea.querySelector( 'form' );
 
-		Array.from( document.getElementsByClassName( 'frm_style_card' ) ).forEach(
-			card => form.parentNode.classList.remove( card.dataset.classname )
-		);
+		const activeCard = document.querySelector( '.frm_active_style_card' );
+		activeCard.classList.remove( 'frm_active_style_card' );
+		form.parentNode.classList.remove( activeCard.dataset.classname );
 
 		form.parentNode.classList.add( event.target.dataset.classname );
+		event.target.classList.add( 'frm_active_style_card' );
 	}
 }() );

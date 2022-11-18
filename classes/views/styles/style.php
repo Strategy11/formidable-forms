@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 							array_walk(
 								$styles,
-								function( $style ) use ( $style_views_path ) {
+								function( $style ) use ( $style_views_path, $active_style ) {
 									include $style_views_path . '_custom-style-card.php';
 								}
 							);

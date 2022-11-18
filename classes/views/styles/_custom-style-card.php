@@ -13,6 +13,10 @@ $params     = array(
 	'style'          => FrmStylesHelper::get_style_param_for_card( $style ),
 	'data-classname' => $class_name,
 );
+
+if ( $active_style->ID === $style->ID ) {
+	$params['class'] .= ' frm_active_style_card';
+}
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div class="frm_style_card_preview">
