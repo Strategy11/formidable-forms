@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm_grid_container">
 	<?php // Sidebar. ?>
-	<div class="frm_grid_container frm4" style="background-color: #F6F7FB; padding: 10px; grid-gap: 5%; grid-template-columns: repeat( 12, 3.5%);">
+	<div class="frm_grid_container frm5" style="background-color: #F6F7FB; padding: 10px; grid-gap: 5%; grid-template-columns: repeat( 12, 3.725%);">
 		<?php
 		// TODO add a title for My Styles.
 		// TODO the design has a "New style" option here.
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 	<?php // Preview area. ?>
-	<div class="frm8">
+	<div class="frm7">
 		<?php
 		/**
 		 * The right side body shows a preview (of the target form) so you can see the form you're actually styling.

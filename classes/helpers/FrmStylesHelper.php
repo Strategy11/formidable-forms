@@ -545,9 +545,23 @@ class FrmStylesHelper {
 		$styles[] = 'flex-direction: column';
 		$styles[] = 'align-content: center';
 		$styles[] = 'justify-content: center';
-		$styles[] = 'background-color: #fff';
+
+		if ( ! $style->post_content['fieldset_bg_color'] ) {
+			$background_color = '#fff';
+		} else {
+			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
+		}
+
+		$styles[] = 'background-color: ' . $background_color;
 		$styles[] = 'border-radius: 6px';
-		$styles[] = 'padding: 10px';
+
+		// Overwrite some styles.
+		$frm_style = new FrmStyle( 'default' );
+		$default_style = $frm_style->get_one();
+		$styles[] = '--font-size: ' . $default_style->post_content['field_font_size'];
+		$styles[] = '--field-font-size: ' . $default_style->post_content['field_font_size'];
+		$styles[] = '--label-padding: ' . $default_style->post_content['label_padding'];
+		$styles[] = '--field-height: ' . $default_style->post_content['field_height'];
 
 		/**
 		 * It really just shows a few basic styles so maybe we can just style it on the fly:
