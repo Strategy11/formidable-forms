@@ -2,8 +2,16 @@
 	document.addEventListener( 'click', handleClickEvents );
 
 	function handleClickEvents( event ) {
-		if ( event.target.classList.contains( 'frm_style_card' ) ) {
+		const target = event.target;
+
+		if ( target.classList.contains( 'frm_style_card' ) ) {
 			handleStyleCardClick( event );
+			return;
+		}
+
+		if ( 'frm_toggle_sample_form' === target.id ) {
+			toggleSampleForm();
+			return;
 		}
 	}
 
@@ -18,5 +26,14 @@
 
 		form.parentNode.classList.add( event.target.dataset.classname );
 		event.target.classList.add( 'frm_active_style_card' );
+
+		const sampleForm = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
+		sampleForm.classList.remove( activeCard.dataset.classname );
+		sampleForm.classList.add( event.target.dataset.classname );
+	}
+
+	function toggleSampleForm() {
+		document.getElementById( 'frm_active_style_form' ).classList.toggle( 'frm_hidden' );
+		document.getElementById( 'frm_sample_form' ).classList.toggle( 'frm_hidden' );
 	}
 }() );

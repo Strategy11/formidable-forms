@@ -4,9 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // This view is used on the style page to render a single custom theme card.
 
-$frm_style     = new FrmStyle( 'default' );
-$default_style = $frm_style->get_one();
-
 $class_name = 'frm_style_' . $style->post_name;
 $params     = array(
 	'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,

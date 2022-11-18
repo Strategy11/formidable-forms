@@ -226,7 +226,10 @@ class FrmFormsController {
 		$active_style = FrmStylesController::get_form_style( $form );
 		$styles       = self::move_active_style_to_top( FrmStylesController::get_style_opts(), $active_style );
 
-		self::render_style_page( $active_style, $styles, $form );
+		$frm_style     = new FrmStyle( 'default' );
+		$default_style = $frm_style->get_one();
+
+		self::render_style_page( $active_style, $styles, $form, $default_style );
 	}
 
 	/**
@@ -277,9 +280,10 @@ class FrmFormsController {
 	 * @param WP_Post        $active_style
 	 * @param array<WP_Post> $styles
 	 * @param stdClass       $form
+	 * @param WP_Post        $default_style
 	 * @return void
 	 */
-	private static function render_style_page( $active_style, $styles, $form ) {
+	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
 		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
 		include $style_views_path . 'style.php';
 	}

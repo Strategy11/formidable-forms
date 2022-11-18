@@ -55,6 +55,10 @@
 	text-align: left;
 }
 
+.frm_button_submit {
+	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,

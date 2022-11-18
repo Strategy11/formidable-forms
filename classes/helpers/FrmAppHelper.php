@@ -333,12 +333,16 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_admin() {
-		return is_admin() && ! wp_doing_ajax();
+		$is_admin = is_admin() && ! wp_doing_ajax();
+
+		/**
+		 * @since x.x
+		 * @param bool $is_admin
+		 */
+		return apply_filters( 'frm_is_admin', $is_admin );
 	}
 
 	/**
