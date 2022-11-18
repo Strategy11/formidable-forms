@@ -222,10 +222,12 @@ class FrmFormsController {
 
 		$plugin_url = FrmAppHelper::plugin_url();
 		$version    = FrmAppHelper::plugin_version();
+		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', array(), $version );
 		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
 		wp_print_styles( 'formidable_style' );
 
 		wp_print_styles( 'formidable' );
+		wp_enqueue_script( 'formidable_style' );
 
 		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
 		include $style_views_path . 'style.php';
