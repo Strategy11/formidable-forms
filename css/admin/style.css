@@ -1,0 +1,35 @@
+#frm_style_sidebar {
+	background-color: #F6F7FB;
+	padding: 20px 10px;
+	grid-gap: 5%;
+	grid-template-columns: repeat( 12, 3.725%);
+	height: calc( 100vh - 95px );
+	vertical-align: top;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.frm_style_card {
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	border-radius: 6px;
+}
+
+.frm_style_card_preview {
+	padding: 10px;
+	flex: 1;
+}
+
+#frm_style_sidebar .frm_style_card input[type="submit"] {
+	height: unset !important;
+	margin: 0;
+	max-width: 100%;
+}
+
+.frm_style_card .frm_style_card_preview + div {
+	border-top: 1px solid #E9EAEA;
+	padding: 10px; 
+	color: var(--label-color);
+}

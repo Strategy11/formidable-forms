@@ -1419,7 +1419,8 @@ class FrmAppHelper {
 	public static function is_full_screen() {
 		return self::is_form_builder_page() ||
 			self::is_style_editor_page() ||
-			self::is_full_screen_view_builder_page();
+			self::is_full_screen_view_builder_page() ||
+			( self::is_admin_page( 'formidable' ) && 'style' === FrmAppHelper::simple_get( 'frm_action' ) );
 	}
 
 	/**

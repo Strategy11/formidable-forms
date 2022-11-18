@@ -541,11 +541,6 @@ class FrmStylesHelper {
 	public static function get_style_param_for_card( $style ) {
 		$styles = array();
 
-		$styles[] = 'display: flex';
-		$styles[] = 'flex-direction: column';
-		$styles[] = 'align-content: center';
-		$styles[] = 'justify-content: center';
-
 		if ( ! $style->post_content['fieldset_bg_color'] ) {
 			$background_color = '#fff';
 		} else {
@@ -553,7 +548,6 @@ class FrmStylesHelper {
 		}
 
 		$styles[] = 'background-color: ' . $background_color;
-		$styles[] = 'border-radius: 6px';
 
 		// Overwrite some styles.
 		$frm_style = new FrmStyle( 'default' );

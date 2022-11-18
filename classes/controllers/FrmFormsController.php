@@ -214,8 +214,16 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function style() {
+		$form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		$form    = FrmForm::getOne( $form_id );
+
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all();
+
+		$plugin_url = FrmAppHelper::plugin_url();
+		$version    = FrmAppHelper::plugin_version();
+		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
+		wp_print_styles( 'formidable_style' );
 
 		wp_print_styles( 'formidable' );
 
