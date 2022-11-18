@@ -4,12 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // This view is used on the style page to render a single custom theme card.
 
-$frm_style = new FrmStyle( 'default' );
+$frm_style     = new FrmStyle( 'default' );
 $default_style = $frm_style->get_one();
 
-$params = array(
-	'class' => 'frm6 with_frm_style frm_style_' . $style->post_name . ' frm_style_card',
-	'style' => FrmStylesHelper::get_style_param_for_card( $style ),
+$class_name = 'frm_style_' . $style->post_name;
+$params     = array(
+	'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,
+	'style'          => FrmStylesHelper::get_style_param_for_card( $style ),
+	'data-classname' => $class_name,
 );
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>

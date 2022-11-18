@@ -23,7 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="frm_grid_container">
 						<div id="frm_style_sidebar" class="frm_grid_container frm5">
 							<?php
-							// TODO add a title for My Styles.
 							// TODO the design has a "New style" option here.
 							// TODO this will trigger a new modal.
 
@@ -42,8 +41,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							 * The right side body shows a preview (of the target form) so you can see the form you're actually styling.
 							 * TODO: There is a floating button here that links to the Style editor page.
 							 */
+							echo FrmFormsController::show_form(  $form->id, '', 'auto', 'auto' );
 							?>
-							Preview Area
 							<?php // TODO: What's the best way to do this? Can I use an iframe? ?>
 						</div><?php // End #frm_style_sidebar ?>
 					</div><?php // End .frm_grid_container ?>
