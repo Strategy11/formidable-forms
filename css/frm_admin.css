@@ -310,7 +310,7 @@ ul.frm_form_nav {
 }
 
 ul.frm_form_nav > li {
-	margin: 0 3.5% 0 0;
+	margin: 0 2% 0 0;
 	display: inline-block;
 }
 
@@ -347,7 +347,7 @@ ul.frm_form_nav > li:last-of-type {
 }
 
 .frm_form_nav > li > a {
-	font-size: 13px;
+	font-size: 12px;
 	text-transform: uppercase;
 }
 
@@ -8003,8 +8003,9 @@ Responsive Design
 		grid-template-columns: 1fr 1fr;
 	}
 
-	ul.frm_form_nav > li {
-		margin-right: 2.5%;
+	ul.frm_form_nav {
+		clear: left;
+		padding-top: 0;
 	}
 }
 
@@ -8039,15 +8040,6 @@ Responsive Design
 		display: inline-block;
 	}
 
-	ul.frm_form_nav {
-		clear: left;
-		padding-top: 0;
-	}
-
-	ul.frm_form_nav > li {
-		margin-right: 3.5%;
-	}
-
 	.frm-full-screen #frm_top_bar {
 		padding: 0 10px !important;
 	}
@@ -8074,6 +8066,11 @@ Responsive Design
 }
 
 @media only screen and (max-width: 850px) {
+	#frm_bs_dropdown {
+		/* There isn't enough room for the title on a screen this size so just hide it. */
+		display: none;
+	}
+
 	.frm_wrap {
 		--biggest-sidebar: 350px;
 		--big-sidebar: 350px;
@@ -8271,10 +8268,6 @@ Responsive Design
 	#form_entries_page .wp-list-table th.frm_hidden,
 	#form_entries_page .wp-list-table td.frm_hidden {
 		display: none !important;
-	}
-
-	ul.frm_form_nav > li {
-		margin-right: 15px;
 	}
 
 	.frm-white-body.auto-fold #wpcontent {

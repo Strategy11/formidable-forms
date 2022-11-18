@@ -1,9 +1,13 @@
+#frm_style_sidebar,
+#frm_style_sidebar + div {
+	height: calc( 100vh - 95px );
+}
+
 #frm_style_sidebar {
 	background-color: #F6F7FB;
 	padding: 20px 10px;
 	grid-gap: 5%;
 	grid-template-columns: repeat( 12, 3.725%);
-	height: calc( 100vh - 95px );
 	vertical-align: top;
 	box-sizing: border-box;
 	overflow-y: auto;
@@ -12,7 +16,6 @@
 #frm_style_sidebar + div {
 	overflow-y: auto;
 	overflow-x: hidden;
-	height: calc( 100vh - 95px );
 	padding-right: 20px;
 }
 
@@ -50,4 +53,12 @@
 	padding: 10px; 
 	color: var(--label-color);
 	text-align: left;
+}
+
+@media only screen and (max-width: 1200px) {
+	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
+	#frm_style_sidebar,
+	#frm_style_sidebar + div {
+		height: calc( 100vh - 135px );
+	}
 }
