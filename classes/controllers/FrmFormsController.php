@@ -214,23 +214,72 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function style() {
+		self::setup_styles_and_scripts_for_style_page();
+
 		$form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		$form    = FrmForm::getOne( $form_id );
 
-		$frm_style = new FrmStyle();
-		$styles    = $frm_style->get_all();
+		if ( ! $form ) {
+			wp_die( 'This form does not exist', '', 404 );
+		}
 
-		$active_style    = FrmStylesController::get_form_style( $form );
+		$active_style = FrmStylesController::get_form_style( $form );
+		$styles       = self::move_active_style_to_top( FrmStylesController::get_style_opts(), $active_style );
 
-		$plugin_url = FrmAppHelper::plugin_url();
-		$version    = FrmAppHelper::plugin_version();
+		self::render_style_page( $active_style, $styles, $form );
+	}
+
+	/**
+	 * The active style should be the first in the list so move it there.
+	 *
+	 * @since x.x
+	 *
+	 * @param array<WP_Post> $styles
+	 * @param WP_Post        $active_style
+	 * @return array
+	 */
+	private static function move_active_style_to_top( $styles, $active_style ) {
+		foreach ( $styles as $key => $style ) {
+			if ( $style->ID === $active_style->ID ) {
+				unset( $styles[ $key ] );
+				break;
+			}
+		}
+
+		array_unshift( $styles, $active_style );
+		return $styles;
+	}
+
+	/**
+	 * Register and enqueue styles and scripts for the style tab page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function setup_styles_and_scripts_for_style_page() {
+		$plugin_url   = FrmAppHelper::plugin_url();
+		$version      = FrmAppHelper::plugin_version();
+
 		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', array(), $version );
 		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
 		wp_print_styles( 'formidable_style' );
 
 		wp_print_styles( 'formidable' );
 		wp_enqueue_script( 'formidable_style' );
+	}
 
+	/**
+	 * Render the style page (with a more limited and typed scope than calling it from self::style directly).
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post        $active_style
+	 * @param array<WP_Post> $styles
+	 * @param stdClass       $form
+	 * @return void
+	 */
+	private static function render_style_page( $active_style, $styles, $form ) {
 		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
 		include $style_views_path . 'style.php';
 	}

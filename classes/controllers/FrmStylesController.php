@@ -530,6 +530,8 @@ class FrmStylesController {
 
 	/**
 	 * Get the stylesheets for the form settings page
+	 *
+	 * @return array<WP_Post>
 	 */
 	public static function get_style_opts() {
 		$frm_style = new FrmStyle();
