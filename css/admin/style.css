@@ -1,5 +1,10 @@
+#frm_style_page_wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
 #frm_style_sidebar,
-#frm_style_sidebar + div {
+#frm_style_preview {
 	height: calc( 100vh - 95px );
 }
 
@@ -11,12 +16,14 @@
 	vertical-align: top;
 	box-sizing: border-box;
 	overflow-y: auto;
+	flex: 1;
 }
 
-#frm_style_sidebar + div {
+#frm_style_preview {
 	overflow-y: auto;
 	overflow-x: hidden;
-	padding-right: 20px;
+	padding: 20px;
+	flex: 2;
 }
 
 .frm_style_card {
@@ -59,10 +66,24 @@
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }
 
+#frm_style_preview .frm_floating_style_button {
+	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
+	border-radius: 43px;
+	background-color: #fff;
+	color: #282F36;
+	border: none;
+	position: absolute;
+	bottom: 20px;
+}
+
+#frm_toggle_sample_form {
+	right: 20px;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,
-	#frm_style_sidebar + div {
+	#frm_style_preview {
 		height: calc( 100vh - 135px );
 	}
 }

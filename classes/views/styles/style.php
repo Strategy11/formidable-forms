@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm_form_fields frm_sample_form frm_forms frm_pro_form">
 			<fieldset>
 				<div class="frm_fields_container">
-					<div class="frm_grid_container">
+					<div id="frm_style_page_wrapper">
 						<div id="frm_style_sidebar" class="frm_grid_container frm5">
 							<?php
 							// TODO the design has a "New style" option here.
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</div>
 						<?php // Preview area. ?>
-						<div class="frm7">
+						<div id="frm_style_preview" class="frm7">
 							<div id="frm_active_style_form">
 								<?php
 								/**
@@ -54,14 +54,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</div>
 							<?php // TODO: Hide this button if it is not the active style. ?>
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $active_style->ID ) ); ?>" id="frm_edit_style" class="button-primary frm-button-primary">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $active_style->ID ) ); ?>" id="frm_edit_style" class="button-secondary frm-button-secondary frm_floating_style_button" tabindex="0" role="button">
 								<?php esc_html_e( 'Edit style', 'formidable' ); ?>
 							</a>
-							<button id="frm_toggle_sample_form" class="button-primary frm-button-primary">
+							<button id="frm_toggle_sample_form" class="button-secondary frm-button-secondary frm_floating_style_button">
 								<?php esc_html_e( 'View sample form', 'formidable' ); ?>
 							</button>
 						</div><?php // End #frm_style_sidebar ?>
-					</div><?php // End .frm_grid_container ?>
+					</div><?php // End #frm_style_page_wrapper ?>
 				</div><?php // End .frm_fields_container ?>
 			</fieldset>
 		</div><?php // End .frm_form_fields ?>
