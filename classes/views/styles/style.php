@@ -6,18 +6,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It is accessed from /wp-admin/admin.php?page=formidable&frm_action=style&id=782
 
 ?>
-
 <div class="frm_wrap">
 	<div class="frm_page_container">
 		<?php
-		$values = array(
-			'form_key' => $form->form_key, // Pass this so that the Preview dropdown works.
-		);
 		FrmAppHelper::get_admin_header(
 			array(
 				'form'        => $form,
 				'hide_title'  => true,
-				'publish' => array( 'FrmFormsController::form_publish_button', compact( 'values' ) ),
+				'publish' => array(
+					'FrmFormsController::form_publish_button',
+					array(
+						'values' => array(
+							'form_key' => $form->form_key, // Pass this so that the Preview dropdown works.
+						),
+					)
+				),
 			)
 		);
 		?>
@@ -47,14 +50,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div id="frm_style_preview" class="frm7">
 							<div id="frm_active_style_form">
 								<?php
-								/**
-								 * The right side body shows a preview (of the target form) so you can see the form you're actually styling.
-								 * TODO: There is a floating button here that links to the Style editor page.
-								 */
+								// The right side body shows a preview (of the target form) so you can see the form you're actually styling.
 								add_filter( 'frm_is_admin', '__return_false' ); // Force is_admin to false so the "Entry Key" field doesn't render in the preview.
 								echo FrmFormsController::show_form(  $form->id, '', 'auto', 'auto' );
 								?>
 							</div>
+							<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this. ?>
 							<div id="frm_sample_form" class="frm_hidden">
 								<?php 
 								$style = $default_style;

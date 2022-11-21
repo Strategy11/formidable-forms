@@ -1,7 +1,8 @@
 ( function() {
+	/* globals wp */
 
 	const { __ } = wp.i18n;
-	const state = {
+	const state  = {
 		showingSampleForm: false
 	};
 
@@ -22,6 +23,7 @@
 
 		if ( 'frm_submit_side_top' === target.id ) {
 			saveActiveStyle();
+			return;
 		}
 	}
 
