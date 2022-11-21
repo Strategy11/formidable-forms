@@ -35,6 +35,7 @@
 	cursor: pointer;
 	box-sizing: border-box;
 	border: 1px solid transparent; /* Add a transparent border so an active style card doesn't cause the box to resize. */
+	background-color: #fff;
 }
 
 .frm_style_card:hover {
