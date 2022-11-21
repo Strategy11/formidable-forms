@@ -535,11 +535,31 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param WP_Post $style
+	 * @param WP_Post $default_style
+	 * @return array
+	 */
+	public static function get_params_for_style_card( $style, $default_style ) {
+		$class_name       = 'frm_style_' . $style->post_name;
+		return array(
+			'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,
+			'style'          => self::get_style_param_for_card( $style, $default_style ),
+			'data-classname' => $class_name,
+			'data-style-id'  => $style->ID,
+			'data-edit-url'  => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) )
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
 	 * @param WP_Post $style
 	 * @param WP_Post $default_style
 	 * @return string
 	 */
-	public static function get_style_param_for_card( $style, $default_style ) {
+	private static function get_style_param_for_card( $style, $default_style ) {
 		$styles = array();
 
 		// Add the background color setting for fieldsets to the card.
