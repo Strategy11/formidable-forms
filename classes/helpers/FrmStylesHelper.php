@@ -536,9 +536,10 @@ class FrmStylesHelper {
 
 	/**
 	 * @param WP_Post $style
+	 * @param WP_Post $default_style
 	 * @return string
 	 */
-	public static function get_style_param_for_card( $style ) {
+	public static function get_style_param_for_card( $style, $default_style ) {
 		$styles = array();
 
 		// Add the background color setting for fieldsets to the card.
@@ -550,8 +551,6 @@ class FrmStylesHelper {
 		$styles[] = '--preview-background-color: ' . $background_color;
 
 		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
-		$frm_style = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
 		$styles[] = '--font-size: ' . $default_style->post_content['field_font_size'];
 		$styles[] = '--field-font-size: ' . $default_style->post_content['field_font_size'];
 		$styles[] = '--label-padding: ' . $default_style->post_content['label_padding'];

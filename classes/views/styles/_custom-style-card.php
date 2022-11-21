@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $class_name = 'frm_style_' . $style->post_name;
 $params     = array(
 	'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,
-	'style'          => FrmStylesHelper::get_style_param_for_card( $style ),
+	'style'          => FrmStylesHelper::get_style_param_for_card( $style, $default_style ),
 	'data-classname' => $class_name,
 	'data-style-id'  => $style->ID,
 );
