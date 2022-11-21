@@ -6,6 +6,7 @@
 #frm_style_sidebar,
 #frm_style_preview {
 	height: calc( 100vh - 95px );
+	box-sizing: border-box;
 }
 
 #frm_style_sidebar {
