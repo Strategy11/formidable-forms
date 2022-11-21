@@ -70,20 +70,33 @@
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }
 
+.frm_floating_style_button {
+	--floating-button-text-color: #282F36;
+}
+
+.frm_floating_style_button:hover,
+.frm_floating_style_button:active,
+.frm_floating_style_button:focus {
+	--floating-button-text-color: var(--primary-color);
+}
+
 #frm_style_preview .frm_floating_style_button {
 	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
 	border-radius: 43px;
 	background-color: #fff;
-	color: #282F36;
+	color: var(--floating-button-text-color);
 	border: none;
 	position: absolute;
 	bottom: 20px;
 	display: flex;
 	align-items: center;
+	padding: 5px 10px;
+	height: unset;
+	cursor: pointer;
 }
 
 #frm_style_preview .frm_floating_style_button svg {
-	fill: #282F36;
+	fill: var(--floating-button-text-color);
 	height: 14px;
 	width: 14px;
 	margin-right: 10px;
