@@ -214,6 +214,10 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function style() {
+		if ( FrmAppHelper::get_post_param( 'style_id', 0, 'absint' ) ) {
+			self::save_form_style();
+		}
+
 		self::setup_styles_and_scripts_for_style_page();
 
 		$form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
@@ -230,6 +234,25 @@ class FrmFormsController {
 		$default_style = $frm_style->get_one();
 
 		self::render_style_page( $active_style, $styles, $form, $default_style );
+	}
+
+	private static function save_form_style() {
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form_style', 'frm_save_form_style_nonce' );
+		if ( $permission_error !== false ) {
+			wp_die( 'Unable to save form', '', 403 );
+		}
+
+		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
+		$form_id  = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		// TODO nonce / permission check.
+
+		$form                          = FrmForm::getOne( $form_id );
+		$form->options['custom_style'] = $style_id;
+
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
+
+		FrmForm::clear_form_cache();
 	}
 
 	/**

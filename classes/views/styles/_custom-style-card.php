@@ -9,6 +9,7 @@ $params     = array(
 	'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,
 	'style'          => FrmStylesHelper::get_style_param_for_card( $style ),
 	'data-classname' => $class_name,
+	'data-style-id'  => $style->ID,
 );
 
 if ( $active_style->ID === $style->ID ) {

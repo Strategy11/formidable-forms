@@ -547,7 +547,7 @@ class FrmStylesHelper {
 		} else {
 			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
 		}
-		$styles[] = 'background-color: ' . $background_color;
+		$styles[] = '--preview-background-color: ' . $background_color;
 
 		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
 		$frm_style = new FrmStyle( 'default' );

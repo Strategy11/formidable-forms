@@ -19,6 +19,10 @@
 			toggleSampleForm();
 			return;
 		}
+
+		if ( 'frm_submit_side_top' === target.id ) {
+			saveActiveStyle();
+		}
 	}
 
 	function handleStyleCardClick( event ) {
@@ -36,6 +40,8 @@
 		const sampleForm = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( event.target.dataset.classname );
+
+		document.getElementById( 'frm_style_form' ).querySelector( '[name="style_id"]' ).value = event.target.dataset.styleId;
 	}
 
 	function toggleSampleForm() {
@@ -44,5 +50,9 @@
 		document.getElementById( 'frm_active_style_form' ).classList.toggle( 'frm_hidden', state.showingSampleForm );
 		document.getElementById( 'frm_sample_form' ).classList.toggle( 'frm_hidden', ! state.showingSampleForm );
 		document.getElementById( 'frm_toggle_sample_form' ).textContent = state.showingSampleForm ? __( 'Disable sample form', 'formidable' ) : __( 'View sample form', 'formidable' );
+	}
+
+	function saveActiveStyle() {
+		document.getElementById( 'frm_style_form' ).submit();
 	}
 }() );

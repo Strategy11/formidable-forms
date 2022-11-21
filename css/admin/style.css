@@ -33,6 +33,8 @@
 	justify-content: center;
 	border-radius: 6px;
 	cursor: pointer;
+	box-sizing: border-box;
+	border: 1px solid transparent; /* Add a transparent border so an active style card doesn't cause the box to resize. */
 }
 
 .frm_style_card:hover {
@@ -41,12 +43,15 @@
 
 .frm_active_style_card {
 	background-color: rgba(188, 224, 253, 0.23) !important;
+	border-color: rgba(65, 153, 253, 0.5);
 }
 
 .frm_style_card_preview {
 	padding: 10px;
 	flex: 1;
 	pointer-events: none;
+	background-color: var(--preview-background-color);
+	border-radius: 6px 6px 0 0
 }
 
 #frm_style_sidebar .frm_style_card input[type="submit"] {
@@ -57,8 +62,7 @@
 
 .frm_style_card .frm_style_card_preview + div {
 	border-top: 1px solid #E9EAEA;
-	padding: 10px; 
-	color: var(--label-color);
+	padding: 10px;
 	text-align: left;
 }
 
