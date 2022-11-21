@@ -1,12 +1,15 @@
 ( function() {
-	/* globals wp */
+	/* globals wp, frmDom */
 
 	const { __ } = wp.i18n;
 	const state  = {
 		showingSampleForm: false
 	};
 
+	const { div, a, tag, svg } = frmDom;
+
 	document.addEventListener( 'click', handleClickEvents );
+	addHamburgMenusToCards();
 
 	function handleClickEvents( event ) {
 		const target = event.target;
@@ -56,5 +59,61 @@
 
 	function saveActiveStyle() {
 		document.getElementById( 'frm_style_form' ).submit();
+	}
+
+	function addHamburgMenusToCards() {
+		const cards = Array.from( document.getElementsByClassName( 'frm_style_card' ) );
+		cards.forEach(
+			card => {
+				const wrapper = card.querySelector( '.frm_style_card_preview' ).nextElementSibling;
+				wrapper.style.position = 'relative';
+				wrapper.appendChild(
+					getHamburgerMenu({
+						editUrl: '', // TODO
+					})
+				);
+			}
+		);
+	}
+
+	function getHamburgerMenu( data ) {
+		const hamburgerMenu = tag( 'a' );
+		hamburgerMenu.className = 'frm-dropdown-toggle dropdown-toggle';
+		hamburgerMenu.setAttribute( 'data-toggle', 'dropdown' );
+		hamburgerMenu.setAttribute( 'data-container', 'body' );
+		hamburgerMenu.setAttribute( 'role', 'button' );
+		hamburgerMenu.setAttribute( 'tabindex', 0 );
+
+		hamburgerMenu.appendChild( svg({ href: '#frm_thick_more_vert_icon' }) );
+
+		// TODO this does nothing.
+		const editOption = a({ text: __( 'Edit', 'formidable' ) });
+		editOption.setAttribute( 'href', data.editUrl );
+
+		// TODO this does nothing.
+		const resetOption = a({ text: __( 'Reset', 'formidable' ) });
+		resetOption.setAttribute( 'href', '#' );
+
+		// TODO this does nothing.
+		const renameOption = a({ text: __( 'Rename', 'formidable' ) });
+		renameOption.setAttribute( 'href', '#' );
+
+		const dropdownMenu = div({
+			className: 'frm-dropdown-menu',
+			children: [ editOption, resetOption, renameOption ].map( wrapDropdownItem )
+		});
+		dropdownMenu.setAttribute( 'role', 'menu' );
+
+		function wrapDropdownItem( anchor ) {
+			return div({
+				className: 'dropdown-item',
+				child: anchor
+			});
+		}
+
+		return div({
+			className: 'dropdown',
+			children: [ hamburgerMenu, dropdownMenu ]
+		});
 	}
 }() );

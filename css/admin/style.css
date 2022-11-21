@@ -46,6 +46,13 @@
 	border-color: rgba(65, 153, 253, 0.5);
 }
 
+.frm_style_card .dropdown {
+	position: absolute;
+	right: 5px;
+	bottom: 50%;
+	transform: translateY(50%);
+}
+
 .frm_style_card_preview {
 	padding: 10px;
 	flex: 1;
