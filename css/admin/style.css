@@ -74,10 +74,24 @@
 	border: none;
 	position: absolute;
 	bottom: 20px;
+	display: flex;
+	align-items: center;
+}
+
+#frm_style_preview .frm_floating_style_button svg {
+	fill: #282F36;
+	height: 14px;
+	width: 14px;
+	margin-right: 10px;
 }
 
 #frm_toggle_sample_form {
 	right: 20px;
+}
+
+#frm_style_preview #frm_toggle_sample_form svg {
+	height: 16px;
+	width: 16px;
 }
 
 @media only screen and (max-width: 1200px) {

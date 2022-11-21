@@ -55,10 +55,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 							<?php // TODO: Hide this button if it is not the active style. ?>
 							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $active_style->ID ) ); ?>" id="frm_edit_style" class="button-secondary frm-button-secondary frm_floating_style_button" tabindex="0" role="button">
-								<?php esc_html_e( 'Edit style', 'formidable' ); ?>
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
 							</a>
 							<button id="frm_toggle_sample_form" class="button-secondary frm-button-secondary frm_floating_style_button">
-								<?php esc_html_e( 'View sample form', 'formidable' ); ?>
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_sample_form_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'View sample form', 'formidable' ); ?>
 							</button>
 						</div><?php // End #frm_style_sidebar ?>
 					</div><?php // End #frm_style_page_wrapper ?>
