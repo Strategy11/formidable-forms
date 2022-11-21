@@ -10,6 +10,7 @@ $params     = array(
 	'style'          => FrmStylesHelper::get_style_param_for_card( $style, $default_style ),
 	'data-classname' => $class_name,
 	'data-style-id'  => $style->ID,
+	'data-edit-url'  => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) )
 );
 
 if ( $active_style->ID === $style->ID ) {

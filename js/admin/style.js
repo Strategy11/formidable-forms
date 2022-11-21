@@ -68,9 +68,7 @@
 				const wrapper = card.querySelector( '.frm_style_card_preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
 				wrapper.appendChild(
-					getHamburgerMenu({
-						editUrl: '', // TODO
-					})
+					getHamburgerMenu({ editUrl: card.dataset.editUrl })
 				);
 			}
 		);
@@ -100,7 +98,7 @@
 
 		const dropdownMenu = div({
 			className: 'frm-dropdown-menu',
-			children: [ editOption, resetOption, renameOption ].map( wrapDropdownItem )
+			children: [ editOption/*, resetOption, renameOption*/ ].map( wrapDropdownItem )
 		});
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
