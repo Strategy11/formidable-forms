@@ -4,18 +4,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // This view is used on the style page to render a single custom theme card.
 
-$class_name = 'frm_style_' . $style->post_name;
-$params     = array(
-	'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,
-	'style'          => FrmStylesHelper::get_style_param_for_card( $style, $default_style ),
-	'data-classname' => $class_name,
-	'data-style-id'  => $style->ID,
-	'data-edit-url'  => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) )
-);
+$is_default_style = $style->ID === $default_style->ID;
+$params           = FrmStylesHelper::get_params_for_style_card( $style, $default_style );
 
 if ( $active_style->ID === $style->ID ) {
 	$params['class'] .= ' frm_active_style_card';
 }
+
+$submit_button_styles = array(
+	'font-size: ' . esc_attr( $default_style->post_content['submit_font_size'] ) . ' !important',
+	'padding: ' . esc_attr( $default_style->post_content['submit_padding'] ) . ' !important',
+);
+$submit_button_params = array(
+	'type'     => 'submit',
+	'disabled' => 'disabled',
+	'class'    => 'frm_full_opacity',
+	'value'    => esc_attr__( 'Submit', 'formidable' ),
+	'style'    => implode( ';', $submit_button_styles ),
+);
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div class="frm_style_card_preview">
@@ -24,7 +30,7 @@ if ( $active_style->ID === $style->ID ) {
 			<input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ); ?>" />
 		</div>
 		<div class="frm_submit">
-			<input type="submit" disabled="disabled" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" style="font-size: <?php echo esc_attr( $default_style->post_content['submit_font_size'] ); ?> !important; padding: <?php echo esc_attr( $default_style->post_content['submit_padding'] ); ?> !important;" />
+			<input <?php FrmAppHelper::array_to_html_params( $submit_button_params, true ); ?> />
 		</div>
 	</div>
 	<div>
