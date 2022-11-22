@@ -1039,7 +1039,7 @@ function frmAdminBuildJS() {
 		maybeUpdatePreviousFieldContainerAfterDrop( $previousFieldContainer, $previousContainerFields );
 		maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields );
 
-		if ( previousSectionId !== newSectionId ) {
+		if ( ! newSectionId || previousSectionId !== newSectionId ) {
 			updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
 		}
 
