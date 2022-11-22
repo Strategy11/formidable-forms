@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 // This view is used on the style page to render a single custom theme card.
+// This includes a basic preview (text field and submit button only)
+// It also includes the title of the style and some basic meta (# of forms assigned, and tags for "selected" and "default").
 
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
