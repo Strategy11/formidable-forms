@@ -34,6 +34,6 @@ $submit_button_params = array(
 		</div>
 	</div>
 	<div>
-		<?php echo esc_html( $style->post_title ); ?>
+		<span class="frm_style_card_title"><?php echo esc_html( $style->post_title ); ?></span>
 	</div>
 </div>

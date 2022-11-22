@@ -75,6 +75,14 @@
 	text-align: left;
 }
 
+.frm_style_card_title {
+	max-width: calc( 100% - 20px );
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: inline-block;
+	white-space: nowrap;
+}
+
 .frm_button_submit {
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }
