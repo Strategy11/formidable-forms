@@ -101,7 +101,7 @@
 	--floating-button-text-color: var(--primary-color);
 }
 
-#frm_style_preview .frm_floating_style_button {
+#frm_style_preview .frm_floating_style_button:not(.frm_hidden) {
 	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
 	border-radius: 43px;
 	background-color: #fff;

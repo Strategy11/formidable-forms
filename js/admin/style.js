@@ -30,6 +30,13 @@
 		}
 	}
 
+	/**
+	 * When a style card is clicked, the preview is updated.
+	 * If the Update button is clicked after selecting a style card, the active card will be saved as the target form's style.
+	 *
+	 * @param {Event} event
+	 * @returns {void}
+	 */
 	function handleStyleCardClick( event ) {
 		const target = event.target;
 
@@ -53,6 +60,12 @@
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
 		styleIdInput.value = card.dataset.styleId;
+
+		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
+		// TODO: If we want Edit in the hamburger (maybe we don't), we should prompt for unsaved changes before redirecting.
+		const editButton     = document.getElementById( 'frm_edit_style' );
+		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
+		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 	}
 
 	function toggleSampleForm() {
