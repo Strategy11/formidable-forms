@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 5.5.3.1
+Stable tag: 5.5.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,12 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.4 =
+* Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
+* Fix: Long field names on the reports tab would force the table to horizontally scroll. A long field name will now break into multiple lines instead.
+* Fix: The frm_form_object filter wouldn't get applied to a cached form result.
+* Updated message styling on admin pages.
+
 = 5.5.3 =
 * New: HTML emails using wpautop will now also convert line breaks into <br /> tags.
 * New: Improved support for importing large XML files. Previously a file over 200MB would trigger a "parser error : internal error: Huge input lookup" error.
