@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<fieldset>
 				<div class="frm_fields_container">
 					<div id="frm_style_page_wrapper">
-						<div id="frm_style_sidebar" class="frm_grid_container frm5">
+						<div id="frm_style_sidebar" class="frm5">
 							<?php
 							/**
 							 * Pro needs to hook in here to add the "New Style" trigger.
@@ -42,16 +42,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 							 */
 							do_action( 'frm_style_sidebar_top', compact( 'form' ) );
 							?>
-
 							<form id="frm_style_form" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=style&id=' . $form->id .'&t=advanced_settings' ) ); ?>">
 								<input type="hidden" name="style_id" value="<?php echo absint( $active_style->ID ); ?>" />
 								<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />
 								<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 							</form>
 							<?php
-							// TODO the design has a "New style" option here.
-							// TODO this will trigger a new modal.
-
 							array_walk(
 								$styles,
 								function( $style ) use ( $style_views_path, $active_style, $default_style ) {
@@ -59,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								}
 							);
 							?>
-						</div>
+						</div><?php // End #frm_style_sidebar ?>
 						<?php // Preview area. ?>
 						<div id="frm_style_preview" class="frm7">
 							<div id="frm_active_style_form">
@@ -84,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<button id="frm_toggle_sample_form" class="frm_floating_style_button">
 								<?php FrmAppHelper::icon_by_class( 'frmfont frm_sample_form_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'View sample form', 'formidable' ); ?>
 							</button>
-						</div><?php // End #frm_style_sidebar ?>
+						</div><?php // End #frm_style_preview ?>
 					</div><?php // End #frm_style_page_wrapper ?>
 				</div><?php // End .frm_fields_container ?>
 			</fieldset>

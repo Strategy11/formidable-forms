@@ -544,7 +544,7 @@ class FrmStylesHelper {
 	public static function get_params_for_style_card( $style, $default_style ) {
 		$class_name       = 'frm_style_' . $style->post_name;
 		return array(
-			'class'          => 'frm6 with_frm_style frm-style-card ' . $class_name,
+			'class'          => 'with_frm_style frm-style-card ' . $class_name,
 			'style'          => self::get_style_param_for_card( $style, $default_style ),
 			'data-classname' => $class_name,
 			'data-style-id'  => $style->ID,
@@ -604,7 +604,7 @@ class FrmStylesHelper {
 			'style'    => implode( ';', $submit_button_styles ),
 		);
 
-		$params = FrmStylesHelper::get_params_for_style_card( $style, $default_style );
+		$params = self::get_params_for_style_card( $style, $default_style );
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card';
 		}

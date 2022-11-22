@@ -11,9 +11,7 @@
 
 #frm_style_sidebar {
 	background-color: #F6F7FB;
-	padding: 20px 10px;
-	grid-gap: 5%;
-	grid-template-columns: repeat( 12, 3.725%);
+	padding: 20px 10px 10px;
 	vertical-align: top;
 	box-sizing: border-box;
 	overflow-y: auto;
@@ -28,7 +26,8 @@
 }
 
 .frm-style-card {
-	display: flex;
+	width: calc( 50% - 10px );
+	display: inline-flex;
 	flex-direction: column;
 	align-content: center;
 	justify-content: center;
@@ -37,6 +36,11 @@
 	box-sizing: border-box;
 	border: 1px solid transparent; /* Add a transparent border so an active style card doesn't cause the box to resize. */
 	background-color: #fff;
+	margin-bottom: 15px;
+}
+
+.frm-style-card:nth-child(2n) {
+	margin-left: 15px;
 }
 
 .frm-style-card:hover {
