@@ -293,10 +293,11 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function setup_styles_and_scripts_for_style_page() {
-		$plugin_url   = FrmAppHelper::plugin_url();
-		$version      = FrmAppHelper::plugin_version();
+		$plugin_url      = FrmAppHelper::plugin_url();
+		$version         = FrmAppHelper::plugin_version();
+		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
 
-		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', array(), $version );
+		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
 		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
 		wp_print_styles( 'formidable_style' );
 

@@ -9,7 +9,7 @@
 	const { div, a, tag, svg } = frmDom;
 
 	document.addEventListener( 'click', handleClickEvents );
-	addHamburgMenusToCards();
+	setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
 
 	function handleClickEvents( event ) {
 		const target = event.target;
@@ -103,34 +103,30 @@
 
 		hamburgerMenu.appendChild( svg({ href: '#frm_thick_more_vert_icon' }) );
 
-		// TODO this does nothing.
-		const editOption = a({ text: __( 'Edit', 'formidable' ) });
-		editOption.setAttribute( 'href', data.editUrl );
-
-		// TODO this does nothing.
-		const resetOption = a({ text: __( 'Reset', 'formidable' ) });
-		resetOption.setAttribute( 'href', '#' );
-
-		// TODO this does nothing.
-		const renameOption = a({ text: __( 'Rename', 'formidable' ) });
-		renameOption.setAttribute( 'href', '#' );
-
-		const dropdownMenu = div({
-			className: 'frm-dropdown-menu',
-			children: [ editOption/*, resetOption, renameOption*/ ].map( wrapDropdownItem )
+		const editOption = a({
+			text: __( 'Edit', 'formidable' ),
+			href: data.editUrl
 		});
-		dropdownMenu.setAttribute( 'role', 'menu' );
 
-		function wrapDropdownItem( anchor ) {
-			return div({
-				className: 'dropdown-item',
-				child: anchor
-			});
-		}
+		const hookName            = 'frm_style_card_dropdown_options';
+		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption ] );
+		const dropdownMenu        = div({
+			className: 'frm-dropdown-menu',
+			children: dropdownMenuOptions.map( wrapDropdownItem )
+		});
+
+		dropdownMenu.setAttribute( 'role', 'menu' );
 
 		return div({
 			className: 'dropdown',
 			children: [ hamburgerMenu, dropdownMenu ]
+		});
+	}
+
+	function wrapDropdownItem( anchor ) {
+		return div({
+			className: 'dropdown-item',
+			child: anchor
 		});
 	}
 }() );
