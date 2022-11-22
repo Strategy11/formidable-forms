@@ -46,9 +46,14 @@ class FrmStylesController {
 		);
 	}
 
+	/**
+	 * Add a "Forms" submenu to the Appearance menu.
+	 * This submenu links to the page to edit the default form.
+	 *
+	 * @return void
+	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
-		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles2', 'FrmStylesController::route' );
+		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
 	}
 
 	/**
