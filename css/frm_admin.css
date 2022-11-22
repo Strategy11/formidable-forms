@@ -2272,7 +2272,8 @@ h2.frm-h2 + .howto {
 	float: left;
 }
 
-.frm-plan-required-tag {
+.frm-plan-required-tag,
+.frm-default-style-tag {
 	background: #FDE6DE;
 	color: #F15A24;
 	font-size: 10px;

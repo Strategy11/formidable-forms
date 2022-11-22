@@ -27,7 +27,7 @@
 	flex: 2;
 }
 
-.frm_style_card {
+.frm-style-card {
 	display: flex;
 	flex-direction: column;
 	align-content: center;
@@ -39,23 +39,23 @@
 	background-color: #fff;
 }
 
-.frm_style_card:hover {
+.frm-style-card:hover {
 	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
 }
 
-.frm_active_style_card {
+.frm-active-style-card {
 	background-color: rgba(188, 224, 253, 0.23) !important;
 	border-color: rgba(65, 153, 253, 0.5);
 }
 
-.frm_style_card .dropdown {
+.frm-style-card .dropdown {
 	position: absolute;
 	right: 5px;
 	bottom: 50%;
 	transform: translateY(50%);
 }
 
-.frm_style_card_preview {
+.frm-style-card-preview {
 	padding: 10px;
 	flex: 1;
 	pointer-events: none;
@@ -63,19 +63,19 @@
 	border-radius: 6px 6px 0 0
 }
 
-#frm_style_sidebar .frm_style_card input[type="submit"] {
+#frm_style_sidebar .frm-style-card input[type="submit"] {
 	height: unset !important;
 	margin: 0;
 	max-width: 100%;
 }
 
-.frm_style_card .frm_style_card_preview + div {
+.frm-style-card .frm-style-card-preview + div {
 	border-top: 1px solid #E9EAEA;
 	padding: 10px;
 	text-align: left;
 }
 
-.frm_style_card_title {
+.frm-style-card-title {
 	max-width: calc( 100% - 20px );
 	text-overflow: ellipsis;
 	overflow: hidden;
@@ -126,6 +126,25 @@
 #frm_style_preview #frm_toggle_sample_form svg {
 	height: 16px;
 	width: 16px;
+}
+
+.frm-selected-style-tag {
+	background: #BEDFE6;
+	color: #0E566C;
+	font-size: 10px;
+	padding: 4px 8px;
+	border-radius: 4px;
+	text-transform: uppercase;
+	font-weight: normal;
+	display: inline-block;
+	line-height: 12px;
+	transform: translateY(-1px);
+	margin-left: 5px;
+}
+
+.frm-style-card-title + div {
+	/* Card meta wrapper */
+	height: 20px;
 }
 
 @media only screen and (max-width: 1200px) {

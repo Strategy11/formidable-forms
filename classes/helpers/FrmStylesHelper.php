@@ -544,7 +544,7 @@ class FrmStylesHelper {
 	public static function get_params_for_style_card( $style, $default_style ) {
 		$class_name       = 'frm_style_' . $style->post_name;
 		return array(
-			'class'          => 'frm6 with_frm_style frm_style_card ' . $class_name,
+			'class'          => 'frm6 with_frm_style frm-style-card ' . $class_name,
 			'style'          => self::get_style_param_for_card( $style, $default_style ),
 			'data-classname' => $class_name,
 			'data-style-id'  => $style->ID,
@@ -577,6 +577,79 @@ class FrmStylesHelper {
 		$styles[] = '--field-height: ' . $default_style->post_content['field_height'];
 
 		return implode( ';', $styles );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param WP_Post $style
+	 * @param string  $style_views_path
+	 * @param WP_Post $active_style
+	 * @param WP_Post $default_style
+	 * @return void
+	 */
+	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style ) {
+		$is_default_style = $style->ID === $default_style->ID;
+		$is_active_style  = $active_style->ID === $style->ID;
+
+		$submit_button_styles = array(
+			'font-size: ' . esc_attr( $default_style->post_content['submit_font_size'] ) . ' !important',
+			'padding: ' . esc_attr( $default_style->post_content['submit_padding'] ) . ' !important',
+		);
+		$submit_button_params = array(
+			'type'     => 'submit',
+			'disabled' => 'disabled',
+			'class'    => 'frm_full_opacity',
+			'value'    => esc_attr__( 'Submit', 'formidable' ),
+			'style'    => implode( ';', $submit_button_styles ),
+		);
+
+		$params = FrmStylesHelper::get_params_for_style_card( $style, $default_style );
+		if ( $is_active_style ) {
+			$params['class'] .= ' frm-active-style-card';
+		}
+
+		include $style_views_path . '_custom-style-card.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string|int $style_id
+	 * @param bool       $is_default
+	 * @param bool       $is_active
+	 * @return void
+	 */
+	public static function echo_card_meta( $style_id, $is_default, $is_active ) {
+		$number_of_forms = self::get_form_count_for_style( $style_id, $is_default );
+		printf( _n( '%1$s Form', '%1$s Forms', $number_of_forms, 'formidable' ), $number_of_forms );
+
+		if ( $is_default ) {
+			echo '<div class="frm-default-style-tag">' . esc_html__( 'Default', 'formidable' ) . '</div>';
+		}
+		if ( $is_active) {
+			echo '<div class="frm-selected-style-tag">' . esc_html__( 'Selected', 'formidable' ) . '</div>';
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string|int $style_id
+	 * @param bool       $is_default
+	 * @return int
+	 */
+	private static function get_form_count_for_style( $style_id, $is_default ) {
+		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
+		$substring  = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+
+		$number_of_forms = FrmDb::get_count( 'frm_forms', array( 'status' => 'published', 'options LIKE' => $substring ) );
+		if ( $is_default ) {
+			// Add forms without an assigned style ID to the default count as well.
+			$number_of_forms += FrmDb::get_count( 'frm_forms', array( 'status' => 'published', 'options NOT LIKE' => 'custom_style' ) );
+		}
+
+		return $number_of_forms;
 	}
 
 	/**

@@ -14,7 +14,7 @@
 	function handleClickEvents( event ) {
 		const target = event.target;
 
-		if ( target.classList.contains( 'frm_style_card' ) || target.closest( '.frm_style_card' ) ) {
+		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
 			return;
 		}
@@ -38,16 +38,16 @@
 			return;
 		}
 
-		const card         = target.classList.contains( 'frm_style_card' ) ? target : target.closest( '.frm_style_card' );
+		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
 		const previewArea  = sidebar.nextElementSibling;
 		const form         = previewArea.querySelector( 'form' );
-		const activeCard   = document.querySelector( '.frm_active_style_card' );
+		const activeCard   = document.querySelector( '.frm-active-style-card' );
 		const sampleForm   = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
 		const styleIdInput = document.getElementById( 'frm_style_form' ).querySelector( '[name="style_id"]' );
 
-		activeCard.classList.remove( 'frm_active_style_card' );
-		card.classList.add( 'frm_active_style_card' );
+		activeCard.classList.remove( 'frm-active-style-card' );
+		card.classList.add( 'frm-active-style-card' );
 		form.parentNode.classList.remove( activeCard.dataset.classname );
 		form.parentNode.classList.add( card.dataset.classname );
 		sampleForm.classList.remove( activeCard.dataset.classname );
@@ -68,10 +68,10 @@
 	}
 
 	function addHamburgMenusToCards() {
-		const cards = Array.from( document.getElementsByClassName( 'frm_style_card' ) );
+		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach(
 			card => {
-				const wrapper = card.querySelector( '.frm_style_card_preview' ).nextElementSibling;
+				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
 				wrapper.appendChild(
 					getHamburgerMenu({ editUrl: card.dataset.editUrl })
