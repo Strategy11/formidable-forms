@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm_wrap">
 	<div class="frm_page_container">
+		<input type="hidden" id="form_id" value="<?php echo absint( $form->id ); ?>" /><?php // The embed button expects that the form ID is available as a #form_id field. ?>
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
@@ -29,6 +30,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="frm_fields_container">
 					<div id="frm_style_page_wrapper">
 						<div id="frm_style_sidebar" class="frm_grid_container frm5">
+							<?php
+							/**
+							 * Pro needs to hook in here to add the "New Style" trigger.
+							 *
+							 * @since x.x
+							 *
+							 * @param array $args {
+							 *     @type stdClass $form
+							 * }
+							 */
+							do_action( 'frm_style_sidebar_top', compact( 'form' ) );
+							?>
+
 							<form id="frm_style_form" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=style&id=' . $form->id .'&t=advanced_settings' ) ); ?>">
 								<input type="hidden" name="style_id" value="<?php echo absint( $active_style->ID ); ?>" />
 								<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />

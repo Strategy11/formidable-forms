@@ -223,7 +223,7 @@ class FrmFormsController {
 		$form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		$form    = FrmForm::getOne( $form_id );
 
-		if ( ! $form ) {
+		if ( ! is_object( $form ) ) {
 			wp_die( 'This form does not exist', '', 404 );
 		}
 
@@ -232,6 +232,15 @@ class FrmFormsController {
 
 		$frm_style     = new FrmStyle( 'default' );
 		$default_style = $frm_style->get_one();
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array {
+		 *     @type stdClass $form
+		 * }
+		 */
+		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
 		self::render_style_page( $active_style, $styles, $form, $default_style );
 	}

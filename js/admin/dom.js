@@ -592,6 +592,33 @@
 		return output;
 	}
 
+	/**
+	 * Get a labelled text input and a matching label.
+	 *
+	 * @since x.x
+	 *
+	 * @param {String} inputId
+	 * @param {String} labelText
+	 * @param {String} inputName
+	 * @returns {Element}
+	 */
+	function labelledTextInput( inputId, labelText, inputName ) {
+		const label = tag( 'label', labelText );
+		label.setAttribute( 'for', inputId );
+
+		const input = tag(
+			'input',
+			{
+				id: inputId,
+				className: 'frm_long_input'
+			}
+		);
+		input.type = 'text';
+		input.setAttribute( 'name', inputName );
+
+		return div({ children: [ label, input ] });
+	}
+
 	function tag( type, args = {}) {
 		const output = document.createElement( type );
 
@@ -646,5 +673,5 @@
 		element.appendChild( child );
 	}
 
-	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
+	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
 }() );
