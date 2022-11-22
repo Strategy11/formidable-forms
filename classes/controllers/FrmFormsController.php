@@ -247,7 +247,7 @@ class FrmFormsController {
 		// TODO nonce / permission check.
 
 		$form                          = FrmForm::getOne( $form_id );
-		$form->options['custom_style'] = $style_id;
+		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
 
 		global $wpdb;
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );

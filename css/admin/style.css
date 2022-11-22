@@ -145,6 +145,9 @@
 .frm-style-card-title + div {
 	/* Card meta wrapper */
 	height: 20px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 @media only screen and (max-width: 1200px) {
