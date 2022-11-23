@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<fieldset>
 				<div class="frm_fields_container">
 					<div id="frm_style_page_wrapper">
-						<div id="frm_style_sidebar" class="frm5">
+						<div id="frm_style_sidebar">
 							<?php
 							/**
 							 * Pro needs to hook in here to add the "New Style" trigger.
@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</div><?php // End #frm_style_sidebar ?>
 						<?php // Preview area. ?>
-						<div id="frm_style_preview" class="frm7">
+						<div id="frm_style_preview">
 							<div id="frm_active_style_form">
 								<?php
 								// The right side body shows a preview (of the target form) so you can see the form you're actually styling.

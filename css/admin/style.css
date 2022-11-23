@@ -16,6 +16,7 @@
 	box-sizing: border-box;
 	overflow-y: auto;
 	flex: 1;
+	min-width: 500px;
 }
 
 #frm_style_preview {
@@ -180,5 +181,15 @@
 	#frm_style_sidebar,
 	#frm_style_preview {
 		height: calc( 100vh - 135px );
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	#frm_style_sidebar {
+		min-width: 260px;
+	}
+	.frm-style-card {
+		width: 100%;
+		margin-left: 0 !important;
 	}
 }
