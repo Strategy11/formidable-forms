@@ -169,6 +169,7 @@
 			text: __( 'Cancel', 'formidable' ),
 			buttonType: 'cancel'
 		});
+		cancelButton.classList.add( 'dismiss' );
 		const resetButton = footerButton({
 			text: __( 'Reset style', 'formidable' ),
 			buttonType: 'primary'
