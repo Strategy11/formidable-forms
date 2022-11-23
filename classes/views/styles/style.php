@@ -78,7 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
 							</a>
 							<button id="frm_toggle_sample_form" class="frm_floating_style_button">
-								<?php FrmAppHelper::icon_by_class( 'frmfont frm_sample_form_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'View sample form', 'formidable' ); ?>
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_sample_form_icon', array( 'echo' => true ) ); ?> <span><?php esc_html_e( 'View sample form', 'formidable' ); ?></span>
 							</button>
 						</div><?php // End #frm_style_preview ?>
 					</div><?php // End #frm_style_page_wrapper ?>

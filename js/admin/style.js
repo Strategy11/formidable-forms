@@ -21,12 +21,12 @@
 			return;
 		}
 
-		if ( 'frm_toggle_sample_form' === target.id ) {
+		if ( 'frm_toggle_sample_form' === target.id || target.closest( '#frm_toggle_sample_form' ) ) {
 			toggleSampleForm();
 			return;
 		}
 
-		if ( 'frm_submit_side_top' === target.id ) {
+		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
 			saveActiveStyle();
 			return;
 		}
@@ -75,7 +75,7 @@
 
 		document.getElementById( 'frm_active_style_form' ).classList.toggle( 'frm_hidden', state.showingSampleForm );
 		document.getElementById( 'frm_sample_form' ).classList.toggle( 'frm_hidden', ! state.showingSampleForm );
-		document.getElementById( 'frm_toggle_sample_form' ).textContent = state.showingSampleForm ? __( 'Disable sample form', 'formidable' ) : __( 'View sample form', 'formidable' );
+		document.getElementById( 'frm_toggle_sample_form' ).querySelector( 'span' ).textContent = state.showingSampleForm ? __( 'View my form', 'formidable' ) : __( 'View sample form', 'formidable' );
 	}
 
 	function saveActiveStyle() {

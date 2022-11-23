@@ -87,6 +87,12 @@
 	max-width: 100%;
 }
 
+/* Avoid disabled button styles overwriting the card's preview styles */
+#frm_style_sidebar .frm-style-card input[disabled] {
+	background-color: var(--submit-bg-color) !important;
+	color: var(--submit-text-color) !important;
+}
+
 .frm-style-card .frm-style-card-preview + div {
 	border-top: 1px solid #E9EAEA;
 	padding: 10px;
