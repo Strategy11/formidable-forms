@@ -114,13 +114,15 @@
 			text: __( 'Edit', 'formidable' ),
 			href: data.editUrl
 		});
+		addIconToOption( editOption, 'frm_pencil_icon' );
 		const resetOption = a({
 			text: __( 'Reset', 'formidable' )
 		});
+		addIconToOption( resetOption, 'frm_reset_icon' );
 		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
 		const hookName            = 'frm_style_card_dropdown_options';
-		const hookArgs            = { data };
+		const hookArgs            = { data, addIconToOption };
 		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption, resetOption ], hookArgs );
 		const dropdownMenu        = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
@@ -134,6 +136,11 @@
 			className: 'dropdown',
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
+	}
+
+	function addIconToOption( option, iconId ) {
+		const icon = frmDom.svg({ href: '#' + iconId });
+		option.insertBefore( icon, option.firstChild );
 	}
 
 	/**
@@ -175,13 +182,8 @@
 			text: __( 'Reset style', 'formidable' ),
 			buttonType: 'primary'
 		});
-		onClickPreventDefault(
-			resetButton,
-			() => resetStyle( styleId )
-		);
-		return div({
-			children: [ cancelButton, resetButton ]
-		});
+		onClickPreventDefault( resetButton, () => resetStyle( styleId ) );
+		return div({ children: [ cancelButton, resetButton ] });
 	}
 
 	function resetStyle( styleId ) {

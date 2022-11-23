@@ -534,18 +534,19 @@ class FrmStylesHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
-	 * @param WP_Post $default_style
+	 * @param WP_Post    $style
+	 * @param WP_Post    $default_style
+	 * @param string|int $form_id
 	 * @return array
 	 */
-	public static function get_params_for_style_card( $style, $default_style ) {
+	public static function get_params_for_style_card( $style, $default_style, $form_id ) {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
 			'class'           => 'with_frm_style frm-style-card ' . $class_name,
 			'style'           => self::get_style_param_for_card( $style, $default_style ),
 			'data-classname'  => $class_name,
 			'data-style-id'   => $style->ID,
-			'data-edit-url'   => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) ),
+			'data-edit-url'   => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID . '&form_id=' . $form_id ) ),
 		);
 
 		/**
@@ -591,13 +592,14 @@ class FrmStylesHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
-	 * @param string  $style_views_path
-	 * @param WP_Post $active_style
-	 * @param WP_Post $default_style
+	 * @param WP_Post    $style
+	 * @param string     $style_views_path
+	 * @param WP_Post    $active_style
+	 * @param WP_Post    $default_style
+	 * @param string|int $form_id
 	 * @return void
 	 */
-	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style ) {
+	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style, $form_id ) {
 		$is_default_style = $style->ID === $default_style->ID;
 		$is_active_style  = $active_style->ID === $style->ID;
 
@@ -613,7 +615,7 @@ class FrmStylesHelper {
 			'style'    => implode( ';', $submit_button_styles ),
 		);
 
-		$params = self::get_params_for_style_card( $style, $default_style );
+		$params = self::get_params_for_style_card( $style, $default_style, $form_id );
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card';
 		}

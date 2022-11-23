@@ -59,6 +59,20 @@
 	transform: translateY(50%);
 }
 
+.frm-style-card .dropdown-item a {
+	padding: 5px 10px;
+}
+
+.frm-style-card .dropdown-item svg {
+	color: #484E54;
+	margin-right: 5px;
+}
+
+.frm-style-card .dropdown-item a:hover svg {
+	color: var(--primary-color);
+	fill: currentColor;
+}
+
 .frm-style-card-preview {
 	padding: 10px;
 	flex: 1;
