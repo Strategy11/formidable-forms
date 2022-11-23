@@ -186,13 +186,12 @@
 	function resetStyle( styleId ) {
 		const formData = new FormData();
 		formData.append( 'styleId', styleId );
+		doJsonPost( 'settings_reset', formData ).then( setCardToDefaultStylesAfterReset );
+	}
 
-		// TODO we need a new AJAX endpoint that actually resets the setting.
+	function setCardToDefaultStylesAfterReset() {
 		// TODO after it's reset we would want to switch the class to the default so the card syncs.
-		doJsonPost( 'settings_reset', formData )
-		.then(
-			() => alert( 'here' )
-		);
+		// The preview would need to switch as well.
 	}
 
 	/**
