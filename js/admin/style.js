@@ -123,7 +123,8 @@
 		const hookArgs            = { data };
 		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption, resetOption ], hookArgs );
 		const dropdownMenu        = div({
-			className: 'frm-dropdown-menu',
+			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
+			className: 'frm-dropdown-menu dropdown-menu-right',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
 		});
 
