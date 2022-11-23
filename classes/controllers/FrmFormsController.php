@@ -227,11 +227,15 @@ class FrmFormsController {
 			wp_die( 'This form does not exist', '', 404 );
 		}
 
-		$active_style = FrmStylesController::get_form_style( $form );
-		$styles       = self::move_active_style_to_top( FrmStylesController::get_style_opts(), $active_style );
-
 		$frm_style     = new FrmStyle( 'default' );
 		$default_style = $frm_style->get_one();
+
+		$active_style = FrmStylesController::get_form_style( $form );
+		if ( is_null( $active_style ) ) {
+			$active_style = $default_style;
+		}
+
+		$styles = self::move_active_style_to_top( FrmStylesController::get_style_opts(), $active_style );
 
 		/**
 		 * @since x.x

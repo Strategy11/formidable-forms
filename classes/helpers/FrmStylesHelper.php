@@ -53,14 +53,11 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.0
+	 * @todo This may be deprecated now with x.x.
 	 */
 	public static function styler_save_button( $atts ) {
 		$style = $atts['style'];
-		if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) {
-			$delete_link = admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID );
-		}
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/styles/header-buttons.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/styles/header-buttons.php';
 	}
 
 	/**
@@ -544,11 +541,12 @@ class FrmStylesHelper {
 	public static function get_params_for_style_card( $style, $default_style ) {
 		$class_name       = 'frm_style_' . $style->post_name;
 		return array(
-			'class'          => 'with_frm_style frm-style-card ' . $class_name,
-			'style'          => self::get_style_param_for_card( $style, $default_style ),
-			'data-classname' => $class_name,
-			'data-style-id'  => $style->ID,
-			'data-edit-url'  => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) )
+			'class'           => 'with_frm_style frm-style-card ' . $class_name,
+			'style'           => self::get_style_param_for_card( $style, $default_style ),
+			'data-classname'  => $class_name,
+			'data-style-id'   => $style->ID,
+			'data-edit-url'   => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) ),
+			'data-delete-url' => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID ) ), // TODO this is only applicable for Pro and shouldn't get added in Lite.
 		);
 	}
 

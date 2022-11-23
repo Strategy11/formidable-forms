@@ -88,9 +88,7 @@
 			card => {
 				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
-				wrapper.appendChild(
-					getHamburgerMenu({ editUrl: card.dataset.editUrl, styleId: card.dataset.styleId })
-				);
+				wrapper.appendChild( getHamburgerMenu( card.dataset ) );
 			}
 		);
 	}
@@ -122,7 +120,8 @@
 		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
 		const hookName            = 'frm_style_card_dropdown_options';
-		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption, resetOption ] );
+		const hookArgs            = { data };
+		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption, resetOption ], hookArgs );
 		const dropdownMenu        = div({
 			className: 'frm-dropdown-menu',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
