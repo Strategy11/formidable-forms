@@ -33,17 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input id="menu-name" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="text" class="frm_full" title="<?php esc_attr_e( 'Enter style name here', 'formidable' ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
 			</p>
 
-			<p>
-				<label class="default-style-box" for="menu_order">
-					<?php if ( $style->menu_order ) { ?>
-						<input name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="hidden" value="1" />
-						<input id="menu_order" disabled="disabled" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ); ?> />
-					<?php } else { ?>
-						<input id="menu_order" name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="checkbox" value="1" <?php checked( $style->menu_order, 1 ); ?> />
-					<?php } ?>
-					<?php esc_html_e( 'Make this the default style', 'formidable' ); ?></span>
-				</label>
-			</p>
+			<?php // menu_order is 1 for the default style, 0 for other styles. This can probably get removed but for now the menu order value is a hidden field. ?>
+			<input name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="hidden" value="<?php echo esc_attr( $style->menu_order ); ?>" />
 
 			<?php
 			if ( ! class_exists( 'FrmProStylesController' ) ) {
