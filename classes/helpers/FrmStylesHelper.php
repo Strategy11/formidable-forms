@@ -539,15 +539,26 @@ class FrmStylesHelper {
 	 * @return array
 	 */
 	public static function get_params_for_style_card( $style, $default_style ) {
-		$class_name       = 'frm_style_' . $style->post_name;
-		return array(
+		$class_name = 'frm_style_' . $style->post_name;
+		$params     = array(
 			'class'           => 'with_frm_style frm-style-card ' . $class_name,
 			'style'           => self::get_style_param_for_card( $style, $default_style ),
 			'data-classname'  => $class_name,
 			'data-style-id'   => $style->ID,
 			'data-edit-url'   => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID ) ),
-			'data-delete-url' => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID ) ), // TODO this is only applicable for Pro and shouldn't get added in Lite.
 		);
+
+		/**
+		 * Filter params so Pro can add additional params, like data-delete-url.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $params
+		 * @param array $args {
+		 *     @type WP_Post $style
+		 * }
+		 */
+		return apply_filters( 'frm_style_card_params', $params, compact( 'style' ) );
 	}
 
 	/**
