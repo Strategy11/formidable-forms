@@ -10232,31 +10232,6 @@ function frmAdminBuildJS() {
 				this.closest( '.dropdown-item' ).classList.add( 'active' );
 			});
 
-			jQuery( '#frm_confirm_modal' ).on( 'click', '[data-resetstyle]', function( e ) {
-				var button = document.getElementById( 'frm_reset_style' );
-
-				button.classList.add( 'frm_loading_button' );
-				e.stopPropagation();
-
-				jQuery.ajax({
-					type: 'POST', url: ajaxurl,
-					data: {action: 'frm_settings_reset', nonce: frmGlobal.nonce},
-					success: function( errObj ) {
-						var key;
-						errObj = errObj.replace( /^\s+|\s+$/g, '' );
-						if ( errObj.indexOf( '{' ) === 0 ) {
-							errObj = JSON.parse( errObj );
-						}
-						for ( key in errObj ) {
-							jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]);
-						}
-						jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
-						triggerChange( document.getElementById( 'frm_fieldset' ) );
-						button.classList.remove( 'frm_loading_button' );
-					}
-				});
-			});
-
 			jQuery( '.frm_pro_form #datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 
 			jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );

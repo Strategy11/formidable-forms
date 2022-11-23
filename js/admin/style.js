@@ -2,11 +2,13 @@
 	/* globals wp, frmDom */
 
 	const { __ } = wp.i18n;
-	const state  = {
+	const state = {
 		showingSampleForm: false
 	};
-
 	const { div, a, tag, svg } = frmDom;
+	const { onClickPreventDefault } = frmDom.util;
+	const { maybeCreateModal, footerButton } = frmDom.modal;
+	const { doJsonPost } = frmDom.ajax;
 
 	document.addEventListener( 'click', handleClickEvents );
 	setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
@@ -87,12 +89,19 @@
 				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
 				wrapper.appendChild(
-					getHamburgerMenu({ editUrl: card.dataset.editUrl })
+					getHamburgerMenu({ editUrl: card.dataset.editUrl, styleId: card.dataset.styleId })
 				);
 			}
 		);
 	}
 
+	/**
+	 * @param {Object} data {
+	 *     @type {String} editUrl
+	 *     @type {String} styleId
+	 * }
+	 * @returns {Element}
+	 */
 	function getHamburgerMenu( data ) {
 		const hamburgerMenu = tag( 'a' );
 		hamburgerMenu.className = 'frm-dropdown-toggle dropdown-toggle';
@@ -107,9 +116,13 @@
 			text: __( 'Edit', 'formidable' ),
 			href: data.editUrl
 		});
+		const resetOption = a({
+			text: __( 'Reset', 'formidable' )
+		});
+		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
 		const hookName            = 'frm_style_card_dropdown_options';
-		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption ] );
+		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption, resetOption ] );
 		const dropdownMenu        = div({
 			className: 'frm-dropdown-menu',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
@@ -123,6 +136,69 @@
 		});
 	}
 
+	/**
+	 * @param {String} styleId
+	 * @returns {void}
+	 */
+	function confirmResetStyle( styleId ) {
+		const modal = maybeCreateModal(
+			'frm_reset_style_modal',
+			{
+				title: __( 'Reset style', 'formidable' ),
+				content: getResetStyleModalContent(),
+				footer: getResetStyleModalFooter( styleId )
+			}
+		);
+		modal.classList.add( 'frm_common_modal' );
+	}
+
+	/**
+	 * @returns {Element}
+	 */
+	function getResetStyleModalContent() {
+		const content = div( __( 'Reset this style back to the default?', 'formidable' ) );
+		content.style.padding = '20px';
+		return content;
+	}
+
+	/**
+	 * @param {String} styleId
+	 * @returns {Element}
+	 */
+	function getResetStyleModalFooter( styleId ) {
+		const cancelButton = footerButton({
+			text: __( 'Cancel', 'formidable' ),
+			buttonType: 'cancel'
+		});
+		const resetButton = footerButton({
+			text: __( 'Reset style', 'formidable' ),
+			buttonType: 'primary'
+		});
+		onClickPreventDefault(
+			resetButton,
+			() => resetStyle( styleId )
+		);
+		return div({
+			children: [ cancelButton, resetButton ]
+		});
+	}
+
+	function resetStyle( styleId ) {
+		const formData = new FormData();
+		formData.append( 'styleId', styleId );
+
+		// TODO we need a new AJAX endpoint that actually resets the setting.
+		// TODO after it's reset we would want to switch the class to the default so the card syncs.
+		doJsonPost( 'settings_reset', formData )
+		.then(
+			() => alert( 'here' )
+		);
+	}
+
+	/**
+	 * @param {Element} anchor
+	 * @returns {Element}
+	 */
 	function wrapDropdownItem( anchor ) {
 		return div({
 			className: 'dropdown-item',

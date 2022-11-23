@@ -377,14 +377,40 @@ class FrmStylesController {
 		}
 	}
 
+	/**
+	 * Handle AJAX routing for frm_settings_reset for resetting styles to the default settings.
+	 *
+	 * @since x.x This function was repurposed to actually reset a style. It now requires a target $_POST['styleId'] value.
+	 * Prior so x.x it would return an array of default settings as reset would require a subsequent update with the new default settings.
+	 *
+	 * @return void
+	 */
 	public static function reset_styling() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$frm_style = new FrmStyle();
-		$defaults  = $frm_style->get_defaults();
+		$style_id = FrmAppHelper::get_post_param( 'styleId', '', 'absint' );
+		if ( ! $style_id ) {
+			wp_die( 0 );
+		}
 
-		echo json_encode( $defaults );
+		$frm_style            = new FrmStyle();
+		$defaults             = $frm_style->get_defaults();
+		$default_post_content = FrmAppHelper::prepare_and_encode( $defaults );
+		$where                = array(
+			'ID'        => $style_id,
+			'post_type' => FrmStylesController::$post_type,
+		);
+		global $wpdb;
+		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_post_content ), $where );
+
+		$frm_style->save_settings(); // Save the settings after resetting to default or the old style will still appear.
+
+		wp_send_json_success(
+			array(
+
+			)
+		);
 		wp_die();
 	}
 
