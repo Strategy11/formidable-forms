@@ -227,15 +227,9 @@ class FrmFormsController {
 			wp_die( 'This form does not exist', '', 404 );
 		}
 
-		$frm_style     = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
-
-		$active_style = FrmStylesController::get_form_style( $form );
-		if ( is_null( $active_style ) ) {
-			$active_style = $default_style;
-		}
-
-		$styles = self::move_active_style_to_top( FrmStylesController::get_style_opts(), $active_style );
+		$styles        = self::get_styles_for_style_page( $form );
+		$active_style  = is_callable( 'FrmProStylesController::get_active_style_for_form' ) ? FrmProStylesController::get_active_style_for_form( $form ) : reset( $styles );
+		$default_style = self::get_default_style();
 
 		/**
 		 * @since x.x
@@ -249,6 +243,37 @@ class FrmFormsController {
 		self::render_style_page( $active_style, $styles, $form, $default_style );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 * @return array<WP_Post>
+	 */
+	private static function get_styles_for_style_page( $form ) {
+		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
+			return FrmProStylesController::get_styles_for_style_page( $form );
+		}
+		return array( self::get_default_style() );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return WP_Post
+	 */
+	private static function get_default_style() {
+		$frm_style     = new FrmStyle( 'default' );
+		$default_style = $frm_style->get_one();
+		return $default_style;
+	}
+
+	/**
+	 * Save style for form (from Style page) via an AJAX action.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
 	private static function save_form_style() {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form_style', 'frm_save_form_style_nonce' );
 		if ( $permission_error !== false ) {
@@ -266,27 +291,6 @@ class FrmFormsController {
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
 
 		FrmForm::clear_form_cache();
-	}
-
-	/**
-	 * The active style should be the first in the list so move it there.
-	 *
-	 * @since x.x
-	 *
-	 * @param array<WP_Post> $styles
-	 * @param WP_Post        $active_style
-	 * @return array
-	 */
-	private static function move_active_style_to_top( $styles, $active_style ) {
-		foreach ( $styles as $key => $style ) {
-			if ( $style->ID === $active_style->ID ) {
-				unset( $styles[ $key ] );
-				break;
-			}
-		}
-
-		array_unshift( $styles, $active_style );
-		return $styles;
 	}
 
 	/**
