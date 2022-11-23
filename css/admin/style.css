@@ -65,7 +65,8 @@
 
 .frm-style-card .dropdown-item svg {
 	color: #484E54;
-	margin-right: 5px;
+	margin-left: 5px;
+	margin-right: 10px;
 }
 
 .frm-style-card .dropdown-item a:hover svg {
