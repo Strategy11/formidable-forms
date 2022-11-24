@@ -385,6 +385,30 @@
 				callback( event );
 			};
 			element.addEventListener( 'click', listener );
+		},
+		/**
+		 * Sets innerHTML with JS code inside <script> tags are executed.
+		 *
+		 * @since 5.5.4
+		 *
+		 * @param {HTMLElement} element The parent element.
+		 * @param {String}      html    The HTML string.
+		 */
+		innerHtml: ( element, html ) => {
+			element.innerHTML = html;
+
+			Array.from( element.querySelectorAll( 'script' ) ).forEach( oldScriptEl => {
+				const newScriptEl = document.createElement( 'script' );
+
+				Array.from( oldScriptEl.attributes ).forEach( attr => {
+					newScriptEl.setAttribute( attr.name, attr.value );
+				});
+
+				const scriptText = document.createTextNode( oldScriptEl.innerHTML );
+				newScriptEl.appendChild( scriptText );
+
+				oldScriptEl.parentNode.replaceChild( newScriptEl, oldScriptEl );
+			});
 		}
 	};
 
@@ -434,9 +458,9 @@
 							jQuery( editor.targetElm ).trigger( 'focusin' );
 							editor.off( 'focusin', '**' );
 						}
-				
+
 						editor.on( 'focusin', focusInCallback );
-				
+
 						editor.on( 'focusout', function() {
 							editor.on( 'focusin', focusInCallback );
 						});

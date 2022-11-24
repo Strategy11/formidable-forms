@@ -6396,7 +6396,7 @@ function frmAdminBuildJS() {
 			closeOpenActions();
 
 			const newActionContainer = div();
-			newActionContainer.innerHTML = html;
+			frmDom.util.innerHtml( newActionContainer, html );
 
 			const widgetTop = newActionContainer.querySelector( '.widget-top' );
 			Array.from( newActionContainer.children ).forEach( child => actionsList.appendChild( child ) );
