@@ -419,11 +419,11 @@ class FrmEntryValidate {
 		 *
 		 * @param array $datas The array of values being sent to Akismet.
 		 */
-		$datas = apply_filters( 'frm_akismet_values', $datas );
+		$datas        = apply_filters( 'frm_akismet_values', $datas );
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		if ( class_exists( 'FrmLog' ) ) {
+		if ( class_exists( 'FrmLog' ) && $response[1] == 'true' ) {
 			$log = new FrmLog();
 			$log->add(
 				array(
@@ -433,8 +433,7 @@ class FrmEntryValidate {
 						'form_id' => $values['form_id'],
 						'entry'   => '',
 						'code'    => $response[1],
-						'request' => $query_string,
-						'headers' => (array) $response[0],
+						'request' => wp_json_encode( $datas ),
 					),
 				)
 			);
