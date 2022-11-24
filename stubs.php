@@ -36,7 +36,7 @@ namespace {
 	class FrmLog {
 		public function __construct() {
 		}
-		public function add() {
+		public function add( $values ) {
 		}
 	}
 
