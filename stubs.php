@@ -32,6 +32,14 @@ namespace {
 		public static function import_attachment( $val, $field ) {
 		}
 	}
+
+	class FrmLog {
+		public function __construct() {
+		}
+		public function add() {
+		}
+	}
+
 }
 
 namespace Elementor {
