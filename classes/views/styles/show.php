@@ -24,11 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p>
 				<label for="menu-name">
 					<?php if ( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) { ?>
-						<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="Back">
+						<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
 							<svg class="frmsvg">
 								<use xlink:href="#frm_back"></use>
 							</svg>
-						</span>
+						</a>
 					<?php } ?>
 					<?php esc_html_e( 'Style Name', 'formidable' ); ?>
 					<?php if ( $style->ID ) { ?>

@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(
-				'form'        => $form,
-				'hide_title'  => true,
-				'publish' => array(
+				'form'       => $form,
+				'hide_title' => true,
+				'publish'    => array(
 					'FrmFormsController::form_publish_button',
 					array(
 						'values' => array(
