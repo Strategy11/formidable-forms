@@ -590,6 +590,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Echo a style card for a specific target Style Post object.
+	 *
 	 * @since x.x
 	 *
 	 * @param WP_Post    $style
@@ -614,8 +616,11 @@ class FrmStylesHelper {
 			'value'    => esc_attr__( 'Submit', 'formidable' ),
 			'style'    => implode( ';', $submit_button_styles ),
 		);
+		$params               = self::get_params_for_style_card( $style, $default_style, $form_id );
 
-		$params = self::get_params_for_style_card( $style, $default_style, $form_id );
+		if ( $is_default_style ) {
+			$params['class'] .= ' frm-default-style-card';
+		}
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card';
 		}
@@ -624,6 +629,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Echo the content for card meta row (# of Forms and Default/Selected tags).
+	 *
 	 * @since x.x
 	 *
 	 * @param string|int $style_id
@@ -638,6 +645,7 @@ class FrmStylesHelper {
 		if ( $is_default ) {
 			echo '<div class="frm-default-style-tag">' . esc_html__( 'Default', 'formidable' ) . '</div>';
 		}
+
 		if ( $is_active) {
 			echo '<div class="frm-selected-style-tag">' . esc_html__( 'Selected', 'formidable' ) . '</div>';
 		}

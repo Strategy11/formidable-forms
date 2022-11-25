@@ -123,7 +123,7 @@
 
 		const hookName            = 'frm_style_card_dropdown_options';
 		const hookArgs            = { data, addIconToOption };
-		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [ editOption, resetOption ], hookArgs );
+		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [{ anchor: editOption, type: 'edit' }, { anchor: resetOption, type: 'reset' }], hookArgs );
 		const dropdownMenu        = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
 			className: 'frm-dropdown-menu dropdown-menu-right',
@@ -198,12 +198,15 @@
 	}
 
 	/**
-	 * @param {Element} anchor
+	 * @param {Object} data {
+	 *     @type {Element} anchor
+	 *     @type {String} type
+	 * }
 	 * @returns {Element}
 	 */
-	function wrapDropdownItem( anchor ) {
+	function wrapDropdownItem({ anchor, type }) {
 		return div({
-			className: 'dropdown-item',
+			className: 'dropdown-item frm-' + type + '-style',
 			child: anchor
 		});
 	}
