@@ -3857,11 +3857,20 @@ function frmAdminBuildJS() {
 		return wrapper;
 	}
 
+	/**
+	 * Handle when a field group layout option (that sets grid classes/column sizing) is selected in the "Row Layout" popup.
+	 *
+	 * @returns {void}
+	 */
 	function handleFieldGroupLayoutOptionClick() {
-		var type, row;
-		type = this.getAttribute( 'layout-type' );
-		row = document.querySelector( '.frm-field-group-hover-target' );
-		size = getFieldsInRow( jQuery( row ) ).length;
+		const row  = document.querySelector( '.frm-field-group-hover-target' );
+		if ( ! row ) {
+			// The field group layout options also get clicked when merging multiple rows.
+			// The following code isn't required for multiple rows though so just exit early.
+			return;
+		}
+
+		const type = this.getAttribute( 'layout-type' );
 		syncLayoutClasses( getFieldsInRow( jQuery( row ) ).first(), type );
 		destroyFieldGroupPopup();
 	}
