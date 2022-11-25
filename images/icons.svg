@@ -250,9 +250,9 @@
 <title>pencil_solid</title>
 <path d="M1.7 13.4a1 1 0 0 0-.3.4l-1.3 5a.9.9 0 0 0 0 .5 1 1 0 0 0 1 .6l5-1.3c.2 0 .4-.2.5-.3l.2-.2-5-4.9zm.5 4.4zM19.7 2.2l-.8-1.1c-.6-.6-1.5-1-2.5-1S14.6.5 14 1l-1.3 1.3 4.9 5L18.9 6a3.5 3.5 0 0 0 .7-3.8zM3 12.1l8.6-8.6 5 5L7.8 17l-5-5z"/>
 </symbol>
-<symbol id="frm_pencil_icon" viewBox="0 0 20 20">
+<symbol id="frm_pencil_icon" viewBox="0 0 18 18" fill="none">
 <title>pencil</title>
-<path d="M19.7 2.2l-.8-1.1c-.6-.6-1.5-1-2.5-1S14.6.5 14 1L1.7 13.4a1 1 0 0 0-.3.4l-1.4 5a.9.9 0 0 0 0 .5 1 1 0 0 0 1.2.6l5-1.3.4-.3L18.9 6a3.5 3.5 0 0 0 .7-3.8zm-6.8 2.6L15.2 7l-8.6 8.7-2.4-2.4zm-10.7 13l1-3.3L5.4 17zM18 4.2l-.4.5L16.3 6 14 3.7l1.3-1.3A1.7 1.7 0 0 1 18 3.6l-.1.6z"/>
+<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.167 1.5A2.358 2.358 0 0 1 16.5 4.833L5.25 16.083l-4.583 1.25 1.25-4.583L13.167 1.5Z"/>
 </symbol>
 <symbol id="frm_signature_icon" viewBox="0 0 20 20">
 <title>signature</title>
@@ -923,5 +923,7 @@
 <symbol id="frm_lightning" viewBox="0 0 20 22" fill="none"><path d="M11 1 1 13h9l-1 8L19 9h-9l1-8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_sample_form_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.833 2.5H4.167c-.92 0-1.667.746-1.667 1.667v11.666c0 .92.746 1.667 1.667 1.667h11.666c.92 0 1.667-.746 1.667-1.667V4.167c0-.92-.746-1.667-1.667-1.667ZM2.5 7.5h15M7.5 17.5v-10"/></symbol>
 <symbol id="frm_reset_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M.833 3.333v5h5M19.167 16.666v-5h-5"/><path stroke="#484E54" stroke-linecap="round" stroke-linejoin="round" d="M17.075 7.5A7.5 7.5 0 0 0 4.7 4.7L.833 8.333m18.334 3.334L15.3 15.3a7.5 7.5 0 0 1-12.375-2.8"/></symbol>
+<symbol id="frm_copy_style_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.667 7.5h-7.5c-.92 0-1.667.746-1.667 1.667v7.5c0 .92.746 1.666 1.667 1.666h7.5c.92 0 1.666-.746 1.666-1.666v-7.5c0-.92-.746-1.667-1.666-1.667Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.166 12.5h-.833a1.667 1.667 0 0 1-1.667-1.667v-7.5a1.667 1.667 0 0 1 1.667-1.667h7.5a1.667 1.667 0 0 1 1.666 1.667v.833"/></symbol>
+<symbol id="frm_edit_style_icon" viewBox="0 0 18 18" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.167 1.5A2.358 2.358 0 0 1 16.5 4.833L5.25 16.083l-4.583 1.25 1.25-4.583L13.167 1.5Z"/></symbol>
 </defs>
 </svg>
