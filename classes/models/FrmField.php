@@ -633,6 +633,8 @@ class FrmField {
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 		if ( ! empty( $results ) ) {
 			if ( empty( $limit ) ) {
+				self::maybe_remove_fields_inside_repeater( $form_id, $results );
+
 				return $results;
 			}
 
@@ -645,6 +647,8 @@ class FrmField {
 					break;
 				}
 			}
+
+			self::maybe_remove_fields_inside_repeater( $form_id, $fields );
 
 			return $fields;
 		}
@@ -662,8 +666,19 @@ class FrmField {
 		if ( empty( $limit ) ) {
 			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
 		}
+		self::maybe_remove_fields_inside_repeater( $form_id, $results );
 
 		return $results;
+	}
+
+	private static function maybe_remove_fields_inside_repeater( $form_id, &$fields ) {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
+			foreach ( $fields as $key => $field ) {
+				if ( $form_id !== $field->form_id ) {
+					unset( $fields[ $key ] );
+				}
+			}
+		}
 	}
 
 	/**
