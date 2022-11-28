@@ -671,6 +671,12 @@ class FrmField {
 		return $results;
 	}
 
+	/**
+	 * Remove fields that should only be displayed inside a repeater field.
+	 *
+	 * @param int $form_id
+	 * @param array $fields
+	 */
 	private static function maybe_remove_fields_inside_repeater( $form_id, &$fields ) {
 		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			foreach ( $fields as $key => $field ) {
