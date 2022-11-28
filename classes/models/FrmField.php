@@ -633,7 +633,7 @@ class FrmField {
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 		if ( ! empty( $results ) ) {
 			if ( empty( $limit ) ) {
-				self::maybe_remove_fields_inside_repeater( $form_id, $results );
+				// self::maybe_remove_fields_inside_repeater( $form_id, $results );
 
 				return $results;
 			}
@@ -666,7 +666,7 @@ class FrmField {
 		if ( empty( $limit ) ) {
 			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
 		}
-		self::maybe_remove_fields_inside_repeater( $form_id, $results );
+		// self::maybe_remove_fields_inside_repeater( $form_id, $results );
 
 		return $results;
 	}
