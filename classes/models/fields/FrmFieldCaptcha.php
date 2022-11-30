@@ -18,9 +18,17 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-captcha.php';
+	}
+
+	/**
+	 * Returns the image name for a captcha.
+	 *
+	 * @return string
+	 */
+	public static function get_captcha_image_name() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
-
 		if ( ! self::should_show_captcha() ) {
 			$image_name = 'captcha_not_setup';
 		} elseif ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
@@ -29,7 +37,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$image_name = $active_captcha;
 		}
 
-		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-captcha.php';
+		return $image_name;
 	}
 
 	/**
