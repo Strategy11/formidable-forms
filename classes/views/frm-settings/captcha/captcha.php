@@ -21,6 +21,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 				<?php
 				FrmAppHelper::icon_by_class( 'frmfont frm_recaptcha' );
 				?>
+				<p><?php echo esc_html_e( 'reCAPTCHA', 'formidable' ); ?></p>
 			</label>
 		</div>
 		<div class="captcha_option <?php echo esc_attr( $recaptcha_is_active ? '' : 'active' ); ?>">
@@ -29,6 +30,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 				<?php
 				FrmAppHelper::icon_by_class( 'frmfont frm_hcaptcha' );
 				?>
+				<p><?php echo esc_html_e( 'hCaptcha', 'formidable' ); ?></p>
 			</label>
 		</div>
 	</div>

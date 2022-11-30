@@ -4472,7 +4472,15 @@ label.frm-example-icon {
 
 .captcha_option label {
 	display: block;
-	padding: 16px 24px;
+	padding: 12px;
+	display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.captcha_option label p {
+	color: #545F6E;
 }
 
 .captcha_option input[type=radio] {
