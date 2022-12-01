@@ -169,6 +169,9 @@ class FrmHooksController {
 		add_action( 'admin_enqueue_scripts', 'FrmApplicationsController::dequeue_scripts', 15 );
 		add_action( 'wp_ajax_frm_get_applications_data', 'FrmApplicationsController::get_applications_data' );
 
+		// CAPTCHA
+		add_filter( 'frm_setup_edit_field_vars', 'FrmFieldCaptcha::update_field_name' );
+
 		FrmSMTPController::load_hooks();
 		FrmWelcomeController::load_hooks();
 		new FrmPluginSearch();

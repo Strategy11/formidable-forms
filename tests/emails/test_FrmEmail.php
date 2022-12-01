@@ -697,7 +697,7 @@ LINE 1<br>LINE 2<br></body></html>'
 		$action->post_content['email_message'] = 'Value <br/>with HTML';
 
 		$settings = array(
-			0 => "<p>Value <br />with HTML</p>", // This is testing HTML, not plain text because it's indexed by 0 which is used for the plain_text setting.
+			0 => '<p>Value <br />with HTML</p>', // This is testing HTML, not plain text because it's indexed by 0 which is used for the plain_text setting.
 			1 => 'Value with HTML',
 		);
 

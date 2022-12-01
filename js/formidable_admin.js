@@ -730,6 +730,15 @@ function frmAdminBuildJS() {
 						showInputIcon( '#' + cont.attr( 'id' ) );
 						frmDom.autocomplete.initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
+
+						/**
+						 * Fires after filling form action content when opening.
+						 *
+						 * @since 5.5.4
+						 *
+						 * @param {Object} insideElement JQuery object of form action inside element.
+						 */
+						wp.hooks.doAction( 'frm_filled_form_action', inside );
 					}
 				});
 			}
@@ -1020,7 +1029,7 @@ function frmAdminBuildJS() {
 		maybeOpenCollapsedPage( placeholder );
 
 		const $previousFieldContainer = ui.helper.parent();
-		const previousSection         = ui.helper.get( 0 ).closest( 'ul.frm_sorting' );
+		const previousSection         = ui.helper.get( 0 ).closest( 'ul.start_divider' );
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
@@ -1029,7 +1038,7 @@ function frmAdminBuildJS() {
 			moveFieldThatAlreadyExists( draggable, placeholder );
 		}
 
-		const previousSectionId = previousSection && previousSection.classList.contains( 'start_divider' ) ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+		const previousSectionId = previousSection ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 		const newSectionId      = newSection.classList.contains( 'start_divider' ) ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 
 		placeholder.remove();
@@ -1040,7 +1049,7 @@ function frmAdminBuildJS() {
 		maybeUpdateDraggableClassAfterDrop( draggable, $previousContainerFields );
 
 		if ( previousSectionId !== newSectionId ) {
-			updateFieldAfterMovingBetweenSections( jQuery( draggable ) );
+			updateFieldAfterMovingBetweenSections( jQuery( draggable ), previousSection );
 		}
 
 		debouncedSyncAfterDragAndDrop();
@@ -1538,23 +1547,26 @@ function frmAdminBuildJS() {
 	/**
 	 * Update a field after it is dragged and dropped into, out of, or between sections
 	 *
-	 * @param {object} currentItem
+	 * @param {Object} currentItem
+	 * @param {Object} previousSection
+	 * @returns {void}
 	 */
-	function updateFieldAfterMovingBetweenSections( currentItem ) {
+	function updateFieldAfterMovingBetweenSections( currentItem, previousSection ) {
 		if ( ! currentItem.hasClass( 'form-field' ) ) {
 			// currentItem is a field group. Call for children recursively.
 			getFieldsInRow( jQuery( currentItem.get( 0 ).firstChild ) ).each(
 				function() {
-					updateFieldAfterMovingBetweenSections( jQuery( this ) );
+					updateFieldAfterMovingBetweenSections( jQuery( this ), previousSection );
 				}
 			);
 			return;
 		}
 
-		const fieldId   = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
-		const section   = getSectionForFieldPlacement( currentItem );
-		const formId    = getFormIdForFieldPlacement( section );
-		const sectionId = getSectionIdForFieldPlacement( section );
+		const fieldId        = currentItem.attr( 'id' ).replace( 'frm_field_id_', '' );
+		const section        = getSectionForFieldPlacement( currentItem );
+		const formId         = getFormIdForFieldPlacement( section );
+		const sectionId      = getSectionIdForFieldPlacement( section );
+		const previousFormId = previousSection ? getFormIdForFieldPlacement( jQuery( previousSection.parentNode ) ) : 0;
 
 		jQuery.ajax({
 			type: 'POST',
@@ -1564,6 +1576,7 @@ function frmAdminBuildJS() {
 				form_id: formId,
 				field: fieldId,
 				section_id: sectionId,
+				previous_form_id: previousFormId,
 				nonce: frmGlobal.nonce
 			},
 			success: function() {
@@ -3857,11 +3870,20 @@ function frmAdminBuildJS() {
 		return wrapper;
 	}
 
+	/**
+	 * Handle when a field group layout option (that sets grid classes/column sizing) is selected in the "Row Layout" popup.
+	 *
+	 * @returns {void}
+	 */
 	function handleFieldGroupLayoutOptionClick() {
-		var type, row;
-		type = this.getAttribute( 'layout-type' );
-		row = document.querySelector( '.frm-field-group-hover-target' );
-		size = getFieldsInRow( jQuery( row ) ).length;
+		const row  = document.querySelector( '.frm-field-group-hover-target' );
+		if ( ! row ) {
+			// The field group layout options also get clicked when merging multiple rows.
+			// The following code isn't required for multiple rows though so just exit early.
+			return;
+		}
+
+		const type = this.getAttribute( 'layout-type' );
 		syncLayoutClasses( getFieldsInRow( jQuery( row ) ).first(), type );
 		destroyFieldGroupPopup();
 	}
@@ -6421,6 +6443,15 @@ function frmAdminBuildJS() {
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
 			}
+
+			/**
+			 * Fires after added a new form action.
+			 *
+			 * @since 5.5.4
+			 *
+			 * @param {HTMLElement} formAction Form action element.
+			 */
+			wp.hooks.doAction( 'frm_added_form_action', newAction );
 		}
 	}
 
@@ -10290,6 +10321,19 @@ function frmAdminBuildJS() {
 			if ( captchaType ) {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
+
+			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( e ) {
+				var selectedValue, unselectedValue;
+				selectedValue = e.target.value;
+				unselectedValue = selectedValue === 'recaptcha' ? 'hcaptcha' : 'recaptcha';
+				document.getElementById( selectedValue + '_settings' ).classList.remove( 'frm_hidden' );
+				document.getElementById( selectedValue ).parentElement.classList.add( 'active' );
+
+				document.getElementById( unselectedValue + '_settings' ).classList.add( 'frm_hidden' );
+				document.getElementById( unselectedValue ).parentElement.classList.remove( 'active' );
+
+				document.querySelector( '.captcha_settings .alert' ).classList.toggle( 'frm_hidden' );
+			});
 		},
 
 		exportInit: function() {

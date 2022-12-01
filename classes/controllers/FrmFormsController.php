@@ -1011,7 +1011,15 @@ class FrmFormsController {
 		);
 	}
 
+	/**
+	 * @param mixed $hidden_columns
+	 * @return array
+	 */
 	public static function hidden_columns( $hidden_columns ) {
+		if ( ! is_array( $hidden_columns ) ) {
+			$hidden_columns = array();
+		}
+
 		$type = FrmAppHelper::get_simple_request(
 			array(
 				'param' => 'form_type',
@@ -2545,7 +2553,7 @@ class FrmFormsController {
 	}
 
 	public static function defer_script_loading( $tag, $handle ) {
-		if ( 'recaptcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
+		if ( 'captcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
 			$tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
 		}
 

@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.1
+Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 5.5.3.1
+Stable tag: 5.5.4
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -440,6 +440,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.4 =
+* New: Added support for hCaptcha. Now in Global Settings, the reCAPTCHA tab has been changed to a CAPTCHA tab with a new CAPTCHA type setting so you can choose between using reCAPTCHA or hCaptcha.
+* Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
+* Fix: Long field names on the reports tab would force the table to horizontally scroll. A long field name will now break into multiple lines instead.
+* Fix: The frm_form_object filter wouldn't get applied to a cached form result.
+* Fix: Prevent an undefined function get_editable_roles fatal error that triggers when trying to connect an account.
+* Fix: An incorrect section comparison was causing fields to keep old section data after being moved somewhere else. This would result in unexpected data exports and other side effects.
+* Fix: A "row is undefined" error would prevent merging multiple field groups together after the layout option was clicked.
+* Updated message styling on admin pages.
+
 = 5.5.3 =
 * New: HTML emails using wpautop will now also convert line breaks into <br /> tags.
 * New: Improved support for importing large XML files. Previously a file over 200MB would trigger a "parser error : internal error: Huge input lookup" error.
