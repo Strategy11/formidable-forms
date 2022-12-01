@@ -543,7 +543,7 @@ class FrmStylesHelper {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
 			'class'           => 'with_frm_style frm-style-card ' . $class_name,
-			'style'           => self::get_style_param_for_card( $style, $default_style ),
+			'style'           => self::get_style_param_for_card( $style ),
 			'data-classname'  => $class_name,
 			'data-style-id'   => $style->ID,
 			'data-edit-url'   => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID . '&form_id=' . $form_id ) ),
@@ -566,10 +566,9 @@ class FrmStylesHelper {
 	 * @since x.x
 	 *
 	 * @param WP_Post $style
-	 * @param WP_Post $default_style
 	 * @return string
 	 */
-	private static function get_style_param_for_card( $style, $default_style ) {
+	private static function get_style_param_for_card( $style ) {
 		$styles = array();
 
 		// Add the background color setting for fieldsets to the card.
@@ -580,11 +579,14 @@ class FrmStylesHelper {
 		}
 		$styles[] = '--preview-background-color: ' . $background_color;
 
+		$frm_style = new FrmStyle();
+		$defaults  = $frm_style->get_defaults();
+
 		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
-		$styles[] = '--font-size: ' . $default_style->post_content['field_font_size'];
-		$styles[] = '--field-font-size: ' . $default_style->post_content['field_font_size'];
-		$styles[] = '--label-padding: ' . $default_style->post_content['label_padding'];
-		$styles[] = '--field-height: ' . $default_style->post_content['field_height'];
+		$styles[] = '--font-size: ' . $defaults['field_font_size'];
+		$styles[] = '--field-font-size: ' . $defaults['field_font_size'];
+		$styles[] = '--label-padding: ' . $defaults['label_padding'];
+		$styles[] = '--field-height: ' . $defaults['field_height'];
 
 		return implode( ';', $styles );
 	}
