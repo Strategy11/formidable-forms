@@ -70,7 +70,7 @@
 </symbol>
 <symbol id="frm_checkmark_circle_icon" viewBox="0 0 20 20" fill="none">
 	<title>checkmark_circle</title>
-	<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18.333 9.234V10a8.333 8.333 0 1 1-4.941-7.616"/><path stroke="#484E54" stroke-linecap="round" stroke-linejoin="round" d="M18.333 3.333 10 11.675l-2.5-2.5"/>
+	<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18.333 9.234V10a8.333 8.333 0 1 1-4.941-7.616"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18.333 3.333 10 11.675l-2.5-2.5"/>
 </symbol>
 <symbol id="frm_checkmark_square_icon" viewBox="0 0 24 24">
 <title>checkmark_square</title>
