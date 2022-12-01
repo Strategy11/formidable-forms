@@ -445,6 +445,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Long field names on the reports tab would force the table to horizontally scroll. A long field name will now break into multiple lines instead.
 * Fix: The frm_form_object filter wouldn't get applied to a cached form result.
 * Fix: Prevent an undefined function get_editable_roles fatal error that triggers when trying to connect an account.
+* Fix: An incorrect section comparison was causing fields to keep old section data after being moved somewhere else. This would result in unexpected data exports and other side effects.
 * Updated message styling on admin pages.
 
 = 5.5.3 =
