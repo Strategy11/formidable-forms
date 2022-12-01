@@ -6,6 +6,7 @@
 * Fix: The frm_form_object filter wouldn't get applied to a cached form result.
 * Fix: Prevent an undefined function get_editable_roles fatal error that triggers when trying to connect an account.
 * Fix: An incorrect section comparison was causing fields to keep old section data after being moved somewhere else. This would result in unexpected data exports and other side effects.
+* Fix: A "row is undefined" error would prevent merging multiple field groups together after the layout option was clicked.
 * Updated message styling on admin pages.
 
 = 5.5.3 =
