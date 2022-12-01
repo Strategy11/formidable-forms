@@ -730,6 +730,15 @@ function frmAdminBuildJS() {
 						showInputIcon( '#' + cont.attr( 'id' ) );
 						frmDom.autocomplete.initAutocomplete( 'page', inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
+
+						/**
+						 * Fires after filling form action content when opening.
+						 *
+						 * @since 5.5.4
+						 *
+						 * @param {Object} insideElement JQuery object of form action inside element.
+						 */
+						wp.hooks.doAction( 'frm_filled_form_action', inside );
 					}
 				});
 			}
@@ -6434,6 +6443,15 @@ function frmAdminBuildJS() {
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
 			}
+
+			/**
+			 * Fires after added a new form action.
+			 *
+			 * @since 5.5.4
+			 *
+			 * @param {HTMLElement} formAction Form action element.
+			 */
+			wp.hooks.doAction( 'frm_added_form_action', newAction );
 		}
 	}
 
