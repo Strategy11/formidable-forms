@@ -6,17 +6,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="howto">
 	<?php
-	$captcha_name = $captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCAPTCHA';
+	$captcha_name = $captcha === 'recaptcha' ? 'reCAPTCHA' : 'hCaptcha';
 	if ( $captcha === 'recaptcha' ) {
 		$captcha_name = 'reCAPTCHA';
 		$captcha_api  = 'https://www.google.com/recaptcha/';
 	} else {
-		$captcha_name = 'hCAPTCHA';
+		$captcha_name = 'hCaptcha';
 		$captcha_api  = 'https://www.hcaptcha.com/signup-interstitial';
 	}
 	printf(
 		/* translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML */
-		esc_html__( '%1$s requires a Site and Private API key. Sign up for a %2$sfree reCAPTCHA key%3$s.', 'formidable' ),
+		esc_html__( '%1$s requires a Site and Private API key. Sign up for a %2$sfree %1$s key%3$s.', 'formidable' ),
 		esc_html( $captcha_name ),
 		'<a href="' . esc_url( $captcha_api ) . '" target="_blank">',
 		'</a>'

@@ -16,7 +16,7 @@ class FrmField {
 		} elseif ( $active_captcha === 'recaptcha' ) {
 			$captcha_name = 'reCAPTCHA';
 		} else {
-			$captcha_name = 'hCAPTCHA';
+			$captcha_name = 'hCaptcha';
 		}
 		$fields = array(
 			'text'     => array(

@@ -325,7 +325,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	public static function update_field_name( $values ) {
 		if ( $values['type'] === 'captcha' ) {
 			$name = $values['name'];
-			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCAPTCHA', 'formidable' ) ), true ) ) {
+			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCaptcha', 'formidable' ) ), true ) ) {
 				$values['name'] = __( 'CAPTCHA', 'formidable' );
 			}
 		}

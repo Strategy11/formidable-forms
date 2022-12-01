@@ -42,7 +42,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 </div>
 
 <div id="recaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? '' : 'frm_hidden' ); ?>">
-	<h3>reCaptcha Settings</h3>
+	<h3><?php esc_html_e( 'reCAPTCHA Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'recaptcha';
 	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
@@ -101,7 +101,7 @@ $recaptcha_is_active = $active_captcha === 'recaptcha';
 </div>
 
 <div id="hcaptcha_settings" class="frm_grid_container <?php echo esc_attr( $recaptcha_is_active ? 'frm_hidden' : '' ); ?>">
-	<h3>hCaptcha Settings</h3>
+	<h3><?php esc_html_e( 'hCaptcha Settings', 'formidable' ); ?></h3>
 	<?php
 	$captcha = 'hcaptcha';
 	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
