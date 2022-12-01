@@ -83,6 +83,17 @@ class test_FrmAddon extends FrmUnitTest {
 
 		}
 	}
+
+	public function test_update_pro_capabilities() {
+		$caps = FrmAppHelper::frm_capabilities( 'pro_only' );
+
+		$this->run_private_method( array( $this->addon, 'update_pro_capabilities' ) );
+
+		$admin_role  = get_role( 'administrator' );
+		foreach ( $caps as $cap => $label ) {
+			$this->assertTrue( $admin_role->has_cap( $cap ) );
+		}
+	}
 }
 
 class FrmTestAddon extends FrmAddon {
