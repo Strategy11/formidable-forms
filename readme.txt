@@ -444,6 +444,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
 * Fix: Long field names on the reports tab would force the table to horizontally scroll. A long field name will now break into multiple lines instead.
 * Fix: The frm_form_object filter wouldn't get applied to a cached form result.
+* Fix: Prevent an undefined function get_editable_roles fatal error that triggers when trying to connect an account.
 * Updated message styling on admin pages.
 
 = 5.5.3 =
