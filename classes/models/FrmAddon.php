@@ -251,6 +251,10 @@ class FrmAddon {
 	protected function update_pro_capabilities() {
 		global $wp_roles;
 
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
 		$caps     = FrmAppHelper::frm_capabilities( 'pro_only' );
 		$roles    = get_editable_roles();
 		$settings = new FrmSettings();
