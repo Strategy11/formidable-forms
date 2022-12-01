@@ -254,6 +254,7 @@
 <title>pencil</title>
 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.167 1.5A2.358 2.358 0 0 1 16.5 4.833L5.25 16.083l-4.583 1.25 1.25-4.583L13.167 1.5Z"/>
 </symbol>
+<symbol id="frm_rename_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M10 16.7h7.5M13.8 3a1.8 1.8 0 0 1 2.4 2.4L5.8 15.8l-3.3.9.8-3.4L13.7 3Z"/></symbol>
 <symbol id="frm_signature_icon" viewBox="0 0 20 20">
 <title>signature</title>
 <path d="M19.7 2.2A3.5 3.5 0 0 0 14 1.1L1.7 13.4a1 1 0 0 0-.3.4l-1.3 5a.9.9 0 0 0 0 .5 1 1 0 0 0 1 .6l5-1.3c.2 0 .4-.1.5-.3L18.9 6a3.5 3.5 0 0 0 .7-3.8zm-6.8 2.6L15.2 7l-8.6 8.7-2.4-2.4zm-10.7 13l1-3.3L5.4 17zM18 4.2l-.4.5L16.3 6 14 3.7l1.3-1.3A1.7 1.7 0 0 1 18 3.6l-.1.6zM9 17.9h11v1H9v-1z"/>

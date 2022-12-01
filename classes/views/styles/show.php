@@ -22,22 +22,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
 		<div class="frm-inner-content">
 			<p>
-				<label for="menu-name">
-					<?php if ( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) { ?>
-						<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
-							<svg class="frmsvg">
-								<use xlink:href="#frm_back"></use>
-							</svg>
-						</a>
-					<?php } ?>
-					<?php esc_html_e( 'Style Name', 'formidable' ); ?>
-					<?php if ( $style->ID ) { ?>
-						<span class="howto alignright">
-							<span>.frm_style_<?php echo esc_attr( $style->post_name ); ?></span>
-						</span>
-					<?php } ?>
-				</label>
-				<input id="menu-name" name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="text" class="frm_full" title="<?php esc_attr_e( 'Enter style name here', 'formidable' ); ?>" value="<?php echo esc_attr( $style->post_title ); ?>" />
+				<?php if ( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) { ?>
+					<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
+						<svg class="frmsvg">
+							<use xlink:href="#frm_back"></use>
+						</svg>
+					</a>
+				<?php } ?>
+				<span style="font-size: 16px;"><?php echo esc_html( $style->post_title ); ?></span>
+				<?php if ( $style->ID ) { ?>
+					<span class="howto alignright">
+						<span>.frm_style_<?php echo esc_attr( $style->post_name ); ?></span>
+					</span>
+				<?php } ?>
+				<input name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="hidden" value="<?php echo esc_attr( $style->post_title ); ?>" /><?php // TODO: Remove this. Make sure removing it doesn't clear style titles though. ?>
 			</p>
 
 			<?php // menu_order is 1 for the default style, 0 for other styles. This can probably get removed but for now the menu order value is a hidden field. ?>

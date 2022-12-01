@@ -1,5 +1,6 @@
 ( function() {
 	/* globals wp, frmDom */
+	'use strict';
 
 	const { __ } = wp.i18n;
 	const state = {
