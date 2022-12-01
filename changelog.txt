@@ -1,5 +1,6 @@
 == Changelog ==
 = 5.5.4 =
+* New: Added support for hCaptcha. Now in Global Settings, the reCAPTCHA tab has been changed to a CAPTCHA tab with a new CAPTCHA type setting so you can choose between using reCAPTCHA or hCaptcha.
 * Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
 * Fix: Long field names on the reports tab would force the table to horizontally scroll. A long field name will now break into multiple lines instead.
 * Fix: The frm_form_object filter wouldn't get applied to a cached form result.
