@@ -2429,7 +2429,7 @@ class FrmFormsController {
 	}
 
 	public static function defer_script_loading( $tag, $handle ) {
-		if ( 'recaptcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
+		if ( 'captcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
 			$tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
 		}
 

@@ -9,6 +9,15 @@ class FrmField {
 	public static $transient_size = 200;
 
 	public static function field_selection() {
+		$frm_settings   = FrmAppHelper::get_settings();
+		$active_captcha = $frm_settings->active_captcha;
+		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
+			$captcha_name = 'CAPTCHA';
+		} elseif ( $active_captcha === 'recaptcha' ) {
+			$captcha_name = 'reCAPTCHA';
+		} else {
+			$captcha_name = 'hCaptcha';
+		}
 		$fields = array(
 			'text'     => array(
 				'name' => __( 'Text', 'formidable' ),
@@ -63,7 +72,7 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
 			'captcha'  => array(
-				'name' => __( 'reCAPTCHA', 'formidable' ),
+				'name' => $captcha_name,
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
 		);

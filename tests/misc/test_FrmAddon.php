@@ -100,7 +100,7 @@ class test_FrmAddon extends FrmUnitTest {
 		// The global $wp_roles object stores an internal role_objects array.
 		// We need to reset the $wp_roles object in order to avoid stale WP_Role capabilities.
 		global $wp_roles;
-		$wp_roles = new WP_Roles();
+		$wp_roles = new WP_Roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 
 		$admin_role = get_role( 'administrator' );
 		foreach ( $caps as $cap ) {

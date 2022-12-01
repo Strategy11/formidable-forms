@@ -51,10 +51,10 @@ class FrmSettingsController {
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
-			'recaptcha' => array(
+			'captcha' => array(
 				'class'    => __CLASS__,
-				'function' => 'recaptcha_settings',
-				'name'     => __( 'reCAPTCHA', 'formidable' ),
+				'function' => 'captcha_settings',
+				'name'     => __( 'CAPTCHA', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'white_label' => array(
@@ -180,11 +180,11 @@ class FrmSettingsController {
 	/**
 	 * @since 4.0
 	 */
-	public static function recaptcha_settings() {
+	public static function captcha_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/recaptcha.php' );
+		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php' );
 	}
 
 	/**
@@ -344,5 +344,13 @@ class FrmSettingsController {
 		}
 
 		wp_send_json( $results );
+	}
+
+	/**
+	 * @deprecated x.x use FrmSettingsController::captcha_settings().
+	 */
+	public static function recaptcha_settings() {
+		_deprecated_function( __FUNCTION__, 'x.x', 'FrmSettingsController::captcha_settings()' );
+		self::captcha_settings();
 	}
 }

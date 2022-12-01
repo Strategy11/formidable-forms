@@ -21,6 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me">
+		<?php
+		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
+			?>
+			<div class="frm_builder_captcha frm_warning_style">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' ); ?>
+				<div><b><?php echo esc_html__( 'Setup a captcha', 'formidable' ); ?></b>
+					<p>
+						<?php
+						/* translators: %1$s: Link HTML, %2$s: End link */
+						printf( esc_html__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+						?>
+					</p>
+				</div>
+			</div>
+		<?php } ?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -226,7 +241,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } ?>
 
-		<?php if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' ) { ?>
+		<?php if ( $display['captcha_size'] && $frm_settings->re_type !== 'invisible' && $frm_settings->active_captcha === 'recaptcha' ) { ?>
 			<p class="frm6 frm_first frm_form_field">
 				<label for="field_options_captcha_size_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Set the size of the captcha field. The compact option is best if your form is in a small area.', 'formidable' ); ?>">
 					<?php esc_html_e( 'ReCaptcha Type', 'formidable' ); ?>

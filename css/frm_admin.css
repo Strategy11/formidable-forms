@@ -4424,6 +4424,94 @@ label.frm-example-icon {
 	display: inline-block !important;
 }
 
+#form_global_settings .captcha_settings h4 {
+	font-weight: 400;
+	font-size: 14px;
+}
+
+#form_global_settings .captcha_settings h3 {
+	font-weight: 600;
+	font-size: 18px;
+	text-transform: none;
+	color: #282F36;
+	margin-bottom: 0;
+}
+
+.captcha_settings .alert {
+	display: flex;
+	margin-top: 16px;
+	padding: 12px 16px;
+	column-gap: 10px;
+	background: rgba(188, 224, 253, 0.23);
+	border-radius: 4px;
+}
+
+.captcha_settings .alert.frm_hidden {
+	display: none;
+}
+
+#form_global_settings .alert p {
+	margin: 0;
+}
+
+.frm_captchas {
+	margin-top: 16px;
+}
+
+.frm_captchas .frm_radio {
+	display: flex;
+    column-gap: 21px;
+}
+
+.captcha_option {
+	border: 1px solid rgba(40, 47, 54, 0.2);
+	border-radius: 4px;
+	display: inline-block;
+	position: relative;
+}
+
+.captcha_option label {
+	display: block;
+	padding: 12px;
+	display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.captcha_option label p {
+	color: #545F6E;
+}
+
+.captcha_option input[type=radio] {
+	border: none;
+	border-width: 0 !important;
+	display: none;
+}
+
+.captcha_option.active label:before {
+	content: '';
+	background-color: none;
+	position: absolute;
+	left: -10px;
+	top: -10px;
+	width: 20px !important;
+	height: 20px !important;
+	margin: 0 !important;
+	background-image: url( data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzQxOTlGRCI+PHRpdGxlPmNoZWNrbWFya19jaXJjbGU8L3RpdGxlPjxjaXJjbGUgY3g9IjEyLjIiIGN5PSIxMS43IiByPSIxMCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yMy42IDEyQTExLjYgMTEuNiAwIDExLjQgMTJhMTEuNiAxMS42IDAgMDEyMy4yIDB6bS0xMyA2LjJsOC43LTguN2MuMy0uMy4zLS43IDAtMWwtMS0xYS43LjcgMCAwMC0xLjEgMGwtNyA3LTMuNC0zLjNhLjguOCAwIDAwLTEgMGwtMSAxYy0uNC4zLS40LjggMCAxbDQuOCA1Yy4zLjIuOC4yIDEgMHoiLz48L3N2Zz4= );
+}
+
+.frm_captchas .frmsvg {
+	width: 140px;
+	height: 38px;
+}
+
+.frm_builder_captcha.frm_warning_style {
+	display: flex;
+    column-gap: 10px;
+	padding: 12px 16px;
+}
+
 .frm-example-icon .frmsvg,
 .frm-example-icon i {
 	height: 20px;

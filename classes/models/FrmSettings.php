@@ -27,6 +27,9 @@ class FrmSettings {
 	public $load_style;
 	public $custom_style;
 
+	public $active_captcha;
+	public $hcaptcha_pubkey;
+	public $hcaptcha_privkey;
 	public $pubkey;
 	public $privkey;
 	public $re_lang;
@@ -116,7 +119,7 @@ class FrmSettings {
 	}
 
 	private function set_default_options() {
-		$this->fill_recaptcha_settings();
+		$this->fill_captcha_settings();
 
 		if ( ! isset( $this->load_style ) ) {
 			if ( ! isset( $this->custom_style ) ) {
@@ -179,9 +182,17 @@ class FrmSettings {
 		}
 	}
 
-	private function fill_recaptcha_settings() {
-		$privkey = '';
-		$re_lang = '';
+	private function fill_captcha_settings() {
+		if ( ! isset( $this->active_captcha ) ) {
+			$this->active_captcha = 'recaptcha';
+		}
+
+		$privkey          = '';
+		$re_lang          = '';
+
+		if ( ! isset( $this->hcaptcha_privkey ) ) {
+			$this->hcaptcha_privkey = '';
+		}
 
 		if ( ! isset( $this->pubkey ) ) {
 			// get the options from the database
@@ -192,7 +203,7 @@ class FrmSettings {
 		}
 
 		if ( ! isset( $this->re_msg ) || empty( $this->re_msg ) ) {
-			$this->re_msg = __( 'The reCAPTCHA was not entered correctly', 'formidable' );
+			$this->re_msg = __( 'The CAPTCHA was not entered correctly', 'formidable' );
 		}
 
 		if ( ! isset( $this->privkey ) ) {
@@ -267,12 +278,15 @@ class FrmSettings {
 	}
 
 	private function update_settings( $params ) {
-		$this->pubkey       = trim( $params['frm_pubkey'] );
-		$this->privkey      = $params['frm_privkey'];
-		$this->re_type      = $params['frm_re_type'];
-		$this->re_lang      = $params['frm_re_lang'];
-		$this->re_threshold = floatval( $params['frm_re_threshold'] );
-		$this->load_style   = $params['frm_load_style'];
+		$this->active_captcha   = $params['frm_active_captcha'];
+		$this->hcaptcha_pubkey  = trim( $params['frm_hcaptcha_pubkey'] );
+		$this->hcaptcha_privkey = $params['frm_hcaptcha_privkey'];
+		$this->pubkey           = trim( $params['frm_pubkey'] );
+		$this->privkey          = $params['frm_privkey'];
+		$this->re_type          = $params['frm_re_type'];
+		$this->re_lang          = $params['frm_re_lang'];
+		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
+		$this->load_style       = $params['frm_load_style'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
