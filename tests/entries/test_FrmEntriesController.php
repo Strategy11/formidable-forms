@@ -64,4 +64,13 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 		return $new_post->ID;
 	}
+
+	/**
+	 * @covers FrmEntriesController::hidden_columns
+	 */
+	public function test_hidden_columns() {
+		// Confirm that a string option value doesn't trigger a fatal error.
+		$columns = FrmEntriesController::hidden_columns( '' );
+		$this->assertIsArray( $columns );
+	}
 }

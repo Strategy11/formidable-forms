@@ -5631,6 +5631,7 @@ span.howto {
 
 .frm_wrap .google-visualization-table-tr-head,
 .frm_wrap .google-visualization-table-tr-head th {
+	white-space: pre-wrap;
 	font-size: 16px;
 	font-weight: 400 !important;
 	text-align: left;
