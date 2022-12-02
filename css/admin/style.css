@@ -83,6 +83,11 @@
 	border-radius: 6px 6px 0 0
 }
 
+.frm-style-card-preview + div .dropdown {
+	/* Give it a z-index boost to avoid the border from the bottom of the card from overlapping the dropdown */
+	z-index: 1;
+}
+
 #frm_style_sidebar .frm-style-card input[type="submit"] {
 	height: unset !important;
 	margin: 0;
