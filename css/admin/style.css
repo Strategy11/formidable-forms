@@ -89,18 +89,6 @@
 	max-width: 100%;
 }
 
-.frm-default-style-card .dropdown-item.frm-delete-style {
-	/* TODO this should be in Pro CSS */
-	/* Hide the delete option for the default style card. */
-	display: none;
-}
-
-.frm-rename-style .frmsvg {
-	/* TODO this should be in Pro CSS */
-	height: 20px;
-	width: 20px;
-}
-
 /* Avoid disabled button styles overwriting the card's preview styles */
 #frm_style_sidebar .frm-style-card input[disabled] {
 	background-color: var(--submit-bg-color) !important;

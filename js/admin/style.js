@@ -115,7 +115,7 @@
 			text: __( 'Edit', 'formidable' ),
 			href: data.editUrl
 		});
-		addIconToOption( editOption, 'frm_edit_style_icon' );// 'frm_pencil_icon' );
+		addIconToOption( editOption, 'frm_pencil_icon' );
 		const resetOption = a({
 			text: __( 'Reset', 'formidable' )
 		});
