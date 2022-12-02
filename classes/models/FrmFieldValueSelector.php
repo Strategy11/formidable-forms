@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * A class for the field value selector
- * Used in field conditional logic, action conditional logic, MailChimp action, etc.
+ * Used in field conditional logic, action conditional logic, Mailchimp action, etc.
  *
  * @since 2.03.05
  */

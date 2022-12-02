@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</ul>
 	</div><div>
 		<ul>
-			<li><?php esc_html_e( 'MailChimp integration', 'formidable' ); ?></li>
+			<li><?php esc_html_e( 'Mailchimp integration', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Repeater fields', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Post submission', 'formidable' ); ?></li>
 			<li><?php esc_html_e( 'Front-end editing', 'formidable' ); ?></li>

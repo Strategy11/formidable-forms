@@ -53,7 +53,7 @@ When a user submits a web form, it's stored in your WordPress database so you wo
 
 Even though the entries are saved, it's still a **GDPR-friendly** form generator. You can turn off IP tracking or stop saving submissions entirely. Or add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
-Need to import your leads to an external service like MailChimp? No problem. **Export leads to a CSV**, open it in Excel, or import it anywhere.
+Need to import your leads to an external service like Mailchimp? No problem. **Export leads to a CSV**, open it in Excel, or import it anywhere.
 
 You can also configure unlimited email notifications and autoresponders triggered by submissions.
 
@@ -209,7 +209,7 @@ In addition to all the features listed above, add power ups with these integrati
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Forms</a>. Keep users on your site while collecting Stripe payments from a credit card form. Select from one time and recurring charges in donation and order forms. Stripe processes payments with simple PCI compliance.
 * <a href="https://formidableforms.com/features/authorize-net-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Authorize.net AIM</a>. Process one-time payments in order forms and price calculators with Authorize.net AIM. For recurring payments or easier security compliance, we recommend Stripe.
 * <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use calculations in your WooCommerce form for variable pricing and upload files with orders.
-* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Contact Forms</a>. Add and update leads in a MailChimp email marketing list from a lead form, online order, or email form.
+* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mailchimp Contact Forms</a>. Add and update leads in a Mailchimp email marketing list from a lead form, online order, or email form.
 * Constant Contact. Create leads automatically with a newsletter signup form.
 * AWeber Forms. Subscribe users to an AWeber mailing list when a signup form is submitted.
 * <a href="https://formidableforms.com/features/mailpoet-newsletters-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailPoet Newsletters</a>. Fill your email marketing lists from newsletter signup forms. Then send WordPress newsletters from your own site using MailPoet.
@@ -401,7 +401,7 @@ Yes! We know that marketing is the key to growing your business. That's why Form
 
 Here is a list of our popular marketing integrations:
 
-* MailChimp
+* Mailchimp
 * AWeber
 * Constant Contact
 * GetResponse
