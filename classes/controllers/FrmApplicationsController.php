@@ -72,6 +72,9 @@ class FrmApplicationsController {
 	 * @return void
 	 */
 	public static function get_applications_data() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
 

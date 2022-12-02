@@ -380,7 +380,10 @@ class FrmAppController {
 	 */
 	public static function install_js_fallback() {
 		FrmAppHelper::load_admin_wide_js();
-		echo '<div id="hidden frm_install_message"></div><script type="text/javascript">jQuery(document).ready(function(){frm_install_now();});</script>';
+		?>
+			<div id="frm_install_message"></div>
+			<script>jQuery(document).ready( frm_install_now );</script>
+		<?php
 	}
 
 	/**
@@ -741,6 +744,8 @@ class FrmAppController {
 	 * @since 2.0.1
 	 */
 	public static function ajax_install() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 		self::api_install();
 		wp_die();
 	}
