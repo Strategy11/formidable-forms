@@ -100,7 +100,11 @@
 
 	const ajax = {
 		doJsonFetch: async function( action ) {
-			const response = await fetch( ajaxurl + '?action=frm_' + action );
+			let targetUrl = ajaxurl + '?action=frm_' + action;
+			if ( -1 === targetUrl.indexOf( 'nonce=' ) ) {
+				targetUrl += '&nonce=' + frmGlobal.nonce;
+			}
+			const response = await fetch( targetUrl );
 			const json = await response.json();
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
