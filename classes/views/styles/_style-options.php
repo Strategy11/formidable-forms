@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
 <div class="frm-inner-content">
 	<p>
-		<?php if ( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) { ?>
-			<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form_id', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
+		<?php if ( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) { ?>
+			<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
 				<svg class="frmsvg">
 					<use xlink:href="#frm_back"></use>
 				</svg>
