@@ -26,31 +26,6 @@ class FrmStylesHelper {
 		return $menu;
 	}
 
-	public static function style_menu( $active = '' ) {
-		?>
-		<ul class="frm_form_nav">
-			<li>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ); ?>"
-					class="<?php echo ( '' == $active ) ? 'current_page' : ''; ?>">
-					<?php esc_html_e( 'Edit Styles', 'formidable' ); ?>
-				</a>
-			</li>
-			<li>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
-					class="<?php echo ( 'manage' == $active ) ? 'current_page' : ''; ?>">
-					<?php esc_html_e( 'Manage Styles', 'formidable' ); ?>
-				</a>
-			</li>
-			<li>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=custom_css' ) ); ?>"
-					class="<?php echo ( 'custom_css' == $active ) ? 'current_page' : ''; ?>">
-					<?php esc_html_e( 'Custom CSS', 'formidable' ); ?>
-				</a>
-			</li>
-		</ul>
-		<?php
-	}
-
 	/**
 	 * @since 4.0
 	 * @todo This may be deprecated now with x.x.
@@ -75,8 +50,13 @@ class FrmStylesHelper {
 	 * Either get the heading or the style switcher.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	public static function styler_switcher( $atts ) {
+		// TODO deprecate this.
+
 		if ( has_action( 'frm_style_switcher_heading' ) ) {
 			do_action( 'frm_style_switcher_heading', $atts );
 		} else {
@@ -528,7 +508,7 @@ class FrmStylesHelper {
 	 * @return string
 	 */
 	public static function get_style_page_url( $form_id ) {
-		return admin_url( 'admin.php?page=formidable&frm_action=style&id=' . absint( $form_id ) );
+		return admin_url( 'themes.php?page=formidable-styles&form_id=' . absint( $form_id ) );
 	}
 
 	/**
@@ -546,7 +526,7 @@ class FrmStylesHelper {
 			'style'           => self::get_style_param_for_card( $style ),
 			'data-classname'  => $class_name,
 			'data-style-id'   => $style->ID,
-			'data-edit-url'   => esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&id=' . $style->ID . '&form_id=' . $form_id ) ),
+			'data-edit-url'   => esc_url( self::get_edit_url( $style, $form_id ) ),
 		);
 
 		/**
@@ -560,6 +540,23 @@ class FrmStylesHelper {
 		 * }
 		 */
 		return apply_filters( 'frm_style_card_params', $params, compact( 'style' ) );
+	}
+
+	/**
+	 * @param WP_Post    $style
+	 * @param string|int $form_id
+	 * @return string
+	 */
+	public static function get_edit_url( $style, $form_id ) {
+		return add_query_arg(
+			array(
+				'page'       => 'formidable-styles',
+				'frm_action' => 'edit',
+				'id'         => $style->ID,
+				'form_id'    => $form_id, // We include &form_id for the back button to know where to point to.
+			),
+			admin_url( 'themes.php' )
+		);
 	}
 
 	/**
@@ -711,5 +708,15 @@ class FrmStylesHelper {
 	 */
 	public static function get_form_for_page() {
 		return FrmDeprecated::get_form_for_page();
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @param string $active
+	 * @return void
+	 */
+	public static function style_menu( $active = '' ) {
+		// TODO deprecate this.
 	}
 }

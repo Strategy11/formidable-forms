@@ -173,8 +173,8 @@ class FrmAppController {
 			array(
 				'link'       => FrmStylesHelper::get_style_page_url( $id ),
 				'label'      => __( 'Style', 'formidable' ),
-				'current'    => array( 'style' ),
-				'page'       => 'formidable',
+				'current'    => array(),
+				'page'       => 'formidable-styles',
 				'permission' => 'frm_edit_forms',
 			),
 			array(

@@ -19,6 +19,17 @@
 	min-width: 500px;
 }
 
+#frm_style_sidebar h3 {
+	font-size: 16px;
+	padding-left: 0;
+	padding-right: 10px;
+}
+
+#frm_style_sidebar .frm-inner-content {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 #frm_style_preview {
 	overflow-y: auto;
 	overflow-x: hidden;

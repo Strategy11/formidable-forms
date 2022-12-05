@@ -10189,13 +10189,13 @@ function frmAdminBuildJS() {
 					if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
 						debouncedPreviewUpdate();
 						return;
-					} else {
-						const hexcolor = jQuery( this ).wpColorPicker( 'color' );
-						jQuery( event.target ).val( hexcolor ).trigger( 'change' );
 					}
+
+					const hexcolor = jQuery( this ).wpColorPicker( 'color' );
+					jQuery( event.target ).val( hexcolor ).trigger( 'change' );
 				}
 			});
-			jQuery( '.wp-color-result-text' ).text( function( i, oldText ) {
+			jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 				return oldText === 'Select Color' ? 'Select' : oldText;
 			});
 

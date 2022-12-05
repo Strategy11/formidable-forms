@@ -207,129 +207,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Render the style page for a form for assigning a style to a form, and for viewing style templates.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function style() {
-		if ( FrmAppHelper::get_post_param( 'style_id', 0, 'absint' ) ) {
-			self::save_form_style();
-		}
-
-		self::setup_styles_and_scripts_for_style_page();
-
-		$form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-		$form    = FrmForm::getOne( $form_id );
-
-		if ( ! is_object( $form ) ) {
-			wp_die( 'This form does not exist', '', 404 );
-		}
-
-		$styles        = self::get_styles_for_style_page( $form );
-		$active_style  = is_callable( 'FrmProStylesController::get_active_style_for_form' ) ? FrmProStylesController::get_active_style_for_form( $form ) : reset( $styles );
-		$default_style = self::get_default_style();
-
-		/**
-		 * @since x.x
-		 *
-		 * @param array {
-		 *     @type stdClass $form
-		 * }
-		 */
-		do_action( 'frm_before_render_style_page', compact( 'form' ) );
-
-		self::render_style_page( $active_style, $styles, $form, $default_style );
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param stdClass $form
-	 * @return array<WP_Post>
-	 */
-	private static function get_styles_for_style_page( $form ) {
-		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
-			return FrmProStylesController::get_styles_for_style_page( $form );
-		}
-		return array( self::get_default_style() );
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return WP_Post
-	 */
-	private static function get_default_style() {
-		$frm_style     = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
-		return $default_style;
-	}
-
-	/**
-	 * Save style for form (from Style page) via an AJAX action.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function save_form_style() {
-		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form_style', 'frm_save_form_style_nonce' );
-		if ( $permission_error !== false ) {
-			wp_die( 'Unable to save form', '', 403 );
-		}
-
-		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
-		$form_id  = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
-		// TODO nonce / permission check.
-
-		$form                          = FrmForm::getOne( $form_id );
-		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
-
-		global $wpdb;
-		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
-
-		FrmForm::clear_form_cache();
-	}
-
-	/**
-	 * Register and enqueue styles and scripts for the style tab page.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function setup_styles_and_scripts_for_style_page() {
-		$plugin_url      = FrmAppHelper::plugin_url();
-		$version         = FrmAppHelper::plugin_version();
-		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
-
-		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
-		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
-		wp_print_styles( 'formidable_style' );
-
-		wp_print_styles( 'formidable' );
-		wp_enqueue_script( 'formidable_style' );
-	}
-
-	/**
-	 * Render the style page (with a more limited and typed scope than calling it from self::style directly).
-	 *
-	 * @since x.x
-	 *
-	 * @param WP_Post        $active_style
-	 * @param array<WP_Post> $styles
-	 * @param stdClass       $form
-	 * @param WP_Post        $default_style
-	 * @return void
-	 */
-	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
-		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
-		include $style_views_path . 'style.php';
-	}
-
-	/**
 	 * Redirect to the url for creating from a template
 	 * Also delete the current form
 	 *
@@ -1823,7 +1700,6 @@ class FrmFormsController {
 			case 'delete_all':
 			case 'settings':
 			case 'update_settings':
-			case 'style':
 				return self::$action( $vars );
 			case 'lite-reports':
 				return self::no_reports( $vars );

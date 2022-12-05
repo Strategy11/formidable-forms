@@ -28,6 +28,8 @@
 		}
 
 		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
+			// TODO if we're in edit view we want to save another form instead.
+
 			saveActiveStyle();
 			return;
 		}
@@ -80,6 +82,12 @@
 	}
 
 	function saveActiveStyle() {
+		const form = document.getElementById( 'frm_edit_style_form' );
+		if ( form ) {
+			form.submit();
+			return;
+		}
+
 		document.getElementById( 'frm_style_form' ).submit();
 	}
 

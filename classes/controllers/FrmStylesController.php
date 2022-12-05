@@ -201,23 +201,175 @@ class FrmStylesController {
 		self::load_styler( 'default' );
 	}
 
+	/**
+	 * @param mixed  $style_id
+	 * @param string $message
+	 * @return void
+	 */
 	public static function edit( $style_id = false, $message = '' ) {
-		if ( ! $style_id ) {
-			$style_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
-			if ( empty( $style_id ) ) {
-				$style_id = 'default';
+		// TODO deprecate this (because the params are unusable).
+		self::style();
+	}
+
+	/**
+	 * Render the style page for a form for assigning a style to a form, and for viewing style templates.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function style() {
+		if ( FrmAppHelper::get_post_param( 'style_id', 0, 'absint' ) ) {
+			self::save_form_style();
+		}
+
+		self::setup_styles_and_scripts_for_style_page();
+
+		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		$form_id  = FrmAppHelper::simple_get( 'form_id', 'absint', 0 );
+
+		if ( ! $form_id ) {
+			if ( ! $style_id ) {
+				wp_die( 'TODO: Handle no form id or style id in params.' );
+			}
+
+			$check = serialize( array( 'custom_style' => (string) $style_id ) );
+			$check = substr( $check, 5, -1 );
+
+			// TODO get a form for the target style.
+			$form_id = FrmDb::get_var(
+				'frm_forms',
+				array(
+					'options LIKE' => $check,
+				)
+			);
+			if ( ! $form_id ) {
+				wp_die( 'This style does not have any form attached.' );
 			}
 		}
 
-		if ( 'default' == $style_id ) {
-			$style = 'default';
-		} else {
-			$frm_style = new FrmStyle( $style_id );
-			$style     = $frm_style->get_one();
-			$style     = $style->ID;
+		$form = FrmForm::getOne( $form_id );
+
+		if ( ! is_object( $form ) ) {
+			wp_die( 'This form does not exist', '', 404 );
 		}
 
-		self::load_styler( $style, $message );
+		$styles = self::get_styles_for_style_page( $form );
+
+		if ( $style_id ) {
+			$frm_style    = new FrmStyle( $style_id );
+			$active_style = $frm_style->get_one();
+		} else {
+			$active_style  = is_callable( 'FrmProStylesController::get_active_style_for_form' ) ? FrmProStylesController::get_active_style_for_form( $form ) : reset( $styles );
+		}
+
+		$default_style = self::get_default_style();
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array {
+		 *     @type stdClass $form
+		 * }
+		 */
+		do_action( 'frm_before_render_style_page', compact( 'form' ) );
+
+		self::render_style_page( $active_style, $styles, $form, $default_style );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 * @return array<WP_Post>
+	 */
+	private static function get_styles_for_style_page( $form ) {
+		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
+			return FrmProStylesController::get_styles_for_style_page( $form );
+		}
+		return array( self::get_default_style() );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return WP_Post
+	 */
+	private static function get_default_style() {
+		$frm_style     = new FrmStyle( 'default' );
+		$default_style = $frm_style->get_one();
+		return $default_style;
+	}
+
+	/**
+	 * Save style for form (from Style page) via an AJAX action.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function save_form_style() {
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form_style', 'frm_save_form_style_nonce' );
+		if ( $permission_error !== false ) {
+			wp_die( 'Unable to save form', '', 403 );
+		}
+
+		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
+		$form_id  = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		// TODO nonce / permission check.
+
+		$form                          = FrmForm::getOne( $form_id );
+		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
+
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
+
+		FrmForm::clear_form_cache();
+	}
+
+	/**
+	 * Register and enqueue styles and scripts for the style tab page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function setup_styles_and_scripts_for_style_page() {
+		$plugin_url      = FrmAppHelper::plugin_url();
+		$version         = FrmAppHelper::plugin_version();
+		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
+
+		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
+		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
+		wp_print_styles( 'formidable_style' );
+
+		wp_print_styles( 'formidable' );
+		wp_enqueue_script( 'formidable_style' );
+	}
+
+	/**
+	 * Render the style page (with a more limited and typed scope than calling it from self::style directly).
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post        $active_style
+	 * @param array<WP_Post> $styles
+	 * @param stdClass       $form
+	 * @param WP_Post        $default_style
+	 * @return void
+	 */
+	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
+		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
+		$view             = 'edit' === FrmAppHelper::simple_get( 'frm_action' ) ? 'edit' : 'list';
+
+		if ( 'edit' === $view ) {
+			FrmStylesController::add_meta_boxes();
+
+			$frm_style = new FrmStyle( $active_style->ID );
+			$style     = $active_style;
+		}
+
+		include $style_views_path . 'style.php';
 	}
 
 	public static function save() {
@@ -241,20 +393,7 @@ class FrmStylesController {
 	}
 
 	public static function load_styler( $style, $message = '' ) {
-		global $frm_settings;
-
-		$frm_style = new FrmStyle();
-		$styles    = $frm_style->get_all();
-
-		if ( is_numeric( $style ) ) {
-			$style = $styles[ $style ];
-		} elseif ( 'default' == $style ) {
-			$style = $frm_style->get_default_style( $styles );
-		}
-
-		self::add_meta_boxes();
-
-		include( FrmAppHelper::plugin_path() . '/classes/views/styles/show.php' );
+		// TODO deprecate this.
 	}
 
 	/**
@@ -369,7 +508,7 @@ class FrmStylesController {
 					return;
 				}
 
-				if ( 'new_style' == $action || 'duplicate' == $action ) {
+				if ( 'new_style' === $action || 'duplicate' === $action ) {
 					return self::$action();
 				}
 
@@ -427,7 +566,7 @@ class FrmStylesController {
 		wp_die();
 	}
 
-	private static function add_meta_boxes() {
+	public static function add_meta_boxes() {
 
 		// setup meta boxes
 		$meta_boxes = array(
