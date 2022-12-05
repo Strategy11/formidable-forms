@@ -22,9 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include $style_views_path . '_sample_form.php';
 		?>
 	</div>
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&form_id=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button" tabindex="0" role="button">
-		<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
-	</a>
+	<?php if ( 'edit' !== $view ) { ?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&form_id=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button" tabindex="0" role="button">
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
+		</a>
+	<?php } ?>
 	<button id="frm_toggle_sample_form" class="frm_floating_style_button">
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_sample_form_icon', array( 'echo' => true ) ); ?> <span><?php esc_html_e( 'View sample form', 'formidable' ); ?></span>
 	</button>
