@@ -575,7 +575,7 @@ class FrmStylesController {
 		$style     = '';
 
 		echo '<style type="text/css">';
-		include( FrmAppHelper::plugin_path() . '/css/_single_theme.css.php' );
+		include FrmAppHelper::plugin_path() . '/css/_single_theme.css.php';
 		echo '</style>';
 		wp_die();
 	}
