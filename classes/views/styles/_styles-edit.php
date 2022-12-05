@@ -9,9 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form id="frm_styling_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_edit_url( $style, $form->id ) ); ?>">
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 		<input type="hidden" name="frm_action" value="save" />
-		<?php wp_nonce_field( 'frm_style_nonce', 'frm_style' ); ?>
 
-		<?php include $style_views_path . '_style-options.php'; ?>
+		<?php
+		wp_nonce_field( 'frm_style_nonce', 'frm_style' );
+
+		$frm_style = new FrmStyle( $style->ID );
+		include $style_views_path . '_style-options.php';
+		?>
 
 		<div id="this_css"></div><?php // This holds the custom CSS for live updates to the preview. ?>
 	</form>

@@ -194,11 +194,11 @@ class FrmStylesController {
 	}
 
 	public static function new_style( $return = '' ) {
-		self::load_styler( 'default' );
+		self::style();
 	}
 
 	public static function duplicate() {
-		self::load_styler( 'default' );
+		self::style();
 	}
 
 	/**
@@ -230,7 +230,10 @@ class FrmStylesController {
 
 		if ( ! $form_id ) {
 			if ( ! $style_id ) {
-				wp_die( 'TODO: Handle no form id or style id in params.' );
+				if ( 'new_style' === FrmApphelper::simple_get( 'frm_action' ) ) {
+					$default_style = self::get_default_style();
+					$style_id      = $default_style->ID;
+				}
 			}
 
 			$check = serialize( array( 'custom_style' => (string) $style_id ) );
@@ -361,13 +364,19 @@ class FrmStylesController {
 	 */
 	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
 		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
-		$view             = 'edit' === FrmAppHelper::simple_get( 'frm_action' ) ? 'edit' : 'list';
+		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
+		$frm_style        = new FrmStyle( $active_style->ID );
+
+		if ( in_array( $view, array( 'edit', 'new_style' ), true ) ) {
+			FrmStylesController::add_meta_boxes();
+		}
 
 		if ( 'edit' === $view ) {
-			FrmStylesController::add_meta_boxes();
-
-			$frm_style = new FrmStyle( $active_style->ID );
-			$style     = $active_style;
+			$style = $active_style;
+		} elseif ( 'new_style' === $view ) {
+			$style             = clone $active_style;
+			$style->ID         = '';
+			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
 		}
 
 		include $style_views_path . 'style.php';
@@ -506,10 +515,15 @@ class FrmStylesController {
 			default:
 				do_action( 'frm_style_action_route', $action );
 				if ( apply_filters( 'frm_style_stop_action_route', false, $action ) ) {
+					echo 'bock';
 					return;
 				}
 
+				var_dump( $action );
+				die();
 				if ( 'new_style' === $action || 'duplicate' === $action ) {
+					echo 'here';
+					die();
 					return self::$action();
 				}
 
