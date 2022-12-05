@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div id="frm_style_page_wrapper">
 						<?php
 						$view_file = 'list' === $view ? 'list' : 'edit';
-						include $style_views_path . '_styles-' . $view_file . '.php';
+						include $style_views_path . '_styles-' . $view_file . '.php'; // Render view based on type (either _styles-list.php or _styles-edit.php).
 
 						include $style_views_path . '_style-preview-container.php'; // Render preview container.
 						?>

@@ -277,27 +277,27 @@
 		}
 
 		function changeStyling() {
-			var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
-			locStr = JSON.stringify( locStr );
+			let locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
+			locStr     = JSON.stringify( locStr );
 			jQuery.ajax({
-				type: 'POST', url: ajaxurl,
+				type: 'POST',
+				url: ajaxurl,
 				data: {
 					action: 'frm_change_styling',
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
 				success: function( css ) {
-					// TODO update the preview in real time.
 					document.getElementById( 'this_css' ).innerHTML = css;
 				}
 			});
 		}
 
 		function textSquishCheck() {
-			var size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
-			var height = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
-			var paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
-			var paddingCount = paddingEntered.length;
+			const size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
+			const height = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
+			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
+			const paddingCount = paddingEntered.length;
 
 			// If too many or too few padding entries, leave now
 			if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {
@@ -305,14 +305,14 @@
 			}
 
 			// Get the top and bottom padding from entered values
-			var paddingTop = paddingEntered[0].replace( /\D/g, '' );
-			var paddingBottom = paddingTop;
+			const paddingTop = paddingEntered[0].replace( /\D/g, '' );
+			const paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
 				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
 			}
 
 			// Check if there is enough space for text
-			var textSpace = height - size - paddingTop - paddingBottom - 3;
+			const textSpace = height - size - paddingTop - paddingBottom - 3;
 			if ( textSpace < 0 ) {
 				infoModal( frm_admin_js.css_invalid_size );
 			}
@@ -320,7 +320,7 @@
 
 		function setPosClass() {
 			/*jshint validthis:true */
-			var value = this.value;
+			let value = this.value;
 			if ( value === 'none' ) {
 				value = 'top';
 			} else if ( value === 'no_label' ) {
@@ -344,15 +344,17 @@
 			});
 		}
 
-		jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
-			var panelId, wrapper,
-				target = jQuery( e.target );
+		jQuery( '#menu-settings-column' ).on(
+			'click',
+			function( e ) {
+				const target = jQuery( e.target );
 
-			if ( e.target.className.indexOf( 'nav-tab-link' ) !== -1 ) {
+				if ( e.target.className.indexOf( 'nav-tab-link' ) === -1 ) {
+					return;
+				}
 
-				panelId = target.data( 'type' );
-
-				wrapper = target.parents( '.accordion-section-content' ).first();
+				const panelId = target.data( 'type' );
+				const wrapper = target.parents( '.accordion-section-content' ).first();
 
 				jQuery( '.tabs-panel-active', wrapper ).removeClass( 'tabs-panel-active' ).addClass( 'tabs-panel-inactive' );
 				jQuery( '#' + panelId, wrapper ).removeClass( 'tabs-panel-inactive' ).addClass( 'tabs-panel-active' );
@@ -365,7 +367,7 @@
 
 				e.preventDefault();
 			}
-		});
+		);
 
 		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
 			const radio = this;
@@ -403,7 +405,7 @@
 			}
 
 			document.addEventListener( event, function( e ) {
-				var target;
+				let target;
 
 				// loop parent nodes from the target to the delegation node.
 				for ( target = e.target; target && target != this; target = target.parentNode ) {
@@ -415,6 +417,11 @@
 			}, options );
 		}
 
+		/**
+		 * @param {HTMLElement} input
+		 * @param {HTMLElement} container
+		 * @returns {void}
+		 */
 		function checkFloatingLabelsForStyles( input, container ) {
 			if ( ! container ) {
 				container = input.closest( '.frm_inside_container' );
@@ -424,19 +431,21 @@
 
 			container.classList.toggle( 'frm_label_float_top', shouldFloatTop );
 
-			if ( 'SELECT' === input.tagName ) {
-				const firstOpt = input.querySelector( 'option:first-child' );
+			if ( 'SELECT' !== input.tagName ) {
+				return;
+			}
 
-				if ( shouldFloatTop ) {
-					if ( firstOpt.hasAttribute( 'data-label' ) ) {
-						firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
-						firstOpt.removeAttribute( 'data-label' );
-					}
-				} else {
-					if ( firstOpt.textContent ) {
-						firstOpt.setAttribute( 'data-label', firstOpt.textContent );
-						firstOpt.textContent = '';
-					}
+			const firstOpt = input.querySelector( 'option:first-child' );
+
+			if ( shouldFloatTop ) {
+				if ( firstOpt.hasAttribute( 'data-label' ) ) {
+					firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
+					firstOpt.removeAttribute( 'data-label' );
+				}
+			} else {
+				if ( firstOpt.textContent ) {
+					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+					firstOpt.textContent = '';
 				}
 			}
 		}

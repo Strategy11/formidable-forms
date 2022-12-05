@@ -244,12 +244,13 @@ class FrmStylesController {
 				)
 			);
 			if ( ! $form_id ) {
-				wp_die( 'This style does not have any form attached.' );
+				// Fallback to any form.
+				// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
+				$form_id = FrmDb::get_var( 'frm_forms', array( 'status' => 'published' ), 'id' );
 			}
 		}
 
 		$form = FrmForm::getOne( $form_id );
-
 		if ( ! is_object( $form ) ) {
 			wp_die( 'This form does not exist', '', 404 );
 		}
