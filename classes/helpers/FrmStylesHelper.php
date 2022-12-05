@@ -553,7 +553,7 @@ class FrmStylesHelper {
 				'page'       => 'formidable-styles',
 				'frm_action' => 'edit',
 				'id'         => $style->ID,
-				'form_id'    => $form_id, // We include &form_id for the back button to know where to point to.
+				'form'       => $form_id, // We include &form_id for the back button to know where to point to.
 			),
 			admin_url( 'themes.php' )
 		);
