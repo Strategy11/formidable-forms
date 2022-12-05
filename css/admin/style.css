@@ -63,6 +63,10 @@
 	margin-left: 15px;
 }
 
+.frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
+	box-shadow: none;
+}
+
 .frm-style-card:hover {
 	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
 }
