@@ -22,12 +22,20 @@
 #frm_style_sidebar h3 {
 	font-size: 16px;
 	padding-left: 0;
-	padding-right: 10px;
 }
 
 #frm_style_sidebar .frm-inner-content {
 	padding-left: 10px;
 	padding-right: 10px;
+}
+
+#frm_style_sidebar .control-section:hover .accordion-section-title {
+	/* Normally an accordion has a white background but this doesn't look great with the padding on the accordion. */
+	background-color: transparent !important;
+}
+
+#frm_style_sidebar .accordion-section-title::after {
+	right: 0;
 }
 
 #frm_style_preview {
