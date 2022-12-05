@@ -226,8 +226,6 @@
 	 * @returns {void}
 	 */
 	function onStyleEditorInit() {
-		collapseAllSections();
-
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( changeStyling, 100 );
 
@@ -271,10 +269,6 @@
 		const changeEvent = document.createEvent( 'HTMLEvents' );
 		changeEvent.initEvent( 'change', true, false );
 		document.getElementById( 'frm_position' ).dispatchEvent( changeEvent );
-
-		function collapseAllSections() {
-			jQuery( '.control-section.accordion-section.open' ).removeClass( 'open' );
-		}
 
 		function changeStyling() {
 			let locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
