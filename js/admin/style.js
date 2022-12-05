@@ -82,7 +82,7 @@
 	}
 
 	function saveActiveStyle() {
-		const form = document.getElementById( 'frm_edit_style_form' );
+		const form = document.getElementById( 'frm_styling_form' );
 		if ( form ) {
 			form.submit();
 			return;
@@ -219,4 +219,228 @@
 			child: anchor
 		});
 	}
+
+	/**
+	 * This gets triggered through a hook called in frmAdminBuild.styleInit() from formidable_admin.js.
+	 *
+	 * @returns {void}
+	 */
+	function onStyleEditorInit() {
+		collapseAllSections();
+
+		const { debounce }           = frmDom.util;
+		const debouncedPreviewUpdate = debounce( changeStyling, 100 );
+
+		document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
+		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', textSquishCheck );
+		document.getElementById( 'frm_field_pad' ).addEventListener( 'change', textSquishCheck );
+
+		jQuery( 'input.hex' ).wpColorPicker({
+			change: function( event ) {
+				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
+					debouncedPreviewUpdate();
+					return;
+				}
+
+				const hexcolor = jQuery( this ).wpColorPicker( 'color' );
+				jQuery( event.target ).val( hexcolor ).trigger( 'change' );
+			}
+		});
+		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
+			return oldText === 'Select Color' ? 'Select' : oldText;
+		});
+		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
+
+		jQuery( '.frm_pro_form #datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
+		jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
+
+		// Check floating label when focus or blur fields.
+		const floatingLabelSelector = '.frm_inside_container > input, .frm_inside_container > textarea, .frm_inside_container > select';
+		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
+			documentOn(
+				eventName,
+				floatingLabelSelector,
+				function( event ) {
+					checkFloatingLabelsForStyles( event.target );
+				},
+				true
+			);
+		});
+
+		// Trigger label position option on load.
+		const changeEvent = document.createEvent( 'HTMLEvents' );
+		changeEvent.initEvent( 'change', true, false );
+		document.getElementById( 'frm_position' ).dispatchEvent( changeEvent );
+
+		function collapseAllSections() {
+			jQuery( '.control-section.accordion-section.open' ).removeClass( 'open' );
+		}
+
+		function changeStyling() {
+			var locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
+			locStr = JSON.stringify( locStr );
+			jQuery.ajax({
+				type: 'POST', url: ajaxurl,
+				data: {
+					action: 'frm_change_styling',
+					nonce: frmGlobal.nonce,
+					frm_style_setting: locStr
+				},
+				success: function( css ) {
+					// TODO update the preview in real time.
+					document.getElementById( 'this_css' ).innerHTML = css;
+				}
+			});
+		}
+
+		function textSquishCheck() {
+			var size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
+			var height = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
+			var paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
+			var paddingCount = paddingEntered.length;
+
+			// If too many or too few padding entries, leave now
+			if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {
+				return;
+			}
+
+			// Get the top and bottom padding from entered values
+			var paddingTop = paddingEntered[0].replace( /\D/g, '' );
+			var paddingBottom = paddingTop;
+			if ( paddingCount >= 3 ) {
+				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
+			}
+
+			// Check if there is enough space for text
+			var textSpace = height - size - paddingTop - paddingBottom - 3;
+			if ( textSpace < 0 ) {
+				infoModal( frm_admin_js.css_invalid_size );
+			}
+		}
+
+		function setPosClass() {
+			/*jshint validthis:true */
+			var value = this.value;
+			if ( value === 'none' ) {
+				value = 'top';
+			} else if ( value === 'no_label' ) {
+				value = 'none';
+			}
+	
+			document.querySelectorAll( '.frm_pos_container' ).forEach( container => {
+				// Fields that support floating label should have a directly child input/textarea/select.
+				const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
+	
+				if ( 'inside' === value && ! input ) {
+					value = 'top';
+				}
+	
+				container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
+				container.classList.add( 'frm_' + value + '_container' );
+	
+				if ( 'inside' === value ) {
+					checkFloatingLabelsForStyles( input, container );
+				}
+			});
+		}
+
+		jQuery( '#menu-settings-column' ).on( 'click', function( e ) {
+			var panelId, wrapper,
+				target = jQuery( e.target );
+
+			if ( e.target.className.indexOf( 'nav-tab-link' ) !== -1 ) {
+
+				panelId = target.data( 'type' );
+
+				wrapper = target.parents( '.accordion-section-content' ).first();
+
+				jQuery( '.tabs-panel-active', wrapper ).removeClass( 'tabs-panel-active' ).addClass( 'tabs-panel-inactive' );
+				jQuery( '#' + panelId, wrapper ).removeClass( 'tabs-panel-inactive' ).addClass( 'tabs-panel-active' );
+
+				jQuery( '.tabs', wrapper ).removeClass( 'tabs' );
+				target.parent().addClass( 'tabs' );
+
+				// select the search bar
+				jQuery( '.quick-search', wrapper ).trigger( 'focus' );
+
+				e.preventDefault();
+			}
+		});
+
+		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
+			const radio = this;
+			const btnGrp = this.closest( '.btn-group' );
+			const btnId = btnGrp.getAttribute( 'id' );
+
+			const select = document.getElementById( btnId.replace( '_select', '' ) );
+			if ( select ) {
+				select.value = radio.value;
+			}
+
+			jQuery( btnGrp ).children( 'button' ).html( radio.nextElementSibling.innerHTML + ' <b class="caret"></b>' );
+
+			const activeItem = btnGrp.querySelector( '.dropdown-item.active' );
+			if ( activeItem ) {
+				activeItem.classList.remove( 'active' );
+			}
+
+			this.closest( '.dropdown-item' ).classList.add( 'active' );
+		});
+
+		/**
+		 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+		 *
+		 * @since 5.4.2
+		 *
+		 * @param {String}         event    Event name.
+		 * @param {String}         selector Selector.
+		 * @param {Function}       handler  Handler.
+		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+		 */
+		function documentOn( event, selector, handler, options ) {
+			if ( 'undefined' === typeof options ) {
+				options = false;
+			}
+
+			document.addEventListener( event, function( e ) {
+				var target;
+
+				// loop parent nodes from the target to the delegation node.
+				for ( target = e.target; target && target != this; target = target.parentNode ) {
+					if ( target.matches( selector ) ) {
+						handler.call( target, e );
+						break;
+					}
+				}
+			}, options );
+		}
+
+		function checkFloatingLabelsForStyles( input, container ) {
+			if ( ! container ) {
+				container = input.closest( '.frm_inside_container' );
+			}
+
+			const shouldFloatTop = input.value || document.activeElement === input;
+
+			container.classList.toggle( 'frm_label_float_top', shouldFloatTop );
+
+			if ( 'SELECT' === input.tagName ) {
+				const firstOpt = input.querySelector( 'option:first-child' );
+
+				if ( shouldFloatTop ) {
+					if ( firstOpt.hasAttribute( 'data-label' ) ) {
+						firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
+						firstOpt.removeAttribute( 'data-label' );
+					}
+				} else {
+					if ( firstOpt.textContent ) {
+						firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+						firstOpt.textContent = '';
+					}
+				}
+			}
+		}
+	}
+
+	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', onStyleEditorInit );
 }() );
