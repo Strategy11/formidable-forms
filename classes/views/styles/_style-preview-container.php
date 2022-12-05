@@ -11,25 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		// The right side body shows a preview (of the target form) so you can see the form you're actually styling.
 		add_filter( 'frm_is_admin', '__return_false' ); // Force is_admin to false so the "Entry Key" field doesn't render in the preview.
-
-		// Filter form classes so the form uses the preview style, not the form's active style.
-		add_filter(
-			'frm_add_form_style_class',
-			function( $class ) use ( $style ) {
-				$split = array_filter(
-					explode( ' ', $class ),
-					/**
-					 * @param string $class
-					 */
-					function( $class ) {
-						return $class && 0 !== strpos( $class, 'frm_style_' );
-					}
-				);
-				$split[] = 'frm_style_' . $style->post_name;
-				return implode( ' ', $split );
-			}
-		);
-
 		echo FrmFormsController::show_form(  $form->id, '', 'auto', 'auto' );
 		?>
 	</div>

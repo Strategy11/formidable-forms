@@ -377,6 +377,7 @@ class FrmStylesController {
 
 		if ( 'edit' === $view ) {
 			$style = $active_style;
+			self::force_form_style( $style );
 		} elseif ( in_array( $view, array( 'new_style', 'duplicate' ) ) ) {
 			$style             = clone $active_style;
 			$style->ID         = '';
@@ -384,6 +385,33 @@ class FrmStylesController {
 		}
 
 		include $style_views_path . 'style.php';
+	}
+
+	/**
+	 * Filter form classes so the form uses the preview style, not the form's active style.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $style
+	 * @return void
+	 */
+	private static function force_form_style( $style ) {
+		add_filter(
+			'frm_add_form_style_class',
+			function( $class ) use ( $style ) {
+				$split = array_filter(
+					explode( ' ', $class ),
+					/**
+					 * @param string $class
+					 */
+					function( $class ) {
+						return $class && 0 !== strpos( $class, 'frm_style_' );
+					}
+				);
+				$split[] = 'frm_style_' . $style->post_name;
+				return implode( ' ', $split );
+			}
+		);
 	}
 
 	public static function save() {
