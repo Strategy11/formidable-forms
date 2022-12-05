@@ -425,13 +425,40 @@ class FrmStylesController {
 			if ( empty( $post_id ) && ! empty( $id ) ) {
 				// set the post id to the new style so it will be loaded for editing
 				$post_id = reset( $id );
+				self::maybe_redirect_on_duplicate( $id );
 			}
+
 			// include the CSS that includes this style
 			echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
 			$message = __( 'Your styling settings have been saved.', 'formidable' );
 		}
 
 		return self::edit( $post_id, $message );
+	}
+
+	/**
+	 * Force a redirect after duplicating a style to avoid an old stale URL that could result in multiple duplicates.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $ids
+	 * @return void
+	 */
+	private static function maybe_redirect_on_duplicate( $ids ) {
+		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$parsed  = parse_url( $referer );
+		$query   = $parsed['query'];
+
+		$creating_duplicate_entry = false !== strpos( $query, 'frm_action=duplicate' );
+		if ( ! $creating_duplicate_entry ) {
+			// Only redirect when creating a duplicate.
+			return;
+		}
+
+		$style     = new stdClass();
+		$style->ID = end( $ids );
+		wp_safe_redirect( esc_url_raw( FrmStylesHelper::get_edit_url( $style ) ) );
+		die();
 	}
 
 	public static function load_styler( $style, $message = '' ) {

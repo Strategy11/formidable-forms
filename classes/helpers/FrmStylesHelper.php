@@ -547,16 +547,19 @@ class FrmStylesHelper {
 	 * @param string|int $form_id
 	 * @return string
 	 */
-	public static function get_edit_url( $style, $form_id ) {
-		return add_query_arg(
-			array(
-				'page'       => 'formidable-styles',
-				'frm_action' => 'edit',
-				'id'         => $style->ID,
-				'form'       => $form_id, // We include &form_id for the back button to know where to point to.
-			),
-			admin_url( 'themes.php' )
+	public static function get_edit_url( $style, $form_id = 0 ) {
+		$query_args = array(
+			'page'       => 'formidable-styles',
+			'frm_action' => 'edit',
+			'id'         => $style->ID,
 		);
+
+		if ( $form_id ) {
+			// We include &form_id for the back button to know where to point to.
+			$query_args['form'] = $form_id;
+		}
+
+		return add_query_arg( $query_args, admin_url( 'themes.php' ) );
 	}
 
 	/**

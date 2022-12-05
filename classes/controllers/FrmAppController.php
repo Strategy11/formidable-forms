@@ -442,6 +442,11 @@ class FrmAppController {
 			FrmFormsController::duplicate();
 		}
 
+		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
+			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
+			FrmStylesController::save();
+		}
+
 		new FrmPersonalData(); // register personal data hooks
 
 		if ( ! FrmAppHelper::doing_ajax() && self::needs_update() ) {
