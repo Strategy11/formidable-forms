@@ -508,7 +508,7 @@ class FrmStylesHelper {
 	 * @return string
 	 */
 	public static function get_style_page_url( $form_id ) {
-		return admin_url( 'themes.php?page=formidable-styles&form_id=' . absint( $form_id ) );
+		return admin_url( 'themes.php?page=formidable-styles&form=' . absint( $form_id ) );
 	}
 
 	/**

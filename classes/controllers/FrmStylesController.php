@@ -226,7 +226,7 @@ class FrmStylesController {
 		self::setup_styles_and_scripts_for_style_page();
 
 		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-		$form_id  = FrmAppHelper::simple_get( 'form_id', 'absint', 0 );
+		$form_id  = FrmAppHelper::simple_get( 'form', 'absint', 0 );
 
 		if ( ! $form_id ) {
 			if ( ! $style_id ) {
@@ -595,6 +595,11 @@ class FrmStylesController {
 		}
 	}
 
+	/**
+	 * @param array $atts
+	 * @param array $sec
+	 * @return void
+	 */
 	public static function include_style_section( $atts, $sec ) {
 		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		$style = $atts['style'];
@@ -613,7 +618,7 @@ class FrmStylesController {
 		$file_name = apply_filters( 'frm_style_settings_' . $sec['args'], $file_name );
 
 		echo '<div class="frm_grid_container">';
-		include( $file_name );
+		include $file_name;
 		echo '</div>';
 	}
 
