@@ -515,15 +515,10 @@ class FrmStylesController {
 			default:
 				do_action( 'frm_style_action_route', $action );
 				if ( apply_filters( 'frm_style_stop_action_route', false, $action ) ) {
-					echo 'bock';
 					return;
 				}
 
-				var_dump( $action );
-				die();
 				if ( 'new_style' === $action || 'duplicate' === $action ) {
-					echo 'here';
-					die();
 					return self::$action();
 				}
 
