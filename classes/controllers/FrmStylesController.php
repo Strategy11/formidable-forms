@@ -230,9 +230,13 @@ class FrmStylesController {
 
 		if ( ! $form_id ) {
 			if ( ! $style_id ) {
-				if ( 'new_style' === FrmApphelper::simple_get( 'frm_action' ) ) {
+				$action = FrmApphelper::simple_get( 'frm_action' );
+
+				if ( 'new_style' === $action ) {
 					$default_style = self::get_default_style();
 					$style_id      = $default_style->ID;
+				} elseif ( 'duplicate' === $action ) {
+					$style_id = FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
 				}
 			}
 
@@ -367,13 +371,13 @@ class FrmStylesController {
 		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
 		$frm_style        = new FrmStyle( $active_style->ID );
 
-		if ( in_array( $view, array( 'edit', 'new_style' ), true ) ) {
+		if ( in_array( $view, array( 'edit', 'new_style', 'duplicate' ), true ) ) {
 			FrmStylesController::add_meta_boxes();
 		}
 
 		if ( 'edit' === $view ) {
 			$style = $active_style;
-		} elseif ( 'new_style' === $view ) {
+		} elseif ( in_array( $view, array( 'new_style', 'duplicate' ) ) ) {
 			$style             = clone $active_style;
 			$style->ID         = '';
 			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
@@ -518,7 +522,7 @@ class FrmStylesController {
 					return;
 				}
 
-				if ( 'new_style' === $action || 'duplicate' === $action ) {
+				if ( in_array( $action, array( 'new_style', 'duplicate' ), true ) ) {
 					return self::$action();
 				}
 
