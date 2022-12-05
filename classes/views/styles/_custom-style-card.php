@@ -19,8 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div>
 		<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
-		<div>
-			<?php FrmStylesHelper::echo_card_meta( $style->ID, $is_default_style, $is_active_style ); ?>
-		</div>
+		<?php
+		/**
+		 * @since x.x
+		 *
+		 * @param array $args {
+		 *     @type WP_Post $style
+		 *     @type bool    $is_default_style
+		 *     @type bool    $is_active_style
+		 * }
+		 */
+		do_action( 'frm_style_card_after_title', compact( 'style', 'is_default_style', 'is_active_style' ) );
+		?>
 	</div>
 </div>

@@ -628,49 +628,6 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Echo the content for card meta row (# of Forms and Default/Selected tags).
-	 *
-	 * @since x.x
-	 *
-	 * @param string|int $style_id
-	 * @param bool       $is_default
-	 * @param bool       $is_active
-	 * @return void
-	 */
-	public static function echo_card_meta( $style_id, $is_default, $is_active ) {
-		$number_of_forms = self::get_form_count_for_style( $style_id, $is_default );
-		printf( _n( '%1$s Form', '%1$s Forms', $number_of_forms, 'formidable' ), $number_of_forms );
-
-		if ( $is_default ) {
-			echo '<div class="frm-default-style-tag">' . esc_html__( 'Default', 'formidable' ) . '</div>';
-		}
-
-		if ( $is_active) {
-			echo '<div class="frm-selected-style-tag">' . esc_html__( 'Selected', 'formidable' ) . '</div>';
-		}
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param string|int $style_id
-	 * @param bool       $is_default
-	 * @return int
-	 */
-	private static function get_form_count_for_style( $style_id, $is_default ) {
-		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
-		$substring  = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
-
-		$number_of_forms = FrmDb::get_count( 'frm_forms', array( 'status' => 'published', 'options LIKE' => $substring ) );
-		if ( $is_default ) {
-			// Add forms without an assigned style ID to the default count as well.
-			$number_of_forms += FrmDb::get_count( 'frm_forms', array( 'status' => 'published', 'options NOT LIKE' => 'custom_style' ) );
-		}
-
-		return $number_of_forms;
-	}
-
-	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
