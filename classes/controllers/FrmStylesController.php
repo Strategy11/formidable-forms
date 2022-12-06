@@ -423,9 +423,9 @@ class FrmStylesController {
 		if ( $post_id !== false && wp_verify_nonce( $style_nonce, 'frm_style_nonce' ) ) {
 			$id = $frm_style->update( $post_id );
 			if ( empty( $post_id ) && ! empty( $id ) ) {
-				// set the post id to the new style so it will be loaded for editing
-				$post_id = reset( $id );
-				self::maybe_redirect_on_duplicate( $id );
+				self::maybe_redirect_after_save( $id );
+
+				$post_id = reset( $id ); // Set the post id to the new style so it will be loaded for editing.
 			}
 
 			// include the CSS that includes this style
@@ -437,21 +437,29 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Force a redirect after duplicating a style to avoid an old stale URL that could result in multiple duplicates.
+	 * Force a redirect after duplicating or creating a new style to avoid an old stale URL that could result in more styles than intended.
 	 *
 	 * @since x.x
 	 *
 	 * @param array $ids
 	 * @return void
 	 */
-	private static function maybe_redirect_on_duplicate( $ids ) {
+	private static function maybe_redirect_after_save( $ids ) {
 		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		$parsed  = parse_url( $referer );
 		$query   = $parsed['query'];
 
-		$creating_duplicate_entry = false !== strpos( $query, 'frm_action=duplicate' );
-		if ( ! $creating_duplicate_entry ) {
-			// Only redirect when creating a duplicate.
+		$current_action      = false;
+		$actions_to_redirect = array( 'duplicate', 'new_style' );
+		foreach ( $actions_to_redirect as $action ) {
+			if ( false !== strpos( $query, 'frm_action=' . $action ) ) {
+				$current_action = $action;
+				break;
+			}
+		}
+
+		if ( false === $current_action ) {
+			// Do not redirect as the referer URL did not match $actions_to_redirect.
 			return;
 		}
 
