@@ -44,6 +44,7 @@ class FrmFormActionsController {
 	 */
 	public static function register_actions() {
 		$action_classes = array(
+			'on_submit'         => 'FrmOnSubmitAction',
 			'email'             => 'FrmEmailAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
