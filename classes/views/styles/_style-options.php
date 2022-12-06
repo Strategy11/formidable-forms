@@ -37,4 +37,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	do_action( 'frm_style_settings_top', $style );
 	?>
 </div>
-<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
+<div class="styling_settings">
+	<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
+</div>

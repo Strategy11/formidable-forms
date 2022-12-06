@@ -384,7 +384,7 @@ class FrmStylesController {
 			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
 		}
 
-		include $style_views_path . 'style.php';
+		include $style_views_path . 'show.php';
 	}
 
 	/**
