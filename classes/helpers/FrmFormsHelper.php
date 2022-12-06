@@ -99,13 +99,13 @@ class FrmFormsHelper {
 			$args['frm_action'] = 'edit';
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
 			unset( $args['id'] ); // Avoid passing style into form switcher on style page.
-			$base = add_query_arg(
-				array(
-					'page'       => 'formidable-styles',
-					'frm_action' => $frm_action
-				),
-				admin_url( 'themes.php' )
+			$query_args = array(
+				'page'       => 'formidable-styles',
 			);
+			if ( $frm_action ) {
+				$query_args['frm_action'] = $frm_action;
+			}
+			$base = add_query_arg( $query_args, admin_url( 'themes.php' ) );
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );

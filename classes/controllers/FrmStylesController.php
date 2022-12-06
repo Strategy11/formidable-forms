@@ -377,11 +377,15 @@ class FrmStylesController {
 
 		if ( 'edit' === $view ) {
 			$style = $active_style;
-			self::force_form_style( $style );
 		} elseif ( in_array( $view, array( 'new_style', 'duplicate' ) ) ) {
 			$style             = clone $active_style;
 			$style->ID         = '';
 			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
+			$style->post_name  = 'new-style';
+		}
+
+		if ( isset( $style ) ) {
+			self::force_form_style( $style );
 		}
 
 		include $style_views_path . 'show.php';
