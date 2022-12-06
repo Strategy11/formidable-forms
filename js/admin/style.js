@@ -198,12 +198,17 @@
 	function resetStyle( styleId ) {
 		const formData = new FormData();
 		formData.append( 'styleId', styleId );
-		doJsonPost( 'settings_reset', formData ).then( setCardToDefaultStylesAfterReset );
+		doJsonPost( 'settings_reset', formData ).then( reloadAfterStyleReset );
 	}
 
-	function setCardToDefaultStylesAfterReset() {
-		// TODO after it's reset we would want to switch the class to the default so the card syncs.
-		// The preview would need to switch as well.
+	/**
+	 * Just reload the page after a card is reset for now as it's easier than trying to load all of the default rules.
+	 *
+	 * @returns {void}
+	 */
+	function reloadAfterStyleReset() {
+		// TODO a success message would be useful.
+		window.location.reload();
 	}
 
 	/**
