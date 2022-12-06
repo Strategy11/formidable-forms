@@ -17,7 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this. ?>
 	<div id="frm_sample_form" class="frm_hidden">
 		<?php 
-		$style        = $default_style;
+		if ( ! isset( $style ) ) {
+			$style = $active_style;
+		}
 		$frm_settings = $frm_settings = FrmAppHelper::get_settings();
 		include $style_views_path . '_sample_form.php';
 		?>
