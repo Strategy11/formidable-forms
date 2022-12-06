@@ -435,8 +435,8 @@ class FrmStylesController {
 			}
 
 			// include the CSS that includes this style
-			echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
-			$message = __( 'Your styling settings have been saved.', 'formidable' );
+			//echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
+			//$message = __( 'Your styling settings have been saved.', 'formidable' );
 		}
 
 		return array( $post_id, $message );
@@ -444,11 +444,12 @@ class FrmStylesController {
 
 	/**
 	 * Show the edit view after saving.
-	 * The save event is triggered earlier, on admin init where FrmStylesController::save_style is called.
+	 * The save event is triggered earlier, on admin init where self::save_style is called.
 	 *
 	 * @return void
 	 */
 	public static function save() {
+		// TODO $message from self::save_style never gets shown anywhere.
 		self::edit();
 	}
 
