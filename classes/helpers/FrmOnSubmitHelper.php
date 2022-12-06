@@ -28,7 +28,7 @@ class FrmOnSubmitHelper {
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'message' );
 		?>
-		<div>
+		<div class="frm_has_shortcodes frm_has_textarea">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
@@ -75,7 +75,7 @@ class FrmOnSubmitHelper {
 	public static function show_redirect_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_url' );
 		?>
-		<div>
+		<div class="frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Enter URL', 'formidable' ); ?></label>
 			<input
 				type="text"
