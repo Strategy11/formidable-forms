@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 // This is the view for the "style page" where you can assign a style to a form and view the list of style templates.
-// It is accessed from /wp-admin/admin.php?page=formidable-styles&form=782
+// It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
 ?>
 <div id="frm_style_sidebar">
 	<?php
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 */
 	do_action( 'frm_style_sidebar_top', compact( 'form' ) );
 	?>
-	<form id="frm_style_form" method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&form=' . $form->id .'&t=advanced_settings' ) ); ?>">
+	<form id="frm_style_form" method="post" action="<?php echo esc_url( admin_url( 'themes.php?page=formidable-styles&form=' . $form->id .'&t=advanced_settings' ) ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $active_style->ID ); ?>" />
 		<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>

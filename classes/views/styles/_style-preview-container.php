@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 // This is the view for the "style page" where you can assign a style to a form and view the list of style templates.
-// It is accessed from /wp-admin/admin.php?page=formidable-styles&frm_action=edit&form=782
+// It is accessed from /wp-admin/themes.php?page=formidable-styles&frm_action=edit&form=782
 
 ?>
 <div id="frm_style_preview">
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 	<?php if ( 'edit' !== $view ) { ?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&form=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button" tabindex="0" role="button">
+		<a href="<?php echo esc_url( admin_url( 'themes.php?page=formidable-styles&frm_action=edit&form=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button" tabindex="0" role="button">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
 		</a>
 	<?php } ?>

@@ -1428,7 +1428,7 @@ class FrmAppHelper {
 
 	/**
 	 * Check if user is on the style editor, or the alternative URL.
-	 * The first URL is a submenu "Styles" in the Formidable menu /wp-admin/admin.php?page=formidable-styles.
+	 * The first URL is a submenu "Styles" in the Formidable menu /wp-admin/themes.php?page=formidable-styles.
 	 * The alternative URL is linked as a submenu "Forms" item of the Appearance menu /wp-admin/themes.php?page=formidable-styles2.
 	 *
 	 * @since 5.5.3

@@ -11,16 +11,28 @@
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { doJsonPost } = frmDom.ajax;
 
-	document.addEventListener( 'click', handleClickEvents );
-	setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
+	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
+	if ( isListPage ) {
+		initListPage();
+	}
 
-	function handleClickEvents( event ) {
+	initCommonEvents();
+
+	/**
+	 * These are shared events for both the edit/list views like the sample form toggle.
+	 */
+	function initCommonEvents() {
+		document.addEventListener( 'click', handleCommonClickEvents );
+	}
+
+	function initListPage() {
+		document.addEventListener( 'click', handleClickEventsForListPage );
+		setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
+		initDatepickerSample();
+	}
+
+	function handleCommonClickEvents( event ) {
 		const target = event.target;
-
-		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
-			handleStyleCardClick( event );
-			return;
-		}
 
 		if ( 'frm_toggle_sample_form' === target.id || target.closest( '#frm_toggle_sample_form' ) ) {
 			toggleSampleForm();
@@ -30,7 +42,16 @@
 		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
 			// TODO if we're in edit view we want to save another form instead.
 
-			saveActiveStyle();
+			handleUpdateClick();
+			return;
+		}
+	}
+
+	function handleClickEventsForListPage( event ) {
+		const target = event.target;
+
+		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
+			handleStyleCardClick( event );
 			return;
 		}
 	}
@@ -81,13 +102,15 @@
 		document.getElementById( 'frm_toggle_sample_form' ).querySelector( 'span' ).textContent = state.showingSampleForm ? __( 'View my form', 'formidable' ) : __( 'View sample form', 'formidable' );
 	}
 
-	function saveActiveStyle() {
+	function handleUpdateClick() {
 		const form = document.getElementById( 'frm_styling_form' );
 		if ( form ) {
+			// Submitting for an "edit" view.
 			form.submit();
 			return;
 		}
 
+		// Submit the "list" view (assign a style to a form).
 		document.getElementById( 'frm_style_form' ).submit();
 	}
 
@@ -254,7 +277,7 @@
 		});
 		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
-		jQuery( '#datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
+		initDatepickerSample();
 		jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
 
 		// Check floating label when focus or blur fields.
@@ -448,6 +471,15 @@
 				}
 			}, options );
 		}
+	}
+
+	/**
+	 * Enable the datepicker in the sample form preview.
+	 *
+	 * @returns {void}
+	 */
+	function initDatepickerSample() {
+		jQuery( '#datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 	}
 
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', onStyleEditorInit );
