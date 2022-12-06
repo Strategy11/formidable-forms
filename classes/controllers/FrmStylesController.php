@@ -420,7 +420,7 @@ class FrmStylesController {
 		);
 	}
 
-	public static function save() {
+	public static function save_style() {
 		$frm_style   = new FrmStyle();
 		$message     = '';
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
@@ -439,6 +439,11 @@ class FrmStylesController {
 			$message = __( 'Your styling settings have been saved.', 'formidable' );
 		}
 
+		return array( $post_id, $message );
+	}
+
+	public static function save() {
+		list ( $post_id, $message ) = self::save_style();
 		return self::edit( $post_id, $message );
 	}
 
