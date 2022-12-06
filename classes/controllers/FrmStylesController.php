@@ -442,9 +442,14 @@ class FrmStylesController {
 		return array( $post_id, $message );
 	}
 
+	/**
+	 * Show the edit view after saving.
+	 * The save event is triggered earlier, on admin init where FrmStylesController::save_style is called.
+	 *
+	 * @return void
+	 */
 	public static function save() {
-		list ( $post_id, $message ) = self::save_style();
-		return self::edit( $post_id, $message );
+		self::edit();
 	}
 
 	/**
