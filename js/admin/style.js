@@ -1,5 +1,5 @@
 ( function() {
-	/* globals wp, frmDom */
+	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
 	const { __ } = wp.i18n;
@@ -254,7 +254,7 @@
 		});
 		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
-		jQuery( '.frm_pro_form #datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
+		jQuery( '#datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 		jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
 
 		// Check floating label when focus or blur fields.
@@ -275,6 +275,12 @@
 		changeEvent.initEvent( 'change', true, false );
 		document.getElementById( 'frm_position' ).dispatchEvent( changeEvent );
 
+		/**
+		 * Sends an AJAX request for new CSS to use for the preview.
+		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
+		 *
+		 * @returns {void}
+		 */
 		function changeStyling() {
 			let locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
 			locStr     = JSON.stringify( locStr );
@@ -292,11 +298,17 @@
 			});
 		}
 
+		/**
+		 * Possibly pop up with a warning that "text will not display correctly if the field height is too small relative to the field padding and text size".
+		 * This can be triggered when modifying font size, height, and padding.
+		 *
+		 * @returns {void}
+		 */
 		function textSquishCheck() {
-			const size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
-			const height = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
+			const size           = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
+			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
-			const paddingCount = paddingEntered.length;
+			const paddingCount   = paddingEntered.length;
 
 			// If too many or too few padding entries, leave now
 			if ( paddingCount === 0 || paddingCount > 4 || height === '' ) {
@@ -304,7 +316,7 @@
 			}
 
 			// Get the top and bottom padding from entered values
-			const paddingTop = paddingEntered[0].replace( /\D/g, '' );
+			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
 			const paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
 				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
@@ -313,10 +325,17 @@
 			// Check if there is enough space for text
 			const textSpace = height - size - paddingTop - paddingBottom - 3;
 			if ( textSpace < 0 ) {
-				infoModal( frm_admin_js.css_invalid_size );
+				frmAdminBuild.infoModal( frm_admin_js.css_invalid_size );
 			}
 		}
 
+		/**
+		 * Update label container classes when the label "Position" setting is changed.
+		 *
+		 * @todo This doesn't work yet with the "My form" preview.
+		 *
+		 * @returns {void}
+		 */
 		function setPosClass() {
 			/*jshint validthis:true */
 			let value = this.value;
@@ -343,35 +362,16 @@
 			});
 		}
 
-		jQuery( '#menu-settings-column' ).on(
-			'click',
-			function( e ) {
-				const target = jQuery( e.target );
-
-				if ( e.target.className.indexOf( 'nav-tab-link' ) === -1 ) {
-					return;
-				}
-
-				const panelId = target.data( 'type' );
-				const wrapper = target.parents( '.accordion-section-content' ).first();
-
-				jQuery( '.tabs-panel-active', wrapper ).removeClass( 'tabs-panel-active' ).addClass( 'tabs-panel-inactive' );
-				jQuery( '#' + panelId, wrapper ).removeClass( 'tabs-panel-inactive' ).addClass( 'tabs-panel-active' );
-
-				jQuery( '.tabs', wrapper ).removeClass( 'tabs' );
-				target.parent().addClass( 'tabs' );
-
-				// select the search bar
-				jQuery( '.quick-search', wrapper ).trigger( 'focus' );
-
-				e.preventDefault();
-			}
-		);
-
+		/**
+		 * When the Collapse icons are updated, sync the dropdown.
+		 * Otherwise the previously selected value will still appear as the selected value.
+		 *
+		 * @returns {void}
+		 */
 		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
-			const radio = this;
+			const radio  = this;
 			const btnGrp = this.closest( '.btn-group' );
-			const btnId = btnGrp.getAttribute( 'id' );
+			const btnId  = btnGrp.getAttribute( 'id' );
 
 			const select = document.getElementById( btnId.replace( '_select', '' ) );
 			if ( select ) {
@@ -387,34 +387,6 @@
 
 			this.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
-
-		/**
-		 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
-		 *
-		 * @since 5.4.2
-		 *
-		 * @param {String}         event    Event name.
-		 * @param {String}         selector Selector.
-		 * @param {Function}       handler  Handler.
-		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
-		 */
-		function documentOn( event, selector, handler, options ) {
-			if ( 'undefined' === typeof options ) {
-				options = false;
-			}
-
-			document.addEventListener( event, function( e ) {
-				let target;
-
-				// loop parent nodes from the target to the delegation node.
-				for ( target = e.target; target && target != this; target = target.parentNode ) {
-					if ( target.matches( selector ) ) {
-						handler.call( target, e );
-						break;
-					}
-				}
-			}, options );
-		}
 
 		/**
 		 * @param {HTMLElement} input
@@ -447,6 +419,34 @@
 					firstOpt.textContent = '';
 				}
 			}
+		}
+
+		/**
+		 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+		 *
+		 * @since 5.4.2
+		 *
+		 * @param {String}         event    Event name.
+		 * @param {String}         selector Selector.
+		 * @param {Function}       handler  Handler.
+		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+		 */
+		function documentOn( event, selector, handler, options ) {
+			if ( 'undefined' === typeof options ) {
+				options = false;
+			}
+
+			document.addEventListener( event, function( e ) {
+				let target;
+
+				// loop parent nodes from the target to the delegation node.
+				for ( target = e.target; target && target != this; target = target.parentNode ) {
+					if ( target.matches( selector ) ) {
+						handler.call( target, e );
+						break;
+					}
+				}
+			}, options );
 		}
 	}
 
