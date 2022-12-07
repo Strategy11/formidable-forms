@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // This is the view for the "style page" where you can assign a style to a form and view the list of style templates.
 // It is accessed from /wp-admin/themes.php?page=formidable-styles&frm_action=edit&form=782
 ?>
-<div id="frm_style_sidebar" class="frm-right-panel">
+<div id="frm_style_sidebar" class="frm-right-panel frm-fields">
 	<form id="frm_styling_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_edit_url( $style, $form->id ) ); ?>">
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 		<input type="hidden" name="frm_action" value="save" />
