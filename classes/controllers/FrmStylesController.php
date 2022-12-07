@@ -214,7 +214,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function edit() {
-		self::style();
+		self::load_styler();
 	}
 
 	/**
@@ -223,7 +223,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function new_style() {
-		self::style();
+		self::load_styler();
 	}
 
 	/**
@@ -232,17 +232,17 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function duplicate() {
-		self::style();
+		self::load_styler();
 	}
 
 	/**
 	 * Render the style page for a form for assigning a style to a form, and for updating a target style.
 	 *
-	 * @since x.x
+	 * @since x.x this function no longer takes parameters.
 	 *
 	 * @return void
 	 */
-	public static function style() {
+	public static function load_styler() {
 		if ( FrmAppHelper::get_post_param( 'style_id', 0, 'absint' ) ) {
 			self::save_form_style();
 		}
@@ -527,10 +527,6 @@ class FrmStylesController {
 		$style->ID = end( $ids );
 		wp_safe_redirect( esc_url_raw( FrmStylesHelper::get_edit_url( $style ) ) );
 		die();
-	}
-
-	public static function load_styler( $style, $message = '' ) {
-		// TODO deprecate this.
 	}
 
 	/**

@@ -512,6 +512,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get params to use in the style card HTML element used in the style list.
+	 *
 	 * @since x.x
 	 *
 	 * @param WP_Post    $style
@@ -543,6 +545,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get a link to edit a style post object in the visual styler.
+	 *
 	 * @param WP_Post    $style
 	 * @param string|int $form_id Used for the back button and preview form target.
 	 * @return string
@@ -563,6 +567,9 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the string to populate the style card's style attribute with.
+	 * This is used to reset some style variables like font size, label padding, and field height, so the cards all look more similar in comparison.
+	 *
 	 * @since x.x
 	 *
 	 * @param WP_Post $style
@@ -624,7 +631,7 @@ class FrmStylesHelper {
 	 *
 	 * @return array
 	 */
-	private static function get_submit_button_params(  ) {
+	private static function get_submit_button_params() {
 		$frm_style            = new FrmStyle();
 		$defaults             = $frm_style->get_defaults();
 		$submit_button_styles = array(

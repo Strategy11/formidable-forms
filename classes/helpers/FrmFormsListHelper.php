@@ -293,6 +293,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Get the HTML for the Style column in the form list.
 	 *
+	 * @since x.x
+	 *
 	 * @param stdClass $form
 	 * @return string
 	 */
