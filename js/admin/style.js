@@ -156,11 +156,13 @@
 	}
 
 	/**
+	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
+	 *
 	 * @param {Object} data {
 	 *     @type {String} editUrl
 	 *     @type {String} styleId
 	 * }
-	 * @returns {Element}
+	 * @returns {HTMLElement}
 	 */
 	function getHamburgerMenu( data ) {
 		const hamburgerMenu = tag( 'a' );
@@ -222,7 +224,7 @@
 	}
 
 	/**
-	 * @returns {Element}
+	 * @returns {HTMLElement}
 	 */
 	function getResetStyleModalContent() {
 		const content = div( __( 'Reset this style back to the default?', 'formidable' ) );
@@ -232,7 +234,7 @@
 
 	/**
 	 * @param {String} styleId
-	 * @returns {Element}
+	 * @returns {HTMLElement}
 	 */
 	function getResetStyleModalFooter( styleId ) {
 		const cancelButton = footerButton({
@@ -248,6 +250,10 @@
 		return div({ children: [ cancelButton, resetButton ] });
 	}
 
+	/**
+	 * @param {String} styleId
+	 * @returns {void}
+	 */
 	function resetStyle( styleId ) {
 		const formData = new FormData();
 		formData.append( 'styleId', styleId );
