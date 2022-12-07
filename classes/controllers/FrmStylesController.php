@@ -206,26 +206,37 @@ class FrmStylesController {
 		return $tag;
 	}
 
-	public static function new_style( $return = '' ) {
+	/**
+	 * Route the edit route to the style function.
+	 *
+	 * @since x.x this function no longer has any parameter values.
+	 *
+	 * @return void
+	 */
+	public static function edit() {
 		self::style();
 	}
 
+	/**
+	 * When a new style route is hit, show a new style with the defaults. There is no ID yet, it is created after the first save event.
+	 *
+	 * @return void
+	 */
+	public static function new_style() {
+		self::style();
+	}
+
+	/**
+	 * When the duplicate route is hit, it just shows the visual styler with a copy of the target style. There is no ID yet, it is created after the first save event.
+	 *
+	 * @return void
+	 */
 	public static function duplicate() {
 		self::style();
 	}
 
 	/**
-	 * @param mixed  $style_id
-	 * @param string $message
-	 * @return void
-	 */
-	public static function edit( $style_id = false, $message = '' ) {
-		// TODO deprecate this (because the params are unusable).
-		self::style();
-	}
-
-	/**
-	 * Render the style page for a form for assigning a style to a form, and for viewing style templates.
+	 * Render the style page for a form for assigning a style to a form, and for updating a target style.
 	 *
 	 * @since x.x
 	 *
