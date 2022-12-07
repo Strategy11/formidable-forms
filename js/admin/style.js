@@ -88,7 +88,7 @@
 		styleIdInput.value = card.dataset.styleId;
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
-		// TODO: If we want Edit in the hamburger (maybe we don't), we should prompt for unsaved changes before redirecting.
+		// TODO: We should prompt for unsaved changes before redirecting.
 		const editButton     = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
@@ -353,39 +353,6 @@
 		}
 
 		/**
-		 * Update label container classes when the label "Position" setting is changed.
-		 *
-		 * @todo This doesn't work yet with the "My form" preview.
-		 *
-		 * @returns {void}
-		 */
-		function setPosClass() {
-			/*jshint validthis:true */
-			let value = this.value;
-			if ( value === 'none' ) {
-				value = 'top';
-			} else if ( value === 'no_label' ) {
-				value = 'none';
-			}
-	
-			document.querySelectorAll( '.frm_pos_container' ).forEach( container => {
-				// Fields that support floating label should have a directly child input/textarea/select.
-				const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
-	
-				if ( 'inside' === value && ! input ) {
-					value = 'top';
-				}
-	
-				container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-				container.classList.add( 'frm_' + value + '_container' );
-	
-				if ( 'inside' === value ) {
-					checkFloatingLabelsForStyles( input, container );
-				}
-			});
-		}
-
-		/**
 		 * When the Collapse icons are updated, sync the dropdown.
 		 * Otherwise the previously selected value will still appear as the selected value.
 		 *
@@ -410,39 +377,6 @@
 
 			this.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
-
-		/**
-		 * @param {HTMLElement} input
-		 * @param {HTMLElement} container
-		 * @returns {void}
-		 */
-		function checkFloatingLabelsForStyles( input, container ) {
-			if ( ! container ) {
-				container = input.closest( '.frm_inside_container' );
-			}
-
-			const shouldFloatTop = input.value || document.activeElement === input;
-
-			container.classList.toggle( 'frm_label_float_top', shouldFloatTop );
-
-			if ( 'SELECT' !== input.tagName ) {
-				return;
-			}
-
-			const firstOpt = input.querySelector( 'option:first-child' );
-
-			if ( shouldFloatTop ) {
-				if ( firstOpt.hasAttribute( 'data-label' ) ) {
-					firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
-					firstOpt.removeAttribute( 'data-label' );
-				}
-			} else {
-				if ( firstOpt.textContent ) {
-					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
-					firstOpt.textContent = '';
-				}
-			}
-		}
 
 		/**
 		 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
@@ -471,6 +405,72 @@
 				}
 			}, options );
 		}
+	}
+
+	/**
+	 * @param {HTMLElement} input
+	 * @param {HTMLElement} container
+	 * @returns {void}
+	 */
+	function checkFloatingLabelsForStyles( input, container ) {
+		if ( ! container ) {
+			container = input.closest( '.frm_inside_container' );
+		}
+
+		const shouldFloatTop = input.value || document.activeElement === input;
+
+		container.classList.toggle( 'frm_label_float_top', shouldFloatTop );
+
+		if ( 'SELECT' !== input.tagName ) {
+			return;
+		}
+
+		const firstOpt = input.querySelector( 'option:first-child' );
+
+		if ( shouldFloatTop ) {
+			if ( firstOpt.hasAttribute( 'data-label' ) ) {
+				firstOpt.textContent = firstOpt.getAttribute( 'data-label' );
+				firstOpt.removeAttribute( 'data-label' );
+			}
+		} else {
+			if ( firstOpt.textContent ) {
+				firstOpt.setAttribute( 'data-label', firstOpt.textContent );
+				firstOpt.textContent = '';
+			}
+		}
+	}
+
+	/**
+	 * Update label container classes when the label "Position" setting is changed.
+	 *
+	 * @todo This doesn't work yet with the "My form" preview.
+	 *
+	 * @returns {void}
+	 */
+	function setPosClass() {
+		/*jshint validthis:true */
+		let value = this.value;
+		if ( value === 'none' ) {
+			value = 'top';
+		} else if ( value === 'no_label' ) {
+			value = 'none';
+		}
+
+		document.querySelectorAll( '.frm_form_field' ).forEach( container => {
+			// Fields that support floating label should have a directly child input/textarea/select.
+			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
+
+			if ( 'inside' === value && ! input ) {
+				value = 'top';
+			}
+
+			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
+			container.classList.add( 'frm_' + value + '_container' );
+
+			if ( 'inside' === value ) {
+				checkFloatingLabelsForStyles( input, container );
+			}
+		});
 	}
 
 	/**

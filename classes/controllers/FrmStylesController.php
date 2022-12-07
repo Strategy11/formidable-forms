@@ -225,8 +225,10 @@ class FrmStylesController {
 
 		self::setup_styles_and_scripts_for_style_page();
 
-		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-		$form_id  = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		$style_id        = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		$form_id         = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		$default_style   = self::get_default_style();
+		$request_form_id = $form_id;
 
 		if ( ! $form_id ) {
 			if ( ! $style_id ) {
@@ -237,6 +239,8 @@ class FrmStylesController {
 					$style_id      = $default_style->ID;
 				} elseif ( 'duplicate' === $action ) {
 					$style_id = FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
+				} else {
+					$style_id = $default_style->ID;
 				}
 			}
 
@@ -261,16 +265,16 @@ class FrmStylesController {
 			wp_die( 'This form does not exist', '', 404 );
 		}
 
-		$styles = self::get_styles_for_style_page( $form );
-
 		if ( $style_id ) {
 			$frm_style    = new FrmStyle( $style_id );
 			$active_style = $frm_style->get_one();
+		} elseif ( $request_form_id ) {
+			$active_style = is_callable( 'FrmProStylesController::get_active_style_for_form' ) ? FrmProStylesController::get_active_style_for_form( $form ) : $default_style;
 		} else {
-			$active_style  = is_callable( 'FrmProStylesController::get_active_style_for_form' ) ? FrmProStylesController::get_active_style_for_form( $form ) : reset( $styles );
+			$active_style = $default_style;
 		}
 
-		$default_style = self::get_default_style();
+		$styles = self::get_styles_for_style_page( $form, $active_style );
 
 		/**
 		 * @since x.x
@@ -288,11 +292,12 @@ class FrmStylesController {
 	 * @since x.x
 	 *
 	 * @param stdClass $form
+	 * @param WP_Post  $active_style
 	 * @return array<WP_Post>
 	 */
-	private static function get_styles_for_style_page( $form ) {
+	private static function get_styles_for_style_page( $form, $active_style ) {
 		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
-			return FrmProStylesController::get_styles_for_style_page( $form );
+			return FrmProStylesController::get_styles_for_style_page( $form, $active_style );
 		}
 		return array( self::get_default_style() );
 	}
