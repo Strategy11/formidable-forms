@@ -240,14 +240,13 @@ class FrmStylesController {
 				}
 			}
 
-			$check = serialize( array( 'custom_style' => (string) $style_id ) );
-			$check = substr( $check, 5, -1 );
-
-			// TODO get a form for the target style.
+			$check   = serialize( array( 'custom_style' => (string) $style_id ) );
+			$check   = substr( $check, 5, -1 );
 			$form_id = FrmDb::get_var(
 				'frm_forms',
 				array(
 					'options LIKE' => $check,
+					'status'       => 'published',
 				)
 			);
 			if ( ! $form_id ) {
