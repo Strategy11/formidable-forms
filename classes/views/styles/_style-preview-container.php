@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div id="frm_style_preview">
+	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 	<div id="frm_active_style_form">
 		<?php
 		// The right side body shows a preview (of the target form) so you can see the form you're actually styling.

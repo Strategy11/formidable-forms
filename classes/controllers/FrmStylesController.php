@@ -4,8 +4,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmStylesController {
+
+	/**
+	 * @var string $post_type
+	 */
 	public static $post_type = 'frm_styles';
+
+	/**
+	 * @var string $screen
+	 */
 	public static $screen = 'formidable_page_formidable-styles';
+
+	/**
+	 * @var string|null $message
+	 */
+	private static $message;
 
 	public static function load_pro_hooks() {
 		if ( FrmAppHelper::pro_is_installed() ) {
@@ -337,6 +350,8 @@ class FrmStylesController {
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
 
 		FrmForm::clear_form_cache();
+
+		self::$message = __( 'Successfully updated style.', 'formidable' );
 	}
 
 	/**
@@ -394,6 +409,10 @@ class FrmStylesController {
 
 		self::force_form_style( $style );
 
+		if ( isset( self::$message ) ) {
+			$message = self::$message;
+		}
+
 		include $style_views_path . 'show.php';
 	}
 
@@ -440,10 +459,8 @@ class FrmStylesController {
 
 			// include the CSS that includes this style
 			//echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
-			//$message = __( 'Your styling settings have been saved.', 'formidable' );
+			self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 		}
-
-		return array( $post_id, $message );
 	}
 
 	/**
