@@ -28,7 +28,7 @@ class FrmOnSubmitHelper {
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'message' );
 		?>
-		<div class="frm_has_shortcodes frm_has_textarea">
+		<div class="frm_form_field frm_has_shortcodes frm_has_textarea">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
@@ -40,7 +40,7 @@ class FrmOnSubmitHelper {
 		</div>
 
 		<?php $id_attr = $args['action_control']->get_field_id( 'show_form' ); ?>
-		<div>
+		<div class="frm_form_field">
 			<?php
 			FrmProHtmlHelper::toggle(
 				$id_attr,
@@ -75,7 +75,7 @@ class FrmOnSubmitHelper {
 	public static function show_redirect_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_url' );
 		?>
-		<div class="frm_has_shortcodes">
+		<div class="frm_form_field frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Enter URL', 'formidable' ); ?></label>
 			<input
 				type="text"
@@ -103,7 +103,7 @@ class FrmOnSubmitHelper {
 	public static function show_page_settings( $args ) {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
 		?>
-		<div>
+		<div class="frm_form_field">
 			<label for="<?php echo esc_attr( $name_attr ); ?>"><?php esc_html_e( 'Select a page', 'formidable' ); ?></label>
 			<?php
 			FrmAppHelper::maybe_autocomplete_pages_options(

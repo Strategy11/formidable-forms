@@ -9523,6 +9523,31 @@ function frmAdminBuildJS() {
 		}, options );
 	}
 
+	function initOnSubmitAction() {
+		const onChangeType = event => {
+			if ( ! event.target.checked ) {
+				return;
+			}
+
+			const actionEl = event.target.closest( '.frm_form_action_settings' );
+			actionEl.querySelectorAll( '[data-sub-settings]:not(.frm-fade)' ).forEach( el => {
+				fadeOut( el, () => el.classList.add( 'frm_hidden' ) );
+			});
+
+			setTimeout( () => {
+				const activeEl = actionEl.querySelector( '[data-sub-settings][data-type="' + event.target.value + '"]' );
+				console.log( activeEl  );
+				if ( ! activeEl ) {
+					return;
+				}
+
+				activeEl.classList.remove( 'frm-fade', 'frm_hidden' );
+			}, 1000 );
+		};
+
+		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -10018,6 +10043,8 @@ function frmAdminBuildJS() {
 			initSelectionAutocomplete();
 
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
+
+			initOnSubmitAction();
 		},
 
 		panelInit: function() {

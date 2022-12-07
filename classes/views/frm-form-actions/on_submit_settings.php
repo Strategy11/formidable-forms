@@ -41,19 +41,20 @@ if ( $col_count <= 4 ) {
 	$col_count = 'frm2';
 }
 ?>
-<div class="frm_on_submit_type_setting">
+<div class="frm_form_field frm_on_submit_type_setting">
 	<div class="frm_grid_container">
 		<?php
 		foreach ( $types as $type => $type_data ) :
-			$input_id = $this->get_field_id( 'success_action' );
+			$input_id = $this->get_field_id( 'success_action' ) . '-' . $type;
 			?>
-			<div class="<?php echo esc_attr( $col_class ); ?>">
+			<div class="frm_on_submit_type <?php echo esc_attr( $col_class ); ?>">
 				<input
 					type="radio"
 					id="<?php echo esc_attr( $input_id ); ?>"
 					name="<?php echo esc_attr( $this->get_field_name( 'success_action' ) ); ?>"
 					value="<?php echo esc_attr( $type ); ?>"
 					<?php checked( $type, $success_action ); ?>
+					class="frm_hidden"
 				/>
 				<label for="<?php echo esc_attr( $input_id ); ?>">
 					<?php FrmAppHelper::icon_by_class( $type_data['icon'], array( 'echo' => true ) ); ?>
@@ -69,7 +70,12 @@ $type_args                   = $args;
 $type_args['form_action']    = $form_action;
 $type_args['action_control'] = $this;
 foreach ( $types as $type_name => $type ) {
-	echo '<div class="frm_on_submit_' . esc_attr( $type_name ) . '_settings">';
+	$css_class = 'frm_on_submit_' . esc_attr( $type_name ) . '_settings';
+	if ( $success_action !== $type_name ) {
+		$css_class .= ' frm_hidden';
+	}
+
+	echo '<div class="' . esc_attr( $css_class ) . '" data-sub-settings data-type="' . esc_attr( $type_name ) . '">';
 
 	if ( is_callable( $type['sub_settings'] ) ) {
 		call_user_func( $type['sub_settings'], $type_args );
@@ -77,3 +83,5 @@ foreach ( $types as $type_name => $type ) {
 
 	echo '</div><!-- End .frm_on_submit_' . esc_attr( $type_name ) . '_settings -->';
 }
+
+unset( $css_class, $type_args, $type_name, $type, $success_action );
