@@ -809,6 +809,12 @@ class FrmStylesController {
 		return $styles;
 	}
 
+	/**
+	 * Get the style post object for a target form.
+	 *
+	 * @param object|string|boolean $form
+	 * @return WP_Post|null
+	 */
 	public static function get_form_style( $form = 'default' ) {
 		$style = FrmFormsHelper::get_form_style( $form );
 
@@ -817,7 +823,6 @@ class FrmStylesController {
 		}
 
 		$frm_style = new FrmStyle( $style );
-
 		return $frm_style->get_one();
 	}
 

@@ -842,28 +842,13 @@ class FrmFormsController {
 	 * @return array<string,string>
 	 */
 	public static function get_columns( $columns ) {
-		$columns['cb'] = '<input type="checkbox" />';
-		$columns['id'] = 'ID';
-
-		$type = FrmAppHelper::get_simple_request(
-			array(
-				'param'   => 'form_type',
-				'type'    => 'request',
-				'default' => 'published',
-			)
-		);
-
-		if ( 'template' === $type ) {
-			$columns['name']     = __( 'Template Name', 'formidable' );
-			$columns['type']     = __( 'Type', 'formidable' );
-			$columns['form_key'] = __( 'Key', 'formidable' );
-		} else {
-			$columns['name']      = __( 'Form Title', 'formidable' );
-			$columns['entries']   = __( 'Entries', 'formidable' );
-			$columns['form_key']  = __( 'Key', 'formidable' );
-			$columns['shortcode'] = __( 'Actions', 'formidable' );
-		}
-
+		$columns['cb']         = '<input type="checkbox" />';
+		$columns['id']         = 'ID';
+		$columns['name']       = __( 'Form Title', 'formidable' );
+		$columns['entries']    = __( 'Entries', 'formidable' );
+		$columns['form_key']   = __( 'Key', 'formidable' );
+		$columns['style']      = __( 'Style', 'formidable' );
+		$columns['shortcode']  = __( 'Actions', 'formidable' );
 		$columns['created_at'] = __( 'Date', 'formidable' );
 
 		add_screen_option(
