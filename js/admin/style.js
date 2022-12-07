@@ -79,6 +79,8 @@
 		const sampleForm   = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
 		const styleIdInput = document.getElementById( 'frm_style_form' ).querySelector( '[name="style_id"]' );
 
+		disableLabelTransitions();
+
 		activeCard.classList.remove( 'frm-active-style-card' );
 		card.classList.add( 'frm-active-style-card' );
 		form.parentNode.classList.remove( activeCard.dataset.classname );
@@ -87,11 +89,39 @@
 		sampleForm.classList.add( card.dataset.classname );
 		styleIdInput.value = card.dataset.styleId;
 
+		setTimeout( enableLabelTransitions, 1 );
+
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
 		// TODO: We should prompt for unsaved changes before redirecting.
 		const editButton     = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
+	}
+
+	/**
+	 * Floating labels have a transition style. Turn it off temporarily when switching between cards to avoid a transition between two different style classes.
+	 *
+	 * @returns {void}
+	 */
+	function disableLabelTransitions() {
+		setLabelTransitionStyle( 'none' );
+	}
+
+	/**
+	 * @returns {void}
+	 */
+	function enableLabelTransitions() {
+		setLabelTransitionStyle( '' );
+	}
+
+	/**
+	 * @param {String} value
+	 * @returns {void}
+	 */
+	function setLabelTransitionStyle( value ) {
+		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_inside_container' ).forEach(
+			container => container.querySelector( 'label' ).style.transition = value
+		);
 	}
 
 	function toggleSampleForm() {
