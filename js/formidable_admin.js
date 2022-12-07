@@ -9413,6 +9413,59 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+	}
+
+	function initOnSubmitAction() {
+		const onChangeType = event => {
+			if ( ! event.target.checked ) {
+				return;
+			}
+
+			const actionEl = event.target.closest( '.frm_form_action_settings' );
+			actionEl.querySelectorAll( '[data-sub-settings]:not(.frm-fade)' ).forEach( el => {
+				fadeOut( el, () => el.classList.add( 'frm_hidden' ) );
+			});
+
+			setTimeout( () => {
+				const activeEl = actionEl.querySelector( '[data-sub-settings][data-type="' + event.target.value + '"]' );
+				console.log( activeEl  );
+				if ( ! activeEl ) {
+					return;
+				}
+
+				activeEl.classList.remove( 'frm-fade', 'frm_hidden' );
+			}, 1000 );
+		};
+
+		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -9908,6 +9961,8 @@ function frmAdminBuildJS() {
 			initSelectionAutocomplete();
 
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
+
+			initOnSubmitAction();
 		},
 
 		panelInit: function() {

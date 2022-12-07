@@ -8862,3 +8862,34 @@ input:checked + .frm_switch .frm_slider:before {
 	left: 1px;
 }
 /* End toggle styling */
+/* On Submit action */
+.frm_single_on_submit_settings .frm_form_field {
+	margin-top: 20px;
+}
+
+.frm_on_submit_type label {
+	display: block;
+	border: 1px solid rgba(40, 47, 54, 0.2);
+	border-radius: 3px;
+	font-size: 15px;
+	padding: 15px;
+	height: 100%;
+	box-sizing: border-box;
+	text-align: center;
+}
+
+.frm_on_submit_type input[type="radio"]:checked + label {
+	border-color: #4199fd;
+	box-shadow: 0 0 0 1px #4199fd;
+}
+
+.frm_on_submit_type input[type="radio"]:checked + label i,
+.frm_on_submit_type input[type="radio"]:checked + label svg {
+	color: #4199fd;
+}
+
+.frm_on_submit_type lable i,
+.frm_on_submit_type lable svg {
+	margin-right: 15px;
+}
+/* End On Submit action */
