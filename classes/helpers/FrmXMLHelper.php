@@ -81,8 +81,14 @@ class FrmXMLHelper {
 			if ( isset( $xml->{$item_type} ) ) {
 				$function_name = 'import_xml_' . $item_type . 's';
 				$imported      = self::$function_name( $xml->{$item_type}, $imported );
-				unset( $function_name, $xml->{$item_type} );
+				if ( $item_type === 'form' ) {
+					$imported_forms = $imported;
+				}
 			}
+		}
+
+		foreach ( $imported_forms['forms'] as $form_id ) {
+			self::update_custom_style_setting_after_import( $form_id );
 		}
 
 		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
@@ -740,6 +746,13 @@ class FrmXMLHelper {
 			);
 			$select   = 'ID';
 			$style_id = FrmDb::get_var( $table, $where, $select );
+
+			if ( ! $style_id ) {
+				$style = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $table WHERE post_type=%s AND post_name=%s", 'frm_styles', $form['options']['custom_style'] ) );
+				if ( $style ) {
+					$style_id = $style->ID;
+				}
+			}
 
 			if ( $style_id ) {
 				$form['options']['custom_style'] = $style_id;
