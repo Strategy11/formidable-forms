@@ -604,20 +604,9 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style, $form_id ) {
-		$is_default_style = $style->ID === $default_style->ID;
-		$is_active_style  = $active_style->ID === $style->ID;
-
-		$submit_button_styles = array(
-			'font-size: ' . esc_attr( $default_style->post_content['submit_font_size'] ) . ' !important',
-			'padding: ' . esc_attr( $default_style->post_content['submit_padding'] ) . ' !important',
-		);
-		$submit_button_params = array(
-			'type'     => 'submit',
-			'disabled' => 'disabled',
-			'class'    => 'frm_full_opacity',
-			'value'    => esc_attr__( 'Submit', 'formidable' ),
-			'style'    => implode( ';', $submit_button_styles ),
-		);
+		$is_default_style     = $style->ID === $default_style->ID;
+		$is_active_style      = $active_style->ID === $style->ID;
+		$submit_button_params = self::get_submit_button_params();
 		$params               = self::get_params_for_style_card( $style, $default_style, $form_id );
 
 		if ( $is_default_style ) {
@@ -628,6 +617,27 @@ class FrmStylesHelper {
 		}
 
 		include $style_views_path . '_custom-style-card.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_submit_button_params(  ) {
+		$frm_style            = new FrmStyle();
+		$defaults             = $frm_style->get_defaults();
+		$submit_button_styles = array(
+			'font-size: ' . esc_attr( $defaults['submit_font_size'] ) . ' !important',
+			'padding: ' . esc_attr( $defaults['submit_padding'] ) . ' !important',
+		);
+		return array(
+			'type'     => 'submit',
+			'disabled' => 'disabled',
+			'class'    => 'frm_full_opacity',
+			'value'    => esc_attr__( 'Submit', 'formidable' ),
+			'style'    => implode( ';', $submit_button_styles ),
+		);
 	}
 
 	/**
