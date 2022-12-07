@@ -443,24 +443,35 @@ class FrmStylesController {
 		);
 	}
 
+	/**
+	 * Save style post object via a POST request submitted from the Visual styler "edit" page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
 	public static function save_style() {
 		$frm_style   = new FrmStyle();
 		$message     = '';
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_style', '', 'sanitize_text_field' );
 
-		if ( $post_id !== false && wp_verify_nonce( $style_nonce, 'frm_style_nonce' ) ) {
-			$id = $frm_style->update( $post_id );
-			if ( empty( $post_id ) && ! empty( $id ) ) {
-				self::maybe_redirect_after_save( $id );
-
-				$post_id = reset( $id ); // Set the post id to the new style so it will be loaded for editing.
-			}
-
-			// include the CSS that includes this style
-			//echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
-			self::$message = __( 'Your styling settings have been saved.', 'formidable' );
+		if ( $post_id === false || ! wp_verify_nonce( $style_nonce, 'frm_style_nonce' ) ) {
+			// Exit early if the request isn't valid.
+			// Since we're not dying, it should just reload the visual styler without any message.
+			return;
 		}
+
+		$id = $frm_style->update( $post_id );
+		if ( empty( $post_id ) && ! empty( $id ) ) {
+			self::maybe_redirect_after_save( $id );
+
+			$post_id = reset( $id ); // Set the post id to the new style so it will be loaded for editing.
+		}
+
+		// include the CSS that includes this style
+		//echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
+		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 	}
 
 	/**
