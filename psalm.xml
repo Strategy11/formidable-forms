@@ -9,6 +9,7 @@
 	<projectFiles>
 		<file name="formidable.php" />
 		<directory name="classes" />
+		<directory name="deprecated" />
 		<ignoreFiles>
 			<directory name="vendor" />
 			<directory name="classes/views/" />
@@ -21,32 +22,7 @@
 	<issueHandlers>
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="FrmProDisplaysController" />
-				<referencedClass name="FrmProAppHelper" />
-				<referencedClass name="FrmProEntryMetaHelper" />
-				<referencedClass name="FrmProFormActionsController" />
-				<referencedClass name="FrmProFieldValue" />
-				<referencedClass name="FrmViewsLayout" />
-				<referencedClass name="FrmProDisplaysHelper" />
-				<referencedClass name="FrmProAddonsController" />
-				<referencedClass name="FrmProDb" />
-				<referencedClass name="FrmProSettings" />
-				<referencedClass name="FrmProEntryShortcodeFormatter" />
-				<referencedClass name="FrmProStylesController" />
-				<referencedClass name="FrmDeprecated" />
-				<referencedClass name="FrmProEntriesController" />
-				<referencedClass name="FrmProFormsHelper" />
-				<referencedClass name="FrmProEntry" />
-				<referencedClass name="WPMailSMTP\Options" />
-				<referencedClass name="Akismet" />
-				<referencedClass name="PHPMailer" />
-				<referencedClass name="FrmProEntryFormatter" />
-				<referencedClass name="FrmProEntriesHelper" />
-				<referencedClass name="FrmProFormsController" />
-				<referencedClass name="FrmViewsAppHelper" />
-				<referencedClass name="Elementor\Plugin" />
 				<referencedClass name="FrmElementorWidget" />
-				<referencedClass name="FrmFormDeprecated" />
 			</errorLevel>
 		</UndefinedClass>
 		<InvalidGlobal>
@@ -64,9 +40,7 @@
 				<referencedFunction name="WP_Optimize" />
 				<referencedFunction name="bp_core_email_from_address_filter" />
 				<referencedFunction name="bp_core_email_from_name_filter" />
-				<referencedFunction name="wp_mail_smtp" />
 				<referencedFunction name="__autoload" />
-				<referencedFunction name="akismet_test_mode" />
 			</errorLevel>
 		</UndefinedFunction>
 		<MissingFile>
@@ -74,5 +48,10 @@
 				<file name="formidable.php" />
 			</errorLevel>
 		</MissingFile>
+		<InvalidParamDefault>
+			<errorLevel type="suppress">
+				<directory name="deprecated" />
+			</errorLevel>
+		</InvalidParamDefault>
 	</issueHandlers>
 </psalm>
