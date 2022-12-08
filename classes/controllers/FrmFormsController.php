@@ -1347,7 +1347,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Updates classes used in submit buttons.
+	 * Updates classes used in submit and prev buttons to avoid conflict with twenty twenty-one theme.
 	 *
 	 * @param array $classes
 	 *
