@@ -140,8 +140,8 @@ namespace WPMailSMTP {
 		/**
 		 * @return Providers\Loader
 		 */
-	   public function get_providers() {
-	   }
+		public function get_providers() {
+		}
 	}
 }
 
@@ -161,7 +161,7 @@ namespace WPMailSMTP\Providers {
 		 *
 		 * @return MailerAbstract|null
 		 */
-	   public function get_mailer( $provider, $phpmailer ) {
-	   }
+		public function get_mailer( $provider, $phpmailer ) {
+		}
 	}
 }
