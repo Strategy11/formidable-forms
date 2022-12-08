@@ -473,6 +473,7 @@
 	 * Technically this isn't required as the form preview is loading JavaScript.
 	 *
 	 * @todo I'm not sure if it makes more sense to block front end JavaScript or to remove this.
+	 * @todo Right now this doesn't initialize on the "list" view. But it still works there since formidable.js loads.
 	 *
 	 * @returns {void}
 	 */
