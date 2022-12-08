@@ -402,7 +402,7 @@ class FrmStylesController {
 		$frm_style        = new FrmStyle( $active_style->ID );
 
 		if ( in_array( $view, array( 'edit', 'new_style', 'duplicate' ), true ) ) {
-			FrmStylesController::add_meta_boxes();
+			self::add_meta_boxes();
 		}
 
 		if ( 'edit' === $view ) {
@@ -671,18 +671,15 @@ class FrmStylesController {
 		$default_post_content = FrmAppHelper::prepare_and_encode( $defaults );
 		$where                = array(
 			'ID'        => $style_id,
-			'post_type' => FrmStylesController::$post_type,
+			'post_type' => self::$post_type,
 		);
 		global $wpdb;
 		$wpdb->update( $wpdb->posts, array( 'post_content' => $default_post_content ), $where );
 
 		$frm_style->save_settings(); // Save the settings after resetting to default or the old style will still appear.
 
-		wp_send_json_success(
-			array(
-
-			)
-		);
+		$data = array();
+		wp_send_json_success( $data );
 		wp_die();
 	}
 

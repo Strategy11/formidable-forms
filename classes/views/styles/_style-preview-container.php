@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		// The right side body shows a preview (of the target form) so you can see the form you're actually styling.
 		add_filter( 'frm_is_admin', '__return_false' ); // Force is_admin to false so the "Entry Key" field doesn't render in the preview.
-		echo FrmFormsController::show_form(  $form->id, '', 'auto', 'auto' );
+		echo FrmFormsController::show_form(  $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	</div>
 	<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this. ?>
 	<div id="frm_sample_form" class="frm_hidden">
-		<?php 
-		$frm_settings = $frm_settings = FrmAppHelper::get_settings();
+		<?php
+		$frm_settings = FrmAppHelper::get_settings();
 		include $style_views_path . '_sample_form.php';
 		?>
 	</div>

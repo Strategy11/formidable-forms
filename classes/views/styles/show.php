@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'values' => array(
 							'form_key' => $form->form_key, // Pass this so that the Preview dropdown works.
 						),
-					)
+					),
 				),
 			)
 		);
