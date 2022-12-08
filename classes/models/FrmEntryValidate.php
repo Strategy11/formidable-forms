@@ -422,8 +422,9 @@ class FrmEntryValidate {
 		$datas        = apply_filters( 'frm_akismet_values', $datas );
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
+		$is_spam      = is_array( $response ) && $response[1] == 'true';
 
-		if ( class_exists( 'FrmLog' ) && $response[1] == 'true' ) {
+		if ( class_exists( 'FrmLog' ) && $is_spam ) {
 			$log = new FrmLog();
 			$log->add(
 				array(
@@ -439,7 +440,7 @@ class FrmEntryValidate {
 			);
 		}
 
-		return ( is_array( $response ) && $response[1] == 'true' );
+		return $is_spam;
 	}
 
 	/**
