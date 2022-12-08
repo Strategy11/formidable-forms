@@ -3924,14 +3924,6 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: calc(100% - 73px);
 }
 
-.styling_settings .frm_image_preview_wrapper {
-	width: 100%;
-}
-
-.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
-	margin-left: 0;
-}
-
 .frm-right-panel .frm_single_option a.frm_remove_tag,
 .frm_single_option a {
 	padding-left: 7px;
@@ -4642,35 +4634,6 @@ label.frm-example-icon {
 	height: 18px;
 	margin-left: 2px;
 	vertical-align: text-bottom;
-}
-
-/* Styles tabs */
-
-#frm_styling_form #frm_delete_style {
-	padding-right: 10px;
-}
-
-#frm_styling_form #frm_delete_style .frmsvg {
-	vertical-align: -webkit-baseline-middle;
-}
-
-.frm_pro_form .frm_form_field.frm_lite_style,
-.frm_pro_form .frm_lite_style {
-	display: none !important;
-}
-
-label.default-style-box input[type="checkbox"] {
-	vertical-align: middle;
-}
-
-#frm_styling_form .frm_form_field input[type="checkbox"],
-#frm_styling_form .frm_form_field input[type="radio"] {
-	vertical-align: bottom;
-}
-
-#frm_styling_form .howto span {
-	float: none;
-	margin-top: 0;
 }
 
 /* Import/Export */
