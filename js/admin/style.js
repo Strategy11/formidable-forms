@@ -314,13 +314,9 @@
 		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
 		initDatepickerSample();
-		jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
-		initFloatingLabels();
 
-		// Trigger label position option on load.
-		const changeEvent = document.createEvent( 'HTMLEvents' );
-		changeEvent.initEvent( 'change', true, false );
-		document.getElementById( 'frm_position' ).dispatchEvent( changeEvent );
+		initFloatingLabels();
+		initPosClass();
 
 		/**
 		 * Sends an AJAX request for new CSS to use for the preview.
@@ -437,6 +433,20 @@
 	}
 
 	/**
+	 * @returns {void}
+	 */
+	function initPosClass() {
+		const positionSetting = document.getElementById( 'frm_position' );
+
+		jQuery( positionSetting ).on( 'change', setPosClass );
+
+		// Trigger label position option on load.
+		const changeEvent = document.createEvent( 'HTMLEvents' );
+		changeEvent.initEvent( 'change', true, false );
+		positionSetting.dispatchEvent( changeEvent );
+	}
+
+	/**
 	 * Update label container classes when the label "Position" setting is changed.
 	 *
 	 * @todo This doesn't work yet with the "My form" preview.
@@ -456,14 +466,16 @@
 			// Fields that support floating label should have a directly child input/textarea/select.
 			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
 
-			if ( 'inside' === value && ! input ) {
-				value = 'top';
+			let currentValue = value;
+
+			if ( 'inside' === currentValue && ! input ) {
+				currentValue = 'top';
 			}
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
-			container.classList.add( 'frm_' + value + '_container' );
+			container.classList.add( 'frm_' + currentValue + '_container' );
 
-			if ( 'inside' === value ) {
+			if ( 'inside' === currentValue ) {
 				checkFloatingLabelsForStyles( input, container );
 			}
 		});
@@ -478,12 +490,10 @@
 	 * @returns {void}
 	 */
 	function initFloatingLabels() {
-		// Check floating label when focus or blur fields.
-		const floatingLabelSelector = '#frm_style_preview .frm_inside_container > input, #frm_style_preview .frm_inside_container > textarea, #frm_style_preview .frm_inside_container > select';
 		[ 'focus', 'blur', 'change' ].forEach(
 			eventName => documentOn(
 				eventName,
-				floatingLabelSelector,
+				'#frm_style_preview .frm_inside_container > input, #frm_style_preview .frm_inside_container > textarea, #frm_style_preview .frm_inside_container > select',
 				event => checkFloatingLabelsForStyles( event.target ),
 				true
 			)
