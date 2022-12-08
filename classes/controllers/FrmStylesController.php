@@ -256,7 +256,7 @@ class FrmStylesController {
 
 		if ( ! $form_id ) {
 			if ( ! $style_id ) {
-				$action = FrmApphelper::simple_get( 'frm_action' );
+				$action = FrmAppHelper::simple_get( 'frm_action' );
 
 				if ( 'new_style' === $action ) {
 					$default_style = self::get_default_style();
