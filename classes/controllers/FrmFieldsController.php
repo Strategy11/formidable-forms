@@ -879,10 +879,7 @@ class FrmFieldsController {
 	 * @deprecated 4.0 Moved to Pro for Other option only.
 	 */
 	public static function add_option() {
-		_deprecated_function( __METHOD__, '4.0', 'FrmProFormsController::add_other_option' );
-		if ( is_callable( 'FrmProFormsController::add_other_option' ) ) {
-			FrmProFormsController::add_other_option();
-		}
+		_deprecated_function( __METHOD__, '4.0', 'FrmProFieldsController::add_other_option' );
 	}
 
 	/**
