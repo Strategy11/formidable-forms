@@ -1346,11 +1346,18 @@ class FrmFormsController {
 		}
 	}
 
-	public static function update_submit_button_classes( $classes ) {
-		if ( wp_get_theme()->get('Name') === 'Twenty Twenty-One' ) {
+	/**
+	 * Updates classes used in submit buttons.
+	 *
+	 * @param array $classes
+	 *
+	 * @return array
+	 */
+	public static function update_classes( $classes ) {
+		if ( wp_get_theme()->get( 'Name' ) === __( 'Twenty Twenty-One', 'formidable' ) ) {
 			$classes[] = 'has-text-color has-background';
 		}
-	
+
 		return $classes;
 	}
 
