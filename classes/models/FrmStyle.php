@@ -106,10 +106,6 @@ class FrmStyle {
 				$new_instance['post_content']['global--color-primary'] = $new_instance['post_content']['submit_bg_color'];
 			}
 
-			if ( isset( $new_instance['post_content']['submit_bg_color'] ) ) {
-				$new_instance['post_content']['global--color-primary'] = $new_instance['post_content']['submit_bg_color'];
-			}
-
 			$all_instances[ $number ] = $new_instance;
 
 			$action_ids[] = $this->save( $new_instance );
