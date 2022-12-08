@@ -547,8 +547,8 @@ class FrmStylesHelper {
 	/**
 	 * Get a link to edit a style post object in the visual styler.
 	 *
-	 * @param WP_Post    $style
-	 * @param string|int $form_id Used for the back button and preview form target.
+	 * @param WP_Post|stdClass $style
+	 * @param string|int       $form_id Used for the back button and preview form target.
 	 * @return string
 	 */
 	public static function get_edit_url( $style, $form_id = 0 ) {
