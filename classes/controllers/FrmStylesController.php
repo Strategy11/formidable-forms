@@ -298,7 +298,11 @@ class FrmStylesController {
 			$active_style = $default_style;
 		}
 
-		$styles = self::get_styles_for_style_page( $form, $active_style );
+		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
+			$styles = FrmProStylesController::get_styles_for_style_page( $form, $active_style );
+		} else {
+			$styles = array( self::get_default_style() );
+		}
 
 		/**
 		 * @since x.x
@@ -310,20 +314,6 @@ class FrmStylesController {
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
 		self::render_style_page( $active_style, $styles, $form, $default_style );
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param stdClass $form
-	 * @param WP_Post  $active_style
-	 * @return array<WP_Post>
-	 */
-	private static function get_styles_for_style_page( $form, $active_style ) {
-		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
-			return FrmProStylesController::get_styles_for_style_page( $form, $active_style );
-		}
-		return array( self::get_default_style() );
 	}
 
 	/**
