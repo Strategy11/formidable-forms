@@ -315,19 +315,7 @@
 
 		initDatepickerSample();
 		jQuery( document.getElementById( 'frm_position' ) ).on( 'change', setPosClass );
-
-		// Check floating label when focus or blur fields.
-		const floatingLabelSelector = '.frm_inside_container > input, .frm_inside_container > textarea, .frm_inside_container > select';
-		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
-			documentOn(
-				eventName,
-				floatingLabelSelector,
-				function( event ) {
-					checkFloatingLabelsForStyles( event.target );
-				},
-				true
-			);
-		});
+		initFloatingLabels();
 
 		// Trigger label position option on load.
 		const changeEvent = document.createEvent( 'HTMLEvents' );
@@ -413,34 +401,6 @@
 
 			this.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
-
-		/**
-		 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
-		 *
-		 * @since 5.4.2
-		 *
-		 * @param {String}         event    Event name.
-		 * @param {String}         selector Selector.
-		 * @param {Function}       handler  Handler.
-		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
-		 */
-		function documentOn( event, selector, handler, options ) {
-			if ( 'undefined' === typeof options ) {
-				options = false;
-			}
-
-			document.addEventListener( event, function( e ) {
-				let target;
-
-				// loop parent nodes from the target to the delegation node.
-				for ( target = e.target; target && target != this; target = target.parentNode ) {
-					if ( target.matches( selector ) ) {
-						handler.call( target, e );
-						break;
-					}
-				}
-			}, options );
-		}
 	}
 
 	/**
@@ -492,7 +452,7 @@
 			value = 'none';
 		}
 
-		document.querySelectorAll( '.frm_form_field' ).forEach( container => {
+		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {
 			// Fields that support floating label should have a directly child input/textarea/select.
 			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
 
@@ -507,6 +467,54 @@
 				checkFloatingLabelsForStyles( input, container );
 			}
 		});
+	}
+
+	/**
+	 * Technically this isn't required as the form preview is loading JavaScript.
+	 *
+	 * @todo I'm not sure if it makes more sense to block front end JavaScript or to remove this.
+	 *
+	 * @returns {void}
+	 */
+	function initFloatingLabels() {
+		// Check floating label when focus or blur fields.
+		const floatingLabelSelector = '#frm_style_preview .frm_inside_container > input, #frm_style_preview .frm_inside_container > textarea, #frm_style_preview .frm_inside_container > select';
+		[ 'focus', 'blur', 'change' ].forEach(
+			eventName => documentOn(
+				eventName,
+				floatingLabelSelector,
+				event => checkFloatingLabelsForStyles( event.target ),
+				true
+			)
+		);
+	}
+
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+		function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			let target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
 	}
 
 	/**
