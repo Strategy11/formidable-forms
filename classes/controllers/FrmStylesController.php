@@ -645,7 +645,8 @@ class FrmStylesController {
 					return self::$action();
 				}
 
-				return self::edit();
+				self::edit();
+				return;
 		}
 	}
 
