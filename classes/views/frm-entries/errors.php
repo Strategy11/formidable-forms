@@ -8,8 +8,16 @@ if ( isset( $include_extra_container ) ) { ?>
 	<?php
 }
 
-if ( empty( $message ) && FrmAppHelper::simple_get( 'message' ) !== '' ) {
-	$message = FrmAppHelper::simple_get( 'message' );
+if ( empty( $message ) && FrmAppHelper::simple_get( 'frm_message' ) ) {
+
+	/**
+	 * Updates message in an entry edit page.
+	 *
+	 * @since 5.x
+	 *
+	 * @param string $message
+	 */
+	$message = apply_filters( 'frm_message', '' );
 }
 
 if ( isset( $message ) && $message != '' ) {
