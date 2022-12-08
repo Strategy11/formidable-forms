@@ -1346,6 +1346,14 @@ class FrmFormsController {
 		}
 	}
 
+	public static function update_submit_button_classes( $classes ) {
+		if ( wp_get_theme()->get('Name') === 'Twenty Twenty-One' ) {
+			$classes[] = 'has-text-color has-background';
+		}
+	
+		return $classes;
+	}
+
 	public static function mb_tags_box( $form_id, $class = '' ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 

@@ -102,9 +102,6 @@ class FrmStyle {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
-			if ( isset( $new_instance['post_content']['submit_bg_color'] ) ) {
-				$new_instance['post_content']['global--color-primary'] = $new_instance['post_content']['submit_bg_color'];
-			}
 
 			$all_instances[ $number ] = $new_instance;
 
