@@ -745,17 +745,11 @@ class FrmXMLHelper {
 				'post_type' => 'frm_styles',
 			);
 			$select   = 'ID';
-			$style_id = FrmDb::get_var( $table, $where, $select );
 
-			if ( ! $style_id ) {
-				$style = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $table WHERE post_type=%s AND post_name=%s", 'frm_styles', $form['options']['custom_style'] ) );
-				if ( $style ) {
-					$style_id = $style->ID;
-				}
-			}
+			$style = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $table WHERE post_type=%s AND post_name=%s", 'frm_styles', $form['options']['custom_style'] ) );
 
-			if ( $style_id ) {
-				$form['options']['custom_style'] = $style_id;
+			if ( $style ) {
+				$form['options']['custom_style'] = $style->ID;
 			} else {
 				// save the old style to maybe update after styles import
 				$form['options']['old_style'] = $form['options']['custom_style'];
