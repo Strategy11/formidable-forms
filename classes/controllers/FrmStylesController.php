@@ -390,6 +390,10 @@ class FrmStylesController {
 		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
 		$frm_style        = new FrmStyle( $active_style->ID );
 
+		if ( ! FrmAppHelper::simple_get( 'form' ) && ! FrmAppHelper::simple_get( 'style_id' ) ) {
+			$view = 'edit'; // Have the Appearance > Forms link fallback to the edit view. Otherwise we want to use 'list' as the default.
+		}
+
 		if ( in_array( $view, array( 'edit', 'new_style', 'duplicate' ), true ) ) {
 			self::add_meta_boxes();
 		}
