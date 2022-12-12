@@ -2140,8 +2140,14 @@ class FrmFormsController {
 		$args['success_opt'] = $opt;
 
 		if ( 'success' === $opt && empty( $args['skip_actions_check'] ) && true ) { // TODO: Replace true with form option check.
-			$has_met_action = self::run_success_form_actions( $args );
-			if ( $has_met_action ) {
+			$met_actions = self::get_met_on_submit_actions( $args );
+			if ( 1 === count( $met_actions ) ) {
+				self::run_single_on_submit_action( $args, $met_actions[0] );
+				return;
+			}
+
+			if ( 1 < count( $met_actions ) ) {
+				self::run_multi_on_submit_actions( $args, $met_actions );
 				return;
 			}
 		}
@@ -2155,9 +2161,15 @@ class FrmFormsController {
 		}
 	}
 
-	private static function run_success_form_actions( $args ) {
-		$entry   = FrmEntry::getOne( $args['entry_id'], true );
-		$actions = FrmOnSubmitHelper::get_actions( $args['form']->id );
+	/**
+	 * Gets met On Submit actions.
+	 *
+	 * @param array $args Args.
+	 * @return array Array of actions that meet the conditional logics.
+	 */
+	private static function get_met_on_submit_actions( $args ) {
+		$entry       = FrmEntry::getOne( $args['entry_id'], true );
+		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
 		$has_redirect = false;
 
@@ -2167,19 +2179,47 @@ class FrmFormsController {
 			}
 
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
+					continue;
+				}
+
 				$has_redirect = true;
 			}
 
 			$met_actions[] = $action;
+			unset( $action );
 		}
 
-		if ( 1 === count( $met_actions ) ) {
-			$new_args = self::get_run_success_action_args( $args, $met_actions[0] );
-			self::run_success_action( $new_args );
-			return true;
+		return $met_actions;
+	}
+
+	/**
+	 * Runs multiple success actions.
+	 *
+	 * @param array $args    Args.
+	 * @param array $actions Form actions.
+	 */
+	private static function run_multi_on_submit_actions( $args, $actions ) {
+		$redirect_action = null;
+		foreach ( $actions as $action ) {
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+				$redirect_action = $action;
+				continue;
+			}
+
+			self::run_single_on_submit_action( $args, $action );
+
+			unset( $action, $new_args );
 		}
 
-		return count( $met_actions ) > 0;
+		if ( $redirect_action ) {
+			// Show script to delay the redirection.
+		}
+	}
+
+	private static function run_single_on_submit_action( $args, $action ) {
+		$new_args = self::get_run_success_action_args( $args, $action );
+		self::run_success_action( $new_args );
 	}
 
 	private static function get_run_success_action_args( $args, $action ) {
