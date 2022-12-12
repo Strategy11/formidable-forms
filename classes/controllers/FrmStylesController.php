@@ -243,7 +243,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function load_styler() {
-		if ( FrmAppHelper::get_post_param( 'style_id', 0, 'absint' ) ) {
+		if ( 'assign_style' === FrmAppHelper::get_post_param( 'frm_action' ) ) {
 			self::save_form_style();
 		}
 
@@ -342,7 +342,6 @@ class FrmStylesController {
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
 		$form_id  = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
-		// TODO nonce / permission check.
 
 		$form                          = FrmForm::getOne( $form_id );
 		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.

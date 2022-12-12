@@ -29,6 +29,29 @@
 		document.addEventListener( 'click', handleClickEventsForListPage );
 		setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
 		initDatepickerSample();
+
+		const enableToggle = document.getElementById( 'frm_enable_styling' );
+		enableToggle.addEventListener(
+			'change',
+			event => {
+				document.getElementById( 'frm_style_cards_wrapper' ).style.opacity = event.target.checked ? 1 : 0.5;
+				document.getElementById( 'frm_style_cards_wrapper' ).style.pointerEvents = event.target.checked ? '' : 'none';
+
+				const styleIdInput = getStyleIdInput();
+
+				if ( ! event.target.checked ) {
+					styleIdInput.value = '0';
+					return;
+				}
+
+				const card         = document.querySelector( '.frm-active-style-card' );
+				styleIdInput.value = card.dataset.styleId;
+			}
+		);
+	}
+
+	function getStyleIdInput() {
+		return document.getElementById( 'frm_style_list_form' ).querySelector( '[name="style_id"]' );
 	}
 
 	function handleCommonClickEvents( event ) {
@@ -77,7 +100,7 @@
 		const form         = previewArea.querySelector( 'form' );
 		const activeCard   = document.querySelector( '.frm-active-style-card' );
 		const sampleForm   = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
-		const styleIdInput = document.getElementById( 'frm_style_form' ).querySelector( '[name="style_id"]' );
+		const styleIdInput = getStyleIdInput();
 
 		disableLabelTransitions();
 
@@ -141,7 +164,7 @@
 		}
 
 		// Submit the "list" view (assign a style to a form).
-		document.getElementById( 'frm_style_form' ).submit();
+		document.getElementById( 'frm_style_list_form' ).submit();
 	}
 
 	function addHamburgMenusToCards() {

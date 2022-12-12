@@ -17,6 +17,7 @@
 	overflow-y: auto;
 	flex: 1;
 	min-width: 500px;
+	position: relative;
 }
 
 #frm_style_sidebar h3 {

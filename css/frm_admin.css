@@ -4256,7 +4256,7 @@ select.frm_cancelnew, input.frm_enternew {
 	margin: 5px 0 5px 25px;
 }
 
-/* Admin toggle */
+/* The small toggle is used to enable/disable email actions. */
 .frm_toggle_off,
 .frm_toggle_on {
 	display: none;
@@ -8802,3 +8802,87 @@ Responsive Design
 	max-width: 100%;
 }
 
+/*
+These are the styles for the "Enable Formidable styling" toggle in the visual styler.
+It uses the same style rules as the font end toggle field in Pro.
+To use this element, you can call the FrmHtmlHelper::toggle function.
+*/
+.frm_switch_opt {
+	padding: 0 8px 0 0;
+	white-space: normal;
+	display: inline;
+	vertical-align: middle;
+	font-weight: normal;
+}
+
+.frm_on_label {
+	padding:0 0 0 8px;
+}
+
+.frm_on_label,
+.frm_off_label {
+	color: #444444;
+}
+
+.frm_switch {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: 25px;
+	vertical-align: middle;
+}
+
+.frm_switch_block input {
+	display:none !important;
+}
+
+.frm_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #eaeaea;
+	transition: .4s;
+	border-radius: 30px;
+}
+
+.frm_slider:before {
+	border-radius: 50%;
+	position: absolute;
+	content: "";
+	height: 23px;
+	width: 23px;
+	left: 1px;
+	bottom: 1px;
+	background-color: white;
+	transition: .4s;
+	box-shadow:0 2px 6px rgba(41, 58, 82, 0.31);
+}
+
+input:checked + .frm_switch .frm_slider {
+	background-color: #579AF6;
+}
+
+input:focus + .frm_switch .frm_slider {
+	box-shadow: 0 0 1px #3177c7;
+}
+
+input:checked + .frm_switch .frm_slider:before {
+	transform: translateX(15px);
+}
+
+.frm_rtl .frm_switch_opt {
+	padding: 0 8px;
+}
+
+.frm_rtl .frm_slider:before {
+	left: 16px;
+}
+
+.frm_rtl input:checked + .frm_switch .frm_slider:before {
+	transform: none!important;
+	left: 1px;
+}
+/* End toggle styling */
