@@ -10,7 +10,7 @@ class FrmHtmlHelper {
 
 	/**
 	 * Create a toggle and either echo or return the string.
-	 * 
+	 * This isn't completely compatible with Pro. The input_html option has been omitted as it isn't secure.
 	 *
 	 * @since x.x
 	 *

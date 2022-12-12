@@ -607,7 +607,7 @@ class FrmStylesHelper {
 	 * @param string     $style_views_path
 	 * @param WP_Post    $active_style
 	 * @param WP_Post    $default_style
-	 * @param string|int $form_id
+	 * @param string|int $form_id This is used in the edit URL for the back action.
 	 * @return void
 	 */
 	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style, $form_id ) {
