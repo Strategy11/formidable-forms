@@ -386,7 +386,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
-		$style_views_path = FrmAppHelper::plugin_path() . '/classes/views/styles/';
+		$style_views_path = self::get_views_path();
 		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
 		$frm_style        = new FrmStyle( $active_style->ID );
 
@@ -418,6 +418,15 @@ class FrmStylesController {
 		}
 
 		include $style_views_path . 'show.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_views_path() {
+		return FrmAppHelper::plugin_path() . '/classes/views/styles/';
 	}
 
 	/**
