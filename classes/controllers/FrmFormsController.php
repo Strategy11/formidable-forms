@@ -2214,6 +2214,8 @@ class FrmFormsController {
 
 		if ( $redirect_action ) {
 			// Show script to delay the redirection.
+			$args['force_delay_redirect'] = true;
+			self::run_single_on_submit_action( $args, $redirect_action );
 		}
 	}
 
@@ -2281,7 +2283,7 @@ class FrmFormsController {
 		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax ) {
 			echo json_encode( array( 'redirect' => $success_url ) );
 			wp_die();
-		} elseif ( ! headers_sent() ) {
+		} elseif ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) {
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
 		} else {
