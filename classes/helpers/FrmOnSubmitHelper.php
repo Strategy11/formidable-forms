@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmOnSubmitHelper {
 
 	/**
+	 * Cache the on submit actions.
+	 *
+	 * @var array
+	 */
+	private static $actions = [];
+
+	/**
 	 * Shows message settings.
 	 *
 	 * @param array $args {
@@ -26,17 +33,17 @@ class FrmOnSubmitHelper {
 	 * }
 	 */
 	public static function show_message_settings( $args ) {
-		$id_attr = $args['action_control']->get_field_id( 'message' );
+		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
 		?>
 		<div class="frm_form_field frm_has_shortcodes frm_has_textarea">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
 			<textarea
-				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'message' ) ); ?>"
+				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_msg' ) ); ?>"
 				id="<?php echo esc_attr( $id_attr ); ?>"
 				rows="4"
-			><?php echo esc_textarea( $args['form_action']->post_content['message'] ); ?></textarea>
+			><?php echo esc_textarea( $args['form_action']->post_content['success_msg'] ); ?></textarea>
 		</div>
 
 		<?php $id_attr = $args['action_control']->get_field_id( 'show_form' ); ?>
@@ -116,5 +123,27 @@ class FrmOnSubmitHelper {
 			?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Gets all active On Submit form actions for form.
+	 *
+	 * @param int $form_id Form ID.
+	 * @return array
+	 */
+	public static function get_actions( $form_id ) {
+		if ( isset( self::$actions[ $form_id ] ) ) {
+			return self::$actions[ $form_id ];
+		}
+
+		self::$actions[ $form_id ] = FrmFormAction::get_action_for_form( $form_id, FrmOnSubmitAction::$slug );
+		return self::$actions[ $form_id ];
+	}
+
+	public static function get_action_type( $action ) {
+		if ( isset( $action->post_content['success_action'] ) ) {
+			return $action->post_content['success_action'];
+		}
+		return 'message';
 	}
 }

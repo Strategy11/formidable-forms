@@ -2130,11 +2130,22 @@ class FrmFormsController {
 		$extra_args = $args;
 		unset( $extra_args['form'] );
 
-		do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
+		if ( empty( $args['skip_actions_check'] ) ) {
+			// Make sure this only runs once.
+			do_action( 'frm_success_action', $args['conf_method'], $args['form'], $args['form']->options, $args['entry_id'], $extra_args );
+		}
 
 		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
+
+		if ( 'success' === $opt && empty( $args['skip_actions_check'] ) && true ) { // TODO: Replace true with form option check.
+			$has_met_action = self::run_success_form_actions( $args );
+			if ( $has_met_action ) {
+				return;
+			}
+		}
+
 		if ( $args['conf_method'] === 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
 		} elseif ( $args['conf_method'] === 'redirect' ) {
@@ -2142,6 +2153,48 @@ class FrmFormsController {
 		} else {
 			self::show_message_after_save( $args );
 		}
+	}
+
+	private static function run_success_form_actions( $args ) {
+		$entry   = FrmEntry::getOne( $args['entry_id'], true );
+		$actions = FrmOnSubmitHelper::get_actions( $args['form']->id );
+		$met_actions = array();
+		$has_redirect = false;
+
+		foreach ( $actions as $action ) {
+			if ( FrmFormAction::action_conditions_met( $action, $entry ) ) {
+				continue;
+			}
+
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+				$has_redirect = true;
+			}
+
+			$met_actions[] = $action;
+		}
+
+		if ( 1 === count( $met_actions ) ) {
+			$new_args = self::get_run_success_action_args( $args, $met_actions[0] );
+			self::run_success_action( $new_args );
+			return true;
+		}
+
+		return count( $met_actions ) > 0;
+	}
+
+	private static function get_run_success_action_args( $args, $action ) {
+		$new_args = $args;
+
+		$new_args['conf_method']        = isset( $action->post_content['success_action'] ) ? $action->post_content['success_action'] : 'message';
+		$new_args['skip_actions_check'] = true;
+
+		foreach ( array( 'success_msg', 'success_url', 'success_page_id', 'show_form' ) as $opt_key ) {
+			$value = isset( $action->post_content[ $opt_key ] ) ? $action->post_content[ $opt_key ] : '';
+			$new_args['form']->options[ $opt_key ] = $value;
+		}
+
+		$new_args['form']->options['success_action'] = $new_args['conf_method'];
+		return $new_args;
 	}
 
 	/**
