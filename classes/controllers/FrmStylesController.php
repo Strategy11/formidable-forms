@@ -70,6 +70,21 @@ class FrmStylesController {
 	}
 
 	/**
+	 * Remove filters for the visual styler preview.
+	 * This triggers earlier than self::admin_init which is called too late.
+	 *
+	 * @return void
+	 */
+	public static function plugins_loaded() {
+		if ( ! FrmAppHelper::is_style_editor_page() ) {
+			return;
+		}
+
+		// Removing this action prevents front end JavaScript from loading.
+		remove_action( 'init', 'FrmFormsController::front_head' );
+	}
+
+	/**
 	 * @return void
 	 */
 	public static function admin_init() {

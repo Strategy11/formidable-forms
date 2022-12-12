@@ -154,6 +154,7 @@ class FrmHooksController {
 
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
+		add_action( 'plugins_loaded', 'FrmStylesController::plugins_loaded' );
 		add_action( 'admin_init', 'FrmStylesController::admin_init' );
 
 		// XML Controller.

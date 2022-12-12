@@ -2338,6 +2338,9 @@ class FrmFormsController {
 		return apply_filters( 'frm_main_feedback', $message, $form, $entry_id );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function front_head() {
 		$version = FrmAppHelper::plugin_version();
 		$suffix  = FrmAppHelper::js_suffix();
