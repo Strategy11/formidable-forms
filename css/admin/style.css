@@ -248,12 +248,8 @@ label.default-style-box input[type="checkbox"] {
 	background: #fff !important;
 }
 
-#frm_enable_styling_wrapper {
-	margin-bottom: 20px;
-}
-
-#frm_enable_styling_wrapper > .with_frm_style {
-	--form-align: left;
+#frm_style_cards_wrapper {
+	margin-top: 20px;
 }
 
 @media only screen and (max-width: 1200px) {

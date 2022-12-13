@@ -28,13 +28,12 @@ $enabled = '0' !== $form->options['custom_style'];
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div id="frm_enable_styling_wrapper">
+	<div>
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',
 			'frm_enable_styling',
 			array(
-				'div_class'   => 'with_frm_style',
 				'checked'     => $enabled,
 				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
 				'show_labels' => true,
