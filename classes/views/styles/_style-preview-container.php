@@ -7,7 +7,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div id="frm_style_preview">
-	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+	<?php
+	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message variable is not empty, it will be rendered in this view.
+
+	FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell.
+	?>
 	<div id="frm_active_style_form">
 		<?php
 		// The right side body shows a preview (of the target form) so you can see the form you're actually styling.
