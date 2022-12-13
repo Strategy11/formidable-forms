@@ -7643,10 +7643,6 @@ iframe#dyncontent_ifr {
 	font-size: 14px;
 }
 
-#frm_styling_form #post-body {
-	padding: 20px;
-}
-
 .ui-datepicker-inline.ui-datepicker {
 	max-width: 19em;
 }
@@ -7658,22 +7654,6 @@ iframe#dyncontent_ifr {
 
 #frm_custom_css_box {
 	width: 100%;
-}
-
-#frm_styling_form .wp-picker-container .wp-color-result.button {
-	width: 100%;
-	overflow: hidden;
-	margin: 0 !important;
-	height: 32px !important;
-	padding: 0 0 0 30px !important;
-	border-radius: var(--small-radius);
-	border-color: var(--grey-border);
-}
-
-#frm_styling_form .wp-color-result-text {
-	line-height: 30px !important;
-	font-size: 15px;
-	background: #fff !important;
 }
 
 .wp-picker-open + .wp-picker-input-wrap {
@@ -7709,11 +7689,6 @@ iframe#dyncontent_ifr {
 
 .frm_end.frm6 .wp-picker-holder {
     margin-left: -86px;
-}
-
-#frm_styling_form div.tabs-panel {
-	padding-left: 5px;
-	padding-right: 5px;
 }
 
 /*form inputs/selects */

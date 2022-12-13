@@ -10066,8 +10066,10 @@ function frmAdminBuildJS() {
 		},
 
 		styleInit: function() {
-			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_choose_image_box', addImageToOption );
-			jQuery( '.frm_image_preview_wrapper' ).on( 'click', '.frm_remove_image_option', removeImageFromOption );
+			const $previewWrapper = jQuery( '.frm_image_preview_wrapper' );
+			$previewWrapper.on( 'click', '.frm_choose_image_box', addImageToOption );
+			$previewWrapper.on( 'click', '.frm_remove_image_option', removeImageFromOption );
+
 			wp.hooks.doAction( 'frm_style_editor_init' );
 		},
 
