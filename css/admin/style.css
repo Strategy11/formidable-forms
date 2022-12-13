@@ -1,3 +1,6 @@
+/*
+This file is added to the visual styler admin page, accessed from the style tab.
+*/
 #frm_style_page_wrapper {
 	display: flex;
 	flex-direction: row;
