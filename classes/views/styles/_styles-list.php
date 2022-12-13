@@ -28,7 +28,7 @@ $enabled = '0' !== $form->options['custom_style'];
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div style="margin-bottom: 20px;">
+	<div id="frm_enable_styling_wrapper">
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',

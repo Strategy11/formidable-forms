@@ -248,6 +248,14 @@ label.default-style-box input[type="checkbox"] {
 	background: #fff !important;
 }
 
+#frm_enable_styling_wrapper {
+	margin-bottom: 20px;
+}
+
+#frm_enable_styling_wrapper > .with_frm_style {
+	--form-align: left;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,
