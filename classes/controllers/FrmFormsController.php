@@ -2236,6 +2236,13 @@ class FrmFormsController {
 		}
 
 		$new_args['form']->options['success_action'] = $new_args['conf_method'];
+
+		if ( 'redirect' === $new_args['conf_method'] ) {
+			$redirect_msg = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : '';
+
+			$new_args['form']->options['success_msg'] = $redirect_msg;
+		}
+
 		return $new_args;
 	}
 
