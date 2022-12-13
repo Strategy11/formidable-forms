@@ -2,8 +2,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-// This is the view for the "style page" where you can assign a style to a form and view the list of style templates.
-// It is accessed from /wp-admin/themes.php?page=formidable-styles&frm_action=edit&form=782
+// This partial view is used in the visual styler. This view renders a container for both the target form and the sample form previews.
+// It also includes the toggle to switch between the two views as only a single one is displayed at a time.
+// It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
 
 ?>
 <div id="frm_style_preview">

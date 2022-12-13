@@ -2,7 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-// This is the view for the "style page" where you can assign a style to a form and view the list of style templates.
+// This partial view is used in the visual styler sidebar in "list" view.
+// It lists all styles and allows the user to select and assign a style to a target form.
 // It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
 
 $enabled = '0' !== $form->options['custom_style'];
