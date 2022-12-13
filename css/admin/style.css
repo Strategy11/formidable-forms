@@ -172,6 +172,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 #frm_style_preview .frm_floating_style_button svg {
+	color: var(--floating-button-text-color);
 	fill: var(--floating-button-text-color);
 	height: 14px;
 	width: 14px;
