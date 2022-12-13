@@ -13,7 +13,7 @@ $aria_checked = $checked ? 'true' : 'false';
 ?>
 
 <div <?php echo $div_class ? 'class="' . esc_attr( $div_class ) . '"' : ''; ?>>
-    <label class="frm_switch_block">
+	<label class="frm_switch_block">
 		<?php if ( $show_labels && $off_label ) { ?>
 			<span class="frm_off_label frm_switch_opt"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
