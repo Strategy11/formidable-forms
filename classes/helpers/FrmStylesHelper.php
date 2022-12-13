@@ -648,6 +648,56 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get all warnings to display above the visual styler preview when editing a style.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post $style
+	 * @param WP_Post $default_style
+	 * @return array<string>
+	 */
+	public static function get_warnings( $style, $default_style ) {
+		$warnings         = array();
+		$is_default_style = $style->ID === $default_style->ID;
+		$form_count       = self::get_form_count_for_style( $style->ID, $is_default_style );
+
+		if ( $form_count > 1 ) {
+			$warnings[] = __( 'Changes that you will make to this style will apply to every form using this style.', 'formidable' );
+		}
+
+		return $warnings;
+	}
+
+	/**
+	 * Get a count of the number of forms assigned to a target style ID.
+	 * All unassigned forms are included in the count for the default style.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $style_id
+	 * @param bool       $is_default
+	 * @return int
+	 */
+	public static function get_form_count_for_style( $style_id, $is_default ) {
+		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
+		$substring  = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+
+		$number_of_forms = FrmDb::get_count( 'frm_forms', array( 'status' => 'published', 'options LIKE' => $substring ) );
+		if ( $is_default ) {
+			// Add forms without an assigned style ID to the default count as well.
+			$substring2 = serialize( array( 'custom_style' => '1' ) );
+			$substring2 = substr( $substring2, 5, -1 );
+
+			$substring3 = serialize( array( 'custom_style' => 1 ) );
+			$substring3 = substr( $substring3, 5, -1 );
+
+			$number_of_forms += FrmDb::get_count( 'frm_forms', array( 'status' => 'published', array( 'options NOT LIKE' => 'custom_style', 'or' => 1, 'options LIKE' => array( $substring2, $substring3 ) ) ) );
+		}
+
+		return $number_of_forms;
+	}
+
+	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */

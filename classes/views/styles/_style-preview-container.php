@@ -9,6 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_style_preview">
 	<?php
+	if ( 'edit' === $view ) {
+		$warnings = FrmStylesHelper::get_warnings( $style, $default_style );
+	}
+
 	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message variable is not empty, it will be rendered in this view.
 
 	FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell.
