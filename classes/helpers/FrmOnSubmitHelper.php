@@ -91,6 +91,16 @@ class FrmOnSubmitHelper {
 				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
 			/>
 		</div>
+
+		<?php $id_attr = $args['action_control']->get_field_id( 'redirect_msg' ); ?>
+		<div class="frm_form_field">
+			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect message (used when multiple On Submit actions run)', 'formidable' ); ?></label>
+			<textarea
+				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'redirect_msg' ) ); ?>"
+				id="<?php echo esc_attr( $id_attr ); ?>"
+				rows="4"
+			><?php echo esc_textarea( $args['form_action']->post_content['redirect_msg'] ); ?></textarea>
+		</div>
 		<?php
 	}
 
