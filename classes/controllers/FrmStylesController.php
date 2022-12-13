@@ -405,7 +405,7 @@ class FrmStylesController {
 		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
 		$frm_style        = new FrmStyle( $active_style->ID );
 
-		if ( ! FrmAppHelper::simple_get( 'form' ) && ! FrmAppHelper::simple_get( 'style_id' ) ) {
+		if ( 'new_style' !== $view && ! FrmAppHelper::simple_get( 'form' ) && ! FrmAppHelper::simple_get( 'style_id' ) ) {
 			$view = 'edit'; // Have the Appearance > Forms link fallback to the edit view. Otherwise we want to use 'list' as the default.
 		}
 
@@ -420,6 +420,7 @@ class FrmStylesController {
 			$style->ID         = '';
 			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
 			$style->post_name  = 'new-style';
+			$style->menu_order = 0;
 		}
 
 		if ( ! isset( $style ) ) {
