@@ -9,9 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_style_preview">
 	<?php
-	if ( 'edit' === $view ) {
-		$warnings = FrmStylesHelper::get_warnings( $style, $default_style );
-	}
+	$warnings = FrmStylesHelper::get_warnings( $style, $default_style, $view );
 
 	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message variable is not empty, it will be rendered in this view.
 

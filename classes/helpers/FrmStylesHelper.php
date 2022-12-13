@@ -648,21 +648,25 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Get all warnings to display above the visual styler preview when editing a style.
+	 * Get all warnings to display above the visual styler preview.
 	 *
 	 * @since x.x
 	 *
 	 * @param WP_Post $style
 	 * @param WP_Post $default_style
+	 * @param string  $view Either 'list' or 'edit'.
 	 * @return array<string>
 	 */
-	public static function get_warnings( $style, $default_style ) {
-		$warnings         = array();
-		$is_default_style = $style->ID === $default_style->ID;
-		$form_count       = self::get_form_count_for_style( $style->ID, $is_default_style );
+	public static function get_warnings( $style, $default_style, $view ) {
+		$warnings = array();
 
-		if ( $form_count > 1 ) {
-			$warnings[] = __( 'Changes that you will make to this style will apply to every form using this style.', 'formidable' );
+		if ( 'edit' === $view ) {
+			$is_default_style = $style->ID === $default_style->ID;
+			$form_count       = self::get_form_count_for_style( $style->ID, $is_default_style );
+	
+			if ( $form_count > 1 ) {
+				$warnings[] = __( 'Changes that you will make to this style will apply to every form using this style.', 'formidable' );
+			}
 		}
 
 		return $warnings;
