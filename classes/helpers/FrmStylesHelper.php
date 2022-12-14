@@ -718,6 +718,24 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string|int $form_id
+	 * @return string
+	 */
+	public static function get_html_for_form_preview( $form_id ) {
+		// Force is_admin to false so the "Entry Key" field doesn't render in the preview.
+		add_filter( 'frm_is_admin', '__return_false' );
+
+		$target_form_preview_html = FrmFormsController::show_form( $form_id, '', 'auto', 'auto' );
+
+		// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
+		wp_dequeue_script( 'captcha-api' );
+
+		return $target_form_preview_html;
+	}
+
+	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */

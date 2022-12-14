@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_style_preview">
 	<?php
+	// Get form HTML before displaying warnings and notes so we can check global data without adding extra database calls.
+	$target_form_preview_html = FrmStylesHelper::get_html_for_form_preview( $form->id );
+
 	$warnings = FrmStylesHelper::get_warnings_for_styler_preview( $style, $default_style, $view );
 	$notes    = is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ? FrmProStylesController::get_notes_for_styler_preview() : array();
 	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message or $warnings variable are not empty, it will be rendered here.
@@ -18,9 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="frm_active_style_form">
 		<?php
 		// The right side body shows a preview (of the target form) so you can see the form you're actually styling.
-		add_filter( 'frm_is_admin', '__return_false' ); // Force is_admin to false so the "Entry Key" field doesn't render in the preview.
-		echo FrmFormsController::show_form( $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		wp_dequeue_script( 'captcha-api' ); // If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
+		echo $target_form_preview_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	</div>
 	<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this and is hidden by default. ?>
