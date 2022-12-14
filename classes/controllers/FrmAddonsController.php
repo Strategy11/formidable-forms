@@ -982,7 +982,6 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
-		error_log( $download_url );
 		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) {
 			error_log( 'not valid' );
 			return array(
@@ -990,9 +989,6 @@ class FrmAddonsController {
 				'success' => false,
 			);
 		}
-
-		error_log( 'install addon' );
-		// TODO here.
 
 		// Create the plugin upgrader with our custom skin.
 		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );

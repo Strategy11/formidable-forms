@@ -3614,7 +3614,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Make sure that the XML file we're trying to load is in fact an XML file, and that it's coming from our S3 bucket.
+	 * Make sure that the file we're trying to load is in fact the expected file type, and that it's coming from our S3 bucket.
 	 * This is to make sure that the URL can't be exploited for a SSRF attack.
 	 *
 	 * @since 5.5.5
