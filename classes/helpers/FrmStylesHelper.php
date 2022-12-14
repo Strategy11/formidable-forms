@@ -663,7 +663,7 @@ class FrmStylesHelper {
 		if ( 'edit' === $view ) {
 			$is_default_style = $style->ID === $default_style->ID;
 			$form_count       = self::get_form_count_for_style( $style->ID, $is_default_style );
-	
+
 			if ( $form_count > 1 ) {
 				$warnings[] = __( 'Changes that you will make to this style will apply to every form using this style.', 'formidable' );
 			}
@@ -683,10 +683,16 @@ class FrmStylesHelper {
 	 * @return int
 	 */
 	public static function get_form_count_for_style( $style_id, $is_default ) {
-		$serialized = serialize( array( 'custom_style' => (string) $style_id ) );
-		$substring  = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+		$serialized      = serialize( array( 'custom_style' => (string) $style_id ) );
+		$substring       = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+		$number_of_forms = FrmDb::get_count(
+			'frm_forms',
+			array(
+				'status'       => 'published',
+				'options LIKE' => $substring,
+			)
+		);
 
-		$number_of_forms = FrmDb::get_count( 'frm_forms', array( 'status' => 'published', 'options LIKE' => $substring ) );
 		if ( $is_default ) {
 			// Add forms without an assigned style ID to the default count as well.
 			$substring2 = serialize( array( 'custom_style' => '1' ) );
@@ -695,7 +701,17 @@ class FrmStylesHelper {
 			$substring3 = serialize( array( 'custom_style' => 1 ) );
 			$substring3 = substr( $substring3, 5, -1 );
 
-			$number_of_forms += FrmDb::get_count( 'frm_forms', array( 'status' => 'published', array( 'options NOT LIKE' => 'custom_style', 'or' => 1, 'options LIKE' => array( $substring2, $substring3 ) ) ) );
+			$number_of_forms += FrmDb::get_count(
+				'frm_forms',
+				array(
+					'status' => 'published',
+					array(
+						'options NOT LIKE' => 'custom_style',
+						'or'               => 1,
+						'options LIKE'     => array( $substring2, $substring3 ),
+					),
+				)
+			);
 		}
 
 		return $number_of_forms;
