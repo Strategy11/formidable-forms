@@ -252,6 +252,11 @@ label.default-style-box input[type="checkbox"] {
 	margin-top: 20px;
 }
 
+#frm_style_preview label {
+	/* Avoid a line-height: 1.4rem rule defined in common.css WordPress admin rules */
+	line-height: normal;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,

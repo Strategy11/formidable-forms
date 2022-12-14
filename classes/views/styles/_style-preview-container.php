@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		echo FrmFormsController::show_form( $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	</div>
-	<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this. ?>
+	<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this and is hidden by default. ?>
 	<div id="frm_sample_form" class="frm_hidden">
 		<?php
 		$frm_settings = FrmAppHelper::get_settings();
