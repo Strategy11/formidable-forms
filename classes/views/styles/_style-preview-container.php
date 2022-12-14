@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		// The right side body shows a preview (of the target form) so you can see the form you're actually styling.
 		add_filter( 'frm_is_admin', '__return_false' ); // Force is_admin to false so the "Entry Key" field doesn't render in the preview.
 		echo FrmFormsController::show_form( $form->id, '', 'auto', 'auto' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		wp_dequeue_script( 'captcha-api' ); // If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
 		?>
 	</div>
 	<?php // Add a sample form to toggle between. This is toggled by the #frm_toggle_sample_form below this and is hidden by default. ?>
