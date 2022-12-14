@@ -179,6 +179,7 @@ Since Formidable is not your average form plugin, this feature list is going to 
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and custom post types from front-end online forms. Send user-generated content quickly from a post creation form to a page.
 * <a href="https://formidableforms.com/features/form-entry-management-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Simple entry management</a>. Flexibly display, edit, and delete entries. Let logged-in users can manage their personal journal entries, weight tracking, guest blog posts, RSVP status, and more.
 * WordPress front-end editing. Allow users to edit their entries and posts from the front-end of your site. Create an online journaling platform, member directory, classified ads, community recipes, and more.
+* Sync custom field values between Advanced Custom Fields (ACF) and Formidable. Now you can create ACF front-end forms to make managing your application faster.
 * Logged-in users can <a href="https://formidableforms.com/features/save-and-continue-partial-submissions/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">save and continue partial submissions</a>. Whether it's a basic email form or a long multi-paged registration form, users can save progress and pick up where they left off.
 * <a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Graphs and charts for data visualization</a>. Display statistics from a survey, poll, and questionnaire. Or graph data in a variety of ways. Whatever you choose, it will update as new data is submitted (great for weight tracking over time).
 * Permissions. Lock visibility and access based on user role.
@@ -355,7 +356,7 @@ Our online form maker comes with all the powerful fields that you need to create
 * Hidden fields
 * User ID
 * HTML block - Great for custom HTML
-* Google reCAPTCHA (invisible V2 or checkbox V2)
+* Google reCAPTCHA (invisible V2 or checkbox V2) or hCaptcha
 
 Here is a list of our advanced premium fields that will come in handy:
 
