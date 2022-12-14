@@ -1200,7 +1200,7 @@ class FrmFormsController {
 				),
 			),
 			'buttons'     => array(
-				'name'     => __( 'Styling & Buttons', 'formidable' ),
+				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
 				'icon'     => 'frm_icon_font frm_pallet_icon',
