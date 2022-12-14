@@ -3614,6 +3614,38 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Make sure that the XML file we're trying to load is in fact an XML file, and that it's coming from our S3 bucket.
+	 * This is to make sure that the URL can't be exploited for a SSRF attack.
+	 *
+	 * @since 5.5.5
+	 *
+	 * @param string $url
+	 * @param string $expected_extension
+	 * @return bool
+	 */
+	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
+		$file_is_in_expected_s3_bucket = 0 === strpos( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		if ( ! $file_is_in_expected_s3_bucket ) {
+			return false;
+		}
+
+		$parsed = parse_url( $url );
+		if ( ! is_array( $parsed ) ) {
+			// URL is malformed.
+			return false;
+		}
+
+		$path = $parsed['path'];
+		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
+		if ( $expected_extension !== $ext ) {
+			// The URL isn't to an XML file.
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * @since 4.08
 	 * @deprecated 4.09.01
 	 */

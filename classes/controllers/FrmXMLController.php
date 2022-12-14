@@ -127,24 +127,7 @@ class FrmXMLController {
 	 * @return bool True on success, False on error.
 	 */
 	private static function validate_xml_url( $url ) {
-		$xml_is_in_expected_s3_bucket = 0 === strpos( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
-		if ( ! $xml_is_in_expected_s3_bucket ) {
-			return false;
-		}
-
-		$parsed = parse_url( $url );
-		if ( ! is_array( $parsed ) ) {
-			return false;
-		}
-
-		$path = $parsed['path'];
-		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-		if ( 'xml' !== $ext ) {
-			// The URL isn't to an XML file.
-			return false;
-		}
-
-		return true;
+		return FrmAppHelper::validate_url_is_in_s3_bucket( $url, 'xml' );
 	}
 
 	/**
