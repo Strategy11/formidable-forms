@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_style_preview">
 	<?php
-	$warnings = FrmStylesHelper::get_warnings( $style, $default_style, $view );
+	$warnings = FrmStylesHelper::get_warnings_for_styler_preview( $style, $default_style, $view );
+	$notes    = is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ? FrmProStylesController::get_notes_for_styler_preview() : array();
 	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message or $warnings variable are not empty, it will be rendered here.
 
 	FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell.

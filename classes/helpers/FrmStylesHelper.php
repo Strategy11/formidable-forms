@@ -657,7 +657,7 @@ class FrmStylesHelper {
 	 * @param string  $view Either 'list' or 'edit'.
 	 * @return array<string>
 	 */
-	public static function get_warnings( $style, $default_style, $view ) {
+	public static function get_warnings_for_styler_preview( $style, $default_style, $view ) {
 		$warnings = array();
 
 		if ( 'edit' === $view ) {
