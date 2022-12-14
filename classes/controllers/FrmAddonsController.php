@@ -983,7 +983,6 @@ class FrmAddonsController {
 		$download_url = self::get_current_plugin();
 
 		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) {
-			error_log( 'not valid' );
 			return array(
 				'message' => 'Plugin URL is not valid',
 				'success' => false,
