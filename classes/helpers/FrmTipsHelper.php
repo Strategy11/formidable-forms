@@ -166,7 +166,7 @@ class FrmTipsHelper {
 					'page'    => 'mailchimp-tip',
 				),
 				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
-				'call' => __( 'Send leads straight to MailChimp.', 'formidable' ),
+				'call' => __( 'Send leads straight to Mailchimp.', 'formidable' ),
 			),
 			array(
 				'link' => array(
@@ -326,7 +326,7 @@ class FrmTipsHelper {
 					'content' => 'automate',
 				),
 				'tip'  => __( 'Automate your business and increase revenue.', 'formidable' ),
-				'call' => __( 'Collect instant payments, and send leads to MailChimp.', 'formidable' ),
+				'call' => __( 'Collect instant payments, and send leads to Mailchimp.', 'formidable' ),
 			),
 		);
 		$random     = rand( 0, count( $tips ) - 1 );
