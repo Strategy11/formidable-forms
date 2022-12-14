@@ -269,3 +269,10 @@ label.default-style-box input[type="checkbox"] {
 		margin-left: 0 !important;
 	}
 }
+
+@media only screen and (max-width: 782px) {
+	#frm_style_preview .with_frm_style .frm_radio input[type=radio],
+	#frm_style_preview .with_frm_style .frm_checkbox input[type=checkbox] {
+		width: 18px !important;
+	}
+}
