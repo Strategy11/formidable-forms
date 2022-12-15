@@ -433,6 +433,13 @@ class FrmStylesController {
 			$message = self::$message;
 		}
 
+		$preview_helper = new FrmStylesPreviewHelper( $form->id );
+
+		// Get form HTML before displaying warnings and notes so we can check global $frm_vars data without adding extra database calls.
+		$target_form_preview_html = $preview_helper->get_html_for_form_preview();
+		$warnings                 = $preview_helper->get_warnings_for_styler_preview( $style, $default_style, $view );
+		$notes                    = $preview_helper->get_notes_for_styler_preview();
+
 		include $style_views_path . 'show.php';
 	}
 

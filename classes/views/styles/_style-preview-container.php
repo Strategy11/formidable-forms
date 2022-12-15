@@ -9,14 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div id="frm_style_preview">
 	<?php
-	// Get form HTML before displaying warnings and notes so we can check global $frm_vars data without adding extra database calls.
-	$target_form_preview_html = FrmStylesHelper::get_html_for_form_preview( $form->id );
-	$warnings                 = FrmStylesHelper::get_warnings_for_styler_preview( $style, $default_style, $view );
-	$notes                    = FrmStylesHelper::get_notes_for_styler_preview();
-
 	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message, $warnings, or $notes variable are not empty, it will be rendered here.
-
-
 	FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell.
 	?>
 	<div id="frm_active_style_form">
