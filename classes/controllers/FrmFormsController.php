@@ -5,6 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormsController {
 
+	/**
+	 * Track the entry object when processing On Submit actions.
+	 *
+	 * @since 5.x.x
+	 * @var object|false
+	 */
+	private static $processing_entry = false;
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -2168,7 +2176,8 @@ class FrmFormsController {
 	 * @return array Array of actions that meet the conditional logics.
 	 */
 	private static function get_met_on_submit_actions( $args ) {
-		$entry       = FrmEntry::getOne( $args['entry_id'], true );
+		// Sometimes $args['entry_id'] is empty, so we track the entry object to prevent errors.
+		$entry       = false !== self::$processing_entry ? self::$processing_entry : FrmEntry::getOne( $args['entry_id'], true );
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
 		$has_redirect = false;
