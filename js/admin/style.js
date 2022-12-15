@@ -336,6 +336,7 @@
 		});
 		jQuery( '#frm_styling_form .styling_settings' ).on( 'change', debouncedPreviewUpdate );
 
+		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
 
 		initFloatingLabels();
