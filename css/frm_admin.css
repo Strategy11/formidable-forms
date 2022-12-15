@@ -4454,6 +4454,10 @@ label.frm-example-icon {
 	margin: 0;
 }
 
+#frm_stripe_icon {
+	border-radius: 5px;
+}
+
 .frm_captchas {
 	margin-top: 16px;
 }

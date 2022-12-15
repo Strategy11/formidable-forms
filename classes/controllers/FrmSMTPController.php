@@ -384,13 +384,12 @@ class FrmSMTPController {
 		return function_exists( 'wp_mail_smtp' ) && ( is_plugin_active( $this->config['lite_plugin'] ) || is_plugin_active( $this->config['pro_plugin'] ) );
 	}
 
-
 	/**
 	 * Get $phpmailer instance.
 	 *
 	 * @since 4.04.04
 	 *
-	 * @return PHPMailer Instance of PHPMailer.
+	 * @return \WPMailSMTP\Providers\MailCatcherInterface|PHPMailer Instance of PHPMailer.
 	 */
 	protected function get_phpmailer() {
 		global $phpmailer;
