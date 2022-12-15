@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 5.5.4
+Stable tag: 5.5.5
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -53,7 +53,7 @@ When a user submits a web form, it's stored in your WordPress database so you wo
 
 Even though the entries are saved, it's still a **GDPR-friendly** form generator. You can turn off IP tracking or stop saving submissions entirely. Or add a GDPR checkbox field to your lead forms and payment forms to collect consent.
 
-Need to import your leads to an external service like MailChimp? No problem. **Export leads to a CSV**, open it in Excel, or import it anywhere.
+Need to import your leads to an external service like Mailchimp? No problem. **Export leads to a CSV**, open it in Excel, or import it anywhere.
 
 You can also configure unlimited email notifications and autoresponders triggered by submissions.
 
@@ -179,6 +179,7 @@ Since Formidable is not your average form plugin, this feature list is going to 
 * <a href="https://formidableforms.com/features/user-submitted-posts-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">User submitted front-end posts and pages</a>. Create and edit WordPress posts, pages, and custom post types from front-end online forms. Send user-generated content quickly from a post creation form to a page.
 * <a href="https://formidableforms.com/features/form-entry-management-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Simple entry management</a>. Flexibly display, edit, and delete entries. Let logged-in users can manage their personal journal entries, weight tracking, guest blog posts, RSVP status, and more.
 * WordPress front-end editing. Allow users to edit their entries and posts from the front-end of your site. Create an online journaling platform, member directory, classified ads, community recipes, and more.
+* Sync custom field values with Advanced Custom Fields (ACF). Now you can create ACF front-end forms to make managing your application faster.
 * Logged-in users can <a href="https://formidableforms.com/features/save-and-continue-partial-submissions/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">save and continue partial submissions</a>. Whether it's a basic email form or a long multi-paged registration form, users can save progress and pick up where they left off.
 * <a href="https://formidableforms.com/features/create-a-graph-wordpress-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Graphs and charts for data visualization</a>. Display statistics from a survey, poll, and questionnaire. Or graph data in a variety of ways. Whatever you choose, it will update as new data is submitted (great for weight tracking over time).
 * Permissions. Lock visibility and access based on user role.
@@ -209,7 +210,7 @@ In addition to all the features listed above, add power ups with these integrati
 * <a href="https://formidableforms.com/features/stripe-payments-for-wordpress/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Stripe Forms</a>. Keep users on your site while collecting Stripe payments from a credit card form. Select from one time and recurring charges in donation and order forms. Stripe processes payments with simple PCI compliance.
 * <a href="https://formidableforms.com/features/authorize-net-payments/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Authorize.net AIM</a>. Process one-time payments in order forms and price calculators with Authorize.net AIM. For recurring payments or easier security compliance, we recommend Stripe.
 * <a href="https://formidableforms.com/features/customizable-woocommerce-forms/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">WooCommerce product configurator</a>. Add custom fields to a WooCommerce product order form and collect extra data when a product is added to the cart. Use calculations in your WooCommerce form for variable pricing and upload files with orders.
-* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailChimp Contact Forms</a>. Add and update leads in a MailChimp email marketing list from a lead form, online order, or email form.
+* <a href="https://formidableforms.com/features/mailchimp-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">Mailchimp Contact Forms</a>. Add and update leads in a Mailchimp email marketing list from a lead form, online order, or email form.
 * Constant Contact. Create leads automatically with a newsletter signup form.
 * AWeber Forms. Subscribe users to an AWeber mailing list when a signup form is submitted.
 * <a href="https://formidableforms.com/features/mailpoet-newsletters-addon/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion">MailPoet Newsletters</a>. Fill your email marketing lists from newsletter signup forms. Then send WordPress newsletters from your own site using MailPoet.
@@ -255,7 +256,7 @@ Formidable is part of the <a href="https://www.wpbeginner.com/">WPBeginner</a> f
 
 == Frequently Asked Questions ==
 = How do I get started with the best forms for WordPress? =
-The fastest way to build a form is to use the contact form example we built for you. After you activate Formidable, insert [formidable id=contact-form] on the WordPress page of your choice.
+The fastest way to build a form is to use the example we built for you. After you activate Formidable, insert [formidable id=contact-form] on the WordPress page of your choice.
 
 Go to the Formidable page and click "add new". Choose the Contact Us form template or another free template and click "Create".
 
@@ -355,7 +356,7 @@ Our online form maker comes with all the powerful fields that you need to create
 * Hidden fields
 * User ID
 * HTML block - Great for custom HTML
-* Google reCAPTCHA (invisible V2 or checkbox V2)
+* Google reCAPTCHA (invisible V2 or checkbox V2) or hCaptcha
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -401,7 +402,7 @@ Yes! We know that marketing is the key to growing your business. That's why Form
 
 Here is a list of our popular marketing integrations:
 
-* MailChimp
+* Mailchimp
 * AWeber
 * Constant Contact
 * GetResponse
@@ -440,6 +441,12 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.5 =
+* Security: Added validation to URLs when installing templates and add ons to make sure that the endpoint cannot be manipulated and used for unsafe requests.
+* Security: Added a nonce and permission check when running migrations and when loading data for applications.
+* Fix: The spinner was not visible at the top of the page when running migrations.
+* Updated the icon used for global Stripe settings.
+
 = 5.5.4 =
 * New: Added support for hCaptcha. Now in Global Settings, the reCAPTCHA tab has been changed to a CAPTCHA tab with a new CAPTCHA type setting so you can choose between using reCAPTCHA or hCaptcha.
 * Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
