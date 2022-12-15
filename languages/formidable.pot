@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.5.4\n"
+"Project-Id-Version: Formidable Forms 5.5.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-01T17:28:01+00:00\n"
+"POT-Creation-Date: 2022-12-15T15:17:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: formidable\n"
@@ -165,16 +165,16 @@ msgstr ""
 msgid "Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1025
+#: classes/controllers/FrmAddonsController.php:1032
 msgid "Your plugin has been activated. Would you like to save and reload the page now?"
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1144
+#: classes/controllers/FrmAddonsController.php:1151
 msgid "Could not install an upgrade. Please download from formidableforms.com and install manually."
 msgstr ""
 
-#: classes/controllers/FrmAddonsController.php:1229
-#: classes/controllers/FrmAddonsController.php:1230
+#: classes/controllers/FrmAddonsController.php:1236
+#: classes/controllers/FrmAddonsController.php:1237
 #: classes/controllers/FrmWelcomeController.php:141
 #: classes/views/frm-forms/new-form-overlay.php:105
 #: classes/views/shared/reports-info.php:23
@@ -197,7 +197,7 @@ msgstr ""
 #: classes/controllers/FrmEntriesController.php:11
 #: classes/controllers/FrmEntriesController.php:100
 #: classes/controllers/FrmFormsController.php:862
-#: classes/controllers/FrmXMLController.php:269
+#: classes/controllers/FrmXMLController.php:291
 #: classes/views/xml/import_form.php:121
 msgid "Entries"
 msgstr ""
@@ -324,7 +324,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:9
 #: classes/controllers/FrmFormsController.php:872
 #: classes/controllers/FrmStylesController.php:51
-#: classes/controllers/FrmXMLController.php:268
+#: classes/controllers/FrmXMLController.php:290
 #: classes/views/frm-forms/list.php:10
 #: classes/widgets/FrmElementorWidget.php:14
 #: js/admin/applications.js:338
@@ -999,35 +999,39 @@ msgstr ""
 msgid "Your server is missing the Simple XML extension. This is required to install a template."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:63
+#: classes/controllers/FrmXMLController.php:58
+msgid "The template you are trying to install could not be validated."
+msgstr ""
+
+#: classes/controllers/FrmXMLController.php:70
 msgid "There was an error reading the form template."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:99
+#: classes/controllers/FrmXMLController.php:106
 msgid "There was an error importing form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:304
+#: classes/controllers/FrmXMLController.php:326
 msgid "Oops, you didn't select a file."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:315
+#: classes/controllers/FrmXMLController.php:337
 msgid "The file does not exist, please try again."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:344
+#: classes/controllers/FrmXMLController.php:366
 msgid "XML import is not enabled on your server with the libxml_disable_entity_loader function."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:559
+#: classes/controllers/FrmXMLController.php:581
 msgid "Please select a form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:589
+#: classes/controllers/FrmXMLController.php:611
 msgid "Form not found."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:621
+#: classes/controllers/FrmXMLController.php:643
 msgid "There are no entries for that form."
 msgstr ""
 
@@ -3649,7 +3653,7 @@ msgid "Grow your business with automated email follow-up."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:169
-msgid "Send leads straight to MailChimp."
+msgid "Send leads straight to Mailchimp."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:176
@@ -3754,7 +3758,7 @@ msgid "Automate your business and increase revenue."
 msgstr ""
 
 #: classes/helpers/FrmTipsHelper.php:329
-msgid "Collect instant payments, and send leads to MailChimp."
+msgid "Collect instant payments, and send leads to Mailchimp."
 msgstr ""
 
 #: classes/helpers/FrmXMLHelper.php:36
@@ -5377,7 +5381,7 @@ msgid "Review before submit"
 msgstr ""
 
 #: classes/views/frm-forms/new-form-overlay/upgrade-body.php:27
-msgid "MailChimp integration"
+msgid "Mailchimp integration"
 msgstr ""
 
 #: classes/views/frm-forms/new-form-overlay/upgrade-body.php:28
