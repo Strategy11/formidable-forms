@@ -718,6 +718,15 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * This is tracked so we can show a note that the CAPTCHA was turned off.
+	 *
+	 * @todo Make a new style preview helper class and move this there.
+	 *
+	 * @var bool $form_includes_captcha
+	 */
+	private static $form_includes_captcha = false;
+
+	/**
 	 * @since x.x
 	 *
 	 * @param string|int $form_id
@@ -729,10 +738,47 @@ class FrmStylesHelper {
 
 		$target_form_preview_html = FrmFormsController::show_form( $form_id, '', 'auto', 'auto' );
 
-		// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
-		wp_dequeue_script( 'captcha-api' );
+		self::$form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+		if ( self::$form_includes_captcha ) {
+			// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
+			wp_dequeue_script( 'captcha-api' );
+		}
+
+		// Return the is_admin status.
+		// Otherwise success messages won't use the proper mark up and will appear without the green background and padding.
+		remove_filter( 'frm_is_admin', '__return_false' );
 
 		return $target_form_preview_html;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @todo Only show the note once for a form per user per month or something.
+	 *
+	 * @return array<string>
+	 */
+	public static function get_notes_for_styler_preview() {
+		$notes = array();
+
+		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
+			$notes = FrmProStylesController::get_notes_for_styler_preview();
+		}
+
+		if ( self::$form_includes_captcha ) {
+			$notes[] = __( 'CAPTCHA fields are hidden.', 'formidable' );
+		}
+
+		if ( ! $notes ) {
+			return array();
+		}
+
+		array_unshift( $notes, __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) );
+
+		// Implode all notes as a single note so they're all wrapped in the same element rather than individual notes.
+		return array(
+			implode( ' ', $notes )
+		);
 	}
 
 	/**
