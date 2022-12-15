@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 5.5.4
+Stable tag: 5.5.5
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,12 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.5 =
+* Security: Added validation to URLs when installing templates and add ons to make sure that the endpoint cannot be manipulated and used for unsafe requests.
+* Security: Added a nonce and permission check when running migrations and when loading data for applications.
+* Fix: The spinner was not visible at the top of the page when running migrations.
+* Updated the icon used for global Stripe settings.
+
 = 5.5.4 =
 * New: Added support for hCaptcha. Now in Global Settings, the reCAPTCHA tab has been changed to a CAPTCHA tab with a new CAPTCHA type setting so you can choose between using reCAPTCHA or hCaptcha.
 * Fix: Avoid a fatal error if the hidden columns setting is in an unexpected format on the form and entry list pages. This may happen because of invalid option data being set or a conflict with another plugin or custom code.
