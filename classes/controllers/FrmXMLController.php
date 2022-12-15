@@ -49,10 +49,17 @@ class FrmXMLController {
 			wp_die();
 		}
 
-		$url = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
-
 		$form = self::get_posted_form();
+		$url  = FrmAppHelper::get_param( 'xml', '', 'post', 'esc_url_raw' );
 		self::override_url( $form, $url );
+
+		if ( ! self::validate_xml_url( $url ) ) {
+			$response = array(
+				'message' => __( 'The template you are trying to install could not be validated.', 'formidable' ),
+			);
+			echo wp_json_encode( $response );
+			wp_die();
+		}
 
 		$response = wp_remote_get( $url );
 		$body     = wp_remote_retrieve_body( $response );
@@ -111,7 +118,22 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Make sure that the XML file we're trying to load is in fact an XML file, and that it's coming from our S3 bucket.
+	 * This is to make sure that the URL can't be exploited for a SSRF attack.
+	 *
+	 * @since 5.5.5
+	 * @param string $url
+	 *
+	 * @return bool True on success, False on error.
+	 */
+	private static function validate_xml_url( $url ) {
+		return FrmAppHelper::validate_url_is_in_s3_bucket( $url, 'xml' );
+	}
+
+	/**
 	 * @since 4.06.02
+	 *
+	 * @return mixed
 	 */
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );

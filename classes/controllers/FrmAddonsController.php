@@ -982,6 +982,13 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
+		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) {
+			return array(
+				'message' => 'Plugin URL is not valid',
+				'success' => false,
+			);
+		}
+
 		// Create the plugin upgrader with our custom skin.
 		$installer = new Plugin_Upgrader( new FrmInstallerSkin() );
 		$installer->install( $download_url );
@@ -1238,7 +1245,11 @@ class FrmAddonsController {
 	public static function ajax_install_addon() {
 		self::install_addon_permissions();
 
-		self::download_and_activate();
+		$result = self::download_and_activate();
+		if ( isset( $result['success'] ) && ! $result['success'] ) {
+			echo json_encode( $result );
+			wp_die();
+		}
 
 		echo json_encode( self::get_addon_activation_response() );
 		wp_die();
