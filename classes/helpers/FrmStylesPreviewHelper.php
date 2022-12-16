@@ -98,7 +98,7 @@ class FrmStylesPreviewHelper {
 
 		if ( 'edit' === $view ) {
 			$is_default_style = $style->ID === $default_style->ID;
-			$form_count       = self::get_form_count_for_style( $style->ID, $is_default_style );
+			$form_count       = FrmStylesHelper::get_form_count_for_style( $style->ID, $is_default_style );
 
 			if ( $form_count > 1 ) {
 				$warnings[] = __( 'Changes that you will make to this style will apply to every form using this style.', 'formidable' );
