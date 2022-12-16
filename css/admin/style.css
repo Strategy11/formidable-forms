@@ -262,8 +262,7 @@ label.default-style-box input[type="checkbox"] {
 }
 
 #frm_style_preview label {
-	/* Avoid a line-height: 1.4rem rule defined in common.css WordPress admin rules */
-	line-height: normal;
+	line-height: var(--line-height);
 }
 
 @media only screen and (max-width: 1200px) {
