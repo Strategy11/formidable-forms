@@ -68,7 +68,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 
-<?php do_action( 'frm_sample_style_form', compact( 'style', 'pos_class' ) ); ?>
+<?php
+/**
+ * @since 2.03
+ *
+ * @param array $args {
+ *     @type WP_Post $style
+ *     @type string  $pos_class
+ * }
+ */
+do_action( 'frm_sample_style_form', compact( 'style', 'pos_class' ) );
+?>
 
 <div class="frm_submit">
 <input type="submit" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
