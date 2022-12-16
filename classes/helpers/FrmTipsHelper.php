@@ -216,6 +216,14 @@ class FrmTipsHelper {
 				'tip'  => __( 'Send an SMS message when a form is submitted.', 'formidable' ),
 				'call' => __( 'Get the Twilio integration.', 'formidable' ),
 			),
+			array(
+				'link' => array(
+					'content' => 'acf-integration',
+					'param'   => 'acf-integration',
+				),
+				'tip'  => __( 'Map your form with ACF.', 'formidable' ),
+				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+			),
 		);
 
 		return $tips;
