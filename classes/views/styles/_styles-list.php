@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $enabled = '0' !== $form->options['custom_style'];
 ?>
-<div id="frm_style_sidebar">
+<div id="frm_style_sidebar" class="frm_wrap">
 	<?php
 	/**
 	 * Pro needs to hook in here to add the "New Style" trigger.
