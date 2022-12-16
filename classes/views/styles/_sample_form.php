@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php do_action( 'frm_sample_style_form', compact( 'style', 'pos_class' ) ); ?>
 
 <div class="frm_submit">
-<input type="submit" disabled="disabled" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
+<input type="submit" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
 </div>
 <div class="clear"></div>
 
