@@ -16,16 +16,7 @@
 		initListPage();
 	}
 
-	initPreview();
 	initCommonEventListeners();
-
-	/**
-	 * @returns {void}
-	 */
-	function initPreview() {
-		// Add a frm_no_style_button class to all buttons to avoid some style rules like border-radius: 30px
-		document.querySelectorAll( '.frm_button_submit' ).forEach( button => button.classList.add( 'frm_no_style_button' ) );
-	}
 
 	/**
 	 * These are shared events for both the edit/list views like the sample form toggle.
@@ -45,6 +36,7 @@
 		enableToggle.addEventListener(
 			'change',
 			event => {
+				// TODO toggle these with a class instead of with styles. This logic is duplicated in _styles-list.php but it should be handled in a CSS file in a single place.
 				document.getElementById( 'frm_style_cards_wrapper' ).style.opacity = event.target.checked ? 1 : 0.5;
 				document.getElementById( 'frm_style_cards_wrapper' ).style.pointerEvents = event.target.checked ? '' : 'none';
 

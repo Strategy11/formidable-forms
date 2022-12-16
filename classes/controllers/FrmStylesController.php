@@ -319,6 +319,8 @@ class FrmStylesController {
 			$styles = array( self::get_default_style() );
 		}
 
+		self::disable_admin_page_styling_on_submit_buttons();
+
 		/**
 		 * @since x.x
 		 *
@@ -329,6 +331,21 @@ class FrmStylesController {
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
 		self::render_style_page( $active_style, $styles, $form, $default_style );
+	}
+
+	/**
+	 * Add a frm_no_style_button class to all buttons to avoid some style rules like border-radius: 30px.
+	 *
+	 * @return void
+	 */
+	private static function disable_admin_page_styling_on_submit_buttons() {
+		add_filter(
+			'frm_submit_button_class',
+			function( $classes ) {
+				$classes[] = 'frm_no_style_button';
+				return $classes;
+			}
+		);
 	}
 
 	/**
