@@ -16,12 +16,23 @@
 		initListPage();
 	}
 
-	initCommonEvents();
+	initPreview();
+	initCommonEventListeners();
+
+	/**
+	 * @returns {void}
+	 */
+	function initPreview() {
+		// Add a frm_no_style_button class to all buttons to avoid some style rules like border-radius: 30px
+		document.querySelectorAll( '.frm_button_submit' ).forEach( button => button.classList.add( 'frm_no_style_button' ) );
+	}
 
 	/**
 	 * These are shared events for both the edit/list views like the sample form toggle.
+	 *
+	 * @returns {void}
 	 */
-	function initCommonEvents() {
+	function initCommonEventListeners() {
 		document.addEventListener( 'click', handleCommonClickEvents );
 	}
 
