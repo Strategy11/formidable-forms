@@ -1203,7 +1203,7 @@ class FrmFormsController {
 				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
-				'icon'     => 'frm_icon_font frm_pallet_icon',
+				'icon'     => 'frm_icon_font frm_button_icon',
 			),
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
