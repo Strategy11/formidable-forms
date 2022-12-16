@@ -562,4 +562,11 @@
 	}
 
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', onStyleEditorInit );
+
+	if ( 'undefined' !== typeof window.__FRMSIG && 'undefined' === typeof window.frmFrontForm ) {
+		// The signature add on expects that validateFormSubmit is callable.
+		// Without this, drawing in a signature field triggers a "Uncaught ReferenceError: frmFrontForm is not defined" error.
+		// We don't want the validation to actually triggr, so just fill in an empty function.
+		window.frmFrontForm = { validateFormSubmit: () => {} };
+	}
 }() );

@@ -262,7 +262,7 @@ class FrmStylesController {
 			self::save_form_style();
 		}
 
-		self::setup_styles_and_scripts_for_style_page();
+		self::setup_styles_and_scripts_for_styler();
 
 		$style_id        = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		$form_id         = FrmAppHelper::simple_get( 'form', 'absint', 0 );
@@ -376,7 +376,7 @@ class FrmStylesController {
 	 *
 	 * @return void
 	 */
-	private static function setup_styles_and_scripts_for_style_page() {
+	private static function setup_styles_and_scripts_for_styler() {
 		$plugin_url      = FrmAppHelper::plugin_url();
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
