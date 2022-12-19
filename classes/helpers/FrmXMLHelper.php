@@ -744,9 +744,10 @@ class FrmXMLHelper {
 				'post_name' => $form['options']['custom_style'],
 				'post_type' => 'frm_styles',
 			);
-			$select   = 'ID';
-
-			$style_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $table WHERE post_type=%s AND post_name=%s", 'frm_styles', $form['options']['custom_style'] ) );
+			$select    = 'ID';
+			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
+			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
+			$style_id = FrmDb::get_var( $table, $where, $select );
 
 			if ( $style_id ) {
 				$form['options']['custom_style'] = $style_id;
