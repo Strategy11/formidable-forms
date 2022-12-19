@@ -8,7 +8,8 @@ if ( isset( $include_extra_container ) ) { ?>
 	<?php
 }
 
-if ( empty( $message ) && FrmAppHelper::simple_get( 'frm_message' ) ) {
+$frm_entry_updated_message = FrmAppHelper::simple_get( 'frm_entries_updated_message' );
+if ( empty( $message ) && $frm_entry_updated_message ) {
 
 	/**
 	 * Updates message in an entry edit page.
@@ -16,8 +17,9 @@ if ( empty( $message ) && FrmAppHelper::simple_get( 'frm_message' ) ) {
 	 * @since 5.x
 	 *
 	 * @param string $message
+	 * @param string $frm_entries_updated_message
 	 */
-	$message = apply_filters( 'frm_message', '' );
+	$message = apply_filters( 'frm_entries_updated_message', '', $frm_entry_updated_message );
 }
 
 if ( isset( $message ) && $message != '' ) {
