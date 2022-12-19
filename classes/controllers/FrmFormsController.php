@@ -1354,7 +1354,7 @@ class FrmFormsController {
 	 * @return array
 	 */
 	public static function update_classes( $classes ) {
-		if ( wp_get_theme()->get( 'Name' ) === __( 'Twenty Twenty-One', 'formidable' ) ) {
+		if ( function_exists( 'twenty_twenty_one_setup' ) ) {
 			$classes[] = 'has-text-color has-background';
 		}
 

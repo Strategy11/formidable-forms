@@ -69,8 +69,6 @@ class FrmHooksController {
 		add_filter( 'frm_replace_content_shortcodes', 'FrmFormsController::replace_content_shortcodes', 20, 3 );
 		add_action( 'admin_bar_init', 'FrmFormsController::admin_bar_css' );
 		add_action( 'wp_footer', 'FrmFormsController::footer_js', 1, 0 );
-		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_classes' );
-		add_filter( 'frm_back_button_class', 'FrmFormsController::update_classes' );
 
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
@@ -249,6 +247,8 @@ class FrmHooksController {
 
 		// Forms Controller.
 		add_filter( 'frm_form_classes', 'FrmFormsController::form_classes' );
+		add_filter( 'frm_submit_button_class', 'FrmFormsController::update_classes' );
+		add_filter( 'frm_back_button_class', 'FrmFormsController::update_classes' );
 
 		// Styles Controller.
 		add_filter( 'frm_use_important_width', 'FrmStylesController::important_style', 10, 2 );
