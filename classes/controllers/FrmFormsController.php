@@ -1353,7 +1353,7 @@ class FrmFormsController {
 	 *
 	 * @return array
 	 */
-	public static function update_classes( $classes ) {
+	public static function update_button_classes( $classes ) {
 		if ( function_exists( 'twenty_twenty_one_setup' ) ) {
 			$classes[] = 'has-text-color has-background';
 		}
