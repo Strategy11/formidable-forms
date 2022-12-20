@@ -35,12 +35,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 					?>
 			<tr>
-				<td class="menu-location-title">
-					<strong><?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?></strong>
+				<td>
+					<label for="frm_style_dropdown_<?php echo absint( $form->id ); ?>"><?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?></label>
 				</td>
 				<td>
-					<input type="hidden" name="prev_style[<?php echo esc_attr( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
-					<select name="style[<?php echo esc_attr( $form->id ); ?>]">
+					<input type="hidden" name="prev_style[<?php echo absint( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
+					<select id="frm_style_dropdown_<?php echo absint( $form->id ); ?>" name="style[<?php echo esc_attr( $form->id ); ?>]">
 						<?php foreach ( $styles as $s ) { ?>
 							<option value="<?php echo esc_attr( $s->ID ); ?>" <?php selected( $s->ID, $this_style ); ?>>
 								<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>
