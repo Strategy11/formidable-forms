@@ -2654,7 +2654,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check for either json or serilized data. This is temporary while transitioning
+	 * Check for either json or serialized data. This is temporary while transitioning
 	 * all data to json.
 	 *
 	 * @since 4.02.03

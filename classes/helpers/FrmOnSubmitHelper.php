@@ -46,18 +46,30 @@ class FrmOnSubmitHelper {
 			><?php echo esc_textarea( $args['form_action']->post_content['success_msg'] ); ?></textarea>
 		</div>
 
-		<?php $id_attr = $args['action_control']->get_field_id( 'show_form' ); ?>
+		<?php
+		$id_attr   = $args['action_control']->get_field_id( 'show_form' );
+		$name_attr = $args['action_control']->get_field_name( 'show_form' );
+		?>
 		<div class="frm_form_field">
 			<?php
-			FrmProHtmlHelper::toggle(
-				$id_attr,
-				$args['action_control']->get_field_name( 'show_form' ),
-				array(
-					'div_class' => 'with_frm_style frm_toggle',
-					'checked'   => ! empty( $args['form_action']->post_content['show_form'] ),
-					'echo'      => true,
-				)
-			);
+			if ( method_exists( 'FrmProHtmlHelper', 'toggle' ) ) {
+				FrmProHtmlHelper::toggle(
+					$id_attr,
+					$name_attr,
+					array(
+						'div_class' => 'with_frm_style frm_toggle',
+						'checked'   => ! empty( $args['form_action']->post_content['show_form'] ),
+						'echo'      => true,
+					)
+				);
+			} else {
+				printf(
+					'<input type="checkbox" value="1" id="%1$s" name="%2$s" %3$s />',
+					esc_attr( $id_attr ),
+					esc_attr( $name_attr ),
+					checked( ! empty( $args['form_action']->post_content['show_form'] ) )
+				);
+			}
 			?>
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Show the form with the confirmation message', 'formidable' ); ?>
@@ -154,6 +166,18 @@ class FrmOnSubmitHelper {
 		if ( isset( $action->post_content['success_action'] ) ) {
 			return $action->post_content['success_action'];
 		}
+		return self::get_default_action_type();
+	}
+
+	public static function get_default_action_type() {
 		return 'message';
+	}
+
+	public static function get_default_msg() {
+		return __( 'Your responses were successfully submitted. Thank you!', 'formidable' );
+	}
+
+	public static function get_default_redirect_msg() {
+		return __( 'Please wait while you are redirected.', 'formidable' );
 	}
 }

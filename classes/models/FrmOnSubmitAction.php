@@ -34,12 +34,12 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function get_defaults() {
 		return array(
-			'success_action'  => 'message',
-			'success_msg'     => __( 'Your responses were successfully submitted. Thank you!', 'formidable' ),
+			'success_action'  => FrmOnSubmitHelper::get_default_action_type(),
+			'success_msg'     => FrmOnSubmitHelper::get_default_msg(),
 			'show_form'       => '',
 			'success_url'     => '',
 			'success_page_id' => '',
-			'redirect_msg'    => __( 'Please wait while you are redirected.', 'formidable' ),
+			'redirect_msg'    => FrmOnSubmitHelper::get_default_redirect_msg(),
 		);
 	}
 }
