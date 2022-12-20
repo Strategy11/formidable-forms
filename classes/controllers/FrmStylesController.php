@@ -572,10 +572,11 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @param string $message
+	 * @param string       $message
 	 * @param array|object $forms
+	 * @return void
 	 */
-	private static function manage( $message = '', $forms = array() ) {
+	public static function manage( $message = '', $forms = array() ) {
 		$frm_style     = new FrmStyle();
 		$styles        = $frm_style->get_all();
 		$default_style = $frm_style->get_default_style( $styles );
@@ -584,7 +585,7 @@ class FrmStylesController {
 			$forms = FrmForm::get_published_forms();
 		}
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/styles/manage.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/styles/manage.php';
 	}
 
 	private static function manage_styles() {

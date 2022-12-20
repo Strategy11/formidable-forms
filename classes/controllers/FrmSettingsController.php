@@ -51,6 +51,18 @@ class FrmSettingsController {
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
+			'custom_css' => array(
+				'class'    => 'FrmStylesController',
+				'function' => 'custom_css',
+				'name'     => __( 'Custom CSS', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_code_icon',
+			),
+			'manage_styles' => array(
+				'class'    => 'FrmStylesController',
+				'function' => 'manage',
+				'name'     => __( 'Manage Styles', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_pallet_icon',
+			),
 			'captcha' => array(
 				'class'    => __CLASS__,
 				'function' => 'captcha_settings',
