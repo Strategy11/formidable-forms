@@ -221,6 +221,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 .frm_pro_form .frm_form_field.frm_lite_style,
 .frm_pro_form .frm_lite_style {
+	/*
+	Hide textarea, radio buttons, and checkboxes in the sample form in Pro.
+	Instead these elements are rendered again in Pro inside of a repeater.
+	*/
 	display: none !important;
 }
 
