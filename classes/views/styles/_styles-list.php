@@ -55,6 +55,9 @@ $enabled = '0' !== $form->options['custom_style'];
 		array_walk(
 			$styles,
 			/**
+			 * Echo a style card for a single style in the $styles array.
+			 *
+			 * @param WP_Post  $style
 			 * @param string   $style_views_path
 			 * @param WP_Post  $active_style
 			 * @param WP_Post  $default_style
