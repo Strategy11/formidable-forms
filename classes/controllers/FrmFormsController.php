@@ -2173,6 +2173,7 @@ class FrmFormsController {
 		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
+		$args['ajax']        = ! empty( $GLOBALS['frm_vars']['ajax'] );
 
 		if ( $args['conf_method'] === 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
@@ -2295,24 +2296,23 @@ class FrmFormsController {
 		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
 		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
 
-		$doing_ajax   = FrmAppHelper::doing_ajax();
-		$headers_sent = headers_sent();
+		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax ) {
+		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			echo json_encode( array( 'redirect' => $success_url ) );
 			wp_die();
-		} elseif ( ! $headers_sent && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit and there is just one On Submit action runs.
+		} elseif ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit and there is just one On Submit action runs.
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
 		} else {
 			add_filter( 'frm_use_wpautop', '__return_true' );
 			echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '<script type="text/javascript">';
-			if ( $headers_sent ) { // Not AJAX submit, delay JS until window.load.
+			if ( ! $doing_ajax ) { // Not AJAX submit, delay JS until window.load.
 				echo 'window.onload=function(){';
 			}
 			echo 'setTimeout(function(){window.location="' . esc_url_raw( $success_url ) . '";}, 8000);';
-			if ( $headers_sent ) {
+			if ( ! $doing_ajax ) {
 				echo '};';
 			}
 			echo '</script>';
