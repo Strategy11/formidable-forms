@@ -31,6 +31,11 @@ class FrmSettingsController {
 		require( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php' );
 	}
 
+	/**
+	 * Get sections to use for Global Settings.
+	 *
+	 * @return array<array>
+	 */
 	private static function get_settings_tabs() {
 		$sections = array(
 			'general' => array(
@@ -92,7 +97,7 @@ class FrmSettingsController {
 		);
 
 		if ( apply_filters( 'frm_include_addon_page', false ) ) {
-			// if no addons need a license, skip this page
+			// If no addons need a license, skip this page
 			$show_licenses    = false;
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 			foreach ( $installed_addons as $installed_addon ) {
@@ -112,6 +117,10 @@ class FrmSettingsController {
 				);
 			}
 		}
+
+		/**
+		 * @param array<array> $sections
+		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 
 		$sections['misc'] = array(
