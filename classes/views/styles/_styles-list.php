@@ -46,8 +46,8 @@ $enabled = '0' !== $form->options['custom_style'];
 	$card_wrapper_params = array(
 		'id' => 'frm_style_cards_wrapper',
 	);
-	if ( ! $enabled ) {
-		$card_wrapper_params['style'] = 'opacity: 0.5; pointer-events: none;';
+	if ( $enabled ) {
+		$card_wrapper_params['class'] = 'frm-styles-enabled';
 	}
 	?>
 	<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>

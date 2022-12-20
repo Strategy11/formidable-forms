@@ -265,6 +265,11 @@ label.default-style-box input[type="checkbox"] {
 	margin-top: 20px;
 }
 
+#frm_style_cards_wrapper:not(.frm-styles-enabled) {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
 #frm_style_preview label {
 	line-height: var(--line-height);
 }
