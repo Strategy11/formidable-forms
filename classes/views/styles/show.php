@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 	</div>
-	<div class="frm_form_fields frm_sample_form frm_forms frm_pro_form">
+	<div class="frm_form_fields frm_sample_form frm_forms">
 		<fieldset>
 			<div class="frm_fields_container">
 				<div id="frm_style_page_wrapper">
