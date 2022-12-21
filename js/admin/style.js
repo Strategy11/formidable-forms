@@ -17,6 +17,7 @@
 	}
 
 	initCommonEventListeners();
+	initPreview();
 
 	/**
 	 * These are shared events for both the edit/list views like the sample form toggle.
@@ -25,8 +26,12 @@
 	 */
 	function initCommonEventListeners() {
 		document.addEventListener( 'click', handleCommonClickEvents );
+		disablePreviewSubmitButtons();
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
 		setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
@@ -52,10 +57,17 @@
 		);
 	}
 
+	/**
+	 * @returns {HTMLElement}
+	 */
 	function getStyleIdInput() {
 		return document.getElementById( 'frm_style_list_form' ).querySelector( '[name="style_id"]' );
 	}
 
+	/**
+	 * @param {Event} event
+	 * @returns {void}
+	 */
 	function handleCommonClickEvents( event ) {
 		const target = event.target;
 
@@ -72,6 +84,27 @@
 		}
 	}
 
+	/**
+	 * @returns {void}
+	 */
+	function disablePreviewSubmitButtons() {
+		const preview = document.getElementById( 'frm_style_preview' );
+		preview.querySelectorAll( 'form' ).forEach(
+			form => form.addEventListener(
+				'submit',
+				event => {
+					event.preventDefault();
+					event.stopPropagation();
+					return false;
+				}
+			)
+		);
+	}
+
+	/**
+	 * @param {Event} event
+	 * @returns {void}
+	 */
 	function handleClickEventsForListPage( event ) {
 		const target = event.target;
 
@@ -149,6 +182,9 @@
 		);
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	function toggleSampleForm() {
 		state.showingSampleForm = ! state.showingSampleForm;
 
@@ -157,6 +193,9 @@
 		document.getElementById( 'frm_toggle_sample_form' ).querySelector( 'span' ).textContent = state.showingSampleForm ? __( 'View my form', 'formidable' ) : __( 'View sample form', 'formidable' );
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	function handleUpdateClick() {
 		const form = document.getElementById( 'frm_styling_form' );
 		if ( form ) {
@@ -169,6 +208,9 @@
 		document.getElementById( 'frm_style_list_form' ).submit();
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	function addHamburgMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach(
@@ -227,6 +269,11 @@
 		});
 	}
 
+	/**
+	 * @param {HTMLElement} option
+	 * @param {String} iconId
+	 * @returns {void}
+	 */
 	function addIconToOption( option, iconId ) {
 		const icon = frmDom.svg({ href: '#' + iconId });
 		option.insertBefore( icon, option.firstChild );
