@@ -7,7 +7,6 @@ if ( isset( $include_extra_container ) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<?php
 }
-
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>
