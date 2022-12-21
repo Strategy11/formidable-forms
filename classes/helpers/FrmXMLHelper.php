@@ -895,7 +895,7 @@ class FrmXMLHelper {
 				'post_type' => 'frm_styles',
 			);
 			$select    = 'ID';
-			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );;
+			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
 			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
 			self::update_custom_style_setting_after_import( $form_id );
 		}
