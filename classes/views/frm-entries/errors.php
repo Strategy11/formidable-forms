@@ -8,20 +8,6 @@ if ( isset( $include_extra_container ) ) { ?>
 	<?php
 }
 
-$message_code = FrmAppHelper::simple_get( 'frm_entries_updated_message' );
-if ( empty( $message ) && $message_code ) {
-
-	/**
-	 * Updates message in an entry edit page.
-	 *
-	 * @since 5.x
-	 *
-	 * @param string $message
-	 * @param string $frm_entries_updated_message
-	 */
-	$message = apply_filters( 'frm_entries_updated_message', '', $message_code );
-}
-
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>
