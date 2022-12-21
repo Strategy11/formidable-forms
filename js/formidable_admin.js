@@ -6776,12 +6776,6 @@ function frmAdminBuildJS() {
 	}
 
 	function showFormMessages() {
-		var action = document.getElementById( 'success_action' );
-		var selectedAction = action.options[action.selectedIndex].value;
-		if ( selectedAction === 'message' ) {
-			return true;
-		}
-
 		var show = false;
 		var editable = document.getElementById( 'editable' );
 		if ( editable !== null ) {
@@ -9881,10 +9875,10 @@ function frmAdminBuildJS() {
 			});
 
 			//Show/hide Messages header
-			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).on( 'change', function() {
+			jQuery( '#editable, #edit_action, #save_draft' ).on( 'change', function() {
 				maybeShowFormMessages();
 			});
-			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
+			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			$loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).on( 'change', function() {
