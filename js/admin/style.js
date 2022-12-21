@@ -29,6 +29,10 @@
 		disablePreviewSubmitButtons();
 	}
 
+	function initPreview() {
+		initFloatingLabels();
+	}
+
 	/**
 	 * @returns {void}
 	 */
@@ -40,6 +44,7 @@
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
 		enableToggle.addEventListener(
 			'change',
+			// TODO move this into a new function rather than nesting it and making it anonymous.
 			event => {
 				const cardWrapper  = document.getElementById( 'frm_style_cards_wrapper' );
 				const styleIdInput = getStyleIdInput();
@@ -55,6 +60,15 @@
 				styleIdInput.value = card.dataset.styleId;
 			}
 		);
+
+		// TODO I need to track label position for each style card.
+		// This whay when I change between cards to preview, the container classes get synced.
+
+		// Update label position in preview on list page.
+		// On the edit page this is handled with the initPosClass function instead.
+		const input = tag( 'input' );
+		input.value = 'inside';
+		setPosClass.bind( input )();
 	}
 
 	/**
@@ -77,8 +91,6 @@
 		}
 
 		if ( 'frm_submit_side_top' === target.id || target.closest( '#frm_submit_side_top' ) ) {
-			// TODO if we're in edit view we want to save another form instead.
-
 			handleUpdateClick();
 			return;
 		}
@@ -388,7 +400,6 @@
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
 
-		initFloatingLabels();
 		initPosClass();
 
 		/**
@@ -557,9 +568,6 @@
 	/**
 	 * Technically this isn't required as the form preview is loading JavaScript.
 	 *
-	 * @todo I'm not sure if it makes more sense to block front end JavaScript or to remove this.
-	 * @todo Right now this doesn't initialize on the "list" view. But it still works there since formidable.js loads.
-	 *
 	 * @returns {void}
 	 */
 	function initFloatingLabels() {
@@ -583,7 +591,7 @@
 	 * @param {Function}       handler  Handler.
 	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 */
-		function documentOn( event, selector, handler, options ) {
+	function documentOn( event, selector, handler, options ) {
 		if ( 'undefined' === typeof options ) {
 			options = false;
 		}
