@@ -218,11 +218,11 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
-					'content' => 'acf-integration',
-					'param'   => 'acf-integration',
+					'content' => 'acf-tip',
+					'param'   => 'acf-tip',
 				),
-				'tip'  => __( 'Map your form with ACF.', 'formidable' ),
-				'call' => __( 'Upgrade to Pro.', 'formidable' ),
+				'tip'  => __( 'Fill Advanced Custom Fields from a form.', 'formidable' ),
+				'call' => __( 'Add ACF Integration', 'formidable' ),
 			),
 		);
 
