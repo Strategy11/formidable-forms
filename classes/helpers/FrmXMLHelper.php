@@ -887,6 +887,9 @@ class FrmXMLHelper {
 
 		foreach ( $imported['forms'] as $form_id ) {
 			$form  = FrmForm::getOne( $form_id );
+			if ( ! isset( $form->options['old_style'] ) ) {
+				continue;
+			}
 			$where = array(
 				'post_name' => $form->options['old_style'],
 				'post_type' => 'frm_styles',
