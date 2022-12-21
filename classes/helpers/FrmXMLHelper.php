@@ -81,14 +81,7 @@ class FrmXMLHelper {
 			if ( isset( $xml->{$item_type} ) ) {
 				$function_name = 'import_xml_' . $item_type . 's';
 				$imported      = self::$function_name( $xml->{$item_type}, $imported );
-				if ( $item_type === 'form' ) {
-					$imported_forms = $imported;
-				}
 			}
-		}
-
-		foreach ( $imported_forms['forms'] as $form_id ) {
-			self::update_custom_style_setting_after_import( $form_id );
 		}
 
 		$imported = apply_filters( 'frm_importing_xml', $imported, $xml );
@@ -745,8 +738,6 @@ class FrmXMLHelper {
 				'post_type' => 'frm_styles',
 			);
 			$select    = 'ID';
-			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
-			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
 			$style_id = FrmDb::get_var( $table, $where, $select );
 
 			if ( $style_id ) {
@@ -893,6 +884,18 @@ class FrmXMLHelper {
 		self::maybe_update_stylesheet( $imported );
 
 		flush_rewrite_rules();
+
+		foreach ( $imported['forms'] as $form_id ) {
+			$form  = FrmForm::getOne( $form_id );
+			$where = array(
+				'post_name' => $form->options['old_style'],
+				'post_type' => 'frm_styles',
+			);
+			$select    = 'ID';
+			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );;
+			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
+			self::update_custom_style_setting_after_import( $form_id );
+		}
 
 		return $imported;
 	}
