@@ -3,67 +3,57 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-
-<div class="frm-inner-content">
+<div>
 	<p class="howto">
-		<?php printf( esc_html__( 'Easily change which style your forms are using by making changes below.', 'formidable' ), '<a href="?page=formidable-styles&frm_action=new_style">', '</a>' ); ?>
+		<?php esc_html_e( 'Easily change which style your forms are using by making changes below.', 'formidable' ); ?>
 	</p>
 
 	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
-	<input type="hidden" name="frm_action" value="manage_styles" />
 	<table class="widefat fixed striped">
 		<thead>
-		<tr>
-			<th scope="col" class="column-locations">
-				<?php esc_html_e( 'Form Title', 'formidable' ); ?>
-			</th>
-			<th scope="col">
-				<?php esc_html_e( 'Assigned Style Templates', 'formidable' ); ?>
-			</th>
-		</tr>
+			<tr>
+				<th scope="col" class="column-locations">
+					<?php esc_html_e( 'Form Title', 'formidable' ); ?>
+				</th>
+				<th scope="col">
+					<?php esc_html_e( 'Assigned Style Templates', 'formidable' ); ?>
+				</th>
+			</tr>
 		</thead>
 
 		<tbody>
 			<?php
 			if ( $forms ) {
-				foreach ( $forms as $form ) {
-					$this_style = isset( $form->options['custom_style'] ) ? (int) $form->options['custom_style'] : 1;
-					if ( 1 === $this_style ) {
-						// use the default style
-						$this_style = $default_style->ID;
-					}
-					?>
-			<tr>
-				<td>
-					<label for="frm_style_dropdown_<?php echo absint( $form->id ); ?>"><?php echo esc_html( empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name ); ?></label>
-				</td>
-				<td>
-					<input type="hidden" name="prev_style[<?php echo absint( $form->id ); ?>]" value="<?php echo esc_attr( $this_style ); ?>" />
-					<select id="frm_style_dropdown_<?php echo absint( $form->id ); ?>" name="style[<?php echo esc_attr( $form->id ); ?>]">
-						<?php foreach ( $styles as $s ) { ?>
-							<option value="<?php echo esc_attr( $s->ID ); ?>" <?php selected( $s->ID, $this_style ); ?>>
-								<?php echo esc_html( $s->post_title . ( empty( $s->menu_order ) ? '' : ' (' . __( 'default', 'formidable' ) . ')' ) ); ?>
-							</option>
-						<?php } ?>
-						<option value="" <?php selected( 0, $this_style ); ?>>
-							<?php esc_html_e( 'Styling disabled', 'formidable' ); ?>
-						</option>
-					</select>
+				$row_view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_manage-styles-row.php';
 
-				</td>
-			</tr>
-					<?php
-				}
+				array_walk(
+					$forms,
+					/**
+					 * @param stdClass       $form
+					 * @param array<WP_Post> $styles
+					 * @param WP_Post        $default_style
+					 * @param string         $row_view_file_path
+					 * @return void
+					 */
+					function( $form ) use ( $styles, $default_style, $row_view_file_path ) {
+						$active_style_id = isset( $form->options['custom_style'] ) ? (int) $form->options['custom_style'] : 1;
+						if ( 1 === $active_style_id ) {
+							// use the default style
+							$active_style_id = $default_style->ID;
+						}
+
+						include $row_view_file_path;
+					}
+				);
 			} else {
 				?>
-			<tr>
-				<td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
-			</tr>
+				<tr>
+					<td><?php esc_html_e( 'No Forms Found', 'formidable' ); ?></td>
+				</tr>
 				<?php
 			}
 			?>
 		</tbody>
 	</table>
-	<?php wp_nonce_field( 'frm_manage_style_nonce', 'frm_manage_style' ); ?>
 </div>
