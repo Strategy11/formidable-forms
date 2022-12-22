@@ -622,24 +622,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function custom_css( $message = '', $style = null ) {
-		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
-			$id       = 'frm_codemirror_box';
-			$settings = wp_enqueue_code_editor(
-				array(
-					'type'       => 'text/css',
-					'codemirror' => array(
-						'indentUnit' => 2,
-						'tabSize'    => 2,
-					),
-				)
-			);
-		} else {
-			$settings = false;
-		}
-
-		if ( empty( $settings ) ) {
-			$id = 'frm_custom_css_box';
-		}
+		$settings = self::enqueue_codemirror();
+		$id       = $settings ? 'frm_codemirror_box' : 'frm_custom_css_box';
 
 		if ( ! isset( $style ) ) {
 			$frm_style = new FrmStyle();
@@ -647,6 +631,34 @@ class FrmStylesController {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
+	}
+
+	/**
+	 * Enqueue assets for codemirror, built into WordPress since 4.9.
+	 * The Custom CSS page uses codemirror.
+	 *
+	 * @since x.x Previously this code was embedded in self::custom_css.
+	 *
+	 * @return array|false
+	 */
+	private static function enqueue_codemirror() {
+		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
+			// The WordPress version is likely older than 4.9.
+			return false;
+		}
+
+		return wp_enqueue_code_editor(
+			array(
+				'type'       => 'text/css',
+				'codemirror' => array(
+					'indentUnit'  => 2,
+					'tabSize'     => 2,
+					// As the codemirror box only appears once you click into the Custom CSS tab, we need to auto-refresh.
+					// Otherwise the line numbers all end up with a 1px width causing overlap issues with the text in the content.
+					'autoRefresh' => true,
+				),
+			)
+		);
 	}
 
 	/**
