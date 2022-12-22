@@ -29,8 +29,14 @@
 		disablePreviewSubmitButtons();
 	}
 
+	/**
+	 * Initialize common functions required for the preview in both the edit and list views.
+	 *
+	 * @returns {void}
+	 */
 	function initPreview() {
 		initFloatingLabels();
+		fillMissingSignatureValidationFunction();
 	}
 
 	/**
@@ -85,7 +91,7 @@
 	}
 
 	/**
-	 * @param {bool} on
+	 * @param {Boolean} on
 	 * @returns {void}
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
@@ -622,6 +628,21 @@
 	}
 
 	/**
+	 * The signature add on expects that validateFormSubmit is callable.
+	 * Without this, drawing in a signature field triggers a "Uncaught ReferenceError: frmFrontForm is not defined" error.
+	 * We don't want the validation to actually triggr, so just fill in an empty function.
+	 *
+	 * @returns {void}
+	 */
+	function fillMissingSignatureValidationFunction() {
+		if ( 'undefined' === typeof window.__FRMSIG || 'undefined' !== typeof window.frmFrontForm ) {
+			return;
+		}
+
+		window.frmFrontForm = { validateFormSubmit: () => {} };
+	}
+
+	/**
 	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
 	 *
 	 * @since 5.4.2
@@ -630,6 +651,7 @@
 	 * @param {String}         selector Selector.
 	 * @param {Function}       handler  Handler.
 	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 * @returns {void}
 	 */
 	function documentOn( event, selector, handler, options ) {
 		if ( 'undefined' === typeof options ) {
@@ -659,11 +681,4 @@
 	}
 
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', onStyleEditorInit );
-
-	if ( 'undefined' !== typeof window.__FRMSIG && 'undefined' === typeof window.frmFrontForm ) {
-		// The signature add on expects that validateFormSubmit is callable.
-		// Without this, drawing in a signature field triggers a "Uncaught ReferenceError: frmFrontForm is not defined" error.
-		// We don't want the validation to actually triggr, so just fill in an empty function.
-		window.frmFrontForm = { validateFormSubmit: () => {} };
-	}
 }() );
