@@ -103,6 +103,23 @@ class FrmEntriesHelper {
 			$new_value = str_replace( '"', '&quot;', $new_value );
 		}
 
+		$field_obj = self::get_field_id_and_object( $field )[1];
+
+		$args = array(
+			'allow_array' => false,
+			'field'       => $field_obj,
+		);
+
+		/**
+		 * Allows updating posted entry value for a field.
+		 *
+		 * @since x.x
+		 *
+		 * @param string|int $new_value
+		 * @param array $args
+		 */
+		$new_value = apply_filters( 'frm_new_entry_value', $new_value, $args );
+
 		return $new_value;
 	}
 
@@ -339,7 +356,7 @@ class FrmEntriesHelper {
 		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
-	public static function get_posted_value( $field, &$value, $args ) {
+	private static function get_field_id_and_object( $field ) {
 		if ( is_array( $field ) ) {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
@@ -349,28 +366,23 @@ class FrmEntriesHelper {
 		} elseif ( is_numeric( $field ) ) {
 			$field_id  = $field;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
-		} else {
+		}
+
+		return array( $field_id, $field_obj );
+	}
+
+	public static function get_posted_value( $field, &$value, $args ) {
+		if ( ! ( is_array( $field ) || is_object( $field ) || is_numeric( $field ) ) ) {
 			$value = self::get_posted_meta( $field, $args );
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );
 			return;
 		}
+		$field_id_and_object = self::get_field_id_and_object( $field );
+
+		$field_id  = $field_id_and_object[0];
+		$field_obj = $field_id_and_object[1];
 
 		$value = self::get_posted_meta( $field_id, $args );
-
-		$args = array(
-			'allow_array' => false,
-			'field'       => $field_obj,
-		);
-
-		/**
-		 * Allows updating posted entry value for a field.
-		 *
-		 * @since x.x
-		 *
-		 * @param string|int $value
-		 * @param array $args
-		 */
-		$value = apply_filters( 'frm_new_entry_value', $value, $args );
 
 		$field_obj->sanitize_value( $value );
 	}
