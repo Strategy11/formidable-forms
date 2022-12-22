@@ -630,6 +630,8 @@ class FrmStylesController {
 			$style     = $frm_style->get_default_style();
 		}
 
+		$custom_css = $style->post_content['custom_css'];
+
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
@@ -647,7 +649,7 @@ class FrmStylesController {
 			return false;
 		}
 
-		return wp_enqueue_code_editor(
+		$settings = wp_enqueue_code_editor(
 			array(
 				'type'       => 'text/css',
 				'codemirror' => array(
@@ -659,23 +661,18 @@ class FrmStylesController {
 				),
 			)
 		);
-	}
 
-	/**
-	 * @return void
-	 */
-	public static function save_css() {
-		$frm_style = new FrmStyle();
-
-		$message = '';
-		$post_id = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_text_field' );
-		$nonce   = FrmAppHelper::get_post_param( 'frm_custom_css', '', 'sanitize_text_field' );
-		if ( wp_verify_nonce( $nonce, 'frm_custom_css_nonce' ) ) {
-			$frm_style->update( $post_id );
-			$message = __( 'Your styling settings have been saved.', 'formidable' );
+		if ( $settings ) {
+			wp_add_inline_script(
+				'code-editor',
+				sprintf(
+					'jQuery( function() { wp.codeEditor.initialize( \'frm_codemirror_box\', %s ); } );',
+					wp_json_encode( $settings )
+				)
+			);
 		}
 
-		self::custom_css( $message );
+		return $settings;
 	}
 
 	public static function route() {
@@ -688,7 +685,6 @@ class FrmStylesController {
 			case 'manage':
 			case 'manage_styles':
 			case 'custom_css':
-			case 'save_css':
 				return self::$action();
 			default:
 				do_action( 'frm_style_action_route', $action );
@@ -991,5 +987,14 @@ class FrmStylesController {
 
 	public static function do_accordion_sections( $screen, $context, $object ) {
 		return do_accordion_sections( $screen, $context, $object );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return void
+	 */
+	public static function save_css() {
+		// TODO deprecate this function.
 	}
 }
