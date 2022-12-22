@@ -357,8 +357,17 @@ class FrmEntriesHelper {
 
 		$value = self::get_posted_meta( $field_id, $args );
 
-		// TODO: add comment.
-		$value = apply_filters( 'frm_new_entry_value', $value, array( 'allow_array' => false, 'field' => $field_obj ) );
+		$args = array( 'allow_array' => false, 'field' => $field_obj );
+
+		/**
+		 * Allows updating posted entry value for a field.
+		 *
+		 * @since x.x
+		 *
+		 * @param string|int $value
+		 * @param array $args
+		 */
+		$value = apply_filters( 'frm_new_entry_value', $value, $args );
 
 		$field_obj->sanitize_value( $value );
 	}
