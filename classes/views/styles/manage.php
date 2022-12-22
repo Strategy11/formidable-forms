@@ -21,12 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</th>
 			</tr>
 		</thead>
-
 		<tbody>
 			<?php
 			if ( $forms ) {
 				$row_view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_manage-styles-row.php';
-
 				array_walk(
 					$forms,
 					/**

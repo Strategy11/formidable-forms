@@ -227,12 +227,19 @@ class FrmSettingsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php' );
 	}
 
+	/**
+	 * Save form data submitted from the Global settings page.
+	 *
+	 * @param string|bool $stop_load
+	 *
+	 * @return void
+	 */
 	public static function process_form( $stop_load = false ) {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			wp_die( esc_html( $frm_settings->admin_permission ) );
 		}
@@ -240,12 +247,12 @@ class FrmSettingsController {
 		$errors  = array();
 		$message = '';
 
-		if ( ! isset( $frm_vars['settings_routed'] ) || ! $frm_vars['settings_routed'] ) {
+		if ( empty( $frm_vars['settings_routed'] ) ) {
 			$errors = $frm_settings->validate( $_POST, array() );
 
 			$frm_settings->update( wp_unslash( $_POST ) );
 
-			if ( empty( $errors ) ) {
+			if ( ! $errors ) {
 				$frm_settings->store();
 				$message = __( 'Settings Saved', 'formidable' );
 			}
@@ -253,9 +260,8 @@ class FrmSettingsController {
 			$message = __( 'Settings Saved', 'formidable' );
 		}
 
-		if ( $stop_load == 'stop_load' ) {
+		if ( $stop_load === 'stop_load' ) {
 			$frm_vars['settings_routed'] = true;
-
 			return;
 		}
 

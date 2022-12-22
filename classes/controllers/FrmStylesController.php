@@ -88,6 +88,8 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function admin_init() {
+		self::maybe_hook_into_global_settings_save();
+
 		if ( ! FrmAppHelper::is_style_editor_page() ) {
 			return;
 		}
@@ -109,6 +111,28 @@ class FrmStylesController {
 		if ( $style ) {
 			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) . '&' . http_build_query( $style->post_content ), array(), $version );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_hook_into_global_settings_save() {
+		if ( empty( $_POST ) || ! isset( $_POST['style'] ) ) {
+			// Avoid changing any style data if the style array is not sent in the request.
+			return;
+		}
+
+		add_action(
+			'frm_update_settings',
+			/**
+			 * Update the form data on the "Manage Styles" tab after global settings are saved.
+			 */
+			function() {
+				self::manage_styles();
+			}
+		);
 	}
 
 	/**
@@ -591,17 +615,12 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Handle saving for the page rendered in self::manage.
+	 * Handle saving for the page rendered in self::manage which is included in Global Settings in the "Manage Styles" tab.
+	 * This gets called from the frm_update_settings hook which is called after saving Global settings.
 	 *
-	 * @todo This logic needs to be called now on Global Settings save events.
+	 * @return void
 	 */
 	private static function manage_styles() {
-		$style_nonce = FrmAppHelper::get_post_param( 'frm_manage_style', '', 'sanitize_text_field' );
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( ! $_POST || ! isset( $_POST['style'] ) || ! wp_verify_nonce( $style_nonce, 'frm_manage_style_nonce' ) ) {
-			return self::manage();
-		}
-
 		global $wpdb;
 
 		$forms = FrmForm::get_published_forms();
@@ -613,14 +632,9 @@ class FrmStylesController {
 			}
 
 			$form->options['custom_style'] = $new_style;
-
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
 			unset( $form );
 		}
-
-		$message = __( 'Your form styles have been saved.', 'formidable' );
-
-		return self::manage( $message, $forms );
 	}
 
 	/**
