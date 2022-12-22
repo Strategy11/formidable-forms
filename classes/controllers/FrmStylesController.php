@@ -572,6 +572,8 @@ class FrmStylesController {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param string       $message
 	 * @param array|object $forms
 	 * @return void
@@ -581,13 +583,18 @@ class FrmStylesController {
 		$styles        = $frm_style->get_all();
 		$default_style = $frm_style->get_default_style( $styles );
 
-		if ( empty( $forms ) ) {
+		if ( ! $forms ) {
 			$forms = FrmForm::get_published_forms();
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/manage.php';
 	}
 
+	/**
+	 * Handle saving for the page rendered in self::manage.
+	 *
+	 * @todo This logic needs to be called now on Global Settings save events.
+	 */
 	private static function manage_styles() {
 		$style_nonce = FrmAppHelper::get_post_param( 'frm_manage_style', '', 'sanitize_text_field' );
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -617,22 +624,39 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @param string        $message
-	 * @param FrmStyle|null $style
+	 * Echo content for the Custom CSS page.
+	 *
+	 * @param string $message
 	 * @return void
 	 */
-	public static function custom_css( $message = '', $style = null ) {
-		$settings = self::enqueue_codemirror();
-		$id       = $settings ? 'frm_codemirror_box' : 'frm_custom_css_box';
-
-		if ( ! isset( $style ) ) {
-			$frm_style = new FrmStyle();
-			$style     = $frm_style->get_default_style();
-		}
-
-		$custom_css = $style->post_content['custom_css'];
+	public static function custom_css( $message = '' ) {
+		$settings   = self::enqueue_codemirror();
+		$id         = $settings ? 'frm_codemirror_box' : 'frm_custom_css_box';
+		$custom_css = self::get_custom_css();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
+	}
+
+	/**
+	 * Get custom CSS code entered in the Custom CSS page.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_custom_css() {
+		$settings = new FrmSettings();
+
+		if ( is_string( $settings->custom_css ) ) {
+			return $settings->custom_css;
+		}
+
+		// If it does not exist, check the default style as a fallback.
+		$frm_style  = new FrmStyle();
+		$style      = $frm_style->get_default_style();
+		$custom_css = $style->post_content['custom_css'];
+
+		return $custom_css;
 	}
 
 	/**
@@ -675,6 +699,11 @@ class FrmStylesController {
 		return $settings;
 	}
 
+	/**
+	 * Handling routing for the visual styler.
+	 *
+	 * @return void
+	 */
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
@@ -682,9 +711,6 @@ class FrmStylesController {
 		switch ( $action ) {
 			case 'edit':
 			case 'save':
-			case 'manage':
-			case 'manage_styles':
-			case 'custom_css':
 				return self::$action();
 			default:
 				do_action( 'frm_style_action_route', $action );

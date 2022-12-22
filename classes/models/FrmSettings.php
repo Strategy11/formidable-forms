@@ -41,6 +41,13 @@ class FrmSettings {
 	public $current_form = 0;
 	public $tracking;
 
+	/**
+	 * @since x.x
+	 *
+	 * @var string|false|null
+	 */
+	public $custom_css;
+
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -115,6 +122,8 @@ class FrmSettings {
 			'email_to' => '[admin_email]',
 			'no_ips'   => 0,
 			'tracking' => FrmAppHelper::pro_is_installed(),
+
+			'custom_css' => false,
 		);
 	}
 
