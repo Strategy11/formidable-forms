@@ -357,8 +357,8 @@ class FrmEntriesHelper {
 
 		$value = self::get_posted_meta( $field_id, $args );
 
-		// TODO: add a hook here and use it instead.
-		FrmProFieldsHelper::replace_field_id_shortcodes( $value, array( 'allow_array' => false, 'field' => $field_obj ) );
+		// TODO: add comment.
+		$value = apply_filters( 'frm_new_entry_value', $value, array( 'allow_array' => false, 'field' => $field_obj ) );
 
 		$field_obj->sanitize_value( $value );
 	}
