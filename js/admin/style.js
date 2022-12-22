@@ -65,18 +65,44 @@
 	 * @returns {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
-		const cardWrapper  = document.getElementById( 'frm_style_cards_wrapper' );
-		const styleIdInput = getStyleIdInput();
+		const cardWrapper   = document.getElementById( 'frm_style_cards_wrapper' );
+		const styleIdInput  = getStyleIdInput();
+		const stylesEnabled = event.target.checked;
+		
+		cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled );
 
-		cardWrapper.classList.toggle( 'frm-styles-enabled', event.target.checked );
-
-		if ( ! event.target.checked ) {
+		if ( ! stylesEnabled ) {
 			styleIdInput.value = '0';
+
+			toggleFormidableStylingInPreviewForms( false );
 			return;
 		}
 
 		const card         = document.querySelector( '.frm-active-style-card' );
 		styleIdInput.value = card.dataset.styleId;
+
+		toggleFormidableStylingInPreviewForms( true );
+	}
+
+	/**
+	 * @param {bool} on
+	 * @returns {void}
+	 */
+	function toggleFormidableStylingInPreviewForms( on ) {
+		const preview    = document.getElementById( 'frm_style_preview' );
+		const activeCard = document.querySelector( '.frm-active-style-card' );
+
+		let selector = '.frm_forms';
+		if ( ! on ) {
+			selector += '.with_frm_style';
+		}
+
+		preview.querySelectorAll( selector ).forEach(
+			formParent => {
+				formParent.classList.toggle( 'with_frm_style', on );
+				formParent.classList.toggle( activeCard.dataset.classname, on );
+			}
+		);
 	}
 
 	/**
