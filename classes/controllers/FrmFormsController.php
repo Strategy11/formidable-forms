@@ -1346,6 +1346,21 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Updates classes used in submit and prev buttons to avoid conflict with twenty twenty-one theme.
+	 *
+	 * @param array $classes
+	 *
+	 * @return array
+	 */
+	public static function update_button_classes( $classes ) {
+		if ( function_exists( 'twenty_twenty_one_setup' ) ) {
+			$classes[] = 'has-text-color has-background';
+		}
+
+		return $classes;
+	}
+
 	public static function mb_tags_box( $form_id, $class = '' ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
