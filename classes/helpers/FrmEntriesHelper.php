@@ -357,7 +357,10 @@ class FrmEntriesHelper {
 
 		$value = self::get_posted_meta( $field_id, $args );
 
-		$args = array( 'allow_array' => false, 'field' => $field_obj );
+		$args = array(
+			'allow_array' => false,
+			'field' => $field_obj,
+		);
 
 		/**
 		 * Allows updating posted entry value for a field.
