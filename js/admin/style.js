@@ -612,8 +612,6 @@
 	}
 
 	/**
-	 * Technically this isn't required as the form preview is loading JavaScript.
-	 *
 	 * @returns {void}
 	 */
 	function initFloatingLabels() {
