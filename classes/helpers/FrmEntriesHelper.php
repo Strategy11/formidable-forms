@@ -357,6 +357,9 @@ class FrmEntriesHelper {
 
 		$value = self::get_posted_meta( $field_id, $args );
 
+		// TODO: add a hook here and use it instead.
+		FrmProFieldsHelper::replace_field_id_shortcodes( $value, array( 'allow_array' => false, 'field' => $field_obj ) );
+
 		$field_obj->sanitize_value( $value );
 	}
 
@@ -370,6 +373,7 @@ class FrmEntriesHelper {
 		} else {
 			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		}
+
 		return $value;
 	}
 
