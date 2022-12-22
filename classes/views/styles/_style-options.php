@@ -32,6 +32,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param WP_Post $style
 	 */
 	do_action( 'frm_style_settings_top', $style );

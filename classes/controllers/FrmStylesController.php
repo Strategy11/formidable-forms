@@ -658,7 +658,7 @@ class FrmStylesController {
 	 *
 	 * @return string
 	 */
-	private static function get_custom_css() {
+	public static function get_custom_css() {
 		$settings = new FrmSettings();
 
 		if ( is_string( $settings->custom_css ) ) {
