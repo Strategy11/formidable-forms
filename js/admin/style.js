@@ -105,6 +105,12 @@
 		preview.querySelectorAll( 'form' ).forEach(
 			form => form.addEventListener(
 				'submit',
+				/**
+				 * Prevent form submit event.
+				 *
+				 * @param {Event} event
+				 * @returns {false}
+				 */
 				event => {
 					event.preventDefault();
 					event.stopPropagation();
@@ -376,7 +382,9 @@
 	 */
 	function onStyleEditorInit() {
 		const { debounce }           = frmDom.util;
-		const debouncedPreviewUpdate = debounce( changeStyling, 100 );
+		const debouncedPreviewUpdate = debounce( () => { console.log( 'Change event triggered' ); console.trace(); changeStyling(); }, 100 );
+
+		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
 		document.getElementById( 'frm_field_height' ).addEventListener( 'change', textSquishCheck );
 		document.getElementById( 'frm_field_font_size' ).addEventListener( 'change', textSquishCheck );
@@ -400,8 +408,6 @@
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
-
-		initPosClass();
 
 		/**
 		 * Sends an AJAX request for new CSS to use for the preview.
