@@ -359,7 +359,7 @@ class FrmEntriesHelper {
 
 		$args = array(
 			'allow_array' => false,
-			'field' => $field_obj,
+			'field'       => $field_obj,
 		);
 
 		/**
