@@ -42,24 +42,7 @@
 		initDatepickerSample();
 
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
-		enableToggle.addEventListener(
-			'change',
-			// TODO move this into a new function rather than nesting it and making it anonymous.
-			event => {
-				const cardWrapper  = document.getElementById( 'frm_style_cards_wrapper' );
-				const styleIdInput = getStyleIdInput();
-
-				cardWrapper.classList.toggle( 'frm-styles-enabled', event.target.checked );
-
-				if ( ! event.target.checked ) {
-					styleIdInput.value = '0';
-					return;
-				}
-
-				const card         = document.querySelector( '.frm-active-style-card' );
-				styleIdInput.value = card.dataset.styleId;
-			}
-		);
+		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
 
 		// TODO I need to track label position for each style card.
 		// This whay when I change between cards to preview, the container classes get synced.
@@ -70,6 +53,30 @@
 //		const input = tag( 'input' );
 //		input.value = 'inside';
 //		setPosClass.bind( input )();
+	}
+
+	/**
+	 * When Formidable styling is disabled, the list of styles fades out.
+	 * The style ID value associated with the selected style card gets cleared.
+	 * This is because disabling styles is linked to the custom_style option as well.
+	 *
+	 * @param {Event} event
+	 *
+	 * @returns {void}
+	 */
+	function handleEnableStylingToggleChange( event ) {
+		const cardWrapper  = document.getElementById( 'frm_style_cards_wrapper' );
+		const styleIdInput = getStyleIdInput();
+
+		cardWrapper.classList.toggle( 'frm-styles-enabled', event.target.checked );
+
+		if ( ! event.target.checked ) {
+			styleIdInput.value = '0';
+			return;
+		}
+
+		const card         = document.querySelector( '.frm-active-style-card' );
+		styleIdInput.value = card.dataset.styleId;
 	}
 
 	/**
