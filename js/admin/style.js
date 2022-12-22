@@ -66,9 +66,10 @@
 
 		// Update label position in preview on list page.
 		// On the edit page this is handled with the initPosClass function instead.
-		const input = tag( 'input' );
-		input.value = 'inside';
-		setPosClass.bind( input )();
+		// TODO do not just always use inside either. Get the active card and use its dataset value.
+//		const input = tag( 'input' );
+//		input.value = 'inside';
+//		setPosClass.bind( input )();
 	}
 
 	/**
