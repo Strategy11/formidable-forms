@@ -25,7 +25,11 @@ class FrmOnSubmitAction extends FrmFormAction {
 		);
 		$action_ops = apply_filters( 'frm_on_submit_control_settings', $action_ops );
 
-		parent::__construct( self::$slug, __( 'On Submit', 'formidable' ), $action_ops );
+		parent::__construct( self::$slug, self::get_name(), $action_ops );
+	}
+
+	public static function get_name() {
+		return __( 'On Submit', 'formidable' );
 	}
 
 	public function form( $form_action, $args = array() ) {

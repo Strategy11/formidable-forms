@@ -122,6 +122,8 @@ class FrmFormsController {
 			$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 		}
 
+		self::maybe_migrate_submit_settings_to_action( $id );
+
 		return self::get_settings_vars( $id, array(), $message );
 	}
 
@@ -2761,6 +2763,68 @@ class FrmFormsController {
 				$form_options['success_msg'] = ! empty( $action->post_content['success_msg'] ) ? $action->post_content['success_msg'] : FrmOnSubmitHelper::get_default_msg();
 				$form_options['show_form']   = ! empty( $action->post_content['show_form'] );
 		}
+	}
+
+	/**
+	 * Maybe migrate submit settings to On Submit action.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	private static function maybe_migrate_submit_settings_to_action( $form_id ) {
+		$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'options' );
+		if ( ! $form_options ) {
+			return;
+		}
+
+		FrmAppHelper::unserialize_or_decode( $form_options );
+		if ( ! isset( $form_options['success_action'] ) ) {
+			return;
+		}
+
+		$post = self::create_on_submit_action_from_form_options( $form_id, $form_options );
+		if ( $post ) {
+			self::remove_deprecated_submit_settings( $form_id, $form_options );
+		}
+	}
+
+	private static function create_on_submit_action_from_form_options( $form_id, $form_options ) {
+		$action['post_type']    = FrmFormActionsController::$action_post_type;
+		$action['post_excerpt'] = FrmOnSubmitAction::$slug;
+		$action['post_title']   = FrmOnSubmitAction::get_name();
+		$action['menu_order']   = $form_id;
+		$action['post_status']  = 'publish';
+		$action['post_content'] = array( 'success_action' => $form_options['success_action'] );
+
+		switch ( $form_options['success_action'] ) {
+			case 'redirect':
+				$action['post_content']['success_url']  = isset( $form_options['success_url'] ) ? $form_options['success_url'] : '';
+				$action['post_content']['redirect_msg'] = isset( $form_options['success_msg'] ) ? $form_options['success_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
+				break;
+
+			case 'page':
+				$action['post_content']['success_page_id'] = isset( $form_options['success_page_id'] ) ? $form_options['success_page_id'] : '';
+				break;
+
+			default:
+				$action['post_content']['success_msg'] = isset( $form_options['success_msg'] ) ? $form_options['success_msg'] : FrmOnSubmitHelper::get_default_msg();
+				$action['post_content']['show_form']   = ! empty( $form_options['show_form'] );
+		}
+
+		$action['post_content'] = FrmAppHelper::prepare_and_encode( $action['post_content'] );
+
+		return FrmDb::save_json_post( $action );
+	}
+
+	private static function remove_deprecated_submit_settings( $form_id, $form_options ) {
+		foreach ( array( 'success_action', 'success_msg', 'success_url', 'show_form', 'success_page_id' ) as $name ) {
+			if ( isset( $form_options[ $name ] ) ) {
+				unset( $form_options[ $name ] );
+			}
+		}
+
+		FrmForm::update( $form_id, array( 'options' => $form_options ) );
 	}
 
 	/**
