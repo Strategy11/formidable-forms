@@ -16,18 +16,6 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.0
-	 */
-	public static function get_style_menu( $active = '' ) {
-		ob_start();
-		self::style_menu( $active );
-		$menu = ob_get_contents();
-		ob_end_clean();
-
-		return $menu;
-	}
-
-	/**
-	 * @since 4.0
 	 * @todo This may be deprecated now with x.x.
 	 */
 	public static function styler_save_button( $atts ) {
@@ -44,30 +32,6 @@ class FrmStylesHelper {
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
-	}
-
-	/**
-	 * Either get the heading or the style switcher.
-	 *
-	 * @since 4.0
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_switcher( $atts ) {
-		// TODO deprecate this.
-
-		if ( has_action( 'frm_style_switcher_heading' ) ) {
-			do_action( 'frm_style_switcher_heading', $atts );
-		} else {
-			?>
-			<div class="frm_top_left">
-				<h1>
-					<?php echo esc_html( $atts['style']->post_title ); ?>
-				</h1>
-			</div>
-			<?php
-		}
 	}
 
 	/**
@@ -733,12 +697,37 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @since 4.0
+	 * @deprecated x.x The style menu is no longer used in the styler.
+	 *
+	 * @param string $active
+	 * @return string
+	 */
+	public static function get_style_menu( $active = '' ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return '';
+	}
+
+	/**
+	 * @deprecated x.x The style menu is no longer used in the styler.
 	 *
 	 * @param string $active
 	 * @return void
 	 */
 	public static function style_menu( $active = '' ) {
-		// TODO deprecate this.
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * Either get the heading or the style switcher.
+	 *
+	 * @since 4.0
+	 * @deprecated x.x The style switcher was replaced with a form switcher and is no longer used.
+	 *
+	 * @param array $atts
+	 * @return void
+	 */
+	public static function styler_switcher( $atts ) {
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }
