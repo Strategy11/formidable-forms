@@ -5658,6 +5658,10 @@ span.howto {
 	margin-top: 2em !important;
 }
 
+#form_reports_page form select {
+	line-height: unset;
+}
+
 /* Views Page */
 #form_views_page img.frm_no_views {
 	max-width: 100%;
