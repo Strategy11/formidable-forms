@@ -488,11 +488,12 @@ class FrmStylesHelper {
 	public static function get_params_for_style_card( $style, $default_style, $form_id ) {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
-			'class'           => 'with_frm_style frm-style-card ' . $class_name,
-			'style'           => self::get_style_param_for_card( $style ),
-			'data-classname'  => $class_name,
-			'data-style-id'   => $style->ID,
-			'data-edit-url'   => esc_url( self::get_edit_url( $style, $form_id ) ),
+			'class'               => 'with_frm_style frm-style-card ' . $class_name,
+			'style'               => self::get_style_param_for_card( $style ),
+			'data-classname'      => $class_name,
+			'data-style-id'       => $style->ID,
+			'data-edit-url'       => esc_url( self::get_edit_url( $style, $form_id ) ),
+			'data-label-position' => $style->post_content['position'],
 		);
 
 		/**

@@ -50,15 +50,35 @@
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
 
-		// TODO I need to track label position for each style card.
-		// This whay when I change between cards to preview, the container classes get synced.
+		syncPreviewFormLabelPositionsWithActiveStyle();
+	}
 
-		// Update label position in preview on list page.
-		// On the edit page this is handled with the initPosClass function instead.
-		// TODO do not just always use inside either. Get the active card and use its dataset value.
-//		const input = tag( 'input' );
-//		input.value = 'inside';
-//		setPosClass.bind( input )();
+	/**
+	 * Update label position in preview on list page.
+	 * On the edit page this is handled with the initPosClass function instead.
+	 */
+	function syncPreviewFormLabelPositionsWithActiveStyle() {
+		const activeCard = getActiveCard();
+		if ( activeCard ) {
+			changeLabelPositionsInPreview( activeCard.dataset.labelPosition );
+		}
+	}
+
+	/**
+	 * @param {String} labelPosition
+	 * @returns {void}
+	 */
+	function changeLabelPositionsInPreview( labelPosition ) {
+		const input = tag( 'input' );
+		input.value = labelPosition;
+		setPosClass.bind( input )();
+	}
+
+	/**
+	 * @returns {HTMLElement}
+	 */
+	function getActiveCard() {
+		return document.querySelector( '.frm-active-style-card' );
 	}
 
 	/**
@@ -96,7 +116,7 @@
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
 		const preview    = document.getElementById( 'frm_style_preview' );
-		const activeCard = document.querySelector( '.frm-active-style-card' );
+		const activeCard = getActiveCard();
 
 		let selector = '.frm_forms';
 		if ( ! on ) {
@@ -212,6 +232,8 @@
 		const editButton     = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
+
+		changeLabelPositionsInPreview( card.dataset.labelPosition );
 	}
 
 	/**
