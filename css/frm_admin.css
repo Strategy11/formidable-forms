@@ -5688,10 +5688,6 @@ span.howto {
     font-weight: 600;
 }
 
-#form_reports_page form input {
-	border-color: var(--grey-border);
-}
-
 #form_reports_page form #from-date {
     margin-right: 0;
     border-radius: 4px 0 0 4px;
@@ -5701,6 +5697,11 @@ span.howto {
     margin-left: 0;
     border-radius: 0 4px 4px 0;
 	border-left-width: 0;
+}
+
+#form_reports_page form input {
+	border-color: var(--grey-border);
+	cursor: pointer;
 }
 
 /* Views Page */
