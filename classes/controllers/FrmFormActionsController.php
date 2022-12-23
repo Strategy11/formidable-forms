@@ -574,6 +574,29 @@ class FrmFormActionsController {
 
 		return $where;
 	}
+
+	/**
+	 * Skips triggering form actions.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param bool  $skip Set to `true` if you want to skip the form action.
+	 * @param array $args {
+	 *     Args.
+	 *
+	 *     @type object $action Form action object.
+	 *     @type object $entry  Entry object.
+	 *     @type object $form   Form object.
+	 *     @type string $event  Event name.
+	 * }
+	 * @return bool
+	 */
+	public static function skip_actions( $skip, $args ) {
+		if ( FrmOnSubmitAction::$slug === $args['action']->post_excerpt ) {
+			return false;
+		}
+		return $skip;
+	}
 }
 
 class Frm_Form_Action_Factory {

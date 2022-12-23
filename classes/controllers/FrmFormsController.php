@@ -2795,7 +2795,10 @@ class FrmFormsController {
 		$action['post_title']   = FrmOnSubmitAction::get_name();
 		$action['menu_order']   = $form_id;
 		$action['post_status']  = 'publish';
-		$action['post_content'] = array( 'success_action' => $form_options['success_action'] );
+		$action['post_content'] = array(
+			'event'          => array( 'create' ),
+			'success_action' => $form_options['success_action'],
+		);
 
 		switch ( $form_options['success_action'] ) {
 			case 'redirect':
