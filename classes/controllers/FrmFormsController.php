@@ -2102,11 +2102,9 @@ class FrmFormsController {
 	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
-		if ( empty( $atts['skip_actions_check'] ) && true ) { // TODO: Replace true with form option check.
-			$met_actions = self::get_met_on_submit_actions( $atts );
-			if ( $met_actions ) {
-				return $met_actions;
-			}
+		$met_actions = self::get_met_on_submit_actions( $atts );
+		if ( $met_actions ) {
+			return $met_actions;
 		}
 
 		$opt    = 'success_action';
