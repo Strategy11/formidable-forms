@@ -45,7 +45,7 @@ if ( $col_count <= 4 ) {
 	<div class="frm_grid_container">
 		<?php
 		foreach ( $types as $type => $type_data ) :
-			$input_id = $this->get_field_id( 'success_action' ) . '-' . $type;
+			$input_id = $this->get_field_id( 'success_action_' . $type );
 			?>
 			<div class="frm_on_submit_type <?php echo esc_attr( $col_class ); ?>">
 				<input
