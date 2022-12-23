@@ -5,14 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormsController {
 
-	/**
-	 * Track the entry object when processing On Submit actions.
-	 *
-	 * @since 5.x.x
-	 * @var object|false
-	 */
-	private static $processing_entry = false;
-
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
