@@ -881,24 +881,29 @@ class FrmXMLHelper {
 		}
 		unset( $posts_with_shortcodes, $view_ids );
 
+		$where = array(
+			'id' => $imported['forms'],
+			'options LIKE' => '"old_style"',
+		);
+		$forms = FrmDb::get_results( 'frm_forms', $where );
+
+		foreach ( $forms as $form ) {
+			$form_options = unserialize( $form->options );
+
+			$where = array(
+				'post_name' => $form_options['old_style'],
+				'post_type' => 'frm_styles',
+			);
+
+			$select = 'ID';
+
+			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
+			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
+		}
+
 		self::maybe_update_stylesheet( $imported );
 
 		flush_rewrite_rules();
-
-		foreach ( $imported['forms'] as $form_id ) {
-			$form  = FrmForm::getOne( $form_id );
-			if ( ! isset( $form->options['old_style'] ) ) {
-				continue;
-			}
-			$where = array(
-				'post_name' => $form->options['old_style'],
-				'post_type' => 'frm_styles',
-			);
-			$select    = 'ID';
-			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
-			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
-			self::update_custom_style_setting_after_import( $form_id );
-		}
 
 		return $imported;
 	}
