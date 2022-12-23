@@ -5686,6 +5686,7 @@ span.howto {
     font-size: 14px;
     line-height: 21px;
     font-weight: 600;
+	cursor: pointer;
 }
 
 #form_reports_page form #from-date {
