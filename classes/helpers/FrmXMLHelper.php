@@ -889,11 +889,13 @@ class FrmXMLHelper {
 		$forms = FrmDb::get_results( 'frm_forms', $where );
 
 		foreach ( $forms as $form ) {
-			$form_options = unserialize( $form->options );
-
+			FrmAppHelper::unserialize_or_decode( $form->options );
+			if ( ! $form->options ) {
+				continue;
+			}
 			$where = array(
-				'post_name' => $form_options['old_style'],
-				'post_type' => 'frm_styles',
+				'post_name' => $form->options['old_style'],
+				'post_type' => FrmStylesController::$post_type,
 			);
 
 			$select = 'ID';
