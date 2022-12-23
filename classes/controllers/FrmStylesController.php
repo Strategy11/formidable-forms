@@ -456,11 +456,18 @@ class FrmStylesController {
 
 		if ( 'edit' === $view ) {
 			$style = $active_style;
-		} elseif ( in_array( $view, array( 'new_style', 'duplicate' ), true ) ) {
+		} elseif ( 'duplicate' === $view ) {
 			$style             = clone $active_style;
-			$style->ID         = '';
+			$new_style        = $frm_style->get_new();
+			$style->ID        = $new_style->ID;
+			$style->post_name = $new_style->post_name;
+			unset( $new_style );
+		} elseif ( 'new_style' === $view ) {
+			$style = $frm_style->get_new();
+		}
+
+		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {
 			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
-			$style->post_name  = 'new-style';
 			$style->menu_order = 0;
 		}
 

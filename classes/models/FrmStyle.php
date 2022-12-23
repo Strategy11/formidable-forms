@@ -55,18 +55,17 @@ class FrmStyle {
 		foreach ( $all_instances as $number => $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
+			
+			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$all_instances[ $number ] = $new_instance;
 
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing
-				if ( $new_instance['menu_order'] && $_POST && empty( $_POST['prev_menu_order'] ) && isset( $_POST['frm_style_setting']['menu_order'] ) ) {
+				if ( $new_instance['menu_order'] && $_POST && empty( $_POST['prev_menu_order'] ) && isset( $_POST['frm_style_setting']['menu_order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 					// this style was set to default, so remove default setting on previous default style
 					$new_instance['menu_order'] = 0;
 					$action_ids[]               = $this->save( $new_instance );
 				}
 
-				// don't continue if not saving this style
+				// Don't continue if not saving this style
 				continue;
 			}
 

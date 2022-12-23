@@ -3,8 +3,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<input name="prev_menu_order" type="hidden" value="<?php echo esc_attr( $style->menu_order ); ?>" />
-<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
 <div class="frm-inner-content">
 	<p>
 		<?php if ( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) { ?>
@@ -22,9 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php } ?>
 		<input name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="hidden" value="<?php echo esc_attr( $style->post_title ); ?>" /><?php // TODO: Remove this. Make sure removing it doesn't clear style titles though. ?>
 	</p>
-
-	<?php // menu_order is 1 for the default style, 0 for other styles. This can probably get removed but for now the menu order value is a hidden field. ?>
-	<input name="<?php echo esc_attr( $frm_style->get_field_name( 'menu_order', '' ) ); ?>" type="hidden" value="<?php echo esc_attr( $style->menu_order ); ?>" />
 
 	<?php
 	if ( ! class_exists( 'FrmProStylesController' ) ) {

@@ -12,6 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="hidden" name="frm_action" value="save" />
 
 		<?php
+		// If prev_menu_order is on, FrmStyle::update will not change the default value on save.
+		// The actual value does not matter. It never gets saved.
+		?>
+		<input name="prev_menu_order" type="hidden" value="1" />
+
+		<?php
 		wp_nonce_field( 'frm_style_nonce', 'frm_style' );
 
 		$frm_style = new FrmStyle( $style->ID );
