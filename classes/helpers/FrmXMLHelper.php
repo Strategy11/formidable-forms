@@ -81,6 +81,7 @@ class FrmXMLHelper {
 			if ( isset( $xml->{$item_type} ) ) {
 				$function_name = 'import_xml_' . $item_type . 's';
 				$imported      = self::$function_name( $xml->{$item_type}, $imported );
+				unset( $function_name, $xml->{$item_type} );
 			}
 		}
 
@@ -737,7 +738,7 @@ class FrmXMLHelper {
 				'post_name' => $form['options']['custom_style'],
 				'post_type' => 'frm_styles',
 			);
-			$select    = 'ID';
+			$select   = 'ID';
 			$style_id = FrmDb::get_var( $table, $where, $select );
 
 			if ( $style_id ) {
