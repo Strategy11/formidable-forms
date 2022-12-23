@@ -119,7 +119,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function maybe_hook_into_global_settings_save() {
-		if ( empty( $_POST ) || ! isset( $_POST['style'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing This is checked when processing the Global Settings form.
+		if ( empty( $_POST ) || ! isset( $_POST['style'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// Avoid changing any style data if the style array is not sent in the request.
 			return;
 		}
@@ -625,8 +625,8 @@ class FrmStylesController {
 
 		$forms = FrmForm::get_published_forms();
 		foreach ( $forms as $form ) {
-			$new_style      = ( isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing This is checked when processing the Global Settings form.
-			$previous_style = ( isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing This is checked when processing the Global Settings form.
+			$new_style      = ( isset( $_POST['style'] ) && isset( $_POST['style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$previous_style = ( isset( $_POST['prev_style'] ) && isset( $_POST['prev_style'][ $form->id ] ) ) ? sanitize_text_field( wp_unslash( $_POST['prev_style'][ $form->id ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( $new_style == $previous_style ) {
 				continue;
 			}
@@ -729,12 +729,14 @@ class FrmStylesController {
 				return;
 			default:
 				do_action( 'frm_style_action_route', $action );
+
 				if ( apply_filters( 'frm_style_stop_action_route', false, $action ) ) {
 					return;
 				}
 
 				if ( in_array( $action, array( 'new_style', 'duplicate' ), true ) ) {
-					return self::$action();
+					self::$action();
+					return;
 				}
 
 				self::edit();
