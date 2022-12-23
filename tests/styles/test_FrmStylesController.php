@@ -49,13 +49,13 @@ class test_FrmStylesController extends FrmUnitTest {
 	}
 
 	/**
-	 * @covers FrmStylesController::save
+	 * @covers FrmStylesController::save_style
 	 * @covers FrmStyle::update
 	 */
-	public function test_save() {
+	public function test_save_style() {
 		$frm_style = new FrmStyle( 'default' );
-		$style = $frm_style->get_one();
-		$defaults = $frm_style->get_defaults();
+		$style     = $frm_style->get_one();
+		$defaults  = $frm_style->get_defaults();
 
 		$_POST = array(
 			'ID'                => $style->ID,
@@ -68,13 +68,12 @@ class test_FrmStylesController extends FrmUnitTest {
 			),
 		);
 
-		ob_start();
-		FrmStylesController::save();
-		$returned = ob_get_contents();
-		ob_end_clean();
+		FrmStylesController::save_style();
 
-		$this->assertNotFalse( strpos( $returned, 'Your styling settings have been saved.' ) );
-		$frm_style = new FrmStyle( $style->ID );
+		$message = $this->get_private_property( 'FrmStylesController', 'message' );
+
+		$this->assertEquals( $message, 'Your styling settings have been saved.' );
+		$frm_style     = new FrmStyle( $style->ID );
 		$updated_style = $frm_style->get_one();
 		$this->assertEquals( $style->post_title . ' Updated', $updated_style->post_title );
 	}
