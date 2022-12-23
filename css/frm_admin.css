@@ -4778,10 +4778,11 @@ h2.frm-h2,
 }
 
 .frm_settings_form h3,
-.frm_form_settings h3 {
+.frm_form_settings h3, .frm_form_settings p.frm_add_logic_link {
 	font-size: 16px;
 	border-top: 1px solid var(--grey-border);
-	padding-top: 10px;
+	margin: 20px 0 10px 0;
+	padding-top: 20px;
 	font-weight: normal;
 	text-transform: uppercase;
 	color: var(--medium-grey);
