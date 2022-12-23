@@ -5665,7 +5665,7 @@ span.howto {
 	align-items: center;
 }
 
-#form_reports_page form label {
+#form_reports_page form span {
     font-weight: 500;
     color: var(--medium-grey);
 }
