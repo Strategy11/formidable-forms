@@ -62,10 +62,10 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 
 if ( ! empty( $notes ) && is_array( $notes ) ) {
 	foreach ( $notes as $note ) {
-	?>
+		?>
 		<div class="frm_note_style">
 			<?php echo esc_html( $note ); ?>
 		</div>
-	<?php
+		<?php
 	}
 }

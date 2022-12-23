@@ -79,7 +79,7 @@ class FrmStylesPreviewHelper {
 
 		// Implode all notes as a single note so they're all wrapped in the same element rather than individual notes.
 		return array(
-			implode( ' ', $notes )
+			implode( ' ', $notes ),
 		);
 	}
 
