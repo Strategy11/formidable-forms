@@ -5304,10 +5304,6 @@ table td, .form-table tr td {
 	vertical-align: bottom;
 }
 
-.frm_action_id {
-	padding-top: 10px;
-}
-
 .frm_logic_field_opts {
 	max-width: 35%;
 }
