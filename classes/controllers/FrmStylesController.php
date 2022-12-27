@@ -337,8 +337,8 @@ class FrmStylesController {
 			$active_style = $default_style;
 		}
 
-		if ( is_callable( 'FrmProStylesController::get_styles_for_style_page' ) ) {
-			$styles = FrmProStylesController::get_styles_for_style_page( $form, $active_style );
+		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
+			$styles = FrmProStylesController::get_styles_for_styler( $form, $active_style );
 		} else {
 			$styles = array( self::get_default_style() );
 		}
