@@ -577,14 +577,11 @@ class FrmStylesController {
 		}
 
 		$id = $frm_style->update( $post_id );
-		if ( empty( $post_id ) && ! empty( $id ) ) {
+		if ( ! $post_id && $id ) {
 			self::maybe_redirect_after_save( $id );
-
 			$post_id = reset( $id ); // Set the post id to the new style so it will be loaded for editing.
 		}
 
-		// include the CSS that includes this style
-		//echo '<link href="' . esc_url( admin_url( 'admin-ajax.php?action=frmpro_css' ) ) . '" type="text/css" rel="Stylesheet" class="frm-custom-theme" />';
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 	}
 
