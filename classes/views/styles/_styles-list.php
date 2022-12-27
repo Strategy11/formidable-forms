@@ -20,7 +20,7 @@ $enabled = '0' !== $form->options['custom_style'];
 	 *     @type stdClass $form
 	 * }
 	 */
-	do_action( 'frm_style_sidebar_top', compact( 'form' ) );
+	do_action( 'frm_style_list_sidebar_top', compact( 'form' ) );
 	?>
 	<?php // This form isn't visible. It's just used for assigning the selected style id to the target form. ?>
 	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( admin_url( 'themes.php?page=formidable-styles&form=' . $form->id . '&t=advanced_settings' ) ); ?>">
