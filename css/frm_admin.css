@@ -5677,6 +5677,8 @@ span.howto {
 
 #form_reports_page form input {
 	color: #545F6E;
+	border-color: var(--grey-border);
+	cursor: pointer;
 }
 
 #form_reports_page form button {
@@ -5688,20 +5690,15 @@ span.howto {
 	cursor: pointer;
 }
 
-#form_reports_page form #from-date {
+#form_reports_page form #start-date {
     margin-right: 0;
     border-radius: 4px 0 0 4px;
 }
 
-#form_reports_page form #to-date {
+#form_reports_page form #end-date {
     margin-left: 0;
     border-radius: 0 4px 4px 0;
 	border-left-width: 0;
-}
-
-#form_reports_page form input {
-	border-color: var(--grey-border);
-	cursor: pointer;
 }
 
 /* Views Page */
