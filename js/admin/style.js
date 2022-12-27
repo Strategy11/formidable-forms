@@ -408,7 +408,7 @@
 	 */
 	function resetStyle( styleId ) {
 		const formData = new FormData();
-		formData.append( 'styleId', styleId );
+		formData.append( 'style_id', styleId );
 		doJsonPost( 'settings_reset', formData ).then( reloadAfterStyleReset );
 	}
 

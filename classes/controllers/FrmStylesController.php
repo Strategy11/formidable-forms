@@ -754,7 +754,7 @@ class FrmStylesController {
 	/**
 	 * Handle AJAX routing for frm_settings_reset for resetting styles to the default settings.
 	 *
-	 * @since x.x This function was repurposed to actually reset a style. It now requires a target $_POST['styleId'] value.
+	 * @since x.x This function was repurposed to actually reset a style. It now requires a target $_POST['style_id'] value.
 	 * Prior so x.x it would return an array of default settings as reset would require a subsequent update with the new default settings.
 	 *
 	 * @return void
@@ -763,7 +763,7 @@ class FrmStylesController {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$style_id = FrmAppHelper::get_post_param( 'styleId', '', 'absint' );
+		$style_id = FrmAppHelper::get_post_param( 'style_id', '', 'absint' );
 		if ( ! $style_id ) {
 			wp_die( 0 );
 		}
