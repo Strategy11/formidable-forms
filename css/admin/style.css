@@ -274,7 +274,7 @@ label.default-style-box input[type="checkbox"] {
 Do not set this for frm_inside_container as it requires a custom line height value.
 Target .frm_primary_label so we avoid other labels like star rating stars.
 */
-#frm_style_preview .frm_form_field:not(.frm_inside_container) label.frm_primary_label {
+#frm_style_preview .frm_form_field:not(.frm_inside_container) > label.frm_primary_label {
 	line-height: var(--line-height);
 }
 

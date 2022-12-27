@@ -14,6 +14,9 @@ class FrmStyle {
 		$this->id = $id;
 	}
 
+	/**
+	 * @return stdClass
+	 */
 	public function get_new() {
 		$this->id = 0;
 
@@ -34,6 +37,10 @@ class FrmStyle {
 		return (object) $style;
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save( $settings ) {
 		return FrmDb::save_settings( $settings, 'frm_styles' );
 	}
@@ -42,10 +49,14 @@ class FrmStyle {
 		// duplicating is a pro feature
 	}
 
+	/**
+	 * @param mixed $id
+	 * @return array<int|WP_Error>
+	 */
 	public function update( $id = 'default' ) {
 		$all_instances = $this->get_all();
 
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			$new_style       = (array) $this->get_new();
 			$all_instances[] = $new_style;
 		}
@@ -55,17 +66,9 @@ class FrmStyle {
 		foreach ( $all_instances as $number => $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
-			
+
 			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				$all_instances[ $number ] = $new_instance;
-
-				if ( $new_instance['menu_order'] && $_POST && empty( $_POST['prev_menu_order'] ) && isset( $_POST['frm_style_setting']['menu_order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					// this style was set to default, so remove default setting on previous default style
-					$new_instance['menu_order'] = 0;
-					$action_ids[]               = $this->save( $new_instance );
-				}
-
-				// Don't continue if not saving this style
+				// Don't continue if not saving this style.
 				continue;
 			}
 
@@ -73,9 +76,8 @@ class FrmStyle {
 			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( $this->unslash_post_content( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
-			$new_instance['menu_order']   = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-			if ( empty( $id ) ) {
+			if ( ! $id ) {
 				$new_instance['post_name'] = $new_instance['post_title'];
 			}
 
@@ -93,19 +95,14 @@ class FrmStyle {
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $color_val );
-				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) )
-					&& ! isset( $new_instance['post_content'][ $setting ] )
-					) {
+				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ), true ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {
 					$new_instance['post_content'][ $setting ] = 0;
-				} elseif ( $setting == 'font' ) {
+				} elseif ( $setting === 'font' ) {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
 
-			$all_instances[ $number ] = $new_instance;
-
 			$action_ids[] = $this->save( $new_instance );
-
 		}
 
 		$this->save_settings();

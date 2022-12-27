@@ -284,7 +284,6 @@ class FrmStylesHelper {
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
-
 			$frm_style = new FrmStyle();
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
@@ -294,7 +293,7 @@ class FrmStylesHelper {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
 					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
-					$style_name = sanitize_title( $posted['style_name'] );
+					$style_name = array_key_exists( 'style_name', $posted ) ? sanitize_title( $posted['style_name'] ) : '';
 				} else {
 					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );
@@ -331,7 +330,7 @@ class FrmStylesHelper {
 		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
 		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
 		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
-		$settings['box_shadow']   = ( isset( $settings['remove_box_shadow'] ) && $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
+		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
 
 		if ( ! isset( $settings['repeat_icon'] ) ) {
 			$settings['repeat_icon'] = 1;
@@ -424,6 +423,8 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @return bool
 	 */
 	public static function previewing_style() {
 		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing

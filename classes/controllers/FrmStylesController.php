@@ -80,7 +80,30 @@ class FrmStylesController {
 			return;
 		}
 
-		// Removing this action prevents front end JavaScript from loading.
+		self::disable_form_css();
+		self::prevent_form_scripts_from_loading();
+	}
+
+	/**
+	 * Avoid loading CSS the normal way with the preview in the styler.
+	 * It gets loaded 
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function disable_form_css() {
+		add_filter( 'get_frm_stylesheet', '__return_false' );
+	}
+
+	/**
+	 * Removing this action prevents front end JavaScript from loading.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function prevent_form_scripts_from_loading() {
 		remove_action( 'init', 'FrmFormsController::front_head' );
 	}
 
@@ -104,7 +127,7 @@ class FrmStylesController {
 
 		$version = FrmAppHelper::plugin_version();
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_style( 'wp-color-picker' ); // TODO is this being loaded on the list view? That isn't necessary.
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
@@ -138,11 +161,12 @@ class FrmStylesController {
 	/**
 	 * @param string $register Either 'enqueue' or 'register'.
 	 * @param bool   $force True to enqueue/register the style if a form has not been loaded.
+	 * @return void
 	 */
 	public static function enqueue_css( $register = 'enqueue', $force = false ) {
 		global $frm_vars;
 
-		$register_css = ( $register == 'register' );
+		$register_css = $register === 'register';
 		$should_load  = $force || ( ( $frm_vars['load_css'] || $register_css ) && ! FrmAppHelper::is_admin() );
 
 		if ( ! $should_load ) {
@@ -150,15 +174,14 @@ class FrmStylesController {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
-		if ( $frm_settings->load_style == 'none' ) {
+		if ( $frm_settings->load_style === 'none' ) {
 			return;
 		}
 
 		$css = apply_filters( 'get_frm_stylesheet', self::custom_stylesheet() );
 
-		if ( ! empty( $css ) ) {
-			$css = (array) $css;
-
+		if ( $css ) {
+			$css     = (array) $css;
 			$version = FrmAppHelper::plugin_version();
 
 			foreach ( $css as $css_key => $file ) {
@@ -167,14 +190,14 @@ class FrmStylesController {
 					wp_register_style( $css_key, $file, array(), $this_version );
 				}
 
-				$load_on_all = ! FrmAppHelper::is_admin() && 'all' == $frm_settings->load_style;
+				$load_on_all = ! FrmAppHelper::is_admin() && 'all' === $frm_settings->load_style;
 				if ( $load_on_all || $register != 'register' ) {
 					wp_enqueue_style( $css_key );
 				}
 				unset( $css_key, $file );
 			}
 
-			if ( $frm_settings->load_style == 'all' ) {
+			if ( $frm_settings->load_style === 'all' ) {
 				$frm_vars['css_loaded'] = true;
 			}
 		}
@@ -183,18 +206,25 @@ class FrmStylesController {
 		add_filter( 'style_loader_tag', 'FrmStylesController::add_tags_to_css', 10, 2 );
 	}
 
+	/**
+	 * @return array<string,string>
+	 */
 	public static function custom_stylesheet() {
 		global $frm_vars;
 		$stylesheet_urls = array();
 
-		if ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) {
-			//include css in head
+		if ( empty( $frm_vars['css_loaded'] ) ) {
+			// Include css in head.
 			self::get_url_to_custom_style( $stylesheet_urls );
 		}
 
 		return $stylesheet_urls;
 	}
 
+	/**
+	 * @param array $stylesheet_urls
+	 * @return void
+	 */
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
 		$file_name = '/css/' . self::get_file_name();
 		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
@@ -454,16 +484,22 @@ class FrmStylesController {
 			self::add_meta_boxes();
 		}
 
-		if ( 'edit' === $view ) {
-			$style = $active_style;
-		} elseif ( 'duplicate' === $view ) {
-			$style             = clone $active_style;
-			$new_style        = $frm_style->get_new();
-			$style->ID        = $new_style->ID;
-			$style->post_name = $new_style->post_name;
-			unset( $new_style );
-		} elseif ( 'new_style' === $view ) {
-			$style = $frm_style->get_new();
+		switch( $view ) {
+			case 'edit':
+				$style       = $active_style;
+				break;
+
+			case 'duplicate':
+				$style            = clone $active_style;
+				$new_style        = $frm_style->get_new();
+				$style->ID        = $new_style->ID;
+				$style->post_name = $new_style->post_name;
+				unset( $new_style );
+				break;
+
+			case 'new_style':
+				$style = $frm_style->get_new();
+				break;
 		}
 
 		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {

@@ -12,12 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="hidden" name="frm_action" value="save" />
 
 		<?php
-		// If prev_menu_order is on, FrmStyle::update will not change the default value on save.
-		// The actual value does not matter. It never gets saved.
-		?>
-		<input name="prev_menu_order" type="hidden" value="1" />
-
-		<?php
 		wp_nonce_field( 'frm_style_nonce', 'frm_style' );
 
 		$frm_style = new FrmStyle( $style->ID );
@@ -31,4 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</form>
 </div>
-<div id="this_css"></div><?php // This holds the custom CSS for live updates to the preview. ?>
+<?php
+// This holds the custom CSS for a single theme that is being worked on on the edit page.
+// It gets populated with the frm_change_styling action.
+?>
+<div id="this_css"></div>
