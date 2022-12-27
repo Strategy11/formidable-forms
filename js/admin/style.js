@@ -614,15 +614,10 @@
 			value = 'none';
 		}
 
-		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {
-			// Fields that support floating label should have a directly child input/textarea/select.
-			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' );
-
-			let currentValue = value;
-
-			if ( 'inside' === currentValue && ! input ) {
-				currentValue = 'top';
-			}
+		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {			
+			const input                 = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
+			const shouldForceTopStyling = 'inside' === value && ( ! input || input.hasAttribute( 'data-frmfile' ) ); // We do not want file upload to use floating labels.
+			const currentValue          = shouldForceTopStyling ? 'top' : value;
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
 			container.classList.add( 'frm_' + currentValue + '_container' );
