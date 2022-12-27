@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<?php
-		// Custom CSS is no longer used from the default style, but it is still checked if the Glboal Setting is missing.
+		// Custom CSS is no longer used from the default style, but it is still checked if the Global Setting is missing.
 		// Include the field so we do not load the old value in case Custom CSS has not been saved as a Global Setting yet.
 		?>
 		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
