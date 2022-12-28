@@ -882,8 +882,10 @@ class FrmXMLHelper {
 		}
 		unset( $posts_with_shortcodes, $view_ids );
 
-		// clear imported forms style cache to make sure the new styles are applied to the forms
-		self::clear_forms_style_caches( $imported['forms'] );
+		if ( ! empty( $imported['forms'] ) ) {
+			// clear imported forms style cache to make sure the new styles are applied to the forms
+			self::clear_forms_style_caches( $imported['forms'] );
+		}
 
 		self::maybe_update_stylesheet( $imported );
 
