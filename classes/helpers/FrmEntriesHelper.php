@@ -380,7 +380,6 @@ class FrmEntriesHelper {
 		$field_id_and_object = self::get_field_id_and_object( $field );
 
 		$field_id  = $field_id_and_object[0];
-		$field_obj = $field_id_and_object[1];
 
 		$value = self::get_posted_meta( $field_id, $args );
 
