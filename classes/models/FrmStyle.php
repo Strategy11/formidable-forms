@@ -240,7 +240,9 @@ class FrmStyle {
 	}
 
 	/**
-	 * Create static css file
+	 * Create static CSS file and update the CSS transient alternative.
+	 *
+	 * @return void
 	 */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
