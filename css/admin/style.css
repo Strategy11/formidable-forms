@@ -10,7 +10,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-top: 15px !important;
 }
 
-#frm_style_page_wrapper {
+#frm_styler_wrapper {
 	display: flex;
 	flex-direction: row;
 }

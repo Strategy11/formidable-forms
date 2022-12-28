@@ -32,18 +32,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 	</div>
-	<div class="frm_form_fields frm_sample_form frm_forms">
-		<fieldset>
-			<div class="frm_fields_container">
-				<div id="frm_style_page_wrapper">
-					<?php
-					$view_file = 'list' === $view ? 'list' : 'edit';
-					include $style_views_path . '_styles-' . $view_file . '.php'; // Render view based on type (either _styles-list.php or _styles-edit.php).
+	<div class="frm_form_fields frm_forms">
+		<div id="frm_styler_wrapper">
+			<?php
+			$view_file = 'list' === $view ? 'list' : 'edit';
+			include $style_views_path . '_styles-' . $view_file . '.php'; // Render view based on type (either _styles-list.php or _styles-edit.php).
 
-					include $style_views_path . '_style-preview-container.php'; // Render preview container.
-					?>
-				</div>
-			</div>
-		</fieldset>
+			include $style_views_path . '_style-preview-container.php'; // Render preview container.
+			?>
+		</div>
 	</div>
 </div>
