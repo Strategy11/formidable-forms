@@ -181,7 +181,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 						if ( $display['type'] === 'rte' ) {
 							$e_args  = array(
-								'textarea_name' => 'field_options[default_value_' . absint( $field['id'] ) . ']',
+								'textarea_name' => 'default_value_' . absint( $field['id'] ),
 								'textarea_rows' => 8,
 							);
 							$html_id = 'frm_default_value_' . absint( $field['id'] );
