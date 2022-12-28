@@ -179,7 +179,14 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 						$field_obj->default_value_to_string( $default_value );
 
-						if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
+						if ( $display['type'] === 'rte' ) {
+							$e_args  = array(
+								'textarea_name' => 'field_options[default_value_' . absint( $field['id'] ) . ']',
+								'textarea_rows' => 8,
+							);
+							$html_id = 'frm_default_value_' . absint( $field['id'] );
+							wp_editor( $field['default_value'], $html_id, $e_args );
+						} elseif ( $display['type'] === 'textarea' ) {
 							?>
 							<textarea name="<?php echo esc_attr( $default_name ); ?>" class="default-value-field" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" rows="3" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>"><?php
 								echo FrmAppHelper::esc_textarea( $default_value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
