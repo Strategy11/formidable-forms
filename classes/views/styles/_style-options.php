@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</svg>
 			</a>
 		<?php } ?>
-		<span style="font-size: 16px;"><?php echo esc_html( $style->post_title ); ?></span>
+		<span id="frm_style_name"><?php echo esc_html( $style->post_title ); ?></span>
 		<?php if ( $style->ID ) { ?>
 			<span class="howto alignright">
 				<span>.frm_style_<?php echo esc_attr( $style->post_name ); ?></span>
