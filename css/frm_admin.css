@@ -3205,17 +3205,6 @@ input[type="checkbox"] {
 	padding: 0;
 }
 
-.frm-star-group:not(.frm-star-hovered) input[type=radio]:checked + label:before,
-.frm-star-group input + label:hover:before,
-.frm-star-group:hover input + label:hover:before,
-.frm-star-group .star-rating-on:before,
-.frm-star-group .star-rating-hover:before,
-.frm-star-group input[type=radio]:checked + label:before,
-.frm-star-group input + label:before,
-.frm-star-group .star-rating:before {
-	color: var( --blue-border);
-}
-
 .frm_wrap .frm-number-range + .frm_last input,
 .frm_wrap .frm-number-range input {
 	text-align: center;
