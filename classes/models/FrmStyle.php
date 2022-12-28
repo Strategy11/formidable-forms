@@ -301,7 +301,16 @@ class FrmStyle {
 		FrmDb::delete_cache_and_transient( 'frmpro_css' );
 	}
 
+	/**
+	 * Delete a style by its post ID.
+	 *
+	 * @param int $id
+	 * @return WP_Post|false|null
+	 */
 	public function destroy( $id ) {
+		if ( $id === $this->get_default_style()->ID ) {
+			return false;
+		}
 		return wp_delete_post( $id );
 	}
 
