@@ -882,8 +882,24 @@ class FrmXMLHelper {
 		}
 		unset( $posts_with_shortcodes, $view_ids );
 
+		// clear imported forms style cache to make sure the new styles are applied to the forms
+		self::clear_forms_style_caches( $imported['forms'] );
+
+		self::maybe_update_stylesheet( $imported );
+
+		flush_rewrite_rules();
+
+		return $imported;
+	}
+
+	/**
+	 * Clears styles from cache for imported forms
+	 *
+	 * @param array $imported_forms
+	 */
+	private static function clear_forms_style_caches( $imported_forms ) {
 		$where = array(
-			'id' => $imported['forms'],
+			'id' => $imported_forms,
 			'options LIKE' => '"old_style"',
 		);
 		$forms = FrmDb::get_results( 'frm_forms', $where );
@@ -903,12 +919,6 @@ class FrmXMLHelper {
 			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
 			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
 		}
-
-		self::maybe_update_stylesheet( $imported );
-
-		flush_rewrite_rules();
-
-		return $imported;
 	}
 
 	/**
