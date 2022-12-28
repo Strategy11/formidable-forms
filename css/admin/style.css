@@ -62,6 +62,17 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	flex: 2;
 }
 
+#frm_active_style_form:not(.frm_hidden),
+#frm_sample_form:not(.frm_hidden) {
+	/* Without this a small form with a max-width of 480px for example doesn't get centered in the preview space. */
+	display: flex;
+}
+
+#frm_active_style_form > .frm_forms {
+	/* This gives small form containers more space. */
+	flex: 1;
+}
+
 .frm-style-card {
 	width: calc( 50% - 10px );
 	display: inline-flex;
