@@ -11,6 +11,8 @@
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { doJsonPost } = frmDom.ajax;
 
+	let autoId = 0;
+
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
 		initListPage();
@@ -413,13 +415,39 @@
 	}
 
 	/**
-	 * Just reload the page after a card is reset for now as it's easier than trying to load all of the default rules.
+	 * Reload Formidable CSS after a style is reset so the preview updates immediately without needing to reload the page.
 	 *
 	 * @returns {void}
 	 */
 	function reloadAfterStyleReset() {
-		// TODO a success message would be useful.
-		window.location.reload();
+		const style = document.getElementById( 'frm-custom-theme-css' );
+		if ( ! style ) {
+			return;
+		}
+
+		const newStyle = document.createElement( 'link' );
+		newStyle.rel   = 'stylesheet';
+		newStyle.type  = 'text/css';
+		newStyle.href  = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
+
+		// Listen for the new style to load before removing the old style to avoid having no styles while the new style is loading.
+		newStyle.addEventListener(
+			'load',
+			() => {
+				style.parentNode.removeChild( style );
+				newStyle.id = 'frm-custom-theme-css'; // Assign the old ID to the new style so it can be removed in the next reset action.
+			}
+		);
+
+		const head = document.getElementsByTagName( 'HEAD' )[0];
+		head.appendChild( newStyle );
+	}
+
+	/**
+	 * @returns {Number}
+	 */
+	function getAutoId() {
+		return ++autoId;
 	}
 
 	/**

@@ -231,6 +231,8 @@ class FrmStyle {
 
 	/**
 	 * @since 3.01.01
+	 *
+	 * @return array
 	 */
 	public function get_color_settings() {
 		$defaults = $this->get_defaults();
@@ -254,8 +256,7 @@ class FrmStyle {
 
 		$this->clear_cache();
 
-		$css = $this->get_css_content( $filename );
-
+		$css         = $this->get_css_content( $filename );
 		$create_file = new FrmCreateFile(
 			array(
 				'file_name'     => FrmStylesController::get_file_name(),
