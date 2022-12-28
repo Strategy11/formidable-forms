@@ -280,7 +280,7 @@ class FrmSettings {
 		do_action( 'frm_update_settings', $params );
 
 		if ( function_exists( 'get_filesystem_method' ) ) {
-			// save styling settings in case fallback setting changes
+			// Save styling settings in case fallback setting changes.
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}

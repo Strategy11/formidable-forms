@@ -693,8 +693,7 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function get_custom_css() {
-		$settings = new FrmSettings();
-
+		$settings = FrmAppHelper::get_settings();
 		if ( is_string( $settings->custom_css ) ) {
 			return $settings->custom_css;
 		}

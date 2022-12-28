@@ -266,6 +266,10 @@ class FrmStyle {
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
 	}
 
+	/**
+	 * @param string $filename
+	 * @return string
+	 */
 	private function get_css_content( $filename ) {
 		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 
@@ -273,13 +277,16 @@ class FrmStyle {
 		$frm_style = $this;
 
 		ob_start();
-		include( $filename );
+		include $filename;
 		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
 		ob_end_clean();
 
 		return FrmStylesController::replace_relative_url( $css );
 	}
 
+	/**
+	 * @return void
+	 */
 	private function clear_cache() {
 		$default_post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
@@ -299,7 +306,7 @@ class FrmStyle {
 	}
 
 	public function get_one() {
-		if ( 'default' == $this->id ) {
+		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
 			if ( $style ) {
 				$this->id = $style->ID;
