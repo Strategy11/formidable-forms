@@ -6342,8 +6342,8 @@ function frmAdminBuildJS() {
 		if ( wysiwyg ) {
 			// Re-initialize the original wysiwyg which was removed before cloning.
 			frmDom.wysiwyg.init( wysiwyg );
+			frmDom.wysiwyg.init( newAction.querySelector( '.wp-editor-area' ) );
 		}
-		frmDom.wysiwyg.init( newAction.querySelector( '.wp-editor-area' ) );
 
 		initiateMultiselect();
 

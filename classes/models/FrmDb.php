@@ -232,7 +232,7 @@ class FrmDb {
 	 *
 	 * @return string
 	 */
-	private static function generate_cache_key( $where, $args, $field, $type ) {
+	public static function generate_cache_key( $where, $args, $field, $type ) {
 		$cache_key = '';
 		$where     = FrmAppHelper::array_flatten( $where );
 		foreach ( $where as $key => $value ) {

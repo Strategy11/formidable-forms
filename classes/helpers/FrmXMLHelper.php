@@ -727,7 +727,7 @@ class FrmXMLHelper {
 			return;
 		}
 
-		if ( is_numeric( $form['options']['custom_style'] ) ) {
+		if ( is_numeric( $form['options']['custom_style'] ) && 1 === intval( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
 		} else {
@@ -880,11 +880,45 @@ class FrmXMLHelper {
 		}
 		unset( $posts_with_shortcodes, $view_ids );
 
+		if ( ! empty( $imported['forms'] ) ) {
+			// clear imported forms style cache to make sure the new styles are applied to the forms
+			self::clear_forms_style_caches( $imported['forms'] );
+		}
+
 		self::maybe_update_stylesheet( $imported );
 
 		flush_rewrite_rules();
 
 		return $imported;
+	}
+
+	/**
+	 * Clears styles from cache for imported forms
+	 *
+	 * @param array $imported_forms
+	 */
+	private static function clear_forms_style_caches( $imported_forms ) {
+		$where = array(
+			'id' => $imported_forms,
+			'options LIKE' => '"old_style"',
+		);
+		$forms = FrmDb::get_results( 'frm_forms', $where );
+
+		foreach ( $forms as $form ) {
+			FrmAppHelper::unserialize_or_decode( $form->options );
+			if ( ! $form->options ) {
+				continue;
+			}
+			$where = array(
+				'post_name' => $form->options['old_style'],
+				'post_type' => FrmStylesController::$post_type,
+			);
+
+			$select = 'ID';
+
+			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
+			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
+		}
 	}
 
 	/**
