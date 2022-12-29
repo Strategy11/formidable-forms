@@ -2774,61 +2774,107 @@ class FrmFormsController {
 	 * @param int $form_id Form ID.
 	 */
 	private static function maybe_migrate_submit_settings_to_action( $form_id ) {
-		$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'options' );
-		if ( ! $form_options ) {
+		$form = FrmDb::get_row( 'frm_forms', array( 'id' => $form_id ), 'options,editable' );
+		if ( ! $form ) {
 			return;
 		}
 
-		FrmAppHelper::unserialize_or_decode( $form_options );
-		if ( ! isset( $form_options['success_action'] ) ) {
+		FrmAppHelper::unserialize_or_decode( $form->options );
+		if ( ! isset( $form->options['success_action'] ) ) {
 			return;
 		}
 
-		$post = self::create_on_submit_action_from_form_options( $form_id, $form_options );
-		if ( $post ) {
-			self::remove_deprecated_submit_settings( $form_id, $form_options );
-		}
-	}
+		// Create On Submit action.
+		$base_action = array();
 
-	private static function create_on_submit_action_from_form_options( $form_id, $form_options ) {
-		$action['post_type']    = FrmFormActionsController::$action_post_type;
-		$action['post_excerpt'] = FrmOnSubmitAction::$slug;
-		$action['post_title']   = FrmOnSubmitAction::get_name();
-		$action['menu_order']   = $form_id;
-		$action['post_status']  = 'publish';
-		$action['post_content'] = array(
-			'event'          => array( 'create' ),
-			'success_action' => $form_options['success_action'],
+		$base_action['post_type']    = FrmFormActionsController::$action_post_type;
+		$base_action['post_excerpt'] = FrmOnSubmitAction::$slug;
+		$base_action['post_title']   = FrmOnSubmitAction::get_name();
+		$base_action['menu_order']   = $form_id;
+		$base_action['post_status']  = 'publish';
+		$base_action['post_content'] = array(
+			'event' => array( 'create' ),
 		);
 
-		switch ( $form_options['success_action'] ) {
-			case 'redirect':
-				$action['post_content']['success_url']  = isset( $form_options['success_url'] ) ? $form_options['success_url'] : '';
-				$action['post_content']['redirect_msg'] = isset( $form_options['success_msg'] ) ? $form_options['success_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
-				break;
+		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
 
-			case 'page':
-				$action['post_content']['success_page_id'] = isset( $form_options['success_page_id'] ) ? $form_options['success_page_id'] : '';
-				break;
+		if ( FrmAppHelper::pro_is_connected() && intval( $form->editable ) ) {
+			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
 
-			default:
-				$action['post_content']['success_msg'] = isset( $form_options['success_msg'] ) ? $form_options['success_msg'] : FrmOnSubmitHelper::get_default_msg();
-				$action['post_content']['show_form']   = ! empty( $form_options['show_form'] );
-		}
+			if ( $action_data === $edit_data ) {
+				// Just create one action for both create and update.
+				$base_action['post_content']['event'][] = 'update';
+			} else {
+				// Create a separate action for update.
+				$edit_action = $base_action;
+				$edit_action['post_content'] += $edit_data;
+				$edit_action['post_content']['event'] = array( 'update' );
 
-		$action['post_content'] = FrmAppHelper::prepare_and_encode( $action['post_content'] );
-
-		return FrmDb::save_json_post( $action );
-	}
-
-	private static function remove_deprecated_submit_settings( $form_id, $form_options ) {
-		foreach ( array( 'success_action', 'success_msg', 'success_url', 'show_form', 'success_page_id' ) as $name ) {
-			if ( isset( $form_options[ $name ] ) ) {
-				unset( $form_options[ $name ] );
+				$edit_action['post_content'] = FrmAppHelper::prepare_and_encode( $edit_action['post_content'] );
+				if ( FrmDb::save_json_post( $edit_action ) ) {
+					self::remove_deprecated_submit_settings( $form_id, $form, true );
+				}
 			}
 		}
 
-		FrmForm::update( $form_id, array( 'options' => $form_options ) );
+		$action                  = $base_action;
+		$action['post_content'] += $action_data;
+		$action['post_content']  = FrmAppHelper::prepare_and_encode( $action['post_content'] );
+
+		if ( FrmDb::save_json_post( $action ) ) {
+			self::remove_deprecated_submit_settings( $form_id, $form );
+		}
+	}
+
+	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
+		$opt  = 'update' === $event ? 'edit_' : 'success_';
+		$data = array(
+			'success_action' => $form_options[ $opt . 'action' ],
+		);
+
+		switch ( $form_options[ $opt . 'action' ] ) {
+			case 'redirect':
+				$data['success_url']  = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
+				$data['redirect_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_redirect_msg();
+				break;
+
+			case 'page':
+				$data['success_page_id'] = isset( $form_options[ $opt . 'page_id' ] ) ? $form_options[ $opt . 'page_id' ] : '';
+				break;
+
+			default:
+				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_msg();
+				$data['show_form']   = ! empty( $form_options['show_form'] );
+		}
+
+		return $data;
+	}
+
+	private static function remove_deprecated_submit_settings( $form_id, $form, $update = false ) {
+		if ( $update ) {
+			$options = array(
+				'edit_action',
+				'edit_msg',
+				'edit_url',
+				'edit_page_id'
+			);
+		} else {
+			$options = array(
+				'success_action',
+				'success_msg',
+				'success_url',
+				'show_form',
+				'success_page_id',
+			);
+		}
+
+		foreach ( $options as $name ) {
+			if ( isset( $form->options[ $name ] ) ) {
+				unset( $form->options[ $name ] );
+			}
+		}
+
+		FrmForm::update( $form_id, array( 'options' => $form->options ) );
 	}
 
 	/**
