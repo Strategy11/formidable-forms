@@ -2179,17 +2179,21 @@ class FrmFormsController {
 	/**
 	 * Gets met On Submit actions.
 	 *
-	 * @param array $args Args.
+	 * @param array  $args  Args.
+	 * @param string $event Form event. Default is `create`.
 	 * @return array Array of actions that meet the conditional logics.
 	 */
-	private static function get_met_on_submit_actions( $args ) {
-		// Sometimes $args['entry_id'] is empty, so we track the entry object to prevent errors.
+	public static function get_met_on_submit_actions( $args, $event = 'create' ) {
 		$entry       = FrmEntry::getOne( $args['entry_id'], true );
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
 		$has_redirect = false;
 
 		foreach ( $actions as $action ) {
+			if ( ! in_array( $event, $action->post_content['event'], true ) ) {
+				continue;
+			}
+
 			if ( FrmFormAction::action_conditions_met( $action, $entry ) ) {
 				continue;
 			}
@@ -2214,7 +2218,7 @@ class FrmFormsController {
 	 *
 	 * @param array $args Args.
 	 */
-	private static function run_multi_on_submit_actions( $args ) {
+	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
 		foreach ( $args['conf_method'] as $action ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
@@ -2234,7 +2238,7 @@ class FrmFormsController {
 		}
 	}
 
-	private static function run_single_on_submit_action( $args, $action ) {
+	public static function run_single_on_submit_action( $args, $action ) {
 		$new_args = self::get_run_success_action_args( $args, $action );
 		self::run_success_action( $new_args );
 	}
@@ -2242,9 +2246,11 @@ class FrmFormsController {
 	private static function get_run_success_action_args( $args, $action ) {
 		$new_args = $args;
 
-		self::populate_on_submit_data( $new_args['form']->options, $action );
+		self::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
 
-		$new_args['conf_method'] = $new_args['form']->options['success_action'];
+		$opt = 'update' === $args['action'] ? 'edit_' : 'success_';
+
+		$new_args['conf_method'] = $new_args['form']->options[ $opt . 'action' ];
 
 		return $new_args;
 	}
@@ -2728,29 +2734,31 @@ class FrmFormsController {
 	 *
 	 * @param array  $form_options Form options.
 	 * @param object $action       Optional. The On Submit action object.
+	 * @param string $event        Form event. Default is `create`.
 	 */
-	private static function populate_on_submit_data( &$form_options, $action = null ) {
+	public static function populate_on_submit_data( &$form_options, $action = null, $event = 'create' ) {
+		$opt = 'update' === $event ? 'edit_' : 'success_';
 		if ( ! $action || ! is_object( $action ) ) {
-			$form_options['success_action'] = FrmOnSubmitHelper::get_default_action_type();
-			$form_options['success_msg']    = FrmOnSubmitHelper::get_default_msg();
+			$form_options[ $opt . 'action' ] = FrmOnSubmitHelper::get_default_action_type();
+			$form_options[ $opt . 'msg' ]    = FrmOnSubmitHelper::get_default_msg();
 			return;
 		}
 
-		$form_options['success_action'] = isset( $action->post_content['success_action'] ) ? $action->post_content['success_action'] : 'message';
+		$form_options[ $opt . 'action' ] = isset( $action->post_content[ 'success_action' ] ) ? $action->post_content[ 'success_action' ] : 'message';
 
-		switch ( $form_options['success_action'] ) {
+		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options['success_url']  = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options[ $opt . 'url' ]  = isset( $action->post_content[ 'success_url' ] ) ? $action->post_content[ 'success_url' ] : '';
 				$form_options['redirect_msg'] = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
-				$form_options['success_msg']  = $form_options['redirect_msg'];
+				$form_options[ $opt . 'msg' ]  = $form_options['redirect_msg'];
 				break;
 
 			case 'page':
-				$form_options['success_page_id'] = isset( $action->post_content['success_page_id'] ) ? $action->post_content['success_page_id'] : '';
+				$form_options[ $opt . 'page_id' ] = isset( $action->post_content[ 'success_page_id' ] ) ? $action->post_content[ 'success_page_id' ] : '';
 				break;
 
 			default:
-				$form_options['success_msg'] = ! empty( $action->post_content['success_msg'] ) ? $action->post_content['success_msg'] : FrmOnSubmitHelper::get_default_msg();
+				$form_options[ $opt . 'msg' ] = ! empty( $action->post_content[ 'success_msg' ] ) ? $action->post_content[ 'success_msg' ] : FrmOnSubmitHelper::get_default_msg();
 				$form_options['show_form']   = ! empty( $action->post_content['show_form'] );
 		}
 	}
