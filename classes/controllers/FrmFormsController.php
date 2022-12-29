@@ -2720,8 +2720,21 @@ class FrmFormsController {
 		$form_options  = maybe_unserialize( $form->options );
 
 		$on_submit_actions = FrmOnSubmitHelper::get_actions( $form->id );
+		$first_create_action = null;
+		$first_edit_action   = null;
+		foreach ( $on_submit_actions as $on_submit_action ) {
+			if ( ! $first_create_action && in_array( 'create', $on_submit_action->post_content['event'], true ) ) {
+				$first_create_action = $on_submit_action;
+			}
+			if ( ! $first_edit_action && in_array( 'update', $on_submit_action->post_content['event'], true ) ) {
+				$first_edit_action = $on_submit_action;
+			}
+		}
 
-		self::populate_on_submit_data( $form_options, $on_submit_actions ? reset( $on_submit_actions ) : null );
+		self::populate_on_submit_data( $form_options, $first_create_action );
+		if ( FrmAppHelper::pro_is_connected() ) {
+			self::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
+		}
 
 		if ( $is_serialized ) {
 			$form_options = serialize( $form_options );
