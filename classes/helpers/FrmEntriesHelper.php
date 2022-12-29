@@ -356,6 +356,13 @@ class FrmEntriesHelper {
 		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
+	/**
+	 * Returns an array with field id and object for any field data type.
+	 *
+	 * @param mixed $field
+	 *
+	 * @return array
+	 */
 	private static function get_field_id_and_object( $field ) {
 		if ( is_array( $field ) ) {
 			$field_id  = $field['id'];
