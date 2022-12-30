@@ -13,6 +13,7 @@
 		<ignoreFiles>
 			<directory name="vendor" />
 			<directory name="classes/views/" />
+			<file name="classes/widgets/FrmShowForm.php" />
 		</ignoreFiles>
 	</projectFiles>
 	<stubs>
