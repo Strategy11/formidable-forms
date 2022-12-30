@@ -460,6 +460,8 @@ class FrmFormAction {
 	}
 
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
+		global $wpdb;
+
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 		if ( empty( $action_controls ) ) {
 			// don't continue if there are no available actions
@@ -469,6 +471,16 @@ class FrmFormAction {
 		if ( 'all' != $type ) {
 			return $action_controls->get_all( $form_id, $atts );
 		}
+		$form_action_types = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT post_excerpt FROM {$wpdb->prefix}posts WHERE menu_order=%d", $form_id ) );
+
+		$limit_total = 0;
+		foreach ( $action_controls as $action_control ) {
+			if ( ! in_array( $action_control->id_base, $form_action_types, true ) ) {
+				continue;
+			}
+			$limit_total += $action_control->action_options['limit'];
+		}
+		$atts['limit'] = $limit_total;
 
 		self::prepare_get_action( $atts );
 
