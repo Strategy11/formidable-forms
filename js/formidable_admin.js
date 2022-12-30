@@ -6766,15 +6766,6 @@ function frmAdminBuildJS() {
 		}*/
 	}
 
-	function maybeShowFormMessages() {
-		var header = document.getElementById( 'frm_messages_header' );
-		if ( showFormMessages() ) {
-			header.style.display = 'block';
-		} else {
-			header.style.display = 'none';
-		}
-	}
-
 	function showFormMessages() {
 		var show = false;
 		var editable = document.getElementById( 'editable' );
@@ -9956,10 +9947,6 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			//Show/hide Messages header
-			jQuery( '#editable, #edit_action, #save_draft' ).on( 'change', function() {
-				maybeShowFormMessages();
-			});
 			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			$loggedIn = document.getElementById( 'logged_in' );
