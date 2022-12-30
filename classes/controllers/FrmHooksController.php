@@ -228,6 +228,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_nopriv_frmpro_load_css', 'FrmStylesController::load_css' );
 		add_action( 'wp_ajax_frmpro_css', 'FrmStylesController::load_saved_css' );
 		add_action( 'wp_ajax_nopriv_frmpro_css', 'FrmStylesController::load_saved_css' );
+		add_action( 'wp_ajax_frm_rename_style', 'FrmStylesController::rename_style' );
 
 		// XML Controller.
 		add_action( 'wp_ajax_frm_install_template', 'FrmXMLController::install_template' );

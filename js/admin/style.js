@@ -6,7 +6,7 @@
 	const state = {
 		showingSampleForm: false
 	};
-	const { div, a, tag, svg } = frmDom;
+	const { div, a, labelledTextInput, tag, svg } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { doJsonPost } = frmDom.ajax;
@@ -370,7 +370,7 @@
 
 		const hookName            = 'frm_style_card_dropdown_options';
 		const hookArgs            = { data, addIconToOption };
-		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [{ anchor: editOption, type: 'edit' }, { anchor: resetOption, type: 'reset' }], hookArgs );
+		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [{ anchor: editOption, type: 'edit' }, { anchor: resetOption, type: 'reset' }, { anchor: getRenameOption( data.styleId ), type: 'rename' } ], hookArgs );
 		const dropdownMenu        = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
 			className: 'frm-dropdown-menu dropdown-menu-right',
@@ -383,6 +383,148 @@
 			className: 'dropdown',
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
+	}
+
+	/**
+	 * @param {String} styleId
+	 * @returns {HTMLElement}
+	 */
+	 function getRenameOption( styleId ) {
+		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
+		addIconToOption( renameOption, 'frm_rename_icon' );
+
+		onClickPreventDefault(
+			renameOption,
+			() => {
+				const card = getCardByStyleId( styleId );
+				const titleElement = card.querySelector( '.frm-style-card-title' );
+				maybeCreateModal(
+					'frm_rename_style_modal',
+					{
+						title: __( 'Rename style', 'formidable-pro' ),
+						content: getStyleInputNameModalContent( 'rename', titleElement.textContent ),
+						footer: getRenameStyleModalFooter( styleId )
+					}
+				);
+			}
+		);
+
+		return renameOption;
+	}
+
+	/**
+	 * Get modal content with just a "Style Name" input.
+	 * This is used for New style, Duplicate style, and for Rename style.
+	 *
+	 * @param {String} context
+	 * @param {String|undefined} value
+	 * @returns {HTMLElement}
+	 */
+	function getStyleInputNameModalContent( context, value ) {
+		// Create a form so we can listen to Enter key presses that trigger a form submit event.
+		const form = tag(
+			'form',
+			{
+				child: labelledTextInput( 'frm_' + context + '_style_name_input', __( 'Style name', 'formidable-pro' ), 'style_name' )
+			}
+		);
+		form.addEventListener(
+			'submit',
+			/**
+			 * @param {Event} event
+			 * @returns {false}
+			 */
+			event => {
+				// Prevent the form in the modal from submitting and trigger the click button in the modal footer instead.
+				event.preventDefault();
+
+				const modal = form.closest( '.frm-dialog' );
+				modal.querySelector( '.frm_modal_footer .frm-button-primary' ).click();
+
+				return false;
+			}
+		);
+		const content = div({ child: form });
+		content.style.padding = '20px';
+		content.querySelector( 'label' ).style.lineHeight = 1.5;
+
+		const styleNameInput = content.querySelector( 'input' );
+		styleNameInput.addEventListener(
+			'input',
+			() => {
+				const footerSubmitButton = styleNameInput.closest( '.frm_modal_content' ).nextElementSibling.querySelector( '.frm-button-primary' );
+				if ( '' === styleNameInput.value ) {
+					footerSubmitButton.setAttribute( 'disabled', 'disabled' );
+					footerSubmitButton.classList.remove( 'dismiss' );
+				} else {
+					footerSubmitButton.removeAttribute( 'disabled' );
+					footerSubmitButton.classList.add( 'dismiss' );
+				}
+			}
+		);
+
+		if ( 'string' === typeof value ) {
+			styleNameInput.value = value;
+		}
+
+		return content;
+	}
+
+	/**
+	 * @param {String} styleId
+	 * @returns {HTMLELement}
+	 */
+	 function getRenameStyleModalFooter( styleId ) {
+		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable-pro' ), buttonType: 'cancel' });
+		cancelButton.classList.add( 'dismiss' );
+
+		const renameButton = footerButton({ text: __( 'Rename style', 'formidable-pro' ), buttonType: 'primary' });
+		onClickPreventDefault(
+			renameButton,
+			/**
+			 * Call frm_rename_style action when the rename style button is clicked in rename modal.
+			 *
+			 * @returns {void}
+			 */
+			() => {
+				const formData       = new FormData();
+				const styleNameInput = document.getElementById( 'frm_rename_style_name_input' );
+				const newStyleName   = styleNameInput.value;
+
+				if ( '' === newStyleName ) {
+					// Avoid setting an empty name.
+					// The button gets disabled on an input event when the name is empty.
+					return;
+				}
+
+				formData.append( 'style_id', styleId );
+				formData.append( 'style_name', newStyleName );
+				doJsonPost( 'rename_style', formData ).then( () => updateStyleNameInCard( styleId, newStyleName ) );
+			}
+		);
+
+		return div({
+			children: [ cancelButton, renameButton ]
+		});
+	}
+
+	/**
+	 * @param {String} styleId
+	 * @param {String} newStyleName
+	 * @returns {void}
+	 */
+	function updateStyleNameInCard( styleId, newStyleName ) {
+		const card         = getCardByStyleId( styleId );
+		const titleElement = card.querySelector( '.frm-style-card-title' );
+		titleElement.textContent = newStyleName;
+	}
+
+	/**
+	 * @param {String} styleId
+	 * @returns {HTMLElement}
+	 */
+	function getCardByStyleId( styleId ) {
+		return Array.from( document.getElementById( 'frm_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
 	}
 
 	/**
@@ -758,4 +900,7 @@
 	}
 
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', onStyleEditorInit );
+
+	// Set a global object so these functions can be re-used in Pro.
+	window.frmStylerFunctions = { getCardByStyleId, getStyleInputNameModalContent };
 }() );

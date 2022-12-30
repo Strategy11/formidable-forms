@@ -1092,6 +1092,42 @@ class FrmStylesController {
 	}
 
 	/**
+	 * Rename a style via an AJAX action.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function rename_style() {
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'nonce', 'frm_ajax' );
+		if ( $permission_error !== false ) {
+			$data = array(
+				'message' => __( 'Unable to rename style', 'formidable' ),
+			);
+			wp_send_json_error( $data, 403 );
+			die();
+		}
+
+		$style_id   = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
+		$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_text_field' );
+
+		if ( ! $style_id || ! $style_name ) {
+			wp_die( 0 );
+		}
+
+		$post = get_post( $style_id );
+		if ( ! $post || $post->post_type !== FrmStylesController::$post_type ) {
+			wp_die( 0 );
+		}
+
+		global $wpdb;
+		$wpdb->update( $wpdb->posts, array( 'post_title' => $style_name ), array( 'ID' => $post->ID ) );
+
+		$data = array();
+		wp_send_json_success( $data );
+	}
+
+	/**
 	 * @deprecated x.x Saving custom CSS has been moved into Global Settings.
 	 *
 	 * @return void
