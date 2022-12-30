@@ -123,7 +123,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ( $forms as $form ) { ?>
+						<?php
+						foreach ( $forms as $form ) {
+							if ( ! empty( $form->parent_form_id ) ) {
+								continue;
+							}
+							?>
 							<tr class="frm-row">
 								<td>
 									<input type="checkbox" name="frm_export_forms[]" value="<?php echo esc_attr( $form->id ); ?>" id="export_form_<?php echo esc_attr( $form->id ); ?>" />
