@@ -312,45 +312,24 @@ class FrmStylesController {
 
 		self::setup_styles_and_scripts_for_styler();
 
-		$style_id        = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		$style_id = self::get_style_id_for_styler();
+		if ( ! $style_id ) {
+			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+		}
+
 		$form_id         = FrmAppHelper::simple_get( 'form', 'absint', 0 );
-		$default_style   = self::get_default_style();
 		$request_form_id = $form_id;
 
 		if ( ! $form_id ) {
-			if ( ! $style_id ) {
-				$action = FrmAppHelper::simple_get( 'frm_action' );
-
-				if ( 'new_style' === $action ) {
-					$default_style = self::get_default_style();
-					$style_id      = $default_style->ID;
-				} elseif ( 'duplicate' === $action ) {
-					$style_id = FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
-				} else {
-					$style_id = $default_style->ID;
-				}
-			}
-
-			$check   = serialize( array( 'custom_style' => (string) $style_id ) );
-			$check   = substr( $check, 5, -1 );
-			$form_id = FrmDb::get_var(
-				'frm_forms',
-				array(
-					'options LIKE' => $check,
-					'status'       => 'published',
-				)
-			);
-			if ( ! $form_id ) {
-				// Fallback to any form.
-				// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
-				$form_id = FrmDb::get_var( 'frm_forms', array( 'status' => 'published' ), 'id' );
-			}
+			$form_id = self::get_form_id_for_style( $style_id );
 		}
 
 		$form = FrmForm::getOne( $form_id );
 		if ( ! is_object( $form ) ) {
 			wp_die( 'This form does not exist', '', 404 );
 		}
+
+		$default_style = self::get_default_style();
 
 		if ( $style_id ) {
 			$frm_style    = new FrmStyle( $style_id );
@@ -364,7 +343,7 @@ class FrmStylesController {
 		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
 			$styles = FrmProStylesController::get_styles_for_styler( $form, $active_style );
 		} else {
-			$styles = array( self::get_default_style() );
+			$styles = array( $default_style );
 		}
 
 		self::disable_admin_page_styling_on_submit_buttons();
@@ -379,6 +358,54 @@ class FrmStylesController {
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
 		self::render_style_page( $active_style, $styles, $form, $default_style );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	private static function get_style_id_for_styler() {
+		$action = FrmAppHelper::simple_get( 'frm_action' );
+
+		if ( 'duplicate' === $action ) {
+			return FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
+		}
+
+		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		if ( $style_id ) {
+			return $style_id;
+		}
+
+		return self::get_default_style()->ID;
+	}
+
+	/**
+	 * If a form ID is not being passed in the URL, try to get the best match.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $style_id
+	 * @return int
+	 */
+	private static function get_form_id_for_style( $style_id ) {
+		$check   = serialize( array( 'custom_style' => (string) $style_id ) );
+		$check   = substr( $check, 5, -1 );
+		$form_id = FrmDb::get_var(
+			'frm_forms',
+			array(
+				'options LIKE' => $check,
+				'status'       => 'published',
+			)
+		);
+
+		if ( ! $form_id ) {
+			// Fallback to any form.
+			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
+			$form_id = FrmDb::get_var( 'frm_forms', array( 'status' => 'published' ), 'id' );
+		}
+
+		return $form_id;
 	}
 
 	/**
@@ -623,9 +650,12 @@ class FrmStylesController {
 			return;
 		}
 
+		parse_str( $query, $parsed_query );
+		$form_id      = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
+
 		$style     = new stdClass();
 		$style->ID = end( $ids );
-		wp_safe_redirect( esc_url_raw( FrmStylesHelper::get_edit_url( $style ) ) );
+		wp_safe_redirect( esc_url_raw( FrmStylesHelper::get_edit_url( $style, $form_id ) ) );
 		die();
 	}
 
