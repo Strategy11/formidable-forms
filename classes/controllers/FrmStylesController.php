@@ -615,11 +615,11 @@ class FrmStylesController {
 	/**
 	 * Show the edit view after saving.
 	 * The save event is triggered earlier, on admin init where self::save_style is called.
+	 * This happens earlier because there is a possible redirect (to adjust the URL for a new or duplicated style).
 	 *
 	 * @return void
 	 */
 	public static function save() {
-		// TODO $message from self::save_style never gets shown anywhere.
 		self::edit();
 	}
 
