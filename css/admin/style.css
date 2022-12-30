@@ -294,6 +294,12 @@ Target .frm_primary_label so we avoid other labels like star rating stars.
 	line-height: var(--line-height);
 }
 
+#frm_style_preview .with_frm_style select {
+	/* Prevent back end styles from shrinking dropdowns. */
+	width: var(--auto-width);
+	max-width: 100%;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,
