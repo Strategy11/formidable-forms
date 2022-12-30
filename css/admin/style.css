@@ -68,7 +68,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: flex;
 }
 
-#frm_active_style_form > .frm_forms {
+#frm_active_style_form > .frm_forms,
+#frm_sample_form > .frm_forms {
 	/* This gives small form containers more space. */
 	flex: 1;
 }
