@@ -113,21 +113,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	overflow: visible;
 }
 
-.frm-style-card .dropdown-item a {
-	padding: 5px 10px;
-}
-
-.frm-style-card .dropdown-item svg {
-	color: #484E54;
-	margin-left: 5px;
-	margin-right: 10px;
-}
-
-.frm-style-card .dropdown-item a:hover svg {
-	color: var(--primary-color);
-	fill: currentColor;
-}
-
 .frm-style-card-preview {
 	padding: 10px;
 	flex: 1;
@@ -284,6 +269,22 @@ label.default-style-box input[type="checkbox"] {
 #frm_style_cards_wrapper:not(.frm-styles-enabled) {
 	opacity: 0.5;
 	pointer-events: none;
+}
+
+/* Style the hamburger menu (used in Style cards, and on the Style "Edit" page beside the Style name. */
+.frm-style-options-menu .dropdown-item a {
+	padding: 5px 10px;
+}
+
+.frm-style-options-menu .dropdown-item svg {
+	color: #484E54;
+	margin-left: 5px;
+	margin-right: 10px;
+}
+
+.frm-style-options-menu .dropdown-item a:hover svg {
+	color: var(--primary-color);
+	fill: currentColor;
 }
 
 /*

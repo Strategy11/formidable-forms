@@ -339,6 +339,22 @@
 	}
 
 	/**
+	 * @returns {void}
+	 */
+	function addHamburgerMenuForEditPage() {
+		const styleName = document.getElementById( 'frm_style_name' );
+		if ( ! styleName ) {
+			return;
+		}
+
+		const styleId = document.getElementById( 'frm_styling_form' ).querySelector( 'input[name="ID"]' ).value;
+
+		const hamburgerMenu = getHamburgerMenu({ styleId });
+		hamburgerMenu.classList.add( 'alignright' );
+		styleName.parentNode.insertBefore( hamburgerMenu, styleName );
+	}
+
+	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
 	 * @param {Object} data {
@@ -348,32 +364,45 @@
 	 * @returns {HTMLElement}
 	 */
 	function getHamburgerMenu( data ) {
-		const hamburgerMenu = tag( 'a' );
-		hamburgerMenu.className = 'frm-dropdown-toggle dropdown-toggle';
+		const hamburgerMenu = a({
+			className: 'frm-dropdown-toggle dropdown-toggle',
+			child: svg({ href: '#frm_thick_more_vert_icon' })
+		});
 		hamburgerMenu.setAttribute( 'data-toggle', 'dropdown' );
 		hamburgerMenu.setAttribute( 'data-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
-		hamburgerMenu.appendChild( svg({ href: '#frm_thick_more_vert_icon' }) );
+		let dropdownMenuOptions = [];
 
-		const editOption = a({
-			text: __( 'Edit', 'formidable' ),
-			href: data.editUrl
-		});
-		addIconToOption( editOption, 'frm_pencil_icon' );
+		if ( 'string' === typeof data.editUrl ) {
+			// The Edit option is not included on the Edit page.
+			const editOption = a({
+				text: __( 'Edit', 'formidable' ),
+				href: data.editUrl
+			});
+			addIconToOption( editOption, 'frm_pencil_icon' );
+			dropdownMenuOptions.push({ anchor: editOption, type: 'edit' });
+		}
+
 		const resetOption = a({
 			text: __( 'Reset', 'formidable' )
 		});
 		addIconToOption( resetOption, 'frm_reset_icon' );
 		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
-		const hookName            = 'frm_style_card_dropdown_options';
-		const hookArgs            = { data, addIconToOption };
-		const dropdownMenuOptions = wp.hooks.applyFilters( hookName, [{ anchor: editOption, type: 'edit' }, { anchor: resetOption, type: 'reset' }, { anchor: getRenameOption( data.styleId ), type: 'rename' } ], hookArgs );
-		const dropdownMenu        = div({
+		dropdownMenuOptions.push(
+			{ anchor: resetOption, type: 'reset' },
+			{ anchor: getRenameOption( data.styleId ), type: 'rename' }
+		);
+
+		const hookName      = 'frm_style_card_dropdown_options';
+		const hookArgs      = { data, addIconToOption };
+		dropdownMenuOptions = wp.hooks.applyFilters( hookName, dropdownMenuOptions, hookArgs );
+
+		const dropdownMenu  = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu dropdown-menu-right',
+			className: 'frm-dropdown-menu dropdown-menu-right frm-style-options-menu',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
 		});
 
@@ -393,16 +422,26 @@
 		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
 		addIconToOption( renameOption, 'frm_rename_icon' );
 
+		let styleName;
+
+		if ( isListPage ) {
+			const card         = getCardByStyleId( styleId );
+			const titleElement = card.querySelector( '.frm-style-card-title' );
+			styleName = titleElement.textContent;
+		} else {
+			const titleSpan = document.getElementById( 'frm_style_name' );
+			styleName = titleSpan.textContent;
+		}
+
 		onClickPreventDefault(
 			renameOption,
 			() => {
-				const card = getCardByStyleId( styleId );
-				const titleElement = card.querySelector( '.frm-style-card-title' );
+				
 				maybeCreateModal(
 					'frm_rename_style_modal',
 					{
 						title: __( 'Rename style', 'formidable-pro' ),
-						content: getStyleInputNameModalContent( 'rename', titleElement.textContent ),
+						content: getStyleInputNameModalContent( 'rename', styleName ),
 						footer: getRenameStyleModalFooter( styleId )
 					}
 				);
@@ -499,7 +538,17 @@
 
 				formData.append( 'style_id', styleId );
 				formData.append( 'style_name', newStyleName );
-				doJsonPost( 'rename_style', formData ).then( () => updateStyleNameInCard( styleId, newStyleName ) );
+				doJsonPost( 'rename_style', formData ).then(
+					() => {
+						if ( isListPage ) {
+							updateStyleNameInCard( styleId, newStyleName );
+							return;
+						}
+
+						const titleSpan = document.getElementById( 'frm_style_name' );
+						titleSpan.textContent = newStyleName;
+					}
+				);
 			}
 		);
 
@@ -645,7 +694,7 @@
 	 *
 	 * @returns {void}
 	 */
-	function onStyleEditorInit() {
+	function initEditPage() {
 		const { debounce }           = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => { console.log( 'Change event triggered' ); console.trace(); changeStyling(); }, 100 );
 
@@ -673,6 +722,8 @@
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
 		initDatepickerSample();
+
+		addHamburgerMenuForEditPage();
 
 		/**
 		 * Sends an AJAX request for new CSS to use for the preview.
@@ -899,7 +950,7 @@
 		jQuery( '#datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 	}
 
-	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', onStyleEditorInit );
+	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', initEditPage );
 
 	// Set a global object so these functions can be re-used in Pro.
 	window.frmStylerFunctions = { getCardByStyleId, getStyleInputNameModalContent };
