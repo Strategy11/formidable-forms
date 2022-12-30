@@ -541,7 +541,7 @@ class FrmStylesHelper {
 	 * @param WP_Post $style
 	 * @return string
 	 */
-	private static function get_style_param_for_card( $style ) {
+	public static function get_style_param_for_card( $style ) {
 		$styles = array();
 
 		// Add the background color setting for fieldsets to the card.

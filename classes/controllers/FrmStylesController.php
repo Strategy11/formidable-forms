@@ -832,7 +832,9 @@ class FrmStylesController {
 
 		$frm_style->save_settings(); // Save the settings after resetting to default or the old style will still appear.
 
-		$data = array();
+		$data = array(
+			'style' => FrmStylesHelper::get_style_param_for_card( $frm_style->get_new() ),
+		);
 		wp_send_json_success( $data );
 		wp_die();
 	}

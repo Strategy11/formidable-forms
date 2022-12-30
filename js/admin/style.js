@@ -636,7 +636,15 @@
 	function resetStyle( styleId ) {
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
-		doJsonPost( 'settings_reset', formData ).then( reloadAfterStyleReset );
+		doJsonPost( 'settings_reset', formData ).then(
+			response => {
+				if ( 'string' === typeof response.style ) {
+					const card = getCardByStyleId( styleId );
+					card.style = response.style;
+				}
+				reloadCSSAfterStyleReset();
+			}
+		);
 	}
 
 	/**
@@ -644,7 +652,7 @@
 	 *
 	 * @returns {void}
 	 */
-	function reloadAfterStyleReset() {
+	function reloadCSSAfterStyleReset() {
 		const style = document.getElementById( 'frm-custom-theme-css' );
 		if ( ! style ) {
 			return;
