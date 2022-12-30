@@ -317,28 +317,19 @@ class FrmStylesController {
 			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
 		}
 
-		$form_id         = FrmAppHelper::simple_get( 'form', 'absint', 0 );
-		$request_form_id = $form_id;
-
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
 		if ( ! $form_id ) {
 			$form_id = self::get_form_id_for_style( $style_id );
 		}
 
 		$form = FrmForm::getOne( $form_id );
 		if ( ! is_object( $form ) ) {
-			wp_die( 'This form does not exist', '', 404 );
+			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
 		}
 
+		$frm_style     = new FrmStyle( $style_id );
+		$active_style  = $frm_style->get_one();
 		$default_style = self::get_default_style();
-
-		if ( $style_id ) {
-			$frm_style    = new FrmStyle( $style_id );
-			$active_style = $frm_style->get_one();
-		} elseif ( $request_form_id ) {
-			$active_style = is_callable( 'FrmProStylesController::get_active_style_for_form' ) ? FrmProStylesController::get_active_style_for_form( $form ) : $default_style;
-		} else {
-			$active_style = $default_style;
-		}
 
 		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
 			$styles = FrmProStylesController::get_styles_for_styler( $form, $active_style );
@@ -367,7 +358,6 @@ class FrmStylesController {
 	 */
 	private static function get_style_id_for_styler() {
 		$action = FrmAppHelper::simple_get( 'frm_action' );
-
 		if ( 'duplicate' === $action ) {
 			return FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
 		}
@@ -375,6 +365,12 @@ class FrmStylesController {
 		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		if ( $style_id ) {
 			return $style_id;
+		}
+
+		$request_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		if ( $request_form_id && is_callable( 'FrmProStylesController::get_active_style_for_form' ) ) {
+			$form = FrmForm::getOne( $request_form_id );
+			return FrmProStylesController::get_active_style_for_form( $form )->ID;
 		}
 
 		return self::get_default_style()->ID;
