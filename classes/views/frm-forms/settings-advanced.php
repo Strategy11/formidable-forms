@@ -116,10 +116,6 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 <?php do_action( 'frm_add_form_perm_options', $values ); ?>
 
 <?php if ( has_action( 'frm_add_form_msg_options' ) ) : ?>
-	<h3 id="frm_messages_header" class="<?php echo esc_attr( ( ( isset( $values['edit_action'] ) && $values['edit_action'] === 'message' && isset( $values['editable'] ) && $values['editable'] == 1 ) || $values['success_action'] === 'message' || isset( $values['save_draft'] ) && $values['save_draft'] == 1 ) ? '' : 'frm_hidden' ); ?>">
-		<?php esc_html_e( 'Messages', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set up your confirmation messages.', 'formidable' ); ?>" ></span>
-	</h3>
 	<table class="form-table frm-fields">
 		<?php do_action( 'frm_add_form_msg_options', $values ); ?>
 	</table>
