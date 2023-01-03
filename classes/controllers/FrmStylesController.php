@@ -1122,12 +1122,20 @@ class FrmStylesController {
 		$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_text_field' );
 
 		if ( ! $style_id || ! $style_name ) {
-			wp_die( 0 );
+			$data = array(
+				'message' => __( 'Invalid route', 'formidable' ),
+			);
+			wp_send_json_error( $data, 400 );
+			die();
 		}
 
 		$post = get_post( $style_id );
 		if ( ! $post || $post->post_type !== self::$post_type ) {
-			wp_die( 0 );
+			$data = array(
+				'message' => __( 'The style you are renaming either does not exist or it is not a style', 'formidable' ),
+			);
+			wp_send_json_error( $data, 404 );
+			die();
 		}
 
 		global $wpdb;
