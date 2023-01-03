@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm-inner-content">
 	<p>
 		<?php if ( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) { ?>
-			<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
+			<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( $form->id ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
 				<svg class="frmsvg">
 					<use xlink:href="#frm_back"></use>
 				</svg>
@@ -20,13 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	if ( ! class_exists( 'FrmProStylesController' ) ) {
 		require dirname( __FILE__ ) . '/_upsell-multiple-styles.php';
 	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param WP_Post $style
-	 */
-	do_action( 'frm_style_settings_top', $style );
 	?>
 </div>
 <div class="styling_settings">

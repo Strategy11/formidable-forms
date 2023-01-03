@@ -856,8 +856,10 @@ class FrmStylesController {
 		wp_die();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function add_meta_boxes() {
-
 		// setup meta boxes
 		$meta_boxes = array(
 			'general'                => __( 'General', 'formidable' ),
@@ -876,6 +878,8 @@ class FrmStylesController {
 		 * Add custom boxes to the styling settings
 		 *
 		 * @since 2.3
+		 *
+		 * @param array $meta_boxes
 		 */
 		$meta_boxes = apply_filters( 'frm_style_boxes', $meta_boxes );
 
