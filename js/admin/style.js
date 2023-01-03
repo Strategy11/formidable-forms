@@ -518,43 +518,53 @@
 		cancelButton.classList.add( 'dismiss' );
 
 		const renameButton = footerButton({ text: __( 'Rename style', 'formidable-pro' ), buttonType: 'primary' });
-		onClickPreventDefault(
-			renameButton,
-			/**
-			 * Call frm_rename_style action when the rename style button is clicked in rename modal.
-			 *
-			 * @returns {void}
-			 */
-			() => {
-				const formData       = new FormData();
-				const styleNameInput = document.getElementById( 'frm_rename_style_name_input' );
-				const newStyleName   = styleNameInput.value;
-
-				if ( '' === newStyleName ) {
-					// Avoid setting an empty name.
-					// The button gets disabled on an input event when the name is empty.
-					return;
-				}
-
-				formData.append( 'style_id', styleId );
-				formData.append( 'style_name', newStyleName );
-				doJsonPost( 'rename_style', formData ).then(
-					() => {
-						if ( isListPage ) {
-							updateStyleNameInCard( styleId, newStyleName );
-							return;
-						}
-
-						const titleSpan = document.getElementById( 'frm_style_name' );
-						titleSpan.textContent = newStyleName;
-					}
-				);
-			}
-		);
+		onClickPreventDefault( renameButton, () => renameStyle( styleId ) );
 
 		return div({
 			children: [ cancelButton, renameButton ]
 		});
+	}
+
+	/**
+	 * Call frm_rename_style action when the rename style button is clicked in rename modal.
+	 *
+	 * @param {String} styleId
+	 * @returns {void}
+	 */
+	function renameStyle( styleId ) {
+		const styleNameInput = document.getElementById( 'frm_rename_style_name_input' );
+		const newStyleName   = styleNameInput.value;
+
+		if ( '' === newStyleName ) {
+			// Avoid setting an empty name.
+			// The button gets disabled on an input event when the name is empty.
+			return;
+		}
+
+		const formData  = new FormData();
+		formData.append( 'style_id', styleId );
+		formData.append( 'style_name', newStyleName );
+		doJsonPost( 'rename_style', formData ).then(
+			/**
+			 * Sync the page with the new name of renamed style after successfully making a POST request.
+			 *
+			 * If on the list page, update the style card after renaming a style.
+			 * On the edit page, update the style name element instead.
+			 *
+			 * @returns {void}
+			 */
+			() => {
+				success( __( 'Style has been renamed successfully', 'formidable' ) );
+
+				if ( isListPage ) {
+					updateStyleNameInCard( styleId, newStyleName );
+					return;
+				}
+
+				const titleSpan = document.getElementById( 'frm_style_name' );
+				titleSpan.textContent = newStyleName;
+			}
+		);
 	}
 
 	/**
@@ -645,7 +655,7 @@
 					card.style = response.style;
 				}
 				reloadCSSAfterStyleReset();
-				success( span( __( 'Style has been reset successfully', 'formidable' ) ) );
+				success( __( 'Style has been reset successfully', 'formidable' ) );
 			}
 		);
 	}

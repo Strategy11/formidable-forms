@@ -670,7 +670,7 @@
 	 * Pop up a success message in the lower right corner.
 	 * It then fades out and gets deleted automatically.
 	 *
-	 * @param {HTMLElement} content
+	 * @param {HTMLElement|String} content
 	 * @returns {void}
 	 */
 	function success( content ) {
@@ -679,7 +679,7 @@
 			className: 'notice notice-info frm-review-notice frm_updated_message',
 			child: div({
 				className: 'frm-satisfied',
-				child: content
+				child: 'string' === typeof content ? document.createTextNode( content ) : content
 			})
 		});
 		notice.style.borderRadius = '4px';
