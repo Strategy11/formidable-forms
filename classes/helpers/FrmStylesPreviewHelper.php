@@ -88,9 +88,9 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
-	 * @param WP_Post $default_style
-	 * @param string  $view Either 'list' or 'edit'.
+	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param WP_Post          $default_style
+	 * @param string           $view Either 'list' or 'edit'.
 	 * @return array<string>
 	 */
 	public function get_warnings_for_styler_preview( $style, $default_style, $view ) {

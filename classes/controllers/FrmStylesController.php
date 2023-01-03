@@ -86,7 +86,7 @@ class FrmStylesController {
 
 	/**
 	 * Avoid loading CSS the normal way with the preview in the styler.
-	 * It gets loaded 
+	 * It gets loaded instead with the frmpro_css action set to the #frm-custom-theme-css element.
 	 *
 	 * @since x.x
 	 *
@@ -505,9 +505,9 @@ class FrmStylesController {
 			self::add_meta_boxes();
 		}
 
-		switch( $view ) {
+		switch ( $view ) {
 			case 'edit':
-				$style       = $active_style;
+				$style = $active_style;
 				break;
 
 			case 'duplicate':
@@ -562,7 +562,7 @@ class FrmStylesController {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
+	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
 	 * @return void
 	 */
 	private static function force_form_style( $style ) {
@@ -1126,7 +1126,7 @@ class FrmStylesController {
 		}
 
 		$post = get_post( $style_id );
-		if ( ! $post || $post->post_type !== FrmStylesController::$post_type ) {
+		if ( ! $post || $post->post_type !== self::$post_type ) {
 			wp_die( 0 );
 		}
 

@@ -537,7 +537,7 @@ class FrmStylesHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
+	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
 	 * @return string
 	 */
 	public static function get_style_param_for_card( $style ) {

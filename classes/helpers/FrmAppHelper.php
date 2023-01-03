@@ -1444,8 +1444,8 @@ class FrmAppHelper {
 			return true;
 		}
 
-		$action                 = FrmAppHelper::simple_get( 'frm_action' );
-		$is_edit_mode           = 'edit' === $action || ( ! $action && ! FrmAppHelper::simple_get( 'id' ) && ! FrmAppHelper::simple_get( 'form' ) );
+		$action                 = self::simple_get( 'frm_action' );
+		$is_edit_mode           = 'edit' === $action || ( ! $action && ! self::simple_get( 'id' ) && ! self::simple_get( 'form' ) );
 		$checking_for_edit_mode = 'edit' === $view;
 
 		return $is_edit_mode === $checking_for_edit_mode;
