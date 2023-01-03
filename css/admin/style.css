@@ -198,20 +198,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	width: 16px;
 }
 
-.frm-selected-style-tag {
-	background: #BEDFE6;
-	color: #0E566C;
-	font-size: 10px;
-	padding: 4px 8px;
-	border-radius: 4px;
-	text-transform: uppercase;
-	font-weight: normal;
-	display: inline-block;
-	line-height: 12px;
-	transform: translateY(-1px);
-	margin-left: 5px;
-}
-
 .frm-style-card-title + div {
 	/* Card meta wrapper */
 	height: 20px;
