@@ -154,12 +154,18 @@ class FrmStylesHelper {
 		return $class;
 	}
 
+	/**
+	 * @param WP_Post  $style
+	 * @param FrmStyle $frm_style
+	 * @param string   $type
+	 * @return void
+	 */
 	public static function bs_icon_select( $style, $frm_style, $type = 'arrow' ) {
 		$function_name = $type . '_icons';
 		$icons         = self::$function_name();
 		unset( $function_name );
 
-		$name = ( 'arrow' == $type ) ? 'collapse_icon' : 'repeat_icon';
+		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
@@ -172,10 +178,12 @@ class FrmStylesHelper {
 					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?>/>
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
 								<span>
-									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) ); ?>
-									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '-', $type ) ); ?>
+									<?php
+									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) );
+									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '-', $type ) );
+									?>
 								</span>
 							</label>
 						</a>

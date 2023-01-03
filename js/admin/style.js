@@ -2,16 +2,16 @@
 	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
-	const { __ } = wp.i18n;
-	const state = {
-		showingSampleForm: false
+	const { __ }                                           = wp.i18n;
+	const state                                            = {
+		showingSampleForm: false,
+		unsavedChanges: false,
+		autoId: 0
 	};
-	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
-	const { onClickPreventDefault } = frmDom.util;
-	const { maybeCreateModal, footerButton } = frmDom.modal;
-	const { doJsonPost } = frmDom.ajax;
-
-	let autoId = 0;
+	const { div, a, labelledTextInput, tag, svg, success } = frmDom;
+	const { onClickPreventDefault }                        = frmDom.util;
+	const { maybeCreateModal, footerButton }               = frmDom.modal;
+	const { doJsonPost }                                   = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -270,6 +270,27 @@
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
+
+		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
+	}
+
+	/**
+	 * @returns {void}
+	 */
+	function trackUnsavedChange() {
+		if ( state.unsavedChanges ) {
+			return;
+		}
+
+		window.addEventListener( 'beforeunload', confirmExit );
+		state.unsavedChanges = true;
+	}
+
+	function confirmExit( event ) {
+		if ( state.unsavedChanges ) {
+			event.preventDefault();
+			event.returnValue = '';
+		}
 	}
 
 	/**
@@ -313,6 +334,8 @@
 	 * @returns {void}
 	 */
 	function handleUpdateClick() {
+		state.unsavedChanges = false; // Prevent the saved changes pop up from triggering when submitting the form.
+
 		const form = document.getElementById( 'frm_styling_form' );
 		if ( form ) {
 			// Submitting for an "edit" view.
@@ -693,7 +716,7 @@
 	 * @returns {Number}
 	 */
 	function getAutoId() {
-		return ++autoId;
+		return ++state.autoId;
 	}
 
 	/**
@@ -717,7 +740,7 @@
 	 */
 	function initEditPage() {
 		const { debounce }           = frmDom.util;
-		const debouncedPreviewUpdate = debounce( () => { console.log( 'Change event triggered' ); console.trace(); changeStyling(); }, 100 );
+		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
 
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
@@ -727,6 +750,8 @@
 
 		jQuery( 'input.hex' ).wpColorPicker({
 			change: function( event ) {
+				trackUnsavedChange();
+
 				if ( null !== event.target.getAttribute( 'data-alpha-color-type' ) ) {
 					debouncedPreviewUpdate();
 					return;
@@ -746,8 +771,12 @@
 
 		addHamburgerMenuForEditPage();
 
+		document.getElementById( 'frm_styling_form' ).querySelectorAll( 'input, select' ).forEach(
+			input => input.addEventListener( 'change', () => trackUnsavedChange() )
+		);
+
 		/**
-		 * Sends an AJAX request for new CSS to use for the preview.
+		 * Sends an AJAX POST request for new CSS to use for the preview.
 		 * This is called whenever a style setting is changed, generally using debouncedPreviewUpdate to avoid simultaneous requests.
 		 *
 		 * @returns {void}
@@ -763,9 +792,7 @@
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
-				success: function( css ) {
-					document.getElementById( 'this_css' ).innerHTML = css;
-				}
+				success: css => document.getElementById( 'this_css' ).innerHTML = css
 			});
 		}
 
@@ -807,8 +834,10 @@
 		 * @returns {void}
 		 */
 		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
+			trackUnsavedChange();
+
 			const radio  = this;
-			const btnGrp = this.closest( '.btn-group' );
+			const btnGrp = radio.closest( '.btn-group' );
 			const btnId  = btnGrp.getAttribute( 'id' );
 
 			const select = document.getElementById( btnId.replace( '_select', '' ) );
@@ -823,7 +852,7 @@
 				activeItem.classList.remove( 'active' );
 			}
 
-			this.closest( '.dropdown-item' ).classList.add( 'active' );
+			radio.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
 	}
 
@@ -971,6 +1000,7 @@
 		jQuery( '#datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
 	}
 
+	// Hook into the styleInit function in formidable_admin.js
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', initEditPage );
 
 	// Set a global object so these functions can be re-used in Pro.
