@@ -121,7 +121,11 @@ class FrmStylesController {
 
 		$version = FrmAppHelper::plugin_version();
 		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_style( 'wp-color-picker' ); // TODO Color picker should not be loaded in the list view. It is only necessary when editing styles.
+
+		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
+			wp_enqueue_style( 'wp-color-picker' );
+		}
+
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
