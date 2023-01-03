@@ -2272,6 +2272,11 @@ h2.frm-h2 + .howto {
 	float: left;
 }
 
+.frm-plan-required-tag {
+	margin-left: 5px;
+	transform: translateY(-1px);
+}
+
 .frm-plan-required-tag,
 .frm-default-style-tag {
 	background: #FDE6DE;
@@ -2283,8 +2288,6 @@ h2.frm-h2 + .howto {
 	font-weight: normal;
 	display: inline-block;
 	line-height: 12px;
-	transform: translateY(-1px);
-	margin-left: 5px;
 }
 
 #frm_new_form_modal.frm-expired #frm-create-block,
