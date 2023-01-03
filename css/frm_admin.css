@@ -2275,6 +2275,8 @@ h2.frm-h2 + .howto {
 .frm-plan-required-tag {
 	margin-left: 5px;
 	transform: translateY(-1px);
+	background: #FDE6DE;
+	color: #F15A24;
 }
 
 .frm-plan-required-tag,
