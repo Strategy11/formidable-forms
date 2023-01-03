@@ -6,7 +6,7 @@
 	const state = {
 		showingSampleForm: false
 	};
-	const { div, a, labelledTextInput, tag, svg } = frmDom;
+	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { maybeCreateModal, footerButton } = frmDom.modal;
 	const { doJsonPost } = frmDom.ajax;
@@ -630,6 +630,8 @@
 	}
 
 	/**
+	 * Make a POST request to reset the style then reload the CSS and reset the card styles.
+	 *
 	 * @param {String} styleId
 	 * @returns {void}
 	 */
@@ -643,6 +645,7 @@
 					card.style = response.style;
 				}
 				reloadCSSAfterStyleReset();
+				success( span( __( 'Style has been reset successfully', 'formidable' ) ) );
 			}
 		);
 	}
