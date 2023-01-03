@@ -198,14 +198,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	width: 16px;
 }
 
-.frm-style-card-title + div {
-	/* Card meta wrapper */
-	height: 20px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-
 .frm_pro_form .frm_form_field.frm_lite_style,
 .frm_pro_form .frm_lite_style {
 	/*
