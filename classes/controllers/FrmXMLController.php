@@ -282,7 +282,8 @@ class FrmXMLController {
 
 	public static function form( $errors = array(), $message = '' ) {
 		$where = array(
-			'status' => array( null, '', 'published' ),
+			'status'         => array( null, '', 'published' ),
+			'parent_form_id' => array( null, 0 ),
 		);
 		$forms = FrmForm::getAll( $where, 'name' );
 
