@@ -15,15 +15,6 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since 4.0
-	 * @todo This may be deprecated now with x.x.
-	 */
-	public static function styler_save_button( $atts ) {
-		$style = $atts['style'];
-		include FrmAppHelper::plugin_path() . '/classes/views/styles/header-buttons.php';
-	}
-
-	/**
 	 * Called from the admin header.
 	 *
 	 * @since 4.0
@@ -738,6 +729,17 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function styler_switcher( $atts ) {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
+	 * @since 4.0
+	 * @deprecated x.x The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
+	 *
+	 * @param array $atts
+	 * @return void
+	 */
+	public static function styler_save_button( $atts ) {
 		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }
