@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 5.5.5
+Stable tag: 5.5.6
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,12 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 5.5.6 =
+* Repeater forms are now hidden from the list of forms to export as XML.
+* Fix: Duplicating a form action without a rich text editor would trigger a JavaScript error after succeeding.
+* Fix: Submit button style rules were not applying when using the Twenty Twenty One theme.
+* Fix: The style would not always assign properly to a form after import when importing both a new form and the style.
+
 = 5.5.5 =
 * Security: Added validation to URLs when installing templates and add ons to make sure that the endpoint cannot be manipulated and used for unsafe requests.
 * Security: Added a nonce and permission check when running migrations and when loading data for applications.
