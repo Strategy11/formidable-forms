@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm_style_sidebar" class="frm-right-panel frm-fields frm_wrap">
 	<form id="frm_styling_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_edit_url( $style, $form->id ) ); ?>">
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
-
 		<input type="hidden" name="frm_action" value="save" />
 
 		<?php

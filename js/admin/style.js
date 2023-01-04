@@ -23,6 +23,7 @@
 
 	/**
 	 * These are shared events for both the edit/list views like the sample form toggle.
+	 * This includes preview events, but also the update button click event handling for both views.
 	 *
 	 * @returns {void}
 	 */

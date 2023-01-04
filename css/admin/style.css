@@ -273,8 +273,8 @@ Target .frm_primary_label so we avoid other labels like star rating stars.
 	line-height: var(--line-height);
 }
 
-#frm_style_preview .with_frm_style select {
-	/* Prevent back end styles from shrinking dropdowns. */
+#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select {
+	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
 	width: var(--auto-width);
 	max-width: 100%;
 }
