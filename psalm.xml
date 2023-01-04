@@ -13,7 +13,6 @@
 		<ignoreFiles>
 			<directory name="vendor" />
 			<directory name="classes/views/" />
-			<file name="classes/widgets/FrmShowForm.php" />
 		</ignoreFiles>
 	</projectFiles>
 	<stubs>
@@ -54,5 +53,10 @@
 				<directory name="deprecated" />
 			</errorLevel>
 		</InvalidParamDefault>
+		<MethodSignatureMustProvideReturnType>
+			<errorLevel type="suppress">
+				<file name="classes/widgets/FrmShowForm.php" />
+			</errorLevel>
+		</MethodSignatureMustProvideReturnType>
 	</issueHandlers>
 </psalm>
