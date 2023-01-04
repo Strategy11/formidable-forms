@@ -458,17 +458,14 @@
 
 		onClickPreventDefault(
 			renameOption,
-			() => {
-				
-				maybeCreateModal(
-					'frm_rename_style_modal',
-					{
-						title: __( 'Rename style', 'formidable-pro' ),
-						content: getStyleInputNameModalContent( 'rename', styleName ),
-						footer: getRenameStyleModalFooter( styleId )
-					}
-				);
-			}
+			() => maybeCreateModal(
+				'frm_rename_style_modal',
+				{
+					title: __( 'Rename style', 'formidable-pro' ),
+					content: getStyleInputNameModalContent( 'rename', styleName ),
+					footer: getRenameStyleModalFooter( styleId )
+				}
+			)
 		);
 
 		return renameOption;
@@ -1004,5 +1001,5 @@
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', initEditPage );
 
 	// Set a global object so these functions can be re-used in Pro.
-	window.frmStylerFunctions = { getCardByStyleId, getStyleInputNameModalContent };
+	window.frmStylerFunctions = { getCardByStyleId, getStyleInputNameModalContent, trackUnsavedChange };
 }() );
