@@ -17,12 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style = new FrmStyle( $style->ID );
 		include $style_views_path . '_style-options.php';
 		?>
-
-		<?php
-		// Custom CSS is no longer used from the default style, but it is still checked if the Global Setting is missing.
-		// Include the field so we do not load the old value in case Custom CSS has not been saved as a Global Setting yet.
-		?>
-		<textarea name="<?php echo esc_attr( $frm_style->get_field_name( 'custom_css' ) ); ?>" class="frm_hidden"><?php echo FrmAppHelper::esc_textarea( $style->post_content['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 	</form>
 </div>
 <?php
@@ -30,3 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It gets populated with the frm_change_styling action.
 ?>
 <div id="this_css"></div>
+
+<?php
+/**
+ * We need this style_name field for calls made from the changeStyling function.
+ * Without it, some styles (including background image opacity) don't properly sync when updated.
+ * It isn't required for frm_styling_form so it's left out separately.
+ */
+?>
+<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
