@@ -5,16 +5,16 @@
  * @package Formidable
  * @since 5.x.x
  *
- * @var object $form_action Form action post object.
- * @var array  $args        Contains `form`, `action_key`, `values`.
- * @var FrmFormAction $this FrmFormAction instance.
+ * @var object        $instance Form action post object.
+ * @var array         $args     Contains `form`, `action_key`, `values`.
+ * @var FrmFormAction $this     FrmFormAction instance.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$success_action = $form_action->post_content['success_action'];
+$success_action = $instance->post_content['success_action'];
 
 $types = array(
 	'message' => array(
@@ -67,7 +67,7 @@ if ( $col_count <= 4 ) {
 
 <?php
 $type_args                   = $args;
-$type_args['form_action']    = $form_action;
+$type_args['form_action']    = $instance;
 $type_args['action_control'] = $this;
 foreach ( $types as $type_name => $type ) {
 	$css_class = 'frm_on_submit_' . esc_attr( $type_name ) . '_settings';
