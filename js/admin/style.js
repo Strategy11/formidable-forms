@@ -709,12 +709,22 @@
 				action: 'frm_settings_reset',
 				nonce: frmGlobal.nonce
 			},
+			/**
+			 * Handle reset success on edit page.
+			 * This function sets all styling inputs to default values.
+			 *
+			 * @todo Stop triggering change events with jQuery. And remove the other jQuery as well.
+			 *
+			 * @param {Object} errorObj
+			 * @returns {void}
+			 */
 			success: errObj => {
 				errObj = errObj.replace( /^\s+|\s+$/g, '' );
 				if ( errObj.indexOf( '{' ) === 0 ) {
 					errObj = JSON.parse( errObj );
 				}
 				for ( let key in errObj ) {
+					// TODO we only need to trigger change for color pickers.
 					jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]).trigger( 'change' );
 				}
 				jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
