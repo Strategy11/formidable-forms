@@ -2228,7 +2228,7 @@ class FrmFormsController {
 
 			self::run_single_on_submit_action( $args, $action );
 
-			unset( $action, $new_args );
+			unset( $action );
 		}
 
 		if ( $redirect_action ) {
