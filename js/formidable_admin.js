@@ -9439,7 +9439,6 @@ function frmAdminBuildJS() {
 
 			setTimeout( () => {
 				const activeEl = actionEl.querySelector( '[data-sub-settings][data-type="' + event.target.value + '"]' );
-				console.log( activeEl  );
 				if ( ! activeEl ) {
 					return;
 				}
