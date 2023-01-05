@@ -150,6 +150,24 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
+	public function test_get_met_on_submit_actions() {
+		$form_id               = $this->factory->form->create();
+		$id_base               = FrmOnSubmitAction::$slug;
+		$option_name           = 'frm_' . $id_base . '_action';
+		$number                = -1;
+		$action_id           = $this->factory->post->create(
+			array(
+				'post_type'    => FrmFormActionsController::$action_post_type,
+				'menu_order'   => $form_id,
+				'post_excerpt' => $id_base,
+				'post_status'  => 'publish',
+				'post_content' => array(
+					'event' => array( 'create' ),
+				)
+			)
+		);
+	}
+
 	/**
 	 * Test redirect after create
 	 *
