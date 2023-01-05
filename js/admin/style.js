@@ -1,3 +1,7 @@
+/**
+ * This script file handles style settings in the Lite plugin.
+ * Pro-specific features are in the style-settings.js file in Pro.
+ */
 ( function() {
 	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
@@ -713,29 +717,52 @@
 				action: 'frm_settings_reset',
 				nonce: frmGlobal.nonce
 			},
-			/**
-			 * Handle reset success on edit page.
-			 * This function sets all styling inputs to default values.
-			 *
-			 * @todo Stop triggering change events with jQuery. And remove the other jQuery as well.
-			 *
-			 * @param {Object} errorObj
-			 * @returns {void}
-			 */
-			success: errObj => {
-				errObj = errObj.replace( /^\s+|\s+$/g, '' );
-				if ( errObj.indexOf( '{' ) === 0 ) {
-					errObj = JSON.parse( errObj );
-				}
-				for ( let key in errObj ) {
-					// TODO we only need to trigger change for color pickers.
-					jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]).trigger( 'change' );
-				}
-				jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
-				jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
-				showStyleResetSuccessMessage();
-			}
+			success: syncPageAfterResetAction
 		});
+	}
+
+	/**
+	 * Handle reset success on edit page.
+	 * This function sets all styling inputs to default values.
+	 *
+	 * @todo Stop triggering change events with jQuery. And remove the other jQuery as well.
+	 *
+	 * @param {Object} response
+	 * @returns {void}
+	 */
+	function syncPageAfterResetAction( response ) {
+		let errObj = response.replace( /^\s+|\s+$/g, '' );
+		if ( errObj.indexOf( '{' ) === 0 ) {
+			errObj = JSON.parse( errObj );
+		}
+
+		for ( const key in errObj ) {
+			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
+			if ( ! targetInput ) {
+				continue;
+			}
+
+			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
+				// Reset the repeater icon dropdown.
+				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + errObj[ key ] + '"]' );
+				if ( targetInput ) {
+					targetInput.checked = true;
+					jQuery( targetInput ).trigger( 'change' );
+				}
+				continue;
+			}
+
+			targetInput.value = errObj[ key ];
+
+			if ( targetInput.classList.contains( 'wp-color-picker' ) ) {
+				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
+				jQuery( targetInput ).trigger( 'change' );
+			}					
+		}
+
+		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
+		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
+		showStyleResetSuccessMessage();
 	}
 
 	/**
