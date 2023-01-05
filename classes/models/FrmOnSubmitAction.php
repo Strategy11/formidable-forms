@@ -32,7 +32,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 		return __( 'On Submit', 'formidable' );
 	}
 
-	public function form( $form_action, $args = array() ) {
+	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';
 	}
 
