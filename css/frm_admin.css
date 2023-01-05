@@ -4733,13 +4733,16 @@ h2.frm-h2,
 }
 
 .frm_settings_form h3,
-.frm_form_settings h3 {
+.frm_form_settings h3,
+.frm_form_settings span.frm_add_logic_link {
 	font-size: 16px;
 	border-top: 1px solid var(--grey-border);
 	padding-top: 10px;
+	margin: 1em 0;
 	font-weight: normal;
 	text-transform: uppercase;
 	color: var(--medium-grey);
+	display: block;
 }
 
 .frm_form_settings .howto {
@@ -5256,10 +5259,6 @@ table td, .form-table tr td {
 .frm_email_row .frm_cancel1_icon:before {
 	line-height: 1;
 	vertical-align: bottom;
-}
-
-.frm_action_id {
-	padding-top: 10px;
 }
 
 .frm_logic_field_opts {
