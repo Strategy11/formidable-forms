@@ -691,9 +691,13 @@
 					card.style = response.style;
 				}
 				reloadCSSAfterStyleReset();
-				success( __( 'Style has been reset successfully', 'formidable' ) );
+				showStyleResetSuccessMessage();
 			}
 		);
+	}
+
+	function showStyleResetSuccessMessage() {
+		success( __( 'Style has been reset successfully', 'formidable' ) );
 	}
 
 	/**
@@ -729,6 +733,7 @@
 				}
 				jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 				jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
+				showStyleResetSuccessMessage();
 			}
 		});
 	}
