@@ -325,6 +325,9 @@ class FrmStyle {
 		return wp_delete_post( $id );
 	}
 
+	/**
+	 * @return WP_Post|stdClass
+	 */
 	public function get_one() {
 		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
@@ -354,6 +357,12 @@ class FrmStyle {
 		return $style;
 	}
 
+	/**
+	 * @param string $orderby
+	 * @param string $order
+	 * @param int    $limit
+	 * @return array
+	 */
 	public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
 		$post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
@@ -432,6 +441,10 @@ class FrmStyle {
 		}
 	}
 
+	/**
+	 * @param mixed $settings
+	 * @return mixed
+	 */
 	public function override_defaults( $settings ) {
 		if ( ! is_array( $settings ) ) {
 			return $settings;
@@ -463,6 +476,9 @@ class FrmStyle {
 		return apply_filters( 'frm_override_default_styles', $settings );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_defaults() {
 		$defaults = array(
 			'theme_css'  => 'ui-lightness',
@@ -604,10 +620,20 @@ class FrmStyle {
 		return apply_filters( 'frm_default_style_settings', $defaults );
 	}
 
+	/**
+	 * Get a name attribute value for a style setting input.
+	 *
+	 * @param string $field_name
+	 * @param string $post_field
+	 * @return string
+	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_bold_options() {
 		return array(
 			100      => 100,
@@ -624,6 +650,9 @@ class FrmStyle {
 
 	/**
 	 * Don't let imbalanced font families ruin the whole stylesheet
+	 *
+	 * @param string $value
+	 * @return string
 	 */
 	public function force_balanced_quotation( $value ) {
 		$balanced_characters = array( '"', "'" );
