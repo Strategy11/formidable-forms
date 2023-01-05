@@ -18,16 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include $style_views_path . '_style-options.php';
 		?>
 	</form>
-</div>
 
-<?php
-/**
- * We need this style_name field for calls made from the changeStyling function.
- * Without it, some styles (including background image opacity and repeater button icons) don't properly sync when updated.
- * It isn't required for frm_styling_form so it's left out of the form.
- */
-?>
-<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
+	<?php
+	/**
+	 * We need this style_name field for calls made from the changeStyling function.
+	 * Without it, some styles (including background image opacity and repeater button icons) don't properly sync when updated.
+	 * It isn't required for frm_styling_form so it's left out of the form.
+	 * It is targetted in JavaScript by its #frm_style_sidebar parent though, so it's important that it's inside sidebar.
+	 */
+	?>
+	<input type="hidden" name="style_name" value="frm_style_<?php echo esc_attr( $style->post_name ); ?>" />
+</div>
 
 <?php
 // This holds the custom CSS for a single theme that is being worked on on the edit page.

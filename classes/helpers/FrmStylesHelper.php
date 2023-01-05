@@ -292,7 +292,7 @@ class FrmStylesHelper {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
 					$settings   = $frm_style->sanitize_post_content( $posted['frm_style_setting']['post_content'] );
-					$style_name = array_key_exists( 'style_name', $posted ) ? sanitize_title( $posted['style_name'] ) : '';
+					$style_name = sanitize_title( $posted['style_name'] );
 				} else {
 					$settings   = $frm_style->sanitize_post_content( $posted['post_content'] );
 					$style_name = FrmAppHelper::get_post_param( 'style_name', '', 'sanitize_title' );

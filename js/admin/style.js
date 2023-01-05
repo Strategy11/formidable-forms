@@ -780,8 +780,11 @@
 		 * @returns {void}
 		 */
 		function changeStyling() {
-			let locStr = jQuery( 'input[name^="frm_style_setting[post_content]"], select[name^="frm_style_setting[post_content]"], textarea[name^="frm_style_setting[post_content]"], input[name="style_name"]' ).serializeArray();
-			locStr     = JSON.stringify( locStr );
+			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
+				input =>  'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
+			);
+			const locStr      = JSON.stringify( jQuery( styleInputs ).serializeArray() );
+
 			jQuery.ajax({
 				type: 'POST',
 				url: ajaxurl,
