@@ -809,9 +809,10 @@ class FrmStylesController {
 
 	/**
 	 * Handle AJAX routing for frm_settings_reset for resetting styles to the default settings.
+	 * From the edit view, it will return default styles and not actually update the style.
+	 * On the list view, it does update the style immediately, and returns the default card style attributes so the style card can be reset as well.
 	 *
-	 * @since x.x This function was repurposed to actually reset a style. It now requires a target $_POST['style_id'] value.
-	 * Prior so x.x it would return an array of default settings as reset would require a subsequent update with the new default settings.
+	 * @since x.x When a style_id is passed to this action, the style will actually be reset.
 	 *
 	 * @return void
 	 */
@@ -821,7 +822,12 @@ class FrmStylesController {
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', '', 'absint' );
 		if ( ! $style_id ) {
-			wp_die( 0 );
+			// A style ID is not sent when resetting on the edit page.
+			// Instead of resetting the style, send the defaults back so the inputs can be updated with JavaScript.
+			$frm_style = new FrmStyle();
+			$defaults  = $frm_style->get_defaults();
+			echo json_encode( $defaults );
+			wp_die();
 		}
 
 		$frm_style            = new FrmStyle();

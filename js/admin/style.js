@@ -661,12 +661,27 @@
 	}
 
 	/**
-	 * Make a POST request to reset the style then reload the CSS and reset the card styles.
+	 * Handle reset dropdown action.
+	 * This function handles the front end routing for the reset action as reset works differently for edit and list views.
 	 *
 	 * @param {String} styleId
 	 * @returns {void}
 	 */
 	function resetStyle( styleId ) {
+		if ( isListPage ) {
+			resetStyleOnListPage( styleId );
+			return;
+		}
+		resetStyleOnEditPage();
+	}
+
+	/**
+	 * Make a POST request to reset the style then reload the CSS and reset the card styles.
+	 *
+	 * @param {String} styleId
+	 * @returns {void}
+	 */
+	function resetStyleOnListPage( styleId ) {
 		const formData = new FormData();
 		formData.append( 'style_id', styleId );
 		doJsonPost( 'settings_reset', formData ).then(
@@ -679,6 +694,33 @@
 				success( __( 'Style has been reset successfully', 'formidable' ) );
 			}
 		);
+	}
+
+	/**
+	 * Reset the style in-page (without actually updating it).
+	 *
+	 * @returns {void}
+	 */
+	function resetStyleOnEditPage() {
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_settings_reset',
+				nonce: frmGlobal.nonce
+			},
+			success: errObj => {
+				errObj = errObj.replace( /^\s+|\s+$/g, '' );
+				if ( errObj.indexOf( '{' ) === 0 ) {
+					errObj = JSON.parse( errObj );
+				}
+				for ( let key in errObj ) {
+					jQuery( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' ).val( errObj[key]).trigger( 'change' );
+				}
+				jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
+				jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
+			}
+		});
 	}
 
 	/**
