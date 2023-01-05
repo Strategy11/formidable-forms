@@ -74,14 +74,15 @@ foreach ( $types as $type_name => $type ) {
 	if ( $success_action !== $type_name ) {
 		$css_class .= ' frm_hidden';
 	}
-
-	echo '<div class="' . esc_attr( $css_class ) . '" data-sub-settings data-type="' . esc_attr( $type_name ) . '">';
-
-	if ( is_callable( $type['sub_settings'] ) ) {
-		call_user_func( $type['sub_settings'], $type_args );
-	}
-
-	echo '</div><!-- End .frm_on_submit_' . esc_attr( $type_name ) . '_settings -->';
+	?>
+	<div class="<?php echo esc_attr( $css_class ); ?>" data-sub-settings data-type="<?php echo esc_attr( $type_name ); ?>">
+		<?php
+		if ( is_callable( $type['sub_settings'] ) ) {
+			call_user_func( $type['sub_settings'], $type_args );
+		}
+		?>
+	</div><!-- End .frm_on_submit_<?php echo esc_attr( $type_name ); ?>_settings -->
+	<?php
 }
 
 unset( $css_class, $type_args, $type_name, $type, $success_action );
