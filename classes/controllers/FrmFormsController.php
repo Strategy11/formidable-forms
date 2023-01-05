@@ -2760,21 +2760,21 @@ class FrmFormsController {
 			return;
 		}
 
-		$form_options[ $opt . 'action' ] = isset( $action->post_content[ 'success_action' ] ) ? $action->post_content[ 'success_action' ] : 'message';
+		$form_options[ $opt . 'action' ] = isset( $action->post_content['success_action'] ) ? $action->post_content['success_action'] : 'message';
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ]  = isset( $action->post_content[ 'success_url' ] ) ? $action->post_content[ 'success_url' ] : '';
+				$form_options[ $opt . 'url' ]  = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
 				$form_options['redirect_msg'] = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
 				$form_options[ $opt . 'msg' ]  = $form_options['redirect_msg'];
 				break;
 
 			case 'page':
-				$form_options[ $opt . 'page_id' ] = isset( $action->post_content[ 'success_page_id' ] ) ? $action->post_content[ 'success_page_id' ] : '';
+				$form_options[ $opt . 'page_id' ] = isset( $action->post_content['success_page_id'] ) ? $action->post_content['success_page_id'] : '';
 				break;
 
 			default:
-				$form_options[ $opt . 'msg' ] = ! empty( $action->post_content[ 'success_msg' ] ) ? $action->post_content[ 'success_msg' ] : FrmOnSubmitHelper::get_default_msg();
+				$form_options[ $opt . 'msg' ] = ! empty( $action->post_content['success_msg'] ) ? $action->post_content['success_msg'] : FrmOnSubmitHelper::get_default_msg();
 				$form_options['show_form']   = ! empty( $action->post_content['show_form'] );
 		}
 	}
@@ -2869,7 +2869,7 @@ class FrmFormsController {
 				'edit_action',
 				'edit_msg',
 				'edit_url',
-				'edit_page_id'
+				'edit_page_id',
 			);
 		} else {
 			$options = array(

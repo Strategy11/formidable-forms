@@ -17,7 +17,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @var array
 	 */
-	private static $actions = [];
+	private static $actions = array();
 
 	/**
 	 * Shows message settings.
