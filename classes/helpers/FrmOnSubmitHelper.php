@@ -43,7 +43,7 @@ class FrmOnSubmitHelper {
 				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_msg' ) ); ?>"
 				id="<?php echo esc_attr( $id_attr ); ?>"
 				rows="4"
-			><?php echo esc_textarea( $args['form_action']->post_content['success_msg'] ); ?></textarea>
+			><?php echo FrmAppHelper::esc_textarea( $args['form_action']->post_content['success_msg'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 		</div>
 
 		<?php
