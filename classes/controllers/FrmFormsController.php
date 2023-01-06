@@ -2029,8 +2029,12 @@ class FrmFormsController {
 				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
 				// If conf_method is an array, run On Submit actions.
-				if ( $pass_args['conf_method'] && is_array( $pass_args['conf_method'] ) ) {
-					if ( 1 === count( $pass_args['conf_method'] ) ) {
+				if ( is_array( $pass_args['conf_method'] ) ) {
+					if ( ! $pass_args['conf_method'] ) {
+						// Use default message.
+						self::populate_on_submit_data( $form->options );
+						self::run_success_action( $pass_args );
+					} elseif ( 1 === count( $pass_args['conf_method'] ) ) {
 						self::populate_on_submit_data( $form->options, reset( $pass_args['conf_method'] ) );
 						$pass_args['form']        = $form;
 						$pass_args['conf_method'] = $form->options['success_action'];
