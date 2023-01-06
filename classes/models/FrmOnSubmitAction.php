@@ -18,12 +18,12 @@ class FrmOnSubmitAction extends FrmFormAction {
 		$action_ops = array(
 			'classes'   => 'frm_icon_font frm_location_arrow',
 			'active'    => true,
-			'event'     => FrmAppHelper::pro_is_connected() ? array( 'create', 'update' ) : array( 'create' ),
+			'event'     => 'create',
 			'limit'     => 99,
 			'priority'  => 9,
 			'color'     => 'rgb(49, 119, 199)',
 		);
-		$action_ops = apply_filters( 'frm_on_submit_control_settings', $action_ops );
+		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 
 		parent::__construct( self::$slug, self::get_name(), $action_ops );
 	}
