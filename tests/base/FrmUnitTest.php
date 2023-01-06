@@ -137,6 +137,14 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		add_filter( 'frm_should_import_files', '__return_true' );
 
+		add_filter(
+			'mime_types',
+			function( $mimes ) {
+				$mimes['xml'] = 'application/xml';
+				return $mimes;
+			}
+		);
+
 		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
 		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
 
