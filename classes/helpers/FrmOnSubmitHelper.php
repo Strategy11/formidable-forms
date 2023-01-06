@@ -174,7 +174,8 @@ class FrmOnSubmitHelper {
 	}
 
 	public static function get_default_msg() {
-		return __( 'Your responses were successfully submitted. Thank you!', 'formidable' );
+		$msg = FrmAppHelper::get_settings()->success_msg;
+		return $msg ? $msg : __( 'Your responses were successfully submitted. Thank you!', 'formidable' );
 	}
 
 	public static function get_default_redirect_msg() {
