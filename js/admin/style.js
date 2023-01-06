@@ -865,7 +865,7 @@
 		 */
 		function changeStyling() {
 			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
-				input =>  'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
+				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
 			);
 			const locStr      = JSON.stringify( jQuery( styleInputs ).serializeArray() );
 
