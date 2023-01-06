@@ -137,6 +137,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		add_filter( 'frm_should_import_files', '__return_true' );
 
+		// Allow XML files in import as we're importing several XML files below.
 		add_filter(
 			'mime_types',
 			function( $mimes ) {
