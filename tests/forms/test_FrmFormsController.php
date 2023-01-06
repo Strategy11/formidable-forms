@@ -150,12 +150,79 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
+	private function create_on_submit_action( $form_id, $post_content ) {
+		$post_data = array(
+			'post_type' => FrmFormActionsController::$action_post_type,
+			'menu_order' => $form_id,
+			'post_excerpt' => FrmOnSubmitAction::$slug,
+			'post_status'  => 'publish',
+			'post_content' => FrmAppHelper::prepare_and_encode( $post_content ),
+		);
+
+		return $this->factory->post->create_and_get( $post_data );
+	}
+
+	public function test_get_met_on_submit_actions() {
+		$form = $this->factory->form->create_and_get();
+
+		$entry_data = $this->factory->field->generate_entry_array( $form );
+		$entry_id   = $this->factory->entry->create( $entry_data );
+
+		$message_action = $this->create_on_submit_action(
+			$form->id,
+			array(
+				'event' => array( 'create' ),
+				'success_action' => 'message',
+				'success_msg'    => 'Success message!',
+			)
+		);
+
+		$page_action = $this->create_on_submit_action(
+			$form->id,
+			array(
+				'event' => array( 'create', 'update' ),
+				'success_action' => 'page',
+				'success_page_id' => 10,
+			)
+		);
+
+		$redirect_action_1 = $this->create_on_submit_action(
+			$form->id,
+			array(
+				'event' => array( 'create' ),
+				'success_action' => 'redirect',
+				'success_url'    => 'https://abc.test',
+				'redirect_msg'   => 'Please wait!',
+			)
+		);
+
+		$redirect_action_2 = $this->create_on_submit_action(
+			$form->id,
+			array(
+				'event' => array( 'create', 'update' ),
+				'success_action' => 'redirect',
+				'success_url'    => 'https://abc2.test',
+				'redirect_msg'   => 'Please wait!',
+			)
+		);
+
+		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ) );
+		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $message_action->ID, $page_action->ID, $redirect_action_1->ID ) );
+
+		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ), 'update' );
+		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
+	}
+
 	/**
 	 * Test redirect after create
 	 *
 	 * @covers FrmFormsController::redirect_after_submit
 	 */
 	public function test_redirect_after_create() {
+		$this->markTestSkipped(
+			'We changed to use On Submit action'
+		);
+
 		$form = $this->factory->form->create_and_get(
 			array(
 				'options' => array(
@@ -185,6 +252,10 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * @covers FrmFormsController::show_message_after_save
 	 */
 	public function test_message_after_create() {
+		$this->markTestSkipped(
+			'We changed to use On Submit action'
+		);
+
 		$this->run_message_after_create( 0 );
 	}
 
@@ -192,6 +263,10 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * @covers FrmFormsController::show_message_after_save
 	 */
 	public function test_message_with_form_after_create() {
+		$this->markTestSkipped(
+			'We changed to use On Submit action'
+		);
+
 		$this->run_message_after_create( 1 );
 	}
 
