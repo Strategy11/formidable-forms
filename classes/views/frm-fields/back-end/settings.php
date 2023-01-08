@@ -193,9 +193,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							?></textarea>
 							<?php
 						} else {
-							?>
-							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" data-sep="<?php echo esc_attr( $field_obj->displayed_field_type( $field ) ? ',' : '' ); ?>" />
-							<?php
+							$field_obj->show_placeholder_setting( $field, $field_obj, $default_name, $default_value );
 						}
 						?>
 					</span>
