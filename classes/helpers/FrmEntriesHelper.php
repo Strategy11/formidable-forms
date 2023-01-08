@@ -94,7 +94,6 @@ class FrmEntriesHelper {
 	 */
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		$new_value = $field->default_value;
-
 		if ( ! $reset && self::value_is_posted( $field, $args ) ) {
 			self::get_posted_value( $field, $new_value, $args );
 		}
@@ -118,7 +117,7 @@ class FrmEntriesHelper {
 		 * @param string|int $new_value
 		 * @param array $args
 		 */
-		$new_value = apply_filters( 'frm_new_entry_value', $new_value, $args );
+		$new_value = apply_filters( 'frm_new_entry_value', $new_value, $field, $args );
 
 		return $new_value;
 	}
