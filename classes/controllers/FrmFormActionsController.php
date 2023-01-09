@@ -493,7 +493,7 @@ class FrmFormActionsController {
 
 		foreach ( $form_actions as $action ) {
 
-			$skip_this_action = ( ! in_array( $this_event, $action->post_content['event'] ) );
+			$skip_this_action = ! in_array( $this_event, $action->post_content['event'] ) || FrmOnSubmitAction::$slug === $action->post_excerpt;
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
 			if ( $skip_this_action ) {
 				continue;
@@ -573,29 +573,6 @@ class FrmFormActionsController {
 		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 
 		return $where;
-	}
-
-	/**
-	 * Skips triggering form actions.
-	 *
-	 * @since 5.x.x
-	 *
-	 * @param bool  $skip Set to `true` if you want to skip the form action.
-	 * @param array $args {
-	 *     Args.
-	 *
-	 *     @type object $action Form action object.
-	 *     @type object $entry  Entry object.
-	 *     @type object $form   Form object.
-	 *     @type string $event  Event name.
-	 * }
-	 * @return bool
-	 */
-	public static function skip_actions( $skip, $args ) {
-		if ( FrmOnSubmitAction::$slug === $args['action']->post_excerpt ) {
-			return false;
-		}
-		return $skip;
 	}
 }
 
