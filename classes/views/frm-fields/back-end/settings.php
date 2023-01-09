@@ -179,7 +179,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 						$field_obj->default_value_to_string( $default_value );
 
-						$field_obj->show_placeholder_setting( $field, $field_obj, $default_name, $default_value );
+						$field_obj->show_placeholder_setting( $field, $default_name, $default_value );
 						?>
 					</span>
 				</p>
