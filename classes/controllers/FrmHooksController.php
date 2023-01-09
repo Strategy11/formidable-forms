@@ -124,7 +124,6 @@ class FrmHooksController {
 			add_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		}
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
-		add_filter( 'frm_skip_form_action', 'FrmFormActionsController::skip_actions', 10, 2 );
 
 		// Forms Controller.
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
