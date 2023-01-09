@@ -18,7 +18,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 		$action_ops = array(
 			'classes'   => 'frm_icon_font frm_location_arrow',
 			'active'    => true,
-			'event'     => 'create',
+			'event'     => array( 'create' ),
 			'limit'     => 99,
 			'priority'  => 9,
 			'color'     => 'rgb(49, 119, 199)',
