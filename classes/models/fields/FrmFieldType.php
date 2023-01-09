@@ -403,7 +403,7 @@ DEFAULT_HTML;
 	 * @param mixed  $default_value
 	 */
 	public function show_placeholder_setting( $field, $default_name, $default_value ) {
-		echo '<input type="text" name="' . esc_attr( $default_name ) . '" value="' . esc_attr( $default_value ) . '" id="frm_default_value_' . esc_attr( $field['id'] ) . '" class="default-value-field" data-changeme="field_' . esc_attr( $field['field_key'] ) . '" data-changeatt="value" data-sep="' . esc_attr( $this->displayed_field_type( $field ) ? ',' : '' ) . '" />';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/placeholder-setting.php';
 	}
 
 	/**
