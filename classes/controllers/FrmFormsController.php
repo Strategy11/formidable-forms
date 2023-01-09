@@ -2161,6 +2161,7 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	public static function run_success_action( $args ) {
+		global $frm_vars;
 		$extra_args = $args;
 		unset( $extra_args['form'] );
 
@@ -2169,7 +2170,7 @@ class FrmFormsController {
 		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
-		$args['ajax']        = ! empty( $GLOBALS['frm_vars']['ajax'] );
+		$args['ajax']        = ! empty( $frm_vars['ajax'] );
 
 		if ( $args['conf_method'] === 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
