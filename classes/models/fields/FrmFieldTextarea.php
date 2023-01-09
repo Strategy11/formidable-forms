@@ -55,6 +55,12 @@ class FrmFieldTextarea extends FrmFieldType {
 		return $value;
 	}
 
+	public function show_placeholder_setting( $field, $field_obj, $default_name, $default_value ) {
+		echo '<textarea name="' . esc_attr( $default_name ) . '" class="default-value-field" id="frm_default_value_' . esc_attr( $field['id'] ) . '" rows="3" data-changeme="field_' . esc_attr( $field['field_key'] ) . '">' .
+		FrmAppHelper::esc_textarea( $default_value ) . // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		'</textarea>';
+	}
+
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
