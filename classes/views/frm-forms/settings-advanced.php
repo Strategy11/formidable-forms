@@ -115,7 +115,12 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 <!--Permissions Section-->
 <?php do_action( 'frm_add_form_perm_options', $values ); ?>
 
-<?php if ( has_action( 'frm_add_form_msg_options' ) ) : ?>
+<?php
+/*
+ * We keep this section to make the frm_add_form_msg_options hook still work after we moved the Success message option
+ * to the On Submit action, and moved the Draft message option to the below of its checkbox.
+ */
+if ( has_action( 'frm_add_form_msg_options' ) ) : ?>
 	<table class="form-table frm-fields">
 		<?php do_action( 'frm_add_form_msg_options', $values ); ?>
 	</table>
