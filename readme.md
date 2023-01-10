@@ -38,5 +38,5 @@ Change '3.05' to the number of the new version
 ## Compressing Icons
 1. Go to https://jakearchibald.github.io/svgomg/ and paste the svg for all the icons.
 2. Set precision to 1.
-3. Some icons need to be compressed individually with precision 2: WordPress, lock, lock open, link, MailChimp
+3. Some icons need to be compressed individually with precision 2: WordPress, lock, lock open, link, Mailchimp
 
