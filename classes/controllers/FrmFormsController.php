@@ -2159,6 +2159,18 @@ class FrmFormsController {
 	 * Used when the success action is not 'message'
 	 *
 	 * @since 2.05
+	 * @since 5.x.x `$args['force_delay_redirect']` is added.
+	 *
+	 * @param array $args {
+	 *     The args.
+	 *
+	 *     @type string $conf_method          The method.
+	 *     @type object $form                 Form object.
+	 *     @type int    $entry_id             Entry ID.
+	 *     @type string $action               The action event. Accepts `create` or `update`.
+	 *     @type array  $fields               The array of fields.
+	 *     @type bool   $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
+	 * }
 	 */
 	public static function run_success_action( $args ) {
 		global $frm_vars;
@@ -2184,7 +2196,9 @@ class FrmFormsController {
 	/**
 	 * Gets met On Submit actions.
 	 *
-	 * @param array  $args  Args.
+	 * @since 5.x.x
+	 *
+	 * @param array  $args  See {@see FrmFormsController::run_success_action()}.
 	 * @param string $event Form event. Default is `create`.
 	 * @return array Array of actions that meet the conditional logics.
 	 */
@@ -2221,7 +2235,9 @@ class FrmFormsController {
 	/**
 	 * Runs multiple success actions.
 	 *
-	 * @param array $args Args.
+	 * @since 5.x.x
+	 *
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
@@ -2243,11 +2259,28 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Runs single On Submit action.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
+	 * @param object $action On Submit action object.
+	 */
 	public static function run_single_on_submit_action( $args, $action ) {
 		$new_args = self::get_run_success_action_args( $args, $action );
 		self::run_success_action( $new_args );
 	}
 
+	/**
+	 * Gets run_success_action() args from the On Subit action.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
+	 * @param object $action On Submit action object.
+	 * @return array
+	 */
 	private static function get_run_success_action_args( $args, $action ) {
 		$new_args = $args;
 
@@ -2257,7 +2290,16 @@ class FrmFormsController {
 
 		$new_args['conf_method'] = $new_args['form']->options[ $opt . 'action' ];
 
-		return $new_args;
+		/**
+		 * Filters the run success action args.
+		 *
+		 * @since 5.x.x
+		 *
+		 * @param array  $new_args The new args.
+		 * @param array  $args     The old args. See {@see FrmFormsController::run_success_action()}.
+		 * @param object $action   On Submit action object.
+		 */
+		return apply_filters( 'frm_get_run_success_action_args', $new_args, $args, $action );
 	}
 
 	/**
@@ -2785,7 +2827,8 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Maybe migrate submit settings to On Submit action.
+	 * Maybe migrate submit settings from the form options to On Submit action.
+	 * This is added after On Submit action is released. This might migrate the frontend editing submit settings too.
 	 *
 	 * @since 5.x.x
 	 *
@@ -2816,16 +2859,17 @@ class FrmFormsController {
 
 		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
 
+		// If frontend editing is enabled, migrate its settings too.
 		if ( FrmAppHelper::pro_is_connected() && intval( $form->editable ) ) {
 			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
 
 			if ( $action_data === $edit_data ) {
-				// Just create one action for both create and update.
+				// Just create one action for both create and update if they are the same.
 				$base_action['post_content']['event'][] = 'update';
 			} else {
 				// Create a separate action for update.
-				$edit_action = $base_action;
-				$edit_action['post_content'] += $edit_data;
+				$edit_action                          = $base_action;
+				$edit_action['post_content']         += $edit_data;
 				$edit_action['post_content']['event'] = array( 'update' );
 
 				$edit_action['post_content'] = FrmAppHelper::prepare_and_encode( $edit_action['post_content'] );
@@ -2844,6 +2888,15 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Gets On Submit action data from form options to be used for the migration.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param array  $form_options Form options.
+	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
+	 * @return array
+	 */
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
 		$opt  = 'update' === $event ? 'edit_' : 'success_';
 		$data = array(
@@ -2868,6 +2921,15 @@ class FrmFormsController {
 		return $data;
 	}
 
+	/**
+	 * Removes deprecated submit settings after they are migrated to the On Submit action.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param int    $form_id Form ID.
+	 * @param object $form    This isn't a full form object, requires at least the `options` property.
+	 * @param bool   $update  Set to `true` to remove the frontend editing ones.
+	 */
 	private static function remove_deprecated_submit_settings( $form_id, $form, $update = false ) {
 		if ( $update ) {
 			$options = array(
