@@ -2028,23 +2028,7 @@ class FrmFormsController {
 				$pass_args['reset']       = true;
 				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
-				// If conf_method is an array, run On Submit actions.
-				if ( is_array( $pass_args['conf_method'] ) ) {
-					if ( ! $pass_args['conf_method'] ) {
-						// Use default message.
-						self::populate_on_submit_data( $form->options );
-						self::run_success_action( $pass_args );
-					} elseif ( 1 === count( $pass_args['conf_method'] ) ) {
-						self::populate_on_submit_data( $form->options, reset( $pass_args['conf_method'] ) );
-						$pass_args['form']        = $form;
-						$pass_args['conf_method'] = $form->options['success_action'];
-						self::run_success_action( $pass_args );
-					} else {
-						self::run_multi_on_submit_actions( $pass_args );
-					}
-				} else {
-					self::run_success_action( $pass_args );
-				}
+				self::run_on_submit_actions( $pass_args );
 
 				do_action(
 					'frm_after_entry_processed',
@@ -2230,6 +2214,32 @@ class FrmFormsController {
 		}
 
 		return $met_actions;
+	}
+
+	/**
+	 * Runs On Submit actions.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param array $args See inside {@see FrmFormsController::get_form_contents()} method.
+	 */
+	private static function run_on_submit_actions( $args ) {
+		// If conf_method is an array, run On Submit actions.
+		if ( is_array( $args['conf_method'] ) ) {
+			if ( ! $args['conf_method'] ) {
+				// Use default message.
+				self::populate_on_submit_data( $args['form']->options );
+				self::run_success_action( $args );
+			} elseif ( 1 === count( $args['conf_method'] ) ) {
+				self::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
+				$args['conf_method'] = $args['form']->options['success_action'];
+				self::run_success_action( $args );
+			} else {
+				self::run_multi_on_submit_actions( $args );
+			}
+		} else {
+			self::run_success_action( $args );
+		}
 	}
 
 	/**
