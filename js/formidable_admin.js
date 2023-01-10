@@ -5796,11 +5796,14 @@ function frmAdminBuildJS() {
 			if ( ! inputTrigger ) {
 				input = getInputForIcon( icon );
 			}
+			if ( input === null ) {
+				input = document.getElementById( icon.getAttribute( 'data-html_id' ) );
+			}
 			if ( input !== null ) {
 				if ( ! inputTrigger ) {
 					input.focus();
 				}
-				container.after( box );
+				container.insertAfter( box );
 				box.setAttribute( 'data-fills', input.id );
 
 				if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
@@ -7377,7 +7380,8 @@ function frmAdminBuildJS() {
 
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
 
-			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+			// obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+			obj.value = variable;
 			var s = e + variable.length;
 			obj.focus();
 			obj.setSelectionRange( s, s );
