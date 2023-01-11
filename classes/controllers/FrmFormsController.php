@@ -2268,6 +2268,7 @@ class FrmFormsController {
 		$redirect_action = null;
 		foreach ( $args['conf_method'] as $action ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+				// We catch the redirect action to run it last.
 				$redirect_action = $action;
 				continue;
 			}
