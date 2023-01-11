@@ -9431,18 +9431,16 @@ function frmAdminBuildJS() {
 			}
 
 			const actionEl = event.target.closest( '.frm_form_action_settings' );
-			actionEl.querySelectorAll( '[data-sub-settings]:not(.frm-fade)' ).forEach( el => {
-				fadeOut( el, () => el.classList.add( 'frm_hidden' ) );
+			actionEl.querySelectorAll( '[data-sub-settings]:not(.frm_hidden)' ).forEach( el => {
+				el.classList.add( 'frm_hidden' )
 			});
 
-			setTimeout( () => {
-				const activeEl = actionEl.querySelector( '[data-sub-settings][data-type="' + event.target.value + '"]' );
-				if ( ! activeEl ) {
-					return;
-				}
+			const activeEl = actionEl.querySelector( '[data-sub-settings][data-type="' + event.target.value + '"]' );
+			if ( ! activeEl ) {
+				return;
+			}
 
-				activeEl.classList.remove( 'frm-fade', 'frm_hidden' );
-			}, 1000 );
+			activeEl.classList.remove( 'frm_hidden' );
 		};
 
 		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
