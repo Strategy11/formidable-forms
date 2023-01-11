@@ -66,7 +66,7 @@ class FrmDefMlcmpAction extends FrmFormAction {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_mailchimp_icon frm_show_upgrade frm-inverse' );
 		$action_ops['color'] = 'var(--dark-grey)';
 
-		parent::__construct( 'mailchimp', 'MailChimp', $action_ops );
+		parent::__construct( 'mailchimp', 'Mailchimp', $action_ops );
 	}
 }
 
