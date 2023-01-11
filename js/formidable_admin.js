@@ -5803,7 +5803,7 @@ function frmAdminBuildJS() {
 				if ( ! inputTrigger ) {
 					input.focus();
 				}
-				container.insertAfter( box );
+				container.after( box );
 				box.setAttribute( 'data-fills', input.id );
 
 				if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
