@@ -35,15 +35,21 @@ class FrmOnSubmitHelper {
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
 		?>
-		<div class="frm_form_field frm_has_shortcodes frm_has_textarea">
+		<div class="frm_form_field">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
-			<textarea
-				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_msg' ) ); ?>"
-				id="<?php echo esc_attr( $id_attr ); ?>"
-				rows="4"
-			><?php echo FrmAppHelper::esc_textarea( $args['form_action']->post_content['success_msg'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+
+			<?php
+			wp_editor(
+				$args['form_action']->post_content['success_msg'],
+				$id_attr,
+				array(
+					'textarea_name' => $args['action_control']->get_field_name( 'success_msg' ),
+					'textarea_rows' => 4,
+				)
+			);
+			?>
 		</div>
 
 		<?php
@@ -106,12 +112,20 @@ class FrmOnSubmitHelper {
 
 		<?php $id_attr = $args['action_control']->get_field_id( 'redirect_msg' ); ?>
 		<div class="frm_form_field">
-			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect message (used when multiple On Submit actions run)', 'formidable' ); ?></label>
-			<textarea
-				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'redirect_msg' ) ); ?>"
-				id="<?php echo esc_attr( $id_attr ); ?>"
-				rows="4"
-			><?php echo FrmAppHelper::esc_textarea( $args['form_action']->post_content['redirect_msg'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+			<label for="<?php echo esc_attr( $id_attr ); ?>">
+				<?php esc_html_e( 'Redirect message (used when multiple On Submit actions run)', 'formidable' ); ?>
+			</label>
+
+			<?php
+			wp_editor(
+				$args['form_action']->post_content['redirect_msg'],
+				$id_attr,
+				array(
+					'textarea_name' => $args['action_control']->get_field_name( 'redirect_msg' ),
+					'textarea_rows' => 4,
+				)
+			);
+			?>
 		</div>
 		<?php
 	}
