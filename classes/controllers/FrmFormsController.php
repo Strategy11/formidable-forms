@@ -2870,7 +2870,7 @@ class FrmFormsController {
 		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
 
 		// If frontend editing is enabled, migrate its settings too.
-		if ( FrmAppHelper::pro_is_connected() && intval( $form->editable ) ) {
+		if ( FrmAppHelper::pro_is_connected() && $form->editable ) {
 			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
 
 			if ( $action_data === $edit_data ) {
