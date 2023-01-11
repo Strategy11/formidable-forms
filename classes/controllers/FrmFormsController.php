@@ -2241,6 +2241,7 @@ class FrmFormsController {
 	private static function run_on_submit_actions( $args ) {
 		if ( ! is_array( $args['conf_method'] ) ) {
 			self::run_success_action( $args );
+			return;
 		}
 
 		// If conf_method is an array, run On Submit actions.
