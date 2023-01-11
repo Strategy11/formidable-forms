@@ -163,13 +163,12 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	public function test_get_met_on_submit_actions() {
-		$form = $this->factory->form->create_and_get();
+		$form_id = $this->factory->form->create();
 
-		$entry_data = $this->factory->field->generate_entry_array( $form );
-		$entry_id   = $this->factory->entry->create( $entry_data );
+		FrmDb::delete_cache_and_transient( $form_id, 'frm_form' );
 
 		$message_action = $this->create_on_submit_action(
-			$form->id,
+			$form_id,
 			array(
 				'event' => array( 'create' ),
 				'success_action' => 'message',
@@ -178,7 +177,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		$page_action = $this->create_on_submit_action(
-			$form->id,
+			$form_id,
 			array(
 				'event' => array( 'create', 'update' ),
 				'success_action' => 'page',
@@ -187,7 +186,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		$redirect_action_1 = $this->create_on_submit_action(
-			$form->id,
+			$form_id,
 			array(
 				'event' => array( 'create' ),
 				'success_action' => 'redirect',
@@ -197,7 +196,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		$redirect_action_2 = $this->create_on_submit_action(
-			$form->id,
+			$form_id,
 			array(
 				'event' => array( 'create', 'update' ),
 				'success_action' => 'redirect',
@@ -205,6 +204,12 @@ class test_FrmFormsController extends FrmUnitTest {
 				'redirect_msg'   => 'Please wait!',
 			)
 		);
+
+		FrmDb::cache_delete_group( 'frm_form' );
+
+		$form       = FrmForm::getOne( $form_id );
+		$entry_data = $this->factory->field->generate_entry_array( $form );
+		$entry_id   = $this->factory->entry->create( $entry_data );
 
 		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ) );
 		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $message_action->ID, $page_action->ID, $redirect_action_1->ID ) );
