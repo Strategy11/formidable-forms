@@ -2348,18 +2348,12 @@ class FrmFormsController {
 	 * @since 3.0
 	 */
 	private static function redirect_after_submit( $args ) {
-		global $frm_vars;
-
 		add_filter( 'frm_use_wpautop', '__return_false' );
 
 		$opt         = $args['success_opt'];
 		$success_url = trim( $args['form']->options[ $opt . '_url' ] );
 		$success_url = apply_filters( 'frm_content', $success_url, $args['form'], $args['entry_id'] );
 		$success_url = do_shortcode( $success_url );
-
-		$success_msg = isset( $args['form']->options[ $opt . '_msg' ] ) ? $args['form']->options[ $opt . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
-
-		$redirect_msg = self::get_redirect_message( $success_url, $success_msg, $args );
 
 		$args['id'] = $args['entry_id'];
 		FrmEntriesController::delete_entry_before_redirect( $success_url, $args['form'], $args );
@@ -2376,18 +2370,33 @@ class FrmFormsController {
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
 		} else {
-			add_filter( 'frm_use_wpautop', '__return_true' );
-			echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo '<script type="text/javascript">';
-			if ( ! $doing_ajax ) { // Not AJAX submit, delay JS until window.load.
-				echo 'window.onload=function(){';
-			}
-			echo 'setTimeout(function(){window.location="' . esc_url_raw( $success_url ) . '";}, 8000);';
-			if ( ! $doing_ajax ) {
-				echo '};';
-			}
-			echo '</script>';
+			self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
 		}
+	}
+
+	/**
+	 * Redirects after submitting using JS. This is used when showing message before redirecting.
+	 *
+	 * @since 5.x.x
+	 *
+	 * @param array $args See {@see FrmFormsController::redirect_after_submit()}.
+	 */
+	private static function redirect_after_submit_using_js( $args ) {
+		$success_msg  = isset( $args['form']->options[ $args['success_opt'] . '_msg' ] ) ? $args['form']->options[ $args['success_opt'] . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
+		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
+
+		add_filter( 'frm_use_wpautop', '__return_true' );
+
+		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<script type="text/javascript">';
+		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
+			echo 'window.onload=function(){';
+		}
+		echo 'setTimeout(function(){window.location="' . esc_url_raw( $args['success_url'] ) . '";}, 8000);';
+		if ( empty( $args['doing_ajax'] ) ) {
+			echo '};';
+		}
+		echo '</script>';
 	}
 
 	/**
