@@ -7380,8 +7380,8 @@ function frmAdminBuildJS() {
 
 			variable = maybeFormatInsertedContent( contentBox, variable, obj.selectionStart, e );
 
-			// obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
-			obj.value = variable;
+			obj.value = obj.value.substr( 0, obj.selectionStart ) + variable + obj.value.substr( obj.selectionEnd, obj.value.length );
+
 			var s = e + variable.length;
 			obj.focus();
 			obj.setSelectionRange( s, s );
