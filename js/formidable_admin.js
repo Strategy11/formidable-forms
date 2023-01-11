@@ -7816,26 +7816,24 @@ function frmAdminBuildJS() {
 	}
 
 	function onActionLoaded( event ) {
-		event.target.closest( '.frm_form_action_settings' ).querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
+		const settings = event.target.closest( '.frm_form_action_settings' );
+		if ( ! settings ) {
+			return;
+		}
+
+		settings.querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
 			if ( svg.nextElementSibling.type === 'text' ) {
 				svg.style.bottom = '-3px';
 				svg.style.marginRight = '0';
 			}
 		});
 
-		const settings = event.target.closest( '.frm_form_action_settings' );
-		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
-			onEmailActionLoaded( settings );
-		}
-	}
-
-	function onEmailActionLoaded( settings ) {
-		const wysiwyg = settings.querySelector( '.wp-editor-area' );
-		if ( wysiwyg ) {
+		settings.querySelectorAll( '.wp-editor-area' ).forEach( wysiwyg => {
 			frmDom.wysiwyg.init(
-				wysiwyg, { height: 160, addFocusEvents: true }
+				wysiwyg,
+				{ height: 160, addFocusEvents: true }
 			);
-		}
+		});
 	}
 
 	/* Styling */
