@@ -100,8 +100,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 			add_filter( 'upload_mimes', $allow_mime_types_function, 11 );
 		}
 
-		remove_filter( 'upload_mimes', 'check_upload_mimes' ); // TODO if this fixes it, try a filter like above rather than removing this.
-
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
