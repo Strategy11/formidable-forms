@@ -88,6 +88,15 @@ class FrmUnitTest extends WP_UnitTestCase {
 			return;
 		}
 
+		// Allow XML files in import as we're importing several XML files below.
+		add_filter(
+			'mime_types',
+			function( $mimes ) {
+				$mimes['xml'] = 'application/xml';
+				return $mimes;
+			}
+		);
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
@@ -136,15 +145,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 		}
 
 		add_filter( 'frm_should_import_files', '__return_true' );
-
-		// Allow XML files in import as we're importing several XML files below.
-		add_filter(
-			'mime_types',
-			function( $mimes ) {
-				$mimes['xml'] = 'application/xml';
-				return $mimes;
-			}
-		);
 
 		$single_file_upload_field = FrmField::getOne( 'single-file-upload-field' );
 		$multi_file_upload_field = FrmField::getOne( 'multi-file-upload-field' );
