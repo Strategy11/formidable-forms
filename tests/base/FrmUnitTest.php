@@ -97,6 +97,8 @@ class FrmUnitTest extends WP_UnitTestCase {
 			}
 		);
 
+		remove_filter( 'upload_mimes', 'check_upload_mimes' ); // Multisite appears to only allow JPG.
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();
