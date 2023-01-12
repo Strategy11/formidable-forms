@@ -974,7 +974,6 @@ class FrmAppHelper {
 	 */
 	public static function add_allowed_icon_tags( $allowed_html ) {
 		$allowed_html['svg']['data-open'] = true;
-		$allowed_html['svg']['data-html_id'] = true;
 		$allowed_html['svg']['title']     = true;
 		return $allowed_html;
 	}
