@@ -54,10 +54,6 @@ class FrmFieldFactory {
 			$field = FrmField::getOne( $field );
 		}
 
-		if ( ! is_object( $field ) ) {
-			var_dump( debug_backtrace( 2 ) );
-		}
-
 		return self::get_field_type( $field->type, $field );
 	}
 

@@ -88,16 +88,19 @@ class FrmUnitTest extends WP_UnitTestCase {
 			return;
 		}
 
-		// Allow XML files in import as we're importing several XML files below.
-		add_filter(
-			'mime_types',
-			function( $mimes ) {
-				$mimes['xml'] = 'application/xml';
-				return $mimes;
-			}
-		);
+		$allow_mime_types_function = function( $mimes ) {
+			$mimes['xml'] = 'application/xml';
+			return $mimes;
+		};
 
-		remove_filter( 'upload_mimes', 'check_upload_mimes' ); // Multisite appears to only allow JPG.
+		// Allow XML files in import as we're importing several XML files below.
+		add_filter( 'mime_types', $allow_mime_types_function );
+
+		if ( is_multisite() ) {
+			add_filter( 'upload_mimes', $allow_mime_types_function, 11 );
+		}
+
+		remove_filter( 'upload_mimes', 'check_upload_mimes' ); // TODO if this fixes it, try a filter like above rather than removing this.
 
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
