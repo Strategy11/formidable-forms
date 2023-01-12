@@ -56,6 +56,16 @@ class FrmFieldTextarea extends FrmFieldType {
 	}
 
 	/**
+	 * @param array  $field
+	 * @param string $default_name
+	 * @param mixed  $default_value
+	 */
+	public function show_placeholder_setting( $field, $default_name, $default_value ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-placeholder-setting.php';
+	}
+
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
