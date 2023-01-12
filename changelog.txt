@@ -1,9 +1,10 @@
 == Changelog ==
 = 5.5.6 =
-* Repeater forms are now hidden from the list of forms to export as XML.
 * Fix: Duplicating a form action without a rich text editor would trigger a JavaScript error after succeeding.
 * Fix: Submit button style rules were not applying when using the Twenty Twenty One theme.
 * Fix: The style would not always assign properly to a form after import when importing both a new form and the style.
+* Fix: It is no longer possible to select both radio buttons in the styler sample form.
+* Repeater forms are now hidden from the list of forms to export as XML.
 
 = 5.5.5 =
 * Security: Added validation to URLs when installing templates and add ons to make sure that the endpoint cannot be manipulated and used for unsafe requests.
