@@ -6594,16 +6594,6 @@ i.frm-show-inline-modal,
 	font-size: 18px;
 }
 
-.frm_rte_placeholder{
-	margin: 0 1em 1em 0;
-    position: relative;
-}
-
-.frm_rte_placeholder .frmsvg.frm-show-inline-modal {
-	top: -26px;
-	left: auto;
-}
-
 .frm-with-right-icon .frmsvg,
 .frm-with-right-icon i:not([class*=mce-]) {
 	right: 0;
