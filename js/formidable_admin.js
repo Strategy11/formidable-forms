@@ -9514,7 +9514,7 @@ function frmAdminBuildJS() {
 
 			const actionEl = event.target.closest( '.frm_form_action_settings' );
 			actionEl.querySelectorAll( '[data-sub-settings]:not(.frm_hidden)' ).forEach( el => {
-				el.classList.add( 'frm_hidden' )
+				el.classList.add( 'frm_hidden' );
 			});
 
 			const activeEl = actionEl.querySelector( '[data-sub-settings][data-type="' + event.target.value + '"]' );
