@@ -5799,7 +5799,7 @@ function frmAdminBuildJS() {
 			if ( input === null ) {
 				const iconWrapper = icon.closest( '.frm-rte-smart-values-wrapper' );
 				if ( iconWrapper ) {
-					const inputID = iconWrapper.getAttribute( 'data-html_id' );
+					const inputID = iconWrapper.getAttribute( 'data-html-id' );
 					if ( inputID ) {
 						input = document.getElementById( inputID );
 					}
@@ -9720,7 +9720,7 @@ function frmAdminBuildJS() {
 			document.querySelectorAll( '.frm-rte-smart-values-wrapper' ).forEach( function( e ) {
 				const modalTrigger = svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm_more_horiz_solid_icon', 'frm-show-inline-modal' ] });
 				modalTrigger.setAttribute( 'data-open', 'frm-smart-values-box' );
-				modalTrigger.setAttribute( 'title', 'Toggle Options' );
+				modalTrigger.setAttribute( 'title', e.getAttribute( 'data-modal-trigger-title' ) );
 				e.appendChild( modalTrigger );
 			});
 
