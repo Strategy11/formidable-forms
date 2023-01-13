@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div class="frm-style-card-preview">
-		<div class="frm_form_field form-field" style="margin-bottom: <?php echo esc_attr( $default_style->post_content['field_margin'] ); ?>">
+		<div class="frm_form_field form-field">
 			<label class="frm_primary_label"><?php esc_html_e( 'Text field', 'formidable' ); ?>
 			<input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ); ?>" />
 		</div>

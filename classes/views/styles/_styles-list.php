@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $enabled = '0' !== $form->options['custom_style'];
 ?>
-<div id="frm_style_sidebar" class="frm_wrap">
+<div id="frm_style_sidebar" class="frm-right-panel frm_wrap frm_p_4">
 	<?php
 	/**
 	 * Pro needs to hook in here to add the "New Style" trigger.
@@ -71,4 +71,5 @@ $enabled = '0' !== $form->options['custom_style'];
 		);
 		?>
 	</div>
+	<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
 </div>
