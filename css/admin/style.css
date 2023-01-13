@@ -241,11 +241,11 @@ label.default-style-box input[type="checkbox"] {
 	background: #fff !important;
 }
 
-#frm_style_cards_wrapper {
+.frm-style-card-wrapper {
 	margin-top: 20px;
 }
 
-#frm_style_cards_wrapper:not(.frm-styles-enabled) {
+.frm-style-card-wrapper:not(.frm-styles-enabled) {
 	opacity: 0.5;
 	pointer-events: none;
 }

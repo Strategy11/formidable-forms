@@ -43,33 +43,67 @@ $enabled = '0' !== $form->options['custom_style'];
 		);
 		?>
 	</div>
+
+	<div class="frm_form_settings">
+		<h2><?php esc_html_e( 'My styles', 'formidable' ); ?></h2>
+	</div>
 	<?php
+	// Begin card wrapper
 	$card_wrapper_params = array(
-		'id' => 'frm_style_cards_wrapper',
+		'id'    => 'frm_custom_style_cards_wrapper',
+		'class' => 'frm-style-card-wrapper',
 	);
 	if ( $enabled ) {
-		$card_wrapper_params['class'] = 'frm-styles-enabled';
+		$card_wrapper_params['class'] .= ' frm-styles-enabled';
 	}
 	?>
 	<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
 		<?php
+		$card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id );
 		array_walk(
 			$styles,
 			/**
 			 * Echo a style card for a single style in the $styles array.
 			 *
-			 * @param WP_Post  $style
-			 * @param string   $style_views_path
-			 * @param WP_Post  $active_style
-			 * @param WP_Post  $default_style
-			 * @param stdClass $form
+			 * @param WP_Post             $style
+			 * @param FrmStylesCardHelper $card_helper
 			 * @return void
 			 */
-			function( $style ) use ( $style_views_path, $active_style, $default_style, $form ) {
-				FrmStylesHelper::echo_style_card( $style, $style_views_path, $active_style, $default_style, $form->id );
+			function( $style ) use ( $card_helper ) {
+				$card_helper->echo_style_card( $style );
 			}
 		);
 		?>
 	</div>
+	<?php // End card wrapper ?>
+	<div class="frm_form_settings">
+		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
+	</div>
+	<?php
+	// Begin card wrapper
+	$card_wrapper_params = array(
+		'id'    => 'frm_template_style_cards_wrapper',
+		'class' => 'frm-style-card-wrapper',
+	);
+	if ( $enabled ) {
+		$card_wrapper_params['class'] .= ' frm-styles-enabled';
+	}
+	?>
+	<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
+		<?php
+		$style_api = new FrmStyleApi();
+		$info      = $style_api->get_api_info();
+		foreach ( $info as $key => $style ) {
+			if ( ! is_numeric( $key ) ) {
+				// Skip active_sub/expires keys.
+				continue;
+			}
+
+			$card_helper->echo_card_template( $style );
+			unset( $style );
+		}
+		?>
+	</div>
+
 	<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
 </div>

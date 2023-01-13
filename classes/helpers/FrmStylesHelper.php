@@ -476,40 +476,6 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Get params to use in the style card HTML element used in the style list.
-	 *
-	 * @since x.x
-	 *
-	 * @param WP_Post    $style
-	 * @param WP_Post    $default_style
-	 * @param string|int $form_id
-	 * @return array
-	 */
-	public static function get_params_for_style_card( $style, $default_style, $form_id ) {
-		$class_name = 'frm_style_' . $style->post_name;
-		$params     = array(
-			'class'               => 'with_frm_style frm-style-card ' . $class_name,
-			'style'               => self::get_style_param_for_card( $style ),
-			'data-classname'      => $class_name,
-			'data-style-id'       => $style->ID,
-			'data-edit-url'       => esc_url( self::get_edit_url( $style, $form_id ) ),
-			'data-label-position' => $style->post_content['position'],
-		);
-
-		/**
-		 * Filter params so Pro can add additional params, like data-delete-url.
-		 *
-		 * @since x.x
-		 *
-		 * @param array $params
-		 * @param array $args {
-		 *     @type WP_Post $style
-		 * }
-		 */
-		return apply_filters( 'frm_style_card_params', $params, compact( 'style' ) );
-	}
-
-	/**
 	 * Get a link to edit a style post object in the visual styler.
 	 *
 	 * @param WP_Post|stdClass $style
@@ -529,87 +495,6 @@ class FrmStylesHelper {
 		}
 
 		return add_query_arg( $query_args, admin_url( 'themes.php' ) );
-	}
-
-	/**
-	 * Get the string to populate the style card's style attribute with.
-	 * This is used to reset some style variables like font size, label padding, and field height, so the cards all look more similar in comparison.
-	 *
-	 * @since x.x
-	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
-	 * @return string
-	 */
-	public static function get_style_param_for_card( $style ) {
-		$styles = array();
-
-		// Add the background color setting for fieldsets to the card.
-		if ( ! $style->post_content['fieldset_bg_color'] ) {
-			$background_color = '#fff';
-		} else {
-			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
-		}
-		$styles[] = '--preview-background-color: ' . $background_color;
-
-		$frm_style = new FrmStyle();
-		$defaults  = $frm_style->get_defaults();
-
-		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
-		$styles[] = '--font-size: ' . $defaults['field_font_size'];
-		$styles[] = '--field-font-size: ' . $defaults['field_font_size'];
-		$styles[] = '--label-padding: ' . $defaults['label_padding'];
-		$styles[] = '--field-height: ' . $defaults['field_height'];
-
-		return implode( ';', $styles );
-	}
-
-	/**
-	 * Echo a style card for a specific target Style Post object.
-	 *
-	 * @since x.x
-	 *
-	 * @param WP_Post    $style
-	 * @param string     $style_views_path
-	 * @param WP_Post    $active_style
-	 * @param WP_Post    $default_style
-	 * @param string|int $form_id This is used in the edit URL for the back action.
-	 * @return void
-	 */
-	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style, $form_id ) {
-		$is_default_style     = $style->ID === $default_style->ID;
-		$is_active_style      = $style->ID === $active_style->ID;
-		$submit_button_params = self::get_submit_button_params();
-		$params               = self::get_params_for_style_card( $style, $default_style, $form_id );
-
-		if ( $is_default_style ) {
-			$params['class'] .= ' frm-default-style-card';
-		}
-		if ( $is_active_style ) {
-			$params['class'] .= ' frm-active-style-card';
-		}
-
-		include $style_views_path . '_custom-style-card.php';
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return array
-	 */
-	private static function get_submit_button_params() {
-		$frm_style            = new FrmStyle();
-		$defaults             = $frm_style->get_defaults();
-		$submit_button_styles = array(
-			'font-size: ' . esc_attr( $defaults['submit_font_size'] ) . ' !important',
-			'padding: ' . esc_attr( $defaults['submit_padding'] ) . ' !important',
-		);
-		return array(
-			'type'     => 'submit',
-			'disabled' => 'disabled',
-			'class'    => 'frm_full_opacity',
-			'value'    => esc_attr__( 'Submit', 'formidable' ),
-			'style'    => implode( ';', $submit_button_styles ),
-		);
 	}
 
 	/**

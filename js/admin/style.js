@@ -132,7 +132,7 @@
 	 * @returns {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
-		const cardWrapper   = document.getElementById( 'frm_style_cards_wrapper' );
+		const cardWrapper   = document.getElementById( 'frm_custom_style_cards_wrapper' );
 		const styleIdInput  = getStyleIdInput();
 		const stylesEnabled = event.target.checked;
 		
@@ -608,7 +608,7 @@
 	 * @returns {HTMLElement}
 	 */
 	function getCardByStyleId( styleId ) {
-		return Array.from( document.getElementById( 'frm_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
+		return Array.from( document.getElementById( 'frm_custom_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
 	}
 
 	/**
