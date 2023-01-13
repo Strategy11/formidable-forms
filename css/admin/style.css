@@ -22,13 +22,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 #frm_style_sidebar {
-	background-color: #F6F7FB;
-	padding: 20px 10px 10px;
 	vertical-align: top;
 	box-sizing: border-box;
 	overflow-y: auto;
 	flex: 1;
-	min-width: 500px;
 	position: relative;
 }
 
@@ -58,8 +55,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 #frm_style_preview {
 	overflow-y: auto;
 	overflow-x: hidden;
-	padding: 20px;
 	flex: 2;
+	border-left: 1px solid var(--sidebar-hover);
 }
 
 #frm_active_style_form:not(.frm_hidden),
@@ -89,7 +86,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card:nth-child(2n) {
-	margin-left: 15px;
+	margin-left: 16px;
 }
 
 .frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
@@ -142,6 +139,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	border-top: 1px solid #E9EAEA;
 	padding: 10px;
 	text-align: left;
+}
+
+.frm-style-card.with_frm_style .frm_form_field {
+	margin-bottom: 16px !important;
 }
 
 .frm-style-card-title {

@@ -35,6 +35,17 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	text-decoration: none;
 }
 
+/* Generic Classes */
+.frm_m_12 {
+	margin: 48px;
+}
+
+.frm_p_4 {
+	padding: 16px;
+}
+
+/* End Generic Classes */
+
 .wrap.frm-with-margin,
 #frm_top_bar + .wrap,
 .frm_wrap > .wrap {
@@ -1353,7 +1364,7 @@ a.frm_hidden,
 
 #frm_form_editor_container {
 	position: relative;
-	margin: 25px 50px 50px;
+	margin-top: 25px;
 }
 
 .form-field p {
