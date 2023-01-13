@@ -2023,6 +2023,7 @@ class FrmFormsController {
 		$reset     = false;
 		$pass_args = compact( 'form', 'fields', 'errors', 'title', 'description', 'reset' );
 
+		$pass_args['action'] = $params['action'];
 		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $handle_process_here ) {
