@@ -175,6 +175,12 @@ class FrmOnSubmitHelper {
 		return $actions;
 	}
 
+	/**
+	 * Gets On Submit action type (message, redirect or page).
+	 *
+	 * @param object $action Form action object.
+	 * @return string
+	 */
 	public static function get_action_type( $action ) {
 		if ( isset( $action->post_content['success_action'] ) ) {
 			return $action->post_content['success_action'];
