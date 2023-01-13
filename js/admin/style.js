@@ -278,6 +278,8 @@
 
 		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
 
+		// TODO trigger an upsell pop up if a style template is clicked.
+		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card };
 		dropdownMenuOptions = wp.hooks.doAction( hookName, hookArgs );
