@@ -13,13 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmOnSubmitHelper {
 
 	/**
-	 * Cache the on submit actions.
-	 *
-	 * @var array
-	 */
-	private static $actions = array();
-
-	/**
 	 * Shows message settings.
 	 *
 	 * @param array $args {
@@ -163,17 +156,23 @@ class FrmOnSubmitHelper {
 
 	/**
 	 * Gets all active On Submit form actions for form.
+	 * This checks and gets data from WordPress cache group `frm_actions` first. It prevents the cache issue if form
+	 * action is created during run time. If you use another cache method, please remember to delete the cache in
+	 * {@see FrmFormAction::save_settings()}.
 	 *
 	 * @param int $form_id Form ID.
 	 * @return array
 	 */
 	public static function get_actions( $form_id ) {
-		if ( isset( self::$actions[ $form_id ] ) ) {
-			return self::$actions[ $form_id ];
+		$cache_key = 'frm_on_submit_actions_' . $form_id;
+		$actions   = wp_cache_get( $cache_key, 'frm_actions' );
+		if ( false !== $actions ) {
+			return $actions;
 		}
 
-		self::$actions[ $form_id ] = FrmFormAction::get_action_for_form( $form_id, FrmOnSubmitAction::$slug );
-		return self::$actions[ $form_id ];
+		$actions = FrmFormAction::get_action_for_form( $form_id, FrmOnSubmitAction::$slug );
+		wp_cache_set( $cache_key, 'frm_actions' );
+		return $actions;
 	}
 
 	public static function get_action_type( $action ) {
