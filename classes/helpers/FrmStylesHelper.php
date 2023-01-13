@@ -577,7 +577,7 @@ class FrmStylesHelper {
 	 */
 	public static function echo_style_card( $style, $style_views_path, $active_style, $default_style, $form_id ) {
 		$is_default_style     = $style->ID === $default_style->ID;
-		$is_active_style      = $active_style->ID === $style->ID;
+		$is_active_style      = $style->ID === $active_style->ID;
 		$submit_button_params = self::get_submit_button_params();
 		$params               = self::get_params_for_style_card( $style, $default_style, $form_id );
 

@@ -16,9 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="frm_submit">
 			<input <?php FrmAppHelper::array_to_html_params( $submit_button_params, true ); ?> />
 		</div>
-	</div>
-	<div>
-		<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
 		<?php
 		/**
 		 * @since x.x
@@ -29,7 +26,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 *     @type bool    $is_active_style
 		 * }
 		 */
-		do_action( 'frm_style_card_after_title', compact( 'style', 'is_default_style', 'is_active_style' ) );
+		do_action( 'frm_style_card_after_submit', compact( 'style', 'is_default_style', 'is_active_style' ) );
 		?>
+	</div>
+	<div>
+		<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
 	</div>
 </div>
