@@ -5787,8 +5787,7 @@ function frmAdminBuildJS() {
 	function showInlineModal( icon, input ) {
 		var box = document.getElementById( icon.getAttribute( 'data-open' ) ),
 			container = jQuery( icon ).closest( 'p' ),
-			inputTrigger = ( typeof input !== 'undefined' ),
-			inputID, iconWrapper;
+			inputTrigger = ( typeof input !== 'undefined' );
 
 		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
@@ -5798,9 +5797,9 @@ function frmAdminBuildJS() {
 				input = getInputForIcon( icon );
 			}
 			if ( input === null ) {
-				iconWrapper = icon.closest( '.frm-rte-smart-values-wrapper' );
+				const iconWrapper = icon.closest( '.frm-rte-smart-values-wrapper' );
 				if ( iconWrapper ) {
-					inputID = iconWrapper.getAttribute( 'data-html_id' );
+					const inputID = iconWrapper.getAttribute( 'data-html_id' );
 					if ( inputID ) {
 						input = document.getElementById( inputID );
 					}
