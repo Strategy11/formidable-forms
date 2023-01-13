@@ -277,6 +277,10 @@
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
 
 		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
+
+		const hookName      = 'frm_style_card_click';
+		const hookArgs      = { card };
+		dropdownMenuOptions = wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	/**
