@@ -2229,7 +2229,17 @@ class FrmFormsController {
 			unset( $action );
 		}
 
-		return $met_actions;
+		$args['event'] = $event;
+
+		/**
+		 * Filters the On Submit actions that meet the conditional logics.
+		 *
+		 * @since 5.x.x
+		 *
+		 * @param array $met_actions Actions that meet the conditional logics.
+		 * @param array $args        See {@see FrmFormsController::run_success_action()}. `$args['event']` is also added.
+		 */
+		return apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
 	}
 
 	/**
