@@ -70,12 +70,12 @@ $type_args                   = $args;
 $type_args['form_action']    = $instance;
 $type_args['action_control'] = $this;
 foreach ( $types as $type_name => $type ) {
-	$css_class = 'frm_on_submit_' . esc_attr( $type_name ) . '_settings';
+	$css_class = 'frm_on_submit_' . esc_attr( $type_name ) . '_settings frm_on_submit_dependent_setting';
 	if ( $success_action !== $type_name ) {
 		$css_class .= ' frm_hidden';
 	}
 	?>
-	<div class="<?php echo esc_attr( $css_class ); ?>" data-sub-settings data-type="<?php echo esc_attr( $type_name ); ?>">
+	<div class="<?php echo esc_attr( $css_class ); ?>" data-show-if-<?php echo esc_attr( $type_name ); ?>>
 		<?php
 		if ( is_callable( $type['sub_settings'] ) ) {
 			call_user_func( $type['sub_settings'], $type_args );
@@ -85,4 +85,19 @@ foreach ( $types as $type_name => $type ) {
 	<?php
 }
 
+$id_attr   = $this->get_field_id( 'time_to_read' );
+$css_class = 'frm_form_field frm_on_submit_dependent_setting';
+if ( ! in_array( $success_action, array( 'message', 'page' ), true ) ) {
+	$css_class .= ' frm_hidden';
+}
+?>
+<div class="<?php echo esc_attr( $css_class ); ?>" data-show-if-message data-show-if-page>
+	<label for="<?php echo esc_attr( $id_attr ); ?>">
+		<?php esc_html_e( 'Number of seconds before redirecting', 'formidable' ); ?>
+	</label>
+
+	<input type="number" min="1" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $instance->post_content['time_to_read'] ); ?>" />
+</div>
+
+<?php
 unset( $css_class, $type_args, $type_name, $type, $success_action );

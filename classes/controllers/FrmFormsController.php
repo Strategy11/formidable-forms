@@ -2263,6 +2263,7 @@ class FrmFormsController {
 	 */
 	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
+		$time_to_read    = 0;
 		foreach ( $args['conf_method'] as $action ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
 				// We catch the redirect action to run it last.
@@ -2272,12 +2273,14 @@ class FrmFormsController {
 
 			self::run_single_on_submit_action( $args, $action );
 
+			$time_to_read += $action->post_content['time_to_read'];
+
 			unset( $action );
 		}
 
 		if ( $redirect_action ) {
 			// Show script to delay the redirection.
-			$args['force_delay_redirect'] = true;
+			$args['force_delay_redirect'] = $time_to_read;
 			self::run_single_on_submit_action( $args, $redirect_action );
 		}
 	}
@@ -2381,6 +2384,7 @@ class FrmFormsController {
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = isset( $args['form']->options[ $args['success_opt'] . '_msg' ] ) ? $args['form']->options[ $args['success_opt'] . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
+		$delay_time   = isset( $args['force_delay_redirect'] ) ? ( 1000 * $args['force_delay_redirect'] ) : 8000;
 
 		add_filter( 'frm_use_wpautop', '__return_true' );
 
@@ -2389,7 +2393,7 @@ class FrmFormsController {
 		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
-		echo 'setTimeout(function(){window.location="' . esc_url_raw( $args['success_url'] ) . '";}, 8000);';
+		echo 'setTimeout(function(){window.location="' . esc_url_raw( $args['success_url'] ) . '";}, ' . intval( $delay_time ) . ');';
 		if ( empty( $args['doing_ajax'] ) ) {
 			echo '};';
 		}

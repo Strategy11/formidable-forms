@@ -44,6 +44,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'success_url'     => '',
 			'success_page_id' => '',
 			'redirect_msg'    => FrmOnSubmitHelper::get_default_redirect_msg(),
+			'time_to_read'    => 5, // In seconds.
 		);
 	}
 }
