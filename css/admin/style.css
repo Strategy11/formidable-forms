@@ -291,12 +291,16 @@ Time fields use a div instead of a label, so don't target by the primary label b
 }
 
 #frm_style_preview select {
+	appearance: none; /* Hide the default icon */
+
 	/*
 	 * The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
 	 * Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.
 	 * The SVG is arrow-down-alt2 from Dashicons.
 	 */
-	background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+	background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+
+	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
 @media only screen and (max-width: 1200px) {
