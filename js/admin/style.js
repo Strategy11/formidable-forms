@@ -288,7 +288,7 @@
 		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card };
-		dropdownMenuOptions = wp.hooks.doAction( hookName, hookArgs );
+		wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	/**
@@ -371,6 +371,11 @@
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach(
 			card => {
+				if ( 'frm_template_style_cards_wrapper' === card.parentNode.id ) {
+					// Templates do not have hamburger menus.
+					return;
+				}
+
 				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
 				wrapper.appendChild( getHamburgerMenu( card.dataset ) );

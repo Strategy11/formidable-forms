@@ -125,16 +125,16 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	public function echo_card_template( $style ) {
-		?>
-		<div class="frm-style-card">
-			<div class="frm-style-card-preview">
-				<img style="max-width: 100%; border-radius: 6px;" src="<?php echo esc_url( $style['icon'][0] ); ?>" />
-				<div>
-					<span class="frm-style-card-title"><?php echo esc_html( $style['name'] ); ?></span>
-				</div>
-			</div>
-		</div>
-		<?php
+		if ( ! isset( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
+			return;
+		}
+
+		$style_object               = new stdClass();
+		$style_object->ID           = 0;
+		$style_object->post_title   = $style['name'];
+		$style_object->post_content = $style['settings'];
+
+		$this->echo_style_card( $style_object );
 	}
 
 	/**
