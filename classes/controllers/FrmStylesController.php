@@ -1152,6 +1152,23 @@ class FrmStylesController {
 	}
 
 	/**
+	 * Prevent the WordPress edit.css file from loading on the visual styler page.
+	 * This way .form-field elements do not have border styles applied to them.
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Styles $styles
+	 * @return void
+	 */
+	public static function disable_conflicting_wp_admin_css( $styles ) {
+		if ( ! FrmAppHelper::is_style_editor_page() ) {
+			return;
+		}
+
+		FrmStylesPreviewHelper::disable_conflicting_wp_admin_css( $styles );
+	}
+
+	/**
 	 * @deprecated x.x Saving custom CSS has been moved into Global Settings.
 	 *
 	 * @return void

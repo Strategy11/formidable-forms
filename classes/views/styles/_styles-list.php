@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $enabled = '0' !== $form->options['custom_style'];
 ?>
-<div id="frm_style_sidebar" class="frm-right-panel frm_wrap frm_p_4">
+<div id="frm_style_sidebar" class="frm-right-panel frm_p_4"><?php // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards. ?>
 	<?php
 	/**
 	 * Pro needs to hook in here to add the "New Style" trigger.

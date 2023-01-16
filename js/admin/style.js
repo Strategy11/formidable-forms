@@ -44,6 +44,12 @@
 	function initPreview() {
 		initFloatingLabels();
 		fillMissingSignatureValidationFunction();
+
+		// Remove .wp-core-ui from the body so the preview can avoid it.
+		// Then add it back where we want to use admin styles (the sidebar and the top bar).
+		document.body.classList.remove( 'wp-core-ui' );
+		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
+		document.getElementById( 'frm_top_bar' ).classList.add( 'wp-core-ui' );
 	}
 
 	/**
@@ -282,7 +288,7 @@
 		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card };
-		dropdownMenuOptions = wp.hooks.doAction( hookName, hookArgs );
+		wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	/**
@@ -365,6 +371,11 @@
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach(
 			card => {
+				if ( 'frm_template_style_cards_wrapper' === card.parentNode.id ) {
+					// Templates do not have hamburger menus.
+					return;
+				}
+
 				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
 				wrapper.appendChild( getHamburgerMenu( card.dataset ) );
@@ -443,7 +454,7 @@
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
 		return div({
-			className: 'dropdown',
+			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
 	}
