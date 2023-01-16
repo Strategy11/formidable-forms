@@ -9716,14 +9716,6 @@ function frmAdminBuildJS() {
 				loadFields( loadFieldId );
 			}
 
-			// append modal triggers to rte placeholder settings
-			document.querySelectorAll( '.frm-rte-smart-values-wrapper' ).forEach( function( e ) {
-				const modalTrigger = svg({ href: '#frm_more_horiz_solid_icon', classList: [ 'frm_more_horiz_solid_icon', 'frm-show-inline-modal' ] });
-				modalTrigger.setAttribute( 'data-open', 'frm-smart-values-box' );
-				modalTrigger.setAttribute( 'title', e.getAttribute( 'data-modal-trigger-title' ) );
-				e.appendChild( modalTrigger );
-			});
-
 			setupSortable( 'ul.frm_sorting' );
 
 			document.querySelectorAll( '.field_type_list > li' ).forEach( makeDraggable );
