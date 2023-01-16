@@ -44,6 +44,12 @@
 	function initPreview() {
 		initFloatingLabels();
 		fillMissingSignatureValidationFunction();
+
+		// Remove .wp-core-ui from the body so the preview can avoid it.
+		// Then add it back where we want to use admin styles (the sidebar and the top bar).
+		document.body.classList.remove( 'wp-core-ui' );
+		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
+		document.getElementById( 'frm_top_bar' ).classList.add( 'wp-core-ui' );
 	}
 
 	/**

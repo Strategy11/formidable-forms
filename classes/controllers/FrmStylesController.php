@@ -1160,29 +1160,12 @@ class FrmStylesController {
 	 * @param WP_Styles $styles
 	 * @return void
 	 */
-	public static function remove_edit_css( $styles ) {
+	public static function disable_conflicting_wp_admin_css( $styles ) {
 		if ( ! FrmAppHelper::is_style_editor_page() ) {
 			return;
 		}
 
-		if ( ! is_callable( array( $styles, 'remove' ) ) || ! array_key_exists( 'wp-admin', $styles->registered ) ) {
-			return;
-		}
-
-		$styles->remove( 'edit' );
-
-		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
-		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
-		if ( false === $edit_key ) {
-			return;
-		}
-
-		// Remove the edit dependency from wp-admin so it still loads, just without edit.css.
-		unset( $wp_admin_dependencies[ $edit_key ] );
-		$wp_admin_dependencies = array_values( $wp_admin_dependencies );
-
-		$styles->remove( 'wp-admin' );
-		$styles->add( 'wp-admin', false, $wp_admin_dependencies );
+		FrmStylesPreviewHelper::disable_conflicting_wp_admin_css( $styles );
 	}
 
 	/**
