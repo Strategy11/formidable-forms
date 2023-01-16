@@ -275,7 +275,6 @@
 		setTimeout( enableLabelTransitions, 1 );
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
-		// TODO: We should prompt for unsaved changes before redirecting.
 		const editButton     = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
