@@ -41,7 +41,6 @@ class FrmStylesCardHelper {
 		$this->form_id       = (int) $form_id;
 	}
 
-
 	/**
 	 * Echo a style card for a specific target Style Post object.
 	 *
@@ -98,7 +97,7 @@ class FrmStylesCardHelper {
 	private function get_params_for_style_card( $style ) {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
-			'class'               => 'with_frm_style frm-style-card ' . $class_name,
+			'class'               => 'with_frm_style frm-style-card',// . $class_name,
 			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,
@@ -151,6 +150,9 @@ class FrmStylesCardHelper {
 	public static function get_style_param_for_card( $style ) {
 		$styles = array();
 
+		$frm_style = new FrmStyle();
+		$defaults  = $frm_style->get_defaults();
+
 		// Add the background color setting for fieldsets to the card.
 		if ( ! $style->post_content['fieldset_bg_color'] ) {
 			$background_color = '#fff';
@@ -163,10 +165,44 @@ class FrmStylesCardHelper {
 		$defaults  = $frm_style->get_defaults();
 
 		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
-		$styles[] = '--font-size: ' . $defaults['field_font_size'];
-		$styles[] = '--field-font-size: ' . $defaults['field_font_size'];
-		$styles[] = '--label-padding: ' . $defaults['label_padding'];
-		$styles[] = '--field-height: ' . $defaults['field_height'];
+		$styles[]  = '--field-font-size: ' . $defaults['field_font_size'];
+		$styles[]  = '--field-height: ' . $defaults['field_height'];
+		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
+		$styles[]  = '--font-size: ' . $defaults['font_size'];
+
+		// Apply additional styles from the style.
+		$rules_to_apply = array(
+			'fieldset_bg_color',
+			'field_border_width',
+			'field_border_style',
+			'border_color',
+			'submit_bg_color',
+			'submit_border_color',
+			'submit_border_width',
+			'submit_border_radius',
+			'submit_text_color',
+			'submit_weight',
+			'submit_width',
+			'label_color',
+			'text_color',
+			'bg_color',
+		);
+
+		$color_settings = $frm_style->get_color_settings();
+
+		foreach ( $rules_to_apply as $key ) {
+			if ( ! array_key_exists( $key, $style->post_content ) ) {
+				continue;
+			}
+
+			$value = $style->post_content[ $key ];
+
+			if ( in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) ) {
+				$value = '#' . $value;
+			}
+
+			$styles[] = '--' . str_replace( '_', '-', $key ) . ':' . $value;
+		}
 
 		return implode( ';', $styles );
 	}

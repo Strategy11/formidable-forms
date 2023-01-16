@@ -153,6 +153,15 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	white-space: nowrap;
 }
 
+.frm-style-card .frm_submit input {
+	border-width: var(--submit-border-width);
+	border-color: var(--submit-border-color);
+	border-radius: var(--submit-border-radius);
+	font-weight: var(--submit-weight);
+	width: var(--submit-width);
+	margin: 0;
+}
+
 .frm_button_submit {
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }

@@ -156,6 +156,7 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
 		add_action( 'plugins_loaded', 'FrmStylesController::plugins_loaded' );
 		add_action( 'admin_init', 'FrmStylesController::admin_init' );
+		add_action( 'wp_default_styles', 'FrmStylesController::remove_edit_css', 11 ); // Use 11 so it happens after add_action( 'wp_default_styles', 'wp_default_styles' ); where edit.css is added.
 
 		// XML Controller.
 		add_action( 'admin_menu', 'FrmXMLController::menu', 41 );

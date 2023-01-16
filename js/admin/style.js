@@ -443,7 +443,7 @@
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
 		return div({
-			className: 'dropdown',
+			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
 	}
