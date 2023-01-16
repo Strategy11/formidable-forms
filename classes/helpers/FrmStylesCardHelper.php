@@ -97,13 +97,17 @@ class FrmStylesCardHelper {
 	private function get_params_for_style_card( $style ) {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
-			'class'               => 'with_frm_style frm-style-card',// . $class_name,
+			'class'               => 'with_frm_style frm-style-card',
 			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,
 			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
 			'data-label-position' => $style->post_content['position'],
 		);
+
+		if ( isset( $style->template_key ) ) {
+			$params['data-template-key'] = $style->template_key;
+		}
 
 		/**
 		 * Filter params so Pro can add additional params, like data-delete-url.
@@ -129,10 +133,13 @@ class FrmStylesCardHelper {
 			return;
 		}
 
+		// Use a better name than my sample form.
 		$style_object               = new stdClass();
 		$style_object->ID           = 0;
 		$style_object->post_title   = $style['name'];
+		$style_object->post_name    = 'my_sample_form';
 		$style_object->post_content = $style['settings'];
+		$style_object->template_key = $style['slug'];
 
 		$this->echo_style_card( $style_object );
 	}
