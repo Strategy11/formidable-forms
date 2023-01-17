@@ -5789,7 +5789,7 @@ function frmAdminBuildJS() {
 			container = jQuery( icon ).closest( 'p' ),
 			inputTrigger = ( typeof input !== 'undefined' );
 
-			if ( container.hasClass( 'frm-open' ) ) {
+		if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
 			box.classList.add( 'frm_hidden' );
 		} else {
