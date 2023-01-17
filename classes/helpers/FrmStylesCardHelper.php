@@ -95,6 +95,14 @@ class FrmStylesCardHelper {
 	 * @return array
 	 */
 	private function get_params_for_style_card( $style ) {
+		if ( ! empty( $style->post_content['position'] ) ) {
+			$label_position = $style->post_content['position'];
+		} else {
+			$frm_style      = new FrmStyle();
+			$defaults       = $frm_style->get_defaults();
+			$label_position = $defaults['position'];
+		}
+
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
 			'class'               => 'frm-style-card',
@@ -102,7 +110,7 @@ class FrmStylesCardHelper {
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,
 			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
-			'data-label-position' => $style->post_content['position'],
+			'data-label-position' => $label_position,
 		);
 
 		if ( isset( $style->template_key ) ) {
@@ -158,7 +166,7 @@ class FrmStylesCardHelper {
 		$styles = array();
 
 		// Add the background color setting for fieldsets to the card.
-		if ( ! $style->post_content['fieldset_bg_color'] ) {
+		if ( empty( $style->post_content['fieldset_bg_color'] ) ) {
 			$background_color = '#fff';
 		} else {
 			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );

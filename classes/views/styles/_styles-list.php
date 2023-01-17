@@ -6,7 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It lists all styles and allows the user to select and assign a style to a target form.
 // It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
 
-$enabled = '0' !== $form->options['custom_style'];
+$enabled     = '0' !== $form->options['custom_style'];
+$card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id );
 ?>
 <div id="frm_style_sidebar" class="frm-right-panel frm_p_4"><?php // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards. ?>
 	<?php
@@ -60,7 +61,6 @@ $enabled = '0' !== $form->options['custom_style'];
 	?>
 	<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
 		<?php
-		$card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id );
 		array_walk(
 			$styles,
 			/**
@@ -94,15 +94,14 @@ $enabled = '0' !== $form->options['custom_style'];
 		<?php
 		$style_api = new FrmStyleApi();
 		$info      = $style_api->get_api_info();
-		foreach ( $info as $key => $style ) {
-			if ( ! is_numeric( $key ) ) {
-				// Skip active_sub/expires keys.
-				continue;
+		array_walk(
+			$info,
+			function( $style, $key ) use ( $card_helper ) {
+				if ( is_numeric( $key ) ) { // Skip active_sub/expires keys.
+					$card_helper->echo_card_template( $style );
+				}
 			}
-
-			$card_helper->echo_card_template( $style );
-			unset( $style );
-		}
+		);
 		?>
 	</div>
 
