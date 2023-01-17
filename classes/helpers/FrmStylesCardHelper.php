@@ -129,7 +129,7 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	public function echo_card_template( $style ) {
-		if ( ! isset( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
+		if ( empty( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
 			return;
 		}
 
