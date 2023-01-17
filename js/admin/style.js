@@ -44,6 +44,12 @@
 	function initPreview() {
 		initFloatingLabels();
 		fillMissingSignatureValidationFunction();
+
+		// Remove .wp-core-ui from the body so the preview can avoid it.
+		// Then add it back where we want to use admin styles (the sidebar and the top bar).
+		document.body.classList.remove( 'wp-core-ui' );
+		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
+		document.getElementById( 'frm_top_bar' ).classList.add( 'wp-core-ui' );
 	}
 
 	/**
@@ -132,7 +138,7 @@
 	 * @returns {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
-		const cardWrapper   = document.getElementById( 'frm_style_cards_wrapper' );
+		const cardWrapper   = document.getElementById( 'frm_custom_style_cards_wrapper' );
 		const styleIdInput  = getStyleIdInput();
 		const stylesEnabled = event.target.checked;
 		
@@ -146,7 +152,7 @@
 		}
 
 		const card         = document.querySelector( '.frm-active-style-card' );
-		styleIdInput.value = card.dataset.styleId;
+		styleIdInput.value = card.dataset.styleId; // TODO update this for template keys.
 
 		toggleFormidableStylingInPreviewForms( true );
 	}
@@ -269,7 +275,6 @@
 		setTimeout( enableLabelTransitions, 1 );
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
-		// TODO: We should prompt for unsaved changes before redirecting.
 		const editButton     = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
@@ -277,6 +282,12 @@
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
 
 		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
+
+		// TODO trigger an upsell pop up if a style template is clicked.
+		// Trigger an action here so Pro can handle template preview updates on card click.
+		const hookName      = 'frm_style_card_click';
+		const hookArgs      = { card, styleIdInput };
+		wp.hooks.doAction( hookName, hookArgs );
 	}
 
 	/**
@@ -359,6 +370,11 @@
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach(
 			card => {
+				if ( 'frm_template_style_cards_wrapper' === card.parentNode.id ) {
+					// Templates do not have hamburger menus.
+					return;
+				}
+
 				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
 				wrapper.style.position = 'relative';
 				wrapper.appendChild( getHamburgerMenu( card.dataset ) );
@@ -437,7 +453,7 @@
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
 		return div({
-			className: 'dropdown',
+			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
 	}
@@ -608,7 +624,7 @@
 	 * @returns {HTMLElement}
 	 */
 	function getCardByStyleId( styleId ) {
-		return Array.from( document.getElementById( 'frm_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
+		return Array.from( document.getElementById( 'frm_custom_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
 	}
 
 	/**

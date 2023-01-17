@@ -33,5 +33,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<button id="frm_toggle_sample_form" class="frm_floating_style_button">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_sample_form_icon', array( 'echo' => true ) ); ?> <span><?php esc_html_e( 'View sample form', 'formidable' ); ?></span>
 		</button>
+		<?php
+		/**
+		 * This is used in Pro to add the spinner to the preview (for previewing templates which have a delay).
+		 *
+		 * @since x.x
+		 */
+		do_action( 'frm_style_preview_after_toggle', $view );
+		?>
 	</div>
 </div>

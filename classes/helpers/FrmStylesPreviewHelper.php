@@ -130,4 +130,48 @@ class FrmStylesPreviewHelper {
 		add_user_meta( $user_id, $meta_key, 1 );
 		return true;
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param WP_Styles $styles
+	 * @return void
+	 */
+	public static function disable_conflicting_wp_admin_css( $styles ) {
+		if ( ! is_callable( array( $styles, 'remove' ) ) || ! array_key_exists( 'wp-admin', $styles->registered ) ) {
+			return;
+		}
+
+		$styles->remove( 'edit' );
+
+		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
+		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+		if ( false === $edit_key ) {
+			return;
+		}
+
+		// Remove the edit dependency from wp-admin so it still loads, just without edit.css.
+		self::remove_wp_admin_dependency( $styles, 'edit' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param WP_Styles $styles
+	 * @param string    $key
+	 * @return void
+	 */
+	private static function remove_wp_admin_dependency( $styles, $key ) {
+		$dependencies = $styles->registered['wp-admin']->deps;
+		$index        = array_search( $key, $dependencies );
+		if ( false === $index ) {
+			return;
+		}
+
+		unset( $dependencies[ $index ] );
+		$dependencies = array_values( $dependencies );
+
+		$styles->registered['wp-admin']->deps = $dependencies;
+	}
+
 }
