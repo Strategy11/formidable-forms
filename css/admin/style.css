@@ -89,8 +89,11 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-left: 16px;
 }
 
-.frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
+.frm-style-card .frm-style-card-preview input {
 	box-shadow: none;
+}
+
+.frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
 	border-color: var(--submit-border-color) !important; /* Use !important so we can avoid the var(--text-color-disabled) !important rule. */
 }
 
