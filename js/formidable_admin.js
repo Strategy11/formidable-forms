@@ -2710,7 +2710,7 @@ function frmAdminBuildJS() {
 
 		for ( i = 0; i < fields.length; i++ ) {
 			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
-				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
+				( excludedOpts.length && hasExcfludedOption( fields[ i ], excludedOpts ) ) ) {
 				continue;
 			}
 
@@ -6766,22 +6766,7 @@ function frmAdminBuildJS() {
 		}*/
 	}
 
-	function maybeShowFormMessages() {
-		var header = document.getElementById( 'frm_messages_header' );
-		if ( showFormMessages() ) {
-			header.style.display = 'block';
-		} else {
-			header.style.display = 'none';
-		}
-	}
-
 	function showFormMessages() {
-		var action = document.getElementById( 'success_action' );
-		var selectedAction = action.options[action.selectedIndex].value;
-		if ( selectedAction === 'message' ) {
-			return true;
-		}
-
 		var show = false;
 		var editable = document.getElementById( 'editable' );
 		if ( editable !== null ) {
@@ -7831,26 +7816,24 @@ function frmAdminBuildJS() {
 	}
 
 	function onActionLoaded( event ) {
-		event.target.closest( '.frm_form_action_settings' ).querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
+		const settings = event.target.closest( '.frm_form_action_settings' );
+		if ( ! settings ) {
+			return;
+		}
+
+		settings.querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
 			if ( svg.nextElementSibling.type === 'text' ) {
 				svg.style.bottom = '-3px';
 				svg.style.marginRight = '0';
 			}
 		});
 
-		const settings = event.target.closest( '.frm_form_action_settings' );
-		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
-			onEmailActionLoaded( settings );
-		}
-	}
-
-	function onEmailActionLoaded( settings ) {
-		const wysiwyg = settings.querySelector( '.wp-editor-area' );
-		if ( wysiwyg ) {
+		settings.querySelectorAll( '.wp-editor-area' ).forEach( wysiwyg => {
 			frmDom.wysiwyg.init(
-				wysiwyg, { height: 160, addFocusEvents: true }
+				wysiwyg,
+				{ height: 160, addFocusEvents: true }
 			);
-		}
+		});
 	}
 
 	/* Global settings page */
@@ -9413,6 +9396,54 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	/**
+	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+	 *
+	 * @since 5.4.2
+	 *
+	 * @param {String}         event    Event name.
+	 * @param {String}         selector Selector.
+	 * @param {Function}       handler  Handler.
+	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 */
+	function documentOn( event, selector, handler, options ) {
+		if ( 'undefined' === typeof options ) {
+			options = false;
+		}
+
+		document.addEventListener( event, function( e ) {
+			var target;
+
+			// loop parent nodes from the target to the delegation node.
+			for ( target = e.target; target && target != this; target = target.parentNode ) {
+				if ( target.matches( selector ) ) {
+					handler.call( target, e );
+					break;
+				}
+			}
+		}, options );
+	}
+
+	function initOnSubmitAction() {
+		const onChangeType = event => {
+			if ( ! event.target.checked ) {
+				return;
+			}
+
+			const actionEl = event.target.closest( '.frm_form_action_settings' );
+			actionEl.querySelectorAll( '.frm_on_submit_dependent_setting:not(.frm_hidden)' ).forEach( el => {
+				el.classList.add( 'frm_hidden' );
+			});
+
+			const activeEls = actionEl.querySelectorAll( '.frm_on_submit_dependent_setting[data-show-if-' + event.target.value + ']' );
+			activeEls.forEach( activeEl => {
+				activeEl.classList.remove( 'frm_hidden' );
+			});
+		};
+
+		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -9827,11 +9858,7 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			//Show/hide Messages header
-			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).on( 'change', function() {
-				maybeShowFormMessages();
-			});
-			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
+			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			$loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).on( 'change', function() {
@@ -9908,6 +9935,8 @@ function frmAdminBuildJS() {
 			initSelectionAutocomplete();
 
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
+
+			initOnSubmitAction();
 		},
 
 		panelInit: function() {
