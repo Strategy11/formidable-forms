@@ -177,6 +177,7 @@ class FrmStylesCardHelper {
 		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
 		$styles[]  = '--font-size: ' . $defaults['font_size'];
 		$styles[]  = '--label-padding: ' . $default_style['label_padding'];
+		$styles[]  = '--form-align: ' . $default_style['form_align'];
 
 		// Apply additional styles from the style.
 		$rules_to_apply = array(
