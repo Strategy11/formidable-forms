@@ -137,7 +137,7 @@ class FrmStylesCardHelper {
 		$style_object               = new stdClass();
 		$style_object->ID           = 0;
 		$style_object->post_title   = $style['name'];
-		$style_object->post_name    = 'my_sample_form';
+		$style_object->post_name    = 'frm_style_template'; // This name is referenced in Pro.
 		$style_object->post_content = $style['settings'];
 		$style_object->template_key = $style['slug'];
 
