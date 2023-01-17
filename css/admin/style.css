@@ -183,7 +183,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	background-color: #fff;
 	color: var(--floating-button-text-color);
 	border: none;
-	position: absolute;
+	position: fixed;
 	bottom: 20px;
 	display: flex;
 	align-items: center;
@@ -201,7 +201,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 #frm_toggle_sample_form {
-	right: 20px;
+	right: 40px;
 }
 
 #frm_style_preview #frm_toggle_sample_form svg {
