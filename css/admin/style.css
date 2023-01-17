@@ -91,6 +91,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 .frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
 	box-shadow: none;
+	border-color: var(--submit-border-color) !important; /* Use !important so we can avoid the var(--text-color-disabled) !important rule. */
 }
 
 .frm-style-card:hover {
@@ -123,7 +124,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	z-index: 1;
 }
 
-#frm_style_sidebar .frm-style-card input[type="submit"] {
+#frm_style_sidebar .frm-style-card input {
 	height: unset !important;
 	margin: 0;
 	max-width: 100%;
@@ -141,7 +142,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	text-align: left;
 }
 
-.frm-style-card.with_frm_style .frm_form_field {
+.frm-style-card .frm_form_field {
 	margin-bottom: 16px !important;
 }
 

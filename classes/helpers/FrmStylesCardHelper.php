@@ -97,7 +97,7 @@ class FrmStylesCardHelper {
 	private function get_params_for_style_card( $style ) {
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
-			'class'               => 'with_frm_style frm-style-card',
+			'class'               => 'frm-style-card',
 			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,
@@ -157,9 +157,6 @@ class FrmStylesCardHelper {
 	public static function get_style_param_for_card( $style ) {
 		$styles = array();
 
-		$frm_style = new FrmStyle();
-		$defaults  = $frm_style->get_defaults();
-
 		// Add the background color setting for fieldsets to the card.
 		if ( ! $style->post_content['fieldset_bg_color'] ) {
 			$background_color = '#fff';
@@ -167,17 +164,6 @@ class FrmStylesCardHelper {
 			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
 		}
 		$styles[] = '--preview-background-color: ' . $background_color;
-
-		$frm_style = new FrmStyle();
-		$defaults  = $frm_style->get_defaults();
-
-		// Overwrite some styles. We want to make sure the sizes are normalized for the cards.
-		$styles[]  = '--field-font-size: ' . $defaults['field_font_size'];
-		$styles[]  = '--field-height: ' . $defaults['field_height'];
-		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
-		$styles[]  = '--font-size: ' . $defaults['font_size'];
-		$styles[]  = '--label-padding: ' . $default_style['label_padding'];
-		$styles[]  = '--form-align: ' . $default_style['form_align'];
 
 		// Apply additional styles from the style.
 		$rules_to_apply = array(
@@ -197,6 +183,7 @@ class FrmStylesCardHelper {
 			'bg_color',
 		);
 
+		$frm_style      = new FrmStyle();
 		$color_settings = $frm_style->get_color_settings();
 
 		foreach ( $rules_to_apply as $key ) {
@@ -212,6 +199,31 @@ class FrmStylesCardHelper {
 
 			$styles[] = '--' . str_replace( '_', '-', $key ) . ':' . $value;
 		}
+
+		return implode( ';', $styles );
+	}
+
+	/**
+	 * Overwrite some styles. We want to make sure the sizes are normalized for the cards.
+	 * The cards use some rules from the default style by default.
+	 * Instead of using the default style for card previews, use the actual defaults.
+	 * This is used in the card wrapper so it doesn't need to get added to each card.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_style_attribute_value_for_wrapper() {
+		$frm_style = new FrmStyle();
+		$defaults  = $frm_style->get_defaults();
+
+		$styles    = array();
+		$styles[]  = '--field-font-size: ' . $defaults['field_font_size'];
+		$styles[]  = '--field-height: ' . $defaults['field_height'];
+		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
+		$styles[]  = '--font-size: ' . $defaults['font_size'];
+		$styles[]  = '--label-padding: ' . $defaults['label_padding'];
+		$styles[]  = '--form-align: ' . $defaults['form_align'];
 
 		return implode( ';', $styles );
 	}

@@ -51,7 +51,8 @@ $enabled = '0' !== $form->options['custom_style'];
 	// Begin card wrapper
 	$card_wrapper_params = array(
 		'id'    => 'frm_custom_style_cards_wrapper',
-		'class' => 'frm-style-card-wrapper',
+		'class' => 'frm-style-card-wrapper with_frm_style',
+		'style' => FrmStylesCardHelper::get_style_attribute_value_for_wrapper()
 	);
 	if ( $enabled ) {
 		$card_wrapper_params['class'] .= ' frm-styles-enabled';
@@ -83,7 +84,7 @@ $enabled = '0' !== $form->options['custom_style'];
 	// Begin card wrapper
 	$card_wrapper_params = array(
 		'id'    => 'frm_template_style_cards_wrapper',
-		'class' => 'frm-style-card-wrapper',
+		'class' => 'frm-style-card-wrapper with_frm_style',
 	);
 	if ( $enabled ) {
 		$card_wrapper_params['class'] .= ' frm-styles-enabled';
