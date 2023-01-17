@@ -5789,23 +5789,13 @@ function frmAdminBuildJS() {
 			container = jQuery( icon ).closest( 'p' ),
 			inputTrigger = ( typeof input !== 'undefined' );
 
-		if ( container.hasClass( 'frm-open' ) ) {
+			if ( container.hasClass( 'frm-open' ) ) {
 			container.removeClass( 'frm-open' );
 			box.classList.add( 'frm_hidden' );
 		} else {
 			if ( ! inputTrigger ) {
 				input = getInputForIcon( icon );
 			}
-			if ( input === null ) {
-				const iconWrapper = icon.closest( '.frm-rte-smart-values-wrapper' );
-				if ( iconWrapper ) {
-					const inputID = iconWrapper.getAttribute( 'data-html-id' );
-					if ( inputID ) {
-						input = document.getElementById( inputID );
-					}
-				}
-			}
-
 			if ( input !== null ) {
 				if ( ! inputTrigger ) {
 					input.focus();
