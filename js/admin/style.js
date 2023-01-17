@@ -462,7 +462,7 @@
 	 * @param {String} styleId
 	 * @returns {HTMLElement}
 	 */
-	 function getRenameOption( styleId ) {
+	function getRenameOption( styleId ) {
 		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
 		addIconToOption( renameOption, 'frm_rename_icon' );
 
@@ -479,7 +479,7 @@
 
 		onClickPreventDefault(
 			renameOption,
-			() => maybeCreateModal(
+			() => stylerModal(
 				'frm_rename_style_modal',
 				{
 					title: __( 'Rename style', 'formidable-pro' ),
@@ -490,6 +490,19 @@
 		);
 
 		return renameOption;
+	}
+
+	/**
+	 * @param {String} id
+	 * @param {Object} args
+	 * @returns {HTMLElement}
+	 */
+	function stylerModal( id, args ) {
+		const modal = maybeCreateModal( id, args );
+		// Include both wp-core-ui and frm-white-body on the modal.
+		// Otherwise cancel buttons in the modal do not get styled properly.
+		modal.classList.add( 'frm_common_modal', 'wp-core-ui', 'frm-white-body' );
+		return modal;
 	}
 
 	/**
@@ -642,7 +655,7 @@
 	 * @returns {void}
 	 */
 	function confirmResetStyle( styleId ) {
-		const modal = maybeCreateModal(
+		stylerModal(
 			'frm_reset_style_modal',
 			{
 				title: __( 'Reset style', 'formidable' ),
@@ -650,7 +663,6 @@
 				footer: getResetStyleModalFooter( styleId )
 			}
 		);
-		modal.classList.add( 'frm_common_modal' );
 	}
 
 	/**
@@ -1105,5 +1117,5 @@
 	wp.hooks.addAction( 'frm_style_editor_init', 'formidable', initEditPage );
 
 	// Set a global object so these functions can be re-used in Pro.
-	window.frmStylerFunctions = { getCardByStyleId, getStyleInputNameModalContent, trackUnsavedChange };
+	window.frmStylerFunctions = { getCardByStyleId, getStyleInputNameModalContent, trackUnsavedChange, stylerModal };
 }() );
