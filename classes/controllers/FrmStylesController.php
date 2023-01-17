@@ -435,7 +435,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Save style for form (from Style page) via an AJAX action.
+	 * Save style for form (from Styler list page) via a POST action.
 	 *
 	 * @since x.x
 	 *
@@ -448,7 +448,22 @@ class FrmStylesController {
 		}
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
-		$form_id  = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+
+		/**
+		 * Hook into the saved style ID so Pro can import a style template by its key and return a new style ID.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $style_id
+		 */
+		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+
+		if ( ! $style_id || ! $form_id ) {
+			// TODO add an error on page load.
+			return;
+		}
 
 		$form                          = FrmForm::getOne( $form_id );
 		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
