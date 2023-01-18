@@ -363,6 +363,7 @@ class FrmStylesController {
 	private static function get_style_id_for_styler() {
 		$action = FrmAppHelper::simple_get( 'frm_action' );
 		if ( 'duplicate' === $action ) {
+			// The duplicate action uses style_id instead of id for better backward compatibility.
 			return FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
 		}
 

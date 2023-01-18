@@ -46,7 +46,7 @@ class FrmStyle {
 	}
 
 	public function duplicate( $id ) {
-		// duplicating is a pro feature
+		// Duplicating is a pro feature. This is handled in FrmProStyle::duplicate instead.
 	}
 
 	/**
