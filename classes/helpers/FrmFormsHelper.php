@@ -97,6 +97,15 @@ class FrmFormsHelper {
 			$args['form']       = 0;
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
 			$args['frm_action'] = 'edit';
+		} elseif ( FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
+			unset( $args['id'] ); // Avoid passing style into form switcher on style page.
+			$query_args = array(
+				'page'       => 'formidable-styles',
+			);
+			if ( $frm_action ) {
+				$query_args['frm_action'] = $frm_action;
+			}
+			$base = add_query_arg( $query_args, admin_url( 'themes.php' ) );
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );
@@ -372,8 +381,6 @@ class FrmFormsHelper {
 
 		return array(
 			'submit_value'     => $frm_settings->submit_value,
-			'success_action'   => 'message',
-			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
 			'honeypot'         => 'basic',

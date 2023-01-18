@@ -196,6 +196,11 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 	}
 
+	/**
+	 * @param stdClass $item
+	 * @param string   $style
+	 * @return string
+	 */
 	public function single_row( $item, $style = '' ) {
 		global $frm_vars, $mode;
 
@@ -242,7 +247,6 @@ class FrmFormsListHelper extends FrmListHelper {
 				case 'name':
 					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
 					$val .= $action_links;
-
 					break;
 				case 'created_at':
 					$date = gmdate( $format, strtotime( $item->created_at ) );
@@ -284,6 +288,28 @@ class FrmFormsListHelper extends FrmListHelper {
 		$r .= '</tr>';
 
 		return $r;
+	}
+
+	/**
+	 * Get the HTML for the Style column in the form list.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	public function column_style( $form ) {
+		$style = FrmStylesController::get_form_style( $form );
+
+		if ( ! $style ) {
+			// Do a second pass to avoid null values.
+			$frm_style = new FrmStyle( 'default' );
+			$style     = $frm_style->get_one();
+		}
+
+		$href  = FrmStylesHelper::get_edit_url( $style, $form->id );
+		$link  = '<a href="' . esc_url( $href ) . '">' . esc_html( $style->post_title ) . '</a>';
+		return '<div class="frm-grey-tag">' . $link . '</div>';
 	}
 
 	/**

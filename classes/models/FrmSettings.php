@@ -41,6 +41,13 @@ class FrmSettings {
 	public $current_form = 0;
 	public $tracking;
 
+	/**
+	 * @since x.x
+	 *
+	 * @var string|false|null
+	 */
+	public $custom_css;
+
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -115,6 +122,8 @@ class FrmSettings {
 			'email_to' => '[admin_email]',
 			'no_ips'   => 0,
 			'tracking' => FrmAppHelper::pro_is_installed(),
+
+			'custom_css' => false,
 		);
 	}
 
@@ -149,6 +158,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 * @return void
 	 */
 	public function fill_with_defaults( $params = array() ) {
 		$settings    = $this->default_options();
@@ -174,12 +184,31 @@ class FrmSettings {
 				$this->{$setting} = $default;
 			}
 
-			if ( $filter_html && in_array( $setting, $filter_keys, true ) ) {
-				$this->{$setting} = FrmAppHelper::kses( $this->{$setting}, 'all' );
-			}
-
+			$this->{$setting} = $this->maybe_sanitize_global_setting( $this->{$setting}, $setting, $filter_keys );
 			unset( $setting, $default );
 		}
+	}
+
+	/**
+	 * Handle sanitizing for a target global setting key.
+	 *
+	 * @since x.x
+	 *
+	 * @param mixed  $value       The unsanitized global setting value.
+	 * @param string $key         The key of the global setting being saved.
+	 * @param array  $filter_keys These keys are are filtered with kses.
+	 * @return mixed
+	 */
+	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
+		if ( 'custom_css' === $key ) {
+			return sanitize_textarea_field( $value );
+		}
+
+		if ( in_array( $key, $filter_keys, true ) ) {
+			return FrmAppHelper::kses( $value, 'all' );
+		}
+
+		return $value;
 	}
 
 	private function fill_captcha_settings() {
@@ -271,7 +300,7 @@ class FrmSettings {
 		do_action( 'frm_update_settings', $params );
 
 		if ( function_exists( 'get_filesystem_method' ) ) {
-			// save styling settings in case fallback setting changes
+			// Save styling settings in case fallback setting changes.
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}
@@ -287,6 +316,7 @@ class FrmSettings {
 		$this->re_lang          = $params['frm_re_lang'];
 		$this->re_threshold     = floatval( $params['frm_re_threshold'] );
 		$this->load_style       = $params['frm_load_style'];
+		$this->custom_css       = $params['frm_custom_css'];
 
 		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {

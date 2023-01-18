@@ -1,0 +1,352 @@
+/*
+This file is added to the visual styler admin page, accessed from the style tab.
+*/
+
+.frm-admin-page-styles #frm-publishing {
+	/*
+	Avoid a conflict with .frm_wrap > #frm_top_bar #frm-publishing { margin-top: 0; } in frm_admin.css
+	Without this, the Embed/Preview/Update buttons all appear too high in the header.
+	*/
+	margin-top: 15px !important;
+}
+
+#frm_styler_wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+#frm_style_sidebar,
+#frm_style_preview {
+	height: calc( 100vh - 95px );
+	box-sizing: border-box;
+}
+
+#frm_style_sidebar {
+	vertical-align: top;
+	box-sizing: border-box;
+	overflow-y: auto;
+	flex: 1;
+	position: relative;
+}
+
+#frm_style_name {
+	font-size: 18px;
+}
+
+#frm_style_sidebar h3 {
+	font-size: 16px;
+	padding-left: 0;
+}
+
+#frm_style_sidebar .frm-inner-content {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#frm_style_sidebar .control-section:hover .accordion-section-title {
+	/* Normally an accordion has a white background but this doesn't look great with the padding on the accordion. */
+	background-color: transparent !important;
+}
+
+#frm_style_sidebar .accordion-section-title::after {
+	right: 0;
+}
+
+#frm_style_preview {
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex: 2;
+	border-left: 1px solid var(--sidebar-hover);
+}
+
+#frm_active_style_form:not(.frm_hidden),
+#frm_sample_form:not(.frm_hidden) {
+	/* Without this a small form with a max-width of 480px for example doesn't get centered in the preview space. */
+	display: flex;
+}
+
+#frm_active_style_form > .frm_forms,
+#frm_sample_form > .frm_forms {
+	/* This gives small form containers more space. */
+	flex: 1;
+}
+
+.frm-style-card {
+	width: calc( 50% - 10px );
+	display: inline-flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	border-radius: 6px;
+	cursor: pointer;
+	box-sizing: border-box;
+	border: 1px solid transparent; /* Add a transparent border so an active style card doesn't cause the box to resize. */
+	background-color: #fff;
+	margin-bottom: 15px;
+}
+
+.frm-style-card:nth-child(2n) {
+	margin-left: 16px;
+}
+
+.frm-style-card .frm-style-card-preview input {
+	box-shadow: none;
+}
+
+.frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
+	border-color: var(--submit-border-color) !important; /* Use !important so we can avoid the var(--text-color-disabled) !important rule. */
+}
+
+.frm-style-card:hover {
+	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
+}
+
+.frm-active-style-card {
+	background-color: rgba(188, 224, 253, 0.23) !important;
+	border-color: rgba(65, 153, 253, 0.5);
+}
+
+.frm-style-card .dropdown {
+	position: absolute;
+	right: 5px;
+	bottom: 50%;
+	transform: translateY(50%);
+	overflow: visible;
+}
+
+.frm-style-card-preview {
+	padding: 10px;
+	flex: 1;
+	pointer-events: none;
+	background-color: var(--preview-background-color);
+	border-radius: 6px 6px 0 0
+}
+
+.frm-style-card-preview + div .dropdown {
+	/* Give it a z-index boost to avoid the border from the bottom of the card from overlapping the dropdown */
+	z-index: 1;
+}
+
+#frm_style_sidebar .frm-style-card input {
+	height: unset !important;
+	margin: 0;
+	max-width: 100%;
+}
+
+/* Avoid disabled button styles overwriting the card's preview styles */
+#frm_style_sidebar .frm-style-card input[disabled] {
+	background-color: var(--submit-bg-color) !important;
+	color: var(--submit-text-color) !important;
+}
+
+.frm-style-card .frm-style-card-preview + div {
+	border-top: 1px solid #E9EAEA;
+	padding: 10px;
+	text-align: left;
+}
+
+.frm-style-card .frm_form_field {
+	margin-bottom: 16px !important;
+}
+
+.frm-style-card-title {
+	max-width: calc( 100% - 20px );
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.frm-style-card .frm_submit input {
+	border-width: var(--submit-border-width);
+	border-color: var(--submit-border-color);
+	border-radius: var(--submit-border-radius);
+	font-weight: var(--submit-weight);
+	width: var(--submit-width);
+	margin: 0;
+}
+
+.frm_button_submit {
+	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
+}
+
+.frm_floating_style_button {
+	--floating-button-text-color: #282F36;
+}
+
+.frm_floating_style_button:hover,
+.frm_floating_style_button:active,
+.frm_floating_style_button:focus {
+	--floating-button-text-color: var(--primary-color);
+}
+
+#frm_style_preview .frm_floating_style_button {
+	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
+	border-radius: 43px;
+	background-color: #fff;
+	color: var(--floating-button-text-color);
+	border: none;
+	position: fixed;
+	bottom: 20px;
+	display: flex;
+	align-items: center;
+	padding: 5px 10px;
+	height: unset;
+	cursor: pointer;
+
+	/*
+	When a background image is set the children in the fieldset have a z-index of 1.\
+	Set to 2 so the floating buttons get priority when clicking if they overlap a form element.
+	*/
+	z-index: 2;
+}
+
+#frm_style_preview .frm_floating_style_button.frm_hidden {
+	display: none;
+}
+
+#frm_style_preview .frm_floating_style_button svg {
+	color: var(--floating-button-text-color);
+	fill: var(--floating-button-text-color);
+	height: 14px;
+	width: 14px;
+	margin-right: 10px;
+}
+
+#frm_edit_style {
+	transform: translateX(-20px);
+}
+
+#frm_toggle_sample_form {
+	right: 40px;
+}
+
+#frm_style_preview #frm_toggle_sample_form svg {
+	height: 16px;
+	width: 16px;
+}
+
+.frm_pro_form .frm_form_field.frm_lite_style,
+.frm_pro_form .frm_lite_style {
+	/*
+	Hide textarea, radio buttons, and checkboxes in the sample form in Pro.
+	Instead these elements are rendered again in Pro inside of a repeater.
+	*/
+	display: none !important;
+}
+
+label.default-style-box input[type="checkbox"] {
+	vertical-align: middle;
+}
+
+#frm_style_sidebar .frm_form_field input[type="checkbox"],
+#frm_style_sidebar .frm_form_field input[type="radio"] {
+	vertical-align: middle;
+}
+
+.styling_settings .frm_image_preview_wrapper {
+	width: 100%;
+}
+
+.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
+	margin-left: 0;
+}
+
+#frm_style_sidebar .wp-picker-container .wp-color-result.button {
+	width: 100%;
+	overflow: hidden;
+	margin: 0 !important;
+	height: 32px !important;
+	padding: 0 0 0 30px !important;
+	border-radius: var(--small-radius);
+	border-color: var(--grey-border);
+}
+
+#frm_style_sidebar .wp-color-result-text {
+	line-height: 30px !important;
+	font-size: 15px;
+	background: #fff !important;
+}
+
+.frm-style-card-wrapper {
+	margin-top: 20px;
+}
+
+.frm-style-card-wrapper:not(.frm-styles-enabled) {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+/* Style the hamburger menu (used in Style cards, and on the Style "Edit" page beside the Style name. */
+.frm-style-options-menu {
+	/* The long "Reset to defaults" option name requires extra space. There's normally a 160px min-width. */
+	min-width: 200px;
+}
+
+.frm-style-options-menu .dropdown-item a {
+	padding: 5px 10px;
+}
+
+.frm-style-options-menu .dropdown-item svg {
+	color: #484E54;
+	margin-left: 5px;
+	margin-right: 10px;
+}
+
+.frm-style-options-menu .dropdown-item a:hover svg {
+	color: var(--primary-color);
+	fill: currentColor;
+}
+
+/*
+Do not set this for frm_inside_container as it requires a custom line height value.
+Target .frm_primary_label so we avoid other labels like star rating stars.
+Time fields use a div instead of a label, so don't target by the primary label by tag type.
+*/
+#frm_style_preview .frm_form_field:not(.frm_inside_container) > .frm_primary_label {
+	line-height: var(--line-height);
+}
+
+#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select {
+	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
+	width: var(--auto-width);
+	max-width: 100%;
+}
+
+#frm_style_preview select {
+	appearance: none; /* Hide the default icon */
+
+	/*
+	 * The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
+	 * Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.
+	 * The SVG is arrow-down-alt2 from Dashicons.
+	 */
+	background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+
+	padding-right: 24px; /* Add enough padding for the icon. */
+}
+
+@media only screen and (max-width: 1200px) {
+	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
+	#frm_style_sidebar,
+	#frm_style_preview {
+		height: calc( 100vh - 135px );
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	#frm_style_sidebar {
+		min-width: 260px;
+	}
+	.frm-style-card {
+		width: 100%;
+		margin-left: 0 !important;
+	}
+}
+
+@media only screen and (max-width: 782px) {
+	#frm_style_preview .with_frm_style .frm_radio input[type=radio],
+	#frm_style_preview .with_frm_style .frm_checkbox input[type=checkbox] {
+		width: 18px !important;
+	}
+}
