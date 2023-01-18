@@ -274,6 +274,11 @@ label.default-style-box input[type="checkbox"] {
 }
 
 /* Style the hamburger menu (used in Style cards, and on the Style "Edit" page beside the Style name. */
+.frm-style-options-menu {
+	/* The long "Reset to defaults" option name requires extra space. There's normally a 160px min-width. */
+	min-width: 200px;
+}
+
 .frm-style-options-menu .dropdown-item a {
 	padding: 5px 10px;
 }

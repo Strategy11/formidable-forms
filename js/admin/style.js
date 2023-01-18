@@ -430,7 +430,7 @@
 		}
 
 		const resetOption = a({
-			text: __( 'Reset', 'formidable' )
+			text: __( 'Reset to defaults', 'formidable' )
 		});
 		addIconToOption( resetOption, 'frm_reset_icon' );
 		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
