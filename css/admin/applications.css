@@ -71,7 +71,7 @@
 }
 
 .frm-application-template-card:hover h4 {
-	color: var(--primary-color);
+	color: var(--primary-500);
 }
 
 /* Card title */
@@ -222,7 +222,7 @@
 }
 
 #frm_application_category_filter > a.frm-active-application-category {
-	color: var(--dark-grey);
+	color: var(--grey-700);
 	pointer-events: none;
 }
 

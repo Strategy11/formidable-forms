@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						)
 					);
 					?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg frm-button-sm">
 						<?php esc_html_e( 'Import', 'formidable' ); ?>
 					</a>
 				</h2>
