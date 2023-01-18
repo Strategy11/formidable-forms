@@ -186,13 +186,19 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	background-color: #fff;
 	color: var(--floating-button-text-color);
 	border: none;
-	position: absolute;
+	position: fixed;
 	bottom: 20px;
 	display: flex;
 	align-items: center;
 	padding: 5px 10px;
 	height: unset;
 	cursor: pointer;
+
+	/*
+	When a background image is set the children in the fieldset have a z-index of 1.\
+	Set to 2 so the floating buttons get priority when clicking if they overlap a form element.
+	*/
+	z-index: 2;
 }
 
 #frm_style_preview .frm_floating_style_button svg {
@@ -203,8 +209,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-right: 10px;
 }
 
+#frm_edit_style {
+	transform: translateX(-20px);
+}
+
 #frm_toggle_sample_form {
-	right: 20px;
+	right: 40px;
 }
 
 #frm_style_preview #frm_toggle_sample_form svg {
