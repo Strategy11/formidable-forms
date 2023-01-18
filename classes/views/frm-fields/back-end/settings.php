@@ -153,14 +153,11 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<?php } ?>
 				</span>
 				<?php } ?>
-				<?php
-				$html_id      = 'frm_default_value_' . absint( $field['id'] );
-				$field_is_rte = $field['type'] === 'rte';
-				?>
+				<?php $html_id = 'frm_default_value_' . absint( $field['id'] ); ?>
 				<p
-				class="frm-has-modal <?php echo esc_attr( $field_is_rte ? 'frm_rte_default' : '' ); ?> default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
-				<?php echo $field_is_rte ? 'data-modal-trigger-title="' . esc_attr__( 'Toggle Options', 'formidable' ) . '"' : ''; ?>
-				<?php echo $field_is_rte ? 'data-html-id="' . esc_attr( $html_id ) . '"' : ''; ?>
+				class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
+				data-modal-trigger-title="<?php echo esc_attr__( 'Toggle Options', 'formidable' ); ?>"
+				data-html-id="<?php echo esc_attr( $html_id ); ?>"
 				id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 					<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
 						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
@@ -168,7 +165,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<span class="frm-with-right-icon">
 						<?php
 						$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
-						if ( ! $field_is_rte ) {
+						if ( $field['type'] !== 'rte' ) {
 							FrmAppHelper::icon_by_class(
 								'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
 								array(
