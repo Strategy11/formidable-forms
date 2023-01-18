@@ -470,7 +470,7 @@ class FrmStylesController {
 
 		$default_style = self::get_default_style();
 		if ( $style_id === $default_style->ID ) {
-			$style_id = ''; // If the default style is selected, use the "Always use default" legacy option instead of the default style.
+			$style_id = 1; // If the default style is selected, use the "Always use default" legacy option instead of the default style.
 		}
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
