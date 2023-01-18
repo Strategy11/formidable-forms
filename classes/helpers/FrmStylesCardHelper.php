@@ -133,7 +133,11 @@ class FrmStylesCardHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @param array $style API style data.
+	 * @param array $style API style data {
+	 *     @type array  $settings
+	 *     @type string $name
+	 *     @type string $slug
+	 * }
 	 * @return void
 	 */
 	public function echo_card_template( $style ) {
@@ -159,7 +163,8 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
+	 * @param WP_Post|stdClass $style A new style (including duplicated styles) is not a WP_Post object.
+	 *                                Template cards also use an stdClss instead of a WP_Post object.
 	 * @return string
 	 */
 	public static function get_style_param_for_card( $style ) {
@@ -174,28 +179,14 @@ class FrmStylesCardHelper {
 		$styles[] = '--preview-background-color: ' . $background_color;
 
 		// Apply additional styles from the style.
-		$rules_to_apply = array(
-			'fieldset_bg_color',
-			'field_border_width',
-			'field_border_style',
-			'border_color',
-			'submit_bg_color',
-			'submit_border_color',
-			'submit_border_width',
-			'submit_border_radius',
-			'submit_text_color',
-			'submit_weight',
-			'submit_width',
-			'label_color',
-			'text_color',
-			'bg_color',
-		);
+		$rules_to_apply = self::get_style_keys_for_card();
 
 		$frm_style      = new FrmStyle();
 		$color_settings = $frm_style->get_color_settings();
 
 		foreach ( $rules_to_apply as $key ) {
 			if ( ! array_key_exists( $key, $style->post_content ) ) {
+				// A template from the API may not include every style key. If something is missing, skip it.
 				continue;
 			}
 
@@ -212,9 +203,37 @@ class FrmStylesCardHelper {
 	}
 
 	/**
+	 * Get the keys we want to use from the style to use in the card.
+	 * We don't use every style as we want the cards to look consistent, so size settings are left out.
+	 * The card previews also only include a labelled text input and submit button so we don't need styles for other elements.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private static function get_style_keys_for_card() {
+		return array(
+			'fieldset_bg_color',
+			'field_border_width',
+			'field_border_style',
+			'border_color',
+			'submit_bg_color',
+			'submit_border_color',
+			'submit_border_width',
+			'submit_border_radius',
+			'submit_text_color',
+			'submit_weight',
+			'submit_width',
+			'label_color',
+			'text_color',
+			'bg_color',
+		);
+	}
+
+	/**
 	 * Overwrite some styles. We want to make sure the sizes are normalized for the cards.
-	 * The cards use some rules from the default style by default.
-	 * Instead of using the default style for card previews, use the actual defaults.
+	 * The cards use some rules from the default style because of the with_frm_style class on the card wrapper.
+	 * As these can be customized, apply some default values for the card previews instead.
 	 * This is used in the card wrapper so it doesn't need to get added to each card.
 	 *
 	 * @since x.x
