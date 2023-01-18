@@ -49,11 +49,13 @@ $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id
 		<h2><?php esc_html_e( 'My styles', 'formidable' ); ?></h2>
 	</div>
 	<?php
+	$wrapper_style = FrmStylesCardHelper::get_style_attribute_value_for_wrapper();
+
 	// Begin card wrapper
 	$card_wrapper_params = array(
 		'id'    => 'frm_custom_style_cards_wrapper',
 		'class' => 'frm-style-card-wrapper with_frm_style',
-		'style' => FrmStylesCardHelper::get_style_attribute_value_for_wrapper()
+		'style' => $wrapper_style,
 	);
 	if ( $enabled ) {
 		$card_wrapper_params['class'] .= ' frm-styles-enabled';
@@ -85,6 +87,7 @@ $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id
 	$card_wrapper_params = array(
 		'id'    => 'frm_template_style_cards_wrapper',
 		'class' => 'frm-style-card-wrapper with_frm_style',
+		'style' => $wrapper_style,
 	);
 	if ( $enabled ) {
 		$card_wrapper_params['class'] .= ' frm-styles-enabled';
