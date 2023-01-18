@@ -131,7 +131,7 @@ class FrmFormsHelper {
 					<span class="frm_bstooltip" title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>" data-placement="right">
 						<?php echo esc_html( $name ); ?>
 					</span>
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon', array( 'aria-hidden' => 'true' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
 			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
@@ -1303,12 +1303,12 @@ BEFORE_HTML;
 			'Calculator'          => array( 'calculator', 'var(--purple)' ),
 			'Registrations'       => array( 'address_card' ),
 			'Customer Service'    => array( 'users_solid', 'var(--pink)' ),
-			'Education'           => array( 'pencil', 'var(--primary-color)' ),
+			'Education'           => array( 'pencil', 'var(--primary-500)' ),
 			'Marketing'           => array( 'eye', 'rgb(0,160,210)' ),
 			'Feedback'            => array( 'smile', 'var(--green)' ),
 			'Business Operations' => array( 'case' ),
 			'Contact Form'        => array( 'email' ),
-			'Survey'              => array( 'comment', 'var(--primary-color)' ),
+			'Survey'              => array( 'comment', 'var(--primary-500)' ),
 			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
 			'Quiz'                => array( 'percent' ),
 			''                    => array( 'align_right' ),
