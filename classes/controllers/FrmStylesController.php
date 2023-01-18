@@ -449,6 +449,10 @@ class FrmStylesController {
 		}
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
+		if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
+			// TODO show an error that save failed.
+			return;
+		}
 
 		/**
 		 * Hook into the saved style ID so Pro can import a style template by its key and return a new style ID.
@@ -459,14 +463,27 @@ class FrmStylesController {
 		 */
 		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
 
-		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
-
-		if ( ! $style_id || ! $form_id ) {
-			// TODO add an error on page load.
+		if ( ! $style_id ) {
+			// TODO show an error that save failed.
 			return;
 		}
 
-		$form                          = FrmForm::getOne( $form_id );
+		$default_style = self::get_default_style();
+		if ( $style_id === $default_style->ID ) {
+			$style_id = ''; // If the default style is selected, use the "Always use default" legacy option instead of the default style.
+		}
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		if ( ! $form_id ) {
+			// TODO show an error that save failed.
+			return;
+		}
+
+		$form = FrmForm::getOne( $form_id );
+		if ( ! $form ) {
+			// TODO handle invalid form ID.
+		}
+
 		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
 
 		global $wpdb;
@@ -475,6 +492,18 @@ class FrmStylesController {
 		FrmForm::clear_form_cache();
 
 		self::$message = __( 'Successfully updated style.', 'formidable' );
+	}
+
+	/**
+	 * 
+	 *
+	 * @param int $style_id
+	 * @return bool True if the style actually exists.
+	 */
+	private static function confirm_style_exists_before_setting( $style_id ) {
+		global $wpdb;
+		$post_type = FrmDb::get_var( $wpdb->posts, array( 'ID' => $style_id ), 'post_type' );
+		return self::$post_type === $post_type;
 	}
 
 	/**
