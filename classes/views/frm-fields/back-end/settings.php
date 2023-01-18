@@ -156,8 +156,8 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<?php $html_id = 'frm_default_value_' . absint( $field['id'] ); ?>
 				<p
 				class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
-				data-modal-trigger-title="<?php echo esc_attr__( 'Toggle Options', 'formidable' ); ?>"
-				data-html-id="<?php echo esc_attr( $html_id ); ?>"
+				<?php echo $field['type'] === 'rte' ? 'data-modal-trigger-title="' . esc_attr__( 'Toggle Options', 'formidable' ) . '"' : ''; ?>
+				<?php echo $field['type'] === 'rte' ? 'data-html-id="' . esc_attr( $html_id ) . '"' : ''; ?>
 				id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 					<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
 						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
