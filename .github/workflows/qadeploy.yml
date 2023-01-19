@@ -23,7 +23,9 @@ jobs:
         password: ${{ secrets.FRM_FTP_PASSWORD }}
         exclude: |
           **/.*
+          **/.*/**
           **/.git*/**
+          **/bin/**
           **/node_modules/**
           **/scss/**
           **/tests/**
@@ -50,7 +52,9 @@ jobs:
         password: ${{ secrets.FRM_FTP_PASSWORD }}
         exclude: |
           **/.*
+          **/.*/**
           **/.git*/**
+          **/bin/**
           **/node_modules/**
           **/scss/**
           **/tests/**
