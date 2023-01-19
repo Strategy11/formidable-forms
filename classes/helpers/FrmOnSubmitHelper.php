@@ -91,7 +91,8 @@ class FrmOnSubmitHelper {
 	 * }
 	 */
 	public static function show_redirect_settings( $args ) {
-		$id_attr = $args['action_control']->get_field_id( 'success_url' );
+		$instance = $args['form_action'];
+		$id_attr  = $args['action_control']->get_field_id( 'success_url' );
 		?>
 		<div class="frm_form_field frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
@@ -99,7 +100,7 @@ class FrmOnSubmitHelper {
 				type="text"
 				id="<?php echo esc_attr( $id_attr ); ?>"
 				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_url' ) ); ?>"
-				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
+				value="<?php echo esc_attr( $instance->post_content['success_url'] ); ?>"
 			/>
 		</div>
 
@@ -112,7 +113,7 @@ class FrmOnSubmitHelper {
 
 			<?php
 			wp_editor(
-				$args['form_action']->post_content['redirect_msg'],
+				$instance->post_content['redirect_msg'],
 				$id_attr,
 				array(
 					'textarea_name' => $args['action_control']->get_field_name( 'redirect_msg' ),
@@ -123,13 +124,14 @@ class FrmOnSubmitHelper {
 			?>
 		</div>
 
-		<?php $id_attr   = $args['action_control']->get_field_id( 'time_to_read' ); ?>
+		<?php $id_attr = $args['action_control']->get_field_id( 'time_to_read' ); ?>
 		<div class="frm_form_field">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
-				<?php esc_html_e( 'Number of seconds before redirecting', 'formidable' ); ?>
+				<?php esc_html_e( 'Delay Before Redirect', 'formidable' ); ?>
 			</label>
 
-			<input type="number" min="1" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $args['form_action']->post_content['time_to_read'] ); ?>" />
+			<input type="number" min="1" max="99" size="2" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $instance->post_content['time_to_read'] ); ?>" />
+			<span><?php esc_html_e( 'seconds', 'formidable' ); ?></span>
 		</div>
 		<?php
 	}

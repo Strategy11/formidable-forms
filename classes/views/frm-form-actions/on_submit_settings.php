@@ -54,7 +54,6 @@ if ( $col_count <= 4 ) {
 					name="<?php echo esc_attr( $this->get_field_name( 'success_action' ) ); ?>"
 					value="<?php echo esc_attr( $type ); ?>"
 					<?php checked( $type, $success_action ); ?>
-					style="height:0;width:0;display:block;border:0;overflow:hidden;"
 				/>
 				<label for="<?php echo esc_attr( $input_id ); ?>">
 					<?php FrmAppHelper::icon_by_class( $type_data['icon'], array( 'echo' => true ) ); ?>

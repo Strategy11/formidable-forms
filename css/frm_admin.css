@@ -8865,6 +8865,12 @@ Responsive Design
 	justify-content: center;
 }
 
+.frm_on_submit_type input {
+	opacity: 0 !important;
+    position: absolute;
+    z-index: -1;
+}
+
 .frm_on_submit_type input[type="radio"]:checked + label {
 	border-color: var(--primary-color);
 	box-shadow: 0 0 0 1px var(--primary-color);
