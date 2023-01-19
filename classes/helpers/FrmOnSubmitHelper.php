@@ -29,7 +29,7 @@ class FrmOnSubmitHelper {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
 		?>
 		<div class="frm_form_field">
-			<label for="<?php echo esc_attr( $id_attr ); ?>">
+			<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
 
@@ -94,7 +94,7 @@ class FrmOnSubmitHelper {
 		$id_attr = $args['action_control']->get_field_id( 'success_url' );
 		?>
 		<div class="frm_form_field frm_has_shortcodes">
-			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Enter URL', 'formidable' ); ?></label>
+			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
 			<input
 				type="text"
 				id="<?php echo esc_attr( $id_attr ); ?>"
@@ -106,7 +106,8 @@ class FrmOnSubmitHelper {
 		<?php $id_attr = $args['action_control']->get_field_id( 'redirect_msg' ); ?>
 		<div class="frm_form_field">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
-				<?php esc_html_e( 'Redirect message (used when multiple On Submit actions run)', 'formidable' ); ?>
+				<?php esc_html_e( 'Message Before Redirect', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This message is shown when ajax submit is turned off or when a success message will be shown.', 'formidable' ); ?>"></span>
 			</label>
 
 			<?php
@@ -116,6 +117,7 @@ class FrmOnSubmitHelper {
 				array(
 					'textarea_name' => $args['action_control']->get_field_name( 'redirect_msg' ),
 					'textarea_rows' => 4,
+					'media_buttons' => false,
 				)
 			);
 			?>
@@ -140,7 +142,9 @@ class FrmOnSubmitHelper {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
 		?>
 		<div class="frm_form_field">
-			<label for="<?php echo esc_attr( $name_attr ); ?>"><?php esc_html_e( 'Select a page', 'formidable' ); ?></label>
+			<label for="<?php echo esc_attr( $name_attr ); ?>" class="screen-reader-text">
+				<?php esc_html_e( 'Select a page', 'formidable' ); ?>
+			</label>
 			<?php
 			FrmAppHelper::maybe_autocomplete_pages_options(
 				array(
