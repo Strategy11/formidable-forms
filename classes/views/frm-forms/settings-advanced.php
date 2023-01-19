@@ -129,17 +129,20 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 <!--Permissions Section-->
 <?php do_action( 'frm_add_form_perm_options', $values ); ?>
 
-<?php
-/*
- * We keep this section to make the frm_add_form_msg_options hook still work after we moved the Success message option
- * to the On Submit action, and moved the Draft message option to the below of its checkbox.
- */
-if ( has_action( 'frm_add_form_msg_options' ) ) :
-	?>
-	<table class="form-table frm-fields">
-		<?php do_action( 'frm_add_form_msg_options', $values ); ?>
-	</table>
-<?php endif; ?>
+<!--Message Section-->
+<h3 id="frm_messages_header" class="<?php echo esc_attr( ( ( isset( $values['edit_action'] ) && $values['edit_action'] === 'message' && isset( $values['editable'] ) && $values['editable'] == 1 ) || $values['success_action'] === 'message' || isset( $values['save_draft'] ) && $values['save_draft'] == 1 ) ? '' : 'frm_hidden' ); ?>">
+	<?php esc_html_e( 'Messages', 'formidable' ); ?>
+	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Set up your confirmation messages.', 'formidable' ); ?>" ></span>
+</h3>
+<table class="form-table frm-fields">
+	<tr class="success_action_message_box success_action_box<?php echo esc_attr( $values['success_action'] === 'message' ? '' : ' frm_hidden' ); ?>">
+		<td class="frm_has_shortcodes frm_has_textarea">
+			<label for="success_msg"><?php esc_html_e( 'On Submit', 'formidable' ); ?></label>
+			<textarea id="success_msg" name="options[success_msg]" cols="50" rows="2" class="frm_long_input"><?php echo FrmAppHelper::esc_textarea( $values['success_msg'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
+		</td>
+	</tr>
+	<?php do_action( 'frm_add_form_msg_options', $values ); ?>
+</table>
 
 <!--Misc Section-->
 <?php if ( has_action( 'frm_additional_form_options' ) ) { ?>

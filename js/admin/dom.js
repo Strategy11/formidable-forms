@@ -596,33 +596,6 @@
 		return output;
 	}
 
-	/**
-	 * Get a labelled text input and a matching label.
-	 *
-	 * @since x.x
-	 *
-	 * @param {String} inputId
-	 * @param {String} labelText
-	 * @param {String} inputName
-	 * @returns {Element}
-	 */
-	function labelledTextInput( inputId, labelText, inputName ) {
-		const label = tag( 'label', labelText );
-		label.setAttribute( 'for', inputId );
-
-		const input = tag(
-			'input',
-			{
-				id: inputId,
-				className: 'frm_long_input'
-			}
-		);
-		input.type = 'text';
-		input.setAttribute( 'name', inputName );
-
-		return div({ children: [ label, input ] });
-	}
-
 	function tag( type, args = {}) {
 		const output = document.createElement( type );
 
@@ -666,33 +639,6 @@
 		return output;
 	}
 
-	/**
-	 * Pop up a success message in the lower right corner.
-	 * It then fades out and gets deleted automatically.
-	 *
-	 * @param {HTMLElement|String} content
-	 * @returns {void}
-	 */
-	function success( content ) {
-		const container           = document.getElementById( 'wpbody' );
-		const notice              = div({
-			className: 'notice notice-info frm-review-notice frm_updated_message',
-			child: div({
-				className: 'frm-satisfied',
-				child: 'string' === typeof content ? document.createTextNode( content ) : content
-			})
-		});
-		notice.style.borderRadius = '4px';
-		notice.style.right        = '10px';
-		notice.style.bottom       = '10px';
-		container.appendChild( notice );
-
-		setTimeout(
-			() => jQuery( notice ).fadeOut( () => notice.remove() ),
-			2000
-		);
-	}
-
 	function setAttributes( element, attrs ) {
 		Object.entries( attrs ).forEach(
 			([ key, value ]) => element.setAttribute( key, value )
@@ -704,5 +650,5 @@
 		element.appendChild( child );
 	}
 
-	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
+	window.frmDom = { tag, div, span, a, img, svg, setAttributes, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
 }() );

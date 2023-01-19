@@ -150,128 +150,35 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
-	private function create_on_submit_action( $form_id, $post_content ) {
-		$post_data = array(
-			'post_type' => FrmFormActionsController::$action_post_type,
-			'menu_order' => $form_id,
-			'post_excerpt' => FrmOnSubmitAction::$slug,
-			'post_status'  => 'publish',
-			'post_content' => FrmAppHelper::prepare_and_encode( $post_content ),
-		);
-
-		return $this->factory->post->create_and_get( $post_data );
-	}
-
-	public function test_multiple_on_submit_actions() {
-		$test_page_id = $this->factory->post->create(
-			array(
-				'post_type'    => 'page',
-				'post_content' => 'Test page content',
-			)
-		);
-
-		$form_id = $this->factory->form->create();
-
-		$message_action = $this->create_on_submit_action(
-			$form_id,
-			array(
-				'event' => array( 'create' ),
-				'success_action' => 'message',
-				'success_msg'    => 'Done!',
-			)
-		);
-
-		$page_action = $this->create_on_submit_action(
-			$form_id,
-			array(
-				'event' => array( 'create', 'update' ),
-				'success_action' => 'page',
-				'success_page_id' => $test_page_id,
-			)
-		);
-
-		$redirect_action_1 = $this->create_on_submit_action(
-			$form_id,
-			array(
-				'event' => array( 'create' ),
-				'success_action' => 'redirect',
-				'success_url'    => 'http://example.com',
-				'redirect_msg'   => 'Please wait!',
-			)
-		);
-
-		$redirect_action_2 = $this->create_on_submit_action(
-			$form_id,
-			array(
-				'event' => array( 'create', 'update' ),
-				'success_action' => 'redirect',
-				'success_url'    => 'https://abc2.test',
-				'redirect_msg'   => 'Please wait!',
-			)
-		);
-
-		// Update form object from cache.
-		wp_cache_delete( $form_id, 'frm_form' );
-		$form = FrmForm::getOne( $form_id );
-
-		// Create entry.
-		$entry_key = 'submit-actions';
-		$response  = $this->post_new_entry( $form, $entry_key );
-
-		$this->assertEmpty( $response );
-
-		$entry_id = FrmEntry::get_id_by_key( $entry_key );
-		$this->assertNotEmpty( $entry_id, 'No entry found with key ' . $entry_key );
-
-		// Test get_met_on_submit_actions.
-		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ) );
-		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $message_action->ID, $page_action->ID, $redirect_action_1->ID ) );
-
-		$actions = FrmFormsController::get_met_on_submit_actions( compact( 'form', 'entry_id' ), 'update' );
-		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
-
-		// Test the output.
-		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
-		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
-
-		$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
-
-		$this->assertNotFalse( strpos( $response, 'Test page content' ) );
-	}
-
 	/**
 	 * Test redirect after create
 	 *
 	 * @covers FrmFormsController::redirect_after_submit
 	 */
 	public function test_redirect_after_create() {
-		$form_id = $this->factory->form->create();
-
-		$this->create_on_submit_action(
-			$form_id,
+		$form = $this->factory->form->create_and_get(
 			array(
-				'event' => array( 'create' ),
-				'success_action' => 'redirect',
-				'success_url'    => 'http://example.com',
-				'redirect_msg'   => 'Please wait!',
+				'options' => array(
+					'success_action' => 'redirect',
+					'success_url'    => 'http://example.com',
+				),
 			)
 		);
-
-		wp_cache_delete( $form_id, 'frm_form' );
-
-		$form = $this->factory->form->get_object_by_id( $form_id );
-
 		$this->assertEquals( $form->options['success_action'], 'redirect' );
 
 		$entry_key = 'submit-redirect';
 		$response = $this->post_new_entry( $form, $entry_key );
 
+		if ( headers_sent() ) {
+			// since headers are sent by phpunit, we will get the js redirect
+			$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
+		}
+
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
-		$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
+		$this->assertNotFalse( strpos( $response, "window.location='http://example.com'" ) );
 	}
 
 	/**
@@ -298,22 +205,7 @@ class test_FrmFormsController extends FrmUnitTest {
 				),
 			)
 		);
-
-		// Test default action.
 		$this->assertEquals( $form->options['success_action'], 'message' );
-
-		$this->create_on_submit_action(
-			$form->id,
-			array(
-				'event'          => array( 'create' ),
-				'success_action' => 'message',
-				'success_msg'    => 'Done!',
-				'show_form'      => $show_form,
-			)
-		);
-
-		// Update $form object after action is created.
-		wp_cache_delete( $form->id, 'frm_form' );
 
 		$entry_key = 'submit-message';
 		$response = $this->post_new_entry( $form, $entry_key );

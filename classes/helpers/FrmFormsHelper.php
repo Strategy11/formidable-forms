@@ -381,6 +381,8 @@ class FrmFormsHelper {
 
 		return array(
 			'submit_value'     => $frm_settings->submit_value,
+			'success_action'   => 'message',
+			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
 			'honeypot'         => 'basic',

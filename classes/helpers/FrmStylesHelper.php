@@ -15,6 +15,55 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public static function get_style_menu( $active = '' ) {
+		ob_start();
+		self::style_menu( $active );
+		$menu = ob_get_contents();
+		ob_end_clean();
+
+		return $menu;
+	}
+
+	public static function style_menu( $active = '' ) {
+		?>
+		<ul class="frm_form_nav">
+			<li>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles' ) ); ?>"
+					class="<?php echo ( '' == $active ) ? 'current_page' : ''; ?>">
+					<?php esc_html_e( 'Edit Styles', 'formidable' ); ?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=manage' ) ); ?>"
+					class="<?php echo ( 'manage' == $active ) ? 'current_page' : ''; ?>">
+					<?php esc_html_e( 'Manage Styles', 'formidable' ); ?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=custom_css' ) ); ?>"
+					class="<?php echo ( 'custom_css' == $active ) ? 'current_page' : ''; ?>">
+					<?php esc_html_e( 'Custom CSS', 'formidable' ); ?>
+				</a>
+			</li>
+		</ul>
+		<?php
+	}
+
+	/**
+	 * @since 4.0
+	 */
+	public static function styler_save_button( $atts ) {
+		$style = $atts['style'];
+		if ( ! empty( $style->ID ) && empty( $style->menu_order ) ) {
+			$delete_link = admin_url( 'admin.php?page=formidable-styles&frm_action=destroy&id=' . $style->ID );
+		}
+
+		include( FrmAppHelper::plugin_path() . '/classes/views/styles/header-buttons.php' );
+	}
+
+	/**
 	 * Called from the admin header.
 	 *
 	 * @since 4.0
@@ -23,6 +72,25 @@ class FrmStylesHelper {
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
+	}
+
+	/**
+	 * Either get the heading or the style switcher.
+	 *
+	 * @since 4.0
+	 */
+	public static function styler_switcher( $atts ) {
+		if ( has_action( 'frm_style_switcher_heading' ) ) {
+			do_action( 'frm_style_switcher_heading', $atts );
+		} else {
+			?>
+			<div class="frm_top_left">
+				<h1>
+					<?php echo esc_html( $atts['style']->post_title ); ?>
+				</h1>
+			</div>
+			<?php
+		}
 	}
 
 	/**
@@ -145,18 +213,12 @@ class FrmStylesHelper {
 		return $class;
 	}
 
-	/**
-	 * @param WP_Post  $style
-	 * @param FrmStyle $frm_style
-	 * @param string   $type
-	 * @return void
-	 */
 	public static function bs_icon_select( $style, $frm_style, $type = 'arrow' ) {
 		$function_name = $type . '_icons';
 		$icons         = self::$function_name();
 		unset( $function_name );
 
-		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
+		$name = ( 'arrow' == $type ) ? 'collapse_icon' : 'repeat_icon';
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
@@ -169,12 +231,10 @@ class FrmStylesHelper {
 					<li <?php echo ( $style->post_content['collapse_icon'] == $key ) ? 'class="active"' : ''; ?>>
 						<a href="javascript:void(0);">
 							<label>
-								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
+								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?>/>
 								<span>
-									<?php
-									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) );
-									FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '-', $type ) );
-									?>
+									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '+', $type ) ); ?>
+									<?php FrmAppHelper::icon_by_class( 'frmfont ' . self::icon_key_to_class( $key, '-', $type ) ); ?>
 								</span>
 							</label>
 						</a>
@@ -283,6 +343,7 @@ class FrmStylesHelper {
 	 */
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
+
 			$frm_style = new FrmStyle();
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
@@ -329,7 +390,7 @@ class FrmStylesHelper {
 		$settings['field_height'] = $settings['field_height'] === '' ? 'auto' : $settings['field_height'];
 		$settings['field_width']  = $settings['field_width'] === '' ? 'auto' : $settings['field_width'];
 		$settings['auto_width']   = $settings['auto_width'] ? 'auto' : $settings['field_width'];
-		$settings['box_shadow']   = ! empty( $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
+		$settings['box_shadow']   = ( isset( $settings['remove_box_shadow'] ) && $settings['remove_box_shadow'] ) ? 'none' : '0 1px 1px rgba(0, 0, 0, 0.075) inset';
 
 		if ( ! isset( $settings['repeat_icon'] ) ) {
 			$settings['repeat_icon'] = 1;
@@ -422,8 +483,6 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
-	 *
-	 * @return bool
 	 */
 	public static function previewing_style() {
 		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -580,51 +639,5 @@ class FrmStylesHelper {
 	 */
 	public static function get_form_for_page() {
 		return FrmDeprecated::get_form_for_page();
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated x.x The style menu is no longer used in the styler.
-	 *
-	 * @param string $active
-	 * @return string
-	 */
-	public static function get_style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
-		return '';
-	}
-
-	/**
-	 * @deprecated x.x The style menu is no longer used in the styler.
-	 *
-	 * @param string $active
-	 * @return void
-	 */
-	public static function style_menu( $active = '' ) {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
-	 * Either get the heading or the style switcher.
-	 *
-	 * @since 4.0
-	 * @deprecated x.x The style switcher was replaced with a form switcher and is no longer used.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_switcher( $atts ) {
-		_deprecated_function( __METHOD__, 'x.x' );
-	}
-
-	/**
-	 * @since 4.0
-	 * @deprecated x.x The styler now uses the Embed/Preview/Update header. It uses the same save button as other pages with Form tabs.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function styler_save_button( $atts ) {
-		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }

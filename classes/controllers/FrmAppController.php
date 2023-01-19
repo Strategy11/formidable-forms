@@ -514,8 +514,7 @@ class FrmAppController {
 			'formidable_embed',
 		);
 
-		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
-			// We only need to load the color picker when editing styles.
+		if ( FrmAppHelper::is_style_editor_page() ) {
 			$dependencies[] = 'wp-color-picker';
 		}
 
