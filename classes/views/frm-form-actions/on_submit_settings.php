@@ -17,19 +17,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 $success_action = $instance->post_content['success_action'];
 
 $types = array(
-	'message' => array(
-		'label' => __( 'Show Message', 'formidable' ),
-		'icon'  => 'frm_icon_font frm_chat_forms_icon',
+	'message'  => array(
+		'label'        => __( 'Show Message', 'formidable' ),
+		'icon'         => 'frm_icon_font frm_chat_forms_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_message_settings' ),
 	),
 	'redirect' => array(
-		'label' => __( 'Redirect to URL', 'formidable' ),
-		'icon'  => 'dashicons dashicons-admin-site-alt3',
+		'label'        => __( 'Redirect to URL', 'formidable' ),
+		'icon'         => 'frm_icon_font frm_globe_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_redirect_settings' ),
 	),
-	'page' => array(
-		'label' => __( 'Show Page Content', 'formidable' ),
-		'icon'  => 'dashicons dashicons-admin-page',
+	'page'     => array(
+		'label'        => __( 'Show Page Content', 'formidable' ),
+		'icon'         => 'frm_icon_font frm_file_text_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_page_settings' ),
 	),
 );
@@ -54,7 +54,6 @@ if ( $col_count <= 4 ) {
 					name="<?php echo esc_attr( $this->get_field_name( 'success_action' ) ); ?>"
 					value="<?php echo esc_attr( $type ); ?>"
 					<?php checked( $type, $success_action ); ?>
-					style="height:0;width:0;display:block;border:0;overflow:hidden;"
 				/>
 				<label for="<?php echo esc_attr( $input_id ); ?>">
 					<?php FrmAppHelper::icon_by_class( $type_data['icon'], array( 'echo' => true ) ); ?>
@@ -85,19 +84,4 @@ foreach ( $types as $type_name => $type ) {
 	<?php
 }
 
-$id_attr   = $this->get_field_id( 'time_to_read' );
-$css_class = 'frm_form_field frm_on_submit_dependent_setting';
-if ( ! in_array( $success_action, array( 'message', 'page' ), true ) ) {
-	$css_class .= ' frm_hidden';
-}
-?>
-<div class="<?php echo esc_attr( $css_class ); ?>" data-show-if-message data-show-if-page>
-	<label for="<?php echo esc_attr( $id_attr ); ?>">
-		<?php esc_html_e( 'Number of seconds before redirecting', 'formidable' ); ?>
-	</label>
-
-	<input type="number" min="1" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $instance->post_content['time_to_read'] ); ?>" />
-</div>
-
-<?php
 unset( $css_class, $type_args, $type_name, $type, $success_action );

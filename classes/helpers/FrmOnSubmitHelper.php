@@ -29,7 +29,7 @@ class FrmOnSubmitHelper {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
 		?>
 		<div class="frm_form_field">
-			<label for="<?php echo esc_attr( $id_attr ); ?>">
+			<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
 
@@ -91,34 +91,47 @@ class FrmOnSubmitHelper {
 	 * }
 	 */
 	public static function show_redirect_settings( $args ) {
-		$id_attr = $args['action_control']->get_field_id( 'success_url' );
+		$instance = $args['form_action'];
+		$id_attr  = $args['action_control']->get_field_id( 'success_url' );
 		?>
 		<div class="frm_form_field frm_has_shortcodes">
-			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Enter URL', 'formidable' ); ?></label>
+			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
 			<input
 				type="text"
 				id="<?php echo esc_attr( $id_attr ); ?>"
 				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_url' ) ); ?>"
-				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
+				value="<?php echo esc_attr( $instance->post_content['success_url'] ); ?>"
 			/>
 		</div>
 
 		<?php $id_attr = $args['action_control']->get_field_id( 'redirect_msg' ); ?>
 		<div class="frm_form_field">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
-				<?php esc_html_e( 'Redirect message (used when multiple On Submit actions run)', 'formidable' ); ?>
+				<?php esc_html_e( 'Message Before Redirect', 'formidable' ); ?>
+				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This message is shown when ajax submit is turned off or when a success message will be shown.', 'formidable' ); ?>"></span>
 			</label>
 
 			<?php
 			wp_editor(
-				$args['form_action']->post_content['redirect_msg'],
+				$instance->post_content['redirect_msg'],
 				$id_attr,
 				array(
 					'textarea_name' => $args['action_control']->get_field_name( 'redirect_msg' ),
 					'textarea_rows' => 4,
+					'media_buttons' => false,
 				)
 			);
 			?>
+		</div>
+
+		<?php $id_attr = $args['action_control']->get_field_id( 'time_to_read' ); ?>
+		<div class="frm_form_field">
+			<label for="<?php echo esc_attr( $id_attr ); ?>">
+				<?php esc_html_e( 'Delay Before Redirect', 'formidable' ); ?>
+			</label>
+
+			<input type="number" min="1" max="99" size="2" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $instance->post_content['time_to_read'] ); ?>" />
+			<span><?php esc_html_e( 'seconds', 'formidable' ); ?></span>
 		</div>
 		<?php
 	}
@@ -140,7 +153,9 @@ class FrmOnSubmitHelper {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
 		?>
 		<div class="frm_form_field">
-			<label for="<?php echo esc_attr( $name_attr ); ?>"><?php esc_html_e( 'Select a page', 'formidable' ); ?></label>
+			<label for="<?php echo esc_attr( $name_attr ); ?>" class="screen-reader-text">
+				<?php esc_html_e( 'Select a page', 'formidable' ); ?>
+			</label>
 			<?php
 			FrmAppHelper::maybe_autocomplete_pages_options(
 				array(

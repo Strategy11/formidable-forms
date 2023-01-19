@@ -19,7 +19,7 @@
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--border-radius: 35px;
-	--small-radius: 6px;
+	--small-radius: 4px;
 	--small-sidebar: 275px;
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
@@ -1382,6 +1382,7 @@ a.frm_hidden,
 .accordion-container label,
 .frm-fields td > label,
 .frm-fields td > div > label,
+.frm_form_field > label:first-child,
 .frm-fields p > label,
 .post-type-frm_display .frm_form_field > label,
 #new_fields .frm_primary_label,
@@ -8429,6 +8430,10 @@ Responsive Design
 		right: auto;
 		left: 0;
 	}
+
+	.frm_on_submit_type svg {
+		display: none;
+	}
 }
 
 @media only screen and (max-width: 475px) {
@@ -8869,28 +8874,30 @@ input:checked + .frm_switch .frm_slider:before {
 }
 
 .frm_on_submit_type label {
-	display: block;
-	border: 1px solid rgba(40, 47, 54, 0.2);
-	border-radius: 3px;
-	font-size: 15px;
-	padding: 15px;
-	height: 100%;
-	box-sizing: border-box;
-	text-align: center;
+	display: flex;
+	border: 1px solid var(--grey-border);
+	border-radius: var(--small-radius);
+	gap: 16px;
+	padding: 16px;
+	font-weight: 600;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm_on_submit_type input {
+	opacity: 0 !important;
+    position: absolute;
+    z-index: -1;
 }
 
 .frm_on_submit_type input[type="radio"]:checked + label {
-	border-color: #4199fd;
-	box-shadow: 0 0 0 1px #4199fd;
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 1px var(--primary-color);
 }
 
-.frm_on_submit_type input[type="radio"]:checked + label i,
+#form_settings_page .frm_on_submit_type label:hover,
 .frm_on_submit_type input[type="radio"]:checked + label svg {
-	color: #4199fd;
+	color: var(--primary-color);
 }
 
-.frm_on_submit_type lable i,
-.frm_on_submit_type lable svg {
-	margin-right: 15px;
-}
 /* End On Submit action */
