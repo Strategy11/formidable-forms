@@ -122,7 +122,15 @@ class FrmOnSubmitHelper {
 			);
 			?>
 		</div>
-		<?php
+
+		<?php $id_attr   = $args['action_control']->get_field_id( 'time_to_read' ); ?>
+		<div class="frm_form_field">
+			<label for="<?php echo esc_attr( $id_attr ); ?>">
+				<?php esc_html_e( 'Number of seconds before redirecting', 'formidable' ); ?>
+			</label>
+
+			<input type="number" min="1" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $args['form_action']->post_content['time_to_read'] ); ?>" />
+		</div>
 	}
 
 	/**

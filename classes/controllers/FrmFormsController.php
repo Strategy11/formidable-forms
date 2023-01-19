@@ -2278,7 +2278,6 @@ class FrmFormsController {
 	 */
 	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
-		$time_to_read    = 0;
 		foreach ( $args['conf_method'] as $action ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
 				// We catch the redirect action to run it last.
@@ -2288,14 +2287,12 @@ class FrmFormsController {
 
 			self::run_single_on_submit_action( $args, $action );
 
-			$time_to_read += $action->post_content['time_to_read'];
-
 			unset( $action );
 		}
 
 		if ( $redirect_action ) {
 			// Show script to delay the redirection.
-			$args['force_delay_redirect'] = $time_to_read;
+			$args['force_delay_redirect'] = $redirect_action->post_content['time_to_read'];
 			self::run_single_on_submit_action( $args, $redirect_action );
 		}
 	}
