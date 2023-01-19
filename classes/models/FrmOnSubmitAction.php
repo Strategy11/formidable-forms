@@ -16,7 +16,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'   => 'frm_icon_font frm_location_arrow',
+			'classes'   => 'frm_icon_font frm_send_icon',
 			'active'    => true,
 			'event'     => array( 'create' ),
 			'limit'     => 99,

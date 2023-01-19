@@ -63,6 +63,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' ); ?>"></span>
 </h3>
 
+<?php
+// Show a temporary message. This can be removed after the date is passed.
+if ( time() < strtotime( '2023-03-07' ) ) {
+	FrmTipsHelper::show_tip(
+		array(
+			'tip'  => __( 'New: The actions after submit have moved.', 'formidable' ),
+			'call' => __( 'Go to the Form Actions', 'formidable' ),
+			'page' => add_query_arg( 't', 'email_settings' ),
+		),
+		'p'
+	);
+}
+?>
+
 <p class="frm8 frm_form_field">
 	<label for="no_save" class="frm_inline_block">
 		<input type="checkbox" name="options[no_save]" id="no_save" value="1" <?php checked( $values['no_save'], 1 ); ?> />
