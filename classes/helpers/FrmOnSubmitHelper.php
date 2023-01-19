@@ -131,6 +131,7 @@ class FrmOnSubmitHelper {
 
 			<input type="number" min="1" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $args['form_action']->post_content['time_to_read'] ); ?>" />
 		</div>
+		<?php
 	}
 
 	/**
