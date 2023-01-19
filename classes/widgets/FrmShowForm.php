@@ -46,7 +46,7 @@ class FrmShowForm extends WP_Widget {
 	 * Outputs the settings update form.
 	 *
 	 * @param array $instance Current settings.
-	 * @return string Default return is 'noform'.
+	 * @return void
 	 */
 	public function form( $instance ) {
 		$defaults = array(
