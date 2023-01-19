@@ -46,7 +46,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post    $style
+	 * @param stdClass|WP_Post $style
 	 * @return void
 	 */
 	public function echo_style_card( $style ) {
