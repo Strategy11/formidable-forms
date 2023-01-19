@@ -85,6 +85,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-bottom: 15px;
 }
 
+.frm-style-card.frm_hidden {
+	display: none;
+}
+
 .frm-style-card:nth-child(2n) {
 	margin-left: 16px;
 }
@@ -126,6 +130,25 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	/* Give it a z-index boost to avoid the border from the bottom of the card from overlapping the dropdown */
 	z-index: 1;
 }
+
+.frm-style-card-pagination {
+	text-align: center;
+	font-size: 14px;
+}
+
+.frm-style-card-pagination a {
+	text-decoration: underline;
+}
+
+.frm-style-card-pagination a + a {
+	margin-left: 10px;
+}
+
+.frm-style-card-pagination a.frm-current-style-card-page {
+	color: var(--dark-grey);
+	text-decoration: none;
+}
+
 
 #frm_style_sidebar .frm-style-card input {
 	height: unset !important;

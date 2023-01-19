@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmStylesCardHelper {
 
+	const PAGE_SIZE = 4;
+
 	/**
 	 * @var string
 	 */
@@ -29,16 +31,23 @@ class FrmStylesCardHelper {
 	private $form_id;
 
 	/**
+	 * @var bool
+	 */
+	private $enabled;
+
+	/**
 	 * @param WP_Post    $active_style
 	 * @param WP_Post    $default_style
 	 * @param string|int $form_id
+	 * @param bool       $enabled
 	 */
-	public function __construct( $active_style, $default_style, $form_id ) {
+	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
 		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_custom-style-card.php';
 
 		$this->active_style  = $active_style;
 		$this->default_style = $default_style;
 		$this->form_id       = (int) $form_id;
+		$this->enabled       = $enabled;
 	}
 
 	/**
@@ -46,10 +55,11 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post    $style
+	 * @param WP_Post $style
+	 * @param bool    $hidden Used for pagination.
 	 * @return void
 	 */
-	public function echo_style_card( $style ) {
+	private function echo_style_card( $style, $hidden = false ) {
 		$is_default_style     = $style->ID === $this->default_style->ID;
 		$is_active_style      = $style->ID === $this->active_style->ID;
 		$submit_button_params = $this->get_submit_button_params();
@@ -60,6 +70,9 @@ class FrmStylesCardHelper {
 		}
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card';
+		}
+		if ( $hidden ) {
+			$params['class'] .= ' frm_hidden';
 		}
 
 		include $this->view_file_path;
@@ -138,9 +151,10 @@ class FrmStylesCardHelper {
 	 *     @type string $name
 	 *     @type string $slug
 	 * }
+	 * @param bool  $hidden
 	 * @return void
 	 */
-	public function echo_card_template( $style ) {
+	public function echo_card_template( $style, $hidden = false ) {
 		if ( empty( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
 			return;
 		}
@@ -153,7 +167,7 @@ class FrmStylesCardHelper {
 		$style_object->post_content = $style['settings'];
 		$style_object->template_key = $style['slug'];
 
-		$this->echo_style_card( $style_object );
+		$this->echo_style_card( $style_object, $hidden );
 	}
 
 	/**
@@ -231,6 +245,44 @@ class FrmStylesCardHelper {
 	}
 
 	/**
+	 * Echo a card wrapper and its children style cards.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $id     The ID of the card wrapper element.
+	 * @param array  $styles
+	 *
+	 * @return void
+	 */
+	public function echo_card_wrapper( $id, $styles ) {
+		$wrapper_style = $this->get_style_attribute_value_for_wrapper();
+
+		// Begin card wrapper
+		$card_wrapper_params = array(
+			'id'    => 'frm_custom_style_cards_wrapper',
+			'class' => 'frm-style-card-wrapper with_frm_style',
+			'style' => $wrapper_style,
+		);
+		if ( $this->enabled ) {
+			$card_wrapper_params['class'] .= ' frm-styles-enabled';
+		}
+
+		$first_style         = reset( $styles );
+		$is_template_wrapper = is_array( $first_style );
+		?>
+		<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
+			<?php
+			if ( $is_template_wrapper ) {
+				$this->echo_template_cards( $styles );
+			} else {
+				$this->echo_custom_cards( $styles );
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Overwrite some styles. We want to make sure the sizes are normalized for the cards.
 	 * The cards use some rules from the default style because of the with_frm_style class on the card wrapper.
 	 * As these can be customized, apply some default values for the card previews instead.
@@ -240,7 +292,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_style_attribute_value_for_wrapper() {
+	private function get_style_attribute_value_for_wrapper() {
 		$frm_style = new FrmStyle();
 		$defaults  = $frm_style->get_defaults();
 
@@ -253,5 +305,81 @@ class FrmStylesCardHelper {
 		$styles[]  = '--form-align: ' . $defaults['form_align'];
 
 		return implode( ';', $styles );
+	}
+
+	/**
+	 * @param array<array> $styles
+	 * @return void
+	 */
+	private function echo_template_cards( $styles ) {
+		$count = 0;
+		array_walk(
+			$styles,
+			/**
+			 * Echo a style card for a single template from API data.
+			 *
+			 * @param array  $style
+			 * @param string $key
+			 * @return void
+			 */
+			function( $style, $key ) use ( &$count ) {
+				if ( is_numeric( $key ) ) { // Skip active_sub/expires keys.
+					$hidden = $count > ( self::PAGE_SIZE - 1 );
+					$this->echo_card_template( $style, $hidden );
+				}
+			}
+		);
+
+		$this->maybe_echo_card_pagination( $count );
+	}
+
+	/**
+	 * @param array<WP_Post> $styles
+	 * @return void
+	 */
+	private function echo_custom_cards( $styles ) {
+		$count = 0;
+		array_walk(
+			$styles,
+			/**
+			* Echo a style card for a single style in the $styles array.
+			*
+			* @param WP_Post $style
+			* @return void
+			*/
+			function( $style ) use ( &$count ) {
+				$hidden = $count > ( self::PAGE_SIZE - 1 );
+				$this->echo_style_card( $style, $hidden );
+				++$count;
+			}
+		);
+
+		$this->maybe_echo_card_pagination( $count );
+	}
+
+	/**
+	 * @param int $count
+	 * @return void
+	 */
+	private function maybe_echo_card_pagination( $count ) {
+		if ( $count <= self::PAGE_SIZE ) {
+			// Not enough cards to require pagination.
+			return;
+		}
+
+		$number_of_pages = ceil( $count / self::PAGE_SIZE );
+		?>
+		<div class="frm-style-card-pagination frm_wrap">
+			<?php for ( $index = 0; $index < $number_of_pages; ++$index ) { ?>
+				<?php
+				$anchor_parms = array( 'href' => '#' );
+				if ( 0 === $index ) {
+					$anchor_parms['class'] = 'frm-current-style-card-page';
+				}
+				?>
+				<a <?php FrmAppHelper::array_to_html_params( $anchor_parms, true ); ?>><?php echo absint( $index + 1 ); ?></a>
+			<?php } ?>
+		</div>
+		<?php
 	}
 }

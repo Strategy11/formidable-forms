@@ -65,6 +65,7 @@
 
 		syncPreviewFormLabelPositionsWithActiveStyle();
 		makeToggleAccessible();
+		initStyleCardPagination();
 	}
 
 	/**
@@ -107,6 +108,51 @@
 					e.preventDefault(); // Prevent the list from scrolling when you hit space.
 					toggle.click();
 				}
+			}
+		);
+	}
+
+	/**
+	 * Handle pagination click events.
+	 *
+	 * @returns {void}
+	 */
+	function initStyleCardPagination() {
+		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
+			pagination => {
+				const wrapper = pagination.closest( '.frm-style-card-wrapper' );
+				pagination.querySelectorAll( 'a' ).forEach(
+					anchor => onClickPreventDefault(
+						anchor,
+						() => {
+							const pageNumber = parseInt( anchor.textContent );
+							showCardsForPage( wrapper, pageNumber );
+
+							const currentStyleCardClass = 'frm-current-style-card-page';
+
+							pagination.querySelector( '.' + currentStyleCardClass ).classList.remove( currentStyleCardClass );
+							anchor.classList.add( currentStyleCardClass );
+						}
+					)
+				);
+			}
+		);
+	}
+
+	/**
+	 * @param {HTMLElement} wrapper
+	 * @param {Number} pageNumber
+	 * @returns {void}
+	 */
+	function showCardsForPage( wrapper, pageNumber ) {
+		const pageSize = 4;
+		const minIndex = ( pageNumber - 1 ) * pageSize;
+		const maxIndex = minIndex + pageSize - 1;
+
+		wrapper.querySelectorAll( '.frm-style-card' ).forEach(
+			( card, index ) => {
+				const hidden = index < minIndex || index > maxIndex;
+				card.classList.toggle( 'frm_hidden', hidden );
 			}
 		);
 	}

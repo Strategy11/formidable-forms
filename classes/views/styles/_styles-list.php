@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
 
 $enabled     = '0' !== $form->options['custom_style'];
-$card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id );
+$card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
 ?>
 <div id="frm_style_sidebar" class="frm-right-panel frm_p_4"><?php // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards. ?>
 	<?php
@@ -48,65 +48,15 @@ $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'My styles', 'formidable' ); ?></h2>
 	</div>
-	<?php
-	$wrapper_style = FrmStylesCardHelper::get_style_attribute_value_for_wrapper();
+	<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $styles ); ?>
 
-	// Begin card wrapper
-	$card_wrapper_params = array(
-		'id'    => 'frm_custom_style_cards_wrapper',
-		'class' => 'frm-style-card-wrapper with_frm_style',
-		'style' => $wrapper_style,
-	);
-	if ( $enabled ) {
-		$card_wrapper_params['class'] .= ' frm-styles-enabled';
-	}
-	?>
-	<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
-		<?php
-		array_walk(
-			$styles,
-			/**
-			 * Echo a style card for a single style in the $styles array.
-			 *
-			 * @param WP_Post             $style
-			 * @param FrmStylesCardHelper $card_helper
-			 * @return void
-			 */
-			function( $style ) use ( $card_helper ) {
-				$card_helper->echo_style_card( $style );
-			}
-		);
-		?>
-	</div>
-	<?php // End card wrapper ?>
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
 	</div>
 	<?php
-	// Begin card wrapper
-	$card_wrapper_params = array(
-		'id'    => 'frm_template_style_cards_wrapper',
-		'class' => 'frm-style-card-wrapper with_frm_style',
-		'style' => $wrapper_style,
-	);
-	if ( $enabled ) {
-		$card_wrapper_params['class'] .= ' frm-styles-enabled';
-	}
-	?>
-	<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
-		<?php
-		$style_api = new FrmStyleApi();
-		$info      = $style_api->get_api_info();
-		array_walk(
-			$info,
-			function( $style, $key ) use ( $card_helper ) {
-				if ( is_numeric( $key ) ) { // Skip active_sub/expires keys.
-					$card_helper->echo_card_template( $style );
-				}
-			}
-		);
-		?>
-	</div>
+	$style_api = new FrmStyleApi();
+	$card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_api->get_api_info() );
 
-	<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
+	FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell.
+	?>
 </div>
