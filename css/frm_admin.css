@@ -1409,7 +1409,7 @@ a.frm_hidden,
 
 #frm_form_editor_container {
 	position: relative;
-	margin-top: 25px;
+	margin: 25px 50px 50px;
 }
 
 .form-field p {
@@ -2330,20 +2330,17 @@ h2.frm-h2 + .howto {
 }
 
 .frm-plan-required-tag {
-	margin-left: 5px;
-	transform: translateY(-1px);
 	background: #FDE6DE;
 	color: #F15A24;
-}
-
-.frm-meta-tag {
 	font-size: 10px;
-	padding: 4px 6px;
+	padding: 4px 8px;
 	border-radius: 4px;
 	text-transform: uppercase;
 	font-weight: normal;
 	display: inline-block;
 	line-height: 12px;
+	transform: translateY(-1px);
+	margin-left: 5px;
 }
 
 #frm_new_form_modal.frm-expired #frm-create-block,
@@ -3266,6 +3263,17 @@ input[type="checkbox"] {
 	padding: 0;
 }
 
+.frm-star-group:not(.frm-star-hovered) input[type=radio]:checked + label:before,
+.frm-star-group input + label:hover:before,
+.frm-star-group:hover input + label:hover:before,
+.frm-star-group .star-rating-on:before,
+.frm-star-group .star-rating-hover:before,
+.frm-star-group input[type=radio]:checked + label:before,
+.frm-star-group input + label:before,
+.frm-star-group .star-rating:before {
+	color: var( --blue-border);
+}
+
 .frm_wrap .frm-number-range + .frm_last input,
 .frm_wrap .frm-number-range input {
 	text-align: center;
@@ -3385,6 +3393,7 @@ input[type="checkbox"] {
 	box-shadow: none;
 	-webkit-appearance: none;
 }
+
 
 .frm_wrap .with_frm_style .frm_checkbox input[type=checkbox],
 .frm_wrap input[type=checkbox],
@@ -3992,6 +4001,14 @@ li.ui-state-default.edit_field_type_divider .frm-show-hover {
 	width: calc(100% - 73px);
 }
 
+.frm-right-panel.styling_settings .frm_image_preview_wrapper {
+	width: 100%;
+}
+
+.frm-right-panel.styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
+	margin-left: 0;
+}
+
 .frm-right-panel .frm_single_option a.frm_remove_tag,
 .frm_single_option a {
 	padding-left: 7px;
@@ -4324,7 +4341,7 @@ select.frm_cancelnew, input.frm_enternew {
 	margin: 5px 0 5px 25px;
 }
 
-/* The small toggle is used to enable/disable email actions. */
+/* Admin toggle */
 .frm_toggle_off,
 .frm_toggle_on {
 	display: none;
@@ -4702,6 +4719,35 @@ label.frm-example-icon {
 	height: 18px;
 	margin-left: 2px;
 	vertical-align: text-bottom;
+}
+
+/* Styles tabs */
+
+#frm_styling_form #frm_delete_style {
+	padding-right: 10px;
+}
+
+#frm_styling_form #frm_delete_style .frmsvg {
+	vertical-align: -webkit-baseline-middle;
+}
+
+.frm_pro_form .frm_form_field.frm_lite_style,
+.frm_pro_form .frm_lite_style {
+	display: none !important;
+}
+
+label.default-style-box input[type="checkbox"] {
+	vertical-align: middle;
+}
+
+#frm_styling_form .frm_form_field input[type="checkbox"],
+#frm_styling_form .frm_form_field input[type="radio"] {
+	vertical-align: bottom;
+}
+
+#frm_styling_form .howto span {
+	float: none;
+	margin-top: 0;
 }
 
 /* Import/Export */
@@ -6051,8 +6097,8 @@ li.selected .divider_section_only:before {
 }
 
 #frm-form-button button,
-.frm_wrap .frm_remove_form_row.frm_button,
-.frm_wrap .frm_add_form_row.frm_button,
+.frm_remove_form_row.frm_button,
+.frm_add_form_row.frm_button,
 .frm-white-body .frm-preview-buttons button {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--blue-border);
@@ -7711,6 +7757,10 @@ iframe#dyncontent_ifr {
 	font-size: var(--text-sm);
 }
 
+#frm_styling_form #post-body {
+	padding: 20px;
+}
+
 .ui-datepicker-inline.ui-datepicker {
 	max-width: 19em;
 }
@@ -7773,6 +7823,11 @@ iframe#dyncontent_ifr {
 
 .frm_end.frm6 .wp-picker-holder {
     margin-left: -86px;
+}
+
+#frm_styling_form div.tabs-panel {
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
 /*form inputs/selects */
@@ -8370,6 +8425,10 @@ Responsive Design
 		display: none !important;
 	}
 
+	ul.frm_form_nav > li {
+		margin-right: 15px;
+	}
+
 	.frm-white-body.auto-fold #wpcontent {
 		padding-left: 0;
 	}
@@ -8846,119 +8905,3 @@ Responsive Design
 	max-width: 100%;
 }
 
-/*
-These are the styles for the "Enable Formidable styling" toggle in the visual styler.
-It uses the same style rules as the font end toggle field in Pro.
-To use this element, you can call the FrmHtmlHelper::toggle function.
-*/
-.frm_switch_opt {
-	padding: 0 8px 0 0;
-	white-space: normal;
-	display: inline;
-	vertical-align: middle;
-	font-weight: normal;
-}
-
-.frm_on_label {
-	padding:0 0 0 8px;
-}
-
-.frm_on_label,
-.frm_off_label {
-	color: #444444;
-}
-
-.frm_switch {
-	position: relative;
-	display: inline-block;
-	width: 40px;
-	height: 25px;
-	vertical-align: middle;
-}
-
-.frm_switch_block input {
-	display:none !important;
-}
-
-.frm_slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #eaeaea;
-	transition: .4s;
-	border-radius: 30px;
-}
-
-.frm_slider:before {
-	border-radius: 50%;
-	position: absolute;
-	content: "";
-	height: 23px;
-	width: 23px;
-	left: 1px;
-	bottom: 1px;
-	background-color: white;
-	transition: .4s;
-	box-shadow:0 2px 6px rgba(41, 58, 82, 0.31);
-}
-
-input:checked + .frm_switch .frm_slider {
-	background-color: #579AF6;
-}
-
-input:focus + .frm_switch .frm_slider {
-	box-shadow: 0 0 1px #3177c7;
-}
-
-input:checked + .frm_switch .frm_slider:before {
-	transform: translateX(15px);
-}
-
-.frm_rtl .frm_switch_opt {
-	padding: 0 8px;
-}
-
-.frm_rtl .frm_slider:before {
-	left: 16px;
-}
-
-.frm_rtl input:checked + .frm_switch .frm_slider:before {
-	transform: none!important;
-	left: 1px;
-}
-/* End toggle styling */
-
-/* On Submit action */
-.frm_single_on_submit_settings .frm_form_field {
-	margin-top: 20px;
-}
-
-.frm_on_submit_type label {
-	display: block;
-	border: 1px solid rgba(40, 47, 54, 0.2);
-	border-radius: 3px;
-	font-size: 15px;
-	padding: 15px;
-	height: 100%;
-	box-sizing: border-box;
-	text-align: center;
-}
-
-.frm_on_submit_type input[type="radio"]:checked + label {
-	border-color: #4199fd;
-	box-shadow: 0 0 0 1px #4199fd;
-}
-
-.frm_on_submit_type input[type="radio"]:checked + label i,
-.frm_on_submit_type input[type="radio"]:checked + label svg {
-	color: #4199fd;
-}
-
-.frm_on_submit_type lable i,
-.frm_on_submit_type lable svg {
-	margin-right: 15px;
-}
-/* End On Submit action */

@@ -623,9 +623,6 @@ class FrmDb {
 	 * Used when saving form actions and styles
 	 *
 	 * @since 2.05.06
-	 *
-	 * @param array $settings
-	 * @return int|WP_Error
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;

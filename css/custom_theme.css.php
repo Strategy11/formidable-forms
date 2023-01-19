@@ -1638,4 +1638,4 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 }
 <?php
 
-echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo strip_tags( $defaults['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

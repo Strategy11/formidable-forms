@@ -53,7 +53,7 @@ if ( ! empty( $template['custom'] ) ) {
 				}
 				?>
 				<?php if ( $plan_required ) { ?>
-					<span class="frm-meta-tag frm-plan-required-tag">
+					<span class="frm-plan-required-tag">
 						<?php
 						echo esc_html( $plan_required );
 						if ( ! in_array( $plan_required, array( 'free', 'Elite' ), true ) ) {

@@ -66,7 +66,7 @@ class FrmForm {
 		if ( ! FrmAppHelper::allow_unfiltered_html() && ! empty( $options['submit_html'] ) ) {
 			$options['submit_html'] = FrmAppHelper::kses_submit_button( $options['submit_html'] );
 		}
-		return FrmAppHelper::maybe_filter_array( $options, array( 'submit_value', 'before_html', 'after_html' ) );
+		return FrmAppHelper::maybe_filter_array( $options, array( 'submit_value', 'success_msg', 'before_html', 'after_html' ) );
 	}
 
 	/**
@@ -763,7 +763,6 @@ class FrmForm {
 		$results = FrmDb::get_row( $table_name, $where );
 
 		if ( isset( $results->options ) ) {
-			FrmFormsController::update_get_form_success_action( $results );
 			FrmDb::set_cache( $results->id, $results, 'frm_form' );
 			FrmAppHelper::unserialize_or_decode( $results->options );
 		}
@@ -792,7 +791,6 @@ class FrmForm {
 
 		if ( $results ) {
 			foreach ( $results as $result ) {
-				FrmFormsController::update_get_form_success_action( $result );
 				FrmDb::set_cache( $result->id, $result, 'frm_form' );
 				FrmAppHelper::unserialize_or_decode( $result->options );
 			}
