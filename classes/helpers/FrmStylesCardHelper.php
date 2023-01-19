@@ -259,7 +259,7 @@ class FrmStylesCardHelper {
 
 		// Begin card wrapper
 		$card_wrapper_params = array(
-			'id'    => 'frm_custom_style_cards_wrapper',
+			'id'    => $id,
 			'class' => 'frm-style-card-wrapper with_frm_style',
 			'style' => $wrapper_style,
 		);
@@ -296,13 +296,13 @@ class FrmStylesCardHelper {
 		$frm_style = new FrmStyle();
 		$defaults  = $frm_style->get_defaults();
 
-		$styles    = array();
-		$styles[]  = '--field-font-size: ' . $defaults['field_font_size'];
-		$styles[]  = '--field-height: ' . $defaults['field_height'];
-		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
-		$styles[]  = '--font-size: ' . $defaults['font_size'];
-		$styles[]  = '--label-padding: ' . $defaults['label_padding'];
-		$styles[]  = '--form-align: ' . $defaults['form_align'];
+		$styles   = array();
+		$styles[] = '--field-font-size: ' . $defaults['field_font_size'];
+		$styles[] = '--field-height: ' . $defaults['field_height'];
+		$styles[] = '--field-pad: ' . $defaults['field_pad'];
+		$styles[] = '--font-size: ' . $defaults['font_size'];
+		$styles[] = '--label-padding: ' . $defaults['label_padding'];
+		$styles[] = '--form-align: ' . $defaults['form_align'];
 
 		return implode( ';', $styles );
 	}

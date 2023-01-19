@@ -15,7 +15,6 @@ $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id
 	 * Pro needs to hook in here to add the "New Style" trigger.
 	 *
 	 * @since x.x
-	 * @todo I think a more descriptive action name like frm_style_list_sidebar_top may be better.
 	 *
 	 * @param array $args {
 	 *     @type stdClass $form
