@@ -397,13 +397,17 @@ DEFAULT_HTML;
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
 	}
 
+	public function show_default_value_setting( $field, $field_obj, $default_value_types, $display ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/placeholder-setting.php';
+	}
+
 	/**
 	 * @param array  $field
 	 * @param string $default_name
 	 * @param mixed  $default_value
 	 */
-	public function show_placeholder_setting( $field, $default_name, $default_value ) {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/placeholder-setting.php';
+	public function show_default_value_field( $field, $default_name, $default_value ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
 	}
 
 	/**
