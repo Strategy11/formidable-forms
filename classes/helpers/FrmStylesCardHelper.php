@@ -55,8 +55,8 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
-	 * @param bool    $hidden Used for pagination.
+	 * @param stdClass|WP_Post $style
+	 * @param bool             $hidden Used for pagination.
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
