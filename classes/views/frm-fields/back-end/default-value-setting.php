@@ -12,11 +12,7 @@ id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 	</label>
 	<span class="frm-with-right-icon">
 		<?php
-		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
-
-		$field_obj->display_modal_trigger_icon( $special_default );
-
-		unset( $special_default );
+		$field_obj->display_smart_values_modal_trigger_icon( $field );
 
 		if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 			$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';

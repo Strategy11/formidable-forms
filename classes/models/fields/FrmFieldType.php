@@ -403,7 +403,8 @@ DEFAULT_HTML;
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-setting.php';
 	}
 
-	public function display_modal_trigger_icon( $special_default ) {
+	public function display_smart_values_modal_trigger_icon( $field ) {
+		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 		FrmAppHelper::icon_by_class(
 			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
 			array(
