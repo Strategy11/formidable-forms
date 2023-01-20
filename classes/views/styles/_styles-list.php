@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $enabled     = '0' !== $form->options['custom_style'];
 $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
+$style_api   = new FrmStyleApi();
 ?>
 <div id="frm_style_sidebar" class="frm-right-panel frm_p_4"><?php // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards. ?>
 	<?php
@@ -52,10 +53,7 @@ $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
 	</div>
-	<?php
-	$style_api = new FrmStyleApi();
-	$card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_api->get_api_info() );
+	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_api->get_api_info() ); ?>
 
-	FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell.
-	?>
+	<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
 </div>
