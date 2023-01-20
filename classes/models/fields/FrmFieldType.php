@@ -397,8 +397,20 @@ DEFAULT_HTML;
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
 	}
 
+	public function echo_field_default_setting_attributes( $field ) {}
+
 	public function show_default_value_setting( $field, $field_obj, $default_value_types, $display ) {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/placeholder-setting.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-setting.php';
+	}
+
+	public function display_modal_trigger_icon( $special_default ) {
+		FrmAppHelper::icon_by_class(
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			array(
+				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
+				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+			)
+		);
 	}
 
 	/**

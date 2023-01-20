@@ -2,12 +2,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-$html_id = 'frm_default_value_' . absint( $field['id'] );
 ?>
 <p
 class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
-<?php echo $field['type'] === 'rte' ? 'data-modal-trigger-title="' . esc_attr__( 'Toggle Options', 'formidable' ) . '"' : ''; ?>
-<?php echo $field['type'] === 'rte' ? 'data-html-id="' . esc_attr( $html_id ) . '"' : ''; ?>
+<?php $field_obj->echo_field_default_setting_attributes( $field ); ?>
 id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 	<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php esc_html_e( 'Default Value', 'formidable' ); ?>
@@ -15,15 +13,8 @@ id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 	<span class="frm-with-right-icon">
 		<?php
 		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
-		if ( $field['type'] !== 'rte' ) {
-			FrmAppHelper::icon_by_class(
-				'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-				array(
-					'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
-					'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
-				)
-			);
-		}
+
+		$field_obj->display_modal_trigger_icon( $special_default );
 
 		unset( $special_default );
 
