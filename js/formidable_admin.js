@@ -8205,6 +8205,8 @@ function frmAdminBuildJS() {
 				form.classList.add( 'frm_hidden' );
 			} );
 		}
+
+		searchContent.call(document.querySelector( '.frm-auto-search' ));
 	}
 
 	function preventMultipleExport() {
@@ -9073,17 +9075,17 @@ function frmAdminBuildJS() {
 		}
 
 		const exportOption = document.querySelector( 'select[name="format"]' ).value;
-		
+
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText = items[i].innerText.toLowerCase();
-			const itemCanBeHidden = ! ( exportOption === 'xml' && items[i].classList.contains( 'is-repeater' ) );
+			const itemCanBeShown = ! ( exportOption === 'xml' && items[i].classList.contains( 'is-repeater' ) );
 			if ( searchText === '' ) {
-				if ( itemCanBeHidden ) {
+				if ( itemCanBeShown ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 ) {
-				if ( itemCanBeHidden ) {
+				if ( itemCanBeShown ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.add( 'frm-search-result' );
