@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<?php
 		/**
+		 * This is used in Pro to include the default/selected tags.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $args {
