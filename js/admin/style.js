@@ -204,7 +204,7 @@
 	}
 
 	/**
-	 * @param {Boolean} on
+	 * @param {boolean} on
 	 * @returns {void}
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
@@ -424,23 +424,31 @@
 	 */
 	function addHamburgMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
-		cards.forEach(
-			card => {
-				if ( 'frm_styles_upsell_card' === card.id ) {
-					// Do not try to add a menu to the upsell card.
-					return;
-				}
+		cards.forEach( card => maybeAddMenuToCard( card ) );
+	}
 
-				if ( 'frm_template_style_cards_wrapper' === card.parentNode.id ) {
-					// Templates do not have hamburger menus.
-					return;
-				}
+	/**
+	 * @param {HTMLlement} card
+	 * @returns {void}
+	 */
+	function maybeAddMenuToCard( card ) {
+		if ( ! shouldAddMenuToCard( card ) ) {
+			return;
+		}
 
-				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
-				wrapper.style.position = 'relative';
-				wrapper.appendChild( getHamburgerMenu( card.dataset ) );
-			}
-		);
+		const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
+		wrapper.style.position = 'relative';
+		wrapper.appendChild( getHamburgerMenu( card.dataset ) );
+	}
+
+	/**
+	 * Avoid adding a menu to an upsell card or a template card.
+	 *
+	 * @param {HTMLlement} card
+	 * @returns {boolean}
+	 */
+	function shouldAddMenuToCard( card ) {
+		return 'frm_styles_upsell_card' !== card.id && 'frm_template_style_cards_wrapper' !== card.parentNode.id;
 	}
 
 	/**
@@ -1144,7 +1152,7 @@
 	 * @param {String}         event    Event name.
 	 * @param {String}         selector Selector.
 	 * @param {Function}       handler  Handler.
-	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 * @returns {void}
 	 */
 	function documentOn( event, selector, handler, options ) {
