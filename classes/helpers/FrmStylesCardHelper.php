@@ -326,6 +326,7 @@ class FrmStylesCardHelper {
 				if ( is_numeric( $key ) ) { // Skip active_sub/expires keys.
 					$hidden = $count > ( self::PAGE_SIZE - 1 );
 					$this->echo_card_template( $style, $hidden );
+					++$count;
 				}
 			}
 		);
