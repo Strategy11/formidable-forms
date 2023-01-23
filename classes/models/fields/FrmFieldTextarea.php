@@ -64,7 +64,6 @@ class FrmFieldTextarea extends FrmFieldType {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
 	}
 
-
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
