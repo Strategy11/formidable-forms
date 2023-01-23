@@ -8172,9 +8172,11 @@ function frmAdminBuildJS() {
 		if ( $dropdown.val() === 'csv' ) {
 			jQuery( '.csv_opts' ).show();
 			jQuery( '.xml_opts' ).hide();
+			showOrHideRepeaters( 'csv' );
 		} else {
 			jQuery( '.csv_opts' ).hide();
 			jQuery( '.xml_opts' ).show();
+			showOrHideRepeaters( 'xml' );
 		}
 
 		var c = $selected.data( 'count' );
@@ -8185,6 +8187,23 @@ function frmAdminBuildJS() {
 		} else {
 			exportField.prop( 'multiple', true );
 			exportField.prop( 'disabled', false );
+		}
+	}
+
+	function showOrHideRepeaters( exportOption ) {
+		const repeaters = document.querySelectorAll( '.is-repeater' );
+		if ( ! repeaters.length ) {
+			return;
+		}
+
+		if ( exportOption === 'csv' ) {
+			repeaters.forEach( form => {
+				form.classList.remove( 'frm_hidden' );
+			} );
+		} else {
+			repeaters.forEach( form => {
+				form.classList.add( 'frm_hidden' );
+			} );
 		}
 	}
 
@@ -8785,6 +8804,7 @@ function frmAdminBuildJS() {
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
 				setTemplateCount( category, searchableTemplates );
 			}
+
 		});
 
 		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
@@ -9053,13 +9073,20 @@ function frmAdminBuildJS() {
 			addons.add( 'frm-limited-actions' );
 		}
 
+		const exportOption = document.querySelector( 'select[name="format"]' ).value;
+		
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText = items[i].innerText.toLowerCase();
+			const itemCanBeHidden = ! ( exportOption === 'xml' && items[i].classList.contains( 'is-repeater' ) );
 			if ( searchText === '' ) {
-				items[i].classList.remove( 'frm_hidden' );
+				if ( itemCanBeHidden ) {
+					items[i].classList.remove( 'frm_hidden' );
+				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 ) {
-				items[i].classList.remove( 'frm_hidden' );
+				if ( itemCanBeHidden ) {
+					items[i].classList.remove( 'frm_hidden' );
+				}
 				items[i].classList.add( 'frm-search-result' );
 			} else {
 				items[i].classList.add( 'frm_hidden' );
@@ -9693,6 +9720,11 @@ function frmAdminBuildJS() {
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
+			
+			const exportFormatSelect = document.querySelector( 'select[name="format"]' );
+			if ( exportFormatSelect ) {
+				showOrHideRepeaters( exportFormatSelect.value );
+			}
 		},
 
 		buildInit: function() {
