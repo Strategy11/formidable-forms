@@ -426,6 +426,11 @@
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach(
 			card => {
+				if ( 'frm_styles_upsell_card' === card.id ) {
+					// Do not try to add a menu to the upsell card.
+					return;
+				}
+
 				if ( 'frm_template_style_cards_wrapper' === card.parentNode.id ) {
 					// Templates do not have hamburger menus.
 					return;
