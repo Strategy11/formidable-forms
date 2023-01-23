@@ -36,18 +36,23 @@ class FrmStylesCardHelper {
 	private $enabled;
 
 	/**
+	 * @var bool If this is true, a lock will be rendered with the style name when self::echo_style_card is called.
+	 */
+	private $locked;
+
+	/**
 	 * @param WP_Post    $active_style
 	 * @param WP_Post    $default_style
 	 * @param string|int $form_id
 	 * @param bool       $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
-		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_custom-style-card.php';
-
-		$this->active_style  = $active_style;
-		$this->default_style = $default_style;
-		$this->form_id       = (int) $form_id;
-		$this->enabled       = $enabled;
+		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
+		$this->active_style   = $active_style;
+		$this->default_style  = $default_style;
+		$this->form_id        = (int) $form_id;
+		$this->enabled        = $enabled;
+		$this->locked         = false;
 	}
 
 	/**
@@ -62,6 +67,7 @@ class FrmStylesCardHelper {
 	private function echo_style_card( $style, $hidden = false ) {
 		$is_default_style     = $style->ID === $this->default_style->ID;
 		$is_active_style      = $style->ID === $this->active_style->ID;
+		$is_locked            = $this->locked;
 		$submit_button_params = $this->get_submit_button_params();
 		$params               = $this->get_params_for_style_card( $style );
 
@@ -154,7 +160,7 @@ class FrmStylesCardHelper {
 	 * @param bool  $hidden
 	 * @return bool True if the template was valid and echoed.
 	 */
-	public function echo_card_template( $style, $hidden = false ) {
+	private function echo_card_template( $style, $hidden = false ) {
 		if ( empty( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
 			return false;
 		}
@@ -167,6 +173,7 @@ class FrmStylesCardHelper {
 		$style_object->post_content = $style['settings'];
 		$style_object->template_key = $style['slug'];
 
+		$this->locked = empty( $style['url'] );
 		$this->echo_style_card( $style_object, $hidden );
 		return true;
 	}
@@ -347,7 +354,8 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_custom_cards( $styles ) {
-		$count = 0;
+		$count        = 0;
+		$this->locked = false;
 		array_walk(
 			$styles,
 			/**

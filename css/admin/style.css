@@ -181,6 +181,14 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	white-space: nowrap;
 }
 
+.frm-style-card-title.frm-locked-style {
+	color: var(--grey);
+}
+
+.frm-style-card-title svg {
+	margin-right: 5px;
+}
+
 .frm-style-card .frm_submit input {
 	border-width: var(--submit-border-width);
 	border-color: var(--submit-border-color);
