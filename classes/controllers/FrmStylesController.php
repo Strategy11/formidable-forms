@@ -369,13 +369,13 @@ class FrmStylesController {
 
 		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		if ( $style_id ) {
+			// Always use the style ID from the URL if one is specified.
 			return $style_id;
 		}
 
 		$request_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
 		if ( $request_form_id && is_callable( 'FrmProStylesController::get_active_style_for_form' ) ) {
-			$form = FrmForm::getOne( $request_form_id );
-			return FrmProStylesController::get_active_style_for_form( $form )->ID;
+			return FrmProStylesController::get_active_style_for_form( $request_form_id )->ID;
 		}
 
 		return self::get_default_style()->ID;
