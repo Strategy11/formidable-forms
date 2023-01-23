@@ -32,15 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 	<div>
-		<?php
-		$title_params = array(
-			'class' => 'frm-style-card-title',
-		);
-		if ( ! empty( $is_locked ) ) {
-			$title_params['class'] .= ' frm-locked-style';
-		}
-		?>
-		<span <?php FrmAppHelper::array_to_html_params( $title_params, true ); ?>>
+		<span class="frm-style-card-title">
 			<?php
 			if ( ! empty( $is_locked ) ) {
 				FrmAppHelper::icon_by_class( 'frmfont frm_lock_solid_icon' );

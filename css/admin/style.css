@@ -181,7 +181,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	white-space: nowrap;
 }
 
-.frm-style-card-title.frm-locked-style {
+.frm-locked-style .frm-style-card-title {
 	color: var(--grey);
 }
 

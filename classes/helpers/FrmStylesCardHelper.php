@@ -62,9 +62,10 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden Used for pagination.
+	 * @param Closure|false    $param_filter
 	 * @return void
 	 */
-	private function echo_style_card( $style, $hidden = false ) {
+	private function echo_style_card( $style, $hidden = false, $param_filter = false ) {
 		$is_default_style     = $style->ID === $this->default_style->ID;
 		$is_active_style      = $style->ID === $this->active_style->ID;
 		$is_locked            = $this->locked;
@@ -79,6 +80,9 @@ class FrmStylesCardHelper {
 		}
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
+		}
+		if ( false !== $param_filter && is_callable( $param_filter ) ) {
+			$params = $param_filter( $params );
 		}
 
 		include $this->view_file_path;
@@ -174,7 +178,36 @@ class FrmStylesCardHelper {
 		$style_object->template_key = $style['slug'];
 
 		$this->locked = empty( $style['url'] );
-		$this->echo_style_card( $style_object, $hidden );
+		$this->echo_style_card(
+			$style_object,
+			$hidden,
+			/**
+			 * Include additional params for templates.
+			 *
+			 * @param stdClass $style_object Object sent to echo_style_card function.
+			 * @param array    $style        API data.
+			 */
+			function( $params ) use ( $style_object, $style ) {
+				if ( $this->locked ) {
+					$params['class'] .= ' frm-locked-style';
+				}
+
+				$params['data-upgrade'] = $style_object->post_title;
+				$params['data-medium']  = 'styler-template';
+
+				$item = array(
+					'categories' => $style['categories'],
+				);
+				$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
+
+				// WordPress requires that images are local files, so we may need to include those files in-plugin.
+				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
+				// 	$params['data-image'] = reset( $style['icon'] );
+				// }
+
+				return $params;
+			}
+		);
 		return true;
 	}
 

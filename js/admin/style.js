@@ -329,6 +329,12 @@
 
 		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
 
+		if ( card.classList.contains( 'frm-locked-style' ) ) {
+			// Exit early before calling the action if the style is locked.
+			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
+			return;
+		}
+
 		// TODO trigger an upsell pop up if a style template is clicked.
 		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
