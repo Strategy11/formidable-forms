@@ -1090,6 +1090,18 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 6.0
+	 * @return void
+	 */
+	public static function import_link() {
+		?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg">
+			<?php esc_html_e( 'Import', 'formidable' ); ?>
+		</a>
+		<?php
+	}
+
+	/**
 	 * Print applicable admin banner.
 	 *
 	 * @since 5.4.2
@@ -1149,7 +1161,7 @@ class FrmAppHelper {
 		}
 
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
-		$class = 'button button-primary frm-button-primary frm-with-plus frm-button-sm';
+		$class = 'button button-primary frm-button-primary frm-with-plus';
 
 		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
 			$class .= ' frm-trigger-new-form-modal';

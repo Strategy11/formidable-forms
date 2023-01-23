@@ -14,7 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
-				'import_link' => $form ? false : true,
+				'import_link' => true,
+				'publish'     => ! $form ? array() : array(
+					'FrmAppHelper::add_new_item_link',
+					array(
+						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
+					)
+				),
 			)
 		);
 		?>
@@ -23,16 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $form ) { ?>
 				<h2>
 					<?php esc_html_e( 'Form Entries', 'formidable' ); ?>
-					<?php
-					FrmAppHelper::add_new_item_link(
-						array(
-							'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
-						)
-					);
-					?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg frm-button-sm">
-						<?php esc_html_e( 'Import', 'formidable' ); ?>
-					</a>
 				</h2>
 				<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 				<div class="clear"></div>

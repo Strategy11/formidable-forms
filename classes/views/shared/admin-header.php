@@ -21,18 +21,20 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 		?>
 	<div class="frm_top_left <?php echo esc_attr( $atts['import_link'] ? 'frm_top_wide' : '' ); ?>">
 		<h1>
-			<?php echo esc_html( $atts['label'] ); ?>
-			<?php FrmAppHelper::add_new_item_link( $atts ); ?>
-			<?php if ( $atts['import_link'] ) { ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg frm-button-sm">
-					<?php esc_html_e( 'Import', 'formidable' ); ?>
-				</a>
-			<?php } ?>
-			<?php if ( isset( $atts['cancel_link'] ) ) { ?>
-				<a href="<?php echo esc_url( $atts['cancel_link'] ); ?>" class="button frm-button-secondary frm_animate_bg frm-button-sm">
+			<?php
+			echo esc_html( $atts['label'] );
+			FrmAppHelper::add_new_item_link( $atts );
+			if ( $atts['import_link'] ) {
+				FrmAppHelper::import_link();
+			}
+			if ( isset( $atts['cancel_link'] ) ) {
+				?>
+				<a href="<?php echo esc_url( $atts['cancel_link'] ); ?>" class="button frm-button-secondary frm_animate_bg">
 					<?php esc_html_e( 'Cancel', 'formidable' ); ?>
 				</a>
-			<?php } ?>
+				<?php
+			}
+			?>
 		</h1>
 	</div>
 		<?php
@@ -42,9 +44,13 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
-	if ( isset( $atts['publish'] ) ) {
+	if ( ! empty( $atts['publish'] ) ) {
 		echo '<div id="frm-publishing">';
 		call_user_func( $atts['publish'][0], $atts['publish'][1] );
+
+		if ( $has_nav && $atts['import_link'] ) {
+			FrmAppHelper::import_link();
+		}
 		echo '</div>';
 	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
 		?>
