@@ -147,6 +147,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 .frm-style-card-pagination a.frm-current-style-card-page {
 	color: var(--dark-grey);
 	text-decoration: none;
+	cursor: default;
 }
 
 
