@@ -25,6 +25,8 @@
 	--primary-hover: var(--primary-700); /* Deprecated */
 	--light-blue: rgba(188, 224, 253, .2);
 	--blue-border: rgb(188, 224, 253);
+	--error-500: #F04438;
+	--error-700: #B42318;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
 	--pink: rgb(226, 42, 110);
@@ -1121,6 +1123,8 @@ p.frm_has_shortcodes {
 .wp-core-ui.frm-white-body .button-secondary,
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
+#frm-form-button button,
+.frm-button-red,
 .frm-button-tertiary {
 	text-shadow: none;
 	box-shadow: none;
@@ -1143,13 +1147,21 @@ p.frm_has_shortcodes {
 	color: var(--primary-500);
 }
 
+.frm-button-red,
+.frm-button-red:focus {
+	color: #fff !important;
+	--primary-500: var(--error-500);
+	--primary-700: var(--error-700);
+}
+
 .frm-white-body h2 .button,
 .post-type-frm_display h2 .frm-button-primary,
 .frm-white-body .tablenav .button,
 .frm-white-body .button.add_media, /* Media buttons above RTE */
 .frm-button-primary.frm-button-sm,
 .frm-button-secondary.frm-button-sm,
-.frm-button-tertiary.frm-button-sm {
+.frm-button-tertiary.frm-button-sm,
+.frm-button-red.frm-button-sm {
 	padding: 4px 12px !important;
 	font-size: var(--text-xs) !important;
 }

@@ -79,6 +79,9 @@
 			if ( args.buttonType ) {
 				output.classList.add( 'button' );
 				switch ( args.buttonType ) {
+					case 'red':
+						output.classList.add( 'frm-button-red', 'frm-button-primary' );
+						break;
 					case 'primary':
 						output.classList.add( 'button-primary', 'frm-button-primary' );
 						if ( ! args.noDismiss ) {
@@ -438,9 +441,9 @@
 							jQuery( editor.targetElm ).trigger( 'focusin' );
 							editor.off( 'focusin', '**' );
 						}
-				
+
 						editor.on( 'focusin', focusInCallback );
-				
+
 						editor.on( 'focusout', function() {
 							editor.on( 'focusin', focusInCallback );
 						});

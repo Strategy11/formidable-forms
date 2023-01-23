@@ -314,7 +314,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$delete_link       = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete', 'formidable' ) . '</a>';
 		}
 
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );
