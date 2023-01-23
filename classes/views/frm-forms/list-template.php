@@ -15,7 +15,7 @@ if ( ! empty( $template['custom'] ) ) {
 	$preview_end  = '?return=html';
 }
 ?><li
-	class="frm-selectable <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
+	class="frm-selectable frm6 <?php echo ! empty( $searchable ) ? 'frm-searchable-template' : ''; ?> <?php echo $plan_required ? 'frm-locked-template frm-' . esc_attr( $plan_required ) . '-template' : ''; ?>"
 	aria-label="<?php echo esc_attr( $stripped_template_name ); ?>"
 	<?php
 	if ( 'free' === $plan_required ) {

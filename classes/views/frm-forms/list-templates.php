@@ -3,8 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<ul class="frm-templates-list frm-featured-forms">
-	<li class="frm-add-blank-form frm-selectable">
+<ul class="frm-templates-list frm-featured-forms frm_grid_container">
+	<li class="frm-add-blank-form frm-selectable frm6">
 		<div class="frm-featured-form">
 			<div class="frm-category-icon" role="button" style="background-color: #F4AD3D;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			require $view_path . 'list-template.php';
 		}
 	}
-	?><li class="frm-selectable" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
+	?><li class="frm-selectable frm6" data-href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>">
 		<div class="frm-featured-form">
 			<div class="frm-category-icon" role="button" style="background-color: #805EF6;">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
