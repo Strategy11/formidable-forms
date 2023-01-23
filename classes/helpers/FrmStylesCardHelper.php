@@ -319,8 +319,9 @@ class FrmStylesCardHelper {
 			/**
 			 * Echo a style card for a single template from API data.
 			 *
-			 * @param array  $style
-			 * @param string $key
+			 * @param array|string $style
+			 * @param string       $key   The key for the API data. It may be a numeric ID, or a key like "active_sub" or "expires".
+			 * @param int          $count Used for pagination.
 			 * @return void
 			 */
 			function( $style, $key ) use ( &$count ) {
@@ -351,6 +352,7 @@ class FrmStylesCardHelper {
 			* Echo a style card for a single style in the $styles array.
 			*
 			* @param WP_Post $style
+			* @param int     $count Used for pagination.
 			* @return void
 			*/
 			function( $style ) use ( &$count ) {
