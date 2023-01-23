@@ -300,7 +300,19 @@
 			return;
 		}
 
-		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
+		const card = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
+
+		if ( 'frm_styles_upsell_card' === card.id ) {
+			card.querySelector( 'a' ).click();
+			return;
+		}
+
+		if ( card.classList.contains( 'frm-locked-style' ) ) {
+			// Exit early before changing the data in the form if the style is locked.
+			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
+			return;
+		}
+
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
 		const previewArea  = sidebar.nextElementSibling;
 		const form         = previewArea.querySelector( 'form' );
@@ -326,16 +338,8 @@
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
-
 		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
 
-		if ( card.classList.contains( 'frm-locked-style' ) ) {
-			// Exit early before calling the action if the style is locked.
-			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
-			return;
-		}
-
-		// TODO trigger an upsell pop up if a style template is clicked.
 		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card, styleIdInput };

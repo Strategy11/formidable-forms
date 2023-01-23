@@ -9,8 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 $enabled     = '0' !== $form->options['custom_style'];
 $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
 $style_api   = new FrmStyleApi();
+$sidebar_params = array(
+	'id'    => 'frm_style_sidebar',
+	'class' => 'frm-right-panel frm_p_4', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+);
+if ( ! FrmAppHelper::pro_is_installed() ) {
+	// Use flex on the sidebar so that the style card matches the size of the upsell card.
+	$sidebar_params['class'] .= ' frm-flex-custom-card-wrapper';
+}
 ?>
-<div id="frm_style_sidebar" class="frm-right-panel frm_p_4"><?php // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards. ?>
+<div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
 	<?php
 	/**
 	 * Pro needs to hook in here to add the "New Style" trigger.
