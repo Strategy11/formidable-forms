@@ -152,11 +152,11 @@ class FrmStylesCardHelper {
 	 *     @type string $slug
 	 * }
 	 * @param bool  $hidden
-	 * @return void
+	 * @return bool True if the template was valid and echoed.
 	 */
 	public function echo_card_template( $style, $hidden = false ) {
 		if ( empty( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
-			return;
+			return false;
 		}
 
 		// Use a better name than my sample form.
@@ -168,6 +168,7 @@ class FrmStylesCardHelper {
 		$style_object->template_key = $style['slug'];
 
 		$this->echo_style_card( $style_object, $hidden );
+		return true;
 	}
 
 	/**
@@ -323,9 +324,13 @@ class FrmStylesCardHelper {
 			 * @return void
 			 */
 			function( $style, $key ) use ( &$count ) {
-				if ( is_numeric( $key ) ) { // Skip active_sub/expires keys.
-					$hidden = $count > ( self::PAGE_SIZE - 1 );
-					$this->echo_card_template( $style, $hidden );
+				if ( ! is_numeric( $key ) ) {
+					// Skip active_sub/expires keys.
+					return;
+				}
+
+				$hidden = $count > ( self::PAGE_SIZE - 1 );
+				if ( $this->echo_card_template( $style, $hidden ) ) {
 					++$count;
 				}
 			}
