@@ -309,6 +309,8 @@ class FrmStylesCardHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param array<array> $styles
 	 * @return void
 	 */

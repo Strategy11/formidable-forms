@@ -187,12 +187,12 @@
 		const cardWrapper   = document.getElementById( 'frm_custom_style_cards_wrapper' );
 		const styleIdInput  = getStyleIdInput();
 		const stylesEnabled = event.target.checked;
-		
+
 		cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled );
+		trackUnsavedChange();
 
 		if ( ! stylesEnabled ) {
 			styleIdInput.value = '0';
-
 			toggleFormidableStylingInPreviewForms( false );
 			return;
 		}
