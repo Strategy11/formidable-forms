@@ -8804,7 +8804,6 @@ function frmAdminBuildJS() {
 				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
 				setTemplateCount( category, searchableTemplates );
 			}
-
 		});
 
 		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
