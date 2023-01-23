@@ -29,6 +29,17 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
+	 * Modify form behaviours for the styler preview.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function adjust_form_for_preview() {
+		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
+	}
+
+	/**
 	 * @since x.x
 	 *
 	 * @param string|int $form_id

@@ -584,6 +584,7 @@ class FrmStylesController {
 		}
 
 		$preview_helper = new FrmStylesPreviewHelper( $form->id );
+		$preview_helper->adjust_form_for_preview();
 
 		// Get form HTML before displaying warnings and notes so we can check global $frm_vars data without adding extra database calls.
 		$target_form_preview_html = $preview_helper->get_html_for_form_preview();
