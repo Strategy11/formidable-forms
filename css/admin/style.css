@@ -368,6 +368,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 #frm_styles_upsell_card > div {
 	position: relative;
 	bottom: 15px;
+	padding: 0 10px;
 }
 
 @media only screen and (max-width: 1200px) {
