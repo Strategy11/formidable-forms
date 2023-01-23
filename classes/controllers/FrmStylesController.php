@@ -463,7 +463,8 @@ class FrmStylesController {
 		 */
 		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
 
-		if ( ! $style_id ) {
+		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', 'sanitize_text_field', '' ) ) {
+			// "0" is a special value used for the enable/disable toggle.
 			// TODO show an error that save failed.
 			return;
 		}
