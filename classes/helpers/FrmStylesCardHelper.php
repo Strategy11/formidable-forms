@@ -188,22 +188,20 @@ class FrmStylesCardHelper {
 			 * @param array    $style        API data.
 			 */
 			$param_callback = function( $params ) use ( $style_object, $style ) {
-				if ( $this->locked ) {
-					$params['class'] .= ' frm-locked-style';
+				$params['class'] .= ' frm-locked-style';
 
-					$params['data-upgrade'] = $style_object->post_title;
-					$params['data-medium']  = 'styler-template';
-	
-					$item = array(
-						'categories' => $style['categories'],
-					);
-					$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
+				$params['data-upgrade'] = $style_object->post_title;
+				$params['data-medium']  = 'styler-template';
 
-					// WordPress requires that images are local files, so we may need to include those files in-plugin.
-					// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
-					// 	$params['data-image'] = reset( $style['icon'] );
-					// }
-				}
+				$item = array(
+					'categories' => $style['categories'],
+				);
+				$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
+
+				// WordPress requires that images are local files, so we may need to include those files in-plugin.
+				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
+				// 	$params['data-image'] = reset( $style['icon'] );
+				// }
 				return $params;
 			};
 		}
