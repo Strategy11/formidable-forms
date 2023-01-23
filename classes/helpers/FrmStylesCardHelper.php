@@ -114,7 +114,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
+	 * @param stdClass|WP_Post $style
 	 * @return array
 	 */
 	private function get_params_for_style_card( $style ) {
@@ -135,10 +135,6 @@ class FrmStylesCardHelper {
 			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
 			'data-label-position' => $label_position,
 		);
-
-		if ( isset( $style->template_key ) ) {
-			$params['data-template-key'] = $style->template_key;
-		}
 
 		/**
 		 * Filter params so Pro can add additional params, like data-delete-url.
@@ -175,10 +171,10 @@ class FrmStylesCardHelper {
 		$style_object->post_title   = $style['name'];
 		$style_object->post_name    = 'frm_style_template'; // This name is referenced in Pro.
 		$style_object->post_content = $style['settings'];
-		$style_object->template_key = $style['slug'];
 
 		$this->locked = empty( $style['url'] );
 
+		// TODO can I use the frm_style_card_params filter instead of calling a callback?
 		$param_callback = false;
 		if ( $this->locked ) {
 			/**
@@ -202,6 +198,11 @@ class FrmStylesCardHelper {
 				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
 				// 	$params['data-image'] = reset( $style['icon'] );
 				// }
+				return $params;
+			};
+		} else {
+			$param_callback = function( $params ) use ( $style ) {
+				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
 		}
