@@ -129,8 +129,11 @@
 							showCardsForPage( wrapper, pageNumber );
 
 							const currentStyleCardClass = 'frm-current-style-card-page';
-
-							pagination.querySelector( '.' + currentStyleCardClass ).classList.remove( currentStyleCardClass );
+							const currentPageNumber     = pagination.querySelector( '.' + currentStyleCardClass );
+							if ( currentPageNumber ) {
+								currentPageNumber.classList.remove( currentStyleCardClass );
+							}
+	
 							anchor.classList.add( currentStyleCardClass );
 						}
 					)
