@@ -8172,11 +8172,9 @@ function frmAdminBuildJS() {
 		if ( $dropdown.val() === 'csv' ) {
 			jQuery( '.csv_opts' ).show();
 			jQuery( '.xml_opts' ).hide();
-			showOrHideRepeaters( 'csv' );
 		} else {
 			jQuery( '.csv_opts' ).hide();
 			jQuery( '.xml_opts' ).show();
-			showOrHideRepeaters( 'xml' );
 		}
 
 		var c = $selected.data( 'count' );
@@ -10395,6 +10393,10 @@ function frmAdminBuildJS() {
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).on( 'change', removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).on( 'change', checkCSVExtension );
 			jQuery( 'select[name="format"]' ).on( 'change', checkExportTypes ).trigger( 'change' );
+			jQuery( 'select[name="format"]' ).on( 'change', event => {
+				showOrHideRepeaters( event.target.value );
+			});
+
 			jQuery( 'input[name="frm_export_forms[]"]' ).on( 'click', preventMultipleExport );
 			initiateMultiselect();
 
