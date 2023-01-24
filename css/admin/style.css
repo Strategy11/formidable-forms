@@ -371,6 +371,25 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding: 0 10px;
 }
 
+.circle1, .circle2, .circle3 {
+	position: relative;
+	border: 2px solid #FFFFFF;
+	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
+	border-radius: 22px;
+	display: inline-block;
+	height: 28px;
+	width: 28px;
+	box-sizing: border-box;
+}
+
+.circle2 {
+	right: 10px;
+}
+
+.circle3 {
+	right: 20px;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,

@@ -9,13 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div class="frm-style-card-preview">
-		<div class="frm_form_field form-field">
-			<label class="frm_primary_label"><?php esc_html_e( 'Text field', 'formidable' ); ?></label>
-			<input type="text" value="<?php esc_attr_e( 'This is sample text', 'formidable' ); ?>" />
-		</div>
-		<div class="frm_submit">
-			<input <?php FrmAppHelper::array_to_html_params( $submit_button_params, true ); ?> />
-		</div>
 		<?php
 		/**
 		 * This is used in Pro to include the default/selected tags.
@@ -29,7 +22,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * }
 		 */
 		do_action( 'frm_style_card_after_submit', compact( 'style', 'is_default_style', 'is_active_style' ) );
+
+		$color1 = $style->post_content['label_color'];
+		$color2 = $style->post_content['text_color'];
+		$color3 = $style->post_content['submit_bg_color'];
+
+		if ( 0 !== strpos( $color1, 'rgb' ) ) {
+			$color1 = '#' . $color1;
+		}
+		if ( 0 !== strpos( $color2, 'rgb' ) ) {
+			$color2 = '#' . $color2;
+		}
+		if ( 0 !== strpos( $color3, 'rgb' ) ) {
+			$color3 = '#' . $color3;
+		}
 		?>
+		<div class="circle1" style="background-color: <?php echo esc_attr( $color1 ); ?>"></div>
+		<div class="circle2" style="background-color: <?php echo esc_attr( $color2 ); ?>"></div>
+		<div class="circle3" style="background-color: <?php echo esc_attr( $color3 ); ?>"></div>
 	</div>
 	<div>
 		<span class="frm-style-card-title">
