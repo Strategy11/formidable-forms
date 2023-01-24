@@ -10,9 +10,18 @@ $off_label    = isset( $args['off_label'] ) ? $args['off_label'] : '';
 $on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
 $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
 $aria_checked = $checked ? 'true' : 'false';
+
+$div_params = array(
+	// This is important when the default style is !important as Pro styling may cause conflicts.
+	// It uses --toggle-on-color so just set the variable.
+	'style' => '--toggle-on-color:var(--primary-color);'
+);
+if ( $div_class ) {
+	$div_params['class'] = $div_class;
+}
 ?>
 
-<div <?php echo $div_class ? 'class="' . esc_attr( $div_class ) . '"' : ''; ?>>
+<div <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
 	<label class="frm_switch_block">
 		<?php if ( $show_labels && $off_label ) { ?>
 			<span class="frm_off_label frm_switch_opt"><?php echo esc_html( $off_label ); ?></span>
