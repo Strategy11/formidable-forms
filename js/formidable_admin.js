@@ -2882,7 +2882,7 @@ function frmAdminBuildJS() {
 			newValue = this.value,
 			changes = document.getElementById( this.getAttribute( 'data-changeme' ) ),
 			att = this.getAttribute( 'data-changeatt' );
-
+		console.log( 'HERE' );
 		if ( changes === null ) {
 			return;
 		}
@@ -9746,6 +9746,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser );
 			$builderForm.on( 'change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg );
 			$builderForm.on( 'change click', '[data-changeme]', liveChanges );
+
 			$builderForm.on( 'click', 'input.frm_req_field', markRequired );
 			$builderForm.on( 'click', '.frm_mark_unique', markUnique );
 
