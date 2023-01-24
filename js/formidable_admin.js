@@ -8199,14 +8199,14 @@ function frmAdminBuildJS() {
 		if ( exportOption === 'csv' ) {
 			repeaters.forEach( form => {
 				form.classList.remove( 'frm_hidden' );
-			} );
+			});
 		} else {
 			repeaters.forEach( form => {
 				form.classList.add( 'frm_hidden' );
-			} );
+			});
 		}
 
-		searchContent.call(document.querySelector( '.frm-auto-search' ));
+		searchContent.call( document.querySelector( '.frm-auto-search' ) );
 	}
 
 	function preventMultipleExport() {
@@ -9721,7 +9721,7 @@ function frmAdminBuildJS() {
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
-			
+
 			const exportFormatSelect = document.querySelector( 'select[name="format"]' );
 			if ( exportFormatSelect ) {
 				showOrHideRepeaters( exportFormatSelect.value );
