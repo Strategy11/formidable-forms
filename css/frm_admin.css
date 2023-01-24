@@ -1221,7 +1221,7 @@ p.frm_has_shortcodes {
 .frm-button-secondary {
 	color: var(--grey-800);
 	border-color: var(--grey-300);
-	background-color: transparent;
+	background-color: #fff;
 }
 
 #wp-content-media-buttons button,
