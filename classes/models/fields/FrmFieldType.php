@@ -397,6 +397,15 @@ DEFAULT_HTML;
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php' );
 	}
 
+	/**
+	 * Allows adding extra html attributes to field default value setting field.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field
+	 *
+	 * @return void
+	 */
 	public function echo_field_default_setting_attributes( $field ) {}
 
 	public function show_default_value_setting( $field, $field_obj, $default_value_types, $display ) {
