@@ -408,6 +408,14 @@ DEFAULT_HTML;
 	 */
 	public function echo_field_default_setting_attributes( $field ) {}
 
+	/**
+	 * @param array $field
+	 * @param object $field_obj
+	 * @param array $default_value_types
+	 * @param array $display
+	 *
+	 * @return void
+	 */
 	public function show_default_value_setting( $field, $field_obj, $default_value_types, $display ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-setting.php';
 	}
