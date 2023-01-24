@@ -288,37 +288,6 @@ class FrmStylesController {
 				return $classes;
 			}
 		);
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return WP_Post
-	 */
-	private static function get_default_style() {
-		$frm_style     = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
-		return $default_style;
-	}
-
-	/**
-	 * Save style for form (from Styler list page) via a POST action.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function save_form_style() {
-		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form_style', 'frm_save_form_style_nonce' );
-		if ( $permission_error !== false ) {
-			wp_die( 'Unable to save form', '', 403 );
-		}
-
-		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
-		if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
-			// TODO show an error that save failed.
-			return;
-		}
 
 		/**
 		 * Hook into the saved style ID so Pro can import a style template by its key and return a new style ID.
