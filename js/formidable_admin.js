@@ -10393,7 +10393,7 @@ function frmAdminBuildJS() {
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).on( 'change', removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).on( 'change', checkCSVExtension );
 			jQuery( 'select[name="format"]' ).on( 'change', checkExportTypes ).trigger( 'change' );
-			jQuery( 'select[name="format"]' ).on( 'change', event => {
+			document.querySelector( 'select[name="format"]' ).addEventListener( 'change', event => {
 				showOrHideRepeaters( event.target.value );
 			});
 
