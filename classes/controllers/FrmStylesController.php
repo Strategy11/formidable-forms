@@ -428,50 +428,7 @@ class FrmStylesController {
 		include $style_views_path . 'show.php';
 	}
 
-	/**
-	 * @since x.x
-	 *
-	 * @return string
-	 */
-	private static function get_views_path() {
-		return FrmAppHelper::plugin_path() . '/classes/views/styles/';
-	}
-
-	/**
-	 * Filter form classes so the form uses the preview style, not the form's active style.
-	 *
-	 * @since x.x
-	 *
-	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
-	 * @return void
-	 */
-	private static function force_form_style( $style ) {
-		add_filter(
-			'frm_add_form_style_class',
-			function( $class ) use ( $style ) {
-				$split = array_filter(
-					explode( ' ', $class ),
-					/**
-					 * @param string $class
-					 */
-					function( $class ) {
-						return $class && 0 !== strpos( $class, 'frm_style_' );
-					}
-				);
-				$split[] = 'frm_style_' . $style->post_name;
-				return implode( ' ', $split );
-			}
-		);
-	}
-
-	/**
-	 * Save style post object via a POST request submitted from the Visual styler "edit" page.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function save_style() {
+	public static function save() {
 		$frm_style   = new FrmStyle();
 		$message     = '';
 		$post_id     = FrmAppHelper::get_post_param( 'ID', false, 'sanitize_title' );

@@ -9044,6 +9044,7 @@ input:checked + .frm_switch .frm_slider:before {
 	left: 1px;
 }
 /* End toggle styling */
+
 /* On Submit action */
 .frm_single_on_submit_settings .frm_form_field {
 	margin-top: 20px;
