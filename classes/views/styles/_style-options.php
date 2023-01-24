@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm-inner-content">
 	<p>
 		<?php if ( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) { ?>
-			<a href="<?php echo esc_url( FrmStylesHelper::get_style_page_url( $form->id ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
+			<a href="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
 				<svg class="frmsvg">
 					<use xlink:href="#frm_back"></use>
 				</svg>

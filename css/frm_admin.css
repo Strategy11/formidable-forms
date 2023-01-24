@@ -1536,7 +1536,7 @@ form .frm_primary_label input {
 	margin-bottom: 20px;
 }
 
-.with_frm_style form .frm_combo_inputs_container > .form-field {
+#frm_builder_page .with_frm_style form .frm_combo_inputs_container > .form-field {
 	margin-bottom: 0;
 }
 

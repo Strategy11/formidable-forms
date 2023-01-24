@@ -46,6 +46,14 @@ class FrmStylesController {
 		);
 	}
 
+	/**
+	 * Add two links for the visual styler.
+	 * There's a "Styles" submenu in the Formidable menu.
+	 * There's a second alternative "Forms" submenu in the Appearance menu.
+	 * This submenu links to a page to edit a form with the default style.
+	 *
+	 * @return void
+	 */
 	public static function menu() {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
 		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles2', 'FrmStylesController::route' );
@@ -198,21 +206,250 @@ class FrmStylesController {
 
 	public static function edit( $style_id = false, $message = '' ) {
 		if ( ! $style_id ) {
-			$style_id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
-			if ( empty( $style_id ) ) {
-				$style_id = 'default';
+			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+		}
+
+		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		if ( ! $form_id ) {
+			$form_id = self::get_form_id_for_style( $style_id );
+		}
+
+		$form = FrmForm::getOne( $form_id );
+		if ( ! is_object( $form ) ) {
+			wp_die( esc_html__( 'Invalid route', 'formidable' ), esc_html__( 'Invalid route', 'formidable' ), 400 );
+		}
+
+		$frm_style     = new FrmStyle( $style_id );
+		$active_style  = $frm_style->get_one();
+		$default_style = self::get_default_style();
+
+		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
+			$styles = FrmProStylesController::get_styles_for_styler( $form, $active_style );
+		} else {
+			$styles = array( $default_style );
+		}
+
+		self::disable_admin_page_styling_on_submit_buttons();
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array {
+		 *     @type stdClass $form
+		 * }
+		 */
+		do_action( 'frm_before_render_style_page', compact( 'form' ) );
+
+		self::render_style_page( $active_style, $styles, $form, $default_style );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	private static function get_style_id_for_styler() {
+		$action = FrmAppHelper::simple_get( 'frm_action' );
+		if ( 'duplicate' === $action ) {
+			// The duplicate action uses style_id instead of id for better backward compatibility.
+			return FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
+		}
+
+		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		if ( $style_id ) {
+			// Always use the style ID from the URL if one is specified.
+			return $style_id;
+		}
+
+		$request_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		if ( $request_form_id && is_callable( 'FrmProStylesController::get_active_style_for_form' ) ) {
+			return FrmProStylesController::get_active_style_for_form( $request_form_id )->ID;
+		}
+
+		return self::get_default_style()->ID;
+	}
+
+	/**
+	 * If a form ID is not being passed in the URL, try to get the best match.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $style_id
+	 * @return int
+	 */
+	private static function get_form_id_for_style( $style_id ) {
+		$check   = serialize( array( 'custom_style' => (string) $style_id ) );
+		$check   = substr( $check, 5, -1 );
+		$form_id = FrmDb::get_var(
+			'frm_forms',
+			array(
+				'options LIKE' => $check,
+				'status'       => 'published',
+			)
+		);
+
+		if ( ! $form_id ) {
+			// Fallback to any form.
+			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
+			$form_id = FrmDb::get_var( 'frm_forms', array( 'status' => 'published' ), 'id' );
+		}
+
+		return $form_id;
+	}
+
+	/**
+	 * Add a frm_no_style_button class to all buttons to avoid some style rules like border-radius: 30px.
+	 *
+	 * @return void
+	 */
+	private static function disable_admin_page_styling_on_submit_buttons() {
+		add_filter(
+			'frm_submit_button_class',
+			function( $classes ) {
+				$classes[] = 'frm_no_style_button';
+				return $classes;
 			}
 		}
 
-		if ( 'default' == $style_id ) {
-			$style = 'default';
-		} else {
-			$frm_style = new FrmStyle( $style_id );
-			$style     = $frm_style->get_one();
-			$style     = $style->ID;
+		/**
+		 * Hook into the saved style ID so Pro can import a style template by its key and return a new style ID.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $style_id
+		 */
+		$style_id = apply_filters( 'frm_saved_form_style_id', $style_id );
+
+		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', 'sanitize_text_field', '' ) ) {
+			// "0" is a special value used for the enable/disable toggle.
+			// TODO show an error that save failed.
+			return;
 		}
 
-		self::load_styler( $style, $message );
+		$default_style = self::get_default_style();
+		if ( $style_id === $default_style->ID ) {
+			$style_id = 1; // If the default style is selected, use the "Always use default" legacy option instead of the default style.
+		}
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
+		if ( ! $form_id ) {
+			// TODO show an error that save failed.
+			return;
+		}
+
+		$form = FrmForm::getOne( $form_id );
+		if ( ! $form ) {
+			// TODO handle invalid form ID.
+		}
+
+		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
+
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
+
+		FrmForm::clear_form_cache();
+
+		self::$message = __( 'Successfully updated style.', 'formidable' );
+	}
+
+	/**
+	 * Validate that we're assigning a form to a style that actually exists before assigning it to a form.
+	 *
+	 * @param int $style_id
+	 * @return bool True if the style actually exists.
+	 */
+	private static function confirm_style_exists_before_setting( $style_id ) {
+		global $wpdb;
+		$post_type = FrmDb::get_var( $wpdb->posts, array( 'ID' => $style_id ), 'post_type' );
+		return self::$post_type === $post_type;
+	}
+
+	/**
+	 * Register and enqueue styles and scripts for the style tab page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function setup_styles_and_scripts_for_styler() {
+		$plugin_url      = FrmAppHelper::plugin_url();
+		$version         = FrmAppHelper::plugin_version();
+		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
+
+		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
+		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
+		wp_print_styles( 'formidable_style' );
+
+		wp_print_styles( 'formidable' );
+		wp_enqueue_script( 'formidable_style' );
+	}
+
+	/**
+	 * Render the style page (with a more limited and typed scope than calling it from self::style directly).
+	 *
+	 * @since x.x
+	 *
+	 * @param WP_Post        $active_style
+	 * @param array<WP_Post> $styles
+	 * @param stdClass       $form
+	 * @param WP_Post        $default_style
+	 * @return void
+	 */
+	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
+		$style_views_path = self::get_views_path();
+		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
+		$frm_style        = new FrmStyle( $active_style->ID );
+
+		if ( 'new_style' !== $view && ! FrmAppHelper::simple_get( 'form' ) && ! FrmAppHelper::simple_get( 'style_id' ) ) {
+			$view = 'edit'; // Have the Appearance > Forms link fallback to the edit view. Otherwise we want to use 'list' as the default.
+		}
+
+		if ( in_array( $view, array( 'edit', 'new_style', 'duplicate' ), true ) ) {
+			self::add_meta_boxes();
+		}
+
+		switch ( $view ) {
+			case 'edit':
+				$style = $active_style;
+				break;
+
+			case 'duplicate':
+				$style            = clone $active_style;
+				$new_style        = $frm_style->get_new();
+				$style->ID        = $new_style->ID;
+				$style->post_name = $new_style->post_name;
+				unset( $new_style );
+				break;
+
+			case 'new_style':
+				$style = $frm_style->get_new();
+				break;
+		}
+
+		if ( in_array( $view, array( 'duplicate', 'new_style' ), true ) ) {
+			$style->post_title = FrmAppHelper::simple_get( 'style_name' );
+			$style->menu_order = 0;
+		}
+
+		if ( ! isset( $style ) ) {
+			$style = $active_style;
+		}
+
+		self::force_form_style( $style );
+
+		if ( isset( self::$message ) ) {
+			$message = self::$message;
+		}
+
+		$preview_helper = new FrmStylesPreviewHelper( $form->id );
+		$preview_helper->adjust_form_for_preview();
+
+		// Get form HTML before displaying warnings and notes so we can check global $frm_vars data without adding extra database calls.
+		$target_form_preview_html = $preview_helper->get_html_for_form_preview();
+		$warnings                 = $preview_helper->get_warnings_for_styler_preview( $style, $default_style, $view );
+		$notes                    = $preview_helper->get_notes_for_styler_preview();
+
+		include $style_views_path . 'show.php';
 	}
 
 	public static function save() {

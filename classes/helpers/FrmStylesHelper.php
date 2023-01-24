@@ -523,6 +523,85 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Get the URL for the Styler page list view (where you can assign styles to a form and view style templates) for a target form.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $form_id
+	 * @return string
+	 */
+	public static function get_list_url( $form_id ) {
+		return admin_url( 'admin.php?page=formidable-styles&form=' . absint( $form_id ) );
+	}
+
+	/**
+	 * Get a link to edit a target style post object in the visual styler.
+	 *
+	 * @param WP_Post|stdClass $style
+	 * @param string|int       $form_id Used for the back button and preview form target.
+	 * @return string
+	 */
+	public static function get_edit_url( $style, $form_id = 0 ) {
+		$query_args = array(
+			'page'       => 'formidable-styles',
+			'frm_action' => 'edit',
+			'id'         => $style->ID,
+		);
+
+		if ( $form_id ) {
+			// We include &form_id for the back button to know where to point to.
+			$query_args['form'] = $form_id;
+		}
+
+		return add_query_arg( $query_args, admin_url( 'admin.php' ) );
+	}
+
+	/**
+	 * Get a count of the number of forms assigned to a target style ID.
+	 * All unassigned forms are included in the count for the default style.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $style_id
+	 * @param bool       $is_default
+	 * @return int
+	 */
+	public static function get_form_count_for_style( $style_id, $is_default ) {
+		$serialized      = serialize( array( 'custom_style' => (string) $style_id ) );
+		$substring       = substr( $serialized, 5, -1 ); // Chop off the "a:1:{" from the front and the "}" from the back.
+		$number_of_forms = FrmDb::get_count(
+			'frm_forms',
+			array(
+				'status'       => 'published',
+				'options LIKE' => $substring,
+			)
+		);
+
+		if ( $is_default ) {
+			// Add forms without an assigned style ID to the default count as well.
+			$substring2 = serialize( array( 'custom_style' => '1' ) );
+			$substring2 = substr( $substring2, 5, -1 );
+
+			$substring3 = serialize( array( 'custom_style' => 1 ) );
+			$substring3 = substr( $substring3, 5, -1 );
+
+			$number_of_forms += FrmDb::get_count(
+				'frm_forms',
+				array(
+					'status' => 'published',
+					array(
+						'options NOT LIKE' => 'custom_style',
+						'or'               => 1,
+						'options LIKE'     => array( $substring2, $substring3 ),
+					),
+				)
+			);
+		}
+
+		return $number_of_forms;
+	}
+
+	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */

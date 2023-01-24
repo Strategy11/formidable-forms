@@ -85,6 +85,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-bottom: 15px;
 }
 
+.frm-style-card.frm_hidden {
+	display: none;
+}
+
 .frm-style-card:nth-child(2n) {
 	margin-left: 16px;
 }
@@ -127,6 +131,25 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	z-index: 1;
 }
 
+.frm-style-card-pagination {
+	text-align: center;
+	font-size: 14px;
+}
+
+.frm-style-card-pagination a {
+	text-decoration: underline;
+}
+
+.frm-style-card-pagination a + a {
+	margin-left: 10px;
+}
+
+.frm-style-card-pagination a.frm-current-style-card-page {
+	color: var(--dark-grey);
+	text-decoration: none;
+	cursor: default;
+}
+
 #frm_style_sidebar .frm-style-card input {
 	height: unset !important;
 	margin: 0;
@@ -155,6 +178,14 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	overflow: hidden;
 	display: inline-block;
 	white-space: nowrap;
+}
+
+.frm-locked-style .frm-style-card-title {
+	color: var(--grey);
+}
+
+.frm-style-card-title svg {
+	margin-right: 5px;
 }
 
 .frm-style-card .frm_submit input {
@@ -324,6 +355,20 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 
 	padding-right: 24px; /* Add enough padding for the icon. */
+}
+
+.frm-flex-custom-card-wrapper #frm_custom_style_cards_wrapper {
+	display: flex;
+}
+
+#frm_styles_upsell_card {
+	text-align: center;
+}
+
+#frm_styles_upsell_card > div {
+	position: relative;
+	bottom: 15px;
+	padding: 0 10px;
 }
 
 @media only screen and (max-width: 1200px) {

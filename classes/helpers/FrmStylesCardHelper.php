@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmStylesCardHelper {
 
+	const PAGE_SIZE = 4;
+
 	/**
 	 * @var string
 	 */
@@ -29,16 +31,28 @@ class FrmStylesCardHelper {
 	private $form_id;
 
 	/**
+	 * @var bool
+	 */
+	private $enabled;
+
+	/**
+	 * @var bool If this is true, a lock will be rendered with the style name when self::echo_style_card is called.
+	 */
+	private $locked;
+
+	/**
 	 * @param WP_Post    $active_style
 	 * @param WP_Post    $default_style
 	 * @param string|int $form_id
+	 * @param bool       $enabled
 	 */
-	public function __construct( $active_style, $default_style, $form_id ) {
-		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_custom-style-card.php';
-
-		$this->active_style  = $active_style;
-		$this->default_style = $default_style;
-		$this->form_id       = (int) $form_id;
+	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
+		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
+		$this->active_style   = $active_style;
+		$this->default_style  = $default_style;
+		$this->form_id        = (int) $form_id;
+		$this->enabled        = $enabled;
+		$this->locked         = false;
 	}
 
 	/**
@@ -46,12 +60,15 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post    $style
+	 * @param stdClass|WP_Post $style
+	 * @param bool             $hidden Used for pagination.
+	 * @param Closure|false    $param_callback
 	 * @return void
 	 */
-	public function echo_style_card( $style ) {
+	private function echo_style_card( $style, $hidden = false, $param_callback = false ) {
 		$is_default_style     = $style->ID === $this->default_style->ID;
 		$is_active_style      = $style->ID === $this->active_style->ID;
+		$is_locked            = $this->locked;
 		$submit_button_params = $this->get_submit_button_params();
 		$params               = $this->get_params_for_style_card( $style );
 
@@ -60,6 +77,12 @@ class FrmStylesCardHelper {
 		}
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card';
+		}
+		if ( $hidden ) {
+			$params['class'] .= ' frm_hidden';
+		}
+		if ( false !== $param_callback && is_callable( $param_callback ) ) {
+			$params = $param_callback( $params );
 		}
 
 		include $this->view_file_path;
@@ -91,7 +114,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post $style
+	 * @param stdClass|WP_Post $style
 	 * @return array
 	 */
 	private function get_params_for_style_card( $style ) {
@@ -112,10 +135,6 @@ class FrmStylesCardHelper {
 			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
 			'data-label-position' => $label_position,
 		);
-
-		if ( isset( $style->template_key ) ) {
-			$params['data-template-key'] = $style->template_key;
-		}
 
 		/**
 		 * Filter params so Pro can add additional params, like data-delete-url.
@@ -138,11 +157,12 @@ class FrmStylesCardHelper {
 	 *     @type string $name
 	 *     @type string $slug
 	 * }
-	 * @return void
+	 * @param bool  $hidden
+	 * @return bool True if the template was valid and echoed.
 	 */
-	public function echo_card_template( $style ) {
+	private function echo_card_template( $style, $hidden = false ) {
 		if ( empty( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
-			return;
+			return false;
 		}
 
 		// Use a better name than my sample form.
@@ -151,9 +171,44 @@ class FrmStylesCardHelper {
 		$style_object->post_title   = $style['name'];
 		$style_object->post_name    = 'frm_style_template'; // This name is referenced in Pro.
 		$style_object->post_content = $style['settings'];
-		$style_object->template_key = $style['slug'];
 
-		$this->echo_style_card( $style_object );
+		$this->locked = empty( $style['url'] );
+
+		// TODO can I use the frm_style_card_params filter instead of calling a callback?
+		$param_callback = false;
+		if ( $this->locked ) {
+			/**
+			 * Include additional params for locked templates.
+			 *
+			 * @param stdClass $style_object Object sent to echo_style_card function.
+			 * @param array    $style        API data.
+			 */
+			$param_callback = function( $params ) use ( $style_object, $style ) {
+				$params['class'] .= ' frm-locked-style';
+
+				$params['data-upgrade'] = $style_object->post_title;
+				$params['data-medium']  = 'styler-template';
+
+				$item = array(
+					'categories' => $style['categories'],
+				);
+				$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
+
+				// WordPress requires that images are local files, so we may need to include those files in-plugin.
+				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
+				// 	$params['data-image'] = reset( $style['icon'] );
+				// }
+				return $params;
+			};
+		} else {
+			$param_callback = function( $params ) use ( $style ) {
+				$params['data-template-key'] = $style['slug'];
+				return $params;
+			};
+		}
+
+		$this->echo_style_card( $style_object, $hidden, $param_callback );
+		return true;
 	}
 
 	/**
@@ -231,6 +286,44 @@ class FrmStylesCardHelper {
 	}
 
 	/**
+	 * Echo a card wrapper and its children style cards.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $id     The ID of the card wrapper element.
+	 * @param array  $styles
+	 *
+	 * @return void
+	 */
+	public function echo_card_wrapper( $id, $styles ) {
+		$wrapper_style = $this->get_style_attribute_value_for_wrapper();
+
+		// Begin card wrapper
+		$card_wrapper_params = array(
+			'id'    => $id,
+			'class' => 'frm-style-card-wrapper with_frm_style',
+			'style' => $wrapper_style,
+		);
+		if ( $this->enabled ) {
+			$card_wrapper_params['class'] .= ' frm-styles-enabled';
+		}
+
+		$first_style         = reset( $styles );
+		$is_template_wrapper = is_array( $first_style );
+		?>
+		<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
+			<?php
+			if ( $is_template_wrapper ) {
+				$this->echo_template_cards( $styles );
+			} else {
+				$this->echo_custom_cards( $styles );
+			}
+			?>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Overwrite some styles. We want to make sure the sizes are normalized for the cards.
 	 * The cards use some rules from the default style because of the with_frm_style class on the card wrapper.
 	 * As these can be customized, apply some default values for the card previews instead.
@@ -240,18 +333,128 @@ class FrmStylesCardHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_style_attribute_value_for_wrapper() {
+	private function get_style_attribute_value_for_wrapper() {
 		$frm_style = new FrmStyle();
 		$defaults  = $frm_style->get_defaults();
 
-		$styles    = array();
-		$styles[]  = '--field-font-size: ' . $defaults['field_font_size'];
-		$styles[]  = '--field-height: ' . $defaults['field_height'];
-		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
-		$styles[]  = '--font-size: ' . $defaults['font_size'];
-		$styles[]  = '--label-padding: ' . $defaults['label_padding'];
-		$styles[]  = '--form-align: ' . $defaults['form_align'];
+		$styles   = array();
+		$styles[] = '--field-font-size: ' . $defaults['field_font_size'];
+		$styles[] = '--field-height: ' . $defaults['field_height'];
+		$styles[] = '--field-pad: ' . $defaults['field_pad'];
+		$styles[] = '--font-size: ' . $defaults['font_size'];
+		$styles[] = '--label-padding: ' . $defaults['label_padding'];
+		$styles[] = '--form-align: ' . $defaults['form_align'];
 
 		return implode( ';', $styles );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array<array> $styles
+	 * @return void
+	 */
+	private function echo_template_cards( $styles ) {
+		$count = 0;
+		array_walk(
+			$styles,
+			/**
+			 * Echo a style card for a single template from API data.
+			 *
+			 * @param array|string $style
+			 * @param string       $key   The key for the API data. It may be a numeric ID, or a key like "active_sub" or "expires".
+			 * @param int          $count Used for pagination.
+			 * @return void
+			 */
+			function( $style, $key ) use ( &$count ) {
+				if ( ! is_numeric( $key ) ) {
+					// Skip active_sub/expires keys.
+					return;
+				}
+
+				$hidden = $count > ( self::PAGE_SIZE - 1 );
+				if ( $this->echo_card_template( $style, $hidden ) ) {
+					++$count;
+				}
+			}
+		);
+
+		$this->maybe_echo_card_pagination( $count );
+	}
+
+	/**
+	 * @param array<WP_Post> $styles
+	 * @return void
+	 */
+	private function echo_custom_cards( $styles ) {
+		$count        = 0;
+		$this->locked = false;
+		array_walk(
+			$styles,
+			/**
+			* Echo a style card for a single style in the $styles array.
+			*
+			* @param WP_Post $style
+			* @param int     $count Used for pagination.
+			* @return void
+			*/
+			function( $style ) use ( &$count ) {
+				$hidden = $count > ( self::PAGE_SIZE - 1 );
+				$this->echo_style_card( $style, $hidden );
+				++$count;
+			}
+		);
+
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$this->echo_upsell_card();
+		}
+
+		$this->maybe_echo_card_pagination( $count );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $count
+	 * @return void
+	 */
+	private function maybe_echo_card_pagination( $count ) {
+		if ( $count <= self::PAGE_SIZE ) {
+			// Not enough cards to require pagination.
+			return;
+		}
+
+		$number_of_pages = ceil( $count / self::PAGE_SIZE );
+		?>
+		<div class="frm-style-card-pagination frm_wrap">
+			<?php for ( $index = 0; $index < $number_of_pages; ++$index ) { ?>
+				<?php
+				$anchor_parms = array( 'href' => '#' );
+				if ( 0 === $index ) {
+					$anchor_parms['class'] = 'frm-current-style-card-page';
+				}
+				?>
+				<a <?php FrmAppHelper::array_to_html_params( $anchor_parms, true ); ?>><?php echo absint( $index + 1 ); ?></a>
+			<?php } ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function echo_upsell_card() {
+		$upgrade_link = FrmAppHelper::admin_upgrade_link( 'styler-upsell-card' );
+		?>
+		<div id="frm_styles_upsell_card" class="frm-style-card">
+			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/upgrade-custom-styles.svg" />
+			<div><?php esc_html_e( 'Create styles and get access to premium templates', 'formidable' ); ?></div>
+			<div>
+				<a href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank"><?php esc_html_e( 'Upgrade now', 'formidable' ); ?></a>
+			</div>
+		</div>
+		<?php
 	}
 }

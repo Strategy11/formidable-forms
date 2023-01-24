@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // This partial view is used in the visual styler. This view renders a container for both the target form and the sample form previews.
 // It also includes the toggle to switch between the two views as only a single one is displayed at a time.
-// It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
+// It is accessed from /wp-admin/admin.php?page=formidable-styles&form=782
 
 ?>
 <div id="frm_style_preview">
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 		</div>
 		<?php if ( 'edit' !== $view ) { ?>
-			<a href="<?php echo esc_url( admin_url( 'themes.php?page=formidable-styles&frm_action=edit&form=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button" tabindex="0" role="button">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=edit&form=' . $form->id ) ); ?>" id="frm_edit_style" class="frm_floating_style_button" tabindex="0" role="button">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_pencil_icon', array( 'echo' => true ) ); ?> <?php esc_html_e( 'Edit style', 'formidable' ); ?>
 			</a>
 		<?php } ?>

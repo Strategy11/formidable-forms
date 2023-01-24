@@ -2,6 +2,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+// This is the main view file used in the visual styler. It is used for both the "list" and "edit" view types.
+// It is accessed from /wp-admin/admin.php?page=formidable-styles&frm_action=edit&form=782
+
 ?>
 <div class="frm_wrap">
 	<form id="frm_styling_form" action="" name="frm_styling_form" method="post">

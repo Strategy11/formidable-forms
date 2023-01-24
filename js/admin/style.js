@@ -65,6 +65,7 @@
 
 		syncPreviewFormLabelPositionsWithActiveStyle();
 		makeToggleAccessible();
+		initStyleCardPagination();
 	}
 
 	/**
@@ -112,6 +113,54 @@
 	}
 
 	/**
+	 * Handle pagination click events.
+	 *
+	 * @returns {void}
+	 */
+	function initStyleCardPagination() {
+		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
+			pagination => {
+				const wrapper = pagination.closest( '.frm-style-card-wrapper' );
+				pagination.querySelectorAll( 'a' ).forEach(
+					anchor => onClickPreventDefault(
+						anchor,
+						() => {
+							const pageNumber = parseInt( anchor.textContent );
+							showCardsForPage( wrapper, pageNumber );
+
+							const currentStyleCardClass = 'frm-current-style-card-page';
+							const currentPageNumber     = pagination.querySelector( '.' + currentStyleCardClass );
+							if ( currentPageNumber ) {
+								currentPageNumber.classList.remove( currentStyleCardClass );
+							}
+	
+							anchor.classList.add( currentStyleCardClass );
+						}
+					)
+				);
+			}
+		);
+	}
+
+	/**
+	 * @param {HTMLElement} wrapper
+	 * @param {Number} pageNumber
+	 * @returns {void}
+	 */
+	function showCardsForPage( wrapper, pageNumber ) {
+		const pageSize = 4;
+		const minIndex = ( pageNumber - 1 ) * pageSize;
+		const maxIndex = minIndex + pageSize - 1;
+
+		wrapper.querySelectorAll( '.frm-style-card' ).forEach(
+			( card, index ) => {
+				const hidden = index < minIndex || index > maxIndex;
+				card.classList.toggle( 'frm_hidden', hidden );
+			}
+		);
+	}
+
+	/**
 	 * @param {String} labelPosition
 	 * @returns {void}
 	 */
@@ -141,12 +190,12 @@
 		const cardWrapper   = document.getElementById( 'frm_custom_style_cards_wrapper' );
 		const styleIdInput  = getStyleIdInput();
 		const stylesEnabled = event.target.checked;
-		
+
 		cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled );
+		trackUnsavedChange();
 
 		if ( ! stylesEnabled ) {
 			styleIdInput.value = '0';
-
 			toggleFormidableStylingInPreviewForms( false );
 			return;
 		}
@@ -158,7 +207,7 @@
 	}
 
 	/**
-	 * @param {Boolean} on
+	 * @param {boolean} on
 	 * @returns {void}
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
@@ -254,7 +303,19 @@
 			return;
 		}
 
-		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
+		const card = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
+
+		if ( 'frm_styles_upsell_card' === card.id ) {
+			card.querySelector( 'a' ).click();
+			return;
+		}
+
+		if ( card.classList.contains( 'frm-locked-style' ) ) {
+			// Exit early before changing the data in the form if the style is locked.
+			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
+			return;
+		}
+
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
 		const previewArea  = sidebar.nextElementSibling;
 		const form         = previewArea.querySelector( 'form' );
@@ -280,10 +341,8 @@
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
-
 		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
 
-		// TODO trigger an upsell pop up if a style template is clicked.
 		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card, styleIdInput };
@@ -368,18 +427,31 @@
 	 */
 	function addHamburgMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
-		cards.forEach(
-			card => {
-				if ( 'frm_template_style_cards_wrapper' === card.parentNode.id ) {
-					// Templates do not have hamburger menus.
-					return;
-				}
+		cards.forEach( card => maybeAddMenuToCard( card ) );
+	}
 
-				const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
-				wrapper.style.position = 'relative';
-				wrapper.appendChild( getHamburgerMenu( card.dataset ) );
-			}
-		);
+	/**
+	 * @param {HTMLlement} card
+	 * @returns {void}
+	 */
+	function maybeAddMenuToCard( card ) {
+		if ( ! shouldAddMenuToCard( card ) ) {
+			return;
+		}
+
+		const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
+		wrapper.style.position = 'relative';
+		wrapper.appendChild( getHamburgerMenu( card.dataset ) );
+	}
+
+	/**
+	 * Avoid adding a menu to an upsell card or a template card.
+	 *
+	 * @param {HTMLlement} card
+	 * @returns {boolean}
+	 */
+	function shouldAddMenuToCard( card ) {
+		return 'frm_styles_upsell_card' !== card.id && 'frm_template_style_cards_wrapper' !== card.parentNode.id;
 	}
 
 	/**
@@ -1083,7 +1155,7 @@
 	 * @param {String}         event    Event name.
 	 * @param {String}         selector Selector.
 	 * @param {Function}       handler  Handler.
-	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+	 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 	 * @returns {void}
 	 */
 	function documentOn( event, selector, handler, options ) {

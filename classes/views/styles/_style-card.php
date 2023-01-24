@@ -2,10 +2,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-// This view is used on the style page to render a single custom style card.
+// This view is used on the style page to render a single style card.
+// It is used for both custom style cards and card templates.
 // This includes a basic preview (text field and submit button only).
-// It also includes the title of the style and some basic meta (# of forms assigned, and tags for "selected" and "default").
-
+// It also includes the title of the style and possibly some basic tags if "selected" or "default".
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div class="frm-style-card-preview">
@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 		<?php
 		/**
+		 * This is used in Pro to include the default/selected tags.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $args {
@@ -30,6 +32,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 	<div>
-		<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
+		<span class="frm-style-card-title">
+			<?php
+			if ( ! empty( $is_locked ) ) {
+				FrmAppHelper::icon_by_class( 'frmfont frm_lock_solid_icon' );
+			}
+			echo esc_html( $style->post_title );
+			?>
+		</span>
 	</div>
 </div>

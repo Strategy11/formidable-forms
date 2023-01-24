@@ -253,13 +253,13 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 		if ( $pagenow ) {
 			// allow this to be true during ajax load i.e. ajax form builder loading
-			$is_page = ( $pagenow == 'admin.php' || $pagenow == 'admin-ajax.php' ) && $get_page == $page;
+			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 			if ( $is_page ) {
 				return true;
 			}
 		}
 
-		return is_admin() && $get_page == $page;
+		return is_admin() && $get_page === $page;
 	}
 
 	/**
@@ -1435,7 +1435,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check if user is on the style editor, or the alternative URL.
+	 * Check if user is on the style editor or its alternative URL.
 	 * The first URL is a submenu "Styles" in the Formidable menu /wp-admin/admin.php?page=formidable-styles.
 	 * The alternative URL is linked as a submenu "Forms" item of the Appearance menu /wp-admin/themes.php?page=formidable-styles2.
 	 *
@@ -1443,8 +1443,20 @@ class FrmAppHelper {
 	 *
 	 * @return bool
 	 */
-	public static function is_style_editor_page() {
-		return self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
+	public static function is_style_editor_page( $view = '' ) {
+		if ( ! self::is_admin_page( 'formidable-styles' ) && ! self::is_admin_page( 'formidable-styles2' ) ) {
+			return false;
+		}
+
+		if ( ! in_array( $view, array( 'list', 'edit' ), true ) ) {
+			return true;
+		}
+
+		$action                 = self::simple_get( 'frm_action' );
+		$is_edit_mode           = 'edit' === $action || ( ! $action && ! self::simple_get( 'id' ) && ! self::simple_get( 'form' ) );
+		$checking_for_edit_mode = 'edit' === $view;
+
+		return $is_edit_mode === $checking_for_edit_mode;
 	}
 
 	/**
