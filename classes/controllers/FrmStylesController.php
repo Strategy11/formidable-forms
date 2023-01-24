@@ -309,7 +309,7 @@ class FrmStylesController {
 				$classes[] = 'frm_no_style_button';
 				return $classes;
 			}
-		}
+		);
 
 		/**
 		 * Hook into the saved style ID so Pro can import a style template by its key and return a new style ID.
