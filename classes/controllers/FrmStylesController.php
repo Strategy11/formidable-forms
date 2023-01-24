@@ -499,7 +499,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * 
+	 * Validate that we're assigning a form to a style that actually exists before assigning it to a form.
 	 *
 	 * @param int $style_id
 	 * @return bool True if the style actually exists.

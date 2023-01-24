@@ -408,7 +408,7 @@ class FrmStylesCardHelper {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$this->echo_upsell_card();
 		}
- 
+
 		$this->maybe_echo_card_pagination( $count );
 	}
 
@@ -449,7 +449,7 @@ class FrmStylesCardHelper {
 		$upgrade_link = FrmAppHelper::admin_upgrade_link( 'styler-upsell-card' );
 		?>
 		<div id="frm_styles_upsell_card" class="frm-style-card">
-			<img src="<?php echo FrmAppHelper::plugin_url(); ?>/images/upgrade-custom-styles.svg" />
+			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/upgrade-custom-styles.svg" />
 			<div><?php esc_html_e( 'Create styles and get access to premium templates', 'formidable' ); ?></div>
 			<div>
 				<a href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank"><?php esc_html_e( 'Upgrade now', 'formidable' ); ?></a>
