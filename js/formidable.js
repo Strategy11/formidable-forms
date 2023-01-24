@@ -616,7 +616,14 @@ function frmFrontFormJS() {
 				}
 
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-				window.location = response.redirect;
+				// Add delay.
+				if ( response.delay > 0 ) {
+					setTimeout( function() {
+						window.location = response.redirect;
+					}, response.delay );
+				} else {
+					window.location = response.redirect;
+				}
 			} else if ( response.content !== '' ) {
 				// the form or success message was returned
 

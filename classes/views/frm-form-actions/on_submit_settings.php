@@ -3,7 +3,7 @@
  * On Submit form action settings
  *
  * @package Formidable
- * @since 5.x.x
+ * @since 6.0
  *
  * @var object        $instance Form action post object.
  * @var array         $args     Contains `form`, `action_key`, `values`.

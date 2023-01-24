@@ -2120,7 +2120,7 @@ class FrmFormsController {
 	 * Gets confirmation method.
 	 *
 	 * @since 3.0
-	 * @since 5.x.x This method can return an array of met On Submit actions.
+	 * @since 6.0 This method can return an array of met On Submit actions.
 	 *
 	 * @param array $atts {
 	 *     Atts.
@@ -2184,17 +2184,17 @@ class FrmFormsController {
 	 * Used when the success action is not 'message'
 	 *
 	 * @since 2.05
-	 * @since 5.x.x `$args['force_delay_redirect']` is added.
+	 * @since 6.0 `$args['time_to_read']` is added.
 	 *
 	 * @param array $args {
 	 *     The args.
 	 *
-	 *     @type string $conf_method          The method.
-	 *     @type object $form                 Form object.
-	 *     @type int    $entry_id             Entry ID.
-	 *     @type string $action               The action event. Accepts `create` or `update`.
-	 *     @type array  $fields               The array of fields.
-	 *     @type bool   $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
+	 *     @type string $conf_method  The method.
+	 *     @type object $form         Form object.
+	 *     @type int    $entry_id     Entry ID.
+	 *     @type string $action       The action event. Accepts `create` or `update`.
+	 *     @type array  $fields       The array of fields.
+	 *     @type int    $time_to_read Force to show the message before redirecting in case redirect method runs.
 	 * }
 	 */
 	public static function run_success_action( $args ) {
@@ -2221,7 +2221,7 @@ class FrmFormsController {
 	/**
 	 * Gets met On Submit actions.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array  $args  See {@see FrmFormsController::run_success_action()}.
 	 * @param string $event Form event. Default is `create`.
@@ -2259,7 +2259,7 @@ class FrmFormsController {
 		/**
 		 * Filters the On Submit actions that meet the conditional logics.
 		 *
-		 * @since 5.x.x
+		 * @since 6.0
 		 *
 		 * @param array $met_actions Actions that meet the conditional logics.
 		 * @param array $args        See {@see FrmFormsController::run_success_action()}. `$args['event']` is also added.
@@ -2270,7 +2270,7 @@ class FrmFormsController {
 	/**
 	 * Runs On Submit actions.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array $args See inside {@see FrmFormsController::get_form_contents()} method.
 	 */
@@ -2288,6 +2288,7 @@ class FrmFormsController {
 		} elseif ( 1 === count( $args['conf_method'] ) ) {
 			self::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
 			$args['conf_method'] = $args['form']->options['success_action'];
+			$args['time_to_read'] = isset( $args['form']->options['time_to_read'] ) ? $args['form']->options['time_to_read'] : 0;
 			self::run_success_action( $args );
 		} else {
 			self::run_multi_on_submit_actions( $args );
@@ -2297,7 +2298,7 @@ class FrmFormsController {
 	/**
 	 * Runs multiple success actions.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
@@ -2317,7 +2318,7 @@ class FrmFormsController {
 
 		if ( $redirect_action ) {
 			// Show script to delay the redirection.
-			$args['force_delay_redirect'] = $redirect_action->post_content['time_to_read'];
+			$args['time_to_read'] = $redirect_action->post_content['time_to_read'];
 			self::run_single_on_submit_action( $args, $redirect_action );
 		}
 	}
@@ -2325,7 +2326,7 @@ class FrmFormsController {
 	/**
 	 * Runs single On Submit action.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
 	 * @param object $action On Submit action object.
@@ -2336,9 +2337,9 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Gets run_success_action() args from the On Subit action.
+	 * Gets run_success_action() args from the On Sumbit action.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
 	 * @param object $action On Submit action object.
@@ -2356,7 +2357,7 @@ class FrmFormsController {
 		/**
 		 * Filters the run success action args.
 		 *
-		 * @since 5.x.x
+		 * @since 6.0
 		 *
 		 * @param array  $new_args The new args.
 		 * @param array  $args     The old args. See {@see FrmFormsController::run_success_action()}.
@@ -2383,6 +2384,7 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit( $args ) {
 		add_filter( 'frm_use_wpautop', '__return_false' );
@@ -2400,33 +2402,41 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
-			echo json_encode( array( 'redirect' => $success_url ) );
+		$args['time_to_read'] = empty( $args['time_to_read'] ) ? 0 : ( 1000 * $args['time_to_read'] );
+
+		if ( ! empty( $args['ajax'] ) && $doing_ajax ) {
+			echo json_encode(
+				array(
+					'redirect' => $success_url,
+					'delay'    => $args['time_to_read'],
+				)
+			);
 			wp_die();
-		} elseif ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit and there is just one On Submit action runs.
+		} elseif ( ! headers_sent() && empty( $args['time_to_read'] ) ) { // Not AJAX submit and there is just one On Submit action runs.
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
-		} else {
-			self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
 		}
+
+		// Redirect with a delay if not ajax.
+		self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
 	}
 
 	/**
 	 * Redirects after submitting using JS. This is used when showing message before redirecting.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
-	 * @param array $args See {@see FrmFormsController::redirect_after_submit()}.
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = isset( $args['form']->options[ $args['success_opt'] . '_msg' ] ) ? $args['form']->options[ $args['success_opt'] . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
-		$delay_time   = isset( $args['force_delay_redirect'] ) ? ( 1000 * $args['force_delay_redirect'] ) : 8000;
+		$delay_time   = $args['time_to_read'];
 
 		add_filter( 'frm_use_wpautop', '__return_true' );
 
 		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo '<script type="text/javascript">';
+		echo '<script>';
 		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
@@ -2824,7 +2834,7 @@ class FrmFormsController {
 	/**
 	 * Gets the first On Submit action to update the success action data in form object.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param object $form
 	 */
@@ -2863,7 +2873,7 @@ class FrmFormsController {
 	/**
 	 * Populates the On Submit data to form options.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array  $form_options Form options.
 	 * @param object $action       Optional. The On Submit action object.
@@ -2881,9 +2891,10 @@ class FrmFormsController {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ]  = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
 				$form_options['redirect_msg'] = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
-				$form_options[ $opt . 'msg' ]  = $form_options['redirect_msg'];
+				$form_options[ $opt . 'msg' ] = $form_options['redirect_msg'];
+				$form_options['time_to_read'] = isset( $action->post_content['time_to_read'] ) ? $action->post_content['time_to_read'] : 0;
 				break;
 
 			case 'page':
@@ -2900,7 +2911,7 @@ class FrmFormsController {
 	 * Maybe migrate submit settings from the form options to On Submit action.
 	 * This is added after On Submit action is released. This might migrate the frontend editing submit settings too.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param int $form_id Form ID.
 	 */
@@ -2961,7 +2972,7 @@ class FrmFormsController {
 	/**
 	 * Gets On Submit action data from form options to be used for the migration.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param array  $form_options Form options.
 	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
@@ -2994,7 +3005,7 @@ class FrmFormsController {
 	/**
 	 * Removes deprecated submit settings after they are migrated to the On Submit action.
 	 *
-	 * @since 5.x.x
+	 * @since 6.0
 	 *
 	 * @param int    $form_id Form ID.
 	 * @param object $form    This isn't a full form object, requires at least the `options` property.

@@ -3,7 +3,7 @@
  * On Submit action helper
  *
  * @package Formidable
- * @since 5.x.x
+ * @since 6.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -130,7 +130,11 @@ class FrmOnSubmitHelper {
 				<?php esc_html_e( 'Delay Before Redirect', 'formidable' ); ?>
 			</label>
 
-			<input type="number" min="1" max="99" size="2" step="1" id="<?php echo esc_attr( $id_attr ); ?>" value="<?php echo intval( $instance->post_content['time_to_read'] ); ?>" />
+			<input type="number" min="1" max="99" size="2" step="1"
+				id="<?php echo esc_attr( $id_attr ); ?>"
+				value="<?php echo intval( $instance->post_content['time_to_read'] ); ?>"
+				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'time_to_read' ) ); ?>"
+				/>
 			<span><?php esc_html_e( 'seconds', 'formidable' ); ?></span>
 		</div>
 		<?php
