@@ -9721,11 +9721,6 @@ function frmAdminBuildJS() {
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
-
-			const exportFormatSelect = document.querySelector( 'select[name="format"]' );
-			if ( exportFormatSelect ) {
-				showOrHideRepeaters( exportFormatSelect.value );
-			}
 		},
 
 		buildInit: function() {
@@ -10412,6 +10407,11 @@ function frmAdminBuildJS() {
 				});
 				this.parentElement.remove();
 			});
+
+			const exportFormatSelect = document.querySelector( 'select[name="format"]' );
+			if ( exportFormatSelect ) {
+				showOrHideRepeaters( exportFormatSelect.value );
+			}
 		},
 
 		inboxBannerInit: function() {
