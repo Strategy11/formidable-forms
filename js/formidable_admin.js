@@ -2882,7 +2882,7 @@ function frmAdminBuildJS() {
 			newValue = this.value,
 			changes = document.getElementById( this.getAttribute( 'data-changeme' ) ),
 			att = this.getAttribute( 'data-changeatt' );
-		console.log( 'HERE' );
+			
 		if ( changes === null ) {
 			return;
 		}
