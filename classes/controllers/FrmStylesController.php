@@ -60,13 +60,16 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Add a "Forms" submenu to the Appearance menu.
-	 * This submenu links to the page to edit the default form.
+	 * Add two links for the visual styler.
+	 * There's a "Styles" submenu in the Formidable menu.
+	 * There's a second alternative "Forms" submenu in the Appearance menu.
+	 * This submenu links to a page to edit a form with the default style.
 	 *
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Styles', 'formidable' ), 'frm_change_settings', 'formidable-styles', 'FrmStylesController::route' );
+		add_submenu_page( 'themes.php', 'Formidable | ' . __( 'Styles', 'formidable' ), __( 'Forms', 'formidable' ), 'frm_change_settings', 'formidable-styles2', 'FrmStylesController::route' );
 	}
 
 	/**

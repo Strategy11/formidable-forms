@@ -171,7 +171,7 @@ class FrmAppController {
 				'permission' => 'frm_edit_forms',
 			),
 			array(
-				'link'       => FrmStylesHelper::get_style_page_url( $id ),
+				'link'       => FrmStylesHelper::get_list_url( $id ),
 				'label'      => __( 'Style', 'formidable' ),
 				'current'    => array(),
 				'page'       => 'formidable-styles',
@@ -445,7 +445,7 @@ class FrmAppController {
 			FrmFormsController::duplicate();
 		}
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-styles' ) && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
+		if ( FrmAppHelper::is_style_editor_page() && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
 			FrmStylesController::save_style();
 		}

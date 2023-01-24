@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 // This partial view is used in the visual styler sidebar in "list" view.
 // It lists all styles and allows the user to select and assign a style to a target form.
-// It is accessed from /wp-admin/themes.php?page=formidable-styles&form=782
+// It is accessed from /wp-admin/admin.php?page=formidable-styles&form=782
 
 $enabled     = '0' !== $form->options['custom_style'];
 $card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
@@ -32,7 +32,7 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 	do_action( 'frm_style_list_sidebar_top', compact( 'form' ) );
 	?>
 	<?php // This form isn't visible. It's just used for assigning the selected style id to the target form. ?>
-	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( admin_url( 'themes.php?page=formidable-styles&form=' . $form->id . '&t=advanced_settings' ) ); ?>">
+	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $active_style->ID ); ?>" />
 		<input type="hidden" name="form_id" value="<?php echo absint( $form->id ); ?>" />
 		<input type="hidden" name="frm_action" value="assign_style" />

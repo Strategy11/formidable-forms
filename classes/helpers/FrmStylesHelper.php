@@ -464,19 +464,19 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * Get the URL for the Style page (where you can assign styles to a form and view style templates) for a target form.
+	 * Get the URL for the Styler page list view (where you can assign styles to a form and view style templates) for a target form.
 	 *
 	 * @since x.x
 	 *
 	 * @param string|int $form_id
 	 * @return string
 	 */
-	public static function get_style_page_url( $form_id ) {
-		return admin_url( 'themes.php?page=formidable-styles&form=' . absint( $form_id ) );
+	public static function get_list_url( $form_id ) {
+		return admin_url( 'admin.php?page=formidable-styles&form=' . absint( $form_id ) );
 	}
 
 	/**
-	 * Get a link to edit a style post object in the visual styler.
+	 * Get a link to edit a target style post object in the visual styler.
 	 *
 	 * @param WP_Post|stdClass $style
 	 * @param string|int       $form_id Used for the back button and preview form target.
@@ -494,7 +494,7 @@ class FrmStylesHelper {
 			$query_args['form'] = $form_id;
 		}
 
-		return add_query_arg( $query_args, admin_url( 'themes.php' ) );
+		return add_query_arg( $query_args, admin_url( 'admin.php' ) );
 	}
 
 	/**

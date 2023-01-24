@@ -97,15 +97,15 @@ class FrmFormsHelper {
 			$args['form']       = 0;
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
 			$args['frm_action'] = 'edit';
-		} elseif ( FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
+		} elseif ( FrmAppHelper::is_style_editor_page() ) {
 			unset( $args['id'] ); // Avoid passing style into form switcher on style page.
 			$query_args = array(
-				'page'       => 'formidable-styles',
+				'page' => 'formidable-styles',
 			);
 			if ( $frm_action ) {
 				$query_args['frm_action'] = $frm_action;
 			}
-			$base = add_query_arg( $query_args, admin_url( 'themes.php' ) );
+			$base = add_query_arg( $query_args, admin_url( 'admin.php' ) );
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );
