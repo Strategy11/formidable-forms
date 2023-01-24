@@ -99,6 +99,32 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Create the default On submit action
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param object|int $form Form object or ID.
+	 */
+	private static function create_default_on_submit_action( $form ) {
+		FrmForm::maybe_get_form( $form );
+
+		/**
+		 * Enable or disable the default On Submit action.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param bool   $create Set to `false` if you want to disable.
+		 * @param object $form   Form object.
+		 */
+		$create = apply_filters( 'frm_create_default_on_submit_action', true, $form );
+
+		if ( $create ) {
+			$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
+			$action_control->create( $form->id );
+		}
+	}
+
 	public static function edit( $values = false ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -605,8 +631,6 @@ class FrmFormsController {
 	 * @since 4.0
 	 */
 	public static function build_new_form() {
-		global $wpdb;
-
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
@@ -633,6 +657,7 @@ class FrmFormsController {
 		 */
 		do_action( 'frm_build_new_form', $form_id );
 
+		self::create_default_on_submit_action( $form_id );
 		self::create_default_email_action( $form_id );
 
 		$response = array(
