@@ -97,15 +97,6 @@ class FrmFormsHelper {
 			$args['form']       = 0;
 		} elseif ( FrmAppHelper::is_admin_page( 'formidable' ) && in_array( $frm_action, array( 'new', 'duplicate' ) ) ) {
 			$args['frm_action'] = 'edit';
-		} elseif ( FrmAppHelper::is_admin_page( 'formidable-styles' ) ) {
-			unset( $args['id'] ); // Avoid passing style into form switcher on style page.
-			$query_args = array(
-				'page'       => 'formidable-styles',
-			);
-			if ( $frm_action ) {
-				$query_args['frm_action'] = $frm_action;
-			}
-			$base = add_query_arg( $query_args, admin_url( 'themes.php' ) );
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );
@@ -381,6 +372,8 @@ class FrmFormsHelper {
 
 		return array(
 			'submit_value'     => $frm_settings->submit_value,
+			'success_action'   => 'message',
+			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
 			'honeypot'         => 'basic',
@@ -1196,7 +1189,10 @@ BEFORE_HTML;
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
-				'data'  => array( 'frmverify' => __( 'Do you want to move this form to the trash?', 'formidable' ) ),
+				'data'  => array(
+					'frmverify'     => __( 'Do you want to move this form to the trash?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
 			),
 			'delete'  => array(
 				'label'   => __( 'Delete Permanently', 'formidable' ),
@@ -1204,7 +1200,10 @@ BEFORE_HTML;
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_delete_icon',
-				'data'    => array( 'frmverify' => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ) ),
+				'data'    => array(
+					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
 			),
 		);
 	}

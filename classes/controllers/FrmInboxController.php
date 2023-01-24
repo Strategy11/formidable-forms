@@ -34,7 +34,7 @@ class FrmInboxController {
 			return;
 		}
 
-		echo '<button class="button-secondary frm-button-secondary" id="frm-dismiss-inbox" type="button">' .
+		echo '<button class="frm-button-secondary" id="frm-dismiss-inbox" type="button">' .
 			esc_html__( 'Dismiss All', 'formidable' ) .
 			'</button>';
 	}
@@ -94,7 +94,7 @@ class FrmInboxController {
 				'key'     => 'usage',
 				'message' => 'Gathering usage data allows us to improve Formidable. Your forms will be considered as we evaluate new features, judge the quality of an update, or determine if an improvement makes sense. You can always visit the <a href="' . esc_url( $link ) . '">Global Settings</a> and choose to stop sharing data. <a href="https://formidableforms.com/knowledgebase/global-settings-overview/#kb-usage-tracking" target="_blank" rel="noopener noreferrer">Read more about what data we collect</a>.',
 				'subject' => __( 'Help Formidable improve with usage tracking', 'formidable' ),
-				'cta'     => '<a href="#" class="button-secondary frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>',
+				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary frm_inbox_dismiss">Activate usage tracking</a>',
 				'type'    => 'feedback',
 			)
 		);
@@ -123,7 +123,7 @@ class FrmInboxController {
 				'key'     => 'free_templates',
 				'message' => 'Add your email address to get a code for 10+ free form templates.',
 				'subject' => 'Get 10+ Free Form Templates',
-				'cta'     => '<a href="#" class="button-secondary frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
+				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
 				'type'    => 'feedback',
 			)
 		);

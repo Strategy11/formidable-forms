@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div id="frm_form_editor_container" class="frm_m_12 <?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
+<div id="frm_form_editor_container" class="<?php echo ( $has_fields ? 'frm-has-fields' : '' ); ?>">
 
 	<?php
 	if ( $has_fields ) {

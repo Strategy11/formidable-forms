@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="checkbox" id="frm-uninstall-box" value="1" onchange="frm_show_div('frm_uninstall_now',this.checked,true,'#')" />
 		<?php esc_html_e( 'Uninstall Formidable Forms and permanently delete all data.', 'formidable' ); ?>
 	</label>
-	<a href="javascript:void(0)" id="frm_uninstall_now" class="frm_hidden" data-frmverify="<?php esc_attr_e( 'Are you sure you want to delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ); ?>" data-frmuninstall="1">
+	<a href="javascript:void(0)" id="frm_uninstall_now" class="frm_hidden" data-frmverify="<?php esc_attr_e( 'Are you sure you want to delete all forms, form data, and all other Formidable data. There is no Undo.', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" data-frmuninstall="1">
 		<?php esc_html_e( 'Uninstall Now', 'formidable' ); ?>
 	</a>
 	<span class="frm-wait frm_spinner"></span>

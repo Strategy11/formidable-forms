@@ -154,9 +154,7 @@ class FrmHooksController {
 
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );
-		add_action( 'plugins_loaded', 'FrmStylesController::plugins_loaded' );
 		add_action( 'admin_init', 'FrmStylesController::admin_init' );
-		add_action( 'wp_default_styles', 'FrmStylesController::disable_conflicting_wp_admin_css', 11 ); // Use 11 so it happens after add_action( 'wp_default_styles', 'wp_default_styles' ); where edit.css is added.
 
 		// XML Controller.
 		add_action( 'admin_menu', 'FrmXMLController::menu', 41 );
@@ -229,7 +227,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_nopriv_frmpro_load_css', 'FrmStylesController::load_css' );
 		add_action( 'wp_ajax_frmpro_css', 'FrmStylesController::load_saved_css' );
 		add_action( 'wp_ajax_nopriv_frmpro_css', 'FrmStylesController::load_saved_css' );
-		add_action( 'wp_ajax_frm_rename_style', 'FrmStylesController::rename_style' );
 
 		// XML Controller.
 		add_action( 'wp_ajax_frm_install_template', 'FrmXMLController::install_template' );
