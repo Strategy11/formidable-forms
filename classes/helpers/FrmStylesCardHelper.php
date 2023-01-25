@@ -76,7 +76,7 @@ class FrmStylesCardHelper {
 			$params['class'] .= ' frm-default-style-card';
 		}
 		if ( $is_active_style ) {
-			$params['class'] .= ' frm-active-style-card';
+			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
 		}
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
@@ -411,7 +411,7 @@ class FrmStylesCardHelper {
 		);
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$this->echo_upsell_card();
+		//	$this->echo_upsell_card();
 		}
 
 		$this->maybe_echo_card_pagination( $count );

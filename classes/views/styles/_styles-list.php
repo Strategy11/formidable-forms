@@ -17,6 +17,19 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 	// Use flex on the sidebar so that the style card matches the size of the upsell card.
 	$sidebar_params['class'] .= ' frm-flex-custom-card-wrapper';
 }
+
+// TODO move this out of the view.
+$custom_styles = array_filter(
+	$styles,
+	/**
+	 * @param WP_Post $style
+	 * @param WP_Post $default_style
+	 * @return array<WP_Post>
+	 */
+	function( $style ) use ( $default_style ) {
+		return $default_style->ID !== $style->ID;
+	}
+);
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
 	<?php
@@ -54,9 +67,15 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 	</div>
 
 	<div class="frm_form_settings">
-		<h2><?php esc_html_e( 'My styles', 'formidable' ); ?></h2>
+		<h2><?php esc_html_e( 'Default style', 'formidable' ); ?></h2>
 	</div>
-	<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $styles ); ?>
+	<?php $card_helper->echo_card_wrapper( 'frm_default_style_cards_wrapper', array( $default_style ) ); ?>
+
+	<div class="frm_form_settings">
+		<h2><?php esc_html_e( 'Custom styles', 'formidable' ); ?></h2>
+	</div>
+	<?php // TODO the new button gets moved into the custom styles wrapper. ?>
+	<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
 
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>

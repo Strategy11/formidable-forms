@@ -8,6 +8,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
+	<div class="frm-style-card-title-wrapper">
+		<?php
+		if ( $is_active_style ) {
+			FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
+		}
+		?>
+		<span class="frm-style-card-title">
+			<?php
+			if ( ! empty( $is_locked ) ) {
+				FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+			}
+			echo esc_html( $style->post_title );
+
+			if ( $is_active_style ) {
+				echo ' ';
+				?>
+				<span>
+					<?php esc_html_e( '(Selected)', 'formidable' ); ?>
+				</span>
+				<?php
+			}
+			?>
+		</span>
+	</div>
 	<div class="frm-style-card-preview">
 		<?php
 		/**
@@ -40,15 +64,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="circle1" style="background-color: <?php echo esc_attr( $color1 ); ?>"></div>
 		<div class="circle2" style="background-color: <?php echo esc_attr( $color2 ); ?>"></div>
 		<div class="circle3" style="background-color: <?php echo esc_attr( $color3 ); ?>"></div>
-	</div>
-	<div>
-		<span class="frm-style-card-title">
-			<?php
-			if ( ! empty( $is_locked ) ) {
-				FrmAppHelper::icon_by_class( 'frmfont frm_lock_solid_icon' );
-			}
-			echo esc_html( $style->post_title );
-			?>
-		</span>
 	</div>
 </div>
