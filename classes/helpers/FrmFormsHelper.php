@@ -140,7 +140,7 @@ class FrmFormsHelper {
 					<span class="frm_bstooltip" title="<?php echo esc_attr( $truncated_name === $name ? '' : $name ); ?>" data-placement="right">
 						<?php echo esc_html( $name ); ?>
 					</span>
-					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown4_icon', array( 'aria-hidden' => 'true' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 				</h1>
 			</a>
 			<ul class="frm-dropdown-menu frm-on-top frm-inline-modal frm_code_list frm-full-hover" role="menu" aria-labelledby="frm-navbarDrop">
@@ -1196,7 +1196,10 @@ BEFORE_HTML;
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
-				'data'  => array( 'frmverify' => __( 'Do you want to move this form to the trash?', 'formidable' ) ),
+				'data'  => array(
+					'frmverify'     => __( 'Do you want to move this form to the trash?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
 			),
 			'delete'  => array(
 				'label'   => __( 'Delete Permanently', 'formidable' ),
@@ -1204,7 +1207,10 @@ BEFORE_HTML;
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_delete_icon',
-				'data'    => array( 'frmverify' => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ) ),
+				'data'    => array(
+					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
+				),
 			),
 		);
 	}
@@ -1310,12 +1316,12 @@ BEFORE_HTML;
 			'Calculator'          => array( 'calculator', 'var(--purple)' ),
 			'Registrations'       => array( 'address_card' ),
 			'Customer Service'    => array( 'users_solid', 'var(--pink)' ),
-			'Education'           => array( 'pencil', 'var(--primary-color)' ),
+			'Education'           => array( 'pencil', 'var(--primary-500)' ),
 			'Marketing'           => array( 'eye', 'rgb(0,160,210)' ),
 			'Feedback'            => array( 'smile', 'var(--green)' ),
 			'Business Operations' => array( 'case' ),
 			'Contact Form'        => array( 'email' ),
-			'Survey'              => array( 'comment', 'var(--primary-color)' ),
+			'Survey'              => array( 'comment', 'var(--primary-500)' ),
 			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
 			'Quiz'                => array( 'percent' ),
 			''                    => array( 'align_right' ),

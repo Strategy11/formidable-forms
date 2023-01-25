@@ -989,7 +989,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function allow_vars_in_styles( $allowed_attr ) {
-		$allowed_attr[] = '--primary-hover';
+		$allowed_attr[] = '--primary-700';
 		return $allowed_attr;
 	}
 
@@ -1000,7 +1000,7 @@ class FrmAppHelper {
 	 * @param string $css_string
 	 */
 	public static function allow_style( $allow_css, $css_string ) {
-		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-hover:' ) ) {
+		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
 			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
 		}
@@ -1091,6 +1091,18 @@ class FrmAppHelper {
 		}
 
 		include( self::plugin_path() . '/classes/views/shared/admin-header.php' );
+	}
+
+	/**
+	 * @since 6.0
+	 * @return void
+	 */
+	public static function import_link() {
+		?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg">
+			<?php esc_html_e( 'Import', 'formidable' ); ?>
+		</a>
+		<?php
 	}
 
 	/**

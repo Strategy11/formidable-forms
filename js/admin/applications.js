@@ -162,7 +162,7 @@
 					'h2',
 					{
 						text: __( 'Application Templates', 'formidable' ),
-						className: 'frm-h2'
+						className: 'frm-h2 frm_mb_md'
 					}
 				),
 				getCategoryOptions(),
@@ -234,7 +234,7 @@
 
 	function getTemplateSearch() {
 		const id = 'frm-application-search';
-		const placeholder = __( 'Search templates', 'formidable' );
+		const placeholder = __( 'Search Templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
 		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
@@ -362,7 +362,7 @@
 
 	function getUseThisTemplateControl( data ) {
 		let control = a({
-			className: 'button frm-button-secondary',
+			className: 'button frm-button-secondary frm-button-sm',
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );

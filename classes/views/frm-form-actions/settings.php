@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$icon_atts = array();
 								if ( isset( $group['color'] ) ) {
 									$icon_atts = array(
-										'style' => '--primary-hover:' . $group['color'],
+										'style' => '--primary-700:' . $group['color'],
 									);
 								}
 								FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', $icon_atts );

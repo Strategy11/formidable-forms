@@ -352,13 +352,13 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::kses_icon
 	 */
 	public function test_kses_icon() {
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:var(--purple)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:var(--purple)"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:rgb(0,160,210)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:rgb(0,160,210)"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-hover:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
 		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
