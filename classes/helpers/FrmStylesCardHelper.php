@@ -169,8 +169,11 @@ class FrmStylesCardHelper {
 		$style_object               = new stdClass();
 		$style_object->ID           = 0;
 		$style_object->post_title   = $style['name'];
-		$style_object->post_name    = $style['slug']; //'frm_style_template'; // This name is referenced in Pro.
 		$style_object->post_content = $style['settings'];
+
+		// An unlocked template uses a static "frm_style_template" in Pro.
+		// A locked template however uses a slug to match the sandbox CSS.
+		$style_object->post_name = isset( $style['url'] ) ? 'frm_style_template' : $style['slug'];
 
 		$this->locked = empty( $style['url'] );
 
