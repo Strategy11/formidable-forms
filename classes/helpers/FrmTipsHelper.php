@@ -13,20 +13,28 @@ class FrmTipsHelper {
 		$tips = self::$callback();
 		$tip  = self::get_random_tip( $tips );
 
+		self::show_tip( $tip );
+	}
+
+	/**
+	 * @since 6.0
+	 * @param array $tip
+	 */
+	public static function show_tip( $tip, $html = '' ) {
+		if ( ! isset( $tip['page'] ) ) {
+			$tip['page'] = '';
+		}
+		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
+			$tip['link']['medium'] = 'tip';
+		}
+
 		if ( 'p' === $html ) {
 			echo '<p class="frmcenter frm_no_top_margin">';
 		}
 
-		if ( ! isset( $tip['page'] ) ) {
-			$tip['page'] = '';
-		}
-		if ( ! isset( $tip['link']['medium'] ) ) {
-			$tip['link']['medium'] = 'tip';
-		}
-
-		$link = FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
+		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
-		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
@@ -43,6 +51,7 @@ class FrmTipsHelper {
 			<?php } ?>
 		</a>
 		<?php
+
 		if ( 'p' === $html ) {
 			echo '</p>';
 		}
