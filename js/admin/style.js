@@ -13,10 +13,10 @@
 		hasAttemptedToLoadTemplateCss: false,
 		autoId: 0
 	};
-	const { div, a, labelledTextInput, tag, svg, success } = frmDom;
-	const { onClickPreventDefault }                        = frmDom.util;
-	const { maybeCreateModal, footerButton }               = frmDom.modal;
-	const { doJsonFetch, doJsonPost }                      = frmDom.ajax;
+	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
+	const { onClickPreventDefault }                              = frmDom.util;
+	const { maybeCreateModal, footerButton }                     = frmDom.modal;
+	const { doJsonFetch, doJsonPost }                            = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -287,6 +287,12 @@
 			handleStyleCardClick( event );
 			return;
 		}
+
+		if ( 'frm_style_template_upsell_button' === target.id || target.closest( '#frm_style_template_upsell_button' ) ) {
+			event.preventDefault();
+			maybeCreateStyleTemplateModal();
+			return;
+		}
 	}
 
 	/**
@@ -314,9 +320,6 @@
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
 		if ( cardIsLocked ) {
 			maybeGetTemplateCss();
-			// Exit early before changing the data in the form if the style is locked.
-			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
-			// return;
 		}
 
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
@@ -334,6 +337,11 @@
 		form.parentNode.classList.add( card.dataset.classname );
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
+
+		const upsellButton = document.getElementById( 'frm_style_template_upsell_button' );
+		if ( upsellButton ) {
+			upsellButton.classList.toggle( 'frm_hidden', ! cardIsLocked );
+		}
 
 		if ( ! cardIsLocked ) {
 			// Don't update the form when a locked card is clicked.
@@ -356,6 +364,72 @@
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card, styleIdInput };
 		wp.hooks.doAction( hookName, hookArgs );
+	}
+
+	function maybeCreateStyleTemplateModal() {
+		const activeCard    = getActiveCard();
+		const titleElement  = activeCard.querySelector( '.frm-style-card-title' );
+		const templateTitle = titleElement.textContent;
+		const modal         = maybeCreateModal(
+			'frm_style_template_modal',
+			{
+				content: getStyleTemplateModalContent( activeCard ),
+				footer: getStyleTemplateModalFooter( activeCard )
+			}
+		);
+		modal.classList.add( 'wp-core-ui' );
+		modal.querySelector( '.frm-modal-title' ).textContent = templateTitle;
+
+		// This is no longer true:
+		// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
+	}
+
+	/**
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
+	function getStyleTemplateModalContent( card ) {
+		const children = [];
+
+		children.push(
+			div({
+				className: 'frm_warning_style',
+				children: [
+					span( __( 'Access to this style requires a license upgrade.', 'formidable' ) ),
+					a({
+						text: getUpgradeNowText(),
+						href: card.dataset.upgradeUrl
+					})
+				]
+			})
+		);
+
+		return div({ children });
+	}
+
+	function getStyleTemplateModalFooter( card ) {
+		const viewDemoSiteButton = footerButton({
+			text: __( 'Learn More', 'formidable' ),
+			buttonType: 'secondary'
+		});
+		viewDemoSiteButton.href = card.dataset.upgradeUrl;
+		viewDemoSiteButton.target = '_blank';
+
+		let primaryActionButton = footerButton({
+			text: getUpgradeNowText(),
+			buttonType: 'primary'
+		});
+
+		primaryActionButton.classList.remove( 'dismiss' );
+		primaryActionButton.setAttribute( 'href', card.dataset.upgradeUrl );
+
+		return div({
+			children: [ viewDemoSiteButton, primaryActionButton ]
+		});
+	}
+
+	function getUpgradeNowText() {
+		return __( 'Upgrade Now', 'formidable' );
 	}
 
 	/**

@@ -390,6 +390,18 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	display: block;
 }
 
+#frm_style_template_modal .frm_warning_style {
+	display: flex;
+}
+
+#frm_style_template_modal .frm_warning_style span {
+  flex: 1;
+}
+
+#frm_style_template_modal .frm_warning_style a:focus {
+	box-shadow: none;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,
