@@ -124,7 +124,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</thead>
 					<tbody>
 						<?php foreach ( $forms as $form ) { ?>
-							<tr class="frm-row <?php echo ! empty( $form->parent_form_id ) ? esc_attr( 'is-repeater' ) : ''; ?>">
+							<tr class="frm-row <?php echo ! empty( $form->parent_form_id ) ? esc_attr( 'frm-is-repeater' ) : ''; ?>">
 								<td>
 									<input type="checkbox" name="frm_export_forms[]" value="<?php echo esc_attr( $form->id ); ?>" id="export_form_<?php echo esc_attr( $form->id ); ?>" />
 								</td>

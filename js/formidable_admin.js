@@ -8150,6 +8150,15 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function getExportOption() {
+		const exportFormatSelect = document.querySelector( 'select[name="format"]' );
+		if ( exportFormatSelect ) {
+			return exportFormatSelect.value;
+		} else {
+			return '';
+		}
+	}
+
 	function checkExportTypes() {
 		/*jshint validthis:true */
 		var $dropdown = jQuery( this );
@@ -8189,7 +8198,11 @@ function frmAdminBuildJS() {
 	}
 
 	function showOrHideRepeaters( exportOption ) {
-		const repeaters = document.querySelectorAll( '.is-repeater' );
+		if ( exportOption === '' ) {
+			return;
+		}
+
+		const repeaters = document.querySelectorAll( '.frm-is-repeater' );
 		if ( ! repeaters.length ) {
 			return;
 		}
@@ -9072,11 +9085,9 @@ function frmAdminBuildJS() {
 			addons.add( 'frm-limited-actions' );
 		}
 
-		const exportOption = document.querySelector( 'select[name="format"]' ).value;
-
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText = items[i].innerText.toLowerCase();
-			const itemCanBeShown = ! ( exportOption === 'xml' && items[i].classList.contains( 'is-repeater' ) );
+			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
 					items[i].classList.remove( 'frm_hidden' );
@@ -10410,10 +10421,7 @@ function frmAdminBuildJS() {
 				this.parentElement.remove();
 			});
 
-			const exportFormatSelect = document.querySelector( 'select[name="format"]' );
-			if ( exportFormatSelect ) {
-				showOrHideRepeaters( exportFormatSelect.value );
-			}
+			showOrHideRepeaters( getExportOption() );
 		},
 
 		inboxBannerInit: function() {
