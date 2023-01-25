@@ -34,11 +34,13 @@
 }
 
 .frm-applications-index-content {
-	padding: 40px 40px 0;
+	padding: var(--gap-sm) 40px var(--gap-md)
 }
 
 .frm-application-cards-grid {
+	padding-top: var(--gap-md);
 	padding-bottom: 50px;
+	grid-gap: var(--gap-md);
 }
 
 .frm-application-cards-grid:last-child {
@@ -71,12 +73,12 @@
 }
 
 .frm-application-template-card:hover h4 {
-	color: var(--primary-color);
+	color: var(--primary-500);
 }
 
 /* Card title */
 .frm-application-card h4 {
-	font-weight: 600;
+	font-weight: 500;
 	display: inline-block;
 	max-width: 100%;
 	overflow: hidden;
@@ -115,9 +117,6 @@
 	position: absolute;
 	right: 10px;
 	bottom: 0;
-	line-height: 17px;
-	min-height: 17px;
-	height: 20px;
 }
 
 /* Card description */
@@ -222,7 +221,7 @@
 }
 
 #frm_application_category_filter > a.frm-active-application-category {
-	color: var(--dark-grey);
+	color: var(--grey-700);
 	pointer-events: none;
 }
 

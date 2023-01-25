@@ -48,7 +48,7 @@ body.frm-admin-page-welcome {
 }
 
 .frm-ws-block-1 .frm-bg-transparent span {
-	color: var(--primary-color);
+	color: var(--primary-500);
 }
 
 .frm-player {
@@ -69,7 +69,7 @@ body.frm-admin-page-welcome {
 	height: 40px;
 	margin-right: 24px;
 
-	background: var(--primary-color);
+	background: var(--primary-500);
 	border-radius: 4px;
 }
 
