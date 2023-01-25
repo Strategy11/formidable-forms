@@ -184,5 +184,4 @@ class FrmStylesPreviewHelper {
 
 		$styles->registered['wp-admin']->deps = $dependencies;
 	}
-
 }

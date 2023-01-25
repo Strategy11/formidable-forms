@@ -169,8 +169,11 @@ class FrmStylesCardHelper {
 		$style_object               = new stdClass();
 		$style_object->ID           = 0;
 		$style_object->post_title   = $style['name'];
-		$style_object->post_name    = 'frm_style_template'; // This name is referenced in Pro.
 		$style_object->post_content = $style['settings'];
+
+		// An unlocked template uses a static "frm_style_template" in Pro.
+		// A locked template however uses a slug to match the sandbox CSS.
+		$style_object->post_name = isset( $style['url'] ) ? 'frm_style_template' : $style['slug'];
 
 		$this->locked = empty( $style['url'] );
 
@@ -186,6 +189,7 @@ class FrmStylesCardHelper {
 			$param_callback = function( $params ) use ( $style_object, $style ) {
 				$params['class'] .= ' frm-locked-style';
 
+				/*
 				$params['data-upgrade'] = $style_object->post_title;
 				$params['data-medium']  = 'styler-template';
 
@@ -193,6 +197,7 @@ class FrmStylesCardHelper {
 					'categories' => $style['categories'],
 				);
 				$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
+				*/
 
 				// WordPress requires that images are local files, so we may need to include those files in-plugin.
 				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
