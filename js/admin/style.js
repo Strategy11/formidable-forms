@@ -336,8 +336,11 @@
 		sampleForm.classList.add( card.dataset.classname );
 
 		if ( ! cardIsLocked ) {
+			// Don't update the form when a locked card is clicked.
 			styleIdInput.value = card.dataset.styleId;
-			trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
+
+			// TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
+			trackUnsavedChange();
 		}
 
 		setTimeout( enableLabelTransitions, 1 );
