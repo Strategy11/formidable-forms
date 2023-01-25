@@ -398,7 +398,8 @@
 					span( __( 'Access to this style requires a license upgrade.', 'formidable' ) ),
 					a({
 						text: getUpgradeNowText(),
-						href: card.dataset.upgradeUrl
+						href: card.dataset.upgradeUrl,
+						target: '_blank'
 					})
 				]
 			})
@@ -422,6 +423,7 @@
 
 		primaryActionButton.classList.remove( 'dismiss' );
 		primaryActionButton.setAttribute( 'href', card.dataset.upgradeUrl );
+		primaryActionButton.target = '_blank';
 
 		return div({
 			children: [ viewDemoSiteButton, primaryActionButton ]
