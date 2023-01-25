@@ -10,12 +10,13 @@
 	const state                                            = {
 		showingSampleForm: false,
 		unsavedChanges: false,
+		hasAttemptedToLoadTemplateCss: false,
 		autoId: 0
 	};
 	const { div, a, labelledTextInput, tag, svg, success } = frmDom;
 	const { onClickPreventDefault }                        = frmDom.util;
 	const { maybeCreateModal, footerButton }               = frmDom.modal;
-	const { doJsonPost }                                   = frmDom.ajax;
+	const { doJsonFetch, doJsonPost }                      = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -310,10 +311,12 @@
 			return;
 		}
 
-		if ( card.classList.contains( 'frm-locked-style' ) ) {
+		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
+		if ( cardIsLocked ) {
+			maybeGetTemplateCss();
 			// Exit early before changing the data in the form if the style is locked.
 			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
-			return;
+			// return;
 		}
 
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
@@ -331,7 +334,11 @@
 		form.parentNode.classList.add( card.dataset.classname );
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
-		styleIdInput.value = card.dataset.styleId;
+
+		if ( ! cardIsLocked ) {
+			styleIdInput.value = card.dataset.styleId;
+			trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
+		}
 
 		setTimeout( enableLabelTransitions, 1 );
 
@@ -341,12 +348,39 @@
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
-		trackUnsavedChange(); // TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
 
 		// Trigger an action here so Pro can handle template preview updates on card click.
 		const hookName      = 'frm_style_card_click';
 		const hookArgs      = { card, styleIdInput };
 		wp.hooks.doAction( hookName, hookArgs );
+	}
+
+	/**
+	 * The template CSS is loaded the first time a locked template is clicked.
+	 *
+	 * @returns {void}
+	 */
+	function maybeGetTemplateCss() {
+		if ( state.hasAttemptedToLoadTemplateCss ) {
+			// Only attempt once so there aren't multiple requests when clicking cards quickly, or multiple failed attempts.
+			return;
+		}
+
+		const preview = document.getElementById( 'frm_style_preview' );
+		preview.classList.add( 'frm-loading-style-template' );
+
+		doJsonFetch( 'get_style_template_css' ).then(
+			response => {
+				document.head.appendChild(
+					tag(
+						'style',
+						{ text: response.css }
+					)
+				);
+				preview.classList.remove( 'frm-loading-style-template' );
+			}
+		);
+		state.hasAttemptedToLoadTemplateCss = true;
 	}
 
 	/**

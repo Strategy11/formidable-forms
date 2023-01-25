@@ -41,5 +41,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 */
 		do_action( 'frm_style_preview_after_toggle', $view );
 		?>
+		<div id="frm_loading_style_placeholder">
+			<span class="frm-wait frm_visible_spinner"></span>
+			<strong><?php esc_html_e( 'Please wait', 'formidable-pro' ); ?></strong>
+			<p><?php esc_html_e( 'Updating CSS...', 'formidable-pro' ); ?></p>
+		</div>
 	</div>
 </div>

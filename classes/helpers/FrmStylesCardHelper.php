@@ -169,7 +169,7 @@ class FrmStylesCardHelper {
 		$style_object               = new stdClass();
 		$style_object->ID           = 0;
 		$style_object->post_title   = $style['name'];
-		$style_object->post_name    = 'frm_style_template'; // This name is referenced in Pro.
+		$style_object->post_name    = $style['slug']; //'frm_style_template'; // This name is referenced in Pro.
 		$style_object->post_content = $style['settings'];
 
 		$this->locked = empty( $style['url'] );
@@ -186,6 +186,7 @@ class FrmStylesCardHelper {
 			$param_callback = function( $params ) use ( $style_object, $style ) {
 				$params['class'] .= ' frm-locked-style';
 
+				/*
 				$params['data-upgrade'] = $style_object->post_title;
 				$params['data-medium']  = 'styler-template';
 
@@ -193,6 +194,7 @@ class FrmStylesCardHelper {
 					'categories' => $style['categories'],
 				);
 				$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
+				*/
 
 				// WordPress requires that images are local files, so we may need to include those files in-plugin.
 				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
