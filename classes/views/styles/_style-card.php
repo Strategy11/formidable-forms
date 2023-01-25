@@ -6,6 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It is used for both custom style cards and card templates.
 // This includes a basic preview (text field and submit button only).
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
+
+$is_template  = 0 === $style->ID;
+$include_info = $is_active_style || $is_template;
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div class="frm-style-card-title-wrapper">
@@ -13,24 +16,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $is_active_style ) {
 			FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
 		}
+		if ( ! empty( $is_locked ) ) {
+			FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+		}
 		?>
-		<span class="frm-style-card-title">
-			<?php
-			if ( ! empty( $is_locked ) ) {
-				FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
-			}
-			echo esc_html( $style->post_title );
-
-			if ( $is_active_style ) {
-				echo ' ';
-				?>
-				<span>
-					<?php esc_html_e( '(Selected)', 'formidable' ); ?>
-				</span>
+		<?php // The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here. ?>
+		<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
+		<?php if ( $include_info ) { ?>
+			<span class="frm-style-card-info">
 				<?php
-			}
-			?>
-		</span>
+				$info_text = $is_active_style ? __( 'Applied', 'formidable' ) : __( 'Preview', 'formidable' );
+				echo '(' . esc_html( $info_text ) . ')';
+				?>
+			</span>
+		<?php } ?>
 	</div>
 	<div class="frm-style-card-preview">
 		<?php

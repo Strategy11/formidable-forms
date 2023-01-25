@@ -58,7 +58,7 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
+		setTimeout( addHamburgerMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
 		initDatepickerSample();
 
 		const enableToggle = document.getElementById( 'frm_enable_styling' );
@@ -460,9 +460,11 @@
 	}
 
 	/**
+	 * Add menu dropdowns to style cards dynamically on load.
+	 *
 	 * @returns {void}
 	 */
-	function addHamburgMenusToCards() {
+	function addHamburgerMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach( card => maybeAddMenuToCard( card ) );
 	}
@@ -476,9 +478,7 @@
 			return;
 		}
 
-		const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
-		wrapper.style.position = 'relative';
-		wrapper.appendChild( getHamburgerMenu( card.dataset ) );
+		card.appendChild( getHamburgerMenu( card.dataset ) );
 	}
 
 	/**
@@ -579,6 +579,7 @@
 
 		if ( isListPage ) {
 			const card         = getCardByStyleId( styleId );
+			console.log({ styleId, card });
 			const titleElement = card.querySelector( '.frm-style-card-title' );
 			styleName = titleElement.textContent;
 		} else {
@@ -746,6 +747,11 @@
 	 * @returns {HTMLElement}
 	 */
 	function getCardByStyleId( styleId ) {
+		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
+		if ( defaultCard ) {
+			return defaultCard;
+		}
+
 		return Array.from( document.getElementById( 'frm_custom_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
 	}
 
