@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
 
 $is_template  = 0 === $style->ID;
-$include_info = $is_active_style || $is_template;
+$include_info = $is_active_style;
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div>
@@ -26,7 +26,7 @@ $include_info = $is_active_style || $is_template;
 			<?php if ( $include_info ) { ?>
 				<span class="frm-style-card-info">
 					<?php
-					$info_text = $is_active_style ? __( 'Applied', 'formidable' ) : __( 'Preview', 'formidable' );
+					$info_text = __( 'Applied', 'formidable' );
 					echo '(' . esc_html( $info_text ) . ')';
 					?>
 				</span>

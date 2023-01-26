@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmStylesCardHelper {
 
-	const PAGE_SIZE = 4;
+	const PAGE_SIZE = 3;
 
 	/**
 	 * @var string

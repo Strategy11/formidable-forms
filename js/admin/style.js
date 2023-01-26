@@ -158,7 +158,7 @@
 	 * @returns {void}
 	 */
 	function showCardsForPage( wrapper, pageNumber ) {
-		const pageSize = 4;
+		const pageSize = 3;
 		const minIndex = ( pageNumber - 1 ) * pageSize;
 		const maxIndex = minIndex + pageSize - 1;
 

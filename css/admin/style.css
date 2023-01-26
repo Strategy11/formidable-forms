@@ -82,7 +82,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	background-color: #fff;
 	margin-bottom: 15px;
 	width: 100%;
-	padding: 20px;
+	padding: 14px;
 	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	position: relative;
 }
@@ -98,12 +98,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card:hover {
-	border: 1px solid #4199FD;
 	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
 }
 
 .frm-active-style-card:not(.frm-currently-set-style-card) {
-	background-color: #F5FAFF;
 	box-shadow: none;
 	border: 1px solid #4199FD;
 }
@@ -151,7 +149,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-left: 10px;
 }
 
-.frm-style-card-pagination a.frm-current-style-card-page {
+#frm_style_sidebar .frm-disabled-pagination-anchor {
 	color: var(--dark-grey);
 	text-decoration: none;
 	cursor: default;
@@ -170,8 +168,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: none;
 }
 
-.frm-currently-set-style-card .frm-style-card-info,
-.frm-active-style-card .frm-style-card-info {
+.frm-currently-set-style-card .frm-style-card-info {
 	display: inline;
 	color: #667085;
 	margin-left: 5px;
@@ -388,7 +385,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	background-color: #F2F4F7;
 	width: 2px;
 	height: 20px;
-	margin: 0 20px;
+	margin: 0 20px 0 5px;
 }
 
 .frm-button-style-example {
