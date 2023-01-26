@@ -196,6 +196,7 @@ class FrmStylesCardHelper {
 					),
 					'/style-templates/' . $style['slug'],
 				);
+				$params['data-requires']    = FrmFormsHelper::get_plan_required( $style );
 				return $params;
 			};
 		} else {

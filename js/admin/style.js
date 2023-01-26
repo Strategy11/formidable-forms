@@ -395,7 +395,11 @@
 			div({
 				className: 'frm_warning_style',
 				children: [
-					span( __( 'Access to this style requires a license upgrade.', 'formidable' ) ),
+					span(
+						/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
+						__( 'Access to this application requires the %s plan.', 'formidable' )
+							.replace( '%s', card.dataset.requires )
+					),
 					a({
 						text: getUpgradeNowText(),
 						href: card.dataset.upgradeUrl,
