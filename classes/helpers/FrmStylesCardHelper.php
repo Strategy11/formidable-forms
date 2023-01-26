@@ -71,9 +71,6 @@ class FrmStylesCardHelper {
 		$submit_button_params = $this->get_submit_button_params();
 		$params               = $this->get_params_for_style_card( $style );
 
-		if ( $is_default_style ) {
-			$params['class'] .= ' frm-default-style-card';
-		}
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
 		}

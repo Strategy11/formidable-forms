@@ -354,7 +354,7 @@
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
 		const editButton     = document.getElementById( 'frm_edit_style' );
-		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
+		const showEditButton = null !== card.querySelector( '.frm-style-card-info' ); // Only the "Applied style" has card info.
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
@@ -627,7 +627,6 @@
 
 		if ( isListPage ) {
 			const card         = getCardByStyleId( styleId );
-			console.log({ styleId, card });
 			const titleElement = card.querySelector( '.frm-style-card-title' );
 			styleName = titleElement.textContent;
 		} else {
