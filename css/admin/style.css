@@ -82,9 +82,15 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	background-color: #fff;
 	margin-bottom: 15px;
 	width: 100%;
-	padding: 10px;
+	padding: 20px;
 	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	position: relative;
+}
+
+.frm-style-card > div:first-child {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
 }
 
 .frm-style-card.frm_hidden {
@@ -104,10 +110,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
 }
 
-.frm-style-card-title-wrapper {
-	flex: 1;
-}
-
 .frm-active-style-card:not(.frm-currently-set-style-card) {
 	background-color: #F5FAFF;
 	box-shadow: none;
@@ -122,13 +124,17 @@ This file is added to the visual styler admin page, accessed from the style tab.
 #frm_style_sidebar .frm-style-card .dropdown {
 	overflow: visible;
 	padding-left: 0;
+	align-self: flex-start;
 }
 
 .frm-style-card-preview {
-	padding: 10px;
+	padding-top: 10px;
 	pointer-events: none;
 	background-color: var(--preview-background-color);
 	border-radius: 6px 6px 0 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .frm-style-card-preview + div .dropdown {
@@ -162,6 +168,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 /* Avoid disabled button styles overwriting the card's preview styles */
+/** TODO Remove old styles. */
 #frm_style_sidebar .frm-style-card input[disabled] {
 	background-color: var(--submit-bg-color) !important;
 	color: var(--submit-text-color) !important;
@@ -391,23 +398,70 @@ Time fields use a div instead of a label, so don't target by the primary label b
 }
 
 /* TODO prefix these, wrap them in the style card class */
-.circle1, .circle2, .circle3 {
+.frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
 	border: 2px solid #FFFFFF;
 	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	border-radius: 22px;
-	display: inline-block;
 	height: 28px;
 	width: 28px;
 	box-sizing: border-box;
 }
 
-.circle1 { 
-	left: 20px;
+.frm-style-circle1 {
+	z-index: 3;
 }
 
-.circle2 {
-	left: 10px;
+.frm-style-circle2 {
+	right: 8px;
+	z-index: 2;
+}
+
+.frm-style-circle3 {
+	right: 16px;
+	z-index: 1;
+}
+
+.frm-style-card-separator {
+	background-color: #F2F4F7;
+	width: 2px;
+	height: 20px;
+	margin: 0 20px;
+}
+
+.frm-button-style-example {
+	background-color: var(--submit-bg-color);
+	border-radius: var(--submit-border-radius);
+	width: 60px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm-button-style-example > div {
+	width: 32px;
+	height: 2px;
+	background-color: var(--submit-text-color);
+}
+
+.frm-input-style-example {
+	border-width: var(--field-border-width);
+	border-style: var(--field-border-style);
+	border-color: var(--border-color);
+	background-color: var(--bg-color);
+	width: 138px;
+	height: 16px;
+	margin-left: 10px;
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+}
+
+.frm-input-style-example > div {
+	width: 46px;
+	height: 2px;
+	background-color: var(--text-color);
 }
 
 #frm_loading_style_placeholder,

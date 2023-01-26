@@ -11,57 +11,68 @@ $is_template  = 0 === $style->ID;
 $include_info = $is_active_style || $is_template;
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
-	<div class="frm-style-card-title-wrapper">
-		<?php
-		if ( $is_active_style ) {
-			FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
-		}
-		if ( ! empty( $is_locked ) ) {
-			FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
-		}
-		?>
-		<?php // The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here. ?>
-		<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
-		<?php if ( $include_info ) { ?>
-			<span class="frm-style-card-info">
-				<?php
-				$info_text = $is_active_style ? __( 'Applied', 'formidable' ) : __( 'Preview', 'formidable' );
-				echo '(' . esc_html( $info_text ) . ')';
+	<div>
+		<div class="frm-style-card-title-wrapper">
+			<?php
+			if ( $is_active_style ) {
+				FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
+			}
+			if ( ! empty( $is_locked ) ) {
+				FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+			}
+			?>
+			<?php // The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here. ?>
+			<span class="frm-style-card-title"><?php echo esc_html( $style->post_title ); ?></span>
+			<?php if ( $include_info ) { ?>
+				<span class="frm-style-card-info">
+					<?php
+					$info_text = $is_active_style ? __( 'Applied', 'formidable' ) : __( 'Preview', 'formidable' );
+					echo '(' . esc_html( $info_text ) . ')';
+					?>
+				</span>
+			<?php } ?>
+		</div>
+		<div class="frm-style-card-preview">
+			<?php
+			/**
+			 * This is used in Pro to include the default/selected tags.
+			 *
+			 * @since x.x
+			 *
+			 * @param array $args {
+			 *     @type WP_Post $style
+			 *     @type bool    $is_default_style
+			 *     @type bool    $is_active_style
+			 * }
+			 */
+			do_action( 'frm_style_card_after_submit', compact( 'style', 'is_default_style', 'is_active_style' ) );
+
+			$colors = array(
+				$style->post_content['label_color'],
+				$style->post_content['text_color'],
+				$style->post_content['submit_bg_color'],
+			);
+			foreach( $colors as $index => $color ) {
+				if ( 0 !== strpos( $color, 'rgb' ) ) {
+					$color = '#' . $color;
+				}
+
+				$circle_params = array(
+					'class' => 'frm-style-circle' . absint( $index + 1 ),
+					'style' => 'background-color: ' . $color,
+				);
 				?>
-			</span>
-		<?php } ?>
-	</div>
-	<div class="frm-style-card-preview">
-		<?php
-		/**
-		 * This is used in Pro to include the default/selected tags.
-		 *
-		 * @since x.x
-		 *
-		 * @param array $args {
-		 *     @type WP_Post $style
-		 *     @type bool    $is_default_style
-		 *     @type bool    $is_active_style
-		 * }
-		 */
-		do_action( 'frm_style_card_after_submit', compact( 'style', 'is_default_style', 'is_active_style' ) );
-
-		$color1 = $style->post_content['label_color'];
-		$color2 = $style->post_content['text_color'];
-		$color3 = $style->post_content['submit_bg_color'];
-
-		if ( 0 !== strpos( $color1, 'rgb' ) ) {
-			$color1 = '#' . $color1;
-		}
-		if ( 0 !== strpos( $color2, 'rgb' ) ) {
-			$color2 = '#' . $color2;
-		}
-		if ( 0 !== strpos( $color3, 'rgb' ) ) {
-			$color3 = '#' . $color3;
-		}
-		?>
-		<div class="circle1" style="background-color: <?php echo esc_attr( $color1 ); ?>"></div>
-		<div class="circle2" style="background-color: <?php echo esc_attr( $color2 ); ?>"></div>
-		<div class="circle3" style="background-color: <?php echo esc_attr( $color3 ); ?>"></div>
+				<div <?php FrmAppHelper::array_to_html_params( $circle_params, true ); ?>></div>
+				<?php
+			}
+			?>
+			<div class="frm-style-card-separator"></div>
+			<div class="frm-button-style-example">
+				<div></div>
+			</div>
+			<div class="frm-input-style-example">
+				<div></div>
+			</div>
+		</div>
 	</div>
 </div>

@@ -175,6 +175,8 @@ class FrmStylesCardHelper {
 
 		if ( $this->locked ) {
 			/**
+			 * Set up a locked style card for the upgrade modal.
+			 *
 			 * @param array $params
 			 * @param array $args {
 			 *     @type WP_Post|stdClass $style
@@ -187,8 +189,7 @@ class FrmStylesCardHelper {
 					return $params;
 				}
 
-				$params['class'] .= ' frm-locked-style';
-
+				$params['class']           .= ' frm-locked-style';
 				$params['data-upgrade-url'] = FrmAppHelper::admin_upgrade_link(
 					array(
 						'content' => 'upgrade',
@@ -199,6 +200,13 @@ class FrmStylesCardHelper {
 				return $params;
 			};
 		} else {
+			/**
+			 * Include the template key for the preview in Pro.
+			 *
+			 * @param array $params
+			 * @param array $style
+			 * @return array
+			 */
 			$param_filter = function( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
