@@ -108,9 +108,13 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	border: 1px solid #4199FD;
 }
 
+.frm-style-card-title-wrapper {
+	display: flex;
+}
+
 .frm-style-card-title-wrapper > svg {
 	fill: var(--primary-color);
-	margin-right: 2px;
+	margin-right: 5px;
 }
 
 #frm_style_sidebar .frm-style-card .dropdown {
@@ -160,9 +164,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: inline-block;
 	white-space: nowrap;
 	font-size: 14px;
-	line-height: 14px;
-	position: relative;
-	top: 1px;
 }
 
 .frm-style-card-info {
@@ -173,6 +174,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 .frm-active-style-card .frm-style-card-info {
 	display: inline;
 	color: #667085;
+	margin-left: 5px;
 }
 
 .frm-locked-style .frm-style-card-title {
