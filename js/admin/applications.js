@@ -410,7 +410,10 @@
 				div({
 					className: 'frm_warning_style',
 					children: [
-						span( __( 'Access to this application requires a license upgrade.', 'formidable' ) ),
+						span(
+							__( 'Access to this application requires the %s plan.', 'formidable' )
+								.replace( '%s', data.requires )
+						),
 						a({
 							text: getUpgradeNowText(),
 							href: data.upgradeUrl
