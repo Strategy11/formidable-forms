@@ -411,6 +411,7 @@
 					className: 'frm_warning_style',
 					children: [
 						span(
+							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
 							__( 'Access to this application requires the %s plan.', 'formidable' )
 								.replace( '%s', data.requires )
 						),
