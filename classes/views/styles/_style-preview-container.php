@@ -35,9 +35,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</button>
 		<?php
 		/**
-		 * This is used in Pro to add the spinner to the preview (for previewing templates which have a delay).
+		 * This is used in Pro to add a "Apply style" button to the preview.
 		 *
 		 * @since x.x
+		 *
+		 * @param string $view 'edit' or 'list'.
 		 */
 		do_action( 'frm_style_preview_after_toggle', $view );
 		?>

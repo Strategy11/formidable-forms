@@ -62,10 +62,9 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden Used for pagination.
-	 * @param Closure|false    $param_callback
 	 * @return void
 	 */
-	private function echo_style_card( $style, $hidden = false, $param_callback = false ) {
+	private function echo_style_card( $style, $hidden = false ) {
 		$is_default_style     = $style->ID === $this->default_style->ID;
 		$is_active_style      = $style->ID === $this->active_style->ID;
 		$is_locked            = $this->locked;
@@ -81,9 +80,6 @@ class FrmStylesCardHelper {
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
 		}
-		if ( false !== $param_callback && is_callable( $param_callback ) ) {
-			$params = $param_callback( $params );
-		}
 
 		include $this->view_file_path;
 	}
@@ -91,7 +87,7 @@ class FrmStylesCardHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @return array
+	 * @return array<string,string>
 	 */
 	private function get_submit_button_params() {
 		$frm_style            = new FrmStyle();
@@ -177,42 +173,41 @@ class FrmStylesCardHelper {
 
 		$this->locked = empty( $style['url'] );
 
-		// TODO can I use the frm_style_card_params filter instead of calling a callback?
-		$param_callback = false;
 		if ( $this->locked ) {
 			/**
-			 * Include additional params for locked templates.
-			 *
-			 * @param stdClass $style_object Object sent to echo_style_card function.
-			 * @param array    $style        API data.
+			 * @param array $params
+			 * @param array $args {
+			 *     @type WP_Post|stdClass $style
+			 * }
+			 * @param stdClass $style_object
+			 * @param array    $style
 			 */
-			$param_callback = function( $params ) use ( $style_object, $style ) {
+			$param_filter = function( $params, $args ) use ( $style_object, $style ) {
+				if ( $args['style'] !== $style_object ) {
+					return $params;
+				}
+
 				$params['class'] .= ' frm-locked-style';
 
-				/*
-				$params['data-upgrade'] = $style_object->post_title;
-				$params['data-medium']  = 'styler-template';
-
-				$item = array(
-					'categories' => $style['categories'],
+				$params['data-upgrade-url'] = FrmAppHelper::admin_upgrade_link(
+					array(
+						'content' => 'upgrade',
+						'medium'  => 'styler-card',
+					),
+					'/style-templates/' . $style['slug'],
 				);
-				$params['data-requires'] = FrmFormsHelper::get_plan_required( $item );
-				*/
-
-				// WordPress requires that images are local files, so we may need to include those files in-plugin.
-				// if ( ! empty( $style['icon'] ) && is_array( $style['icon'] ) ) {
-				// 	$params['data-image'] = reset( $style['icon'] );
-				// }
 				return $params;
 			};
 		} else {
-			$param_callback = function( $params ) use ( $style ) {
+			$param_filter = function( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
 		}
 
-		$this->echo_style_card( $style_object, $hidden, $param_callback );
+		add_filter( 'frm_style_card_params', $param_filter, 10, $this->locked ? 2 : 1 );
+
+		$this->echo_style_card( $style_object, $hidden );
 		return true;
 	}
 
@@ -431,16 +426,8 @@ class FrmStylesCardHelper {
 
 		$number_of_pages = ceil( $count / self::PAGE_SIZE );
 		?>
-		<div class="frm-style-card-pagination frm_wrap">
-			<?php for ( $index = 0; $index < $number_of_pages; ++$index ) { ?>
-				<?php
-				$anchor_parms = array( 'href' => '#' );
-				if ( 0 === $index ) {
-					$anchor_parms['class'] = 'frm-current-style-card-page';
-				}
-				?>
-				<a <?php FrmAppHelper::array_to_html_params( $anchor_parms, true ); ?>><?php echo absint( $index + 1 ); ?></a>
-			<?php } ?>
+		<div class="frm-style-card-pagination frm_wrap" data-number-of-pages="<?php echo absint( $number_of_pages ); ?>">
+			<a href="#" class="frm-prev-style-page frm-disabled-pagination-anchor">‹</a> <a href="#" class="frm-next-style-page">›</a>
 		</div>
 		<?php
 	}

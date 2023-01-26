@@ -10,13 +10,12 @@
 	const state                                            = {
 		showingSampleForm: false,
 		unsavedChanges: false,
-		hasAttemptedToLoadTemplateCss: false,
 		autoId: 0
 	};
-	const { div, a, labelledTextInput, tag, svg, success } = frmDom;
-	const { onClickPreventDefault }                        = frmDom.util;
-	const { maybeCreateModal, footerButton }               = frmDom.modal;
-	const { doJsonFetch, doJsonPost }                      = frmDom.ajax;
+	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
+	const { onClickPreventDefault }                              = frmDom.util;
+	const { maybeCreateModal, footerButton }                     = frmDom.modal;
+	const { doJsonPost }                                         = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -121,21 +120,31 @@
 	function initStyleCardPagination() {
 		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
 			pagination => {
-				const wrapper = pagination.closest( '.frm-style-card-wrapper' );
-				pagination.querySelectorAll( 'a' ).forEach(
+				const wrapper    = pagination.closest( '.frm-style-card-wrapper' );
+				const prevAnchor = pagination.querySelector( '.frm-prev-style-page' );
+				const nextAnchor = pagination.querySelector( '.frm-next-style-page' );
+				let pageNumber   = 1;
+
+				[ prevAnchor, nextAnchor ].forEach(
 					anchor => onClickPreventDefault(
 						anchor,
 						() => {
-							const pageNumber = parseInt( anchor.textContent );
-							showCardsForPage( wrapper, pageNumber );
-
-							const currentStyleCardClass = 'frm-current-style-card-page';
-							const currentPageNumber     = pagination.querySelector( '.' + currentStyleCardClass );
-							if ( currentPageNumber ) {
-								currentPageNumber.classList.remove( currentStyleCardClass );
+							const disabledClass = 'frm-disabled-pagination-anchor';
+							if ( anchor.classList.contains( disabledClass ) ) {
+								return;
 							}
-	
-							anchor.classList.add( currentStyleCardClass );
+
+							if ( anchor === prevAnchor ) {
+								pageNumber--;
+							} else {
+								pageNumber++;
+							}
+
+							const numberOfPages = parseInt( pagination.dataset.numberOfPages );
+
+							prevAnchor.classList.toggle( disabledClass, 1 === pageNumber );
+							nextAnchor.classList.toggle( disabledClass, numberOfPages === pageNumber );
+							showCardsForPage( wrapper, pageNumber );
 						}
 					)
 				);
@@ -313,10 +322,8 @@
 
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
 		if ( cardIsLocked ) {
-			maybeGetTemplateCss();
-			// Exit early before changing the data in the form if the style is locked.
-			// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
-			// return;
+			maybeCreateStyleTemplateModal( card );
+			return; // Exit early as we're not actually selecting a locked template for preview.
 		}
 
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
@@ -359,31 +366,72 @@
 	}
 
 	/**
-	 * The template CSS is loaded the first time a locked template is clicked.
-	 *
-	 * @returns {void}
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
 	 */
-	function maybeGetTemplateCss() {
-		if ( state.hasAttemptedToLoadTemplateCss ) {
-			// Only attempt once so there aren't multiple requests when clicking cards quickly, or multiple failed attempts.
-			return;
-		}
-
-		const preview = document.getElementById( 'frm_style_preview' );
-		preview.classList.add( 'frm-loading-style-template' );
-
-		doJsonFetch( 'get_style_template_css' ).then(
-			response => {
-				document.head.appendChild(
-					tag(
-						'style',
-						{ text: response.css }
-					)
-				);
-				preview.classList.remove( 'frm-loading-style-template' );
+	function maybeCreateStyleTemplateModal( card ) {
+		const titleElement  = card.querySelector( '.frm-style-card-title' );
+		const templateTitle = titleElement.textContent;
+		const modal         = maybeCreateModal(
+			'frm_style_template_modal',
+			{
+				content: getStyleTemplateModalContent( card ),
+				footer: getStyleTemplateModalFooter( card )
 			}
 		);
-		state.hasAttemptedToLoadTemplateCss = true;
+		modal.classList.add( 'wp-core-ui' );
+		modal.querySelector( '.frm-modal-title' ).textContent = templateTitle;
+		return modal;
+	}
+
+	/**
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
+	function getStyleTemplateModalContent( card ) {
+		const children = [];
+
+		children.push(
+			div({
+				className: 'frm_warning_style',
+				children: [
+					span( __( 'Access to this style requires a license upgrade.', 'formidable' ) ),
+					a({
+						text: getUpgradeNowText(),
+						href: card.dataset.upgradeUrl,
+						target: '_blank'
+					})
+				]
+			})
+		);
+
+		return div({ children });
+	}
+
+	function getStyleTemplateModalFooter( card ) {
+		const viewDemoSiteButton = footerButton({
+			text: __( 'Learn More', 'formidable' ),
+			buttonType: 'secondary'
+		});
+		viewDemoSiteButton.href = card.dataset.upgradeUrl;
+		viewDemoSiteButton.target = '_blank';
+
+		let primaryActionButton = footerButton({
+			text: getUpgradeNowText(),
+			buttonType: 'primary'
+		});
+
+		primaryActionButton.classList.remove( 'dismiss' );
+		primaryActionButton.setAttribute( 'href', card.dataset.upgradeUrl );
+		primaryActionButton.target = '_blank';
+
+		return div({
+			children: [ viewDemoSiteButton, primaryActionButton ]
+		});
+	}
+
+	function getUpgradeNowText() {
+		return __( 'Upgrade Now', 'formidable' );
 	}
 
 	/**
@@ -860,7 +908,7 @@
 				action: 'frm_settings_reset',
 				nonce: frmGlobal.nonce
 			},
-			success: syncPageAfterResetAction
+			success: syncEditPageAfterResetAction
 		});
 	}
 
@@ -873,13 +921,13 @@
 	 * @param {Object} response
 	 * @returns {void}
 	 */
-	function syncPageAfterResetAction( response ) {
-		let errObj = response.replace( /^\s+|\s+$/g, '' );
-		if ( errObj.indexOf( '{' ) === 0 ) {
-			errObj = JSON.parse( errObj );
+	function syncEditPageAfterResetAction( response ) {
+		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
+		if ( defaultValues.indexOf( '{' ) === 0 ) {
+			defaultValues = JSON.parse( defaultValues );
 		}
 
-		for ( const key in errObj ) {
+		for ( const key in defaultValues ) {
 			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
 			if ( ! targetInput ) {
 				continue;
@@ -887,7 +935,7 @@
 
 			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
 				// Reset the repeater icon dropdown.
-				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + errObj[ key ] + '"]' );
+				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + defaultValues[ key ] + '"]' );
 				if ( targetInput ) {
 					targetInput.checked = true;
 					jQuery( targetInput ).trigger( 'change' );
@@ -895,12 +943,12 @@
 				continue;
 			}
 
-			targetInput.value = errObj[ key ];
+			targetInput.value = defaultValues[ key ];
 
 			if ( targetInput.classList.contains( 'wp-color-picker' ) ) {
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
 				jQuery( targetInput ).trigger( 'change' );
-			}					
+			}
 		}
 
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
