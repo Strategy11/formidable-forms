@@ -8159,6 +8159,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function exportTypeChanged( event ) {
+		showOrHideRepeaters( event.target.value );
+		checkExportTypes.call( event.target );
+	}
+
 	function checkExportTypes() {
 		/*jshint validthis:true */
 		var $dropdown = jQuery( this );
@@ -8195,6 +8200,7 @@ function frmAdminBuildJS() {
 			exportField.prop( 'multiple', true );
 			exportField.prop( 'disabled', false );
 		}
+		$dropdown.trigger( 'change' );
 	}
 
 	function showOrHideRepeaters( exportOption ) {
@@ -10403,10 +10409,7 @@ function frmAdminBuildJS() {
 			jQuery( document.getElementById( 'frm_export_xml' ) ).on( 'submit', validateExport );
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).on( 'change', removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).on( 'change', checkCSVExtension );
-			jQuery( 'select[name="format"]' ).on( 'change', checkExportTypes ).trigger( 'change' );
-			document.querySelector( 'select[name="format"]' ).addEventListener( 'change', event => {
-				showOrHideRepeaters( event.target.value );
-			});
+			document.querySelector( 'select[name="format"]' ).addEventListener( 'change', exportTypeChanged );
 
 			jQuery( 'input[name="frm_export_forms[]"]' ).on( 'click', preventMultipleExport );
 			initiateMultiselect();
