@@ -87,7 +87,7 @@ class FrmStylesCardHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @return array
+	 * @return array<string,string>
 	 */
 	private function get_submit_button_params() {
 		$frm_style            = new FrmStyle();
@@ -426,16 +426,8 @@ class FrmStylesCardHelper {
 
 		$number_of_pages = ceil( $count / self::PAGE_SIZE );
 		?>
-		<div class="frm-style-card-pagination frm_wrap">
-			<?php for ( $index = 0; $index < $number_of_pages; ++$index ) { ?>
-				<?php
-				$anchor_parms = array( 'href' => '#' );
-				if ( 0 === $index ) {
-					$anchor_parms['class'] = 'frm-current-style-card-page';
-				}
-				?>
-				<a <?php FrmAppHelper::array_to_html_params( $anchor_parms, true ); ?>><?php echo absint( $index + 1 ); ?></a>
-			<?php } ?>
+		<div class="frm-style-card-pagination frm_wrap" data-number-of-pages="<?php echo absint( $number_of_pages ); ?>">
+			<a href="#" class="frm-prev-style-page frm-disabled-pagination-anchor">‹</a> <a href="#" class="frm-next-style-page">›</a>
 		</div>
 		<?php
 	}

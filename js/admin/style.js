@@ -121,21 +121,31 @@
 	function initStyleCardPagination() {
 		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
 			pagination => {
-				const wrapper = pagination.closest( '.frm-style-card-wrapper' );
-				pagination.querySelectorAll( 'a' ).forEach(
+				const wrapper    = pagination.closest( '.frm-style-card-wrapper' );
+				const prevAnchor = pagination.querySelector( '.frm-prev-style-page' );
+				const nextAnchor = pagination.querySelector( '.frm-next-style-page' );
+				let pageNumber   = 1;
+
+				[ prevAnchor, nextAnchor ].forEach(
 					anchor => onClickPreventDefault(
 						anchor,
 						() => {
-							const pageNumber = parseInt( anchor.textContent );
-							showCardsForPage( wrapper, pageNumber );
-
-							const currentStyleCardClass = 'frm-current-style-card-page';
-							const currentPageNumber     = pagination.querySelector( '.' + currentStyleCardClass );
-							if ( currentPageNumber ) {
-								currentPageNumber.classList.remove( currentStyleCardClass );
+							const disabledClass = 'frm-disabled-pagination-anchor';
+							if ( anchor.classList.contains( disabledClass ) ) {
+								return;
 							}
-	
-							anchor.classList.add( currentStyleCardClass );
+
+							if ( anchor === prevAnchor ) {
+								pageNumber--;
+							} else {
+								pageNumber++;
+							}
+
+							const numberOfPages = parseInt( pagination.dataset.numberOfPages );
+
+							prevAnchor.classList.toggle( disabledClass, 1 === pageNumber );
+							nextAnchor.classList.toggle( disabledClass, numberOfPages === pageNumber );
+							showCardsForPage( wrapper, pageNumber );
 						}
 					)
 				);
