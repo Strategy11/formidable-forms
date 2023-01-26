@@ -8881,4 +8881,8 @@ Responsive Design
 	color: var(--primary-color);
 }
 
+#frm_notification_settings:not(.frm_on_submit_has_message) .frm_redirect_message_form_field {
+	display: none;
+}
+
 /* End On Submit action */
