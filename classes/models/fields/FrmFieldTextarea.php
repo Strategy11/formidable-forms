@@ -56,6 +56,19 @@ class FrmFieldTextarea extends FrmFieldType {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $default_name
+	 * @param mixed  $default_value
+	 *
+	 * @return void
+	 */
+	public function show_default_value_field( $field, $default_name, $default_value ) {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
+	}
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *

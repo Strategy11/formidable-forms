@@ -153,46 +153,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 					<?php } ?>
 				</span>
 				<?php } ?>
-
-				<p class="frm-has-modal default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>" id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
-					<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
-						<?php esc_html_e( 'Default Value', 'formidable' ); ?>
-					</label>
-					<span class="frm-with-right-icon">
-						<?php
-						$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
-						FrmAppHelper::icon_by_class(
-							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-							array(
-								'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
-								'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
-							)
-						);
-						unset( $special_default );
-
-						if ( isset( $display['default_value'] ) && $display['default_value'] ) {
-							$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
-							$default_value = isset( $field['dyn_default_value'] ) ? $field['dyn_default_value'] : '';
-						} else {
-							$default_name  = 'default_value_' . $field['id'];
-							$default_value = $field['default_value'];
-						}
-						$field_obj->default_value_to_string( $default_value );
-
-						if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
-							?>
-							<textarea name="<?php echo esc_attr( $default_name ); ?>" class="default-value-field" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" rows="3" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>"><?php
-								echo FrmAppHelper::esc_textarea( $default_value ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							?></textarea>
-							<?php
-						} else {
-							?>
-							<input type="text" name="<?php echo esc_attr( $default_name ); ?>" value="<?php echo esc_attr( $default_value ); ?>" id="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>" class="default-value-field" data-changeme="field_<?php echo esc_attr( $field['field_key'] ); ?>" data-changeatt="value" data-sep="<?php echo esc_attr( $field_obj->displayed_field_type( $field ) ? ',' : '' ); ?>" />
-							<?php
-						}
-						?>
-					</span>
-				</p>
+				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
 			</div>
 		<?php } ?>
