@@ -10,13 +10,12 @@
 	const state                                            = {
 		showingSampleForm: false,
 		unsavedChanges: false,
-		hasAttemptedToLoadTemplateCss: false,
 		autoId: 0
 	};
 	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
 	const { onClickPreventDefault }                              = frmDom.util;
 	const { maybeCreateModal, footerButton }                     = frmDom.modal;
-	const { doJsonFetch, doJsonPost }                            = frmDom.ajax;
+	const { doJsonPost }                                         = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -297,12 +296,6 @@
 			handleStyleCardClick( event );
 			return;
 		}
-
-		if ( 'frm_style_template_upsell_button' === target.id || target.closest( '#frm_style_template_upsell_button' ) ) {
-			event.preventDefault();
-			maybeCreateStyleTemplateModal();
-			return;
-		}
 	}
 
 	/**
@@ -329,7 +322,8 @@
 
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
 		if ( cardIsLocked ) {
-			maybeGetTemplateCss();
+			maybeCreateStyleTemplateModal( card );
+			return; // Exit early as we're not actually selecting a locked template for preview.
 		}
 
 		const sidebar      = document.getElementById( 'frm_style_sidebar' );
@@ -347,11 +341,6 @@
 		form.parentNode.classList.add( card.dataset.classname );
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
-
-		const upsellButton = document.getElementById( 'frm_style_template_upsell_button' );
-		if ( upsellButton ) {
-			upsellButton.classList.toggle( 'frm_hidden', ! cardIsLocked );
-		}
 
 		if ( ! cardIsLocked ) {
 			// Don't update the form when a locked card is clicked.
@@ -376,22 +365,23 @@
 		wp.hooks.doAction( hookName, hookArgs );
 	}
 
-	function maybeCreateStyleTemplateModal() {
-		const activeCard    = getActiveCard();
-		const titleElement  = activeCard.querySelector( '.frm-style-card-title' );
+	/**
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
+	function maybeCreateStyleTemplateModal( card ) {
+		const titleElement  = card.querySelector( '.frm-style-card-title' );
 		const templateTitle = titleElement.textContent;
 		const modal         = maybeCreateModal(
 			'frm_style_template_modal',
 			{
-				content: getStyleTemplateModalContent( activeCard ),
-				footer: getStyleTemplateModalFooter( activeCard )
+				content: getStyleTemplateModalContent( card ),
+				footer: getStyleTemplateModalFooter( card )
 			}
 		);
 		modal.classList.add( 'wp-core-ui' );
 		modal.querySelector( '.frm-modal-title' ).textContent = templateTitle;
-
-		// This is no longer true:
-		// The card includes data-upgrade, data-medium and data-requires attributes if it is locked, so an upgrade modal will trigger instead.
+		return modal;
 	}
 
 	/**
@@ -442,34 +432,6 @@
 
 	function getUpgradeNowText() {
 		return __( 'Upgrade Now', 'formidable' );
-	}
-
-	/**
-	 * The template CSS is loaded the first time a locked template is clicked.
-	 *
-	 * @returns {void}
-	 */
-	function maybeGetTemplateCss() {
-		if ( state.hasAttemptedToLoadTemplateCss ) {
-			// Only attempt once so there aren't multiple requests when clicking cards quickly, or multiple failed attempts.
-			return;
-		}
-
-		const preview = document.getElementById( 'frm_style_preview' );
-		preview.classList.add( 'frm-loading-style-template' );
-
-		doJsonFetch( 'get_style_template_css' ).then(
-			response => {
-				document.head.appendChild(
-					tag(
-						'style',
-						{ text: response.css }
-					)
-				);
-				preview.classList.remove( 'frm-loading-style-template' );
-			}
-		);
-		state.hasAttemptedToLoadTemplateCss = true;
 	}
 
 	/**

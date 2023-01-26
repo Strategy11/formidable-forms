@@ -43,9 +43,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 */
 		do_action( 'frm_style_preview_after_toggle', $view );
 		?>
-		<a href="#" id="frm_style_template_upsell_button" class="frm_floating_style_button frm_hidden" tabindex="0" role="button">
-			<span class="frm-apply-button-text"><?php esc_html_e( 'Upgrade Now', 'formidable' ); ?></span>
-		</a>
 		<div id="frm_loading_style_placeholder">
 			<span class="frm-wait frm_visible_spinner"></span>
 			<strong><?php esc_html_e( 'Please wait', 'formidable-pro' ); ?></strong>
