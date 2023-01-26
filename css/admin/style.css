@@ -97,14 +97,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: none;
 }
 
-.frm-style-card .frm-style-card-preview input {
-	box-shadow: none;
-}
-
-.frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
-	border-color: var(--submit-border-color) !important; /* Use !important so we can avoid the var(--text-color-disabled) !important rule. */
-}
-
 .frm-style-card:hover {
 	border: 1px solid #4199FD;
 	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
@@ -161,29 +153,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	cursor: default;
 }
 
-#frm_style_sidebar .frm-style-card input {
-	height: unset !important;
-	margin: 0;
-	max-width: 100%;
-}
-
-/* Avoid disabled button styles overwriting the card's preview styles */
-/** TODO Remove old styles. */
-#frm_style_sidebar .frm-style-card input[disabled] {
-	background-color: var(--submit-bg-color) !important;
-	color: var(--submit-text-color) !important;
-}
-
-.frm-style-card .frm-style-card-preview + div {
-	border-top: 1px solid #E9EAEA;
-	padding: 10px;
-	text-align: left;
-}
-
-.frm-style-card .frm_form_field {
-	margin-bottom: 16px !important;
-}
-
 .frm-style-card-title {
 	max-width: calc( 100% - 20px );
 	text-overflow: ellipsis;
@@ -212,15 +181,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 .frm-style-card-title svg {
 	margin-right: 5px;
-}
-
-.frm-style-card .frm_submit input {
-	border-width: var(--submit-border-width);
-	border-color: var(--submit-border-color);
-	border-radius: var(--submit-border-radius);
-	font-weight: var(--submit-weight);
-	width: var(--submit-width);
-	margin: 0;
 }
 
 .frm_button_submit {

@@ -34,19 +34,6 @@ $include_info = $is_active_style || $is_template;
 		</div>
 		<div class="frm-style-card-preview">
 			<?php
-			/**
-			 * This is used in Pro to include the default/selected tags.
-			 *
-			 * @since x.x
-			 *
-			 * @param array $args {
-			 *     @type WP_Post $style
-			 *     @type bool    $is_default_style
-			 *     @type bool    $is_active_style
-			 * }
-			 */
-			do_action( 'frm_style_card_after_submit', compact( 'style', 'is_default_style', 'is_active_style' ) );
-
 			$colors = array(
 				$style->post_content['label_color'],
 				$style->post_content['text_color'],
