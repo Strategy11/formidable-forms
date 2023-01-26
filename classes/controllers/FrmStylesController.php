@@ -1219,67 +1219,6 @@ class FrmStylesController {
 	}
 
 	/**
-	 * Pull the style template CSS from the Formidable sandbox site into the styler for the template preview.
-	 * This is called when the first locked template is clicked.
-	 * It includes all style templates so there is no need to call it multiple times a page load.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function get_template_css() {
-		$transient_key = 'frm_style_template_css';
-
-		// TODO nonce/permission check.
-
-		$css = get_transient( $transient_key );
-		if ( ! $css || ! is_string( $css ) ) {
-			$css = self::pull_template_css_from_sandbox_site();
-
-			if ( false === $css ) {
-				// TODO handle errors.
-				wp_die();
-			}
-
-			// Store as a transient to keep the number of requests to the sandbox site low.
-			// Only cache for an hour so news template don't take too long to preview.
-			set_transient( $transient_key, $css, HOUR_IN_SECONDS );
-		}
-
-		$data = array(
-			'css' => $css,
-		);
-		wp_send_json_success( $data );
-		wp_die();
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return string|false
-	 */
-	private static function pull_template_css_from_sandbox_site() {
-		$url      = 'https://sandbox.formidableforms.com/demos/wp-content/plugins/formidable/css/formidableforms17.css';
-		$response = wp_remote_get( $url );
-
-		if ( is_wp_error( $response ) ) {
-			return false;
-		}
-
-		$css = wp_remote_retrieve_body( $response );
-
-		// Make a small validation check for an expected template class to make sure the response appears valid.
-		$expected_css_selector = '.frm_style_lines-no-boxes';
-		$includes_expected_css = false !== strpos( $css, $expected_css_selector );
-
-		if ( ! $includes_expected_css ) {
-			return false;
-		}
-
-		return $css;
-	}
-
-	/**
 	 * @deprecated x.x Saving custom CSS has been moved into Global Settings.
 	 *
 	 * @return void
