@@ -930,7 +930,7 @@
 				action: 'frm_settings_reset',
 				nonce: frmGlobal.nonce
 			},
-			success: syncPageAfterResetAction
+			success: syncEditPageAfterResetAction
 		});
 	}
 
@@ -943,13 +943,13 @@
 	 * @param {Object} response
 	 * @returns {void}
 	 */
-	function syncPageAfterResetAction( response ) {
-		let errObj = response.replace( /^\s+|\s+$/g, '' );
-		if ( errObj.indexOf( '{' ) === 0 ) {
-			errObj = JSON.parse( errObj );
+	function syncEditPageAfterResetAction( response ) {
+		let defaultValues = response.replace( /^\s+|\s+$/g, '' );
+		if ( defaultValues.indexOf( '{' ) === 0 ) {
+			defaultValues = JSON.parse( defaultValues );
 		}
 
-		for ( const key in errObj ) {
+		for ( const key in defaultValues ) {
 			let targetInput = document.querySelector( 'input[name$="[' + key + ']"], select[name$="[' + key + ']"]' );
 			if ( ! targetInput ) {
 				continue;
@@ -957,7 +957,7 @@
 
 			if ( 'radio' === targetInput.getAttribute( 'type' ) ) {
 				// Reset the repeater icon dropdown.
-				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + errObj[ key ] + '"]' );
+				targetInput = document.querySelector( 'input[name$="[' + key + ']"][value="' + defaultValues[ key ] + '"]' );
 				if ( targetInput ) {
 					targetInput.checked = true;
 					jQuery( targetInput ).trigger( 'change' );
@@ -965,12 +965,12 @@
 				continue;
 			}
 
-			targetInput.value = errObj[ key ];
+			targetInput.value = defaultValues[ key ];
 
 			if ( targetInput.classList.contains( 'wp-color-picker' ) ) {
 				// Trigger a change event so the color pickers sync. Otherwise they stay the same color after reset.
 				jQuery( targetInput ).trigger( 'change' );
-			}					
+			}
 		}
 
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
