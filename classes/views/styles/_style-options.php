@@ -14,12 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php } ?>
 		<span id="frm_style_name"><?php echo esc_html( $style->post_title ); ?></span>
 	</p>
-
-	<?php
-	if ( ! class_exists( 'FrmProStylesController' ) ) {
-		require dirname( __FILE__ ) . '/_upsell-multiple-styles.php';
-	}
-	?>
 </div>
 <div class="styling_settings">
 	<?php FrmStylesController::do_accordion_sections( FrmStylesController::$screen, 'side', compact( 'style', 'frm_style' ) ); ?>
