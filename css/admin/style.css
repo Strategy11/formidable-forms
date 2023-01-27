@@ -273,9 +273,9 @@ label.default-style-box input[type="checkbox"] {
 	overflow: hidden;
 	margin: 0 !important;
 	height: 32px !important;
-	padding: 0 0 0 30px !important;
+	padding: 0 0 0 var(--gap-lg) !important;
 	border-radius: var(--small-radius);
-	border-color: var(--grey-border);
+	border-color: var(--grey-300);
 }
 
 #frm_style_sidebar .wp-color-result-text {
