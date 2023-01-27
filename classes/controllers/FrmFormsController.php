@@ -2423,7 +2423,7 @@ class FrmFormsController {
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
-		$success_msg  = isset( $args['form']->options[ $args['success_opt'] . '_msg' ] ) ? $args['form']->options[ $args['success_opt'] . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
+		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
 
 		/**
@@ -2894,8 +2894,6 @@ class FrmFormsController {
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
 				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
-				$form_options['redirect_msg'] = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
-				$form_options[ $opt . 'msg' ] = $form_options['redirect_msg'];
 				break;
 
 			case 'page':
@@ -2987,8 +2985,7 @@ class FrmFormsController {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$data['success_url']  = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
-				$data['redirect_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_redirect_msg();
+				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
 				break;
 
 			case 'page':

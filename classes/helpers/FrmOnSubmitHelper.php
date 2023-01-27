@@ -91,8 +91,7 @@ class FrmOnSubmitHelper {
 	 * }
 	 */
 	public static function show_redirect_settings( $args ) {
-		$instance = $args['form_action'];
-		$id_attr  = $args['action_control']->get_field_id( 'success_url' );
+		$id_attr = $args['action_control']->get_field_id( 'success_url' );
 		?>
 		<div class="frm_form_field frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
@@ -100,28 +99,8 @@ class FrmOnSubmitHelper {
 				type="text"
 				id="<?php echo esc_attr( $id_attr ); ?>"
 				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_url' ) ); ?>"
-				value="<?php echo esc_attr( $instance->post_content['success_url'] ); ?>"
+				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
 			/>
-		</div>
-
-		<?php $id_attr = $args['action_control']->get_field_id( 'redirect_msg' ); ?>
-		<div class="frm_form_field frm_redirect_message_form_field">
-			<label for="<?php echo esc_attr( $id_attr ); ?>">
-				<?php esc_html_e( 'Message Before Redirect', 'formidable' ); ?>
-				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This message is shown when ajax submit is turned off or when a success message will be shown.', 'formidable' ); ?>"></span>
-			</label>
-
-			<?php
-			wp_editor(
-				$instance->post_content['redirect_msg'],
-				$id_attr,
-				array(
-					'textarea_name' => $args['action_control']->get_field_name( 'redirect_msg' ),
-					'textarea_rows' => 4,
-					'media_buttons' => false,
-				)
-			);
-			?>
 		</div>
 		<?php
 	}
