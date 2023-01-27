@@ -2,14 +2,6 @@
 This file is added to the visual styler admin page, accessed from the style tab.
 */
 
-.frm-admin-page-styles #frm-publishing {
-	/*
-	Avoid a conflict with .frm_wrap > #frm_top_bar #frm-publishing { margin-top: 0; } in frm_admin.css
-	Without this, the Embed/Preview/Update buttons all appear too high in the header.
-	*/
-	margin-top: 15px !important;
-}
-
 #frm_styler_wrapper {
 	display: flex;
 	flex-direction: row;
