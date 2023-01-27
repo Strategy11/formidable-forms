@@ -2848,7 +2848,6 @@ class FrmAppHelper {
 				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
 				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
 				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-				'caution'           => __( 'Heads up', 'formidable' ),
 				'confirm'           => __( 'Are you sure?', 'formidable' ),
 				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),

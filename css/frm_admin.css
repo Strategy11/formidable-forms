@@ -1682,7 +1682,7 @@ div.frm_updated_message {
 	color: #1E561F;
 	padding: 12px 25px;
 	font-size: var(--text-sm);
-	margin: 5px 0 var(--gap-sm);
+	margin: var(--gap-sm) 0;
 	text-align: left;
 }
 
@@ -7125,12 +7125,6 @@ ul .frm_col_two {
 
 .info-modal-inside a.frm-standard-link:hover {
 	color: var(--primary-700);
-}
-
-.frm-caution {
-	text-transform: uppercase;
-	font-weight: bold;
-	color: var(--grey-700);
 }
 
 .frm_no_p_margin > p {

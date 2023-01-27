@@ -386,7 +386,7 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmModal( link ) {
-		var caution, verify, $confirmMessage, frmCaution, i, dataAtts, btnClass,
+		var verify, $confirmMessage, i, dataAtts, btnClass,
 			$info = initModal( '#frm_confirm_modal', '400px' ),
 			continueButton = document.getElementById( 'frm-confirmed-click' );
 
@@ -394,18 +394,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		caution = link.getAttribute( 'data-frmcaution' );
 		verify = link.getAttribute( 'data-frmverify' );
 		btnClass = verify ? link.getAttribute( 'data-frmverify-btn' ) : '';
 		$confirmMessage = jQuery( '.frm-confirm-msg' );
 		$confirmMessage.empty();
-
-		if ( caution ) {
-			frmCaution = document.createElement( 'div' );
-			frmCaution.classList.add( 'frm-caution' );
-			frmCaution.appendChild( document.createTextNode( caution ) );
-			$confirmMessage.append( frmCaution );
-		}
 
 		if ( verify ) {
 			$confirmMessage.append( document.createTextNode( verify ) );
@@ -3478,7 +3470,6 @@ function frmAdminBuildJS() {
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
 			confirmMsg = frm_admin_js.conf_delete_sec;
-			this.setAttribute( 'data-frmcaution', frm_admin_js.caution );
 		}
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
@@ -4404,7 +4395,6 @@ function frmAdminBuildJS() {
 			multiselectPopup.remove();
 		}
 
-		this.setAttribute( 'data-frmcaution', __( 'Heads up', 'formidable' ) );
 		/* translators: %1$s: Number of fields that are selected to be deleted. */
 		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
