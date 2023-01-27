@@ -51,10 +51,9 @@
 		fillMissingSignatureValidationFunction();
 
 		// Remove .wp-core-ui from the body so the preview can avoid it.
-		// Then add it back where we want to use admin styles (the sidebar and the top bar).
+		// Then add it back where we want to use admin styles (the sidebar, otherwise inputs appear short).
 		document.body.classList.remove( 'wp-core-ui' );
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
-		document.getElementById( 'frm_top_bar' ).classList.add( 'wp-core-ui' );
 	}
 
 	/**
@@ -398,7 +397,6 @@
 				footer: getStyleTemplateModalFooter( card )
 			}
 		);
-		modal.classList.add( 'wp-core-ui' );
 		modal.querySelector( '.frm-modal-title' ).textContent = templateTitle;
 		return modal;
 	}
@@ -693,7 +691,8 @@
 	function stylerModal( id, args ) {
 		const modal = maybeCreateModal( id, args );
 		// Include both wp-core-ui and frm-white-body on the modal.
-		// Otherwise cancel buttons in the modal do not get styled properly.
+		// Without wp-core-ui, the vertical alignment of the primary button is wrong.
+		// Without frm-white-body, cancel buttons in the modal do not get styled properly.
 		modal.classList.add( 'frm_common_modal', 'wp-core-ui', 'frm-white-body' );
 		return modal;
 	}
