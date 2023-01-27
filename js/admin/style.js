@@ -339,14 +339,9 @@
 			return;
 		}
 
-		const card = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
-
-		if ( 'frm_styles_upsell_card' === card.id ) {
-			card.querySelector( 'a' ).click();
-			return;
-		}
-
+		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
+
 		if ( cardIsLocked ) {
 			maybeCreateStyleTemplateModal( card );
 			return; // Exit early as we're not actually selecting a locked template for preview.
@@ -577,7 +572,7 @@
 	 * @returns {boolean}
 	 */
 	function shouldAddMenuToCard( card ) {
-		return 'frm_styles_upsell_card' !== card.id && 'frm_template_style_cards_wrapper' !== card.parentNode.id;
+		return 'frm_template_style_cards_wrapper' !== card.parentNode.id;
 	}
 
 	/**

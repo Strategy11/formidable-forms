@@ -342,20 +342,6 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
-.frm-flex-custom-card-wrapper #frm_custom_style_cards_wrapper {
-	display: flex;
-}
-
-#frm_styles_upsell_card {
-	text-align: center;
-}
-
-#frm_styles_upsell_card > div {
-	position: relative;
-	bottom: 15px;
-	padding: 0 10px;
-}
-
 /* TODO prefix these, wrap them in the style card class */
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;

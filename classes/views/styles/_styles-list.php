@@ -14,10 +14,6 @@ $sidebar_params = array(
 	'id'    => 'frm_style_sidebar',
 	'class' => 'frm-right-panel frm_p_4', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
 );
-if ( ! FrmAppHelper::pro_is_installed() ) {
-	// Use flex on the sidebar so that the style card matches the size of the upsell card.
-	$sidebar_params['class'] .= ' frm-flex-custom-card-wrapper';
-}
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
 	<?php
@@ -59,10 +55,13 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 	</div>
 	<?php $card_helper->echo_card_wrapper( 'frm_default_style_cards_wrapper', array( $default_style ) ); ?>
 
-	<div class="frm_form_settings">
-		<h2><?php esc_html_e( 'Custom styles', 'formidable' ); ?></h2>
-	</div>
-	<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
+	<?php if ( $custom_styles ) { ?>
+		<?php // TODO Always show this in lite, but with an upsell. ?>
+		<div class="frm_form_settings">
+			<h2><?php esc_html_e( 'Custom styles', 'formidable' ); ?></h2>
+		</div>
+		<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
+	<?php } ?>
 
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
