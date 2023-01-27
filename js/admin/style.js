@@ -204,13 +204,14 @@
 	 * @returns {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
-		const cardWrapper   = document.getElementById( 'frm_custom_style_cards_wrapper' );
-		const styleIdInput  = getStyleIdInput();
 		const stylesEnabled = event.target.checked;
 
-		cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled );
+		document.querySelectorAll( '.frm-style-card-wrapper' ).forEach(
+			cardWrapper => cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled )
+		);
 
 		if ( ! stylesEnabled ) {
+			const styleIdInput = getStyleIdInput();
 			styleIdInput.value = '0';
 			trackListPageChange();
 			toggleFormidableStylingInPreviewForms( false );
@@ -238,10 +239,6 @@
 	 */
 	function trackListPageChange() {
 		const styleIdInput   = getStyleIdInput();
-		console.log(
-			styleIdInput.value,
-			state.initialSelectedStyleValue
-		);
 		state.unsavedChanges = styleIdInput.value !== state.initialSelectedStyleValue;
 	}
 

@@ -68,6 +68,4 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
 	</div>
 	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $card_helper->get_template_info() ); ?>
-
-	<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
 </div>
