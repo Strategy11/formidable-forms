@@ -69,7 +69,6 @@
 		const styleIdInput              = getStyleIdInput();
 		state.initialSelectedStyleValue = styleIdInput.value;
 
-		state.listPageToggleEnabledOnLoad = enableToggle.checked;
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
 
 		syncPreviewFormLabelPositionsWithActiveStyle();
@@ -218,11 +217,15 @@
 			return;
 		}
 
-		const card         = document.querySelector( '.frm-active-style-card' );
-		styleIdInput.value = card.dataset.styleId; // TODO update this for template keys.
-
-		trackListPageChange();
 		toggleFormidableStylingInPreviewForms( true );
+
+		// Click the active card so the style id input properly syncs.
+		// In Pro, templates use a templateKey attribute so we don't always want card.dataset.styleId
+		// There is no need to call trackListPageChange as it happens in the click event.
+		const card = document.querySelector( '.frm-active-style-card' );
+		if ( card ) {
+			card.click();
+		}
 	}
 
 	/**
