@@ -84,8 +84,6 @@ class FrmStyle {
 				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
 			}
 
-			$new_instance['post_title'] = isset( $_POST['frm_style_setting']['post_title'] ) ?  : '';
-
 			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );

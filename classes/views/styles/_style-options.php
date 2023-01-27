@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</a>
 		<?php } ?>
 		<span id="frm_style_name"><?php echo esc_html( $style->post_title ); ?></span>
-		<input name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="hidden" value="<?php echo esc_attr( $style->post_title ); ?>" /><?php // TODO: Remove this. Make sure removing it doesn't clear style titles though. ?>
 	</p>
 
 	<?php
