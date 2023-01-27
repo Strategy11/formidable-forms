@@ -1130,6 +1130,7 @@ p.frm_has_shortcodes {
 .frm-white-body .button-primary,
 .frm-white-body .button-secondary,
 #frm-form-button button,
+.frm-preview-buttons button,
 .frm-button-red,
 .frm-button-tertiary {
 	text-shadow: none;
@@ -1215,6 +1216,7 @@ p.frm_has_shortcodes {
 
 .frm-search #search-submit,
 #frm-form-button .frm_button_submit,
+.frm-white-body .frm-preview-buttons button,
 .frm-white-body .button:not(.frm-button-primary),
 .wp-core-ui.frm-white-body .button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
@@ -5467,7 +5469,7 @@ table td, .form-table tr td {
 .frm-inline-select,
 #frm_submit_logic_row,
 .frm_logic_rows .frm-collapse-me {
-	line-height: 30px;
+	line-height: 36px;
 }
 
 .frm_logic_row:first-of-type {
@@ -6177,10 +6179,8 @@ li.selected .divider_section_only:before {
 	display: none;
 }
 
-#frm-form-button button,
 .frm_remove_form_row.frm_button,
-.frm_add_form_row.frm_button,
-.frm-white-body .frm-preview-buttons button {
+.frm_add_form_row.frm_button {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--blue-border);
 	color: var(--primary-500);
@@ -6285,15 +6285,7 @@ li.selected .divider_section_only:before {
 
 .frm-page-break .frm-collapse-page.button {
 	margin-left: 46%;
-	margin-top: -15px;
-	background-color: #fff;
-	border-color: var(--primary-700) !important;
-	color: var(--primary-700);
-}
-
-#frm-fake-page .frm-collapse-page.button {
-	border-color: var(--grey) !important;
-	color: var(--grey);
+	margin-top: calc( -28px / 2 );
 }
 
 #frm-fake-page.frm-page-collapsed {
@@ -6319,20 +6311,16 @@ li.selected .divider_section_only:before {
 }
 
 .frm-collapse-page .frm_arrowdown6_icon {
-	width: 16px;
+	width: var(--text-sm);
+	height: var(--text-sm);
+	font-size: var(--text-sm);
 	text-align: center;
 	margin-left: 2px;
-	color: var(--primary-700);
+	color: currentColor;
 }
 
 #frm-fake-page .frm_arrowdown6_icon {
-	color: var(--grey);
-}
-
-#frm-fake-page .frm-collapse-page:hover,
-#frm-fake-page .frm-collapse-page:hover .frm_arrowdown6_icon,
-.frm-collapse-page:hover .frm_arrowdown6_icon {
-	color: #fff;
+	color: currentColor;
 }
 
 .frm-collapsed i:before,

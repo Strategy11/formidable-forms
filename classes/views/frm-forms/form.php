@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div id="frm-fake-page" class="frm_hidden">
 		<div class="frm-page-break">
-			<div class="frm-collapse-page button frm-button-secondary">
+			<div class="frm-collapse-page button frm-button-secondary frm-button-sm">
 				<?php
 				/* translators: %s: The page number */
 				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' );
