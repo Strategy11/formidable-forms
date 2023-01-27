@@ -338,12 +338,6 @@ class FrmStylesController {
 		$active_style  = $frm_style->get_one();
 		$default_style = self::get_default_style();
 
-		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
-			$styles = FrmProStylesController::get_styles_for_styler( $form, $active_style );
-		} else {
-			$styles = array( $default_style );
-		}
-
 		self::disable_admin_page_styling_on_submit_buttons();
 
 		/**
@@ -355,7 +349,7 @@ class FrmStylesController {
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
-		self::render_style_page( $active_style, $styles, $form, $default_style );
+		self::render_style_page( $active_style, $form, $default_style );
 	}
 
 	/**
@@ -541,7 +535,7 @@ class FrmStylesController {
 	 * @param WP_Post        $default_style
 	 * @return void
 	 */
-	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
+	private static function render_style_page( $active_style, $form, $default_style ) {
 		$style_views_path = self::get_views_path();
 		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
 		$frm_style        = new FrmStyle( $active_style->ID );

@@ -6,9 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It lists all styles and allows the user to select and assign a style to a target form.
 // It is accessed from /wp-admin/admin.php?page=formidable-styles&form=782
 
-$enabled     = '0' !== $form->options['custom_style'];
-$card_helper = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
-$style_api   = new FrmStyleApi();
+$enabled        = '0' !== $form->options['custom_style'];
+$card_helper    = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
+$styles         = $card_helper->get_styles( $form );
+$custom_styles  = $card_helper->filter_custom_styles( $styles );
 $sidebar_params = array(
 	'id'    => 'frm_style_sidebar',
 	'class' => 'frm-right-panel frm_p_4', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
@@ -17,19 +18,6 @@ if ( ! FrmAppHelper::pro_is_installed() ) {
 	// Use flex on the sidebar so that the style card matches the size of the upsell card.
 	$sidebar_params['class'] .= ' frm-flex-custom-card-wrapper';
 }
-
-// TODO move this out of the view.
-$custom_styles = array_filter(
-	$styles,
-	/**
-	 * @param WP_Post $style
-	 * @param WP_Post $default_style
-	 * @return array<WP_Post>
-	 */
-	function( $style ) use ( $default_style ) {
-		return $default_style->ID !== $style->ID;
-	}
-);
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
 	<?php
@@ -74,13 +62,12 @@ $custom_styles = array_filter(
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'Custom styles', 'formidable' ); ?></h2>
 	</div>
-	<?php // TODO the new button gets moved into the custom styles wrapper. ?>
 	<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
 
 	<div class="frm_form_settings">
 		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
 	</div>
-	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $style_api->get_api_info() ); ?>
+	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $card_helper->get_template_info() ); ?>
 
 	<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
 </div>

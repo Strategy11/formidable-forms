@@ -455,4 +455,41 @@ class FrmStylesCardHelper {
 		</div>
 		<?php
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_styles() {
+		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
+			return FrmProStylesController::get_styles_for_styler( $this->active_style );
+		}
+		return array( $this->default_style );
+	}
+
+	/**
+	 * Remove the default style from an array of styles.
+	 *
+	 * @param array $styles
+	 * @return array
+	 */
+	public function filter_custom_styles( $styles ) {
+		// TODO move this out of the view.
+		return array_filter(
+			$styles,
+			/**
+			 * @param WP_Post $style
+			 * @return bool
+			 */
+			function( $style ) {
+				return $this->default_style->ID !== $style->ID;
+			}
+		);
+	}
+
+	public function get_template_info() {
+		$style_api = new FrmStyleApi();
+		return $style_api->get_api_info();
+	}
 }
