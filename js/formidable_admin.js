@@ -7484,7 +7484,7 @@ function frmAdminBuildJS() {
 			hideShortcodes( box );
 		} else {
 			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
-			box.style.left = ( pos.left - parentPos.left - 257 ) + 'px';
+			box.style.left = ( pos.left - parentPos.left - 280 ) + 'px';
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
 			if ( input.classList.contains( 'frm_not_email_to' ) ) {
@@ -7826,13 +7826,6 @@ function frmAdminBuildJS() {
 	}
 
 	function onActionLoaded( event ) {
-		event.target.closest( '.frm_form_action_settings' ).querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
-			if ( svg.nextElementSibling.type === 'text' ) {
-				svg.style.bottom = '-3px';
-				svg.style.marginRight = '0';
-			}
-		});
-
 		const settings = event.target.closest( '.frm_form_action_settings' );
 		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
 			onEmailActionLoaded( settings );
