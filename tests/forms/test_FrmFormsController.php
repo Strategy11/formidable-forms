@@ -152,8 +152,8 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	private function create_on_submit_action( $form_id, $post_content ) {
 		$post_data = array(
-			'post_type' => FrmFormActionsController::$action_post_type,
-			'menu_order' => $form_id,
+			'post_type'    => FrmFormActionsController::$action_post_type,
+			'menu_order'   => $form_id,
 			'post_excerpt' => FrmOnSubmitAction::$slug,
 			'post_status'  => 'publish',
 			'post_content' => FrmAppHelper::prepare_and_encode( $post_content ),
@@ -175,7 +175,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$message_action = $this->create_on_submit_action(
 			$form_id,
 			array(
-				'event' => array( 'create' ),
+				'event'          => array( 'create' ),
 				'success_action' => 'message',
 				'success_msg'    => 'Done!',
 			)
@@ -184,8 +184,8 @@ class test_FrmFormsController extends FrmUnitTest {
 		$page_action = $this->create_on_submit_action(
 			$form_id,
 			array(
-				'event' => array( 'create', 'update' ),
-				'success_action' => 'page',
+				'event'           => array( 'create', 'update' ),
+				'success_action'  => 'page',
 				'success_page_id' => $test_page_id,
 			)
 		);
@@ -193,20 +193,18 @@ class test_FrmFormsController extends FrmUnitTest {
 		$redirect_action_1 = $this->create_on_submit_action(
 			$form_id,
 			array(
-				'event' => array( 'create' ),
+				'event'          => array( 'create' ),
 				'success_action' => 'redirect',
 				'success_url'    => 'http://example.com',
-				'redirect_msg'   => 'Please wait!',
 			)
 		);
 
 		$redirect_action_2 = $this->create_on_submit_action(
 			$form_id,
 			array(
-				'event' => array( 'create', 'update' ),
+				'event'          => array( 'create', 'update' ),
 				'success_action' => 'redirect',
 				'success_url'    => 'https://abc2.test',
-				'redirect_msg'   => 'Please wait!',
 			)
 		);
 
@@ -251,10 +249,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->create_on_submit_action(
 			$form_id,
 			array(
-				'event' => array( 'create' ),
+				'event'          => array( 'create' ),
 				'success_action' => 'redirect',
 				'success_url'    => 'http://example.com',
-				'redirect_msg'   => 'Please wait!',
 			)
 		);
 
