@@ -50,6 +50,8 @@ class FrmStyle {
 	}
 
 	/**
+	 * Handle save actions in the visual styler edit page.
+	 *
 	 * @param mixed $id
 	 * @return array<int|WP_Error>
 	 */
@@ -76,7 +78,13 @@ class FrmStyle {
 			// Preserve the previous value in case Custom CSS has not been saved as a Global Setting yet.
 			$custom_css = isset( $new_instance['post_content']['custom_css'] ) ? $new_instance['post_content']['custom_css'] : '';
 
-			$new_instance['post_title'] = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! empty( $_POST['frm_style_setting']['post_title'] ) ) {
+				// The nonce check happens in FrmStylesController::save_style before this is called.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
+			}
+
+			$new_instance['post_title'] = isset( $_POST['frm_style_setting']['post_title'] ) ?  : '';
 
 			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$new_instance['post_content']['custom_css'] = $custom_css;
