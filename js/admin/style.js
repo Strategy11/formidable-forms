@@ -6,11 +6,15 @@
 	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
-	const { __ }                                           = wp.i18n;
-	const state                                            = {
-		showingSampleForm: false,
-		unsavedChanges: false,
-		autoId: 0
+	const { __ }                                                 = wp.i18n;
+	const state                                                  = {
+		showingSampleForm: false, // boolean
+		unsavedChanges: false, // boolean
+		autoId: 0, // Number
+		// Track the value of the selected style ID on page (on the list page).
+		// This is tracked to determine if there are actually unsaved changes.
+		// This way when you switch back to the initial value it doesn't count as a change.
+		initialSelectedStyleValue: false // String|false
 	};
 	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
 	const { onClickPreventDefault }                              = frmDom.util;
@@ -33,6 +37,7 @@
 	 */
 	function initCommonEventListeners() {
 		document.addEventListener( 'click', handleCommonClickEvents );
+		window.addEventListener( 'beforeunload', maybeConfirmExit );
 		disablePreviewSubmitButtons();
 	}
 
@@ -60,7 +65,11 @@
 		setTimeout( addHamburgerMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
 		initDatepickerSample();
 
-		const enableToggle = document.getElementById( 'frm_enable_styling' );
+		const enableToggle              = document.getElementById( 'frm_enable_styling' );
+		const styleIdInput              = getStyleIdInput();
+		state.initialSelectedStyleValue = styleIdInput.value;
+
+		state.listPageToggleEnabledOnLoad = enableToggle.checked;
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
 
 		syncPreviewFormLabelPositionsWithActiveStyle();
@@ -193,7 +202,6 @@
 	 * This is because disabling styles is linked to the custom_style option as well.
 	 *
 	 * @param {Event} event
-	 *
 	 * @returns {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
@@ -202,10 +210,10 @@
 		const stylesEnabled = event.target.checked;
 
 		cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled );
-		trackUnsavedChange();
 
 		if ( ! stylesEnabled ) {
 			styleIdInput.value = '0';
+			trackListPageChange();
 			toggleFormidableStylingInPreviewForms( false );
 			return;
 		}
@@ -213,7 +221,25 @@
 		const card         = document.querySelector( '.frm-active-style-card' );
 		styleIdInput.value = card.dataset.styleId; // TODO update this for template keys.
 
+		trackListPageChange();
 		toggleFormidableStylingInPreviewForms( true );
+	}
+
+	/**
+	 * Track unsaved changes on the list page.
+	 * All settings on the list page are mapped to the value of the styleIdInput.
+	 * We track the value on load with state.initialSelectedStyleValue.
+	 * Only consider unsaved changes on the page when this variable is no longer set to the original value.
+	 *
+	 * @returns {void}
+	 */
+	function trackListPageChange() {
+		const styleIdInput   = getStyleIdInput();
+		console.log(
+			styleIdInput.value,
+			state.initialSelectedStyleValue
+		);
+		state.unsavedChanges = styleIdInput.value !== state.initialSelectedStyleValue;
 	}
 
 	/**
@@ -345,9 +371,7 @@
 		if ( ! cardIsLocked ) {
 			// Don't update the form when a locked card is clicked.
 			styleIdInput.value = card.dataset.styleId;
-
-			// TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
-			trackUnsavedChange();
+			trackListPageChange();
 		}
 
 		setTimeout( enableLabelTransitions, 1 );
@@ -412,6 +436,10 @@
 		return div({ children });
 	}
 
+	/**
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
 	function getStyleTemplateModalFooter( card ) {
 		const viewDemoSiteButton = footerButton({
 			text: __( 'Learn More', 'formidable' ),
@@ -434,27 +462,36 @@
 		});
 	}
 
+	/**
+	 * @returns {String}
+	 */
 	function getUpgradeNowText() {
 		return __( 'Upgrade Now', 'formidable' );
 	}
 
 	/**
+	 * Track an unsaved change on the edit page.
+	 * This is included in the frmStylerFunctions global so unsaved changes can be tracked in Pro as well.
+	 *
 	 * @returns {void}
 	 */
 	function trackUnsavedChange() {
-		if ( state.unsavedChanges ) {
-			return;
-		}
-
-		window.addEventListener( 'beforeunload', confirmExit );
 		state.unsavedChanges = true;
 	}
 
-	function confirmExit( event ) {
-		if ( state.unsavedChanges ) {
-			event.preventDefault();
-			event.returnValue = '';
+	/**
+	 * Possibly prevent leaving the page if there are unsaved changes.
+	 *
+	 * @param {Event} event
+	 * @returns {void}
+	 */
+	function maybeConfirmExit( event ) {
+		if ( ! state.unsavedChanges ) {
+			return;
 		}
+
+		event.preventDefault();
+		event.returnValue = '';
 	}
 
 	/**
