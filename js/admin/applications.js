@@ -178,7 +178,7 @@
 		}
 
 		const categories = [ getAllItemsCategory() ].concat( state.categories );
-		const wrapper = div({ id: 'frm_application_category_filter' });
+		const wrapper = div({ id: 'frm_application_category_filter', className: 'subsubsub' });
 
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
@@ -187,18 +187,18 @@
 			}
 			const anchor = a( category );
 			if ( 0 === index ) {
-				anchor.classList.add( 'frm-active-application-category' );
+				anchor.classList.add( 'current' );
 				elements.activeCategoryAnchor = anchor;
 			}
 			onClickPreventDefault(
 				anchor,
 				() => {
 					if ( false !== elements.activeCategoryAnchor ) {
-						elements.activeCategoryAnchor.classList.remove( 'frm-active-application-category' );
+						elements.activeCategoryAnchor.classList.remove( 'current' );
 					}
 
 					handleCategorySelect( category );
-					anchor.classList.add( 'frm-active-application-category' );
+					anchor.classList.add( 'current' );
 					elements.activeCategoryAnchor = anchor;
 				}
 			);
