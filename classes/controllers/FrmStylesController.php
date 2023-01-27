@@ -466,11 +466,6 @@ class FrmStylesController {
 			return;
 		}
 
-		$default_style = self::get_default_style();
-		if ( $style_id === $default_style->ID ) {
-			$style_id = 1; // If the default style is selected, use the "Always use default" legacy option instead of the default style.
-		}
-
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
 		if ( ! $form_id ) {
 			// TODO show an error that save failed.
@@ -480,6 +475,15 @@ class FrmStylesController {
 		$form = FrmForm::getOne( $form_id );
 		if ( ! $form ) {
 			// TODO handle invalid form ID.
+			return;
+		}
+
+		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
+		// There's also a check here for conversational forms.
+		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
+		$default_style = self::get_default_style();
+		if ( $style_id === $default_style->ID && empty( $form->options['chat'] ) ) {
+			$style_id = 1;
 		}
 
 		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
