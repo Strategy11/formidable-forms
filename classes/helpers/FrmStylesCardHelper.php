@@ -16,7 +16,7 @@ class FrmStylesCardHelper {
 	private $view_file_path;
 
 	/**
-	 * @var WP_Post
+	 * @var stdClass|WP_Post
 	 */
 	private $active_style;
 
@@ -41,10 +41,10 @@ class FrmStylesCardHelper {
 	private $locked;
 
 	/**
-	 * @param WP_Post    $active_style
-	 * @param WP_Post    $default_style
-	 * @param string|int $form_id
-	 * @param bool       $enabled
+	 * @param stdClass|WP_Post $active_style
+	 * @param WP_Post          $default_style
+	 * @param string|int       $form_id
+	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
 		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';

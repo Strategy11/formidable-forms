@@ -529,10 +529,10 @@ class FrmStylesController {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post        $active_style
-	 * @param array<WP_Post> $styles
-	 * @param stdClass       $form
-	 * @param WP_Post        $default_style
+	 * @param stdClass|WP_Post $active_style
+	 * @param array<WP_Post>   $styles
+	 * @param stdClass         $form
+	 * @param WP_Post          $default_style
 	 * @return void
 	 */
 	private static function render_style_page( $active_style, $form, $default_style ) {

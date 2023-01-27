@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $enabled        = '0' !== $form->options['custom_style'];
 $card_helper    = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
-$styles         = $card_helper->get_styles( $form );
+$styles         = $card_helper->get_styles();
 $custom_styles  = $card_helper->filter_custom_styles( $styles );
 $sidebar_params = array(
 	'id'    => 'frm_style_sidebar',
