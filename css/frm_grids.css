@@ -41,7 +41,7 @@
 .frm_form_fields .frm_section_heading,
 .frm_form_fields .frm_fields_container{
 	display:grid;
-	grid-template-columns: repeat(12, 6.5%);
+	grid-template-columns: repeat(12, 1fr);
 	grid-auto-rows: max-content;
 	grid-gap: 0 2%;
 }
