@@ -26,7 +26,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 		<span class="frm_email_icons alignright">
 			<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
 				<a href="javascript:void(0)" class="frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_solid_icon' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?>
 				</a>
 			<?php } ?>
 			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">

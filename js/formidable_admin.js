@@ -2276,7 +2276,7 @@ function frmAdminBuildJS() {
 			function( option ) {
 				var li, anchor, span;
 				li = document.createElement( 'div' );
-				li.classList.add( 'frm_dropdown_li', 'frm_more_options_li', 'dropdown-item' );
+				li.classList.add( 'frm_more_options_li', 'dropdown-item' );
 
 				anchor = document.createElement( 'a' );
 				anchor.classList.add( option.class + classSuffix );

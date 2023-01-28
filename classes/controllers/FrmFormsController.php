@@ -47,8 +47,7 @@ class FrmFormsController {
 		$data_message  = __( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' );
 		$data_message .= ' <img src="' . esc_attr( $images_url ) . '/survey-logic.png" srcset="' . esc_attr( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
 		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
-		FrmAppHelper::icon_by_class( 'frmfont frm_swap_icon' );
-		esc_html_e( 'Add Conditional Logic', 'formidable' );
+		esc_html_e( 'Conditional Logic', 'formidable' );
 		echo '</a>';
 	}
 
