@@ -33,10 +33,6 @@
 	padding-left: 0;
 }
 
-.frm-applications-index-content {
-	padding: var(--gap-sm) 40px var(--gap-md)
-}
-
 .frm-application-cards-grid {
 	padding-top: var(--gap-md);
 	padding-bottom: 50px;
@@ -58,6 +54,7 @@
 	padding: 10px 0;
 	display: flex;
 	flex-direction: column;
+	box-shadow: var(--box-shadow-sm);
 }
 
 .frm-application-card:nth-child(4) ~ .frm-application-card {
@@ -69,7 +66,7 @@
 }
 
 .frm-application-template-card:hover {
-	filter: drop-shadow(0px 12px 24px rgba(72, 78, 84, 0.2));
+	box-shadow: var(--box-shadow);
 }
 
 .frm-application-template-card:hover h4 {
@@ -78,7 +75,6 @@
 
 /* Card title */
 .frm-application-card h4 {
-	font-weight: 500;
 	display: inline-block;
 	max-width: 100%;
 	overflow: hidden;
@@ -209,7 +205,7 @@
 }
 
 #frm_application_category_filter > a {
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #frm_application_category_filter > a:first-child {
@@ -218,11 +214,6 @@
 
 #frm_application_category_filter > a:last-child {
 	padding-right: 0;
-}
-
-#frm_application_category_filter > a.frm-active-application-category {
-	color: var(--grey-700);
-	pointer-events: none;
 }
 
 .frm-admin-page-applications #frm_top_bar h1 {

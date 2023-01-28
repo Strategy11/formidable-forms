@@ -7,9 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'                  => $params['template'] ? __( 'Templates', 'formidable' ) : __( 'Forms', 'formidable' ),
-			'trigger_new_form_modal' => ! $params['template'] && current_user_can( 'frm_edit_forms' ),
+			'label'                  => __( 'Forms', 'formidable' ),
+
 			'import_link'            => true,
+			'publish'                => array(
+				'FrmAppHelper::add_new_item_link',
+				array(
+					'trigger_new_form_modal' => current_user_can( 'frm_edit_forms' ),
+				)
+			),
 		)
 	);
 	?>
