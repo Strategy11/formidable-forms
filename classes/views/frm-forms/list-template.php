@@ -34,9 +34,13 @@ if ( ! empty( $template['custom'] ) ) {
 	<div class="frm-featured-form">
 		<?php
 		if ( $render_icon ) {
-			?><div class="frm-category-icon" role="button">
-				<?php FrmFormsHelper::template_icon( $template['categories'] ); ?>
-			</div><?php
+			FrmFormsHelper::template_icon(
+				$template['categories'],
+				array(
+					'html' => 'div',
+					'bg'   => true,
+				)
+			);
 		}
 		?><div>
 			<h3 role="button">

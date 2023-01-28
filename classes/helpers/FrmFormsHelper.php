@@ -1291,7 +1291,22 @@ BEFORE_HTML;
 		return $name;
 	}
 
-	public static function template_icon( $categories ) {
+	/**
+	 * @param array $categories
+	 * @param array $atts {
+	 *     @type string  $html 'span' or 'div'.
+	 *     @type boolean $bg   Whether to add a bg color or not.
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function template_icon( $categories, $atts = array() ) {
+		$defaults = array(
+			'html' => 'span',
+			'bg'   => false
+		);
+		$atts = array_merge( $defaults, $atts );
+
 		$ignore     = self::ignore_template_categories();
 		$categories = array_diff( $categories, $ignore );
 
@@ -1299,24 +1314,29 @@ BEFORE_HTML;
 			'WooCommerce'         => array( 'woocommerce', 'var(--purple)' ),
 			'Post'                => array( 'wordpress', 'rgb(0,160,210)' ),
 			'User Registration'   => array( 'register', 'var(--pink)' ),
+			'Registration and Signup' => array( 'register', 'var(--pink)' ),
 			'PayPal'              => array( 'paypal' ),
 			'Stripe'              => array( 'credit_card', 'var(--green)' ),
-			'Twilio'              => array( 'sms', 'rgb(0,160,210)' ),
-			'Payment'             => array( 'credit_card', 'var(--green)' ),
+			'Twilio'              => array( 'sms' ),
+			'Payment'             => array( 'credit_card' ),
+			'Order Form'          => array( 'product' ),
+			'Finance'             => array( 'total' ),
 			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
 			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
-			'Real Estate'         => array( 'house', 'var(--purple)' ),
+			'Real Estate'         => array( 'house' ),
 			'Calculator'          => array( 'calculator', 'var(--purple)' ),
+			'Quiz'                => array( 'percent' ),
 			'Registrations'       => array( 'address_card' ),
-			'Customer Service'    => array( 'users_solid', 'var(--pink)' ),
-			'Education'           => array( 'pencil', 'var(--primary-500)' ),
-			'Marketing'           => array( 'eye', 'rgb(0,160,210)' ),
-			'Feedback'            => array( 'smile', 'var(--green)' ),
+			'Customer Service'    => array( 'users_solid' ),
+			'Education'           => array( 'pencil' ),
+			'Marketing'           => array( 'eye' ),
+			'Feedback'            => array( 'smile' ),
 			'Business Operations' => array( 'case' ),
 			'Contact Form'        => array( 'email' ),
-			'Survey'              => array( 'comment', 'var(--primary-500)' ),
-			'Application Form'    => array( 'align_right', 'rgb(0,160,210)' ),
-			'Quiz'                => array( 'percent' ),
+			'Conversational Forms' => array( 'chat_forms' ),
+			'Survey'              => array( 'chat_forms', 'var(--orange)' ),
+			'Application'         => array( 'align_right' ),
+			'Signature'           => array( 'signature' ),
 			''                    => array( 'align_right' ),
 		);
 
@@ -1336,12 +1356,21 @@ BEFORE_HTML;
 			$icon = reset( $icons );
 		}
 
-		echo '<span class="frm-inner-circle" ' . ( isset( $icon[1] ) ? 'style="background-color:' . esc_attr( $icon[1] ) : '' ) . '">';
+		$bg = isset( $icon[1] ) ? $icon[1] : '';
+
+		if ( $atts['html'] === 'div' ) {
+			echo '<div class="frm-category-icon frm-icon-wrapper" role="button"';
+		} else {
+			echo '<span class="frm-inner-circle"';
+		}
+		echo empty( $bg ) || empty( $atts['bg'] ) ? '' : ' style="background-color:' . esc_attr( $bg ) . '"';
+		echo '>';
+
 		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon[0] . '_icon' );
 		echo '<span class="frm_hidden">';
 		FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 		echo '</span>';
-		echo '</span>';
+		echo '</' . esc_attr( $atts['html'] ) . '>';
 	}
 
 	/**
