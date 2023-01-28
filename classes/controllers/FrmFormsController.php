@@ -2168,17 +2168,17 @@ class FrmFormsController {
 	 * Used when the success action is not 'message'
 	 *
 	 * @since 2.05
-	 * @since 6.0 `$args['time_to_read']` is added.
+	 * @since 6.0 `$args['force_delay_redirect']` is added.
 	 *
 	 * @param array $args {
 	 *     The args.
 	 *
-	 *     @type string $conf_method  The method.
-	 *     @type object $form         Form object.
-	 *     @type int    $entry_id     Entry ID.
-	 *     @type string $action       The action event. Accepts `create` or `update`.
-	 *     @type array  $fields       The array of fields.
-	 *     @type int    $time_to_read Force to show the message before redirecting in case redirect method runs.
+	 *     @type string $conf_method          The method.
+	 *     @type object $form                 Form object.
+	 *     @type int    $entry_id             Entry ID.
+	 *     @type string $action               The action event. Accepts `create` or `update`.
+	 *     @type array  $fields               The array of fields.
+	 *     @type int    $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
 	 * }
 	 */
 	public static function run_success_action( $args ) {
@@ -2301,8 +2301,7 @@ class FrmFormsController {
 
 		if ( $redirect_action ) {
 			// Show script to delay the redirection.
-			$args['form']->options['time_to_read'] = $redirect_action->post_content['time_to_read'];
-			$args['force_delay_redirect']          = true;
+			$args['force_delay_redirect'] = true;
 			self::run_single_on_submit_action( $args, $redirect_action );
 		}
 	}
@@ -2408,9 +2407,17 @@ class FrmFormsController {
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
-		$success_msg  = isset( $args['form']->options[ $args['success_opt'] . '_msg' ] ) ? $args['form']->options[ $args['success_opt'] . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
+		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
-		$delay_time   = isset( $args['form']->options['time_to_read'] ) ? ( 1000 * $args['form']->options['time_to_read'] ) : 8000; // The old version delays for 8 seconds.
+
+		/**
+		 * Filters the delay time before redirecting when On Submit Redirect action is delayed.
+		 *
+		 * @since 6.0
+		 *
+		 * @param int $delay_time Delay time in miliseconds.
+		 */
+		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
 
 		add_filter( 'frm_use_wpautop', '__return_true' );
 
@@ -2434,7 +2441,7 @@ class FrmFormsController {
 	 * @param array $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
-		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message" role="status">' . $success_msg . '<br/>' .
+		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
 			'</div></div>';
@@ -2874,9 +2881,6 @@ class FrmFormsController {
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
 				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
-				$form_options['redirect_msg'] = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
-				$form_options[ $opt . 'msg' ] = $form_options['redirect_msg'];
-				$form_options['time_to_read'] = isset( $action->post_content['time_to_read'] ) ? $action->post_content['time_to_read'] : 8;
 				break;
 
 			case 'page':
@@ -2968,8 +2972,7 @@ class FrmFormsController {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$data['success_url']  = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
-				$data['redirect_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_redirect_msg();
+				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
 				break;
 
 			case 'page':

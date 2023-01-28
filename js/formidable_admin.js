@@ -9431,8 +9431,6 @@ function frmAdminBuildJS() {
 	}
 
 	function initOnSubmitAction() {
-		const actionsEl = document.getElementById( 'frm_notification_settings' );
-
 		const onChangeType = event => {
 			if ( ! event.target.checked ) {
 				return;
@@ -9451,20 +9449,7 @@ function frmAdminBuildJS() {
 			actionEl.setAttribute( 'data-on-submit-type', event.target.value );
 		};
 
-		/**
-		 * Checks if it should show or hide Redirect message setting.
-		 */
-		const showHideRedirectMessage = () => {
-			const hasMessage = document.querySelector( '.frm_single_on_submit_settings[data-on-submit-type="page"],.frm_single_on_submit_settings[data-on-submit-type="message"]' );
-			actionsEl.classList.toggle( 'frm_on_submit_has_message', hasMessage );
-		};
-
 		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
-
-		// Show or hide Redirect message setting.
-		documentReady( showHideRedirectMessage );
-		frmAdminBuild.hooks.addAction( 'frm_after_action_removed', showHideRedirectMessage );
-		frmAdminBuild.hooks.addAction( 'frm_added_form_action', showHideRedirectMessage );
 	}
 
 	return {
