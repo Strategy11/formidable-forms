@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmStylesCardHelper {
 
-	const PAGE_SIZE = 4;
+	const PAGE_SIZE = 3;
 
 	/**
 	 * @var string
@@ -16,7 +16,7 @@ class FrmStylesCardHelper {
 	private $view_file_path;
 
 	/**
-	 * @var WP_Post
+	 * @var stdClass|WP_Post
 	 */
 	private $active_style;
 
@@ -41,10 +41,10 @@ class FrmStylesCardHelper {
 	private $locked;
 
 	/**
-	 * @param WP_Post    $active_style
-	 * @param WP_Post    $default_style
-	 * @param string|int $form_id
-	 * @param bool       $enabled
+	 * @param stdClass|WP_Post $active_style
+	 * @param WP_Post          $default_style
+	 * @param string|int       $form_id
+	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
 		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
@@ -71,11 +71,8 @@ class FrmStylesCardHelper {
 		$submit_button_params = $this->get_submit_button_params();
 		$params               = $this->get_params_for_style_card( $style );
 
-		if ( $is_default_style ) {
-			$params['class'] .= ' frm-default-style-card';
-		}
 		if ( $is_active_style ) {
-			$params['class'] .= ' frm-active-style-card';
+			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
 		}
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
@@ -175,6 +172,8 @@ class FrmStylesCardHelper {
 
 		if ( $this->locked ) {
 			/**
+			 * Set up a locked style card for the upgrade modal.
+			 *
 			 * @param array $params
 			 * @param array $args {
 			 *     @type WP_Post|stdClass $style
@@ -187,8 +186,7 @@ class FrmStylesCardHelper {
 					return $params;
 				}
 
-				$params['class'] .= ' frm-locked-style';
-
+				$params['class']           .= ' frm-locked-style';
 				$params['data-upgrade-url'] = FrmAppHelper::admin_upgrade_link(
 					array(
 						'content' => 'upgrade',
@@ -200,6 +198,13 @@ class FrmStylesCardHelper {
 				return $params;
 			};
 		} else {
+			/**
+			 * Include the template key for the preview in Pro.
+			 *
+			 * @param array $params
+			 * @param array $style
+			 * @return array
+			 */
 			$param_filter = function( $params ) use ( $style ) {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
@@ -407,7 +412,7 @@ class FrmStylesCardHelper {
 		);
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$this->echo_upsell_card();
+		//	$this->echo_upsell_card();
 		}
 
 		$this->maybe_echo_card_pagination( $count );
@@ -439,15 +444,43 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_upsell_card() {
-		$upgrade_link = FrmAppHelper::admin_upgrade_link( 'styler-upsell-card' );
-		?>
-		<div id="frm_styles_upsell_card" class="frm-style-card">
-			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/upgrade-custom-styles.svg" />
-			<div><?php esc_html_e( 'Create styles and get access to premium templates', 'formidable' ); ?></div>
-			<div>
-				<a href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank"><?php esc_html_e( 'Upgrade now', 'formidable' ); ?></a>
-			</div>
-		</div>
-		<?php
+		// TODO do something new in the new design.
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_styles() {
+		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
+			return FrmProStylesController::get_styles_for_styler( $this->active_style );
+		}
+		return array( $this->default_style );
+	}
+
+	/**
+	 * Remove the default style from an array of styles.
+	 *
+	 * @param array $styles
+	 * @return array
+	 */
+	public function filter_custom_styles( $styles ) {
+		// TODO move this out of the view.
+		return array_filter(
+			$styles,
+			/**
+			 * @param WP_Post $style
+			 * @return bool
+			 */
+			function( $style ) {
+				return $this->default_style->ID !== $style->ID;
+			}
+		);
+	}
+
+	public function get_template_info() {
+		$style_api = new FrmStyleApi();
+		return $style_api->get_api_info();
 	}
 }

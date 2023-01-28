@@ -338,12 +338,6 @@ class FrmStylesController {
 		$active_style  = $frm_style->get_one();
 		$default_style = self::get_default_style();
 
-		if ( is_callable( 'FrmProStylesController::get_styles_for_styler' ) ) {
-			$styles = FrmProStylesController::get_styles_for_styler( $form, $active_style );
-		} else {
-			$styles = array( $default_style );
-		}
-
 		self::disable_admin_page_styling_on_submit_buttons();
 
 		/**
@@ -355,7 +349,7 @@ class FrmStylesController {
 		 */
 		do_action( 'frm_before_render_style_page', compact( 'form' ) );
 
-		self::render_style_page( $active_style, $styles, $form, $default_style );
+		self::render_style_page( $active_style, $form, $default_style );
 	}
 
 	/**
@@ -472,11 +466,6 @@ class FrmStylesController {
 			return;
 		}
 
-		$default_style = self::get_default_style();
-		if ( $style_id === $default_style->ID ) {
-			$style_id = 1; // If the default style is selected, use the "Always use default" legacy option instead of the default style.
-		}
-
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
 		if ( ! $form_id ) {
 			// TODO show an error that save failed.
@@ -486,6 +475,15 @@ class FrmStylesController {
 		$form = FrmForm::getOne( $form_id );
 		if ( ! $form ) {
 			// TODO handle invalid form ID.
+			return;
+		}
+
+		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
+		// There's also a check here for conversational forms.
+		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
+		$default_style = self::get_default_style();
+		if ( $style_id === $default_style->ID && empty( $form->options['chat'] ) ) {
+			$style_id = 1;
 		}
 
 		$form->options['custom_style'] = (string) $style_id; // We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
@@ -535,13 +533,13 @@ class FrmStylesController {
 	 *
 	 * @since x.x
 	 *
-	 * @param WP_Post        $active_style
-	 * @param array<WP_Post> $styles
-	 * @param stdClass       $form
-	 * @param WP_Post        $default_style
+	 * @param stdClass|WP_Post $active_style
+	 * @param array<WP_Post>   $styles
+	 * @param stdClass         $form
+	 * @param WP_Post          $default_style
 	 * @return void
 	 */
-	private static function render_style_page( $active_style, $styles, $form, $default_style ) {
+	private static function render_style_page( $active_style, $form, $default_style ) {
 		$style_views_path = self::get_views_path();
 		$view             = FrmAppHelper::simple_get( 'frm_action', 'sanitize_text_field', 'list' ); // edit, list (default), new_style.
 		$frm_style        = new FrmStyle( $active_style->ID );

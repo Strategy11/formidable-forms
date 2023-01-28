@@ -2,6 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+// TODO do we deprecate this file?
 ?>
 <?php
 $multiple_styles_title   = __( 'You are currently limited to 1 style template', 'formidable' );

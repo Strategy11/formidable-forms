@@ -6,11 +6,15 @@
 	/* globals wp, frmDom, frmAdminBuild */
 	'use strict';
 
-	const { __ }                                           = wp.i18n;
-	const state                                            = {
-		showingSampleForm: false,
-		unsavedChanges: false,
-		autoId: 0
+	const { __ }                                                 = wp.i18n;
+	const state                                                  = {
+		showingSampleForm: false, // boolean
+		unsavedChanges: false, // boolean
+		autoId: 0, // Number
+		// Track the value of the selected style ID on page (on the list page).
+		// This is tracked to determine if there are actually unsaved changes.
+		// This way when you switch back to the initial value it doesn't count as a change.
+		initialSelectedStyleValue: false // String|false
 	};
 	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
 	const { onClickPreventDefault }                              = frmDom.util;
@@ -33,6 +37,7 @@
 	 */
 	function initCommonEventListeners() {
 		document.addEventListener( 'click', handleCommonClickEvents );
+		window.addEventListener( 'beforeunload', maybeConfirmExit );
 		disablePreviewSubmitButtons();
 	}
 
@@ -57,10 +62,13 @@
 	 */
 	function initListPage() {
 		document.addEventListener( 'click', handleClickEventsForListPage );
-		setTimeout( addHamburgMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
+		setTimeout( addHamburgerMenusToCards, 0 ); // Add a timeout so Pro has a chance to add a filter first.
 		initDatepickerSample();
 
-		const enableToggle = document.getElementById( 'frm_enable_styling' );
+		const enableToggle              = document.getElementById( 'frm_enable_styling' );
+		const styleIdInput              = getStyleIdInput();
+		state.initialSelectedStyleValue = styleIdInput.value;
+
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
 
 		syncPreviewFormLabelPositionsWithActiveStyle();
@@ -158,7 +166,7 @@
 	 * @returns {void}
 	 */
 	function showCardsForPage( wrapper, pageNumber ) {
-		const pageSize = 4;
+		const pageSize = 3;
 		const minIndex = ( pageNumber - 1 ) * pageSize;
 		const maxIndex = minIndex + pageSize - 1;
 
@@ -193,27 +201,45 @@
 	 * This is because disabling styles is linked to the custom_style option as well.
 	 *
 	 * @param {Event} event
-	 *
 	 * @returns {void}
 	 */
 	function handleEnableStylingToggleChange( event ) {
-		const cardWrapper   = document.getElementById( 'frm_custom_style_cards_wrapper' );
-		const styleIdInput  = getStyleIdInput();
 		const stylesEnabled = event.target.checked;
 
-		cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled );
-		trackUnsavedChange();
+		document.querySelectorAll( '.frm-style-card-wrapper' ).forEach(
+			cardWrapper => cardWrapper.classList.toggle( 'frm-styles-enabled', stylesEnabled )
+		);
 
 		if ( ! stylesEnabled ) {
+			const styleIdInput = getStyleIdInput();
 			styleIdInput.value = '0';
+			trackListPageChange();
 			toggleFormidableStylingInPreviewForms( false );
 			return;
 		}
 
-		const card         = document.querySelector( '.frm-active-style-card' );
-		styleIdInput.value = card.dataset.styleId; // TODO update this for template keys.
-
 		toggleFormidableStylingInPreviewForms( true );
+
+		// Click the active card so the style id input properly syncs.
+		// In Pro, templates use a templateKey attribute so we don't always want card.dataset.styleId
+		// There is no need to call trackListPageChange as it happens in the click event.
+		const card = document.querySelector( '.frm-active-style-card' );
+		if ( card ) {
+			card.click();
+		}
+	}
+
+	/**
+	 * Track unsaved changes on the list page.
+	 * All settings on the list page are mapped to the value of the styleIdInput.
+	 * We track the value on load with state.initialSelectedStyleValue.
+	 * Only consider unsaved changes on the page when this variable is no longer set to the original value.
+	 *
+	 * @returns {void}
+	 */
+	function trackListPageChange() {
+		const styleIdInput   = getStyleIdInput();
+		state.unsavedChanges = styleIdInput.value !== state.initialSelectedStyleValue;
 	}
 
 	/**
@@ -313,14 +339,9 @@
 			return;
 		}
 
-		const card = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
-
-		if ( 'frm_styles_upsell_card' === card.id ) {
-			card.querySelector( 'a' ).click();
-			return;
-		}
-
+		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
+
 		if ( cardIsLocked ) {
 			maybeCreateStyleTemplateModal( card );
 			return; // Exit early as we're not actually selecting a locked template for preview.
@@ -345,16 +366,14 @@
 		if ( ! cardIsLocked ) {
 			// Don't update the form when a locked card is clicked.
 			styleIdInput.value = card.dataset.styleId;
-
-			// TODO if the style gets changed back, showing the unsaved changes pop up does not make much sense.
-			trackUnsavedChange();
+			trackListPageChange();
 		}
 
 		setTimeout( enableLabelTransitions, 1 );
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
 		const editButton     = document.getElementById( 'frm_edit_style' );
-		const showEditButton = null !== card.querySelector( '.frm-selected-style-tag' );
+		const showEditButton = null !== card.querySelector( '.frm-style-card-info' ); // Only the "Applied style" has card info.
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
@@ -412,6 +431,10 @@
 		return div({ children });
 	}
 
+	/**
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
 	function getStyleTemplateModalFooter( card ) {
 		const viewDemoSiteButton = footerButton({
 			text: __( 'Learn More', 'formidable' ),
@@ -434,27 +457,36 @@
 		});
 	}
 
+	/**
+	 * @returns {String}
+	 */
 	function getUpgradeNowText() {
 		return __( 'Upgrade Now', 'formidable' );
 	}
 
 	/**
+	 * Track an unsaved change on the edit page.
+	 * This is included in the frmStylerFunctions global so unsaved changes can be tracked in Pro as well.
+	 *
 	 * @returns {void}
 	 */
 	function trackUnsavedChange() {
-		if ( state.unsavedChanges ) {
-			return;
-		}
-
-		window.addEventListener( 'beforeunload', confirmExit );
 		state.unsavedChanges = true;
 	}
 
-	function confirmExit( event ) {
-		if ( state.unsavedChanges ) {
-			event.preventDefault();
-			event.returnValue = '';
+	/**
+	 * Possibly prevent leaving the page if there are unsaved changes.
+	 *
+	 * @param {Event} event
+	 * @returns {void}
+	 */
+	function maybeConfirmExit( event ) {
+		if ( ! state.unsavedChanges ) {
+			return;
 		}
+
+		event.preventDefault();
+		event.returnValue = '';
 	}
 
 	/**
@@ -512,9 +544,11 @@
 	}
 
 	/**
+	 * Add menu dropdowns to style cards dynamically on load.
+	 *
 	 * @returns {void}
 	 */
-	function addHamburgMenusToCards() {
+	function addHamburgerMenusToCards() {
 		const cards = Array.from( document.getElementsByClassName( 'frm-style-card' ) );
 		cards.forEach( card => maybeAddMenuToCard( card ) );
 	}
@@ -528,9 +562,7 @@
 			return;
 		}
 
-		const wrapper = card.querySelector( '.frm-style-card-preview' ).nextElementSibling;
-		wrapper.style.position = 'relative';
-		wrapper.appendChild( getHamburgerMenu( card.dataset ) );
+		card.appendChild( getHamburgerMenu( card.dataset ) );
 	}
 
 	/**
@@ -540,7 +572,7 @@
 	 * @returns {boolean}
 	 */
 	function shouldAddMenuToCard( card ) {
-		return 'frm_styles_upsell_card' !== card.id && 'frm_template_style_cards_wrapper' !== card.parentNode.id;
+		return 'frm_template_style_cards_wrapper' !== card.parentNode.id;
 	}
 
 	/**
@@ -798,6 +830,11 @@
 	 * @returns {HTMLElement}
 	 */
 	function getCardByStyleId( styleId ) {
+		const defaultCard = document.querySelector( '#frm_default_style_cards_wrapper > div[data-style-id="' + styleId + '"]' );
+		if ( defaultCard ) {
+			return defaultCard;
+		}
+
 		return Array.from( document.getElementById( 'frm_custom_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
 	}
 

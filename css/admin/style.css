@@ -2,14 +2,6 @@
 This file is added to the visual styler admin page, accessed from the style tab.
 */
 
-.frm-admin-page-styles #frm-publishing {
-	/*
-	Avoid a conflict with .frm_wrap > #frm_top_bar #frm-publishing { margin-top: 0; } in frm_admin.css
-	Without this, the Embed/Preview/Update buttons all appear too high in the header.
-	*/
-	margin-top: 15px !important;
-}
-
 #frm_styler_wrapper {
 	display: flex;
 	flex-direction: row;
@@ -72,58 +64,63 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card {
-	width: calc( 50% - 10px );
-	display: inline-flex;
-	flex-direction: column;
-	align-content: center;
-	justify-content: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	border-radius: 6px;
 	cursor: pointer;
 	box-sizing: border-box;
 	border: 1px solid transparent; /* Add a transparent border so an active style card doesn't cause the box to resize. */
 	background-color: #fff;
 	margin-bottom: 15px;
+	width: 100%;
+	padding: 14px;
+	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
+	position: relative;
+}
+
+.frm-style-card > div:first-child {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
 }
 
 .frm-style-card.frm_hidden {
 	display: none;
 }
 
-.frm-style-card:nth-child(2n) {
-	margin-left: 16px;
-}
-
-.frm-style-card .frm-style-card-preview input {
-	box-shadow: none;
-}
-
-.frm-style-card .frm-style-card-preview .frm_submit input[type="submit"] {
-	border-color: var(--submit-border-color) !important; /* Use !important so we can avoid the var(--text-color-disabled) !important rule. */
-}
-
 .frm-style-card:hover {
 	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
 }
 
-.frm-active-style-card {
-	background-color: rgba(188, 224, 253, 0.23) !important;
-	border-color: rgba(65, 153, 253, 0.5);
+.frm-active-style-card:not(.frm-currently-set-style-card) {
+	box-shadow: none;
+	border: 1px solid #4199FD;
 }
 
-.frm-style-card .dropdown {
-	position: absolute;
-	right: 5px;
-	bottom: 50%;
-	transform: translateY(50%);
+.frm-style-card-title-wrapper {
+	display: flex;
+}
+
+.frm-style-card-title-wrapper > svg {
+	fill: var(--primary-color);
+	margin-right: 5px;
+}
+
+#frm_style_sidebar .frm-style-card .dropdown {
 	overflow: visible;
+	padding-left: 0;
+	align-self: flex-start;
 }
 
 .frm-style-card-preview {
-	padding: 10px;
-	flex: 1;
+	padding-top: 10px;
 	pointer-events: none;
 	background-color: var(--preview-background-color);
-	border-radius: 6px 6px 0 0
+	border-radius: 6px 6px 0 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .frm-style-card-preview + div .dropdown {
@@ -144,32 +141,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-left: 10px;
 }
 
-.frm-style-card-pagination a.frm-current-style-card-page {
+#frm_style_sidebar .frm-disabled-pagination-anchor {
 	color: var(--dark-grey);
 	text-decoration: none;
 	cursor: default;
-}
-
-#frm_style_sidebar .frm-style-card input {
-	height: unset !important;
-	margin: 0;
-	max-width: 100%;
-}
-
-/* Avoid disabled button styles overwriting the card's preview styles */
-#frm_style_sidebar .frm-style-card input[disabled] {
-	background-color: var(--submit-bg-color) !important;
-	color: var(--submit-text-color) !important;
-}
-
-.frm-style-card .frm-style-card-preview + div {
-	border-top: 1px solid #E9EAEA;
-	padding: 10px;
-	text-align: left;
-}
-
-.frm-style-card .frm_form_field {
-	margin-bottom: 16px !important;
 }
 
 .frm-style-card-title {
@@ -178,6 +153,17 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	overflow: hidden;
 	display: inline-block;
 	white-space: nowrap;
+	font-size: 14px;
+}
+
+.frm-style-card-info {
+	display: none;
+}
+
+.frm-currently-set-style-card .frm-style-card-info {
+	display: inline;
+	color: #667085;
+	margin-left: 5px;
 }
 
 .frm-locked-style .frm-style-card-title {
@@ -186,15 +172,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 .frm-style-card-title svg {
 	margin-right: 5px;
-}
-
-.frm-style-card .frm_submit input {
-	border-width: var(--submit-border-width);
-	border-color: var(--submit-border-color);
-	border-radius: var(--submit-border-radius);
-	font-weight: var(--submit-weight);
-	width: var(--submit-width);
-	margin: 0;
 }
 
 .frm_button_submit {
@@ -288,9 +265,9 @@ label.default-style-box input[type="checkbox"] {
 	overflow: hidden;
 	margin: 0 !important;
 	height: 32px !important;
-	padding: 0 0 0 30px !important;
+	padding: 0 0 0 var(--gap-lg) !important;
 	border-radius: var(--small-radius);
-	border-color: var(--grey-border);
+	border-color: var(--grey-300);
 }
 
 #frm_style_sidebar .wp-color-result-text {
@@ -357,18 +334,71 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
-.frm-flex-custom-card-wrapper #frm_custom_style_cards_wrapper {
-	display: flex;
-}
-
-#frm_styles_upsell_card {
-	text-align: center;
-}
-
-#frm_styles_upsell_card > div {
+/* TODO prefix these, wrap them in the style card class */
+.frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
-	bottom: 15px;
-	padding: 0 10px;
+	border: 2px solid #FFFFFF;
+	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
+	border-radius: 22px;
+	height: 28px;
+	width: 28px;
+	box-sizing: border-box;
+}
+
+.frm-style-circle1 {
+	z-index: 3;
+}
+
+.frm-style-circle2 {
+	right: 8px;
+	z-index: 2;
+}
+
+.frm-style-circle3 {
+	right: 16px;
+	z-index: 1;
+}
+
+.frm-style-card-separator {
+	background-color: #F2F4F7;
+	width: 2px;
+	height: 20px;
+	margin: 0 20px 0 5px;
+}
+
+.frm-button-style-example {
+	background-color: var(--submit-bg-color);
+	border-radius: var(--submit-border-radius);
+	width: 60px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm-button-style-example > div {
+	width: 32px;
+	height: 2px;
+	background-color: var(--submit-text-color);
+}
+
+.frm-input-style-example {
+	border-width: var(--field-border-width);
+	border-style: var(--field-border-style);
+	border-color: var(--border-color);
+	background-color: var(--bg-color);
+	width: 138px;
+	height: 16px;
+	margin-left: 10px;
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+}
+
+.frm-input-style-example > div {
+	width: 46px;
+	height: 2px;
+	background-color: var(--text-color);
 }
 
 #frm_loading_style_placeholder,
@@ -413,10 +443,6 @@ Time fields use a div instead of a label, so don't target by the primary label b
 @media only screen and (max-width: 900px) {
 	#frm_style_sidebar {
 		min-width: 260px;
-	}
-	.frm-style-card {
-		width: 100%;
-		margin-left: 0 !important;
 	}
 }
 
