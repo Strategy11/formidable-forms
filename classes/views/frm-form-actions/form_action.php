@@ -7,9 +7,16 @@ $a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 
 $form_action = apply_filters( 'frm_form_action_settings', $form_action, $form_action->post_excerpt );
 $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_action_settings', $form_action );
-
+$data_attrs  = 'data-actionkey="' . esc_attr( $action_key ) . '"';
+if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
+	$data_attrs .= ' data-on-submit-type="' . esc_attr( FrmOnSubmitHelper::get_action_type( $form_action ) ) . '"';
+}
 ?>
-<div id="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="widget frm_form_action_settings frm_single_<?php echo esc_attr( $form_action->post_excerpt ); ?>_settings <?php echo esc_attr( $form_action->post_status === 'publish' ? '' : 'frm_disabled_action' ); ?>" data-actionkey="<?php echo esc_attr( $action_key ); ?>">
+<div
+	id="frm_form_action_<?php echo esc_attr( $action_key ); ?>"
+	class="widget frm_form_action_settings frm_single_<?php echo esc_attr( $form_action->post_excerpt ); ?>_settings <?php echo esc_attr( $form_action->post_status === 'publish' ? '' : 'frm_disabled_action' ); ?>"
+	<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+>
 	<div class="widget-top">
 		<div class="widget-title-action">
 			<button type="button" class="widget-action hide-if-no-js" aria-expanded="false">

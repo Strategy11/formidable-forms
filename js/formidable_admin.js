@@ -6446,7 +6446,7 @@ function frmAdminBuildJS() {
 			 *
 			 * @param {HTMLElement} formAction Form action element.
 			 */
-			wp.hooks.doAction( 'frm_added_form_action', newAction );
+			frmAdminBuild.hooks.doAction( 'frm_added_form_action', newAction );
 		}
 	}
 
@@ -9415,7 +9415,24 @@ function frmAdminBuildJS() {
 		}, options );
 	}
 
+	/**
+	 * Does the same as jQuery( document ).ready( fn ).
+	 *
+	 * @since 6.0
+	 *
+	 * @param {Function} fn Function.
+	 */
+	function documentReady( fn ) {
+		if ( 'loading' !== document.readyState ) {
+			fn();
+		} else {
+			document.addEventListener( 'DOMContentLoaded', fn );
+		}
+	}
+
 	function initOnSubmitAction() {
+		const actionsEl = document.getElementById( 'frm_notification_settings' );
+
 		const onChangeType = event => {
 			if ( ! event.target.checked ) {
 				return;
@@ -9430,9 +9447,24 @@ function frmAdminBuildJS() {
 			activeEls.forEach( activeEl => {
 				activeEl.classList.remove( 'frm_hidden' );
 			});
+
+			actionEl.setAttribute( 'data-on-submit-type', event.target.value );
+		};
+
+		/**
+		 * Checks if it should show or hide Redirect message setting.
+		 */
+		const showHideRedirectMessage = () => {
+			const hasMessage = document.querySelector( '.frm_single_on_submit_settings[data-on-submit-type="page"],.frm_single_on_submit_settings[data-on-submit-type="message"]' );
+			actionsEl.classList.toggle( 'frm_on_submit_has_message', hasMessage );
 		};
 
 		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
+
+		// Show or hide Redirect message setting.
+		documentReady( showHideRedirectMessage );
+		frmAdminBuild.hooks.addAction( 'frm_after_action_removed', showHideRedirectMessage );
+		frmAdminBuild.hooks.addAction( 'frm_added_form_action', showHideRedirectMessage );
 	}
 
 	return {
@@ -10241,6 +10273,12 @@ function frmAdminBuildJS() {
 			},
 			addFilter: function( hookName, callback, priority ) {
 				return wp.hooks.addFilter( hookName, 'formidable', callback, priority );
+			},
+			doAction: function( hookName, ...args ) {
+				return wp.hooks.doAction( hookName, ...args );
+			},
+			addAction: function( hookName, callback, priority ) {
+				return wp.hooks.addAction( hookName, 'formidable', callback, priority );
 			}
 		},
 

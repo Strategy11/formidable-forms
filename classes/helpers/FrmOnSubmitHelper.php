@@ -105,7 +105,7 @@ class FrmOnSubmitHelper {
 		</div>
 
 		<?php $id_attr = $args['action_control']->get_field_id( 'redirect_msg' ); ?>
-		<div class="frm_form_field">
+		<div class="frm_form_field frm_redirect_message_form_field">
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Message Before Redirect', 'formidable' ); ?>
 				<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'This message is shown when ajax submit is turned off or when a success message will be shown.', 'formidable' ); ?>"></span>

@@ -2273,7 +2273,6 @@ class FrmFormsController {
 		} elseif ( 1 === count( $args['conf_method'] ) ) {
 			self::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
 			$args['conf_method'] = $args['form']->options['success_action'];
-			$args['time_to_read'] = isset( $args['form']->options['time_to_read'] ) ? $args['form']->options['time_to_read'] : 0;
 			self::run_success_action( $args );
 		} else {
 			self::run_multi_on_submit_actions( $args );
@@ -2303,7 +2302,8 @@ class FrmFormsController {
 
 		if ( $redirect_action ) {
 			// Show script to delay the redirection.
-			$args['time_to_read'] = $redirect_action->post_content['time_to_read'];
+			$args['form']->options['time_to_read'] = $redirect_action->post_content['time_to_read'];
+			$args['force_delay_redirect']          = true;
 			self::run_single_on_submit_action( $args, $redirect_action );
 		}
 	}
@@ -2387,22 +2387,17 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		$args['time_to_read'] = empty( $args['time_to_read'] ) ? 0 : ( 1000 * $args['time_to_read'] );
-
-		if ( ! empty( $args['ajax'] ) && $doing_ajax ) {
-			echo json_encode(
-				array(
-					'redirect' => $success_url,
-					'delay'    => $args['time_to_read'],
-				)
-			);
+		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
+			echo json_encode( array( 'redirect' => $success_url ) );
 			wp_die();
-		} elseif ( ! headers_sent() && empty( $args['time_to_read'] ) ) { // Not AJAX submit and there is just one On Submit action runs.
+		}
+
+		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
 		}
 
-		// Redirect with a delay if not ajax.
+		// Redirect with a delay.
 		self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
 	}
 
@@ -2416,7 +2411,7 @@ class FrmFormsController {
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = isset( $args['form']->options[ $args['success_opt'] . '_msg' ] ) ? $args['form']->options[ $args['success_opt'] . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
-		$delay_time   = $args['time_to_read'];
+		$delay_time   = isset( $args['form']->options['time_to_read'] ) ? ( 1000 * $args['form']->options['time_to_read'] ) : 8000; // The old version delays for 8 seconds.
 
 		add_filter( 'frm_use_wpautop', '__return_true' );
 
@@ -2882,7 +2877,7 @@ class FrmFormsController {
 				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
 				$form_options['redirect_msg'] = isset( $action->post_content['redirect_msg'] ) ? $action->post_content['redirect_msg'] : FrmOnSubmitHelper::get_default_redirect_msg();
 				$form_options[ $opt . 'msg' ] = $form_options['redirect_msg'];
-				$form_options['time_to_read'] = isset( $action->post_content['time_to_read'] ) ? $action->post_content['time_to_read'] : 0;
+				$form_options['time_to_read'] = isset( $action->post_content['time_to_read'] ) ? $action->post_content['time_to_read'] : 8;
 				break;
 
 			case 'page':
