@@ -623,7 +623,7 @@
 		}
 
 		const resetOption = a({
-			text: __( 'Reset to defaults', 'formidable' )
+			text: __( 'Reset to Defaults', 'formidable' )
 		});
 		addIconToOption( resetOption, 'frm_reset_icon' );
 		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
@@ -639,7 +639,7 @@
 
 		const dropdownMenu  = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu dropdown-menu-right frm-style-options-menu',
+			className: 'frm-dropdown-menu dropdown-menu-right frm-style-options-menu frm_p_1',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
 		});
 
@@ -1230,7 +1230,7 @@
 			value = 'none';
 		}
 
-		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {			
+		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {
 			const input                 = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
 			const shouldForceTopStyling = 'inside' === value && ( ! input || 'hidden' === input.type ); // We do not want file upload to use floating labels, or inline datepickers, which both use hidden inputs.
 			const currentValue          = shouldForceTopStyling ? 'top' : value;

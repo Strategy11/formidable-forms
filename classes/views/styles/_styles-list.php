@@ -35,7 +35,7 @@ $sidebar_params = array(
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div>
+	<div class="frm_mb_sm">
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',
@@ -51,20 +51,20 @@ $sidebar_params = array(
 	</div>
 
 	<div class="frm_form_settings">
-		<h2><?php esc_html_e( 'Default style', 'formidable' ); ?></h2>
+		<h2><?php esc_html_e( 'Default Style', 'formidable' ); ?></h2>
 	</div>
 	<?php $card_helper->echo_card_wrapper( 'frm_default_style_cards_wrapper', array( $default_style ) ); ?>
 
 	<?php if ( $custom_styles ) { ?>
 		<?php // TODO Always show this in lite, but with an upsell. ?>
 		<div class="frm_form_settings">
-			<h2><?php esc_html_e( 'Custom styles', 'formidable' ); ?></h2>
+			<h2><?php esc_html_e( 'Custom Styles', 'formidable' ); ?></h2>
 		</div>
 		<?php $card_helper->echo_card_wrapper( 'frm_custom_style_cards_wrapper', $custom_styles ); ?>
 	<?php } ?>
 
 	<div class="frm_form_settings">
-		<h2><?php esc_html_e( 'Formidable styles', 'formidable' ); ?></h2>
+		<h2><?php esc_html_e( 'Formidable Styles', 'formidable' ); ?></h2>
 	</div>
 	<?php $card_helper->echo_card_wrapper( 'frm_template_style_cards_wrapper', $card_helper->get_template_info() ); ?>
 </div>
