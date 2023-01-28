@@ -135,6 +135,10 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	width: auto !important;
 }
 
+.frm-justify-between {
+	justify-content: space-between;
+}
+
 /* End Generic Classes */
 
 .post-type-frm_display .wrap > #posts-filter,
@@ -2822,6 +2826,7 @@ h1 .fa-caret-down {
 	outline: 0;
 }
 
+.frm_wrap .ui-autocomplete,
 #frm_adv_info.frm-dropdown-menu,
 .frm-dropdown-menu {
 	/* Copied from .dropdown-menu rules from Bootstrap */
@@ -2894,6 +2899,7 @@ h1 .fa-caret-down {
 	margin: 0;
 }
 
+.frm_wrap .ui-autocomplete li > div,
 .frm-dropdown-menu > .dropdown-item > a,
 .frm-dropdown-menu .frm_dropdown_li {
 	clear: both;
@@ -5009,16 +5015,8 @@ h2.frm-h2,
 }
 
 .frm_wrap .ui-autocomplete {
-	box-shadow: none;
-	border: 1px solid var(--grey-300);
-	border-radius: var(--small-radius);
-	background: var(--lightest-grey);
-	position: absolute;
 	padding: 3px 0;
-	font-size: 15px;
 	max-height: 310px;
-	overflow-y: auto;
-	overflow-x: hidden;
 }
 
 .frm_wrap .ui-widget {
@@ -5026,22 +5024,11 @@ h2.frm-h2,
 }
 
 .frm_wrap .ui-autocomplete li {
-	padding: 2px 10px;
+	padding: 2px 4px;
 	background: none;
 	color: var(--grey-700);
 	border: none;
 	font-weight: normal;
-}
-
-.frm_wrap .ui-autocomplete li div.ui-state-active,
-.frm_wrap .ui-autocomplete li.ui-state-focus {
-	background: rgb(65, 153, 253);
-	color: #fff;
-}
-
-.frm_wrap .ui-autocomplete .ui-menu-item-wrapper {
-	padding: 2px 10px;
-	border-radius: var(--small-radius);
 }
 
 .frm_wrap .ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
@@ -6860,6 +6847,7 @@ i.frm-show-inline-modal {
 	border-color: var(--grey-300);
 }
 
+.frm_wrap .frm-search .frm-search-input,
 .frm-white-body .search-box input[name="s"], /* Views search */
 .frm_wrap .frm-search input[name="s"] {
 	padding-top: 3px;
@@ -7191,17 +7179,19 @@ ul .frm_col_two {
 	margin: 0;
 }
 
+.frm_wrap .ui-autocomplete li > div,
 .frm-dropdown-menu > .dropdown-item > a,
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
-	display: block;
+	display: flex;
 	color: var(--grey-700);
 	padding: 8px 10px;
 	font-size: var(--text-md);
+	gap: var(--gap-sm);
+    align-items: center;
 }
 
 .frm_code_list.frm-full-hover a span {
-	float: right;
 	max-width: 83px;
 	text-align: right;
 }
@@ -7213,6 +7203,8 @@ ul .frm_col_two {
 	text-overflow: ellipsis;
 }
 
+.frm_wrap .ui-autocomplete li div.ui-state-active,
+.frm_wrap .ui-autocomplete li.ui-state-focus,
 .frm-dropdown-menu > .dropdown-item > a:hover,
 .frm_code_list.frm-full-hover a:hover span,
 .frm_code_list.frm-full-hover a:hover {
