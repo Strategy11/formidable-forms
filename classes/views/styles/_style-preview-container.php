@@ -35,11 +35,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</button>
 		<?php
 		/**
-		 * This is used in Pro to add the spinner to the preview (for previewing templates which have a delay).
+		 * This is used in Pro to add a "Apply style" button to the preview.
 		 *
 		 * @since x.x
+		 *
+		 * @param string $view 'edit' or 'list'.
 		 */
 		do_action( 'frm_style_preview_after_toggle', $view );
 		?>
+		<div id="frm_loading_style_placeholder">
+			<span class="frm-wait frm_visible_spinner"></span>
+			<strong><?php esc_html_e( 'Please wait', 'formidable-pro' ); ?></strong>
+			<p><?php esc_html_e( 'Updating CSS...', 'formidable-pro' ); ?></p>
+		</div>
 	</div>
 </div>
