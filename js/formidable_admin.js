@@ -386,7 +386,7 @@ function frmAdminBuildJS() {
 	}
 
 	function confirmModal( link ) {
-		var caution, verify, $confirmMessage, frmCaution, i, dataAtts, btnClass,
+		var verify, $confirmMessage, i, dataAtts, btnClass,
 			$info = initModal( '#frm_confirm_modal', '400px' ),
 			continueButton = document.getElementById( 'frm-confirmed-click' );
 
@@ -394,18 +394,10 @@ function frmAdminBuildJS() {
 			return false;
 		}
 
-		caution = link.getAttribute( 'data-frmcaution' );
 		verify = link.getAttribute( 'data-frmverify' );
 		btnClass = verify ? link.getAttribute( 'data-frmverify-btn' ) : '';
 		$confirmMessage = jQuery( '.frm-confirm-msg' );
 		$confirmMessage.empty();
-
-		if ( caution ) {
-			frmCaution = document.createElement( 'div' );
-			frmCaution.classList.add( 'frm-caution' );
-			frmCaution.appendChild( document.createTextNode( caution ) );
-			$confirmMessage.append( frmCaution );
-		}
 
 		if ( verify ) {
 			$confirmMessage.append( document.createTextNode( verify ) );
@@ -3478,7 +3470,6 @@ function frmAdminBuildJS() {
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
 			confirmMsg = frm_admin_js.conf_delete_sec;
-			this.setAttribute( 'data-frmcaution', frm_admin_js.caution );
 		}
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
@@ -4404,7 +4395,6 @@ function frmAdminBuildJS() {
 			multiselectPopup.remove();
 		}
 
-		this.setAttribute( 'data-frmcaution', __( 'Heads up', 'formidable' ) );
 		/* translators: %1$s: Number of fields that are selected to be deleted. */
 		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
@@ -7479,7 +7469,7 @@ function frmAdminBuildJS() {
 			hideShortcodes( box );
 		} else {
 			box.style.top = ( pos.top - parentPos.top + 32 ) + 'px';
-			box.style.left = ( pos.left - parentPos.left - 257 ) + 'px';
+			box.style.left = ( pos.left - parentPos.left - 280 ) + 'px';
 
 			jQuery( '.frm_code_list a' ).removeClass( 'frm_noallow' );
 			if ( input.classList.contains( 'frm_not_email_to' ) ) {
@@ -7822,18 +7812,14 @@ function frmAdminBuildJS() {
 
 	function onActionLoaded( event ) {
 		const settings = event.target.closest( '.frm_form_action_settings' );
-		if ( ! settings ) {
-			return;
+		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
+			onEmailActionLoaded( settings );
 		}
+	}
 
-		settings.querySelectorAll( '.frmsvg.frm-show-box' ).forEach( ( svg ) => {
-			if ( svg.nextElementSibling.type === 'text' ) {
-				svg.style.bottom = '-3px';
-				svg.style.marginRight = '0';
-			}
-		});
-
-		settings.querySelectorAll( '.wp-editor-area' ).forEach( wysiwyg => {
+	function onEmailActionLoaded( settings ) {
+		const wysiwyg = settings.querySelector( '.wp-editor-area' );
+		if ( wysiwyg ) {
 			frmDom.wysiwyg.init(
 				wysiwyg,
 				{ height: 160, addFocusEvents: true }
