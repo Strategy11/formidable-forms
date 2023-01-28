@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 ?>
-<div id="frm_top_bar" class="<?php echo esc_attr( $has_nav ? 'frm_nav_bar' : 'frm_no_nav_bar' ); ?>">
+<div id="frm_top_bar" class="<?php echo esc_attr( 'frm_nav_bar' ); ?>">
 	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>" class="frm-header-logo">
 		<?php FrmAppHelper::show_header_logo(); ?>
 	</a>
