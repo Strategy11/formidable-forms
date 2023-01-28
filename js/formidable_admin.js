@@ -7824,7 +7824,7 @@ function frmAdminBuildJS() {
 				wysiwyg,
 				{ height: 160, addFocusEvents: true }
 			);
-		});
+		};
 	}
 
 	/* Global settings page */
