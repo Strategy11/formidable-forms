@@ -1093,9 +1093,9 @@ class FrmAppHelper {
 	 * @since 6.0
 	 * @return void
 	 */
-	public static function import_link() {
+	public static function import_link( $type = 'secondary' ) {
 		?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
 			<?php esc_html_e( 'Import', 'formidable' ); ?>
 		</a>
 		<?php

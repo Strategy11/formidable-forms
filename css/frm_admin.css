@@ -1235,7 +1235,7 @@ p.frm_has_shortcodes {
 	vertical-align: inherit;
 }
 
-.frm-search #search-submit,
+.frm-white-body #search-submit,
 #frm-form-button .frm_button_submit,
 .frm-white-body .frm-preview-buttons button,
 .frm-white-body .button:not(.frm-button-primary),
