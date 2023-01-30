@@ -12,7 +12,7 @@ $styles         = $card_helper->get_styles();
 $custom_styles  = $card_helper->filter_custom_styles( $styles );
 $sidebar_params = array(
 	'id'    => 'frm_style_sidebar',
-	'class' => 'frm-right-panel frm_p_4', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+	'class' => 'frm-right-panel frm-p-4', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
 );
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
@@ -35,7 +35,7 @@ $sidebar_params = array(
 		<input type="hidden" name="frm_action" value="assign_style" />
 		<?php wp_nonce_field( 'frm_save_form_style_nonce', 'frm_save_form_style' ); ?>
 	</form>
-	<div class="frm_mb_sm">
+	<div class="frm-mb-sm">
 		<?php
 		FrmHtmlHelper::toggle(
 			'frm_enable_styling',

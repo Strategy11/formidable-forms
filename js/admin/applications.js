@@ -162,7 +162,7 @@
 					'h2',
 					{
 						text: __( 'Application Templates', 'formidable' ),
-						className: 'frm-h2 frm_mb_md'
+						className: 'frm-h2 frm-mb-md'
 					}
 				),
 				getCategoryOptions(),

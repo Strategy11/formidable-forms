@@ -327,7 +327,7 @@
 			search.init( input, targetClassName, args );
 
 			function getAutoSearchInput( id, placeholder ) {
-				const className = 'frm-search-input frm-auto-search';
+				const className = 'frm-search-input frm-auto-search frm-w-full';
 				const inputArgs = { id, className };
 				const input = tag( 'input', inputArgs );
 				input.setAttribute( 'placeholder', placeholder );

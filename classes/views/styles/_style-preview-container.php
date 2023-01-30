@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div id="frm_style_preview">
-	<div class="frm_m_12">
+	<div class="frm-m-12">
 		<?php
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; // If a $message, $warnings, or $notes variable are not empty, it will be rendered here.
 		?>

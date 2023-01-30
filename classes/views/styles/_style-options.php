@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</svg>
 			</a>
 		<?php } ?>
-		<span id="frm_style_name" class="frm_text_lg"><?php echo esc_html( $style->post_title ); ?></span>
+		<span id="frm_style_name" class="frm-text-lg"><?php echo esc_html( $style->post_title ); ?></span>
 	</p>
 </div>
 <div class="styling_settings">
