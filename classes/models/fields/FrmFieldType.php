@@ -446,14 +446,16 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_default_value_field( $field, $default_name, $default_value ) {
-		$pro_version              = class_exists( 'FrmProDb' ) ? FrmProDb::$plug_version : '0';
-		$min_pro_version_not_met  = version_compare( $pro_version, '5.5.6', '<=' );
-
-		if ( $field['type'] === 'rte' && $min_pro_version_not_met ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
-		} else {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
+		if ( $field['type'] === 'rte' ) {
+			$pro_version              = class_exists( 'FrmProDb' ) ? FrmProDb::$plug_version : '0';
+			$min_pro_version_not_met  = version_compare( $pro_version, '5.5.6', '<=' );
+			if ( $min_pro_version_not_met ) {
+				include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
+				return;
+			}
 		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
 	}
 
 	/**
