@@ -66,7 +66,7 @@
 }
 
 .frm-application-template-card:hover {
-	box-shadow: var(--box-shadow);
+	box-shadow: var(--box-shadow-lg);
 }
 
 .frm-application-template-card:hover h4 {

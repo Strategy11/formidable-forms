@@ -531,6 +531,8 @@
 	}
 
 	function makeModalIntoADialogAndOpen( modal, { width } = {}) {
+		const bodyWithModalClassName = 'frm-body-with-open-modal';
+
 		const $modal = jQuery( modal );
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
 			$modal.dialog({
@@ -565,14 +567,15 @@
 					}
 				},
 				close: function() {
-					document.body.style.overflowY = 'initial';
+					document.body.classList.remove( bodyWithModalClassName );
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				}
 			});
 		}
 
-		document.body.style.overflowY = 'hidden';
+		document.body.classList.add( bodyWithModalClassName );
+
 		$modal.dialog( 'open' );
 		return $modal;
 	}

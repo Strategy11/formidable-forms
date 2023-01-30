@@ -51,7 +51,7 @@
 	--gap-lg: 32px;
 	--box-shadow-sm: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
-	--box-shadow: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
+	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-xl: 0px 9.41489px 11.2979px -1.88298px rgba(16, 24, 40, 0.08), 0px 3.76596px 3.76596px -1.88298px rgba(16, 24, 40, 0.03);
 }
 
@@ -123,12 +123,14 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 
 .frm_text_md {
 	font-size: var(--text-md);
-	line-height: var(--leading);
+}
+
+.frm_text_lg {
+	font-size: var(--text-lg);
 }
 
 .frm_text_xl {
 	font-size: var(--text-xl);
-	line-height: var(--leading);
 }
 
 .frm_w_auto {
@@ -1285,6 +1287,7 @@ p.frm_has_shortcodes {
 
 .frm-white-body .button:not(.frm-button-primary):focus,
 .frm-white-body .button:not(.frm-button-primary):active,
+.frm-white-body .frm-button-secondary:hover,
 .wp-core-ui.frm-white-body .frm-button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
@@ -2115,6 +2118,10 @@ h2.frm-h2 + .howto {
 	text-align: right;
 }
 
+body.frm-body-with-open-modal {
+	overflow-y: hidden;
+}
+
 #frm_new_form_modal .postbox > div.inside {
 	max-height: 490px;
 	overflow-y: auto;
@@ -2811,7 +2818,7 @@ h1 .fa-caret-down {
 	background-clip: padding-box;
 	border: 1px solid var(--grey-100);
 	border-radius: 0.25rem;
-	box-shadow: var(--box-shadow);
+	box-shadow: var(--box-shadow-lg);
 
 	/* Custom rules */
 	max-height: 200px;
@@ -7103,7 +7110,7 @@ ul .frm_col_two {
 .frm_code_list.frm-full-hover a {
 	display: flex;
 	color: var(--grey-700);
-	padding: 8px 10px;
+	padding: 5px 10px;
 	font-size: var(--text-md);
 	gap: var(--gap-sm);
     align-items: center;
@@ -7129,6 +7136,14 @@ ul .frm_col_two {
 	background: var(--primary-25);
 	color: var(--primary-500);
 	border-radius: var(--small-radius);
+}
+
+.frm-dropdown-menu > .dropdown-item > a .frmsvg {
+	opacity: .8;
+}
+
+.frm-dropdown-menu > .dropdown-item > a:hover .frmsvg {
+	opacity: 1;
 }
 
 .frm-dropdown-menu.frm_code_list > li > a {

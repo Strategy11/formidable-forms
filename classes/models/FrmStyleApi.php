@@ -38,20 +38,21 @@ class FrmStyleApi extends FrmFormApi {
 	 * @return array
 	 */
 	private function fill_missing_style_settings( $api_info ) {
-		$divi  = $api_info[28067337];
-		$sleek = $api_info[28067363];
 		$lines = $api_info[28067373];
 		$big   = $api_info[28067379];
-		$dark  = $api_info[28067312];
 
 		$lines['settings'] = $this->get_placeholder_lines_style();
 		$big['settings']   = $this->get_placeholder_big_style();
 
-		$api_info[28067337] = $divi;
-		$api_info[28067363] = $sleek;
 		$api_info[28067373] = $lines;
 		$api_info[28067379] = $big;
-		$api_info[28067312] = $dark;
+
+		// Remove 'Styling Template' from titles.
+		foreach ( $api_info as $id => $template ) {
+			if ( isset( $template['name'] ) ) {
+				$api_info[ $id ]['name'] = preg_replace( '/(\sStyle|Styling)?(\sTemplate)?$/', '', $template['name'] );
+			}
+		}
 
 		return $api_info;
 	}
