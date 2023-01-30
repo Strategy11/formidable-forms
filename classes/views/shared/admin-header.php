@@ -42,8 +42,8 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
+	echo '<div id="frm-publishing">';
 	if ( ! empty( $atts['publish'] ) || ! empty( $atts['import_link'] ) ) {
-		echo '<div id="frm-publishing">';
 		$btn_type = 'primary';
 		if ( isset( $atts['publish'] ) && is_array( $atts['publish'] ) ) {
 			call_user_func( $atts['publish'][0], $atts['publish'][1] );
@@ -54,16 +54,14 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 			// Use primary style if it's the only button.
 			FrmAppHelper::import_link( $btn_type );
 		}
-		echo '</div>';
 	} elseif ( ! FrmAppHelper::pro_is_installed() ) {
 		?>
-		<div id="frm-publishing">
 			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
 				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 			</a>
-		</div>
 		<?php
 	}
+	echo '</div>';
 
 	if ( FrmAppHelper::is_full_screen() ) { ?>
 		<div class="frm-full-close">
