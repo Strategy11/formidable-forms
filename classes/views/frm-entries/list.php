@@ -4,9 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
-	<?php if ( $form ) { ?>
-	<div class="frm_page_container">
-	<?php } ?>
 
 		<?php
 		FrmAppHelper::get_admin_header(
@@ -50,7 +47,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</form>
 			<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 		</div>
-	<?php if ( $form ) { ?>
-	</div>
-	<?php } ?>
 </div>
