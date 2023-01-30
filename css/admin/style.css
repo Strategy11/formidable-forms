@@ -296,7 +296,6 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
-/* TODO prefix these, wrap them in the style card class */
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
 	border: 2px solid #FFFFFF;
@@ -319,6 +318,16 @@ Time fields use a div instead of a label, so don't target by the primary label b
 .frm-style-circle3 {
 	right: 16px;
 	z-index: 1;
+}
+
+/* Remove link styling from the back icon on the edit page. */
+#frm_styling_form p > a {
+	color: var(--grey-500);
+}
+
+#frm_styling_form p > a svg {
+	position: relative;
+	bottom: 2px;
 }
 
 .frm-style-card-separator {
