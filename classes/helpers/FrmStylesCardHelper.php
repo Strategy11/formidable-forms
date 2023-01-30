@@ -65,11 +65,10 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
-		$is_default_style     = $style->ID === $this->default_style->ID;
-		$is_active_style      = $style->ID === $this->active_style->ID;
-		$is_locked            = $this->locked;
-		$submit_button_params = $this->get_submit_button_params();
-		$params               = $this->get_params_for_style_card( $style );
+		$is_default_style = $style->ID === $this->default_style->ID;
+		$is_active_style  = $style->ID === $this->active_style->ID;
+		$is_locked        = $this->locked;
+		$params           = $this->get_params_for_style_card( $style );
 
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
@@ -79,27 +78,6 @@ class FrmStylesCardHelper {
 		}
 
 		include $this->view_file_path;
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return array<string,string>
-	 */
-	private function get_submit_button_params() {
-		$frm_style            = new FrmStyle();
-		$defaults             = $frm_style->get_defaults();
-		$submit_button_styles = array(
-			'font-size: ' . esc_attr( $defaults['submit_font_size'] ) . ' !important',
-			'padding: ' . esc_attr( $defaults['submit_padding'] ) . ' !important',
-		);
-		return array(
-			'type'     => 'submit',
-			'disabled' => 'disabled',
-			'class'    => 'frm_full_opacity',
-			'value'    => esc_attr__( 'Submit', 'formidable' ),
-			'style'    => implode( ';', $submit_button_styles ),
-		);
 	}
 
 	/**
@@ -466,7 +444,6 @@ class FrmStylesCardHelper {
 	 * @return array
 	 */
 	public function filter_custom_styles( $styles ) {
-		// TODO move this out of the view.
 		return array_filter(
 			$styles,
 			/**

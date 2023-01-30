@@ -405,6 +405,30 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	box-shadow: none;
 }
 
+#frm_style_template_modal .frm-style-sample input {
+	height: unset !important;
+	margin: 0;
+	max-width: 100%;
+}
+
+#frm_style_template_modal .frm-style-sample {
+	width: 260px;
+	margin: 0 auto 40px;
+}
+
+/* Avoid disabled button styles overwriting the sample's styles */
+#frm_style_template_modal .frm-style-sample input[disabled] {
+	background-color: var(--submit-bg-color) !important;
+	color: var(--submit-text-color) !important;
+	border-color: var(--submit-border-color) !important;
+	padding: 10px 20px;
+	font-size: 15px;
+}
+
+#frm_style_template_modal .frm-style-sample .frm_form_field {
+	margin-bottom: 16px !important;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,

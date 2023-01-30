@@ -426,7 +426,46 @@
 			})
 		);
 
+		children.push( getStyleTemplateModalSample( card ) );
+
 		return div({ children });
+	}
+
+	/**
+	 * Get a small example form for the upsell modal.
+	 * This just includes a small text field and submit button.
+	 *
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
+	function getStyleTemplateModalSample( card ) {
+		const input = tag( 'input' );
+		input.setAttribute( 'type', 'text' );
+		input.value = __( 'This is sample text', 'formidable' );
+
+		const button = tag( 'input' );
+		button.setAttribute( 'type', 'submit' );
+		button.disabled = true;
+		button.className = 'frm_full_opacity';
+		button.value = __( 'Submit', 'formidable' );
+
+		const children = [
+			div({
+				className: 'frm_form_field form-field',
+				children: [
+					tag( 'label', { className: 'frm_primary_label', text: __( 'Text field', 'formidable' ) }),
+					input
+				]
+			}),
+			div({
+				className: 'frm_submit',
+				child: button
+			})
+		];
+		return div({
+			className: 'frm-style-sample with_frm_style ' + card.dataset.classname,
+			children
+		});
 	}
 
 	/**
