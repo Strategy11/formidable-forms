@@ -154,7 +154,7 @@ class FrmOnSubmitHelper {
 			return $actions;
 		}
 
-		$actions = FrmFormAction::get_action_for_form( $form_id, FrmOnSubmitAction::$slug );
+		$actions = FrmFormAction::get_action_for_form( $form_id, FrmOnSubmitAction::$slug, array( 'post_status' => 'publish' ) );
 		wp_cache_set( $cache_key, 'frm_actions' );
 		return $actions;
 	}
