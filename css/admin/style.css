@@ -18,15 +18,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	vertical-align: top;
 	box-sizing: border-box;
 	overflow-y: auto;
-	flex: 1;
-}
-
-#frm_style_name {
-	font-size: 18px;
 }
 
 #frm_style_sidebar h3 {
-	font-size: 16px;
+	font-size: var(--text-md);
 	padding-left: 0;
 }
 
@@ -75,7 +70,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-bottom: 15px;
 	width: 100%;
 	padding: 14px;
-	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
+	box-shadow: var(--box-shadow-sm);
 	position: relative;
 }
 
@@ -90,12 +85,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card:hover {
-	box-shadow: 0px 12px 24px rgba(72, 78, 84, 0.2);
+	box-shadow: var(--box-shadow-lg);
 }
 
 .frm-active-style-card:not(.frm-currently-set-style-card) {
 	box-shadow: none;
-	border: 1px solid #4199FD;
+	border: 1px solid var(--primary-500);
 }
 
 .frm-style-card-title-wrapper {
@@ -178,28 +173,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }
 
-.frm_floating_style_button {
-	--floating-button-text-color: #282F36;
-}
-
-.frm_floating_style_button:hover,
-.frm_floating_style_button:active,
-.frm_floating_style_button:focus {
-	--floating-button-text-color: var(--primary-color);
-}
-
 #frm_style_preview .frm_floating_style_button {
-	box-shadow: 0px 8px 24px rgba(40, 47, 54, 0.15);
-	border-radius: 43px;
-	background-color: #fff;
-	color: var(--floating-button-text-color);
-	border: none;
+	box-shadow: var(--box-shadow-xl);
 	position: fixed;
 	bottom: 20px;
 	display: flex;
 	align-items: center;
-	padding: 5px 10px;
-	height: unset;
 	cursor: pointer;
 
 	/*
@@ -214,8 +193,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 #frm_style_preview .frm_floating_style_button svg {
-	color: var(--floating-button-text-color);
-	fill: var(--floating-button-text-color);
 	height: 14px;
 	width: 14px;
 	margin-right: 10px;
@@ -291,21 +268,6 @@ label.default-style-box input[type="checkbox"] {
 	min-width: 200px;
 }
 
-.frm-style-options-menu .dropdown-item a {
-	padding: 5px 10px;
-}
-
-.frm-style-options-menu .dropdown-item svg {
-	color: #484E54;
-	margin-left: 5px;
-	margin-right: 10px;
-}
-
-.frm-style-options-menu .dropdown-item a:hover svg {
-	color: var(--primary-color);
-	fill: currentColor;
-}
-
 /*
 Do not set this for frm_inside_container as it requires a custom line height value.
 Target .frm_primary_label so we avoid other labels like star rating stars.
@@ -338,7 +300,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
 	border: 2px solid #FFFFFF;
-	box-shadow: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
+	box-shadow: var(--box-shadow-sm);
 	border-radius: 22px;
 	height: 28px;
 	width: 28px;
@@ -368,6 +330,8 @@ Time fields use a div instead of a label, so don't target by the primary label b
 
 .frm-button-style-example {
 	background-color: var(--submit-bg-color);
+	border: 1px solid var(--grey-500);
+	border-color: var(--submit-border-color);
 	border-radius: var(--submit-border-radius);
 	width: 60px;
 	height: 16px;
