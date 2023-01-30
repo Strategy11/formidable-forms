@@ -1930,6 +1930,10 @@ h2.frm-h2 + .howto {
 	border-top: 1px solid var(--sidebar-hover);
 }
 
+body.frm-body-with-open-modal {
+	overflow-y: hidden;
+}
+
 #frm_new_form_modal .postbox > div.inside {
 	max-height: 490px;
 	overflow-y: auto;
