@@ -157,6 +157,7 @@ class FrmApplicationTemplate {
 				$application['forPurchase'] = true;
 			}
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
+			$application['requires']   = FrmFormsHelper::get_plan_required( $application );
 			$application['link']       = $application['upgradeUrl'];
 		}
 
