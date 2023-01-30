@@ -141,6 +141,10 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	width: 100% !important;
 }
 
+.frm-block {
+	display: block;
+}
+
 .frm-justify-between {
 	justify-content: space-between;
 }
@@ -389,8 +393,7 @@ td.column-title .frm_actions_dropdown {
 	font-size: var(--text-sm);
 }
 
-/** Override CSS in Views plugin.
- */
+/* Override CSS in Views plugin. */
 .frm-views-editor-body .frm_page_container #frm_top_bar h1 {
 	padding: 0 !important;
 	color: var(--grey-900);
@@ -399,6 +402,25 @@ td.column-title .frm_actions_dropdown {
 
 .post-type-frm_display .frm_top_left {
 	padding-bottom: 0 !important;
+}
+
+#frm_new_view_modal .frm-category-icon .frmsvg {
+	transform: none !important;
+	position: initial;
+}
+
+#frm_new_view_modal .frm-search-input {
+	border-width: 1px;
+}
+
+#frm_new_view_modal input[type=checkbox] + label {
+	display: inline-block; /* Checkboxes need to be moved inside the labels */
+	margin-bottom: 0;
+}
+
+.frm-new-table-view-option.frm-selected-table-view-option {
+	border-radius: var(--small-radius);
+	background: var(--primary-25);
 }
 /** End Temporary View CSS */
 
@@ -424,6 +446,7 @@ a .frmsvg {
 }
 
 .frm_wrap .view-switch a.current:before,
+.frm-white-body a,
 .frm_wrap a,
 .frm_wrap a i {
 	color: var(--primary-color);
@@ -2187,6 +2210,7 @@ body.frm-body-with-open-modal {
 }
 
 .frm-templates-list .frm-inner-circle,
+.frm-category-icon, /* Deprecated */
 .frm-icon-wrapper {
 	background: var(--primary-500);
 	border-radius: var(--small-radius);
