@@ -382,15 +382,38 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param string $opt
+	 * @param mixed  $value
+	 * @return void
+	 */
 	private static function sanitize_field_opt( $opt, &$value ) {
-		if ( is_string( $value ) ) {
-			if ( $opt === 'calc' ) {
-				$value = self::sanitize_calc( $value );
-			} else {
-				$value = FrmAppHelper::kses( $value, 'all' );
-			}
-			$value = trim( $value );
+		if ( ! is_string( $value ) ) {
+			return;
 		}
+
+		/**
+		 * Allow the option to turn off sanitization for a field. This way a custom rule can be used instead.
+		 * Make sure to add custom sanitization using the frm_update_field_options filter as the data will no longer be sanitized.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $should_sanitize
+		 * @param string $opt
+		 */
+		$should_sanitize = apply_filters( 'frm_should_sanitize_field_opt_string', true, $opt );
+
+		if ( ! $should_sanitize ) {
+			return;
+		}
+
+		if ( $opt === 'calc' ) {
+			$value = self::sanitize_calc( $value );
+		} else {
+			$value = FrmAppHelper::kses( $value, 'all' );
+		}
+
+		$value = trim( $value );
 	}
 
 	/**

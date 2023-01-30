@@ -88,6 +88,19 @@ class FrmUnitTest extends WP_UnitTestCase {
 			return;
 		}
 
+		$allow_xml_mime_types_function = function( $mimes ) {
+			$mimes['xml'] = 'application/xml';
+			return $mimes;
+		};
+
+		// Allow XML files in import as we're importing several XML files below.
+		add_filter( 'mime_types', $allow_xml_mime_types_function );
+
+		if ( is_multisite() ) {
+			// Mimes get changed because of add_filter( 'upload_mimes', 'check_upload_mimes' ); in ms-default-filters.php (A WordPress file).
+			add_filter( 'upload_mimes', $allow_xml_mime_types_function, 11 );
+		}
+
 		FrmHooksController::trigger_load_hook( 'load_admin_hooks' );
 		FrmAppController::install();
 		self::do_tables_exist();

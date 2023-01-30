@@ -103,7 +103,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			$site_key          = $frm_settings->pubkey;
-			$recaptcha_options = '" data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
+			$recaptcha_options = ' data-size="' . esc_attr( $captcha_size ) . '" data-theme="' . esc_attr( $this->field['captcha_theme'] ) . '"';
 		} else {
 			$site_key = $frm_settings->hcaptcha_pubkey;
 		}
