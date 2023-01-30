@@ -107,9 +107,6 @@ a.frm_icon_font:hover{
 .frm_copy_icon:before {
 	content: "\f0c5";
 }
-.frm_clone_solid_icon:before {
-	content: "\f24e";
-}
 .frm_clone_icon:before {
 	content: "\f24d";
 }

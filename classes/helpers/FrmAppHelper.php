@@ -931,6 +931,16 @@ class FrmAppHelper {
 		$html_atts = self::array_to_html_params( $atts );
 
 		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+
+		// Replace icons that have been removed.
+		$deprecated = array(
+			'frm_clone_solid_icon' => 'frm_clone_icon',
+		);
+		if ( isset( $deprecated[ $icon ] ) ) {
+			$icon = $deprecated[ $icon ];
+			$class = str_replace( $icon, $deprecated[ $icon ], $class );
+		}
+
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
@@ -1097,9 +1107,9 @@ class FrmAppHelper {
 	 * @since 6.0
 	 * @return void
 	 */
-	public static function import_link() {
+	public static function import_link( $type = 'secondary' ) {
 		?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-secondary frm_animate_bg">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
 			<?php esc_html_e( 'Import', 'formidable' ); ?>
 		</a>
 		<?php
@@ -2866,7 +2876,6 @@ class FrmAppHelper {
 				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
 				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
 				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-				'caution'           => __( 'Heads up', 'formidable' ),
 				'confirm'           => __( 'Are you sure?', 'formidable' ),
 				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
