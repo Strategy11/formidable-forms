@@ -657,27 +657,28 @@
 		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
 		addIconToOption( renameOption, 'frm_rename_icon' );
 
-		let styleName;
+		let titleTarget;
 
+		// Depending on the page we're pulling the text from an existing element on the page.
 		if ( isListPage ) {
-			const card         = getCardByStyleId( styleId );
-			const titleElement = card.querySelector( '.frm-style-card-title' );
-			styleName = titleElement.textContent;
+			titleTarget = getCardByStyleId( styleId ).querySelector( '.frm-style-card-title' );
 		} else {
-			const titleSpan = document.getElementById( 'frm_style_name' );
-			styleName = titleSpan.textContent;
+			titleTarget = document.getElementById( 'frm_style_name' );
 		}
 
 		onClickPreventDefault(
 			renameOption,
-			() => stylerModal(
-				'frm_rename_style_modal',
-				{
-					title: __( 'Rename style', 'formidable-pro' ),
-					content: getStyleInputNameModalContent( 'rename', styleName ),
-					footer: getRenameStyleModalFooter( styleId )
-				}
-			)
+			() => {
+				const styleName = titleTarget.textContent;
+				stylerModal(
+					'frm_rename_style_modal',
+					{
+						title: __( 'Rename style', 'formidable-pro' ),
+						content: getStyleInputNameModalContent( 'rename', styleName ),
+						footer: getRenameStyleModalFooter( styleId )
+					}
+				);
+			}
 		);
 
 		return renameOption;
