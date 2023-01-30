@@ -449,22 +449,21 @@
 		button.className = 'frm_full_opacity';
 		button.value = __( 'Submit', 'formidable' );
 
-		const children = [
-			div({
-				className: 'frm_form_field form-field',
-				children: [
-					tag( 'label', { className: 'frm_primary_label', text: __( 'Text field', 'formidable' ) }),
-					input
-				]
-			}),
-			div({
-				className: 'frm_submit',
-				child: button
-			})
-		];
 		return div({
 			className: 'frm-style-sample with_frm_style ' + card.dataset.classname,
-			children
+			children: [
+				div({
+					className: 'frm_form_field form-field',
+					children: [
+						tag( 'label', { className: 'frm_primary_label', text: __( 'Text field', 'formidable' ) }),
+						input
+					]
+				}),
+				div({
+					className: 'frm_submit',
+					child: button
+				})
+			]
 		});
 	}
 
