@@ -108,7 +108,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	box-shadow: var(--box-shadow-lg);
 }
 
-.frm-active-style-card:not(.frm-currently-set-style-card) {
+.frm-active-style-card {
 	box-shadow: none;
 	border: 1px solid var(--primary-500);
 }
