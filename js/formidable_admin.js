@@ -7812,19 +7812,13 @@ function frmAdminBuildJS() {
 
 	function onActionLoaded( event ) {
 		const settings = event.target.closest( '.frm_form_action_settings' );
-		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
-			onEmailActionLoaded( settings );
-		}
-	}
-
-	function onEmailActionLoaded( settings ) {
-		const wysiwyg = settings.querySelector( '.wp-editor-area' );
+		const wysiwyg  = settings.querySelector( '.wp-editor-area' );
 		if ( wysiwyg ) {
 			frmDom.wysiwyg.init(
 				wysiwyg,
 				{ height: 160, addFocusEvents: true }
 			);
-		};
+		}
 	}
 
 	/* Global settings page */
