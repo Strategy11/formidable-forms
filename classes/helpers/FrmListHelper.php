@@ -944,7 +944,7 @@ class FrmListHelper {
 				$class[] = 'num';
 			}
 
-			if ( $column_key === $primary ) {
+			if ( $column_key === $primary || $column_key === 'name' ) {
 				$class[] = 'column-primary';
 			}
 

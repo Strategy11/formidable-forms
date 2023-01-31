@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				/* translators: %s: The page number */
 				printf( esc_html__( 'Page %s', 'formidable' ), '<span class="frm-page-num">1</span>' );
 				?>
-				<i class="frm_icon_font frm_arrowdown6_icon"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</div>
 		</div>
 	</div>

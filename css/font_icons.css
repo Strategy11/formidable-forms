@@ -16,7 +16,6 @@
 	font-weight: 600;
 }
 
-
 .frmfont,
 .frm_icon_font,
 .frm_dashicon_font{
@@ -85,9 +84,6 @@ a.frm_icon_font:hover{
 }
 .frm_delete_icon:before {
 	content: "\e610" !important;
-}
-.frm_delete_solid_icon:before {
-	content: "\e900";
 }
 .frm_move_icon:before {
 	content: "\e61a";
@@ -569,26 +565,14 @@ a.frm_icon_font:hover{
 .frm_lock_open_icon:before {
 	content: "\e957";
 }
-.frm_lock_solid_icon:before {
-	content: "\e958";
-}
 .frm_lock_icon:before {
 	content: "\e959";
-}
-.frm_magic_wand_icon:before {
-	content: "\e997";
 }
 .frm_dollar_sign_icon:before {
 	content: "\e91c";
 }
 .frm_percent_icon:before {
 	content: "\e939";
-}
-.frm_notification_solid_icon:before {
-	content: "\e964";
-}
-.frm_notification_icon:before {
-	content: "\e965";
 }
 .frm_external_link_icon:before {
 	content: "\e966";
@@ -599,9 +583,6 @@ a.frm_icon_font:hover{
 .frm_pageview_icon:before {
 	content: "\e96b";
 }
-.frm_settings_solid_icon:before {
-	content: "\e979";
-}
 .frm_settings_icon:before {
 	content: "\e97a";
 }
@@ -611,41 +592,14 @@ a.frm_icon_font:hover{
 .frm_support_icon:before {
 	content: "\f1cd";
 }
-.frm_text_solid_icon:before {
-	content: "\e98c";
-}
 .frm_text_icon:before {
 	content: "\e98d";
 }
 .frm_text2_icon:before {
 	content: "\f031";
 }
-.frm_text3_icon:before {
-	content: "\e98e";
-}
-.frm_unfold_less_icon:before {
-	content: "\e993";
-}
-.frm_unfold_more_icon:before {
-	content: "\e994";
-}
-.frm_work_solid_icon:before {
-	content: "\e999";
-}
-.frm_work_icon:before {
-	content: "\e99e";
-}
 .frm_white_label_icon:before {
 	content: "\e91d" !important;
-}
-.frm_zoom_out_icon:before {
-	content: "\e99f";
-}
-.frm_maximize_icon:before {
-	content: "\e920";
-}
-.frm_minimize_icon:before {
-	content: "\e93a";
 }
 .frm_authorize_icon:before {
 	content: "\e903";

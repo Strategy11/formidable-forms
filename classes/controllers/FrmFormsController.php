@@ -842,8 +842,8 @@ class FrmFormsController {
 	 */
 	public static function get_columns( $columns ) {
 		$columns['cb']         = '<input type="checkbox" />';
-		$columns['id']         = 'ID';
 		$columns['name']       = __( 'Form Title', 'formidable' );
+		$columns['id']         = 'ID';
 		$columns['entries']    = __( 'Entries', 'formidable' );
 		$columns['form_key']   = __( 'Key', 'formidable' );
 		$columns['style']      = __( 'Style', 'formidable' );

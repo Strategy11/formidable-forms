@@ -232,6 +232,10 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class .= ' frm_hidden';
 			}
 
+			if ( $column_name === 'name' ) {
+				$class .= ' column-primary';
+			}
+
 			$class        = 'class="' . esc_attr( $class ) . '"';
 			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
 			$attributes   = $class . $style . $data_colname;
@@ -308,8 +312,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$href  = FrmStylesHelper::get_edit_url( $style, $form->id );
-		$link  = '<a href="' . esc_url( $href ) . '">' . esc_html( $style->post_title ) . '</a>';
-		return '<div class="frm-grey-tag">' . $link . '</div>';
+		return '<a href="' . esc_url( $href ) . '">' . esc_html( $style->post_title ) . '</a>';
 	}
 
 	/**
