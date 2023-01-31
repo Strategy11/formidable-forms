@@ -65,8 +65,9 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
-		$params    = $this->get_params_for_style_card( $style, $hidden );
-		$is_locked = $this->locked;
+		$params          = $this->get_params_for_style_card( $style, $hidden );
+		$is_locked       = $this->locked;
+		$is_active_style = $style->ID === $this->active_style->ID;
 		include $this->view_file_path;
 	}
 
@@ -79,10 +80,7 @@ class FrmStylesCardHelper {
 	 * @param bool             $hidden
 	 * @return array
 	 */
-	private function get_params_for_style_card( $style, $hidden = false ) {
-		$is_default_style = $style->ID === $this->default_style->ID;
-		$is_active_style  = $style->ID === $this->active_style->ID;
-	
+	private function get_params_for_style_card( $style, $hidden = false ) {	
 		if ( ! empty( $style->post_content['position'] ) ) {
 			$label_position = $style->post_content['position'];
 		} else {
@@ -101,6 +99,7 @@ class FrmStylesCardHelper {
 			'data-label-position' => $label_position,
 		);
 
+		$is_active_style = $style->ID === $this->active_style->ID;
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
 		}

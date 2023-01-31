@@ -8,7 +8,7 @@
 
 	const { __ }                                                 = wp.i18n;
 	const state                                                  = {
-		showingSampleForm: false, // boolean
+		showingSampleForm: document.getElementById( 'frm_active_style_form' ).classList.contains( 'frm_hidden' ), // boolean
 		unsavedChanges: false, // boolean
 		autoId: 0, // Number
 		// Track the value of the selected style ID on page (on the list page).
@@ -285,6 +285,11 @@
 			handleUpdateClick();
 			return;
 		}
+
+		if ( target.classList.contains( 'frm-edit-style' ) || null !== target.closest( '.frm-edit-style' ) || 'frm_edit_style' === target.id ) {
+			modifyStylerUrl( target );
+			return;
+		}
 	}
 
 	/**
@@ -556,9 +561,7 @@
 	 */
 	function toggleSampleForm() {
 		state.showingSampleForm = ! state.showingSampleForm;
-
 		document.getElementById( 'frm_active_style_form' ).classList.toggle( 'frm_hidden', state.showingSampleForm );
-		document.getElementById( 'frm_sample_form' ).classList.toggle( 'frm_hidden', ! state.showingSampleForm );
 		document.getElementById( 'frm_toggle_sample_form' ).querySelector( 'span' ).textContent = state.showingSampleForm ? __( 'View my form', 'formidable' ) : __( 'View sample form', 'formidable' );
 	}
 
@@ -577,6 +580,23 @@
 
 		// Submit the "list" view (assign a style to a form).
 		document.getElementById( 'frm_style_list_form' ).submit();
+	}
+
+	/**
+	 * Maybe modify an anchor's URL on click.
+	 * If the sample form toggle is active, we want to pass that as a query parameter so we know to default to the sample form on load.
+	 *
+	 * @param {HTMLElement} clickTarget
+	 * @returns 
+	 */
+	function modifyStylerUrl( clickTarget ) {
+		if ( ! state.showingSampleForm ) {
+			// Don't change the URL if it is not a sample form.
+			return;
+		}
+
+		const anchor = clickTarget.hasAttribute( 'href' ) ? clickTarget : clickTarget.querySelector( 'a[href]' );
+		anchor.setAttribute( 'href', anchor.getAttribute( 'href' ) + '&sample=1' );
 	}
 
 	/**

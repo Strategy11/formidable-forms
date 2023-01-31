@@ -46,8 +46,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	border-left: 1px solid var(--sidebar-hover);
 }
 
+#frm_active_style_form:not(.frm_hidden) ~ #frm_sample_form {
+	display: none;
+}
+
 #frm_active_style_form:not(.frm_hidden),
-#frm_sample_form:not(.frm_hidden) {
+#frm_sample_form {
 	/* Without this a small form with a max-width of 480px for example doesn't get centered in the preview space. */
 	display: flex;
 }
