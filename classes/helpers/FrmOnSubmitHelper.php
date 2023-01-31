@@ -28,7 +28,7 @@ class FrmOnSubmitHelper {
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
 		?>
-		<div class="frm_form_field">
+		<div class="frm_form_field frm_has_shortcodes">
 			<label for="<?php echo esc_attr( $id_attr ); ?>" class="screen-reader-text">
 				<?php esc_html_e( 'Message on submit', 'formidable' ); ?>
 			</label>
@@ -40,6 +40,7 @@ class FrmOnSubmitHelper {
 				array(
 					'textarea_name' => $args['action_control']->get_field_name( 'success_msg' ),
 					'textarea_rows' => 4,
+					'editor_class'  => 'frm_not_email_message',
 				)
 			);
 			?>
