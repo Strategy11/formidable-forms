@@ -102,7 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</label>
 		</div>
 
-		<div class="frm_grid_container frm-fields frm_mx_sm">
+		<div class="frm_grid_container frm-fields frm-mx-sm">
 			<div class="frm1 frm_form_field" style="line-height:38px;">
 				<label for="frm-id-condition">
 					<?php esc_html_e( 'IF', 'formidable' ); ?>
@@ -161,10 +161,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input id="frm-text-condition" type="text" value="" placeholder="<?php esc_attr_e( 'A blank value', 'formidable' ); ?>" class="frm-build-logic" />
 			</div>
 		</div>
-			<p class="frmcenter frm_mb_0">
+			<p class="frmcenter frm-mb-0">
 				<?php esc_html_e( 'Click to Insert', 'formidable' ); ?>:
 			</p>
-			<ul class="frm_code_list frm-full-hover frmcenter frm_m_0">
+			<ul class="frm_code_list frm-full-hover frmcenter frm-m-0">
 				<li>
 					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
 						[if x equals=""][/if x]

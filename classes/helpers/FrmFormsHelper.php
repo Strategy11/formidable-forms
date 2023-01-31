@@ -602,17 +602,17 @@ BEFORE_HTML;
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code"
 				data-code="<?php echo esc_attr( $args['id'] ); ?>">
-				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
 				<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
 				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
+				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden"
 				data-code="<?php echo esc_attr( $args['key'] ); ?>">
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
 				<?php if ( isset( $field['icon'] ) ) { ?>
 					<?php FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) ); ?>
 				<?php } ?>
 				<?php echo esc_attr( FrmAppHelper::truncate( $args['name'], 60 ) ); ?>
+				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
@@ -638,10 +638,10 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
 				<?php echo $has_tooltip ? 'title="' . esc_attr( $args['title'] ) . '"' : ''; ?>
 				data-code="<?php echo esc_attr( $args['code'] ); ?>">
+				<?php echo esc_attr( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
 				<span>
 					[<?php echo esc_attr( FrmAppHelper::truncate( $args['code'], 10 ) ); ?>]
 				</span>
-				<?php echo esc_attr( FrmAppHelper::truncate( $args['label'], 60 ) ); ?>
 			</a>
 		</li>
 		<?php

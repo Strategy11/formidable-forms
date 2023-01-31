@@ -296,7 +296,6 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
-/* TODO prefix these, wrap them in the style card class */
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
 	border: 2px solid #FFFFFF;
@@ -319,6 +318,16 @@ Time fields use a div instead of a label, so don't target by the primary label b
 .frm-style-circle3 {
 	right: 16px;
 	z-index: 1;
+}
+
+/* Remove link styling from the back icon on the edit page. */
+#frm_styling_form p > a {
+	color: var(--grey-500);
+}
+
+#frm_styling_form p > a svg {
+	position: relative;
+	bottom: 2px;
 }
 
 .frm-style-card-separator {
@@ -394,6 +403,30 @@ Time fields use a div instead of a label, so don't target by the primary label b
 
 #frm_style_template_modal .frm_warning_style a:focus {
 	box-shadow: none;
+}
+
+#frm_style_template_modal .frm-style-sample input {
+	height: unset !important;
+	margin: 0;
+	max-width: 100%;
+}
+
+#frm_style_template_modal .frm-style-sample {
+	width: 260px;
+	margin: 0 auto 40px;
+}
+
+/* Avoid disabled button styles overwriting the sample's styles */
+#frm_style_template_modal .frm-style-sample input[disabled] {
+	background-color: var(--submit-bg-color) !important;
+	color: var(--submit-text-color) !important;
+	border-color: var(--submit-border-color) !important;
+	padding: 10px 20px;
+	font-size: 15px;
+}
+
+#frm_style_template_modal .frm-style-sample .frm_form_field {
+	margin-bottom: 16px !important;
 }
 
 @media only screen and (max-width: 1200px) {

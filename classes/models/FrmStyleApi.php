@@ -41,6 +41,7 @@ class FrmStyleApi extends FrmFormApi {
 		$lines = $api_info[28067373];
 		$big   = $api_info[28067379];
 
+		// TODO remove these, once they're actually in the API data.
 		$lines['settings'] = $this->get_placeholder_lines_style();
 		$big['settings']   = $this->get_placeholder_big_style();
 

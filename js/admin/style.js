@@ -426,7 +426,45 @@
 			})
 		);
 
+		children.push( getStyleTemplateModalSample( card ) );
+
 		return div({ children });
+	}
+
+	/**
+	 * Get a small example form for the upsell modal.
+	 * This just includes a small text field and submit button.
+	 *
+	 * @param {HTMLElement} card
+	 * @returns {HTMLElement}
+	 */
+	function getStyleTemplateModalSample( card ) {
+		const input = tag( 'input' );
+		input.setAttribute( 'type', 'text' );
+		input.value = __( 'This is sample text', 'formidable' );
+
+		const button = tag( 'input' );
+		button.setAttribute( 'type', 'submit' );
+		button.disabled = true;
+		button.className = 'frm_full_opacity';
+		button.value = __( 'Submit', 'formidable' );
+
+		return div({
+			className: 'frm-style-sample with_frm_style ' + card.dataset.classname,
+			children: [
+				div({
+					className: 'frm_form_field form-field',
+					children: [
+						tag( 'label', { className: 'frm_primary_label', text: __( 'Text field', 'formidable' ) }),
+						input
+					]
+				}),
+				div({
+					className: 'frm_submit',
+					child: button
+				})
+			]
+		});
 	}
 
 	/**
@@ -637,7 +675,7 @@
 
 		const dropdownMenu  = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu dropdown-menu-right frm-style-options-menu frm_p_1',
+			className: 'frm-dropdown-menu dropdown-menu-right frm-style-options-menu frm-p-1',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
 		});
 
@@ -657,27 +695,28 @@
 		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
 		addIconToOption( renameOption, 'frm_rename_icon' );
 
-		let styleName;
+		let titleTarget;
 
+		// Depending on the page we're pulling the text from an existing element on the page.
 		if ( isListPage ) {
-			const card         = getCardByStyleId( styleId );
-			const titleElement = card.querySelector( '.frm-style-card-title' );
-			styleName = titleElement.textContent;
+			titleTarget = getCardByStyleId( styleId ).querySelector( '.frm-style-card-title' );
 		} else {
-			const titleSpan = document.getElementById( 'frm_style_name' );
-			styleName = titleSpan.textContent;
+			titleTarget = document.getElementById( 'frm_style_name' );
 		}
 
 		onClickPreventDefault(
 			renameOption,
-			() => stylerModal(
-				'frm_rename_style_modal',
-				{
-					title: __( 'Rename style', 'formidable-pro' ),
-					content: getStyleInputNameModalContent( 'rename', styleName ),
-					footer: getRenameStyleModalFooter( styleId )
-				}
-			)
+			() => {
+				const styleName = titleTarget.textContent;
+				stylerModal(
+					'frm_rename_style_modal',
+					{
+						title: __( 'Rename style', 'formidable-pro' ),
+						content: getStyleInputNameModalContent( 'rename', styleName ),
+						footer: getRenameStyleModalFooter( styleId )
+					}
+				);
+			}
 		);
 
 		return renameOption;
