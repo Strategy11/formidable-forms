@@ -2489,9 +2489,9 @@ body.frm-body-with-open-modal {
 
 .frm-locked-template h3 .frmsvg {
 	height: 12px;
-	width: 14px;
-	vertical-align: top;
-	padding-top: 6px;
+	width: 12px;
+	vertical-align: baseline;
+	color: var(--grey-500);
 }
 
 #frm_new_form_modal .frm-use-this-template {
