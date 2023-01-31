@@ -447,10 +447,9 @@ DEFAULT_HTML;
 	 */
 	public function show_default_value_field( $field, $default_name, $default_value ) {
 		if ( $field['type'] === 'rte' ) {
-			if ( ! FrmAppHelper::meets_min_pro_version( '5.5.7' ) ) {
-				include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
-				return;
-			}
+			// This function is overwritten in Pro. This check is for backwards compatibility.
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
+			return;
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
