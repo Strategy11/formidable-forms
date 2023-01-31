@@ -79,7 +79,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	background-color: var(--preview-background-color);
 }
 
-.frm-style-card .frm-dropdown-toggle svg {
+.frm-style-card .frm-dropdown-toggle svg,
+#frm_styling_form .frm-dropdown-toggle svg {
 	color: var(--grey-500);
 }
 
