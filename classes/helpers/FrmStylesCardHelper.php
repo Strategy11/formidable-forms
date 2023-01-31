@@ -170,7 +170,7 @@ class FrmStylesCardHelper {
 						'content' => 'upgrade',
 						'medium'  => 'styler-card',
 					),
-					'/style-templates/' . $style['slug'],
+					'/style-templates/' . $style['slug']
 				);
 				$params['data-requires']    = FrmFormsHelper::get_plan_required( $style );
 				return $params;
