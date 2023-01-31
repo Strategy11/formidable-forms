@@ -903,6 +903,13 @@ class FrmStylesController {
 		wp_die();
 	}
 
+	/**
+	 * Handle routing for the frm_change_styling AJAX action.
+	 * This doesn't actually change styling. It just handles the events when someone changes a style.
+	 * It responds with the new CSS required for the updated styler preview in the edit page.
+	 *
+	 * @return void
+	 */
 	public static function change_styling() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
