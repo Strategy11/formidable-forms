@@ -1188,6 +1188,7 @@ p.frm_has_shortcodes {
 	box-sizing: border-box;
 	font-weight: 500;
 	margin-bottom: 0;
+	display: inline-block;
 }
 
 .frm-button-tertiary {
@@ -1283,6 +1284,7 @@ p.frm_has_shortcodes {
 .wp-core-ui.frm-white-body .button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
+.frm-white-body .frm-button-secondary,
 .frm-button-secondary {
 	color: var(--grey-800);
 	border-color: var(--grey-300);
@@ -1395,15 +1397,12 @@ input.frm_insert_in_template {
 }
 
 .frm-review-notice a {
-	margin: 5px;
+	margin: 0 var(--gap-xs) !important;
 }
 
 .frm-review-notice .frm-button-primary,
 .frm-review-notice .frm-button-secondary {
 	min-width: 100px;
-	display: inline-block;
-	text-align: center;
-	padding: 2px 10px;
 }
 
 .frm-review-notice p > span {
@@ -4828,14 +4827,14 @@ label.frm-example-icon {
 .frm_inbox_card {
 	display: grid;
 	grid-template-columns: 72px 1fr;
-	grid-gap: var(--gap-sm);
+	grid-gap: var(--gap-xs);
 	border-bottom: 1px solid var(--grey-300);
-	padding: 25px;
+	padding: var(--gap-md);
 }
 
 .frm_inbox_card_icon {
 	grid-row: span 3 / span 3;
-	padding-top: 20px;
+	padding-top: var(--gap-xs);
 	text-align: center
 }
 
@@ -4856,9 +4855,6 @@ label.frm-example-icon {
 	text-transform: none;
 	margin: 0;
 	padding: 0;
-	font-weight: 600;
-	color: var(--medium-grey);
-	font-size: var(--text-md);
 }
 
 .frm_inbox_date {
