@@ -2914,6 +2914,10 @@ h1 .fa-caret-down {
 	min-width: 160px !important;
 }
 
+.frm-field-action-icons .frm-dropdown-toggle svg {
+	color: #9EA9B8;
+}
+
 .multiselect-container.frm-dropdown-menu,
 #search-submit .frm-dropdown-menu {
 	min-width: 200px !important;

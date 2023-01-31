@@ -65,18 +65,8 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
-		$is_default_style = $style->ID === $this->default_style->ID;
-		$is_active_style  = $style->ID === $this->active_style->ID;
-		$is_locked        = $this->locked;
-		$params           = $this->get_params_for_style_card( $style );
-
-		if ( $is_active_style ) {
-			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
-		}
-		if ( $hidden ) {
-			$params['class'] .= ' frm_hidden';
-		}
-
+		$params    = $this->get_params_for_style_card( $style, $hidden );
+		$is_locked = $this->locked;
 		include $this->view_file_path;
 	}
 
@@ -86,9 +76,13 @@ class FrmStylesCardHelper {
 	 * @since x.x
 	 *
 	 * @param stdClass|WP_Post $style
+	 * @param bool             $hidden
 	 * @return array
 	 */
-	private function get_params_for_style_card( $style ) {
+	private function get_params_for_style_card( $style, $hidden = false ) {
+		$is_default_style = $style->ID === $this->default_style->ID;
+		$is_active_style  = $style->ID === $this->active_style->ID;
+	
 		if ( ! empty( $style->post_content['position'] ) ) {
 			$label_position = $style->post_content['position'];
 		} else {
@@ -107,6 +101,16 @@ class FrmStylesCardHelper {
 			'data-label-position' => $label_position,
 		);
 
+		if ( $is_active_style ) {
+			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
+		}
+		if ( $hidden ) {
+			$params['class'] .= ' frm_hidden';
+		}
+		if ( $this->has_dark_background( $style ) ) {
+			$params['class'] .= ' frm-dark-style';
+		}
+
 		/**
 		 * Filter params so Pro can add additional params, like data-delete-url.
 		 *
@@ -119,6 +123,43 @@ class FrmStylesCardHelper {
 		 */
 		return apply_filters( 'frm_style_card_params', $params, compact( 'style' ) );
 	}
+
+	/**
+	 * @param WP_Post|stdClass $style
+	 * @return bool
+	 */
+	public function has_dark_background( $style ) {
+		$key = 'fieldset_bg_color';
+
+		if ( empty( $style->post_content[ $key ] ) ) {
+			return false;
+		}
+
+		$color = $style->post_content[ $key ];
+		if ( 0 === strpos( $color, 'rgb' ) ) {
+			$color = $this->rgb_to_hex( $color );
+		}
+
+		$c_r        = hexdec( substr( $color, 0, 2 ) );
+		$c_g        = hexdec( substr( $color, 2, 2 ) );
+		$c_b        = hexdec( substr( $color, 4, 2 ) );
+		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+
+		return $brightness < 155;
+	}
+
+	/**
+	 * @var string rgba
+	 * @return string
+	 */
+	private function rgb_to_hex( $rgba ) {
+        if ( strpos( $rgba, '#' ) === 0 ) {
+            return $rgba;
+        }
+
+        preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
+        return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
+    }
 
 	/**
 	 * @since x.x
@@ -252,7 +293,7 @@ class FrmStylesCardHelper {
 	 */
 	private static function get_style_keys_for_card() {
 		return array(
-			'fieldset_bg_color',
+			//'fieldset_bg_color',
 			'field_border_width',
 			'field_border_style',
 			'border_color',
@@ -261,7 +302,7 @@ class FrmStylesCardHelper {
 			'submit_border_width',
 			'submit_border_radius',
 			'submit_text_color',
-			'submit_weight',
+			//'submit_weight',
 			'submit_width',
 			'label_color',
 			'text_color',

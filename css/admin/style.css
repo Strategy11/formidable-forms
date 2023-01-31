@@ -72,6 +72,17 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	padding: 14px;
 	box-shadow: var(--box-shadow-sm);
 	position: relative;
+	background-color: var(--preview-background-color);
+}
+
+.frm-style-card .frm-dropdown-toggle svg {
+	color: var(--grey-500);
+}
+
+.frm-style-card.frm-dark-style .frm-style-card-title,
+.frm-style-card.frm-dark-style .frm-style-card-title-wrapper svg,
+.frm-style-card.frm-dark-style .frm-dropdown-toggle svg {
+	color: #fff;
 }
 
 .frm-style-card > div:first-child {
@@ -98,7 +109,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card-title-wrapper > svg {
-	fill: var(--primary-color);
 	margin-right: 5px;
 }
 
@@ -111,7 +121,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 .frm-style-card-preview {
 	padding-top: 10px;
 	pointer-events: none;
-	background-color: var(--preview-background-color);
 	border-radius: 6px 6px 0 0;
 	display: flex;
 	flex-direction: row;
