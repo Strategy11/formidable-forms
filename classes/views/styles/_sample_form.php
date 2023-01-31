@@ -80,7 +80,7 @@ $pos_class = 'frm_' . ( $style->post_content['position'] == 'none' ? 'top' : ( $
 					?>
 
 					<div class="frm_submit">
-						<input type="submit" class="frm_full_opacity" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
+						<input type="submit" class="frm-opacity-100" value="<?php esc_attr_e( 'Submit', 'formidable' ); ?>" />
 					</div>
 
 					<div class="clear"></div>
