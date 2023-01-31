@@ -83,6 +83,11 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	color: var(--grey-500);
 }
 
+.frm-style-card.frm-currently-set-style-card .frm-style-card-title-wrapper svg {
+	/* The checkmark circle should be blue. */
+	color: var(--primary-500);
+}
+
 .frm-style-card.frm-dark-style .frm-style-card-title,
 .frm-style-card.frm-dark-style .frm-style-card-title-wrapper svg,
 .frm-style-card.frm-dark-style .frm-dropdown-toggle svg {
