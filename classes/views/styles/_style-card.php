@@ -40,6 +40,8 @@ $include_info = $is_active_style;
 				$style->post_content['submit_bg_color'],
 			);
 			foreach( $colors as $index => $color ) {
+				$brightness = FrmStylesHelper::get_color_brightness( $color );
+
 				if ( 0 !== strpos( $color, 'rgb' ) ) {
 					$color = '#' . $color;
 				}
@@ -48,7 +50,11 @@ $include_info = $is_active_style;
 					'class' => 'frm-style-circle' . absint( $index + 1 ),
 					'style' => 'background-color: ' . $color,
 				);
-				?>
+
+				if ( 255 === $brightness ) {
+					$circle_params['class'] .= ' frm-darker-circle-border';
+				}
+			?>
 				<div <?php FrmAppHelper::array_to_html_params( $circle_params, true ); ?>></div>
 				<?php
 			}

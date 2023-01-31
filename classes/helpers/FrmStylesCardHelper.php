@@ -128,38 +128,17 @@ class FrmStylesCardHelper {
 	 * @param WP_Post|stdClass $style
 	 * @return bool
 	 */
-	public function has_dark_background( $style ) {
+	private function has_dark_background( $style ) {
 		$key = 'fieldset_bg_color';
 
 		if ( empty( $style->post_content[ $key ] ) ) {
 			return false;
 		}
 
-		$color = $style->post_content[ $key ];
-		if ( 0 === strpos( $color, 'rgb' ) ) {
-			$color = $this->rgb_to_hex( $color );
-		}
-
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
-		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
-
+		$color      = $style->post_content[ $key ];
+		$brightness = FrmStylesHelper::get_color_brightness( $color );
 		return $brightness < 155;
 	}
-
-	/**
-	 * @var string rgba
-	 * @return string
-	 */
-	private function rgb_to_hex( $rgba ) {
-        if ( strpos( $rgba, '#' ) === 0 ) {
-            return $rgba;
-        }
-
-        preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
-        return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
-    }
 
 	/**
 	 * @since x.x

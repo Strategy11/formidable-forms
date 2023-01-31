@@ -315,6 +315,10 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	box-sizing: border-box;
 }
 
+.frm-darker-circle-border {
+	border-color: var(--grey-300);
+}
+
 .frm-style-circle1 {
 	z-index: 3;
 }
