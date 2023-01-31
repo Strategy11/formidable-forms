@@ -414,7 +414,7 @@
 				children: [
 					span(
 						/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
-						__( 'Access to this application requires the %s plan.', 'formidable' )
+						__( 'Access to this style requires the %s plan.', 'formidable' )
 							.replace( '%s', card.dataset.requires )
 					),
 					a({
