@@ -25,6 +25,8 @@ class FrmOnSubmitAction extends FrmFormAction {
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 
+		$this->maybe_save_edit_trigger( $action_ops );
+
 		parent::__construct( self::$slug, self::get_name(), $action_ops );
 	}
 
@@ -44,5 +46,19 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'success_url'     => '',
 			'success_page_id' => '',
 		);
+	}
+
+	/**
+	 * Add a workaround in case Pro hasn't been updated. We don't want to
+	 * lose the trigger and have edit messages start showing on create.
+	 *
+	 * @param array $action_ops The action setup details.
+	 *
+	 * @return void
+	 */
+	protected function maybe_save_edit_trigger( &$action_ops ) {
+		if ( $action_ops['event'] === array( 'create' ) && FrmAppHelper::pro_is_installed() ) {
+			$action_ops['event'][] = 'update';
+		}
 	}
 }
