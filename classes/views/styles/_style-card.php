@@ -35,11 +35,12 @@ $include_info = $is_active_style;
 		<div class="frm-style-card-preview">
 			<?php
 			$colors = array(
-				$style->post_content['label_color'],
-				$style->post_content['text_color'],
-				$style->post_content['submit_bg_color'],
+				'label-color'     => $style->post_content['label_color'],
+				'text-color'      => $style->post_content['text_color'],
+				'submit-bg-color' => $style->post_content['submit_bg_color'],
 			);
-			foreach( $colors as $index => $color ) {
+			$index  = 0;
+			foreach( $colors as $css_var_name => $color ) {
 				$brightness = FrmStylesHelper::get_color_brightness( $color );
 
 				if ( 0 !== strpos( $color, 'rgb' ) ) {
@@ -48,15 +49,15 @@ $include_info = $is_active_style;
 
 				$circle_params = array(
 					'class' => 'frm-style-circle' . absint( $index + 1 ),
-					'style' => 'background-color: ' . $color,
+					'style' => 'background-color: var(--' . $css_var_name . ')',
 				);
-
 				if ( 255 === $brightness ) {
 					$circle_params['class'] .= ' frm-darker-circle-border';
 				}
 			?>
 				<div <?php FrmAppHelper::array_to_html_params( $circle_params, true ); ?>></div>
 				<?php
+				++$index;
 			}
 			?>
 			<div class="frm-style-card-separator"></div>
