@@ -1626,6 +1626,7 @@ a.frm_hidden,
 .frm-fields td > div > label,
 .frm_form_field > label:first-child,
 .frm-fields p > label,
+.frm_on_submit_type > label,
 .post-type-frm_display .frm_form_field > label,
 #new_fields .frm_primary_label,
 #frm_form_editor_container .frm_primary_label {
