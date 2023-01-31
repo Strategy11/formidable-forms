@@ -91,7 +91,7 @@ class FrmStylesCardHelper {
 
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
-			'class'               => 'frm-style-card',
+			'class'               => 'frm-style-card frm-transition-ease',
 			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,

@@ -451,7 +451,7 @@
 		const button = tag( 'input' );
 		button.setAttribute( 'type', 'submit' );
 		button.disabled = true;
-		button.className = 'frm_full_opacity';
+		button.className = 'frm-opacity-100';
 		button.value = __( 'Submit', 'formidable' );
 
 		return div({
@@ -681,7 +681,7 @@
 		const resetOption = a({
 			text: __( 'Reset to Defaults', 'formidable' )
 		});
-		addIconToOption( resetOption, 'frm_reset_icon' );
+		addIconToOption( resetOption, 'frm_repeater_icon' );
 		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
 		dropdownMenuOptions.push(
@@ -713,7 +713,7 @@
 	 */
 	function getRenameOption( styleId ) {
 		const renameOption = a( __( 'Rename', 'formidable-pro' ) );
-		addIconToOption( renameOption, 'frm_rename_icon' );
+		addIconToOption( renameOption, 'frm_signature_icon' );
 
 		let titleTarget;
 

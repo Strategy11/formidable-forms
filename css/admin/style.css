@@ -182,7 +182,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-right: 5px;
 }
 
-.frm_button_submit {
+#frm_style_preview .frm_button_submit {
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }
 
@@ -203,12 +203,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 #frm_style_preview .frm_floating_style_button.frm_hidden {
 	display: none;
-}
-
-#frm_style_preview .frm_floating_style_button svg {
-	height: 14px;
-	width: 14px;
-	margin-right: 10px;
 }
 
 #frm_edit_style {
