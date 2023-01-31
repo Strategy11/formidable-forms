@@ -2260,6 +2260,9 @@ body.frm-body-with-open-modal {
 .frm-templates-list li > div:not(.frm-hover-icons) {
 	display: flex;
 	width: 100%;
+}
+
+.frm-templates-list li .frm-featured-form {
 	padding: 7px 5px;
 }
 
@@ -2293,7 +2296,7 @@ body.frm-body-with-open-modal {
 
 .frm-templates-list li .frm-category-icon {
 	overflow: hidden;
-	vertical-align: top;
+	align-self: flex-start;
 }
 
 .frm-templates-list li > div > div:last-child:not(.frm-dropdown-menu) {
@@ -2362,11 +2365,11 @@ body.frm-body-with-open-modal {
 #frm_new_form_modal .accordion-section.open .accordion-section-title
 {
 	background: #fff !important;
-	border-bottom: none;
+	border-bottom-color: transparent;
 }
 
 #frm_new_form_modal .accordion-section.open:hover {
-	border-bottom: none;
+	border-bottom-color: transparent;
 }
 
 #frm_new_form_modal .accordion-section {
@@ -2385,7 +2388,7 @@ body.frm-body-with-open-modal {
 }
 
 #frm_new_form_modal .frm-templates-list.frm-categories-list .accordion-section-title {
-	padding-left: 10px;
+	padding-left: var(--gap-sm);
 }
 
 #frm_new_form_modal .frm-templates-list.frm-categories-list li.frm-selectable {
@@ -2394,19 +2397,19 @@ body.frm-body-with-open-modal {
 }
 
 #frm_new_form_modal .accordion-section-content {
-	padding: 10px 0;
+	padding: var(--gap-sm);
 }
 
 .frm-hover-icons {
 	position: absolute;
 	right: 0;
-	top: 0;
+	top: calc( ( 58px - 22px ) / 2 );
 	height: 20px;
 	width: 65px;
 	height: 100%;
 	box-sizing: border-box;
-	padding: 14px 10px 0 5px !important;
-	border-radius: 6px;
+	padding: 0 10px 0 5px !important;
+	border-radius: var(--small-radius);
 	text-align: right;
 }
 
@@ -2417,6 +2420,7 @@ body.frm-body-with-open-modal {
 .frm-hover-icons a {
 	width: 22px;
 	height: 22px;
+	font-size: var(--text-md);
 	display: inline-block;
 	border-radius: 50%;
 	box-sizing: border-box;
@@ -2435,17 +2439,15 @@ body.frm-body-with-open-modal {
 	background-color: var(--primary-500);
 }
 
-.frm-hover-icons > .frm-preview-form .frmsvg {
-	width: 16px;
-	height: 16px;
-	color: var(--primary-500);
-}
-
-.frm-hover-icons > .frm-delete-form .frmsvg {
+.frm-hover-icons > a .frmsvg {
 	width: 14px;
 	height: 14px;
+	vertical-align: baseline;
+}
+
+.frm-hover-icons > .frm-preview-form .frmsvg,
+.frm-hover-icons > .frm-delete-form .frmsvg {
 	color: var(--primary-500);
-	transform: translateY(-1px);
 }
 
 .frm-hover-icons > .frm-unlock-form {
@@ -2453,13 +2455,9 @@ body.frm-body-with-open-modal {
 }
 
 .frm-hover-icons > .frm-unlock-form .frmsvg {
-	width: 12px;
-	height: 12px;
 	background-color: var(--primary-500);
-	transform: translateY(-2px);
 }
 
-.frm-hover-icons > .frm-create-form .frmsvg,
 .frm-ready-made-solution .frmsvg {
 	width: 14px;
 	height: 14px;
@@ -2491,9 +2489,9 @@ body.frm-body-with-open-modal {
 
 .frm-locked-template h3 .frmsvg {
 	height: 12px;
-	width: 14px;
-	vertical-align: top;
-	padding-top: 6px;
+	width: 12px;
+	vertical-align: baseline;
+	color: var(--grey-500);
 }
 
 #frm_new_form_modal .frm-use-this-template {
