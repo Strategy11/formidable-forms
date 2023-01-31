@@ -54,10 +54,11 @@ $include_info = $is_active_style;
 				if ( 255 === $brightness ) {
 					$circle_params['class'] .= ' frm-darker-circle-border';
 				}
+
+				++$index;
 			?>
 				<div <?php FrmAppHelper::array_to_html_params( $circle_params, true ); ?>></div>
 				<?php
-				++$index;
 			}
 			?>
 			<div class="frm-style-card-separator"></div>

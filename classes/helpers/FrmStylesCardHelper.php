@@ -358,7 +358,6 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_template_cards( $styles ) {
-		$count = 0;
 		array_walk(
 			$styles,
 			/**
@@ -375,14 +374,9 @@ class FrmStylesCardHelper {
 					return;
 				}
 
-				$hidden = $count > ( self::PAGE_SIZE - 1 );
-				if ( $this->echo_card_template( $style, $hidden ) ) {
-					++$count;
-				}
+				$this->echo_card_template( $style );
 			}
 		);
-
-		$this->maybe_echo_card_pagination( $count );
 	}
 
 	/**
