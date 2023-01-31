@@ -89,7 +89,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card.frm-dark-style .frm-style-card-title,
-.frm-style-card.frm-dark-style .frm-style-card-title-wrapper svg,
+.frm-style-card.frm-dark-style.frm-locked-style .frm-style-card-title-wrapper svg,
 .frm-style-card.frm-dark-style .frm-dropdown-toggle svg {
 	color: #fff;
 }
