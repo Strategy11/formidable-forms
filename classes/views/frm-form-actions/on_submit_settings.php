@@ -41,13 +41,13 @@ if ( $col_count <= 4 ) {
 	$col_count = 'frm2';
 }
 ?>
-<div class="frm_form_field frm_on_submit_type_setting">
+<div class="frm_on_submit_type_setting">
 	<div class="frm_grid_container">
 		<?php
 		foreach ( $types as $type => $type_data ) :
 			$input_id = $this->get_field_id( 'success_action_' . $type );
 			?>
-			<div class="frm_on_submit_type <?php echo esc_attr( $col_class ); ?>">
+			<div class="frm_on_submit_type frm_form_field <?php echo esc_attr( $col_class ); ?>">
 				<input
 					type="radio"
 					id="<?php echo esc_attr( $input_id ); ?>"

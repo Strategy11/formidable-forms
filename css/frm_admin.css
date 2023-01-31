@@ -5138,7 +5138,6 @@ h2.frm-h2,
 
 .frm_email_settings .widget {
 	margin-bottom: 15px;
-	line-height: 1.4em;
 	padding: 0;
 }
 
@@ -9055,7 +9054,11 @@ input:checked + .frm_switch .frm_slider:before {
 
 /* On Submit action */
 .frm_single_on_submit_settings .frm_form_field {
-	margin-top: 20px;
+	margin: 8px 0;
+}
+
+.frm_on_submit_type_setting {
+	padding: 8px 0;
 }
 
 .frm_on_submit_type label {
@@ -9064,7 +9067,6 @@ input:checked + .frm_switch .frm_slider:before {
 	border-radius: var(--small-radius);
 	gap: 16px;
 	padding: 16px;
-	font-weight: 600;
 	align-items: center;
 	justify-content: center;
 }
