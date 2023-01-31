@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<input type="hidden" name="ID" value="<?php echo esc_attr( $style->ID ); ?>" />
 		<input type="hidden" name="frm_action" value="save" />
 
+		<?php if ( ! $style->ID ) { ?>
+			<?php // Include a hidden input for new styles so the new style name updates. ?>
+			<input name="<?php echo esc_attr( $frm_style->get_field_name( 'post_title', '' ) ); ?>" type="hidden" value="<?php echo esc_attr( $style->post_title ); ?>" />
+		<?php } ?>
+
 		<?php
 		wp_nonce_field( 'frm_style_nonce', 'frm_style' );
 
