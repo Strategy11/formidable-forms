@@ -2,7 +2,11 @@
 /*
 Plugin Name: Formidable Forms
 Description: Quickly and easily create drag-and-drop forms
+<<<<<<< HEAD
 Version: 6.0b
+=======
+Version: 5.5.7
+>>>>>>> master
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
 Author: Strategy11 Form Builder Team
