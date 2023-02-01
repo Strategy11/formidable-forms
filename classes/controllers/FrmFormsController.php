@@ -2360,7 +2360,12 @@ class FrmFormsController {
 			$old_post = $post;
 			$post     = $page;
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
+
+			// Fix the On Submit page content doesn't show when previewing In theme.
+			remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
 			echo apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+
 			$post = $old_post;
 		}
 	}
@@ -2848,7 +2853,7 @@ class FrmFormsController {
 		}
 
 		self::populate_on_submit_data( $form_options, $first_create_action );
-		if ( FrmAppHelper::pro_is_connected() && $form->editable ) {
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
 			self::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
 		}
 
