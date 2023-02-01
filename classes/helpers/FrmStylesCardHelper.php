@@ -106,7 +106,7 @@ class FrmStylesCardHelper {
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
 		}
-		if ( $this->has_dark_background( $style ) ) {
+		if ( self::has_dark_background( $style ) ) {
 			$params['class'] .= ' frm-dark-style';
 		}
 
@@ -127,14 +127,27 @@ class FrmStylesCardHelper {
 	 * @param WP_Post|stdClass $style
 	 * @return bool
 	 */
-	private function has_dark_background( $style ) {
+	private static function has_dark_background( $style ) {
 		$key = 'fieldset_bg_color';
 
 		if ( empty( $style->post_content[ $key ] ) ) {
 			return false;
 		}
 
-		$color      = $style->post_content[ $key ];
+		$color = $style->post_content[ $key ];
+
+		if ( 0 === strpos( $color, 'rgba' ) ) {
+			preg_match_all( "/([\\d.]+)/", $color, $matches );
+			
+			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
+				// Consider a faded out rgba value as light even when the color is dark.
+				$color_opacity = floatval( $matches[1][3] );
+				if ( $color_opacity  < 0.5 ) {
+					return false;
+				}
+			}
+		}
+
 		$brightness = FrmStylesHelper::get_color_brightness( $color );
 		return $brightness < 155;
 	}

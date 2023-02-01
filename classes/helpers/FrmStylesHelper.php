@@ -551,6 +551,11 @@ class FrmStylesHelper {
 			$color = self::rgb_to_hex( $color );
 		}
 
+		if ( 3 === strlen( $color ) ) {
+			// Change a 3 character hex color to a 6 character one.
+			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
+		}
+
 		$c_r        = hexdec( substr( $color, 0, 2 ) );
 		$c_g        = hexdec( substr( $color, 2, 2 ) );
 		$c_b        = hexdec( substr( $color, 4, 2 ) );

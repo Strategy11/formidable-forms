@@ -129,13 +129,7 @@ class FrmStylesController {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		$css_url = admin_url( 'admin-ajax.php?action=frmpro_css' );
-		if ( 'assign_style' === FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' ) ) {
-			// Make sure that we don't load a cached CSS file right after we save a style.
-			$css_url .= '&unique=' . uniqid();
-		}
-
-		wp_enqueue_style( 'frm-custom-theme', $css_url, array(), $version );
+		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
 		if ( $style ) {

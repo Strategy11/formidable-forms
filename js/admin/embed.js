@@ -45,7 +45,8 @@
 				break;
 
 			case 'svg':
-				clicked = element.parentNode.classList.contains( 'frm-embed-form' );
+			case 'use':
+				clicked = null !== element.closest( '.frm-embed-form' );
 				if ( clicked ) {
 					state.type = 'form';
 				}
