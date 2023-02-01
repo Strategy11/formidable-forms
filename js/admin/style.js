@@ -640,15 +640,12 @@
 			card = getCardByStyleId( data.styleId );
 		}
 
-		const isDefault = 'frm_default_style_cards_wrapper' === card.closest( '.frm-style-card-wrapper' ).id;
-		if ( ! isDefault ) {
-			const applyOption = a({
-				text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
-			});
-			addIconToOption( applyOption, 'frm_save_icon' );
-			dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
-			onClickPreventDefault( applyOption, handleApplyOptionClick );
-		}
+		const applyOption = a({
+			text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
+		});
+		addIconToOption( applyOption, 'frm_save_icon' );
+		dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
+		onClickPreventDefault( applyOption, handleApplyOptionClick );
 
 		if ( ! isTemplate ) {
 			if ( 'string' === typeof data.editUrl ) {
