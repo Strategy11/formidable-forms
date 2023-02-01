@@ -7812,7 +7812,13 @@ function frmAdminBuildJS() {
 
 	function onActionLoaded( event ) {
 		const settings = event.target.closest( '.frm_form_action_settings' );
-		const wysiwyg  = settings.querySelector( '.wp-editor-area' );
+		if ( settings && ( settings.classList.contains( 'frm_single_email_settings' ) || settings.classList.contains( 'frm_single_on_submit_settings' ) ) ) {
+			initWysiwygOnActionLoaded( settings );
+		}
+	}
+
+	function initWysiwygOnActionLoaded( settings ) {
+		const wysiwyg = settings.querySelector( '.wp-editor-area' );
 		if ( wysiwyg ) {
 			frmDom.wysiwyg.init(
 				wysiwyg,
