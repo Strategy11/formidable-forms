@@ -215,11 +215,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	right: 40px;
 }
 
-#frm_style_preview #frm_toggle_sample_form svg {
-	height: 16px;
-	width: 16px;
-}
-
 .frm_pro_form .frm_form_field.frm_lite_style,
 .frm_pro_form .frm_lite_style {
 	/*

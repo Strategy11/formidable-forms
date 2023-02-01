@@ -1235,7 +1235,7 @@ p.frm_has_shortcodes {
 }
 
 .button.frm-with-icon svg {
-	color: var(--grey-500);
+	opacity: .8;
 }
 
 .frm-with-icon.frm-button-sm svg {
