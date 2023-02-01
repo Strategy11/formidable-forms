@@ -556,29 +556,9 @@
 <title>browser</title>
 <path d="M18.1 1.3H2C.9 1.3 0 2 0 3V17c0 1 .8 1.9 1.9 1.9H18c1 0 1.9-.9 1.9-2V3.2c0-1-.8-1.9-1.9-1.9zM2 3.5c0-.3.2-.5.4-.5H4c.3 0 .5.2.5.5v1c0 .2-.2.4-.5.4H2.3a.5.5 0 0 1-.4-.5v-1zm16.2 13c0 .2 0 .3-.2.3H2a.2.2 0 0 1-.2-.3v-10H18v10zm0-12c0 .2-.2.4-.4.4h-11a.5.5 0 0 1-.5-.5v-1c0-.2.3-.4.5-.4h11c.2 0 .4.2.4.5v1z"/>
 </symbol>
-<symbol id="frm_cloud_download_solid_icon" viewBox="0 0 22 20">
-<title>cloud_download_solid</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6zM16 10.9l-4.6 4.7L6.5 11h2.8V7.2H13v3.7H16z"/>
-</symbol>
-<symbol id="frm_cloud_download_icon" viewBox="0 0 22 20">
-<title>cloud_download</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6zm-.3 7.4H5.6a3.7 3.7 0 0 1-.4-7.4l1-.1.5-1a5.2 5.2 0 0 1 9.6 1.4l.3 1.4 1.4.1a2.8 2.8 0 0 1-.2 5.6zm-5.2-7.5H10V11H7.5l3.7 3.8 3.8-3.8h-2.4z"/>
-</symbol>
 <symbol id="frm_cloud_upload_solid_icon" viewBox="0 0 640 512">
 <title>cloud_upload_solid</title>
 <path d="M537.6 226.6a96 96 0 00-142.9-114.4 159.9 159.9 0 00-298.5 87.9A144.1 144.1 0 00144 480h368a128 128 0 0025.6-253.4zM393.4 288H328v112a16 16 0 01-16 16h-48a16 16 0 01-16-16V288h-65.4a16 16 0 01-11.3-27.3l105.4-105.4a16 16 0 0122.6 0l105.4 105.4a16 16 0 01-11.3 27.3z"/>
-</symbol>
-<symbol id="frm_cloud_upload_icon" viewBox="0 0 22 20">
-<title>cloud_upload</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6zm-.3 7.4H5.6a3.7 3.7 0 0 1-.4-7.4l1-.1.5-1a5.2 5.2 0 0 1 9.6 1.4l.3 1.4 1.4.1a2.8 2.8 0 0 1-.2 5.6zM7.5 11h2.4v2.9h2.7v-2.9H15l-3.7-3.7z"/>
-</symbol>
-<symbol id="frm_cloud_solid_icon" viewBox="0 0 22 20">
-<title>cloud_solid</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6z"/>
-</symbol>
-<symbol id="frm_cloud_icon" viewBox="0 0 22 20">
-<title>cloud</title>
-<path d="M11.3 4.4c2.4 0 4.5 1.7 5 4.1l.3 1.4 1.4.1a2.8 2.8 0 0 1-.2 5.6H5.6a3.7 3.7 0 0 1-.4-7.4l1-.1.5-1a5.1 5.1 0 0 1 4.5-2.7zm0-1.9A7 7 0 0 0 5 6.3a5.6 5.6 0 0 0 .6 11.2h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6a7 7 0 0 0-6.8-5.7z"/>
 </symbol>
 <symbol id="frm_shuffle_icon" viewBox="0 0 20 20">
 <title>shuffle</title>
@@ -587,18 +567,6 @@
 <symbol id="frm_swap_icon" viewBox="0 0 20 20">
 <title>swap</title>
 <path d="M9 6a4 4 0 0 1 8 0v8h3l-4 4-4-4h3V6a2 2 0 1 0-4 0v8a4 4 0 0 1-8 0V6H0l4-4 4 4H5v8a2 2 0 1 0 4 0V6z"/>
-</symbol>
-<symbol id="frm_dropper_solid_icon" viewBox="0 0 20 20">
-<title>dropper_solid</title>
-<path d="M19.7 3L17 .2c-.5-.4-1.2-.4-1.6 0L12 3.8 10 1.7 8.3 3.2 10 4.8 0 14.8V20h5.3l9.9-10 1.6 1.7 1.5-1.6L16.2 8l3.5-3.5c.4-.4.4-1.1 0-1.6zM4.4 17.7l-2.2-2.2 9-9 2.1 2.2-9 9z"/>
-</symbol>
-<symbol id="frm_tint_icon" viewBox="0 0 14 20">
-<title>tint</title>
-<path d="M8 .9C8 .3 7.4 0 7 0c-.5 0-1 .3-1.2.9C4 7 0 8.7 0 13c0 3.9 3 7 6.9 7s6.8-3.1 6.8-7C13.7 8.7 10 7 8 1zM7 18a5 5 0 0 1-5-5c0-1.8.8-3 2-4.7 1-1.3 2-3 3-5.1.9 2.2 2 3.8 3 5.2 1.2 1.7 2 2.8 2 4.5a5 5 0 0 1-5 5.1zm.6-2.5a3.1 3.1 0 0 1-3.1-3.1.6.6 0 0 0-1.3 0c0 2.4 2 4.4 4.4 4.4a.6.6 0 0 0 0-1.3z"/>
-</symbol>
-<symbol id="frm_pallet_solid_icon" viewBox="0 0 20 20">
-<title>pallet_solid</title>
-<path d="M10 0a10 10 0 0 0 0 20 1.7 1.7 0 0 0 1.2-2.8c-.2-.3-.4-.7-.4-1 0-1 .8-1.8 1.7-1.8h2c3 0 5.5-2.4 5.5-5.5 0-5-4.5-8.9-10-8.9zM3.9 10a1.7 1.7 0 1 1 0-3.3 1.7 1.7 0 0 1 0 3.3zm3.3-4.4a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zm5.6 0a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM16 10a1.7 1.7 0 1 1 0-3.3 1.7 1.7 0 0 1 0 3.3z"/>
 </symbol>
 <symbol id="frm_pallet_icon" viewBox="0 0 20 20">
 <title>pallet</title>

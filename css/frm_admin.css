@@ -6717,6 +6717,11 @@ ul.frm-category-tabs {
 	width: 9em;
 }
 
+.toplevel_page_formidable .column-shortcode div {
+	display: flex;
+	gap: var(--gap-xs);
+}
+
 .widefat .column-entries, .widefat .column-link {
 	width: 10%;
 	text-align: center;

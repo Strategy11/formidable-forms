@@ -256,10 +256,6 @@ class FrmFormsListHelper extends FrmListHelper {
 					$date = gmdate( $format, strtotime( $item->created_at ) );
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
-				case 'shortcode':
-					$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
-					$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $item ) );
-					break;
 				case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
 						$val = FrmAppHelper::icon_by_class(
@@ -295,6 +291,22 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * Get the HTML for the Actions column in the form list.
+	 *
+	 * @since x.x
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	protected function column_shortcode( $form ) {
+		$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+		$val .= $this->column_style( $form );
+		$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
+		$val = '<div>' . $val . '</div>';
+		return $val;
+	}
+
+	/**
 	 * Get the HTML for the Style column in the form list.
 	 *
 	 * @since x.x
@@ -302,7 +314,13 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @param stdClass $form
 	 * @return string
 	 */
-	public function column_style( $form ) {
+	protected function column_style( $form ) {
+		$style_setting = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : '';
+		if ( $style_setting === '0' ) {
+			// Don't show a link if styling is off.
+			return '';
+		}
+
 		$style = FrmStylesController::get_form_style( $form );
 
 		if ( ! $style ) {
@@ -312,7 +330,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$href  = FrmStylesHelper::get_edit_url( $style, $form->id );
-		return '<a href="' . esc_url( $href ) . '">' . esc_html( $style->post_title ) . '</a>';
+		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>';
 	}
 
 	/**
