@@ -1044,13 +1044,6 @@
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
-
-		const newCssTag = tag( 'link' );
-		newCssTag.setAttribute( 'type', 'text/css' );
-		newCssTag.setAttribute( 'href', ajaxurl + '?action=frmpro_load_css&flat=1&' + Object.keys(defaultValues).map(function(key) {
-			return key + '=' + defaultValues[key]
-		}).join('&') );
-		document.head.appendChild( newCssTag );
 	}
 
 	/**
