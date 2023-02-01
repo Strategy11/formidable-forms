@@ -255,7 +255,7 @@ label.default-style-box input[type="checkbox"] {
 	overflow: hidden;
 	margin: 0 !important;
 	height: 32px !important;
-	padding: 0 0 0 var(--gap-lg) !important;
+	padding: 0 0 0 30px !important; /* var(--gap-lg) is too large. It causes the background image to appear between the button and the text */
 	border-radius: var(--small-radius);
 	border-color: var(--grey-300);
 }
@@ -264,6 +264,7 @@ label.default-style-box input[type="checkbox"] {
 	line-height: 30px !important;
 	font-size: 15px;
 	background: #fff !important;
+	height: 32px;
 }
 
 .frm-style-card-wrapper {
