@@ -18,7 +18,7 @@ $include_info = $is_active_style;
 				FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
 			}
 			if ( ! empty( $is_locked ) ) {
-				FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+				FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 			}
 			?>
 			<?php // The rename option uses the text content of .frm-style-card-title so don't leave any additional whitespace here. ?>
