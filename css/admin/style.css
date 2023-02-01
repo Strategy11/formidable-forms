@@ -319,7 +319,7 @@ The label in the preview should use the label color setting.
 
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
-	border: 2px solid #FFFFFF;
+	border: 1.5px solid var(--grey-100);
 	box-shadow: var(--box-shadow-sm);
 	border-radius: 22px;
 	height: 28px;
