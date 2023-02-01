@@ -328,6 +328,7 @@ td.column-title .frm_actions_dropdown {
 .frm-white-body .wrap h4,
 .frm-white-body h4 {
 	font-size: var(--text-sm);
+	font-weight: 500;
 }
 
 /* Override CSS in Views plugin. */
@@ -986,6 +987,13 @@ p.frm_has_shortcodes {
 	border-bottom: 2px solid var(--sidebar-hover);
 	border-top: none;
 	padding-top: 0 !important;
+}
+
+.frm-flex-justify,
+.frm-right-panel h3 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .frm-right-panel h3 i {
@@ -2703,6 +2711,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	margin-top: var(--gap-sm);
 }
 
+.frm-collapsed .frmsvg,
 .caret.rotate-270,
 .frm-embed-modal-option .caret {
 	align-self: center;
@@ -2859,7 +2868,7 @@ h1 .fa-caret-down {
 .wp-admin .frm_wrap select,
 .frm_wrap .frm_form_builder select,
 .frm_wrap .ui-autocomplete-input {
-	background:#fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23667085%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
+	background: transparent url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23667085%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 	background-size: 16px 16px;
 }
 
@@ -2955,6 +2964,7 @@ h1 .fa-caret-down {
 
 .frm-select-list-item,
 .frm_wrap .ui-autocomplete li > div,
+.multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
 .frm-dropdown-menu .frm_dropdown_li {
 	clear: both;
@@ -2964,7 +2974,9 @@ h1 .fa-caret-down {
 	border-radius: var(--small-radius);
 }
 
-.frm-dropdown-menu > .active > a, .frm-dropdown-menu > .active > a:hover, .frm-dropdown-menu > .active > a:focus {
+.frm-dropdown-menu > .active > a,
+.frm-dropdown-menu > .active > a:hover,
+.frm-dropdown-menu > .active > a:focus {
 	text-decoration: none;
 	outline: 0;
 }
@@ -3080,7 +3092,7 @@ a.frm_option_icon:hover::before {
 	top: auto;
 	left: auto;
 	font-size: var(--text-sm);
-	padding-top: 3px;
+	padding: 4px;
     margin-bottom: 3px;
 }
 
@@ -3289,12 +3301,10 @@ a.frm_option_icon:hover::before {
 }
 
 .multiselect-container button.multiselect-option {
-	display: block;
 	width: 100%;
 	text-align: left;
-	background: none;
 	border: none;
-	padding: 5px 0 5px 15px;
+	margin-bottom: 4px;
 }
 
 .multiselect-container button.multiselect-option label {
@@ -6344,6 +6354,7 @@ li.selected .divider_section_only:before {
 	bottom: -15px;
 }
 
+.frm-collapse-page .frmsvg,
 .frm-collapse-page .frm_arrowdown6_icon {
 	width: var(--text-sm);
 	height: var(--text-sm);
@@ -6706,6 +6717,11 @@ ul.frm-category-tabs {
 	width: 9em;
 }
 
+.toplevel_page_formidable .column-shortcode div {
+	display: flex;
+	gap: var(--gap-xs);
+}
+
 .widefat .column-entries, .widefat .column-link {
 	width: 10%;
 	text-align: center;
@@ -6724,7 +6740,7 @@ ul.frm-category-tabs {
 
 .frm-white-body .search-box,
 .frm-search {
-	width: 32%;
+	min-width: 32%;
 	position: relative;
 	display: flex;
 	gap: var(--gap-sm);
@@ -6868,7 +6884,10 @@ i.frm-show-inline-modal {
 
 span.multiselect-selected-text {
 	white-space: nowrap;
-    display: inline-block;
+	display: inline-block;
+	max-width: 90%;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .frm-search #search-submit a {
@@ -7179,6 +7198,7 @@ ul .frm_col_two {
 
 .frm-select-list-item,
 .frm_wrap .ui-autocomplete li > div,
+.multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
@@ -7211,6 +7231,8 @@ ul .frm_col_two {
 .frm-select-list-item:hover,
 .frm_wrap .ui-autocomplete li div.ui-state-active,
 .frm_wrap .ui-autocomplete li.ui-state-focus,
+.multiselect-container button.multiselect-option.active,
+.multiselect-container button.multiselect-option:hover,
 .frm-dropdown-menu > .dropdown-item > a:hover,
 .frm_code_list.frm-full-hover a:hover span,
 .frm_code_list.frm-full-hover a:hover {
@@ -7900,13 +7922,13 @@ button.frm_choose_image_box,
 	outline: 0;
 	box-shadow: none;
 	border-radius: var(--small-radius);
-	padding: 6px 14px;
+	padding: 5px 14px;
 	border-color: var(--grey-300);
 	color: var(--grey-800);
 	font-size: var(--text-md);
 	margin: 0;
 	background-color: #fff;
-	line-height: 24px;
+	line-height: var(--leading);
 }
 
 .frm-white-body textarea:focus,
@@ -8012,7 +8034,7 @@ button.frm_choose_image_box,
 }
 
 .frm-fields button.btn {
-	height: auto;
+	height: 36px;
 	text-align: inherit;
 }
 
@@ -8383,7 +8405,7 @@ Responsive Design
 		line-height: normal;
 	}
 
-	.frm-full-screen #screen-meta-links {
+	.frm-white-body #screen-meta-links {
 		display: none;
 	}
 
@@ -8462,16 +8484,6 @@ Responsive Design
 	.wp-list-table.toplevel_page_formidable td.column-created_at {
 		padding: 3px 8px 3px 35%;
 		text-align: left;
-	}
-
-	.wp-list-table.toplevel_page_formidable td.column-title:before,
-	.wp-list-table.toplevel_page_formidable td.column-id:before {
-		display: none !important;
-	}
-
-	.wp-list-table.toplevel_page_formidable td.column-title,
-	.wp-list-table.toplevel_page_formidable td.column-id {
-		display: table-cell !important;
 	}
 
 	#form_entries_page .wp-list-table th.frm_hidden,

@@ -131,7 +131,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 	<h3 class="frm-collapsed">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
-		<i class="frm_icon_font frm_arrowdown6_icon"></i>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 
@@ -316,7 +316,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
-				<i class="frm_icon_font frm_arrowdown6_icon"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</h3>
 
 			<div class="frm_validation_box frm-collapse-me">
