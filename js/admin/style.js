@@ -431,45 +431,7 @@
 			})
 		);
 
-		children.push( getStyleTemplateModalSample( card ) );
-
 		return div({ children });
-	}
-
-	/**
-	 * Get a small example form for the upsell modal.
-	 * This just includes a small text field and submit button.
-	 *
-	 * @param {HTMLElement} card
-	 * @returns {HTMLElement}
-	 */
-	function getStyleTemplateModalSample( card ) {
-		const input = tag( 'input' );
-		input.setAttribute( 'type', 'text' );
-		input.value = __( 'This is sample text', 'formidable' );
-
-		const button = tag( 'input' );
-		button.setAttribute( 'type', 'submit' );
-		button.disabled = true;
-		button.className = 'frm-opacity-100';
-		button.value = __( 'Submit', 'formidable' );
-
-		return div({
-			className: 'frm-style-sample with_frm_style ' + card.dataset.classname,
-			children: [
-				div({
-					className: 'frm_form_field form-field',
-					children: [
-						tag( 'label', { className: 'frm_primary_label', text: __( 'Text field', 'formidable' ) }),
-						input
-					]
-				}),
-				div({
-					className: 'frm_submit',
-					child: button
-				})
-			]
-		});
 	}
 
 	/**
@@ -628,7 +590,7 @@
 	 * @returns {boolean}
 	 */
 	function shouldAddMenuToCard( card ) {
-		return 'frm_template_style_cards_wrapper' !== card.parentNode.id;
+		return 'frm_template_style_cards_wrapper' !== card.parentNode.id || ! card.classList.contains( 'frm-locked-style' );
 	}
 
 	/**
@@ -650,9 +612,11 @@
 	/**
 	 * Get a dropdown and the "hamburger" stacked dot menu trigger for a single style card.
 	 *
-	 * @param {Object} data {
+	 * @param {DOMStringMap} data {
 	 *     @type {String} editUrl
 	 *     @type {String} styleId
+	 *     @type {String} labelPosition
+	 *     @type {String} classname
 	 * }
 	 * @returns {HTMLElement}
 	 */
@@ -666,31 +630,41 @@
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
+		const isTemplate        = 'undefined' !== typeof data.templateKey;
 		let dropdownMenuOptions = [];
 
-		if ( 'string' === typeof data.editUrl ) {
-			// The Edit option is not included on the Edit page.
-			const editOption = a({
-				text: __( 'Edit', 'formidable' ),
-				href: data.editUrl
+		const applyOption = a({
+			text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
+		});
+		addIconToOption( applyOption, 'frm_save_icon' );
+		dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
+		onClickPreventDefault( applyOption, handleApplyOptionClick );
+
+		if ( ! isTemplate ) {
+			if ( 'string' === typeof data.editUrl ) {
+				// The Edit option is not included on the Edit page.
+				const editOption = a({
+					text: __( 'Edit', 'formidable' ),
+					href: data.editUrl
+				});
+				addIconToOption( editOption, 'frm_pencil_icon' );
+				dropdownMenuOptions.push({ anchor: editOption, type: 'edit' });
+			}
+
+			const resetOption = a({
+				text: __( 'Reset to Defaults', 'formidable' )
 			});
-			addIconToOption( editOption, 'frm_pencil_icon' );
-			dropdownMenuOptions.push({ anchor: editOption, type: 'edit' });
+			addIconToOption( resetOption, 'frm_repeater_icon' );
+			onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
+
+			dropdownMenuOptions.push(
+				{ anchor: resetOption, type: 'reset' },
+				{ anchor: getRenameOption( data.styleId ), type: 'rename' }
+			);
 		}
 
-		const resetOption = a({
-			text: __( 'Reset to Defaults', 'formidable' )
-		});
-		addIconToOption( resetOption, 'frm_repeater_icon' );
-		onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
-
-		dropdownMenuOptions.push(
-			{ anchor: resetOption, type: 'reset' },
-			{ anchor: getRenameOption( data.styleId ), type: 'rename' }
-		);
-
 		const hookName      = 'frm_style_card_dropdown_options';
-		const hookArgs      = { data, addIconToOption };
+		const hookArgs      = { data, addIconToOption, isTemplate };
 		dropdownMenuOptions = wp.hooks.applyFilters( hookName, dropdownMenuOptions, hookArgs );
 
 		const dropdownMenu  = div({
@@ -705,6 +679,21 @@
 			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
+	}
+
+	/**
+	 * @param {Event} event
+	 * @returns {void}
+	 */
+	function handleApplyOptionClick( event ) {
+		const option = event.target;
+		const card   = option.closest( '.frm-style-card' );
+		if ( ! card ) {
+			return;
+		}
+
+		card.click();
+		handleUpdateClick();
 	}
 
 	/**
@@ -884,6 +873,15 @@
 	}
 
 	/**
+	 * @param {String} templateKey
+	 * @returns {HTMLElement}
+	 */
+	function getTemplateCard( templateKey ) {
+		const templateCard = document.getElementById( 'frm_template_style_cards_wrapper' ).querySelector( '.frm-style-card[data-template-key="' + templateKey + '"]' );
+		return templateCard;
+	}
+
+	/**
 	 * @param {String} styleId
 	 * @returns {HTMLElement}
 	 */
@@ -892,7 +890,6 @@
 		if ( defaultCard ) {
 			return defaultCard;
 		}
-
 		return Array.from( document.getElementById( 'frm_custom_style_cards_wrapper' ).children ).find( card => card.dataset.styleId === styleId );
 	}
 

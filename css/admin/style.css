@@ -229,10 +229,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: none !important;
 }
 
-label.default-style-box input[type="checkbox"] {
-	vertical-align: middle;
-}
-
 #frm_style_sidebar .frm_form_field input[type="checkbox"],
 #frm_style_sidebar .frm_form_field input[type="radio"] {
 	vertical-align: middle;
@@ -244,6 +240,37 @@ label.default-style-box input[type="checkbox"] {
 
 .styling_settings .frm_image_preview_wrapper .frm_choose_image_box {
 	margin-left: 0;
+}
+
+/* Color picker CSS */
+#frm_style_sidebar .wp-picker-open + .wp-picker-input-wrap {
+	position: absolute;
+	margin-left: calc( ( 100% - 35px ) * -1 );
+	margin-top: 1px;
+	width: calc( 100% - 36px );
+}
+
+#frm_style_sidebar .wp-picker-container input[type="text"].wp-color-picker {
+	border: none;
+	padding: 5px 8px;
+	font-family: inherit;
+	color: var(--grey-700);
+	font-size: var(--text-md);
+	width: 100%;
+	line-height: var(--leading);
+}
+
+#frm_style_sidebar .wp-picker-input-wrap .wp-picker-clear {
+	display: none !important;
+}
+
+#frm_style_sidebar .wp-picker-holder {
+	position: absolute;
+	z-index: 999;
+}
+
+#frm_style_sidebar .wp-picker-input-wrap label {
+	margin-bottom: 0;
 }
 
 #frm_style_sidebar .wp-picker-container .wp-color-result.button {
@@ -261,7 +288,7 @@ label.default-style-box input[type="checkbox"] {
 	font-size: var(--text-md);
 	background: #fff !important;
 	color: var(--grey-900);
-	padding: 5px 14px 5px 8px;
+	padding: 5px 8px;
 	border-color: var(--grey-300);
 	text-align: left;
 }
@@ -282,6 +309,19 @@ label.default-style-box input[type="checkbox"] {
 .wp-picker-container .wp-picker-input-wrap input.hex.wp-color-picker {
 	max-width: 100%;
 	position: relative;
+}
+
+.frm_end .wp-picker-holder {
+	margin-left: -145px;
+}
+
+.frm_end.frm6 .wp-picker-holder {
+    margin-left: -86px;
+}
+/* End of color picker CSS */
+
+.ui-datepicker-inline.ui-datepicker {
+	max-width: 19em;
 }
 
 .frm-style-card-wrapper {
@@ -337,7 +377,7 @@ The label in the preview should use the label color setting.
 
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
-	border: 2px solid #FFFFFF;
+	border: 1.5px solid var(--grey-100);
 	box-shadow: var(--box-shadow-sm);
 	border-radius: 22px;
 	height: 28px;
@@ -418,7 +458,8 @@ The label in the preview should use the label color setting.
 }
 
 #frm_loading_style_placeholder,
-#frm_style_preview.frm-loading-style-template .frm_forms
+#frm_style_preview.frm-loading-style-template .frm_forms,
+#frm_default_style_cards_wrapper .dropdown-item.frm-apply-style
 {
 	display: none;
 }
@@ -446,30 +487,6 @@ The label in the preview should use the label color setting.
 
 #frm_style_template_modal .frm_warning_style a:focus {
 	box-shadow: none;
-}
-
-#frm_style_template_modal .frm-style-sample input {
-	height: unset !important;
-	margin: 0;
-	max-width: 100%;
-}
-
-#frm_style_template_modal .frm-style-sample {
-	width: 260px;
-	margin: 0 auto 40px;
-}
-
-/* Avoid disabled button styles overwriting the sample's styles */
-#frm_style_template_modal .frm-style-sample input[disabled] {
-	background-color: var(--submit-bg-color) !important;
-	color: var(--submit-text-color) !important;
-	border-color: var(--submit-border-color) !important;
-	padding: 10px 20px;
-	font-size: 15px;
-}
-
-#frm_style_template_modal .frm-style-sample .frm_form_field {
-	margin-bottom: 16px !important;
 }
 
 @media only screen and (max-width: 1200px) {
