@@ -309,6 +309,10 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
+#frm_style_preview .frm_form_field > label:first-child {
+	color: var(--label-color);
+}
+
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
 	position: relative;
 	border: 2px solid #FFFFFF;
