@@ -309,7 +309,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$href  = FrmStylesHelper::get_edit_url( $style, $form->id );
 		$link  = '<a href="' . esc_url( $href ) . '">' . esc_html( $style->post_title ) . '</a>';
-		return '<div class="frm-grey-tag">' . $link . '</div>';
+		return $link;
 	}
 
 	/**
