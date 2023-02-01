@@ -65,18 +65,9 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
-		$is_default_style = $style->ID === $this->default_style->ID;
-		$is_active_style  = $style->ID === $this->active_style->ID;
-		$is_locked        = $this->locked;
-		$params           = $this->get_params_for_style_card( $style );
-
-		if ( $is_active_style ) {
-			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
-		}
-		if ( $hidden ) {
-			$params['class'] .= ' frm_hidden';
-		}
-
+		$params          = $this->get_params_for_style_card( $style, $hidden );
+		$is_locked       = $this->locked;
+		$is_active_style = $style->ID === $this->active_style->ID;
 		include $this->view_file_path;
 	}
 
@@ -86,9 +77,10 @@ class FrmStylesCardHelper {
 	 * @since x.x
 	 *
 	 * @param stdClass|WP_Post $style
+	 * @param bool             $hidden
 	 * @return array
 	 */
-	private function get_params_for_style_card( $style ) {
+	private function get_params_for_style_card( $style, $hidden = false ) {	
 		if ( ! empty( $style->post_content['position'] ) ) {
 			$label_position = $style->post_content['position'];
 		} else {
@@ -99,13 +91,24 @@ class FrmStylesCardHelper {
 
 		$class_name = 'frm_style_' . $style->post_name;
 		$params     = array(
-			'class'               => 'frm-style-card',
+			'class'               => 'frm-style-card frm-transition-ease',
 			'style'               => self::get_style_param_for_card( $style ),
 			'data-classname'      => $class_name,
 			'data-style-id'       => $style->ID,
 			'data-edit-url'       => esc_url( FrmStylesHelper::get_edit_url( $style, $this->form_id ) ),
 			'data-label-position' => $label_position,
 		);
+
+		$is_active_style = $style->ID === $this->active_style->ID;
+		if ( $is_active_style ) {
+			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
+		}
+		if ( $hidden ) {
+			$params['class'] .= ' frm_hidden';
+		}
+		if ( $this->has_dark_background( $style ) ) {
+			$params['class'] .= ' frm-dark-style';
+		}
 
 		/**
 		 * Filter params so Pro can add additional params, like data-delete-url.
@@ -118,6 +121,22 @@ class FrmStylesCardHelper {
 		 * }
 		 */
 		return apply_filters( 'frm_style_card_params', $params, compact( 'style' ) );
+	}
+
+	/**
+	 * @param WP_Post|stdClass $style
+	 * @return bool
+	 */
+	private function has_dark_background( $style ) {
+		$key = 'fieldset_bg_color';
+
+		if ( empty( $style->post_content[ $key ] ) ) {
+			return false;
+		}
+
+		$color      = $style->post_content[ $key ];
+		$brightness = FrmStylesHelper::get_color_brightness( $color );
+		return $brightness < 155;
 	}
 
 	/**
@@ -252,7 +271,7 @@ class FrmStylesCardHelper {
 	 */
 	private static function get_style_keys_for_card() {
 		return array(
-			'fieldset_bg_color',
+			//'fieldset_bg_color',
 			'field_border_width',
 			'field_border_style',
 			'border_color',
@@ -261,7 +280,7 @@ class FrmStylesCardHelper {
 			'submit_border_width',
 			'submit_border_radius',
 			'submit_text_color',
-			'submit_weight',
+			//'submit_weight',
 			'submit_width',
 			'label_color',
 			'text_color',
@@ -339,7 +358,6 @@ class FrmStylesCardHelper {
 	 * @return void
 	 */
 	private function echo_template_cards( $styles ) {
-		$count = 0;
 		array_walk(
 			$styles,
 			/**
@@ -356,14 +374,9 @@ class FrmStylesCardHelper {
 					return;
 				}
 
-				$hidden = $count > ( self::PAGE_SIZE - 1 );
-				if ( $this->echo_card_template( $style, $hidden ) ) {
-					++$count;
-				}
+				$this->echo_card_template( $style );
 			}
 		);
-
-		$this->maybe_echo_card_pagination( $count );
 	}
 
 	/**

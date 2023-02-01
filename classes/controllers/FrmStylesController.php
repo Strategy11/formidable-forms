@@ -129,7 +129,13 @@ class FrmStylesController {
 			wp_enqueue_style( 'wp-color-picker' );
 		}
 
-		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
+		$css_url = admin_url( 'admin-ajax.php?action=frmpro_css' );
+		if ( 'assign_style' === FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' ) ) {
+			// Make sure that we don't load a cached CSS file right after we save a style.
+			$css_url .= '&unique=' . uniqid();
+		}
+
+		wp_enqueue_style( 'frm-custom-theme', $css_url, array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
 		if ( $style ) {
@@ -897,6 +903,13 @@ class FrmStylesController {
 		wp_die();
 	}
 
+	/**
+	 * Handle routing for the frm_change_styling AJAX action.
+	 * This doesn't actually change styling. It just handles the events when someone changes a style.
+	 * It responds with the new CSS required for the updated styler preview in the edit page.
+	 *
+	 * @return void
+	 */
 	public static function change_styling() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 

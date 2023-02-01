@@ -46,8 +46,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	border-left: 1px solid var(--sidebar-hover);
 }
 
+#frm_active_style_form:not(.frm_hidden) ~ #frm_sample_form {
+	display: none;
+}
+
 #frm_active_style_form:not(.frm_hidden),
-#frm_sample_form:not(.frm_hidden) {
+#frm_sample_form {
 	/* Without this a small form with a max-width of 480px for example doesn't get centered in the preview space. */
 	display: flex;
 }
@@ -72,6 +76,23 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	padding: 14px;
 	box-shadow: var(--box-shadow-sm);
 	position: relative;
+	background-color: var(--preview-background-color);
+}
+
+.frm-style-card .frm-dropdown-toggle svg,
+#frm_styling_form .frm-dropdown-toggle svg {
+	color: var(--grey-500);
+}
+
+.frm-style-card.frm-currently-set-style-card .frm-style-card-title-wrapper svg {
+	/* The checkmark circle should be blue. */
+	color: var(--primary-500);
+}
+
+.frm-style-card.frm-dark-style .frm-style-card-title,
+.frm-style-card.frm-dark-style.frm-locked-style .frm-style-card-title-wrapper svg,
+.frm-style-card.frm-dark-style .frm-dropdown-toggle svg {
+	color: #fff;
 }
 
 .frm-style-card > div:first-child {
@@ -88,7 +109,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	box-shadow: var(--box-shadow-lg);
 }
 
-.frm-active-style-card:not(.frm-currently-set-style-card) {
+.frm-active-style-card {
 	box-shadow: none;
 	border: 1px solid var(--primary-500);
 }
@@ -98,7 +119,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card-title-wrapper > svg {
-	fill: var(--primary-color);
 	margin-right: 5px;
 }
 
@@ -111,7 +131,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 .frm-style-card-preview {
 	padding-top: 10px;
 	pointer-events: none;
-	background-color: var(--preview-background-color);
 	border-radius: 6px 6px 0 0;
 	display: flex;
 	flex-direction: row;
@@ -169,7 +188,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	margin-right: 5px;
 }
 
-.frm_button_submit {
+#frm_style_preview .frm_button_submit {
 	transition: none !important; /* Avoid the preview updates from transitioning between one another. */
 }
 
@@ -190,12 +209,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 #frm_style_preview .frm_floating_style_button.frm_hidden {
 	display: none;
-}
-
-#frm_style_preview .frm_floating_style_button svg {
-	height: 14px;
-	width: 14px;
-	margin-right: 10px;
 }
 
 #frm_edit_style {
@@ -304,6 +317,10 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	height: 28px;
 	width: 28px;
 	box-sizing: border-box;
+}
+
+.frm-darker-circle-border {
+	border-color: var(--grey-300);
 }
 
 .frm-style-circle1 {

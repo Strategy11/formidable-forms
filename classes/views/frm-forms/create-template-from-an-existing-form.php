@@ -3,7 +3,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?><li>
-	<h3><?php esc_html_e( 'Create a template from an existing form', 'formidable' ); ?></h3>
+	<label for="frm-template-drop">
+		<?php esc_html_e( 'Create a template from an existing form', 'formidable' ); ?>
+	</label>
 	<div class="dropdown frm-fields">
 		<button type="button" class="frm-dropdown-toggle dropdown-toggle btn btn-default" id="frm-template-drop" data-toggle="dropdown" style="width:auto">
 			<?php esc_html_e( 'Select form for new template', 'formidable' ); ?>

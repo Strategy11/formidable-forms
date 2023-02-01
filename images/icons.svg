@@ -12,10 +12,6 @@
 <title>delete</title>
 <path d="M424 80a24 24 0 1 1 0 48h-12l-24 325c-2 33-30 59-63 59H123c-33 0-61-26-63-59L36 128H24a24 24 0 1 1 0-48h70l37-55c10-16 27-25 46-25h94c19 0 36 9 47 25l36 55h70zM177 48c-2 0-6 1-6 4l-19 28h145l-19-28c-2-3-4-4-7-4h-94zm187 80H84l24 321c0 9 7 15 15 15h202c8 0 15-6 16-15l23-321z"/>
 </symbol>
-<symbol id="frm_delete_solid_icon" viewBox="0 0 20 20">
-<title>delete_solid</title>
-<path d="M18.7 3.4h-4.2l-.9-2.2C13.3.5 12.6 0 12 0H7.8A2 2 0 0 0 6 1.1L5 3.5H1.4c-.1 0-.3 0-.4.2l-.2.2v.9c0 .2.2.4.5.4h1.2v12.5c0 1.2 1 2.2 2.1 2.3h10.8a2.4 2.4 0 0 0 2.1-2.7V5.1h1.3L19 5c.2-.1.3-.3.3-.5V4c0-.4-.3-.6-.6-.6zM7.6 2l.2-.1H12l.5 1.5H7zm-.3 13.5c0 .2-.2.4-.4.4H6a.5.5 0 0 1-.4-.4V8c0-.2.2-.4.4-.4h1c.2 0 .4.2.4.4zm3.4 0c0 .2-.2.4-.5.4h-.8a.5.5 0 0 1-.4-.4V8c0-.2.2-.4.4-.4h.8c.3 0 .5.2.5.4zm3.3 0c0 .2-.3.4-.5.4h-.8a.5.5 0 0 1-.5-.4V8c0-.2.2-.4.5-.4h.8c.2 0 .4.2.5.4z"/>
-</symbol>
 <symbol id="frm_move_icon" viewBox="0 0 20 20">
 <title>move</title>
 <path d="M9.3 4.2h1.3V17H9.3V4zM10 .5l3 3.8H6.8zm9.5 9.5l-3.8 3.2V6.8zM6.8 15.7h6.3L10 19.5l-3.2-3.8zM.5 10.2l3.8-3.1v6.3zm3.8-.8h11.4v1.2H4.3V9.4z"/>
@@ -246,11 +242,10 @@
 <title>pencil_solid</title>
 <path d="M1.7 13.4a1 1 0 0 0-.3.4l-1.3 5a.9.9 0 0 0 0 .5 1 1 0 0 0 1 .6l5-1.3c.2 0 .4-.2.5-.3l.2-.2-5-4.9zm.5 4.4zM19.7 2.2l-.8-1.1c-.6-.6-1.5-1-2.5-1S14.6.5 14 1l-1.3 1.3 4.9 5L18.9 6a3.5 3.5 0 0 0 .7-3.8zM3 12.1l8.6-8.6 5 5L7.8 17l-5-5z"/>
 </symbol>
-<symbol id="frm_pencil_icon" viewBox="0 0 18 18" fill="none">
+<symbol id="frm_pencil_icon" viewBox="0 0 512 512">
 <title>pencil</title>
-<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.167 1.5A2.358 2.358 0 0 1 16.5 4.833L5.25 16.083l-4.583 1.25 1.25-4.583L13.167 1.5Z"/>
+<path d="M59 324 363 19c25-25 65-25 90 0l40 40 8 10c16 25 14 58-8 80L189 453l-4 4c-10 9-21 14-34 19L31 511c-9 3-18 0-24-7-6-5-9-14-6-23l35-120c5-14 12-27 23-37zm23 50-23 79 79-23 17-10 228-229-63-63L93 357l-2 2-9 15z"/>
 </symbol>
-<symbol id="frm_rename_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M10 16.7h7.5M13.8 3a1.8 1.8 0 0 1 2.4 2.4L5.8 15.8l-3.3.9.8-3.4L13.7 3Z"/></symbol>
 <symbol id="frm_signature_icon" viewBox="0 0 20 20">
 <title>signature</title>
 <path d="M19.7 2.2A3.5 3.5 0 0 0 14 1.1L1.7 13.4a1 1 0 0 0-.3.4l-1.3 5a.9.9 0 0 0 0 .5 1 1 0 0 0 1 .6l5-1.3c.2 0 .4-.1.5-.3L18.9 6a3.5 3.5 0 0 0 .7-3.8zm-6.8 2.6L15.2 7l-8.6 8.7-2.4-2.4zm-10.7 13l1-3.3L5.4 17zM18 4.2l-.4.5L16.3 6 14 3.7l1.3-1.3A1.7 1.7 0 0 1 18 3.6l-.1.6zM9 17.9h11v1H9v-1z"/>
@@ -561,29 +556,9 @@
 <title>browser</title>
 <path d="M18.1 1.3H2C.9 1.3 0 2 0 3V17c0 1 .8 1.9 1.9 1.9H18c1 0 1.9-.9 1.9-2V3.2c0-1-.8-1.9-1.9-1.9zM2 3.5c0-.3.2-.5.4-.5H4c.3 0 .5.2.5.5v1c0 .2-.2.4-.5.4H2.3a.5.5 0 0 1-.4-.5v-1zm16.2 13c0 .2 0 .3-.2.3H2a.2.2 0 0 1-.2-.3v-10H18v10zm0-12c0 .2-.2.4-.4.4h-11a.5.5 0 0 1-.5-.5v-1c0-.2.3-.4.5-.4h11c.2 0 .4.2.4.5v1z"/>
 </symbol>
-<symbol id="frm_cloud_download_solid_icon" viewBox="0 0 22 20">
-<title>cloud_download_solid</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6zM16 10.9l-4.6 4.7L6.5 11h2.8V7.2H13v3.7H16z"/>
-</symbol>
-<symbol id="frm_cloud_download_icon" viewBox="0 0 22 20">
-<title>cloud_download</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6zm-.3 7.4H5.6a3.7 3.7 0 0 1-.4-7.4l1-.1.5-1a5.2 5.2 0 0 1 9.6 1.4l.3 1.4 1.4.1a2.8 2.8 0 0 1-.2 5.6zm-5.2-7.5H10V11H7.5l3.7 3.8 3.8-3.8h-2.4z"/>
-</symbol>
 <symbol id="frm_cloud_upload_solid_icon" viewBox="0 0 640 512">
 <title>cloud_upload_solid</title>
 <path d="M537.6 226.6a96 96 0 00-142.9-114.4 159.9 159.9 0 00-298.5 87.9A144.1 144.1 0 00144 480h368a128 128 0 0025.6-253.4zM393.4 288H328v112a16 16 0 01-16 16h-48a16 16 0 01-16-16V288h-65.4a16 16 0 01-11.3-27.3l105.4-105.4a16 16 0 0122.6 0l105.4 105.4a16 16 0 01-11.3 27.3z"/>
-</symbol>
-<symbol id="frm_cloud_upload_icon" viewBox="0 0 22 20">
-<title>cloud_upload</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6zm-.3 7.4H5.6a3.7 3.7 0 0 1-.4-7.4l1-.1.5-1a5.2 5.2 0 0 1 9.6 1.4l.3 1.4 1.4.1a2.8 2.8 0 0 1-.2 5.6zM7.5 11h2.4v2.9h2.7v-2.9H15l-3.7-3.7z"/>
-</symbol>
-<symbol id="frm_cloud_solid_icon" viewBox="0 0 22 20">
-<title>cloud_solid</title>
-<path d="M18.1 8.2a7 7 0 0 0-13-2 5.6 5.6 0 0 0 .5 11.3h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6z"/>
-</symbol>
-<symbol id="frm_cloud_icon" viewBox="0 0 22 20">
-<title>cloud</title>
-<path d="M11.3 4.4c2.4 0 4.5 1.7 5 4.1l.3 1.4 1.4.1a2.8 2.8 0 0 1-.2 5.6H5.6a3.7 3.7 0 0 1-.4-7.4l1-.1.5-1a5.1 5.1 0 0 1 4.5-2.7zm0-1.9A7 7 0 0 0 5 6.3a5.6 5.6 0 0 0 .6 11.2h12.2c2.6 0 4.7-2.1 4.7-4.7 0-2.5-2-4.5-4.4-4.6a7 7 0 0 0-6.8-5.7z"/>
 </symbol>
 <symbol id="frm_shuffle_icon" viewBox="0 0 20 20">
 <title>shuffle</title>
@@ -592,18 +567,6 @@
 <symbol id="frm_swap_icon" viewBox="0 0 20 20">
 <title>swap</title>
 <path d="M9 6a4 4 0 0 1 8 0v8h3l-4 4-4-4h3V6a2 2 0 1 0-4 0v8a4 4 0 0 1-8 0V6H0l4-4 4 4H5v8a2 2 0 1 0 4 0V6z"/>
-</symbol>
-<symbol id="frm_dropper_solid_icon" viewBox="0 0 20 20">
-<title>dropper_solid</title>
-<path d="M19.7 3L17 .2c-.5-.4-1.2-.4-1.6 0L12 3.8 10 1.7 8.3 3.2 10 4.8 0 14.8V20h5.3l9.9-10 1.6 1.7 1.5-1.6L16.2 8l3.5-3.5c.4-.4.4-1.1 0-1.6zM4.4 17.7l-2.2-2.2 9-9 2.1 2.2-9 9z"/>
-</symbol>
-<symbol id="frm_tint_icon" viewBox="0 0 14 20">
-<title>tint</title>
-<path d="M8 .9C8 .3 7.4 0 7 0c-.5 0-1 .3-1.2.9C4 7 0 8.7 0 13c0 3.9 3 7 6.9 7s6.8-3.1 6.8-7C13.7 8.7 10 7 8 1zM7 18a5 5 0 0 1-5-5c0-1.8.8-3 2-4.7 1-1.3 2-3 3-5.1.9 2.2 2 3.8 3 5.2 1.2 1.7 2 2.8 2 4.5a5 5 0 0 1-5 5.1zm.6-2.5a3.1 3.1 0 0 1-3.1-3.1.6.6 0 0 0-1.3 0c0 2.4 2 4.4 4.4 4.4a.6.6 0 0 0 0-1.3z"/>
-</symbol>
-<symbol id="frm_pallet_solid_icon" viewBox="0 0 20 20">
-<title>pallet_solid</title>
-<path d="M10 0a10 10 0 0 0 0 20 1.7 1.7 0 0 0 1.2-2.8c-.2-.3-.4-.7-.4-1 0-1 .8-1.8 1.7-1.8h2c3 0 5.5-2.4 5.5-5.5 0-5-4.5-8.9-10-8.9zM3.9 10a1.7 1.7 0 1 1 0-3.3 1.7 1.7 0 0 1 0 3.3zm3.3-4.4a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zm5.6 0a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM16 10a1.7 1.7 0 1 1 0-3.3 1.7 1.7 0 0 1 0 3.3z"/>
 </symbol>
 <symbol id="frm_pallet_icon" viewBox="0 0 20 20">
 <title>pallet</title>
@@ -649,17 +612,9 @@
 <title>lock_open</title>
 <path d="M10 15.24c1.05 0 1.9-.86 1.9-1.9s-.85-1.91-1.9-1.91a1.9 1.9 0 0 0 0 3.8zm5.71-8.57h-.95v-1.9a4.76 4.76 0 0 0-9.52 0h1.8a2.95 2.95 0 0 1 5.91 0v1.9H4.3c-1.05 0-1.91.85-1.91 1.9v9.53c0 1.04.86 1.9 1.9 1.9h11.43c1.05 0 1.9-.86 1.9-1.9V8.57c0-1.05-.85-1.9-1.9-1.9zm0 11.42H4.28V8.57h11.43v9.52z"/>
 </symbol>
-<symbol id="frm_lock_solid_icon" viewBox="0 0 20 20">
-<title>lock_solid</title>
-<path d="M15.7 6.7h-1v-2a4.8 4.8 0 0 0-9.5 0v2h-1c-1 0-1.8.8-1.8 1.9V18c0 1 .8 1.9 1.9 1.9h11.4c1 0 2-.9 2-1.9V8.6c0-1-1-2-2-2zM10 15.2c-1 0-2-.8-2-1.9s1-1.9 2-1.9 2 .9 2 2-1 1.8-2 1.8zm3-8.5H7v-2a3 3 0 0 1 6 0v2z"/>
-</symbol>
 <symbol id="frm_lock_icon" viewBox="0 0 20 20">
 <title>lock</title>
 <path d="M15.71 6.67h-.95v-1.9a4.76 4.76 0 0 0-9.52 0v1.9h-.95c-1.05 0-1.9.85-1.9 1.9v9.53c0 1.04.85 1.9 1.9 1.9h11.43c1.04 0 1.9-.86 1.9-1.9V8.57c0-1.05-.86-1.9-1.9-1.9zm-8.57-1.9a2.85 2.85 0 1 1 5.72 0v1.9H7.14v-1.9zm8.57 13.32H4.28V8.57h11.43v9.52zM10 15.24c1.05 0 1.9-.86 1.9-1.9s-.85-1.91-1.9-1.91a1.9 1.9 0 0 0 0 3.8z"/>
-</symbol>
-<symbol id="frm_magic_wand_icon" viewBox="0 0 20 20">
-<title>magic_wand</title>
-<path d="M5 3.8L2.5 1.3H1.2v1.2L3.8 5zM6.3 0h1.2v2.5H6.2zm5 6.3h2.4v1.2h-2.4zm1.2-3.8V1.2h-1.3L8.8 3.8 10 5zM0 6.3h2.5v1.2H0zm6.3 5h1.2v2.4H6.2zm-5 0v1.2h1.2L5 10 3.7 8.7zm18.4 6L7.3 4.7a1 1 0 0 0-1.3 0L4.8 6a1 1 0 0 0 0 1.3l12.4 12.4c.4.4 1 .4 1.4 0l1.1-1.1c.4-.4.4-1 0-1.4zM9.4 10.5L5.6 7 7 5.6l3.7 3.8-1.2 1.2z"/>
 </symbol>
 <symbol id="frm_dollar_sign_icon" viewBox="0 0 20 20">
 <title>dollar_sign</title>
@@ -668,10 +623,6 @@
 <symbol id="frm_percent_icon" viewBox="0 0 20 20">
 <title>percent</title>
 <path d="M8.3 5.4a2.9 2.9 0 0 0-1.8-2.7 2.9 2.9 0 0 0-3.1.7 3 3 0 0 0-.9 2 2.9 2.9 0 0 0 .9 2 3 3 0 0 0 2 1 2.9 2.9 0 0 0 2-1 3 3 0 0 0 1-2zm-1.6 0a1.3 1.3 0 0 1-1.8 1.2 1.2 1.2 0 0 1-.6-.7 1.3 1.3 0 0 1 0-1l.2-.4.4-.2a1.3 1.3 0 0 1 1 0l.4.2.3.4v.5zm10.8 9.2a2.9 2.9 0 0 0-.9-2 3 3 0 0 0-2-1 2.9 2.9 0 0 0-2 1 3 3 0 0 0-1 2 2.9 2.9 0 0 0 1 2 3 3 0 0 0 2 .9 2.9 2.9 0 0 0 2-.9 3 3 0 0 0 .9-2zm-1.7 0a1.3 1.3 0 0 1-1.7 1.1 1.2 1.2 0 0 1-.7-.6 1.3 1.3 0 0 1 0-1l.3-.4.4-.3a1.3 1.3 0 0 1 1 0l.4.3.2.4.1.5zM17 4.4L4.5 16.8c-.4.5-1.2.5-1.6 0-.5-.4-.5-1.1 0-1.6L15.4 2.7c.4-.5 1.2-.5 1.6 0 .5.5.5 1.2 0 1.7z"/>
-</symbol>
-<symbol id="frm_notification_solid_icon" viewBox="0 0 20 20">
-<title>notification_solid</title>
-<path d="M10 20c1.1 0 2-1 2-2H8c0 1 .9 2 2 2zm6.2-6.2v-5c0-3.2-1.7-5.9-4.7-6.6v-.7a1.5 1.5 0 1 0-3 0v.7c-3 .7-4.7 3.4-4.7 6.5v5.1l-2 2.1v1h16.4v-1l-2-2z"/>
 </symbol>
 <symbol id="frm_notification_icon" viewBox="0 0 20 20">
 <title>notification</title>
@@ -689,10 +640,6 @@
 <title>pageview</title>
 <path d="M9.5 14c.9 0 1.7-.3 2.4-.7l2.4 2.4 1.4-1.4-2.4-2.4A4.5 4.5 0 1 0 9.5 14zm0-7a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM18 2H2a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 14H2V4h16v12z"/>
 </symbol>
-<symbol id="frm_settings_solid_icon" viewBox="0 0 20 20">
-<title>settings_solid</title>
-<path d="M17.4 11l.1-1V9l2-1.6c.2-.2.3-.5.2-.7l-2-3.4c-.2-.3-.4-.3-.7-.3l-2.4 1-1.7-1-.4-2.6c0-.2-.3-.4-.5-.4H8c-.3 0-.5.2-.5.4l-.4 2.7c-.6.2-1.1.6-1.7 1L3 3c-.3-.1-.5 0-.7.2l-2 3.4c0 .3 0 .5.2.7l2 1.6v2l-2 1.6c-.2.2-.3.5-.2.7l2 3.4c.2.2.4.3.6.2l2.5-1c.6.4 1.1.8 1.7 1l.4 2.7c0 .2.3.4.5.4h4c.3 0 .5-.2.5-.4l.4-2.7c.6-.2 1.1-.6 1.7-1l2.4 1c.3.1.5 0 .7-.2l2-3.4c0-.3 0-.5-.2-.7l-2-1.6zM10 13.8c-2 0-3.8-1.7-3.8-3.8S8 6.2 10 6.2 13.8 8 13.8 10 12 13.8 10 13.8z"/>
-</symbol>
 <symbol id="frm_settings_icon" viewBox="0 0 512 512">
 <title>settings</title>
 <path d="M160 256c0-54 42-96 96-96a96 96 0 1 1-96 96zm96-48a48 48 0 1 0 0 96 48 48 0 0 0 0-96zM293 0c22 0 42 15 47 37l8 32 24 14 32-9c21-6 44 3 55 22l37 64c11 19 8 44-8 59l-24 22a271 271 0 0 1 0 29l24 23c16 15 19 40 8 59l-37 64a48 48 0 0 1-55 22l-32-9-24 14-8 32c-5 22-25 37-47 37h-74c-22 0-42-15-47-37l-8-32-24-14-33 9c-20 6-43-3-54-22l-37-64c-11-19-8-44 8-59l24-23a217 217 0 0 1 0-29l-24-22a48 48 0 0 1-8-59l37-64c11-19 34-28 54-22l33 9 24-14 8-32c5-22 25-37 47-37h74zm-87 104-12 4c-12 6-24 13-35 21l-10 7-55-16-37 64 42 40-2 12a164 164 0 0 0 0 40l2 12-42 40 37 64 55-16 10 7c11 9 23 15 35 21l12 4 13 56h74l14-56 11-4c12-6 24-12 35-21l10-7 55 16 37-64-42-40 2-12a153 153 0 0 0 0-40l-2-12 42-40-37-64-55 16-10-7c-11-8-23-15-35-21l-11-4-14-56h-74l-13 56z"/>
@@ -705,10 +652,6 @@
 <title>support</title>
 <path d="M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 1.4c-1.5 0-2.8.4-4 1L8 4.6a5.8 5.8 0 0 1 3.8 0L14 2.4c-1.2-.6-2.5-1-4-1zM2.4 14L4.6 12a5.8 5.8 0 0 1 0-3.8L2.4 6a8.6 8.6 0 0 0 0 8zm7.6 4.6c1.5 0 2.8-.4 4-1L12 15.4a5.7 5.7 0 0 1-3.8 0L6 17.6c1.2.6 2.5 1 4 1zm0-4.3a4.3 4.3 0 1 0 0-8.6 4.3 4.3 0 0 0 0 8.6zm5.4-2.4l2.2 2.1a8.6 8.6 0 0 0 0-8L15.4 8a5.8 5.8 0 0 1 0 3.8z"/>
 </symbol>
-<symbol id="frm_text_solid_icon" viewBox="0 0 20 20">
-<title>text_solid</title>
-<path d="M8 11.5h4L10 6zM18 0H2a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-4 16.5l-1.2-3H7.2l-1.2 3H4l5-13h2l5 13h-2z"/>
-</symbol>
 <symbol id="frm_text_icon" viewBox="0 0 20 20">
 <title>text</title>
 <path d="M7.2 13.5h5.6l1.1 3H16l-5-13H9l-5 13h2l1.2-3zM10 6l2 5.5H8L10 6zm8-6H2a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 18H2V2h16v16z"/>
@@ -716,41 +659,9 @@
 <symbol id="frm_text2_icon" viewBox="0 0 640 512">
 <path d="M320 248v48a24 24 0 0 0 48 0v-24h88v160h-32a24 24 0 0 0 0 48h112a24 24 0 0 0 0-48h-32V272h88v24a24 24 0 0 0 48 0v-48c0-13-11-24-24-24H344c-13 0-24 11-24 24zM0 56v80a24 24 0 1 0 48 0V80h120v352h-48c-13 0-24 11-24 24s11 24 24 24h144a24 24 0 1 0 0-48h-48V80h120v56a24 24 0 0 0 48 0V56c0-13-11-24-24-24H24C11 32 0 43 0 56z"/>
 </symbol>
-<symbol id="frm_text3_icon" viewBox="0 0 20 20">
-<title>text3</title>
-<path d="M2.3 1.8V5h6v13.1h3.3V5.2h6.1V1.8z"/>
-</symbol>
-<symbol id="frm_unfold_less_icon" viewBox="0 0 20 20">
-<title>unfold_less</title>
-<path d="M5.6 16.3L7 17.7l3-3 3 3 1.4-1.4L10 12l-4.4 4.4zm8.8-12.6L13 2.3l-3 3-3-3-1.4 1.4L10 8l4.4-4.4z"/>
-</symbol>
-<symbol id="frm_unfold_more_icon" viewBox="0 0 20 20">
-<title>unfold_more</title>
-<path d="M10 4.2l3 3 1.3-1.4L10 1.5 5.7 5.8 7 7.2l3-3zm0 11.6l-3-3-1.3 1.4 4.3 4.3 4.3-4.3-1.3-1.4-3 3z"/>
-</symbol>
-<symbol id="frm_work_solid_icon" viewBox="0 0 20 20">
-<title>work_solid</title>
-<path d="M18 4h-4V2a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v11c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm-6 0H8V2h4v2z"/>
-</symbol>
-<symbol id="frm_work_icon" viewBox="0 0 20 20">
-<title>work</title>
-<path d="M12 4V2H8v2h4zM2 6v11h16V6H2zm16-2a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h4V2c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2h4z"/>
-</symbol>
 <symbol id="frm_white_label_icon" viewBox="0 0 20 20">
 <title>white_label</title>
 <path d="M18.1 1.3H2C.9 1.3 0 2 0 3V17c0 1 .8 1.9 1.9 1.9H18c1 0 1.9-.9 1.9-2V3.2c0-1-.8-1.9-1.9-1.9zM18 16.9H2a.2.2 0 0 1-.2-.3V3.4c0-.2 0-.3.2-.3H18c.1 0 .2.1.2.3v13.2c0 .2 0 .3-.2.3zm-1.6-3.6v1c0 .2-.3.4-.5.4H8a.5.5 0 0 1-.5-.5v-1c0-.2.2-.4.5-.4h7.8c.2 0 .4.2.4.5zm0-3.8v1c0 .2-.3.4-.5.4H8a.5.5 0 0 1-.5-.4v-1c0-.2.2-.4.5-.4h7.8c.2 0 .4.2.4.4zm0-3.7v1c0 .2-.3.4-.5.4H8a.5.5 0 0 1-.5-.5v-1c0-.2.2-.4.5-.4h7.8c.2 0 .4.2.4.5zm-9.9.5a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0zm0 3.7a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0zm0 3.8a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/>
-</symbol>
-<symbol id="frm_zoom_out_icon" viewBox="0 0 20 20">
-<title>zoom_out</title>
-<path d="M12.8 1.5L15 3.7l-2.7 2.7 1.3 1.3L16.3 5l2.2 2.2V1.5h-5.7zM1.5 7.2L3.7 5l2.7 2.7 1.3-1.3L5 3.7l2.2-2.2H1.5v5.7zm5.7 11.3L5 16.3l2.7-2.7-1.3-1.3L3.7 15l-2.2-2.2v5.7h5.7zm11.3-5.7L16.3 15l-2.7-2.7-1.3 1.3 2.7 2.7-2.2 2.2h5.7v-5.7z"/>
-</symbol>
-<symbol id="frm_maximize_icon" viewBox="0 0 20 20">
-<title>maximize</title>
-<path d="M16.3 2.4l-5 5a1 1 0 1 0 1.3 1.4l5-5V7a1 1 0 0 0 1.9 0V1.4v-.3a1 1 0 0 0-1-.6h-5.7a1 1 0 0 0 0 1.9zM3.7 17.6l5-5a1 1 0 1 0-1.3-1.4l-5 5V13a1 1 0 0 0-1.9 0v6a1 1 0 0 0 1 .6h5.7a1 1 0 0 0 0-1.9z"/>
-</symbol>
-<symbol id="frm_minimize_icon" viewBox="0 0 20 20">
-<title>minimize</title>
-<path d="M14.2 7.2l5-5A1 1 0 1 0 18 .7l-5 5V2.4a1 1 0 0 0-2 0v5.7a1 1 0 0 0 .3.7 1 1 0 0 0 .7.2h5.7a1 1 0 0 0 0-1.9zm-12 12l5-5v3.4a1 1 0 0 0 1.8 0v-5.7a1 1 0 0 0-.2-.7A1 1 0 0 0 8 11H2.4a1 1 0 0 0 0 1.9h3.4l-5 5A1 1 0 1 0 2 19.2z"/>
 </symbol>
 <symbol id="frm_authorize_icon" viewBox="0 0 20 20">
 <title>authorize</title>
@@ -904,12 +815,9 @@
 <path fill="currentColor" d="M4 16h16v4H4z"/></symbol>
 <symbol id="frm_alert_icon" viewBox="0 0 17 15"><path d="M16.8 12.9c.6 1-.1 2.1-1.2 2.1H1.4c-1 0-1.8-1.2-1.2-2.1L7.2.7c.6-1 2-1 2.5 0l7.1 12.2zm-8.3-2.5c-.7 0-1.4.6-1.4 1.3 0 .8.7 1.4 1.4 1.4s1.4-.6 1.4-1.4c0-.7-.7-1.3-1.4-1.3zM7.2 5.5l.2 4c0 .2.2.3.4.3h1.4c.2 0 .4-.1.4-.3l.2-4c0-.2-.2-.3-.4-.3H7.6c-.2 0-.4.1-.4.3z" fill="currentColor"/></symbol>
 <title>Preview</title>
-<symbol id="frm_eye_simple" viewBox="0 0 18 16"><path d="M1.667 8S4.333 2.667 9 2.667 16.333 8 16.333 8 13.667 13.333 9 13.333 1.667 8 1.667 8z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 10a2 2 0 100-4 2 2 0 000 4z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<title>Back</title>
+<symbol id="frm_eye_simple" viewBox="1 1 16 14"><path d="M1.667 8S4.333 2.667 9 2.667 16.333 8 16.333 8 13.667 13.333 9 13.333 1.667 8 1.667 8z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 10a2 2 0 100-4 2 2 0 000 4z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_back" viewBox="0 0 24 25" fill="none"><path d="M19 12.031H5M12 19.031l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<title>Locked</title>
-<symbol id="frm_lock_simple" viewBox="0 0 12 14" fill="none"><path d="M10.714 6.125h-.643V4.156C10.071 1.865 8.245 0 6 0 3.755 0 1.929 1.865 1.929 4.156v1.969h-.643C.576 6.125 0 6.713 0 7.438v5.25C0 13.412.576 14 1.286 14h9.428c.71 0 1.286-.588 1.286-1.313v-5.25c0-.724-.576-1.312-1.286-1.312zm-2.785 0H4.07V4.156c0-1.085.866-1.968 1.929-1.968 1.063 0 1.929.883 1.929 1.968v1.969z" fill="#282F36" fill-opacity=".5"/></symbol>
-<title>Unlock</title>
+<symbol id="frm_lock_simple" viewBox="0 0 12 14" fill="none"><path d="M10.714 6.125h-.643V4.156C10.071 1.865 8.245 0 6 0 3.755 0 1.929 1.865 1.929 4.156v1.969h-.643C.576 6.125 0 6.713 0 7.438v5.25C0 13.412.576 14 1.286 14h9.428c.71 0 1.286-.588 1.286-1.313v-5.25c0-.724-.576-1.312-1.286-1.312zm-2.785 0H4.07V4.156c0-1.085.866-1.968 1.929-1.968 1.063 0 1.929.883 1.929 1.968v1.969z" fill="currentColor" /></symbol>
 <symbol id="frm_unlock_simple" viewBox="0 0 12 14" fill="none"><path d="M10.714 7H4.071V4.18c0-1.083.85-1.983 1.91-1.993 1.072-.011 1.948.877 1.948 1.968v.438c0 .363.286.656.642.656h.858a.648.648 0 00.642-.656v-.438c0-2.297-1.834-4.164-4.084-4.156-2.25.008-4.058 1.9-4.058 4.197V7h-.643C.576 7 0 7.587 0 8.312v4.375c0 .724.576 1.312 1.286 1.312h9.428c.71 0 1.286-.588 1.286-1.312V8.312c0-.725-.576-1.313-1.286-1.313z" fill="#F0F8FF"/></symbol>
 <symbol id="frm_house_icon" viewBox="0 0 20 20"><path d="M19.7 9L10.4.2a.6.6 0 00-.8 0L.3 9a1 1 0 00.7 1.8h1.5v8c0 .6.6 1.2 1.3 1.2h3.5c.3 0 .6-.3.6-.6V14c0-.2.1-.3.2-.3H12s.2.1.2.3v5.4c0 .3.3.6.6.6h3.6c.6 0 1.2-.6 1.2-1.3v-7.9H19a1 1 0 00.7-1.8z" fill="currentColor"/></symbol>
 <symbol id="frm_comment_icon" viewBox="0 0 36 36" fill="none"><path d="M28 23.3a2.6 2.6 0 01-2.6 2.6H11c-.6 0-1.1.2-1.5.6l-2.8 2.8a1 1 0 01-1.7-.7v-18A2.6 2.6 0 017.6 8h17.8a2.6 2.6 0 012.6 2.6v12.7z" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><path d="M12.5 2.5a1 1 0 100 2v-2zM31 19a1 1 0 102 0h-2zM12.5 4.5H27v-2H12.5v2zm18.5 4V19h2V8.5h-2zm-4-4a4 4 0 014 4h2a6 6 0 00-6-6v2z" fill="currentColor" opacity=".6"></path></symbol>
@@ -927,18 +835,12 @@
 <symbol id="frm_break_field_group_icon" viewBox="0 0 20 20" fill="none"><path d="M16.667 3.5h-13.5c-.92 0-1.667.746-1.667 1.667v1.5c0 .92.746 1.666 1.667 1.666h13.5c.92 0 1.666-.746 1.666-1.666v-1.5c0-.92-.746-1.667-1.666-1.667zM16.667 11.5h-13.5c-.92 0-1.667.746-1.667 1.667v1.5c0 .92.746 1.666 1.667 1.666h13.5c.92 0 1.666-.746 1.666-1.666v-1.5c0-.92-.746-1.667-1.666-1.667z" stroke="#484E54" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_trash_icon" viewBox="0 0 20 20" fill="none"><path d="M2.5 5h15M6.667 5V3.334a1.667 1.667 0 011.667-1.667h3.333a1.667 1.667 0 011.667 1.667V5m2.5 0v11.667a1.667 1.667 0 01-1.667 1.667H5.834a1.667 1.667 0 01-1.667-1.667V5h11.667z" stroke="#484E54" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_thick_move_icon" viewBox="0 0 20 20"><path d="M4.166 7.5l-2.5 2.5 2.5 2.5M7.5 4.167l2.5-2.5 2.5 2.5M12.5 15.833l-2.5 2.5-2.5-2.5M15.834 7.5l2.5 2.5-2.5 2.5M1.666 10h16.667M10 1.667v16.667" stroke="#9EA9B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="frm_thick_more_vert_icon" viewBox="0 0 20 20"><path d="M10 10.834a.833.833 0 100-1.667.833.833 0 000 1.667zM10 5a.833.833 0 100-1.667A.833.833 0 0010 5zM10 16.667A.833.833 0 1010 15a.833.833 0 000 1.667z" fill="#9EA9B8" stroke="#9EA9B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-<symbol id="frm_chat_forms_icon" viewBox="1 1 20 20" fill="none" stroke="currentColor"><path d="M19.991 13.914a2 2 0 0 1-2 2h-12l-4 4v-16a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="frm_thick_more_vert_icon" viewBox="0 0 20 20"><path d="M10 10.834a.833.833 0 100-1.667.833.833 0 000 1.667zM10 5a.833.833 0 100-1.667A.833.833 0 0010 5zM10 16.667A.833.833 0 1010 15a.833.833 0 000 1.667z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="frm_chat_forms_icon" viewBox="0 0 21 21" fill="none" stroke="currentColor"><path d="M19.991 13.914a2 2 0 0 1-2 2h-12l-4 4v-16a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_lightning" viewBox="0 0 20 22" fill="none"><path d="M11 1 1 13h9l-1 8L19 9h-9l1-8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_hcaptcha" viewBox="0 0 38 40" fill="none"><path fill="#0074BF" d="M28.75 33.25H24V38h4.75v-4.75Z" opacity=".5"/><path fill="#0074BF" d="M24 33.25h-4.75V38H24v-4.75ZM19.25 33.25H14.5V38h4.75v-4.75Z" opacity=".7"/><path fill="#0074BF" d="M14.5 33.25H9.75V38h4.75v-4.75Z" opacity=".5"/><path fill="#0082BF" d="M33.5 28.5h-4.75v4.75h4.75V28.5Z" opacity=".7"/><path fill="#0082BF" d="M28.75 28.5H24v4.75h4.75V28.5Z" opacity=".8"/><path fill="#0082BF" d="M24 28.5h-4.75v4.75H24V28.5ZM19.25 28.5H14.5v4.75h4.75V28.5Z"/><path fill="#0082BF" d="M14.5 28.5H9.75v4.75h4.75V28.5Z" opacity=".8"/><path fill="#0082BF" d="M9.75 28.5H5v4.75h4.75V28.5Z" opacity=".7"/><path fill="#008FBF" d="M38.25 23.75H33.5v4.75h4.75v-4.75Z" opacity=".5"/><path fill="#008FBF" d="M33.5 23.75h-4.75v4.75h4.75v-4.75Z" opacity=".8"/><path fill="#008FBF" d="M28.75 23.75H24v4.75h4.75v-4.75ZM24 23.75h-4.75v4.75H24v-4.75ZM19.25 23.75H14.5v4.75h4.75v-4.75ZM14.5 23.75H9.75v4.75h4.75v-4.75Z"/><path fill="#008FBF" d="M9.75 23.75H5v4.75h4.75v-4.75Z" opacity=".8"/><path fill="#008FBF" d="M5 23.75H.25v4.75H5v-4.75Z" opacity=".5"/><path fill="#009DBF" d="M38.25 19H33.5v4.75h4.75V19Z" opacity=".7"/><path fill="#009DBF" d="M33.5 19h-4.75v4.75h4.75V19ZM28.75 19H24v4.75h4.75V19ZM24 19h-4.75v4.75H24V19ZM19.25 19H14.5v4.75h4.75V19ZM14.5 19H9.75v4.75h4.75V19ZM9.75 19H5v4.75h4.75V19Z"/><path fill="#009DBF" d="M5 19H.25v4.75H5V19Z" opacity=".7"/><path fill="#00ABBF" d="M38.25 14.25H33.5V19h4.75v-4.75Z" opacity=".7"/><path fill="#00ABBF" d="M33.5 14.25h-4.75V19h4.75v-4.75ZM28.75 14.25H24V19h4.75v-4.75ZM24 14.25h-4.75V19H24v-4.75ZM19.25 14.25H14.5V19h4.75v-4.75ZM14.5 14.25H9.75V19h4.75v-4.75ZM9.75 14.25H5V19h4.75v-4.75Z"/><path fill="#00ABBF" d="M5 14.25H.25V19H5v-4.75Z" opacity=".7"/><path fill="#00B9BF" d="M38.25 9.5H33.5v4.75h4.75V9.5Z" opacity=".5"/><path fill="#00B9BF" d="M33.5 9.5h-4.75v4.75h4.75V9.5Z" opacity=".8"/><path fill="#00B9BF" d="M28.75 9.5H24v4.75h4.75V9.5ZM24 9.5h-4.75v4.75H24V9.5ZM19.25 9.5H14.5v4.75h4.75V9.5ZM14.5 9.5H9.75v4.75h4.75V9.5Z"/><path fill="#00B9BF" d="M9.75 9.5H5v4.75h4.75V9.5Z" opacity=".8"/><path fill="#00B9BF" d="M5 9.5H.25v4.75H5V9.5Z" opacity=".5"/><path fill="#00C6BF" d="M33.5 4.75h-4.75V9.5h4.75V4.75Z" opacity=".7"/><path fill="#00C6BF" d="M28.75 4.75H24V9.5h4.75V4.75Z" opacity=".8"/><path fill="#00C6BF" d="M24 4.75h-4.75V9.5H24V4.75ZM19.25 4.75H14.5V9.5h4.75V4.75Z"/><path fill="#00C6BF" d="M14.5 4.75H9.75V9.5h4.75V4.75Z" opacity=".8"/><path fill="#00C6BF" d="M9.75 4.75H5V9.5h4.75V4.75Z" opacity=".7"/><path fill="#00D4BF" d="M28.75 0H24v4.75h4.75V0Z" opacity=".5"/><path fill="#00D4BF" d="M24 0h-4.75v4.75H24V0ZM19.25 0H14.5v4.75h4.75V0Z" opacity=".7"/><path fill="#00D4BF" d="M14.5 0H9.75v4.75h4.75V0Z" opacity=".5"/><path fill="#fff" d="m12.758 17.496 1.312-2.96c.478-.763.43-1.694-.119-2.22a.933.933 0 0 0-.239-.19 1.454 1.454 0 0 0-1.217-.143c-.454.143-.86.453-1.098.859 0 0-1.814 4.225-2.482 6.134-.669 1.91-.406 5.395 2.196 7.996 2.768 2.77 6.755 3.39 9.285 1.48.095-.047.215-.119.31-.19l7.853-6.54c.382-.311.955-.956.43-1.696-.502-.716-1.432-.238-1.814.024l-4.512 3.294a.217.217 0 0 1-.286-.024c-.12-.143-.143-.525.048-.668l6.922-5.872c.596-.549.692-1.313.19-1.862-.477-.525-1.217-.5-1.837.024l-6.206 4.822a.269.269 0 0 1-.382-.048v-.024c-.12-.143-.167-.382-.024-.501l7.065-6.85a1.39 1.39 0 0 0 .072-1.958 1.298 1.298 0 0 0-.955-.406c-.358 0-.716.144-1.002.406l-7.209 6.78c-.167.166-.501 0-.549-.192-.024-.072 0-.143.072-.19l5.514-6.278c.549-.502.572-1.385.071-1.934-.501-.549-1.384-.573-1.933-.071l-.072.071-8.378 9.261c-.31.31-.74.31-.955.144-.143-.144-.167-.334-.071-.478Z"/></symbol>
 <symbol id="frm_recaptcha" viewBox="0 0 38 38" fill="none"><path fill="#1C3AA9" d="M38.586 19.085a19.756 19.756 0 0 0-.02-.82V2.752L34.278 7.04C30.768 2.744 25.428 0 19.447 0 13.223 0 7.693 2.97 4.197 7.572l7.03 7.103a9.313 9.313 0 0 1 2.848-3.195c1.227-.957 2.966-1.74 5.372-1.74.29 0 .515.034.68.098a9.268 9.268 0 0 1 7.084 4.267l-4.976 4.976c6.303-.025 13.423-.04 16.35.003"/><path fill="#4285F4" d="M19.335 0c-.275.002-.548.008-.82.02H3.002L7.29 4.31C2.994 7.819.25 13.159.25 19.139c0 6.225 2.971 11.754 7.572 15.25l7.103-7.03a9.313 9.313 0 0 1-3.195-2.848c-.957-1.227-1.74-2.966-1.74-5.371 0-.29.034-.515.098-.68a9.268 9.268 0 0 1 4.267-7.085l4.976 4.976c-.025-6.302-.04-13.422.003-16.35"/><path fill="#ABABAB" d="M.25 19.14c.002.274.008.547.02.82v15.512l4.289-4.288c3.51 4.296 8.85 7.04 14.83 7.04 6.225 0 11.754-2.97 15.25-7.571l-7.03-7.104a9.315 9.315 0 0 1-2.848 3.195c-1.227.958-2.966 1.74-5.371 1.74-.29 0-.515-.033-.68-.097a9.267 9.267 0 0 1-7.085-4.268l4.976-4.976c-6.302.025-13.423.04-16.35-.003"/></symbol>
-<symbol id="frm_sample_form_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.833 2.5H4.167c-.92 0-1.667.746-1.667 1.667v11.666c0 .92.746 1.667 1.667 1.667h11.666c.92 0 1.667-.746 1.667-1.667V4.167c0-.92-.746-1.667-1.667-1.667ZM2.5 7.5h15M7.5 17.5v-10"/></symbol>
-<symbol id="frm_reset_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M.833 3.333v5h5M19.167 16.666v-5h-5"/><path stroke="#484E54" stroke-linecap="round" stroke-linejoin="round" d="M17.075 7.5A7.5 7.5 0 0 0 4.7 4.7L.833 8.333m18.334 3.334L15.3 15.3a7.5 7.5 0 0 1-12.375-2.8"/></symbol>
-<symbol id="frm_copy_style_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.667 7.5h-7.5c-.92 0-1.667.746-1.667 1.667v7.5c0 .92.746 1.666 1.667 1.666h7.5c.92 0 1.666-.746 1.666-1.666v-7.5c0-.92-.746-1.667-1.666-1.667Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.166 12.5h-.833a1.667 1.667 0 0 1-1.667-1.667v-7.5a1.667 1.667 0 0 1 1.667-1.667h7.5a1.667 1.667 0 0 1 1.666 1.667v.833"/></symbol>
-<symbol id="frm_set_as_default_icon" viewBox="0 0 20 20" fill="none">
-<title>checkmark circle</title>
-<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18.333 9.234V10a8.333 8.333 0 1 1-4.941-7.616"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18.333 3.333 10 11.675l-2.5-2.5"/>
-</symbol>
+<symbol id="frm_sample_form_icon" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.833 2.5H4.167c-.92 0-1.667.746-1.667 1.667v11.666c0 .92.746 1.667 1.667 1.667h11.666c.92 0 1.667-.746 1.667-1.667V4.167c0-.92-.746-1.667-1.667-1.667ZM2.5 7.5h15M7.5 17.5v-10" stroke-width="1.5"/></symbol>
 <symbol id="frm_send_icon" viewBox="0 0 16.5 15.1"><path d="M9 15c.5 0 .8-.4 1.1-1.1l4.7-12.3.2-.8c0-.5-.3-.8-.8-.8-.2 0-.5 0-.8.2L1 4.9C.5 5.1 0 5.5 0 6c0 .7.5 1 1.2 1.1L5 8.3c.4.1.7.1 1-.2L13.9.8h.3V1L6.9 8.9c-.3.3-.3.6-.2 1L8 13.8c.2.8.4 1.3 1 1.3Z" fill="currentColor"/></symbol>
 <symbol id="frm_globe_icon" viewBox="1.1 1.1 21.8 21.8" fill="none"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM2 12h20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2c2.5 2.7 4 6.3 4 10s-1.5 7.3-4 10c-2.5-2.7-4-6.3-4-10s1.5-7.3 4-10v0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs>

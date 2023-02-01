@@ -150,7 +150,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="frm-hover-icons-template" class="frm-hover-icons">
 		<a role="button" href="#" class="frm-delete-form" aria-label="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>">
 			<svg class="frmsvg">
-				<use xlink:href="#frm_delete_solid_icon"></use>
+				<use xlink:href="#frm_delete_icon"></use>
 			</svg>
 		</a><a role="button" href="#" class="frm-preview-form" aria-label="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>">
 			<svg class="frmsvg">

@@ -111,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			);
 			?>
 			<div class="frm-scroll-box">
-				<table class="widefat striped frm-border frm_no_top_margin">
+				<table class="widefat striped frm-border frm-mt-0">
 					<thead>
 						<tr>
 							<td class="column-cb check-column"></td>

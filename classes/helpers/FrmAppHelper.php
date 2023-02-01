@@ -1468,8 +1468,13 @@ class FrmAppHelper {
 			return true;
 		}
 
-		$action                 = self::simple_get( 'frm_action' );
-		$is_edit_mode           = 'edit' === $action || ( ! $action && ! self::simple_get( 'id' ) && ! self::simple_get( 'form' ) );
+		$action       = self::simple_get( 'frm_action' );
+		$is_edit_mode = 'edit' === $action || ( ! $action && ! self::simple_get( 'id' ) && ! self::simple_get( 'form' ) );
+
+		if ( ! $is_edit_mode && class_exists( 'FrmProStylesController' ) && in_array( $action, array( 'new_style', 'duplicate' ), true ) ) {
+			$is_edit_mode = true;
+		}
+
 		$checking_for_edit_mode = 'edit' === $view;
 
 		return $is_edit_mode === $checking_for_edit_mode;

@@ -1331,6 +1331,7 @@ BEFORE_HTML;
 			'Health and Wellness' => array( 'heart', 'var(--pink)' ),
 			'Event Planning'      => array( 'calendar', 'var(--orange)' ),
 			'Real Estate'         => array( 'house' ),
+			'Nonprofit'           => array( 'heart_solid' ),
 			'Calculator'          => array( 'calculator', 'var(--purple)' ),
 			'Quiz'                => array( 'percent' ),
 			'Registrations'       => array( 'address_card' ),

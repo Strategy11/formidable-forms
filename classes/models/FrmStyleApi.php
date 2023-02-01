@@ -40,13 +40,23 @@ class FrmStyleApi extends FrmFormApi {
 	private function fill_missing_style_settings( $api_info ) {
 		$lines = $api_info[28067373];
 		$big   = $api_info[28067379];
+		$dark  = $api_info[28067312];
 
-		// TODO remove these, once they're actually in the API data.
-		$lines['settings'] = $this->get_placeholder_lines_style();
-		$big['settings']   = $this->get_placeholder_big_style();
+		// TODO remove these placeholder settings, once they're actually in the API data.
+		if ( empty( $lines['settings'] ) ) {
+			$lines['settings']  = $this->get_placeholder_lines_style();
+			$api_info[28067373] = $lines;
+		}
 
-		$api_info[28067373] = $lines;
-		$api_info[28067379] = $big;
+		if ( empty( $big['settings'] ) ) {
+			$big['settings']    = $this->get_placeholder_big_style();
+			$api_info[28067379] = $big;
+		}
+
+		if ( empty( $dark['settings'] ) ) {
+			$dark['settings']   = $this->get_placeholder_dark_style();
+			$api_info[28067312] = $dark;
+		}
 
 		// Remove 'Styling Template' from titles.
 		foreach ( $api_info as $id => $template ) {
@@ -99,6 +109,28 @@ class FrmStyleApi extends FrmFormApi {
 			'label_color'          => '444444',
 			'text_color'           => '555555',
 			'bg_color'             => 'ffffff',
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private function get_placeholder_dark_style() {
+		return array(
+			'fieldset_bg_color'    => '22303d',
+			'field_border_width'   => '1px',
+			'field_border_style'   => 'solid',
+			'border_color'         => 'cccccc',
+			'submit_bg_color'      => '00ba8b',
+			'submit_border_color'  => '00ba8b',
+			'submit_border_width'  => '1px',
+			'submit_border_radius' => '4px',
+			'submit_weight'        => 'normal',
+			'submit_text_color'    => 'f',
+			'submit_width'         => '100%',
+			'label_color'          => 'f2f2f2',
+			'text_color'           => 'f2f2f2',
+			'bg_color'             => '22303d',
 		);
 	}
 }
