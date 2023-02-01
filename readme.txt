@@ -442,7 +442,11 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 5.5.7 =
+* Security: Additional validation has been added when deleting entries on admin pages.
 * Fix: reCAPTCHA fields were including an additional = character in the HTML. This may have caused conflicts with other libraries.
+* Fix: Embed icons would not always prompt the embed modal when clicked in specific areas of the icon.
+* Fix: The document body would become scrollable unintentionally after some modals were closed.
+* Repeater forms have been added back to the list of export options when exporting in CSV format.
 
 = 5.5.6 =
 * Fix: Duplicating a form action without a rich text editor would trigger a JavaScript error after succeeding.
