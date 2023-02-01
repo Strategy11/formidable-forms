@@ -302,6 +302,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
 		$val .= $this->column_style( $form );
 		$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
+		$val = str_replace( '&nbsp;', '', $val ); // Remove the space hardeded in Landing pages.
 		$val = '<div>' . $val . '</div>';
 		return $val;
 	}

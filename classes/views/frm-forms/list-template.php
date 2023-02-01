@@ -46,7 +46,7 @@ if ( ! empty( $template['custom'] ) ) {
 			<h3 role="button">
 				<?php if ( $plan_required ) { ?>
 					<svg class="frmsvg">
-						<use xlink:href="#frm_lock_simple"></use>
+						<use xlink:href="#frm_lock_icon"></use>
 					</svg>
 				<?php } ?>
 				<?php echo esc_html( $stripped_template_name ); ?>

@@ -284,10 +284,10 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
-			const titleWrapper = span({
+			const titleWrapper = tag( 'h4', {
 				children: [
-					svg({ href: '#frm_lock_simple' }),
-					tag( 'h4', { text: data.name })
+					svg({ href: '#frm_lock_icon' }),
+					document.createTextNode( data.name )
 				]
 			});
 			const header = div({
