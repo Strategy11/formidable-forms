@@ -284,7 +284,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	padding: 0 0 0 30px !important; /* Use 30px because var(--gap-lg) is too large. It causes the background image to appear between the button and the text */
 	border-radius: var(--small-radius);
 	border-color: var(--grey-300);
-	height: 37px;
+	height: 37px !important;
 }
 
 #frm_style_sidebar .wp-color-result-text {
