@@ -2866,7 +2866,7 @@ class FrmFormsController {
 		}
 
 		self::populate_on_submit_data( $form_options, $first_create_action );
-		if ( FrmAppHelper::pro_is_connected() && $form->editable ) {
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
 			self::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
 		}
 
