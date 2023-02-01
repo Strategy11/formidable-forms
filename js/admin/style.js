@@ -633,13 +633,6 @@
 		const isTemplate        = 'undefined' !== typeof data.templateKey;
 		let dropdownMenuOptions = [];
 
-		let card;
-		if ( isTemplate ) {
-			card = getTemplateCard( data.templateKey );
-		} else {
-			card = getCardByStyleId( data.styleId );
-		}
-
 		const applyOption = a({
 			text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
 		});
@@ -1051,6 +1044,13 @@
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
+
+		const newCssTag = tag( 'link' );
+		newCssTag.setAttribute( 'type', 'text/css' );
+		newCssTag.setAttribute( 'href', ajaxurl + '?action=frmpro_load_css&flat=1&' + Object.keys(defaultValues).map(function(key) {
+			return key + '=' + defaultValues[key]
+		}).join('&') );
+		document.head.appendChild( newCssTag );
 	}
 
 	/**
