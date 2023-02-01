@@ -20,11 +20,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	overflow-y: auto;
 }
 
-#frm_style_sidebar h3 {
-	font-size: var(--text-md);
-	padding-left: 0;
-}
-
 #frm_style_sidebar .frm-inner-content {
 	padding-left: 10px;
 	padding-right: 10px;
@@ -37,6 +32,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 #frm_style_sidebar .accordion-section-title::after {
 	right: 0;
+	color: var(--grey-400);
 }
 
 #frm_style_preview {
@@ -254,16 +250,38 @@ label.default-style-box input[type="checkbox"] {
 	width: 100%;
 	overflow: hidden;
 	margin: 0 !important;
-	height: 32px !important;
+	height: var(--h-md) !important;
 	padding: 0 0 0 var(--gap-lg) !important;
 	border-radius: var(--small-radius);
 	border-color: var(--grey-300);
 }
 
 #frm_style_sidebar .wp-color-result-text {
-	line-height: 30px !important;
-	font-size: 15px;
+	line-height: var(--leading) !important;
+	font-size: var(--text-md);
 	background: #fff !important;
+	color: var(--grey-900);
+	padding: 5px 14px 5px 8px;
+	border-color: var(--grey-300);
+	text-align: left;
+}
+
+#frm_style_sidebar .color-alpha {
+	width: var(--gap-lg) !important;
+}
+
+.frm_grid_container .wp-picker-container {
+	width: 100%;
+	position: relative;
+}
+
+.wp-picker-container button.wp-color-result {
+	border: 1px solid var(--grey-300) !important;
+}
+
+.wp-picker-container .wp-picker-input-wrap input.hex.wp-color-picker {
+	max-width: 100%;
+	position: relative;
 }
 
 .frm-style-card-wrapper {

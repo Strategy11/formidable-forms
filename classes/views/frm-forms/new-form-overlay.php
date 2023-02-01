@@ -144,7 +144,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_eye_simple' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+	FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_unlock_simple' );
 	?>
 	<div id="frm-hover-icons-template" class="frm-hover-icons">

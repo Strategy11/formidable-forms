@@ -44,6 +44,9 @@
 	--text-md: 16px;
 	--text-lg: 18px;
 	--text-xl: 20px;
+	--h-xs: 24px;
+	--h-sm: 30px;
+	--h-md: 36px;
 	--leading: 1.5;
 	--gap-xs: 8px;
 	--gap-sm: 16px;
@@ -408,6 +411,10 @@ td.column-title .frm_actions_dropdown {
 	flex-direction: row-reverse; /* Switch in the HTML */
 }
 
+#frm_view_editor_left.frm-right-panel .accordion-section-title:before {
+	content: '' !important;
+	margin: 0;
+}
 /** End Temporary View CSS */
 
 .frm-upgrade-bar {
@@ -977,7 +984,7 @@ p.frm_has_shortcodes {
 .frm-right-panel a.frm_add_logic_link,
 .frm-right-panel h3 {
 	color: var(--grey-700);
-	font-size: var(--text-xl);
+	font-size: var(--text-lg);
 	font-weight: 400;
 	border-top: 2px solid var(--sidebar-hover);
 	margin: 0;
@@ -990,7 +997,7 @@ p.frm_has_shortcodes {
 }
 
 .frm-flex-justify,
-.frm-right-panel h3 {
+.frm-right-panel .frm-single-settings h3 {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -2494,10 +2501,11 @@ body.frm-body-with-open-modal {
 	color: var(--primary-700) !important;
 }
 
+.frm-application-card h4 .frmsvg,
 .frm-locked-template h3 .frmsvg {
-	height: 12px;
-	width: 12px;
-	vertical-align: baseline;
+	height: var(--text-sm);
+	width: var(--text-sm);
+	vertical-align: text-top;
 	color: var(--grey-500);
 }
 
@@ -3098,11 +3106,11 @@ a.frm_option_icon:hover::before {
 
 .frm-right-panel .accordion-section-content {
 	background: transparent;
-	padding-top: 0
+	padding: 0;
 }
 
-.frm-right-panel .accordion-section-content  > .inside {
-	padding: 0;
+.frm-right-panel .accordion-section-content > .inside {
+	padding: 0 0 var(--gap-xs);
 }
 
 .frm-right-panel .accordion-section-content .inside a {
@@ -3144,7 +3152,7 @@ a.frm_option_icon:hover::before {
 .frm-with-line span,
 .accordion-section-content h4 span {
 	background: #fff;
-	padding: 0 10px;
+	padding: 0 10px 0 0;
 	position: relative;
 	display: inline-block;
 	z-index: 2;
@@ -3188,6 +3196,7 @@ a.frm_option_icon:hover::before {
 	font-size: 18px;
 	font-variant: normal;
 	text-rendering: auto;
+	vertical-align: text-top;
 }
 
 #frm_new_form_modal .accordion-section.open .accordion-section-title:after {
@@ -3195,7 +3204,7 @@ a.frm_option_icon:hover::before {
 }
 
 .frm-right-panel .accordion-section-title:after {
-	right: 20px;
+	top: calc(50% - 10px) !important;
 }
 
 .frm-right-panel .open .accordion-section-title:after {
@@ -3206,7 +3215,7 @@ a.frm_option_icon:hover::before {
 	content: "\f1de" !important;
 	color: var(--grey);
 	font-size: 17px !important;
-	margin: 0 10px;
+	margin: 0 10px 0 0;
 }
 
 .form-title-style .accordion-section-title:before,
@@ -3266,10 +3275,14 @@ a.frm_option_icon:hover::before {
 	content: "\e939" !important;
 }
 
+#frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
 	padding: 15px 20px;
 	background: var(--sidebar-color);
-	line-height: 1;
+	line-height: var(--leading);
+	color: var(--grey-700);
+	font-size: var(--text-lg);
+	font-weight: 400;
 }
 
 .control-section .accordion-section-title:after, /** Form template list */
@@ -3964,6 +3977,11 @@ label input[type="checkbox"], label input[type="radio"] {
 #frm-options-panel h3 {
 	padding: 15px 0;
 	margin-top: -2px;
+}
+
+#frm_style_sidebar h3,
+#frm_view_editor_left.frm-right-panel .accordion-section-title {
+	padding: 15px 0;
 }
 
 .frm_field_key {
@@ -5516,7 +5534,7 @@ table td, .form-table tr td {
 p.frm-inline-select,
 #frm_submit_logic_row,
 .frm_logic_rows .frm-collapse-me {
-	line-height: 36px !important;
+	line-height: var(--h-md) !important;
 }
 
 .frm_logic_row {
@@ -7866,20 +7884,23 @@ iframe#dyncontent_ifr {
 
 .wp-picker-open + .wp-picker-input-wrap {
 	position: absolute;
-	margin-left: -87px;
+	margin-left: calc( ( 100% - 35px ) * -1 );
 	margin-top: 1px;
-	width: 86px;
+	width: calc( 100% - 36px );
 }
 
 .wp-picker-container input[type="text"].wp-color-picker {
 	border: none;
-	padding: 3px;
+	padding: 5px 14px 5px 8px;
 	font-family: inherit;
 	color: var(--grey-700);
-	font-size: 15px;
+	font-size: var(--text-md);
 	width: 100%;
-	line-height: 1;
-	text-align: center;
+	line-height: var(--leading);
+}
+
+.wp-picker-input-wrap label {
+	margin-bottom: 0;
 }
 
 .wp-picker-input-wrap .wp-picker-clear {
@@ -7990,17 +8011,13 @@ button.frm_choose_image_box,
 	padding-top: 0 !important;
 }
 
-.wp-admin .frm_wrap .form-table select,
-#postbox-container-2 select,
-.wp-admin .frm_wrap select {
-	line-height: 36px;
-	height: 38px;
+.wp-admin .frm_wrap .form-table select {
 	vertical-align: top;
 }
 
 .frm_wrap .frm_form_builder select {
-	line-height: 36px;
-	height: 38px;
+	line-height: var(--leading);
+	height: var(--text-md);
 	width: 100%;
 }
 
@@ -8008,7 +8025,6 @@ button.frm_choose_image_box,
 .wp-admin .frm_wrap select,
 .frm_wrap .frm_form_builder select {
 	height: auto;
-	padding: 0 28px 0 14px;
 	background-position: right 11px top 55%;
 }
 
@@ -8034,7 +8050,7 @@ button.frm_choose_image_box,
 }
 
 .frm-fields button.btn {
-	height: 36px;
+	height: var(--h-md);
 	text-align: inherit;
 }
 
