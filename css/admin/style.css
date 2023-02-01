@@ -254,10 +254,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	width: 86px;
 }
 
-#frm_style_sidebar .wp-picker-input-wrap input {
-	height: 35px;
-}
-
 #frm_style_sidebar .wp-picker-container input[type="text"].wp-color-picker {
 	border: none;
 	font-family: inherit;
@@ -266,6 +262,9 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	width: 100%;
 	line-height: 1;
 	text-align: center;
+	height: 37px;
+	position: relative;
+	bottom: 1px;
 }
 
 #frm_style_sidebar .wp-picker-input-wrap .wp-picker-clear {
