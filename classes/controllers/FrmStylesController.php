@@ -520,10 +520,6 @@ class FrmStylesController {
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
 
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$js_dependencies[] = 'wp-color-picker-alpha';
-		}
-
 		wp_register_script( 'formidable_style', $plugin_url . '/js/admin/style.js', $js_dependencies, $version );
 		wp_register_style( 'formidable_style', $plugin_url . '/css/admin/style.css', array(), $version );
 		wp_print_styles( 'formidable_style' );
