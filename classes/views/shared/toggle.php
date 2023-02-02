@@ -21,7 +21,7 @@ $on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
 $value        = isset( $args['value'] ) ? $args['value'] : $on_label;
 $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
 $aria_checked = $checked ? 'true' : 'false';
-$input_html   = isset( $args['input_html'] ) ? $args['input_html'] : '';
+$input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
 
 $use_container = false;
 
@@ -52,7 +52,14 @@ if ( $use_container ) {
 			<?php if ( $show_labels && $off_label ) { ?>
 				data-off="<?php echo esc_attr( $off_label ); ?>"
 			<?php } ?>
-			<?php echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php
+			if ( is_array( $input_html ) ) {
+				FrmAppHelper::array_to_html_params( $input_html, true );
+			} else {
+				_deprecated_argument( '$args[input_html]', '6.0', 'Use an array for "input_html"' );
+				echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+			?>
 		/>
 
 		<span class="frm_switch" tabindex="0" role="switch" aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">

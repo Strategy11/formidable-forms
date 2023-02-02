@@ -10,7 +10,6 @@ class FrmHtmlHelper {
 
 	/**
 	 * Create a toggle and either echo or return the string.
-	 * This isn't completely compatible with Pro. The input_html option has been omitted as it isn't secure.
 	 * This is intended for use on admin pages only. The CSS is included in frm_admin.css.
 	 *
 	 * @since x.x
