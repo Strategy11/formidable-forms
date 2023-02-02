@@ -314,6 +314,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	pointer-events: none;
 }
 
+/* When styles are disabled we don't want the active card to look like it is Applied. */
+.frm-style-card-wrapper:not(.frm-styles-enabled) .frm-currently-set-style-card .frm-style-card-title-wrapper svg,
+.frm-style-card-wrapper:not(.frm-styles-enabled) .frm-currently-set-style-card .frm-style-card-info {
+	display: none;
+}
+
 /* Style the hamburger menu (used in Style cards, and on the Style "Edit" page beside the Style name. */
 .frm-style-options-menu {
 	/* The long "Reset to defaults" option name requires extra space. There's normally a 160px min-width. */
