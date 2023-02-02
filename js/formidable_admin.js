@@ -971,6 +971,7 @@ function frmAdminBuildJS() {
 	function handleDrag( event, ui ) {
 		var container = jQuery( '#post-body-content' );
 		var startSort = 0;
+
 		container.scrollTop( function( i, v ) {
 			var moved, h, relativePos, y;
 
@@ -979,14 +980,15 @@ function frmAdminBuildJS() {
 			relativePos = event.clientY - this.offsetTop;
 			y = relativePos - h / 2;
 			if ( relativePos > ( h - 50 ) && moved > 5 ) {
+
 				// scrolling down
-				return v + y * 0.1;
+				return v + y * 0.03;
 			} else if ( relativePos < 50 && moved < -5 ) {
+
 				//scrolling up
-				return v - Math.abs( y * 0.1 );
+				return v - Math.abs( y * 0.03 );
 			}
 		});
-
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
 
@@ -1004,6 +1006,10 @@ function frmAdminBuildJS() {
 				id: 'frm_drag_placeholder',
 				className: 'sortable-placeholder'
 			});
+		}
+
+		if ( ui.helper.get( 0 ).classList.contains( 'form-field' ) ) {
+			ui.helper.get( 0 ).style.transform = 'translateY(' + getDragOffset( ui.helper ) + 'px)';
 		}
 
 		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
