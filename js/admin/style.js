@@ -633,12 +633,14 @@
 		const isTemplate        = 'undefined' !== typeof data.templateKey;
 		let dropdownMenuOptions = [];
 
-		const applyOption = a({
-			text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
-		});
-		addIconToOption( applyOption, 'frm_save_icon' );
-		dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
-		onClickPreventDefault( applyOption, handleApplyOptionClick );
+		if ( isListPage ) {
+			const applyOption = a({
+				text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
+			});
+			addIconToOption( applyOption, 'frm_save_icon' );
+			dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
+			onClickPreventDefault( applyOption, handleApplyOptionClick );
+		}
 
 		if ( ! isTemplate ) {
 			if ( 'string' === typeof data.editUrl ) {
