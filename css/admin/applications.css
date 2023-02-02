@@ -48,7 +48,7 @@
 }
 
 .frm-application-card {
-	border-radius: 4px;
+	border-radius: var(--small-radius);
 	background: #FFFFFF;
 	grid-column: span 3/span 3; /* treat as frm3 */
 	padding: 10px 0;
@@ -88,11 +88,8 @@
 	max-width: calc( 100% - 30px );
 }
 
-.frm-locked-application-template > div:first-child > span > .frmsvg {
-	position: relative;
-	bottom: 5px;
-	width: 14px;
-	height: 14px;
+.frm-application-card h4 .frmsvg {
+	margin-right: var(--gap-xs);
 }
 
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
