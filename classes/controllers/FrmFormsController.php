@@ -2946,7 +2946,7 @@ class FrmFormsController {
 		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
 
 		// If frontend editing is enabled, migrate its settings too.
-		if ( FrmAppHelper::pro_is_connected() && $form->editable ) {
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
 			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
 
 			if ( $action_data === $edit_data ) {
@@ -3007,8 +3007,7 @@ class FrmFormsController {
 
 		foreach ( $exists as $exist ) {
 			$is_event_match = in_array( $update ? 'update' : 'create', $exist->post_content['event'], true );
-			$is_data_match  = empty( $exist->post_content['conditions'] ) && $action['success_action'] === $exist->post_content['success_action'];
-
+			$is_data_match  = empty( $exist->post_content['conditions']['send_stop'] ) && $action['post_content']['success_action'] === $exist->post_content['success_action'];
 			if ( $is_event_match && $is_data_match ) {
 				return false;
 			}
