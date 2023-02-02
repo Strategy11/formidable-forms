@@ -329,9 +329,7 @@
 			return; // Exit early as we're not actually selecting a locked template for preview.
 		}
 
-		const sidebar      = document.getElementById( 'frm_style_sidebar' );
-		const previewArea  = sidebar.nextElementSibling;
-		const form         = previewArea.querySelector( 'form' );
+		const previewArea  = document.getElementById( 'frm_style_preview' );
 		const activeCard   = document.querySelector( '.frm-active-style-card' );
 		const sampleForm   = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
 		const styleIdInput = getStyleIdInput();
@@ -340,8 +338,14 @@
 
 		activeCard.classList.remove( 'frm-active-style-card' );
 		card.classList.add( 'frm-active-style-card' );
-		form.parentNode.classList.remove( activeCard.dataset.classname );
-		form.parentNode.classList.add( card.dataset.classname );
+
+		const form = previewArea.querySelector( 'form' );
+		if ( form ) {
+			// If you do not have a valid form selected, form may be null.
+			form.parentNode.classList.remove( activeCard.dataset.classname );
+			form.parentNode.classList.add( card.dataset.classname );
+		}
+		
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
 
@@ -1343,7 +1347,10 @@
 	 * @returns {void}
 	 */
 	function initDatepickerSample() {
-		jQuery( '#datepicker_sample' ).datepicker({ changeMonth: true, changeYear: true });
+		const $sample = jQuery( '#datepicker_sample' );
+		if ( $sample.length && 'function' === typeof $sample.datepicker ) {
+			$sample.datepicker({ changeMonth: true, changeYear: true });
+		}
 	}
 
 	// Hook into the styleInit function in formidable_admin.js
