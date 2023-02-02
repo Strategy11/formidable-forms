@@ -6,7 +6,7 @@
 	--grey-900: #101828;
 	--grey-800: #1D2939;
 	--grey-700: #344054;
-	--grey-500: #667085;
+	--grey-500: #667085; /* Roughly 65% opacity */
 	--grey-400: #98A2B3;
 	--grey-300: #D0D5DD;
 	--grey-100: #F2F4F7;
@@ -1235,7 +1235,7 @@ p.frm_has_shortcodes {
 }
 
 .button.frm-with-icon svg {
-	opacity: .8;
+	opacity: .65; /* Get close to grey-500 without overriding hover colors */
 }
 
 .frm-with-icon.frm-button-sm svg {
