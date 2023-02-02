@@ -433,11 +433,9 @@ class FrmStylesCardHelper {
 			// Not enough cards to require pagination.
 			return;
 		}
-
-		$number_of_pages = ceil( $count / self::PAGE_SIZE );
 		?>
-		<div class="frm-style-card-pagination frm_wrap" data-number-of-pages="<?php echo absint( $number_of_pages ); ?>">
-			<a href="#" class="frm-prev-style-page frm-disabled-pagination-anchor">‹</a> <a href="#" class="frm-next-style-page">›</a>
+		<div class="frm-style-card-pagination frm_wrap">
+			<a href="#" class="frm-show-all-styles"><?php printf( esc_html__( 'Show all (%d)', 'formidable' ), $count - self::PAGE_SIZE ); ?></a>
 		</div>
 		<?php
 	}

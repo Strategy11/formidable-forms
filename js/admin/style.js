@@ -127,52 +127,30 @@
 	function initStyleCardPagination() {
 		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
 			pagination => {
-				const wrapper    = pagination.closest( '.frm-style-card-wrapper' );
-				const prevAnchor = pagination.querySelector( '.frm-prev-style-page' );
-				const nextAnchor = pagination.querySelector( '.frm-next-style-page' );
-				let pageNumber   = 1;
+				const wrapper       = pagination.closest( '.frm-style-card-wrapper' );
+				const showAllAnchor = pagination.querySelector( '.frm-show-all-styles' );
+				let showingAll      = false;
 
-				[ prevAnchor, nextAnchor ].forEach(
-					anchor => onClickPreventDefault(
-						anchor,
-						() => {
-							const disabledClass = 'frm-disabled-pagination-anchor';
-							if ( anchor.classList.contains( disabledClass ) ) {
-								return;
-							}
+				onClickPreventDefault(
+					showAllAnchor,
+					() => {
+						showingAll = ! showingAll;
 
-							if ( anchor === prevAnchor ) {
-								pageNumber--;
-							} else {
-								pageNumber++;
-							}
-
-							const numberOfPages = parseInt( pagination.dataset.numberOfPages );
-
-							prevAnchor.classList.toggle( disabledClass, 1 === pageNumber );
-							nextAnchor.classList.toggle( disabledClass, numberOfPages === pageNumber );
-							showCardsForPage( wrapper, pageNumber );
+						if ( showingAll ) {
+							wrapper.querySelectorAll( '.frm-style-card' ).forEach(
+								card => card.classList.remove( 'frm_hidden' )
+							);
+							showAllAnchor.textContent = __( 'Show less', 'formidable' );
+							return;
 						}
-					)
+
+						wrapper.querySelectorAll( '.frm-style-card:nth-child(3) ~ .frm-style-card' ).forEach(
+							card => card.classList.add( 'frm_hidden' )
+						);
+						const hiddenCount         = wrapper.querySelectorAll( '.frm-style-card.frm_hidden' ).length;
+						showAllAnchor.textContent = __( 'Show all (%d)', 'formidable' ).replace( '%d', hiddenCount );
+					}
 				);
-			}
-		);
-	}
-
-	/**
-	 * @param {HTMLElement} wrapper
-	 * @param {Number} pageNumber
-	 * @returns {void}
-	 */
-	function showCardsForPage( wrapper, pageNumber ) {
-		const pageSize = 3;
-		const minIndex = ( pageNumber - 1 ) * pageSize;
-		const maxIndex = minIndex + pageSize - 1;
-
-		wrapper.querySelectorAll( '.frm-style-card' ).forEach(
-			( card, index ) => {
-				const hidden = index < minIndex || index > maxIndex;
-				card.classList.toggle( 'frm_hidden', hidden );
 			}
 		);
 	}

@@ -143,20 +143,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	font-size: 14px;
 }
 
-.frm-style-card-pagination a {
-	text-decoration: underline;
-}
-
-.frm-style-card-pagination a + a {
-	margin-left: 10px;
-}
-
-#frm_style_sidebar .frm-disabled-pagination-anchor {
-	color: var(--dark-grey);
-	text-decoration: none;
-	cursor: default;
-}
-
 .frm-style-card-title {
 	max-width: calc( 100% - 20px );
 	text-overflow: ellipsis;
