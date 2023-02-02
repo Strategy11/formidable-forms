@@ -2,6 +2,8 @@
 /**
  * Show a toggle with or without labels.
  *
+ * @package Formidable
+ *
  * @var string $id   The HTML id.
  * @var string $name The HTML name.
  * @var array  $args Pass args.
@@ -16,8 +18,10 @@ $div_class    = isset( $args['div_class'] ) ? $args['div_class'] : false;
 $show_labels  = isset( $args['show_labels'] ) ? $args['show_labels'] : false;
 $off_label    = isset( $args['off_label'] ) ? $args['off_label'] : '';
 $on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
+$value        = isset( $args['value'] ) ? $args['value'] : $on_label;
 $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
 $aria_checked = $checked ? 'true' : 'false';
+$input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
 
 $use_container = false;
 
@@ -29,6 +33,10 @@ $div_params = array(
 if ( $div_class ) {
 	$use_container       = true;
 	$div_params['class'] = $div_class;
+}
+
+if ( $show_labels && $off_label ) {
+	$input_html['data-off'] = $off_label;
 }
 
 if ( $use_container ) {
@@ -43,11 +51,9 @@ if ( $use_container ) {
 			<span class="frm_off_label frm_switch_opt"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
-		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>[]" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $on_label ); ?>"
+		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>[]" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
 			<?php checked( $checked, true ); ?>
-			<?php if ( $show_labels && $off_label ) { ?>
-				data-off="<?php echo esc_attr( $off_label ); ?>"
-			<?php } ?>
+			<?php FrmAppHelper::array_to_html_params( $input_html, true ); ?>
 		/>
 
 		<span class="frm_switch" tabindex="0" role="switch" aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">

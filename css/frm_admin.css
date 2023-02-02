@@ -8919,6 +8919,10 @@ input:checked + .frm_switch .frm_slider:before {
 	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
 }
 
+input[type="checkbox"]:disabled + .frm_switch {
+	opacity: .5;
+}
+
 .frm_switch_opt ~ .frm_switch .frm_slider:before,
 .frm_switch_opt ~ input:checked + .frm_switch .frm_slider:before {
 	content: ''; /* Don't show x/check if off label included */
