@@ -1,4 +1,12 @@
 <?php
+/**
+ * Show a toggle with or without labels.
+ *
+ * @var string $id   The HTML id.
+ * @var string $name The HTML name.
+ * @var array  $args Pass args.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
