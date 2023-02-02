@@ -360,6 +360,7 @@ The label in the preview should use the label color setting.
 */
 #frm_style_preview .frm_form_field > label:first-child {
     color: var(--label-color);
+	font-size: var(--font-size);
 }
 
 .frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
