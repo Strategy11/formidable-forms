@@ -699,7 +699,7 @@ function frmAdminBuildJS() {
 		if ( cont.length && typeof target !== 'undefined' ) {
 			const className = target.parentElement.className;
 			if ( 'string' === typeof className ) {
-				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 || className.indexOf( 'frm_switch' ) > -1 ) {
+				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 ) {
 					// clicking on delete icon shouldn't open it
 					event.stopPropagation();
 					return;

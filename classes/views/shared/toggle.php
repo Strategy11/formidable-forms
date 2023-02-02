@@ -42,9 +42,9 @@ if ( $use_container ) {
 	$div_params = array();
 }
 ?>
-	<label class="frm_switch_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
+	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
 		<?php if ( $show_labels && $off_label ) { ?>
-			<span class="frm_off_label frm_switch_opt"><?php echo esc_html( $off_label ); ?></span>
+			<span class="frm_off_label frm_toggle_opt"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
 		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>[]" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
@@ -62,12 +62,12 @@ if ( $use_container ) {
 			?>
 		/>
 
-		<span class="frm_switch" tabindex="0" role="switch" aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">
-			<span class="frm_slider"></span>
+		<span class="frm_toggle" tabindex="0" role="switch" aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">
+			<span class="frm_toggle_slider"></span>
 		</span>
 
 		<?php if ( $show_labels && $on_label != 1 ) { ?>
-			<span class="frm_on_label frm_switch_opt"><?php echo FrmAppHelper::kses( $on_label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			<span class="frm_on_label frm_toggle_opt"><?php echo FrmAppHelper::kses( $on_label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 		<?php } ?>
 	</label>
 <?php if ( $use_container ) { ?>
