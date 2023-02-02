@@ -24,7 +24,7 @@ class FrmHtmlHelper {
 	 * @return string|void
 	 */
 	public static function toggle( $id, $name, $args ) {
-		wp_enqueue_script( 'formidable_style_settings' );
+		wp_enqueue_script( 'formidable_settings' );
 		return FrmAppHelper::clip(
 			function() use ( $id, $name, $args ) { // @phpstan-ignore-line
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';

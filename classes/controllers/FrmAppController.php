@@ -480,7 +480,8 @@ class FrmAppController {
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
 		self::register_popper1();
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
-		wp_register_script( 'formidable_style_settings', $plugin_url . '/js/admin/style-settings.js', array(), $version, true );
+		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array( 'formidable-admin' ), $version, true );
+
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
