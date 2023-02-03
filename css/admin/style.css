@@ -483,8 +483,14 @@ The label in the preview should use the label color setting.
   flex: 1;
 }
 
-#frm_style_template_modal .frm_warning_style a:focus {
+#frm_style_template_modal .frm_warning_style a:focus,
+#frm_new_style_trigger:focus {
 	box-shadow: none;
+}
+
+#frm_new_style_trigger_wrapper {
+	position: absolute;
+	right: 15px;
 }
 
 /* RTL Styling */
@@ -544,6 +550,13 @@ body.rtl .frm-style-card-separator {
 @media only screen and (max-width: 900px) {
 	#frm_style_sidebar {
 		min-width: 260px;
+	}
+	/* Break the new style trigger into a separate line to avoid overlapping with the Enable Formidable styling toggle. */
+	#frm_new_style_trigger_wrapper {
+		position: static;
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 10px;
 	}
 }
 

@@ -642,14 +642,18 @@
 			onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
 			dropdownMenuOptions.push(
-				{ anchor: resetOption, type: 'reset' },
-				{ anchor: getRenameOption( data.styleId ), type: 'rename' }
+				{ anchor: getRenameOption( data.styleId ), type: 'rename' },
+				{ anchor: resetOption, type: 'reset' }
 			);
 		}
 
 		const hookName      = 'frm_style_card_dropdown_options';
 		const hookArgs      = { data, addIconToOption, isTemplate };
 		dropdownMenuOptions = wp.hooks.applyFilters( hookName, dropdownMenuOptions, hookArgs );
+
+		if ( isListPage && ! isTemplate ) {
+			maybeAddDuplicateUpsell( dropdownMenuOptions );
+		}
 
 		const dropdownMenu  = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
@@ -666,6 +670,33 @@
 			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
 		});
+	}
+
+	/**
+	 * @param {Array} dropdownMenuOptions
+	 * @returns {void}
+	 */
+	function maybeAddDuplicateUpsell( dropdownMenuOptions ) {
+		let duplicateOptionExists = false;
+		for ( let i = 0; i < dropdownMenuOptions.length; ++i ) {
+			if ( dropdownMenuOptions[i].type === 'duplicate' ) {
+				duplicateOptionExists = true;
+				break;
+			}
+		}
+
+		if ( duplicateOptionExists ) {
+			return;
+		}
+
+		const duplicateUpsell = a({
+			text: __( 'Duplicate', 'formidable' ),
+			className: 'frm_noallow'
+		});
+		addIconToOption( duplicateUpsell, 'frm_clone_icon' );
+		onClickPreventDefault( duplicateUpsell, () => document.getElementById( 'frm_new_style_trigger' ).click() );
+		const upsellOption = { anchor: duplicateUpsell, type: 'duplicate' };
+		dropdownMenuOptions.splice( 3, 0, upsellOption );
 	}
 
 	/**
