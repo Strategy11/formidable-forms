@@ -892,6 +892,7 @@ function frmAdminBuildJS() {
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
+			refreshPositions: true,
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
@@ -982,11 +983,11 @@ function frmAdminBuildJS() {
 			if ( relativePos > ( h - 50 ) && moved > 5 ) {
 
 				// scrolling down
-				return v + y * 0.05;
+				return v + y * 0.1;
 			} else if ( relativePos < 50 && moved < -5 ) {
 
 				//scrolling up
-				return v - Math.abs( y * 0.05 );
+				return v - Math.abs( y * 0.1 );
 			}
 		});
 		const draggable = event.target;
