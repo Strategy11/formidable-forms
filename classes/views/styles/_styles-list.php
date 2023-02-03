@@ -17,17 +17,28 @@ $sidebar_params = array(
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
 	<?php
-	/**
-	 * Pro needs to hook in here to add the "New Style" trigger.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $args {
-	 *     @type stdClass $form
-	 * }
-	 */
-	do_action( 'frm_style_list_sidebar_top', compact( 'form' ) );
+	$can_create_styles = class_exists( 'FrmProStylesPreviewHelper' );
+	$trigger_params    = array(
+		'id' => 'frm_new_style_trigger',
+		'href' => '#',
+	);
+	if ( $can_create_styles ) {
+		$trigger_params['data-new-style-url'] = esc_url( admin_url( 'admin.php?page=formidable-styles&frm_action=new_style' ) );
+	} else {
+		$trigger_params['class']        = 'frm_noallow';
+		$trigger_params['data-upgrade'] = __( 'You are currently limited to 1 style template', 'formidable' );
+		$trigger_params['data-message'] = __( 'Upgrade to create and manage as many form styles as you need.', 'formidable' );
+		$trigger_params['data-image']   = 'styles-upsell.svg';
+	}
 	?>
+	<div id="frm_new_style_trigger_wrapper">
+		<a <?php FrmAppHelper::array_to_html_params( $trigger_params, true ); ?>>
+			<?php
+			FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
+			esc_html_e( 'New Style', 'formidable-pro' );
+			?>
+		</a>
+	</div>
 	<?php // This form isn't visible. It's just used for assigning the selected style id to the target form. ?>
 	<form id="frm_style_list_form" method="post" action="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>">
 		<input type="hidden" name="style_id" value="<?php echo absint( $enabled ? $active_style->ID : 0 ); ?>" />
