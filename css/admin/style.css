@@ -476,6 +476,52 @@ The label in the preview should use the label color setting.
 	box-shadow: none;
 }
 
+/* RTL Styling */
+body.rtl #frm_toggle_sample_form {
+	right: unset;
+	left: 40px;
+}
+
+body.rtl #frm_new_style_trigger_wrapper {
+	right: unset;
+	left: 15px;
+}
+
+body.rtl .frm-style-card-info,
+body.rtl .frm-input-style-example {
+	margin-left: 0;
+	margin-right: 5px;
+}
+
+body.rtl .frm-style-card-title-wrapper > svg {
+	margin-right: 0;
+	margin-left: 5px;
+}
+
+body.rtl .frm-input-style-example {
+	padding-left: 0;
+	padding-right: 10px;
+}
+
+body.rtl .frm-style-circle1,
+body.rtl .frm-style-circle2,
+body.rtl .frm-style-circle3 {
+	right: unset;
+}
+
+body.rtl .frm-style-circle2 {
+	left: 8px;
+}
+
+body.rtl .frm-style-circle3 {
+	left: 16px;
+}
+
+body.rtl .frm-style-card-separator {
+	margin: 0 5px 0 20px;
+}
+/* End RTL Styling */
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,

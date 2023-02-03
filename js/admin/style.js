@@ -653,9 +653,12 @@
 
 		const dropdownMenu  = div({
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
-			className: 'frm-dropdown-menu dropdown-menu-right frm-style-options-menu frm-p-1',
+			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
 		});
+
+		const isRtl = document.body.classList.contains( 'rtl' );
+		dropdownMenu.classList.add( 'dropdown-menu-' + ( isRtl ? 'left' : 'right' ) );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
