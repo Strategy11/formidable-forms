@@ -37,6 +37,54 @@ class FrmStylesPreviewHelper {
 	 */
 	public function adjust_form_for_preview() {
 		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
+		$this->hide_captcha_fields();
+		$this->disable_javascript_validation();
+	}
+
+	/**
+	 * Captcha does not initialize in the preview. Hide it so we don't see the label either.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function hide_captcha_fields() {
+		add_filter(
+			'frm_show_normal_field_type',
+			/**
+			 * @param bool   $show
+			 * @param string $field_type
+			 * @param string $target_field_type
+			 * @return bool
+			 */
+			function( $show, $field_type ) {
+				if ( 'captcha' === $field_type ) {
+					$show = false;
+				}
+				return $show;
+			},
+			10,
+			2
+		);
+	}
+
+	/**
+	 * Turn off JavaScript validation for the preview.
+	 * Without this we hit a "PHP Fatal error:  Uncaught Error: Maximum function nesting level of '256' reached" error.
+	 * This only happened with specific Look up fields when FrmProLookupFieldsController::get_independent_lookup_field_options is called in Pro.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function disable_javascript_validation() {
+		add_filter(
+			'frm_form_object',
+			function( $form ) {
+				$form->options['js_validate'] = false;
+				return $form;
+			}
+		);
 	}
 
 	/**

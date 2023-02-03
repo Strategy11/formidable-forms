@@ -2181,6 +2181,14 @@ h2.frm-h2 + .howto {
 	z-index: 2;
 }
 
+body.rtl .frm-inline-modal > a.dismiss,
+body.rtl .frm-modal .postbox > a.dismiss,
+body.rtl .frm-modal .postbox .frm-modal-title + div:last-child,
+body.rtl .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
+	right: unset;
+	left: 30px;
+}
+
 .frm-info-modal .postbox > a.dismiss,
 .frm-inline-modal > a.dismiss {
 	right: 13px;

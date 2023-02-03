@@ -117,14 +117,17 @@
 			}
 			return Promise.resolve( json.data );
 		},
-		doJsonPost: async function( action, formData ) {
+		doJsonPost: async function( action, formData, { signal } = {}) {
 			formData.append( 'nonce', frmGlobal.nonce );
 			const init = {
 				method: 'POST',
 				body: formData
 			};
+			if ( signal ) {
+				init.signal = signal;
+			}
 			const response = await fetch( ajaxurl + '?action=frm_' + action, init );
-			const json = await response.json();
+			const json     = await response.json();
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
