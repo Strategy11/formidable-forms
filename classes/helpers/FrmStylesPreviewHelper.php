@@ -123,7 +123,16 @@ class FrmStylesPreviewHelper {
 	 */
 	private function should_show_multiple_forms_warning( $style_id, $default_style_id ) {
 		$is_default_style = $style_id === $default_style_id;
-		$form_count       = FrmStylesHelper::get_form_count_for_style( $style_id, $is_default_style );
+
+		if ( ! $is_default_style ) {
+			// Also check for the conversational default.
+			$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
+			if ( $conversational_style_id && (int) $conversational_style_id === $style_id ) {
+				$is_default_style = true;
+			}
+		}
+
+		$form_count = FrmStylesHelper::get_form_count_for_style( $style_id, $is_default_style );
 
 		if ( $form_count <= 1 ) {
 			return false;
