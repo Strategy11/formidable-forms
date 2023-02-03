@@ -43,7 +43,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	border-left: 1px solid var(--sidebar-hover);
 }
 
-#frm_active_style_form:not(.frm_hidden) ~ #frm_sample_form {
+#frm_active_style_form:not(.frm_hidden) ~ #frm_sample_form,
+.frm-style-card-info {
 	display: none;
 }
 
@@ -89,7 +90,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 .frm-style-card.frm-dark-style .frm-style-card-title,
 .frm-style-card.frm-dark-style.frm-locked-style .frm-style-card-title-wrapper svg,
-.frm-style-card.frm-dark-style .frm-dropdown-toggle svg {
+.frm-style-card.frm-dark-style .frm-dropdown-toggle svg,
+.frm-style-card.frm-dark-style .frm-style-card-info {
 	color: #fff;
 }
 
@@ -154,13 +156,10 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	font-size: 14px;
 }
 
-.frm-style-card-info {
-	display: none;
-}
-
 .frm-currently-set-style-card .frm-style-card-info {
 	display: inline;
-	color: #667085;
+	color: var(--grey-700);
+	opacity: 0.6;
 	margin-left: 5px;
 }
 
