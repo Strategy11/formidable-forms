@@ -21,8 +21,9 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 #frm_style_sidebar .frm-inner-content {
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 0;
 }
 
 #frm_style_sidebar .control-section:hover .accordion-section-title {
@@ -56,6 +57,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 #frm_sample_form > .frm_forms {
 	/* This gives small form containers more space. */
 	flex: 1;
+	padding: 0 10px; /* Match the extra padding around fields on builder */
 }
 
 .frm-style-card {
@@ -392,8 +394,9 @@ The label in the preview should use the label color setting.
 }
 
 /* Remove link styling from the back icon on the edit page. */
-#frm_styling_form p > a {
+#frm_styling_form h2 > a {
 	color: var(--grey-500);
+	margin-right: 10px;
 }
 
 #frm_styling_form p > a svg {
