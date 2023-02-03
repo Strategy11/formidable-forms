@@ -519,7 +519,6 @@ class FrmFormAction {
 			);
 		}
 		$defaults = array(
-			'limit'       => 99,
 			'post_status' => $default_status,
 		);
 		$args     = wp_parse_args( $args, $defaults );
@@ -550,7 +549,7 @@ class FrmFormAction {
 
 	public function get_all( $form_id = false, $atts = array() ) {
 		self::prepare_get_action( $atts, 'any' );
-		$limit = $atts['limit'];
+		$limit = $this->action_options['limit'];
 
 		if ( $form_id ) {
 			$this->form_id = $form_id;
