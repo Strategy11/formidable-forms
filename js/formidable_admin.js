@@ -971,12 +971,11 @@ function frmAdminBuildJS() {
 
 	function handleDrag( event, ui ) {
 		var container = jQuery( '#post-body-content' );
-		var startSort = 0;
 
 		container.scrollTop( function( i, v ) {
 			var moved, h, relativePos, y;
 
-			moved = event.clientY - startSort;
+			moved = event.clientY;
 			h = this.offsetHeight;
 			relativePos = event.clientY - this.offsetTop;
 			y = relativePos - h / 2;
