@@ -493,11 +493,6 @@ body.rtl #frm_toggle_sample_form {
 	left: 40px;
 }
 
-body.rtl #frm_new_style_trigger_wrapper {
-	right: unset;
-	left: 15px;
-}
-
 body.rtl .frm-style-card-info,
 body.rtl .frm-input-style-example {
 	margin-left: 0;
