@@ -982,11 +982,11 @@ function frmAdminBuildJS() {
 			if ( relativePos > ( h - 50 ) && moved > 5 ) {
 
 				// scrolling down
-				return v + y * 0.03;
+				return v + y * 0.05;
 			} else if ( relativePos < 50 && moved < -5 ) {
 
 				//scrolling up
-				return v - Math.abs( y * 0.03 );
+				return v - Math.abs( y * 0.05 );
 			}
 		});
 		const draggable = event.target;
