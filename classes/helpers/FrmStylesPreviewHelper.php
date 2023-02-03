@@ -37,6 +37,34 @@ class FrmStylesPreviewHelper {
 	 */
 	public function adjust_form_for_preview() {
 		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
+		$this->hide_captcha_fields();
+	}
+
+	/**
+	 * Captcha does not initialize in the preview. Hide it so we don't see the label either.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function hide_captcha_fields() {
+		add_filter(
+			'frm_show_normal_field_type',
+			/**
+			 * @param bool   $show
+			 * @param string $field_type
+			 * @param string $target_field_type
+			 * @return bool
+			 */
+			function( $show, $field_type ) {
+				if ( 'captcha' === $field_type ) {
+					$show = false;
+				}
+				return $show;
+			},
+			10,
+			2
+		);
 	}
 
 	/**
