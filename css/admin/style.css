@@ -375,10 +375,6 @@ The label in the preview should use the label color setting.
 	box-sizing: border-box;
 }
 
-.frm-darker-circle-border {
-	border-color: var(--grey-300);
-}
-
 .frm-style-circle1 {
 	z-index: 3;
 }

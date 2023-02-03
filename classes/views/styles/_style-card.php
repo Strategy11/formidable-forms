@@ -41,8 +41,6 @@ $include_info = $is_active_style;
 			);
 			$index  = 0;
 			foreach( $colors as $css_var_name => $color ) {
-				$brightness = FrmStylesHelper::get_color_brightness( $color );
-
 				if ( 0 !== strpos( $color, 'rgb' ) ) {
 					$color = '#' . $color;
 				}
@@ -51,9 +49,6 @@ $include_info = $is_active_style;
 					'class' => 'frm-style-circle' . absint( $index + 1 ),
 					'style' => 'background-color: var(--' . $css_var_name . ')',
 				);
-				if ( 255 === $brightness ) {
-					$circle_params['class'] .= ' frm-darker-circle-border';
-				}
 
 				++$index;
 			?>
