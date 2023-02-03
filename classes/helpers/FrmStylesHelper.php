@@ -518,28 +518,54 @@ class FrmStylesHelper {
 			)
 		);
 
-		if ( $is_default ) {
-			// Add forms without an assigned style ID to the default count as well.
-			$substring2 = serialize( array( 'custom_style' => '1' ) );
-			$substring2 = substr( $substring2, 5, -1 );
+		if ( ! $is_default ) {
+			// Exit early as the rest of the code is about including the default count.
+			return $number_of_forms;
+		}
 
-			$substring3 = serialize( array( 'custom_style' => 1 ) );
-			$substring3 = substr( $substring3, 5, -1 );
+		$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
+		$number_of_forms        += self::get_default_style_count( $style_id, $conversational_style_id );
 
-			$number_of_forms += FrmDb::get_count(
-				'frm_forms',
-				array(
-					'status' => 'published',
-					array(
-						'options NOT LIKE' => 'custom_style',
-						'or'               => 1,
-						'options LIKE'     => array( $substring2, $substring3 ),
-					),
-				)
+		return $number_of_forms;
+	}
+
+	/**
+	 * Get the number of forms that use the default style.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|int $style_id
+	 * @param mixed      $conversational_style_id
+	 * @return int
+	 */
+	private static function get_default_style_count( $style_id, $conversational_style_id ) {
+		$substrings = array_map(
+			function( $value ) {
+				$substring = serialize( array( 'custom_style' => $value ) );
+				return substr( $substring, 5, -1 );
+			},
+			array( '1', 1 )
+		);
+		$where = array(
+			'status' => 'published',
+			0        => array(
+				'options NOT LIKE' => 'custom_style',
+				'or'               => 1,
+				'options LIKE'     => $substrings,
+			),
+		);
+
+		if ( $conversational_style_id ) {
+			// When a conversational style is set, check for it in the query by wrapping the where and adding a conversational option check.
+			$is_conversational_style = (int) $style_id === (int) $conversational_style_id;
+			$where[0] = array(
+				// The chat option doesn't exist if it isn't on.
+				( $is_conversational_style ? 'options LIKE' : 'options NOT LIKE' ) => ';s:4:"chat";',
+				$where[0]
 			);
 		}
 
-		return $number_of_forms;
+		return FrmDb::get_count( 'frm_forms', $where );
 	}
 
 	/**
