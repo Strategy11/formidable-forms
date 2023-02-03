@@ -101,7 +101,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 	/**
 	 * @covers FrmStylesHelper::get_form_count_for_style
-	 * @group mike
 	 */
 	public function test_get_form_count_for_style() {
 		$new_style_id = $this->factory->post->create(

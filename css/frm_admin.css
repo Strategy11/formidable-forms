@@ -9,6 +9,7 @@
 	--grey-500: #667085; /* Roughly 65% opacity */
 	--grey-400: #98A2B3;
 	--grey-300: #D0D5DD;
+	--grey-200: #EAECF0;
 	--grey-100: #F2F4F7;
 	--grey-50: #F9FAFB;
 	--grey-25: #FCFCFD;
@@ -19,7 +20,7 @@
 	--grey-border: var(--grey-300); /* Deprecated */
 	--lightest-grey: rgb(250, 250, 250);
 	--sidebar-color: var(--grey-50);
-	--sidebar-hover: rgb(227, 232, 235);
+	--sidebar-hover: var(--grey-200);
 	--primary-700: #2B66A9;
 	--primary-500: #4199FD;
 	--primary-25: #F5FAFF;
@@ -95,7 +96,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .wrap.frm-with-margin,
 #frm_top_bar + .wrap,
 .frm_wrap > .wrap {
-	margin: var(--gap-sm) 40px var(--gap-md);
+	margin: var(--gap-sm) var(--gap-md) var(--gap-md);
 }
 
 .frm-full-screen #wpbody-content > .wrap {
@@ -821,7 +822,7 @@ p.frm_has_shortcodes {
 }
 
 .frm-inner-content {
-	padding: 10px 25px;
+	padding: var(--gap-md);
 }
 
 .post-type-frm_display #poststuff {
@@ -897,7 +898,7 @@ p.frm_has_shortcodes {
 	margin: 10px 0 20px;
 	padding: 0 var(--gap-sm);
 	display: block;
-	border-bottom: 2px solid var(--sidebar-hover);
+	border-bottom: 1px solid var(--grey-300);
 }
 
 #frm-nav-tabs {
@@ -1477,7 +1478,11 @@ input.frm_insert_in_template {
 }
 
 .frm-p-4 {
-	padding: 16px;
+	padding: var(--gap-sm);
+}
+
+.frm-p-6 {
+	padding: var(--gap-md);
 }
 
 .frm-text-md {
@@ -1592,7 +1597,7 @@ a.frm_hidden,
 .post-type-frm_display .wrap > .subsubsub,
 .post-type-frm_display .wrap > .icl_subsubsub,
 .frm_form_settings > p {
-	margin: 6px 40px;
+	margin: 6px var(--gap-md);
 	padding: 0;
 }
 
@@ -1628,7 +1633,7 @@ a.frm_hidden,
 
 #frm_form_editor_container {
 	position: relative;
-	margin-top: 25px;
+	margin-top: 28px;
 }
 
 .form-field p {
@@ -3109,6 +3114,7 @@ a.frm_option_icon:hover::before {
 .frm-right-panel .accordion-section-content {
 	background: transparent;
 	padding: 0;
+	overflow: initial;
 }
 
 .frm-right-panel .accordion-section-content > .inside {
@@ -3133,7 +3139,7 @@ a.frm_option_icon:hover::before {
 .js .frm-right-panel .control-section .accordion-section-title:focus,
 .js .frm-right-panel .control-section .accordion-section-title:hover {
 	background: transparent;
-	color: var(--grey-700);
+	color: var(--grey-900);
 }
 
 .js .frm-right-panel .control-section .accordion-section-title:hover:before {
@@ -3154,7 +3160,7 @@ a.frm_option_icon:hover::before {
 .frm-with-line span,
 .accordion-section-content h4 span {
 	background: #fff;
-	padding: 0 10px 0 0;
+	padding: 0 10px;
 	position: relative;
 	display: inline-block;
 	z-index: 2;
@@ -3436,6 +3442,7 @@ a.frm_option_icon:hover::before {
 .frm-single-settings .frm-embed-message {
 	width: 100%;
 	position: static;
+	border-radius: var(--small-radius);
 }
 
 #new_fields input[type=text],
@@ -4446,7 +4453,7 @@ a.frm_remove_image_option:hover,
 /* Form settings */
 
 .frm-form-setting-tabs {
-	margin-top: 20px !important;
+	margin-top: var(--gap-sm) !important;
 }
 
 .frm-right-panel > .postbox {
@@ -4474,8 +4481,13 @@ a.frm_remove_image_option:hover,
 .frm-form-setting-tabs a {
 	font-size: var(--text-md);
 	color: var(--grey-700);
-	padding: 15px 15px 15px 20px;
+	padding: var(--gap-sm);
 	display: block;
+}
+
+.frm-form-setting-tabs a {
+	color: var(--grey-900);
+	padding: var(--gap-sm) var(--gap-md);
 }
 
 .frm-right-panel .inside a {
@@ -4490,7 +4502,7 @@ a.frm_remove_image_option:hover,
 
 .frm-form-setting-tabs a:hover {
 	background: var(--sidebar-hover);
-	color: var(--grey-700);
+	color: var(--grey-900);
 }
 
 .frm-right-panel .inside i,
@@ -4501,7 +4513,11 @@ a.frm_remove_image_option:hover,
 	display: inline-block;
 	width: 20px;
 	height: 20px;
-	color: var(--grey);
+	color: var(--grey-500);
+}
+
+.frm-form-setting-tabs a .frmsvg {
+	margin: 0;
 }
 
 .frm-right-panel .inside a:hover i,
@@ -5993,7 +6009,7 @@ span.howto {
 
 #frm-show-fields {
 	min-height: 350px;
-	padding: 10px 0 35px;
+	padding: 0 0 35px;
 	margin: 0;
 	position: relative;
 }
@@ -6598,6 +6614,9 @@ ul.frm-category-tabs {
 .frm-category-tabs > li a:active {
 	outline: none;
 	box-shadow: none;
+	display: flex;
+	gap: var(--gap-sm);
+	align-items: center;
 }
 
 .frm-category-tabs > li.active .frmsvg,
