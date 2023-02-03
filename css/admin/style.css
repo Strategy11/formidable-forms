@@ -355,6 +355,17 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	padding-right: 24px; /* Add enough padding for the icon. */
 }
 
+/* Unset frm_admin checkbox styling in the preview. */
+#frm_style_preview input[type="checkbox"]:checked {
+	background-color: unset;
+}
+
+#frm_style_preview input[type="checkbox"]:checked:before {
+	content: "";
+	position: relative;
+	left: 1px;
+}
+
 /*
 Avoid a conflict with the .frm_form_field > label:first-child rule in frm_admin.css
 The label in the preview should use the label color setting.
