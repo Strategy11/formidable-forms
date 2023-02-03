@@ -398,9 +398,13 @@ class FrmStylesController {
 		);
 
 		if ( ! $form_id ) {
-			// Fallback to any form.
 			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
-			$form_id = FrmDb::get_var( 'frm_forms', array( 'status' => 'published' ), 'id' );
+			// Fallback to any form.
+			$where = array(
+				'status'         => 'published',
+				'parent_form_id' => array( null, 0 ) // Make sure it's not a repeater.
+			);
+			$form_id = FrmDb::get_var( 'frm_forms', $where, 'id' );
 		}
 
 		return $form_id;
