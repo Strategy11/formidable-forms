@@ -2284,7 +2284,7 @@ body.frm-body-with-open-modal {
 	max-width: calc( 100% - 65px );
 }
 
-.frm-templates-list li > div:not(.frm-hover-icons) {
+.frm-templates-list > li > div:not(.frm-hover-icons) {
 	display: flex;
 	width: 100%;
 }
@@ -2326,7 +2326,7 @@ body.frm-body-with-open-modal {
 	align-self: flex-start;
 }
 
-.frm-templates-list li > div > div:last-child:not(.frm-dropdown-menu) {
+.frm-templates-list > li > div > div:last-child:not(.frm-dropdown-menu) {
 	/* the content container to the right of the icon in Create new form modal */
 	display: inline-block;
 	width: calc( 100% - 40px );
@@ -2430,25 +2430,24 @@ body.frm-body-with-open-modal {
 .frm-hover-icons {
 	position: absolute;
 	right: 0;
-	top: calc( ( 58px - 22px ) / 2 );
-	height: 20px;
-	width: 65px;
+	top: calc( ( 58px - 2px - 22px ) / 2 ); /* Template item height - borders - icon height */
+	max-width: 91px;
 	height: 100%;
 	box-sizing: border-box;
 	padding: 0 10px 0 5px !important;
 	border-radius: var(--small-radius);
 	text-align: right;
-}
-
-#frm_new_form_modal .frm-selectable[data-custom="1"] .frm-hover-icons {
-	width: 91px;
+	display: flex;
+	gap: 5px;
 }
 
 .frm-hover-icons a {
 	width: 22px;
 	height: 22px;
 	font-size: var(--text-md);
-	display: inline-block;
+	display: inline-flex;
+    align-items: center;
+    justify-content: center;
 	border-radius: 50%;
 	box-sizing: border-box;
 	line-height: var(--leading);
@@ -2458,7 +2457,6 @@ body.frm-body-with-open-modal {
 .frm-hover-icons > .frm-preview-form,
 .frm-hover-icons > .frm-delete-form {
 	border: 1px solid var(--primary-500);
-	margin-right: 5px;
 }
 
 .frm-hover-icons > .frm-create-form,
@@ -2613,16 +2611,19 @@ li .frm-hover-icons .frm-preview-form,
 #frm_new_form_modal[frm-page="email"] #frm-email-title,
 #frm_new_form_modal[frm-page="code"] #frm-email-title,
 #frm_new_form_modal[frm-page="renew"] #frm-renew-title,
-.frm-locked-template .frm-hover-icons .frm-unlock-form,
-li[data-preview] .frm-hover-icons .frm-preview-form,
 #frm_code_from_email_error[frm-error="wrong-code"] span[frm-error="wrong-code"],
 #frm_code_from_email_error[frm-error="empty"] span[frm-error="empty"],
 #frm_code_from_email_error[frm-error="custom"] span[frm-error="custom"],
 #frm_leave_email_error[frm-error="invalid"] span[frm-error="invalid"],
-#frm_leave_email_error[frm-error="empty"] span[frm-error="empty"],
-#frm_new_form_modal .frm-selectable[data-custom="1"] .frm-hover-icons .frm-delete-form
+#frm_leave_email_error[frm-error="empty"] span[frm-error="empty"]
 {
 	display: inline-block;
+}
+
+.frm-locked-template .frm-hover-icons .frm-unlock-form,
+li[data-preview] .frm-hover-icons .frm-preview-form,
+#frm_new_form_modal .frm-selectable[data-custom="1"] .frm-hover-icons .frm-delete-form {
+	display: inline-flex;
 }
 
 #frm_new_form_modal[frm-page="create"] #frm-create-block,
