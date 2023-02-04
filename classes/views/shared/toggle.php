@@ -35,6 +35,10 @@ if ( $div_class ) {
 	$div_params['class'] = $div_class;
 }
 
+if ( strpos( $name, '[' ) === false ) {
+	$name .= '[]';
+}
+
 if ( $use_container ) {
 	?>
 <div <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
@@ -47,7 +51,7 @@ if ( $use_container ) {
 			<span class="frm_off_label frm_toggle_opt"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
-		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>[]" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
+		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
 			<?php checked( $checked, true ); ?>
 			<?php if ( $show_labels && $off_label ) { ?>
 				data-off="<?php echo esc_attr( $off_label ); ?>"
@@ -56,8 +60,7 @@ if ( $use_container ) {
 			if ( is_array( $input_html ) ) {
 				FrmAppHelper::array_to_html_params( $input_html, true );
 			} else {
-				_deprecated_argument( '$args[input_html]', '6.0', 'Use an array for "input_html"' );
-				echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				_doing_it_wrong( '$args[input_html]', 'An array is required', '6.0' );
 			}
 			?>
 		/>
