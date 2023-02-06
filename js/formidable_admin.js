@@ -5948,7 +5948,6 @@ function frmAdminBuildJS() {
 	function afterFormSave( button ) {
 		button.classList.remove( 'frm_loading_form' );
 		button.classList.remove( 'frm_loading_button' );
-		button.innterHTML = frm_admin_js.saved;
 		resetOptionTextDetails();
 		fieldsUpdated = 0;
 		button.setAttribute( 'aria-busy', 'false' );
