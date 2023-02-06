@@ -554,7 +554,8 @@ ul.frm_form_nav > li {
 .frm-full-close {
 	display: none;
 	padding-left: var(--gap-md);
-	border-left: 1px solid var(--grey-300);
+	border: 0 solid var(--grey-300);
+	border-left-width: 1px; /* Make RTL a bit less maintenance */
 	height: 100%;
 	box-sizing: border-box;
 }
@@ -2904,7 +2905,8 @@ h1 .fa-caret-down {
 .frm_wrap .frm_form_builder select,
 .frm_wrap .ui-autocomplete-input {
 	background: transparent url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23667085%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
-	background-size: 16px 16px;
+	background-size: var(--text-md) var(--text-md);
+	padding-right: var(--gap-lg) !important;
 }
 
 .frm-btn-group .caret {
@@ -4668,15 +4670,15 @@ input[disabled] + .frm_toggle_slider {
 	content: '' !important; /* Don't show x/check if off label included or on builder page */
 }
 
-.frm_rtl .frm_toggle_opt {
+.rtl .frm_toggle_opt {
 	padding: 0 8px;
 }
 
-.frm_rtl .frm_toggle_slider:before {
+.rtl .frm_toggle_slider:before {
 	left: 17px;
 }
 
-.frm_rtl input:checked + .frm_toggle .frm_toggle_slider:before {
+.rtl input:checked + .frm_toggle .frm_toggle_slider:before {
 	transform: none!important;
 	left: 1px;
 }
@@ -5700,11 +5702,6 @@ p.frm-inline-select,
 
 h3.frm_add_logic_link {
 	margin-bottom: 0 !important;
-}
-
-a.frm_add_logic_link {
-	display: block;
-	padding: 10px;
 }
 
 a.frm_add_logic_link.frm_hidden {
@@ -8182,10 +8179,16 @@ button.frm_choose_image_box,
 	padding-left: 15px;
 }
 
+.rtl .frm-full-close,
 .rtl .frm_wrap .columns-2 .frm-right-panel,
 .rtl .frm-right-panel {
 	border-right-width: 1px;
 	border-left-width: 0;
+}
+
+.rtl .frm-full-close {
+	padding-left: 0;
+	padding-right: var(--gap-md);
 }
 
 .rtl .frm-text-right {
@@ -8261,7 +8264,9 @@ button.frm_choose_image_box,
 }
 
 .rtl.wp-admin .frm_wrap select {
-	padding: 0 12px 0 24px !important;
+	padding-left: var(--gap-lg) !important;
+	padding-right: 5px !important;
+	background-position: left 11px top 55%;
 }
 
 /* ---------------------------------------------------------------
