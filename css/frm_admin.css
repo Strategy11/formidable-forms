@@ -26,7 +26,7 @@
 	--primary-25: #F5FAFF;
 	--primary-color: var(--primary-500); /* Deprecated */
 	--primary-hover: var(--primary-700); /* Deprecated */
-	--light-blue: rgba(188, 224, 253, .2);
+	--light-blue: var(--primary-25); /* Deprecated */
 	--blue-border: rgb(188, 224, 253);
 	--error-500: #F04438;
 	--error-700: #B42318;
@@ -7322,6 +7322,10 @@ ul .frm_col_two {
 
 .frm_code_list.frm-full-hover.frmcenter a {
 	display: block;
+}
+
+#frm-layout-classes frm-full-hover a span {
+	max-width: 45%;
 }
 
 .frm-select-list-item.active,
