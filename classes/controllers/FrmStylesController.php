@@ -913,6 +913,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function change_styling() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$frm_style = new FrmStyle();
