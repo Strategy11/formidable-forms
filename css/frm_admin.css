@@ -1242,6 +1242,11 @@ p.frm_has_shortcodes {
 	opacity: .65; /* Get close to grey-500 without overriding hover colors */
 }
 
+.frm-with-icon svg {
+	height: var(--text-sm);
+	width: var(--text-sm);
+}
+
 .frm-with-icon.frm-button-sm svg {
 	height: var(--text-xs);
 	width: var(--text-xs);

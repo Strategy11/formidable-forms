@@ -2874,8 +2874,8 @@ class FrmAppHelper {
 				'desc'              => __( '(Click to add description)', 'formidable' ),
 				'blank'             => __( '(Blank)', 'formidable' ),
 				'no_label'          => __( '(no label)', 'formidable' ),
-				'saving'            => esc_attr( __( 'Saving', 'formidable' ) ),
-				'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
+				'saving'            => '', // Deprecated in 6.0.
+				'saved'             => '', // Deprecated in 6.0.
 				'ok'                => __( 'OK', 'formidable' ),
 				'cancel'            => __( 'Cancel', 'formidable' ),
 				'default_label'     => __( 'Default', 'formidable' ),
