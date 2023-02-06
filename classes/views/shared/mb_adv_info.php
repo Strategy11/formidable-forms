@@ -96,8 +96,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'',
 				array(
 					'checked'     => true,
-					'on_label'    => __( 'ID', 'formidable' ),
-					'off_label'   => __( 'Key', 'formidable' ),
+					'on_label'    => __( 'Use IDs', 'formidable' ),
+					'off_label'   => __( 'Use Keys', 'formidable' ),
 					'value'       => 'id',
 					'show_labels' => true,
 					'echo'        => true,
