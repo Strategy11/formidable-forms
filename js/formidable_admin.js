@@ -970,25 +970,7 @@ function frmAdminBuildJS() {
 	}
 
 	function handleDrag( event, ui ) {
-		var container = jQuery( '#post-body-content' );
-
-		container.scrollTop( function( i, v ) {
-			var moved, h, relativePos, y;
-
-			moved = event.clientY;
-			h = this.offsetHeight;
-			relativePos = event.clientY - this.offsetTop;
-			y = relativePos - h / 2;
-			if ( relativePos > ( h - 50 ) && moved > 5 ) {
-
-				// scrolling down
-				return v + y * 0.1;
-			} else if ( relativePos < 50 && moved < -5 ) {
-
-				//scrolling up
-				return v - Math.abs( y * 0.1 );
-			}
-		});
+		maybeScrollBuilder( event );
 		const draggable = event.target;
 		const droppable = getDroppableTarget();
 
@@ -1021,6 +1003,26 @@ function frmAdminBuildJS() {
 
 		placeholder.style.top = '';
 		handleDragOverFieldGroup({ droppable, x: event.clientX, placeholder });
+	}
+
+	function maybeScrollBuilder( event ) {
+		jQuery( '#post-body-content' ).scrollTop( function( i, v ) {
+			var moved, h, relativePos, y;
+
+			moved = event.clientY;
+			h = this.offsetHeight;
+			relativePos = event.clientY - this.offsetTop;
+			y = relativePos - h / 2;
+			if ( relativePos > ( h - 50 ) && moved > 5 ) {
+
+				// scrolling down
+				return v + y * 0.1;
+			} else if ( relativePos < 50 && moved < -5 ) {
+
+				//scrolling up
+				return v - Math.abs( y * 0.1 );
+			}
+		});
 	}
 
 	function getDragOffset( $helper ) {
