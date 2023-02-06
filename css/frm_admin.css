@@ -1233,6 +1233,10 @@ p.frm_has_shortcodes {
 	font-size: var(--text-xs) !important;
 }
 
+.frm_no_style_button {
+	background: transparent;
+}
+
 .frm-with-icon {
 	display: flex;
 	gap: var(--gap-xs);
