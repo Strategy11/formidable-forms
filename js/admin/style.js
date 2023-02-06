@@ -345,7 +345,7 @@
 			form.parentNode.classList.remove( activeCard.dataset.classname );
 			form.parentNode.classList.add( card.dataset.classname );
 		}
-		
+
 		sampleForm.classList.remove( activeCard.dataset.classname );
 		sampleForm.classList.add( card.dataset.classname );
 
@@ -522,6 +522,8 @@
 			return;
 		}
 
+		document.getElementById( 'frm_submit_side_top' ).classList.add( 'frm_loading_button' );
+
 		// Submit the "list" view (assign a style to a form).
 		document.getElementById( 'frm_style_list_form' ).submit();
 	}
@@ -531,7 +533,7 @@
 	 * If the sample form toggle is active, we want to pass that as a query parameter so we know to default to the sample form on load.
 	 *
 	 * @param {HTMLElement} clickTarget
-	 * @returns 
+	 * @returns {void}
 	 */
 	function modifyStylerUrl( clickTarget ) {
 		if ( ! state.showingSampleForm ) {
