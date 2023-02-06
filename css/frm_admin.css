@@ -6266,8 +6266,8 @@ li.selected .divider_section_only:before {
 	display: none;
 }
 
-.frm_remove_form_row.frm_button,
-.frm_add_form_row.frm_button {
+.frm_wrap .frm_remove_form_row.frm_button,
+.frm_wrap .frm_add_form_row.frm_button {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--blue-border);
 	color: var(--primary-500);
