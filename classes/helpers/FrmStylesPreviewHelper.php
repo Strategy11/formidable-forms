@@ -123,20 +123,35 @@ class FrmStylesPreviewHelper {
 	public function get_notes_for_styler_preview() {
 		$notes = array();
 
+		$fallback_form_note = $this->get_fallback_form_note();
+		if ( is_string( $fallback_form_note ) ) {
+			$notes[] = $fallback_form_note;
+		}
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( 'none' === $frm_settings->load_style ) {
+			$notes[] = function() {
+				printf(
+					// translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
+					esc_html__( 'Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s.', 'formidable' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">',
+					'</a>'
+				);
+			};
+		}
+
 		if ( class_exists( 'FrmProStylesController' ) && ! class_exists( 'FrmProStylesPreviewHelper' ) ) {
 			$notes[] = __( 'You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features.', 'formidable' );
 		}
 
 		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
-			$notes = FrmProStylesController::get_notes_for_styler_preview();
+			$notes = array_merge( $notes, FrmProStylesController::get_notes_for_styler_preview() );
 		}
 
 		$disabled_features_note = $this->get_disabled_features_note();
 		if ( is_string( $disabled_features_note ) ) {
 			$notes[] = $disabled_features_note;
 		}
-
-		$notes = $this->maybe_add_fallback_form_note( $notes );
 
 		return $notes;
 	}
@@ -168,14 +183,15 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @param array<string> $notes
-	 * @return array<string>
+	 * @since x.x
+	 *
+	 * @return string|false
 	 */
-	private function maybe_add_fallback_form_note( $notes ) {
+	private function get_fallback_form_note() {
 		if ( ! FrmAppHelper::simple_get( 'form', 'absint' ) ) {
-			array_unshift( $notes, __( 'This form is being previewed because no form was selected. Use the form dropdown to select a new preview target.', 'formidable' ) );
+			return __( 'This form is being previewed because no form was selected. Use the form dropdown to select a new preview target.', 'formidable' );
 		}
-		return $notes;
+		return false;
 	}
 
 	/**

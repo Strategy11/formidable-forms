@@ -517,6 +517,12 @@ body.rtl .frm-style-card-separator {
 }
 /* End RTL Styling */
 
+.frm-styles-globally-disabled #frm_new_style_trigger,
+.frm-styles-globally-disabled .frm_on_label {
+	pointer-events: none;
+	opacity: 0.5;
+}
+
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
 	#frm_style_sidebar,
