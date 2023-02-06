@@ -569,6 +569,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param string $color
 	 * @return int
 	 */
@@ -591,6 +593,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @param string $rgba
 	 * @return string
 	 */

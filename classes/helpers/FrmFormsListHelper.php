@@ -318,13 +318,14 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	protected function column_style( $form ) {
 		$style_setting = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : '';
-		if ( $style_setting === '0' ) {
+		$frm_settings  = FrmAppHelper::get_settings();
+
+		if ( $style_setting === '0' || 'none' === $frm_settings->load_style ) {
 			// Don't show a link if styling is off.
 			return '';
 		}
 
 		$style = FrmStylesController::get_form_style( $form );
-
 		if ( ! $style ) {
 			// Do a second pass to avoid null values.
 			$frm_style = new FrmStyle( 'default' );

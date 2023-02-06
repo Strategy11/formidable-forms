@@ -67,7 +67,6 @@ $sidebar_params = array(
 	<?php $card_helper->echo_card_wrapper( 'frm_default_style_cards_wrapper', array( $default_style ) ); ?>
 
 	<?php if ( $custom_styles ) { ?>
-		<?php // TODO Always show this in lite, but with an upsell. ?>
 		<div class="frm_form_settings">
 			<h2><?php esc_html_e( 'Custom Styles', 'formidable' ); ?></h2>
 		</div>
