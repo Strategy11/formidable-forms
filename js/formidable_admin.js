@@ -5883,7 +5883,6 @@ function frmAdminBuildJS() {
 	function submitBuild() {
 		/*jshint validthis:true */
 		var $thisEle = this;
-		var p = this.innerHTML;
 
 		preFormSave( this );
 
@@ -5896,7 +5895,7 @@ function frmAdminBuildJS() {
 			url: ajaxurl,
 			data: {action: 'frm_save_form', 'frm_compact_fields': v, nonce: frmGlobal.nonce},
 			success: function( msg ) {
-				afterFormSave( $thisEle, p );
+				afterFormSave( $thisEle );
 
 				var $postStuff = document.getElementById( 'post-body-content' );
 				var $html = document.createElement( 'div' );
@@ -5946,7 +5945,7 @@ function frmAdminBuildJS() {
 		b.setAttribute( 'aria-busy', 'true' );
 	}
 
-	function afterFormSave( button, buttonVal ) {
+	function afterFormSave( button ) {
 		button.classList.remove( 'frm_loading_form' );
 		button.classList.remove( 'frm_loading_button' );
 		button.innterHTML = frm_admin_js.saved;
