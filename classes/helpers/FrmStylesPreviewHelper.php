@@ -37,6 +37,7 @@ class FrmStylesPreviewHelper {
 	 */
 	public function adjust_form_for_preview() {
 		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
+		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 	}
