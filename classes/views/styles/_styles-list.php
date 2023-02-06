@@ -6,14 +6,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 // It lists all styles and allows the user to select and assign a style to a target form.
 // It is accessed from /wp-admin/admin.php?page=formidable-styles&form=782
 
-$enabled        = '0' !== $form->options['custom_style'];
-$card_helper    = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
-$styles         = $card_helper->get_styles();
-$custom_styles  = $card_helper->filter_custom_styles( $styles );
-$sidebar_params = array(
+$frm_settings      = FrmAppHelper::get_settings();
+$globally_disabled = 'none' === $frm_settings->load_style;
+$enabled           = '0' !== $form->options['custom_style'] && ! $globally_disabled;
+$card_helper       = new FrmStylesCardHelper( $active_style, $default_style, $form->id, $enabled );
+$styles            = $card_helper->get_styles();
+$custom_styles     = $card_helper->filter_custom_styles( $styles );
+$sidebar_params    = array(
 	'id'    => 'frm_style_sidebar',
 	'class' => 'frm-right-panel frm-p-6', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
 );
+$toggle_input_html = array();
+if ( $globally_disabled ) {
+	$sidebar_params['class'] .= ' frm-styles-globally-disabled';
+	$toggle_input_html['disabled'] = 'disabled';
+}
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
 	<?php
@@ -56,6 +63,7 @@ $sidebar_params = array(
 				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
 				'show_labels' => true,
 				'echo'        => true,
+				'input_html' => $toggle_input_html,
 			)
 		);
 		?>
@@ -67,7 +75,6 @@ $sidebar_params = array(
 	<?php $card_helper->echo_card_wrapper( 'frm_default_style_cards_wrapper', array( $default_style ) ); ?>
 
 	<?php if ( $custom_styles ) { ?>
-		<?php // TODO Always show this in lite, but with an upsell. ?>
 		<div class="frm_form_settings">
 			<h2><?php esc_html_e( 'Custom Styles', 'formidable' ); ?></h2>
 		</div>

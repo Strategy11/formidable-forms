@@ -64,7 +64,14 @@ if ( ! empty( $notes ) && is_array( $notes ) ) {
 	foreach ( $notes as $note ) {
 		?>
 		<div class="frm_note_style">
-			<?php echo esc_html( $note ); ?>
+			<?php
+			if ( is_string( $note ) ) {
+				echo esc_html( $note );
+			} elseif ( is_callable( $note ) ) {
+				// If $note is a function call it so we can handle cases where we don't want to wrap the whole note in esc_html.
+				$note();
+			}
+			?>
 		</div>
 		<?php
 	}

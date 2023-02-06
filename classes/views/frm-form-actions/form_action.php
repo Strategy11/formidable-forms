@@ -33,12 +33,19 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon ' ); ?>
 			</a>
 
-			<label class="frm_toggle">
-				<input type="checkbox" value="publish" name="<?php echo esc_attr( $action_control->get_field_name( 'post_status', '' ) ); ?>" <?php checked( $form_action->post_status, 'publish' ); ?> />
-				<span class="frm_toggle_slider"></span>
-				<span class="frm_toggle_on">ON</span>
-				<span class="frm_toggle_off">OFF</span>
-			</label>
+			<?php
+			FrmHtmlHelper::toggle(
+				$action_control->get_field_id( 'post_status', '' ),
+				$action_control->get_field_name( 'post_status', '' ),
+				array(
+					'checked'     => $form_action->post_status === 'publish',
+					'on_label'    => 'publish',
+					'off_label'   => 'OFF',
+					'show_labels' => false,
+					'echo'        => true,
+				)
+			);
+			?>
 		</span>
 		<div class="widget-title">
 			<h4>

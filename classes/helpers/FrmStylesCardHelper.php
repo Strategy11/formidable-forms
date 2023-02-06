@@ -142,7 +142,7 @@ class FrmStylesCardHelper {
 			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
 				// Consider a faded out rgba value as light even when the color is dark.
 				$color_opacity = floatval( $matches[1][3] );
-				if ( $color_opacity  < 0.5 ) {
+				if ( $color_opacity < 0.5 ) {
 					return false;
 				}
 			}
@@ -284,7 +284,6 @@ class FrmStylesCardHelper {
 	 */
 	private static function get_style_keys_for_card() {
 		return array(
-			//'fieldset_bg_color',
 			'field_border_width',
 			'field_border_style',
 			'border_color',
@@ -293,8 +292,6 @@ class FrmStylesCardHelper {
 			'submit_border_width',
 			'submit_border_radius',
 			'submit_text_color',
-			//'submit_weight',
-			'submit_width',
 			'label_color',
 			'text_color',
 			'bg_color',
@@ -415,10 +412,6 @@ class FrmStylesCardHelper {
 			}
 		);
 
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-		//	$this->echo_upsell_card();
-		}
-
 		$this->maybe_echo_card_pagination( $count );
 	}
 
@@ -438,15 +431,6 @@ class FrmStylesCardHelper {
 			<a href="#" class="frm-show-all-styles"><?php printf( esc_html__( 'Show all (%d)', 'formidable' ), $count - self::PAGE_SIZE ); ?></a>
 		</div>
 		<?php
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private function echo_upsell_card() {
-		// TODO do something new in the new design.
 	}
 
 	/**

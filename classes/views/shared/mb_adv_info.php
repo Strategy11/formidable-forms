@@ -89,17 +89,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	if ( $show_logic ) {
 		?>
 	<div id="frm-conditionals" class="tabs-panel">
-		<div class="frmcenter" style="margin-bottom:9px">
-			<label class="frm_toggle frm_toggle_long">
-				<input type="checkbox" value="id" checked="checked" id="frm-id-key-condition" />
-				<span class="frm_toggle_slider"></span>
-				<span class="frm_toggle_on">
-					<?php esc_html_e( 'ID', 'formidable' ); ?>
-				</span>
-				<span class="frm_toggle_off">
-					<?php esc_html_e( 'Key', 'formidable' ); ?>
-				</span>
-			</label>
+		<div class="frmcenter">
+			<?php
+			FrmHtmlHelper::toggle(
+				'frm-id-key-condition',
+				'',
+				array(
+					'checked'     => true,
+					'on_label'    => __( 'ID', 'formidable' ),
+					'off_label'   => __( 'Key', 'formidable' ),
+					'value'       => 'id',
+					'show_labels' => true,
+					'echo'        => true,
+				),
+			);
+			?>
 		</div>
 
 		<div class="frm_grid_container frm-fields frm-mx-sm">

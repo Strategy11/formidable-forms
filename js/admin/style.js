@@ -1176,8 +1176,24 @@
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
-				success: css => document.getElementById( 'this_css' ).innerHTML = css
+				success: handleChangeStylingSuccess
 			});
+		}
+
+		/**
+		 * Update the CSS used for the preview on the edit page when a styling input has been updated.
+		 *
+		 * @param {String} css The response from the frm_change_styling request.
+		 * @returns {void}
+		 */
+		function handleChangeStylingSuccess( css ) {
+			// Validate the string response. A valid output will include rules with .with_frm_style
+			if ( -1 === css.indexOf( '.with_frm_style' ) ) {
+				// Handle error (possibly a permission error, or an outdated nonce).
+				alert( css );
+				return;
+			}
+			document.getElementById( 'this_css' ).innerHTML = css;
 		}
 
 		/**

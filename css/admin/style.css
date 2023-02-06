@@ -99,6 +99,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: flex;
 	flex: 1;
 	flex-direction: column;
+	gap: var(--gap-sm);
 }
 
 .frm-style-card.frm_hidden {
@@ -116,10 +117,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 
 .frm-style-card-title-wrapper {
 	display: flex;
-}
-
-.frm-style-card-title-wrapper > svg {
-	margin-right: 5px;
+	gap: var(--gap-2xs);
+	align-items: center;
 }
 
 #frm_style_sidebar .frm-style-card .dropdown {
@@ -129,12 +128,12 @@ This file is added to the visual styler admin page, accessed from the style tab.
 }
 
 .frm-style-card-preview {
-	padding-top: 10px;
 	pointer-events: none;
 	border-radius: 6px 6px 0 0;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	gap: var(--gap-sm);
 }
 
 .frm-style-card-preview + div .dropdown {
@@ -160,7 +159,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: inline;
 	color: var(--grey-700);
 	opacity: 0.6;
-	margin-left: 5px;
 }
 
 .frm-locked-style .frm-style-card-title {
@@ -346,7 +344,9 @@ Time fields use a div instead of a label, so don't target by the primary label b
 
 #frm_style_preview select {
 	appearance: none; /* Hide the default icon */
+}
 
+#frm_style_preview select:not(.ui-datepicker-month):not(.ui-datepicker-year) {
 	/*
 	The styler preview doesn't use .wp-core-ui which results in a funny looking dropdown arrow.
 	Restore the WordPress background image defined in /wp-admin/css/forms.css for preview selects so they appear nicer and more consistent with other dropdowns.
@@ -377,28 +377,21 @@ The label in the preview should use the label color setting.
 	font-size: var(--font-size);
 }
 
-.frm-style-circle1, .frm-style-circle2, .frm-style-circle3 {
-	position: relative;
+.frm-color-blocks {
+	display: grid;
+	justify-content: center;
+	grid-template-columns: repeat(auto-fit,  minmax(20px, max-content));
+	max-width: 60px;
+}
+
+.frm-color-blocks > div {
 	border: 1.5px solid var(--grey-100);
 	box-shadow: var(--box-shadow-sm);
 	border-radius: 22px;
 	height: 28px;
 	width: 28px;
 	box-sizing: border-box;
-}
-
-.frm-style-circle1 {
-	z-index: 3;
-}
-
-.frm-style-circle2 {
-	right: 8px;
-	z-index: 2;
-}
-
-.frm-style-circle3 {
-	right: 16px;
-	z-index: 1;
+	flex-shrink: 0;
 }
 
 /* Remove link styling from the back icon on the edit page. */
@@ -413,10 +406,16 @@ The label in the preview should use the label color setting.
 }
 
 .frm-style-card-separator {
-	background-color: #F2F4F7;
+	background-color: var(--grey-300);
 	width: 2px;
 	height: 20px;
-	margin: 0 20px 0 5px;
+	margin-left: 6px;
+}
+
+.frm-mini-form-style {
+	display: flex;
+	gap: var(--gap-xs);
+	width: 100%;
 }
 
 .frm-button-style-example {
@@ -442,16 +441,18 @@ The label in the preview should use the label color setting.
 	border-style: var(--field-border-style);
 	border-color: var(--border-color);
 	background-color: var(--bg-color);
-	width: 138px;
+	max-width: 138px;
+	width: 100%;
 	height: 16px;
-	margin-left: 10px;
 	display: flex;
 	align-items: center;
 	padding-left: 10px;
+	flex: 1;
 }
 
 .frm-input-style-example > div {
-	width: 46px;
+	max-width: 46px;
+	width: calc( 100% - 8px );
 	height: 2px;
 	background-color: var(--text-color);
 }
@@ -506,40 +507,23 @@ body.rtl #frm_new_style_trigger_wrapper {
 	left: 15px;
 }
 
-body.rtl .frm-style-card-info,
-body.rtl .frm-input-style-example {
-	margin-left: 0;
-	margin-right: 5px;
-}
-
-body.rtl .frm-style-card-title-wrapper > svg {
-	margin-right: 0;
-	margin-left: 5px;
-}
-
 body.rtl .frm-input-style-example {
 	padding-left: 0;
 	padding-right: 10px;
 }
 
-body.rtl .frm-style-circle1,
-body.rtl .frm-style-circle2,
-body.rtl .frm-style-circle3 {
-	right: unset;
-}
-
-body.rtl .frm-style-circle2 {
-	left: 8px;
-}
-
-body.rtl .frm-style-circle3 {
-	left: 16px;
-}
-
 body.rtl .frm-style-card-separator {
-	margin: 0 5px 0 20px;
+	margin: 0 6px 0 0;
 }
 /* End RTL Styling */
+
+.frm-styles-globally-disabled #frm_new_style_trigger,
+.frm-styles-globally-disabled .frm_toggle,
+.frm-styles-globally-disabled .frm_on_label,
+.frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
+	pointer-events: none;
+	opacity: 0.5;
+}
 
 @media only screen and (max-width: 1200px) {
 	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
@@ -550,9 +534,6 @@ body.rtl .frm-style-card-separator {
 }
 
 @media only screen and (max-width: 900px) {
-	#frm_style_sidebar {
-		min-width: 260px;
-	}
 	/* Break the new style trigger into a separate line to avoid overlapping with the Enable Formidable styling toggle. */
 	#frm_new_style_trigger_wrapper {
 		position: static;

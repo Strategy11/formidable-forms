@@ -451,7 +451,7 @@ class FrmStylesController {
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
 		if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
-			// TODO show an error that save failed.
+			wp_die( esc_html__( 'Invalid target style', 'formidable' ), esc_html__( 'Invalid target style', 'formidable' ), 400 );
 			return;
 		}
 
@@ -466,19 +466,19 @@ class FrmStylesController {
 
 		if ( ! $style_id && '0' !== FrmAppHelper::get_post_param( 'style_id', 'sanitize_text_field', '' ) ) {
 			// "0" is a special value used for the enable/disable toggle.
-			// TODO show an error that save failed.
+			wp_die( esc_html__( 'Invalid style value', 'formidable' ), esc_html__( 'Invalid style value', 'formidable' ), 400 );
 			return;
 		}
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 'absint', 0 );
 		if ( ! $form_id ) {
-			// TODO show an error that save failed.
+			wp_die( esc_html__( 'No form specified', 'formidable' ), esc_html__( 'No form specified', 'formidable' ), 400 );
 			return;
 		}
 
 		$form = FrmForm::getOne( $form_id );
 		if ( ! $form ) {
-			// TODO handle invalid form ID.
+			wp_die( esc_html__( 'Form does not exist', 'formidable' ), esc_html__( 'Form does not exist', 'formidable' ), 400 );
 			return;
 		}
 
@@ -913,6 +913,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function change_styling() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$frm_style = new FrmStyle();

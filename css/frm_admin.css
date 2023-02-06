@@ -49,10 +49,13 @@
 	--h-sm: 30px;
 	--h-md: 36px;
 	--leading: 1.5;
+	--gap-2xs: 4px;
 	--gap-xs: 8px;
 	--gap-sm: 16px;
 	--gap-md: 24px;
 	--gap-lg: 32px;
+	--gap-xl: 40px;
+	--gap-2xl: 48px;
 	--box-shadow-sm: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
@@ -65,7 +68,7 @@
 }
 
 .with_frm_style,
-.frm-white-body .wrap,
+.frm-white-body .wpbody-content,
 .frm_wrap {
 	font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	--toggle-off-color: var(--grey-300);
@@ -1447,7 +1450,8 @@ input.frm_insert_in_template {
 }
 
 .frm-m-12 {
-	margin: 48px;
+	margin: var(--gap-2xl);
+
 }
 
 .frm_no_top_margin, /* deprecated */
@@ -4570,40 +4574,40 @@ select.frm_cancelnew, input.frm_enternew {
 	margin: 0;
 }
 
-/* The small toggle is used to enable/disable email actions. */
-.frm_toggle_off,
-.frm_toggle_on {
-	display: none;
-	color: #fff;
-	z-index: 999;
-	position: absolute;
-	font-size: 10px;
-	line-height: 2;
-	left: 6px;
+/*
+These are the styles for the "Enable Formidable styling" toggle in the visual styler.
+It uses the same style rules as the font end toggle field in Pro.
+To use this element, you can call the FrmHtmlHelper::toggle function.
+*/
+.frm_toggle_opt {
+	padding: 0;
+	white-space: normal;
+	display: inline;
+	vertical-align: middle;
+	font-weight: normal;
 }
 
-.frm_toggle_off {
-	display: inline;
-	left: auto;
-	right: 5px;
-	color: var(--grey-700);
+.frm_on_label,
+.frm_off_label {
+	color: #444444;
 }
 
 .frm_toggle {
 	position: relative;
 	display: inline-block;
-	width: 45px;
-	height: 20px;
+	width: 40px;
+	height: 24px;
 	vertical-align: middle;
-	margin: 2px;
 }
 
-label > span.frm_toggle {
-	margin-right: 15px;
+.frm_toggle_block {
+	display: inline-flex;
+    gap: 16px;
 }
 
-.frm_toggle input {
-	display: none !important;
+.frm_toggle input, /* Reverse compatibility */
+.frm_toggle_block input {
+	display:none !important;
 }
 
 .frm_toggle_slider {
@@ -4613,28 +4617,80 @@ label > span.frm_toggle {
 	left: 0;
 	right: 0;
 	bottom: 0;
+	background-color: var(--grey-border);
 	transition: .4s;
 	border-radius: 30px;
-	background-color: #fff;
-	box-shadow: 0 0 0 2px var(--grey);
 }
 
 .frm_toggle_slider:before {
 	border-radius: 50%;
 	position: absolute;
-	content: "";
-	height: 16px;
-	width: 16px;
-	left: 2px;
-	top: 2px;
-	transition: .3s;
-	background-color: var(--grey);
+	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 20 20%27><path d=%27M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z%27 fill=%27%2398A2B3%27/%3E</svg>");
+	height: 22px;
+	width: 22px;
+	padding: 0.5px 6px;
+	left: 1px;
+	bottom: 1px;
+	background-color: white;
+	transition: .4s;
+	box-sizing: border-box;
+	box-shadow:0 2px 6px rgba(41, 58, 82, 0.31);
+	line-height: 22px;
+}
+
+input:checked + .frm_toggle .frm_toggle_slider {
+	background-color: #579AF6;
+}
+
+input:focus + .frm_toggle .frm_toggle_slider {
+	box-shadow: 0 0 1px #3177c7;
+}
+
+input:checked + .frm_toggle .frm_toggle_slider:before {
+	transform: translateX(16px);
+	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
 }
 
 input[disabled] + .frm_toggle_slider {
 	pointer-events: none;
 	cursor: text;
 	opacity: .5;
+}
+
+.frm_toggle_opt ~ .frm_toggle .frm_toggle_slider:before {
+	content: '' !important; /* Don't show x/check if off label included or on builder page */
+}
+
+.frm_rtl .frm_toggle_opt {
+	padding: 0 8px;
+}
+
+.frm_rtl .frm_toggle_slider:before {
+	left: 17px;
+}
+
+.frm_rtl input:checked + .frm_toggle .frm_toggle_slider:before {
+	transform: none!important;
+	left: 1px;
+}
+
+/* Deprecated admin toggle */
+.frm_toggle_off,
+.frm_toggle_on {
+	display: none;
+	color: #fff;
+	z-index: 999;
+	position: absolute;
+	font-size: 10px;
+	line-height: 20px;
+	left: 6px;
+}
+
+.frm_toggle_off {
+	display: inline;
+	left: auto;
+	right: 5px;
+	color: var(--dark-grey);
 }
 
 .frm_toggle_long {
@@ -4671,17 +4727,8 @@ input[disabled] + .frm_toggle_slider {
 	border-radius: var(--border-radius) 0 0 var(--border-radius);
 	height: 100%;
 	background-color: #fff;
-	color: var(--primary-500);
-}
-
-input:checked + .frm_toggle_slider {
-	background-color: var(--primary-500);
-	box-shadow: 0 0 0 2px var(--primary-500);
-}
-
-input:checked + .frm_toggle_slider:before {
-	transform: translateX(25px);
-	background-color: #fff;
+	color: var(--primary-color);
+	content: '' !important;
 }
 
 .frm_toggle_long input:checked + .frm_toggle_slider:before {
@@ -4710,9 +4757,7 @@ input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
 	font-weight: bold;
 }
 
-input:focus + .frm_toggle_slider {
-	box-shadow: 0 0 1px #008ec2;
-}
+/* End toggle styling */
 
 /* Global Settings */
 
@@ -6267,8 +6312,8 @@ li.selected .divider_section_only:before {
 	display: none;
 }
 
-.frm_remove_form_row.frm_button,
-.frm_add_form_row.frm_button {
+.frm_wrap .frm_remove_form_row.frm_button,
+.frm_wrap .frm_add_form_row.frm_button {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--blue-border);
 	color: var(--primary-500);
@@ -8257,6 +8302,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 1050px) {
+	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 390px;
 	}
@@ -8271,9 +8317,11 @@ Responsive Design
 }
 
 @media only screen and (max-width: 960px) {
+	.frm-white-body,
 	.frm_wrap {
-		--gap-sm: 10px;
+		--gap-sm: 8px;
 		--gap-md: 16px;
+		--gap-2xl: 24px;
 	}
 
 	.auto-fold #adminmenuwrap {
@@ -8296,6 +8344,7 @@ Responsive Design
 		display: none;
 	}
 
+	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 350px;
 		--big-sidebar: 350px;
@@ -8388,6 +8437,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 782px) {
+	.frm-white-body,
 	.frm_wrap {
 		--small-sidebar: 20%;
 		--medium-sidebar: 35%
@@ -8528,6 +8578,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 700px) {
+	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 50%;
 		--big-sidebar: 50%;
@@ -8535,6 +8586,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 600px) {
+	.frm-white-body,
 	.frm_wrap {
 		--small-sidebar: 45px;
 	}
@@ -8979,91 +9031,6 @@ Responsive Design
 	max-width: 100%;
 }
 
-/*
-These are the styles for the "Enable Formidable styling" toggle in the visual styler.
-It uses the same style rules as the font end toggle field in Pro.
-To use this element, you can call the FrmHtmlHelper::toggle function.
-*/
-.frm_switch_opt {
-	padding: 0 8px 0 0;
-	white-space: normal;
-	display: inline;
-	vertical-align: middle;
-	font-weight: normal;
-}
-
-.frm_on_label {
-	padding:0 0 0 8px;
-}
-
-.frm_on_label,
-.frm_off_label {
-	color: #444444;
-}
-
-.frm_switch {
-	position: relative;
-	display: inline-block;
-	width: 40px;
-	height: 25px;
-	vertical-align: middle;
-}
-
-.frm_switch_block input {
-	display:none !important;
-}
-
-.frm_slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #eaeaea;
-	transition: .4s;
-	border-radius: 30px;
-}
-
-.frm_slider:before {
-	border-radius: 50%;
-	position: absolute;
-	content: "";
-	height: 23px;
-	width: 23px;
-	left: 1px;
-	bottom: 1px;
-	background-color: white;
-	transition: .4s;
-	box-shadow:0 2px 6px rgba(41, 58, 82, 0.31);
-}
-
-input:checked + .frm_switch .frm_slider {
-	background-color: #579AF6;
-}
-
-input:focus + .frm_switch .frm_slider {
-	box-shadow: 0 0 1px #3177c7;
-}
-
-input:checked + .frm_switch .frm_slider:before {
-	transform: translateX(15px);
-}
-
-.frm_rtl .frm_switch_opt {
-	padding: 0 8px;
-}
-
-.frm_rtl .frm_slider:before {
-	left: 16px;
-}
-
-.frm_rtl input:checked + .frm_switch .frm_slider:before {
-	transform: none!important;
-	left: 1px;
-}
-/* End toggle styling */
-
 /* On Submit action */
 .frm_single_on_submit_settings .frm_form_field {
 	margin: 8px 0;
@@ -9098,5 +9065,4 @@ input:checked + .frm_switch .frm_slider:before {
 .frm_on_submit_type input[type="radio"]:checked + label svg {
 	color: var(--primary-color);
 }
-
 /* End On Submit action */

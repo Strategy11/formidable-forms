@@ -37,6 +37,7 @@ class FrmStylesPreviewHelper {
 	 */
 	public function adjust_form_for_preview() {
 		add_filter( 'frm_run_antispam', '__return_false', 99 ); // Don't bother including the antispam token in the preview as the form isn't submitted.
+		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
 	}
@@ -122,24 +123,75 @@ class FrmStylesPreviewHelper {
 	public function get_notes_for_styler_preview() {
 		$notes = array();
 
-		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
-			$notes = FrmProStylesController::get_notes_for_styler_preview();
+		$fallback_form_note = $this->get_fallback_form_note();
+		if ( is_string( $fallback_form_note ) ) {
+			$notes[] = $fallback_form_note;
 		}
+
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( 'none' === $frm_settings->load_style ) {
+			$notes[] = function() {
+				printf(
+					// translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
+					esc_html__( 'Formidable styles are disabled. This needs to be enabled in %1$sGlobal Settings%2$s.', 'formidable' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">',
+					'</a>'
+				);
+			};
+		}
+
+		if ( class_exists( 'FrmProStylesController' ) && ! class_exists( 'FrmProStylesPreviewHelper' ) ) {
+			$notes[] = __( 'You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features.', 'formidable' );
+		}
+
+		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
+			$notes = array_merge( $notes, FrmProStylesController::get_notes_for_styler_preview() );
+		}
+
+		$disabled_features_note = $this->get_disabled_features_note();
+		if ( is_string( $disabled_features_note ) ) {
+			$notes[] = $disabled_features_note;
+		}
+
+		return $notes;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string|false
+	 */
+	private function get_disabled_features_note() {
+		$disabled_features = array();
 
 		if ( $this->form_includes_captcha ) {
-			$notes[] = __( 'CAPTCHA fields are hidden.', 'formidable' );
+			$disabled_features[] = __( 'CAPTCHA fields are hidden.', 'formidable' );
 		}
 
-		if ( ! $notes ) {
-			return array();
+		if ( is_callable( 'FrmProStylesController::get_disabled_javascript_features' ) ) {
+			$disabled_pro_features = FrmProStylesController::get_disabled_javascript_features();
+			if ( is_string( $disabled_pro_features ) ) {
+				$disabled_features[] = $disabled_pro_features;
+			}
 		}
 
-		array_unshift( $notes, __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) );
+		if ( $disabled_features ) {
+			return __( 'Not all JavaScript is loaded in this preview.', 'formidable' ) . ' ' . implode( ' ', $disabled_features );
+		}
 
-		// Implode all notes as a single note so they're all wrapped in the same element rather than individual notes.
-		return array(
-			implode( ' ', $notes ),
-		);
+		return false;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string|false
+	 */
+	private function get_fallback_form_note() {
+		if ( ! FrmAppHelper::simple_get( 'form', 'absint' ) ) {
+			return __( 'This form is being previewed because no form was selected. Use the form dropdown to select a new preview target.', 'formidable' );
+		}
+		return false;
 	}
 
 	/**

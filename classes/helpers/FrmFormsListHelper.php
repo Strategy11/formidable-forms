@@ -292,6 +292,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * Get the HTML for the Actions column in the form list.
+	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
 	 * @since x.x
 	 *
@@ -299,11 +300,11 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
-		$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
 		$val .= $this->column_style( $form );
-		$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
-		$val = str_replace( '&nbsp;', '', $val ); // Remove the space hardeded in Landing pages.
-		$val = '<div>' . $val . '</div>';
+		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
+		$val  = str_replace( '&nbsp;', '', $val ); // Remove the space hard coded in Landing pages.
+		$val  = '<div>' . $val . '</div>';
 		return $val;
 	}
 
@@ -317,13 +318,14 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	protected function column_style( $form ) {
 		$style_setting = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : '';
-		if ( $style_setting === '0' ) {
+		$frm_settings  = FrmAppHelper::get_settings();
+
+		if ( $style_setting === '0' || 'none' === $frm_settings->load_style ) {
 			// Don't show a link if styling is off.
 			return '';
 		}
 
 		$style = FrmStylesController::get_form_style( $form );
-
 		if ( ! $style ) {
 			// Do a second pass to avoid null values.
 			$frm_style = new FrmStyle( 'default' );

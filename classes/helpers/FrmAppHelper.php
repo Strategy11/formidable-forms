@@ -1105,6 +1105,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 6.0
+	 *
+	 * @param string $type
 	 * @return void
 	 */
 	public static function import_link( $type = 'secondary' ) {
