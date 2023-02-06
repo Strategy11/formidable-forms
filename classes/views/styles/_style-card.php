@@ -33,6 +33,7 @@ $include_info = $is_active_style;
 			<?php } ?>
 		</div>
 		<div class="frm-style-card-preview">
+			<div class="frm-color-blocks">
 			<?php
 			$colors = array(
 				'label-color'     => $style->post_content['label_color'],
@@ -56,12 +57,15 @@ $include_info = $is_active_style;
 				<?php
 			}
 			?>
-			<div class="frm-style-card-separator"></div>
-			<div class="frm-button-style-example">
-				<div></div>
 			</div>
-			<div class="frm-input-style-example">
-				<div></div>
+			<div class="frm-style-card-separator"></div>
+			<div class="frm-mini-form-style">
+				<div class="frm-button-style-example">
+					<div></div>
+				</div>
+				<div class="frm-input-style-example">
+					<div></div>
+				</div>
 			</div>
 		</div>
 	</div>

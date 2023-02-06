@@ -49,10 +49,13 @@
 	--h-sm: 30px;
 	--h-md: 36px;
 	--leading: 1.5;
+	--gap-2xs: 4px;
 	--gap-xs: 8px;
 	--gap-sm: 16px;
 	--gap-md: 24px;
 	--gap-lg: 32px;
+	--gap-xl: 40px;
+	--gap-2xl: 48px;
 	--box-shadow-sm: 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-md: 0px 1.88298px 3.76596px -0.941489px rgba(16, 24, 40, 0.1), 0px 0.941489px 1.88298px -0.941489px rgba(16, 24, 40, 0.06);
 	--box-shadow-lg: 0px 6px 8px -2px rgba(16, 24, 40, 0.08), 0px 1.88298px 4px -1px rgba(16, 24, 40, 0.03), 0px 0.470745px 1.41223px rgba(16, 24, 40, 0.1), 0px 0.470745px 0.941489px rgba(16, 24, 40, 0.06);
@@ -65,7 +68,7 @@
 }
 
 .with_frm_style,
-.frm-white-body .wrap,
+.frm-white-body .wpbody-content,
 .frm_wrap {
 	font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	--toggle-off-color: var(--grey-300);
@@ -1447,7 +1450,8 @@ input.frm_insert_in_template {
 }
 
 .frm-m-12 {
-	margin: 48px;
+	margin: var(--gap-2xl);
+
 }
 
 .frm_no_top_margin, /* deprecated */
@@ -8256,6 +8260,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 1050px) {
+	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 390px;
 	}
@@ -8270,9 +8275,11 @@ Responsive Design
 }
 
 @media only screen and (max-width: 960px) {
+	.frm-white-body,
 	.frm_wrap {
-		--gap-sm: 10px;
+		--gap-sm: 8px;
 		--gap-md: 16px;
+		--gap-2xl: 24px;
 	}
 
 	.auto-fold #adminmenuwrap {
@@ -8295,6 +8302,7 @@ Responsive Design
 		display: none;
 	}
 
+	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 350px;
 		--big-sidebar: 350px;
@@ -8387,6 +8395,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 782px) {
+	.frm-white-body,
 	.frm_wrap {
 		--small-sidebar: 20%;
 		--medium-sidebar: 35%
@@ -8527,6 +8536,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 700px) {
+	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 50%;
 		--big-sidebar: 50%;
@@ -8534,6 +8544,7 @@ Responsive Design
 }
 
 @media only screen and (max-width: 600px) {
+	.frm-white-body,
 	.frm_wrap {
 		--small-sidebar: 45px;
 	}
