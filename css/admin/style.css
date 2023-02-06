@@ -518,7 +518,9 @@ body.rtl .frm-style-card-separator {
 /* End RTL Styling */
 
 .frm-styles-globally-disabled #frm_new_style_trigger,
-.frm-styles-globally-disabled .frm_on_label {
+.frm-styles-globally-disabled .frm_toggle,
+.frm-styles-globally-disabled .frm_on_label,
+.frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
 	pointer-events: none;
 	opacity: 0.5;
 }

@@ -16,8 +16,10 @@ $sidebar_params    = array(
 	'id'    => 'frm_style_sidebar',
 	'class' => 'frm-right-panel frm-p-6', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
 );
+$toggle_input_html = array();
 if ( $globally_disabled ) {
 	$sidebar_params['class'] .= ' frm-styles-globally-disabled';
+	$toggle_input_html['disabled'] = 'disabled';
 }
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $sidebar_params, true ); ?>>
@@ -61,9 +63,7 @@ if ( $globally_disabled ) {
 				'on_label'    => __( 'Enable Formidable styling', 'formidable' ),
 				'show_labels' => true,
 				'echo'        => true,
-				'input_html' => array(
-					'disabled' => 'disabled',
-				)
+				'input_html' => $toggle_input_html,
 			)
 		);
 		?>
