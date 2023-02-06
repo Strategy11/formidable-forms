@@ -182,6 +182,8 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: flex;
 	align-items: center;
 	cursor: pointer;
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
 
 	/*
 	When a background image is set the children in the fieldset have a z-index of 1.\
