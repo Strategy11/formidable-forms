@@ -2912,6 +2912,7 @@ class FrmFormsController {
 			return;
 		}
 
+		$form->id = $form_id;
 		FrmAppHelper::unserialize_or_decode( $form->options );
 		if ( ! isset( $form->options['success_action'] ) ) {
 			return;
@@ -2932,7 +2933,7 @@ class FrmFormsController {
 		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
 
 		// If frontend editing is enabled, migrate its settings too.
-		if ( FrmAppHelper::pro_is_connected() && $form->editable ) {
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
 			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
 
 			if ( $action_data === $edit_data ) {
@@ -2944,20 +2945,62 @@ class FrmFormsController {
 				$edit_action['post_content']         += $edit_data;
 				$edit_action['post_content']['event'] = array( 'update' );
 
-				$edit_action['post_content'] = FrmAppHelper::prepare_and_encode( $edit_action['post_content'] );
-				if ( FrmDb::save_json_post( $edit_action ) ) {
-					self::remove_deprecated_submit_settings( $form_id, $form, true );
-				}
+				self::maybe_save_on_submit_action_and_remove_settings( $edit_action, $form, true );
 			}
 		}
 
 		$action                  = $base_action;
 		$action['post_content'] += $action_data;
-		$action['post_content']  = FrmAppHelper::prepare_and_encode( $action['post_content'] );
 
-		if ( FrmDb::save_json_post( $action ) ) {
-			self::remove_deprecated_submit_settings( $form_id, $form );
+		self::maybe_save_on_submit_action_and_remove_settings( $action, $form );
+	}
+
+	/**
+	 * Maybe save On Submit action then remove old settings if successfully.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $action Form action post array.
+	 * @param object $form   This isn't a full form object, requires at least `id` and `options` properties.
+	 * @param bool   $update Set to `true` to remove the frontend editing ones.
+	 */
+	private static function maybe_save_on_submit_action_and_remove_settings( $action, $form, $update = false ) {
+		if ( ! self::should_migrate_on_submit_action( $action, $form, $update ) ) {
+			return;
 		}
+
+		$action['post_content'] = FrmAppHelper::prepare_and_encode( $action['post_content'] );
+		if ( FrmDb::save_json_post( $action ) ) {
+			self::remove_deprecated_submit_settings( $form, $update );
+		}
+	}
+
+	/**
+	 * Checks if action should be migrated.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $action See {@see FrmFormsController::maybe_save_on_submit_action_and_remove_settings()}.
+	 * @param object $form   See {@see FrmFormsController::maybe_save_on_submit_action_and_remove_settings()}.
+	 * @param bool   $update See {@see FrmFormsController::maybe_save_on_submit_action_and_remove_settings()}.
+	 * @return bool
+	 */
+	private static function should_migrate_on_submit_action( $action, $form, $update = false ) {
+		$exists = FrmOnSubmitHelper::get_actions( $form->id );
+
+		if ( ! $exists ) {
+			return true;
+		}
+
+		foreach ( $exists as $exist ) {
+			$is_event_match = in_array( $update ? 'update' : 'create', $exist->post_content['event'], true );
+			$is_data_match  = empty( $exist->post_content['conditions']['send_stop'] ) && $action['post_content']['success_action'] === $exist->post_content['success_action'];
+			if ( $is_event_match && $is_data_match ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -2997,11 +3040,10 @@ class FrmFormsController {
 	 *
 	 * @since 6.0
 	 *
-	 * @param int    $form_id Form ID.
-	 * @param object $form    This isn't a full form object, requires at least the `options` property.
-	 * @param bool   $update  Set to `true` to remove the frontend editing ones.
+	 * @param object $form   See {@see FrmFormsController::maybe_save_on_submit_action_and_remove_settings()}.
+	 * @param bool   $update See {@see FrmFormsController::maybe_save_on_submit_action_and_remove_settings()}.
 	 */
-	private static function remove_deprecated_submit_settings( $form_id, $form, $update = false ) {
+	private static function remove_deprecated_submit_settings( $form, $update = false ) {
 		if ( $update ) {
 			$options = array(
 				'edit_action',
@@ -3025,7 +3067,7 @@ class FrmFormsController {
 			}
 		}
 
-		FrmForm::update( $form_id, array( 'options' => $form->options ) );
+		FrmForm::update( $form->id, array( 'options' => $form->options ) );
 	}
 
 	/**
