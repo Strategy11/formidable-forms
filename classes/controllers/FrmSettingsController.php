@@ -71,7 +71,7 @@ class FrmSettingsController {
 			'captcha' => array(
 				'class'    => __CLASS__,
 				'function' => 'captcha_settings',
-				'name'     => __( 'CAPTCHA', 'formidable' ),
+				'name'     => __( 'Captcha', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'white_label' => array(
