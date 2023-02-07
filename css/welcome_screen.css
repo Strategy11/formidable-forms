@@ -25,7 +25,7 @@ body.frm-admin-page-welcome {
 .frm-player iframe {
 	width: 100%;
 	max-width: 480px;
-	border-radius: var(--small-radius);
+	border-radius: var(--border-radius);
 }
 
 .frm-ws-block h3 {

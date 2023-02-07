@@ -8765,14 +8765,10 @@ Responsive Design
 	order: 2;
 }
 
-.frm-video-wrapper {
-	padding: 0 20px;
-}
-
 .frm-video-wrapper iframe {
 	width: 100%;
 	max-width: 843px;
-	border-radius: 10px;
+	border-radius: var(--border-radius);
 }
 
 #frm_field_group_popup {

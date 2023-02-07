@@ -13,24 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php echo esc_html( $title ); ?>
 			</span>
 		</h1>
-		<?php if ( 'index' === $context && ! FrmAppHelper::pro_is_installed() ) { ?>
-			<?php
-			FrmAddonsController::show_conditional_action_button(
-				array(
-					'addon'        => false,
-					'upgrade_link' => FrmAppHelper::admin_upgrade_link(
-						array(
-							'medium'  => 'applications-header',
-							'content' => 'applications',
-						)
-					),
-				)
-			);
-			?>
-		<?php } ?>
 	</div>
 	<div id="frm-publishing">
 		<?php do_action( 'frm_applications_header_inside_title_after_span', $context ); ?>
 		<?php do_action( 'frm_applications_header_after_title', $context ); ?>
+		<?php if ( 'index' === $context && ! FrmAppHelper::pro_is_installed() ) { ?>
+			<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'header' ) ); ?>" class="button button-secondary frm-button-secondary">
+				<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
+			</a>
+		<?php } ?>
 	</div>
 </div>
