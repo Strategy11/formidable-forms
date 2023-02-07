@@ -66,7 +66,7 @@ class FrmForm {
 		if ( ! FrmAppHelper::allow_unfiltered_html() && ! empty( $options['submit_html'] ) ) {
 			$options['submit_html'] = FrmAppHelper::kses_submit_button( $options['submit_html'] );
 		}
-		return FrmAppHelper::maybe_filter_array( $options, array( 'submit_value', 'before_html', 'after_html' ) );
+		return FrmAppHelper::maybe_filter_array( $options, array( 'submit_value', 'success_msg', 'before_html', 'after_html' ) );
 	}
 
 	/**
