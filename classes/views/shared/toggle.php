@@ -25,11 +25,7 @@ $input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
 
 $use_container = false;
 
-$div_params = array(
-	// This is important when the default style is !important as Pro styling may cause conflicts.
-	// It uses --toggle-on-color so just set the variable.
-	'style' => '--toggle-on-color:var(--primary-color);'
-);
+$div_params = array();
 if ( $div_class ) {
 	$use_container       = true;
 	$div_params['class'] = $div_class;

@@ -494,7 +494,6 @@ class FrmAppController {
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
 
-
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		if ( 'formidable-applications' === $page ) {

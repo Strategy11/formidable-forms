@@ -71,8 +71,6 @@
 .frm-white-body .wpbody-content,
 .frm_wrap {
 	font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	--toggle-off-color: var(--grey-300);
-	--toggle-on-color: var(--primary-500);
 }
 
 /* Safari 11+ */
