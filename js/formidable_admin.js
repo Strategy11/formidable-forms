@@ -332,11 +332,10 @@ function frmAdminBuildJS() {
 		thisFormId = 0,
 		autoId = 0,
 		optionMap = {},
-		lastNewActionIdReturned = 0,
-		$postBodyContent;
+		lastNewActionIdReturned = 0;
 
 	const { __ } = wp.i18n;
-	let debouncedSyncAfterDragAndDrop, postBodyContent;
+	let debouncedSyncAfterDragAndDrop, postBodyContent, $postBodyContent;
 
 	if ( thisForm !== null ) {
 		thisFormId = thisForm.value;
