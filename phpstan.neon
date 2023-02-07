@@ -75,3 +75,5 @@ parameters:
 		- '#should always throw an exception or terminate script execution but#'
 		- '#spl_autoload_register expects#'
 		- '#always exists and is always falsy#'
+		- '#has an unused use#'
+

@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 5.5.6\n"
+"Project-Id-Version: Formidable Forms 5.5.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-01-12T18:15:27+00:00\n"
+"POT-Creation-Date: 2023-02-01T15:01:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: formidable\n"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: js/src/form/formselect.js:23
 #: languages/formidable-js-strings.php:33
-#: js/admin/embed.js:340
+#: js/admin/embed.js:341
 msgid "form"
 msgstr ""
 
@@ -197,7 +197,7 @@ msgstr ""
 #: classes/controllers/FrmEntriesController.php:11
 #: classes/controllers/FrmEntriesController.php:100
 #: classes/controllers/FrmFormsController.php:862
-#: classes/controllers/FrmXMLController.php:292
+#: classes/controllers/FrmXMLController.php:291
 #: classes/views/xml/import_form.php:121
 msgid "Entries"
 msgstr ""
@@ -274,7 +274,7 @@ msgstr ""
 msgid "You are trying to view an entry that does not exist."
 msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:487
+#: classes/controllers/FrmEntriesController.php:496
 msgid "Entry was successfully deleted"
 msgstr ""
 
@@ -324,7 +324,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:9
 #: classes/controllers/FrmFormsController.php:872
 #: classes/controllers/FrmStylesController.php:51
-#: classes/controllers/FrmXMLController.php:291
+#: classes/controllers/FrmXMLController.php:290
 #: classes/views/frm-forms/list.php:10
 #: classes/widgets/FrmElementorWidget.php:14
 #: js/admin/applications.js:338
@@ -1011,27 +1011,27 @@ msgstr ""
 msgid "There was an error importing form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:327
+#: classes/controllers/FrmXMLController.php:326
 msgid "Oops, you didn't select a file."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:338
+#: classes/controllers/FrmXMLController.php:337
 msgid "The file does not exist, please try again."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:367
+#: classes/controllers/FrmXMLController.php:366
 msgid "XML import is not enabled on your server with the libxml_disable_entity_loader function."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:582
+#: classes/controllers/FrmXMLController.php:581
 msgid "Please select a form"
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:612
+#: classes/controllers/FrmXMLController.php:611
 msgid "Form not found."
 msgstr ""
 
-#: classes/controllers/FrmXMLController.php:644
+#: classes/controllers/FrmXMLController.php:643
 msgid "There are no entries for that form."
 msgstr ""
 
@@ -1254,7 +1254,7 @@ msgid "Cancel"
 msgstr ""
 
 #: classes/helpers/FrmAppHelper.php:2834
-#: classes/views/frm-fields/back-end/settings.php:295
+#: classes/views/frm-fields/back-end/settings.php:256
 msgid "Default"
 msgstr ""
 
@@ -1914,7 +1914,7 @@ msgstr ""
 #: classes/helpers/FrmFieldsHelper.php:167
 #: classes/helpers/FrmFieldsHelper.php:294
 #: classes/helpers/FrmXMLHelper.php:1469
-#: classes/models/fields/FrmFieldType.php:583
+#: classes/models/fields/FrmFieldType.php:641
 msgid "%s is invalid"
 msgstr ""
 
@@ -1924,7 +1924,7 @@ msgid "%s must be unique"
 msgstr ""
 
 #: classes/helpers/FrmFieldsHelper.php:292
-#: classes/models/fields/FrmFieldType.php:580
+#: classes/models/fields/FrmFieldType.php:638
 msgid "This field is invalid"
 msgstr ""
 
@@ -3120,7 +3120,7 @@ msgstr ""
 
 #: classes/helpers/FrmFormMigratorsHelper.php:46
 #: js/admin/applications.js:366
-#: js/admin/applications.js:473
+#: js/admin/applications.js:477
 msgid "Learn More"
 msgstr ""
 
@@ -3171,7 +3171,7 @@ msgid "Field ID"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:495
-#: classes/views/frm-fields/back-end/settings.php:319
+#: classes/views/frm-fields/back-end/settings.php:280
 msgid "Field Key"
 msgstr ""
 
@@ -3180,7 +3180,7 @@ msgid "Field Name"
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:507
-#: classes/views/frm-fields/back-end/settings.php:292
+#: classes/views/frm-fields/back-end/settings.php:253
 msgid "Label Position"
 msgstr ""
 
@@ -3904,17 +3904,17 @@ msgid "Option 2"
 msgstr ""
 
 #: classes/models/fields/FrmFieldCombo.php:190
-#: classes/views/frm-fields/back-end/settings.php:159
+#: classes/views/frm-fields/back-end/default-value-setting.php:11
 msgid "Default Value"
 msgstr ""
 
 #: classes/models/fields/FrmFieldCombo.php:191
-#: classes/views/frm-fields/back-end/settings.php:205
+#: classes/views/frm-fields/back-end/settings.php:166
 msgid "Placeholder Text"
 msgstr ""
 
 #: classes/models/fields/FrmFieldCombo.php:192
-#: js/admin/applications.js:440
+#: js/admin/applications.js:444
 msgid "Description"
 msgstr ""
 
@@ -3942,20 +3942,27 @@ msgstr ""
 #. translators: %s: Field name
 #. translators: %s: Field type
 #: classes/models/fields/FrmFieldType.php:395
-#: classes/models/fields/FrmFieldType.php:471
+#: classes/models/fields/FrmFieldType.php:529
 msgid "%s Options"
 msgstr ""
 
-#: classes/models/fields/FrmFieldType.php:411
+#: classes/models/fields/FrmFieldType.php:434
+#: classes/views/frm-fields/back-end/html-content.php:16
+#: classes/views/frm-fields/back-end/settings.php:100
+#: classes/views/frm-fields/back-end/value-format.php:16
+msgid "Toggle Options"
+msgstr ""
+
+#: classes/models/fields/FrmFieldType.php:469
 #: classes/views/frm-fields/back-end/bulk-options-overlay.php:10
 msgid "Bulk Edit Options"
 msgstr ""
 
-#: classes/models/fields/FrmFieldType.php:418
+#: classes/models/fields/FrmFieldType.php:476
 msgid "Add Option"
 msgstr ""
 
-#: classes/models/fields/FrmFieldType.php:590
+#: classes/models/fields/FrmFieldType.php:648
 msgid "Untitled"
 msgstr ""
 
@@ -4658,7 +4665,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:11
-#: js/formidable_admin.js:8389
+#: js/formidable_admin.js:8427
 msgid "Close"
 msgstr ""
 
@@ -4688,13 +4695,6 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/html-content.php:8
 msgid "Content"
-msgstr ""
-
-#: classes/views/frm-fields/back-end/html-content.php:16
-#: classes/views/frm-fields/back-end/settings.php:100
-#: classes/views/frm-fields/back-end/settings.php:168
-#: classes/views/frm-fields/back-end/value-format.php:16
-msgid "Toggle Options"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/input-mask-info.php:7
@@ -4804,7 +4804,7 @@ msgid "Your captcha will not appear on your form until you %1$sset up%2$s the Si
 msgstr ""
 
 #: classes/views/frm-fields/back-end/settings.php:54
-#: classes/views/frm-fields/back-end/settings.php:365
+#: classes/views/frm-fields/back-end/settings.php:326
 msgid "Required"
 msgstr ""
 
@@ -4813,7 +4813,7 @@ msgid "Unique: Do not allow the same response multiple times. For example, if on
 msgstr ""
 
 #: classes/views/frm-fields/back-end/settings.php:62
-#: classes/views/frm-fields/back-end/settings.php:385
+#: classes/views/frm-fields/back-end/settings.php:346
 msgid "Unique"
 msgstr ""
 
@@ -4838,63 +4838,63 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:239
+#: classes/views/frm-fields/back-end/settings.php:200
 msgid "If this URL points to an image, show to image on the entries listing page."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:246
+#: classes/views/frm-fields/back-end/settings.php:207
 msgid "Set the size of the captcha field. The compact option is best if your form is in a small area."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:247
+#: classes/views/frm-fields/back-end/settings.php:208
 msgid "ReCaptcha Type"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:251
+#: classes/views/frm-fields/back-end/settings.php:212
 msgid "Normal"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:254
+#: classes/views/frm-fields/back-end/settings.php:215
 msgid "Compact"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:260
+#: classes/views/frm-fields/back-end/settings.php:221
 msgid "reCAPTCHA Color"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:264
+#: classes/views/frm-fields/back-end/settings.php:225
 msgid "Light"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:267
+#: classes/views/frm-fields/back-end/settings.php:228
 msgid "Dark"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:284
+#: classes/views/frm-fields/back-end/settings.php:245
 msgid "Required Field Indicator"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:310
+#: classes/views/frm-fields/back-end/settings.php:271
 msgid "Center"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:318
+#: classes/views/frm-fields/back-end/settings.php:279
 msgid "The field key can be used as an alternative to the field ID in many cases."
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:327
+#: classes/views/frm-fields/back-end/settings.php:288
 msgid "Field Type"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:357
+#: classes/views/frm-fields/back-end/settings.php:318
 msgid "Validation Messages"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:374
+#: classes/views/frm-fields/back-end/settings.php:335
 msgid "Invalid Format"
 msgstr ""
 
-#: classes/views/frm-fields/back-end/settings.php:396
+#: classes/views/frm-fields/back-end/settings.php:357
 msgid "Confirmation"
 msgstr ""
 
@@ -5229,7 +5229,7 @@ msgid "Templates"
 msgstr ""
 
 #: classes/views/frm-forms/new-form-overlay.php:11
-#: js/admin/embed.js:101
+#: js/admin/embed.js:102
 msgid "Back"
 msgstr ""
 
@@ -6564,94 +6564,95 @@ msgstr ""
 msgid "Page"
 msgstr ""
 
-#: js/admin/applications.js:413
-msgid "Access to this application requires a license upgrade."
+#. translators: %s: The required license type (ie. Plus, Business, or Elite)
+#: js/admin/applications.js:415
+msgid "Access to this application requires the %s plan."
 msgstr ""
 
 #. translators: %s type: ie form, view.
-#: js/admin/embed.js:76
+#: js/admin/embed.js:77
 msgid "Embed %s"
 msgstr ""
 
-#: js/admin/embed.js:96
+#: js/admin/embed.js:97
 msgid "Done"
 msgstr ""
 
 #. translators: %s type: ie form, view.
-#: js/admin/embed.js:131
+#: js/admin/embed.js:132
 msgid "Embed your %s into an existing page."
 msgstr ""
 
 #. translators: %s type: ie form, view.
-#: js/admin/embed.js:134
+#: js/admin/embed.js:135
 msgid "Put your %s on a newly created page."
 msgstr ""
 
 #. translators: %s type: ie form, view.
-#: js/admin/embed.js:137
+#: js/admin/embed.js:138
 msgid "Use WP shortcodes or PHP code to put the %s in any place."
 msgstr ""
 
-#: js/admin/embed.js:142
+#: js/admin/embed.js:143
 msgid "Select existing page"
 msgstr ""
 
 #. translators: %s: type (ie. view, form).
-#: js/admin/embed.js:180
+#: js/admin/embed.js:181
 msgid "Select the page you want to embed your %s into."
 msgstr ""
 
 #. translators: %s: type (ie. view, form).
-#: js/admin/embed.js:191
+#: js/admin/embed.js:192
 msgid "Insert %s"
 msgstr ""
 
-#: js/admin/embed.js:222
+#: js/admin/embed.js:223
 msgid "Please select a page"
 msgstr ""
 
-#: js/admin/embed.js:234
+#: js/admin/embed.js:235
 msgid "Create new page"
 msgstr ""
 
-#: js/admin/embed.js:277
+#: js/admin/embed.js:278
 msgid "What will you call the new page?"
 msgstr ""
 
-#: js/admin/embed.js:283
+#: js/admin/embed.js:284
 msgid "Name your page"
 msgstr ""
 
-#: js/admin/embed.js:293
+#: js/admin/embed.js:294
 msgid "Create page"
 msgstr ""
 
-#: js/admin/embed.js:305
+#: js/admin/embed.js:306
 msgid "Insert manually"
 msgstr ""
 
-#: js/admin/embed.js:337
+#: js/admin/embed.js:338
 msgid "view"
 msgstr ""
 
-#: js/admin/embed.js:379
+#: js/admin/embed.js:380
 msgid "WordPress shortcode"
 msgstr ""
 
-#: js/admin/embed.js:382
+#: js/admin/embed.js:383
 msgid "How to use shortcodes in WordPress"
 msgstr ""
 
-#: js/admin/embed.js:385
+#: js/admin/embed.js:386
 msgid "Use PHP code"
 msgstr ""
 
 #. translators: %s: Example type (ie. WordPress shortcode, API Form script)
-#: js/admin/embed.js:444
+#: js/admin/embed.js:445
 msgid "Copy %s"
 msgstr ""
 
-#: js/admin/embed.js:478
+#: js/admin/embed.js:479
 msgid "Successfully copied embed example"
 msgstr ""
 
@@ -6720,10 +6721,10 @@ msgstr ""
 msgid "Check all applications"
 msgstr ""
 
-#: js/formidable_admin.js:8374
+#: js/formidable_admin.js:8412
 msgid "Save and Reload"
 msgstr ""
 
-#: js/formidable_admin.js:9004
+#: js/formidable_admin.js:9042
 msgid "Unable to install template"
 msgstr ""

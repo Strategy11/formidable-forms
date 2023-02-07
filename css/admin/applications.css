@@ -33,12 +33,10 @@
 	padding-left: 0;
 }
 
-.frm-applications-index-content {
-	padding: 40px 40px 0;
-}
-
 .frm-application-cards-grid {
+	padding-top: var(--gap-md);
 	padding-bottom: 50px;
+	grid-gap: var(--gap-md);
 }
 
 .frm-application-cards-grid:last-child {
@@ -50,12 +48,13 @@
 }
 
 .frm-application-card {
-	border-radius: 4px;
+	border-radius: var(--small-radius);
 	background: #FFFFFF;
 	grid-column: span 3/span 3; /* treat as frm3 */
 	padding: 10px 0;
 	display: flex;
 	flex-direction: column;
+	box-shadow: var(--box-shadow-sm);
 }
 
 .frm-application-card:nth-child(4) ~ .frm-application-card {
@@ -67,16 +66,15 @@
 }
 
 .frm-application-template-card:hover {
-	filter: drop-shadow(0px 12px 24px rgba(72, 78, 84, 0.2));
+	box-shadow: var(--box-shadow-lg);
 }
 
 .frm-application-template-card:hover h4 {
-	color: var(--primary-color);
+	color: var(--primary-500);
 }
 
 /* Card title */
 .frm-application-card h4 {
-	font-weight: 600;
 	display: inline-block;
 	max-width: 100%;
 	overflow: hidden;
@@ -90,11 +88,8 @@
 	max-width: calc( 100% - 30px );
 }
 
-.frm-locked-application-template > div:first-child > span > .frmsvg {
-	position: relative;
-	bottom: 5px;
-	width: 14px;
-	height: 14px;
+.frm-application-card h4 .frmsvg {
+	margin-right: var(--gap-xs);
 }
 
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
@@ -115,9 +110,6 @@
 	position: absolute;
 	right: 10px;
 	bottom: 0;
-	line-height: 17px;
-	min-height: 17px;
-	height: 20px;
 }
 
 /* Card description */
@@ -210,7 +202,7 @@
 }
 
 #frm_application_category_filter > a {
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #frm_application_category_filter > a:first-child {
@@ -219,11 +211,6 @@
 
 #frm_application_category_filter > a:last-child {
 	padding-right: 0;
-}
-
-#frm_application_category_filter > a.frm-active-application-category {
-	color: var(--dark-grey);
-	pointer-events: none;
 }
 
 .frm-admin-page-applications #frm_top_bar h1 {

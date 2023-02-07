@@ -46,9 +46,9 @@ class FrmFormsController {
 		$images_url    = FrmAppHelper::plugin_url() . '/images/';
 		$data_message  = __( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' );
 		$data_message .= ' <img src="' . esc_attr( $images_url ) . '/survey-logic.png" srcset="' . esc_attr( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
-		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
-		FrmAppHelper::icon_by_class( 'frmfont frm_swap_icon' );
-		esc_html_e( 'Add Conditional Logic', 'formidable' );
+		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link frm-collapsed frm-flex-justify" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
+		esc_html_e( 'Conditional Logic', 'formidable' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
 		echo '</a>';
 	}
 
@@ -869,28 +869,12 @@ class FrmFormsController {
 	 * @return array<string,string>
 	 */
 	public static function get_columns( $columns ) {
-		$columns['cb'] = '<input type="checkbox" />';
-		$columns['id'] = 'ID';
-
-		$type = FrmAppHelper::get_simple_request(
-			array(
-				'param'   => 'form_type',
-				'type'    => 'request',
-				'default' => 'published',
-			)
-		);
-
-		if ( 'template' === $type ) {
-			$columns['name']     = __( 'Template Name', 'formidable' );
-			$columns['type']     = __( 'Type', 'formidable' );
-			$columns['form_key'] = __( 'Key', 'formidable' );
-		} else {
-			$columns['name']      = __( 'Form Title', 'formidable' );
-			$columns['entries']   = __( 'Entries', 'formidable' );
-			$columns['form_key']  = __( 'Key', 'formidable' );
-			$columns['shortcode'] = __( 'Actions', 'formidable' );
-		}
-
+		$columns['cb']         = '<input type="checkbox" />';
+		$columns['name']       = __( 'Form Title', 'formidable' );
+		$columns['entries']    = __( 'Entries', 'formidable' );
+		$columns['id']         = 'ID';
+		$columns['form_key']   = __( 'Key', 'formidable' );
+		$columns['shortcode']  = __( 'Actions', 'formidable' );
 		$columns['created_at'] = __( 'Date', 'formidable' );
 
 		add_screen_option(
@@ -1242,10 +1226,10 @@ class FrmFormsController {
 				),
 			),
 			'buttons'     => array(
-				'name'     => __( 'Styling & Buttons', 'formidable' ),
+				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => __CLASS__,
 				'function' => 'buttons_settings',
-				'icon'     => 'frm_icon_font frm_pallet_icon',
+				'icon'     => 'frm_icon_font frm_button_icon',
 			),
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
@@ -2609,6 +2593,9 @@ class FrmFormsController {
 		return apply_filters( 'frm_main_feedback', $message, $form, $entry_id );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function front_head() {
 		$version = FrmAppHelper::plugin_version();
 		$suffix  = FrmAppHelper::js_suffix();

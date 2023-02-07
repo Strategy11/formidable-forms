@@ -4,9 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
-	<?php if ( $form ) { ?>
-	<div class="frm_page_container">
-	<?php } ?>
 
 		<?php
 		FrmAppHelper::get_admin_header(
@@ -14,7 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
-				'import_link' => $form ? false : true,
+				'import_link' => true,
+				'publish'     => ! $form ? true : array(
+					'FrmAppHelper::add_new_item_link',
+					array(
+						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
+					)
+				),
 			)
 		);
 		?>
@@ -23,16 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $form ) { ?>
 				<h2>
 					<?php esc_html_e( 'Form Entries', 'formidable' ); ?>
-					<?php
-					FrmAppHelper::add_new_item_link(
-						array(
-							'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
-						)
-					);
-					?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button button-secondary frm-button-secondary frm_animate_bg">
-						<?php esc_html_e( 'Import', 'formidable' ); ?>
-					</a>
 				</h2>
 				<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 				<div class="clear"></div>
@@ -54,7 +47,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</form>
 			<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
 		</div>
-	<?php if ( $form ) { ?>
-	</div>
-	<?php } ?>
 </div>

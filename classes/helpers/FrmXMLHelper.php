@@ -828,12 +828,10 @@ class FrmXMLHelper {
 			} elseif ( $post['post_type'] === 'frm_styles' ) {
 				// Properly encode post content before inserting the post
 				$post['post_content'] = FrmAppHelper::maybe_json_decode( $post['post_content'] );
-				$custom_css           = isset( $post['post_content']['custom_css'] ) ? $post['post_content']['custom_css'] : '';
 				$post['post_content'] = FrmAppHelper::prepare_and_encode( $post['post_content'] );
 
 				// Create/update post now
 				$post_id = wp_insert_post( $post );
-				self::maybe_update_custom_css( $custom_css );
 			} else {
 				if ( $post['post_type'] === 'frm_display' ) {
 					$post['post_content'] = self::maybe_prepare_json_view_content( $post['post_content'] );
@@ -1228,23 +1226,6 @@ class FrmXMLHelper {
 				FrmViewsLayout::maybe_create_layouts_for_view( $post_id, $listing_layout, $detail_layout );
 			}
 		}
-	}
-
-	/**
-	 * If a template includes custom css, let's include it.
-	 * The custom css is included on the default style.
-	 *
-	 * @since 2.03
-	 */
-	private static function maybe_update_custom_css( $custom_css ) {
-		if ( empty( $custom_css ) ) {
-			return;
-		}
-
-		$frm_style                                 = new FrmStyle();
-		$default_style                             = $frm_style->get_default_style();
-		$default_style->post_content['custom_css'] .= "\r\n\r\n" . $custom_css;
-		$frm_style->save( $default_style );
 	}
 
 	private static function maybe_update_stylesheet( $imported ) {

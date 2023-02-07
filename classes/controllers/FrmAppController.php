@@ -171,6 +171,13 @@ class FrmAppController {
 				'permission' => 'frm_edit_forms',
 			),
 			array(
+				'link'       => FrmStylesHelper::get_list_url( $id ),
+				'label'      => __( 'Style', 'formidable' ),
+				'current'    => array(),
+				'page'       => 'formidable-styles',
+				'permission' => 'frm_edit_forms',
+			),
+			array(
 				'link'       => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . absint( $id ) ),
 				'label'      => __( 'Settings', 'formidable' ),
 				'current'    => array( 'settings' ),
@@ -438,6 +445,11 @@ class FrmAppController {
 			FrmFormsController::duplicate();
 		}
 
+		if ( FrmAppHelper::is_style_editor_page() && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
+			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
+			FrmStylesController::save_style();
+		}
+
 		new FrmPersonalData(); // register personal data hooks
 
 		if ( ! FrmAppHelper::doing_ajax() && self::needs_update() ) {
@@ -480,6 +492,8 @@ class FrmAppController {
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
 		self::register_popper1();
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
+
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
@@ -502,7 +516,8 @@ class FrmAppController {
 			'formidable_embed',
 		);
 
-		if ( FrmAppHelper::is_style_editor_page() ) {
+		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
+			// We only need to load the color picker when editing styles.
 			$dependencies[] = 'wp-color-picker';
 		}
 

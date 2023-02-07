@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<h2 class="frm-h2"><?php esc_html_e( 'Import', 'formidable' ); ?></h2>
 		<p class="howto"><?php echo esc_html( apply_filters( 'frm_upload_instructions1', __( 'Upload your Formidable XML file to import forms into this site. If your imported form key and creation date match a form on your site, that form will be updated.', 'formidable' ) ) ); ?></p>
 		<br/>
-		<form enctype="multipart/form-data" method="post">
+		<form enctype="multipart/form-data" method="post" class="frm-fields">
 			<input type="hidden" name="frm_action" value="import_xml" />
 			<?php wp_nonce_field( 'import-xml-nonce', 'import-xml' ); ?>
 			<p>
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 
 			<div class="frm-table-box">
-			<p class="alignleft" style="margin-bottom:0;">
+			<p class="alignleft frm-mb-sm">
 				<label class="xml_opts">
 					<?php esc_html_e( 'Select Form(s)', 'formidable' ); ?>
 				</label>
@@ -111,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			);
 			?>
 			<div class="frm-scroll-box">
-				<table class="widefat striped frm-border frm_no_top_margin">
+				<table class="widefat striped frm-border frm-mt-0">
 					<thead>
 						<tr>
 							<td class="column-cb check-column"></td>

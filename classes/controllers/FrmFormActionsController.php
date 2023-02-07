@@ -245,9 +245,9 @@ class FrmFormActionsController {
 
 		// HTML to include on the icon.
 		$icon_atts = array();
-		if ( $action_control->action_options['color'] !== 'var(--primary-hover)' ) {
+		if ( $action_control->action_options['color'] !== 'var(--primary-700)' ) {
 			$icon_atts = array(
-				'style' => '--primary-hover:' . $action_control->action_options['color'],
+				'style' => '--primary-700:' . $action_control->action_options['color'],
 			);
 		}
 

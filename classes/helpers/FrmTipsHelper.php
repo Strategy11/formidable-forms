@@ -29,7 +29,7 @@ class FrmTipsHelper {
 		}
 
 		if ( 'p' === $html ) {
-			echo '<p class="frmcenter frm_no_top_margin">';
+			echo '<p class="frmcenter frm-mt-0">';
 		}
 
 		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
