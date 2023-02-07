@@ -119,12 +119,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow-x: visible;
 }
 
-.formidable_page_formidable-pro-upgrade #wpfooter,
-.toplevel_page_formidable #wpfooter {
-	border-top: 1px solid #ddd;
-	background: #fff;
-}
-
 .frm-full-screen {
 	height: 100%;
 	overflow: hidden;
@@ -683,10 +677,7 @@ ul.frm_form_nav > li {
 	padding-top: 0;
 }
 
-.frm-full-screen.frm-admin-page-entries .frm_page_container,
-.frm-new-entry .frm_page_container,
-.frm-admin-page-reports .frm_page_container,
-.frm_list_entry_page .frm_page_container {
+.frm-full-screen.frm-admin-page-entries .frm_page_container {
 	height: auto;
 	display: block;
 }
@@ -1186,7 +1177,8 @@ p.frm_has_shortcodes {
 .frm-button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
-.frm-white-body #search-submit,
+.frm-white-body .frm-search .button,
+.frm-white-body .search-box .button, /* Views */
 .frm-white-body .tablenav .button,
 .frm_orange_button,
 .toplevel_page_formidable #frm_upgrade_modal .button-primary,
@@ -1292,9 +1284,9 @@ p.frm_has_shortcodes {
 }
 
 .frm-button-primary.frm_large{
-	font-size: 22px !important;
+	font-size: var(--text-md) !important;
 	height: auto !important;
-	padding: 16px 32px !important;
+	padding: 9px 18px !important;
 }
 
 .frm-button-primary i:before {
@@ -1485,6 +1477,10 @@ input.frm_insert_in_template {
 
 .frm-mb-md {
 	margin-bottom: var(--gap-md) !important;
+}
+
+.frm-mb-lg {
+	margin-bottom: var(--gap-lg) !important;
 }
 
 .frm-mx-sm {
@@ -1818,12 +1814,6 @@ form .frm_blank_field label {
 	margin: 20px auto !important;
 }
 
-.upgrade_to_pro h1,
-.upgrade_to_pro h3,
-.upgrade_to_pro {
-	color: #444;
-}
-
 .upgrade_to_pro .error {
 	display: none;
 }
@@ -1975,13 +1965,12 @@ div.frm_updated_message {
 
 .frm-yes {
 	color: var(--green);
-	font-size: 21px;
-	font-weight: 500;
+	font-size: var(--text-xl);
 }
 
 .frm-nope {
-	color: #d2e0f2;
-	font-size: 21px;
+	color: var(--grey-400);
+	font-size: var(--text-xl);
 }
 
 .upgrade_to_pro a {
@@ -1989,8 +1978,8 @@ div.frm_updated_message {
 }
 
 .upgrade_to_pro table .frmsvg {
-	height: 20px;
-	width: 20px;
+	height: var(--text-xl);
+	width: var(--text-xl);
 }
 
 .upgrade_to_pro table.widefat {
@@ -1998,10 +1987,12 @@ div.frm_updated_message {
 	border-collapse: collapse;
 }
 
-.upgrade_to_pro table th,
+.frm-white-body .upgrade_to_pro table th,
 .upgrade_to_pro table td {
 	padding: 10px 15px;
-	border: 1px solid #d2e0f2;
+	border: 1px solid var(--grey-300);
+	line-height: var(--leading);
+	font-size: var(--text-sm);
 }
 
 .upgrade_to_pro table th.frmcenter {
@@ -2009,7 +2000,7 @@ div.frm_updated_message {
 }
 
 .widefat th.frm_table_break {
-	background-color: #f6f7fb;
+	background-color: var(--sidebar-color);
 }
 
 h2.frm-h2 + .howto {
@@ -2749,7 +2740,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	cursor: pointer;
 	display: flex;
 	gap: var(--gap-sm);
-	font-size: var(--font-sm);
+	font-size: var(--text-sm);
 }
 
 .frm-embed-modal-option + .frm-embed-modal-option {
@@ -2915,7 +2906,11 @@ h1 .fa-caret-down {
 .frm_wrap .ui-autocomplete-input {
 	background: transparent url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23667085%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 	background-size: var(--text-md) var(--text-md);
-	padding-right: var(--gap-lg) !important;
+	padding-right: var(--gap-md) !important;
+}
+
+.caret {
+	padding-right: var(--gap-xs) !important;
 }
 
 .frm-btn-group .caret {
@@ -2976,7 +2971,7 @@ h1 .fa-caret-down {
 
 #frm_field_group_controls .frm-dropdown-menu,
 .frm-field-action-icons .frm-dropdown-menu {
-	min-width: 160px !important;
+	min-width: 180px !important;
 }
 
 .frm-field-action-icons .frm-dropdown-toggle svg {
@@ -4594,7 +4589,6 @@ select.frm_cancelnew, input.frm_enternew {
 
 /*
 These are the styles for the "Enable Formidable styling" toggle in the visual styler.
-It uses the same style rules as the font end toggle field in Pro.
 To use this element, you can call the FrmHtmlHelper::toggle function.
 */
 .frm_toggle_opt {
@@ -7205,12 +7199,6 @@ ul .frm_col_two {
 	font-size: 17px !important;
 }
 
-.frm_placeholder_block h3 {
-	font-size: 22px;
-	font-weight: 400;
-	color: var(--medium-grey);
-}
-
 .frm-green-icons .frmsvg {
 	color: var(--green);
 }
@@ -7258,6 +7246,7 @@ ul .frm_col_two {
 .frm_wrap .ui-autocomplete li > div,
 .multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
 	display: flex;
@@ -8778,14 +8767,10 @@ Responsive Design
 	order: 2;
 }
 
-.frm-video-wrapper {
-	padding: 0 20px;
-}
-
 .frm-video-wrapper iframe {
 	width: 100%;
 	max-width: 843px;
-	border-radius: 10px;
+	border-radius: var(--border-radius);
 }
 
 #frm_field_group_popup {
