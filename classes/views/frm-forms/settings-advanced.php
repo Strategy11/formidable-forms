@@ -63,6 +63,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Choose what will happen after the user submits this form.', 'formidable' ); ?>"></span>
 </h3>
 
+<input type="hidden" name="options[on_submit_migrated]" value="<?php echo empty( $values['on_submit_migrated'] ) ? '' : intval( $values['on_submit_migrated'] ); ?>" />
+
 <?php
 // Show a temporary message. This can be removed after the date is passed.
 if ( time() < strtotime( '2023-03-07' ) ) {
