@@ -180,8 +180,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	display: flex;
 	align-items: center;
 	cursor: pointer;
-	padding-top: 8px !important;
-	padding-bottom: 8px !important;
+	font-weight: 400;
 
 	/*
 	When a background image is set the children in the fieldset have a z-index of 1.\
@@ -486,8 +485,7 @@ The label in the preview should use the label color setting.
   flex: 1;
 }
 
-#frm_style_template_modal .frm_warning_style a:focus,
-#frm_new_style_trigger:focus {
+#frm_style_template_modal .frm_warning_style a:focus {
 	box-shadow: none;
 }
 

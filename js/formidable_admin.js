@@ -548,6 +548,7 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'click', 'a[data-frmverify]', confirmClick );
 		wrapClass.on( 'click', 'a[data-frmtoggle]', toggleItem );
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
+		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
@@ -5882,8 +5883,7 @@ function frmAdminBuildJS() {
 
 	function submitBuild() {
 		/*jshint validthis:true */
-		var $thisEle = jQuery( this );
-		var p = $thisEle.html();
+		var $thisEle = this;
 
 		preFormSave( this );
 
@@ -5896,7 +5896,7 @@ function frmAdminBuildJS() {
 			url: ajaxurl,
 			data: {action: 'frm_save_form', 'frm_compact_fields': v, nonce: frmGlobal.nonce},
 			success: function( msg ) {
-				afterFormSave( $thisEle, p );
+				afterFormSave( $thisEle );
 
 				var $postStuff = document.getElementById( 'post-body-content' );
 				var $html = document.createElement( 'div' );
@@ -5938,30 +5938,24 @@ function frmAdminBuildJS() {
 			jQuery( '.inplace_save, .postbox' ).trigger( 'click' );
 		}
 
-		$button = jQuery( b );
-
-		if ( $button.hasClass( 'frm_button_submit' ) ) {
-			$button.addClass( 'frm_loading_form' );
-			$button.html( frm_admin_js.saving );
+		if ( b.classList.contains( 'frm_button_submit' ) ) {
+			b.classList.add( 'frm_loading_form' );
 		} else {
-			$button.addClass( 'frm_loading_button' );
-			$button.val( frm_admin_js.saving );
+			b.classList.add( 'frm_loading_button' );
 		}
+		b.setAttribute( 'aria-busy', 'true' );
 	}
 
-	function afterFormSave( $button, buttonVal ) {
-		$button.removeClass( 'frm_loading_form' ).removeClass( 'frm_loading_button' );
-		$button.html( frm_admin_js.saved );
+	function afterFormSave( button ) {
+		button.classList.remove( 'frm_loading_form' );
+		button.classList.remove( 'frm_loading_button' );
 		resetOptionTextDetails();
 		fieldsUpdated = 0;
+		button.setAttribute( 'aria-busy', 'false' );
 
 		setTimeout( function() {
 			jQuery( '.frm_updated_message' ).fadeOut( 'slow', function() {
 				this.parentNode.removeChild( this );
-			});
-			$button.fadeOut( 'slow', function() {
-				$button.html( buttonVal );
-				$button.show();
 			});
 		}, 5000 );
 	}
@@ -10186,17 +10180,8 @@ function frmAdminBuildJS() {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
 
-			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( e ) {
-				var selectedValue, unselectedValue;
-				selectedValue = e.target.value;
-				unselectedValue = selectedValue === 'recaptcha' ? 'hcaptcha' : 'recaptcha';
-				document.getElementById( selectedValue + '_settings' ).classList.remove( 'frm_hidden' );
-				document.getElementById( selectedValue ).parentElement.classList.add( 'active' );
-
-				document.getElementById( unselectedValue + '_settings' ).classList.add( 'frm_hidden' );
-				document.getElementById( unselectedValue ).parentElement.classList.remove( 'active' );
-
-				document.querySelector( '.captcha_settings .alert' ).classList.toggle( 'frm_hidden' );
+			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function() {
+				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden' );
 			});
 		},
 
