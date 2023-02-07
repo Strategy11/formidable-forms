@@ -332,7 +332,8 @@ function frmAdminBuildJS() {
 		thisFormId = 0,
 		autoId = 0,
 		optionMap = {},
-		lastNewActionIdReturned = 0;
+		lastNewActionIdReturned = 0,
+		$postBodyContent;
 
 	const { __ } = wp.i18n;
 	let debouncedSyncAfterDragAndDrop, postBodyContent;
@@ -1006,8 +1007,8 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeScrollBuilder( event ) {
-		jQuery( '#post-body-content' ).scrollTop( function( i, v ) {
-			var moved, h, relativePos, y;
+		$postBodyContent.scrollTop( function( i, v ) {
+			let moved, h, relativePos, y;
 
 			moved = event.clientY;
 			h = this.offsetHeight;
@@ -9767,7 +9768,8 @@ function frmAdminBuildJS() {
 
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 			postBodyContent = document.getElementById( 'post-body-content' );
-
+			$postBodyContent = jQuery( postBodyContent );
+	
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
 				loadFields( loadFieldId );
