@@ -192,7 +192,7 @@ class FrmOnSubmitHelper {
 	 * @param int $form_id Form ID.
 	 */
 	public static function save_on_submit_settings( $form_id ) {
-		$actions             = FrmOnSubmitHelper::get_actions( $form_id );
+		$actions             = self::get_actions( $form_id );
 		$first_create_action = null;
 		$first_edit_action   = null;
 		foreach ( $actions as $action ) {
