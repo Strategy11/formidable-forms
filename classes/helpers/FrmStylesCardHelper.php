@@ -430,8 +430,8 @@ class FrmStylesCardHelper {
 		<div class="frm-style-card-pagination frm_wrap">
 			<a href="#" class="frm-show-all-styles">
 				<?php
-				/* translators: %d: The number of styles */
 				printf(
+					/* translators: %d: The number of styles */
 					esc_html__( 'Show all (%d)', 'formidable' ),
 					esc_html( $count - self::PAGE_SIZE )
 				);
