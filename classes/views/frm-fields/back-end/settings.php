@@ -24,16 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
-			<div class="frm_builder_captcha frm_warning_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' ); ?>
-				<div><b><?php echo esc_html__( 'Setup a captcha', 'formidable' ); ?></b>
-					<p>
-						<?php
-						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
-						?>
-					</p>
-				</div>
+			<div class="frm_warning_style frm-with-icon">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
 			</div>
 		<?php } ?>
 		<?php if ( $display['label'] ) { ?>

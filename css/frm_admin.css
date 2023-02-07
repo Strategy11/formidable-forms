@@ -1840,7 +1840,7 @@ div.frm_updated_message {
 	border-radius: var(--small-radius);
 	background-color: #D5F2DC;
 	color: #1E561F;
-	padding: 12px 25px;
+	padding: var(--gap-sm) var(--gap-md);
 	font-size: var(--text-sm);
 	margin: var(--gap-sm) 0;
 	text-align: left;
@@ -4612,13 +4612,14 @@ To use this element, you can call the FrmHtmlHelper::toggle function.
 	position: relative;
 	display: inline-block;
 	width: 40px;
-	height: 24px;
+	height: var(--h-xs);
 	vertical-align: middle;
 }
 
 .frm_toggle_block {
 	display: inline-flex;
-    gap: 16px;
+    gap: var(--gap-sm);
+	align-items: center;
 }
 
 .frm_toggle input, /* Reverse compatibility */
@@ -4652,6 +4653,7 @@ To use this element, you can call the FrmHtmlHelper::toggle function.
 	box-sizing: border-box;
 	box-shadow: var(--box-shadow-md);
 	font-size: 22px;
+	line-height: 18px;
 }
 
 input:checked + .frm_toggle .frm_toggle_slider {
@@ -4834,12 +4836,6 @@ label.frm-example-icon {
 
 .frm-long-icon-buttons label > svg {
 	height: 21px;
-}
-
-.frm_builder_captcha.frm_warning_style {
-	display: flex;
-    column-gap: 10px;
-	padding: 12px 16px;
 }
 
 .frm-example-icon .frmsvg,
