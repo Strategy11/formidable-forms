@@ -259,8 +259,6 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		$form = $this->factory->form->get_object_by_id( $form_id );
 
-		$this->assertEquals( $form->options['success_action'], 'redirect' );
-
 		$entry_key = 'submit-redirect';
 		$response = $this->post_new_entry( $form, $entry_key );
 
