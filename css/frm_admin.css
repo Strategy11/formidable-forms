@@ -1481,6 +1481,10 @@ input.frm_insert_in_template {
 	margin-bottom: var(--gap-md) !important;
 }
 
+.frm-mb-lg {
+	margin-bottom: var(--gap-lg) !important;
+}
+
 .frm-mx-sm {
 	margin-left: var(--gap-sm) !important;
 	margin-right: var(--gap-sm) !important;

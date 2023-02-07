@@ -137,7 +137,7 @@ class FrmWelcomeController {
 	public static function upgrade_to_pro_button() {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			?>
-				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'settings-license' ) ); ?>" class="button-secondary frm-button-secondary" target="_blank" rel="nofollow noopener">
+				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'welcome' ) ); ?>" class="button-secondary frm-button-secondary frm-button-sm" target="_blank" rel="nofollow noopener">
 					<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
 				</a>
 			<?php
