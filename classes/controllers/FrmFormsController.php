@@ -2116,9 +2116,11 @@ class FrmFormsController {
 	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
-		$met_actions = self::get_met_on_submit_actions( $atts );
-		if ( $met_actions ) {
-			return $met_actions;
+		if ( ! empty( $atts['entry_id'] ) ) { // Check against entry has already submitted error.
+			$met_actions = self::get_met_on_submit_actions( $atts );
+			if ( $met_actions ) {
+				return $met_actions;
+			}
 		}
 
 		$opt    = 'success_action';
