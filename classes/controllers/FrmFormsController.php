@@ -638,6 +638,7 @@ class FrmFormsController {
 		$new_values['form_key'] = $new_values['name'];
 		$new_values['options']  = array(
 			'antispam' => 1,
+			'on_submit_migrated' => 1,
 		);
 
 		/**
