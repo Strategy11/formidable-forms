@@ -1286,9 +1286,9 @@ p.frm_has_shortcodes {
 }
 
 .frm-button-primary.frm_large{
-	font-size: 22px !important;
+	font-size: var(--text-md) !important;
 	height: auto !important;
-	padding: 16px 32px !important;
+	padding: 9px 18px !important;
 }
 
 .frm-button-primary i:before {
@@ -1810,12 +1810,6 @@ form .frm_blank_field label {
 	margin: 20px auto !important;
 }
 
-.upgrade_to_pro h1,
-.upgrade_to_pro h3,
-.upgrade_to_pro {
-	color: #444;
-}
-
 .upgrade_to_pro .error {
 	display: none;
 }
@@ -1967,13 +1961,12 @@ div.frm_updated_message {
 
 .frm-yes {
 	color: var(--green);
-	font-size: 21px;
-	font-weight: 500;
+	font-size: var(--text-xl);
 }
 
 .frm-nope {
-	color: #d2e0f2;
-	font-size: 21px;
+	color: var(--grey-400);
+	font-size: var(--text-xl);
 }
 
 .upgrade_to_pro a {
@@ -1981,8 +1974,8 @@ div.frm_updated_message {
 }
 
 .upgrade_to_pro table .frmsvg {
-	height: 20px;
-	width: 20px;
+	height: var(--text-xl);
+	width: var(--text-xl);
 }
 
 .upgrade_to_pro table.widefat {
@@ -1990,10 +1983,12 @@ div.frm_updated_message {
 	border-collapse: collapse;
 }
 
-.upgrade_to_pro table th,
+.frm-white-body .upgrade_to_pro table th,
 .upgrade_to_pro table td {
 	padding: 10px 15px;
-	border: 1px solid #d2e0f2;
+	border: 1px solid var(--grey-300);
+	line-height: var(--leading);
+	font-size: var(--text-sm);
 }
 
 .upgrade_to_pro table th.frmcenter {
@@ -2001,7 +1996,7 @@ div.frm_updated_message {
 }
 
 .widefat th.frm_table_break {
-	background-color: #f6f7fb;
+	background-color: var(--sidebar-color);
 }
 
 h2.frm-h2 + .howto {
@@ -2741,7 +2736,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	cursor: pointer;
 	display: flex;
 	gap: var(--gap-sm);
-	font-size: var(--font-sm);
+	font-size: var(--text-sm);
 }
 
 .frm-embed-modal-option + .frm-embed-modal-option {
@@ -4586,7 +4581,6 @@ select.frm_cancelnew, input.frm_enternew {
 
 /*
 These are the styles for the "Enable Formidable styling" toggle in the visual styler.
-It uses the same style rules as the font end toggle field in Pro.
 To use this element, you can call the FrmHtmlHelper::toggle function.
 */
 .frm_toggle_opt {
