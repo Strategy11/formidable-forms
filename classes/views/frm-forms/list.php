@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'FrmAppHelper::add_new_item_link',
 				array(
 					'trigger_new_form_modal' => current_user_can( 'frm_edit_forms' ),
-				)
+				),
 			),
 		)
 	);

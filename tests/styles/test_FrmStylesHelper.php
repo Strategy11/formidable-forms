@@ -157,7 +157,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 				'options' => array(
 					'custom_style' => 1,
 					'chat'         => 1,
-				)
+				),
 			)
 		);
 
@@ -170,7 +170,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 				'options' => array(
 					'custom_style' => (string) $conversational_style_id,
 					'chat'         => 1,
-				)
+				),
 			)
 		);
 

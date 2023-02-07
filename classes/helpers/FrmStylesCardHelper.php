@@ -80,7 +80,7 @@ class FrmStylesCardHelper {
 	 * @param bool             $hidden
 	 * @return array
 	 */
-	private function get_params_for_style_card( $style, $hidden = false ) {	
+	private function get_params_for_style_card( $style, $hidden = false ) {
 		if ( ! empty( $style->post_content['position'] ) ) {
 			$label_position = $style->post_content['position'];
 		} else {
@@ -137,8 +137,8 @@ class FrmStylesCardHelper {
 		$color = $style->post_content[ $key ];
 
 		if ( 0 === strpos( $color, 'rgba' ) ) {
-			preg_match_all( "/([\\d.]+)/", $color, $matches );
-			
+			preg_match_all( '/([\\d.]+)/', $color, $matches );
+
 			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
 				// Consider a faded out rgba value as light even when the color is dark.
 				$color_opacity = floatval( $matches[1][3] );
@@ -428,7 +428,15 @@ class FrmStylesCardHelper {
 		}
 		?>
 		<div class="frm-style-card-pagination frm_wrap">
-			<a href="#" class="frm-show-all-styles"><?php printf( esc_html__( 'Show all (%d)', 'formidable' ), $count - self::PAGE_SIZE ); ?></a>
+			<a href="#" class="frm-show-all-styles">
+				<?php
+				printf(
+					/* translators: %d: The number of styles */
+					esc_html__( 'Show all (%d)', 'formidable' ),
+					esc_html( $count - self::PAGE_SIZE )
+				);
+				?>
+			</a>
 		</div>
 		<?php
 	}

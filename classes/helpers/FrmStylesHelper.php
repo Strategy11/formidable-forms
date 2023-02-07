@@ -561,7 +561,7 @@ class FrmStylesHelper {
 			$where[0] = array(
 				// The chat option doesn't exist if it isn't on.
 				( $is_conversational_style ? 'options LIKE' : 'options NOT LIKE' ) => ';s:4:"chat";',
-				$where[0]
+				$where[0],
 			);
 		}
 
