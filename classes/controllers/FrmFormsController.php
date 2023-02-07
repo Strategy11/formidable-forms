@@ -2839,45 +2839,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Gets the first On Submit action to update the success action data in form object.
-	 *
-	 * @since 6.0
-	 *
-	 * @param object $form
-	 */
-	public static function update_get_form_success_action( &$form ) {
-		if ( ! isset( $form->options ) ) {
-			return;
-		}
-
-		$is_serialized = is_serialized( $form->options );
-		$form_options  = maybe_unserialize( $form->options );
-
-		$on_submit_actions = FrmOnSubmitHelper::get_actions( $form->id );
-		$first_create_action = null;
-		$first_edit_action   = null;
-		foreach ( $on_submit_actions as $on_submit_action ) {
-			if ( ! $first_create_action && in_array( 'create', $on_submit_action->post_content['event'], true ) ) {
-				$first_create_action = $on_submit_action;
-			}
-			if ( ! $first_edit_action && in_array( 'update', $on_submit_action->post_content['event'], true ) ) {
-				$first_edit_action = $on_submit_action;
-			}
-		}
-
-		self::populate_on_submit_data( $form_options, $first_create_action );
-		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
-			self::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
-		}
-
-		if ( $is_serialized ) {
-			$form_options = serialize( $form_options );
-		}
-
-		$form->options = $form_options;
-	}
-
-	/**
 	 * Populates the On Submit data to form options.
 	 *
 	 * @since 6.0

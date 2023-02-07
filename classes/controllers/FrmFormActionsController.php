@@ -441,6 +441,8 @@ class FrmFormActionsController {
 		$old_actions = array_diff( $old_actions, $new_actions );
 
 		self::delete_missing_actions( $old_actions );
+
+		FrmOnSubmitHelper::save_on_submit_settings( $form_id );
 	}
 
 	public static function delete_missing_actions( $old_actions ) {

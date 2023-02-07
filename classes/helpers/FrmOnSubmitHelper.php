@@ -185,4 +185,36 @@ class FrmOnSubmitHelper {
 	public static function get_default_redirect_msg() {
 		return __( 'Please wait while you are redirected.', 'formidable' );
 	}
+
+	/**
+	 * Adds the first On Submit action data to the form options to be saved.
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	public static function save_on_submit_settings( $form_id ) {
+		$actions             = FrmOnSubmitHelper::get_actions( $form_id );
+		$first_create_action = null;
+		$first_edit_action   = null;
+		foreach ( $actions as $action ) {
+			if ( ! $first_create_action && in_array( 'create', $action->post_content['event'], true ) ) {
+				$first_create_action = $action;
+			}
+			if ( ! $first_edit_action && in_array( 'update', $action->post_content['event'], true ) ) {
+				$first_edit_action = $action;
+			}
+		}
+
+		$form_options = array();
+		FrmFormsController::populate_on_submit_data( $form_options, $first_create_action );
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() ) {
+			$form_editable = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'editable' );
+			if ( $form_editable ) {
+				FrmFormsController::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
+			}
+		}
+
+		if ( ! empty( $form_options ) ) {
+			$_POST['options'] += $form_options;
+		}
+	}
 }
