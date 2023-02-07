@@ -1416,7 +1416,7 @@ function frmAdminBuildJS() {
 		dropdown.appendChild( trigger );
 
 		ul = document.createElement( 'div' );
-		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu' );
+		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu', 'dropdown-menu-right' );
 		ul.setAttribute( 'role', 'menu' );
 		dropdown.appendChild( ul );
 

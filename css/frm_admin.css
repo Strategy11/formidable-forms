@@ -677,10 +677,7 @@ ul.frm_form_nav > li {
 	padding-top: 0;
 }
 
-.frm-full-screen.frm-admin-page-entries .frm_page_container,
-.frm-new-entry .frm_page_container,
-.frm-admin-page-reports .frm_page_container,
-.frm_list_entry_page .frm_page_container {
+.frm-full-screen.frm-admin-page-entries .frm_page_container {
 	height: auto;
 	display: block;
 }
@@ -1180,7 +1177,8 @@ p.frm_has_shortcodes {
 .frm-button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
-.frm-white-body #search-submit,
+.frm-white-body .frm-search .button,
+.frm-white-body .search-box .button, /* Views */
 .frm-white-body .tablenav .button,
 .frm_orange_button,
 .toplevel_page_formidable #frm_upgrade_modal .button-primary,
@@ -2906,7 +2904,11 @@ h1 .fa-caret-down {
 .frm_wrap .ui-autocomplete-input {
 	background: transparent url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23667085%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 	background-size: var(--text-md) var(--text-md);
-	padding-right: var(--gap-lg) !important;
+	padding-right: var(--gap-md) !important;
+}
+
+.caret {
+	padding-right: var(--gap-xs) !important;
 }
 
 .frm-btn-group .caret {
@@ -2967,7 +2969,7 @@ h1 .fa-caret-down {
 
 #frm_field_group_controls .frm-dropdown-menu,
 .frm-field-action-icons .frm-dropdown-menu {
-	min-width: 160px !important;
+	min-width: 180px !important;
 }
 
 .frm-field-action-icons .frm-dropdown-toggle svg {
@@ -7196,12 +7198,6 @@ ul .frm_col_two {
 	font-size: 17px !important;
 }
 
-.frm_placeholder_block h3 {
-	font-size: 22px;
-	font-weight: 400;
-	color: var(--medium-grey);
-}
-
 .frm-green-icons .frmsvg {
 	color: var(--green);
 }
@@ -7249,6 +7245,7 @@ ul .frm_col_two {
 .frm_wrap .ui-autocomplete li > div,
 .multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
 	display: flex;
