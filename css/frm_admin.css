@@ -119,12 +119,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow-x: visible;
 }
 
-.formidable_page_formidable-pro-upgrade #wpfooter,
-.toplevel_page_formidable #wpfooter {
-	border-top: 1px solid #ddd;
-	background: #fff;
-}
-
 .frm-full-screen {
 	height: 100%;
 	overflow: hidden;

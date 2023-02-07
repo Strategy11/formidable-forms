@@ -21,15 +21,15 @@
 	position: relative;
 }
 
-.formidable_page_formidable-applications #frm_top_bar {
+.frm-admin-page-applications #frm_top_bar {
 	background: #fff;
 }
 
-.formidable_page_formidable-applications #wpbody {
+.frm-admin-page-applications #wpbody {
 	background: var(--sidebar-color);
 }
 
-.formidable_page_formidable-applications #wpcontent {
+.frm-admin-page-applications #wpcontent {
 	padding-left: 0;
 }
 
@@ -43,7 +43,7 @@
 	padding-bottom: 100px;
 }
 
-.formidable_page_formidable-applications #wpbody-content {
+.frm-admin-page-applications #wpbody-content {
 	padding-bottom: 0;
 }
 
@@ -158,7 +158,7 @@
 	padding: 25px 30px;
 }
 
-.formidable_page_formidable-applications .ui-widget-overlay {
+.frm-admin-page-applications .ui-widget-overlay {
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -189,7 +189,7 @@
 	margin-bottom: 5px;
 }
 
-.formidable_page_formidable-applications #frm_bs_dropdown .install-now {
+.frm-admin-page-applications #frm_bs_dropdown .install-now {
 	vertical-align: bottom;
 }
 
