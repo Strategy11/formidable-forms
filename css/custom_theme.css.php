@@ -328,6 +328,7 @@ legend.frm_hidden{
 
 .with_frm_style .wp-editor-container textarea{
 	border:none<?php echo esc_html( $important ); ?>;
+	box-shadow:none !important;
 }
 
 .with_frm_style .mceIframeContainer{
