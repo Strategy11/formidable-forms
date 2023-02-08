@@ -38,26 +38,6 @@ class FrmStyleApi extends FrmFormApi {
 	 * @return array
 	 */
 	private function fill_missing_style_settings( $api_info ) {
-		$lines = $api_info[28067373];
-		$big   = $api_info[28067379];
-		$dark  = $api_info[28067312];
-
-		// TODO remove these placeholder settings, once they're actually in the API data.
-		if ( empty( $lines['settings'] ) ) {
-			$lines['settings']  = $this->get_placeholder_lines_style();
-			$api_info[28067373] = $lines;
-		}
-
-		if ( empty( $big['settings'] ) ) {
-			$big['settings']    = $this->get_placeholder_big_style();
-			$api_info[28067379] = $big;
-		}
-
-		if ( empty( $dark['settings'] ) ) {
-			$dark['settings']   = $this->get_placeholder_dark_style();
-			$api_info[28067312] = $dark;
-		}
-
 		// Remove 'Styling Template' from titles.
 		foreach ( $api_info as $id => $template ) {
 			if ( isset( $template['name'] ) ) {

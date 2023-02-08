@@ -249,6 +249,10 @@ class FrmStylesCardHelper {
 		}
 		$styles[] = '--preview-background-color: ' . $background_color;
 
+		if ( empty( $style->post_content['submit_border_color'] ) ) {
+			$style->post_content['submit_border_color'] = 'transparent';
+		}
+
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
 
@@ -263,7 +267,8 @@ class FrmStylesCardHelper {
 
 			$value = $style->post_content[ $key ];
 
-			if ( in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) ) {
+			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) && $value !== 'transparent';
+			if ( $is_hex ) {
 				$value = '#' . $value;
 			}
 
