@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="frm_hidden">
 				<?php
 				// Include keywords for the action search.
-				echo $action_control->action_options['keywords'];
+				echo esc_html( $action_control->action_options['keywords'] );
 				?>
 			</span>
 		<?php } ?>
