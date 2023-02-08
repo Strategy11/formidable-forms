@@ -10,6 +10,13 @@ class FrmFormApi {
 	protected $cache_timeout = '+6 hours';
 
 	/**
+	 * The number of days an add-on is new.
+	 *
+	 * @var int $new_days
+	 */
+	protected $new_days = 90;
+
+	/**
 	 * @since 3.06
 	 */
 	public function __construct( $license = null ) {
@@ -251,6 +258,6 @@ class FrmFormApi {
 	 * @return bool
 	 */
 	protected function is_new( $addon ) {
-		return strtotime( $addon['released'] ) > strtotime( '-30 days' );
+		return strtotime( $addon['released'] ) > strtotime( '-' . $this->new_days . ' days' );
 	}
 }

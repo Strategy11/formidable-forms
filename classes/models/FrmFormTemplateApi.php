@@ -12,6 +12,11 @@ class FrmFormTemplateApi extends FrmFormApi {
 	protected static $free_license;
 
 	/**
+	 * @var int $new_days
+	 */
+	protected $new_days = 30;
+
+	/**
 	 * @since 3.06
 	 */
 	protected function set_cache_key() {
