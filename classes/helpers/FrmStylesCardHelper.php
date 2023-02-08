@@ -174,17 +174,6 @@ class FrmStylesCardHelper {
 		$style_object->post_title   = $style['name'];
 		$style_object->post_content = $style['settings'];
 
-		if ( ! empty( $style['is_new'] ) ) {
-			add_filter(
-				'frm_style_template_is_new',
-				function( $is_new, $style ) use ( $style_object ) {
-					return $style === $style_object;
-				},
-				10,
-				2
-			);
-		}
-
 		// An unlocked template uses a static "frm_style_template" in Pro.
 		// A locked template however uses a slug to match the sandbox CSS.
 		$style_object->post_name = isset( $style['url'] ) ? 'frm_style_template' : $style['slug'];
@@ -230,6 +219,17 @@ class FrmStylesCardHelper {
 				$params['data-template-key'] = $style['slug'];
 				return $params;
 			};
+		}
+
+		if ( ! empty( $style['is_new'] ) ) {
+			add_filter(
+				'frm_style_template_is_new',
+				function( $is_new, $style ) use ( $style_object ) {
+					return $style === $style_object;
+				},
+				10,
+				2
+			);
 		}
 
 		add_filter( 'frm_style_card_params', $param_filter, 10, $this->locked ? 2 : 1 );
