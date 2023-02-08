@@ -1006,23 +1006,24 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeScrollBuilder( event ) {
-		$postBodyContent.scrollTop( function( i, v ) {
-			let moved, h, relativePos, y;
+		$postBodyContent.scrollTop(
+			( _, v ) => {
+				const moved       = event.clientY;
+				const h           = postBodyContent.offsetHeight;
+				const relativePos = event.clientY - postBodyContent.offsetTop;
+				const y           = relativePos - h / 2;
 
-			moved = event.clientY;
-			h = this.offsetHeight;
-			relativePos = event.clientY - this.offsetTop;
-			y = relativePos - h / 2;
-			if ( relativePos > ( h - 50 ) && moved > 5 ) {
+				if ( relativePos > ( h - 50 ) && moved > 5 ) {
+					// Scrolling down.
+					return v + y * 0.1;
+				}
 
-				// scrolling down
-				return v + y * 0.1;
-			} else if ( relativePos < 50 && moved < -5 ) {
-
-				//scrolling up
-				return v - Math.abs( y * 0.1 );
+				if ( relativePos < 50 && moved < -5 ) {
+					// Scrolling up.
+					return v - Math.abs( y * 0.1 );
+				}
 			}
-		});
+		);
 	}
 
 	function getDragOffset( $helper ) {
