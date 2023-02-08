@@ -284,10 +284,12 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
+			const title = tag( 'h4', { text: data.name });
+
 			const titleWrapper = span({
 				children: [
 					svg({ href: '#frm_lock_simple' }),
-					tag( 'h4', { text: data.name })
+					title
 				]
 			});
 			const header = div({
@@ -298,7 +300,7 @@
 			});
 
 			if ( data.isNew ) {
-				titleWrapper.querySelector( 'h4' ).appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+				title.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
 			}
 
 			const counter = getItemCounter();
