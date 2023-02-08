@@ -167,6 +167,8 @@ class FrmStyle {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
 				} elseif ( $value > 1 || $value < 0 ) {
 					$new_value = 1;
+				} else {
+					$new_value = floatval( $value );
 				}
 			}
 
