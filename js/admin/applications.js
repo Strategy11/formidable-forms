@@ -284,7 +284,7 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
-			const title = tag( 'h4', { text: data.name });
+			const title = tag( 'h4', data.name );
 
 			const titleWrapper = span({
 				children: [
