@@ -991,8 +991,9 @@
 		formData.append( 'style_id', styleId );
 		doJsonPost( 'settings_reset', formData ).then(
 			response => {
+				const card = getCardByStyleId( styleId );
+				card.classList.remove( 'frm-dark-style' );
 				if ( 'string' === typeof response.style ) {
-					const card = getCardByStyleId( styleId );
 					card.style = response.style;
 				}
 				reloadCSSAfterStyleReset();
