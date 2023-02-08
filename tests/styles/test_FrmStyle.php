@@ -11,7 +11,7 @@ class test_FrmStyle extends FrmUnitTest {
 	public function test_maybe_sanitize_rgba_value() {
 		$frm_style            = new FrmStyle();
 		$invalid_color_values = array(
-			'rgba(45, 45, 45,' => 'rgba(45, 45, 45,1)',
+			'rgba(45, 45, 45,' => 'rgba(45,45,45,1)',
 			'rgba(, , ,1)'     => 'rgba(0,0,0,1)',
 			'rgba(45,45'       => 'rgba(45,45,0,1)',
 			'rgba(355,,,0.5)'  => 'rgba(255,0,0,0.5)',
@@ -27,7 +27,8 @@ class test_FrmStyle extends FrmUnitTest {
 			'(rgb(0,0,0)'      => 'rgb(0,0,0)',
 			'rgba(0,0,0,1))'   => 'rgba(0,0,0,1)',
 			' rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
-			' (rgb(0,0,0)'      => 'rgb(0,0,0)',
+			' (rgb(0,0,0)'     => 'rgb(0,0,0)',
+			'rgba((0,0,0,1)'   => 'rgba(0,0,0,1)',
 		);
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {

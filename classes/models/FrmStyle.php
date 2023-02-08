@@ -141,6 +141,7 @@ class FrmStyle {
 		$color_val .= ')';
 
 		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
+		$color_rgba            = trim( $color_rgba, '()' ); // Remove any excessive braces from the rgba like rgba((.
 		$length_of_color_codes = strpos( $color_val, '(' );
 		$new_color_values      = array();
 
@@ -150,16 +151,18 @@ class FrmStyle {
 			$value_is_empty_string = '' === trim( $value ) || '' === $value;
 
 			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
-				// insert a value for r, g, or b
+				// Insert a value for r, g, or b.
 				if ( $value < 0 ) {
 					$new_value = 0;
 				} elseif ( $value > 255 ) {
 					$new_value = 255;
 				} elseif ( $value_is_empty_string ) {
 					$new_value = 0;
+				} else {
+					$new_value = absint( $value );
 				}
 			} else {
-				// insert a value for alpha
+				// Insert a value for alpha.
 				if ( $value_is_empty_string ) {
 					$new_value = 4 === $length_of_color_codes ? 1 : 0;
 				} elseif ( $value > 1 || $value < 0 ) {
@@ -185,6 +188,7 @@ class FrmStyle {
 
 		$new_color = implode( ',', $new_color_values );
 		$prefix    = substr( $color_val, 0, strpos( $color_val, '(' ) + 1 );
+		$prefix    = rtrim( $prefix, '(' ) . '('; // Limit the number of opening braces after rgb/rgba. There should only be one.
 		$new_color = $prefix . $new_color . ')';
 
 		$color_val = $new_color;
