@@ -173,6 +173,7 @@ class FrmStylesCardHelper {
 		$style_object->ID           = 0;
 		$style_object->post_title   = $style['name'];
 		$style_object->post_content = $style['settings'];
+		$style_object->is_new       = ! empty( $style['is_new'] ); // Used to track that a style template is now.
 
 		// An unlocked template uses a static "frm_style_template" in Pro.
 		// A locked template however uses a slug to match the sandbox CSS.

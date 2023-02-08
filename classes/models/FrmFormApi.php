@@ -91,12 +91,20 @@ class FrmFormApi {
 		}
 
 		foreach ( $addons as $k => $addon ) {
-			if ( ! isset( $addon['categories'] ) ) {
+			if ( ! is_array( $addon ) ) {
 				continue;
 			}
-			$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
-			if ( ! empty( $cats ) ) {
-				unset( $addons[ $k ] );
+
+			if ( isset( $addon['categories'] ) ) {
+				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
+				if ( ! empty( $cats ) ) {
+					unset( $addons[ $k ] );
+					continue;
+				}
+			}
+
+			if ( array_key_exists( 'released', $addon ) ) {
+				$addons[ $k ]['is_new'] = strtotime( $addon['released'] ) > strtotime( '-30 days' );
 			}
 		}
 

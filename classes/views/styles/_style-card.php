@@ -7,8 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // This includes a basic preview (text field and submit button only).
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
 
-$is_template  = 0 === $style->ID;
-$include_info = $is_active_style;
+$is_template     = 0 === $style->ID;
+$include_info    = $is_active_style;
+$is_new_template = $is_template && ! empty( $style->is_new );
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div>
@@ -30,6 +31,9 @@ $include_info = $is_active_style;
 					echo '(' . esc_html( $info_text ) . ')';
 					?>
 				</span>
+			<?php } ?>
+			<?php if ( $is_new_template ) { ?>
+				<span class="frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
 			<?php } ?>
 		</div>
 		<div class="frm-style-card-preview">
