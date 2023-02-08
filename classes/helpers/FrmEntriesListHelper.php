@@ -13,6 +13,20 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	private function get_repeater_form_ids( $form_id ) {
+		return array_reduce(
+			FrmField::get_all_types_in_form( $form_id, 'divider' ),
+			function( $total, $divider ) {
+				if ( FrmField::is_repeating_field( $divider ) && ! empty( $divider->field_options['form_select'] ) ) {
+					$total[] = $divider->field_options['form_select'];
+				}
+
+				return $total;
+			},
+			array()
+		);
+	}
+
 	public function prepare_items() {
 		global $per_page;
 
@@ -20,9 +34,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$form_id  = $this->params['form'];
 
 		$s_query = array();
-
+		$form_ids = $this->get_repeater_form_ids( $form_id );
+		$form_ids[] = $form_id;
 		if ( $form_id ) {
-			$s_query['it.form_id'] = $form_id;
+			$s_query['it.form_id'] = $form_ids;
 			$join_form_in_query    = false;
 		} else {
 			$s_query[]          = array(
@@ -74,9 +89,25 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'default' => ( $page - 1 ) * $per_page,
 			)
 		);
-
 		$limit       = FrmDb::esc_limit( $start . ',' . $per_page );
 		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
+
+		foreach ( $this->items as $key => $item ) {
+			if ( ! empty( $item->parent_item_id ) ) {
+				$parent_item = FrmEntry::getOne( $item->parent_item_id );
+				/** Get all parent form items */
+				$where = array(
+					'it.id' => $item->parent_item_id,
+				);
+				$parent_items_left = FrmEntry::getAll( $where, $order, $limit, true );
+				$this->items[ $key ]->metas += $parent_items_left[ $item->parent_item_id ]->metas;
+				if ( isset( $this->items[ $item->parent_item_id ] ) ) {
+					$this->items[ $item->parent_item_id ]->metas = $this->items[ $key ]->metas;
+					unset( $this->items[ $key ] );
+				}
+			}
+		}
+
 		$total_items = FrmEntry::getRecordCount( $s_query );
 		$this->total_items = $total_items;
 
@@ -211,6 +242,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$attributes .= ' data-colname="' . $column_display_name . '"';
 
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
+			$form   = FrmForm::maybe_get_current_form();
+			if ( $form ) {
+				$form_id = $form->id;
+			}
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 
 			if ( $this->column_name == 'cb' ) {
@@ -322,7 +357,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	private function get_column_value( $item, &$val ) {
 		$col_name = $this->column_name;
-
 		if ( strpos( $col_name, 'frmsep_' ) === 0 ) {
 			$sep_val  = true;
 			$col_name = str_replace( 'frmsep_', '', $col_name );
@@ -333,7 +367,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( strpos( $col_name, '-_-' ) ) {
 			list( $col_name, $embedded_field_id ) = explode( '-_-', $col_name );
 		}
-
 		$field = FrmField::getOne( $col_name );
 		if ( ! $field ) {
 			return;
