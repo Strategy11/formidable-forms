@@ -75,6 +75,8 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow: auto;
 }
 
+.frm-full-screen #wpadminbar,
+.frm-full-screen #adminmenumain,
 .frm-full-screen .wp-header-end {
 	display: none;
 }
@@ -84,6 +86,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .frm-full-screen #wpcontent {
 	padding-bottom: 0;
 	overflow: hidden;
+	margin: 0 !important;
 }
 
 .frm-white-body #wpbody-content {
@@ -504,12 +507,16 @@ ul.frm_form_nav > li:last-of-type {
 	margin: 0;
 }
 
-.frm_wrap .frm_page_container {
+.frm_page_container {
 	height: calc( 100vh - 32px );
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 	padding-top: 0;
+}
+
+.frm-full-screen .frm_page_container {
+	height: 100vh;
 }
 
 .frm-full-screen.frm-admin-page-entries .frm_page_container,
