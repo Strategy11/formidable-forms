@@ -14,7 +14,7 @@ $styles            = $card_helper->get_styles();
 $custom_styles     = $card_helper->filter_custom_styles( $styles );
 $sidebar_params    = array(
 	'id'    => 'frm_style_sidebar',
-	'class' => 'frm-right-panel frm-p-6', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
+	'class' => 'frm-right-panel frm-p-6 frm_wrap', // Make sure not to put .frm_wrap on the whole container because it will cause admin styles to apply to style cards.
 );
 $toggle_input_html = array();
 if ( $globally_disabled ) {
@@ -42,7 +42,7 @@ if ( $globally_disabled ) {
 		<a <?php FrmAppHelper::array_to_html_params( $trigger_params, true ); ?>>
 			<?php
 			FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
-			esc_html_e( 'New Style', 'formidable-pro' );
+			esc_html_e( 'New Style', 'formidable' );
 			?>
 		</a>
 	</div>

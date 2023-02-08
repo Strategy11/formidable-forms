@@ -548,6 +548,7 @@ function frmAdminBuildJS() {
 		wrapClass.on( 'click', 'a[data-frmverify]', confirmClick );
 		wrapClass.on( 'click', 'a[data-frmtoggle]', toggleItem );
 		wrapClass.on( 'click', 'a[data-frmhide], a[data-frmshow]', hideShowItem );
+		wrapClass.on( 'change', 'input[data-frmhide], input[data-frmshow]', hideShowItem );
 		wrapClass.on( 'click', '.widget-top,a.widget-action', clickWidget );
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
@@ -1415,7 +1416,7 @@ function frmAdminBuildJS() {
 		dropdown.appendChild( trigger );
 
 		ul = document.createElement( 'div' );
-		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu' );
+		ul.classList.add( 'frm-dropdown-menu', 'dropdown-menu', 'dropdown-menu-right' );
 		ul.setAttribute( 'role', 'menu' );
 		dropdown.appendChild( ul );
 
@@ -10130,17 +10131,8 @@ function frmAdminBuildJS() {
 				captchaType.addEventListener( 'change', handleCaptchaTypeChange );
 			}
 
-			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function( e ) {
-				var selectedValue, unselectedValue;
-				selectedValue = e.target.value;
-				unselectedValue = selectedValue === 'recaptcha' ? 'hcaptcha' : 'recaptcha';
-				document.getElementById( selectedValue + '_settings' ).classList.remove( 'frm_hidden' );
-				document.getElementById( selectedValue ).parentElement.classList.add( 'active' );
-
-				document.getElementById( unselectedValue + '_settings' ).classList.add( 'frm_hidden' );
-				document.getElementById( unselectedValue ).parentElement.classList.remove( 'active' );
-
-				document.querySelector( '.captcha_settings .alert' ).classList.toggle( 'frm_hidden' );
+			document.querySelector( '.frm_captchas' ).addEventListener( 'change', function() {
+				document.querySelector( '.captcha_settings .frm_note_style' ).classList.toggle( 'frm_hidden' );
 			});
 		},
 

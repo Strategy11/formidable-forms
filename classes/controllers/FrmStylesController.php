@@ -402,7 +402,7 @@ class FrmStylesController {
 			// Fallback to any form.
 			$where = array(
 				'status'         => 'published',
-				'parent_form_id' => array( null, 0 ) // Make sure it's not a repeater.
+				'parent_form_id' => array( null, 0 ), // Make sure it's not a repeater.
 			);
 			$form_id = FrmDb::get_var( 'frm_forms', $where, 'id' );
 		}

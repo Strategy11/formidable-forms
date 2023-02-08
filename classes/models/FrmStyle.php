@@ -78,6 +78,7 @@ class FrmStyle {
 			// Preserve the previous value in case Custom CSS has not been saved as a Global Setting yet.
 			$custom_css = isset( $new_instance['post_content']['custom_css'] ) ? $new_instance['post_content']['custom_css'] : '';
 
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( ! empty( $_POST['frm_style_setting']['post_title'] ) ) {
 				// The nonce check happens in FrmStylesController::save_style before this is called.
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing

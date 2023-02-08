@@ -165,7 +165,7 @@ class FrmStylesPreviewHelper {
 		$disabled_features = array();
 
 		if ( $this->form_includes_captcha ) {
-			$disabled_features[] = __( 'CAPTCHA fields are hidden.', 'formidable' );
+			$disabled_features[] = __( 'Captcha fields are hidden.', 'formidable' );
 		}
 
 		if ( is_callable( 'FrmProStylesController::get_disabled_javascript_features' ) ) {

@@ -205,6 +205,20 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $rgba
+	 * @return string
+	 */
+	private static function rgb_to_hex( $rgba ) {
+		if ( strpos( $rgba, '#' ) === 0 ) {
+			return $rgba;
+		}
+		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
+		return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
+	}
+
+	/**
 	 * @param $hex string - The original color in hex format #ffffff
 	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
 	 *
@@ -224,11 +238,7 @@ class FrmStylesHelper {
 
 		// Normalize into a six character long hex string
 		$hex = str_replace( '#', '', $hex );
-		if ( strlen( $hex ) == 3 ) {
-			$hex = str_repeat( substr( $hex, 0, 1 ), 2 );
-			$hex .= str_repeat( substr( $hex, 1, 1 ), 2 );
-			$hex .= str_repeat( substr( $hex, 2, 1 ), 2 );
-		}
+		self::fill_hex( $hex );
 
 		// Split into three parts: R, G and B
 		$color_parts = str_split( $hex, 2 );
@@ -241,6 +251,40 @@ class FrmStylesHelper {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $color
+	 * @return int
+	 */
+	public static function get_color_brightness( $color ) {
+		if ( 0 === strpos( $color, 'rgb' ) ) {
+			$color = self::rgb_to_hex( $color );
+		}
+
+		self::fill_hex( $color );
+
+		$c_r        = hexdec( substr( $color, 0, 2 ) );
+		$c_g        = hexdec( substr( $color, 2, 2 ) );
+		$c_b        = hexdec( substr( $color, 4, 2 ) );
+		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+
+		return $brightness;
+	}
+
+	/**
+	 * Change a 3 character hex color to a 6 character one.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function fill_hex( &$color ) {
+		if ( 3 === strlen( $color ) ) {
+			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
+		}
 	}
 
 	/**
@@ -561,49 +605,11 @@ class FrmStylesHelper {
 			$where[0] = array(
 				// The chat option doesn't exist if it isn't on.
 				( $is_conversational_style ? 'options LIKE' : 'options NOT LIKE' ) => ';s:4:"chat";',
-				$where[0]
+				$where[0],
 			);
 		}
 
 		return FrmDb::get_count( 'frm_forms', $where );
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param string $color
-	 * @return int
-	 */
-	public static function get_color_brightness( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
-			$color = self::rgb_to_hex( $color );
-		}
-
-		if ( 3 === strlen( $color ) ) {
-			// Change a 3 character hex color to a 6 character one.
-			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
-		}
-
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
-		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
-
-		return $brightness;
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param string $rgba
-	 * @return string
-	 */
-	private static function rgb_to_hex( $rgba ) {
-		if ( strpos( $rgba, '#' ) === 0 ) {
-			return $rgba;
-		}
-		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
-		return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
 	}
 
 	/**
