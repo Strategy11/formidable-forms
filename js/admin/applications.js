@@ -284,10 +284,12 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
+			const title = tag( 'h4', data.name );
+
 			const titleWrapper = span({
 				children: [
 					svg({ href: '#frm_lock_simple' }),
-					tag( 'h4', { text: data.name })
+					title
 				]
 			});
 			const header = div({
@@ -296,6 +298,10 @@
 					getUseThisTemplateControl( data )
 				]
 			});
+
+			if ( data.isNew ) {
+				title.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+			}
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
