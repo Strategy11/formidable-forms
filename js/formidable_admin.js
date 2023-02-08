@@ -8068,6 +8068,20 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function getExportOption() {
+		const exportFormatSelect = document.querySelector( 'select[name="format"]' );
+		if ( exportFormatSelect ) {
+			return exportFormatSelect.value;
+		} else {
+			return '';
+		}
+	}
+
+	function exportTypeChanged( event ) {
+		showOrHideRepeaters( event.target.value );
+		checkExportTypes.call( event.target );
+	}
+
 	function checkExportTypes() {
 		/*jshint validthis:true */
 		var $dropdown = jQuery( this );
@@ -8104,6 +8118,30 @@ function frmAdminBuildJS() {
 			exportField.prop( 'multiple', true );
 			exportField.prop( 'disabled', false );
 		}
+		$dropdown.trigger( 'change' );
+	}
+
+	function showOrHideRepeaters( exportOption ) {
+		if ( exportOption === '' ) {
+			return;
+		}
+
+		const repeaters = document.querySelectorAll( '.frm-is-repeater' );
+		if ( ! repeaters.length ) {
+			return;
+		}
+
+		if ( exportOption === 'csv' ) {
+			repeaters.forEach( form => {
+				form.classList.remove( 'frm_hidden' );
+			});
+		} else {
+			repeaters.forEach( form => {
+				form.classList.add( 'frm_hidden' );
+			});
+		}
+
+		searchContent.call( document.querySelector( '.frm-auto-search' ) );
 	}
 
 	function preventMultipleExport() {
@@ -8973,11 +9011,16 @@ function frmAdminBuildJS() {
 
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText = items[i].innerText.toLowerCase();
+			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
-				items[i].classList.remove( 'frm_hidden' );
+				if ( itemCanBeShown ) {
+					items[i].classList.remove( 'frm_hidden' );
+				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 ) {
-				items[i].classList.remove( 'frm_hidden' );
+				if ( itemCanBeShown ) {
+					items[i].classList.remove( 'frm_hidden' );
+				}
 				items[i].classList.add( 'frm-search-result' );
 			} else {
 				items[i].classList.add( 'frm_hidden' );
@@ -10125,7 +10168,8 @@ function frmAdminBuildJS() {
 			jQuery( document.getElementById( 'frm_export_xml' ) ).on( 'submit', validateExport );
 			jQuery( '#frm_export_xml input, #frm_export_xml select' ).on( 'change', removeExportError );
 			jQuery( 'input[name="frm_import_file"]' ).on( 'change', checkCSVExtension );
-			jQuery( 'select[name="format"]' ).on( 'change', checkExportTypes ).trigger( 'change' );
+			document.querySelector( 'select[name="format"]' ).addEventListener( 'change', exportTypeChanged );
+
 			jQuery( 'input[name="frm_export_forms[]"]' ).on( 'click', preventMultipleExport );
 			initiateMultiselect();
 
@@ -10138,6 +10182,8 @@ function frmAdminBuildJS() {
 				});
 				this.parentElement.remove();
 			});
+
+			showOrHideRepeaters( getExportOption() );
 		},
 
 		inboxBannerInit: function() {
