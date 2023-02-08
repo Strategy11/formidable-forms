@@ -22,6 +22,12 @@ class test_FrmStyle extends FrmUnitTest {
 			'rgb(300,0,-1)'    => 'rgb(255,0,0)',
 			'rgb('             => 'rgb(0,0,0)',
 			'rgb(255,255,255)' => 'rgb(255,255,255)',
+			'(rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
+			'((rgba(0,0,0,1)'  => 'rgba(0,0,0,1)',
+			'(rgb(0,0,0)'      => 'rgb(0,0,0)',
+			'rgba(0,0,0,1))'   => 'rgba(0,0,0,1)',
+			' rgba(0,0,0,1)'   => 'rgba(0,0,0,1)',
+			' (rgb(0,0,0)'      => 'rgb(0,0,0)',
 		);
 
 		foreach ( $invalid_color_values as $color_val => $expected_color_val ) {

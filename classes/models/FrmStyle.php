@@ -89,16 +89,16 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
-					if ( $color_val !== '' && 0 === strpos( $color_val, 'rgb' ) ) {
-						// maybe sanitize if invalid rgba value is entered
+					if ( $color_val !== '' && false !== strpos( $color_val, 'rgb' ) ) {
+						// Maybe sanitize if invalid rgba value is entered.
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $color_val );
-				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ) )
+				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ), true )
 					&& ! isset( $new_instance['post_content'][ $setting ] )
 					) {
 					$new_instance['post_content'][ $setting ] = 0;
-				} elseif ( $setting == 'font' ) {
+				} elseif ( $setting === 'font' ) {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
@@ -128,6 +128,7 @@ class FrmStyle {
 		}
 
 		$color_val = trim( $color_val );
+		$color_val = ltrim( $color_val, '(' ); // Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
 		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
@@ -135,9 +136,9 @@ class FrmStyle {
 			}
 		}
 
-		if ( substr( $color_val, -1 ) !== ')' ) {
-			$color_val .= ')';
-		}
+		// Remove all leading ')' braces, then add one back. This way there's always a single brace.
+		$color_val  = rtrim( $color_val, ')' );
+		$color_val .= ')';
 
 		$color_rgba            = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
 		$length_of_color_codes = strpos( $color_val, '(' );
