@@ -297,8 +297,7 @@
 				]
 			});
 
-			const isNew = data.isNew;
-			if ( isNew ) {
+			if ( data.isNew ) {
 				titleWrapper.querySelector( 'h4' ).appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
 			}
 
