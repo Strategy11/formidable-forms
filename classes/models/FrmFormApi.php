@@ -103,8 +103,8 @@ class FrmFormApi {
 				}
 			}
 
-			if ( array_key_exists( 'released', $addon ) ) {
-				$addons[ $k ]['is_new'] = strtotime( $addon['released'] ) > strtotime( '-30 days' );
+			if ( ! array_key_exists( 'is_new', $addon ) && array_key_exists( 'released', $addon ) ) {
+				$addons[ $k ]['is_new'] = $this->is_new( $addon );
 			}
 		}
 
@@ -240,5 +240,15 @@ class FrmFormApi {
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Check if a template is new.
+	 *
+	 * @param array $addon
+	 * @return bool
+	 */
+	protected function is_new( $addon ) {
+		return strtotime( $addon['released'] ) > strtotime( '-30 days' );
 	}
 }
