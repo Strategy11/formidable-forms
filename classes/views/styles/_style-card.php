@@ -7,9 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 // This includes a basic preview (text field and submit button only).
 // It also includes the title of the style and possibly some basic tags if "selected" or "default".
 
-$is_template     = 0 === $style->ID;
-$include_info    = $is_active_style;
-$is_new_template = $is_template && apply_filters( 'frm_style_template_is_new', false, $style );
+$is_template  = 0 === $style->ID;
+$include_info = $is_active_style;
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div>
@@ -32,7 +31,7 @@ $is_new_template = $is_template && apply_filters( 'frm_style_template_is_new', f
 					?>
 				</span>
 			<?php } ?>
-			<?php if ( $is_new_template ) { ?>
+			<?php if ( ! empty( $is_new_template ) ) { ?>
 				<span class="frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
 			<?php } ?>
 		</div>

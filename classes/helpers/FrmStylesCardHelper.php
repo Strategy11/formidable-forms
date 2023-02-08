@@ -41,18 +41,24 @@ class FrmStylesCardHelper {
 	private $locked;
 
 	/**
+	 * @var bool If this is true, a "NEW" pill is included beside the style name.
+	 */
+	private $is_new_template;
+
+	/**
 	 * @param stdClass|WP_Post $active_style
 	 * @param WP_Post          $default_style
 	 * @param string|int       $form_id
 	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
-		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
-		$this->active_style   = $active_style;
-		$this->default_style  = $default_style;
-		$this->form_id        = (int) $form_id;
-		$this->enabled        = $enabled;
-		$this->locked         = false;
+		$this->view_file_path  = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
+		$this->active_style    = $active_style;
+		$this->default_style   = $default_style;
+		$this->form_id         = (int) $form_id;
+		$this->enabled         = $enabled;
+		$this->locked          = false;
+		$this->is_new_template = false;
 	}
 
 	/**
@@ -67,7 +73,9 @@ class FrmStylesCardHelper {
 	private function echo_style_card( $style, $hidden = false ) {
 		$params          = $this->get_params_for_style_card( $style, $hidden );
 		$is_locked       = $this->locked;
+		$is_new_template = $this->is_new_template;
 		$is_active_style = $style->ID === $this->active_style->ID;
+
 		include $this->view_file_path;
 	}
 
@@ -221,16 +229,7 @@ class FrmStylesCardHelper {
 			};
 		}
 
-		if ( ! empty( $style['is_new'] ) ) {
-			add_filter(
-				'frm_style_template_is_new',
-				function( $is_new, $style ) use ( $style_object ) {
-					return $style === $style_object;
-				},
-				10,
-				2
-			);
-		}
+		$this->is_new_template = ! empty( $style['is_new'] );
 
 		add_filter( 'frm_style_card_params', $param_filter, 10, $this->locked ? 2 : 1 );
 
