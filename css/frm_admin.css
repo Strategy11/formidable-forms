@@ -84,7 +84,7 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .frm-full-screen #wpbody-content,
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
-	padding-bottom: 0;
+	padding: 0;
 	overflow: hidden;
 	margin: 0 !important;
 }
@@ -507,7 +507,7 @@ ul.frm_form_nav > li:last-of-type {
 	margin: 0;
 }
 
-.frm_page_container {
+.frm_wrap .frm_page_container { /* Use .frm_wrap to avoid messing up Views editor layout */
 	height: calc( 100vh - 32px );
 	display: flex;
 	flex-direction: column;
@@ -515,9 +515,23 @@ ul.frm_form_nav > li:last-of-type {
 	padding-top: 0;
 }
 
-.frm-full-screen .frm_page_container {
+.frm-full-screen .frm_wrap .frm_page_container {
 	height: 100vh;
 }
+
+/* Temp Views full screen override until HTML is updated */
+.frm-views-editor-body {
+	--header-height: 61px;
+}
+
+#frm_view_editor_left, #frm_view_editor_right {
+	height: calc( 100vh - var( --header-height ) ) !important;
+}
+
+#frm_view_editor_preview_area {
+	height: calc( 100vh - 100px - var( --header-height ) ) !important;
+}
+/* End temp Views override */
 
 .frm-full-screen.frm-admin-page-entries .frm_page_container,
 .frm-new-entry .frm_page_container,

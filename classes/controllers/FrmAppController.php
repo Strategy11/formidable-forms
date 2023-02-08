@@ -449,9 +449,9 @@ class FrmAppController {
 			self::admin_js();
 		}
 
-		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			self::disable_admin_menus();
+		self::disable_admin_menus();
 
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$action = FrmAppHelper::get_param( 'frm_action' );
 
 			if ( in_array( $action, array( 'add_new', 'list_templates' ), true ) ) {
