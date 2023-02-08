@@ -297,6 +297,11 @@
 				]
 			});
 
+			const isNew = data.isNew;
+			if ( isNew ) {
+				titleWrapper.querySelector( 'h4' ).appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+			}
+
 			const counter = getItemCounter();
 			if ( false !== counter ) {
 				header.appendChild( counter );
