@@ -205,6 +205,20 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $rgba
+	 * @return string
+	 */
+	private static function rgb_to_hex( $rgba ) {
+		if ( strpos( $rgba, '#' ) === 0 ) {
+			return $rgba;
+		}
+		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
+		return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
+	}
+
+	/**
 	 * @param $hex string - The original color in hex format #ffffff
 	 * @param $steps integer - should be between -255 and 255. Negative = darker, positive = lighter
 	 *
@@ -224,11 +238,7 @@ class FrmStylesHelper {
 
 		// Normalize into a six character long hex string
 		$hex = str_replace( '#', '', $hex );
-		if ( strlen( $hex ) == 3 ) {
-			$hex = str_repeat( substr( $hex, 0, 1 ), 2 );
-			$hex .= str_repeat( substr( $hex, 1, 1 ), 2 );
-			$hex .= str_repeat( substr( $hex, 2, 1 ), 2 );
-		}
+		self::fill_hex( $hex );
 
 		// Split into three parts: R, G and B
 		$color_parts = str_split( $hex, 2 );
@@ -254,10 +264,7 @@ class FrmStylesHelper {
 			$color = self::rgb_to_hex( $color );
 		}
 
-		if ( 3 === strlen( $color ) ) {
-			// Change a 3 character hex color to a 6 character one.
-			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
-		}
+		self::fill_hex( $color );
 
 		$c_r        = hexdec( substr( $color, 0, 2 ) );
 		$c_g        = hexdec( substr( $color, 2, 2 ) );
@@ -268,17 +275,16 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * Change a 3 character hex color to a 6 character one.
+	 *
 	 * @since x.x
 	 *
-	 * @param string $rgba
-	 * @return string
+	 * @return array
 	 */
-	private static function rgb_to_hex( $rgba ) {
-		if ( strpos( $rgba, '#' ) === 0 ) {
-			return $rgba;
+	private static function fill_hex( &$color ) {
+		if ( 3 === strlen( $color ) ) {
+			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
 		}
-		preg_match( '/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i', $rgba, $by_color );
-		return sprintf( '%02x%02x%02x', $by_color[1], $by_color[2], $by_color[3] );
 	}
 
 	/**
