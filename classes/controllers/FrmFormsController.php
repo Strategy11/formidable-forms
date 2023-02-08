@@ -2147,6 +2147,13 @@ class FrmFormsController {
 			)
 		);
 
+		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
+				self::populate_on_submit_data( $form->options, $conf_method[0] );
+				$conf_method = 'redirect';
+			}
+		}
+
 		if ( 'redirect' === $conf_method ) {
 			self::trigger_redirect( $form, $params, $args );
 		}
