@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $is_template     = 0 === $style->ID;
 $include_info    = $is_active_style;
-$is_new_template = $is_template && ! empty( $style->is_new );
+$is_new_template = $is_template && apply_filters( 'frm_style_template_is_new', false, $style );
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 	<div>
