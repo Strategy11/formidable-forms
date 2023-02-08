@@ -22,6 +22,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'limit'     => 99,
 			'priority'  => 9,
 			'color'     => 'rgb(66, 193, 178)',
+			'keywords'  => __( 'redirect, success, confirmation, submit', 'formidable' ),
 		);
 		$action_ops = apply_filters( 'frm_' . self::$slug . '_control_settings', $action_ops );
 
@@ -31,7 +32,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 	}
 
 	public static function get_name() {
-		return __( 'On Submit', 'formidable' );
+		return __( 'Confirmation', 'formidable' );
 	}
 
 	public function form( $instance, $args = array() ) {

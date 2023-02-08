@@ -52,24 +52,15 @@ class FrmOnSubmitHelper {
 		?>
 		<div class="frm_form_field">
 			<?php
-			if ( method_exists( 'FrmProHtmlHelper', 'toggle' ) ) {
-				FrmProHtmlHelper::toggle(
-					$id_attr,
-					$name_attr,
-					array(
-						'div_class' => 'with_frm_style frm_toggle',
-						'checked'   => ! empty( $args['form_action']->post_content['show_form'] ),
-						'echo'      => true,
-					)
-				);
-			} else {
-				printf(
-					'<input type="checkbox" value="1" id="%1$s" name="%2$s" %3$s />',
-					esc_attr( $id_attr ),
-					esc_attr( $name_attr ),
-					checked( ! empty( $args['form_action']->post_content['show_form'] ) )
-				);
-			}
+			FrmHtmlHelper::toggle(
+				$id_attr,
+				$name_attr,
+				array(
+					'div_class' => 'with_frm_style frm_toggle',
+					'checked'   => ! empty( $args['form_action']->post_content['show_form'] ),
+					'echo'      => true,
+				)
+			);
 			?>
 			<label for="<?php echo esc_attr( $id_attr ); ?>">
 				<?php esc_html_e( 'Show the form with the confirmation message', 'formidable' ); ?>
@@ -192,7 +183,7 @@ class FrmOnSubmitHelper {
 	 * @param int $form_id Form ID.
 	 */
 	public static function save_on_submit_settings( $form_id ) {
-		$actions             = FrmOnSubmitHelper::get_actions( $form_id );
+		$actions             = self::get_actions( $form_id );
 		$first_create_action = null;
 		$first_edit_action   = null;
 		foreach ( $actions as $action ) {

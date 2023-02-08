@@ -262,6 +262,11 @@ class test_FrmFormsController extends FrmUnitTest {
 		$entry_key = 'submit-redirect';
 		$response = $this->post_new_entry( $form, $entry_key );
 
+		if ( headers_sent() ) {
+			// since headers are sent by phpunit, we will get the js redirect
+			$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
+		}
+
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 

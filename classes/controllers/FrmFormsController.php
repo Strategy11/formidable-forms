@@ -638,6 +638,7 @@ class FrmFormsController {
 		$new_values['form_key'] = $new_values['name'];
 		$new_values['options']  = array(
 			'antispam' => 1,
+			'on_submit_migrated' => 1,
 		);
 
 		/**
@@ -2115,9 +2116,11 @@ class FrmFormsController {
 	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
-		$met_actions = self::get_met_on_submit_actions( $atts );
-		if ( $met_actions ) {
-			return $met_actions;
+		if ( ! empty( $atts['entry_id'] ) ) { // Check against entry has already submitted error.
+			$met_actions = self::get_met_on_submit_actions( $atts );
+			if ( $met_actions ) {
+				return $met_actions;
+			}
 		}
 
 		$opt    = 'success_action';
@@ -2143,6 +2146,13 @@ class FrmFormsController {
 				'entry_id' => $params['id'],
 			)
 		);
+
+		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
+				self::populate_on_submit_data( $form->options, $conf_method[0] );
+				$conf_method = 'redirect';
+			}
+		}
 
 		if ( 'redirect' === $conf_method ) {
 			self::trigger_redirect( $form, $params, $args );
@@ -2362,9 +2372,17 @@ class FrmFormsController {
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
 
 			// Fix the On Submit page content doesn't show when previewing In theme.
-			remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			$has_preview_filter = has_filter( 'the_content', 'FrmFormsController::preview_content' );
+
+			if ( $has_preview_filter ) {
+				remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			}
+
 			echo apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+
+			if ( $has_preview_filter ) {
+				add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			}
 
 			$post = $old_post;
 		}
