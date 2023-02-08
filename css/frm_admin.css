@@ -9038,4 +9038,5 @@ Responsive Design
 .frm_on_submit_type input[type="radio"]:checked + label svg {
 	color: var(--primary-color);
 }
+
 /* End On Submit action */
