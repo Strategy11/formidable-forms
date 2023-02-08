@@ -2365,9 +2365,17 @@ class FrmFormsController {
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
 
 			// Fix the On Submit page content doesn't show when previewing In theme.
-			remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			$has_preview_filter = has_filter( 'the_content', 'FrmFormsController::preview_content' );
+
+			if ( $has_preview_filter ) {
+				remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			}
+
 			echo apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+
+			if ( $has_preview_filter ) {
+				add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			}
 
 			$post = $old_post;
 		}
