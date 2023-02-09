@@ -250,10 +250,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$attributes .= ' data-colname="' . $column_display_name . '"';
 
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
-			$form   = FrmForm::maybe_get_current_form();
-			if ( $form ) {
-				$form_id = $form->id;
-			}
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 
 			if ( $this->column_name == 'cb' ) {
