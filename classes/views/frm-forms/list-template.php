@@ -47,7 +47,7 @@ if ( ! empty( $template['custom'] ) ) {
 				<?php } ?>
 				<?php echo esc_html( $stripped_template_name ); ?>
 				<?php
-				$template_is_new = strtotime( $template['released'] ) > strtotime( '-10 days' );
+				$template_is_new = strtotime( $template['released'] ) > strtotime( '-30 days' );
 				if ( $template_is_new && empty( $template['custom'] ) ) {
 					FrmAppHelper::show_pill_text();
 				}

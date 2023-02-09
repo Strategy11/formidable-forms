@@ -157,8 +157,11 @@ class FrmApplicationTemplate {
 				$application['forPurchase'] = true;
 			}
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
+			$application['requires']   = FrmFormsHelper::get_plan_required( $application );
 			$application['link']       = $application['upgradeUrl'];
 		}
+
+		$application['isNew'] = $this->is_new();
 
 		return $application;
 	}
@@ -194,6 +197,23 @@ class FrmApplicationTemplate {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if an application template is new. If it is, we include a "NEW" pill beside the title.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function is_new() {
+		if ( ! array_key_exists( 'released', $this->api_data ) ) {
+			return false;
+		}
+
+		$release_date = $this->api_data['released'];
+		$is_new       = strtotime( $release_date ) > strtotime( '-30 days' );
+		return $is_new;
 	}
 
 	/**

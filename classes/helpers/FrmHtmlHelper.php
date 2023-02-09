@@ -10,7 +10,6 @@ class FrmHtmlHelper {
 
 	/**
 	 * Create a toggle and either echo or return the string.
-	 * This isn't completely compatible with Pro. The input_html option has been omitted as it isn't secure.
 	 * This is intended for use on admin pages only. The CSS is included in frm_admin.css.
 	 *
 	 * @since x.x
@@ -24,7 +23,9 @@ class FrmHtmlHelper {
 	 * @return string|void
 	 */
 	public static function toggle( $id, $name, $args ) {
+		wp_enqueue_script( 'formidable_settings' );
 		return FrmAppHelper::clip(
+			// @phpstan-ignore-next-line
 			function() use ( $id, $name, $args ) {
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';
 			},

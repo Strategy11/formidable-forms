@@ -440,13 +440,22 @@ class FrmFormsController {
 		self::change_form_status( 'untrash' );
 	}
 
+	/**
+	 * @param array $ids
+	 * @return string
+	 */
 	public static function bulk_untrash( $ids ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$count = FrmForm::set_status( $ids, 'published' );
 
+		if ( ! $count ) {
+			// Don't show "0 forms restored" on refresh.
+			return '';
+		}
+
 		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), 1 );
+		$message = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
 
 		return $message;
 	}

@@ -473,8 +473,17 @@ class FrmEntriesController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/show.php' );
 	}
 
+	/**
+	 * Destroy an entry from the admin page.
+	 * This is triggered from the entries list from the "Delete" row action, and also from the "Delete Entry" trigger in the view/edit entry sidebar.
+	 *
+	 * @return void
+	 */
 	public static function destroy() {
-		FrmAppHelper::permission_check( 'frm_delete_entries' );
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_entries', '_wpnonce', -1 );
+		if ( false !== $permission_error ) {
+			wp_die( esc_html( $permission_error ) );
+		}
 
 		$params = FrmForm::get_admin_params();
 
