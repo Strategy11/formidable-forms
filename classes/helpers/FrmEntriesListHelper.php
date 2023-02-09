@@ -90,25 +90,36 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 		$limit       = FrmDb::esc_limit( $start . ',' . $per_page );
-		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
+		$items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 
-		foreach ( $this->items as $key => $item ) {
+		$items_having_parent = array_filter(
+			$items,
+			function( $item ) {
+				return ! empty( $item->parent_item_id );
+			}
+		);
+
+		$parent_item_ids = wp_list_pluck( $items_having_parent, 'parent_item_id' );
+
+		$where = array(
+			'it.id' => $parent_item_ids,
+		);
+
+		$parent_items = FrmEntry::getAll( $where, $order, $limit, true );
+		foreach ( $items as $key => $item ) {
 			if ( ! empty( $item->parent_item_id ) ) {
-				$parent_item = FrmEntry::getOne( $item->parent_item_id );
-				/** Get all parent form items */
-				$where = array(
-					'it.id' => $item->parent_item_id,
-				);
-				$parent_items_left = FrmEntry::getAll( $where, $order, $limit, true );
-				$this->items[ $key ]->metas += $parent_items_left[ $item->parent_item_id ]->metas;
-				if ( isset( $this->items[ $item->parent_item_id ] ) ) {
-					$this->items[ $item->parent_item_id ]->metas = $this->items[ $key ]->metas;
-					unset( $this->items[ $key ] );
+				if ( isset( $items[ $item->parent_item_id ] ) ) {
+					$items[ $item->parent_item_id ]->metas += $item->metas;
+					unset( $items[ $key ] );
+				} else {
+					$items[ $key ]->metas += $parent_items[ $item->parent_item_id ]->metas;
 				}
 			}
 		}
 
+		$this->items = $items;
 		$total_items = FrmEntry::getRecordCount( $s_query );
+
 		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
