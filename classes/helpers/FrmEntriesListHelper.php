@@ -89,7 +89,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'default' => ( $page - 1 ) * $per_page,
 			)
 		);
-		$limit       = FrmDb::esc_limit( $start . ',' . $per_page );
+		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 
 		$items_having_parent = array_filter(
@@ -106,14 +106,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 
 		$parent_items = FrmEntry::getAll( $where, $order, $limit, true );
-		foreach ( $items as $key => $item ) {
-			if ( ! empty( $item->parent_item_id ) ) {
-				if ( isset( $items[ $item->parent_item_id ] ) ) {
-					$items[ $item->parent_item_id ]->metas += $item->metas;
-					unset( $items[ $key ] );
-				} else {
-					$items[ $key ]->metas += $parent_items[ $item->parent_item_id ]->metas;
-				}
+		foreach ( $items_having_parent as $key => $item ) {
+			if ( isset( $items[ $item->parent_item_id ] ) ) {
+				$items[ $item->parent_item_id ]->metas += $item->metas;
+				unset( $items[ $key ] );
+			} else {
+				$items[ $key ]->metas += $parent_items[ $item->parent_item_id ]->metas;
 			}
 		}
 
