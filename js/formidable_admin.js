@@ -9771,7 +9771,7 @@ function frmAdminBuildJS() {
 			debouncedSyncAfterDragAndDrop = debounce( syncAfterDragAndDrop, 10 );
 			postBodyContent = document.getElementById( 'post-body-content' );
 			$postBodyContent = jQuery( postBodyContent );
-	
+
 			if ( jQuery( '.frm_field_loading' ).length ) {
 				loadFieldId = jQuery( '.frm_field_loading' ).first().attr( 'id' );
 				loadFields( loadFieldId );
