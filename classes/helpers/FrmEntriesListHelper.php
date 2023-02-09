@@ -91,7 +91,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
-
+		// self::merge_repeater_entries_with
 		$items_having_parent = array_filter(
 			$items,
 			function( $item ) {
@@ -107,12 +107,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$parent_items = FrmEntry::getAll( $where, $order, $limit, true );
 		foreach ( $items_having_parent as $key => $item ) {
-			if ( isset( $items[ $item->parent_item_id ] ) ) {
-				$items[ $item->parent_item_id ]->metas += $item->metas;
-				unset( $items[ $key ] );
-			} else {
-				$items[ $key ]->metas += $parent_items[ $item->parent_item_id ]->metas;
+			if ( ! isset( $items[ $item->parent_item_id ] ) ) {
+				$items[ $item->parent_item_id ] = $parent_items[ $item->parent_item_id ];
 			}
+			$items[ $item->parent_item_id ]->metas += $item->metas;
+			unset( $items[ $key ] );
 		}
 
 		$this->items = $items;
