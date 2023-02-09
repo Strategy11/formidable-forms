@@ -1930,40 +1930,6 @@ div.frm_updated_message {
 	color: var(--primary-700);
 }
 
-.frm_ribbon {
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	transform: rotate(45deg);
-	border: 25px solid transparent;
-	border-bottom: 25px solid var(--orange);
-	position: absolute;
-	top: -31px;
-	right: -74px;
-	padding: 0px 10px;
-	width: 30px;
-	color: white;
-	font-family: sans-serif;
-	size: 11px;
-}
-
-.plugin-card-top .frm_ribbon {
-	right: -33px;
-	top: -28px;
-}
-
-.frm_ribbon span {
-	position: absolute;
-	left: 25px;
-	font-size: 15px;
-	top: 4px;
-}
-
-.accordion-section-content .frm-selectable:hover .frm_ribbon {
-	display: none;
-}
-
 .frm_pro_heading span {
 	margin-top: 10px;
 }
@@ -2915,7 +2881,7 @@ h1 .fa-caret-down {
 .frm_wrap .ui-autocomplete-input {
 	background: transparent url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23667085%22%2F%3E%3C%2Fsvg%3E') no-repeat right 5px top 55%;
 	background-size: var(--text-md) var(--text-md);
-	padding-right: var(--gap-md) !important;
+	padding-right: var(--gap-lg) !important;
 }
 
 .caret {
