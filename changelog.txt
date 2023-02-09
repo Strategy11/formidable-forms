@@ -5,6 +5,7 @@
 * New: Destructive actions, like deleting, now use red confirmation buttons on admin pages.
 * New: An exported form with no name will now export with the form key included in the file name instead of just exporting as -form.xml.
 * New: On submit behaviour including messages, redirect, and page content have been changed to a new form action type, allowing them to work with conditional logic.
+* New: The styler will now show a pop up when exiting with unsaved changes.
 * Fix: Color pickers were not visibly resetting after a styler reset action.
 * Fix: Styler icon dropdowns were not visibly appearing as reset after resetting a style in older versions.
 * Fix: The success message would always show 1 form restored when undoing a delete action instead of the proper count.
