@@ -4,13 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <h2>
-	<?php if ( FrmAppHelper::simple_get( 'form', 'absint', 0 ) ) { ?>
-		<a href="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
-			<svg class="frmsvg">
-				<use xlink:href="#frm_back"></use>
-			</svg>
-		</a>
-	<?php } ?>
+	<a href="<?php echo esc_url( FrmStylesHelper::get_list_url( $form->id ) ); ?>" tabindex="0" role="button" title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
+		<svg class="frmsvg">
+			<use xlink:href="#frm_back"></use>
+		</svg>
+	</a>
 	<span id="frm_style_name"><?php echo esc_html( $style->post_title ); ?></span>
 </h2>
 <div class="styling_settings">

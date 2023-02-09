@@ -161,6 +161,8 @@ class FrmApplicationTemplate {
 			$application['link']       = $application['upgradeUrl'];
 		}
 
+		$application['isNew'] = $this->is_new();
+
 		return $application;
 	}
 
@@ -195,6 +197,17 @@ class FrmApplicationTemplate {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if an application template is new. If it is, we include a "NEW" pill beside the title.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function is_new() {
+		return ! empty( $this->api_data['is_new'] );
 	}
 
 	/**

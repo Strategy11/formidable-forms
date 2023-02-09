@@ -56,8 +56,8 @@ if ( $sample_form_is_on ) {
 		?>
 		<div id="frm_loading_style_placeholder">
 			<span class="frm-wait frm_visible_spinner"></span>
-			<strong><?php esc_html_e( 'Please wait', 'formidable-pro' ); ?></strong>
-			<p><?php esc_html_e( 'Updating CSS...', 'formidable-pro' ); ?></p>
+			<strong><?php esc_html_e( 'Please wait', 'formidable' ); ?></strong>
+			<p><?php esc_html_e( 'Updating CSS...', 'formidable' ); ?></p>
 		</div>
 	</div>
 </div>

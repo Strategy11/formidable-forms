@@ -35,7 +35,7 @@
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--border-radius: 35px;
-	--small-radius: 4px;
+	--small-radius: 8px;
 	--small-sidebar: 275px;
 	--medium-sidebar: 350px;
 	--big-sidebar: 390px;
@@ -71,8 +71,17 @@
 .frm-white-body .wpbody-content,
 .frm_wrap {
 	font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	--toggle-off-color: var(--grey-300);
-	--toggle-on-color: var(--primary-500);
+}
+
+/* Safari 11+ */
+@media not all and (min-resolution:.001dpcm) {
+	@supports (-webkit-appearance:none) and (stroke-color:transparent) {
+		.with_frm_style,
+		.frm-white-body .wpbody-content,
+		.frm_wrap {
+			-webkit-font-smoothing: antialiased;
+		}
+	}
 }
 
 .frm-white-body,
@@ -119,12 +128,6 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow-x: visible;
 }
 
-.formidable_page_formidable-pro-upgrade #wpfooter,
-.toplevel_page_formidable #wpfooter {
-	border-top: 1px solid #ddd;
-	background: #fff;
-}
-
 .frm-full-screen {
 	height: 100%;
 	overflow: hidden;
@@ -136,6 +139,8 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 	overflow: auto;
 }
 
+.frm-full-screen #wpadminbar,
+.frm-full-screen #adminmenumain,
 .frm-full-screen .wp-header-end {
 	display: none;
 }
@@ -143,8 +148,9 @@ a, .widget .widget-top, .stuffbox h3, .frm-collapsed {
 .frm-full-screen #wpbody-content,
 .frm-full-screen #wpbody,
 .frm-full-screen #wpcontent {
-	padding-bottom: 0;
+	padding: 0;
 	overflow: hidden;
+	margin: 0 !important;
 }
 
 .frm-white-body #wpbody-content {
@@ -675,13 +681,31 @@ ul.frm_form_nav > li {
 	font-size: var(--text-sm);
 }
 
-.frm_wrap .frm_page_container {
+.frm_wrap .frm_page_container { /* Use .frm_wrap to avoid messing up Views editor layout */
 	height: calc( 100vh - 32px );
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 	padding-top: 0;
 }
+
+.frm-full-screen .frm_wrap .frm_page_container {
+	height: 100vh;
+}
+
+/* Temp Views full screen override until HTML is updated */
+.frm-views-editor-body {
+	--header-height: 61px;
+}
+
+#frm_view_editor_left, #frm_view_editor_right {
+	height: calc( 100vh - var( --header-height ) ) !important;
+}
+
+#frm_view_editor_preview_area {
+	height: calc( 100vh - 100px - var( --header-height ) ) !important;
+}
+/* End temp Views override */
 
 .frm-full-screen.frm-admin-page-entries .frm_page_container,
 .frm-new-entry .frm_page_container,
@@ -1186,7 +1210,8 @@ p.frm_has_shortcodes {
 .frm-button-secondary,
 .wp-core-ui .button-secondary.frm-button-secondary,
 .wp-core-ui .button.frm-button-secondary,
-.frm-white-body #search-submit,
+.frm-white-body .frm-search .button,
+.frm-white-body .search-box .button, /* Views */
 .frm-white-body .tablenav .button,
 .frm_orange_button,
 .toplevel_page_formidable #frm_upgrade_modal .button-primary,
@@ -1292,9 +1317,9 @@ p.frm_has_shortcodes {
 }
 
 .frm-button-primary.frm_large{
-	font-size: 22px !important;
+	font-size: var(--text-md) !important;
 	height: auto !important;
-	padding: 16px 32px !important;
+	padding: 9px 18px !important;
 }
 
 .frm-button-primary i:before {
@@ -1485,6 +1510,10 @@ input.frm_insert_in_template {
 
 .frm-mb-md {
 	margin-bottom: var(--gap-md) !important;
+}
+
+.frm-mb-lg {
+	margin-bottom: var(--gap-lg) !important;
 }
 
 .frm-mx-sm {
@@ -1818,12 +1847,6 @@ form .frm_blank_field label {
 	margin: 20px auto !important;
 }
 
-.upgrade_to_pro h1,
-.upgrade_to_pro h3,
-.upgrade_to_pro {
-	color: #444;
-}
-
 .upgrade_to_pro .error {
 	display: none;
 }
@@ -1931,40 +1954,6 @@ div.frm_updated_message {
 	color: var(--primary-700);
 }
 
-.frm_ribbon {
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	transform: rotate(45deg);
-	border: 25px solid transparent;
-	border-bottom: 25px solid var(--orange);
-	position: absolute;
-	top: -31px;
-	right: -74px;
-	padding: 0px 10px;
-	width: 30px;
-	color: white;
-	font-family: sans-serif;
-	size: 11px;
-}
-
-.plugin-card-top .frm_ribbon {
-	right: -33px;
-	top: -28px;
-}
-
-.frm_ribbon span {
-	position: absolute;
-	left: 25px;
-	font-size: 15px;
-	top: 4px;
-}
-
-.accordion-section-content .frm-selectable:hover .frm_ribbon {
-	display: none;
-}
-
 .frm_pro_heading span {
 	margin-top: 10px;
 }
@@ -1975,13 +1964,12 @@ div.frm_updated_message {
 
 .frm-yes {
 	color: var(--green);
-	font-size: 21px;
-	font-weight: 500;
+	font-size: var(--text-xl);
 }
 
 .frm-nope {
-	color: #d2e0f2;
-	font-size: 21px;
+	color: var(--grey-400);
+	font-size: var(--text-xl);
 }
 
 .upgrade_to_pro a {
@@ -1989,8 +1977,8 @@ div.frm_updated_message {
 }
 
 .upgrade_to_pro table .frmsvg {
-	height: 20px;
-	width: 20px;
+	height: var(--text-xl);
+	width: var(--text-xl);
 }
 
 .upgrade_to_pro table.widefat {
@@ -1998,10 +1986,12 @@ div.frm_updated_message {
 	border-collapse: collapse;
 }
 
-.upgrade_to_pro table th,
+.frm-white-body .upgrade_to_pro table th,
 .upgrade_to_pro table td {
 	padding: 10px 15px;
-	border: 1px solid #d2e0f2;
+	border: 1px solid var(--grey-300);
+	line-height: var(--leading);
+	font-size: var(--text-sm);
 }
 
 .upgrade_to_pro table th.frmcenter {
@@ -2009,7 +1999,7 @@ div.frm_updated_message {
 }
 
 .widefat th.frm_table_break {
-	background-color: #f6f7fb;
+	background-color: var(--sidebar-color);
 }
 
 h2.frm-h2 + .howto {
@@ -2749,7 +2739,7 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	cursor: pointer;
 	display: flex;
 	gap: var(--gap-sm);
-	font-size: var(--font-sm);
+	font-size: var(--text-sm);
 }
 
 .frm-embed-modal-option + .frm-embed-modal-option {
@@ -2918,6 +2908,10 @@ h1 .fa-caret-down {
 	padding-right: var(--gap-lg) !important;
 }
 
+.caret {
+	padding-right: var(--gap-xs) !important;
+}
+
 .frm-btn-group .caret {
 	float: right;
 	margin-top: calc( var(--text-md) / 2 );
@@ -2976,7 +2970,7 @@ h1 .fa-caret-down {
 
 #frm_field_group_controls .frm-dropdown-menu,
 .frm-field-action-icons .frm-dropdown-menu {
-	min-width: 160px !important;
+	min-width: 180px !important;
 }
 
 .frm-field-action-icons .frm-dropdown-toggle svg {
@@ -4594,7 +4588,6 @@ select.frm_cancelnew, input.frm_enternew {
 
 /*
 These are the styles for the "Enable Formidable styling" toggle in the visual styler.
-It uses the same style rules as the font end toggle field in Pro.
 To use this element, you can call the FrmHtmlHelper::toggle function.
 */
 .frm_toggle_opt {
@@ -4647,14 +4640,14 @@ To use this element, you can call the FrmHtmlHelper::toggle function.
 	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 20 20%27><path d=%27M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z%27 fill=%27%2398A2B3%27/%3E</svg>");
 	height: 22px;
 	width: 22px;
-	padding: 0 6px;
+	padding: 0 5.5px;
 	left: 1px;
 	bottom: 1px;
 	background-color: white;
 	transition: .4s;
 	box-sizing: border-box;
 	box-shadow: var(--box-shadow-md);
-	font-size: 22px;
+	font-size: 21px;
 	line-height: 18px;
 }
 
@@ -4667,6 +4660,7 @@ input:focus + .frm_toggle .frm_toggle_slider {
 }
 
 input:checked + .frm_toggle .frm_toggle_slider:before {
+	padding: 0 6px;
 	transform: translateX(16px);
 	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
 }
@@ -7205,12 +7199,6 @@ ul .frm_col_two {
 	font-size: 17px !important;
 }
 
-.frm_placeholder_block h3 {
-	font-size: 22px;
-	font-weight: 400;
-	color: var(--medium-grey);
-}
-
 .frm-green-icons .frmsvg {
 	color: var(--green);
 }
@@ -7258,6 +7246,7 @@ ul .frm_col_two {
 .frm_wrap .ui-autocomplete li > div,
 .multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
 	display: flex;
@@ -8778,14 +8767,10 @@ Responsive Design
 	order: 2;
 }
 
-.frm-video-wrapper {
-	padding: 0 20px;
-}
-
 .frm-video-wrapper iframe {
 	width: 100%;
 	max-width: 843px;
-	border-radius: 10px;
+	border-radius: var(--border-radius);
 }
 
 #frm_field_group_popup {

@@ -284,18 +284,25 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
-			const titleWrapper = tag( 'h4', {
-				children: [
-					svg({ href: '#frm_lock_icon' }),
-					document.createTextNode( data.name )
-				]
-			});
+			const titleWrapper = tag(
+				'h4',
+				{
+					children: [
+						svg({ href: '#frm_lock_icon' }),
+						document.createTextNode( data.name )
+					]
+				}
+			);
 			const header = div({
 				children: [
 					titleWrapper,
 					getUseThisTemplateControl( data )
 				]
 			});
+
+			if ( data.isNew ) {
+				titleWrapper.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+			}
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {

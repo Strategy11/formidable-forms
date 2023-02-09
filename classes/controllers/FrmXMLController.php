@@ -554,7 +554,8 @@ class FrmXMLController {
 				$filename = 'form-' . $form_id . '.xml';
 				if ( $selected_form_id === $form_id ) {
 					$form     = FrmForm::getOne( $form_id );
-					$filename = sanitize_title( $form->name ) . '-form.xml';
+					$filename = $form->name !== '' ? $form->name : $form->form_key;
+					$filename = sanitize_title( $filename ) . '-form.xml';
 					break;
 				}
 			}

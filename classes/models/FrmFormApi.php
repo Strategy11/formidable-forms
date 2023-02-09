@@ -10,6 +10,13 @@ class FrmFormApi {
 	protected $cache_timeout = '+6 hours';
 
 	/**
+	 * The number of days an add-on is new.
+	 *
+	 * @var int $new_days
+	 */
+	protected $new_days = 90;
+
+	/**
 	 * @since 3.06
 	 */
 	public function __construct( $license = null ) {
@@ -91,12 +98,20 @@ class FrmFormApi {
 		}
 
 		foreach ( $addons as $k => $addon ) {
-			if ( ! isset( $addon['categories'] ) ) {
+			if ( ! is_array( $addon ) ) {
 				continue;
 			}
-			$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
-			if ( ! empty( $cats ) ) {
-				unset( $addons[ $k ] );
+
+			if ( isset( $addon['categories'] ) ) {
+				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
+				if ( ! empty( $cats ) ) {
+					unset( $addons[ $k ] );
+					continue;
+				}
+			}
+
+			if ( ! array_key_exists( 'is_new', $addon ) && array_key_exists( 'released', $addon ) ) {
+				$addons[ $k ]['is_new'] = $this->is_new( $addon );
 			}
 		}
 
@@ -232,5 +247,17 @@ class FrmFormApi {
 		}
 
 		return $errors;
+	}
+
+	/**
+	 * Check if a template is new.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addon
+	 * @return bool
+	 */
+	protected function is_new( $addon ) {
+		return strtotime( $addon['released'] ) > strtotime( '-' . $this->new_days . ' days' );
 	}
 }

@@ -41,18 +41,24 @@ class FrmStylesCardHelper {
 	private $locked;
 
 	/**
+	 * @var bool If this is true, a "NEW" pill is included beside the style name.
+	 */
+	private $is_new_template;
+
+	/**
 	 * @param stdClass|WP_Post $active_style
 	 * @param WP_Post          $default_style
 	 * @param string|int       $form_id
 	 * @param bool             $enabled
 	 */
 	public function __construct( $active_style, $default_style, $form_id, $enabled ) {
-		$this->view_file_path = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
-		$this->active_style   = $active_style;
-		$this->default_style  = $default_style;
-		$this->form_id        = (int) $form_id;
-		$this->enabled        = $enabled;
-		$this->locked         = false;
+		$this->view_file_path  = FrmAppHelper::plugin_path() . '/classes/views/styles/_style-card.php';
+		$this->active_style    = $active_style;
+		$this->default_style   = $default_style;
+		$this->form_id         = (int) $form_id;
+		$this->enabled         = $enabled;
+		$this->locked          = false;
+		$this->is_new_template = false;
 	}
 
 	/**
@@ -67,7 +73,9 @@ class FrmStylesCardHelper {
 	private function echo_style_card( $style, $hidden = false ) {
 		$params          = $this->get_params_for_style_card( $style, $hidden );
 		$is_locked       = $this->locked;
+		$is_new_template = $this->is_new_template;
 		$is_active_style = $style->ID === $this->active_style->ID;
+
 		include $this->view_file_path;
 	}
 
@@ -80,7 +88,7 @@ class FrmStylesCardHelper {
 	 * @param bool             $hidden
 	 * @return array
 	 */
-	private function get_params_for_style_card( $style, $hidden = false ) {	
+	private function get_params_for_style_card( $style, $hidden = false ) {
 		if ( ! empty( $style->post_content['position'] ) ) {
 			$label_position = $style->post_content['position'];
 		} else {
@@ -137,8 +145,8 @@ class FrmStylesCardHelper {
 		$color = $style->post_content[ $key ];
 
 		if ( 0 === strpos( $color, 'rgba' ) ) {
-			preg_match_all( "/([\\d.]+)/", $color, $matches );
-			
+			preg_match_all( '/([\\d.]+)/', $color, $matches );
+
 			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
 				// Consider a faded out rgba value as light even when the color is dark.
 				$color_opacity = floatval( $matches[1][3] );
@@ -221,6 +229,8 @@ class FrmStylesCardHelper {
 			};
 		}
 
+		$this->is_new_template = ! empty( $style['is_new'] );
+
 		add_filter( 'frm_style_card_params', $param_filter, 10, $this->locked ? 2 : 1 );
 
 		$this->echo_style_card( $style_object, $hidden );
@@ -249,6 +259,10 @@ class FrmStylesCardHelper {
 		}
 		$styles[] = '--preview-background-color: ' . $background_color;
 
+		if ( empty( $style->post_content['submit_border_color'] ) ) {
+			$style->post_content['submit_border_color'] = 'transparent';
+		}
+
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
 
@@ -263,7 +277,8 @@ class FrmStylesCardHelper {
 
 			$value = $style->post_content[ $key ];
 
-			if ( in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) ) {
+			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) && $value !== 'transparent';
+			if ( $is_hex ) {
 				$value = '#' . $value;
 			}
 
@@ -428,7 +443,15 @@ class FrmStylesCardHelper {
 		}
 		?>
 		<div class="frm-style-card-pagination frm_wrap">
-			<a href="#" class="frm-show-all-styles"><?php printf( esc_html__( 'Show all (%d)', 'formidable' ), $count - self::PAGE_SIZE ); ?></a>
+			<a href="#" class="frm-show-all-styles">
+				<?php
+				printf(
+					/* translators: %d: The number of styles */
+					esc_html__( 'Show all (%d)', 'formidable' ),
+					esc_html( $count - self::PAGE_SIZE )
+				);
+				?>
+			</a>
 		</div>
 		<?php
 	}

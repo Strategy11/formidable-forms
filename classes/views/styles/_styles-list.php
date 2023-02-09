@@ -42,7 +42,7 @@ if ( $globally_disabled ) {
 		<a <?php FrmAppHelper::array_to_html_params( $trigger_params, true ); ?>>
 			<?php
 			FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
-			esc_html_e( 'New Style', 'formidable-pro' );
+			esc_html_e( 'New Style', 'formidable' );
 			?>
 		</a>
 	</div>

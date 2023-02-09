@@ -28,6 +28,7 @@
 
 	initCommonEventListeners();
 	initPreview();
+	fixWpAuthModal();
 
 	/**
 	 * These are shared events for both the edit/list views like the sample form toggle.
@@ -54,6 +55,19 @@
 		// Then add it back where we want to use admin styles (the sidebar, otherwise inputs appear short).
 		document.body.classList.remove( 'wp-core-ui' );
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
+	}
+
+	/**
+	 * Add the wp-core-ui class to the #wp-auth-check-wrap element.
+	 * As this style isn't included on the body for the styler, the close button on the auth modal wasn't getting styled properly.
+	 *
+	 * @returns {void}
+	 */
+	function fixWpAuthModal() {
+		const authWrap = document.getElementById( 'wp-auth-check-wrap' );
+		if ( authWrap ) {
+			authWrap.classList.add( 'wp-core-ui' );
+		}
 	}
 
 	/**
@@ -991,8 +1005,9 @@
 		formData.append( 'style_id', styleId );
 		doJsonPost( 'settings_reset', formData ).then(
 			response => {
+				const card = getCardByStyleId( styleId );
+				card.classList.remove( 'frm-dark-style' );
 				if ( 'string' === typeof response.style ) {
-					const card = getCardByStyleId( styleId );
 					card.style = response.style;
 				}
 				reloadCSSAfterStyleReset();

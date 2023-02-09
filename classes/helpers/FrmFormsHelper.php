@@ -1312,7 +1312,7 @@ BEFORE_HTML;
 	public static function template_icon( $categories, $atts = array() ) {
 		$defaults = array(
 			'html' => 'span',
-			'bg'   => false
+			'bg'   => false,
 		);
 		$atts = array_merge( $defaults, $atts );
 

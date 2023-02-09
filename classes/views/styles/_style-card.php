@@ -31,6 +31,9 @@ $include_info = $is_active_style;
 					?>
 				</span>
 			<?php } ?>
+			<?php if ( ! empty( $is_new_template ) ) { ?>
+				<span class="frm-new-pill"><?php esc_html_e( 'NEW', 'formidable' ); ?></span>
+			<?php } ?>
 		</div>
 		<div class="frm-style-card-preview">
 			<div class="frm-color-blocks">
@@ -41,7 +44,7 @@ $include_info = $is_active_style;
 				'submit-bg-color' => $style->post_content['submit_bg_color'],
 			);
 			$index  = 0;
-			foreach( $colors as $css_var_name => $color ) {
+			foreach ( $colors as $css_var_name => $color ) {
 				if ( 0 !== strpos( $color, 'rgb' ) ) {
 					$color = '#' . $color;
 				}
@@ -52,7 +55,7 @@ $include_info = $is_active_style;
 				);
 
 				++$index;
-			?>
+				?>
 				<div <?php FrmAppHelper::array_to_html_params( $circle_params, true ); ?>></div>
 				<?php
 			}
