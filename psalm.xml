@@ -53,5 +53,10 @@
 				<directory name="deprecated" />
 			</errorLevel>
 		</InvalidParamDefault>
+		<MethodSignatureMustProvideReturnType>
+			<errorLevel type="suppress">
+				<file name="classes/widgets/FrmShowForm.php" />
+			</errorLevel>
+		</MethodSignatureMustProvideReturnType>
 	</issueHandlers>
 </psalm>
