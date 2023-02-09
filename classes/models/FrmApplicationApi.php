@@ -14,6 +14,11 @@ class FrmApplicationApi extends FrmFormApi {
 	private static $base_api_url = 'https://formidableforms.com/wp-json/view-templates/v1/list';
 
 	/**
+	 * @var int $new_days
+	 */
+	protected $new_days = 60;
+
+	/**
 	 * @return string
 	 */
 	protected function api_url() {

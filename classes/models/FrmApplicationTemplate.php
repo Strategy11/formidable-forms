@@ -207,13 +207,7 @@ class FrmApplicationTemplate {
 	 * @return bool
 	 */
 	private function is_new() {
-		if ( ! array_key_exists( 'released', $this->api_data ) ) {
-			return false;
-		}
-
-		$release_date = $this->api_data['released'];
-		$is_new       = strtotime( $release_date ) > strtotime( '-30 days' );
-		return $is_new;
+		return ! empty( $this->api_data['is_new'] );
 	}
 
 	/**

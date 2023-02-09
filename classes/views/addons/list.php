@@ -43,13 +43,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php foreach ( $addons as $slug => $addon ) { ?>
 			<div class="frm-card plugin-card-<?php echo esc_attr( $slug ); ?> frm-no-thumb frm-addon-<?php echo esc_attr( $addon['status']['type'] ); ?>">
 				<div class="plugin-card-top">
-					<?php if ( strtotime( $addon['released'] ) > strtotime( '-90 days' ) ) { ?>
-						<div class="frm_ribbon">
-							<span>New</span>
-						</div>
-					<?php } ?>
 					<h2>
-						<?php echo esc_html( $addon['title'] ); ?>
+						<?php
+						echo esc_html( $addon['title'] );
+
+						if ( ! empty( $addon['is_new'] ) ) {
+							FrmAppHelper::show_pill_text();
+						}
+						?>
 					</h2>
 					<p>
 						<?php
