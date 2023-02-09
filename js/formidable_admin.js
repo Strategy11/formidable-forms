@@ -1022,6 +1022,8 @@ function frmAdminBuildJS() {
 					// Scrolling up.
 					return v - Math.abs( y * 0.1 );
 				}
+
+				return v;
 			}
 		);
 	}
