@@ -989,11 +989,9 @@ function frmAdminBuildJS() {
 				className: 'sortable-placeholder'
 			});
 		}
-		const frmSortableHelper = ui.helper.get( 0 );
-		if ( frmSortableHelper.classList.contains( 'form-field' ) ) {
-			// Sync the y position of the draggable so it still follows the cursor after scrolling up and down the field list.
-			frmSortableHelper.style.transform = 'translateY(' + getDragOffset( ui.helper ) + 'px)';
-		}
+
+		// Sync the y position of the draggable so it still follows the cursor after scrolling up and down the field list.
+		ui.helper.get( 0 ).style.transform = 'translateY(' + getDragOffset( ui.helper ) + 'px)';
 
 		if ( 'frm-show-fields' === droppable.id || droppable.classList.contains( 'start_divider' ) ) {
 			placeholder.style.left = 0;
