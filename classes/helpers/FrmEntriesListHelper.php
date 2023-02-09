@@ -91,7 +91,23 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 		$limit = FrmDb::esc_limit( $start . ',' . $per_page );
 		$items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
-		// self::merge_repeater_entries_with
+
+		self::merge_repeater_entries_with_parent( $items, $order, $limit );
+
+		$this->items = $items;
+		$total_items = FrmEntry::getRecordCount( $s_query );
+
+		$this->total_items = $total_items;
+
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page'    => $per_page,
+			)
+		);
+	}
+
+	private static function merge_repeater_entries_with_parent( &$items, $order, $limit ) {
 		$items_having_parent = array_filter(
 			$items,
 			function( $item ) {
@@ -100,6 +116,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 
 		$parent_item_ids = wp_list_pluck( $items_having_parent, 'parent_item_id' );
+
+		if ( empty( $parent_item_ids ) ) {
+			return;
+		}
 
 		$where = array(
 			'it.id' => $parent_item_ids,
@@ -113,18 +133,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$items[ $item->parent_item_id ]->metas += $item->metas;
 			unset( $items[ $key ] );
 		}
-
-		$this->items = $items;
-		$total_items = FrmEntry::getRecordCount( $s_query );
-
-		$this->total_items = $total_items;
-
-		$this->set_pagination_args(
-			array(
-				'total_items' => $total_items,
-				'per_page'    => $per_page,
-			)
-		);
 	}
 
 	public function no_items() {
