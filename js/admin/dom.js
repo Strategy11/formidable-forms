@@ -648,7 +648,7 @@
 			return output;
 		}
 
-		const { id, className, children, child, text } = args;
+		const { id, className, children, child, text, data } = args;
 
 		if ( id ) {
 			output.id = id;
@@ -662,6 +662,11 @@
 			output.appendChild( child );
 		} else if ( text ) {
 			output.textContent = text;
+		}
+		if ( data ) {
+			Object.keys( data ).forEach( function( dataKey ) {
+				output.setAttribute( 'data-' + dataKey, data[dataKey] );
+			});
 		}
 		return output;
 	}
