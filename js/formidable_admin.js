@@ -7633,20 +7633,27 @@ function frmAdminBuildJS() {
 			image.setAttribute( 'src', thumbnailFolderUrl + filenameToUse );
 
 			const imageWrapper = div({ child: image });
-			imageWrapper.style.textAlign = 'center';
+			const href = frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key;
 
 			return tag(
 				'li',
 				{
-					className: 'frm-searchable-template frm-ready-made-solution',
+					className: 'frm-searchable-template frm-ready-made-solution frm-selectable',
+					data: {
+						href: href
+					},
 					children: [
 						imageWrapper,
 						div({
+							className: 'frm-solution-details',
 							children: [
-								span( __( 'Ready Made Solution', 'formidable' ) ),
+								span({
+									className: 'frm-meta-tag',
+									text: __( 'Ready Made Solution', 'formidable' )
+								}),
 								tag( 'h3', template.name ),
 								a({
-									text: __( 'Check all applications', 'formidable' ),
+									text: __( 'See all applications', 'formidable' ),
 									href: frmGlobal.applicationsUrl
 								})
 							]
@@ -7655,7 +7662,7 @@ function frmAdminBuildJS() {
 							className: 'frm-hover-icons',
 							child: a({
 								child: svg({ href: '#frm_plus_icon' }),
-								href: frmGlobal.applicationsUrl + '&triggerViewApplicationModal=1&template=' + template.key
+								href: href
 							})
 						})
 					]
@@ -8473,6 +8480,10 @@ function frmAdminBuildJS() {
 			jQuery( '#frm-preview-title' ).text( getStrippedTemplateName( $li ) );
 			$modal.attr( 'frm-page', 'preview' );
 			activeHoverIcons = jQuery( this ).closest( '.frm-hover-icons' );
+		});
+
+		jQuery( document ).on( 'click', 'li.frm-ready-made-solution[data-href]', function() {
+			window.location = this.getAttribute( 'data-href' );
 		});
 
 		jQuery( document ).on( 'click', 'li .frm-hover-icons .frm-create-form', function( event ) {
