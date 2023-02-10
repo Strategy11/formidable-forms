@@ -42,7 +42,8 @@ if ( ! empty( $template['custom'] ) ) {
 				)
 			);
 		}
-		?><div>
+		?>
+		<div class="frm-template-details">
 			<h3 role="button">
 				<?php if ( $plan_required ) { ?>
 					<svg class="frmsvg">

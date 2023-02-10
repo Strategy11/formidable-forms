@@ -2297,7 +2297,7 @@ body.frm-body-with-open-modal {
 	max-width: calc( 100% - 65px );
 }
 
-.frm-templates-list > li > div:not(.frm-hover-icons) {
+.frm-templates-list .frm-featured-form {
 	display: flex;
 	width: 100%;
 }
@@ -2339,7 +2339,7 @@ body.frm-body-with-open-modal {
 	align-self: flex-start;
 }
 
-.frm-templates-list > li > div > div:last-child:not(.frm-dropdown-menu) {
+.frm-templates-list .frm-template-details {
 	/* the content container to the right of the icon in Create new form modal */
 	display: inline-block;
 	width: calc( 100% - 40px );
@@ -2454,6 +2454,14 @@ body.frm-body-with-open-modal {
 	gap: 5px;
 }
 
+.frm-ready-made-solution .frm-hover-icons {
+	visibility: hidden;
+}
+
+.frm-ready-made-solution:hover .frm-hover-icons {
+	visibility: visible;
+}
+
 .frm-hover-icons a {
 	width: 22px;
 	height: 22px;
@@ -2558,6 +2566,12 @@ body.frm-body-with-open-modal {
 .frm-plan-required-tag {
 	margin-left: 5px;
 	transform: translateY(-1px);
+	background: #FDE6DE;
+	color: #F15A24;
+}
+
+.frm-ready-made-solution .frm-meta-tag {
+	width: fit-content;
 	background: #FDE6DE;
 	color: #F15A24;
 }
@@ -8962,28 +8976,38 @@ Responsive Design
 }
 
 #frm_new_form_modal .frm-ready-made-solution {
-	padding: 20px 5px;
+	padding: var(--gap-xs) !important;
+	margin: var(--gap-xs) 0 var(--gap-sm);
 	display: flex;
+	gap: var(--gap-sm);
+	position: relative;
+	overflow: visible !important;
 }
 
-.frm-ready-made-solution .frm-hover-icons {
-	padding: 5px;
-	position: static;
+#frm_new_form_modal .frm-ready-made-solution:after {
+	width: 100%;
+	height: 1px;
+	background: var(--grey-300);
+	content: '';
+	position: absolute;
+	bottom: -10px;
+	left: 0;
+}
+
+#frm_new_form_modal .frm-ready-made-solution.frm-search-result:last-of-type::after {
+	content: none;
+}
+
+#frm_new_form_modal .frm-solution-details {
+	flex: 1;
+	display: flex;
+	gap: var(--gap-2xs);
+	flex-direction: column;
 }
 
 #frm_new_form_modal .frm-ready-made-solution > div:first-child {
-	width: 300px;
-}
-
-.frm-ready-made-solution span {
-	background-color: #fde6de;
-	color: #f25a24;
-	padding: 10px;
-	text-transform: uppercase;
-	font-size: 11px;
-	margin-bottom: 10px;
-	display: inline-block;
-	border-radius: 4px;
+	width: 30%;
+	text-align: center;
 }
 
 .frm-ready-made-solution h3 ~ a {
@@ -8992,6 +9016,8 @@ Responsive Design
 
 .frm-ready-made-solution img {
 	max-width: 100%;
+	display: block;
+	box-shadow: var(--box-shadow-lg);
 }
 
 /* On Submit action */
