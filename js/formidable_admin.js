@@ -6455,6 +6455,7 @@ function frmAdminBuildJS() {
 			showInputIcon( '#frm_form_action_' + actionId );
 
 			initiateMultiselect();
+			frmDom.autocomplete.initAutocomplete( 'page', newAction );
 
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
