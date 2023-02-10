@@ -7607,7 +7607,7 @@ function frmAdminBuildJS() {
 		}
 
 		function addTemplateToCategoryList( template ) {
-			categoryList.insertBefore( getReadyMadeSolution( template ), categoryList.firstChild );
+			categoryList.appendChild( getReadyMadeSolution( template ), categoryList.firstChild );
 		}
 
 		function getReadyMadeSolution( template ) {
