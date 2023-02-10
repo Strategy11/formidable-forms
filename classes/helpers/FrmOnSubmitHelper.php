@@ -196,16 +196,49 @@ class FrmOnSubmitHelper {
 		}
 
 		$form_options = array();
-		FrmFormsController::populate_on_submit_data( $form_options, $first_create_action );
+		self::populate_on_submit_data( $form_options, $first_create_action );
 		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() ) {
 			$form_editable = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'editable' );
 			if ( $form_editable ) {
-				FrmFormsController::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
+				self::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
 			}
 		}
 
 		if ( ! empty( $form_options ) ) {
 			$_POST['options'] += $form_options;
+		}
+	}
+
+	/**
+	 * Populates the On Submit data to form options.
+	 *
+	 * @param array  $form_options Form options.
+	 * @param object $action       Optional. The On Submit action object.
+	 * @param string $event        Form event. Default is `create`.
+	 */
+	public static function populate_on_submit_data( &$form_options, $action = null, $event = 'create' ) {
+		$opt = 'update' === $event ? 'edit_' : 'success_';
+		if ( ! $action || ! is_object( $action ) ) {
+			$form_options[ $opt . 'action' ] = self::get_default_action_type();
+			$form_options[ $opt . 'msg' ]    = self::get_default_msg();
+
+			return;
+		}
+
+		$form_options[ $opt . 'action' ] = isset( $action->post_content['success_action'] ) ? $action->post_content['success_action'] : 'message';
+
+		switch ( $form_options[ $opt . 'action' ] ) {
+			case 'redirect':
+				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				break;
+
+			case 'page':
+				$form_options[ $opt . 'page_id' ] = isset( $action->post_content['success_page_id'] ) ? $action->post_content['success_page_id'] : '';
+				break;
+
+			default:
+				$form_options[ $opt . 'msg' ] = ! empty( $action->post_content['success_msg'] ) ? $action->post_content['success_msg'] : self::get_default_msg();
+				$form_options['show_form']    = ! empty( $action->post_content['show_form'] );
 		}
 	}
 }
