@@ -2940,6 +2940,7 @@ h1 .fa-caret-down {
 	margin: var(--gap-xs) 0 0;
 	text-align: left;
 	list-style: none;
+	background: none;
 	background-color: #fff;
 	background-clip: padding-box;
 	border: 1px solid var(--grey-100);
