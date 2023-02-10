@@ -9452,49 +9452,6 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	/**
-	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
-	 *
-	 * @since 5.4.2
-	 *
-	 * @param {String}         event    Event name.
-	 * @param {String}         selector Selector.
-	 * @param {Function}       handler  Handler.
-	 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
-	 */
-	function documentOn( event, selector, handler, options ) {
-		if ( 'undefined' === typeof options ) {
-			options = false;
-		}
-
-		document.addEventListener( event, function( e ) {
-			var target;
-
-			// loop parent nodes from the target to the delegation node.
-			for ( target = e.target; target && target != this; target = target.parentNode ) {
-				if ( target.matches( selector ) ) {
-					handler.call( target, e );
-					break;
-				}
-			}
-		}, options );
-	}
-
-	/**
-	 * Does the same as jQuery( document ).ready( fn ).
-	 *
-	 * @since 6.0
-	 *
-	 * @param {Function} fn Function.
-	 */
-	function documentReady( fn ) {
-		if ( 'loading' !== document.readyState ) {
-			fn();
-		} else {
-			document.addEventListener( 'DOMContentLoaded', fn );
-		}
-	}
-
 	function initOnSubmitAction() {
 		const onChangeType = event => {
 			if ( ! event.target.checked ) {
@@ -9514,7 +9471,7 @@ function frmAdminBuildJS() {
 			actionEl.setAttribute( 'data-on-submit-type', event.target.value );
 		};
 
-		documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
+		frmDom.util.documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
 	}
 
 	return {
