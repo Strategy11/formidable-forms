@@ -9094,7 +9094,12 @@ function frmAdminBuildJS() {
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText;
 			if ( items[i].classList.contains( 'frm-searchable-template' ) ) {
-				innerText = items[i].querySelector( 'h3' ).innerText.toLowerCase();
+				const itemFeaturedForm = items[i].querySelector( '.frm-featured-form' );
+				if ( itemFeaturedForm ) {
+					innerText = itemFeaturedForm.innerText.toLowerCase();
+				} else {
+					innerText = items[i].querySelector( 'h3' ).innerText.toLowerCase();
+				}
 			} else {
 				innerText = items[i].innerText.toLowerCase();
 			}
