@@ -9092,7 +9092,7 @@ function frmAdminBuildJS() {
 		}
 
 		for ( i = 0; i < items.length; i++ ) {
-			var innerText = items[i].innerText.toLowerCase();
+			var innerText = items[i].querySelector( 'h3' ).innerText.toLowerCase();
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
