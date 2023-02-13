@@ -6361,6 +6361,13 @@ function frmAdminBuildJS() {
 			frmDom.wysiwyg.init( newAction.querySelector( '.wp-editor-area' ) );
 		}
 
+		if ( newAction.classList.contains( 'frm_single_on_submit_settings' ) ) {
+			const autocompleteInput = newAction.querySelector( 'input.frm-page-search' );
+			if ( autocompleteInput ) {
+				frmDom.autocomplete.initAutocomplete( 'page', newAction );
+			}
+		}
+
 		initiateMultiselect();
 
 		const hookName = 'frm_after_duplicate_action';
@@ -6455,6 +6462,7 @@ function frmAdminBuildJS() {
 			showInputIcon( '#frm_form_action_' + actionId );
 
 			initiateMultiselect();
+			frmDom.autocomplete.initAutocomplete( 'page', newAction );
 
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
@@ -6467,7 +6475,7 @@ function frmAdminBuildJS() {
 			 *
 			 * @param {HTMLElement} formAction Form action element.
 			 */
-			wp.hooks.doAction( 'frm_added_form_action', newAction );
+			frmAdminBuild.hooks.doAction( 'frm_added_form_action', newAction );
 		}
 	}
 
@@ -6782,22 +6790,7 @@ function frmAdminBuildJS() {
 		}*/
 	}
 
-	function maybeShowFormMessages() {
-		var header = document.getElementById( 'frm_messages_header' );
-		if ( showFormMessages() ) {
-			header.style.display = 'block';
-		} else {
-			header.style.display = 'none';
-		}
-	}
-
 	function showFormMessages() {
-		var action = document.getElementById( 'success_action' );
-		var selectedAction = action.options[action.selectedIndex].value;
-		if ( selectedAction === 'message' ) {
-			return true;
-		}
-
 		var show = false;
 		var editable = document.getElementById( 'editable' );
 		if ( editable !== null ) {
@@ -7855,16 +7848,17 @@ function frmAdminBuildJS() {
 
 	function onActionLoaded( event ) {
 		const settings = event.target.closest( '.frm_form_action_settings' );
-		if ( settings && settings.classList.contains( 'frm_single_email_settings' ) ) {
-			onEmailActionLoaded( settings );
+		if ( settings && ( settings.classList.contains( 'frm_single_email_settings' ) || settings.classList.contains( 'frm_single_on_submit_settings' ) ) ) {
+			initWysiwygOnActionLoaded( settings );
 		}
 	}
 
-	function onEmailActionLoaded( settings ) {
+	function initWysiwygOnActionLoaded( settings ) {
 		const wysiwyg = settings.querySelector( '.wp-editor-area' );
 		if ( wysiwyg ) {
 			frmDom.wysiwyg.init(
-				wysiwyg, { height: 160, addFocusEvents: true }
+				wysiwyg,
+				{ height: 160, addFocusEvents: true }
 			);
 		}
 	}
@@ -9476,6 +9470,28 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	function initOnSubmitAction() {
+		const onChangeType = event => {
+			if ( ! event.target.checked ) {
+				return;
+			}
+
+			const actionEl = event.target.closest( '.frm_form_action_settings' );
+			actionEl.querySelectorAll( '.frm_on_submit_dependent_setting:not(.frm_hidden)' ).forEach( el => {
+				el.classList.add( 'frm_hidden' );
+			});
+
+			const activeEls = actionEl.querySelectorAll( '.frm_on_submit_dependent_setting[data-show-if-' + event.target.value + ']' );
+			activeEls.forEach( activeEl => {
+				activeEl.classList.remove( 'frm_hidden' );
+			});
+
+			actionEl.setAttribute( 'data-on-submit-type', event.target.value );
+		};
+
+		frmDom.util.documentOn( 'change', '.frm_on_submit_type input[type="radio"]', onChangeType );
+	}
+
 	return {
 		init: function() {
 			s = {};
@@ -9891,11 +9907,7 @@ function frmAdminBuildJS() {
 				}
 			});
 
-			//Show/hide Messages header
-			jQuery( '#editable, #edit_action, #save_draft, #success_action' ).on( 'change', function() {
-				maybeShowFormMessages();
-			});
-			jQuery( 'select[name="options[success_action]"], select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
+			jQuery( 'select[name="options[edit_action]"]' ).on( 'change', showSuccessOpt );
 
 			$loggedIn = document.getElementById( 'logged_in' );
 			jQuery( $loggedIn ).on( 'change', function() {
@@ -9972,6 +9984,8 @@ function frmAdminBuildJS() {
 			initSelectionAutocomplete();
 
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
+
+			initOnSubmitAction();
 		},
 
 		panelInit: function() {
@@ -10279,6 +10293,12 @@ function frmAdminBuildJS() {
 			},
 			addFilter: function( hookName, callback, priority ) {
 				return wp.hooks.addFilter( hookName, 'formidable', callback, priority );
+			},
+			doAction: function( hookName, ...args ) {
+				return wp.hooks.doAction( hookName, ...args );
+			},
+			addAction: function( hookName, callback, priority ) {
+				return wp.hooks.addAction( hookName, 'formidable', callback, priority );
 			}
 		},
 

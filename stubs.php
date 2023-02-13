@@ -94,6 +94,10 @@ namespace {
 	}
 	class FrmViewsAppHelper {
 	}
+	class FrmProHtmlHelper {
+		public static function toggle( $id, $name, $args ) {
+		}
+	}
 	class Akismet {
 	}
 	class PHPMailer {

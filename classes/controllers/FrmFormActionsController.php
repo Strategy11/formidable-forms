@@ -44,6 +44,7 @@ class FrmFormActionsController {
 	 */
 	public static function register_actions() {
 		$action_classes = array(
+			'on_submit'         => 'FrmOnSubmitAction',
 			'email'             => 'FrmEmailAction',
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
@@ -440,6 +441,8 @@ class FrmFormActionsController {
 		$old_actions = array_diff( $old_actions, $new_actions );
 
 		self::delete_missing_actions( $old_actions );
+
+		FrmOnSubmitHelper::save_on_submit_settings( $form_id );
 	}
 
 	public static function delete_missing_actions( $old_actions ) {
@@ -492,7 +495,7 @@ class FrmFormActionsController {
 
 		foreach ( $form_actions as $action ) {
 
-			$skip_this_action = ( ! in_array( $this_event, $action->post_content['event'] ) );
+			$skip_this_action = ! in_array( $this_event, $action->post_content['event'], true ) || FrmOnSubmitAction::$slug === $action->post_excerpt;
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
 			if ( $skip_this_action ) {
 				continue;

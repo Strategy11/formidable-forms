@@ -402,6 +402,34 @@
 				callback( event );
 			};
 			element.addEventListener( 'click', listener );
+		},
+
+		/**
+		 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
+		 *
+		 * @since 6.0
+		 *
+		 * @param {String}         event    Event name.
+		 * @param {String}         selector Selector.
+		 * @param {Function}       handler  Handler.
+		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+		 */
+		documentOn: ( event, selector, handler, options ) => {
+			if ( 'undefined' === typeof options ) {
+				options = false;
+			}
+
+			document.addEventListener( event, function( e ) {
+				let target;
+
+				// loop parent nodes from the target to the delegation node.
+				for ( target = e.target; target && target != this; target = target.parentNode ) {
+					if ( target && target.matches && target.matches( selector ) ) {
+						handler.call( target, e );
+						break;
+					}
+				}
+			}, options );
 		}
 	};
 

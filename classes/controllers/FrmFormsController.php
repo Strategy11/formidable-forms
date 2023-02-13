@@ -99,6 +99,32 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * Create the default On submit action
+	 *
+	 * @since 6.0.0
+	 *
+	 * @param object|int $form Form object or ID.
+	 */
+	private static function create_default_on_submit_action( $form ) {
+		FrmForm::maybe_get_form( $form );
+
+		/**
+		 * Enable or disable the default On Submit action.
+		 *
+		 * @since 6.0.0
+		 *
+		 * @param bool   $create Set to `false` if you want to disable.
+		 * @param object $form   Form object.
+		 */
+		$create = apply_filters( 'frm_create_default_on_submit_action', true, $form );
+
+		if ( $create ) {
+			$action_control = FrmFormActionsController::get_form_actions( FrmOnSubmitAction::$slug );
+			$action_control->create( $form->id );
+		}
+	}
+
 	public static function edit( $values = false ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -113,6 +139,8 @@ class FrmFormsController {
 		if ( ! $id || ! is_numeric( $id ) ) {
 			$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 		}
+
+		self::maybe_migrate_submit_settings_to_action( $id );
 
 		return self::get_settings_vars( $id, array(), $message );
 	}
@@ -612,8 +640,6 @@ class FrmFormsController {
 	 * @since 4.0
 	 */
 	public static function build_new_form() {
-		global $wpdb;
-
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
@@ -621,6 +647,7 @@ class FrmFormsController {
 		$new_values['form_key'] = $new_values['name'];
 		$new_values['options']  = array(
 			'antispam' => 1,
+			'on_submit_migrated' => 1,
 		);
 
 		/**
@@ -640,6 +667,7 @@ class FrmFormsController {
 		 */
 		do_action( 'frm_build_new_form', $form_id );
 
+		self::create_default_on_submit_action( $form_id );
 		self::create_default_email_action( $form_id );
 
 		$response = array(
@@ -2014,6 +2042,7 @@ class FrmFormsController {
 		$reset     = false;
 		$pass_args = compact( 'form', 'fields', 'errors', 'title', 'description', 'reset' );
 
+		$pass_args['action'] = $params['action'];
 		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $handle_process_here ) {
@@ -2034,7 +2063,7 @@ class FrmFormsController {
 				$pass_args['reset']       = true;
 				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
-				self::run_success_action( $pass_args );
+				self::run_on_submit_actions( $pass_args );
 
 				do_action(
 					'frm_after_entry_processed',
@@ -2082,9 +2111,27 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Gets confirmation method.
+	 *
 	 * @since 3.0
+	 * @since 6.0 This method can return an array of met On Submit actions.
+	 *
+	 * @param array $atts {
+	 *     Atts.
+	 *
+	 *     @type object $form     Form object.
+	 *     @type int    $entry_id Entry ID.
+	 * }
+	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
+		if ( ! empty( $atts['entry_id'] ) ) { // Check against entry has already submitted error.
+			$met_actions = self::get_met_on_submit_actions( $atts );
+			if ( $met_actions ) {
+				return $met_actions;
+			}
+		}
+
 		$opt    = 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
@@ -2108,6 +2155,13 @@ class FrmFormsController {
 				'entry_id' => $params['id'],
 			)
 		);
+
+		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
+				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0] );
+				$conf_method = 'redirect';
+			}
+		}
 
 		if ( 'redirect' === $conf_method ) {
 			self::trigger_redirect( $form, $params, $args );
@@ -2133,8 +2187,21 @@ class FrmFormsController {
 	 * Used when the success action is not 'message'
 	 *
 	 * @since 2.05
+	 * @since 6.0 `$args['force_delay_redirect']` is added.
+	 *
+	 * @param array $args {
+	 *     The args.
+	 *
+	 *     @type string $conf_method          The method.
+	 *     @type object $form                 Form object.
+	 *     @type int    $entry_id             Entry ID.
+	 *     @type string $action               The action event. Accepts `create` or `update`.
+	 *     @type array  $fields               The array of fields.
+	 *     @type int    $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
+	 * }
 	 */
 	public static function run_success_action( $args ) {
+		global $frm_vars;
 		$extra_args = $args;
 		unset( $extra_args['form'] );
 
@@ -2143,6 +2210,8 @@ class FrmFormsController {
 		$opt = ( ! isset( $args['action'] ) || $args['action'] === 'create' ) ? 'success' : 'edit';
 
 		$args['success_opt'] = $opt;
+		$args['ajax']        = ! empty( $frm_vars['ajax'] );
+
 		if ( $args['conf_method'] === 'page' && is_numeric( $args['form']->options[ $opt . '_page_id' ] ) ) {
 			self::load_page_after_submit( $args );
 		} elseif ( $args['conf_method'] === 'redirect' ) {
@@ -2150,6 +2219,153 @@ class FrmFormsController {
 		} else {
 			self::show_message_after_save( $args );
 		}
+	}
+
+	/**
+	 * Gets met On Submit actions.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $args  See {@see FrmFormsController::run_success_action()}.
+	 * @param string $event Form event. Default is `create`.
+	 * @return array Array of actions that meet the conditional logics.
+	 */
+	public static function get_met_on_submit_actions( $args, $event = 'create' ) {
+		$entry       = FrmEntry::getOne( $args['entry_id'], true );
+		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
+		$met_actions = array();
+		$has_redirect = false;
+
+		foreach ( $actions as $action ) {
+			if ( ! in_array( $event, $action->post_content['event'], true ) ) {
+				continue;
+			}
+
+			if ( FrmFormAction::action_conditions_met( $action, $entry ) ) {
+				continue;
+			}
+
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
+					continue;
+				}
+
+				$has_redirect = true;
+			}
+
+			$met_actions[] = $action;
+			unset( $action );
+		}
+
+		$args['event'] = $event;
+
+		/**
+		 * Filters the On Submit actions that meet the conditional logics.
+		 *
+		 * @since 6.0
+		 *
+		 * @param array $met_actions Actions that meet the conditional logics.
+		 * @param array $args        See {@see FrmFormsController::run_success_action()}. `$args['event']` is also added.
+		 */
+		return apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
+	}
+
+	/**
+	 * Runs On Submit actions.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $args See inside {@see FrmFormsController::get_form_contents()} method.
+	 */
+	private static function run_on_submit_actions( $args ) {
+		if ( ! is_array( $args['conf_method'] ) ) {
+			self::run_success_action( $args );
+			return;
+		}
+
+		// If conf_method is an array, run On Submit actions.
+		if ( ! $args['conf_method'] ) {
+			// Use default message.
+			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options );
+			self::run_success_action( $args );
+		} elseif ( 1 === count( $args['conf_method'] ) ) {
+			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
+			$args['conf_method'] = $args['form']->options['success_action'];
+			self::run_success_action( $args );
+		} else {
+			self::run_multi_on_submit_actions( $args );
+		}
+	}
+
+	/**
+	 * Runs multiple success actions.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 */
+	public static function run_multi_on_submit_actions( $args ) {
+		$redirect_action = null;
+		foreach ( $args['conf_method'] as $action ) {
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+				// We catch the redirect action to run it last.
+				$redirect_action = $action;
+				continue;
+			}
+
+			self::run_single_on_submit_action( $args, $action );
+
+			unset( $action );
+		}
+
+		if ( $redirect_action ) {
+			// Show script to delay the redirection.
+			$args['force_delay_redirect'] = true;
+			self::run_single_on_submit_action( $args, $redirect_action );
+		}
+	}
+
+	/**
+	 * Runs single On Submit action.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
+	 * @param object $action On Submit action object.
+	 */
+	public static function run_single_on_submit_action( $args, $action ) {
+		$new_args = self::get_run_success_action_args( $args, $action );
+		self::run_success_action( $new_args );
+	}
+
+	/**
+	 * Gets run_success_action() args from the On Sumbit action.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
+	 * @param object $action On Submit action object.
+	 * @return array
+	 */
+	private static function get_run_success_action_args( $args, $action ) {
+		$new_args = $args;
+
+		FrmOnSubmitHelper::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
+
+		$opt = 'update' === $args['action'] ? 'edit_' : 'success_';
+
+		$new_args['conf_method'] = $new_args['form']->options[ $opt . 'action' ];
+
+		/**
+		 * Filters the run success action args.
+		 *
+		 * @since 6.0
+		 *
+		 * @param array  $new_args The new args.
+		 * @param array  $args     The old args. See {@see FrmFormsController::run_success_action()}.
+		 * @param object $action   On Submit action object.
+		 */
+		return apply_filters( 'frm_get_run_success_action_args', $new_args, $args, $action );
 	}
 
 	/**
@@ -2163,27 +2379,35 @@ class FrmFormsController {
 			$old_post = $post;
 			$post     = $page;
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
+
+			// Fix the On Submit page content doesn't show when previewing In theme.
+			$has_preview_filter = has_filter( 'the_content', 'FrmFormsController::preview_content' );
+
+			if ( $has_preview_filter ) {
+				remove_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			}
+
 			echo apply_filters( 'the_content', $content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			if ( $has_preview_filter ) {
+				add_filter( 'the_content', 'FrmFormsController::preview_content', 9999 );
+			}
+
 			$post = $old_post;
 		}
 	}
 
 	/**
 	 * @since 3.0
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit( $args ) {
-		global $frm_vars;
-
 		add_filter( 'frm_use_wpautop', '__return_false' );
 
 		$opt         = $args['success_opt'];
 		$success_url = trim( $args['form']->options[ $opt . '_url' ] );
 		$success_url = apply_filters( 'frm_content', $success_url, $args['form'], $args['entry_id'] );
 		$success_url = do_shortcode( $success_url );
-
-		$success_msg = isset( $args['form']->options[ $opt . '_msg' ] ) ? $args['form']->options[ $opt . '_msg' ] : __( 'Please wait while you are redirected.', 'formidable' );
-
-		$redirect_msg = self::get_redirect_message( $success_url, $success_msg, $args );
 
 		$args['id'] = $args['entry_id'];
 		FrmEntriesController::delete_entry_before_redirect( $success_url, $args['form'], $args );
@@ -2193,17 +2417,52 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		if ( isset( $args['ajax'] ) && $args['ajax'] && $doing_ajax ) {
+		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
 			echo json_encode( array( 'redirect' => $success_url ) );
 			wp_die();
-		} elseif ( ! headers_sent() ) {
+		}
+
+		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
-		} else {
-			add_filter( 'frm_use_wpautop', '__return_true' );
-			echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo "<script type='text/javascript'>window.onload = function(){setTimeout(window.location='" . esc_url_raw( $success_url ) . "', 8000);}</script>";
 		}
+
+		// Redirect with a delay.
+		self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
+	}
+
+	/**
+	 * Redirects after submitting using JS. This is used when showing message before redirecting.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 */
+	private static function redirect_after_submit_using_js( $args ) {
+		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
+		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
+
+		/**
+		 * Filters the delay time before redirecting when On Submit Redirect action is delayed.
+		 *
+		 * @since 6.0
+		 *
+		 * @param int $delay_time Delay time in miliseconds.
+		 */
+		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
+
+		add_filter( 'frm_use_wpautop', '__return_true' );
+
+		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<script>';
+		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
+			echo 'window.onload=function(){';
+		}
+		echo 'setTimeout(function(){window.location="' . esc_url_raw( $args['success_url'] ) . '";}, ' . intval( $delay_time ) . ');';
+		if ( empty( $args['doing_ajax'] ) ) {
+			echo '};';
+		}
+		echo '</script>';
 	}
 
 	/**
@@ -2214,7 +2473,7 @@ class FrmFormsController {
 	 * @param array $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
-		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg frm_message" role="status">' . $success_msg . '<br/>' .
+		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
 			'</div></div>';
@@ -2591,6 +2850,103 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
+	}
+
+	/**
+	 * Maybe migrate submit settings from the form options to On Submit action.
+	 * This is added after On Submit action is released. This might migrate the frontend editing submit settings too.
+	 *
+	 * @since 6.0
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	private static function maybe_migrate_submit_settings_to_action( $form_id ) {
+		$form = FrmDb::get_row( 'frm_forms', array( 'id' => $form_id ), 'options,editable' );
+		if ( ! $form ) {
+			return;
+		}
+
+		FrmAppHelper::unserialize_or_decode( $form->options );
+
+		$flag_key = 'on_submit_migrated';
+		if ( ! empty( $form->options[ $flag_key ] ) ) {
+			return;
+		}
+
+		$form->id = $form_id;
+
+		// Create On Submit action.
+		$base_action = array();
+
+		$base_action['post_type']    = FrmFormActionsController::$action_post_type;
+		$base_action['post_excerpt'] = FrmOnSubmitAction::$slug;
+		$base_action['post_title']   = FrmOnSubmitAction::get_name();
+		$base_action['menu_order']   = $form_id;
+		$base_action['post_status']  = 'publish';
+		$base_action['post_content'] = array(
+			'event' => array( 'create' ),
+		);
+
+		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
+
+		// If frontend editing is enabled, migrate its settings too.
+		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
+			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
+
+			if ( $action_data === $edit_data ) {
+				// Just create one action for both create and update if they are the same.
+				$base_action['post_content']['event'][] = 'update';
+			} else {
+				// Create a separate action for update.
+				$edit_action                          = $base_action;
+				$edit_action['post_content']         += $edit_data;
+				$edit_action['post_content']['event'] = array( 'update' );
+
+				$edit_action['post_content'] = FrmAppHelper::prepare_and_encode( $edit_action['post_content'] );
+				FrmDb::save_json_post( $edit_action );
+			}
+		}
+
+		$action                  = $base_action;
+		$action['post_content'] += $action_data;
+
+		$action['post_content'] = FrmAppHelper::prepare_and_encode( $action['post_content'] );
+		FrmDb::save_json_post( $action );
+
+		$form->options[ $flag_key ] = 1;
+		FrmForm::update( $form->id, array( 'options' => $form->options ) );
+	}
+
+	/**
+	 * Gets On Submit action data from form options to be used for the migration.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array  $form_options Form options.
+	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
+	 * @return array
+	 */
+	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
+		$opt  = 'update' === $event ? 'edit_' : 'success_';
+		$data = array(
+			'success_action' => $form_options[ $opt . 'action' ],
+		);
+
+		switch ( $form_options[ $opt . 'action' ] ) {
+			case 'redirect':
+				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
+				break;
+
+			case 'page':
+				$data['success_page_id'] = isset( $form_options[ $opt . 'page_id' ] ) ? $form_options[ $opt . 'page_id' ] : '';
+				break;
+
+			default:
+				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_msg();
+				$data['show_form']   = ! empty( $form_options['show_form'] );
+		}
+
+		return $data;
 	}
 
 	/**
