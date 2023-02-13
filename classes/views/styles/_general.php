@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm4 frm_form_field">
 	<label for="frm_form_width"><?php esc_html_e( 'Max Width', 'formidable' ); ?></label>
-	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'form_width' ) ); ?>" id="frm_form_width" value="<?php echo esc_attr( $style->post_content['form_width'] ); ?>" ./>
+	<input type="text" name="<?php echo esc_attr( $frm_style->get_field_name( 'form_width' ) ); ?>" id="frm_form_width" value="<?php echo esc_attr( $style->post_content['form_width'] ); ?>" />
 </p>
 
 <p class="frm4 frm_form_field frm_end">
