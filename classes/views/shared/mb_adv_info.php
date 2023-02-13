@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="frm_grid_container frm-fields frm-mx-sm">
-			<div class="frm1 frm_form_field" style="line-height:38px;">
+			<div class="frm1 frm_form_field frm-inline-select">
 				<label for="frm-id-condition">
 					<?php esc_html_e( 'IF', 'formidable' ); ?>
 				</label>

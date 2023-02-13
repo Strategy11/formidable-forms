@@ -803,19 +803,6 @@ p.frm_has_shortcodes {
 	background: #fff;
 }
 
-.frm_has_shortcodes > .frmsvg,
-.frm_has_shortcodes > i {
-	top: 37px;
-	right: 5px;
-	margin-top: -9px;
-	padding: 5px;
-	font-size: 10px;
-	height: 10px;
-	width: 10px;
-	line-height: 9px;
-	font-weight: bold;
-}
-
 .frm_has_shortcodes .frmsvg,
 .frm_has_shortcodes i:not([class*=mce-]) {
 	position: absolute;
@@ -1126,11 +1113,6 @@ p.frm_has_shortcodes {
 	clear: both;
 }
 
-#titlediv #title {
-	line-height: 1.5;
-	height: auto;
-}
-
 .frm_sidebar select {
 	width: 100%;
 	margin-left: 0;
@@ -1169,31 +1151,19 @@ p.frm_has_shortcodes {
 /* Buttons */
 
 .frm_orange_button,
-.frm_reverse_button,
-.post-type-frm_display .wrap .add-new-h2 {
+.frm_reverse_button {
 	font-size: 12px;
 	border: 1px solid var(--orange);
 	color: var(--orange);
-	line-height: 1.4;
 	font-weight: 600;
 	padding: 1px 4px;
 	border-radius: 4px;
 	background: transparent;
 }
 
-.post-type-frm_display .wrap .add-new-h2 {
-	margin: 1px 0 0 10px;
-	text-transform: lowercase;
-	position: initial;
-	vertical-align: middle;
-}
-
 .frm_reverse_button:hover,
 .frm_reverse_button:active,
-.frm_reverse_button:focus,
-.post-type-frm_display .wrap .add-new-h2:hover,
-.post-type-frm_display .wrap .add-new-h2:active,
-.post-type-frm_display .wrap .add-new-h2:focus {
+.frm_reverse_button:focus {
 	color: #fff;
 	background: var(--orange);
 	border: 1px solid var(--orange);
@@ -1374,10 +1344,6 @@ p.frm_has_shortcodes {
 	background: var(--grey-50) !important;
 	box-shadow: none !important;
 	outline: none !important;
-}
-
-.frm-with-plus {
-	padding-left: 10px !important;
 }
 
 .frm-button-primary .frmsvg {
@@ -2297,7 +2263,7 @@ body.frm-body-with-open-modal {
 	max-width: calc( 100% - 65px );
 }
 
-.frm-templates-list > li > div:not(.frm-hover-icons) {
+.frm-templates-list .frm-featured-form {
 	display: flex;
 	width: 100%;
 }
@@ -2339,7 +2305,7 @@ body.frm-body-with-open-modal {
 	align-self: flex-start;
 }
 
-.frm-templates-list > li > div > div:last-child:not(.frm-dropdown-menu) {
+.frm-templates-list .frm-template-details {
 	/* the content container to the right of the icon in Create new form modal */
 	display: inline-block;
 	width: calc( 100% - 40px );
@@ -2454,6 +2420,14 @@ body.frm-body-with-open-modal {
 	gap: 5px;
 }
 
+.frm-ready-made-solution .frm-hover-icons {
+	visibility: hidden;
+}
+
+.frm-ready-made-solution:hover .frm-hover-icons {
+	visibility: visible;
+}
+
 .frm-hover-icons a {
 	width: 22px;
 	height: 22px;
@@ -2558,6 +2532,12 @@ body.frm-body-with-open-modal {
 .frm-plan-required-tag {
 	margin-left: 5px;
 	transform: translateY(-1px);
+	background: #FDE6DE;
+	color: #F15A24;
+}
+
+.frm-ready-made-solution .frm-meta-tag {
+	width: fit-content;
 	background: #FDE6DE;
 	color: #F15A24;
 }
@@ -2838,7 +2818,6 @@ a.frm_pro_tip {
 	border-radius: var(--small-radius);
 	padding: 5px 15px;
 	margin: 0 auto;
-	line-height: 1.4;
 	display: flex;
 	align-items: center;
 }
@@ -3082,7 +3061,7 @@ h1 .fa-caret-down {
 	border: 1px solid #ddd;
 	background: #fff;
 	height: 28px;
-	line-height: 1.5;
+	line-height: var(--leading);
 }
 
 a.frm_option_icon:before {
@@ -3884,7 +3863,7 @@ label input[type="checkbox"], label input[type="radio"] {
 	margin: 0;
 	width: 100%;
 	padding: 6px;
-	line-height: 1.5;
+	line-height: var(--leading);
 	border: 0 none;
 	outline: none;
 	-moz-box-sizing: border-box;
@@ -4413,11 +4392,11 @@ li.frm_field_box > ul.frm_grid_container {
 }
 
 .frm_image_data {
-	margin-left: 10px;
+	margin-left: var(--gap-xs);
 	display: flex;
 	flex-direction: column;
 	font-size: var(--text-sm);
-	line-height: 17px;
+	justify-content: space-around;
 }
 
 .frm_image_styling_frame {
@@ -4443,8 +4422,7 @@ li.frm_field_box > ul.frm_grid_container {
 }
 
 .frm_image_preview_title{
-	margin-top: 6px;
-	color: rgba(40, 47, 54, 0.65);
+	color: var(--grey-500);
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -4465,7 +4443,6 @@ li.frm_field_box > ul.frm_grid_container {
 
 a.frm_remove_image_option,
 .frm_remove_image_option {
-	margin-top: 9px;
 	color: var(--grey-400);
 	cursor: pointer;
 }
@@ -4498,8 +4475,7 @@ a.frm_remove_image_option:hover,
 }
 
 .frm-right-panel .misc-pub-section {
-	padding: 10px 0;
-	line-height: 1.4em;
+	padding: var(--gap-xs) 0;
 	position: relative;
 }
 
@@ -4843,11 +4819,6 @@ label.frm-example-icon {
 	color: var(--grey-700);
 }
 
-.edd_frm_license_row {
-	clear: both;
-	line-height: 2em;
-}
-
 .frm_license_msg {
 	margin-top: 0;
 }
@@ -5187,7 +5158,7 @@ h2.frm-h2,
 
 #frm_email_addon_menu {
 	border: 1px solid var(--grey-300);
-	padding: 15px;
+	padding: var(--gap-sm);
 	border-radius: 4px;
 	margin: var(--gap-md) 0 var(--gap-sm);
 }
@@ -5212,18 +5183,13 @@ h2.frm-h2,
 }
 
 .frm_email_settings .widget {
-	margin-bottom: 15px;
-	padding: 0;
-}
-
-.frm_email_settings .widget:last-of-type {
-	margin-bottom: 20px;
+	margin-bottom: var(--gap-sm);
 }
 
 .frm_form_action_settings .widget-top {
 	box-shadow: none;
 	border-color: var(--grey-300);
-	border-radius: 4px;
+	border-radius: var(--small-radius);
 	background: var(--lightest-grey);
 	color: var(--grey-700);
 }
@@ -5432,7 +5398,6 @@ span.frm-inner-circle.frm-inverse {
 	height: 24px;
 	width: 24px;
 	font-size: 24px;
-	line-height: 1em;
 }
 
 .frm_email_settings .widget-title:hover .frm_form_action_icon.frm-inverse .frmsvg,
@@ -5525,7 +5490,6 @@ table td, .form-table tr td {
 	/* For add-ons that haven't been updated for 4.0 */
 	float: none;
 	width: auto !important;
-	line-height: 1;
 }
 
 .frm-fields .frm_autoresponder_rows select {
@@ -5540,21 +5504,22 @@ table td, .form-table tr td {
 }
 
 #frm_notification_settings .frm_email_buttons {
-	padding: 7px;
+	padding: var(--gap-2xs);
 	background: var(--light-blue);
 	color: var(--primary-700);
-	border-radius: 4px;
+	border-radius: var(--small-radius);
 	border-color: var(--blue-border);
-	line-height: 1em;
+	line-height: 1;
 	height: auto;
-	font-size: 12px;
+	min-height: 12px;
+	font-size: var(--text-xs);
 	box-shadow: none;
 }
 
 .frm_reply_to_container,
 .frm_bcc_cc_container {
 	float: right;
-	margin: -8px 0 0;
+	margin: -4px 0 0;
 	z-index: 1;
 	position: relative;
 }
@@ -5613,11 +5578,6 @@ p.frm-inline-select,
 	margin-top: 0;
 	margin-bottom: 0;
 	padding: 0;
-}
-
-.frm_form_settings input[type="text"] {
-	line-height: normal;
-	height: auto;
 }
 
 #poststuff .widgets-holder-wrap .frm_form_action_settings .widget-inside {
@@ -5859,7 +5819,7 @@ span.howto {
 }
 
 .frm_no_entries_form .frm_no_entries_text {
-	line-height: 200%;
+	line-height: var(--leading);
 }
 
 #form_entries_page #the-list .no-items {
@@ -7983,16 +7943,6 @@ button.frm_choose_image_box,
 	color: var(--grey-500);
 }
 
-#postcustomstuff table input {
-	width: 100% !important;
-	margin: 0 !important;
-}
-
-#postcustomstuff table td {
-	padding: 7px 0 7px 7px !important;
-	line-height: 30px;
-}
-
 #postcustomstuff table td > div {
 	/* To override some inline css in add-on */
 	padding-top: 0 !important;
@@ -8963,28 +8913,38 @@ Responsive Design
 }
 
 #frm_new_form_modal .frm-ready-made-solution {
-	padding: 20px 5px;
+	padding: var(--gap-xs) !important;
+	margin: var(--gap-xs) 0 var(--gap-sm);
 	display: flex;
+	gap: var(--gap-sm);
+	position: relative;
+	overflow: visible !important;
 }
 
-.frm-ready-made-solution .frm-hover-icons {
-	padding: 5px;
-	position: static;
+#frm_new_form_modal .frm-ready-made-solution:after {
+	width: 100%;
+	height: 1px;
+	background: var(--grey-300);
+	content: '';
+	position: absolute;
+	bottom: -10px;
+	left: 0;
+}
+
+#frm_new_form_modal .frm-ready-made-solution.frm-search-result:last-of-type::after {
+	content: none;
+}
+
+#frm_new_form_modal .frm-solution-details {
+	flex: 1;
+	display: flex;
+	gap: var(--gap-2xs);
+	flex-direction: column;
 }
 
 #frm_new_form_modal .frm-ready-made-solution > div:first-child {
-	width: 300px;
-}
-
-.frm-ready-made-solution span {
-	background-color: #fde6de;
-	color: #f25a24;
-	padding: 10px;
-	text-transform: uppercase;
-	font-size: 11px;
-	margin-bottom: 10px;
-	display: inline-block;
-	border-radius: 4px;
+	width: 30%;
+	text-align: center;
 }
 
 .frm-ready-made-solution h3 ~ a {
@@ -8993,6 +8953,8 @@ Responsive Design
 
 .frm-ready-made-solution img {
 	max-width: 100%;
+	display: block;
+	box-shadow: var(--box-shadow-lg);
 }
 
 /* On Submit action */

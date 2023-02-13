@@ -81,15 +81,19 @@
 			output.setAttribute( 'tabindex', 0 );
 			if ( args.buttonType ) {
 				output.classList.add( 'button' );
+
+				if ( ! args.noDismiss && -1 !== [ 'red', 'primary' ].indexOf( args.buttonType ) ) {
+					// Primary and red buttons close modals by default on click.
+					// To disable this default behaviour you can use the noDismiss: 1 arg.
+					output.classList.add( 'dismiss' );
+				}
+
 				switch ( args.buttonType ) {
 					case 'red':
 						output.classList.add( 'frm-button-red', 'frm-button-primary' );
 						break;
 					case 'primary':
 						output.classList.add( 'button-primary', 'frm-button-primary' );
-						if ( ! args.noDismiss ) {
-							output.classList.add( 'dismiss' );
-						}
 						break;
 					case 'secondary':
 						output.classList.add( 'button-secondary', 'frm-button-secondary' );
@@ -672,7 +676,7 @@
 			return output;
 		}
 
-		const { id, className, children, child, text } = args;
+		const { id, className, children, child, text, data } = args;
 
 		if ( id ) {
 			output.id = id;
@@ -686,6 +690,11 @@
 			output.appendChild( child );
 		} else if ( text ) {
 			output.textContent = text;
+		}
+		if ( data ) {
+			Object.keys( data ).forEach( function( dataKey ) {
+				output.setAttribute( 'data-' + dataKey, data[dataKey] );
+			});
 		}
 		return output;
 	}
