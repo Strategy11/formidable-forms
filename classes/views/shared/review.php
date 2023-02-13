@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<br/>
 			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?>
 		</p>
-		<a href="#" class="frm_reverse_button frm_animate_bg show-frm-feedback frm-button-secondary" data-link="feedback">
+		<a href="#" class="show-frm-feedback button frm-button-secondary" data-link="feedback">
 			<?php esc_html_e( 'Not Really', 'formidable' ); ?>
 		</a>
-		<a href="#" class="frm_animate_bg show-frm-feedback frm-button-primary" data-link="review">
+		<a href="#" class="show-frm-feedback button frm-button-primary" data-link="review">
 			<?php esc_html_e( 'Yes!', 'formidable' ); ?>
 		</a>
 	</div>
@@ -22,10 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<p>- Steph Wells<br/>
 			<span><?php esc_html_e( 'Co-Founder and CTO of Formidable Forms', 'formidable' ); ?><span>
 		</p>
-		<a href="#" class="frm-dismiss-review-notice frm_reverse_button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
+		<a href="#" class="frm-dismiss-review-notice button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'No thanks, maybe later', 'formidable' ); ?>
 		</a>
-		<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out frm-button-primary" data-link="yes" target="_blank" rel="noopener">
+		<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-primary" data-link="yes" target="_blank" rel="noopener">
 			<?php esc_html_e( 'Ok, you deserve it', 'formidable' ); ?>
 		</a>
 		<br/>

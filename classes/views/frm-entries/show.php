@@ -4,8 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="form_show_entry_page" class="frm_wrap frm_single_entry_page">
-	<div class="frm_page_container">
-
+	<div>
 		<?php
 		FrmAppHelper::get_admin_header(
 			array(

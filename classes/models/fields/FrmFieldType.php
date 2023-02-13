@@ -529,8 +529,8 @@ DEFAULT_HTML;
 				esc_html__( '%s Options', 'formidable' ),
 				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
 			);
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
 			?>
-			<i class="frm_icon_font frm_arrowdown6_icon"></i>
 		</h3>
 		<?php
 	}

@@ -14,7 +14,7 @@ class FrmTipsHelper {
 		$tip  = self::get_random_tip( $tips );
 
 		if ( 'p' === $html ) {
-			echo '<p class="frmcenter frm_no_top_margin">';
+			echo '<p class="frmcenter frm-mt-0">';
 		}
 
 		if ( ! isset( $tip['page'] ) ) {

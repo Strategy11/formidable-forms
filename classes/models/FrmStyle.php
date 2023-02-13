@@ -14,6 +14,9 @@ class FrmStyle {
 		$this->id = $id;
 	}
 
+	/**
+	 * @return stdClass
+	 */
 	public function get_new() {
 		$this->id = 0;
 
@@ -34,18 +37,28 @@ class FrmStyle {
 		return (object) $style;
 	}
 
+	/**
+	 * @param array $settings
+	 * @return int|WP_Error
+	 */
 	public function save( $settings ) {
 		return FrmDb::save_settings( $settings, 'frm_styles' );
 	}
 
 	public function duplicate( $id ) {
-		// duplicating is a pro feature
+		// Duplicating is a pro feature. This is handled in FrmProStyle::duplicate instead.
 	}
 
+	/**
+	 * Handle save actions in the visual styler edit page.
+	 *
+	 * @param mixed $id
+	 * @return array<int|WP_Error>
+	 */
 	public function update( $id = 'default' ) {
 		$all_instances = $this->get_all();
 
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			$new_style       = (array) $this->get_new();
 			$all_instances[] = $new_style;
 		}
@@ -55,28 +68,31 @@ class FrmStyle {
 		foreach ( $all_instances as $number => $new_instance ) {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
-				$all_instances[ $number ] = $new_instance;
 
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing
-				if ( $new_instance['menu_order'] && $_POST && empty( $_POST['prev_menu_order'] ) && isset( $_POST['frm_style_setting']['menu_order'] ) ) {
-					// this style was set to default, so remove default setting on previous default style
-					$new_instance['menu_order'] = 0;
-					$action_ids[]               = $this->save( $new_instance );
-				}
-
-				// don't continue if not saving this style
+			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				// Don't continue if not saving this style.
 				continue;
 			}
 
-			$new_instance['post_title']   = isset( $_POST['frm_style_setting']['post_title'] ) ? sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$new_instance['post_content'] = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( $this->unslash_post_content( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			// Custom CSS is no longer used from the default style, but it is still checked if the Global Setting is missing.
+			// Preserve the previous value in case Custom CSS has not been saved as a Global Setting yet.
+			$custom_css = isset( $new_instance['post_content']['custom_css'] ) ? $new_instance['post_content']['custom_css'] : '';
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			if ( ! empty( $_POST['frm_style_setting']['post_title'] ) ) {
+				// The nonce check happens in FrmStylesController::save_style before this is called.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
+			}
+
+			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$new_instance['post_content']['custom_css'] = $custom_css;
+			unset( $custom_css );
+
 			$new_instance['post_type']    = FrmStylesController::$post_type;
 			$new_instance['post_status']  = 'publish';
-			$new_instance['menu_order']   = isset( $_POST['frm_style_setting']['menu_order'] ) ? absint( $_POST['frm_style_setting']['menu_order'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-			if ( empty( $id ) ) {
+			if ( ! $id ) {
 				$new_instance['post_name'] = $new_instance['post_title'];
 			}
 
@@ -94,19 +110,14 @@ class FrmStyle {
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
 					$new_instance['post_content'][ $setting ] = str_replace( '#', '', $color_val );
-				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ), true )
-					&& ! isset( $new_instance['post_content'][ $setting ] )
-					) {
+				} elseif ( in_array( $setting, array( 'submit_style', 'important_style', 'auto_width' ), true ) && ! isset( $new_instance['post_content'][ $setting ] ) ) {
 					$new_instance['post_content'][ $setting ] = 0;
 				} elseif ( $setting === 'font' ) {
 					$new_instance['post_content'][ $setting ] = $this->force_balanced_quotation( $new_instance['post_content'][ $setting ] );
 				}
 			}
 
-			$all_instances[ $number ] = $new_instance;
-
 			$action_ids[] = $this->save( $new_instance );
-
 		}
 
 		$this->save_settings();
@@ -242,6 +253,8 @@ class FrmStyle {
 
 	/**
 	 * @since 3.01.01
+	 *
+	 * @return array
 	 */
 	public function get_color_settings() {
 		$defaults = $this->get_defaults();
@@ -251,7 +264,9 @@ class FrmStyle {
 	}
 
 	/**
-	 * Create static css file
+	 * Create static CSS file and update the CSS transient alternative.
+	 *
+	 * @return void
 	 */
 	public function save_settings() {
 		$filename = FrmAppHelper::plugin_path() . '/css/custom_theme.css.php';
@@ -263,8 +278,7 @@ class FrmStyle {
 
 		$this->clear_cache();
 
-		$css = $this->get_css_content( $filename );
-
+		$css         = $this->get_css_content( $filename );
 		$create_file = new FrmCreateFile(
 			array(
 				'file_name'     => FrmStylesController::get_file_name(),
@@ -277,6 +291,10 @@ class FrmStyle {
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
 	}
 
+	/**
+	 * @param string $filename
+	 * @return string
+	 */
 	private function get_css_content( $filename ) {
 		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 
@@ -284,13 +302,16 @@ class FrmStyle {
 		$frm_style = $this;
 
 		ob_start();
-		include( $filename );
+		include $filename;
 		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
 		ob_end_clean();
 
 		return FrmStylesController::replace_relative_url( $css );
 	}
 
+	/**
+	 * @return void
+	 */
 	private function clear_cache() {
 		$default_post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
@@ -305,12 +326,24 @@ class FrmStyle {
 		FrmDb::delete_cache_and_transient( 'frmpro_css' );
 	}
 
+	/**
+	 * Delete a style by its post ID.
+	 *
+	 * @param int $id
+	 * @return WP_Post|false|null
+	 */
 	public function destroy( $id ) {
+		if ( $id === $this->get_default_style()->ID ) {
+			return false;
+		}
 		return wp_delete_post( $id );
 	}
 
+	/**
+	 * @return WP_Post|stdClass
+	 */
 	public function get_one() {
-		if ( 'default' == $this->id ) {
+		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
 			if ( $style ) {
 				$this->id = $style->ID;
@@ -338,6 +371,12 @@ class FrmStyle {
 		return $style;
 	}
 
+	/**
+	 * @param string $orderby
+	 * @param string $order
+	 * @param int    $limit
+	 * @return array
+	 */
 	public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
 		$post_atts = array(
 			'post_type'   => FrmStylesController::$post_type,
@@ -416,6 +455,10 @@ class FrmStyle {
 		}
 	}
 
+	/**
+	 * @param mixed $settings
+	 * @return mixed
+	 */
 	public function override_defaults( $settings ) {
 		if ( ! is_array( $settings ) ) {
 			return $settings;
@@ -447,6 +490,9 @@ class FrmStyle {
 		return apply_filters( 'frm_override_default_styles', $settings );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_defaults() {
 		$defaults = array(
 			'theme_css'  => 'ui-lightness',
@@ -588,10 +634,20 @@ class FrmStyle {
 		return apply_filters( 'frm_default_style_settings', $defaults );
 	}
 
+	/**
+	 * Get a name attribute value for a style setting input.
+	 *
+	 * @param string $field_name
+	 * @param string $post_field
+	 * @return string
+	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		return 'frm_style_setting' . ( empty( $post_field ) ? '' : '[' . $post_field . ']' ) . '[' . $field_name . ']';
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_bold_options() {
 		return array(
 			100      => 100,
@@ -608,6 +664,9 @@ class FrmStyle {
 
 	/**
 	 * Don't let imbalanced font families ruin the whole stylesheet
+	 *
+	 * @param string $value
+	 * @return string
 	 */
 	public function force_balanced_quotation( $value ) {
 		$balanced_characters = array( '"', "'" );

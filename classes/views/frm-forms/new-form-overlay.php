@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<p>
 						<label for="frm_template_name" id="frm_new_name" data-template="<?php esc_attr_e( 'Template Name', 'formidable' ); ?>" data-form="<?php esc_html_e( 'Form Name', 'formidable' ); ?>">
 							<?php esc_html_e( 'Form Name', 'formidable' ); ?>
-						</label><br/>
+						</label>
 						<input type="text" name="template_name" id="frm_template_name" class="frm_long_input" />
 					</p>
 
@@ -144,13 +144,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	FrmAppHelper::icon_by_class( 'frmfont frm_eye_simple' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_back' );
-	FrmAppHelper::icon_by_class( 'frmfont frm_lock_simple' );
+	FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 	FrmAppHelper::icon_by_class( 'frmfont frm_unlock_simple' );
 	?>
 	<div id="frm-hover-icons-template" class="frm-hover-icons">
 		<a role="button" href="#" class="frm-delete-form" aria-label="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Delete form', 'formidable' ); ?>">
 			<svg class="frmsvg">
-				<use xlink:href="#frm_delete_solid_icon"></use>
+				<use xlink:href="#frm_delete_icon"></use>
 			</svg>
 		</a><a role="button" href="#" class="frm-preview-form" aria-label="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>" title="<?php esc_attr_e( 'Preview form', 'formidable' ); ?>">
 			<svg class="frmsvg">

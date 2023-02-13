@@ -162,7 +162,7 @@
 					'h2',
 					{
 						text: __( 'Application Templates', 'formidable' ),
-						className: 'frm-h2'
+						className: 'frm-h2 frm-mb-md'
 					}
 				),
 				getCategoryOptions(),
@@ -178,7 +178,7 @@
 		}
 
 		const categories = [ getAllItemsCategory() ].concat( state.categories );
-		const wrapper = div({ id: 'frm_application_category_filter' });
+		const wrapper = div({ id: 'frm_application_category_filter', className: 'subsubsub' });
 
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
@@ -187,18 +187,18 @@
 			}
 			const anchor = a( category );
 			if ( 0 === index ) {
-				anchor.classList.add( 'frm-active-application-category' );
+				anchor.classList.add( 'current' );
 				elements.activeCategoryAnchor = anchor;
 			}
 			onClickPreventDefault(
 				anchor,
 				() => {
 					if ( false !== elements.activeCategoryAnchor ) {
-						elements.activeCategoryAnchor.classList.remove( 'frm-active-application-category' );
+						elements.activeCategoryAnchor.classList.remove( 'current' );
 					}
 
 					handleCategorySelect( category );
-					anchor.classList.add( 'frm-active-application-category' );
+					anchor.classList.add( 'current' );
 					elements.activeCategoryAnchor = anchor;
 				}
 			);
@@ -234,7 +234,7 @@
 
 	function getTemplateSearch() {
 		const id = 'frm-application-search';
-		const placeholder = __( 'Search templates', 'formidable' );
+		const placeholder = __( 'Search Templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
 		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
@@ -284,14 +284,15 @@
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
-			const title = tag( 'h4', data.name );
-
-			const titleWrapper = span({
-				children: [
-					svg({ href: '#frm_lock_simple' }),
-					title
-				]
-			});
+			const titleWrapper = tag(
+				'h4',
+				{
+					children: [
+						svg({ href: '#frm_lock_icon' }),
+						document.createTextNode( data.name )
+					]
+				}
+			);
 			const header = div({
 				children: [
 					titleWrapper,
@@ -300,7 +301,7 @@
 			});
 
 			if ( data.isNew ) {
-				title.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span({ className: 'frm-new-pill', text: __( 'NEW', 'formidable' ) }) );
 			}
 
 			const counter = getItemCounter();
@@ -368,7 +369,7 @@
 
 	function getUseThisTemplateControl( data ) {
 		let control = a({
-			className: 'button frm-button-secondary',
+			className: 'button frm-button-secondary frm-button-sm',
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );

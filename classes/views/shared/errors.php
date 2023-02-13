@@ -31,7 +31,7 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 	<?php
 }
 
-if ( isset( $warnings ) && is_array( $warnings ) && count( $warnings ) > 0 ) {
+if ( ! empty( $warnings ) && is_array( $warnings ) ) {
 	?>
 	<div class="frm_warning_style inline" role="alert">
 		<div class="frm_warning_heading"> <?php echo esc_html__( 'Warning:', 'formidable' ); ?></div>
@@ -46,7 +46,7 @@ if ( isset( $warnings ) && is_array( $warnings ) && count( $warnings ) > 0 ) {
 	<?php
 }
 
-if ( isset( $errors ) && is_array( $errors ) && count( $errors ) > 0 ) {
+if ( ! empty( $errors ) && is_array( $errors ) ) {
 	?>
 	<div class="frm_error_style inline" role="alert">
 		<ul id="frm_errors">
@@ -58,4 +58,21 @@ if ( isset( $errors ) && is_array( $errors ) && count( $errors ) > 0 ) {
 		</ul>
 	</div>
 	<?php
+}
+
+if ( ! empty( $notes ) && is_array( $notes ) ) {
+	foreach ( $notes as $note ) {
+		?>
+		<div class="frm_note_style">
+			<?php
+			if ( is_string( $note ) ) {
+				echo esc_html( $note );
+			} elseif ( is_callable( $note ) ) {
+				// If $note is a function call it so we can handle cases where we don't want to wrap the whole note in esc_html.
+				$note();
+			}
+			?>
+		</div>
+		<?php
+	}
 }

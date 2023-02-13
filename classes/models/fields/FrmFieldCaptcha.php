@@ -29,9 +29,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	public static function get_captcha_image_name() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
-		if ( ! self::should_show_captcha() ) {
-			$image_name = 'captcha_not_setup';
-		} elseif ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
+		if ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
 			$image_name = 'recaptcha_v3';
 		} else {
 			$image_name = $active_captcha;
@@ -326,7 +324,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( $values['type'] === 'captcha' ) {
 			$name = $values['name'];
 			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCaptcha', 'formidable' ) ), true ) ) {
-				$values['name'] = __( 'CAPTCHA', 'formidable' );
+				$values['name'] = __( 'Captcha', 'formidable' );
 			}
 		}
 
