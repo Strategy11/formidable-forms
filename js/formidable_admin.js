@@ -6361,6 +6361,13 @@ function frmAdminBuildJS() {
 			frmDom.wysiwyg.init( newAction.querySelector( '.wp-editor-area' ) );
 		}
 
+		if ( newAction.classList.contains( 'frm_single_on_submit_settings' ) ) {
+			const autocompleteInput = newAction.querySelector( 'input.frm-page-search' );
+			if ( autocompleteInput ) {
+				frmDom.autocomplete.initAutocomplete( 'page', newAction );
+			}
+		}
+
 		initiateMultiselect();
 
 		const hookName = 'frm_after_duplicate_action';
