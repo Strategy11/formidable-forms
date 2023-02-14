@@ -25,6 +25,7 @@
 
 	function handleSpaceDownEvent( e ) {
 		if ( e.target.classList.contains( 'frm_toggle' ) ) {
+			e.preventDefault(); // Prevent automatic browser scroll when space is pressed.
 			e.target.click();
 		}
 	}
