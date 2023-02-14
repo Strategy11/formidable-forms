@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 5.5.7
+Stable tag: 6.0
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,26 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.0 =
+* New: Added a new style tab when editing a form that links to the visual styler. Now a form can be previewed with a style in real time without the need to update the form.
+* New: Added additional logic to clean up invalid RGB color values in the styler.
+* New: Destructive actions, like deleting, now use red confirmation buttons on admin pages.
+* New: An exported form with no name will now export with the form key included in the file name instead of just exporting as -form.xml.
+* New: On submit behaviour including messages, redirect, and page content have been changed to a new Confirmation form action type, allowing them to work with conditional logic.
+* New: The styler will now show a pop up when exiting with unsaved changes.
+* New: Updated the UI to make it more modern and consistent between all the Formidable pages
+* Fix: Color pickers were not visibly resetting after a styler reset action.
+* Fix: Styler icon dropdowns were not visibly appearing as reset after resetting a style in older versions.
+* Fix: The success message would always show 1 form restored when undoing a delete action instead of the proper count.
+* Fix: A field dragged near the top or bottom of the field list wouldn't automatically cause the list to scroll.
+* Full screen pages no longer include the WordPress admin bar to prevent page scrolling issues when dragging.
+* Several style options have been reset and rename. These have no been added added to the dropdown for each style in the new list view of the visual styler. Custom CSS and Manage styles have been moved to Global Settings. The style name setting is now at the bottom of the General section in the edit page.
+* The frm_style_settings_top hook is no longer used.
+* Star rating fields are no longer blue in builder and entries list pages.
+* The Styling & Buttons category has been changed to a Buttons category.
+* Custom CSS is no longer merged on import.
+* The styler sample form has been made more accessible.
+
 = 5.5.7 =
 * Security: Additional validation has been added when deleting entries on admin pages.
 * Fix: reCAPTCHA fields were including an additional = character in the HTML. This may have caused conflicts with other libraries.
