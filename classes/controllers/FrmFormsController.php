@@ -2339,7 +2339,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Gets run_success_action() args from the On Sumbit action.
+	 * Gets run_success_action() args from the On Submit action.
 	 *
 	 * @since 6.0
 	 *
@@ -2929,10 +2929,10 @@ class FrmFormsController {
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
 		$opt  = 'update' === $event ? 'edit_' : 'success_';
 		$data = array(
-			'success_action' => $form_options[ $opt . 'action' ],
+			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : FrmOnSubmitHelper::get_default_action_type(),
 		);
 
-		switch ( $form_options[ $opt . 'action' ] ) {
+		switch ( $data['success_action'] ) {
 			case 'redirect':
 				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
 				break;
