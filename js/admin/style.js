@@ -85,7 +85,6 @@
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
 
 		syncPreviewFormLabelPositionsWithActiveStyle();
-		makeToggleAccessible();
 		initStyleCardPagination();
 	}
 
@@ -98,39 +97,6 @@
 		if ( activeCard ) {
 			changeLabelPositionsInPreview( activeCard.dataset.labelPosition );
 		}
-	}
-
-	/**
-	 * Toggle accessibility is handled for other pages in Pro.
-	 * As the only toggle in Lite is currently for Enabling styles only, simpler code can be used and loaded just for the styler for now.
-	 *
-	 * @returns {void}
-	 */
-	function makeToggleAccessible() {
-		const toggleCheckbox = document.getElementById( 'frm_enable_styling' );
-		if ( ! toggleCheckbox ) {
-			return;
-		}
-
-		const toggle = toggleCheckbox.nextElementSibling;
-
-		toggleCheckbox.addEventListener( 'change', () => toggle.setAttribute( 'aria-checked', toggleCheckbox.checked ? 'true' : 'false' ) );
-
-		toggle.addEventListener(
-			'keydown',
-			/**
-			 * Toggle the enable styling toggle when the space key is pressed.
-			 *
-			 * @param {Event} e
-			 * @returns {void}
-			 */
-			e => {
-				if ( ' ' === e.key ) {
-					e.preventDefault(); // Prevent the list from scrolling when you hit space.
-					toggle.click();
-				}
-			}
-		);
 	}
 
 	/**
