@@ -196,7 +196,7 @@ class FrmSettings {
 	 *
 	 * @param mixed  $value       The unsanitized global setting value.
 	 * @param string $key         The key of the global setting being saved.
-	 * @param array  $filter_keys These keys are are filtered with kses.
+	 * @param array  $filter_keys These keys that are filtered with kses.
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
