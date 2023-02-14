@@ -7417,8 +7417,6 @@ input[disabled],
 	font-size: var(--text-md);
 }
 
-/* Icon for Name field is larger */
-
 .frm_code_list i:before {
 	font-size: inherit;
 }
