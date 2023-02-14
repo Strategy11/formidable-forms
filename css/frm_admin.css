@@ -1449,6 +1449,12 @@ input.frm_insert_in_template {
 	font-size: var(--text-sm);
 }
 
+.frm-floating-success-message {
+	border-radius: 4px;
+	right: 10px !important;
+	bottom: 10px !important;
+}
+
 /* Generic Classes */
 .frm_no_margin, /* deprecated */
 .frm-m-0 {
