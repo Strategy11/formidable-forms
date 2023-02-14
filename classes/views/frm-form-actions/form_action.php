@@ -9,11 +9,11 @@ $form_action = apply_filters( 'frm_form_action_settings', $form_action, $form_ac
 $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_action_settings', $form_action );
 
 $data_attrs = array(
-	'data-actionkey' => esc_attr( $action_key ),
+	'data-actionkey' => $action_key,
 );
 
 if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
-	$data_attrs['data-on-submit-type'] = esc_attr( FrmOnSubmitHelper::get_action_type( $form_action ) );
+	$data_attrs['data-on-submit-type'] = FrmOnSubmitHelper::get_action_type( $form_action );
 }
 ?>
 <div

@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( time() < strtotime( '2023-03-07' ) ) {
 	FrmTipsHelper::show_tip(
 		array(
-			'tip'  => __( 'New: The actions after submit have moved.', 'formidable' ),
+			'tip'  => __( 'New: The form confirmation settings have moved.', 'formidable' ),
 			'call' => __( 'Go to the Form Actions', 'formidable' ),
 			'page' => add_query_arg( 't', 'email_settings' ),
 		),

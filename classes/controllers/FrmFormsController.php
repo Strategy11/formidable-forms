@@ -2158,7 +2158,7 @@ class FrmFormsController {
 
 		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
-				self::populate_on_submit_data( $form->options, $conf_method[0] );
+				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0] );
 				$conf_method = 'redirect';
 			}
 		}
@@ -2286,10 +2286,10 @@ class FrmFormsController {
 		// If conf_method is an array, run On Submit actions.
 		if ( ! $args['conf_method'] ) {
 			// Use default message.
-			self::populate_on_submit_data( $args['form']->options );
+			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options );
 			self::run_success_action( $args );
 		} elseif ( 1 === count( $args['conf_method'] ) ) {
-			self::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
+			FrmOnSubmitHelper::populate_on_submit_data( $args['form']->options, reset( $args['conf_method'] ) );
 			$args['conf_method'] = $args['form']->options['success_action'];
 			self::run_success_action( $args );
 		} else {
@@ -2339,7 +2339,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Gets run_success_action() args from the On Sumbit action.
+	 * Gets run_success_action() args from the On Submit action.
 	 *
 	 * @since 6.0
 	 *
@@ -2350,7 +2350,7 @@ class FrmFormsController {
 	private static function get_run_success_action_args( $args, $action ) {
 		$new_args = $args;
 
-		self::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
+		FrmOnSubmitHelper::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
 
 		$opt = 'update' === $args['action'] ? 'edit_' : 'success_';
 
@@ -2853,40 +2853,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Populates the On Submit data to form options.
-	 *
-	 * @since 6.0
-	 *
-	 * @param array  $form_options Form options.
-	 * @param object $action       Optional. The On Submit action object.
-	 * @param string $event        Form event. Default is `create`.
-	 */
-	public static function populate_on_submit_data( &$form_options, $action = null, $event = 'create' ) {
-		$opt = 'update' === $event ? 'edit_' : 'success_';
-		if ( ! $action || ! is_object( $action ) ) {
-			$form_options[ $opt . 'action' ] = FrmOnSubmitHelper::get_default_action_type();
-			$form_options[ $opt . 'msg' ]    = FrmOnSubmitHelper::get_default_msg();
-			return;
-		}
-
-		$form_options[ $opt . 'action' ] = isset( $action->post_content['success_action'] ) ? $action->post_content['success_action'] : 'message';
-
-		switch ( $form_options[ $opt . 'action' ] ) {
-			case 'redirect':
-				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
-				break;
-
-			case 'page':
-				$form_options[ $opt . 'page_id' ] = isset( $action->post_content['success_page_id'] ) ? $action->post_content['success_page_id'] : '';
-				break;
-
-			default:
-				$form_options[ $opt . 'msg' ] = ! empty( $action->post_content['success_msg'] ) ? $action->post_content['success_msg'] : FrmOnSubmitHelper::get_default_msg();
-				$form_options['show_form']   = ! empty( $action->post_content['show_form'] );
-		}
-	}
-
-	/**
 	 * Maybe migrate submit settings from the form options to On Submit action.
 	 * This is added after On Submit action is released. This might migrate the frontend editing submit settings too.
 	 *
@@ -2963,10 +2929,10 @@ class FrmFormsController {
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
 		$opt  = 'update' === $event ? 'edit_' : 'success_';
 		$data = array(
-			'success_action' => $form_options[ $opt . 'action' ],
+			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : FrmOnSubmitHelper::get_default_action_type(),
 		);
 
-		switch ( $form_options[ $opt . 'action' ] ) {
+		switch ( $data['success_action'] ) {
 			case 'redirect':
 				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
 				break;

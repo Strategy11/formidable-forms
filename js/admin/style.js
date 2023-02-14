@@ -1355,7 +1355,7 @@
 	 */
 	function initFloatingLabels() {
 		[ 'focus', 'blur', 'change' ].forEach(
-			eventName => documentOn(
+			eventName => frmDom.util.documentOn(
 				eventName,
 				'#frm_style_preview .frm_inside_container > input, #frm_style_preview .frm_inside_container > textarea, #frm_style_preview .frm_inside_container > select',
 				event => checkFloatingLabelsForStyles( event.target ),
@@ -1377,35 +1377,6 @@
 		}
 
 		window.frmFrontForm = { validateFormSubmit: () => {} };
-	}
-
-	/**
-	 * Does the same as jQuery( document ).on( 'event', 'selector', handler ).
-	 *
-	 * @since 5.4.2
-	 *
-	 * @param {String}         event    Event name.
-	 * @param {String}         selector Selector.
-	 * @param {Function}       handler  Handler.
-	 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
-	 * @returns {void}
-	 */
-	function documentOn( event, selector, handler, options ) {
-		if ( 'undefined' === typeof options ) {
-			options = false;
-		}
-
-		document.addEventListener( event, function( e ) {
-			let target;
-
-			// loop parent nodes from the target to the delegation node.
-			for ( target = e.target; target && target != this; target = target.parentNode ) {
-				if ( target.matches( selector ) ) {
-					handler.call( target, e );
-					break;
-				}
-			}
-		}, options );
 	}
 
 	/**

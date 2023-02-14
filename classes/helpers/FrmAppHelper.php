@@ -1177,7 +1177,7 @@ class FrmAppHelper {
 		}
 
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
-		$class = 'button button-primary frm-button-primary frm-with-plus';
+		$class = 'button button-primary frm-button-primary';
 
 		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
 			$class .= ' frm-trigger-new-form-modal';
