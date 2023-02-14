@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.0
  */
 class FrmStyleApi extends FrmFormApi {
 

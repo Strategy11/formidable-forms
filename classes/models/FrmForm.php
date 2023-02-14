@@ -396,7 +396,7 @@ class FrmForm {
 		 * Allow the option to turn off sanitization for a field. This way a custom rule can be used instead.
 		 * Make sure to add custom sanitization using the frm_update_field_options filter as the data will no longer be sanitized.
 		 *
-		 * @since x.x
+		 * @since 6.0
 		 *
 		 * @param bool   $should_sanitize
 		 * @param string $opt

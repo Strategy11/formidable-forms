@@ -51,7 +51,7 @@ function frmFrontFormJS() {
 	/**
 	 * Triggers custom JS event.
 	 *
-	 * @since 5.x
+	 * @since 5.5.3
 	 *
 	 * @param {HTMLElement} el        The HTML element.
 	 * @param {String}      eventName Event name.

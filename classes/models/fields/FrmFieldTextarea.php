@@ -56,7 +56,7 @@ class FrmFieldTextarea extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array  $field
 	 * @param string $default_name

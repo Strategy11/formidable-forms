@@ -252,7 +252,7 @@ class FrmFormApi {
 	/**
 	 * Check if a template is new.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array $addon
 	 * @return bool

@@ -643,7 +643,7 @@
 	/**
 	 * Get a labelled text input and a matching label.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param {String} inputId
 	 * @param {String} labelText

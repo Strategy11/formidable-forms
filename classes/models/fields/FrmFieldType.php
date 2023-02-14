@@ -400,7 +400,7 @@ DEFAULT_HTML;
 	/**
 	 * Allows adding extra html attributes to field default value setting field.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array $field
 	 *
@@ -437,7 +437,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array  $field
 	 * @param string $default_name

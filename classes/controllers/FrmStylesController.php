@@ -91,7 +91,7 @@ class FrmStylesController {
 	 * Avoid loading CSS the normal way with the preview in the styler.
 	 * It gets loaded instead with the frmpro_css action set to the #frm-custom-theme-css element.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -102,7 +102,7 @@ class FrmStylesController {
 	/**
 	 * Removing this action prevents front end JavaScript from loading.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -138,7 +138,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -279,7 +279,7 @@ class FrmStylesController {
 	/**
 	 * Route the edit route to the style function.
 	 *
-	 * @since x.x this function no longer has any parameter values.
+	 * @since 6.0 this function no longer has any parameter values.
 	 *
 	 * @return void
 	 */
@@ -308,7 +308,7 @@ class FrmStylesController {
 	/**
 	 * Render the style page for a form for assigning a style to a form, and for updating a target style.
 	 *
-	 * @since x.x this function no longer takes parameters.
+	 * @since 6.0 this function no longer takes parameters.
 	 *
 	 * @return void
 	 */
@@ -341,7 +341,7 @@ class FrmStylesController {
 		self::disable_admin_page_styling_on_submit_buttons();
 
 		/**
-		 * @since x.x
+		 * @since 6.0
 		 *
 		 * @param array {
 		 *     @type stdClass $form
@@ -353,7 +353,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return int
 	 */
@@ -381,7 +381,7 @@ class FrmStylesController {
 	/**
 	 * If a form ID is not being passed in the URL, try to get the best match.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param int $style_id
 	 * @return int
@@ -426,7 +426,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return WP_Post
 	 */
@@ -439,7 +439,7 @@ class FrmStylesController {
 	/**
 	 * Save style for form (from Styler list page) via a POST action.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -458,7 +458,7 @@ class FrmStylesController {
 		/**
 		 * Hook into the saved style ID so Pro can import a style template by its key and return a new style ID.
 		 *
-		 * @since x.x
+		 * @since 6.0
 		 *
 		 * @param int $style_id
 		 */
@@ -515,7 +515,7 @@ class FrmStylesController {
 	/**
 	 * Register and enqueue styles and scripts for the style tab page.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -539,7 +539,7 @@ class FrmStylesController {
 	/**
 	 * Render the style page (with a more limited and typed scope than calling it from self::style directly).
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $active_style
 	 * @param array<WP_Post>   $styles
@@ -605,7 +605,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return string
 	 */
@@ -616,7 +616,7 @@ class FrmStylesController {
 	/**
 	 * Filter form classes so the form uses the preview style, not the form's active style.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
 	 * @return void
@@ -643,7 +643,7 @@ class FrmStylesController {
 	/**
 	 * Save style post object via a POST request submitted from the Visual styler "edit" page.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -682,7 +682,7 @@ class FrmStylesController {
 	/**
 	 * Force a redirect after duplicating or creating a new style to avoid an old stale URL that could result in more styles than intended.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array $ids
 	 * @return void
@@ -716,7 +716,7 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string       $message
 	 * @param array|object $forms
@@ -774,7 +774,7 @@ class FrmStylesController {
 	/**
 	 * Get custom CSS code entered in the Custom CSS page.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return string
 	 */
@@ -796,7 +796,7 @@ class FrmStylesController {
 	 * Enqueue assets for codemirror, built into WordPress since 4.9.
 	 * The Custom CSS page uses codemirror.
 	 *
-	 * @since x.x Previously this code was embedded in self::custom_css.
+	 * @since 6.0 Previously this code was embedded in self::custom_css.
 	 *
 	 * @return array|false
 	 */
@@ -868,7 +868,7 @@ class FrmStylesController {
 	 * From the edit view, it will return default styles and not actually update the style.
 	 * On the list view, it does update the style immediately, and returns the default card style attributes so the style card can be reset as well.
 	 *
-	 * @since x.x When a style_id is passed to this action, the style will actually be reset.
+	 * @since 6.0 When a style_id is passed to this action, the style will actually be reset.
 	 *
 	 * @return void
 	 */
@@ -1174,7 +1174,7 @@ class FrmStylesController {
 	/**
 	 * Rename a style via an AJAX action.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -1219,7 +1219,7 @@ class FrmStylesController {
 	 * Prevent the WordPress edit.css file from loading on the visual styler page.
 	 * This way .form-field elements do not have border styles applied to them.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
 	 * @return void
