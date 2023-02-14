@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '6.0b';
+	public static $plug_version = '6.0';
 
 	/**
 	 * @since 1.07.02
@@ -339,7 +339,7 @@ class FrmAppHelper {
 		$is_admin = is_admin() && ! wp_doing_ajax();
 
 		/**
-		 * @since x.x
+		 * @since 6.0
 		 * @param bool $is_admin
 		 */
 		return apply_filters( 'frm_is_admin', $is_admin );
@@ -1456,7 +1456,7 @@ class FrmAppHelper {
 	 * The alternative URL is linked as a submenu "Forms" item of the Appearance menu /wp-admin/themes.php?page=formidable-styles2.
 	 *
 	 * @since 5.5.3
-	 * @since x.x Added the $view parameter. Previously there was only a 'edit' view.
+	 * @since 6.0 Added the $view parameter. Previously there was only a 'edit' view.
 	 *
 	 * @param string $view Supports 'edit', 'list', and ''. If '', both 'edit' and 'list' will match.
 	 * @return bool

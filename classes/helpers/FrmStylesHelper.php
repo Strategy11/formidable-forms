@@ -205,7 +205,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string $rgba
 	 * @return string
@@ -254,7 +254,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string $color
 	 * @return int
@@ -277,7 +277,7 @@ class FrmStylesHelper {
 	/**
 	 * Change a 3 character hex color to a 6 character one.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return array
 	 */
@@ -510,7 +510,7 @@ class FrmStylesHelper {
 	/**
 	 * Get the URL for the Styler page list view (where you can assign styles to a form and view style templates) for a target form.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string|int $form_id
 	 * @return string
@@ -545,7 +545,7 @@ class FrmStylesHelper {
 	 * Get a count of the number of forms assigned to a target style ID.
 	 * All unassigned forms are included in the count for the default style.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string|int $style_id
 	 * @param bool       $is_default
@@ -576,7 +576,7 @@ class FrmStylesHelper {
 	/**
 	 * Get the number of forms that use the default style.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string|int $style_id
 	 * @param mixed      $conversational_style_id

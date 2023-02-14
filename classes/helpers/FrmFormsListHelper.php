@@ -294,7 +294,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * Get the HTML for the Actions column in the form list.
 	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param stdClass $form
 	 * @return string
@@ -311,7 +311,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Get the HTML for the Style column in the form list.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param stdClass $form
 	 * @return string

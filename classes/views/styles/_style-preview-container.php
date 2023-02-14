@@ -48,7 +48,7 @@ if ( $sample_form_is_on ) {
 		/**
 		 * This is used in Pro to add a "Apply style" button to the preview.
 		 *
-		 * @since x.x
+		 * @since 6.0
 		 *
 		 * @param string $view 'edit' or 'list'.
 		 */

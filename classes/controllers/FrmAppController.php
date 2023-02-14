@@ -478,7 +478,7 @@ class FrmAppController {
 	/**
 	 * Remove the admin menus and hide the gaps on full screen pages.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 */
 	private static function disable_admin_menus() {
 		if ( ! FrmAppHelper::is_full_screen() ) {

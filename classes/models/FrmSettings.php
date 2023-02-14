@@ -42,7 +42,7 @@ class FrmSettings {
 	public $tracking;
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @var string|false|null
 	 */
@@ -192,11 +192,11 @@ class FrmSettings {
 	/**
 	 * Handle sanitizing for a target global setting key.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param mixed  $value       The unsanitized global setting value.
 	 * @param string $key         The key of the global setting being saved.
-	 * @param array  $filter_keys These keys are are filtered with kses.
+	 * @param array  $filter_keys These keys that are filtered with kses.
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {

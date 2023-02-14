@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.0
  */
 class FrmStylesPreviewHelper {
 
@@ -31,7 +31,7 @@ class FrmStylesPreviewHelper {
 	/**
 	 * Modify form behaviours for the styler preview.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -45,7 +45,7 @@ class FrmStylesPreviewHelper {
 	/**
 	 * Captcha does not initialize in the preview. Hide it so we don't see the label either.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -74,7 +74,7 @@ class FrmStylesPreviewHelper {
 	 * Without this we hit a "PHP Fatal error:  Uncaught Error: Maximum function nesting level of '256' reached" error.
 	 * This only happened with specific Look up fields when FrmProLookupFieldsController::get_independent_lookup_field_options is called in Pro.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return void
 	 */
@@ -89,7 +89,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string|int $form_id
 	 * @return string
@@ -114,7 +114,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @todo Only show the note once for a form per user per month or something.
 	 *
@@ -157,7 +157,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return string|false
 	 */
@@ -183,7 +183,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return string|false
 	 */
@@ -197,7 +197,7 @@ class FrmStylesPreviewHelper {
 	/**
 	 * Get all warnings to display above the visual styler preview.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param WP_Post|stdClass $style A new style is not a WP_Post object.
 	 * @param WP_Post          $default_style
@@ -215,7 +215,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param int $style_id
 	 * @param int $default_style_id
@@ -252,7 +252,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
 	 * @return void
@@ -275,7 +275,7 @@ class FrmStylesPreviewHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
 	 * @param string    $key

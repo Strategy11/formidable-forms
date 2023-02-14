@@ -156,7 +156,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * Allows updating hcaptcha js api url.
 		 *
-		 * @since x.x
+		 * @since 6.0
 		 *
 		 * @param string $api_js_url
 		 */
@@ -314,7 +314,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * Updates field name in page builder to the currently activated captcha if it is set to the default.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array $values
 	 *

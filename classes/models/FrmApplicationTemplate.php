@@ -202,7 +202,7 @@ class FrmApplicationTemplate {
 	/**
 	 * Check if an application template is new. If it is, we include a "NEW" pill beside the title.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return bool
 	 */

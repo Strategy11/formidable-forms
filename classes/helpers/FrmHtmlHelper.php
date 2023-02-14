@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.0
  */
 class FrmHtmlHelper {
 
@@ -12,7 +12,7 @@ class FrmHtmlHelper {
 	 * Create a toggle and either echo or return the string.
 	 * This is intended for use on admin pages only. The CSS is included in frm_admin.css.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string $id
 	 * @param string $name

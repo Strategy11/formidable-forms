@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.0
  */
 class FrmStylesCardHelper {
 
@@ -64,7 +64,7 @@ class FrmStylesCardHelper {
 	/**
 	 * Echo a style card for a specific target Style Post object.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden Used for pagination.
@@ -82,7 +82,7 @@ class FrmStylesCardHelper {
 	/**
 	 * Get params to use in the style card HTML element used in the style list.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden
@@ -121,7 +121,7 @@ class FrmStylesCardHelper {
 		/**
 		 * Filter params so Pro can add additional params, like data-delete-url.
 		 *
-		 * @since x.x
+		 * @since 6.0
 		 *
 		 * @param array $params
 		 * @param array $args {
@@ -161,7 +161,7 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array $style API style data {
 	 *     @type array  $settings
@@ -242,7 +242,7 @@ class FrmStylesCardHelper {
 	 * This is used to reset some style variables like font size, label padding, and field height, so the cards all look more similar in comparison.
 	 * It's kept static as it only requires a $style as input and also gets called when resetting a style.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param WP_Post|stdClass $style A new style (including duplicated styles) is not a WP_Post object.
 	 *                                Template cards also use an stdClss instead of a WP_Post object.
@@ -293,7 +293,7 @@ class FrmStylesCardHelper {
 	 * We don't use every style as we want the cards to look consistent, so size settings are left out.
 	 * The card previews also only include a labelled text input and submit button so we don't need styles for other elements.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return array<string>
 	 */
@@ -316,7 +316,7 @@ class FrmStylesCardHelper {
 	/**
 	 * Echo a card wrapper and its children style cards.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param string $id     The ID of the card wrapper element.
 	 * @param array  $styles
@@ -357,7 +357,7 @@ class FrmStylesCardHelper {
 	 * As these can be customized, apply some default values for the card previews instead.
 	 * This is used in the card wrapper so it doesn't need to get added to each card.
 	 *
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return string
 	 */
@@ -377,7 +377,7 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param array<array> $styles
 	 * @return void
@@ -431,7 +431,7 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @param int $count
 	 * @return void
@@ -457,7 +457,7 @@ class FrmStylesCardHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.0
 	 *
 	 * @return array
 	 */
