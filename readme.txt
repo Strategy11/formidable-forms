@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 6.0
+Stable tag: 6.0.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.0.1 =
+* Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
+
 = 6.0 =
 * New: Added a new style tab when editing a form that links to the visual styler. Now a form can be previewed with a style in real time without the need to update the form.
 * New: Added additional logic to clean up invalid RGB color values in the styler.
