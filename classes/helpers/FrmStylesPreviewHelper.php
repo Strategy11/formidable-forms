@@ -40,6 +40,34 @@ class FrmStylesPreviewHelper {
 		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
+		$this->add_a_div_class_for_default_label_positions();
+	}
+
+	private function add_a_div_class_for_default_label_positions() {
+		add_filter(
+			'frm_field_div_classes',
+			/**
+			 * @param string       $classes
+			 * @param object|array $field
+			 * @return string
+			 */
+			function( $classes, $field ) {
+				if ( ! is_array( $field ) ) {
+					return $classes;
+				}
+
+				// TODO how do we get access to this in a more efficient way?
+				// $field['label'] it's very useful as it uses 'top' already for an unset value.
+				$field_object = FrmField::getOne( $field['id'] );
+				if ( empty( $field_object->field_options['label'] ) ) {
+					$classes .= ' frm-default-label-position';
+				}
+
+				return $classes;
+			},
+			10,
+			2
+		);
 	}
 
 	/**
