@@ -55,6 +55,12 @@ class FrmStylesPreviewHelper {
 		$this->add_a_div_class_for_default_label_positions();
 	}
 
+	/**
+	 * Add a frm-default-label-position class to any field with a default label position.
+	 * A field with a custom label position shouldn't ever change in the styler preview.
+	 *
+	 * @since 6.0.1
+	 */
 	private function add_a_div_class_for_default_label_positions() {
 		// Only fields with no label position set hit this filter, so track those for the frm_field_div_classes filter.
 		add_filter(
