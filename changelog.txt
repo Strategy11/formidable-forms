@@ -1,4 +1,7 @@
 == Changelog ==
+= 6.0.1 =
+* Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
+
 = 6.0 =
 * New: Added a new style tab when editing a form that links to the visual styler. Now a form can be previewed with a style in real time without the need to update the form.
 * New: Added additional logic to clean up invalid RGB color values in the styler.
