@@ -60,6 +60,7 @@ class FrmStylesPreviewHelper {
 	 * A field with a custom label position shouldn't ever change in the styler preview.
 	 *
 	 * @since 6.0.1
+	 * @return void
 	 */
 	private function add_a_div_class_for_default_label_positions() {
 		// Only fields with no label position set hit this filter, so track those for the frm_field_div_classes filter.
