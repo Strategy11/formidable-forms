@@ -24,16 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
-			<div class="frm_builder_captcha frm_warning_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' ); ?>
-				<div><b><?php echo esc_html__( 'Setup a captcha', 'formidable' ); ?></b>
-					<p>
-						<?php
-						/* translators: %1$s: Link HTML, %2$s: End link */
-						printf( esc_html__( 'Your captcha will not appear on your form until you %1$sset up%2$s the Site and Secret Keys', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
-						?>
-					</p>
-				</div>
+			<div class="frm_warning_style frm-with-icon">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'Captchas will not be used until the Site and Secret Keys are %1$sset up%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
 			</div>
 		<?php } ?>
 		<?php if ( $display['label'] ) { ?>
@@ -131,7 +129,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 	<h3 class="frm-collapsed">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
-		<i class="frm_icon_font frm_arrowdown6_icon"></i>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me">
 
@@ -302,7 +300,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<input type="hidden" id="field_options_type_<?php echo esc_attr( $field['id'] ); ?>" value="<?php echo esc_attr( $field['type'] ); ?>" />
 		<?php } ?>
 
-		<table class="form-table frm_no_top_margin">
+		<table class="form-table frm-mt-0">
 			<?php $field_obj->show_options( $field, $display, $values ); ?>
 			<?php do_action( 'frm_field_options_form', $field, $display, $values ); ?>
 		</table>
@@ -316,7 +314,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
-				<i class="frm_icon_font frm_arrowdown6_icon"></i>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</h3>
 
 			<div class="frm_validation_box frm-collapse-me">

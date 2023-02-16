@@ -328,6 +328,7 @@ legend.frm_hidden{
 
 .with_frm_style .wp-editor-container textarea{
 	border:none<?php echo esc_html( $important ); ?>;
+	box-shadow:none !important;
 }
 
 .with_frm_style .mceIframeContainer{
@@ -1638,4 +1639,4 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 }
 <?php
 
-echo strip_tags( $defaults['custom_css'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

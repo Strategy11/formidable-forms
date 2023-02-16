@@ -12,7 +12,7 @@ class FrmField {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
 		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
-			$captcha_name = 'CAPTCHA';
+			$captcha_name = 'Captcha';
 		} elseif ( $active_captcha === 'recaptcha' ) {
 			$captcha_name = 'reCAPTCHA';
 		} else {

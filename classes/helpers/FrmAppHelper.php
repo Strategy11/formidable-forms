@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '5.5.7';
+	public static $plug_version = '6.0.1';
 
 	/**
 	 * @since 1.07.02
@@ -253,13 +253,13 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 		if ( $pagenow ) {
 			// allow this to be true during ajax load i.e. ajax form builder loading
-			$is_page = ( $pagenow == 'admin.php' || $pagenow == 'admin-ajax.php' ) && $get_page == $page;
+			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 			if ( $is_page ) {
 				return true;
 			}
 		}
 
-		return is_admin() && $get_page == $page;
+		return is_admin() && $get_page === $page;
 	}
 
 	/**
@@ -333,12 +333,16 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param None
-	 *
 	 * @return boolean
 	 */
 	public static function is_admin() {
-		return is_admin() && ! wp_doing_ajax();
+		$is_admin = is_admin() && ! wp_doing_ajax();
+
+		/**
+		 * @since 6.0
+		 * @param bool $is_admin
+		 */
+		return apply_filters( 'frm_is_admin', $is_admin );
 	}
 
 	/**
@@ -927,6 +931,16 @@ class FrmAppHelper {
 		$html_atts = self::array_to_html_params( $atts );
 
 		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+
+		// Replace icons that have been removed.
+		$deprecated = array(
+			'frm_clone_solid_icon' => 'frm_clone_icon',
+		);
+		if ( isset( $deprecated[ $icon ] ) ) {
+			$icon = $deprecated[ $icon ];
+			$class = str_replace( $icon, $deprecated[ $icon ], $class );
+		}
+
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
@@ -985,7 +999,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	public static function allow_vars_in_styles( $allowed_attr ) {
-		$allowed_attr[] = '--primary-hover';
+		$allowed_attr[] = '--primary-700';
 		return $allowed_attr;
 	}
 
@@ -996,7 +1010,7 @@ class FrmAppHelper {
 	 * @param string $css_string
 	 */
 	public static function allow_style( $allow_css, $css_string ) {
-		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-hover:' ) ) {
+		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
 			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
 		}
@@ -1090,6 +1104,20 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 6.0
+	 *
+	 * @param string $type
+	 * @return void
+	 */
+	public static function import_link( $type = 'secondary' ) {
+		?>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
+			<?php esc_html_e( 'Import', 'formidable' ); ?>
+		</a>
+		<?php
+	}
+
+	/**
 	 * Print applicable admin banner.
 	 *
 	 * @since 5.4.2
@@ -1149,7 +1177,7 @@ class FrmAppHelper {
 		}
 
 		$href  = ! empty( $atts['new_link'] ) ? esc_url( $atts['new_link'] ) : '#';
-		$class = 'button button-primary frm-button-primary frm-with-plus';
+		$class = 'button button-primary frm-button-primary';
 
 		if ( ! empty( $atts['trigger_new_form_modal'] ) ) {
 			$class .= ' frm-trigger-new-form-modal';
@@ -1423,16 +1451,35 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check if user is on the style editor, or the alternative URL.
+	 * Check if user is on the style editor or its alternative URL.
 	 * The first URL is a submenu "Styles" in the Formidable menu /wp-admin/admin.php?page=formidable-styles.
 	 * The alternative URL is linked as a submenu "Forms" item of the Appearance menu /wp-admin/themes.php?page=formidable-styles2.
 	 *
 	 * @since 5.5.3
+	 * @since 6.0 Added the $view parameter. Previously there was only a 'edit' view.
 	 *
+	 * @param string $view Supports 'edit', 'list', and ''. If '', both 'edit' and 'list' will match.
 	 * @return bool
 	 */
-	public static function is_style_editor_page() {
-		return self::is_admin_page( 'formidable-styles' ) || self::is_admin_page( 'formidable-styles2' );
+	public static function is_style_editor_page( $view = '' ) {
+		if ( ! self::is_admin_page( 'formidable-styles' ) && ! self::is_admin_page( 'formidable-styles2' ) ) {
+			return false;
+		}
+
+		if ( ! in_array( $view, array( 'list', 'edit' ), true ) ) {
+			return true;
+		}
+
+		$action       = self::simple_get( 'frm_action' );
+		$is_edit_mode = 'edit' === $action || ( ! $action && ! self::simple_get( 'id' ) && ! self::simple_get( 'form' ) );
+
+		if ( ! $is_edit_mode && class_exists( 'FrmProStylesController' ) && in_array( $action, array( 'new_style', 'duplicate' ), true ) ) {
+			$is_edit_mode = true;
+		}
+
+		$checking_for_edit_mode = 'edit' === $view;
+
+		return $is_edit_mode === $checking_for_edit_mode;
 	}
 
 	/**
@@ -2654,7 +2701,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check for either json or serilized data. This is temporary while transitioning
+	 * Check for either json or serialized data. This is temporary while transitioning
 	 * all data to json.
 	 *
 	 * @since 4.02.03
@@ -2827,8 +2874,8 @@ class FrmAppHelper {
 				'desc'              => __( '(Click to add description)', 'formidable' ),
 				'blank'             => __( '(Blank)', 'formidable' ),
 				'no_label'          => __( '(no label)', 'formidable' ),
-				'saving'            => esc_attr( __( 'Saving', 'formidable' ) ),
-				'saved'             => esc_attr( __( 'Saved', 'formidable' ) ),
+				'saving'            => '', // Deprecated in 6.0.
+				'saved'             => '', // Deprecated in 6.0.
 				'ok'                => __( 'OK', 'formidable' ),
 				'cancel'            => __( 'Cancel', 'formidable' ),
 				'default_label'     => __( 'Default', 'formidable' ),
@@ -2836,7 +2883,6 @@ class FrmAppHelper {
 				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
 				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
 				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-				'caution'           => __( 'Heads up', 'formidable' ),
 				'confirm'           => __( 'Are you sure?', 'formidable' ),
 				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
 				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),

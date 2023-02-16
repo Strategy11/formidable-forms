@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" aria-expanded="false">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 			</a>
-			<ul class="frm-dropdown-menu" role="menu"></ul>
+			<ul class="frm-dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu"></ul>
 		</div>
 
 	</div>

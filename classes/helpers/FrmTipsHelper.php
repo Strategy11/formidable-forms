@@ -13,20 +13,39 @@ class FrmTipsHelper {
 		$tips = self::$callback();
 		$tip  = self::get_random_tip( $tips );
 
-		if ( 'p' === $html ) {
-			echo '<p class="frmcenter frm_no_top_margin">';
-		}
+		self::show_tip( $tip );
+	}
 
+	/**
+	 * Shows tip.
+	 *
+	 * @since 6.0
+	 *
+	 * @param array $tip {
+	 *     Tip args
+	 *
+	 *     @type array  $link Tip link data. See the first parameter of {@see FrmAppHelper::admin_upgrade_link()} for more details.
+	 *     @type string $page The based link of the tip. If this is empty, `https://formidableforms.com/lite-upgrade/` will
+	 *                        be used. Otherwise, `https://formidableforms.com/{$page}` will be used.
+	 *     @type string $tip  Tip text.
+	 *     @type string $call Call to action text.
+	 * }
+	 */
+	public static function show_tip( $tip, $html = '' ) {
 		if ( ! isset( $tip['page'] ) ) {
 			$tip['page'] = '';
 		}
-		if ( ! isset( $tip['link']['medium'] ) ) {
+		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
 			$tip['link']['medium'] = 'tip';
 		}
 
-		$link = FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
+		if ( 'p' === $html ) {
+			echo '<p class="frmcenter frm-mt-0">';
+		}
+
+		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
-		<a href="<?php echo esc_url( $link ); ?>" target="_blank" class="frm_pro_tip">
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
@@ -43,6 +62,7 @@ class FrmTipsHelper {
 			<?php } ?>
 		</a>
 		<?php
+
 		if ( 'p' === $html ) {
 			echo '</p>';
 		}

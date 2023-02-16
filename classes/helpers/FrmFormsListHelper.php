@@ -196,6 +196,11 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 	}
 
+	/**
+	 * @param stdClass $item
+	 * @param string   $style
+	 * @return string
+	 */
 	public function single_row( $item, $style = '' ) {
 		global $frm_vars, $mode;
 
@@ -227,6 +232,10 @@ class FrmFormsListHelper extends FrmListHelper {
 				$class .= ' frm_hidden';
 			}
 
+			if ( $column_name === 'name' ) {
+				$class .= ' column-primary';
+			}
+
 			$class        = 'class="' . esc_attr( $class ) . '"';
 			$data_colname = ' data-colname="' . esc_attr( $column_display_name ) . '"';
 			$attributes   = $class . $style . $data_colname;
@@ -242,15 +251,10 @@ class FrmFormsListHelper extends FrmListHelper {
 				case 'name':
 					$val = $this->get_form_name( $item, $actions, $edit_link, $mode );
 					$val .= $action_links;
-
 					break;
 				case 'created_at':
 					$date = gmdate( $format, strtotime( $item->created_at ) );
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
-					break;
-				case 'shortcode':
-					$val = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
-					$val = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $item ) );
 					break;
 				case 'entries':
 					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
@@ -284,6 +288,52 @@ class FrmFormsListHelper extends FrmListHelper {
 		$r .= '</tr>';
 
 		return $r;
+	}
+
+	/**
+	 * Get the HTML for the Actions column in the form list.
+	 * This includes multiple icons for triggering the embed modal, the visual styler, and an active landing page.
+	 *
+	 * @since 6.0
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	protected function column_shortcode( $form ) {
+		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_html__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
+		$val .= $this->column_style( $form );
+		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
+		$val  = str_replace( '&nbsp;', '', $val ); // Remove the space hard coded in Landing pages.
+		$val  = '<div>' . $val . '</div>';
+		return $val;
+	}
+
+	/**
+	 * Get the HTML for the Style column in the form list.
+	 *
+	 * @since 6.0
+	 *
+	 * @param stdClass $form
+	 * @return string
+	 */
+	protected function column_style( $form ) {
+		$style_setting = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : '';
+		$frm_settings  = FrmAppHelper::get_settings();
+
+		if ( $style_setting === '0' || 'none' === $frm_settings->load_style ) {
+			// Don't show a link if styling is off.
+			return '';
+		}
+
+		$style = FrmStylesController::get_form_style( $form );
+		if ( ! $style ) {
+			// Do a second pass to avoid null values.
+			$frm_style = new FrmStyle( 'default' );
+			$style     = $frm_style->get_one();
+		}
+
+		$href = FrmStylesHelper::get_edit_url( $style, $form->id );
+		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>';
 	}
 
 	/**

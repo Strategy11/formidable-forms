@@ -21,45 +21,40 @@
 	position: relative;
 }
 
-.formidable_page_formidable-applications #frm_top_bar {
+.frm-admin-page-applications #frm_top_bar {
 	background: #fff;
 }
 
-.formidable_page_formidable-applications #wpbody {
+.frm-admin-page-applications #wpbody {
 	background: var(--sidebar-color);
 }
 
-.formidable_page_formidable-applications #wpcontent {
+.frm-admin-page-applications #wpcontent {
 	padding-left: 0;
 }
 
-.frm-applications-index-content {
-	padding: 40px 40px 0;
-}
-
 .frm-application-cards-grid {
+	padding-top: var(--gap-md);
 	padding-bottom: 50px;
+	grid-gap: var(--gap-md);
 }
 
 .frm-application-cards-grid:last-child {
 	padding-bottom: 100px;
 }
 
-.formidable_page_formidable-applications #wpbody-content {
+.frm-admin-page-applications #wpbody-content {
 	padding-bottom: 0;
 }
 
 .frm-application-card {
-	border-radius: 4px;
+	border-radius: var(--small-radius);
 	background: #FFFFFF;
 	grid-column: span 3/span 3; /* treat as frm3 */
 	padding: 10px 0;
 	display: flex;
 	flex-direction: column;
-}
-
-.frm-application-card:nth-child(4) ~ .frm-application-card {
-	margin-top: 20px;
+	box-shadow: var(--box-shadow-sm);
 }
 
 .frm-application-template-card {
@@ -67,16 +62,15 @@
 }
 
 .frm-application-template-card:hover {
-	filter: drop-shadow(0px 12px 24px rgba(72, 78, 84, 0.2));
+	box-shadow: var(--box-shadow-lg);
 }
 
 .frm-application-template-card:hover h4 {
-	color: var(--primary-color);
+	color: var(--primary-500);
 }
 
 /* Card title */
 .frm-application-card h4 {
-	font-weight: 600;
 	display: inline-block;
 	max-width: 100%;
 	overflow: hidden;
@@ -90,11 +84,8 @@
 	max-width: calc( 100% - 30px );
 }
 
-.frm-locked-application-template > div:first-child > span > .frmsvg {
-	position: relative;
-	bottom: 5px;
-	width: 14px;
-	height: 14px;
+.frm-application-card h4 .frmsvg {
+	margin-right: var(--gap-xs);
 }
 
 #frm_application_templates_grid .frm-application-card .frm-button-secondary {
@@ -115,9 +106,6 @@
 	position: absolute;
 	right: 10px;
 	bottom: 0;
-	line-height: 17px;
-	min-height: 17px;
-	height: 20px;
 }
 
 /* Card description */
@@ -166,7 +154,7 @@
 	padding: 25px 30px;
 }
 
-.formidable_page_formidable-applications .ui-widget-overlay {
+.frm-admin-page-applications .ui-widget-overlay {
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -197,7 +185,7 @@
 	margin-bottom: 5px;
 }
 
-.formidable_page_formidable-applications #frm_bs_dropdown .install-now {
+.frm-admin-page-applications #frm_bs_dropdown .install-now {
 	vertical-align: bottom;
 }
 
@@ -210,7 +198,7 @@
 }
 
 #frm_application_category_filter > a {
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 #frm_application_category_filter > a:first-child {
@@ -219,11 +207,6 @@
 
 #frm_application_category_filter > a:last-child {
 	padding-right: 0;
-}
-
-#frm_application_category_filter > a.frm-active-application-category {
-	color: var(--dark-grey);
-	pointer-events: none;
 }
 
 .frm-admin-page-applications #frm_top_bar h1 {
@@ -249,32 +232,23 @@
 #frm_custom_applications_placeholder > div:last-child {
 	text-align: center;
 	max-width: 500px;
-	margin: 0 auto 20px;
+	margin: var(--gap-md) auto;
 	position: relative;
-	top: 20px;
 }
 
 #frm_custom_applications_placeholder > div a {
-	margin-top: 20px;
+	margin-top: var(--gap-md);
 }
 
 @media only screen and (max-width: 1200px) {
 	.frm-application-card {
 		grid-column: span 4/span 4; /* treat as frm4 */
 	}
-
-	.frm-application-card:nth-child(3) ~ .frm-application-card {
-		margin-top: 20px;
-	}
 }
 
 @media only screen and (max-width: 800px) {
 	.frm-application-card {
 		grid-column: span 6/span 6; /* treat as frm6 */
-	}
-
-	.frm-application-card:nth-child(2) ~ .frm-application-card {
-		margin-top: 20px;
 	}
 }
 
@@ -286,9 +260,5 @@
 
 	.frm-application-card {
 		grid-column: span 12/span 12; /* treat as frm12 */
-	}
-
-	.frm-application-card:nth-child(1) ~ .frm-application-card {
-		margin-top: 20px;
 	}
 }
