@@ -19,10 +19,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
 		$form_id  = $this->params['form'];
 		$s_query  = array();
+
 		$join_form_in_query = false;
 
 		$this->items = $this->get_entry_items( $form_id, $per_page, $s_query, $join_form_in_query );
 		$total_items = FrmEntry::getRecordCount( $s_query );
+
 		$this->total_items = $total_items;
 
 		$this->set_pagination_args(
