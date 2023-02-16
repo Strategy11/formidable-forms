@@ -19,10 +19,66 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
 		$form_id  = $this->params['form'];
 
+		$this->items = $this->get_entry_items();
+		$total_items = FrmEntry::getRecordCount( $s_query );
+		$this->total_items = $total_items;
+
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page'    => $per_page,
+			)
+		);
+	}
+
+	private function get_entry_items( $form_id ) {
+		$s_query  = $this->get_search_query( $form_id );
+		$order_by = $this->get_order_by();
+		$limit    = $this->get_limit();
+
+		return FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
+	}
+
+	private function get_order_by() {
+		$orderby = self::get_param(
+			array(
+				'param'   => 'orderby',
+				'default' => 'id',
+			)
+		);
+
+		if ( strpos( $orderby, 'meta' ) !== false ) {
+			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+			$orderby          .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
+		}
+
+		$order = self::get_param(
+			array(
+				'param'   => 'order',
+				'default' => 'DESC',
+			)
+		);
+
+		return FrmDb::esc_order( $orderby . ' ' . $order );
+	}
+
+	private function get_limit() {
+		$page  = $this->get_pagenum();
+		$start = (int) self::get_param(
+			array(
+				'param'   => 'start',
+				'default' => ( $page - 1 ) * $per_page,
+			)
+		);
+
+		return $limit = FrmDb::esc_limit( $start . ',' . $per_page );
+	}
+
+	private function get_search_query( $form_id ) {
 		$s_query = array();
 
 		if ( $form_id ) {
-			$s_query['it.form_id'] = $form_id;
+			$s_query['it.form_id'] = $this->get_form_ids( $form_id );
 			$join_form_in_query    = false;
 		} else {
 			$s_query[]          = array(
@@ -45,47 +101,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 		}
 
-		$s_query = apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
+		return apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
+	}
 
-		$orderby = self::get_param(
-			array(
-				'param'   => 'orderby',
-				'default' => 'id',
-			)
-		);
-
-		if ( strpos( $orderby, 'meta' ) !== false ) {
-			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby          .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
-		}
-
-		$order = self::get_param(
-			array(
-				'param'   => 'order',
-				'default' => 'DESC',
-			)
-		);
-		$order = FrmDb::esc_order( $orderby . ' ' . $order );
-
-		$page  = $this->get_pagenum();
-		$start = (int) self::get_param(
-			array(
-				'param'   => 'start',
-				'default' => ( $page - 1 ) * $per_page,
-			)
-		);
-
-		$limit       = FrmDb::esc_limit( $start . ',' . $per_page );
-		$this->items = FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
-		$total_items = FrmEntry::getRecordCount( $s_query );
-		$this->total_items = $total_items;
-
-		$this->set_pagination_args(
-			array(
-				'total_items' => $total_items,
-				'per_page'    => $per_page,
-			)
-		);
+	private function get_form_ids( $form_id ) {
+		return $form_id;
 	}
 
 	public function no_items() {
