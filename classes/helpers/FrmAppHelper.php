@@ -377,23 +377,29 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check for the IP address in several places
-	 * Used by [ip] shortcode
+	 * Check for the IP address in several places (when custom headers are enabled).
+	 * Used by [ip] shortcode.
 	 *
 	 * @return string The IP address of the current user
 	 */
 	public static function get_ip_address() {
-		$ip_options = array(
-			'HTTP_CLIENT_IP',
-			'HTTP_CF_CONNECTING_IP',
-			'HTTP_X_FORWARDED_FOR',
-			'HTTP_X_FORWARDED',
-			'HTTP_X_CLUSTER_CLIENT_IP',
-			'HTTP_X_REAL_IP',
-			'HTTP_FORWARDED_FOR',
-			'HTTP_FORWARDED',
-			'REMOTE_ADDR',
-		);
+		$settings = FrmAppHelper::get_settings();
+		if ( $settings->custom_header_ip ) {
+			$ip_options = array(
+				'HTTP_CLIENT_IP',
+				'HTTP_CF_CONNECTING_IP',
+				'HTTP_X_FORWARDED_FOR',
+				'HTTP_X_FORWARDED',
+				'HTTP_X_CLUSTER_CLIENT_IP',
+				'HTTP_X_REAL_IP',
+				'HTTP_FORWARDED_FOR',
+				'HTTP_FORWARDED',
+				'REMOTE_ADDR',
+			);
+		} else {
+			$ip_options = array( 'REMOTE_ADDR' );
+		}
+
 		$ip = '';
 		foreach ( $ip_options as $key ) {
 			if ( ! isset( $_SERVER[ $key ] ) ) {

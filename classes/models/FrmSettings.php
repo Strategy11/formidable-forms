@@ -38,6 +38,7 @@ class FrmSettings {
 	public $re_multi;
 
 	public $no_ips;
+	public $custom_header_ip;
 	public $current_form = 0;
 	public $tracking;
 
@@ -119,9 +120,10 @@ class FrmSettings {
 			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
 			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
 
-			'email_to' => '[admin_email]',
-			'no_ips'   => 0,
-			'tracking' => FrmAppHelper::pro_is_installed(),
+			'email_to'         => '[admin_email]',
+			'no_ips'           => 0,
+			'custom_header_ip' => 0,
+			'tracking'         => FrmAppHelper::pro_is_installed(),
 
 			'custom_css' => false,
 		);
@@ -322,7 +324,7 @@ class FrmSettings {
 		$this->load_style       = $params['frm_load_style'];
 		$this->custom_css       = $params['frm_custom_css'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'tracking', 'admin_bar' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? $params[ 'frm_' . $set ] : 0;
 		}
