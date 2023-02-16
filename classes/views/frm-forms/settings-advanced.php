@@ -87,7 +87,7 @@ if ( time() < strtotime( '2023-03-07' ) ) {
 </p>
 
 <?php
-is_callable( 'self::render_spam_settings' ) && self::render_spam_settings( $values );
+is_callable( 'FrmFormsController::render_spam_settings' ) && FrmFormsController::render_spam_settings( $values );
 FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 ?>
 
