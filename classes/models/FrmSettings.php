@@ -3,6 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+#[\AllowDynamicProperties]
 class FrmSettings {
 	public $option_name = 'frm_options';
 	public $menu;
