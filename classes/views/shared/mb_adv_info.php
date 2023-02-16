@@ -101,7 +101,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'value'       => 'id',
 					'show_labels' => true,
 					'echo'        => true,
-				),
+				)
 			);
 			?>
 		</div>
