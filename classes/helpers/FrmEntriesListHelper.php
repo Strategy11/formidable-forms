@@ -32,7 +32,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	private function get_entry_items( $form_id ) {
-		$s_query  = $this->get_search_query( $form_id );
+		$join_form_in_query = false;
+		$s_query  = $this->get_search_query( $form_id, $join_form_in_query );
 		$order_by = $this->get_order_by();
 		$limit    = $this->get_limit();
 
@@ -74,12 +75,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $limit = FrmDb::esc_limit( $start . ',' . $per_page );
 	}
 
-	private function get_search_query( $form_id ) {
+	private function get_search_query( $form_id, &$join_form_in_query ) {
 		$s_query = array();
 
 		if ( $form_id ) {
 			$s_query['it.form_id'] = $this->get_form_ids( $form_id );
-			$join_form_in_query    = false;
 		} else {
 			$s_query[]          = array(
 				'or'               => 1,
