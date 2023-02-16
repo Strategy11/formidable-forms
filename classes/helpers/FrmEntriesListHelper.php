@@ -19,8 +19,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_entries_per_page' );
 		$form_id  = $this->params['form'];
 		$s_query  = array();
+		$join_form_in_query = false;
 
-		$this->items = $this->get_entry_items( $form_id, $per_page, $s_query );
+		$this->items = $this->get_entry_items( $form_id, $per_page, $s_query, $join_form_in_query );
 		$total_items = FrmEntry::getRecordCount( $s_query );
 		$this->total_items = $total_items;
 
@@ -32,16 +33,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 	}
 
-	public function get_entry_items( $form_id, $per_page, &$s_query ) {
-		$join_form_in_query = false;
-		$s_query  = $this->get_search_query( $form_id, $join_form_in_query );
-		$order = $this->get_order_by();
-		$limit    = $this->get_limit( $per_page );
+	protected function get_entry_items( $form_id, $per_page, &$s_query, &$join_form_in_query ) {
+		$s_query = $this->get_search_query( $form_id, $join_form_in_query );
+		$order   = $this->get_order_by();
+		$limit   = $this->get_limit( $per_page );
 
 		return FrmEntry::getAll( $s_query, $order, $limit, true, $join_form_in_query );
 	}
 
-	private function get_order_by() {
+	protected function get_order_by() {
 		$orderby = self::get_param(
 			array(
 				'param'   => 'orderby',
@@ -64,7 +64,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return FrmDb::esc_order( $orderby . ' ' . $order );
 	}
 
-	private function get_limit( $per_page ) {
+	protected function get_limit( $per_page ) {
 		$page  = $this->get_pagenum();
 		$start = (int) self::get_param(
 			array(
@@ -76,7 +76,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $limit = FrmDb::esc_limit( $start . ',' . $per_page );
 	}
 
-	public function get_search_query( $form_id, &$join_form_in_query ) {
+	protected function get_search_query( $form_id, &$join_form_in_query ) {
 		$s_query = array();
 
 		if ( $form_id ) {
@@ -105,7 +105,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return apply_filters( 'frm_entries_list_query', $s_query, compact( 'form_id' ) );
 	}
 
-	public function get_form_ids( $form_id ) {
+	protected function get_form_ids( $form_id ) {
 		return $form_id;
 	}
 
