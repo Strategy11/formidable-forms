@@ -122,7 +122,7 @@ class FrmSettings {
 
 			'email_to'         => '[admin_email]',
 			'no_ips'           => 0,
-			'custom_header_ip' => 0,
+			'custom_header_ip' => false,
 			'tracking'         => FrmAppHelper::pro_is_installed(),
 
 			'custom_css' => false,
@@ -202,6 +202,13 @@ class FrmSettings {
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
+		if ( 'custom_header_ip' === $key ) {
+			if ( false === $value ) {
+				return $value;
+			}
+			return ! empty( $value ) ? 1 : 0;
+		}
+
 		if ( 'custom_css' === $key ) {
 			if ( false === $value ) {
 				// Avoid changing the false default value to an empty string.

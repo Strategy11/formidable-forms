@@ -473,6 +473,31 @@ class FrmAppController {
 
 			FrmInbox::maybe_disable_screen_options();
 		}
+
+		self::maybe_add_ip_warning();
+	}
+
+	/**
+	 * Show a warning for the IP address setting if it hasn't been set.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_add_ip_warning() {
+		$settings = FrmAppHelper::get_settings();
+		if ( false !== $settings->custom_header_ip ) {
+			// The setting has been changed from the false default (to either 1 or 0), so stop showing the message.
+			return;
+		}
+
+		add_filter(
+			'frm_message_list',
+			function( $show_messages ) {
+				$show_messages['ip_msg'] = 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to Global Settings and enabling the "Use custom headers when retrieving IPs with form submissions." setting.';
+				return $show_messages;
+			}
+		);
 	}
 
 	/**
