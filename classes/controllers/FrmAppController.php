@@ -491,6 +491,12 @@ class FrmAppController {
 			return;
 		}
 
+		$latest_entry_ip = FrmDb::get_var( 'frm_items', array(), 'ip', array( 'order_by' => 'id DESC' ) );
+		if ( $latest_entry_ip ) {
+			// Only show the message if the latest entry has no IP.
+			return;
+		}
+
 		add_filter(
 			'frm_message_list',
 			function( $show_messages ) {
