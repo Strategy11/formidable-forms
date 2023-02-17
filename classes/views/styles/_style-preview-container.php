@@ -16,7 +16,7 @@ if ( $sample_form_is_on ) {
 }
 ?>
 <div id="frm_style_preview">
-	<div class="frm-m-12">
+	<div class="frm-m-12 frm-mt-0">
 		<?php
 		// If a $message, $warnings, or $notes variable are not empty, it will be rendered here.
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
