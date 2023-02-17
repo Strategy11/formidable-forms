@@ -10,9 +10,9 @@
 		<file name="formidable.php" />
 		<directory name="classes" />
 		<directory name="deprecated" />
+		<directory name="classes/views/" />
 		<ignoreFiles>
 			<directory name="vendor" />
-			<directory name="classes/views/" />
 		</ignoreFiles>
 	</projectFiles>
 	<stubs>
@@ -58,5 +58,46 @@
 				<file name="classes/widgets/FrmShowForm.php" />
 			</errorLevel>
 		</MethodSignatureMustProvideReturnType>
+		<!-- Add exceptions for classes/views files. -->
+		<UndefinedGlobalVariable>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</UndefinedGlobalVariable>
+		<UndefinedVariable>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</UndefinedVariable>
+		<NonStaticSelfCall>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</NonStaticSelfCall>
+		<NullReference>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</NullReference>
+		<InvalidScope>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</InvalidScope>
+		<InaccessibleMethod>
+			<errorLevel type="suppress">
+				<directory name="classes/views" />
+			</errorLevel>
+		</InaccessibleMethod>
+		<ParadoxicalCondition>
+			<errorLevel type="suppress">
+				<file name="classes/views/frm-form-actions/_action_inside.php" />
+			</errorLevel>
+		</ParadoxicalCondition>
+		<ParamNameMismatch>
+			<errorLevel type="suppress">
+				<file name="classes/views/frm-form-actions/email_action.php" />
+			</errorLevel>
+		</ParamNameMismatch>
 	</issueHandlers>
 </psalm>
