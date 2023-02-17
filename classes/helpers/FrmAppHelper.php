@@ -383,8 +383,7 @@ class FrmAppHelper {
 	 * @return string The IP address of the current user
 	 */
 	public static function get_ip_address() {
-		$settings = FrmAppHelper::get_settings();
-		if ( $settings->custom_header_ip ) {
+		if ( self::should_use_custom_header_ip() ) {
 			$ip_options = array(
 				'HTTP_CLIENT_IP',
 				'HTTP_CF_CONNECTING_IP',
@@ -417,6 +416,31 @@ class FrmAppHelper {
 		}
 
 		return sanitize_text_field( $ip );
+	}
+
+	/**
+	 * Check if we should check every HTTP header or just $_SERVER['REMOTE_ADDR'].
+	 * The other HTTP headers can be spoofed so this isn't recommended.
+	 * But in some cases (like reverse proxies), the IP may be empty if you use $_SERVER['REMOTE_ADDR'].
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_use_custom_header_ip() {
+		$settings                    = FrmAppHelper::get_settings();
+		$should_use_custom_header_ip = ! $settings->no_ips && $settings->custom_header_ip;
+
+		/**
+		 * Filter whether to check spoofable HTTP headers.
+		 * This uses the custom_header_ip setting, but it is hidden if the GDPR option is also on.
+		 * As the IP is still checked for blacklist checks, someone with the GDPR option may still want to enable this when behind a reverse proxy.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $should_use_custom_header_ip
+		 */
+		return apply_filters( 'frm_use_custom_header_ip', $should_use_custom_header_ip );
 	}
 
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {

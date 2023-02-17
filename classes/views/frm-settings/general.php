@@ -51,7 +51,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
-<p>
+<?php
+$custom_header_ip_wrapper_params = array();
+if ( $frm_settings->no_ips ) {
+	$custom_header_ip_wrapper_params['class'] = 'frm_hidden';
+}
+?>
+<p <?php FrmAppHelper::array_to_html_params( $custom_header_ip_wrapper_params, true ); ?>>
 	<label for="frm_custom_header_ip">
 		<input type="checkbox" name="frm_custom_header_ip" id="frm_custom_header_ip" value="1" <?php checked( $frm_settings->custom_header_ip, 1 ); ?> />
 		<?php esc_html_e( 'Use custom headers when retrieving IPs with form submissions.', 'formidable' ); ?>
