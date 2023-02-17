@@ -4056,6 +4056,8 @@ label input[type="checkbox"], label input[type="radio"] {
 
 .frm_rte {
 	background: url(../images/rte.png) no-repeat;
+	background-size: clamp( 400px, 100%, 654px) auto;
+
 }
 
 .frm_rte .howto {
@@ -4111,9 +4113,10 @@ label input[type="checkbox"], label input[type="radio"] {
 
 .frm_sorting .frm_rte textarea {
 	width: 653px;
+	max-width: 100%;
 	background: #fff;
 	margin: 1px 0 0;
-	border: 1px solid #dfdfdf;
+	border: 1px solid var(--grey-300);
 	border-top: none;
 	-moz-border-radius: 0;
 	-webkit-border-radius: 0;
