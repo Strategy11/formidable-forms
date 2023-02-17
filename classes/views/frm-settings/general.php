@@ -61,7 +61,7 @@ if ( $frm_settings->no_ips ) {
 	<label for="frm_custom_header_ip">
 		<input type="checkbox" name="frm_custom_header_ip" id="frm_custom_header_ip" value="1" <?php checked( $frm_settings->custom_header_ip, 1 ); ?> />
 		<?php esc_html_e( 'Use custom headers when retrieving IPs with form submissions.', 'formidable' ); ?>
-		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'In some server configurations, like when a reverse proxy is used, IP information from $_SERVER[\'REMOTE_ADDR\'] may not be accurate and needs to be retrieved from other header values likes X-Forwarded-For. As these other headers can be spoofed, it is only recommended to turn on this setting if IP addresses appear inaccurate in form entries.', 'formidable' ); ?>"></span>
+		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ); ?>"></span>
 	</label>
 </p>
 
