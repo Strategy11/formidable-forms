@@ -732,7 +732,6 @@ ul.frm_form_nav > li {
 .frm-white-body .columns-2 > div {
 	overflow-y: auto;
 	box-sizing: border-box;
-    position: relative;
 }
 
 .frm_wrap .columns-2 .frm-right-panel,

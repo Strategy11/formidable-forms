@@ -470,20 +470,16 @@ The label in the preview should use the label color setting.
 	box-shadow: none;
 }
 
-#frm_new_style_trigger_wrapper {
-	position: absolute;
-	right: 15px;
+/* Break the new style trigger into a separate line on small screens to avoid overlapping with the Enable Formidable styling toggle. */
+#frm_style_sidebar > .frm-flex-justify {
+	gap: var(--gap-sm);
+	flex-wrap: wrap;
 }
 
 /* RTL Styling */
 body.rtl #frm_toggle_sample_form {
 	right: unset;
 	left: 40px;
-}
-
-body.rtl #frm_new_style_trigger_wrapper {
-	right: unset;
-	left: 15px;
 }
 
 body.rtl .frm-input-style-example {
@@ -502,16 +498,6 @@ body.rtl .frm-style-card-separator {
 .frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
 	pointer-events: none;
 	opacity: 0.5;
-}
-
-@media only screen and (max-width: 900px) {
-	/* Break the new style trigger into a separate line to avoid overlapping with the Enable Formidable styling toggle. */
-	#frm_new_style_trigger_wrapper {
-		position: static;
-		display: flex;
-		justify-content: flex-end;
-		margin-bottom: 10px;
-	}
 }
 
 @media only screen and (max-width: 782px) {
