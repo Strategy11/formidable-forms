@@ -499,7 +499,7 @@ class FrmAppController {
 		add_filter(
 			'frm_message_list',
 			function( $show_messages ) {
-				$global_settings_link = admin_url( 'admin.php?page=formidable-settings' );
+				$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
 				$show_messages['ip_msg'] = 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to <a href="' . esc_url( $global_settings_link ) . '">Global Settings</a> and enabling the "Use custom headers when retrieving IPs with form submissions." setting.';
 				return $show_messages;
 			}
