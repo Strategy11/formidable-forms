@@ -491,9 +491,8 @@ class FrmAppController {
 			return;
 		}
 
-		$latest_entry_ip = FrmDb::get_var( 'frm_items', array(), 'ip', array( 'order_by' => 'id DESC' ) );
-		if ( $latest_entry_ip ) {
-			// Only show the message if the latest entry has no IP.
+		if ( ! self::is_behind_proxy() ) {
+			// This message is only applicable when where is a reverse proxy.
 			return;
 		}
 
@@ -504,6 +503,27 @@ class FrmAppController {
 				return $show_messages;
 			}
 		);
+	}
+
+	/**
+	 * Check if any reverse proxy headers are set.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_behind_proxy() {
+		$http_proxy_headers = array( 'CLIENT_IP', 'CF_CONNECTING_IP', 'X_FORWARDED_FOR', 'X_FORWARDED', 'X_CLUSTER_CLIENT_IP', 'X_REAL_IP', 'FORWARDED_FOR', 'FORWARDED' );
+		foreach ( $http_proxy_headers as $proxy_header ) {
+			$ip = trim( FrmAppHelper::get_server_value( 'HTTP_' . $proxy_header ) );
+			if ( ! $ip ) {
+				continue;
+			}
+
+			// Return true for anything that isn't empty but ignoring values like ::1.
+			return 0 !== strpos( $ip, '::' );
+		}
+		return false;
 	}
 
 	/**
