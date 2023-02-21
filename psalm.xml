@@ -79,11 +79,11 @@
 				<directory name="classes/views" />
 			</errorLevel>
 		</NullReference>
-		<InaccessibleMethod>
+		<InvalidScope>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
 			</errorLevel>
-		</InaccessibleMethod>
+		</InvalidScope>
 		<ParadoxicalCondition>
 			<errorLevel type="suppress">
 				<file name="classes/views/frm-form-actions/_action_inside.php" />
