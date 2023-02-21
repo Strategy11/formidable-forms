@@ -21,11 +21,23 @@ class FrmStylesPreviewHelper {
 	private $form_includes_captcha = false;
 
 	/**
+	 * Track the field ids with the default label position.
+	 * A field with a default label position will have a frm-default-label-position class in the styler preview.
+	 * Only fields with this class will change when you update the position setting in the styler.
+	 *
+	 * @since 6.0.1
+	 *
+	 * @var array
+	 */
+	private $default_label_position_field_ids;
+
+	/**
 	 * @param string|int $form_id
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
 		$this->form_id = (int) $form_id;
+		$this->default_label_position_field_ids = array();
 	}
 
 	/**
@@ -40,6 +52,51 @@ class FrmStylesPreviewHelper {
 		add_filter( 'frm_run_honeypot', '__return_false' ); // We don't need the honeypot in the preview so leave it out.
 		$this->hide_captcha_fields();
 		$this->disable_javascript_validation();
+		$this->add_a_div_class_for_default_label_positions();
+	}
+
+	/**
+	 * Add a frm-default-label-position class to any field with a default label position.
+	 * A field with a custom label position shouldn't ever change in the styler preview.
+	 *
+	 * @since 6.0.1
+	 * @return void
+	 */
+	private function add_a_div_class_for_default_label_positions() {
+		// Only fields with no label position set hit this filter, so track those for the frm_field_div_classes filter.
+		add_filter(
+			'frm_html_label_position',
+			/**
+			 * @param string $position
+			 * @param object|array $field
+			 * @return string
+			 */
+			function( $position, $field ) {
+				if ( is_array( $field ) ) {
+					$this->default_label_position_field_ids[] = (int) $field['id'];
+				}
+				return $position;
+			},
+			10,
+			2
+		);
+
+		add_filter(
+			'frm_field_div_classes',
+			/**
+			 * @param string       $classes
+			 * @param object|array $field
+			 * @return string
+			 */
+			function( $classes, $field ) {
+				if ( is_array( $field ) && in_array( (int) $field['id'], $this->default_label_position_field_ids, true ) ) {
+					$classes .= ' frm-default-label-position';
+				}
+				return $classes;
+			},
+			10,
+			2
+		);
 	}
 
 	/**

@@ -1289,8 +1289,6 @@
 	/**
 	 * Update label container classes when the label "Position" setting is changed.
 	 *
-	 * @todo This doesn't work yet with the "My form" preview.
-	 *
 	 * @returns {void}
 	 */
 	function setPosClass() {
@@ -1302,7 +1300,7 @@
 			value = 'none';
 		}
 
-		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field' ).forEach( container => {
+		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field.frm-default-label-position, #frm_sample_form .frm_form_field' ).forEach( container => {
 			const input                 = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
 			const shouldForceTopStyling = 'inside' === value && ( ! input || 'hidden' === input.type ); // We do not want file upload to use floating labels, or inline datepickers, which both use hidden inputs.
 			const currentValue          = shouldForceTopStyling ? 'top' : value;
