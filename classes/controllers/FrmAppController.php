@@ -516,12 +516,10 @@ class FrmAppController {
 		$http_proxy_headers = array( 'CLIENT_IP', 'CF_CONNECTING_IP', 'X_FORWARDED_FOR', 'X_FORWARDED', 'X_CLUSTER_CLIENT_IP', 'X_REAL_IP', 'FORWARDED_FOR', 'FORWARDED' );
 		foreach ( $http_proxy_headers as $proxy_header ) {
 			$ip = trim( FrmAppHelper::get_server_value( 'HTTP_' . $proxy_header ) );
-			if ( ! $ip ) {
-				continue;
-			}
-
 			// Return true for anything that isn't empty but ignoring values like ::1.
-			return 0 !== strpos( $ip, '::' );
+			if ( $ip && 0 !== strpos( $ip, '::' ) ) {
+				return true;
+			}
 		}
 		return false;
 	}
