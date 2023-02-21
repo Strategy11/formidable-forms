@@ -204,13 +204,6 @@ class FrmSettings {
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
-		if ( 'custom_header_ip' === $key ) {
-			if ( false === $value ) {
-				return $value;
-			}
-			return $value ? 1 : 0;
-		}
-
 		if ( 'custom_css' === $key ) {
 			if ( false === $value ) {
 				// Avoid changing the false default value to an empty string.
