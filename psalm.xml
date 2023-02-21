@@ -79,11 +79,6 @@
 				<directory name="classes/views" />
 			</errorLevel>
 		</NullReference>
-		<InvalidScope>
-			<errorLevel type="suppress">
-				<directory name="classes/views" />
-			</errorLevel>
-		</InvalidScope>
 		<InaccessibleMethod>
 			<errorLevel type="suppress">
 				<directory name="classes/views" />
