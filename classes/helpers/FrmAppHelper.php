@@ -383,23 +383,9 @@ class FrmAppHelper {
 	 * @return string The IP address of the current user
 	 */
 	public static function get_ip_address() {
-		if ( self::should_use_custom_header_ip() ) {
-			$ip_options = array(
-				'HTTP_CLIENT_IP',
-				'HTTP_CF_CONNECTING_IP',
-				'HTTP_X_FORWARDED_FOR',
-				'HTTP_X_FORWARDED',
-				'HTTP_X_CLUSTER_CLIENT_IP',
-				'HTTP_X_REAL_IP',
-				'HTTP_FORWARDED_FOR',
-				'HTTP_FORWARDED',
-				'REMOTE_ADDR',
-			);
-		} else {
-			$ip_options = array( 'REMOTE_ADDR' );
-		}
+		$ip_options = self::should_use_custom_header_ip() ? self::get_custom_header_keys_for_ip() : array( 'REMOTE_ADDR' );
+		$ip         = '';
 
-		$ip = '';
 		foreach ( $ip_options as $key ) {
 			if ( ! isset( $_SERVER[ $key ] ) ) {
 				continue;
@@ -407,7 +393,7 @@ class FrmAppHelper {
 
 			$key = self::get_server_value( $key );
 			foreach ( explode( ',', $key ) as $ip ) {
-				$ip = trim( $ip ); // just to be safe.
+				$ip = trim( $ip ); // Just to be safe.
 
 				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
 					return sanitize_text_field( $ip );
@@ -416,6 +402,25 @@ class FrmAppHelper {
 		}
 
 		return sanitize_text_field( $ip );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_custom_header_keys_for_ip() {
+		return array(
+			'HTTP_CLIENT_IP',
+			'HTTP_CF_CONNECTING_IP',
+			'HTTP_X_FORWARDED_FOR',
+			'HTTP_X_FORWARDED',
+			'HTTP_X_CLUSTER_CLIENT_IP',
+			'HTTP_X_REAL_IP',
+			'HTTP_FORWARDED_FOR',
+			'HTTP_FORWARDED',
+			'REMOTE_ADDR',
+		);
 	}
 
 	/**
