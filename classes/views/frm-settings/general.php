@@ -46,15 +46,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p>
 	<label for="frm_no_ips">
-		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> />
+		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> data-frmhide=".frm_custom_header_ip_cont" />
 		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDPR compliance.', 'formidable' ); ?>
 	</label>
 </p>
 
 <?php
-$custom_header_ip_wrapper_params = array();
+$custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont' );
 if ( $frm_settings->no_ips ) {
-	$custom_header_ip_wrapper_params['class'] = 'frm_hidden';
+	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }
 ?>
 <p <?php FrmAppHelper::array_to_html_params( $custom_header_ip_wrapper_params, true ); ?>>

@@ -458,16 +458,31 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
+	/**
+	 * Toggle a class on target elements when an anchor is clicked, or when a radio or checkbox has been selected.
+	 *
+	 * @param {Event} e Event with either the change or click type.
+	 * @returns {false}
+	 */
 	function hideShowItem( e ) {
 		/*jshint validthis:true */
-		var hide = this.getAttribute( 'data-frmhide' ),
-			show = this.getAttribute( 'data-frmshow' ),
-			toggleClass = this.getAttribute( 'data-toggleclass' );
+		let hide = this.getAttribute( 'data-frmhide' );
+		let show = this.getAttribute( 'data-frmshow' );
+
+		// Flip unchecked checkboxes so an off value undoes the on value.
+		if ( isUncheckedCheckbox( this ) ) {
+			if ( hide !== null ) {
+				show = hide;
+				hide = null;
+			} else if ( show !== null ) {
+				hide = show;
+				show = null;
+			}
+		}
 
 		e.preventDefault();
-		if ( toggleClass === null ) {
-			toggleClass = 'frm_hidden';
-		}
+
+		const toggleClass = this.getAttribute( 'data-toggleclass' ) || 'frm_hidden';
 
 		if ( hide !== null ) {
 			jQuery( hide ).addClass( toggleClass );
@@ -486,6 +501,10 @@ function frmAdminBuildJS() {
 		}
 
 		return false;
+	}
+
+	function isUncheckedCheckbox( element ) {
+		return 'INPUT' === element.nodeName && 'checkbox' === element.type && ! element.checked;
 	}
 
 	function setupMenuOffset() {
