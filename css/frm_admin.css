@@ -715,7 +715,7 @@ ul.frm_form_nav > li {
 	display: block;
 }
 
-.frm_flex_wrap {
+.frm_single_entry_page .frm_forms .columns-2 {
 	flex-wrap: wrap;
 }
 
