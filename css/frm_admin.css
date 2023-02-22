@@ -8645,7 +8645,7 @@ Responsive Design
 		padding: 20px;
 	}
 
-	.frm_page_container .columns-2,
+	.frm_wrap .columns-2,
 	.frm_wrap .frm_page_container {
 		height: auto;
 		display: block;
