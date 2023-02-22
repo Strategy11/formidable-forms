@@ -2125,15 +2125,18 @@ class FrmFormsController {
 	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
+		$opt    = 'success_action';
+		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
+
 		if ( ! empty( $atts['entry_id'] ) ) { // Check against entry has already submitted error.
 			$met_actions = self::get_met_on_submit_actions( $atts );
 			if ( $met_actions ) {
-				return $met_actions;
+				$method = $met_actions;
+			} else {
+				$method = 'message';
 			}
 		}
 
-		$opt    = 'success_action';
-		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
 
 		if ( $method != 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
