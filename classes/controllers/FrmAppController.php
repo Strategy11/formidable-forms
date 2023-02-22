@@ -496,6 +496,11 @@ class FrmAppController {
 			return;
 		}
 
+		if ( FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_text_field' ) ) {
+			// Avoid the message on a POST action. We don't want to show the message if we're saving global settings.
+			return;
+		}
+
 		add_filter(
 			'frm_message_list',
 			function( $show_messages ) {
