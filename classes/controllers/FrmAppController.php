@@ -60,7 +60,13 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_full_screen() ) {
-			$classes .= apply_filters( 'frm_admin_full_screen_class', ' frm-full-screen folded' );
+			$full_screen_on = self::get_full_screen_setting();
+			$add_class = '';
+			if ( $full_screen_on ) {
+				$add_class = ' frm-full-screen is-fullscreen-mode';
+				wp_enqueue_style( 'wp-edit-post' ); // Load the CSS for .is-fullscreen-mode.
+			}
+			$classes .= apply_filters( 'frm_admin_full_screen_class', $add_class );
 		}
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -68,6 +74,25 @@ class FrmAppController {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Get the full screen mode setting from the block editor.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function get_full_screen_setting() {
+		global $wpdb;
+		$meta_key = $wpdb->get_blog_prefix() . 'persisted_preferences';
+
+		$prefs = get_user_meta( get_current_user_id(), $meta_key, true );
+		if ( $prefs && isset( $prefs['core/edit-post']['fullscreenMode'] ) ) {
+			return $prefs['core/edit-post']['fullscreenMode'];
+		}
+
+		return true;
 	}
 
 	/**
@@ -94,6 +119,7 @@ class FrmAppController {
 			'formidable',
 			'formidable-entries',
 			'formidable-views',
+			'formidable-views-editor',
 			'formidable-pro-upgrade',
 			'formidable-addons',
 			'formidable-import',
@@ -461,8 +487,6 @@ class FrmAppController {
 			self::admin_js();
 		}
 
-		self::disable_admin_menus();
-
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$action = FrmAppHelper::get_param( 'frm_action' );
 
@@ -473,27 +497,6 @@ class FrmAppController {
 
 			FrmInbox::maybe_disable_screen_options();
 		}
-	}
-
-	/**
-	 * Remove the admin menus and hide the gaps on full screen pages.
-	 *
-	 * @since 6.0
-	 */
-	private static function disable_admin_menus() {
-		if ( ! FrmAppHelper::is_full_screen() ) {
-			return;
-		}
-
-		wp_deregister_script( 'admin-bar' );
-		wp_deregister_style( 'admin-bar' );
-		remove_action( 'admin_footer', 'wp_admin_bar_render', 1000 );
-		add_action(
-			'admin_head',
-			function() {
-				echo '<style>html.wp-toolbar{padding-top:0}</style>';
-			}
-		);
 	}
 
 	/**

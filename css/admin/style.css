@@ -7,19 +7,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	flex-direction: row;
 }
 
-#frm_style_sidebar,
-#frm_style_preview {
-	height: calc( 100vh - 95px );
-	box-sizing: border-box;
-	position: relative;
-}
-
-#frm_style_sidebar {
-	vertical-align: top;
-	box-sizing: border-box;
-	overflow-y: auto;
-}
-
 #frm_style_sidebar .frm-inner-content {
 	padding-left: 0;
 	padding-right: 0;
@@ -34,13 +21,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 #frm_style_sidebar .accordion-section-title::after {
 	right: 0;
 	color: var(--grey-400);
-}
-
-#frm_style_preview {
-	overflow-y: auto;
-	overflow-x: hidden;
-	flex: 2;
-	border-left: 1px solid var(--sidebar-hover);
 }
 
 #frm_active_style_form:not(.frm_hidden) ~ #frm_sample_form,
@@ -490,20 +470,16 @@ The label in the preview should use the label color setting.
 	box-shadow: none;
 }
 
-#frm_new_style_trigger_wrapper {
-	position: absolute;
-	right: 15px;
+/* Break the new style trigger into a separate line on small screens to avoid overlapping with the Enable Formidable styling toggle. */
+#frm_style_sidebar > .frm-flex-justify {
+	gap: var(--gap-sm);
+	flex-wrap: wrap;
 }
 
 /* RTL Styling */
 body.rtl #frm_toggle_sample_form {
 	right: unset;
 	left: 40px;
-}
-
-body.rtl #frm_new_style_trigger_wrapper {
-	right: unset;
-	left: 15px;
 }
 
 body.rtl .frm-input-style-example {
@@ -522,24 +498,6 @@ body.rtl .frm-style-card-separator {
 .frm-styles-globally-disabled ~ #frm_style_preview #frm_edit_style {
 	pointer-events: none;
 	opacity: 0.5;
-}
-
-@media only screen and (max-width: 1200px) {
-	/* Adjust the height to account for the taller header when the tabs drop to a second line. */
-	#frm_style_sidebar,
-	#frm_style_preview {
-		height: calc( 100vh - 135px );
-	}
-}
-
-@media only screen and (max-width: 900px) {
-	/* Break the new style trigger into a separate line to avoid overlapping with the Enable Formidable styling toggle. */
-	#frm_new_style_trigger_wrapper {
-		position: static;
-		display: flex;
-		justify-content: flex-end;
-		margin-bottom: 10px;
-	}
 }
 
 @media only screen and (max-width: 782px) {
