@@ -7602,8 +7602,24 @@ function frmAdminBuildJS() {
 
 		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
 
+		function setSearchableText() {
+			const items = Array.from( document.querySelectorAll( '.frm-templates-list.frm-categories-list .frm-searchable-template.frm-ready-made-solution' ) );
+			items.forEach( item => {
+				let innerText;
+
+				const itemFeaturedForm = item.querySelector( '.frm-featured-form' );
+				if ( itemFeaturedForm ) {
+					innerText = itemFeaturedForm.innerText.toLowerCase();
+				} else {
+					innerText = item.querySelector( 'h3' ).innerText.toLowerCase();
+				}
+				item.setAttribute( 'frm-search-text', innerText );
+			});
+		}
+
 		function addTemplatesOnFetchSuccess( data ) {
 			data.templates.forEach( addTemplateToCategoryList );
+			setSearchableText();
 		}
 
 		function addTemplateToCategoryList( template ) {
@@ -9092,17 +9108,8 @@ function frmAdminBuildJS() {
 		}
 
 		for ( i = 0; i < items.length; i++ ) {
-			var innerText;
-			if ( items[i].classList.contains( 'frm-searchable-template' ) ) {
-				const itemFeaturedForm = items[i].querySelector( '.frm-featured-form' );
-				if ( itemFeaturedForm ) {
-					innerText = itemFeaturedForm.innerText.toLowerCase();
-				} else {
-					innerText = items[i].querySelector( 'h3' ).innerText.toLowerCase();
-				}
-			} else {
-				innerText = items[i].innerText.toLowerCase();
-			}
+			var innerText = items[i].innerText.toLowerCase();
+
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
@@ -9576,8 +9583,17 @@ function frmAdminBuildJS() {
 		}, options );
 	}
 
+	function initSearch( inputID ) {
+		const searchInput = document.getElementById( inputID );
+		searchInput.classList.remove( 'frm-auto-search' );
+		frmDom.search.init( searchInput, 'control-section accordion-section' );
+		frmDom.search.init( searchInput, 'frm-searchable-template' );
+	}
+
 	return {
 		init: function() {
+			initSearch( 'template-search-input' );
+
 			s = {};
 
 			// Bootstrap dropdown button
