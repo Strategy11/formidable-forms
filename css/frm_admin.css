@@ -1853,7 +1853,8 @@ div.frm_updated_message {
 	margin: 5px 65px;
 }
 
-#form_global_settings #post-body-content > .frm_updated_message {
+#form_global_settings #post-body-content > .frm_updated_message,
+#form_global_settings #post-body-content > .frm_warning_style {
 	margin: 5px 25px;
 }
 
