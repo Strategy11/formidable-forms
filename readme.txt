@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 6.0.1
+Stable tag: 6.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.1 =
+* Fix: Forms with redirect confirmation actions were redirecting when saving a draft entry.
+* Fix: An extra comma was causing the editor for views to break in PHP versions 7.2 and lower.
+* Fix: Formidable settings have been updated to avoid PHP 8.2 deprecation messages.
+* Fix: Label position styles were being applied to all fields in styler previews, not just fields with the default label position setting.
+* Fix: The sidebar has been moved back to below the entry details when printing an entry.
+
 = 6.0.1 =
 * Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
 
