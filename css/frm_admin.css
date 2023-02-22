@@ -715,6 +715,10 @@ ul.frm_form_nav > li {
 	display: block;
 }
 
+.frm_flex_wrap {
+	flex-wrap: wrap;
+}
+
 .frm-new-entry .columns-2 {
 	border: none;
 }
