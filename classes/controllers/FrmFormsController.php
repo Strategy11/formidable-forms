@@ -2496,7 +2496,7 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	public static function show_message_after_save( $atts ) {
-		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'] );
+		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
 
 		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
 			self::show_form_after_submit( $atts );
@@ -2606,12 +2606,19 @@ class FrmFormsController {
 	 * Prepare the success message before it's shown
 	 *
 	 * @since 2.05
+	 * @since 6.0.x Added the third parameter.
+	 *
+	 * @param object $form     Form object.
+	 * @param int    $entry_id Entry ID.
+	 * @param array  $args     See {@see FrmFormsController::run_success_action()}.
+	 * @return string
 	 */
-	private static function prepare_submit_message( $form, $entry_id ) {
+	private static function prepare_submit_message( $form, $entry_id, $args = array() ) {
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
+		$opt          = isset( $args['success_opt'] ) ? $args['success_opt'] : 'success';
 
 		if ( $entry_id && is_numeric( $entry_id ) ) {
-			$message = isset( $form->options['success_msg'] ) ? $form->options['success_msg'] : $frm_settings->success_msg;
+			$message = isset( $form->options[ $opt . '_msg' ] ) ? $form->options[ $opt . '_msg' ] : $frm_settings->success_msg;
 			$class   = 'frm_message';
 		} else {
 			$message = $frm_settings->failed_msg;
