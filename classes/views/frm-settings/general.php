@@ -46,8 +46,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p>
 	<label for="frm_no_ips">
-		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> />
+		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> data-frmhide=".frm_custom_header_ip_cont" />
 		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDPR compliance.', 'formidable' ); ?>
+	</label>
+</p>
+
+<?php
+$custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont' );
+if ( $frm_settings->no_ips ) {
+	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
+}
+?>
+<p <?php FrmAppHelper::array_to_html_params( $custom_header_ip_wrapper_params, true ); ?>>
+	<label for="frm_custom_header_ip">
+		<input type="checkbox" name="frm_custom_header_ip" id="frm_custom_header_ip" value="1" <?php checked( $frm_settings->custom_header_ip, 1 ); ?> />
+		<?php esc_html_e( 'Use custom headers when retrieving IPs with form submissions.', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ); ?>"></span>
 	</label>
 </p>
 

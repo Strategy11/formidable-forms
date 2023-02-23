@@ -602,4 +602,19 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( 3, FrmAppHelper::count_decimals( 13.123 ) );
 		$this->assertEquals( 3, FrmAppHelper::count_decimals( '13.123' ) );
 	}
+
+	/**
+	 * @covers FrmAppHelper::get_ip_address
+	 */
+	public function test_get_ip_address() {
+		$ip_address = FrmAppHelper::get_ip_address();
+
+		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address() );
+
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '1.2.3.4';
+
+		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address(), 'When custom header IPs are disabled, ignore headers like HTTP_X_FORWARDED_FOR.' );
+		add_filter( 'frm_use_custom_header_ip', '__return_true' );
+		$this->assertEquals( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
+	}
 }

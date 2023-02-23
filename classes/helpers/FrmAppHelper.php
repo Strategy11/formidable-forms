@@ -377,13 +377,40 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Check for the IP address in several places
-	 * Used by [ip] shortcode
+	 * Check for the IP address in several places (when custom headers are enabled).
+	 * Used by [ip] shortcode.
 	 *
 	 * @return string The IP address of the current user
 	 */
 	public static function get_ip_address() {
-		$ip_options = array(
+		$ip_options = self::should_use_custom_header_ip() ? self::get_custom_header_keys_for_ip() : array( 'REMOTE_ADDR' );
+		$ip         = '';
+
+		foreach ( $ip_options as $key ) {
+			if ( ! isset( $_SERVER[ $key ] ) ) {
+				continue;
+			}
+
+			$key = self::get_server_value( $key );
+			foreach ( explode( ',', $key ) as $ip ) {
+				$ip = trim( $ip ); // Just to be safe.
+
+				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
+					return sanitize_text_field( $ip );
+				}
+			}
+		}
+
+		return sanitize_text_field( $ip );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function get_custom_header_keys_for_ip() {
+		return array(
 			'HTTP_CLIENT_IP',
 			'HTTP_CF_CONNECTING_IP',
 			'HTTP_X_FORWARDED_FOR',
@@ -394,23 +421,31 @@ class FrmAppHelper {
 			'HTTP_FORWARDED',
 			'REMOTE_ADDR',
 		);
-		$ip = '';
-		foreach ( $ip_options as $key ) {
-			if ( ! isset( $_SERVER[ $key ] ) ) {
-				continue;
-			}
+	}
 
-			$key = self::get_server_value( $key );
-			foreach ( explode( ',', $key ) as $ip ) {
-				$ip = trim( $ip ); // just to be safe.
+	/**
+	 * Check if we should check every HTTP header or just $_SERVER['REMOTE_ADDR'].
+	 * The other HTTP headers can be spoofed so this isn't recommended.
+	 * But in some cases (like reverse proxies), the IP may be empty if you use $_SERVER['REMOTE_ADDR'].
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function should_use_custom_header_ip() {
+		$settings                    = self::get_settings();
+		$should_use_custom_header_ip = ! $settings->no_ips && $settings->custom_header_ip;
 
-				if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ) {
-					return sanitize_text_field( $ip );
-				}
-			}
-		}
-
-		return sanitize_text_field( $ip );
+		/**
+		 * Filter whether to check spoofable HTTP headers.
+		 * This uses the custom_header_ip setting, but it is hidden if the GDPR option is also on.
+		 * As the IP is still checked for blacklist checks, someone with the GDPR option may still want to enable this when behind a reverse proxy.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $should_use_custom_header_ip
+		 */
+		return apply_filters( 'frm_use_custom_header_ip', $should_use_custom_header_ip );
 	}
 
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
