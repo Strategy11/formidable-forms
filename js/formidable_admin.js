@@ -8880,13 +8880,14 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		initSearch( 'template-search-input' );
+		initSearch( 'template-search-input', [ 'control-section accordion-section', 'frm-searchable-template frm-ready-made-solution' ]);
 	}
 
-	function initSearch( inputID ) {
+	function initSearch( inputID, itemClasses ) {
 		const searchInput = document.getElementById( inputID );
-		frmDom.search.init( searchInput, 'control-section accordion-section' );
-		frmDom.search.init( searchInput, 'frm-searchable-template frm-ready-made-solution' );
+		itemClasses.forEach( itemClass => {
+			frmDom.search.init( searchInput, itemClass );
+		});
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
