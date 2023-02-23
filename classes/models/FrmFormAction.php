@@ -550,7 +550,7 @@ class FrmFormAction {
 	}
 
 	public function get_all( $form_id = false, $atts = array() ) {
-		if ( is_array( $atts ) && ! isset( $atts['limit'] ) ) {
+		if ( is_array( $atts ) && ! isset( $atts['limit'] ) && $this->action_options['limit'] > 99 ) {
 			$atts['limit'] = $this->action_options['limit'];
 		}
 
