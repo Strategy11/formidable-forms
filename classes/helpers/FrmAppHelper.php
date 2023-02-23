@@ -433,7 +433,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	private static function should_use_custom_header_ip() {
-		$settings                    = FrmAppHelper::get_settings();
+		$settings                    = self::get_settings();
 		$should_use_custom_header_ip = ! $settings->no_ips && $settings->custom_header_ip;
 
 		/**
