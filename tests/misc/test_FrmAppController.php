@@ -131,12 +131,12 @@ class test_FrmAppController extends FrmUnitTest {
 				'expected' => true,
 			),
 			array(
-				'version'  => '6.0',
+				'version'  => '7.0', // This version should be later than the current version (Bump this to 8 when v7.0 is released).
 				'db'       => FrmAppHelper::$db_version + 1,
 				'expected' => false,
 			),
 			array(
-				'version'  => '6.01.10',
+				'version'  => '7.01.10',
 				'db'       => 900,
 				'expected' => false,
 			),
