@@ -7602,7 +7602,7 @@ function frmAdminBuildJS() {
 
 		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
 
-		function setSearchableText() {
+		function setTemplatesSearchableText() {
 			const items = Array.from( document.querySelectorAll( '.frm-templates-list.frm-categories-list .frm-searchable-template.frm-ready-made-solution' ) );
 			items.forEach( item => {
 				let innerText;
@@ -7619,7 +7619,7 @@ function frmAdminBuildJS() {
 
 		function addTemplatesOnFetchSuccess( data ) {
 			data.templates.forEach( addTemplateToCategoryList );
-			setSearchableText();
+			setTemplatesSearchableText();
 		}
 
 		function addTemplateToCategoryList( template ) {
@@ -8879,6 +8879,14 @@ function frmAdminBuildJS() {
 				}
 			}
 		}
+
+		initSearch( 'template-search-input' );
+	}
+
+	function initSearch( inputID ) {
+		const searchInput = document.getElementById( inputID );
+		frmDom.search.init( searchInput, 'control-section accordion-section' );
+		frmDom.search.init( searchInput, 'frm-searchable-template' );
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
@@ -9583,16 +9591,8 @@ function frmAdminBuildJS() {
 		}, options );
 	}
 
-	function initSearch( inputID ) {
-		const searchInput = document.getElementById( inputID );
-		frmDom.search.init( searchInput, 'control-section accordion-section' );
-		frmDom.search.init( searchInput, 'frm-searchable-template' );
-	}
-
 	return {
 		init: function() {
-			initSearch( 'template-search-input' );
-
 			s = {};
 
 			// Bootstrap dropdown button
