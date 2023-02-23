@@ -442,11 +442,13 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 
 == Changelog ==
 = 6.1 =
+* New: Full screen pages are now conditionally full screen based on the WordPress fullscreen mode user preference setting.
 * Fix: Forms with redirect confirmation actions were redirecting when saving a draft entry.
 * Fix: An extra comma was causing the editor for views to break in PHP versions 7.2 and lower.
 * Fix: Formidable settings have been updated to avoid PHP 8.2 deprecation messages.
 * Fix: Label position styles were being applied to all fields in styler previews, not just fields with the default label position setting.
 * Fix: The sidebar has been moved back to below the entry details when printing an entry.
+* Fix: A 99 limit would always get applied when getting form actions without a specified limit. Now the limit is based off of the action type. This fixes issues with Quiz outcomes not matching when beyond the 99 limit.
 
 = 6.0.1 =
 * Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
