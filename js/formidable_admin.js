@@ -9585,7 +9585,6 @@ function frmAdminBuildJS() {
 
 	function initSearch( inputID ) {
 		const searchInput = document.getElementById( inputID );
-		searchInput.classList.remove( 'frm-auto-search' );
 		frmDom.search.init( searchInput, 'control-section accordion-section' );
 		frmDom.search.init( searchInput, 'frm-searchable-template' );
 	}
@@ -9704,7 +9703,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
