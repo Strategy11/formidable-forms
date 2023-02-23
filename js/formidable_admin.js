@@ -8886,7 +8886,7 @@ function frmAdminBuildJS() {
 	function initSearch( inputID ) {
 		const searchInput = document.getElementById( inputID );
 		frmDom.search.init( searchInput, 'control-section accordion-section' );
-		frmDom.search.init( searchInput, 'frm-searchable-template' );
+		frmDom.search.init( searchInput, 'frm-searchable-template frm-ready-made-solution' );
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
