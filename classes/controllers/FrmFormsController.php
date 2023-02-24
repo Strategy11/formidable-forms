@@ -2132,8 +2132,6 @@ class FrmFormsController {
 			$met_actions = self::get_met_on_submit_actions( $atts );
 			if ( $met_actions ) {
 				$method = $met_actions;
-			} else {
-				$method = 'message';
 			}
 		}
 
