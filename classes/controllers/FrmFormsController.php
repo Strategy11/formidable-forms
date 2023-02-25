@@ -2124,17 +2124,18 @@ class FrmFormsController {
 	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
-		$opt    = 'success_action';
+		$action = FrmOnSubmitHelper::current_event( $atts );
+		$opt    = 'update' === $action ? 'edit_action' : 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 
 		if ( ! empty( $atts['entry_id'] ) && FrmOnSubmitHelper::form_has_migrated( $atts['form'] ) ) {
-			$met_actions = self::get_met_on_submit_actions( $atts );
+			$met_actions = self::get_met_on_submit_actions( $atts, $action );
 			if ( $met_actions ) {
 				$method = $met_actions;
 			}
 		}
 
-		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
+		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], $action );
 
 		if ( $method != 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
 			$method = 'message';
@@ -2153,6 +2154,7 @@ class FrmFormsController {
 			array(
 				'form'     => $form,
 				'entry_id' => $params['id'],
+				'action'   => FrmOnSubmitHelper::current_event( $params ),
 			)
 		);
 
@@ -2302,6 +2304,7 @@ class FrmFormsController {
 			array(
 				'form'     => $args['form'],
 				'entry_id' => $args['entry_id'],
+				'action'   => FrmOnSubmitHelper::current_event( $args ),
 			)
 		);
 		if ( ! is_array( $args['conf_method'] ) ) {

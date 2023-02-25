@@ -274,4 +274,15 @@ class FrmOnSubmitHelper {
 
 		return $action;
 	}
+
+	/**
+	 * Check if the current event has been paased. If not, use create actions.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @return string
+	 */
+	public static function current_event( $atts ) {
+		return ! empty( $atts['action'] ) ? $atts['action'] : 'create';
+	}
 }
