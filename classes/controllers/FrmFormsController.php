@@ -2503,7 +2503,7 @@ class FrmFormsController {
 	 */
 	public static function show_message_after_save( $atts ) {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
-		$show_form       = ( isset( $atts['form']->options['show_form'] ) ) ? $atts['form']->options['show_form'] : true;
+		$show_form       = ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'];
 
 		if ( 'edit' === $atts['success_opt'] && version_compare( FrmProDb::$plug_version, '6.1.1', '>=' ) ) {
 			$show_form = apply_filters( 'frm_show_form_after_edit', $show_form, $atts['form'] );
