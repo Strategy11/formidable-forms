@@ -2174,7 +2174,8 @@ class FrmFormsController {
 	public static function maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args ) {
 		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
-				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0] );
+				$event = FrmOnSubmitHelper::current_event( $params );
+				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0], $event );
 				$conf_method = 'redirect';
 			}
 		}
