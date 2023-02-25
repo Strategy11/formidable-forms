@@ -2128,11 +2128,12 @@ class FrmFormsController {
 		$opt    = 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 
-		if ( ! empty( $atts['entry_id'] ) ) { // Check against entry has already submitted error.
+		if ( ! empty( $atts['entry_id'] ) && FrmOnSubmitHelper::form_has_migrated( $atts['form'] ) ) { // Check against entry has already submitted error.
 			$met_actions = self::get_met_on_submit_actions( $atts );
 			if ( $met_actions ) {
 				$method = $met_actions;
 			} else {
+				// If no actions match, use the default message.
 				$method = 'message';
 			}
 		}

@@ -241,4 +241,16 @@ class FrmOnSubmitHelper {
 				$form_options['show_form']    = ! empty( $action->post_content['show_form'] );
 		}
 	}
+
+	/**
+	 * Checks if On Submit settings are migrated.
+	 *
+	 * @since 6.x
+	 *
+	 * @param object $form Form object.
+	 * @return bool
+	 */
+	public static function form_has_migrated( $form ) {
+		return ! empty( $form->options['on_submit_migrated'] );
+	}
 }
