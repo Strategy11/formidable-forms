@@ -326,7 +326,7 @@ class FrmOnSubmitHelper {
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
 		$opt  = 'update' === $event ? 'edit_' : 'success_';
 		$data = array(
-			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : FrmOnSubmitHelper::get_default_action_type(),
+			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : self::get_default_action_type(),
 		);
 
 		switch ( $data['success_action'] ) {
@@ -339,7 +339,7 @@ class FrmOnSubmitHelper {
 				break;
 
 			default:
-				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_msg();
+				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : self::get_default_msg();
 				$data['show_form']   = ! empty( $form_options['show_form'] );
 		}
 
