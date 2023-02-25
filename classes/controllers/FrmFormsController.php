@@ -140,7 +140,7 @@ class FrmFormsController {
 			$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 		}
 
-		self::maybe_migrate_submit_settings_to_action( $id );
+		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $id );
 
 		return self::get_settings_vars( $id, array(), $message );
 	}
@@ -2124,19 +2124,18 @@ class FrmFormsController {
 	 * @return string|array
 	 */
 	private static function get_confirmation_method( $atts ) {
-		$opt    = 'success_action';
+		$action = FrmOnSubmitHelper::current_event( $atts );
+		$opt    = 'update' === $action ? 'edit_action' : 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 
-		if ( ! empty( $atts['entry_id'] ) ) { // Check against entry has already submitted error.
-			$met_actions = self::get_met_on_submit_actions( $atts );
+		if ( ! empty( $atts['entry_id'] ) ) {
+			$met_actions = self::get_met_on_submit_actions( $atts, $action );
 			if ( $met_actions ) {
 				$method = $met_actions;
-			} else {
-				$method = 'message';
 			}
 		}
 
-		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], 'create' );
+		$method = apply_filters( 'frm_success_filter', $method, $atts['form'], $action );
 
 		if ( $method != 'message' && ( ! $atts['entry_id'] || ! is_numeric( $atts['entry_id'] ) ) ) {
 			$method = 'message';
@@ -2155,9 +2154,24 @@ class FrmFormsController {
 			array(
 				'form'     => $form,
 				'entry_id' => $params['id'],
+				'action'   => FrmOnSubmitHelper::current_event( $params ),
 			)
 		);
 
+		self::maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args );
+	}
+
+	/**
+	 * Maybe trigger redirect with the new Confirmation action.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @param array|string $conf_method Array of confirmation actions or the action type string.
+	 * @param object       $form        Form object.
+	 * @param array        $params      See {@see FrmFormsController::maybe_trigger_redirect()}.
+	 * @param array        $args        See {@see FrmFormsController::maybe_trigger_redirect()}.
+	 */
+	public static function maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args ) {
 		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
 				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0] );
@@ -2233,6 +2247,10 @@ class FrmFormsController {
 	 * @return array Array of actions that meet the conditional logics.
 	 */
 	public static function get_met_on_submit_actions( $args, $event = 'create' ) {
+		if ( ! FrmOnSubmitHelper::form_has_migrated( $args['form'] ) ) {
+			return array();
+		}
+
 		$entry       = FrmEntry::getOne( $args['entry_id'], true );
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
@@ -2269,7 +2287,13 @@ class FrmFormsController {
 		 * @param array $met_actions Actions that meet the conditional logics.
 		 * @param array $args        See {@see FrmFormsController::run_success_action()}. `$args['event']` is also added.
 		 */
-		return apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
+		$met_actions = apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
+
+		if ( empty( $met_actions ) ) {
+			$met_actions = array( FrmOnSubmitHelper::get_fallback_action( $event ) );
+		}
+
+		return $met_actions;
 	}
 
 	/**
@@ -2284,6 +2308,7 @@ class FrmFormsController {
 			array(
 				'form'     => $args['form'],
 				'entry_id' => $args['entry_id'],
+				'action'   => FrmOnSubmitHelper::current_event( $args ),
 			)
 		);
 		if ( ! is_array( $args['conf_method'] ) ) {
@@ -2865,103 +2890,6 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
-	}
-
-	/**
-	 * Maybe migrate submit settings from the form options to On Submit action.
-	 * This is added after On Submit action is released. This might migrate the frontend editing submit settings too.
-	 *
-	 * @since 6.0
-	 *
-	 * @param int $form_id Form ID.
-	 */
-	private static function maybe_migrate_submit_settings_to_action( $form_id ) {
-		$form = FrmDb::get_row( 'frm_forms', array( 'id' => $form_id ), 'options,editable' );
-		if ( ! $form ) {
-			return;
-		}
-
-		FrmAppHelper::unserialize_or_decode( $form->options );
-
-		$flag_key = 'on_submit_migrated';
-		if ( ! empty( $form->options[ $flag_key ] ) ) {
-			return;
-		}
-
-		$form->id = $form_id;
-
-		// Create On Submit action.
-		$base_action = array();
-
-		$base_action['post_type']    = FrmFormActionsController::$action_post_type;
-		$base_action['post_excerpt'] = FrmOnSubmitAction::$slug;
-		$base_action['post_title']   = FrmOnSubmitAction::get_name();
-		$base_action['menu_order']   = $form_id;
-		$base_action['post_status']  = 'publish';
-		$base_action['post_content'] = array(
-			'event' => array( 'create' ),
-		);
-
-		$action_data = self::get_on_submit_action_data_from_form_options( $form->options );
-
-		// If frontend editing is enabled, migrate its settings too.
-		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() && $form->editable ) {
-			$edit_data = self::get_on_submit_action_data_from_form_options( $form->options, 'update' );
-
-			if ( $action_data === $edit_data ) {
-				// Just create one action for both create and update if they are the same.
-				$base_action['post_content']['event'][] = 'update';
-			} else {
-				// Create a separate action for update.
-				$edit_action                          = $base_action;
-				$edit_action['post_content']         += $edit_data;
-				$edit_action['post_content']['event'] = array( 'update' );
-
-				$edit_action['post_content'] = FrmAppHelper::prepare_and_encode( $edit_action['post_content'] );
-				FrmDb::save_json_post( $edit_action );
-			}
-		}
-
-		$action                  = $base_action;
-		$action['post_content'] += $action_data;
-
-		$action['post_content'] = FrmAppHelper::prepare_and_encode( $action['post_content'] );
-		FrmDb::save_json_post( $action );
-
-		$form->options[ $flag_key ] = 1;
-		FrmForm::update( $form->id, array( 'options' => $form->options ) );
-	}
-
-	/**
-	 * Gets On Submit action data from form options to be used for the migration.
-	 *
-	 * @since 6.0
-	 *
-	 * @param array  $form_options Form options.
-	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
-	 * @return array
-	 */
-	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
-		$opt  = 'update' === $event ? 'edit_' : 'success_';
-		$data = array(
-			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : FrmOnSubmitHelper::get_default_action_type(),
-		);
-
-		switch ( $data['success_action'] ) {
-			case 'redirect':
-				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
-				break;
-
-			case 'page':
-				$data['success_page_id'] = isset( $form_options[ $opt . 'page_id' ] ) ? $form_options[ $opt . 'page_id' ] : '';
-				break;
-
-			default:
-				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : FrmOnSubmitHelper::get_default_msg();
-				$data['show_form']   = ! empty( $form_options['show_form'] );
-		}
-
-		return $data;
 	}
 
 	/**
