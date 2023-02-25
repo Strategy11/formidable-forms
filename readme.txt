@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 6.1
+Stable tag: 6.1.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,11 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.1.1 =
+* Fix: Redirects weren't happening after submit in forms without the new Confirmation form actions.
+* Fix: The email message box was difficult to resize manually.
+* Fix: There was extra space showing on the edit style page.
+
 = 6.1 =
 * Security: Added a new global setting to use custom headers when retrieving IPs with form submissions. This is disabled by default to avoid IP spoofing but required when using a reverse proxy as all IP addresses may appear identical. This setting is hidden when the GDPR IP option is enabled, but can still be enabled with a new frm_use_custom_header_ip filter using __return_true.
 * New: Full screen pages are now conditionally full screen based on the WordPress fullscreen mode user preference setting.

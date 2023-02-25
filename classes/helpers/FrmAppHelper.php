@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '6.1';
+	public static $plug_version = '6.1.1';
 
 	/**
 	 * @since 1.07.02
@@ -405,7 +405,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.1
 	 *
 	 * @return array
 	 */
@@ -428,7 +428,7 @@ class FrmAppHelper {
 	 * The other HTTP headers can be spoofed so this isn't recommended.
 	 * But in some cases (like reverse proxies), the IP may be empty if you use $_SERVER['REMOTE_ADDR'].
 	 *
-	 * @since x.x
+	 * @since 6.1
 	 *
 	 * @return bool
 	 */
@@ -441,7 +441,7 @@ class FrmAppHelper {
 		 * This uses the custom_header_ip setting, but it is hidden if the GDPR option is also on.
 		 * As the IP is still checked for blacklist checks, someone with the GDPR option may still want to enable this when behind a reverse proxy.
 		 *
-		 * @since x.x
+		 * @since 6.1
 		 *
 		 * @param bool $should_use_custom_header_ip
 		 */
@@ -3938,9 +3938,9 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.07
-	 * @deprecated x.x
+	 * @deprecated 6.0
 	 */
 	public static function renewal_message() {
-		_deprecated_function( __METHOD__, 'x.x', 'FrmProAddonsController::renewal_message' );
+		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
 	}
 }

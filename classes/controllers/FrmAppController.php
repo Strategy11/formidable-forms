@@ -79,7 +79,7 @@ class FrmAppController {
 	/**
 	 * Get the full screen mode setting from the block editor.
 	 *
-	 * @since x.x
+	 * @since 6.1
 	 *
 	 * @return bool
 	 */
@@ -504,7 +504,7 @@ class FrmAppController {
 	/**
 	 * Show a warning for the IP address setting if it hasn't been set.
 	 *
-	 * @since x.x
+	 * @since 6.1
 	 *
 	 * @return void
 	 */
@@ -538,7 +538,7 @@ class FrmAppController {
 	/**
 	 * Check if any reverse proxy headers are set.
 	 *
-	 * @since x.x
+	 * @since 6.1
 	 *
 	 * @return bool
 	 */

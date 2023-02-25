@@ -1233,11 +1233,11 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @deprecated x.x Saving custom CSS has been moved into Global Settings.
+	 * @deprecated 6.1 Saving custom CSS has been moved into Global Settings.
 	 *
 	 * @return void
 	 */
 	public static function save_css() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.1' );
 	}
 }
