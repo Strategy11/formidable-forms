@@ -259,13 +259,15 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.1.1
 	 *
+	 * @param string|array $event Uses 'create' or 'update'.
+	 *
 	 * @return object
 	 */
-	public static function get_fallback_action() {
+	public static function get_fallback_action( $event = 'create' ) {
 		$action = new stdClass();
 
 		$action->post_content = array(
-			'event'          => array( 'create' ),
+			'event'          => (array) $event,
 			'success_action' => 'message',
 			'success_msg'    => self::get_default_msg(),
 		);

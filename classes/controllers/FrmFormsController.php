@@ -2127,13 +2127,10 @@ class FrmFormsController {
 		$opt    = 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 
-		if ( ! empty( $atts['entry_id'] ) && FrmOnSubmitHelper::form_has_migrated( $atts['form'] ) ) { // Check against entry has already submitted error.
+		if ( ! empty( $atts['entry_id'] ) && FrmOnSubmitHelper::form_has_migrated( $atts['form'] ) ) {
 			$met_actions = self::get_met_on_submit_actions( $atts );
 			if ( $met_actions ) {
 				$method = $met_actions;
-			} else {
-				// If no actions match, use the default message.
-				$method = array( FrmOnSubmitHelper::get_fallback_action() );
 			}
 		}
 
@@ -2284,7 +2281,13 @@ class FrmFormsController {
 		 * @param array $met_actions Actions that meet the conditional logics.
 		 * @param array $args        See {@see FrmFormsController::run_success_action()}. `$args['event']` is also added.
 		 */
-		return apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
+		$met_actions = apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
+
+		if ( empty( $met_actions ) ) {
+			$met_actions = array( FrmOnSubmitHelper::get_fallback_action( $event ) );
+		}
+
+		return $met_actions;
 	}
 
 	/**
