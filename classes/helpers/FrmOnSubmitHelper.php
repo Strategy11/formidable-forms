@@ -245,12 +245,31 @@ class FrmOnSubmitHelper {
 	/**
 	 * Checks if On Submit settings are migrated.
 	 *
-	 * @since 6.x
+	 * @since 6.1.1
 	 *
 	 * @param object $form Form object.
 	 * @return bool
 	 */
 	public static function form_has_migrated( $form ) {
 		return ! empty( $form->options['on_submit_migrated'] );
+	}
+
+	/**
+	 * Gets fallback action, used when no actions match.
+	 *
+	 * @since 6.1.1
+	 *
+	 * @return object
+	 */
+	public static function get_fallback_action() {
+		$action = new stdClass();
+
+		$action->post_content = array(
+			'event'          => array( 'create' ),
+			'success_action' => 'message',
+			'success_msg'    => self::get_default_msg(),
+		);
+
+		return $action;
 	}
 }

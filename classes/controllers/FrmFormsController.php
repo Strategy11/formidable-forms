@@ -2133,7 +2133,7 @@ class FrmFormsController {
 				$method = $met_actions;
 			} else {
 				// If no actions match, use the default message.
-				$method = 'message';
+				$method = array( FrmOnSubmitHelper::get_fallback_action() );
 			}
 		}
 
