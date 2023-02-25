@@ -2061,7 +2061,6 @@ class FrmFormsController {
 				$entry_id                 = self::just_created_entry( $form->id );
 				$pass_args['entry_id']    = $entry_id;
 				$pass_args['reset']       = true;
-				$pass_args['conf_method'] = self::get_confirmation_method( compact( 'form', 'entry_id' ) );
 
 				self::run_on_submit_actions( $pass_args );
 
@@ -2281,7 +2280,13 @@ class FrmFormsController {
 	 *
 	 * @param array $args See inside {@see FrmFormsController::get_form_contents()} method.
 	 */
-	private static function run_on_submit_actions( $args ) {
+	public static function run_on_submit_actions( $args ) {
+		$args['conf_method'] = self::get_confirmation_method(
+			array(
+				'form'     => $args['form'],
+				'entry_id' => $args['entry_id'],
+			)
+		);
 		if ( ! is_array( $args['conf_method'] ) ) {
 			self::run_success_action( $args );
 			return;
