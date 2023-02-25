@@ -6820,7 +6820,6 @@ i.frm-show-inline-modal,
 .frm_form_settings .wp-editor-container .frm-with-right-icon .frmsvg {
 	top: auto;
 	bottom: 0;
-	margin-right: 10px;
 }
 
 .frm_form_settings .frm_has_textarea .frm-with-right-icon .frmsvg {
@@ -6838,8 +6837,9 @@ i.frm-show-inline-modal {
 	z-index: 1;
 	opacity: 1;
 	top: auto;
-	padding: calc( ( 36px - 18px ) / 2 ); /* input height - svg / 2 */
-	padding-bottom: 0;
+	margin: calc( ( 36px - 18px ) / 2 ); /* input height - svg / 2 */
+	margin-bottom: 0;
+	padding: 0;
 }
 
 .frm-open .frmsvg.frm-show-inline-modal,
