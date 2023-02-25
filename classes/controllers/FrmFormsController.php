@@ -2128,7 +2128,7 @@ class FrmFormsController {
 		$opt    = 'update' === $action ? 'edit_action' : 'success_action';
 		$method = ( isset( $atts['form']->options[ $opt ] ) && ! empty( $atts['form']->options[ $opt ] ) ) ? $atts['form']->options[ $opt ] : 'message';
 
-		if ( ! empty( $atts['entry_id'] ) && FrmOnSubmitHelper::form_has_migrated( $atts['form'] ) ) {
+		if ( ! empty( $atts['entry_id'] ) ) {
 			$met_actions = self::get_met_on_submit_actions( $atts, $action );
 			if ( $met_actions ) {
 				$method = $met_actions;
@@ -2247,6 +2247,10 @@ class FrmFormsController {
 	 * @return array Array of actions that meet the conditional logics.
 	 */
 	public static function get_met_on_submit_actions( $args, $event = 'create' ) {
+		if ( ! FrmOnSubmitHelper::form_has_migrated( $args['form'] ) ) {
+			return array();
+		}
+
 		$entry       = FrmEntry::getOne( $args['entry_id'], true );
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
