@@ -2499,11 +2499,17 @@ class FrmFormsController {
 	 * Prepare to show the success message and empty form after submit
 	 *
 	 * @since 2.05
+	 * @since 6.1.1 Moved `frm_show_form_after_edit` filter to this method.
 	 */
 	public static function show_message_after_save( $atts ) {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
+		$show_form       = ( isset( $atts['form']->options['show_form'] ) ) ? $atts['form']->options['show_form'] : true;
 
-		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
+		if ( 'edit' === $atts['success_opt'] && version_compare( FrmProDb::$plug_version, '6.1.1', '>=' ) ) {
+			$show_form = apply_filters( 'frm_show_form_after_edit', $show_form, $atts['form'] );
+		}
+
+		if ( $show_form ) {
 			self::show_form_after_submit( $atts );
 		} else {
 			self::show_lone_success_messsage( $atts );
