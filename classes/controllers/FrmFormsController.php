@@ -2282,7 +2282,7 @@ class FrmFormsController {
 	public static function run_on_submit_actions( $args ) {
 		$args['conf_method'] = self::get_confirmation_method(
 			array(
-				'form' => $args['form'],
+				'form'     => $args['form'],
 				'entry_id' => $args['entry_id'],
 			)
 		);
