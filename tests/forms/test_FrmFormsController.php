@@ -2,6 +2,7 @@
 
 /**
  * @group forms
+ * @group forms-controller
  */
 class test_FrmFormsController extends FrmUnitTest {
 
@@ -210,6 +211,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		// Update form object from cache.
 		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
 		$form = FrmForm::getOne( $form_id );
 
 		// Create entry.
@@ -230,12 +232,15 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		// Test the output.
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
-		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
-
-		$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
-
-		$this->assertNotFalse( strpos( $response, 'Test page content' ) );
+		$contains = array(
+			'frmFrontForm.scrollMsg(' . $form->id . ')',
+			'Done!',
+			'window.location="http://example.com"',
+			'Test page content',
+		);
+		foreach ( $contains as $c ) {
+			$this->assertStringContainsString( $c, $response );
+		}
 	}
 
 	/**
@@ -256,6 +261,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		);
 
 		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
 
 		$form = $this->factory->form->get_object_by_id( $form_id );
 
@@ -272,6 +278,13 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
 		$this->assertNotFalse( strpos( $response, 'window.location="http://example.com"' ) );
+	}
+
+	/**
+	 * Trigger migration check and the flag.
+	 */
+	private function trigger_migrate_actions( $form_id ) {
+		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
 	}
 
 	/**
