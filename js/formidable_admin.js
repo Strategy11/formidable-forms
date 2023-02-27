@@ -3514,7 +3514,24 @@ function frmAdminBuildJS() {
 			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
-			fieldId = field.data( 'fid' );
+			fieldId = field.data( 'fid' ),
+			fieldBoxes,
+			fieldIdsToDelete = 0;
+
+		if ( field.data( 'ftype' ) === 'divider' ) {
+			fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider')?.querySelectorAll( '.frm_field_box' );
+			if ( fieldBoxes && fieldBoxes.length ) {
+				fieldBoxes.forEach( fieldBox => {
+					if ( fieldBox.querySelectorAll( 'li.form-field' ) ) {
+						fieldIdsToDelete += fieldBox.querySelectorAll( 'li.form-field' ).length;
+					}
+				});
+				if ( fieldIdsToDelete ) {
+					/* translators: %1$s: Number of fields that are selected to be deleted. */
+					confirmMsg = __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete );
+				}
+			}
+		}
 
 		if ( li.classList.contains( 'frm-section-collapsed' ) || li.classList.contains( 'frm-page-collapsed' ) ) {
 			return false;
