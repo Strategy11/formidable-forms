@@ -3530,7 +3530,7 @@ function frmAdminBuildJS() {
 				});
 				if ( fieldIdsToDelete ) {
 					/* translators: %1$s: Number of fields that are selected to be deleted. */
-					confirmMsg = __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete );
+					confirmMsg = __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', fieldIdsToDelete );
 				}
 			}
 		}
