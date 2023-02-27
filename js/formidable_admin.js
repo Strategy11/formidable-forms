@@ -3516,14 +3516,16 @@ function frmAdminBuildJS() {
 			field = jQuery( this ).closest( 'li.form-field' ),
 			fieldId = field.data( 'fid' ),
 			fieldBoxes,
+			fieldsInsideFieldBox,
 			fieldIdsToDelete = 0;
 
 		if ( field.data( 'ftype' ) === 'divider' ) {
 			fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider')?.querySelectorAll( '.frm_field_box' );
 			if ( fieldBoxes && fieldBoxes.length ) {
 				fieldBoxes.forEach( fieldBox => {
-					if ( fieldBox.querySelectorAll( 'li.form-field' ) ) {
-						fieldIdsToDelete += fieldBox.querySelectorAll( 'li.form-field' ).length;
+					fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
+					if ( fieldsInsideFieldBox ) {
+						fieldIdsToDelete += fieldsInsideFieldBox.length;
 					}
 				});
 				if ( fieldIdsToDelete ) {
