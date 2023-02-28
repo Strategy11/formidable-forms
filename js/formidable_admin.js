@@ -5470,23 +5470,63 @@ function frmAdminBuildJS() {
 	}
 
 	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
-		var imageLabelClass, fullLabel,
+		var imageLabelClass,
 			originalLabel = label,
-			shape = fieldType === 'checkbox' ? 'square' : 'circle';
+			shape = fieldType === 'checkbox' ? 'square' : 'circle',
+			labelImage,
+			labelNode;
 
-		fullLabel = '<div class="frm_selected_checkmark"><svg class="frmsvg"><use xlink:href="#frm_checkmark_' + shape + '_icon"></svg></div>';
 		if ( imageUrl ) {
-			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
+			labelImage = tag(
+				'img',
+				{
+					src: imageUrl,
+					alt: originalLabel
+				}
+			);
 		} else {
-			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
-		}
-		if ( showLabelWithImage ) {
-			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
+			labelImage = tag(
+				'div',
+				{
+					className: 'frm_empty_url'
+				}
+			);
+			labelImage.innerHTML = frm_admin_js.image_placeholder_icon;
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		return ( '<span class="frm_image_option_container' + imageLabelClass + '">' + fullLabel + '</span>' );
+		labelNode = tag(
+			'span',
+			{
+				className: 'frm_image_option_container' + imageLabelClass,
+				children: [
+					tag(
+						'div',
+						{
+							className: 'frm_selected_checkmark',
+							child: svg({ href: '#frm_checkmark_' + shape + '_icon' })
+						}
+					),
+					labelImage,
+					tag(
+						'span',
+						{
+							className: 'frm_text_label_for_image',
+							child: tag(
+								'span',
+								{
+									className: 'frm_text_label_for_image_inner',
+									text: originalLabel
+								}
+							)
+						}
+					)
+				]
+			}
+		);
+
+		return labelNode;
 	}
 
 	function getChecked( id ) {
