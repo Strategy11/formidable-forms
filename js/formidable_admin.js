@@ -7602,24 +7602,9 @@ function frmAdminBuildJS() {
 
 		const categoryList = modal.querySelector( 'ul.frm-categories-list' );
 
-		function setTemplatesSearchableText() {
-			const items = Array.from( document.querySelectorAll( '.frm-templates-list.frm-categories-list .frm-searchable-template.frm-ready-made-solution' ) );
-			items.forEach( item => {
-				let innerText;
-
-				const itemFeaturedForm = item.querySelector( '.frm-featured-form' );
-				if ( itemFeaturedForm ) {
-					innerText = itemFeaturedForm.innerText.toLowerCase();
-				} else {
-					innerText = item.querySelector( 'h3' ).innerText.toLowerCase();
-				}
-				item.setAttribute( 'frm-search-text', innerText );
-			});
-		}
-
 		function addTemplatesOnFetchSuccess( data ) {
 			data.templates.forEach( addTemplateToCategoryList );
-			setTemplatesSearchableText();
+			initSearch( 'template-search-input', 'frm-searchable-template frm-ready-made-solution' );
 		}
 
 		function addTemplateToCategoryList( template ) {
@@ -8880,14 +8865,26 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		initSearch( 'template-search-input', [ 'control-section accordion-section', 'frm-searchable-template frm-ready-made-solution' ]);
+		initSearch( 'template-search-input', 'control-section accordion-section' );
 	}
 
-	function initSearch( inputID, itemClasses ) {
+	function initSearch( inputID, itemClass ) {
 		const searchInput = document.getElementById( inputID );
-		itemClasses.forEach( itemClass => {
-			frmDom.search.init( searchInput, itemClass );
+		Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
+			let innerText;
+
+			const itemFeaturedForm = item.querySelector( '.frm-featured-form' );
+
+			if ( itemFeaturedForm ) {
+				innerText = itemFeaturedForm.innerText.toLowerCase();
+			} else {
+				innerText = item.querySelector( 'h3' ).innerText.toLowerCase();
+			}
+
+			item.setAttribute( 'frm-search-text', innerText );
 		});
+
+		frmDom.search.init( searchInput, itemClass );
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
