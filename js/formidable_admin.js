@@ -2044,7 +2044,7 @@ function frmAdminBuildJS() {
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
-		if ( $field.hasClass( 'frm-section-collapsed' ) || $field.hasClass( 'frm-page-collapsed' ) ) {
+		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
 			return false;
 		}
 
@@ -3520,7 +3520,7 @@ function frmAdminBuildJS() {
 			fieldIdsToDelete = 0;
 
 		if ( field.data( 'ftype' ) === 'divider' ) {
-			fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider')?.querySelectorAll( '.frm_field_box' );
+			fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider' )?.querySelectorAll( '.frm_field_box' );
 			if ( fieldBoxes && fieldBoxes.length ) {
 				fieldBoxes.forEach( fieldBox => {
 					fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
