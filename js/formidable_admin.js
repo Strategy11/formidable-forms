@@ -5490,13 +5490,10 @@ function frmAdminBuildJS() {
 			const unsafeAttributes = [ 'onerror', 'onclick' ];
 			if ( imgs.length ) {
 				imgs.forEach( img => {
-					console.log( img );
 					let imgNode = createElementFromHTML( img );
 					unsafeAttributes.forEach( attr => {
-						console.log( attr, imgNode.getAttribute( attr ) );
 						imgNode.removeAttribute( attr );
 					});
-					console.log( imgNode );
 					html = html.replace( img, imgNode.outerHTML );
 				});
 			}
