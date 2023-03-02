@@ -267,7 +267,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					el.reset.innerHTML = msg.message;
+					el.reset.textContent = msg.message;
 					if ( el.reset.getAttribute( 'data-refresh' ) === '1' ) {
 						window.location.reload();
 					}
@@ -4839,7 +4839,7 @@ function frmAdminBuildJS() {
 				} else {
 					containerClass.remove( 'frm-first-page' );
 				}
-				pages[i].innerHTML = ( i + 1 );
+				pages[i].textContent = ( i + 1 );
 			}
 		} else {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
@@ -5469,6 +5469,32 @@ function frmAdminBuildJS() {
 		return img.attr( 'src' );
 	}
 
+	function createElementFromHTML( html ) {
+		const div = document.createElement( 'div' );
+		div.innerHTML = html;
+		return div.firstChild;
+	}
+
+	function purifyImgTags( html ) {
+		imgs = html.match( /<img([\w\W]+?)>/g );
+
+		const safeAttributes = [ 'src', 'class', 'height', 'width' ];
+		if ( imgs.length ) {
+			imgs.forEach( img => {
+				let unsafeImgNode = createElementFromHTML( img );
+				[ ...unsafeImgNode.attributes ].forEach( attr => {
+					if ( ! safeAttributes.includes( attr.name ) ) {
+						unsafeImgNode.removeAttribute( attr.name );
+					}
+				});
+
+				html = html.replaceAll( img, unsafeImgNode.outerHTML );
+			});
+		}
+
+		return html;
+	}
+
 	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
 		var imageLabelClass,
 			originalLabel = label,
@@ -5477,32 +5503,6 @@ function frmAdminBuildJS() {
 			labelNode,
 			imageLabel,
 			imgs;
-
-		function createElementFromHTML( html ) {
-			const div = document.createElement( 'div' );
-			div.innerHTML = html;
-			return div.firstChild;
-		}
-
-		function purifyImgTags( html ) {
-			imgs = html.match( /<img([\w\W]+?)>/g );
-
-			const safeAttributes = [ 'src', 'class', 'height', 'width' ];
-			if ( imgs.length ) {
-				imgs.forEach( img => {
-					let unsafeImgNode = createElementFromHTML( img );
-					[ ...unsafeImgNode.attributes ].forEach( attr => {
-						if ( ! safeAttributes.includes( attr.name ) ) {
-							unsafeImgNode.removeAttribute( attr.name );
-						}
-					});
-
-					html = html.replaceAll( img, unsafeImgNode.outerHTML );
-				});
-			}
-
-			return html;
-		}
 
 		originalLabel = purifyImgTags( originalLabel );
 
@@ -5616,7 +5616,7 @@ function frmAdminBuildJS() {
 				input.value === targetInput.value
 		);
 		if ( conflicts.length ) {
-			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyImgTags( targetInput.value ) ) );
 		}
 	}
 
@@ -7326,7 +7326,7 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private_label;
+			document.getElementById( 'post-visibility-display' ).textContent = frm_admin_js.private_label;
 			document.getElementById( 'hidden-post-visibility' ).value = 'private';
 			document.getElementById( 'visibility-radio-private' ).checked = true;
 		}
@@ -8513,8 +8513,8 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_template_name' ).value = oldName;
 			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
 			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
-			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
+			nameLabel.textContent = nameLabel.getAttribute( 'data-form' );
+			descLabel.textContent = descLabel.getAttribute( 'data-form' );
 			$modal.dialog( 'open' );
 		});
 
