@@ -6310,6 +6310,10 @@ li.selected .divider_section_only:before {
 	transition: border 0.7s ease-out;
 }
 
+.frm_sorting li.ui-state-default.edit_field_type_divider.frm-section-collapsed {
+	z-index: 3;
+}
+
 .frm-section-collapsed {
 	border-left-color: transparent !important;
 }
