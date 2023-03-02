@@ -8876,15 +8876,31 @@ function frmAdminBuildJS() {
 			const itemFeaturedForm = item.querySelector( '.frm-featured-form' );
 
 			if ( itemFeaturedForm ) {
-				innerText = itemFeaturedForm.innerText.toLowerCase();
+				if ( item.querySelector( 'h3' ).innerText === 'My Templates' ) {
+					itemFeaturedForm.querySelectorAll( '.accordion-section-content .frm-selectable' ).forEach( li => {
+						innerText += li.innerText;
+					});
+				} else {
+					innerText = itemFeaturedForm.innerText;
+				}
 			} else {
-				innerText = item.querySelector( 'h3' ).innerText.toLowerCase();
+				innerText = item.querySelector( 'h3' ).innerText;
 			}
 
-			item.setAttribute( 'frm-search-text', innerText );
+			item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
 		});
 
 		frmDom.search.init( searchInput, itemClass );
+
+		if ( itemClass === 'control-section accordion-section' ) {
+			frmDom.search.init( searchInput, 'frm-selectable frm-searchable-template' );
+
+			searchInput.addEventListener( 'frmAfterSearch', () => {
+				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
+					setTemplateCount( category );
+				});
+			});
+		}
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {

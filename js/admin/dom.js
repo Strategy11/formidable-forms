@@ -368,6 +368,9 @@
 					}
 					item.classList.toggle( 'frm-search-result', isSearchResult );
 				}
+
+				const event = new Event( 'frmAfterSearch', { bubbles: false } );
+				input.dispatchEvent( event );
 			}
 		}
 	};
