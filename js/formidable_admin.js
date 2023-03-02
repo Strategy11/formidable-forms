@@ -5474,7 +5474,25 @@ function frmAdminBuildJS() {
 			originalLabel = label,
 			shape = fieldType === 'checkbox' ? 'square' : 'circle',
 			labelImage,
-			labelNode;
+			labelNode,
+			imageLabel,
+			imgs;
+
+		function createElementFromHTML( htmlString ) {
+			var div = document.createElement('div');
+			div.innerHTML = htmlString.trim();
+			return div.firstChild;
+		}
+
+		imgs = originalLabel.match(/<img([\w\W]+?)>/g);
+
+		if ( imgs.length ) {
+			imgs.forEach( img => {
+				let imgNode = createElementFromHTML( img );
+				imgNode.removeAttribute( 'onerror' );
+				originalLabel = originalLabel.replace( img, imgNode.outerHTML );
+			});
+		}
 
 		if ( imageUrl ) {
 			labelImage = tag(
@@ -5496,6 +5514,9 @@ function frmAdminBuildJS() {
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
+		imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' } );
+
+		imageLabel.innerHTML = originalLabel;
 		labelNode = tag(
 			'span',
 			{
@@ -5513,13 +5534,7 @@ function frmAdminBuildJS() {
 						'span',
 						{
 							className: 'frm_text_label_for_image',
-							child: tag(
-								'span',
-								{
-									className: 'frm_text_label_for_image_inner',
-									text: originalLabel
-								}
-							)
+							child: imageLabel
 						}
 					)
 				]
