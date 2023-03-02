@@ -8870,36 +8870,30 @@ function frmAdminBuildJS() {
 
 	function initSearch( inputID, itemClass ) {
 		const searchInput = document.getElementById( inputID );
-		Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
-			let innerText;
-
-			const itemFeaturedForm = item.querySelector( '.frm-featured-form' );
-
-			if ( itemFeaturedForm ) {
-				if ( item.querySelector( 'h3' ).innerText === 'My Templates' ) {
-					itemFeaturedForm.querySelectorAll( '.accordion-section-content .frm-selectable' ).forEach( li => {
-						innerText += li.innerText;
-					});
-				} else {
-					innerText = itemFeaturedForm.innerText;
-				}
-			} else {
-				innerText = item.querySelector( 'h3' ).innerText;
-			}
-
-			item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
-		});
-
-		frmDom.search.init( searchInput, itemClass );
 
 		if ( itemClass === 'control-section accordion-section' ) {
 			frmDom.search.init( searchInput, 'frm-selectable frm-searchable-template' );
 
 			searchInput.addEventListener( 'frmAfterSearch', () => {
 				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
-					setTemplateCount( category );
+					const found = category.closest( '.control-section.accordion-section' ).querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' );
+					if ( found ) {
+						setTemplateCount( category );
+					}
+					category.classList.toggle( 'frm_hidden', ! found );
 				});
 			});
+
+		} else {
+			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
+				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
+					let innerText = '';
+					innerText = item.querySelector( 'h3' ).innerText;
+					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
+				});
+			}
+
+			frmDom.search.init( searchInput, itemClass );
 		}
 	}
 

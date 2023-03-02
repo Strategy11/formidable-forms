@@ -337,6 +337,7 @@
 			input.addEventListener( 'input', handleSearch );
 			input.addEventListener( 'search', handleSearch );
 			input.addEventListener( 'change', handleSearch );
+			const event = new Event( 'frmAfterSearch', { bubbles: false } );
 
 			function handleSearch() {
 				const searchText = input.value.toLowerCase();
@@ -369,7 +370,6 @@
 					item.classList.toggle( 'frm-search-result', isSearchResult );
 				}
 
-				const event = new Event( 'frmAfterSearch', { bubbles: false } );
 				input.dispatchEvent( event );
 			}
 		}
