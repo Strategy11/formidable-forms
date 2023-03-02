@@ -7301,6 +7301,7 @@ ul .frm_col_two {
 .frm_wrap .ui-autocomplete li > div,
 .multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:visited,
 .frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
