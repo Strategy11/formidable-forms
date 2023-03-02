@@ -5506,7 +5506,6 @@ function frmAdminBuildJS() {
 
 		originalLabel = purifyImgTags( originalLabel );
 
-		console.log( originalLabel );
 		if ( imageUrl ) {
 			labelImage = tag( 'img', { src: imageUrl, alt: originalLabel });
 		} else {
