@@ -6241,8 +6241,7 @@ ul.start_divider {
 
 .frm-page-collapsed .frm_clone_icon,
 .frm-page-collapsed .frm_delete_field,
-.frm-section-collapsed .frm_clone_icon,
-.frm-section-collapsed .frm_delete_field {
+.frm-section-collapsed .frm_clone_icon {
 	opacity: .5;
 	cursor: not-allowed;
 }
