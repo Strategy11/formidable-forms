@@ -452,7 +452,7 @@ function frmAdminBuildJS() {
 
 		if ( text !== null && text !== '' ) {
 			this.setAttribute( 'data-toggletext', this.innerHTML );
-			this.innerHTML = text;
+			this.textContent = text;
 		}
 
 		return false;
