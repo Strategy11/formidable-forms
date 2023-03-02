@@ -5479,42 +5479,43 @@ function frmAdminBuildJS() {
 			imgs;
 
 		function createElementFromHTML( htmlString ) {
-			var div = document.createElement('div');
+			var div = document.createElement( 'div' );
 			div.innerHTML = htmlString.trim();
 			return div.firstChild;
 		}
 
-		imgs = originalLabel.match(/<img([\w\W]+?)>/g);
+		function purifyImgTags( html ) {
+			imgs = html.match( /<img([\w\W]+?)>/g );
 
-		if ( imgs.length ) {
-			imgs.forEach( img => {
-				let imgNode = createElementFromHTML( img );
-				imgNode.removeAttribute( 'onerror' );
-				originalLabel = originalLabel.replace( img, imgNode.outerHTML );
-			});
+			const unsafeAttributes = [ 'onerror', 'onclick' ];
+			if ( imgs.length ) {
+				imgs.forEach( img => {
+					console.log( img );
+					let imgNode = createElementFromHTML( img );
+					unsafeAttributes.forEach( attr => {
+						console.log( attr, imgNode.getAttribute( attr ) );
+						imgNode.removeAttribute( attr );
+					});
+					console.log( imgNode );
+					html = html.replace( img, imgNode.outerHTML );
+				});
+			}
+
+			return html;
 		}
 
+		originalLabel = purifyImgTags( originalLabel );
+
 		if ( imageUrl ) {
-			labelImage = tag(
-				'img',
-				{
-					src: imageUrl,
-					alt: originalLabel
-				}
-			);
+			labelImage = tag( 'img', { src: imageUrl, alt: originalLabel });
 		} else {
-			labelImage = tag(
-				'div',
-				{
-					className: 'frm_empty_url'
-				}
-			);
+			labelImage = tag( 'div', { className: 'frm_empty_url' });
 			labelImage.innerHTML = frm_admin_js.image_placeholder_icon;
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' } );
+		imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' });
 
 		imageLabel.innerHTML = originalLabel;
 		labelNode = tag(
@@ -5522,21 +5523,9 @@ function frmAdminBuildJS() {
 			{
 				className: 'frm_image_option_container' + imageLabelClass,
 				children: [
-					tag(
-						'div',
-						{
-							className: 'frm_selected_checkmark',
-							child: svg({ href: '#frm_checkmark_' + shape + '_icon' })
-						}
-					),
+					tag( 'div', { className: 'frm_selected_checkmark', child: svg({ href: '#frm_checkmark_' + shape + '_icon' }) }),
 					labelImage,
-					tag(
-						'span',
-						{
-							className: 'frm_text_label_for_image',
-							child: imageLabel
-						}
-					)
+					tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel })
 				]
 			}
 		);
