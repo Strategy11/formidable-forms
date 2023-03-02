@@ -6815,18 +6815,6 @@ function frmAdminBuildJS() {
 		}*/
 	}
 
-	function showFormMessages() {
-		var show = false;
-		var editable = document.getElementById( 'editable' );
-		if ( editable !== null ) {
-			show = editable.checked && jQuery( document.getElementById( 'edit_action' ) ).val() === 'message';
-			if ( ! show ) {
-				show = isChecked( 'save_draft' );
-			}
-		}
-		return show;
-	}
-
 	function checkDupPost() {
 		/*jshint validthis:true */
 		var postField = jQuery( 'select.frm_single_post_field' );
