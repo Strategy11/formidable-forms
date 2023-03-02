@@ -8872,7 +8872,7 @@ function frmAdminBuildJS() {
 		const searchInput = document.getElementById( inputID );
 
 		if ( itemClass === 'control-section accordion-section' ) {
-			frmDom.search.init( searchInput, 'frm-selectable frm-searchable-template' );
+			itemClass = 'frm-selectable frm-searchable-template';
 
 			searchInput.addEventListener( 'frmAfterSearch', () => {
 				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
@@ -8884,17 +8884,15 @@ function frmAdminBuildJS() {
 				});
 			});
 
-		} else {
-			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
-				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
-					let innerText = '';
-					innerText = item.querySelector( 'h3' ).innerText;
-					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
-				});
-			}
-
-			frmDom.search.init( searchInput, itemClass );
+		} else if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
+			Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
+				let innerText = '';
+				innerText = item.querySelector( 'h3' ).innerText;
+				item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
+			});
 		}
+
+		frmDom.search.init( searchInput, itemClass );
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
