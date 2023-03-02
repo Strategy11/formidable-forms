@@ -3519,16 +3519,14 @@ function frmAdminBuildJS() {
 			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
-			fieldId = field.data( 'fid' ),
-			fieldBoxes,
-			fieldsInsideFieldBox,
-			fieldIdsToDelete = 0;
+			fieldId = field.data( 'fid' );
 
 		if ( field.data( 'ftype' ) === 'divider' ) {
-			fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider' )?.querySelectorAll( '.frm_field_box' );
+			const fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider' )?.querySelectorAll( '.frm_field_box' );
 			if ( fieldBoxes && fieldBoxes.length ) {
+				let fieldIdsToDelete = 0;
 				fieldBoxes.forEach( fieldBox => {
-					fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
+					const fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
 					if ( fieldsInsideFieldBox ) {
 						fieldIdsToDelete += fieldsInsideFieldBox.length;
 					}
