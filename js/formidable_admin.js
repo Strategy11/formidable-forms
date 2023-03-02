@@ -5487,14 +5487,17 @@ function frmAdminBuildJS() {
 		function purifyImgTags( html ) {
 			imgs = html.match( /<img([\w\W]+?)>/g );
 
-			const unsafeAttributes = [ 'onerror', 'onclick' ];
+			const safeAttributes = [ 'src', 'class', 'height', 'width' ];
 			if ( imgs.length ) {
 				imgs.forEach( img => {
-					let imgNode = createElementFromHTML( img );
-					unsafeAttributes.forEach( attr => {
-						imgNode.removeAttribute( attr );
+					let unsafeImgNode = createElementFromHTML( img );
+					[ ...unsafeImgNode.attributes ].forEach( attr => {
+						if ( ! safeAttributes.includes( attr.name ) ) {
+							unsafeImgNode.removeAttribute( attr.name );
+						}
 					});
-					html = html.replace( img, imgNode.outerHTML );
+
+					html = html.replaceAll( img, unsafeImgNode.outerHTML );
 				});
 			}
 
@@ -5503,6 +5506,7 @@ function frmAdminBuildJS() {
 
 		originalLabel = purifyImgTags( originalLabel );
 
+		console.log( originalLabel );
 		if ( imageUrl ) {
 			labelImage = tag( 'img', { src: imageUrl, alt: originalLabel });
 		} else {
