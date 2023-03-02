@@ -3508,6 +3508,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function confirmFieldsDeleteMessage( numberOfFields ) {
+		/* translators: %1$s: Number of fields that are selected to be deleted. */
+		return __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', numberOfFields );
+	}
+
 	function clickDeleteField() {
 		/*jshint validthis:true */
 		var confirmMsg = frm_admin_js.conf_delete,
@@ -3529,8 +3534,7 @@ function frmAdminBuildJS() {
 					}
 				});
 				if ( fieldIdsToDelete ) {
-					/* translators: %1$s: Number of fields that are selected to be deleted. */
-					confirmMsg = __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', fieldIdsToDelete );
+					confirmMsg = confirmFieldsDeleteMessage( fieldIdsToDelete );
 				}
 			}
 		}
@@ -4467,8 +4471,7 @@ function frmAdminBuildJS() {
 			multiselectPopup.remove();
 		}
 
-		/* translators: %1$s: Number of fields that are selected to be deleted. */
-		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
+		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
 		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
