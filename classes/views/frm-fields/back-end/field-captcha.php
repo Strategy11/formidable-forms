@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! FrmFieldCaptcha::should_show_captcha() ) {
 	?>
 <span class="frm-with-icon frm-not-set frm_note_style">
-	<?php FrmProAppHelper::icon_by_class( 'frm_icon_font frm_report_problem_solid_icon' ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_report_problem_solid_icon' ); ?>
 	<?php esc_attr_e( 'This field is not set up yet.', 'formidable' ); ?>
 </span>
 	<?php
