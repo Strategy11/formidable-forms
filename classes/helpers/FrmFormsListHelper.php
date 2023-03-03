@@ -163,7 +163,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$form_type = FrmAppHelper::simple_get( 'form_type', 'sanitize_title', 'published' );
 
 		if ( isset( $statuses[ $form_type ] ) ) {
-			$counts->$form_type = count( $this->items );
+			$counts->$form_type = $this->total_items;
 		}
 
 		$form_type = self::get_param(
