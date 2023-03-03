@@ -8874,7 +8874,7 @@ function frmAdminBuildJS() {
 		if ( itemClass === 'control-section accordion-section' ) {
 			itemClass = 'frm-selectable frm-searchable-template';
 
-			searchInput.addEventListener( 'frmAfterSearch', () => {
+			const handleTemplateSearch = () => {
 				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
 					const found = category.closest( '.control-section.accordion-section' ).querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' );
 					if ( found ) {
@@ -8882,7 +8882,9 @@ function frmAdminBuildJS() {
 					}
 					category.classList.toggle( 'frm_hidden', ! found );
 				});
-			});
+			};
+
+			frmDom.search.init( searchInput, itemClass, { handleSearchResult: handleTemplateSearch });
 
 		} else if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
 			Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
@@ -8890,9 +8892,9 @@ function frmAdminBuildJS() {
 				innerText = item.querySelector( 'h3' ).innerText;
 				item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
 			});
+			frmDom.search.init( searchInput, itemClass );
 		}
 
-		frmDom.search.init( searchInput, itemClass );
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
