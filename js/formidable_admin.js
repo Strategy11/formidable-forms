@@ -8886,12 +8886,14 @@ function frmAdminBuildJS() {
 
 			frmDom.search.init( searchInput, itemClass, { handleSearchResult: handleTemplateSearch });
 
-		} else if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
-			Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
-				let innerText = '';
-				innerText = item.querySelector( 'h3' ).innerText;
-				item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
-			});
+		} else {
+			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
+				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
+					let innerText = '';
+					innerText = item.querySelector( 'h3' ).innerText;
+					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
+				});
+			}
 			frmDom.search.init( searchInput, itemClass );
 		}
 
