@@ -2049,7 +2049,6 @@ function frmAdminBuildJS() {
 		}
 
 		closeOpenFieldDropdowns();
-
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
 		newRowId = this.getAttribute( 'frm-target-row-id' );
@@ -2110,6 +2109,7 @@ function frmAdminBuildJS() {
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
+				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 			}
 		});
 		return false;
