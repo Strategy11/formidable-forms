@@ -8769,6 +8769,11 @@ Responsive Design
 		display: block;
 		width: 100%;
 	}
+
+	#form_reports_page .google-visualization-table > div {
+		overflow: visible !important;
+		height: auto !important;
+	}
 }
 
 .frm-admin-page-styles #frm-publishing #save_menu_header,
