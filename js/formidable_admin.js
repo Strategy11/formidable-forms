@@ -3522,18 +3522,16 @@ function frmAdminBuildJS() {
 			fieldId = field.data( 'fid' );
 
 		if ( field.data( 'ftype' ) === 'divider' ) {
-			const fieldBoxes = document.querySelector( '.frm-field-group-hover-target' )?.querySelector( '.start_divider' )?.querySelectorAll( '.frm_field_box' );
-			if ( fieldBoxes && fieldBoxes.length ) {
-				let fieldIdsToDelete = 0;
-				fieldBoxes.forEach( fieldBox => {
-					const fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
-					if ( fieldsInsideFieldBox ) {
-						fieldIdsToDelete += fieldsInsideFieldBox.length;
-					}
-				});
-				if ( fieldIdsToDelete ) {
-					confirmMsg = confirmFieldsDeleteMessage( fieldIdsToDelete );
+			const fieldBoxes = document.querySelectorAll( '.frm-field-group-hover-target .start_divider .frm_field_box' );
+			let fieldIdsToDelete = 0;
+			fieldBoxes.forEach( fieldBox => {
+				const fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
+				if ( fieldsInsideFieldBox ) {
+					fieldIdsToDelete += fieldsInsideFieldBox.length;
 				}
+			});
+			if ( fieldIdsToDelete ) {
+				confirmMsg = confirmFieldsDeleteMessage( fieldIdsToDelete );
 			}
 		}
 
