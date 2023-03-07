@@ -2602,6 +2602,14 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	private static function fill_atts_for_form_display( &$args ) {
+		if ( ! isset( $args['title'] ) && isset( $args['show_title'] ) ) {
+			$args['title'] = $args['show_title'];
+		}
+
+		if ( ! isset( $args['description'] ) && isset( $args['show_description'] ) ) {
+			$args['description'] = $args['show_description'];
+		}
+
 		$defaults = array(
 			'errors'      => array(),
 			'message'     => '',
