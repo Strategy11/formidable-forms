@@ -4,22 +4,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
-
 		<?php
-		FrmAppHelper::get_admin_header(
-			array(
-				'label'       => __( 'Form Entries', 'formidable' ),
-				'form'        => $form,
-				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
-				'import_link' => true,
-				'publish'     => ! $form ? true : array(
-					'FrmAppHelper::add_new_item_link',
-					array(
-						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
+		if ( FrmAppHelper::pro_is_installed() ) {
+			// Adding new entries from an admin page is a Pro feature.
+			FrmAppHelper::get_admin_header(
+				array(
+					'label'       => __( 'Form Entries', 'formidable' ),
+					'form'        => $form,
+					'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
+					'import_link' => true,
+					'publish'     => ! $form ? true : array(
+						'FrmAppHelper::add_new_item_link',
+						array(
+							'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
+						),
 					),
-				),
-			)
-		);
+				)
+			);
+		}
 		?>
 
 		<div class="wrap">
