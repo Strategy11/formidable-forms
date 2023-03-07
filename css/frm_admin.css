@@ -602,6 +602,7 @@ ul.frm_form_nav > li {
 
 #frm-publishing {
 	min-width: 225px;
+	max-width: 325px;
 	align-self: center;
 	align-items: center;
 	display: flex;
