@@ -1,4 +1,15 @@
 == Changelog ==
+= 6.1.2 =
+* New: The active filtered form type will be used when searching forms. Previously form searching would only check active forms.
+* Fix: The add new entry/import buttons would appear incorrectly when Pro wasn't installed.
+* Fix: Long button translations, like for German, would cause buttons in the header to overflow into multiple lines.
+* Fix: A CAPTCHA field in a form without any keys set would trigger an error when Pro wasn't installed.
+
+= 6.1.1 =
+* Fix: Redirects weren't happening after submit in forms without the new Confirmation form actions.
+* Fix: The email message box was difficult to resize manually.
+* Fix: There was extra space showing on the edit style page.
+
 = 6.1 =
 * Security: Added a new global setting to use custom headers when retrieving IPs with form submissions. This is disabled by default to avoid IP spoofing but required when using a reverse proxy as all IP addresses may appear identical. This setting is hidden when the GDPR IP option is enabled, but can still be enabled with a new frm_use_custom_header_ip filter using __return_true.
 * New: Full screen pages are now conditionally full screen based on the WordPress fullscreen mode user preference setting.
