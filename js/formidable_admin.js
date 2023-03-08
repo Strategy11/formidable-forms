@@ -5362,7 +5362,7 @@ function frmAdminBuildJS() {
 			if ( ! isOther || showOther ) {
 				var opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
-				opt.innerHTML = label;
+				opt.innerHTML = purifyImgTags( label );
 
 				if ( isProduct ) {
 					opt.setAttribute( 'data-price', opts[ i ].price );
@@ -5476,7 +5476,11 @@ function frmAdminBuildJS() {
 	}
 
 	function purifyImgTags( html ) {
-		imgs = html.match( /<img([\w\W]+?)>/g );
+		const imgs = html.match( /<img([\w\W]+?)>/g );
+
+		if ( ! imgs ) {
+			return html;
+		}
 
 		const safeAttributes = [ 'src', 'class', 'height', 'width' ];
 		if ( imgs.length ) {
@@ -5501,8 +5505,7 @@ function frmAdminBuildJS() {
 			shape = fieldType === 'checkbox' ? 'square' : 'circle',
 			labelImage,
 			labelNode,
-			imageLabel,
-			imgs;
+			imageLabel;
 
 		originalLabel = purifyImgTags( originalLabel );
 
@@ -5615,6 +5618,7 @@ function frmAdminBuildJS() {
 				areValuesSeparate === input.name.endsWith( '[value]' ) &&
 				input.value === targetInput.value
 		);
+
 		if ( conflicts.length ) {
 			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyImgTags( targetInput.value ) ) );
 		}
