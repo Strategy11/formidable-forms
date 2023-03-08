@@ -3531,7 +3531,7 @@ function frmAdminBuildJS() {
 				}
 			});
 			if ( fieldIdsToDelete ) {
-				confirmMsg = confirmFieldsDeleteMessage( fieldIdsToDelete );
+				confirmMsg = confirmFieldsDeleteMessage( ++fieldIdsToDelete );
 			}
 		}
 
