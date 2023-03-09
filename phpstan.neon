@@ -76,4 +76,7 @@ parameters:
 		- '#spl_autoload_register expects#'
 		- '#always exists and is always falsy#'
 		- '#has an unused use#'
-
+		- '#AllowDynamicProperties does not exist#'
+		- '#Variable \$customer_id_error_message in empty\(\) is never defined#'
+		- "#Offset '(stripe_link|change_field)' on string in#"
+		- '#Result of static method FrmTransLiteCRUDController::show#'

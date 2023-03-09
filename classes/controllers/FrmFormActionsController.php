@@ -49,7 +49,7 @@ class FrmFormActionsController {
 			'wppost'            => 'FrmDefPostAction',
 			'register'          => 'FrmDefRegAction',
 			'paypal'            => 'FrmDefPayPalAction',
-			'payment'           => 'FrmDefHrsAction',
+			'payment'           => 'FrmTransLiteAction',
 			'quiz'              => 'FrmDefQuizAction',
 			'quiz_outcome'      => 'FrmDefQuizOutcomeAction',
 			'mailchimp'         => 'FrmDefMlcmpAction',

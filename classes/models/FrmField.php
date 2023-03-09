@@ -75,6 +75,10 @@ class FrmField {
 				'name' => $captcha_name,
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
+			'credit_card'    => array(
+				'name'  => __( 'Credit Card', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_credit_card_icon',
+			),
 		);
 
 		return apply_filters( 'frm_available_fields', $fields );
@@ -167,10 +171,11 @@ class FrmField {
 				'name' => __( 'Tags', 'formidable' ),
 				'icon' => 'frm_icon_font frm_price_tags_icon',
 			),
+			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
+			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
 			'credit_card'    => array(
-				'name'  => __( 'Credit Card', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_credit_card_icon frm_show_upgrade',
-				'addon' => 'stripe',
+				'name'  => '',
+				'icon'  => '',
 			),
 			'address'        => array(
 				'name' => __( 'Address', 'formidable' ),

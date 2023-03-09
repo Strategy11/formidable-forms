@@ -19,6 +19,7 @@ namespace {
 	define( 'COOKIEHASH', '' );
 	define( 'COOKIE_DOMAIN', false );
 	define( 'WP_IMPORTING', false );
+	define( 'ICL_PLUGIN_INACTIVE', false );
 
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}

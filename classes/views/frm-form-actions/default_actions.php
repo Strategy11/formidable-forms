@@ -88,6 +88,7 @@ class FrmDefTwilioAction extends FrmFormAction {
 }
 
 // add payment action
+// TODO: deprecate this.
 class FrmDefHrsAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops           = FrmFormAction::default_action_opts( 'frm_stripe_icon frm_credit_card_alt_icon frm_show_upgrade' );
