@@ -39,7 +39,7 @@ class FrmTransLiteAppController {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
 
 			$log_message = 'Subscription #' . $sub->id . ': ';
-			if ( $sub->status == 'future_cancel' ) {
+			if ( $sub->status === 'future_cancel' ) {
 				FrmTransLiteSubscriptionsController::change_subscription_status(
 					array(
 						'status' => 'canceled',
@@ -90,9 +90,13 @@ class FrmTransLiteAppController {
 		}
 	}
 
+	/**
+	 * @param object $sub
+	 * @param object $last_payment
+	 */
 	private static function update_sub_for_new_payment( $sub, $last_payment ) {
 		$frm_sub = new FrmTransLiteSubscription();
-		if ( $last_payment->status == 'complete' ) {
+		if ( $last_payment->status === 'complete' ) {
 			$frm_sub->update(
 				$sub->id,
 				array(
@@ -100,7 +104,7 @@ class FrmTransLiteAppController {
 					'next_bill_date' => $last_payment->expire_date,
 				)
 			);
-		} elseif ( $last_payment->status == 'failed' ) {
+		} elseif ( $last_payment->status === 'failed' ) {
 			self::add_one_fail( $sub );
 		}
 	}

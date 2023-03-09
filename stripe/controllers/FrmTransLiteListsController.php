@@ -36,10 +36,10 @@ class FrmTransLiteListsController {
 
 		if ( 'subscriptions' === $type ) {
 			$add_columns = array(
-				'sub_id'     => __( 'Profile ID', 'formidable' ),
-				'item_id'    => __( 'Entry', 'formidable' ),
-				'form_id'    => __( 'Form', 'formidable' ),
-				'amount'     => __( 'Billing Cycle', 'formidable' ),
+				'sub_id'         => __( 'Profile ID', 'formidable' ),
+				'item_id'        => __( 'Entry', 'formidable' ),
+				'form_id'        => __( 'Form', 'formidable' ),
+				'amount'         => __( 'Billing Cycle', 'formidable' ),
 				'end_count'      => __( 'Payments Made', 'formidable' ),
 				'next_bill_date' => __( 'Next Bill Date', 'formidable' ),
 			);
