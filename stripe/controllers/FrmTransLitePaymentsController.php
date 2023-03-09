@@ -128,12 +128,13 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 */
 	public static function refund_link( $payment ) {
 		if ( $payment->status === 'refunded' ) {
-			$link = __( 'Refunded', 'formidable' );
+			$link = esc_html__( 'Refunded', 'formidable' );
 		} else {
-			$link = admin_url( 'admin-ajax.php?action=frm_trans_refund&payment_id=' . $payment->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
 			$confirm = __( 'Are you sure you want to refund that payment?', 'formidable' );
-			$link = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-deleteconfirm="' . esc_attr( $confirm ) . '">';
-			$link .= __( 'Refund', 'formidable' );
+
+			$link  = admin_url( 'admin-ajax.php?action=frm_trans_refund&payment_id=' . $payment->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
+			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-deleteconfirm="' . esc_attr( $confirm ) . '">';
+			$link .= esc_html__( 'Refund', 'formidable' );
 			$link .= '</a>';
 		}
 

@@ -11,6 +11,8 @@ class FrmStrpLiteSubscriptionHelper {
 	 * Prepare a charge object for a Stripe subscription.
 	 *
 	 * @since 3.0
+	 * @todo I removed the $charge_object->paid = false; line from here is it isn't required for Stripe link.
+	 *       Make sure that if/when we re-use this in Stripe that we still include that.
 	 *
 	 * @param object $subscription A Stripe Subscription object.
 	 * @param string $amount
@@ -20,7 +22,6 @@ class FrmStrpLiteSubscriptionHelper {
 		$charge_object                       = new stdClass();
 		$charge_object->sub_id               = $subscription->id;
 		$charge_object->id                   = null;
-		$charge_object->paid                 = false; // This is only checked in FrmStrpLiteActionsController::trigger_one_time_payment, it doesn't need to be set for Stripe Link.
 		$charge_object->amount               = $amount;
 		$charge_object->current_period_start = $subscription->current_period_start;
 		$charge_object->current_period_end   = $subscription->current_period_end;
