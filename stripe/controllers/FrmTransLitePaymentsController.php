@@ -2,6 +2,9 @@
 
 class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		$frm_settings = FrmAppHelper::get_settings();
 
@@ -9,6 +12,9 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		add_submenu_page( 'formidable', $frm_settings->menu . ' | Payments', 'Payments', 'frm_view_entries', 'formidable-payments', 'FrmTransLitePaymentsController::route' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
@@ -24,10 +30,16 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function new_payment() {
 		self::get_new_vars();
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function create() {
 		$frm_payment = new FrmTransLitePayment();
 		if ( $id = $frm_payment->create( $_POST ) ) {
@@ -39,12 +51,15 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function get_new_vars( $error = '' ) {
 		global $wpdb;
 
-		$frm_payment = new FrmTransLitePayment();
+		$frm_payment  = new FrmTransLitePayment();
 		$get_defaults = $frm_payment->get_defaults();
-		$defaults = array();
+		$defaults     = array();
 		foreach ( $get_defaults as $name => $values ) {
 			$defaults[ $name ] = $values['default'];
 		}
@@ -57,7 +72,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 		$currency = FrmTransLiteAppHelper::get_currency( 'usd' );
 
-		include( FrmTransLiteAppHelper::plugin_path() . '/views/payments/new.php' );
+		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/new.php';
 	}
 
 	/**
@@ -66,7 +81,11 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 */
 	public static function load_sidebar_actions( $payment ) {
 		FrmTransLiteActionsController::actions_js();
-		// TODO Still include sidebar actions for the capture link in the payments submodule.
+
+		$icon        = $payment->status === 'complete' ? 'yes' : 'no-alt';
+		$date_format = __( 'M j, Y @ G:i' );
+		$created_at  = FrmAppHelper::get_localized_date( $date_format, $payment->created_at );
+		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/sidebar_actions.php';
 	}
 
 	/**
@@ -136,6 +155,8 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function refund_payment() {
+		// TODO If this isn't Lite, use the Payments submodule.
+
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
@@ -145,8 +166,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$payment     = $frm_payment->get_one( $payment_id );
 
 			$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $payment->paysys, 'class' );
-			$class_name = 'Frm' . $class_name . 'ApiHelper';
-			$refunded   = $class_name::refund_payment( $payment->receipt_id, compact( 'payment' ) );
+			$refunded   = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
 			if ( $refunded ) {
 				self::change_payment_status( $payment, 'refunded' );
 				$message = __( 'Refunded', 'formidable' );
@@ -166,6 +186,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 *
 	 * @param object $payment
 	 * @param string $status
+	 * @return void
 	 */
 	public static function change_payment_status( $payment, $status ) {
 		$frm_payment = new FrmTransLitePayment();

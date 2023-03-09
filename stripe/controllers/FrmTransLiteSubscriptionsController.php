@@ -55,6 +55,8 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function cancel_subscription() {
+		// TODO If the Payments submodule is active, use it to cancel subscription instead.
+
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
 		$sub_id = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
@@ -63,8 +65,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$sub     = $frm_sub->get_one( $sub_id );
 			if ( $sub ) {
 				$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $sub->paysys, 'class' );
-				$class_name = 'Frm' . $class_name . 'ApiHelper';
-				$canceled   = $class_name::cancel_subscription( $sub->sub_id );
+				$canceled   = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
 				if ( $canceled ) {
 					self::change_subscription_status(
 						array(

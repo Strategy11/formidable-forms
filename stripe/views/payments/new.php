@@ -26,7 +26,6 @@
 						<?php
 						$form_action = 'create';
 						wp_nonce_field( 'create-options' );
-
 						require FrmTransLiteAppHelper::plugin_path() . '/views/payments/form.php';
 						?>
 

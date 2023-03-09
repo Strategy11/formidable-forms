@@ -1,3 +1,7 @@
+
+<?php // Don't just always include this when the Payments submodule is active. ?>
+<input type="hidden" value="stripe" name="<?php echo esc_attr( $this->get_field_name( 'gateway' ) ); ?>[]" />
+
 <div class="frm_grid_container">
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">

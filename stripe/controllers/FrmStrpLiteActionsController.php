@@ -323,7 +323,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function before_save_settings( $settings ) {
 		$settings['currency']    = strtolower( $settings['currency'] );
-		$settings['stripe_link'] = ! empty( $settings['stripe_link'] ) ? 1 : 0;
+		// TODO Only force one when the Stripe add on isn't active.
+		$settings['stripe_link'] = 1;//! empty( $settings['stripe_link'] ) ? 1 : 0;
 		$settings                = self::create_plans( $settings );
 		return $settings;
 	}
