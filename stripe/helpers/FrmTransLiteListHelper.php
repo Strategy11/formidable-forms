@@ -14,7 +14,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function prepare_items() {
 		global $wpdb;
-        
+
 		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
 
@@ -27,10 +27,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$this->items = $wpdb->get_results( 'SELECT * ' . $query . " ORDER BY p.{$orderby} $order LIMIT $start, $per_page");
 		$total_items = $wpdb->get_var( 'SELECT COUNT(*) ' . $query );
 
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,
-			'per_page'    => $per_page
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page'    => $per_page
+			)
+		);
 	}
 
 	/**
@@ -39,13 +41,15 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_table_query() {
 		global $wpdb;
 
-		$table_name = ( $this->table == 'subscriptions' ) ? 'frm_subscriptions' : 'frm_payments';
+		$table_name = $this->table === 'subscriptions' ? 'frm_subscriptions' : 'frm_payments';
 		$form_id    = FrmAppHelper::get_param( 'form', 0, 'get', 'absint' );
+
 		if ( $form_id ) {
 			$query = $wpdb->prepare( "FROM {$wpdb->prefix}{$table_name} p LEFT JOIN {$wpdb->prefix}frm_items i ON (p.item_id = i.id) WHERE i.form_id = %d", $form_id );
 		} else {
 			$query = 'FROM ' . $wpdb->prefix . $table_name . ' p';
 		}
+
 		return $query;
 	}
 
@@ -60,7 +64,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return array
 	 */
 	public function get_views() {
-
 		$statuses = array(
 		    'payments'      => __( 'Payments', 'formidable' ),
 		    'subscriptions' => __( 'Subscriptions', 'formidable' ),
@@ -242,16 +245,20 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $val;
 	}
 
+	/**
+	 * @param object $item
+	 * @return array
+	 */
 	private function get_row_actions( $item ) {
-		$base_link = '?page=formidable-payments&action=';
-		$edit_link = $base_link . 'edit&id=' . $item->id;
-		$view_link = $base_link . 'show&id=' . $item->id . '&type=' .  $this->table;
+		$base_link   = '?page=formidable-payments&action=';
+		$edit_link   = $base_link . 'edit&id=' . $item->id;
+		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' .  $this->table;
 		$delete_link = $base_link . 'destroy&id=' . $item->id;
 
-		$actions = array();
+		$actions         = array();
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
 
-		if ( $this->table != 'subscriptions' ) {
+		if ( $this->table !== 'subscriptions' ) {
 			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
 			$actions['delete'] = '<a href="' . esc_url( $delete_link ) . '">' . __( 'Delete' ) . '</a>';
 		}
@@ -259,14 +266,27 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $actions;
 	}
 
+	/**
+	 * @param object $item
+	 * @return string
+	 */
 	private function get_item_id_column( $item) {
 		return '<a href="' . esc_url( '?page=formidable-entries&frm_action=show&action=show&id=' . $item->item_id ) . '">' . $item->item_id . '</a>';
 	}
 
+	/**
+	 * @param object $item
+	 * @param array  $atts
+	 * @return mixed
+	 */
 	private function get_form_id_column( $item, $atts ) {
 		return isset( $atts['form_ids'][ $item->item_id ] ) ? $atts['form_ids'][ $item->item_id ]->name : '';
 	}
 
+	/**
+	 * @param object $item
+	 * @return string
+	 */
 	private function get_user_id_column( $item ) {
 		global $wpdb;
 		$val = FrmDb::get_var( $wpdb->prefix .'frm_items', array( 'id' => $item->item_id ), 'user_id' );

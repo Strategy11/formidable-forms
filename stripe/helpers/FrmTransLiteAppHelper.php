@@ -101,6 +101,9 @@ class FrmTransLiteAppHelper {
 		return $currency;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_currencies() {
 		$pro_currencies = array();
 		if ( is_callable( 'FrmProCurrencyHelper::get_currencies' ) ) {
@@ -270,7 +273,7 @@ class FrmTransLiteAppHelper {
 		);
 
 		$currencies = array_merge( $currencies, $pro_currencies );
-		$currencies = apply_filters( 'frm_currencies', $currencies );
+		$currencies = (array) apply_filters( 'frm_currencies', $currencies );
             
 		return $currencies;
 	}
@@ -480,7 +483,6 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param string $date
 	 * @param string $format
-	 *
 	 * @return string
 	 */
 	public static function format_the_date( $date, $format = '' ) {
@@ -508,20 +510,24 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param int $user_id
-	 *
 	 * @return string
 	 */
 	public static function get_user_link( $user_id ) {
-		$user_link = __( 'Guest', 'formidable' );
+		$user_link = esc_html__( 'Guest', 'formidable' );
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
 			if ( $user ) {
-				$user_link = '<a href="' . esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . $user->display_name . '</a>';
+				$user_link = '<a href="' . esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
 		}
 		return $user_link;
 	}
 
+	/**
+	 * @param mixed  $value
+	 * @param string $label
+	 * @return void
+	 */
 	public static function show_in_table( $value, $label ) {
 		if ( ! empty( $value ) ) { ?>
 			<tr valign="top">
