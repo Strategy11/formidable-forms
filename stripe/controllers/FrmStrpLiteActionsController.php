@@ -224,23 +224,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Maybe update charge attributes for free trials.
-	 *
-	 * @param array $atts
-	 * @return void
-	 */
-	private static function adjust_for_free_trial( &$atts ) {
-		$trial_end = self::get_trial_end_time( $atts );
-		if ( ! $trial_end ) {
-			return;
-		}
-
-		$atts['charge']->amount               = 0;
-		$atts['charge']->current_period_start = time();
-		$atts['charge']->current_period_end   = $trial_end;
-	}
-
-	/**
 	 * Get the trial period from the settings or from the connected entry.
 	 *
 	 * @since 1.16
