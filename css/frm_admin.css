@@ -737,6 +737,10 @@ ul.frm_form_nav > li {
 	overflow-y: hidden;
 }
 
+.frm-white-body.post-type-frm_display #titlediv #title-prompt-text {
+	padding: 3px 0 0 10px;
+}
+
 .frm_wrap .columns-2 .frm-right-panel,
 .frm-right-panel {
 	flex: 0 0 var(--biggest-sidebar);
