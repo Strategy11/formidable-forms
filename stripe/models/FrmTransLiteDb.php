@@ -2,10 +2,25 @@
 
 class FrmTransLiteDb {
 
-	public $db_version  = 5;
+	/**
+	 * @var int
+	 */
+	public $db_version = 5;
+
+	/**
+	 * @var string
+	 */
 	public $db_opt_name = 'frm_trans_db_version';
-	public $table_name  = '';
-	public $singular    = '';
+
+	/**
+	 * @var string
+	 */
+	public $table_name = '';
+
+	/**
+	 * @var string
+	 */
+	public $singular = '';
 
 	/**
 	 * @param mixed $old_db_version
@@ -194,12 +209,12 @@ class FrmTransLiteDb {
 		$defaults = $this->get_defaults();
 		foreach ( $defaults as $val => $default ) {
 			if ( isset( $values[ $val ] ) ) {
-				if ( $default['sanitize'] == 'float' ) {
+				if ( $default['sanitize'] === 'float' ) {
 					$new_values[ $val ] = (float) $values[ $val ];
 				} elseif ( ! empty( $default['sanitize'] ) ) {
 					$new_values[ $val ] = call_user_func( $default['sanitize'], $values[ $val ] );
 				}
-			} else if ( $values['action'] == 'create' ) {
+			} elseif ( $values['action'] === 'create' ) {
 				$new_values[ $val ] = $default['default'];
 			}
 		}
