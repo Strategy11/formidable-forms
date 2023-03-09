@@ -77,13 +77,20 @@ class FrmTransLiteCRUDController {
 		self::get_edit_vars( $id, $error, $message );
 	}
 
+	/**
+	 * @param mixed  $id
+	 * @param mixed  $errors
+	 * @param string $message
+	 * @return void
+	 */
 	public static function get_edit_vars( $id, $errors = '', $message = '' ) {
 		if ( ! $id ) {
 			die( esc_html__( 'Please select a payment to view', 'formidable' ) );
 		}
 
 		if ( ! current_user_can( 'frm_edit_entries' ) ) {
-			return self::show( $id );
+			self::show( $id );
+			return;
 		}
 
 		$table_name = self::table_name();
@@ -99,8 +106,8 @@ class FrmTransLiteCRUDController {
 				if ( $var === 'id' ) {
 					continue;
 				}
-				$var = sanitize_text_field( $var );
-				$val = sanitize_text_field( $val );
+				$var           = sanitize_text_field( $var );
+				$val           = sanitize_text_field( $val );
 				$payment->$var = FrmAppHelper::get_param( $var, $val, 'post', 'sanitize_text_field' );
 			}
 		}
@@ -108,6 +115,9 @@ class FrmTransLiteCRUDController {
 		include FrmTransLiteAppHelper::plugin_path() . '/views/' . $table_name . '/edit.php';
 	}
 
+	/**
+	 * @return string
+	 */
 	private static function table_name() {
 		$allowed = array( 'payments', 'subscriptions' );
 		$default = reset( $allowed );
@@ -119,8 +129,11 @@ class FrmTransLiteCRUDController {
 		return $name;
 	}
 
+	/**
+	 * @return FrmTransLiteSubscription|FrmTransLitePayment
+	 */
 	private static function the_class() {
-		$class_name = ( self::table_name() === 'subscriptions' ) ? 'FrmTransLiteSubscription' : 'FrmTransLitePayment';
+		$class_name = self::table_name() === 'subscriptions' ? 'FrmTransLiteSubscription' : 'FrmTransLitePayment';
 		return new $class_name();
 	}
 }
