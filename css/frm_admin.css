@@ -723,14 +723,18 @@ ul.frm_form_nav > li {
 	overflow: hidden;
 }
 
+.frm-white-body .columns-2 > div {
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
 .frm-white-body.post-type-frm_display .columns-2 {
 	display: block;
 	overflow: visible;
 }
 
-.frm-white-body .columns-2 > div {
-	overflow-y: auto;
-	box-sizing: border-box;
+.frm-white-body.post-type-frm_display .columns-2 > div {
+	overflow-y: hidden;
 }
 
 .frm_wrap .columns-2 .frm-right-panel,
