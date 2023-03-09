@@ -6,10 +6,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	public function __construct( $args ) {
 		$this->table = isset( $_REQUEST['trans_type'] ) ? $_REQUEST['trans_type'] : '';
-
 		parent::__construct( $args );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function prepare_items() {
 		global $wpdb;
         
@@ -31,6 +33,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		) );
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_table_query() {
 		global $wpdb;
 
@@ -44,10 +49,16 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $query;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function no_items() {
 		esc_html_e( 'No payments found.', 'formidable' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_views() {
 
 		$statuses = array(
@@ -66,7 +77,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
         $type        = isset( $_REQUEST['trans_type'] ) ? sanitize_text_field( $_REQUEST['trans_type'] ) : 'payments';
 
 	    foreach ( $statuses as $status => $name ) {
-
 	        if ( $status == $type ) {
     			$class = ' class="current"';
     		} else {
@@ -83,10 +93,16 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $links;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_columns() {
 	    return FrmTransLiteListsController::payment_columns();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_sortable_columns() {
 		return array(
 		    'item_id'        => 'item_id',
@@ -101,15 +117,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'next_bill_date' => 'next_bill_date',
 		);
 	}
-	
-	public function get_bulk_actions(){
-	    $actions = array( 'bulk_delete' => __( 'Delete' ) );
-            
-        return $actions;
-    }
 
+	/**
+	 * @param string $which
+	 * @return void
+	 */
 	public function extra_tablenav( $which ) {
-		$footer = ( $which != 'top' );
+		$footer = $which !== 'top';
 		if ( ! $footer ) {
 			$form_id = isset( $_REQUEST['form'] ) ? absint( $_REQUEST['form'] ) : 0;
 			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
