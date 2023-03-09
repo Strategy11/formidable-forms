@@ -36,14 +36,14 @@
 		</select>
 	</p>
 
-	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] == 'recurring' ? '' : 'frm_hidden'; ?>">
+	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Repeat Every', 'formidable' ); ?>
 		</label>
 		<input type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
 		<select name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
 			<?php foreach ( FrmTransLiteAppHelper::get_repeat_times() as $k => $v ) { ?>
-				<option value="<?php echo esc_attr($k); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
+				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
 			<?php } ?>
 		</select>
 		<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
