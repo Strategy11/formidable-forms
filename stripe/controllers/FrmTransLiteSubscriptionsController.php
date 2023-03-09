@@ -66,10 +66,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 				$class_name = 'Frm' . $class_name . 'ApiHelper';
 				$canceled   = $class_name::cancel_subscription( $sub->sub_id );
 				if ( $canceled ) {
-					self::change_subscription_status( array(
-						'status' => 'future_cancel',
-						'sub'    => $sub,
-					) );
+					self::change_subscription_status(
+						array(
+							'status' => 'future_cancel',
+							'sub'    => $sub,
+						)
+					);
 
 					$message = __( 'Canceled', 'formidable' );
 				} else {
@@ -78,7 +80,6 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			} else {
 				$message = __( 'That subscription was not found', 'formidable' );
 			}
-
 		} else {
 			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
 		}

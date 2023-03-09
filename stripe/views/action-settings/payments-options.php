@@ -8,21 +8,36 @@
 
 	<p class="frm6">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'amount' ) ); ?>">
-			<?php esc_html_e( 'Amount', 'formidable'); ?>
+			<?php esc_html_e( 'Amount', 'formidable' ); ?>
 		</label>
 		<input type="text" value="<?php echo esc_attr( $form_action->post_content['amount'] ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'amount' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'amount' ) ); ?>" class="frm_not_email_subject large-text" />
 	</p>
 
 	<?php
-	$cc_field = $this->maybe_show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'credit_card', 'allowed_fields' => 'credit_card' ) );
-	if ( $cc_field['field_count'] === 1 ) { ?>
+	$cc_field = $this->maybe_show_fields_dropdown(
+		$field_dropdown_atts,
+		array(
+			'name' => 'credit_card',
+			'allowed_fields' => 'credit_card',
+		)
+	);
+	if ( $cc_field['field_count'] === 1 ) {
+		?>
 		<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'credit_card' ) ); ?>" value="<?php echo esc_attr( $cc_field['field_id'] ); ?>" />
 	<?php } else { ?>
-    <p class="<?php echo esc_attr( $classes['credit_card'] ); ?> frm6">
+	<p class="<?php echo esc_attr( $classes['credit_card'] ); ?> frm6">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'credit_card' ) ); ?>">
 			<?php esc_html_e( 'Credit Card', 'formidable' ); ?>
 		</label>
-		<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'credit_card', 'allowed_fields' => 'credit_card' ) ); ?>
+		<?php
+		$this->show_fields_dropdown(
+			$field_dropdown_atts,
+			array(
+				'name' => 'credit_card',
+				'allowed_fields' => 'credit_card',
+			)
+		);
+		?>
 	</p>
 	<?php } ?>
 
@@ -66,10 +81,10 @@
 		<select name="<?php echo esc_attr( $this->get_field_name( 'currency' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'currency' ) ); ?>">
 			<?php foreach ( FrmTransLiteAppHelper::get_currencies() as $code => $currency ) { ?>
 				<option value="<?php echo esc_attr( strtolower( $code ) ); ?>" <?php selected( $form_action->post_content['currency'], strtolower( $code ) ); ?>><?php echo esc_html( $currency['name'] . ' (' . strtoupper( $code ) . ')' ); ?></option>
-			<?php
+				<?php
 				unset( $currency, $code );
 			}
-		?>
+			?>
 		</select>
 	</p>
 
@@ -91,18 +106,26 @@
 			<label for="<?php echo esc_attr( $action_control->get_field_id( 'billing_address' ) ); ?>">
 				<?php esc_html_e( 'Address', 'formidable' ); ?>
 			</label>
-			<?php $action_control->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_address', 'allowed_fields' => 'address' ) ); ?>
+			<?php
+			$action_control->show_fields_dropdown(
+				$field_dropdown_atts,
+				array(
+					'name' => 'billing_address',
+					'allowed_fields' => 'address',
+				)
+			);
+			?>
 	</p>
 	<p class="<?php echo esc_attr( $classes['billing_first_name'] ); ?> frm6">
 			<label for="<?php echo esc_attr( $this->get_field_id( 'billing_first_name' ) ); ?>">
-                <?php esc_html_e( 'First Name', 'formidable' ); ?>
-            </label>
+				<?php esc_html_e( 'First Name', 'formidable' ); ?>
+			</label>
 			<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_first_name' ) ); ?>
 	</p>
 	<p class="<?php echo esc_attr( $classes['billing_last_name'] ); ?> frm6">
 			<label for="<?php echo esc_attr( $this->get_field_id( 'billing_last_name' ) ); ?>">
 				<?php esc_html_e( 'Last Name', 'formidable' ); ?>
-            </label>
+			</label>
 			<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_last_name' ) ); ?>
-    </p>
+	</p>
 </div>

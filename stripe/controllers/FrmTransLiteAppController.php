@@ -38,12 +38,14 @@ class FrmTransLiteAppController {
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
 
-			$log_message = 'Subscription #' . $sub->id .': ';
+			$log_message = 'Subscription #' . $sub->id . ': ';
 			if ( $sub->status == 'future_cancel' ) {
-				FrmTransLiteSubscriptionsController::change_subscription_status( array(
-					'status' => 'canceled',
-					'sub'    => $sub,
-				) );
+				FrmTransLiteSubscriptionsController::change_subscription_status(
+					array(
+						'status' => 'canceled',
+						'sub'    => $sub,
+					)
+				);
 
 				$status = 'failed';
 				$log_message .= 'Failed triggers run on canceled subscription. ';
@@ -60,7 +62,7 @@ class FrmTransLiteAppController {
 				} elseif ( $new_payment ) {
 					$status = $last_payment->status;
 					self::update_sub_for_new_payment( $sub, $last_payment );
-				} elseif ( $last_payment->expire_date < date('Y-m-d') ) {
+				} elseif ( $last_payment->expire_date < date( 'Y-m-d' ) ) {
 					// the payment has expired, and no new payment was made
 					$status = 'failed';
 					self::add_one_fail( $sub );
@@ -77,7 +79,12 @@ class FrmTransLiteAppController {
 
 			FrmTransLiteLog::log_message( $log_message );
 
-			self::maybe_trigger_changes( array( 'status' => $status, 'payment' => $last_payment ) );
+			self::maybe_trigger_changes(
+				array(
+					'status'  => $status,
+					'payment' => $last_payment,
+				)
+			);
 
 			unset( $sub );
 		}
@@ -86,7 +93,13 @@ class FrmTransLiteAppController {
 	private static function update_sub_for_new_payment( $sub, $last_payment ) {
 		$frm_sub = new FrmTransLiteSubscription();
 		if ( $last_payment->status == 'complete' ) {
-			$frm_sub->update( $sub->id, array( 'fail_count' => 0, 'next_bill_date' => $last_payment->expire_date ) );
+			$frm_sub->update(
+				$sub->id,
+				array(
+					'fail_count' => 0,
+					'next_bill_date' => $last_payment->expire_date,
+				)
+			);
 		} elseif ( $last_payment->status == 'failed' ) {
 			self::add_one_fail( $sub );
 		}
@@ -106,10 +119,12 @@ class FrmTransLiteAppController {
 		$frm_sub->update( $sub->id, $new_values );
 
 		if ( $fail_count > 3 ) {
-			FrmTransLiteSubscriptionsController::change_subscription_status( array(
-				'status' => 'canceled',
-				'sub'    => $sub,
-			) );
+			FrmTransLiteSubscriptionsController::change_subscription_status(
+				array(
+					'status' => 'canceled',
+					'sub'    => $sub,
+				)
+			);
 		}
 	}
 

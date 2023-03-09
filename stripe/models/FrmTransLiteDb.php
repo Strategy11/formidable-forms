@@ -158,7 +158,7 @@ class FrmTransLiteDb {
 	public function get_all_by_multiple( $values ) {
 		global $wpdb;
 		FrmDb::get_where_clause_and_values( $values );
-		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . $values['where'] .' ORDER BY created_at DESC', $values['values'] );
+		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . $values['where'] . ' ORDER BY created_at DESC', $values['values'] );
 
 		return $wpdb->get_results( $query );
 	}
@@ -210,13 +210,13 @@ class FrmTransLiteDb {
 	 */
 	private function migrate_data( $old_db_version ) {
 		$migrations = array( 4 );
-        foreach ( $migrations as $migration ) {
-            if ( $this->db_version >= $migration && $old_db_version < $migration ) {
+		foreach ( $migrations as $migration ) {
+			if ( $this->db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
-                $this->$function_name();
-            }
-        }
-    }
+				$this->$function_name();
+			}
+		}
+	}
 
 	/**
 	 * @return void
@@ -232,7 +232,7 @@ class FrmTransLiteDb {
 		$payments = $wpdb->get_results( $query );
 		foreach ( $payments as $payment ) {
 			$status = $payment->completed ? 'complete' : 'failed';
-			$wpdb->update( $wpdb->prefix . 'frm_payments', compact('status'), array( 'id' => $payment->id ) );
+			$wpdb->update( $wpdb->prefix . 'frm_payments', compact( 'status' ), array( 'id' => $payment->id ) );
 		}
 	}
 }

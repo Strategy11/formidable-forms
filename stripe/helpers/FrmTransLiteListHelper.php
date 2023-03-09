@@ -2,7 +2,7 @@
 
 class FrmTransLiteListHelper extends FrmListHelper {
 
-    var $table = '';
+	var $table = '';
 
 	public function __construct( $args ) {
 		$this->table = isset( $_REQUEST['trans_type'] ) ? $_REQUEST['trans_type'] : '';
@@ -19,18 +19,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
 
 		$page     = $this->get_pagenum();
-		$per_page = $this->get_items_per_page( 'formidable_page_formidable_payments_per_page');
+		$per_page = $this->get_items_per_page( 'formidable_page_formidable_payments_per_page' );
 		$start    = ( $page - 1 ) * $per_page;
 		$start    = FrmAppHelper::get_param( 'start', $start, 'get', 'absint' );
 
 		$query       = $this->get_table_query();
-		$this->items = $wpdb->get_results( 'SELECT * ' . $query . " ORDER BY p.{$orderby} $order LIMIT $start, $per_page");
+		$this->items = $wpdb->get_results( 'SELECT * ' . $query . " ORDER BY p.{$orderby} $order LIMIT $start, $per_page" );
 		$total_items = $wpdb->get_var( 'SELECT COUNT(*) ' . $query );
 
 		$this->set_pagination_args(
 			array(
 				'total_items' => $total_items,
-				'per_page'    => $per_page
+				'per_page'    => $per_page,
 			)
 		);
 	}
@@ -65,33 +65,33 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function get_views() {
 		$statuses = array(
-		    'payments'      => __( 'Payments', 'formidable' ),
-		    'subscriptions' => __( 'Subscriptions', 'formidable' ),
+			'payments'      => __( 'Payments', 'formidable' ),
+			'subscriptions' => __( 'Subscriptions', 'formidable' ),
 		);
 
-	    $links = array();
+		$links = array();
 
 		$frm_payment = new FrmTransLitePayment();
 		$frm_sub     = new FrmTransLiteSubscription();
-	    $counts      = array(
+		$counts      = array(
 			'payments'      => $frm_payment->get_count(),
 			'subscriptions' => $frm_sub->get_count(),
 		);
-        $type        = isset( $_REQUEST['trans_type'] ) ? sanitize_text_field( $_REQUEST['trans_type'] ) : 'payments';
+		$type        = isset( $_REQUEST['trans_type'] ) ? sanitize_text_field( $_REQUEST['trans_type'] ) : 'payments';
 
-	    foreach ( $statuses as $status => $name ) {
-	        if ( $status == $type ) {
-    			$class = ' class="current"';
-    		} else {
-    		    $class = '';
-    		}
+		foreach ( $statuses as $status => $name ) {
+			if ( $status == $type ) {
+				$class = ' class="current"';
+			} else {
+				$class = '';
+			}
 
-    		if ( $counts[ $status ] || 'published' === $status ) {
+			if ( $counts[ $status ] || 'published' === $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>' . sprintf( __( '%1$s <span class="count">(%2$s)</span>', 'formidable' ), $name, number_format_i18n( $counts[ $status ] ) ) . '</a>';
-		    }
+			}
 
-		    unset( $status, $name );
-	    }
+			unset( $status, $name );
+		}
 
 		return $links;
 	}
@@ -100,7 +100,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return array
 	 */
 	public function get_columns() {
-	    return FrmTransLiteListsController::payment_columns();
+		return FrmTransLiteListsController::payment_columns();
 	}
 
 	/**
@@ -108,7 +108,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function get_sortable_columns() {
 		return array(
-		    'item_id'        => 'item_id',
+			'item_id'        => 'item_id',
 			'amount'         => 'amount',
 			'created_at'     => 'created_at',
 			'receipt_id'     => 'receipt_id',
@@ -156,7 +156,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 			unset( $item );
 		}
-    }
+	}
 
 	private function display_columns( $item, $args ) {
 		list( $columns, $hidden ) = $this->get_column_info();
@@ -204,7 +204,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
 		global $wpdb;
-		$forms = $wpdb->get_results("SELECT fo.id as form_id, fo.name, e.id FROM {$wpdb->prefix}frm_items e LEFT JOIN {$wpdb->prefix}frm_forms fo ON (e.form_id = fo.id) WHERE e.id in (". implode(',', $entry_ids ).")");
+		$forms = $wpdb->get_results( "SELECT fo.id as form_id, fo.name, e.id FROM {$wpdb->prefix}frm_items e LEFT JOIN {$wpdb->prefix}frm_forms fo ON (e.form_id = fo.id) WHERE e.id in (" . implode( ',', $entry_ids ) . ')' );
 		unset( $entry_ids );
 
 		$form_ids = array();
@@ -235,7 +235,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	private function get_action_column( $item, $field ) {
-		$link = add_query_arg( array( 'action' => 'show', 'id' => $item->id, 'type' => $this->table ) );
+		$link = add_query_arg(
+			array(
+				'action' => 'show',
+				'id' => $item->id,
+				'type' => $this->table,
+			)
+		);
 
 		$val = '<strong><a class="row-title" href="' . esc_url( $link ) . '" title="' . esc_attr__( 'Edit' ) . '">';
 		$val .= $item->{$field};
@@ -252,7 +258,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_row_actions( $item ) {
 		$base_link   = '?page=formidable-payments&action=';
 		$edit_link   = $base_link . 'edit&id=' . $item->id;
-		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' .  $this->table;
+		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' . $this->table;
 		$delete_link = $base_link . 'destroy&id=' . $item->id;
 
 		$actions         = array();
@@ -270,7 +276,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @param object $item
 	 * @return string
 	 */
-	private function get_item_id_column( $item) {
+	private function get_item_id_column( $item ) {
 		return '<a href="' . esc_url( '?page=formidable-entries&frm_action=show&action=show&id=' . $item->item_id ) . '">' . $item->item_id . '</a>';
 	}
 
@@ -289,7 +295,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_user_id_column( $item ) {
 		global $wpdb;
-		$val = FrmDb::get_var( $wpdb->prefix .'frm_items', array( 'id' => $item->item_id ), 'user_id' );
+		$val = FrmDb::get_var( $wpdb->prefix . 'frm_items', array( 'id' => $item->item_id ), 'user_id' );
 		return FrmTransLiteAppHelper::get_user_link( $val );
 	}
 

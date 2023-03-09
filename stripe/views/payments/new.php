@@ -20,12 +20,12 @@
 						</div>
 					</div>
 				</div>
-        
+		
 				<div id="post-body">
 					<div id="post-body-content">
 						<?php
-						$form_action = 'create'; 
-						wp_nonce_field( 'create-options' ); 
+						$form_action = 'create';
+						wp_nonce_field( 'create-options' );
 
 						require FrmTransLiteAppHelper::plugin_path() . '/views/payments/form.php';
 						?>
@@ -40,5 +40,5 @@
 		</div>
 	</div>
 </div>
-    
+	
 </div>

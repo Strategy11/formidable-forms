@@ -1,11 +1,11 @@
 <div class="wrap">
-    <div id="icon-options-general" class="icon32"><br></div>
-    <h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
+	<div id="icon-options-general" class="icon32"><br></div>
+	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
 
-    <?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
-    <div id="poststuff" class="metabox-holder has-right-sidebar">
-        <div class="inner-sidebar">
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+		<div class="inner-sidebar">
 			<div id="submitdiv" class="postbox ">
 				<h3 class="hndle"><span><?php esc_html_e( 'Payment Details', 'formidable' ); ?></span></h3>
 				<div class="inside">
@@ -28,9 +28,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+		</div>
 
-        <div id="post-body">
+		<div id="post-body">
 			<div id="post-body-content">
 				<div class="postbox">
 					<div class="handlediv"><br/></div>
@@ -44,14 +44,14 @@
 								</tr>
 
 								<tr valign="top">
-									<th scope="row"><?php esc_html_e( 'User', 'formidable'); ?>:</th>
+									<th scope="row"><?php esc_html_e( 'User', 'formidable' ); ?>:</th>
 									<td>
 										<?php echo wp_kses_post( $user_name ); ?>
 									</td>
 								</tr>
 
 								<tr valign="top">
-									<th scope="row"><?php esc_html_e( 'Entry', 'formidable'); ?>:</th>
+									<th scope="row"><?php esc_html_e( 'Entry', 'formidable' ); ?>:</th>
 									<td>
 										<a href="?page=formidable-entries&amp;action=show&amp;frm_action=show&amp;id=<?php echo absint( $subscription->item_id ); ?>">
 											<?php echo absint( $subscription->item_id ); ?>
@@ -80,7 +80,7 @@
 								<?php
 								if ( $subscription->meta_value ) {
 									$subscription->meta_value = maybe_unserialize( $subscription->meta_value );
-								?>
+									?>
 								<tr valign="top">
 									<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 									<td>
@@ -89,26 +89,29 @@
 										<table class="widefat" style="border:none;">
 										<?php
 
-										foreach ( $metas as $key => $meta ) { ?>
+										foreach ( $metas as $key => $meta ) {
+											?>
 										<tr>
 											<th><?php echo esc_html( $key ); ?></th>
 											<td><?php echo esc_html( $meta ); ?></td>
 										</tr>
-										<?php
-										} ?>
+											<?php
+										}
+										?>
 										</table>
 										<br/>
 									<?php } ?>
 
 									</td>
 								</tr>
-								<?php
-								} ?>
+									<?php
+								}
+								?>
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>

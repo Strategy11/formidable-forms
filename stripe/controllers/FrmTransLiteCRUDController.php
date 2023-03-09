@@ -45,14 +45,14 @@ class FrmTransLiteCRUDController {
 			$message = __( 'Payment was Successfully Deleted', 'formidable' );
 		}
 
-		FrmTransLiteListsController::display_list( compact('message') );
+		FrmTransLiteListsController::display_list( compact( 'message' ) );
 	}
 
 	/**
 	 * @return void
 	 */
 	public static function edit() {
-		$id = FrmAppHelper::get_param('id');
+		$id = FrmAppHelper::get_param( 'id' );
 		self::get_edit_vars( $id );
 	}
 
@@ -64,7 +64,7 @@ class FrmTransLiteCRUDController {
 	public static function update() {
 		FrmAppHelper::permission_check( 'administrator' );
 
-		$id          = FrmAppHelper::get_param('id');
+		$id          = FrmAppHelper::get_param( 'id' );
 		$message     = '';
 		$error       = '';
 		$frm_payment = self::the_class();
@@ -93,7 +93,7 @@ class FrmTransLiteCRUDController {
 
 		$currency = FrmTransLiteAppHelper::get_action_setting( 'currency', array( 'payment' => $payment ) );
 		$currency = FrmTransLiteAppHelper::get_currency( $currency );
-        
+
 		if ( $_POST && isset( $_POST['receipt_id'] ) ) {
 			foreach ( $payment as $var => $val ) {
 				if ( $var === 'id' ) {

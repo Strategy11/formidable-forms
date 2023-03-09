@@ -24,7 +24,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		}
 	}
 
-	private static function new_payment(){
+	private static function new_payment() {
 		self::get_new_vars();
 	}
 
@@ -65,13 +65,8 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $payment ) {
-		$icon        = ( $payment->status === 'complete' ) ? 'yes' : 'no-alt';
-		$date_format = __( 'M j, Y @ G:i' );
-		$created_at  = FrmAppHelper::get_localized_date( $date_format, $payment->created_at );
-
 		FrmTransLiteActionsController::actions_js();
-
-		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/sidebar_actions.php';
+		// TODO Still include sidebar actions for the capture link in the payments submodule.
 	}
 
 	/**

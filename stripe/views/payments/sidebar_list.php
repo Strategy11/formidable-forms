@@ -4,7 +4,8 @@
 <h3 class="hndle"><span><?php esc_html_e( 'Payments', 'formidable' ); ?></span></h3>
 <div class="inside">
 
-	<?php foreach ( $payments as $payment ) {
+	<?php
+	foreach ( $payments as $payment ) {
 		if ( empty( $payment->status ) && isset( $payment->completed ) && $payment->completed ) {
 			$payment->status = 'complete'; // PayPal fallback
 		}
@@ -13,7 +14,7 @@
 			$entry_total += $payment->amount;
 			$total_payment = $payment;
 		}
-	?>
+		?>
 		<div class="misc-pub-section">
 			<span class="dashicons dashicons-calendar-alt wp-media-buttons-icon"></span>
 			<span>
@@ -48,8 +49,8 @@
 	<?php } ?>
 
 	<?php foreach ( $subscriptions as $sub ) { ?>
-	    <div class="misc-pub-section">
-	        <span class="dashicons dashicons-update wp-media-buttons-icon"></span>
+		<div class="misc-pub-section">
+			<span class="dashicons dashicons-update wp-media-buttons-icon"></span>
 			<a href="?page=formidable-payments&amp;action=show&amp;type=subscriptions&amp;id=<?php echo absint( $sub->id ); ?>">
 				<?php echo esc_html( FrmTransLiteAppHelper::format_billing_cycle( $sub ) ); ?>
 			</a>
@@ -61,8 +62,10 @@
 		</div>
 	<?php } ?>
 
-	<?php if ( $entry_total ) {
-		$total_payment->amount = $entry_total; ?>
+	<?php
+	if ( $entry_total ) {
+		$total_payment->amount = $entry_total;
+		?>
 		<div class="misc-pub-section">
 			<span class="dashicons-cart dashicons wp-media-buttons-icon"></span>
 			<span>

@@ -10,9 +10,9 @@ class FrmTransLiteAppHelper {
 		return FrmAppHelper::plugin_url() . '/stripe/';
 	}
 
-    public static function plugin_folder() {
-        return basename( self::plugin_path() );
-    }
+	public static function plugin_folder() {
+		return basename( self::plugin_path() );
+	}
 
 	public static function get_gateways() {
 		$gateways = array(
@@ -113,113 +113,201 @@ class FrmTransLiteAppHelper {
 		$currencies = array(
 			'aud' => array(
 				'name' => __( 'Australian Dollar', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'bdt' => array(
 				'name' => __( 'Bangladeshi Taka', 'formidable' ),
-				'symbol_left' => '৳', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '৳',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'brl' => array(
 				'name' => __( 'Brazilian Real', 'formidable' ),
-				'symbol_left' => 'R$', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => 'R$',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'cad' => array(
 				'name' => __( 'Canadian Dollar', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => 'CAD', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => 'CAD',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'cny' => array(
 				'name' => __( 'Chinese Renminbi Yuan', 'formidable' ),
-				'symbol_left' => '¥', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '¥',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'czk' => array(
 				'name' => __( 'Czech Koruna', 'formidable' ),
-				'symbol_left' => '', 'symbol_right' => '&#75;&#269;', 'symbol_padding' => ' ',
-				'thousand_separator' => ' ', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => '',
+				'symbol_right' => '&#75;&#269;',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ' ',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'dkk' => array(
 				'name' => __( 'Danish Krone', 'formidable' ),
-				'symbol_left' => 'Kr', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => 'Kr',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'eur' => array(
 				'name' => __( 'Euro', 'formidable' ),
-				'symbol_left' => '', 'symbol_right' => '&#8364;', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => '',
+				'symbol_right' => '&#8364;',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'hkd' => array(
 				'name' => __( 'Hong Kong Dollar', 'formidable' ),
-				'symbol_left' => 'HK$', 'symbol_right' => '', 'symbol_padding' => '',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => 'HK$',
+				'symbol_right' => '',
+				'symbol_padding' => '',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'huf' => array(
 				'name' => __( 'Hungarian Forint', 'formidable' ),
-				'symbol_left' => '', 'symbol_right' => 'Ft', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => '',
+				'symbol_right' => 'Ft',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'inr' => array(
 				'name' => __( 'Indian Rupee', 'formidable' ),
-				'symbol_left' => '&#8377;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '&#8377;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'ils' => array(
 				'name' => __( 'Israeli New Sheqel', 'formidable' ),
-				'symbol_left' => '&#8362;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '&#8362;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'jpy' => array(
 				'name' => __( 'Japanese Yen', 'formidable' ),
-				'symbol_left' => '&#165;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '', 'decimals' => 0,
+				'symbol_left' => '&#165;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '',
+				'decimals' => 0,
 			),
 			'myr' => array(
 				'name' => __( 'Malaysian Ringgit', 'formidable' ),
-				'symbol_left' => '&#82;&#77;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '&#82;&#77;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'mxn' => array(
 				'name' => __( 'Mexican Peso', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'nzd' => array(
 				'name' => __( 'New Zealand Dollar', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'nok' => array(
 				'name' => __( 'Norwegian Krone', 'formidable' ),
-				'symbol_left' => 'Kr', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => 'Kr',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'pkr' => array(
 				'name' => __( 'Pakistani Rupee', 'formidable' ),
-				'symbol_left' => '₨', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => '', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '₨',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'php' => array(
 				'name' => __( 'Philippine Peso', 'formidable' ),
-				'symbol_left' => 'Php', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => 'Php',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'pln' => array(
 				'name' => __( 'Polish Zloty', 'formidable' ),
-				'symbol_left' => '&#122;&#322;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => '&#122;&#322;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'gbp' => array(
 				'name' => __( 'Pound Sterling', 'formidable' ),
-				'symbol_left' => '&#163;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '&#163;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'sgd' => array(
 				'name' => __( 'Singapore Dollar', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'zar' => array(
 				'name' => __( 'South African Rand', 'formidable' ),
@@ -232,49 +320,81 @@ class FrmTransLiteAppHelper {
 			),
 			'lkr' => array(
 				'name' => __( 'Sri Lankan Rupee', 'formidable' ),
-				'symbol_left' => '₨', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => '', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '₨',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'sek' => array(
 				'name' => __( 'Swedish Krona', 'formidable' ),
-				'symbol_left' => '', 'symbol_right' => 'Kr', 'symbol_padding' => ' ',
-				'thousand_separator' => ' ', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => '',
+				'symbol_right' => 'Kr',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ' ',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'chf' => array(
 				'name' => __( 'Swiss Franc', 'formidable' ),
-				'symbol_left' => 'Fr.', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => "'", 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => 'Fr.',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => "'",
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'twd' => array(
 				'name' => __( 'Taiwan New Dollar', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'thb' => array(
 				'name' => __( 'Thai Baht', 'formidable' ),
-				'symbol_left' => '&#3647;', 'symbol_right' => '', 'symbol_padding' => ' ',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '&#3647;',
+				'symbol_right' => '',
+				'symbol_padding' => ' ',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 			'try' => array(
 				'name' => __( 'Turkish Liras', 'formidable' ),
-				'symbol_left' => '', 'symbol_right' => '&#8364;', 'symbol_padding' => ' ',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 2,
+				'symbol_left' => '',
+				'symbol_right' => '&#8364;',
+				'symbol_padding' => ' ',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 2,
 			),
 			'uyu' => array(
-				'name' => __('Uruguayan Peso', 'formidable'),
-				'symbol_left' => '$U', 'symbol_right' => '', 'symbol_padding' =>  '',
-				'thousand_separator' => '.', 'decimal_separator' => ',', 'decimals' => 0,
+				'name' => __( 'Uruguayan Peso', 'formidable' ),
+				'symbol_left' => '$U',
+				'symbol_right' => '',
+				'symbol_padding' => '',
+				'thousand_separator' => '.',
+				'decimal_separator' => ',',
+				'decimals' => 0,
 			),
 			'usd' => array(
 				'name' => __( 'U.S. Dollar', 'formidable' ),
-				'symbol_left' => '$', 'symbol_right' => '', 'symbol_padding' =>  '',
-				'thousand_separator' => ',', 'decimal_separator' => '.', 'decimals' => 2,
+				'symbol_left' => '$',
+				'symbol_right' => '',
+				'symbol_padding' => '',
+				'thousand_separator' => ',',
+				'decimal_separator' => '.',
+				'decimals' => 2,
 			),
 		);
 
 		$currencies = array_merge( $currencies, $pro_currencies );
 		$currencies = (array) apply_filters( 'frm_currencies', $currencies );
-            
+
 		return $currencies;
 	}
 
@@ -317,11 +437,10 @@ class FrmTransLiteAppHelper {
 	 * @since 1.11
 	 *
 	 * @param object $subscription
-	 *
 	 * @return string
 	 */
 	public static function get_payment_description( $subscription ) {
-		$atts = array( 'payment' => array( 'action_id' => $subscription->action_id ) );
+		$atts        = array( 'payment' => array( 'action_id' => $subscription->action_id ) );
 		$description = self::get_action_setting( 'description', $atts );
 
 		if ( empty( $description ) ) {
@@ -329,22 +448,22 @@ class FrmTransLiteAppHelper {
 		}
 
 		$entry = FrmEntry::getOne( $subscription->item_id, true );
-
 		if ( ! $entry ) {
 			return $description;
 		}
 
 		$form = FrmForm::getOne( $entry->form_id );
-
 		if ( ! $form ) {
 			return $description;
 		}
 
-		return self::process_shortcodes( array(
-			'value' => $description,
-			'form'  => $form,
-			'entry' => $entry,
-		) );
+		return self::process_shortcodes(
+			array(
+				'value' => $description,
+				'form'  => $form,
+				'entry' => $entry,
+			)
+		);
 	}
 
 	/**
@@ -363,7 +482,7 @@ class FrmTransLiteAppHelper {
 			FrmProFieldsHelper::replace_non_standard_formidable_shortcodes( array(), $value );
 		}
 
-		if ( isset( $atts['entry'] ) && ! empty( $atts['entry'] ) ) {
+		if ( ! empty( $atts['entry'] ) ) {
 			if ( ! isset( $atts['form'] ) ) {
 				$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
 			}
@@ -379,7 +498,7 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function format_billing_cycle( $sub ) {
-		$amount = FrmTransLiteAppHelper::formatted_amount( $sub );
+		$amount   = self::formatted_amount( $sub );
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
 		if ( $sub->interval_count == 1 ) {
 			$amount = $amount . '/' . $interval;
@@ -468,13 +587,13 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_date_format() {
 		$date_format = 'm/d/Y';
-		if ( class_exists('FrmProAppHelper') ){
+		if ( class_exists( 'FrmProAppHelper' ) ) {
 			$frmpro_settings = FrmProAppHelper::get_settings();
 			if ( $frmpro_settings ) {
 				$date_format = $frmpro_settings->date_format;
 			}
 		} else {
-			$date_format = get_option('date_format');
+			$date_format = get_option( 'date_format' );
 		}
 
 		return $date_format;
@@ -517,7 +636,7 @@ class FrmTransLiteAppHelper {
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
 			if ( $user ) {
-				$user_link = '<a href="' . esc_url( admin_url('user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
+				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
 		}
 		return $user_link;

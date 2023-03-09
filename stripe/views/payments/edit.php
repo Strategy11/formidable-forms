@@ -1,7 +1,7 @@
 <div class="wrap">
 	<div id="icon-edit-pages" class="icon32"><br/></div>
 	<h2><?php esc_html_e( 'Edit Payment', 'formidable' ); ?>
-		<a href="?page=formidable-payments&amp;action=new" class="add-new-h2"><?php esc_html_e( 'Add New', 'formidable'); ?></a>
+		<a href="?page=formidable-payments&amp;action=new" class="add-new-h2"><?php esc_html_e( 'Add New', 'formidable' ); ?></a>
 	</h2>
 
 	<div class="form-wrap">
@@ -45,7 +45,7 @@
 						<input type="hidden" name="id" value="<?php echo esc_attr( $payment->id ); ?>" />
 						<?php
 						$form_action = 'update';
-						wp_nonce_field('update-options');
+						wp_nonce_field( 'update-options' );
 						require FrmTransLiteAppHelper::plugin_path() . '/views/payments/form.php';
 						?>
 

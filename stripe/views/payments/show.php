@@ -1,21 +1,15 @@
 <div class="wrap">
-    <div id="icon-options-general" class="icon32"><br></div>
-    <h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
+	<div id="icon-options-general" class="icon32"><br></div>
+	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
 
-    <?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
-    <div id="poststuff" class="metabox-holder has-right-sidebar">
-        <div class="inner-sidebar">
+	<div id="poststuff" class="metabox-holder has-right-sidebar">
+		<div class="inner-sidebar">
 			<div id="submitdiv" class="postbox ">
 				<h3 class="hndle"><span><?php esc_html_e( 'Payment Details', 'formidable' ); ?></span></h3>
 				<div class="inside">
 					<div class="submitbox">
-						<div id="minor-publishing" style="border:none;">
-							<div class="misc-pub-section">
-								<?php FrmTransLitePaymentsController::load_sidebar_actions( $payment ); ?>
-								<div class="clear"></div>
-							</div>
-						</div>
 
 						<div id="major-publishing-actions">
 							<div id="delete-action">                	    
@@ -32,9 +26,9 @@
 					</div>
 				</div>
 			</div>
-        </div>
+		</div>
 
-        <div id="post-body">
+		<div id="post-body">
 			<div id="post-body-content">
 				<div class="postbox">
 					<div class="handlediv"><br/></div>
@@ -48,14 +42,14 @@
 							</tr>
 
 							<tr valign="top">
-								<th scope="row"><?php esc_html_e( 'User', 'formidable'); ?>:</th>
+								<th scope="row"><?php esc_html_e( 'User', 'formidable' ); ?>:</th>
 								<td>
 									<?php echo wp_kses_post( $user_name ); ?>
 								</td>
 							</tr>
 
 							<tr valign="top">
-								<th scope="row"><?php esc_html_e( 'Entry', 'formidable'); ?>:</th>
+								<th scope="row"><?php esc_html_e( 'Entry', 'formidable' ); ?>:</th>
 								<td>
 									<a href="?page=formidable-entries&amp;action=show&amp;frm_action=show&amp;id=<?php echo absint( $payment->item_id ); ?>">
 										<?php echo absint( $payment->item_id ); ?>
@@ -108,7 +102,8 @@
 								<th scope="row"><?php esc_html_e( 'Payment Status Updates', 'formidable' ); ?>:</th>
 								<td>
 
-								<?php foreach ( $payment->meta_value as $k => $metas ) {
+								<?php
+								foreach ( $payment->meta_value as $k => $metas ) {
 									if ( empty( $metas ) ) {
 										continue;
 									}
@@ -116,12 +111,13 @@
 									<table class="widefat" style="border:none;overflow-wrap:break-word;word-break:break-word;">
 										<?php
 										if ( is_array( $metas ) ) {
-											foreach ( $metas as $key => $meta ) { ?>
+											foreach ( $metas as $key => $meta ) {
+												?>
 											<tr>
 												<th><?php echo esc_html( $key ); ?></th>
 												<td><?php echo esc_html( $meta ); ?></td>
 											</tr>
-											<?php
+												<?php
 											}
 										} else {
 											?>
@@ -138,13 +134,14 @@
 
 								</td>
 							</tr>
-							<?php
-							} ?>
+								<?php
+							}
+							?>
 						</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>

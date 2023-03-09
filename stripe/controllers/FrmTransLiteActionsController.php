@@ -22,9 +22,13 @@ class FrmTransLiteActionsController {
 	 */
 	public static function actions_js() {
 		wp_enqueue_script( 'frmtrans_admin', FrmTransLiteAppHelper::plugin_url() . '/js/frmtrans_admin.js', array( 'jquery' ) );
-		wp_localize_script( 'frmtrans_admin', 'frm_trans_vars', array(
-			'nonce'   => wp_create_nonce( 'frm_trans_ajax' ),
-		) );
+		wp_localize_script(
+			'frmtrans_admin',
+			'frm_trans_vars',
+			array(
+				'nonce'   => wp_create_nonce( 'frm_trans_ajax' ),
+			)
+		);
 	}
 
 	/**
@@ -97,10 +101,12 @@ class FrmTransLiteActionsController {
 		$payment     = $frm_payment->get_one_by( $sub->id, 'sub_id' );
 
 		if ( $payment && $payment->action_id ) {
-			self::trigger_payment_status_change( array(
-				'status'  => $sub->status,
-				'payment' => $payment,
-			) );
+			self::trigger_payment_status_change(
+				array(
+					'status'  => $sub->status,
+					'payment' => $payment,
+				)
+			);
 		}
 	}
 
@@ -111,7 +117,10 @@ class FrmTransLiteActionsController {
 	public static function trigger_payment_status_change( $atts ) {
 		$action = isset( $atts['action'] ) ? $atts['action'] : $atts['payment']->action_id;
 		$entry_id = isset( $atts['entry'] ) ? $atts['entry']->id : $atts['payment']->item_id;
-		$atts = array( 'trigger' => $atts['status'], 'entry_id' => $entry_id );
+		$atts = array(
+			'trigger'  => $atts['status'],
+			'entry_id' => $entry_id,
+		);
 
 		if ( ! isset( $atts['payment'] ) ) {
 			$frm_payment     = new FrmTransLitePayment();
@@ -198,17 +207,21 @@ class FrmTransLiteActionsController {
 		foreach ( $action->post_content['change_field'] as $change_field ) {
 			$is_trigger_for_field = $change_field['status'] == $atts['trigger'];
 			if ( $is_trigger_for_field ) {
-				$value = FrmTransLiteAppHelper::process_shortcodes( array(
-					'value' => $change_field['value'],
-					'form'  => $action->menu_order,
-					'entry' => isset( $atts['entry'] ) ? $atts['entry'] : $atts['entry_id'],
-				) );
+				$value = FrmTransLiteAppHelper::process_shortcodes(
+					array(
+						'value' => $change_field['value'],
+						'form'  => $action->menu_order,
+						'entry' => isset( $atts['entry'] ) ? $atts['entry'] : $atts['entry_id'],
+					)
+				);
 
-				FrmProEntryMeta::update_single_field( array(
-					'entry_id' => $atts['entry_id'],
-					'field_id' => $change_field['id'],
-					'value'    => $value,
-				) );
+				FrmProEntryMeta::update_single_field(
+					array(
+						'entry_id' => $atts['entry_id'],
+						'field_id' => $change_field['id'],
+						'value'    => $value,
+					)
+				);
 			}
 		}
 	}
@@ -259,7 +272,7 @@ class FrmTransLiteActionsController {
 			unset( $a, $this_amount );
 		}
 
-		return number_format ( $total, $currency['decimals'], '.', '' );
+		return number_format( $total, $currency['decimals'], '.', '' );
 	}
 
 	/**

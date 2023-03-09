@@ -20,7 +20,7 @@
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><?php esc_html_e( 'Entry ID', 'formidable'); ?></th>
+					<th scope="row"><?php esc_html_e( 'Entry ID', 'formidable' ); ?></th>
 					<td>
 						#<input type="number" name="item_id" value="<?php echo esc_attr( $payment->item_id ); ?>" />
 						<?php if ( $payment->item_id ) { ?>

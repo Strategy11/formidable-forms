@@ -140,22 +140,22 @@ class FrmTransLiteAction extends FrmFormAction {
 		}
 		$has_field = false;
 		?>
-        <select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
-            <option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'formidable' ); ?></option>
-            <?php
-            foreach ( $form_atts['form_fields'] as $field ) {
+		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
+			<option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'formidable' ); ?></option>
+			<?php
+			foreach ( $form_atts['form_fields'] as $field ) {
 				if ( ! empty( $field_atts['allowed_fields'] ) && ! in_array( $field->type, (array) $field_atts['allowed_fields'] ) ) {
 					continue;
 				}
 				$has_field  = true;
 				$key_exists = array_key_exists( $field_atts['name'], $form_atts['form_action']->post_content );
-                ?>
-                <option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
+				?>
+				<option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
 					<?php echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) ); ?>
-                </option>
-                <?php
+				</option>
+				<?php
 				unset( $field );
-            }
+			}
 
 			if ( ! $has_field && ! empty( $field_atts['allowed_fields'] ) ) {
 				$readable_fields = str_replace( '_', ' ', implode( ', ', (array) $field_atts['allowed_fields'] ) );
@@ -163,9 +163,9 @@ class FrmTransLiteAction extends FrmFormAction {
 				<option value="">
 					<?php echo esc_html( sprintf( __( 'Oops! You need a %s field in your form.', 'formidable' ), $readable_fields ) ); ?>
 				</option>
-			<?php
-		}
-		?>
+				<?php
+			}
+			?>
 		</select>
 		<?php
 	}

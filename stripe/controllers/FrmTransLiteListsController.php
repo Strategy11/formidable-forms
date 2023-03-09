@@ -79,7 +79,14 @@ class FrmTransLiteListsController {
 	 */
 	public static function list_page_params() {
 		$values = array();
-		foreach ( array( 'id' => '', 'paged' => 1, 'form' => '', 'search' => '', 'sort' => '', 'sdir' => '' ) as $var => $default ) {
+		foreach ( array(
+			'id'     => '',
+			'paged'  => 1,
+			'form'   => '',
+			'search' => '',
+			'sort'   => '',
+			'sdir'   => '',
+		) as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default );
 		}
 
@@ -93,7 +100,10 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {
-		$defaults = array( 'errors' => array(), 'message' => '' );
+		$defaults = array(
+			'errors'  => array(),
+			'message' => '',
+		);
 		$response = array_merge( $defaults, $response );
 		$errors   = $response['errors'];
 		$message  = $response['message'];
