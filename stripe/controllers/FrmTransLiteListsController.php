@@ -45,12 +45,12 @@ class FrmTransLiteListsController {
 			);
 		} else {
 			$add_columns = array(
-				'receipt_id' => __( 'Receipt ID', 'formidable' ),
-				'item_id'    => __( 'Entry', 'formidable' ),
-				'form_id'    => __( 'Form', 'formidable' ),
-				'amount'     => __( 'Amount', 'formidable' ),
-				'sub_id'     => __( 'Subscription', 'formidable' ),
-				'begin_date' => __( 'Begin Date', 'formidable' ),
+				'receipt_id'  => __( 'Receipt ID', 'formidable' ),
+				'item_id'     => __( 'Entry', 'formidable' ),
+				'form_id'     => __( 'Form', 'formidable' ),
+				'amount'      => __( 'Amount', 'formidable' ),
+				'sub_id'      => __( 'Subscription', 'formidable' ),
+				'begin_date'  => __( 'Begin Date', 'formidable' ),
 				'expire_date' => __( 'Expire Date', 'formidable' ),
 			);
 		}
@@ -62,13 +62,6 @@ class FrmTransLiteListsController {
 		$columns['paysys']     = __( 'Processor', 'formidable' );
 
 		return $columns;
-	}
-
-	public static function save_per_page( $save, $option, $value ) {
-		if ( $option === 'formidable_page_formidable_payments_per_page' ) {
-			$save = absint( $value );
-		}
-		return $save;
 	}
 
 	/**
