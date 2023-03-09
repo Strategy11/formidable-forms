@@ -82,59 +82,6 @@ class FrmTransLiteListsController {
 	}
 
 	/**
-	 * Maybe process bulk actions.
-	 *
-	 * @param string $action
-	 * @return void
-	 */
-	private static function bulk_actions( $action ) {
-		$response = array(
-			'errors'  => array(),
-			'message' => '',
-		);
-
-		$items = FrmAppHelper::get_param( 'item-action', '' );
-		if ( empty( $items ) ) {
-			$response['errors'][] = __( 'No payments were selected', 'formidable' );
-		} else {
-			if ( ! is_array( $items ) ) {
-				$items = explode( ',', $items );
-			}
-
-			$bulkaction = str_replace( 'bulk_', '', $action );
-			if ( $bulkaction === 'delete' ) {
-				self::bulk_delete( $items, $response );
-			}
-		}
-
-		self::display_list( $response );
-	}
-
-	/**
-	 * Handle bulk deleting payments.
-	 *
-	 * @param array $items
-	 * @param array $response
-	 * @return void
-	 */
-	private static function bulk_delete( $items, &$response ) {
-		if ( ! current_user_can( 'frm_delete_entries' ) ) {
-			$frm_settings         = FrmAppHelper::get_settings();
-			$response['errors'][] = $frm_settings->admin_permission;
-			return;
-		}
-
-		if ( is_array( $items ) ) {
-			$frm_payment = new FrmTransLitePayment();
-			foreach ( $items as $item_id ) {
-				if ( $frm_payment->destroy( absint( $item_id ) ) ) {
-					$response['message'] = __( 'Payments were Successfully Deleted', 'formidable' );
-				}
-			}
-		}
-	}
-
-	/**
 	 * @return array
 	 */
 	public static function list_page_params() {
