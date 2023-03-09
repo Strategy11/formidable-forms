@@ -333,7 +333,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$plan_opts = FrmStrpLiteSubscriptionHelper::prepare_plan_options( $settings );
-		// TODO I think I'm missing a plan_id input as I'm seeing a PHP Notice here.
 		if ( $plan_opts['id'] != $settings['plan_id'] ) {
 			$settings['plan_id'] = FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan_opts );
 		}

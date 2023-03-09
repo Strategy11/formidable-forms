@@ -12,6 +12,9 @@ class FrmStrpLiteEventsController {
 	private $charge;
 	private $status;
 
+	/**
+	 * @return void
+	 */
 	private function set_payment_status() {
 		if ( $this->status === 'refunded' ) {
 			$this->charge = $this->invoice->id;
@@ -136,6 +139,7 @@ class FrmStrpLiteEventsController {
 	 * When a customer is deleted in Stripe, remove the link to a user.
 	 *
 	 * @since 2.01
+	 * @return void
 	 */
 	private function reset_customer() {
 		global $wpdb;
@@ -148,19 +152,26 @@ class FrmStrpLiteEventsController {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	private function maybe_subscription_canceled() {
 		if ( $this->invoice->cancel_at_period_end == true ) {
 			$this->subscription_canceled( 'future_cancel' );
 		}
 	}
 
+	/**
+	 * @param string $status
+	 * @return bool
+	 */
 	private function subscription_canceled( $status = 'canceled' ) {
 		$sub = $this->get_subscription( $this->invoice->id );
 		if ( ! $sub ) {
 			return false;
 		}
 
-		if ( $sub->status == $status ) {
+		if ( $sub->status === $status ) {
 			FrmTransLiteLog::log_message( 'No action taken since the subscription is already canceled.' );
 			echo json_encode(
 				array(
@@ -177,6 +188,7 @@ class FrmStrpLiteEventsController {
 				'sub'    => $sub,
 			)
 		);
+		return true;
 	}
 
 	private function prepare_from_invoice() {
@@ -251,6 +263,10 @@ class FrmStrpLiteEventsController {
 		return $frm_payment->get_one_by( $sub_id, 'sub_id' );
 	}
 
+	/**
+	 * @param array $payment_values
+	 * @return void
+	 */
 	private function set_payment_values( &$payment_values ) {
 		$payment_values['begin_date']  = date( 'Y-m-d' );
 		$payment_values['expire_date'] = '0000-00-00';
@@ -270,6 +286,11 @@ class FrmStrpLiteEventsController {
 		FrmTransLiteAppHelper::add_note_to_payment( $payment_values );
 	}
 
+	/**
+	 * @param object $sub
+	 * @param array  $payment
+	 * @return void
+	 */
 	private function update_next_bill_date( $sub, $payment ) {
 		$frm_sub = new FrmTransLiteSubscription();
 		if ( $payment['status'] === 'complete' ) {
@@ -279,6 +300,9 @@ class FrmStrpLiteEventsController {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	private function is_partial_refund() {
 		$partial = false;
 		if ( $this->status === 'refunded' ) {
@@ -289,11 +313,18 @@ class FrmStrpLiteEventsController {
 		return $partial;
 	}
 
+	/**
+	 * @param array $payment_values
+	 * @return void
+	 */
 	private function set_partial_refund( &$payment_values ) {
 		$payment_values['amount'] = $this->invoice->amount - $this->invoice->amount_refunded;
 		$payment_values['amount'] = number_format( $payment_values['amount'] / 100, 2 );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function process_connect_events() {
 		$this->flush_response();
 
@@ -424,7 +455,7 @@ class FrmStrpLiteEventsController {
 			'invoice.payment_succeeded'     => 'complete',
 			'invoice.payment_failed'        => 'failed',
 			'charge.refunded'               => 'refunded',
-			'charge.captured'               => 'complete',
+			// 'charge.captured'            => 'complete', // TODO only handle this if the Stripe add on is active.
 		);
 
 		if ( isset( $events[ $this->event->type ] ) ) {

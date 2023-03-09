@@ -199,7 +199,7 @@ class FrmStrpLiteLinkController {
 		}
 
 		$customer_has_been_charged = ! empty( $subscription->latest_invoice->charge );
-		$atts['charge']            = FrmStrpLiteSubscriptionHelper::prepare_charge_object_for_subscription( $subscription, $amount ); // TODO this function looks like it sets "paid" to 0.
+		$atts['charge']            = FrmStrpLiteSubscriptionHelper::prepare_charge_object_for_subscription( $subscription, $amount );
 		$new_payment_values        = array();
 
 		if ( $customer_has_been_charged ) {
