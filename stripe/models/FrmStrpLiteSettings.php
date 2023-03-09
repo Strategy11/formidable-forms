@@ -110,10 +110,7 @@ class FrmStrpLiteSettings {
 	 * @return string
 	 */
 	public function get_active_publishable_key() {
-		if ( FrmStrpLiteConnectHelper::stripe_connect_is_setup() ) {
-			return $this->settings->test_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
-		}
-		return $this->settings->test_mode ? $this->settings->test_publish : $this->settings->live_publish;
+		return $this->settings->test_mode ? $this->get_frm_publishable_test_key() : $this->get_frm_publishable_live_key();
 	}
 
 	/**
