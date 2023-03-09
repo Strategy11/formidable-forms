@@ -93,6 +93,16 @@
 	</p>
 
 	<?php // TODO Still support gateways in the Payments submodule ?>
+
+	<?php
+	do_action(
+		'frm_pay_show_stripe_options',
+		array(
+			'form_action'    => $form_action,
+			'action_control' => $this,
+		)
+	);
+	?>
 </div>
 <div class="frm_grid_container">
 	<h3>
@@ -100,36 +110,36 @@
 	</h3>
 
 	<p class="frm6">
-			<label for="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>">
-				<?php esc_html_e( 'Email', 'formidable' ); ?>
-			</label>
-			<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email'] ); ?>" class="frm_not_email_to large-text" />
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>">
+			<?php esc_html_e( 'Email', 'formidable' ); ?>
+		</label>
+		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'email' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email'] ); ?>" class="frm_not_email_to large-text" />
 	</p>
 
 	<p class="<?php echo esc_attr( $classes['billing_address'] ); ?> frm6">
-			<label for="<?php echo esc_attr( $action_control->get_field_id( 'billing_address' ) ); ?>">
-				<?php esc_html_e( 'Address', 'formidable' ); ?>
-			</label>
-			<?php
-			$action_control->show_fields_dropdown(
-				$field_dropdown_atts,
-				array(
-					'name' => 'billing_address',
-					'allowed_fields' => 'address',
-				)
-			);
-			?>
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'billing_address' ) ); ?>">
+			<?php esc_html_e( 'Address', 'formidable' ); ?>
+		</label>
+		<?php
+		$action_control->show_fields_dropdown(
+			$field_dropdown_atts,
+			array(
+				'name' => 'billing_address',
+				'allowed_fields' => 'address',
+			)
+		);
+		?>
 	</p>
 	<p class="<?php echo esc_attr( $classes['billing_first_name'] ); ?> frm6">
-			<label for="<?php echo esc_attr( $this->get_field_id( 'billing_first_name' ) ); ?>">
-				<?php esc_html_e( 'First Name', 'formidable' ); ?>
-			</label>
-			<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_first_name' ) ); ?>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'billing_first_name' ) ); ?>">
+			<?php esc_html_e( 'First Name', 'formidable' ); ?>
+		</label>
+		<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_first_name' ) ); ?>
 	</p>
 	<p class="<?php echo esc_attr( $classes['billing_last_name'] ); ?> frm6">
-			<label for="<?php echo esc_attr( $this->get_field_id( 'billing_last_name' ) ); ?>">
-				<?php esc_html_e( 'Last Name', 'formidable' ); ?>
-			</label>
-			<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_last_name' ) ); ?>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'billing_last_name' ) ); ?>">
+			<?php esc_html_e( 'Last Name', 'formidable' ); ?>
+		</label>
+		<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_last_name' ) ); ?>
 	</p>
 </div>
