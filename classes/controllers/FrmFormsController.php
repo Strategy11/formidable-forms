@@ -2530,7 +2530,12 @@ class FrmFormsController {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
 
 		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
-			self::show_form_after_submit( $atts );
+			if ( isset( $atts['action'] ) && 'update' === $atts['action'] && is_callable( array( 'FrmProEntriesController', 'show_front_end_form_with_entry' ) ) ) {
+				$atts['show_form'] = FrmProEntriesController::is_form_displayed_after_edit( $atts['form'] );
+				FrmProEntriesController::show_front_end_form_with_entry( $atts, $atts );
+			} else {
+				self::show_form_after_submit( $atts );
+			}
 		} else {
 			self::show_lone_success_messsage( $atts );
 		}
