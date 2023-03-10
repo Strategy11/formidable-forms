@@ -8802,30 +8802,6 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm-add-my-email-address' ).click();
 		});
 
-		jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
-			var categories = $modal.get( 0 ).querySelector( '.frm-categories-list' ).children,
-				categoryIndex,
-				category,
-				searchableTemplates,
-				count;
-
-			for ( categoryIndex in categories ) {
-				if ( isNaN( categoryIndex ) ) {
-					continue;
-				}
-
-				category = categories[ categoryIndex ];
-				if ( ! category.classList.contains( 'accordion-section' ) ) {
-					continue;
-				}
-
-				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
-				count = searchableTemplates.length;
-				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-				setTemplateCount( category, searchableTemplates );
-			}
-		});
-
 		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
 			document.getElementById( 'frm-create-title' ).removeAttribute( 'frm-type' );
 			$modal.attr( 'frm-page', 'create' );
