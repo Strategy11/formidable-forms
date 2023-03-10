@@ -2404,12 +2404,21 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	private static function load_page_after_submit( $args ) {
 		global $post;
 		$opt = $args['success_opt'];
 		if ( ! $post || $args['form']->options[ $opt . '_page_id' ] != $post->ID ) {
-			$page     = get_post( $args['form']->options[ $opt . '_page_id' ] );
+			$page = get_post( $args['form']->options[ $opt . '_page_id' ] );
+
+			if ( ! $page || 'trash' === $page->post_status ) {
+				self::show_message_after_save( $args );
+				return;
+			}
+
 			$old_post = $post;
 			$post     = $page;
 			$content  = apply_filters( 'frm_content', $page->post_content, $args['form'], $args['entry_id'] );
