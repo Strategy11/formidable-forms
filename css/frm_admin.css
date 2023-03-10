@@ -6322,15 +6322,14 @@ li.selected .divider_section_only:before {
 	display: none;
 }
 
-.frm_wrap .frm_remove_form_row.frm_button,
-.frm_wrap .frm_add_form_row.frm_button {
+#frm_builder_page .frm_remove_form_row.frm_button,
+#frm_builder_page .frm_add_form_row.frm_button {
 	border-radius: var(--small-radius);
 	border: 1px solid var(--blue-border);
-	color: var(--primary-500);
 }
 
-.frm_wrap .frm_remove_form_row .frmsvg,
-.frm_remove_form_row i:before,
+#frm_builder_page .frm_remove_form_row .frmsvg,
+#frm_builder_page .frm_remove_form_row i:before,
 .frm_wrap .frm_add_form_row .frmsvg,
 .frm_add_form_row i:before {
 	color: var(--primary-700);
