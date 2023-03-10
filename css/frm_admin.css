@@ -668,7 +668,7 @@ ul.frm_form_nav > li {
 }
 
 .frm-admin-page-translate .frm_wrap .frm_page_container {
-	overflow: scroll;
+	overflow: auto;
 }
 
 .auto-fold.frm-admin-page-styles .frm_page_container,
