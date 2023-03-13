@@ -662,6 +662,23 @@ class FrmAppController {
 				wp_enqueue_script( 'jquery-ui-draggable' );
 				self::maybe_deregister_popper2();
 				wp_enqueue_script( 'formidable_admin' );
+				wp_add_inline_style(
+					'formidable-admin',
+					'
+					.frm-white-body.post-type-frm_display .columns-2 {
+						display: block;
+						overflow: visible;
+					}
+
+					.frm-white-body.post-type-frm_display .columns-2 > div {
+						overflow-y: hidden;
+					}
+
+					.frm-white-body.post-type-frm_display #titlediv #title-prompt-text {
+						padding: 3px 0 0 10px;
+					}
+					'
+				);
 				wp_enqueue_style( 'formidable-admin' );
 				FrmAppHelper::localize_script( 'admin' );
 				self::include_info_overlay();
