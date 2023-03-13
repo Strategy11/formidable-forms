@@ -677,6 +677,10 @@ class FrmAppController {
 					.frm-white-body.post-type-frm_display #titlediv #title-prompt-text {
 						padding: 3px 0 0 10px;
 					}
+
+					.post-type-frm_display #field-search-input {
+						flex: 1;
+					}
 					'
 				);
 				wp_enqueue_style( 'formidable-admin' );
