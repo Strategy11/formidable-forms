@@ -12,7 +12,8 @@ import { cssHideAdvancedSettings } from '../common/utilities/values';
 const { Fragment } = wp.element;
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
-const { ServerSideRender, Notice } = wp.components;
+const { Notice } = wp.components;
+const { serverSideRender: ServerSideRender } = wp;
 
 registerBlockType( 'formidable/simple-form', {
 	title: formidable_form_selector.name,
