@@ -441,13 +441,21 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.1.2 =
+* New: The active filtered form type will be used when searching forms. Previously form searching would only check active forms.
+* Fix: It was not possible to scroll a Polylang translation page.
+* Fix: The page layout of the legacy views editor was broken.
+* Fix: The add new entry/import buttons would appear incorrectly when Pro wasn't installed.
+* Fix: Long button translations, like for German, would cause buttons in the header to overflow into multiple lines.
+* Fix: A CAPTCHA field in a form without any keys set would trigger an error when Pro wasn't installed.
+
 = 6.1.1 =
 * Fix: Redirects weren't happening after submit in forms without the new Confirmation form actions.
 * Fix: The email message box was difficult to resize manually.
 * Fix: There was extra space showing on the edit style page.
 
 = 6.1 =
-* Security: Added a new global setting to use custom headers when retrieving IPs with form submissions. This is disabled by default to avoid IP spoofing but required when using a reverse proxy as all IP addresses may appear identical. This setting is hidden when the GDPR IP option is enabled, but can still be enabled with a new frm_use_custom_header_ip filter using __return_true.
+* Security: Added a new global setting to use custom headers when retrieving IPs with submissions. This is disabled by default to avoid IP spoofing but required when using a reverse proxy as all IP addresses may appear identical. This setting is hidden when the GDPR IP option is enabled, but can still be enabled with a new frm_use_custom_header_ip filter using __return_true.
 * New: Full screen pages are now conditionally full screen based on the WordPress fullscreen mode user preference setting.
 * New: Success messages when updating an entry will now use the message from a confirmation action that triggers on entry updates.
 * Fix: Forms with redirect confirmation actions were redirecting when saving a draft entry.
@@ -455,7 +463,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Formidable settings have been updated to avoid PHP 8.2 deprecation messages.
 * Fix: Label position styles were being applied to all fields in styler previews, not just fields with the default label position setting.
 * Fix: The sidebar has been moved back to below the entry details when printing an entry.
-* Fix: A 99 limit would always get applied when getting form actions without a specified limit. Now the limit is based off of the action type. This fixes issues with Quiz outcomes not matching when beyond the 99 limit.
+* Fix: A 99 limit would always get applied when getting actions without a specified limit. Now the limit is based off of the action type. This fixes issues with Quiz outcomes not matching when beyond the 99 limit.
 
 = 6.0.1 =
 * Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
