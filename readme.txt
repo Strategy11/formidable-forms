@@ -469,10 +469,10 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: Custom CSS was not properly migrating to global settings, appearing empty instead.
 
 = 6.0 =
-* New: Added a new style tab when editing a form that links to the visual styler. Now a form can be previewed with a style in real time without the need to update the form.
+* New: Added a new style tab when editing a form that links to the visual styler. Now a form can be previewed with a style in real time without the need to update it.
 * New: Added additional logic to clean up invalid RGB color values in the styler.
 * New: Destructive actions, like deleting, now use red confirmation buttons on admin pages.
-* New: An exported form with no name will now export with the form key included in the file name instead of just exporting as -form.xml.
+* New: An exported form with no name will now export with key included in the file name instead of just exporting as -form.xml.
 * New: On submit behaviour including messages, redirect, and page content have been changed to a new Confirmation form action type, allowing them to work with conditional logic.
 * New: The styler will now show a pop up when exiting with unsaved changes.
 * New: Updated the UI to make it more modern and consistent between all the Formidable pages
@@ -486,7 +486,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Star rating fields are no longer blue in builder and entries list pages.
 * The Styling & Buttons category has been changed to a Buttons category.
 * Custom CSS is no longer merged on import.
-* The styler sample form has been made more accessible.
+* The styler sample has been made more accessible.
 
 = 5.5.7 =
 * Security: Additional validation has been added when deleting entries on admin pages.
