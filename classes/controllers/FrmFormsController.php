@@ -2274,6 +2274,10 @@ class FrmFormsController {
 				$has_redirect = true;
 			}
 
+			if ( ! self::is_valid_on_submit_action( $action ) ) {
+				continue;
+			}
+
 			$met_actions[] = $action;
 			unset( $action );
 		}
@@ -2295,6 +2299,28 @@ class FrmFormsController {
 		}
 
 		return $met_actions;
+	}
+
+	/**
+	 * Checks if a Confirmation action has the valid data.
+	 *
+	 * @since 6.x
+	 *
+	 * @param object $action Form action object.
+	 * @return bool
+	 */
+	private static function is_valid_on_submit_action( $action ) {
+		$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+		if ( 'redirect' === $action_type && empty( $action->post_content['success_url'] ) ) {
+			return false;
+		}
+
+		if ( 'page' === $action_type && ( empty( $action->post_content['success_page_id'] ) || ! get_post( $action->post_content['success_page_id'] ) ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
