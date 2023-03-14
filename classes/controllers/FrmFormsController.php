@@ -2316,8 +2316,15 @@ class FrmFormsController {
 			return false;
 		}
 
-		if ( 'page' === $action_type && ( empty( $action->post_content['success_page_id'] ) || ! get_post( $action->post_content['success_page_id'] ) ) ) {
-			return false;
+		if ( 'page' === $action_type ) {
+			if ( empty( $action->post_content['success_page_id'] ) ) {
+				return false;
+			}
+
+			$page = get_post( $action->post_content['success_page_id'] );
+			if ( ! $page || 'trash' === $page->post_status ) {
+				return false;
+			}
 		}
 
 		return true;
