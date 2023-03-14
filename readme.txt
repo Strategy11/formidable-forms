@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6
-Stable tag: 6.1.1
+Stable tag: 6.1.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -448,6 +448,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 * Fix: The add new entry/import buttons would appear incorrectly when Pro wasn't installed.
 * Fix: Long button translations, like for German, would cause buttons in the header to overflow into multiple lines.
 * Fix: A CAPTCHA field in a form without any keys set would trigger an error when Pro wasn't installed.
+* Fix: Form blocks would break when using newer versions of the Gutenberg plugin.
 
 = 6.1.1 =
 * Fix: Redirects weren't happening after submit in forms without the new Confirmation form actions.
