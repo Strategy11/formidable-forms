@@ -666,6 +666,10 @@ ul.frm_form_nav > li {
 	right: 0;
 }
 
+.frm-admin-page-translate .frm_wrap .frm_page_container, .frm-admin-page-update_translations .frm_wrap .frm_page_container {
+	position: static;
+}
+
 .auto-fold.frm-admin-page-styles .frm_page_container,
 .auto-fold .frm_wrap .frm_page_container {
 	left: 160px;
