@@ -2310,6 +2310,19 @@ function frmAdminBuildJS() {
 		onFieldActionDropdownShow( true );
 	}
 
+	function changeSectionStyle( e ) {
+		const collapsedSection = e.target.closest( '.frm-section-collapsed' );
+		if ( ! collapsedSection ) {
+			return;
+		}
+
+		if ( e.type === 'show' ) {
+			collapsedSection.style.zIndex = 3;
+		} else {
+			collapsedSection.style.zIndex = 1;
+		}
+	}
+
 	function fillFieldActionDropdown( ul, isFieldGroup ) {
 		var classSuffix, options;
 		classSuffix = isFieldGroup ? '_field_group' : '_field';
@@ -9763,6 +9776,8 @@ function frmAdminBuildJS() {
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
+
+			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_toggle_image_options', toggleImageOptions );
