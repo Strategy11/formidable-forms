@@ -2566,7 +2566,9 @@ class FrmFormsController {
 			if ( isset( $atts['action'] ) && 'update' === $atts['action'] && is_callable( array( 'FrmProEntriesController', 'show_front_end_form_with_entry' ) ) ) {
 				$entry = FrmEntry::getOne( $atts['entry_id'] );
 				if ( $entry ) {
-					$atts['show_form'] = FrmProEntriesController::is_form_displayed_after_edit( $atts['form'] );
+					// This is copied from the Pro plugin.
+					$atts['conf_message'] = FrmProEntriesController::confirmation( 'message', $atts['form'], $atts['form']->options, $entry->id, $atts );
+					$atts['show_form']    = FrmProEntriesController::is_form_displayed_after_edit( $atts['form'] );
 					FrmProEntriesController::show_front_end_form_with_entry( $entry, $atts );
 				}
 			} else {
