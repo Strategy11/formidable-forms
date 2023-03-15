@@ -1108,24 +1108,4 @@ class FrmForm {
 	public static function get_edit_link( $form_id ) {
 		return admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id );
 	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $key
-	 *
-	 * @return int form id
-	 */
-	public static function getIdByKey( $key ) {
-		return FrmFormDeprecated::getIdByKey( $key );
-	}
-
-	/**
-	 * @deprecated 3.0
-	 * @codeCoverageIgnore
-	 */
-	public static function getKeyById( $id ) {
-		return FrmFormDeprecated::getKeyById( $id );
-	}
 }

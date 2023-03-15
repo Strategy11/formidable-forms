@@ -2129,12 +2129,4 @@ class FrmFieldsHelper {
 	public static function get_default_field_opts( $type, $field = null, $limit = false ) {
 		return FrmDeprecated::get_default_field_opts( $type, $field, $limit );
 	}
-
-	/**
-	 * @deprecated 2.02.07
-	 * @codeCoverageIgnore
-	 */
-	public static function dropdown_categories( $args ) {
-		return FrmDeprecated::dropdown_categories( $args );
-	}
 }
