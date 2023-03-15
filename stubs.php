@@ -32,9 +32,6 @@ namespace {
 		public static function import_attachment( $val, $field ) {
 		}
 	}
-	class FrmProDisplaysController {
-
-	}
 	class FrmProAppHelper {
 		public static function get_settings() {
 		}
@@ -45,7 +42,7 @@ namespace {
 	}
 	class FrmProFormActionsController {
 	}
-	class FrmProFieldValue {
+	class FrmViewsLayout {
 	}
 	class FrmProDisplaysHelper {
 		public static function get_shortcodes( $content, $form_id ) {
