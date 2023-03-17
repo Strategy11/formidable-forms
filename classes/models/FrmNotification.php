@@ -64,22 +64,4 @@ class FrmNotification {
 			echo ' ' . FrmAppHelper::kses( implode( ', ', (array) $temp ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
-
-	/**
-	 * @deprecated 2.03.04
-	 * @codeCoverageIgnore
-	 */
-	public static function remove_mandrill_br() {
-		_deprecated_function( __FUNCTION__, '2.03.04', 'FrmEmailHelper::remove_mandrill_br' );
-
-		return FrmEmailHelper::remove_mandrill_br();
-	}
-
-	/**
-	 * @deprecated 2.03.04
-	 * @codeCoverageIgnore
-	 */
-	public static function send_email() {
-		_deprecated_function( __FUNCTION__, '2.03.04', 'FrmEmail::send' );
-	}
 }

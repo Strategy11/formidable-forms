@@ -934,32 +934,6 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form_shortcode( $atts ) {
-		return FrmDeprecated::get_form_shortcode( $atts );
-	}
-
-	/**
-	 * @deprecated 2.5.4
-	 * @codeCoverageIgnore
-	 */
-	public static function widget_text_filter( $content ) {
-		return FrmDeprecated::widget_text_filter( $content );
-	}
-
-	/**
-	 * Deprecated in favor of wpmu_upgrade_site
-	 *
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function front_head() {
-		FrmDeprecated::front_head();
-	}
-
-	/**
 	 * @deprecated 3.0.04
 	 * @codeCoverageIgnore
 	 */
