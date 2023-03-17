@@ -5181,7 +5181,25 @@ function frmAdminBuildJS() {
 				single.append( labelForDisplay );
 			}
 		} else {
-			text[ text.length - 1 ].nodeValue = ' ' + label.val();
+			let firstInputIndex = false;
+			text.forEach( ( node, index ) => {
+				if ( firstInputIndex === false ) {
+					if ( node.tagName === 'INPUT' ) {
+						firstInputIndex = index;
+					}
+				} else {
+					if ( index === firstInputIndex + 1 ) {
+						node.nodeValue = ' ' + label.val();
+					} else {
+						single[0].removeChild( node );
+					}
+				}
+			});
+
+			// Last node is not getting removed on first update after save for some reason.
+			if ( text.length > firstInputIndex + 2 ) {
+				single[0].removeChild( single[0].lastChild );
+			}
 		}
 
 		// Set saved value.
