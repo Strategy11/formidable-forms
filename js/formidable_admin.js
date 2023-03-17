@@ -2044,12 +2044,11 @@ function frmAdminBuildJS() {
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
-		if ( $field.hasClass( 'frm-section-collapsed' ) || $field.hasClass( 'frm-page-collapsed' ) ) {
+		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
 			return false;
 		}
 
 		closeOpenFieldDropdowns();
-
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
 		newRowId = this.getAttribute( 'frm-target-row-id' );
@@ -2110,6 +2109,7 @@ function frmAdminBuildJS() {
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
+				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 			}
 		});
 		return false;
@@ -2308,6 +2308,19 @@ function frmAdminBuildJS() {
 
 	function onFieldGroupActionDropdownShow() {
 		onFieldActionDropdownShow( true );
+	}
+
+	function changeSectionStyle( e ) {
+		const collapsedSection = e.target.closest( '.frm-section-collapsed' );
+		if ( ! collapsedSection ) {
+			return;
+		}
+
+		if ( e.type === 'show' ) {
+			collapsedSection.style.zIndex = 3;
+		} else {
+			collapsedSection.style.zIndex = 1;
+		}
 	}
 
 	function fillFieldActionDropdown( ul, isFieldGroup ) {
@@ -3508,6 +3521,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function confirmFieldsDeleteMessage( numberOfFields ) {
+		/* translators: %1$s: Number of fields that are selected to be deleted. */
+		return __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', numberOfFields );
+	}
+
 	function clickDeleteField() {
 		/*jshint validthis:true */
 		var confirmMsg = frm_admin_js.conf_delete,
@@ -3515,6 +3533,20 @@ function frmAdminBuildJS() {
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
 			fieldId = field.data( 'fid' );
+
+		if ( field.data( 'ftype' ) === 'divider' ) {
+			const fieldBoxes = document.querySelectorAll( '.frm-field-group-hover-target .start_divider .frm_field_box' );
+			let fieldIdsToDelete = 0;
+			fieldBoxes.forEach( fieldBox => {
+				const fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
+				if ( fieldsInsideFieldBox ) {
+					fieldIdsToDelete += fieldsInsideFieldBox.length;
+				}
+			});
+			if ( fieldIdsToDelete ) {
+				confirmMsg = confirmFieldsDeleteMessage( ++fieldIdsToDelete );
+			}
+		}
 
 		if ( li.classList.contains( 'frm-section-collapsed' ) || li.classList.contains( 'frm-page-collapsed' ) ) {
 			return false;
@@ -4448,8 +4480,7 @@ function frmAdminBuildJS() {
 			multiselectPopup.remove();
 		}
 
-		/* translators: %1$s: Number of fields that are selected to be deleted. */
-		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
+		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
 		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
@@ -9745,6 +9776,8 @@ function frmAdminBuildJS() {
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
+
+			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_toggle_image_options', toggleImageOptions );

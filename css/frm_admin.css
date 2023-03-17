@@ -6244,8 +6244,8 @@ ul.start_divider {
 
 .frm-page-collapsed .frm_clone_icon,
 .frm-page-collapsed .frm_delete_field,
-.frm-section-collapsed .frm_clone_icon,
-.frm-section-collapsed .frm_delete_field {
+.frm-page-collapsed .frm_clone_field,
+.frm-section-collapsed .frm_clone_icon {
 	opacity: .5;
 	cursor: not-allowed;
 }
@@ -7300,6 +7300,7 @@ ul .frm_col_two {
 .frm_wrap .ui-autocomplete li > div,
 .multiselect-container button.multiselect-option,
 .frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:visited,
 .frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
 .frm-dropdown-menu .frm_dropdown_li,
 .frm_code_list.frm-full-hover a {
