@@ -1023,7 +1023,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @return array|string
+	 * @return array
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
