@@ -636,6 +636,7 @@
 		const output = tag( 'img', args );
 		if ( 'string' === typeof args.src ) {
 			output.setAttribute( 'src', args.src );
+			output.setAttribute( 'alt', args.alt );
 		}
 		return output;
 	}

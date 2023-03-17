@@ -5476,6 +5476,10 @@ function frmAdminBuildJS() {
 	}
 
 	function purifyImgTags( html ) {
+		if ( html instanceof Element || html instanceof Document ) {
+			html = html.outerHTML;
+		}
+
 		const imgs = html.match( /<img([\w\W]+?)>/g );
 
 		if ( ! imgs ) {
@@ -5510,9 +5514,9 @@ function frmAdminBuildJS() {
 		originalLabel = purifyImgTags( originalLabel );
 
 		if ( imageUrl ) {
-			labelImage = tag( 'img', { src: imageUrl, alt: originalLabel });
+			labelImage = img({ src: imageUrl, alt: originalLabel });
 		} else {
-			labelImage = tag( 'div', { className: 'frm_empty_url' });
+			labelImage = div({ className: 'frm_empty_url' });
 			labelImage.innerHTML = frm_admin_js.image_placeholder_icon;
 		}
 
