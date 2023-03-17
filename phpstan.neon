@@ -57,3 +57,4 @@ parameters:
 		- '#should always throw an exception or terminate script execution but#'
 		- '#always exists and is always falsy#'
 		- '#has an unused use#'
+		- '#Cannot use array destructuring on#'
