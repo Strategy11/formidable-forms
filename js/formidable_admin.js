@@ -5346,7 +5346,7 @@ function frmAdminBuildJS() {
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyImgTags( opt.label ) + '</label>' +
+			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
@@ -5380,7 +5380,7 @@ function frmAdminBuildJS() {
 			if ( ! isOther || showOther ) {
 				var opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
-				opt.innerHTML = purifyImgTags( label );
+				opt.innerHTML = purifyHtml( label );
 
 				if ( isProduct ) {
 					opt.setAttribute( 'data-price', opts[ i ].price );
@@ -5493,30 +5493,51 @@ function frmAdminBuildJS() {
 		return div.firstChild;
 	}
 
-	function purifyImgTags( html ) {
+	function purifyHtml( html ) {
 		if ( html instanceof Element || html instanceof Document ) {
 			html = html.outerHTML;
 		}
 
-		const imgs = html.match( /<img([\w\W]+?)>/g );
-
-		if ( ! imgs ) {
-			return html;
-		}
-
+		const supportedTags  = [ 'img', 'p', 'span', 'b', 'strong' ];
 		const safeAttributes = [ 'src', 'class', 'height', 'width' ];
-		if ( imgs.length ) {
-			imgs.forEach( img => {
-				let unsafeImgNode = createElementFromHTML( img );
-				[ ...unsafeImgNode.attributes ].forEach( attr => {
-					if ( ! safeAttributes.includes( attr.name ) ) {
-						unsafeImgNode.removeAttribute( attr.name );
-					}
-				});
 
-				html = html.replaceAll( img, unsafeImgNode.outerHTML );
-			});
-		}
+		supportedTags.forEach( tag => {
+			let pattern;
+			if ( tag === 'img' ) {
+				pattern = new RegExp( `<${tag}([\\w\\W]+?)>`, 'g' );
+			} else {
+				pattern = new RegExp( `<${tag}([^>]*)>([^<]*)<\/${tag}>`, 'g' );
+			}
+			tagsInHtml = html.match( pattern );
+
+			if ( tagsInHtml ) {
+				tagsInHtml.forEach( elementHtml => {
+					const element = createElementFromHTML( elementHtml );
+					const elementAttributes = [ ...element.attributes ];
+
+					elementAttributes.forEach( attr => {
+						element.removeAttribute( attr.name );
+					});
+
+					const cleanElement = frmDom.tag( tag );
+					if ( tag === 'img' ) {
+						safeAttributes.forEach( attr => {
+							const index = elementAttributes.findIndex( elementAttr => elementAttr.name === attr );
+							if ( index !== -1 ) {
+								cleanElement.setAttribute( attr, elementAttributes[ index ].value );
+							}
+
+						});
+					} else {
+						cleanElement.textContent = element.textContent;
+					}
+
+					html = html.replaceAll( elementHtml, cleanElement.outerHTML );
+				});
+			}
+		});
+
+		console.log( html );
 
 		return html;
 	}
@@ -5529,7 +5550,7 @@ function frmAdminBuildJS() {
 			labelNode,
 			imageLabel;
 
-		originalLabel = purifyImgTags( originalLabel );
+		originalLabel = purifyHtml( originalLabel );
 
 		if ( imageUrl ) {
 			labelImage = img({ src: imageUrl, alt: originalLabel });
@@ -5642,7 +5663,7 @@ function frmAdminBuildJS() {
 		);
 
 		if ( conflicts.length ) {
-			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyImgTags( targetInput.value ) ) );
+			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyHtml( targetInput.value ) ) );
 		}
 	}
 
