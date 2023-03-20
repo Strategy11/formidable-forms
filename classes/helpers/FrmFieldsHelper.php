@@ -760,11 +760,16 @@ class FrmFieldsHelper {
 	/**
 	 * @param string $replace_with
 	 * @param array  $atts
+	 * @return string
 	 */
 	private static function trigger_shortcode_atts( $replace_with, $atts ) {
 		$supported_atts = array( 'sanitize', 'sanitize_url' );
 		$included_atts  = array_intersect( $supported_atts, array_keys( $atts ) );
 		foreach ( $included_atts as $included_att ) {
+			if ( '0' === $atts[ $included_att ] ) {
+				// Skip any option that uses 0 so sanitize_url=0 does not encode.
+				continue;
+			}
 			$function     = 'atts_' . $included_att;
 			$replace_with = self::$function( $replace_with, $atts );
 		}
