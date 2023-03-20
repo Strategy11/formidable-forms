@@ -5526,7 +5526,6 @@ function frmAdminBuildJS() {
 							if ( index !== -1 ) {
 								cleanElement.setAttribute( attr, elementAttributes[ index ].value );
 							}
-
 						});
 					} else {
 						cleanElement.textContent = element.textContent;
