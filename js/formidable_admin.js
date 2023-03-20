@@ -5498,12 +5498,12 @@ function frmAdminBuildJS() {
 			html = html.outerHTML;
 		}
 
-		const supportedTags  = [ 'img', 'p', 'span', 'b', 'strong' ];
+		const supportedTags  = [ 'img', 'p', 'span', 'b', 'strong', 'script', 'embed', 'iframe' ];
 		const safeAttributes = [ 'src', 'class', 'height', 'width' ];
 
 		supportedTags.forEach( tag => {
 			let pattern;
-			if ( tag === 'img' ) {
+			if ( tag === 'img' || tag === 'embed' ) {
 				pattern = new RegExp( `<${tag}([\\w\\W]+?)>`, 'g' );
 			} else {
 				pattern = new RegExp( `<${tag}([^>]*)>([^<]*)<\/${tag}>`, 'g' );
@@ -5512,26 +5512,30 @@ function frmAdminBuildJS() {
 
 			if ( tagsInHtml ) {
 				tagsInHtml.forEach( elementHtml => {
-					const element = createElementFromHTML( elementHtml );
-					const elementAttributes = [ ...element.attributes ];
-
-					elementAttributes.forEach( attr => {
-						element.removeAttribute( attr.name );
-					});
-
-					const cleanElement = frmDom.tag( tag );
-					if ( tag === 'img' ) {
-						safeAttributes.forEach( attr => {
-							const index = elementAttributes.findIndex( elementAttr => elementAttr.name === attr );
-							if ( index !== -1 ) {
-								cleanElement.setAttribute( attr, elementAttributes[ index ].value );
-							}
-						});
+					if ([ 'script', 'iframe' ].includes( tag ) ) {
+						html = html.replaceAll( elementHtml, '' );
 					} else {
-						cleanElement.textContent = element.textContent;
-					}
+						const element = createElementFromHTML( elementHtml );
+						const elementAttributes = [ ...element.attributes ];
 
-					html = html.replaceAll( elementHtml, cleanElement.outerHTML );
+						elementAttributes.forEach( attr => {
+							element.removeAttribute( attr.name );
+						});
+
+						const cleanElement = frmDom.tag( tag );
+						if ( tag === 'img' ) {
+							safeAttributes.forEach( attr => {
+								const index = elementAttributes.findIndex( elementAttr => elementAttr.name === attr );
+								if ( index !== -1 ) {
+									cleanElement.setAttribute( attr, elementAttributes[ index ].value );
+								}
+							});
+						} else {
+							cleanElement.textContent = element.textContent;
+						}
+
+						html = html.replaceAll( elementHtml, cleanElement.outerHTML );
+					}
 				});
 			}
 		});
