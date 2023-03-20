@@ -8852,7 +8852,7 @@ function frmAdminBuildJS() {
 
 			const handleTemplateSearch = () => {
 				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
-					const found = category.querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' );
+					const found = category.querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' ) || category.querySelector( '#frm-template-drop' );
 					if ( found ) {
 						setTemplateCount( category );
 					}
