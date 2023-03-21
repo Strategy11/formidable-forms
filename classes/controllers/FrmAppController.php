@@ -961,7 +961,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 1.07.05
+	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
 	 * @codeCoverageIgnore
 	 *
 	 * @param array $atts
