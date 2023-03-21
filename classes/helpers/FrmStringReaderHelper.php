@@ -79,7 +79,7 @@ class FrmStringReaderHelper {
 			--$count;
 		}
 
-		return $strip_quotes ? $this->stripe_quotes( $value ) : $value;
+		return $strip_quotes ? $this->strip_quotes( $value ) : $value;
 	}
 
 	/**
@@ -107,7 +107,7 @@ class FrmStringReaderHelper {
 	 * @param string string
 	 * @return string
 	 */
-	private function stripe_quotes( $string ) {
+	private function strip_quotes( $string ) {
 		// Only remove exactly one quote from the start and the end and then only if there is one at each end.
 
 		if ( strlen( $string ) < 2 || substr( $string, 0, 1 ) !== '"' || substr( $string, -1, 1 ) !== '"' ) {
