@@ -751,5 +751,57 @@
 		element.appendChild( child );
 	}
 
-	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
+	const allowedHtml = {
+		b: [],
+		div: [ 'class' ],
+		img: [ 'src', 'alt' ],
+		p: [],
+		span: [ 'class' ],
+		strong: [],
+		svg: [ 'class' ],
+		use: []
+	};
+
+	function purify( element ) {
+		return cleanNode( element );
+	}
+
+	function cleanNode( node ) {
+		if ( 'undefined' === typeof node.tagName ) {
+			return node;
+		}
+
+		const tagType = node.tagName.toLowerCase();
+
+		if ( 'svg' === tagType ) {
+			return svg({
+				href: node.querySelector( 'use' ).getAttribute( 'xlink:href' ),
+				classList: Array.from( node.classList )
+			});
+		}
+
+		const newNode = document.createElement( tagType );
+
+		if ( 'undefined' === typeof allowedHtml[ tagType ]) {
+			// Tag type is not allowed.
+			return document.createTextNode( '' );
+		}
+
+		allowedHtml[ tagType ].forEach(
+			allowedTag => {
+				if ( node.getAttribute( allowedTag ) ) {
+					newNode.setAttribute( allowedTag, node.getAttribute( allowedTag ) );
+				}
+			}
+		);
+
+		[ ...node.attributes ].forEach( attr => {
+			node.removeAttribute( attr.name );
+		});
+
+		node.childNodes.forEach( child => newNode.appendChild( cleanNode( child ) ) );
+		return newNode;
+	}
+
+	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg, purify };
 }() );

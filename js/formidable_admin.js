@@ -5346,7 +5346,7 @@ function frmAdminBuildJS() {
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
+			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
@@ -5487,62 +5487,14 @@ function frmAdminBuildJS() {
 		return img.attr( 'src' );
 	}
 
-	function createElementFromHTML( html ) {
-		const div = document.createElement( 'div' );
-		div.innerHTML = html;
-		return div.firstChild;
-	}
-
 	function purifyHtml( html ) {
 		if ( html instanceof Element || html instanceof Document ) {
 			html = html.outerHTML;
 		}
 
-		const supportedTags  = [ 'img', 'p', 'span', 'b', 'strong', 'script', 'embed', 'iframe' ];
-		const safeAttributes = [ 'src', 'class', 'height', 'width' ];
-
-		supportedTags.forEach( tag => {
-			let pattern;
-			if ( tag === 'img' || tag === 'embed' ) {
-				pattern = new RegExp( `<${tag}([\\w\\W]+?)>`, 'g' );
-			} else {
-				pattern = new RegExp( `<${tag}([^>]*)>([^<]*)<\/${tag}>`, 'g' );
-			}
-			tagsInHtml = html.match( pattern );
-
-			if ( tagsInHtml ) {
-				tagsInHtml.forEach( elementHtml => {
-					if ([ 'script', 'iframe' ].includes( tag ) ) {
-						html = html.replaceAll( elementHtml, '' );
-					} else {
-						const element = createElementFromHTML( elementHtml );
-						const elementAttributes = [ ...element.attributes ];
-
-						elementAttributes.forEach( attr => {
-							element.removeAttribute( attr.name );
-						});
-
-						const cleanElement = frmDom.tag( tag );
-						if ( tag === 'img' ) {
-							safeAttributes.forEach( attr => {
-								const index = elementAttributes.findIndex( elementAttr => elementAttr.name === attr );
-								if ( index !== -1 ) {
-									cleanElement.setAttribute( attr, elementAttributes[ index ].value );
-								}
-							});
-						} else {
-							cleanElement.textContent = element.textContent;
-						}
-
-						html = html.replaceAll( elementHtml, cleanElement.outerHTML );
-					}
-				});
-			}
-		});
-
-		console.log( html );
-
-		return html;
+		const element = document.createElement( 'div' );
+		element.innerHTML = html;
+		return jQuery( frmDom.purify( element ) ).html();
 	}
 
 	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
