@@ -2740,6 +2740,9 @@ class FrmAppHelper {
 	 * all data to json.
 	 *
 	 * @since 4.02.03
+	 *
+	 * @param array|string $value
+	 * @return void
 	 */
 	public static function unserialize_or_decode( &$value ) {
 		if ( is_array( $value ) ) {
@@ -2747,7 +2750,11 @@ class FrmAppHelper {
 		}
 
 		if ( is_serialized( $value ) ) {
-			$value = maybe_unserialize( $value );
+			$parser = new FrmSerializedStringParserHelper();
+			$parsed = $parser->parse( $value );
+			if ( is_array( $parsed ) ) {
+				$value = $parsed;
+			}
 		} else {
 			$value = self::maybe_json_decode( $value, false );
 		}
