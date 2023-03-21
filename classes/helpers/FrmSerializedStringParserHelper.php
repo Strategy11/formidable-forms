@@ -18,7 +18,7 @@ class FrmSerializedStringParserHelper {
 	 * @return mixed
 	 */
 	public function parse( $string ) {
-		return $this->doParse( new FrmStringReaderHelper( $string ) );
+		return $this->do_parse( new FrmStringReaderHelper( $string ) );
 	}
 
 	/**
@@ -27,7 +27,7 @@ class FrmSerializedStringParserHelper {
 	 * @param FrmStringReaderHelper $string
 	 * @return mixed
 	 */
-	private function doParse( $string ) {
+	private function do_parse( $string ) {
 		$val = null;
 
 		// May be : or ; as a terminator, depending on what the data type is.
@@ -36,15 +36,15 @@ class FrmSerializedStringParserHelper {
 		switch ( $type ) {
 			case 'a':
 				// Associative array: a:length:{[index][value]...}
-				$count = (int) $string->readUntil( ':' );
+				$count = (int) $string->read_until( ':' );
 
 				// Eat the opening "{" of the array.
 				$string->read( 1 );
 
 				$val = [];
 				for ( $i = 0; $i < $count; $i++ ) {
-					$array_key         = $this->doParse( $string );
-					$array_value       = $this->doParse( $string );
+					$array_key         = $this->do_parse( $string );
+					$array_value       = $this->do_parse( $string );
 					$val[ $array_key ] = $array_value;
 				}
 
@@ -54,7 +54,7 @@ class FrmSerializedStringParserHelper {
 				break;
 
 			case 's':
-				$len = (int) $string->readUntil( ':' );
+				$len = (int) $string->read_until( ':' );
 				$val = $string->read( $len + 2 );
 
 				// Eat the separator.
@@ -62,11 +62,11 @@ class FrmSerializedStringParserHelper {
 				break;
 
 			case 'i':
-				$val = (int) $string->readUntil( ';' );
+				$val = (int) $string->read_until( ';' );
 				break;
 
 			case 'd':
-				$val = (float) $string->readUntil( ';' );
+				$val = (float) $string->read_until( ';' );
 				break;
 
 			case 'b':

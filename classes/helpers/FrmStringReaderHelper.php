@@ -48,10 +48,10 @@ class FrmStringReaderHelper {
 	 * @param bool   $discard_char
 	 * @return string
 	 */
-	public function readUntil( $char, $discard_char = true ) {
+	public function read_until( $char, $discard_char = true ) {
 		$value = '';
 
-		while ( null !== ( $one = $this->readOne() ) ) {
+		while ( null !== ( $one = $this->read_one() ) ) {
 			if ( $one !== $char || !$discard_char ) {
 				$value .= $one;
 			}
@@ -74,12 +74,12 @@ class FrmStringReaderHelper {
 	public function read( $count, $strip_quotes = true ) {
 		$value = '';
 
-		while ( $count > 0 && ! is_null( $one = $this->readOne() ) ) {
+		while ( $count > 0 && ! is_null( $one = $this->read_one() ) ) {
 			$value .= $one;
 			$count -= 1;
 		}
 
-		return $strip_quotes ? $this->stripQuotes( $value ) : $value;
+		return $strip_quotes ? $this->stripe_quotes( $value ) : $value;
 	}
 
 	/**
@@ -88,7 +88,7 @@ class FrmStringReaderHelper {
 	 *
 	 * @return string|null
 	 */
-	private function readOne() {
+	private function read_one() {
 		if ( $this->pos <= $this->max ) {
 			$value = $this->string[ $this->pos ];
 			$this->pos += 1;
@@ -107,7 +107,7 @@ class FrmStringReaderHelper {
 	 * @param string string
 	 * @return string
 	 */
-	private function stripQuotes( $string ) {
+	private function stripe_quotes( $string ) {
 		// Only remove exactly one quote from the start and the end and then only if there is one at each end.
 
 		if ( strlen( $string ) < 2 || substr( $string, 0, 1 ) !== '"' || substr( $string, -1, 1 ) !== '"' ) {
