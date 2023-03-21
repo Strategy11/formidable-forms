@@ -593,4 +593,20 @@ class FrmDeprecated {
 
 		FrmEntryValidate::validate_field_types( $errors, $field, '', $args );
 	}
+
+	/**
+	 * @deprecated 2.02.07
+	 */
+	public static function dropdown_categories( $args ) {
+		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
+
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$args['location'] = 'front';
+			$dropdown = FrmProPost::get_category_dropdown( $args['field'], $args );
+		} else {
+			$dropdown = '';
+		}
+
+		return $dropdown;
+	}
 }

@@ -2143,15 +2143,6 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function dropdown_categories( $args ) {
-		_deprecated_function( __FUNCTION__, '2.02.07', 'FrmProPost::get_category_dropdown' );
-
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$args['location'] = 'front';
-			$dropdown         = FrmProPost::get_category_dropdown( $args['field'], $args );
-		} else {
-			$dropdown = '';
-		}
-
-		return $dropdown;
+		return FrmDeprecated::dropdown_categories( $args );
 	}
 }
