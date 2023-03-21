@@ -968,7 +968,7 @@ class FrmAppController {
 	 * @return string
 	 */
 	public static function get_form_shortcode( $atts ) {
-		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
+		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
 		return FrmFormsController::get_form_shortcode( $atts );
 	}
 }
