@@ -27,7 +27,7 @@ class FrmSerializedStringParserHelper {
 	 * @param FrmStringReaderHelper $string
 	 * @return mixed
 	 */
-	protected function doParse( $string ) {
+	private function doParse( $string ) {
 		$val = null;
 
 		// May be : or ; as a terminator, depending on what the data type is.
