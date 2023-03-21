@@ -69,9 +69,10 @@ class FrmStringReaderHelper {
 	 * whichever comes first.
 	 * By default, remove enclosing double-quotes from the result.
 	 *
+	 * @param int $count
 	 * @return string
 	 */
-	public function read( $count, $strip_quotes = true ) {
+	public function read( $count ) {
 		$value = '';
 
 		while ( $count > 0 && ! is_null( $one = $this->read_one() ) ) {
@@ -79,7 +80,7 @@ class FrmStringReaderHelper {
 			--$count;
 		}
 
-		return $strip_quotes ? $this->strip_quotes( $value ) : $value;
+		return $this->strip_quotes( $value );
 	}
 
 	/**
