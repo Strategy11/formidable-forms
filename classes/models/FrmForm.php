@@ -1108,4 +1108,28 @@ class FrmForm {
 	public static function get_edit_link( $form_id ) {
 		return admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id );
 	}
+
+	/**
+	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
+	 * @codeCoverageIgnore
+	 *
+	 * @param string $key
+	 * @return int form id
+	 */
+	public static function getIdByKey( $key ) {
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_id_by_key' );
+		return FrmForm::get_id_by_key( $key );
+	}
+
+	/**
+	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
+	 * @codeCoverageIgnore
+	 *
+	 * @param string|int $id
+	 * @return string
+	 */
+	public static function getKeyById( $id ) {
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_key_by_id' );
+		return FrmForm::get_key_by_id( $id );
+	}
 }

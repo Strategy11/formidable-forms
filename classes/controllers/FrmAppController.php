@@ -959,4 +959,16 @@ class FrmAppController {
 	public static function include_embed_form_icons() {
 		_deprecated_function( __METHOD__, '5.3' );
 	}
+
+	/**
+	 * @deprecated 1.07.05
+	 * @codeCoverageIgnore
+	 *
+	 * @param array $atts
+	 * @return string
+	 */
+	public static function get_form_shortcode( $atts ) {
+		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode()' );
+		return FrmFormsController::get_form_shortcode( $atts );
+	}
 }
