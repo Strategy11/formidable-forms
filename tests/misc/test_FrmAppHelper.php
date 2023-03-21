@@ -617,4 +617,24 @@ class test_FrmAppHelper extends FrmUnitTest {
 		add_filter( 'frm_use_custom_header_ip', '__return_true' );
 		$this->assertEquals( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
 	}
+
+	/**
+	 * @covers FrmAppHelper::human_time_diff
+	 */
+	public function test_human_time_diff() {
+		$difference = FrmAppHelper::human_time_diff( 0, 0 );
+		$this->assertEquals( '0 seconds', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, 1 );
+		$this->assertEquals( '1 second', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, HOUR_IN_SECONDS );
+		$this->assertEquals( '1 hour', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS );
+		$this->assertEquals( '1 day', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS * 2 );
+		$this->assertEquals( '2 days', $difference );
+	}
 }
