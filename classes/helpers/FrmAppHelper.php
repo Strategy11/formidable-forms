@@ -2393,7 +2393,7 @@ class FrmAppHelper {
 	 * @return string $time_ago
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		if ( empty( $to ) ) {
+		if ( empty( $to ) && 0 !== $to ) {
 			$now = new DateTime();
 		} else {
 			$now = new DateTime( '@' . $to );
