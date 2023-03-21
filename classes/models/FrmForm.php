@@ -1118,7 +1118,7 @@ class FrmForm {
 	 */
 	public static function getIdByKey( $key ) {
 		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_id_by_key' );
-		return FrmForm::get_id_by_key( $key );
+		return self::get_id_by_key( $key );
 	}
 
 	/**
@@ -1130,6 +1130,6 @@ class FrmForm {
 	 */
 	public static function getKeyById( $id ) {
 		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_key_by_id' );
-		return FrmForm::get_key_by_id( $id );
+		return self::get_key_by_id( $id );
 	}
 }
