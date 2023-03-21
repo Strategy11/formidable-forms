@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Parses serialized strings without using the unsafe unserialize function.
  */
-
 class FrmSerializedStringParserHelper {
 
 	/**
@@ -41,7 +40,7 @@ class FrmSerializedStringParserHelper {
 				// Eat the opening "{" of the array.
 				$string->read( 1 );
 
-				$val = [];
+				$val = array();
 				for ( $i = 0; $i < $count; $i++ ) {
 					$array_key         = $this->do_parse( $string );
 					$array_value       = $this->do_parse( $string );
@@ -50,7 +49,6 @@ class FrmSerializedStringParserHelper {
 
 				// Eat "}" terminating the array.
 				$string->read( 1 );
-
 				break;
 
 			case 's':
@@ -70,7 +68,7 @@ class FrmSerializedStringParserHelper {
 				break;
 
 			case 'b':
-				// Boolean is 0 or 1
+				// Boolean is 0 or 1.
 				$bool = $string->read( 2 );
 				$val  = substr( $bool, 0, 1 ) == '1';
 				break;

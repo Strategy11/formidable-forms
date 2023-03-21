@@ -52,7 +52,7 @@ class FrmStringReaderHelper {
 		$value = '';
 
 		while ( null !== ( $one = $this->read_one() ) ) {
-			if ( $one !== $char || !$discard_char ) {
+			if ( $one !== $char || ! $discard_char ) {
 				$value .= $one;
 			}
 
@@ -76,7 +76,7 @@ class FrmStringReaderHelper {
 
 		while ( $count > 0 && ! is_null( $one = $this->read_one() ) ) {
 			$value .= $one;
-			$count -= 1;
+			--$count;
 		}
 
 		return $strip_quotes ? $this->stripe_quotes( $value ) : $value;
