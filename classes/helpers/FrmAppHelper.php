@@ -2775,10 +2775,7 @@ class FrmAppHelper {
 			return $value;
 		}
 
-		// TODO Maybe make this a singleton or something instead? It's a lot of create this object every time.
-		$parser = new FrmSerializedStringParserHelper();
-		$parsed = $parser->parse( $value );
-
+		$parsed = FrmSerializedStringParserHelper::get()->parse( $value );
 		if ( is_array( $parsed ) ) {
 			$value = $parsed;
 		}

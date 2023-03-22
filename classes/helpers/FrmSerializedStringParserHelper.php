@@ -9,6 +9,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmSerializedStringParserHelper {
 
+	private static $instance;
+
+	public static function get() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Private constructor to enforce the use of FrmSerializedStringParserHelper::get.
+	 */
+	private function __construct() {}
+
 	/**
 	 * Parse a string containing a serialized data structure.
 	 * This is the initial entry point into the recursive parser.
