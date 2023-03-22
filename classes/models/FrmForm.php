@@ -372,13 +372,9 @@ class FrmForm {
 			);
 
 			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
-				foreach ( $values['frm_fields_submitted'] as $id ) {
-					foreach ( $values['field_options'][ 'options_' . $id ] as $option_key => $option ) {
-						foreach ( $option as $key => $item ) {
-							if ( $key === 'label' ) {
-								$values['field_options'][ 'options_' . $id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item );
-							}
-						}
+				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
+					foreach ( $option as $key => $item ) {
+						$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
 					}
 				}
 			}
