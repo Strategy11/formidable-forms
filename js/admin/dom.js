@@ -768,7 +768,10 @@
 
 	function cleanNode( node ) {
 		if ( 'undefined' === typeof node.tagName ) {
-			return node;
+			if ( '#text' === node.nodeName ) {
+				return document.createTextNode( node.textContent );
+			}
+			return document.createTextNode( '' );
 		}
 
 		const tagType = node.tagName.toLowerCase();
@@ -789,15 +792,11 @@
 
 		allowedHtml[ tagType ].forEach(
 			allowedTag => {
-				if ( node.getAttribute( allowedTag ) ) {
+				if ( node.hasAttribute( allowedTag ) ) {
 					newNode.setAttribute( allowedTag, node.getAttribute( allowedTag ) );
 				}
 			}
 		);
-
-		[ ...node.attributes ].forEach( attr => {
-			node.removeAttribute( attr.name );
-		});
 
 		node.childNodes.forEach( child => newNode.appendChild( cleanNode( child ) ) );
 		return newNode;

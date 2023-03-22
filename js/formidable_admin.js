@@ -5494,7 +5494,7 @@ function frmAdminBuildJS() {
 
 		const element = document.createElement( 'div' );
 		element.innerHTML = html;
-		return jQuery( frmDom.purify( element ) ).html();
+		return frmDom.purify( element ).innerHTML;
 	}
 
 	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
