@@ -7657,10 +7657,11 @@ function frmAdminBuildJS() {
 
 		function addTemplatesOnFetchSuccess( data ) {
 			data.templates.forEach( addTemplateToCategoryList );
+			initSearch( 'template-search-input', 'frm-searchable-template frm-ready-made-solution' );
 		}
 
 		function addTemplateToCategoryList( template ) {
-			categoryList.insertBefore( getReadyMadeSolution( template ), categoryList.firstChild );
+			categoryList.appendChild( getReadyMadeSolution( template ) );
 		}
 
 		function getReadyMadeSolution( template ) {
@@ -8777,30 +8778,6 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm-add-my-email-address' ).click();
 		});
 
-		jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
-			var categories = $modal.get( 0 ).querySelector( '.frm-categories-list' ).children,
-				categoryIndex,
-				category,
-				searchableTemplates,
-				count;
-
-			for ( categoryIndex in categories ) {
-				if ( isNaN( categoryIndex ) ) {
-					continue;
-				}
-
-				category = categories[ categoryIndex ];
-				if ( ! category.classList.contains( 'accordion-section' ) ) {
-					continue;
-				}
-
-				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
-				count = searchableTemplates.length;
-				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-				setTemplateCount( category, searchableTemplates );
-			}
-		});
-
 		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
 			document.getElementById( 'frm-create-title' ).removeAttribute( 'frm-type' );
 			$modal.attr( 'frm-page', 'create' );
@@ -8839,6 +8816,39 @@ function frmAdminBuildJS() {
 				}
 			}
 		}
+
+		initSearch( 'template-search-input', 'control-section accordion-section' );
+	}
+
+	function initSearch( inputID, itemClass ) {
+		const searchInput = document.getElementById( inputID );
+
+		if ( itemClass === 'control-section accordion-section' ) {
+			itemClass = 'frm-selectable frm-searchable-template';
+
+			const handleTemplateSearch = () => {
+				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
+					const found = category.querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' ) || ( searchInput.value === '' && category.querySelector( '#frm-template-drop' ) );
+					if ( found ) {
+						setTemplateCount( category );
+					}
+					category.classList.toggle( 'frm_hidden', ! found );
+				});
+			};
+
+			frmDom.search.init( searchInput, itemClass, { handleSearchResult: handleTemplateSearch });
+
+		} else {
+			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
+				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
+					let innerText = '';
+					innerText = item.querySelector( 'h3' ).innerText;
+					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
+				});
+			}
+			frmDom.search.init( searchInput, itemClass );
+		}
+
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
@@ -9069,6 +9079,7 @@ function frmAdminBuildJS() {
 
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText = items[i].innerText.toLowerCase();
+
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
@@ -9648,7 +9659,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
