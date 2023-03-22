@@ -2750,14 +2750,40 @@ class FrmAppHelper {
 		}
 
 		if ( is_serialized( $value ) ) {
-			$parser = new FrmSerializedStringParserHelper();
-			$parsed = $parser->parse( $value );
-			if ( is_array( $parsed ) ) {
-				$value = $parsed;
-			}
+			$value = self::maybe_unserialize_array( $value );
 		} else {
 			$value = self::maybe_json_decode( $value, false );
 		}
+	}
+
+	/**
+	 * Safely unserialize an array if necessary.
+	 * This function doesn't actually use unserialize. The string is parsed instead.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public static function maybe_unserialize_array( $value ) {
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+
+		// Since we only expect an array, skip anything that doesn't start with a:.
+		if ( ! is_serialized( $value ) || 'a:' !== substr( $value, 0, 2 ) ) {
+			return $value;
+		}
+
+		// TODO Maybe make this a singleton or something instead? It's a lot of create this object every time.
+		$parser = new FrmSerializedStringParserHelper();
+		$parsed = $parser->parse( $value );
+
+		if ( is_array( $parsed ) ) {
+			$value = $parsed;
+		}
+
+		return $value;
 	}
 
 	/**
