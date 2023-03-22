@@ -415,15 +415,16 @@ class FrmEntry {
 				'item_id'    => $entry->id,
 				'field_id !' => 0,
 			),
-			'field_id, meta_value, field_key, item_id'
+			'field_id, meta_value, field_key, item_id, f.type'
 		);
 
 		$entry->metas = array();
 
 		$include_key = apply_filters( 'frm_include_meta_keys', false, array( 'form_id' => $entry->form_id ) );
 		foreach ( $metas as $meta_val ) {
+			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
+
 			if ( $meta_val->item_id == $entry->id ) {
-				FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 				if ( $include_key ) {
 					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
@@ -436,7 +437,6 @@ class FrmEntry {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
 
-			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
 			$entry->metas[ $meta_val->field_id ][] = $meta_val->meta_value;
 
 			unset( $meta_val );
@@ -518,7 +518,11 @@ class FrmEntry {
 			$meta_where['item_id'] = array_keys( $entries );
 		}
 
-		$metas = FrmDb::get_results( $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON (it.field_id = fi.id)', $meta_where, 'item_id, meta_value, field_id, field_key, form_id' );
+		$metas = FrmDb::get_results(
+			$wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id = fi.id',
+			$meta_where,
+			'item_id, meta_value, field_id, field_key, form_id, fi.type'
+		);
 
 		unset( $meta_where );
 
@@ -536,7 +540,7 @@ class FrmEntry {
 				$entries[ $meta_val->item_id ]->metas = array();
 			}
 
-			FrmAppHelper::unserialize_or_decode( $meta_val->meta_value );
+			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
 			$entries[ $meta_val->item_id ]->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 			unset( $m_key, $meta_val );
 		}

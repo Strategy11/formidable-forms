@@ -2055,6 +2055,40 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (@see self::field_type_requires_unserialize).
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed  $value
+	 * @param string $field_type
+	 * @return void
+	 */
+	public static function prepare_field_value( &$value, $field_type ) {
+		if ( self::field_type_requires_unserialize_or_decode( $field_type ) ) {
+			FrmAppHelper::unserialize_or_decode( $value );
+		}
+	}
+
+	/**
+	 * @since 6.2
+	 *
+	 * @param string $type Field type.
+	 * @return bool
+	 */
+	private static function field_type_requires_unserialize_or_decode( $type ) {
+		$requires_unserialize = in_array( $type, array( 'checkbox', 'name', 'address', 'credit_card', 'select', 'file' ), true );
+		/**
+		 * Filter whether a type requires unserialize.
+		 *
+		 * @since 6.2
+		 *
+		 * @param bool $requires_unserialize
+		 */
+		return (bool) apply_filters( 'frm_' . $type . '_requires_unserialize_or_decode', $requires_unserialize );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function show_icon_link_js( $atts ) {

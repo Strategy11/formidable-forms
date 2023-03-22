@@ -288,7 +288,7 @@ class FrmEntriesHelper {
 		}
 
 		$unfiltered_value = $value;
-		FrmAppHelper::unserialize_or_decode( $unfiltered_value );
+		FrmFieldsHelper::prepare_field_value( $unfiltered_value, $field->type );
 
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );

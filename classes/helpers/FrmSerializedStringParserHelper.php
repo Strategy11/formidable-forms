@@ -11,6 +11,11 @@ class FrmSerializedStringParserHelper {
 
 	private static $instance;
 
+	/**
+	 * Get a singleton instance of the parser.
+	 *
+	 * @return FrmSerializedStringParserHelper
+	 */
 	public static function get() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new self();
