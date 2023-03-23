@@ -664,6 +664,11 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertIsArray( $unserialized_array );
 		$this->assertArrayHasKey( 'key', $unserialized_array );
 		$this->assertEquals( 'value', $unserialized_array['key'] );
+
+		$serialized_string = 'O:8:"DateTime":0:{}';
+		$unserialized = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsString( $unserialized );
+		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
 	}
 
 }
