@@ -5493,7 +5493,7 @@ function frmAdminBuildJS() {
 			html = html.outerHTML;
 		}
 
-		const clean = Array.from( jQuery.parseHTML( html ) ).reduce(
+		const clean = jQuery.parseHTML( html ).reduce(
 			( total, currentNode ) => {
 				const cleanNode = frmDom.cleanNode( currentNode );
 
