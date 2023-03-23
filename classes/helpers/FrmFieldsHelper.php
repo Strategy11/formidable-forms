@@ -1334,6 +1334,8 @@ class FrmFieldsHelper {
 		$replace      = array();
 		$replace_with = array();
 		foreach ( (array) $frm_duplicate_ids as $old => $new ) {
+			$replace[]      = $old;
+			$replace_with[] = $new;
 			$replace[]      = '[if ' . $old . ']';
 			$replace_with[] = '[if ' . $new . ']';
 			$replace[]      = '[if ' . $old . ' ';

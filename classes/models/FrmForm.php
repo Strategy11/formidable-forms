@@ -135,6 +135,10 @@ class FrmForm {
 			$new_opts['success_msg'] = FrmFieldsHelper::switch_field_ids( $new_opts['success_msg'] );
 		}
 
+		if ( ! empty( $new_opts['submit_conditions']['hide_field'] ) ) {
+			$new_opts['submit_conditions']['hide_field'] = FrmFieldsHelper::switch_field_ids( $new_opts['submit_conditions']['hide_field'] );
+		}
+
 		$new_opts = apply_filters( 'frm_after_duplicate_form_values', $new_opts, $form_id );
 
 		if ( $new_opts != $values['options'] ) {
