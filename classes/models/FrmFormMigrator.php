@@ -64,7 +64,7 @@ abstract class FrmFormMigrator {
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
-						<div style="margin:10px auto;max-width:400px;text-align:center;">
+						<div style="max-width:400px;text-align:left;">
 							<?php
 							if ( empty( $this->get_forms() ) ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
