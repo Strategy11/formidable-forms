@@ -54,8 +54,8 @@ abstract class FrmFormMigrator {
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
 			<p class="howto">Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>.</p>
-			<div class="welcome-panel" id="welcome-panel">
-				<div class="welcome-panel-content" style="text-align:center;margin-bottom:10px;">
+			<div id="welcome-panel">
+				<div style="margin-bottom:10px;">
 					<p class="about-description">
 						Select the forms to import.
 					</p>
@@ -64,7 +64,7 @@ abstract class FrmFormMigrator {
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
-						<div style="margin:10px auto;max-width:400px;text-align:left;">
+						<div style="margin:10px auto;max-width:400px;text-align:center;">
 							<?php
 							if ( empty( $this->get_forms() ) ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
