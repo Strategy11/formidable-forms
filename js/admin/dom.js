@@ -636,6 +636,8 @@
 		const output = tag( 'img', args );
 		if ( 'string' === typeof args.src ) {
 			output.setAttribute( 'src', args.src );
+		}
+		if ( 'string' === typeof args.alt ) {
 			output.setAttribute( 'alt', args.alt );
 		}
 		return output;
@@ -762,10 +764,6 @@
 		use: []
 	};
 
-	function purify( element ) {
-		return cleanNode( element );
-	}
-
 	function cleanNode( node ) {
 		if ( 'undefined' === typeof node.tagName ) {
 			if ( '#text' === node.nodeName ) {
@@ -802,5 +800,5 @@
 		return newNode;
 	}
 
-	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg, purify };
+	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg, cleanNode };
 }() );
