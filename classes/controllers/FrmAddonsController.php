@@ -980,16 +980,13 @@ class FrmAddonsController {
 	 *
 	 * @return bool
 	 */
-	private static function is_whitelisted( $url ) {
-		$whitelisted_urls = array(
+	private static function is_allowed( $url ) {
+		$allowed_urls = array(
 			'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
 			'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
 		);
 
-		if ( in_array( $url, $whitelisted_urls, true ) ) {
-			return true;
-		}
-		return false;
+		return in_array( $url, $allowed_urls, true );
 	}
 
 	/**
@@ -1003,7 +1000,7 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
-		if ( ! ( self::is_whitelisted( $download_url ) || FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) ) {
+		if ( ! ( self::is_allowed( $download_url ) || FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) ) {
 			return array(
 				'message' => 'Plugin URL is not valid',
 				'success' => false,
