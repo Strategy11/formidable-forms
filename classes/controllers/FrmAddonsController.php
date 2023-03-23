@@ -972,6 +972,27 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Checks if an addon download url is whitelisted.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $url
+	 *
+	 * @return bool
+	 */
+	private static function is_whitelisted( $url ) {
+		$whitelisted_urls = array(
+			'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
+			'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
+		);
+
+		if ( in_array( $url, $whitelisted_urls, true ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * We do not need any extra credentials if we have gotten this far,
 	 * so let's install the plugin.
 	 *
@@ -982,7 +1003,7 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
-		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) {
+		if ( ! ( self::is_whitelisted( $download_url ) || FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) ) {
 			return array(
 				'message' => 'Plugin URL is not valid',
 				'success' => false,

@@ -86,7 +86,7 @@ abstract class FrmFormMigrator {
 								</p>
 							<?php } ?>
 						</div>
-						<button type="submit" class="button button-primary button-hero">Start Import</button>
+						<p class="submit"><button type="submit" class="button button-primary frm-button-primary">Start Import</button></p>
 					</form>
 					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
