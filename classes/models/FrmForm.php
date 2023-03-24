@@ -136,7 +136,12 @@ class FrmForm {
 		}
 
 		if ( ! empty( $new_opts['submit_conditions']['hide_field'] ) ) {
-			$new_opts['submit_conditions']['hide_field'] = FrmFieldsHelper::switch_field_ids( $new_opts['submit_conditions']['hide_field'] );
+			global $frm_duplicate_ids;
+			foreach ( $new_opts['submit_conditions']['hide_field'] as $key => $val ) {
+				if ( array_search( $val, array_keys( $frm_duplicate_ids ) ) !== false ) {
+					$new_opts['submit_conditions']['hide_field'][ $key ] = $frm_duplicate_ids[ $val ];
+				}
+			}
 		}
 
 		$new_opts = apply_filters( 'frm_after_duplicate_form_values', $new_opts, $form_id );
