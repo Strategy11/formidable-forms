@@ -972,7 +972,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * Checks if an addon download url is whitelisted.
+	 * Checks if an addon download url is allowed.
 	 *
 	 * @since x.x
 	 *
@@ -981,12 +981,7 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	private static function is_allowed( $url ) {
-		$allowed_urls = array(
-			'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
-			'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
-		);
-
-		return in_array( $url, $allowed_urls, true );
+		return strpos( $url, 'https://downloads.wordpress.org/plugin' ) !== false;
 	}
 
 	/**
