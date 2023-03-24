@@ -138,7 +138,7 @@ class FrmForm {
 		if ( ! empty( $new_opts['submit_conditions']['hide_field'] ) ) {
 			global $frm_duplicate_ids;
 			foreach ( $new_opts['submit_conditions']['hide_field'] as $key => $val ) {
-				if ( array_search( $val, array_keys( (array) $frm_duplicate_ids ) ) !== false ) {
+				if ( isset( $frm_duplicate_ids[ $val ] ) ) {
 					$new_opts['submit_conditions']['hide_field'][ $key ] = $frm_duplicate_ids[ $val ];
 				}
 			}
