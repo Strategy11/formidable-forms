@@ -2065,27 +2065,42 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	public static function prepare_field_value( &$value, $field_type ) {
-		if ( self::field_type_requires_unserialize_or_decode( $field_type ) ) {
+		if ( self::should_unserialize_or_decode( $field_type ) ) {
 			FrmAppHelper::unserialize_or_decode( $value );
 		}
 	}
 
 	/**
+	 * A lot of types use serialized arrays (including checkbox, name, address, credit_card, select, file, lookup, data, product).
+	 * To be on the safe side (in case we missed a type), return false for types that do not require it.
+	 *
 	 * @since 6.2
 	 *
 	 * @param string $type Field type.
 	 * @return bool
 	 */
-	private static function field_type_requires_unserialize_or_decode( $type ) {
-		$requires_unserialize = in_array( $type, array( 'checkbox', 'name', 'address', 'credit_card', 'select', 'file' ), true );
-		/**
-		 * Filter whether a type requires unserialize.
-		 *
-		 * @since 6.2
-		 *
-		 * @param bool $requires_unserialize
-		 */
-		return (bool) apply_filters( 'frm_' . $type . '_requires_unserialize_or_decode', $requires_unserialize );
+	private static function should_unserialize_or_decode( $type ) {
+		switch ( $type ) {
+			case 'text':
+			case 'textarea':
+			case 'radio':
+			case 'email':
+			case 'url':
+			case 'number':
+			case 'phone':
+			case 'hidden':
+			case 'user_id':
+			case 'rte':
+			case 'date':
+			case 'time':
+			case 'scale':
+			case 'star':
+			case 'range':
+			case 'toggle':
+			case 'nps':
+				return false;
+		}
+		return true;
 	}
 
 	/**
