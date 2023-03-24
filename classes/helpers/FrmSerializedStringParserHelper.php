@@ -6,9 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Parses serialized strings without using the unsafe unserialize function.
+ *
+ * @since 6.2
  */
 class FrmSerializedStringParserHelper {
 
+	/**
+	 * @var FrmSerializedStringParserHelper|null
+	 */
 	private static $instance;
 
 	/**

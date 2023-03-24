@@ -641,7 +641,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::unserialize_or_decode
 	 */
-	public function test_unserialize_or_decode(  ) {
+	public function test_unserialize_or_decode() {
 		$json_encoded_string = '{"key":"value"}';
 		FrmAppHelper::unserialize_or_decode( $json_encoded_string );
 		$this->assertIsArray( $json_encoded_string );
@@ -658,7 +658,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	/**
 	 * @covers FrmAppHelper::maybe_unserialize_array
 	 */
-	public function test_maybe_unserialize_array(  ) {
+	public function test_maybe_unserialize_array() {
 		$serialized_string  = 'a:1:{s:3:"key";s:5:"value";}';
 		$unserialized_array = FrmAppHelper::maybe_unserialize_array( $serialized_string );
 		$this->assertIsArray( $unserialized_array );

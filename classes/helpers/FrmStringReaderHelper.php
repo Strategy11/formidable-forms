@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - One character.
  * - A specified number of characters.
  * - Until a matching character is found.
+ *
+ * @since 6.2
  */
-
 class FrmStringReaderHelper {
 
 	/**
