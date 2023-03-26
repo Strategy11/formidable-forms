@@ -277,17 +277,20 @@ class FrmXMLController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
 
 		if ( 'import_xml' === $action ) {
-			return self::import_xml();
+			self::import_xml();
 		} elseif ( 'export_xml' === $action ) {
-			return self::export_xml();
+			self::export_xml();
 		} elseif ( apply_filters( 'frm_xml_route', true, $action ) ) {
-			return self::form();
+			self::form();
 		}
 	}
 
