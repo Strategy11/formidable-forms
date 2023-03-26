@@ -15,6 +15,9 @@ class FrmFieldNumber extends FrmFieldType {
 	protected $type = 'number';
 	protected $display_type = 'text';
 
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		$settings = array(
 			'size'           => true,
@@ -31,6 +34,11 @@ class FrmFieldNumber extends FrmFieldType {
 		return $settings;
 	}
 
+	/**
+	 * @return (int|string)[]
+	 *
+	 * @psalm-return array{minnum: 0, maxnum: 9999999, step: 'any'}
+	 */
 	protected function extra_field_opts() {
 		return array(
 			'minnum' => 0,
@@ -41,6 +49,8 @@ class FrmFieldNumber extends FrmFieldType {
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
 		$this->add_min_max( $args, $input_html );
@@ -84,6 +94,8 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @param array $errors Errors array.
 	 * @param array $args   Validation args.
+	 *
+	 * @return void
 	 */
 	private function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
@@ -139,6 +151,10 @@ class FrmFieldNumber extends FrmFieldType {
 	 * Remove the comma when HTML5 isn't supported
 	 *
 	 * @since 3.0
+	 *
+	 * @param array $args
+	 *
+	 * @return void
 	 */
 	private function remove_commas_from_number( &$args ) {
 		if ( strpos( $args['value'], ',' ) ) {
@@ -160,6 +176,8 @@ class FrmFieldNumber extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );

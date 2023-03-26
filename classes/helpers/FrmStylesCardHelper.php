@@ -487,6 +487,9 @@ class FrmStylesCardHelper {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_template_info() {
 		$style_api = new FrmStyleApi();
 		return $style_api->get_api_info();

@@ -21,6 +21,9 @@ class FrmFieldPhone extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
@@ -30,6 +33,9 @@ class FrmFieldPhone extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function html5_input_type() {
 		$frm_settings = FrmAppHelper::get_settings();
 
@@ -38,6 +44,8 @@ class FrmFieldPhone extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $value );

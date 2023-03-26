@@ -13,6 +13,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	/**
+	 * @return void
+	 */
 	public function prepare_items() {
 		global $per_page;
 
@@ -88,6 +91,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function no_items() {
 		$s = self::get_param(
 			array(
@@ -119,10 +125,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function search_box( $text, $input_id ) {
 		// Searching is a pro feature
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function display_tablenav( $which ) {
 		$is_footer = ( $which !== 'top' );
 		if ( $is_footer && ! empty( $this->items ) ) {
@@ -138,6 +150,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		parent::display_tablenav( $which );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
 		if ( $which === 'top' && ! $form_id ) {
@@ -175,6 +190,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 		return $primary_column;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function single_row( $item, $style = '' ) {
 		// Set up the hover actions for this user
 		$actions   = array();
@@ -241,11 +259,16 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * Get the column names that the logged in user can action on
+	 *
+	 * @return string[]
 	 */
 	private function get_action_columns() {
 		return array( 'cb', 'form_id', 'id', 'post_id' );
 	}
 
+	/**
+	 * @param object $item
+	 */
 	private function column_value( $item ) {
 		$col_name = $this->column_name;
 
@@ -308,6 +331,10 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $view_link
+	 * @param array $actions
+	 * @param object $item
+	 *
+	 * @return void
 	 */
 	private function get_actions( &$actions, $item, $view_link ) {
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
@@ -320,6 +347,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );
 	}
 
+	/**
+	 * @param false $val
+	 *
+	 * @return void
+	 */
 	private function get_column_value( $item, &$val ) {
 		$col_name = $this->column_name;
 

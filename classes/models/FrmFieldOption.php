@@ -45,6 +45,8 @@ class FrmFieldOption {
 	 * Set the option label
 	 *
 	 * @since 2.03.05
+	 *
+	 * @return void
 	 */
 	private function set_option_label() {
 		if ( is_array( $this->option ) ) {
@@ -58,6 +60,8 @@ class FrmFieldOption {
 	 * Set the saved value
 	 *
 	 * @since 2.03.05
+	 *
+	 * @return void
 	 */
 	protected function set_saved_value() {
 		$this->saved_value = $this->option_label;
@@ -70,6 +74,8 @@ class FrmFieldOption {
 	 *
 	 * @param string $selected_value
 	 * @param int $truncate
+	 *
+	 * @return void
 	 */
 	public function print_single_option( $selected_value, $truncate ) {
 		if ( '' !== $this->saved_value ) {
