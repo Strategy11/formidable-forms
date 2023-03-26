@@ -14,6 +14,8 @@ class FrmNotification {
 	 * @param object $action
 	 * @param object $entry
 	 * @param object $form
+	 *
+	 * @return void
 	 */
 	public static function trigger_email( $action, $entry, $form ) {
 		$email = new FrmEmail( $action, $entry, $form );
@@ -33,6 +35,8 @@ class FrmNotification {
 	 * Remove the trigger_email function from the frm_trigger_email_action hook
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	public static function stop_emails() {
 		remove_action( 'frm_trigger_email_action', 'FrmNotification::trigger_email', 10 );
@@ -42,6 +46,8 @@ class FrmNotification {
 	 * Hook the trigger_email function to frm_trigger_email_action action
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	public static function hook_emails_to_action() {
 		add_action( 'frm_trigger_email_action', 'FrmNotification::trigger_email', 10, 3 );
@@ -53,6 +59,8 @@ class FrmNotification {
 	 * @since 2.03.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	private static function print_recipients( $atts ) {
 		if ( apply_filters( 'frm_echo_emails', false ) ) {

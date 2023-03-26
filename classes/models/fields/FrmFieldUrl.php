@@ -15,6 +15,9 @@ class FrmFieldUrl extends FrmFieldType {
 	protected $type = 'url';
 	protected $display_type = 'text';
 
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
@@ -33,10 +36,16 @@ class FrmFieldUrl extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function get_field_name() {
 		return __( 'Website', 'formidable' );
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function fill_default_atts( &$atts ) {
 		$defaults = array(
 			'sep'  => ', ',
@@ -92,6 +101,8 @@ class FrmFieldUrl extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'esc_url_raw', $value );
