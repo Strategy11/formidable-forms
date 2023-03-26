@@ -45,6 +45,9 @@ class FrmStyle {
 		return FrmDb::save_settings( $settings, 'frm_styles' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function duplicate( $id ) {
 		// Duplicating is a pro feature. This is handled in FrmProStyle::duplicate instead.
 	}
@@ -244,11 +247,13 @@ class FrmStyle {
 
 	/**
 	 * @since 3.01.01
+	 *
+	 * @param string $setting
+	 * @return bool
 	 */
 	private function is_color( $setting ) {
 		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-
-		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors );
+		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors, true );
 	}
 
 	/**
@@ -443,6 +448,9 @@ class FrmStyle {
 		return $styles;
 	}
 
+	/**
+	 * @param array|null $styles
+	 */
 	public function get_default_style( $styles = null ) {
 		if ( ! isset( $styles ) ) {
 			$styles = $this->get_all( 'menu_order', 'DESC', 1 );
