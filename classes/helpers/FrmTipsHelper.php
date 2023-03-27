@@ -29,7 +29,7 @@ class FrmTipsHelper {
 	 *
 	 * @param array $tip {
 	 *     Tip args
-	 * 
+	 *
 	 *     @type array  $link Tip link data. See the first parameter of {@see FrmAppHelper::admin_upgrade_link()} for more details.
 	 *     @type string $page The based link of the tip. If this is empty, `https://formidableforms.com/lite-upgrade/` will
 	 *                        be used. Otherwise, `https://formidableforms.com/{$page}` will be used.
