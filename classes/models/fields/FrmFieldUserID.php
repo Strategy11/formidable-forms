@@ -33,6 +33,12 @@ class FrmFieldUserID extends FrmFieldType {
 	protected $holds_email_values = true;
 
 	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
+
+	/**
 	 * @return string
 	 */
 	protected function include_form_builder_file() {

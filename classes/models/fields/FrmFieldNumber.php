@@ -13,7 +13,16 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'number';
+
+	/**
+	 * @var string
+	 */
 	protected $display_type = 'text';
+
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
 
 	protected function field_settings_for_type() {
 		$settings = array(

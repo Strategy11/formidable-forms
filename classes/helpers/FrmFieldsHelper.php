@@ -2065,42 +2065,8 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	public static function prepare_field_value( &$value, $field_type ) {
-		if ( self::should_unserialize_or_decode( $field_type ) ) {
-			FrmAppHelper::unserialize_or_decode( $value );
-		}
-	}
-
-	/**
-	 * A lot of types use serialized arrays (including checkbox, name, address, credit_card, select, file, lookup, data, product).
-	 * To be on the safe side (in case we missed a type), return false for types that do not require it.
-	 *
-	 * @since 6.2
-	 *
-	 * @param string $type Field type.
-	 * @return bool
-	 */
-	private static function should_unserialize_or_decode( $type ) {
-		switch ( $type ) {
-			case 'text':
-			case 'textarea':
-			case 'radio':
-			case 'email':
-			case 'url':
-			case 'number':
-			case 'phone':
-			case 'hidden':
-			case 'user_id':
-			case 'rte':
-			case 'date':
-			case 'time':
-			case 'scale':
-			case 'star':
-			case 'range':
-			case 'toggle':
-			case 'nps':
-				return false;
-		}
-		return true;
+		$field_object = FrmFieldFactory::get_field_type( $field_type );
+  		$value        = $field_object->maybe_decode_value( $value );
 	}
 
 	/**
