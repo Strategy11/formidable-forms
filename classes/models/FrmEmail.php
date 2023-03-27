@@ -142,6 +142,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param object $action
+	 *
+	 * @return void
 	 */
 	private function set_email_key( $action ) {
 		$this->email_key = $action->ID;
@@ -153,6 +155,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 *
+	 * @return void
 	 */
 	private function set_to( $user_id_args ) {
 		$to = $this->prepare_email_setting( $this->settings['email_to'], $user_id_args );
@@ -187,6 +191,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 *
+	 * @return void
 	 */
 	private function set_cc( $user_id_args ) {
 		$this->cc = $this->prepare_additional_recipients( $this->settings['cc'], $user_id_args );
@@ -198,6 +204,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 *
+	 * @return void
 	 */
 	private function set_bcc( $user_id_args ) {
 		$this->bcc = $this->prepare_additional_recipients( $this->settings['bcc'], $user_id_args );
@@ -247,6 +255,8 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 *
+	 * @return void
 	 */
 	private function set_reply_to( $user_id_args ) {
 		$this->reply_to = trim( $this->settings['reply_to'] );
@@ -267,6 +277,8 @@ class FrmEmail {
 	 * This should be set before the message
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_is_plain_text() {
 		if ( $this->settings['plain_text'] ) {
@@ -279,6 +291,8 @@ class FrmEmail {
 	 * This should be set before the message
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_include_user_info() {
 		if ( isset( $this->settings['inc_user_info'] ) ) {
@@ -292,6 +306,9 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param $action
+	 * @param object $action
+	 *
+	 * @return void
 	 */
 	private function set_is_single_recipient( $action ) {
 		$args = array(
@@ -312,6 +329,8 @@ class FrmEmail {
 	 * Set the charset
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_charset() {
 		$this->charset = get_option( 'blog_charset' );
@@ -321,6 +340,8 @@ class FrmEmail {
 	 * Set the content type
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_content_type() {
 		if ( $this->is_plain_text ) {
@@ -359,6 +380,8 @@ class FrmEmail {
 	 * Set the email message
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function set_message() {
 		$this->message = $this->settings['email_message'];
@@ -405,6 +428,8 @@ class FrmEmail {
 
 	/**
 	 * Runs message through autop, extracting the content inside body tag if it has <body>.
+	 *
+	 * @return void
 	 */
 	private function add_autop() {
 		$message = $this->message;
@@ -416,6 +441,11 @@ class FrmEmail {
 		}
 	}
 
+	/**
+	 * @param string $mail_body
+	 *
+	 * @return void
+	 */
 	private function maybe_add_ip( &$mail_body ) {
 		if ( ! empty( $this->entry->ip ) ) {
 			$mail_body .= __( 'IP Address', 'formidable' ) . ': ' . $this->entry->ip . "\r\n";
@@ -738,6 +768,10 @@ class FrmEmail {
 	 * Get only the email if the name and email have been combined
 	 *
 	 * @since 3.0.06
+	 *
+	 * @param string $name
+	 *
+	 * @return string
 	 */
 	private function get_email_from_name( $name ) {
 		$email = trim( trim( $name, '>' ), '<' );
@@ -775,6 +809,9 @@ class FrmEmail {
 
 	/**
 	 * @since 3.0.06
+	 *
+	 * @param string $name
+	 * @param string $email
 	 */
 	private function format_from_email( $name, $email ) {
 		if ( '' !== $name ) {
@@ -789,6 +826,8 @@ class FrmEmail {
 	 * Send the phone numbers to the frm_send_to_not_email hook
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function handle_phone_numbers() {
 
@@ -848,6 +887,8 @@ class FrmEmail {
 	 * Remove the Buddypress email filters
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function remove_buddypress_filters() {
 		remove_filter( 'wp_mail_from', 'bp_core_email_from_address_filter' );
@@ -859,6 +900,8 @@ class FrmEmail {
 	 * Remove line breaks in HTML emails to prevent conflicts with Mandrill
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function add_mandrill_filter() {
 		if ( ! $this->is_plain_text ) {
@@ -870,6 +913,8 @@ class FrmEmail {
 	 * Remove Mandrill line break filter
 	 *
 	 * @since 2.03.04
+	 *
+	 * @return void
 	 */
 	private function remove_mandrill_filter() {
 		remove_filter( 'mandrill_nl2br', 'FrmEmailHelper::remove_mandrill_br' );

@@ -7,7 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
-	 * @return int|boolean id on success or false on failure
+	 * @return int|bool id on success or false on failure.
 	 */
 	public static function create( $values ) {
 		global $wpdb;
@@ -808,7 +808,11 @@ class FrmForm {
 	 * Get all published forms
 	 *
 	 * @since 2.0
-	 * @return array of forms
+	 *
+	 * @param array  $query
+	 * @param int    $limit
+	 * @param string $inc_children
+	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;

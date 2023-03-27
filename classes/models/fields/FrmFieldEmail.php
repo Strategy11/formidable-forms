@@ -30,6 +30,9 @@ class FrmFieldEmail extends FrmFieldType {
 	 */
 	protected $array_allowed = false;
 
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
@@ -56,6 +59,8 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_value( 'sanitize_email', $value );

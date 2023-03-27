@@ -14,7 +14,9 @@ class FrmWelcomeController {
 	/**
 	 * Register all of the hooks related to the welcome screen functionality
 	 *
-	 * @access   public
+	 * @access public
+	 *
+	 * @return void
 	 */
 	public static function load_hooks() {
 		add_action( 'admin_init', __CLASS__ . '::redirect' );
@@ -65,6 +67,8 @@ class FrmWelcomeController {
 
 	/**
 	 * Don't redirect every time the plugin is activated.
+	 *
+	 * @return bool
 	 */
 	private static function already_redirected() {
 		$last_redirect = get_option( self::$last_redirect );
@@ -134,6 +138,9 @@ class FrmWelcomeController {
 		return admin_url( 'admin.php?page=' . self::$menu_slug );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function upgrade_to_pro_button() {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			?>
@@ -144,12 +151,21 @@ class FrmWelcomeController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function maybe_show_license_box() {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			FrmSettingsController::license_box();
 		}
 	}
 
+	/**
+	 * @param string $plugin
+	 * @param string $upgrade_link_args
+	 *
+	 * @return void
+	 */
 	public static function maybe_show_conditional_action_button( $plugin, $upgrade_link_args ) {
 		$is_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 		if ( ! $is_installed ) {
