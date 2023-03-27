@@ -74,6 +74,10 @@ abstract class FrmFieldType {
 	 */
 	protected $is_tall = false;
 
+	/**
+	 * @param object|array|int $field
+	 * @param string           $type
+	 */
 	public function __construct( $field = 0, $type = '' ) {
 		$this->field = $field;
 		$this->set_type( $type );
@@ -152,8 +156,7 @@ abstract class FrmFieldType {
 	}
 
 	/**
-	 *
-	 * @return object|array
+	 * @return array|int|object
 	 */
 	public function get_field() {
 		return $this->field;

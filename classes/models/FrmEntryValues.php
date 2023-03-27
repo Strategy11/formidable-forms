@@ -76,6 +76,8 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param int|string $entry_id
+	 *
+	 * @return void
 	 */
 	protected function init_entry( $entry_id ) {
 		$this->entry = FrmEntry::getOne( $entry_id, true );
@@ -95,6 +97,8 @@ class FrmEntryValues {
 	 * Set the form_id property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_form_id() {
 		$this->form_id = (int) $this->entry->form_id;
@@ -106,6 +110,8 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_include_fields( $atts ) {
 
@@ -147,6 +153,8 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_exclude_fields( $atts ) {
 		$this->exclude_fields = $this->prepare_array_property( 'exclude_fields', $atts );
@@ -191,6 +199,8 @@ class FrmEntryValues {
 	 * Set the fields property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
@@ -217,6 +227,8 @@ class FrmEntryValues {
 	 * Set the field_values property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_field_values() {
 		foreach ( $this->fields as $field ) {
@@ -241,6 +253,8 @@ class FrmEntryValues {
 	 * Set the user_info property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_user_info() {
 		if ( isset( $this->entry->description ) ) {
@@ -338,6 +352,8 @@ class FrmEntryValues {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
+	 *
+	 * @return void
 	 */
 	protected function add_field_values( $field ) {
 		$this->field_values[ $field->id ] = new FrmFieldValue( $field, $this->entry );

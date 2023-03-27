@@ -30,18 +30,30 @@ class FrmInstallPlugin {
 		return $url;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_installed() {
 		return is_dir( WP_PLUGIN_DIR . '/' . $this->plugin_slug );
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_active() {
 		return is_plugin_active( $this->plugin_file );
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function install_url() {
 		return wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=' . $this->plugin_slug ), 'install-plugin_' . $this->plugin_slug );
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function activate_url() {
 		return wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=' . $this->plugin_file ), 'activate-plugin_' . $this->plugin_file );
 	}

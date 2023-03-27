@@ -305,7 +305,8 @@ class FrmEntryValidate {
 
 	/**
 	 * @param int $form_id
-	 * @return boolean
+	 *
+	 * @return bool|string
 	 */
 	private static function is_antispam_check( $form_id ) {
 		$aspm = new FrmAntiSpam( $form_id );

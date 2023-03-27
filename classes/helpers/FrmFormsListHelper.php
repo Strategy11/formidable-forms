@@ -14,6 +14,9 @@ class FrmFormsListHelper extends FrmListHelper {
 		parent::__construct( $args );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function prepare_items() {
 		global $wpdb, $per_page, $mode;
 
@@ -100,6 +103,9 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	public function no_items() {
 		if ( $this->status === 'trash' ) {
 			echo '<p>';
@@ -136,6 +142,9 @@ class FrmFormsListHelper extends FrmListHelper {
 		return $actions;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function extra_tablenav( $which ) {
 		if ( 'top' != $which ) {
 			return;
@@ -192,6 +201,9 @@ class FrmFormsListHelper extends FrmListHelper {
 		return $links;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function pagination( $which ) {
 		global $mode;
 
@@ -344,6 +356,10 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $edit_link
+	 * @param array $actions
+	 * @param stdClass $item
+	 *
+	 * @return void
 	 */
 	private function get_actions( &$actions, $item, $edit_link ) {
 		$new_actions = FrmFormsHelper::get_action_links( $item->id, $item );
@@ -368,6 +384,9 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $edit_link
+	 * @param stdClass $item
+	 *
+	 * @return string
 	 */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
@@ -396,6 +415,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $val
+	 *
+	 * @return void
 	 */
 	private function add_draft_label( $item, &$val ) {
 		if ( 'draft' == $item->status && 'draft' != $this->status ) {
@@ -405,6 +426,8 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $val
+	 *
+	 * @return void
 	 */
 	private function add_form_description( $item, &$val ) {
 		global $mode;

@@ -370,7 +370,7 @@ abstract class FrmFormMigrator {
 	 *              the name key is a must. The keys are the column
 	 *              names of the forms table in the DB.
 	 *
-	 * @return int The ID of the newly created form.
+	 * @return bool|int The ID of the newly created form or false on failure.
 	 */
 	protected function create_form( $form ) {
 		$form['form_key'] = $form['name'];

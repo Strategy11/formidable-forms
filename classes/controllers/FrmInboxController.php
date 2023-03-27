@@ -10,6 +10,8 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	public static function menu() {
 		$unread = self::get_notice_count();
@@ -28,6 +30,8 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @return void
 	 */
 	public static function dismiss_all_button( $atts ) {
 		if ( empty( $atts['messages'] ) ) {
@@ -41,6 +45,8 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	public static function inbox() {
 		FrmAppHelper::include_svg();
@@ -59,6 +65,8 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	public static function dismiss_message() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -79,6 +87,8 @@ class FrmInboxController {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	private static function add_tracking_request() {
 		$settings = FrmAppHelper::get_settings();
@@ -104,6 +114,8 @@ class FrmInboxController {
 	 * Adds free template design.
 	 *
 	 * @since 4.10.03
+	 *
+	 * @return void
 	 */
 	private static function add_free_template_message() {
 		if ( FrmAppHelper::pro_is_installed() ) {

@@ -20,6 +20,9 @@ class FrmFieldText extends FrmFieldType {
 	 */
 	protected $holds_email_values = true;
 
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
