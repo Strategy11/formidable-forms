@@ -1,4 +1,12 @@
 == Changelog ==
+= 6.2 =
+* Fix: When searching for templates with the word application, all ready made solutions would appear first, making it difficult to search for an application form template.
+* Fix: The User Flow add on would display a time difference of 0 seconds as 52 years.
+* Fix: When using some shortcode options, including sanitize_url=0 or sanitize=0, the option would be treated the same as 1. 0 values will now be treated as off.
+* The delete option for a collapsed section is no longer faded out.
+* Duplicating a collapsed section is no longer disabled.
+* Several functions deprecated in version 2.x have been removed.
+
 = 6.1.2 =
 * New: The active filtered form type will be used when searching forms. Previously form searching would only check active forms.
 * Fix: It was not possible to scroll a Polylang translation page.
