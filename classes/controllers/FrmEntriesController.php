@@ -756,9 +756,7 @@ class FrmEntriesController {
 				// Trigger the footer scripts if there is a form to show.
 				if ( $errors || ! empty( $frm_vars['forms_loaded'] ) ) {
 					ob_start();
-					// TODO Do we require these functions in Lite?
-					// FrmProFormsController::print_ajax_scripts( '' );
-					// FrmProFormsController::footer_js();
+					FrmFormsController::print_ajax_scripts();
 					$response['content'] .= ob_get_contents();
 					ob_end_clean();
 
