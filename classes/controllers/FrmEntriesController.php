@@ -699,16 +699,14 @@ class FrmEntriesController {
 	}
 
 	/**
+	 * Create an entry when the ajax_submit option is on.
+	 *
 	 * @return void
 	 */
 	public static function ajax_create() {
 		if ( is_callable( 'FrmProEntriesController::ajax_create' ) ) {
 			// Let Pro handle AJAX Submit if it's available.
-			// Pro requires additional logic for supporting:
-			// - forms with multiple pages
-			// - file fields
-			// - updating entries.
-			// - include_fields/exclude_fields/get form shortcode options.
+			// This is because Pro requires additional code to support other Pro features.
 			return;
 		}
 
@@ -741,7 +739,14 @@ class FrmEntriesController {
 		}
 
 		$is_ajax_on = FrmForm::is_ajax_on( $form );
-		$errors     = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! $is_ajax_on ) {
+			// This continues in the Pro version as it is required for other features including in-place edit.
+			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
+			echo json_encode( $response );
+			wp_die();
+		}
+
+		$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( empty( $errors ) ) {
 			if ( $is_ajax_on ) {
