@@ -1541,6 +1541,11 @@ class FrmFormsController {
 			echo ' frm_js_validate ';
 			self::add_js_validate_form_to_global_vars( $form );
 		}
+
+		// TODO Only when Pro is updated (when Pro isn't up to date, just let Pro handle the AJAX submit).
+		if ( FrmProForm::is_ajax_on( $form ) ) {
+			echo ' frm_ajax_submit ';
+		}
 	}
 
 	/**

@@ -397,6 +397,7 @@ class FrmFormsHelper {
 			'submit_html'      => self::get_default_html( 'submit' ),
 			'show_title'       => 0,
 			'show_description' => 0,
+			'ajax_submit'      => 0,
 		);
 	}
 
