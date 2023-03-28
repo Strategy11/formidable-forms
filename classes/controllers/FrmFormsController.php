@@ -1530,7 +1530,10 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Insert the form class setting into the form
+	 * Insert the form class setting into the form.
+	 *
+	 * @param stdClass $form
+	 * @return void
 	 */
 	public static function form_classes( $form ) {
 		if ( isset( $form->options['form_class'] ) ) {
@@ -1543,7 +1546,7 @@ class FrmFormsController {
 		}
 
 		// TODO Only when Pro is updated (when Pro isn't up to date, just let Pro handle the AJAX submit).
-		if ( FrmProForm::is_ajax_on( $form ) ) {
+		if ( FrmForm::is_ajax_on( $form ) ) {
 			echo ' frm_ajax_submit ';
 		}
 	}
