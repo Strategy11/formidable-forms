@@ -976,12 +976,15 @@ class FrmAddonsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $url
+	 * @param string $download_url
 	 *
 	 * @return bool
 	 */
-	private static function is_allowed( $url ) {
-		return strpos( $url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $url, '.zip', -4 ) === 0;
+	private static function url_is_allowed( $download_url ) {
+		return (
+			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ||
+			( strpos( $download_url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $download_url, '.zip', -4 ) === 0 )
+		);
 	}
 
 	/**
@@ -995,7 +998,7 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
-		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) && ! self::is_allowed( $download_url ) ) {
+		if ( ! self::url_is_allowed( $download_url ) ) {
 			return array(
 				'message' => 'Plugin URL is not valid',
 				'success' => false,
