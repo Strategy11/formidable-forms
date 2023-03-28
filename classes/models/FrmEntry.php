@@ -895,8 +895,16 @@ class FrmEntry {
 	 */
 	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
 		global $frm_vars;
-		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
-			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
+		if ( ! empty( $frm_vars['captcha_score'][ $form_id ] ) ) {
+			$captcha_score = $frm_vars['captcha_score'][ $form_id ];
+		}
+
+		if ( empty( $captcha_score ) && FrmAppHelper::get_post_param( 'recaptcha_score', false ) ) {
+			$captcha_score = FrmAppHelper::get_post_param( 'recaptcha_score' );
+		}
+
+		if ( ! empty( $captcha_score ) ) {
+			$captcha_score_meta = array( 'captcha_score' => $captcha_score );
 			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
 		}
 	}
