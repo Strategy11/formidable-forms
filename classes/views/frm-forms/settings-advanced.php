@@ -106,17 +106,7 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 		</td>
 	</tr>
 	<?php do_action( 'frm_add_form_ajax_options', $values ); ?>
-	<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
-		<tr>
-			<td>
-				<label data-upgrade="<?php esc_attr_e( 'AJAX Form Submissions', 'formidable' ); ?>" data-medium="ajax" data-message="<?php esc_attr_e( 'Want to submit forms without reloading the page?', 'formidable' ); ?>">
-					<input type="checkbox" disabled="disabled" />
-					<span class="frm_noallow"><?php esc_html_e( 'Submit this form with AJAX', 'formidable' ); ?></span>
-					<span class="frm_help frm_icon_font frm_tooltip_icon" title="<?php esc_attr_e( 'Submit the form without refreshing the page.', 'formidable' ); ?>"></span>
-				</label>
-			</td>
-		</tr>
-	<?php } elseif ( FrmFormsHelper::should_use_pro_for_ajax_submit() ) { ?>
+	<?php if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() ) { ?>
 		<tr>
 			<td>
 				<label for="ajax_submit">
