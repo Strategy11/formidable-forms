@@ -116,7 +116,7 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 				</label>
 			</td>
 		</tr>
-	<?php } elseif ( version_compare( FrmProDb::$plug_version, '6.2', '>=' ) ) { ?>
+	<?php } elseif ( FrmFormsHelper::should_use_pro_for_ajax_submit() ) { ?>
 		<tr>
 			<td>
 				<label for="ajax_submit">

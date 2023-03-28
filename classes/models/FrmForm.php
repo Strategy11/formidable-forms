@@ -1116,6 +1116,8 @@ class FrmForm {
 	/**
 	 * Check if the "Submit this form with AJAX" setting is toggled on.
 	 *
+	 * @since 6.2
+	 *
 	 * @param stdClass $form
 	 * @return bool
 	 */

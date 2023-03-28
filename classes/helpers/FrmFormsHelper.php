@@ -1756,4 +1756,16 @@ BEFORE_HTML;
 
 		return str_replace( $original_query, $query, $url );
 	}
+
+	/**
+	 * Check if Pro isn't up to date yet.
+	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
+	 *
+	 * @since 6.2
+	 *
+	 * @return bool
+	 */
+	public static function should_use_pro_for_ajax_submit() {
+		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProForm::lite_supports_ajax_submit' );
+	}
 }
