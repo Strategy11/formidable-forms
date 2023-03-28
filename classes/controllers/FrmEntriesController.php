@@ -722,7 +722,11 @@ class FrmEntriesController {
 			return;
 		}
 
-		$response = array( 'errors' => array(), 'content' => '', 'pass' => false );
+		$response = array(
+			'errors'  => array(),
+			'content' => '',
+			'pass'    => false,
+		);
 
 		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		if ( ! $form_id ) {
@@ -737,7 +741,7 @@ class FrmEntriesController {
 		}
 
 		$is_ajax_on = FrmForm::is_ajax_on( $form );
-		$errors     = FrmEntryValidate::validate( wp_unslash( $_POST ) );
+		$errors     = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( empty( $errors ) ) {
 			if ( $is_ajax_on ) {
@@ -746,11 +750,11 @@ class FrmEntriesController {
 				$frm_vars['css_loaded'] = true;
 
 				$processed = true;
-				FrmEntriesController::process_entry( $errors, true );
+				self::process_entry( $errors, true );
 
 				// TODO Do I need Form State for carrying title/description?
-			//	$title                = FrmProFormState::get_from_request( 'title', false );
-			//	$description          = FrmProFormState::get_from_request( 'description', false );
+				// $title                = FrmProFormState::get_from_request( 'title', false );
+				// $description          = FrmProFormState::get_from_request( 'description', false );
 				$response['content'] .= FrmFormsController::show_form( $form->id );//, '', $title, $description );
 
 				// Trigger the footer scripts if there is a form to show.
