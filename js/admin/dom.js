@@ -185,6 +185,10 @@
 					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
 					if ( $dropdownItem.length ) {
 						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
+
+						// Delay a focus event so the screen reader reads the option value again.
+						// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
+						setTimeout( () => $dropdownItem.get( 0 ).focus(), 0 );
 					}
 				}
 			});
