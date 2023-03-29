@@ -980,7 +980,7 @@ class FrmAddonsController {
 	 *
 	 * @return bool
 	 */
-	private static function url_is_allowed( $download_url ) {
+	public static function url_is_allowed( $download_url ) {
 		return (
 			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ||
 			( strpos( $download_url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $download_url, '.zip', -4 ) === 0 )
