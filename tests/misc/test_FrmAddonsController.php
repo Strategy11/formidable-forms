@@ -4,12 +4,9 @@
  * @group addons
  */
 class test_FrmAddonsController extends FrmUnitTest {
-	private $addon;
 
 	public function setUp(): void {
 		parent::setUp();
-
-		$this->check_php_version( '5.4' );
 	}
 
 	/**
