@@ -8029,7 +8029,7 @@ function frmAdminBuildJS() {
 	 */
 	function importForm( $processSettings ) {
 		var formID = s.importQueue[0],
-			provider = $processSettings.closest( '.welcome-panel-content' ).find( 'input[name="slug"]' ).val(),
+			provider = jQuery( '#welcome-panel' ).find( 'input[name="slug"]' ).val(),
 			data = {
 				action: 'frm_import_' + provider,
 				form_id: formID,

@@ -1003,6 +1003,22 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Checks if an addon download url is allowed.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $download_url
+	 *
+	 * @return bool
+	 */
+	public static function url_is_allowed( $download_url ) {
+		return (
+			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ||
+			( strpos( $download_url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $download_url, '.zip', -4 ) === 0 )
+		);
+	}
+
+	/**
 	 * We do not need any extra credentials if we have gotten this far,
 	 * so let's install the plugin.
 	 *
@@ -1013,7 +1029,7 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
-		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) {
+		if ( ! self::url_is_allowed( $download_url ) ) {
 			return array(
 				'message' => 'Plugin URL is not valid',
 				'success' => false,
