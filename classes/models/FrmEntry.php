@@ -899,8 +899,11 @@ class FrmEntry {
 			$captcha_score = $frm_vars['captcha_score'][ $form_id ];
 		}
 
-		if ( empty( $captcha_score ) && FrmAppHelper::get_post_param( 'captcha_score', false ) ) {
-			$captcha_score = FrmAppHelper::get_post_param( 'captcha_score' );
+		if ( empty( $captcha_score ) ) {
+			$captcha_scores = FrmAppHelper::get_post_param( 'captcha_scores', false );
+			if ( $captcha_scores && isset( $captcha_scores[ $form_id ] ) ) {
+				$captcha_score = $captcha_scores[ $form_id ];
+			}
 		}
 
 		if ( ! empty( $captcha_score ) ) {
