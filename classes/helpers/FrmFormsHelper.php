@@ -1766,6 +1766,6 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function should_use_pro_for_ajax_submit() {
-		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProForm::lite_supports_ajax_submit' );
+		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProFormsHelper::lite_supports_ajax_submit' );
 	}
 }

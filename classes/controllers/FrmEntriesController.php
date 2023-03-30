@@ -754,14 +754,14 @@ class FrmEntriesController {
 			$frm_vars['ajax']       = true;
 			$frm_vars['css_loaded'] = true;
 
-			self::process_entry( $errors, true );
+			self::process_entry( '', true );
 
 			$title                = FrmFormState::get_from_request( 'title', 'auto' );
 			$description          = FrmFormState::get_from_request( 'description', 'auto' );
 			$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
 
-			// Trigger the footer scripts if there is a form to show.
-			if ( $errors || ! empty( $frm_vars['forms_loaded'] ) ) {
+			// Trigger the footer scripts if there is a form to show (for CAPTCHAs to work on subsequent forms).
+			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
 				ob_start();
 				FrmFormsController::print_ajax_scripts();
 				$response['content'] .= ob_get_contents();
