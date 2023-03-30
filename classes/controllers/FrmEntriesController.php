@@ -760,10 +760,10 @@ class FrmEntriesController {
 			$description          = FrmFormState::get_from_request( 'description', 'auto' );
 			$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
 
-			// Trigger the footer scripts if there is a form to show (for CAPTCHAs to work on subsequent forms).
+			// Trigger the footer scripts if there is a form to show.
 			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
 				ob_start();
-				FrmFormsController::print_ajax_scripts();
+				self::print_ajax_scripts();
 				$response['content'] .= ob_get_contents();
 				ob_end_clean();
 
@@ -794,6 +794,24 @@ class FrmEntriesController {
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Load CAPTCHA script after AJAX submit so subsequent form CAPTCHAs don't break.
+	 *
+	 * @since 6.2
+	 *
+	 * @param string $keep
+	 * @return void
+	 */
+	private static function print_ajax_scripts() {
+		global $wp_scripts;
+		$keep_scripts       = array( 'captcha-api' );
+		$keep_scripts       = apply_filters( 'frm_ajax_load_scripts', $keep_scripts );
+		$registered_scripts = (array) $wp_scripts->registered;
+		$registered_scripts = array_diff( array_keys( $registered_scripts ), $keep_scripts );
+		$wp_scripts->done   = array_merge( $wp_scripts->done, $registered_scripts );
+		wp_print_footer_scripts();
 	}
 
 	/**

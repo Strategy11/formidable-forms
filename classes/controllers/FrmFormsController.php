@@ -2955,40 +2955,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since 6.2
-	 *
-	 * @param string $keep
-	 * @return void
-	 */
-	public static function print_ajax_scripts() {
-		global $wp_scripts, $wp_styles;
-
-		if ( ! FrmAppHelper::doing_ajax() ) {
-			wp_enqueue_script( 'formidable' );
-			FrmAppHelper::localize_script( 'front' );
-		}
-
-		$keep_scripts       = array( 'captcha-api' );
-		$keep_scripts       = apply_filters( 'frm_ajax_load_scripts', $keep_scripts );
-		$registered_scripts = (array) $wp_scripts->registered;
-		$registered_scripts = array_diff( array_keys( $registered_scripts ), $keep_scripts );
-		self::mark_scripts_as_loaded( $registered_scripts );
-
-		wp_print_footer_scripts();
-	}
-
-	/**
-	 * @since 6.2
-	 *
-	 * @param array $scripts
-	 * @return void
-	 */
-	private static function mark_scripts_as_loaded( $scripts ) {
-		global $wp_scripts;
-		$wp_scripts->done = array_merge( $wp_scripts->done, $scripts );
-	}
-
-	/**
 	 * @deprecated 4.0
 	 */
 	public static function new_form( $values = array() ) {
