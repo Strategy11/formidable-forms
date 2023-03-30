@@ -2053,6 +2053,9 @@ class FrmFormsController {
 		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $handle_process_here ) {
+			FrmFormState::set_initial_value( 'title', $title );
+			FrmFormState::set_initial_value( 'description', $description );
+
 			do_action( 'frm_display_form_action', $params, $fields, $form, $title, $description );
 			if ( apply_filters( 'frm_continue_to_new', true, $form->id, $params['action'] ) ) {
 				self::show_form_after_submit( $pass_args );

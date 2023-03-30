@@ -757,10 +757,9 @@ class FrmEntriesController {
 				$processed = true;
 				self::process_entry( $errors, true );
 
-				// TODO Do I need Form State for carrying title/description?
-				// $title                = FrmProFormState::get_from_request( 'title', false );
-				// $description          = FrmProFormState::get_from_request( 'description', false );
-				$response['content'] .= FrmFormsController::show_form( $form->id );//, '', $title, $description );
+				$title                = FrmFormState::get_from_request( 'title', 'auto' );
+				$description          = FrmFormState::get_from_request( 'description', 'auto' );
+				$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
 
 				// Trigger the footer scripts if there is a form to show.
 				if ( $errors || ! empty( $frm_vars['forms_loaded'] ) ) {
