@@ -981,7 +981,7 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	private static function is_allowed( $url ) {
-		return strpos( $url, 'https://downloads.wordpress.org/plugin' ) !== false;
+		return strpos( $url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $url, '.zip', -4 ) === 0;
 	}
 
 	/**
