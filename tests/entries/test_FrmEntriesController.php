@@ -76,7 +76,6 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 	/**
 	 * @covers FrmEntriesController::maybe_modify_ajax_error
-	 * @group mike
 	 */
 	public function test_maybe_modify_ajax_error() {
 		$error    = 'This field cannot be blank.';
