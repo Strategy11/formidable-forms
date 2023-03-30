@@ -105,6 +105,6 @@ class test_FrmEntriesController extends FrmUnitTest {
 	}
 
 	private function maybe_modify_ajax_error( $error, $field_id, $form, $errors = array() ) {
-		return $this->run_private_method( array( 'FrmEntriesController', 'maybe_modify_ajax_error' ), array( $error, $field_id, $form, $errors ) );
+		return $this->run_private_method( array( 'FrmEntriesAJAXSubmitController', 'maybe_modify_ajax_error' ), array( $error, $field_id, $form, $errors ) );
 	}
 }
