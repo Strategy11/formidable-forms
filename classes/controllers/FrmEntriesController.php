@@ -801,7 +801,6 @@ class FrmEntriesController {
 	 *
 	 * @since 6.2
 	 *
-	 * @param string $keep
 	 * @return void
 	 */
 	private static function print_ajax_scripts() {
