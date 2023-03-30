@@ -1545,7 +1545,7 @@ class FrmFormsController {
 			self::add_js_validate_form_to_global_vars( $form );
 		}
 
-		if ( FrmForm::is_ajax_on( $form ) ) {
+		if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() && FrmForm::is_ajax_on( $form ) ) {
 			echo ' frm_ajax_submit ';
 		}
 	}
