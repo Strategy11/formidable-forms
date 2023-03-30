@@ -5195,11 +5195,6 @@ function frmAdminBuildJS() {
 					}
 				}
 			});
-
-			// Last node is not getting removed on first update after save for some reason.
-			if ( text.length > firstInputIndex + 2 ) {
-				single[0].removeChild( single[0].lastChild );
-			}
 		}
 
 		// Set saved value.
