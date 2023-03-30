@@ -2968,20 +2968,11 @@ class FrmFormsController {
 			FrmAppHelper::localize_script( 'front' );
 		}
 
-		$keep_scripts = array( 'captcha-api' );
-		$keep_styles  = array( 'dashicons' );
-
+		$keep_scripts       = array( 'captcha-api' );
 		$keep_scripts       = apply_filters( 'frm_ajax_load_scripts', $keep_scripts );
 		$registered_scripts = (array) $wp_scripts->registered;
 		$registered_scripts = array_diff( array_keys( $registered_scripts ), $keep_scripts );
 		self::mark_scripts_as_loaded( $registered_scripts );
-
-		$keep_styles       = apply_filters( 'frm_ajax_load_styles', $keep_styles );
-		$registered_styles = (array) $wp_styles->registered;
-		$registered_styles = array_diff( array_keys( $registered_styles ), $keep_styles );
-		if ( ! empty( $registered_styles ) ) {
-			$wp_styles->done = array_merge( $wp_styles->done, $registered_styles );
-		}
 
 		wp_print_footer_scripts();
 	}
