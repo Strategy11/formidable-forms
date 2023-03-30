@@ -700,6 +700,7 @@ class FrmEntriesController {
 
 	/**
 	 * Create an entry when the ajax_submit option is on.
+	 * If Pro is active, FrmProEntriesController::ajax_create will be used instead.
 	 *
 	 * @return void
 	 */
@@ -749,28 +750,25 @@ class FrmEntriesController {
 		$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $errors ) {
-			if ( $is_ajax_on ) {
-				global $frm_vars;
-				$frm_vars['ajax']       = true;
-				$frm_vars['css_loaded'] = true;
+			global $frm_vars;
+			$frm_vars['ajax']       = true;
+			$frm_vars['css_loaded'] = true;
 
-				$processed = true;
-				self::process_entry( $errors, true );
+			self::process_entry( $errors, true );
 
-				$title                = FrmFormState::get_from_request( 'title', 'auto' );
-				$description          = FrmFormState::get_from_request( 'description', 'auto' );
-				$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
+			$title                = FrmFormState::get_from_request( 'title', 'auto' );
+			$description          = FrmFormState::get_from_request( 'description', 'auto' );
+			$response['content'] .= FrmFormsController::show_form( $form->id, '', $title, $description );
 
-				// Trigger the footer scripts if there is a form to show.
-				if ( $errors || ! empty( $frm_vars['forms_loaded'] ) ) {
-					ob_start();
-					FrmFormsController::print_ajax_scripts();
-					$response['content'] .= ob_get_contents();
-					ob_end_clean();
+			// Trigger the footer scripts if there is a form to show.
+			if ( $errors || ! empty( $frm_vars['forms_loaded'] ) ) {
+				ob_start();
+				FrmFormsController::print_ajax_scripts();
+				$response['content'] .= ob_get_contents();
+				ob_end_clean();
 
-					// Mark the end of added footer content
-					$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
-				}
+				// Mark the end of added footer content.
+				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';
 			}
 		} else {
 			$obj = array();
