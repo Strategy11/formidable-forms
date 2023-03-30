@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @since 6.2
  */
-class FrmAJAXEntrySubmitController {
+class FrmEntriesAJAXSubmitController {
 
 	/**
 	 * Create an entry when the ajax_submit option is on.
