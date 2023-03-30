@@ -726,7 +726,7 @@ class FrmEntriesController {
 			'pass'    => false,
 		);
 
-		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		if ( ! $form_id ) {
 			echo json_encode( $response );
 			wp_die();
@@ -748,7 +748,7 @@ class FrmEntriesController {
 
 		$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( empty( $errors ) ) {
+		if ( ! $errors ) {
 			if ( $is_ajax_on ) {
 				global $frm_vars;
 				$frm_vars['ajax']       = true;
