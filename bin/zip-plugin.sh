@@ -63,7 +63,7 @@ zip -r $zipname $destination \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
-	-x "*[^(dompdf)]/vendor/*" \
+	-x "$source/vendor/*" \
 	-x "*/temp.xml" \
 	-x "formidable-pro/views/*" \
 	-x "formidable-views/js/dom.js" \
