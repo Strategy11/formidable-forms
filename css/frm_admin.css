@@ -5962,10 +5962,6 @@ span.howto {
 	min-width: 175px;
 }
 
-#form_reports_page h2 {
-	margin-top: 2em !important;
-}
-
 /* Views Page */
 #form_views_page img.frm_no_views {
 	max-width: 100%;
@@ -7946,6 +7942,7 @@ button.frm_choose_image_box,
 .frm_wrap input[type="text"],
 .frm_wrap input[type=search],
 .frm_wrap input[type="number"],
+.frm_wrap input[type="date"],
 .frm_wrap select,
 .wp-admin .frm_wrap select,
 .field-group textarea,
@@ -8032,6 +8029,7 @@ button.frm_choose_image_box,
 .frm-white-body .tablenav select,
 .frm-white-body .tablenav input[type="text"],
 .wp-admin .frm_wrap .tablenav select,
+.frm_wrap .tablenav input[type="date"],
 .frm_wrap .tablenav input[type="text"] {
 	padding-top: 0;
 	padding-bottom: 0;
