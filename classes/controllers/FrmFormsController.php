@@ -2275,22 +2275,27 @@ class FrmFormsController {
 				continue;
 			}
 
-			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+			$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+			if ( 'redirect' === $action_type ) {
+				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
+					continue;
+				}
+
+				// Run through frm_redirect_url filter. This is used for the valid action check.
 				$action->post_content['success_url'] = self::run_redirect_url_filter(
 					$action->post_content['success_url'],
 					$args['form'],
 					$args + array( 'action' => $event )
 				);
-
-				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
-					continue;
-				}
-
-				$has_redirect = true;
 			}
 
 			if ( ! self::is_valid_on_submit_action( $action ) ) {
 				continue;
+			}
+
+			if ( 'redirect' === $action_type ) {
+				$has_redirect = true;
 			}
 
 			$met_actions[] = $action;
