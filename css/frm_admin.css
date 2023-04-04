@@ -5924,6 +5924,10 @@ span.howto {
 	max-width: 100%;
 }
 
+#form_reports_page form select {
+    line-height: 2;
+}
+
 .frm_wrap .google-visualization-table .gradient,
 .frm_wrap .google-visualization-table-tr-head,
 .frm_wrap .google-visualization-table-tr-odd,
