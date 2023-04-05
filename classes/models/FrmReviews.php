@@ -179,7 +179,7 @@ class FrmReviews {
 	/**
 	 * @since 4.05.02
 	 *
-	 * @return (mixed|string)[]
+	 * @return array
 	 */
 	private function inbox_keys() {
 		return array(

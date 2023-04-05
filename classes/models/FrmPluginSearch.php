@@ -290,7 +290,7 @@ class FrmPluginSearch {
 	 * @param array $links Related links.
 	 * @param array $plugin Plugin result information.
 	 *
-	 * @return (mixed|string)[]
+	 * @return array
 	 */
 	public function insert_related_links( $links, $plugin ) {
 		if ( self::$slug !== $plugin['slug'] ) {
