@@ -1005,7 +1005,7 @@ class FrmAddonsController {
 	/**
 	 * Checks if an addon download url is allowed.
 	 *
-	 * @since x.x
+	 * @since 6.2
 	 *
 	 * @param string $download_url
 	 *

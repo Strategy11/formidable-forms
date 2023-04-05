@@ -8,7 +8,7 @@ class FrmFormsController {
 	/**
 	 * Track the form and action that ran frm_redirect_url filter. Each item in array is {form_id}_create or {form_id}_update.
 	 *
-	 * @since 6.x
+	 * @since 6.2
 	 *
 	 * @var array
 	 */
@@ -2335,7 +2335,7 @@ class FrmFormsController {
 	 * Runs frm_redirect_url filter and prepare the URL.
 	 * This ensures that filter just fires once per form and action.
 	 *
-	 * @since 6.x
+	 * @since 6.2
 	 *
 	 * @param string $url The URL.
 	 * @param object $form Form object.
@@ -2359,7 +2359,7 @@ class FrmFormsController {
 	/**
 	 * Checks if a Confirmation action has the valid data.
 	 *
-	 * @since 6.x
+	 * @since 6.1.2
 	 *
 	 * @param object $action Form action object.
 	 * @return bool
