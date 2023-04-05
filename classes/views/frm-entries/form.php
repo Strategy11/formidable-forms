@@ -75,6 +75,7 @@ if ( FrmAppHelper::is_admin() ) {
 	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 	<?php
 	FrmHoneypot::maybe_render_field( $form->id );
+	FrmFormState::maybe_render_state_field( $form );
 }
 
 do_action( 'frm_entry_form', $form, $form_action, $errors );

@@ -1539,7 +1539,10 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Insert the form class setting into the form
+	 * Insert the form class setting into the form.
+	 *
+	 * @param stdClass $form
+	 * @return void
 	 */
 	public static function form_classes( $form ) {
 		if ( isset( $form->options['form_class'] ) ) {
@@ -1549,6 +1552,10 @@ class FrmFormsController {
 		if ( ! empty( $form->options['js_validate'] ) ) {
 			echo ' frm_js_validate ';
 			self::add_js_validate_form_to_global_vars( $form );
+		}
+
+		if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() && FrmForm::is_ajax_on( $form ) ) {
+			echo ' frm_ajax_submit ';
 		}
 	}
 
@@ -2055,6 +2062,9 @@ class FrmFormsController {
 		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $handle_process_here ) {
+			FrmFormState::set_initial_value( 'title', $title );
+			FrmFormState::set_initial_value( 'description', $description );
+
 			do_action( 'frm_display_form_action', $params, $fields, $form, $title, $description );
 			if ( apply_filters( 'frm_continue_to_new', true, $form->id, $params['action'] ) ) {
 				self::show_form_after_submit( $pass_args );
