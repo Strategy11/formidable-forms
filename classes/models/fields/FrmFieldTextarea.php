@@ -14,6 +14,14 @@ class FrmFieldTextarea extends FrmFieldType {
 	 */
 	protected $type = 'textarea';
 
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
+	/**
+	 * @return bool[]
+	 */
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
@@ -21,6 +29,9 @@ class FrmFieldTextarea extends FrmFieldType {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function extra_field_opts() {
 		return array(
 			'max' => '5',
@@ -29,6 +40,8 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	/**
 	 * @param string $name
+	 *
+	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
 		$size = FrmField::get_option( $this->field, 'size' );

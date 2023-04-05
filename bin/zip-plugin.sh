@@ -63,7 +63,7 @@ zip -r $zipname $destination \
 	-x "*/readme.md" \
 	-x "*/README.md" \
 	-x "*/tests/*" \
-	-x "*[^(dompdf)]/vendor/*" \
+	-x "$source/vendor/*" \
 	-x "*/temp.xml" \
 	-x "formidable-pro/views/*" \
 	-x "formidable-views/js/dom.js" \
@@ -73,6 +73,7 @@ zip -r $zipname $destination \
 	-x "formidable-chat/js/chat.js" \
 	-x "formidable-api/js/embed.js" \
 	-x "formidable-api/js/iframe-embed.js" \
+	-x "formidable-hubspot/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip"
 

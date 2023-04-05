@@ -49,6 +49,11 @@ class FrmFieldFactory {
 		return $field_info;
 	}
 
+	/**
+	 * @param int|string|object $field
+	 *
+	 * @return stdClass
+	 */
 	public static function get_field_object( $field ) {
 		if ( ! is_object( $field ) ) {
 			$field = FrmField::getOne( $field );
@@ -119,6 +124,8 @@ class FrmFieldFactory {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $property
 	 */
 	public static function field_has_property( $type, $property ) {
 		$field = self::get_field_type( $type );

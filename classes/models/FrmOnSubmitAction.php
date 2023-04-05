@@ -31,10 +31,16 @@ class FrmOnSubmitAction extends FrmFormAction {
 		parent::__construct( self::$slug, self::get_name(), $action_ops );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_name() {
 		return __( 'Confirmation', 'formidable' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';
 	}

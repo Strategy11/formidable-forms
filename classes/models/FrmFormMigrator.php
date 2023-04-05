@@ -54,8 +54,8 @@ abstract class FrmFormMigrator {
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
 			<p class="howto">Import forms and settings automatically from <?php echo esc_html( $this->name ); ?>.</p>
-			<div class="welcome-panel" id="welcome-panel">
-				<div class="welcome-panel-content" style="text-align:center;margin-bottom:10px;">
+			<div id="welcome-panel">
+				<div style="margin-bottom:10px;">
 					<p class="about-description">
 						Select the forms to import.
 					</p>
@@ -64,7 +64,7 @@ abstract class FrmFormMigrator {
 						<?php wp_nonce_field( 'nonce', 'frm_ajax' ); ?>
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
-						<div style="margin:10px auto;max-width:400px;text-align:left;">
+						<div style="max-width:400px;text-align:left;">
 							<?php
 							if ( empty( $this->get_forms() ) ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
@@ -86,7 +86,7 @@ abstract class FrmFormMigrator {
 								</p>
 							<?php } ?>
 						</div>
-						<button type="submit" class="button button-primary button-hero">Start Import</button>
+						<p class="submit"><button type="submit" class="button button-primary frm-button-primary">Start Import</button></p>
 					</form>
 					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
@@ -370,7 +370,7 @@ abstract class FrmFormMigrator {
 	 *              the name key is a must. The keys are the column
 	 *              names of the forms table in the DB.
 	 *
-	 * @return int The ID of the newly created form.
+	 * @return bool|int The ID of the newly created form or false on failure.
 	 */
 	protected function create_form( $form ) {
 		$form['form_key'] = $form['name'];

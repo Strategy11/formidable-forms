@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmAppController {
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		FrmAppHelper::maybe_add_permissions();
 		if ( ! current_user_can( 'frm_view_forms' ) ) {
@@ -97,6 +100,8 @@ class FrmAppController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return string
 	 */
 	private static function get_os() {
 		$agent = strtolower( FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
@@ -151,10 +156,21 @@ class FrmAppController {
 		return $is_white_page;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_wp_admin_style() {
 		FrmAppHelper::load_font_style();
 	}
 
+	/**
+	 * @param bool $show_nav
+	 * @param string $title
+	 *
+	 * @psalm-param 'hide'|'show' $title
+	 *
+	 * @return void
+	 */
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
 		if ( empty( $show_nav ) || ! $form ) {
@@ -173,6 +189,9 @@ class FrmAppController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/shared/form-nav.php' );
 	}
 
+	/**
+	 * @return string
+	 */
 	private static function get_current_page() {
 		$page         = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 		$post_type    = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
@@ -185,6 +204,10 @@ class FrmAppController {
 		return $current_page;
 	}
 
+	/**
+	 * @param object $form
+	 * @return array
+	 */
 	private static function get_form_nav_items( $form ) {
 		$id = $form->parent_form_id ? $form->parent_form_id : $form->id;
 
@@ -253,10 +276,13 @@ class FrmAppController {
 			'form'    => $form,
 		);
 
-		return apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
+		return (array) apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
 	}
 
 	// Adds a settings link to the plugins page
+	/**
+	 * @return array
+	 */
 	public static function settings_link( $links ) {
 		$settings = array();
 
@@ -269,6 +295,9 @@ class FrmAppController {
 		return array_merge( $settings, $links );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function pro_get_started_headline() {
 		self::review_request();
 		FrmAppHelper::min_pro_version_notice( '4.0' );
@@ -278,6 +307,8 @@ class FrmAppController {
 	 * Add admin notices as needed for reviews
 	 *
 	 * @since 3.04.03
+	 *
+	 * @return void
 	 */
 	private static function review_request() {
 		$reviews = new FrmReviews();
@@ -288,6 +319,8 @@ class FrmAppController {
 	 * Save the request to hide the review
 	 *
 	 * @since 3.04.03
+	 *
+	 * @return void
 	 */
 	public static function dismiss_review() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
@@ -299,6 +332,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	public static function include_upgrade_overlay() {
 		self::enqueue_dialog_assets();
@@ -319,6 +354,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.06.03
+	 *
+	 * @return void
 	 */
 	public static function upgrade_overlay_html() {
 		$is_pro       = FrmAppHelper::pro_is_installed();
@@ -338,6 +375,9 @@ class FrmAppController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function new_form_overlay_html() {
 		FrmFormsController::before_list_templates();
 
@@ -386,17 +426,25 @@ class FrmAppController {
 		include $path . 'new-form-overlay.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function include_info_overlay() {
 		self::enqueue_dialog_assets();
 		add_action( 'admin_footer', 'FrmAppController::info_overlay_html' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function info_overlay_html() {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/info-overlay.php';
 	}
 
 	/**
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
@@ -410,6 +458,8 @@ class FrmAppController {
 	 * Use a javascript fallback instead.
 	 *
 	 * @since 2.0.3
+	 *
+	 * @return void
 	 */
 	public static function install_js_fallback() {
 		FrmAppHelper::load_admin_wide_js();
@@ -445,6 +495,9 @@ class FrmAppController {
 	 * Check both version number and DB number for changes
 	 *
 	 * @since 3.0.04
+	 *
+	 * @param array $atts
+	 * @return bool
 	 */
 	public static function compare_for_update( $atts ) {
 		$db_version = get_option( $atts['option'] );
@@ -465,6 +518,8 @@ class FrmAppController {
 	 * Check for database update and trigger js loading
 	 *
 	 * @since 2.0.1
+	 *
+	 * @return void
 	 */
 	public static function admin_init() {
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) && 'duplicate' === FrmAppHelper::get_param( 'frm_action' ) ) {
@@ -658,17 +713,50 @@ class FrmAppController {
 			}
 
 			if ( $post_type === 'frm_display' ) {
-				wp_enqueue_style( 'formidable-grids' );
-				wp_enqueue_script( 'jquery-ui-draggable' );
-				self::maybe_deregister_popper2();
-				wp_enqueue_script( 'formidable_admin' );
-				wp_enqueue_style( 'formidable-admin' );
-				FrmAppHelper::localize_script( 'admin' );
-				self::include_info_overlay();
+				self::enqueue_legacy_views_assets();
 			}
 		}
 
 		self::maybe_force_formidable_block_on_gutenberg_page();
+	}
+
+	/**
+	 * Enqueue required assets for the Legacy Views editor (Views v4.x).
+	 *
+	 * @since 6.1.2
+	 *
+	 * @return void
+	 */
+	private static function enqueue_legacy_views_assets() {
+		wp_enqueue_style( 'formidable-grids' );
+		wp_enqueue_script( 'jquery-ui-draggable' );
+		self::maybe_deregister_popper2();
+		wp_enqueue_script( 'formidable_admin' );
+		wp_add_inline_style(
+			'formidable-admin',
+			'
+			.frm-white-body.post-type-frm_display .columns-2 {
+				display: block;
+				overflow: visible;
+			}
+
+			.frm-white-body.post-type-frm_display .columns-2 > div {
+				overflow-y: hidden;
+			}
+
+			.frm-white-body.post-type-frm_display #titlediv #title-prompt-text {
+				padding: 3px 0 0 10px;
+			}
+
+			.post-type-frm_display #field-search-input,
+			.post-type-frm_display #advanced-search-input {
+				flex: 1;
+			}
+			'
+		);
+		wp_enqueue_style( 'formidable-admin' );
+		FrmAppHelper::localize_script( 'admin' );
+		self::include_info_overlay();
 	}
 
 	/**
@@ -727,12 +815,19 @@ class FrmAppController {
 	/**
 	 * @since 5.3
 	 *
+	 * @param string       $block_name
+	 * @param string       $object_key
+	 * @param array|string $object_id
+	 *
 	 * @return void
 	 */
 	public static function add_js_to_inject_gutenberg_block( $block_name, $object_key, $object_id ) {
 		require FrmAppHelper::plugin_path() . '/classes/views/shared/edit-page-js.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_lang() {
 		load_plugin_textdomain( 'formidable', false, FrmAppHelper::plugin_folder() . '/languages/' );
 	}
@@ -741,6 +836,8 @@ class FrmAppController {
 	 * Check if the styles are updated when a form is loaded on the front-end
 	 *
 	 * @since 3.0.1
+	 *
+	 * @return void
 	 */
 	public static function maybe_update_styles() {
 		if ( self::needs_update() ) {
@@ -750,6 +847,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public static function create_rest_routes() {
 		$args = array(
@@ -786,6 +885,8 @@ class FrmAppController {
 	 * @since 2.0.1
 	 *
 	 * @param int $blog_id Blog ID.
+	 *
+	 * @return void
 	 */
 	public static function network_upgrade_site( $blog_id = 0 ) {
 		// Flag to check if install is happening as intended.
@@ -811,6 +912,8 @@ class FrmAppController {
 	/**
 	 * Make sure WP_Site_Health has been included because it is required when calling rest_do_request.
 	 * Check first that the file exists because WP_Site_Health was only introduced in WordPress 5.2.
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_wp_site_health() {
 		if ( ! class_exists( 'WP_Site_Health' ) ) {
@@ -823,6 +926,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return true
 	 */
 	public static function api_install() {
 		delete_transient( 'frm_updating_api' );
@@ -843,6 +948,8 @@ class FrmAppController {
 	 * Called via ajax request during network upgrade process.
 	 *
 	 * @since 2.0.1
+	 *
+	 * @return void
 	 */
 	public static function ajax_install() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
@@ -851,11 +958,17 @@ class FrmAppController {
 		wp_die();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function install() {
 		$frmdb = new FrmMigrate();
 		$frmdb->upgrade();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function uninstall() {
 		FrmAppHelper::permission_check( 'administrator' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -881,6 +994,9 @@ class FrmAppController {
 		return $tables;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function deauthorize() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -901,34 +1017,11 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form_shortcode( $atts ) {
-		return FrmDeprecated::get_form_shortcode( $atts );
-	}
-
-	/**
-	 * @deprecated 2.5.4
-	 * @codeCoverageIgnore
-	 */
-	public static function widget_text_filter( $content ) {
-		return FrmDeprecated::widget_text_filter( $content );
-	}
-
-	/**
-	 * Deprecated in favor of wpmu_upgrade_site
-	 *
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function front_head() {
-		FrmDeprecated::front_head();
-	}
-
-	/**
 	 * @deprecated 3.0.04
+	 *
 	 * @codeCoverageIgnore
+	 *
+	 * @return void
 	 */
 	public static function activation_install() {
 		FrmDeprecated::activation_install();
@@ -951,5 +1044,17 @@ class FrmAppController {
 	 */
 	public static function include_embed_form_icons() {
 		_deprecated_function( __METHOD__, '5.3' );
+	}
+
+	/**
+	 * @deprecated 1.07.05 This is still referenced in the API add on as of v1.13.
+	 * @codeCoverageIgnore
+	 *
+	 * @param array $atts
+	 * @return string
+	 */
+	public static function get_form_shortcode( $atts ) {
+		_deprecated_function( __FUNCTION__, '1.07.05', 'FrmFormsController::get_form_shortcode' );
+		return FrmFormsController::get_form_shortcode( $atts );
 	}
 }

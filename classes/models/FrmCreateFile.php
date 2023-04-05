@@ -28,6 +28,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function set_new_file_path( $atts ) {
 		if ( isset( $atts['new_file_path'] ) ) {
@@ -37,6 +39,11 @@ class FrmCreateFile {
 		}
 	}
 
+	/**
+	 * @param string $file_content
+	 *
+	 * @return void
+	 */
 	public function create_file( $file_content ) {
 		if ( $this->has_permission ) {
 			$dirs_exist = true;
@@ -54,6 +61,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public function append_file( $file_content ) {
 		if ( $this->has_permission ) {
@@ -74,6 +83,8 @@ class FrmCreateFile {
 	 * @since 3.0
 	 *
 	 * @param array $file_names And array of file paths
+	 *
+	 * @return void
 	 */
 	public function combine_files( $file_names ) {
 		if ( $this->has_permission ) {
@@ -112,6 +123,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function check_permission() {
 		$creds = $this->get_creds();
@@ -124,6 +137,11 @@ class FrmCreateFile {
 		}
 	}
 
+	/**
+	 * @param true $dirs_exist
+	 *
+	 * @return void
+	 */
 	private function create_directories( &$dirs_exist ) {
 		global $wp_filesystem;
 
@@ -139,6 +157,9 @@ class FrmCreateFile {
 		}
 	}
 
+	/**
+	 * @return string[]
+	 */
 	private function get_needed_dirs() {
 		$dir_names   = explode( '/', $this->folder_name );
 		$needed_dirs = array();
@@ -167,6 +188,9 @@ class FrmCreateFile {
 		return $creds;
 	}
 
+	/**
+	 * @param string $type
+	 */
 	private function get_ftp_creds( $type ) {
 		$credentials = get_option(
 			'ftp_credentials',
@@ -223,6 +247,9 @@ class FrmCreateFile {
 		return false;
 	}
 
+	/**
+	 * @return void
+	 */
 	private function show_error_message() {
 		if ( ! empty( $this->error_message ) ) {
 			echo '<div class="message">' . esc_html( $this->error_message ) . '</div>';

@@ -7,7 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
-	 * @return int|boolean id on success or false on failure
+	 * @return int|bool id on success or false on failure.
 	 */
 	public static function create( $values ) {
 		global $wpdb;
@@ -816,7 +816,11 @@ class FrmForm {
 	 * Get all published forms
 	 *
 	 * @since 2.0
-	 * @return array of forms
+	 *
+	 * @param array  $query
+	 * @param int    $limit
+	 * @param string $inc_children
+	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;
@@ -1118,22 +1122,26 @@ class FrmForm {
 	}
 
 	/**
-	 * @deprecated 3.0
+	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
 	 * @codeCoverageIgnore
 	 *
 	 * @param string $key
-	 *
 	 * @return int form id
 	 */
 	public static function getIdByKey( $key ) {
-		return FrmFormDeprecated::getIdByKey( $key );
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_id_by_key' );
+		return self::get_id_by_key( $key );
 	}
 
 	/**
-	 * @deprecated 3.0
+	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
 	 * @codeCoverageIgnore
+	 *
+	 * @param string|int $id
+	 * @return string
 	 */
 	public static function getKeyById( $id ) {
-		return FrmFormDeprecated::getKeyById( $id );
+		_deprecated_function( __FUNCTION__, '2.03.05', 'FrmForm::get_key_by_id' );
+		return self::get_key_by_id( $id );
 	}
 }

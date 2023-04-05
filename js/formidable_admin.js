@@ -2044,12 +2044,11 @@ function frmAdminBuildJS() {
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
-		if ( $field.hasClass( 'frm-section-collapsed' ) || $field.hasClass( 'frm-page-collapsed' ) ) {
+		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
 			return false;
 		}
 
 		closeOpenFieldDropdowns();
-
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
 		newRowId = this.getAttribute( 'frm-target-row-id' );
@@ -2110,6 +2109,7 @@ function frmAdminBuildJS() {
 				afterAddField( msg, false );
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
+				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
 			}
 		});
 		return false;
@@ -2308,6 +2308,19 @@ function frmAdminBuildJS() {
 
 	function onFieldGroupActionDropdownShow() {
 		onFieldActionDropdownShow( true );
+	}
+
+	function changeSectionStyle( e ) {
+		const collapsedSection = e.target.closest( '.frm-section-collapsed' );
+		if ( ! collapsedSection ) {
+			return;
+		}
+
+		if ( e.type === 'show' ) {
+			collapsedSection.style.zIndex = 3;
+		} else {
+			collapsedSection.style.zIndex = 1;
+		}
 	}
 
 	function fillFieldActionDropdown( ul, isFieldGroup ) {
@@ -3508,6 +3521,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function confirmFieldsDeleteMessage( numberOfFields ) {
+		/* translators: %1$s: Number of fields that are selected to be deleted. */
+		return __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', numberOfFields );
+	}
+
 	function clickDeleteField() {
 		/*jshint validthis:true */
 		var confirmMsg = frm_admin_js.conf_delete,
@@ -3515,6 +3533,20 @@ function frmAdminBuildJS() {
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
 			fieldId = field.data( 'fid' );
+
+		if ( field.data( 'ftype' ) === 'divider' ) {
+			const fieldBoxes = document.querySelectorAll( '.frm-field-group-hover-target .start_divider .frm_field_box' );
+			let fieldIdsToDelete = 0;
+			fieldBoxes.forEach( fieldBox => {
+				const fieldsInsideFieldBox = fieldBox.querySelectorAll( 'li.form-field' );
+				if ( fieldsInsideFieldBox ) {
+					fieldIdsToDelete += fieldsInsideFieldBox.length;
+				}
+			});
+			if ( fieldIdsToDelete ) {
+				confirmMsg = confirmFieldsDeleteMessage( ++fieldIdsToDelete );
+			}
+		}
 
 		if ( li.classList.contains( 'frm-section-collapsed' ) || li.classList.contains( 'frm-page-collapsed' ) ) {
 			return false;
@@ -4448,8 +4480,7 @@ function frmAdminBuildJS() {
 			multiselectPopup.remove();
 		}
 
-		/* translators: %1$s: Number of fields that are selected to be deleted. */
-		this.setAttribute( 'data-frmverify', __( 'Are you sure you want to delete these %1$s selected fields?', 'formidable' ).replace( '%1$s', fieldIdsToDelete.length ) );
+		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
 		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
@@ -6868,18 +6899,6 @@ function frmAdminBuildJS() {
 		}*/
 	}
 
-	function showFormMessages() {
-		var show = false;
-		var editable = document.getElementById( 'editable' );
-		if ( editable !== null ) {
-			show = editable.checked && jQuery( document.getElementById( 'edit_action' ) ).val() === 'message';
-			if ( ! show ) {
-				show = isChecked( 'save_draft' );
-			}
-		}
-		return show;
-	}
-
 	function checkDupPost() {
 		/*jshint validthis:true */
 		var postField = jQuery( 'select.frm_single_post_field' );
@@ -7691,10 +7710,11 @@ function frmAdminBuildJS() {
 
 		function addTemplatesOnFetchSuccess( data ) {
 			data.templates.forEach( addTemplateToCategoryList );
+			initSearch( 'template-search-input', 'frm-searchable-template frm-ready-made-solution' );
 		}
 
 		function addTemplateToCategoryList( template ) {
-			categoryList.insertBefore( getReadyMadeSolution( template ), categoryList.firstChild );
+			categoryList.appendChild( getReadyMadeSolution( template ) );
 		}
 
 		function getReadyMadeSolution( template ) {
@@ -8062,7 +8082,7 @@ function frmAdminBuildJS() {
 	 */
 	function importForm( $processSettings ) {
 		var formID = s.importQueue[0],
-			provider = $processSettings.closest( '.welcome-panel-content' ).find( 'input[name="slug"]' ).val(),
+			provider = jQuery( '#welcome-panel' ).find( 'input[name="slug"]' ).val(),
 			data = {
 				action: 'frm_import_' + provider,
 				form_id: formID,
@@ -8811,30 +8831,6 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm-add-my-email-address' ).click();
 		});
 
-		jQuery( document ).on( 'frmAfterSearch', '#frm_new_form_modal #template-search-input', function() {
-			var categories = $modal.get( 0 ).querySelector( '.frm-categories-list' ).children,
-				categoryIndex,
-				category,
-				searchableTemplates,
-				count;
-
-			for ( categoryIndex in categories ) {
-				if ( isNaN( categoryIndex ) ) {
-					continue;
-				}
-
-				category = categories[ categoryIndex ];
-				if ( ! category.classList.contains( 'accordion-section' ) ) {
-					continue;
-				}
-
-				searchableTemplates = category.querySelectorAll( '.frm-searchable-template:not(.frm_hidden)' );
-				count = searchableTemplates.length;
-				jQuery( category ).toggleClass( 'frm_hidden', this.value !== '' && ! count );
-				setTemplateCount( category, searchableTemplates );
-			}
-		});
-
 		jQuery( document ).on( 'click', '#frm_new_form_modal .frm-modal-back, #frm_new_form_modal .frm_modal_footer .frm-modal-cancel, #frm_new_form_modal .frm-back-to-all-templates', function( event ) {
 			document.getElementById( 'frm-create-title' ).removeAttribute( 'frm-type' );
 			$modal.attr( 'frm-page', 'create' );
@@ -8873,6 +8869,39 @@ function frmAdminBuildJS() {
 				}
 			}
 		}
+
+		initSearch( 'template-search-input', 'control-section accordion-section' );
+	}
+
+	function initSearch( inputID, itemClass ) {
+		const searchInput = document.getElementById( inputID );
+
+		if ( itemClass === 'control-section accordion-section' ) {
+			itemClass = 'frm-selectable frm-searchable-template';
+
+			const handleTemplateSearch = () => {
+				document.querySelectorAll( '.control-section.accordion-section' ).forEach( category => {
+					const found = category.querySelector( '.frm-selectable.frm-searchable-template:not(.frm_hidden)' ) || ( searchInput.value === '' && category.querySelector( '#frm-template-drop' ) );
+					if ( found ) {
+						setTemplateCount( category );
+					}
+					category.classList.toggle( 'frm_hidden', ! found );
+				});
+			};
+
+			frmDom.search.init( searchInput, itemClass, { handleSearchResult: handleTemplateSearch });
+
+		} else {
+			if ( itemClass === 'frm-searchable-template frm-ready-made-solution' ) {
+				Array.from( document.getElementsByClassName( itemClass ) ).forEach( item => {
+					let innerText = '';
+					innerText = item.querySelector( 'h3' ).innerText;
+					item.setAttribute( 'frm-search-text', innerText.toLowerCase() );
+				});
+			}
+			frmDom.search.init( searchInput, itemClass );
+		}
+
 	}
 
 	function updateTemplateModalFreeUrls( urlByKey ) {
@@ -9103,6 +9132,7 @@ function frmAdminBuildJS() {
 
 		for ( i = 0; i < items.length; i++ ) {
 			var innerText = items[i].innerText.toLowerCase();
+
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
 				if ( itemCanBeShown ) {
@@ -9682,7 +9712,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
@@ -9810,6 +9840,8 @@ function frmAdminBuildJS() {
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
+
+			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 
 			$builderForm.on( 'click', '.frm_toggle_sep_values', toggleSepValues );
 			$builderForm.on( 'click', '.frm_toggle_image_options', toggleImageOptions );

@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormsController {
 
+	/**
+	 * Track the form and action that ran frm_redirect_url filter. Each item in array is {form_id}_create or {form_id}_update.
+	 *
+	 * @since 6.x
+	 *
+	 * @var array
+	 */
+	private static $ran_redirect_url_filter = array();
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -2266,11 +2275,26 @@ class FrmFormsController {
 				continue;
 			}
 
-			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+			$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+			if ( 'redirect' === $action_type ) {
 				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
 					continue;
 				}
 
+				// Run through frm_redirect_url filter. This is used for the valid action check.
+				$action->post_content['success_url'] = self::run_redirect_url_filter(
+					$action->post_content['success_url'],
+					$args['form'],
+					$args + array( 'action' => $event )
+				);
+			}
+
+			if ( ! self::is_valid_on_submit_action( $action ) ) {
+				continue;
+			}
+
+			if ( 'redirect' === $action_type ) {
 				$has_redirect = true;
 			}
 
@@ -2295,6 +2319,60 @@ class FrmFormsController {
 		}
 
 		return $met_actions;
+	}
+
+	/**
+	 * Runs frm_redirect_url filter and prepare the URL.
+	 * This ensures that filter just fires once per form and action.
+	 *
+	 * @since 6.x
+	 *
+	 * @param string $url The URL.
+	 * @param object $form Form object.
+	 * @param array  $args Args from {@see FrmFormsController::run_success_action()}. `$args['action']` is required.
+	 */
+	private static function run_redirect_url_filter( $url, $form, $args ) {
+		if ( empty( $args['action'] ) || ! is_string( $args['action'] ) ) {
+			return $url;
+		}
+
+		if ( in_array( $form->id . '_' . $args['action'], self::$ran_redirect_url_filter, true ) ) {
+			return $url;
+		}
+
+		self::$ran_redirect_url_filter[] = $form->id . '_' . $args['action'];
+
+		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
+		return apply_filters( 'frm_redirect_url', $url, $form, $args );
+	}
+
+	/**
+	 * Checks if a Confirmation action has the valid data.
+	 *
+	 * @since 6.x
+	 *
+	 * @param object $action Form action object.
+	 * @return bool
+	 */
+	private static function is_valid_on_submit_action( $action ) {
+		$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+		if ( 'redirect' === $action_type && empty( $action->post_content['success_url'] ) ) {
+			return false;
+		}
+
+		if ( 'page' === $action_type ) {
+			if ( empty( $action->post_content['success_page_id'] ) ) {
+				return false;
+			}
+
+			$page = get_post( $action->post_content['success_page_id'] );
+			if ( ! $page || 'trash' === $page->post_status ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -2446,8 +2524,7 @@ class FrmFormsController {
 		$args['id'] = $args['entry_id'];
 		FrmEntriesController::delete_entry_before_redirect( $success_url, $args['form'], $args );
 
-		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
-		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
+		$success_url = self::run_redirect_url_filter( $success_url, $args['form'], $args );
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
@@ -2530,7 +2607,17 @@ class FrmFormsController {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
 
 		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
-			self::show_form_after_submit( $atts );
+			if ( isset( $atts['action'] ) && 'update' === $atts['action'] && is_callable( array( 'FrmProEntriesController', 'show_front_end_form_with_entry' ) ) ) {
+				$entry = FrmEntry::getOne( $atts['entry_id'] );
+				if ( $entry ) {
+					// This is copied from the Pro plugin.
+					$atts['conf_message'] = FrmProEntriesController::confirmation( 'message', $atts['form'], $atts['form']->options, $entry->id, $atts );
+					$atts['show_form']    = FrmProEntriesController::is_form_displayed_after_edit( $atts['form'] );
+					FrmProEntriesController::show_front_end_form_with_entry( $entry, $atts );
+				}
+			} else {
+				self::show_form_after_submit( $atts );
+			}
 		} else {
 			self::show_lone_success_messsage( $atts );
 		}
@@ -2602,6 +2689,14 @@ class FrmFormsController {
 	 * @since 2.05
 	 */
 	private static function fill_atts_for_form_display( &$args ) {
+		if ( ! isset( $args['title'] ) && isset( $args['show_title'] ) ) {
+			$args['title'] = $args['show_title'];
+		}
+
+		if ( ! isset( $args['description'] ) && isset( $args['show_description'] ) ) {
+			$args['description'] = $args['show_description'];
+		}
+
 		$defaults = array(
 			'errors'      => array(),
 			'message'     => '',
@@ -2909,27 +3004,11 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function add_default_templates( $path, $default = true, $template = true ) {
-		FrmDeprecated::add_default_templates( $path, $default, $template );
-	}
-
-	/**
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 */
 	public static function bulk_create_template( $ids ) {
 		return FrmDeprecated::bulk_create_template( $ids );
-	}
-
-	/**
-	 * @deprecated 2.03
-	 * @codeCoverageIgnore
-	 */
-	public static function register_pro_scripts() {
-		FrmDeprecated::register_pro_scripts();
 	}
 
 	/**

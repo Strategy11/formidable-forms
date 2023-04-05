@@ -88,6 +88,9 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param $form_id
+	 * @param int|string $form_id
+	 *
+	 * @return void
 	 */
 	protected function init_form_id( $form_id ) {
 		$this->form_id = (int) $form_id;
@@ -97,6 +100,8 @@ class FrmEntryShortcodeFormatter {
 	 * Initialize the fields property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_fields() {
 		$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'exclude', 'exclude' );
@@ -108,6 +113,8 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.05
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_plain_text( $atts ) {
 		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
@@ -121,6 +128,8 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_format( $atts ) {
 		if ( isset( $atts['format'] ) && is_string( $atts['format'] ) && $atts['format'] !== '' ) {
@@ -134,6 +143,8 @@ class FrmEntryShortcodeFormatter {
 	 * Initialize the table_generator property
 	 *
 	 * @since 2.04
+	 *
+	 * @return void
 	 */
 	protected function init_table_generator() {
 		$this->table_generator = new FrmTableHTMLGenerator( 'shortcode' );
@@ -164,6 +175,8 @@ class FrmEntryShortcodeFormatter {
 	 * Return the default HTML array
 	 *
 	 * @since 2.04
+	 *
+	 * @return array
 	 */
 	protected function get_array() {
 		foreach ( $this->fields as $field ) {
@@ -177,6 +190,8 @@ class FrmEntryShortcodeFormatter {
 	 * Return the default plain text for an email message
 	 *
 	 * @since 2.04
+	 *
+	 * @return string
 	 */
 	protected function get_plain_text() {
 		return $this->generate_content_for_all_fields();
@@ -186,6 +201,8 @@ class FrmEntryShortcodeFormatter {
 	 * Return the default HTML for an email message
 	 *
 	 * @since 2.04
+	 *
+	 * @return string
 	 */
 	protected function get_table() {
 		$content = $this->table_generator->generate_table_header();
@@ -271,6 +288,8 @@ class FrmEntryShortcodeFormatter {
 	 * @since 2.04
 	 *
 	 * @param stdClass $field
+	 *
+	 * @return void
 	 */
 	protected function add_field_array( $field ) {
 		if ( in_array( $field->type, $this->skip_fields ) ) {
@@ -287,6 +306,8 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @param stdClass $field
 	 * @param string $value
+	 *
+	 * @return void
 	 */
 	protected function add_single_field_array( $field, $value ) {
 		$array = array(

@@ -22,15 +22,21 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args - Includes 'field', 'display', and 'values'
+	 *
+	 * @return void
 	 */
 	public function show_primary_options( $args ) {
 		$field = $args['field'];
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/html-content.php';
 
 		parent::show_primary_options( $args );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function default_html() {
 		return '<div id="frm_field_[id]_container" class="frm_form_field form-field">[description]</div>';
 	}
@@ -49,10 +55,16 @@ class FrmFieldHTML extends FrmFieldType {
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_container_class() {
 		return ' frm_html_container';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function include_form_builder_file() {
 		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-html.php';
 	}

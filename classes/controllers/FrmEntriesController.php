@@ -705,20 +705,4 @@ class FrmEntriesController {
 		_deprecated_function( __METHOD__, '4.0' );
 		return $help;
 	}
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function show_form( $id = '', $key = '', $title = false, $description = false ) {
-		return FrmDeprecated::show_form( $id, $key, $title, $description );
-	}
-
-	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function get_form( $filename, $form, $title, $description ) {
-		return FrmDeprecated::get_form( $filename, $form, $title, $description );
-	}
 }

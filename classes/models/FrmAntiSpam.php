@@ -21,6 +21,8 @@ class FrmAntiSpam extends FrmValidate {
 
 	/**
 	 * @param int $form_id
+	 *
+	 * @return void
 	 */
 	public static function maybe_init( $form_id ) {
 		$antispam = new self( $form_id );
@@ -33,6 +35,8 @@ class FrmAntiSpam extends FrmValidate {
 	 * Initialise the actions for the Anti-spam.
 	 *
 	 * @since 4.11
+	 *
+	 * @return void
 	 */
 	public function init() {
 		add_filter( 'frm_form_attributes', array( $this, 'add_token_to_form' ), 10, 1 );
@@ -170,6 +174,8 @@ class FrmAntiSpam extends FrmValidate {
 
 	/**
 	 * @param int $form_id
+	 *
+	 * @return void
 	 */
 	public static function maybe_echo_token( $form_id ) {
 		$antispam = new self( $form_id );
@@ -293,6 +299,8 @@ class FrmAntiSpam extends FrmValidate {
 
 	/**
 	 * Clear third party cache plugins to avoid data-tokens missing or appearing when the antispam setting is changed.
+	 *
+	 * @return void
 	 */
 	public static function clear_caches() {
 		self::clear_w3_total_cache();
@@ -301,16 +309,25 @@ class FrmAntiSpam extends FrmValidate {
 		self::clear_wp_optimize();
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function clear_w3_total_cache() {
 		if ( is_callable( 'w3tc_flush_all' ) ) {
 			w3tc_flush_all();
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function clear_wp_fastest_cache() {
 		do_action( 'wpfc_clear_all_cache' );
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function clear_wp_super_cache() {
 		if ( function_exists( 'wp_cache_clean_cache' ) ) {
 			global $file_prefix;
@@ -318,6 +335,9 @@ class FrmAntiSpam extends FrmValidate {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function clear_wp_optimize() {
 		if ( class_exists( 'WP_Optimize' ) ) {
 			WP_Optimize()->get_page_cache()->purge();
