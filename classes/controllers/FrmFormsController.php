@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormsController {
 
+	/**
+	 * Track the form and action that ran frm_redirect_url filter. Each item in array is {form_id}_create or {form_id}_update.
+	 *
+	 * @since 6.x
+	 *
+	 * @var array
+	 */
+	private static $ran_redirect_url_filter = array();
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -2266,16 +2275,27 @@ class FrmFormsController {
 				continue;
 			}
 
-			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+			$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+			if ( 'redirect' === $action_type ) {
 				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
 					continue;
 				}
 
-				$has_redirect = true;
+				// Run through frm_redirect_url filter. This is used for the valid action check.
+				$action->post_content['success_url'] = self::run_redirect_url_filter(
+					$action->post_content['success_url'],
+					$args['form'],
+					$args + array( 'action' => $event )
+				);
 			}
 
 			if ( ! self::is_valid_on_submit_action( $action ) ) {
 				continue;
+			}
+
+			if ( 'redirect' === $action_type ) {
+				$has_redirect = true;
 			}
 
 			$met_actions[] = $action;
@@ -2299,6 +2319,31 @@ class FrmFormsController {
 		}
 
 		return $met_actions;
+	}
+
+	/**
+	 * Runs frm_redirect_url filter and prepare the URL.
+	 * This ensures that filter just fires once per form and action.
+	 *
+	 * @since 6.x
+	 *
+	 * @param string $url The URL.
+	 * @param object $form Form object.
+	 * @param array  $args Args from {@see FrmFormsController::run_success_action()}. `$args['action']` is required.
+	 */
+	private static function run_redirect_url_filter( $url, $form, $args ) {
+		if ( empty( $args['action'] ) || ! is_string( $args['action'] ) ) {
+			return $url;
+		}
+
+		if ( in_array( $form->id . '_' . $args['action'], self::$ran_redirect_url_filter, true ) ) {
+			return $url;
+		}
+
+		self::$ran_redirect_url_filter[] = $form->id . '_' . $args['action'];
+
+		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
+		return apply_filters( 'frm_redirect_url', $url, $form, $args );
 	}
 
 	/**
@@ -2479,8 +2524,7 @@ class FrmFormsController {
 		$args['id'] = $args['entry_id'];
 		FrmEntriesController::delete_entry_before_redirect( $success_url, $args['form'], $args );
 
-		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
-		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
+		$success_url = self::run_redirect_url_filter( $success_url, $args['form'], $args );
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
