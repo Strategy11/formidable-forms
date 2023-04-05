@@ -26,10 +26,10 @@ jobs:
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.5.0
 
       # get the PHP version
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@2.24.0
         with:
           php-version: ${{ matrix.php }}
           tools: phpunit-polyfills
