@@ -75,6 +75,14 @@ abstract class FrmFieldType {
 	protected $is_tall = false;
 
 	/**
+	 * Does this type support array values (like a checkbox or a name field).
+	 *
+	 * @var bool
+	 * @since 6.2
+	 */
+	protected $array_allowed = true;
+
+	/**
 	 * @param object|array|int $field
 	 * @param string           $type
 	 */
@@ -1411,5 +1419,22 @@ DEFAULT_HTML;
 	 */
 	public function sanitize_value( &$value ) {
 		FrmAppHelper::sanitize_with_html( $value );
+	}
+
+	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (including checkbox, name, address, credit_card, select, file, lookup, data, product).
+	 * If a type does not require it, $this->array_allowed = false can be set to avoid the unserialize call.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function maybe_decode_value( $value ) {
+		if ( $this->has_input && $this->array_allowed ) {
+			FrmAppHelper::unserialize_or_decode( $value );
+		}
+		return $value;
 	}
 }

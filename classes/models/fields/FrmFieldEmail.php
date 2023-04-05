@@ -13,6 +13,10 @@ class FrmFieldEmail extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'email';
+
+	/**
+	 * @var string
+	 */
 	protected $display_type = 'text';
 
 	/**
@@ -20,6 +24,11 @@ class FrmFieldEmail extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
+
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
 
 	/**
 	 * @return bool[]

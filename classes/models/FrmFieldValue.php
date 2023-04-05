@@ -267,7 +267,7 @@ class FrmFieldValue {
 	}
 
 	/**
-	 * Clean a field's saved value
+	 * Clean a field's saved value.
 	 *
 	 * @since 2.04
 	 *
@@ -276,7 +276,8 @@ class FrmFieldValue {
 	protected function clean_saved_value() {
 		if ( $this->saved_value !== '' ) {
 			if ( ! is_array( $this->saved_value ) && ! is_object( $this->saved_value ) ) {
-				FrmAppHelper::unserialize_or_decode( $this->saved_value );
+				$field_type = FrmField::get_field_type( $this->field );
+				FrmFieldsHelper::prepare_field_value( $this->saved_value, $field_type );
 			}
 
 			if ( is_array( $this->saved_value ) && empty( $this->saved_value ) ) {

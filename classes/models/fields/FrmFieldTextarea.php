@@ -15,6 +15,11 @@ class FrmFieldTextarea extends FrmFieldType {
 	protected $type = 'textarea';
 
 	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
+
+	/**
 	 * @return bool[]
 	 */
 	protected function field_settings_for_type() {

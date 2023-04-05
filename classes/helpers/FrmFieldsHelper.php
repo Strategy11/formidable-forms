@@ -2055,6 +2055,21 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (@see self::field_type_requires_unserialize).
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed  $value
+	 * @param string $field_type
+	 * @return void
+	 */
+	public static function prepare_field_value( &$value, $field_type ) {
+		$field_object = FrmFieldFactory::get_field_type( $field_type );
+  		$value        = $field_object->maybe_decode_value( $value );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function show_icon_link_js( $atts ) {

@@ -637,4 +637,38 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS * 2 );
 		$this->assertEquals( '2 days', $difference );
 	}
+
+	/**
+	 * @covers FrmAppHelper::unserialize_or_decode
+	 */
+	public function test_unserialize_or_decode() {
+		$json_encoded_string = '{"key":"value"}';
+		FrmAppHelper::unserialize_or_decode( $json_encoded_string );
+		$this->assertIsArray( $json_encoded_string );
+		$this->assertArrayHasKey( 'key', $json_encoded_string );
+		$this->assertEquals( 'value', $json_encoded_string['key'] );
+
+		$serialized_string = 'a:1:{s:3:"key";s:5:"value";}';
+		FrmAppHelper::unserialize_or_decode( $serialized_string );
+		$this->assertIsArray( $serialized_string );
+		$this->assertArrayHasKey( 'key', $serialized_string );
+		$this->assertEquals( 'value', $serialized_string['key'] );
+	}
+
+	/**
+	 * @covers FrmAppHelper::maybe_unserialize_array
+	 */
+	public function test_maybe_unserialize_array() {
+		$serialized_string  = 'a:1:{s:3:"key";s:5:"value";}';
+		$unserialized_array = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsArray( $unserialized_array );
+		$this->assertArrayHasKey( 'key', $unserialized_array );
+		$this->assertEquals( 'value', $unserialized_array['key'] );
+
+		$serialized_string = 'O:8:"DateTime":0:{}';
+		$unserialized = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsString( $unserialized );
+		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
+	}
+
 }

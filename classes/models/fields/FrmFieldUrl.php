@@ -13,7 +13,16 @@ class FrmFieldUrl extends FrmFieldType {
 	 * @since 3.0
 	 */
 	protected $type = 'url';
+
+	/**
+	 * @var string
+	 */
 	protected $display_type = 'text';
+
+	/**
+	 * @var bool
+	 */
+	protected $array_allowed = false;
 
 	/**
 	 * @return bool[]
