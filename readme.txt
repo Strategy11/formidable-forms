@@ -3,7 +3,7 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal form, paypal, stripe, stripe form, aweber, aweber form, getresponse, calculator, quote form, contact button, form manager, Akismet, payment form, survey form, donation form, email subscription, user registration form, wordpress registration, wordpress login form, constant contact, mailpoet, active campaign, salesforce, hubspot, campaign monitor, quiz builder, quiz, feedback form, drag and drop, mailchimp form
 Requires at least: 5.2
-Tested up to: 6.1.1
+Tested up to: 6.2
 Requires PHP: 5.6
 Stable tag: 6.2
 
@@ -441,6 +441,18 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.2 =
+* New: The setting to Submit this form with AJAX has been moved into Lite. Forms can now be submitted without reloading the whole page.
+* New: Multiselect dropdown items used in admin pages will now include the checkbox role and the aria-checked attribute for improved accessibility with screen readers.
+* Fix: When searching for templates with the word application, all ready made solutions would appear first, making it difficult to search for an application form template.
+* Fix: The User Flow add on would display a time difference of 0 seconds as 52 years.
+* Fix: When using some shortcode options, including sanitize_url=0 or sanitize=0, the option would be treated the same as 1. 0 values will now be treated as off.
+* Fix: The gravity forms importer would not successfully install when clicking the Get Started button. Styling issues when the importer add on is active have also been fixed.
+* Fix: A redirect confirmation action with an empty redirect URL would exit early and fallback to using a message without checking the frm_redirect_url filter first for redirects set in custom code.
+* The delete option for a collapsed section is no longer faded out.
+* Duplicating a collapsed section is no longer disabled.
+* Several functions deprecated in version 2.x have been removed.
+
 = 6.1.2 =
 * New: The active filtered form type will be used when searching forms. Previously form searching would only check active forms.
 * Fix: It was not possible to scroll a Polylang translation page.
