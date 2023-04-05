@@ -11,19 +11,16 @@ on:
 name: PHPUnit
 jobs:
   build-test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     env:
       WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
       matrix:
         include:
-          - php: 7.3
+          - php: 7.4
             wordpress: master
             multisite: 0
-          - php: 7.2
-            wordpress: master
-            multisite: 1
-          - php: 8.0
+          - php: 8.1
             wordpress: master
             multisite: 0
 
