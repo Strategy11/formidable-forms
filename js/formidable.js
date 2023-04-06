@@ -1347,6 +1347,16 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function setCustomValidityMessage() {
+		document.querySelectorAll( '.frm_fields_container input[type=text]:not(.frm_verify)' ).forEach( function( el ) {
+			el.oninvalid = function() {
+				if ( this.dataset.invmsg ) {
+					this.setCustomValidity( this.dataset.invmsg );
+				}
+			}
+		});
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1384,6 +1394,7 @@ function frmFrontFormJS() {
 			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
+			setCustomValidityMessage();
 		},
 
 		getFieldId: function( field, fullID ) {
