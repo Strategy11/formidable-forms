@@ -7960,6 +7960,10 @@ button.frm_choose_image_box,
 	line-height: var(--leading);
 }
 
+.frm_wrap ::-webkit-datetime-edit {
+    line-height: var(--leading);
+}
+
 .frm-white-body textarea:focus,
 .frm-white-body input:focus,
 .frm-white-body select:focus,
@@ -8034,6 +8038,10 @@ button.frm_choose_image_box,
 	padding-top: 0;
 	padding-bottom: 0;
 	line-height: 1;
+}
+
+.frm_wrap .tablenav ::-webkit-datetime-edit {
+    line-height: 1;
 }
 
 .frm-fields button.btn,
