@@ -94,6 +94,27 @@ class FrmOnSubmitHelper {
 				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
 			/>
 		</div>
+
+		<?php
+		$id_attr   = $args['action_control']->get_field_id( 'open_in_new_tab' );
+		$name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
+		?>
+		<div class="frm_form_field">
+			<?php
+			FrmHtmlHelper::toggle(
+				$id_attr,
+				$name_attr,
+				array(
+					'div_class' => 'with_frm_style frm_toggle',
+					'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
+					'echo'      => true,
+				)
+			);
+			?>
+			<label for="<?php echo esc_attr( $id_attr ); ?>">
+				<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
+			</label>
+		</div>
 		<?php
 	}
 
