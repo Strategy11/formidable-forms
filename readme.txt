@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 6.2
+Stable tag: 6.2.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.2.1 =
+* Fix: Shortcodes were not getting replaced in redirect confirmation actions.
+
 = 6.2 =
 * Security: The way serialized array values are handled has been updated to use a safer method.
 * New: The setting to Submit this form with AJAX has been moved into Lite. Forms can now be submitted without reloading the whole page.
