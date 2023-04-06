@@ -5189,7 +5189,14 @@ function frmAdminBuildJS() {
 					}
 				} else {
 					if ( index === firstInputIndex + 1 ) {
-						node.nodeValue = ' ' + label.val();
+						let nodeValue = '';
+
+						if ( buttonsAsOptions( fieldId ) ) {
+							nodeValue = div({ className: 'frm_label_button_container', text: ' ' + label.val() });
+							single[0].replaceChild( nodeValue, node );
+						} else {
+							node.nodeValue = ' ' + label.val();
+						}
 					} else {
 						single[0].removeChild( node );
 					}
@@ -5203,6 +5210,13 @@ function frmAdminBuildJS() {
 		// Set the default value.
 		defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
 		previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+	}
+
+	function buttonsAsOptions( fieldId ) {
+		const fields = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
+		const result = Array.from( fields ).find( field => field.checked &&  ( 'buttons' === field.value ) );
+
+		return typeof result !== 'undefined';
 	}
 
 	/**
