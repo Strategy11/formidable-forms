@@ -36,4 +36,26 @@ class test_FrmStyle extends FrmUnitTest {
 			$this->assertEquals( $expected_color_val, $color_val );
 		}
 	}
+
+	/**
+	 * @covers FrmStyle::sanitize_post_content
+	 */
+	public function test_sanitize_post_content() {
+		$post_content = array(
+			'bg_color'            => '000',
+			'font_size'           => '14px',
+			'title_margin_bottom' => '60px}',
+			'field_height'        => ';12px',
+			'field_width'         => '{10px',
+		);
+		$frm_style              = new FrmStyle();
+		$sanitized_post_content = $frm_style->sanitize_post_content( $post_content );
+
+		$this->assertIsArray( $sanitized_post_content );
+		$this->assertEquals( '000', $sanitized_post_content['bg_color'] );
+		$this->assertEquals( '14px', $sanitized_post_content['font_size'] );
+		$this->assertEquals( '60px', $sanitized_post_content['title_margin_bottom'] );
+		$this->assertEquals( '12px', $sanitized_post_content['field_height'] );
+		$this->assertEquals( '10px', $sanitized_post_content['field_width'] );
+	}
 }

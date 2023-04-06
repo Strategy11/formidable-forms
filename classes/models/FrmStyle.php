@@ -241,8 +241,21 @@ class FrmStyle {
 			} else {
 				$sanitized_settings[ $key ] = $defaults[ $key ];
 			}
+			$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
 		}
 		return $sanitized_settings;
+	}
+
+	/**
+	 * Remove any characters that should not be used in CSS.
+	 *
+	 * @since 6.2.1
+	 *
+	 * @param string $setting
+	 * @return string
+	 */
+	private static function strip_invalid_characters( $setting ) {
+		return str_replace( array( '{', '}', ';' ), '', $setting );
 	}
 
 	/**
