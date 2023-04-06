@@ -241,7 +241,10 @@ class FrmStyle {
 			} else {
 				$sanitized_settings[ $key ] = $defaults[ $key ];
 			}
-			$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
+			
+			if ( 'custom_css' !== $key ) {
+				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
+			}
 		}
 		return $sanitized_settings;
 	}
