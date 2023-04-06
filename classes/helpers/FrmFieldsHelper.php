@@ -2066,7 +2066,7 @@ class FrmFieldsHelper {
 	 */
 	public static function prepare_field_value( &$value, $field_type ) {
 		$field_object = FrmFieldFactory::get_field_type( $field_type );
-  		$value        = $field_object->maybe_decode_value( $value );
+		$value        = $field_object->maybe_decode_value( $value );
 	}
 
 	/**
