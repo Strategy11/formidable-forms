@@ -5,6 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmTipsHelper {
 
+	/**
+	 * @param string $callback
+	 * @param string $html
+	 *
+	 * @return void
+	 */
 	public static function pro_tip( $callback, $html = '' ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			return;
@@ -30,6 +36,9 @@ class FrmTipsHelper {
 	 *     @type string $tip  Tip text.
 	 *     @type string $call Call to action text.
 	 * }
+	 * @param string $html
+	 *
+	 * @return void
 	 */
 	public static function show_tip( $tip, $html = '' ) {
 		if ( ! isset( $tip['page'] ) ) {
@@ -68,6 +77,9 @@ class FrmTipsHelper {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_builder_tip() {
 		$tips = array(
 			array(
@@ -123,6 +135,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_form_settings_tip() {
 		$tips = array(
 			array(
@@ -154,6 +169,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_form_action_tip() {
 		$tips = array(
 			array(
@@ -283,6 +301,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_entries_tip() {
 		$tips = array(
 			array(
@@ -315,6 +336,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_import_tip() {
 		$tips = array(
 			array(
@@ -330,6 +354,9 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_banner_tip() {
 		$tips       = array(
 			array(

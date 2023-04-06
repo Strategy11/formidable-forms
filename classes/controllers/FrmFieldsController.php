@@ -910,20 +910,4 @@ class FrmFieldsController {
 	public static function include_single_field( $field_id, $values, $form_id = 0 ) {
 		return FrmDeprecated::include_single_field( $field_id, $values, $form_id );
 	}
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function edit_option() {
-		FrmDeprecated::deprecated( __METHOD__, '2.3' );
-	}
-
-	/**
-	 * @deprecated 2.3
-	 * @codeCoverageIgnore
-	 */
-	public static function delete_option() {
-		FrmDeprecated::deprecated( __METHOD__, '2.3' );
-	}
 }

@@ -88,6 +88,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $replaced_for;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		if ( ! self::should_show_captcha() ) {
@@ -116,6 +119,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $html;
 	}
 
+	/**
+	 * @return void
+	 */
 	protected function load_field_scripts( $args ) {
 		$api_js_url = $this->api_url();
 
@@ -132,6 +138,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $this->hcaptcha_api_url();
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 */
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
@@ -165,6 +174,13 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $api_js_url;
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 *
+	 * @return string
+	 *
+	 * @psalm-return ''|'frm-'
+	 */
 	protected function class_prefix( $frm_settings ) {
 		if ( $this->allow_multiple( $frm_settings ) && $frm_settings->active_captcha === 'recaptcha' ) {
 			$class_prefix = 'frm-';
@@ -175,6 +191,13 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $class_prefix;
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 *
+	 * @return string
+	 *
+	 * @psalm-return 'g-recaptcha'|'h-captcha'
+	 */
 	protected function captcha_class( $frm_settings ) {
 		return $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha' : 'h-captcha';
 	}
@@ -185,6 +208,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @return string
+	 *
+	 * @param FrmSettings $frm_settings
 	 */
 	protected function captcha_size( $frm_settings ) {
 		if ( in_array( $frm_settings->re_type, array( 'invisible', 'v3' ), true ) ) {
@@ -287,6 +312,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return ! empty( $frm_settings->hcaptcha_pubkey );
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function should_validate() {
 		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
@@ -297,6 +325,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return self::should_show_captcha();
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 */
 	protected function send_api_check( $frm_settings ) {
 		$captcha_settings = new FrmFieldCaptchaSettings( $frm_settings );
 

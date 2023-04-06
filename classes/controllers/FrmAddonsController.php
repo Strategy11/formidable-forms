@@ -38,6 +38,9 @@ class FrmAddonsController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function list_addons() {
 		FrmAppHelper::include_svg();
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
@@ -70,6 +73,9 @@ class FrmAddonsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/list.php' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		if ( empty( $plugins ) ) {
@@ -83,6 +89,9 @@ class FrmAddonsController {
 		include( FrmAppHelper::plugin_path() . '/classes/views/addons/settings.php' );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected static function get_api_addons() {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
@@ -243,6 +252,9 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 *
+	 * @param array $addons
+	 * @return array
 	 */
 	protected static function get_pro_from_addons( $addons ) {
 		return isset( $addons['93790'] ) ? $addons['93790'] : array();
@@ -286,6 +298,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 *
+	 * @return array|false
 	 */
 	protected static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
@@ -531,6 +545,9 @@ class FrmAddonsController {
 		return $plugin;
 	}
 
+	/**
+	 * @return void
+	 */
 	protected static function prepare_addons( &$addons ) {
 		$activate_url = '';
 		if ( current_user_can( 'activate_plugins' ) ) {
@@ -590,6 +607,9 @@ class FrmAddonsController {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	private static function is_plugin_active( $file_name, $slug ) {
 		if ( 'formidable-views/formidable-views.php' === $file_name ) {
 			return self::get_active_views_version() === $slug;
@@ -610,6 +630,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	protected static function prepare_addon_link( &$link ) {
 		$site_url = 'https://formidableforms.com/';
@@ -630,6 +652,8 @@ class FrmAddonsController {
 	 * installed, active, not installed
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	protected static function set_addon_status( &$addon ) {
 		if ( ! empty( $addon['activate_url'] ) ) {
@@ -650,6 +674,9 @@ class FrmAddonsController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function upgrade_to_pro() {
 		FrmAppHelper::include_svg();
 
@@ -861,6 +888,8 @@ class FrmAddonsController {
 	 * Install Pro after connection with Formidable.
 	 *
 	 * @since 4.02.05
+	 *
+	 * @return void
 	 */
 	public static function connect_pro() {
 		FrmAppHelper::permission_check( 'install_plugins' );
@@ -934,6 +963,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	protected static function maybe_show_cred_form() {
 		if ( ! function_exists( 'request_filesystem_credentials' ) ) {
@@ -972,6 +1003,22 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * Checks if an addon download url is allowed.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $download_url
+	 *
+	 * @return bool
+	 */
+	public static function url_is_allowed( $download_url ) {
+		return (
+			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ||
+			( strpos( $download_url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $download_url, '.zip', -4 ) === 0 )
+		);
+	}
+
+	/**
 	 * We do not need any extra credentials if we have gotten this far,
 	 * so let's install the plugin.
 	 *
@@ -982,7 +1029,7 @@ class FrmAddonsController {
 
 		$download_url = self::get_current_plugin();
 
-		if ( ! FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ) {
+		if ( ! self::url_is_allowed( $download_url ) ) {
 			return array(
 				'message' => 'Plugin URL is not valid',
 				'success' => false,
@@ -1008,6 +1055,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.06.03
+	 *
+	 * @return void
 	 */
 	public static function ajax_activate_addon() {
 
@@ -1023,7 +1072,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @return array|string
+	 * @return array
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
@@ -1057,6 +1106,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.02
+	 *
 	 * @param string $installed The plugin folder name with file name
 	 */
 	protected static function maybe_activate_addon( $installed ) {
@@ -1084,6 +1134,8 @@ class FrmAddonsController {
 	 * Run security checks before installing
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	protected static function install_addon_permissions() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -1096,6 +1148,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 *
+	 * @return string
 	 */
 	public static function connect_link() {
 		$auth = get_option( 'frm_connect_token' );
@@ -1207,6 +1261,7 @@ class FrmAddonsController {
 	 * Render a conditional action button for an add on
 	 *
 	 * @since 4.09.01
+	 *
 	 * @param array $addon
 	 * @param string|false $license_type
 	 * @param string $plan_required
@@ -1222,6 +1277,10 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.09.01
+	 *
+	 * @param array|false $addon
+	 *
+	 * @return void
 	 */
 	protected static function addon_upgrade_link( $addon, $upgrade_link ) {
 		if ( $addon ) {
@@ -1241,6 +1300,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	public static function ajax_install_addon() {
 		self::install_addon_permissions();
@@ -1257,7 +1318,10 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.06.02
+	 *
 	 * @deprecated 4.09.01
+	 *
+	 * @return void
 	 */
 	public static function ajax_multiple_addons() {
 		FrmDeprecated::ajax_multiple_addons();
@@ -1306,8 +1370,12 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
+	 *
 	 * @deprecated 3.06
+	 *
 	 * @codeCoverageIgnore
+	 *
+	 * @return void
 	 */
 	public static function reset_cached_addons( $license = '' ) {
 		FrmDeprecated::reset_cached_addons( $license );
@@ -1343,7 +1411,10 @@ class FrmAddonsController {
 
 	/**
 	 * @deprecated 3.04.03
+	 *
 	 * @codeCoverageIgnore
+	 *
+	 * @return void
 	 */
 	public static function get_licenses() {
 		FrmDeprecated::get_licenses();

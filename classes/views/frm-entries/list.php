@@ -2,17 +2,19 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$pro_is_installed = FrmAppHelper::pro_is_installed();
 ?>
 <div id="form_entries_page" class="frm_wrap frm_list_entry_page">
-
 		<?php
+		// Adding new entries from an admin page is a Pro feature.
 		FrmAppHelper::get_admin_header(
 			array(
 				'label'       => __( 'Form Entries', 'formidable' ),
 				'form'        => $form,
 				'close'       => $form ? admin_url( 'admin.php?page=formidable-entries&form=' . $form->id ) : '',
-				'import_link' => true,
-				'publish'     => ! $form ? true : array(
+				'import_link' => $pro_is_installed,
+				'publish'     => ! $form || ! $pro_is_installed ? true : array(
 					'FrmAppHelper::add_new_item_link',
 					array(
 						'new_link' => admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $form->id ),
@@ -27,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<h2>
 					<?php esc_html_e( 'Form Entries', 'formidable' ); ?>
 				</h2>
-				<?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
+				<?php if ( ! $pro_is_installed ) { ?>
 				<div class="clear"></div>
 				<?php } ?>
 			<?php } ?>
@@ -42,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmTipsHelper::pro_tip( 'get_entries_tip', 'p' ); ?>
 
 				<div class="clear"></div>
-				<?php require( FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php' ); ?>
+				<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 				<?php $wp_list_table->display(); ?>
 			</form>
 			<?php do_action( 'frm_page_footer', array( 'table' => $wp_list_table ) ); ?>
