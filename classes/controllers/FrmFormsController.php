@@ -2352,7 +2352,6 @@ class FrmFormsController {
 
 		self::$ran_redirect_url_filter[] = $form->id . '_' . $args['action'];
 
-		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
 		return apply_filters( 'frm_redirect_url', $url, $form, $args );
 	}
 
@@ -2534,6 +2533,7 @@ class FrmFormsController {
 		$args['id'] = $args['entry_id'];
 		FrmEntriesController::delete_entry_before_redirect( $success_url, $args['form'], $args );
 
+		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
 		$success_url = self::run_redirect_url_filter( $success_url, $args['form'], $args );
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
