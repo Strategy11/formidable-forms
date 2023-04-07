@@ -39,14 +39,24 @@ class test_FrmStyle extends FrmUnitTest {
 
 	/**
 	 * @covers FrmStyle::sanitize_post_content
+	 * @covers FrmStyle::strip_invalid_characters
 	 */
 	public function test_sanitize_post_content() {
 		$post_content = array(
-			'bg_color'            => '000',
-			'font_size'           => '14px',
-			'title_margin_bottom' => '60px}',
-			'field_height'        => ';12px',
-			'field_width'         => '{10px',
+			'bg_color'              => '000',
+			'font_size'             => '14px',
+			'title_margin_bottom'   => '60px}',
+			'field_height'          => ';12px',
+			'field_width'           => '{10px',
+			'width'                 => 'calc(100% / 3)',
+			'section_color'         => 'rgba(255,255,255,1)',
+			'submit_border_color'   => 'ffffff',
+			'submit_active_color'   => 'rgb(255,255,255)',
+			'progress_bg_color'     => '000(',
+			'success_bg_color'      => ')fff',
+			'section_border_width'  => '[12px',
+			'section_font_size'     => '16px]',
+			'unsupported_key'       => 'fff',
 		);
 		$frm_style              = new FrmStyle();
 		$sanitized_post_content = $frm_style->sanitize_post_content( $post_content );
@@ -57,5 +67,14 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( '60px', $sanitized_post_content['title_margin_bottom'] );
 		$this->assertEquals( '12px', $sanitized_post_content['field_height'] );
 		$this->assertEquals( '10px', $sanitized_post_content['field_width'] );
+		$this->assertEquals( 'calc(100% / 3)', $sanitized_post_content['width'] );
+		$this->assertEquals( 'rgba(255,255,255,1)', $sanitized_post_content['section_color'] );
+		$this->assertEquals( 'ffffff', $sanitized_post_content['submit_border_color'] );
+		$this->assertEquals( 'rgb(255,255,255)', $sanitized_post_content['submit_active_color'] );
+		$this->assertEquals( '000', $sanitized_post_content['progress_bg_color'] );
+		$this->assertEquals( 'fff', $sanitized_post_content['success_bg_color'] );
+		$this->assertEquals( '12px', $sanitized_post_content['section_border_width'] );
+		$this->assertEquals( '16px', $sanitized_post_content['section_font_size'] );
+		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
 	}
 }

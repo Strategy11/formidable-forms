@@ -258,7 +258,18 @@ class FrmStyle {
 	 * @return string
 	 */
 	private static function strip_invalid_characters( $setting ) {
-		return str_replace( array( '{', '}', ';' ), '', $setting );
+		$characters_to_remove = array( '{', '}', ';', '[', ']' );
+
+		// RGB is handled instead in self::maybe_sanitize_rgba_value.
+		if ( 0 !== strpos( $setting, 'rgb' ) ) {
+			$number_of_opening_braces = substr_count( $setting, '(' );
+			$number_of_closing_braces = substr_count( $setting, ')' );
+			if ( $number_of_opening_braces !== $number_of_closing_braces ) {
+				array_push( $characters_to_remove, '(', ')' );
+			}
+		}
+
+		return str_replace( $characters_to_remove, '', $setting );
 	}
 
 	/**
