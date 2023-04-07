@@ -277,11 +277,11 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		if ( headers_sent() ) {
 			// since headers are sent by phpunit, we will get the js redirect
-			$this->assertNotFalse( strpos( $response, 'window.location="' . $expected_url . '"' ) );
+			$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
 		}
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
-		$this->assertNotFalse( strpos( $response, 'window.location="' . $expected_url . '"' ) );
+		$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
 	}
 
 	/**
