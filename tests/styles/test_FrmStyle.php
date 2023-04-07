@@ -57,6 +57,7 @@ class test_FrmStyle extends FrmUnitTest {
 			'section_border_width'  => '[12px',
 			'section_font_size'     => '16px]',
 			'unsupported_key'       => 'fff',
+			'custom_css'            => '.my-class { color: red; }',
 		);
 		$frm_style              = new FrmStyle();
 		$sanitized_post_content = $frm_style->sanitize_post_content( $post_content );
@@ -75,6 +76,7 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( 'fff', $sanitized_post_content['success_bg_color'] );
 		$this->assertEquals( '12px', $sanitized_post_content['section_border_width'] );
 		$this->assertEquals( '16px', $sanitized_post_content['section_font_size'] );
+		$this->assertEquals( '.my-class { color: red; }', $sanitized_post_content['custom_css'] );
 		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
 	}
 }
