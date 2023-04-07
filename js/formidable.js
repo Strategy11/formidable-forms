@@ -1349,10 +1349,11 @@ function frmFrontFormJS() {
 
 	function setCustomValidityMessage( e ) {
 		let selector;
+		let textInputSelector = 'input[type=text]:not(.frm_verify)';
 		if ( typeof e !== 'undefined' && e.type === 'frmAfterAddRow' ) {
-			selector = '.frm_repeat_sec:last-of-type input[type=text]:not(.frm_verify)';
+			selector = `.frm_repeat_sec:last-of-type ${textInputSelector}`;
 		} else {
-			selector = '.frm_fields_container input[type=text]:not(.frm_verify)';
+			selector = `.frm_fields_container ${textInputSelector}`;
 		}
 
 		document.querySelectorAll( selector ).forEach( function( el ) {
