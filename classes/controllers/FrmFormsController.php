@@ -2343,6 +2343,9 @@ class FrmFormsController {
 	 */
 	private static function run_redirect_url_filter( $url, $form, $args ) {
 		if ( empty( $args['action'] ) || ! is_string( $args['action'] ) ) {
+			if ( ! empty( $args['paypal_url'] ) ) {
+				return apply_filters( 'frm_redirect_url', $url, $form, $args );
+			}
 			return $url;
 		}
 
