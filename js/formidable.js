@@ -1347,8 +1347,15 @@ function frmFrontFormJS() {
 		});
 	}
 
-	function setCustomValidityMessage() {
-		document.querySelectorAll( '.frm_fields_container input[type=text]:not(.frm_verify)' ).forEach( function( el ) {
+	function setCustomValidityMessage( e ) {
+		let selector;
+		if ( typeof e !== 'undefined' && e.type === 'frmAfterAddRow' ) {
+			selector = '.frm_repeat_sec:last-of-type input[type=text]:not(.frm_verify)';
+		} else {
+			selector = '.frm_fields_container input[type=text]:not(.frm_verify)';
+		}
+
+		document.querySelectorAll( selector ).forEach( function( el ) {
 			el.oninvalid = function() {
 				if ( this.dataset.invmsg ) {
 					this.setCustomValidity( this.dataset.invmsg );
