@@ -1,4 +1,7 @@
 == Changelog ==
+= 6.2.2 =
+* Fix: Redirects to PayPal were not working, resulting in a white screen instead.
+
 = 6.2.1 =
 * Fix: Shortcodes were not getting replaced in redirect confirmation actions.
 
