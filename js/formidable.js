@@ -1353,7 +1353,7 @@ function frmFrontFormJS() {
 				if ( this.dataset.invmsg ) {
 					this.setCustomValidity( this.dataset.invmsg );
 				}
-			}
+			};
 		});
 	}
 
@@ -1394,6 +1394,8 @@ function frmFrontFormJS() {
 			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
+
+			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
 		},
 
