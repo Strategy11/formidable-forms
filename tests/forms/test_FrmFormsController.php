@@ -275,12 +275,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$entry        = FrmEntry::getOne( $created_entry_id, true );
 		$expected_url = 'http://example.com?param=' . $entry->metas[ $field_id ];
 
-		if ( headers_sent() ) {
-			// since headers are sent by phpunit, we will get the js redirect
-			$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
-		}
+		$this->assertTrue( headers_sent() );
 
-		$response = FrmFormsController::show_form( $form->id ); // this is where the redirect happens
+		// Since headers are sent by phpunit, we will get the js redirect.
 		$this->assertStringContainsString( 'window.location="' . $expected_url . '"', $response );
 	}
 
