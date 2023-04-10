@@ -10267,6 +10267,10 @@ function frmAdminBuildJS() {
 			});
 
 			showOrHideRepeaters( getExportOption() );
+
+			document.querySelector( '#cb-import-select-all' ).addEventListener( 'change', event => {
+				document.querySelectorAll( '[name="frm_export_forms[]"]' ).forEach( cb => cb.checked = event.target.checked );
+			});
 		},
 
 		inboxBannerInit: function() {

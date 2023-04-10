@@ -114,7 +114,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<table class="widefat striped frm-border frm-mt-0">
 					<thead>
 						<tr>
-							<td class="column-cb check-column"></td>
+							<td class="column-cb check-column">
+								<label class="screen-reader-text" for="cb-import-select-all"><?php esc_html_e( 'Select All', 'formidable' ); ?></label>
+								<input id="cb-import-select-all" type="checkbox">
+							</td>
 							<td><?php esc_html_e( 'Form Title', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'ID / Form Key', 'formidable' ); ?></td>
 							<td><?php esc_html_e( 'Type', 'formidable' ); ?></td>
