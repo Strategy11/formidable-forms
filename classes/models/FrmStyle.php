@@ -299,14 +299,15 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function should_remove_every_brace( $setting ) {
-		$looks_like_a_broken_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
-
-		if ( $looks_like_a_broken_hex_value ) {
+		// Matches hex values but also checks for unexpected ( and ).
+		$looks_like_a_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
+		if ( $looks_like_a_hex_value ) {
 			return true;
 		}
 
-		$looks_like_a_broken_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/', $setting );
-		if ( $looks_like_a_broken_size ) {
+		// Matches size values but also checks for unexpected ( and ).
+		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/', $setting );
+		if ( $looks_like_a_size ) {
 			return true;
 		}
 

@@ -87,6 +87,11 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( '10pt', $this->strip_invalid_characters( '(10pt' ) );
 		$this->assertEquals( '100%', $this->strip_invalid_characters( '100%)' ) );
 		$this->assertEquals( '14px', $this->strip_invalid_characters( '(14px)' ) );
+
+		// Test some things that should not change.
+		$this->assertEquals( 'fff', $this->strip_invalid_characters( 'fff' ) );
+		$this->assertEquals( '12px', $this->strip_invalid_characters( '12px' ) );
+		$this->assertEquals( 'rgb(0,0,0)', $this->strip_invalid_characters( 'rgb(0,0,0)' ) );
 	}
 
 	private function strip_invalid_characters( $input ) {
