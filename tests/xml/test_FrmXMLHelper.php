@@ -119,4 +119,27 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	private function populate_postmeta( &$post, $meta, $imported ) {
 		$this->run_private_method( array( 'FrmXMLHelper', 'populate_postmeta' ), array( &$post, $meta, $imported ) );
 	}
+
+	/**
+	 * @covers FrmXMLHelper::maybe_fix_xml
+	 */
+	public function test_maybe_fix_xml() {
+		$wp_comment        = '<!-- generator="WordPress/5.2.4" created="2019-10-23 19:33" -->';
+		$simple_xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . '<channel></channel>';
+
+		$xml_string = chr( 13 ) . $simple_xml_string;
+		$this->maybe_fix_xml( $xml_string );
+
+		$this->assertEquals( $simple_xml_string, $xml_string );
+
+		$conflicting_meta_tag = '<meta name="generator" content="Equity 1.7.13" />';
+		$xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . $conflicting_meta_tag . '<channel></channel>';
+		$this->maybe_fix_xml( $xml_string );
+
+		$this->assertEquals( $simple_xml_string, $xml_string );
+	}
+
+	private function maybe_fix_xml( &$xml_string ) {
+		$this->run_private_method( array( 'FrmXMLHelper', 'maybe_fix_xml' ), array( &$xml_string ) );
+	}
 }
