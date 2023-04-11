@@ -252,7 +252,7 @@ class FrmStyle {
 	/**
 	 * Remove any characters that should not be used in CSS.
 	 *
-	 * @since 6.2.1
+	 * @since 6.3
 	 *
 	 * @param string $setting
 	 * @return string
@@ -290,6 +290,28 @@ class FrmStyle {
 		}
 
 		return $this->trim_braces( $setting );
+	}
+
+	/**
+	 * @since 6.3
+	 *
+	 * @param string $input
+	 * @return string
+	 */
+	private function trim_braces( $input ) {
+		$output = $input;
+		// Remove any ( from the start of the string as no CSS values expect at the first character.
+		if ( $output && '(' === $output[0] ) {
+			$output = ltrim( $output, '(' );
+		}
+		// Remove extra braces from the end.
+		if ( ')' === substr( $output, -1 ) ) {
+			$output = rtrim( $output, ')' );
+			if ( false !== strpos( $output, '(' ) ) {
+				$output .= ')';
+			}
+		}
+		return $output;
 	}
 
 	/**
@@ -762,25 +784,5 @@ class FrmStyle {
 			}
 		}
 		return $value;
-	}
-
-	/**
-	 * @param string $input
-	 * @return string
-	 */
-	public function trim_braces( $input ) {
-		$output = $input;
-		// Remove any ( from the start of the string as no CSS values expect at the first character.
-		if ( $output && '(' === $output[0] ) {
-			$output = ltrim( $output, '(' );
-		}
-		// Remove extra braces from the end.
-		if ( ')' === substr( $output, -1 ) ) {
-			$output = rtrim( $output, ')' );
-			if ( false !== strpos( $output, '(' ) ) {
-				$output .= ')';
-			}
-		}
-		return $output;
 	}
 }
