@@ -79,4 +79,56 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( '.my-class { color: red; }', $sanitized_post_content['custom_css'] );
 		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
 	}
+
+	public function test_strip_invalid_characters() {
+		// Make sure that braces don't get added to sizes but removed instead.
+		$this->assertEquals( '12px', $this->strip_invalid_characters( '12px(' ) );
+		$this->assertEquals( '2rem', $this->strip_invalid_characters( ')2rem' ) );
+		$this->assertEquals( '10pt', $this->strip_invalid_characters( '(10pt' ) );
+		$this->assertEquals( '100%', $this->strip_invalid_characters( '100%)' ) );
+		$this->assertEquals( '14px', $this->strip_invalid_characters( '(14px)' ) );
+	}
+
+	private function strip_invalid_characters( $input ) {
+		$frm_style = new FrmStyle();
+		return $this->run_private_method( array( $frm_style, 'strip_invalid_characters' ), array( $input ) );
+	}
+
+	/**
+	 * @covers FrmStyle::force_balanced_quotation
+	 */
+	public function test_force_balanced_quotation() {
+		$frm_style = new FrmStyle();
+
+		// Test a case where nothing changes.
+		$this->assertEquals( '"Arial"', $frm_style->force_balanced_quotation( '"Arial"' ) );
+
+		// Balance a missing " at the end.
+		$this->assertEquals( '"Verdana"', $frm_style->force_balanced_quotation( '"Verdana' ) );
+
+		// Balance a missing ' at the end.
+		$this->assertEquals( "'Times New Roman'", $frm_style->force_balanced_quotation( "'Times New Roman" ) );
+
+		// Balance a missing " at the front.
+		$this->assertEquals( '"Helvetica"', $frm_style->force_balanced_quotation( 'Helvetica"' ) );
+
+		// Balance a missing ' at the front.
+		$this->assertEquals( "'Comic Sans'", $frm_style->force_balanced_quotation( "Comic Sans'" ) );
+	}
+
+	public function test_trim_braces() {
+		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%)))' ) );
+		$this->assertEquals( 'calc(100%)', $this->trim_braces( '((calc(100%)' ) );
+		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%))' ) );
+		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%)))' ) );
+	}
+
+	/**
+	 * @param string $value
+	 * @return string
+	 */
+	private function trim_braces( $value ) {
+		$frm_style = new FrmStyle();
+		return $this->run_private_method( array( $frm_style, 'trim_braces' ), array( $value ) );
+	}
 }

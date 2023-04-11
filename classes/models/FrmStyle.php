@@ -257,21 +257,51 @@ class FrmStyle {
 	 * @param string $setting
 	 * @return string
 	 */
-	private static function strip_invalid_characters( $setting ) {
+	private function strip_invalid_characters( $setting ) {
 		$characters_to_remove = array( '{', '}', ';', '[', ']' );
 
 		// RGB is handled instead in self::maybe_sanitize_rgba_value.
 		if ( 0 !== strpos( $setting, 'rgb' ) ) {
-			$number_of_opening_braces = substr_count( $setting, '(' );
-			$number_of_closing_braces = substr_count( $setting, ')' );
-			if ( $number_of_opening_braces !== $number_of_closing_braces ) {
-				array_push( $characters_to_remove, '(', ')' );
-			}
+			$setting = $this->maybe_fix_braces( $setting, $characters_to_remove );
 		}
 
 		return str_replace( $characters_to_remove, '', $setting );
 	}
 
+	/**
+	 * @param string $setting
+	 * @param array  $characters_to_remove
+	 * @return string
+	 */
+	private function maybe_fix_braces( $setting, &$characters_to_remove ) {
+		$number_of_opening_braces = substr_count( $setting, '(' );
+		$number_of_closing_braces = substr_count( $setting, ')' );
+
+		if ( $number_of_opening_braces === $number_of_closing_braces ) {
+			return $this->trim_braces( $setting );
+		}
+
+		$should_remove_every_brace     = false;
+		$looks_like_a_broken_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
+
+		if ( $looks_like_a_broken_hex_value ) {
+			$should_remove_every_brace = true;
+		} else {
+			$looks_like_a_broken_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/', $setting );
+			if ( $looks_like_a_broken_size ) {
+				$should_remove_every_brace = true;
+			}
+		}
+
+		if ( $should_remove_every_brace ) {
+			// Add to $characters_to_remove to remove when str_replace is called.
+			array_push( $characters_to_remove, '(', ')' );
+			return $setting;
+		}
+
+		return $this->trim_braces( $setting );
+	}
+	
 	/**
 	 * @since 3.01.01
 	 *
@@ -698,7 +728,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * Don't let imbalanced font families ruin the whole stylesheet
+	 * Don't let imbalanced font families ruin the whole stylesheet.
 	 *
 	 * @param string $value
 	 * @return string
@@ -708,11 +738,37 @@ class FrmStyle {
 		foreach ( $balanced_characters as $char ) {
 			$char_count  = substr_count( $value, $char );
 			$is_balanced = $char_count % 2 == 0;
-			if ( ! $is_balanced ) {
+
+			if ( $is_balanced ) {
+				continue;
+			}
+
+			if ( $value && $char === $value[ strlen( $value ) - 1 ] ) {
+				$value = $char . $value;
+			} else {
 				$value .= $char;
 			}
 		}
-
 		return $value;
+	}
+
+	/**
+	 * @param string $input
+	 * @return string
+	 */
+	public function trim_braces( $input ) {
+		$output = $input;
+		// Remove any ( from the start of the string as no CSS values expect at the first character.
+		if ( $output && '(' === $output[0] ) {
+			$output = ltrim( $output, '(' );
+		}
+		// Remove extra braces from the end.
+		if ( ')' === substr( $output, -1 ) ) {
+			$output = rtrim( $output, ')' );
+			if ( false !== strpos( $output, '(' ) ) {
+				$output .= ')';
+			}
+		}
+		return $output;
 	}
 }
