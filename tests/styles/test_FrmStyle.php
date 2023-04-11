@@ -80,6 +80,9 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
 	}
 
+	/**
+	 * @covers FrmStyle::strip_invalid_characters
+	 */
 	public function test_strip_invalid_characters() {
 		// Make sure that braces don't get added to sizes but removed instead.
 		$this->assertEquals( '12px', $this->strip_invalid_characters( '12px(' ) );
@@ -121,11 +124,14 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( "'Comic Sans'", $frm_style->force_balanced_quotation( "Comic Sans'" ) );
 	}
 
+	/**
+	 * @gcovers FrmStyle::trim_braces
+	 */
 	public function test_trim_braces() {
 		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%)))' ) );
-		$this->assertEquals( 'calc(100%)', $this->trim_braces( '((calc(100%)' ) );
-		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%))' ) );
-		$this->assertEquals( 'calc(100%)', $this->trim_braces( '(calc(100%)))' ) );
+		$this->assertEquals( 'skewX(5px)', $this->trim_braces( '((skewX(5px)' ) );
+		$this->assertEquals( 'var(--grey)', $this->trim_braces( '(var(--grey))' ) );
+		$this->assertEquals( 'scale(2)', $this->trim_braces( '(scale(2)))' ) );
 	}
 
 	/**
