@@ -269,6 +269,8 @@ class FrmStyle {
 	}
 
 	/**
+	 * @since 6.3
+	 *
 	 * @param string $setting
 	 * @param array  $characters_to_remove
 	 * @return string
@@ -281,25 +283,34 @@ class FrmStyle {
 			return $this->trim_braces( $setting );
 		}
 
-		$should_remove_every_brace     = false;
-		$looks_like_a_broken_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
-
-		if ( $looks_like_a_broken_hex_value ) {
-			$should_remove_every_brace = true;
-		} else {
-			$looks_like_a_broken_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/', $setting );
-			if ( $looks_like_a_broken_size ) {
-				$should_remove_every_brace = true;
-			}
-		}
-
-		if ( $should_remove_every_brace ) {
+		if ( $this->should_remove_every_brace( $setting ) ) {
 			// Add to $characters_to_remove to remove when str_replace is called.
 			array_push( $characters_to_remove, '(', ')' );
 			return $setting;
 		}
 
 		return $this->trim_braces( $setting );
+	}
+
+	/**
+	 * @since 6.3
+	 *
+	 * @param string $setting
+	 * @return bool
+	 */
+	private function should_remove_every_brace( $setting ) {
+		$looks_like_a_broken_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
+
+		if ( $looks_like_a_broken_hex_value ) {
+			return true;
+		}
+
+		$looks_like_a_broken_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/', $setting );
+		if ( $looks_like_a_broken_size ) {
+			return true;
+		}
+
+		return false;
 	}
 	
 	/**
