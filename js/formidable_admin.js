@@ -8133,10 +8133,10 @@ function frmAdminBuildJS() {
 	}
 
 	function exportTypeChanged( event ) {
-		var target = event.target;
-		showOrHideRepeaters( target.value );
-		checkExportTypes.call( target );
-		checkSelectedAllFormsCheckbox( target.value );
+		var value = event.target;
+		showOrHideRepeaters( value );
+		checkExportTypes.call( event.target );
+		checkSelectedAllFormsCheckbox( value );
 	}
 
 	function checkSelectedAllFormsCheckbox( exportType ) {
