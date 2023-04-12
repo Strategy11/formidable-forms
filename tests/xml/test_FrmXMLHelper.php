@@ -142,4 +142,28 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	private function maybe_fix_xml( &$xml_string ) {
 		$this->run_private_method( array( 'FrmXMLHelper', 'maybe_fix_xml' ), array( &$xml_string ) );
 	}
+
+	/**
+	 * @covers FrmXMLHelper::cdata
+	 */
+	public function test_cdata() {
+		$this->assertEquals( '<![CDATA[Name]]>', FrmXMLHelper::cdata( 'Name' ) );
+		$this->assertEquals( '<![CDATA[29yf4d]]>', FrmXMLHelper::cdata( '29yf4d' ) );
+		$this->assertEquals( '<![CDATA[United States]]>', FrmXMLHelper::cdata( 'United States' ) );
+		$this->assertEquals( '<![CDATA[["Red","Blue"]]]>', FrmXMLHelper::cdata( serialize( array( 'Red', 'Blue' ) ) ) );
+		$this->assertEquals( '<![CDATA[[60418,60419,60420]]]>', FrmXMLHelper::cdata( serialize( array( 60418, 60419, 60420 ) ) ) );
+		$this->assertEquals(
+			'<![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]>',
+			FrmXMLHelper::cdata(
+				serialize(
+					array(
+						'browser' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
+						'referrer' => 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd',
+					)
+				)
+			)
+		);
+		$this->assertEquals( '5', FrmXMLHelper::cdata( '5' ), 'Numbers do not need to be wrapped' );
+		$this->assertEquals( '<![CDATA[2023-05-21]]>', FrmXMLHelper::cdata( '2023-05-21' ) );
+	}
 }
