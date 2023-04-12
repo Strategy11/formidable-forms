@@ -1573,6 +1573,12 @@ class FrmXMLHelper {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
+		} elseif ( seems_utf8( $str ) === false && mb_check_encoding( $str, 'ISO-8859-1' ) ) {
+			if ( function_exists( 'mb_convert_encoding' ) ) {
+				$str = mb_convert_encoding( $str, 'UTF-8', 'ISO-8859-1' );
+			} elseif ( function_exists( 'iconv' ) ) {
+				$str = iconv( 'ISO-8859-1', 'UTF-8', $str );
+			}
 		}
 
 		if ( is_numeric( $str ) ) {
