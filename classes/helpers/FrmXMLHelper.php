@@ -1578,6 +1578,7 @@ class FrmXMLHelper {
 				$str = mb_convert_encoding( $str, 'UTF-8', 'ISO-8859-1' );
 			} elseif ( function_exists( 'iconv' ) ) {
 				$converted_string = iconv( 'ISO-8859-1', 'UTF-8', $str );
+				// Value is false if $str is not UTF-8.
 				if ( false !== $converted_string ) {
 					$str = $converted_string;
 				}
