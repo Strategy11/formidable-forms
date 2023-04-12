@@ -1349,8 +1349,9 @@ function frmFrontFormJS() {
 	}
 
 	function setCustomValidityMessage( e ) {
-		let selector;
-		let textInputSelector = 'input[type=text]:not(.frm_verify)';
+		var selector,
+			textInputSelector = 'input[type=text]:not(.frm_verify)';
+
 		if ( typeof e !== 'undefined' && e.type === 'frmAfterAddRow' ) {
 			selector = '.frm_repeat_sec:last-of-type ' + textInputSelector;
 		} else {
