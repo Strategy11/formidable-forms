@@ -8133,7 +8133,7 @@ function frmAdminBuildJS() {
 	}
 
 	function exportTypeChanged( event ) {
-		var value = event.target;
+		var value = event.target.value;
 		showOrHideRepeaters( value );
 		checkExportTypes.call( event.target );
 		checkSelectedAllFormsCheckbox( value );
