@@ -323,6 +323,11 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function should_remove_every_brace( $setting ) {
+		if ( 0 === strpos( trim( $setting, '()' ), 'calc' ) ) {
+			// Support calc() sizes. We do not want to remove all braces when calc is used.
+			return false;
+		}
+
 		// Matches hex values but also checks for unexpected ( and ).
 		$looks_like_a_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
 		if ( $looks_like_a_hex_value ) {
