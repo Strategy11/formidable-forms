@@ -14,6 +14,16 @@ class FrmFormsController {
 	 */
 	private static $ran_redirect_url_filter = array();
 
+	/**
+	 * Track the form that opened the redirect URL in a new tab. This is used to check if we should show the default
+	 * message in the currect tab.
+	 *
+	 * @since 6.2
+	 *
+	 * @var array Keys are form IDs and values are boolean.
+	 */
+	private static $redirected_in_new_tab = array();
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -2271,6 +2281,11 @@ class FrmFormsController {
 			return array();
 		}
 
+		// If a redirect action has already opened the URL in a new tab, we show the default message in the currect tab.
+		if ( ! empty( self::$redirected_in_new_tab[ $args['form']->id ] ) ) {
+			return array( FrmOnSubmitHelper::get_fallback_action( $event ) );
+		}
+
 		$entry       = FrmEntry::getOne( $args['entry_id'], true );
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
@@ -2552,11 +2567,12 @@ class FrmFormsController {
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( $open_in_new_tab ) {
-//				echo "<script>window.open('" . esc_url_raw( $success_url ) . "', '_blank');</script>";
 				echo "<script>window.open('" . esc_url_raw( $success_url ) . "', '_blank');</script>";
-			} else {
-				wp_redirect( esc_url_raw( $success_url ) );
+				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
+				return;
 			}
+
+			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
 		}
 
@@ -2613,9 +2629,14 @@ class FrmFormsController {
 	 * @param array $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
+		$target = '';
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$target = ' target="_blank"';
+		}
+
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
+			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '"' . $target . '>', '</a>' ) .
 			'</div></div>';
 
 		$redirect_args = array(
