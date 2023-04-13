@@ -8,6 +8,7 @@ if ( ! isset( $saving ) ) {
 
 	if ( ! empty( $css ) ) {
 		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
 }
