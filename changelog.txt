@@ -1,4 +1,10 @@
 == Changelog ==
+= 6.2.2 =
+* Fix: Redirects to PayPal were not working, resulting in a white screen instead.
+
+= 6.2.1 =
+* Fix: Shortcodes were not getting replaced in redirect confirmation actions.
+
 = 6.2 =
 * Security: The way serialized array values are handled has been updated to use a safer method.
 * New: The setting to Submit this form with AJAX has been moved into Lite. Forms can now be submitted without reloading the whole page.
