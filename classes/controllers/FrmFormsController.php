@@ -2538,13 +2538,25 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
+		$open_in_new_tab = ! empty( $args['form']->options['open_in_new_tab'] );
+
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
-			echo json_encode( array( 'redirect' => $success_url ) );
+			echo json_encode(
+				array(
+					'redirect'        => $success_url,
+					'open_in_new_tab' => $open_in_new_tab,
+				)
+			);
 			wp_die();
 		}
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
-			wp_redirect( esc_url_raw( $success_url ) );
+			if ( $open_in_new_tab ) {
+//				echo "<script>window.open('" . esc_url_raw( $success_url ) . "', '_blank');</script>";
+				echo "<script>window.open('" . esc_url_raw( $success_url ) . "', '_blank');</script>";
+			} else {
+				wp_redirect( esc_url_raw( $success_url ) );
+			}
 			die(); // do not use wp_die or redirect fails
 		}
 
@@ -2562,6 +2574,7 @@ class FrmFormsController {
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
+		$success_url  = esc_url_raw( $args['success_url'] );
 
 		/**
 		 * Filters the delay time before redirecting when On Submit Redirect action is delayed.
@@ -2572,6 +2585,12 @@ class FrmFormsController {
 		 */
 		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
 
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$redirect_js = "window.open('" . $success_url . "', '_blank')";
+		} else {
+			$redirect_js = "window.location='" . $success_url . "';";
+		}
+
 		add_filter( 'frm_use_wpautop', '__return_true' );
 
 		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -2579,7 +2598,7 @@ class FrmFormsController {
 		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
-		echo 'setTimeout(function(){window.location="' . esc_url_raw( $args['success_url'] ) . '";}, ' . intval( $delay_time ) . ');';
+		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');';
 		if ( empty( $args['doing_ajax'] ) ) {
 			echo '};';
 		}

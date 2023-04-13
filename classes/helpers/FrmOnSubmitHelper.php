@@ -250,7 +250,8 @@ class FrmOnSubmitHelper {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ] = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options[ $opt . 'url' ]    = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options['open_in_new_tab'] = ! empty( $action->post_content['open_in_new_tab'] );
 				break;
 
 			case 'page':
