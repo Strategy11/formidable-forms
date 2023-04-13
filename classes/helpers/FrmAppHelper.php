@@ -2830,7 +2830,7 @@ class FrmAppHelper {
 
 		if ( function_exists( 'iconv' ) ) {
 			$converted = iconv( $from_format, $to_format, $value );
-			// Value is false if $value is not UTF-8.
+			// Value is false if $value is not ISO-8859-1.
 			if ( false !== $converted ) {
 				return $converted;
 			}
