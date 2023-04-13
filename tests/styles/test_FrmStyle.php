@@ -96,15 +96,6 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( 'var(--grey)', $this->strip_invalid_characters( '(var(--grey)' ) );
 		$this->assertEquals( 'var(--white)', $this->strip_invalid_characters( '(var(--white)))' ) );
 
-		// Test some standard HTML colors.
-		$this->assertEquals( 'red', $this->strip_invalid_characters( 'red(' ), 'All braces should be stripped from standard HTML colors' );
-		$this->assertEquals( 'black', $this->strip_invalid_characters( 'black)' ) );
-		$this->assertEquals( 'white', $this->strip_invalid_characters( ')white' ) );
-		$this->assertEquals( 'green', $this->strip_invalid_characters( '(green' ) );
-		$this->assertEquals( 'tomato', $this->strip_invalid_characters( 'tomato))' ) );
-		$this->assertEquals( 'orange', $this->strip_invalid_characters( '))orange' ) );
-		$this->assertEquals( 'blue', $this->strip_invalid_characters( 'blue((' ) );
-
 		// Test some calc() rules with extra braces.
 		$this->assertEquals( 'calc(50%/3)', $this->strip_invalid_characters( '(calc(50%/3)' ) );
 		$this->assertEquals( 'calc(10%*5)', $this->strip_invalid_characters( ')calc(10%*5)' ) );

@@ -336,11 +336,6 @@ class FrmStyle {
 			return true;
 		}
 
-		$looks_like_a_standard_color = preg_match( '/^([a-zA-Z]+\(|\)[a-zA-Z]+|\s*\([a-zA-Z]*\)\s*)$/', $setting );
-		if ( $looks_like_a_standard_color ) {
-			return true;
-		}
-
 		return false;
 	}
 	
