@@ -1574,15 +1574,7 @@ class FrmXMLHelper {
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
 		} elseif ( seems_utf8( $str ) === false ) {
-			if ( function_exists( 'mb_check_encoding' ) && mb_check_encoding( $str, 'ISO-8859-1' ) ) {
-				$str = mb_convert_encoding( $str, 'UTF-8', 'ISO-8859-1' );
-			} elseif ( function_exists( 'iconv' ) ) {
-				$converted_string = iconv( 'ISO-8859-1', 'UTF-8', $str );
-				// Value is false if $str is not UTF-8.
-				if ( false !== $converted_string ) {
-					$str = $converted_string;
-				}
-			}
+			$str = FrmAppHelper::maybe_utf8_encode( $str );
 		}
 
 		if ( is_numeric( $str ) ) {

@@ -145,6 +145,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 
 	/**
 	 * @covers FrmXMLHelper::cdata
+	 * @covers FrmAppHelper::maybe_utf8_encode
 	 */
 	public function test_cdata() {
 		$this->assertEquals( '<![CDATA[Name]]>', FrmXMLHelper::cdata( 'Name' ) );
@@ -165,6 +166,9 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		);
 		$this->assertEquals( '5', FrmXMLHelper::cdata( '5' ), 'Numbers do not need to be wrapped' );
 		$this->assertEquals( '<![CDATA[2023-05-21]]>', FrmXMLHelper::cdata( '2023-05-21' ) );
+
+		// Test that a ISO-8859-1 characters (\xC1 and \xE9) convert to UTF-8.
 		$this->assertEquals( '<![CDATA[HelloÁWorld]]>', FrmXMLHelper::cdata( "Hello\xC1World" ) ); // \xC1 is the Á character.
+		$this->assertEquals( '<![CDATA[é]]>', FrmXMLHelper::cdata( "\xE9" ) ); // \xE9 is the é character.
 	}
 }

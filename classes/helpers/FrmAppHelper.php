@@ -2812,6 +2812,34 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 6.3
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public static function maybe_utf8_encode( $value ) {
+		$from_format = 'ISO-8859-1';
+		$to_format   = 'UTF-8';
+
+		if ( function_exists( 'mb_check_encoding' ) && function_exists( 'mb_convert_encoding' ) ) {
+			if ( mb_check_encoding( $value, $from_format ) ) {
+				return mb_convert_encoding( $value, $to_format, $from_format );
+			}
+			return $value;
+		}
+
+		if ( function_exists( 'iconv' ) ) {
+			$converted = iconv( $from_format, $to_format, $value );
+			// Value is false if $value is not UTF-8.
+			if ( false !== $converted ) {
+				return $converted;
+			}
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Reformat the json serialized array in name => value array.
 	 *
 	 * @since 4.02.03
