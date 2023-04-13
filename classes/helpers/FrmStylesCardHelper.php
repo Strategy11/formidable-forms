@@ -302,6 +302,7 @@ class FrmStylesCardHelper {
 			'field_border_width',
 			'field_border_style',
 			'border_color',
+			'border_radius',
 			'submit_bg_color',
 			'submit_border_color',
 			'submit_border_width',
