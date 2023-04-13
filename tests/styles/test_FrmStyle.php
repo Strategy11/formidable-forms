@@ -90,11 +90,30 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( '10pt', $this->strip_invalid_characters( '(10pt' ) );
 		$this->assertEquals( '100%', $this->strip_invalid_characters( '100%)' ) );
 		$this->assertEquals( '14px', $this->strip_invalid_characters( '(14px)' ) );
+		$this->assertEquals( '20PX', $this->strip_invalid_characters( ')20PX' ), 'strip_invalid_characters should be case insensitive' );
+
+		// Test CSS vars.
+		$this->assertEquals( 'var(--grey)', $this->strip_invalid_characters( '(var(--grey)' ) );
+		$this->assertEquals( 'var(--white)', $this->strip_invalid_characters( '(var(--white)))' ) );
+
+		// Test some standard HTML colors.
+		$this->assertEquals( 'red', $this->strip_invalid_characters( 'red(' ), 'All braces should be stripped from standard HTML colors' );
+		$this->assertEquals( 'black', $this->strip_invalid_characters( 'black)' ) );
+		$this->assertEquals( 'white', $this->strip_invalid_characters( ')white' ) );
+		$this->assertEquals( 'green', $this->strip_invalid_characters( '(green' ) );
+		$this->assertEquals( 'tomato', $this->strip_invalid_characters( 'tomato))' ) );
+		$this->assertEquals( 'orange', $this->strip_invalid_characters( '))orange' ) );
+		$this->assertEquals( 'blue', $this->strip_invalid_characters( 'blue((' ) );
+
+		// Test some calc() rules with extra braces.
+		$this->assertEquals( 'calc(50%/3)', $this->strip_invalid_characters( '(calc(50%/3)' ) );
+		$this->assertEquals( 'calc(10%*5)', $this->strip_invalid_characters( ')calc(10%*5)' ) );
 
 		// Test some things that should not change.
 		$this->assertEquals( 'fff', $this->strip_invalid_characters( 'fff' ) );
 		$this->assertEquals( '12px', $this->strip_invalid_characters( '12px' ) );
 		$this->assertEquals( 'rgb(0,0,0)', $this->strip_invalid_characters( 'rgb(0,0,0)' ) );
+		$this->assertEquals( 'calc(100%/6)', $this->strip_invalid_characters( 'calc(100%/6)' ) );
 	}
 
 	private function strip_invalid_characters( $input ) {
@@ -141,5 +160,21 @@ class test_FrmStyle extends FrmUnitTest {
 	private function trim_braces( $value ) {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'trim_braces' ), array( $value ) );
+	}
+
+	/**
+	 * @group mike
+	 */
+	public function test_should_remove_every_brace() {
+
+	}
+
+	/**
+	 * @param string $value
+	 * @return string
+	 */
+	private function should_remove_every_brace( $setting ) {
+		$frm_style = new FrmStyle();
+		return $this->run_private_method( array( $frm_style, 'should_remove_every_brace' ), array( $setting ) );
 	}
 }

@@ -301,12 +301,14 @@ class FrmStyle {
 	private function trim_braces( $input ) {
 		$output = $input;
 		// Remove any ( from the start of the string as no CSS values expect at the first character.
-		if ( $output && '(' === $output[0] ) {
-			$output = ltrim( $output, '(' );
+		if ( $output ) {
+			if ( in_array( $output[0], array( '(', ')' ), true ) ) {
+				$output = ltrim( $output, '()' );
+			}
 		}
 		// Remove extra braces from the end.
-		if ( ')' === substr( $output, -1 ) ) {
-			$output = rtrim( $output, ')' );
+		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
+			$output = rtrim( $output, '()' );
 			if ( false !== strpos( $output, '(' ) ) {
 				$output .= ')';
 			}
@@ -328,8 +330,14 @@ class FrmStyle {
 		}
 
 		// Matches size values but also checks for unexpected ( and ).
-		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/', $setting );
+		// This is case insensitive so it will catch PX, PT, etc, as well.
+		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
 		if ( $looks_like_a_size ) {
+			return true;
+		}
+
+		$looks_like_a_standard_color = preg_match( '/^([a-zA-Z]+\(|\)[a-zA-Z]+|\s*\([a-zA-Z]*\)\s*)$/', $setting );
+		if ( $looks_like_a_standard_color ) {
 			return true;
 		}
 
