@@ -152,20 +152,4 @@ class test_FrmStyle extends FrmUnitTest {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'trim_braces' ), array( $value ) );
 	}
-
-	/**
-	 * @group mike
-	 */
-	public function test_should_remove_every_brace() {
-
-	}
-
-	/**
-	 * @param string $value
-	 * @return string
-	 */
-	private function should_remove_every_brace( $setting ) {
-		$frm_style = new FrmStyle();
-		return $this->run_private_method( array( $frm_style, 'should_remove_every_brace' ), array( $setting ) );
-	}
 }
