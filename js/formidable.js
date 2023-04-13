@@ -616,7 +616,12 @@ function frmFrontFormJS() {
 				}
 
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-				window.location = response.redirect;
+
+				if ( response.open_in_new_tab ) {
+					window.open( response.redirect, '_blank' );
+				} else {
+					window.location = response.redirect;
+				}
 			} else if ( response.content !== '' ) {
 				// the form or success message was returned
 
