@@ -1574,7 +1574,7 @@ class FrmXMLHelper {
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
 		} elseif ( seems_utf8( $str ) === false ) {
-			$str = utf8_encode( $str );
+			$str = FrmAppHelper::maybe_utf8_encode( $str );
 		}
 
 		if ( is_numeric( $str ) ) {
