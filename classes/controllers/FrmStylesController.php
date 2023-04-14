@@ -1035,7 +1035,7 @@ class FrmStylesController {
 	public static function maybe_hide_sample_form_error_message() {
 		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		if ( false !== strpos( $referer, 'admin.php?page=formidable-styles' ) ) {
-			echo '#frm_css_error { display: none; }';
+			echo '#frm_broken_styles_warning { display: none; }';
 		}
 	}
 
