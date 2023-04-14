@@ -44,9 +44,7 @@ class FrmFieldNumber extends FrmFieldType {
 	}
 
 	/**
-	 * @return (int|string)[]
-	 *
-	 * @psalm-return array{minnum: 0, maxnum: 9999999, step: 'any'}
+	 * @return array
 	 */
 	protected function extra_field_opts() {
 		return array(

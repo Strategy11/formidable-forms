@@ -255,6 +255,9 @@ class FrmHooksController {
 
 		// Templates API.
 		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
+
+		// Submit with AJAX.
+		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 ); // Trigger before process_entry.
 	}
 
 	/**

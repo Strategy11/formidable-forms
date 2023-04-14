@@ -1122,6 +1122,18 @@ class FrmForm {
 	}
 
 	/**
+	 * Check if the "Submit this form with AJAX" setting is toggled on.
+	 *
+	 * @since 6.2
+	 *
+	 * @param stdClass $form
+	 * @return bool
+	 */
+	public static function is_ajax_on( $form ) {
+		return ! empty( $form->options['ajax_submit'] );
+	}
+
+	/**
 	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
 	 * @codeCoverageIgnore
 	 *

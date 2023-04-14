@@ -6198,22 +6198,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	// Move the top banner above the screen options to prevent overlap.
-	function moveTopBanner() {
-		const $banner = document.querySelector( '.frm-banner-alert' ) || document.querySelector( '.frm-upgrade-bar' );
-		if ( ! $banner ) {
-			return;
-		}
-
-		const $screenMeta = document.getElementById( 'screen-meta' );
-		if ( ! $screenMeta ) {
-			return;
-		}
-
-		const $parentDiv = document.getElementById( 'wpbody-content' );
-		$parentDiv.insertBefore( $banner, $screenMeta );
-	}
-
 	function getRequiredLicenseFromTrigger( element ) {
 		if ( element.dataset.requires ) {
 			return element.dataset.requires;
@@ -9677,7 +9661,6 @@ function frmAdminBuildJS() {
 
 			loadTooltips();
 			initUpgradeModal();
-			moveTopBanner();
 
 			// used on build, form settings, and view settings
 			var $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
