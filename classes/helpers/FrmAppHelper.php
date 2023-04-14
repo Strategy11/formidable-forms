@@ -1114,7 +1114,9 @@ class FrmAppHelper {
 			ob_start();
 		}
 
-		$echo_function();
+		if ( is_callable( $echo_function ) ) {
+			$echo_function();
+		}
 
 		if ( ! $echo ) {
 			$return = ob_get_contents();
