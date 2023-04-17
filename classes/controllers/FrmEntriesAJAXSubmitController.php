@@ -120,6 +120,12 @@ class FrmEntriesAJAXSubmitController {
 		$registered_scripts = (array) $wp_scripts->registered;
 		$registered_scripts = array_diff( array_keys( $registered_scripts ), $keep_scripts );
 		$wp_scripts->done   = array_merge( $wp_scripts->done, $registered_scripts );
+
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			// Prevent WooCommerce 7.6.0 from triggering a fatal error when wp_print_footer_scripts is called.
+			require_once ABSPATH . 'wp-admin/includes/screen.php';
+		}
+
 		wp_print_footer_scripts();
 	}
 
