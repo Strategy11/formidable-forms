@@ -444,7 +444,7 @@ See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zap
 = 6.2.3 =
 * Fix: Forms submitted with AJAX would display an unexpected "We're sorry. It looks like you've already submitted that" message when WooCommerce v7.6.0 is active.
 * Fix: Added an extra check so invalid serialized data doesn't trigger any warning or errors when an unexpected array key type is found.
-* Fix: XML exports would fail to export because of an unexpected carriage return at the beginning of the file, or an unexpected meta tag added by the Equity WordPress theme. In these cases the XML string will now be corrected in order for the import to work.
+* Fix: XML exports would fail to import because of an unexpected carriage return at the beginning of the file, or an unexpected meta tag added by the Equity WordPress theme. In these cases the XML string will now be corrected in order for the import to work.
 * Fix: Added a callable check to avoid a "Call to undefined function FrmProAddonsController::print_grace" error when upgrading.
 * Fix: The license warning banner would overflow on top of other page elements.
 * Fix: Added additional validation for style settings. Unexpected invalid characters will now be cleaned up automatically when a style is saved. A new warning will now also be displayed in the styler when a broken stylesheet is detected.
