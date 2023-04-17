@@ -1028,7 +1028,7 @@ class FrmStylesController {
 	 * Add an extra style rule to hide a broken style warning.
 	 * To avoid cluttering the front end with any unecessary styles this is only added when the referer URL matches the styler.
 	 *
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @return void
 	 */
