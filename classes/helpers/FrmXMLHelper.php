@@ -64,7 +64,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $xml_string
 	 * @return void

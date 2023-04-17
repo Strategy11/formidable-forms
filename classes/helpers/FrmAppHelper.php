@@ -2814,7 +2814,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $value
 	 * @return string

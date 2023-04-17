@@ -252,7 +252,7 @@ class FrmStyle {
 	/**
 	 * Remove any characters that should not be used in CSS.
 	 *
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $setting
 	 * @return string
@@ -269,7 +269,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $setting
 	 * @param array  $characters_to_remove
@@ -293,7 +293,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $input
 	 * @return string
@@ -317,7 +317,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $setting
 	 * @return bool
