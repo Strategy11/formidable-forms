@@ -1891,6 +1891,43 @@ div.frm_updated_message {
 	margin-bottom:4px;
 }
 
+/* Warning message dismiss */
+.frm_warning_style:has(.frm-warning-dismiss) {
+    position: relative;
+    padding-right: calc(var(--gap-md) + 15px);
+}
+
+body.rtl .frm_warning_style:has(.frm-warning-dismiss) {
+    padding-right: var(--gap-md);
+    padding-left: calc(var(--gap-md) + 15px);
+}
+
+.frm_warning_style li:has(.frm-warning-dismiss) {
+    position: absolute;
+    top: var(--gap-sm);
+    right: var(--gap-md);
+    transform: translate(70%, -50%);
+	cursor: pointer;
+	transition: opacity 0.2s ease-out;
+}
+
+body.rtl .frm_warning_style li:has(.frm-warning-dismiss) {
+	left: var(--gap-md);
+	right: auto;
+	transform: translate(-70%, -50%);
+}
+
+.frm_warning_style li:has(.frm-warning-dismiss):hover {
+	opacity: 0.8;
+}
+
+.frm-warning-dismiss.frmsvg,
+.frm-warning-dismiss.frmsvg svg {
+	display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+
 .frm_note_style {
 	background: rgba(188, 224, 253, 0.23);
 	color: var(--grey-700);
