@@ -237,6 +237,7 @@ class FrmHooksController {
 
 		// Settings.
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );
+		add_action( 'wp_ajax_frm_dismiss_custom_header_ip_notice', 'FrmAppHelper::dismiss_warning_message' );
 
 		// Styles Controller.
 		add_action( 'wp_ajax_frm_settings_reset', 'FrmStylesController::reset_styling' );
