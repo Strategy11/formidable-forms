@@ -3842,4 +3842,40 @@ class FrmAppHelper {
 	public static function renewal_message() {
 		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
 	}
+
+	/**
+	 * Display a dismissable warning message and save its dismissal state.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message The warning message to display.
+	 * @param string $action The WP Ajax action.
+	 *                       The unique identifier for the dismissal state of the message.
+	 * @return void
+	 */
+	public static function print_dismissable_warning_message( $message, $action ) {
+		add_filter(
+			'frm_message_list',
+			function( $show_messages ) use ( $message, $action ) {
+				if ( get_option( $action, false ) ) {
+					return $show_messages;
+				}
+
+				add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_dismiss_icon_tags' );
+
+				$dismiss_icon = self::icon_by_class(
+					'frmfont frm_close_icon',
+					array(
+						'aria-label' => 'Dismiss',
+						'echo' => false,
+					)
+				);
+
+				$show_messages['warning_msg'] = $message;
+				$show_messages['dismiss_icon'] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $action ) . '">' . $dismiss_icon . '</span>';
+
+				return $show_messages;
+			}
+		);
+	}
 }
