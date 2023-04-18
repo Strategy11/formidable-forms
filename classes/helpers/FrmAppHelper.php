@@ -3897,4 +3897,25 @@ class FrmAppHelper {
 
 		wp_die();
 	}
+
+	/**
+	 * Add allowed HTML tags for the dismiss icon in a warning message.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $allowed_html The array of allowed HTML tags and attributes.
+	 * @return array The updated array of allowed HTML tags and attributes.
+	 */
+	public static function add_allowed_dismiss_icon_tags( $allowed_html ) {
+		$allowed_html['span']['data-action'] = true;
+		$allowed_html['svg'] = array(
+			'class'      => true,
+			'aria-label' => true,
+		);
+		$allowed_html['use'] = array(
+			'xlink:href' => true,
+		);
+
+		return $allowed_html;
+	}
 }
