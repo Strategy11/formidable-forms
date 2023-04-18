@@ -3456,6 +3456,28 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Dismiss a warning message and send an AJAX request to update the dismissal state.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event The event object associated with the click on the dismiss icon.
+	 */
+	function dismissWarningMessage( event ) {
+		event.preventDefault();
+
+		const $this = jQuery( this );
+		const $warning = $this.closest( '.frm_warning_style' );
+		const action = $this.data( 'action' );
+
+		$warning.remove();
+
+		jQuery.post( ajaxurl, {
+			action: action,
+			nonce: frmGlobal.nonce
+		});
+	}
+
+	/**
 	 * If a field is clicked in the builder, prevent inputs from changing.
 	 */
 	function stopFieldFocus( e ) {
@@ -9548,6 +9570,9 @@ function frmAdminBuildJS() {
 			if ( typeof thisFormId === 'undefined' ) {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
+
+			// Dismiss dissmissable warning message.
+			jQuery( '.frm-warning-dismiss' ).on( 'click', dismissWarningMessage );
 
 			frmAdminBuild.inboxBannerInit();
 
