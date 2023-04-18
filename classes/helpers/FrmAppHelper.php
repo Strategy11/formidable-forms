@@ -3878,4 +3878,23 @@ class FrmAppHelper {
 			}
 		);
 	}
+
+	/**
+	 * Dismiss a warning message and update the dismissal state.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function dismiss_warning_message() {
+		self::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( ! empty( $_POST['action'] ) ) {
+			$option = sanitize_text_field( wp_unslash( $_POST['action'] ) );
+			update_option( $option, true );
+		}
+
+		wp_die();
+	}
 }
