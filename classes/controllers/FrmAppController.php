@@ -586,8 +586,8 @@ class FrmAppController {
 			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
 			'<a href="' . esc_url( $global_settings_link ) . '">Global Settings</a>',
 		);
-		$wp_ajax_action = 'frm_dismiss_custom_header_ip_notice';
-		FrmAppHelper::print_dismissable_warning_message( $message, $wp_ajax_action );
+		$action = FrmHooksController::DISMISS_IP_NOTICE_ACTION;
+		FrmAppHelper::print_dismissable_warning_message( $message, $action );
 	}
 
 	/**
