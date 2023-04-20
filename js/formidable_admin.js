@@ -9568,7 +9568,9 @@ function frmAdminBuildJS() {
 			}
 
 			// Add event listener for dismissible warning messages.
-			document.querySelector( '.frm-warning-dismiss' ).addEventListener( 'click', dismissWarningMessage );
+			document.querySelectorAll( '.frm-warning-dismiss' )?.forEach( ( dismissIcon ) => {
+				dismissIcon.addEventListener( 'click', dismissWarningMessage );
+			});
 
 			frmAdminBuild.inboxBannerInit();
 
