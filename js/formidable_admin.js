@@ -3468,9 +3468,7 @@ function frmAdminBuildJS() {
 		const warningEl = this.closest( '.frm_warning_style' );
 		jQuery( warningEl ).fadeOut( 400, () => warningEl.remove() );
 
-		// `doJsonPost` adds 'frm_' to the beginning of the action. To prevent
-		// any issues, we remove 'frm_' from the beginning of action if it is present.
-		const action = this.dataset.action.replace( /^frm_/, '' );
+		const action = this.dataset.action;
 		const formData  = new FormData();
 		doJsonPost( action, formData );
 	}
