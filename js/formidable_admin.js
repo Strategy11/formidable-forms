@@ -318,7 +318,7 @@ function frmAdminBuildJS() {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
 	const { tag, div, span, a, svg, img } = frmDom;
-	const { doJsonFetch } = frmDom.ajax;
+	const { doJsonFetch, doJsonPost } = frmDom.ajax;
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -3465,16 +3465,14 @@ function frmAdminBuildJS() {
 	function dismissWarningMessage( event ) {
 		event.preventDefault();
 
-		const $this = jQuery( this );
-		const $warning = $this.closest( '.frm_warning_style' );
-		const action = $this.data( 'action' );
+		const warningEl = this.closest( '.frm_warning_style' );
+		jQuery( warningEl ).fadeOut( 400, () => warningEl.remove() );
 
-		$warning.remove();
-
-		jQuery.post( ajaxurl, {
-			action: action,
-			nonce: frmGlobal.nonce
-		});
+		// `doJsonPost` adds 'frm_' to the beginning of the action. To prevent
+		// any issues, we remove 'frm_' from the beginning of action if it is present.
+		const action = this.dataset.action.replace( /^frm_/, '' );
+		const formData  = new FormData();
+		doJsonPost( action, formData );
 	}
 
 	/**
@@ -9571,8 +9569,8 @@ function frmAdminBuildJS() {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
-			// Dismiss dissmissable warning message.
-			jQuery( '.frm-warning-dismiss' ).on( 'click', dismissWarningMessage );
+			// Add event listener for dismissible warning messages.
+			document.querySelector( '.frm-warning-dismiss' ).addEventListener( 'click', dismissWarningMessage );
 
 			frmAdminBuild.inboxBannerInit();
 
