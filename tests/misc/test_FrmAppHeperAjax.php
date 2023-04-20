@@ -25,19 +25,19 @@ class test_FrmAppHeperAjax extends FrmAjaxUnitTest {
 
 		$this->_handleAjax( $action );
 
-		try {
 			// Check if the warning message is not dismissed
-			$this->assertFalse( get_option( $option, false ) );
+		$this->assertFalse( get_option( $option, false ) );
 
+		try {
 			// Call dismiss_warning_message method
 			FrmAppHelper::dismiss_warning_message( $option );
-
-			// Check if the warning message is dismissed
-			$this->assertTrue( get_option( $option ) );
 		} catch ( WPAjaxDieContinueException $e ) {
 			// Ignore the die() statement in wp_send_json_success()
 			unset( $e );
 		} finally {
+			// Check if the warning message is dismissed
+			$this->assertTrue( get_option( $option ) );
+
 			// Clean up
 			delete_option( $option );
 			wp_set_current_user( 0 );
