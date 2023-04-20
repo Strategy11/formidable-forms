@@ -36,10 +36,14 @@ class FrmXMLHelper {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
 		}
 
+		$xml_string = file_get_contents( $file );
+		self::maybe_fix_xml( $xml_string );
+
 		$dom = new DOMDocument();
+
 		// LIBXML_COMPACT activates small nodes allocation optimization.
 		// Use LIBXML_PARSEHUGE to avoid "parser error : internal error: Huge input lookup" for large (300MB) files.
-		$success = $dom->loadXML( file_get_contents( $file ), LIBXML_COMPACT | LIBXML_PARSEHUGE );
+		$success = $dom->loadXML( $xml_string, LIBXML_COMPACT | LIBXML_PARSEHUGE );
 		if ( ! $success ) {
 			return new WP_Error( 'SimpleXML_parse_error', __( 'There was an error when reading this XML file', 'formidable' ), libxml_get_errors() );
 		}
@@ -57,6 +61,33 @@ class FrmXMLHelper {
 		}
 
 		return self::import_xml_now( $xml );
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $xml_string
+	 * @return void
+	 */
+	private static function maybe_fix_xml( &$xml_string ) {
+		if ( '<?xml' !== substr( $xml_string, 0, 5 ) ) {
+			// Some XML files have may have unexpected characters at the start.
+			$xml_string = substr( $xml_string, strpos( $xml_string, '<?xml' ) );
+		}
+
+		// The Equity theme adds a <meta name="generator" content="Equity 1.7.13" /> tag using the "the_generator" filter.
+		// Strip that out as it breaks the XML import.
+		$channel_start_position     = strpos( $xml_string, '<channel>' );
+		$content_before_channel_tag = substr( $xml_string, 0, $channel_start_position );
+		if ( 0 !== strpos( $content_before_channel_tag, '<meta name="generator" ' ) ) {
+			$content_before_channel_tag = preg_replace(
+				'/<meta\s+[^>]*name="generator"[^>]*\/>/i',
+				'',
+				$content_before_channel_tag,
+				1
+			);
+			$xml_string = $content_before_channel_tag . substr( $xml_string, $channel_start_position );
+		}
 	}
 
 	/**
@@ -1543,7 +1574,7 @@ class FrmXMLHelper {
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
 		} elseif ( seems_utf8( $str ) === false ) {
-			$str = utf8_encode( $str );
+			$str = FrmAppHelper::maybe_utf8_encode( $str );
 		}
 
 		if ( is_numeric( $str ) ) {

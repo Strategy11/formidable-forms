@@ -119,4 +119,56 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	private function populate_postmeta( &$post, $meta, $imported ) {
 		$this->run_private_method( array( 'FrmXMLHelper', 'populate_postmeta' ), array( &$post, $meta, $imported ) );
 	}
+
+	/**
+	 * @covers FrmXMLHelper::maybe_fix_xml
+	 */
+	public function test_maybe_fix_xml() {
+		$wp_comment        = '<!-- generator="WordPress/5.2.4" created="2019-10-23 19:33" -->';
+		$simple_xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . '<channel></channel>';
+
+		$xml_string = chr( 13 ) . $simple_xml_string;
+		$this->maybe_fix_xml( $xml_string );
+
+		$this->assertEquals( $simple_xml_string, $xml_string );
+
+		$conflicting_meta_tag = '<meta name="generator" content="Equity 1.7.13" />';
+		$xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . $conflicting_meta_tag . '<channel></channel>';
+		$this->maybe_fix_xml( $xml_string );
+
+		$this->assertEquals( $simple_xml_string, $xml_string );
+	}
+
+	private function maybe_fix_xml( &$xml_string ) {
+		$this->run_private_method( array( 'FrmXMLHelper', 'maybe_fix_xml' ), array( &$xml_string ) );
+	}
+
+	/**
+	 * @covers FrmXMLHelper::cdata
+	 * @covers FrmAppHelper::maybe_utf8_encode
+	 */
+	public function test_cdata() {
+		$this->assertEquals( '<![CDATA[Name]]>', FrmXMLHelper::cdata( 'Name' ) );
+		$this->assertEquals( '<![CDATA[29yf4d]]>', FrmXMLHelper::cdata( '29yf4d' ) );
+		$this->assertEquals( '<![CDATA[United States]]>', FrmXMLHelper::cdata( 'United States' ) );
+		$this->assertEquals( '<![CDATA[["Red","Blue"]]]>', FrmXMLHelper::cdata( serialize( array( 'Red', 'Blue' ) ) ) );
+		$this->assertEquals( '<![CDATA[[60418,60419,60420]]]>', FrmXMLHelper::cdata( serialize( array( 60418, 60419, 60420 ) ) ) );
+		$this->assertEquals(
+			'<![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]>',
+			FrmXMLHelper::cdata(
+				serialize(
+					array(
+						'browser' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko/20100101 Firefox/37.0',
+						'referrer' => 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd',
+					)
+				)
+			)
+		);
+		$this->assertEquals( '5', FrmXMLHelper::cdata( '5' ), 'Numbers do not need to be wrapped' );
+		$this->assertEquals( '<![CDATA[2023-05-21]]>', FrmXMLHelper::cdata( '2023-05-21' ) );
+
+		// Test that a ISO-8859-1 characters (\xC1 and \xE9) convert to UTF-8.
+		$this->assertEquals( '<![CDATA[HelloÁWorld]]>', FrmXMLHelper::cdata( "Hello\xC1World" ) ); // \xC1 is the Á character.
+		$this->assertEquals( '<![CDATA[é]]>', FrmXMLHelper::cdata( "\xE9" ) ); // \xE9 is the é character.
+	}
 }

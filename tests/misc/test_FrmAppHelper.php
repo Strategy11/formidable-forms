@@ -671,4 +671,35 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
 	}
 
+	/**
+	 * @covers FrmAppHelper::clip
+	 */
+	public function test_clip() {
+		// Test a function.
+		$echo_function = function() {
+			echo '<div>My html</div>';
+		};
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My html</div>', $html );
+
+		// Test a callable string.
+		$echo_function = __CLASS__ . '::echo_function';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My echo function content</div>', $html );
+
+		// Test something uncallable.
+		// Make sure it isn't fatal just in case.
+		$echo_function = __CLASS__ . '::something_uncallable';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '', $html );
+	}
+
+	/**
+	 * Echo HTML for the test_clip unit test.
+	 *
+	 * @return void
+	 */
+	public static function echo_function() {
+		echo '<div>My echo function content</div>';
+	}
 }
