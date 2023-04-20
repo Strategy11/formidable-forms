@@ -1279,7 +1279,7 @@ class FrmXMLHelper {
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
 			$errors[] = $result->get_error_message();
-			$errors[] = '<br />' . _x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . htmlentities( print_r( $result, 1 ) );
+			$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $result, 1 ) );
 
 			return;
 		} elseif ( ! $result ) {
