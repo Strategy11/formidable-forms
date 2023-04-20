@@ -2558,8 +2558,8 @@ class FrmFormsController {
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
 			echo json_encode(
 				array(
-					'redirect'        => $success_url,
-					'open_in_new_tab' => $open_in_new_tab,
+					'redirect'     => $success_url,
+					'openInNewTab' => $open_in_new_tab,
 				)
 			);
 			wp_die();

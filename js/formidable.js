@@ -617,7 +617,7 @@ function frmFrontFormJS() {
 
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
 
-				if ( response.open_in_new_tab ) {
+				if ( response.openInNewTab ) {
 					window.open( response.redirect, '_blank' );
 				} else {
 					window.location = response.redirect;
