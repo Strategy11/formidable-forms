@@ -704,28 +704,28 @@ class test_FrmAppHelper extends FrmUnitTest {
 	}
 
 	/**
-     * @covers FrmAppHelper::add_dismissable_warning_message
-     */
-    public function test_add_dismissable_warning_message() {
-        // Test with missing message and option parameters.
-        FrmAppHelper::add_dismissable_warning_message();
-        $messages = apply_filters( 'frm_message_list', array() );
-        $this->assertEmpty( $messages );
+	 * @covers FrmAppHelper::add_dismissable_warning_message
+	*/
+	public function test_add_dismissable_warning_message() {
+		// Test with missing message and option parameters.
+		FrmAppHelper::add_dismissable_warning_message();
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
 
-        // Test with valid message and option parameters.
-        $message = 'Test warning message';
-        $option = 'test_option';
-        FrmAppHelper::add_dismissable_warning_message( $message, $option );
-        $messages = apply_filters( 'frm_message_list', array() );
-        $this->assertNotEmpty( $messages );
-        $this->assertArrayHasKey( 'warning_msg', $messages );
-        $this->assertArrayHasKey( 'dismiss_icon', $messages );
-        $this->assertEquals( $message, $messages['warning_msg'] );
-
-        // Test with dismissed message.
-        update_option( $option, true );
+		// Test with valid message and option parameters.
+		$message = 'Test warning message';
+		$option = 'test_option';
 		FrmAppHelper::add_dismissable_warning_message( $message, $option );
-        $messages = apply_filters( 'frm_message_list', [] );
-        $this->assertEmpty( $messages );
-    }
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertNotEmpty( $messages );
+		$this->assertArrayHasKey( 'warning_msg', $messages );
+		$this->assertArrayHasKey( 'dismiss_icon', $messages );
+		$this->assertEquals( $message, $messages['warning_msg'] );
+
+		// Test with dismissed message.
+		update_option( $option, true );
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', [] );
+		$this->assertEmpty( $messages );
+	}
 }
