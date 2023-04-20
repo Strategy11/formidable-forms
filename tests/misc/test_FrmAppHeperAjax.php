@@ -25,7 +25,7 @@ class test_FrmAppHeperAjax extends FrmAjaxUnitTest {
 
 		$this->_handleAjax( $action );
 
-			// Check if the warning message is not dismissed
+		// Check if the warning message is not dismissed
 		$this->assertFalse( get_option( $option, false ) );
 
 		try {
