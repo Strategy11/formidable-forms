@@ -23,12 +23,7 @@ class test_FrmAppHeperAjax extends FrmAjaxUnitTest {
 			'nonce'  => wp_create_nonce( 'frm_ajax' ),
 		);
 
-		try {
-			$this->_handleAjax( $action );
-		} catch ( WPAjaxDieContinueException $e ) {
-			// Ignore the die() statement in wp_send_json_success()
-			unset( $e );
-		}
+		$this->_handleAjax( $action );
 
 		try {
 			// Check if the warning message is not dismissed
@@ -39,6 +34,9 @@ class test_FrmAppHeperAjax extends FrmAjaxUnitTest {
 
 			// Check if the warning message is dismissed
 			$this->assertTrue( get_option( $option ) );
+		} catch ( WPAjaxDieContinueException $e ) {
+			// Ignore the die() statement in wp_send_json_success()
+			unset( $e );
 		} finally {
 			// Clean up
 			delete_option( $option );
