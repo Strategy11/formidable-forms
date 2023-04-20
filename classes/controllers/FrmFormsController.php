@@ -20,7 +20,7 @@ class FrmFormsController {
 	 *
 	 * @since 6.2
 	 *
-	 * @var array Keys are form IDs and values are boolean.
+	 * @var array Keys are form IDs and values are 1.
 	 */
 	private static $redirected_in_new_tab = array();
 
