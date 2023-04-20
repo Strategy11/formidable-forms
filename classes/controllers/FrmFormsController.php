@@ -2553,20 +2553,13 @@ class FrmFormsController {
 
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
-		$open_in_new_tab = ! empty( $args['form']->options['open_in_new_tab'] );
-
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
-			echo json_encode(
-				array(
-					'redirect'     => $success_url,
-					'openInNewTab' => $open_in_new_tab,
-				)
-			);
+			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
 		}
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
-			if ( $open_in_new_tab ) {
+			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 				echo "<script>window.open('" . esc_url_raw( $success_url ) . "', '_blank');</script>";
 				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
 				return;
@@ -2578,6 +2571,31 @@ class FrmFormsController {
 
 		// Redirect with a delay.
 		self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
+	}
+
+	/**
+	 * Gets response data for redirect action when AJAX submitting.
+	 *
+	 * @since 6.x
+	 *
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 * @return array
+	 */
+	private static function get_ajax_redirect_response_data( $args ) {
+		$response_data = array( 'redirect' => $args['success_url'] );
+
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$response_data['openInNewTab'] = 1;
+
+			$args['message'] = FrmOnSubmitHelper::get_default_msg();
+			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
+
+			ob_start();
+			self::show_lone_success_messsage( $args );
+			$response_data['content'] = ob_get_clean();
+		}
+
+		return $response_data;
 	}
 
 	/**
