@@ -1279,7 +1279,23 @@ class FrmXMLHelper {
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
 			$errors[] = $result->get_error_message();
-			$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $result, 1 ) );
+
+			// Remove the SimpleXML_parse_error from a WP_Error object to avoid
+			// displaying duplicate error messages from $result->get_error_message()
+			$error_codes = $result->get_error_codes();
+			$error_details = array();
+			foreach ( $error_codes as $error_code ) {
+				// Clone WP_Error data because WP_Error removes all error messages and data
+				// associated with the specified error code when an item is removed.
+				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source
+				$error_details = $result->get_error_data( $error_code );
+				if ( $error_code === 'SimpleXML_parse_error' ) {
+					$result->remove( $error_code );
+					break;
+				}
+			}
+
+			$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
 
 			return;
 		} elseif ( ! $result ) {
