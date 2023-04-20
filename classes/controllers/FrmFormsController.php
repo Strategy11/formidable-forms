@@ -2602,7 +2602,7 @@ class FrmFormsController {
 		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
-		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');';
+		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( empty( $args['doing_ajax'] ) ) {
 			echo '};';
 		}
