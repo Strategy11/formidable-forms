@@ -318,6 +318,7 @@ function frmAdminBuildJS() {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
 	const { tag, div, span, a, svg, img } = frmDom;
+	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
@@ -3463,12 +3464,12 @@ function frmAdminBuildJS() {
 	 * @param {Event} event The event object associated with the click on the dismiss icon.
 	 */
 	function dismissWarningMessage( event ) {
-		event.preventDefault();
+		const target = event.target;
 
-		const warningEl = this.closest( '.frm_warning_style' );
+		const warningEl = target.closest( '.frm_warning_style' );
 		jQuery( warningEl ).fadeOut( 400, () => warningEl.remove() );
 
-		const action = this.dataset.action;
+		const action = target.dataset.action;
 		const formData  = new FormData();
 		doJsonPost( action, formData );
 	}
@@ -9568,8 +9569,8 @@ function frmAdminBuildJS() {
 			}
 
 			// Add event listener for dismissible warning messages.
-			document.querySelectorAll( '.frm-warning-dismiss' )?.forEach( ( dismissIcon ) => {
-				dismissIcon.addEventListener( 'click', dismissWarningMessage );
+			document.querySelectorAll( '.frm-warning-dismiss' ).forEach( ( dismissIcon ) => {
+				onClickPreventDefault( dismissIcon, dismissWarningMessage );
 			});
 
 			frmAdminBuild.inboxBannerInit();
