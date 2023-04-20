@@ -3849,30 +3849,43 @@ class FrmAppHelper {
 	 * @since x.x
 	 *
 	 * @param string $message The warning message to display.
-	 * @param string $action The WP Ajax action.
-	 *                       The unique identifier for the dismissal state of the message.
+	 * @param string $option  The unique identifier for the dismissal state of the message and the WP Ajax action.
 	 * @return void
 	 */
-	public static function print_dismissable_warning_message( $message, $action ) {
+	public static function add_dismissable_warning_message( $message = '', $option = '' ) {
+		if ( ! $message || ! $option ) {
+			return;
+		}
+
+		// Check if the option doesn't start with 'frm_'
+		if ( strpos( $option, 'frm_' ) !== 0 ) {
+			// Add the 'frm_' prefix to the option
+			$option = 'frm_' . $option;
+		}
+
+		$ajax_callback = function() use ( $option ) {
+			self::dismiss_warning_message( $option );
+		};
+
+		add_action( 'wp_ajax_' . $option, $ajax_callback );
+
 		add_filter(
 			'frm_message_list',
-			function( $show_messages ) use ( $message, $action ) {
-				if ( get_option( $action, false ) ) {
+			function( $show_messages ) use ( $message, $option ) {
+				if ( get_option( $option, false ) ) {
 					return $show_messages;
 				}
-
-				add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_dismiss_icon_tags' );
 
 				$dismiss_icon = self::icon_by_class(
 					'frmfont frm_close_icon',
 					array(
-						'aria-label' => 'Dismiss',
+						'aria-label' => _x( 'Dismiss', 'warning message: close icon label', 'formidable' ),
 						'echo' => false,
 					)
 				);
 
 				$show_messages['warning_msg'] = $message;
-				$show_messages['dismiss_icon'] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $action ) . '">' . $dismiss_icon . '</span>';
+				$show_messages['dismiss_icon'] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $option ) . '">' . $dismiss_icon . '</span>';
 
 				return $show_messages;
 			}
@@ -3884,38 +3897,17 @@ class FrmAppHelper {
 	 *
 	 * @since x.x
 	 *
+	 * @param string $option The unique identifier for the dismissal state of the message.
 	 * @return void
 	 */
-	public static function dismiss_warning_message() {
+	public static function dismiss_warning_message( $option = '' ) {
 		self::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		if ( ! empty( $_POST['action'] ) ) {
-			$option = sanitize_text_field( wp_unslash( $_POST['action'] ) );
+		if ( $option ) {
 			update_option( $option, true );
 		}
 
-		wp_die();
-	}
-
-	/**
-	 * Add allowed HTML tags for the dismiss icon in a warning message.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $allowed_html The array of allowed HTML tags and attributes.
-	 * @return array The updated array of allowed HTML tags and attributes.
-	 */
-	public static function add_allowed_dismiss_icon_tags( $allowed_html ) {
-		$allowed_html['span']['data-action'] = true;
-		$allowed_html['svg'] = array(
-			'class'      => true,
-			'aria-label' => true,
-		);
-		$allowed_html['use'] = array(
-			'xlink:href' => true,
-		);
-
-		return $allowed_html;
+		wp_send_json_success();
 	}
 }
