@@ -725,7 +725,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		// Test with dismissed message.
 		update_option( $option, true );
 		FrmAppHelper::add_dismissable_warning_message( $message, $option );
-		$messages = apply_filters( 'frm_message_list', [] );
+		$messages = apply_filters( 'frm_message_list', array() );
 		$this->assertEmpty( $messages );
 	}
 }

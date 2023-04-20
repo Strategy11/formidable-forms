@@ -3863,7 +3863,7 @@ class FrmAppHelper {
 
 		// We're handling JS codes with `doJsonPost` and it adds 'frm_' to the beginning of the action.
 		// To prevent any issues, we add 'frm_' from the beginning of the action.
-		add_action( 'wp_ajax_frm_' . $option, $ajax_callback);
+		add_action( 'wp_ajax_frm_' . $option, $ajax_callback );
 
 		add_filter(
 			'frm_message_list',
