@@ -3842,4 +3842,68 @@ class FrmAppHelper {
 	public static function renewal_message() {
 		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
 	}
+
+	/**
+	 * Display a dismissable warning message and save its dismissal state.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $message The warning message to display.
+	 * @param string $option  The unique identifier for the dismissal state of the message and the WP Ajax action.
+	 * @return void
+	 */
+	public static function add_dismissable_warning_message( $message = '', $option = '' ) {
+		if ( ! $message || ! $option ) {
+			return;
+		}
+
+		$ajax_callback = function() use ( $option ) {
+			self::dismiss_warning_message( $option );
+		};
+
+		// We're handling JS codes with `doJsonPost` and it adds 'frm_' to the beginning of the action.
+		// To prevent any issues, we add 'frm_' from the beginning of the action.
+		add_action( 'wp_ajax_frm_' . $option, $ajax_callback );
+
+		add_filter(
+			'frm_message_list',
+			function( $show_messages ) use ( $message, $option ) {
+				if ( get_option( $option, false ) ) {
+					return $show_messages;
+				}
+
+				$dismiss_icon = self::icon_by_class(
+					'frmfont frm_close_icon',
+					array(
+						'aria-label' => _x( 'Dismiss', 'warning message: close icon label', 'formidable' ),
+						'echo' => false,
+					)
+				);
+
+				$show_messages[] = $message;
+				$show_messages[] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $option ) . '">' . $dismiss_icon . '</span>';
+
+				return $show_messages;
+			}
+		);
+	}
+
+	/**
+	 * Dismiss a warning message and update the dismissal state.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $option The unique identifier for the dismissal state of the message.
+	 * @return void
+	 */
+	public static function dismiss_warning_message( $option = '' ) {
+		self::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( $option ) {
+			update_option( $option, true, 'no' );
+		}
+
+		wp_send_json_success();
+	}
 }

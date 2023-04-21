@@ -1891,6 +1891,41 @@ div.frm_updated_message {
 	margin-bottom:4px;
 }
 
+/* Warning message dismiss */
+.frm_warning_style {
+	position: relative;
+	padding-right: calc(var(--gap-md) + 15px);
+}
+
+body.rtl .frm_warning_style {
+	padding-right: var(--gap-md);
+	padding-left: calc(var(--gap-md) + 15px);
+}
+
+.frm-warning-dismiss {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	cursor: pointer;
+	transition: opacity 0.2s ease-out;
+}
+
+body.rtl .frm-warning-dismiss {
+	left: 10px;
+	right: auto;
+}
+
+.frm-warning-dismiss:hover {
+	opacity: 0.8;
+}
+
+.frm-warning-dismiss.frmsvg,
+.frm-warning-dismiss.frmsvg svg {
+	width: 15px;
+	height: 15px;
+}
+
 .frm_note_style {
 	background: rgba(188, 224, 253, 0.23);
 	color: var(--grey-700);

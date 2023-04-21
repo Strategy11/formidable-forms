@@ -702,4 +702,30 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public static function echo_function() {
 		echo '<div>My echo function content</div>';
 	}
+
+	/**
+	 * @covers FrmAppHelper::add_dismissable_warning_message
+	*/
+	public function test_add_dismissable_warning_message() {
+		// Test with missing message and option parameters.
+		FrmAppHelper::add_dismissable_warning_message();
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+
+		// Test with valid message and option parameters.
+		$message = 'Test warning message';
+		$option = 'test_option';
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertNotEmpty( $messages );
+		$this->assertArrayHasKey( 0, $messages );
+		$this->assertArrayHasKey( 1, $messages );
+		$this->assertEquals( $message, $messages[0] );
+
+		// Test with dismissed message.
+		update_option( $option, true );
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+	}
 }
