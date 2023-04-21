@@ -72,6 +72,6 @@
 }
 
 .editor-styles-wrapper .wp-block-post-content .with_frm_style .frm_repeat_buttons .frm_button {
-	/* Prevent blue anrchor text in Add/Remove buttons */
+	/* Prevent blue anchor text in Add/Remove buttons */
 	color:var(--submit-text-color) !important;
 }
