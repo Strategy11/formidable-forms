@@ -3880,8 +3880,8 @@ class FrmAppHelper {
 					)
 				);
 
-				$show_messages['warning_msg'] = $message;
-				$show_messages['dismiss_icon'] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $option ) . '">' . $dismiss_icon . '</span>';
+				$show_messages[] = $message;
+				$show_messages[] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $option ) . '">' . $dismiss_icon . '</span>';
 
 				return $show_messages;
 			}
