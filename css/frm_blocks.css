@@ -73,5 +73,6 @@
 
 .editor-styles-wrapper .wp-block-post-content .with_frm_style .frm_repeat_buttons .frm_button {
 	/* Prevent blue anchor text in Add/Remove buttons */
-	color:var(--submit-text-color) !important;
+	color: var(--submit-text-color) !important;
+	background: var(--submit-bg-color) !important;
 }
