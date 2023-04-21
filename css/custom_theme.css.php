@@ -632,10 +632,6 @@ legend.frm_hidden{
 	color:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
 	background:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
 }
-
-.editor-styles-wrapper .wp-block-post-content .with_frm_style .frm_button{
-	color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
-}
 <?php } ?>
 
 .with_frm_style .frm_submit{
