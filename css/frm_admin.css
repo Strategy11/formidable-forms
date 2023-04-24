@@ -2790,12 +2790,12 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	transform: rotate(-90deg);
 }
 
-#frm_embed_modal .frm-modal-cancel {
+#frm_embed_modal .frm_modal_footer {
 	display: none;
 }
 
-#frm_embed_modal.frm-on-page-2 .frm-modal-cancel {
-	display: inline;
+#frm_embed_modal.frm-on-page-2 .frm_modal_footer {
+	display: block;
 }
 
 .frm-embed-modal-content ul {
