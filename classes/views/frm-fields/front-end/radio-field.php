@@ -38,7 +38,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] == 'post_category' ) 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
 			?><label for="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>"><?php
 		}
-		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
+		$checked = empty( $field['default_null'] ) && FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 
 		$other_opt = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field_name', 'opt_key', 'field' ), $other_opt, $checked );

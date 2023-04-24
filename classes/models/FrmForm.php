@@ -373,6 +373,11 @@ class FrmForm {
 
 			self::prepare_field_update_values( $field, $values, $new_field );
 
+			// Add flag for the null default value for the radio field.
+			if ( in_array( $new_field['type'], array( 'checkbox', 'radio' ), true ) ) {
+				$new_field['field_options']['default_null'] = ! isset( $values[ 'default_value_' . $field_id ] );
+			}
+
 			FrmField::update( $field_id, $new_field );
 
 			FrmField::delete_form_transient( $field->form_id );
