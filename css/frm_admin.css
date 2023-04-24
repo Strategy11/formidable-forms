@@ -1635,6 +1635,12 @@ a.frm_hidden,
 	padding: 0;
 }
 
+.frm-entry-container .frm_start_over {
+	padding: 10px 20px;
+	line-height: normal;
+	vertical-align: middle;
+}
+
 #form_reports_page .frm-inner-content {
 	width: calc(100% - 40px);
 	max-width: 900px;
