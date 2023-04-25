@@ -34,9 +34,10 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 		$action->update_callback( $form_id );
 
 		$updated_action = get_post( $action_id );
+		print_r( $updated_action );
 		$post_content = (array) FrmAppHelper::maybe_json_decode( $updated_action->post_content );
 
 		$this->assertFalse( empty( $post_content['success_url'] ) );
-		$this->assertEquals( 'https://example.com/?param[1 sanitize_url=1]', $post_content['success_url'] );
+		$this->assertEquals( 'https://example.com/?param=[1 sanitize_url=1]', $post_content['success_url'] );
 	}
 }
