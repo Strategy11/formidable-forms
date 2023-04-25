@@ -26,7 +26,7 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 				'post_title'  => 'Confirmation',
 				'post_content' => array(
 					'success_action' => 'redirect',
-					'success_url'    => 'https://example.com/?param=[1]',
+					'success_url'    => 'https://example.com/?param=[event_date]',
 				),
 			),
 		);
@@ -39,6 +39,6 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 		$post_content = (array) FrmAppHelper::maybe_json_decode( $updated_action->post_content );
 
 		$this->assertFalse( empty( $post_content['success_url'] ) );
-		$this->assertEquals( 'https://example.com/?param=[1 sanitize_url=1]', $post_content['success_url'] );
+		$this->assertEquals( 'https://example.com/?param=[event_date sanitize_url=1]', $post_content['success_url'] );
 	}
 }
