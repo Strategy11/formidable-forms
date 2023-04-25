@@ -342,6 +342,7 @@ The label in the preview should use the label color setting.
 	border-width: var(--field-border-width);
 	border-style: var(--field-border-style);
 	border-color: var(--border-color);
+	border-radius: var(--border-radius);
 	background-color: var(--bg-color);
 	max-width: 138px;
 	width: 100%;

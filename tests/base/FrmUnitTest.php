@@ -625,7 +625,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	protected function run_private_method( $method, $args = array() ) {
-		$this->check_php_version( '5.3' );
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );
 		return $m->invokeArgs( is_string( $method[0] ) ? null : $method[0], $args );
@@ -639,7 +638,6 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return ReflectionProperty
 	 */
 	protected function get_accessible_property( $object, $property ) {
-		$this->check_php_version( '5.3' );
 		$rc = new ReflectionClass( $object );
 		$p = $rc->getProperty( $property );
 		$p->setAccessible( true );

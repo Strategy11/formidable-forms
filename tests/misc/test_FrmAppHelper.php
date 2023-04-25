@@ -671,4 +671,61 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
 	}
 
+	/**
+	 * @covers FrmAppHelper::clip
+	 */
+	public function test_clip() {
+		// Test a function.
+		$echo_function = function() {
+			echo '<div>My html</div>';
+		};
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My html</div>', $html );
+
+		// Test a callable string.
+		$echo_function = __CLASS__ . '::echo_function';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My echo function content</div>', $html );
+
+		// Test something uncallable.
+		// Make sure it isn't fatal just in case.
+		$echo_function = __CLASS__ . '::something_uncallable';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '', $html );
+	}
+
+	/**
+	 * Echo HTML for the test_clip unit test.
+	 *
+	 * @return void
+	 */
+	public static function echo_function() {
+		echo '<div>My echo function content</div>';
+	}
+
+	/**
+	 * @covers FrmAppHelper::add_dismissable_warning_message
+	*/
+	public function test_add_dismissable_warning_message() {
+		// Test with missing message and option parameters.
+		FrmAppHelper::add_dismissable_warning_message();
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+
+		// Test with valid message and option parameters.
+		$message = 'Test warning message';
+		$option = 'test_option';
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertNotEmpty( $messages );
+		$this->assertArrayHasKey( 0, $messages );
+		$this->assertArrayHasKey( 1, $messages );
+		$this->assertEquals( $message, $messages[0] );
+
+		// Test with dismissed message.
+		update_option( $option, true );
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+	}
 }

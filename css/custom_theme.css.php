@@ -8,6 +8,7 @@ if ( ! isset( $saving ) ) {
 
 	if ( ! empty( $css ) ) {
 		echo strip_tags( $css, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmStylesController::maybe_hide_sample_form_error_message();
 		die();
 	}
 }
@@ -86,7 +87,7 @@ form input.frm_verify{
 }
 
 .with_frm_style .frm_form_fields > fieldset{
-<?php if ( ! empty( $defaults['fieldset'] ) ) { ?>
+<?php if ( isset( $defaults['fieldset'] ) && ( $defaults['fieldset'] || '0' === $defaults['fieldset'] ) ) { ?>
 	border-width:<?php echo esc_html( $defaults['fieldset'] . $important ); ?>;
 	border-width:var(--fieldset)<?php echo esc_html( $important ); ?>;
 <?php } ?>

@@ -11,7 +11,7 @@
 		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE",
 		"zip": "./bin/zip-plugin.sh formidable",
 		"git-release": "./bin/git-release.sh formidable formidable-forms",
-		"makepot": "npx pot-to-php languages/formidable-js.pot languages/formidable-js-strings.php formidable && wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot"
+		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot"
 	},
 	"engines": {
 		"node": ">=8.0.0",

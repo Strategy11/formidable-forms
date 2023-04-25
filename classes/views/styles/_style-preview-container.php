@@ -22,6 +22,9 @@ if ( $sample_form_is_on ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';
 		?>
 		<?php FrmTipsHelper::pro_tip( 'get_styling_tip', 'p' ); // If Pro is not active, this will show an upsell. ?>
+		<div id="frm_broken_styles_warning" class="frm_warning_style">
+			<?php esc_html_e( 'One or more of your style settings may contain invalid characters that break form styling.', 'formidable' ); ?>
+		</div>
 		<div <?php FrmAppHelper::array_to_html_params( $active_form_wrapper_params, true ); ?>>
 			<?php
 			// The right side body shows a preview (of the target form) so you can see the form you're actually styling.

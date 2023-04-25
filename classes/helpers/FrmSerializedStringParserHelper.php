@@ -66,9 +66,12 @@ class FrmSerializedStringParserHelper {
 
 				$val = array();
 				for ( $i = 0; $i < $count; $i++ ) {
-					$array_key         = $this->do_parse( $string );
-					$array_value       = $this->do_parse( $string );
-					$val[ $array_key ] = $array_value;
+					$array_key   = $this->do_parse( $string );
+					$array_value = $this->do_parse( $string );
+
+					if ( ! is_array( $array_key ) ) {
+						$val[ $array_key ] = $array_value;
+					}
 				}
 
 				// Eat "}" terminating the array.

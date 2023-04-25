@@ -318,7 +318,8 @@ function frmAdminBuildJS() {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
 	const { tag, div, span, a, svg, img } = frmDom;
-	const { doJsonFetch } = frmDom.ajax;
+	const { onClickPreventDefault } = frmDom.util;
+	const { doJsonFetch, doJsonPost } = frmDom.ajax;
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -3456,6 +3457,24 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Dismiss a warning message and send an AJAX request to update the dismissal state.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event} event The event object associated with the click on the dismiss icon.
+	 */
+	function dismissWarningMessage( event ) {
+		const target = event.target;
+
+		const warningEl = target.closest( '.frm_warning_style' );
+		jQuery( warningEl ).fadeOut( 400, () => warningEl.remove() );
+
+		const action = target.dataset.action;
+		const formData  = new FormData();
+		doJsonPost( action, formData );
+	}
+
+	/**
 	 * If a field is clicked in the builder, prevent inputs from changing.
 	 */
 	function stopFieldFocus( e ) {
@@ -6129,22 +6148,6 @@ function frmAdminBuildJS() {
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.setAttribute( 'href', link );
 		}
-	}
-
-	// Move the top banner above the screen options to prevent overlap.
-	function moveTopBanner() {
-		const $banner = document.querySelector( '.frm-banner-alert' ) || document.querySelector( '.frm-upgrade-bar' );
-		if ( ! $banner ) {
-			return;
-		}
-
-		const $screenMeta = document.getElementById( 'screen-meta' );
-		if ( ! $screenMeta ) {
-			return;
-		}
-
-		const $parentDiv = document.getElementById( 'wpbody-content' );
-		$parentDiv.insertBefore( $banner, $screenMeta );
 	}
 
 	function getRequiredLicenseFromTrigger( element ) {
@@ -9565,6 +9568,11 @@ function frmAdminBuildJS() {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
+			// Add event listener for dismissible warning messages.
+			document.querySelectorAll( '.frm-warning-dismiss' ).forEach( ( dismissIcon ) => {
+				onClickPreventDefault( dismissIcon, dismissWarningMessage );
+			});
+
 			frmAdminBuild.inboxBannerInit();
 
 			if ( $newFields.length > 0 ) {
@@ -9610,7 +9618,6 @@ function frmAdminBuildJS() {
 
 			loadTooltips();
 			initUpgradeModal();
-			moveTopBanner();
 
 			// used on build, form settings, and view settings
 			var $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
