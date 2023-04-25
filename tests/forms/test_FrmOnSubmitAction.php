@@ -22,8 +22,12 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 		$_POST[ $option_name ] = array(
 			$number => array(
 				'ID'          => $action_id,
-				'success_action' => 'redirect',
-				'success_url'    => 'https://example.com/?param=[1]',
+				'post_status' => 'publish',
+				'post_title'  => 'Confirmation',
+				'post_content' => array(
+					'success_action' => 'redirect',
+					'success_url'    => 'https://example.com/?param=[1]',
+				),
 			),
 		);
 
