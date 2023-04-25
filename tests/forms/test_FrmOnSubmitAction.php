@@ -37,7 +37,7 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 			),
 		);
 
-		$action = new FrmFormAction( $id_base, 'Confirmation' );
+		$action = new FrmOnSubmitAction();
 		$action->update_callback( $form_id );
 
 		$updated_action = get_post( $action_id );
