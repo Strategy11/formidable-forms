@@ -1301,7 +1301,9 @@ class FrmXMLHelper {
 				}
 			}
 
-			$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
+			if ( ! empty( $error_details ) ) {
+				$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
+			}
 
 			return;
 		} elseif ( ! $result ) {
