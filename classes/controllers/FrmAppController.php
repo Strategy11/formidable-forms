@@ -571,7 +571,7 @@ class FrmAppController {
 		}
 
 		if ( ! self::is_behind_proxy() ) {
-			// This message is only applicable when where is a reverse proxy.
+			// This message is only applicable when using a reverse proxy.
 			return;
 		}
 
