@@ -1723,6 +1723,7 @@ BEFORE_HTML;
 		$query          = $parsed['query'];
 
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
+		print_r( $shortcodes );
 		if ( empty( $shortcodes[0] ) ) {
 			// No shortcodes found, do nothing.
 			return $url;

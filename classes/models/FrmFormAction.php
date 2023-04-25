@@ -402,7 +402,6 @@ class FrmFormAction {
 			$new_instance['menu_order'] = $this->form_id;
 			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
 			$instance = $this->update( $new_instance, $old_instance );
-			print_r( $instance['post_content'] );
 
 			/**
 			 * Filter an action's settings before saving.

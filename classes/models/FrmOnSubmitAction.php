@@ -72,6 +72,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 				(int) $new_instance['menu_order']
 			);
 		}
+		print_r( $new_instance );
 		return $new_instance;
 	}
 

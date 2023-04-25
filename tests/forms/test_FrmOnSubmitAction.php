@@ -22,9 +22,6 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 				'post_type'    => FrmFormActionsController::$action_post_type,
 				'menu_order'   => $form_id,
 				'post_excerpt' => $id_base,
-				'post_content' => array(
-					'success_action' => 'redirect',
-				),
 			)
 		);
 
