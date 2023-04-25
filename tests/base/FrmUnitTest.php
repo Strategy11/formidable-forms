@@ -315,14 +315,24 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$users = get_users(
 			array(
 				'role' => $role,
-				'number' => 1,
 			)
 		);
 		if ( empty( $users ) ) {
 			$this->fail( 'No users with this role currently exist.' );
 			$user = null;
 		} else {
-			$user = reset( $users );
+			$users_with_exact_role = array_filter(
+				$users,
+				function ( $user ) use ( $role ) {
+					return $user->roles === array( $role );
+				}
+			);
+
+			if ( $users_with_exact_role ) {
+				$user = reset( $users_with_exact_role );
+			} else {
+				$user = reset( $users );
+			}
 		}
 
 		return $user;
