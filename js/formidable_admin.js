@@ -9740,7 +9740,7 @@ function frmAdminBuildJS() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			document.querySelectorAll( '.field_type_list > li' ).forEach( makeDraggable );
+			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade)' ).forEach( makeDraggable );
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
