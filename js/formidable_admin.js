@@ -913,8 +913,7 @@ function frmAdminBuildJS() {
 			cursorAt: {
 				top: 0,
 				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
-			},
-			cancel: '.frm_show_upgrade' // Prevent .frm_show_upgrade elements from being draggable.
+			}
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;
