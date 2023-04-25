@@ -33,7 +33,13 @@ class FrmXMLHelper {
 		}
 
 		if ( ! class_exists( 'DOMDocument' ) ) {
-			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
+			$error_message = sprintf(
+				/* translators: 1: Documentation link */
+				__( 'In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled.', 'formidable' ),
+				'<a href="https://formidableforms.com/knowledgebase/import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled" target="_blank">Importing Forms, Entries, and Views</a>'
+			);
+
+			return new WP_Error( 'SimpleXML_parse_error', $error_message, libxml_get_errors() );
 		}
 
 		$xml_string = file_get_contents( $file );
