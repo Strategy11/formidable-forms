@@ -23,6 +23,7 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 			$number => array(
 				'ID'          => $action_id,
 				'post_status' => 'publish',
+				'post_title'  => 'Confirmation',
 				'post_content' => array(
 					'success_action' => 'redirect',
 					'success_url'    => 'https://example.com/?param=[1]',
@@ -30,13 +31,13 @@ class test_FrmOnSubmitAction extends FrmUnitTest {
 			),
 		);
 
-		$action = new FrmFormAction( $id_base, 'Confirmation' );
+		$action = new FrmOnSubmitAction();
 		$action->update_callback( $form_id );
 
 		$updated_action = get_post( $action_id );
 		$post_content = (array) FrmAppHelper::maybe_json_decode( $updated_action->post_content );
 
 		$this->assertFalse( empty( $post_content['success_url'] ) );
-		$this->assertEquals( 'https://example.com/?param[1 sanitize_url=1]', $post_content['success_url'] );
+		$this->assertEquals( 'https://example.com/?param=[1 sanitize_url=1]', $post_content['success_url'] );
 	}
 }
