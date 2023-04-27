@@ -1348,23 +1348,39 @@ function frmFrontFormJS() {
 		});
 	}
 
-	function setCustomValidityMessage( e ) {
-		var selector,
-			textInputSelector = 'input[type=text]:not(.frm_verify)';
+	function setCustomValidityMessage() {
+		var forms, length, index;
 
-		if ( typeof e !== 'undefined' && e.type === 'frmAfterAddRow' ) {
-			selector = '.frm_repeat_sec:last-of-type ' + textInputSelector;
-		} else {
-			selector = '.frm_fields_container ' + textInputSelector;
+		forms  = document.getElementsByClassName( 'frm-show-form' );
+		length = forms.length;
+
+		for ( index = 0; index < length; ++index ) {
+			forms[ index ].addEventListener(
+				'invalid',
+				function( event ) {
+					var target = event.target;
+
+					if ( 'INPUT' !== target.nodeName ) {
+						return;
+					}
+
+					if ( ! target.dataset.invmsg ) {
+						return;
+					}
+
+					if ( 'text' !== target.getAttribute( 'type' ) ) {
+						return;
+					}
+
+					if ( target.classList.contains( 'frm_verify' ) ) {
+						return;
+					}
+
+					target.setCustomValidity( target.dataset.invmsg );
+				},
+				true
+			);
 		}
-
-		document.querySelectorAll( selector ).forEach( function( el ) {
-			el.oninvalid = function() {
-				if ( this.dataset.invmsg ) {
-					this.setCustomValidity( this.dataset.invmsg );
-				}
-			};
-		});
 	}
 
 	return {
