@@ -199,6 +199,17 @@ class FrmOnSubmitHelper {
 	}
 
 	/**
+	 * Gets the default open in new tab message.
+	 *
+	 * @since 6.x.x
+	 *
+	 * @return string
+	 */
+	public static function get_default_open_in_new_tab_msg() {
+		return FrmAppHelper::get_settings()->open_in_new_tab_msg;
+	}
+
+	/**
 	 * Adds the first On Submit action data to the form options to be saved.
 	 *
 	 * @param int $form_id Form ID.
@@ -407,6 +418,22 @@ class FrmOnSubmitHelper {
 			'success_action' => 'message',
 			'success_msg'    => self::get_default_msg(),
 		);
+
+		return $action;
+	}
+
+	/**
+	 * Gets fallback action after opening the redirect URL in a new tab.
+	 *
+	 * @since 6.x.x
+	 *
+	 * @param string|array $event Uses 'create' or 'update'.
+	 * @return object
+	 */
+	public static function get_fallback_action_after_open_in_new_tab( $event ) {
+		$action = self::get_fallback_action( $event );
+
+		$action->post_content['success_msg'] = self::get_default_open_in_new_tab_msg();
 
 		return $action;
 	}

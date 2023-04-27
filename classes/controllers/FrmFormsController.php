@@ -2274,7 +2274,7 @@ class FrmFormsController {
 
 		// If a redirect action has already opened the URL in a new tab, we show the default message in the currect tab.
 		if ( ! empty( self::$redirected_in_new_tab[ $args['form']->id ] ) ) {
-			return array( FrmOnSubmitHelper::get_fallback_action( $event ) );
+			return array( FrmOnSubmitHelper::get_fallback_action_after_open_in_new_tab( $event ) );
 		}
 
 		$entry       = FrmEntry::getOne( $args['entry_id'], true );
@@ -2557,7 +2557,7 @@ class FrmFormsController {
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$response_data['openInNewTab'] = 1;
 
-			$args['message'] = FrmOnSubmitHelper::get_default_msg();
+			$args['message'] = FrmOnSubmitHelper::get_default_open_in_new_tab_msg();
 			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
 
 			ob_start();
