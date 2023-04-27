@@ -676,7 +676,10 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp = wp_remote_post( $this->store_url, $arg_array );
+		$resp = wp_remote_post(
+			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
+			$arg_array
+		);
 		$body = wp_remote_retrieve_body( $resp );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
