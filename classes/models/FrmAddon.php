@@ -528,12 +528,10 @@ class FrmAddon {
 
 		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
 		if ( empty( $license ) ) {
-			wp_die(
-				json_encode(
-					array(
-						'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
-						'success' => false,
-					)
+			wp_send_json(
+				array(
+					'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
+					'success' => false,
 				)
 			);
 		}
@@ -541,8 +539,7 @@ class FrmAddon {
 		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$response    = self::activate_license_for_plugin( $license, $plugin_slug );
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
@@ -662,8 +659,7 @@ class FrmAddon {
 			'message' => __( 'Cache cleared', 'formidable' ),
 		);
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	public static function deactivate() {
@@ -691,8 +687,7 @@ class FrmAddon {
 
 		$this_plugin->clear_license();
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
