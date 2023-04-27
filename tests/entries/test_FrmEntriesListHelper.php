@@ -9,6 +9,8 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 	 * @covers FrmEntriesListHelper::column_value
 	 */
 	public function test_column_value() {
+		FrmAppHelper::set_current_screen_and_hook_suffix();
+
 		$item = new stdClass();
 
 		// This doesn't need to be accurate for this test. This ID doesn't match the database.
