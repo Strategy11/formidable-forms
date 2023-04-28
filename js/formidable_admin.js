@@ -2532,11 +2532,11 @@ function frmAdminBuildJS() {
 		var slug = jQuery( '#param' ).val(),
 			msg;
 		slug = slug.trim().toLowerCase();
-		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) {
-			msg = frm_admin_js.slug_is_reserved;
+		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) { // eslint-disable-line camelcase
+			msg = frm_admin_js.slug_is_reserved; // eslint-disable-line camelcase
 			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' );
+			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' ); // eslint-disable-line camelcase
 			infoModal( msg );
 		}
 	}
@@ -2551,7 +2551,7 @@ function frmAdminBuildJS() {
 			unsafeParams = '';
 
 		while ( match !== null ) {
-			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) {
+			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) { // eslint-disable-line camelcase
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -2562,10 +2562,10 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			msg =  frm_admin_js.param_is_reserved;
+			msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
 			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
-			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>';
+			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>'; // eslint-disable-line camelcase
 
 			infoModal( msg );
 		}
@@ -2610,7 +2610,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + '\n\n';
+			msg = frm_admin_js.unmatched_parens + '\n\n'; // eslint-disable-line camelcase
 			return msg;
 		}
 
@@ -2648,7 +2648,7 @@ function frmAdminBuildJS() {
 		var nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = frm_admin_js.text_shortcodes + '\n\n';
+			msg = frm_admin_js.text_shortcodes + '\n\n'; // eslint-disable-line camelcase
 		}
 
 		return msg;
@@ -2681,7 +2681,7 @@ function frmAdminBuildJS() {
 			msg = '';
 
 		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + '\n\n';
+			msg += frm_admin_js.view_shortcodes + '\n\n'; // eslint-disable-line camelcase
 		}
 
 		return msg;
@@ -3085,7 +3085,7 @@ function frmAdminBuildJS() {
 			$thisField.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 			$unqDetail = jQuery( '.frm_unique_details' + fieldId + ' input' );
 			if ( $unqDetail.val() === '' ) {
-				$unqDetail.val( frm_admin_js.default_unique );
+				$unqDetail.val( frm_admin_js.default_unique ); // eslint-disable-line camelcase
 			}
 		} else {
 			var v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
@@ -3108,7 +3108,7 @@ function frmAdminBuildJS() {
 			//Add default validation message if empty
 			var valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
 			if ( valMsg.val() === '' ) {
-				valMsg.val( frm_admin_js.default_conf );
+				valMsg.val( frm_admin_js.default_conf ); // eslint-disable-line camelcase
 			}
 
 			setConfirmationFieldDescriptions( fieldId );
@@ -3133,17 +3133,17 @@ function frmAdminBuildJS() {
 
 		var fieldDescription = document.getElementById( 'field_description_' + fieldId );
 		var hiddenDescName = 'field_options[description_' + fieldId + ']';
-		var newValue = frm_admin_js['enter_' + fieldType];
+		var newValue = frm_admin_js['enter_' + fieldType]; // eslint-disable-line camelcase
 		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
 		var confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
 		var hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
-		var newConfValue = frm_admin_js['confirm_' + fieldType];
+		var newConfValue = frm_admin_js['confirm_' + fieldType]; // eslint-disable-line camelcase
 		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
 
 	function maybeSetNewDescription( descriptionDiv, hiddenName, newValue ) {
-		if ( descriptionDiv.innerHTML === frm_admin_js.desc ) {
+		if ( descriptionDiv.innerHTML === frm_admin_js.desc ) { // eslint-disable-line camelcase
 
 			// Set the visible description value and the hidden description value
 			descriptionDiv.innerHTML = newValue;
@@ -3534,7 +3534,7 @@ function frmAdminBuildJS() {
 	 */
 	function maybeClearOptText() {
 		/*jshint validthis:true */
-		if ( this.value === frm_admin_js.new_option ) {
+		if ( this.value === frm_admin_js.new_option ) { // eslint-disable-line camelcase
 			this.setAttribute( 'data-value-on-focus', this.value );
 			this.value = '';
 		}
@@ -3547,7 +3547,7 @@ function frmAdminBuildJS() {
 
 	function clickDeleteField() {
 		/*jshint validthis:true */
-		var confirmMsg = frm_admin_js.conf_delete,
+		var confirmMsg = frm_admin_js.conf_delete, // eslint-disable-line camelcase
 			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
@@ -3573,7 +3573,7 @@ function frmAdminBuildJS() {
 
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirmMsg = frm_admin_js.conf_delete_sec;
+			confirmMsg = frm_admin_js.conf_delete_sec; // eslint-disable-line camelcase
 		}
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
@@ -4726,7 +4726,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) {
+		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) { // eslint-disable-line camelcase
 			this.setAttribute( 'data-value-on-focus', this.value );
 		}
 	}
@@ -5105,7 +5105,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			infoModal( frm_admin_js.repeat_limit_min );
+			infoModal( frm_admin_js.repeat_limit_min ); // eslint-disable-line camelcase
 			this.value = '';
 		}
 	}
@@ -5114,7 +5114,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			infoModal( frm_admin_js.checkbox_limit );
+			infoModal( frm_admin_js.checkbox_limit ); // eslint-disable-line camelcase
 			this.value = '';
 		}
 	}
@@ -5528,7 +5528,7 @@ function frmAdminBuildJS() {
 		if ( imageUrl ) {
 			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
 		} else {
-			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
+			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>'; // eslint-disable-line camelcase
 		}
 		if ( showLabelWithImage ) {
 			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
@@ -6759,7 +6759,7 @@ function frmAdminBuildJS() {
 	}
 
 	function onlyOneActionMessage() {
-		infoModal( frm_admin_js.only_one_action );
+		infoModal( frm_admin_js.only_one_action ); // eslint-disable-line camelcase
 	}
 
 	function addFormLogicRow() {
@@ -6862,7 +6862,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				infoModal( frm_admin_js.field_already_used );
+				infoModal( frm_admin_js.field_already_used ); // eslint-disable-line camelcase
 				return false;
 			}
 		});
@@ -7304,7 +7304,7 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private_label;
+			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private_label; // eslint-disable-line camelcase
 			document.getElementById( 'hidden-post-visibility' ).value = 'private';
 			document.getElementById( 'visibility-radio-private' ).checked = true;
 		}
@@ -7493,7 +7493,7 @@ function frmAdminBuildJS() {
 		idKey = document.getElementById( idKey );
 		field = idKey.options[idKey.selectedIndex].value;
 		code = 'if ' + field + ' ' + is + '="' + text + '"]';
-		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field );
+		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field ); // eslint-disable-line camelcase
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
@@ -8308,7 +8308,7 @@ function frmAdminBuildJS() {
 			dataType: 'json',
 			data: {
 				action: 'frm_install_addon',
-				nonce: frm_admin_js.nonce,
+				nonce: frm_admin_js.nonce, // eslint-disable-line camelcase
 				plugin: plugin,
 				hostname: el.find( '#hostname' ).val(),
 				username: el.find( '#username' ).val(),
@@ -8340,7 +8340,7 @@ function frmAdminBuildJS() {
 
 		// The Ajax request was successful, so let's update the output.
 		button.css({ opacity: '0' });
-		message.text( frm_admin_js.active );
+		message.text( frm_admin_js.active ); // eslint-disable-line camelcase
 
 		document.querySelectorAll( '.frm-oneclick' ).forEach(
 			oneClick => {
@@ -9964,7 +9964,7 @@ function frmAdminBuildJS() {
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
 				if ( this.checked ) {
-					if ( confirm( frm_admin_js.no_save_warning ) !== true ) {
+					if ( confirm( frm_admin_js.no_save_warning ) !== true ) { // eslint-disable-line camelcase
 						// Uncheck box if user hits "Cancel"
 						jQuery( this ).attr( 'checked', false );
 					}
@@ -10479,7 +10479,7 @@ function frmImportCsv( formID ) {
 				jQuery( '.frm_csv_remaining' ).html( count );
 				frmImportCsv( formID );
 			} else {
-				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete );
+				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete ); // eslint-disable-line camelcase
 				setTimeout( function() {
 					location.href = '?page=formidable-entries&frm_action=list&form=' + formID + '&import-message=1';
 				}, 2000 );
