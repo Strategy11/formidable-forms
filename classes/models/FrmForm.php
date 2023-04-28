@@ -285,11 +285,6 @@ class FrmForm {
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-		if ( ! empty( $options['success_url'] ) && ! empty( $args['form_id'] ) ) {
-			$options['success_url']           = FrmFormsHelper::maybe_add_sanitize_url_attr( $options['success_url'], (int) $args['form_id'] );
-			$values['options']['success_url'] = $options['success_url'];
-		}
-
 		/**
 		 * Allows modifying form options before updating or creating.
 		 *

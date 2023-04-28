@@ -122,7 +122,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$colspan = $this->get_column_count();
 
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/no_entries.php';
 	}
 
 	/**
@@ -231,7 +231,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 
-			if ( $this->column_name == 'cb' ) {
+			if ( $this->column_name === 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
 				if ( in_array( $column_name, $hidden, true ) ) {
@@ -279,7 +279,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = $item->{$col_name};
 				break;
 			case 'name':
-			case 'description':
 				$val = FrmAppHelper::truncate( strip_tags( $item->{$col_name} ), 100 );
 				break;
 			case 'created_at':
