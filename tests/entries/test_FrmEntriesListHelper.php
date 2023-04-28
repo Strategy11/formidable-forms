@@ -50,6 +50,6 @@ class test_FrmEntriesListHelper extends FrmUnitTest {
 	private function column_value( $item, $column_name ) {
 		$list_helper = new FrmEntriesListHelper( array() );
 		$this->set_private_property( $list_helper, 'column_name', $column_name );
-		return $this->run_private_method( array( $list_helper, 'column_value' ), array( $item )	);
+		return $this->run_private_method( array( $list_helper, 'column_value' ), array( $item ) );
 	}
 }
