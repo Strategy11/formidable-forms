@@ -2558,6 +2558,10 @@ class FrmFormsController {
 			$response_data['openInNewTab'] = 1;
 
 			$args['message'] = FrmOnSubmitHelper::get_default_open_in_new_tab_msg();
+
+			$args['form']->options['success_msg'] = $args['message'];
+			$args['form']->options['edit_msg']    = $args['message'];
+
 			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
 
 			ob_start();

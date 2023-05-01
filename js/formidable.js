@@ -590,7 +590,7 @@ function frmFrontFormJS() {
 
 		success = function( response ) {
 			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger, continueShowContent = false;
+				$fieldCont, key, inCollapsedSection, frmTrigger;
 
 			defaultResponse = {
 				content: '',
@@ -619,14 +619,10 @@ function frmFrontFormJS() {
 
 				if ( response.openInNewTab ) {
 					window.open( response.redirect, '_blank' );
-					continueShowContent = true;
 				} else {
 					window.location = response.redirect;
+					return;
 				}
-			}
-
-			if ( ! continueShowContent ) {
-				return;
 			}
 
 			if ( response.content !== '' ) {
