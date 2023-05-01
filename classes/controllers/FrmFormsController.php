@@ -2530,7 +2530,7 @@ class FrmFormsController {
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
-				echo "<script>window.open(\"" . esc_url_raw( $success_url ) . "\", '_blank');</script>";
+				echo '<script>window.open("' . esc_url_raw( $success_url ) . '", "_blank");</script>';
 				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
 				return;
 			}
@@ -2597,9 +2597,9 @@ class FrmFormsController {
 		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
 
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
-			$redirect_js = "window.open(\"" . $success_url . "\", '_blank')";
+			$redirect_js = 'window.open("' . $success_url . '", "_blank")';
 		} else {
-			$redirect_js = "window.location=\"" . $success_url . "\";";
+			$redirect_js = 'window.location="' . $success_url . '";';
 		}
 
 		add_filter( 'frm_use_wpautop', '__return_true' );
