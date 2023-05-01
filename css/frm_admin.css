@@ -7537,7 +7537,8 @@ input[disabled],
 }
 
 .field_type_list li.frmbutton .frmsvg {
-	width: var(--h-xs);
+	width: var(--text-xl);
+	font-size: var(--text-xl);
 }
 
 .frm_code_list i:before {
