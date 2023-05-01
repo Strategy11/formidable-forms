@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 6.2.3
+Stable tag: 6.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.3 =
+* New: Improved the readability of error messages when importing XML.
+* New: The custom validity message pop up that happens when trying to submit an entry with an invalid format will now use the custom invalid message defined in form settings.
+* Fix: A 0 fieldset border value would not work, showing a border instead.
+* Fix: Confirmation action redirects were no longer enforcing the sanitize_url option in shortcodes.
+* Fix: Repeater icons would appear darker than expected in Gutenberg block previews.
+* Fix: Improper use of the frm_validate_entry filter will now throw a message. Previously when a null value was returned, no validation would error, and a warning (or fatal error in PHP8) would occur. Now unless an array is returned, the previous error messages will be preserved and a message will be triggered for improper use.
+* Fix: The autocomplete page dropdown would be cut off because of an overflow styling issue when embedding a form into an existing page in a modal.
+* Fix: Using "description" as a field key would trigger a fatal error on entries list pages.
+
 = 6.2.3 =
 * Fix: Forms submitted with AJAX would display an unexpected "We're sorry. It looks like you've already submitted that" message when WooCommerce v7.6.0 is active.
 * Fix: Added an extra check so invalid serialized data doesn't trigger any warning or errors when an unexpected array key type is found.
