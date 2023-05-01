@@ -361,4 +361,31 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		return $response;
 	}
+
+	public function test_redirect_in_new_tab() {
+		$form_id  = $this->factory->form->create();
+
+		$this->create_on_submit_action(
+			$form_id,
+			array(
+				'event'           => array( 'create' ),
+				'success_action'  => 'redirect',
+				'success_url'     => 'http://example.com',
+				'open_in_new_tab' => 1,
+			)
+		);
+
+		wp_cache_delete( $form_id, 'frm_form' );
+		$this->trigger_migrate_actions( $form_id );
+		$form = $this->factory->form->get_object_by_id( $form_id );
+
+		$entry_key = 'submit-redirect';
+		$response  = $this->post_new_entry( $form, $entry_key );
+
+		$this->assertTrue( headers_sent() );
+
+		// Since headers are sent by phpunit, we will get the js redirect.
+		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
+		$this->assertStringContainsString( 'target="_blank">Click here</a>', $response );
+	}
 }
