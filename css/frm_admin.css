@@ -7536,6 +7536,10 @@ input[disabled],
 	font-size: var(--text-md);
 }
 
+.field_type_list li.frmbutton .frmsvg {
+	width: var(--h-xs);
+}
+
 .frm_code_list i:before {
 	font-size: inherit;
 }
