@@ -7536,6 +7536,7 @@ input[disabled],
 	font-size: var(--text-md);
 }
 
+/* Standardize icon size for field buttons in the builder */
 .field_type_list li.frmbutton .frmsvg {
 	width: var(--text-xl);
 	font-size: var(--text-xl);
