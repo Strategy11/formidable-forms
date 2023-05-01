@@ -2561,6 +2561,9 @@ class FrmFormsController {
 
 			$args['form']->options['success_msg'] = $args['message'];
 			$args['form']->options['edit_msg']    = $args['message'];
+			if ( ! isset( $args['fields'] ) ) {
+				$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
+			}
 
 			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
 
