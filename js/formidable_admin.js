@@ -9666,7 +9666,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm_new_form_modal #template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
