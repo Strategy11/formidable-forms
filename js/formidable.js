@@ -617,12 +617,14 @@ function frmFrontFormJS() {
 
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
 
-				if ( response.openInNewTab ) {
-					window.open( response.redirect, '_blank' );
-				} else {
+				if ( ! response.openInNewTab ) {
+					// We return here because we're redirecting there is no need to update content.
 					window.location = response.redirect;
 					return;
 				}
+
+				// We don't return here because we're opening in a new tab, the old tab will still update.
+				window.open( response.redirect, '_blank' );
 			}
 
 			if ( response.content !== '' ) {
