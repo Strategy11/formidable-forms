@@ -8133,18 +8133,19 @@ function frmAdminBuildJS() {
 	}
 
 	function exportTypeChanged( event ) {
-		var value = event.target.value;
+		const value = event.target.value;
 		showOrHideRepeaters( value );
 		checkExportTypes.call( event.target );
 		checkSelectedAllFormsCheckbox( value );
 	}
 
 	function checkSelectedAllFormsCheckbox( exportType ) {
+		const selectAllCheckbox = document.getElementById( 'frm-export-select-all' );
 		if ( exportType === 'csv' ) {
-			document.querySelector( '#frm-export-select-all' ).checked = false;
-			document.querySelector( '#frm-export-select-all' ).disabled = true;
+			selectAllCheckbox.checked = false;
+			selectAllCheckbox.disabled = true;
 		} else {
-			document.querySelector( '#frm-export-select-all' ).disabled = false;
+			selectAllCheckbox.disabled = false;
 		}
 	}
 
