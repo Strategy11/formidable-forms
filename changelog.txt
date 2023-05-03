@@ -10,6 +10,7 @@
 * Fix: The autocomplete page dropdown would be cut off because of an overflow styling issue when embedding a form into an existing page in a modal.
 * Fix: Using "description" as a field key would trigger a fatal error on entries list pages.
 * Fix: Search wasn't working on the Import/Export page.
+* The form builder now applies more strict filtering and escaping when previewing real time updates.
 
 = 6.2.3 =
 * Fix: Forms submitted with AJAX would display an unexpected "We're sorry. It looks like you've already submitted that" message when WooCommerce v7.6.0 is active.
