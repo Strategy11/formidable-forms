@@ -2557,7 +2557,7 @@ class FrmFormsController {
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$response_data['openInNewTab'] = 1;
 
-			$args['message'] = FrmOnSubmitHelper::get_default_open_in_new_tab_msg();
+			$args['message'] = FrmOnSubmitHelper::get_default_new_tab_msg();
 
 			$args['form']->options['success_msg'] = $args['message'];
 			$args['form']->options['edit_msg']    = $args['message'];

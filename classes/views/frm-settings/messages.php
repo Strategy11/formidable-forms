@@ -80,9 +80,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="frm_help frm_icon_font frm_tooltip_icon"
 			title="<?php esc_attr_e( 'The default message seen after opening the redirect URL in new tab when a form is submitted.', 'formidable' ); ?>"></span>
 	</label>
-	<input type="text" id="frm_open_in_new_tab_msg" name="frm_open_in_new_tab_msg"
+	<input type="text" id="frm_new_tab_msg" name="frm_new_tab_msg"
 		class="frm_with_left_label"
-		value="<?php echo esc_attr( $frm_settings->open_in_new_tab_msg ); ?>"/>
+		value="<?php echo esc_attr( $frm_settings->new_tab_msg ); ?>"/>
 </p>
 
 <p>

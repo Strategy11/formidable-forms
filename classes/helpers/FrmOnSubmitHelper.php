@@ -205,8 +205,8 @@ class FrmOnSubmitHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_default_open_in_new_tab_msg() {
-		return FrmAppHelper::get_settings()->open_in_new_tab_msg;
+	public static function get_default_new_tab_msg() {
+		return FrmAppHelper::get_settings()->new_tab_msg;
 	}
 
 	/**
@@ -433,7 +433,7 @@ class FrmOnSubmitHelper {
 	public static function get_fallback_action_after_open_in_new_tab( $event ) {
 		$action = self::get_fallback_action( $event );
 
-		$action->post_content['success_msg'] = self::get_default_open_in_new_tab_msg();
+		$action->post_content['success_msg'] = self::get_default_new_tab_msg();
 
 		return $action;
 	}
