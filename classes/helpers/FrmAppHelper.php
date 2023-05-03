@@ -3846,7 +3846,7 @@ class FrmAppHelper {
 	/**
 	 * Display a dismissable warning message and save its dismissal state.
 	 *
-	 * @since x.x
+	 * @since 6.3
 	 *
 	 * @param string $message The warning message to display.
 	 * @param string $option  The unique identifier for the dismissal state of the message and the WP Ajax action.
@@ -3891,7 +3891,7 @@ class FrmAppHelper {
 	/**
 	 * Dismiss a warning message and update the dismissal state.
 	 *
-	 * @since x.x
+	 * @since 6.3
 	 *
 	 * @param string $option The unique identifier for the dismissal state of the message.
 	 * @return void

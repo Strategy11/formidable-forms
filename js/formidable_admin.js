@@ -3459,7 +3459,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Dismiss a warning message and send an AJAX request to update the dismissal state.
 	 *
-	 * @since x.x
+	 * @since 6.3
 	 *
 	 * @param {Event} event The event object associated with the click on the dismiss icon.
 	 */
