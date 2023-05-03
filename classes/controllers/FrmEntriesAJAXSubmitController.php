@@ -15,6 +15,8 @@ class FrmEntriesAJAXSubmitController {
 	 * @return void
 	 */
 	public static function ajax_create() {
+		self::fix_woocommerce_conflict(); // This is called before we exit early to cover the conflict in Pro as well.
+
 		if ( is_callable( 'FrmProEntriesController::ajax_create' ) ) {
 			// Let Pro handle AJAX Submit if it's available.
 			// This is because Pro requires additional code to support other Pro features.
@@ -104,6 +106,25 @@ class FrmEntriesAJAXSubmitController {
 
 		echo json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Prevent WooCommerce 7.6.0 from triggering a fatal error when wp_print_footer_scripts is called.
+	 *
+	 * @since 6.2.3
+	 *
+	 * @return void
+	 */
+	private static function fix_woocommerce_conflict() {
+		add_action(
+			'wp_print_footer_scripts',
+			function() {
+				if ( ! function_exists( 'get_current_screen' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/screen.php';
+				}
+			},
+			1
+		);
 	}
 
 	/**

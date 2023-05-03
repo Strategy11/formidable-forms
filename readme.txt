@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, free, custom form, contact form, form maker, 
 Requires at least: 5.2
 Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 6.2.2
+Stable tag: 6.2.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -441,6 +441,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all <a href="https://zapier.com/apps/formidable/integrations">Formidable Zapier Integrations</a>.
 
 == Changelog ==
+= 6.2.3 =
+* Fix: Forms submitted with AJAX would display an unexpected "We're sorry. It looks like you've already submitted that" message when WooCommerce v7.6.0 is active.
+* Fix: Added an extra check so invalid serialized data doesn't trigger any warning or errors when an unexpected array key type is found.
+* Fix: XML exports would fail to import because of an unexpected carriage return at the beginning of the file, or an unexpected meta tag added by the Equity WordPress theme. In these cases the XML string will now be corrected in order for the import to work.
+* Fix: Added a callable check to avoid a "Call to undefined function FrmProAddonsController::print_grace" error when upgrading.
+* Fix: The license warning banner would overflow on top of other page elements.
+* Fix: Added additional validation for style settings. Unexpected invalid characters will now be cleaned up automatically when a style is saved. A new warning will now also be displayed in the styler when a broken stylesheet is detected.
+* Fix: The utf8_encode function has been replaced as it is deprecated in PHP 8.2.
+* Input border radius is now included in styler card preview samples.
+
 = 6.2.2 =
 * Fix: Redirects to PayPal were not working, resulting in a white screen instead.
 

@@ -571,7 +571,7 @@ class FrmAppController {
 		}
 
 		if ( ! self::is_behind_proxy() ) {
-			// This message is only applicable when where is a reverse proxy.
+			// This message is only applicable when using a reverse proxy.
 			return;
 		}
 
@@ -580,14 +580,14 @@ class FrmAppController {
 			return;
 		}
 
-		add_filter(
-			'frm_message_list',
-			function( $show_messages ) {
-				$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
-				$show_messages['ip_msg'] = 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to <a href="' . esc_url( $global_settings_link ) . '">Global Settings</a> and enabling the "Use custom headers when retrieving IPs with form submissions." setting.';
-				return $show_messages;
-			}
+		$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
+		$message = sprintf(
+			// Translators: 1: Global Settings Link
+			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
+			'<a href="' . esc_url( $global_settings_link ) . '">Global Settings</a>'
 		);
+		$option_name = 'frm_dismiss_ip_address_notice';
+		FrmAppHelper::add_dismissable_warning_message( $message, $option_name );
 	}
 
 	/**

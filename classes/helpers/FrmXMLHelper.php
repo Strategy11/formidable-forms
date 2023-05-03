@@ -33,7 +33,13 @@ class FrmXMLHelper {
 		}
 
 		if ( ! class_exists( 'DOMDocument' ) ) {
-			return new WP_Error( 'SimpleXML_parse_error', __( 'Your server does not have XML enabled', 'formidable' ), libxml_get_errors() );
+			$error_message = sprintf(
+				/* translators: 1: Documentation link */
+				__( 'In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled.', 'formidable' ),
+				'<a href="https://formidableforms.com/knowledgebase/import-forms-entries-and-views/#kb-your-server-does-not-have-xml-enabled" target="_blank">Importing Forms, Entries, and Views</a>'
+			);
+
+			return new WP_Error( 'SimpleXML_parse_error', $error_message, libxml_get_errors() );
 		}
 
 		$xml_string = file_get_contents( $file );
@@ -64,7 +70,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @since 6.3
+	 * @since 6.2.3
 	 *
 	 * @param string $xml_string
 	 * @return void
@@ -1279,6 +1285,27 @@ class FrmXMLHelper {
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
 			$errors[] = $result->get_error_message();
+
+			// Remove the SimpleXML_parse_error from the WP_Error object to avoid
+			// displaying duplicate error messages from $result->get_error_message()
+			$error_codes = $result->get_error_codes();
+			$error_details = array();
+			foreach ( $error_codes as $error_code ) {
+				// Clone WP_Error data because WP_Error removes all error messages and data
+				// associated with the specified error code when an item is removed.
+				// Source: https://developer.wordpress.org/reference/classes/wp_error/remove/#source
+				$error_details = $result->get_error_data( $error_code );
+				if ( $error_code === 'SimpleXML_parse_error' ) {
+					$result->remove( $error_code );
+					break;
+				}
+			}
+
+			if ( ! empty( $error_details ) ) {
+				$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
+			}
+
+			return;
 		} elseif ( ! $result ) {
 			return;
 		}
