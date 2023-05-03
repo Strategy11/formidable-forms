@@ -111,7 +111,7 @@ class FrmOnSubmitHelper {
 				)
 			);
 			?>
-			<label for="<?php echo esc_attr( $id_attr ); ?>">
+			<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
 				<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
 			</label>
 		</div>
