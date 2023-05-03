@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.2.3\n"
+"Project-Id-Version: Formidable Forms 6.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-04-17T17:19:26+00:00\n"
+"POT-Creation-Date: 2023-05-03T13:23:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: formidable\n"
 
 #: js/src/common/components/itemselect.js:26
@@ -64,7 +64,7 @@ msgstr ""
 
 #: js/src/form/formselect.js:23
 #: languages/formidable-js-strings.php:33
-#: js/admin/embed.js:341
+#: js/admin/embed.js:345
 msgid "form"
 msgstr ""
 
@@ -194,7 +194,7 @@ msgstr ""
 #: classes/views/styles/_field-colors.php:23
 #: classes/views/styles/_field-colors.php:82
 #: classes/views/styles/_field-description.php:19
-#: classes/views/xml/import_form.php:122
+#: classes/views/xml/import_form.php:125
 msgid "Style"
 msgstr ""
 
@@ -210,7 +210,7 @@ msgstr ""
 #: classes/controllers/FrmEntriesController.php:100
 #: classes/controllers/FrmFormsController.php:884
 #: classes/controllers/FrmXMLController.php:311
-#: classes/views/xml/import_form.php:121
+#: classes/views/xml/import_form.php:124
 msgid "Entries"
 msgstr ""
 
@@ -235,6 +235,11 @@ msgstr ""
 msgid "Build a Form"
 msgstr ""
 
+#. Translators: 1: Global Settings Link
+#: classes/controllers/FrmAppController.php:586
+msgid "IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the \"Use custom headers when retrieving IPs with form submissions.\" setting."
+msgstr ""
+
 #: classes/controllers/FrmApplicationsController.php:17
 #: classes/views/applications/index.php:8
 msgid "Applications"
@@ -249,7 +254,7 @@ msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:84
 #: classes/controllers/FrmFormsController.php:758
-#: classes/views/xml/import_form.php:152
+#: classes/views/xml/import_form.php:155
 #: classes/widgets/FrmElementorWidget.php:37
 #: classes/widgets/FrmShowForm.php:71
 #: js/admin/applications.js:345
@@ -435,7 +440,7 @@ msgstr ""
 #: classes/views/frm-forms/settings-advanced.php:13
 #: classes/views/styles/manage.php:17
 #: classes/views/styles/_sample_form.php:12
-#: classes/views/xml/import_form.php:118
+#: classes/views/xml/import_form.php:121
 msgid "Form Title"
 msgstr ""
 
@@ -660,7 +665,7 @@ msgstr ""
 #: classes/helpers/FrmFormsListHelper.php:394
 #: classes/views/frm-forms/create-template-from-an-existing-form.php:27
 #: classes/views/styles/_manage-styles-row.php:6
-#: classes/views/xml/import_form.php:133
+#: classes/views/xml/import_form.php:136
 #: classes/widgets/FrmElementorWidget.php:77
 msgid "(no title)"
 msgstr ""
@@ -898,7 +903,7 @@ msgstr ""
 #: classes/controllers/FrmSMTPController.php:338
 #: classes/models/FrmPluginSearch.php:318
 #: classes/views/addons/settings.php:31
-#: js/formidable_admin.js:6273
+#: js/formidable_admin.js:6359
 msgid "Activate"
 msgstr ""
 
@@ -983,7 +988,7 @@ msgid "Field Colors"
 msgstr ""
 
 #: classes/controllers/FrmStylesController.php:941
-#: js/formidable_admin.js:2332
+#: js/formidable_admin.js:2333
 msgid "Field Settings"
 msgstr ""
 
@@ -1268,7 +1273,7 @@ msgstr ""
 #: classes/views/shared/admin-header.php:31
 #: classes/views/shared/confirm-overlay.php:19
 #: js/admin/style.js:936
-#: js/formidable_admin.js:4066
+#: js/formidable_admin.js:4085
 msgid "Cancel"
 msgstr ""
 
@@ -1793,6 +1798,11 @@ msgstr ""
 msgid "NEW"
 msgstr ""
 
+#: classes/helpers/FrmAppHelper.php:3878
+msgctxt "warning message: close icon label"
+msgid "Dismiss"
+msgstr ""
+
 #: classes/helpers/FrmCSVExportHelper.php:250
 msgid "(label)"
 msgstr ""
@@ -1894,33 +1904,33 @@ msgstr ""
 msgid "Filter"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:291
+#: classes/helpers/FrmEntriesListHelper.php:290
 msgid "No"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:291
+#: classes/helpers/FrmEntriesListHelper.php:290
 msgid "Yes"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:340
+#: classes/helpers/FrmEntriesListHelper.php:339
 #: classes/views/frm-entries/sidebar-shared.php:43
 #: js/admin/applications.js:349
 msgid "View"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:344
+#: classes/helpers/FrmEntriesListHelper.php:343
 msgid "Permanently delete this entry?"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:344
+#: classes/helpers/FrmEntriesListHelper.php:343
 #: classes/helpers/FrmFormsHelper.php:1209
 #: classes/helpers/FrmFormsListHelper.php:139
 #: classes/views/frm-form-actions/form_action.php:36
-#: js/formidable_admin.js:2360
+#: js/formidable_admin.js:2361
 msgid "Delete"
 msgstr ""
 
-#: classes/helpers/FrmEntriesListHelper.php:398
+#: classes/helpers/FrmEntriesListHelper.php:397
 msgid "ALL selected entries in this form will be permanently deleted. Want to proceed?"
 msgstr ""
 
@@ -1928,7 +1938,7 @@ msgstr ""
 #. translators: %s: The field name.
 #: classes/helpers/FrmFieldsHelper.php:167
 #: classes/helpers/FrmFieldsHelper.php:294
-#: classes/helpers/FrmXMLHelper.php:1481
+#: classes/helpers/FrmXMLHelper.php:1508
 #: classes/models/fields/FrmFieldType.php:652
 msgid "%s is invalid"
 msgstr ""
@@ -3508,6 +3518,7 @@ msgid "Next page"
 msgstr ""
 
 #: classes/helpers/FrmListHelper.php:929
+#: classes/views/xml/import_form.php:118
 msgid "Select All"
 msgstr ""
 
@@ -3827,34 +3838,40 @@ msgstr ""
 msgid "Collect instant payments, and send leads to Mailchimp."
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:36
-msgid "Your server does not have XML enabled"
+#. translators: 1: Documentation link
+#: classes/helpers/FrmXMLHelper.php:38
+msgid "In order to install XML, your server must have DOMDocument installed. Follow our documentation on %1$s to ensure DOMDocument is properly set up and XML support is enabled."
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:48
-#: classes/helpers/FrmXMLHelper.php:60
+#: classes/helpers/FrmXMLHelper.php:54
+#: classes/helpers/FrmXMLHelper.php:66
 msgid "There was an error when reading this XML file"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:52
+#: classes/helpers/FrmXMLHelper.php:58
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1293
+#: classes/helpers/FrmXMLHelper.php:1305
+msgctxt "import xml message"
+msgid "Error details:"
+msgstr ""
+
+#: classes/helpers/FrmXMLHelper.php:1320
 #: classes/views/solutions/_import.php:51
 msgid "Imported"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1294
+#: classes/helpers/FrmXMLHelper.php:1321
 msgid "Updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1319
+#: classes/helpers/FrmXMLHelper.php:1346
 msgid "Nothing was imported or updated"
 msgstr ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1346
+#: classes/helpers/FrmXMLHelper.php:1373
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
@@ -3862,7 +3879,7 @@ msgstr[1] ""
 
 #. translators: %1$s: Number of items
 #. translators: %1$s - field type
-#: classes/helpers/FrmXMLHelper.php:1348
+#: classes/helpers/FrmXMLHelper.php:1375
 #: classes/models/FrmFormMigrator.php:584
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -3870,56 +3887,56 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1350
+#: classes/helpers/FrmXMLHelper.php:1377
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1352
+#: classes/helpers/FrmXMLHelper.php:1379
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1354
+#: classes/helpers/FrmXMLHelper.php:1381
 msgid "%1$s Page/Post"
 msgid_plural "%1$s Pages/Posts"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1356
+#: classes/helpers/FrmXMLHelper.php:1383
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1358
+#: classes/helpers/FrmXMLHelper.php:1385
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1360
+#: classes/helpers/FrmXMLHelper.php:1387
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:1398
+#: classes/helpers/FrmXMLHelper.php:1425
 msgid "Go to imported form"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1633
+#: classes/helpers/FrmXMLHelper.php:1660
 msgid "Create Posts"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1762
+#: classes/helpers/FrmXMLHelper.php:1789
 msgid "Email Notification"
 msgstr ""
 
@@ -4033,62 +4050,66 @@ msgstr ""
 msgid "Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s."
 msgstr ""
 
-#: classes/models/FrmAddon.php:509
+#: classes/models/FrmAddon.php:533
 msgid "Oops! You forgot to enter your license number."
 msgstr ""
 
-#: classes/models/FrmAddon.php:592
+#: classes/models/FrmAddon.php:599
+msgid "Please wait two minutes before trying again."
+msgstr ""
+
+#: classes/models/FrmAddon.php:637
 msgid "Your license has been activated. Enjoy!"
 msgstr ""
 
-#: classes/models/FrmAddon.php:593
-#: classes/models/FrmAddon.php:598
+#: classes/models/FrmAddon.php:638
+#: classes/models/FrmAddon.php:643
 msgid "That license key is invalid"
 msgstr ""
 
-#: classes/models/FrmAddon.php:594
+#: classes/models/FrmAddon.php:639
 msgid "That license is expired"
 msgstr ""
 
-#: classes/models/FrmAddon.php:595
+#: classes/models/FrmAddon.php:640
 msgid "That license has been refunded"
 msgstr ""
 
-#: classes/models/FrmAddon.php:596
+#: classes/models/FrmAddon.php:641
 msgid "That license has been used on too many sites"
 msgstr ""
 
-#: classes/models/FrmAddon.php:597
+#: classes/models/FrmAddon.php:642
 msgid "Oops! That is the wrong license key for this plugin."
 msgstr ""
 
-#: classes/models/FrmAddon.php:614
+#: classes/models/FrmAddon.php:659
 msgid "Cache cleared"
 msgstr ""
 
-#: classes/models/FrmAddon.php:636
+#: classes/models/FrmAddon.php:680
 msgid "That license was removed successfully"
 msgstr ""
 
-#: classes/models/FrmAddon.php:638
+#: classes/models/FrmAddon.php:682
 msgid "There was an error deactivating your license."
 msgstr ""
 
-#: classes/models/FrmAddon.php:682
+#: classes/models/FrmAddon.php:731
 msgid "Your License Key was invalid"
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/models/FrmAddon.php:686
+#: classes/models/FrmAddon.php:735
 msgid "You had an error communicating with the Formidable API. %1$sClick here%2$s for more information."
 msgstr ""
 
-#: classes/models/FrmAddon.php:689
+#: classes/models/FrmAddon.php:738
 msgid "You had an HTTP error connecting to the Formidable API"
 msgstr ""
 
 #. translators: %1$s: Error code, %2$s: Error message
-#: classes/models/FrmAddon.php:700
+#: classes/models/FrmAddon.php:752
 msgid "There was a %1$s error: %2$s"
 msgstr ""
 
@@ -4134,16 +4155,16 @@ msgstr ""
 msgid "IP Address"
 msgstr ""
 
-#: classes/models/FrmEntryValidate.php:12
+#: classes/models/FrmEntryValidate.php:18
 msgid "There was a problem with your submission. Please try again."
 msgstr ""
 
-#: classes/models/FrmEntryValidate.php:278
-#: classes/models/FrmEntryValidate.php:288
+#: classes/models/FrmEntryValidate.php:290
+#: classes/models/FrmEntryValidate.php:300
 msgid "Your entry appears to be spam!"
 msgstr ""
 
-#: classes/models/FrmEntryValidate.php:280
+#: classes/models/FrmEntryValidate.php:292
 msgid "Your entry appears to be blocked spam!"
 msgstr ""
 
@@ -4309,31 +4330,31 @@ msgstr ""
 msgid "There are no options for this action."
 msgstr ""
 
-#: classes/models/FrmFormAction.php:899
+#: classes/models/FrmFormAction.php:897
 msgid "Draft is saved"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:900
+#: classes/models/FrmFormAction.php:898
 msgid "Entry is created"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:901
+#: classes/models/FrmFormAction.php:899
 msgid "Entry is updated"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:902
+#: classes/models/FrmFormAction.php:900
 msgid "Entry is deleted"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:903
+#: classes/models/FrmFormAction.php:901
 msgid "Entry is imported"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:916
+#: classes/models/FrmFormAction.php:914
 msgid "Use Conditional Logic"
 msgstr ""
 
-#: classes/models/FrmFormAction.php:926
+#: classes/models/FrmFormAction.php:924
 msgid "Conditional form actions"
 msgstr ""
 
@@ -4725,7 +4746,7 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:70
-#: js/formidable_admin.js:8384
+#: js/formidable_admin.js:8482
 msgid "Close"
 msgstr ""
 
@@ -5019,7 +5040,7 @@ msgstr ""
 
 #: classes/views/frm-form-actions/form_action.php:32
 #: js/admin/style.js:675
-#: js/formidable_admin.js:2366
+#: js/formidable_admin.js:2367
 msgid "Duplicate"
 msgstr ""
 
@@ -5160,9 +5181,9 @@ msgid "Move Field"
 msgstr ""
 
 #: classes/views/frm-forms/add_field.php:29
-#: js/formidable_admin.js:1457
-#: js/formidable_admin.js:1460
-#: js/formidable_admin.js:2291
+#: js/formidable_admin.js:1458
+#: js/formidable_admin.js:1461
+#: js/formidable_admin.js:2292
 msgid "More Options"
 msgstr ""
 
@@ -5898,7 +5919,7 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: classes/views/shared/errors.php:37
+#: classes/views/shared/errors.php:46
 msgid "Warning:"
 msgstr ""
 
@@ -6536,24 +6557,24 @@ msgstr ""
 msgid "Select a Form"
 msgstr ""
 
-#: classes/views/xml/import_form.php:119
+#: classes/views/xml/import_form.php:122
 msgid "ID / Form Key"
 msgstr ""
 
-#: classes/views/xml/import_form.php:120
+#: classes/views/xml/import_form.php:123
 msgid "Type"
 msgstr ""
 
-#: classes/views/xml/import_form.php:142
+#: classes/views/xml/import_form.php:145
 msgid "Template"
 msgstr ""
 
 #. translators: %1$s: Form name
-#: classes/views/xml/import_form.php:147
+#: classes/views/xml/import_form.php:150
 msgid "Child Form (%1$s)"
 msgstr ""
 
-#: classes/views/xml/import_form.php:179
+#: classes/views/xml/import_form.php:182
 msgid "Export Selection"
 msgstr ""
 
@@ -6661,52 +6682,52 @@ msgstr ""
 msgid "Insert %s"
 msgstr ""
 
-#: js/admin/embed.js:223
+#: js/admin/embed.js:227
 msgid "Please select a page"
 msgstr ""
 
-#: js/admin/embed.js:235
+#: js/admin/embed.js:239
 msgid "Create new page"
 msgstr ""
 
-#: js/admin/embed.js:278
+#: js/admin/embed.js:282
 msgid "What will you call the new page?"
 msgstr ""
 
-#: js/admin/embed.js:284
+#: js/admin/embed.js:288
 msgid "Name your page"
 msgstr ""
 
-#: js/admin/embed.js:294
+#: js/admin/embed.js:298
 msgid "Create page"
 msgstr ""
 
-#: js/admin/embed.js:306
+#: js/admin/embed.js:310
 msgid "Insert manually"
 msgstr ""
 
-#: js/admin/embed.js:338
+#: js/admin/embed.js:342
 msgid "view"
 msgstr ""
 
-#: js/admin/embed.js:382
+#: js/admin/embed.js:386
 msgid "WordPress shortcode"
 msgstr ""
 
-#: js/admin/embed.js:385
+#: js/admin/embed.js:389
 msgid "How to use shortcodes in WordPress"
 msgstr ""
 
-#: js/admin/embed.js:388
+#: js/admin/embed.js:392
 msgid "Use PHP code"
 msgstr ""
 
 #. translators: %s: Example type (ie. WordPress shortcode, API Form script)
-#: js/admin/embed.js:447
+#: js/admin/embed.js:451
 msgid "Copy %s"
 msgstr ""
 
-#: js/admin/embed.js:481
+#: js/admin/embed.js:485
 msgid "Successfully copied embed example"
 msgstr ""
 
@@ -6744,71 +6765,71 @@ msgstr ""
 msgid "Style has been reset successfully"
 msgstr ""
 
-#: js/formidable_admin.js:1418
+#: js/formidable_admin.js:1419
 msgid "Set Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:1425
+#: js/formidable_admin.js:1426
 msgid "Move Field Group"
 msgstr ""
 
-#: js/formidable_admin.js:2360
+#: js/formidable_admin.js:2361
 msgid "Delete Group"
 msgstr ""
 
-#: js/formidable_admin.js:2366
+#: js/formidable_admin.js:2367
 msgid "Duplicate Group"
 msgstr ""
 
 #. translators: %1$s: Number of fields that are selected to be deleted.
-#: js/formidable_admin.js:3526
+#: js/formidable_admin.js:3545
 msgid "Are you sure you want to delete these %1$s selected field(s)?"
 msgstr ""
 
-#: js/formidable_admin.js:3764
+#: js/formidable_admin.js:3783
 msgid "Custom layout"
 msgstr ""
 
-#: js/formidable_admin.js:3787
+#: js/formidable_admin.js:3806
 msgid "Break into rows"
 msgstr ""
 
-#: js/formidable_admin.js:3797
+#: js/formidable_admin.js:3816
 msgid "Row Layout"
 msgstr ""
 
-#: js/formidable_admin.js:4051
+#: js/formidable_admin.js:4070
 msgid "Enter number of columns for each field"
 msgstr ""
 
-#: js/formidable_admin.js:4055
+#: js/formidable_admin.js:4074
 msgid "Layouts are based on a 12-column grid system"
 msgstr ""
 
-#: js/formidable_admin.js:4071
+#: js/formidable_admin.js:4090
 msgid "Save"
 msgstr ""
 
-#: js/formidable_admin.js:4397
+#: js/formidable_admin.js:4416
 msgid "Merge into row"
 msgstr ""
 
-#: js/formidable_admin.js:5606
+#: js/formidable_admin.js:5692
 msgid "Duplicate option value \"%s\" detected"
 msgstr ""
 
-#: js/formidable_admin.js:7674
+#: js/formidable_admin.js:7760
 msgid "Ready Made Solution"
 msgstr ""
 
-#: js/formidable_admin.js:7678
+#: js/formidable_admin.js:7764
 msgid "See all applications"
 msgstr ""
 
-#: js/formidable_admin.js:8369
+#: js/formidable_admin.js:8467
 msgid "Save and Reload"
 msgstr ""
 
-#: js/formidable_admin.js:9012
+#: js/formidable_admin.js:9110
 msgid "Unable to install template"
 msgstr ""
