@@ -8136,8 +8136,20 @@ function frmAdminBuildJS() {
 	}
 
 	function exportTypeChanged( event ) {
-		showOrHideRepeaters( event.target.value );
+		const value = event.target.value;
+		showOrHideRepeaters( value );
 		checkExportTypes.call( event.target );
+		checkSelectedAllFormsCheckbox( value );
+	}
+
+	function checkSelectedAllFormsCheckbox( exportType ) {
+		const selectAllCheckbox = document.getElementById( 'frm-export-select-all' );
+		if ( exportType === 'csv' ) {
+			selectAllCheckbox.checked = false;
+			selectAllCheckbox.disabled = true;
+		} else {
+			selectAllCheckbox.disabled = false;
+		}
 	}
 
 	function checkExportTypes() {
@@ -10274,6 +10286,10 @@ function frmAdminBuildJS() {
 			});
 
 			showOrHideRepeaters( getExportOption() );
+
+			document.querySelector( '#frm-export-select-all' ).addEventListener( 'change', event => {
+				document.querySelectorAll( '[name="frm_export_forms[]"]' ).forEach( cb => cb.checked = event.target.checked );
+			});
 		},
 
 		inboxBannerInit: function() {
