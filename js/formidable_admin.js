@@ -267,7 +267,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					el.reset.innerHTML = msg.message;
+					el.reset.textContent = msg.message;
 					if ( el.reset.getAttribute( 'data-refresh' ) === '1' ) {
 						window.location.reload();
 					}
@@ -453,7 +453,7 @@ function frmAdminBuildJS() {
 
 		if ( text !== null && text !== '' ) {
 			this.setAttribute( 'data-toggletext', this.innerHTML );
-			this.innerHTML = text;
+			this.textContent = text;
 		}
 
 		return false;
@@ -4889,7 +4889,7 @@ function frmAdminBuildJS() {
 				} else {
 					containerClass.remove( 'frm-first-page' );
 				}
-				pages[i].innerHTML = ( i + 1 );
+				pages[i].textContent = ( i + 1 );
 			}
 		} else {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
@@ -5231,7 +5231,27 @@ function frmAdminBuildJS() {
 				single.append( labelForDisplay );
 			}
 		} else {
-			text[ text.length - 1 ].nodeValue = ' ' + label.val();
+			let firstInputIndex = false;
+			text.forEach( ( node, index ) => {
+				if ( firstInputIndex === false ) {
+					if ( node.tagName === 'INPUT' ) {
+						firstInputIndex = index;
+					}
+				} else {
+					if ( index === firstInputIndex + 1 ) {
+						let nodeValue = '';
+
+						if ( buttonsAsOptions( fieldId ) ) {
+							nodeValue = div({ className: 'frm_label_button_container', text: ' ' + label.val() });
+							single[0].replaceChild( nodeValue, node );
+						} else {
+							node.nodeValue = ' ' + label.val();
+						}
+					} else {
+						single[0].removeChild( node );
+					}
+				}
+			});
 		}
 
 		// Set saved value.
@@ -5240,6 +5260,13 @@ function frmAdminBuildJS() {
 		// Set the default value.
 		defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
 		previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+	}
+
+	function buttonsAsOptions( fieldId ) {
+		const fields = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
+		const result = Array.from( fields ).find( field => field.checked &&  ( 'buttons' === field.value ) );
+
+		return typeof result !== 'undefined';
 	}
 
 	/**
@@ -5378,7 +5405,7 @@ function frmAdminBuildJS() {
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + opt.label + '</label>' +
+			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
@@ -5412,7 +5439,7 @@ function frmAdminBuildJS() {
 			if ( ! isOther || showOther ) {
 				var opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
-				opt.innerHTML = label;
+				opt.innerHTML = purifyHtml( label );
 
 				if ( isProduct ) {
 					opt.setAttribute( 'data-price', opts[ i ].price );
@@ -5438,22 +5465,23 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, optObj,
-			image, savedLabel, input, field, checkbox, fieldType,
+		let i, saved, labelName, label, key, optObj,
+			fieldType,
 			checked = false,
 			opts = [],
-			imageUrl = '',
+			imageUrl = '';
 
-			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
-			separateValues = usingSeparateValues( fieldId ),
-			hasImageOptions = imagesAsOptions( fieldId ),
-			showLabelWithImage = showingLabelWithImage( fieldId ),
-			isProduct = isProductField( fieldId );
+		const optVals            = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' );
+		const isProduct          = isProductField( fieldId );
+		const showLabelWithImage = showingLabelWithImage( fieldId );
+		const hasImageOptions    = imagesAsOptions( fieldId );
+		const separateValues     = usingSeparateValues( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
 			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[image]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
 				continue;
 			}
+
 			saved = optVals[ i ].value;
 			label = saved;
 			key = optVals[ i ].name.replace( 'field_options[options_' + fieldId + '][', '' ).replace( '[label]', '' ).replace( ']', '' );
@@ -5464,9 +5492,9 @@ function frmAdminBuildJS() {
 			}
 
 			if ( hasImageOptions ) {
-				imageUrl = getImageUrlFromInput( optVals[i]);
+				imageUrl  = getImageUrlFromInput( optVals[i]);
 				fieldType = radioOrCheckbox( fieldId );
-				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
+				label     = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
 			/**
@@ -5519,24 +5547,62 @@ function frmAdminBuildJS() {
 		return img.attr( 'src' );
 	}
 
-	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
-		var imageLabelClass, fullLabel,
-			originalLabel = label,
-			shape = fieldType === 'checkbox' ? 'square' : 'circle';
-
-		fullLabel = '<div class="frm_selected_checkmark"><svg class="frmsvg"><use xlink:href="#frm_checkmark_' + shape + '_icon"></svg></div>';
-		if ( imageUrl ) {
-			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
-		} else {
-			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>'; // eslint-disable-line camelcase
+	function purifyHtml( html ) {
+		if ( html instanceof Element || html instanceof Document ) {
+			html = html.outerHTML;
 		}
-		if ( showLabelWithImage ) {
-			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
+
+		const clean = jQuery.parseHTML( html ).reduce(
+			( total, currentNode ) => {
+				const cleanNode = frmDom.cleanNode( currentNode );
+
+				if ( '#text' === cleanNode.nodeName ) {
+					return total += cleanNode.textContent;
+				}
+
+				return total + cleanNode.outerHTML;
+			},
+			''
+		);
+
+		return clean;
+	}
+
+	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
+		var imageLabelClass,
+			originalLabel = label,
+			shape = fieldType === 'checkbox' ? 'square' : 'circle',
+			labelImage,
+			labelNode,
+			imageLabel;
+
+		originalLabel = purifyHtml( originalLabel );
+
+		if ( imageUrl ) {
+			labelImage = img({ src: imageUrl, alt: originalLabel });
+		} else {
+			labelImage           = div({ className: 'frm_empty_url' });
+			labelImage.innerHTML = frm_admin_js.image_placeholder_icon; // eslint-disable-line camelcase
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		return ( '<span class="frm_image_option_container' + imageLabelClass + '">' + fullLabel + '</span>' );
+		imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' });
+
+		imageLabel.innerHTML = originalLabel;
+		labelNode = tag(
+			'span',
+			{
+				className: 'frm_image_option_container' + imageLabelClass,
+				children: [
+					tag( 'div', { className: 'frm_selected_checkmark', child: svg({ href: '#frm_checkmark_' + shape + '_icon' }) }),
+					labelImage,
+					tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel })
+				]
+			}
+		);
+
+		return labelNode;
 	}
 
 	function getChecked( id ) {
@@ -5621,8 +5687,9 @@ function frmAdminBuildJS() {
 				areValuesSeparate === input.name.endsWith( '[value]' ) &&
 				input.value === targetInput.value
 		);
+
 		if ( conflicts.length ) {
-			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyHtml( targetInput.value ) ) );
 		}
 	}
 
@@ -7304,9 +7371,9 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private_label; // eslint-disable-line camelcase
-			document.getElementById( 'hidden-post-visibility' ).value = 'private';
-			document.getElementById( 'visibility-radio-private' ).checked = true;
+			document.getElementById( 'post-visibility-display' ).textContent = frm_admin_js.private_label; // eslint-disable-line camelcase
+			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
+			document.getElementById( 'visibility-radio-private' ).checked    = true;
 		}
 	}
 
@@ -8504,8 +8571,8 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_template_name' ).value = oldName;
 			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
 			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
-			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
+			nameLabel.textContent = nameLabel.getAttribute( 'data-form' );
+			descLabel.textContent = descLabel.getAttribute( 'data-form' );
 			$modal.dialog( 'open' );
 		});
 
