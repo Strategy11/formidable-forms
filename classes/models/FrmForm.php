@@ -366,6 +366,14 @@ class FrmForm {
 				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
 			);
 
+			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
+				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
+					foreach ( $option as $key => $item ) {
+						$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
+					}
+				}
+			}
+
 			self::prepare_field_update_values( $field, $values, $new_field );
 
 			FrmField::update( $field_id, $new_field );
