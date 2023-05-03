@@ -8136,8 +8136,20 @@ function frmAdminBuildJS() {
 	}
 
 	function exportTypeChanged( event ) {
-		showOrHideRepeaters( event.target.value );
+		const value = event.target.value;
+		showOrHideRepeaters( value );
 		checkExportTypes.call( event.target );
+		checkSelectedAllFormsCheckbox( value );
+	}
+
+	function checkSelectedAllFormsCheckbox( exportType ) {
+		const selectAllCheckbox = document.getElementById( 'frm-export-select-all' );
+		if ( exportType === 'csv' ) {
+			selectAllCheckbox.checked = false;
+			selectAllCheckbox.disabled = true;
+		} else {
+			selectAllCheckbox.disabled = false;
+		}
 	}
 
 	function checkExportTypes() {
@@ -9666,7 +9678,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm_new_form_modal #template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
@@ -10274,6 +10286,10 @@ function frmAdminBuildJS() {
 			});
 
 			showOrHideRepeaters( getExportOption() );
+
+			document.querySelector( '#frm-export-select-all' ).addEventListener( 'change', event => {
+				document.querySelectorAll( '[name="frm_export_forms[]"]' ).forEach( cb => cb.checked = event.target.checked );
+			});
 		},
 
 		inboxBannerInit: function() {
