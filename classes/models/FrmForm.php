@@ -368,8 +368,10 @@ class FrmForm {
 
 			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) {
 				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
-					foreach ( $option as $key => $item ) {
-						$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
+					if ( is_array( $option ) ) {
+						foreach ( $option as $key => $item ) {
+							$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
+						}
 					}
 				}
 			}
