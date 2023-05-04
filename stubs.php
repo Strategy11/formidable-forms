@@ -73,6 +73,17 @@ namespace {
 	}
 	class FrmViewsAppHelper {
 	}
+	class FrmProHtmlHelper {
+
+		/**
+		 * @param string $option   The string used as the option label.
+		 * @param bool   $selected True if the option should be selected.
+		 * @param array  $params   Other HTML params for the option.
+		 * @return void
+		 */
+		public static function echo_dropdown_option( $option, $selected, $params = array() ) {
+		}
+	}
 	class Akismet {
 	}
 	class PHPMailer {
