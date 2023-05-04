@@ -8359,6 +8359,11 @@ Responsive Design
 		display: inline-block;
 	}
 
+	/* Fix: Issue where the admin page content had extra white space to the left on small screens */
+	.auto-fold.frm-admin-page-styles:not(.frm-full-screen) .frm_page_container,
+	.auto-fold:not(.frm-full-screen) .frm_wrap .frm_page_container {
+		left: 36px;
+	}
 }
 
 @media only screen and (max-width: 850px) {
