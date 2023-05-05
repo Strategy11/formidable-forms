@@ -55,8 +55,8 @@ class S11FloatingLinks {
 	initComponent() {
 		// Create and append elements
 		this.createWrapper();
-		this.createIconButton();
 		this.createNavMenu();
+		this.createIconButton();
 
 		// Apply styles
 		this.applyComponentStyles();
@@ -77,34 +77,14 @@ class S11FloatingLinks {
 	}
 
 	/**
-	 * Create the icon button element, add a click event listener, and append it to the wrapper element.
-	 *
-	 * @memberof S11FloatingLinks
-	 */
-	createIconButton() {
-		// Create the icon button element
-		this.iconButtonElement = document.createElement( 'div' );
-		this.iconButtonElement.classList.add( 's11-floating-links-logo-icon' );
-		this.iconButtonElement.innerHTML = this.options.logoIcon;
-
-		// Add a click event listener
-		this.iconButtonElement.addEventListener( 'click', () => {
-			this.navMenuElement.classList.toggle( 's11-fade-toggle' );
-		});
-
-		// Append the icon button to the wrapper element
-		this.wrapperElement.appendChild( this.iconButtonElement );
-	}
-
-	/**
 	 * Create the navigation menu element with the specified links and append it to the wrapper element.
 	 *
 	 * @memberof S11FloatingLinks
 	 */
-    createNavMenu() {
+	createNavMenu() {
 		// Create the navigation menu element
 		this.navMenuElement = document.createElement( 'div' );
-		this.navMenuElement.classList.add( 's11-floating-links-nav-menu' );
+		this.navMenuElement.classList.add( 's11-floating-links-nav-menu', 's11-fadeout' );
 
 		// Create and append link elements
 		this.links.forEach( ( link ) => {
@@ -124,8 +104,8 @@ class S11FloatingLinks {
 			}
 
 			linkElement.innerHTML = `
-				<span class="s11-floating-links-nav-icon">${link.icon}</span>
 				<span class="s11-floating-links-nav-text">${link.title}</span>
+				<span class="s11-floating-links-nav-icon">${link.icon}</span>
 			`;
 
 			this.navMenuElement.appendChild( linkElement );
@@ -138,6 +118,40 @@ class S11FloatingLinks {
 	linkHasRequiredProperties( link ) {
 		const requiredProperties = [ 'title', 'icon', 'url' ];
 		return requiredProperties.every( prop => link.hasOwnProperty( prop ) );
+	}
+
+	/**
+	 * Create the icon button element, add a click event listener, and append it to the wrapper element.
+	 *
+	 * @memberof S11FloatingLinks
+	 */
+	createIconButton() {
+		// Create the icon button element
+		this.iconButtonElement = document.createElement( 'div' );
+		this.iconButtonElement.classList.add( 's11-floating-links-logo-icon' );
+		this.iconButtonElement.innerHTML = this.options.logoIcon;
+
+		// Add a click event listener
+		this.iconButtonElement.addEventListener( 'click', () => {
+			this.toggleFade( this.navMenuElement );
+		});
+
+		// Append the icon button to the wrapper element
+		this.wrapperElement.appendChild( this.iconButtonElement );
+	}
+
+	toggleFade( element ) {
+		if ( ! element ) {
+			return;
+		}
+
+		element.classList.toggle( 's11-fadein' );
+		element.classList.toggle( 's11-fadeout' );
+
+		element.classList.add( 's11-fading' );
+		element.addEventListener( 'animationend', () => {
+			element.classList.remove( 's11-fading' );
+		}, { once: true });
 	}
 
 	/**
@@ -161,6 +175,10 @@ class S11FloatingLinks {
 				right: 48px;
 				bottom: 48px;
 				z-index: 1000;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+				gap: 16px;
 			}
 
 			.s11-floating-links-logo-icon {
@@ -170,10 +188,10 @@ class S11FloatingLinks {
 				width: 64px;
 				height: 64px;
 				padding: 12px;
+				background-color: #fff;
 				border: 1px solid #f2f4f7;
 				border-radius: 50%;
-				box-shadow: 0 11px 22 -5 rgba(16, 24, 40, 0.18);
-				background-color: #fff;
+				box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18);
 				cursor: pointer;
 			}
 
@@ -182,18 +200,116 @@ class S11FloatingLinks {
 
 			.s11-floating-links-nav-menu {
 				display: none;
+				grid-template-columns: 1fr;
+				background-color: #fff;
+				padding: 16px;
+				border: 1px solid #f2f4f7;
+				border-radius: 8px;
+				box-shadow: 0 11px 22px -5px rgba(16, 24, 40, 0.18);
 			}
 
 			.s11-floating-links-nav-item {
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 8px;
+				padding: 0 6px;
+				margin: 16px 0;
+				text-decoration: none;
+				z-index: 1;
 			}
 
-			.s11-floating-links-nav-item:hover {
+			.s11-floating-links-nav-item:first-child {
+				margin-top: 0;
+			}
+
+			.s11-floating-links-nav-item:last-child {
+				margin-bottom: 0;
+			}
+
+			.s11-floating-links-nav-item:focus {
+				outline: 0;
+			}
+
+			.s11-floating-links-nav-item::before {
+				content: '';
+				position: absolute;
+				top: -4px;
+				left: -6px;
+				width: calc(100% + 12px);
+				height: calc(100% + 8px);
+				z-index: 0;
+				border-radius: 8px;
+				background-color: transparent;
+				transition: background-color 240ms ease-in;
+				cursor: pointer;
+			}
+
+			.s11-floating-links-nav-item:hover::before {
+				background-color: ${this.options?.bgHoverColor ? this.options?.bgHoverColor : '#F5FAFF'};
+			}
+
+			.s11-floating-links-nav-text {
+				font-size: 0.875rem;
+				line-height: 1.25rem;
+				color: #1D2939;
+				font-weight: 500;
+				z-index: 2;
+				transition: color 240ms ease-out;
+			}
+
+			.s11-floating-links-nav-item:hover .s11-floating-links-nav-text {
+				color: ${this.options?.hoverColor ? this.options.hoverColor : '#4199FD'}
 			}
 
 			.s11-floating-links-nav-icon {
+				display: flex;
+				z-index: 2;
 			}
 
-			.s11-fade-toggle {
+			.s11-floating-links-nav-icon > svg path {
+				transition: stroke 240ms ease-out;
+			}
+
+			.s11-floating-links-nav-item:hover .s11-floating-links-nav-icon > svg path {
+				stroke: ${this.options?.hoverColor ? this.options.hoverColor : '#4199FD'}
+			}
+
+			.s11-fadein {
+				display: block;
+				animation: fadeInUp 240ms ease-in-out forwards;
+			}
+
+			.s11-fadeout {
+				display: none;
+				animation: fadeOutDown 240ms ease-in-out forwards;
+			}
+
+			.s11-fading {
+				display: block;
+			}
+
+			@keyframes fadeInUp {
+				0% {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				100% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			@keyframes fadeOutDown {
+				0% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+				100% {
+					opacity: 0;
+					transform: translateY(20px);
+				}
 			}
 		`;
 
@@ -268,6 +384,8 @@ const links = [
 
 // Define options
 const options = {
+	hoverColor: '#4199FD',
+	bgHoverColor: '#F5FAFF',
 	logoIcon: `
 		<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 40 40">
 			<g clip-path="url(#a)">
