@@ -696,6 +696,13 @@ class FrmAppController {
 				wp_enqueue_script( 'formidable' );
 			}
 
+			if ( ! FrmAppHelper::pro_is_installed() ) {
+				// Enqueue Floating Links.
+				wp_enqueue_script( 'formidable_floating_links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array( 'wp-i18n' ), $version, true );
+				// Register translations for the Floating Links.
+				wp_set_script_translations( 'formidable_floating_links', 'formidable' );
+			}
+
 			do_action( 'frm_enqueue_builder_scripts' );
 			self::include_upgrade_overlay();
 			self::include_info_overlay();
@@ -718,11 +725,6 @@ class FrmAppController {
 		}
 
 		self::maybe_force_formidable_block_on_gutenberg_page();
-
-		// Enqueue Floating Links.
-		wp_enqueue_script( 'formidable_floating_links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array( 'wp-i18n' ), $version, true );
-		// Register translations for the Floating Links.
-		wp_set_script_translations( 'formidable_floating_links', 'formidable' );
 	}
 
 	/**

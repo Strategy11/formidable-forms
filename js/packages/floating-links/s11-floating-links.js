@@ -58,6 +58,9 @@ class S11FloatingLinks {
 		this.createNavMenu();
 		this.createIconButton();
 
+		// Add event listener to close the navigation menu when clicking outside of floating links wrapper
+		this.addOutsideClickListener();
+
 		// Apply styles
 		this.applyComponentStyles();
 	}
@@ -129,29 +132,90 @@ class S11FloatingLinks {
 		// Create the icon button element
 		this.iconButtonElement = document.createElement( 'div' );
 		this.iconButtonElement.classList.add( 's11-floating-links-logo-icon' );
-		this.iconButtonElement.innerHTML = this.options.logoIcon;
+		this.iconButtonElement.innerHTML = this.options.logoIcon.trim();
+
+		// Define close icon
+		const closeIcon = `
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 25">
+				<path stroke="#282F36" stroke-opacity=".85" stroke-width="1.5" d="M5.405 5.5 19 19.5m-14 0 13.595-14"/>
+			</svg>
+		`;
 
 		// Add a click event listener
 		this.iconButtonElement.addEventListener( 'click', () => {
+			// Toggle the navigation menu element
 			this.toggleFade( this.navMenuElement );
+
+			// Switch the icon of the icon button element
+			this.switchIconButton( closeIcon );
 		});
 
 		// Append the icon button to the wrapper element
 		this.wrapperElement.appendChild( this.iconButtonElement );
 	}
 
+	/**
+	 * Switch the icon of the icon button element between the logo icon and the close icon.
+	 * This method is called when the icon button is clicked.
+	 *
+	 * @memberof S11FloatingLinks
+	 *
+	 * @param {string} closeIcon - The SVG close icon that will replace the logo icon when the navigation menu is opened.
+	 */
+	switchIconButton( closeIcon ) {
+		this.iconButtonElement.classList.toggle( 's11-show-close-icon' );
+
+		if ( this.iconButtonElement.classList.contains( 's11-show-close-icon' ) ) {
+			this.iconButtonElement.innerHTML = closeIcon.trim();
+			return;
+		}
+
+		this.iconButtonElement.innerHTML = this.options.logoIcon.trim();
+	}
+
+	/**
+	 * Toggle the fade-in and fade-out animation for the specified element.
+	 * This method is used to show or hide the navigation menu when the icon button is clicked.
+	 *
+	 * @memberof S11FloatingLinks
+	 *
+	 * @param {HTMLElement} element - The element to apply the fade animation on.
+	 */
 	toggleFade( element ) {
 		if ( ! element ) {
 			return;
 		}
 
+		element.classList.add( 's11-fading' );
 		element.classList.toggle( 's11-fadein' );
 		element.classList.toggle( 's11-fadeout' );
 
-		element.classList.add( 's11-fading' );
 		element.addEventListener( 'animationend', () => {
 			element.classList.remove( 's11-fading' );
 		}, { once: true });
+	}
+
+	/**
+	 * Add a click event listener to the body to close the navigation when clicked outside of the floating links wrapper.
+	 * Prevents the click event from bubbling up to the body when clicking on the floating links wrapper.
+	 *
+	 * @memberof S11FloatingLinks
+	 */
+	addOutsideClickListener() {
+		document.body.addEventListener( 'click', ( e ) => {
+			if ( ! this.wrapperElement.contains( e.target ) && this.navMenuElement.classList.contains( 's11-fadein' ) ) {
+				// Toggle the navigation menu element
+				this.toggleFade( this.navMenuElement );
+
+				// Switch the icon of the icon button element
+				this.switchIconButton( this.options.logoIcon.trim() );
+			}
+		});
+
+		// Prevent click event from bubbling up to the body when clicking on the wrapper element
+		this.wrapperElement.addEventListener( 'click', ( e ) => {
+			e.stopPropagation();
+		});
 	}
 
 	/**
@@ -195,9 +259,6 @@ class S11FloatingLinks {
 				cursor: pointer;
 			}
 
-			.s11-floating-links-logo-icon:hover {
-			}
-
 			.s11-floating-links-nav-menu {
 				display: none;
 				grid-template-columns: 1fr;
@@ -214,7 +275,6 @@ class S11FloatingLinks {
 				align-items: center;
 				justify-content: space-between;
 				gap: 8px;
-				padding: 0 6px;
 				margin: 16px 0;
 				text-decoration: none;
 				z-index: 1;
@@ -230,6 +290,7 @@ class S11FloatingLinks {
 
 			.s11-floating-links-nav-item:focus {
 				outline: 0;
+				box-shadow: none;
 			}
 
 			.s11-floating-links-nav-item::before {
