@@ -7536,6 +7536,12 @@ input[disabled],
 	font-size: var(--text-md);
 }
 
+/* Standardize icon size for field buttons in the builder */
+.field_type_list li.frmbutton .frmsvg {
+	width: var(--text-xl);
+	font-size: var(--text-xl);
+}
+
 .frm_code_list i:before {
 	font-size: inherit;
 }
@@ -7560,6 +7566,11 @@ input[disabled],
 	border-radius: var(--border-radius) !important;
 	padding: var(--gap-xs) var(--gap-sm) !important;
 	color: var(--grey-900) !important;
+}
+
+/* Adjust field button size to full width in builder */
+#frm-insert-fields li a {
+	display: flex !important;
 }
 
 .frmbutton.ui-draggable-dragging a {
