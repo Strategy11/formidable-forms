@@ -38,7 +38,7 @@ class FrmHtmlHelper {
 	 * This is useful to avoid closing and opening PHP to echo <option> tags which leads to extra whitespace.
 	 * Avoiding whitespace saves 5KB of HTML for an international address field with a country dropdown with 252 options.
 	 *
-	 * @since 6.3
+	 * @since 6.3.1
 	 *
 	 * @param string $option   The string used as the option label.
 	 * @param bool   $selected True if the option should be selected.
