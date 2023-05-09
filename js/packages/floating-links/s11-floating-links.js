@@ -415,18 +415,18 @@ const notificationsIcon = `
 	</svg>
 `;
 
-// Define links
-const links = [
+// Define links for the free version of the plugin
+const freeVersionLinks = [
 	{
 		title: __( 'Upgrade', 'formidable' ),
 		icon: upgradeIcon,
-		url: 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=top-bar&utm_campaign=liteplugin',
+		url: 'https://formidableforms.com/lite-upgrade/',
 		openInNewTab: true
 	},
 	{
 		title: __( 'Support', 'formidable' ),
 		icon: supportIcon,
-		url: 'https://formidableforms.com/knowledgebase/support-2/',
+		url: 'https://wordpress.org/support/plugin/formidable/',
 		openInNewTab: true
 	},
 	{
@@ -434,11 +434,15 @@ const links = [
 		icon: documentationIcon,
 		url: 'https://formidableforms.com/knowledgebase/',
 		openInNewTab: true
-	},
+	}
+];
+
+// Define links for the pro version of the plugin
+const proVersionLinks = [
 	{
-		title: __( 'Notifications', 'formidable' ),
-		icon: notificationsIcon,
-		url: '#',
+		title: __( 'Support & Docs', 'formidable' ),
+		icon: supportIcon,
+		url: 'https://wordpress.org/support/plugin/formidable/',
 		openInNewTab: true
 	}
 ];
@@ -462,5 +466,6 @@ const options = {
 	`
 };
 
-// Call S11FloatingLinks class
+// Determine the appropriate links and initialize the S11FloatingLinks class
+const links = s11FloatingLinksData.proIsInstalled ? proVersionLinks : freeVersionLinks;
 new S11FloatingLinks( links, options );
