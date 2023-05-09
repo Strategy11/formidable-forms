@@ -696,12 +696,16 @@ class FrmAppController {
 				wp_enqueue_script( 'formidable' );
 			}
 
-			if ( ! FrmAppHelper::pro_is_installed() ) {
-				// Enqueue Floating Links.
-				wp_enqueue_script( 'formidable_floating_links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array( 'wp-i18n' ), $version, true );
-				// Register translations for the Floating Links.
-				wp_set_script_translations( 'formidable_floating_links', 'formidable' );
-			}
+			// Enqueue the Formidable Floating Links script.
+			wp_enqueue_script( 'formidable-floating-links', $plugin_url . '/js/packages/floating-links/s11-floating-links.js', array( 'wp-i18n' ), $version, true );
+			// Register translation domain for Formidable Floating Links.
+			wp_set_script_translations( 'formidable-floating-links', 'formidable' );
+			// Define localized data for the script.
+			$floating_links_data = array(
+				'proIsInstalled' => FrmAppHelper::pro_is_installed(),
+			);
+			// Localize the Formidable Floating Links script with the defined data.
+			wp_localize_script( 'formidable-floating-links', 's11FloatingLinksData', $floating_links_data );
 
 			do_action( 'frm_enqueue_builder_scripts' );
 			self::include_upgrade_overlay();
