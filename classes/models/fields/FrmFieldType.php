@@ -523,6 +523,7 @@ DEFAULT_HTML;
 			'select'   => FrmField::is_field_type( $field, 'select' ),
 			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
 			'data'     => FrmField::is_field_type( $field, 'data' ),
+			'scale'    => FrmField::is_field_type( $field, 'scale' ),
 		);
 		return array_filter( $display_type );
 	}
