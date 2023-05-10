@@ -1928,6 +1928,23 @@ class FrmFieldsHelper {
 	 * @param array $field Field data.
 	 */
 	public static function show_radio_display_format( $field ) {
+		$options = self::get_display_format_options( $field['type'] );
+
+		/**
+		 * Allows modifying the options of Display format setting of Radio field.
+		 *
+		 * @since 5.0.04
+		 *
+		 * @param array $options Options.
+		 */
+		$options = apply_filters( 'frm_radio_display_format_options', $options );
+
+		$args = self::get_display_format_args( $field, $options );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
+	}
+
+	private static function get_display_format_options( $field_type ) {
 		$options = array(
 			'0'       => array(
 				'text'   => __( 'Simple', 'formidable' ),
@@ -1951,18 +1968,11 @@ class FrmFieldsHelper {
 			),
 		);
 
-		/**
-		 * Allows modifying the options of Display format setting of Radio field.
-		 *
-		 * @since 5.0.04
-		 *
-		 * @param array $options Options.
-		 */
-		$options = apply_filters( 'frm_radio_display_format_options', $options );
+		if ( $field_type === 'scale' ) {
+			unset( $options['1'] );
+		}
 
-		$args = self::get_display_format_args( $field, $options );
-
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
+		return $options;
 	}
 
 	/**
