@@ -1944,7 +1944,7 @@ class FrmFieldsHelper {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
 	}
 
-	private static function get_display_format_options( $field_type ) {
+	public static function get_display_format_options( $field_type ) {
 		$options = array(
 			'0'       => array(
 				'text'   => __( 'Simple', 'formidable' ),
@@ -1984,7 +1984,7 @@ class FrmFieldsHelper {
 	 * @param array $options Options array.
 	 * @return array
 	 */
-	private static function get_display_format_args( $field, $options ) {
+	public static function get_display_format_args( $field, $options ) {
 		$args = array(
 			'selected'    => '0',
 			'options'     => array(),
@@ -1995,7 +1995,7 @@ class FrmFieldsHelper {
 		);
 
 		self::fill_image_setting_options( $options, $args );
-
+		return $args;
 		/**
 		 * Allows modifying the arguments of Display format setting of Radio field.
 		 *
