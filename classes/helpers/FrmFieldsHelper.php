@@ -1995,7 +1995,7 @@ class FrmFieldsHelper {
 		);
 
 		self::fill_image_setting_options( $options, $args );
-		return $args;
+
 		/**
 		 * Allows modifying the arguments of Display format setting of Radio field.
 		 *
