@@ -2072,7 +2072,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-addons .plugin-card-top {
-	height: 155px;
+	min-height: 155px;
 	padding-top: var(--gap-lg);
 	overflow: hidden;
 }
