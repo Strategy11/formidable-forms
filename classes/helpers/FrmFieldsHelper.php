@@ -2004,7 +2004,7 @@ class FrmFieldsHelper {
 		 * @param array $args        Arguments.
 		 * @param array $method_args The arguments from the method. Contains `field`, `options`.
 		 */
-		return apply_filters( 'frm_radio_display_format_args', $args, compact( 'field', 'options' ) );
+		return apply_filters( 'frm_' . $field['type'] . '_display_format_args', $args, compact( 'field', 'options' ) );
 	}
 
 	/**
