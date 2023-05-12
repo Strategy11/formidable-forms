@@ -837,11 +837,6 @@ a.frm_save_draft{
 	text-indent: -20px;
 }
 
-.with_frm_style .horizontal_radio .frm_scale label {
-	display: block;
-	text-align: center;
-}
-
 .with_frm_style .frm_scale label {
 	display: flex;
 	align-items: center;
