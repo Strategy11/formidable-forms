@@ -831,11 +831,20 @@ a.frm_save_draft{
 }
 
 .with_frm_style .vertical_radio .frm_checkbox label,
-.with_frm_style .vertical_radio .frm_radio label,
-.with_frm_style .vertical_radio .frm_scale label {
+.with_frm_style .vertical_radio .frm_radio label {
 	display: block;
 	padding-left: 20px;
 	text-indent: -20px;
+}
+
+.with_frm_style .horizontal_radio .frm_scale label {
+	display: block;
+	text-align: center;
+}
+
+.with_frm_style .frm_scale label {
+	display: flex;
+	align-items: center;
 }
 
 .with_frm_style .frm_radio label,
