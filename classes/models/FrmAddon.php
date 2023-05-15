@@ -467,26 +467,51 @@ class FrmAddon {
 			return;
 		}
 
+		// Only check weekly.
+		if ( $this->checked_recently( '7 days' ) ) {
+			return;
+		}
+
+		$this->update_last_checked();
+
+		$response = $this->get_license_status();
+		if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] || 'missing' === $response['status'] ) {
+			$this->clear_license();
+		}
+	}
+
+	/**
+	 * Has this been checked too recently?
+	 *
+	 * @param string $time ie. '1 day'
+	 * @return bool
+	 */
+	private function checked_recently( $time ) {
+		$last_checked = $this->last_checked();
+		$time_ago     = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
+		return $last_checked && $last_checked > $time_ago;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	private function last_checked() {
 		if ( is_multisite() ) {
 			$last_checked = get_site_option( $this->transient_key() );
 		} else {
 			$last_checked = get_option( $this->transient_key() );
 		}
+		return $last_checked;
+	}
 
-		$seven_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) );
-
-		if ( ! $last_checked || $last_checked < $seven_days_ago ) {
-			// check weekly
-			if ( is_multisite() ) {
-				update_site_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
-			} else {
-				update_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
-			}
-
-			$response = $this->get_license_status();
-			if ( 'revoked' === $response['status'] || 'blocked' === $response['status'] || 'disabled' === $response['status'] || 'missing' === $response['status'] ) {
-				$this->clear_license();
-			}
+	/**
+	 * @return void
+	 */
+	private function update_last_checked() {
+		if ( is_multisite() ) {
+			update_site_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
+		} else {
+			update_option( $this->transient_key(), gmdate( 'Y-m-d H:i:s' ) );
 		}
 	}
 
@@ -503,12 +528,10 @@ class FrmAddon {
 
 		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
 		if ( empty( $license ) ) {
-			wp_die(
-				json_encode(
-					array(
-						'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
-						'success' => false,
-					)
+			wp_send_json(
+				array(
+					'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
+					'success' => false,
 				)
 			);
 		}
@@ -516,8 +539,7 @@ class FrmAddon {
 		$plugin_slug = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		$response    = self::activate_license_for_plugin( $license, $plugin_slug );
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
@@ -531,6 +553,8 @@ class FrmAddon {
 	private function activate_license( $license ) {
 		$this->set_license( $license );
 		$this->license = $license;
+
+		$this->die_if_not_allowed();
 
 		$response            = $this->get_license_status();
 		$response['message'] = '';
@@ -554,7 +578,28 @@ class FrmAddon {
 			$this->set_active( $is_valid );
 		}
 
+		$this->update_last_checked();
+
 		return $response;
+	}
+
+	/**
+	 * Prevent this check from happening more than once per minute with the same license.
+	 *
+	 * @return void
+	 */
+	private function die_if_not_allowed() {
+		if ( ! $this->checked_recently( '2 minutes' ) ) {
+			return;
+		}
+
+		// Don't check more than once per minute.
+		wp_send_json(
+			array(
+				'message' => __( 'Please wait two minutes before trying again.', 'formidable' ),
+				'success' => false,
+			)
+		);
 	}
 
 	private function get_license_status() {
@@ -574,7 +619,7 @@ class FrmAddon {
 
 			// $license_data->license will be either "valid" or "invalid"
 			if ( is_array( $license_data ) ) {
-				if ( in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
+				if ( isset( $license_data['license'] ) && in_array( $license_data['license'], array( 'valid', 'invalid' ), true ) ) {
 					$response['status'] = $license_data['license'];
 				}
 			} else {
@@ -614,8 +659,7 @@ class FrmAddon {
 			'message' => __( 'Cache cleared', 'formidable' ),
 		);
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	public static function deactivate() {
@@ -643,8 +687,7 @@ class FrmAddon {
 
 		$this_plugin->clear_license();
 
-		echo json_encode( $response );
-		wp_die();
+		wp_send_json( $response );
 	}
 
 	/**
@@ -658,6 +701,9 @@ class FrmAddon {
 		return $this_plugin;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function send_mothership_request( $action ) {
 		$api_params = array(
 			'edd_action' => $action,
@@ -676,7 +722,10 @@ class FrmAddon {
 			'user-agent' => $this->plugin_slug . '/' . $this->version . '; ' . get_bloginfo( 'url' ),
 		);
 
-		$resp = wp_remote_post( $this->store_url, $arg_array );
+		$resp = wp_remote_post(
+			$this->store_url . '?l=' . urlencode( base64_encode( $this->license ) ),
+			$arg_array
+		);
 		$body = wp_remote_retrieve_body( $resp );
 
 		$message = __( 'Your License Key was invalid', 'formidable' );
@@ -696,8 +745,14 @@ class FrmAddon {
 					$message = $json_res;
 				}
 			} elseif ( isset( $resp['response'] ) && isset( $resp['response']['code'] ) ) {
-				/* translators: %1$s: Error code, %2$s: Error message */
-				$message = sprintf( __( 'There was a %1$s error: %2$s', 'formidable' ), $resp['response']['code'], $resp['response']['message'] . ' ' . $resp['body'] );
+				$resp['body'] = wp_strip_all_tags( $resp['body'] );
+
+				$message = sprintf(
+					/* translators: %1$s: Error code, %2$s: Error message */
+					esc_html__( 'There was a %1$s error: %2$s', 'formidable' ),
+					esc_html( $resp['response']['code'] ),
+					$resp['response']['message'] . ' ' . $resp['body']
+				);
 			}
 		}
 

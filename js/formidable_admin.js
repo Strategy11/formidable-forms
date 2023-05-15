@@ -267,7 +267,7 @@ var FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ 
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					el.reset.innerHTML = msg.message;
+					el.reset.textContent = msg.message;
 					if ( el.reset.getAttribute( 'data-refresh' ) === '1' ) {
 						window.location.reload();
 					}
@@ -318,7 +318,8 @@ function frmAdminBuildJS() {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
 	const { tag, div, span, a, svg, img } = frmDom;
-	const { doJsonFetch } = frmDom.ajax;
+	const { onClickPreventDefault } = frmDom.util;
+	const { doJsonFetch, doJsonPost } = frmDom.ajax;
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -452,7 +453,7 @@ function frmAdminBuildJS() {
 
 		if ( text !== null && text !== '' ) {
 			this.setAttribute( 'data-toggletext', this.innerHTML );
-			this.innerHTML = text;
+			this.textContent = text;
 		}
 
 		return false;
@@ -2531,11 +2532,11 @@ function frmAdminBuildJS() {
 		var slug = jQuery( '#param' ).val(),
 			msg;
 		slug = slug.trim().toLowerCase();
-		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) {
-			msg = frm_admin_js.slug_is_reserved;
+		if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( slug ) ) { // eslint-disable-line camelcase
+			msg = frm_admin_js.slug_is_reserved; // eslint-disable-line camelcase
 			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
-			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' );
+			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>', 'div' ); // eslint-disable-line camelcase
 			infoModal( msg );
 		}
 	}
@@ -2550,7 +2551,7 @@ function frmAdminBuildJS() {
 			unsafeParams = '';
 
 		while ( match !== null ) {
-			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) {
+			if ( Array.isArray( frm_admin_js.unsafe_params ) && frm_admin_js.unsafe_params.includes( match[1]) ) { // eslint-disable-line camelcase
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -2561,10 +2562,10 @@ function frmAdminBuildJS() {
 		}
 
 		if ( unsafeParams !== '' ) {
-			msg =  frm_admin_js.param_is_reserved;
+			msg =  frm_admin_js.param_is_reserved; // eslint-disable-line camelcase
 			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
-			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>';
+			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frm_admin_js.reserved_words + '</a>'; // eslint-disable-line camelcase
 
 			infoModal( msg );
 		}
@@ -2609,7 +2610,7 @@ function frmAdminBuildJS() {
 		}
 
 		if ( stack.length > 0 || unmatchedClosing.length > 0 ) {
-			msg = frm_admin_js.unmatched_parens + '\n\n';
+			msg = frm_admin_js.unmatched_parens + '\n\n'; // eslint-disable-line camelcase
 			return msg;
 		}
 
@@ -2647,7 +2648,7 @@ function frmAdminBuildJS() {
 		var nonNumericShortcodes = getNonNumericShortcodes();
 
 		if ( nonNumericShortcodes.test( calculation ) ) {
-			msg = frm_admin_js.text_shortcodes + '\n\n';
+			msg = frm_admin_js.text_shortcodes + '\n\n'; // eslint-disable-line camelcase
 		}
 
 		return msg;
@@ -2680,7 +2681,7 @@ function frmAdminBuildJS() {
 			msg = '';
 
 		if ( nonFormShortcodes.test( formula ) ) {
-			msg += frm_admin_js.view_shortcodes + '\n\n';
+			msg += frm_admin_js.view_shortcodes + '\n\n'; // eslint-disable-line camelcase
 		}
 
 		return msg;
@@ -3084,7 +3085,7 @@ function frmAdminBuildJS() {
 			$thisField.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 			$unqDetail = jQuery( '.frm_unique_details' + fieldId + ' input' );
 			if ( $unqDetail.val() === '' ) {
-				$unqDetail.val( frm_admin_js.default_unique );
+				$unqDetail.val( frm_admin_js.default_unique ); // eslint-disable-line camelcase
 			}
 		} else {
 			var v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
@@ -3107,7 +3108,7 @@ function frmAdminBuildJS() {
 			//Add default validation message if empty
 			var valMsg = jQuery( '.frm_validation_box .frm_conf_details' + fieldId + ' input' );
 			if ( valMsg.val() === '' ) {
-				valMsg.val( frm_admin_js.default_conf );
+				valMsg.val( frm_admin_js.default_conf ); // eslint-disable-line camelcase
 			}
 
 			setConfirmationFieldDescriptions( fieldId );
@@ -3132,17 +3133,17 @@ function frmAdminBuildJS() {
 
 		var fieldDescription = document.getElementById( 'field_description_' + fieldId );
 		var hiddenDescName = 'field_options[description_' + fieldId + ']';
-		var newValue = frm_admin_js['enter_' + fieldType];
+		var newValue = frm_admin_js['enter_' + fieldType]; // eslint-disable-line camelcase
 		maybeSetNewDescription( fieldDescription, hiddenDescName, newValue );
 
 		var confFieldDescription = document.getElementById( 'conf_field_description_' + fieldId );
 		var hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
-		var newConfValue = frm_admin_js['confirm_' + fieldType];
+		var newConfValue = frm_admin_js['confirm_' + fieldType]; // eslint-disable-line camelcase
 		maybeSetNewDescription( confFieldDescription, hiddenConfName, newConfValue );
 	}
 
 	function maybeSetNewDescription( descriptionDiv, hiddenName, newValue ) {
-		if ( descriptionDiv.innerHTML === frm_admin_js.desc ) {
+		if ( descriptionDiv.innerHTML === frm_admin_js.desc ) { // eslint-disable-line camelcase
 
 			// Set the visible description value and the hidden description value
 			descriptionDiv.innerHTML = newValue;
@@ -3456,6 +3457,24 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Dismiss a warning message and send an AJAX request to update the dismissal state.
+	 *
+	 * @since 6.3
+	 *
+	 * @param {Event} event The event object associated with the click on the dismiss icon.
+	 */
+	function dismissWarningMessage( event ) {
+		const target = event.target;
+
+		const warningEl = target.closest( '.frm_warning_style' );
+		jQuery( warningEl ).fadeOut( 400, () => warningEl.remove() );
+
+		const action = target.dataset.action;
+		const formData  = new FormData();
+		doJsonPost( action, formData );
+	}
+
+	/**
 	 * If a field is clicked in the builder, prevent inputs from changing.
 	 */
 	function stopFieldFocus( e ) {
@@ -3515,7 +3534,7 @@ function frmAdminBuildJS() {
 	 */
 	function maybeClearOptText() {
 		/*jshint validthis:true */
-		if ( this.value === frm_admin_js.new_option ) {
+		if ( this.value === frm_admin_js.new_option ) { // eslint-disable-line camelcase
 			this.setAttribute( 'data-value-on-focus', this.value );
 			this.value = '';
 		}
@@ -3528,7 +3547,7 @@ function frmAdminBuildJS() {
 
 	function clickDeleteField() {
 		/*jshint validthis:true */
-		var confirmMsg = frm_admin_js.conf_delete,
+		var confirmMsg = frm_admin_js.conf_delete, // eslint-disable-line camelcase
 			maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
 			li = maybeDivider.parentNode,
 			field = jQuery( this ).closest( 'li.form-field' ),
@@ -3554,7 +3573,7 @@ function frmAdminBuildJS() {
 
 		// If deleting a section, use a special message.
 		if ( maybeDivider.className === 'divider_section_only' ) {
-			confirmMsg = frm_admin_js.conf_delete_sec;
+			confirmMsg = frm_admin_js.conf_delete_sec; // eslint-disable-line camelcase
 		}
 
 		this.setAttribute( 'data-frmverify', confirmMsg );
@@ -4707,7 +4726,7 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) {
+		if ( '' !== this.value || frm_admin_js.new_option !== this.getAttribute( 'data-value-on-focus' ) ) { // eslint-disable-line camelcase
 			this.setAttribute( 'data-value-on-focus', this.value );
 		}
 	}
@@ -4870,7 +4889,7 @@ function frmAdminBuildJS() {
 				} else {
 					containerClass.remove( 'frm-first-page' );
 				}
-				pages[i].innerHTML = ( i + 1 );
+				pages[i].textContent = ( i + 1 );
 			}
 		} else {
 			document.getElementById( 'frm-fake-page' ).style.display = 'none';
@@ -5086,7 +5105,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 2 || val > 200 ) ) {
-			infoModal( frm_admin_js.repeat_limit_min );
+			infoModal( frm_admin_js.repeat_limit_min ); // eslint-disable-line camelcase
 			this.value = '';
 		}
 	}
@@ -5095,7 +5114,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		var val = this.value;
 		if ( val !== '' && ( val < 1 || val > 200 ) ) {
-			infoModal( frm_admin_js.checkbox_limit );
+			infoModal( frm_admin_js.checkbox_limit ); // eslint-disable-line camelcase
 			this.value = '';
 		}
 	}
@@ -5212,7 +5231,27 @@ function frmAdminBuildJS() {
 				single.append( labelForDisplay );
 			}
 		} else {
-			text[ text.length - 1 ].nodeValue = ' ' + label.val();
+			let firstInputIndex = false;
+			text.forEach( ( node, index ) => {
+				if ( firstInputIndex === false ) {
+					if ( node.tagName === 'INPUT' ) {
+						firstInputIndex = index;
+					}
+				} else {
+					if ( index === firstInputIndex + 1 ) {
+						let nodeValue = '';
+
+						if ( buttonsAsOptions( fieldId ) ) {
+							nodeValue = div({ className: 'frm_label_button_container', text: ' ' + label.val() });
+							single[0].replaceChild( nodeValue, node );
+						} else {
+							node.nodeValue = ' ' + label.val();
+						}
+					} else {
+						single[0].removeChild( node );
+					}
+				}
+			});
 		}
 
 		// Set saved value.
@@ -5221,6 +5260,13 @@ function frmAdminBuildJS() {
 		// Set the default value.
 		defaultVal = thisOpt.find( 'input[name^="default_value_"]' );
 		previewInput.prop( 'checked', defaultVal.is( ':checked' ) ? true : false );
+	}
+
+	function buttonsAsOptions( fieldId ) {
+		const fields = document.getElementsByName( 'field_options[image_options_' + fieldId + ']' );
+		const result = Array.from( fields ).find( field => field.checked &&  ( 'buttons' === field.value ) );
+
+		return typeof result !== 'undefined';
 	}
 
 	/**
@@ -5359,7 +5405,7 @@ function frmAdminBuildJS() {
 		single = '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id +
 			'"><input type="' + type +
 			'" name="item_meta[' + fieldId + ']' + ( type === 'checkbox' ? '[]' : '' ) +
-			'" value="' + opt.saved + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + opt.label + '</label>' +
+			'" value="' + purifyHtml( opt.saved ) + '" id="' + id + '"' + ( isProduct ? ' data-price="' + opt.price + '"' : '' ) + ( opt.checked ? ' checked="checked"' : '' ) + '> ' + purifyHtml( opt.label ) + '</label>' +
 			( isOther ? other : '' ) +
 			'</div>';
 
@@ -5393,7 +5439,7 @@ function frmAdminBuildJS() {
 			if ( ! isOther || showOther ) {
 				var opt = document.createElement( 'option' );
 				opt.value = opts[ i ].saved;
-				opt.innerHTML = label;
+				opt.innerHTML = purifyHtml( label );
 
 				if ( isProduct ) {
 					opt.setAttribute( 'data-price', opts[ i ].price );
@@ -5419,22 +5465,23 @@ function frmAdminBuildJS() {
 	}
 
 	function getMultipleOpts( fieldId ) {
-		var i, saved, labelName, label, key, optObj,
-			image, savedLabel, input, field, checkbox, fieldType,
+		let i, saved, labelName, label, key, optObj,
+			fieldType,
 			checked = false,
 			opts = [],
-			imageUrl = '',
+			imageUrl = '';
 
-			optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ),
-			separateValues = usingSeparateValues( fieldId ),
-			hasImageOptions = imagesAsOptions( fieldId ),
-			showLabelWithImage = showingLabelWithImage( fieldId ),
-			isProduct = isProductField( fieldId );
+		const optVals            = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' );
+		const isProduct          = isProductField( fieldId );
+		const showLabelWithImage = showingLabelWithImage( fieldId );
+		const hasImageOptions    = imagesAsOptions( fieldId );
+		const separateValues     = usingSeparateValues( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
 			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[image]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
 				continue;
 			}
+
 			saved = optVals[ i ].value;
 			label = saved;
 			key = optVals[ i ].name.replace( 'field_options[options_' + fieldId + '][', '' ).replace( '[label]', '' ).replace( ']', '' );
@@ -5445,9 +5492,9 @@ function frmAdminBuildJS() {
 			}
 
 			if ( hasImageOptions ) {
-				imageUrl = getImageUrlFromInput( optVals[i]);
+				imageUrl  = getImageUrlFromInput( optVals[i]);
 				fieldType = radioOrCheckbox( fieldId );
-				label = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
+				label     = getImageLabel(  label, showLabelWithImage, imageUrl, fieldType );
 			}
 
 			/**
@@ -5500,24 +5547,62 @@ function frmAdminBuildJS() {
 		return img.attr( 'src' );
 	}
 
-	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
-		var imageLabelClass, fullLabel,
-			originalLabel = label,
-			shape = fieldType === 'checkbox' ? 'square' : 'circle';
-
-		fullLabel = '<div class="frm_selected_checkmark"><svg class="frmsvg"><use xlink:href="#frm_checkmark_' + shape + '_icon"></svg></div>';
-		if ( imageUrl ) {
-			fullLabel += '<img src="' + imageUrl + '" alt="' + originalLabel + '" />';
-		} else {
-			fullLabel += '<div class="frm_empty_url">' + frm_admin_js.image_placeholder_icon + '</div>';
+	function purifyHtml( html ) {
+		if ( html instanceof Element || html instanceof Document ) {
+			html = html.outerHTML;
 		}
-		if ( showLabelWithImage ) {
-			fullLabel += '<span class="frm_text_label_for_image"><span class="frm_text_label_for_image_inner">' + originalLabel + '</span></span>';
+
+		const clean = jQuery.parseHTML( html ).reduce(
+			( total, currentNode ) => {
+				const cleanNode = frmDom.cleanNode( currentNode );
+
+				if ( '#text' === cleanNode.nodeName ) {
+					return total += cleanNode.textContent;
+				}
+
+				return total + cleanNode.outerHTML;
+			},
+			''
+		);
+
+		return clean;
+	}
+
+	function getImageLabel( label, showLabelWithImage, imageUrl, fieldType ) {
+		var imageLabelClass,
+			originalLabel = label,
+			shape = fieldType === 'checkbox' ? 'square' : 'circle',
+			labelImage,
+			labelNode,
+			imageLabel;
+
+		originalLabel = purifyHtml( originalLabel );
+
+		if ( imageUrl ) {
+			labelImage = img({ src: imageUrl, alt: originalLabel });
+		} else {
+			labelImage           = div({ className: 'frm_empty_url' });
+			labelImage.innerHTML = frm_admin_js.image_placeholder_icon; // eslint-disable-line camelcase
 		}
 
 		imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
 
-		return ( '<span class="frm_image_option_container' + imageLabelClass + '">' + fullLabel + '</span>' );
+		imageLabel = tag( 'span', { className: 'frm_text_label_for_image_inner' });
+
+		imageLabel.innerHTML = originalLabel;
+		labelNode = tag(
+			'span',
+			{
+				className: 'frm_image_option_container' + imageLabelClass,
+				children: [
+					tag( 'div', { className: 'frm_selected_checkmark', child: svg({ href: '#frm_checkmark_' + shape + '_icon' }) }),
+					labelImage,
+					tag( 'span', { className: 'frm_text_label_for_image', child: imageLabel })
+				]
+			}
+		);
+
+		return labelNode;
 	}
 
 	function getChecked( id ) {
@@ -5602,8 +5687,9 @@ function frmAdminBuildJS() {
 				areValuesSeparate === input.name.endsWith( '[value]' ) &&
 				input.value === targetInput.value
 		);
+
 		if ( conflicts.length ) {
-			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', targetInput.value ) );
+			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyHtml( targetInput.value ) ) );
 		}
 	}
 
@@ -6740,7 +6826,7 @@ function frmAdminBuildJS() {
 	}
 
 	function onlyOneActionMessage() {
-		infoModal( frm_admin_js.only_one_action );
+		infoModal( frm_admin_js.only_one_action ); // eslint-disable-line camelcase
 	}
 
 	function addFormLogicRow() {
@@ -6843,7 +6929,7 @@ function frmAdminBuildJS() {
 			if ( jQuery( this ).val() === v && this.name !== $t.name ) {
 				this.style.borderColor = 'red';
 				jQuery( $t ).val( '' );
-				infoModal( frm_admin_js.field_already_used );
+				infoModal( frm_admin_js.field_already_used ); // eslint-disable-line camelcase
 				return false;
 			}
 		});
@@ -7285,9 +7371,9 @@ function frmAdminBuildJS() {
 	function setDefaultPostStatus() {
 		var urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
-			document.getElementById( 'post-visibility-display' ).innerHTML = frm_admin_js.private_label;
-			document.getElementById( 'hidden-post-visibility' ).value = 'private';
-			document.getElementById( 'visibility-radio-private' ).checked = true;
+			document.getElementById( 'post-visibility-display' ).textContent = frm_admin_js.private_label; // eslint-disable-line camelcase
+			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
+			document.getElementById( 'visibility-radio-private' ).checked    = true;
 		}
 	}
 
@@ -7387,7 +7473,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeAddSanitizeUrlToShortcodeVariable( variable, element, contentBox ) {
-		if ( 'object' !== typeof element || ! ( element instanceof jQuery ) || 'success_url' !== contentBox[0].id ) {
+		if ( 'object' !== typeof element || ! ( element instanceof jQuery ) || 0 !== contentBox[0].id.indexOf( 'success_url_' ) ) {
 			return variable;
 		}
 
@@ -7474,7 +7560,7 @@ function frmAdminBuildJS() {
 		idKey = document.getElementById( idKey );
 		field = idKey.options[idKey.selectedIndex].value;
 		code = 'if ' + field + ' ' + is + '="' + text + '"]';
-		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field );
+		result.setAttribute( 'data-code', code + frm_admin_js.conditional_text + '[/if ' + field ); // eslint-disable-line camelcase
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
@@ -8117,8 +8203,20 @@ function frmAdminBuildJS() {
 	}
 
 	function exportTypeChanged( event ) {
-		showOrHideRepeaters( event.target.value );
+		const value = event.target.value;
+		showOrHideRepeaters( value );
 		checkExportTypes.call( event.target );
+		checkSelectedAllFormsCheckbox( value );
+	}
+
+	function checkSelectedAllFormsCheckbox( exportType ) {
+		const selectAllCheckbox = document.getElementById( 'frm-export-select-all' );
+		if ( exportType === 'csv' ) {
+			selectAllCheckbox.checked = false;
+			selectAllCheckbox.disabled = true;
+		} else {
+			selectAllCheckbox.disabled = false;
+		}
 	}
 
 	function checkExportTypes() {
@@ -8289,7 +8387,7 @@ function frmAdminBuildJS() {
 			dataType: 'json',
 			data: {
 				action: 'frm_install_addon',
-				nonce: frm_admin_js.nonce,
+				nonce: frm_admin_js.nonce, // eslint-disable-line camelcase
 				plugin: plugin,
 				hostname: el.find( '#hostname' ).val(),
 				username: el.find( '#username' ).val(),
@@ -8321,7 +8419,7 @@ function frmAdminBuildJS() {
 
 		// The Ajax request was successful, so let's update the output.
 		button.css({ opacity: '0' });
-		message.text( frm_admin_js.active );
+		message.text( frm_admin_js.active ); // eslint-disable-line camelcase
 
 		document.querySelectorAll( '.frm-oneclick' ).forEach(
 			oneClick => {
@@ -8473,8 +8571,8 @@ function frmAdminBuildJS() {
 			document.getElementById( 'frm_template_name' ).value = oldName;
 			document.getElementById( 'frm_link' ).value = this.attributes.rel.value;
 			document.getElementById( 'frm_action_type' ).value = 'frm_install_template';
-			nameLabel.innerHTML = nameLabel.getAttribute( 'data-form' );
-			descLabel.innerHTML = descLabel.getAttribute( 'data-form' );
+			nameLabel.textContent = nameLabel.getAttribute( 'data-form' );
+			descLabel.textContent = descLabel.getAttribute( 'data-form' );
 			$modal.dialog( 'open' );
 		});
 
@@ -9549,6 +9647,11 @@ function frmAdminBuildJS() {
 				thisFormId = jQuery( document.getElementById( 'form_id' ) ).val();
 			}
 
+			// Add event listener for dismissible warning messages.
+			document.querySelectorAll( '.frm-warning-dismiss' ).forEach( ( dismissIcon ) => {
+				onClickPreventDefault( dismissIcon, dismissWarningMessage );
+			});
+
 			frmAdminBuild.inboxBannerInit();
 
 			if ( $newFields.length > 0 ) {
@@ -9642,7 +9745,7 @@ function frmAdminBuildJS() {
 				this.select();
 			});
 
-			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#template-search-input)', searchContent );
+			jQuery( document ).on( 'input search change', '.frm-auto-search:not(#frm_new_form_modal #template-search-input)', searchContent );
 			jQuery( document ).on( 'focusin click', '.frm-auto-search', stopPropagation );
 			var autoSearch = jQuery( '.frm-auto-search' );
 			if ( autoSearch.val() !== '' ) {
@@ -9716,7 +9819,7 @@ function frmAdminBuildJS() {
 
 			setupSortable( 'ul.frm_sorting' );
 
-			document.querySelectorAll( '.field_type_list > li' ).forEach( makeDraggable );
+			document.querySelectorAll( '.field_type_list > li:not(.frm_show_upgrade)' ).forEach( makeDraggable );
 
 			jQuery( 'ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a' ).disableSelection();
 
@@ -9940,7 +10043,7 @@ function frmAdminBuildJS() {
 			//Warning when user selects "Do not store entries ..."
 			jQuery( document.getElementById( 'no_save' ) ).on( 'change', function() {
 				if ( this.checked ) {
-					if ( confirm( frm_admin_js.no_save_warning ) !== true ) {
+					if ( confirm( frm_admin_js.no_save_warning ) !== true ) { // eslint-disable-line camelcase
 						// Uncheck box if user hits "Cancel"
 						jQuery( this ).attr( 'checked', false );
 					}
@@ -10250,6 +10353,10 @@ function frmAdminBuildJS() {
 			});
 
 			showOrHideRepeaters( getExportOption() );
+
+			document.querySelector( '#frm-export-select-all' ).addEventListener( 'change', event => {
+				document.querySelectorAll( '[name="frm_export_forms[]"]' ).forEach( cb => cb.checked = event.target.checked );
+			});
 		},
 
 		inboxBannerInit: function() {
@@ -10455,7 +10562,7 @@ function frmImportCsv( formID ) {
 				jQuery( '.frm_csv_remaining' ).html( count );
 				frmImportCsv( formID );
 			} else {
-				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete );
+				jQuery( document.getElementById( 'frm_import_message' ) ).html( frm_admin_js.import_complete ); // eslint-disable-line camelcase
 				setTimeout( function() {
 					location.href = '?page=formidable-entries&frm_action=list&form=' + formID + '&import-message=1';
 				}, 2000 );

@@ -65,3 +65,15 @@
 .frm-admin-loading {
 	width: 200px;
 }
+
+.editor-styles-wrapper .frm_repeat_buttons i {
+	/* Avoid font-style: italic conflicts. The +/- icon should not be italic */
+	font-style: unset;
+}
+
+.editor-styles-wrapper .wp-block-post-content .with_frm_style .frm_repeat_buttons .frm_button {
+	/* Prevent blue anchor text in Add/Remove buttons */
+	color: var(--submit-text-color) !important;
+	/* Ensure consistent background color on focus for Add/Remove buttons */
+	background: var(--submit-bg-color) !important;
+}

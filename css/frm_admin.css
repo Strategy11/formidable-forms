@@ -1891,6 +1891,41 @@ div.frm_updated_message {
 	margin-bottom:4px;
 }
 
+/* Warning message dismiss */
+.frm_warning_style {
+	position: relative;
+	padding-right: calc(var(--gap-md) + 15px);
+}
+
+body.rtl .frm_warning_style {
+	padding-right: var(--gap-md);
+	padding-left: calc(var(--gap-md) + 15px);
+}
+
+.frm-warning-dismiss {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	cursor: pointer;
+	transition: opacity 0.2s ease-out;
+}
+
+body.rtl .frm-warning-dismiss {
+	left: 10px;
+	right: auto;
+}
+
+.frm-warning-dismiss:hover {
+	opacity: 0.8;
+}
+
+.frm-warning-dismiss.frmsvg,
+.frm-warning-dismiss.frmsvg svg {
+	width: 15px;
+	height: 15px;
+}
+
 .frm_note_style {
 	background: rgba(188, 224, 253, 0.23);
 	color: var(--grey-700);
@@ -2037,7 +2072,7 @@ h2.frm-h2 + .howto {
 }
 
 .frm-addons .plugin-card-top {
-	height: 155px;
+	min-height: 155px;
 	padding-top: var(--gap-lg);
 	overflow: hidden;
 }
@@ -2749,12 +2784,12 @@ li[data-preview] .frm-hover-icons .frm-preview-form,
 	transform: rotate(-90deg);
 }
 
-#frm_embed_modal .frm-modal-cancel {
+#frm_embed_modal .frm_modal_footer {
 	display: none;
 }
 
-#frm_embed_modal.frm-on-page-2 .frm-modal-cancel {
-	display: inline;
+#frm_embed_modal.frm-on-page-2 .frm_modal_footer {
+	display: block;
 }
 
 .frm-embed-modal-content ul {
@@ -7501,6 +7536,12 @@ input[disabled],
 	font-size: var(--text-md);
 }
 
+/* Standardize icon size for field buttons in the builder */
+.field_type_list li.frmbutton .frmsvg {
+	width: var(--text-xl);
+	font-size: var(--text-xl);
+}
+
 .frm_code_list i:before {
 	font-size: inherit;
 }
@@ -7525,6 +7566,11 @@ input[disabled],
 	border-radius: var(--border-radius) !important;
 	padding: var(--gap-xs) var(--gap-sm) !important;
 	color: var(--grey-900) !important;
+}
+
+/* Adjust field button size to full width in builder */
+#frm-insert-fields li a {
+	display: flex !important;
 }
 
 .frmbutton.ui-draggable-dragging a {
@@ -8324,6 +8370,11 @@ Responsive Design
 		display: inline-block;
 	}
 
+	/* Fix: Issue where the admin page content had extra white space to the left on small screens */
+	.auto-fold.frm-admin-page-styles:not(.frm-full-screen) .frm_page_container,
+	.auto-fold:not(.frm-full-screen) .frm_wrap .frm_page_container {
+		left: 36px;
+	}
 }
 
 @media only screen and (max-width: 850px) {

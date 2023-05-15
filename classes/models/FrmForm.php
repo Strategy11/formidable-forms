@@ -285,11 +285,6 @@ class FrmForm {
 		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html']  = ( isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
-		if ( ! empty( $options['success_url'] ) && ! empty( $args['form_id'] ) ) {
-			$options['success_url']           = FrmFormsHelper::maybe_add_sanitize_url_attr( $options['success_url'], (int) $args['form_id'] );
-			$values['options']['success_url'] = $options['success_url'];
-		}
-
 		/**
 		 * Allows modifying form options before updating or creating.
 		 *
@@ -370,6 +365,16 @@ class FrmForm {
 				'field_options' => $field->field_options,
 				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
 			);
+
+			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) {
+				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
+					if ( is_array( $option ) ) {
+						foreach ( $option as $key => $item ) {
+							$values['field_options'][ 'options_' . $field_id ][ $option_key ][ $key ] = FrmAppHelper::kses( $item, 'all' );
+						}
+					}
+				}
+			}
 
 			self::prepare_field_update_values( $field, $values, $new_field );
 

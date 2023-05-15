@@ -57,6 +57,26 @@ class FrmOnSubmitAction extends FrmFormAction {
 	}
 
 	/**
+	 * This function should check that $new_instance is set correctly.
+	 * The newly calculated value of $instance should be returned.
+	 * If "false" is returned, the instance won't be saved/updated.
+	 *
+	 * @param array $new_instance New settings for this instance as input by the user via form()
+	 * @param array $old_instance Old settings for this instance
+	 *
+	 * @return array Settings to save or bool false to cancel saving
+	 */
+	public function update( $new_instance, $old_instance ) {
+		if ( 'redirect' === $new_instance['post_content']['success_action'] && ! empty( $new_instance['post_content']['success_url'] ) ) {
+			$new_instance['post_content']['success_url'] = FrmFormsHelper::maybe_add_sanitize_url_attr(
+				$new_instance['post_content']['success_url'],
+				(int) $new_instance['menu_order']
+			);
+		}
+		return $new_instance;
+	}
+
+	/**
 	 * Add a workaround in case Pro hasn't been updated. We don't want to
 	 * lose the trigger and have edit messages start showing on create.
 	 *

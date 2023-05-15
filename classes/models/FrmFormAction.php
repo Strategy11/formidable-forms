@@ -202,8 +202,6 @@ class FrmFormAction {
 		return $field_name . '_' . $this->number;
 	}
 
-	// Private Function. Don't worry about this.
-
 	/**
 	 * @param int|string $number
 	 * @return void
