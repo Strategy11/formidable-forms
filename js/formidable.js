@@ -1362,18 +1362,18 @@ function frmFrontFormJS() {
 	}
 
 	function maybeShowNewTabFallbackMessage() {
-		if (!window.frmShowNewTabFallback) {
-			return;
-		}
-
 		var messageEl;
 
-		messageEl = document.querySelector('#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message');
-		if (!messageEl) {
+		if ( ! window.frmShowNewTabFallback ) {
 			return;
 		}
 
-		messageEl.insertAdjacentHTML('afterend', '<div class="frm-redirect-msg" role="status">' + frmShowNewTabFallback.message + '</div>');
+		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		if ( ! messageEl ) {
+			return;
+		}
+
+		messageEl.insertAdjacentHTML( 'afterend', '<div class="frm-redirect-msg" role="status">' + frmShowNewTabFallback.message + '</div>' );
 	}
 
 	function setCustomValidityMessage() {
