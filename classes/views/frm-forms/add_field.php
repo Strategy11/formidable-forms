@@ -18,7 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<?php if ( $field['type'] === 'divider' ) { ?>
-			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
+			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
+				<?php
+				FrmAppHelper::icon_by_class(
+					'frmfont frm_arrowdown6_icon',
+					array( 'aria-label' => __( 'Expand/Collapse Section Icon', 'formidable' ) )
+				);
+				?>
+			</a>
 		<?php } ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>" data-container="body" aria-label="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
