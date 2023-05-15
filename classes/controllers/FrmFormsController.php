@@ -2559,6 +2559,7 @@ class FrmFormsController {
 			'formId'  => intval( $args['form']->id ),
 			'message' => self::get_redirect_fallback_message( $success_url, $args ),
 		);
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo 'frmShowNewTabFallback = ' . FrmAppHelper::maybe_json_encode( $data ) . ';';
 		echo '}</script>';
 	}
