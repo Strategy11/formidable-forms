@@ -2552,15 +2552,15 @@ class FrmFormsController {
 	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
 	 */
 	private static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
-		echo '<script>
-var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");
-if ( ! newTab ) {
-	frmShowNewTabFallback = {
-		formId: ' . $args['form']->id . ',
-		message: \'' . self::get_redirect_fallback_message( $success_url, $args ) . '\',
-	};
-}
-</script>';
+		echo '<script>var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");';
+		echo 'if ( ! newTab ) {';
+
+		$data = array(
+			'formId'  => intval( $args['form']->id ),
+			'message' => self::get_redirect_fallback_message( $success_url, $args ),
+		);
+		echo 'frmShowNewTabFallback = ' . FrmAppHelper::maybe_json_encode( $data ) . ';';
+		echo '}</script>';
 	}
 
 	/**
