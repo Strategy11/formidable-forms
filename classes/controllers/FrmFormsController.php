@@ -2530,7 +2530,7 @@ class FrmFormsController {
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
-				echo '<script>window.open("' . esc_url_raw( $success_url ) . '", "_blank");</script>';
+				self::print_open_in_new_tab_js_with_fallback_handler( $success_url, $args );
 				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
 				return;
 			}
@@ -2541,6 +2541,26 @@ class FrmFormsController {
 
 		// Redirect with a delay.
 		self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
+	}
+
+	/**
+	 * Prints open in new tab js with fallback handler.
+	 *
+	 * @since 6.x
+	 *
+	 * @param string $success_url Success URL.
+	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
+	 */
+	private static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
+		echo '<script>
+var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");
+if ( ! newTab ) {
+	frmShowNewTabFallback = {
+		formId: ' . $args['form']->id . ',
+		message: \'' . self::get_redirect_fallback_message( $success_url, $args ) . '\',
+	};
+}
+</script>';
 	}
 
 	/**
@@ -2570,6 +2590,8 @@ class FrmFormsController {
 			ob_start();
 			self::show_lone_success_messsage( $args );
 			$response_data['content'] = ob_get_clean();
+
+			$response_data['fallbackMsg'] = '<div class="frm-redirect-msg" role="status">' . self::get_redirect_fallback_message( $args['success_url'], $args ) . '</div>';
 		}
 
 		return $response_data;
@@ -2624,14 +2646,8 @@ class FrmFormsController {
 	 * @param array $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
-		$target = '';
-		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
-			$target = ' target="_blank"';
-		}
-
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
-			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '"' . $target . '>', '</a>' ) .
+			self::get_redirect_fallback_message( $success_url, $args ) .
 			'</div></div>';
 
 		$redirect_args = array(
@@ -2641,6 +2657,29 @@ class FrmFormsController {
 		);
 
 		return apply_filters( 'frm_redirect_msg', $redirect_msg, $redirect_args );
+	}
+
+	/**
+	 * Gets fallback message when redirecting failed.
+	 *
+	 * @since 6.x
+	 *
+	 * @param string $success_url Redirect URL.
+	 * @param array  $args        Contains `form` object.
+	 * @return string
+	 */
+	private static function get_redirect_fallback_message( $success_url, $args ) {
+		$target = '';
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$target = ' target="_blank"';
+		}
+
+		return sprintf(
+			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+			__( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ),
+			'<a href="' . esc_url( $success_url ) . '"' . $target . '>',
+			'</a>'
+		);
 	}
 
 	/**

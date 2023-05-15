@@ -590,7 +590,7 @@ function frmFrontFormJS() {
 
 		success = function( response ) {
 			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger;
+				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
 
 			defaultResponse = {
 				content: '',
@@ -624,7 +624,10 @@ function frmFrontFormJS() {
 				}
 
 				// We don't return here because we're opening in a new tab, the old tab will still update.
-				window.open( response.redirect, '_blank' );
+				newTab = window.open( response.redirect, '_blank' );
+				if ( ! newTab && response.fallbackMsg && response.content ) {
+					response.content += response.fallbackMsg;
+				}
 			}
 
 			if ( response.content !== '' ) {
@@ -1357,6 +1360,21 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function maybeShowNewTabFallbackMessage() {
+		if ( ! window.frmShowNewTabFallback ) {
+			return;
+		}
+
+		var messageEl;
+
+		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		if ( ! messageEl ) {
+			return;
+		}
+
+		messageEl.insertAdjacentHTML( 'afterend', '<div class="frm-redirect-msg" role="status">' + frmShowNewTabFallback.message + '</div>' );
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1394,6 +1412,7 @@ function frmFrontFormJS() {
 			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
+			maybeShowNewTabFallbackMessage();
 		},
 
 		getFieldId: function( field, fullID ) {
