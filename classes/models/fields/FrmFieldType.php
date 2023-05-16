@@ -199,8 +199,15 @@ DEFAULT_HTML;
 		return '[input]';
 	}
 
-	protected function multiple_input_html() {
-		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
+	/**
+	 * Generates the HTML for multiple input fields within a div container.
+	 * Note: The placeholders [key] and [input] will be replaced dynamically.
+	 *
+	 * @param string $aria_role Specifies the role attribute for the div container, defaults to 'group'.
+	 * @return string The HTML string for the div container with input fields, ready for string replacement.
+	 */
+	protected function multiple_input_html( $aria_role = 'group' ) {
+		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="' . esc_attr( $aria_role ) . '" tabindex="0" [multiple-input-attributes]>[input]</div>';
 	}
 
 	protected function primary_label_element() {

@@ -753,7 +753,7 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
-		if ( in_array( $field['type'], array( 'file', 'data', 'lookup' ), true ) ) {
+		if ( in_array( $field['type'], array( 'file', 'data', 'lookup', 'nps', 'radio', 'checkbox' ), true ) ) {
 			return;
 		}
 

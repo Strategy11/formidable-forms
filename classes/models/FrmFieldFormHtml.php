@@ -137,6 +137,8 @@ class FrmFieldFormHtml {
 		$this->replace_form_shortcodes();
 		$this->process_wp_shortcodes();
 		$this->maybe_replace_description_shortcode( true );
+
+		$this->add_multiple_input_attributes();
 	}
 
 	/**
@@ -483,5 +485,28 @@ class FrmFieldFormHtml {
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
 			$this->html = do_shortcode( $this->html );
 		}
+	}
+
+	/**
+	 * Adds multiple input attributes.
+	 *
+	 * @since x.x
+	 */
+	private function add_multiple_input_attributes() {
+		$field      = $this->field_obj->get_field();
+		$field_type = $this->field_obj->get_field_column( 'type' );
+		$attributes = array();
+
+		// Add 'aria-required' attribute to 'nps', 'radio', and 'checkbox' fields if required.
+		if ( in_array( $field_type, array( 'nps', 'radio', 'checkbox' ), true ) ) {
+			if ( $field['required'] === '1' ) {
+				$attributes['aria-required'] = 'aria-required="true"';
+			}
+		}
+
+		// Concatenate attributes into a string, and replace the [multiple-input-attributes]
+		// placeholder in the HTML with the attributes string.
+		$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
+		$this->html = str_replace( ' [multiple-input-attributes]', $html_attributes, $this->html );
 	}
 }
