@@ -34,8 +34,7 @@ class FrmFieldRadio extends FrmFieldType {
 	protected $array_allowed = false;
 
 	protected function input_html() {
-		$aria_role = 'radiogroup';
-		return $this->multiple_input_html( $aria_role );
+		return $this->multiple_input_html();
 	}
 
 	protected function include_form_builder_file() {

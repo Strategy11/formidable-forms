@@ -497,9 +497,29 @@ class FrmFieldFormHtml {
 		$field_type = $this->field_obj->get_field_column( 'type' );
 		$attributes = array();
 
-		// Add 'aria-required' attribute to 'nps', 'radio', and 'checkbox' fields if required.
-		if ( in_array( $field_type, array( 'nps', 'radio', 'checkbox' ), true ) ) {
-			if ( $field['required'] === '1' ) {
+		// Check if the field type is one of the following.
+		$is_valid_field_type = in_array( $field_type, array( 'data', 'product', 'radio', 'checkbox' ), true );
+
+		if ( $is_valid_field_type ) {
+			$is_radio = $field_type === 'radio' || ( ! empty( $field['data_type'] ) && $field['data_type'] === 'radio' );
+			$is_needed_aria_required = true;
+
+			// Check if the field type is 'data' or 'product'.
+			$is_data_or_product = in_array( $field_type, array( 'data', 'product' ), true );
+
+			if ( $is_data_or_product ) {
+				// Check if the data type isn't 'radio' or 'checkbox'.
+				if ( ! in_array( $field['data_type'], array( 'radio', 'checkbox' ), true ) ) {
+					// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
+					$is_needed_aria_required = false;
+				}
+			}
+
+			// Add 'role' attribute to the field.
+			$attributes['role'] = $is_radio ? 'role="radiogroup"' : 'role="group"';
+
+			// Add 'aria-required' attribute to the field if required.
+			if ( $is_needed_aria_required && '1' === $field['required'] ) {
 				$attributes['aria-required'] = 'aria-required="true"';
 			}
 		}

@@ -753,8 +753,18 @@ class FrmFieldsController {
 	 * @param array $add_html
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
-		if ( in_array( $field['type'], array( 'file', 'data', 'lookup', 'nps', 'radio', 'checkbox' ), true ) ) {
+		if ( in_array( $field['type'], array( 'file', 'nps', 'radio', 'checkbox' ), true ) ) {
 			return;
+		}
+
+		if ( in_array( $field['type'], array( 'data', 'lookup', 'product' ), true ) ) {
+			// Check if the data type is 'radio' or 'checkbox'.
+			$is_radio_or_checkbox = in_array( $field['data_type'], array( 'radio', 'checkbox' ), true );
+
+			// If the data type is 'radio' or 'checkbox', return early.
+			if ( $is_radio_or_checkbox ) {
+				return;
+			}
 		}
 
 		$include_html = FrmAppHelper::meets_min_pro_version( '3.06.01' );
