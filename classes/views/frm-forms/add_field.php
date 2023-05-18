@@ -17,9 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
 
-		<?php if ( $field['type'] === 'divider' ) { ?>
-			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
-		<?php } ?>
+		<?php if ( $field['type'] === 'divider' ) : ?>
+			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
+				<?php
+				FrmAppHelper::icon_by_class(
+					'frmfont frm_arrowdown6_icon',
+					array( 'aria-label' => esc_attr__( 'Expand/Collapse Section Icon', 'formidable' ) )
+				);
+				?>
+			</a>
+		<?php endif; ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>" data-container="body" aria-label="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_move_icon' ); ?>
