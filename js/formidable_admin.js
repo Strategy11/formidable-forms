@@ -5156,6 +5156,7 @@ function frmAdminBuildJS() {
 		var field, thisOpt;
 
 		field = getFieldKeyFromOpt( this );
+
 		if ( ! field ) {
 			return;
 		}
@@ -5338,17 +5339,50 @@ function frmAdminBuildJS() {
 		adjustConditionalLogicOptionOrders( fieldId );
 	}
 
-	function adjustConditionalLogicOptionOrders( fieldId ) {
+	function updateConditionalLogicsDependentOnThis() {
+		let that = this;
+		setTimeout( function() {
+			var fieldId, liContainer = that.closest( '.frm-single-settings' );
+
+			fieldId = liContainer.dataset['fid'];
+			if ( ! fieldId ) {
+				return;
+			}
+	
+			adjustConditionalLogicOptionOrders( fieldId, 'scale' );
+		}, 0 );
+
+	}
+
+	function getScaleFieldOptions( fieldId ) {
+		let opts = [];
+		let label, saved, i, optObj;
+		const optVals = document.querySelectorAll( 'input[name^="item_meta[' + fieldId + ']"]' );
+
+		optVals.forEach( ( opt, index ) => {
+			opts.push( opt.value );
+		});
+
+		return opts;
+	}
+
+	function adjustConditionalLogicOptionOrders( fieldId, type ) {
+		
 		var row, opts, logicId, valueSelect, rowOptions, expectedOrder, optionLength, optionIndex, expectedOption, optionMatch,
 			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length,
-			fieldOptions = getFieldOptions( fieldId ),
-			optionLength = fieldOptions.length;
+			fieldOptions, optionLength;
+
+		if ( type && 'scale' === type ) {
+			fieldOptions = getScaleFieldOptions( fieldId );
+		} else {
+			fieldOptions = getFieldOptions( fieldId );
+		}
+		optionLength = fieldOptions.length;
 
 		for ( rowIndex = 0; rowIndex < rowLength; rowIndex++ ) {
 			row = rows[ rowIndex ];
 			opts = row.querySelector( '.frm_logic_field_opts' );
-
 			if ( opts.value != fieldId ) {
 				continue;
 			}
@@ -9913,6 +9947,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'focusin', '.frm_single_option input[type=text]', maybeClearOptText );
 			$builderForm.on( 'click', '.frm_add_opt', addFieldOption );
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
+			$builderForm.on( 'change', '.frm_scale_opt', updateConditionalLogicsDependentOnThis );
 			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
 			$builderForm.on( 'focusin', '.frm_classes', showBuilderModal );
