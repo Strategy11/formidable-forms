@@ -522,10 +522,10 @@ class FrmFieldFormHtml {
 			if ( $is_needed_aria_required && '1' === $field['required'] ) {
 				$attributes['aria-required'] = 'aria-required="true"';
 			}
-		}
 
-		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
-		$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
-		$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
+			// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
+			$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
+			$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
+		}
 	}
 }
