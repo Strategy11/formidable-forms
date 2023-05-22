@@ -203,15 +203,14 @@ DEFAULT_HTML;
 	 * Creates a template for generating HTML containing multiple input fields enclosed in a div container.
 	 *
 	 * The placeholders [key] and [input] will be replaced dynamically during runtime.
-	 * [multiple-input-attributes] acts as a placeholder for any additional attributes that an input field might require.
 	 *
 	 * @see FrmFieldFormHtml->get_html() for the function handling the dynamic replacement.
 	 *
 	 * @return string The template HTML string for a div container with multiple input fields. This string is
-	 *                prepared for dynamic replacement of the placeholders [key], [input], and [multiple-input-attributes].
+	 *                prepared for dynamic replacement of the placeholders [key], and [input].
 	 */
 	protected function multiple_input_html() {
-		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" tabindex="0" [multiple-input-attributes]>[input]</div>';
+		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
 	}
 
 	protected function primary_label_element() {

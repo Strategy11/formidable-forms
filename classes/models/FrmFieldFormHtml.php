@@ -524,9 +524,8 @@ class FrmFieldFormHtml {
 			}
 		}
 
-		// Concatenate attributes into a string, and replace the [multiple-input-attributes]
-		// placeholder in the HTML with the attributes string.
+		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
 		$html_attributes = $attributes ? ' ' . implode( ' ', $attributes ) : '';
-		$this->html = str_replace( ' [multiple-input-attributes]', $html_attributes, $this->html );
+		$this->html = str_replace( ' role="group"', $html_attributes, $this->html );
 	}
 }
