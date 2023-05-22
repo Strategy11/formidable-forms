@@ -5342,9 +5342,8 @@ function frmAdminBuildJS() {
 	function updateConditionalLogicsDependentOnThis() {
 		let that = this;
 		setTimeout( function() {
-			var fieldId, liContainer = that.closest( '.frm-single-settings' );
+			let fieldId = that.closest( '.frm-single-settings' ).dataset['fid'];
 
-			fieldId = liContainer.dataset['fid'];
 			if ( ! fieldId ) {
 				return;
 			}
@@ -5356,10 +5355,9 @@ function frmAdminBuildJS() {
 
 	function getScaleFieldOptions( fieldId ) {
 		let opts = [];
-		let label, saved, i, optObj;
 		const optVals = document.querySelectorAll( 'input[name^="item_meta[' + fieldId + ']"]' );
 
-		optVals.forEach( ( opt, index ) => {
+		optVals.forEach( opt => {
 			opts.push( opt.value );
 		});
 
