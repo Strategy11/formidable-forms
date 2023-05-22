@@ -806,12 +806,11 @@ DEFAULT_HTML;
 	public function get_container_class() {
 		$is_radio    = FrmField::is_radio( $this->field );
 		$is_checkbox = FrmField::is_checkbox( $this->field );
-		$is_scale    = FrmField::is_field_type( $this->field, 'scale' );
 
 		$align       = FrmField::get_option( $this->field, 'align' );
 
 		$class = '';
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox || $is_scale ) ) {
+		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
