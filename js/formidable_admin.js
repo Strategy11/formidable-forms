@@ -5339,10 +5339,9 @@ function frmAdminBuildJS() {
 	}
 
 
-	function updateConditionalLogicsDependentOnThis() {
-		let that = this;
+	function updateConditionalLogicsDependentOnThis( e ) {
 		setTimeout( function() {
-			let fieldId = that.closest( '.frm-single-settings' ).dataset['fid'];
+			let fieldId = e.target.closest( '.frm-single-settings' ).dataset['fid'];
 
 			if ( ! fieldId ) {
 				return;
@@ -5365,7 +5364,7 @@ function frmAdminBuildJS() {
 	}
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
-		var row, opts, logicId, valueSelect, rowOptions, expectedOrder, optionLength, optionIndex, expectedOption, optionMatch,
+		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch,
 			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length,
 			fieldOptions, optionLength;
