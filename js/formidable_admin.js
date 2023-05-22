@@ -5349,7 +5349,6 @@ function frmAdminBuildJS() {
 
 			adjustConditionalLogicOptionOrders( fieldId, 'scale' );
 		}, 0 );
-
 	}
 
 	function getScaleFieldOptions( fieldId ) {
