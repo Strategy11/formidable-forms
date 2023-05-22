@@ -5370,7 +5370,7 @@ function frmAdminBuildJS() {
 			rowLength = rows.length,
 			fieldOptions, optionLength;
 
-		if ( type && 'scale' === type ) {
+		if ( 'scale' === type ) {
 			fieldOptions = getScaleFieldOptions( fieldId );
 		} else {
 			fieldOptions = getFieldOptions( fieldId );
