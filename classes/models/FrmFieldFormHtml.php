@@ -498,10 +498,10 @@ class FrmFieldFormHtml {
 		$attributes = array();
 
 		// Check if the field type is one of the following.
-		$is_valid_field_type = in_array( $field_type, array( 'data', 'product', 'radio', 'checkbox' ), true );
+		$is_valid_field_type = in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true );
 
 		if ( $is_valid_field_type ) {
-			$is_radio = $field_type === 'radio' || ( ! empty( $field['data_type'] ) && $field['data_type'] === 'radio' );
+			$is_radio = $field_type === 'radio' || $field_type === 'scale' || ( ! empty( $field['data_type'] ) && $field['data_type'] === 'radio' );
 			$is_needed_aria_required = true;
 
 			// Check if the field type is 'data' or 'product'.
