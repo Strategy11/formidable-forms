@@ -1959,7 +1959,6 @@ class FrmFieldsHelper {
 			),
 		);
 
-
 		/**
 		 * Allows modifying the options of Display format setting of Radio field.
 		 *
