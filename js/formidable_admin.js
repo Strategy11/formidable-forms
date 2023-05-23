@@ -10450,7 +10450,7 @@ function frmAdminBuildJS() {
 		},
 
 		infoModal: infoModal,
-		addRadioCheckboxOpt: addRadioCheckboxOpt,
+		addRadioCheckboxOpt: addRadioCheckboxOpt
 	};
 }
 
