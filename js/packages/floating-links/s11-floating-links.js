@@ -61,6 +61,9 @@ class S11FloatingLinks {
 		// Add event listener to close the navigation menu when clicking outside of floating links wrapper
 		this.addOutsideClickListener();
 
+		// Add scroll event listener to hide/show floating links on scroll
+		this.addScrollEventListener();
+
 		// Apply styles
 		this.applyComponentStyles();
 	}
@@ -73,7 +76,7 @@ class S11FloatingLinks {
 	createWrapper() {
 		// Create the wrapper element
 		this.wrapperElement = document.createElement( 'div' );
-		this.wrapperElement.classList.add( 's11-floating-links' );
+		this.wrapperElement.classList.add( 's11-floating-links', 's11-fadein' );
 
 		// Add the wrapper to the DOM
 		document.body.appendChild( this.wrapperElement );
@@ -219,6 +222,32 @@ class S11FloatingLinks {
 	}
 
 	/**
+	 * Add a scroll event listener to the window to toggle visibility of the Floating Links.
+	 * Show the Floating Links when scrolling up, and hide when scrolling down.
+	 *
+	 * @memberof S11FloatingLinks
+	 */
+	addScrollEventListener() {
+		window.addEventListener( 'scroll', () => {
+			const currentScrollPosition = window.scrollY || document.documentElement.scrollTop;
+
+			if ( currentScrollPosition < this.lastScrollPosition ) {
+				// When scrolling up show the Floating Links
+				if ( ! this.wrapperElement.classList.contains( 's11-fadein' ) ) {
+					this.toggleFade( this.wrapperElement );
+				}
+			} else {
+				// When scrolling down hide the Floating Links
+				if ( ! this.wrapperElement.classList.contains( 's11-fadeout' ) ) {
+					this.toggleFade( this.wrapperElement );
+				}
+			}
+
+			this.lastScrollPosition = currentScrollPosition;
+		});
+	}
+
+	/**
 	 * Apply styles to the component elements.
 	 *
 	 * @memberof S11FloatingLinks
@@ -239,10 +268,15 @@ class S11FloatingLinks {
 				right: 48px;
 				bottom: 48px;
 				z-index: 1000;
-				display: flex;
+				display: none;
 				flex-direction: column;
 				align-items: flex-end;
 				gap: 16px;
+			}
+
+			.s11-floating-links.s11-fadein,
+			.s11-floating-links.s11-fading {
+				display: flex;
 			}
 
 			.s11-floating-links-logo-icon {
