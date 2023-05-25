@@ -2648,6 +2648,7 @@ class FrmAppHelper {
 			'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
 			/* translators: %1$s: Form name, %2$s: Date */
 			'email_subject' => esc_attr( sprintf( __( 'If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable' ), $form_name, self::site_name() ) ),
+			'new_tab'       => __( 'This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed.', 'formidable' ),
 		);
 
 		if ( ! isset( $tooltips[ $name ] ) ) {

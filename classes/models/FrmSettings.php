@@ -120,6 +120,7 @@ class FrmSettings {
 			'submit_value'     => __( 'Submit', 'formidable' ),
 			'login_msg'        => __( 'You do not have permission to view this form.', 'formidable' ),
 			'admin_permission' => __( 'You do not have permission to do that', 'formidable' ),
+			'new_tab_msg'      => __( 'The page has been opened in a new tab.', 'formidable' ),
 
 			'email_to'         => '[admin_email]',
 			'no_ips'           => 0,
