@@ -2592,7 +2592,7 @@ class FrmFormsController {
 			self::show_lone_success_messsage( $args );
 			$response_data['content'] = ob_get_clean();
 
-			$response_data['fallbackMsg'] = '<div class="frm-redirect-msg" role="status">' . self::get_redirect_fallback_message( $args['success_url'], $args ) . '</div>';
+			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
 		}
 
 		return $response_data;

@@ -627,7 +627,7 @@ function frmFrontFormJS() {
 				// We don't return here because we're opening in a new tab, the old tab will still update.
 				newTab = window.open( response.redirect, '_blank' );
 				if ( ! newTab && response.fallbackMsg && response.content ) {
-					response.content += response.fallbackMsg;
+					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
 				}
 			}
 
@@ -1373,7 +1373,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		messageEl.insertAdjacentHTML( 'afterend', '<div class="frm-redirect-msg" role="status">' + frmShowNewTabFallback.message + '</div>' );
+		messageEl.insertAdjacentHTML( 'beforeend', ' ' + frmShowNewTabFallback.message );
 	}
 
 	function setCustomValidityMessage() {
