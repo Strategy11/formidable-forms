@@ -11,6 +11,19 @@ class FrmAddonsController {
 	protected static $plugin;
 
 	/**
+	 * White list URLs for allowed source of plugins.
+	 *
+	 * @since 6.3.1
+	 *
+	 * @var array
+	 */
+	const WHITE_LIST = array(
+		'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
+		'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
+		'https://downloads.wordpress.org/plugin/wp-mail-smtp.zip',
+	);
+
+	/**
 	 * @return void
 	 */
 	public static function menu() {
@@ -1013,8 +1026,7 @@ class FrmAddonsController {
 	 */
 	public static function url_is_allowed( $download_url ) {
 		return (
-			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ||
-			( strpos( $download_url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $download_url, '.zip', -4 ) === 0 )
+			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) || in_array( $download_url, self::WHITE_LIST, true )
 		);
 	}
 
