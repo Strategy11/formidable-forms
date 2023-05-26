@@ -21,7 +21,6 @@ class FrmSettingsController {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
 	}
 
