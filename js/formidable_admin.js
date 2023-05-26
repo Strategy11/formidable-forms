@@ -5842,6 +5842,18 @@ function frmAdminBuildJS() {
 		noSectionFields.classList.toggle( 'frm_block', ! sectionHasFields );
 	}
 
+	function handleShowPasswordLiveUpdate() {
+		frmDom.util.documentOn( 'change', '.frm_show_password_setting_input', event => {
+			const fieldId = event.target.getAttribute( 'data-fid' );
+			const fieldEl = document.getElementById( 'frm_field_id_' + fieldId );
+			if ( ! fieldEl ) {
+				return;
+			}
+
+			fieldEl.classList.toggle( 'frm_disabled_show_password', ! event.target.checked );
+		});
+	}
+
 	function slideDown() {
 		/*jshint validthis:true */
 		var id = jQuery( this ).data( 'slidedown' );
@@ -9949,6 +9961,7 @@ function frmAdminBuildJS() {
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
+			handleShowPasswordLiveUpdate();
 		},
 
 		settingsInit: function() {
