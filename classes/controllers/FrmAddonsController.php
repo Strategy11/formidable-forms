@@ -1025,6 +1025,8 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 */
 	protected static function install_addon() {
+		FrmAppHelper::permission_check( 'install_plugins' );
+
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 		$download_url = self::get_current_plugin();
