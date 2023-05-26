@@ -5363,7 +5363,7 @@ function frmAdminBuildJS() {
 	}
 
 	function adjustConditionalLogicOptionOrders( fieldId, type ) {
-		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions, optionLength,
+		var row, opts, logicId, valueSelect, optionLength, optionIndex, expectedOption, optionMatch, fieldOptions,
 			rows = document.getElementById( 'frm_builder_page' ).querySelectorAll( '.frm_logic_row' ),
 			rowLength = rows.length;
 
