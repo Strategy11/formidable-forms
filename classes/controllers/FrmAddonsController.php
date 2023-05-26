@@ -1177,6 +1177,10 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return false;
+		}
+
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
