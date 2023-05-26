@@ -3,6 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 $is_welcome = FrmAppHelper::is_admin_page( 'formidable-welcome' );
+write_log( $is_welcome );
+write_log( FrmAddonsController::connect_link() );
 ?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 <p id="frm-connect-btns" class="frm-show-unauthorized">
