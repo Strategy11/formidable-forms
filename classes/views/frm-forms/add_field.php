@@ -61,7 +61,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php } ?>
 </div>
-<?php if ( $display['conf_field'] ) {
+<?php
+if ( $display['conf_field'] ) {
 	$input_html = sprintf(
 		'<input type="text" id="conf_field_%1$s" name="field_options[conf_input_%2$s]" placeholder="%3$s" class="dyn_default_value" />',
 		esc_attr( $field['field_key'] ),
@@ -82,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				 * @param string $input_html Input HTML.
 				 * @param array  $args       Contains `field` array.
 				 */
-				echo apply_filters( 'frm_conf_input_backend', $input_html, compact( 'field' ) );
+				echo apply_filters( 'frm_conf_input_backend', $input_html, compact( 'field' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 			</div>
 			<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
