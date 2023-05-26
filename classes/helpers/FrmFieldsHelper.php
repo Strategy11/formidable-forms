@@ -763,7 +763,7 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	private static function trigger_shortcode_atts( $replace_with, $atts ) {
-		$supported_atts = array( 'sanitize', 'sanitize_url' );
+		$supported_atts = array( 'remove_accents', 'sanitize', 'sanitize_url' );
 		$included_atts  = array_intersect( $supported_atts, array_keys( $atts ) );
 		foreach ( $included_atts as $included_att ) {
 			if ( '0' === $atts[ $included_att ] ) {
@@ -774,6 +774,19 @@ class FrmFieldsHelper {
 			$replace_with = self::$function( $replace_with, $atts );
 		}
 		return $replace_with;
+	}
+
+	/**
+	 * Converts all accent characters to ASCII characters.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $replace_with The text to remove accents from.
+	 *
+	 * @return string
+	 */
+	public static function atts_remove_accents( $replace_with ) {
+		return remove_accents( $replace_with );
 	}
 
 	/**
