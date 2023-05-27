@@ -493,7 +493,7 @@ class FrmFieldFormHtml {
 	 * @since x.x
 	 */
 	private function add_multiple_input_attributes() {
-		$field      = $this->field_obj->get_field();
+		$field      = (array) $this->field_obj->get_field();
 		$field_type = $this->field_obj->get_field_column( 'type' );
 		$attributes = array();
 
@@ -501,17 +501,21 @@ class FrmFieldFormHtml {
 		$is_valid_field_type = in_array( $field_type, array( 'radio', 'checkbox', 'data', 'product', 'scale' ), true );
 
 		if ( $is_valid_field_type ) {
-			$is_radio = $field_type === 'radio' || $field_type === 'scale' || ( ! empty( $field['data_type'] ) && $field['data_type'] === 'radio' );
+			$is_radio = 'radio' === $field_type || 'scale' === $field_type;
 			$is_needed_aria_required = true;
 
 			// Check if the field type is 'data' or 'product'.
 			$is_data_or_product = in_array( $field_type, array( 'data', 'product' ), true );
-
 			if ( $is_data_or_product ) {
+				$data_type = FrmField::get_option( $field, 'data_type' );
 				// Check if the data type isn't 'radio' or 'checkbox'.
-				if ( ! in_array( $field['data_type'], array( 'radio', 'checkbox' ), true ) ) {
+				if ( 'radio' !== $data_type && 'checkbox' !== $data_type ) {
 					// If data type aren't 'radio' or 'checkbox', doesn't need to add 'aria-required' to multiple input container.
 					$is_needed_aria_required = false;
+				}
+				// Check if data type is 'radio'
+				if ( 'radio' === $data_type ) {
+					$is_radio = true;
 				}
 			}
 
