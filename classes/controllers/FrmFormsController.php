@@ -1616,11 +1616,15 @@ class FrmFormsController {
 	 *
 	 * @since 5.5
 	 *
-	 * @param string              $string
+	 * @param string|array        $string
 	 * @param stdClass|string|int $form
-	 * @return string
+	 * @return string|array
 	 */
 	public static function replace_form_name_shortcodes( $string, $form ) {
+		if ( ! is_string( $string ) ) {
+			return $string;
+		}
+
 		if ( false === strpos( $string, '[form_name]' ) ) {
 			return $string;
 		}
