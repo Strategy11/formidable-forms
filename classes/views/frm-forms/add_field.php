@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 			<?php echo esc_html( $field['required_indicator'] ); ?>
 		</span>
-		<span class="frm-sub-label frm-collapsed-label">
+		<span class="frm-sub-label frm-collapsed-label" aria-expanded="false">
 			<?php esc_html_e( '(Collapsed)', 'formidable' ); ?>
 		</span>
 	</label>
