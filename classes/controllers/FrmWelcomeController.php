@@ -86,6 +86,9 @@ class FrmWelcomeController {
 	 * @return void
 	 */
 	public static function screen_page() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Welcome Screen', 'formidable' ), __( 'Welcome Screen', 'formidable' ), 'read', self::$menu_slug, __CLASS__ . '::screen_content' );
 	}
 
