@@ -4992,7 +4992,7 @@ function frmAdminBuildJS() {
 		this.classList.toggle( 'frm-collapsed' );
 
 		// Toggles the "aria-expanded" attribute
-		const expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
+		let expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
 		this.setAttribute( 'aria-expanded', ! expanded );
 	}
 
@@ -9877,6 +9877,19 @@ function frmAdminBuildJS() {
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
 			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
+			$builderForm.on( 'keydown', '.frm-single-settings h3', function( event ) {
+				// If so, only proceed if the key pressed was 'Enter' or 'Space'
+				if ( event.key === 'Enter' || event.key === ' ' ) {
+					// Prevent the default action
+					event.preventDefault();
+				} else {
+					// If the key wasn't 'Enter' or 'Space', exit the function
+					return;
+				}
+
+				// Execute the function
+				maybeCollapseSettings.call( this, event );
+			});
 
 			jQuery( builderArea ).on( 'show.bs.dropdown hide.bs.dropdown', changeSectionStyle );
 
