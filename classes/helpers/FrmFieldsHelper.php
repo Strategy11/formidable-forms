@@ -1935,6 +1935,15 @@ class FrmFieldsHelper {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
 	}
 
+	/**
+	 * Creates an array that contains variables used for display format options setting.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field The field.
+	 *
+	 * @return array
+	 */
 	public static function get_display_format_options( $field ) {
 		$options = array(
 			'0'       => array(
