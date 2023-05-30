@@ -127,7 +127,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 ?>
 
-	<h3 class="frm-collapsed" aria-expanded="false">
+	<h3 class="frm-collapsed" aria-expanded="false" tabindex="0">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
@@ -312,7 +312,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
 		?>
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
-			<h3 class="frm-collapsed" aria-expanded="false">
+			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0">
 				<?php esc_html_e( 'Validation Messages', 'formidable' ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</h3>
