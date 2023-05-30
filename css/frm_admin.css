@@ -4050,6 +4050,10 @@ label input[type="checkbox"], label input[type="radio"] {
 	margin-top: -2px;
 }
 
+.frm-right-panel a.frm_add_logic_link:focus {
+	outline: auto;
+}
+
 #frm_style_sidebar h3,
 #frm_view_editor_left.frm-right-panel .accordion-section-title {
 	padding: 15px 0;

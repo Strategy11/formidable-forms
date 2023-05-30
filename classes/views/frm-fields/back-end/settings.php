@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</h3>
 
-	<div class="frm_grid_container frm-collapse-me">
+	<div class="frm_grid_container frm-collapse-me" role="group">
 		<?php
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
@@ -131,7 +131,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
-	<div class="frm_grid_container frm-collapse-me">
+	<div class="frm_grid_container frm-collapse-me" role="group">
 
 		<?php if ( $display['default'] ) { ?>
 			<div class="frm-has-modal">
@@ -317,7 +317,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			</h3>
 
-			<div class="frm_validation_box frm-collapse-me">
+			<div class="frm_validation_box frm-collapse-me" role="group">
 				<?php if ( $display['required'] ) { ?>
 					<p class="frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
 						<label for="field_options_blank_<?php echo esc_attr( $field['id'] ); ?>">
