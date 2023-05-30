@@ -239,17 +239,17 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php if ( $display['required'] ) { ?>
 			<p class="frm6 frm_form_field frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">
-				<label>
+				<label for="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Required Field Indicator', 'formidable' ); ?>
 				</label>
-				<input type="text" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
+				<input type="text" id="field_options_required_indicator_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[required_indicator_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['required_indicator'] ); ?>" />
 			</p>
 		<?php } ?>
 
 		<?php if ( $display['label_position'] ) { ?>
 			<p class="frm6 frm_form_field">
-				<label><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
-				<select name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
+				<label for="field_options_label_<?php echo esc_attr( $field['id'] ); ?>"><?php esc_html_e( 'Label Position', 'formidable' ); ?></label>
+				<select id="field_options_label_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[label_<?php echo esc_attr( $field['id'] ); ?>]">
 					<option value="" <?php selected( $field['label'], '' ); ?>>
 						<?php esc_html_e( 'Default', 'formidable' ); ?>
 					</option>
