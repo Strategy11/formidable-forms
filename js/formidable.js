@@ -1348,6 +1348,47 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function shouldUpdateValidityMessage( target ) {
+		if ( 'INPUT' !== target.nodeName ) {
+			return false;
+		}
+
+		if ( ! target.dataset.invmsg ) {
+			return false;
+		}
+
+		if ( 'text' !== target.getAttribute( 'type' ) ) {
+			return false;
+		}
+
+		if ( target.classList.contains( 'frm_verify' ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	function maybeClearCustomValidityMessage( event, field, fieldId, e ) {
+		var target = field,
+			isInvalid = false;
+
+		if ( ! shouldUpdateValidityMessage( field ) ) {
+			return;
+		}
+
+		for ( let key in target.validity ) {
+			if ( 'customError' === key ) {
+				continue;
+			}
+			if ( 'valid' !== key && target.validity[ key ] === true ) {
+				isInvalid = true;
+			}
+		}
+		if ( ! isInvalid ) {
+			target.setCustomValidity( '' );
+		}
+	}
+
 	function setCustomValidityMessage() {
 		var forms, length, index;
 
@@ -1360,19 +1401,7 @@ function frmFrontFormJS() {
 				function( event ) {
 					var target = event.target;
 
-					if ( 'INPUT' !== target.nodeName ) {
-						return;
-					}
-
-					if ( ! target.dataset.invmsg ) {
-						return;
-					}
-
-					if ( 'text' !== target.getAttribute( 'type' ) ) {
-						return;
-					}
-
-					if ( target.classList.contains( 'frm_verify' ) ) {
+					if ( ! shouldUpdateValidityMessage( target ) ) {
 						return;
 					}
 
@@ -1423,6 +1452,7 @@ function frmFrontFormJS() {
 
 			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
+			jQuery( document ).on( 'frmFieldChanged', maybeClearCustomValidityMessage );
 		},
 
 		getFieldId: function( field, fullID ) {
