@@ -11,9 +11,15 @@ class test_FrmAddonsController extends FrmUnitTest {
 
 	/**
 	 * @covers FrmAddonsController::url_is_allowed
+	 * @covers FrmAddonsController::allowed_external_urls
 	 */
 	public function test_url_is_allowed() {
-		$allowed_download_urls = FrmAddonsController::WHITE_LIST;
+		add_filter( 'frm_allowed_external_urls', '__return_empty_array' );
+		$allowed_download_urls = $this->run_private_method( array( 'FrmAddonsController', 'allowed_external_urls' ) );
+		$this->assertEmpty( $allowed_download_urls );
+
+		remove_all_actions( 'frm_allowed_external_urls' );
+		$allowed_download_urls = $this->run_private_method( array( 'FrmAddonsController', 'allowed_external_urls' ) );
 		array_push( $allowed_download_urls, 'https://s3.amazonaws.com/fp.strategy11.com/releases/acf/formidable-acf-1.0.zip' );
 
 		$disallowed_download_urls = array(
