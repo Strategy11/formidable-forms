@@ -76,6 +76,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p>
+	<label for="frm_new_tab_msg" class="frm_left_label"><?php esc_html_e( 'Open In New Tab Message', 'formidable' ); ?>
+		<span class="frm_help frm_icon_font frm_tooltip_icon"
+			title="<?php esc_attr_e( 'The default message seen after opening the redirect URL in new tab when a form is submitted.', 'formidable' ); ?>"></span>
+	</label>
+	<input type="text" id="frm_new_tab_msg" name="frm_new_tab_msg"
+		class="frm_with_left_label"
+		value="<?php echo esc_attr( $frm_settings->new_tab_msg ); ?>"/>
+</p>
+
+<p>
 	<label for="frm_submit_value" class="frm_left_label"><?php esc_html_e( 'Submit Button Text', 'formidable' ); ?>
 		<span class="frm_help frm_icon_font frm_tooltip_icon"
 			title="<?php esc_attr_e( 'The default label for the submit button.', 'formidable' ); ?>"></span>

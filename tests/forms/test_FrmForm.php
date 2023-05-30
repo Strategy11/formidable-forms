@@ -198,4 +198,14 @@ class test_FrmForm extends FrmUnitTest {
 	private function normalize_calc_spaces( $calc ) {
 		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}
+
+	/**
+	 * @covers FrmForm::getName
+	 */
+	public function test_getName() {
+		$form_name = 'Test form';
+		$form_id   = $this->factory->form->create( array( 'name' => $form_name ) );
+		$name      = FrmForm::getName( (string) $form_id );
+		$this->assertEquals( $form_name, $name );
+	}
 }
