@@ -491,6 +491,37 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Set color for select placeholders.
+	 *
+	 * @since x.x
+	 */
+	function setSelectPlaceholderColor() {
+		var selects = document.querySelectorAll( '.form-field select' );
+		var styleElement = document.querySelector( '.with_frm_style' );
+		var textColor = getComputedStyle( styleElement ).getPropertyValue( '--text-color' ).trim();
+		var textColorDisabled = getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim();
+		var changeSelectColor = function( select ) {
+			if ( select.value === '' ) {
+				select.style.cssText += `; color: ${textColorDisabled} !important`;
+			} else {
+				select.style.color = '';
+			}
+		};
+
+		if ( ! textColor || ! textColorDisabled ) {
+			return;
+		}
+
+		selects.forEach( function( select ) {
+			changeSelectColor( select );
+
+			select.onchange = function() {
+				changeSelectColor( select );
+			};
+		});
+	}
+
 	function hasInvisibleRecaptcha( object ) {
 		var recaptcha, recaptchaID, alreadyChecked;
 
@@ -1452,6 +1483,8 @@ function frmFrontFormJS() {
 
 			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
 			setCustomValidityMessage();
+
+			setSelectPlaceholderColor();
 		},
 
 		getFieldId: function( field, fullID ) {
