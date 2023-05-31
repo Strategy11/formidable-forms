@@ -1368,24 +1368,23 @@ function frmFrontFormJS() {
 		return true;
 	}
 
-	function maybeClearCustomValidityMessage( event, field, fieldId, e ) {
-		var target = field,
-			isInvalid = false;
+	function maybeClearCustomValidityMessage( event, field ) {
+		var isInvalid = false;
 
 		if ( ! shouldUpdateValidityMessage( field ) ) {
 			return;
 		}
 
-		for ( let key in target.validity ) {
+		for ( let key in field.validity ) {
 			if ( 'customError' === key ) {
 				continue;
 			}
-			if ( 'valid' !== key && target.validity[ key ] === true ) {
+			if ( 'valid' !== key && field.validity[ key ] === true ) {
 				isInvalid = true;
 			}
 		}
 		if ( ! isInvalid ) {
-			target.setCustomValidity( '' );
+			field.setCustomValidity( '' );
 		}
 	}
 
@@ -1401,11 +1400,9 @@ function frmFrontFormJS() {
 				function( event ) {
 					var target = event.target;
 
-					if ( ! shouldUpdateValidityMessage( target ) ) {
-						return;
+					if ( shouldUpdateValidityMessage( target ) ) {
+						target.setCustomValidity( target.dataset.invmsg );
 					}
-
-					target.setCustomValidity( target.dataset.invmsg );
 				},
 				true
 			);
