@@ -499,7 +499,6 @@ function frmFrontFormJS() {
 	function setSelectPlaceholderColor() {
 		var selects = document.querySelectorAll( '.form-field select' );
 		var styleElement = document.querySelector( '.with_frm_style' );
-		var textColor = getComputedStyle( styleElement ).getPropertyValue( '--text-color' ).trim();
 		var textColorDisabled = getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim();
 		var changeSelectColor = function( select ) {
 			if ( select.value === '' ) {
@@ -509,7 +508,7 @@ function frmFrontFormJS() {
 			}
 		};
 
-		if ( ! textColor || ! textColorDisabled ) {
+		if ( ! textColorDisabled ) {
 			return;
 		}
 
