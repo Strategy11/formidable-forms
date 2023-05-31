@@ -2652,7 +2652,7 @@ li .frm-hover-icons .frm-preview-form,
 	display: none;
 }
 
-#frm_new_form_modal:not([frm-page="create"]):not([frm-page="email"]) .frm-modal-back,
+#frm_new_form_modal:not([frm-page="create"]) .frm-modal-back,
 #frm_new_form_modal[frm-page="create"] #frm-create-title,
 #frm-create-title[frm-type="template"] span[frm-type="template"],
 #frm_new_form_modal[frm-page="preview"] #frm-preview-title,
