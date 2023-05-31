@@ -1,4 +1,15 @@
 == Changelog ==
+= 6.3.1 =
+* Security: Additional validation has been added when installing plugins from the WordPress repository.
+* New: A new "Open in new tab" toggle has been added to confirmation actions with redirect rules.
+* New: Dropdown field options now use less whitespace, reducing the amount of required HTML downloaded to load the form.
+* New: Additional missing for attributes have been added to admin pages to improve accessibility.
+* New: Support for a new remove_accents option has been added for field shortcodes.
+* Fix: There was additional unexpected white space on some mobile widths when distraction free mode is not active.
+* Fix: Field button options were inconsistent widths. When clicking beside a field, it wouldn't get added to the form because of the small button size.
+* Fix: A fatal error would occur in PHP 8.2 when checking for form name shortcodes in array data.
+* Fix: A warning would occur for forms with no name when viewing the list of entries.
+
 = 6.3 =
 * New: Improved the readability of error messages when importing XML.
 * New: The custom validity message pop up that happens when trying to submit an entry with an invalid format will now use the custom invalid message defined in form settings.

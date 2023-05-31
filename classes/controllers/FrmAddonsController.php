@@ -1013,8 +1013,7 @@ class FrmAddonsController {
 	 */
 	public static function url_is_allowed( $download_url ) {
 		return (
-			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) ||
-			( strpos( $download_url, 'https://downloads.wordpress.org/plugin' ) === 0 && substr_compare( $download_url, '.zip', -4 ) === 0 )
+			FrmAppHelper::validate_url_is_in_s3_bucket( $download_url, 'zip' ) || in_array( $download_url, self::allowed_external_urls(), true )
 		);
 	}
 
@@ -1025,6 +1024,8 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 */
 	protected static function install_addon() {
+		FrmAppHelper::permission_check( 'install_plugins' );
+
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 		$download_url = self::get_current_plugin();
@@ -1177,6 +1178,10 @@ class FrmAddonsController {
 	 * @return bool
 	 */
 	public static function can_install_addon_api() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return false;
+		}
+
 		// Verify params present (auth & download link).
 		$post_auth = FrmAppHelper::get_param( 'token', '', 'request', 'sanitize_text_field' );
 		$post_url  = FrmAppHelper::get_param( 'file_url', '', 'request', 'sanitize_text_field' );
@@ -1314,6 +1319,38 @@ class FrmAddonsController {
 
 		echo json_encode( self::get_addon_activation_response() );
 		wp_die();
+	}
+
+	/**
+	 * Allowed URLs used for internal source of plugins installation.
+	 *
+	 * @since 6.3.1
+	 *
+	 * @return array
+	 */
+	private static function allowed_external_urls() {
+		$allowed_url_list = array(
+			'https://downloads.wordpress.org/plugin/formidable-gravity-forms-importer.zip',
+			'https://downloads.wordpress.org/plugin/formidable-import-pirate-forms.zip',
+			'https://downloads.wordpress.org/plugin/wp-mail-smtp.zip',
+		);
+
+		/**
+		 * List of URLs used in plugin formidable internal installation.
+		 *
+		 * @since 6.3.1
+		 *
+		 * @param array $allowed_url_list List of URLs.
+		 */
+		$allowed_url_list = apply_filters( 'frm_allowed_external_urls', $allowed_url_list );
+
+		if ( ! is_array( $allowed_url_list ) ) {
+			_doing_it_wrong( __METHOD__, 'Only an array of URLs could be used within this filter.', '6.3.1' );
+
+			return array();
+		}
+
+		return $allowed_url_list;
 	}
 
 	/**
