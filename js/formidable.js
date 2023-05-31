@@ -1388,14 +1388,15 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		for ( let key in field.validity ) {
+		Object.keys( field.validity ).forEach( function( key ) {
 			if ( 'customError' === key ) {
-				continue;
+				return;
 			}
 			if ( 'valid' !== key && field.validity[ key ] === true ) {
 				isInvalid = true;
 			}
-		}
+		});
+
 		if ( ! isInvalid ) {
 			field.setCustomValidity( '' );
 		}
