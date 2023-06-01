@@ -8902,6 +8902,7 @@ function frmAdminBuildJS() {
 				$modalBackButton.hide();
 				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
 					$modalBackButton.show();
+					$modal.dialog( 'close' );
 				});
 			}
 		}
