@@ -1395,6 +1395,7 @@ function frmFrontFormJS() {
 			}
 			if ( 'valid' !== key && field.validity[ key ] === true ) {
 				isInvalid = true;
+				break;
 			}
 		};
 
