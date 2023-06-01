@@ -288,8 +288,8 @@ legend.frm_hidden{
 .with_frm_style input[type=search],
 .with_frm_style select,
 .with_frm_style .frm-card-element.StripeElement{
-	height:<?php echo esc_html( $defaults['field_height'] ); ?>;
-	height:var(--field-height)<?php echo esc_html( $important ); ?>;
+	min-height:<?php echo esc_html( $defaults['field_height'] ); ?>;
+	min-height:var(--field-height)<?php echo esc_html( $important ); ?>;
 	line-height:1.3<?php echo esc_html( $important ); ?>;
 }
 
