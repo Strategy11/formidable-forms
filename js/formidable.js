@@ -498,8 +498,19 @@ function frmFrontFormJS() {
 	 */
 	function setSelectPlaceholderColor() {
 		var selects = document.querySelectorAll( '.form-field select' );
+
 		var styleElement = document.querySelector( '.with_frm_style' );
+		if ( ! styleElement ) {
+			return;
+		}
+
+		// eslint-disable-next-line vars-on-top
 		var textColorDisabled = getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim();
+		if ( ! textColorDisabled ) {
+			return;
+		}
+
+		// eslint-disable-next-line vars-on-top
 		var changeSelectColor = function( select ) {
 			if ( select.value === '' ) {
 				select.style.cssText += `; color: ${textColorDisabled} !important`;
@@ -508,16 +519,12 @@ function frmFrontFormJS() {
 			}
 		};
 
-		if ( ! textColorDisabled ) {
-			return;
-		}
-
 		selects.forEach( function( select ) {
 			changeSelectColor( select );
 
-			select.onchange = function() {
+			select.addEventListener( 'change', function() {
 				changeSelectColor( select );
-			};
+			});
 		});
 	}
 
