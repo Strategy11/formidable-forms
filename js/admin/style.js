@@ -50,6 +50,7 @@
 	function initPreview() {
 		initFloatingLabels();
 		fillMissingSignatureValidationFunction();
+		setSelectPlaceholderColor();
 
 		// Remove .wp-core-ui from the body so the preview can avoid it.
 		// Then add it back where we want to use admin styles (the sidebar, otherwise inputs appear short).
@@ -1159,7 +1160,10 @@
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
-				success: handleChangeStylingSuccess
+				success: ( css ) => {
+					handleChangeStylingSuccess( css );
+					setSelectPlaceholderColor();
+				}
 			});
 		}
 
@@ -1353,6 +1357,41 @@
 		if ( $sample.length && 'function' === typeof $sample.datepicker ) {
 			$sample.datepicker({ changeMonth: true, changeYear: true });
 		}
+	}
+
+	/**
+	 * Set color for select placeholders.
+	 *
+	 * @since x.x
+	 */
+	function setSelectPlaceholderColor() {
+		const selects = document.querySelectorAll( '.form-field select' );
+
+		const styleElement = document.querySelector( '.with_frm_style' );
+		if ( ! styleElement ) {
+			return;
+		}
+
+		const textColorDisabled = getComputedStyle( styleElement ).getPropertyValue( '--text-color-disabled' ).trim();
+		if ( ! textColorDisabled ) {
+			return;
+		}
+
+		const changeSelectColor = ( select ) => {
+			if ( select.value === '' ) {
+				select.style.cssText += `; color: ${textColorDisabled} !important`;
+			} else {
+				select.style.color = '';
+			}
+		};
+
+		selects.forEach( ( select ) => {
+			changeSelectColor( select );
+
+			select.addEventListener( 'change', () => {
+				changeSelectColor( select );
+			});
+		});
 	}
 
 	// Hook into the styleInit function in formidable_admin.js
