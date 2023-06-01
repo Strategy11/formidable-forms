@@ -717,6 +717,14 @@ class FrmAppController {
 			}
 		}
 
+	}
+
+	/**
+	 * @since x.
+	 *
+	 * @return void
+	 */
+	public static function admin_enqueue_scripts() {
 		self::maybe_force_formidable_block_on_gutenberg_page();
 	}
 
