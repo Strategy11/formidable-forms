@@ -8908,6 +8908,14 @@ function frmAdminBuildJS() {
 				if ( firstLockedTemplate.length ) {
 					showFreeTemplatesForm( firstLockedTemplate );
 				}
+
+				// Hides the back button in the Free Template Modal and shows it when the cancel button is clicked
+				$modalBackButton = $modal.find( '.frm-modal-back' );
+				$modalBackButton.hide();
+				$modal.find( '.frm-modal-cancel' ).on( 'click', ( event ) => {
+					$modalBackButton.show();
+					$modal.dialog( 'close' );
+				});
 			}
 		}
 
