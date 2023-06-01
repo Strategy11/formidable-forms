@@ -1382,20 +1382,21 @@ function frmFrontFormJS() {
 	}
 
 	function maybeClearCustomValidityMessage( event, field ) {
-		var isInvalid = false;
+		var key,
+			isInvalid = false;
 
 		if ( ! shouldUpdateValidityMessage( field ) ) {
 			return;
 		}
 
-		Object.keys( field.validity ).forEach( function( key ) {
+		for ( key in field.validity ) {
 			if ( 'customError' === key ) {
-				return;
+				continue;
 			}
 			if ( 'valid' !== key && field.validity[ key ] === true ) {
 				isInvalid = true;
 			}
-		});
+		};
 
 		if ( ! isInvalid ) {
 			field.setCustomValidity( '' );
