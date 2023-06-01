@@ -528,7 +528,7 @@ DEFAULT_HTML;
 		/**
 		 * @since x.x
 		 *
-		 * @param array $displayed_type
+		 * @param array $display_type
 		 * @param array $field
 		 */
 		$display_type = apply_filters( 'frm_displayed_field_type', $display_type, compact( 'field' ) );
