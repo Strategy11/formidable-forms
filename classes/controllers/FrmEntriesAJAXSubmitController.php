@@ -122,6 +122,12 @@ class FrmEntriesAJAXSubmitController {
 				if ( ! function_exists( 'get_current_screen' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/screen.php';
 				}
+
+				if ( ! class_exists( 'WP_Screen', false ) ) {
+					require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
+				}
+
+				FrmAppHelper::set_current_screen_and_hook_suffix();
 			},
 			1
 		);
