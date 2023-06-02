@@ -23,6 +23,12 @@ jobs:
           - php: 8.0
             wordpress: master
             multisite: 0
+          - php: 8.1
+            wordpress: master
+            multisite: 0
+          - php: 8.2
+            wordpress: master
+            multisite: 0
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
