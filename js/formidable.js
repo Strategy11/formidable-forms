@@ -306,7 +306,7 @@ function frmFrontFormJS() {
 	}
 
 	function checkRequiredField( field, errors ) {
-		var checkGroup, options, tempVal, i, placeholder,
+		var checkGroup, tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
@@ -380,15 +380,23 @@ function frmFrontFormJS() {
 				fieldID = getFieldId( field, true );
 			}
 
-			options = field.querySelectorAll( 'option' );
-			if ( ! ( fieldID in errors ) && options.length ) {
-				if ( ! ( options.length === 1 && options[0].value === '' ) ) {
-					errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
-				}
+			if ( shouldAddRequiredValidationError( fieldID, errors, field ) ) {
+				errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
 			}
 		}
 
 		return errors;
+	}
+
+	function shouldAddRequiredValidationError( fieldID, errors, field ) {
+		var options = field.querySelectorAll( 'option' );
+		if ( ! ( fieldID in errors ) && options.length ) {
+			if ( options.length === 1 && options[0].value === '' ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	function isSignatureField( field ) {
