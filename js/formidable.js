@@ -306,7 +306,7 @@ function frmFrontFormJS() {
 	}
 
 	function checkRequiredField( field, errors ) {
-		var checkGroup, tempVal, i, placeholder,
+		var checkGroup, options, tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
@@ -379,8 +379,12 @@ function frmFrontFormJS() {
 			if ( fieldID === '' ) {
 				fieldID = getFieldId( field, true );
 			}
-			if ( ! ( fieldID in errors ) ) {
-				errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
+
+			options = field.querySelectorAll( 'option' );
+			if ( ! ( fieldID in errors ) && options.length ) {
+				if ( ! ( options.length === 1 && options[0].value === '' ) ) {
+					errors[ fieldID ] = getFieldValidationMessage( field, 'data-reqmsg' );
+				}
 			}
 		}
 
