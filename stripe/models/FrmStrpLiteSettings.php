@@ -3,6 +3,11 @@
 #[\AllowDynamicProperties]
 class FrmStrpLiteSettings {
 
+	/**
+	 * @var stdClass|null
+	 */
+	public $settings;
+
 	public function __construct() {
 		$this->set_default_options();
 	}

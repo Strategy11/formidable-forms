@@ -38,7 +38,7 @@ class FrmStrpLiteConnectHelper {
 		$action   = str_replace( $prefix, '', $action );
 		$function = 'handle_' . $action;
 
-		if ( ! is_callable( 'self::' . $function ) || ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
+		if ( ! is_callable( self::class . '::' . $function ) || ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
 			wp_send_json_error();
 		}
 
