@@ -524,7 +524,6 @@ DEFAULT_HTML;
 			'lookup'   => FrmField::is_field_type( $field, 'lookup' ),
 			'data'     => FrmField::is_field_type( $field, 'data' ),
 		);
-
 		return array_filter( $display_type );
 	}
 
