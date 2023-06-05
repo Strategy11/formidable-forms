@@ -378,7 +378,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		$settings                = new FrmStrpLiteSettings();
+		$settings                = FrmStrpLiteAppHelper::get_settings();
 		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
 		$publishable             = $settings->get_active_publishable_key();
 

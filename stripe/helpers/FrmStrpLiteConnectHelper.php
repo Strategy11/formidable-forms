@@ -344,7 +344,7 @@ class FrmStrpLiteConnectHelper {
 	private static function set_stripe_details_as_submitted_and_clear_legacy_keys( $mode ) {
 		update_option( self::get_stripe_details_submitted_option_name( $mode ), true, 'no' );
 
-		$settings         = new FrmStrpLiteSettings();
+		$settings         = FrmStrpLiteAppHelper::get_settings();
 		$settings         = $settings->settings;
 		$updated_settings = false;
 

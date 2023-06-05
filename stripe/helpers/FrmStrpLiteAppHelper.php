@@ -2,6 +2,11 @@
 
 class FrmStrpLiteAppHelper {
 
+	/**
+	 * @var FrmStrpSettings|null
+	 */
+	private static $settings;
+
 	public static function plugin_path() {
 		return FrmAppHelper::plugin_path() . '/stripe/';
 	}
@@ -63,8 +68,18 @@ class FrmStrpLiteAppHelper {
 		return $meta_name;
 	}
 
+	/**
+	 * @return FrmStrpLiteSettings
+	 */
+	public static function get_settings() {
+		if ( ! isset( self::$settings ) ) {
+			self::$settings = new FrmStrpLiteSettings();
+		}
+		return self::$settings;
+	}
+
 	public static function active_mode() {
-		$settings = new FrmStrpLiteSettings();
+		$settings = self::get_settings();
 		return $settings->settings->test_mode ? 'test' : 'live';
 	}
 }

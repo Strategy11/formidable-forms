@@ -41,7 +41,7 @@ class FrmStrpLiteSettingsController {
 		$atts                             = array_merge( $atts, self::get_default_settings_atts() );
 		$errors                           = $atts['errors'];
 		$message                          = $atts['message'];
-		$settings                         = new FrmStrpLiteSettings();
+		$settings                         = FrmStrpLiteAppHelper::get_settings();
 		$stripe_connect_is_live           = FrmStrpLiteConnectHelper::stripe_connect_is_setup( 'live' );
 		$stripe_connect_is_on_for_test    = FrmStrpLiteConnectHelper::stripe_connect_is_setup( 'test' );
 
@@ -69,7 +69,7 @@ class FrmStrpLiteSettingsController {
 			'message' => '',
 		);
 
-		$settings = new FrmStrpLiteSettings();
+		$settings = FrmStrpLiteAppHelper::get_settings();
 		$settings->update( $_POST );
 
 		if ( empty( $atts['errors'] ) ) {

@@ -9,6 +9,6 @@ class FrmTransLiteLog {
 	 * @return void
 	 */
 	public static function log_message( $text ) {
-
+		error_log( $text );
 	}
 }
