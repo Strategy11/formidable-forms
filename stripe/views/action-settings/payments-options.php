@@ -1,3 +1,7 @@
+<?php
+// TODO Move this into the controller.
+$currencies = FrmCurrencyHelper::get_currencies();
+?>
 
 <?php // Don't just always include this when the Payments submodule is active. ?>
 <input type="hidden" value="stripe" name="<?php echo esc_attr( $this->get_field_name( 'gateway' ) ); ?>[]" />
@@ -83,7 +87,7 @@
 			<?php esc_html_e( 'Currency', 'formidable' ); ?>
 		</label>
 		<select name="<?php echo esc_attr( $this->get_field_name( 'currency' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'currency' ) ); ?>">
-			<?php foreach ( FrmTransLiteAppHelper::get_currencies() as $code => $currency ) { ?>
+			<?php foreach ( $currencies as $code => $currency ) { ?>
 				<option value="<?php echo esc_attr( strtolower( $code ) ); ?>" <?php selected( $form_action->post_content['currency'], strtolower( $code ) ); ?>><?php echo esc_html( $currency['name'] . ' (' . strtoupper( $code ) . ')' ); ?></option>
 				<?php
 				unset( $currency, $code );

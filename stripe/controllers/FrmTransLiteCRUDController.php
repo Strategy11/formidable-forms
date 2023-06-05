@@ -99,7 +99,7 @@ class FrmTransLiteCRUDController {
 		$payment = $wpdb->get_row( $wpdb->prepare( "SELECT p.*, e.user_id FROM {$wpdb->prefix}frm_" . $table_name . " p LEFT JOIN {$wpdb->prefix}frm_items e ON (p.item_id = e.id) WHERE p.id=%d", $id ) );
 
 		$currency = FrmTransLiteAppHelper::get_action_setting( 'currency', array( 'payment' => $payment ) );
-		$currency = FrmTransLiteAppHelper::get_currency( $currency );
+		$currency = FrmCurrencyHelper::get_currency( $currency );
 
 		if ( $_POST && isset( $_POST['receipt_id'] ) ) {
 			foreach ( $payment as $var => $val ) {

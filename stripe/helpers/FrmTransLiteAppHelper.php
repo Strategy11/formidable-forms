@@ -2,18 +2,32 @@
 
 class FrmTransLiteAppHelper {
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_path() {
 		return FrmAppHelper::plugin_path() . '/stripe/';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_url() {
 		return FrmAppHelper::plugin_url() . '/stripe/';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_folder() {
 		return basename( self::plugin_path() );
 	}
 
+	/**
+	 * @todo How should I modify this function? We don't want this filter in Lite.
+	 *
+	 * @return array
+	 */
 	public static function get_gateways() {
 		$gateways = array(
 			'manual' => array(
@@ -33,7 +47,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_setting_for_gateway( $gateway, $setting ) {
 		$gateways = self::get_gateways();
-		$value = '';
+		$value    = '';
 		if ( isset( $gateways[ $gateway ] ) ) {
 			$value = $gateways[ $gateway ][ $setting ];
 		}
@@ -48,21 +62,21 @@ class FrmTransLiteAppHelper {
 	public static function get_payment_statuses() {
 		return array(
 			'authorized' => __( 'Authorized', 'formidable' ),
-			'pending'  => __( 'Pending', 'formidable' ),
-			'complete' => __( 'Completed', 'formidable' ),
-			'failed'   => __( 'Failed', 'formidable' ),
-			'refunded' => __( 'Refunded', 'formidable' ),
-			'canceled' => __( 'Canceled', 'formidable' ),
+			'pending'    => __( 'Pending', 'formidable' ),
+			'complete'   => __( 'Completed', 'formidable' ),
+			'failed'     => __( 'Failed', 'formidable' ),
+			'refunded'   => __( 'Refunded', 'formidable' ),
+			'canceled'   => __( 'Canceled', 'formidable' ),
 		);
 	}
 
 	public static function get_subscription_statuses() {
 		return array(
-			'pending'  => __( 'Pending', 'formidable' ),
-			'active'   => __( 'Active', 'formidable' ),
+			'pending'       => __( 'Pending', 'formidable' ),
+			'active'        => __( 'Active', 'formidable' ),
 			'future_cancel' => __( 'Canceled', 'formidable' ),
-			'canceled' => __( 'Canceled', 'formidable' ),
-			'void'     => __( 'Void', 'formidable' ),
+			'canceled'      => __( 'Canceled', 'formidable' ),
+			'void'          => __( 'Void', 'formidable' ),
 		);
 	}
 
@@ -83,319 +97,12 @@ class FrmTransLiteAppHelper {
 	}
 
 	public static function add_meta_to_payment( $meta_value, $note ) {
-		$meta_value = (array) maybe_unserialize( $meta_value );
+		$meta_value   = (array) maybe_unserialize( $meta_value );
 		$meta_value[] = array(
 			'message' => $note,
 			'date'    => date( 'Y-m-d H:i:s' ),
 		);
 		return $meta_value;
-	}
-
-	public static function get_currency( $currency ) {
-		$currencies = self::get_currencies();
-		if ( isset( $currencies[ $currency ] ) ) {
-			$currency = $currencies[ $currency ];
-		} else {
-			$currency = $currencies['usd'];
-		}
-		return $currency;
-	}
-
-	/**
-	 * @return array
-	 */
-	public static function get_currencies() {
-		$pro_currencies = array();
-		if ( is_callable( 'FrmProCurrencyHelper::get_currencies' ) ) {
-			$pro_currencies = FrmProCurrencyHelper::get_currencies();
-		}
-
-		$currencies = array(
-			'aud' => array(
-				'name' => __( 'Australian Dollar', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'bdt' => array(
-				'name' => __( 'Bangladeshi Taka', 'formidable' ),
-				'symbol_left' => '৳',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'brl' => array(
-				'name' => __( 'Brazilian Real', 'formidable' ),
-				'symbol_left' => 'R$',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'cad' => array(
-				'name' => __( 'Canadian Dollar', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => 'CAD',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'cny' => array(
-				'name' => __( 'Chinese Renminbi Yuan', 'formidable' ),
-				'symbol_left' => '¥',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'czk' => array(
-				'name' => __( 'Czech Koruna', 'formidable' ),
-				'symbol_left' => '',
-				'symbol_right' => '&#75;&#269;',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ' ',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'dkk' => array(
-				'name' => __( 'Danish Krone', 'formidable' ),
-				'symbol_left' => 'Kr',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'eur' => array(
-				'name' => __( 'Euro', 'formidable' ),
-				'symbol_left' => '',
-				'symbol_right' => '&#8364;',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'hkd' => array(
-				'name' => __( 'Hong Kong Dollar', 'formidable' ),
-				'symbol_left' => 'HK$',
-				'symbol_right' => '',
-				'symbol_padding' => '',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'huf' => array(
-				'name' => __( 'Hungarian Forint', 'formidable' ),
-				'symbol_left' => '',
-				'symbol_right' => 'Ft',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'inr' => array(
-				'name' => __( 'Indian Rupee', 'formidable' ),
-				'symbol_left' => '&#8377;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'ils' => array(
-				'name' => __( 'Israeli New Sheqel', 'formidable' ),
-				'symbol_left' => '&#8362;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'jpy' => array(
-				'name' => __( 'Japanese Yen', 'formidable' ),
-				'symbol_left' => '&#165;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '',
-				'decimals' => 0,
-			),
-			'myr' => array(
-				'name' => __( 'Malaysian Ringgit', 'formidable' ),
-				'symbol_left' => '&#82;&#77;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'mxn' => array(
-				'name' => __( 'Mexican Peso', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'nzd' => array(
-				'name' => __( 'New Zealand Dollar', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'nok' => array(
-				'name' => __( 'Norwegian Krone', 'formidable' ),
-				'symbol_left' => 'Kr',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'pkr' => array(
-				'name' => __( 'Pakistani Rupee', 'formidable' ),
-				'symbol_left' => '₨',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'php' => array(
-				'name' => __( 'Philippine Peso', 'formidable' ),
-				'symbol_left' => 'Php',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'pln' => array(
-				'name' => __( 'Polish Zloty', 'formidable' ),
-				'symbol_left' => '&#122;&#322;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'gbp' => array(
-				'name' => __( 'Pound Sterling', 'formidable' ),
-				'symbol_left' => '&#163;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'sgd' => array(
-				'name' => __( 'Singapore Dollar', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'zar' => array(
-				'name' => __( 'South African Rand', 'formidable' ),
-				'symbol_left'        => 'R',
-				'symbol_right'       => '',
-				'symbol_padding'     => ' ',
-				'thousand_separator' => ' ',
-				'decimal_separator'  => '.',
-				'decimals'           => 2,
-			),
-			'lkr' => array(
-				'name' => __( 'Sri Lankan Rupee', 'formidable' ),
-				'symbol_left' => '₨',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'sek' => array(
-				'name' => __( 'Swedish Krona', 'formidable' ),
-				'symbol_left' => '',
-				'symbol_right' => 'Kr',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ' ',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'chf' => array(
-				'name' => __( 'Swiss Franc', 'formidable' ),
-				'symbol_left' => 'Fr.',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => "'",
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'twd' => array(
-				'name' => __( 'Taiwan New Dollar', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'thb' => array(
-				'name' => __( 'Thai Baht', 'formidable' ),
-				'symbol_left' => '&#3647;',
-				'symbol_right' => '',
-				'symbol_padding' => ' ',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-			'try' => array(
-				'name' => __( 'Turkish Liras', 'formidable' ),
-				'symbol_left' => '',
-				'symbol_right' => '&#8364;',
-				'symbol_padding' => ' ',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 2,
-			),
-			'uyu' => array(
-				'name' => __( 'Uruguayan Peso', 'formidable' ),
-				'symbol_left' => '$U',
-				'symbol_right' => '',
-				'symbol_padding' => '',
-				'thousand_separator' => '.',
-				'decimal_separator' => ',',
-				'decimals' => 0,
-			),
-			'usd' => array(
-				'name' => __( 'U.S. Dollar', 'formidable' ),
-				'symbol_left' => '$',
-				'symbol_right' => '',
-				'symbol_padding' => '',
-				'thousand_separator' => ',',
-				'decimal_separator' => '.',
-				'decimals' => 2,
-			),
-		);
-
-		$currencies = array_merge( $currencies, $pro_currencies );
-		$currencies = (array) apply_filters( 'frm_currencies', $currencies );
-
-		return $currencies;
 	}
 
 	/**
@@ -404,13 +111,13 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value = isset( $settings[ $option ] ) ? $settings[ $option ] : '';
-
+		$value    = isset( $settings[ $option ] ) ? $settings[ $option ] : '';
 		return $value;
 	}
 
 	public static function get_action_settings( $atts ) {
 		$settings = array();
+
 		if ( isset( $atts['payment'] ) ) {
 			$atts['payment'] = (array) $atts['payment'];
 			if ( ! empty( $atts['payment']['action_id'] ) ) {
@@ -422,48 +129,6 @@ class FrmTransLiteAppHelper {
 		}
 
 		return $settings;
-	}
-
-	public static function get_action_description( $action_id ) {
-		_deprecated_function( __FUNCTION__, '1.11', 'FrmTransLiteAppHelper::get_payment_description' );
-
-		$atts = array( 'payment' => compact( 'action_id' ) );
-		return self::get_action_setting( 'description', $atts );
-	}
-
-	/**
-	 * Return the filtered payment description
-	 *
-	 * @since 1.11
-	 *
-	 * @param object $subscription
-	 * @return string
-	 */
-	public static function get_payment_description( $subscription ) {
-		$atts        = array( 'payment' => array( 'action_id' => $subscription->action_id ) );
-		$description = self::get_action_setting( 'description', $atts );
-
-		if ( empty( $description ) ) {
-			return '';
-		}
-
-		$entry = FrmEntry::getOne( $subscription->item_id, true );
-		if ( ! $entry ) {
-			return $description;
-		}
-
-		$form = FrmForm::getOne( $entry->form_id );
-		if ( ! $form ) {
-			return $description;
-		}
-
-		return self::process_shortcodes(
-			array(
-				'value' => $description,
-				'form'  => $form,
-				'entry' => $entry,
-			)
-		);
 	}
 
 	/**
@@ -555,15 +220,15 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function formatted_amount( $payment ) {
 		$currency = 'usd';
-		$amount = $payment;
+		$amount   = $payment;
 
 		if ( is_object( $payment ) || is_array( $payment ) ) {
-			$payment = (array) $payment;
-			$amount = $payment['amount'];
+			$payment  = (array) $payment;
+			$amount   = $payment['amount'];
 			$currency = self::get_action_setting( 'currency', array( 'payment' => $payment ) );
 		}
 
-		$currency = self::get_currency( $currency );
+		$currency = FrmCurrencyHelper::get_currency( $currency );
 
 		self::format_amount_for_currency( $currency, $amount );
 
@@ -573,13 +238,13 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param array $currency
 	 * @param float $amount
-	 * @return string
+	 * @return void
 	 */
 	public static function format_amount_for_currency( $currency, &$amount ) {
-		$amount = number_format( $amount, $currency['decimals'], $currency['decimal_separator'], $currency['thousand_separator'] );
-		$left_symbol = $currency['symbol_left'] . $currency['symbol_padding'];
+		$amount       = number_format( $amount, $currency['decimals'], $currency['decimal_separator'], $currency['thousand_separator'] );
+		$left_symbol  = $currency['symbol_left'] . $currency['symbol_padding'];
 		$right_symbol = $currency['symbol_padding'] . $currency['symbol_right'];
-		$amount = $left_symbol . $amount . $right_symbol;
+		$amount       = $left_symbol . $amount . $right_symbol;
 	}
 
 	/**

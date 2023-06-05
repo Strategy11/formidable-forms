@@ -289,7 +289,7 @@ class FrmTransLiteActionsController {
 			$currency = $atts['currency'];
 		}
 
-		return FrmTransLiteAppHelper::get_currency( $currency );
+		return FrmCurrencyHelper::get_currency( $currency );
 	}
 
 	/**

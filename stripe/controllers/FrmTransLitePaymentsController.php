@@ -70,7 +70,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$payment->$var = FrmAppHelper::get_param( $var, $default, 'post', 'sanitize_text_field' );
 		}
 
-		$currency = FrmTransLiteAppHelper::get_currency( 'usd' );
+		$currency = FrmCurrencyHelper::get_currency( 'usd' );
 
 		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/new.php';
 	}
