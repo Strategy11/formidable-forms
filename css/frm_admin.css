@@ -6124,6 +6124,14 @@ span.howto {
 	min-height: 50px;
 }
 
+#frm_builder_page .field_type_list ~ .field_type_list #credit_card {
+	/*
+	Hide the credit card field in the "Advanced Fields" section.
+	It is still defined for backward compatibility but we do not want to see it.
+	*/
+	display: none;
+}
+
 #frm_builder_page #frm_field_group_controls {
 	position: absolute;
 	padding: 5px;
