@@ -14,7 +14,7 @@ const UpgradeNotice = ( { text, buttonText, link } ) => (
 	</Notice>
 );
 
-registerBlockType( 'formidable-modal/modal', {
+registerBlockType( 'frm-modal/modal', {
 	title: __( 'Formidable Modal', 'formidable' ),
 	description: __( 'Display a Calculator Form', 'formidable' ),
 	icon: {
