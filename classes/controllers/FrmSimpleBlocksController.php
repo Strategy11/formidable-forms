@@ -39,6 +39,7 @@ class FrmSimpleBlocksController {
 			'name'  => $block_name,
 			'link'  => FrmAppHelper::admin_upgrade_link( 'block' ),
 			'url'   => FrmAppHelper::plugin_url(),
+			'licenseType' => FrmAddonsController::license_type(),
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );

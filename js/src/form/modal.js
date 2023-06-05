@@ -33,7 +33,7 @@ registerBlockType( 'formidable-modal/modal', {
 	],
 
 	edit: ( { setAttributes, attributes } ) => {
-		const hasAccess = true; // TODO.
+		const hasAccess = -1 !== [ 'elite', 'business', 'personal', 'grandfathered' ].indexOf( formidable_form_selector.licenseType );
 		const blockName = __( 'Bootstrap modal popup', 'formidable' );
 		const imageStyles = {
 			maxWidth: '504px',
