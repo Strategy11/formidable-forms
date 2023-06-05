@@ -310,12 +310,14 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	private static function maybe_use_decimal( &$amount, $currency ) {
-		if ( $currency['thousand_separator'] === '.' ) {
-			$amount_parts = explode( '.', $amount );
-			$used_for_decimal = ( count( $amount_parts ) == 2 && strlen( $amount_parts[1] ) == 2 );
-			if ( $used_for_decimal ) {
-				$amount = str_replace( '.', $currency['decimal_separator'], $amount );
-			}
+		if ( $currency['thousand_separator'] !== '.' ) {
+			return;
+		}
+
+		$amount_parts     = explode( '.', $amount );
+		$used_for_decimal = ( count( $amount_parts ) == 2 && strlen( $amount_parts[1] ) == 2 );
+		if ( $used_for_decimal ) {
+			$amount = str_replace( '.', $currency['decimal_separator'], $amount );
 		}
 	}
 

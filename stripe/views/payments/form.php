@@ -32,7 +32,7 @@
 				<tr valign="top">
 					<th scope="row"><?php esc_html_e( 'Receipt', 'formidable' ); ?></th>
 					<td>
-						<?php if ( $payment->paysys != 'manual' && ! empty( $payment->receipt_id ) ) { ?>
+						<?php if ( $payment->paysys !== 'manual' && ! empty( $payment->receipt_id ) ) { ?>
 							<?php FrmTransLitePaymentsController::show_receipt_link( $payment ); ?>
 							<input type="hidden" name="receipt_id" value="<?php echo esc_attr( $payment->receipt_id ); ?>" />
 						<?php } else { ?>

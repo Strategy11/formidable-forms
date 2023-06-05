@@ -168,10 +168,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 			if ( $column_name === 'cb' ) {
 				echo $val; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			} else {
-				echo '<td ' . $attributes . '>' . $val . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				unset( $val );
+				continue;
 			}
+
+			echo '<td ' . $attributes . '>' . $val . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			unset( $val );
 		}
 	}
 
@@ -295,12 +296,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_user_id_column( $item ) {
 		global $wpdb;
-		$val = FrmDb::get_var( $wpdb->prefix . 'frm_items', array( 'id' => $item->item_id ), 'user_id' );
+		$val = FrmDb::get_var( 'frm_items', array( 'id' => $item->item_id ), 'user_id' );
 		return FrmTransLiteAppHelper::get_user_link( $val );
 	}
 
 	private function get_created_at_column( $item, $atts ) {
-		if ( empty( $item->created_at ) || $item->created_at == '0000-00-00 00:00:00' ) {
+		if ( empty( $item->created_at ) || $item->created_at === '0000-00-00 00:00:00' ) {
 			$val = '';
 		} else {
 			$date = FrmAppHelper::get_localized_date( $atts['date_format'], $item->created_at );
@@ -311,7 +312,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	private function get_amount_column( $item ) {
-		if ( $this->table == 'subscriptions' ) {
+		if ( $this->table === 'subscriptions' ) {
 			$val = FrmTransLiteAppHelper::format_billing_cycle( $item );
 		} else {
 			$val = FrmTransLiteAppHelper::formatted_amount( $item );
@@ -322,9 +323,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_end_count_column( $item ) {
 		$limit = ( $item->end_count >= 9999 ) ? __( 'unlimited', 'formidable' ) : $item->end_count;
 
-		$frm_payment = new FrmTransLitePayment();
+		$frm_payment        = new FrmTransLitePayment();
 		$completed_payments = $frm_payment->get_all_by( $item->id, 'sub_id' );
-		$count = 0;
+		$count              = 0;
 
 		foreach ( $completed_payments as $completed_payment ) {
 			if ( $completed_payment->status == 'complete' ) {
@@ -347,7 +348,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_sub_id_column( $item ) {
 		if ( empty( $item->sub_id ) ) {
 			$val = '';
-		} elseif ( $this->table == 'subscriptions' ) {
+		} elseif ( $this->table === 'subscriptions' ) {
 			$val = $this->get_action_column( $item, 'sub_id' );
 		} else {
 			$val = '<a href="' . esc_url( '?page=formidable-payments&action=show&type=subscriptions&id=' . $item->sub_id ) . '">' . $item->sub_id . '</a>';
