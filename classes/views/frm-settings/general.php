@@ -33,9 +33,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php do_action( 'frm_style_general_settings', $frm_settings ); ?>
 
-
 <h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
-<?php do_action( 'frm_settings_form', $frm_settings ); ?>
+
+<?php
+ob_start();
+
+/**
+ * Trigger an action so Pro can display additional General settings in the Other section.
+ *
+ * @param FrmSettings $frm_settings
+ */
+do_action( 'frm_settings_form', $frm_settings );
+
+$more_html = ob_get_clean();
+echo $more_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
+if ( false === strpos( $more_html, 'id="frm_currency"' ) ) {
+	$currencies = FrmCurrencyHelper::get_currencies();
+	?>
+	<p class="frm_grid_container">
+		<label for="frm_currency" class="frm4 frm_form_field frm_help" title="<?php esc_attr_e( 'Select the currency to be used by Formidable globally.', 'formidable-pro' ) ?>">
+			<?php esc_html_e( 'Currency', 'formidable-pro' ); ?>
+		</label>
+		<select id="frm_currency" name="frm_currency" class="frm8 frm_form_field">
+			<?php
+			$c = empty( $frm_settings->currency ) ? 'USD' : strtoupper( $frm_settings->currency );
+			foreach ( $currencies as $code => $currency ) {
+				?>
+				<option value="<?php echo esc_attr( $code ); ?>"<?php selected( $c, strtoupper( $code ) ); ?>>
+					<?php echo esc_html( $currency['name'] . ' (' . $code . ')' ); ?>
+				</option>
+				<?php
+			}
+			?>
+		</select>
+	</p>
+	<?php
+	unset( $currencies );
+}
+
+unset( $more_html );
+?>
 
 <div class="clear"></div>
 
