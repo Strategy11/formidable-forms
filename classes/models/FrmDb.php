@@ -741,28 +741,4 @@ class FrmDb {
 			wp_cache_delete( 'cached_keys', $group );
 		}
 	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function upgrade() {
-		FrmDeprecated::upgrade();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function collation() {
-		return FrmDeprecated::collation();
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public function uninstall() {
-		FrmDeprecated::uninstall();
-	}
 }

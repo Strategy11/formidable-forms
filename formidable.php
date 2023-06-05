@@ -2,7 +2,7 @@
 /*
 Plugin Name: Formidable Forms
 Description: Quickly and easily create drag-and-drop forms
-Version: 6.1.1
+Version: 6.3.1
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
 Author: Strategy11 Form Builder Team
@@ -27,6 +27,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'plugins_loaded', 'load_formidable_forms', 0 );
+/**
+ * @return void
+ */
 function load_formidable_forms() {
 	global $frm_vars;
 	$frm_vars = array(
@@ -53,6 +56,9 @@ if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoloa
 // Add the autoloader
 spl_autoload_register( 'frm_forms_autoloader' );
 
+/**
+ * @return void
+ */
 function frm_forms_autoloader( $class_name ) {
 	// Only load Frm classes here
 	if ( ! preg_match( '/^Frm.+$/', $class_name ) || preg_match( '/^FrmPro.+$/', $class_name ) ) {
@@ -66,6 +72,8 @@ function frm_forms_autoloader( $class_name ) {
  * Autoload the Formidable and Pro classes
  *
  * @since 3.0
+ *
+ * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
 	$deprecated        = array( 'FrmEntryFormat', 'FrmPointers', 'FrmEDD_SL_Plugin_Updater' );
@@ -118,6 +126,9 @@ function frm_class_autoloader( $class_name, $filepath ) {
 }
 
 add_action( 'activate_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'frm_maybe_install' );
+/**
+ * @return void
+ */
 function frm_maybe_install() {
 	if ( get_transient( FrmWelcomeController::$option_name ) !== 'no' ) {
 		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );

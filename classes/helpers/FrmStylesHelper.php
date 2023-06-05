@@ -399,6 +399,8 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @return array
 	 */
 	private static function allow_color_override() {
 		$frm_style = new FrmStyle();
@@ -420,7 +422,6 @@ class FrmStylesHelper {
 			'submit_active_border_color',
 			'submit_hover_bg_color',
 			'submit_active_bg_color',
-			'success_bg_color',
 		);
 
 		return array(

@@ -172,6 +172,12 @@ class FrmEntriesHelper {
 		return $message;
 	}
 
+	/**
+	 * @param stdClass $entry
+	 * @param stdClass $field
+	 * @param array    $atts
+	 * @return string
+	 */
 	public static function prepare_display_value( $entry, $field, $atts ) {
 		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
 
@@ -188,12 +194,14 @@ class FrmEntriesHelper {
 			return self::display_value( $field_value, $field, $atts );
 		}
 
-		// This is an embeded form.
-		$val = '';
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return '';
+		}
 
+		// This is an embeded form.
 		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
 			// This is a repeating section.
-			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ) );
+			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
 		} else {
 			// Get all values for this field.
 			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
@@ -205,8 +213,8 @@ class FrmEntriesHelper {
 
 		$field_value = array();
 
-		if ( ! isset( $child_entries ) || ! $child_entries || ! FrmAppHelper::pro_is_installed() ) {
-			return $val;
+		if ( empty( $child_entries ) ) {
+			return '';
 		}
 
 		foreach ( $child_entries as $child_entry ) {
@@ -288,7 +296,7 @@ class FrmEntriesHelper {
 		}
 
 		$unfiltered_value = $value;
-		FrmAppHelper::unserialize_or_decode( $unfiltered_value );
+		FrmFieldsHelper::prepare_field_value( $unfiltered_value, $field->type );
 
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );

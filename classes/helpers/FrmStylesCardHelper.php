@@ -302,6 +302,7 @@ class FrmStylesCardHelper {
 			'field_border_width',
 			'field_border_style',
 			'border_color',
+			'border_radius',
 			'submit_bg_color',
 			'submit_border_color',
 			'submit_border_width',
@@ -487,6 +488,9 @@ class FrmStylesCardHelper {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_template_info() {
 		$style_api = new FrmStyleApi();
 		return $style_api->get_api_info();

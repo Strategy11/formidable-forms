@@ -141,12 +141,11 @@
 
 	const multiselect = {
 		init: function() {
-			let $select, id, labelledBy;
+			const $select = jQuery( this );
+			const id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
 
-			$select = jQuery( this );
-			id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
-			labelledBy = id ? jQuery( '#for_' + id ) : false;
-			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+			let labelledBy = id ? jQuery( '#for_' + id ) : false;
+			labelledBy     = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 
 			$select.multiselect({
 				templates: {
@@ -165,9 +164,32 @@
 							}
 						});
 					}
+
+					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
+					$dropdown.find( '.dropdown-item' ).each(
+						function() {
+							const option         = this;
+							const dropdownInput  = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+							if ( dropdownInput ) {
+								option.setAttribute( 'role', 'checkbox' );
+								option.setAttribute( 'aria-checked', dropdownInput.checked ? 'true' : 'false' );
+							}
+						}
+					);
 				},
-				onChange: function( element, option ) {
-					$select.trigger( 'frm-multiselect-changed', element, option );
+				onChange: function( $option, checked ) {
+					$select.trigger( 'frm-multiselect-changed', $option, checked );
+
+					const $dropdown     = $select.next( '.frm-btn-group.dropdown' );
+					const optionValue   = $option.val();
+					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
+					if ( $dropdownItem.length ) {
+						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
+
+						// Delay a focus event so the screen reader reads the option value again.
+						// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
+						setTimeout( () => $dropdownItem.get( 0 ).focus(), 0 );
+					}
 				}
 			});
 		}
@@ -637,6 +659,9 @@
 		if ( 'string' === typeof args.src ) {
 			output.setAttribute( 'src', args.src );
 		}
+		if ( 'string' === typeof args.alt ) {
+			output.setAttribute( 'alt', args.alt );
+		}
 		return output;
 	}
 
@@ -750,5 +775,52 @@
 		element.appendChild( child );
 	}
 
-	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg };
+	const allowedHtml = {
+		b: [],
+		div: [ 'class' ],
+		img: [ 'src', 'alt' ],
+		p: [],
+		span: [ 'class' ],
+		strong: [],
+		svg: [ 'class' ],
+		use: []
+	};
+
+	function cleanNode( node ) {
+		if ( 'undefined' === typeof node.tagName ) {
+			if ( '#text' === node.nodeName ) {
+				return document.createTextNode( node.textContent );
+			}
+			return document.createTextNode( '' );
+		}
+
+		const tagType = node.tagName.toLowerCase();
+
+		if ( 'svg' === tagType ) {
+			return svg({
+				href: node.querySelector( 'use' ).getAttribute( 'xlink:href' ),
+				classList: Array.from( node.classList )
+			});
+		}
+
+		const newNode = document.createElement( tagType );
+
+		if ( 'undefined' === typeof allowedHtml[ tagType ]) {
+			// Tag type is not allowed.
+			return document.createTextNode( '' );
+		}
+
+		allowedHtml[ tagType ].forEach(
+			allowedTag => {
+				if ( node.hasAttribute( allowedTag ) ) {
+					newNode.setAttribute( allowedTag, node.getAttribute( allowedTag ) );
+				}
+			}
+		);
+
+		node.childNodes.forEach( child => newNode.appendChild( cleanNode( child ) ) );
+		return newNode;
+	}
+
+	window.frmDom = { tag, div, span, a, img, labelledTextInput, svg, setAttributes, success, modal, ajax, bootstrap, autocomplete, search, util, wysiwyg, cleanNode };
 }() );

@@ -107,5 +107,10 @@
 				<file name="classes/views/frm-form-actions/email_action.php" />
 			</errorLevel>
 		</ParamNameMismatch>
+		<UndefinedAttributeClass>
+			<errorLevel type="suppress">
+				<referencedClass name="AllowDynamicProperties" />
+			</errorLevel>
+		</UndefinedAttributeClass>
 	</issueHandlers>
 </psalm>

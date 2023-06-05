@@ -7,6 +7,10 @@ class FrmHooksController {
 
 	/**
 	 * Trigger plugin-wide hook loading
+	 *
+	 * @param string $hooks
+	 *
+	 * @return void
 	 */
 	public static function trigger_load_hook( $hooks = 'load_hooks' ) {
 		$controllers = apply_filters( 'frm_load_controllers', array( 'FrmHooksController' ) );
@@ -45,10 +49,16 @@ class FrmHooksController {
 
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function trigger_load_form_hooks() {
 		self::trigger_load_hook( 'load_form_hooks' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_hooks() {
 		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
 		add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
@@ -101,6 +111,9 @@ class FrmHooksController {
 		FrmStrpLiteHooksController::load_hooks();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_admin_hooks() {
 		add_action( 'admin_menu', 'FrmAppController::menu', 1 );
 		add_filter( 'admin_body_class', 'FrmAppController::add_admin_class', 999 );
@@ -184,6 +197,9 @@ class FrmHooksController {
 		new FrmPluginSearch();
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_install', 'FrmAppController::ajax_install' );
 		add_action( 'wp_ajax_frm_uninstall', 'FrmAppController::uninstall' );
@@ -244,8 +260,14 @@ class FrmHooksController {
 
 		// Templates API.
 		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
+
+		// Submit with AJAX.
+		add_action( 'wp_loaded', 'FrmEntriesAJAXSubmitController::ajax_create', 5 ); // Trigger before process_entry.
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_form_hooks() {
 		// Fields Controller.
 		add_filter( 'frm_field_type', 'FrmFieldsController::change_type' );
@@ -262,10 +284,16 @@ class FrmHooksController {
 		add_filter( 'frm_use_important_width', 'FrmStylesController::important_style', 10, 2 );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_view_hooks() {
 		// Hooks go here when a view is loaded.
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function load_multisite_hooks() {
 		add_action( 'wpmu_upgrade_site', 'FrmAppController::network_upgrade_site' );
 
@@ -275,6 +303,8 @@ class FrmHooksController {
 
 	/**
 	 * @deprecated 5.0.06 use FrmElementorController::register_elementor_hooks directly.
+	 *
+	 * @return void
 	 */
 	public static function register_elementor_hooks() {
 		_deprecated_function( __FUNCTION__, '5.0.06', 'FrmElementorController::register_elementor_hooks' );

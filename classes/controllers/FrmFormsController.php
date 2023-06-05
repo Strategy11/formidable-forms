@@ -5,6 +5,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormsController {
 
+	/**
+	 * Track the form that opened the redirect URL in a new tab. This is used to check if we should show the default
+	 * message in the currect tab.
+	 *
+	 * @since 6.2
+	 *
+	 * @var array Keys are form IDs and values are 1.
+	 */
+	private static $redirected_in_new_tab = array();
+
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -1530,7 +1540,10 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Insert the form class setting into the form
+	 * Insert the form class setting into the form.
+	 *
+	 * @param stdClass $form
+	 * @return void
 	 */
 	public static function form_classes( $form ) {
 		if ( isset( $form->options['form_class'] ) ) {
@@ -1540,6 +1553,10 @@ class FrmFormsController {
 		if ( ! empty( $form->options['js_validate'] ) ) {
 			echo ' frm_js_validate ';
 			self::add_js_validate_form_to_global_vars( $form );
+		}
+
+		if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() && FrmForm::is_ajax_on( $form ) ) {
+			echo ' frm_ajax_submit ';
 		}
 	}
 
@@ -1599,11 +1616,15 @@ class FrmFormsController {
 	 *
 	 * @since 5.5
 	 *
-	 * @param string              $string
+	 * @param string|array        $string
 	 * @param stdClass|string|int $form
-	 * @return string
+	 * @return string|array
 	 */
 	public static function replace_form_name_shortcodes( $string, $form ) {
+		if ( ! is_string( $string ) ) {
+			return $string;
+		}
+
 		if ( false === strpos( $string, '[form_name]' ) ) {
 			return $string;
 		}
@@ -2046,6 +2067,9 @@ class FrmFormsController {
 		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $handle_process_here ) {
+			FrmFormState::set_initial_value( 'title', $title );
+			FrmFormState::set_initial_value( 'description', $description );
+
 			do_action( 'frm_display_form_action', $params, $fields, $form, $title, $description );
 			if ( apply_filters( 'frm_continue_to_new', true, $form->id, $params['action'] ) ) {
 				self::show_form_after_submit( $pass_args );
@@ -2252,6 +2276,11 @@ class FrmFormsController {
 			return array();
 		}
 
+		// If a redirect action has already opened the URL in a new tab, we show the default message in the currect tab.
+		if ( ! empty( self::$redirected_in_new_tab[ $args['form']->id ] ) ) {
+			return array( FrmOnSubmitHelper::get_fallback_action_after_open_in_new_tab( $event ) );
+		}
+
 		$entry       = FrmEntry::getOne( $args['entry_id'], true );
 		$actions     = FrmOnSubmitHelper::get_actions( $args['form']->id );
 		$met_actions = array();
@@ -2266,11 +2295,19 @@ class FrmFormsController {
 				continue;
 			}
 
-			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
+			$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+			if ( 'redirect' === $action_type ) {
 				if ( $has_redirect ) { // Do not process because we run the first redirect action only.
 					continue;
 				}
+			}
 
+			if ( ! self::is_valid_on_submit_action( $action, $args, $event ) ) {
+				continue;
+			}
+
+			if ( 'redirect' === $action_type ) {
 				$has_redirect = true;
 			}
 
@@ -2295,6 +2332,45 @@ class FrmFormsController {
 		}
 
 		return $met_actions;
+	}
+
+	/**
+	 * Checks if a Confirmation action has the valid data.
+	 *
+	 * @since 6.1.2
+	 *
+	 * @param object $action Form action object.
+	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
+	 * @param string $event  Form event. Default is `create`.
+	 * @return bool
+	 */
+	private static function is_valid_on_submit_action( $action, $args, $event = 'create' ) {
+		$action_type = FrmOnSubmitHelper::get_action_type( $action );
+
+		if ( 'redirect' === $action_type ) {
+			// Run through frm_redirect_url filter. This is used for the valid action check.
+			$action->post_content['success_url'] = apply_filters(
+				'frm_redirect_url',
+				$action->post_content['success_url'],
+				$args['form'],
+				$args + array( 'action' => $event )
+			);
+
+			return ! empty( $action->post_content['success_url'] );
+		}
+
+		if ( 'page' === $action_type ) {
+			if ( empty( $action->post_content['success_page_id'] ) ) {
+				return false;
+			}
+
+			$page = get_post( $action->post_content['success_page_id'] );
+			if ( ! $page || 'trash' === $page->post_status ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -2452,17 +2528,78 @@ class FrmFormsController {
 		$doing_ajax = FrmAppHelper::doing_ajax();
 
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) { // Is AJAX submit and there is just one Redirect action runs.
-			echo json_encode( array( 'redirect' => $success_url ) );
+			echo json_encode( self::get_ajax_redirect_response_data( $args + compact( 'success_url' ) ) );
 			wp_die();
 		}
 
 		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) { // Not AJAX submit, no headers sent, and there is just one Redirect action runs.
+			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+				self::print_open_in_new_tab_js_with_fallback_handler( $success_url, $args );
+				self::$redirected_in_new_tab[ $args['form']->id ] = 1;
+				return;
+			}
+
 			wp_redirect( esc_url_raw( $success_url ) );
 			die(); // do not use wp_die or redirect fails
 		}
 
 		// Redirect with a delay.
 		self::redirect_after_submit_using_js( $args + compact( 'success_url', 'doing_ajax' ) );
+	}
+
+	/**
+	 * Prints open in new tab js with fallback handler.
+	 *
+	 * @since 6.x
+	 *
+	 * @param string $success_url Success URL.
+	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
+	 */
+	private static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
+		echo '<script>var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");';
+		echo 'if ( ! newTab ) {';
+
+		$data = array(
+			'formId'  => intval( $args['form']->id ),
+			'message' => self::get_redirect_fallback_message( $success_url, $args ),
+		);
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo 'frmShowNewTabFallback = ' . FrmAppHelper::maybe_json_encode( $data ) . ';';
+		echo '}</script>';
+	}
+
+	/**
+	 * Gets response data for redirect action when AJAX submitting.
+	 *
+	 * @since 6.x
+	 *
+	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 * @return array
+	 */
+	private static function get_ajax_redirect_response_data( $args ) {
+		$response_data = array( 'redirect' => $args['success_url'] );
+
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$response_data['openInNewTab'] = 1;
+
+			$args['message'] = FrmOnSubmitHelper::get_default_new_tab_msg();
+
+			$args['form']->options['success_msg'] = $args['message'];
+			$args['form']->options['edit_msg']    = $args['message'];
+			if ( ! isset( $args['fields'] ) ) {
+				$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
+			}
+
+			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
+
+			ob_start();
+			self::show_lone_success_messsage( $args );
+			$response_data['content'] = ob_get_clean();
+
+			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
+		}
+
+		return $response_data;
 	}
 
 	/**
@@ -2475,6 +2612,7 @@ class FrmFormsController {
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
+		$success_url  = esc_url_raw( $args['success_url'] );
 
 		/**
 		 * Filters the delay time before redirecting when On Submit Redirect action is delayed.
@@ -2485,6 +2623,12 @@ class FrmFormsController {
 		 */
 		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
 
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$redirect_js = 'window.open("' . $success_url . '", "_blank")';
+		} else {
+			$redirect_js = 'window.location="' . $success_url . '";';
+		}
+
 		add_filter( 'frm_use_wpautop', '__return_true' );
 
 		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -2492,7 +2636,7 @@ class FrmFormsController {
 		if ( empty( $args['doing_ajax'] ) ) { // Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
-		echo 'setTimeout(function(){window.location="' . esc_url_raw( $args['success_url'] ) . '";}, ' . intval( $delay_time ) . ');';
+		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		if ( empty( $args['doing_ajax'] ) ) {
 			echo '};';
 		}
@@ -2508,8 +2652,7 @@ class FrmFormsController {
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
-			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			sprintf( __( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ), '<a href="' . esc_url( $success_url ) . '">', '</a>' ) .
+			self::get_redirect_fallback_message( $success_url, $args ) .
 			'</div></div>';
 
 		$redirect_args = array(
@@ -2522,6 +2665,29 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Gets fallback message when redirecting failed.
+	 *
+	 * @since 6.x
+	 *
+	 * @param string $success_url Redirect URL.
+	 * @param array  $args        Contains `form` object.
+	 * @return string
+	 */
+	private static function get_redirect_fallback_message( $success_url, $args ) {
+		$target = '';
+		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
+			$target = ' target="_blank"';
+		}
+
+		return sprintf(
+			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+			__( '%1$sClick here%2$s if you are not automatically redirected.', 'formidable' ),
+			'<a href="' . esc_url( $success_url ) . '"' . $target . '>',
+			'</a>'
+		);
+	}
+
+	/**
 	 * Prepare to show the success message and empty form after submit
 	 *
 	 * @since 2.05
@@ -2530,7 +2696,17 @@ class FrmFormsController {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
 
 		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
-			self::show_form_after_submit( $atts );
+			if ( isset( $atts['action'] ) && 'update' === $atts['action'] && is_callable( array( 'FrmProEntriesController', 'show_front_end_form_with_entry' ) ) ) {
+				$entry = FrmEntry::getOne( $atts['entry_id'] );
+				if ( $entry ) {
+					// This is copied from the Pro plugin.
+					$atts['conf_message'] = FrmProEntriesController::confirmation( 'message', $atts['form'], $atts['form']->options, $entry->id, $atts );
+					$atts['show_form']    = FrmProEntriesController::is_form_displayed_after_edit( $atts['form'] );
+					FrmProEntriesController::show_front_end_form_with_entry( $entry, $atts );
+				}
+			} else {
+				self::show_form_after_submit( $atts );
+			}
 		} else {
 			self::show_lone_success_messsage( $atts );
 		}
@@ -2917,27 +3093,11 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated 1.07.05
-	 * @codeCoverageIgnore
-	 */
-	public static function add_default_templates( $path, $default = true, $template = true ) {
-		FrmDeprecated::add_default_templates( $path, $default, $template );
-	}
-
-	/**
 	 * @deprecated 3.0
 	 * @codeCoverageIgnore
 	 */
 	public static function bulk_create_template( $ids ) {
 		return FrmDeprecated::bulk_create_template( $ids );
-	}
-
-	/**
-	 * @deprecated 2.03
-	 * @codeCoverageIgnore
-	 */
-	public static function register_pro_scripts() {
-		FrmDeprecated::register_pro_scripts();
 	}
 
 	/**

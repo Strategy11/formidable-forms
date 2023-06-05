@@ -760,15 +760,33 @@ class FrmFieldsHelper {
 	/**
 	 * @param string $replace_with
 	 * @param array  $atts
+	 * @return string
 	 */
 	private static function trigger_shortcode_atts( $replace_with, $atts ) {
-		$supported_atts = array( 'sanitize', 'sanitize_url' );
+		$supported_atts = array( 'remove_accents', 'sanitize', 'sanitize_url' );
 		$included_atts  = array_intersect( $supported_atts, array_keys( $atts ) );
 		foreach ( $included_atts as $included_att ) {
+			if ( '0' === $atts[ $included_att ] ) {
+				// Skip any option that uses 0 so sanitize_url=0 does not encode.
+				continue;
+			}
 			$function     = 'atts_' . $included_att;
 			$replace_with = self::$function( $replace_with, $atts );
 		}
 		return $replace_with;
+	}
+
+	/**
+	 * Converts all accent characters to ASCII characters.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $replace_with The text to remove accents from.
+	 *
+	 * @return string
+	 */
+	public static function atts_remove_accents( $replace_with ) {
+		return remove_accents( $replace_with );
 	}
 
 	/**
@@ -2050,6 +2068,21 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Maybe adjust a field value based on type.
+	 * Some types require unserializing an array (@see self::field_type_requires_unserialize).
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed  $value
+	 * @param string $field_type
+	 * @return void
+	 */
+	public static function prepare_field_value( &$value, $field_type ) {
+		$field_object = FrmFieldFactory::get_field_type( $field_type );
+		$value        = $field_object->maybe_decode_value( $value );
+	}
+
+	/**
 	 * @deprecated 4.0
 	 */
 	public static function show_icon_link_js( $atts ) {
@@ -2131,8 +2164,11 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @deprecated 2.02.07
+	 * @deprecated 2.02.07 This is still referenced in the Highrise add on as of v1.06.
 	 * @codeCoverageIgnore
+	 *
+	 * @param array $args
+	 * @return string
 	 */
 	public static function dropdown_categories( $args ) {
 		return FrmDeprecated::dropdown_categories( $args );

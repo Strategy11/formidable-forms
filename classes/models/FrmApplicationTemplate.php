@@ -31,6 +31,8 @@ class FrmApplicationTemplate {
 	/**
 	 * @param array<string> $keys
 	 * @param array<string> $keys_with_images
+	 *
+	 * @return void
 	 */
 	public static function init() {
 		/**

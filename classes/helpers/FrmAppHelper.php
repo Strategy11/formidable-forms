@@ -16,7 +16,7 @@ class FrmAppHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static $plug_version = '6.1.1';
+	public static $plug_version = '6.3.1';
 
 	/**
 	 * @since 1.07.02
@@ -1114,7 +1114,9 @@ class FrmAppHelper {
 			ob_start();
 		}
 
-		$echo_function();
+		if ( is_callable( $echo_function ) ) {
+			$echo_function();
+		}
 
 		if ( ! $echo ) {
 			$return = ob_get_contents();
@@ -2393,7 +2395,7 @@ class FrmAppHelper {
 	 * @return string $time_ago
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		if ( empty( $to ) ) {
+		if ( empty( $to ) && 0 !== $to ) {
 			$now = new DateTime();
 		} else {
 			$now = new DateTime( '@' . $to );
@@ -2646,6 +2648,7 @@ class FrmAppHelper {
 			'from'          => __( 'Enter the name and/or email address of the sender. FORMAT: John Bates <john@example.com> or john@example.com.', 'formidable' ),
 			/* translators: %1$s: Form name, %2$s: Date */
 			'email_subject' => esc_attr( sprintf( __( 'If you leave the subject blank, the default will be used: %1$s Form submitted on %2$s', 'formidable' ), $form_name, self::site_name() ) ),
+			'new_tab'       => __( 'This option will open the link in a new browser tab. Please note that some popup blockers may prevent this from happening, in which case the link will be displayed.', 'formidable' ),
 		);
 
 		if ( ! isset( $tooltips[ $name ] ) ) {
@@ -2740,6 +2743,9 @@ class FrmAppHelper {
 	 * all data to json.
 	 *
 	 * @since 4.02.03
+	 *
+	 * @param array|string $value
+	 * @return void
 	 */
 	public static function unserialize_or_decode( &$value ) {
 		if ( is_array( $value ) ) {
@@ -2747,10 +2753,37 @@ class FrmAppHelper {
 		}
 
 		if ( is_serialized( $value ) ) {
-			$value = maybe_unserialize( $value );
+			$value = self::maybe_unserialize_array( $value );
 		} else {
 			$value = self::maybe_json_decode( $value, false );
 		}
+	}
+
+	/**
+	 * Safely unserialize an array if necessary.
+	 * This function doesn't actually use unserialize. The string is parsed instead.
+	 *
+	 * @since 6.2
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public static function maybe_unserialize_array( $value ) {
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+
+		// Since we only expect an array, skip anything that doesn't start with a:.
+		if ( ! is_serialized( $value ) || 'a:' !== substr( $value, 0, 2 ) ) {
+			return $value;
+		}
+
+		$parsed = FrmSerializedStringParserHelper::get()->parse( $value );
+		if ( is_array( $parsed ) ) {
+			$value = $parsed;
+		}
+
+		return $value;
 	}
 
 	/**
@@ -2779,6 +2812,34 @@ class FrmAppHelper {
 		}
 
 		return $string;
+	}
+
+	/**
+	 * @since 6.2.3
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public static function maybe_utf8_encode( $value ) {
+		$from_format = 'ISO-8859-1';
+		$to_format   = 'UTF-8';
+
+		if ( function_exists( 'mb_check_encoding' ) && function_exists( 'mb_convert_encoding' ) ) {
+			if ( mb_check_encoding( $value, $from_format ) ) {
+				return mb_convert_encoding( $value, $to_format, $from_format );
+			}
+			return $value;
+		}
+
+		if ( function_exists( 'iconv' ) ) {
+			$converted = iconv( $from_format, $to_format, $value );
+			// Value is false if $value is not ISO-8859-1.
+			if ( false !== $converted ) {
+				return $converted;
+			}
+		}
+
+		return $value;
 	}
 
 	/**
@@ -3757,172 +3818,11 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * Used to filter shortcode in text widgets
-	 *
-	 * @deprecated 2.5.4
-	 * @codeCoverageIgnore
-	 */
-	public static function widget_text_filter_callback( $matches ) {
-		return FrmDeprecated::widget_text_filter_callback( $matches );
-	}
-
-	/**
 	 * @deprecated 3.01
 	 * @codeCoverageIgnore
 	 */
 	public static function sanitize_array( &$values ) {
 		FrmDeprecated::sanitize_array( $values );
-	}
-
-	/**
-	 * @param array $settings
-	 * @param string $group
-	 *
-	 * @since 2.0.6
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function save_settings( $settings, $group ) {
-		return FrmDeprecated::save_settings( $settings, $group );
-	}
-
-	/**
-	 * @since 2.0.4
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function save_json_post( $settings ) {
-		return FrmDeprecated::save_json_post( $settings );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $cache_key The unique name for this cache
-	 * @param string $group The name of the cache group
-	 * @param string $query If blank, don't run a db call
-	 * @param string $type The wpdb function to use with this query
-	 *
-	 * @return mixed $results The cache or query results
-	 */
-	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-		return FrmDeprecated::check_cache( $cache_key, $group, $query, $type, $time );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
-		return FrmDeprecated::set_cache( $cache_key, $results, $group, $time );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function add_key_to_group_cache( $key, $group ) {
-		FrmDeprecated::add_key_to_group_cache( $key, $group );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function get_group_cached_keys( $group ) {
-		return FrmDeprecated::get_group_cached_keys( $group );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 * @return mixed The cached value or false
-	 */
-	public static function check_cache_and_transient( $cache_key ) {
-		return FrmDeprecated::check_cache( $cache_key );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $cache_key
-	 */
-	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
-		FrmDeprecated::delete_cache_and_transient( $cache_key, $group );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $group The name of the cache group
-	 */
-	public static function cache_delete_group( $group ) {
-		FrmDeprecated::cache_delete_group( $group );
-	}
-
-	/**
-	 * @since 1.07.10
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 *
-	 * @param string $term The value to escape
-	 *
-	 * @return string The escaped value
-	 */
-	public static function esc_like( $term ) {
-		return FrmDeprecated::esc_like( $term );
-	}
-
-	/**
-	 * @param string $order_query
-	 *
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function esc_order( $order_query ) {
-		return FrmDeprecated::esc_order( $order_query );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function esc_order_by( &$order_by ) {
-		FrmDeprecated::esc_order_by( $order_by );
-	}
-
-	/**
-	 * @param string $limit
-	 *
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function esc_limit( $limit ) {
-		return FrmDeprecated::esc_limit( $limit );
-	}
-
-	/**
-	 * @since 2.0
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function prepare_array_values( $array, $type = '%s' ) {
-		return FrmDeprecated::prepare_array_values( $array, $type );
-	}
-
-	/**
-	 * @deprecated 2.05.06
-	 * @codeCoverageIgnore
-	 */
-	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		return FrmDeprecated::prepend_and_or_where( $starts_with, $where );
 	}
 
 	/**
@@ -3942,5 +3842,69 @@ class FrmAppHelper {
 	 */
 	public static function renewal_message() {
 		_deprecated_function( __METHOD__, '6.0', 'FrmProAddonsController::renewal_message' );
+	}
+
+	/**
+	 * Display a dismissable warning message and save its dismissal state.
+	 *
+	 * @since 6.3
+	 *
+	 * @param string $message The warning message to display.
+	 * @param string $option  The unique identifier for the dismissal state of the message and the WP Ajax action.
+	 * @return void
+	 */
+	public static function add_dismissable_warning_message( $message = '', $option = '' ) {
+		if ( ! $message || ! $option ) {
+			return;
+		}
+
+		$ajax_callback = function() use ( $option ) {
+			self::dismiss_warning_message( $option );
+		};
+
+		// We're handling JS codes with `doJsonPost` and it adds 'frm_' to the beginning of the action.
+		// To prevent any issues, we add 'frm_' from the beginning of the action.
+		add_action( 'wp_ajax_frm_' . $option, $ajax_callback );
+
+		add_filter(
+			'frm_message_list',
+			function( $show_messages ) use ( $message, $option ) {
+				if ( get_option( $option, false ) ) {
+					return $show_messages;
+				}
+
+				$dismiss_icon = self::icon_by_class(
+					'frmfont frm_close_icon',
+					array(
+						'aria-label' => _x( 'Dismiss', 'warning message: close icon label', 'formidable' ),
+						'echo' => false,
+					)
+				);
+
+				$show_messages[] = $message;
+				$show_messages[] = '<span class="frm-warning-dismiss frmsvg" data-action="' . esc_attr( $option ) . '">' . $dismiss_icon . '</span>';
+
+				return $show_messages;
+			}
+		);
+	}
+
+	/**
+	 * Dismiss a warning message and update the dismissal state.
+	 *
+	 * @since 6.3
+	 *
+	 * @param string $option The unique identifier for the dismissal state of the message.
+	 * @return void
+	 */
+	public static function dismiss_warning_message( $option = '' ) {
+		self::permission_check( 'frm_change_settings' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( $option ) {
+			update_option( $option, true, 'no' );
+		}
+
+		wp_send_json_success();
 	}
 }

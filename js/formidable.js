@@ -17,6 +17,7 @@ function frmFrontFormJS() {
 	 * @since 5.4
 	 */
 	function maybeAddPolyfills() {
+		var i;
 		if ( ! Element.prototype.matches ) {
 			// IE9 supports matches but as msMatchesSelector instead.
 			Element.prototype.matches = Element.prototype.msMatchesSelector;
@@ -41,7 +42,7 @@ function frmFrontFormJS() {
 		if ( window.NodeList && ! NodeList.prototype.forEach ) {
 			NodeList.prototype.forEach = function( callback, thisArg ) {
 				thisArg = thisArg || window;
-				for ( var i = 0; i < this.length; i++ ) {
+				for ( i = 0; i < this.length; i++ ) {
 					callback.call( thisArg, this[ i ], i, this );
 				}
 			};
@@ -585,12 +586,12 @@ function frmFrontFormJS() {
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
 
-		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce;
+		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		success = function( response ) {
 			var defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger;
+				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
 
 			defaultResponse = {
 				content: '',
@@ -616,8 +617,21 @@ function frmFrontFormJS() {
 				}
 
 				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-				window.location = response.redirect;
-			} else if ( response.content !== '' ) {
+
+				if ( ! response.openInNewTab ) {
+					// We return here because we're redirecting there is no need to update content.
+					window.location = response.redirect;
+					return;
+				}
+
+				// We don't return here because we're opening in a new tab, the old tab will still update.
+				newTab = window.open( response.redirect, '_blank' );
+				if ( ! newTab && response.fallbackMsg && response.content ) {
+					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				}
+			}
+
+			if ( response.content !== '' ) {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
@@ -626,7 +640,7 @@ function frmFrontFormJS() {
 				}
 
 				removeSubmitLoading( jQuery( object ) );
-				if ( frm_js.offset != -1 ) {
+				if ( frm_js.offset != -1 ) { // eslint-disable-line camelcase
 					frmFrontForm.scrollMsg( jQuery( object ), false );
 				}
 
@@ -746,7 +760,7 @@ function frmFrontFormJS() {
 	function postToAjaxUrl( form, data, success, error ) {
 		var ajaxUrl, action, ajaxParams;
 
-		ajaxUrl = frm_js.ajax_url;
+		ajaxUrl = frm_js.ajax_url; // eslint-disable-line camelcase
 		action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
@@ -849,7 +863,7 @@ function frmFrontFormJS() {
 						jsErrors[key]
 					);
 				} else {
-					roleString = frm_js.include_alert_role ? 'role="alert"' : '';
+					roleString = frm_js.include_alert_role ? 'role="alert"' : ''; // eslint-disable-line camelcase
 					$fieldCont.append( '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[key] + '</div>' );
 				}
 
@@ -997,12 +1011,12 @@ function frmFrontFormJS() {
 
 		jQuery.ajax({
 			type: 'POST',
-			url: frm_js.ajax_url,
+			url: frm_js.ajax_url, // eslint-disable-line camelcase
 			data: {
 				action: 'frm_entries_send_email',
 				entry_id: entryId,
 				form_id: formId,
-				nonce: frm_js.nonce
+				nonce: frm_js.nonce // eslint-disable-line camelcase
 			},
 			success: function( msg ) {
 				var admin = document.getElementById( 'wpbody' );
@@ -1153,7 +1167,7 @@ function frmFrontFormJS() {
 	function checkForErrorsAndMaybeSetFocus() {
 		var errors, element, timeoutCallback;
 
-		if ( ! frm_js.focus_first_error ) {
+		if ( ! frm_js.focus_first_error ) { // eslint-disable-line camelcase
 			return;
 		}
 
@@ -1347,6 +1361,56 @@ function frmFrontFormJS() {
 		});
 	}
 
+	function maybeShowNewTabFallbackMessage() {
+		var messageEl;
+
+		if ( ! window.frmShowNewTabFallback ) {
+			return;
+		}
+
+		messageEl = document.querySelector( '#frm_form_' + frmShowNewTabFallback.formId + '_container .frm_message' );
+		if ( ! messageEl ) {
+			return;
+		}
+
+		messageEl.insertAdjacentHTML( 'beforeend', ' ' + frmShowNewTabFallback.message );
+	}
+
+	function setCustomValidityMessage() {
+		var forms, length, index;
+
+		forms  = document.getElementsByClassName( 'frm-show-form' );
+		length = forms.length;
+
+		for ( index = 0; index < length; ++index ) {
+			forms[ index ].addEventListener(
+				'invalid',
+				function( event ) {
+					var target = event.target;
+
+					if ( 'INPUT' !== target.nodeName ) {
+						return;
+					}
+
+					if ( ! target.dataset.invmsg ) {
+						return;
+					}
+
+					if ( 'text' !== target.getAttribute( 'type' ) ) {
+						return;
+					}
+
+					if ( target.classList.contains( 'frm_verify' ) ) {
+						return;
+					}
+
+					target.setCustomValidity( target.dataset.invmsg );
+				},
+				true
+			);
+		}
+	}
+
 	return {
 		init: function() {
 			maybeAddPolyfills();
@@ -1384,6 +1448,10 @@ function frmFrontFormJS() {
 			addFilterFallbackForIE(); // Filter is not supported in any version of IE.
 
 			initFloatingLabels();
+			maybeShowNewTabFallbackMessage();
+
+			jQuery( document ).on( 'frmAfterAddRow', setCustomValidityMessage );
+			setCustomValidityMessage();
 		},
 
 		getFieldId: function( field, fullID ) {
@@ -1589,10 +1657,10 @@ function frmFrontFormJS() {
 
 			jQuery( scrollObj ).trigger( 'focus' );
 			newPos = scrollObj.offset().top;
-			if ( ! newPos || frm_js.offset === '-1' ) {
+			if ( ! newPos || frm_js.offset === '-1' ) { // eslint-disable-line camelcase
 				return;
 			}
-			newPos = newPos - frm_js.offset;
+			newPos = newPos - frm_js.offset; // eslint-disable-line camelcase
 
 			m = jQuery( 'html' ).css( 'margin-top' );
 			b = jQuery( 'body' ).css( 'margin-top' );
@@ -1722,13 +1790,13 @@ function frmUpdateField( entryId, fieldId, value, message, num ) {
 	jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).html( '<span class="frm-loading-img"></span>' );
 	jQuery.ajax({
 		type: 'POST',
-		url: frm_js.ajax_url,
+		url: frm_js.ajax_url, // eslint-disable-line camelcase
 		data: {
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
 			field_id: fieldId,
 			value: value,
-			nonce: frm_js.nonce
+			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
 		success: function() {
 			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
@@ -1745,11 +1813,11 @@ function frmDeleteEntry( entryId, prefix ) {
 	jQuery( document.getElementById( 'frm_delete_' + entryId ) ).replaceWith( '<span class="frm-loading-img" id="frm_delete_' + entryId + '"></span>' );
 	jQuery.ajax({
 		type: 'POST',
-		url: frm_js.ajax_url,
+		url: frm_js.ajax_url, // eslint-disable-line camelcase
 		data: {
 			action: 'frm_entries_destroy',
 			entry: entryId,
-			nonce: frm_js.nonce
+			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
 		success: function( html ) {
 			if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
@@ -1772,12 +1840,12 @@ function frm_resend_email( entryId, formId ) { // eslint-disable-line camelcase
 	$link.append( '<span class="spinner" style="display:inline"></span>' );
 	jQuery.ajax({
 		type: 'POST',
-		url: frm_js.ajax_url,
+		url: frm_js.ajax_url, // eslint-disable-line camelcase
 		data: {
 			action: 'frm_entries_send_email',
 			entry_id: entryId,
 			form_id: formId,
-			nonce: frm_js.nonce
+			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
 		success: function( msg ) {
 			$link.replaceWith( msg );

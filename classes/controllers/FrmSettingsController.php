@@ -12,8 +12,15 @@ class FrmSettingsController {
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
 	}
 
+	/**
+	 * Include license box template on demand.
+	 *
+	 * @return void
+	 */
 	public static function license_box() {
-		$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
 		include( FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php' );
 	}
 

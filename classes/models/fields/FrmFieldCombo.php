@@ -47,6 +47,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Registers sub fields.
 	 *
 	 * @param array $sub_fields Sub fields. Accepts array or array or array of string.
+	 *
+	 * @return void
 	 */
 	protected function register_sub_fields( array $sub_fields ) {
 		$defaults = $this->get_default_sub_field();
@@ -131,7 +133,10 @@ class FrmFieldCombo extends FrmFieldType {
 	 * of the individual field labels.
 	 *
 	 * @since 4.0
+	 *
 	 * @param array $args Includes 'field', 'display'.
+	 *
+	 * @return void
 	 */
 	public function show_after_default( $args ) {
 		$field                = (array) $args['field'];
@@ -214,6 +219,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Shows field on the form builder.
 	 *
 	 * @param string $name Field name.
+	 *
+	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
@@ -274,6 +281,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 *     @type array  $errors         Field errors.
 	 *     @type bool   $remove_names   Remove name attribute or not.
 	 * }
+	 *
+	 * @return void
 	 */
 	protected function load_field_output( $args ) {
 		if ( empty( $args['field'] ) ) {
@@ -308,6 +317,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 *     @type array  $errors         Field errors.
 	 *     @type bool   $remove_names   Remove name attribute or not.
 	 * }
+	 *
+	 * @return void
 	 */
 	protected function process_args_for_field_output( &$args ) {
 		$args['field'] = (array) $args['field'];
@@ -335,6 +346,8 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Prints sub field input atts.
 	 *
 	 * @param array $args Arguments. Includes `field`, `sub_field`.
+	 *
+	 * @return void
 	 */
 	protected function print_input_atts( $args ) {
 		$field     = $args['field'];

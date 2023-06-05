@@ -209,6 +209,10 @@
 
 						frmDom.autocomplete.initAutocomplete( 'page', dropdownWrapper );
 
+						// Prevent cutoff issue with the autocomplete dropdown.
+						// This also adds visible overflow even if autocomplete is not activated, but that's fine for this page.
+						modal.querySelector( '.postbox' ).style.overflow = 'visible';
+
 						function redirectToExistingPageWithInjectedShortcode( event ) {
 							event.preventDefault();
 

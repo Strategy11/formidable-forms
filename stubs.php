@@ -33,21 +33,8 @@ namespace {
 		public static function import_attachment( $val, $field ) {
 		}
 	}
-	class FrmProDisplaysController {
-
-	}
 	class FrmProAppHelper {
-		public static function maybe_convert_to_db_date( $date_str, $to_format = 'Y-m-d' ) {
-		}
-		public static function format_time( $time, $format = 'H:i' ) {
-		}
-		public static function get_current_user_value( $value, $return_array = false ) {
-		}
-		public static function icon_by_class( $class, $atts = array() ) {
-		}
 		public static function get_settings() {
-		}
-		public static function get_custom_taxonomy( $post_type, $field ) {
 		}
 	}
 	class FrmProEntryMetaHelper {
@@ -55,12 +42,6 @@ namespace {
 		}
 	}
 	class FrmProFormActionsController {
-		public static function prepare_logic_value( &$logic_value, $entry ) {
-		}
-		public static function get_value_from_entry( $entry, $field_id ) {
-		}
-	}
-	class FrmProFieldValue {
 	}
 	class FrmViewsLayout {
 	}
@@ -91,13 +72,7 @@ namespace {
 	}
 	class FrmProEntriesHelper {
 	}
-	class FrmProFormsController {
-	}
 	class FrmViewsAppHelper {
-	}
-	class FrmProHtmlHelper {
-		public static function toggle( $id, $name, $args ) {
-		}
 	}
 	class Akismet {
 	}

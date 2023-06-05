@@ -191,6 +191,12 @@ class FrmField {
 				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
 				'addon' => 'signature',
 			),
+			'ai' => array(
+				'name'  => __( 'AI', 'formidable' ),
+				'icon'  => 'frm_icon_font frm_eye_icon frm_show_upgrade',
+				'addon' => 'ai',
+				'message' => 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.',
+			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
@@ -215,6 +221,10 @@ class FrmField {
 				'section' => 'pricing',
 			),
 		);
+
+		if ( ! FrmAppHelper::show_new_feature( 'ai' ) ) {
+			unset( $fields['ai'] );
+		}
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -1079,7 +1089,7 @@ class FrmField {
 	/**
 	 * @param string $id
 	 *
-	 * @return string
+	 * @return null|string
 	 */
 	public static function get_key_by_id( $id ) {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );

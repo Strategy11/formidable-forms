@@ -4,6 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmEntryValidate {
+
+	/**
+	 * @param array         $values
+	 * @param string[]|bool $exclude
+	 * @return array
+	 */
 	public static function validate( $values, $exclude = false ) {
 		FrmEntry::sanitize_entry_post( $values );
 		$errors = array();
@@ -44,7 +50,13 @@ class FrmEntryValidate {
 		 * @param array $values Value data of the form.
 		 * @param array $args   Custom arguments. Contains `exclude` and `posted_fields`.
 		 */
-		$errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude', 'posted_fields' ) );
+		$filtered_errors = apply_filters( 'frm_validate_entry', $errors, $values, compact( 'exclude', 'posted_fields' ) );
+
+		if ( is_array( $filtered_errors ) ) {
+			$errors = $filtered_errors;
+		} else {
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_validate_entry filter.', '6.3' );
+		}
 
 		return $errors;
 	}
@@ -305,7 +317,8 @@ class FrmEntryValidate {
 
 	/**
 	 * @param int $form_id
-	 * @return boolean
+	 *
+	 * @return bool|string
 	 */
 	private static function is_antispam_check( $form_id ) {
 		$aspm = new FrmAntiSpam( $form_id );

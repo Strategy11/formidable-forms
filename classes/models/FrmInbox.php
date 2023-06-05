@@ -29,6 +29,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	protected function set_cache_key() {
 		$this->cache_key = 'frm_inbox_cache';
@@ -36,6 +38,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return string
 	 */
 	protected function api_url() {
 		return 'https://formidableforms.com/wp-json/inbox/v1/message/';
@@ -43,6 +47,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @param false|string $filter
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
@@ -54,6 +60,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	public function set_messages() {
 		self::$messages = get_option( $this->option );
@@ -71,6 +79,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.05
+	 *
+	 * @return void
 	 */
 	private function add_api_messages() {
 		$api = $this->get_api_info();
@@ -85,6 +95,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @param array|string $message
+	 *
+	 * @return void
 	 */
 	public function add_message( $message ) {
 		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
@@ -115,6 +127,11 @@ class FrmInbox extends FrmFormApi {
 		$this->clean_messages();
 	}
 
+	/**
+	 * @param array $message
+	 *
+	 * @return void
+	 */
 	private function fill_message( &$message ) {
 		$defaults = array(
 			'time'    => time(),
@@ -133,6 +150,9 @@ class FrmInbox extends FrmFormApi {
 		unset( $message['time'] );
 	}
 
+	/**
+	 * @return void
+	 */
 	private function clean_messages() {
 		$removed = false;
 		foreach ( self::$messages as $t => $message ) {
@@ -150,6 +170,9 @@ class FrmInbox extends FrmFormApi {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function filter_messages( &$messages ) {
 		$user_id = get_current_user_id();
 		foreach ( $messages as $k => $message ) {
@@ -163,6 +186,11 @@ class FrmInbox extends FrmFormApi {
 		$messages = apply_filters( 'frm_filter_inbox', $messages );
 	}
 
+	/**
+	 * @param array $message
+	 *
+	 * @return bool
+	 */
 	private function is_expired( $message ) {
 		return isset( $message['expires'] ) && ! empty( $message['expires'] ) && $message['expires'] < time();
 	}
@@ -194,6 +222,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @param string $key
+	 *
+	 * @return void
 	 */
 	public function mark_read( $key ) {
 		if ( ! $key || ! isset( self::$messages[ $key ] ) ) {
@@ -212,6 +242,8 @@ class FrmInbox extends FrmFormApi {
 	 * @param string $key
 	 *
 	 * @since 4.05.02
+	 *
+	 * @return void
 	 */
 	public function mark_unread( $key ) {
 		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
@@ -223,6 +255,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @param string $key
+	 *
+	 * @return void
 	 */
 	public function dismiss( $key ) {
 		if ( $key === 'all' ) {
@@ -244,6 +278,8 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @return void
 	 */
 	private function dismiss_all() {
 		$user_id = get_current_user_id();
@@ -286,6 +322,10 @@ class FrmInbox extends FrmFormApi {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @param string $key
+	 *
+	 * @return void
 	 */
 	public function remove( $key ) {
 		if ( isset( self::$messages[ $key ] ) ) {
@@ -294,6 +334,9 @@ class FrmInbox extends FrmFormApi {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private function update_list() {
 		update_option( $this->option, self::$messages, 'no' );
 	}
@@ -312,6 +355,9 @@ class FrmInbox extends FrmFormApi {
 		return true;
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function maybe_disable_screen_options() {
 		self::$banner_messages = self::get_banner_messages();
 		if ( self::$banner_messages ) {

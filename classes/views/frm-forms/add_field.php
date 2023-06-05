@@ -17,9 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 			(ID <?php echo esc_html( $field['id'] ); ?>)
 		</div>
 
-		<?php if ( $field['type'] === 'divider' ) { ?>
-			<a href="#" class="frm-collapse-section frm-hover-icon frm_icon_font frm_arrowdown6_icon" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>"></a>
-		<?php } ?>
+		<?php if ( $field['type'] === 'divider' ) : ?>
+			<a href="#" class="frm-collapse-section" title="<?php esc_attr_e( 'Expand/Collapse Section', 'formidable' ); ?>">
+				<?php
+				FrmAppHelper::icon_by_class(
+					'frmfont frm_arrowdown6_icon',
+					array( 'aria-label' => esc_attr__( 'Expand/Collapse Section Icon', 'formidable' ) )
+				);
+				?>
+			</a>
+		<?php endif; ?>
 
 		<a href="#" class="frm_bstooltip frm-move frm-hover-icon" title="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>" data-container="body" aria-label="<?php esc_attr_e( 'Move Field', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_move_icon' ); ?>
@@ -54,19 +61,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php } ?>
 </div>
-<?php if ( $display['conf_field'] ) { ?>
-<div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_container" class="frm_conf_field_container frm_form_fields frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
-	<div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_conf_container">
-		<label class="frm_primary_label">&nbsp;</label>
-		<div class="frm_form_fields">
-			<input type="text" id="conf_field_<?php echo esc_attr( $field['field_key'] ); ?>" name="field_options[conf_input_<?php echo esc_attr( $field['id'] ); ?>]" placeholder="<?php echo esc_attr( $field['conf_input'] ); ?>" class="dyn_default_value" />
-		</div>
-		<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
-			echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		?></div>
-</div>
-</div>
-<div class="clear"></div>
+<?php
+if ( $display['conf_field'] ) {
+	$input_html = sprintf(
+		'<input type="text" id="conf_field_%1$s" name="field_options[conf_input_%2$s]" placeholder="%3$s" class="dyn_default_value" />',
+		esc_attr( $field['field_key'] ),
+		esc_attr( $field['id'] ),
+		esc_attr( $field['conf_input'] )
+	);
+	?>
+	<div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_container" class="frm_conf_field_container frm_form_fields frm_conf_details<?php echo esc_attr( $field['id'] . ( $field['conf_field'] ? '' : ' frm_hidden' ) ); ?>">
+		<div id="frm_conf_field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_conf_container">
+			<label class="frm_primary_label">&nbsp;</label>
+			<div class="frm_form_fields">
+				<?php
+				/**
+				 * Filters the HTML of confirmation input in the backend.
+				 *
+				 * @since x.x
+				 *
+				 * @param string $input_html Input HTML.
+				 * @param array  $args       Contains `field` array.
+				 */
+				echo apply_filters( 'frm_conf_input_backend', $input_html, compact( 'field' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				?>
+			</div>
+			<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
+				echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			?></div>
+	</div>
+	</div>
+	<div class="clear"></div>
 	<?php
 }
 

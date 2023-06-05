@@ -617,4 +617,115 @@ class test_FrmAppHelper extends FrmUnitTest {
 		add_filter( 'frm_use_custom_header_ip', '__return_true' );
 		$this->assertEquals( '1.2.3.4', FrmAppHelper::get_ip_address(), 'When custom header IPs are enabled, we should check for headers like HTTP_X_FORWARDED_FOR' );
 	}
+
+	/**
+	 * @covers FrmAppHelper::human_time_diff
+	 */
+	public function test_human_time_diff() {
+		$difference = FrmAppHelper::human_time_diff( 0, 0 );
+		$this->assertEquals( '0 seconds', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, 1 );
+		$this->assertEquals( '1 second', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, HOUR_IN_SECONDS );
+		$this->assertEquals( '1 hour', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS );
+		$this->assertEquals( '1 day', $difference );
+
+		$difference = FrmAppHelper::human_time_diff( 0, DAY_IN_SECONDS * 2 );
+		$this->assertEquals( '2 days', $difference );
+	}
+
+	/**
+	 * @covers FrmAppHelper::unserialize_or_decode
+	 */
+	public function test_unserialize_or_decode() {
+		$json_encoded_string = '{"key":"value"}';
+		FrmAppHelper::unserialize_or_decode( $json_encoded_string );
+		$this->assertIsArray( $json_encoded_string );
+		$this->assertArrayHasKey( 'key', $json_encoded_string );
+		$this->assertEquals( 'value', $json_encoded_string['key'] );
+
+		$serialized_string = 'a:1:{s:3:"key";s:5:"value";}';
+		FrmAppHelper::unserialize_or_decode( $serialized_string );
+		$this->assertIsArray( $serialized_string );
+		$this->assertArrayHasKey( 'key', $serialized_string );
+		$this->assertEquals( 'value', $serialized_string['key'] );
+	}
+
+	/**
+	 * @covers FrmAppHelper::maybe_unserialize_array
+	 */
+	public function test_maybe_unserialize_array() {
+		$serialized_string  = 'a:1:{s:3:"key";s:5:"value";}';
+		$unserialized_array = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsArray( $unserialized_array );
+		$this->assertArrayHasKey( 'key', $unserialized_array );
+		$this->assertEquals( 'value', $unserialized_array['key'] );
+
+		$serialized_string = 'O:8:"DateTime":0:{}';
+		$unserialized = FrmAppHelper::maybe_unserialize_array( $serialized_string );
+		$this->assertIsString( $unserialized );
+		$this->assertEquals( 'O:8:"DateTime":0:{}', $unserialized, 'Serialized object data should remain serialized strings.' );
+	}
+
+	/**
+	 * @covers FrmAppHelper::clip
+	 */
+	public function test_clip() {
+		// Test a function.
+		$echo_function = function() {
+			echo '<div>My html</div>';
+		};
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My html</div>', $html );
+
+		// Test a callable string.
+		$echo_function = __CLASS__ . '::echo_function';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '<div>My echo function content</div>', $html );
+
+		// Test something uncallable.
+		// Make sure it isn't fatal just in case.
+		$echo_function = __CLASS__ . '::something_uncallable';
+		$html = FrmAppHelper::clip( $echo_function );
+		$this->assertEquals( '', $html );
+	}
+
+	/**
+	 * Echo HTML for the test_clip unit test.
+	 *
+	 * @return void
+	 */
+	public static function echo_function() {
+		echo '<div>My echo function content</div>';
+	}
+
+	/**
+	 * @covers FrmAppHelper::add_dismissable_warning_message
+	*/
+	public function test_add_dismissable_warning_message() {
+		// Test with missing message and option parameters.
+		FrmAppHelper::add_dismissable_warning_message();
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+
+		// Test with valid message and option parameters.
+		$message = 'Test warning message';
+		$option = 'test_option';
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertNotEmpty( $messages );
+		$this->assertArrayHasKey( 0, $messages );
+		$this->assertArrayHasKey( 1, $messages );
+		$this->assertEquals( $message, $messages[0] );
+
+		// Test with dismissed message.
+		update_option( $option, true );
+		FrmAppHelper::add_dismissable_warning_message( $message, $option );
+		$messages = apply_filters( 'frm_message_list', array() );
+		$this->assertEmpty( $messages );
+	}
 }

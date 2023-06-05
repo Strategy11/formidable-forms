@@ -31,10 +31,16 @@ class FrmOnSubmitAction extends FrmFormAction {
 		parent::__construct( self::$slug, self::get_name(), $action_ops );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_name() {
 		return __( 'Confirmation', 'formidable' );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';
 	}
@@ -46,7 +52,28 @@ class FrmOnSubmitAction extends FrmFormAction {
 			'show_form'       => '',
 			'success_url'     => '',
 			'success_page_id' => '',
+			'open_in_new_tab' => '',
 		);
+	}
+
+	/**
+	 * This function should check that $new_instance is set correctly.
+	 * The newly calculated value of $instance should be returned.
+	 * If "false" is returned, the instance won't be saved/updated.
+	 *
+	 * @param array $new_instance New settings for this instance as input by the user via form()
+	 * @param array $old_instance Old settings for this instance
+	 *
+	 * @return array Settings to save or bool false to cancel saving
+	 */
+	public function update( $new_instance, $old_instance ) {
+		if ( 'redirect' === $new_instance['post_content']['success_action'] && ! empty( $new_instance['post_content']['success_url'] ) ) {
+			$new_instance['post_content']['success_url'] = FrmFormsHelper::maybe_add_sanitize_url_attr(
+				$new_instance['post_content']['success_url'],
+				(int) $new_instance['menu_order']
+			);
+		}
+		return $new_instance;
 	}
 
 	/**
