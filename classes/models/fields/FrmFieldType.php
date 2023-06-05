@@ -525,14 +525,6 @@ DEFAULT_HTML;
 			'data'     => FrmField::is_field_type( $field, 'data' ),
 		);
 
-		/**
-		 * @since x.x
-		 *
-		 * @param array $display_type
-		 * @param array $field
-		 */
-		$display_type = apply_filters( 'frm_displayed_field_type', $display_type, compact( 'field' ) );
-
 		return array_filter( $display_type );
 	}
 
