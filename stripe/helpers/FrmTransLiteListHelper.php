@@ -127,11 +127,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function extra_tablenav( $which ) {
 		$footer = $which !== 'top';
-		if ( ! $footer ) {
-			$form_id = isset( $_REQUEST['form'] ) ? absint( $_REQUEST['form'] ) : 0;
-			echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo '<input id="post-query-submit" class="button" type="submit" value="Filter" name="filter_action">';
+		if ( $footer ) {
+			return;
 		}
+
+		$form_id = isset( $_REQUEST['form'] ) ? absint( $_REQUEST['form'] ) : 0;
+		echo FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<input id="post-query-submit" class="button" type="submit" value="Filter" name="filter_action">';
 	}
 
 	/**
@@ -184,8 +186,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 	}
 
+	/**
+	 * @param object $item
+	 * @param array  $args
+	 */
 	private function get_column_value( $item, $args ) {
-		$column_name = $args['column_name'];
+		$column_name   = $args['column_name'];
 		$function_name = 'get_' . $column_name . '_column';
 
 		if ( method_exists( $this, $function_name ) ) {
@@ -250,11 +256,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return '<th scope="row" class="check-column"><input type="checkbox" name="item-action[]" value="' . esc_attr( $item->id ) . '" /></th>';
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
 	private function get_receipt_id_column( $item ) {
 		return $this->get_action_column( $item, 'receipt_id' );
 	}
 
 	/**
+	 * @param object $item
 	 * @param string $field
 	 *
 	 * @return string
@@ -268,11 +280,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			)
 		);
 
-		$val = '<strong><a class="row-title" href="' . esc_url( $link ) . '" title="' . esc_attr__( 'Edit' ) . '">';
+		$val  = '<strong><a class="row-title" href="' . esc_url( $link ) . '" title="' . esc_attr__( 'Edit', 'formidable' ) . '">';
 		$val .= $item->{$field};
 		$val .= '</a></strong><br />';
-
 		$val .= $this->row_actions( $this->get_row_actions( $item ) );
+
 		return $val;
 	}
 
@@ -290,8 +302,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
 
 		if ( $this->table !== 'subscriptions' ) {
-			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit' ) . '</a>';
-			$actions['delete'] = '<a href="' . esc_url( $delete_link ) . '">' . __( 'Delete' ) . '</a>';
+			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( $delete_link ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
 		}
 
 		return $actions;
@@ -325,16 +337,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param array  $atts
 	 * @return string
 	 */
 	private function get_created_at_column( $item, $atts ) {
 		if ( empty( $item->created_at ) || $item->created_at === '0000-00-00 00:00:00' ) {
-			$val = '';
-		} else {
-			$date = FrmAppHelper::get_localized_date( $atts['date_format'], $item->created_at );
-			$date_title = FrmAppHelper::get_localized_date( $atts['date_format'] . ' g:i:s A', $item->created_at );
-			$val = '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
+			return '';
 		}
+
+		$date       = FrmAppHelper::get_localized_date( $atts['date_format'], $item->created_at );
+		$date_title = FrmAppHelper::get_localized_date( $atts['date_format'] . ' g:i:s A', $item->created_at );
+		$val        = '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
 		return $val;
 	}
 
@@ -343,25 +357,24 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_amount_column( $item ) {
 		if ( $this->table === 'subscriptions' ) {
-			$val = FrmTransLiteAppHelper::format_billing_cycle( $item );
-		} else {
-			$val = FrmTransLiteAppHelper::formatted_amount( $item );
+			return FrmTransLiteAppHelper::format_billing_cycle( $item );
 		}
-		return $val;
+		return FrmTransLiteAppHelper::formatted_amount( $item );
 	}
 
 	/**
+	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_end_count_column( $item ) {
-		$limit = ( $item->end_count >= 9999 ) ? __( 'unlimited', 'formidable' ) : $item->end_count;
-
+		$limit              = $item->end_count >= 9999 ? __( 'unlimited', 'formidable' ) : $item->end_count;
 		$frm_payment        = new FrmTransLitePayment();
 		$completed_payments = $frm_payment->get_all_by( $item->id, 'sub_id' );
 		$count              = 0;
 
 		foreach ( $completed_payments as $completed_payment ) {
-			if ( $completed_payment->status == 'complete' ) {
+			if ( $completed_payment->status === 'complete' ) {
 				$count++;
 			}
 		}
@@ -374,18 +387,23 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	private function get_status_column( $item ) {
-		$fallback = ( isset( $item->completed ) && $item->completed ) ? 'complete' : ''; // PayPal fallback
+		$fallback = ! empty( $item->completed ) ? 'complete' : ''; // PayPal fallback
 		return $item->status ? FrmTransLiteAppHelper::show_status( $item->status ) : $fallback;
 	}
 
+	/**
+	 * @param object $item
+	 * @return string
+	 */
 	private function get_sub_id_column( $item ) {
 		if ( empty( $item->sub_id ) ) {
-			$val = '';
-		} elseif ( $this->table === 'subscriptions' ) {
-			$val = $this->get_action_column( $item, 'sub_id' );
-		} else {
-			$val = '<a href="' . esc_url( '?page=formidable-payments&action=show&type=subscriptions&id=' . $item->sub_id ) . '">' . $item->sub_id . '</a>';
+			return '';
 		}
-		return $val;
+
+		if ( $this->table === 'subscriptions' ) {
+			return $this->get_action_column( $item, 'sub_id' );
+		}
+
+		return '<a href="' . esc_url( '?page=formidable-payments&action=show&type=subscriptions&id=' . $item->sub_id ) . '">' . $item->sub_id . '</a>';
 	}
 }
