@@ -443,10 +443,6 @@ class FrmStrpLiteEventsController {
 	 * @return void
 	 */
 	private function handle_event() {
-		if ( $this->is_waiting_for_3d_secure_to_finish() ) {
-			return;
-		}
-
 		$this->invoice = $this->event->data->object;
 		$this->charge  = isset( $this->invoice->charge ) ? $this->invoice->charge : false;
 		if ( ! $this->charge && $this->invoice->object === 'payment_intent' ) {
@@ -472,25 +468,5 @@ class FrmStrpLiteEventsController {
 		} elseif ( $this->event->type === 'customer.subscription.updated' ) {
 			$this->maybe_subscription_canceled();
 		}
-	}
-
-	/**
-	 * Fixes Stripe issue #154. payment_intent.payment_failed is triggered when the payment intent status is set to "requires_action".
-	 * Avoid setting the subscription to failed when waiting for 3D secure
-	 *
-	 * @since 2.07
-	 *
-	 * @return bool
-	 */
-	private function is_waiting_for_3d_secure_to_finish() {
-		if ( 'payment_intent.payment_failed' !== $this->event->type ) {
-			// Only return true for failed payment event.
-			return false;
-		}
-
-		$intent_id = $this->event->data->object->id;
-		$intent    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
-
-		return is_object( $intent ) && 'requires_action' === $intent->status;
 	}
 }
