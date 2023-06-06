@@ -59,6 +59,9 @@ class FrmTransLiteAppHelper {
 		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public static function get_payment_statuses() {
 		return array(
 			'authorized' => __( 'Authorized', 'formidable' ),
@@ -70,6 +73,9 @@ class FrmTransLiteAppHelper {
 		);
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public static function get_subscription_statuses() {
 		return array(
 			'pending'       => __( 'Pending', 'formidable' ),
@@ -96,6 +102,11 @@ class FrmTransLiteAppHelper {
 		$payment_values['meta_value'] = self::add_meta_to_payment( $payment_values['meta_value'], $message );
 	}
 
+	/**
+	 * @param string $note
+	 *
+	 * @return array
+	 */
 	public static function add_meta_to_payment( $meta_value, $note ) {
 		$meta_value   = (array) maybe_unserialize( $meta_value );
 		$meta_value[] = array(
@@ -115,20 +126,25 @@ class FrmTransLiteAppHelper {
 		return $value;
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	public static function get_action_settings( $atts ) {
-		$settings = array();
-
-		if ( isset( $atts['payment'] ) ) {
-			$atts['payment'] = (array) $atts['payment'];
-			if ( ! empty( $atts['payment']['action_id'] ) ) {
-				$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
-				if ( $form_action ) {
-					$settings = $form_action->post_content;
-				}
-			}
+		if ( ! isset( $atts['payment'] ) ) {
+			return array();
 		}
 
-		return $settings;
+		$atts['payment'] = (array) $atts['payment'];
+		if ( empty( $atts['payment']['action_id'] ) ) {
+			return array();
+		}
+
+		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
+		if ( ! $form_action ) {
+			return array();
+		}
+
+		return $form_action->post_content;
 	}
 
 	/**
@@ -215,9 +231,6 @@ class FrmTransLiteAppHelper {
 		return $value;
 	}
 
-	/**
-	 * @return string
-	 */
 	public static function formatted_amount( $payment ) {
 		$currency = 'usd';
 		$amount   = $payment;

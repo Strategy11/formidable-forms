@@ -11,6 +11,9 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static $latest_error_from_stripe_connect;
 
+	/**
+	 * @return void
+	 */
 	public static function check_for_stripe_connect_webhooks() {
 		if ( wp_doing_ajax() ) {
 			self::check_for_stripe_connect_ajax_actions();
@@ -21,6 +24,9 @@ class FrmStrpLiteConnectHelper {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function check_for_stripe_connect_ajax_actions() {
 		$action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
 		$prefix = 'frm_stripe_connect_';
@@ -45,16 +51,24 @@ class FrmStrpLiteConnectHelper {
 		self::$function();
 	}
 
+	/**
+	 * @return bool
+	 */
 	private static function user_landed_on_the_return_url() {
 		return isset( $_GET['frm_stripe_connect_return'] );
 	}
 
+	/**
+	 * @return bool
+	 */
 	private static function user_landed_on_the_oauth_return_url() {
 		return isset( $_GET['frm_stripe_connect_return_oauth'] );
 	}
 
 	/**
 	 * Handle the request to initialize with Stripe Connect
+	 *
+	 * @return void
 	 */
 	private static function handle_initialize() {
 		$data = self::initialize();
@@ -76,7 +90,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * Initialize a Stripe Connect integration with the connect server
 	 *
-	 * @return object|string|false
+	 *  @return object|string|false
 	 */
 	private static function initialize() {
 		$mode = self::get_mode_value_from_post();
@@ -122,6 +136,9 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @return array|string
+	 *
+	 * @param string $action
+	 * @param array  $additional_body
 	 */
 	private static function post_to_connect_server( $action, $additional_body = array() ) {
 		$body    = array(
@@ -161,6 +178,8 @@ class FrmStrpLiteConnectHelper {
 	 * Try to make sure the server time limit exceeds the request time limit.
 	 *
 	 * @param int $timeout seconds.
+	 *
+	 * @return void
 	 */
 	private static function try_to_extend_server_timeout( $timeout ) {
 		if ( ! ini_get( 'safe_mode' ) ) {
@@ -227,6 +246,9 @@ class FrmStrpLiteConnectHelper {
 		return 'https://api.strategy11.com/';
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function handle_disconnect() {
 		self::disconnect();
 		self::reset_stripe_connect_integration();
@@ -235,6 +257,8 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * Delete every Stripe connect option, calling when disconnecting.
+	 *
+	 * @return void
 	 */
 	public static function reset_stripe_connect_integration() {
 		$mode = self::get_mode_value_from_post();
@@ -244,6 +268,9 @@ class FrmStrpLiteConnectHelper {
 		delete_option( self::get_stripe_details_submitted_option_name( $mode ) );
 	}
 
+	/**
+	 * @return false|object
+	 */
 	private static function disconnect() {
 		$additional_body = array(
 			'frm_strp_connect_mode' => self::get_mode_value_from_post(),
@@ -496,6 +523,9 @@ class FrmStrpLiteConnectHelper {
 		return admin_url( 'admin.php?page=formidable-settings&t=stripe_settings&connected=' . intval( $connected ) );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function render_stripe_connect_settings_container() {
 		self::register_settings_scripts();
 		?>
@@ -510,6 +540,9 @@ class FrmStrpLiteConnectHelper {
 		<?php
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function render_settings() {
 		$modes = array( 'test', 'live' );
 		$html  = '';
@@ -555,6 +588,9 @@ class FrmStrpLiteConnectHelper {
 		return $test_mode ? 'test' : 'live';
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function register_settings_scripts() {
 		$version = FrmAppHelper::plugin_version();
 		wp_register_script( 'formidable_stripe_settings', FrmStrpLiteAppHelper::plugin_url() . '/js/connect_settings.js', array(), FrmAppHelper::plugin_version(), true );
@@ -595,6 +631,9 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $action
+	 * @param array  $additional_body
+	 *
 	 * @return object|false
 	 */
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {

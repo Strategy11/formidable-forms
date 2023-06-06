@@ -134,6 +134,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public function display_rows() {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
 		$gateways    = FrmTransLiteAppHelper::get_gateways();
@@ -158,6 +161,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return void
+	 */
 	private function display_columns( $item, $args ) {
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -197,6 +205,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $val;
 	}
 
+	/**
+	 * @return array
+	 */
 	private function get_form_ids() {
 		$entry_ids = array();
 		foreach ( $this->items as $item ) {
@@ -217,6 +228,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $form_ids;
 	}
 
+	/**
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	private function get_row_classes( $atts ) {
 		$class = 'column-' . $atts['column_name'];
 
@@ -227,6 +243,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return 'class="' . esc_attr( $class ) . '"';
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_cb_column( $item ) {
 		return '<th scope="row" class="check-column"><input type="checkbox" name="item-action[]" value="' . esc_attr( $item->id ) . '" /></th>';
 	}
@@ -235,12 +254,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $this->get_action_column( $item, 'receipt_id' );
 	}
 
+	/**
+	 * @param string $field
+	 *
+	 * @return string
+	 */
 	private function get_action_column( $item, $field ) {
 		$link = add_query_arg(
 			array(
 				'action' => 'show',
-				'id' => $item->id,
-				'type' => $this->table,
+				'id'     => $item->id,
+				'type'   => $this->table,
 			)
 		);
 
@@ -300,6 +324,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return FrmTransLiteAppHelper::get_user_link( $val );
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_created_at_column( $item, $atts ) {
 		if ( empty( $item->created_at ) || $item->created_at === '0000-00-00 00:00:00' ) {
 			$val = '';
@@ -311,6 +338,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $val;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_amount_column( $item ) {
 		if ( $this->table === 'subscriptions' ) {
 			$val = FrmTransLiteAppHelper::format_billing_cycle( $item );
@@ -320,6 +350,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return $val;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_end_count_column( $item ) {
 		$limit = ( $item->end_count >= 9999 ) ? __( 'unlimited', 'formidable' ) : $item->end_count;
 

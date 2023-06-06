@@ -3,22 +3,34 @@
 class FrmStrpLiteAppHelper {
 
 	/**
-	 * @var FrmStrpSettings|null
+	 * @var FrmStrpLiteSettings|null
 	 */
 	private static $settings;
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_path() {
 		return FrmAppHelper::plugin_path() . '/stripe/';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_folder() {
 		return basename( self::plugin_path() );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function plugin_url() {
 		return FrmAppHelper::plugin_url() . '/stripe/';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function is_debug() {
 		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
@@ -78,6 +90,11 @@ class FrmStrpLiteAppHelper {
 		return self::$settings;
 	}
 
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'live'|'test'
+	 */
 	public static function active_mode() {
 		$settings = self::get_settings();
 		return $settings->settings->test_mode ? 'test' : 'live';

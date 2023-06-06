@@ -294,6 +294,7 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param string $amount
+	 *
 	 * @return string
 	 */
 	private static function get_amount_from_string( $amount ) {

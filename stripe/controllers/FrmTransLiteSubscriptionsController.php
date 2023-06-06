@@ -103,6 +103,9 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 		FrmTransLiteActionsController::trigger_subscription_status_change( $atts['sub'] );
 	}
 
+	/**
+	 * @return null|string
+	 */
 	public static function list_subscriptions_shortcode() {
 		if ( ! is_user_logged_in() ) {
 			return;

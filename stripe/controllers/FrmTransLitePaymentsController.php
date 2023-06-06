@@ -52,6 +52,8 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * @param string $error
+	 *
 	 * @return void
 	 */
 	private static function get_new_vars( $error = '' ) {

@@ -93,6 +93,8 @@ class FrmTransLiteAppController {
 	/**
 	 * @param object $sub
 	 * @param object $last_payment
+	 *
+	 * @return void
 	 */
 	private static function update_sub_for_new_payment( $sub, $last_payment ) {
 		$frm_sub = new FrmTransLiteSubscription();
