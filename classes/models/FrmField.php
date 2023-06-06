@@ -9,15 +9,6 @@ class FrmField {
 	public static $transient_size = 200;
 
 	public static function field_selection() {
-		$frm_settings   = FrmAppHelper::get_settings();
-		$active_captcha = $frm_settings->active_captcha;
-		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
-			$captcha_name = 'Captcha';
-		} elseif ( $active_captcha === 'recaptcha' ) {
-			$captcha_name = 'reCAPTCHA';
-		} else {
-			$captcha_name = 'hCaptcha';
-		}
 		$fields = array(
 			'text'     => array(
 				'name' => __( 'Text', 'formidable' ),
@@ -72,16 +63,37 @@ class FrmField {
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
 			'captcha'  => array(
-				'name' => $captcha_name,
+				'name' => self::get_captcha_field_name(),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
-			'credit_card'    => array(
+			'credit_card' => array(
 				'name'  => __( 'Credit Card', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_credit_card_icon',
 			),
 		);
 
+		/**
+		 * @param array $fields
+		 */
 		return apply_filters( 'frm_available_fields', $fields );
+	}
+
+	/**
+	 * Get the name of the Captcha field based on the global Captcha setting.
+	 *
+	 * @return string
+	 */
+	private static function get_captcha_field_name() {
+		$frm_settings   = FrmAppHelper::get_settings();
+		$active_captcha = $frm_settings->active_captcha;
+		if ( ! FrmFieldCaptcha::should_show_captcha() ) {
+			$captcha_name = 'Captcha';
+		} elseif ( $active_captcha === 'recaptcha' ) {
+			$captcha_name = 'reCAPTCHA';
+		} else {
+			$captcha_name = 'hCaptcha';
+		}
+		return $captcha_name;
 	}
 
 	public static function pro_field_selection() {

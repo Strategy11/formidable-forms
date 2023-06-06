@@ -80,9 +80,12 @@ class FrmFieldsController {
 	 */
 	public static function include_new_field( $field_type, $form_id ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$field_values = apply_filters( 'frm_before_field_created', $field_values );
 
-		$field_id = FrmField::create( $field_values );
+		/**
+		 * @param array $field_values
+		 */
+		$field_values = apply_filters( 'frm_before_field_created', $field_values );
+		$field_id     = FrmField::create( $field_values );
 
 		if ( ! $field_id ) {
 			return false;
@@ -313,7 +316,8 @@ class FrmFieldsController {
 		if ( $display['clear_on_focus'] && is_array( $field['placeholder'] ) ) {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
-		include( FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php' );
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
 	/**

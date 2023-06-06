@@ -14,7 +14,12 @@ class FrmFieldsHelper {
 		$values = self::get_default_field( $type );
 
 		global $wpdb;
-		$field_count = FrmDb::get_var( 'frm_fields', array( 'form_id' => $form_id ), 'field_order', array( 'order_by' => 'field_order DESC' ) );
+		$field_count = FrmDb::get_var(
+			'frm_fields',
+			array( 'form_id' => $form_id ),
+			'field_order',
+			array( 'order_by' => 'field_order DESC' )
+		);
 
 		$values['field_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_fields', 'field_key' );
 		$values['form_id']     = $form_id;
@@ -22,8 +27,8 @@ class FrmFieldsHelper {
 
 		$values['field_options']['custom_html'] = self::get_default_html( $type );
 
-		if ( isset( $setting ) && ! empty( $setting ) ) {
-			if ( in_array( $type, array( 'data', 'lookup' ) ) ) {
+		if ( ! empty( $setting ) ) {
+			if ( in_array( $type, array( 'data', 'lookup' ), true ) ) {
 				$values['field_options']['data_type'] = $setting;
 			} else {
 				$values['field_options'][ $setting ] = 1;
