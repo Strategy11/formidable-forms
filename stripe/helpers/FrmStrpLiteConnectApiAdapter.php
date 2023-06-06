@@ -101,7 +101,7 @@ class FrmStrpLiteConnectApiAdapter {
 				return $customer_id_error_message;
 			}
 
-			return __( 'Unable to retrieve customer through Stripe Connect.', 'formidable-stripe' );
+			return __( 'Unable to retrieve customer through Stripe Connect.', 'formidable' );
 		}
 
 		if ( $user_id ) {

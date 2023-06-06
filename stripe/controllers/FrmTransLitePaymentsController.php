@@ -42,13 +42,16 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 */
 	private static function create() {
 		$frm_payment = new FrmTransLitePayment();
-		if ( $id = $frm_payment->create( $_POST ) ) {
-			$message = __( 'Payment was Successfully Created', 'formidable' );
-			self::get_edit_vars( $id, '', $message );
-		} else {
+		$id          = $frm_payment->create( $_POST );
+
+		if ( ! $id ) {
 			$message = __( 'There was a problem creating that payment', 'formidable' );
 			self::get_new_vars( $message );
+			return;
 		}
+
+		$message = __( 'Payment was Successfully Created', 'formidable' );
+		self::get_edit_vars( $id, '', $message );
 	}
 
 	/**

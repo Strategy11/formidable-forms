@@ -300,7 +300,7 @@ class FrmTransLiteAppHelper {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 		} elseif ( $_POST && isset( $_POST['frm_user_id'] ) ) {
-			// TODO Pull this logic from Pro or something, and check that a regisration action is active.
+			// TODO Pull this logic from Pro or something, and check that a registration action is active.
 		}
 		return $user_id;
 	}

@@ -116,7 +116,9 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @return array
 	 */
 	public function maybe_show_fields_dropdown( $form_atts, $field_atts ) {
-		$field_count = $field_id = 0;
+		$field_count = 0;
+		$field_id    = 0;
+
 		foreach ( $form_atts['form_fields'] as $field ) {
 			if ( ! empty( $field_atts['allowed_fields'] ) && ! in_array( $field->type, (array) $field_atts['allowed_fields'] ) ) {
 				continue;
@@ -124,6 +126,7 @@ class FrmTransLiteAction extends FrmFormAction {
 			$field_count++;
 			$field_id = $field->id;
 		}
+
 		return compact( 'field_count', 'field_id' );
 	}
 

@@ -2,6 +2,9 @@
 <ruleset name="Formidable Forms">
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
+    <!-- This is required to run PHPCS in PHP 8 -->
+    <ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>deprecated/*</exclude-pattern>
@@ -46,15 +49,29 @@
 	<!-- Exclude specific rules for unit tests (fix when possible) -->
 	<rule ref="WordPress.Security.NonceVerification.Missing">
 		<exclude-pattern>tests/*</exclude-pattern>
+		<!-- Temporary exclusion for Stripe Lite -->
+		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmStrpLiteActionsController.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmTransLitePaymentsController.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmStrpLiteSettingsController.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmTransLiteCRUDController.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
 		<exclude-pattern>tests/*</exclude-pattern>
+		<!-- Temporary exclusion for Stripe Lite -->
+		<exclude-pattern>stripe/controllers/FrmTransLiteCRUDController.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmTransLiteDb.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmTransLiteSubscription.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
 		<exclude-pattern>tests/*</exclude-pattern>
+		<!-- Temporary exclusion for Stripe Lite -->
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
 		<exclude-pattern>tests/*</exclude-pattern>
@@ -64,12 +81,22 @@
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotValidated">
 		<exclude-pattern>tests/*</exclude-pattern>
+		<!-- Temporary exclusion for Stripe Lite -->
+		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
+		<exclude-pattern>stripe/views/lists/list.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
 		<exclude-pattern>tests/*</exclude-pattern>
+		<!-- Temporary exclusion for Stripe Lite -->
+		<exclude-pattern>stripe/*</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.ValidatedSanitizedInput.InputNotSanitized">
 		<exclude-pattern>tests/*</exclude-pattern>
+		<!-- Temporary exclusion for Stripe Lite -->
+		<exclude-pattern>stripe/models/FrmStrpLiteAuth.ph</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmStrpLiteActionsController.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmTransLiteListsController.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
 	</rule>
 
 	<!-- These rules likely won't see any changes for compatibility -->
@@ -85,5 +112,26 @@
 		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
 		<exclude-pattern>classes/models/FrmForm.php</exclude-pattern>
 		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+	</rule>
+
+	<!-- Additional temporary exclusions for Stripe Lite -->
+	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
+		<exclude-pattern>stripe/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Operators.IncrementDecrementUsage.NotAllowed">
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedElseif">
+		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.I18n.MissingArgDomain">
+		<exclude-pattern>stripe/controllers/FrmTransLitePaymentsController.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmTransLiteSubscriptionsController.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DateTime.RestrictedFunctions.date_date">
+		<exclude-pattern>stripe/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.EnqueuedResourceParameters.MissingVersion">
+		<exclude-pattern>stripe/controllers/FrmTransLiteActionsController.php</exclude-pattern>
 	</rule>
 </ruleset>

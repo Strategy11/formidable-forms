@@ -1,3 +1,7 @@
+<?php
+$payment_statuses = FrmTransLiteAppHelper::get_payment_statuses();
+?>
+
 <div class="postbox">
 	<h3 class="hndle"><span><?php esc_html_e( 'Payment Details', 'formidable' ); ?></span></h3>
 
@@ -10,8 +14,8 @@
 					<th scope="row"><?php esc_html_e( 'Status', 'formidable' ); ?></th>
 					<td>
 						<select name="status">
-							<?php foreach ( FrmTransLiteAppHelper::get_payment_statuses() as $status => $label ) { ?>
-								<option value="<?php echo esc_attr( $status ); ?>" <?php selected( $status, $payment->status ); ?>>
+							<?php foreach ( $payment_statuses as $payment_status => $label ) { ?>
+								<option value="<?php echo esc_attr( $payment_status ); ?>" <?php selected( $payment_status, $payment->status ); ?>>
 									<?php echo esc_attr( $label ); ?>
 								</option>
 							<?php } ?>

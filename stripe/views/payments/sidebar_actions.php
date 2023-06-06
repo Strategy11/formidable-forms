@@ -1,7 +1,7 @@
 <div id="misc-publishing-actions">
 	<div class="misc-pub-section curtime misc-pub-curtime">
-    	<span id="timestamp">
-		    <?php printf( esc_html__( 'Created on: %1$s', 'formidable' ), '<b>' . esc_html( $created_at ) . '</b>' ); ?>
+		<span id="timestamp">
+			<?php printf( esc_html__( 'Created on: %1$s', 'formidable' ), '<b>' . esc_html( $created_at ) . '</b>' ); ?>
 		</span>
 	</div>
 
