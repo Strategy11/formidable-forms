@@ -36,7 +36,6 @@ class FrmStrpLiteHooksController {
 		add_action( 'frm_enqueue_stripe_scripts', 'FrmStrpLiteActionsController::load_scripts' );
 		add_filter( 'frm_setup_edit_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
 		add_filter( 'frm_setup_new_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
-		add_filter( 'frm_include_credit_card', '__return_true' );
 		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
 
 		// Stripe link.
