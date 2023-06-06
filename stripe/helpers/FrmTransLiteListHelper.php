@@ -2,7 +2,7 @@
 
 class FrmTransLiteListHelper extends FrmListHelper {
 
-	var $table = '';
+	private $table = '';
 
 	public function __construct( $args ) {
 		$this->table = isset( $_REQUEST['trans_type'] ) ? $_REQUEST['trans_type'] : '';
