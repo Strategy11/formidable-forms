@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div style="margin-bottom:15px;" data-test-mode="<?php echo $test ? 1 : 0; ?>">
 	<span style="margin-bottom: 5px;min-width:40px;display: inline-block;">
 		<b style="color: var(--medium-grey);"><?php echo esc_html( $title ); ?></b>

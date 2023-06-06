@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <table class="form-table">
 
 	<?php // TODO Still support the before/after settings if the Payments submodule is active. ?>

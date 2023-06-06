@@ -1,4 +1,8 @@
-
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="postbox frm_with_icons">
 	<div class="handlediv"><br/></div>
 	<h3 class="hndle"><span><?php esc_html_e( 'Payments', 'formidable' ); ?></span></h3>

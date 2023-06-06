@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 // TODO Move this into the controller.
 $currencies = FrmCurrencyHelper::get_currencies();
 ?>

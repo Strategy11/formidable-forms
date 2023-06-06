@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="misc-publishing-actions">
 	<div class="misc-pub-section curtime misc-pub-curtime">
 		<span id="timestamp">

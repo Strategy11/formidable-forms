@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div class="wrap">
 	<div id="icon-edit-pages" class="icon32"><br/></div>
 	<h2><?php esc_html_e( 'New Payment', 'formidable' ); ?></h2>

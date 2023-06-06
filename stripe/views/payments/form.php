@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 $payment_statuses = FrmTransLiteAppHelper::get_payment_statuses();
 ?>
 

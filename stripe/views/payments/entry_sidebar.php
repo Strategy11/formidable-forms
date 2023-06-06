@@ -1,3 +1,8 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
 <div id="misc-publishing-actions">
 	<div class="misc-pub-section">
 		<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?> wp-media-buttons-icon"></span>

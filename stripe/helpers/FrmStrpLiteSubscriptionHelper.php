@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
 
 /**
  * Handles shared Stripe subscription logic between FrmStrpLiteActionsController and FrmStrpLiteLinkController.
