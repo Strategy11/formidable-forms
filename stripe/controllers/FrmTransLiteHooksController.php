@@ -45,7 +45,12 @@ class FrmTransLiteHooksController {
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 		add_action( 'frm_show_entry_sidebar', 'FrmTransLiteEntriesController::sidebar_list', 9 );
 
-		// TODO Move to a load_ajax_hooks function.
+		if ( defined( 'DOING_AJAX' ) ) {
+			self::load_ajax_hooks();
+		}
+	}
+
+	private static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_trans_refund', 'FrmTransLitePaymentsController::refund_payment' );
 		add_action( 'wp_ajax_frm_trans_cancel', 'FrmTransLiteSubscriptionsController::cancel_subscription' );
 	}
