@@ -400,7 +400,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$stripe_vars = array(
 			'publishable_key'  => $publishable,
-			'process'          => $settings->settings->process,
 			'form_id'          => $params['form_id'],
 			'nonce'            => wp_create_nonce( 'frm_strp_ajax' ),
 			'root'             => esc_url_raw( rest_url() ),

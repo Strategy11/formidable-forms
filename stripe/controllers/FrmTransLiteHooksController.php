@@ -9,6 +9,11 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		if ( class_exists( 'FrmTransHooksController', false ) ) {
+			// Exit early, let the Payments submodule handle everything.
+			return;
+		}
+
 		register_activation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-payments.php', 'FrmTransLiteAppController::install' );
 		register_deactivation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-payments.php', 'FrmTransLiteAppController::remove_cron' );
 
@@ -30,6 +35,11 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		if ( class_exists( 'FrmTransHooksController', false ) ) {
+			// Exit early, let the Payments submodule handle everything.
+			return;
+		}
+
 		// Actions.
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );

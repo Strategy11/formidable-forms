@@ -27,7 +27,7 @@
 					if ( ccField.length && ! ccField.is( ':hidden' ) ) {
 						e.preventDefault();
 						event = e;
-						processForm( ccField );
+						processForm();
 						return;
 					}
 				}
@@ -42,8 +42,8 @@
 			return false;
 		}
 
-		function processForm( ccField ) {
-			var $form, meta, settings, i;
+		function processForm() {
+			var $form, meta;
 
 			$form = jQuery( thisForm );
 

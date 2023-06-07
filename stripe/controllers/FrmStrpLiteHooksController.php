@@ -9,6 +9,11 @@ class FrmStrpLiteHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		if ( class_exists( 'FrmStrpHooksController', false ) ) {
+			// Exit early, let the Stripe add on handle everything.
+			return;
+		}
+
 		// TODO Move this somewhere less temporary.
 		$callback = function( $values, $field ) {
 			if ( $field->type !== 'credit_card' ) {
@@ -47,6 +52,11 @@ class FrmStrpLiteHooksController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		if ( class_exists( 'FrmStrpHooksController', false ) ) {
+			// Exit early, let the Stripe add on handle everything.
+			return;
+		}
+
 		add_action( 'admin_init', 'FrmStrpLiteAppController::include_updater', 1 );
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
 

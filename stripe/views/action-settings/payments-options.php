@@ -132,7 +132,7 @@ $currencies = FrmCurrencyHelper::get_currencies();
 		$action_control->show_fields_dropdown(
 			$field_dropdown_atts,
 			array(
-				'name' => 'billing_address',
+				'name'           => 'billing_address',
 				'allowed_fields' => 'address',
 			)
 		);
