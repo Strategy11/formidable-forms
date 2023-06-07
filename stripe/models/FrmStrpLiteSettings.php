@@ -67,24 +67,14 @@ class FrmStrpLiteSettings {
 	public function get_options() {
 		$settings = get_option( 'frm_' . $this->param() . '_options' );
 
-		if ( ! is_object( $settings ) ) {
-			if ( $settings ) { // workaround for W3 total cache conflict
-				$settings = unserialize( serialize( $settings ) );
-			} else {
-				// If unserializing didn't work
-				if ( ! is_object( $settings ) ) {
-					if ( $settings ) {
-						// workaround for W3 total cache conflict
-						$settings = unserialize( serialize( $settings ) );
-					} else {
-						// TODO This line is wrong. set_default_options returns void so we shouldn't be setting $settings.
-						$settings = $this->set_default_options( true );
-					}
-					$this->store();
-				}
-			}
-		} else {
+		if ( is_object( $settings ) ) {
 			$this->set_default_options( $settings );
+		} elseif ( $settings ) {
+			// Workaround for W3 total cache conflict.
+			$this->settings = unserialize( serialize( $settings ) );
+		} else {
+			$this->set_default_options( true );
+			$this->store();
 		}
 
 		return $this->settings;
