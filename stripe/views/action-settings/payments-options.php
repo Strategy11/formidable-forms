@@ -29,29 +29,12 @@ $currencies = FrmCurrencyHelper::get_currencies();
 	$cc_field = $this->maybe_show_fields_dropdown(
 		$field_dropdown_atts,
 		array(
-			'name' => 'credit_card',
+			'name'           => 'credit_card',
 			'allowed_fields' => 'credit_card',
 		)
 	);
-	if ( $cc_field['field_count'] === 1 ) {
-		?>
-		<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'credit_card' ) ); ?>" value="<?php echo esc_attr( $cc_field['field_id'] ); ?>" />
-	<?php } else { ?>
-	<p class="<?php echo esc_attr( $classes['credit_card'] ); ?> frm6">
-		<label for="<?php echo esc_attr( $this->get_field_id( 'credit_card' ) ); ?>">
-			<?php esc_html_e( 'Credit Card', 'formidable' ); ?>
-		</label>
-		<?php
-		$this->show_fields_dropdown(
-			$field_dropdown_atts,
-			array(
-				'name' => 'credit_card',
-				'allowed_fields' => 'credit_card',
-			)
-		);
-		?>
-	</p>
-	<?php } ?>
+	?>
+	<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'credit_card' ) ); ?>" value="<?php echo esc_attr( $cc_field['field_id'] ); ?>" />
 
 	<p class="frm6">
 		<label>

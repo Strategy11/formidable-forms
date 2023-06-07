@@ -123,9 +123,12 @@ class FrmTransLiteAction extends FrmFormAction {
 		$field_id    = 0;
 
 		foreach ( $form_atts['form_fields'] as $field ) {
-			if ( ! empty( $field_atts['allowed_fields'] ) && ! in_array( $field->type, (array) $field_atts['allowed_fields'] ) ) {
+			$type_is_allowed = empty( $field_atts['allowed_fields'] ) || in_array( $field->type, (array) $field_atts['allowed_fields'], true );
+
+			if ( ! $type_is_allowed ) {
 				continue;
 			}
+
 			$field_count++;
 			$field_id = $field->id;
 		}
@@ -150,9 +153,12 @@ class FrmTransLiteAction extends FrmFormAction {
 			<option value=""><?php esc_html_e( '&mdash; Select &mdash;', 'formidable' ); ?></option>
 			<?php
 			foreach ( $form_atts['form_fields'] as $field ) {
-				if ( ! empty( $field_atts['allowed_fields'] ) && ! in_array( $field->type, (array) $field_atts['allowed_fields'] ) ) {
+				$type_is_allowed = empty( $field_atts['allowed_fields'] ) || in_array( $field->type, (array) $field_atts['allowed_fields'], true );
+
+				if ( ! $type_is_allowed ) {
 					continue;
 				}
+
 				$has_field  = true;
 				$key_exists = array_key_exists( $field_atts['name'], $form_atts['form_action']->post_content );
 				?>
