@@ -137,7 +137,6 @@ class FrmTransLiteActionsController {
 		// Set future-cancel as trigger when applicable.
 		$atts['trigger'] = str_replace( '_', '-', $atts['trigger'] );
 
-		self::set_fields_after_payment( $action, $atts );
 		if ( $atts['payment'] ) {
 			self::trigger_actions_after_payment( $atts['payment'], $atts );
 		}
@@ -173,60 +172,6 @@ class FrmTransLiteActionsController {
 			$trigger_event = ( $payment->status === 'complete' ) ? 'payment-success' : 'payment-failed';
 		}
 		FrmFormActionsController::trigger_actions( $trigger_event, $entry->form_id, $entry->id );
-	}
-
-	/**
-	 * @param mixed $action
-	 * @param array $atts
-	 * @return void
-	 */
-	public static function set_fields_after_payment( $action, $atts ) {
-		/**
-		 * @param array $atts
-		 */
-		do_action( 'frm_payment_status_' . $atts['trigger'], $atts );
-
-		if ( ! is_callable( 'FrmProEntryMeta::update_single_field' ) || empty( $action ) ) {
-			return;
-		}
-
-		if ( is_numeric( $action ) ) {
-			$action = FrmTransLiteAction::get_single_action_type( $action, 'payment' );
-		}
-
-		self::change_fields( $action, $atts );
-	}
-
-	/**
-	 * @param WP_Post $action
-	 * @param array   $atts
-	 * @return void
-	 */
-	private static function change_fields( $action, $atts ) {
-		if ( empty( $action->post_content['change_field'] ) ) {
-			return;
-		}
-
-		foreach ( $action->post_content['change_field'] as $change_field ) {
-			$is_trigger_for_field = $change_field['status'] == $atts['trigger'];
-			if ( $is_trigger_for_field ) {
-				$value = FrmTransLiteAppHelper::process_shortcodes(
-					array(
-						'value' => $change_field['value'],
-						'form'  => $action->menu_order,
-						'entry' => isset( $atts['entry'] ) ? $atts['entry'] : $atts['entry_id'],
-					)
-				);
-
-				FrmProEntryMeta::update_single_field(
-					array(
-						'entry_id' => $atts['entry_id'],
-						'field_id' => $change_field['id'],
-						'value'    => $value,
-					)
-				);
-			}
-		}
 	}
 
 	/**

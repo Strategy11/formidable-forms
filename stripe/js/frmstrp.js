@@ -416,7 +416,7 @@
 		function loadElements() {
 			if ( document.getElementsByClassName( 'frm-card-element' ).length ) {
 				maybeLoadStripeLink();
-			}	
+			}
 		}
 
 		/**

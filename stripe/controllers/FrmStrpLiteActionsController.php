@@ -6,16 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
-	 * Generate the HTML from Stripe rather than Formidable.
-	 *
-	 * @since 2.0
-	 * @return string
-	 */
-	public static function show_card_callback( $callback ) {
-		return 'FrmStrpLiteActionsController::show_card';
-	}
-
-	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
 	 * @since 2.0

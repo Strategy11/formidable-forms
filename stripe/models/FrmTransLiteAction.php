@@ -74,7 +74,6 @@ class FrmTransLiteAction extends FrmFormAction {
 			'shipping_last_name'   => '',
 			'shipping_company'     => '',
 			'shipping_address'     => '',
-			'change_field'         => array(),
 		);
 		return (array) apply_filters( 'frm_pay_action_defaults', $defaults );
 	}
@@ -85,11 +84,11 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @return string
 	 */
 	private function default_currency() {
-		if ( ! is_callable( 'FrmProAppHelper::get_settings' ) ) {
+		if ( ! is_callable( 'FrmAppHelper::get_settings' ) ) {
 			return 'usd';
 		}
 
-		$frm_settings = FrmProAppHelper::get_settings();
+		$frm_settings = FrmAppHelper::get_settings();
 		$currency     = trim( $frm_settings->currency );
 		if ( ! $currency ) {
 			$currency = 'USD';
