@@ -14,8 +14,8 @@ class FrmTransLiteHooksController {
 			return;
 		}
 
-		register_activation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-payments.php', 'FrmTransLiteAppController::install' );
-		register_deactivation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-payments.php', 'FrmTransLiteAppController::remove_cron' );
+		// register_activation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-payments.php', 'FrmTransLiteAppController::install' );
+		// register_deactivation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-payments.php', 'FrmTransLiteAppController::remove_cron' );
 
 		// Actions.
 		add_action( 'frm_payment_cron', 'FrmTransLiteAppController::run_payment_cron' );
