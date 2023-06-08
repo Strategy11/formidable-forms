@@ -17,25 +17,47 @@ class FrmTransLiteCRUDController {
 	 */
 	public static function show( $id = 0 ) {
 		if ( ! $id ) {
-			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'sanitize_text_field' );
+			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 			if ( ! $id ) {
 				wp_die( esc_html__( 'Please select a payment to view', 'formidable' ) );
 			}
 		}
 
-		$table_name = self::table_name();
-
-		global $wpdb;
-		$payment = $wpdb->get_row( $wpdb->prepare( "SELECT p.*, e.user_id FROM {$wpdb->prefix}frm_" . $table_name . " p LEFT JOIN {$wpdb->prefix}frm_items e ON (p.item_id = e.id) WHERE p.id=%d", $id ) );
-
+		$payment     = self::get_payment_row( $id );
 		$date_format = get_option( 'date_format' );
 		$user_name   = FrmTransLiteAppHelper::get_user_link( $payment->user_id );
+		$table_name  = self::table_name();
 
 		if ( $table_name !== 'payments' ) {
 			$subscription = $payment;
 		}
 
 		include FrmTransLiteAppHelper::plugin_path() . '/views/' . $table_name . '/show.php';
+	}
+
+	/**
+	 * @param int $id
+	 * @return object|null
+	 */
+	private static function get_payment_row( $id ) {
+		global $wpdb;
+
+		$table_name = self::table_name();
+
+		// @codingStandardsIgnoreStart
+		$payment = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT
+					p.*, e.user_id
+				FROM `{$wpdb->prefix}frm_{$table_name}` p
+				LEFT JOIN `{$wpdb->prefix}frm_items` e ON p.item_id = e.id
+				WHERE p.id=%d",
+				$id
+			)
+		);
+		// @codingStandardsIgnoreEnd
+
+		return $payment;
 	}
 
 	/**
@@ -63,9 +85,10 @@ class FrmTransLiteCRUDController {
 		$default = reset( $allowed );
 		$name    = FrmAppHelper::get_param( 'type', $default, 'get', 'sanitize_text_field' );
 
-		if ( ! in_array( $name, $allowed ) ) {
+		if ( ! in_array( $name, $allowed, true ) ) {
 			$name = $default;
 		}
+
 		return $name;
 	}
 

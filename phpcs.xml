@@ -54,7 +54,6 @@
 		<exclude-pattern>stripe/controllers/FrmStrpLiteActionsController.php</exclude-pattern>
 		<exclude-pattern>stripe/controllers/FrmTransLitePaymentsController.php</exclude-pattern>
 		<exclude-pattern>stripe/controllers/FrmStrpLiteSettingsController.php</exclude-pattern>
-		<exclude-pattern>stripe/controllers/FrmTransLiteCRUDController.php</exclude-pattern>
 		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
@@ -63,7 +62,6 @@
 	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
 		<exclude-pattern>tests/*</exclude-pattern>
 		<!-- Temporary exclusion for Stripe Lite -->
-		<exclude-pattern>stripe/controllers/FrmTransLiteCRUDController.php</exclude-pattern>
 		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
 		<exclude-pattern>stripe/models/FrmTransLiteDb.php</exclude-pattern>
 		<exclude-pattern>stripe/models/FrmTransLiteSubscription.php</exclude-pattern>
