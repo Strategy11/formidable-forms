@@ -141,7 +141,15 @@ class FrmTransLiteDb {
 		 */
 		do_action( 'frm_before_destroy_' . $this->singular, $id );
 
-		$result = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d', $id ) );
+		// @codingStandardsIgnoreStart
+		$result = $wpdb->query(
+			$wpdb->prepare(
+				'DELETE FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d',
+				$id
+			)
+		);
+		// @codingStandardsIgnoreEnd
+
 		return $result;
 	}
 
@@ -151,40 +159,78 @@ class FrmTransLiteDb {
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
-		return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d', $id ) );
+		// @codingStandardsIgnoreStart
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT * FROM ' . $wpdb->prefix . $this->table_name . ' WHERE id=%d',
+				$id
+			)
+		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	/**
 	 * @param string|int $id
 	 * @param string     $field
-	 * @return array|object|null|void
+	 * @return object|null
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
+		if ( ! in_array( $field, array( 'receipt_id', 'sub_id' ), true ) ) {
+			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', 'x.x' );
+			return null;
+		}
+
 		global $wpdb;
+		// Can this be exploited?
 		$field = sanitize_text_field( $field );
-		$query = 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . ' WHERE ' . $field . ' = %s ORDER BY created_at DESC';
-		return $wpdb->get_row( $wpdb->prepare( $query, $id ) );
+		// @codingStandardsIgnoreStart
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT * FROM ' . $wpdb->prefix . $this->table_name
+				. ' WHERE ' . $field . ' = %s ORDER BY created_at DESC',
+				$id
+			)
+		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	public function get_all_by( $value, $field = 'item_id' ) {
-		global $wpdb;
 		$field = sanitize_text_field( $field );
-		$query = 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . ' WHERE ' . $field . ' = %s ORDER BY created_at DESC';
-		return $wpdb->get_results( $wpdb->prepare( $query, $value ) );
-	}
 
-	public function get_all_by_multiple( $values ) {
+		if ( ! in_array( $field, array( 'item_id', 'sub_id' ), true ) ) {
+			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', 'x.x' );
+			return null;
+		}
+
 		global $wpdb;
-		FrmDb::get_where_clause_and_values( $values );
-		$query = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . $values['where'] . ' ORDER BY created_at DESC', $values['values'] );
-
-		return $wpdb->get_results( $query );
+		// @codingStandardsIgnoreStart
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM ' . $wpdb->prefix . $this->table_name
+				. ' WHERE ' . $field . ' = %s ORDER BY created_at DESC',
+				$value
+			)
+		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	public function get_all_for_user( $user_id ) {
 		global $wpdb;
-		$query = 'SELECT *, e.id as entry_id, p.id as id FROM ' . $wpdb->prefix . $this->table_name . ' p LEFT JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id = p.item_id) WHERE e.user_id = %d ORDER BY p.created_at DESC';
-		return $wpdb->get_results( $wpdb->prepare( $query, $user_id ) );
+		// @codingStandardsIgnoreStart
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT
+					*,
+					e.id as entry_id,
+					p.id as id
+				FROM ' . $wpdb->prefix . $this->table_name . ' p '
+				. 'LEFT JOIN ' . $wpdb->prefix . 'frm_items e ON e.id = p.item_id '
+				. 'WHERE e.user_id = %d '
+				. 'ORDER BY p.created_at DESC',
+				$user_id
+			)
+		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	public function get_all_for_entry( $id ) {
@@ -193,7 +239,11 @@ class FrmTransLiteDb {
 
 	public function get_count() {
 		global $wpdb;
-		return $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $wpdb->prefix . $this->table_name );
+		// @codingStandardsIgnoreStart
+		return $wpdb->get_var(
+			'SELECT COUNT(*) FROM ' . $wpdb->prefix . $this->table_name
+		);
+		// @codingStandardsIgnoreEnd
 	}
 
 	/**
@@ -246,8 +296,9 @@ class FrmTransLiteDb {
 			return;
 		}
 
-		$query = 'SELECT * FROM ' . $wpdb->prefix . 'frm_payments WHERE completed is NOT NULL AND status is NULL';
-		$payments = $wpdb->get_results( $query );
+		$payments = $wpdb->get_results(
+			"SELECT * FROM {$wpdb->prefix}frm_payments WHERE completed is NOT NULL AND status is NULL"
+		);
 		foreach ( $payments as $payment ) {
 			$status = $payment->completed ? 'complete' : 'failed';
 			$wpdb->update( $wpdb->prefix . 'frm_payments', compact( 'status' ), array( 'id' => $payment->id ) );
