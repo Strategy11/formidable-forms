@@ -67,6 +67,8 @@ class FrmStrpLiteSettingsController {
 	 * @return void
 	 */
 	public static function process_form() {
+		// Does this need a nonce?
+
 		$atts = array(
 			'errors'  => array(),
 			'message' => '',

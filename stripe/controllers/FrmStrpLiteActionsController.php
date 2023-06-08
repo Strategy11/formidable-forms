@@ -69,7 +69,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
 		$has_processed = self::has_stripe_processed( $field->form_id ) || isset( $_POST[ 'frmintent' . $field->form_id ] );
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && isset( $_GET['frm_action'] ) && 'edit' === sanitize_text_field( $_GET['frm_action'] ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && isset( $_GET['frm_action'] ) && 'edit' === FrmAppHelper::simple_get( 'frm_action' ) ) {
 			$has_processed = true;
 		}
 
@@ -189,6 +189,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		self::add_customer_name( $atts, $payment_info );
 
 		$customer          = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
+		// Can we stop passing this in $_POST data?
 		$_POST['customer'] = $customer; // Set for later use.
 
 		return $customer;
