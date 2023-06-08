@@ -393,8 +393,11 @@ class FrmFieldsController {
 		}
 
 		$pro_fields = FrmField::pro_field_selection();
-		$types      = array_keys( $pro_fields );
-		if ( in_array( $type, $types ) ) {
+		// We want to keep credit_card types as credit card types for Stripe Lite.
+		// The credit_card key is set for backward compatibility.
+		unset( $pro_fields['credit_card'] );
+
+		if ( array_key_exists( $type, $pro_fields ) ) {
 			$type = 'text';
 		}
 
@@ -498,7 +501,7 @@ class FrmFieldsController {
 	}
 
 	private static function add_html_cols( $field, array &$add_html ) {
-		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ) ) ) {
+		if ( ! in_array( $field['type'], array( 'textarea', 'rte' ), true ) ) {
 			return;
 		}
 

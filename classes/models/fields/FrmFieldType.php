@@ -906,13 +906,7 @@ DEFAULT_HTML;
 		if ( ! empty( $include_file ) ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
-			// For some reason type is getting changed to "text".
-			if ( 'credit_card' === $this->field['original_type'] ) {
-				$object = new FrmFieldCreditCard();
-				$input = $object->front_field_input( $args, $shortcode_atts );
-			} else {
-				$input = $this->front_field_input( $args, $shortcode_atts );
-			}
+			$input = $this->front_field_input( $args, $shortcode_atts );
 		}
 
 		$this->load_field_scripts( $args );
