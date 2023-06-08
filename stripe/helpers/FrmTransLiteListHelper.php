@@ -283,12 +283,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			)
 		);
 
-		$val  = '<strong><a class="row-title" href="' . esc_url( $link ) . '" title="' . esc_attr__( 'View', 'formidable' ) . '">';
-		$val .= $item->{$field};
-		$val .= '</a></strong><br />';
-		$val .= $this->row_actions( $this->get_row_actions( $item ) );
+		$link_params = array(
+			'class' => 'rot-title',
+			'href'  => esc_url( $link ),
+			'title' => __( 'View', 'formidable' ),
+		);
+		$link = '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>'
+			. $item->{$field}
+			. '</a>';
 
-		return $val;
+		return '<strong>' . $link . '</strong>'
+			. '<br />'
+			. $this->row_actions( $this->get_row_actions( $item ) );
 	}
 
 	/**
