@@ -18,17 +18,24 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	public function prepare_items() {
 		global $wpdb;
 
-		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
-		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
+		$orderby  = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
+		$order    = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
+		if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
+			$order = 'DESC';
+		}
 
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_payments_per_page' );
 		$start    = ( $page - 1 ) * $per_page;
 		$start    = FrmAppHelper::get_param( 'start', $start, 'get', 'absint' );
+		$query    = $this->get_table_query();
 
-		$query       = $this->get_table_query();
-		$this->items = $wpdb->get_results( 'SELECT * ' . $query . " ORDER BY p.{$orderby} $order LIMIT $start, $per_page" );
+		// @codingStandardsIgnoreStart
+		$this->items = $wpdb->get_results(
+			'SELECT * ' . $query . " ORDER BY p.{$orderby} $order LIMIT $start, $per_page"
+		);
 		$total_items = $wpdb->get_var( 'SELECT COUNT(*) ' . $query );
+		// @codingStandardsIgnoreEnd
 
 		$this->set_pagination_args(
 			array(
@@ -48,9 +55,16 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$form_id    = FrmAppHelper::get_param( 'form', 0, 'get', 'absint' );
 
 		if ( $form_id ) {
-			$query = $wpdb->prepare( "FROM {$wpdb->prefix}{$table_name} p LEFT JOIN {$wpdb->prefix}frm_items i ON (p.item_id = i.id) WHERE i.form_id = %d", $form_id );
+			// @codingStandardsIgnoreStart
+			$query = $wpdb->prepare(
+				"FROM `{$wpdb->prefix}{$table_name}` p
+				LEFT JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
+				WHERE i.form_id = %d",
+				$form_id
+			);
+			// @codingStandardsIgnoreEnd
 		} else {
-			$query = 'FROM ' . $wpdb->prefix . $table_name . ' p';
+			$query = "FROM `{$wpdb->prefix}{$table_name}` p";
 		}
 
 		return $query;
@@ -225,7 +239,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
 		global $wpdb;
-		$forms = $wpdb->get_results( "SELECT fo.id as form_id, fo.name, e.id FROM {$wpdb->prefix}frm_items e LEFT JOIN {$wpdb->prefix}frm_forms fo ON (e.form_id = fo.id) WHERE e.id in (" . implode( ',', $entry_ids ) . ')' );
+		// @codingStandardsIgnoreStart
+		$forms = $wpdb->get_results(
+			"SELECT
+				fo.id as form_id,
+				fo.name,
+				e.id
+			FROM {$wpdb->prefix}frm_items e
+			LEFT JOIN {$wpdb->prefix}frm_forms fo ON e.form_id = fo.id
+			WHERE e.id in (" . implode( ',', $entry_ids ) . ')'
+		);
+		// @codingStandardsIgnoreEnd
 		unset( $entry_ids );
 
 		$form_ids = array();

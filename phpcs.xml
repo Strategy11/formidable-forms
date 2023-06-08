@@ -62,14 +62,11 @@
 	<rule ref="WordPress.DB.PreparedSQL.NotPrepared">
 		<exclude-pattern>tests/*</exclude-pattern>
 		<!-- Temporary exclusion for Stripe Lite -->
-		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
 		<exclude-pattern>stripe/models/FrmTransLiteDb.php</exclude-pattern>
 		<exclude-pattern>stripe/models/FrmTransLiteSubscription.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
 		<exclude-pattern>tests/*</exclude-pattern>
-		<!-- Temporary exclusion for Stripe Lite -->
-		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
 		<exclude-pattern>tests/*</exclude-pattern>
