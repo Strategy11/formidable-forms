@@ -128,9 +128,6 @@
 		<exclude-pattern>stripe/controllers/FrmTransLitePaymentsController.php</exclude-pattern>
 		<exclude-pattern>stripe/controllers/FrmTransLiteSubscriptionsController.php</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.DateTime.RestrictedFunctions.date_date">
-		<exclude-pattern>stripe/*</exclude-pattern>
-	</rule>
 	<rule ref="WordPress.WP.EnqueuedResourceParameters.MissingVersion">
 		<exclude-pattern>stripe/controllers/FrmTransLiteActionsController.php</exclude-pattern>
 	</rule>

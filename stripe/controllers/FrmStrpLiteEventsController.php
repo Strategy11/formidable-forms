@@ -272,13 +272,13 @@ class FrmStrpLiteEventsController {
 	 * @return void
 	 */
 	private function set_payment_values( &$payment_values ) {
-		$payment_values['begin_date']  = date( 'Y-m-d' );
+		$payment_values['begin_date']  = gmdate( 'Y-m-d' );
 		$payment_values['expire_date'] = '0000-00-00';
 
 		foreach ( $this->invoice->lines->data as $line ) {
 			$payment_values['amount']      = number_format( ( $line->amount / 100 ), 2, '.', '' );
-			$payment_values['begin_date']  = date( 'Y-m-d', $line->period->start );
-			$payment_values['expire_date'] = date( 'Y-m-d', $line->period->end );
+			$payment_values['begin_date']  = gmdate( 'Y-m-d', $line->period->start );
+			$payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 		}
 
 		$payment_values['receipt_id']  = $this->charge ? $this->charge : __( 'None', 'formidable' );

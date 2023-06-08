@@ -114,7 +114,7 @@ class FrmTransLiteAppHelper {
 		$meta_value   = (array) maybe_unserialize( $meta_value );
 		$meta_value[] = array(
 			'message' => $note,
-			'date'    => date( 'Y-m-d H:i:s' ),
+			'date'    => gmdate( 'Y-m-d H:i:s' ),
 		);
 		return $meta_value;
 	}

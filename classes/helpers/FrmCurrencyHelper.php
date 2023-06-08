@@ -323,7 +323,7 @@ class FrmCurrencyHelper {
 		if ( is_array( $filtered_currencies ) ) {
 			$currencies = $filtered_currencies;
 		} else {
-			// TODO call _doing_it_wrong here.
+			_doing_it_wrong( __FUNCTION__, 'Only arrays should be returned when using the frm_currencies filter.', 'x.x' );
 		}
 
 		return $currencies;

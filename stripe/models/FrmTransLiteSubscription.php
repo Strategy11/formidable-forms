@@ -80,6 +80,6 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	public function get_overdue_subscriptions() {
 		global $wpdb;
 		$query = 'SELECT * FROM ' . $wpdb->prefix . $this->table_name . ' WHERE fail_count < %d AND next_bill_date < %s AND (status = %s OR status = %s)';
-		return $wpdb->get_results( $wpdb->prepare( $query, 3, date( 'Y-m-d' ), 'active', 'future_cancel' ) );
+		return $wpdb->get_results( $wpdb->prepare( $query, 3, gmdate( 'Y-m-d' ), 'active', 'future_cancel' ) );
 	}
 }

@@ -53,8 +53,8 @@ if ( false === strpos( $more_html, 'id="frm_currency"' ) ) {
 	$currencies = FrmCurrencyHelper::get_currencies();
 	?>
 	<p class="frm_grid_container">
-		<label for="frm_currency" class="frm4 frm_form_field frm_help" title="<?php esc_attr_e( 'Select the currency to be used by Formidable globally.', 'formidable-pro' ); ?>">
-			<?php esc_html_e( 'Currency', 'formidable-pro' ); ?>
+		<label for="frm_currency" class="frm4 frm_form_field frm_help" title="<?php esc_attr_e( 'Select the currency to be used by Formidable globally.', 'formidable' ); ?>">
+			<?php esc_html_e( 'Currency', 'formidable' ); ?>
 		</label>
 		<select id="frm_currency" name="frm_currency" class="frm8 frm_form_field">
 			<?php
