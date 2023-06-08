@@ -24,63 +24,11 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$type   = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
 
 		$class_name = $type === 'subscriptions' ? 'FrmTransLiteSubscriptionsController' : 'FrmTransLitePaymentsController';
-		if ( $action === 'new' ) {
-			self::new_payment();
-		} elseif ( method_exists( $class_name, $action ) ) {
+		if ( method_exists( $class_name, $action ) ) {
 			$class_name::$action();
 		} else {
 			FrmTransLiteListsController::route( $action );
 		}
-	}
-
-	/**
-	 * @return void
-	 */
-	private static function new_payment() {
-		self::get_new_vars();
-	}
-
-	/**
-	 * @return void
-	 */
-	private static function create() {
-		$frm_payment = new FrmTransLitePayment();
-		$id          = $frm_payment->create( $_POST );
-
-		if ( ! $id ) {
-			$message = __( 'There was a problem creating that payment', 'formidable' );
-			self::get_new_vars( $message );
-			return;
-		}
-
-		$message = __( 'Payment was Successfully Created', 'formidable' );
-		self::get_edit_vars( $id, '', $message );
-	}
-
-	/**
-	 * @param string $error
-	 *
-	 * @return void
-	 */
-	private static function get_new_vars( $error = '' ) {
-		global $wpdb;
-
-		$frm_payment  = new FrmTransLitePayment();
-		$get_defaults = $frm_payment->get_defaults();
-		$defaults     = array();
-		foreach ( $get_defaults as $name => $values ) {
-			$defaults[ $name ] = $values['default'];
-		}
-		$defaults['paysys'] = 'manual';
-
-		$payment = (object) array();
-		foreach ( $defaults as $var => $default ) {
-			$payment->$var = FrmAppHelper::get_param( $var, $default, 'post', 'sanitize_text_field' );
-		}
-
-		$currency = FrmCurrencyHelper::get_currency( 'usd' );
-
-		include FrmTransLiteAppHelper::plugin_path() . '/views/payments/new.php';
 	}
 
 	/**

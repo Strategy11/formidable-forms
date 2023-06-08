@@ -5,11 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"><br></div>
-	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?>
-		<a href="?page=formidable-payments&amp;action=new" class="add-new-h2">
-			<?php esc_html_e( 'Add New', 'formidable' ); ?>
-		</a>
-	</h2>
+	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
 
 	<?php
 	include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php';

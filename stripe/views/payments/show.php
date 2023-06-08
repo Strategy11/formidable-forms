@@ -22,9 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</a>
 							</div>
 
-							<div id="publishing-action">
-								<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-payments&action=edit&id=' . $payment->id ) ); ?>" class="button-primary"><?php esc_html_e( 'Edit', 'formidable' ); ?></a>
-							</div>
 							<div class="clear"></div>
 						</div>
 					</div>

@@ -283,7 +283,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			)
 		);
 
-		$val  = '<strong><a class="row-title" href="' . esc_url( $link ) . '" title="' . esc_attr__( 'Edit', 'formidable' ) . '">';
+		$val  = '<strong><a class="row-title" href="' . esc_url( $link ) . '" title="' . esc_attr__( 'View', 'formidable' ) . '">';
 		$val .= $item->{$field};
 		$val .= '</a></strong><br />';
 		$val .= $this->row_actions( $this->get_row_actions( $item ) );
@@ -297,7 +297,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_row_actions( $item ) {
 		$base_link   = '?page=formidable-payments&action=';
-		$edit_link   = $base_link . 'edit&id=' . $item->id;
 		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' . $this->table;
 		$delete_link = $base_link . 'destroy&id=' . $item->id;
 
@@ -305,7 +304,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
 
 		if ( $this->table !== 'subscriptions' ) {
-			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . __( 'Edit', 'formidable' ) . '</a>';
 			$actions['delete'] = '<a href="' . esc_url( $delete_link ) . '">' . __( 'Delete', 'formidable' ) . '</a>';
 		}
 
