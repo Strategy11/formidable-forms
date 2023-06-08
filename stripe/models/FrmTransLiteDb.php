@@ -199,7 +199,7 @@ class FrmTransLiteDb {
 
 		if ( ! in_array( $field, array( 'item_id', 'sub_id' ), true ) ) {
 			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', 'x.x' );
-			return null;
+			return array();
 		}
 
 		global $wpdb;
