@@ -10,7 +10,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $subscription ) {
-		$date_format = __( 'M j, Y @ G:i' );
+		$date_format = __( 'M j, Y @ G:i', 'formidable' );
 
 		FrmTransLiteActionsController::actions_js();
 
