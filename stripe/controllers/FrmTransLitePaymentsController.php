@@ -51,18 +51,30 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function show_receipt_link( $payment ) {
-		$link = esc_html( $payment->receipt_id );
-		if ( $payment->receipt_id !== 'None' ) {
+		$link   = esc_html( $payment->receipt_id );
+		$paysys = $payment->paysys;
+
+		if ( $payment->receipt_id !== 'None' && self::should_filter_receipt_link( $paysys ) ) {
 			/**
 			 * Filter a receipt link for a specific gateway.
 			 * For example, Stripe uses frm_pay_stripe_receipt.
 			 *
 			 * @param string $link
 			 */
-			$link = apply_filters( 'frm_pay_' . $payment->paysys . '_receipt', $link );
+			$link = apply_filters( 'frm_pay_' . $paysys . '_receipt', $link );
 		}
 
 		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 * @param string $paysys
+	 *
+	 * @return bool
+	 */
+	private static function should_filter_receipt_link( $paysys ) {
+		$allowed_types = array( 'stripe', 'authnet_aim' );
+		return in_array( $paysys, $allowed_types, true );
 	}
 
 	/**
