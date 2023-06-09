@@ -134,3 +134,14 @@ function frm_maybe_install() {
 		set_transient( FrmWelcomeController::$option_name, FrmWelcomeController::$menu_slug, 60 );
 	}
 }
+
+register_deactivation_hook(
+	__FILE__,
+	function() {
+		if ( ! class_exists( 'FrmCronController', false ) ) {
+			require_once __DIR__ . '/classes/controllers/FrmCronController.php';
+		}
+
+		FrmCronController::remove_crons();
+	}
+);
