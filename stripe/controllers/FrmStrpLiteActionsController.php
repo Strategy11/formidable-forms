@@ -290,8 +290,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function before_save_settings( $settings ) {
 		$settings['currency']    = strtolower( $settings['currency'] );
-		// TODO Only force one when the Stripe add on isn't active.
-		$settings['stripe_link'] = 1;//! empty( $settings['stripe_link'] ) ? 1 : 0;
+		$settings['stripe_link'] = 1; // In Lite Stripe link is always used.
 		$settings                = self::create_plans( $settings );
 		return $settings;
 	}
@@ -376,8 +375,20 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
 		$publishable             = $settings->get_active_publishable_key();
 
-		wp_register_script( 'stripe', 'https://js.stripe.com/v3/', array(), '3.0', false );
-		wp_enqueue_script( 'formidable-stripe', FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . FrmAppHelper::js_suffix() . '.js', array( 'stripe', 'formidable' ), FrmAppHelper::plugin_version(), false );
+		wp_register_script(
+			'stripe',
+			'https://js.stripe.com/v3/',
+			array(),
+			'3.0',
+			false
+		);
+		wp_enqueue_script(
+			'formidable-stripe',
+			FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . FrmAppHelper::js_suffix() . '.js',
+			array( 'stripe', 'formidable' ),
+			FrmAppHelper::plugin_version(),
+			false
+		);
 
 		if ( ! empty( $params['form_id'] ) ) {
 			$action_settings = self::prepare_settings_for_js( $params['form_id'] );

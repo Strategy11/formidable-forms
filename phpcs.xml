@@ -115,7 +115,4 @@
 	<rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedElseif">
 		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.WP.EnqueuedResourceParameters.MissingVersion">
-		<exclude-pattern>stripe/controllers/FrmTransLiteActionsController.php</exclude-pattern>
-	</rule>
 </ruleset>

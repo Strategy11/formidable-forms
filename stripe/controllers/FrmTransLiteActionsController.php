@@ -24,12 +24,17 @@ class FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function actions_js() {
-		wp_enqueue_script( 'frmtrans_admin', FrmTransLiteAppHelper::plugin_url() . '/js/frmtrans_admin.js', array( 'jquery' ) );
+		wp_enqueue_script(
+			'frmtrans_admin',
+			FrmTransLiteAppHelper::plugin_url() . '/js/frmtrans_admin.js',
+			array( 'jquery' ),
+			FrmAppHelper::plugin_version()
+		);
 		wp_localize_script(
 			'frmtrans_admin',
 			'frm_trans_vars',
 			array(
-				'nonce'   => wp_create_nonce( 'frm_trans_ajax' ),
+				'nonce' => wp_create_nonce( 'frm_trans_ajax' ),
 			)
 		);
 	}
