@@ -115,10 +115,6 @@
 	<rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedElseif">
 		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.WP.I18n.MissingArgDomain">
-		<exclude-pattern>stripe/controllers/FrmTransLitePaymentsController.php</exclude-pattern>
-		<exclude-pattern>stripe/controllers/FrmTransLiteSubscriptionsController.php</exclude-pattern>
-	</rule>
 	<rule ref="WordPress.WP.EnqueuedResourceParameters.MissingVersion">
 		<exclude-pattern>stripe/controllers/FrmTransLiteActionsController.php</exclude-pattern>
 	</rule>
