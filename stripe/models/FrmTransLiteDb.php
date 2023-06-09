@@ -175,7 +175,7 @@ class FrmTransLiteDb {
 	 * @return object|null
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
-		if ( ! in_array( $field, array( 'receipt_id', 'sub_id' ), true ) ) {
+		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
 			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by receipt id or sub id.', 'x.x' );
 			return null;
 		}
@@ -197,7 +197,7 @@ class FrmTransLiteDb {
 	public function get_all_by( $value, $field = 'item_id' ) {
 		$field = sanitize_text_field( $field );
 
-		if ( ! in_array( $field, array( 'item_id', 'sub_id' ), true ) ) {
+		if ( ! in_array( $field, array( 'receipt_id', 'sub_id', 'item_id' ), true ) ) {
 			_doing_it_wrong( __FUNCTION__, 'Items can only be retrieved by item id or sub id.', 'x.x' );
 			return array();
 		}
