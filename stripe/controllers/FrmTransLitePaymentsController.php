@@ -94,16 +94,29 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$link .= '</a>';
 		}
 
-		/**
-		 * Filter the refund link for a specific gateway.
-		 * For example, Stripe uses frm_pay_stripe_refund_link.
-		 *
-		 * @param string $link
-		 * @param object $payment
-		 */
-		$link = apply_filters( 'frm_pay_' . $payment->paysys . '_refund_link', $link, $payment );
+		$paysys = $payment->paysys;
+		if ( self::should_filter_refund_link( $paysys ) ) {
+			/**
+			 * Filter the refund link for a specific gateway.
+			 * For example, Stripe uses frm_pay_stripe_refund_link.
+			 *
+			 * @param string $link
+			 * @param object $payment
+			 */
+			$link = apply_filters( 'frm_pay_' . $paysys . '_refund_link', $link, $payment );
+		}
 
 		return $link;
+	}
+
+	/**
+	 * @param string $paysys
+	 *
+	 * @return bool
+	 */
+	private static function should_filter_refund_link( $paysys ) {
+		$allowed_types = array( 'stripe', 'authnet_aim' );
+		return in_array( $paysys, $allowed_types, true );
 	}
 
 	/**
@@ -112,30 +125,28 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function refund_payment() {
-		// TODO If this isn't Lite, use the Payments submodule.
-
 		FrmAppHelper::permission_check( 'frm_edit_entries' );
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
+		// TODO Is this a number? Can we use absint?
 		$payment_id = FrmAppHelper::get_param( 'payment_id', '', 'get', 'sanitize_text_field' );
-		if ( $payment_id ) {
-			$frm_payment = new FrmTransLitePayment();
-			$payment     = $frm_payment->get_one( $payment_id );
-
-			$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $payment->paysys, 'class' );
-			$refunded   = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
-			if ( $refunded ) {
-				self::change_payment_status( $payment, 'refunded' );
-				$message = __( 'Refunded', 'formidable' );
-			} else {
-				$message = __( 'Failed', 'formidable' );
-			}
-		} else {
-			$message = __( 'Oops! No payment was selected for refund.', 'formidable' );
+		if ( ! $payment_id ) {
+			wp_die( esc_html( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}
 
-		echo esc_html( $message );
-		wp_die();
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$class_name  = FrmTransLiteAppHelper::get_setting_for_gateway( $payment->paysys, 'class' );
+		$refunded    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
+
+		if ( $refunded ) {
+			self::change_payment_status( $payment, 'refunded' );
+			$message = __( 'Refunded', 'formidable' );
+		} else {
+			$message = __( 'Failed', 'formidable' );
+		}
+
+		wp_die( esc_html( $message ) );
 	}
 
 	/**
@@ -146,10 +157,13 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function change_payment_status( $payment, $status ) {
-		$frm_payment = new FrmTransLitePayment();
-		if ( $status != $payment->status ) {
-			$frm_payment->update( $payment->id, array( 'status' => $status ) );
-			FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+		if ( $status === $payment->status ) {
+			// The payment status has not actually changed.
+			return;
 		}
+
+		$frm_payment = new FrmTransLitePayment();
+		$frm_payment->update( $payment->id, array( 'status' => $status ) );
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 	}
 }

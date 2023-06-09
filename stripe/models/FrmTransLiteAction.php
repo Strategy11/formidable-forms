@@ -28,8 +28,7 @@ class FrmTransLiteAction extends FrmFormAction {
 
 		global $wpdb;
 
-		$list_fields = self::get_defaults();
-
+		$list_fields    = self::get_defaults();
 		$action_control = $this;
 		$options        = $form_action->post_content;
 		$gateways       = FrmTransLiteAppHelper::get_gateways();
@@ -45,6 +44,8 @@ class FrmTransLiteAction extends FrmFormAction {
 
 		$form_fields         = $this->get_field_options( $args['form']->id );
 		$field_dropdown_atts = compact( 'form_fields', 'form_action' );
+		$currencies          = FrmCurrencyHelper::get_currencies();
+		$repeat_times        = FrmTransLiteAppHelper::get_repeat_times();
 
 		include FrmTransLiteAppHelper::plugin_path() . '/views/action-settings/payments-options.php';
 	}

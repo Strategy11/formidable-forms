@@ -2,12 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-// TODO Move this into the controller.
-$currencies = FrmCurrencyHelper::get_currencies();
 ?>
 
-<?php // Don't just always include this when the Payments submodule is active. ?>
 <input type="hidden" value="stripe" name="<?php echo esc_attr( $this->get_field_name( 'gateway' ) ); ?>[]" />
 
 <div class="frm_grid_container">
@@ -50,24 +46,26 @@ $currencies = FrmCurrencyHelper::get_currencies();
 		<label>
 			<?php esc_html_e( 'Repeat Every', 'formidable' ); ?>
 		</label>
-		<input type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
-		<select name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
-			<?php foreach ( FrmTransLiteAppHelper::get_repeat_times() as $k => $v ) { ?>
-				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
-			<?php } ?>
-		</select>
-		<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
+		<span class="frm_grid_container">
+			<input class="frm6" type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
+			<select class="frm6" name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
+				<?php foreach ( $repeat_times as $k => $v ) { ?>
+					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
+				<?php } ?>
+			</select>
+			<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
+		</span>
 	</p>
 
 	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
 			<?php esc_html_e( 'Trial Period', 'formidable' ); ?>
 		</label>
-		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject auto_width" />
-		<?php esc_html_e( 'day(s)', 'formidable' ); ?>
+		<span class="frm_grid_container">
+			<input class="frm6" type="text" name="<?php echo esc_attr( $this->get_field_name( 'trial_interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['trial_interval_count'] ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'trial_interval_count' ) ); ?>" class="frm_not_email_subject auto_width" />
+			<?php esc_html_e( 'day(s)', 'formidable' ); ?>
+		</span>
 	</p>
-
-	<?php // TODO Keep the capture setting in the Payments submodule ?>
 
 	<p class="frm6">
 		<label for="<?php echo esc_attr( $this->get_field_id( 'currency' ) ); ?>">
@@ -82,8 +80,6 @@ $currencies = FrmCurrencyHelper::get_currencies();
 			?>
 		</select>
 	</p>
-
-	<?php // TODO Still support gateways in the Payments submodule ?>
 
 	<?php
 	do_action(

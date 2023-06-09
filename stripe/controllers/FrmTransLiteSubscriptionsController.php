@@ -39,17 +39,36 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @return string
 	 */
 	public static function cancel_link( $sub ) {
-		if ( $sub->status == 'active' ) {
-			$link = admin_url( 'admin-ajax.php?action=frm_trans_cancel&sub=' . $sub->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
-			$link = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-deleteconfirm="' . esc_attr__( 'Are you sure you want to cancel that subscription?', 'formidable' ) . '">';
+		if ( $sub->status === 'active' ) {
+			$link  = admin_url( 'admin-ajax.php?action=frm_trans_cancel&sub=' . $sub->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
+			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-deleteconfirm="' . esc_attr__( 'Are you sure you want to cancel that subscription?', 'formidable' ) . '">';
 			$link .= esc_html__( 'Cancel', 'formidable' );
 			$link .= '</a>';
 		} else {
 			$link = esc_html__( 'Canceled', 'formidable' );
 		}
-		$link = apply_filters( 'frm_pay_' . $sub->paysys . '_cancel_link', $link, $sub );
+
+		$paysys = $sub->paysys;
+		if ( self::should_filter_cancel_link( $paysys ) ) {
+			$link = apply_filters(
+				'frm_pay_' . $paysys . '_cancel_link',
+				$link,
+				$sub
+			);
+		}
 
 		return $link;
+	}
+
+	/**
+	 * @param string $paysys
+	 *
+	 * @return bool
+	 */
+	private static function should_filter_cancel_link( $paysys ) {
+		// TODO I don't know if any other gateways at the moment support canceling a subscription. Is that true?
+		$allowed_types = array( 'stripe' );
+		return in_array( $paysys, $allowed_types, true );
 	}
 
 	/**
