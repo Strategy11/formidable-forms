@@ -41,7 +41,6 @@ class FrmTransLiteHooksController {
 		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 		add_action( 'frm_show_entry_sidebar', 'FrmTransLiteEntriesController::sidebar_list', 9 );
-		add_action( 'admin_init', self::class . '::maybe_redirect_to_stripe_settings' );
 
 		// Filters
 		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
@@ -49,30 +48,6 @@ class FrmTransLiteHooksController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
-	}
-
-	/**
-	 * Redirect to Stripe settings when payments are not yet installed
-	 * and the payments page is accessed by its URL.
-	 *
-	 * @return void
-	 */
-	public static function maybe_redirect_to_stripe_settings() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) || self::payments_are_installed() ) {
-			return;
-		}
-
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
-		die();
-	}
-
-	/**
-	 * @return bool
-	 */
-	private static function payments_are_installed() {
-		$db     = new FrmTransLiteDb();
-		$option = get_option( $db->db_opt_name );
-		return false !== $option;
 	}
 
 	private static function load_ajax_hooks() {

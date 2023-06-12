@@ -42,6 +42,7 @@ class FrmStrpLiteHooksController {
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
 		add_action( 'frm_pay_show_stripe_options', 'FrmStrpLiteActionsController::add_action_options' );
 		add_action( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
+		add_action( 'admin_init', 'FrmStrpLiteAppController::maybe_redirect_to_stripe_settings' );
 
 		// Filters.
 		add_filter( 'frm_pay_action_defaults', 'FrmStrpLiteActionsController::add_action_defaults' );

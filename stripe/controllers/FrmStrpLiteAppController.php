@@ -47,4 +47,28 @@ class FrmStrpLiteAppController {
 			delete_option( $option_name );
 		}
 	}
+
+	/**
+	 * Redirect to Stripe settings when payments are not yet installed
+	 * and the payments page is accessed by its URL.
+	 *
+	 * @return void
+	 */
+	public static function maybe_redirect_to_stripe_settings() {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) || self::payments_are_installed() ) {
+			return;
+		}
+
+		wp_safe_redirect( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) );
+		die();
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function payments_are_installed() {
+		$db     = new FrmTransLiteDb();
+		$option = get_option( $db->db_opt_name );
+		return false !== $option;
+	}
 }
