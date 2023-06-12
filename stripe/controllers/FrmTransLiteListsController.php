@@ -129,4 +129,16 @@ class FrmTransLiteListsController {
 
 		include FrmTransLiteAppHelper::plugin_path() . '/views/lists/list.php';
 	}
+
+	/**
+	 * @param mixed  $save
+	 * @param string $option
+	 * @param int    $value
+	 */
+	public static function save_per_page( $save, $option, $value ) {
+		if ( $option === 'formidable_page_formidable_payments_per_page' ) {
+			$save = absint( $value );
+		}
+		return $save;
+	}
 }

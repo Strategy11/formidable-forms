@@ -45,6 +45,9 @@ class FrmTransLiteHooksController {
 		add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
 		add_action( 'frm_show_entry_sidebar', 'FrmTransLiteEntriesController::sidebar_list', 9 );
 
+		// Filters
+		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
+
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
