@@ -373,6 +373,12 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function set_stripe_details_as_submitted( $mode ) {
 		update_option( self::get_stripe_details_submitted_option_name( $mode ), true, 'no' );
+
+		FrmTransLiteAppController::install();
+
+		if ( ! wp_next_scheduled( 'frm_payment_cron' ) ) {
+			wp_schedule_event( time(), 'daily', 'frm_payment_cron' );
+		}
 	}
 
 	/**
