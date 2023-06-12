@@ -24,14 +24,17 @@ class FrmCronController {
 	private static function get_events() {
 		return array(
 			'formidable_send_usage' => 'weekly',
+			// TODO Nothing starts this cron at the moment.
+			'frm_payment_cron'      => 'daily',
 		);
 	}
-
 
 	/**
 	 * Removes all cron events.
 	 *
 	 * @since x.x
+	 *
+	 * @return void
 	 */
 	public static function remove_crons() {
 		$events = self::get_events();

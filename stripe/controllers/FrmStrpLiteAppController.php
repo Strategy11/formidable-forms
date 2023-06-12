@@ -6,16 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteAppController {
 
 	/**
-	 * Include the updater and show the Stripe connect message.
-	 *
-	 * @return void
-	 */
-	public static function include_updater() {
-		self::install();
-	}
-
-	/**
 	 * Install required tables.
+	 *
+	 * @todo Call this when Stripe is connected for the first time.
 	 *
 	 * @param mixed $old_db_version
 	 * @return void

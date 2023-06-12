@@ -30,8 +30,6 @@ class FrmStrpLiteHooksController {
 		add_filter( 'frm_setup_new_fields_vars', $callback, 10, 2 );
 		add_filter( 'frm_setup_edit_fields_vars', $callback, 10, 2 );
 
-		// register_activation_hook( dirname( dirname( __FILE__ ) ) . '/formidable-stripe.php', 'FrmStrpLiteAppController::install' );
-
 		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
 		add_action( 'frm_entry_form', 'FrmStrpLiteAuth::add_hidden_token_field' );
@@ -57,7 +55,6 @@ class FrmStrpLiteHooksController {
 		}
 
 		// Actions.
-		add_action( 'admin_init', 'FrmStrpLiteAppController::include_updater', 1 );
 		add_action( 'frm_after_uninstall', 'FrmStrpLiteAppController::uninstall' );
 		add_action( 'frm_pay_show_stripe_options', 'FrmStrpLiteActionsController::add_action_options' );
 		add_action( 'frm_add_settings_section', 'FrmStrpLiteSettingsController::add_settings_section' );
