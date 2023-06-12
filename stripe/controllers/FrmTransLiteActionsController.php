@@ -314,13 +314,13 @@ class FrmTransLiteActionsController {
 	 * Include the price field ids to pass to the javascript.
 	 *
 	 * @since 2.0
+	 *
+	 * @param WP_Post $action
+	 * @return array|int
 	 */
 	private static function get_fields_for_price( $action ) {
-		$amount = $action->post_content['amount'];
-		if ( ! is_callable( 'FrmProDisplaysHelper::get_shortcodes' ) ) {
-			return -1;
-		}
-		$shortcodes = FrmProDisplaysHelper::get_shortcodes( $amount, $action->menu_order );
+		$amount     = $action->post_content['amount'];
+		$shortcodes = FrmFieldsHelper::get_shortcodes( $amount, $action->menu_order );
 		return isset( $shortcodes[2] ) ? $shortcodes[2] : -1;
 	}
 
