@@ -148,7 +148,6 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = $frm_payment->get_one( $payment_id );
-		$class_name  = FrmTransLiteAppHelper::get_setting_for_gateway( $payment->paysys, 'class' );
 		$refunded    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
 
 		if ( $refunded ) {

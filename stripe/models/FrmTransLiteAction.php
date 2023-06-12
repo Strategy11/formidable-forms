@@ -31,8 +31,6 @@ class FrmTransLiteAction extends FrmFormAction {
 		$list_fields    = self::get_defaults();
 		$action_control = $this;
 		$options        = $form_action->post_content;
-		$gateways       = FrmTransLiteAppHelper::get_gateways();
-		unset( $gateways['manual'] );
 
 		// TODO Call get_classes_for_fields in the Payments submodule.
 		$classes = array(

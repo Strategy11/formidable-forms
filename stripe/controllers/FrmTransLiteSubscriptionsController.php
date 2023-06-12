@@ -86,8 +86,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$frm_sub = new FrmTransLiteSubscription();
 			$sub     = $frm_sub->get_one( $sub_id );
 			if ( $sub ) {
-				$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $sub->paysys, 'class' );
-				$canceled   = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
+				$canceled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
 				if ( $canceled ) {
 					self::change_subscription_status(
 						array(

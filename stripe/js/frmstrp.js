@@ -217,16 +217,15 @@
 			};
 
 			for ( i = 0; i < settings.length; i++ ) {
-				if ( jQuery.inArray( 'stripe', settings[ i ].gateways ) !== -1 ) {
-					addressID = settings[ i ].address;
-					firstNameID = settings[ i ].first_name;
-					lastNameID = settings[ i ].last_name;
-				}
+				addressID   = settings[ i ].address;
+				firstNameID = settings[ i ].first_name;
+				lastNameID  = settings[ i ].last_name;
 			}
 
 			if ( addressID !== '' ) {
 				addressContainer = $form.find( '#frm_field_' + addressID + '_container' );
-				prefix = '';
+				prefix           = '';
+
 				if ( addressContainer.length < 1 ) {
 					addressContainer = $form.find( 'input[name="item_meta[' + addressID + '][line1]"]' );
 					if ( addressContainer.length ) {

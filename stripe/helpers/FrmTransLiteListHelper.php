@@ -132,7 +132,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'sub_id'         => 'sub_id',
 			'begin_date'     => 'begin_date',
 			'expire_date'    => 'expire_date',
-			'paysys'         => 'paysys',
 			'status'         => 'status',
 			'next_bill_date' => 'next_bill_date',
 		);
@@ -158,12 +157,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function display_rows() {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
-		$gateways    = FrmTransLiteAppHelper::get_gateways();
 
 		$alt = 0;
 
 		$form_ids = $this->get_form_ids();
-		$args     = compact( 'form_ids', 'date_format', 'gateways' );
+		$args     = compact( 'form_ids', 'date_format' );
 
 		foreach ( $this->items as $item ) {
 			echo '<tr id="payment-' . esc_attr( $item->id ) . '" valign="middle" ';
@@ -411,10 +409,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
-	}
-
-	private function get_paysys_column( $item, $atts ) {
-		return isset( $atts['gateways'][ $item->paysys ] ) ? $atts['gateways'][ $item->paysys ]['label'] : $item->paysys;
 	}
 
 	private function get_status_column( $item ) {

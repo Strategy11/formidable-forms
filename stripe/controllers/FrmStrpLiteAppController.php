@@ -18,28 +18,6 @@ class FrmStrpLiteAppController {
 	}
 
 	/**
-	 * Add a Stripe gateway for the payment action.
-	 *
-	 * @param array $gateways
-	 * @return array
-	 */
-	public static function add_gateway( $gateways ) {
-		$gateways['stripe'] = array(
-			'label'      => 'Stripe',
-			'user_label' => __( 'Credit Card', 'formidable' ),
-			'class'      => 'Strp',
-			'recurring'  => true,
-			'include'    => array(
-				'billing_first_name',
-				'billing_last_name',
-				'credit_card',
-				'billing_address',
-			),
-		);
-		return $gateways;
-	}
-
-	/**
 	 * Remove Stripe database items after uninstall.
 	 *
 	 * @since 2.07

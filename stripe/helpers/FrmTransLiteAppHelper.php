@@ -26,37 +26,6 @@ class FrmTransLiteAppHelper {
 		return basename( self::plugin_path() );
 	}
 
-	/**
-	 * @todo How should I modify this function? We don't want this filter in Lite.
-	 *
-	 * @return array
-	 */
-	public static function get_gateways() {
-		$gateways = array(
-			'manual' => array(
-				'label' => __( 'Manual', 'formidable' ),
-				'user_label' => __( 'Manual', 'formidable' ),
-				'class' => 'Trans',
-				'recurring' => true,
-			),
-		);
-		$gateways = apply_filters( 'frm_payment_gateways', $gateways );
-		return $gateways;
-	}
-
-	/**
-	 * @param string $gateway
-	 * @param string $setting
-	 */
-	public static function get_setting_for_gateway( $gateway, $setting ) {
-		$gateways = self::get_gateways();
-		$value    = '';
-		if ( isset( $gateways[ $gateway ] ) ) {
-			$value = $gateways[ $gateway ][ $setting ];
-		}
-		return $value;
-	}
-
 	public static function show_status( $status ) {
 		$statuses = array_merge( self::get_payment_statuses(), self::get_subscription_statuses() );
 		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
