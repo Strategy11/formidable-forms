@@ -5,16 +5,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"><br></div>
-	<h2><?php esc_html_e( 'Payments', 'formidable' ); ?></h2>
+	<h2>
+		<?php esc_html_e( 'Payments', 'formidable' ); ?>
+	</h2>
 
 	<?php include FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
 
 	<div id="poststuff" class="metabox-holder has-right-sidebar">
 		<div class="inner-sidebar">
-			<div id="submitdiv" class="postbox ">
-				<h3 class="hndle"><span><?php esc_html_e( 'Payment Details', 'formidable' ); ?></span></h3>
+			<div id="submitdiv" class="postbox">
+				<h3 class="hndle">
+					<span>
+						<?php esc_html_e( 'Payment Details', 'formidable' ); ?>
+					</span>
+				</h3>
 				<div class="inside">
 					<div class="submitbox">
+						<div id="minor-publishing" style="border:none;">
+							<div class="misc-pub-section">
+								<?php FrmTransLitePaymentsController::load_sidebar_actions( $payment ); ?>
+								<div class="clear"></div>
+							</div>
+						</div>
 						<div id="major-publishing-actions">
 							<div id="delete-action">                	    
 								<a class="submitdelete deletion" href="<?php echo esc_url( add_query_arg( 'frm_action', 'destroy' ) ); ?>" onclick="return confirm('<?php esc_attr_e( 'Are you sure you want to delete that payment?', 'formidable' ); ?>');" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
@@ -33,10 +45,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div id="post-body-content">
 				<div class="postbox">
 					<div class="handlediv"><br/></div>
-					<h3 class="hndle"><span><?php esc_html_e( 'Payment', 'formidable' ); ?></span></h3>
+					<h3 class="hndle">
+						<span>
+							<?php esc_html_e( 'Payment', 'formidable' ); ?>
+						</span>
+					</h3>
 					<div class="inside">
 						<table class="form-table">
-							<tbody>
+						<tbody>
 							<tr valign="top">
 								<th scope="row"><?php esc_html_e( 'Status', 'formidable' ); ?>:</th>
 								<td><?php echo esc_html( FrmTransLiteAppHelper::show_status( $payment->status ) ); ?></td>
