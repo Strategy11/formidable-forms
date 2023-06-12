@@ -2940,11 +2940,8 @@ class FrmAppHelper {
 	public static function localize_script( $location ) {
 		global $wp_scripts;
 
-		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
-		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
-
 		$script_strings = array(
-			'ajax_url'           => $ajax_url,
+			'ajax_url'           => esc_url_raw( self::get_ajax_url() ),
 			'images_url'         => self::plugin_url() . '/images',
 			'loading'            => __( 'Loading&hellip;', 'formidable' ),
 			'remove'             => __( 'Remove', 'formidable' ),
@@ -2960,70 +2957,87 @@ class FrmAppHelper {
 		);
 
 		$data = $wp_scripts->get_data( 'formidable', 'data' );
-		if ( empty( $data ) ) {
+		if ( ! $data ) {
 			wp_localize_script( 'formidable', 'frm_js', $script_strings );
 		}
 
-		if ( $location == 'admin' ) {
+		if ( $location === 'admin' ) {
 			$frm_settings         = self::get_settings();
 			$admin_script_strings = array(
-				'desc'              => __( '(Click to add description)', 'formidable' ),
-				'blank'             => __( '(Blank)', 'formidable' ),
-				'no_label'          => __( '(no label)', 'formidable' ),
-				'saving'            => '', // Deprecated in 6.0.
-				'saved'             => '', // Deprecated in 6.0.
-				'ok'                => __( 'OK', 'formidable' ),
-				'cancel'            => __( 'Cancel', 'formidable' ),
-				'default_label'     => __( 'Default', 'formidable' ),
-				'clear_default'     => __( 'Clear default value when typing', 'formidable' ),
-				'no_clear_default'  => __( 'Do not clear default value when typing', 'formidable' ),
-				'valid_default'     => __( 'Default value will pass form validation', 'formidable' ),
-				'no_valid_default'  => __( 'Default value will NOT pass form validation', 'formidable' ),
-				'confirm'           => __( 'Are you sure?', 'formidable' ),
-				'conf_delete'       => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
-				'conf_delete_sec'   => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
-				'conf_no_repeat'    => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
-				'default_unique'    => $frm_settings->unique_msg,
-				'default_conf'      => __( 'The entered values do not match', 'formidable' ),
-				'enter_email'       => __( 'Enter Email', 'formidable' ),
-				'confirm_email'     => __( 'Confirm Email', 'formidable' ),
-				'conditional_text'  => __( 'Conditional content here', 'formidable' ),
-				'new_option'        => __( 'New Option', 'formidable' ),
-				'css_invalid_size'  => __( 'In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
-				'enter_password'    => __( 'Enter Password', 'formidable' ),
-				'confirm_password'  => __( 'Confirm Password', 'formidable' ),
-				'import_complete'   => __( 'Import Complete', 'formidable' ),
-				'updating'          => __( 'Please wait while your site updates.', 'formidable' ),
-				'no_save_warning'   => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
-				'private_label'     => __( 'Private', 'formidable' ),
-				'jquery_ui_url'     => '',
-				'pro_url'           => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
-				'no_licenses'       => __( 'No new licenses were found', 'formidable' ),
-				'unmatched_parens'  => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
-				'view_shortcodes'   => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
-				'text_shortcodes'   => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
-				'only_one_action'   => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
-				'unsafe_params'     => FrmFormsHelper::reserved_words(),
+				'desc'               => __( '(Click to add description)', 'formidable' ),
+				'blank'              => __( '(Blank)', 'formidable' ),
+				'no_label'           => __( '(no label)', 'formidable' ),
+				'ok'                 => __( 'OK', 'formidable' ),
+				'cancel'             => __( 'Cancel', 'formidable' ),
+				'default_label'      => __( 'Default', 'formidable' ),
+				'clear_default'      => __( 'Clear default value when typing', 'formidable' ),
+				'no_clear_default'   => __( 'Do not clear default value when typing', 'formidable' ),
+				'valid_default'      => __( 'Default value will pass form validation', 'formidable' ),
+				'no_valid_default'   => __( 'Default value will NOT pass form validation', 'formidable' ),
+				'confirm'            => __( 'Are you sure?', 'formidable' ),
+				'conf_delete'        => __( 'Are you sure you want to delete this field and all data associated with it?', 'formidable' ),
+				'conf_delete_sec'    => __( 'All fields inside this Section will be deleted along with their data. Are you sure you want to delete this group of fields?', 'formidable' ),
+				'conf_no_repeat'     => __( 'Warning: If you have entries with multiple rows, all but the first row will be lost.', 'formidable' ),
+				'default_unique'     => $frm_settings->unique_msg,
+				'default_conf'       => __( 'The entered values do not match', 'formidable' ),
+				'enter_email'        => __( 'Enter Email', 'formidable' ),
+				'confirm_email'      => __( 'Confirm Email', 'formidable' ),
+				'conditional_text'   => __( 'Conditional content here', 'formidable' ),
+				'new_option'         => __( 'New Option', 'formidable' ),
+				'css_invalid_size'   => __( 'In certain browsers (e.g. Firefox) text will not display correctly if the field height is too small relative to the field padding and text size. Please increase your field height or decrease your field padding.', 'formidable' ),
+				'enter_password'     => __( 'Enter Password', 'formidable' ),
+				'confirm_password'   => __( 'Confirm Password', 'formidable' ),
+				'import_complete'    => __( 'Import Complete', 'formidable' ),
+				'updating'           => __( 'Please wait while your site updates.', 'formidable' ),
+				'no_save_warning'    => __( 'Warning: There is no way to retrieve unsaved entries.', 'formidable' ),
+				'private_label'      => __( 'Private', 'formidable' ),
+				'jquery_ui_url'      => '',
+				'pro_url'            => is_callable( 'FrmProAppHelper::plugin_url' ) ? FrmProAppHelper::plugin_url() : '',
+				'no_licenses'        => __( 'No new licenses were found', 'formidable' ),
+				'unmatched_parens'   => __( 'This calculation has at least one unmatched ( ) { } [ ].', 'formidable' ),
+				'view_shortcodes'    => __( 'This calculation may have shortcodes that work in Views but not forms.', 'formidable' ),
+				'text_shortcodes'    => __( 'This calculation may have shortcodes that work in text calculations but not numeric calculations.', 'formidable' ),
+				'only_one_action'    => __( 'This form action is limited to one per form. Please edit the existing form action.', 'formidable' ),
+				'unsafe_params'      => FrmFormsHelper::reserved_words(),
 				/* Translators: %s is the name of a Detail Page Slug that is a reserved word.*/
-				'slug_is_reserved' => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
+				'slug_is_reserved'   => sprintf( __( 'The Detail Page Slug "%s" is reserved by WordPress. This may cause problems. Is this intentional?', 'formidable' ), '****' ),
 				/* Translators: %s is the name of a parameter that is a reserved word.  More than one word could be listed here, though that would not be common. */
-				'param_is_reserved' => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
-				'reserved_words'    => __( 'See the list of reserved words in WordPress.', 'formidable' ),
-				'repeat_limit_min'  => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
-				'checkbox_limit'    => __( 'Please select a limit between 0 and 200.', 'formidable' ),
-				'install'           => __( 'Install', 'formidable' ),
-				'active'            => __( 'Active', 'formidable' ),
-				'select_a_field'    => __( 'Select a Field', 'formidable' ),
-				'no_items_found'    => __( 'No items found.', 'formidable' ),
+				'param_is_reserved'  => sprintf( __( 'The parameter "%s" is reserved by WordPress. This may cause problems when included in the URL. Is this intentional? ', 'formidable' ), '****' ),
+				'reserved_words'     => __( 'See the list of reserved words in WordPress.', 'formidable' ),
+				'repeat_limit_min'   => __( 'Please enter a Repeat Limit that is greater than 1.', 'formidable' ),
+				'checkbox_limit'     => __( 'Please select a limit between 0 and 200.', 'formidable' ),
+				'install'            => __( 'Install', 'formidable' ),
+				'active'             => __( 'Active', 'formidable' ),
+				'select_a_field'     => __( 'Select a Field', 'formidable' ),
+				'no_items_found'     => __( 'No items found.', 'formidable' ),
 				'field_already_used' => __( 'Oops. You have already used that field.', 'formidable' ),
+				'saving'             => '', // Deprecated in 6.0.
+				'saved'              => '', // Deprecated in 6.0.
 			);
+			/**
+			 * @param array $admin_script_strings
+			 */
 			$admin_script_strings = apply_filters( 'frm_admin_script_strings', $admin_script_strings );
 
 			$data = $wp_scripts->get_data( 'formidable_admin', 'data' );
-			if ( empty( $data ) ) {
+			if ( ! $data ) {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_ajax_url() {
+		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
+
+		/**
+		 * @param string $ajax_url
+		 */
+		return apply_filters( 'frm_ajax_url', $ajax_url );
 	}
 
 	/**

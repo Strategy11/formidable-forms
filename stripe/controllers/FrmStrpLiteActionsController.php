@@ -399,15 +399,12 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			$params['form_id'] = 0;
 		}
 
-		$ajax_url = admin_url( 'admin-ajax.php', is_ssl() ? 'admin' : 'http' );
-		$ajax_url = apply_filters( 'frm_ajax_url', $ajax_url );
-
 		$stripe_vars = array(
 			'publishable_key'  => $publishable,
 			'form_id'          => $params['form_id'],
 			'nonce'            => wp_create_nonce( 'frm_strp_ajax' ),
 			'root'             => esc_url_raw( rest_url() ),
-			'ajax'             => esc_url_raw( $ajax_url ),
+			'ajax'             => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'api_nonce'        => wp_create_nonce( 'wp_rest' ),
 			'settings'         => $action_settings,
 			'locale'           => self::get_locale(),
