@@ -6,6 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
+	 * @var object|string|null A memoized value for the current Stripe customer object.
+	 */
+	private static $customer;
+
+	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
 	 * @since 2.0
@@ -119,12 +124,12 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Set a customer object to $_POST['customer'] to use later.
 	 *
 	 * @param array $atts
-	 * @return mixed
+	 * @return object|string
 	 */
 	private static function set_customer_with_token( $atts ) {
-		if ( isset( $_POST['customer'] ) ) {
+		if ( isset( self::$customer ) ) {
 			// It's an object if this isn't the first Stripe action running.
-			return $_POST['customer'];
+			return self::$customer;
 		}
 
 		$payment_info = array(
@@ -138,9 +143,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		self::add_customer_name( $atts, $payment_info );
 
-		$customer          = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
-		// Can we stop passing this in $_POST data?
-		$_POST['customer'] = $customer; // Set for later use.
+		$customer       = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
+		self::$customer = $customer; // Set for later use.
 
 		return $customer;
 	}

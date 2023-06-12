@@ -61,7 +61,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $options
-	 * @return mixed
+	 * @return object|string
 	 */
 	public static function get_customer( $options = array() ) {
 		$user_id   = ! empty( $options['user_id'] ) ? $options['user_id'] : get_current_user_id();
