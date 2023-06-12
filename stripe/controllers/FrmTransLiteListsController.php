@@ -62,7 +62,6 @@ class FrmTransLiteListsController {
 
 		$columns['status']     = __( 'Status', 'formidable' );
 		$columns['created_at'] = __( 'Date', 'formidable' );
-		$columns['paysys']     = __( 'Processor', 'formidable' );
 
 		return $columns;
 	}
