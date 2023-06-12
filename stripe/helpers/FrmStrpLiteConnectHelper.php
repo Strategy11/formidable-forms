@@ -353,7 +353,7 @@ class FrmStrpLiteConnectHelper {
 			update_option( self::get_account_id_option_name( $mode ), $data->account_id, 'no' );
 
 			if ( ! empty( $data->details_submitted ) ) {
-				self::set_stripe_details_as_submitted_and_clear_legacy_keys( $mode );
+				self::set_stripe_details_as_submitted( $mode );
 				if ( 'live' === $mode ) {
 					self::dismiss_inbox_message_to_use_stripe_connect();
 				}
@@ -366,31 +366,13 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * On a successful account status check, set details_submitted option and clear legacy key data
+	 * On a successful account status check, set details_submitted option.
 	 *
 	 * @param string $mode 'live' or 'test'.
 	 * @return void
 	 */
-	private static function set_stripe_details_as_submitted_and_clear_legacy_keys( $mode ) {
+	private static function set_stripe_details_as_submitted( $mode ) {
 		update_option( self::get_stripe_details_submitted_option_name( $mode ), true, 'no' );
-
-		$settings         = FrmStrpLiteAppHelper::get_settings();
-		$settings         = $settings->settings;
-		$updated_settings = false;
-
-		if ( ! empty( $settings->{ $mode . '_publish' } ) ) {
-			$settings->{ $mode . '_publish' } = '';
-			$updated_settings                 = true;
-		}
-
-		if ( ! empty( $settings->{ $mode . '_secret' } ) ) {
-			$settings->{ $mode . '_secret' } = '';
-			$updated_settings                = true;
-		}
-
-		if ( $updated_settings ) {
-			update_option( 'frm_strp_options', $settings, 'no' );
-		}
 	}
 
 	/**
@@ -460,7 +442,7 @@ class FrmStrpLiteConnectHelper {
 		$data            = self::post_with_authenticated_body( 'account_status', $additional_body );
 		$success         = false !== $data && ! empty( $data->details_submitted );
 		if ( $success ) {
-			self::set_stripe_details_as_submitted_and_clear_legacy_keys( $mode );
+			self::set_stripe_details_as_submitted( $mode );
 		}
 		return $success;
 	}
