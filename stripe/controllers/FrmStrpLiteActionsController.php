@@ -240,12 +240,28 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Filter Stripe action on save.
 	 *
 	 * @param array $settings
+	 * @param array $action
 	 * @return array
 	 */
-	public static function before_save_settings( $settings ) {
+	public static function before_save_settings( $settings, $action ) {
 		$settings['currency']    = strtolower( $settings['currency'] );
 		$settings['stripe_link'] = 1; // In Lite Stripe link is always used.
 		$settings                = self::create_plans( $settings );
+
+		// TODO Also check to confirm that there are no credit card fields before creating one.
+		if ( empty( $settings['credit_card'] ) ) {
+			$form_id      = absint( $action['menu_order'] );
+			$field_values = FrmFieldsHelper::setup_new_vars( 'credit_card', $form_id );
+
+			/**
+			 * @param array $field_values
+			 */
+			$field_values = apply_filters( 'frm_before_field_created', $field_values );
+			$field_id     = FrmField::create( $field_values );
+
+			$settings['credit_card'] = $field_id;
+		}
+
 		return $settings;
 	}
 
