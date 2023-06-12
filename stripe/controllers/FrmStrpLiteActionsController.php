@@ -59,36 +59,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * If the names are being used on the CC fields,
-	 * make sure it doesn't prevent the submission if Stripe has approved.
-	 *
-	 * @param array    $errors
-	 * @param stdClass $field
-	 * @param array    $values
-	 * @return array
-	 */
-	public static function remove_cc_validation( $errors, $field, $values ) {
-		$has_processed = self::has_stripe_processed( $field->form_id ) || isset( $_POST[ 'frmintent' . $field->form_id ] );
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && isset( $_GET['frm_action'] ) && 'edit' === FrmAppHelper::simple_get( 'frm_action' ) ) {
-			$has_processed = true;
-		}
-
-		if ( ! $has_processed ) {
-			return $errors;
-		}
-
-		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
-		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
-			unset( $errors[ 'field' . $field_id . '-cc' ] );
-		}
-		if ( isset( $errors[ 'field' . $field_id ] ) ) {
-			unset( $errors[ 'field' . $field_id ] );
-		}
-
-		return $errors;
-	}
-
-	/**
 	 * Trigger a Stripe payment after a form is submitted.
 	 * This is called for both one time and recurring payments.
 	 * It is also called when Stripe link is active but the Stripe payment is triggered instead with JavaScript.
@@ -113,9 +83,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$is_stripe_link = ! empty( $action->post_content['stripe_link'] );
-
-		if ( ! $is_stripe_link && ! self::has_stripe_processed( $form->id ) ) {
-			$response['error'] = __( 'The Stripe Token is missing.', 'formidable' );
+		if ( ! $is_stripe_link ) {
+			$response['error'] = __( 'This action is not configured as expected.', 'formidable' );
 			return $response;
 		}
 
@@ -147,21 +116,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Check POST data to determine if a Stripe payment has been submitted.
-	 * stripeToken: Set when the card will be processed after entry. May not result in successful payment.
-	 * stripeMethod: The payment method has been verified.
-	 * frmauth: The payment intent has been created.
-	 *
-	 * @since 2.0
-	 *
-	 * @param string|int $form_id
-	 * @return bool
-	 */
-	private static function has_stripe_processed( $form_id ) {
-		return isset( $_POST['stripeToken'] ) || isset( $_POST[ 'frmauth' . $form_id ] ) || isset( $_POST['stripeMethod'] );
-	}
-
-	/**
 	 * Set a customer object to $_POST['customer'] to use later.
 	 *
 	 * @param array $atts
@@ -176,10 +130,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$payment_info = array(
 			'user_id' => FrmTransLiteAppHelper::get_user_id_for_current_payment(),
 		);
-
-		if ( isset( $_POST['stripeToken'] ) ) {
-			$payment_info['source'] = sanitize_text_field( $_POST['stripeToken'] );
-		}
 
 		if ( ! empty( $atts['action']->post_content['email'] ) ) {
 			$payment_info['email'] = apply_filters( 'frm_content', $atts['action']->post_content['email'], $atts['form'], $atts['entry'] );
