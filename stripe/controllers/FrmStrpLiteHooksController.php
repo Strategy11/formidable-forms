@@ -35,7 +35,6 @@ class FrmStrpLiteHooksController {
 		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
 		add_action( 'frm_entry_form', 'FrmStrpLiteAuth::add_hidden_token_field' );
-		add_filter( 'frm_pro_show_card_callback', 'FrmStrpLiteActionsController::show_card_callback' );
 		add_filter( 'frm_validate_credit_card_field_entry', 'FrmStrpLiteActionsController::remove_cc_validation', 20, 3 );
 		add_action( 'frm_enqueue_form_scripts', 'FrmStrpLiteActionsController::maybe_load_scripts' );
 		add_action( 'frm_enqueue_stripe_scripts', 'FrmStrpLiteActionsController::load_scripts' );
