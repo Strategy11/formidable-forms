@@ -14,31 +14,17 @@ class FrmStrpLiteHooksController {
 			return;
 		}
 
-		// TODO Move this somewhere less temporary.
-		$callback = function( $values, $field ) {
-			if ( $field->type !== 'credit_card' ) {
-				return $values;
-			}
+		// Actions.
+		add_action( 'frm_entry_form', 'FrmStrpLiteAuth::add_hidden_token_field' );
+		add_action( 'frm_enqueue_form_scripts', 'FrmStrpLiteActionsController::maybe_load_scripts' );
+		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
 
-			if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
-				do_action( 'frm_enqueue_stripe_scripts', array( 'form_id' => $field->form_id ) );
-			}
-
-			return $values;
-		};
-
-		add_filter( 'frm_setup_new_fields_vars', $callback, 10, 2 );
-		add_filter( 'frm_setup_edit_fields_vars', $callback, 10, 2 );
-
+		// Filters.
 		add_filter( 'frm_payment_gateways', 'FrmStrpLiteAppController::add_gateway' );
 		add_filter( 'frm_filter_final_form', 'FrmStrpLiteAuth::maybe_show_message' );
-		add_action( 'frm_entry_form', 'FrmStrpLiteAuth::add_hidden_token_field' );
 		add_filter( 'frm_validate_credit_card_field_entry', 'FrmStrpLiteActionsController::remove_cc_validation', 20, 3 );
-		add_action( 'frm_enqueue_form_scripts', 'FrmStrpLiteActionsController::maybe_load_scripts' );
-		add_action( 'frm_enqueue_stripe_scripts', 'FrmStrpLiteActionsController::load_scripts' );
 		add_filter( 'frm_setup_edit_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
 		add_filter( 'frm_setup_new_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
-		add_action( 'init', 'FrmStrpLiteConnectHelper::check_for_stripe_connect_webhooks' );
 
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );

@@ -341,25 +341,27 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$form = FrmForm::getOne( $params['form_id'] );
-		if ( $form && ! empty( $form->options['ajax_submit'] ) ) {
-			$credit_card_field = FrmField::getAll(
-				array(
-					'fi.form_id' => $form->id,
-					'type'       => 'credit_card',
-				)
-			);
-			if ( $credit_card_field ) {
-				self::load_scripts( $params );
-			}
+		if ( ! $form ) {
+			return;
 		}
+
+		$credit_card_field = FrmField::getAll(
+			array(
+				'fi.form_id' => $form->id,
+				'type'       => 'credit_card',
+			)
+		);
+		if ( ! $credit_card_field ) {
+			return;
+		}
+
+		self::load_scripts( $params );
 	}
 
 	/**
 	 * Load front end JavaScript for a Stripe form.
 	 *
-	 * @param array $params {
-	 *     @type mixed $form_id
-	 * }
+	 * @param mixed $form_id
 	 * @return void
 	 */
 	public static function load_scripts( $params ) {
