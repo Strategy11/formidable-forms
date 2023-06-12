@@ -26,9 +26,10 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$class_name = $type === 'subscriptions' ? 'FrmTransLiteSubscriptionsController' : 'FrmTransLitePaymentsController';
 		if ( method_exists( $class_name, $action ) ) {
 			$class_name::$action();
-		} else {
-			FrmTransLiteListsController::route( $action );
+			return;
 		}
+
+		FrmTransLiteListsController::route( $action );
 	}
 
 	/**
