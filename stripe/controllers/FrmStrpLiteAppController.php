@@ -8,8 +8,6 @@ class FrmStrpLiteAppController {
 	/**
 	 * Install required tables.
 	 *
-	 * @todo Call this when Stripe is connected for the first time.
-	 *
 	 * @param mixed $old_db_version
 	 * @return void
 	 */
