@@ -24,6 +24,14 @@ class FrmStrpLiteHooksController {
 		add_filter( 'frm_setup_edit_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
 		add_filter( 'frm_setup_new_fields_vars', 'FrmStrpLiteSettingsController::prepare_field_desc', 30, 2 );
 
+		// This filter flags the Pro credit card field that Stripe is enabled.
+		add_filter(
+			'frm_pro_show_card_callback',
+			function() {
+				return 'FrmStrpLiteActionsController::show_card';
+			}
+		);
+
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
 		add_filter( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
