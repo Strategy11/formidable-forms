@@ -301,7 +301,6 @@ class FrmField {
 		}
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
-		$new_id        = 0;
 
 		if ( ! $query_results ) {
 			return false;
