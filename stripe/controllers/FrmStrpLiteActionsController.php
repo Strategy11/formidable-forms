@@ -247,22 +247,70 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$settings['currency']    = strtolower( $settings['currency'] );
 		$settings['stripe_link'] = 1; // In Lite Stripe link is always used.
 		$settings                = self::create_plans( $settings );
+		$form_id                 = absint( $action['menu_order'] );
 
-		// TODO Also check to confirm that there are no credit card fields before creating one.
 		if ( empty( $settings['credit_card'] ) ) {
-			$form_id      = absint( $action['menu_order'] );
-			$field_values = FrmFieldsHelper::setup_new_vars( 'credit_card', $form_id );
+			$credit_card_field_id = FrmDb::get_var(
+				'frm_fields',
+				array(
+					'type'    => 'credit_card',
+					'form_id' => $form_id,
+				)
+			);
+			if ( ! $credit_card_field_id ) {
+				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
+			}
+			if ( $credit_card_field_id ) {
+				$settings['credit_card'] = $credit_card_field_id;
+			}
+		}
 
-			/**
-			 * @param array $field_values
-			 */
-			$field_values = apply_filters( 'frm_before_field_created', $field_values );
-			$field_id     = FrmField::create( $field_values );
-
-			$settings['credit_card'] = $field_id;
+		$gateway_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(
+				'type'    => 'gateway',
+				'form_id' => $form_id,
+			)
+		);
+		if ( ! $gateway_field_id ) {
+			self::add_a_gateway_field( $form_id );
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * @param int    $form_id
+	 * @param string $field_type
+	 * @param string $field_name
+	 * @return int|false
+	 */
+	private static function add_a_field( $form_id, $field_type, $field_name ) {
+		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$new_values['name'] = $field_name;
+		$field_id           = FrmField::create( $new_values );
+		return $field_id;
+	}
+
+	/**
+	 * A credit card field is added automatically if missing before a Stripe action is updated.
+	 *
+	 * @param int $form_id
+	 * @return int|false
+	 */
+	private static function add_a_credit_card_field( $form_id ) {
+		return self::add_a_field( $form_id, 'credit_card', __( 'Credit Card', 'formidable' ) );
+	}
+
+	/**
+	 * A gateway field is added automatically for compatibility with the Stripe add on.
+	 * The gateway field is not important for the Stripe Lite implementation.
+	 *
+	 * @param int $form_id
+	 * @return int|false
+	 */
+	private static function add_a_gateway_field( $form_id ) {
+		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );
 	}
 
 	/**

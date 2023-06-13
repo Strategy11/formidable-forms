@@ -255,6 +255,13 @@ class FrmField {
 		return array_merge( $pro_field_selection, self::field_selection() );
 	}
 
+	/**
+	 * Create a field.
+	 *
+	 * @param array $values
+	 * @param bool  $return
+	 * @return int|false
+	 */
 	public static function create( $values, $return = true ) {
 		global $wpdb, $frm_duplicate_ids;
 
@@ -295,24 +302,23 @@ class FrmField {
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_fields', $new_values );
 		$new_id        = 0;
-		if ( $query_results ) {
-			self::delete_form_transient( $new_values['form_id'] );
-			$new_id = $wpdb->insert_id;
+
+		if ( ! $query_results ) {
+			return false;
 		}
+
+		self::delete_form_transient( $new_values['form_id'] );
+		$new_id = $wpdb->insert_id;
 
 		if ( ! $return ) {
 			return false;
 		}
 
-		if ( $query_results ) {
-			if ( isset( $values['id'] ) ) {
-				$frm_duplicate_ids[ $values['id'] ] = $new_id;
-			}
-
-			return $new_id;
-		} else {
-			return false;
+		if ( isset( $values['id'] ) ) {
+			$frm_duplicate_ids[ $values['id'] ] = $new_id;
 		}
+
+		return $new_id;
 	}
 
 	/**
