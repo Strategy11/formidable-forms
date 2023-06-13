@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									</td>
 								</tr>
 
-								<?php FrmTransLiteAppHelper::show_in_table( $subscription->sub_id, __( 'Subscription<script>alert("hey")</script>', 'formidable' ) ); ?>
+								<?php FrmTransLiteAppHelper::show_in_table( $subscription->sub_id, __( 'Subscription', 'formidable' ) ); ?>
 
 								<tr valign="top">
 									<th scope="row"><?php esc_html_e( 'Billing Cycle', 'formidable' ); ?>:</th>
