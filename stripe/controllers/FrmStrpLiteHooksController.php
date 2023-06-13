@@ -32,6 +32,19 @@ class FrmStrpLiteHooksController {
 			}
 		);
 
+		// This filter hides gateway fields from the entries list.
+		add_filter(
+			'frm_fields_in_entries_list_table',
+			function( $form_cols ) {
+				return array_values( array_filter(
+					$form_cols,
+					function( $form_col ) {
+						return 'gateway' !== $form_col->type;
+					}
+				) );
+			}
+		);
+
 		// Stripe link.
 		add_filter( 'frm_form_object', 'FrmStrpLiteLinkController::force_ajax_submit_for_stripe_link' );
 		add_filter( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
