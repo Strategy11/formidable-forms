@@ -6124,6 +6124,11 @@ span.howto {
 	min-height: 50px;
 }
 
+#frm_builder_page li[data-ftype="gateway"] {
+	/* Gateway fields are included for add-on compatibility but we do not want it to be visible. */
+	display: none;
+}
+
 #frm_builder_page #frm_field_group_controls {
 	position: absolute;
 	padding: 5px;

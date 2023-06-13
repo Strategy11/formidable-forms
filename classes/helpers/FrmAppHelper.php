@@ -1839,7 +1839,7 @@ class FrmAppHelper {
 			if ( is_array( $value ) ) {
 				$return = array_merge( $return, self::array_flatten( $value, $keys ) );
 			} else {
-				if ( $keys == 'keep' ) {
+				if ( $keys === 'keep' ) {
 					$return[ $key ] = $value;
 				} else {
 					$return[] = $value;
@@ -1925,7 +1925,7 @@ class FrmAppHelper {
 		}
 
 		$user_id = sanitize_text_field( $user_id );
-		if ( $user_id == 'current' ) {
+		if ( $user_id === 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
 			if ( is_email( $user_id ) ) {
