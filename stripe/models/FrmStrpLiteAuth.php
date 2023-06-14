@@ -222,10 +222,11 @@ class FrmStrpLiteAuth {
 	 * @return mixed
 	 */
 	public static function get_payment_intents( $name ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST[ $name ] ) ) {
 			return array();
 		}
-		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
 	}
@@ -283,6 +284,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function update_intent_pricing( $form_id, &$intents ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( ! isset( $_POST['form_id'] ) || absint( $_POST['form_id'] ) != $form_id ) {
 			return;
 		}
@@ -344,6 +346,8 @@ class FrmStrpLiteAuth {
 		$entry->post_id = 0;
 		$entry->id      = 0;
 		$entry->metas   = array();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {
 			$k = sanitize_text_field( stripslashes( $k ) );
 			$v = wp_unslash( $v );
@@ -358,6 +362,7 @@ class FrmStrpLiteAuth {
 				$entry->{$k} = $v;
 			}
 		}
+
 		return $entry;
 	}
 

@@ -50,10 +50,7 @@
 	<rule ref="WordPress.Security.NonceVerification.Missing">
 		<exclude-pattern>tests/*</exclude-pattern>
 		<!-- Temporary exclusion for Stripe Lite -->
-		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
-		<exclude-pattern>stripe/controllers/FrmStrpLiteActionsController.php</exclude-pattern>
 		<exclude-pattern>stripe/controllers/FrmStrpLiteSettingsController.php</exclude-pattern>
-		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
 	<rule ref="PEAR.NamingConventions.ValidClassName.StartWithCapital">
 		<exclude-pattern>tests/*</exclude-pattern>
@@ -100,8 +97,5 @@
 	<!-- Additional temporary exclusions for Stripe Lite -->
 	<rule ref="WordPress.WP.I18n.MissingTranslatorsComment">
 		<exclude-pattern>stripe/*</exclude-pattern>
-	</rule>
-	<rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedElseif">
-		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
 	</rule>
 </ruleset>
